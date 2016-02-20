@@ -197,6 +197,7 @@
     <Compile Include="Controllers\ActivityController.cs" />
     <Compile Include="Controllers\BarChartItemController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
+    <Compile Include="Controllers\ProjectScheduleController.cs" />
     <Compile Include="Controllers\SubActivityController.cs" />
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>

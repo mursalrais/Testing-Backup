@@ -2,9 +2,9 @@
 using Microsoft.SharePoint.Client;
 using System.Security;
 
-namespace MCAWebAndAPI.Service.SPConnector
+namespace MCAWebAndAPI.Service.Connector
 {
-    public class Connector
+    public class SPConnector
     {
         static string CurUrl = "https://eceos2.sharepoint.com/sites/mca-dev";
         static string UserName =  "sp.services@eceos.com";

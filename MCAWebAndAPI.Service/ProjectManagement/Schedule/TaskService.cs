@@ -14,9 +14,24 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
             throw new NotImplementedException();
         }
 
+        public Task Get(string title)
+        {
+            var tasks = Connector.SPConnector.GetList("Tasks");
+            var task = tasks.First(e => e["Title"].Equals(title));
+            return new Task
+            {
+                Title = task["Title"].ToString()
+            };
+                
+        }
+
         public IEnumerable<Task> GetAllTask()
         {
-            throw new NotImplementedException();
+            var list = Connector.SPConnector.GetList("Tasks");
+            return list.Select(e => new Task
+            {
+                Title = e["Title"].ToString()
+            });
         }
 
         public IEnumerable<Task> GetAllTaskNotCompleted()

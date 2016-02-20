@@ -9,6 +9,8 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
         IEnumerable<Task> GetAllTask();
 
+        Task Get(string title);
+
         IEnumerable<Task> GetAllTaskNotCompleted();
 
     }
