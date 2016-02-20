@@ -29,7 +29,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
         public Task Get(string title)
         {
-            var tasks = SPConnector.GetListByName("Tasks");
+            var tasks = SPConnector.GetList("Tasks");
             var task = tasks.First(e => title.Equals(Convert.ToString(e["Title"])));
             return new Task
             {
@@ -40,7 +40,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
         public IEnumerable<Task> GetAllTask()
         {
-            var list = SPConnector.GetListByName("Tasks");
+            var list = SPConnector.GetList("Tasks");
             var result = new List<Task>();
             foreach (Microsoft.SharePoint.Client.ListItem item in list)
             {
@@ -52,7 +52,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
         public IEnumerable<Task> GetAllTaskNotCompleted()
         {
-            var list = SPConnector.GetListByName("Tasks");
+            var list = SPConnector.GetList("Tasks");
             var result = new List<Task>();
             foreach (Microsoft.SharePoint.Client.ListItem item in list)
             {
@@ -67,7 +67,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
         public IEnumerable<Task> GetMilestones()
         {
-            var list = SPConnector.GetListByName("Tasks");
+            var list = SPConnector.GetList("Tasks");
             var result = new List<Task>();
             foreach (Microsoft.SharePoint.Client.ListItem item in list)
             {
