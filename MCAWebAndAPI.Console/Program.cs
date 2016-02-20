@@ -14,8 +14,6 @@ namespace MCAWebAndAPI.Console
         static void Main(string[] args)
         {
             var result = service.GetAllTask();
-
-
             System.Console.ReadLine();
         }
     }

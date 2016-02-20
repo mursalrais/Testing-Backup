@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using MCAWebAndAPI.Model.ProjectManagement.Schedule;
+using System.Linq;
 
 namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 {
@@ -12,6 +13,6 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
         Task Get(string title);
 
         IEnumerable<Task> GetAllTaskNotCompleted();
-
+        IEnumerable<Task> GetMilestones();
     }
 }

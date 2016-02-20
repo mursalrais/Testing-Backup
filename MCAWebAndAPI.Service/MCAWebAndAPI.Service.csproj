@@ -42,7 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Connector\SPConnector.cs" />
+    <Compile Include="SPUtil\SPConnector.cs" />
     <Compile Include="ProjectManagement\Schedule\ITaskService.cs" />
     <Compile Include="ProjectManagement\Schedule\TaskService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
