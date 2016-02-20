@@ -23,9 +23,8 @@ namespace MCAWebAndAPI.Service.Connector
 
                 List byTitle = context.Web.Lists.GetByTitle(listName);
                 CamlQuery query = CamlQuery.CreateAllItemsQuery();
-                ListItemCollection clientObject = byTitle.GetItems(query);
-
-                context.Load(clientObject);
+                Microsoft.SharePoint.Client.ListItemCollection clientObject = byTitle.GetItems(query);
+                context.Load<Microsoft.SharePoint.Client.ListItemCollection>(clientObject);
                 context.ExecuteQuery();
                 return clientObject;
             }

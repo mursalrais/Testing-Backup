@@ -28,10 +28,12 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
         public IEnumerable<Task> GetAllTask()
         {
             var list = Connector.SPConnector.GetList("Tasks");
-            return list.Select(e => new Task
+            var result =  list.Select(e => new Task
             {
                 Title = e["Title"].ToString()
-            });
+            }).ToList();
+
+            return result;
         }
 
         public IEnumerable<Task> GetAllTaskNotCompleted()

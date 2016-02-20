@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCAWebAndAPI.Service", "MCA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCAWebAndAPI.Web", "MCAWebAndAPI.Web\MCAWebAndAPI.Web.csproj", "{1A22D557-AC51-4FAA-A9CD-43691C669226}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCAWebAndAPI.Console", "MCAWebAndAPI.Console\MCAWebAndAPI.Console.csproj", "{7ED88303-F3A2-48B8-A655-05E744B0D571}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{1A22D557-AC51-4FAA-A9CD-43691C669226}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1A22D557-AC51-4FAA-A9CD-43691C669226}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1A22D557-AC51-4FAA-A9CD-43691C669226}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7ED88303-F3A2-48B8-A655-05E744B0D571}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7ED88303-F3A2-48B8-A655-05E744B0D571}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7ED88303-F3A2-48B8-A655-05E744B0D571}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7ED88303-F3A2-48B8-A655-05E744B0D571}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
