@@ -20,20 +20,21 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         // GET api/<controller>
-        public IEnumerable<Task> Get()
+        public HttpResponseMessage Get()
         {
-            return taskService.GetAllTask();
+            var res = taskService.GetAllTask();
+            return this.Request.CreateResponse(
+                HttpStatusCode.OK, res);
         }
 
         // GET api/<controller>/GetNotCompleted
-        [Route("Task/GetNotCompleted")]
         public IEnumerable<Task> GetNotCompleted()
         {
             return taskService.GetAllTaskNotCompleted();
         }
+        
 
         // GET api/<controller>/GetMilestones
-        [Route("Task/GetMilestones")]
         public IEnumerable<Task> GetMilestones()
         {
             return taskService.GetMilestones();

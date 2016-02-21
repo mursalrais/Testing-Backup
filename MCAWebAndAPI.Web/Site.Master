@@ -10,63 +10,188 @@
 
     <asp:PlaceHolder runat="server">
         <%: Scripts.Render("~/bundles/modernizr") %>
+        <%: Scripts.Render("~/bundles/jQuery") %>
+        <%: Scripts.Render("~/bundles/kendo") %>
     </asp:PlaceHolder>
 
-    <webopt:bundlereference runat="server" path="~/Content/css" />
+    <webopt:BundleReference runat="server" Path="~/Content/css" />
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link href="Content/custom.css" rel="stylesheet" />
 </head>
 <body>
-    <form runat="server">
-        <asp:ScriptManager runat="server">
-            <Scripts>
-                <%--To learn more about bundling scripts in ScriptManager see http://go.microsoft.com/fwlink/?LinkID=301884 --%>
-                <%--Framework Scripts--%>
-                <asp:ScriptReference Name="MsAjaxBundle" />
-                <asp:ScriptReference Name="jquery" />
-                <asp:ScriptReference Name="bootstrap" />
-                <asp:ScriptReference Name="respond" />
-                <asp:ScriptReference Name="WebForms.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebForms.js" />
-                <asp:ScriptReference Name="WebUIValidation.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebUIValidation.js" />
-                <asp:ScriptReference Name="MenuStandards.js" Assembly="System.Web" Path="~/Scripts/WebForms/MenuStandards.js" />
-                <asp:ScriptReference Name="GridView.js" Assembly="System.Web" Path="~/Scripts/WebForms/GridView.js" />
-                <asp:ScriptReference Name="DetailsView.js" Assembly="System.Web" Path="~/Scripts/WebForms/DetailsView.js" />
-                <asp:ScriptReference Name="TreeView.js" Assembly="System.Web" Path="~/Scripts/WebForms/TreeView.js" />
-                <asp:ScriptReference Name="WebParts.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebParts.js" />
-                <asp:ScriptReference Name="Focus.js" Assembly="System.Web" Path="~/Scripts/WebForms/Focus.js" />
-                <asp:ScriptReference Name="WebFormsBundle" />
-                <%--Site Scripts--%>
-            </Scripts>
-        </asp:ScriptManager>
-
-        <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="mainbar">
             <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" runat="server" href="~/">Application name</a>
+                <button type="button" class="btn mainbar-toggle" data-toggle="collapse" data-target=".mainbar-collapse"><i class="fa fa-bars"></i></button>
+                <div class="mainbar-collapse collapse">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <a href="https://eceos2.sharepoint.com/sites/mca-dev/SitePages/home.aspx">
+                                <img class="company-logo" src="../Images/logo.png" alt="company logo" />
+                            </a>
+                        </div>
+                        <div class="col-md-7">
+                            <ul class="nav navbar-nav mainbar-nav">
+                                <li class="dropdown">
+                                    <a href="https://eceos2.sharepoint.com/sites/mca-dev/SitePages/home.aspx">
+                                        <i class="fa fa-home"></i>
+                                        [ProjectName]
+                                    </a>
+                                </li>
+                                <li class="dropdown ">
+                                    <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">
+                                        <i class="fa fa-align-left"></i>
+                                        Project Management
+                                <span class="caret"></span>
+                                    </a>
+
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a href="#">Financial Tracking</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Result Tracking</a>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li class="dropdown ">
+                                    <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">
+                                        <i class="fa fa-keyboard-o"></i>
+                                        Master Data
+                                <span class="caret"></span>
+                                    </a>
+
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a href="#">Activity</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Sub-Activity</a>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li class="dropdown">
+                                    <a href="./sites/mca-dev/project-gp/SitePages/Monev.aspx">
+                                        <i class="fa fa-dashboard"></i>
+                                        Monev Dashboard
+                                    </a>
+                                </li>
+
+
+                                <li class="dropdown">
+                                    <a href="#contact" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">
+                                        <i class="fa fa-external-link"></i>
+                                        Features
+                                <span class="caret"></span>
+                                    </a>
+
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a href="#">Documents</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Calendar</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Risk Register</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Issue Register</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-3 pull-right">
+                            <!-- THIS IS for SEARCHING -->
+                            <div id="imaginary_container">
+                                <div class="input-group stylish-input-group">
+                                    <input type="text" class="form-control" placeholder="Search">
+                                    <span class="input-group-addon">
+                                        <button type="submit">
+                                            <span class="glyphicon glyphicon-search"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
-                        <li><a runat="server" href="~/">Home</a></li>
-                        <li><a runat="server" href="~/About">About</a></li>
-                        <li><a runat="server" href="~/Contact">Contact</a></li>
-                    </ul>
+                <!-- /.navbar-collapse -->
+            </div>
+            <!-- /.container -->
+        </div>
+        <!-- /.mainbar -->
+
+
+        <div class="container">
+            <div class="content">
+                <div class="content-container">
+                    <div class="content-header">
+                        <h2 class="content-header-title">[PAGE TITLE]</h2>
+                        <ol class="breadcrumb">
+                            <li>
+                                <a href="/">MCA-Indonesia : IMS</a>
+                            </li>
+                            <li>
+                                <a href="#">[BREADCRUMB 1]</a>
+                            </li>
+                            <li class="active">[BREADCRUMB 2]]</li>
+                        </ol>
+                    </div>
+                    <!-- /.content-header -->
+
+                    <div id="main-content">
+                        
+                        <!-- MAIN CONTENT START HERE -->
+                        <form runat="server">
+                            <asp:ScriptManager runat="server">
+                            <Scripts>
+                                <%--To learn more about bundling scripts in ScriptManager see http://go.microsoft.com/fwlink/?LinkID=301884 --%>
+                                <%--Framework Scripts--%>
+                                <asp:ScriptReference Name="MsAjaxBundle" />
+                                <asp:ScriptReference Name="bootstrap" />
+                                <asp:ScriptReference Name="respond" />
+                                <asp:ScriptReference Name="WebForms.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebForms.js" />
+                                <asp:ScriptReference Name="WebUIValidation.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebUIValidation.js" />
+                                <asp:ScriptReference Name="MenuStandards.js" Assembly="System.Web" Path="~/Scripts/WebForms/MenuStandards.js" />
+                                <asp:ScriptReference Name="GridView.js" Assembly="System.Web" Path="~/Scripts/WebForms/GridView.js" />
+                                <asp:ScriptReference Name="DetailsView.js" Assembly="System.Web" Path="~/Scripts/WebForms/DetailsView.js" />
+                                <asp:ScriptReference Name="TreeView.js" Assembly="System.Web" Path="~/Scripts/WebForms/TreeView.js" />
+                                <asp:ScriptReference Name="WebParts.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebParts.js" />
+                                <asp:ScriptReference Name="Focus.js" Assembly="System.Web" Path="~/Scripts/WebForms/Focus.js" />
+
+
+                                <asp:ScriptReference Name="WebFormsBundle" />
+                                <%--Site Scripts--%>
+                            </Scripts>
+                        </asp:ScriptManager>
+                            <asp:ContentPlaceHolder ID="MainContent" runat="server">
+                            </asp:ContentPlaceHolder>
+                        </form>
+                        <!-- MAIN CONTENT ENDS HERE-->
+                    </div>
+
+
+                </div>
+                <!-- /.content-container -->
+            </div>
+            <!-- /.content -->
+        </div>
+        <!-- /.container -->
+        <footer class="footer dark">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <span class="footer-text pull-left">MCA Indonesia - Information Management System</span>
+                    </div>
+                    <div class="col-md-6">
+                        <span class="footer-text pull-right">&copy; 2016 -  The eCEOs Sdn Bhd. &nbsp;&nbsp;&nbsp;</span>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="container body-content">
-            <asp:ContentPlaceHolder ID="MainContent" runat="server">
-            </asp:ContentPlaceHolder>
-            <hr />
-            <footer>
-                <p>&copy; <%: DateTime.Now.Year %> - My ASP.NET Application</p>
-            </footer>
-        </div>
-
-    </form>
+        </footer>
 </body>
 </html>

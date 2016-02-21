@@ -8,18 +8,18 @@ namespace MCAWebAndAPI.Model.ProjectManagement.Common
 {
     public class Activity
     {
-        private Project _project;
-
-        public Project Project
+        private string _activityName;
+        
+        public string ActivityName
         {
             get
             {
-                return _project;
+                return _activityName;
             }
 
             set
             {
-                _project = value;
+                _activityName = value;
             }
         }
     }

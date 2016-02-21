@@ -8,18 +8,18 @@ namespace MCAWebAndAPI.Model.ProjectManagement.Common
 {
     public class Project
     {
-        private string _title;
+        private string _projectName;
 
-        public string Title
+        public string ProjectName
         {
             get
             {
-                return "Project Dummy";
+                return _projectName;
             }
 
             set
             {
-                _title = value;
+                _projectName = value;
             }
         }
     }

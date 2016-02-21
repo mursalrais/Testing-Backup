@@ -46,6 +46,10 @@
     <Reference Include="App_Licenses">
       <HintPath>..\..\..\..\Downloads\epmo_online\Bin\App_Licenses.dll</HintPath>
     </Reference>
+    <Reference Include="AspNet.ScriptManager.bootstrap, Version=3.3.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\AspNet.ScriptManager.bootstrap.3.3.6\lib\net45\AspNet.ScriptManager.bootstrap.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="DlhSoft.ProjectData.GanttChart.ASP.Controls">
       <HintPath>..\..\..\..\Downloads\epmo_online\Bin\DlhSoft.ProjectData.GanttChart.ASP.Controls.dll</HintPath>
     </Reference>
@@ -57,6 +61,11 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -79,9 +88,6 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
-    <Reference Include="AspNet.ScriptManager.bootstrap">
-      <HintPath>..\packages\AspNet.ScriptManager.bootstrap.3.0.0\lib\net45\AspNet.ScriptManager.bootstrap.dll</HintPath>
-    </Reference>
     <Reference Include="AspNet.ScriptManager.jQuery">
       <HintPath>..\packages\AspNet.ScriptManager.jQuery.1.10.2\lib\net45\AspNet.ScriptManager.jQuery.dll</HintPath>
     </Reference>
@@ -101,10 +107,6 @@
     <Reference Include="Antlr3.Runtime">
       <Private>True</Private>
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <Private>True</Private>
-      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.Web.Optimization.WebForms">
       <Private>True</Private>
@@ -131,18 +133,53 @@
   <ItemGroup>
     <Content Include="About.aspx" />
     <Content Include="Contact.aspx" />
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\custom.css" />
+    <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\kendo.common.min.css" />
+    <Content Include="Content\kendo.dataviz.metro.min.css" />
+    <Content Include="Content\kendo.metro.min.css" />
+    <Content Include="Content\Kendo\kendo.common.min.css" />
+    <Content Include="Content\Kendo\kendo.dataviz.metro.min.css" />
+    <Content Include="Content\Kendo\kendo.metro.min.css" />
+    <Content Include="Content\Kendo\Metro\editor.png" />
+    <Content Include="Content\Kendo\Metro\imagebrowser.png" />
+    <Content Include="Content\Kendo\Metro\indeterminate.gif" />
+    <Content Include="Content\Kendo\Metro\loading-image.gif" />
+    <Content Include="Content\Kendo\Metro\loading.gif" />
+    <Content Include="Content\Kendo\Metro\loading_2x.gif" />
+    <Content Include="Content\Kendo\Metro\markers.png" />
+    <Content Include="Content\Kendo\Metro\markers_2x.png" />
+    <Content Include="Content\Kendo\Metro\slider-h.gif" />
+    <Content Include="Content\Kendo\Metro\slider-v.gif" />
+    <Content Include="Content\Kendo\Metro\sprite.png" />
+    <Content Include="Content\Kendo\Metro\sprite_2x.png" />
+    <Content Include="Content\Kendo\Metro\sprite_kpi.png" />
+    <Content Include="Content\Kendo\Metro\sprite_kpi_2x.png" />
     <Content Include="Content\Site.css" />
+    <Content Include="Content\z_mcatheme.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Images\logo.png" />
+    <Content Include="Scripts\Apps\Kendo.Dropdown.js" />
+    <Content Include="Scripts\Apps\Kendo.Grid.js" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\bootstrap.min.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Content\bootstrap-theme.min.css.map" />
+    <Content Include="Content\bootstrap-theme.css.map" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\kendo.all.min.js" />
+    <Content Include="Scripts\kendo.core.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />

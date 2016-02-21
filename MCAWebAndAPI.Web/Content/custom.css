@@ -1,0 +1,73 @@
+
+
+@media (min-width: 1200px){
+    .container {
+        width: 94% !important;
+        max-width: 1400px !important;
+    }
+}
+
+.mainbar {
+    background: #1A417C !important;
+ }
+
+.company-logo{
+  position: relative;
+  margin: 12px auto 25px;
+  z-index: 100;
+  width: 100px;
+}
+
+form.navbar-form {
+    margin-top: 35px;
+}
+
+.border-bottom-dot{
+  padding-bottom: .5em;
+    margin-bottom: 2.5em;
+  border-bottom: 1px dotted #CCC;
+}
+
+.caption {
+    margin-top: 9px;
+    text-align: center;
+}
+
+footer.dark{
+  background-color: #333333;
+  margin: 50px 0 0 0;
+  padding: 50px 0 20px 0;
+}
+
+.footer-text{
+  color: #EFEFEF;
+}
+
+#back-to-top{
+  background-color: #85C226 !important;
+}
+
+#s4-bodyContainer {
+  padding-bottom: 0px !important;
+}
+
+#breadcrumb span {
+    font-size: 18px;
+    color: #16A085;
+}
+
+#imaginary_container{
+    margin-top:12%; /* Don't copy this */
+}
+.stylish-input-group .input-group-addon{
+    background: white !important; 
+}
+.stylish-input-group .form-control{
+	border-right:0; 
+	box-shadow:0 0 0; 
+	border-color:#ccc;
+}
+.stylish-input-group button{
+    border:0;
+    background:transparent;
+}

@@ -9,11 +9,13 @@ namespace MCAWebAndAPI.Model.ProjectManagement.Schedule
 {
     public class Task
     {
-        private string _title;
-        private SPUser _assignedTo;
-        private DateTime _startDate;
-        private DateTime _dueDate;
-        private int _percentage;
+        string _title;
+        string _assignedTo;
+        DateTime _startDate;
+        DateTime _dueDate;
+        int _percentage;
+        string _subActivity;
+        string _activity;
 
         public int Percentage
         {
@@ -21,7 +23,6 @@ namespace MCAWebAndAPI.Model.ProjectManagement.Schedule
             {
                 return _percentage;
             }
-
             set
             {
                 _percentage = value;
@@ -33,6 +34,22 @@ namespace MCAWebAndAPI.Model.ProjectManagement.Schedule
             get
             {
                 return _percentage + "%";
+            }
+        }
+
+        public string StartDateString
+        {
+            get
+            {
+                return _startDate.ToShortDateString();
+            }
+        }
+
+        public string DueDateString
+        {
+            get
+            {
+                return _dueDate.ToShortDateString();
             }
         }
 
@@ -55,20 +72,18 @@ namespace MCAWebAndAPI.Model.ProjectManagement.Schedule
             {
                 return _startDate;
             }
-
             set
             {
                 _startDate = value;
             }
         }
 
-        public SPUser AssignedTo
+        public string AssignedTo
         {
             get
             {
                 return _assignedTo;
             }
-
             set
             {
                 _assignedTo = value;
@@ -85,6 +100,32 @@ namespace MCAWebAndAPI.Model.ProjectManagement.Schedule
             set
             {
                 _title = value;
+            }
+        }
+
+        public string SubActivity
+        {
+            get
+            {
+                return _subActivity;
+            }
+
+            set
+            {
+                _subActivity = value;
+            }
+        }
+
+        public string Activity
+        {
+            get
+            {
+                return _activity;
+            }
+
+            set
+            {
+                _activity = value;
             }
         }
 

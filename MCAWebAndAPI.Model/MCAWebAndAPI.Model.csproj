@@ -48,13 +48,17 @@
     <Compile Include="ProjectManagement\Common\ActivityVM.cs" />
     <Compile Include="ProjectManagement\Common\Project.cs" />
     <Compile Include="ProjectManagement\Common\SPUser.cs" />
+    <Compile Include="ProjectManagement\Common\SubActivity.cs" />
     <Compile Include="ProjectManagement\Schedule\Task.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModel\Chart\ProjectStatusBarChartVM.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="BackOffice\" />
     <Folder Include="ProjectManagement\Finance\" />
     <Folder Include="ProjectManagement\Result\" />
+    <Folder Include="ViewModel\Control\" />
+    <Folder Include="ViewModel\Grid\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
