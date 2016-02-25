@@ -144,20 +144,25 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
             // Update ONLY summary tasks that change
             foreach (var changeFlag in _updatedSummaryTasks)
             {
-                var SPListItem = SPConnector.GetListItem("EpmoTask", changeFlag.Key);
+                Dictionary<string, object> updatedValues = new Dictionary<string, object>();
+
+                //var SPListItem = SPConnector.GetListItem("EpmoTask", changeFlag.Key);
 
                 // Modify columns value if it needs to be changed
                 if (changeFlag.Value.StartDateChanged)
-                    SPListItem["StartDate"] = _summaryTasks[changeFlag.Key].StartDate;
+                    updatedValues.Add("StartDate", _summaryTasks[changeFlag.Key].StartDate);
+                    //SPListItem["StartDate"] = _summaryTasks[changeFlag.Key].StartDate;
 
                 if (changeFlag.Value.DueDateChanged)
-                    SPListItem["DueDate"] = _summaryTasks[changeFlag.Key].DueDate;
+                    updatedValues.Add("DueDate", _summaryTasks[changeFlag.Key].DueDate);
+                    //SPListItem["DueDate"] = _summaryTasks[changeFlag.Key].DueDate;
 
                 if (changeFlag.Value.PercentCompleteChanged)
-                    SPListItem["PercentComplete"] = _summaryTasks[changeFlag.Key].PercentComplete;
+                    updatedValues.Add("PercentComplete", _summaryTasks[changeFlag.Key].PercentComplete);
+                    //SPListItem["PercentComplete"] = _summaryTasks[changeFlag.Key].PercentComplete;
 
                 // Update to SharePoint
-                SPConnector.UpdateListItem("EpmoTask", changeFlag.Key, SPListItem);
+                SPConnector.UpdateListItem("EpmoTask", changeFlag.Key, updatedValues);
 
             }
         }

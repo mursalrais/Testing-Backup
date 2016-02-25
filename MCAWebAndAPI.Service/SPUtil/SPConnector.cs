@@ -57,7 +57,8 @@ namespace MCAWebAndAPI.Service.SPUtil
             }
         }
 
-        public static void UpdateListItem(string listName, int listItemID, ListItem listItem)
+
+        public static void UpdateListItem(string listName, int listItemID, Dictionary<string, object> updatedValues)
         {
             using (ClientContext context = new ClientContext(CurUrl))
             {
@@ -66,19 +67,23 @@ namespace MCAWebAndAPI.Service.SPUtil
                 context.Credentials = new SharePointOnlineCredentials(UserName, secureString);
 
                 // Get one listitem
-                var SPListItem = context.Web.Lists.GetByTitle(listName).GetItemById(listItemID);
+                List SPList = context.Web.Lists.GetByTitle(listName);
+                ListItem SPListItem = SPList.GetItemById(listItemID);
+                context.Load(SPListItem);
+                context.ExecuteQuery();
 
                 // Set listitem value to parsed listitem
-                SPListItem = listItem;
+                foreach (var key in updatedValues.Keys)
+                {
+                    SPListItem[key] = updatedValues[key];
+                }
 
                 // Update remotely
                 SPListItem.Update();
                 context.ExecuteQuery();
-                
+
             }
         }
-
-
 
     }
 }
