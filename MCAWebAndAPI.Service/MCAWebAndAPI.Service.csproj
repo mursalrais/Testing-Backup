@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="ProjectManagement\Common\IProjectHierarchyService.cs" />
     <Compile Include="ProjectManagement\Common\ProjectHierarchyService.cs" />
+    <Compile Include="SPUtil\MathUtil.cs" />
     <Compile Include="SPUtil\SPConnector.cs" />
     <Compile Include="ProjectManagement\Schedule\ITaskService.cs" />
     <Compile Include="ProjectManagement\Schedule\TaskService.cs" />

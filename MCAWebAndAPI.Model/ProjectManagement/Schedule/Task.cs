@@ -15,20 +15,20 @@ namespace MCAWebAndAPI.Model.ProjectManagement.Schedule
         string _assignedTo;
         DateTime _startDate;
         DateTime _dueDate;
-        int _percentage;
+        double _percentComplete;
         string _subActivity;
         string _activity;
         bool _isSummaryTask;
 
-        public int Percentage
+        public double PercentComplete
         {
             get
             {
-                return _percentage;
+                return _percentComplete;
             }
             set
             {
-                _percentage = value;
+                _percentComplete = value;
             }
         }
 
@@ -36,7 +36,7 @@ namespace MCAWebAndAPI.Model.ProjectManagement.Schedule
         {
             get
             {
-                return _percentage + "%";
+                return _percentComplete + "%";
             }
         }
 

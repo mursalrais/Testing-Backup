@@ -13,7 +13,8 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
         public TaskService()
         {
             _summaryTasks = new Dictionary<int, Task>();
-            _updatedSummaryTasks = new List<int>();
+            _updatedSummaryTasks = new Dictionary<int, TaskChangeFlag>();
+            _percentCompleteInitialValue = new Dictionary<int, double>();
         }
 
         #region Object Converter
@@ -24,7 +25,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
             task.Title = Convert.ToString(item["Title"]);
             task.StartDate = Convert.ToDateTime(item["StartDate"]);
             task.DueDate = Convert.ToDateTime(item["DueDate"]);
-            task.Percentage = Convert.ToInt32(item["PercentComplete"]);
+            task.PercentComplete = Convert.ToDouble(item["PercentComplete"]);
             task.IsSummaryTask = Convert.ToBoolean(item["Summary"]);
 
             task.ParentId = item["ParentID"] == null ? 0 : Convert.ToInt32((item["ParentID"] as FieldLookupValue).LookupValue);
@@ -37,10 +38,16 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
         #region Summary Task Calculation
         Dictionary<int, Task> _summaryTasks;
-        List<int> _updatedSummaryTasks;
+        Dictionary<int, TaskChangeFlag> _updatedSummaryTasks;
+        Dictionary<int, double> _percentCompleteInitialValue;
 
         void PutIntoSummaryTasks(int ID, Task thisTask)
         {
+            // manipulate percent complete
+            _percentCompleteInitialValue.Add(ID, thisTask.PercentComplete);
+            thisTask.PercentComplete = -1;
+
+            // put into dictionary
             _summaryTasks.Add(ID, thisTask);
         }
 
@@ -59,16 +66,57 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
         {
             _summaryTasks[parentID].DueDate = thisTaskDueDate;
 
-            if (!_updatedSummaryTasks.Contains(parentID))
-                _updatedSummaryTasks.Add(parentID);
+            // update change flag
+            if (!_updatedSummaryTasks.ContainsKey(parentID))
+                _updatedSummaryTasks.Add(parentID, new TaskChangeFlag
+                {
+                    DueDateChanged = true
+                });
+
+            else if (!_updatedSummaryTasks[parentID].DueDateChanged)
+                _updatedSummaryTasks[parentID].DueDateChanged = true;
         }
 
         void UpdateParentStartDate(int parentID, DateTime thisTaskStartDate)
         {
             _summaryTasks[parentID].StartDate = thisTaskStartDate;
 
-            if (!_updatedSummaryTasks.Contains(parentID))
-                _updatedSummaryTasks.Add(parentID);
+            // update change flag
+            if (!_updatedSummaryTasks.ContainsKey(parentID))
+                _updatedSummaryTasks.Add(parentID, new TaskChangeFlag
+                {
+                    StartDateChanged = true
+                });
+
+            else if (!_updatedSummaryTasks[parentID].StartDateChanged)
+                _updatedSummaryTasks[parentID].StartDateChanged = true;
+        }
+
+
+        void UpdateParentPercentage(int parentID, double thisTaskPercentage)
+        {
+            // first child
+            if (_summaryTasks[parentID].PercentComplete.Equals(-1))
+                _summaryTasks[parentID].PercentComplete = thisTaskPercentage;
+            else
+                _summaryTasks[parentID].PercentComplete = (_summaryTasks[parentID].PercentComplete + thisTaskPercentage) / 2;
+
+           
+            // update change flag
+            if (!_updatedSummaryTasks.ContainsKey(parentID))
+                _updatedSummaryTasks.Add(parentID, new TaskChangeFlag
+                {
+                    PercentCompleteChanged = true
+                });
+
+            else if (!_updatedSummaryTasks[parentID].PercentCompleteChanged)
+                _updatedSummaryTasks[parentID].PercentCompleteChanged = true;
+
+        }
+
+        bool ShouldUpdatePercentage(int parentID, double thisTaskPercentage)
+        {
+            return !MathUtil.CompareDouble(_summaryTasks[parentID].PercentComplete, thisTaskPercentage);
         }
 
         void UpdateParentRecursively(Task thisTask)
@@ -83,10 +131,15 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
             if (ShouldUpdateDueDate(thisTask.ParentId, thisTask.DueDate))
                 UpdateParentDueDate(thisTask.ParentId, thisTask.DueDate);
 
+            if (ShouldUpdatePercentage(thisTask.ParentId, thisTask.PercentComplete))
+                UpdateParentPercentage(thisTask.ParentId, thisTask.PercentComplete);
+
+
             // If currentTask still has parent
             if (_summaryTasks.ContainsKey(thisTask.ParentId))
                 UpdateParentRecursively(_summaryTasks[thisTask.ParentId]);
         }
+
 
         public int CalculateSummaryTask()
         {
@@ -110,19 +163,35 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
             return _updatedSummaryTasks.Count();
         }
 
+        bool NeedToChangeListItem(int key, TaskChangeFlag flag)
+        {
+            return (flag.PercentCompleteChanged &&
+                !MathUtil.CompareDouble(_percentCompleteInitialValue[key], _summaryTasks[key].PercentComplete))
+                || flag.StartDateChanged || flag.DueDateChanged;
+        }
+
         private void UpdateSummaryTaskAfterCalculation()
         {
             // Update ONLY summary tasks that change
-            foreach (var key in _updatedSummaryTasks)
+            foreach (var changeFlag in _updatedSummaryTasks)
             {
-                var SPListItem = SPConnector.GetListItem("EpmoTask", key);
+                if(NeedToChangeListItem(changeFlag.Key, changeFlag.Value))
+                {
+                    var SPListItem = SPConnector.GetListItem("EpmoTask", changeFlag.Key);
 
-                // Modify columns value
-                SPListItem["StartDate"] = _summaryTasks[key].StartDate;
-                SPListItem["DueDate"] = _summaryTasks[key].DueDate;
+                    // Modify columns value if it needs to be changed
+                    if(changeFlag.Value.StartDateChanged)
+                        SPListItem["StartDate"] = _summaryTasks[changeFlag.Key].StartDate;
 
-                // Update to SharePoint
-                SPConnector.UpdateListItem("EpmoTask", key, SPListItem);
+                    if (changeFlag.Value.DueDateChanged)
+                        SPListItem["DueDate"] = _summaryTasks[changeFlag.Key].DueDate;
+
+                    if(changeFlag.Value.PercentCompleteChanged)
+                        SPListItem["PercentComplete"] = _summaryTasks[changeFlag.Key].PercentComplete;
+
+                    // Update to SharePoint
+                    SPConnector.UpdateListItem("EpmoTask", changeFlag.Key, SPListItem);
+                }
             }
         }
 
