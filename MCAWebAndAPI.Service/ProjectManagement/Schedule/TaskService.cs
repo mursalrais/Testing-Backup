@@ -125,11 +125,11 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
                 SPConnector.UpdateListItem("EpmoTask", key, SPListItem);
             }
         }
-        
+
 
         #endregion
 
-
+        #region CRUD Tasks List
         public bool CreateTask(Task task)
         {
             throw new NotImplementedException();
@@ -187,6 +187,9 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
             return result;
         }
 
+        #endregion
+
+        #region Charting
         public IEnumerable<ProjectStatusBarChartVM> GenerateProjectStatusBarChart()
         {
             var list = SPConnector.GetList("Tasks");
@@ -213,5 +216,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
             return days <= 0 ? 0 : days;
         }
+
+        #endregion
     }
 }
