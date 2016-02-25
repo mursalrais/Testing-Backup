@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Service.SPUtil
 {
@@ -10,7 +6,9 @@ namespace MCAWebAndAPI.Service.SPUtil
     {
         public static bool CompareDouble(double value1, double value2)
         {
-            var difference = .1;
+            // 100 % = 1
+            // 0.1% = .0001
+            var difference = .0001;
             return Math.Abs(value1 - value2) <= difference;
         }   
     }
