@@ -67,8 +67,6 @@ namespace MCAWebAndAPI.Service.SPUtil
 
                 // Get one listitem
                 var SPListItem = context.Web.Lists.GetByTitle(listName).GetItemById(listItemID);
-                context.Load(SPListItem);
-                context.ExecuteQuery();
 
                 // Set listitem value to parsed listitem
                 SPListItem = listItem;

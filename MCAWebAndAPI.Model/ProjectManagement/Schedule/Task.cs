@@ -170,11 +170,7 @@ namespace MCAWebAndAPI.Model.ProjectManagement.Schedule
                 _isSummaryTask = value;
             }
         }
-
-        public Task()
-        {
-
-        }
+        
 
     }
 }
