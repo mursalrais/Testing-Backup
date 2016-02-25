@@ -15,5 +15,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
         IEnumerable<ProjectStatusBarChartVM> GenerateProjectStatusBarChart();
 
+        int CalculateSummaryTask();
+
     }
 }

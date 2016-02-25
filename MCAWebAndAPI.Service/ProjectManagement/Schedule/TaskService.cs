@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Linq;
-using System.Text;
 using MCAWebAndAPI.Model.ProjectManagement.Schedule;
 using MCAWebAndAPI.Service.SPUtil;
-using System.Collections;
 using System.Collections.Generic;
 using MCAWebAndAPI.Model.ViewModel.Chart;
 using Microsoft.SharePoint.Client;
@@ -12,21 +10,126 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 {
     public class TaskService : ITaskService
     {
-        Task ConvertToModel(Microsoft.SharePoint.Client.ListItem item)
+        public TaskService()
         {
-            return new Task
-            {
-                Title = Convert.ToString(item["Title"]),
-                AssignedTo = Convert.ToString(item["AssignedTo"]),
-                DueDate = Convert.ToDateTime(item["DueDate"]),
-                StartDate = Convert.ToDateTime(item["StartDate"]),
-                Percentage = Convert.ToInt32(item["PercentComplete"]),
-                Activity = Convert.ToString( (item["Activity"] as FieldLookupValue).LookupValue ?? string.Empty),
-                SubActivity = Convert.ToString( (item["Sub_x002d_Activity"] as FieldLookupValue).LookupValue ?? string.Empty)
-            };
+            _summaryTasks = new Dictionary<int, Task>();
+            _updatedSummaryTasks = new List<int>();
         }
 
-         
+        #region Object Converter
+        Task ConvertToModel(Microsoft.SharePoint.Client.ListItem item)
+        {
+            var task = new Task();
+            task.Id = Convert.ToInt32(item["ID"]);
+            task.Title = Convert.ToString(item["Title"]);
+            task.StartDate = Convert.ToDateTime(item["StartDate"]);
+            task.DueDate = Convert.ToDateTime(item["DueDate"]);
+            task.Percentage = Convert.ToInt32(item["PercentComplete"]);
+            task.IsSummaryTask = Convert.ToBoolean(item["Summary"]);
+
+            task.ParentId = item["ParentID"] == null ? 0 : Convert.ToInt32((item["ParentID"] as FieldLookupValue).LookupValue);
+            
+            return task;
+        }
+
+
+        #endregion
+
+        #region Summary Task Calculation
+        Dictionary<int, Task> _summaryTasks;
+        List<int> _updatedSummaryTasks;
+
+        void PutIntoSummaryTasks(int ID, Task thisTask)
+        {
+            _summaryTasks.Add(ID, thisTask);
+        }
+
+        bool ShouldUpdateStartDate(int parentID, DateTime thisTaskStartDate)
+        {
+            return thisTaskStartDate < _summaryTasks[parentID].StartDate;
+        }
+
+        bool ShouldUpdateDueDate(int parentID, DateTime thisTaskDueDate)
+        {
+            return thisTaskDueDate > _summaryTasks[parentID].DueDate;
+        }
+
+
+        void UpdateParentDueDate(int parentID, DateTime thisTaskDueDate)
+        {
+            _summaryTasks[parentID].DueDate = thisTaskDueDate;
+
+            if (!_updatedSummaryTasks.Contains(parentID))
+                _updatedSummaryTasks.Add(parentID);
+        }
+
+        void UpdateParentStartDate(int parentID, DateTime thisTaskStartDate)
+        {
+            _summaryTasks[parentID].StartDate = thisTaskStartDate;
+
+            if (!_updatedSummaryTasks.Contains(parentID))
+                _updatedSummaryTasks.Add(parentID);
+        }
+
+        void UpdateParentRecursively(Task thisTask)
+        {
+            // breaking point
+            if (thisTask.ParentId == 0)
+                return;
+
+            if (ShouldUpdateStartDate(thisTask.ParentId, thisTask.StartDate))
+                UpdateParentStartDate(thisTask.ParentId, thisTask.StartDate);
+
+            if (ShouldUpdateDueDate(thisTask.ParentId, thisTask.DueDate))
+                UpdateParentDueDate(thisTask.ParentId, thisTask.DueDate);
+
+            // If currentTask still has parent
+            if (_summaryTasks.ContainsKey(thisTask.ParentId))
+                UpdateParentRecursively(_summaryTasks[thisTask.ParentId]);
+        }
+
+        public int CalculateSummaryTask()
+        {
+            // Retrieve all SP List and copy to in-memory objects
+            foreach (var item in SPConnector.GetList("EpmoTask"))
+            {
+                var TaskItem = ConvertToModel(item);
+
+                // Task summary is put into Dictionary
+                if (TaskItem.IsSummaryTask)
+                    PutIntoSummaryTasks(TaskItem.Id, TaskItem);
+
+                // Task leaf is used to update its summary task(s)
+                else
+                    UpdateParentRecursively(TaskItem);   
+            }
+
+            UpdateSummaryTaskAfterCalculation();
+
+            // return number of summary tasks that have been updated
+            return _updatedSummaryTasks.Count();
+        }
+
+        private void UpdateSummaryTaskAfterCalculation()
+        {
+            // Update ONLY summary tasks that change
+            foreach (var key in _updatedSummaryTasks)
+            {
+                var SPListItem = SPConnector.GetListItem("EpmoTask", key);
+
+                // Modify columns value
+                SPListItem["StartDate"] = _summaryTasks[key].StartDate;
+                SPListItem["DueDate"] = _summaryTasks[key].DueDate;
+
+                // Update to SharePoint
+                SPConnector.UpdateListItem("EpmoTask", key, SPListItem);
+            }
+        }
+        
+
+        #endregion
+
+
         public bool CreateTask(Task task)
         {
             throw new NotImplementedException();

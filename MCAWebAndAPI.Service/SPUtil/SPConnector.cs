@@ -39,6 +39,47 @@ namespace MCAWebAndAPI.Service.SPUtil
             }
         }
 
+        public static ListItem GetListItem(string listName, int listItemID)
+        {
+            using (ClientContext context = new ClientContext(CurUrl))
+            {
+                SecureString secureString = new SecureString();
+                Password.ToList().ForEach(secureString.AppendChar);
+                context.Credentials = new SharePointOnlineCredentials(UserName, secureString);
+
+                // Get one listitem
+                var SPListItem = context.Web.Lists.GetByTitle(listName).GetItemById(listItemID);
+                context.Load(SPListItem);
+                context.ExecuteQuery();
+
+                return SPListItem;
+
+            }
+        }
+
+        public static void UpdateListItem(string listName, int listItemID, ListItem listItem)
+        {
+            using (ClientContext context = new ClientContext(CurUrl))
+            {
+                SecureString secureString = new SecureString();
+                Password.ToList().ForEach(secureString.AppendChar);
+                context.Credentials = new SharePointOnlineCredentials(UserName, secureString);
+
+                // Get one listitem
+                var SPListItem = context.Web.Lists.GetByTitle(listName).GetItemById(listItemID);
+                context.Load(SPListItem);
+                context.ExecuteQuery();
+
+                // Set listitem value to parsed listitem
+                SPListItem = listItem;
+
+                // Update remotely
+                SPListItem.Update();
+                context.ExecuteQuery();
+                
+            }
+        }
+
 
 
     }

@@ -9,6 +9,8 @@ namespace MCAWebAndAPI.Model.ProjectManagement.Schedule
 {
     public class Task
     {
+        int _id;
+        int _parentId;
         string _title;
         string _assignedTo;
         DateTime _startDate;
@@ -16,6 +18,7 @@ namespace MCAWebAndAPI.Model.ProjectManagement.Schedule
         int _percentage;
         string _subActivity;
         string _activity;
+        bool _isSummaryTask;
 
         public int Percentage
         {
@@ -126,6 +129,45 @@ namespace MCAWebAndAPI.Model.ProjectManagement.Schedule
             set
             {
                 _activity = value;
+            }
+        }
+
+        public int Id
+        {
+            get
+            {
+                return _id;
+            }
+
+            set
+            {
+                _id = value;
+            }
+        }
+
+        public int ParentId
+        {
+            get
+            {
+                return _parentId;
+            }
+
+            set
+            {
+                _parentId = value;
+            }
+        }
+
+        public bool IsSummaryTask
+        {
+            get
+            {
+                return _isSummaryTask;
+            }
+
+            set
+            {
+                _isSummaryTask = value;
             }
         }
 

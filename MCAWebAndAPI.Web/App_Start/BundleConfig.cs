@@ -39,7 +39,8 @@ namespace MCAWebAndAPI.Web
 
             bundles.Add(new ScriptBundle("~/bundles/kendo").Include(
                            "~/Scripts/kendo.all.min.js", 
-                           "~/Scripts/Apps/Kendo.Grid.js"));
+                           "~/Scripts/Apps/Kendo.Grid.js",
+                           "~/Scripts/Apps/Kendo.Dropdown.js"));
 
             ScriptManager.ScriptResourceMapping.AddDefinition(
                 "respond",

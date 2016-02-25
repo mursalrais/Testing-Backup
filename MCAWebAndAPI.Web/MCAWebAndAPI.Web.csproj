@@ -243,11 +243,8 @@
     <Compile Include="Contact.aspx.designer.cs">
       <DependentUpon>Contact.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Controllers\ActivityController.cs" />
-    <Compile Include="Controllers\BarChartItemController.cs" />
-    <Compile Include="Controllers\ProjectController.cs" />
+    <Compile Include="Controllers\ProjectHierarchyController.cs" />
     <Compile Include="Controllers\TaskController.cs" />
-    <Compile Include="Controllers\SubActivityController.cs" />
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

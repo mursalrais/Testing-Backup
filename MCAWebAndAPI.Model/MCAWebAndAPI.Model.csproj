@@ -40,10 +40,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Demo\BarChartItem.cs" />
-    <Compile Include="Demo\CascadeDropDown\Activity.cs" />
-    <Compile Include="Demo\CascadeDropDown\Project.cs" />
-    <Compile Include="Demo\CascadeDropDown\SubActivity.cs" />
     <Compile Include="ProjectManagement\Common\Activity.cs" />
     <Compile Include="ProjectManagement\Common\ActivityVM.cs" />
     <Compile Include="ProjectManagement\Common\Project.cs" />

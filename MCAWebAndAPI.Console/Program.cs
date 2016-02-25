@@ -13,8 +13,25 @@ namespace MCAWebAndAPI.Console
 
         static void Main(string[] args)
         {
-            var result = service.GetAllTask();
+            try
+            {
+                CalculateTaskSummary();
+            }catch(Exception e)
+            {
+                System.Console.WriteLine(e.Message);
+            }
+
+            System.Console.WriteLine("DONE");
             System.Console.ReadLine();
+        }
+
+        static void CalculateTaskSummary()
+        {
+            int numberOfUpdatedSummaryTasks = 0;
+            System.Console.WriteLine("START to CALCULATE TASKS");
+            numberOfUpdatedSummaryTasks = service.CalculateSummaryTask();
+
+            System.Console.WriteLine(string.Format("{0} summary tasks have been updated", numberOfUpdatedSummaryTasks));
         }
     }
 }
