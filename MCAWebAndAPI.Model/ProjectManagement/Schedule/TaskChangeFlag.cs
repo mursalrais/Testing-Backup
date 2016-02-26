@@ -8,7 +8,7 @@ namespace MCAWebAndAPI.Model.ProjectManagement.Schedule
 {
     public enum TaskChangeFlagEnum
     {
-        START_DATE, DUE_DATE, PERCENT_COMPLETE, DURATION, SUMMARY
+        START_DATE, DUE_DATE, PERCENT_COMPLETE, DURATION, SUMMARY, MILESTONE
     }
     
 }

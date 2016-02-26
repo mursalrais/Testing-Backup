@@ -20,6 +20,7 @@ namespace MCAWebAndAPI.Model.ProjectManagement.Schedule
         string _subActivity;
         string _activity;
         bool _isSummaryTask;
+        bool _isMilestone;
 
         public double PercentComplete
         {
@@ -167,7 +168,6 @@ namespace MCAWebAndAPI.Model.ProjectManagement.Schedule
             {
                 return _isSummaryTask;
             }
-
             set
             {
                 _isSummaryTask = value;
@@ -184,6 +184,19 @@ namespace MCAWebAndAPI.Model.ProjectManagement.Schedule
             set
             {
                 _duration = value;
+            }
+        }
+
+        public bool IsMilestone
+        {
+            get
+            {
+                return _isMilestone;
+            }
+
+            set
+            {
+                _isMilestone = value;
             }
         }
     }

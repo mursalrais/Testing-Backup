@@ -33,11 +33,16 @@ namespace MCAWebAndAPI.Model.ProjectManagement.Schedule
 
             foreach(var child in _childrenDurationAndPercentComplete)
             {
-                totalPercentCompleteTimesDuration += child.Item1 * child.Item2;
+                totalPercentCompleteTimesDuration += (child.Item1 * child.Item2);
                 totalDuration += child.Item1;
             }
 
             _taskValue.PercentComplete = totalPercentCompleteTimesDuration / totalDuration;
+        }
+
+        public void CalculateMilestones()
+        {
+            _taskValue.IsMilestone = !_taskValue.IsSummaryTask && (_taskValue.StartDate.CompareTo(_taskValue.DueDate) == 0);
         }
         
 

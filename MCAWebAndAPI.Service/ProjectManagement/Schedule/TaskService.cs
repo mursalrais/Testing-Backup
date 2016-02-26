@@ -6,14 +6,18 @@ using System.Collections.Generic;
 using MCAWebAndAPI.Model.ViewModel.Chart;
 using Microsoft.SharePoint.Client;
 using System.Collections;
+using NLog;
 
 namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 {
     public class TaskService : ITaskService
     {
+        static Logger logger = LogManager.GetCurrentClassLogger();
+
+
         public TaskService()
         {
-            _summaryTasks = new Dictionary<int, TaskSummaryCalculation>();
+            _updatedTaskCandidates = new Dictionary<int, TaskSummaryCalculation>();
         }
 
         #region Object Converter
@@ -24,9 +28,13 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
             task.Title = Convert.ToString(item["Title"]);
             task.StartDate = Convert.ToDateTime(item["StartDate"]);
             task.DueDate = Convert.ToDateTime(item["DueDate"]);
+            task.Duration = Convert.ToDouble(item["Duration"]);
+
+
             task.PercentComplete = Convert.ToDouble(item["PercentComplete"]);
             task.IsSummaryTask = Convert.ToBoolean(item["Summary"]);
-
+            task.IsMilestone = Convert.ToBoolean(item["Milestone"]);
+            
             task.ParentId = item["ParentID"] == null ? 0 : Convert.ToInt32((item["ParentID"] as FieldLookupValue).LookupValue);
 
             return task;
@@ -36,7 +44,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
         #endregion
 
         #region Summary Task Calculation
-        Dictionary<int, TaskSummaryCalculation> _summaryTasks;
+        Dictionary<int, TaskSummaryCalculation> _updatedTaskCandidates;
         public int CalculateSummaryTask()
         {
             // Retrieve all SP List and copy to in-memory objects
@@ -49,24 +57,40 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
                     PushToSummaryTasks(TaskItem.Id, TaskItem);
                 // Task leaf is used to update its summary task(s)
                 else
-                    UpdateParentRecursively(TaskItem);
+                    UpdateParentDates(TaskItem);
 
                 PushToParentPercentCompleteArray(TaskItem);
+                CalculateMilestone(TaskItem);
             }
 
-            CalculateSummaryTasksPercentComplete();
-            CalculateSummaryTasksDuration();
+            CalculateColumns();
             UpdateSummaryTaskAfterCalculation();
 
+            var numberOfUpdatedTask = _updatedTaskCandidates.Values.Count(e => e.ShouldBeUpdated);
             // return number of summary tasks that have been updated
-            return _summaryTasks.Values.Select(e => e.ShouldBeUpdated).Count();
+            return numberOfUpdatedTask;
         }
 
+        private void CalculateColumns()
+        {
+            foreach (var item in _updatedTaskCandidates.Values)
+            {
+                // put initial value to temporary variable
+                double percentCompleteInitialValue = item.TaskValue.PercentComplete;
+                
+                // update task percent complete based on children's average value
+                item.CalculatePercentComplete();
+
+                // Compare if it is same with initial value, if not then the flag is set true 
+                if (!MathUtil.CompareDouble(item.TaskValue.PercentComplete, percentCompleteInitialValue))
+                    item.UpdateFlag(TaskChangeFlagEnum.PERCENT_COMPLETE, true);
+            }
+        }
 
         void PushToSummaryTasks(int ID, Task thisTask)
         {
             // put into dictionary
-            _summaryTasks.Add(ID, new TaskSummaryCalculation(thisTask));
+            _updatedTaskCandidates.Add(ID, new TaskSummaryCalculation(thisTask));
         }
 
         void PushToParentPercentCompleteArray(Task thisTask)
@@ -74,38 +98,42 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
             // only if task has parent
             if (thisTask.ParentId != 0)
             {
-                _summaryTasks[thisTask.ParentId].PutChildDurationAndPercentComplete(thisTask.Duration, thisTask.PercentComplete);
+                _updatedTaskCandidates[thisTask.ParentId].PutChildDurationAndPercentComplete(thisTask.Duration, thisTask.PercentComplete);
             }
         }
 
         bool ShouldUpdateStartDate(int parentID, DateTime thisTaskStartDate)
         {
-            return thisTaskStartDate < _summaryTasks[parentID].TaskValue.StartDate;
+            return thisTaskStartDate < _updatedTaskCandidates[parentID].TaskValue.StartDate;
         }
 
         bool ShouldUpdateDueDate(int parentID, DateTime thisTaskDueDate)
         {
-            return thisTaskDueDate > _summaryTasks[parentID].TaskValue.DueDate;
+            return thisTaskDueDate > _updatedTaskCandidates[parentID].TaskValue.DueDate;
         }
-
 
         void UpdateParentDueDate(int parentID, DateTime thisTaskDueDate)
         {
-            _summaryTasks[parentID].TaskValue.DueDate = thisTaskDueDate;
+            _updatedTaskCandidates[parentID].TaskValue.DueDate = thisTaskDueDate;
+            _updatedTaskCandidates[parentID].TaskValue.Duration = MathUtil.CalculateWorkingDays(_updatedTaskCandidates[parentID].TaskValue.StartDate, thisTaskDueDate);
 
             // update change flag
-            _summaryTasks[parentID].UpdateFlag(TaskChangeFlagEnum.DUE_DATE, true);
+            _updatedTaskCandidates[parentID].UpdateFlag(TaskChangeFlagEnum.DUE_DATE, true);
+            _updatedTaskCandidates[parentID].UpdateFlag(TaskChangeFlagEnum.DURATION, true);
+
         }
 
         void UpdateParentStartDate(int parentID, DateTime thisTaskStartDate)
         {
-            _summaryTasks[parentID].TaskValue.StartDate = thisTaskStartDate;
-
+            _updatedTaskCandidates[parentID].TaskValue.StartDate = thisTaskStartDate;
+            _updatedTaskCandidates[parentID].TaskValue.Duration = MathUtil.CalculateWorkingDays(thisTaskStartDate, _updatedTaskCandidates[parentID].TaskValue.DueDate);
+            
             // update change flag
-            _summaryTasks[parentID].UpdateFlag(TaskChangeFlagEnum.START_DATE, true);
+            _updatedTaskCandidates[parentID].UpdateFlag(TaskChangeFlagEnum.START_DATE, true);
+            _updatedTaskCandidates[parentID].UpdateFlag(TaskChangeFlagEnum.DURATION, true);
         }
 
-        void UpdateParentRecursively(Task thisTask)
+        void UpdateParentDates(Task thisTask)
         {
             // breaking point
             if (thisTask.ParentId == 0)
@@ -118,60 +146,74 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
                 UpdateParentDueDate(thisTask.ParentId, thisTask.DueDate);
 
             // If currentTask still has parent
-            if (_summaryTasks.ContainsKey(thisTask.ParentId))
-                UpdateParentRecursively(_summaryTasks[thisTask.ParentId].TaskValue);
+            if (_updatedTaskCandidates.ContainsKey(thisTask.ParentId))
+                UpdateParentDates(_updatedTaskCandidates[thisTask.ParentId].TaskValue);
+                
         }
 
-        void CalculateSummaryTasksPercentComplete()
+        // Recheck milestone value
+        private void CalculateMilestone(Task thisTask)
         {
-            foreach (var item in _summaryTasks.Values)
+            if(thisTask.IsSummaryTask && thisTask.IsMilestone)
             {
-                // put into temporary variable
-                double valueBeforeUpdated = item.TaskValue.PercentComplete;
-
-                // update task percent complete based on children's average value
-                item.CalculatePercentComplete();
-
-                // Compare if it is same with initial value
-                if (!MathUtil.CompareDouble(item.TaskValue.PercentComplete, valueBeforeUpdated))
-                    item.UpdateFlag(TaskChangeFlagEnum.PERCENT_COMPLETE, true);
+                _updatedTaskCandidates[thisTask.Id].TaskValue.IsMilestone = false;
+                _updatedTaskCandidates[thisTask.Id].UpdateFlag(TaskChangeFlagEnum.MILESTONE, true);
             }
-        }
-
-        void CalculateSummaryTasksDuration()
-        {
-            foreach (var item in _summaryTasks.Values)
+            else if (thisTask.IsSummaryTask)
             {
-                var beforeValue = item.TaskValue.Duration;
-                item.TaskValue.Duration = MathUtil.CalculateWorkingDays(item.TaskValue.StartDate, item.TaskValue.DueDate);
-
-                if (!MathUtil.CompareDouble(beforeValue, item.TaskValue.Duration))
-                    item.UpdateFlag(TaskChangeFlagEnum.DURATION, true);
+                if(thisTask.StartDate.CompareTo(thisTask.DueDate) == 0 && !thisTask.IsMilestone)
+                {
+                    thisTask.IsMilestone = true;
+                    PushToSummaryTasks(thisTask.Id, thisTask);
+                    _updatedTaskCandidates[thisTask.Id].UpdateFlag(TaskChangeFlagEnum.MILESTONE, true);
+                }
+                else if(thisTask.StartDate.CompareTo(thisTask.DueDate) != 0 && thisTask.IsMilestone)
+                {
+                    thisTask.IsMilestone = false;
+                    PushToSummaryTasks(thisTask.Id, thisTask);
+                    _updatedTaskCandidates[thisTask.Id].UpdateFlag(TaskChangeFlagEnum.MILESTONE, true);
+                }
             }
         }
 
         void UpdateSummaryTaskAfterCalculation()
         {
             // Update ONLY summary tasks that change
-            foreach (var item in _summaryTasks.Values)
+            foreach (var item in _updatedTaskCandidates.Values)
             {
-                Dictionary<string, object> updatedValues = new Dictionary<string, object>();
+                if (item.ShouldBeUpdated)
+                {
+                    Dictionary<string, object> updatedValues = new Dictionary<string, object>();
 
-                // Modify columns value if it needs to be changed
-                if (item.GetFlag(TaskChangeFlagEnum.START_DATE))
-                    updatedValues.Add("StartDate", item.TaskValue.StartDate);
-
-                if (item.GetFlag(TaskChangeFlagEnum.DUE_DATE))
-                    updatedValues.Add("DueDate", item.TaskValue.DueDate);
-
-                if (item.GetFlag(TaskChangeFlagEnum.PERCENT_COMPLETE))
-                    updatedValues.Add("PercentComplete", item.TaskValue.PercentComplete);
-
-                if(item.GetFlag(TaskChangeFlagEnum.DURATION))
-                    updatedValues.Add("Duration", item.TaskValue.Duration);
-
-                // Update to SharePoint
-                SPConnector.UpdateListItem("EpmoTask", item.TaskValue.Id, updatedValues);
+                    // Modify columns value if it needs to be changed
+                    if (item.GetFlag(TaskChangeFlagEnum.START_DATE))
+                    {
+                        updatedValues.Add("StartDate", item.TaskValue.StartDate);
+                        logger.Debug(item.TaskValue.Id + ": Update " + TaskChangeFlagEnum.START_DATE.ToString() + " to " + item.TaskValue.StartDate);
+                    }
+                    if (item.GetFlag(TaskChangeFlagEnum.DUE_DATE))
+                    {
+                        updatedValues.Add("DueDate", item.TaskValue.DueDate);
+                        logger.Debug(item.TaskValue.Id + ": Update " + TaskChangeFlagEnum.START_DATE.ToString() + " to " + item.TaskValue.DueDate);
+                    }
+                    if (item.GetFlag(TaskChangeFlagEnum.PERCENT_COMPLETE))
+                    {
+                        updatedValues.Add("PercentComplete", item.TaskValue.PercentComplete);
+                        logger.Debug(item.TaskValue.Id + ": Update " + TaskChangeFlagEnum.PERCENT_COMPLETE.ToString() + " to " + item.TaskValue.PercentComplete);
+                    }
+                    if (item.GetFlag(TaskChangeFlagEnum.DURATION))
+                    {
+                        updatedValues.Add("Duration", item.TaskValue.Duration);
+                        logger.Debug(item.TaskValue.Id + ": Update " + TaskChangeFlagEnum.DURATION.ToString() + " to " + item.TaskValue.Duration);
+                    }
+                    if (item.GetFlag(TaskChangeFlagEnum.MILESTONE))
+                    {
+                        updatedValues.Add("Milestone", item.TaskValue.IsMilestone);
+                        logger.Debug(item.TaskValue.Id + ": Update " + TaskChangeFlagEnum.MILESTONE.ToString() + " to " + item.TaskValue.IsMilestone);
+                    }
+                    // Update to SharePoint
+                    SPConnector.UpdateListItem("EpmoTask", item.TaskValue.Id, updatedValues);
+                }
             }
         }
 
