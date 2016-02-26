@@ -15,6 +15,7 @@ namespace MCAWebAndAPI.Model.ProjectManagement.Schedule
         string _assignedTo;
         DateTime _startDate;
         DateTime _dueDate;
+        double _duration;
         double _percentComplete;
         string _subActivity;
         string _activity;
@@ -80,6 +81,8 @@ namespace MCAWebAndAPI.Model.ProjectManagement.Schedule
                 _startDate = value;
             }
         }
+
+        
 
         public string AssignedTo
         {
@@ -170,7 +173,18 @@ namespace MCAWebAndAPI.Model.ProjectManagement.Schedule
                 _isSummaryTask = value;
             }
         }
-        
 
+        public double Duration
+        {
+            get
+            {
+                return _duration;
+            }
+
+            set
+            {
+                _duration = value;
+            }
+        }
     }
 }
