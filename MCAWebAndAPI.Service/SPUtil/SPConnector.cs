@@ -72,16 +72,23 @@ namespace MCAWebAndAPI.Service.SPUtil
                 context.Load(SPListItem);
                 context.ExecuteQuery();
 
+                // Get current editor
+                var currentEditor = SPListItem["Editor"];
+
                 // Set listitem value to parsed listitem
                 foreach (var key in updatedValues.Keys)
                 {
                     SPListItem[key] = updatedValues[key];
                 }
-
-                // Update remotely
+                
+                // Update columns remotely
                 SPListItem.Update();
                 context.ExecuteQuery();
 
+                // Set editor not to be SP Service
+                SPListItem["Editor"] = currentEditor;
+                SPListItem.Update();
+                context.ExecuteQuery();
             }
         }
 

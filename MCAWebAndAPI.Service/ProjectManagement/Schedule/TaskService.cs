@@ -13,7 +13,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
     public class TaskService : ITaskService
     {
         static Logger logger = LogManager.GetCurrentClassLogger();
-
+        const string SP_LIST_NAME = "EpmoTask";
 
         public TaskService()
         {
@@ -45,25 +45,36 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
         #region Summary Task Calculation
         Dictionary<int, TaskSummaryCalculation> _updatedTaskCandidates;
-        public int CalculateSummaryTask()
+        public int CalculateTaskColumns()
         {
+            var allTaskListItems = new Dictionary<int, Task>();
+
             // Retrieve all SP List and copy to in-memory objects
-            foreach (var item in SPConnector.GetList("EpmoTask"))
+            foreach (var item in SPConnector.GetList(SP_LIST_NAME))
             {
-                var TaskItem = ConvertToModel(item);
-
-                // Task summary is put into Dictionary
-                if (TaskItem.IsSummaryTask)
-                    PushToSummaryTasks(TaskItem.Id, TaskItem);
-                // Task leaf is used to update its summary task(s)
-                else
-                    UpdateParentDates(TaskItem);
-
-                PushToParentPercentCompleteArray(TaskItem);
-                CalculateMilestone(TaskItem);
+                var taskItem = ConvertToModel(item);
+                allTaskListItems.Add(taskItem.Id, taskItem);
             }
 
-            CalculateColumns();
+            // Populate Sumary Tasks
+            foreach(var taskItem in allTaskListItems.Values)
+            {
+                if(taskItem.ParentId != 0)
+                    PutToUpdatedTaskCandidates(taskItem.ParentId, allTaskListItems[taskItem.ParentId]);
+            }
+
+            // Process Task Columns
+            foreach(var taskItem in allTaskListItems.Values)
+            {
+                if (!ShouldBeSummaryTask(taskItem))
+                    UpdateParentDates(taskItem);
+
+                CalculateIsSummary(taskItem);
+                CalculateMilestone(taskItem);
+                PushToParentPercentCompleteArray(taskItem);
+            }
+
+            CalculatePercentComplete();
             UpdateSummaryTaskAfterCalculation();
 
             var numberOfUpdatedTask = _updatedTaskCandidates.Values.Count(e => e.ShouldBeUpdated);
@@ -71,7 +82,28 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
             return numberOfUpdatedTask;
         }
 
-        private void CalculateColumns()
+        private void CalculateIsSummary(Task taskItem)
+        {
+            // update if this task shoud be Summary Task but not set as summary task
+            if (ShouldBeSummaryTask(taskItem) && !taskItem.IsSummaryTask)
+            {
+                _updatedTaskCandidates[taskItem.Id].TaskValue.IsSummaryTask = true;
+                _updatedTaskCandidates[taskItem.Id].UpdateFlag(TaskChangeFlagEnum.SUMMARY, true);
+            }
+            // update if this task should not be Summary Task but set as summary task 
+            else if(!ShouldBeSummaryTask(taskItem) && taskItem.IsSummaryTask)
+            {
+                _updatedTaskCandidates[taskItem.Id].TaskValue.IsSummaryTask = false;
+                _updatedTaskCandidates[taskItem.Id].UpdateFlag(TaskChangeFlagEnum.SUMMARY, true);
+            }
+        }
+
+        private bool ShouldBeSummaryTask(Task taskItem)
+        {
+            return _updatedTaskCandidates.ContainsKey(taskItem.Id);
+        }
+
+        private void CalculatePercentComplete()
         {
             foreach (var item in _updatedTaskCandidates.Values)
             {
@@ -80,6 +112,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
                 
                 // update task percent complete based on children's average value
                 item.CalculatePercentComplete();
+                logger.Debug(item.TaskValue.PercentComplete); 
 
                 // Compare if it is same with initial value, if not then the flag is set true 
                 if (!MathUtil.CompareDouble(item.TaskValue.PercentComplete, percentCompleteInitialValue))
@@ -87,10 +120,10 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
             }
         }
 
-        void PushToSummaryTasks(int ID, Task thisTask)
+        void PutToUpdatedTaskCandidates(int ID, Task thisTask)
         {
-            // put into dictionary
-            _updatedTaskCandidates.Add(ID, new TaskSummaryCalculation(thisTask));
+            if (!_updatedTaskCandidates.ContainsKey(ID))
+                _updatedTaskCandidates.Add(ID, new TaskSummaryCalculation(thisTask));
         }
 
         void PushToParentPercentCompleteArray(Task thisTask)
@@ -98,7 +131,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
             // only if task has parent
             if (thisTask.ParentId != 0)
             {
-                _updatedTaskCandidates[thisTask.ParentId].PutChildDurationAndPercentComplete(thisTask.Duration, thisTask.PercentComplete);
+                 _updatedTaskCandidates[thisTask.ParentId].PutChildDurationAndPercentComplete(thisTask.Duration, thisTask.PercentComplete);
             }
         }
 
@@ -164,13 +197,13 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
                 if(thisTask.StartDate.CompareTo(thisTask.DueDate) == 0 && !thisTask.IsMilestone)
                 {
                     thisTask.IsMilestone = true;
-                    PushToSummaryTasks(thisTask.Id, thisTask);
+                    PutToUpdatedTaskCandidates(thisTask.Id, thisTask);
                     _updatedTaskCandidates[thisTask.Id].UpdateFlag(TaskChangeFlagEnum.MILESTONE, true);
                 }
                 else if(thisTask.StartDate.CompareTo(thisTask.DueDate) != 0 && thisTask.IsMilestone)
                 {
                     thisTask.IsMilestone = false;
-                    PushToSummaryTasks(thisTask.Id, thisTask);
+                    PutToUpdatedTaskCandidates(thisTask.Id, thisTask);
                     _updatedTaskCandidates[thisTask.Id].UpdateFlag(TaskChangeFlagEnum.MILESTONE, true);
                 }
             }
@@ -211,8 +244,20 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
                         updatedValues.Add("Milestone", item.TaskValue.IsMilestone);
                         logger.Debug(item.TaskValue.Id + ": Update " + TaskChangeFlagEnum.MILESTONE.ToString() + " to " + item.TaskValue.IsMilestone);
                     }
+                    if (item.GetFlag(TaskChangeFlagEnum.SUMMARY))
+                    {
+                        updatedValues.Add("Summary", item.TaskValue.IsSummaryTask);
+                        logger.Debug(item.TaskValue.Id + ": Update " + TaskChangeFlagEnum.SUMMARY.ToString() + " to " + item.TaskValue.IsSummaryTask);
+                    }
+
                     // Update to SharePoint
-                    SPConnector.UpdateListItem("EpmoTask", item.TaskValue.Id, updatedValues);
+                    try {
+                        SPConnector.UpdateListItem("EpmoTask", item.TaskValue.Id, updatedValues);
+                    }
+                    catch(Exception e)
+                    {
+                        logger.Debug("ID: " + item.TaskValue.Id + " values: " + updatedValues.Keys + " error: " + e.Message);
+                    }
                 }
             }
         }
@@ -228,7 +273,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
         public Task Get(string title)
         {
-            var tasks = SPConnector.GetList("Tasks");
+            var tasks = SPConnector.GetList(SP_LIST_NAME);
             var task = tasks.First(e => title.Equals(Convert.ToString(e["Title"])));
             return new Task
             {
@@ -239,20 +284,20 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
         public IEnumerable<Task> GetAllTask()
         {
-            List<Task> jsonList = new List<Task>();
+            List<Task> result = new List<Task>();
 
-            foreach (var item in SPConnector.GetList("Tasks"))
+            foreach (var item in SPConnector.GetList(SP_LIST_NAME))
             {
-                jsonList.Add(ConvertToModel(item));
+                result.Add(ConvertToModel(item));
             }
 
-            return jsonList;
+            return result;
         }
 
         public IEnumerable<Task> GetAllTaskNotCompleted()
         {
-            var list = SPConnector.GetList("Tasks",
-                "<View><Query><Where><And><Lt><FieldRef Name='PercentComplete' /><Value Type='Number'>100</Value></Lt><Neq><FieldRef Name='Status' /><Value Type='Choice'>Completed</Value></Neq></And></Where><OrderBy><FieldRef Name='StartDate' Ascending='True' /></OrderBy></Query></View>");
+            var stringQuery = "<View><Query><Where><And><Lt><FieldRef Name='PercentComplete' /><Value Type='Number'>100</Value></Lt><Neq><FieldRef Name='Status' /><Value Type='Choice'>Completed</Value></Neq></And></Where><OrderBy><FieldRef Name='StartDate' Ascending='True' /></OrderBy></Query></View>";
+            var list = SPConnector.GetList(SP_LIST_NAME, stringQuery);
 
             var result = new List<Task>();
             foreach (var item in list)
@@ -265,8 +310,8 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
         public IEnumerable<Task> GetMilestones()
         {
-            var list = SPConnector.GetList("Tasks",
-                "<View><Query><Where><Eq><FieldRef Name='IsMilestone' /><Value Type='Boolean'>1</Value></Eq></Where></Query></View>");
+            var stringQuery = "<View><Query><Where><Eq><FieldRef Name='IsMilestone' /><Value Type='Boolean'>1</Value></Eq></Where></Query></View>";
+            var list = SPConnector.GetList(SP_LIST_NAME, stringQuery);
 
             var result = new List<Task>();
             foreach (var item in list)
@@ -282,7 +327,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
         #region Charting
         public IEnumerable<ProjectStatusBarChartVM> GenerateProjectStatusBarChart()
         {
-            var list = SPConnector.GetList("Tasks");
+            var list = SPConnector.GetList(SP_LIST_NAME);
             var result = new List<ProjectStatusBarChartVM>();
 
             foreach (var item in list)

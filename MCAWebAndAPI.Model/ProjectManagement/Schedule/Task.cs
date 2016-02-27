@@ -34,14 +34,6 @@ namespace MCAWebAndAPI.Model.ProjectManagement.Schedule
             }
         }
 
-        public string PercentageString
-        {
-            get
-            {
-                return _percentComplete + "%";
-            }
-        }
-
         public string StartDateString
         {
             get
@@ -84,18 +76,6 @@ namespace MCAWebAndAPI.Model.ProjectManagement.Schedule
         }
 
         
-
-        public string AssignedTo
-        {
-            get
-            {
-                return _assignedTo;
-            }
-            set
-            {
-                _assignedTo = value;
-            }
-        }
 
         public string Title
         {
@@ -170,7 +150,7 @@ namespace MCAWebAndAPI.Model.ProjectManagement.Schedule
             }
             set
             {
-                _isSummaryTask = value;
+                _isMilestone = value;
             }
         }
 

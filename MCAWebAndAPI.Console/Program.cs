@@ -25,7 +25,7 @@ namespace MCAWebAndAPI.Console
         {
             int numberOfUpdatedSummaryTasks = 0;
             System.Console.WriteLine("START to CALCULATE TASKS");
-            numberOfUpdatedSummaryTasks = service.CalculateSummaryTask();
+            numberOfUpdatedSummaryTasks = service.CalculateTaskColumns();
 
             System.Console.WriteLine(string.Format("{0} summary tasks have been updated", numberOfUpdatedSummaryTasks));
         }

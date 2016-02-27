@@ -6,6 +6,9 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using MCAWebAndAPI.Model.ProjectManagement.Schedule;
+using System.Text;
+using System.Net.Http.Headers;
+
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -25,23 +28,10 @@ namespace MCAWebAndAPI.Web.Controllers
             return taskService.GetAllTask();
         }
 
-        // GET api/<controller>/GetNotCompleted
-        public IEnumerable<Task> GetNotCompleted()
+        [AcceptVerbs("GET", "POST")]
+        public void CalculateTasks()
         {
-            return taskService.GetAllTaskNotCompleted();
-        }
-        
-
-        // GET api/<controller>/GetMilestones
-        public IEnumerable<Task> GetMilestones()
-        {
-            return taskService.GetMilestones();
-        }
-
-        
-        public int CalculateSummaryTask()
-        {
-            return taskService.CalculateSummaryTask();
+            taskService.CalculateTaskColumns();
         }
     }
 }
