@@ -150,7 +150,7 @@ namespace MCAWebAndAPI.Model.ProjectManagement.Schedule
             }
             set
             {
-                _isMilestone = value;
+                _isSummaryTask = value;
             }
         }
 

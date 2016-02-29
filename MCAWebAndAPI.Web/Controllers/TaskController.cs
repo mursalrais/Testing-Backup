@@ -29,9 +29,9 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         [AcceptVerbs("GET", "POST")]
-        public void CalculateTasks()
+        public int CalculateTasks()
         {
-            taskService.CalculateTaskColumns();
+            return taskService.CalculateTaskColumns();
         }
     }
 }

@@ -112,7 +112,6 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
                 
                 // update task percent complete based on children's average value
                 item.CalculatePercentComplete();
-                logger.Debug(item.TaskValue.PercentComplete); 
 
                 // Compare if it is same with initial value, if not then the flag is set true 
                 if (!MathUtil.CompareDouble(item.TaskValue.PercentComplete, percentCompleteInitialValue))
