@@ -17,5 +17,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
         int CalculateTaskColumns();
 
+        void UpdateTodayValue();
+
     }
 }
