@@ -14,6 +14,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
     {
         static Logger logger = LogManager.GetCurrentClassLogger();
         const string SP_LIST_NAME = "EpmoTask";
+        const string SP_PROJECT_INFORMATION_LIST_NAME = "Project Information";
 
         public TaskService()
         {
@@ -76,10 +77,29 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
             CalculatePercentComplete();
             UpdateSummaryTaskAfterCalculation();
+            UpdateProjectInformation();
 
             var numberOfUpdatedTask = _updatedTaskCandidates.Values.Count(e => e.ShouldBeUpdated);
             // return number of summary tasks that have been updated
             return numberOfUpdatedTask;
+        }
+
+        private void UpdateProjectInformation()
+        {
+            Dictionary<string, object> updatedColumns = new Dictionary<string, object>();
+            var mainTaskItem = _updatedTaskCandidates.Values.FirstOrDefault(e => e.TaskValue.ParentId == 0);
+
+            updatedColumns["Title"] = mainTaskItem.TaskValue.Title;
+            updatedColumns["PercentComplete"] = mainTaskItem.TaskValue.PercentComplete;
+
+            try
+            {
+                SPConnector.UpdateListItem(SP_PROJECT_INFORMATION_LIST_NAME, 1, updatedColumns);
+            }
+            catch (Exception e)
+            {
+                logger.Debug(e.Message);
+            }
         }
 
         private void CalculateIsSummary(Task taskItem)
@@ -251,7 +271,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
                     // Update to SharePoint
                     try {
-                        SPConnector.UpdateListItem("EpmoTask", item.TaskValue.Id, updatedValues);
+                        SPConnector.UpdateListItem(SP_LIST_NAME, item.TaskValue.Id, updatedValues);
                     }
                     catch(Exception e)
                     {

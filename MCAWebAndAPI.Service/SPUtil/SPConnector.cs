@@ -58,6 +58,37 @@ namespace MCAWebAndAPI.Service.SPUtil
         }
 
 
+        public static void UpdateListItem(string listName, ListItem listItem)
+        {
+            using (ClientContext context = new ClientContext(CurUrl))
+            {
+                SecureString secureString = new SecureString();
+                Password.ToList().ForEach(secureString.AppendChar);
+                context.Credentials = new SharePointOnlineCredentials(UserName, secureString);
+
+                // Get one listitem
+                List SPList = context.Web.Lists.GetByTitle(listName);
+                ListItem SPListItem = SPList.GetItemById(listItem.Id);
+                context.Load(SPListItem);
+                context.ExecuteQuery();
+
+                // Get current editor
+                var currentEditor = SPListItem["Editor"];
+
+                // Set listitem value to parsed listitem
+                SPListItem = listItem;
+
+                // Update columns remotely
+                SPListItem.Update();
+                context.ExecuteQuery();
+
+                // Set editor not to be SP Service
+                SPListItem["Editor"] = currentEditor;
+                SPListItem.Update();
+                context.ExecuteQuery();
+            }
+        }
+
         public static void UpdateListItem(string listName, int listItemID, Dictionary<string, object> updatedValues)
         {
             using (ClientContext context = new ClientContext(CurUrl))
@@ -91,6 +122,8 @@ namespace MCAWebAndAPI.Service.SPUtil
                 context.ExecuteQuery();
             }
         }
+
+
 
     }
 }
