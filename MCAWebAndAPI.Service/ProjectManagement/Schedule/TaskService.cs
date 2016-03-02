@@ -283,13 +283,32 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
         #endregion
 
+        #region Update Today Value
+        public void UpdateTodayValue()
+        {
+            Dictionary<string, object> UpdateTodayValue = new Dictionary<string, object>();
+            var AllListItem = GetAllTask();
+            int Day;
+            foreach (var item in AllListItem)
+            {
+                Day = CalculateProjectStatusWeight(item.StartDate, item.DueDate);
+                if (!UpdateTodayValue.ContainsKey("Today"))
+                    UpdateTodayValue.Add("Today", Day);
+                else
+                    UpdateTodayValue["Today"] = Day;
+
+                SPConnector.UpdateListItem(SP_LIST_NAME, item.Id, UpdateTodayValue);
+            }
+        }
+
+        #endregion
+
         #region CRUD Tasks List
         public bool CreateTask(Task task)
         {
             throw new NotImplementedException();
         }
-
-
+        
         public Task Get(string title)
         {
             var tasks = SPConnector.GetList(SP_LIST_NAME);

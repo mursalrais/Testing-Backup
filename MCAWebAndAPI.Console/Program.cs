@@ -11,7 +11,7 @@ namespace MCAWebAndAPI.Console
         {
             try
             {
-                CalculateTaskSummary();
+                UpdateTodayValue();
             }catch(Exception e)
             {
                 System.Console.WriteLine(e.Message);
@@ -20,7 +20,10 @@ namespace MCAWebAndAPI.Console
             System.Console.WriteLine("DONE");
             System.Console.ReadLine();
         }
-
+        static void UpdateTodayValue()
+        {
+            service.UpdateTodayValue();
+        }
         static void CalculateTaskSummary()
         {
             int numberOfUpdatedSummaryTasks = 0;
