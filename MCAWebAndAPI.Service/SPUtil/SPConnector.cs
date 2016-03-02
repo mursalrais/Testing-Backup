@@ -10,10 +10,11 @@ namespace MCAWebAndAPI.Service.SPUtil
 {
     public class SPConnector
     {
-        static string CurUrl = "https://eceos2.sharepoint.com/sites/mca-dev";
+        static string CurUrl = "https://eceos2.sharepoint.com/sites/epmo-app-dev";
         static string UserName =  "sp.services@eceos.com";
         static string Password = "Raja0432";
-       
+
+        
 
         public static ListItemCollection GetList(string listName, string caml = null)
         {

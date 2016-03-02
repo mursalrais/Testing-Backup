@@ -13,7 +13,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
     public class TaskService : ITaskService
     {
         static Logger logger = LogManager.GetCurrentClassLogger();
-        const string SP_LIST_NAME = "EpmoTask";
+        const string SP_LIST_NAME = "Tasks";
         const string SP_PROJECT_INFORMATION_LIST_NAME = "Project Information";
 
         public TaskService()
