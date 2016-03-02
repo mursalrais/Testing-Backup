@@ -7,6 +7,8 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 {
     public interface ITaskService
     {
+        void SetSiteUrl(string siteUrl);
+
         IEnumerable<Task> GetAllTask();
 
         IEnumerable<Task> GetAllTaskNotCompleted();

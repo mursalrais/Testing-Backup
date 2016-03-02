@@ -15,11 +15,18 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
         static Logger logger = LogManager.GetCurrentClassLogger();
         const string SP_LIST_NAME = "Tasks";
         const string SP_PROJECT_INFORMATION_LIST_NAME = "Project Information";
+        string _siteUrl = null;
 
         public TaskService()
         {
             _updatedTaskCandidates = new Dictionary<int, TaskSummaryCalculation>();
         }
+
+        public void SetSiteUrl(string siteUrl)
+        {
+            _siteUrl = siteUrl;
+        }
+
 
         #region Object Converter
         Task ConvertToModel(Microsoft.SharePoint.Client.ListItem item)
@@ -94,7 +101,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
             try
             {
-                SPConnector.UpdateListItem(SP_PROJECT_INFORMATION_LIST_NAME, 1, updatedColumns);
+                SPConnector.UpdateListItem(SP_PROJECT_INFORMATION_LIST_NAME, 1, updatedColumns, _siteUrl);
             }
             catch (Exception e)
             {
@@ -271,7 +278,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
                     // Update to SharePoint
                     try {
-                        SPConnector.UpdateListItem(SP_LIST_NAME, item.TaskValue.Id, updatedValues);
+                        SPConnector.UpdateListItem(SP_LIST_NAME, item.TaskValue.Id, updatedValues, _siteUrl);
                     }
                     catch(Exception e)
                     {
@@ -390,6 +397,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
             return days <= 0 ? 0 : days;
         }
 
+      
         #endregion
     }
 }

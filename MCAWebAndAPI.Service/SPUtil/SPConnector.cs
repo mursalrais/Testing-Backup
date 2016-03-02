@@ -14,7 +14,6 @@ namespace MCAWebAndAPI.Service.SPUtil
         static string UserName =  "sp.services@eceos.com";
         static string Password = "Raja0432";
 
-        
 
         public static ListItemCollection GetList(string listName, string caml = null)
         {
@@ -40,9 +39,9 @@ namespace MCAWebAndAPI.Service.SPUtil
             }
         }
 
-        public static ListItem GetListItem(string listName, int listItemID)
+        public static ListItem GetListItem(string listName, int listItemID, string siteUrl = null)
         {
-            using (ClientContext context = new ClientContext(CurUrl))
+            using (ClientContext context = new ClientContext(siteUrl ?? CurUrl))
             {
                 SecureString secureString = new SecureString();
                 Password.ToList().ForEach(secureString.AppendChar);
@@ -58,41 +57,9 @@ namespace MCAWebAndAPI.Service.SPUtil
             }
         }
 
-
-        public static void UpdateListItem(string listName, ListItem listItem)
+        public static void UpdateListItem(string listName, int listItemID, Dictionary<string, object> updatedValues, string siteUrl = null)
         {
-            using (ClientContext context = new ClientContext(CurUrl))
-            {
-                SecureString secureString = new SecureString();
-                Password.ToList().ForEach(secureString.AppendChar);
-                context.Credentials = new SharePointOnlineCredentials(UserName, secureString);
-
-                // Get one listitem
-                List SPList = context.Web.Lists.GetByTitle(listName);
-                ListItem SPListItem = SPList.GetItemById(listItem.Id);
-                context.Load(SPListItem);
-                context.ExecuteQuery();
-
-                // Get current editor
-                var currentEditor = SPListItem["Editor"];
-
-                // Set listitem value to parsed listitem
-                SPListItem = listItem;
-
-                // Update columns remotely
-                SPListItem.Update();
-                context.ExecuteQuery();
-
-                // Set editor not to be SP Service
-                SPListItem["Editor"] = currentEditor;
-                SPListItem.Update();
-                context.ExecuteQuery();
-            }
-        }
-
-        public static void UpdateListItem(string listName, int listItemID, Dictionary<string, object> updatedValues)
-        {
-            using (ClientContext context = new ClientContext(CurUrl))
+            using (ClientContext context = new ClientContext(siteUrl ?? CurUrl))
             {
                 SecureString secureString = new SecureString();
                 Password.ToList().ForEach(secureString.AppendChar);
