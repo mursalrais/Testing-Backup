@@ -23,16 +23,16 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         [AcceptVerbs("GET", "POST")]
-        public int CalculateTasks(string siteUrl)
+        public int CalculateTasks(string siteUrl = null)
         {
-            taskService.SetSiteUrl(string.IsNullOrEmpty(siteUrl) ? null : siteUrl); 
+            taskService.SetSiteUrl(siteUrl); 
             return taskService.CalculateTaskColumns();
         }
 
         [AcceptVerbs("GET", "POST")]
-        public void UpdateToday(string siteUrl)
+        public void UpdateToday(string siteUrl = null)
         {
-            taskService.SetSiteUrl(string.IsNullOrEmpty(siteUrl) ? null : siteUrl);
+            taskService.SetSiteUrl(siteUrl);
             taskService.UpdateTodayValue();
         }
     }

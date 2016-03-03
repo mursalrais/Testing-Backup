@@ -22,6 +22,8 @@ namespace MCAWebAndAPI.Model.ProjectManagement.Schedule
         bool _isSummaryTask;
         bool _isMilestone;
 
+        double _todayCalculatedDays;
+
         public double PercentComplete
         {
             get
@@ -177,6 +179,19 @@ namespace MCAWebAndAPI.Model.ProjectManagement.Schedule
             set
             {
                 _isMilestone = value;
+            }
+        }
+
+        public double TodayCalculatedDays
+        {
+            get
+            {
+                return _todayCalculatedDays;
+            }
+
+            set
+            {
+                _todayCalculatedDays = value;
             }
         }
     }

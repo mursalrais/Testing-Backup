@@ -45,6 +45,8 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
             
             task.ParentId = item["ParentID"] == null ? 0 : Convert.ToInt32((item["ParentID"] as FieldLookupValue).LookupValue);
 
+            task.TodayCalculatedDays = Convert.ToDouble(item["Today"]);
+
             return task;
         }
 
@@ -294,17 +296,24 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
         public void UpdateTodayValue()
         {
             Dictionary<string, object> UpdateTodayValue = new Dictionary<string, object>();
-            var AllListItem = GetAllTask();
-            int Day;
+            var AllListItem = SPConnector.GetList(SP_LIST_NAME);
+            double days;
+
             foreach (var item in AllListItem)
             {
-                Day = CalculateProjectStatusWeight(item.StartDate, item.DueDate);
-                if (!UpdateTodayValue.ContainsKey("Today"))
-                    UpdateTodayValue.Add("Today", Day);
-                else
-                    UpdateTodayValue["Today"] = Day;
+                var currentValue = Convert.ToDouble(item["Today"]);
+                var dueDate = Convert.ToDateTime(item["DueDate"]);
+                days = MathUtil.CalculateWorkingDays(DateTime.Now, dueDate);
 
-                SPConnector.UpdateListItem(SP_LIST_NAME, item.Id, UpdateTodayValue);
+                if (!MathUtil.CompareDouble(currentValue, days))
+                {
+                    if (!UpdateTodayValue.ContainsKey("Today"))
+                        UpdateTodayValue.Add("Today", days);
+                    else
+                        UpdateTodayValue["Today"] = days;
+
+                    SPConnector.UpdateListItem(SP_LIST_NAME, item.Id, UpdateTodayValue);
+                }
             }
         }
 
