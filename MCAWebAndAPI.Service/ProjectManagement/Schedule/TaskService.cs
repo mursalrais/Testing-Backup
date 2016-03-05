@@ -22,12 +22,21 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
             _updatedTaskCandidates = new Dictionary<int, TaskSummaryCalculation>();
         }
 
+        /// <summary>
+        /// Set SharePoint web absolute URL
+        /// </summary>
+        /// <param name="siteUrl">SPWeb Absolute URL</param>
         public void SetSiteUrl(string siteUrl)
         {
             _siteUrl = siteUrl;
         }
 
 
+        /// <summary>
+        /// Convert SPListItem object to In-Memory Object
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         #region Object Converter
         Task ConvertToModel(Microsoft.SharePoint.Client.ListItem item)
         {
@@ -55,6 +64,11 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
         #region Summary Task Calculation
         Dictionary<int, TaskSummaryCalculation> _updatedTaskCandidates;
+
+        /// <summary>
+        /// Update StartDate, DueDate, PercentComplete, IsSummaryTask, Milestone columns based on current condition
+        /// </summary>
+        /// <returns>Number of list item that has been updated</returns>
         public int CalculateTaskColumns()
         {
             var allTaskListItems = new Dictionary<int, Task>();
