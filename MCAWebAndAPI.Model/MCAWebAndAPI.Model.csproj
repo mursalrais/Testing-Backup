@@ -45,6 +45,9 @@
     <Compile Include="ProjectManagement\Common\Project.cs" />
     <Compile Include="ProjectManagement\Common\SPUser.cs" />
     <Compile Include="ProjectManagement\Common\SubActivity.cs" />
+    <Compile Include="ProjectManagement\Schedule\Action.cs" />
+    <Compile Include="ProjectManagement\Schedule\Issue.cs" />
+    <Compile Include="ProjectManagement\Schedule\Risk.cs" />
     <Compile Include="ProjectManagement\Schedule\Task.cs" />
     <Compile Include="ProjectManagement\Schedule\TaskChangeFlag.cs" />
     <Compile Include="ProjectManagement\Schedule\TaskSummaryCalculation.cs" />

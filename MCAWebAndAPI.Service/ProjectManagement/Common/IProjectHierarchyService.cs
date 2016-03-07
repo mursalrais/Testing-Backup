@@ -13,6 +13,5 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Common
 
         IEnumerable<Activity> GetAllActivities();
 
-
     }
 }
