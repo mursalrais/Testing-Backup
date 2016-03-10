@@ -14,26 +14,24 @@
                         <div class="col-md-6">
                             <div class="form-group">
                             <label for="activity-dropdown">Activity</label>
-                            <input id="activity-dropdown" style="width: 100%" />
+                            
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                             <label for="sub-activity-dropdown">Sub-Activity</label>
-                            <input id="sub-activity-dropdown" style="width: 100%" />
+                          
                             </div>
                         </div>
                     </div>
                     <div class="col-md-3">
-                            <div class="form-group">
+                        <div class="form-group">
                             <label for="quarter-dropdown">Quarter</label>
-                            <input id="quarter-dropdown" style="width: 100%" />
-                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div id="task-by-activity-kendo-grid">
-                    </div>
+                   
                 </div>
             </div>
         </div>

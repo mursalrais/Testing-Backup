@@ -2,18 +2,14 @@
 using Microsoft.SharePoint.Client;
 using System.Security;
 using System.Collections.Generic;
-using MCAWebAndAPI.Model.ProjectManagement.Schedule;
-using System;
-using System.Linq.Expressions;
 
 namespace MCAWebAndAPI.Service.SPUtil
 {
     public class SPConnector
     {
-        static string CurUrl = "https://eceos2.sharepoint.com/sites/epmo-app-dev";
+        static string CurUrl = "https://eceos2.sharepoint.com/sites/mca-dev";
         static string UserName =  "sp.services@eceos.com";
         static string Password = "Raja0432";
-
 
         public static ListItemCollection GetList(string listName, string caml = null)
         {
@@ -30,15 +26,14 @@ namespace MCAWebAndAPI.Service.SPUtil
                         ViewXml = caml
                     };
 
-                ListItemCollection SPListItems = SPList.GetItems(camlQuery);
-
+                var SPListItems = SPList.GetItems(camlQuery);
                 context.Load(SPListItems);
                 context.ExecuteQuery();
 
                 return SPListItems;
             }
         }
-
+        
         public static ListItem GetListItem(string listName, int listItemID, string siteUrl = null)
         {
             using (ClientContext context = new ClientContext(siteUrl ?? CurUrl))
@@ -46,14 +41,12 @@ namespace MCAWebAndAPI.Service.SPUtil
                 SecureString secureString = new SecureString();
                 Password.ToList().ForEach(secureString.AppendChar);
                 context.Credentials = new SharePointOnlineCredentials(UserName, secureString);
-
+                
                 // Get one listitem
                 var SPListItem = context.Web.Lists.GetByTitle(listName).GetItemById(listItemID);
                 context.Load(SPListItem);
                 context.ExecuteQuery();
-
                 return SPListItem;
-
             }
         }
 
@@ -90,8 +83,5 @@ namespace MCAWebAndAPI.Service.SPUtil
                 context.ExecuteQuery();
             }
         }
-
-
-
     }
 }

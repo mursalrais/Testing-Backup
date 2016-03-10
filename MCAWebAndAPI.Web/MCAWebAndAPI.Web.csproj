@@ -164,7 +164,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Images\logo.png" />
     <Content Include="Scripts\Apps\Kendo.Dropdown.js" />
-    <Content Include="Scripts\Apps\Kendo.Grid.js" />
+    <Content Include="Scripts\Apps\KendoGrid.Tasks.js" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
@@ -244,6 +244,7 @@
       <DependentUpon>Contact.aspx</DependentUpon>
     </Compile>
     <Compile Include="Controllers\ProjectHierarchyController.cs" />
+    <Compile Include="Controllers\RIAController.cs" />
     <Compile Include="Controllers\TaskController.cs" />
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>

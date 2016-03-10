@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Model.ProjectManagement.Schedule
 {
-    public class Risk
+    public class Risk : RIABase
     {
     }
 }

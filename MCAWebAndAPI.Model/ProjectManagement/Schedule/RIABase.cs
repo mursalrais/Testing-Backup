@@ -6,8 +6,13 @@ using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Model.ProjectManagement.Schedule
 {
-    public class Issue : RIABase
+    public abstract class RIABase
     {
+        public int Id { get; set; }
+
+        public string Title { get; set; }
+
+        public string Status{ get; set; }
 
     }
 }
