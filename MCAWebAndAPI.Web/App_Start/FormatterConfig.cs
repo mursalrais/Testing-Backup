@@ -10,7 +10,7 @@ using WebApiContrib.Formatting.Jsonp;
 namespace MCAWebAndAPI.Web.App_Start
 {
     public class FormatterConfig
-    {
+    { 
         public static void RegisterFormatters(MediaTypeFormatterCollection formatters)
         {
             var jsonFormatter = formatters.JsonFormatter;
