@@ -19,9 +19,9 @@ namespace MCAWebAndAPI.Web
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
-                name: "DefaultApi",
-                routeTemplate: "api/{controller}/{action}/{id}",
-                defaults: new { action = "get", id = RouteParameter.Optional }
+                 name: "DefaultApi",
+                 routeTemplate: "api/{controller}/{action}/{id}/{format}",
+                 defaults: new { id = RouteParameter.Optional, format = RouteParameter.Optional }
             );
 
             config.Routes.MapHttpRoute(

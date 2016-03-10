@@ -7,6 +7,7 @@ using System.Web.Routing;
 using System.Web.Security;
 using System.Web.SessionState;
 using System.Web.Http;
+using MCAWebAndAPI.Web.App_Start;
 
 namespace MCAWebAndAPI.Web
 {
@@ -14,13 +15,11 @@ namespace MCAWebAndAPI.Web
     {
         void Application_Start(object sender, EventArgs e)
         {
-            // Code that runs on application startup
             GlobalConfiguration.Configure(WebApiConfig.Register);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-
             GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-
+            FormatterConfig.RegisterFormatters(GlobalConfiguration.Configuration.Formatters);
         }
     }
 }
