@@ -88,6 +88,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
             return result;
         }
+        
 
         public IEnumerable<OverallRIAChartVM> GetOverallRIAChart()
         {
@@ -97,26 +98,68 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
             var viewModel = new List<OverallRIAChartVM>();
             viewModel.Add(new OverallRIAChartVM {
-                Name = "Closed",
-                Data = { risks.Count(e => string.Compare(e.Status, "Closed", StringComparison.OrdinalIgnoreCase) == 0),
-                    actions.Count(e => string.Compare(e.Status, "Closed", StringComparison.OrdinalIgnoreCase) == 0),
-                    issues.Count(e => string.Compare(e.Status, "Closed", StringComparison.OrdinalIgnoreCase) == 0) },
+                Name = "Risk",
+                Status = "Closed", 
+                Value = risks.Count(e => string.Compare(e.Status, "Closed", StringComparison.OrdinalIgnoreCase) == 0),
                 Color = "#069F16"
             });
             viewModel.Add(new OverallRIAChartVM
             {
-                Name = "Pending",
-                Data = { risks.Count(e => string.Compare(e.Status, "Pending", StringComparison.OrdinalIgnoreCase) == 0),
-                    actions.Count(e => string.Compare(e.Status, "Pending", StringComparison.OrdinalIgnoreCase) == 0),
-                    issues.Count(e => string.Compare(e.Status, "Pending", StringComparison.OrdinalIgnoreCase) == 0) },
+                Name = "Risk",
+                Status = "Pending",
+                Value = risks.Count(e => string.Compare(e.Status, "Pending", StringComparison.OrdinalIgnoreCase) == 0),
                 Color = "#FFFF25"
             });
             viewModel.Add(new OverallRIAChartVM
             {
-                Name = "Open",
-                Data = { risks.Count(e => string.Compare(e.Status, "Open", StringComparison.OrdinalIgnoreCase) == 0),
-                       actions.Count(e => string.Compare(e.Status, "Open", StringComparison.OrdinalIgnoreCase) == 0),
-                       issues.Count(e => string.Compare(e.Status, "Open", StringComparison.OrdinalIgnoreCase) == 0) },
+                Name = "Risk",
+                Status = "Open",
+                Value = risks.Count(e => string.Compare(e.Status, "Open", StringComparison.OrdinalIgnoreCase) == 0),
+                Color = "#FF0000"
+            });
+
+            viewModel.Add(new OverallRIAChartVM
+            {
+                Name = "Issue",
+                Status = "Closed",
+                Value = issues.Count(e => string.Compare(e.Status, "Closed", StringComparison.OrdinalIgnoreCase) == 0),
+                Color = "#069F16"
+            });
+            viewModel.Add(new OverallRIAChartVM
+            {
+                Name = "Issue",
+                Status = "Pending",
+                Value = issues.Count(e => string.Compare(e.Status, "Pending", StringComparison.OrdinalIgnoreCase) == 0),
+                Color = "#FFFF25"
+            });
+            viewModel.Add(new OverallRIAChartVM
+            {
+                Name = "Issue",
+                Status = "Open",
+                Value = issues.Count(e => string.Compare(e.Status, "Open", StringComparison.OrdinalIgnoreCase) == 0),
+                Color = "#FF0000"
+            });
+
+
+            viewModel.Add(new OverallRIAChartVM
+            {
+                Name = "Actions",
+                Status = "Closed",
+                Value = actions.Count(e => string.Compare(e.Status, "Closed", StringComparison.OrdinalIgnoreCase) == 0),
+                Color = "#069F16"
+            });
+            viewModel.Add(new OverallRIAChartVM
+            {
+                Name = "Actions",
+                Status = "Pending",
+                Value = actions.Count(e => string.Compare(e.Status, "Pending", StringComparison.OrdinalIgnoreCase) == 0),
+                Color = "#FFFF25"
+            });
+            viewModel.Add(new OverallRIAChartVM
+            {
+                Name = "Actions",
+                Status = "Open",
+                Value = actions.Count(e => string.Compare(e.Status, "Open", StringComparison.OrdinalIgnoreCase) == 0),
                 Color = "#FF0000"
             });
 
