@@ -10,7 +10,7 @@ using System.Web.Http.Cors;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
-    [EnableCors(origins: "http://103.28.56.18/", headers: "*", methods: "*")]
+    [EnableCors(origins: "http://103.28.56.18", headers: "*", methods: "*")]
 
     public class RIAController : ApiController
     {

@@ -12,7 +12,7 @@ namespace MCAWebAndAPI.Web
         public static void Register(HttpConfiguration config)
         {
             // Web API configuration and services
-            var cors = new EnableCorsAttribute("http://103.28.56.18/", "*", "*");
+            var cors = new EnableCorsAttribute("http://103.28.56.18", "*", "*");
             config.EnableCors(cors);
 
             // Web API routes
