@@ -6,9 +6,12 @@ using System.Net.Http;
 using System.Web.Http;
 using MCAWebAndAPI.Model.ViewModel.Chart;
 using MCAWebAndAPI.Service.ProjectManagement.Schedule;
+using System.Web.Http.Cors;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
+    [EnableCors(origins: "http://103.28.56.18/", headers: "*", methods: "*")]
+
     public class RIAController : ApiController
     {
         IRIAService riaService;
@@ -23,6 +26,7 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             return new string[] { "value1", "value2" };
         }
+
 
         [AcceptVerbs("GET", "POST")]
         public IEnumerable<OverallRIAChartVM> GetOverallRiaChart(string siteUrl = null) {
