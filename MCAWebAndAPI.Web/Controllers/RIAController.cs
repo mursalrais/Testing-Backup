@@ -1,18 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
-using MCAWebAndAPI.Model.ViewModel.Chart;
-using MCAWebAndAPI.Service.ProjectManagement.Schedule;
-using System.Web.Http.Cors;
+﻿using MCAWebAndAPI.Service.ProjectManagement.Schedule;
+using MCAWebAndAPI.Web.Helpers;
+using System.Web.Mvc;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
-    [EnableCors(origins: "http://103.28.56.18", headers: "*", methods: "*")]
-
-    public class RIAController : ApiController
+    public class RIAController : Controller
     {
         IRIAService riaService;
 
@@ -21,38 +13,20 @@ namespace MCAWebAndAPI.Web.Controllers
             riaService = new RIAService();
         }
 
-        // GET api/<controller>
-        public IEnumerable<string> Get()
+        // GET: RIA
+        public ActionResult Index()
         {
-            return new string[] { "value1", "value2" };
+            return View();
         }
 
 
-        [AcceptVerbs("GET", "POST")]
-        public IEnumerable<OverallRIAChartVM> GetOverallRiaChart(string siteUrl = null) {
+        public ActionResult GetOverallRIAChart(string siteUrl = null) {
+
             riaService.SetSiteUrl(siteUrl);
-            return riaService.GetOverallRIAChart();
-        }
+            var data = riaService.GetOverallRIAChart();
 
-        // GET api/<controller>/5
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<controller>
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT api/<controller>/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/<controller>/5
-        public void Delete(int id)
-        {
+            return this.Jsonp(data);
+            
         }
     }
 }

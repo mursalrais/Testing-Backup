@@ -1,14 +1,16 @@
 ﻿using MCAWebAndAPI.Service.ProjectManagement.Schedule;
+using System;
 using System.Collections.Generic;
-using System.Web.Http;
-using MCAWebAndAPI.Model.ProjectManagement.Schedule;
-
+using System.Linq;
+using System.Web;
+using System.Web.Helpers;
+using System.Web.Mvc;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
-    public class TaskController : ApiController
+    
+    public class TaskController : Controller
     {
-
         ITaskService taskService;
 
         public TaskController()
@@ -16,24 +18,26 @@ namespace MCAWebAndAPI.Web.Controllers
             taskService = new TaskService();
         }
 
-        // GET api/<controller>
-        public IEnumerable<Task> Get()
+        // GET: Tasks
+        public ActionResult Index()
         {
-            return taskService.GetAllTask();
+            return View();
         }
 
-        [AcceptVerbs("GET", "POST")]
+        public JsonResult GetTasks() {
+
+            var data = 1;
+            return new JsonResult
+            {
+                Data = data, 
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
         public int CalculateTasks(string siteUrl = null)
         {
-            taskService.SetSiteUrl(siteUrl); 
-            return taskService.CalculateTaskColumns();
-        }
-
-        [AcceptVerbs("GET", "POST")]
-        public void UpdateToday(string siteUrl = null)
-        {
             taskService.SetSiteUrl(siteUrl);
-            taskService.UpdateTodayValue();
+            return taskService.CalculateTaskColumns();
         }
     }
 }
