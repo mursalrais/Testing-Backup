@@ -393,6 +393,69 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
         #endregion
 
         #region Charting
+
+
+        Dictionary<DateTime, int>  _baseLineTotal = new Dictionary<DateTime, int>();
+        Dictionary<DateTime, int> _planTotal = new Dictionary<DateTime, int>();
+        Dictionary<DateTime, int> _actualTotal = new Dictionary<DateTime, int>();
+
+        private void ReCalculateTotal() {
+
+            var list = _baseLineTotal.Keys.ToList();
+            list.Sort();
+            var arr = list;
+            for (int i = 0; i <  arr.Count; ) {
+                var key = arr[i];
+                var keyNext = arr[++i];
+
+                _baseLineTotal[keyNext] += _baseLineTotal[key];
+            }
+
+            list = _planTotal.Keys.ToList();
+            list.Sort();
+            arr = list;
+            for (int i = 0; i < arr.Count;)
+            {
+                var key = arr[i];
+                var keyNext = arr[++i];
+
+                _planTotal[keyNext] += _planTotal[key];
+            }
+
+            list = _actualTotal.Keys.ToList();
+            list.Sort();
+            arr = list;
+            for (int i = 0; i < arr.Count;)
+            {
+                var key = arr[i];
+                var keyNext = arr[++i];
+
+                _actualTotal[keyNext] += _actualTotal[key];
+            }
+        }
+
+      
+
+        public IEnumerable<ProjectScheduleSCurveVM> GenerateProjectScheduleSCurveChart() {
+
+            foreach (var item in SPConnector.GetList(SP_LIST_NAME)) {
+                if (!Convert.ToBoolean(item["Summary"])){
+
+                    var originalDateTime = Convert.ToDateTime(item["DueDate"]);
+                    var key = MathUtil.ConvertToDateWithoutTime(originalDateTime);
+                    if (_baseLineTotal.ContainsKey(key))
+                        _baseLineTotal[key]++;
+                    else
+                        _baseLineTotal.Add(key, 1);
+                }
+            }
+
+            var result = new List<ProjectScheduleSCurveVM>();
+
+            return result;
+
+        }
+
         public IEnumerable<ProjectStatusBarChartVM> GenerateProjectStatusBarChart()
         {
             var list = SPConnector.GetList(SP_LIST_NAME);

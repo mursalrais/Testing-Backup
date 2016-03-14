@@ -25,7 +25,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
             return new Calendar(){
                 Id = Convert.ToInt32(item["ID"]),
                 Title = Convert.ToString(item["Title"]),
-                Startdate = Convert.ToDateTime(item["EventDate"]),
+                StartDate = Convert.ToDateTime(item["EventDate"]),
                 EndDate = Convert.ToDateTime(item["EndDate"]),
                 IsAllDayEvent = Convert.ToBoolean(item["fAllDayEvent"]),
                 IsRecurring = Convert.ToBoolean(item["fRecurrence"])

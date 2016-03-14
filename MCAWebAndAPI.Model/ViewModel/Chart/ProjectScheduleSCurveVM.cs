@@ -1,0 +1,18 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MCAWebAndAPI.Model.ViewModel.Chart
+{
+    public class ProjectScheduleSCurveVM
+    {
+        public string Category { get; set; }
+
+        public int Value { get; set; }
+
+        public DateTime Date { get; set; }
+
+    }
+}

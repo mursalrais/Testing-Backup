@@ -12,7 +12,7 @@ namespace MCAWebAndAPI.Model.ProjectManagement.Schedule
 
         public string Title { get; set; }
 
-        public DateTime Startdate { get; set; }
+        public DateTime StartDate { get; set; }
 
         public DateTime EndDate { get; set; }
 

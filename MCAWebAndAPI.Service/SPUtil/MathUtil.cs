@@ -11,7 +11,11 @@ namespace MCAWebAndAPI.Service.SPUtil
             var difference = .0001;
             return Math.Abs(value1 - value2) <= difference;
         }
-        
+
+        // TODO: to complete
+        public static DateTime ConvertToDateWithoutTime(DateTime dateTime) {
+            return new DateTime();
+        }
 
         public static double CalculateWorkingDays(DateTime startDate, DateTime endDate)
         {
