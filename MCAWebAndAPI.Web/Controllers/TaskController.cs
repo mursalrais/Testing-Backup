@@ -18,12 +18,6 @@ namespace MCAWebAndAPI.Web.Controllers
             taskService = new TaskService();
         }
 
-        // GET: Tasks
-        public ActionResult Index()
-        {
-            return View();
-        }
-
         public JsonResult GetTasks() {
 
             var data = 1;

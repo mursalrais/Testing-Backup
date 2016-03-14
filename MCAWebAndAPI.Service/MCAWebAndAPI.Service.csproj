@@ -48,6 +48,8 @@
   <ItemGroup>
     <Compile Include="ProjectManagement\Common\IProjectHierarchyService.cs" />
     <Compile Include="ProjectManagement\Common\ProjectHierarchyService.cs" />
+    <Compile Include="ProjectManagement\Schedule\CalendarService.cs" />
+    <Compile Include="ProjectManagement\Schedule\ICalendarService.cs" />
     <Compile Include="ProjectManagement\Schedule\IRIAService.cs" />
     <Compile Include="ProjectManagement\Schedule\RIAService.cs" />
     <Compile Include="SPUtil\MathUtil.cs" />
