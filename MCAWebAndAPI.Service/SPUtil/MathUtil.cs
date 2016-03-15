@@ -11,10 +11,24 @@ namespace MCAWebAndAPI.Service.SPUtil
             var difference = .0001;
             return Math.Abs(value1 - value2) <= difference;
         }
+        
 
-        // TODO: to complete
         public static DateTime ConvertToDateWithoutTime(DateTime dateTime) {
-            return new DateTime();
+            var day = dateTime.Day;
+            var month = dateTime.Month;
+            var year = dateTime.Year;
+
+            return new DateTime(year, month, day);
+        }
+        
+        public static DateTime ConvertToDateWithoutTime(string dateTimeString)
+        {
+            var splittedString = dateTimeString.Split('/');
+            var day = Convert.ToInt32(splittedString[0]);
+            var month = Convert.ToInt32(splittedString[1]);
+            var year = Convert.ToInt32(splittedString[2]);
+
+            return new DateTime(year, month, day);
         }
 
         public static double CalculateWorkingDays(DateTime startDate, DateTime endDate)

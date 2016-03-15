@@ -21,5 +21,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
         void UpdateTodayValue();
 
+        IEnumerable<ProjectScheduleSCurveVM> GenerateProjectScheduleSCurveChart();
+
     }
 }

@@ -18,12 +18,25 @@ namespace MCAWebAndAPI.Web.Controllers
             taskService = new TaskService();
         }
 
-        public JsonResult GetTasks() {
+        public JsonResult GetTasks(string siteUrl = null) {
 
-            var data = 1;
+            taskService.SetSiteUrl(siteUrl);
+            var data = taskService.GetAllTask();
             return new JsonResult
             {
                 Data = data, 
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+
+        public JsonResult GetProjectScheduleSCurveChart(string siteUrl = null)
+        {
+            taskService.SetSiteUrl(siteUrl);
+            var data = taskService.GenerateProjectScheduleSCurveChart();
+
+            return new JsonResult
+            {
+                Data = data,
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }

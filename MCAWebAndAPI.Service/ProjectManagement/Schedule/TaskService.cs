@@ -20,6 +20,10 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
         public TaskService()
         {
             _updatedTaskCandidates = new Dictionary<int, TaskSummaryCalculation>();
+            _baseLineTotal = new Dictionary<DateTime, int>();
+            _planTotal = new Dictionary<DateTime, int>();
+            _actualTotal = new Dictionary<DateTime, int>();
+
         }
 
         /// <summary>
@@ -395,65 +399,91 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
         #region Charting
 
 
-        Dictionary<DateTime, int>  _baseLineTotal = new Dictionary<DateTime, int>();
-        Dictionary<DateTime, int> _planTotal = new Dictionary<DateTime, int>();
-        Dictionary<DateTime, int> _actualTotal = new Dictionary<DateTime, int>();
-
-        private void ReCalculateTotal() {
-
-            var list = _baseLineTotal.Keys.ToList();
-            list.Sort();
-            var arr = list;
-            for (int i = 0; i <  arr.Count; ) {
-                var key = arr[i];
-                var keyNext = arr[++i];
-
-                _baseLineTotal[keyNext] += _baseLineTotal[key];
+        Dictionary<DateTime, int> _baseLineTotal;
+        Dictionary<DateTime, int> _planTotal;
+        Dictionary<DateTime, int> _actualTotal;
+        
+        void PopulateDictionary(ref Dictionary<DateTime, int> totalDicts, ListItem item, string columnName)
+        {
+            var originalDateTime = new DateTime();
+            string originalDateTimeString = null;
+            bool useString = false;
+            try
+            {
+                originalDateTime = Convert.ToDateTime(item[columnName]);
+            }
+            catch (Exception e)
+            {
+                logger.Debug(e.Message);
+                useString = true;
+                originalDateTimeString = Convert.ToString(item[columnName]);
             }
 
-            list = _planTotal.Keys.ToList();
-            list.Sort();
-            arr = list;
-            for (int i = 0; i < arr.Count;)
+            var containValue = (!useString) || (useString && IsNullEmptyOrNA(originalDateTimeString));
+            if (containValue)
             {
-                var key = arr[i];
-                var keyNext = arr[++i];
-
-                _planTotal[keyNext] += _planTotal[key];
-            }
-
-            list = _actualTotal.Keys.ToList();
-            list.Sort();
-            arr = list;
-            for (int i = 0; i < arr.Count;)
-            {
-                var key = arr[i];
-                var keyNext = arr[++i];
-
-                _actualTotal[keyNext] += _actualTotal[key];
+                var key = useString ? MathUtil.ConvertToDateWithoutTime(originalDateTimeString) : MathUtil.ConvertToDateWithoutTime(originalDateTime);
+                if (totalDicts.ContainsKey(key))
+                    totalDicts[key]++;
+                else
+                    totalDicts.Add(key, 1);
             }
         }
 
-      
+        private bool IsNullEmptyOrNA(string input)
+        {
+            return string.IsNullOrEmpty(input) || string.Compare(input, "NA", StringComparison.OrdinalIgnoreCase) == 0;
+        }
+
+        private void ReCalculateTotal(ref Dictionary<DateTime, int> totalDicts)
+        {
+            var list = totalDicts.Keys.ToList();
+            list.Sort();
+            var arr = list;
+            for (int i = 0; i < arr.Count - 1;)
+            {
+                var key = arr[i];
+                var keyNext = arr[++i];
+
+                totalDicts[keyNext] += totalDicts[key];
+            }
+        }
+
+        void AddSCurveData(ref List<ProjectScheduleSCurveVM> items, Dictionary<DateTime, int> totalDict, string category)
+        {
+            foreach (var item in totalDict)
+            {
+                items.Add(new ProjectScheduleSCurveVM
+                {
+                    Category = category,
+                    Date = item.Key,
+                    Value = item.Value
+                });
+            }
+        }
 
         public IEnumerable<ProjectScheduleSCurveVM> GenerateProjectScheduleSCurveChart() {
-
+            // Populate each dictionary
             foreach (var item in SPConnector.GetList(SP_LIST_NAME)) {
-                if (!Convert.ToBoolean(item["Summary"])){
-
-                    var originalDateTime = Convert.ToDateTime(item["DueDate"]);
-                    var key = MathUtil.ConvertToDateWithoutTime(originalDateTime);
-                    if (_baseLineTotal.ContainsKey(key))
-                        _baseLineTotal[key]++;
-                    else
-                        _baseLineTotal.Add(key, 1);
+                if (!Convert.ToBoolean(item["Summary"]) && !Convert.ToBoolean(item["Milestone"])){
+                    PopulateDictionary(ref _planTotal, item, "DueDate");
+                    PopulateDictionary(ref _baseLineTotal, item, "Baseline_x0020_Finish");
+                    PopulateDictionary(ref _actualTotal, item, "Actual_x0020_Finish");
                 }
             }
 
+            // To update the total completed tasks
+            ReCalculateTotal(ref _baseLineTotal);
+            ReCalculateTotal(ref _actualTotal);
+            ReCalculateTotal(ref _planTotal);
+
+            // Transform to the view models
             var result = new List<ProjectScheduleSCurveVM>();
+            AddSCurveData(ref result, _baseLineTotal, "BaseLine");
+            AddSCurveData(ref result, _actualTotal, "Actual");
+            AddSCurveData(ref result, _planTotal, "Planned");
 
             return result;
-
         }
 
         public IEnumerable<ProjectStatusBarChartVM> GenerateProjectStatusBarChart()
