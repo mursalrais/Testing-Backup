@@ -1,4 +1,5 @@
 ﻿using MCAWebAndAPI.Service.ProjectManagement.Schedule;
+using MCAWebAndAPI.Web.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,33 +19,25 @@ namespace MCAWebAndAPI.Web.Controllers
             taskService = new TaskService();
         }
 
-        public JsonResult GetTasks(string siteUrl = null) {
+        public ActionResult GetTasks(string siteUrl = null) {
 
             taskService.SetSiteUrl(siteUrl);
             var data = taskService.GetAllTask();
-            return new JsonResult
-            {
-                Data = data, 
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet
-            };
+            return this.Jsonp(data);
         }
 
-        public JsonResult GetProjectScheduleSCurveChart(string siteUrl = null)
+        public ActionResult GetProjectScheduleSCurveChart(string siteUrl = null)
         {
             taskService.SetSiteUrl(siteUrl);
             var data = taskService.GenerateProjectScheduleSCurveChart();
-
-            return new JsonResult
-            {
-                Data = data,
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet
-            };
+            return this.Jsonp(data);
         }
 
-        public int CalculateTasks(string siteUrl = null)
+        public ActionResult CalculateTasks(string siteUrl = null)
         {
             taskService.SetSiteUrl(siteUrl);
-            return taskService.CalculateTaskColumns();
+            var data = taskService.CalculateTaskColumns();
+            return this.Jsonp(data);
         }
     }
 }
