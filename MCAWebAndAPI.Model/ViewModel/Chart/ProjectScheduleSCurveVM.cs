@@ -12,7 +12,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Chart
 
         public int Value { get; set; }
 
-        public DateTime Date { get; set; }
+        public DateTime DateValue { get; set; }
+
+        public string Color { get; set; }
 
     }
 }

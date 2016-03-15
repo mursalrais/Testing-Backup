@@ -449,15 +449,16 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
             }
         }
 
-        void AddSCurveData(ref List<ProjectScheduleSCurveVM> items, Dictionary<DateTime, int> totalDict, string category)
+        void AddSCurveData(ref List<ProjectScheduleSCurveVM> items, Dictionary<DateTime, int> totalDict, string category, string color)
         {
             foreach (var item in totalDict)
             {
                 items.Add(new ProjectScheduleSCurveVM
                 {
                     Category = category,
-                    Date = item.Key,
-                    Value = item.Value
+                    DateValue = item.Key,
+                    Value = item.Value, 
+                    Color = color
                 });
             }
         }
@@ -479,9 +480,9 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
             // Transform to the view models
             var result = new List<ProjectScheduleSCurveVM>();
-            AddSCurveData(ref result, _baseLineTotal, "BaseLine");
-            AddSCurveData(ref result, _actualTotal, "Actual");
-            AddSCurveData(ref result, _planTotal, "Planned");
+            AddSCurveData(ref result, _baseLineTotal, "BaseLine", "blue");
+            AddSCurveData(ref result, _actualTotal, "Actual", "red");
+            AddSCurveData(ref result, _planTotal, "Planned", "green");
 
             return result;
         }
