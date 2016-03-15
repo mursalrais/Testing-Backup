@@ -406,33 +406,33 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
         void PopulateDictionary(ref Dictionary<DateTime, int> totalDicts, ListItem item, string columnName)
         {
             var originalDateTime = new DateTime();
-            string originalDateTimeString = null;
+            string originalDateTimeString = Convert.ToString(item[columnName]);
+
+            if (IsNullEmptyOrNA(originalDateTimeString))
+                return;
+
             bool useString = false;
             try
             {
-                originalDateTime = Convert.ToDateTime(item[columnName]);
+                originalDateTime = Convert.ToDateTime(originalDateTimeString);
             }
             catch (Exception e)
             {
-                logger.Debug(e.Message);
-                useString = true;
-                originalDateTimeString = Convert.ToString(item[columnName]);
+                useString = true;   
             }
 
-            var containValue = (!useString) || (useString && IsNullEmptyOrNA(originalDateTimeString));
-            if (containValue)
-            {
-                var key = useString ? MathUtil.ConvertToDateWithoutTime(originalDateTimeString) : MathUtil.ConvertToDateWithoutTime(originalDateTime);
-                if (totalDicts.ContainsKey(key))
-                    totalDicts[key]++;
-                else
-                    totalDicts.Add(key, 1);
-            }
+            var key = useString ? MathUtil.ConvertToDateWithoutTime(originalDateTimeString) : MathUtil.ConvertToDateWithoutTime(originalDateTime);
+            if (totalDicts.ContainsKey(key))
+                totalDicts[key]++;
+            else
+                totalDicts.Add(key, 1);
         }
 
         private bool IsNullEmptyOrNA(string input)
         {
-            return string.IsNullOrEmpty(input) || string.Compare(input, "NA", StringComparison.OrdinalIgnoreCase) == 0;
+            return string.IsNullOrEmpty(input) || string.IsNullOrWhiteSpace(input) 
+                || string.Compare(input, "NA", StringComparison.OrdinalIgnoreCase) == 0
+                || string.Compare(input, " ", StringComparison.OrdinalIgnoreCase) == 0;
         }
 
         private void ReCalculateTotal(ref Dictionary<DateTime, int> totalDicts)
