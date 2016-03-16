@@ -7,6 +7,7 @@ using MCAWebAndAPI.Model.ViewModel.Chart;
 using Microsoft.SharePoint.Client;
 using System.Collections;
 using NLog;
+using MCAWebAndAPI.Model.ViewModel.Gantt;
 
 namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 {
@@ -396,13 +397,83 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
         #endregion
 
+        #region Gantt Chart
+
+        GanttTasksVM ConvertToGanttTaskVM(ListItem item, int order)
+        {
+            var task = new GanttTasksVM();
+            task.ID = Convert.ToInt32(item["ID"]);
+            task.Title = Convert.ToString(item["Title"]);
+            task.Start = Convert.ToDateTime(item["StartDate"]);
+            task.End = Convert.ToDateTime(item["DueDate"]);
+            task.OrderID = order;
+            task.PercentComplete = Convert.ToDouble(item["PercentComplete"]);
+            task.Summary = Convert.ToBoolean(item["Summary"]);
+            task.Expanded = true;
+
+            if(item["ParentID"] != null)
+                task.ParentID = Convert.ToInt32((item["ParentID"] as FieldLookupValue).LookupValue);
+
+            return task;
+        }
+
+        public IEnumerable<GanttTasksVM> GenerateGanttChart()
+        {
+            var result = new List<GanttTasksVM>();
+            var order = 0;
+            foreach (var item in SPConnector.GetList(SP_LIST_NAME))
+            {
+                result.Add(ConvertToGanttTaskVM(item, order++));
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Since there is no dependency, it returns new object
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<GanttDependenciesVM> GenerateGanttDependecies() {
+            return new List<GanttDependenciesVM>();
+        }
+
+        #endregion
+
         #region Charting
 
 
         Dictionary<DateTime, int> _baseLineTotal;
         Dictionary<DateTime, int> _planTotal;
         Dictionary<DateTime, int> _actualTotal;
-        
+
+
+        public IEnumerable<ProjectScheduleSCurveVM> GenerateProjectScheduleSCurveChart()
+        {
+            // Populate each dictionary
+            foreach (var item in SPConnector.GetList(SP_LIST_NAME))
+            {
+                if (!Convert.ToBoolean(item["Summary"]) && !Convert.ToBoolean(item["Milestone"]))
+                {
+                    PopulateDictionary(ref _planTotal, item, "DueDate");
+                    PopulateDictionary(ref _baseLineTotal, item, "Baseline_x0020_Finish");
+                    PopulateDictionary(ref _actualTotal, item, "Actual_x0020_Finish");
+                }
+            }
+
+            // To update the total completed tasks
+            ReCalculateTotal(ref _baseLineTotal);
+            ReCalculateTotal(ref _actualTotal);
+            ReCalculateTotal(ref _planTotal);
+
+            // Transform to the view models
+            var result = new List<ProjectScheduleSCurveVM>();
+            AddSCurveData(ref result, _baseLineTotal, "BaseLine", "blue");
+            AddSCurveData(ref result, _actualTotal, "Actual", "red");
+            AddSCurveData(ref result, _planTotal, "Planned", "green");
+
+            return result;
+        }
+
         void PopulateDictionary(ref Dictionary<DateTime, int> totalDicts, ListItem item, string columnName)
         {
             var originalDateTime = new DateTime();
@@ -463,29 +534,6 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
             }
         }
 
-        public IEnumerable<ProjectScheduleSCurveVM> GenerateProjectScheduleSCurveChart() {
-            // Populate each dictionary
-            foreach (var item in SPConnector.GetList(SP_LIST_NAME)) {
-                if (!Convert.ToBoolean(item["Summary"]) && !Convert.ToBoolean(item["Milestone"])){
-                    PopulateDictionary(ref _planTotal, item, "DueDate");
-                    PopulateDictionary(ref _baseLineTotal, item, "Baseline_x0020_Finish");
-                    PopulateDictionary(ref _actualTotal, item, "Actual_x0020_Finish");
-                }
-            }
-
-            // To update the total completed tasks
-            ReCalculateTotal(ref _baseLineTotal);
-            ReCalculateTotal(ref _actualTotal);
-            ReCalculateTotal(ref _planTotal);
-
-            // Transform to the view models
-            var result = new List<ProjectScheduleSCurveVM>();
-            AddSCurveData(ref result, _baseLineTotal, "BaseLine", "blue");
-            AddSCurveData(ref result, _actualTotal, "Actual", "red");
-            AddSCurveData(ref result, _planTotal, "Planned", "green");
-
-            return result;
-        }
 
         public IEnumerable<ProjectStatusBarChartVM> GenerateProjectStatusBarChart()
         {

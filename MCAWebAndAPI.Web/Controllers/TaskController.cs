@@ -33,6 +33,20 @@ namespace MCAWebAndAPI.Web.Controllers
             return this.Jsonp(data);
         }
 
+        public ActionResult GetGanttChart(string siteUrl = null)
+        {
+            taskService.SetSiteUrl(siteUrl);
+            var data = taskService.GenerateGanttChart();
+            return this.Jsonp(data);
+        }
+
+        public ActionResult GetGanttDependencies(string siteUrl = null)
+        {
+            taskService.SetSiteUrl(siteUrl);
+            var data = taskService.GenerateGanttDependecies();
+            return this.Jsonp(data);
+        }
+
         public ActionResult CalculateTasks(string siteUrl = null)
         {
             taskService.SetSiteUrl(siteUrl);
