@@ -16,5 +16,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Chart
 
         public string Color { get; set; }
 
+        public string Note { get; set; }
+
     }
 }

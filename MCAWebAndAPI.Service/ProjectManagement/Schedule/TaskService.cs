@@ -528,8 +528,9 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
                 {
                     Category = category,
                     DateValue = item.Key,
-                    Value = item.Value, 
-                    Color = color
+                    Value = item.Value,
+                    Color = color,
+                    Note = item.Value + string.Empty
                 });
             }
         }
