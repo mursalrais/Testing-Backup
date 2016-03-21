@@ -15,6 +15,15 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
         const string RISK_SP_LIST_NAME = "Risks";
         const string ISSUE_SP_LIST_NAME = "Issues";
         const string ACTION_SP_LIST_NAME = "Actions";
+
+        const string OPEN_STATUS = "Open";
+        const string PENDING_STATUS = "Pending";
+        const string CLOSED_STATUS = "Closed";
+
+        const string HIGH_PRIORITY = "High";
+        const string NORMAL_PRIORITY = "Normal";
+        const string LOW_PRIORITY = "Low";
+
         string _siteUrl = null;
 
         public void SetSiteUrl(string siteUrl)
@@ -25,29 +34,24 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
         private RIABase ConvertToModel(ListItem item, string listName)
         {
+            var result = new RIABase()
+            {
+                Id = Convert.ToInt32(item["ID"]),
+                Title = Convert.ToString(item["Title"]),
+                Status = Convert.ToString(item["Status"]),
+                AssignedTo = Convert.ToString(item["AssignedTo"]),
+                Priority = Convert.ToString(item["Priority"])
+            };
+
+            // In case there is a need to add child-specific columns 
             switch (listName)
             {
                 case ACTION_SP_LIST_NAME:
-                    return new Model.ProjectManagement.Schedule.Action()
-                    {
-                        Id = Convert.ToInt32(item["ID"]),
-                        Title = Convert.ToString(item["Title"]),
-                        Status = Convert.ToString(item["Status"])
-                    };
+                    return result as Model.ProjectManagement.Schedule.Action;
                 case RISK_SP_LIST_NAME:
-                    return new Risk()
-                    {
-                        Id = Convert.ToInt32(item["ID"]),
-                        Title = Convert.ToString(item["Title"]),
-                        Status = Convert.ToString(item["Status"])
-                    };
+                    return result as Risk;
                 case ISSUE_SP_LIST_NAME:
-                    return new Issue()
-                    {
-                        Id = Convert.ToInt32(item["ID"]),
-                        Title = Convert.ToString(item["Title"]),
-                        Status = Convert.ToString(item["Status"])
-                    };
+                    return result as Issue;
                 default: return null;
             }
         }
@@ -71,7 +75,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
             foreach (var item in SPConnector.GetList(ISSUE_SP_LIST_NAME))
             {
-                result.Add(ConvertToModel(item, ISSUE_SP_LIST_NAME) as Model.ProjectManagement.Schedule.Issue);
+                result.Add(ConvertToModel(item, ISSUE_SP_LIST_NAME) as Issue);
             }
 
             return result;
@@ -88,82 +92,166 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
             return result;
         }
-        
 
-        public IEnumerable<OverallRIAChartVM> GetOverallRIAChart()
+        IEnumerable<StackedBarChartVM> IRIAService.GetOverallRIAChart()
         {
             var actions = GetAllAction();
             var issues = GetAllIssues();
             var risks = GetAllRisks();
 
-            var viewModel = new List<OverallRIAChartVM>();
-            viewModel.Add(new OverallRIAChartVM {
-                Name = "Risk",
-                Status = "Closed", 
-                Value = risks.Count(e => string.Compare(e.Status, "Closed", StringComparison.OrdinalIgnoreCase) == 0),
-                Color = "#069F16"
-            });
-            viewModel.Add(new OverallRIAChartVM
+            var viewModel = new List<StackedBarChartVM>();
+            viewModel.Add(new StackedBarChartVM
             {
-                Name = "Risk",
-                Status = "Pending",
-                Value = risks.Count(e => string.Compare(e.Status, "Pending", StringComparison.OrdinalIgnoreCase) == 0),
-                Color = "#FFFF25"
+                CategoryName = RISK_SP_LIST_NAME,
+                GroupName = CLOSED_STATUS,
+                Value = risks.Count(e => string.Compare(e.Status, CLOSED_STATUS, StringComparison.OrdinalIgnoreCase) == 0),
+                Color = GraphicUtil.GREEN
             });
-            viewModel.Add(new OverallRIAChartVM
+            viewModel.Add(new StackedBarChartVM
             {
-                Name = "Risk",
-                Status = "Open",
-                Value = risks.Count(e => string.Compare(e.Status, "Open", StringComparison.OrdinalIgnoreCase) == 0),
-                Color = "#FF0000"
+                CategoryName = RISK_SP_LIST_NAME,
+                GroupName = PENDING_STATUS,
+                Value = risks.Count(e => string.Compare(e.Status, PENDING_STATUS, StringComparison.OrdinalIgnoreCase) == 0),
+                Color = GraphicUtil.YELLOW
             });
-
-            viewModel.Add(new OverallRIAChartVM
+            viewModel.Add(new StackedBarChartVM
             {
-                Name = "Issue",
-                Status = "Closed",
-                Value = issues.Count(e => string.Compare(e.Status, "Closed", StringComparison.OrdinalIgnoreCase) == 0),
-                Color = "#069F16"
-            });
-            viewModel.Add(new OverallRIAChartVM
-            {
-                Name = "Issue",
-                Status = "Pending",
-                Value = issues.Count(e => string.Compare(e.Status, "Pending", StringComparison.OrdinalIgnoreCase) == 0),
-                Color = "#FFFF25"
-            });
-            viewModel.Add(new OverallRIAChartVM
-            {
-                Name = "Issue",
-                Status = "Open",
-                Value = issues.Count(e => string.Compare(e.Status, "Open", StringComparison.OrdinalIgnoreCase) == 0),
-                Color = "#FF0000"
+                CategoryName = RISK_SP_LIST_NAME,
+                GroupName = OPEN_STATUS,
+                Value = risks.Count(e => string.Compare(e.Status, OPEN_STATUS, StringComparison.OrdinalIgnoreCase) == 0),
+                Color = GraphicUtil.RED
             });
 
+            viewModel.Add(new StackedBarChartVM
+            {
+                CategoryName = ISSUE_SP_LIST_NAME,
+                GroupName = CLOSED_STATUS,
+                Value = issues.Count(e => string.Compare(e.Status, CLOSED_STATUS, StringComparison.OrdinalIgnoreCase) == 0),
+                Color = GraphicUtil.GREEN
+            });
+            viewModel.Add(new StackedBarChartVM
+            {
+                CategoryName = ISSUE_SP_LIST_NAME,
+                GroupName = PENDING_STATUS,
+                Value = issues.Count(e => string.Compare(e.Status, PENDING_STATUS, StringComparison.OrdinalIgnoreCase) == 0),
+                Color = GraphicUtil.YELLOW
+            });
+            viewModel.Add(new StackedBarChartVM
+            {
+                CategoryName = ISSUE_SP_LIST_NAME,
+                GroupName = OPEN_STATUS,
+                Value = issues.Count(e => string.Compare(e.Status, OPEN_STATUS, StringComparison.OrdinalIgnoreCase) == 0),
+                Color = GraphicUtil.RED
+            });
 
-            viewModel.Add(new OverallRIAChartVM
+
+            viewModel.Add(new StackedBarChartVM
             {
-                Name = "Actions",
-                Status = "Closed",
-                Value = actions.Count(e => string.Compare(e.Status, "Closed", StringComparison.OrdinalIgnoreCase) == 0),
-                Color = "#069F16"
+                CategoryName = ACTION_SP_LIST_NAME,
+                GroupName = CLOSED_STATUS,
+                Value = actions.Count(e => string.Compare(e.Status, CLOSED_STATUS, StringComparison.OrdinalIgnoreCase) == 0),
+                Color = GraphicUtil.GREEN
             });
-            viewModel.Add(new OverallRIAChartVM
+            viewModel.Add(new StackedBarChartVM
             {
-                Name = "Actions",
-                Status = "Pending",
-                Value = actions.Count(e => string.Compare(e.Status, "Pending", StringComparison.OrdinalIgnoreCase) == 0),
-                Color = "#FFFF25"
+                CategoryName = ACTION_SP_LIST_NAME,
+                GroupName = PENDING_STATUS,
+                Value = actions.Count(e => string.Compare(e.Status, PENDING_STATUS, StringComparison.OrdinalIgnoreCase) == 0),
+                Color = GraphicUtil.YELLOW
             });
-            viewModel.Add(new OverallRIAChartVM
+            viewModel.Add(new StackedBarChartVM
             {
-                Name = "Actions",
-                Status = "Open",
-                Value = actions.Count(e => string.Compare(e.Status, "Open", StringComparison.OrdinalIgnoreCase) == 0),
-                Color = "#FF0000"
+                CategoryName = ACTION_SP_LIST_NAME,
+                GroupName = OPEN_STATUS,
+                Value = actions.Count(e => string.Compare(e.Status, OPEN_STATUS, StringComparison.OrdinalIgnoreCase) == 0),
+                Color = GraphicUtil.RED
             });
 
             return viewModel;
+        }
+
+        public IEnumerable<StackedBarChartVM> GetRIAResourceChart(string riaType)
+        {
+            var items = new List<RIABase>();
+
+            foreach (var item in SPConnector.GetList(riaType))
+            {
+                items.Add(ConvertToModel(item, riaType));
+            }
+
+            return items.Select(e => new StackedBarChartVM
+            {
+                CategoryName = e.AssignedTo,
+                GroupName = e.Status,
+                Color = e.Status == OPEN_STATUS ? GraphicUtil.RED : (e.Status == PENDING_STATUS ? GraphicUtil.YELLOW : GraphicUtil.GREEN), 
+                Value = 1
+            });
+        }
+
+        public IEnumerable<DonutsChartVM> GetRIAStatusChart(string riaType)
+        {
+            var items = new List<RIABase>();
+
+            foreach (var item in SPConnector.GetList(riaType))
+            {
+                items.Add(ConvertToModel(item, riaType));
+            }
+
+            var results = new List<DonutsChartVM>();
+
+            results.Add(new DonutsChartVM()
+            {
+                Label = OPEN_STATUS,
+                Value = items.Count(e => string.Compare(e.Status, OPEN_STATUS, StringComparison.OrdinalIgnoreCase) == 0), 
+                Color = GraphicUtil.RED
+            });
+            results.Add(new DonutsChartVM()
+            {
+                Label = PENDING_STATUS,
+                Value = items.Count(e => string.Compare(e.Status, PENDING_STATUS, StringComparison.OrdinalIgnoreCase) == 0), 
+                Color = GraphicUtil.YELLOW
+            });
+            results.Add(new DonutsChartVM()
+            {
+                Label = CLOSED_STATUS,
+                Value = items.Count(e => string.Compare(e.Status, CLOSED_STATUS, StringComparison.OrdinalIgnoreCase) == 0), 
+                Color = GraphicUtil.GREEN
+            });
+
+            return results;
+        }
+
+        public IEnumerable<DonutsChartVM> GetRIAPriorityChart(string riaType)
+        {
+            var items = new List<RIABase>();
+
+            foreach (var item in SPConnector.GetList(riaType))
+            {
+                items.Add(ConvertToModel(item, riaType));
+            }
+
+            var results = new List<DonutsChartVM>();
+
+            results.Add(new DonutsChartVM()
+            {
+                Label = HIGH_PRIORITY,
+                Value = items.Count(e => string.Compare(e.Priority, HIGH_PRIORITY, StringComparison.OrdinalIgnoreCase) == 0),
+                Color = GraphicUtil.RED
+            });
+            results.Add(new DonutsChartVM()
+            {
+                Label = NORMAL_PRIORITY,
+                Value = items.Count(e => string.Compare(e.Priority, NORMAL_PRIORITY, StringComparison.OrdinalIgnoreCase) == 0),
+                Color = GraphicUtil.YELLOW
+            });
+            results.Add(new DonutsChartVM()
+            {
+                Label = LOW_PRIORITY,
+                Value = items.Count(e => string.Compare(e.Status, LOW_PRIORITY, StringComparison.OrdinalIgnoreCase) == 0),
+                Color = GraphicUtil.GREEN
+            });
+
+            return results;
         }
     }
 }

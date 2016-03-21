@@ -469,7 +469,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
             var result = new List<ProjectScheduleSCurveVM>();
             AddSCurveData(ref result, _baseLineTotal, "BaseLine", "blue");
             AddSCurveData(ref result, _actualTotal, "Actual", "red");
-            AddSCurveData(ref result, _planTotal, "Planned", "green");
+            AddSCurveData(ref result, _planTotal, "Forecast", "green");
 
             return result;
         }
@@ -529,8 +529,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
                     Category = category,
                     DateValue = item.Key,
                     Value = item.Value,
-                    Color = color,
-                    Note = item.Value + string.Empty
+                    Color = color
                 });
             }
         }

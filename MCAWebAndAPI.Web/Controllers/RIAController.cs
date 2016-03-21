@@ -28,5 +28,29 @@ namespace MCAWebAndAPI.Web.Controllers
             return this.Jsonp(data);
             
         }
+
+        public ActionResult GetRIAResourceChart(string riaType, string siteUrl = null)
+        {
+            riaService.SetSiteUrl(siteUrl);
+            var data = riaService.GetRIAResourceChart(riaType);
+
+            return this.Jsonp(data);
+        }
+
+        public ActionResult GetRIAStatusChart(string riaType, string siteUrl = null)
+        {
+            riaService.SetSiteUrl(siteUrl);
+            var data = riaService.GetRIAStatusChart(riaType);
+
+            return this.Jsonp(data);
+        }
+
+        public ActionResult GetRIAPriorityChart(string riaType, string siteUrl = null)
+        {
+            riaService.SetSiteUrl(siteUrl);
+            var data = riaService.GetRIAPriorityChart(riaType);
+
+            return this.Jsonp(data);
+        }
     }
 }

@@ -12,7 +12,9 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
         IEnumerable<Issue> GetAllIssues();
         IEnumerable<Action> GetAllAction();
 
-        IEnumerable<OverallRIAChartVM> GetOverallRIAChart();
-
+        IEnumerable<StackedBarChartVM> GetOverallRIAChart();
+        IEnumerable<StackedBarChartVM> GetRIAResourceChart(string riaType);
+        IEnumerable<DonutsChartVM> GetRIAStatusChart(string riaType);
+        IEnumerable<DonutsChartVM> GetRIAPriorityChart(string riaType);
     }
 }

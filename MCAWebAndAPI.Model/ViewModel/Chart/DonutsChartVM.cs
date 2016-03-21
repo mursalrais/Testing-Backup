@@ -6,15 +6,12 @@ using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Model.ViewModel.Chart
 {
-    public class ProjectScheduleSCurveVM
+    public class DonutsChartVM
     {
-        public string Category { get; set; }
-
         public int Value { get; set; }
 
-        public DateTime DateValue { get; set; }
+        public string Label { get; set; }
 
         public string Color { get; set; }
-        
     }
 }
