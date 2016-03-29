@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>MCA-I - Integrated Management System</title>
+
+    @Scripts.Render("~/bundles/modernizr")
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+    <!-- Basic CSS Frameworks -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+
+    <!-- Kendo Frameworks-->
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2016.1.112/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2016.1.112/styles/kendo.metro.min.css" />
+
+    <!-- App CSS -->
+    <link rel="stylesheet" href="~/Content/z_mcatheme.css" />
+    <link rel="stylesheet" href="~/Content/custom.css" />
+
+    <!-- Basic JS Libraries -->
+    <script src="https://code.jquery.com/jquery-1.12.1.min.js">
+//<![CDATA[//]]>
+    </script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js">
+//<![CDATA[//]]>
+    </script>
+
+    <!-- KENDO Library-->
+    <script src="https://kendo.cdn.telerik.com/2016.1.112/js/kendo.all.min.js">
+//<![CDATA[//]]>
+    </script>
+
+
+</head>
+<body>
+    <div>
+        @RenderBody()
+    </div>
+
+    @Scripts.Render("~/bundles/apps")
+</body>
+</html>

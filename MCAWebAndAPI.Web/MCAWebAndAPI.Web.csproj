@@ -180,10 +180,12 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="ProjectStatusByActivity.aspx" />
+    <Content Include="ProjectStatusByProject.aspx" />
     <Content Include="Scripts\apps\charts\KendoChartDonuts.js" />
     <Content Include="Scripts\apps\charts\KendoChartProjectGantt.js" />
     <Content Include="Scripts\apps\charts\KendoChartProjectPercentage.js" />
     <Content Include="Scripts\apps\charts\KendoChartProjectStatusByActivity.js" />
+    <Content Include="Scripts\apps\charts\KendoChartProjectStatusByProject.js" />
     <Content Include="Scripts\apps\charts\KendoChartRIA.js" />
     <Content Include="Scripts\apps\charts\KendoChartRIAPriority.js" />
     <Content Include="Scripts\apps\charts\KendoChartRIAResource.js" />
@@ -192,6 +194,7 @@
     <Content Include="Scripts\apps\charts\KendoChartUtils.js" />
     <Content Include="Scripts\apps\common\Utils.js" />
     <Content Include="Scripts\apps\grids\KendoGridActivity.js" />
+    <Content Include="Scripts\apps\grids\KendoGridProject.js" />
     <Content Include="Scripts\apps\grids\KendoGridScheduler.js" />
     <Content Include="Scripts\apps\grids\KendoGridTasks.js" />
     <Content Include="Scripts\apps\sliders\jQuerySlider.js" />
@@ -234,6 +237,10 @@
     <Content Include="packages.config" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Site.Mobile.Master" />
+    <Content Include="Views\ProjectHierarchy\ProjectStatusByProject.cshtml" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\_LayoutMCA.cshtml" />
+    <Content Include="Views\Web.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -265,6 +272,13 @@
     </Compile>
     <Compile Include="ProjectStatusByActivity.aspx.designer.cs">
       <DependentUpon>ProjectStatusByActivity.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ProjectStatusByProject.aspx.cs">
+      <DependentUpon>ProjectStatusByProject.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ProjectStatusByProject.aspx.designer.cs">
+      <DependentUpon>ProjectStatusByProject.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Site.Master.cs">

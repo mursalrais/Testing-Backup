@@ -12,13 +12,13 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Common
     {
         void SetSiteUrl(string siteUrl);
 
-        IEnumerable<SubActivity> GetAllSubActivities();
+        IEnumerable<Project> GetAllProjects();
 
         IEnumerable<Activity> GetAllActivities();
 
         IEnumerable<StackedBarChartVM> GenerateProjectHealthStatusChartByActivity();
 
-
+        IEnumerable<StackedBarChartVM> GenerateProjectHealthStatusChartByProject();
 
 
 

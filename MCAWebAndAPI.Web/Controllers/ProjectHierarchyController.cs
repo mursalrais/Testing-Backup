@@ -12,9 +12,8 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             _service = new ProjectHierarchyService();
         }
-
-        // GET: ProjectHierarchy
-        public ActionResult Index()
+        
+        public ActionResult ProjectStatusByProject()
         {
             return View();
         }
@@ -22,18 +21,28 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult GetProjectHealthStatusChartByActivity(string siteUrl = null)
         {
             _service.SetSiteUrl(siteUrl);
-
             var data = _service.GenerateProjectHealthStatusChartByActivity();
+            return this.Jsonp(data);
+        }
 
+        public ActionResult GetProjectHealthStatusChartByProject(string siteUrl = null)
+        {
+            _service.SetSiteUrl(siteUrl);
+            var data = _service.GenerateProjectHealthStatusChartByProject();
             return this.Jsonp(data);
         }
 
         public ActionResult GetActivities(string siteUrl = null)
         {
             _service.SetSiteUrl(siteUrl);
-
             var data = _service.GetAllActivities();
+            return this.Jsonp(data);
+        }
 
+        public ActionResult GetProjects(string siteUrl = null)
+        {
+            _service.SetSiteUrl(siteUrl);
+            var data = _service.GetAllProjects();
             return this.Jsonp(data);
         }
     }

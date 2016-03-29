@@ -11,9 +11,9 @@ namespace MCAWebAndAPI.Service.SPUtil
         static string UserName =  "sp.services@eceos.com";
         static string Password = "Raja0432";
 
-        public static ListItemCollection GetList(string listName, string caml = null)
+        public static ListItemCollection GetList(string listName, string siteUrl = null, string caml = null)
         {
-            using (ClientContext context = new ClientContext(CurUrl))
+            using (ClientContext context = new ClientContext(siteUrl ?? CurUrl))
             {
                 SecureString secureString = new SecureString();
                 Password.ToList().ForEach(secureString.AppendChar);
