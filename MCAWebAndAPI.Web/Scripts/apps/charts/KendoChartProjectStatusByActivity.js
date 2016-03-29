@@ -7,11 +7,8 @@ EPMO.Utils = EPMO.Utils || {};
 
 EPMO.Charts.displayProjectStatusByActivityChart = function (divId) {
 
-    var _url = EPMO.Utils.getHost() + 
-        "/ProjectHierarchy/GetProjectHealthStatusChartByActivity";
-
-    var _legend = EPMO.Charts.Utils.generateLegend();
-    _legend.position = "bottom";
+    var _url = EPMO.Utils.getHost() +
+        "/ProjectHierarchy/GetProjectHealthStatusChartByActivity" + EPMO.Utils.getSiteUrl();
 
     var _dataSource = new kendo.data.DataSource({
         transport: {
@@ -27,7 +24,9 @@ EPMO.Charts.displayProjectStatusByActivityChart = function (divId) {
     });
 
     $("#" + divId).kendoChart({
-        legend: _legend,
+        legend: {
+            position: "bottom"
+        },
         seriesDefaults: {
             type: "bar",
             stack: true
@@ -36,10 +35,8 @@ EPMO.Charts.displayProjectStatusByActivityChart = function (divId) {
         series: [{
             field: "Value",
             categoryField: "CategoryName",
-            colorField: "Color",
             aggregate: "sum"
         }],
-        dataBound: onDataBound,
         valueAxis: {
             line: {
                 visible: false
@@ -56,8 +53,4 @@ EPMO.Charts.displayProjectStatusByActivityChart = function (divId) {
         }
     });
 
-    function onDataBound() {
-        var _chart = $("#" + divId).data("kendoChart");
-        _chart.options.series[0].color = _chart.options.series[0].data[0].color;
-    }
 };

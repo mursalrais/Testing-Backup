@@ -27,6 +27,19 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Common
             return model;
         }
 
+        private Activity ConvertToActivityModel(ListItem item)
+        {
+            var model = new Activity();
+            model.ActivityName = Convert.ToString(item["Title"]);
+            model.Start = Convert.ToDateTime(item["Start"]);
+            model.Finish = Convert.ToDateTime(item["Finish"]);
+            model.Director = (FieldUserValue)item["Project_x0020_Director"] == null ? "" :
+                    Convert.ToString(((FieldUserValue)item["Project_x0020_Director"]).LookupValue);
+            model.ColorStatus = GenerateScheduleStatusColor(Convert.ToString(item["ScheduleStatus"]));
+
+            return model;
+        }
+
         public void SetSiteUrl(string siteUrl)
         {
             _siteUrl = siteUrl;
@@ -34,18 +47,16 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Common
 
         public IEnumerable<Activity> GetAllActivities()
         {
-            var list = SPConnector.GetList("Activity");
-            var result = new List<Activity>();
+            var items = new List<Activity>();
 
-            foreach(var item in list)
+            foreach (var item in SPConnector.GetList(SP_ACTIVITY_LIST_NAME))
             {
-                result.Add(new Activity
-                {
-                    ActivityName = Convert.ToString(item["Title"])
-                });
+                items.Add(ConvertToActivityModel(item));
             }
-            return result;
+
+            return items;
         }
+
 
         public IEnumerable<SubActivity> GetAllSubActivities()
         {
@@ -84,13 +95,27 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Common
                 items.Add(ConvertToSubActivityModel(item));
             }
 
-            return items.Select(e => new StackedBarChartVM
-            {
-                CategoryName = e.ActivityName,
-                GroupName = e.ScheduleStatus,
-                Value = 1,
-                Color = GenerateScheduleStatusColor(e.ScheduleStatus)
-            });
+
+            var viewModels = new List<StackedBarChartVM>();
+
+            viewModels.AddRange(ConvertToOrderedSubActivitiesVM(items, "Significantly Behind Schedule"));
+            viewModels.AddRange(ConvertToOrderedSubActivitiesVM(items, "Behind Schedule"));
+            viewModels.AddRange(ConvertToOrderedSubActivitiesVM(items, "On Schedule"));
+            viewModels.AddRange(ConvertToOrderedSubActivitiesVM(items, "Future"));
+
+            return viewModels;
+        }
+
+        private IEnumerable<StackedBarChartVM> ConvertToOrderedSubActivitiesVM(List<SubActivity> items, string groupName)
+        {
+            return items.Where(e => string.Compare(e.ScheduleStatus, groupName, StringComparison.OrdinalIgnoreCase) == 0)
+                .Select(f => new StackedBarChartVM()
+                {
+                    CategoryName = f.ActivityName,
+                    GroupName = f.ScheduleStatus,
+                    Value = 1,
+                    Color = GenerateScheduleStatusColor(f.ScheduleStatus)
+                });
         }
     }
 }

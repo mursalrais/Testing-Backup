@@ -191,6 +191,7 @@
     <Content Include="Scripts\apps\charts\KendoChartScheduleSCurve.js" />
     <Content Include="Scripts\apps\charts\KendoChartUtils.js" />
     <Content Include="Scripts\apps\common\Utils.js" />
+    <Content Include="Scripts\apps\grids\KendoGridActivity.js" />
     <Content Include="Scripts\apps\grids\KendoGridScheduler.js" />
     <Content Include="Scripts\apps\grids\KendoGridTasks.js" />
     <Content Include="Scripts\apps\sliders\jQuerySlider.js" />

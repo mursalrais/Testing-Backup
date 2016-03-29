@@ -6,56 +6,63 @@ EPMO.Utils = EPMO.Utils || {};
 
 EPMO.Grids.displayActivityGrid = function (divId) {
 
-    var _url = _spPageContextInfo.webAbsoluteUrl +
-	"/_api/web/lists/getbytitle('Activity')/Items?$" +
-	"select=Title,Start,Finish,ScheduleStatus";
+    var _url = EPMO.Utils.getHost() + "ProjectHierarchy/GetActivities" + EPMO.Utils.getSiteUrl();
 
     var _dataSource = new kendo.data.DataSource({
-        type: "json",
         transport: {
             read: {
                 url: _url,
-                beforeSend: function (xhr) {
-                    xhr.setRequestHeader("Accept", "application/json; odata=verbose");
+                dataType: 'jsonp',
+                type: 'GET'
+            },
+            parameterMap: function (options, operation) {
+                if (operation !== "read") {
+                    return { models: kendo.stringify(options.models || [options]) };
                 }
             }
         },
         schema: {
-            data: function (data) {
-                return data.d && data.d.results ? data.d.results : [data.d];
-            },
             model: {
                 fields: {
-                    Title: { type: "string" },
-                    Start: { type: "date" },
-                    Finish: { type: "date" },
-                    ScheduleStatus: { type: "string" }
+                    ActivityName: { from: "ActivityName", type: "string" },
+                    Director: { from: "Director", type: "string" },
+                    Start: { from: "Start", type: "date" },
+                    Finish: { from: "Finish", type: "date" },
+                    Color: { from: "ColorStatus", type: "string"}
                 }
             }
         }
     });
 
+
+
     var _columns = [{
-        field: "Title",
+        field: "ActivityName",
         title: "Activity Name",
-        width: 300
-    }, {
+        width: 320
+    },
+    {
+        field: "Director",
+        title: "Director Name"
+    },
+    {
         field: "Start",
         title: "Start Date",
-        template: '#= kendo.toString(StartDate, "D") #'
+        template: '#= kendo.toString(Start, "D") #'
     }, {
         field: "Finish",
         title: "Finish Date",
-        template: '#= kendo.toString(DueDate, "D") #'
+        template: '#= kendo.toString(Finish, "D") #'
     }, {
         field: "ScheduleStatus",
-        title: "Schedule Status",
-        width: 100
-    }];
+        title: "Status",
+        width: 150,
+        template: '<svg height="50" width="50"><circle cx="25" cy="25" r="20" stroke="black" stroke-width="1" fill="#= Color #" /></svg>'
+    }
+    ];
 
     $("#" + divId).kendoGrid({
         dataSource: _dataSource,
-        height: 550,
         sortable: true,
         pageable: {
             refresh: true,

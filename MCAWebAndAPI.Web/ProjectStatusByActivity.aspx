@@ -10,12 +10,12 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            <div class="col-md-6">
-                <div id="project-status-by-activity-chart"></div>
-            </div>
-            <div class="col-md-6">
-                <div id="project-s-curve-chart"></div>
-            </div> 
+            <div id="project-status-by-activity-chart"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div id="project-s-curve-chart"></div>
         </div>
     </div>
 
@@ -26,6 +26,7 @@
             EPMO.Charts.displaySCurveChart("project-s-curve-chart");
             EPMO.Charts.displayProjectStatusByActivityChart("project-status-by-activity-chart");
         });
+
     </script>
 
 </asp:Content>

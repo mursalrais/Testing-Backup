@@ -27,5 +27,14 @@ namespace MCAWebAndAPI.Web.Controllers
 
             return this.Jsonp(data);
         }
+
+        public ActionResult GetActivities(string siteUrl = null)
+        {
+            _service.SetSiteUrl(siteUrl);
+
+            var data = _service.GetAllActivities();
+
+            return this.Jsonp(data);
+        }
     }
 }
