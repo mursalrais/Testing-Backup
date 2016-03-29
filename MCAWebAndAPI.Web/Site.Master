@@ -10,144 +10,158 @@
 
     <asp:PlaceHolder runat="server">
         <%: Scripts.Render("~/bundles/modernizr") %>
-        <%: Scripts.Render("~/bundles/jQuery") %>
-        <%: Scripts.Render("~/bundles/kendo") %>
     </asp:PlaceHolder>
 
-    <webopt:BundleReference runat="server" Path="~/Content/css" />
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-    <link href="Content/custom.css" rel="stylesheet" />
+
+    <!-- Basic CSS Frameworks -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+
+    <!-- Kendo Frameworks-->
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2016.1.112/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2016.1.112/styles/kendo.metro.min.css" />
+
+    <!-- App CSS -->
+    <webopt:BundleReference runat="server" Path="~/Content/css" />
+
+    <!-- Basic JS Libraries -->
+    <script src="https://code.jquery.com/jquery-1.12.1.min.js">//<![CDATA[//]]>
+    </script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js">//<![CDATA[//]]>
+    </script>
+
+    <!-- KENDO Library-->
+    <script src="https://kendo.cdn.telerik.com/2016.1.112/js/kendo.all.min.js">//<![CDATA[//]]>
+    </script>
+
 </head>
 <body>
-        <div class="mainbar">
-            <div class="container">
-                <button type="button" class="btn mainbar-toggle" data-toggle="collapse" data-target=".mainbar-collapse"><i class="fa fa-bars"></i></button>
-                <div class="mainbar-collapse collapse">
-                    <div class="row">
-                        <div class="col-md-2">
-                            <a href="https://eceos2.sharepoint.com/sites/mca-dev/SitePages/home.aspx">
-                                <img class="company-logo" src="../Images/logo.png" alt="company logo" />
+
+    <div class="mainbar">
+        <div class="container">
+            <button type="button" class="btn mainbar-toggle" data-toggle="collapse" data-target=".mainbar-collapse">
+                <i class="fa fa-bars"></i>
+            </button>
+            <div class="mainbar-collapse collapse">
+                <div class="col-md-2">
+                    <a href="https://eceos2.sharepoint.com/sites/mca-dev/SitePages/home.aspx">
+                        <img class="company-logo" src="img/logo.png" alt="company logo" />
+                    </a>
+                </div>
+                <div class="col-md-7">
+                    <ul class="nav navbar-nav mainbar-nav">
+                        <li class="dropdown">
+                            <a id="link-home"><i class="fa fa-crosshairs"></i>
+                                Compact Program
                             </a>
-                        </div>
-                        <div class="col-md-7">
-                            <ul class="nav navbar-nav mainbar-nav">
-                                <li class="dropdown">
-                                    <a href="https://eceos2.sharepoint.com/sites/mca-dev/SitePages/home.aspx">
-                                        <i class="fa fa-home"></i>
-                                        [ProjectName]
-                                    </a>
+                        </li>
+                        <li class="dropdown ">
+                            <a class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">
+                                <i class="fa fa-tasks"></i>
+                                Projects
+                                            <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a id="link-project-gp">Green Prosperity</a>
                                 </li>
-                                <li class="dropdown ">
-                                    <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">
-                                        <i class="fa fa-align-left"></i>
-                                        Project Management
-                                <span class="caret"></span>
-                                    </a>
-
-                                    <ul class="dropdown-menu">
-                                        <li>
-                                            <a href="#">Financial Tracking</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Result Tracking</a>
-                                        </li>
-                                    </ul>
+                                <li>
+                                    <a id="link-project-hn">Health Nutrition</a>
                                 </li>
-
-                                <li class="dropdown ">
-                                    <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">
-                                        <i class="fa fa-keyboard-o"></i>
-                                        Master Data
-                                <span class="caret"></span>
-                                    </a>
-
-                                    <ul class="dropdown-menu">
-                                        <li>
-                                            <a href="#">Activity</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Sub-Activity</a>
-                                        </li>
-                                    </ul>
-                                </li>
-
-                                <li class="dropdown">
-                                    <a href="./sites/mca-dev/project-gp/SitePages/Monev.aspx">
-                                        <i class="fa fa-dashboard"></i>
-                                        Monev Dashboard
-                                    </a>
-                                </li>
-
-
-                                <li class="dropdown">
-                                    <a href="#contact" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">
-                                        <i class="fa fa-external-link"></i>
-                                        Features
-                                <span class="caret"></span>
-                                    </a>
-
-                                    <ul class="dropdown-menu">
-                                        <li>
-                                            <a href="#">Documents</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Calendar</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Risk Register</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Issue Register</a>
-                                        </li>
-                                    </ul>
+                                <li>
+                                    <a id="link-project-pm">Procurement Modernization</a>
                                 </li>
                             </ul>
-                        </div>
-                        <div class="col-md-3 pull-right">
-                            <!-- THIS IS for SEARCHING -->
-                            <div id="imaginary_container">
-                                <div class="input-group stylish-input-group">
-                                    <input type="text" class="form-control" placeholder="Search">
-                                    <span class="input-group-addon">
-                                        <button type="submit">
-                                            <span class="glyphicon glyphicon-search"></span>
-                                        </button>
-                                    </span>
-                                </div>
+                        </li>
+                        <li class="dropdown ">
+                            <a class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">
+                                <i class="fa fa-dashboard"></i>
+                                Project Management
+                                            <span class="caret"></span>
+                            </a>
+
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a id="link-pm-schedule-tracking">Schedule Tracking</a>
+                                </li>
+                                <li>
+                                    <a id="link-pm-project-dashboard">Project Dashboard</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">
+                                <i class="fa fa-external-link"></i>
+                                Features
+                                            <span class="caret"></span>
+                            </a>
+
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a id="link-feature-documents">Documents</a>
+                                </li>
+                                <li>
+                                    <a id="link-feature-calendar">Calendar</a>
+                                </li>
+                                <li>
+                                    <a id="link-feeature-risk">Risk Register</a>
+                                </li>
+                                <li>
+                                    <a id="link-feature-issue">Issue Register</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-md-3 pull-right">
+                    <!-- THIS IS for SEARCHING -->
+                    <br />
+                    <br />
+                    <div class="navbar-form">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search" name="srch-term" id="srch-term" />
+                            <div class="input-group-btn">
+                                <button class="btn btn-default" type="submit">
+                                    <i class="glyphicon glyphicon-search"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
+
                 </div>
-                <!-- /.navbar-collapse -->
             </div>
-            <!-- /.container -->
+
         </div>
-        <!-- /.mainbar -->
+        <!-- /.container -->
+    </div>
+    <!-- /.mainbar -->
 
 
-        <div class="container">
-            <div class="content">
-                <div class="content-container">
-                    <div class="content-header">
-                        <h2 class="content-header-title">[PAGE TITLE]</h2>
-                        <ol class="breadcrumb">
-                            <li>
-                                <a href="/">MCA-Indonesia : IMS</a>
-                            </li>
-                            <li>
-                                <a href="#">[BREADCRUMB 1]</a>
-                            </li>
-                            <li class="active">[BREADCRUMB 2]]</li>
-                        </ol>
-                    </div>
-                    <!-- /.content-header -->
+    <div class="container">
+        <div class="content">
+            <div class="content-container">
+                <div class="content-header">
+                    <h2 class="content-header-title">[PAGE TITLE]</h2>
+                    <ol class="breadcrumb">
+                        <li>
+                            <a href="/">MCA-Indonesia : IMS</a>
+                        </li>
+                        <li>
+                            <a href="#">[BREADCRUMB 1]</a>
+                        </li>
+                        <li class="active">[BREADCRUMB 2]]</li>
+                    </ol>
+                </div>
+                <!-- /.content-header -->
 
-                    <div id="main-content">
-                        
-                        <!-- MAIN CONTENT START HERE -->
-                        <form runat="server">
-                            <asp:ScriptManager runat="server">
+                <div id="main-content">
+
+                    <!-- MAIN CONTENT START HERE -->
+                    <form runat="server">
+                        <asp:ScriptManager runat="server">
                             <Scripts>
                                 <%--To learn more about bundling scripts in ScriptManager see http://go.microsoft.com/fwlink/?LinkID=301884 --%>
                                 <%--Framework Scripts--%>
@@ -168,30 +182,35 @@
                                 <%--Site Scripts--%>
                             </Scripts>
                         </asp:ScriptManager>
-                            <asp:ContentPlaceHolder ID="MainContent" runat="server">
-                            </asp:ContentPlaceHolder>
-                        </form>
-                        <!-- MAIN CONTENT ENDS HERE-->
-                    </div>
-
-
+                        <asp:ContentPlaceHolder ID="MainContent" runat="server">
+                        </asp:ContentPlaceHolder>
+                    </form>
+                    <!-- MAIN CONTENT ENDS HERE-->
                 </div>
-                <!-- /.content-container -->
+
+
             </div>
-            <!-- /.content -->
+            <!-- /.content-container -->
         </div>
-        <!-- /.container -->
-        <footer class="footer dark">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-6">
-                        <span class="footer-text pull-left">MCA Indonesia - Information Management System</span>
-                    </div>
-                    <div class="col-md-6">
-                        <span class="footer-text pull-right">&copy; 2016 -  The eCEOs Sdn Bhd. &nbsp;&nbsp;&nbsp;</span>
-                    </div>
+        <!-- /.content -->
+    </div>
+    <!-- /.container -->
+    <footer class="footer dark">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <span class="footer-text pull-left">MCA Indonesia - Information Management System</span>
+                </div>
+                <div class="col-md-6">
+                    <span class="footer-text pull-right">&copy; 2016 -  The eCEOs Sdn Bhd. &nbsp;&nbsp;&nbsp;</span>
                 </div>
             </div>
-        </footer>
+        </div>
+    </footer>
+
+   <asp:PlaceHolder runat="server">
+        <%: Scripts.Render("~/bundles/apps") %>
+    </asp:PlaceHolder>
+
 </body>
 </html>

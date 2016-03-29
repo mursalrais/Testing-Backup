@@ -16,6 +16,9 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
         static Logger logger = LogManager.GetCurrentClassLogger();
         const string SP_LIST_NAME = "Tasks";
         const string SP_PROJECT_INFORMATION_LIST_NAME = "Project Information";
+        const string SP_ACTIVITY_LIST_NAME = "Activity";
+        const string SP_SUB_ACTIVITY_LIST_NAME = "SubActivity";
+
         string _siteUrl = null;
 
         public TaskService()
@@ -562,7 +565,12 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
             return days <= 0 ? 0 : days;
         }
 
-      
+        public IEnumerable<StackedBarChartVM> GenerateProjectHealthStatusByActivityChart()
+        {
+            throw new NotImplementedException();
+        }
+
+
         #endregion
     }
 }

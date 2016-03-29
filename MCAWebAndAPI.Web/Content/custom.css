@@ -1,21 +1,25 @@
-
-
-@media (min-width: 1200px){
-    .container {
-        width: 94% !important;
-        max-width: 1400px !important;
-    }
+﻿.container {
+    width: 94% !important;
 }
 
 .mainbar {
     background: #1A417C !important;
  }
 
-.company-logo{
-  position: relative;
-  margin: 12px auto 25px;
-  z-index: 100;
-  width: 100px;
+.portlet-content .row {
+    max-width: 1362px;
+    overflow-x: auto;
+}
+
+div.k-grid{
+  max-width: 5000px;
+}
+
+.company-logo {
+    position: relative;
+    margin: 5px 0 0 0;
+    z-index: 100;
+    width: 125px;
 }
 
 form.navbar-form {
@@ -23,9 +27,9 @@ form.navbar-form {
 }
 
 .border-bottom-dot{
-  padding-bottom: .5em;
+	padding-bottom: .5em;
     margin-bottom: 2.5em;
-  border-bottom: 1px dotted #CCC;
+	border-bottom: 1px dotted #CCC;
 }
 
 .caption {
@@ -34,21 +38,21 @@ form.navbar-form {
 }
 
 footer.dark{
-  background-color: #333333;
-  margin: 50px 0 0 0;
-  padding: 50px 0 20px 0;
+	background-color: #333333;
+	margin: 50px 0 0 0;
+	padding: 50px 0 20px 0;
 }
 
 .footer-text{
-  color: #EFEFEF;
+	color: #EFEFEF;
 }
 
 #back-to-top{
-  background-color: #85C226 !important;
+	background-color: #85C226 !important;
 }
 
 #s4-bodyContainer {
-  padding-bottom: 0px !important;
+	padding-bottom: 0px !important;
 }
 
 #breadcrumb span {
@@ -56,18 +60,57 @@ footer.dark{
     color: #16A085;
 }
 
-#imaginary_container{
-    margin-top:12%; /* Don't copy this */
+
+/* Program-Specific */
+
+
+.nav-pills.nav-stacked > li > a:hover {
+    background-color: #E46F2F;
+    color: white;
 }
-.stylish-input-group .input-group-addon{
-    background: white !important; 
+
+span.chart-figure{
+  text-align: center;
+  font-weight: 600;
 }
-.stylish-input-group .form-control{
-	border-right:0; 
-	box-shadow:0 0 0; 
-	border-color:#ccc;
+
+
+/* Kendo Elements */
+.gauge-container {
+                    background: transparent url("../img/gauge-container.png") no-repeat 50% 50%;
+                    width: 404px;
+                    height: 404px;
+                    text-align: center;
+                    margin: 0 auto 30px auto;
+                }
+
+.gauge-container > div {
+    width: 330px;
+    height: 330px;
+    margin: 0 auto 0;
 }
-.stylish-input-group button{
-    border:0;
-    background:transparent;
+
+th.k-scheduler-timecolumn, td.k-scheduler-timecolumn {
+    display: none!important;
+}
+
+.tp-caption {
+    position: absolute;
+    left: 15%;
+    top: 70%;
+    -webkit-font-smoothing: antialiased !important;
+    background-color: rgba(30,30,30,0.8) !important;
+    padding: 20px 50px 20px 50px;
+}
+
+.tp-caption.light_medium_30_shadowed {
+    font-size:30px;line-height:40px;font-weight:700;color:#ffffff;text-decoration:none;background-color:transparent;text-shadow:0px 0px 7px rgba(0, 0, 0, 0.25);border-width:0px;border-color:rgb(0, 0, 0);border-style:none;
+}
+
+div#slider-caption a{
+    color: white !important;
+}
+
+.portlet-content > div:not(.k-grid), .portlet-content > div:not(.k-widget) {
+    text-align: center !important;
 }

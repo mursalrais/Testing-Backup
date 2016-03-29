@@ -32,6 +32,9 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult GetRIAResourceChart(string riaType, string siteUrl = null)
         {
             riaService.SetSiteUrl(siteUrl);
+            riaType = riaType.Replace("\"", "");
+            riaType = riaType.Replace("\'", "");
+
             var data = riaService.GetRIAResourceChart(riaType);
 
             return this.Jsonp(data);
@@ -40,6 +43,9 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult GetRIAStatusChart(string riaType, string siteUrl = null)
         {
             riaService.SetSiteUrl(siteUrl);
+            riaType = riaType.Replace("\"", "");
+            riaType = riaType.Replace("\'", "");
+
             var data = riaService.GetRIAStatusChart(riaType);
 
             return this.Jsonp(data);
@@ -48,7 +54,19 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult GetRIAPriorityChart(string riaType, string siteUrl = null)
         {
             riaService.SetSiteUrl(siteUrl);
+            riaType = riaType.Replace("\"", "");
+            riaType = riaType.Replace("\'", "");
+
             var data = riaService.GetRIAPriorityChart(riaType);
+
+            return this.Jsonp(data);
+        }
+
+        public ActionResult GetIssuesAgeingChart(string siteUrl = null)
+        {
+            riaService.SetSiteUrl(siteUrl);
+
+            var data = riaService.GetIssuesAgeingChart();
 
             return this.Jsonp(data);
         }

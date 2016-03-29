@@ -156,55 +156,47 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="About.aspx" />
-    <Content Include="Contact.aspx" />
-    <Content Include="Content\bootstrap-theme.css" />
-    <Content Include="Content\bootstrap-theme.min.css" />
-    <Content Include="Content\bootstrap.css" />
-    <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\custom.css" />
-    <Content Include="Content\font-awesome.min.css" />
-    <Content Include="Content\kendo.common.min.css" />
-    <Content Include="Content\kendo.dataviz.metro.min.css" />
-    <Content Include="Content\kendo.metro.min.css" />
-    <Content Include="Content\Kendo\kendo.common.min.css" />
-    <Content Include="Content\Kendo\kendo.dataviz.metro.min.css" />
-    <Content Include="Content\Kendo\kendo.metro.min.css" />
-    <Content Include="Content\Kendo\Metro\editor.png" />
-    <Content Include="Content\Kendo\Metro\imagebrowser.png" />
-    <Content Include="Content\Kendo\Metro\indeterminate.gif" />
-    <Content Include="Content\Kendo\Metro\loading-image.gif" />
-    <Content Include="Content\Kendo\Metro\loading.gif" />
-    <Content Include="Content\Kendo\Metro\loading_2x.gif" />
-    <Content Include="Content\Kendo\Metro\markers.png" />
-    <Content Include="Content\Kendo\Metro\markers_2x.png" />
-    <Content Include="Content\Kendo\Metro\slider-h.gif" />
-    <Content Include="Content\Kendo\Metro\slider-v.gif" />
-    <Content Include="Content\Kendo\Metro\sprite.png" />
-    <Content Include="Content\Kendo\Metro\sprite_2x.png" />
-    <Content Include="Content\Kendo\Metro\sprite_kpi.png" />
-    <Content Include="Content\Kendo\Metro\sprite_kpi_2x.png" />
-    <Content Include="Content\Site.css" />
+    <Content Include="Content\Metro\editor.png" />
+    <Content Include="Content\Metro\imagebrowser.png" />
+    <Content Include="Content\Metro\indeterminate.gif" />
+    <Content Include="Content\Metro\loading-image.gif" />
+    <Content Include="Content\Metro\loading.gif" />
+    <Content Include="Content\Metro\loading_2x.gif" />
+    <Content Include="Content\Metro\markers.png" />
+    <Content Include="Content\Metro\markers_2x.png" />
+    <Content Include="Content\Metro\slider-h.gif" />
+    <Content Include="Content\Metro\slider-v.gif" />
+    <Content Include="Content\Metro\sprite.png" />
+    <Content Include="Content\Metro\sprite_2x.png" />
+    <Content Include="Content\Metro\sprite_kpi.png" />
+    <Content Include="Content\Metro\sprite_kpi_2x.png" />
     <Content Include="Content\z_mcatheme.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Images\logo.png" />
-    <Content Include="Scripts\Apps\Kendo.Dropdown.js" />
-    <Content Include="Scripts\Apps\KendoGrid.Tasks.js" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="Content\bootstrap.min.css.map" />
-    <Content Include="Content\bootstrap.css.map" />
-    <Content Include="Content\bootstrap-theme.min.css.map" />
-    <Content Include="Content\bootstrap-theme.css.map" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
-    <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="ProjectStatusByActivity.aspx" />
+    <Content Include="Scripts\apps\charts\KendoChartDonuts.js" />
+    <Content Include="Scripts\apps\charts\KendoChartProjectGantt.js" />
+    <Content Include="Scripts\apps\charts\KendoChartProjectPercentage.js" />
+    <Content Include="Scripts\apps\charts\KendoChartProjectStatusByActivity.js" />
+    <Content Include="Scripts\apps\charts\KendoChartRIA.js" />
+    <Content Include="Scripts\apps\charts\KendoChartRIAPriority.js" />
+    <Content Include="Scripts\apps\charts\KendoChartRIAResource.js" />
+    <Content Include="Scripts\apps\charts\KendoChartRIAStatus.js" />
+    <Content Include="Scripts\apps\charts\KendoChartScheduleSCurve.js" />
+    <Content Include="Scripts\apps\charts\KendoChartUtils.js" />
+    <Content Include="Scripts\apps\common\Utils.js" />
+    <Content Include="Scripts\apps\grids\KendoGridScheduler.js" />
+    <Content Include="Scripts\apps\grids\KendoGridTasks.js" />
+    <Content Include="Scripts\apps\sliders\jQuerySlider.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
-    <Content Include="Scripts\kendo.all.min.js" />
-    <Content Include="Scripts\kendo.core.min.js" />
+    <Content Include="Scripts\libs\indicator_jslink.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
@@ -229,6 +221,7 @@
     <Content Include="Scripts\WebForms\WebForms.js" />
     <Content Include="Scripts\WebForms\WebParts.js" />
     <Content Include="Scripts\WebForms\WebUIValidation.js" />
+    <Content Include="Scripts\z_mcatheme.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Default.aspx" />
     <Content Include="favicon.ico" />
@@ -249,22 +242,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
-    <Compile Include="About.aspx.cs">
-      <DependentUpon>About.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="About.aspx.designer.cs">
-      <DependentUpon>About.aspx</DependentUpon>
-    </Compile>
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Contact.aspx.cs">
-      <DependentUpon>Contact.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Contact.aspx.designer.cs">
-      <DependentUpon>Contact.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Controllers\CalendarController.cs" />
+    <Compile Include="Controllers\ProjectHierarchyController.cs" />
     <Compile Include="Controllers\RIAController.cs" />
     <Compile Include="Controllers\TaskController.cs" />
     <Compile Include="Default.aspx.cs">
@@ -278,6 +258,13 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\JsonpResult.cs" />
+    <Compile Include="ProjectStatusByActivity.aspx.cs">
+      <DependentUpon>ProjectStatusByActivity.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ProjectStatusByActivity.aspx.designer.cs">
+      <DependentUpon>ProjectStatusByActivity.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>

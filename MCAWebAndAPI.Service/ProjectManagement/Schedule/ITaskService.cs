@@ -28,5 +28,8 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
         IEnumerable<GanttDependenciesVM> GenerateGanttDependecies();
 
+
+        IEnumerable<StackedBarChartVM> GenerateProjectHealthStatusByActivityChart();
+
     }
 }

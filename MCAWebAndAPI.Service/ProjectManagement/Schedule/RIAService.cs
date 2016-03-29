@@ -24,6 +24,8 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
         const string NORMAL_PRIORITY = "Normal";
         const string LOW_PRIORITY = "Low";
 
+        const string UNASSIGNED = "Unassigned";
+
         string _siteUrl = null;
 
         public void SetSiteUrl(string siteUrl)
@@ -39,21 +41,16 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
                 Id = Convert.ToInt32(item["ID"]),
                 Title = Convert.ToString(item["Title"]),
                 Status = Convert.ToString(item["Status"]),
-                AssignedTo = Convert.ToString(item["AssignedTo"]),
+                AssignedTo = (FieldUserValue)item["AssignedTo"] == null ? UNASSIGNED : 
+                    Convert.ToString(((FieldUserValue)item["AssignedTo"]).LookupValue),
                 Priority = Convert.ToString(item["Priority"])
             };
 
+            if (string.IsNullOrEmpty(result.AssignedTo))
+                result.AssignedTo = UNASSIGNED;
+
             // In case there is a need to add child-specific columns 
-            switch (listName)
-            {
-                case ACTION_SP_LIST_NAME:
-                    return result as Model.ProjectManagement.Schedule.Action;
-                case RISK_SP_LIST_NAME:
-                    return result as Risk;
-                case ISSUE_SP_LIST_NAME:
-                    return result as Issue;
-                default: return null;
-            }
+            return result;
         }
 
         public IEnumerable<Model.ProjectManagement.Schedule.Action> GetAllAction()
@@ -92,12 +89,24 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
             return result;
         }
+        
+        public IEnumerable<RIABase> GetRIAListItems(string listName)
+        {
+            var result = new List<RIABase>();
+
+            foreach (var item in SPConnector.GetList(listName))
+            {
+                result.Add(ConvertToModel(item, listName));
+            }
+
+            return result;
+        }
 
         IEnumerable<StackedBarChartVM> IRIAService.GetOverallRIAChart()
         {
-            var actions = GetAllAction();
-            var issues = GetAllIssues();
-            var risks = GetAllRisks();
+            var actions = GetRIAListItems(ACTION_SP_LIST_NAME);
+            var issues = GetRIAListItems(ISSUE_SP_LIST_NAME);
+            var risks = GetRIAListItems(RISK_SP_LIST_NAME);
 
             var viewModel = new List<StackedBarChartVM>();
             viewModel.Add(new StackedBarChartVM
@@ -253,5 +262,12 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
             return results;
         }
+
+        public IEnumerable<BarChartVM> GetIssuesAgeingChart()
+        {
+            var issuesAgeing = new List<BarChartVM>();
+            return issuesAgeing;
+        }
+
     }
 }

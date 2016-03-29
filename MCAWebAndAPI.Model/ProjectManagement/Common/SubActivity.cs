@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MCAWebAndAPI.Model.ProjectManagement.Common
+﻿namespace MCAWebAndAPI.Model.ProjectManagement.Common
 {
     public class SubActivity
     {
         private string _subActivityName;
         private string _activityFK;
+        private string _scheduleStatus;
 
         public string SubActivityName
         {
@@ -24,7 +19,7 @@ namespace MCAWebAndAPI.Model.ProjectManagement.Common
             }
         }
 
-        public string ActivityFK
+        public string ActivityName
         {
             get
             {
@@ -34,6 +29,19 @@ namespace MCAWebAndAPI.Model.ProjectManagement.Common
             set
             {
                 _activityFK = value;
+            }
+        }
+
+        public string ScheduleStatus
+        {
+            get
+            {
+                return _scheduleStatus;
+            }
+
+            set
+            {
+                _scheduleStatus = value;
             }
         }
     }

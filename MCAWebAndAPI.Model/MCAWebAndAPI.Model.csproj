@@ -41,7 +41,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ProjectManagement\Common\Activity.cs" />
-    <Compile Include="ProjectManagement\Common\ActivityVM.cs" />
     <Compile Include="ProjectManagement\Common\Project.cs" />
     <Compile Include="ProjectManagement\Common\SPUser.cs" />
     <Compile Include="ProjectManagement\Common\SubActivity.cs" />

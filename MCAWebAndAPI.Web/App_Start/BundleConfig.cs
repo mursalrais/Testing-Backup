@@ -34,13 +34,7 @@ namespace MCAWebAndAPI.Web
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                             "~/Scripts/modernizr-*"));
 
-            bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                           "~/Scripts/jquery-*"));
-
-            bundles.Add(new ScriptBundle("~/bundles/kendo").Include(
-                           "~/Scripts/kendo.all.min.js", 
-                           "~/Scripts/Apps/Kendo.Grid.js",
-                           "~/Scripts/Apps/Kendo.Dropdown.js"));
+            bundles.Add(new ScriptBundle("~/bundles/apps").IncludeDirectory("~/Scripts/apps", "*.js", true));
 
             ScriptManager.ScriptResourceMapping.AddDefinition(
                 "respond",
