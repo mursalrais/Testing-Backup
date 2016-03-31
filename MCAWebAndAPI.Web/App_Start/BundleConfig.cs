@@ -43,6 +43,12 @@ namespace MCAWebAndAPI.Web
                     Path = "~/Scripts/respond.min.js",
                     DebugPath = "~/Scripts/respond.js",
                 });
+
+
+            bundles.Add(new StyleBundle("~/Content/theme").Include(
+               "~/Content/z_mcatheme.css",
+               "~/Content/custom.css"));
+
         }
     }
 }

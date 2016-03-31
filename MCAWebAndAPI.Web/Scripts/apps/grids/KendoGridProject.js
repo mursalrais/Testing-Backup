@@ -54,7 +54,7 @@ EPMO.Grids.displayProjectGrid = function (divId) {
         field: "Finish",
         title: "Finish Date",
         template: '#= kendo.toString(Finish, "D") #'
-    },{
+    }, {
         field: "PercentComplete",
         title: "Completion",
         format: "{0:p}",

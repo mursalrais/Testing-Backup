@@ -26,6 +26,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Common
                     Convert.ToString(((FieldUserValue)item["Project_x0020_Manager"]).LookupValue);
             model.ColorStatus = GenerateScheduleStatusColor(Convert.ToString(item["Schedule_x0020_Status"]));
             model.ScheduleStatus = Convert.ToString(item["Schedule_x0020_Status"]);
+            model.PercentComplete = Convert.ToDouble(item["_x0025__x0020_Complete"]);
 
             return model;
         }
@@ -48,15 +49,21 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Common
             model.Finish = Convert.ToDateTime(item["Finish"]);
             model.Director = (FieldUserValue)item["Project_x0020_Director"] == null ? "" :
                     Convert.ToString(((FieldUserValue)item["Project_x0020_Director"]).LookupValue);
-            model.ColorStatus = GenerateScheduleStatusColor(Convert.ToString(item["ScheduleStatus"]));
-            model.ScheduleStatus = Convert.ToString(item["ScheduleStatus"]);
+            model.ColorStatus = GenerateScheduleStatusColor(Convert.ToString(item["Schedule_x0020_Status"]));
+            model.ScheduleStatus = Convert.ToString(item["Schedule_x0020_Status"]);
+            model.ProjectName = Convert.ToString(item["ProjectName"]);
 
             return model;
         }
 
         public void SetSiteUrl(string siteUrl)
         {
-            _siteUrl = siteUrl;
+            if(siteUrl != null)
+            {
+                _siteUrl = siteUrl;
+                _siteUrl = _siteUrl.Replace("\"", "");
+                _siteUrl = _siteUrl.Replace("\'", "");
+            }
         }
 
         public IEnumerable<Activity> GetAllActivities()
@@ -152,7 +159,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Common
 
             return items.Select(e => new StackedBarChartVM()
             {
-                CategoryName = e.ActivityName,
+                CategoryName = e.ProjectName,
                 GroupName = GenerateOrderedScheduleStatus(e.ScheduleStatus),
                 Value = 1,
                 Color = GenerateScheduleStatusColor(e.ScheduleStatus)

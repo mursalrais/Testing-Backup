@@ -9,6 +9,7 @@ namespace MCAWebAndAPI.Model.ProjectManagement.Common
     public class Activity
     {
         private string _activityName;
+        private string _projectName;
         private string _director;
         private DateTime _start;
         private DateTime _finish;
@@ -90,6 +91,19 @@ namespace MCAWebAndAPI.Model.ProjectManagement.Common
             set
             {
                 _colorStatus = value;
+            }
+        }
+
+        public string ProjectName
+        {
+            get
+            {
+                return _projectName;
+            }
+
+            set
+            {
+                _projectName = value;
             }
         }
     }

@@ -1,0 +1,101 @@
+﻿<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+
+    @Scripts.Render("~/bundles/modernizr")
+
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+    <!-- Basic CSS Frameworks -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+
+    <!-- Kendo Frameworks-->
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2016.1.112/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2016.1.112/styles/kendo.metro.min.css" />
+
+
+    @Styles.Render("~/Content/theme")
+
+    <!-- Basic JS Libraries -->
+    <script src="https://code.jquery.com/jquery-1.12.1.min.js">
+        //<![CDATA[//]]>
+    </script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js">
+        //<![CDATA[//]]>
+    </script>
+
+    <!-- KENDO Library-->
+    <script src="https://kendo.cdn.telerik.com/2016.1.112/js/kendo.all.min.js">
+        //<![CDATA[//]]>
+    </script>
+
+</head>
+<body>
+
+    <div class="mainbar">
+        <div class="container">
+            <button type="button" class="btn mainbar-toggle" data-toggle="collapse" data-target=".mainbar-collapse">
+                <i class="fa fa-bars"></i>
+            </button>
+            <div class="mainbar-collapse collapse">
+                @Html.Partial("_PartialHeader")
+            </div>
+        </div>
+        <!-- /.container -->
+    </div>
+    <!-- /.mainbar -->
+
+
+    <div class="container">
+        <div class="content">
+            <div class="content-container">
+                <div class="content-header">
+                    <h2 class="content-header-title">[PAGE TITLE]</h2>
+                    <ol class="breadcrumb">
+                        <li>
+                            <a href="/">MCA-Indonesia : IMS</a>
+                        </li>
+                        <li>
+                            <a href="#">[BREADCRUMB 1]</a>
+                        </li>
+                        <li class="active">[BREADCRUMB 2]]</li>
+                    </ol>
+                </div>
+                <!-- /.content-header -->
+
+                <div id="main-content">
+
+                    @RenderBody()
+
+                    <!-- MAIN CONTENT ENDS HERE-->
+                </div>
+
+
+            </div>
+            <!-- /.content-container -->
+        </div>
+        <!-- /.content -->
+    </div>
+    <!-- /.container -->
+    <footer class="footer dark">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <span class="footer-text pull-left">MCA Indonesia - Information Management System</span>
+                </div>
+                <div class="col-md-6">
+                    <span class="footer-text pull-right">&copy; @DateTime.Now.Year - My ASP.NET Application</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    @Scripts.Render("~/bundles/apps")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

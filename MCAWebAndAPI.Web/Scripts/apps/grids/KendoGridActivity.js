@@ -28,7 +28,7 @@ EPMO.Grids.displayActivityGrid = function (divId) {
                     Director: { from: "Director", type: "string" },
                     Start: { from: "Start", type: "date" },
                     Finish: { from: "Finish", type: "date" },
-                    Color: { from: "ColorStatus", type: "string"}
+                    Color: { from: "ColorStatus", type: "string" }
                 }
             }
         }

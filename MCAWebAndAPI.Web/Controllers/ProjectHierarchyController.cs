@@ -18,6 +18,12 @@ namespace MCAWebAndAPI.Web.Controllers
             return View();
         }
 
+        public ActionResult ProjectStatusByActivity()
+        {
+            return View();
+        }
+
+
         public ActionResult GetProjectHealthStatusChartByActivity(string siteUrl = null)
         {
             _service.SetSiteUrl(siteUrl);

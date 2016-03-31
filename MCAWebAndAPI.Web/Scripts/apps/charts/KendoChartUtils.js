@@ -4,47 +4,49 @@ var EPMO = window.EPMO || {};
 EPMO.Charts = EPMO.Charts || {};
 EPMO.Charts.Utils = EPMO.Charts.Utils || {};
 
-EPMO.Charts.Utils.generateLegend = function(){
+EPMO.Charts.Utils.generateLegend = function () {
 
-	var _legend = {
-		item: {
-			visual: function (e) {
-				var color = e.series.color;
-				for (var i=0;i<e.series.data.length;i++){
-    				if (e.series.data[i].Color != "" && e.series.data[i].Color !== undefined && e.series.data[i].fname != "") {
-    					color = e.series.data[i].Color
-					}
-				}
+    var _legend = {
+        item: {
+            visual: function (e) {
+                var color = e.series.color;
+                for (var i = 0; i < e.series.data.length; i++) {
+                    if (e.series.data[i].Color != "" && e.series.data[i].Color !== undefined && e.series.data[i].fname != "") {
+                        color = e.series.data[i].Color
+                    }
+                }
 
-				var rect = new kendo.geometry.Rect([0, 0], [100, 50]);
-				var layout = new kendo.drawing.Layout(rect, {
-					spacing: 5,
-					alignItems: "center"
-				});
+                var rect = new kendo.geometry.Rect([0, 0], [100, 50]);
+                var layout = new kendo.drawing.Layout(rect, {
+                    spacing: 5,
+                    alignItems: "center"
+                });
 
-				var marker = new kendo.drawing.Path({
-					fill: {
-						color: color
-					}
-				}).moveTo(10, 0).lineTo(10, 10).lineTo(0, 10).lineTo(0,0).close();
+                var marker = new kendo.drawing.Path({
+                    fill: {
+                        color: color
+                    }
+                }).moveTo(10, 0).lineTo(10, 10).lineTo(0, 10).lineTo(0, 0).close();
 
-				var label = new kendo.drawing.Text(e.series.name, [0, 0], {
-					fill: {
-						color: "black"
-					}
-				});
+                var label = new kendo.drawing.Text(
+					EPMO.Charts.Utils.shortLabels(e.series.name),
+					[0, 0], {
+					    fill: {
+					        color: "black"
+					    }
+					});
 
-				layout.append(marker, label);
-				layout.reflow()
-				return layout;
-			}
-		}
-	};
+                layout.append(marker, label);
+                layout.reflow()
+                return layout;
+            }
+        }
+    };
 
-	return _legend;
+    return _legend;
 };
 
-EPMO.Charts.Utils.generateTitle =  function(e, title, center, radius) {
+EPMO.Charts.Utils.generateTitle = function (e, title, center, radius) {
     var draw = kendo.drawing;
     var geom = kendo.geometry;
     var chart = e.sender;
@@ -60,7 +62,7 @@ EPMO.Charts.Utils.generateTitle =  function(e, title, center, radius) {
     //
     // http://docs.telerik.com/kendo-ui/api/javascript/dataviz/drawing/text
     var text = new draw.Text(title, [0, 0], {
-      font: "18px Verdana,Arial,sans-serif"
+        font: "18px Verdana,Arial,sans-serif"
     });
 
     // Align the text in the bounding box
@@ -72,4 +74,18 @@ EPMO.Charts.Utils.generateTitle =  function(e, title, center, radius) {
 
     // Draw it on the Chart drawing surface
     e.sender.surface.draw(text);
-}
+};
+
+EPMO.Charts.Utils.shortLabels = function (value) {
+    if (value.length > 20) {
+        value = value.substring(0, 20);
+        return value;
+    } else {
+        return value;
+    }
+};
+
+EPMO.Charts.Utils.hideOrder = function (value) {
+    value = value.substring(2, 40);
+    return value;
+};

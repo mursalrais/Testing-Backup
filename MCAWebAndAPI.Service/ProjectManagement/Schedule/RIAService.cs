@@ -31,6 +31,8 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
         public void SetSiteUrl(string siteUrl)
         {
             _siteUrl = siteUrl;
+            _siteUrl = _siteUrl.Replace("\"", "");
+            _siteUrl = _siteUrl.Replace("\'", "");
         }
 
 

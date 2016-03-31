@@ -18,7 +18,12 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
         public void SetSiteUrl(string siteUrl)
         {
-            _siteUrl = siteUrl;
+            if (siteUrl != null)
+            {
+                _siteUrl = siteUrl;
+                _siteUrl = _siteUrl.Replace("\"", "");
+                _siteUrl = _siteUrl.Replace("\'", "");
+            }
         }
 
         Calendar ConvertToModel(ListItem item) {
