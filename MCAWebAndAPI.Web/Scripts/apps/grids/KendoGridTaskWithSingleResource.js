@@ -59,7 +59,7 @@ EPMO.Grids.displayTaskWithSingleResourceGrid = function (divId) {
             field: "DueDate",
             title: "Finish Date",
             template: '#= kendo.toString(DueDate, "D") #'
-        }, {
+        }, { 
             field: "PercentComplete",
             title: "Completion",
             format: "{0:p}",
@@ -67,8 +67,9 @@ EPMO.Grids.displayTaskWithSingleResourceGrid = function (divId) {
         }, {
             field: "AssignedTo",
             title: "Assigned To",
+            hidden: true,
             aggregates: ["count", "average"],
-            groupHeaderTemplate: "#= value # #= count# Task(s) Assigned"
+            groupHeaderTemplate: "#= value #: #= count# Task(s) Assigned"
         }]
     });
 };
