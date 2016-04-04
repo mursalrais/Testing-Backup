@@ -16,6 +16,10 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Common
         const string SP_SUB_ACTIVITY_LIST_NAME = "Sub Activity";
         const string SP_PROJECT_INFORMATION_LIST_NAME = "Project Information";
 
+        const string IMS_PROJECT_HN_NAME = "Health and Nutrition";
+        const string IMS_PROJECT_PM_NAME = "Procurement Modernization";
+        const string IMS_PROJECT_GP_NAME = "Green Prosperity";
+
         private Project ConvertToProjectModel(ListItem item)
         {
             var model = new Project();
@@ -142,20 +146,29 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Common
             });
         }
 
+        private IEnumerable<Activity> GetProjectActivities(string projectRelativeUrl)
+        {
+            var programSiteUrl = _siteUrl;
+            _siteUrl = programSiteUrl + projectRelativeUrl;
+            var activities = GetAllActivities();
+            _siteUrl = programSiteUrl;
+
+            foreach(var item in activities)
+            {
+                item.ProjectName = projectRelativeUrl.Contains("hn") ? IMS_PROJECT_HN_NAME :
+                    projectRelativeUrl.Contains("pm") ? IMS_PROJECT_PM_NAME :
+                    IMS_PROJECT_GP_NAME;
+            }
+
+            return activities;
+        }
 
         public IEnumerable<StackedBarChartVM> GenerateProjectHealthStatusChartByProject()
         {
             var items = new List<Activity>();
-
-            var programSiteUrl = _siteUrl;
-            _siteUrl = programSiteUrl + "/gp";
-            items.AddRange(GetAllActivities());
-            _siteUrl = programSiteUrl + "/hn";
-            items.AddRange(GetAllActivities());
-            _siteUrl = programSiteUrl + "/pm";
-            items.AddRange(GetAllActivities());
-            _siteUrl = programSiteUrl;
-
+            items.AddRange(GetProjectActivities("/gp"));
+            items.AddRange(GetProjectActivities("/hn"));
+            items.AddRange(GetProjectActivities("/pm"));
 
             return items.Select(e => new StackedBarChartVM()
             {

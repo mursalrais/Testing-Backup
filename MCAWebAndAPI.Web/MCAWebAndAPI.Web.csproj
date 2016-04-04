@@ -248,6 +248,8 @@
     <Content Include="Views\ProjectHierarchy\ProjectStatusByActivity.cshtml" />
     <Content Include="Views\Task\TaskByResource.cshtml" />
     <Content Include="Views\Task\TaskWithSingleResource.cshtml" />
+    <Content Include="Views\Home\ScheduleTracking.cshtml" />
+    <Content Include="Views\Home\ProjectHealthByActivity.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

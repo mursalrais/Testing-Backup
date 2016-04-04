@@ -56,20 +56,13 @@ EPMO.Grids.displayActivityGrid = function (divId) {
     }, {
         field: "ScheduleStatus",
         title: "Status",
-        width: 150,
-        template: '<svg height="50" width="50"><circle cx="25" cy="25" r="20" stroke="black" stroke-width="1" fill="#= Color #" /></svg>'
+        width: 100,
+        template: '<svg height="30" width="30"><circle cx="15" cy="15" r="10" stroke="black" stroke-width="1" fill="#= Color #" /></svg>'
     }
     ];
 
     $("#" + divId).kendoGrid({
         dataSource: _dataSource,
-        sortable: true,
-        pageable: {
-            refresh: true,
-            pageSizes: true,
-            buttonCount: 5,
-        },
-        filterable: true,
         columns: _columns
     });
 }

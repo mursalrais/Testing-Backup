@@ -1,0 +1,20 @@
+﻿
+@{
+    ViewBag.Title = "ProjectHealthByActivity";
+}
+
+<h2>ProjectHealthByActivity</h2>
+
+<div id="project-status-by-activity-grid"></div>
+<div id="project-status-by-activity-chart"></div>
+<div id="project-s-curve-chart"></div>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        EPMO.Grids.displayActivityGrid("project-status-by-activity-grid");
+        EPMO.Charts.displaySCurveByActivityChart("project-s-curve-chart");
+        EPMO.Charts.displayProjectStatusByActivityChart("project-status-by-activity-chart");
+    });
+</script>
