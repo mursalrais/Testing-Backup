@@ -50,7 +50,7 @@
     <Compile Include="ProjectManagement\Schedule\Risk.cs" />
     <Compile Include="ProjectManagement\Schedule\Task.cs" />
     <Compile Include="ProjectManagement\Schedule\TaskChangeFlag.cs" />
-    <Compile Include="ProjectManagement\Schedule\TaskSummaryCalculation.cs" />
+    <Compile Include="ProjectManagement\Schedule\TaskManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModel\Chart\BarChartVM.cs" />
     <Compile Include="ViewModel\Chart\DonutsChartVM.cs" />

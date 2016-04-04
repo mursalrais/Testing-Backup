@@ -190,6 +190,7 @@
     <Content Include="Scripts\apps\charts\KendoChartRIAResource.js" />
     <Content Include="Scripts\apps\charts\KendoChartRIAStatus.js" />
     <Content Include="Scripts\apps\charts\KendoChartScheduleSCurve.js" />
+    <Content Include="Scripts\apps\charts\KendoChartTaskResource.js" />
     <Content Include="Scripts\apps\charts\KendoChartUtils.js" />
     <Content Include="Scripts\apps\common\Utils.js" />
     <Content Include="Scripts\apps\grids\KendoGridActivity.js" />
@@ -244,6 +245,7 @@
     <Content Include="Views\Shared\_PartialHeader.cshtml" />
     <Content Include="Views\ProjectHierarchy\ProjectStatusByProject.cshtml" />
     <Content Include="Views\ProjectHierarchy\ProjectStatusByActivity.cshtml" />
+    <Content Include="Views\Task\TaskByResource.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

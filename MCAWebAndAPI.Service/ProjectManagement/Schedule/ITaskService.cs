@@ -31,5 +31,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
         IEnumerable<StackedBarChartVM> GenerateProjectHealthStatusByActivityChart();
 
+        IEnumerable<StackedBarChartVM> GenerateTaskByResourceChart();
+
     }
 }

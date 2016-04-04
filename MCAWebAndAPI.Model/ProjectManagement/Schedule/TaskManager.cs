@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace MCAWebAndAPI.Model.ProjectManagement.Schedule
 {
-    public class TaskSummaryCalculation
+    public class TaskManager
     {
         Task _taskValue;
         Dictionary<TaskChangeFlagEnum, bool> _flags;
@@ -12,7 +12,7 @@ namespace MCAWebAndAPI.Model.ProjectManagement.Schedule
         // Item1 : Duration, Item2 : PercentComplete
         List<Tuple<double, double>> _childrenDurationAndPercentComplete;
         
-        public TaskSummaryCalculation(Task taskValue)
+        public TaskManager(Task taskValue)
         {
             _taskValue = taskValue;
             _flags = new Dictionary<TaskChangeFlagEnum, bool>();

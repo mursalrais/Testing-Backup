@@ -1,0 +1,18 @@
+﻿
+@{
+    ViewBag.Title = "TaskByResource";
+}
+
+<h2>TaskByResource</h2>
+
+<div class="row">
+    <div class="col-md-12">
+        <div id="task-by-resource"></div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        EPMO.Charts.displayTaskResourceChart("task-by-resource");
+    });
+</script>

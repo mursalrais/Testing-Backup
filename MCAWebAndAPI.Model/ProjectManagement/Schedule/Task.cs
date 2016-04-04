@@ -194,5 +194,18 @@ namespace MCAWebAndAPI.Model.ProjectManagement.Schedule
                 _todayCalculatedDays = value;
             }
         }
+
+        public string AssignedTo
+        {
+            get
+            {
+                return _assignedTo;
+            }
+
+            set
+            {
+                _assignedTo = value;
+            }
+        }
     }
 }

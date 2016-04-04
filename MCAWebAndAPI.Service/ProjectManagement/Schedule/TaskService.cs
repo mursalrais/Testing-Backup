@@ -23,7 +23,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
         public TaskService()
         {
-            _updatedTaskCandidates = new Dictionary<int, TaskSummaryCalculation>();
+            _updatedTaskCandidates = new Dictionary<int, TaskManager>();
             _baseLineTotal = new Dictionary<DateTime, int>();
             _planTotal = new Dictionary<DateTime, int>();
             _actualTotal = new Dictionary<DateTime, int>();
@@ -64,19 +64,37 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
             task.PercentComplete = Convert.ToDouble(item["PercentComplete"]);
             task.IsSummaryTask = Convert.ToBoolean(item["Summary"]);
             task.IsMilestone = Convert.ToBoolean(item["Milestone"]);
-            
-            task.ParentId = item["ParentID"] == null ? 0 : Convert.ToInt32((item["ParentID"] as FieldLookupValue).LookupValue);
 
-            task.TodayCalculatedDays = Convert.ToDouble(item["Today"]);
+            var assignedTo = (FieldUserValue[])item["AssignedTo"];
+            task.AssignedTo = assignedTo == null || assignedTo.Count() == 0 ?
+                "Unassigned" : FlattenAssignedTo(assignedTo);
+
+            task.ParentId = item["ParentID"] == null ? 0 : 
+                Convert.ToInt32((item["ParentID"] as FieldLookupValue).LookupValue);
+
+            //task.TodayCalculatedDays = Convert.ToDouble(item["Today"]);
 
             return task;
         }
+
+        string separator = ";";
+        private string FlattenAssignedTo(FieldUserValue[] assignedTos)
+        {
+            var result = string.Empty;
+            foreach(var item in assignedTos)
+            {
+                result += item.LookupValue + separator;
+            }
+            return result;
+        }
+
+        
 
 
         #endregion
 
         #region Summary Task Calculation
-        Dictionary<int, TaskSummaryCalculation> _updatedTaskCandidates;
+        Dictionary<int, TaskManager> _updatedTaskCandidates;
 
         /// <summary>
         /// Update StartDate, DueDate, PercentComplete, IsSummaryTask, Milestone columns based on current condition
@@ -178,7 +196,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
         void PutToUpdatedTaskCandidates(int ID, Task thisTask)
         {
             if (!_updatedTaskCandidates.ContainsKey(ID))
-                _updatedTaskCandidates.Add(ID, new TaskSummaryCalculation(thisTask));
+                _updatedTaskCandidates.Add(ID, new TaskManager(thisTask));
         }
 
         void PushToParentPercentCompleteArray(Task thisTask)
@@ -448,6 +466,33 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
         #endregion
 
         #region Charting
+
+        private IEnumerable<StackedBarChartVM> ConvertTotaskByResourceVM(Task item)
+        {
+            return item.AssignedTo.Split(separator.ToCharArray())
+                .Where(f => !string.IsNullOrEmpty(f))
+                .Select(e =>
+            new StackedBarChartVM
+            {
+                CategoryName = e,
+                GroupName = e,
+                Value = 1
+            });
+        }
+
+        public IEnumerable<StackedBarChartVM> GenerateTaskByResourceChart()
+        {
+            var tasks = GetAllTask();
+            var viewModels = new List<StackedBarChartVM>();
+
+            foreach(var item in tasks)
+            {
+                if(!item.IsSummaryTask)
+                    viewModels.AddRange(ConvertTotaskByResourceVM(item));
+            }
+
+            return viewModels;
+        }
 
 
         Dictionary<DateTime, int> _baseLineTotal;

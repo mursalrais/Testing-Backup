@@ -19,6 +19,11 @@ namespace MCAWebAndAPI.Web.Controllers
             taskService = new TaskService();
         }
 
+        public ActionResult TaskByResource()
+        {
+            return View();
+        }
+
         public ActionResult GetTasks(string siteUrl = null) {
 
             taskService.SetSiteUrl(siteUrl);
@@ -37,6 +42,13 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             taskService.SetSiteUrl(siteUrl);
             var data = taskService.GenerateGanttChart();
+            return this.Jsonp(data);
+        }
+
+        public ActionResult GetTaskByResourceChart(string siteUrl = null)
+        {
+            taskService.SetSiteUrl(siteUrl);
+            var data = taskService.GenerateTaskByResourceChart();
             return this.Jsonp(data);
         }
 
