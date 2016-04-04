@@ -36,7 +36,6 @@ EPMO.Grids.displayProjectGrid = function (divId) {
     });
 
 
-
     var _columns = [{
         field: "ProjectName",
         title: "Project Name",
@@ -44,7 +43,7 @@ EPMO.Grids.displayProjectGrid = function (divId) {
     },
     {
         field: "Director",
-        title: "Project Manager"
+        title: "Project Director"
     },
     {
         field: "Start",
@@ -64,7 +63,7 @@ EPMO.Grids.displayProjectGrid = function (divId) {
         field: "ScheduleStatus",
         title: "Status",
         width: 150,
-        template: '<svg height="50" width="50"><circle cx="25" cy="25" r="20" stroke="black" stroke-width="1" fill="#= Color #" /></svg>'
+        template: '<svg height="25" width="25"><circle cx="20" cy="20" r="18" stroke="black" stroke-width="1" fill="#= Color #" /></svg>'
     }
     ];
 

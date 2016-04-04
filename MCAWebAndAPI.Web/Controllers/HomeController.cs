@@ -12,5 +12,10 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             return View();
         }
+
+        public Action ScheduleTracking()
+        {
+            return View();
+        }
     }
 }
