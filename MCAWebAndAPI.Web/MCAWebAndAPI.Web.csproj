@@ -197,6 +197,7 @@
     <Content Include="Scripts\apps\grids\KendoGridProject.js" />
     <Content Include="Scripts\apps\grids\KendoGridScheduler.js" />
     <Content Include="Scripts\apps\grids\KendoGridTasks.js" />
+    <Content Include="Scripts\apps\grids\KendoGridTaskWithSingleResource.js" />
     <Content Include="Scripts\apps\sliders\jQuerySlider.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -246,6 +247,7 @@
     <Content Include="Views\ProjectHierarchy\ProjectStatusByProject.cshtml" />
     <Content Include="Views\ProjectHierarchy\ProjectStatusByActivity.cshtml" />
     <Content Include="Views\Task\TaskByResource.cshtml" />
+    <Content Include="Views\Task\TaskWithSingleResource.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

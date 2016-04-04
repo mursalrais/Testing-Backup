@@ -24,10 +24,22 @@ namespace MCAWebAndAPI.Web.Controllers
             return View();
         }
 
+        public ActionResult TaskWithSingleResource()
+        {
+            return View();
+        }
+
         public ActionResult GetTasks(string siteUrl = null) {
 
             taskService.SetSiteUrl(siteUrl);
             var data = taskService.GetAllTask();
+            return this.Jsonp(data);
+        }
+
+        public ActionResult GetTasksWithSingleResource(string siteUrl = null)
+        {
+            taskService.SetSiteUrl(siteUrl);
+            var data = taskService.GetAllTaskWithSingleResource();
             return this.Jsonp(data);
         }
 

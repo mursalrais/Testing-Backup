@@ -51,7 +51,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
         /// <param name="item"></param>
         /// <returns></returns>
         #region Object Converter
-        Task ConvertToModel(Microsoft.SharePoint.Client.ListItem item)
+        Task ConvertToModel(Microsoft.SharePoint.Client.ListItem item, string assignedToValue = null)
         {
             var task = new Task();
             task.Id = Convert.ToInt32(item["ID"]);
@@ -59,22 +59,42 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
             task.StartDate = Convert.ToDateTime(item["StartDate"]);
             task.DueDate = Convert.ToDateTime(item["DueDate"]);
             task.Duration = Convert.ToDouble(item["Duration"]);
-
-
             task.PercentComplete = Convert.ToDouble(item["PercentComplete"]);
             task.IsSummaryTask = Convert.ToBoolean(item["Summary"]);
             task.IsMilestone = Convert.ToBoolean(item["Milestone"]);
+            task.ParentId = item["ParentID"] == null ? 0 :
+               Convert.ToInt32((item["ParentID"] as FieldLookupValue).LookupValue);
 
-            var assignedTo = (FieldUserValue[])item["AssignedTo"];
-            task.AssignedTo = assignedTo == null || assignedTo.Count() == 0 ?
-                "Unassigned" : FlattenAssignedTo(assignedTo);
-
-            task.ParentId = item["ParentID"] == null ? 0 : 
-                Convert.ToInt32((item["ParentID"] as FieldLookupValue).LookupValue);
-
-            //task.TodayCalculatedDays = Convert.ToDouble(item["Today"]);
-
+            if (assignedToValue!= null)
+            {
+                var assignedTo = (FieldUserValue[])item["AssignedTo"];
+                task.AssignedTo = assignedTo == null || assignedTo.Count() == 0 ?
+                    "Unassigned" : FlattenAssignedTo(assignedTo);
+            }
+            else
+            {
+                task.AssignedTo = assignedToValue;
+            }
+           
             return task;
+        }
+
+        IEnumerable<Task> ConvertToModels(Microsoft.SharePoint.Client.ListItem item)
+        {
+            var result = new List<Task>();
+
+            var assignedTos = (FieldUserValue[])item["AssignedTo"];
+            if (assignedTos == null || assignedTos.Count() == 0)
+                result.Add(ConvertToModel(item, "Unassigned"));
+            else
+            {
+                foreach (var assignedTo in assignedTos)
+                {
+                    result.Add(ConvertToModel(item, assignedTo.LookupValue));
+                }
+            }
+
+            return result;
         }
 
         string separator = ";";
@@ -392,30 +412,14 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
             return result;
         }
-
-        public IEnumerable<Task> GetAllTaskNotCompleted()
+        
+        public IEnumerable<Task> GetAllTaskWithSingleResource()
         {
-            var stringQuery = "<View><Query><Where><And><Lt><FieldRef Name='PercentComplete' /><Value Type='Number'>100</Value></Lt><Neq><FieldRef Name='Status' /><Value Type='Choice'>Completed</Value></Neq></And></Where><OrderBy><FieldRef Name='StartDate' Ascending='True' /></OrderBy></Query></View>";
-            var list = SPConnector.GetList(SP_LIST_NAME, stringQuery);
+            List<Task> result = new List<Task>();
 
-            var result = new List<Task>();
-            foreach (var item in list)
+            foreach (var item in SPConnector.GetList(SP_LIST_NAME))
             {
-                result.Add(ConvertToModel(item));
-            }
-
-            return result;
-        }
-
-        public IEnumerable<Task> GetMilestones()
-        {
-            var stringQuery = "<View><Query><Where><Eq><FieldRef Name='IsMilestone' /><Value Type='Boolean'>1</Value></Eq></Where></Query></View>";
-            var list = SPConnector.GetList(SP_LIST_NAME, stringQuery);
-
-            var result = new List<Task>();
-            foreach (var item in list)
-            {
-                result.Add(ConvertToModel(item));
+                result.AddRange(ConvertToModels(item));
             }
 
             return result;

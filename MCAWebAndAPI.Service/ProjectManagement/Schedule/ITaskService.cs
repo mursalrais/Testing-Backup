@@ -12,9 +12,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
         IEnumerable<Task> GetAllTask();
 
-        IEnumerable<Task> GetAllTaskNotCompleted();
-
-        IEnumerable<Task> GetMilestones();
+        IEnumerable<Task> GetAllTaskWithSingleResource();
 
         IEnumerable<ProjectStatusBarChartVM> GenerateProjectStatusBarChart();
 

@@ -11,8 +11,19 @@
     </div>
 </div>
 
+<d<div class="row">
+    <div style="width: 50%">
+        <div id="risk-by-resource"></div>
+    </div>
+    <div style="width: 50%">
+        <div id="risk-by-status"></div>
+    </div>
+</div>
+
 <script>
     $(document).ready(function () {
         EPMO.Charts.displayTaskResourceChart("task-by-resource");
+        EPMO.Charts.displayRIAResourceChart("risk-by-resource", "Risks");
+        EPMO.Charts.displayRIAStatusChart("risk-by-status", "Risks");
     });
 </script>
