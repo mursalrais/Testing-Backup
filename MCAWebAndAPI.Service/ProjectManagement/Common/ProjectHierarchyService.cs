@@ -55,6 +55,8 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Common
                     Convert.ToString(((FieldUserValue)item["Project_x0020_Director"]).LookupValue);
             model.ColorStatus = GenerateScheduleStatusColor(Convert.ToString(item["Schedule_x0020_Status"]));
             model.ScheduleStatus = Convert.ToString(item["Schedule_x0020_Status"]);
+            model.NoofSubActivity = Convert.ToInt32(item["NoofSubActivity"]);
+            model.PercentComplete = Convert.ToDouble(item["PercentComplete"]);
             model.ProjectName = Convert.ToString(item["ProjectName"]);
 
             return model;

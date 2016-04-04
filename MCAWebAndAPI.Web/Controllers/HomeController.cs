@@ -17,5 +17,10 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             return View();
         }
+
+        public ActionResult ProjectHealthByActivity()
+        {
+            return View();
+        }
     }
 }

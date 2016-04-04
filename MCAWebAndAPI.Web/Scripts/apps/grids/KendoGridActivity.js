@@ -24,11 +24,13 @@ EPMO.Grids.displayActivityGrid = function (divId) {
         schema: {
             model: {
                 fields: {
-                    ActivityName: { from: "ActivityName", type: "string" },
-                    Director: { from: "Director", type: "string" },
-                    Start: { from: "Start", type: "date" },
-                    Finish: { from: "Finish", type: "date" },
-                    Color: { from: "ColorStatus", type: "string" }
+                    ActivityName: { type: "string" },
+                    Director: { type: "string" },
+                    Start: { type: "date" },
+                    Finish: {type: "date" },
+                    Color: { from: "ColorStatus", type: "string" },
+                    NoofSubActivity: { type: "number" },
+                    PercentComplete: { type: "decimal"}
                 }
             }
         }
@@ -40,10 +42,18 @@ EPMO.Grids.displayActivityGrid = function (divId) {
         field: "ActivityName",
         title: "Activity Name",
         width: 320
-    },
-    {
+    },{
+        field: "NoofSubActivity",
+        title: "Total SubAct",
+        width: 120
+    },{
+        field: "ScheduleStatus",
+        title: "Status",
+        width: 100,
+        template: '<svg height="30" width="30"><circle cx="15" cy="15" r="10" stroke="black" stroke-width="1" fill="#= Color #" /></svg>'
+    },{
         field: "Director",
-        title: "Director Name"
+        title: "Project Director"
     },
     {
         field: "Start",
@@ -54,10 +64,10 @@ EPMO.Grids.displayActivityGrid = function (divId) {
         title: "Finish Date",
         template: '#= kendo.toString(Finish, "D") #'
     }, {
-        field: "ScheduleStatus",
-        title: "Status",
-        width: 100,
-        template: '<svg height="30" width="30"><circle cx="15" cy="15" r="10" stroke="black" stroke-width="1" fill="#= Color #" /></svg>'
+        field: "PercentComplete",
+        title: "Completion",
+        format: "{0:p}",
+        width: 100
     }
     ];
 

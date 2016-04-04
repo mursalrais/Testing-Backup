@@ -15,7 +15,9 @@ namespace MCAWebAndAPI.Model.ProjectManagement.Common
         private DateTime _finish;
         private string _scheduleStatus;
         private string _colorStatus;
-        
+        private int _numberOfSubActivities;
+        private double _percentComplete;
+
         public string ActivityName
         {
             get
@@ -104,6 +106,32 @@ namespace MCAWebAndAPI.Model.ProjectManagement.Common
             set
             {
                 _projectName = value;
+            }
+        }
+
+        public int NoofSubActivity
+        {
+            get
+            {
+                return _numberOfSubActivities;
+            }
+
+            set
+            {
+                _numberOfSubActivities = value;
+            }
+        }
+
+        public double PercentComplete
+        {
+            get
+            {
+                return _percentComplete;
+            }
+
+            set
+            {
+                _percentComplete = value;
             }
         }
     }
