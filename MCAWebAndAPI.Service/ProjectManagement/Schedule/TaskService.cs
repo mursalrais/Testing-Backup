@@ -65,7 +65,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
             task.ParentId = item["ParentID"] == null ? 0 :
                Convert.ToInt32((item["ParentID"] as FieldLookupValue).LookupValue);
 
-            if (assignedToValue!= null)
+            if (assignedToValue == null)
             {
                 var assignedTo = (FieldUserValue[])item["AssignedTo"];
                 task.AssignedTo = assignedTo == null || assignedTo.Count() == 0 ?
