@@ -83,5 +83,31 @@ namespace MCAWebAndAPI.Service.SPUtil
                 context.ExecuteQuery();
             }
         }
+
+        public static void AddListItem(string listName, Dictionary<string, object> columnValues, string siteUrl = null)
+        {
+            using (ClientContext context = new ClientContext(siteUrl ?? CurUrl))
+            {
+                SecureString secureString = new SecureString();
+                Password.ToList().ForEach(secureString.AppendChar);
+                context.Credentials = new SharePointOnlineCredentials(UserName, secureString);
+
+                ClientContext clientContext = new ClientContext(siteUrl);
+                List SPList = clientContext.Web.Lists.GetByTitle(listName);
+
+                ListItemCreationInformation itemCreateInfo = new ListItemCreationInformation();
+                ListItem SPListItem = SPList.AddItem(itemCreateInfo);
+               
+                // Set listitem value to parsed listitem
+                foreach (var key in columnValues.Keys)
+                {
+                    SPListItem[key] = columnValues[key];
+                }
+
+                // Update columns remotely
+                SPListItem.Update();
+                context.ExecuteQuery();
+            }
+        }
     }
 }

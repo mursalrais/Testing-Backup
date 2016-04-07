@@ -298,17 +298,19 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Common
         public bool UpdateWBSMapping()
         {
             var wbsList = GetAllWBSMappings();
-            var wbsDictionary = new Dictionary<string, WBSMapping>();
+            var wbsProjectDict = new Dictionary<string, WBSMapping>();
+            var wbsProgramDict = new Dictionary<string, ListItem>();
 
             foreach(var item in wbsList)
             {
-                wbsDictionary.Add(item.WBSID, item);
+                wbsProjectDict.Add(item.WBSID, item);
             }
 
             foreach (var item in SPConnector.GetList(SP_WBSMAPPING_IN_PROGRAM_LIST_NAME, _siteUrl))
             {
                 try {
-                    UpdateIfChanged(item, wbsDictionary);
+                    wbsProgramDict.Add(Convert.ToString(item["WBS_x0020_ID"]), item);
+                    UpdateIfChanged(item, wbsProjectDict);
                 }
                 catch (Exception)
                 {
@@ -316,8 +318,47 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Common
                 }
             }
 
+            AppendIfNewWBSExist(wbsProjectDict, wbsProgramDict);
+
             return true;
         }
+
+        private void AppendIfNewWBSExist(Dictionary<string, WBSMapping> wbsProjectDict, Dictionary<string, ListItem> wbsProgramDict)
+        {
+            var itemKeysToAppend = new List<string>();
+            foreach(var item in wbsProjectDict)
+            {
+                if (!wbsProgramDict.ContainsKey(item.Key))
+                {
+                    itemKeysToAppend.Add(item.Key);
+                }
+            }
+
+            if (itemKeysToAppend.Count == 0)
+                return;
+
+            
+            foreach(var itemKey in itemKeysToAppend)
+            {
+                var item = wbsProjectDict[itemKey];
+
+                var columnValues = new Dictionary<string, object>();
+                columnValues.Add("WBS_x0020_ID", item.WBSID);
+                columnValues.Add("WBS_x0020_Description", item.WBSDescription);
+                columnValues.Add("Sub_x0020_Activity", item.SubActivity);
+                columnValues.Add("Activity", item.Activity);
+                columnValues.Add("Project", item.Project);
+
+                try {
+                    SPConnector.AddListItem(SP_WBSMAPPING_IN_PROGRAM_LIST_NAME, columnValues);
+                }catch(Exception e)
+                {
+                    logger.Debug(e.Message);
+                }
+            }
+        }
+
+        
 
         private void UpdateIfChanged(ListItem item, Dictionary<string, WBSMapping> wbsDictionary)
         {
@@ -347,7 +388,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Common
             {
                 try
                 {
-                    SPConnector.UpdateListItem(SP_WBSMAPPING_IN_PROGRAM_LIST_NAME, Convert.ToInt32(item["Id"]),
+                    SPConnector.UpdateListItem(SP_WBSMAPPING_IN_PROGRAM_LIST_NAME, Convert.ToInt32(item["ID"]),
                         updatedValues, _siteUrl);
                 }
                 catch (Exception e)
