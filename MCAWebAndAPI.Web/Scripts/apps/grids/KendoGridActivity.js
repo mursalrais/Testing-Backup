@@ -21,6 +21,7 @@ EPMO.Grids.displayActivityGrid = function (divId) {
                 }
             }
         },
+        requestEnd: EPMO.Utils.onRequestEnd,
         schema: {
             model: {
                 fields: {
