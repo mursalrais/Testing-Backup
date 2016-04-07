@@ -37,7 +37,7 @@ EPMO.Charts.displayProjectStatusByProjectChart = function (divId) {
             visibleInLegend: false
         }],
         valueAxis: {
-            max: 10,
+            majorUnit: 1, 
             line: {
                 visible: false
             }

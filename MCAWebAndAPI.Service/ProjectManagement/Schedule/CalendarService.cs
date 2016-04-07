@@ -41,7 +41,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
         {
             var result = new List<Calendar>();
 
-            foreach (var item in SPConnector.GetList(CALENDAR_SP_LIST_NAME))
+            foreach (var item in SPConnector.GetList(CALENDAR_SP_LIST_NAME, _siteUrl))
             {
                 result.Add(ConvertToModel(item));
             }

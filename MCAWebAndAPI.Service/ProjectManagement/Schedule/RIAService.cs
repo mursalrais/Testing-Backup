@@ -59,7 +59,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
         {
             var result = new List<Model.ProjectManagement.Schedule.Action>();
 
-            foreach (var item in SPConnector.GetList(ACTION_SP_LIST_NAME))
+            foreach (var item in SPConnector.GetList(ACTION_SP_LIST_NAME, _siteUrl))
             {
                 result.Add(ConvertToModel(item, ACTION_SP_LIST_NAME) as Model.ProjectManagement.Schedule.Action);
             }
@@ -72,7 +72,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
         {
             var result = new List<Model.ProjectManagement.Schedule.Issue>();
 
-            foreach (var item in SPConnector.GetList(ISSUE_SP_LIST_NAME))
+            foreach (var item in SPConnector.GetList(ISSUE_SP_LIST_NAME, _siteUrl))
             {
                 result.Add(ConvertToModel(item, ISSUE_SP_LIST_NAME) as Issue);
             }
@@ -84,7 +84,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
         {
             var result = new List<Model.ProjectManagement.Schedule.Risk>();
 
-            foreach (var item in SPConnector.GetList(RISK_SP_LIST_NAME))
+            foreach (var item in SPConnector.GetList(RISK_SP_LIST_NAME, _siteUrl))
             {
                 result.Add(ConvertToModel(item, RISK_SP_LIST_NAME) as Model.ProjectManagement.Schedule.Risk);
             }
@@ -96,7 +96,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
         {
             var result = new List<RIABase>();
 
-            foreach (var item in SPConnector.GetList(listName))
+            foreach (var item in SPConnector.GetList(listName, _siteUrl))
             {
                 result.Add(ConvertToModel(item, listName));
             }
@@ -185,7 +185,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
         {
             var items = new List<RIABase>();
 
-            foreach (var item in SPConnector.GetList(riaType))
+            foreach (var item in SPConnector.GetList(riaType, _siteUrl))
             {
                 items.Add(ConvertToModel(item, riaType));
             }
@@ -203,7 +203,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
         {
             var items = new List<RIABase>();
 
-            foreach (var item in SPConnector.GetList(riaType))
+            foreach (var item in SPConnector.GetList(riaType, _siteUrl))
             {
                 items.Add(ConvertToModel(item, riaType));
             }
@@ -236,7 +236,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
         {
             var items = new List<RIABase>();
 
-            foreach (var item in SPConnector.GetList(riaType))
+            foreach (var item in SPConnector.GetList(riaType, _siteUrl))
             {
                 items.Add(ConvertToModel(item, riaType));
             }

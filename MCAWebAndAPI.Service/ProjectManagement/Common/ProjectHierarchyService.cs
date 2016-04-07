@@ -350,7 +350,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Common
                 columnValues.Add("Project", item.Project);
 
                 try {
-                    SPConnector.AddListItem(SP_WBSMAPPING_IN_PROGRAM_LIST_NAME, columnValues);
+                    SPConnector.AddListItem(SP_WBSMAPPING_IN_PROGRAM_LIST_NAME, columnValues, _siteUrl);
                 }catch(Exception e)
                 {
                     logger.Debug(e.Message);
