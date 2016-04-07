@@ -8,12 +8,19 @@ EPMO.Commands.updateWBSMapping = function () {
     var _url = EPMO.Utils.getHost() +
         "ProjectHierarchy/UpdateWBSMapping" + EPMO.Utils.getSiteUrl();
 
-    $.getJSON(_url, function (result) {
-        if (result){
-            alert("WBS Mapping has been sucessfully updated");
+    $.ajax({
+        type: 'GET',
+        url: _url,
+        async: false,
+        jsonpCallback: 'callback',
+        contentType: "application/json",
+        dataType: 'jsonp',
+        success: function(json) {
+            console.dir(json.sites);
+        },
+        error: function(e) {
+            console.log(e.message);
         }
-        else {
-            alert("There is no change in WBS Mapping in project sites");
-        }
-    })
+    });
+
 };
