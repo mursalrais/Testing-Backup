@@ -37,6 +37,7 @@ EPMO.Charts.displayProjectStatusByProjectChart = function (divId) {
             visibleInLegend: false
         }],
         valueAxis: {
+            max: 10,
             line: {
                 visible: false
             }
@@ -49,7 +50,13 @@ EPMO.Charts.displayProjectStatusByProjectChart = function (divId) {
         tooltip: {
             visible: true,
             template: "#= EPMO.Charts.Utils.hideOrder(series.name) #: #= value # Activities"
-        }
+        }, 
+        dataBound: doDataBound
     });
+
+    function doDataBound(e){
+        var axis = e.sender.options.categoryAxis;
+        axis.categories = axis.categories.sort();
+    }
 
 };

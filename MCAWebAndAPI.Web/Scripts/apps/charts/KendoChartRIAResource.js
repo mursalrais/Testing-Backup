@@ -35,15 +35,14 @@ EPMO.Charts.displayRIAResourceChart = function(divId, riaType){
         series: [{
             field: "Value",
             categoryField: "CategoryName",
-            colorField: "Color"
+            colorField: "Color", 
+            aggregate: "sum"
         }],
         dataBound: onDataBound,
         valueAxis: {
-            line: {
-                visible: false
-            },
+        	max: 10,
             minorGridLines: {
-                visible: true
+                visible: false
             }
         },
         categoryAxis: {

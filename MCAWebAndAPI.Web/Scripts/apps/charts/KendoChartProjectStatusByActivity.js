@@ -37,8 +37,12 @@ EPMO.Charts.displayProjectStatusByActivityChart = function (divId) {
             visibleInLegend: false
         }],
         valueAxis: {
+            max: 20,
             line: {
-                visible: false
+                visible: true
+            },
+            minorGridLines: {
+                visible: true
             }
         },
         categoryAxis: {

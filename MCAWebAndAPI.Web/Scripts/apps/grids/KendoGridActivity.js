@@ -38,17 +38,18 @@ EPMO.Grids.displayActivityGrid = function (divId) {
 
 
 
+
     var _columns = [{
         field: "ActivityName",
-        title: "Activity Name",
+        title: "Activity Name ytfytf",
         width: 320
     },{
         field: "NoofSubActivity",
-        title: "Total SubAct",
+        title: "Number of Sub Activity",
         width: 120
     },{
         field: "ScheduleStatus",
-        title: "Status",
+        title: "Schedule Status",
         width: 100,
         template: '<svg height="30" width="30"><circle cx="15" cy="15" r="10" stroke="black" stroke-width="1" fill="#= Color #" /></svg>'
     },{
@@ -57,22 +58,24 @@ EPMO.Grids.displayActivityGrid = function (divId) {
     },
     {
         field: "Start",
-        title: "Start Date",
+        title: "Project Start",
         template: '#= kendo.toString(Start, "D") #'
     }, {
         field: "Finish",
-        title: "Finish Date",
+        title: "Project Finish",
         template: '#= kendo.toString(Finish, "D") #'
     }, {
         field: "PercentComplete",
-        title: "Completion",
+        title: "%Complete",
         format: "{0:p}",
         width: 100
     }
     ];
 
-    $("#" + divId).kendoGrid({
+    var grid = $("#" + divId).kendoGrid({
         dataSource: _dataSource,
         columns: _columns
     });
+    
+        console.log(grid);
 }
