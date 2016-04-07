@@ -41,11 +41,11 @@ EPMO.Grids.displayActivityGrid = function (divId) {
 
     var _columns = [{
         field: "ActivityName",
-        title: "Activity Name ytfytf",
+        title: "Activity Name",
         width: 320
     },{
         field: "NoofSubActivity",
-        title: "Number of Sub Activity",
+        title: "SubAct Total",
         width: 120
     },{
         field: "ScheduleStatus",
@@ -58,11 +58,11 @@ EPMO.Grids.displayActivityGrid = function (divId) {
     },
     {
         field: "Start",
-        title: "Project Start",
+        title: "Start Date",
         template: '#= kendo.toString(Start, "D") #'
     }, {
         field: "Finish",
-        title: "Project Finish",
+        title: "Finish Date",
         template: '#= kendo.toString(Finish, "D") #'
     }, {
         field: "PercentComplete",

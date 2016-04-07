@@ -40,12 +40,10 @@ EPMO.Grids.displayProjectGrid = function (divId) {
         field: "ProjectName",
         title: "Project Name",
         width: 320
-    },
-    {
+    },{
         field: "Director",
         title: "Project Director"
-    },
-    {
+    },{
         field: "Start",
         title: "Start Date",
         template: '#= kendo.toString(Start, "D") #'
