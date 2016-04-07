@@ -23,6 +23,10 @@ namespace MCAWebAndAPI.Web.Controllers
             return View();
         }
 
+        public ActionResult AllWBS()
+        {
+            return View();
+        }
 
         public ActionResult GetProjectHealthStatusChartByActivity(string siteUrl = null)
         {
@@ -49,6 +53,20 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             _service.SetSiteUrl(siteUrl);
             var data = _service.GetAllProjects();
+            return this.Jsonp(data);
+        }
+
+        public ActionResult GetWBSMappings(string siteUrl = null)
+        {
+            _service.SetSiteUrl(siteUrl);
+            var data = _service.GetAllWBSMappings();
+            return this.Jsonp(data);
+        }
+
+        public ActionResult UpdateWBSMapping(string siteUrl = null)
+        {
+            _service.SetSiteUrl(siteUrl);
+            var data = _service.UpdateWBSMapping();
             return this.Jsonp(data);
         }
     }

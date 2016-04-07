@@ -7,7 +7,7 @@ namespace MCAWebAndAPI.Service.SPUtil
 {
     public class SPConnector
     {
-        static string CurUrl = "https://eceos2.sharepoint.com/sites/epmoonline/pm";
+        static string CurUrl = "https://eceos2.sharepoint.com/sites/epmoonline";
         static string UserName =  "sp.services@eceos.com";
         static string Password = "Raja0432";
 

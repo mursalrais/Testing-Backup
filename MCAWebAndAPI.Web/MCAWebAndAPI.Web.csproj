@@ -192,12 +192,14 @@
     <Content Include="Scripts\apps\charts\KendoChartScheduleSCurve.js" />
     <Content Include="Scripts\apps\charts\KendoChartTaskResource.js" />
     <Content Include="Scripts\apps\charts\KendoChartUtils.js" />
+    <Content Include="Scripts\apps\common\Commands.js" />
     <Content Include="Scripts\apps\common\Utils.js" />
     <Content Include="Scripts\apps\grids\KendoGridActivity.js" />
     <Content Include="Scripts\apps\grids\KendoGridProject.js" />
     <Content Include="Scripts\apps\grids\KendoGridScheduler.js" />
     <Content Include="Scripts\apps\grids\KendoGridTasks.js" />
     <Content Include="Scripts\apps\grids\KendoGridTaskWithSingleResource.js" />
+    <Content Include="Scripts\apps\grids\KendoGridWBS.js" />
     <Content Include="Scripts\apps\sliders\jQuerySlider.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -250,6 +252,7 @@
     <Content Include="Views\Task\TaskWithSingleResource.cshtml" />
     <Content Include="Views\Home\ScheduleTracking.cshtml" />
     <Content Include="Views\Home\ProjectHealthByActivity.cshtml" />
+    <Content Include="Views\ProjectHierarchy\AllWBS.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

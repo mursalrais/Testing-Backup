@@ -1,8 +1,8 @@
 'use strict';
 
 var EPMO = window.EPMO || {};
+EPMO.Utils = EPMO.Utils || {};
 EPMO.Charts = EPMO.Charts || {};
-
 EPMO.Charts.SCurve = EPMO.Charts.SCurve || {};
 
 EPMO.Charts.SCurve.Utils = (function () {

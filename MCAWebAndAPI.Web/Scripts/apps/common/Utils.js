@@ -6,18 +6,18 @@ EPMO.Utils = EPMO.Utils || {};
 EPMO.Utils.getHost = function () {
     
     // if debug mode
-    //return "http://localhost:15923/";
+    return "http://localhost:15923/";
 
     // eCEOs Web Application
-    return "https://host.my-epmo.com/";
+    //return "https://host.my-epmo.com/";
 }
 
 EPMO.Utils.getSiteUrl = function () {
     // if debug mode
-    //return "";
+    return "";
 
-    // if dev mode
-    return "?siteUrl='" + _spPageContextInfo.webAbsoluteUrl +"'";
+    //if dev mode
+    //return "?siteUrl='" + _spPageContextInfo.webAbsoluteUrl +"'";
 }
 
 EPMO.Utils.onRequestEnd = function(e) {

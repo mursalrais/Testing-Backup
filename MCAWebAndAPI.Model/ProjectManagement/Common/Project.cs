@@ -77,7 +77,7 @@ namespace MCAWebAndAPI.Model.ProjectManagement.Common
 
             set
             {
-                _start = value;
+                _start = new DateTime(value.Ticks, DateTimeKind.Utc);
             }
         }
 
@@ -90,7 +90,7 @@ namespace MCAWebAndAPI.Model.ProjectManagement.Common
 
             set
             {
-                _finish = value;
+                _finish = new DateTime(value.Ticks, DateTimeKind.Utc);
             }
         }
 

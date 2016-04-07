@@ -5,16 +5,21 @@ using MCAWebAndAPI.Model.ProjectManagement.Common;
 using MCAWebAndAPI.Model.ViewModel.Chart;
 using MCAWebAndAPI.Service.SPUtil;
 using Microsoft.SharePoint.Client;
+using NLog;
 
 namespace MCAWebAndAPI.Service.ProjectManagement.Common
 {
     public class ProjectHierarchyService : IProjectHierarchyService
     {
         string _siteUrl = null;
+        static Logger logger = LogManager.GetCurrentClassLogger();
 
         const string SP_ACTIVITY_LIST_NAME = "Activity";
         const string SP_SUB_ACTIVITY_LIST_NAME = "Sub Activity";
         const string SP_PROJECT_INFORMATION_LIST_NAME = "Project Information";
+        const string SP_WBSMAPPING_IN_PROJECT_LIST_NAME = "WBSMapping";
+        const string SP_WBSMAPPING_IN_PROGRAM_LIST_NAME = "WBS Mapping";
+
 
         const string IMS_PROJECT_HN_NAME = "Health and Nutrition";
         const string IMS_PROJECT_PM_NAME = "Procurement Modernization";
@@ -62,6 +67,35 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Common
             return model;
         }
 
+        private WBSMapping ConvertToWBSModel(ListItem item, IEnumerable<SubActivity> subActivities, 
+            IEnumerable<Activity> activities)
+        {
+            var model = new WBSMapping();
+            model.WBSID = Convert.ToString(item["Title"]);
+            model.WBSDescription = Convert.ToString(item["Description"]);
+            model.SubActivity = item["SubActivity"] == null ? string.Empty :
+                Convert.ToString((item["SubActivity"] as FieldLookupValue).LookupValue);
+
+            var relatedActivity = RetrieveRelatedActivity(model.SubActivity, subActivities, activities);
+            if (relatedActivity == null)
+                return model;
+
+            model.Activity = relatedActivity.ActivityName;
+            model.Project = relatedActivity.ProjectName;
+            return model;
+        }
+
+        private Activity RetrieveRelatedActivity(string subActivityName, IEnumerable<SubActivity> subActivities, IEnumerable<Activity> activities)
+        {
+            if (string.IsNullOrEmpty(subActivityName))
+                return null;
+
+            var subActivity = subActivities.FirstOrDefault(e => 
+                string.Compare(e.SubActivityName, subActivityName, StringComparison.OrdinalIgnoreCase) == 0);
+            return activities.FirstOrDefault(e => 
+                string.Compare(e.ActivityName, subActivity.ActivityName, StringComparison.OrdinalIgnoreCase) == 0);
+        }
+
         public void SetSiteUrl(string siteUrl)
         {
             if(siteUrl != null)
@@ -72,6 +106,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Common
             }
         }
 
+
         public IEnumerable<Activity> GetAllActivities()
         {
             var items = new List<Activity>();
@@ -79,6 +114,31 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Common
             foreach (var item in SPConnector.GetList(SP_ACTIVITY_LIST_NAME, _siteUrl))
             {
                 items.Add(ConvertToActivityModel(item));
+            }
+
+            return items;
+        }
+
+        public IEnumerable<SubActivity> GetAllSubActivities()
+        {
+            var items = new List<SubActivity>();
+
+            foreach (var item in SPConnector.GetList(SP_SUB_ACTIVITY_LIST_NAME, _siteUrl))
+            {
+                items.Add(ConvertToSubActivityModel(item));
+            }
+
+            return items;
+        }
+
+        private IEnumerable<WBSMapping> GetAllWBSes(IEnumerable<SubActivity> subActivities,
+            IEnumerable<Activity> activities)
+        {
+            var items = new List<WBSMapping>();
+
+            foreach (var item in SPConnector.GetList(SP_WBSMAPPING_IN_PROJECT_LIST_NAME, _siteUrl))
+            {
+                items.Add(ConvertToWBSModel(item, subActivities, activities));
             }
 
             return items;
@@ -138,7 +198,6 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Common
                 items.Add(ConvertToSubActivityModel(item));
             }
 
-
             return items.Select(e => new StackedBarChartVM()
             {
                 CategoryName = e.ActivityName,
@@ -165,12 +224,30 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Common
             return activities;
         }
 
+        private IEnumerable<SubActivity> GetProjectSubActivities(string projectRelativeUrl)
+        {
+            var programSiteUrl = _siteUrl;
+            _siteUrl = programSiteUrl + projectRelativeUrl;
+            var subActivities = GetAllSubActivities();
+            _siteUrl = programSiteUrl;
+
+            return subActivities;
+        }
+
+        private IEnumerable<WBSMapping> GetProjectWBS(string projectRelativeUrl, IEnumerable<SubActivity> subActivities,
+            IEnumerable<Activity> activities)
+        {
+            var programSiteUrl = _siteUrl;
+            _siteUrl = programSiteUrl + projectRelativeUrl;
+            var wbses = GetAllWBSes(subActivities, activities);
+            _siteUrl = programSiteUrl;
+
+            return wbses;
+        }
+
         public IEnumerable<StackedBarChartVM> GenerateProjectHealthStatusChartByProject()
         {
-            var items = new List<Activity>();
-            items.AddRange(GetProjectActivities("/gp"));
-            items.AddRange(GetProjectActivities("/hn"));
-            items.AddRange(GetProjectActivities("/pm"));
+            var items = GetActivitiesAcrossProjects();
 
             return items.Select(e => new StackedBarChartVM()
             {
@@ -181,6 +258,103 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Common
             });
         }
 
+        private IEnumerable<Activity> GetActivitiesAcrossProjects()
+        {
+            var items = new List<Activity>();
+            items.AddRange(GetProjectActivities("/gp"));
+            items.AddRange(GetProjectActivities("/hn"));
+            items.AddRange(GetProjectActivities("/pm"));
+            return items;
+        }
 
+        private IEnumerable<SubActivity> GetSubActivitiesAcrossProjects()
+        {
+            var items = new List<SubActivity>();
+            items.AddRange(GetProjectSubActivities("/gp"));
+            items.AddRange(GetProjectSubActivities("/hn"));
+            items.AddRange(GetProjectSubActivities("/pm"));
+            return items;
+        }
+
+        private IEnumerable<WBSMapping> GetWBSAcrossProjects(IEnumerable<SubActivity> subActivities,
+            IEnumerable<Activity> activities)
+        {
+            var items = new List<WBSMapping>();
+            items.AddRange(GetProjectWBS("/gp", subActivities, activities));
+            items.AddRange(GetProjectWBS("/hn", subActivities, activities));
+            items.AddRange(GetProjectWBS("/pm", subActivities, activities));
+            return items;
+        }
+
+        public IEnumerable<WBSMapping> GetAllWBSMappings()
+        {
+            var activities = GetActivitiesAcrossProjects();
+            var subActivities = GetSubActivitiesAcrossProjects();
+            var items = GetWBSAcrossProjects(subActivities, activities);
+
+            return items;
+        }
+
+        public bool UpdateWBSMapping()
+        {
+            var wbsList = GetAllWBSMappings();
+            var wbsDictionary = new Dictionary<string, WBSMapping>();
+
+            foreach(var item in wbsList)
+            {
+                wbsDictionary.Add(item.WBSID, item);
+            }
+
+            foreach (var item in SPConnector.GetList(SP_WBSMAPPING_IN_PROGRAM_LIST_NAME, _siteUrl))
+            {
+                try {
+                    UpdateIfChanged(item, wbsDictionary);
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private void UpdateIfChanged(ListItem item, Dictionary<string, WBSMapping> wbsDictionary)
+        {
+            var key = Convert.ToString(item["WBS_x0020_ID"]);
+            if (!wbsDictionary.ContainsKey(key))
+                return;
+
+            var updatedValues = new Dictionary<string, object>();
+
+            if (string.Compare(Convert.ToString(item["WBS_x0020_Description"]), 
+                wbsDictionary[key].WBSDescription, StringComparison.OrdinalIgnoreCase) != 0)
+                updatedValues.Add("WBS_x0020_Description", wbsDictionary[key].WBSDescription);
+
+            if (string.Compare(Convert.ToString(item["Sub_x0020_Activity"]),
+               wbsDictionary[key].SubActivity, StringComparison.OrdinalIgnoreCase) != 0)
+                updatedValues.Add("Sub_x0020_Activity", wbsDictionary[key].SubActivity);
+
+            if (string.Compare(Convert.ToString(item["Activity"]),
+               wbsDictionary[key].Activity, StringComparison.OrdinalIgnoreCase) != 0)
+                updatedValues.Add("Activity", wbsDictionary[key].Activity);
+
+            if (string.Compare(Convert.ToString(item["Project"]),
+               wbsDictionary[key].Project, StringComparison.OrdinalIgnoreCase) != 0)
+                updatedValues.Add("Project", wbsDictionary[key].Project);
+
+            if(updatedValues.Count > 0)
+            {
+                try
+                {
+                    SPConnector.UpdateListItem(SP_WBSMAPPING_IN_PROGRAM_LIST_NAME, Convert.ToInt32(item["Id"]),
+                        updatedValues, _siteUrl);
+                }
+                catch (Exception e)
+                {
+                    logger.Debug(e.Message);
+                }
+            }
+        }
     }
 }
