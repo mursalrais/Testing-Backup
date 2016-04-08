@@ -28,10 +28,10 @@ EPMO.Grids.displayActivityGrid = function (divId) {
                     ActivityName: { type: "string" },
                     Director: { type: "string" },
                     Start: { type: "date" },
-                    Finish: {type: "date" },
+                    Finish: { type: "date" },
                     Color: { from: "ColorStatus", type: "string" },
                     NoofSubActivity: { type: "number" },
-                    PercentComplete: { type: "decimal"}
+                    PercentComplete: { type: "decimal" }
                 }
             }
         }
@@ -44,20 +44,19 @@ EPMO.Grids.displayActivityGrid = function (divId) {
         field: "ActivityName",
         title: "Activity Name",
         width: 320
-    },{
+    }, {
+        field: "ScheduleStatus",
+        title: "Status",
+        width: 100,
+        template: '<svg height="30" width="30"><circle cx="15" cy="15" r="10" stroke="black" stroke-width="1" fill="#= Color #" /></svg>'
+    }, {
         field: "NoofSubActivity",
         title: "SubAct Total",
         width: 120
-    },{
-        field: "ScheduleStatus",
-        title: "Schedule Status",
-        width: 100,
-        template: '<svg height="30" width="30"><circle cx="15" cy="15" r="10" stroke="black" stroke-width="1" fill="#= Color #" /></svg>'
-    },{
+    }, {
         field: "Director",
         title: "Project Director"
-    },
-    {
+    }, {
         field: "Start",
         title: "Start Date",
         template: '#= kendo.toString(Start, "D") #'
@@ -77,6 +76,6 @@ EPMO.Grids.displayActivityGrid = function (divId) {
         dataSource: _dataSource,
         columns: _columns
     });
-    
-        console.log(grid);
+
+    console.log(grid);
 }

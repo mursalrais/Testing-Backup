@@ -15,13 +15,14 @@ EPMO.Grids.displayProjectGrid = function (divId) {
                 dataType: 'jsonp',
                 type: 'GET'
             },
-            requestEnd: EPMO.Utils.onRequestEnd,
+
             parameterMap: function (options, operation) {
                 if (operation !== "read") {
                     return { models: kendo.stringify(options.models || [options]) };
                 }
             }
         },
+        requestEnd: EPMO.Utils.onRequestEnd,
         schema: {
             model: {
                 fields: {
@@ -41,10 +42,15 @@ EPMO.Grids.displayProjectGrid = function (divId) {
         field: "ProjectName",
         title: "Project Name",
         width: 320
-    },{
+    }, {
+        field: "ScheduleStatus",
+        title: "Status",
+        width: 100,
+        template: '<svg height="30" width="30"><circle cx="15" cy="15" r="10" stroke="black" stroke-width="1" fill="#= Color #" /></svg>'
+    }, {
         field: "Director",
         title: "Project Director"
-    },{
+    }, {
         field: "Start",
         title: "Start Date",
         template: '#= kendo.toString(Start, "D") #'
@@ -54,15 +60,9 @@ EPMO.Grids.displayProjectGrid = function (divId) {
         template: '#= kendo.toString(Finish, "D") #'
     }, {
         field: "PercentComplete",
-        title: "Completion",
+        title: "%Complete",
         format: "{0:p}",
         width: 100
-    },
-    {
-        field: "ScheduleStatus",
-        title: "Status",
-        width: 100,
-        template: '<svg height="30" width="30"><circle cx="15" cy="15" r="10" stroke="black" stroke-width="1" fill="#= Color #" /></svg>'
     }
     ];
 
