@@ -306,11 +306,15 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Common
                 wbsProjectDict.Add(item.WBSID, item);
             }
 
+            var anyUpdatedValue = false;
             foreach (var item in SPConnector.GetList(SP_WBSMAPPING_IN_PROGRAM_LIST_NAME, _siteUrl))
             {
                 try {
                     wbsProgramDict.Add(Convert.ToString(item["WBS_x0020_ID"]), item);
-                    UpdateIfChanged(item, wbsProjectDict);
+                    var isUpdated = UpdateIfChanged(item, wbsProjectDict);
+
+                    if (isUpdated && !anyUpdatedValue)
+                        anyUpdatedValue = true;
                 }
                 catch (Exception)
                 {
@@ -318,12 +322,11 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Common
                 }
             }
 
-            AppendIfNewWBSExist(wbsProjectDict, wbsProgramDict);
-
-            return true;
+            var appendIfNew = AppendIfNewWBSExist(wbsProjectDict, wbsProgramDict);
+            return anyUpdatedValue || appendIfNew;
         }
 
-        private void AppendIfNewWBSExist(Dictionary<string, WBSMapping> wbsProjectDict, Dictionary<string, ListItem> wbsProgramDict)
+        private bool AppendIfNewWBSExist(Dictionary<string, WBSMapping> wbsProjectDict, Dictionary<string, ListItem> wbsProgramDict)
         {
             var itemKeysToAppend = new List<string>();
             foreach(var item in wbsProjectDict)
@@ -335,7 +338,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Common
             }
 
             if (itemKeysToAppend.Count == 0)
-                return;
+                return false;
 
             
             foreach(var itemKey in itemKeysToAppend)
@@ -356,15 +359,17 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Common
                     logger.Debug(e.Message);
                 }
             }
+
+            return true;
         }
 
         
 
-        private void UpdateIfChanged(ListItem item, Dictionary<string, WBSMapping> wbsDictionary)
+        private bool UpdateIfChanged(ListItem item, Dictionary<string, WBSMapping> wbsDictionary)
         {
             var key = Convert.ToString(item["WBS_x0020_ID"]);
             if (!wbsDictionary.ContainsKey(key))
-                return;
+                return false;
 
             var updatedValues = new Dictionary<string, object>();
 
@@ -390,11 +395,17 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Common
                 {
                     SPConnector.UpdateListItem(SP_WBSMAPPING_IN_PROGRAM_LIST_NAME, Convert.ToInt32(item["ID"]),
                         updatedValues, _siteUrl);
+                    return true;
                 }
                 catch (Exception e)
                 {
                     logger.Debug(e.Message);
+                    return false;
                 }
+            }
+            else
+            {
+                return false;
             }
         }
     }
