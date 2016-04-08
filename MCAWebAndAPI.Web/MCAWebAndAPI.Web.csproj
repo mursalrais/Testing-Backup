@@ -253,6 +253,7 @@
     <Content Include="Views\Home\ScheduleTracking.cshtml" />
     <Content Include="Views\Home\ProjectHealthByActivity.cshtml" />
     <Content Include="Views\ProjectHierarchy\AllWBS.cshtml" />
+    <Content Include="Views\Shared\_LayoutMin.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

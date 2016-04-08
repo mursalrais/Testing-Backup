@@ -92,20 +92,14 @@ namespace MCAWebAndAPI.Service.SPUtil
                 Password.ToList().ForEach(secureString.AppendChar);
                 context.Credentials = new SharePointOnlineCredentials(UserName, secureString);
 
-                ClientContext clientContext = new ClientContext(siteUrl);
-                List SPList = clientContext.Web.Lists.GetByTitle(listName);
-
+                List spList = context.Web.Lists.GetByTitle(listName);
                 ListItemCreationInformation itemCreateInfo = new ListItemCreationInformation();
-                ListItem SPListItem = SPList.AddItem(itemCreateInfo);
-               
-                // Set listitem value to parsed listitem
+                ListItem newItem = spList.AddItem(itemCreateInfo);
                 foreach (var key in columnValues.Keys)
                 {
-                    SPListItem[key] = columnValues[key];
+                    newItem[key] = columnValues[key];
                 }
-
-                // Update columns remotely
-                SPListItem.Update();
+                newItem.Update();
                 context.ExecuteQuery();
             }
         }

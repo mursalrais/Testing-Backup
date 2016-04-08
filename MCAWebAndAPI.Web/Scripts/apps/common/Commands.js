@@ -15,11 +15,17 @@ EPMO.Commands.updateWBSMapping = function () {
         jsonpCallback: 'callback',
         contentType: "application/json",
         dataType: 'jsonp',
-        success: function(json) {
-            console.dir(json.sites);
+        success: function(result) {
+            if (result){
+                alert("Successfully updated");
+            }
+            else {
+                alert("No updated WBS mapping is found")
+            }
+            location.reload();
         },
-        error: function(e) {
-            console.log(e.message);
+        error: function (e) {
+            location.reload();
         }
     });
 

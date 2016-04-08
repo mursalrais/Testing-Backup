@@ -20,44 +20,55 @@ EPMO.Utils.getSiteUrl = function () {
     //return "?siteUrl='" + _spPageContextInfo.webAbsoluteUrl +"'";
 }
 
-EPMO.Utils.onRequestEnd = function(e) {
-        if (e.response.Data && e.response.Data.length) {
-            var data = e.response.Data;
-            if (this.group().length && e.type == "read") {
-                EPMO.Utils.handleGroups(data);
-            } else {
-                loopRecords(data);
-            }
-        }
-    };
+EPMO.Utils.onRequestEnd = function (e) {
+    if (e.response && e.response.length) {
+        var data = e.response;
+        if (this.group().length && e.type == "read") {
+            EPMO.Utils.handleGroups(data);
+        } else {
+            //console.log(data);
+            EPMO.Utils.loopRecords(data);
 
-EPMO.Utils.handleGroups = function(groups) {
-        for (var i = 0; i < groups.length; i++) {
-            var gr = groups[i];
-            offsetDateFields(gr); //handle the Key variable as well
-            if (gr.HasSubgroups) {
-                handleGroups(gr.Items)
-            } else {
-                loopRecords(gr.Items);
-            }
         }
-    };
+    }
+};
 
-EPMO.Utils.loopRecords = function(persons) {
-        for (var i = 0; i < persons.length; i++) {
-            var person = persons[i];
-            offsetDateFields(person);
+EPMO.Utils.handleGroups = function (groups) {
+    for (var i = 0; i < groups.length; i++) {
+        var gr = groups[i];
+        EPMO.Utils.offsetDateFields(gr); //handle the Key variable as well
+        if (gr.HasSubgroups) {
+            EPMO.Utils.handleGroups(gr.Items)
+        } else {
+            EPMO.Utils.loopRecords(gr.Items);
         }
-    };
+    }
+};
 
-EPMO.Utils.offsetDateFields = function(obj) {
-        for (var name in obj) {
-            var prop = obj[name];
-            if (typeof (prop) === "string" && prop.indexOf("/Date(") == 0) {
-                obj[name] = prop.replace(/\d+/, function (n) {
-                    var offsetMiliseconds = new Date(parseInt(n)).getTimezoneOffset() * 60000;
-                    return parseInt(n) + offsetMiliseconds
-                });
-            }
+EPMO.Utils.loopRecords = function (persons) {
+    for (var i = 0; i < persons.length; i++) {
+        var person = persons[i];
+        EPMO.Utils.offsetDateFields(person);
+    }
+
+};
+
+EPMO.Utils.offsetDateFields = function (obj) {
+    var time = 13;
+    for (var name in obj) {
+        var prop = obj[name];
+        if (typeof (prop) === "string" && prop.indexOf("/Date(") == 0) {
+            //obj[name] = prop.replace(/\d+/, function (n) {
+            //    var offsetMiliseconds = new Date(parseInt(n)).getTimezoneOffset() * 60000;
+            //    return parseInt(n) + offsetMiliseconds
+            //});
+            var actualDate = new Date(parseInt(prop.substr(6)));
+            console.log(obj[name]);
+            //actualDate = actualDate.setTime(actualDate.getTime() + (time*60*60*1000)); 
+            actualDate = actualDate.setTime(actualDate.getTime() + (time * 60 * 60 * 1000));
+            obj[name] = new Date(actualDate);
+            //console.log(actualDate);
+            console.log(obj[name]);
         }
-    };
+    }
+};
