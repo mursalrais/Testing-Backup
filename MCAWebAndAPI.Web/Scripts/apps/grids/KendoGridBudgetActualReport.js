@@ -113,29 +113,29 @@ function getQtrMonth(strQtr, strCheck) {
     else if (strCheck == "2") {
         columns.push({
             title: strMainTitle1,
-            columns: [{ width: "100px", field: strField1a, title: strTitle1, groupFooterTemplate: "#=sum#" },
-                { width: "100px", field: strField2a, title: strTitle2, groupFooterTemplate: "#=sum#" },
+            columns: [{ width: "100px", field: strField1a, title: strTitle1, groupFooterTemplate: "#= kendo.toString(sum, 'n0') #", format: "{0:n0}" },
+                { width: "100px", field: strField2a, title: strTitle2, groupFooterTemplate: "#= kendo.toString(sum, 'n0') #", format: "{0:n0}" },
                 { width: "100px", field: strField3a, title: strTitle3, groupFooterTemplate: " #= doMath(data.Actual1.sum,data.Budget1.sum)  # %" }]
         });
 
         columns.push({
             title: strMainTitle2,
-            columns: [{ width: "100px", field: strField1b, title: strTitle1, groupFooterTemplate: "#=sum#" },
-                { width: "100px", field: strField2b, title: strTitle2, groupFooterTemplate: "#=sum#" },
+            columns: [{ width: "100px", field: strField1b, title: strTitle1, groupFooterTemplate: "#= kendo.toString(sum, 'n0') #", format: "{0:n0}" },
+                { width: "100px", field: strField2b, title: strTitle2, groupFooterTemplate: "#= kendo.toString(sum, 'n0') #", format: "{0:n0}" },
                 { width: "100px", field: strField3b, title: strTitle3, groupFooterTemplate: "  #= doMath(data.Actual2.sum,data.Budget2.sum) # %" }]
         });
 
         columns.push({
             title: strMainTitle3,
-            columns: [{ width: "100px", field: strField1c, title: strTitle1, groupFooterTemplate: "#=sum#" },
-                { width: "100px", field: strField2c, title: strTitle2, groupFooterTemplate: "#=sum#" },
+            columns: [{ width: "100px", field: strField1c, title: strTitle1, groupFooterTemplate: "#= kendo.toString(sum, 'n0') #", format: "{0:n0}" },
+                { width: "100px", field: strField2c, title: strTitle2, groupFooterTemplate: "#= kendo.toString(sum, 'n0') #", format: "{0:n0}" },
                 { width: "100px", field: strField3c, title: strTitle3, groupFooterTemplate: "  #= doMath(data.Actual3.sum,data.Budget3.sum)  # %" }]
         });
 
         columns.push({
             title: strMainTitle4,
-            columns: [{ width: "100px", field: strField1d, title: strTitle1, groupFooterTemplate: "#=sum#" },
-                { width: "100px", field: strField2d, title: strTitle2, groupFooterTemplate: "#=sum#" },
+            columns: [{ width: "100px", field: strField1d, title: strTitle1, groupFooterTemplate: "#= kendo.toString(sum, 'n0') #", format: "{0:n0}" },
+                { width: "100px", field: strField2d, title: strTitle2, groupFooterTemplate: "#= kendo.toString(sum, 'n0') #", format: "{0:n0}" },
                 { width: "100px", field: strField3d, title: strTitle3, groupFooterTemplate: "  #= doMath(data.Actual4.sum,data.Budget4.sum)  # %" }]
         });
     }
@@ -160,17 +160,20 @@ function generateColumns(strQtr) {
                 width: "120px",
                 field: "TotalInitialBudget",
                 title: "Total Budget",
-                groupFooterTemplate: "#=sum#"
+                format: "{0:n0}",
+                groupFooterTemplate: "#= kendo.toString(sum, 'n0') #"
             }, {
                 width: "120px",
                 field: "ActualtoDate",
                 title: "Actual to Date",
-                groupFooterTemplate: "#=sum#"
+                format: "{0:n0}",
+                groupFooterTemplate: "#= kendo.toString(sum, 'n0') #"
             }, {
                 width: "120px",
                 field: "BalanceBudget",
                 title: "Balance Budget",
-                groupFooterTemplate: "#=sum#"
+                format: "{0:n0}",
+                groupFooterTemplate: "#= kendo.toString(sum, 'n0') #"
             }, {
                 width: "120px",
                 field: "PercentComplete",
@@ -180,7 +183,8 @@ function generateColumns(strQtr) {
                 width: "120px",
                 field: "AverageDisbursementNeededperMont",
                 title: "Average Disbursement Needed / Month",
-                groupFooterTemplate: "#=sum#"
+                format: "{0:n0}",
+                groupFooterTemplate: "#= kendo.toString(sum, 'n0') #"
             }
      ];
     columns.push.apply(columns, getQtrMonth(strQtr, "2"));
@@ -190,8 +194,9 @@ function generateColumns(strQtr) {
 }
 
 function doMath(a, b, divId) {
-    var ds = $("#GridBudget").data("kendoGrid").dataSource;
-    var aggregates = ds.aggregates();
+    //var ds = $("#GridBudget").data("kendoGrid").dataSource;
+    //var aggregates = ds.aggregates();
+    if (a == 0 || b == 0) return 0;
     var percentage = (a / b) * 100;
 
     return percentage.toFixed(2);
@@ -239,9 +244,9 @@ EPMO.Grids.displayGrid = function (divId, strList, strQuarter, strProject, strMa
 
     if (isEmpty(strProject) == false) {
         if (isEmpty(strQuarter)) {
-            strQuery = "&$filter= ((Quarter eq 'Q01') and (WBSID/ProjectText eq '" + strProject + "'))";
+            strQuery = "&$filter= ((Quarter eq 'Q01') and (WBSID/Project eq '" + strProject + "'))";
         } else {
-            strQuery = "&$filter= ((Quarter eq '" + strQuarter + "') and (WBSID/ProjectText eq '" + strProject + "'))";
+            strQuery = "&$filter= ((Quarter eq '" + strQuarter + "') and (WBSID/Project eq '" + strProject + "'))";
             $("#" + divId).empty();
         }
 
@@ -263,9 +268,9 @@ EPMO.Grids.displayGrid = function (divId, strList, strQuarter, strProject, strMa
 
 
     _url = str.substring(0, str.length - intLength) + "/_api/web/lists/getbytitle('"
-        + tempList + "')/Items?$select=*,WBSID/WBS_x0020_ID,WBSID/WBS_x0020_Description,WBSID/Activity,WBSID/Sub_x0020_Activity,WBSID/ProjectText&$expand=WBSID&$top=10000&" + strQuery;
+        + tempList + "')/Items?$select=*,WBSID/WBS_x0020_ID,WBSID/WBS_x0020_Description,WBSID/Activity,WBSID/Sub_x0020_Activity,WBSID/Project&$expand=WBSID&$top=10000&" + strQuery;
 
-  
+
 
 
 
@@ -391,9 +396,9 @@ function mydataSource(strQtr, data) {
         for (var i = 0; i < myresults.length; i++) {
             var strActivity, strSubActivity;
             var strWBSID, strtitle, strtotalbudget, stractualtodate, strbalancebudget, strpercent, straverage, strProject;
-            var strBudget1, strBudget2, strBudget3, strBudget4;
-            var strActual1, strActual2, strActual3, strActual4;
-            var strComplete1, strComplete2, strComplete3, strComplete4;
+            var strBudget1 = 0, strBudget2 = 0, strBudget3 = 0, strBudget4 = 0;
+            var strActual1 = 0, strActual2 = 0, strActual3 = 0, strActual4 = 0;
+            var strComplete1 = 0, strComplete2 = 0, strComplete3 = 0, strComplete4 = 0;
 
             strWBSID = myresults[i].WBSID.WBS_x0020_ID;
 
@@ -435,10 +440,10 @@ function mydataSource(strQtr, data) {
                 }
 
                 strtitle = queryMonth1[0].WBSID.WBS_x0020_Description; strActivity = queryMonth1[0].WBSID.Activity; strSubActivity = queryMonth1[0].WBSID.Sub_x0020_Activity;
-             
+
                 strtotalbudget = queryMonth1[0].TotalInitialBudget; stractualtodate = queryMonth1[0].ActualtoDate;
                 strbalancebudget = queryMonth1[0].BalanceBudget; strpercent = kendo.toString((queryMonth1[0].PercentComplete), "p");
-                straverage = queryMonth1[0].AverageDisbursementNeededperMont; strProject = queryMonth1[0].WBSID.ProjectText;
+                straverage = queryMonth1[0].AverageDisbursementNeededperMont; strProject = queryMonth1[0].WBSID.Project;
 
 
             }
@@ -465,15 +470,15 @@ function mydataSource(strQtr, data) {
                 }
 
                 strtitle = queryMonth2[0].WBSID.WBS_x0020_Description; strActivity = queryMonth2[0].WBSID.Activity; strSubActivity = queryMonth2[0].WBSID.Sub_x0020_Activity;
-           
+
                 strtotalbudget = queryMonth2[0].TotalInitialBudget; stractualtodate = queryMonth2[0].ActualtoDate;
                 strbalancebudget = queryMonth2[0].BalanceBudget; strpercent = kendo.toString((queryMonth2[0].PercentComplete), "p");
-                straverage = queryMonth2[0].AverageDisbursementNeededperMont; strProject = queryMonth2[0].WBSID.ProjectText;
+                straverage = queryMonth2[0].AverageDisbursementNeededperMont; strProject = queryMonth2[0].WBSID.Project;
 
             }
 
             var queryMonth3 = Enumerable.From(myresults)
-          .Where("$.Month == '"+strMonth3+"' && $.Year == '" + strYear3 + "' && $.WBSID.WBS_x0020_ID == '" + strWBSID + "'")
+          .Where("$.Month == '" + strMonth3 + "' && $.Year == '" + strYear3 + "' && $.WBSID.WBS_x0020_ID == '" + strWBSID + "'")
           .Select()
           .ToArray();
 
@@ -497,11 +502,11 @@ function mydataSource(strQtr, data) {
                 }
 
                 strtitle = queryMonth3[0].WBSID.WBS_x0020_Description; strActivity = queryMonth3[0].WBSID.Activity; strSubActivity = queryMonth3[0].WBSID.Sub_x0020_Activity;
-         
+
                 strtotalbudget = queryMonth3[0].TotalInitialBudget; stractualtodate = queryMonth3[0].ActualtoDate;
                 strbalancebudget = queryMonth3[0].BalanceBudget; strpercent = kendo.toString((queryMonth3[0].PercentComplete), "p");
-                straverage = queryMonth3[0].AverageDisbursementNeededperMont; strProject = queryMonth3[0].WBSID.ProjectText;
-              
+                straverage = queryMonth3[0].AverageDisbursementNeededperMont; strProject = queryMonth3[0].WBSID.Project;
+
 
             }
 
@@ -515,12 +520,12 @@ function mydataSource(strQtr, data) {
                 Budget3: strBudget3, Actual3: strActual3, Complete3: strComplete3,
                 Budget4: strBudget4, Actual4: strActual4, Complete4: strComplete4
             });
-            strBudget1 = ""; strActual1 = ""; strComplete1 = ""; strBudget2 = ""; strActual2 = ""; strComplete2 = "";
-            strBudget3 = ""; strActual3 = ""; strComplete3 = ""; strBudget4 = ""; strActual4 = ""; strComplete4 = "";
+            strBudget1 = "0"; strActual1 = "0"; strComplete1 = "0"; strBudget2 = "0"; strActual2 = "0"; strComplete2 = "0";
+            strBudget3 = "0"; strActual3 = "0"; strComplete3 = "0"; strBudget4 = "0"; strActual4 = "0"; strComplete4 = "0";
             strWBSID = ""; strtitle = ""; strtotalbudget = ""; stractualtodate = ""; strbalancebudget = "";
             strpercent = ""; straverage = ""; strProject = "";
             //console.log(strMonth);
-            console.log(mydata);
+            //console.log(mydata);
         }
         //batas
     }

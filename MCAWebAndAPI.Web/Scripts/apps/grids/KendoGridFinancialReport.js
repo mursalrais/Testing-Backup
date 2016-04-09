@@ -169,15 +169,17 @@ function getCurrentPeriod(strQtr, strCheck) {
 
     if (strCheck == "1") {
         columns.push({ field: strField1, aggregate: "sum" },
-            { field: strField2, aggregate: "sum" }, { field: strField3, aggregate: "sum" }, { field: strField4, aggregate: "sum" })
+            { field: strField2, aggregate: "sum" },
+            { field: strField3, aggregate: "sum" },
+            { field: strField4, aggregate: "sum" })
     } else if (strCheck == "2") {
         columns.push({
             title: "Current Period",
             columns: [
-                { width: "100px", field: strField1, title: strTitle1, groupFooterTemplate: "#=sum#" },
-                { width: "100px", field: strField2, title: strTitle2, groupFooterTemplate: "#=sum#" },
-                { width: "100px", field: strField3, title: strTitle3, groupFooterTemplate: "#=sum#" },
-                { width: "100px", field: strField4, title: strTitle4, groupFooterTemplate: "#=sum#" }
+                { width: "100px", field: strField1, title: strTitle1, groupFooterTemplate: "#= kendo.toString(sum, 'n0') #", format: "{0:n0}" },
+                { width: "100px", field: strField2, title: strTitle2, groupFooterTemplate: "#= kendo.toString(sum, 'n0') #", format: "{0:n0}" },
+                { width: "100px", field: strField3, title: strTitle3, groupFooterTemplate: "#= kendo.toString(sum, 'n0') #", format: "{0:n0}" },
+                { width: "100px", field: strField4, title: strTitle4, groupFooterTemplate: "#= kendo.toString(sum, 'n0') #", format: "{0:n0}" }
             ]
         });
     }
@@ -279,15 +281,17 @@ function getNextPeriod(strQtr, strCheck) {
 
     if (strCheck == "1") {
         columns.push({ field: strField1, aggregate: "sum" },
-            { field: strField2, aggregate: "sum" }, { field: strField3, aggregate: "sum" }, { field: strField4, aggregate: "sum" })
+            { field: strField2, aggregate: "sum" },
+            { field: strField3, aggregate: "sum" },
+            { field: strField4, aggregate: "sum" })
     } else if (strCheck == "2") {
         columns.push({
             title: "Next Period",
             columns: [
-                { width: "100px", field: strField1, title: strTitle1, groupFooterTemplate: "#=sum#" },
-                { width: "100px", field: strField2, title: strTitle2, groupFooterTemplate: "#=sum#" },
-                { width: "100px", field: strField3, title: strTitle3, groupFooterTemplate: "#=sum#" },
-                { width: "100px", field: strField4, title: strTitle4, groupFooterTemplate: "#=sum#" }
+                { width: "100px", field: strField1, title: strTitle1, groupFooterTemplate: "#= kendo.toString(sum, 'n0') #", format: "{0:n0}" },
+                { width: "100px", field: strField2, title: strTitle2, groupFooterTemplate: "#= kendo.toString(sum, 'n0') #", format: "{0:n0}" },
+                { width: "100px", field: strField3, title: strTitle3, groupFooterTemplate: "#= kendo.toString(sum, 'n0') #", format: "{0:n0}" },
+                { width: "100px", field: strField4, title: strTitle4, groupFooterTemplate: "#= kendo.toString(sum, 'n0') #", format: "{0:n0}" }
             ]
         });
     }
@@ -303,22 +307,22 @@ function generateColumns(strQtr) {
     [
          {
              width: "100px",
-             field: "Project",
-             title: "Project"
+             field: "WBSID.Project",
+             title: "Project", hidden: true
          },
           {
               width: "100px",
-              field: "Activity",
-              title: "Activity"
+              field: "WBSID.Activity",
+              title: "Activity", hidden: true
           },
            {
                width: "100px",
-               field: "Sub_x0020_Activity",
-               title: "Sub Activity"
+               field: "WBSID.Sub_x0020_Activity",
+               title: "Sub Activity", hidden: true
            },
         {
             width: "100px",
-            field: "WBSIDId",
+            field: "WBSID.WBS_x0020_ID",
             title: "WBSID",
         }, {
             width: "240px",
@@ -328,7 +332,7 @@ function generateColumns(strQtr) {
             width: "120px",
             field: "ActualCumulativeDisbursements",
             title: "Actual Cumulative at the Beginning of Current Period",
-            groupFooterTemplate: "#=sum#"
+            groupFooterTemplate: "#= kendo.toString(sum, 'n0') #", format: "{0:n0}"
         }
     ];
     columns.push.apply(columns, getCurrentPeriod(strQtr, "2"));
@@ -343,17 +347,17 @@ function generateColumns(strQtr) {
            width: "130px",
            field: "DisbursementsasCurrentlyProjecte",
            title: strcolumnForecast,
-           groupFooterTemplate: "#=sum#"
+           groupFooterTemplate: "#= kendo.toString(sum, 'n0') #", format: "{0:n0}"
        }, {
            width: "130px",
            field: "ApprovedMulti_x002d_YearFinancia",
            title: "Approved Multi-Year Financial Plan(Should match with Schedule B)",
-           groupFooterTemplate: "#=sum#"
+           groupFooterTemplate: "#= kendo.toString(sum, 'n0') #", format: "{0:n0}"
        }, {
            width: "130px",
            field: "ProjectionsVsApprovedPlanUnder_x",
            title: "Projections Vs Approved Plan Under/Over Budget Difference",
-           groupFooterTemplate: "#=sum#"
+           groupFooterTemplate: "#= kendo.toString(sum, 'n0') #", format: "{0:n0}"
        }
     ];
 
@@ -372,7 +376,7 @@ function getQTR(strQtr, strCheck) {
         }
     } else if (strCheck == "2") {
         for (var i = intLoop ; i < 21; i++) {
-            columns.push({ width: "100px", field: "Q" + (i + 1) + "Target", title: "QTR " + (i + 1), groupFooterTemplate: "#=sum#" })
+            columns.push({ width: "100px", field: "Q" + (i + 1) + "Target", title: "QTR " + (i + 1), groupFooterTemplate: "#= kendo.toString(sum, 'n0') #", format: "{0:n0}" })
         }
     }
 
@@ -414,13 +418,13 @@ function mydataSource(_url, strQtr) {
     var dataSource = new kendo.data.DataSource({
         group: [
         {
-            field: "Project", aggregates: getAgregate(strQtr)
+            field: "WBSID.Project", aggregates: getAgregate(strQtr)
         },
         {
-            field: "Activity", aggregates: getAgregate(strQtr)
+            field: "WBSID.Activity", aggregates: getAgregate(strQtr)
         },
         {
-            field: "Sub_x0020_Activity", aggregates: getAgregate(strQtr)
+            field: "WBSID.Sub_x0020_Activity", aggregates: getAgregate(strQtr)
         }],
         type: "json",
         transport: {
@@ -431,6 +435,7 @@ function mydataSource(_url, strQtr) {
                 }
             }
         },
+        pageSize: 20,
         schema: {
             data: function (data) {
                 return data.d && data.d.results ? data.d.results : [data.d];
@@ -464,9 +469,9 @@ EPMO.Grids.displayGrid = function (divId, strList, strQuarter, strProject, strMa
 
     if (isEmpty(strProject) == false) {
         if (isEmpty(strQuarter)) {
-            strQuery = "&$filter= ((Quarter eq 'Q01') and (Project eq '" + strProject + "'))";
+            strQuery = "&$filter= ((Quarter eq 'Q01') and (WBSID/Project eq '" + strProject + "'))";
         } else {
-            strQuery = "&$filter= ((Quarter eq '" + strQuarter + "') and (Project eq '" + strProject + "'))";
+            strQuery = "&$filter= ((Quarter eq '" + strQuarter + "') and (WBSID/Project eq '" + strProject + "'))";
             $("#" + divId).empty();
         }
 
@@ -490,9 +495,15 @@ EPMO.Grids.displayGrid = function (divId, strList, strQuarter, strProject, strMa
     //_url = str.substring(0, str.length - intLength) + "/_api/web/lists/getbytitle('"
     //    + tempList + "')/Items?$top=10000&" + strQuery;
 
-    _url = str.substring(0, str.length - intLength) + "/_api/web/lists/getbytitle('"
-       + tempList + "')/Items?$select=*,WBSID/ID&$expand=WBSID";
+    //_url = str.substring(0, str.length - intLength) + "/_api/web/lists/getbytitle('"
+    //   + tempList + "')/Items?$top=10000&$select=*,WBSID/Activity," +
+    //   "WBSID/Sub_x0020_Activity,WBSID/WBS_x0020_ID,WBSID/ProjectText&" +
+    //   "$expand=WBSID&$filter=((WBSID/ProjectText eq '" + strProject + "') and (Quarter eq 'Q13')) ";
 
+    _url = str.substring(0, str.length - intLength) + "/_api/web/lists/getbytitle('"
+       + tempList + "')/Items?$top=10000&$select=*,WBSID/Activity," +
+       "WBSID/Sub_x0020_Activity,WBSID/WBS_x0020_ID,WBSID/Project&" +
+       "$expand=WBSID" + strQuery;;
 
     $("#" + divId).kendoGrid({
         toolbar: ["excel"],
