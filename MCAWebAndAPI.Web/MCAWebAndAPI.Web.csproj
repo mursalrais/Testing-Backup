@@ -195,6 +195,7 @@
     <Content Include="Scripts\apps\common\Commands.js" />
     <Content Include="Scripts\apps\common\Utils.js" />
     <Content Include="Scripts\apps\grids\KendoGridActivity.js" />
+    <Content Include="Scripts\apps\grids\KendoGridBudgetActualReport.js" />
     <Content Include="Scripts\apps\grids\KendoGridFinancialReport.js" />
     <Content Include="Scripts\apps\grids\KendoGridProject.js" />
     <Content Include="Scripts\apps\grids\KendoGridScheduler.js" />

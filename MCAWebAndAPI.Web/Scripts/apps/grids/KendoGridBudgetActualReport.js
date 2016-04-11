@@ -443,6 +443,12 @@ EPMO.Grids.displayBudgetActualGrid = function (divId, strList, strQuarter, strPr
         return deferred.promise()
     };
 
+    function ConvertToNumber(string) {
+        string = string.replace(/\,/g, "");
+        return parseInt(string);
+    };
+
+
     function createGrid(divId, strQuarter, data) {
         if (EPMO.Utils.isEmpty(strQuarter) == false) {
             $("#" + divId).empty();
@@ -459,7 +465,20 @@ EPMO.Grids.displayBudgetActualGrid = function (divId, strList, strQuarter, strPr
             width: 1250,
             scrollable: true,
             groupable: false,
-            columns: generateColumns(strQuarter)
+            columns: generateColumns(strQuarter),
+            excelExport: function (e) {
+                var sheet = e.workbook.sheets[0];
+                for (var i = 0; i < sheet.rows.length; i++) {
+                    if (sheet.rows[i].type == "group-footer") {
+                        for (var ci = 5; ci < sheet.rows[i].cells.length; ci++) {
+                            if (sheet.rows[i].cells[ci].value.indexOf('%') === -1) {
+                                sheet.rows[i].cells[ci].value = ConvertToNumber(sheet.rows[i].cells[ci].value);
+                            }
+
+                        }
+                    }
+                }
+            },
         });
     }
 
