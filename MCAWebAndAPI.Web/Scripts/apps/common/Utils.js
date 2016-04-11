@@ -4,7 +4,7 @@ var EPMO = window.EPMO || {};
 EPMO.Utils = EPMO.Utils || {};
 
 EPMO.Utils.getHost = function () {
-    
+
     // if debug mode
     return "http://localhost:15923/";
 
@@ -72,3 +72,32 @@ EPMO.Utils.offsetDateFields = function (obj) {
         }
     }
 };
+
+
+EPMO.Utils.displayGroupNameinGroupFooter = function (e) {
+    var t = $("#grid .k-grouping-row"); //get all grouping rows
+    $.each(t, function (key, elem) {
+        if ($(elem).find("td p.k-reset").text().indexOf("SubActivity:") !== -1) {
+            $(elem).addClass("sub-activity-grouping-row"); //add a class to the grouping row, so we can find it later
+        } else if ($(elem).find("td p.k-reset").text().indexOf("Activity:") !== -1) {
+            $(elem).addClass("activity-grouping-row"); //add a class to the grouping row, so we can find it later
+        } else if ($(elem).find("td p.k-reset").text().indexOf("Project:") !== -1) {
+            $(elem).addClass("project-grouping-row"); //add a class to the grouping row, so we can find it later
+        }
+    });
+
+    t = $(".k-group-footer"); //get all group footer rows
+    $.each(t, function (key, elem) {
+        // total
+        if ($(elem).prev().attr("class") == "k-group-footer") {
+            //year group footer rows are always preceded by a make group footer row
+            var prevLabel = $(elem).prevAll(".sub-activity-grouping-row:first").find("td p.k-reset").text().replace("SubActivity: ", "");
+            $(elem).find("td:contains('Total:')").text("Total (" + prevLabel + "):"); //update total text to show group value
+        }
+        //    //make total
+        //else { //make group footer rows are never preceded by a group footer row
+        //    var prevLabel = $(elem).prevAll(".k-grouping-row:first").find("td p.k-reset").text().replace("Make: ", ""); //traverse backwards to find closest grouping row and get group value
+        //    $(elem).find("td:contains('Total:')").text("Total (" + prevLabel + "):")
+        //}
+    });
+}

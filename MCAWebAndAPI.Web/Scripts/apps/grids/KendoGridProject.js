@@ -15,7 +15,6 @@ EPMO.Grids.displayProjectGrid = function (divId) {
                 dataType: 'jsonp',
                 type: 'GET'
             },
-
             parameterMap: function (options, operation) {
                 if (operation !== "read") {
                     return { models: kendo.stringify(options.models || [options]) };
