@@ -280,7 +280,7 @@ EPMO.Grids.displayFinancialReportGrid = function (divId, strList, strQuarter, st
             columns.push({
                 title: "Next Period",
                 columns: [
-                    { width: "100px", field: strField1, title: strTitle1, groupFooterTemplate: "#= kendo.toString(sum, 'n0') #", format: "{0:n0}" },
+                    { width: "100px", field: strField1, title: strTitle1, groupFooterTemplate: "#=  kendo.toString(sum, 'n0') #", format: "{0:n0}" },
                     { width: "100px", field: strField2, title: strTitle2, groupFooterTemplate: "#= kendo.toString(sum, 'n0') #", format: "{0:n0}" },
                     { width: "100px", field: strField3, title: strTitle3, groupFooterTemplate: "#= kendo.toString(sum, 'n0') #", format: "{0:n0}" },
                     { width: "100px", field: strField4, title: strTitle4, groupFooterTemplate: "#= kendo.toString(sum, 'n0') #", format: "{0:n0}" }
@@ -403,9 +403,13 @@ EPMO.Grids.displayFinancialReportGrid = function (divId, strList, strQuarter, st
         return columns;
     }
 
+    function ConvertToNumber(string) {
+        string = string.replace(/\,/g, "");
+        return parseInt(string);
+    }
+
 
     function mydataSource(_url, strQtr) {
-        console.log(_url);
         var dataSource = new kendo.data.DataSource({
             group: [
             {
@@ -439,6 +443,7 @@ EPMO.Grids.displayFinancialReportGrid = function (divId, strList, strQuarter, st
                         DisbursementsasCurrentlyProjecte: { type: "number" },
                         ApprovedMulti_x002d_YearFinancia: { type: "number" },
                         ProjectionsVsApprovedPlanUnder_x: { type: "number" },
+                        OData__x0041_pr16: { type: "number" }
 
                     }
                 }
@@ -482,7 +487,8 @@ EPMO.Grids.displayFinancialReportGrid = function (divId, strList, strQuarter, st
         toolbar: ["excel"],
         excel: {
             fileName: "Detailed Financial Plan Report.xlsx",
-            allPages: true
+            allPages: true,
+
         },
         dataSource: mydataSource(_url, strQuarter),
         height: 550,
@@ -490,6 +496,17 @@ EPMO.Grids.displayFinancialReportGrid = function (divId, strList, strQuarter, st
         scrollable: true,
         resizable: true,
         groupable: false,
+        excelExport: function (e) {
+            var sheet = e.workbook.sheets[0];
+            for (var i = 0; i < sheet.rows.length; i++) {
+                if (sheet.rows[i].type == "group-footer") {
+                    for (var ci = 5; ci < sheet.rows[i].cells.length; ci++) {
+                        //tes
+                        sheet.rows[i].cells[ci].value = ConvertToNumber(sheet.rows[i].cells[ci].value);
+                    }
+                }
+            }
+        },
         columns: generateColumns(strQuarter)
     });
 
