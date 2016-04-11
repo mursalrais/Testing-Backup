@@ -28,7 +28,6 @@ EPMO.Utils.onRequestEnd = function (e) {
         } else {
             //console.log(data);
             EPMO.Utils.loopRecords(data);
-
         }
     }
 };
@@ -73,31 +72,23 @@ EPMO.Utils.offsetDateFields = function (obj) {
     }
 };
 
+EPMO.Utils.doMath = function (a, b, divId) {
+    //var ds = $("#GridBudget").data("kendoGrid").dataSource;
+    //var aggregates = ds.aggregates();
+    if (a == 0 || b == 0) return 0;
+    var percentage = (a / b) * 100;
 
-EPMO.Utils.displayGroupNameinGroupFooter = function (e) {
-    var t = $("#grid .k-grouping-row"); //get all grouping rows
-    $.each(t, function (key, elem) {
-        if ($(elem).find("td p.k-reset").text().indexOf("SubActivity:") !== -1) {
-            $(elem).addClass("sub-activity-grouping-row"); //add a class to the grouping row, so we can find it later
-        } else if ($(elem).find("td p.k-reset").text().indexOf("Activity:") !== -1) {
-            $(elem).addClass("activity-grouping-row"); //add a class to the grouping row, so we can find it later
-        } else if ($(elem).find("td p.k-reset").text().indexOf("Project:") !== -1) {
-            $(elem).addClass("project-grouping-row"); //add a class to the grouping row, so we can find it later
-        }
-    });
+    return percentage.toFixed(2);
+};
 
-    t = $(".k-group-footer"); //get all group footer rows
-    $.each(t, function (key, elem) {
-        // total
-        if ($(elem).prev().attr("class") == "k-group-footer") {
-            //year group footer rows are always preceded by a make group footer row
-            var prevLabel = $(elem).prevAll(".sub-activity-grouping-row:first").find("td p.k-reset").text().replace("SubActivity: ", "");
-            $(elem).find("td:contains('Total:')").text("Total (" + prevLabel + "):"); //update total text to show group value
-        }
-        //    //make total
-        //else { //make group footer rows are never preceded by a group footer row
-        //    var prevLabel = $(elem).prevAll(".k-grouping-row:first").find("td p.k-reset").text().replace("Make: ", ""); //traverse backwards to find closest grouping row and get group value
-        //    $(elem).find("td:contains('Total:')").text("Total (" + prevLabel + "):")
-        //}
-    });
-}
+EPMO.Utils.isEmpty = function (str) {
+    return (!str || 0 === str.length);
+};
+
+EPMO.Utils.isEmptyZero = function (str) {
+    var strResult = 0;
+    if ((EPMO.Utils.isEmpty(str)) == false) {
+        strResult = str;
+    }
+    return strResult;
+};
