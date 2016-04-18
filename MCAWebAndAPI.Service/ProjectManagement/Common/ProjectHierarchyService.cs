@@ -310,13 +310,14 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Common
         {
             var wbsList = GetAllWBSMappings();
             var wbsProjectDict = new Dictionary<string, WBSMapping>();
-            var wbsProgramDict = new Dictionary<string, ListItem>();
-
             foreach(var item in wbsList)
             {
-                wbsProjectDict.Add(item.WBSID, item);
+                if(!wbsProjectDict.ContainsKey(item.WBSID)){
+                    wbsProjectDict.Add(item.WBSID, item);
+                }
             }
 
+            var wbsProgramDict = new Dictionary<string, ListItem>();
             var anyUpdatedValue = false;
             foreach (var item in SPConnector.GetList(SP_WBSMAPPING_IN_PROGRAM_LIST_NAME, _siteUrl))
             {
