@@ -81,8 +81,19 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Common
                 return model;
 
             model.Activity = relatedActivity.ActivityName;
-            model.Project = relatedActivity.ProjectName;
+            model.Project = getProjectNameFromSiteUrl() ?? relatedActivity.ProjectName;
             return model;
+        }
+
+        private string getProjectNameFromSiteUrl()
+        {
+            if (_siteUrl.Contains("/gp"))
+                return "Green Prosperity";
+            if(_siteUrl.Contains("/hn"))
+                return "Health and Nutrition";
+            if (_siteUrl.Contains("/pm"))
+                return "Procurement Modernization";
+            return null;
         }
 
         private Activity RetrieveRelatedActivity(string subActivityName, IEnumerable<SubActivity> subActivities, IEnumerable<Activity> activities)

@@ -7,12 +7,28 @@ namespace MCAWebAndAPI.Service.SPUtil
 {
     public class SPConnector
     {
-        static string CurUrl = "https://eceos2.sharepoint.com/sites/epmoonline";
+        static string CurUrl = "https://eceos2.sharepoint.com/sites/mca-dev";
         static string UserName =  "sp.services@eceos.com";
         static string Password = "Raja0432";
 
+        private static void MapCredential(string url)
+        {
+            if (url.Contains("eceos"))
+            {
+                UserName = "sp.services@eceos.com";
+                Password = "Raja0432";
+            }
+
+            if (url.Contains("mcai"))
+            {
+                UserName = "admin.sharepoint@mca-indonesia.go.id";
+                Password = "admin123$";
+            }
+        } 
+
         public static ListItemCollection GetList(string listName, string siteUrl = null, string caml = null)
         {
+            MapCredential(siteUrl);
             using (ClientContext context = new ClientContext(siteUrl ?? CurUrl))
             {
                 SecureString secureString = new SecureString();
@@ -36,6 +52,7 @@ namespace MCAWebAndAPI.Service.SPUtil
         
         public static ListItem GetListItem(string listName, int listItemID, string siteUrl = null)
         {
+            MapCredential(siteUrl);
             using (ClientContext context = new ClientContext(siteUrl ?? CurUrl))
             {
                 SecureString secureString = new SecureString();
@@ -52,6 +69,7 @@ namespace MCAWebAndAPI.Service.SPUtil
 
         public static void UpdateListItem(string listName, int listItemID, Dictionary<string, object> updatedValues, string siteUrl = null)
         {
+            MapCredential(siteUrl);
             using (ClientContext context = new ClientContext(siteUrl ?? CurUrl))
             {
                 SecureString secureString = new SecureString();
@@ -86,6 +104,7 @@ namespace MCAWebAndAPI.Service.SPUtil
 
         public static void AddListItem(string listName, Dictionary<string, object> columnValues, string siteUrl = null)
         {
+            MapCredential(siteUrl);
             using (ClientContext context = new ClientContext(siteUrl ?? CurUrl))
             {
                 SecureString secureString = new SecureString();

@@ -92,3 +92,14 @@ EPMO.Utils.isEmptyZero = function (str) {
     }
     return strResult;
 };
+
+EPMO.Utils.generateMenu = function (navDivId) {
+
+    var menus = [];
+    var lis = $("#" + navDivId + " li");
+    $.each(lis, function (key, elem) {
+        menus.push($(elem).text());
+    });
+
+    return menus;
+}

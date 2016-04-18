@@ -18,7 +18,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
         const string OPEN_STATUS = "Open";
         const string PENDING_STATUS = "Pending";
-        const string CLOSED_STATUS = "Closed";
+        const string SOLVED_STATUS = "Solved";
 
         const string HIGH_PRIORITY = "High";
         const string NORMAL_PRIORITY = "Normal";
@@ -114,8 +114,8 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
             viewModel.Add(new StackedBarChartVM
             {
                 CategoryName = RISK_SP_LIST_NAME,
-                GroupName = CLOSED_STATUS,
-                Value = risks.Count(e => string.Compare(e.Status, CLOSED_STATUS, StringComparison.OrdinalIgnoreCase) == 0),
+                GroupName = SOLVED_STATUS,
+                Value = risks.Count(e => string.Compare(e.Status, SOLVED_STATUS, StringComparison.OrdinalIgnoreCase) == 0),
                 Color = GraphicUtil.GREEN
             });
             viewModel.Add(new StackedBarChartVM
@@ -125,19 +125,12 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
                 Value = risks.Count(e => string.Compare(e.Status, PENDING_STATUS, StringComparison.OrdinalIgnoreCase) == 0),
                 Color = GraphicUtil.YELLOW
             });
-            viewModel.Add(new StackedBarChartVM
-            {
-                CategoryName = RISK_SP_LIST_NAME,
-                GroupName = OPEN_STATUS,
-                Value = risks.Count(e => string.Compare(e.Status, OPEN_STATUS, StringComparison.OrdinalIgnoreCase) == 0),
-                Color = GraphicUtil.RED
-            });
 
             viewModel.Add(new StackedBarChartVM
             {
                 CategoryName = ISSUE_SP_LIST_NAME,
-                GroupName = CLOSED_STATUS,
-                Value = issues.Count(e => string.Compare(e.Status, CLOSED_STATUS, StringComparison.OrdinalIgnoreCase) == 0),
+                GroupName = SOLVED_STATUS,
+                Value = issues.Count(e => string.Compare(e.Status, SOLVED_STATUS, StringComparison.OrdinalIgnoreCase) == 0),
                 Color = GraphicUtil.GREEN
             });
             viewModel.Add(new StackedBarChartVM
@@ -147,20 +140,12 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
                 Value = issues.Count(e => string.Compare(e.Status, PENDING_STATUS, StringComparison.OrdinalIgnoreCase) == 0),
                 Color = GraphicUtil.YELLOW
             });
-            viewModel.Add(new StackedBarChartVM
-            {
-                CategoryName = ISSUE_SP_LIST_NAME,
-                GroupName = OPEN_STATUS,
-                Value = issues.Count(e => string.Compare(e.Status, OPEN_STATUS, StringComparison.OrdinalIgnoreCase) == 0),
-                Color = GraphicUtil.RED
-            });
-
 
             viewModel.Add(new StackedBarChartVM
             {
                 CategoryName = ACTION_SP_LIST_NAME,
-                GroupName = CLOSED_STATUS,
-                Value = actions.Count(e => string.Compare(e.Status, CLOSED_STATUS, StringComparison.OrdinalIgnoreCase) == 0),
+                GroupName = SOLVED_STATUS,
+                Value = actions.Count(e => string.Compare(e.Status, SOLVED_STATUS, StringComparison.OrdinalIgnoreCase) == 0),
                 Color = GraphicUtil.GREEN
             });
             viewModel.Add(new StackedBarChartVM
@@ -169,13 +154,6 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
                 GroupName = PENDING_STATUS,
                 Value = actions.Count(e => string.Compare(e.Status, PENDING_STATUS, StringComparison.OrdinalIgnoreCase) == 0),
                 Color = GraphicUtil.YELLOW
-            });
-            viewModel.Add(new StackedBarChartVM
-            {
-                CategoryName = ACTION_SP_LIST_NAME,
-                GroupName = OPEN_STATUS,
-                Value = actions.Count(e => string.Compare(e.Status, OPEN_STATUS, StringComparison.OrdinalIgnoreCase) == 0),
-                Color = GraphicUtil.RED
             });
 
             return viewModel;
@@ -194,7 +172,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
             {
                 CategoryName = e.AssignedTo,
                 GroupName = e.Status,
-                Color = e.Status == OPEN_STATUS ? GraphicUtil.RED : (e.Status == PENDING_STATUS ? GraphicUtil.YELLOW : GraphicUtil.GREEN), 
+                Color = e.Status == PENDING_STATUS ? GraphicUtil.YELLOW : GraphicUtil.GREEN, 
                 Value = 1
             });
         }
@@ -212,21 +190,15 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
             results.Add(new DonutsChartVM()
             {
-                Label = OPEN_STATUS,
-                Value = items.Count(e => string.Compare(e.Status, OPEN_STATUS, StringComparison.OrdinalIgnoreCase) == 0), 
-                Color = GraphicUtil.RED
+                Label = SOLVED_STATUS,
+                Value = items.Count(e => string.Compare(e.Status, SOLVED_STATUS, StringComparison.OrdinalIgnoreCase) == 0), 
+                Color = GraphicUtil.GREEN
             });
             results.Add(new DonutsChartVM()
             {
                 Label = PENDING_STATUS,
                 Value = items.Count(e => string.Compare(e.Status, PENDING_STATUS, StringComparison.OrdinalIgnoreCase) == 0), 
                 Color = GraphicUtil.YELLOW
-            });
-            results.Add(new DonutsChartVM()
-            {
-                Label = CLOSED_STATUS,
-                Value = items.Count(e => string.Compare(e.Status, CLOSED_STATUS, StringComparison.OrdinalIgnoreCase) == 0), 
-                Color = GraphicUtil.GREEN
             });
 
             return results;

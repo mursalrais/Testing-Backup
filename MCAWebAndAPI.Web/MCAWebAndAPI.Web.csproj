@@ -194,6 +194,8 @@
     <Content Include="Scripts\apps\charts\KendoChartUtils.js" />
     <Content Include="Scripts\apps\common\Commands.js" />
     <Content Include="Scripts\apps\common\Utils.js" />
+    <Content Include="Scripts\apps\grids\KendoGridBudgetActualReport.js" />
+    <Content Include="Scripts\apps\grids\KendoGridFinancialReport.js" />
     <Content Include="Scripts\apps\grids\KendoGridActivity.js" />
     <Content Include="Scripts\apps\grids\KendoGridBudgetActualReport.js" />
     <Content Include="Scripts\apps\grids\KendoGridFinancialReport.js" />
@@ -201,6 +203,7 @@
     <Content Include="Scripts\apps\grids\KendoGridScheduler.js" />
     <Content Include="Scripts\apps\grids\KendoGridTasks.js" />
     <Content Include="Scripts\apps\grids\KendoGridTaskWithSingleResource.js" />
+    <Content Include="Scripts\apps\grids\KendoGridUtils.js" />
     <Content Include="Scripts\apps\grids\KendoGridWBS.js" />
     <Content Include="Scripts\apps\sliders\jQuerySlider.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -302,6 +305,7 @@
   <ItemGroup>
     <Folder Include="App_Code\" />
     <Folder Include="App_Data\" />
+    <Folder Include="Scripts\apps\controlls\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MCAWebAndAPI.Model\MCAWebAndAPI.Model.csproj">
