@@ -58,14 +58,18 @@
     <Compile Include="ViewModel\Chart\StackedBarChartVM.cs" />
     <Compile Include="ViewModel\Chart\ProjectScheduleSCurveVM.cs" />
     <Compile Include="ViewModel\Chart\ProjectStatusBarChartVM.cs" />
+    <Compile Include="ViewModel\Form\Procurement\PurchaseOrderVM.cs" />
+    <Compile Include="ViewModel\Form\Procurement\PurchaseOrderHeaderVM.cs" />
+    <Compile Include="ViewModel\Form\Procurement\PurchaseOrderItemVM.cs" />
     <Compile Include="ViewModel\Gantt\GanttDependenciesVM.cs" />
     <Compile Include="ViewModel\Gantt\GanttTasksVM.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="BackOffice\" />
     <Folder Include="ProjectManagement\Finance\" />
     <Folder Include="ProjectManagement\Result\" />
     <Folder Include="ViewModel\Control\" />
+    <Folder Include="ViewModel\Form\Asset\" />
+    <Folder Include="ViewModel\Form\Finance\" />
     <Folder Include="ViewModel\Grid\" />
   </ItemGroup>
   <ItemGroup>
