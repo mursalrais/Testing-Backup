@@ -188,7 +188,9 @@
     <Content Include="Content\Metro\sprite_2x.png" />
     <Content Include="Content\Metro\sprite_kpi.png" />
     <Content Include="Content\Metro\sprite_kpi_2x.png" />
-    <Content Include="Content\z_mcatheme.css" />
+    <Content Include="Content\smartadmin-production-plugins.min.css" />
+    <Content Include="Content\smartadmin-production.min.css" />
+    <Content Include="Content\smartadmin-skins.min.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Images\logo.png" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -196,6 +198,10 @@
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="img\favicon\favicon.ico" />
+    <Content Include="img\mybg.png" />
+    <Content Include="Scripts\app.config.js" />
+    <Content Include="Scripts\app.min.js" />
     <Content Include="Scripts\apps\charts\KendoChartDonuts.js" />
     <Content Include="Scripts\apps\charts\KendoChartProjectGantt.js" />
     <Content Include="Scripts\apps\charts\KendoChartProjectPercentage.js" />
@@ -251,7 +257,6 @@
     <Content Include="Scripts\WebForms\WebForms.js" />
     <Content Include="Scripts\WebForms\WebParts.js" />
     <Content Include="Scripts\WebForms\WebUIValidation.js" />
-    <Content Include="Scripts\z_mcatheme.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
@@ -290,6 +295,11 @@
     <Content Include="Views\Shared\EditorTemplates\Time.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Url.cshtml" />
     <Content Include="Views\Task\Test.cshtml" />
+    <Content Include="Views\PurchaseOrder\Create.cshtml" />
+    <Content Include="Views\FINEventBudget\Create.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\String.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\ComboBox.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\HttpPostedFileBase.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -302,6 +312,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\CalendarController.cs" />
+    <Compile Include="Controllers\FINEventBudgetController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProjectHierarchyController.cs" />
     <Compile Include="Controllers\PurchaseOrderController.cs" />
@@ -338,7 +349,6 @@
     <Folder Include="App_Code\" />
     <Folder Include="App_Data\" />
     <Folder Include="Scripts\apps\controlls\" />
-    <Folder Include="Views\PurchaseOrder\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MCAWebAndAPI.Model\MCAWebAndAPI.Model.csproj">

@@ -46,7 +46,9 @@ namespace MCAWebAndAPI.Web
 
 
             bundles.Add(new StyleBundle("~/Content/theme").Include(
-               "~/Content/z_mcatheme.css",
+               "~/Content/smartadmin-production-plugins.min.css",
+               "~/Content/smartadmin-production.min.css",
+               "~/Content/smartadmin-skins.min.css",
                "~/Content/custom.css"));
 
         }

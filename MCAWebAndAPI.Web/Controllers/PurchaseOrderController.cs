@@ -25,9 +25,33 @@ namespace MCAWebAndAPI.Web.Controllers
         /// </summary>
         /// <param name="key">If null, then Create. Otherwise, Update</param>
         /// <returns></returns>
-        public ActionResult Create(string key = null)
+        public ActionResult Create()
         {
-            return View();
+            var viewModel = new PurchaseOrderVM
+            {
+                Header = new PurchaseOrderHeaderVM()
+                {
+                    PONumber = "1212",
+                    VendorName = "eceos"
+                },
+                Items = GeneratePOItems()
+            };
+            
+
+            return View(viewModel);
+        }
+
+        private IEnumerable<PurchaseOrderItemVM> GeneratePOItems()
+        {
+            var list = new List<PurchaseOrderItemVM>();
+            list.Add(new PurchaseOrderItemVM()
+            {   ShortText = "asas"
+            });
+            list.Add(new PurchaseOrderItemVM()
+            {
+                ShortText = "asas"
+            });
+            return list;
         }
 
         /// <summary>

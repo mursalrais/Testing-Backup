@@ -1,116 +1,28 @@
-﻿.container {
-    width: 94% !important;
+/*
+ * It is advised not to edit the smartadmin_production.css
+ * as this will override any changes you make in the 
+ * later versions of this theme. 
+ * 
+ * We advise that you use use this CSS to override 
+ * SmartAdmin styles. 
+ * 
+ * Rename the stylesheet to whatever your liking so it will stay
+ * unique to you with each update of SmartAdmin.
+ */
+
+/*
+ * INDEX
+ * 
+ * - HTML
+ * - BODY
+ * - CUSTOM STYLES
+ */ 
+#main{
+    padding-bottom: 5px;
+    margin: 0;
 }
 
-.mainbar {
-    background: #1A417C !important;
- }
-
-.portlet-content .row {
-    max-width: 1362px;
-    overflow-x: auto;
-}
-
-div.k-grid{
-  max-width: 5000px;
-}
-
-.company-logo {
-    position: relative;
-    margin: 5px 0 0 0;
-    z-index: 100;
-    width: 125px;
-}
-
-form.navbar-form {
-    margin-top: 35px;
-}
-
-.border-bottom-dot{
-	padding-bottom: .5em;
-    margin-bottom: 2.5em;
-	border-bottom: 1px dotted #CCC;
-}
-
-.caption {
-    margin-top: 9px;
-    text-align: center;
-}
-
-footer.dark{
-	background-color: #333333;
-	margin: 50px 0 0 0;
-	padding: 50px 0 20px 0;
-}
-
-.footer-text{
-	color: #EFEFEF;
-}
-
-#back-to-top{
-	background-color: #85C226 !important;
-}
-
-#s4-bodyContainer {
-	padding-bottom: 0px !important;
-}
-
-#breadcrumb span {
-    font-size: 18px;
-    color: #16A085;
-}
-
-
-/* Program-Specific */
-
-
-.nav-pills.nav-stacked > li > a:hover {
-    background-color: #E46F2F;
-    color: white;
-}
-
-span.chart-figure{
-  text-align: center;
-  font-weight: 600;
-}
-
-
-/* Kendo Elements */
-.gauge-container {
-                    background: transparent url("../img/gauge-container.png") no-repeat 50% 50%;
-                    width: 404px;
-                    height: 404px;
-                    text-align: center;
-                    margin: 0 auto 30px auto;
-                }
-
-.gauge-container > div {
-    width: 330px;
-    height: 330px;
-    margin: 0 auto 0;
-}
-
-th.k-scheduler-timecolumn, td.k-scheduler-timecolumn {
-    display: none!important;
-}
-
-.tp-caption {
-    position: absolute;
-    left: 15%;
-    top: 70%;
-    -webkit-font-smoothing: antialiased !important;
-    background-color: rgba(30,30,30,0.8) !important;
-    padding: 20px 50px 20px 50px;
-}
-
-.tp-caption.light_medium_30_shadowed {
-    font-size:30px;line-height:40px;font-weight:700;color:#ffffff;text-decoration:none;background-color:transparent;text-shadow:0px 0px 7px rgba(0, 0, 0, 0.25);border-width:0px;border-color:rgb(0, 0, 0);border-style:none;
-}
-
-div#slider-caption a{
-    color: white !important;
-}
-
-.portlet-content > div:not(.k-grid), .portlet-content > div:not(.k-widget) {
-    text-align: center !important;
+.k-upload-button{
+    margin: 0 !important;
+    float: right !important;
 }

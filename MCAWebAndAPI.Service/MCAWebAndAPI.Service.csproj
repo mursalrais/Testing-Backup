@@ -46,6 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Finance\EventBudgetService.cs" />
+    <Compile Include="Finance\IEventBudgetService.cs" />
     <Compile Include="ProjectManagement\Common\IProjectHierarchyService.cs" />
     <Compile Include="ProjectManagement\Common\ProjectHierarchyService.cs" />
     <Compile Include="ProjectManagement\Schedule\CalendarService.cs" />
@@ -60,9 +62,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="BackOffice\" />
-    <Folder Include="ProjectManagement\Finance\" />
-    <Folder Include="ProjectManagement\Result\" />
+    <Folder Include="Asset\" />
+    <Folder Include="ResourceAndContract\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MCAWebAndAPI.Model\MCAWebAndAPI.Model.csproj">
