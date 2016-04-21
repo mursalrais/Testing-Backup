@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Kendo.Mvc">
+      <HintPath>C:\Users\DAC 11\Desktop\Kendo.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -58,6 +61,9 @@
     <Compile Include="ViewModel\Chart\StackedBarChartVM.cs" />
     <Compile Include="ViewModel\Chart\ProjectScheduleSCurveVM.cs" />
     <Compile Include="ViewModel\Chart\ProjectStatusBarChartVM.cs" />
+    <Compile Include="ViewModel\Form\AssignmentAsset\AssignmentAssetHeaderVM.cs" />
+    <Compile Include="ViewModel\Form\AssignmentAsset\AssignmentAssetItemVM.cs" />
+    <Compile Include="ViewModel\Form\AssignmentAsset\AssignmentAssetVM.cs" />
     <Compile Include="ViewModel\Form\Procurement\PurchaseOrderVM.cs" />
     <Compile Include="ViewModel\Form\Procurement\PurchaseOrderHeaderVM.cs" />
     <Compile Include="ViewModel\Form\Procurement\PurchaseOrderItemVM.cs" />

@@ -1,0 +1,48 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.AssignmentAsset
+
+
+@model AssignmentAssetVM
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="col-md-6">
+            @Html.Bootstrap().LabelFor(m => m.Header.PONumber)
+        </div>
+        <div class="col-md-6">
+            @Html.Bootstrap().TextBoxFor(m => m.Header.PONumber)
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="col-md-6">
+            @Html.Bootstrap().LabelFor(m => m.Header.VendorName)
+        </div>
+        <div class="col-md-6">
+            @Html.Bootstrap().TextBoxFor(m => m.Header.VendorName)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    @(Html.Kendo().Grid<PurchaseOrderItemVM>()
+        .Name("purchase-order-item-grid") // will be ID
+        .DataSource(
+           ds =>
+            ds.Ajax()
+            .Model(
+                mod =>
+                {
+                    mod.Id(m => m.POItemNumber);
+                    mod.Field(m => m.Qty);
+                })
+        )
+        .Columns(
+           col =>
+           {
+               col.Bound(m => m.POItemNumber).Width(200);
+               col.Bound(m => m.Qty).Width(200);
+               col.Bound(m => m.UnitPrice).Width(300);
+               col.Bound(m => m.ShortText);
+           }
+        )
+    )
+</div>
