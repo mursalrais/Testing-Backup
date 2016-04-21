@@ -18,7 +18,7 @@ namespace MCAWebAndAPI.Service.Finance
             _siteUrl = siteUrl;
         }
 
-        public IEnumerable<EventBudgetVM> GetEventBudget()
+        public EventBudgetVM GetEventBudget()
         {
             throw new NotImplementedException();
         }

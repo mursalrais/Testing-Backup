@@ -9,8 +9,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Control
 {
     public class ComboBoxVM
     {
-        public IEnumerable _choices;
-        public IEnumerable Choices
+        private IEnumerable<string> _choices;
+        public IEnumerable<string> Choices
         {
             get
             {

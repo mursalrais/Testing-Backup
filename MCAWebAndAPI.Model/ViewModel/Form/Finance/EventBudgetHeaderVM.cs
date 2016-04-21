@@ -35,6 +35,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         [DisplayName("Total (USD)")]
         public decimal? TotalUSD { get; set; }
 
+        [DisplayName("Period (from)")]
         public DateTime PeriodFrom
         {
             get

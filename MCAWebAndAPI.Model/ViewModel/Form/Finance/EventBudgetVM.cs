@@ -21,6 +21,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
                 }
                 return _header;
             }
+
             set
             {
                 _header = value;
@@ -31,10 +32,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         {
             get
             {
-                if(_items == null)
-                {
+                if (_items == null)
                     _items = new List<EventBudgetItemVM>();
-                }
                 return _items;
             }
             set
