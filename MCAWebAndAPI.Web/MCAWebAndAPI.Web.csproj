@@ -300,6 +300,14 @@
     <Content Include="Views\Shared\DisplayTemplates\String.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\ComboBox.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\HttpPostedFileBase.cshtml" />
+    <Content Include="Views\ASSAssetReplacement\Create.cshtml" />
+    <Content Include="Views\ASSAssignmentofAsset\Create.cshtml" />
+    <Content Include="Views\ASSAssetScrapping\Create.cshtml" />
+    <Content Include="Views\ASSAssetCheckResult\Create.cshtml" />
+    <Content Include="Views\ASSAssetCheckResultApprove\Create.cshtml" />
+    <Content Include="Views\ASSAssetReplacement\Edit.cshtml" />
+    <Content Include="Views\ASSAssignmentofAsset\Edit.cshtml" />
+    <Content Include="Views\ASSAssetScrapping\Edit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -311,6 +319,11 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\ASSAssetCheckResultApproveController.cs" />
+    <Compile Include="Controllers\ASSAssetCheckResultController.cs" />
+    <Compile Include="Controllers\ASSAssetReplacementController.cs" />
+    <Compile Include="Controllers\ASSAssetScrappingController.cs" />
+    <Compile Include="Controllers\ASSAssignmentofAssetController.cs" />
     <Compile Include="Controllers\CalendarController.cs" />
     <Compile Include="Controllers\FINEventBudgetController.cs" />
     <Compile Include="Controllers\HomeController.cs" />

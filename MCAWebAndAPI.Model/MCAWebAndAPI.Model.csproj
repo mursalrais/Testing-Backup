@@ -61,6 +61,21 @@
     <Compile Include="ViewModel\Chart\ProjectScheduleSCurveVM.cs" />
     <Compile Include="ViewModel\Chart\ProjectStatusBarChartVM.cs" />
     <Compile Include="ViewModel\Control\ComboBoxVM.cs" />
+    <Compile Include="ViewModel\Form\Asset\AssetCheckResultApproveHeaderVM.cs" />
+    <Compile Include="ViewModel\Form\Asset\AssetCheckResultApproveItemVM.cs" />
+    <Compile Include="ViewModel\Form\Asset\AssetCheckResultApproveVM.cs" />
+    <Compile Include="ViewModel\Form\Asset\AssetCheckResultHeaderVM.cs" />
+    <Compile Include="ViewModel\Form\Asset\AssetCheckResultItemVM.cs" />
+    <Compile Include="ViewModel\Form\Asset\AssetCheckResultVM.cs" />
+    <Compile Include="ViewModel\Form\Asset\AssetReplacementHeaderVM.cs" />
+    <Compile Include="ViewModel\Form\Asset\AssetReplacementItemVM.cs" />
+    <Compile Include="ViewModel\Form\Asset\AssetReplacementVM.cs" />
+    <Compile Include="ViewModel\Form\Asset\AssetScrappingHeaderVM.cs" />
+    <Compile Include="ViewModel\Form\Asset\AssetScrappingItemVM.cs" />
+    <Compile Include="ViewModel\Form\Asset\AssetScrappingVM.cs" />
+    <Compile Include="ViewModel\Form\Asset\AssignmentofAssetHeaderVM.cs" />
+    <Compile Include="ViewModel\Form\Asset\AssignmentofAssetItemVM.cs" />
+    <Compile Include="ViewModel\Form\Asset\AssignmentofAssetVM.cs" />
     <Compile Include="ViewModel\Form\Finance\EventBudgetHeaderVM.cs" />
     <Compile Include="ViewModel\Form\Finance\EventBudgetItemVM.cs" />
     <Compile Include="ViewModel\Form\Finance\EventBudgetVM.cs" />
@@ -73,7 +88,6 @@
   <ItemGroup>
     <Folder Include="ProjectManagement\Finance\" />
     <Folder Include="ProjectManagement\Result\" />
-    <Folder Include="ViewModel\Form\Asset\" />
     <Folder Include="ViewModel\Grid\" />
   </ItemGroup>
   <ItemGroup>

@@ -32,5 +32,10 @@ namespace MCAWebAndAPI.Service.Finance
         {
             throw new NotImplementedException();
         }
+
+        IEnumerable<EventBudgetVM> IEventBudgetService.GetEventBudget()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -1,0 +1,44 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Asset
+
+@model AssetReplacementVM
+
+<form class="form-horizontal" method="post" action="/ASSassetReplacement/Edit" id="edit-asset-replacement-form">
+    <fieldset>
+        <legend>Edit Form Asset Replacement</legend>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Header.PoLineItem).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.DisplayFor(m => m.Header.PoLineItem)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Header.AssetSubAsset).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.Header.AssetSubAsset)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Header.Wbs).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.Header.Wbs)
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Header.CostIdr).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.Header.CostIdr)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Header.CostUsd).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.Header.CostUsd)
+                </div>
+            </div>
+        </div>
+    </fieldset>
+
+</form>
