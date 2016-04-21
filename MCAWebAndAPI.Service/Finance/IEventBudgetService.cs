@@ -12,7 +12,7 @@ namespace MCAWebAndAPI.Service.Finance
     {
         void SetSiteUrl(string siteUrl);
 
-        IEnumerable<EventBudgetVM> GetEventBudget();
+        EventBudgetVM GetEventBudget();
 
         bool CreateEventBudget(EventBudgetVM eventBudget);
 

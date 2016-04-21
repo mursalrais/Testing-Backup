@@ -34,7 +34,11 @@ namespace MCAWebAndAPI.Web
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                             "~/Scripts/modernizr-*"));
 
-            bundles.Add(new ScriptBundle("~/bundles/apps").IncludeDirectory("~/Scripts/apps", "*.js", true));
+            bundles.Add(new ScriptBundle("~/bundles/apps")
+                .IncludeDirectory("~/Scripts/apps", "*.js", true));
+
+            bundles.Add(new ScriptBundle("~/bundles/bi")
+                .Include("~/Scripts/bi-frame.js"));
 
             ScriptManager.ScriptResourceMapping.AddDefinition(
                 "respond",
@@ -51,6 +55,8 @@ namespace MCAWebAndAPI.Web
                "~/Content/smartadmin-skins.min.css",
                "~/Content/custom.css"));
 
+            bundles.Add(new StyleBundle("~/Content/bi").Include(
+                "~/Content/bi.css"));
         }
     }
 }
