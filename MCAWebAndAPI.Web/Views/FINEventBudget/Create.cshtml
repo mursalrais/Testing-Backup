@@ -1,0 +1,97 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Finance
+
+@model EventBudgetVM
+
+
+<form class="form-horizontal" method="post" action="/FINEventBudget/Create" id="create-event-budget-form">
+    <fieldset>
+        <legend>Form Event Budget</legend>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Header.EventName).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.Header.EventName)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Header.PeriodFrom).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.Header.PeriodFrom)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Header.Project).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.Header.Project)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Header.Attachment).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.Header.Attachment)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Header.TotalDirectPayment).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.DisplayFor(m => m.Header.TotalDirectPayment)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Header.TotalSCA).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.DisplayFor(m => m.Header.TotalSCA)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Header.TotalIDR).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.DisplayFor(m => m.Header.TotalIDR)
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Header.Venue).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.Header.Venue)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Header.PeriodTo).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.Header.PeriodTo)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Header.Rate).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.Header.Rate)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Header.Fund).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.Header.Fund)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Header.Wbs).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.Header.Wbs)
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-4"></div>
+                <div class="col-md-8"></div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Header.TotalUSD).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.DisplayFor(m => m.Header.TotalUSD)
+                </div>
+            </div>
+        </div>
+    </fieldset>
+
+</form>

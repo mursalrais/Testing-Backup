@@ -14,10 +14,9 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
 
-    <!-- Kendo Frameworks-->
-    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2016.1.112/styles/kendo.common.min.css" />
-    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2016.1.112/styles/kendo.metro.min.css" />
+    @Styles.Render("~/Content/theme")
 
+    <!-- Kendo Frameworks-->
     <link href="http://cdn.kendostatic.com/2016.1.412/styles/kendo.common-fiori.min.css" rel="stylesheet" type="text/css" />
     <link href="http://cdn.kendostatic.com/2016.1.412/styles/kendo.mobile.all.min.css" rel="stylesheet" type="text/css" />
     <link href="http://cdn.kendostatic.com/2016.1.412/styles/kendo.dataviz.min.css" rel="stylesheet" type="text/css" />
@@ -36,13 +35,16 @@
     <script src="@Url.Content("~/Scripts/kendo.modernizr.custom.js")"></script>
 
 </head>
-<body>
+<body class="smart-style-6">
 
-    <div id="main-content">
-
-        @RenderBody()
-
-        <!-- MAIN CONTENT ENDS HERE-->
+    <div id="main" role="main">
+        <div id="content">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    @RenderBody()
+                </div>
+            </div>
+        </div>    
     </div>
 
 

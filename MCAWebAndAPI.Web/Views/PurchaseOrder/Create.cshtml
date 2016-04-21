@@ -1,23 +1,16 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.Procurement
 
-
 @model PurchaseOrderVM
 
 <div class="row">
     <div class="col-md-6">
-        <div class="col-md-6">
-            @Html.Bootstrap().LabelFor(m => m.Header.PONumber)
-        </div>
-        <div class="col-md-6">
-            @Html.Bootstrap().TextBoxFor(m => m.Header.PONumber)
+        <div class="input-group">
+            @Html.EditorFor(m => m.Header.PONumber)
         </div>
     </div>
     <div class="col-md-6">
-        <div class="col-md-6">
-            @Html.Bootstrap().LabelFor(m => m.Header.VendorName)
-        </div>
-        <div class="col-md-6">
-            @Html.Bootstrap().TextBoxFor(m => m.Header.VendorName)
+        <div class="input-group">
+            @Html.EditorFor(m => m.Header.VendorName)
         </div>
     </div>
 </div>

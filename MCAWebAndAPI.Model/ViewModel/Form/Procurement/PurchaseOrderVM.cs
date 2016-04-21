@@ -11,5 +11,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Procurement
         public PurchaseOrderHeaderVM Header { get; set; }
 
         public IEnumerable<PurchaseOrderItemVM> Items { get; set; }
+
     }
 }

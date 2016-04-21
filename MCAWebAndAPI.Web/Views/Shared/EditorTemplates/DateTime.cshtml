@@ -1,3 +1,6 @@
 @model DateTime?
 
-@(Html.Kendo().DateTimePickerFor(m => m))
+@(Html.Kendo().DateTimePickerFor(m => m).HtmlAttributes(new {
+    @class = "form-control",
+    style = "width:100%;"
+}))
