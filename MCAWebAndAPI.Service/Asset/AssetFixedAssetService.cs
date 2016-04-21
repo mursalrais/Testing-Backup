@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MCAWebAndAPI.Model.ViewModel.Form.Finance;
+using MCAWebAndAPI.Model.ViewModel.Form.Asset;
 using NLog;
 
-namespace MCAWebAndAPI.Service.Finance
+namespace MCAWebAndAPI.Service.Asset
 {
-    public class EventBudgetService : IEventBudgetService
+    public class AssetFixedAssetService : IAssetFixedAssetService
     {
         string _siteUrl = null;
         static Logger logger = LogManager.GetCurrentClassLogger();
@@ -18,22 +18,22 @@ namespace MCAWebAndAPI.Service.Finance
             _siteUrl = siteUrl;
         }
 
-        public EventBudgetVM GetEventBudget()
+        public AssetFixedAssetVM GetAssetFixedAssets()
         {
             throw new NotImplementedException();
         }
 
-        public bool CreateEventBudget(EventBudgetVM eventBudget)
+        public bool CreateAssetFixedAsset(AssetFixedAssetVM assetFixedAsset)
         {
             throw new NotImplementedException();
         }
 
-        public bool UpdateEventBudget(EventBudgetVM eventBudget)
+        public bool UpdateAssetFixedAsset(AssetFixedAssetVM assetFixedAsset)
         {
             throw new NotImplementedException();
         }
 
-        IEnumerable<EventBudgetVM> IEventBudgetService.GetEventBudget()
+        IEnumerable<AssetFixedAssetVM> IAssetFixedAssetService.GetAssetFixedAssets()
         {
             throw new NotImplementedException();
         }

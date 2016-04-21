@@ -1,0 +1,33 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Asset
+
+@model AssetSmallValueAssetVM
+
+<form class="form-horizontal" method="post" action="/ASSAssetSmallValueAsset/Create" id="create-asset-SmallValueAsset-form">
+    <fieldset>
+        <legend>Form Asset Smaill Value Asset</legend>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Header.RunDate).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.Header.RunDate)
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-4">
+                    <a href="javascript:void(0);" class="btn btn-primary control-label">Download</a>
+                </div>
+                <div class="col-md-8">
+                   
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <div class="col-md-4">
+                    <a href="javascript:void(0);" class="btn btn-primary control-label">Execute</a>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</form>

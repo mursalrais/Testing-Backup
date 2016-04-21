@@ -46,6 +46,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Asset\AssetSmallValueAssetService.cs" />
+    <Compile Include="Asset\AssetFixedAssetService.cs" />
+    <Compile Include="Asset\AssetLoanAndReturnService.cs" />
+    <Compile Include="Asset\AssetCheckFormService.cs" />
+    <Compile Include="Asset\AssetTransferService.cs" />
+    <Compile Include="Asset\AssetAcquisitionService.cs" />
+    <Compile Include="Asset\IAssetSmallValueAssetService.cs" />
+    <Compile Include="Asset\IAssetFixedAssetService.cs" />
+    <Compile Include="Asset\IAssetLoanAndReturnService.cs" />
+    <Compile Include="Asset\IAssetCheckFormService.cs" />
+    <Compile Include="Asset\IAssetTransferService.cs" />
+    <Compile Include="Asset\IAssetAcquisitionService.cs" />
     <Compile Include="Finance\EventBudgetService.cs" />
     <Compile Include="Finance\IEventBudgetService.cs" />
     <Compile Include="ProjectManagement\Common\IProjectHierarchyService.cs" />
@@ -62,7 +74,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Asset\" />
     <Folder Include="ResourceAndContract\" />
   </ItemGroup>
   <ItemGroup>

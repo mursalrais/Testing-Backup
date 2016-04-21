@@ -300,6 +300,12 @@
     <Content Include="Views\Shared\DisplayTemplates\String.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\ComboBox.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\HttpPostedFileBase.cshtml" />
+    <Content Include="Views\ASSAssetAcquisition\Create.cshtml" />
+    <Content Include="Views\ASSAssetTransfer\Create.cshtml" />
+    <Content Include="Views\ASSAssetLoanAndReturn\Create.cshtml" />
+    <Content Include="Views\ASSAssetCheckForm\Create.cshtml" />
+    <Content Include="Views\ASSAssetFixedAsset\Create.cshtml" />
+    <Content Include="Views\ASSAssetSmallValueAsset\Create.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -311,6 +317,12 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\ASSAssetSmallValueAssetController.cs" />
+    <Compile Include="Controllers\ASSAssetFixedAssetController.cs" />
+    <Compile Include="Controllers\ASSAssetLoanAndReturnController.cs" />
+    <Compile Include="Controllers\ASSAssetCheckFormController.cs" />
+    <Compile Include="Controllers\ASSAssetTransferController.cs" />
+    <Compile Include="Controllers\ASSAssetAcquisitionController.cs" />
     <Compile Include="Controllers\CalendarController.cs" />
     <Compile Include="Controllers\FINEventBudgetController.cs" />
     <Compile Include="Controllers\HomeController.cs" />

@@ -1,0 +1,25 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Asset
+
+@model AssetCheckFormVM
+
+<form class="form-horizontal" method="post" action="/ASSAssetCheckForm/Create" id="create-asset-CheckForm-form">
+    <fieldset>
+        <legend>Form Asset Check Form</legend>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Header.CreateDate).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.Header.CreateDate)
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <div class="col-md-4">
+                    <a href="javascript:void(0);" class="btn btn-primary">Check Out</a>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</form>
