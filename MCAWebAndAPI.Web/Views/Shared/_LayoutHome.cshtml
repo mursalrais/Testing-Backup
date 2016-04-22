@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewBag.Title</title>
+
+    @Scripts.Render("~/bundles/modernizr")
+
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+    <!-- Basic CSS Frameworks -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+
+    @Styles.Render("~/Content/theme")
+    <link href="~/Content/home.css" rel="stylesheet" />
+
+    <script src="http://cdn.kendostatic.com/2016.1.412/js/jquery.min.js"></script>
+
+    <!-- Basic JS Libraries -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js">
+        //<![CDATA[//]]>
+    </script>
+
+    <script src="@Url.Content("~/Scripts/kendo.modernizr.custom.js")"></script>
+
+</head>
+<body class="animated fadeInDown">
+    
+            @RenderBody()
+       
+
+    @Scripts.Render("~/bundles/apps")
+    @RenderSection("scripts", required: false)
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            pageSetUp();
+        })
+    </script>
+</body>
+</html>

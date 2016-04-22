@@ -91,6 +91,10 @@
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Web.Http.Cors, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Cors.5.2.3\lib\net45\System.Web.Http.Cors.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
       <Private>True</Private>
@@ -175,6 +179,7 @@
   <ItemGroup>
     <Content Include="Content\bi.css" />
     <Content Include="Content\custom.css" />
+    <Content Include="Content\home.css" />
     <Content Include="Content\smartadmin-production-plugins.min.css" />
     <Content Include="Content\smartadmin-production.min.css" />
     <Content Include="Content\smartadmin-skins.min.css" />
@@ -256,7 +261,6 @@
     <Content Include="packages.config" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Site.Mobile.Master" />
-    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_LayoutBI.cshtml" />
     <Content Include="Views\Web.config" />
@@ -291,6 +295,22 @@
     <Content Include="Views\BIEmbed\WF01.cshtml" />
     <Content Include="Views\BIEmbed\WFP01.cshtml" />
     <Content Include="Views\BIEmbed\WF03.cshtml" />
+    <Content Include="Views\ASSAssetAcquisition\Create.cshtml" />
+    <Content Include="Views\ASSAssetCheckForm\Create.cshtml" />
+    <Content Include="Views\ASSAssetCheckResultApprove\Create.cshtml" />
+    <Content Include="Views\ASSAssetCheckResult\Create.cshtml" />
+    <Content Include="Views\ASSAssetFixedAsset\Create.cshtml" />
+    <Content Include="Views\ASSAssetLoanAndReturn\Create.cshtml" />
+    <Content Include="Views\ASSAssetReplacement\Create.cshtml" />
+    <Content Include="Views\ASSAssetReplacement\Edit.cshtml" />
+    <Content Include="Views\ASSAssetScrapping\Create.cshtml" />
+    <Content Include="Views\ASSAssetScrapping\Edit.cshtml" />
+    <Content Include="Views\ASSAssetSmallValueAsset\Create.cshtml" />
+    <Content Include="Views\ASSAssetTransfer\Create.cshtml" />
+    <Content Include="Views\ASSAssignmentofAsset\Create.cshtml" />
+    <Content Include="Views\ASSAssignmentofAsset\Edit.cshtml" />
+    <Content Include="Views\Shared\_LayoutHome.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -302,6 +322,18 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\ASSAssetAcquisitionController.cs" />
+    <Compile Include="Controllers\ASSAssetCheckFormController.cs" />
+    <Compile Include="Controllers\ASSAssetCheckResultApproveController.cs" />
+    <Compile Include="Controllers\ASSAssetCheckResultController.cs" />
+    <Compile Include="Controllers\ASSAssetFixedAssetController.cs" />
+    <Compile Include="Controllers\ASSAssetLoanAndReturnController.cs" />
+    <Compile Include="Controllers\ASSAssetReplacementController.cs" />
+    <Compile Include="Controllers\ASSAssetScrappingController.cs" />
+    <Compile Include="Controllers\ASSAssetSmallValueAssetController.cs" />
+    <Compile Include="Controllers\ASSAssetTransferController.cs" />
+    <Compile Include="Controllers\ASSAssignmentofAssetController.cs" />
+    <Compile Include="Controllers\AssignmentAssetController.cs" />
     <Compile Include="Controllers\BIEmbedController.cs" />
     <Compile Include="Controllers\CalendarController.cs" />
     <Compile Include="Controllers\FINEventBudgetController.cs" />

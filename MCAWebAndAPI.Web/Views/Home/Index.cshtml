@@ -1,31 +1,149 @@
 ﻿@{
-    ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
 }
 
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+@{
+    ViewBag.Title = "Integrated Management System (IMS) - MCA Indonesia";
+}
+
+<header id="header">
+    <div id="dummy"></div>
+    <div class="container">
+        <div id="logo-group">
+            <img src="~/Images/logo.png" alt="MCA Indonesia">
+        </div>
+        <div id="title-group">
+            <h1>Integrated Management System (<span class="txt-color-teal">IMS</span>) - Millenium Challenge Account Indonesia</h1>
+        </div>
+    </div>
+</header>
+
+<div id="main" role="main">
+    <div id="content" class="container">
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-7 col-lg-8 hidden-xs hidden-sm">
+                <h1 class="txt-color-blue login-header-big">Welcome to IMS</h1>
+                <div class="hero">
+
+                    <div class="pull-left login-desc-box-l">
+                        <h4 class="paragraph-header">
+                            One sentence slogan. One sentence slogan. One sentence slogan. 
+                        </h4>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        <h5 class="about-heading">About IMS - Are you up to date?</h5>
+                        <p>
+                            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa.
+                        </p>
+                        <p>
+                            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa.
+                        </p>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        <h5 class="about-heading">Just another Header Just another Header</h5>
+                        <p>
+                            Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi voluptatem accusantium!
+                        </p>
+                        <p>
+                            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-5 col-lg-4">
+                <div class="well no-padding">
+                    <form action="index.html" id="login-form" class="smart-form client-form">
+                        <header>
+                            Sign In
+                        </header>
+
+                        <fieldset>
+                            <div class="tree smart-form">
+                                <ul role="tree">
+                                    <li class="parent_li" role="treeitem">
+                                        <span id="compact-program-button" title="Login to Compact Program Site">
+                                            <i class="fa fa-lg fa-compass"></i>
+                                            Compact Program
+                                        </span>
+                                        <ul role="group">
+                                            <li class="parent_li" role="treeitem">
+                                                <span id="gp-button" title="Login to Green Prosperity Project Site">
+                                                    <i class="fa fa-lg fa-leaf"></i>
+                                                    Green Prosperity
+                                                </span>
+                                            </li>
+                                            <li class="parent_li" role="treeitem">
+                                                <span id="hn-button" title="Login to Health and Nutrition Project Site">
+                                                    <i class="fa fa-lg fa-heartbeat"></i>
+                                                    Health and Nutrition
+                                                </span>
+                                            </li>
+                                            <li class="parent_li" role="treeitem">
+                                                <span id="pm-button" title="Login to Procurement Modernization Project Site">
+                                                    <i class="fa fa-lg fa-cubes"></i>
+                                                    Procurement Modernization
+                                                </span>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                        </fieldset>
+                    </form>
+
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
 </div>
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
+
+<footer>
+
+    <div class="footer-content clearfix">
+        <div class="container custom-container">
+
+        </div>
     </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
+    <div class="bottom-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12 text-center">
+                    <p>
+                        The eCEOs, Sdn, Bhd © 2016
+                    </p>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
-</div>
+</footer>
+
+@section scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#compact-program-button").click(function () {
+                window.location = "https://mcai4.sharepoint.com/sites/ims";
+            });
+            $("#gp-button").click(function () {
+                window.location = "https://mcai4.sharepoint.com/sites/ims/gp";
+            });
+            $("#hn-button").click(function () {
+                window.location = "https://mcai4.sharepoint.com/sites/ims/hn";
+            });
+            $("#pm-button").click(function () {
+                window.location = "https://mcai4.sharepoint.com/sites/ims/pm";
+            });
+
+        });
+    </script>
+}

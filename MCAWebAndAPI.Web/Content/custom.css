@@ -22,7 +22,47 @@
     margin: 0;
 }
 
+#header>:first-child{
+    width: 0 !important;
+}
+
 .k-upload-button{
     margin: 0 !important;
     float: right !important;
 }
+
+body.animated.fadeInDown #header{
+    height: 100px !important;
+    margin-bottom: 50px !important;
+}
+
+#header .container{
+    display: block !important;
+    float: none !important;
+    height: inherit !important;
+}
+
+#header .container #logo-group{
+    height: 100%;
+    padding: 5px 0;
+    width: 15%;
+    display: inline-block;
+}
+
+#logo-group img{
+    height: inherit !important;
+}
+
+#header .container #title-group{
+    width: 70%;
+    display: inline-block;
+}
+
+form#login-form {
+    padding-bottom: 50px;
+}
+
+.smart-form fieldset{
+    padding: 30px 40px !important;
+}
+    
