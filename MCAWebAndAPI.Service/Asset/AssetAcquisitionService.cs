@@ -37,5 +37,19 @@ namespace MCAWebAndAPI.Service.Asset
         {
             throw new NotImplementedException();
         }
+
+        public AssetAcquisitionVM GetEventBudgetItem_Dummy()
+        {
+            var list = new List<AssetAcquisitionItemVM>();
+            list.Add(new AssetAcquisitionItemVM()
+            {
+                AssetDescription = "",
+                AssetNo = "",
+                AssetSubNo= "",
+                CostUSD = "",
+                CostIDR = "",
+            })
+            return list;
+        }
     }
 }

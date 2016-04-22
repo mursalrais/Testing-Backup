@@ -9,6 +9,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 {
     public class AssetAcquisitionHeaderVM
     {
+        public int Id { get; set; }
         private DateTime _purchaseDate;
         private ComboBoxVM _acceptanceMemoNo;        
 
