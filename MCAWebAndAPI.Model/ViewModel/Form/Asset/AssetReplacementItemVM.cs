@@ -8,5 +8,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 {
     public class AssetReplacementItemVM
     {
+
     }
 }
