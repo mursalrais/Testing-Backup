@@ -1,6 +1,7 @@
 ﻿using System;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 using NLog;
+using System.Collections.Generic;
 
 namespace MCAWebAndAPI.Service.Finance
 {
@@ -28,6 +29,21 @@ namespace MCAWebAndAPI.Service.Finance
         {
             throw new NotImplementedException();
         }
-        
+
+        public EventBudgetVM GetEventBudget_Dummy()
+        {
+            var viewModel = new EventBudgetVM();
+
+            var list  = new List<EventBudgetItemVM>();
+            list.Add(new EventBudgetItemVM()
+            {
+                AmountPerItem = 1212,
+                DirectPayment = 122,
+                Remarks = "asass"
+            });
+            viewModel.Items = list;
+
+            return viewModel;
+        }
     }
 }

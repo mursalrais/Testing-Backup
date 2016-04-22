@@ -14,6 +14,9 @@ namespace MCAWebAndAPI.Service.Finance
 
         EventBudgetVM GetEventBudget();
 
+        EventBudgetVM GetEventBudget_Dummy();
+
+
         bool CreateEventBudget(EventBudgetVM eventBudget);
 
         bool UpdateEventBudget(EventBudgetVM eventBudget);

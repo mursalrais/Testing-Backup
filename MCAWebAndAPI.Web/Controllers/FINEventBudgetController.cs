@@ -10,11 +10,11 @@ namespace MCAWebAndAPI.Web.Controllers
 {
     public class FINEventBudgetController : Controller
     {
-        IEventBudgetService eventBudgetService;
+        IEventBudgetService _eventBudgetService;
 
         public FINEventBudgetController()
         {
-            eventBudgetService = new EventBudgetService();
+            _eventBudgetService = new EventBudgetService();
         }
 
         // GET: FINEventBudget
@@ -25,7 +25,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult Create()
         {
-            var viewModel = new EventBudgetVM();
+            var viewModel = _eventBudgetService.GetEventBudget_Dummy();
 
             return View(viewModel);
         }
