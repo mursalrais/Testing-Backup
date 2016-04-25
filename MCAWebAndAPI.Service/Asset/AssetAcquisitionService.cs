@@ -28,6 +28,20 @@ namespace MCAWebAndAPI.Service.Asset
             throw new NotImplementedException();
         }
 
+        public bool CreateAssetAcquisition_dummy(AssetAcquisitionVM assetAcquisition)
+        {
+            var entitiy = new AssetAcquisitionVM();
+            entitiy = assetAcquisition;
+            return true;
+        }
+
+        public bool CreateAssetAcquisitionItem_dummy(AssetAcquisitionItemVM assetAcquisition)
+        {
+            var entitiy = new AssetAcquisitionItemVM();
+            entitiy = assetAcquisition;
+            return true;
+        }
+
         public bool UpdateAssetAcquisition(AssetAcquisitionVM assetAcquisition)
         {
             throw new NotImplementedException();
@@ -38,18 +52,21 @@ namespace MCAWebAndAPI.Service.Asset
             throw new NotImplementedException();
         }
 
-        public AssetAcquisitionVM GetEventBudgetItem_Dummy()
+        public AssetAcquisitionVM GetAssetAcquisition_Dummy()
         {
+            var viewModel = new AssetAcquisitionVM();
+
             var list = new List<AssetAcquisitionItemVM>();
             list.Add(new AssetAcquisitionItemVM()
             {
-                AssetDescription = "",
-                AssetNo = "",
-                AssetSubNo= "",
-                CostUSD = "",
-                CostIDR = "",
-            })
-            return list;
+                AssetDescription = "Asseasfas",
+                CostUSD = 20000,
+                New = "Newwww",
+                Id = 1                
+            });
+            viewModel.Items = list;
+
+            return viewModel;
         }
     }
 }
