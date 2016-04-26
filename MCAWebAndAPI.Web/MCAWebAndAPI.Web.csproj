@@ -184,6 +184,7 @@
     <Content Include="Content\smartadmin-production.min.css" />
     <Content Include="Content\smartadmin-skins.min.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Images\laptop.jpg" />
     <Content Include="Images\logo.png" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -312,6 +313,7 @@
     <Content Include="Views\ASSAssignmentofAsset\Edit.cshtml" />
     <Content Include="Views\Shared\_LayoutHome.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\BIEmbed\WFP03.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -334,7 +336,6 @@
     <Compile Include="Controllers\ASSAssetSmallValueAssetController.cs" />
     <Compile Include="Controllers\ASSAssetTransferController.cs" />
     <Compile Include="Controllers\ASSAssignmentofAssetController.cs" />
-    <Compile Include="Controllers\AssignmentAssetController.cs" />
     <Compile Include="Controllers\BIEmbedController.cs" />
     <Compile Include="Controllers\CalendarController.cs" />
     <Compile Include="Controllers\FINEventBudgetController.cs" />

@@ -23,5 +23,10 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             return View();
         }
+
+        public ActionResult WFP03()
+        {
+            return View();
+        }
     }
 }
