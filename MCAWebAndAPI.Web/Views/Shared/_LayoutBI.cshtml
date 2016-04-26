@@ -19,5 +19,14 @@
 
     <script src="http://cdn.kendostatic.com/2016.1.412/js/jquery.min.js"></script>
     @RenderSection("scripts", required: false)
+    <script type="text/javascript" src="~/Scripts/libs/iframeResizer.contentWindow.min.js" defer></script>
+    <script>
+			var iFrameResizer = {
+					messageCallback: function(message){
+						alert(message,parentIFrame.getId());
+					}
+				}
+    </script>
+
 </body>
 </html>
