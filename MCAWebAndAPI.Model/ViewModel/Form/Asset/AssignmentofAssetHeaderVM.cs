@@ -12,6 +12,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
         private DateTime _date;
         private ComboBoxVM _assetHolder, _assetSubAsset;
 
+        public int Id { get; set; }
+
         public string TransactionType { get; set; }
 
         public string Office { get; set; }

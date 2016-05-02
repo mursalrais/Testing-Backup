@@ -13,6 +13,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
     {
         private DateTime _date;
 
+        public int Id { get; set; }
+
         public string CountedBy1 { get; set; }
 
         public string CountedBy2 { get; set; }

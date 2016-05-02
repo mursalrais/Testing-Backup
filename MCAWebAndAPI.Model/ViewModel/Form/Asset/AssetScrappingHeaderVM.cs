@@ -13,6 +13,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
     {
         private DateTime _date;
 
+        public int Id { get; set; }
+
         public string TransactionType { get; set; }
 
         [DisplayName("Asset-Sub Asset")]

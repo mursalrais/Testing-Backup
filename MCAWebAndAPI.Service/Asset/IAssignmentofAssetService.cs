@@ -16,5 +16,13 @@ namespace MCAWebAndAPI.Service.Asset
         bool CreateAssignmentofAsset(AssignmentofAssetVM assignmentofAsset);
 
         bool UpdateAssignmentofAsset(AssignmentofAssetVM assignmentofAsset);
+
+        bool CreateAssignmentofAsset_Dummy(AssignmentofAssetItemVM assignmentofAsset);
+
+        bool UpdateAssignmentofAsset_Dummy(AssignmentofAssetItemVM assignmentofAsset);
+
+        bool DestroyAssignmentofAsset_Dummy(AssignmentofAssetItemVM assignmentofAsset);
+
+        AssignmentofAssetVM GetAssignmentofAssetItems_Dummy();
     }
 }

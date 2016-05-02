@@ -37,6 +37,38 @@
                 <a style="float:right" class="btn btn-default" href="#">Get Data</a>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-12">
+                @(Html.Kendo().Grid(Model.Items)
+                    .Name("asset-check-result-items-grid")
+                    .Columns(columns =>
+                    {
+                        columns.Bound(p => p.Item);
+                        columns.Bound(p => p.AssetNo);
+                        columns.Bound(p => p.SubAssetNo);
+                        columns.Bound(p => p.AssetDescription);
+                        columns.Bound(p => p.SerialNo);
+                        columns.Bound(p => p.LocationName);
+                        columns.Bound(p => p.Status);
+                        columns.Bound(p => p.SystemQty);
+                        columns.Bound(p => p.PhysicalQty);
+                        columns.Bound(p => p.DifferentQty);
+                        columns.Bound(p => p.Scrap);
+                        columns.Bound(p => p.Remarks);
+                        columns.Command(command => { command.Edit(); command.Destroy(); }).Width(250);
+                    })
+                    .ToolBar(toolbar => toolbar.Create())
+                    .Editable(editable => editable.Mode(GridEditMode.PopUp))
+                    .DataSource(dataSource => dataSource
+                        .Ajax()
+                        .Model(model => model.Id(p => p.Id))
+                        .Create(update => update.Action("EditingPopup_Create", "ASSAssetCheckResult"))
+                        .Update(update => update.Action("EditingPopup_Update", "ASSAssetCheckResult"))
+                        .Destroy(update => update.Action("EditingPopup_Destroy", "ASSAssetCheckResult"))
+                )
+                )
+            </div>
+        </div>
     </fieldset>
 
 </form>

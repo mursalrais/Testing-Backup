@@ -13,8 +13,16 @@ namespace MCAWebAndAPI.Service.Asset
 
         IEnumerable<AssetCheckResultApproveVM> GetAssetCheckResultApprove();
 
-        bool CreateAssetCheckResultApprove(AssetReplacementVM assetCheckResultApprove);
+        bool CreateAssetCheckResultApprove(AssetCheckResultApproveVM assetCheckResultApprove);
 
-        bool UpdateAssetCheckResultApprove(AssetReplacementVM assetCheckResultApprove);
+        bool UpdateAssetCheckResultApprove(AssetCheckResultApproveVM assetCheckResultApprove);
+
+        bool CreateAssetCheckResultApprove_Dummy(AssetCheckResultApproveItemVM assetCheckResultApprove);
+
+        bool UpdateAssetCheckResultApprove_Dummy(AssetCheckResultApproveItemVM assetCheckResultApprove);
+
+        bool DestroyAssetCheckResultApprove_Dummy(AssetCheckResultApproveItemVM assetCheckResultApprove);
+
+        AssetCheckResultApproveVM GetAssetCheckResultApproveItems_Dummy();
     }
 }
