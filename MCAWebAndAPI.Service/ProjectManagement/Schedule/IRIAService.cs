@@ -15,7 +15,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
         IEnumerable<StackedBarChartVM> GetOverallRIAChart();
         IEnumerable<StackedBarChartVM> GetRIAResourceChart(string riaType);
         IEnumerable<DonutsChartVM> GetRIAStatusChart(string riaType);
-        IEnumerable<DonutsChartVM> GetRIAPriorityChart(string riaType);
+        //IEnumerable<DonutsChartVM> GetRIAPriorityChart(string riaType);
         IEnumerable<BarChartVM> GetIssuesAgeingChart();
     }
 }
