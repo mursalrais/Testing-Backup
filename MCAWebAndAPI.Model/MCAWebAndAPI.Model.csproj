@@ -61,6 +61,7 @@
     <Compile Include="ViewModel\Chart\ProjectScheduleSCurveVM.cs" />
     <Compile Include="ViewModel\Chart\ProjectStatusBarChartVM.cs" />
     <Compile Include="ViewModel\Control\ComboBoxVM.cs" />
+    <Compile Include="ViewModel\Form\Asset\AssetMasterVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetAcquisitionHeaderVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetAcquisitionItemVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetAcquisitionVM.cs" />
