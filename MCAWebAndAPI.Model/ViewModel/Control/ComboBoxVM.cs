@@ -22,6 +22,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Control
         }
 
         public string Value { get; set; }
+        public string FieldValue { get; set; }
 
 
 

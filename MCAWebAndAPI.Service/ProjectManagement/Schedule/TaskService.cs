@@ -5,7 +5,6 @@ using MCAWebAndAPI.Service.SPUtil;
 using System.Collections.Generic;
 using MCAWebAndAPI.Model.ViewModel.Chart;
 using Microsoft.SharePoint.Client;
-using System.Collections;
 using NLog;
 using MCAWebAndAPI.Model.ViewModel.Gantt;
 
@@ -246,7 +245,6 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
             // update change flag
             _updatedTaskCandidates[parentID].UpdateFlag(TaskChangeFlagEnum.DUE_DATE, true);
             _updatedTaskCandidates[parentID].UpdateFlag(TaskChangeFlagEnum.DURATION, true);
-
         }
 
         void UpdateParentStartDate(int parentID, DateTime thisTaskStartDate)
@@ -518,15 +516,15 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
             }
 
             // To update the total completed tasks
+            ReCalculateTotal(ref _planTotal);
             ReCalculateTotal(ref _baseLineTotal);
             ReCalculateTotal(ref _actualTotal);
-            ReCalculateTotal(ref _planTotal);
 
             // Transform to the view models
             var result = new List<ProjectScheduleSCurveVM>();
+            AddSCurveData(ref result, _planTotal, "Forecast", "green");
             AddSCurveData(ref result, _baseLineTotal, "BaseLine", "blue");
             AddSCurveData(ref result, _actualTotal, "Actual", "red");
-            AddSCurveData(ref result, _planTotal, "Forecast", "green");
 
             return result;
         }
