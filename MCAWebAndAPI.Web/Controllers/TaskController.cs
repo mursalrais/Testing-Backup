@@ -35,7 +35,6 @@ namespace MCAWebAndAPI.Web.Controllers
 
             taskService.SetSiteUrl(siteUrl);
             var data = taskService.GetAllTask();
-
             return this.Jsonp(data);
         }
 

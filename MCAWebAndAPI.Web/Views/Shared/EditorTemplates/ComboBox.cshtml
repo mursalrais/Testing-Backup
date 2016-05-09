@@ -3,7 +3,7 @@
 @(
  Html.Kendo().DropDownListFor(m => m)
         .BindTo(Model.Choices)
-        .DataValueField("Value")
+        .DataValueField(Model.FieldValue)
         .Filter("contains")
         .HtmlAttributes(new {
             @class = "form-control",
