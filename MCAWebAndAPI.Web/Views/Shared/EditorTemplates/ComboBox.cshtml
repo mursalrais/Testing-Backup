@@ -5,6 +5,7 @@
         .BindTo(Model.Choices)
         .DataValueField(Model.FieldValue)
         .Filter("contains")
+        .Value(Model.DefaultValue)
         .HtmlAttributes(new {
             @class = "form-control",
             style = "width:100%;"

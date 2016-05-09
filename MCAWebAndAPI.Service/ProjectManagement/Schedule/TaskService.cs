@@ -17,16 +17,17 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
         const string SP_PROJECT_INFORMATION_LIST_NAME = "Project Information";
         const string SP_ACTIVITY_LIST_NAME = "Activity";
         const string SP_SUB_ACTIVITY_LIST_NAME = "SubActivity";
-
         string _siteUrl = null;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public TaskService()
         {
             _updatedTaskCandidates = new Dictionary<int, TaskManager>();
             _baseLineTotal = new Dictionary<DateTime, int>();
             _planTotal = new Dictionary<DateTime, int>();
             _actualTotal = new Dictionary<DateTime, int>();
-
         }
 
         /// <summary>
