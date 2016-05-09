@@ -28,16 +28,16 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult Create()
         {
-            var viewModel = _assetMasterService.GetAssetMaster_Dummy();
+            //var viewModel = _assetMasterService.GetAssetMaster_Dummy();
 
-            return View(viewModel);
+            return View();
         }
 
         [HttpPost]
         public ActionResult Submit(AssetMasterVM _data)
         {
             //return View(new AssetMasterVM());
-            var data = _data;
+            var data = _assetMasterService.GetAssetMaster_Dummy(_data);
 
             return this.Jsonp(data);
         }
@@ -47,7 +47,7 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             if (_assetMasterVM != null && ModelState.IsValid)
             {
-                _assetMasterService.CreateAssetMasterItem_dummy(_assetMasterVM);
+                //_assetMasterService.CreateAssetMasterItem_dummy(_assetMasterVM);
                 //productService.Create(_assetMasterItem);
             }
 

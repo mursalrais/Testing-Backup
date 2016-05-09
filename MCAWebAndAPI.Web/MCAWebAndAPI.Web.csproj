@@ -314,6 +314,7 @@
     <Content Include="Views\Shared\_LayoutHome.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\BIEmbed\WFP03.cshtml" />
+    <Content Include="Views\ASSAssetMaster\Create.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

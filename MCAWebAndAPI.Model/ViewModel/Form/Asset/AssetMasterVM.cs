@@ -112,6 +112,27 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
         }
 
         [UIHint("ComboBox")]
+        public ComboBoxVM AssetType
+        {
+            get
+            {
+                if (_assetType == null)
+                    _assetType = new ComboBoxVM()
+                    {
+                        Choices = new string[]
+                        {
+                            "LA", "BU", "CO", "CE", "CS", "OE", "FF", "VE", "OT"
+                        }
+                    };
+                return _assetType;
+            }
+            set
+            {
+                _assetType = value;
+            }
+        }
+
+        [UIHint("ComboBox")]
         public ComboBoxVM AssetNoAssetDesc
         {
             get

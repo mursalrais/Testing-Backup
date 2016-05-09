@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Asset\AssetMasterService.cs" />
     <Compile Include="Asset\AssetAcquisitionService.cs" />
     <Compile Include="Asset\AssetCheckFormService.cs" />
     <Compile Include="Asset\AssetCheckResultApproveService.cs" />
@@ -56,6 +57,7 @@
     <Compile Include="Asset\AssetScrappingService.cs" />
     <Compile Include="Asset\AssetSmallValueAssetService.cs" />
     <Compile Include="Asset\AssetTransferService.cs" />
+    <Compile Include="Asset\IAssetMasterService.cs" />
     <Compile Include="Asset\IAssetAcquisitionService.cs" />
     <Compile Include="Asset\IAssetCheckFormService.cs" />
     <Compile Include="Asset\IAssetCheckResultApproveService.cs" />
