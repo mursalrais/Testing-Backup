@@ -28,16 +28,16 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult Create()
         {
-            //var viewModel = _assetMasterService.GetAssetMaster_Dummy();
+            var viewModel = _assetMasterService.GetAssetMaster_Dummy();
 
-            return View();
+            return View(viewModel);
         }
 
         [HttpPost]
         public ActionResult Submit(AssetMasterVM _data)
         {
             //return View(new AssetMasterVM());
-            var data = _assetMasterService.GetAssetMaster_Dummy(_data);
+            var data = _assetMasterService.GetAssetMaster_Dummy();
 
             return this.Jsonp(data);
         }

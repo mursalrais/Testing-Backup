@@ -20,7 +20,7 @@ namespace MCAWebAndAPI.Service.Asset
 
         bool UpdateAssetMaster(AssetMasterVM assetMaster);
 
-        AssetMasterVM GetAssetMaster_Dummy(AssetMasterVM assetMaster);
+        AssetMasterVM GetAssetMaster_Dummy();
         
        
     }

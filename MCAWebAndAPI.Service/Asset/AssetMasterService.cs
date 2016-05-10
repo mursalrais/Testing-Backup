@@ -33,26 +33,26 @@ namespace MCAWebAndAPI.Service.Asset
         public bool CreateAssetMaster_dummy(AssetMasterVM assetMaster)
         {
             
-            var columnValues = new Dictionary<string, object>();
-            columnValues.Add("AssetCategory", assetMaster.AssetCategory.Value);
-            columnValues.Add("Title", assetMaster.AssetDesc);
-            columnValues.Add("AssetID", assetMaster.Id);
-            columnValues.Add("AssetLevel", assetMaster.AssetLevel.Value);
-            columnValues.Add("AssetNo", assetMaster.AssetNoAssetDesc.Value);
-            columnValues.Add("AssetType",assetMaster.AssetType.Value);
-            columnValues.Add("Condition",assetMaster.Condition.Value);
-            columnValues.Add("ProjectUnit",assetMaster.ProjectUnit.Value);
-            columnValues.Add("Remarks",assetMaster.Remarks);
-            columnValues.Add("SerialNo",assetMaster.SerialNo);
-            columnValues.Add("Spesifications", assetMaster.Spesifications);
-            try
-            {
-                SPConnector.AddListItem(SP_ASDASD_LISTNAME, columnValues, _siteUrl);
-            }
-            catch (Exception e)
-            {
-                logger.Debug(e.Message);
-            }
+            //var columnValues = new Dictionary<string, object>();
+            //columnValues.Add("AssetCategory", assetMaster.AssetCategory.Value);
+            //columnValues.Add("Title", assetMaster.AssetDesc);
+            //columnValues.Add("AssetID", assetMaster.Id);
+            //columnValues.Add("AssetLevel", assetMaster.AssetLevel.Value);
+            //columnValues.Add("AssetNo", assetMaster.AssetNoAssetDesc.Value);
+            //columnValues.Add("AssetType",assetMaster.AssetType.Value);
+            //columnValues.Add("Condition",assetMaster.Condition.Value);
+            //columnValues.Add("ProjectUnit",assetMaster.ProjectUnit.Value);
+            //columnValues.Add("Remarks",assetMaster.Remarks);
+            //columnValues.Add("SerialNo",assetMaster.SerialNo);
+            //columnValues.Add("Spesifications", assetMaster.Spesifications);
+            //try
+            //{
+            //    SPConnector.AddListItem(SP_ASDASD_LISTNAME, columnValues, _siteUrl);
+            //}
+            //catch (Exception e)
+            //{
+            //    logger.Debug(e.Message);
+            //}
             //var entitiy = new AssetMasterVM();
             //entitiy = assetMaster;
             return true;
@@ -68,9 +68,11 @@ namespace MCAWebAndAPI.Service.Asset
             throw new NotImplementedException();
         }        
 
-        public AssetMasterVM GetAssetMaster_Dummy(AssetMasterVM assetMaster)
+        public AssetMasterVM GetAssetMaster_Dummy()
         {
-            throw new NotImplementedException();
+            var viewModel = new AssetMasterVM();           
+
+            return viewModel;
         }
     }
 }
