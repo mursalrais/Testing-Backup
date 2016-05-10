@@ -55,6 +55,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
                             "Main Asset",
                             "Sub Asset"
                         }
+                        //FieldValue = "AssetLevel"
                     };
                 return _assetLevel;
             }
