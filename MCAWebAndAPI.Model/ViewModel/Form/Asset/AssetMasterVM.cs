@@ -143,9 +143,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
                     {
                         Choices = new string[]
                         {
-                            "LA",
-                            "BU",
-                            "CO"
+                            ""
                         }
                     };
                 return _assetNoAssetDesc;
