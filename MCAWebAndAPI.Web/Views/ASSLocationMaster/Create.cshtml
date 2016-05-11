@@ -1,0 +1,38 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Asset
+
+@model LocationMasterVM
+
+<form class="form-horizontal" method="post" action="/ASSLocationMaster/Submit" id="create-location-master-form">
+    <fieldset>
+        <legend>Form Location Master Data</legend>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Header.Remarks).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.Header.Remarks)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Header.OfficeName).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.Header.OfficeName)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Header.FloorName).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.Header.FloorName)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Header.RoomName).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.Header.RoomName)
+                </div>
+            </div>
+            <input class="k-button k-button-icontext k-grid-add" type="submit" value="Save" />
+            <input class="k-button k-button-icontext k-grid-add" type="button" value="Cancel" onclick="location.href='@Url.Action("Index","Home")';"/>
+        </div>
+    </fieldset>
+
+</form>

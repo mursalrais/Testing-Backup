@@ -315,6 +315,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\BIEmbed\WFP03.cshtml" />
     <Content Include="Views\ASSAssetMaster\Create.cshtml" />
+    <Content Include="Views\ASSLocationMaster\Create.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -338,6 +339,7 @@
     <Compile Include="Controllers\ASSAssetSmallValueAssetController.cs" />
     <Compile Include="Controllers\ASSAssetTransferController.cs" />
     <Compile Include="Controllers\ASSAssignmentofAssetController.cs" />
+    <Compile Include="Controllers\ASSLocationMasterController.cs" />
     <Compile Include="Controllers\BIEmbedController.cs" />
     <Compile Include="Controllers\CalendarController.cs" />
     <Compile Include="Controllers\FINEventBudgetController.cs" />
