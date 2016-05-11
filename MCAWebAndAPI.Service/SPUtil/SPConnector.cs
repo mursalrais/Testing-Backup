@@ -2,6 +2,7 @@
 using Microsoft.SharePoint.Client;
 using System.Security;
 using System.Collections.Generic;
+using System.Net;
 
 namespace MCAWebAndAPI.Service.SPUtil
 {
@@ -120,6 +121,34 @@ namespace MCAWebAndAPI.Service.SPUtil
                 }
                 newItem.Update();
                 context.ExecuteQuery();
+            }
+        }
+
+        public static string[] GetChoiceFieldValues(string listName, string fieldName, string siteUrl = null)
+        {
+            using (ClientContext clientContext = new ClientContext(siteUrl ?? CurUrl))
+            {
+                //List<portalfile> fileList = new List<portalfile>();
+
+                //var domain = siteUrl ?? CurUrl;
+                //var username = UserName;
+                //var password = Password;
+                //clientContext.Credentials = new NetworkCredential(username, password, domain);
+
+                SecureString secureString = new SecureString();
+                Password.ToList().ForEach(secureString.AppendChar);
+                clientContext.Credentials = new SharePointOnlineCredentials(UserName, secureString);
+
+                Web web = clientContext.Web;
+                var list = web.Lists.GetByTitle(listName);
+                clientContext.Load(list, d => d.Title);
+                clientContext.ExecuteQuery();
+
+                var field = clientContext.CastTo<FieldChoice>(list.Fields.GetByInternalNameOrTitle(fieldName));
+                clientContext.Load(field, f => f.Choices);
+                clientContext.ExecuteQuery();
+
+                return field.Choices;
             }
         }
     }

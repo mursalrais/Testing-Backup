@@ -17,11 +17,13 @@ namespace MCAWebAndAPI.Service.SPUtil
         public static string ConvertToDigitNumber(int value, int numberOfDigit)
         {
             var stringNumber = value + string.Empty;
-            for(int i = 0; i< numberOfDigit - stringNumber.Length; i++)
+            while (stringNumber.Length < numberOfDigit)
             {
                 stringNumber = "0" + stringNumber;
             }
             return stringNumber;
         }
+
+
     }
 }
