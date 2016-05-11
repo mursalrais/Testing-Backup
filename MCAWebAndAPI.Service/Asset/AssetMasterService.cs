@@ -11,9 +11,9 @@ namespace MCAWebAndAPI.Service.Asset
 {
     public class AssetMasterService : IAssetMasterService
     {
-        string _siteUrl = null;
+        string _siteUrl = "https://eceos2.sharepoint.com/sites/mca-dev/dev/";
         static Logger logger = LogManager.GetCurrentClassLogger();
-        const string SP_ASSMAS_LIST_NAME = "AssetMaster";
+        const string SP_ASSMAS_LIST_NAME = "Asset Master";
 
         public void SetSiteUrl(string siteUrl)
         {
@@ -32,19 +32,20 @@ namespace MCAWebAndAPI.Service.Asset
 
         public bool CreateAssetMaster_dummy(AssetMasterVM assetMaster)
         {
-            
+
             var columnValues = new Dictionary<string, object>();
             columnValues.Add("AssetCategory", assetMaster.AssetCategory.Value);
             columnValues.Add("Title", assetMaster.AssetDesc);
-            columnValues.Add("AssetID", assetMaster.Id);
+            //columnValues.Add("AssetID", assetMaster.Id);
             columnValues.Add("AssetLevel", assetMaster.AssetLevel.Value);
-            columnValues.Add("AssetNo", assetMaster.AssetNoAssetDesc.Value);
-            columnValues.Add("AssetType",assetMaster.AssetType.Value);
-            columnValues.Add("Condition",assetMaster.Condition.Value);
-            columnValues.Add("ProjectUnit",assetMaster.ProjectUnit.Value);
-            columnValues.Add("Remarks",assetMaster.Remarks);
-            columnValues.Add("SerialNo",assetMaster.SerialNo);
+            columnValues.Add("AssetID", assetMaster.AssetNoAssetDesc.Value);
+            columnValues.Add("AssetType", assetMaster.AssetType.Value);
+            columnValues.Add("Condition", assetMaster.Condition.Value);
+            columnValues.Add("ProjectUnit", assetMaster.ProjectUnit.Value);
+            columnValues.Add("Remarks", assetMaster.Remarks);
+            columnValues.Add("SerialNo", assetMaster.SerialNo);
             columnValues.Add("Spesifications", assetMaster.Spesifications);
+            columnValues.Add("WarranyExpires", assetMaster.WarrantyExpires);
 
             try
             {
@@ -54,8 +55,10 @@ namespace MCAWebAndAPI.Service.Asset
             {
                 logger.Debug(e.Message);
             }
+            var entitiy = new AssetMasterVM();
+            entitiy = assetMaster;
             return true;
-        }        
+        }
 
         public bool UpdateAssetMaster(AssetMasterVM assetMaster)
         {
@@ -65,12 +68,12 @@ namespace MCAWebAndAPI.Service.Asset
         IEnumerable<AssetMasterVM> IAssetMasterService.GetAssetMasters()
         {
             throw new NotImplementedException();
-        }        
+        }
 
         public AssetMasterVM GetAssetMaster_Dummy()
         {
-            var viewModel = new AssetMasterVM();           
-
+            var viewModel = new AssetMasterVM();
+            viewModel.AssetNoAssetDesc.Choices = GetChoiceFromList();
             return viewModel;
         }
 
@@ -133,6 +136,17 @@ namespace MCAWebAndAPI.Service.Asset
             var result = string.Compare(assetCategory, "Fixed Asset", StringComparison.OrdinalIgnoreCase) == 0 ?
                 "FXA" : "SVA";
             return result += projectUnit + assetType;
+        }
+
+        private string[] GetChoiceFromList()
+        {
+            List<string> _choices = new List<string>();
+            var listItems = SPConnector.GetList(SP_ASSMAS_LIST_NAME, _siteUrl);
+            foreach (var item in listItems)
+            {
+                _choices.Add(item["AssetLevel"].ToString());
+            }
+            return _choices.ToArray();
         }
     }
 }
