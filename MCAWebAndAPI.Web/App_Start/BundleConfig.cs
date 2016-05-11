@@ -35,7 +35,8 @@ namespace MCAWebAndAPI.Web
                             "~/Scripts/modernizr-*"));
 
             bundles.Add(new ScriptBundle("~/bundles/apps")
-                .IncludeDirectory("~/Scripts/apps", "*.js", true));
+                .IncludeDirectory("~/Scripts/apps", "*.js", true)
+                .IncludeDirectory("~/Scripts/libs", "*.js", true));
 
             bundles.Add(new ScriptBundle("~/bundles/bi")
                 .Include("~/Scripts/bi-frame.js"));

@@ -9,7 +9,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 {
     public class AssetAcquisitionHeaderVM
     {
-        private DateTime _purchaseDate;
+        public int Id { get; set; }
+        private DateTime _warrantyExpires;
         private ComboBoxVM _acceptanceMemoNo;        
 
         public string TransactionType { get; set; }
@@ -19,14 +20,14 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
         {
             get
             {
-                if (_purchaseDate == null)
-                    _purchaseDate = new DateTime();
-                return _purchaseDate;
+                if (_warrantyExpires == null)
+                    _warrantyExpires = new DateTime();
+                return _warrantyExpires;
             }
 
             set
             {
-                _purchaseDate = value;
+                _warrantyExpires = value;
             }
         }
 

@@ -51,6 +51,17 @@ namespace MCAWebAndAPI.Web.Controllers
             return this.Jsonp(data);
         }
 
+        //public ActionResult GetRIAPriorityChart(string riaType, string siteUrl = null)
+        //{
+        //    riaService.SetSiteUrl(siteUrl);
+        //    riaType = riaType.Replace("\"", "");
+        //    riaType = riaType.Replace("\'", "");
+
+        //    var data = riaService.GetRIAPriorityChart(riaType);
+
+        //    return this.Jsonp(data);
+        //}
+
         public ActionResult GetIssuesAgeingChart(string siteUrl = null)
         {
             riaService.SetSiteUrl(siteUrl);

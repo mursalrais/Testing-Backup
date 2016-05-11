@@ -5,7 +5,6 @@ using MCAWebAndAPI.Service.SPUtil;
 using System.Collections.Generic;
 using MCAWebAndAPI.Model.ViewModel.Chart;
 using Microsoft.SharePoint.Client;
-using System.Collections;
 using NLog;
 using MCAWebAndAPI.Model.ViewModel.Gantt;
 
@@ -18,16 +17,17 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
         const string SP_PROJECT_INFORMATION_LIST_NAME = "Project Information";
         const string SP_ACTIVITY_LIST_NAME = "Activity";
         const string SP_SUB_ACTIVITY_LIST_NAME = "SubActivity";
-
         string _siteUrl = null;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public TaskService()
         {
             _updatedTaskCandidates = new Dictionary<int, TaskManager>();
             _baseLineTotal = new Dictionary<DateTime, int>();
             _planTotal = new Dictionary<DateTime, int>();
             _actualTotal = new Dictionary<DateTime, int>();
-
         }
 
         /// <summary>
@@ -246,7 +246,6 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
             // update change flag
             _updatedTaskCandidates[parentID].UpdateFlag(TaskChangeFlagEnum.DUE_DATE, true);
             _updatedTaskCandidates[parentID].UpdateFlag(TaskChangeFlagEnum.DURATION, true);
-
         }
 
         void UpdateParentStartDate(int parentID, DateTime thisTaskStartDate)
@@ -518,15 +517,15 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
             }
 
             // To update the total completed tasks
+            ReCalculateTotal(ref _planTotal);
             ReCalculateTotal(ref _baseLineTotal);
             ReCalculateTotal(ref _actualTotal);
-            ReCalculateTotal(ref _planTotal);
 
             // Transform to the view models
             var result = new List<ProjectScheduleSCurveVM>();
+            AddSCurveData(ref result, _planTotal, "Forecast", "green");
             AddSCurveData(ref result, _baseLineTotal, "BaseLine", "blue");
             AddSCurveData(ref result, _actualTotal, "Actual", "red");
-            AddSCurveData(ref result, _planTotal, "Forecast", "green");
 
             return result;
         }

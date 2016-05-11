@@ -20,6 +20,10 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
         const string PENDING_STATUS = "Pending";
         const string SOLVED_STATUS = "Solved";
 
+        //const string HIGH_PRIORITY = "High";
+        //const string NORMAL_PRIORITY = "Normal";
+        //const string LOW_PRIORITY = "Low";
+
         const string UNASSIGNED = "Unassigned";
 
         string _siteUrl = null;
@@ -41,6 +45,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
                 Status = Convert.ToString(item["Status"]),
                 AssignedTo = (FieldUserValue)item["AssignedTo"] == null ? UNASSIGNED : 
                     Convert.ToString(((FieldUserValue)item["AssignedTo"]).LookupValue),
+                //Priority = Convert.ToString(item["Priority"])
             };
 
             if (string.IsNullOrEmpty(result.AssignedTo))
@@ -198,6 +203,39 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
             return results;
         }
+
+        //public IEnumerable<DonutsChartVM> GetRIAPriorityChart(string riaType)
+        //{
+        //    var items = new List<RIABase>();
+
+        //    foreach (var item in SPConnector.GetList(riaType, _siteUrl))
+        //    {
+        //        items.Add(ConvertToModel(item, riaType));
+        //    }
+
+        //    var results = new List<DonutsChartVM>();
+
+        //    results.Add(new DonutsChartVM()
+        //    {
+        //        Label = HIGH_PRIORITY,
+        //        Value = items.Count(e => string.Compare(e.Priority, HIGH_PRIORITY, StringComparison.OrdinalIgnoreCase) == 0),
+        //        Color = GraphicUtil.RED
+        //    });
+        //    results.Add(new DonutsChartVM()
+        //    {
+        //        Label = NORMAL_PRIORITY,
+        //        Value = items.Count(e => string.Compare(e.Priority, NORMAL_PRIORITY, StringComparison.OrdinalIgnoreCase) == 0),
+        //        Color = GraphicUtil.YELLOW
+        //    });
+        //    results.Add(new DonutsChartVM()
+        //    {
+        //        Label = LOW_PRIORITY,
+        //        Value = items.Count(e => string.Compare(e.Status, LOW_PRIORITY, StringComparison.OrdinalIgnoreCase) == 0),
+        //        Color = GraphicUtil.GREEN
+        //    });
+
+        //    return results;
+        //}
 
         public IEnumerable<BarChartVM> GetIssuesAgeingChart()
         {

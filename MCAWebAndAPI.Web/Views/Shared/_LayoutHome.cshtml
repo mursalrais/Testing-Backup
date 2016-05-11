@@ -17,7 +17,7 @@
     @Styles.Render("~/Content/theme")
     <link href="~/Content/home.css" rel="stylesheet" />
 
-    <script src="http://cdn.kendostatic.com/2016.1.412/js/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 
     <!-- Basic JS Libraries -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js">
@@ -27,19 +27,11 @@
     <script src="@Url.Content("~/Scripts/kendo.modernizr.custom.js")"></script>
 
 </head>
-<body class="animated fadeInDown">
+<body class="animated fadeInDown smart-style-6">
     
             @RenderBody()
        
-
-    @Scripts.Render("~/bundles/apps")
     @RenderSection("scripts", required: false)
 
-
-    <script type="text/javascript">
-        $(document).ready(function () {
-            pageSetUp();
-        })
-    </script>
 </body>
 </html>

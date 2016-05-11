@@ -16,6 +16,13 @@ namespace MCAWebAndAPI.Service.Asset
 
         bool CreateAssetAcquisition(AssetAcquisitionVM assetAcquisition);
 
+        bool CreateAssetAcquisition_dummy(AssetAcquisitionVM assetAcquisition);
+
         bool UpdateAssetAcquisition(AssetAcquisitionVM assetAcquisition);
+
+        AssetAcquisitionVM GetAssetAcquisition_Dummy();
+
+        bool CreateAssetAcquisitionItem_dummy(AssetAcquisitionItemVM assetAcquisition);
+       
     }
 }

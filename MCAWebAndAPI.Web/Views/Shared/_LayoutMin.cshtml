@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title</title>
 
     @Scripts.Render("~/bundles/modernizr")
 
@@ -26,6 +26,14 @@
     <script src="http://cdn.kendostatic.com/2016.1.412/js/jszip.min.js"></script>
     <script src="http://cdn.kendostatic.com/2016.1.412/js/kendo.all.min.js"></script>
     <script src="http://cdn.kendostatic.com/2016.1.412/js/kendo.aspnetmvc.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/libs/iframeResizer.contentWindow.min.js" defer></script>
+    <script>
+			var iFrameResizer = {
+					messageCallback: function(message){
+						alert(message,parentIFrame.getId());
+					}
+				}
+    </script>
     
     <!-- Basic JS Libraries -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js">
