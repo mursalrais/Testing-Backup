@@ -8,7 +8,7 @@ using NLog;
 
 namespace MCAWebAndAPI.Service.Asset
 {
-    public class AssetCheckResultService : IAssetCheckResultService
+    public class AssignmentofAssetService : IAssignmentofAssetService
     {
         string _siteUrl = null;
         static Logger logger = LogManager.GetCurrentClassLogger();
@@ -18,55 +18,56 @@ namespace MCAWebAndAPI.Service.Asset
             _siteUrl = siteUrl;
         }
 
-        public AssetCheckResultVM GetAssetCheckResult()
+        public AssignmentofAssetVM GetAssignmentofAsset()
         {
             throw new NotImplementedException();
         }
 
-        public bool CreateAssetCheckResult(AssetCheckResultVM assetCheckResult)
+        public bool CreateAssignmentofAsset(AssignmentofAssetVM assignmentofAsset)
         {
             throw new NotImplementedException();
         }
 
-        public bool UpdateAssetCheckResult(AssetCheckResultVM assetCheckResult)
+        public bool UpdateAssignmentofAsset(AssignmentofAssetVM assignmentofAsset)
         {
             throw new NotImplementedException();
         }
 
-        IEnumerable<AssetCheckResultVM> IAssetCheckResultService.GetAssetCheckResult()
+        IEnumerable<AssignmentofAssetVM> IAssignmentofAssetService.GetAssignmentofAsset()
         {
             throw new NotImplementedException();
         }
 
-        public bool CreateAssetCheckResult_Dummy(AssetCheckResultItemVM assetCheckResult)
+        public bool CreateAssignmentofAsset_Dummy(AssignmentofAssetItemVM assignmentofAsset)
         {
-            var entity = new AssetCheckResultItemVM();
-            entity = assetCheckResult;
+            var entity = new AssignmentofAssetItemVM();
+            entity = assignmentofAsset;
             return true;
         }
 
-        public bool UpdateAssetCheckResult_Dummy(AssetCheckResultItemVM assetCheckResult)
+        public bool UpdateAssignmentofAsset_Dummy(AssignmentofAssetItemVM assignmentofAsset)
         {
             throw new NotImplementedException();
         }
 
-        public bool DestroyAssetCheckResult_Dummy(AssetCheckResultItemVM assetCheckResult)
+        public bool DestroyAssignmentofAsset_Dummy(AssignmentofAssetItemVM assignmentofAsset)
         {
             throw new NotImplementedException();
         }
 
-        public AssetCheckResultVM GetAssetCheckResultItems_Dummy()
+        public AssignmentofAssetVM GetAssignmentofAssetItems_Dummy()
         {
-            var viewModel = new AssetCheckResultVM();
+            var viewModel = new AssignmentofAssetVM();
 
-            var list = new List<AssetCheckResultItemVM>();
-            list.Add(new AssetCheckResultItemVM()
+            var list = new List<AssignmentofAssetItemVM>();
+            list.Add(new AssignmentofAssetItemVM()
             {
-                AssetNo = 34,
+                NewAsset = "New",
                 Item = "Chair",
                 AssetDescription = "New Asset",
                 Id = 1
             });
+            viewModel.Header.TransactionType = "Cash";
             viewModel.Items = list;
 
             return viewModel;

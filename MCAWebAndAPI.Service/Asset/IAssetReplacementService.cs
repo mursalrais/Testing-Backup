@@ -16,5 +16,13 @@ namespace MCAWebAndAPI.Service.Asset
         bool CreateAssetReplacement(AssetReplacementVM assetReplacement);
 
         bool UpdateAssetReplacement(AssetReplacementVM assetReplacement);
+
+        bool CreateAssetReplacement_Dummy(AssetReplacementItemVM assetReplacement);
+
+        bool UpdateAssetReplacement_Dummy(AssetReplacementItemVM assetReplacement);
+
+        bool DestroyAssetReplacement_Dummy(AssetReplacementItemVM assetReplacement);
+
+        AssetReplacementVM GetAssetReplacementItems_Dummy();
     }
 }
