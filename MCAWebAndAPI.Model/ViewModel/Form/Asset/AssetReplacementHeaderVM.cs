@@ -12,6 +12,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
         private DateTime _purchaseDate;
         private ComboBoxVM _oldTransactionId, _purchaseDesc, _assetSubAsset, _wbs;
 
+        public int Id { get; set; }
+
         public string TransactionType { get; set; }
 
         [DisplayName("PO Line Item")]

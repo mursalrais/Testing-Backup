@@ -27,6 +27,34 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-12">
+                @(Html.Kendo().Grid(Model.Items)
+                    .Name("assignment-of-asset-items-grid")
+                    .Columns(columns =>
+                    {
+                        columns.Bound(p => p.NewAsset);
+                        columns.Bound(p => p.Item);
+                        columns.Bound(p => p.AssetNo);
+                        columns.Bound(p => p.SubAssetNo);
+                        columns.Bound(p => p.AssetDescription);
+                        columns.Bound(p => p.OfficeName);
+                        columns.Bound(p => p.FloorName);
+                        columns.Bound(p => p.RoomName);
+                        columns.Command(command => { command.Edit(); command.Destroy(); }).Width(250);
+                    })
+                    .ToolBar(toolbar => toolbar.Create())
+                    .Editable(editable => editable.Mode(GridEditMode.PopUp))
+                    .DataSource(dataSource => dataSource
+                        .Ajax()
+                        .Model(model => model.Id(p => p.Id))
+                        .Create(update => update.Action("EditingPopup_Create", "ASSAssignmentofAsset"))
+                        .Update(update => update.Action("EditingPopup_Update", "ASSAssignmentofAsset"))
+                        .Destroy(update => update.Action("EditingPopup_Destroy", "ASSAssignmentofAsset"))
+                )
+                )
+            </div>
+        </div>
     </fieldset>
 
 </form>

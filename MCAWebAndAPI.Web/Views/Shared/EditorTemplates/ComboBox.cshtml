@@ -1,11 +1,11 @@
 ﻿@model MCAWebAndAPI.Model.ViewModel.Control.ComboBoxVM
 
-@(
- Html.Kendo().DropDownListFor(m => m.Value)
+@(Html.Kendo().DropDownListFor(m => m)
         .BindTo(Model.Choices)
+        .DataValueField("Value")
         .Filter("contains")
-        .Value(Model.DefaultValue)
-        .HtmlAttributes(new {
+        .HtmlAttributes(new
+        {
             @class = "form-control",
             style = "width:100%;"
         })

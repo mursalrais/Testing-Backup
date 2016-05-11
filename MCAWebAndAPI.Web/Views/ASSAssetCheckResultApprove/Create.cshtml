@@ -2,7 +2,7 @@
 
 @model AssetCheckResultApproveVM
 
-<form class="form-horizontal" method="post" action="/ASSAssetCheckResult/Create" id="create-asset-check-result">
+<form class="form-horizontal" method="post" action="/ASSAssetCheckResultApprove/Create" id="create-asset-check-result-approve">
     <fieldset>
         <legend>Form Asset Check Result</legend>
         <div class="col-md-6">
@@ -45,6 +45,38 @@
                 <div class="col-md-8" style="float:right">
                     <a style="float:right" class="btn btn-default" href="#">Get Data</a>
                 </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                @(Html.Kendo().Grid(Model.Items)
+                    .Name("asset-check-result-approve-items-grid")
+                    .Columns(columns =>
+                    {
+                        columns.Bound(p => p.Item);
+                        columns.Bound(p => p.AssetNo);
+                        columns.Bound(p => p.SubAssetNo);
+                        columns.Bound(p => p.AssetDescription);
+                        columns.Bound(p => p.SerialNo);
+                        columns.Bound(p => p.LocationName);
+                        columns.Bound(p => p.Status);
+                        columns.Bound(p => p.SystemQty);
+                        columns.Bound(p => p.PhysicalQty);
+                        columns.Bound(p => p.DifferentQty);
+                        columns.Bound(p => p.Scrap);
+                        columns.Bound(p => p.Remarks);
+                        columns.Command(command => { command.Edit(); command.Destroy(); }).Width(250);
+                    })
+                    .ToolBar(toolbar => toolbar.Create())
+                    .Editable(editable => editable.Mode(GridEditMode.PopUp))
+                    .DataSource(dataSource => dataSource
+                        .Ajax()
+                        .Model(model => model.Id(p => p.Id))
+                        .Create(update => update.Action("EditingPopup_Create", "ASSAssetCheckResultApprove"))
+                        .Update(update => update.Action("EditingPopup_Update", "ASSAssetCheckResultApprove"))
+                        .Destroy(update => update.Action("EditingPopup_Destroy", "ASSAssetCheckResultApprove"))
+                )
+                )
             </div>
         </div>
     </fieldset>

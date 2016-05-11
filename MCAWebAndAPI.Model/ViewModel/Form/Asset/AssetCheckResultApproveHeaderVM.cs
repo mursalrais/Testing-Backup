@@ -3,12 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MCAWebAndAPI.Model.ViewModel.Control;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 {
     public class AssetCheckResultApproveHeaderVM
     {
         private DateTime _createDate, _countDate;
+
+        public int Id { get; set; }
 
         public DateTime CountDate
         {

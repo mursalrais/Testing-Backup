@@ -16,5 +16,13 @@ namespace MCAWebAndAPI.Service.Asset
         bool CreateAssetScrapping(AssetScrappingVM assetScrapping);
 
         bool UpdateAssetScrapping(AssetScrappingVM assetScrapping);
+
+        bool CreateAssetScrapping_Dummy(AssetScrappingItemVM assetScrapping);
+
+        bool UpdateAssetScrapping_Dummy(AssetScrappingItemVM assetScrapping);
+
+        bool DestroyAssetScrapping_Dummy(AssetScrappingItemVM assetScrapping);
+
+        AssetScrappingVM GetssetScrappingItems_Dummy();
     }
 }

@@ -67,9 +67,11 @@ namespace MCAWebAndAPI.Service.Asset
             throw new NotImplementedException();
         }        
 
-        public AssetMasterVM GetAssetMaster_Dummy(AssetMasterVM assetMaster)
+        public AssetMasterVM GetAssetMaster_Dummy()
         {
-            throw new NotImplementedException();
+            var viewModel = new AssetMasterVM();           
+
+            return viewModel;
         }
 
         private string GenerateAssetID(AssetMasterVM assetMaster)

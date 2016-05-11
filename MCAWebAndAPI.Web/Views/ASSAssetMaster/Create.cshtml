@@ -5,8 +5,9 @@
 <form class="form-horizontal" method="post" action="/ASSAssetMaster/Submit" id="create-asset-master-form">
     <fieldset>
         <legend>Form Asset Master</legend>
+
         <div class="col-md-12">
-            <div class="form-group" >
+            <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.AssetLevel).Class("col-md-4 control-label")
                 <div class="col-md-8">
                     @Html.EditorFor(m => m.AssetLevel)
@@ -78,7 +79,7 @@
     </fieldset>
 
 </form>
-<script type="text/javascript">
+@*<script type="text/javascript">
     function error_handler(e) {
         if (e.errors) {
             var message = "Errors:\n";
@@ -100,6 +101,6 @@
         });
 
     });
-</script>
+</script>*@
 
 
