@@ -104,13 +104,15 @@ namespace MCAWebAndAPI.Service.Asset
         {
             var caml = @"<View>  
                 <Query> 
-                    <Where><Contains><FieldRef Name='AssetID' /><Value Type='Text'>AA" 
+                    <Where><Contains><FieldRef Name='AssetID' /><Value Type='Text'>" 
                 + assetID
                 + @"</Value></Contains></Where> 
                 </Query> 
                 <ViewFields><FieldRef Name='AssetID' /></ViewFields> 
             </View>";
             var listItem = SPConnector.GetList(SP_ASSMAS_LIST_NAME, _siteUrl, caml);
+            if (listItem.Count == 0) // if not found
+                return 1; 
 
             var numbers = new List<int>();
             foreach(var item in listItem)
