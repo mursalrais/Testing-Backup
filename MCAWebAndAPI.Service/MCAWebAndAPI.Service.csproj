@@ -64,6 +64,7 @@
     <Compile Include="Asset\IAssetCheckResultService.cs" />
     <Compile Include="Asset\IAssetFixedAssetService.cs" />
     <Compile Include="Asset\IAssetLoanAndReturnService.cs" />
+    <Compile Include="Asset\IAssetMasterService1.cs" />
     <Compile Include="Asset\IAssetReplacementService.cs" />
     <Compile Include="Asset\IAssetScrappingService.cs" />
     <Compile Include="Asset\IAssetSmallValueAssetService.cs" />
@@ -85,7 +86,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="ResourceAndContract\" />
+    <Folder Include="HR\Common\" />
+    <Folder Include="HR\Leave\" />
+    <Folder Include="HR\Payroll\" />
+    <Folder Include="HR\Recruitment\" />
+    <Folder Include="HR\Travel\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MCAWebAndAPI.Model\MCAWebAndAPI.Model.csproj">

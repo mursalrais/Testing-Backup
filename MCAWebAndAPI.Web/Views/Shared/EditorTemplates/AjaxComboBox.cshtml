@@ -1,0 +1,12 @@
+﻿@model MCAWebAndAPI.Model.ViewModel.Control.AjaxComboBoxVM
+
+@(Html.Kendo().DropDownListFor(m => m.Value)
+        .DataTextField(Model.TextField)
+        .DataValueField(Model.ValueField)
+        .Filter("contains")
+        .HtmlAttributes(new
+        {
+            @class = "form-control",
+            style = "width:100%;"
+        })
+)

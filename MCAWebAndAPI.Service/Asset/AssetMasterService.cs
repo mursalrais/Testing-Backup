@@ -62,11 +62,6 @@ namespace MCAWebAndAPI.Service.Asset
             throw new NotImplementedException();
         }
 
-        IEnumerable<AssetMasterVM> IAssetMasterService.GetAssetMasters()
-        {
-            throw new NotImplementedException();
-        }        
-
         public AssetMasterVM GetAssetMaster_Dummy()
         {
             var viewModel = new AssetMasterVM();           
