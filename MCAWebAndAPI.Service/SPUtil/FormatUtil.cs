@@ -24,6 +24,5 @@ namespace MCAWebAndAPI.Service.SPUtil
             return stringNumber;
         }
 
-
     }
 }

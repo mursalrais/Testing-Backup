@@ -48,6 +48,10 @@ body.smart-style-6 #content {
     float: right !important;
 }
 
+.form-group {
+    padding: 20px 0 !important;
+}
+
 body.animated.fadeInDown #header{
     height: 100px !important;
 }

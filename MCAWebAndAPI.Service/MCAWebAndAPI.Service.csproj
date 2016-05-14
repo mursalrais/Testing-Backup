@@ -56,6 +56,7 @@
     <Compile Include="Asset\AssetReplacementService.cs" />
     <Compile Include="Asset\AssetScrappingService.cs" />
     <Compile Include="Asset\AssetSmallValueAssetService.cs" />
+    <Compile Include="Asset\AssetTransactionService.cs" />
     <Compile Include="Asset\AssetTransferService.cs" />
     <Compile Include="Asset\AssignmentofAssetService.cs" />
     <Compile Include="Asset\IAssetAcquisitionService.cs" />
@@ -64,13 +65,17 @@
     <Compile Include="Asset\IAssetCheckResultService.cs" />
     <Compile Include="Asset\IAssetFixedAssetService.cs" />
     <Compile Include="Asset\IAssetLoanAndReturnService.cs" />
+    <Compile Include="Asset\IAssetMasterService.cs.cs" />
     <Compile Include="Asset\IAssetReplacementService.cs" />
     <Compile Include="Asset\IAssetScrappingService.cs" />
     <Compile Include="Asset\IAssetSmallValueAssetService.cs" />
+    <Compile Include="Asset\IAssetTransactionService.cs" />
     <Compile Include="Asset\IAssetTransferService.cs" />
     <Compile Include="Asset\IAssignmentofAssetService.cs" />
     <Compile Include="Finance\EventBudgetService.cs" />
     <Compile Include="Finance\IEventBudgetService.cs" />
+    <Compile Include="HR\Common\DataMasterService.cs" />
+    <Compile Include="HR\Common\IDataMasterService.cs" />
     <Compile Include="ProjectManagement\Common\IProjectHierarchyService.cs" />
     <Compile Include="ProjectManagement\Common\ProjectHierarchyService.cs" />
     <Compile Include="ProjectManagement\Schedule\CalendarService.cs" />
@@ -80,13 +85,13 @@
     <Compile Include="SPUtil\FormatUtil.cs" />
     <Compile Include="SPUtil\GraphicUtil.cs" />
     <Compile Include="SPUtil\MathUtil.cs" />
+    <Compile Include="SPUtil\ModelMappingUtil.cs" />
     <Compile Include="SPUtil\SPConnector.cs" />
     <Compile Include="ProjectManagement\Schedule\ITaskService.cs" />
     <Compile Include="ProjectManagement\Schedule\TaskService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="HR\Common\" />
     <Folder Include="HR\Leave\" />
     <Folder Include="HR\Payroll\" />
     <Folder Include="HR\Recruitment\" />

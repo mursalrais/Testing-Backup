@@ -35,11 +35,22 @@ namespace MCAWebAndAPI.Web
                             "~/Scripts/modernizr-*"));
 
             bundles.Add(new ScriptBundle("~/bundles/apps")
-                .IncludeDirectory("~/Scripts/apps", "*.js", true)
-                .IncludeDirectory("~/Scripts/libs", "*.js", true));
+                .IncludeDirectory("~/Scripts/apps", "*.js", true));
+
+            bundles.Add(new ScriptBundle("~/bundles/libScripts")
+                .Include(
+                "~/Scripts/libs/jquery.min",
+                "~/Scripts/libs/jszip.min.js",
+                "~/Scripts/libs/pako_deflate.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/bi")
                 .Include("~/Scripts/bi-frame.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/kendo")
+                .Include("~/Scripts/kendo/2016.2.504/kendo.all.min.js",
+                 "~/Scripts/kendo/2016.2.504/kendo.aspnetmvc.min.js"));
+
+
 
             ScriptManager.ScriptResourceMapping.AddDefinition(
                 "respond",
@@ -58,6 +69,13 @@ namespace MCAWebAndAPI.Web
 
             bundles.Add(new StyleBundle("~/Content/bi").Include(
                 "~/Content/bi.css"));
+
+            bundles.Add(new StyleBundle("~/Content/kendo").Include(
+                "~/Content/kendo/2016.2.504/kendo.common-fiori.min.css",
+                "~/Content/kendo/2016.2.504/kendo.fiori.min.css",
+                "~/Content/kendo/2016.2.504/kendo.dataviz.fiori.min.css"));
+
+
         }
     }
 }

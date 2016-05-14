@@ -18,22 +18,22 @@ namespace MCAWebAndAPI.Service.Asset
             _siteUrl = siteUrl;
         }
 
-        public AssetTransferVM GetAssetTransfers()
+        public AssetTransactionVM GetAssetTransfers()
         {
             throw new NotImplementedException();
         }
 
-        public bool CreateAssetTransfer(AssetTransferVM assetTransfer)
+        public bool CreateAssetTransfer(AssetTransactionVM assetTransfer)
         {
             throw new NotImplementedException();
         }
 
-        public bool UpdateAssetTransfer(AssetTransferVM assetTransfer)
+        public bool UpdateAssetTransfer(AssetTransactionVM assetTransfer)
         {
             throw new NotImplementedException();
         }
 
-        IEnumerable<AssetTransferVM> IAssetTransferService.GetAssetTransfers()
+        IEnumerable<AssetTransactionVM> IAssetTransferService.GetAssetTransfers()
         {
             throw new NotImplementedException();
         }

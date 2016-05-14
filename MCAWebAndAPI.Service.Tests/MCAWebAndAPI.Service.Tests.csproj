@@ -54,7 +54,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="FormatUtilTest.cs" />
+    <Compile Include="Common\FormatUtilTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -62,6 +62,11 @@
       <Project>{529feab6-e31e-4332-a499-75240b2c85ed}</Project>
       <Name>MCAWebAndAPI.Service</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Assets\" />
+    <Folder Include="HR\" />
+    <Folder Include="Project Management\" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

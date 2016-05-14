@@ -12,10 +12,10 @@ namespace MCAWebAndAPI.Service.Asset
     {
         void SetSiteUrl(string siteUrl);
 
-        IEnumerable<AssetTransferVM> GetAssetTransfers();
+        IEnumerable<AssetTransactionVM> GetAssetTransfers();
 
-        bool CreateAssetTransfer(AssetTransferVM assetTransfer);
+        bool CreateAssetTransfer(AssetTransactionVM assetTransfer);
 
-        bool UpdateAssetTransfer(AssetTransferVM assetTransfer);
+        bool UpdateAssetTransfer(AssetTransactionVM assetTransfer);
     }
 }

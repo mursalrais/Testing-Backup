@@ -6,7 +6,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 {
     public class EventBudgetItemVM
     {
-        private ComboBoxVM _category;
+        ComboBoxVM _category;
 
         public string Description { get; set; }
 

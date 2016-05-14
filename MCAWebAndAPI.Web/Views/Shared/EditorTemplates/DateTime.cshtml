@@ -1,8 +1,8 @@
 @model DateTime?
 
-@(Html.Kendo().DatePickerFor(m => m)
-    .Format("dd-MM-yyyy")
-    .HtmlAttributes(new {
+
+@(Html.Kendo().DateTimePickerFor(m => m).Culture("id-ID").HtmlAttributes(new
+{
     @class = "form-control",
     style = "width:100%;"
 }))
