@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using MCAWebAndAPI.Model.ProjectManagement.Schedule;
 using NLog;
 using Microsoft.SharePoint.Client;
-using MCAWebAndAPI.Service.SPUtil;
+using MCAWebAndAPI.Service.Utils;
 
 namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 {

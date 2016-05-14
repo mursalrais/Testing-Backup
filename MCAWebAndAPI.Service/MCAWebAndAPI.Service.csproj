@@ -82,11 +82,11 @@
     <Compile Include="ProjectManagement\Schedule\ICalendarService.cs" />
     <Compile Include="ProjectManagement\Schedule\IRIAService.cs" />
     <Compile Include="ProjectManagement\Schedule\RIAService.cs" />
-    <Compile Include="SPUtil\FormatUtil.cs" />
-    <Compile Include="SPUtil\GraphicUtil.cs" />
-    <Compile Include="SPUtil\MathUtil.cs" />
-    <Compile Include="SPUtil\ModelMappingUtil.cs" />
-    <Compile Include="SPUtil\SPConnector.cs" />
+    <Compile Include="Utils\FormatUtil.cs" />
+    <Compile Include="Utils\GraphicUtil.cs" />
+    <Compile Include="Utils\MathUtil.cs" />
+    <Compile Include="Utils\ModelMappingUtil.cs" />
+    <Compile Include="Utils\SPConnector.cs" />
     <Compile Include="ProjectManagement\Schedule\ITaskService.cs" />
     <Compile Include="ProjectManagement\Schedule\TaskService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

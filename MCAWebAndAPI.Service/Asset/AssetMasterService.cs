@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MCAWebAndAPI.Model.ViewModel.Form.Asset;
 using NLog;
-using MCAWebAndAPI.Service.SPUtil;
+using MCAWebAndAPI.Service.Utils;
 
 namespace MCAWebAndAPI.Service.Asset
 {

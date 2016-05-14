@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MCAWebAndAPI.Model.ProjectManagement.Common;
 using MCAWebAndAPI.Model.ViewModel.Chart;
-using MCAWebAndAPI.Service.SPUtil;
+using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
 using NLog;
 

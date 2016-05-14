@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MCAWebAndAPI.Service.SPUtil
+namespace MCAWebAndAPI.Service.Utils
 {
     public class ModelMappingUtil
     {

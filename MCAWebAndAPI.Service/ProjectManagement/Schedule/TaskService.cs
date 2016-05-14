@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using MCAWebAndAPI.Model.ProjectManagement.Schedule;
-using MCAWebAndAPI.Service.SPUtil;
+using MCAWebAndAPI.Service.Utils;
 using System.Collections.Generic;
 using MCAWebAndAPI.Model.ViewModel.Chart;
 using Microsoft.SharePoint.Client;

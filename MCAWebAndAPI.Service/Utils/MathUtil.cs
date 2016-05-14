@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MCAWebAndAPI.Service.SPUtil
+namespace MCAWebAndAPI.Service.Utils
 {
     public class MathUtil
     {

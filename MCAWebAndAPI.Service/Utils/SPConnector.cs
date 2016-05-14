@@ -4,7 +4,7 @@ using System.Security;
 using System.Collections.Generic;
 using System.Net;
 
-namespace MCAWebAndAPI.Service.SPUtil
+namespace MCAWebAndAPI.Service.Utils
 {
     public class SPConnector
     {
