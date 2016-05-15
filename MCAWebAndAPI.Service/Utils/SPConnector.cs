@@ -3,6 +3,7 @@ using Microsoft.SharePoint.Client;
 using System.Security;
 using System.Collections.Generic;
 using System.Net;
+using System;
 
 namespace MCAWebAndAPI.Service.Utils
 {
@@ -25,7 +26,27 @@ namespace MCAWebAndAPI.Service.Utils
                 UserName = "admin.sharepoint@mca-indonesia.go.id";
                 Password = "admin123$";
             }
-        } 
+        }
+
+        internal static int GetInsertedItemID(string listName, string siteUrl = null, string caml = null)
+        {
+            string camlViewXml = caml ?? @"<View>  
+            <Query> 
+               <OrderBy><FieldRef Name='ID' Ascending='FALSE' /><FieldRef Name='ID' Ascending='FALSE' /></OrderBy> 
+            </Query> 
+                <ViewFields><FieldRef Name='ID' /></ViewFields> 
+            <RowLimit>1</RowLimit> 
+            </View>";
+
+            var result = 1;
+            var list = GetList(listName, siteUrl, camlViewXml);
+            foreach(var item in list)
+            {
+                result = Convert.ToInt32(item["ID"]);
+            }
+
+            return result;
+        }
 
         public static ListItemCollection GetList(string listName, string siteUrl = null, string caml = null)
         {
@@ -128,12 +149,6 @@ namespace MCAWebAndAPI.Service.Utils
         {
             using (ClientContext clientContext = new ClientContext(siteUrl ?? CurUrl))
             {
-                //List<portalfile> fileList = new List<portalfile>();
-
-                //var domain = siteUrl ?? CurUrl;
-                //var username = UserName;
-                //var password = Password;
-                //clientContext.Credentials = new NetworkCredential(username, password, domain);
 
                 SecureString secureString = new SecureString();
                 Password.ToList().ForEach(secureString.AppendChar);

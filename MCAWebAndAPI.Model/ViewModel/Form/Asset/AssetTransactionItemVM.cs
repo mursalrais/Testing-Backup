@@ -7,11 +7,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 {
     public class AssetTransactionItemVM
     {  
-        public int Header_ID { get; set; }
+        public int? Header_ID { get; set; }
 
-        public int ID { get; set; }
-
-        public InGridComboBoxVM Asset { get; set; }
+        public int? ID { get; set; }
 
         [UIHint("InGridComboBox")]
         [DisplayName("Location (from)")]
@@ -49,7 +47,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 
         InGridComboBoxVM _locationFrom;
         InGridComboBoxVM _locationTo;
-        InGridComboBoxVM _assetID;
+        AjaxComboBoxVM _asset;
         InGridComboBoxVM _WBS;
 
         [UIHint("CurrencyIDR")]
@@ -60,23 +58,30 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
         [DisplayName("Cost (USD)")]
         public decimal? CostUSD { get; set; }
 
-        public DateTime ReturnDate { get; set; }
+        [UIHint("Date")]
+        public DateTime? ReturnDate { get; set; }
 
         public string Remarks { get; set; }
 
-        [UIHint("InGridComboBox")]
+        [UIHint("AjaxComboBoxVM")]
         [DisplayName("Asset")]
-        public InGridComboBoxVM AssetID
+        public AjaxComboBoxVM Asset
         {
             get
             {
-                if (_assetID == null)
-                    return new InGridComboBoxVM();
-                return _assetID;
+                if (_asset == null)
+                    return new AjaxComboBoxVM
+                    {
+                        ActionName = "GetAssetMasters",
+                        ControllerName = "ASSAssetMaster",
+                        TextField = "Text",
+                        ValueField = "ID"
+                    };
+                return _asset;
             }
             set
             {
-                _assetID = value;
+                _asset = value;
             }
         }
 

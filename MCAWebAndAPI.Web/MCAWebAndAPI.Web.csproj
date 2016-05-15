@@ -652,6 +652,7 @@
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\kendo.modernizr.custom.js" />
+    <Content Include="Scripts\kendo\2016.2.504\kendo.culture.id-ID.min.js" />
     <Content Include="Scripts\libs\angular.min.js" />
     <Content Include="Scripts\libs\jquery.min.js" />
     <Content Include="Scripts\libs\jszip.min.js" />
@@ -978,6 +979,7 @@
     <Content Include="Scripts\kendo\2016.2.504\kendo.window.min.js.map" />
     <Content Include="Views\Shared\EditorTemplates\InGridComboBox.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\CurrencyUSD.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\InGridAjaxComboBox.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1011,11 +1013,18 @@
     <Compile Include="Controllers\PurchaseOrderController.cs" />
     <Compile Include="Controllers\RIAController.cs" />
     <Compile Include="Controllers\TaskController.cs" />
+    <Compile Include="Filters\JsonHandleErrorAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\JsonpResult.cs" />
+    <Compile Include="Helpers\Populator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\ConfigResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ConfigResource.resx</DependentUpon>
+    </Compile>
     <Compile Include="Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1053,6 +1062,13 @@
       <Project>{529feab6-e31e-4332-a499-75240b2c85ed}</Project>
       <Name>MCAWebAndAPI.Service</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\ConfigResource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ConfigResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>MCAWebAndAPI.Web.Resources</CustomToolNamespace>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

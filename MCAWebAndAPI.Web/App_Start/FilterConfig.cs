@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using MCAWebAndAPI.Web.Filters;
 using System.Web.Mvc;
 
 namespace MCAWebAndAPI.Web
@@ -11,6 +8,7 @@ namespace MCAWebAndAPI.Web
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.Add(new HandleErrorAttribute());
+            filters.Add(new JsonHandleErrorAttribute());
         }
     }
 }

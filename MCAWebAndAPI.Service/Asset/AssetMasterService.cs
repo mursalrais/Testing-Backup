@@ -17,7 +17,7 @@ namespace MCAWebAndAPI.Service.Asset
 
         public void SetSiteUrl(string siteUrl)
         {
-            _siteUrl = siteUrl;
+            _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
         }
 
         public AssetMasterVM GetAssetMasters()
@@ -67,7 +67,17 @@ namespace MCAWebAndAPI.Service.Asset
 
         IEnumerable<AssetMasterVM> IAssetMasterService.GetAssetMasters()
         {
-            throw new NotImplementedException();
+            var viewModels = new List<AssetMasterVM>();
+
+            foreach(var item in SPConnector.GetList(SP_ASSMAS_LIST_NAME, _siteUrl))
+            {
+                viewModels.Add(new AssetMasterVM {
+                    Id = Convert.ToInt32(item["ID"]), 
+                    AssetDesc = Convert.ToString(item["Title"])
+                });
+            }
+
+            return viewModels;
         }
 
         public AssetMasterVM GetAssetMaster_Dummy()

@@ -24,5 +24,18 @@ namespace MCAWebAndAPI.Service.Utils
             return stringNumber;
         }
 
+        public static string ConvertToCleanSiteUrl(string siteUrl)
+        {
+            var result = string.Empty;
+            if (siteUrl != null)
+            {
+                result = siteUrl;
+                result = result.Replace("\"", "");
+                result = result.Replace("\'", "");
+            }
+
+            return result;
+        }
+
     }
 }

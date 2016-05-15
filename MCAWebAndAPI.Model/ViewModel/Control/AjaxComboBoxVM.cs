@@ -39,5 +39,11 @@ namespace MCAWebAndAPI.Model.ViewModel.Control
         /// </summary>
         public string ActionName { get; set; }
 
+        /// <summary>
+        /// Define custom onSelectEventName
+        /// </summary>
+        public string OnSelectEventName { get; set; }
+
+
     }
 }

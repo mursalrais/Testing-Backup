@@ -18,18 +18,32 @@ namespace MCAWebAndAPI.Service.Asset
 
         public int CreateHeader(AssetTransactionHeaderVM header)
         {
-            throw new NotImplementedException();
+            var updatedValues = new Dictionary<string, object>();
+            updatedValues.Add("TransactionType", header.TransactionType);
+            updatedValues.Add("AssignmentDate", header.Date);
+            updatedValues.Add("HolderID", new FieldLookupValue { LookupId  = Convert.ToInt32(header.AssetHolderFrom.Value) } );
+            updatedValues.Add("HolderIDTo", new FieldLookupValue { LookupId = Convert.ToInt32(header.AssetHolderTo.Value) });
+
+            try
+            {
+                SPConnector.AddListItem(SP_HEADER_LIST_NAME, updatedValues, _siteUrl);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.Message);
+            }
+            
+            return SPConnector.GetInsertedItemID(SP_HEADER_LIST_NAME);
         }
 
         public int CreateItem(int headerID, AssetTransactionItemVM item)
         {
             var updatedValues = new Dictionary<string, object>();
             updatedValues.Add("TransactionID", new FieldLookupValue { LookupId = headerID });
-            updatedValues.Add("LocationID", new FieldLookupValue { LookupId = item.LocationFrom.ID });
-            updatedValues.Add("LocationIDTo", new FieldLookupValue { LookupId = item.LocationTo.ID });
+            updatedValues.Add("LocationID", new FieldLookupValue { LookupId = item.LocationFrom.CategoryID });
+            updatedValues.Add("LocationIDTo", new FieldLookupValue { LookupId = item.LocationTo.CategoryID });
             updatedValues.Add("CostIDR", item.CostIDR);
             updatedValues.Add("CostUSD", item.CostUSD);
-
 
             SPConnector.AddListItem(SP_ITEMS_LIST_NAME, updatedValues, _siteUrl);
 
@@ -49,19 +63,20 @@ namespace MCAWebAndAPI.Service.Asset
 
         public IEnumerable<AssetTransactionItemVM> GetItems(int headerID)
         {
+            //TODO: Put filter get items having FK = header ID
             var caml = "";
 
             var listItems = SPConnector.GetList(SP_ITEMS_LIST_NAME, _siteUrl, caml);
             var viewModels = new List<AssetTransactionItemVM>();
             foreach (var item in listItems)
             {
-                viewModels.Add(ConvertListItemToAssetTransactionItemVM(item));
+                viewModels.Add(ConvertToAssetTransactionItemVM(item));
             }
 
             return viewModels;
         }
 
-        private AssetTransactionItemVM ConvertListItemToAssetTransactionItemVM(ListItem item)
+        private AssetTransactionItemVM ConvertToAssetTransactionItemVM(ListItem item)
         {
             throw new NotImplementedException();
         }
@@ -69,28 +84,17 @@ namespace MCAWebAndAPI.Service.Asset
         public AssetTransactionVM GetPopulatedModel(int? id = null)
         {
             var model = new AssetTransactionVM();
-            var header = new AssetTransactionHeaderVM();
-            header.AssetHolderFrom = ModelMappingUtil.ConfigAjaxComboBoxVM("HRDataMaster", "GetProfessionals", "ProfessionalID", "ProfessionalDesc");
-            header.AssetHolderTo = ModelMappingUtil.ConfigAjaxComboBoxVM("HRDataMaster", "GetProfessionals", "ProfessionalID", "ProfessionalDesc");
-
-            // Edit Mode
-            if (id != null)
-            {
-                
-            }
-
-            model.Header = header;
             return model;
         }
 
         public void SetSiteUrl(string siteUrl)
         {
-            _siteUrl = siteUrl;
+            _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
         }
 
-        public void UpdateHeader(AssetTransactionItemVM header)
+        public void UpdateHeader(AssetTransactionHeaderVM header)
         {
-            throw new NotImplementedException();
+            
         }
 
         public void UpdateItem(AssetTransactionItemVM item)

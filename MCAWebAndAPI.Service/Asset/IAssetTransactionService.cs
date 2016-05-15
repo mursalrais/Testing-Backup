@@ -23,7 +23,7 @@ namespace MCAWebAndAPI.Service.Asset
 
         int CreateItem(int headerID, AssetTransactionItemVM item);
 
-        void UpdateHeader(AssetTransactionItemVM header);
+        void UpdateHeader(AssetTransactionHeaderVM header);
 
         void UpdateItem(AssetTransactionItemVM item);
 

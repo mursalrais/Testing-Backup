@@ -36,12 +36,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
         /// <param name="siteUrl">SPWeb Absolute URL</param>
         public void SetSiteUrl(string siteUrl)
         {
-            if (siteUrl != null)
-            {
-                _siteUrl = siteUrl;
-                _siteUrl = _siteUrl.Replace("\"", "");
-                _siteUrl = _siteUrl.Replace("\'", "");
-            }
+            _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
         }
 
 

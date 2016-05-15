@@ -1,6 +1,6 @@
 ﻿@model MCAWebAndAPI.Model.ViewModel.Control.InGridComboBoxVM
 
 @(Html.Kendo().DropDownListFor(m => m)
-        .DataValueField("ID")
-        .DataTextField("Text")
-        .BindTo((System.Collections.IEnumerable)ViewData["InGridComboBoxItems"]))
+        .DataValueField("CategoryID")
+        .DataTextField("CategoryName")
+        .BindTo((System.Collections.IEnumerable)ViewData["InGridComboBoxVM"]))

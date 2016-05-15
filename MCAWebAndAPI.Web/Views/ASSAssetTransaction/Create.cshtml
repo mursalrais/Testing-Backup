@@ -8,72 +8,71 @@
                 {
                     OnSuccess = "onSuccess",
                     OnFailure = "onFailure"
-                }))
+                }, new { @class = "form-horizontal" }))
 {<fieldset>
         <legend>Form Asset Transfer</legend>
         @Html.AntiForgeryToken()
         @Html.ValidationSummary()
 
-        <div class="col-md-6">
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.TransactionType).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.DisplayFor(m => m.Header.TransactionType)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.AssetHolderFrom).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.Header.AssetHolderFrom)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.ContactNoFrom).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.DisplayFor(m => m.Header.ContactNoFrom)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.ProjectUnitFrom).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.DisplayFor(m => m.Header.ProjectUnitFrom)
-                </div>
-            </div>
-        </div>
+         <div class="col-md-6">
+             <div class="form-group">
+                 @Html.Bootstrap().LabelFor(m => m.Header.TransactionType).Class("col-md-4 control-label")
+                 <div class="col-md-8">
+                     @Html.DisplayFor(m => m.Header.TransactionType)
+                 </div>
+             </div>
+             <div class="form-group">
+                 @Html.Bootstrap().LabelFor(m => m.Header.AssetHolderFrom).Class("col-md-4 control-label")
+                 <div class="col-md-8">
+                     @Html.EditorFor(m => m.Header.AssetHolderFrom)
+                 </div>
+             </div>
+             <div class="form-group">
+                 @Html.Bootstrap().LabelFor(m => m.Header.ContactNoFrom).Class("col-md-4 control-label")
+                 <div class="col-md-8">
+                     @Html.DisplayFor(m => m.Header.ContactNoFrom)
+                 </div>
+             </div>
+             <div class="form-group">
+                 @Html.Bootstrap().LabelFor(m => m.Header.ProjectUnitFrom).Class("col-md-4 control-label")
+                 <div class="col-md-8">
+                     @Html.DisplayFor(m => m.Header.ProjectUnitFrom)
+                 </div>
+             </div>
+         </div>
 
-        <div class="col-md-6">
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.Date).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.Header.Date)
-                </div>
-            </div>  
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.AssetHolderTo).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.Header.AssetHolderTo)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.ContactNoTo).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.DisplayFor(m => m.Header.ContactNoTo)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.ProjectUnitTo).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.DisplayFor(m => m.Header.ProjectUnitTo)
-                </div>
-            </div>
-        </div>
-     @Html.Bootstrap().SubmitButton().Text("Submit")
-
-    </fieldset>
+         <div class="col-md-6">
+             <div class="form-group">
+                 @Html.Bootstrap().LabelFor(m => m.Header.Date).Class("col-md-4 control-label")
+                 <div class="col-md-8">
+                     @Html.EditorFor(m => m.Header.Date)
+                 </div>
+             </div>
+             <div class="form-group">
+                 @Html.Bootstrap().LabelFor(m => m.Header.AssetHolderTo).Class("col-md-4 control-label")
+                 <div class="col-md-8">
+                     @Html.EditorFor(m => m.Header.AssetHolderTo)
+                 </div>
+             </div>
+             <div class="form-group">
+                 @Html.Bootstrap().LabelFor(m => m.Header.ContactNoTo).Class("col-md-4 control-label")
+                 <div class="col-md-8">
+                     @Html.DisplayFor(m => m.Header.ContactNoTo)
+                 </div>
+             </div>
+             <div class="form-group">
+                 @Html.Bootstrap().LabelFor(m => m.Header.ProjectUnitTo).Class("col-md-4 control-label")
+                 <div class="col-md-8">
+                     @Html.DisplayFor(m => m.Header.ProjectUnitTo)
+                 </div>
+             </div>
+         </div>
+ </fieldset>
 }
 
-<div class="col-md-12">
-    @(Html.Kendo().Grid(Model.Items)
+<div class="row">
+    <div class="col-md-12">
+        @(Html.Kendo().Grid<AssetTransactionItemVM>()
             .Name("GridItem")
             .Pageable()
             .Sortable()
@@ -86,30 +85,49 @@
             .Editable(editable => editable.Mode(GridEditMode.InCell))
             .Columns(columns =>
             {
-                columns.Bound(p => p.Asset);
+                columns.Bound(p => p.Asset).Filterable(false).EditorTemplateName("AjaxComboBox");
                 columns.Bound(p => p.LocationFrom);
                 columns.Bound(p => p.LocationTo).Width(120);
                 columns.Bound(p => p.CostIDR).Width(120);
                 columns.Bound(p => p.CostUSD).Width(120);
                 columns.Bound(p => p.ReturnDate);
                 columns.Bound(p => p.Remarks);
-                columns.Bound(p => p.Header_ID).Hidden();
+                columns.Command(command => command.Destroy()).Width(150);
             })
             .DataSource(dataSource => dataSource
                 .Ajax()
                 .Batch(true)
                 .ServerOperation(false)
                 .PageSize(20)
-                .Create(update => update.Action("CreateItem", "ASSAssetTransaction"))
-                .Update(update => update.Action("UpdateItem", "ASSAssetTransaction"))
-                .Destroy(update => update.Action("DeleteItem", "ASSAssetTransaction"))
+                .Read(read => read.Action("Grid_Read", "ASSAssetTransaction"))
+                .Create(update => update.Action("Grid_Create", "ASSAssetTransaction"))
+                .Update(update => update.Action("Grid_Update", "ASSAssetTransaction"))
+                .Destroy(update => update.Action("Grid_Destroy", "ASSAssetTransaction"))
                 .Model(model =>
                 {
                     model.Id(p => p.ID);
                     model.Field(p => p.Header_ID).Editable(false);
+                    model.Field(p => p.Asset).DefaultValue(
+                        ViewData["DefaultInGridComboBoxVMValue"] as AssetTransactionItemVM);
                 })
             )
-    )
+        )
+    </div>
+</div>
+
+
+<div class="form-actions">
+    <div class="row">
+        <div class="col-md-12">
+            <button class="btn btn-default" type="submit">
+                Cancel
+            </button>
+            <button class="btn btn-primary" type="submit">
+                <i class="fa fa-save"></i>
+                Submit
+            </button>
+        </div>
+    </div>
 </div>
 
 @section scripts{
@@ -125,11 +143,25 @@
 
         $(document).ready(function () {
 
-            $('#Header_AssetHolderFrom_Value').data('kendoDropDownList').select(function (e) {
-                var dataItem = this.dataItem(e.item);
-                $('#Header_ContactNoFrom').text(dataItem.text);
-            });
         });
+
+        function OnSelectAssetHolderFrom(e) {
+            var dataItem = this.dataItem(e.item);
+            var url = "/HRDataMaster/GetProfessional/" + dataItem.ID;
+            $.getJSON(url, function (result) {
+                $("#Header_ContactNoFrom").val(result[0].ContactNo);
+                $("#Header_ProjectUnitFrom").val(result[0].ProjectUnit);
+            })
+        }
+
+        function OnSelectAssetHolderTo(e) {
+            var dataItem = this.dataItem(e.item);
+            var url = "/HRDataMaster/GetProfessional/" + dataItem.ID;
+            $.getJSON(url, function (result) {
+                $("#Header_ContactNoTo").val(result[0].ContactNo);
+                $("#Header_ProjectUnitTo").val(result[0].ProjectUnit);
+            })
+        }
 
     </script>
 }

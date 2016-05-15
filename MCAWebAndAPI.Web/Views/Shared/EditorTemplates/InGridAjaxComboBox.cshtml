@@ -5,7 +5,6 @@
         .DataValueField(Model.ValueField)
         .DataSource(source => source.Read(read => read.Action(Model.ActionName, Model.ControllerName)))
         .Value(Model.DefaultValue)
-        .Events(ev => ev.Select(Model.OnSelectEventName))
         .Filter("contains")
         .HtmlAttributes(new
         {
