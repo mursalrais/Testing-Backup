@@ -72,7 +72,7 @@ namespace MCAWebAndAPI.Service.Asset
             foreach(var item in SPConnector.GetList(SP_ASSMAS_LIST_NAME, _siteUrl))
             {
                 viewModels.Add(new AssetMasterVM {
-                    Id = Convert.ToInt32(item["ID"]), 
+                    ID = Convert.ToInt32(item["ID"]), 
                     AssetDesc = Convert.ToString(item["Title"])
                 });
             }
@@ -122,19 +122,19 @@ namespace MCAWebAndAPI.Service.Asset
             return assetID;
         }
 
-        private int GetAssetIDLastNumber(string assetID)
+        int GetAssetIDLastNumber(string assetID)
         {
             var caml = @"<View>  
                 <Query> 
-                    <Where><Contains><FieldRef Name='AssetID' /><Value Type='Text'>" 
+                    <Where><Contains><FieldRef Name='AssetID' /><Value Type='Text'>"
                 + assetID
                 + @"</Value></Contains></Where> 
                 </Query> 
                 <ViewFields><FieldRef Name='AssetID' /></ViewFields> 
             </View>";
-            var listItem = SPConnector.GetList(SP_ASSMAS_LIST_NAME, _siteUrl,caml);
+            var listItem = SPConnector.GetList(SP_ASSMAS_LIST_NAME, _siteUrl, caml);
             if (listItem.Count == 0) // if not found
-                return 1; 
+                return 1;
 
             var numbers = new List<int>();
             if (assetID.Length <= 14)  // if main asset
@@ -153,13 +153,13 @@ namespace MCAWebAndAPI.Service.Asset
             {
                 foreach (var item in listItem)
                 {
-                    var itemAssetID = Convert.ToString(item["AssetID"]);                
+                    var itemAssetID = Convert.ToString(item["AssetID"]);
 
                     var itemNumber = Convert.ToInt32(itemAssetID.Split('-')[4]);
                     numbers.Add(itemNumber);
                 }
             }
-            
+
 
             return numbers.Max() + 1;
         }
@@ -180,6 +180,23 @@ namespace MCAWebAndAPI.Service.Asset
                 _choices.Add(item["AssetID"].ToString());
             }
             return _choices.ToArray();
+        }
+
+        public IEnumerable<AssetLocationVM> GetAssetLocations()
+        {
+            return new List<AssetLocationVM>
+            {
+                new AssetLocationVM
+                {
+                    ID = 1,
+                    Name = "Jakarta"
+                },
+                new AssetLocationVM
+                {
+                    ID = 2,
+                    Name = "Surabaya"
+                }
+            };
         }
     }
 }

@@ -85,6 +85,18 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Common
             return model;
         }
 
+        WBSMapping ConvertToWBSModelInProgram(ListItem item)
+        {
+            return new WBSMapping
+            {
+                WBSID = Convert.ToString(item["WBS_x0020_ID"]), 
+                WBSDescription = Convert.ToString(item["WBS_x0020_Description"]), 
+                Activity = Convert.ToString(item["Activity"]), 
+                Project = Convert.ToString(item["Project"]), 
+                SubActivity = Convert.ToString(item["Sub_x0020_Activity"])
+            };
+        }
+
         private string getProjectNameFromSiteUrl()
         {
             if (_siteUrl.Contains("/gp"))
@@ -419,6 +431,18 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Common
             {
                 return false;
             }
+        }
+
+        public IEnumerable<WBSMapping> GetWBSMappingsInProgram()
+        {
+            var wbs = new List<WBSMapping>();
+
+            foreach(var item in SPConnector.GetList(SP_WBSMAPPING_IN_PROGRAM_LIST_NAME, _siteUrl))
+            {
+                wbs.Add(ConvertToWBSModelInProgram(item));
+            }
+
+            return wbs;
         }
     }
 }

@@ -14,6 +14,8 @@ namespace MCAWebAndAPI.Service.Asset
 
         IEnumerable<AssetMasterVM> GetAssetMasters();
 
+        IEnumerable<AssetLocationVM> GetAssetLocations();
+
         bool CreateAssetMaster(AssetMasterVM assetMaster);
 
         bool CreateAssetMaster_dummy(AssetMasterVM assetMaster);

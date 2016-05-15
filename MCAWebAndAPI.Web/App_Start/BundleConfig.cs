@@ -48,8 +48,7 @@ namespace MCAWebAndAPI.Web
 
             bundles.Add(new ScriptBundle("~/bundles/kendo")
                 .Include("~/Scripts/kendo/2016.2.504/kendo.all.min.js",
-                 "~/Scripts/kendo/2016.2.504/kendo.aspnetmvc.min.js",
-                 "~/Scripts/kendo/2016.2.504/kendo.culture.id-ID.min.js"));
+                 "~/Scripts/kendo/2016.2.504/kendo.aspnetmvc.min.js"));
 
             ScriptManager.ScriptResourceMapping.AddDefinition(
                 "respond",

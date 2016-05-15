@@ -9,7 +9,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 {
     public class AssetMasterVM
     {
-        public int Id { get; set; }
+        public int? ID { get; set; }
 
         private ComboBoxVM _assetLevel;
         private ComboBoxVM _assetCategory;

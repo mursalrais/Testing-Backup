@@ -14,12 +14,12 @@ namespace MCAWebAndAPI.Service.Asset
     {
         string _siteUrl;
         static Logger logger = LogManager.GetCurrentClassLogger();
-        const string SP_ITEMS_LIST_NAME = "AssetTrxItem", SP_HEADER_LIST_NAME = "AssetTrxHeader"; 
+        const string SP_ITEMS_LIST_NAME = "Asset Transaction Detail", SP_HEADER_LIST_NAME = "Asset Transaction Header"; 
 
         public int CreateHeader(AssetTransactionHeaderVM header)
         {
             var updatedValues = new Dictionary<string, object>();
-            updatedValues.Add("TransactionType", header.TransactionType);
+            updatedValues.Add("Title", header.TransactionType);
             updatedValues.Add("AssignmentDate", header.Date);
             updatedValues.Add("HolderID", new FieldLookupValue { LookupId  = Convert.ToInt32(header.AssetHolderFrom.Value) } );
             updatedValues.Add("HolderIDTo", new FieldLookupValue { LookupId = Convert.ToInt32(header.AssetHolderTo.Value) });
@@ -33,15 +33,13 @@ namespace MCAWebAndAPI.Service.Asset
                 logger.Error(e.Message);
             }
             
-            return SPConnector.GetInsertedItemID(SP_HEADER_LIST_NAME);
+            return SPConnector.GetInsertedItemID(SP_HEADER_LIST_NAME, _siteUrl);
         }
 
         public int CreateItem(int headerID, AssetTransactionItemVM item)
         {
             var updatedValues = new Dictionary<string, object>();
             updatedValues.Add("TransactionID", new FieldLookupValue { LookupId = headerID });
-            updatedValues.Add("LocationID", new FieldLookupValue { LookupId = item.LocationFrom.CategoryID });
-            updatedValues.Add("LocationIDTo", new FieldLookupValue { LookupId = item.LocationTo.CategoryID });
             updatedValues.Add("CostIDR", item.CostIDR);
             updatedValues.Add("CostUSD", item.CostUSD);
 

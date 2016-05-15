@@ -11,44 +11,11 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 
         public int? ID { get; set; }
 
-        [UIHint("InGridComboBox")]
-        [DisplayName("Location (from)")]
-        public InGridComboBoxVM LocationFrom
-        {
-            get
-            {
-                if (_locationFrom == null)
-                    _locationFrom = new InGridComboBoxVM();
-                return _locationFrom;
-            }
+        InGridComboBoxVM _asset = new InGridComboBoxVM();
+        InGridComboBoxVM _locationFrom = new InGridComboBoxVM();
+        InGridComboBoxVM _locationTo = new InGridComboBoxVM();
+        InGridComboBoxVM _WBS = new InGridComboBoxVM();
 
-            set
-            {
-                _locationFrom = value;
-            }
-        }
-
-        [UIHint("InGridComboBox")]
-        [DisplayName("Location (to)")]
-        public InGridComboBoxVM LocationTo
-        {
-            get
-            {
-                if (_locationTo == null)
-                    _locationTo = new InGridComboBoxVM();
-                return _locationTo;
-            }
-
-            set
-            {
-                _locationTo = value;
-            }
-        }
-
-        InGridComboBoxVM _locationFrom;
-        InGridComboBoxVM _locationTo;
-        AjaxComboBoxVM _asset;
-        InGridComboBoxVM _WBS;
 
         [UIHint("CurrencyIDR")]
         [DisplayName("Cost (IDR)")]
@@ -63,36 +30,53 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 
         public string Remarks { get; set; }
 
-        [UIHint("AjaxComboBoxVM")]
-        [DisplayName("Asset")]
-        public AjaxComboBoxVM Asset
+        [UIHint("InGridComboBox_Asset")]
+        public InGridComboBoxVM Asset
         {
             get
             {
-                if (_asset == null)
-                    return new AjaxComboBoxVM
-                    {
-                        ActionName = "GetAssetMasters",
-                        ControllerName = "ASSAssetMaster",
-                        TextField = "Text",
-                        ValueField = "ID"
-                    };
                 return _asset;
             }
+
             set
             {
                 _asset = value;
             }
         }
 
-        [UIHint("InGridComboBox")]
-        [DisplayName("WBS")]
+        [UIHint("InGridComboBox_Location")]
+        public InGridComboBoxVM LocationFrom
+        {
+            get
+            {
+                return _locationFrom;
+            }
+
+            set
+            {
+                _locationFrom = value;
+            }
+        }
+
+        [UIHint("InGridComboBox_Location")]
+        public InGridComboBoxVM LocationTo
+        {
+            get
+            {
+                return _locationTo;
+            }
+
+            set
+            {
+                _locationTo = value;
+            }
+        }
+
+        [UIHint("InGridComboBox_WBS")]
         public InGridComboBoxVM WBS
         {
             get
             {
-                if (_WBS == null)
-                    return new InGridComboBoxVM();
                 return _WBS;
             }
 

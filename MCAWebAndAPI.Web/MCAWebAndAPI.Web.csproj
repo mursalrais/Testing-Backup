@@ -977,9 +977,11 @@
     <Content Include="Scripts\kendo\2016.2.504\kendo.web.min.js.map" />
     <Content Include="Scripts\kendo\2016.2.504\kendo.webcomponents.min.js.map" />
     <Content Include="Scripts\kendo\2016.2.504\kendo.window.min.js.map" />
-    <Content Include="Views\Shared\EditorTemplates\InGridComboBox.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\InGridComboBox_Asset.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\CurrencyUSD.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\InGridAjaxComboBox.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\InGridComboBox_Location.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\InGridComboBox_WBS.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

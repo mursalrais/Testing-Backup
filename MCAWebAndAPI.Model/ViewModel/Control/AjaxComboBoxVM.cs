@@ -12,13 +12,10 @@ namespace MCAWebAndAPI.Model.ViewModel.Control
     /// </summary>
     public class AjaxComboBoxVM
     {
-        public string Value { get; set; }
+        public int Value { get; set; }
 
-        /// <summary>
-        /// Set default value on initial display
-        /// </summary>
-        public string DefaultValue { get; set; }
-
+        string _defaultValue = "0";
+        
         /// <summary>
         /// Set name of field from JSON result that becomes value
         /// </summary>
@@ -39,11 +36,33 @@ namespace MCAWebAndAPI.Model.ViewModel.Control
         /// </summary>
         public string ActionName { get; set; }
 
-        /// <summary>
-        /// Define custom onSelectEventName
-        /// </summary>
-        public string OnSelectEventName { get; set; }
+        public string OnSelectEventName
+        {
+            get
+            {
+                return _onSelectEventName;
+            }
 
+            set
+            {
+                _onSelectEventName = value;
+            }
+        }
+
+        public string DefaultValue
+        {
+            get
+            {
+                return _defaultValue;
+            }
+
+            set
+            {
+                _defaultValue = value;
+            }
+        }
+
+        string _onSelectEventName = "OnSelect";
 
     }
 }

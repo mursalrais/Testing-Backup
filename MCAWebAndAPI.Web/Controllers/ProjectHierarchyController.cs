@@ -2,6 +2,12 @@
 using MCAWebAndAPI.Web.Helpers;
 using System.Web.Mvc;
 
+using System.Linq;
+using System.Collections.Generic;
+
+using MCAWebAndAPI.Web.Resources;
+using MCAWebAndAPI.Model.ProjectManagement.Common;
+
 namespace MCAWebAndAPI.Web.Controllers
 {
     public class ProjectHierarchyController : Controller
@@ -68,6 +74,35 @@ namespace MCAWebAndAPI.Web.Controllers
             _service.SetSiteUrl(siteUrl);
             var data = _service.UpdateWBSMapping();
             return this.Jsonp(data);
+        }
+
+        public JsonResult GetWBS()
+        {
+            _service.SetSiteUrl(ConfigResource.DefaultProgramSiteUrl);
+            var data = GetWBSMappingFromExistingSession();
+
+            return Json(data.Select(e =>
+                new
+                {
+                    e.WBSID, 
+                    e.WBSDescription, 
+                    e.Activity, 
+                    e.SubActivity, 
+                    e.Project
+                }
+            ), JsonRequestBehavior.AllowGet);
+        }
+
+
+        private IEnumerable<WBSMapping> GetWBSMappingFromExistingSession()
+        {
+            //Get existing session variable
+            var sessionVariable = System.Web.HttpContext.Current.Session["WBSMapping"] as IEnumerable<WBSMapping>;
+            var wbsMapping = sessionVariable ?? _service.GetWBSMappingsInProgram();
+
+            if (sessionVariable == null) // If no session variable is found
+                System.Web.HttpContext.Current.Session["WBSMapping"] = wbsMapping;
+            return wbsMapping;
         }
     }
 }

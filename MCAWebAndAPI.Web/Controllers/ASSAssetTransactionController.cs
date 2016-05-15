@@ -29,17 +29,46 @@ namespace MCAWebAndAPI.Web.Controllers
         /// <returns></returns>
         public ActionResult CreateAssetTransfer(string siteUrl = null)
         {
+            // Clear Existing Session Variables if any
+            if (System.Web.HttpContext.Current.Session.Keys.Count > 0)
+                System.Web.HttpContext.Current.Session.Clear();
+
             // MANDATORY: Set Site URL
             _assetTransactionService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            System.Web.HttpContext.Current.Session["SiteUrl"] = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
 
             // Get blank ViewModel
             var viewModel = _assetTransactionService.GetPopulatedModel();
 
             // Modify ViewModel based on spesific case, e.g., Asset Transfer is one of conditions in Asset transaction
             viewModel.Header.TransactionType = "Asset Transfer";
-            
+
+            PopulateInGridComboBox();
+
             // Return to the name of the view and parse the model
             return View("Create", viewModel);
+        }
+
+        private void PopulateInGridComboBox()
+        {
+            IAssetMasterService _assetMasterService = new AssetMasterService();
+            var assetMasters = _assetMasterService.GetAssetMasters();
+            ViewData["InGridComboBox_Asset"] = assetMasters.Select(e => new InGridComboBoxVM
+            {
+                CategoryID = e.ID ?? 0, 
+                CategoryName = e.AssetDesc
+            });
+
+            //TODO: If Edit Mode, please map to existing data
+            ViewData["DefaultValue_Asset"] = assetMasters.FirstOrDefault(e => true);
+
+            var locationMasters = _assetMasterService.GetAssetLocations();
+            ViewData["InGridComboBox_Location"] = locationMasters.Select(e => new InGridComboBoxVM
+            {
+                CategoryID = e.ID ?? 0,
+                CategoryName = e.Name
+            });
+            ViewData["DefaultValue_Location"] = assetMasters.FirstOrDefault(e => true);
         }
 
         [HttpPost]
@@ -54,6 +83,8 @@ namespace MCAWebAndAPI.Web.Controllers
                 JsonRequestBehavior.AllowGet);
             }
 
+            _assetTransactionService.SetSiteUrl(System.Web.HttpContext.Current.Session["SiteUrl"] as string);
+
             // Get Header ID after inster to SharePoint
             var headerID = _assetTransactionService.CreateHeader(viewModel.Header);
 
@@ -61,8 +92,11 @@ namespace MCAWebAndAPI.Web.Controllers
             var items = System.Web.HttpContext.Current.Session["AssetTransactionItemVM"] as List<AssetTransactionItemVM>;
 
             // Insert items to SharePoint
-            _assetTransactionService.CreateItems(headerID, items);  
-            
+            _assetTransactionService.CreateItems(headerID, items);
+
+            // Clear session variables
+            System.Web.HttpContext.Current.Session.Clear();
+
             // Return JSON
             return Json(new { success = true , urlToRedirect = "google.com"}, 
                 JsonRequestBehavior.AllowGet);
@@ -74,7 +108,6 @@ namespace MCAWebAndAPI.Web.Controllers
             IEnumerable<AssetTransactionItemVM> viewModel = System.Web.HttpContext.Current.Session["AssetTransactionItemVM"] as List<AssetTransactionItemVM> 
                 ?? new List<AssetTransactionItemVM>();
             
-
             // Convert to Kendo DataSource
             DataSourceResult result = viewModel.ToDataSourceResult(request);
 
@@ -95,18 +128,14 @@ namespace MCAWebAndAPI.Web.Controllers
             var sessionVariables = System.Web.HttpContext.Current.Session["AssetTransactionItemVM"] as List<AssetTransactionItemVM>
                 ?? new List<AssetTransactionItemVM>();
 
-            // Get Header ID from session variable
-            var headerData = System.Web.HttpContext.Current.Session["AssetTransactionHeaderVM"] as AssetTransactionHeaderVM;
-
             foreach (var item in viewModel)
             {
-                // Set it as FK in item
-                item.Header_ID = headerData.ID;
-
                 // Store in session variable
                 sessionVariables.Add(item);
             }
-            
+            // Kendo adds new Item on top, so we have to reverse the list
+            sessionVariables.Reverse();
+
             // Overwrite existing session variable
             System.Web.HttpContext.Current.Session["AssetTransactionItemVM"] = sessionVariables;
 
@@ -124,9 +153,6 @@ namespace MCAWebAndAPI.Web.Controllers
             // Get existing session variable
             var sessionVariables = System.Web.HttpContext.Current.Session["AssetTransactionItemVM"] as List<AssetTransactionItemVM>
                 ?? new List<AssetTransactionItemVM>();
-
-            // Get Header ID from session variable
-            var headerData = System.Web.HttpContext.Current.Session["AssetTransactionHeaderVM"] as AssetTransactionHeaderVM;
 
             foreach (var item in viewModel)
             {
