@@ -37,9 +37,9 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult Submit(AssetMasterVM _data)
         {
             //return View(new AssetMasterVM());
-            var data = _assetMasterService.GetAssetMaster_Dummy();
+            _assetMasterService.CreateAssetMaster_dummy(_data);
 
-            return this.Jsonp(data);
+            return this.Jsonp(_data);
         }
 
         [AcceptVerbs(HttpVerbs.Post)]

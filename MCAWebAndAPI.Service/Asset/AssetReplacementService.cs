@@ -42,16 +42,7 @@ namespace MCAWebAndAPI.Service.Asset
         {
             var viewModel = new AssetReplacementVM();
 
-            var list = new List<AssetReplacementItemVM>();
-            list.Add(new AssetReplacementItemVM()
-            {
-                NewAsset = "New",
-                Item = "Chair",
-                WbsId = 123,
-                Id = 1
-            });
-            viewModel.Header.TransactionType = "Cash";
-            viewModel.Items = list;
+           
 
             return viewModel;
         }

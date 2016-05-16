@@ -79,7 +79,8 @@
     </fieldset>
 
 </form>
-@*<script type="text/javascript">
+<script type="text/javascript">
+    $(document.readyState)
     function error_handler(e) {
         if (e.errors) {
             var message = "Errors:\n";
@@ -93,14 +94,56 @@
             alert(message);
         }
     }
+    function onChange() {
+        if (this.element.attr("id") == "AssetLevel_Value") {
+            if ($("#AssetLevel_Value").data("kendoDropDownList").value() == "Main Asset") {
+                $("#AssetCategory_Value").data("kendoDropDownList").enable(true);
+                $("#AssetCategory_Value").data("kendoDropDownList").select(0);
+
+                $("#ProjectUnit_Value").data("kendoDropDownList").enable(true);
+                $("#ProjectUnit_Value").data("kendoDropDownList").select(0);
+
+                $("#AssetType_Value").data("kendoDropDownList").enable(true);
+                $("#AssetType_Value").data("kendoDropDownList").select(0);
+
+
+                $("#AssetNoAssetDesc_Value").data("kendoDropDownList").enable(false);
+                $("#AssetNoAssetDesc_Value").data("kendoDropDownList").value("");
+
+            }
+            else {
+                $("#AssetCategory_Value").data("kendoDropDownList").enable(false);
+                $("#AssetCategory_Value").data("kendoDropDownList").value("");
+
+                $("#ProjectUnit_Value").data("kendoDropDownList").enable(false);
+                $("#ProjectUnit_Value").data("kendoDropDownList").value("");
+
+                $("#AssetType_Value").data("kendoDropDownList").enable(false);
+                $("#AssetType_Value").data("kendoDropDownList").value("");
+
+                $("#AssetNoAssetDesc_Value").data("kendoDropDownList").enable(true);
+                $("#AssetNoAssetDesc_Value").data("kendoDropDownList").select(0);
+            }
+
+            ;
+        }
+
+    }
     $(function () {
+        $("#AssetCategory_Value").data("kendoDropDownList").enable(true);
+        $("#AssetCategory_Value").data("kendoDropDownList").select(0);
 
-        $($(".k-input")[0]).change(
-        function () {
-            alert("hai");
-        });
+        $("#ProjectUnit_Value").data("kendoDropDownList").enable(true);
+        $("#ProjectUnit_Value").data("kendoDropDownList").select(0);
 
+        $("#AssetType_Value").data("kendoDropDownList").enable(true);
+        $("#AssetType_Value").data("kendoDropDownList").select(0);
+
+
+        $("#AssetNoAssetDesc_Value").data("kendoDropDownList").enable(false);
+        $("#AssetNoAssetDesc_Value").data("kendoDropDownList").value("");
     });
-</script>*@
+
+</script>
 
 

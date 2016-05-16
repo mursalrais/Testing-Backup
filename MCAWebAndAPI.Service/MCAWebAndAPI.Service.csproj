@@ -70,8 +70,6 @@
     <Compile Include="Asset\IAssetSmallValueAssetService.cs" />
     <Compile Include="Asset\IAssetTransferService.cs" />
     <Compile Include="Asset\IAssignmentofAssetService.cs" />
-    <Compile Include="Asset\ILocationMasterService.cs" />
-    <Compile Include="Asset\LocationMasterService.cs" />
     <Compile Include="Finance\EventBudgetService.cs" />
     <Compile Include="Finance\IEventBudgetService.cs" />
     <Compile Include="ProjectManagement\Common\IProjectHierarchyService.cs" />
@@ -80,6 +78,7 @@
     <Compile Include="ProjectManagement\Schedule\ICalendarService.cs" />
     <Compile Include="ProjectManagement\Schedule\IRIAService.cs" />
     <Compile Include="ProjectManagement\Schedule\RIAService.cs" />
+    <Compile Include="SPUtil\FormatUtil.cs" />
     <Compile Include="SPUtil\GraphicUtil.cs" />
     <Compile Include="SPUtil\MathUtil.cs" />
     <Compile Include="SPUtil\SPConnector.cs" />
