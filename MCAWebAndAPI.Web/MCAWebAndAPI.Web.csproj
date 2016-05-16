@@ -224,6 +224,10 @@
     <Content Include="Scripts\bi-frame.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\kendo.modernizr.custom.js" />
     <Content Include="Scripts\libs\iframeResizer.contentWindow.min.js" />
     <Content Include="Scripts\libs\indicator_jslink.js" />
@@ -316,6 +320,7 @@
     <Content Include="Views\BIEmbed\WFP03.cshtml" />
     <Content Include="Views\ASSAssetMaster\Create.cshtml" />
     <Content Include="Views\ASSLocationMaster\Create.cshtml" />
+    <Content Include="Views\ASSLocationMaster\IFrame.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

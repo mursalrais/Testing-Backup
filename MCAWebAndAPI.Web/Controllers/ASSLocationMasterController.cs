@@ -22,6 +22,16 @@ namespace MCAWebAndAPI.Web.Controllers
             return View();
         }
 
+        public ActionResult Edit()
+        {
+            return View();
+        }
+
+        public ActionResult IFrame()
+        {
+            return View();
+        }
+
         public ActionResult Create()
         {
             var viewModel = _locationMasterService.GetLocationMaster();
@@ -29,11 +39,31 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewModel);
         }
 
+        //public ActionResult SubmitEvent(LocationMasterVM[] Options)
+        //{
+        //    return Json(new { status = "Success", message = "Success" });
+        //}
+
         [HttpPost]
-        public ActionResult Submit(LocationMasterVM _data)
+        public JsonResult Submit(LocationMasterVM _data)
         {
-           _locationMasterService.CreateLocationMaster(_data);
-            return this.Jsonp(_data);
+            _locationMasterService.CreateLocationMaster(_data);
+            if (!ModelState.IsValid)
+            {
+                return new JsonResult()
+                {
+                    JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+                    Data = new { result = "Error" }
+                };
+            }
+
+            //add to database
+
+            return new JsonResult()
+            {
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+                Data = new { result = "Success" }
+            };
         }
     }
 }

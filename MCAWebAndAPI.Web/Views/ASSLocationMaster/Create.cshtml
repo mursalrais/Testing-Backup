@@ -2,7 +2,14 @@
 
 @model LocationMasterVM
 
-<form class="form-horizontal" method="post" action="/ASSLocationMaster/Submit" id="create-location-master-form">
+@using (Ajax.BeginForm("Submit", "ASSLocationMaster", null,
+                                                new AjaxOptions
+                                                {
+                                                    OnFailure = "OnFailure",
+                                                    OnSuccess = "OnSuccess"
+                                                }))
+{
+    @Html.ValidationSummary(true)
     <fieldset>
         <legend>Form Location Master Data</legend>
         <div class="col-md-6">
@@ -30,9 +37,35 @@
                     @Html.EditorFor(m => m.Header.RoomName)
                 </div>
             </div>
-            <input class="k-button k-button-icontext k-grid-add" type="submit" value="Save" />
-            <input class="k-button k-button-icontext k-grid-add" type="button" value="Cancel" onclick="location.href='@Url.Action("Index","Home")';"/>
+            <input class="k-button k-button-icontext k-grid-add" type="submit" value="Save" id="btnSave" />
+            <input class="k-button k-button-icontext k-grid-add" type="button" value="Cancel" onclick="location.href='@Url.Action("Create", "ASSLocationMaster")';" />
         </div>
     </fieldset>
+}
+<script>
+    function OnSuccess(data) {
+        parent.postMessage(data.result, "http://localhost:15923/");
+    }
 
-</form>
+    function OnFailure() {
+        alert("Fail")
+    }
+</script>
+@*<script type="text/javascript">
+        $(function () {
+            $('form').submit(function (form) {
+                if ($(this).valid()) {
+                    $.ajax({
+                        url: this.action,
+                        type: this.method,
+                        data: $(this).serialize(),
+                        success: function (data) {
+                            console.log(data);
+                            parent.postMessage("Hello", "http://localhost:15923/");
+                        }
+                    });
+                }
+                return false;
+            });
+        });
+    </script>*@

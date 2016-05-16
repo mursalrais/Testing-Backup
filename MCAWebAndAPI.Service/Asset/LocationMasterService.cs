@@ -11,7 +11,7 @@ namespace MCAWebAndAPI.Service.Asset
 {
     public class LocationMasterService : ILocationMasterService
     {
-        string _siteUrl = "https://eceos2.sharepoint.com/sites/mca-dev/dev/";
+        string _siteUrl = "https://eceos2.sharepoint.com/sites/mca-dev/dev";
         static Logger logger = LogManager.GetCurrentClassLogger();
         const string SP_LOCATIONMASTER_LISTNAME = "Location Master";
 
