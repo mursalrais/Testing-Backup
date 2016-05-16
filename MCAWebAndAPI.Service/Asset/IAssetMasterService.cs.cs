@@ -16,11 +16,11 @@ namespace MCAWebAndAPI.Service.Asset
 
         bool CreateAssetMaster(AssetMasterVM assetMaster);
 
-        bool CreateAssetMaster_dummy(AssetMasterVM assetMaster);
-
         bool UpdateAssetMaster(AssetMasterVM assetMaster);
 
-        AssetMasterVM GetAssetMaster_Dummy();
+        AssetMasterVM GetAssetMaster();
+
+        AssetMasterVM GetAssetMaster(int ID);
 
 
 

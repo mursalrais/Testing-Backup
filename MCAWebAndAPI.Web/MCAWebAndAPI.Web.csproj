@@ -315,6 +315,8 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\BIEmbed\WFP03.cshtml" />
     <Content Include="Views\ASSAssetMaster\Create.cshtml" />
+    <Content Include="Views\ASSAssetMaster\Edit.cshtml" />
+    <Content Include="Views\PDFExport\Create.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -342,6 +344,7 @@
     <Compile Include="Controllers\CalendarController.cs" />
     <Compile Include="Controllers\FINEventBudgetController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\PDFExportController.cs" />
     <Compile Include="Controllers\ProjectHierarchyController.cs" />
     <Compile Include="Controllers\PurchaseOrderController.cs" />
     <Compile Include="Controllers\RIAController.cs" />

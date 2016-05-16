@@ -26,20 +26,37 @@ namespace MCAWebAndAPI.Web.Controllers
             return View();
         }
 
-        public ActionResult Create()
+        public ActionResult Create(string site)
         {
-            var viewModel = _assetMasterService.GetAssetMaster_Dummy();
+            var viewModel = _assetMasterService.GetAssetMaster();
+            return View(viewModel);
+        }
 
+        public ActionResult Edit(int ID, string site)
+        {
+            var viewModel = _assetMasterService.GetAssetMaster(ID);
             return View(viewModel);
         }
 
         [HttpPost]
-        public ActionResult Submit(AssetMasterVM _data)
+        public ActionResult Submit(AssetMasterVM _data, string site)
         {
             //return View(new AssetMasterVM());
-            _assetMasterService.CreateAssetMaster_dummy(_data);
+            _assetMasterService.CreateAssetMaster(_data);
+            return new JavaScriptResult
+            {
+                Script = string.Format("window.parent.location.href = '{0}'", "https://eceos2.sharepoint.com/sites/mca-dev/dev/Lists/AssetMaster/AllItems.aspx")
+            };
+        }
 
-            return this.Jsonp(_data);
+        public ActionResult Update(AssetMasterVM _data, string site)
+        {
+            //return View(new AssetMasterVM());
+            _assetMasterService.UpdateAssetMaster(_data);
+            return new JavaScriptResult
+            {
+                Script = string.Format("window.parent.location.href = '{0}'", "https://eceos2.sharepoint.com/sites/mca-dev/dev/Lists/AssetMaster/AllItems.aspx")
+            };
         }
 
         [AcceptVerbs(HttpVerbs.Post)]

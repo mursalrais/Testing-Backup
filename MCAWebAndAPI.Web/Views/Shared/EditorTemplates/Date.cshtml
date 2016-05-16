@@ -1,4 +1,6 @@
 @model DateTime?
 
 @(Html.Kendo().DatePickerFor(m => m)
-    .Format("dd-MM-yyyy"))
+    .Format("dd-MM-yyy")
+    .ParseFormats("yy/MM/dd")    
+    )
