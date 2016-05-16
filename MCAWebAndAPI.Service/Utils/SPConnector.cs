@@ -2,7 +2,6 @@
 using Microsoft.SharePoint.Client;
 using System.Security;
 using System.Collections.Generic;
-using System.Net;
 using System;
 
 namespace MCAWebAndAPI.Service.Utils
@@ -15,7 +14,7 @@ namespace MCAWebAndAPI.Service.Utils
 
         private static void MapCredential(string url)
         {
-            if (url.Contains("eceos"))
+            if (url == null || url.Contains("eceos"))
             {
                 UserName = "sp.services@eceos.com";
                 Password = "Raja0432";
