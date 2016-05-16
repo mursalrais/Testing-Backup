@@ -21,6 +21,8 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Common
         IEnumerable<StackedBarChartVM> GenerateProjectHealthStatusChartByProject();
         IEnumerable<WBSMapping> GetAllWBSMappings();
 
+        IEnumerable<WBSMapping> GetWBSMappingsInProgram();
+
         bool UpdateWBSMapping();
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using MCAWebAndAPI.Model.ProjectManagement.Schedule;
-using MCAWebAndAPI.Service.SPUtil;
+using MCAWebAndAPI.Service.Utils;
 using System.Collections.Generic;
 using MCAWebAndAPI.Model.ViewModel.Chart;
 using Microsoft.SharePoint.Client;
@@ -36,12 +36,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
         /// <param name="siteUrl">SPWeb Absolute URL</param>
         public void SetSiteUrl(string siteUrl)
         {
-            if (siteUrl != null)
-            {
-                _siteUrl = siteUrl;
-                _siteUrl = _siteUrl.Replace("\"", "");
-                _siteUrl = _siteUrl.Replace("\'", "");
-            }
+            _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
         }
 
 

@@ -25,7 +25,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult Create()
         {
-            var viewModel = new AssetTransferVM();
+            var viewModel = new AssetTransactionVM();
 
             return View(viewModel);
         }

@@ -60,5 +60,12 @@
 
     @Scripts.Render("~/bundles/apps")
     @RenderSection("scripts", required: false)
+    <script type="text/javascript">
+      $(document).ajaxError(function (e, jqxhr, settings, exception) {
+                       e.stopPropagation();
+                       if (jqxhr != null)
+                           console.log(jqxhr.responseText);
+                     });
+    </script>
 </body>
 </html>

@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HR\DataMaster\ProfessionalMaster.cs" />
     <Compile Include="ProjectManagement\Common\Activity.cs" />
     <Compile Include="ProjectManagement\Common\Project.cs" />
     <Compile Include="ProjectManagement\Common\SPUser.cs" />
@@ -60,7 +61,10 @@
     <Compile Include="ViewModel\Chart\StackedBarChartVM.cs" />
     <Compile Include="ViewModel\Chart\ProjectScheduleSCurveVM.cs" />
     <Compile Include="ViewModel\Chart\ProjectStatusBarChartVM.cs" />
+    <Compile Include="ViewModel\Control\AjaxComboBoxVM.cs" />
     <Compile Include="ViewModel\Control\ComboBoxVM.cs" />
+    <Compile Include="ViewModel\Control\InGridComboBoxVM.cs" />
+    <Compile Include="ViewModel\Form\Asset\AssetLocationVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetMasterVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetAcquisitionHeaderVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetAcquisitionItemVM.cs" />
@@ -89,9 +93,9 @@
     <Compile Include="ViewModel\Form\Asset\AssetSmallValueAssetHeaderVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetSmallValueAssetItemVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetSmallValueAssetVM.cs" />
-    <Compile Include="ViewModel\Form\Asset\AssetTransferHeaderVM.cs" />
-    <Compile Include="ViewModel\Form\Asset\AssetTransferItemVM.cs" />
-    <Compile Include="ViewModel\Form\Asset\AssetTransferVM.cs" />
+    <Compile Include="ViewModel\Form\Asset\AssetTransactionHeaderVM.cs" />
+    <Compile Include="ViewModel\Form\Asset\AssetTransactionItemVM.cs" />
+    <Compile Include="ViewModel\Form\Asset\AssetTransactionVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssignmentofAssetHeaderVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssignmentofAssetItemVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssignmentofAssetVM.cs" />
@@ -109,11 +113,7 @@
     <Compile Include="ViewModel\Gantt\GanttDependenciesVM.cs" />
     <Compile Include="ViewModel\Gantt\GanttTasksVM.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ProjectManagement\Finance\" />
-    <Folder Include="ProjectManagement\Result\" />
-    <Folder Include="ViewModel\Grid\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Compile Include="ProjectManagement\Schedule\Calendar.cs" />
   </ItemGroup>

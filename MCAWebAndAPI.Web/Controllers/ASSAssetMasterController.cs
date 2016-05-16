@@ -3,13 +3,11 @@ using Kendo.Mvc.UI;
 using MCAWebAndAPI.Model.ViewModel.Form.Asset;
 using MCAWebAndAPI.Service.Asset;
 using MCAWebAndAPI.Web.Helpers;
-using System;
-using System.Collections.Generic;
+using MCAWebAndAPI.Web.Resources;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
-namespace MCAWebAndAPI.Web.Controllers
+namespace MCAWebAndAPI.Web.ContrWollers
 {
     public class ASSAssetMasterController : Controller
     {
@@ -20,10 +18,30 @@ namespace MCAWebAndAPI.Web.Controllers
             _assetMasterService = new AssetMasterService();
         }
 
-        // GET: ASSAssetMaster
-        public ActionResult Index()
+        public JsonResult GetAssetMasters()
         {
-            return View();
+            _assetMasterService.SetSiteUrl(ConfigResource.DefaultBOSiteUrl);
+            var result = _assetMasterService.GetAssetMasters();
+
+            //TODO: To map object based on other requirements
+            return Json(result.Select(e => (new
+            {
+                e.ID,
+                e.AssetDesc
+            })), JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetAssetLocations()
+        {
+            _assetMasterService.SetSiteUrl(ConfigResource.DefaultBOSiteUrl);
+            var result = _assetMasterService.GetAssetLocations();
+
+            //TODO: To map object based on other requirements
+            return Json(result.Select(e => (new
+            {
+                e.ID,
+                e.Name
+            })), JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Create()

@@ -9,7 +9,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 {
     public class AssetMasterVM
     {
-        public int Id { get; set; }
+        public int? ID { get; set; }
 
         private ComboBoxVM _assetLevel;
         private ComboBoxVM _assetCategory;
@@ -52,8 +52,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
                     {
                         Choices = new string[]
                         {
-                            "Main Asset",
-                            "Sub Asset"
+                            ""
                         }
                         //FieldValue = "AssetLevel"
                     };
@@ -73,11 +72,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
                 if (_assetCategory == null)
                     _assetCategory = new ComboBoxVM()
                     {
-                        Choices = new string[]
-                        {
-                            "Fixed Asset",
-                            "Small Value Asset"
-                        }
+                        
                     };
                 return _assetCategory;
             }
@@ -97,11 +92,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
                     {
                         Choices = new string[]
                         {
-                            "GP",
-                            "HN",
-                            "PM",
-                            "ME",
-                            "PC"
+                            ""
                         }
                     };
                 return _projectUnit;
@@ -122,7 +113,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
                     {
                         Choices = new string[]
                         {
-                            "LA", "BU", "CO", "CE", "CS", "OE", "FF", "VE", "OT"
+                            ""
                         }
                     };
                 return _assetType;
@@ -164,9 +155,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
                     {
                         Choices = new string[]
                         {
-                            "Normal",
-                            "Good",
-                            "Broken"
+                            ""
                         }
                     };
                 return _condition;
