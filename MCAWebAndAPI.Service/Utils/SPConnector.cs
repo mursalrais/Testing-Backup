@@ -173,7 +173,7 @@ namespace MCAWebAndAPI.Service.Utils
             }
         }
 
-        public static bool sendEmail( string email, string content, string subject,string siteUrl= null)
+        public static bool SendEmail( string email, string content, string subject, string siteUrl= null)
         {
             using (ClientContext clientContext = new ClientContext(siteUrl ?? CurUrl))
             {
@@ -192,5 +192,28 @@ namespace MCAWebAndAPI.Service.Utils
             }
             return true;
         }
+
+        public static bool SendEmails(IEnumerable<string> emails, string content, string subject, string siteUrl = null)
+        {
+            using (ClientContext clientContext = new ClientContext(siteUrl ?? CurUrl))
+            {
+                SecureString secureString = new SecureString();
+                Password.ToList().ForEach(secureString.AppendChar);
+                clientContext.Credentials = new SharePointOnlineCredentials(UserName, secureString);
+
+                EmailProperties properties = new EmailProperties();
+                properties.To = emails;
+                properties.Subject = subject;
+                properties.Body = content;
+
+                Utility.SendEmail(clientContext, properties);
+
+                clientContext.ExecuteQuery();
+            }
+            return true;
+        }
+
+
+
     }
 }
