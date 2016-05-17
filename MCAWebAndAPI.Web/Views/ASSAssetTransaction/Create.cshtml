@@ -144,11 +144,11 @@
         });
 
         function onSuccess(data) {
-            window.location.href = data.urlToRedirect;
+            parent.postMessage(data.result, "https://host.my-epmo.com/");
         }
 
-        function onFailure(data) {
-            window.location.href = data.urlToRedirect;
+        function onFailure() {
+            alert("Fail")
         }
 
         function OnSelectAssetHolderFrom(e) {

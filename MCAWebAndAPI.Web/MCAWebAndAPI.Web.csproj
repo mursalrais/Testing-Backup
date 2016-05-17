@@ -651,6 +651,10 @@
     <Content Include="Scripts\bi-frame.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\kendo.modernizr.custom.js" />
     <Content Include="Scripts\kendo\2016.2.504\kendo.culture.id-ID.min.js" />
     <Content Include="Scripts\libs\angular.min.js" />
@@ -982,6 +986,8 @@
     <Content Include="Views\Shared\EditorTemplates\InGridAjaxComboBox.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\InGridComboBox_Location.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\InGridComboBox_WBS.cshtml" />
+    <Content Include="Views\ASSLocationMaster\Create.cshtml" />
+    <Content Include="Views\ASSLocationMaster\IFrame.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1006,6 +1012,7 @@
     <Compile Include="Controllers\ASSAssetTransactionController.cs" />
     <Compile Include="Controllers\ASSAssetTransferController.cs" />
     <Compile Include="Controllers\ASSAssignmentofAssetController.cs" />
+    <Compile Include="Controllers\ASSLocationMasterController.cs" />
     <Compile Include="Controllers\BIEmbedController.cs" />
     <Compile Include="Controllers\CalendarController.cs" />
     <Compile Include="Controllers\FINEventBudgetController.cs" />

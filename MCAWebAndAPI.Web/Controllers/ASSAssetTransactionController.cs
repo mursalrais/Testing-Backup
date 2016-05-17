@@ -75,14 +75,6 @@ namespace MCAWebAndAPI.Web.Controllers
         [JsonHandleError]
         public JsonResult Create(AssetTransactionVM viewModel)
         {
-            // Check whether error is found
-            if(!ModelState.IsValid)
-            {
-                ModelState.AddModelError("500", "Internal Server Error");
-                return Json(new { success = false, urlToRedirect = "google.com" },
-                JsonRequestBehavior.AllowGet);
-            }
-
             _assetTransactionService.SetSiteUrl(System.Web.HttpContext.Current.Session["SiteUrl"] as string);
 
             // Get Header ID after inster to SharePoint
@@ -97,9 +89,23 @@ namespace MCAWebAndAPI.Web.Controllers
             // Clear session variables
             System.Web.HttpContext.Current.Session.Clear();
 
-            // Return JSON
-            return Json(new { success = true , urlToRedirect = "google.com"}, 
-                JsonRequestBehavior.AllowGet);
+            // Check whether error is found
+            if (!ModelState.IsValid)
+            {
+                return new JsonResult()
+                {
+                    JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+                    Data = new { result = "Error" }
+                };
+            }
+
+            //add to database
+
+            return new JsonResult()
+            {
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+                Data = new { result = "Success" }
+            };
         }
 
         public JsonResult Grid_Read([DataSourceRequest] DataSourceRequest request)
