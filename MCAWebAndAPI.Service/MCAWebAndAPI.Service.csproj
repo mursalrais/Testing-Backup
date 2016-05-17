@@ -33,21 +33,31 @@
     <Reference Include="Microsoft.SharePoint.Client, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.SharePoint.Client.Runtime, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL" />
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.4.2.3\lib\net45\NLog.dll</HintPath>
+      <HintPath>..\packages\NLog.4.4.0-beta5\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Select.Pdf, Version=16.2.0.0, Culture=neutral, PublicKeyToken=e0ae9f6e27a97018, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Debug\Select.Pdf.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="TuesPechkin, Version=2.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\TuesPechkin.2.1.1\lib\net20\TuesPechkin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="TuesPechkin.Wkhtmltox.Win32, Version=0.12.2.1, Culture=neutral, processorArchitecture=x86">
+      <HintPath>..\packages\TuesPechkin.Wkhtmltox.Win32.0.12.2.1\lib\net20\TuesPechkin.Wkhtmltox.Win32.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Asset\AssetMasterService.cs" />
@@ -78,12 +88,11 @@
     <Compile Include="Asset\IAssignmentofAssetService.cs" />
     <Compile Include="Asset\ILocationMasterService.cs" />
     <Compile Include="Asset\LocationMasterService.cs" />
+    <Compile Include="Converter\PDFConverter.cs" />
     <Compile Include="Finance\EventBudgetService.cs" />
     <Compile Include="Finance\IEventBudgetService.cs" />
-    <Compile Include="HR\Common\DataMasterService.cs" />
-    <Compile Include="HR\Common\IDataMasterService.cs" />
-    <Compile Include="PDFExporter\PDFExporterService.cs" />
-    <Compile Include="PDFExporter\IPDFExporterService.cs" />
+    <Compile Include="HR\Common\HRDataMasterService.cs" />
+    <Compile Include="HR\Common\IHRDataMasterService.cs" />
     <Compile Include="ProjectManagement\Common\IProjectHierarchyService.cs" />
     <Compile Include="ProjectManagement\Common\ProjectHierarchyService.cs" />
     <Compile Include="ProjectManagement\Schedule\CalendarService.cs" />
@@ -99,8 +108,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="BackOffice\" />
-    <Folder Include="HR\Leave\" />
     <Folder Include="HR\Payroll\" />
     <Folder Include="HR\Recruitment\" />
     <Folder Include="HR\Travel\" />

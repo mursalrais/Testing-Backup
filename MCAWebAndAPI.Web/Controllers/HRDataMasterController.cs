@@ -10,11 +10,11 @@ namespace MCAWebAndAPI.Web.Controllers
     public class HRDataMasterController : Controller
     {
 
-        IDataMasterService _dataMasterService;
+        IHRDataMasterService _dataMasterService;
 
         public HRDataMasterController()
         {
-            _dataMasterService = new DataMasterService();
+            _dataMasterService = new HRDataMasterService();
         }
 
         public JsonResult GetProfessionals()

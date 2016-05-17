@@ -1007,7 +1007,8 @@
     <Content Include="Views\Shared\EditorTemplates\InGridAjaxComboBox.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\InGridComboBox_Location.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\InGridComboBox_WBS.cshtml" />
-    <Content Include="Views\PDFExport\Create.cshtml" />
+    <Content Include="Views\ASSLocationMaster\Create.cshtml" />
+    <Content Include="Views\ASSLocationMaster\IFrame.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1038,7 +1039,6 @@
     <Compile Include="Controllers\FINEventBudgetController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HRDataMasterController.cs" />
-    <Compile Include="Controllers\PDFExportController.cs" />
     <Compile Include="Controllers\ProjectHierarchyController.cs" />
     <Compile Include="Controllers\PurchaseOrderController.cs" />
     <Compile Include="Controllers\RIAController.cs" />
@@ -1132,9 +1132,7 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
-    <Error Condition="!Exists('..\packages\Select.Pdf.16.2.0.0\build\Select.Pdf.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Select.Pdf.16.2.0.0\build\Select.Pdf.targets'))" />
   </Target>
-  <Import Project="..\packages\Select.Pdf.16.2.0.0\build\Select.Pdf.targets" Condition="Exists('..\packages\Select.Pdf.16.2.0.0\build\Select.Pdf.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

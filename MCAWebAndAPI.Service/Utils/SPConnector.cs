@@ -124,6 +124,12 @@ namespace MCAWebAndAPI.Service.Utils
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="listName"></param>
+        /// <param name="columnValues"></param>
+        /// <param name="siteUrl"></param>
         public static void AddListItem(string listName, Dictionary<string, object> columnValues, string siteUrl = null)
         {
             MapCredential(siteUrl);

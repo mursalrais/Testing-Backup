@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MCAWebAndAPI.Service.Converter;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -21,6 +22,13 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult ProjectHealthByActivity()
         {
             return View();
+        }
+
+        [HttpGet]
+        public FileResult Print()
+        {
+            var result = PDFConverter.Instance.Convert("Kompas", "http://www.kompas.com/");
+            return File(result, "application/pdf");
         }
     }
 }

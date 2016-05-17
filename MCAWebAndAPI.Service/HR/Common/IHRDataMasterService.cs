@@ -7,13 +7,10 @@ using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Service.HR.Common
 {
-    public interface IHRMasterService
+    public interface IHRDataMasterService
     {
         void SetSiteUrl(string siteUrl);
 
         IEnumerable<ProfessionalMaster> GetProfessionals();
-
-        IEnumerable<ProfessionalMaster> GetResignedProfessionals();
-        
     }
 }
