@@ -36,6 +36,10 @@
       <HintPath>..\packages\NLog.4.2.3\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Select.Pdf, Version=16.2.0.0, Culture=neutral, PublicKeyToken=e0ae9f6e27a97018, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\Select.Pdf.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -72,10 +76,14 @@
     <Compile Include="Asset\IAssetTransactionService.cs" />
     <Compile Include="Asset\IAssetTransferService.cs" />
     <Compile Include="Asset\IAssignmentofAssetService.cs" />
+    <Compile Include="Asset\ILocationMasterService.cs" />
+    <Compile Include="Asset\LocationMasterService.cs" />
     <Compile Include="Finance\EventBudgetService.cs" />
     <Compile Include="Finance\IEventBudgetService.cs" />
     <Compile Include="HR\Common\DataMasterService.cs" />
     <Compile Include="HR\Common\IDataMasterService.cs" />
+    <Compile Include="PDFExporter\PDFExporterService.cs" />
+    <Compile Include="PDFExporter\IPDFExporterService.cs" />
     <Compile Include="ProjectManagement\Common\IProjectHierarchyService.cs" />
     <Compile Include="ProjectManagement\Common\ProjectHierarchyService.cs" />
     <Compile Include="ProjectManagement\Schedule\CalendarService.cs" />
@@ -91,10 +99,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="BackOffice\" />
     <Folder Include="HR\Leave\" />
     <Folder Include="HR\Payroll\" />
     <Folder Include="HR\Recruitment\" />
     <Folder Include="HR\Travel\" />
+    <Folder Include="ProjectManagement\Finance\" />
+    <Folder Include="ProjectManagement\Result\" />
+    <Folder Include="ResourceAndContract\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MCAWebAndAPI.Model\MCAWebAndAPI.Model.csproj">
@@ -103,6 +115,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="bin\Debug\MCAWebAndAPI.Service.dll" />
+    <Content Include="bin\Debug\MCAWebAndAPI.Service.pdb" />
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

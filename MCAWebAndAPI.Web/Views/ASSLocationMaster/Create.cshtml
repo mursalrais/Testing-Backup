@@ -1,0 +1,71 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Asset
+
+@model LocationMasterVM
+
+@using (Ajax.BeginForm("Submit", "ASSLocationMaster", null,
+                                                new AjaxOptions
+                                                {
+                                                    OnFailure = "OnFailure",
+                                                    OnSuccess = "OnSuccess"
+                                                }))
+{
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend>Form Location Master Data</legend>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Header.Remarks).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.Header.Remarks)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Header.OfficeName).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.Header.OfficeName)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Header.FloorName).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.Header.FloorName)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Header.RoomName).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.Header.RoomName)
+                </div>
+            </div>
+            <input class="k-button k-button-icontext k-grid-add" type="submit" value="Save" id="btnSave" />
+            <input class="k-button k-button-icontext k-grid-add" type="button" value="Cancel" onclick="location.href='@Url.Action("Create", "ASSLocationMaster")';" />
+        </div>
+    </fieldset>
+}
+<script>
+    function OnSuccess(data) {
+        parent.postMessage(data.result, "http://localhost:15923/");
+    }
+
+    function OnFailure() {
+        alert("Fail")
+    }
+</script>
+@*<script type="text/javascript">
+        $(function () {
+            $('form').submit(function (form) {
+                if ($(this).valid()) {
+                    $.ajax({
+                        url: this.action,
+                        type: this.method,
+                        data: $(this).serialize(),
+                        success: function (data) {
+                            console.log(data);
+                            parent.postMessage("Hello", "http://localhost:15923/");
+                        }
+                    });
+                }
+                return false;
+            });
+        });
+    </script>*@

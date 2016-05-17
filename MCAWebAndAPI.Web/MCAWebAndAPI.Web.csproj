@@ -76,6 +76,10 @@
       <HintPath>..\packages\Portable.Licensing.1.1.0\lib\portable-net40+sl4+wp7+win8\Portable.Licensing.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Select.Pdf, Version=16.2.0.0, Culture=neutral, PublicKeyToken=e0ae9f6e27a97018, processorArchitecture=MSIL">
+      <HintPath>..\packages\Select.Pdf.16.2.0.0\lib\net40\Select.Pdf.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -1003,6 +1007,7 @@
     <Content Include="Views\Shared\EditorTemplates\InGridAjaxComboBox.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\InGridComboBox_Location.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\InGridComboBox_WBS.cshtml" />
+    <Content Include="Views\PDFExport\Create.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1027,11 +1032,13 @@
     <Compile Include="Controllers\ASSAssetTransactionController.cs" />
     <Compile Include="Controllers\ASSAssetTransferController.cs" />
     <Compile Include="Controllers\ASSAssignmentofAssetController.cs" />
+    <Compile Include="Controllers\ASSLocationMasterController.cs" />
     <Compile Include="Controllers\BIEmbedController.cs" />
     <Compile Include="Controllers\CalendarController.cs" />
     <Compile Include="Controllers\FINEventBudgetController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HRDataMasterController.cs" />
+    <Compile Include="Controllers\PDFExportController.cs" />
     <Compile Include="Controllers\ProjectHierarchyController.cs" />
     <Compile Include="Controllers\PurchaseOrderController.cs" />
     <Compile Include="Controllers\RIAController.cs" />
@@ -1125,7 +1132,9 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+    <Error Condition="!Exists('..\packages\Select.Pdf.16.2.0.0\build\Select.Pdf.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Select.Pdf.16.2.0.0\build\Select.Pdf.targets'))" />
   </Target>
+  <Import Project="..\packages\Select.Pdf.16.2.0.0\build\Select.Pdf.targets" Condition="Exists('..\packages\Select.Pdf.16.2.0.0\build\Select.Pdf.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
