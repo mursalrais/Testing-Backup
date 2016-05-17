@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MCAWebAndAPI.Model.ViewModel.Form.Asset;
 using NLog;
-using MCAWebAndAPI.Service.SPUtil;
 
 namespace MCAWebAndAPI.Service.Asset
 {
@@ -24,7 +20,7 @@ namespace MCAWebAndAPI.Service.Asset
             columnValues.Add("OfficeName", locationMaster.Header.OfficeName);
             try
             {
-                SPConnector.AddListItem(SP_LOCATIONMASTER_LISTNAME, columnValues, _siteUrl);
+                Utils.SPConnector.AddListItem(SP_LOCATIONMASTER_LISTNAME, columnValues, _siteUrl);
             }
             catch (Exception e)
             {
