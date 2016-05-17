@@ -1,0 +1,13 @@
+﻿@model MCAWebAndAPI.Model.ViewModel.Control.AjaxComboBoxVM
+
+@(Html.Kendo().DropDownListFor(m => m)
+            .DataTextField("AssetDesc")
+            .DataValueField("ID")
+            .DataSource(source => source.Read(read => read.Action("GetAssetMasters", "ASSAssetMaster")))
+            .HtmlAttributes(new
+            {
+                @class = "form-control",
+                style = "width:100%;"
+            })
+            .Events(e => e.Select("onInGridSelect"))
+)

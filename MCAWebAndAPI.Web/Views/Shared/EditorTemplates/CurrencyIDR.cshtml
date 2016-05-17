@@ -1,0 +1,11 @@
+@model decimal?
+
+@(Html.Kendo().CurrencyTextBoxFor(m => m)
+     .HtmlAttributes(new
+     {
+         @class = "form-control",
+         style = "width:100%;"
+     })
+     .Min(0)
+     .Culture("id-ID")
+)
