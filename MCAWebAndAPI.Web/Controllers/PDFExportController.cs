@@ -1,13 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Kendo.Mvc.Extensions;
+using Kendo.Mvc.UI;
+using MCAWebAndAPI.Model.ViewModel.Control;
+using MCAWebAndAPI.Service.PDFExporter;
+using MCAWebAndAPI.Web.Helpers;
+using MCAWebAndAPI.Web.Resources;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
     public class PDFExportController : Controller
     {
+        IPDFExporterService _pdfExporterService;
+
+        public PDFExportController()
+        {
+            _pdfExporterService = new PDFExporterService();
+        }
         // GET: PDFExport
         public ActionResult Index()
         {
@@ -23,23 +32,21 @@ namespace MCAWebAndAPI.Web.Controllers
         // GET: PDFExport/Create
         public ActionResult Create()
         {
-            return View();
+
+            var viewModel = _pdfExporterService.GetPDFExporter();
+            return View(viewModel);
         }
 
         // POST: PDFExport/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Submit(PDFExporterVM _data, string site)
         {
-            try
+            //return View(new AssetMasterVM());
+            _pdfExporterService.CreatePDFExporter(_data);
+            return new JavaScriptResult
             {
-                // TODO: Add insert logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+                Script = string.Format("window.parent.location.href = '{0}'", "https://eceos2.sharepoint.com/sites/mca-dev/dev/Lists/AssetMaster/AllItems.aspx")
+            };
         }
 
         // GET: PDFExport/Edit/5

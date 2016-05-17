@@ -4,6 +4,7 @@ using System.Security;
 using System.Collections.Generic;
 using System.Net;
 using System;
+using Microsoft.SharePoint.Client.Utilities;
 
 namespace MCAWebAndAPI.Service.Utils
 {
@@ -165,6 +166,26 @@ namespace MCAWebAndAPI.Service.Utils
 
                 return field.Choices;
             }
+        }
+
+        public static bool sendEmail( string email, string content, string subject,string siteUrl= null)
+        {
+            using (ClientContext clientContext = new ClientContext(siteUrl ?? CurUrl))
+            {
+                SecureString secureString = new SecureString();
+                Password.ToList().ForEach(secureString.AppendChar);
+                clientContext.Credentials = new SharePointOnlineCredentials(UserName, secureString);
+
+                EmailProperties properties = new EmailProperties();
+                properties.To = new string[] { email };
+                properties.Subject = subject;
+                properties.Body = content;
+
+                Utility.SendEmail(clientContext, properties);
+
+                clientContext.ExecuteQuery();
+            }
+            return true;
         }
     }
 }
