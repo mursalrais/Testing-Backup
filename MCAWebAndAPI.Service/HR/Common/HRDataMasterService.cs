@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MCAWebAndAPI.Model.HR.DataMaster;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
 
 namespace MCAWebAndAPI.Service.HR.Common
 {
-    public class DataMasterService : IDataMasterService
+    public class HRDataMasterService : IHRDataMasterService
     {
         string _siteUrl;
         const string SP_PROMAS_LIST_NAME = "Professional Master";

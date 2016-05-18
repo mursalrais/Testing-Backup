@@ -23,8 +23,12 @@ body.smart-style-6 #header, body.smart-style-6 .dropdown-menu>.active>a, body.sm
 }
 
 body.smart-style-6 #content {
-    margin-left: 12% !important;
-    margin-right: 12% !important;
+    margin-left: 3%;
+    margin-right: 3%;
+}
+
+body.animated.fadeInDown.smart-style-6 #content {
+    margin: 0 12% !important;
 }
 
 #main{

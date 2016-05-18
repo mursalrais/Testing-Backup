@@ -20,19 +20,48 @@ namespace MCAWebAndAPI.Service.Asset
             _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
         }
 
-        public AssetMasterVM GetAssetMasters()
+        public AssetMasterVM GetAssetMaster()
         {
-            throw new NotImplementedException();
+            var viewModel = new AssetMasterVM();
+            viewModel.AssetNoAssetDesc.Choices = GetChoiceFromList("AssetID");
+            viewModel.AssetLevel.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "AssetLevel");
+            viewModel.AssetCategory.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "AssetCategory");
+            viewModel.AssetType.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "AssetType");
+            viewModel.Condition.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "Condition");
+            viewModel.ProjectUnit.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "ProjectUnit");
+
+            return viewModel;
+        }
+
+        public AssetMasterVM GetAssetMaster(int ID)
+        {
+            var listItem = SPConnector.GetListItem(SP_ASSMAS_LIST_NAME, ID, _siteUrl);
+            var viewModel = new AssetMasterVM();
+
+            viewModel.AssetNoAssetDesc.Choices = GetChoiceFromList("AssetID");
+            viewModel.AssetLevel.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "AssetLevel");
+            viewModel.AssetCategory.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "AssetCategory");
+            viewModel.AssetType.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "AssetType");
+            viewModel.Condition.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "Condition");
+            viewModel.ProjectUnit.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "ProjectUnit");
+
+            viewModel.ProjectUnit.DefaultValue = Convert.ToString(listItem["ProjectUnit"]);
+            viewModel.Remarks = Convert.ToString(listItem["Remarks"]);
+            viewModel.SerialNo = Convert.ToString(listItem["SerialNo"]);
+            viewModel.Spesifications = Convert.ToString(listItem["Spesifications"]);            
+            viewModel.WarrantyExpires = Convert.ToDateTime(listItem["WarranyExpires"]);
+            viewModel.AssetCategory.DefaultValue = Convert.ToString(listItem["AssetCategory"]);
+            viewModel.AssetDesc = Convert.ToString(listItem["Title"]);
+            viewModel.AssetLevel.DefaultValue = Convert.ToString(listItem["AssetLevel"]);
+            viewModel.AssetType.DefaultValue = Convert.ToString(listItem["AssetType"]);
+            viewModel.Condition.DefaultValue = Convert.ToString(listItem["Condition"]);
+            viewModel.ID = ID;
+
+            return viewModel;
         }
 
         public bool CreateAssetMaster(AssetMasterVM assetMaster)
         {
-            throw new NotImplementedException();
-        }
-
-        public bool CreateAssetMaster_dummy(AssetMasterVM assetMaster)
-        {
-
             var columnValues = new Dictionary<string, object>();
             string _assetID = GenerateAssetID(assetMaster);
             columnValues.Add("AssetCategory", assetMaster.AssetCategory.Value);
@@ -45,7 +74,16 @@ namespace MCAWebAndAPI.Service.Asset
             columnValues.Add("Remarks", assetMaster.Remarks);
             columnValues.Add("SerialNo", assetMaster.SerialNo);
             columnValues.Add("Spesifications", assetMaster.Spesifications);
-            columnValues.Add("WarranyExpires", assetMaster.WarrantyExpires);
+            if (assetMaster.WarrantyExpires.HasValue)
+            {
+                columnValues.Add("WarranyExpires", assetMaster.WarrantyExpires.Value.Date);
+            }
+            else
+            {
+                columnValues.Add("WarranyExpires", null);
+            }
+
+
 
             try
             {
@@ -54,15 +92,42 @@ namespace MCAWebAndAPI.Service.Asset
             catch (Exception e)
             {
                 logger.Debug(e.Message);
+                return false;
             }
             var entitiy = new AssetMasterVM();
             entitiy = assetMaster;
             return true;
-        }
+        }      
 
         public bool UpdateAssetMaster(AssetMasterVM assetMaster)
         {
-            throw new NotImplementedException();
+            var columnValues = new Dictionary<string, object>();
+            int ID = assetMaster.ID.Value;
+            string _assetID = GenerateAssetID(assetMaster);
+            columnValues.Add("AssetCategory", assetMaster.AssetCategory.Value);
+            columnValues.Add("Title", assetMaster.AssetDesc);
+            columnValues.Add("AssetLevel", assetMaster.AssetLevel.Value);
+            columnValues.Add("AssetID", _assetID);
+            columnValues.Add("AssetType", assetMaster.AssetType.Value);
+            columnValues.Add("Condition", assetMaster.Condition.Value);
+            columnValues.Add("ProjectUnit", assetMaster.ProjectUnit.Value);
+            columnValues.Add("Remarks", assetMaster.Remarks);
+            columnValues.Add("SerialNo", assetMaster.SerialNo);
+            columnValues.Add("Spesifications", assetMaster.Spesifications);
+            columnValues.Add("WarranyExpires", assetMaster.WarrantyExpires.Value);
+
+            try
+            {
+                SPConnector.UpdateListItem(SP_ASSMAS_LIST_NAME, ID, columnValues, _siteUrl);
+            }
+            catch (Exception e)
+            {
+                logger.Debug(e.Message);
+                return false;
+            }
+            var entitiy = new AssetMasterVM();
+            entitiy = assetMaster;
+            return true;
         }
 
         IEnumerable<AssetMasterVM> IAssetMasterService.GetAssetMasters()
@@ -83,7 +148,8 @@ namespace MCAWebAndAPI.Service.Asset
         public AssetMasterVM GetAssetMaster_Dummy()
         {
             var viewModel = new AssetMasterVM();
-            viewModel.AssetNoAssetDesc.Choices = GetChoiceFromList();
+            string listName = "AssetID";
+            viewModel.AssetNoAssetDesc.Choices = GetChoiceFromList(listName);
             viewModel.AssetLevel.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "AssetLevel");
             viewModel.AssetCategory.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "AssetCategory");
             viewModel.AssetType.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "AssetType");
@@ -171,13 +237,13 @@ namespace MCAWebAndAPI.Service.Asset
             return result += "-"+projectUnit+"-" + assetType;
         }
 
-        private string[] GetChoiceFromList()
+        private string[] GetChoiceFromList(string listName)
         {
             List<string> _choices = new List<string>();
             var listItems = SPConnector.GetList(SP_ASSMAS_LIST_NAME, _siteUrl);
             foreach (var item in listItems)
             {
-                _choices.Add(item["AssetID"].ToString());
+                _choices.Add(item[listName].ToString());
             }
             return _choices.ToArray();
         }
@@ -198,5 +264,7 @@ namespace MCAWebAndAPI.Service.Asset
                 }
             };
         }
+
+        
     }
 }

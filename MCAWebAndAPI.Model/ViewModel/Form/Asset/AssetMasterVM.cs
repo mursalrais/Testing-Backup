@@ -22,26 +22,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
         public string SerialNo { get; set; }
         public string Spesifications { get; set; }
         public string Remarks { get; set; }
-
-        private DateTime _warrantyExpires;
-
-
-        public DateTime WarrantyExpires
-        {
-            get
-            {
-                if (_warrantyExpires == null)
-                    _warrantyExpires = new DateTime();
-                return _warrantyExpires;
-            }
-
-            set
-            {
-                _warrantyExpires = value;
-            }
-        }
-
-
+        public DateTime? WarrantyExpires { get; set; }
         [UIHint("ComboBox")]
         public ComboBoxVM AssetLevel
         {
@@ -53,8 +34,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
                         Choices = new string[]
                         {
                             ""
-                        }
-                        //FieldValue = "AssetLevel"
+                        }                       
                     };
                 return _assetLevel;
             }
