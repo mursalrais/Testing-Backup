@@ -12,7 +12,7 @@ namespace MCAWebAndAPI.Service.Common
     public class LocationService : ILocationService
     {
         string _siteUrl;
-        const string SP_LOCATION_LIST_NAME = "Location";
+        const string SP_LOCATION_LIST_NAME = "Location Master";
 
         public IEnumerable<Location> GetCities(int? parentId)
         {

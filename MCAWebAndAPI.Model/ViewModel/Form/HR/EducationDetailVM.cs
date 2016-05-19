@@ -11,8 +11,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         public string Subject { get; set; }
 
-        [DisplayName("Year of Graduation")]
-        [UIHint("Date")]
+        [DisplayName("Graduation")]
+        [UIHint("Month")]
         public DateTime? YearOfGraduation { get; set; }
 
         [UIHint("TextArea")]

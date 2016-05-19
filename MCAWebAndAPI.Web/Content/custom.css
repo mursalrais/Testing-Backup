@@ -92,8 +92,14 @@ form .row {
     padding-bottom: 25px;
 }
 
-.form-group label {
+.form-horizontal label.control-label {
     padding-top: 10px;
+}
+
+form .k-button.k-upload-button {
+    left: 132px;
+    top: -5px;
+    z-index: 1000;
 }
 
 .smart-form fieldset{

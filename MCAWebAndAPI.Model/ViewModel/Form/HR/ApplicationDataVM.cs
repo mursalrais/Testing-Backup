@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Web;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
@@ -11,6 +12,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         IEnumerable<EducationDetailVM> _educationDetails = new List<EducationDetailVM>();
         IEnumerable<TrainingDetailVM> _trainingDetails = new List<TrainingDetailVM>();
         IEnumerable<WorkingExperienceDetailVM> _workingExperienceDetails = new List<WorkingExperienceDetailVM>();
+
+        IEnumerable<HttpPostedFileBase> _documents = new List<HttpPostedFileBase>();
 
         [UIHint("TextArea")]
         public string SpecializationField { get; set; }
@@ -21,7 +24,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         [DisplayName("Months of Relevant Work")]
         public int MonthRelevantWork { get; set; }
-
 
         [DisplayName("First & Middle Name")]
         public string FirstMiddleName { get; set; }
@@ -49,7 +51,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             }
         }
 
-        DateTime? _dateOfBirth = DateTime.Now;
+        DateTime? _dateOfBirth = DateTime.Now.AddYears(-28);
         AjaxComboBoxVM _nationality = new AjaxComboBoxVM
         {
             ControllerName = "Location",
@@ -244,6 +246,33 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             set
             {
                 _educationDetails = value;
+            }
+        }
+
+        [UIHint("MultiFileUploader")]
+        public IEnumerable<HttpPostedFileBase> Documents
+        {
+            get
+            {
+                return _documents;
+            }
+
+            set
+            {
+                _documents = value;
+            }
+        }
+
+        public IEnumerable<WorkingExperienceDetailVM> WorkingExperienceDetails
+        {
+            get
+            {
+                return _workingExperienceDetails;
+            }
+
+            set
+            {
+                _workingExperienceDetails = value;
             }
         }
     }

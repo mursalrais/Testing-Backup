@@ -1,6 +1,7 @@
 ﻿using MCAWebAndAPI.Model.HR.DataMaster;
 using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using System.Collections.Generic;
+using System.Web;
 
 namespace MCAWebAndAPI.Service.HR.Common
 {
@@ -12,8 +13,5 @@ namespace MCAWebAndAPI.Service.HR.Common
 
         ProfessionalDataVM GetBlankProfessionalDataForm();
 
-        ApplicationDataVM GetBlankApplicationDataForm();
-
-        
     }
 }

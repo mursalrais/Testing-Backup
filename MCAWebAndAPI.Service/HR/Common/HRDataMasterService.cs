@@ -43,12 +43,7 @@ namespace MCAWebAndAPI.Service.HR.Common
 
         public ProfessionalDataVM GetBlankProfessionalDataForm()
         {
-            return new ProfessionalDataVM();
-        }
-
-        public ApplicationDataVM GetBlankApplicationDataForm()
-        {
-            return new ApplicationDataVM();
+            throw new NotImplementedException();
         }
     }
 }

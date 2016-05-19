@@ -11,10 +11,10 @@ namespace MCAWebAndAPI.Service.Common
     {
         void SetSiteUrl(string siteUrl);
 
-        IEnumerable<Location> GetCountries(int? parentId);
+        IEnumerable<Location> GetCountries(int? parentId = null);
 
-        IEnumerable<Location> GetProvinces(int? parentId);
+        IEnumerable<Location> GetProvinces(int? parentId = null);
 
-        IEnumerable<Location> GetCities(int? parentId);
+        IEnumerable<Location> GetCities(int? parentId = null);
     }
 }
