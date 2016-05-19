@@ -655,6 +655,10 @@
     <Content Include="Scripts\bi-frame.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\kendo.modernizr.custom.js" />
     <Content Include="Scripts\kendo\2016.2.504\kendo.culture.id-ID.min.js" />
     <Content Include="Scripts\libs\angular.min.js" />

@@ -143,11 +143,11 @@
         });
 
         function onSuccess(data) {
-            window.location.href = data.urlToRedirect;
+            parent.postMessage("Success", "https://eceos2.sharepoint.com");
         }
 
-        function onFailure(data) {
-            window.location.href = data.urlToRedirect;
+        function onFailure() {
+            alert("Fail")
         }
 
         function OnSelectAssetHolderFrom(e) {

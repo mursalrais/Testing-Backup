@@ -11,7 +11,7 @@
 </head>
 <body>
     <div>
-        <iframe width="100%" height="1050" src="http://localhost:15923/ASSLocationMaster/Create" frameborder="0"></iframe>
+        <iframe width="100%" height="1050" src="https://host.my-epmo.com/ASSAssetTransaction/CreateAssetTransfer" frameborder="0"></iframe>
     </div>
     <script>
         var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
@@ -23,7 +23,7 @@
             if (e.data == "Success") {
 
                 setTimeout(function () {
-                    location.href = "https://eceos2.sharepoint.com/sites/mca-dev/dev/Lists/LocationMaster/AllItems.aspx";
+                    location.href = "https://eceos2.sharepoint.com/sites/mca-dev/dev/Lists/AssetTrxDetail";
                 }, 1000);
             }
             console.log('parent received message!:  ', e.data);

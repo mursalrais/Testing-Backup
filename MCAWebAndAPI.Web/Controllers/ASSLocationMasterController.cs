@@ -1,9 +1,15 @@
-﻿using System.Web.Mvc;
+﻿using Kendo.Mvc.Extensions;
+using Kendo.Mvc.UI;
 using MCAWebAndAPI.Model.ViewModel.Form.Asset;
 using MCAWebAndAPI.Service.Asset;
-using Kendo.Mvc.UI;
-using Kendo.Mvc.Extensions;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
+using System;
 using MCAWebAndAPI.Web.Helpers;
+using MCAWebAndAPI.Model.ViewModel.Control;
+using MCAWebAndAPI.Web.Filters;
+using MCAWebAndAPI.Web.Resources;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -32,8 +38,16 @@ namespace MCAWebAndAPI.Web.Controllers
             return View();
         }
 
-        public ActionResult Create()
+        public ActionResult Create(string siteUrl = null, string userId = null)
         {
+            // Clear Existing Session Variables if any
+            if (System.Web.HttpContext.Current.Session.Keys.Count > 0)
+                System.Web.HttpContext.Current.Session.Clear();
+
+            // MANDATORY: Set Site URL
+            _locationMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            System.Web.HttpContext.Current.Session["SiteUrl"] = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
+
             var viewModel = _locationMasterService.GetLocationMaster();
 
             return View(viewModel);
