@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MCAWebAndAPI.Model.ViewModel.Form.Asset;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
@@ -14,7 +11,8 @@ namespace MCAWebAndAPI.Service.Asset
     {
         string _siteUrl;
         static Logger logger = LogManager.GetCurrentClassLogger();
-        const string SP_ITEMS_LIST_NAME = "Asset Transaction Detail", SP_HEADER_LIST_NAME = "Asset Transaction Header"; 
+        const string SP_ITEMS_LIST_NAME = "Asset Transaction Detail", 
+            SP_HEADER_LIST_NAME = "Asset Transaction Header"; 
 
         public int CreateHeader(AssetTransactionHeaderVM header)
         {

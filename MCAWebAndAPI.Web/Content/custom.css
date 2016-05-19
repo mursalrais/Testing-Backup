@@ -87,6 +87,15 @@ form#login-form {
     padding-bottom: 50px;
 }
 
+
+form .row {
+    padding-bottom: 25px;
+}
+
+.form-group label {
+    padding-top: 10px;
+}
+
 .smart-form fieldset{
     padding: 30px 10px 30px 40px !important;
 }

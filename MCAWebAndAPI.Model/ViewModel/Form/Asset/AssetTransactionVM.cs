@@ -4,7 +4,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 {
     public class AssetTransactionVM
     {
-
         AssetTransactionHeaderVM _header;
         IEnumerable<AssetTransactionItemVM> _items;
 

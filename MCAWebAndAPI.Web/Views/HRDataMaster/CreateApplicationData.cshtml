@@ -1,0 +1,46 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model ApplicationDataVM
+
+@{
+    ViewBag.Title = "CreateApplicationData";
+}
+
+@using (Ajax.BeginForm("CreateApplicationData", "HRDataMaster",
+                                                    FormMethod.Post,
+                                                    new AjaxOptions
+                                                    {
+                                                        OnSuccess = "onSuccess",
+                                                        OnFailure = "onFailure"
+                                                    }, new { @class = "form-horizontal" }))
+{
+    <fieldset>
+        <legend>Personnal Details</legend>
+        <div class="row">
+            @Html.Partial("_PersonalDetails", Model)
+        </div>
+        <legend>Contact Information</legend>
+        <div class="row">
+            @Html.Partial("_ContactInformationDetailsForApplication", Model)
+        </div>
+        <legend>Education</legend>
+        <div class="row">
+            @Html.Partial("_EducationDetails", Model.EducationDetails)
+        </div>
+        <legend>Training</legend>
+        <div class="row">
+            @Html.Partial("_TrainingDetails", Model.TrainingDetails)
+        </div>
+        <legend>Specialization</legend>
+        <div class="row">
+            @Html.Partial("_SpecializationDetails", Model)
+        </div>
+        <legend>Working Experience</legend>
+        <div class="row">
+            @Html.Partial("_WorkingExperienceDetails", Model)
+        </div>
+        <legend>Documents</legend>
+        <div class="row">
+            @Html.Partial("_DocumentDetailsForApplication", Model)
+        </div>
+    </fieldset>
+}

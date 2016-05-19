@@ -1,9 +1,6 @@
 ﻿using MCAWebAndAPI.Model.HR.DataMaster;
-using System;
+using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Service.HR.Common
 {
@@ -12,5 +9,11 @@ namespace MCAWebAndAPI.Service.HR.Common
         void SetSiteUrl(string siteUrl);
 
         IEnumerable<ProfessionalMaster> GetProfessionals();
+
+        ProfessionalDataVM GetBlankProfessionalDataForm();
+
+        ApplicationDataVM GetBlankApplicationDataForm();
+
+        
     }
 }

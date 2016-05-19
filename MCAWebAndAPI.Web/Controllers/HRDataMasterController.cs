@@ -51,7 +51,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 ), JsonRequestBehavior.AllowGet);
         }
 
-        private IEnumerable<ProfessionalMaster> GetFromExistingSession()
+        IEnumerable<ProfessionalMaster> GetFromExistingSession()
         {
             //Get existing session variable
             var sessionVariable = System.Web.HttpContext.Current.Session["ProfessionalMaster"] as IEnumerable<ProfessionalMaster>;
@@ -62,5 +62,33 @@ namespace MCAWebAndAPI.Web.Controllers
             return professionals;
         }
 
+
+        public ActionResult CreateProfessionalData(string siteUrl = null)
+        {
+            // Clear Existing Session Variables if any
+            if (System.Web.HttpContext.Current.Session.Keys.Count > 0)
+                System.Web.HttpContext.Current.Session.Clear();
+
+            // MANDATORY: Set Site URL
+            _dataMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            System.Web.HttpContext.Current.Session["SiteUrl"] = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
+
+            var viewModel = _dataMasterService.GetBlankProfessionalDataForm();
+            return View(viewModel);
+        }
+        
+        public ActionResult CreateApplicationData(string siteUrl = null)
+        {
+            // Clear Existing Session Variables if any
+            if (System.Web.HttpContext.Current.Session.Keys.Count > 0)
+                System.Web.HttpContext.Current.Session.Clear();
+
+            // MANDATORY: Set Site URL
+            _dataMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            System.Web.HttpContext.Current.Session["SiteUrl"] = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
+
+            var viewModel = _dataMasterService.GetBlankApplicationDataForm();
+            return View(viewModel);
+        }
     }
 }

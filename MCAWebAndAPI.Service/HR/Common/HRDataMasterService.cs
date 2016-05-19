@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using MCAWebAndAPI.Model.HR.DataMaster;
+using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
 
@@ -10,7 +11,6 @@ namespace MCAWebAndAPI.Service.HR.Common
     {
         string _siteUrl;
         const string SP_PROMAS_LIST_NAME = "Professional Master";
-
 
         public void SetSiteUrl(string siteUrl)
         {
@@ -39,6 +39,16 @@ namespace MCAWebAndAPI.Service.HR.Common
                 Position = Convert.ToString(item["Position"]),
                 ProjectUnit = Convert.ToString(item["ProjectUnit"])
             };
+        }
+
+        public ProfessionalDataVM GetBlankProfessionalDataForm()
+        {
+            return new ProfessionalDataVM();
+        }
+
+        public ApplicationDataVM GetBlankApplicationDataForm()
+        {
+            return new ApplicationDataVM();
         }
     }
 }

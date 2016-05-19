@@ -1,6 +1,8 @@
-﻿namespace MCAWebAndAPI.Model.ProjectManagement.Common
+﻿using MCAWebAndAPI.Model.Common;
+
+namespace MCAWebAndAPI.Model.ProjectManagement.Common
 {
-    public class SubActivity
+    public class SubActivity : Item
     {
         private string _subActivityName;
         private string _activityFK;
