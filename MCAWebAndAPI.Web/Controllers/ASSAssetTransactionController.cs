@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using MCAWebAndAPI.Model.ViewModel.Control;
 using MCAWebAndAPI.Web.Filters;
 using MCAWebAndAPI.Web.Resources;
+using MCAWebAndAPI.Web.Helpers;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -27,13 +28,11 @@ namespace MCAWebAndAPI.Web.Controllers
         /// <returns></returns>
         public ActionResult CreateAssetTransfer(string siteUrl = null)
         {
-            // Clear Existing Session Variables if any
-            if (System.Web.HttpContext.Current.Session.Keys.Count > 0)
-                System.Web.HttpContext.Current.Session.Clear();
+            SessionManager.RemoveAll(); 
 
             // MANDATORY: Set Site URL
             _assetTransactionService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            System.Web.HttpContext.Current.Session["SiteUrl"] = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
             // Get blank ViewModel
             var viewModel = _assetTransactionService.GetPopulatedModel();
@@ -79,7 +78,7 @@ namespace MCAWebAndAPI.Web.Controllers
             var headerID = _assetTransactionService.CreateHeader(viewModel.Header);
 
             // Get Items from session variable
-            var items = System.Web.HttpContext.Current.Session["AssetTransactionItemVM"] as List<AssetTransactionItemVM>;
+            var items = SessionManager.Get<List<AssetTransactionItemVM>>("AssetTransactionItemVM");
 
             // Insert items to SharePoint
             _assetTransactionService.CreateItems(headerID, items);
@@ -109,7 +108,8 @@ namespace MCAWebAndAPI.Web.Controllers
         public JsonResult Grid_Read([DataSourceRequest] DataSourceRequest request)
         {
             // Get from existing session variable or create new if doesn't exist
-            IEnumerable<AssetTransactionItemVM> viewModel = System.Web.HttpContext.Current.Session["AssetTransactionItemVM"] as List<AssetTransactionItemVM> 
+            IEnumerable<AssetTransactionItemVM> viewModel =
+                SessionManager.Get<List<AssetTransactionItemVM>>("AssetTransactionItemVM")
                 ?? new List<AssetTransactionItemVM>();
             
             // Convert to Kendo DataSource
@@ -129,7 +129,8 @@ namespace MCAWebAndAPI.Web.Controllers
                 return Json(viewModel.ToDataSourceResult(request, ModelState));
 
             // Get existing session variable if any otherwise create new object
-            var sessionVariables = System.Web.HttpContext.Current.Session["AssetTransactionItemVM"] as List<AssetTransactionItemVM>
+            var sessionVariables =
+                SessionManager.Get<List<AssetTransactionItemVM>>("AssetTransactionItemVM")
                 ?? new List<AssetTransactionItemVM>();
 
             foreach (var item in viewModel)
@@ -141,7 +142,7 @@ namespace MCAWebAndAPI.Web.Controllers
             sessionVariables.Reverse();
 
             // Overwrite existing session variable
-            System.Web.HttpContext.Current.Session["AssetTransactionItemVM"] = sessionVariables;
+            SessionManager.Set("AssetTransactionItemVM",sessionVariables);
 
             // Return JSON
             return Json(sessionVariables.ToDataSourceResult(request, ModelState));
@@ -155,7 +156,8 @@ namespace MCAWebAndAPI.Web.Controllers
                 return Json(viewModel.ToDataSourceResult(request, ModelState));
 
             // Get existing session variable
-            var sessionVariables = System.Web.HttpContext.Current.Session["AssetTransactionItemVM"] as List<AssetTransactionItemVM>
+            var sessionVariables =
+                SessionManager.Get<List<AssetTransactionItemVM>>("AssetTransactionItemVM")
                 ?? new List<AssetTransactionItemVM>();
 
             foreach (var item in viewModel)
@@ -165,7 +167,7 @@ namespace MCAWebAndAPI.Web.Controllers
             }
 
             // Overwrite existing session variable
-            System.Web.HttpContext.Current.Session["AssetTransactionItemVM"] = sessionVariables;
+            SessionManager.Set("AssetTransactionItemVM", sessionVariables);
 
             // Return JSON
             return Json(sessionVariables.ToDataSourceResult(request, ModelState));
@@ -179,7 +181,9 @@ namespace MCAWebAndAPI.Web.Controllers
                 return Json(viewModel.ToDataSourceResult(request, ModelState));
 
             // Get existing session variable
-            var sessionVariables = System.Web.HttpContext.Current.Session["AssetTransactionItemVM"] as List<AssetTransactionItemVM>;
+            var sessionVariables =
+                SessionManager.Get<List<AssetTransactionItemVM>>("AssetTransactionItemVM")
+                ?? new List<AssetTransactionItemVM>();
 
             foreach (var item in viewModel)
             {
@@ -187,7 +191,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 sessionVariables.Remove(obj);
             }
 
-            System.Web.HttpContext.Current.Session["AssetTransactionItemVM"] = sessionVariables;
+            SessionManager.Set("AssetTransactionItemVM", sessionVariables);
             return Json(viewModel.ToDataSourceResult(request, ModelState));
         }
     }

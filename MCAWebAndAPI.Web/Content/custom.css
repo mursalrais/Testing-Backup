@@ -87,6 +87,21 @@ form#login-form {
     padding-bottom: 50px;
 }
 
+
+form .row {
+    padding-bottom: 25px;
+}
+
+.form-horizontal label.control-label {
+    padding-top: 10px;
+}
+
+form .k-button.k-upload-button {
+    left: 132px;
+    top: -5px;
+    z-index: 1000;
+}
+
 .smart-form fieldset{
     padding: 30px 10px 30px 40px !important;
 }

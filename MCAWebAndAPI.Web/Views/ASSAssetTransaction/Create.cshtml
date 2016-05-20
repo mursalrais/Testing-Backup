@@ -82,12 +82,12 @@
                 toolbar.Create();
                 toolbar.Save();
             })
-            .Editable(editable => editable.Mode(GridEditMode.InCell))
+            .Editable(editable => editable.Mode(GridEditMode.InCell).CreateAt(GridInsertRowPosition.Bottom))
             .Columns(columns =>
             {
-                columns.Bound(p => p.Asset).Filterable(false); 
-                columns.Bound(p => p.LocationFrom);
-                columns.Bound(p => p.LocationTo); 
+                columns.Bound(p => p.Asset).Filterable(false).ClientTemplate("#=Asset.CategoryName#");
+                columns.Bound(p => p.LocationFrom).ClientTemplate("#=LocationFrom.CategoryName#");
+                columns.Bound(p => p.LocationTo).ClientTemplate("#=LocationTo.CategoryName#");
                 columns.Bound(p => p.CostIDR).Width(120);
                 columns.Bound(p => p.CostUSD).Width(120);
                 columns.Bound(p => p.ReturnDate);

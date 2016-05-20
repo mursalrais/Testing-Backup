@@ -1,0 +1,62 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model ApplicationDataVM
+
+<div class="col-md-12" style="margin-bottom: 20px">
+    @(Html.Kendo().Grid(Model.WorkingExperienceDetails)
+        .Name("WorkingExperienceDetail")
+        .ToolBar(tools => tools.Create().Text("Add New Working Experience"))
+        .Editable(editable => editable.Mode(GridEditMode.InCell).CreateAt(GridInsertRowPosition.Bottom))
+        .Columns(columns =>
+        {
+            columns.Bound(p => p.Position).ClientTemplate("#= Position #" +
+                          "<input type='hidden' name='WorkingExperienceDetail[#= getWorkingExperienceDetail(data)#].Position' value='#= Position #' />"
+                        );
+            columns.Bound(p => p.Company).ClientTemplate("#= Company #" +
+                               "<input type='hidden' name='WorkingExperienceDetail[#= getWorkingExperienceDetail(data)#].Company' value='#= Company #' />"
+                             );
+            columns.Bound(p => p.From).ClientTemplate("#= From #" +
+                               "<input type='hidden' name='WorkingExperienceDetail[#= getWorkingExperienceDetail(data)#].From' value='#= From #' />"
+                             );
+            columns.Bound(p => p.To).ClientTemplate("#= To #" +
+                               "<input type='hidden' name='WorkingExperienceDetail[#= getWorkingExperienceDetail(data)#].To' value='#= To #' />"
+                             );
+            columns.Bound(p => p.JobDescription).ClientTemplate("#= JobDescription #" +
+                               "<input type='hidden' name='WorkingExperienceDetail[#= getWorkingExperienceDetail(data)#].To' value='#= JobDescription #' />");
+            columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
+              "<input type='hidden' name='WorkingExperienceDetail[#= getWorkingExperienceDetail(data)#].ID' value='#= ID #' />"
+            );
+        })
+        .DataSource(dataSource => dataSource.Ajax()
+                   .Model(model =>
+                   {
+                       model.Id(p => p.ID);
+                   })
+                   .ServerOperation(false)
+        )
+    )
+</div>
+<div class="col-md-6">
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.YearRelevanWork).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.Kendo().TextBoxFor(model => model.YearRelevanWork).HtmlAttributes(new { @class = "form-control", style = "width:100%;" })
+        </div>
+    </div>
+</div>
+<div class="col-md-6">
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.MonthRelevantWork).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.Kendo().TextBoxFor(model => model.MonthRelevantWork).HtmlAttributes(new { @class = "form-control", style = "width:100%;" })
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function getWorkingExperienceDetail(dataItem) {
+        var data = $("#WorkingExperienceDetail").data("kendoGrid").dataSource.data();
+        return data.indexOf(dataItem);
+    }
+</script>
+

@@ -212,8 +212,5 @@ namespace MCAWebAndAPI.Service.Utils
             }
             return true;
         }
-
-
-
     }
 }
