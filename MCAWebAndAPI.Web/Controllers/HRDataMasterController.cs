@@ -86,5 +86,16 @@ namespace MCAWebAndAPI.Web.Controllers
             return professionals;
         }
 
+        private IEnumerable<PositionsMaster> GetFromPositionsExistingSession()
+        {
+            //Get existing session variable
+            var sessionVariable = System.Web.HttpContext.Current.Session["PositionsMaster"] as IEnumerable<PositionsMaster>;
+            var positions = sessionVariable ?? _dataMasterService.GetPositions();
+
+            if (sessionVariable == null) // If no session variable is found
+                System.Web.HttpContext.Current.Session["PositionsMaster"] = positions;
+            return positions;
+        }
+
     }
 }
