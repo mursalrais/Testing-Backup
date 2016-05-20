@@ -65,6 +65,7 @@
     <Compile Include="ViewModel\Chart\StackedBarChartVM.cs" />
     <Compile Include="ViewModel\Chart\ProjectScheduleSCurveVM.cs" />
     <Compile Include="ViewModel\Chart\ProjectStatusBarChartVM.cs" />
+    <Compile Include="ViewModel\Control\CSVVM.cs" />
     <Compile Include="ViewModel\Control\AjaxComboBoxVM.cs" />
     <Compile Include="ViewModel\Control\ComboBoxVM.cs" />
     <Compile Include="ViewModel\Control\InGridComboBoxVM.cs" />

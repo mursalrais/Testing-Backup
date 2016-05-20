@@ -1,0 +1,91 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Control
+
+@model CSVVM
+
+<form class="form-horizontal" method="post" action="/CSV/Submit" id="create-asset-acquisition-form">
+    <fieldset>
+        <legend>CSV Uploader</legend>
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary()
+
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.File).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                        @(Html.Kendo().Upload()
+        .Name("files")
+        .Async(a => a
+            .Save("Save", "CSV")
+            .Remove("Remove", "CSV")
+            .AutoUpload(true)
+        )
+                        )
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.ListName).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.ListName)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                @if (Model.DataTable.Columns.Count != 0)
+                {
+                    @(Html.Kendo().Grid(Model.DataTable)
+            .Name("DayViewGrid")
+            .Columns(columns =>
+            {
+                foreach (System.Data.DataColumn column in Model.DataTable.Columns)
+                {
+                    columns.Bound(column.ColumnName).Title(column.Caption);
+                }
+            }
+            )
+            .Scrollable(scr => scr.Height(600))
+            .DataSource(dataSource => dataSource
+                .Ajax()
+                .Model(model =>
+                {
+                    model.Id(Model.DataTable.Columns[0].ColumnName);
+
+                    foreach (System.Data.DataColumn column in Model.DataTable.Columns)
+                    {
+                        if (column.Ordinal > 0)
+                            model.Field(column.ColumnName, column.DataType);
+                    }
+                }
+                 )
+
+            )
+                    )
+                }
+               
+            </div>
+        </div>
+
+
+
+        <input class="k-button k-button-icontext k-grid-add" type="submit" />
+    </fieldset>
+
+</form>
+<script type="text/javascript">
+    function error_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            alert(message);
+        }
+    }
+
+</script>
+
+

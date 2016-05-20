@@ -865,7 +865,6 @@
     <Content Include="Views\ASSAssetCheckResultApprove\Create.cshtml" />
     <Content Include="Views\ASSAssetCheckResult\Create.cshtml" />
     <Content Include="Views\ASSAssetFixedAsset\Create.cshtml" />
-    <Content Include="Views\ASSAssetLoanAndReturn\Create.cshtml" />
     <Content Include="Views\ASSAssetReplacement\Create.cshtml" />
     <Content Include="Views\ASSAssetReplacement\Edit.cshtml" />
     <Content Include="Views\ASSAssetScrapping\Create.cshtml" />
@@ -1009,6 +1008,10 @@
     <Content Include="Views\Shared\EditorTemplates\InGridComboBox_WBS.cshtml" />
     <Content Include="Views\ASSLocationMaster\Create.cshtml" />
     <Content Include="Views\ASSLocationMaster\IFrame.cshtml" />
+    <Content Include="Views\ASSAssetLoanAndReturn\Create.cshtml" />
+    <Content Include="Views\CSV\Create.cshtml" />
+    <Content Include="Views\CSV\Submit.cshtml" />
+    <Content Include="Views\ASSAssetMaster\Edit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1020,6 +1023,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\CSVController.cs" />
     <Compile Include="Controllers\ASSAssetMasterController.cs" />
     <Compile Include="Controllers\ASSAssetAcquisitionController.cs" />
     <Compile Include="Controllers\ASSAssetCheckFormController.cs" />
@@ -1081,6 +1085,7 @@
     <Folder Include="App_Code\" />
     <Folder Include="App_Data\" />
     <Folder Include="Scripts\apps\controlls\" />
+    <Folder Include="Views\ASSAssetScrapping\ASSAssetLoanAndReturn\" />
     <Folder Include="Views\HRProfessional\" />
   </ItemGroup>
   <ItemGroup>
