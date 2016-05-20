@@ -1,7 +1,24 @@
 ﻿@model MCAWebAndAPI.Model.ViewModel.Control.AjaxComboBoxVM
 
 
-@(Html.Kendo().DropDownListFor(m => m.Value)
+@if (Model.OnSelectEventName.IsEmpty())
+{
+    @(Html.Kendo().DropDownListFor(m => m.Value)
+            .DataTextField(Model.TextField)
+            .DataValueField(Model.ValueField)
+            .DataSource(source => source.Read(read => read.Action(Model.ActionName, Model.ControllerName)))
+            .Value(Model.DefaultValue)
+            .Filter("contains")
+            .HtmlAttributes(new
+            {
+                @class = "form-control",
+                style = "width:100%;"
+            })
+    )
+}
+else
+{
+    @(Html.Kendo().DropDownListFor(m => m.Value)
             .DataTextField(Model.TextField)
             .DataValueField(Model.ValueField)
             .DataSource(source => source.Read(read => read.Action(Model.ActionName, Model.ControllerName)))
@@ -14,3 +31,7 @@
                 style = "width:100%;"
             })
     )
+}
+
+
+

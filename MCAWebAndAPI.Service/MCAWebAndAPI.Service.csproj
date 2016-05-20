@@ -60,6 +60,8 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -104,11 +106,15 @@
     <Compile Include="Asset\IAssignmentofAssetService.cs" />
     <Compile Include="Asset\ILocationMasterService.cs" />
     <Compile Include="Asset\LocationMasterService.cs" />
+    <Compile Include="Common\ILocationService.cs" />
+    <Compile Include="Common\LocationService.cs" />
     <Compile Include="Converter\CSVConverter.cs" />
     <Compile Include="Converter\PDFConverter.cs" />
     <Compile Include="Finance\EventBudgetService.cs" />
     <Compile Include="Finance\IEventBudgetService.cs" />
+    <Compile Include="HR\Common\HRApplicationService.cs" />
     <Compile Include="HR\Common\HRDataMasterService.cs" />
+    <Compile Include="HR\Common\IHRApplicationService.cs" />
     <Compile Include="HR\Common\IHRDataMasterService.cs" />
     <Compile Include="JobSchedulers\Jobs\EmailJob.cs" />
     <Compile Include="JobSchedulers\Schedulers\EmailScheduler.cs" />
@@ -129,7 +135,6 @@
   <ItemGroup>
     <Folder Include="ContractProcurement\" />
     <Folder Include="HR\Payroll\" />
-    <Folder Include="HR\Recruitment\" />
     <Folder Include="HR\Travel\" />
     <Folder Include="ProjectManagement\Finance\" />
     <Folder Include="ProjectManagement\Result\" />

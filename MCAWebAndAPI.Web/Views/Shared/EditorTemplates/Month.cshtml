@@ -1,0 +1,10 @@
+﻿@model DateTime?
+
+@(Html.Kendo().DatePickerFor(m => m)
+              .Start(CalendarView.Year)
+              .Depth(CalendarView.Year)
+              .Format("MMMM yyyy")
+              .HtmlAttributes(new {
+                  @class = "form-control",
+                  style = "width: 100%" })
+)

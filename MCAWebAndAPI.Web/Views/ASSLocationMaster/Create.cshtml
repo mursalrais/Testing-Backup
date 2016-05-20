@@ -44,28 +44,10 @@
 }
 <script>
     function OnSuccess(data) {
-        parent.postMessage(data.result, "http://localhost:15923/");
+        parent.postMessage("Success", "https://eceos2.sharepoint.com");
     }
 
     function OnFailure() {
         alert("Fail")
     }
 </script>
-@*<script type="text/javascript">
-        $(function () {
-            $('form').submit(function (form) {
-                if ($(this).valid()) {
-                    $.ajax({
-                        url: this.action,
-                        type: this.method,
-                        data: $(this).serialize(),
-                        success: function (data) {
-                            console.log(data);
-                            parent.postMessage("Hello", "http://localhost:15923/");
-                        }
-                    });
-                }
-                return false;
-            });
-        });
-    </script>*@

@@ -1,11 +1,7 @@
 ﻿using MCAWebAndAPI.Service.JobSchedulers.Jobs;
 using Quartz;
 using Quartz.Impl;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Service.JobSchedulers.Schedulers
 {
@@ -18,14 +14,15 @@ namespace MCAWebAndAPI.Service.JobSchedulers.Schedulers
         /// <param name="subject"></param>
         /// <param name="body"></param>
         /// <param name="siteUrl"></param>
-        public static void SendNow_PerHour_UntilFiveTimes(IEnumerable<string> targetEmails, string subject, string body, string siteUrl = null)
+        public static void SendNow_PerHour_UntilFiveTimes(IEnumerable<string> targetEmails, 
+            string subject, string body, string siteUrl = null)
         {
             // construct a scheduler factory
-            ISchedulerFactory schedFact = new StdSchedulerFactory();
+            ISchedulerFactory scheduleFactory = new StdSchedulerFactory();
 
             // get a scheduler
-            IScheduler sched = schedFact.GetScheduler();
-            sched.Start();
+            IScheduler scheduler = scheduleFactory.GetScheduler();
+            scheduler.Start();
 
             var _targetEmails = string.Empty;
             foreach(var email in targetEmails)
@@ -34,23 +31,23 @@ namespace MCAWebAndAPI.Service.JobSchedulers.Schedulers
             }
 
             IJobDetail job = JobBuilder.Create<EmailJob>()
-                .WithIdentity("email-job", "alert-jobs")
-                .UsingJobData("target-emails", _targetEmails)
-                .UsingJobData("subject", subject)
-                .UsingJobData("body", body)
-                .UsingJobData("site-url", siteUrl)
+                .WithIdentity("email-job", "alert-jobs") // put job name and job category
+                .UsingJobData("target-emails", _targetEmails) // passing variable
+                .UsingJobData("subject", subject) // passing variable
+                .UsingJobData("body", body) // passing variable
+                .UsingJobData("site-url", siteUrl) // passing variable
                 .Build();
 
             // Trigger the job to run now, and then every 1 hour
             ITrigger trigger = TriggerBuilder.Create()
               .WithIdentity("start-now-per-hour-until-five-times", "repetitive-triggers")
-              .StartNow()
+              .StartNow() // start when?
               .WithSimpleSchedule(x => x
-                  .WithIntervalInHours(1)
-                  .WithRepeatCount(5))
+                  .WithIntervalInHours(1) // interval or how often?
+                  .WithRepeatCount(5)) // repeat until how many times?
               .Build();
 
-            sched.ScheduleJob(job, trigger);
+            scheduler.ScheduleJob(job, trigger);
         }
     }
 }

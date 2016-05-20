@@ -1,0 +1,9 @@
+﻿@model object 
+
+@(Html.Kendo().MaskedTextBoxFor(m => m)
+                  .Mask("+00 - (999) - 000000000")
+                  .HtmlAttributes(new {
+                      @class = "form-control",
+                      style = "width: 100"
+                  })
+)
