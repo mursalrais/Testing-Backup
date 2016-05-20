@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MCAWebAndAPI.Model.ViewModel.Form.HR;
+using MCAWebAndAPI.Model.HR.DataMaster;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
 using NLog;
@@ -41,7 +42,31 @@ namespace MCAWebAndAPI.Service.HR
 
             return SPConnector.GetInsertedItemID(SP_LIST_NAME, _siteUrl);
         }
-        
+
+        public IEnumerable<PSAMaster> GetPSAs()
+        {
+            var models = new List<PSAMaster>();
+
+            foreach (var item in SPConnector.GetList(SP_LIST_NAME, _siteUrl))
+            {
+                models.Add(ConvertToPSAModel(item));
+            }
+
+            return models;
+        }
+
+        private PSAMaster ConvertToPSAModel(ListItem item)
+        {
+            return new PSAMaster
+            {
+                ID = item["professional_x003a_ID"] == null ? "" :
+               Convert.ToString((item["professional_x003a_ID"] as FieldLookupValue).LookupValue),
+                JoinDate = Convert.ToString(item["joindate"]),
+                DateOfNewPSA = Convert.ToString(item["dateofnewpsa"]),
+                PsaExpiryDate = Convert.ToString(item["psaexpirydate"]),
+                ProjectOrUnit = Convert.ToString(item["ProjectOrUnit"]),
+            };
+        }
 
         /*
         public int CreateItem(int headerID, AssetTransactionItemVM item)

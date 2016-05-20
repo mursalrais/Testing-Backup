@@ -10,6 +10,7 @@ using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Model.ViewModel.Control;
 using MCAWebAndAPI.Web.Filters;
 using MCAWebAndAPI.Web.Resources;
+using MCAWebAndAPI.Model.HR.DataMaster;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -196,6 +197,35 @@ namespace MCAWebAndAPI.Web.Controllers
             return Json(viewModel.ToDataSourceResult(request, ModelState));
         }
         */
+
+        public JsonResult GetPsa(string id)
+        {
+            psaManagementService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            var professionals = GetFromExistingSession();
+            return Json(professionals.Where(e => e.ID == id).Select(
+                    e =>
+                    new
+                    {
+                        e.ID,
+                        e.JoinDate,
+                        e.DateOfNewPSA,
+                        e.PsaExpiryDate,
+                        e.ProjectOrUnit
+                    }
+                ), JsonRequestBehavior.AllowGet);
+        }
+
+        private IEnumerable<PSAMaster> GetFromExistingSession()
+        {
+            //Get existing session variable
+            var sessionVariable = System.Web.HttpContext.Current.Session["PSA"] as IEnumerable<PSAMaster>;
+            var psa = sessionVariable ?? psaManagementService.GetPSAs();
+
+            if (sessionVariable == null) // If no session variable is found
+                System.Web.HttpContext.Current.Session["PSA"] = psa;
+            return psa;
+        }
+
     }
 
 }

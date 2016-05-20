@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MCAWebAndAPI.Model.HR.DataMaster;
 
 namespace MCAWebAndAPI.Service.HR
 {
@@ -12,6 +13,8 @@ namespace MCAWebAndAPI.Service.HR
         void SetSiteUrl(string siteUrl);
 
         PSAManagementVM GetPopulatedModel(int? id = null);
+
+        IEnumerable<PSAMaster> GetPSAs();
 
         /*
         AssetTransactionHeaderVM GetHeader();

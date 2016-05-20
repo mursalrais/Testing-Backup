@@ -1114,6 +1114,8 @@
     <Content Include="Views\CSV\Create.cshtml" />
     <Content Include="Views\CSV\Submit.cshtml" />
     <Content Include="Views\HRPSAManagement\Create.cshtml" />
+    <Content Include="Views\HRPayroll\CreateMonthlyFee.cshtml" />
+    <Content Include="Views\HRPayroll\EditMonthlyFee.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1146,6 +1148,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HRApplicationController.cs" />
     <Compile Include="Controllers\HRDataMasterController.cs" />
+    <Compile Include="Controllers\HRPayrollController.cs" />
     <Compile Include="Controllers\LocationController.cs" />
     <Compile Include="Controllers\ProjectHierarchyController.cs" />
     <Compile Include="Controllers\HRPSAManagementController.cs" />

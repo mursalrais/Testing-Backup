@@ -116,6 +116,8 @@
     <Compile Include="HR\Common\HRDataMasterService.cs" />
     <Compile Include="HR\Common\IHRApplicationService.cs" />
     <Compile Include="HR\Common\IHRDataMasterService.cs" />
+    <Compile Include="HR\Payroll\HRPayrollServices.cs" />
+    <Compile Include="HR\Payroll\IHRPayrollServices.cs" />
     <Compile Include="HR\Recruitment\IPSAManagementService.cs" />
     <Compile Include="HR\Recruitment\PSAManagementService.cs" />
     <Compile Include="JobSchedulers\Jobs\EmailJob.cs" />
@@ -137,7 +139,6 @@
   <ItemGroup>
     <Folder Include="ContractProcurement\" />
     <Folder Include="HR\Leave\" />
-    <Folder Include="HR\Payroll\" />
     <Folder Include="HR\Travel\" />
     <Folder Include="ProjectManagement\Finance\" />
     <Folder Include="ProjectManagement\Result\" />
