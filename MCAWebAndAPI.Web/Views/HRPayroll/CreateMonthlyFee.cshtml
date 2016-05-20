@@ -1,0 +1,158 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+
+@model MonthlyFeeVM
+
+@using (Ajax.BeginForm("SubmitMonthlyFee", "HRPayroll",
+                                        FormMethod.Post,
+                                        new AjaxOptions
+                                        {
+                                            OnSuccess = "onSuccess",
+                                            OnFailure = "onFailure"
+                                        }, new { @class = "form-horizontal" }))
+{<fieldset>
+        <legend>Form Asset Transfer</legend>
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary()
+
+        <div class="col-md-12">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Header.ProfessionalID).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.DisplayFor(m => m.Header.ProfessionalID)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Header.ProfessionalName).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.Header.ProfessionalName)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Header.ProjectUnit).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.DisplayFor(m => m.Header.ProjectUnit)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Header.Position).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.DisplayFor(m => m.Header.Position)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Header.Status).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.DisplayFor(m => m.Header.Status)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Header.JoinDate).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.DisplayFor(m => m.Header.JoinDate)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Header.DateOfNewPsa).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.DisplayFor(m => m.Header.DateOfNewPsa)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Header.EndOfContract).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.DisplayFor(m => m.Header.EndOfContract)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Header.DateOfNewFee).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.Header.DateOfNewFee)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Header.MonthlyFee).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.Header.MonthlyFee)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Header.AnnualFee).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.DisplayFor(m => m.Header.AnnualFee)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Header.Currency).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.Header.Currency)
+                </div>
+            </div>
+        </div>
+    </fieldset>
+}
+
+<div class="form-actions">
+    <div class="row">
+        <div class="col-md-12">
+            <button class="btn btn-default" type="submit">
+                Cancel
+            </button>
+            <button id="submit-button" class="btn btn-primary" type="submit">
+                <i class="fa fa-save"></i>
+                Submit
+            </button>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#submit-button").click(function () {
+                $("form").submit();
+            });
+        });
+
+        function onSuccess(data) {
+            parent.postMessage("Success", "https://eceos2.sharepoint.com");
+        }
+
+        function onFailure() {
+            alert("Fail")
+        }
+
+        function OnSelectProfessionalName(e) {
+            var dataItem = this.dataItem(e.item);
+            var url = "/HRDataMaster/GetProfessional/" + dataItem.ID;
+            var urlPSA = "/HRPSAMaster/GetPSA/" + dataItem.ID;
+            $.getJSON(url, function (result) {  
+                $('#Header_ProfessionalID').prop('value', result[0].ID);
+                $('#Header_Position').prop('value', result[0].Position);
+
+                //$('#Header_JoinDate').prop('value', result[0].ProjectUnit);
+                //$('#Header_DateOfNewPsa').prop('value', result[0].Position);
+                //$('#Header_EndofContract').prop('value', result[0].Position);
+            })
+            $.getJSON(urlPSA, function (result) {
+                $('#Header_ProjectUnit').prop('value', result[0].ProjectOrUnit);
+                $('#Header_JoinDate').prop('value', result[0].JoinDate);
+                $('#Header_DateOfNewPsa').prop('value', result[0].DateOfNewPSA);
+                $('#Header_EndOfContract').prop('value', result[0].PsaExpiryDate);
+            })
+        }
+
+        $(document).ready(function () {
+
+            $("#Header_MonthlyFee").on('input', function () {
+                sumCal();
+            });
+
+            function sumCal() {
+                var AnnualFee = $("#Header_MonthlyFee").val();
+                var Result = Number(AnnualFee) *12;
+                $("#Header_AnnualFee").val(Result);
+            }
+        });
+
+    </script>
+}

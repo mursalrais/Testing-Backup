@@ -110,6 +110,8 @@
     <Compile Include="Finance\IEventBudgetService.cs" />
     <Compile Include="HR\Common\HRDataMasterService.cs" />
     <Compile Include="HR\Common\IHRDataMasterService.cs" />
+    <Compile Include="HR\Payroll\IHRPayrollServices.cs" />
+    <Compile Include="HR\Payroll\HRPayrollServices.cs" />
     <Compile Include="JobSchedulers\Jobs\EmailJob.cs" />
     <Compile Include="JobSchedulers\Schedulers\EmailScheduler.cs" />
     <Compile Include="ProjectManagement\Common\IProjectHierarchyService.cs" />
@@ -128,7 +130,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ContractProcurement\" />
-    <Folder Include="HR\Payroll\" />
     <Folder Include="HR\Recruitment\" />
     <Folder Include="HR\Travel\" />
     <Folder Include="ProjectManagement\Finance\" />

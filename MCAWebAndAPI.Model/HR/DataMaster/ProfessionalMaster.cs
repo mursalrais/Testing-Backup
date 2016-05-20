@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MCAWebAndAPI.Model.ViewModel.Control;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace MCAWebAndAPI.Model.HR.DataMaster
 {
@@ -14,9 +17,7 @@ namespace MCAWebAndAPI.Model.HR.DataMaster
 
         public string Position { get; set; }
 
-        public string ContactNo { get; set; }
-
-        public string ProjectUnit { get; set; }
+        public string Status { get; set; }
 
     }
 }
