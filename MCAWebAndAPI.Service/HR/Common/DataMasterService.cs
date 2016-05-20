@@ -13,8 +13,8 @@ namespace MCAWebAndAPI.Service.HR.Common
     {
         string _siteUrl;
         const string SP_PROMAS_LIST_NAME = "Professional Master";
-
-
+        const string SP_POSMAS_LIST_NAME = "Position Master";
+        
         public void SetSiteUrl(string siteUrl)
         {
             _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
@@ -41,6 +41,30 @@ namespace MCAWebAndAPI.Service.HR.Common
                 ContactNo = Convert.ToString(item["ContactNo"]),
                 Position = Convert.ToString(item["Position"]),
                 ProjectUnit = Convert.ToString(item["ProjectUnit"])
+            };
+        }
+
+        public IEnumerable<PositionsMaster> GetPositions()
+        {
+            var models = new List<PositionsMaster>();
+
+            foreach (var item in SPConnector.GetList(SP_POSMAS_LIST_NAME, _siteUrl))
+            {
+                models.Add(ConvertToPositionsModel(item));
+            }
+
+            return models;
+        }
+
+        private PositionsMaster ConvertToPositionsModel(ListItem item)
+        {
+            return new PositionsMaster
+            {
+                ID = Convert.ToInt32(item["ID"]),
+                Title = Convert.ToString(item["Title"]),
+                //PositionStatus = Convert.ToString(item["positionstatus"]),
+                //Position = Convert.ToString(item["Position"]),
+                //ProjectUnit = Convert.ToString(item["ProjectUnit"])
             };
         }
     }

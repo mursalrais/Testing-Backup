@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HR\DataMaster\PositionsMaster.cs" />
     <Compile Include="HR\DataMaster\ProfessionalMaster.cs" />
     <Compile Include="ProjectManagement\Common\Activity.cs" />
     <Compile Include="ProjectManagement\Common\Project.cs" />
@@ -107,6 +108,8 @@
     <Compile Include="ViewModel\Form\Finance\EventBudgetHeaderVM.cs" />
     <Compile Include="ViewModel\Form\Finance\EventBudgetItemVM.cs" />
     <Compile Include="ViewModel\Form\Finance\EventBudgetVM.cs" />
+    <Compile Include="ViewModel\Form\HR\CalendarEventVM.cs" />
+    <Compile Include="ViewModel\Form\HR\PSAManagementVM.cs" />
     <Compile Include="ViewModel\Form\Procurement\PurchaseOrderVM.cs" />
     <Compile Include="ViewModel\Form\Procurement\PurchaseOrderHeaderVM.cs" />
     <Compile Include="ViewModel\Form\Procurement\PurchaseOrderItemVM.cs" />

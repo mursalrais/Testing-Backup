@@ -51,6 +51,28 @@ namespace MCAWebAndAPI.Web.Controllers
                 ), JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetPositions()
+        {
+            //TODO: Ask whether it is from BO or from HR
+            _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+
+            var positions = GetFromPositionsExistingSession();
+
+            return Json(positions.Select(e =>
+                new {
+                    e.ID,
+                    e.Title,
+                    e.PositionStatus,
+                    e.PositionManpowerRequisitionApprover1,
+                    e.PositionManpowerRequisitionApprover2,
+                    e.Remarks,
+                    e.IsKeyPosition,
+                    Desc = string.Format("{0}", e.Title)
+                }),
+                JsonRequestBehavior.AllowGet);
+        }
+
+
         private IEnumerable<ProfessionalMaster> GetFromExistingSession()
         {
             //Get existing session variable
@@ -60,6 +82,17 @@ namespace MCAWebAndAPI.Web.Controllers
             if (sessionVariable == null) // If no session variable is found
                 System.Web.HttpContext.Current.Session["ProfessionalMaster"] = professionals;
             return professionals;
+        }
+
+        private IEnumerable<PositionsMaster> GetFromPositionsExistingSession()
+        {
+            //Get existing session variable
+            var sessionVariable = System.Web.HttpContext.Current.Session["PositionsMaster"] as IEnumerable<PositionsMaster>;
+            var positions = sessionVariable ?? _dataMasterService.GetPositions();
+
+            if (sessionVariable == null) // If no session variable is found
+                System.Web.HttpContext.Current.Session["PositionsMaster"] = positions;
+            return positions;
         }
 
     }

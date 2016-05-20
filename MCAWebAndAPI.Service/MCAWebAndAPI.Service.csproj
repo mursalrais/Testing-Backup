@@ -78,10 +78,12 @@
     <Compile Include="Finance\IEventBudgetService.cs" />
     <Compile Include="HR\Common\DataMasterService.cs" />
     <Compile Include="HR\Common\IDataMasterService.cs" />
+    <Compile Include="HR\Recruitment\IPSAManagementService.cs" />
+    <Compile Include="HR\Recruitment\PSAManagementService.cs" />
     <Compile Include="ProjectManagement\Common\IProjectHierarchyService.cs" />
     <Compile Include="ProjectManagement\Common\ProjectHierarchyService.cs" />
-    <Compile Include="ProjectManagement\Schedule\CalendarService.cs" />
-    <Compile Include="ProjectManagement\Schedule\ICalendarService.cs" />
+    <Compile Include="HR\Common\CalendarService.cs" />
+    <Compile Include="HR\Common\ICalendarService.cs" />
     <Compile Include="ProjectManagement\Schedule\IRIAService.cs" />
     <Compile Include="ProjectManagement\Schedule\RIAService.cs" />
     <Compile Include="Utils\FormatUtil.cs" />
@@ -95,7 +97,6 @@
   <ItemGroup>
     <Folder Include="HR\Leave\" />
     <Folder Include="HR\Payroll\" />
-    <Folder Include="HR\Recruitment\" />
     <Folder Include="HR\Travel\" />
   </ItemGroup>
   <ItemGroup>

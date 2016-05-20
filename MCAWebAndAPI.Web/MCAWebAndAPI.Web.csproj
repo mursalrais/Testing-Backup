@@ -982,6 +982,8 @@
     <Content Include="Views\Shared\EditorTemplates\InGridAjaxComboBox.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\InGridComboBox_Location.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\InGridComboBox_WBS.cshtml" />
+    <Content Include="Views\CalendarEvent\Create.cshtml" />
+    <Content Include="Views\HRPSAManagement\Create.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1007,11 +1009,12 @@
     <Compile Include="Controllers\ASSAssetTransferController.cs" />
     <Compile Include="Controllers\ASSAssignmentofAssetController.cs" />
     <Compile Include="Controllers\BIEmbedController.cs" />
-    <Compile Include="Controllers\CalendarController.cs" />
+    <Compile Include="Controllers\CalendarEventController.cs" />
     <Compile Include="Controllers\FINEventBudgetController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HRDataMasterController.cs" />
     <Compile Include="Controllers\ProjectHierarchyController.cs" />
+    <Compile Include="Controllers\HRPSAManagementController.cs" />
     <Compile Include="Controllers\PurchaseOrderController.cs" />
     <Compile Include="Controllers\RIAController.cs" />
     <Compile Include="Controllers\TaskController.cs" />
@@ -1054,6 +1057,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Scripts\apps\controlls\" />
     <Folder Include="Views\HRProfessional\" />
+    <Folder Include="Views\PSAManagement\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MCAWebAndAPI.Model\MCAWebAndAPI.Model.csproj">

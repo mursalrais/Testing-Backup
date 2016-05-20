@@ -12,5 +12,7 @@ namespace MCAWebAndAPI.Service.HR.Common
         void SetSiteUrl(string siteUrl);
 
         IEnumerable<ProfessionalMaster> GetProfessionals();
+
+        IEnumerable<PositionsMaster> GetPositions();
     }
 }
