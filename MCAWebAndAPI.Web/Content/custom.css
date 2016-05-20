@@ -23,8 +23,12 @@ body.smart-style-6 #header, body.smart-style-6 .dropdown-menu>.active>a, body.sm
 }
 
 body.smart-style-6 #content {
-    margin-left: 12% !important;
-    margin-right: 12% !important;
+    margin-left: 3%;
+    margin-right: 3%;
+}
+
+body.animated.fadeInDown.smart-style-6 #content {
+    margin: 0 12% !important;
 }
 
 #main{
@@ -81,6 +85,21 @@ body.animated.fadeInDown #header{
 
 form#login-form {
     padding-bottom: 50px;
+}
+
+
+form .row {
+    padding-bottom: 25px;
+}
+
+.form-horizontal label.control-label {
+    padding-top: 10px;
+}
+
+form .k-button.k-upload-button {
+    left: 132px;
+    top: -5px;
+    z-index: 1000;
 }
 
 .smart-form fieldset{

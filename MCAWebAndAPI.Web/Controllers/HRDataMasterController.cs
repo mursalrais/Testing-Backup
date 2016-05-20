@@ -4,17 +4,19 @@ using System.Web.Mvc;
 using MCAWebAndAPI.Web.Resources;
 using System.Collections.Generic;
 using MCAWebAndAPI.Model.HR.DataMaster;
+using MCAWebAndAPI.Model.ViewModel.Form.HR;
+using System.Web;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
     public class HRDataMasterController : Controller
     {
 
-        IDataMasterService _dataMasterService;
+        IHRDataMasterService _dataMasterService;
 
         public HRDataMasterController()
         {
-            _dataMasterService = new DataMasterService();
+            _dataMasterService = new HRDataMasterService();
         }
 
         public JsonResult GetProfessionals()
@@ -82,17 +84,6 @@ namespace MCAWebAndAPI.Web.Controllers
             if (sessionVariable == null) // If no session variable is found
                 System.Web.HttpContext.Current.Session["ProfessionalMaster"] = professionals;
             return professionals;
-        }
-
-        private IEnumerable<PositionsMaster> GetFromPositionsExistingSession()
-        {
-            //Get existing session variable
-            var sessionVariable = System.Web.HttpContext.Current.Session["PositionsMaster"] as IEnumerable<PositionsMaster>;
-            var positions = sessionVariable ?? _dataMasterService.GetPositions();
-
-            if (sessionVariable == null) // If no session variable is found
-                System.Web.HttpContext.Current.Session["PositionsMaster"] = positions;
-            return positions;
         }
 
     }

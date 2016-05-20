@@ -1,13 +1,11 @@
 ﻿using MCAWebAndAPI.Model.HR.DataMaster;
-using System;
+using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Web;
 
 namespace MCAWebAndAPI.Service.HR.Common
 {
-    public interface IDataMasterService
+    public interface IHRDataMasterService
     {
         void SetSiteUrl(string siteUrl);
 

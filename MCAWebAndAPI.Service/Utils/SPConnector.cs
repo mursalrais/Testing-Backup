@@ -2,8 +2,8 @@
 using Microsoft.SharePoint.Client;
 using System.Security;
 using System.Collections.Generic;
-using System.Net;
 using System;
+using Microsoft.SharePoint.Client.Utilities;
 
 namespace MCAWebAndAPI.Service.Utils
 {
@@ -15,7 +15,7 @@ namespace MCAWebAndAPI.Service.Utils
 
         private static void MapCredential(string url)
         {
-            if (url.Contains("eceos"))
+            if (url == null || url.Contains("eceos"))
             {
                 UserName = "sp.services@eceos.com";
                 Password = "Raja0432";
@@ -124,6 +124,12 @@ namespace MCAWebAndAPI.Service.Utils
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="listName"></param>
+        /// <param name="columnValues"></param>
+        /// <param name="siteUrl"></param>
         public static void AddListItem(string listName, Dictionary<string, object> columnValues, string siteUrl = null)
         {
             MapCredential(siteUrl);
@@ -165,6 +171,46 @@ namespace MCAWebAndAPI.Service.Utils
 
                 return field.Choices;
             }
+        }
+
+        public static bool SendEmail( string email, string content, string subject, string siteUrl= null)
+        {
+            using (ClientContext clientContext = new ClientContext(siteUrl ?? CurUrl))
+            {
+                SecureString secureString = new SecureString();
+                Password.ToList().ForEach(secureString.AppendChar);
+                clientContext.Credentials = new SharePointOnlineCredentials(UserName, secureString);
+
+                EmailProperties properties = new EmailProperties();
+                properties.To = new string[] { email };
+                properties.Subject = subject;
+                properties.Body = content;
+
+                Utility.SendEmail(clientContext, properties);
+
+                clientContext.ExecuteQuery();
+            }
+            return true;
+        }
+
+        public static bool SendEmails(IEnumerable<string> emails, string content, string subject, string siteUrl = null)
+        {
+            using (ClientContext clientContext = new ClientContext(siteUrl ?? CurUrl))
+            {
+                SecureString secureString = new SecureString();
+                Password.ToList().ForEach(secureString.AppendChar);
+                clientContext.Credentials = new SharePointOnlineCredentials(UserName, secureString);
+
+                EmailProperties properties = new EmailProperties();
+                properties.To = emails;
+                properties.Subject = subject;
+                properties.Body = content;
+
+                Utility.SendEmail(clientContext, properties);
+
+                clientContext.ExecuteQuery();
+            }
+            return true;
         }
     }
 }

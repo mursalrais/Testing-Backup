@@ -1,0 +1,32 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+
+@model ProfessionalDataVM
+
+@using (Ajax.BeginForm("CreateProfessionalData", "HRDataMaster",
+                                                    FormMethod.Post,
+                                                    new AjaxOptions
+                                                    {
+                                                        OnSuccess = "onSuccess",
+                                                        OnFailure = "onFailure"
+                                                    }, new { @class = "form-horizontal" }))
+{<fieldset>
+     @Html.ValidationSummary()
+
+     <legend>Personal Details</legend>
+     <div class="row">
+         @Html.Partial("_PersonalDetails", Model)
+     </div>
+     <legend>Organizational Details</legend>
+     <legend>Contact Information</legend>
+     <div class="row">
+         
+     </div>
+
+     <legend>Education</legend>
+     <legend>Training</legend>
+     <legend>Insurance</legend>
+     <legend>Payroll</legend>
+     <legend>Dependent</legend>
+
+ </fieldset>
+}
