@@ -32,7 +32,29 @@ namespace MCAWebAndAPI.Service.Converter
             return result;
         }
 
-        public byte[] Convert(string pageTitle, string url)
+        public byte[] ConvertFromHTML(string pageTitle, string stringHTML)
+        {
+            var document = new HtmlToPdfDocument
+            {
+                GlobalSettings = {
+                    ProduceOutline = true,
+                    DocumentTitle = pageTitle,
+                    PaperSize = PaperKind.A4, // Implicit conversion to PechkinPaperSize
+                    Margins =
+                    {
+                        All = 1.375,
+                        Unit = Unit.Centimeters
+                    }
+                },
+                Objects = {
+                    new ObjectSettings { HtmlText = stringHTML }
+                }
+            };
+
+            return Convert(document);
+        }
+
+        public byte[] ConvertFromURL(string pageTitle, string url)
         {
             var document = new HtmlToPdfDocument
             {

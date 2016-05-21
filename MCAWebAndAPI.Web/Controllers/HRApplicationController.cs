@@ -1,9 +1,13 @@
 ﻿using MCAWebAndAPI.Model.ViewModel.Form.HR;
+using MCAWebAndAPI.Service.Converter;
 using MCAWebAndAPI.Service.HR.Common;
+using MCAWebAndAPI.Service.HR.Recruitment;
+using MCAWebAndAPI.Web.Filters;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -22,6 +26,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
 
         [HttpPost]
+        [JsonHandleError]
         public ActionResult CreateApplicationData(FormCollection form, ApplicationDataVM viewModel)
         {
             if (!ModelState.IsValid)
@@ -34,21 +39,86 @@ namespace MCAWebAndAPI.Web.Controllers
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
-            var headerID = _service.CreateApplicationData(viewModel);
+            int? headerID = null;
+            try
+            {
+                headerID = _service.CreateApplicationData(viewModel);
+            }
+            catch (Exception e)
+            {
+                return Json(new {status = false, errorMessages = e.Message },
+                   JsonRequestBehavior.AllowGet);
+            }
 
-            viewModel.EducationDetails = BindEducationDetails(form, viewModel.EducationDetails);
-            _service.CreateEducationDetails(headerID, viewModel.EducationDetails);
+            try
+            {
+                viewModel.EducationDetails = BindEducationDetails(form, viewModel.EducationDetails);
+                _service.CreateEducationDetails(headerID, viewModel.EducationDetails);
+            }
+            catch (Exception e)
+            {
+                return Json(new { status = false, errorMessages = e.Message },
+                   JsonRequestBehavior.AllowGet);
+            }
 
-            viewModel.TrainingDetails = BindTrainingDetails(form, viewModel.TrainingDetails);
-            _service.CreateTrainingDetails(headerID, viewModel.TrainingDetails);
+            try
+            {
+                viewModel.TrainingDetails = BindTrainingDetails(form, viewModel.TrainingDetails);
+                _service.CreateTrainingDetails(headerID, viewModel.TrainingDetails);
+            }
+            catch(Exception e)
+            {
+                return Json(new { status = false, errorMessages = e.Message },
+                  JsonRequestBehavior.AllowGet);
+            }
 
-            viewModel.WorkingExperienceDetails = BindWorkingExperienceDetails(form, viewModel.WorkingExperienceDetails);
-            _service.CreateWorkingExperienceDetails(headerID, viewModel.WorkingExperienceDetails);
+            try
+            {
+                viewModel.WorkingExperienceDetails = BindWorkingExperienceDetails(form, viewModel.WorkingExperienceDetails);
+                _service.CreateWorkingExperienceDetails(headerID, viewModel.WorkingExperienceDetails);
+            }catch(Exception e)
+            {
+                return Json(new { status = false, errorMessages = e.Message },
+                 JsonRequestBehavior.AllowGet);
+            }
 
-            _service.CreateProfessionalDocuments(headerID, viewModel.Documents);
+            try
+            {
+                _service.CreateProfessionalDocuments(headerID, viewModel.Documents);
+            }
+            catch (Exception e)
+            {
+                return Json(new { status = false, errorMessages = e.Message },
+                JsonRequestBehavior.AllowGet);
+            }
 
             return Json(new { status = true, urlToRedirect = siteUrl + ConfigResource.UrlApplication }, 
                 JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [JsonHandleError]
+        public FileResult PrintApplicationData(FormCollection form, ApplicationDataVM viewModel)
+        { 
+            viewModel.EducationDetails = BindEducationDetails(form, viewModel.EducationDetails);
+            viewModel.TrainingDetails = BindTrainingDetails(form, viewModel.TrainingDetails);
+            viewModel.WorkingExperienceDetails = BindWorkingExperienceDetails(form, viewModel.WorkingExperienceDetails);
+
+            const string relativePath = "~/Views/HRApplication/PrintApplicationData.cshtml";
+            string content;
+            
+            var view = ViewEngines.Engines.FindView(ControllerContext, relativePath, null);
+            ViewData.Model = viewModel;
+            
+            using (var writer = new StringWriter())
+            {
+                var context = new ViewContext(ControllerContext, view.View, ViewData, TempData, writer);
+                view.View.Render(context, writer);
+                writer.Flush();
+                content = writer.ToString();
+                byte[] pdfBuf = PDFConverter.Instance.ConvertFromHTML(viewModel.FirstMiddleName + "_Application.pdf", content);
+                return File(pdfBuf, "application/pdf");
+            }
         }
 
         private IEnumerable<WorkingExperienceDetailVM> BindWorkingExperienceDetails(FormCollection form, IEnumerable<WorkingExperienceDetailVM> workingExperienceDetails)

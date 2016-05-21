@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MCAWebAndAPI.Model.HR.DataMaster;
 
-namespace MCAWebAndAPI.Service.HR
+namespace MCAWebAndAPI.Service.HR.Recruitment
 {
     public interface IPSAManagementService
     {

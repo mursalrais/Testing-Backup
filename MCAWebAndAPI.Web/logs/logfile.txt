@@ -5,3 +5,4 @@
 2016-05-21 17:12:15.1631 MCAWebAndAPI.Service.HR.Common.HRApplicationService Column 'applications' does not exist. It may have been deleted by another user.  /sites/mca-dev/hr/Lists/Application Training
 2016-05-21 17:12:16.5203 MCAWebAndAPI.Service.HR.Common.HRApplicationService Column 'applications' does not exist. It may have been deleted by another user.  /sites/mca-dev/hr/Lists/Application Working Experience
 2016-05-21 17:12:17.8903 MCAWebAndAPI.Service.HR.Common.HRApplicationService Column 'applications' does not exist. It may have been deleted by another user.  /sites/mca-dev/hr/Lists/Application Working Experience
+2016-05-21 21:40:04.0294 MCAWebAndAPI.Service.Asset.LocationMasterService Object reference not set to an instance of an object.

@@ -112,9 +112,9 @@
     <Compile Include="Converter\PDFConverter.cs" />
     <Compile Include="Finance\EventBudgetService.cs" />
     <Compile Include="Finance\IEventBudgetService.cs" />
-    <Compile Include="HR\Common\HRApplicationService.cs" />
+    <Compile Include="HR\Recruitment\HRApplicationService.cs" />
     <Compile Include="HR\Common\HRDataMasterService.cs" />
-    <Compile Include="HR\Common\IHRApplicationService.cs" />
+    <Compile Include="HR\Recruitment\IHRApplicationService.cs" />
     <Compile Include="HR\Common\IHRDataMasterService.cs" />
     <Compile Include="HR\Payroll\HRPayrollServices.cs" />
     <Compile Include="HR\Payroll\IHRPayrollServices.cs" />
@@ -128,6 +128,11 @@
     <Compile Include="HR\Common\ICalendarService.cs" />
     <Compile Include="ProjectManagement\Schedule\IRIAService.cs" />
     <Compile Include="ProjectManagement\Schedule\RIAService.cs" />
+    <Compile Include="Resources\ErrorResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ErrorResource.resx</DependentUpon>
+    </Compile>
     <Compile Include="Utils\FormatUtil.cs" />
     <Compile Include="Utils\GraphicUtil.cs" />
     <Compile Include="Utils\MathUtil.cs" />
@@ -163,6 +168,12 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\ErrorResource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ErrorResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

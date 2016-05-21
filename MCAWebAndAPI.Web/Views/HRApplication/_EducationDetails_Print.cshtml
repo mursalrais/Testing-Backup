@@ -1,0 +1,22 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model IEnumerable<EducationDetailVM>
+
+<div class="col-md-12">
+
+    @(Html.Kendo().Grid(Model)
+    .Name("EducationDetails")
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.University);
+        columns.Bound(p => p.Subject);
+        columns.Bound(p => p.YearOfGraduation);
+        columns.Bound(p => p.Remarks);
+    })
+    .DataSource(dataSource => dataSource.Ajax()
+                   .Model(model =>
+                   {
+                       model.Id(p => p.ID);
+                   })
+                   )
+    )
+</div>

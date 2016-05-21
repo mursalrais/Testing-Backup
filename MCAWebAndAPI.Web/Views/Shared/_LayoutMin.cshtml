@@ -1,5 +1,5 @@
 ﻿
-@{ Html.EnableClientValidation(); }
+@*@{ Html.EnableClientValidation(); }*@
 
 <!DOCTYPE html>
 
@@ -60,8 +60,8 @@
 
     <script src="~/Scripts/jquery.validate.min.js"></script>
     <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/custom.js"></script>
 
-    @Scripts.Render("~/bundles/apps")
     @RenderSection("scripts", required: false)
     <script type="text/javascript">
       $(document).ajaxError(function (e, jqxhr, settings, exception) {

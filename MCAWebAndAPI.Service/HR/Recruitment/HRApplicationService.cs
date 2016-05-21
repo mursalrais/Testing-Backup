@@ -5,8 +5,9 @@ using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using MCAWebAndAPI.Service.Utils;
 using NLog;
 using Microsoft.SharePoint.Client;
+using MCAWebAndAPI.Service.Resources;
 
-namespace MCAWebAndAPI.Service.HR.Common
+namespace MCAWebAndAPI.Service.HR.Recruitment
 {
     public class HRApplicationService : IHRApplicationService
     {
@@ -54,12 +55,13 @@ namespace MCAWebAndAPI.Service.HR.Common
             catch (Exception e)
             {
                 logger.Error(e.Message);
+                throw new Exception(ErrorResource.SPInsertError);
             }
 
             return SPConnector.GetInsertedItemID(SP_APPDATA_LIST_NAME, _siteUrl);
         }
 
-        public void CreateEducationDetails(int headerID, IEnumerable<EducationDetailVM> viewModels)
+        public void CreateEducationDetails(int? headerID, IEnumerable<EducationDetailVM> viewModels)
         {
             foreach (var viewModel in viewModels)
             {
@@ -75,11 +77,12 @@ namespace MCAWebAndAPI.Service.HR.Common
                 }catch(Exception e)
                 {
                     logger.Error(e.Message);
+                    throw new Exception(ErrorResource.SPInsertError);
                 }
             }
         }
 
-        public void CreateProfessionalDocuments(int headerID, IEnumerable<HttpPostedFileBase> documents)
+        public void CreateProfessionalDocuments(int? headerID, IEnumerable<HttpPostedFileBase> documents)
         {
             foreach (var doc in documents)
             {
@@ -89,11 +92,12 @@ namespace MCAWebAndAPI.Service.HR.Common
                 }catch(Exception e)
                 {
                     logger.Error(e.Message);
+                    throw new Exception(ErrorResource.SPInsertError);
                 }
             }
         }
 
-        public void CreateTrainingDetails(int headerID, IEnumerable<TrainingDetailVM> trainingDetails)
+        public void CreateTrainingDetails(int? headerID, IEnumerable<TrainingDetailVM> trainingDetails)
         {
             foreach (var viewModel in trainingDetails)
             {
@@ -111,11 +115,12 @@ namespace MCAWebAndAPI.Service.HR.Common
                 catch (Exception e)
                 {
                     logger.Error(e.Message);
+                    throw new Exception(ErrorResource.SPInsertError);
                 }
             }
         }
 
-        public void CreateWorkingExperienceDetails(int headerID, IEnumerable<WorkingExperienceDetailVM> workingExperienceDetails)
+        public void CreateWorkingExperienceDetails(int? headerID, IEnumerable<WorkingExperienceDetailVM> workingExperienceDetails)
         {
             foreach (var viewModel in workingExperienceDetails)
             {
@@ -134,6 +139,7 @@ namespace MCAWebAndAPI.Service.HR.Common
                 catch (Exception e)
                 {
                     logger.Error(e.Message);
+                    throw new Exception(ErrorResource.SPInsertError);
                 }
             }
         }

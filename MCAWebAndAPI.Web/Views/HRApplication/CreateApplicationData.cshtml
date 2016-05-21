@@ -9,8 +9,8 @@
                                                     FormMethod.Post,
                                                     new AjaxOptions
                                                     {
-                                                        OnSuccess = "onSuccess",
-                                                        OnFailure = "onFailure"
+                                                        OnSuccess = "onSuccessForm",
+                                                        OnFailure = "onFailureForm"
                                                     }, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
 {
     <fieldset>
@@ -20,7 +20,7 @@
         </div>
         <legend>Contact Information</legend>
         <div class="row">
-            @Html.Partial("_ContactInformationDetailsForApplication", Model)
+            @Html.Partial("_ContactInformationDetails", Model)
         </div>
         <legend>Education</legend>
         <div class="row">
@@ -40,14 +40,14 @@
         </div>
         <legend>Documents</legend>
         <div class="row">
-            @Html.Partial("_DocumentDetailsForApplication", Model)
+            @Html.Partial("_DocumentDetails", Model)
         </div>
     </fieldset>
     <div class="form-actions">
         <div class="row">
             <div class="col-md-12">
-                <button class="btn btn-default" type="submit">
-                    Cancel
+                <button id="print-button" class="btn btn-default" type="button">
+                    Print
                 </button>
                 <button id="submit-button" class="btn btn-primary" type="submit">
                     <i class="fa fa-save"></i>

@@ -11,6 +11,7 @@ using MCAWebAndAPI.Model.ViewModel.Control;
 using MCAWebAndAPI.Web.Filters;
 using MCAWebAndAPI.Web.Resources;
 using MCAWebAndAPI.Model.HR.DataMaster;
+using MCAWebAndAPI.Service.HR.Recruitment;
 
 namespace MCAWebAndAPI.Web.Controllers
 {

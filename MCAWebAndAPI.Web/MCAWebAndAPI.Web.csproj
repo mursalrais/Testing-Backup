@@ -736,6 +736,7 @@
     <Content Include="Scripts\apps\grids\KendoGridWBS.js" />
     <Content Include="Scripts\apps\sliders\jQuerySlider.js" />
     <Content Include="Scripts\bi-frame.js" />
+    <Content Include="Scripts\custom.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
@@ -1103,17 +1104,16 @@
     <Content Include="Views\HRDataMaster\CreateProfessionalData.cshtml" />
     <Content Include="Views\HRApplication\CreateApplicationData.cshtml" />
     <Content Include="Views\HRApplication\_PersonalDetails.cshtml" />
-    <Content Include="Views\HRApplication\_ContactInformationDetailsForApplication.cshtml" />
+    <Content Include="Views\HRApplication\_ContactInformationDetails.cshtml" />
     <Content Include="Views\HRApplication\_EducationDetails.cshtml" />
     <Content Include="Views\HRApplication\_TrainingDetails.cshtml" />
     <Content Include="Views\HRApplication\_SpecializationDetails.cshtml" />
     <Content Include="Views\HRApplication\_WorkingExperienceDetails.cshtml" />
-    <Content Include="Views\HRApplication\_DocumentDetailsForApplication.cshtml" />
+    <Content Include="Views\HRApplication\_DocumentDetails.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\MultiFileUploader.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Month.cshtml" />
     <Content Include="Views\Home\IndexGrid.cshtml" />
     <Content Include="Views\HRApplication\PrintApplicationData.cshtml" />
-    <Content Include="Views\HRApplication\_PrintPersonalDetails.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\Url.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\AjaxComboBox.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\ComboBox.cshtml" />
@@ -1137,6 +1137,19 @@
     <Content Include="Views\Shared\DisplayTemplates\PhoneNumber.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\TextArea.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\Time.cshtml" />
+    <Content Include="Views\CalendarEvent\Create.cshtml" />
+    <Content Include="Views\CSV\Create.cshtml" />
+    <Content Include="Views\CSV\Submit.cshtml" />
+    <Content Include="Views\HRPayroll\CreateMonthlyFee.cshtml" />
+    <Content Include="Views\HRPayroll\EditMonthlyFee.cshtml" />
+    <Content Include="Views\HRPSAManagement\Create.cshtml" />
+    <Content Include="Views\HRApplication\_PersonalDetails_Print.cshtml" />
+    <Content Include="Views\HRApplication\_SpecializationDetails_Print.cshtml" />
+    <Content Include="Views\HRApplication\_TrainingDetails_Print.cshtml" />
+    <Content Include="Views\HRApplication\_WorkingExperienceDetails_Print.cshtml" />
+    <Content Include="Views\HRApplication\_EducationDetails_Print.cshtml" />
+    <Content Include="Views\HRApplication\_DocumentDetails_Print.cshtml" />
+    <Content Include="Views\HRApplication\_ContactInformationDetails_Print.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1217,6 +1230,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Scripts\apps\controlls\" />
     <Folder Include="Views\HRProfessional\" />
+    <Folder Include="Views\Location\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MCAWebAndAPI.Model\MCAWebAndAPI.Model.csproj">

@@ -23,7 +23,7 @@ namespace MCAWebAndAPI.Web.Controllers
         [HttpGet]
         public FileResult Print()
         {
-            var result = PDFConverter.Instance.Convert("Kompas", "http://www.kompas.com/");
+            var result = PDFConverter.Instance.ConvertFromURL("Kompas", "http://www.kompas.com/");
             return File(result, "application/pdf");
         }
     }

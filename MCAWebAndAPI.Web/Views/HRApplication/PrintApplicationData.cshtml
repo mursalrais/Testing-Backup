@@ -9,31 +9,31 @@
     <fieldset>
         <legend>Personnal Details</legend>
         <div class="row">
-            @Html.Partial("_PersonalDetails", Model)
+            @Html.Partial("_PersonalDetails_Print", Model)
         </div>
         <legend>Contact Information</legend>
         <div class="row">
-            @Html.Partial("_ContactInformationDetailsForApplication", Model)
+            @Html.Partial("_ContactInformationDetails_Print", Model)
         </div>
         <legend>Education</legend>
         <div class="row">
-            @Html.Partial("_EducationDetails", Model.EducationDetails)
+            @Html.Partial("_EducationDetails_Print", Model.EducationDetails)
         </div>
         <legend>Training</legend>
         <div class="row">
-            @Html.Partial("_TrainingDetails", Model.TrainingDetails)
+            @Html.Partial("_TrainingDetails_Print", Model.TrainingDetails)
         </div>
         <legend>Specialization</legend>
         <div class="row">
-            @Html.Partial("_SpecializationDetails", Model)
+            @Html.Partial("_SpecializationDetails_Print", Model)
         </div>
         <legend>Working Experience</legend>
         <div class="row">
-            @Html.Partial("_WorkingExperienceDetails", Model)
+            @Html.Partial("_WorkingExperienceDetails_Print", Model)
         </div>
         <legend>Documents</legend>
         <div class="row">
-            @Html.Partial("_DocumentDetailsForApplication", Model)
+            @Html.Partial("_DocumentDetails_Print", Model)
         </div>
     </fieldset>
 </div>
