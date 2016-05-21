@@ -14,10 +14,10 @@
             columns.Bound(p => p.Company).ClientTemplate("#= Company #" +
                                "<input type='hidden' name='WorkingExperienceDetails[#= getWorkingExperienceDetail(data)#].Company' value='#= Company #' />"
                              );
-            columns.Bound(p => p.From).ClientTemplate("#= From #" +
+            columns.Bound(p => p.From).ClientTemplate("#= From.getFullYear() #" +
                                "<input type='hidden' name='WorkingExperienceDetails[#= getWorkingExperienceDetail(data)#].From' value='#= From #' />"
                              );
-            columns.Bound(p => p.To).ClientTemplate("#= To #" +
+            columns.Bound(p => p.To).ClientTemplate("#= To.getFullYear() #" +
                                "<input type='hidden' name='WorkingExperienceDetails[#= getWorkingExperienceDetail(data)#].To' value='#= To #' />"
                              );
             columns.Bound(p => p.JobDescription).ClientTemplate("#= JobDescription #" +
@@ -30,6 +30,8 @@
                    .Model(model =>
                    {
                        model.Id(p => p.ID);
+                       model.Field(e => e.From).DefaultValue(DateTime.Now.AddYears(-5));
+                       model.Field(e => e.To).DefaultValue(DateTime.Now);
                    })
                    .ServerOperation(false)
         )

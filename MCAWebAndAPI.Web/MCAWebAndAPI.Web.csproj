@@ -601,8 +601,8 @@
     <Content Include="Content\smartadmin-production.min.css" />
     <Content Include="Content\smartadmin-skins.min.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
-    <Content Include="Images\laptop.jpg" />
-    <Content Include="Images\logo.png" />
+    <Content Include="img\laptop.jpg" />
+    <Content Include="img\logo.png" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
@@ -1178,12 +1178,11 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\BinderHelper.cs" />
     <Compile Include="Helpers\JsonpResult.cs" />
     <Compile Include="Helpers\MathHelper.cs" />
     <Compile Include="Helpers\Populator.cs" />
     <Compile Include="Helpers\SessionManager.cs" />
-    <Compile Include="Models\Category.cs" />
-    <Compile Include="Models\Product.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\ConfigResource.Designer.cs">
       <AutoGen>True</AutoGen>

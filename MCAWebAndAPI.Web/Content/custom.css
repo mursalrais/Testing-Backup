@@ -39,7 +39,7 @@ body.animated.fadeInDown.smart-style-6 #content {
 
 .fadeInDown #main{
     padding-top: 70px;
-    background-image: url("/Images/laptop.jpg");
+    background-image: url("/img/laptop.jpg");
     background-size: cover;
 }
 
