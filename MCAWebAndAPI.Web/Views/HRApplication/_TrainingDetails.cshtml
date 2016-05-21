@@ -4,25 +4,25 @@
 <div class="col-md-12">
 
     @(Html.Kendo().Grid(Model)
-    .Name("TrainingDetail")
+    .Name("TrainingDetails")
     .ToolBar(tools => tools.Create().Text("Add New Training"))
     .Editable(editable => editable.Mode(GridEditMode.InCell).CreateAt(GridInsertRowPosition.Bottom))
     .Columns(columns =>
     {
         columns.Bound(p => p.Institution).ClientTemplate("#= Institution #" +
-                           "<input type='hidden' name='TrainingDetail[#= getTrainingDetail(data)#].Institution' value='#= Institution #' />"
+                           "<input type='hidden' name='TrainingDetails[#= getTrainingDetail(data)#].Institution' value='#= Institution #' />"
                          );
         columns.Bound(p => p.Subject).ClientTemplate("#= Subject #" +
-                           "<input type='hidden' name='TrainingDetail[#= getTrainingDetail(data)#].Subject' value='#= Subject #' />"
+                           "<input type='hidden' name='TrainingDetails[#= getTrainingDetail(data)#].Subject' value='#= Subject #' />"
                          );
         columns.Bound(p => p.Year).ClientTemplate("#= Year #" +
-                           "<input type='hidden' name='TrainingDetail[#= getTrainingDetail(data)#].Year' value='#= Year #' />"
+                           "<input type='hidden' name='TrainingDetails[#= getTrainingDetail(data)#].Year' value='#= Year #' />"
                          );
         columns.Bound(p => p.Remarks).ClientTemplate("#= Remarks #" +
-                           "<input type='hidden' name='TrainingDetail[#= getTrainingDetail(data)#].Remarks' value='#= Remarks #' />"
+                           "<input type='hidden' name='TrainingDetails[#= getTrainingDetail(data)#].Remarks' value='#= Remarks #' />"
                          );
         columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
-          "<input type='hidden' name='TrainingDetail[#= getTrainingDetail(data)#].ID' value='#= ID #' />"
+          "<input type='hidden' name='TrainingDetails[#= getTrainingDetail(data)#].ID' value='#= ID #' />"
         );
     })
     .DataSource(dataSource => dataSource.Ajax()
@@ -38,7 +38,7 @@
 
 <script>
     function getTrainingDetail(dataItem) {
-        var data = $("#TrainingDetail").data("kendoGrid").dataSource.data();
+        var data = $("#TrainingDetails").data("kendoGrid").dataSource.data();
         return data.indexOf(dataItem);
     }
 </script>

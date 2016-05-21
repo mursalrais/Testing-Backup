@@ -2,17 +2,10 @@
 @model ApplicationDataVM
 
 @{
-    ViewBag.Title = "CreateApplicationData";
+    ViewBag.Title = "Print Application Data";
 }
 
-@using (Ajax.BeginForm("CreateApplicationData", "HRApplication",
-                                                    FormMethod.Post,
-                                                    new AjaxOptions
-                                                    {
-                                                        OnSuccess = "onSuccess",
-                                                        OnFailure = "onFailure"
-                                                    }, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
-{
+<div class="form-horizontal">
     <fieldset>
         <legend>Personnal Details</legend>
         <div class="row">
@@ -43,17 +36,4 @@
             @Html.Partial("_DocumentDetailsForApplication", Model)
         </div>
     </fieldset>
-    <div class="form-actions">
-        <div class="row">
-            <div class="col-md-12">
-                <button class="btn btn-default" type="submit">
-                    Cancel
-                </button>
-                <button id="submit-button" class="btn btn-primary" type="submit">
-                    <i class="fa fa-save"></i>
-                    Submit
-                </button>
-            </div>
-        </div>
-    </div>
-}
+</div>

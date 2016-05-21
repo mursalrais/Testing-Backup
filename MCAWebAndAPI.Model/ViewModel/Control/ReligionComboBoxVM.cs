@@ -12,15 +12,12 @@ namespace MCAWebAndAPI.Model.ViewModel.Control
         {
             Choices = new string[]
              {
-                "Islam",
-                "Christian",
-                "Catholique",
-                "Hindu",
-                "Budha",
-                "Konghucu",
-                "Sikh",
-                "Jewish",
-                "Atheism"
+                 "Islam",
+                 "Protestantism",
+                 "Catholicism",
+                 "Hinduism",
+                 "Buddhism",
+                 "Atheism"
              };
             DefaultValue = "Islam";
         }

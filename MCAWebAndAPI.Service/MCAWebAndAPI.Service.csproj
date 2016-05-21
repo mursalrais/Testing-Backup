@@ -131,6 +131,7 @@
     <Compile Include="ProjectManagement\Schedule\ITaskService.cs" />
     <Compile Include="ProjectManagement\Schedule\TaskService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\WorkflowUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ContractProcurement\" />

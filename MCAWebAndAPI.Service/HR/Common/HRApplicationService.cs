@@ -1,41 +1,141 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web;
 using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using MCAWebAndAPI.Service.Utils;
+using NLog;
+using Microsoft.SharePoint.Client;
 
 namespace MCAWebAndAPI.Service.HR.Common
 {
     public class HRApplicationService : IHRApplicationService
     {
         string _siteUrl;
+        static Logger logger = LogManager.GetCurrentClassLogger();
 
+        const string SP_APPDATA_LIST_NAME = "Application";
+        const string SP_APPEDU_LIST_NAME = "Application Education";
+        const string SP_APPWORK_LIST_NAME = "Application Working Experience";
+        const string SP_APPTRAIN_LIST_NAME = "Application Training";
+        const string SP_APPDOC_LIST_NAME = "Application Documents";
+        
         public int CreateApplicationData(ApplicationDataVM viewModel)
         {
-            throw new NotImplementedException();
+            var updatedValue = new Dictionary<string, object>();
+
+            updatedValue.Add("Title", viewModel.FirstMiddleName);
+            updatedValue.Add("lastname", viewModel.LastName);
+            updatedValue.Add("placeofbirth", viewModel.PlaceOfBirth);
+            updatedValue.Add("dateofbirth", viewModel.DateOfBirth);
+            updatedValue.Add("idcardnumber", viewModel.IDCardNumber);
+            updatedValue.Add("permanentaddress", viewModel.PermanentAddress);
+            updatedValue.Add("permanentlandlinephone", FormatUtil.ConvertToCleanPhoneNumber(viewModel.Telephone));
+            updatedValue.Add("currentaddress", viewModel.CurrentAddress);
+            updatedValue.Add("currentlandlinephone", FormatUtil.ConvertToCleanPhoneNumber(viewModel.CurrentTelephone));
+            updatedValue.Add("personalemail", viewModel.EmailAddresOne);
+            updatedValue.Add("personalemail2", viewModel.EmailAddresTwo);
+            updatedValue.Add("mobilephonenr", FormatUtil.ConvertToCleanPhoneNumber(viewModel.MobileNumberOne));
+            updatedValue.Add("mobilephonenr2", FormatUtil.ConvertToCleanPhoneNumber(viewModel.MobileNumberTwo));
+            updatedValue.Add("specializationfield", viewModel.SpecializationField);
+            updatedValue.Add("totalrelevantexperienceyears", viewModel.YearRelevanWork);
+            updatedValue.Add("totalrelevantexperiencemonths", viewModel.MonthRelevantWork);
+            updatedValue.Add("maritalstatus", viewModel.MaritalStatus.Value);
+            updatedValue.Add("bloodtype", viewModel.BloodType.Value);
+            updatedValue.Add("Religion", viewModel.Religion.Value);
+            updatedValue.Add("Gender", viewModel.Gender.Value);
+            updatedValue.Add("idcardtype", viewModel.IDCardType.Value);
+            updatedValue.Add("Nationality", new FieldLookupValue { LookupId = viewModel.Nationality.Value });
+            updatedValue.Add("applicationstatus", WorkflowUtil.DRAFT);
+
+            try
+            {
+                SPConnector.AddListItem(SP_APPDATA_LIST_NAME, updatedValue, _siteUrl);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.Message);
+            }
+
+            return SPConnector.GetInsertedItemID(SP_APPDATA_LIST_NAME, _siteUrl);
         }
 
-        public bool CreateEducationDetails(int headerID, IEnumerable<EducationDetailVM> educationDetails)
+        public void CreateEducationDetails(int headerID, IEnumerable<EducationDetailVM> viewModels)
         {
-            throw new NotImplementedException();
+            foreach (var viewModel in viewModels)
+            {
+                var updatedValue = new Dictionary<string, object>();
+                updatedValue.Add("Title", viewModel.Subject);
+                updatedValue.Add("applicationuniversity", viewModel.University);
+                updatedValue.Add("applicationyearofgraduation", FormatUtil.ConvertToYearString(viewModel.YearOfGraduation));
+                updatedValue.Add("applications", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
+
+                try
+                {
+                    SPConnector.AddListItem(SP_APPEDU_LIST_NAME, updatedValue, _siteUrl);
+                }catch(Exception e)
+                {
+                    logger.Error(e.Message);
+                }
+            }
         }
 
         public void CreateProfessionalDocuments(int headerID, IEnumerable<HttpPostedFileBase> documents)
         {
-            throw new NotImplementedException();
+            foreach (var doc in documents)
+            {
+                try
+                {
+                    SPConnector.UploadDocument(SP_APPDOC_LIST_NAME, doc.FileName, doc.InputStream, _siteUrl);
+                }catch(Exception e)
+                {
+                    logger.Error(e.Message);
+                }
+            }
         }
 
-        public bool CreateTrainingDetails(int headerID, IEnumerable<TrainingDetailVM> trainingDetails)
+        public void CreateTrainingDetails(int headerID, IEnumerable<TrainingDetailVM> trainingDetails)
         {
-            throw new NotImplementedException();
+            foreach (var viewModel in trainingDetails)
+            {
+                var updatedValue = new Dictionary<string, object>();
+                updatedValue.Add("Title", viewModel.Subject);
+                updatedValue.Add("applicationtraininginstitution", viewModel.Institution);
+                updatedValue.Add("applicationtrainingremarks", viewModel.Remarks);
+                updatedValue.Add("applicationtrainingyear", FormatUtil.ConvertToYearString(viewModel.Year));
+                updatedValue.Add("application", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
+
+                try
+                {
+                    SPConnector.AddListItem(SP_APPTRAIN_LIST_NAME, updatedValue, _siteUrl);
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e.Message);
+                }
+            }
         }
 
-        public bool CreateWorkingExperienceDetails(int headerID, IEnumerable<WorkingExperienceDetailVM> workingExperienceDetails)
+        public void CreateWorkingExperienceDetails(int headerID, IEnumerable<WorkingExperienceDetailVM> workingExperienceDetails)
         {
-            throw new NotImplementedException();
+            foreach (var viewModel in workingExperienceDetails)
+            {
+                var updatedValue = new Dictionary<string, object>();
+                updatedValue.Add("Title", viewModel.Position);
+                updatedValue.Add("applicationcompany", viewModel.Company);
+                updatedValue.Add("applicationfrom", FormatUtil.ConvertToYearString(viewModel.From));
+                updatedValue.Add("applicationto", FormatUtil.ConvertToYearString(viewModel.To));
+                updatedValue.Add("application", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
+                updatedValue.Add("applicationjobdescription", viewModel.JobDescription);
+
+                try
+                {
+                    SPConnector.AddListItem(SP_APPWORK_LIST_NAME, updatedValue, _siteUrl);
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e.Message);
+                }
+            }
         }
 
         public ApplicationDataVM GetBlankApplicationDataForm()

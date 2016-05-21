@@ -24,6 +24,8 @@ namespace MCAWebAndAPI.Web.Controllers
         [HttpPost]
         public ActionResult CreateApplicationData(ApplicationDataVM viewModel)
         {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             var headerID = _service.CreateApplicationData(viewModel);
 
@@ -32,7 +34,8 @@ namespace MCAWebAndAPI.Web.Controllers
             _service.CreateWorkingExperienceDetails(headerID, viewModel.WorkingExperienceDetails);
             _service.CreateProfessionalDocuments(headerID, viewModel.Documents);
 
-            return Json(new { status = true, urlToRedirect = "/hr" }, JsonRequestBehavior.AllowGet);
+            return Json(new { status = true, urlToRedirect = siteUrl + ConfigResource.UrlApplication }, 
+                JsonRequestBehavior.AllowGet);
         }
 
 
@@ -43,7 +46,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             // MANDATORY: Set Site URL
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             var viewModel = _service.GetBlankApplicationDataForm();
             return View(viewModel);

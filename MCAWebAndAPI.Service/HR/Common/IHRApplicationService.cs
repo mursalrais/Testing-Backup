@@ -12,11 +12,11 @@ namespace MCAWebAndAPI.Service.HR.Common
 
         int CreateApplicationData(ApplicationDataVM viewModel);
 
-        bool CreateEducationDetails(int headerID, IEnumerable<EducationDetailVM> educationDetails);
+        void CreateEducationDetails(int headerID, IEnumerable<EducationDetailVM> educationDetails);
 
-        bool CreateTrainingDetails(int headerID, IEnumerable<TrainingDetailVM> trainingDetails);
+        void CreateTrainingDetails(int headerID, IEnumerable<TrainingDetailVM> trainingDetails);
 
-        bool CreateWorkingExperienceDetails(int headerID, IEnumerable<WorkingExperienceDetailVM> workingExperienceDetails);
+        void CreateWorkingExperienceDetails(int headerID, IEnumerable<WorkingExperienceDetailVM> workingExperienceDetails);
 
         void CreateProfessionalDocuments(int headerID, IEnumerable<HttpPostedFileBase> documents);
     }

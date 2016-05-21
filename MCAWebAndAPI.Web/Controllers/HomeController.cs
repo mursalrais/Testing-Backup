@@ -1,6 +1,4 @@
-﻿using GridInForm.Models;
-using MCAWebAndAPI.Service.Converter;
-using System.Collections.Generic;
+﻿using MCAWebAndAPI.Service.Converter;
 using System.Web.Mvc;
 
 namespace MCAWebAndAPI.Web.Controllers
@@ -10,25 +8,6 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult Index()
         {
             return View();
-        }
-
-        public ActionResult IndexGrid()
-        {
-            return View(new Category
-            {
-                Name = "Category 1",
-                Products = new List<Product> {
-                        new Product
-                        {
-                            Name = "Product 1"
-                        }
-                    }
-            });
-        }
-
-        public ActionResult Save(Category category)
-        {
-            return View(category);
         }
 
         public ActionResult ScheduleTracking()

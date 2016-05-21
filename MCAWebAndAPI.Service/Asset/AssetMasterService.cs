@@ -91,7 +91,7 @@ namespace MCAWebAndAPI.Service.Asset
             }
             catch (Exception e)
             {
-                logger.Debug(e.Message);
+                logger.Error(e.Message);
                 return false;
             }
             var entitiy = new AssetMasterVM();
@@ -122,7 +122,7 @@ namespace MCAWebAndAPI.Service.Asset
             }
             catch (Exception e)
             {
-                logger.Debug(e.Message);
+                logger.Error(e.Message);
                 return false;
             }
             var entitiy = new AssetMasterVM();

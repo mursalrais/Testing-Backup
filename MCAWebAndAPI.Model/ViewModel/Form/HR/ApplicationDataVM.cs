@@ -1,4 +1,5 @@
-﻿using MCAWebAndAPI.Model.ViewModel.Control;
+﻿using MCAWebAndAPI.Model.Common;
+using MCAWebAndAPI.Model.ViewModel.Control;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -7,17 +8,17 @@ using System.Web;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
-    public class ApplicationDataVM
+    public class ApplicationDataVM : Item
     {
-        IEnumerable<EducationDetailVM> _educationDetails = new List<EducationDetailVM>();
-        IEnumerable<TrainingDetailVM> _trainingDetails = new List<TrainingDetailVM>();
-        IEnumerable<WorkingExperienceDetailVM> _workingExperienceDetails = new List<WorkingExperienceDetailVM>();
+        public IEnumerable<EducationDetailVM> EducationDetails { get; set; } = new List<EducationDetailVM>();
+        public IEnumerable<TrainingDetailVM> TrainingDetails { get; set; } = new List<TrainingDetailVM>();
+        public IEnumerable<WorkingExperienceDetailVM> WorkingExperienceDetails { get; set; } = new List<WorkingExperienceDetailVM>();
 
-        IEnumerable<HttpPostedFileBase> _documents = new List<HttpPostedFileBase>();
-
+        [UIHint("MultiFileUploader")]
+        public IEnumerable<HttpPostedFileBase> Documents { get; set; } = new List<HttpPostedFileBase>();
+        
         [UIHint("TextArea")]
         public string SpecializationField { get; set; }
-
 
         [DisplayName("Years of Relevant Work")]
         public int YearRelevanWork { get; set; }
@@ -26,33 +27,26 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public int MonthRelevantWork { get; set; }
 
         [DisplayName("First & Middle Name")]
+        [Required]
         public string FirstMiddleName { get; set; }
 
+        [Required]
         public string LastName { get; set; }
 
+        [Required]
         [DisplayName("Place of Birth")]
         public string PlaceOfBirth { get; set; }
 
-        GenderComboBoxVM _gender = new GenderComboBoxVM();
-
-        public string MyProperty { get; set; }
+        [UIHint("ComboBox")]
+        public GenderComboBoxVM Gender { get; set; } = new GenderComboBoxVM();
 
         [UIHint("Date")]
+        [Required]
         [DisplayName("Date of Birth")]
-        public DateTime? DateOfBirth
-        {
-            get
-            {
-                return _dateOfBirth;
-            }
-            set
-            {
-                _dateOfBirth = value;
-            }
-        }
+        public DateTime? DateOfBirth { get; set; } = DateTime.Now.AddYears(-28);
 
-        DateTime? _dateOfBirth = DateTime.Now.AddYears(-28);
-        AjaxComboBoxVM _nationality = new AjaxComboBoxVM
+        [UIHint("AjaxComboBox")]
+        public AjaxComboBoxVM Nationality { get; set; } = new AjaxComboBoxVM
         {
             ControllerName = "Location",
             ActionName = "GetCountries",
@@ -60,21 +54,29 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             TextField = "Title"
         };
 
-        MaritalStatusComboBoxVM _maritalStatus = new MaritalStatusComboBoxVM();
-        ComboBoxVM _bloodType = new ComboBoxVM
+        [UIHint("ComboBox")]
+        public MaritalStatusComboBoxVM MaritalStatus { get; set; } = new MaritalStatusComboBoxVM();
+
+        [UIHint("ComboBox")]
+        public ComboBoxVM BloodType { get; set; } = new ComboBoxVM
         {
             Choices = new string[]
             {
                 "A",
                 "B",
-                "C",
-                "D"
+                "O",
+                "AB"
             },
             DefaultValue = "A"
         };
 
-        ReligionComboBoxVM _religion = new ReligionComboBoxVM();
-        ComboBoxVM _IDCardType = new ComboBoxVM
+        [UIHint("ComboBox")]
+        public ReligionComboBoxVM Religion { get; set; } = new ReligionComboBoxVM();
+
+        [UIHint("ComboBox")]
+        [DisplayName("ID Card Type")]
+        [Required]
+        public ComboBoxVM IDCardType { get; set; } = new ComboBoxVM
         {
             Choices = new string[]
             {
@@ -86,27 +88,17 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             DefaultValue = "KTP"
         };
 
+        [Required]
         [DisplayName("ID Card Number")]
         public string IDCardNumber { get; set; }
 
         [UIHint("Date")]
         [DisplayName("ID Card Expiry")]
-        public DateTime? IDCardExpiry
-        {
-            get
-            {
-                return _IDCardExpiry;
-            }
-            set
-            {
-                _IDCardExpiry = value;
-            }
-        }
-
-        DateTime? _IDCardExpiry = DateTime.Now;
+        public DateTime? IDCardExpiry { get; set; } = DateTime.Now;
 
         [UIHint("TextArea")]
         [DataType(DataType.MultilineText)]
+        [Required]
         public string PermanentAddress { get; set; }
 
         [UIHint("TextArea")]
@@ -114,166 +106,28 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public string CurrentAddress { get; set; }
 
 
-        [UIHint("ComboBox")]
-        [DisplayName("ID Card Type")]
-        public ComboBoxVM IDCardType
-        {
-            get
-            {
-                return _IDCardType;
-            }
-            set
-            {
-                _IDCardType = value;
-            }
-        }
-
-        [UIHint("ComboBox")]
-        public MaritalStatusComboBoxVM MaritalStatus
-        {
-            get
-            {
-                return _maritalStatus;
-            }
-            set
-            {
-                _maritalStatus = value;
-            }
-        }
-
-        [UIHint("ComboBox")]
-        public ComboBoxVM BloodType
-        {
-            get
-            {
-                return _bloodType;
-            }
-
-            set
-            {
-                _bloodType = value;
-            }
-        }
-
-        [UIHint("ComboBox")]
-        public ReligionComboBoxVM Religion
-        {
-            get
-            {
-                return _religion;
-            }
-
-            set
-            {
-                _religion = value;
-            }
-        }
-
-        [UIHint("ComboBox")]
-        public GenderComboBoxVM Gender
-        {
-            get
-            {
-                return _gender;
-            }
-
-            set
-            {
-                _gender = value;
-            }
-        }
-
-        [UIHint("AjaxComboBox")]
-        public AjaxComboBoxVM Nationality
-        {
-            get
-            {
-                return _nationality;
-            }
-
-            set
-            {
-                _nationality = value;
-            }
-        }
-
         [UIHint("PhoneNumber")]
-        [RegularExpression("([0-9]+)")]
         public string Telephone { get; set; }
 
         [UIHint("PhoneNumber")]
-        [RegularExpression("([0-9]+)")]
         public string CurrentTelephone { get; set; }
 
         [UIHint("PhoneNumber")]
-        [RegularExpression("([0-9]+)")]
         [DisplayName("Mobile Number [1]")]
+        [Required]
         public string MobileNumberOne { get; set; }
 
         [UIHint("PhoneNumber")]
-        [RegularExpression("([0-9]+)")]
         [DisplayName("Mobile Number [2]")]
         public string MobileNumberTwo { get; set; }
 
         [UIHint("EmailAddress")]
         [DisplayName("Email Address [1]")]
+        [Required]
         public string EmailAddresOne { get; set; }
 
         [UIHint("EmailAddress")]
         [DisplayName("Email Address [2]")]
         public string EmailAddresTwo { get; set; }
-
-        public IEnumerable<TrainingDetailVM> TrainingDetails
-        {
-            get
-            {
-                return _trainingDetails;
-            }
-
-            set
-            {
-                _trainingDetails = value;
-            }
-        }
-
-        public IEnumerable<EducationDetailVM> EducationDetails
-        {
-            get
-            {
-                return _educationDetails;
-            }
-
-            set
-            {
-                _educationDetails = value;
-            }
-        }
-
-        [UIHint("MultiFileUploader")]
-        public IEnumerable<HttpPostedFileBase> Documents
-        {
-            get
-            {
-                return _documents;
-            }
-
-            set
-            {
-                _documents = value;
-            }
-        }
-
-        public IEnumerable<WorkingExperienceDetailVM> WorkingExperienceDetails
-        {
-            get
-            {
-                return _workingExperienceDetails;
-            }
-
-            set
-            {
-                _workingExperienceDetails = value;
-            }
-        }
     }
 }

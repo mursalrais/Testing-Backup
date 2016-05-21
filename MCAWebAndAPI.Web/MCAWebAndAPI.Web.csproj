@@ -1027,6 +1027,31 @@
     <Content Include="Views\Shared\EditorTemplates\MultiFileUploader.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Month.cshtml" />
     <Content Include="Views\Home\IndexGrid.cshtml" />
+    <Content Include="Views\HRApplication\PrintApplicationData.cshtml" />
+    <Content Include="Views\HRApplication\_PrintPersonalDetails.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\Url.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\AjaxComboBox.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\ComboBox.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\CurrencyIDR.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\CurrencyUSD.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\Date.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\DateTime.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\Email.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\EmailAddress.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\GridForeignKey.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\HttpPostedFileBase.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\InGridAjaxComboBox.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\InGridComboBox_Asset.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\InGridComboBox_Location.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\InGridComboBox_WBS.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\Integer.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\Month.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\MultiFileUploader.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\Number.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\Password.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\PhoneNumber.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\TextArea.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\Time.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1071,8 +1096,6 @@
     <Compile Include="Helpers\MathHelper.cs" />
     <Compile Include="Helpers\Populator.cs" />
     <Compile Include="Helpers\SessionManager.cs" />
-    <Compile Include="Models\Category.cs" />
-    <Compile Include="Models\Product.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\ConfigResource.Designer.cs">
       <AutoGen>True</AutoGen>

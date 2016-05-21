@@ -13,8 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCAWebAndAPI.Console", "MCA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCAWebAndAPI.Service.Tests", "MCAWebAndAPI.Service.Tests\MCAWebAndAPI.Service.Tests.csproj", "{941C06AF-0B5D-469C-A11A-D6E56E32D7FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GridInForm", "..\..\..\Documents\Visual Studio 2015\Projects\GridInForm\GridInForm.csproj", "{B72A8BE7-21C2-4C1B-99BD-1569F116B501}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,10 +39,6 @@ Global
 		{941C06AF-0B5D-469C-A11A-D6E56E32D7FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{941C06AF-0B5D-469C-A11A-D6E56E32D7FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{941C06AF-0B5D-469C-A11A-D6E56E32D7FA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B72A8BE7-21C2-4C1B-99BD-1569F116B501}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B72A8BE7-21C2-4C1B-99BD-1569F116B501}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B72A8BE7-21C2-4C1B-99BD-1569F116B501}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B72A8BE7-21C2-4C1B-99BD-1569F116B501}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

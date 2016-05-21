@@ -86,5 +86,14 @@ namespace MCAWebAndAPI.Web.Resources {
                 return ResourceManager.GetString("DefaultProgramSiteUrl", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to /Lists/Application.
+        /// </summary>
+        internal static string UrlApplication {
+            get {
+                return ResourceManager.GetString("UrlApplication", resourceCulture);
+            }
+        }
     }
 }
