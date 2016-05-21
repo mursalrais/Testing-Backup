@@ -102,6 +102,12 @@ form .k-button.k-upload-button {
     z-index: 1000;
 }
 
+span.field-validation-error {
+    color: #b94a48;
+    font-size: 85%;
+    display: block;
+}
+
 .smart-form fieldset{
     padding: 30px 10px 30px 40px !important;
 }

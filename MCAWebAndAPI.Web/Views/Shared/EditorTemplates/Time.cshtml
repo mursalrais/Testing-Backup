@@ -1,3 +1,4 @@
 @model DateTime?
            
 @(Html.Kendo().TimePickerFor(m => m))
+@Html.ValidationMessageFor(model => model)

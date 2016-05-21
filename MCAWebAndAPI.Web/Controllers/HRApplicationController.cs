@@ -24,6 +24,13 @@ namespace MCAWebAndAPI.Web.Controllers
         [HttpPost]
         public ActionResult CreateApplicationData(FormCollection form, ApplicationDataVM viewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return Json(new { status = false,
+                    errorMessages = BindHelper.GetErrorMessages(ModelState.Values) },
+                    JsonRequestBehavior.AllowGet);
+            }
+
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
@@ -49,9 +56,9 @@ namespace MCAWebAndAPI.Web.Controllers
             var array = workingExperienceDetails.ToArray();
             for (int i = 0; i < array.Length; i++)
             {
-                array[i].From = BinderHelper.BindDateInGrid("WorkingExperienceDetails",
+                array[i].From = BindHelper.BindDateInGrid("WorkingExperienceDetails",
                     i, "From", form);
-                array[i].To = BinderHelper.BindDateInGrid("WorkingExperienceDetails",
+                array[i].To = BindHelper.BindDateInGrid("WorkingExperienceDetails",
                     i, "To", form);
             }
 
@@ -63,7 +70,7 @@ namespace MCAWebAndAPI.Web.Controllers
             var array = trainingDetails.ToArray();
             for (int i = 0; i < array.Length; i++)
             {
-                array[i].Year = BinderHelper.BindDateInGrid("TrainingDetails",
+                array[i].Year = BindHelper.BindDateInGrid("TrainingDetails",
                     i, "Year", form);
             }
 
@@ -76,7 +83,7 @@ namespace MCAWebAndAPI.Web.Controllers
             var array = educationDetails.ToArray();
             for (int i = 0; i< array.Length; i++)
             {
-                array[i].YearOfGraduation = BinderHelper.BindDateInGrid("EducationDetails",
+                array[i].YearOfGraduation = BindHelper.BindDateInGrid("EducationDetails",
                     i, "YearOfGraduation", form);
             }
 

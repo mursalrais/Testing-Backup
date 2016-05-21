@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace MCAWebAndAPI.Web.Helpers
 {
-    public class BinderHelper
+    public class BindHelper
     {
         public static DateTime? BindDateInGrid(string prefix, int index, string postfix, FormCollection form)
         {
@@ -18,6 +18,21 @@ namespace MCAWebAndAPI.Web.Helpers
             var result = DateTime.ParseExact(dateString, "MMM dd yyyy",
                                        System.Globalization.CultureInfo.InvariantCulture);
             return result;
+        }
+
+        public static string GetErrorMessages(ICollection<ModelState> modelStates)
+        {
+            var errorMessages = string.Empty;
+            foreach (var model in modelStates)
+            {
+                foreach (var modelError in model.Errors)
+                {
+                    errorMessages += modelError.ErrorMessage;
+                    errorMessages += "<br/>";
+                }
+            }
+            return errorMessages;
+
         }
     }
 }

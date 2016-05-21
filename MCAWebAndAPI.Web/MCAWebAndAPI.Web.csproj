@@ -742,6 +742,8 @@
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\kendo.modernizr.custom.js" />
     <Content Include="Scripts\kendo\2016.2.504\kendo.culture.id-ID.min.js" />
     <Content Include="Scripts\libs\angular.min.js" />
@@ -1178,10 +1180,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\BinderHelper.cs" />
+    <Compile Include="Helpers\BindHelper.cs" />
     <Compile Include="Helpers\JsonpResult.cs" />
     <Compile Include="Helpers\MathHelper.cs" />
-    <Compile Include="Helpers\Populator.cs" />
     <Compile Include="Helpers\SessionManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\ConfigResource.Designer.cs">
