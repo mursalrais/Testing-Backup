@@ -57,3 +57,18 @@
         </div>
     </div>
 }
+
+@section scripts{
+
+    <script>
+        function onSelectIDCardType(e) {
+            var dataItem = this.dataItem(e.item);
+            if (dataItem === "KTP") {
+                $('#IDCardExpiry').closest('.form-group').show();
+            } else {
+                $('#IDCardExpiry').closest('.form-group').hide();
+            }
+        }
+
+    </script>
+}

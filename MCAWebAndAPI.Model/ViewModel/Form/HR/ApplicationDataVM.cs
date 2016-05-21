@@ -85,7 +85,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
                 "Passport",
                 "SIM"
             },
-            DefaultValue = "KTP"
+            DefaultValue = "KTP", 
+            OnSelectEventName = "onSelectIDCardType"
         };
 
         [Required]
