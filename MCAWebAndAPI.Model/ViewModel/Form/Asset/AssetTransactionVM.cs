@@ -4,23 +4,20 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 {
     public class AssetTransactionVM
     {
-        AssetTransactionHeaderVM _header;
+
+        AssetTransactionHeaderVM header = new AssetTransactionHeaderVM();
         IEnumerable<AssetTransactionItemVM> _items;
 
         public AssetTransactionHeaderVM Header
         {
             get
             {
-                if (_header == null)
-                {
-                    _header = new AssetTransactionHeaderVM();
-                }
-                return _header;
+                return header;
             }
 
             set
             {
-                _header = value;
+                header = value;
             }
         }
 

@@ -11,7 +11,6 @@ namespace MCAWebAndAPI.Service.HR.Common
 
         IEnumerable<ProfessionalMaster> GetProfessionals();
 
-        ProfessionalDataVM GetBlankProfessionalDataForm();
-
+        IEnumerable<PositionsMaster> GetPositions();
     }
 }

@@ -11,6 +11,7 @@ namespace MCAWebAndAPI.Service.HR.Common
     {
         string _siteUrl;
         const string SP_PROMAS_LIST_NAME = "Professional Master";
+        const string SP_POSMAS_LIST_NAME = "Position Master";
 
         public void SetSiteUrl(string siteUrl)
         {
@@ -33,17 +34,36 @@ namespace MCAWebAndAPI.Service.HR.Common
         {
             return new ProfessionalMaster
             {
-                ID = Convert.ToInt32(item["ID"]), 
+                ID = Convert.ToInt32(item["ID"]),
                 Name = Convert.ToString(item["Title"]),
-                ContactNo = Convert.ToString(item["ContactNo"]),
-                Position = Convert.ToString(item["Position"]),
-                ProjectUnit = Convert.ToString(item["ProjectUnit"])
+                Status = Convert.ToString(item["maritalstatus"]),
+                Position = item["Position"] == null ? "" :
+               Convert.ToString((item["Position"] as FieldLookupValue).LookupValue)
             };
         }
 
-        public ProfessionalDataVM GetBlankProfessionalDataForm()
+        public IEnumerable<PositionsMaster> GetPositions()
         {
-            throw new NotImplementedException();
+            var models = new List<PositionsMaster>();
+
+            foreach (var item in SPConnector.GetList(SP_POSMAS_LIST_NAME, _siteUrl))
+            {
+                models.Add(ConvertToPositionsModel(item));
+            }
+
+            return models;
+        }
+
+        private PositionsMaster ConvertToPositionsModel(ListItem item)
+        {
+            return new PositionsMaster
+            {
+                ID = Convert.ToInt32(item["ID"]),
+                Title = Convert.ToString(item["Title"]),
+                //PositionStatus = Convert.ToString(item["positionstatus"]),
+                //Position = Convert.ToString(item["Position"]),
+                //ProjectUnit = Convert.ToString(item["ProjectUnit"])
+            };
         }
     }
 }
