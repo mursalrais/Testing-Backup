@@ -1,11 +1,11 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
 @model ApplicationDataVM
 
-<div class="col-md-6">
+<div class="col-xs-6">
     <div class="form-group">
-        @Html.Bootstrap().LabelFor(m => m.SpecializationField).Class("col-md-4 control-label")
-        <div class="col-md-8">
-            @Html.EditorFor(m => m.SpecializationField)
+        @Html.Bootstrap().LabelFor(m => m.SpecializationField).Class("col-xs-4 control-label")
+        <div class="col-xs-8">
+            @Html.DisplayFor(m => m.SpecializationField)
         </div>
     </div>
 </div>

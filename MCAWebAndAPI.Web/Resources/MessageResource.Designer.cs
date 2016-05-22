@@ -68,5 +68,14 @@ namespace MCAWebAndAPI.Web.Resources {
                 return ResourceManager.GetString("SuccessCreateApplicationData", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Congratulation {0}! To download the printed version of your application. &lt;br/&gt;&lt;br/&gt;&lt;a href=&quot;{1}&quot; target=&quot;_blank&quot; class=&quot;btn btn-labeled btn-default&quot;&gt; &lt;span class=&quot;btn-label&quot;&gt;&lt;i class=&quot;fa fa-file&quot;&gt;&lt;/i&gt;&lt;/span&gt;Download File&lt;/a&gt;.
+        /// </summary>
+        internal static string SuccessPrintApplicationData {
+            get {
+                return ResourceManager.GetString("SuccessPrintApplicationData", resourceCulture);
+            }
+        }
     }
 }

@@ -1,29 +1,17 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
 @model IEnumerable<TrainingDetailVM>
 
-<div class="col-md-12">
+<div class="col-xs-12">
 
     @(Html.Kendo().Grid(Model)
     .Name("TrainingDetails")
-    .ToolBar(tools => tools.Create().Text("Add New Training"))
-    .Editable(editable => editable.Mode(GridEditMode.InCell).CreateAt(GridInsertRowPosition.Bottom))
     .Columns(columns =>
     {
-        columns.Bound(p => p.Institution).ClientTemplate("#= Institution #" +
-                           "<input type='hidden' name='TrainingDetails[#= getTrainingDetail(data)#].Institution' value='#= Institution #' />"
-                         ).Width(400);
-        columns.Bound(p => p.Subject).ClientTemplate("#= Subject #" +
-                           "<input type='hidden' name='TrainingDetails[#= getTrainingDetail(data)#].Subject' value='#= Subject #' />"
-                         ).Width(400);
-        columns.Bound(p => p.Year).ClientTemplate("#= Year.getFullYear() #" +
-                           "<input type='hidden' name='TrainingDetails[#= getTrainingDetail(data)#].Year' value='#= Year #' />"
-                         ).Width(200);
-        columns.Bound(p => p.Remarks).ClientTemplate("#= Remarks #" +
-                           "<input type='hidden' name='TrainingDetails[#= getTrainingDetail(data)#].Remarks' value='#= Remarks #' />"
-                         );
-        columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
-          "<input type='hidden' name='TrainingDetails[#= getTrainingDetail(data)#].ID' value='#= ID #' />"
-        );
+        columns.Bound(p => p.Institution);
+        columns.Bound(p => p.Subject);
+        columns.Bound(p => p.Year);
+        columns.Bound(p => p.Remarks);
+    
     })
     .DataSource(dataSource => dataSource.Ajax()
                    .Model(model =>
@@ -31,7 +19,6 @@
                        model.Id(p => p.ID);
                        model.Field(e => e.Year).DefaultValue(DateTime.Now);
                    })
-                   .ServerOperation(false)
      )
     )
 </div>

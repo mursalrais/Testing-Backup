@@ -40,7 +40,7 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         [HttpPost]
-        [JsonHandleError]
+       
         public JsonResult SubmitMonthlyFee(MonthlyFeeVM viewModel)
         {
             _hRPayrollService.SetSiteUrl(System.Web.HttpContext.Current.Session["SiteUrl"] as string);
@@ -81,7 +81,7 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         [HttpPost]
-        [JsonHandleError]
+       
         public JsonResult UpdateMonthlyFee(MonthlyFeeVM _data, string site)
         {
             _hRPayrollService.SetSiteUrl(System.Web.HttpContext.Current.Session["SiteUrl"] as string);

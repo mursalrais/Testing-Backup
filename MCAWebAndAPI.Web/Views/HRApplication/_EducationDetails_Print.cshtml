@@ -1,15 +1,17 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@using MCAWebAndAPI.Web.Helpers
+
 @model IEnumerable<EducationDetailVM>
 
-<div class="col-md-12">
+<div class="col-xs-12">
 
     @(Html.Kendo().Grid(Model)
     .Name("EducationDetails")
     .Columns(columns =>
     {
-        columns.Bound(p => p.University);
-        columns.Bound(p => p.Subject);
-        columns.Bound(p => p.YearOfGraduation);
+        columns.Bound(p => p.University).Width(250);
+        columns.Bound(p => p.Subject).Width(250);
+        columns.Bound(p => p.YearOfGraduation).ClientTemplate(("#= YearOfGraduation.getFullYear() #")).Width(250);
         columns.Bound(p => p.Remarks);
     })
     .DataSource(dataSource => dataSource.Ajax()
@@ -19,4 +21,5 @@
                    })
                    )
     )
+    
 </div>

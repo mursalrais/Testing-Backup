@@ -145,9 +145,53 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             }
         }
 
-        public ApplicationDataVM GetBlankApplicationDataForm()
+        public ApplicationDataVM GetApplicationData(int? ID)
         {
-            return new ApplicationDataVM();
+            var viewModel = new ApplicationDataVM();
+            if (ID == null)
+                return viewModel;
+
+            var listItem = SPConnector.GetListItem(SP_APPDATA_LIST_NAME, ID, _siteUrl);
+            viewModel = ConvertToApplicationDataVM(listItem);
+
+            return viewModel;
+
+        }
+
+        private ApplicationDataVM ConvertToApplicationDataVM(ListItem listItem)
+        {
+            var viewModel = new ApplicationDataVM();
+            viewModel.ID = Convert.ToInt32(listItem["ID"]);
+            viewModel.FirstMiddleName = Convert.ToString(listItem["Title"]);
+
+            viewModel.EducationDetails = GetEducationDetails(viewModel.ID);
+            viewModel.TrainingDetails = GetTrainingDetails(viewModel.ID);
+            viewModel.WorkingExperienceDetails = GetWorkingExperienceDetails(viewModel.ID);
+            viewModel.Documents = GetDocuments(viewModel.ID);
+
+            //TODO: To Map one by one
+            return viewModel;
+
+        }
+
+        private IEnumerable<HttpPostedFileBase> GetDocuments(int? iD)
+        {
+            throw new NotImplementedException();
+        }
+
+        private IEnumerable<WorkingExperienceDetailVM> GetWorkingExperienceDetails(int? iD)
+        {
+            throw new NotImplementedException();
+        }
+
+        private IEnumerable<TrainingDetailVM> GetTrainingDetails(int? iD)
+        {
+            throw new NotImplementedException();
+        }
+
+        private IEnumerable<EducationDetailVM> GetEducationDetails(int? iD)
+        {
+            throw new NotImplementedException();
         }
 
         public void SetSiteUrl(string siteUrl = null)

@@ -1,4 +1,5 @@
-﻿using MCAWebAndAPI.Model.ViewModel.Form.HR;
+﻿using Elmah;
+using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using MCAWebAndAPI.Service.Converter;
 using MCAWebAndAPI.Service.HR.Common;
 using MCAWebAndAPI.Service.HR.Recruitment;
@@ -14,6 +15,7 @@ using System.Web.Mvc;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
+    [Filters.HandleError]
     public class HRApplicationController : Controller
     {
 
@@ -24,9 +26,20 @@ namespace MCAWebAndAPI.Web.Controllers
             _service = new HRApplicationService();
         }
 
+        public ActionResult DisplayApplicationData(string siteUrl = null, int? ID = null)
+        {
+            // Clear Existing Session Variables if any
+            SessionManager.RemoveAll();
+
+            // MANDATORY: Set Site URL
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            var viewModel = _service.GetApplicationData(ID);
+            return View(viewModel);
+        }
 
         [HttpPost]
-        [JsonHandleError]
         public ActionResult CreateApplicationData(FormCollection form, ApplicationDataVM viewModel)
         {
             if (!ModelState.IsValid)
@@ -45,6 +58,7 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
+                ErrorSignal.FromCurrentContext().Raise(e);
                 return Json(new {errorMessage = e.Message },
                    JsonRequestBehavior.AllowGet);
             }
@@ -56,6 +70,7 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
+                ErrorSignal.FromCurrentContext().Raise(e);
                 return Json(new { errorMessage = e.Message },
                    JsonRequestBehavior.AllowGet);
             }
@@ -67,6 +82,7 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch(Exception e)
             {
+                ErrorSignal.FromCurrentContext().Raise(e);
                 return Json(new { errorMessage = e.Message },
                   JsonRequestBehavior.AllowGet);
             }
@@ -77,6 +93,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 _service.CreateWorkingExperienceDetails(headerID, viewModel.WorkingExperienceDetails);
             }catch(Exception e)
             {
+                ErrorSignal.FromCurrentContext().Raise(e);
                 return Json(new { errorMessage = e.Message },
                  JsonRequestBehavior.AllowGet);
             }
@@ -87,6 +104,7 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
+                ErrorSignal.FromCurrentContext().Raise(e);
                 return Json(new { errorMessage = e.Message },
                 JsonRequestBehavior.AllowGet);
             }
@@ -98,8 +116,7 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         [HttpPost]
-        [JsonHandleError]
-        public FileResult PrintApplicationData(FormCollection form, ApplicationDataVM viewModel)
+        public ActionResult PrintApplicationData(FormCollection form, ApplicationDataVM viewModel)
         { 
             viewModel.EducationDetails = BindEducationDetails(form, viewModel.EducationDetails);
             viewModel.TrainingDetails = BindTrainingDetails(form, viewModel.TrainingDetails);
@@ -110,16 +127,50 @@ namespace MCAWebAndAPI.Web.Controllers
             
             var view = ViewEngines.Engines.FindView(ControllerContext, relativePath, null);
             ViewData.Model = viewModel;
-            
+            var fileName = viewModel.FirstMiddleName + "_Application.pdf";
+
             using (var writer = new StringWriter())
             {
                 var context = new ViewContext(ControllerContext, view.View, ViewData, TempData, writer);
                 view.View.Render(context, writer);
                 writer.Flush();
                 content = writer.ToString();
-                byte[] pdfBuf = PDFConverter.Instance.ConvertFromHTML(viewModel.FirstMiddleName + "_Application.pdf", content);
-                return File(pdfBuf, "application/pdf");
+
+                // Get PDF Bytes
+                byte[] pdfBuf = null;
+                try
+                {
+                    pdfBuf = PDFConverter.Instance.ConvertFromHTML(fileName, content);
+                }
+                catch (Exception e)
+                {
+                    ErrorSignal.FromCurrentContext().Raise(e);
+                    return Json(new { errorMessage = e.Message }, JsonRequestBehavior.AllowGet);
+                }
+
+                // Save to Server Path
+                var fileNamePath = Path.GetFileName(fileName);
+                var path = Path.Combine(Server.MapPath("~/App_Data"), fileNamePath);
+                try
+                {
+                    System.IO.File.WriteAllBytes(path, pdfBuf);
+                }
+                catch (Exception e)
+                {
+                    ErrorSignal.FromCurrentContext().Raise(e);
+                    return Json(new { errorMessage = e.Message }, JsonRequestBehavior.AllowGet);
+                }
             }
+
+
+            var downloadPath = string.Format("/File/Download?fileName={0}", fileName);
+            return Json(new
+            {
+                successMessage = string.Format(MessageResource.SuccessPrintApplicationData, 
+                viewModel.FirstMiddleName, downloadPath)
+            },
+            JsonRequestBehavior.AllowGet);
+            
         }
 
         private IEnumerable<WorkingExperienceDetailVM> BindWorkingExperienceDetails(FormCollection form, IEnumerable<WorkingExperienceDetailVM> workingExperienceDetails)
@@ -170,7 +221,7 @@ namespace MCAWebAndAPI.Web.Controllers
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
-            var viewModel = _service.GetBlankApplicationDataForm();
+            var viewModel = _service.GetApplicationData(null);
             return View(viewModel);
         }
     }

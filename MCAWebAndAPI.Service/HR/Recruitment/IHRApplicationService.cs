@@ -8,7 +8,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
     {
         void SetSiteUrl(string siteUrl = null);
 
-        ApplicationDataVM GetBlankApplicationDataForm();
+        ApplicationDataVM GetApplicationData(int? ID);
 
         int CreateApplicationData(ApplicationDataVM viewModel);
 

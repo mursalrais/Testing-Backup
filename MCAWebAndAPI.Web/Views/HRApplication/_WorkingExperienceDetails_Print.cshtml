@@ -1,54 +1,37 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
 @model ApplicationDataVM
 
-<div class="col-md-12" style="margin-bottom: 20px">
+<div class="col-xs-12" style="margin-bottom: 20px">
     @(Html.Kendo().Grid(Model.WorkingExperienceDetails)
         .Name("WorkingExperienceDetails")
-        .ToolBar(tools => tools.Create().Text("Add New Working Experience"))
-        .Editable(editable => editable.Mode(GridEditMode.InCell).CreateAt(GridInsertRowPosition.Bottom))
         .Columns(columns =>
         {
-            columns.Bound(p => p.Position).ClientTemplate("#= Position #" +
-                          "<input type='hidden' name='WorkingExperienceDetails[#= getWorkingExperienceDetail(data)#].Position' value='#= Position #' />"
-                        );
-            columns.Bound(p => p.Company).ClientTemplate("#= Company #" +
-                               "<input type='hidden' name='WorkingExperienceDetails[#= getWorkingExperienceDetail(data)#].Company' value='#= Company #' />"
-                             );
-            columns.Bound(p => p.From).ClientTemplate("#= From.getFullYear() #" +
-                               "<input type='hidden' name='WorkingExperienceDetails[#= getWorkingExperienceDetail(data)#].From' value='#= From #' />"
-                             );
-            columns.Bound(p => p.To).ClientTemplate("#= To.getFullYear() #" +
-                               "<input type='hidden' name='WorkingExperienceDetails[#= getWorkingExperienceDetail(data)#].To' value='#= To #' />"
-                             );
-            columns.Bound(p => p.JobDescription).ClientTemplate("#= JobDescription #" +
-                               "<input type='hidden' name='WorkingExperienceDetails[#= getWorkingExperienceDetail(data)#].To' value='#= JobDescription #' />");
-            columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
-              "<input type='hidden' name='WorkingExperienceDetails[#= getWorkingExperienceDetail(data)#].ID' value='#= ID #' />"
-            );
+            columns.Bound(p => p.Position);
+            columns.Bound(p => p.Company);
+            columns.Bound(p => p.From);
+            columns.Bound(p => p.To);
+            columns.Bound(p => p.JobDescription);
         })
         .DataSource(dataSource => dataSource.Ajax()
                    .Model(model =>
                    {
                        model.Id(p => p.ID);
-                       model.Field(e => e.From).DefaultValue(DateTime.Now.AddYears(-5));
-                       model.Field(e => e.To).DefaultValue(DateTime.Now);
                    })
-                   .ServerOperation(false)
         )
     )
 </div>
-<div class="col-md-6">
+<div class="col-xs-6">
     <div class="form-group">
-        @Html.Bootstrap().LabelFor(m => m.YearRelevanWork).Class("col-md-4 control-label")
-        <div class="col-md-8">
+        @Html.Bootstrap().LabelFor(m => m.YearRelevanWork).Class("col-xs-4 control-label")
+        <div class="col-xs-8">
             @Html.Kendo().TextBoxFor(model => model.YearRelevanWork).HtmlAttributes(new { @class = "form-control", style = "width:100%;" })
         </div>
     </div>
 </div>
-<div class="col-md-6">
+<div class="col-xs-6">
     <div class="form-group">
-        @Html.Bootstrap().LabelFor(m => m.MonthRelevantWork).Class("col-md-4 control-label")
-        <div class="col-md-8">
+        @Html.Bootstrap().LabelFor(m => m.MonthRelevantWork).Class("col-xs-4 control-label")
+        <div class="col-xs-8">
             @Html.Kendo().TextBoxFor(model => model.MonthRelevantWork).HtmlAttributes(new { @class = "form-control", style = "width:100%;" })
         </div>
     </div>

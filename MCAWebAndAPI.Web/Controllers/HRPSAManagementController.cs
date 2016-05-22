@@ -76,7 +76,7 @@ namespace MCAWebAndAPI.Web.Controllers
         */
 
         [HttpPost]
-        [JsonHandleError]
+       
         public JsonResult Create(PSAManagementVM viewModel)
         {
             // Check whether error is found

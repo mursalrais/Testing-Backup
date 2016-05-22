@@ -73,7 +73,7 @@ namespace MCAWebAndAPI.Service.Utils
             }
         }
         
-        public static ListItem GetListItem(string listName, int listItemID, string siteUrl = null)
+        public static ListItem GetListItem(string listName, int? listItemID, string siteUrl = null)
         {
             MapCredential(siteUrl);
             using (ClientContext context = new ClientContext(siteUrl ?? CurUrl))
@@ -83,7 +83,7 @@ namespace MCAWebAndAPI.Service.Utils
                 context.Credentials = new SharePointOnlineCredentials(UserName, secureString);
                 
                 // Get one listitem
-                var SPListItem = context.Web.Lists.GetByTitle(listName).GetItemById(listItemID);
+                var SPListItem = context.Web.Lists.GetByTitle(listName).GetItemById((int)listItemID);
                 context.Load(SPListItem);
                 context.ExecuteQuery();
                 return SPListItem;

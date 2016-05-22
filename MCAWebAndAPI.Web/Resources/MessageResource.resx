@@ -120,4 +120,7 @@
   <data name="SuccessCreateApplicationData" xml:space="preserve">
     <value>Congratulation {0}! Your application has successfully been submitted.</value>
   </data>
+  <data name="SuccessPrintApplicationData" xml:space="preserve">
+    <value>Congratulation {0}! To download the printed version of your application. &lt;br/&gt;&lt;br/&gt;&lt;a href="{1}" target="_blank" class="btn btn-labeled btn-default"&gt; &lt;span class="btn-label"&gt;&lt;i class="fa fa-file"&gt;&lt;/i&gt;&lt;/span&gt;Download File&lt;/a&gt;</value>
+  </data>
 </root>
