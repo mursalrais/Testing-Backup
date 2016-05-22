@@ -31,8 +31,7 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return Json(new { status = false,
-                    errorMessages = BindHelper.GetErrorMessages(ModelState.Values) },
+                return Json(new {  errorMessage = BindHelper.GetErrorMessages(ModelState.Values) },
                     JsonRequestBehavior.AllowGet);
             }
 
@@ -46,7 +45,7 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
-                return Json(new {status = false, errorMessages = e.Message },
+                return Json(new {errorMessage = e.Message },
                    JsonRequestBehavior.AllowGet);
             }
 
@@ -57,7 +56,7 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
-                return Json(new { status = false, errorMessages = e.Message },
+                return Json(new { errorMessage = e.Message },
                    JsonRequestBehavior.AllowGet);
             }
 
@@ -68,7 +67,7 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch(Exception e)
             {
-                return Json(new { status = false, errorMessages = e.Message },
+                return Json(new { errorMessage = e.Message },
                   JsonRequestBehavior.AllowGet);
             }
 
@@ -78,7 +77,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 _service.CreateWorkingExperienceDetails(headerID, viewModel.WorkingExperienceDetails);
             }catch(Exception e)
             {
-                return Json(new { status = false, errorMessages = e.Message },
+                return Json(new { errorMessage = e.Message },
                  JsonRequestBehavior.AllowGet);
             }
 
@@ -88,11 +87,13 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
-                return Json(new { status = false, errorMessages = e.Message },
+                return Json(new { errorMessage = e.Message },
                 JsonRequestBehavior.AllowGet);
             }
 
-            return Json(new { status = true, urlToRedirect = siteUrl + ConfigResource.UrlApplication }, 
+            // Use this if only not embedded in SharePoint page
+            return Json(new {
+                successMessage = string.Format(MessageResource.SuccessCreateApplicationData, viewModel.FirstMiddleName) },
                 JsonRequestBehavior.AllowGet);
         }
 

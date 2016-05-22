@@ -9,8 +9,10 @@
                                                     FormMethod.Post,
                                                     new AjaxOptions
                                                     {
+                                                        OnBegin = "onBeginForm",
+                                                        OnFailure = "onFailureForm",
                                                         OnSuccess = "onSuccessForm",
-                                                        OnFailure = "onFailureForm"
+                                                        OnComplete = "onCompleteForm"
                                                     }, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
 {
     <fieldset>
@@ -69,6 +71,5 @@
                 $('#IDCardExpiry').closest('.form-group').hide();
             }
         }
-
     </script>
 }

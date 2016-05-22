@@ -17,6 +17,11 @@ namespace MCAWebAndAPI.Web.Controllers
             _locationService = new LocationService();
         }
 
+        /// <summary>
+        /// Stored to cahce for 2 hours
+        /// </summary>
+        /// <returns></returns>
+        [OutputCache(Duration = (2 * 3600))]
         public JsonResult GetCountries()
         {
             _locationService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);

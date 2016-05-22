@@ -21,7 +21,7 @@ namespace MCAWebAndAPI.Service.Converter
         {
             converter = new ThreadSafeConverter(
                                 new RemotingToolset<PdfToolset>(
-                                    new Win32EmbeddedDeployment(
+                                    new Win64EmbeddedDeployment(
                                         new TempFolderDeployment())));
         }
 

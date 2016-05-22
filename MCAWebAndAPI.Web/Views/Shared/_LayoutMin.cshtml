@@ -57,9 +57,13 @@
             </div>
         </div>    
     </div>
+    <div class="modal-loading"></div>
+    @Html.Partial("_Modal")
 
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
     <script src="~/Scripts/jquery.validate.min.js"></script>
     <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
     <script src="~/Scripts/custom.js"></script>
 
     @RenderSection("scripts", required: false)
@@ -68,7 +72,13 @@
                        e.stopPropagation();
                        if (jqxhr != null)
                            console.log(jqxhr.responseText);
-                     });
+      });
+
+      $(document).on({
+          ajaxStart: function () { showLoading(); },
+          ajaxStop: function () { hideLoading(); }
+      });
+
     </script>
 </body>
 </html>

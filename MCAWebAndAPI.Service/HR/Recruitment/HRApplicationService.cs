@@ -45,6 +45,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             updatedValue.Add("Religion", viewModel.Religion.Value);
             updatedValue.Add("Gender", viewModel.Gender.Value);
             updatedValue.Add("idcardtype", viewModel.IDCardType.Value);
+            updatedValue.Add("idcardexpirydate", viewModel.IDCardExpiry);
             updatedValue.Add("Nationality", new FieldLookupValue { LookupId = viewModel.Nationality.Value });
             updatedValue.Add("applicationstatus", WorkflowUtil.DRAFT);
 
