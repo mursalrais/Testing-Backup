@@ -1,0 +1,33 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model IEnumerable<TrainingDetailVM>
+
+<div class="col-xs-12">
+
+    @(Html.Kendo().Grid(Model)
+    .Name("TrainingDetails")
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.Institution);
+        columns.Bound(p => p.Subject);
+        columns.Bound(p => p.Year);
+        columns.Bound(p => p.Remarks);
+    
+    })
+    .DataSource(dataSource => dataSource.Ajax()
+                   .Model(model =>
+                   {
+                       model.Id(p => p.ID);
+                       model.Field(e => e.Year).DefaultValue(DateTime.Now);
+                   })
+     )
+    )
+</div>
+
+
+<script>
+    function getTrainingDetail(dataItem) {
+        var data = $("#TrainingDetails").data("kendoGrid").dataSource.data();
+        return data.indexOf(dataItem);
+    }
+
+</script>

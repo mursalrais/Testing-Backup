@@ -1,0 +1,14 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model ApplicationDataVM
+
+<div class="col-xs-6">
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.Documents).Class("col-xs-4 control-label")
+        <div class="col-xs-8">
+            @for (int i = 0; i < Model.Documents.ToArray().Length; i++)
+            {
+                <span style="display:block">@Model.Documents.ToArray()[i].FileName</span>
+            }
+        </div>
+    </div>
+</div>

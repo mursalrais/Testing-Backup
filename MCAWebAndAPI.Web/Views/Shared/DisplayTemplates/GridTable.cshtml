@@ -1,0 +1,9 @@
+﻿@using MCAWebAndAPI.Web.Helpers
+
+@model IEnumerable<object>
+
+@{ 
+    var TableModel = Html.GetDataTableFromObjects(Model.ToArray());
+}
+
+@Html.ConvertDataTableToHTML(TableModel)

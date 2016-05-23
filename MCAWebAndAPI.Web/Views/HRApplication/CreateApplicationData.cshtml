@@ -9,9 +9,11 @@
                                                     FormMethod.Post,
                                                     new AjaxOptions
                                                     {
-                                                        OnSuccess = "onSuccess",
-                                                        OnFailure = "onFailure"
-                                                    }, new { @class = "form-horizontal" }))
+                                                        OnBegin = "onBeginForm",
+                                                        OnFailure = "onFailureForm",
+                                                        OnSuccess = "onSuccessForm",
+                                                        OnComplete = "onCompleteForm"
+                                                    }, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
 {
     <fieldset>
         <legend>Personnal Details</legend>
@@ -20,7 +22,7 @@
         </div>
         <legend>Contact Information</legend>
         <div class="row">
-            @Html.Partial("_ContactInformationDetailsForApplication", Model)
+            @Html.Partial("_ContactInformationDetails", Model)
         </div>
         <legend>Education</legend>
         <div class="row">
@@ -40,14 +42,14 @@
         </div>
         <legend>Documents</legend>
         <div class="row">
-            @Html.Partial("_DocumentDetailsForApplication", Model)
+            @Html.Partial("_DocumentDetails", Model)
         </div>
     </fieldset>
     <div class="form-actions">
         <div class="row">
             <div class="col-md-12">
-                <button class="btn btn-default" type="submit">
-                    Cancel
+                <button id="print-button" class="btn btn-default" type="button">
+                    Print
                 </button>
                 <button id="submit-button" class="btn btn-primary" type="submit">
                     <i class="fa fa-save"></i>
@@ -56,4 +58,18 @@
             </div>
         </div>
     </div>
+}
+
+@section scripts{
+
+    <script>
+        function onSelectIDCardType(e) {
+            var dataItem = this.dataItem(e.item);
+            if (dataItem === "KTP") {
+                $('#IDCardExpiry').closest('.form-group').show();
+            } else {
+                $('#IDCardExpiry').closest('.form-group').hide();
+            }
+        }
+    </script>
 }

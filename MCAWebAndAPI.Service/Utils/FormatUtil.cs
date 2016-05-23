@@ -37,5 +37,24 @@ namespace MCAWebAndAPI.Service.Utils
             return result;
         }
 
+        public static string ConvertToCleanPhoneNumber(string phoneNumber)
+        {
+            if (phoneNumber == null)
+                return phoneNumber;
+
+            var result = phoneNumber.Replace("_", string.Empty);
+            return result;
+        }
+
+        public static string ConvertToYearString(DateTime? dateTime)
+        {
+            if (dateTime == null)
+                return null;
+
+            return ((DateTime)dateTime).Year + string.Empty;
+        }
+
+
+         
     }
 }

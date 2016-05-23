@@ -69,7 +69,7 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         [HttpPost]
-        [JsonHandleError]
+       
         public JsonResult Create(AssetTransactionVM viewModel)
         {
             _assetTransactionService.SetSiteUrl(System.Web.HttpContext.Current.Session["SiteUrl"] as string);

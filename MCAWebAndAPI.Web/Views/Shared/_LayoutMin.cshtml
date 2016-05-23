@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿
+@*@{ Html.EnableClientValidation(); }*@
+
+<!DOCTYPE html>
 
 <html lang="en">
 <head>
@@ -18,8 +21,9 @@
     @Styles.Render("~/Content/kendo")
     
     <script src="~/Scripts/libs/jquery.min.js"></script>
+
+
     <script src="~/Scripts/libs/jszip.min.js"></script>
-    <script src="~/Scripts/libs/pako_deflate.min.js"></script>
     @Scripts.Render("~/bundles/kendo")
     
     <script src="~/Scripts/WebForms/MSAjax/MicrosoftAjax.js"></script>
@@ -52,15 +56,28 @@
             </div>
         </div>    
     </div>
+    <div class="modal-loading"></div>
+    @Html.Partial("_Modal")
 
-    @Scripts.Render("~/bundles/apps")
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+    <script src="~/Scripts/custom.js"></script>
+
     @RenderSection("scripts", required: false)
     <script type="text/javascript">
       $(document).ajaxError(function (e, jqxhr, settings, exception) {
                        e.stopPropagation();
                        if (jqxhr != null)
                            console.log(jqxhr.responseText);
-                     });
+      });
+
+      $(document).on({
+          ajaxStart: function () { showLoading(); },
+          ajaxStop: function () { hideLoading(); }
+      });
+
     </script>
 </body>
 </html>

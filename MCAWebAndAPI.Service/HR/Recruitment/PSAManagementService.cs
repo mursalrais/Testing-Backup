@@ -9,7 +9,7 @@ using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
 using NLog;
 
-namespace MCAWebAndAPI.Service.HR
+namespace MCAWebAndAPI.Service.HR.Recruitment
 {
     public class PSAManagementService : IPSAManagementService
     {

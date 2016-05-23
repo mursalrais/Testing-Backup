@@ -4,6 +4,7 @@ using System.Security;
 using System.Collections.Generic;
 using System;
 using Microsoft.SharePoint.Client.Utilities;
+using System.IO;
 
 namespace MCAWebAndAPI.Service.Utils
 {
@@ -72,7 +73,7 @@ namespace MCAWebAndAPI.Service.Utils
             }
         }
         
-        public static ListItem GetListItem(string listName, int listItemID, string siteUrl = null)
+        public static ListItem GetListItem(string listName, int? listItemID, string siteUrl = null)
         {
             MapCredential(siteUrl);
             using (ClientContext context = new ClientContext(siteUrl ?? CurUrl))
@@ -82,7 +83,7 @@ namespace MCAWebAndAPI.Service.Utils
                 context.Credentials = new SharePointOnlineCredentials(UserName, secureString);
                 
                 // Get one listitem
-                var SPListItem = context.Web.Lists.GetByTitle(listName).GetItemById(listItemID);
+                var SPListItem = context.Web.Lists.GetByTitle(listName).GetItemById((int)listItemID);
                 context.Load(SPListItem);
                 context.ExecuteQuery();
                 return SPListItem;
@@ -151,8 +152,30 @@ namespace MCAWebAndAPI.Service.Utils
             }
         }
 
+        public static void UploadDocument(string listName, string docName, Stream fileStream, string siteUrl = null)
+        {
+            using (ClientContext context = new ClientContext(siteUrl ?? CurUrl))
+            {
+                SecureString secureString = new SecureString();
+                Password.ToList().ForEach(secureString.AppendChar);
+                context.Credentials = new SharePointOnlineCredentials(UserName, secureString);
+
+                using (var fs = fileStream)
+                {
+                    List spList = context.Web.Lists.GetByTitle(listName);
+                    context.Load(spList.RootFolder);
+                    context.ExecuteQuery();
+
+                    var fi = new FileInfo(docName);
+                    var fileUrl = string.Format("{0}/{1}", spList.RootFolder.ServerRelativeUrl, fi.Name);
+                    Microsoft.SharePoint.Client.File.SaveBinaryDirect(context, fileUrl, fs, true);
+                }
+            }
+        }
+
         public static string[] GetChoiceFieldValues(string listName, string fieldName, string siteUrl = null)
         {
+            MapCredential(siteUrl);
             using (ClientContext clientContext = new ClientContext(siteUrl ?? CurUrl))
             {
 
@@ -172,9 +195,11 @@ namespace MCAWebAndAPI.Service.Utils
                 return field.Choices;
             }
         }
+        
 
         public static bool SendEmail( string email, string content, string subject, string siteUrl= null)
         {
+            MapCredential(siteUrl);
             using (ClientContext clientContext = new ClientContext(siteUrl ?? CurUrl))
             {
                 SecureString secureString = new SecureString();
@@ -195,6 +220,7 @@ namespace MCAWebAndAPI.Service.Utils
 
         public static bool SendEmails(IEnumerable<string> emails, string content, string subject, string siteUrl = null)
         {
+            MapCredential(siteUrl);
             using (ClientContext clientContext = new ClientContext(siteUrl ?? CurUrl))
             {
                 SecureString secureString = new SecureString();
@@ -212,5 +238,7 @@ namespace MCAWebAndAPI.Service.Utils
             }
             return true;
         }
+
+
     }
 }

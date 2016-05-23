@@ -42,7 +42,7 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         [HttpPost]
-        [JsonHandleError]
+       
         public ActionResult Create(CalendarEventVM viewModel)
         {
             // Check whether error is found

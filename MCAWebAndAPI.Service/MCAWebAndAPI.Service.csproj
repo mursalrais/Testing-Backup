@@ -72,8 +72,8 @@
       <HintPath>..\packages\TuesPechkin.2.1.1\lib\net20\TuesPechkin.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="TuesPechkin.Wkhtmltox.Win32, Version=0.12.2.1, Culture=neutral, processorArchitecture=x86">
-      <HintPath>..\packages\TuesPechkin.Wkhtmltox.Win32.0.12.2.1\lib\net20\TuesPechkin.Wkhtmltox.Win32.dll</HintPath>
+    <Reference Include="TuesPechkin.Wkhtmltox.Win64, Version=0.12.2.1, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\TuesPechkin.Wkhtmltox.Win64.0.12.2.1\lib\net20\TuesPechkin.Wkhtmltox.Win64.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -112,9 +112,9 @@
     <Compile Include="Converter\PDFConverter.cs" />
     <Compile Include="Finance\EventBudgetService.cs" />
     <Compile Include="Finance\IEventBudgetService.cs" />
-    <Compile Include="HR\Common\HRApplicationService.cs" />
+    <Compile Include="HR\Recruitment\HRApplicationService.cs" />
     <Compile Include="HR\Common\HRDataMasterService.cs" />
-    <Compile Include="HR\Common\IHRApplicationService.cs" />
+    <Compile Include="HR\Recruitment\IHRApplicationService.cs" />
     <Compile Include="HR\Common\IHRDataMasterService.cs" />
     <Compile Include="HR\Payroll\HRPayrollServices.cs" />
     <Compile Include="HR\Payroll\IHRPayrollServices.cs" />
@@ -128,6 +128,11 @@
     <Compile Include="HR\Common\ICalendarService.cs" />
     <Compile Include="ProjectManagement\Schedule\IRIAService.cs" />
     <Compile Include="ProjectManagement\Schedule\RIAService.cs" />
+    <Compile Include="Resources\ErrorResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ErrorResource.resx</DependentUpon>
+    </Compile>
     <Compile Include="Utils\FormatUtil.cs" />
     <Compile Include="Utils\GraphicUtil.cs" />
     <Compile Include="Utils\MathUtil.cs" />
@@ -135,6 +140,7 @@
     <Compile Include="ProjectManagement\Schedule\ITaskService.cs" />
     <Compile Include="ProjectManagement\Schedule\TaskService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\WorkflowUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ContractProcurement\" />
@@ -162,6 +168,12 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\ErrorResource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ErrorResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

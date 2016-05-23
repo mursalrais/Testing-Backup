@@ -13,7 +13,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         [DisplayName("Graduation")]
         [UIHint("Month")]
-        public DateTime? YearOfGraduation { get; set; }
+        public DateTime? YearOfGraduation { get; set; } = DateTime.Now;
 
         [UIHint("TextArea")]
         public string Remarks { get; set; }
