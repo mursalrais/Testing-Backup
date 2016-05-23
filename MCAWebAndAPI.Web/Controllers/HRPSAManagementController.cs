@@ -40,38 +40,14 @@ namespace MCAWebAndAPI.Web.Controllers
             // Get blank ViewModel
             var viewModel = psaManagementService.GetPopulatedModel();
 
-            // Modify ViewModel based on spesific case, e.g., Asset Transfer is one of conditions in Asset transaction
-            //viewModel.Header.TransactionType = "Asset Transfer";
-
-            //PopulateInGridComboBox();
-
-            // Return to the name of the view and parse the model
             return View("Create", viewModel);
         }
 
-        /*
-        private void PopulateInGridComboBox()
+        public ActionResult Edit(int ID, string site)
         {
-            IAssetMasterService _assetMasterService = new AssetMasterService();
-            var assetMasters = _assetMasterService.GetAssetMasters();
-            ViewData["InGridComboBox_Asset"] = assetMasters.Select(e => new InGridComboBoxVM
-            {
-                CategoryID = e.ID ?? 0,
-                CategoryName = e.AssetDesc
-            });
-
-            //TODO: If Edit Mode, please map to existing data
-            ViewData["DefaultValue_Asset"] = assetMasters.FirstOrDefault(e => true);
-
-            var locationMasters = _assetMasterService.GetAssetLocations();
-            ViewData["InGridComboBox_Location"] = locationMasters.Select(e => new InGridComboBoxVM
-            {
-                CategoryID = e.ID ?? 0,
-                CategoryName = e.Name
-            });
-            ViewData["DefaultValue_Location"] = assetMasters.FirstOrDefault(e => true);
+            var viewModel = psaManagementService.GetPSAManagement(ID);
+            return View(viewModel);
         }
-        */
 
         [HttpPost]
         [JsonHandleError]
@@ -90,18 +66,22 @@ namespace MCAWebAndAPI.Web.Controllers
             // Get Header ID after inster to SharePoint
             var psaID = psaManagementService.CreatePSA(viewModel);
 
-            // Get Items from session variable
-            //var items = System.Web.HttpContext.Current.Session["AssetTransactionItemVM"] as List<AssetTransactionItemVM>;
-
-            // Insert items to SharePoint
-            //_assetTransactionService.CreateItems(headerID, items);
-
             // Clear session variables
             System.Web.HttpContext.Current.Session.Clear();
 
             // Return JSON
             return Json(new { success = true, urlToRedirect = "google.com" },
                 JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Update(PSAManagementVM psaManagement, string site)
+        {
+            //return View(new AssetMasterVM());
+            psaManagementService.UpdatePSAManagement(psaManagement);
+            return new JavaScriptResult
+            {
+                Script = string.Format("window.parent.location.href = '{0}'", "https://eceos2.sharepoint.com/sites/mca-dev/hr/_layouts/15/start.aspx#/Lists/PSA/AllItems.aspx")
+            };
         }
 
         /*

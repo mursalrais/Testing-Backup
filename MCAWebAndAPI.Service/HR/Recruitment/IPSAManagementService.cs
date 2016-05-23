@@ -13,28 +13,10 @@ namespace MCAWebAndAPI.Service.HR
 
         PSAManagementVM GetPopulatedModel(int? id = null);
 
-        /*
-        AssetTransactionHeaderVM GetHeader();
-        
-        IEnumerable<AssetTransactionItemVM> GetItems(int headerID);
-        */
         int CreatePSA(PSAManagementVM psaManagement);
 
-        /*
-        bool CreateItems(int headerID, IEnumerable<AssetTransactionItemVM> items);
-        
-        int CreateItem(int headerID, AssetTransactionItemVM item);
-        */
+        PSAManagementVM GetPSAManagement(int ID);
 
-        /*
-        void UpdateHeader(PSAManagementVM psaManagement);
-        */
-
-        /*
-        void UpdateItem(AssetTransactionItemVM item);
-        
-
-        void DeleteItem(AssetTransactionItemVM item);
-        */
+        bool UpdatePSAManagement(PSAManagementVM psaManagement);
     }
 }

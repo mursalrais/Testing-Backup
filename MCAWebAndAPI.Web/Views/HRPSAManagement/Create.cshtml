@@ -34,6 +34,12 @@
                 </div>
             </div>
             <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.ProjectOrUnit1).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.ProjectOrUnit1)
+                </div>
+            </div>
+            <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.Position).Class("col-md-4 control-label")
                 <div class="col-md-8">
                     @Html.EditorFor(m => m.Position)
@@ -70,86 +76,8 @@
                 </div>
             </div>
         </div>
-
-        @*<div class="col-md-6">
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.Date).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.Header.Date)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.AssetHolderTo).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.Header.AssetHolderTo)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.ContactNoTo).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.DisplayFor(m => m.Header.ContactNoTo)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.ProjectUnitTo).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.DisplayFor(m => m.Header.ProjectUnitTo)
-                </div>
-            </div>
-        </div>*@
     </fieldset>
 }
-
-@*
-    <div class="row">
-        <div class="col-md-12">
-            @(Html.Kendo().Grid<AssetTransactionItemVM>()
-                .Name("GridItem")
-                .Pageable()
-                .Sortable()
-                .Scrollable()
-                .ToolBar(toolbar =>
-                {
-                    toolbar.Create();
-                    toolbar.Save();
-                })
-                .Editable(editable => editable.Mode(GridEditMode.InCell))
-                .Columns(columns =>
-                {
-                    columns.Bound(p => p.Asset).Filterable(false);
-                    columns.Bound(p => p.LocationFrom);
-                    columns.Bound(p => p.LocationTo);
-                    columns.Bound(p => p.CostIDR).Width(120);
-                    columns.Bound(p => p.CostUSD).Width(120);
-                    columns.Bound(p => p.ReturnDate);
-                    columns.Bound(p => p.Remarks);
-                    columns.Command(command => command.Destroy()).Width(150);
-                })
-                .DataSource(dataSource => dataSource
-                    .Ajax()
-                    .Batch(true)
-                    .ServerOperation(false)
-                    .PageSize(20)
-                    .Read(read => read.Action("Grid_Read", "ASSAssetTransaction"))
-                    .Create(update => update.Action("Grid_Create", "ASSAssetTransaction"))
-                    .Update(update => update.Action("Grid_Update", "ASSAssetTransaction"))
-                    .Destroy(update => update.Action("Grid_Destroy", "ASSAssetTransaction"))
-                    .Model(model =>
-                    {
-                        model.Id(p => p.ID);
-                        model.Field(p => p.Header_ID).Editable(false);
-                        model.Field(p => p.Asset).DefaultValue(
-                            ViewData["DefaultValue_Asset"] as MCAWebAndAPI.Model.ViewModel.Control.InGridComboBoxVM);
-                        model.Field(p => p.LocationFrom).DefaultValue(
-                            ViewData["DefaultValue_Location"] as MCAWebAndAPI.Model.ViewModel.Control.InGridComboBoxVM);
-                        model.Field(p => p.LocationTo).DefaultValue(
-                            ViewData["DefaultValue_Location"] as MCAWebAndAPI.Model.ViewModel.Control.InGridComboBoxVM);
-                    })
-                )
-            )
-        </div>
-    </div>
-*@
 
 <div class="form-actions">
     <div class="row">
@@ -197,19 +125,6 @@
         function OnSelectPosition(e) {
             var dataItem = this.dataItem(e.item);
             var url = "/HRDataMaster/GetPositions/" + dataItem.ID;
-            /*
-            $.getJSON(url, function (result) {
-                $('#Header_ContactNoFrom').prop('value', result[0].ContactNo);
-                $('#Header_ProjectUnitFrom').prop('value', result[0].ProjectUnit);
-            })
-            */
         }
-
-        /*
-        function onInGridSelect(e) {
-            var dataItem = this.dataItem(e.item);
-            console.log(dataItem.ID + dataItem.AssetDesc);
-        }
-        */
     </script>
 }
