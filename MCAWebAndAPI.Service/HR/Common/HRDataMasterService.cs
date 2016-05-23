@@ -20,7 +20,7 @@ namespace MCAWebAndAPI.Service.HR.Common
             _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
         }
 
-        public IEnumerable<ProfessionalMaster> GetProfessionals()
+        public IEnumerable<ProfessionalMaster> GetProfessionalMonthlyFees()
         {
             var models = new List<ProfessionalMaster>();
             int tempID;
@@ -29,13 +29,24 @@ namespace MCAWebAndAPI.Service.HR.Common
             {
                 collectionIDMonthlyFee.Add(Convert.ToInt32(item["ProfessionalId"]));
             }
-            foreach(var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl))
+            foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl))
             {
                 tempID = Convert.ToInt32(item["ID"]);
                 if (!(collectionIDMonthlyFee.Any(e => e == tempID)))
                 {
                     models.Add(ConvertToProfessionalModel(item));
                 }
+            }
+
+            return models;
+        }
+
+        public IEnumerable<ProfessionalMaster> GetProfessionals()
+        {
+            var models = new List<ProfessionalMaster>();
+            foreach(var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl))
+            {
+                    models.Add(ConvertToProfessionalModel(item));
             }
 
             return models;
