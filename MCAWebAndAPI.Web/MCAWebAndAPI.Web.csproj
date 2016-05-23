@@ -1116,6 +1116,7 @@
     <Content Include="Views\HRPSAManagement\Create.cshtml" />
     <Content Include="Views\HRPayroll\CreateMonthlyFee.cshtml" />
     <Content Include="Views\HRPayroll\EditMonthlyFee.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\ShortDate.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
