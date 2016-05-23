@@ -23,21 +23,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         */
         int CreatePSA(PSAManagementVM psaManagement);
 
-        /*
-        bool CreateItems(int headerID, IEnumerable<AssetTransactionItemVM> items);
+        PSAManagementVM GetPSAManagement(int ID);
         
-        int CreateItem(int headerID, AssetTransactionItemVM item);
-        */
-
-        /*
-        void UpdateHeader(PSAManagementVM psaManagement);
-        */
-
-        /*
-        void UpdateItem(AssetTransactionItemVM item);
-        
-
-        void DeleteItem(AssetTransactionItemVM item);
-        */
+        bool UpdatePSAManagement(PSAManagementVM psaManagement);
     }
 }

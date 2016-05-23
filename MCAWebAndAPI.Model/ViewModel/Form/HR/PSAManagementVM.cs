@@ -21,6 +21,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [DisplayName("Renewal#")]
         public int renewalnumber { get; set; }
 
+        private ComboBoxVM ProjectOrUnit = new ComboBoxVM { Choices = new string[] { "GP", "HN", "PM" } };
+
         DateTime? joinDate = DateTime.Now;
 
         [UIHint("Date")]
@@ -135,6 +137,21 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             set
             {
                 isrenewal = value;
+            }
+        }
+
+        [UIHint("ComboBox")]
+        [DisplayName("Div/Project/Unit")]
+        public ComboBoxVM ProjectOrUnit1
+        {
+            get
+            {
+                return ProjectOrUnit;
+            }
+
+            set
+            {
+                ProjectOrUnit = value;
             }
         }
     }

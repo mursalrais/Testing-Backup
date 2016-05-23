@@ -1,0 +1,253 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+
+@model PSAManagementVM
+
+@using (Ajax.BeginForm("Update", "HRPSAManagement",
+                                                    FormMethod.Post,
+                                                    new AjaxOptions
+                                                    {
+                                                        OnSuccess = "onSuccess",
+                                                        OnFailure = "onFailure"
+                                                    }, new { @class = "form-horizontal" }))
+{<fieldset>
+        <legend>Form PSA Management</legend>
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary()
+
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.psaNumber).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.psaNumber)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.IsRenewal).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.IsRenewal)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.renewalnumber).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.renewalnumber)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.ProjectOrUnit1).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.ProjectOrUnit1)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Position).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.Position)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Professional).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.Professional)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.joindate).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.joindate)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.dateofnewpsa).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.dateofnewpsa)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.tenure).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.tenure)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.psaexpirydate).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.psaexpirydate)
+                </div>
+            </div>
+               @Html.HiddenFor(m => m.ID)
+        </div>
+     @*<input class="k-button k-button-icontext k-grid-add" type="submit" value="Update" />*@
+    </fieldset>
+}
+
+    <div class="form-actions">
+        <div class="row">
+            <div class="col-md-12">
+                <button id="submit-button" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    Update
+                </button>
+            </div>
+        </div>
+    </div>
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#submit-button").click(function () {
+                $("form").submit();
+            });
+
+        });
+
+        function onSuccess(data) {
+            window.location.href = data.urlToRedirect;
+        }
+
+        function onFailure(data) {
+            window.location.href = data.urlToRedirect;
+        }
+
+        function OnSelectAssetHolderFrom(e) {
+            var dataItem = this.dataItem(e.item);
+            var url = "/HRDataMaster/GetProfessionals/" + dataItem.ID;
+        }
+
+        function OnSelectPosition(e) {
+            var dataItem = this.dataItem(e.item);
+            var url = "/HRDataMaster/GetPositions/" + dataItem.ID;
+        }
+    </script>
+}
+
+
+@*
+    <form class="form-horizontal" method="post" action="/HRPSAManagement/Update" id="create-asset-master-form">
+        <fieldset>
+            <legend>Form PSA Management</legend>
+
+            <div class="col-md-12">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.psaNumber).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.EditorFor(m => m.psaNumber)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.IsRenewal).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.EditorFor(m => m.IsRenewal)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.renewalnumber).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.EditorFor(m => m.renewalnumber)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.ProjectOrUnit1).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.EditorFor(m => m.ProjectOrUnit1)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Position).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.EditorFor(m => m.Position)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Professional).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.EditorFor(m => m.Professional)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.joindate).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.EditorFor(m => m.joindate)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.dateofnewpsa).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.EditorFor(m => m.dateofnewpsa)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.tenure).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.EditorFor(m => m.tenure)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.psaexpirydate).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.EditorFor(m => m.psaexpirydate)
+                    </div>
+                </div>
+                @Html.HiddenFor(m => m.ID)
+            </div>
+            <input class="k-button k-button-icontext k-grid-add" type="submit" value="Update" />
+        </fieldset>
+
+    </form>
+    <script type="text/javascript">
+        $(document.readyState)
+        /*function Callback() {
+            window.parentIFrame.sendMessage('Hello from the iFrame')
+        }*/
+        /*function onChange() {
+            if (this.element.attr("id") == "AssetLevel_Value") {
+                if ($("#AssetLevel_Value").data("kendoDropDownList").value() == "Main Asset") {
+                    $("#AssetCategory_Value").data("kendoDropDownList").enable(true);
+                    $("#AssetCategory_Value").data("kendoDropDownList").select(0);
+
+                    $("#ProjectUnit_Value").data("kendoDropDownList").enable(true);
+                    $("#ProjectUnit_Value").data("kendoDropDownList").select(0);
+
+                    $("#AssetType_Value").data("kendoDropDownList").enable(true);
+                    $("#AssetType_Value").data("kendoDropDownList").select(0);
+
+
+                    $("#AssetNoAssetDesc_Value").data("kendoDropDownList").enable(false);
+                    $("#AssetNoAssetDesc_Value").data("kendoDropDownList").value("");
+
+                }
+                else {
+                    $("#AssetCategory_Value").data("kendoDropDownList").enable(false);
+                    $("#AssetCategory_Value").data("kendoDropDownList").value("");
+
+                    $("#ProjectUnit_Value").data("kendoDropDownList").enable(false);
+                    $("#ProjectUnit_Value").data("kendoDropDownList").value("");
+
+                    $("#AssetType_Value").data("kendoDropDownList").enable(false);
+                    $("#AssetType_Value").data("kendoDropDownList").value("");
+
+                    $("#AssetNoAssetDesc_Value").data("kendoDropDownList").enable(true);
+                    $("#AssetNoAssetDesc_Value").data("kendoDropDownList").select(0);
+                }
+
+                ;
+            }
+
+        }
+        $(function () {
+            $("#AssetCategory_Value").data("kendoDropDownList").enable(true);
+            $("#AssetCategory_Value").data("kendoDropDownList").select(0);
+
+            $("#ProjectUnit_Value").data("kendoDropDownList").enable(true);
+            $("#ProjectUnit_Value").data("kendoDropDownList").select(0);
+
+            $("#AssetType_Value").data("kendoDropDownList").enable(true);
+            $("#AssetType_Value").data("kendoDropDownList").select(0);
+
+
+            $("#AssetNoAssetDesc_Value").data("kendoDropDownList").enable(false);
+            $("#AssetNoAssetDesc_Value").data("kendoDropDownList").value("");
+        });
+        */
+    </script>*@
+

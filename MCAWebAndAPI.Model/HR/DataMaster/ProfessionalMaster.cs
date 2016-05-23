@@ -13,6 +13,8 @@ namespace MCAWebAndAPI.Model.HR.DataMaster
     {
         public int ID { get; set; }
 
+        public int IDMonthlyFee { get; set; }
+
         public string Name { get; set; }
 
         public string Position { get; set; }

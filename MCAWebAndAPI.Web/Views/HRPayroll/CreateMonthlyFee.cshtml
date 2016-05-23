@@ -54,7 +54,8 @@
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.Header.DateOfNewPsa).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Html.DisplayFor(m => m.Header.DateOfNewPsa)
+                    @{ var last = Model.Last(); }
+                    @Html.DisplayFor(m => Last.Header.DateOfNewPsa)
                 </div>
             </div>
             <div class="form-group">

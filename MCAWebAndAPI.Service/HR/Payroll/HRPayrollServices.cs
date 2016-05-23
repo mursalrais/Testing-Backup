@@ -89,6 +89,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             viewModel.Header.MonthlyFee = Convert.ToInt32(listItem["MonthlyFee"]);
             viewModel.Header.AnnualFee = Convert.ToInt32(listItem["AnnualFee"]);
             viewModel.Header.Currency.Value = Convert.ToString(listItem["MonthlyFeeCurrency"]);
+            viewModel.Header.ProfessionalName.Value = Convert.ToInt32(listItem["ProfessionalId"]);
             viewModel.Header.ID = ID;
 
             return viewModel;

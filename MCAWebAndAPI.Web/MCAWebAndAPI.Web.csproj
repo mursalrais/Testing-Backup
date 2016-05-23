@@ -595,17 +595,6 @@
     <Content Include="Views\HRPayroll\CreateMonthlyFee.cshtml" />
     <Content Include="Views\HRPayroll\EditMonthlyFee.cshtml" />
     <Content Include="Views\HRPSAManagement\Create.cshtml" />
-    <Content Include="Views\HRApplication\_PersonalDetails_Print.cshtml" />
-    <Content Include="Views\HRApplication\_SpecializationDetails_Print.cshtml" />
-    <Content Include="Views\HRApplication\_TrainingDetails_Print.cshtml" />
-    <Content Include="Views\HRApplication\_WorkingExperienceDetails_Print.cshtml" />
-    <Content Include="Views\HRApplication\_EducationDetails_Print.cshtml" />
-    <Content Include="Views\HRApplication\_DocumentDetails_Print.cshtml" />
-    <Content Include="Views\HRApplication\_ContactInformationDetails_Print.cshtml" />
-    <Content Include="Views\Shared\_Modal.cshtml" />
-    <Content Include="Views\Shared\_LayoutPDF.cshtml" />
-    <Content Include="Views\Error\Index.cshtml" />
-    <Content Include="Views\Shared\DisplayTemplates\GridTable.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -694,7 +683,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="Views\File\" />
     <Folder Include="Views\HRProfessional\" />
-    <Folder Include="Views\Location\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MCAWebAndAPI.Model\MCAWebAndAPI.Model.csproj">
