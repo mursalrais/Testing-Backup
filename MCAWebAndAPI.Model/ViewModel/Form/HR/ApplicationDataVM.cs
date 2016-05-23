@@ -10,6 +10,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
     public class ApplicationDataVM : Item
     {
+       
         public IEnumerable<EducationDetailVM> EducationDetails { get; set; } = new List<EducationDetailVM>();
         public IEnumerable<TrainingDetailVM> TrainingDetails { get; set; } = new List<TrainingDetailVM>();
         public IEnumerable<WorkingExperienceDetailVM> WorkingExperienceDetails { get; set; } = new List<WorkingExperienceDetailVM>();

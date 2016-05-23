@@ -4,7 +4,6 @@ using MCAWebAndAPI.Model.HR.DataMaster;
 using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
-using Microsoft.SharePoint;
 
 namespace MCAWebAndAPI.Service.HR.Common
 {
@@ -28,10 +27,6 @@ namespace MCAWebAndAPI.Service.HR.Common
             {
                 models.Add(ConvertToProfessionalModel(item));
             }
-            //foreach (var item in SPConnector.GetList(SP_MONFEE_LIST_NAME, _siteUrl))
-            //{
-            //    models.Add(ConvertToProfessionalModel(item));
-            //}
 
             return models;
         }
@@ -41,7 +36,6 @@ namespace MCAWebAndAPI.Service.HR.Common
             return new ProfessionalMaster
             {
                 ID = Convert.ToInt32(item["ID"]),
-                //IDMonthlyFee = Convert.ToInt32(item["ProfessionalId"]),
                 Name = Convert.ToString(item["Title"]),
                 Status = Convert.ToString(item["maritalstatus"]),
                 Position = item["Position"] == null ? "" :
