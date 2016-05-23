@@ -111,7 +111,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.ID = ID;
         */
             }
-
+     
         public PSAManagementVM GetPopulatedModel(int? id = null)
         {
             var model = new PSAManagementVM();

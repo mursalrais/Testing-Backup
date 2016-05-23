@@ -61,9 +61,9 @@ namespace MCAWebAndAPI.Service.Utils
                 var SPList = context.Web.Lists.GetByTitle(listName);
                 var camlQuery = caml == null ?
                     CamlQuery.CreateAllItemsQuery() :  
-                    new CamlQuery {
-                        ViewXml = caml
-                    };
+                        new CamlQuery {
+                            ViewXml = caml
+                        };
 
                 var SPListItems = SPList.GetItems(camlQuery);
                 context.Load(SPListItems);
@@ -154,6 +154,7 @@ namespace MCAWebAndAPI.Service.Utils
 
         public static void UploadDocument(string listName, string docName, Stream fileStream, string siteUrl = null)
         {
+            MapCredential(siteUrl);
             using (ClientContext context = new ClientContext(siteUrl ?? CurUrl))
             {
                 SecureString secureString = new SecureString();

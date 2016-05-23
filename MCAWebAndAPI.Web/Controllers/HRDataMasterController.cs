@@ -21,7 +21,6 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetProfessionals()
         {
-            //TODO: Ask whether it is from BO or from HR
             _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
 
             var professionals = GetFromExistingSession();
@@ -53,7 +52,6 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetPositions()
         {
-            //TODO: Ask whether it is from BO or from HR
             _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
 
             var positions = GetFromPositionsExistingSession();

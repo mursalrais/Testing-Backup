@@ -52,7 +52,6 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         [HttpPost]
-       
         public JsonResult Create(PSAManagementVM viewModel)
         {
             // Check whether error is found

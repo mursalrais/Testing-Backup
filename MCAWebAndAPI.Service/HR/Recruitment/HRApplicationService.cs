@@ -19,7 +19,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         const string SP_APPWORK_LIST_NAME = "Application Working Experience";
         const string SP_APPTRAIN_LIST_NAME = "Application Training";
         const string SP_APPDOC_LIST_NAME = "Application Documents";
-        
+
         public int CreateApplicationData(ApplicationDataVM viewModel)
         {
             var updatedValue = new Dictionary<string, object>();
@@ -75,7 +75,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 try
                 {
                     SPConnector.AddListItem(SP_APPEDU_LIST_NAME, updatedValue, _siteUrl);
-                }catch(Exception e)
+                }
+                catch (Exception e)
                 {
                     logger.Error(e.Message);
                     throw new Exception(ErrorResource.SPInsertError);
@@ -90,7 +91,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 try
                 {
                     SPConnector.UploadDocument(SP_APPDOC_LIST_NAME, doc.FileName, doc.InputStream, _siteUrl);
-                }catch(Exception e)
+                }
+                catch (Exception e)
                 {
                     logger.Error(e.Message);
                     throw new Exception(ErrorResource.SPInsertError);
@@ -163,35 +165,139 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             var viewModel = new ApplicationDataVM();
             viewModel.ID = Convert.ToInt32(listItem["ID"]);
             viewModel.FirstMiddleName = Convert.ToString(listItem["Title"]);
+            viewModel.LastName = Convert.ToString(listItem["lastname"]);
+            viewModel.PlaceOfBirth = Convert.ToString("placeofbirth");
+            viewModel.DateOfBirth = Convert.ToDateTime("dateofbirth");
+            viewModel.CurrentAddress = Convert.ToString(listItem["currentaddress"]);
+            viewModel.IDCardNumber = Convert.ToString(listItem["idcardnumber"]);
+            viewModel.Telephone = Convert.ToString(listItem["permanentlandlinephone"]);
+            viewModel.CurrentTelephone = Convert.ToString(listItem["currentlandlinephone"]);
+            viewModel.EmailAddresOne = Convert.ToString(listItem["personalemail"]);
+            viewModel.EmailAddresTwo = Convert.ToString(listItem["personalemail2"]);
+            viewModel.MobileNumberOne = Convert.ToString(listItem["mobilephonenr"]);
+            viewModel.MobileNumberTwo = Convert.ToString(listItem["mobilephonenr2"]);
+            viewModel.SpecializationField = Convert.ToString(listItem["specializationfield"]);
+            viewModel.YearRelevanWork = Convert.ToInt32(listItem["totalrelevantexperienceyears"]);
+            viewModel.MonthRelevantWork = Convert.ToInt32(listItem["totalrelevantexperiencemonths"]);
+            viewModel.MaritalStatus.DefaultValue = Convert.ToString(listItem["maritalstatus"]);
+            viewModel.BloodType.DefaultValue = Convert.ToString(listItem["bloodtype"]);
+            viewModel.Religion.DefaultValue = Convert.ToString(listItem["Religion"]);
+            viewModel.Gender.DefaultValue = Convert.ToString(listItem["Gender"]);
+            viewModel.IDCardType.DefaultValue = Convert.ToString(listItem["idcardtype"]);
+            viewModel.IDCardExpiry = Convert.ToDateTime(listItem["idcardexpirydate"]);
+            viewModel.Nationality.DefaultValue = FormatUtil.ConvertLookupToID(listItem, "Nationality") + string.Empty;
 
+            // Convert Details
             viewModel.EducationDetails = GetEducationDetails(viewModel.ID);
             viewModel.TrainingDetails = GetTrainingDetails(viewModel.ID);
             viewModel.WorkingExperienceDetails = GetWorkingExperienceDetails(viewModel.ID);
             viewModel.Documents = GetDocuments(viewModel.ID);
 
-            //TODO: To Map one by one
             return viewModel;
 
         }
 
         private IEnumerable<HttpPostedFileBase> GetDocuments(int? iD)
         {
+            var caml = @"<View>  
+            <Query> 
+               <Where><Eq><FieldRef Name='application' LookupId='True' /><Value Type='Lookup'>" + iD 
+               + @"</Value></Eq></Where> 
+            </Query>
+            <ViewFields><FieldRef Name='Title' /><FieldRef Name='ID' /><FieldRef Name='FileRef' /></ViewFields></View>";
+
             throw new NotImplementedException();
         }
 
         private IEnumerable<WorkingExperienceDetailVM> GetWorkingExperienceDetails(int? iD)
         {
-            throw new NotImplementedException();
+            var caml = @"<View>  
+            <Query> 
+               <Where><Eq><FieldRef Name='application' LookupId='True' /><Value Type='Lookup'>" + iD + @"</Value></Eq></Where> 
+            </Query> 
+             <ViewFields><FieldRef Name='ID' /><FieldRef Name='application' /><FieldRef Name='Title' /><FieldRef Name='applicationcompany' /><FieldRef Name='applicationfrom' /><FieldRef Name='applicationto' /><FieldRef Name='applicationjobdescription' /></ViewFields> 
+      </View>";
+
+            var workingExperienceDetails = new List<WorkingExperienceDetailVM>();
+            foreach(var item in SPConnector.GetList(SP_APPWORK_LIST_NAME, _siteUrl, caml))
+            {
+                workingExperienceDetails.Add(ConvertToWorkingExperienceDetailVM(item));
+            }
+
+            return workingExperienceDetails;
+        }
+
+        private WorkingExperienceDetailVM ConvertToWorkingExperienceDetailVM(ListItem item)
+        {
+            return new WorkingExperienceDetailVM
+            {
+                ID = Convert.ToInt32(item["ID"]),
+                Company = Convert.ToString(item["applicationcompany"]),
+                Position = Convert.ToString(item["Title"]),
+                JobDescription = Convert.ToString(item["applicationjobdescription"]),
+                From = Convert.ToDateTime(item["applicationfrom"]),
+                To = Convert.ToDateTime(item["applicationto"])
+            };
         }
 
         private IEnumerable<TrainingDetailVM> GetTrainingDetails(int? iD)
         {
-            throw new NotImplementedException();
+            var caml = @"<View>  
+            <Query> 
+               <Where><Eq><FieldRef Name='application' LookupId='True' /><Value Type='Lookup'>" + iD 
+               + @"</Value></Eq></Where> 
+            </Query> 
+             <ViewFields><FieldRef Name='ID' /><FieldRef Name='Title' /><FieldRef Name='applicationtraininginstitution' /><FieldRef Name='applicationtrainingyear' /><FieldRef Name='applicationtrainingremarks' /><FieldRef Name='application' /></ViewFields> 
+            </View>";
+
+            var trainingDetails = new List<TrainingDetailVM>();
+            foreach (var item in SPConnector.GetList(SP_APPTRAIN_LIST_NAME, _siteUrl, caml))
+            {
+                trainingDetails.Add(ConvertToTrainingDetailVM(item));
+            }
+
+            return trainingDetails;
+        }
+
+        private TrainingDetailVM ConvertToTrainingDetailVM(ListItem item)
+        {
+            return new TrainingDetailVM
+            {
+                ID = Convert.ToInt32(item["ID"]),
+                Subject = Convert.ToString(item["Title"]),
+                Institution = Convert.ToString(item["applicationtraininginstitution"]),
+                Remarks = Convert.ToString(item["applicationtrainingremarks"]),
+                Year = Convert.ToDateTime(item["applicationtrainingyear"])
+            };
         }
 
         private IEnumerable<EducationDetailVM> GetEducationDetails(int? iD)
         {
-            throw new NotImplementedException();
+            var caml = @"<View>  
+            <Query> 
+               <Where><Eq><FieldRef Name='applications' LookupId='True' /><Value Type='Lookup'>" + iD + @"</Value></Eq></Where> 
+            </Query> 
+             <ViewFields><FieldRef Name='applications' /><FieldRef Name='applicationuniversity' /><FieldRef Name='applicationyearofgraduation' /><FieldRef Name='Title' /><FieldRef Name='ID' /></ViewFields> 
+            </View>";
+
+            var eduacationDetails = new List<EducationDetailVM>();
+            foreach (var item in SPConnector.GetList(SP_APPEDU_LIST_NAME, _siteUrl, caml))
+            {
+                eduacationDetails.Add(ConvertToEducationDetailVM(item));
+            }
+
+            return eduacationDetails;
+        }
+
+        private EducationDetailVM ConvertToEducationDetailVM(ListItem item)
+        {
+            return new EducationDetailVM
+            {
+                ID = Convert.ToInt32(item["ID"]),
+                Subject = Convert.ToString(item["Title"]),
+                University = Convert.ToString(item["applicationuniversity"]),
+                YearOfGraduation = Convert.ToDateTime(item["applicationyearofgraduation"])
+            };
         }
 
         public void SetSiteUrl(string siteUrl = null)
