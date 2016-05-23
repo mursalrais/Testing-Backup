@@ -17,7 +17,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         static Logger logger = LogManager.GetCurrentClassLogger();
         const string SP_PSA_LIST_NAME = "PSA";
 
-       
+
         public int CreatePSA(PSAManagementVM psaManagement)
         {
             var updatedValues = new Dictionary<string, object>();
@@ -41,21 +41,21 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 logger.Error(e.Message);
             }
 
-            return SPConnector.GetInsertedItemID(SP_PSA_LIST_NAME, _siteUrl); 
+            return SPConnector.GetInsertedItemID(SP_PSA_LIST_NAME, _siteUrl);
         }
 
         public IEnumerable<PSAMaster> GetPSAs()
         {
             var models = new List<PSAMaster>();
 
-            foreach (var item in SPConnector.GetList(SP_LIST_NAME, _siteUrl))
+            foreach (var item in SPConnector.GetList(SP_PSA_LIST_NAME, _siteUrl))
             {
                 models.Add(ConvertToPSAModel(item));
             }
 
             return models;
         }
-        
+
         private PSAMaster ConvertToPSAModel(ListItem item)
         {
             return new PSAMaster
@@ -68,6 +68,67 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 ProjectOrUnit = Convert.ToString(item["ProjectOrUnit"]),
 
             };
+        }
+
+        public void SetSiteUrl(string siteUrl)
+        {
+            _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
+        }
+
+        public PSAManagementVM GetPopulatedModel(int? id = default(int?))
+        {
+            var model = new PSAManagementVM();
+            return model;
+        }
+
+        public PSAManagementVM GetPSAManagement(int ID)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool UpdatePSAManagement(PSAManagementVM psaManagement)
+        {
+            var columnValues = new Dictionary<string, object>();
+            int ID = psaManagement.ID.Value;
+
+            columnValues.Add("Title", psaManagement.psaNumber);
+            columnValues.Add("isrenewal", psaManagement.IsRenewal.Value);
+            columnValues.Add("renewalnumber", psaManagement.renewalnumber);
+            columnValues.Add("ProjectOrUnit", psaManagement.ProjectOrUnit1.Value);
+            columnValues.Add("position", new FieldLookupValue { LookupId = Convert.ToInt32(psaManagement.Position.Value) });
+            columnValues.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(psaManagement.Professional.Value) });
+            columnValues.Add("joindate", psaManagement.joindate.Value);
+            columnValues.Add("dateofnewpsa", psaManagement.dateofnewpsa.Value);
+            columnValues.Add("tenure", psaManagement.tenure);
+            columnValues.Add("psaexpirydate", psaManagement.psaexpirydate);
+
+            /*
+                columnValues.Add("AssetCategory", assetMaster.AssetCategory.Value);
+                columnValues.Add("Title", assetMaster.AssetDesc);
+                columnValues.Add("AssetLevel", assetMaster.AssetLevel.Value);
+                columnValues.Add("AssetID", _assetID);
+                columnValues.Add("AssetType", assetMaster.AssetType.Value);
+                columnValues.Add("Condition", assetMaster.Condition.Value);
+                columnValues.Add("ProjectUnit", assetMaster.ProjectUnit.Value);
+                columnValues.Add("Remarks", assetMaster.Remarks);
+                columnValues.Add("SerialNo", assetMaster.SerialNo);
+                columnValues.Add("Spesifications", assetMaster.Spesifications);
+                columnValues.Add("WarranyExpires", assetMaster.WarrantyExpires.Value);
+            */
+
+            try
+            {
+                SPConnector.UpdateListItem(SP_PSA_LIST_NAME, ID, columnValues, _siteUrl);
+            }
+            catch (Exception e)
+            {
+                logger.Debug(e.Message);
+                return false;
+            }
+
+            var entitiy = new PSAManagementVM();
+            entitiy = psaManagement;
+            return true;
         }
 
         /*
@@ -110,62 +171,5 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.Condition.DefaultValue = Convert.ToString(listItem["Condition"]);
             viewModel.ID = ID;
         */
-            }
-
-        public PSAManagementVM GetPopulatedModel(int? id = null)
-        {
-            var model = new PSAManagementVM();
-            return model;
-        }
-
-        public void SetSiteUrl(string siteUrl)
-        {
-            _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
-        }
-
-        public bool UpdatePSAManagement(PSAManagementVM psaManagement)
-        {
-            var columnValues = new Dictionary<string, object>();
-            int ID = psaManagement.ID.Value;
-
-            columnValues.Add("Title", psaManagement.psaNumber);
-            columnValues.Add("isrenewal", psaManagement.IsRenewal.Value);
-            columnValues.Add("renewalnumber", psaManagement.renewalnumber);
-            columnValues.Add("ProjectOrUnit", psaManagement.ProjectOrUnit1.Value);
-            columnValues.Add("position", new FieldLookupValue { LookupId = Convert.ToInt32(psaManagement.Position.Value)} );
-            columnValues.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(psaManagement.Professional.Value)});
-            columnValues.Add("joindate", psaManagement.joindate.Value);
-            columnValues.Add("dateofnewpsa", psaManagement.dateofnewpsa.Value);
-            columnValues.Add("tenure", psaManagement.tenure);
-            columnValues.Add("psaexpirydate", psaManagement.psaexpirydate);
-
-        /*
-            columnValues.Add("AssetCategory", assetMaster.AssetCategory.Value);
-            columnValues.Add("Title", assetMaster.AssetDesc);
-            columnValues.Add("AssetLevel", assetMaster.AssetLevel.Value);
-            columnValues.Add("AssetID", _assetID);
-            columnValues.Add("AssetType", assetMaster.AssetType.Value);
-            columnValues.Add("Condition", assetMaster.Condition.Value);
-            columnValues.Add("ProjectUnit", assetMaster.ProjectUnit.Value);
-            columnValues.Add("Remarks", assetMaster.Remarks);
-            columnValues.Add("SerialNo", assetMaster.SerialNo);
-            columnValues.Add("Spesifications", assetMaster.Spesifications);
-            columnValues.Add("WarranyExpires", assetMaster.WarrantyExpires.Value);
-        */
-
-                try
-                {
-                SPConnector.UpdateListItem(SP_PSA_LIST_NAME, ID, columnValues, _siteUrl);
-                }
-                catch (Exception e)
-                {
-                logger.Debug(e.Message);
-                    return false;
-                }
-
-            var entitiy = new PSAManagementVM();
-            entitiy = psaManagement;
-            return true;
-        }
     }
 }
