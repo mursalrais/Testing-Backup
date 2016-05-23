@@ -38,7 +38,7 @@ namespace MCAWebAndAPI.Service.HR.Common
             return new ProfessionalMaster
             {
                 ID = Convert.ToInt32(item["ID"]),
-                IDMonthlyFee = Convert.ToInt32(item["ProfessionalId"]),
+
                 Name = Convert.ToString(item["Title"]),
                 Status = Convert.ToString(item["maritalstatus"]),
                 Position = item["Position"] == null ? "" :
