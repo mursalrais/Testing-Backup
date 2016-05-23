@@ -420,12 +420,16 @@
     <Content Include="bin\roslyn\Microsoft.CSharp.Core.targets" />
     <Content Include="bin\roslyn\Microsoft.VisualBasic.Core.targets" />
     <Content Include="bin\roslyn\VBCSCompiler.exe.config" />
+    <None Include="job_scheduling_data_2_0.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\PublishProfiles\host.my-epmo.com.pubxml" />
     <None Include="Properties\PublishProfiles\mcai-ims-test-free - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\mcai-ims-test-free - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="img\favicon\favicon.ico" />
     <Content Include="img\mybg.png" />
+    <Content Include="logs\logfile.txt" />
     <Content Include="Scripts\app.config.js" />
     <Content Include="Scripts\app.min.js" />
     <Content Include="Scripts\bi-frame.js" />
@@ -595,6 +599,10 @@
     <Content Include="Views\HRPayroll\CreateMonthlyFee.cshtml" />
     <Content Include="Views\HRPayroll\EditMonthlyFee.cshtml" />
     <Content Include="Views\HRPSAManagement\Create.cshtml" />
+    <Content Include="Views\ASSAssetMaster\Edit.cshtml" />
+    <Content Include="Web.config_temp" />
+    <Content Include="Views\HRPSAManagement\Edit.cshtml" />
+    <Content Include="Views\Error\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -645,6 +653,9 @@
     <Compile Include="Helpers\JsonpResult.cs" />
     <Compile Include="Helpers\MathHelper.cs" />
     <Compile Include="Helpers\SessionManager.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\ConfigResource.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -681,8 +692,11 @@
   <ItemGroup>
     <Folder Include="App_Code\" />
     <Folder Include="App_Data\" />
+    <Folder Include="Images\" />
+    <Folder Include="Models\" />
     <Folder Include="Views\File\" />
     <Folder Include="Views\HRProfessional\" />
+    <Folder Include="Views\PSAManagement\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MCAWebAndAPI.Model\MCAWebAndAPI.Model.csproj">
