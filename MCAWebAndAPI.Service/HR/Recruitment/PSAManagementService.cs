@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MCAWebAndAPI.Model.ViewModel.Form.HR;
+using MCAWebAndAPI.Model.HR.DataMaster;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
 using NLog;
 
-namespace MCAWebAndAPI.Service.HR
+namespace MCAWebAndAPI.Service.HR.Recruitment
 {
     public class PSAManagementService : IPSAManagementService
     {
@@ -43,7 +44,34 @@ namespace MCAWebAndAPI.Service.HR
             return SPConnector.GetInsertedItemID(SP_PSA_LIST_NAME, _siteUrl); 
         }
 
-        public PSAManagementVM GetPSAManagement(int ID)
+        public IEnumerable<PSAMaster> GetPSAs()
+        {
+            var models = new List<PSAMaster>();
+
+            foreach (var item in SPConnector.GetList(SP_LIST_NAME, _siteUrl))
+            {
+                models.Add(ConvertToPSAModel(item));
+            }
+
+            return models;
+        }
+        
+        private PSAMaster ConvertToPSAModel(ListItem item)
+        {
+            return new PSAMaster
+            {
+                ID = item["professional_x003a_ID"] == null ? "" :
+               Convert.ToString((item["professional_x003a_ID"] as FieldLookupValue).LookupValue),
+                JoinDate = Convert.ToString(item["joindate"]),
+                DateOfNewPSA = Convert.ToString(item["dateofnewpsa"]),
+                PsaExpiryDate = Convert.ToString(item["psaexpirydate"]),
+                ProjectOrUnit = Convert.ToString(item["ProjectOrUnit"]),
+
+            };
+        }
+
+        /*
+        public int CreateItem(int headerID, AssetTransactionItemVM item)
         {
             var listItem = SPConnector.GetListItem(SP_PSA_LIST_NAME, ID, _siteUrl);
             var viewModel = new PSAManagementVM();
@@ -62,7 +90,7 @@ namespace MCAWebAndAPI.Service.HR
 
             return viewModel;
 
-            /*
+        /*
             viewModel.AssetNoAssetDesc.Choices = GetChoiceFromList("AssetID");
             viewModel.AssetLevel.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "AssetLevel");
             viewModel.AssetCategory.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "AssetCategory");
@@ -81,8 +109,8 @@ namespace MCAWebAndAPI.Service.HR
             viewModel.AssetType.DefaultValue = Convert.ToString(listItem["AssetType"]);
             viewModel.Condition.DefaultValue = Convert.ToString(listItem["Condition"]);
             viewModel.ID = ID;
-            */
-        }
+        */
+            }
 
         public PSAManagementVM GetPopulatedModel(int? id = null)
         {
@@ -99,7 +127,7 @@ namespace MCAWebAndAPI.Service.HR
         {
             var columnValues = new Dictionary<string, object>();
             int ID = psaManagement.ID.Value;
-            
+
             columnValues.Add("Title", psaManagement.psaNumber);
             columnValues.Add("isrenewal", psaManagement.IsRenewal.Value);
             columnValues.Add("renewalnumber", psaManagement.renewalnumber);
@@ -111,7 +139,7 @@ namespace MCAWebAndAPI.Service.HR
             columnValues.Add("tenure", psaManagement.tenure);
             columnValues.Add("psaexpirydate", psaManagement.psaexpirydate);
 
-            /*
+        /*
             columnValues.Add("AssetCategory", assetMaster.AssetCategory.Value);
             columnValues.Add("Title", assetMaster.AssetDesc);
             columnValues.Add("AssetLevel", assetMaster.AssetLevel.Value);
@@ -123,17 +151,17 @@ namespace MCAWebAndAPI.Service.HR
             columnValues.Add("SerialNo", assetMaster.SerialNo);
             columnValues.Add("Spesifications", assetMaster.Spesifications);
             columnValues.Add("WarranyExpires", assetMaster.WarrantyExpires.Value);
-            */
+        */
 
-            try
-            {
+                try
+                {
                 SPConnector.UpdateListItem(SP_PSA_LIST_NAME, ID, columnValues, _siteUrl);
-            }
-            catch (Exception e)
-            {
+                }
+                catch (Exception e)
+                {
                 logger.Debug(e.Message);
-                return false;
-            }
+                    return false;
+                }
 
             var entitiy = new PSAManagementVM();
             entitiy = psaManagement;

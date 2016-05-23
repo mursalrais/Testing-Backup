@@ -380,7 +380,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Common
                     SPConnector.AddListItem(SP_WBSMAPPING_IN_PROGRAM_LIST_NAME, columnValues, _siteUrl);
                 }catch(Exception e)
                 {
-                    logger.Debug(e.Message);
+                    logger.Error(e.Message);
                 }
             }
 
@@ -423,7 +423,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Common
                 }
                 catch (Exception e)
                 {
-                    logger.Debug(e.Message);
+                    logger.Error(e.Message);
                     return false;
                 }
             }

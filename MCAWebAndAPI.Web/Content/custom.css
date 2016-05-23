@@ -39,7 +39,7 @@ body.animated.fadeInDown.smart-style-6 #content {
 
 .fadeInDown #main{
     padding-top: 70px;
-    background-image: url("/Images/laptop.jpg");
+    background-image: url("/img/laptop.jpg");
     background-size: cover;
 }
 
@@ -102,6 +102,12 @@ form .k-button.k-upload-button {
     z-index: 1000;
 }
 
+span.field-validation-error {
+    color: #b94a48;
+    font-size: 85%;
+    display: block;
+}
+
 .smart-form fieldset{
     padding: 30px 10px 30px 40px !important;
 }
@@ -110,6 +116,38 @@ h1.txt-color-black.login-header-big {
     text-align: left;
     margin-left: 28px;
 }
+
+/* Start by setting display:none to make this hidden.
+   Then we position it in relation to the viewport window
+   with position:fixed. Width, height, top and left speak
+   for themselves. Background we set to 80% white with
+   our animation centered, and no-repeating */
+.modal-loading {
+    display:    none;
+    position:   fixed;
+    z-index:    1000;
+    top:        0;
+    left:       0;
+    height:     100%;
+    width:      100%;
+    background: rgba( 255, 255, 255, .8 ) 
+                 url("/img/ajax-loader.gif")
+                 50% 50% 
+                 no-repeat;
+}
+
+/* When the body has the loading class, we turn
+   the scrollbar off with overflow:hidden */
+body.loading {
+    overflow: hidden;   
+}
+
+/* Anytime the body has the loading class, our
+   modal element will be visible */
+body.loading .modal-loading {
+    display: block;
+}
+
 
 @media only screen and (max-width: 768px) {
     /* For mobile phones: */

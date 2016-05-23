@@ -129,4 +129,7 @@
     <value>https://eceos2.sharepoint.com/sites/mca-dev</value>
     <comment>To Change when Migrated</comment>
   </data>
+  <data name="UrlApplication" xml:space="preserve">
+    <value>/Lists/Application</value>
+  </data>
 </root>

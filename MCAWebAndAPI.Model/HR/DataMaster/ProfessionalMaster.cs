@@ -1,16 +1,25 @@
-﻿using MCAWebAndAPI.Model.Common;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using MCAWebAndAPI.Model.ViewModel.Control;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace MCAWebAndAPI.Model.HR.DataMaster
 {
-    public class ProfessionalMaster : Item
+    public class ProfessionalMaster
     {
+        public int ID { get; set; }
+
+        public int IDMonthlyFee { get; set; }
+
         public string Name { get; set; }
 
         public string Position { get; set; }
 
-        public string ContactNo { get; set; }
-
-        public string ProjectUnit { get; set; }
+        public string Status { get; set; }
 
     }
 }

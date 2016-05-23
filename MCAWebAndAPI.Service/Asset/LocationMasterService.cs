@@ -28,7 +28,7 @@ namespace MCAWebAndAPI.Service.Asset
             }
             catch (Exception e)
             {
-                logger.Debug(e.Message);
+                logger.Error(e.Message);
             }
             var entitiy = new LocationMasterVM();
             entitiy = locationMaster;

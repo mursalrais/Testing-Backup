@@ -1,0 +1,5 @@
+﻿@model MCAWebAndAPI.Model.ViewModel.Control.AjaxComboBoxVM
+
+
+@(Html.Kendo().TextBoxFor(model => model.Value)
+    .HtmlAttributes(new { @class = "form-control", style = "width:100%;", @readonly = true }))

@@ -22,7 +22,7 @@ namespace MCAWebAndAPI.Web.Controllers
         public JsonResult GetProfessionals()
         {
             //TODO: Ask whether it is from BO or from HR
-            _dataMasterService.SetSiteUrl(ConfigResource.DefaultBOSiteUrl);
+            _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
 
             var professionals = GetFromExistingSession();
 
@@ -31,8 +31,7 @@ namespace MCAWebAndAPI.Web.Controllers
                     e.ID,
                     e.Name, 
                     e.Position,
-                    e.ContactNo, 
-                    e.ProjectUnit,
+                    e.Status,
                     Desc = string.Format("{0} - {1}", e.Name, e.Position) }),
                 JsonRequestBehavior.AllowGet);
         }
@@ -47,8 +46,7 @@ namespace MCAWebAndAPI.Web.Controllers
                         e.ID,
                         e.Name,
                         e.Position,
-                        e.ContactNo,
-                        e.ProjectUnit
+                        e.Status
                     }
                 ), JsonRequestBehavior.AllowGet);
         }

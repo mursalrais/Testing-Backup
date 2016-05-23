@@ -1,3 +1,4 @@
 ﻿@model object
 
-@Html.Kendo().TextBoxFor(model => model).HtmlAttributes(new { @class = "form-control", style = "width:100%; color:#c0c0c0" , @readonly = true})
+@(Html.Kendo().TextBoxFor(model => model)
+    .HtmlAttributes(new { @class = "form-control", style = "width:100%;" , @readonly = true}))

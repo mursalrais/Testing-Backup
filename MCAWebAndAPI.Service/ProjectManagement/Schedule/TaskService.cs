@@ -167,7 +167,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
             }
             catch (Exception e)
             {
-                logger.Debug(e.Message);
+                logger.Error(e.Message);
             }
         }
 
@@ -309,32 +309,32 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
                     if (item.GetFlag(TaskChangeFlagEnum.START_DATE))
                     {
                         updatedValues.Add("StartDate", item.TaskValue.StartDate);
-                        logger.Debug(item.TaskValue.Id + ": Update " + TaskChangeFlagEnum.START_DATE.ToString() + " to " + item.TaskValue.StartDate);
+                        logger.Error(item.TaskValue.Id + ": Update " + TaskChangeFlagEnum.START_DATE.ToString() + " to " + item.TaskValue.StartDate);
                     }
                     if (item.GetFlag(TaskChangeFlagEnum.DUE_DATE))
                     {
                         updatedValues.Add("DueDate", item.TaskValue.DueDate);
-                        logger.Debug(item.TaskValue.Id + ": Update " + TaskChangeFlagEnum.START_DATE.ToString() + " to " + item.TaskValue.DueDate);
+                        logger.Error(item.TaskValue.Id + ": Update " + TaskChangeFlagEnum.START_DATE.ToString() + " to " + item.TaskValue.DueDate);
                     }
                     if (item.GetFlag(TaskChangeFlagEnum.PERCENT_COMPLETE))
                     {
                         updatedValues.Add("PercentComplete", item.TaskValue.PercentComplete);
-                        logger.Debug(item.TaskValue.Id + ": Update " + TaskChangeFlagEnum.PERCENT_COMPLETE.ToString() + " to " + item.TaskValue.PercentComplete);
+                        logger.Error(item.TaskValue.Id + ": Update " + TaskChangeFlagEnum.PERCENT_COMPLETE.ToString() + " to " + item.TaskValue.PercentComplete);
                     }
                     if (item.GetFlag(TaskChangeFlagEnum.DURATION))
                     {
                         updatedValues.Add("Duration", item.TaskValue.Duration);
-                        logger.Debug(item.TaskValue.Id + ": Update " + TaskChangeFlagEnum.DURATION.ToString() + " to " + item.TaskValue.Duration);
+                        logger.Error(item.TaskValue.Id + ": Update " + TaskChangeFlagEnum.DURATION.ToString() + " to " + item.TaskValue.Duration);
                     }
                     if (item.GetFlag(TaskChangeFlagEnum.MILESTONE))
                     {
                         updatedValues.Add("Milestone", item.TaskValue.IsMilestone);
-                        logger.Debug(item.TaskValue.Id + ": Update " + TaskChangeFlagEnum.MILESTONE.ToString() + " to " + item.TaskValue.IsMilestone);
+                        logger.Error(item.TaskValue.Id + ": Update " + TaskChangeFlagEnum.MILESTONE.ToString() + " to " + item.TaskValue.IsMilestone);
                     }
                     if (item.GetFlag(TaskChangeFlagEnum.SUMMARY))
                     {
                         updatedValues.Add("Summary", item.TaskValue.IsSummaryTask);
-                        logger.Debug(item.TaskValue.Id + ": Update " + TaskChangeFlagEnum.SUMMARY.ToString() + " to " + item.TaskValue.IsSummaryTask);
+                        logger.Error(item.TaskValue.Id + ": Update " + TaskChangeFlagEnum.SUMMARY.ToString() + " to " + item.TaskValue.IsSummaryTask);
                     }
 
                     // Update to SharePoint
@@ -343,7 +343,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
                     }
                     catch(Exception e)
                     {
-                        logger.Debug("ID: " + item.TaskValue.Id + " values: " + updatedValues.Keys + " error: " + e.Message);
+                        logger.Error("ID: " + item.TaskValue.Id + " values: " + updatedValues.Keys + " error: " + e.Message);
                     }
                 }
             }

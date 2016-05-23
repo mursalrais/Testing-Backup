@@ -8,6 +8,11 @@ namespace MCAWebAndAPI.Model.ViewModel.Control
 {
     public class InGridComboBoxVM
     {
+        public InGridComboBoxVM()
+        {
+
+        }
+
         public int CategoryID { get; set; }
 
         public string CategoryName { get; set; }

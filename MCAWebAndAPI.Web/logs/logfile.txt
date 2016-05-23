@@ -1,0 +1,10 @@
+2016-05-21 17:09:04.7659 MCAWebAndAPI.Service.HR.Common.HRApplicationService Column 'gender' does not exist. It may have been deleted by another user.  /sites/mca-dev/hr/Lists/Application
+2016-05-21 17:09:09.3861 MCAWebAndAPI.Service.HR.Common.HRApplicationService Column 'applicationtrainingremakrs' does not exist. It may have been deleted by another user.  /sites/mca-dev/hr/Lists/Application Training
+2016-05-21 17:09:10.7826 MCAWebAndAPI.Service.HR.Common.HRApplicationService Column 'applications' does not exist. It may have been deleted by another user.  /sites/mca-dev/hr/Lists/Application Working Experience
+2016-05-21 17:09:12.1557 MCAWebAndAPI.Service.HR.Common.HRApplicationService Column 'applications' does not exist. It may have been deleted by another user.  /sites/mca-dev/hr/Lists/Application Working Experience
+2016-05-21 17:12:15.1631 MCAWebAndAPI.Service.HR.Common.HRApplicationService Column 'applications' does not exist. It may have been deleted by another user.  /sites/mca-dev/hr/Lists/Application Training
+2016-05-21 17:12:16.5203 MCAWebAndAPI.Service.HR.Common.HRApplicationService Column 'applications' does not exist. It may have been deleted by another user.  /sites/mca-dev/hr/Lists/Application Working Experience
+2016-05-21 17:12:17.8903 MCAWebAndAPI.Service.HR.Common.HRApplicationService Column 'applications' does not exist. It may have been deleted by another user.  /sites/mca-dev/hr/Lists/Application Working Experience
+2016-05-21 21:40:04.0294 MCAWebAndAPI.Service.Asset.LocationMasterService Object reference not set to an instance of an object.
+2016-05-22 13:07:11.5173 MCAWebAndAPI.Service.HR.Recruitment.HRApplicationService The underlying connection was closed: An unexpected error occurred on a send.
+2016-05-22 14:38:35.6999 MCAWebAndAPI.Service.HR.Recruitment.HRApplicationService The remote name could not be resolved: 'eceos2.sharepoint.com'
