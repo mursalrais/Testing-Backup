@@ -17,7 +17,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         static Logger logger = LogManager.GetCurrentClassLogger();
         const string SP_PSA_LIST_NAME = "PSA";
 
-
+       
         public int CreatePSA(PSAManagementVM psaManagement)
         {
             var updatedValues = new Dictionary<string, object>();
@@ -41,7 +41,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 logger.Error(e.Message);
             }
 
-            return SPConnector.GetInsertedItemID(SP_PSA_LIST_NAME, _siteUrl);
+            return SPConnector.GetInsertedItemID(SP_PSA_LIST_NAME, _siteUrl); 
         }
 
         public IEnumerable<PSAMaster> GetPSAs()
@@ -55,7 +55,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             return models;
         }
-
+        
         private PSAMaster ConvertToPSAModel(ListItem item)
         {
             return new PSAMaster
@@ -83,7 +83,28 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         public PSAManagementVM GetPSAManagement(int ID)
         {
-            throw new NotImplementedException();
+            var listItem = SPConnector.GetListItem(SP_PSA_LIST_NAME, ID, _siteUrl);
+            var viewModel = new PSAManagementVM();
+
+            viewModel.psaNumber = Convert.ToString(listItem["Title"]);
+            viewModel.IsRenewal.Choices = SPConnector.GetChoiceFieldValues(SP_PSA_LIST_NAME, "isrenewal");
+            viewModel.IsRenewal.DefaultValue = Convert.ToString(listItem["isrenewal"]);
+
+            viewModel.renewalnumber = Convert.ToInt32(listItem["renewalnumber"]);
+
+            viewModel.ProjectOrUnit1.Choices = SPConnector.GetChoiceFieldValues(SP_PSA_LIST_NAME, "ProjectUnit");
+            viewModel.ProjectOrUnit1.DefaultValue = Convert.ToString(listItem["ProjectUnit"]);
+
+            viewModel.Position.DefaultValue = Convert.ToString(listItem["position"]);
+            viewModel.Professional.DefaultValue = Convert.ToString(listItem["professional"]);
+
+            viewModel.joindate = Convert.ToDateTime(listItem["joindate"]).ToLocalTime();
+            viewModel.dateofnewpsa = Convert.ToDateTime(listItem["dateofnewpsa"]).ToLocalTime();
+            viewModel.tenure = Convert.ToInt32(listItem["tenure"]);
+            viewModel.psaexpirydate = Convert.ToDateTime(listItem["psaexpirydate"]).ToLocalTime();
+
+            
+            return viewModel;
         }
 
         public bool UpdatePSAManagement(PSAManagementVM psaManagement)
@@ -102,20 +123,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             columnValues.Add("tenure", psaManagement.tenure);
             columnValues.Add("psaexpirydate", psaManagement.psaexpirydate);
 
-            /*
-                columnValues.Add("AssetCategory", assetMaster.AssetCategory.Value);
-                columnValues.Add("Title", assetMaster.AssetDesc);
-                columnValues.Add("AssetLevel", assetMaster.AssetLevel.Value);
-                columnValues.Add("AssetID", _assetID);
-                columnValues.Add("AssetType", assetMaster.AssetType.Value);
-                columnValues.Add("Condition", assetMaster.Condition.Value);
-                columnValues.Add("ProjectUnit", assetMaster.ProjectUnit.Value);
-                columnValues.Add("Remarks", assetMaster.Remarks);
-                columnValues.Add("SerialNo", assetMaster.SerialNo);
-                columnValues.Add("Spesifications", assetMaster.Spesifications);
-                columnValues.Add("WarranyExpires", assetMaster.WarrantyExpires.Value);
-            */
-
             try
             {
                 SPConnector.UpdateListItem(SP_PSA_LIST_NAME, ID, columnValues, _siteUrl);
@@ -131,45 +138,5 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return true;
         }
 
-        /*
-        public int CreateItem(int headerID, AssetTransactionItemVM item)
-        {
-            var listItem = SPConnector.GetListItem(SP_PSA_LIST_NAME, ID, _siteUrl);
-            var viewModel = new PSAManagementVM();
-
-            viewModel.psaNumber = Convert.ToString(listItem["Title"]);
-            viewModel.IsRenewal.DefaultValue = Convert.ToString(listItem["isrenewal"]);
-            viewModel.renewalnumber = Convert.ToInt32(listItem["renewalnumber"]);
-            viewModel.ProjectOrUnit1.DefaultValue = Convert.ToString(listItem["ProjectOrUnit"]);
-            viewModel.Position.DefaultValue= Convert.ToString(listItem["position"]);
-            viewModel.Professional.DefaultValue = Convert.ToString(listItem["professional"]);
-            viewModel.joindate = Convert.ToDateTime(listItem["joindate"]).ToLocalTime();
-            viewModel.dateofnewpsa = Convert.ToDateTime(listItem["dateofnewpsa"]).ToLocalTime();
-            viewModel.tenure = Convert.ToInt32(listItem["tenure"]);
-            viewModel.psaexpirydate = Convert.ToDateTime(listItem["psaexpirydate"]).ToLocalTime();
-            viewModel.ID = ID;
-
-            return viewModel;
-
-        /*
-            viewModel.AssetNoAssetDesc.Choices = GetChoiceFromList("AssetID");
-            viewModel.AssetLevel.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "AssetLevel");
-            viewModel.AssetCategory.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "AssetCategory");
-            viewModel.AssetType.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "AssetType");
-            viewModel.Condition.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "Condition");
-            viewModel.ProjectUnit.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "ProjectUnit");
-
-            viewModel.ProjectUnit.DefaultValue = Convert.ToString(listItem["ProjectUnit"]);
-            viewModel.Remarks = Convert.ToString(listItem["Remarks"]);
-            viewModel.SerialNo = Convert.ToString(listItem["SerialNo"]);
-            viewModel.Spesifications = Convert.ToString(listItem["Spesifications"]);
-            viewModel.WarrantyExpires = Convert.ToDateTime(listItem["WarranyExpires"]);
-            viewModel.AssetCategory.DefaultValue = Convert.ToString(listItem["AssetCategory"]);
-            viewModel.AssetDesc = Convert.ToString(listItem["Title"]);
-            viewModel.AssetLevel.DefaultValue = Convert.ToString(listItem["AssetLevel"]);
-            viewModel.AssetType.DefaultValue = Convert.ToString(listItem["AssetType"]);
-            viewModel.Condition.DefaultValue = Convert.ToString(listItem["Condition"]);
-            viewModel.ID = ID;
-        */
     }
 }
