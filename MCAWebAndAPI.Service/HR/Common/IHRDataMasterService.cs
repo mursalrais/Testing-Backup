@@ -2,6 +2,8 @@
 using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using System.Collections.Generic;
 using System.Web;
+using Microsoft.SharePoint;
+using Microsoft.SharePoint.Client;
 
 namespace MCAWebAndAPI.Service.HR.Common
 {
@@ -10,6 +12,8 @@ namespace MCAWebAndAPI.Service.HR.Common
         void SetSiteUrl(string siteUrl);
 
         IEnumerable<ProfessionalMaster> GetProfessionals();
+
+        IEnumerable<ProfessionalMaster> GetProfessionalMonthlyFees();
 
         IEnumerable<PositionsMaster> GetPositions();
     }

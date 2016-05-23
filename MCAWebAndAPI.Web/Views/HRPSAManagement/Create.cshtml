@@ -113,13 +113,7 @@
         function OnSelectAssetHolderFrom(e) {
             var dataItem = this.dataItem(e.item);
             var url = "/HRDataMaster/GetProfessionals/" + dataItem.ID;
-            
-            /*
-            $.getJSON(url, function (result) {
-                $('#Header_ContactNoFrom').prop('value', result[0].ContactNo);
-                $('#Header_ProjectUnitFrom').prop('value', result[0].ProjectUnit);
-            })
-            */
+           
         }
 
         function OnSelectPosition(e) {

@@ -16,11 +16,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         IEnumerable<PSAMaster> GetPSAs();
 
-        /*
-        AssetTransactionHeaderVM GetHeader();
-        
-        IEnumerable<AssetTransactionItemVM> GetItems(int headerID);
-        */
         int CreatePSA(PSAManagementVM psaManagement);
 
         PSAManagementVM GetPSAManagement(int ID);

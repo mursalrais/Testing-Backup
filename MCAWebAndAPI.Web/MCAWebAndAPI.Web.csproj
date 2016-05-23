@@ -16,7 +16,7 @@
     <RootNamespace>MCAWebAndAPI.Web</RootNamespace>
     <AssemblyName>MCAWebAndAPI.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -420,6 +420,9 @@
     <Content Include="bin\roslyn\Microsoft.CSharp.Core.targets" />
     <Content Include="bin\roslyn\Microsoft.VisualBasic.Core.targets" />
     <Content Include="bin\roslyn\VBCSCompiler.exe.config" />
+    <None Include="job_scheduling_data_2_0.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\PublishProfiles\host.my-epmo.com.pubxml" />
     <None Include="Properties\PublishProfiles\mcai-ims-test-free - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\mcai-ims-test-free - Web Deploy.pubxml" />
@@ -595,6 +598,17 @@
     <Content Include="Views\HRPayroll\CreateMonthlyFee.cshtml" />
     <Content Include="Views\HRPayroll\EditMonthlyFee.cshtml" />
     <Content Include="Views\HRPSAManagement\Create.cshtml" />
+    <Content Include="Views\HRApplication\_ContactInformationDetails_Print.cshtml" />
+    <Content Include="Views\HRApplication\_DocumentDetails_Print.cshtml" />
+    <Content Include="Views\HRApplication\_EducationDetails_Print.cshtml" />
+    <Content Include="Views\HRApplication\_PersonalDetails_Print.cshtml" />
+    <Content Include="Views\HRApplication\_SpecializationDetails_Print.cshtml" />
+    <Content Include="Views\HRApplication\_TrainingDetails_Print.cshtml" />
+    <Content Include="Views\HRApplication\_WorkingExperienceDetails_Print.cshtml" />
+    <Content Include="Views\HRPSAManagement\Edit.cshtml" />
+    <Content Include="Views\Shared\_LayoutPDF.cshtml" />
+    <Content Include="Views\Shared\_Modal.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\GridTable.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -682,6 +696,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Views\File\" />
     <Folder Include="Views\HRProfessional\" />
+    <Folder Include="Views\Task\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MCAWebAndAPI.Model\MCAWebAndAPI.Model.csproj">

@@ -4,6 +4,7 @@ using MCAWebAndAPI.Model.HR.DataMaster;
 using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
+using System.Linq;
 
 namespace MCAWebAndAPI.Service.HR.Common
 {
@@ -19,17 +20,33 @@ namespace MCAWebAndAPI.Service.HR.Common
             _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
         }
 
+        public IEnumerable<ProfessionalMaster> GetProfessionalMonthlyFees()
+        {
+            var models = new List<ProfessionalMaster>();
+            int tempID;
+            List<int> collectionIDMonthlyFee = new List<int>();
+            foreach (var item in SPConnector.GetList(SP_MONFEE_LIST_NAME, _siteUrl))
+            {
+                collectionIDMonthlyFee.Add(Convert.ToInt32(item["ProfessionalId"]));
+            }
+            foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl))
+            {
+                tempID = Convert.ToInt32(item["ID"]);
+                if (!(collectionIDMonthlyFee.Any(e => e == tempID)))
+                {
+                    models.Add(ConvertToProfessionalModel(item));
+                }
+            }
+
+            return models;
+        }
+
         public IEnumerable<ProfessionalMaster> GetProfessionals()
         {
             var models = new List<ProfessionalMaster>();
-
             foreach(var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl))
             {
-                models.Add(ConvertToProfessionalModel(item));
-            }
-            foreach (var item in SPConnector.GetList(SP_MONFEE_LIST_NAME, _siteUrl))
-            {
-                models.Add(ConvertToProfessionalModel(item));
+                    models.Add(ConvertToProfessionalModel(item));
             }
 
             return models;
@@ -40,7 +57,6 @@ namespace MCAWebAndAPI.Service.HR.Common
             return new ProfessionalMaster
             {
                 ID = Convert.ToInt32(item["ID"]),
-                IDMonthlyFee = Convert.ToInt32(item["ProfessionalId"]),
                 Name = Convert.ToString(item["Title"]),
                 Status = Convert.ToString(item["maritalstatus"]),
                 Position = item["Position"] == null ? "" :

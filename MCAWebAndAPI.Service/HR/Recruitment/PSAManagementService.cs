@@ -48,7 +48,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             var models = new List<PSAMaster>();
 
-            foreach (var item in SPConnector.GetList(SP_LIST_NAME, _siteUrl))
+            foreach (var item in SPConnector.GetList(SP_PSA_LIST_NAME, _siteUrl))
             {
                 models.Add(ConvertToPSAModel(item));
             }
@@ -70,57 +70,41 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             };
         }
 
-        /*
-        public int CreateItem(int headerID, AssetTransactionItemVM item)
+        public void SetSiteUrl(string siteUrl)
         {
-            var listItem = SPConnector.GetListItem(SP_PSA_LIST_NAME, ID, _siteUrl);
-            var viewModel = new PSAManagementVM();
+            _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
+        }
 
-            viewModel.psaNumber = Convert.ToString(listItem["Title"]);
-            viewModel.IsRenewal.DefaultValue = Convert.ToString(listItem["isrenewal"]);
-            viewModel.renewalnumber = Convert.ToInt32(listItem["renewalnumber"]);
-            viewModel.ProjectOrUnit1.DefaultValue = Convert.ToString(listItem["ProjectOrUnit"]);
-            viewModel.Position.DefaultValue= Convert.ToString(listItem["position"]);
-            viewModel.Professional.DefaultValue = Convert.ToString(listItem["professional"]);
-            viewModel.joindate = Convert.ToDateTime(listItem["joindate"]).ToLocalTime();
-            viewModel.dateofnewpsa = Convert.ToDateTime(listItem["dateofnewpsa"]).ToLocalTime();
-            viewModel.tenure = Convert.ToInt32(listItem["tenure"]);
-            viewModel.psaexpirydate = Convert.ToDateTime(listItem["psaexpirydate"]).ToLocalTime();
-            viewModel.ID = ID;
-
-            return viewModel;
-
-        /*
-            viewModel.AssetNoAssetDesc.Choices = GetChoiceFromList("AssetID");
-            viewModel.AssetLevel.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "AssetLevel");
-            viewModel.AssetCategory.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "AssetCategory");
-            viewModel.AssetType.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "AssetType");
-            viewModel.Condition.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "Condition");
-            viewModel.ProjectUnit.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "ProjectUnit");
-
-            viewModel.ProjectUnit.DefaultValue = Convert.ToString(listItem["ProjectUnit"]);
-            viewModel.Remarks = Convert.ToString(listItem["Remarks"]);
-            viewModel.SerialNo = Convert.ToString(listItem["SerialNo"]);
-            viewModel.Spesifications = Convert.ToString(listItem["Spesifications"]);
-            viewModel.WarrantyExpires = Convert.ToDateTime(listItem["WarranyExpires"]);
-            viewModel.AssetCategory.DefaultValue = Convert.ToString(listItem["AssetCategory"]);
-            viewModel.AssetDesc = Convert.ToString(listItem["Title"]);
-            viewModel.AssetLevel.DefaultValue = Convert.ToString(listItem["AssetLevel"]);
-            viewModel.AssetType.DefaultValue = Convert.ToString(listItem["AssetType"]);
-            viewModel.Condition.DefaultValue = Convert.ToString(listItem["Condition"]);
-            viewModel.ID = ID;
-        */
-            }
-     
-        public PSAManagementVM GetPopulatedModel(int? id = null)
+        public PSAManagementVM GetPopulatedModel(int? id = default(int?))
         {
             var model = new PSAManagementVM();
             return model;
         }
 
-        public void SetSiteUrl(string siteUrl)
+        public PSAManagementVM GetPSAManagement(int ID)
         {
-            _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
+            var listItem = SPConnector.GetListItem(SP_PSA_LIST_NAME, ID, _siteUrl);
+            var viewModel = new PSAManagementVM();
+
+            viewModel.psaNumber = Convert.ToString(listItem["Title"]);
+            viewModel.IsRenewal.Choices = SPConnector.GetChoiceFieldValues(SP_PSA_LIST_NAME, "isrenewal");
+            viewModel.IsRenewal.DefaultValue = Convert.ToString(listItem["isrenewal"]);
+
+            viewModel.renewalnumber = Convert.ToInt32(listItem["renewalnumber"]);
+
+            viewModel.ProjectOrUnit1.Choices = SPConnector.GetChoiceFieldValues(SP_PSA_LIST_NAME, "ProjectUnit");
+            viewModel.ProjectOrUnit1.DefaultValue = Convert.ToString(listItem["ProjectUnit"]);
+
+            viewModel.Position.DefaultValue = Convert.ToString(listItem["position"]);
+            viewModel.Professional.DefaultValue = Convert.ToString(listItem["professional"]);
+
+            viewModel.joindate = Convert.ToDateTime(listItem["joindate"]).ToLocalTime();
+            viewModel.dateofnewpsa = Convert.ToDateTime(listItem["dateofnewpsa"]).ToLocalTime();
+            viewModel.tenure = Convert.ToInt32(listItem["tenure"]);
+            viewModel.psaexpirydate = Convert.ToDateTime(listItem["psaexpirydate"]).ToLocalTime();
+
+            
+            return viewModel;
         }
 
         public bool UpdatePSAManagement(PSAManagementVM psaManagement)
@@ -132,40 +116,27 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             columnValues.Add("isrenewal", psaManagement.IsRenewal.Value);
             columnValues.Add("renewalnumber", psaManagement.renewalnumber);
             columnValues.Add("ProjectOrUnit", psaManagement.ProjectOrUnit1.Value);
-            columnValues.Add("position", new FieldLookupValue { LookupId = Convert.ToInt32(psaManagement.Position.Value)} );
-            columnValues.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(psaManagement.Professional.Value)});
+            columnValues.Add("position", new FieldLookupValue { LookupId = Convert.ToInt32(psaManagement.Position.Value) });
+            columnValues.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(psaManagement.Professional.Value) });
             columnValues.Add("joindate", psaManagement.joindate.Value);
             columnValues.Add("dateofnewpsa", psaManagement.dateofnewpsa.Value);
             columnValues.Add("tenure", psaManagement.tenure);
             columnValues.Add("psaexpirydate", psaManagement.psaexpirydate);
 
-        /*
-            columnValues.Add("AssetCategory", assetMaster.AssetCategory.Value);
-            columnValues.Add("Title", assetMaster.AssetDesc);
-            columnValues.Add("AssetLevel", assetMaster.AssetLevel.Value);
-            columnValues.Add("AssetID", _assetID);
-            columnValues.Add("AssetType", assetMaster.AssetType.Value);
-            columnValues.Add("Condition", assetMaster.Condition.Value);
-            columnValues.Add("ProjectUnit", assetMaster.ProjectUnit.Value);
-            columnValues.Add("Remarks", assetMaster.Remarks);
-            columnValues.Add("SerialNo", assetMaster.SerialNo);
-            columnValues.Add("Spesifications", assetMaster.Spesifications);
-            columnValues.Add("WarranyExpires", assetMaster.WarrantyExpires.Value);
-        */
-
-                try
-                {
+            try
+            {
                 SPConnector.UpdateListItem(SP_PSA_LIST_NAME, ID, columnValues, _siteUrl);
-                }
-                catch (Exception e)
-                {
+            }
+            catch (Exception e)
+            {
                 logger.Debug(e.Message);
-                    return false;
-                }
+                return false;
+            }
 
             var entitiy = new PSAManagementVM();
             entitiy = psaManagement;
             return true;
         }
+
     }
 }
