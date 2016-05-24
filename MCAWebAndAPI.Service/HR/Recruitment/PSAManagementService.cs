@@ -17,11 +17,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
     public class PSAManagementService : IPSAManagementService
     {
         string _siteUrl;
-        //string _siteUrl = "https://eceos2.sharepoint.com/sites/mca-dev/hr/";
         static Logger logger = LogManager.GetCurrentClassLogger();
 
         const string SP_PSA_LIST_NAME = "PSA";
-               
+        const string SP_PSA_DOC_LIST_NAME = "PSA Documents";
+
         public int CreatePSAManagement(PSAManagementVM psaManagement)
         {
             var updatedValues = new Dictionary<string, object>();
@@ -108,6 +108,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.tenure = Convert.ToInt32(listItem["tenure"]);
             viewModel.pSAExpiryDate = Convert.ToDateTime(listItem["psaexpirydate"]).ToLocalTime();
 
+            viewModel.Documents = GetDocuments(viewModel.ID);
 
             return viewModel;
         }
@@ -141,6 +142,34 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             var entitiy = new PSAManagementVM();
             entitiy = psaManagement;
             return true;
+        }
+
+        private IEnumerable<HttpPostedFileBase> GetDocuments(int? iD)
+        {
+            var caml = @"<View>  
+            <Query> 
+               <Where><Eq><FieldRef Name='psa' LookupId='True' /><Value Type='Lookup'>" + iD
+               + @"</Value></Eq></Where> 
+            </Query>
+            <ViewFields><FieldRef Name='Title' /><FieldRef Name='ID' /><FieldRef Name='FileRef' /></ViewFields></View>";
+
+            throw new NotImplementedException();
+        }
+
+        public void CreateProfessionalDocuments(int? psaID, IEnumerable<HttpPostedFileBase> documents)
+        {
+            foreach (var doc in documents)
+            {
+                try
+                {
+                    SPConnector.UploadDocument(SP_PSA_DOC_LIST_NAME, doc.FileName, doc.InputStream, _siteUrl);
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e.Message);
+                    throw new Exception(ErrorResource.SPInsertError);
+                }
+            }
         }
 
     }

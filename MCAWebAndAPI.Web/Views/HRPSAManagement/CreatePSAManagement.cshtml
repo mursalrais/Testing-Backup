@@ -2,22 +2,98 @@
 
 @model PSAManagementVM
 
-@using (Ajax.BeginForm("CreatePSAManagement", "HRPSAManagement",
-                                        FormMethod.Post,
-                                        new AjaxOptions
-                                        {
-                                            OnBegin = "onBeginForm",
-                                            OnFailure = "onFailureForm",
-                                            OnSuccess = "onSuccessFormEmbed",
-                                            OnComplete = "onCompleteForm"
-                                        }, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
-{<fieldset>
-     <legend>PSA Management Data</legend>
-     <div class="row">
-         @Html.Partial("_PSAManagementData", Model)
-     </div>
-</fieldset>
+    @*@using (Ajax.BeginForm("CreatePSAManagement", "HRPSAManagement",
+                                            FormMethod.Post,
+                                            new AjaxOptions
+                                            {
+                                                OnBegin = "onBeginForm",
+                                                OnFailure = "onFailureForm",
+                                                OnSuccess = "onSuccessFormEmbed",
+                                                OnComplete = "onCompleteForm"
+                                            }, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
+    {
+    *@
+<form class="form-horizontal" method="post" action="/HRPSAManagement/CreatePSAManagement" id="create-psa-management-form" >
+    <fieldset>
+        <legend>PSA Management Data</legend>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.psaNumber).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.EditorFor(m => m.psaNumber)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.isrenewal).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.EditorFor(m => m.isrenewal)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.renewalnumber).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.EditorFor(m => m.renewalnumber)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.ProjectOrUnit).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.EditorFor(m => m.ProjectOrUnit)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.position).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.EditorFor(m => m.position)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.professional).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.EditorFor(m => m.professional)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.joinDate).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.EditorFor(m => m.joinDate)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.dateofNewPSA).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.EditorFor(m => m.dateofNewPSA)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.tenure).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.EditorFor(m => m.tenure)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.pSAExpiryDate).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.DisplayFor(m => m.pSAExpiryDate)
+                    </div>
+                </div>
+            </div>
+        </div>
+        <legend>Documents</legend>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Documents).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.EditorFor(m => m.Documents)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
 
+    @*
     <div class="form-actions">
         <div class="row">
             <div class="col-md-12">
@@ -31,36 +107,36 @@
             </div>
         </div>
     </div>
-}
-
+    *@
+</form>
 @*
-    <div class="form-actions">
-        <div class="row">
-            <div class="col-md-12">
-                <button class="btn btn-default" type="submit">
-                    Cancel
-                </button>
-                <button id="submit-button" class="btn btn-primary" type="submit">
-                    <i class="fa fa-save"></i>
-                    Submit
-                </button>
+    }
+*@
+    
+        <div class="form-actions">
+            <div class="row">
+                <div class="col-md-12">
+                    <button class="btn btn-default" type="submit">
+                        Cancel
+                    </button>
+                    <button id="submit-button" class="btn btn-primary" type="submit">
+                        <i class="fa fa-save"></i>
+                        Submit
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
-*@
 
-@section scripts{
-    <script type="text/javascript">
-        @*
+    @section scripts{
+        <script type="text/javascript">
+          
         $(document).ready(function () {
             $("#submit-button").click(function () {
                 $("form").submit();
             });
 
         });
-        *@
-
-        @*
+       
         function onSuccess(data) {
             window.location.href = data.urlToRedirect;
         }
@@ -68,17 +144,16 @@
         function onFailure(data) {
             window.location.href = data.urlToRedirect;
         }
-        *@
 
-        function OnSelectAssetHolderFrom(e) {
-            var dataItem = this.dataItem(e.item);
-            var url = "/HRDataMaster/GetProfessionals/" + dataItem.ID;
+            function OnSelectAssetHolderFrom(e) {
+                var dataItem = this.dataItem(e.item);
+                var url = "/HRDataMaster/GetProfessionals/" + dataItem.ID;
 
-        }
+            }
 
-        function OnSelectPosition(e) {
-            var dataItem = this.dataItem(e.item);
-            var url = "/HRDataMaster/GetPositions/" + dataItem.ID;
-        }
-    </script>
-}
+            function OnSelectPosition(e) {
+                var dataItem = this.dataItem(e.item);
+                var url = "/HRDataMaster/GetPositions/" + dataItem.ID;
+            }
+        </script>
+    }

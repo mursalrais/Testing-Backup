@@ -88,6 +88,17 @@ namespace MCAWebAndAPI.Web.Controllers
                    JsonRequestBehavior.AllowGet);
             }
 
+            try
+            {
+                psaManagementService.CreateProfessionalDocuments(psaID, viewModel.Documents);
+            }
+            catch (Exception e)
+            {
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return Json(new { errorMessage = e.Message },
+                JsonRequestBehavior.AllowGet);
+            }
+
             // Return JSON
             return Json(new { success = true, urlToRedirect = "google.com" },
                 JsonRequestBehavior.AllowGet);
