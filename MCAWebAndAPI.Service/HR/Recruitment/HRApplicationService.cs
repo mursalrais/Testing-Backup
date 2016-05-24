@@ -174,6 +174,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.CurrentAddress =
                 FormatUtil.ConvertMultipleLine(Convert.ToString(listItem["currentaddress"]));
             viewModel.IDCardNumber = Convert.ToString(listItem["idcardnumber"]);
+            viewModel.IDCardExpiry = Convert.ToDateTime(listItem["idcardexpirydate"]);
             viewModel.Telephone = Convert.ToString(listItem["permanentlandlinephone"]);
             viewModel.CurrentTelephone = Convert.ToString(listItem["currentlandlinephone"]);
             viewModel.EmailAddresOne = Convert.ToString(listItem["personalemail"]);

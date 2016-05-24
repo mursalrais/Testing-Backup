@@ -15,6 +15,7 @@
 
 <script>
     $('#application-document-button').click(function () {
-        parent.postMessage("Success", @Model );
+        parent.postMessage({ 
+            result : "Success", urlToRedirect : "@Model" }, "@Model" );
     });
 </script>

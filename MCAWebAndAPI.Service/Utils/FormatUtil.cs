@@ -28,6 +28,9 @@ namespace MCAWebAndAPI.Service.Utils
         //<div class="ExternalClass0291F132E71045C9B5B5B26A60D6439C">Value here</div>
         public static string ConvertMultipleLine(string multipleLineValue)
         {
+            if (string.IsNullOrEmpty(multipleLineValue))
+                return string.Empty;
+
             var value = multipleLineValue.Split('>')[1].Split('<')[0];
             return value;
         }
