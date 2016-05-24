@@ -14,7 +14,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         IEnumerable<PSAMaster> GetPSAs();
 
-        int CreatePSA(PSAManagementVM psaManagement);
+        int CreatePSAManagement(PSAManagementVM psaManagement);
 
         PSAManagementVM GetPSAManagement(int? ID);
         

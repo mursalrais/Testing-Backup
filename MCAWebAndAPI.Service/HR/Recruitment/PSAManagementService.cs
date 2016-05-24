@@ -22,19 +22,19 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         const string SP_PSA_LIST_NAME = "PSA";
                
-        public int CreatePSA(PSAManagementVM psaManagement)
+        public int CreatePSAManagement(PSAManagementVM psaManagement)
         {
             var updatedValues = new Dictionary<string, object>();
             updatedValues.Add("Title", psaManagement.psaNumber);
-            updatedValues.Add("isrenewal", psaManagement.IsRenewal.Value);
+            updatedValues.Add("isrenewal", psaManagement.isrenewal.Value);
             updatedValues.Add("renewalnumber", psaManagement.renewalnumber);
-            updatedValues.Add("ProjectOrUnit", psaManagement.ProjectOrUnit1.Value);
-            updatedValues.Add("position", new FieldLookupValue { LookupId = Convert.ToInt32(psaManagement.Position.Value) });
-            updatedValues.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(psaManagement.Professional.Value) });
-            updatedValues.Add("joindate", psaManagement.joindate);
-            updatedValues.Add("dateofnewpsa", psaManagement.dateofnewpsa);
+            updatedValues.Add("ProjectOrUnit", psaManagement.ProjectOrUnit.Value);
+            updatedValues.Add("position", new FieldLookupValue { LookupId = Convert.ToInt32(psaManagement.position.Value) });
+            updatedValues.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(psaManagement.professional.Value) });
+            updatedValues.Add("joindate", psaManagement.joinDate);
+            updatedValues.Add("dateofnewpsa", psaManagement.dateofNewPSA);
             updatedValues.Add("tenure", psaManagement.tenure);
-            updatedValues.Add("psaexpirydate", psaManagement.psaexpirydate);
+            updatedValues.Add("psaexpirydate", psaManagement.pSAExpiryDate);
 
             try
             {
@@ -43,9 +43,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             catch (Exception e)
             {
                 logger.Error(e.Message);
+                throw new Exception(ErrorResource.SPInsertError);
             }
 
-            return SPConnector.GetInsertedItemID(SP_PSA_LIST_NAME, _siteUrl); 
+            return SPConnector.GetInsertedItemID(SP_PSA_LIST_NAME, _siteUrl);
         }
 
         public IEnumerable<PSAMaster> GetPSAs()

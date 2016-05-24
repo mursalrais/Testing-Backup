@@ -648,6 +648,7 @@
     <Compile Include="Controllers\HRApplicationController.cs" />
     <Compile Include="Controllers\HRDataMasterController.cs" />
     <Compile Include="Controllers\HRPayrollController.cs" />
+    <Compile Include="Controllers\HRPSAManagementController.cs" />
     <Compile Include="Controllers\LocationController.cs" />
     <Compile Include="Controllers\ProjectHierarchyController.cs" />
     <Compile Include="Controllers\PurchaseOrderController.cs" />

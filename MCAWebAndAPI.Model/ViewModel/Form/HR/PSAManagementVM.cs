@@ -15,7 +15,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         [UIHint("ComboBox")]
         [DisplayName("Renewal?")]
-        public ComboBoxVM isrenewal { get; set} = new ComboBoxVM { Choices = new string[] { "Yes", "No" } };
+        public ComboBoxVM isrenewal { get; set; } = new ComboBoxVM { Choices = new string[] { "Yes", "No" } };
 
         [DisplayName("Renewal#")]
         public int renewalnumber { get; set; }

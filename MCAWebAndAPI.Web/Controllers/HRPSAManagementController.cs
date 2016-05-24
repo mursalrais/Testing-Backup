@@ -12,6 +12,11 @@ using MCAWebAndAPI.Web.Filters;
 using MCAWebAndAPI.Web.Resources;
 using MCAWebAndAPI.Model.HR.DataMaster;
 using MCAWebAndAPI.Service.HR.Recruitment;
+using Elmah;
+using MCAWebAndAPI.Service.Converter;
+using MCAWebAndAPI.Service.HR.Common;
+using System.IO;
+using System.Web;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -59,32 +64,9 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         [HttpPost]
-        public JsonResult Create(PSAManagementVM viewModel)
+        public JsonResult CreatePSAManagement(FormCollection form, PSAManagementVM viewModel)
         {
             // Check whether error is found
-            if (!ModelState.IsValid)
-            {
-                ModelState.AddModelError("500", "Internal Server Error");
-                return Json(new { success = false, urlToRedirect = "google.com" },
-                JsonRequestBehavior.AllowGet);
-            }
-
-            psaManagementService.SetSiteUrl(System.Web.HttpContext.Current.Session["SiteUrl"] as string);
-
-            // Get Header ID after inster to SharePoint
-            var psaID = psaManagementService.CreatePSA(viewModel);
-
-            // Clear session variables
-            System.Web.HttpContext.Current.Session.Clear();
-
-            // Return JSON
-            return Json(new { success = true, urlToRedirect = "google.com" },
-                JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpPost]
-        public ActionResult CreateApplicationData(FormCollection form, ApplicationDataVM viewModel)
-        {
             if (!ModelState.IsValid)
             {
                 return Json(new { errorMessage = BindHelper.GetErrorMessages(ModelState.Values) },
@@ -92,12 +74,12 @@ namespace MCAWebAndAPI.Web.Controllers
             }
 
             var siteUrl = SessionManager.Get<string>("SiteUrl");
-            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            psaManagementService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
-            int? headerID = null;
+            int? psaID = null;
             try
             {
-                headerID = _service.CreateApplicationData(viewModel);
+                psaID = psaManagementService.CreatePSAManagement(viewModel);
             }
             catch (Exception e)
             {
@@ -106,58 +88,8 @@ namespace MCAWebAndAPI.Web.Controllers
                    JsonRequestBehavior.AllowGet);
             }
 
-            try
-            {
-                viewModel.EducationDetails = BindEducationDetails(form, viewModel.EducationDetails);
-                _service.CreateEducationDetails(headerID, viewModel.EducationDetails);
-            }
-            catch (Exception e)
-            {
-                ErrorSignal.FromCurrentContext().Raise(e);
-                return Json(new { errorMessage = e.Message },
-                   JsonRequestBehavior.AllowGet);
-            }
-
-            try
-            {
-                viewModel.TrainingDetails = BindTrainingDetails(form, viewModel.TrainingDetails);
-                _service.CreateTrainingDetails(headerID, viewModel.TrainingDetails);
-            }
-            catch (Exception e)
-            {
-                ErrorSignal.FromCurrentContext().Raise(e);
-                return Json(new { errorMessage = e.Message },
-                  JsonRequestBehavior.AllowGet);
-            }
-
-            try
-            {
-                viewModel.WorkingExperienceDetails = BindWorkingExperienceDetails(form, viewModel.WorkingExperienceDetails);
-                _service.CreateWorkingExperienceDetails(headerID, viewModel.WorkingExperienceDetails);
-            }
-            catch (Exception e)
-            {
-                ErrorSignal.FromCurrentContext().Raise(e);
-                return Json(new { errorMessage = e.Message },
-                 JsonRequestBehavior.AllowGet);
-            }
-
-            try
-            {
-                _service.CreateProfessionalDocuments(headerID, viewModel.Documents);
-            }
-            catch (Exception e)
-            {
-                ErrorSignal.FromCurrentContext().Raise(e);
-                return Json(new { errorMessage = e.Message },
-                JsonRequestBehavior.AllowGet);
-            }
-
-            // Use this if only not embedded in SharePoint page
-            return Json(new
-            {
-                successMessage = string.Format(MessageResource.SuccessCreateApplicationData, viewModel.FirstMiddleName)
-            },
+            // Return JSON
+            return Json(new { success = true, urlToRedirect = "google.com" },
                 JsonRequestBehavior.AllowGet);
         }
 
