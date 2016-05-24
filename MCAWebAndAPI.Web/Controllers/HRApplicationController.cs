@@ -1,16 +1,13 @@
 ﻿using Elmah;
 using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using MCAWebAndAPI.Service.Converter;
-using MCAWebAndAPI.Service.HR.Common;
 using MCAWebAndAPI.Service.HR.Recruitment;
-using MCAWebAndAPI.Web.Filters;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace MCAWebAndAPI.Web.Controllers
@@ -44,8 +41,7 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return Json(new {  errorMessage = BindHelper.GetErrorMessages(ModelState.Values) },
-                    JsonRequestBehavior.AllowGet);
+                RedirectToAction("Index", "Error");
             }
 
             var siteUrl = SessionManager.Get<string>("SiteUrl");
@@ -59,8 +55,7 @@ namespace MCAWebAndAPI.Web.Controllers
             catch (Exception e)
             {
                 ErrorSignal.FromCurrentContext().Raise(e);
-                return Json(new {errorMessage = e.Message },
-                   JsonRequestBehavior.AllowGet);
+                return RedirectToAction("Index", "Error");
             }
 
             try
@@ -71,8 +66,7 @@ namespace MCAWebAndAPI.Web.Controllers
             catch (Exception e)
             {
                 ErrorSignal.FromCurrentContext().Raise(e);
-                return Json(new { errorMessage = e.Message },
-                   JsonRequestBehavior.AllowGet);
+                return RedirectToAction("Index", "Error");
             }
 
             try
@@ -83,8 +77,7 @@ namespace MCAWebAndAPI.Web.Controllers
             catch(Exception e)
             {
                 ErrorSignal.FromCurrentContext().Raise(e);
-                return Json(new { errorMessage = e.Message },
-                  JsonRequestBehavior.AllowGet);
+                return RedirectToAction("Index", "Error");
             }
 
             try
@@ -94,8 +87,7 @@ namespace MCAWebAndAPI.Web.Controllers
             }catch(Exception e)
             {
                 ErrorSignal.FromCurrentContext().Raise(e);
-                return Json(new { errorMessage = e.Message },
-                 JsonRequestBehavior.AllowGet);
+                return RedirectToAction("Index", "Error");
             }
 
             try
@@ -105,14 +97,12 @@ namespace MCAWebAndAPI.Web.Controllers
             catch (Exception e)
             {
                 ErrorSignal.FromCurrentContext().Raise(e);
-                return Json(new { errorMessage = e.Message },
-                JsonRequestBehavior.AllowGet);
+                return RedirectToAction("Index", "Error");
             }
 
-            // Use this if only not embedded in SharePoint page
-            return Json(new {
-                successMessage = string.Format(MessageResource.SuccessCreateApplicationData, viewModel.FirstMiddleName) },
-                JsonRequestBehavior.AllowGet);
+            return RedirectToAction("Index", 
+                "Success", 
+                new { successMessage = string.Format(MessageResource.SuccessCreateApplicationData, viewModel.FirstMiddleName)});
         }
 
         [HttpPost]
@@ -145,32 +135,13 @@ namespace MCAWebAndAPI.Web.Controllers
                 catch (Exception e)
                 {
                     ErrorSignal.FromCurrentContext().Raise(e);
-                    return Json(new { errorMessage = e.Message }, JsonRequestBehavior.AllowGet);
+                    RedirectToAction("Index", "Error");
                 }
 
-                // Save to Server Path
-                var fileNamePath = Path.GetFileName(fileName);
-                var path = Path.Combine(Server.MapPath("~/App_Data"), fileNamePath);
-                try
-                {
-                    System.IO.File.WriteAllBytes(path, pdfBuf);
-                }
-                catch (Exception e)
-                {
-                    ErrorSignal.FromCurrentContext().Raise(e);
-                    return Json(new { errorMessage = e.Message }, JsonRequestBehavior.AllowGet);
-                }
+                if (pdfBuf == null)
+                    return HttpNotFound();
+                return File(pdfBuf, "application/pdf");
             }
-
-
-            var downloadPath = string.Format("/File/Download?fileName={0}", fileName);
-            return Json(new
-            {
-                successMessage = string.Format(MessageResource.SuccessPrintApplicationData, 
-                viewModel.FirstMiddleName, downloadPath)
-            },
-            JsonRequestBehavior.AllowGet);
-            
         }
 
         private IEnumerable<WorkingExperienceDetailVM> BindWorkingExperienceDetails(FormCollection form, IEnumerable<WorkingExperienceDetailVM> workingExperienceDetails)

@@ -5,11 +5,7 @@
     ViewBag.Title = "CreateApplicationData";
 }
 
-@using (Html.BeginForm("CreateApplicationData", "HRApplication", FormMethod.Post, 
-                                                     new
-                                                     { @class = "form-horizontal",
-                                                         enctype = "multipart/form-data" }))
-{
+<div class="form-horizontal">
     <fieldset>
         <legend>Personnal Details</legend>
         <div class="row">
@@ -37,7 +33,7 @@
         </div>
         <legend>Documents</legend>
         <div class="row">
-            @Html.Partial("_DocumentDetails", Model)
+            @Html.Partial("_DocumentDetails_Display", Model)
         </div>
     </fieldset>
     <div class="form-actions">
@@ -53,18 +49,22 @@
             </div>
         </div>
     </div>
-}
+</div>
 
-@section scripts{
+    @section scripts{
 
-    <script>
-        function onSelectIDCardType(e) {
-            var dataItem = this.dataItem(e.item);
-            if (dataItem === "KTP") {
-                $('#IDCardExpiry').closest('.form-group').show();
-            } else {
-                $('#IDCardExpiry').closest('.form-group').hide();
+        <script>
+            function onSelectIDCardType(e) {
+                var dataItem = this.dataItem(e.item);
+                if (dataItem === "KTP") {
+                    $('#IDCardExpiry').closest('.form-group').show();
+                } else {
+                    $('#IDCardExpiry').closest('.form-group').hide();
+                }
             }
-        }
-    </script>
-}
+
+            $(document).ready(function () {
+                $('form input').prop('readonly', 'true');
+            });
+        </script>
+    }

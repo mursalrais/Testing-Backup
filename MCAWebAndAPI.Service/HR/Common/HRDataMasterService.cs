@@ -8,6 +8,65 @@ using System.Linq;
 
 namespace MCAWebAndAPI.Service.HR.Common
 {
+    /// <summary>
+    /// <ViewFields>
+    //    <FieldRef Name = 'Title' />
+    //    < FieldRef Name='lastname' />
+    //    <FieldRef Name = 'Position' />
+    //    < FieldRef Name='placeofbirth' />
+    //    <FieldRef Name = 'dateofbirth' />
+    //    < FieldRef Name='maritalstatus' />
+    //    <FieldRef Name = 'bloodtype' />
+    //    < FieldRef Name='Gender' />
+    //    <FieldRef Name = 'Nationality' />
+    //    < FieldRef Name='Religion' />
+    //    <FieldRef Name = 'idcardtype' />
+    //    < FieldRef Name='idcardnumber' />
+    //    <FieldRef Name = 'idcardexpirydate' />
+    //    < FieldRef Name='permanentaddress' />
+    //    <FieldRef Name = 'permanentlandlinephone' />
+    //    < FieldRef Name='currentaddress' />
+    //    <FieldRef Name = 'currentlandlinephone' />
+    //    < FieldRef Name='emergencynumber' />
+    //    <FieldRef Name = 'officephone' />
+    //    < FieldRef Name='Extension' />
+    //    <FieldRef Name = 'NIK' />
+    //    < FieldRef Name='officeemail' />
+    //    <FieldRef Name = 'personalemail' />
+    //    < FieldRef Name='personalemail2' />
+    //    <FieldRef Name = 'mobilephonenr' />
+    //    < FieldRef Name='mobilephonenr2' />
+    //    <FieldRef Name = 'hiaccountname' />
+    //    < FieldRef Name='hiaccountnr' />
+    //    <FieldRef Name = 'hicurrency' />
+    //    < FieldRef Name='hibankname' />
+    //    <FieldRef Name = 'hibankbranchoffice' />
+    //    < FieldRef Name='hieffectivedate' />
+    //    <FieldRef Name = 'hienddate' />
+    //    < FieldRef Name='hiriaccountnr' />
+    //    <FieldRef Name = 'hirjaccountnr' />
+    //    < FieldRef Name='hirgaccountnr' />
+    //    <FieldRef Name = 'himaaccountnr' />
+    //    < FieldRef Name='spaccountname' />
+    //    <FieldRef Name = 'spaccountnr' />
+    //    < FieldRef Name='spcurrency' />
+    //    <FieldRef Name = 'spbankname' />
+    //    < FieldRef Name='spbranchoffice' />
+    //    <FieldRef Name = 'speffectivedate' />
+    //    < FieldRef Name='spenddate' />
+    //    <FieldRef Name = 'payrollaccountname' />
+    //    < FieldRef Name='payrollaccountnr' />
+    //    <FieldRef Name = 'payrollcurrency' />
+    //    < FieldRef Name='payrollbankname' />
+    //    <FieldRef Name = 'payrollbranchoffice' />
+    //    < FieldRef Name='payrollbankswiftcode' />
+    //    <FieldRef Name = 'payrolltaxstatus' />
+    //    < FieldRef Name='taxid' />
+    //    <FieldRef Name = 'nameintaxid' />
+    //    < FieldRef Name='taxaddress' />
+    //    <FieldRef Name = 'datavalidationstatus' /></ ViewFields >
+    //</ View >
+    /// </summary>
     public class HRDataMasterService : IHRDataMasterService
     {
         string _siteUrl;
@@ -34,7 +93,7 @@ namespace MCAWebAndAPI.Service.HR.Common
                 tempID = Convert.ToInt32(item["ID"]);
                 if (!(collectionIDMonthlyFee.Any(e => e == tempID)))
                 {
-                    models.Add(ConvertToProfessionalModel(item));
+                    models.Add(ConvertToProfessionalModel_Light(item));
                 }
             }
 
@@ -46,13 +105,19 @@ namespace MCAWebAndAPI.Service.HR.Common
             var models = new List<ProfessionalMaster>();
             foreach(var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl))
             {
-                    models.Add(ConvertToProfessionalModel(item));
+                    models.Add(ConvertToProfessionalModel_Light(item));
             }
 
             return models;
         }
 
-        private ProfessionalMaster ConvertToProfessionalModel(ListItem item)
+        /// <summary>
+        /// Convert to light-weight version of professional model.
+        /// This is only used to display professional combo box
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        private ProfessionalMaster ConvertToProfessionalModel_Light(ListItem item)
         {
             return new ProfessionalMaster
             {
@@ -86,6 +151,29 @@ namespace MCAWebAndAPI.Service.HR.Common
                 //Position = Convert.ToString(item["Position"]),
                 //ProjectUnit = Convert.ToString(item["ProjectUnit"])
             };
+        }
+
+        public ProfessionalDataVM GetProfessionalData(int? ID)
+        {
+            if (ID == null)
+                return new ProfessionalDataVM();
+
+            var listItem = SPConnector.GetListItem(SP_POSMAS_LIST_NAME, ID, _siteUrl);
+            return ConvertToProfessionalModel(listItem);
+        }
+
+        /// <summary>
+        /// TODO: To finish mapping
+        /// </summary>
+        /// <param name="listItem"></param>
+        /// <returns></returns>
+        private ProfessionalDataVM ConvertToProfessionalModel(ListItem listItem)
+        {
+            return new ProfessionalDataVM
+            {
+                ID = Convert.ToInt32(listItem["ID"]),
+                FirstMiddleName = Convert.ToString(listItem["Title"])
+            }; 
         }
     }
 }
