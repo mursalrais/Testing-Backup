@@ -74,7 +74,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 viewModel.TrainingDetails = BindTrainingDetails(form, viewModel.TrainingDetails);
                 _service.CreateTrainingDetails(headerID, viewModel.TrainingDetails);
             }
-            catch (Exception e)
+            catch(Exception e)
             {
                 ErrorSignal.FromCurrentContext().Raise(e);
                 return RedirectToAction("Index", "Error");
@@ -84,8 +84,7 @@ namespace MCAWebAndAPI.Web.Controllers
             {
                 viewModel.WorkingExperienceDetails = BindWorkingExperienceDetails(form, viewModel.WorkingExperienceDetails);
                 _service.CreateWorkingExperienceDetails(headerID, viewModel.WorkingExperienceDetails);
-            }
-            catch (Exception e)
+            }catch(Exception e)
             {
                 ErrorSignal.FromCurrentContext().Raise(e);
                 return RedirectToAction("Index", "Error");
@@ -101,21 +100,21 @@ namespace MCAWebAndAPI.Web.Controllers
                 return RedirectToAction("Index", "Error");
             }
 
-            return RedirectToAction("Index",
-                "Success",
-                new { successMessage = string.Format(MessageResource.SuccessCreateApplicationData, viewModel.FirstMiddleName) });
+            return RedirectToAction("Index", 
+                "Success", 
+                new { successMessage = string.Format(MessageResource.SuccessCreateApplicationData, viewModel.FirstMiddleName)});
         }
 
         [HttpPost]
         public ActionResult PrintApplicationData(FormCollection form, ApplicationDataVM viewModel)
-        {
+        { 
             viewModel.EducationDetails = BindEducationDetails(form, viewModel.EducationDetails);
             viewModel.TrainingDetails = BindTrainingDetails(form, viewModel.TrainingDetails);
             viewModel.WorkingExperienceDetails = BindWorkingExperienceDetails(form, viewModel.WorkingExperienceDetails);
 
             const string relativePath = "~/Views/HRApplication/PrintApplicationData.cshtml";
             string content;
-
+            
             var view = ViewEngines.Engines.FindView(ControllerContext, relativePath, null);
             ViewData.Model = viewModel;
             var fileName = viewModel.FirstMiddleName + "_Application.pdf";
@@ -171,11 +170,11 @@ namespace MCAWebAndAPI.Web.Controllers
             return array;
         }
 
-        private IEnumerable<EducationDetailVM> BindEducationDetails(FormCollection form,
+        private IEnumerable<EducationDetailVM> BindEducationDetails(FormCollection form, 
             IEnumerable<EducationDetailVM> educationDetails)
         {
             var array = educationDetails.ToArray();
-            for (int i = 0; i < array.Length; i++)
+            for (int i = 0; i< array.Length; i++)
             {
                 array[i].YearOfGraduation = BindHelper.BindDateInGrid("EducationDetails",
                     i, "YearOfGraduation", form);

@@ -20,7 +20,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         public string DocumentUrl { get; set; }
 
-
         [UIHint("TextArea")]
         public string SpecializationField { get; set; }
 

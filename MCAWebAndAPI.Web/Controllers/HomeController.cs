@@ -9,13 +9,13 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             return View();
         }
-
-
+        
+        
 
         [HttpGet]
         public FileResult Print(string pageName = null, string urlToPrint = null)
         {
-            var result = PDFConverter.Instance.ConvertFromURL(pageName ?? "PDF Doc.pdf",
+            var result = PDFConverter.Instance.ConvertFromURL(pageName ?? "PDF Doc.pdf", 
                 urlToPrint ?? "/Error");
             return File(result, "application/pdf");
         }
