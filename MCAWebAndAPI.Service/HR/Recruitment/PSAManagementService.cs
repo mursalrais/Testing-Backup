@@ -118,15 +118,15 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             int ID = psaManagement.ID.Value;
 
             columnValues.Add("Title", psaManagement.psaNumber);
-            columnValues.Add("isrenewal", psaManagement.IsRenewal.Value);
+            columnValues.Add("isrenewal", psaManagement.isrenewal);
             columnValues.Add("renewalnumber", psaManagement.renewalnumber);
-            columnValues.Add("ProjectOrUnit", psaManagement.ProjectOrUnit1.Value);
-            columnValues.Add("position", new FieldLookupValue { LookupId = Convert.ToInt32(psaManagement.Position.Value) });
-            columnValues.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(psaManagement.Professional.Value) });
-            columnValues.Add("joindate", psaManagement.joindate.Value);
-            columnValues.Add("dateofnewpsa", psaManagement.dateofnewpsa.Value);
+            columnValues.Add("ProjectOrUnit", psaManagement.ProjectOrUnit);
+            columnValues.Add("position", new FieldLookupValue { LookupId = Convert.ToInt32(psaManagement.position.Value) });
+            columnValues.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(psaManagement.professional.Value) });
+            columnValues.Add("joindate", psaManagement.joinDate.Value);
+            columnValues.Add("dateofnewpsa", psaManagement.dateofNewPSA.Value);
             columnValues.Add("tenure", psaManagement.tenure);
-            columnValues.Add("psaexpirydate", psaManagement.psaexpirydate.Value);
+            columnValues.Add("psaexpirydate", psaManagement.pSAExpiryDate.Value);
 
             try
             {
