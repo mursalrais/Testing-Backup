@@ -528,6 +528,14 @@
     <Content Include="Views\HRApplication\_DocumentDetails_Display.cshtml" />
     <Content Include="Views\HRApplication\DisplayApplicationData.cshtml" />
     <Content Include="Views\Success\Index.cshtml" />
+    <Content Include="Views\HRProfessional\EditProfessional.cshtml" />
+    <Content Include="Views\HRProfessional\_ContactInformationDetails.cshtml" />
+    <Content Include="Views\HRProfessional\_PersonalDetails.cshtml" />
+    <Content Include="Views\HRProfessional\_EducationDetails.cshtml" />
+    <Content Include="Views\HRProfessional\_TrainingDetails.cshtml" />
+    <Content Include="Views\HRProfessional\_InsuranceDetails.cshtml" />
+    <Content Include="Views\HRProfessional\_PayrollDetails.cshtml" />
+    <Content Include="Views\HRProfessional\_DependentDetails.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -563,6 +571,7 @@
     <Compile Include="Controllers\HRApplicationController.cs" />
     <Compile Include="Controllers\HRDataMasterController.cs" />
     <Compile Include="Controllers\HRPayrollController.cs" />
+    <Compile Include="Controllers\HRProfessionalController.cs" />
     <Compile Include="Controllers\HRPSAManagementController.cs" />
     <Compile Include="Controllers\LocationController.cs" />
     <Compile Include="Controllers\ProjectHierarchyController.cs" />
@@ -620,7 +629,6 @@
   <ItemGroup>
     <Folder Include="App_Code\" />
     <Folder Include="Views\File\" />
-    <Folder Include="Views\HRProfessional\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MCAWebAndAPI.Model\MCAWebAndAPI.Model.csproj">

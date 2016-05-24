@@ -15,39 +15,13 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [UIHint("EmailAddress")]
         public string OfficeEmail { get; set; }
 
-        public IEnumerable<OrganizationalDetailVM> OrganizationalDetails
-        {
-            get
-            {
-                return _organizationalDetails;
-            }
-            set
-            {
-                _organizationalDetails = value;
-            }
-        }
-
-   
+        public IEnumerable<OrganizationalDetailVM> OrganizationalDetails { get; set; } = new List<OrganizationalDetailVM>();
 
         [RegularExpression("([0-9]+)")]
         public string Extension { get; set; }
-        
 
-        public IEnumerable<DependentDetailVM> DependentDetails
-        {
-            get
-            {
-                return _dependentDetails;
-            }
-            set
-            {
-                _dependentDetails = value;
-            }
-        }
-
-        IEnumerable<OrganizationalDetailVM> _organizationalDetails = new List<OrganizationalDetailVM>();
-        IEnumerable<DependentDetailVM> _dependentDetails = new List<DependentDetailVM>();
-
+        public IEnumerable<DependentDetailVM> DependentDetails = new List<DependentDetailVM>();
+       
         [DisplayName("Account Name")]
         public string AccountNameForHI { get; set; }
 
@@ -59,150 +33,90 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         [DisplayName("Branch Office")]
         public string BranchOfficeForHI { get; set; }
-
-        DateTime? _effectiveDateForHI = DateTime.Now;
-
-        DateTime? _endDateForHI = DateTime.Now;
-
-        CurrencyComboBoxVM _currencyForHI = new CurrencyComboBoxVM();
-
+        
+        [DisplayName("RI")]
         public string VendorAccountNumberRIForHI { get; set; }
 
+        [DisplayName("RJ")]
         public string VendorAccountNumberRJForHI { get; set; }
 
+        [DisplayName("HI")]
         public string VendorAccountNumberRGForHI { get; set; }
 
+        [DisplayName("MA")]
         public string VendorAccountNumberMAForHI { get; set; }
-
-        public string AccountNameForSP { get; set; }
-
-        public string BankNameForSP { get; set; }
-
-        public string AccountNumberForSP { get; set; }
-
-        public string BranchOfficeForSP { get; set; }
-
-        DateTime? _effectiveDateForSP = DateTime.Now;
-
-        DateTime? _endDateForSP = DateTime.Now;
-
-        CurrencyComboBoxVM _currencyForSP = new CurrencyComboBoxVM();
-
-        public string AccountNameForPayroll { get; set; }
-
-        public string AccountNumberForPayroll { get; set; }
-
-        public string BankNameForPayroll { get; set; }
-
-        public string BranchOfficeForPayroll { get; set; }
-
-        ComboBoxVM _taxStatusForPayroll = new ComboBoxVM
-        {
-            Choices = new string[]
-            {
-                "Status A",
-                "Status B"
-            },
-            DefaultValue = "Status A"
-        };
-
-        public string TaxIDForPayroll { get; set; }
-
-        public string NIK { get; set; }
-
-        public string NameInTaxForPayroll { get; set; }
-
-        public string BankSwiftCodeForPayroll { get; set; }
-
-        public string TaxIDAddress { get; set; }
-
-
-        [UIHint("Date")]
-        [DisplayName("Effective Date")]
-        public DateTime? EffectiveDateForHI
-        {
-            get
-            {
-                return _effectiveDateForHI;
-            }
-
-            set
-            {
-                _effectiveDateForHI = value;
-            }
-        }
-
-        [UIHint("Date")]
-        [DisplayName("End Date")]
-        public DateTime? EndDateForHI
-        {
-            get
-            {
-                return _endDateForHI;
-            }
-
-            set
-            {
-                _endDateForHI = value;
-            }
-        }
-
-        [UIHint("Date")]
-        [DisplayName("Effective Date")]
-        public DateTime? EffectiveDateForSP
-        {
-            get
-            {
-                return _effectiveDateForSP;
-            }
-
-            set
-            {
-                _effectiveDateForSP = value;
-            }
-        }
-
-        [UIHint("Date")]
-        [DisplayName("End Date")]
-        public DateTime? EndDateForSP
-        {
-            get
-            {
-                return _endDateForSP;
-            }
-            set
-            {
-                _endDateForSP = value;
-            }
-        }
-
-        [UIHint("ComboBox")]
-        [DisplayName("Tax Status")]
-        public ComboBoxVM TaxStatusForPayroll
-        {
-            get
-            {
-                return _taxStatusForPayroll;
-            }
-            set
-            {
-                _taxStatusForPayroll = value;
-            }
-        }
 
         [UIHint("ComboBox")]
         [DisplayName("Currency")]
-        public CurrencyComboBoxVM CurrencyForSP
-        {
-            get
-            {
-                return _currencyForSP;
-            }
-            set
-            {
-                _currencyForSP = value;
-            }
-        }
+        public CurrencyComboBoxVM CurrencyForHI { get; set; } = new CurrencyComboBoxVM();
+
+        [DisplayName("Account Name")]
+        public string AccountNameForSP { get; set; }
+
+        [DisplayName("Bank Name")]
+        public string BankNameForSP { get; set; }
+
+        [DisplayName("Account Number")]
+        public string AccountNumberForSP { get; set; }
+
+        [DisplayName("Branch Office")]
+        public string BranchOfficeForSP { get; set; }
+
+        [DisplayName("Account Name")]
+        public string AccountNameForPayroll { get; set; }
+
+        [DisplayName("Account Number")]
+        public string AccountNumberForPayroll { get; set; }
+
+        [DisplayName("Bank Name")]
+        public string BankNameForPayroll { get; set; }
+
+        [DisplayName("Branch Office")]
+        public string BranchOfficeForPayroll { get; set; }
+
+        [DisplayName("Tax ID")]
+        public string TaxIDForPayroll { get; set; }
+
+        [DisplayName("NIK")]
+        public string NIK { get; set; }
+
+        [DisplayName("Name in Tax")]
+        public string NameInTaxForPayroll { get; set; }
+
+        [DisplayName("Bank Swift Code")]
+        public string BankSwiftCodeForPayroll { get; set; }
+
+        [DisplayName("Tax ID Address")]
+        [UIHint("TextArea")]
+        public string TaxIDAddress { get; set; }
+
+        [DisplayName("Currency")]
+        [UIHint("ComboBox")]
+        public CurrencyComboBoxVM CurrencyForPayroll { get; set; } = new CurrencyComboBoxVM();
+
+        [UIHint("Date")]
+        [DisplayName("Effective Date")]
+        public DateTime? EffectiveDateForHI { get; set; } = DateTime.Now;
+
+
+        [UIHint("Date")]
+        [DisplayName("End Date")]
+        public DateTime? EndDateForHI { get; set; } = DateTime.Now;
+
+        [UIHint("Date")]
+        [DisplayName("Effective Date")]
+        public DateTime? EffectiveDateForSP { get; set; } = DateTime.Now;
+
+        [UIHint("Date")]
+        [DisplayName("End Date")]
+        public DateTime? EndDateForSP { get; set; } = DateTime.Now;
+        [UIHint("ComboBox")]
+        [DisplayName("Tax Status")]
+        public ComboBoxVM TaxStatusForPayroll { get; set; } = new ComboBoxVM();
+
+        [UIHint("ComboBox")]
+        [DisplayName("Currency")]
+        public CurrencyComboBoxVM CurrencyForSP { get; set; } = new CurrencyComboBoxVM();
 
     }
 }
