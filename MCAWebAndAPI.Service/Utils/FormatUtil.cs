@@ -25,6 +25,16 @@ namespace MCAWebAndAPI.Service.Utils
             return stringNumber;
         }
 
+        //<div class="ExternalClass0291F132E71045C9B5B5B26A60D6439C">Value here</div>
+        public static string ConvertMultipleLine(string multipleLineValue)
+        {
+            if (string.IsNullOrEmpty(multipleLineValue))
+                return string.Empty;
+
+            var value = multipleLineValue.Split('>')[1].Split('<')[0];
+            return value;
+        }
+
         public static string ConvertToCleanSiteUrl(string siteUrl)
         {
             var result = string.Empty;

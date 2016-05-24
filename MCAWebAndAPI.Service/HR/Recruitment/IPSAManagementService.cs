@@ -22,6 +22,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         
         bool UpdatePSAManagement(PSAManagementVM psaManagement);
 
-        void CreateProfessionalDocuments(int? headerID, IEnumerable<HttpPostedFileBase> documents);
+        void CreatePSAManagementDocuments(int? headerID, IEnumerable<HttpPostedFileBase> documents);
     }
 }

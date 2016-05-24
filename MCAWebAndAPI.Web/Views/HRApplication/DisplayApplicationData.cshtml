@@ -5,11 +5,7 @@
     ViewBag.Title = "CreateApplicationData";
 }
 
-@using (Html.BeginForm("CreateApplicationData", "HRApplication", FormMethod.Post, 
-                                                     new
-                                                     { @class = "form-horizontal",
-                                                         enctype = "multipart/form-data" }))
-{
+<div class="form-horizontal">
     <fieldset>
         <legend>Personnal Details</legend>
         <div class="row">
@@ -37,34 +33,32 @@
         </div>
         <legend>Documents</legend>
         <div class="row">
-            @Html.Partial("_DocumentDetails", Model)
+            @Html.Partial("_DocumentDetails_Display", Model. DocumentUrl)
         </div>
     </fieldset>
     <div class="form-actions">
         <div class="row">
-            <div class="col-md-12">
-                <button id="print-button" class="btn btn-default" type="button">
-                    Print
-                </button>
-                <button id="submit-button" class="btn btn-primary" type="submit">
-                    <i class="fa fa-save"></i>
-                    Submit
-                </button>
-            </div>
+            <div class="col-md-12"><br/></div>
         </div>
     </div>
-}
+</div>
 
-@section scripts{
+    @section scripts{
 
-    <script>
-        function onSelectIDCardType(e) {
-            var dataItem = this.dataItem(e.item);
-            if (dataItem === "KTP") {
-                $('#IDCardExpiry').closest('.form-group').show();
-            } else {
-                $('#IDCardExpiry').closest('.form-group').hide();
+        <script>
+            function onSelectIDCardType(e) {
+                var dataItem = this.dataItem(e.item);
+                if (dataItem === "KTP") {
+                    $('#IDCardExpiry').closest('.form-group').show();
+                } else {
+                    $('#IDCardExpiry').closest('.form-group').hide();
+                }
             }
-        }
-    </script>
-}
+
+            $(document).ready(function () {
+                $('input').prop('readonly', 'true');
+                $('textarea').prop('readonly', 'true');
+                $('')
+            });
+        </script>
+    }

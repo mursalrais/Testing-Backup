@@ -64,13 +64,12 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         [HttpPost]
-        public JsonResult CreatePSAManagement(FormCollection form, PSAManagementVM viewModel)
+        public ActionResult CreatePSAManagement(FormCollection form, PSAManagementVM viewModel)
         {
             // Check whether error is found
             if (!ModelState.IsValid)
             {
-                return Json(new { errorMessage = BindHelper.GetErrorMessages(ModelState.Values) },
-                    JsonRequestBehavior.AllowGet);
+                RedirectToAction("Index", "Error");
             }
 
             var siteUrl = SessionManager.Get<string>("SiteUrl");
@@ -84,27 +83,26 @@ namespace MCAWebAndAPI.Web.Controllers
             catch (Exception e)
             {
                 ErrorSignal.FromCurrentContext().Raise(e);
-                return Json(new { errorMessage = e.Message },
-                   JsonRequestBehavior.AllowGet);
+                return RedirectToAction("Index", "Error");
             }
 
             try
             {
-                psaManagementService.CreateProfessionalDocuments(psaID, viewModel.Documents);
+                psaManagementService.CreatePSAManagementDocuments(psaID, viewModel.Documents);
             }
             catch (Exception e)
             {
                 ErrorSignal.FromCurrentContext().Raise(e);
-                return Json(new { errorMessage = e.Message },
-                JsonRequestBehavior.AllowGet);
+                return RedirectToAction("Index", "Error");
             }
 
-            // Return JSON
-            return Json(new { success = true, urlToRedirect = "google.com" },
-                JsonRequestBehavior.AllowGet);
+            return RedirectToAction("Index",
+                "Success",
+                new { successMessage = string.Format(MessageResource.SuccessCreateApplicationData, viewModel.psaNumber) });
+
         }
 
-        public ActionResult Update(PSAManagementVM psaManagement, string site)
+        /*public ActionResult Update(PSAManagementVM psaManagement, string site)
         {
             //return View(new AssetMasterVM());
             psaManagementService.UpdatePSAManagement(psaManagement);
@@ -112,7 +110,7 @@ namespace MCAWebAndAPI.Web.Controllers
             {
                 Script = string.Format("window.parent.location.href = '{0}'", "https://eceos2.sharepoint.com/sites/mca-dev/hr/_layouts/15/start.aspx#/Lists/PSA/AllItems.aspx")
             };
-        }
+        }*/
 
         
 
