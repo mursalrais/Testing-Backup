@@ -19,7 +19,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         AjaxComboBoxVM _professionalName = new AjaxComboBoxVM
         {
-            ActionName = "GetProfessionals",
+            ActionName = "GetProfessionalMonthlyFees",
             ControllerName = "HRDataMaster",
             ValueField = "ID",
             TextField = "Name",

@@ -119,7 +119,6 @@
     <Compile Include="HR\Payroll\HRPayrollServices.cs" />
     <Compile Include="HR\Payroll\IHRPayrollServices.cs" />
     <Compile Include="HR\Recruitment\IPSAManagementService.cs" />
-    <Compile Include="HR\Recruitment\PSAManagementService.cs" />
     <Compile Include="JobSchedulers\Jobs\EmailJob.cs" />
     <Compile Include="JobSchedulers\Schedulers\EmailScheduler.cs" />
     <Compile Include="obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />

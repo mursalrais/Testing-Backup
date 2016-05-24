@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.SharePoint.Client;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -54,7 +55,22 @@ namespace MCAWebAndAPI.Service.Utils
             return ((DateTime)dateTime).Year + string.Empty;
         }
 
+        public static int? ConvertLookupToID(ListItem item, string columnName)
+        {
+            if (item[columnName] == null)
+                return null;
 
-         
+            return Convert.ToInt32((item[columnName] as FieldLookupValue).LookupId);
+        }
+
+
+        public static string ConvertLookupToValue(ListItem item, string columnName)
+        {
+            if (item[columnName] == null)
+                return null;
+
+            return Convert.ToString((item[columnName] as FieldLookupValue).LookupValue);
+        }
+
     }
 }

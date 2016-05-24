@@ -69,8 +69,6 @@ namespace MCAWebAndAPI.Web.Controllers
                     var fileName = Path.GetFileName(fullName);
                     var physicalPath = Path.Combine(Server.MapPath("~/App_Data"), fileName);
 
-                    // TODO: Verify user permissions
-
                     if (System.IO.File.Exists(physicalPath))
                     {
                         // The files are not actually removed in this demo

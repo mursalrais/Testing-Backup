@@ -56,7 +56,6 @@ namespace MCAWebAndAPI.Web.Controllers
                 CategoryName = e.AssetDesc
             });
 
-            //TODO: If Edit Mode, please map to existing data
             ViewData["DefaultValue_Asset"] = assetMasters.FirstOrDefault(e => true);
 
             var locationMasters = _assetMasterService.GetAssetLocations();
