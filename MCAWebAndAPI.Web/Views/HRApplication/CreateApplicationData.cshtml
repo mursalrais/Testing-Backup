@@ -5,10 +5,15 @@
     ViewBag.Title = "CreateApplicationData";
 }
 
-@using (Html.BeginForm("CreateApplicationData", "HRApplication", FormMethod.Post, 
-                                                     new
-                                                     { @class = "form-horizontal",
-                                                         enctype = "multipart/form-data" }))
+@using (Ajax.BeginForm("CreateApplicationData", "HRApplication",
+                                                    FormMethod.Post,
+                                                    new AjaxOptions
+                                                    {
+                                                        OnBegin = "onBeginForm",
+                                                        OnFailure = "onFailureForm",
+                                                        OnSuccess = "onSuccessFormEmbed",
+                                                        OnComplete = "onCompleteForm"
+                                                    }, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
 {
     <fieldset>
         <legend>Personnal Details</legend>

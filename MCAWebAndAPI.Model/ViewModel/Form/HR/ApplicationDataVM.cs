@@ -17,9 +17,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         [UIHint("MultiFileUploader")]
         public IEnumerable<HttpPostedFileBase> Documents { get; set; } = new List<HttpPostedFileBase>();
-
-        public string DocumentUrl { get; set; }
-
+        
         [UIHint("TextArea")]
         public string SpecializationField { get; set; }
 

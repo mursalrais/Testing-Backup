@@ -9,14 +9,21 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             return View();
         }
-        
-        
+
+        public ActionResult ScheduleTracking()
+        {
+            return View();
+        }
+
+        public ActionResult ProjectHealthByActivity()
+        {
+            return View();
+        }
 
         [HttpGet]
-        public FileResult Print(string pageName = null, string urlToPrint = null)
+        public FileResult Print()
         {
-            var result = PDFConverter.Instance.ConvertFromURL(pageName ?? "PDF Doc.pdf", 
-                urlToPrint ?? "/Error");
+            var result = PDFConverter.Instance.ConvertFromURL("Kompas", "http://www.kompas.com/");
             return File(result, "application/pdf");
         }
     }

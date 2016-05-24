@@ -42,11 +42,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             updatedValue.Add("totalrelevantexperiencemonths", viewModel.MonthRelevantWork);
             updatedValue.Add("maritalstatus", viewModel.MaritalStatus.Value);
             updatedValue.Add("bloodtype", viewModel.BloodType.Value);
-            updatedValue.Add("religion", viewModel.Religion.Value);
-            updatedValue.Add("gender", viewModel.Gender.Value);
+            updatedValue.Add("Religion", viewModel.Religion.Value);
+            updatedValue.Add("Gender", viewModel.Gender.Value);
             updatedValue.Add("idcardtype", viewModel.IDCardType.Value);
             updatedValue.Add("idcardexpirydate", viewModel.IDCardExpiry);
-            updatedValue.Add("nationality", new FieldLookupValue { LookupId = viewModel.Nationality.Value });
+            updatedValue.Add("Nationality", new FieldLookupValue { LookupId = viewModel.Nationality.Value });
             updatedValue.Add("applicationstatus", WorkflowUtil.DRAFT);
 
             try
@@ -181,25 +181,32 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.MonthRelevantWork = Convert.ToInt32(listItem["totalrelevantexperiencemonths"]);
             viewModel.MaritalStatus.DefaultValue = Convert.ToString(listItem["maritalstatus"]);
             viewModel.BloodType.DefaultValue = Convert.ToString(listItem["bloodtype"]);
-            viewModel.Religion.DefaultValue = Convert.ToString(listItem["religion"]);
-            viewModel.Gender.DefaultValue = Convert.ToString(listItem["gender"]);
+            viewModel.Religion.DefaultValue = Convert.ToString(listItem["Religion"]);
+            viewModel.Gender.DefaultValue = Convert.ToString(listItem["Gender"]);
             viewModel.IDCardType.DefaultValue = Convert.ToString(listItem["idcardtype"]);
             viewModel.IDCardExpiry = Convert.ToDateTime(listItem["idcardexpirydate"]);
-            viewModel.Nationality.DefaultValue = FormatUtil.ConvertLookupToID(listItem, "nationality") + string.Empty;
+            viewModel.Nationality.DefaultValue = FormatUtil.ConvertLookupToID(listItem, "Nationality") + string.Empty;
 
             // Convert Details
             viewModel.EducationDetails = GetEducationDetails(viewModel.ID);
             viewModel.TrainingDetails = GetTrainingDetails(viewModel.ID);
             viewModel.WorkingExperienceDetails = GetWorkingExperienceDetails(viewModel.ID);
-            viewModel.DocumentUrl = GetDocumentUrl(viewModel.ID);
+            viewModel.Documents = GetDocuments(viewModel.ID);
 
             return viewModel;
 
         }
 
-        private string GetDocumentUrl(int? iD)
+        private IEnumerable<HttpPostedFileBase> GetDocuments(int? iD)
         {
-            return string.Format(UrlResource.ApplicationDocumentByID, _siteUrl, iD);       
+            var caml = @"<View>  
+            <Query> 
+               <Where><Eq><FieldRef Name='application' LookupId='True' /><Value Type='Lookup'>" + iD 
+               + @"</Value></Eq></Where> 
+            </Query>
+            <ViewFields><FieldRef Name='Title' /><FieldRef Name='ID' /><FieldRef Name='FileRef' /></ViewFields></View>";
+
+            throw new NotImplementedException();
         }
 
         private IEnumerable<WorkingExperienceDetailVM> GetWorkingExperienceDetails(int? iD)
@@ -209,7 +216,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                <Where><Eq><FieldRef Name='application' LookupId='True' /><Value Type='Lookup'>" + iD + @"</Value></Eq></Where> 
             </Query> 
              <ViewFields><FieldRef Name='ID' /><FieldRef Name='application' /><FieldRef Name='Title' /><FieldRef Name='applicationcompany' /><FieldRef Name='applicationfrom' /><FieldRef Name='applicationto' /><FieldRef Name='applicationjobdescription' /></ViewFields> 
-            </View>";
+      </View>";
 
             var workingExperienceDetails = new List<WorkingExperienceDetailVM>();
             foreach(var item in SPConnector.GetList(SP_APPWORK_LIST_NAME, _siteUrl, caml))
