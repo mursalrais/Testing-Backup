@@ -12,13 +12,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
     {
         void SetSiteUrl(string siteUrl);
 
-        PSAManagementVM GetPopulatedModel(int? id = null);
-
         IEnumerable<PSAMaster> GetPSAs();
 
         int CreatePSA(PSAManagementVM psaManagement);
 
-        PSAManagementVM GetPSAManagement(int ID);
+        PSAManagementVM GetPSAManagement(int? ID);
         
         bool UpdatePSAManagement(PSAManagementVM psaManagement);
     }

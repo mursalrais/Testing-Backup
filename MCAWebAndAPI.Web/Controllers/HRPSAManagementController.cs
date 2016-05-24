@@ -15,6 +15,7 @@ using MCAWebAndAPI.Service.HR.Recruitment;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
+    [Filters.HandleError]
     public class HRPSAManagementController : Controller
     {
         IPSAManagementService psaManagementService;
@@ -32,27 +33,32 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult CreatePSAManagement(string siteUrl = null)
         {
             // Clear Existing Session Variables if any
-            if (System.Web.HttpContext.Current.Session.Keys.Count > 0)
-                System.Web.HttpContext.Current.Session.Clear();
+            SessionManager.RemoveAll();
 
             // MANDATORY: Set Site URL
             psaManagementService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-            System.Web.HttpContext.Current.Session["SiteUrl"] = siteUrl ?? ConfigResource.DefaultHRSiteUrl;
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             // Get blank ViewModel
-            var viewModel = psaManagementService.GetPopulatedModel();
+            var viewModel = psaManagementService.GetPSAManagement(null);
 
-            return View("Create", viewModel);
+            return View(viewModel);
         }
 
-        public ActionResult Edit(int ID, string site)
+        public ActionResult DisplayPSAManagement(string siteUrl = null, int? ID = null)
         {
+            // Clear Existing Session Variables if any
+            SessionManager.RemoveAll();
+
+            // MANDATORY: Set Site URL
+            psaManagementService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
             var viewModel = psaManagementService.GetPSAManagement(ID);
             return View(viewModel);
         }
 
         [HttpPost]
-       
         public JsonResult Create(PSAManagementVM viewModel)
         {
             // Check whether error is found
@@ -73,6 +79,85 @@ namespace MCAWebAndAPI.Web.Controllers
 
             // Return JSON
             return Json(new { success = true, urlToRedirect = "google.com" },
+                JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult CreateApplicationData(FormCollection form, ApplicationDataVM viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Json(new { errorMessage = BindHelper.GetErrorMessages(ModelState.Values) },
+                    JsonRequestBehavior.AllowGet);
+            }
+
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            int? headerID = null;
+            try
+            {
+                headerID = _service.CreateApplicationData(viewModel);
+            }
+            catch (Exception e)
+            {
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return Json(new { errorMessage = e.Message },
+                   JsonRequestBehavior.AllowGet);
+            }
+
+            try
+            {
+                viewModel.EducationDetails = BindEducationDetails(form, viewModel.EducationDetails);
+                _service.CreateEducationDetails(headerID, viewModel.EducationDetails);
+            }
+            catch (Exception e)
+            {
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return Json(new { errorMessage = e.Message },
+                   JsonRequestBehavior.AllowGet);
+            }
+
+            try
+            {
+                viewModel.TrainingDetails = BindTrainingDetails(form, viewModel.TrainingDetails);
+                _service.CreateTrainingDetails(headerID, viewModel.TrainingDetails);
+            }
+            catch (Exception e)
+            {
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return Json(new { errorMessage = e.Message },
+                  JsonRequestBehavior.AllowGet);
+            }
+
+            try
+            {
+                viewModel.WorkingExperienceDetails = BindWorkingExperienceDetails(form, viewModel.WorkingExperienceDetails);
+                _service.CreateWorkingExperienceDetails(headerID, viewModel.WorkingExperienceDetails);
+            }
+            catch (Exception e)
+            {
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return Json(new { errorMessage = e.Message },
+                 JsonRequestBehavior.AllowGet);
+            }
+
+            try
+            {
+                _service.CreateProfessionalDocuments(headerID, viewModel.Documents);
+            }
+            catch (Exception e)
+            {
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return Json(new { errorMessage = e.Message },
+                JsonRequestBehavior.AllowGet);
+            }
+
+            // Use this if only not embedded in SharePoint page
+            return Json(new
+            {
+                successMessage = string.Format(MessageResource.SuccessCreateApplicationData, viewModel.FirstMiddleName)
+            },
                 JsonRequestBehavior.AllowGet);
         }
 
