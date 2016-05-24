@@ -4,8 +4,6 @@ using System.Web.Mvc;
 using MCAWebAndAPI.Web.Resources;
 using System.Collections.Generic;
 using MCAWebAndAPI.Model.HR.DataMaster;
-using MCAWebAndAPI.Model.ViewModel.Form.HR;
-using System.Web;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
