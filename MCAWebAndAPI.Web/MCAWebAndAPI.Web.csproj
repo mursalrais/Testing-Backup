@@ -525,6 +525,9 @@
     <Content Include="Views\ASSAssetMaster\Edit.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
     <Content Include="Views\HRPSAManagement\_PSAManagementData.cshtml" />
+    <Content Include="Views\HRApplication\_DocumentDetails_Display.cshtml" />
+    <Content Include="Views\HRApplication\DisplayApplicationData.cshtml" />
+    <Content Include="Views\Success\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -565,6 +568,7 @@
     <Compile Include="Controllers\ProjectHierarchyController.cs" />
     <Compile Include="Controllers\PurchaseOrderController.cs" />
     <Compile Include="Controllers\RIAController.cs" />
+    <Compile Include="Controllers\SuccessController.cs" />
     <Compile Include="Controllers\TaskController.cs" />
     <Compile Include="Filters\HandleErrorAttribute.cs" />
     <Compile Include="Global.asax.cs">

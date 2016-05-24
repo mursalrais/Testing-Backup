@@ -33,20 +33,12 @@
         </div>
         <legend>Documents</legend>
         <div class="row">
-            @Html.Partial("_DocumentDetails_Display", Model)
+            @Html.Partial("_DocumentDetails_Display", Model. DocumentUrl)
         </div>
     </fieldset>
     <div class="form-actions">
         <div class="row">
-            <div class="col-md-12">
-                <button id="print-button" class="btn btn-default" type="button">
-                    Print
-                </button>
-                <button id="submit-button" class="btn btn-primary" type="submit">
-                    <i class="fa fa-save"></i>
-                    Submit
-                </button>
-            </div>
+            <div class="col-md-12"><br/></div>
         </div>
     </div>
 </div>
@@ -64,7 +56,7 @@
             }
 
             $(document).ready(function () {
-                $('form input').prop('readonly', 'true');
+                $('input').prop('readonly', 'true');
             });
         </script>
     }

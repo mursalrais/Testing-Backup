@@ -169,7 +169,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.LastName = Convert.ToString(listItem["lastname"]);
             viewModel.PlaceOfBirth = Convert.ToString(listItem["placeofbirth"]);
             viewModel.DateOfBirth = Convert.ToDateTime(listItem["dateofbirth"]);
-            viewModel.CurrentAddress = Convert.ToString(listItem["currentaddress"]);
+            viewModel.PermanentAddress =
+                FormatUtil.ConvertMultipleLine(Convert.ToString(listItem["permanentaddress"]));
+            viewModel.CurrentAddress =
+                FormatUtil.ConvertMultipleLine(Convert.ToString(listItem["currentaddress"]));
             viewModel.IDCardNumber = Convert.ToString(listItem["idcardnumber"]);
             viewModel.Telephone = Convert.ToString(listItem["permanentlandlinephone"]);
             viewModel.CurrentTelephone = Convert.ToString(listItem["currentlandlinephone"]);
@@ -177,7 +180,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.EmailAddresTwo = Convert.ToString(listItem["personalemail2"]);
             viewModel.MobileNumberOne = Convert.ToString(listItem["mobilephonenr"]);
             viewModel.MobileNumberTwo = Convert.ToString(listItem["mobilephonenr2"]);
-            viewModel.SpecializationField = Convert.ToString(listItem["specializationfield"]);
+            viewModel.SpecializationField =
+                FormatUtil.ConvertMultipleLine(Convert.ToString(listItem["specializationfield"]));
             viewModel.YearRelevanWork = Convert.ToInt32(listItem["totalrelevantexperienceyears"]);
             viewModel.MonthRelevantWork = Convert.ToInt32(listItem["totalrelevantexperiencemonths"]);
             viewModel.MaritalStatus.DefaultValue = Convert.ToString(listItem["maritalstatus"]);
