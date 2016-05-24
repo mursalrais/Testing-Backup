@@ -12,9 +12,15 @@ using MCAWebAndAPI.Web.Filters;
 using MCAWebAndAPI.Web.Resources;
 using MCAWebAndAPI.Model.HR.DataMaster;
 using MCAWebAndAPI.Service.HR.Recruitment;
+using Elmah;
+using MCAWebAndAPI.Service.Converter;
+using MCAWebAndAPI.Service.HR.Common;
+using System.IO;
+using System.Web;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
+    [Filters.HandleError]
     public class HRPSAManagementController : Controller
     {
         IPSAManagementService psaManagementService;
@@ -32,43 +38,55 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult CreatePSAManagement(string siteUrl = null)
         {
             // Clear Existing Session Variables if any
-            if (System.Web.HttpContext.Current.Session.Keys.Count > 0)
-                System.Web.HttpContext.Current.Session.Clear();
+            SessionManager.RemoveAll();
 
             // MANDATORY: Set Site URL
             psaManagementService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-            System.Web.HttpContext.Current.Session["SiteUrl"] = siteUrl ?? ConfigResource.DefaultHRSiteUrl;
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             // Get blank ViewModel
-            var viewModel = psaManagementService.GetPopulatedModel();
+            var viewModel = psaManagementService.GetPSAManagement(null);
 
-            return View("Create", viewModel);
+            return View(viewModel);
         }
 
-        public ActionResult Edit(int ID, string site)
+        public ActionResult DisplayPSAManagement(string siteUrl = null, int? ID = null)
         {
+            // Clear Existing Session Variables if any
+            SessionManager.RemoveAll();
+
+            // MANDATORY: Set Site URL
+            psaManagementService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
             var viewModel = psaManagementService.GetPSAManagement(ID);
             return View(viewModel);
         }
 
         [HttpPost]
-        public JsonResult Create(PSAManagementVM viewModel)
+        public JsonResult CreatePSAManagement(FormCollection form, PSAManagementVM viewModel)
         {
             // Check whether error is found
             if (!ModelState.IsValid)
             {
-                ModelState.AddModelError("500", "Internal Server Error");
-                return Json(new { success = false, urlToRedirect = "google.com" },
-                JsonRequestBehavior.AllowGet);
+                return Json(new { errorMessage = BindHelper.GetErrorMessages(ModelState.Values) },
+                    JsonRequestBehavior.AllowGet);
             }
 
-            psaManagementService.SetSiteUrl(System.Web.HttpContext.Current.Session["SiteUrl"] as string);
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            psaManagementService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
-            // Get Header ID after inster to SharePoint
-            var psaID = psaManagementService.CreatePSA(viewModel);
-
-            // Clear session variables
-            System.Web.HttpContext.Current.Session.Clear();
+            int? psaID = null;
+            try
+            {
+                psaID = psaManagementService.CreatePSAManagement(viewModel);
+            }
+            catch (Exception e)
+            {
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return Json(new { errorMessage = e.Message },
+                   JsonRequestBehavior.AllowGet);
+            }
 
             // Return JSON
             return Json(new { success = true, urlToRedirect = "google.com" },
