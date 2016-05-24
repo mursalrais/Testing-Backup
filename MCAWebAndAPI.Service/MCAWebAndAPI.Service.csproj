@@ -136,6 +136,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ErrorResource.resx</DependentUpon>
     </Compile>
+    <Compile Include="Resources\UrlResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UrlResource.resx</DependentUpon>
+    </Compile>
     <Compile Include="Utils\FormatUtil.cs" />
     <Compile Include="Utils\GraphicUtil.cs" />
     <Compile Include="Utils\MathUtil.cs" />
@@ -176,6 +181,10 @@
     <EmbeddedResource Include="Resources\ErrorResource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ErrorResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\UrlResource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>UrlResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

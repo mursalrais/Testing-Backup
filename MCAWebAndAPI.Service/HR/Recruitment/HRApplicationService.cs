@@ -42,11 +42,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             updatedValue.Add("totalrelevantexperiencemonths", viewModel.MonthRelevantWork);
             updatedValue.Add("maritalstatus", viewModel.MaritalStatus.Value);
             updatedValue.Add("bloodtype", viewModel.BloodType.Value);
-            updatedValue.Add("Religion", viewModel.Religion.Value);
-            updatedValue.Add("Gender", viewModel.Gender.Value);
+            updatedValue.Add("religion", viewModel.Religion.Value);
+            updatedValue.Add("gender", viewModel.Gender.Value);
             updatedValue.Add("idcardtype", viewModel.IDCardType.Value);
             updatedValue.Add("idcardexpirydate", viewModel.IDCardExpiry);
-            updatedValue.Add("Nationality", new FieldLookupValue { LookupId = viewModel.Nationality.Value });
+            updatedValue.Add("nationality", new FieldLookupValue { LookupId = viewModel.Nationality.Value });
             updatedValue.Add("applicationstatus", WorkflowUtil.DRAFT);
 
             try
@@ -68,9 +68,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 var updatedValue = new Dictionary<string, object>();
                 updatedValue.Add("Title", viewModel.Subject);
-                updatedValue.Add("applicationuniversity", viewModel.University);
-                updatedValue.Add("applicationyearofgraduation", FormatUtil.ConvertToYearString(viewModel.YearOfGraduation));
+                updatedValue.Add("university", viewModel.University);
+                updatedValue.Add("yearofgraduation", FormatUtil.ConvertToYearString(viewModel.YearOfGraduation));
                 updatedValue.Add("applications", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
+                updatedValue.Add("remarks", viewModel.Remarks);
 
                 try
                 {
@@ -106,9 +107,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 var updatedValue = new Dictionary<string, object>();
                 updatedValue.Add("Title", viewModel.Subject);
-                updatedValue.Add("applicationtraininginstitution", viewModel.Institution);
-                updatedValue.Add("applicationtrainingremarks", viewModel.Remarks);
-                updatedValue.Add("applicationtrainingyear", FormatUtil.ConvertToYearString(viewModel.Year));
+                updatedValue.Add("traininginstitution", viewModel.Institution);
+                updatedValue.Add("trainingremarks", viewModel.Remarks);
+                updatedValue.Add("trainingyear", FormatUtil.ConvertToYearString(viewModel.Year));
                 updatedValue.Add("application", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
 
                 try
@@ -166,8 +167,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.ID = Convert.ToInt32(listItem["ID"]);
             viewModel.FirstMiddleName = Convert.ToString(listItem["Title"]);
             viewModel.LastName = Convert.ToString(listItem["lastname"]);
-            viewModel.PlaceOfBirth = Convert.ToString("placeofbirth");
-            viewModel.DateOfBirth = Convert.ToDateTime("dateofbirth");
+            viewModel.PlaceOfBirth = Convert.ToString(listItem["placeofbirth"]);
+            viewModel.DateOfBirth = Convert.ToDateTime(listItem["dateofbirth"]);
             viewModel.CurrentAddress = Convert.ToString(listItem["currentaddress"]);
             viewModel.IDCardNumber = Convert.ToString(listItem["idcardnumber"]);
             viewModel.Telephone = Convert.ToString(listItem["permanentlandlinephone"]);
@@ -181,20 +182,25 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.MonthRelevantWork = Convert.ToInt32(listItem["totalrelevantexperiencemonths"]);
             viewModel.MaritalStatus.DefaultValue = Convert.ToString(listItem["maritalstatus"]);
             viewModel.BloodType.DefaultValue = Convert.ToString(listItem["bloodtype"]);
-            viewModel.Religion.DefaultValue = Convert.ToString(listItem["Religion"]);
-            viewModel.Gender.DefaultValue = Convert.ToString(listItem["Gender"]);
+            viewModel.Religion.DefaultValue = Convert.ToString(listItem["religion"]);
+            viewModel.Gender.DefaultValue = Convert.ToString(listItem["gender"]);
             viewModel.IDCardType.DefaultValue = Convert.ToString(listItem["idcardtype"]);
             viewModel.IDCardExpiry = Convert.ToDateTime(listItem["idcardexpirydate"]);
-            viewModel.Nationality.DefaultValue = FormatUtil.ConvertLookupToID(listItem, "Nationality") + string.Empty;
+            viewModel.Nationality.DefaultValue = FormatUtil.ConvertLookupToID(listItem, "nationality") + string.Empty;
 
             // Convert Details
             viewModel.EducationDetails = GetEducationDetails(viewModel.ID);
             viewModel.TrainingDetails = GetTrainingDetails(viewModel.ID);
             viewModel.WorkingExperienceDetails = GetWorkingExperienceDetails(viewModel.ID);
-            viewModel.Documents = GetDocuments(viewModel.ID);
+            viewModel.DocumentUrl = GetDocumentUrl(viewModel.ID);
 
             return viewModel;
 
+        }
+
+        private string GetDocumentUrl(int? iD)
+        {
+            return string.Format(UrlResource.ApplicationDocumentByID, _siteUrl, iD);
         }
 
         private IEnumerable<HttpPostedFileBase> GetDocuments(int? iD)
@@ -215,8 +221,15 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             <Query> 
                <Where><Eq><FieldRef Name='application' LookupId='True' /><Value Type='Lookup'>" + iD + @"</Value></Eq></Where> 
             </Query> 
-             <ViewFields><FieldRef Name='ID' /><FieldRef Name='application' /><FieldRef Name='Title' /><FieldRef Name='applicationcompany' /><FieldRef Name='applicationfrom' /><FieldRef Name='applicationto' /><FieldRef Name='applicationjobdescription' /></ViewFields> 
-      </View>";
+             <ViewFields>
+            <FieldRef Name='ID' />
+            <FieldRef Name='application' />
+            <FieldRef Name='Title' />
+            <FieldRef Name='applicationcompany' />
+            <FieldRef Name='applicationfrom' />
+            <FieldRef Name='applicationto' />
+            <FieldRef Name='applicationjobdescription' /></ViewFields> 
+            </View>";
 
             var workingExperienceDetails = new List<WorkingExperienceDetailVM>();
             foreach(var item in SPConnector.GetList(SP_APPWORK_LIST_NAME, _siteUrl, caml))
@@ -227,6 +240,16 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return workingExperienceDetails;
         }
 
+        /// <summary>
+        //<ViewFields>
+        //  <FieldRef Name = 'applicationjobdescription' />
+        //  < FieldRef Name='applicationfrom' />
+        //  <FieldRef Name = 'applicationcompany' />
+        //  < FieldRef Name='applicationto' />
+        //</ViewFields>
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         private WorkingExperienceDetailVM ConvertToWorkingExperienceDetailVM(ListItem item)
         {
             return new WorkingExperienceDetailVM
@@ -247,7 +270,14 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                <Where><Eq><FieldRef Name='application' LookupId='True' /><Value Type='Lookup'>" + iD 
                + @"</Value></Eq></Where> 
             </Query> 
-             <ViewFields><FieldRef Name='ID' /><FieldRef Name='Title' /><FieldRef Name='applicationtraininginstitution' /><FieldRef Name='applicationtrainingyear' /><FieldRef Name='applicationtrainingremarks' /><FieldRef Name='application' /></ViewFields> 
+             <ViewFields>
+                <FieldRef Name='ID' />
+                <FieldRef Name='Title' />
+                <FieldRef Name='traininginstitution' />
+                <FieldRef Name='trainingyear' />
+                <FieldRef Name='trainingremarks' />
+                <FieldRef Name='application' />
+            </ViewFields> 
             </View>";
 
             var trainingDetails = new List<TrainingDetailVM>();
@@ -259,25 +289,49 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return trainingDetails;
         }
 
+
+        /// <summary>
+       //<ViewFields>
+       //   <FieldRef Name = 'Title' />
+       //   < FieldRef Name='trainingyear' />
+       //   <FieldRef Name = 'traininginstitution' />
+       //   < FieldRef Name='trainingremarks' />
+       //</ViewFields>
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         private TrainingDetailVM ConvertToTrainingDetailVM(ListItem item)
         {
             return new TrainingDetailVM
             {
                 ID = Convert.ToInt32(item["ID"]),
                 Subject = Convert.ToString(item["Title"]),
-                Institution = Convert.ToString(item["applicationtraininginstitution"]),
-                Remarks = Convert.ToString(item["applicationtrainingremarks"]),
-                Year = Convert.ToDateTime(item["applicationtrainingyear"])
+                Institution = Convert.ToString(item["traininginstitution"]),
+                Remarks = Convert.ToString(item["trainingremarks"]),
+                Year = Convert.ToDateTime(item["trainingyear"])
             };
         }
-
+   //<ViewFields>
+   //   <FieldRef Name = 'Title' />
+   //   < FieldRef Name='applications' />
+   //   <FieldRef Name = 'university' />
+   //   < FieldRef Name='yearofgraduation' />
+   //   <FieldRef Name = 'remarks' />
+   //</ ViewFields >
         private IEnumerable<EducationDetailVM> GetEducationDetails(int? iD)
         {
             var caml = @"<View>  
             <Query> 
                <Where><Eq><FieldRef Name='applications' LookupId='True' /><Value Type='Lookup'>" + iD + @"</Value></Eq></Where> 
             </Query> 
-             <ViewFields><FieldRef Name='applications' /><FieldRef Name='applicationuniversity' /><FieldRef Name='applicationyearofgraduation' /><FieldRef Name='Title' /><FieldRef Name='ID' /></ViewFields> 
+             <ViewFields>
+                <FieldRef Name='applications' />
+                <FieldRef Name='university' />
+                <FieldRef Name='yearofgraduation' />
+                <FieldRef Name='remarks' />
+                <FieldRef Name='Title' />
+                <FieldRef Name='ID' />
+             </ViewFields> 
             </View>";
 
             var eduacationDetails = new List<EducationDetailVM>();
@@ -289,14 +343,26 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return eduacationDetails;
         }
 
+        /// <summary>
+           // <ViewFields>
+           //   <FieldRef Name = 'Title' />
+           //   < FieldRef Name='university' />
+           //   <FieldRef Name = 'yearofgraduation' />
+           //   < FieldRef Name='remarks' />
+           //   <FieldRef Name = 'applications' />
+           //</ ViewFields >
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         private EducationDetailVM ConvertToEducationDetailVM(ListItem item)
         {
             return new EducationDetailVM
             {
                 ID = Convert.ToInt32(item["ID"]),
                 Subject = Convert.ToString(item["Title"]),
-                University = Convert.ToString(item["applicationuniversity"]),
-                YearOfGraduation = Convert.ToDateTime(item["applicationyearofgraduation"])
+                University = Convert.ToString(item["university"]),
+                YearOfGraduation = Convert.ToDateTime(item["yearofgraduation"]),
+                Remarks = Convert.ToString(item["remarks"])
             };
         }
 
