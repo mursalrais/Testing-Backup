@@ -51,7 +51,22 @@ namespace MCAWebAndAPI.Service.Common
 
         public IEnumerable<Location> GetProvinces(int? parentId)
         {
-            throw new NotImplementedException();
+            var caml = @"
+            <View>  
+                <Query> 
+                    <Where><Eq><FieldRef Name='Level' /><Value Type='Choice'>Province</Value></Eq></Where>
+                    <OrderBy><FieldRef Name='Title' /></OrderBy> 
+                </Query> 
+                    <ViewFields><FieldRef Name='ID' /><FieldRef Name='Title' /></ViewFields> 
+            </View>";
+
+            var locations = new List<Location>();
+            foreach (var item in SPConnector.GetList(SP_LOCATION_LIST_NAME, _siteUrl, caml))
+            {
+                locations.Add(ConvertToLocationModel(item));
+            }
+
+            return locations;
         }
 
         public void SetSiteUrl(string siteUrl)

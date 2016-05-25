@@ -35,5 +35,19 @@ namespace MCAWebAndAPI.Web.Controllers
             }), JsonRequestBehavior.AllowGet);
         }
 
+        [OutputCache(Duration = (2 * 3600))]
+        public JsonResult GetProvince()
+        {
+            _locationService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+
+            var province = _locationService.GetProvinces();
+
+            return Json(province.Select(e => new
+            {
+                e.ID,
+                e.Title
+            }), JsonRequestBehavior.AllowGet);
+        }
+
     }
 }
