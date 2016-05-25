@@ -7,7 +7,7 @@ using MCAWebAndAPI.Web.Resources;
 using System.Linq;
 using System.Web.Mvc;
 
-namespace MCAWebAndAPI.Web.ContrWollers
+namespace MCAWebAndAPI.Web.Controllers
 {
     public class ASSAssetMasterController : Controller
     {

@@ -4,8 +4,6 @@ using System.Web.Mvc;
 using MCAWebAndAPI.Web.Resources;
 using System.Collections.Generic;
 using MCAWebAndAPI.Model.HR.DataMaster;
-using MCAWebAndAPI.Model.ViewModel.Form.HR;
-using System.Web;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -38,7 +36,6 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetProfessionals()
         {
-            //TODO: Ask whether it is from BO or from HR
             _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
 
             var professionals = GetFromExistingSession();
@@ -70,7 +67,6 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetPositions()
         {
-            //TODO: Ask whether it is from BO or from HR
             _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
 
             var positions = GetFromPositionsExistingSession();

@@ -2,5 +2,6 @@
 
 @(Html.Kendo().Upload()
     .Name("Documents")
+    .Multiple(true)
 )
 @Html.ValidationMessageFor(model => model)

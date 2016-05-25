@@ -1,0 +1,62 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model PSAManagementVM
+
+@{
+    ViewBag.Title = "CreatePSAManagement";
+}
+
+<div class="form-horizontal">
+    <fieldset>
+        <legend>PSA Management</legend>
+        <div class="row">
+            @Html.Partial("_PSAManagementData", Model)
+        </div>
+        <div class="row">
+            @Html.Partial("_DocumentDetailsDisplay", Model.DocumentUrl)
+        </div>
+    </fieldset>
+    <div class="form-actions">
+        <div class="row">
+            <div class="col-md-12"><br /></div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+
+    <script>
+        
+        
+            $(document).ready(function () {
+                $('input').prop('readonly', 'true');
+                $('textarea').prop('readonly', 'true');
+                $('')
+            });
+
+            function OnSelectAssetHolderFrom(e) {
+                var dataItem = this.dataItem(e.item);
+                var url = "/HRDataMaster/GetProfessionals/" + dataItem.ID;
+
+            }
+
+            function OnSelectPosition(e) {
+                var dataItem = this.dataItem(e.item);
+                var url = "/HRDataMaster/GetPositions/" + dataItem.ID;
+            }
+
+            $(document).ready(function () {
+
+                $("#tenure").on('input', function () {
+                    sumCal();
+                });
+
+                function sumCal() {
+                    var tenure = $("#tenure").val();
+                    var dateOfNewPSA = $("#dateofNewPSA").val();
+                    var psaexpirydate = new Date(new Date(dateOfNewPSA).setMonth(dateOfNewPSA.getMonth() + tenure));
+                    $("#pSAExpiryDate").val(psaexpirydate);
+                }
+            });
+        
+    </script>
+}

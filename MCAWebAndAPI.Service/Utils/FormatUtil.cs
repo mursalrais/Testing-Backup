@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.SharePoint.Client;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,16 @@ namespace MCAWebAndAPI.Service.Utils
                 stringNumber = "0" + stringNumber;
             }
             return stringNumber;
+        }
+
+        //<div class="ExternalClass0291F132E71045C9B5B5B26A60D6439C">Value here</div>
+        public static string ConvertMultipleLine(string multipleLineValue)
+        {
+            if (string.IsNullOrEmpty(multipleLineValue))
+                return string.Empty;
+
+            var value = multipleLineValue.Split('>')[1].Split('<')[0];
+            return value;
         }
 
         public static string ConvertToCleanSiteUrl(string siteUrl)
@@ -54,7 +65,22 @@ namespace MCAWebAndAPI.Service.Utils
             return ((DateTime)dateTime).Year + string.Empty;
         }
 
+        public static int? ConvertLookupToID(ListItem item, string columnName)
+        {
+            if (item[columnName] == null)
+                return null;
 
-         
+            return Convert.ToInt32((item[columnName] as FieldLookupValue).LookupId);
+        }
+
+
+        public static string ConvertLookupToValue(ListItem item, string columnName)
+        {
+            if (item[columnName] == null)
+                return null;
+
+            return Convert.ToString((item[columnName] as FieldLookupValue).LookupValue);
+        }
+
     }
 }

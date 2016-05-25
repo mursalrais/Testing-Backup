@@ -16,7 +16,7 @@
     <RootNamespace>MCAWebAndAPI.Web</RootNamespace>
     <AssemblyName>MCAWebAndAPI.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -190,85 +190,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Readme\Elmah.txt" />
-    <Content Include="bin\Antlr3.Runtime.dll" />
-    <Content Include="bin\Antlr3.Runtime.pdb" />
-    <Content Include="bin\AspNet.ScriptManager.bootstrap.dll" />
-    <Content Include="bin\AspNet.ScriptManager.jQuery.dll" />
-    <Content Include="bin\bg-BG\Kendo.Mvc.resources.dll" />
-    <Content Include="bin\cs-CZ\Kendo.Mvc.resources.dll" />
-    <Content Include="bin\da-DK\Kendo.Mvc.resources.dll" />
-    <Content Include="bin\de-DE\Kendo.Mvc.resources.dll" />
-    <Content Include="bin\es-ES\Kendo.Mvc.resources.dll" />
-    <Content Include="bin\fr-CA\Kendo.Mvc.resources.dll" />
-    <Content Include="bin\fr-FR\Kendo.Mvc.resources.dll" />
-    <Content Include="bin\it-IT\Kendo.Mvc.resources.dll" />
-    <Content Include="bin\Kendo.Mvc.dll" />
-    <Content Include="bin\Kendo.Mvc.xml" />
-    <Content Include="bin\MCAWebAndAPI.Model.dll" />
-    <Content Include="bin\MCAWebAndAPI.Model.pdb" />
-    <Content Include="bin\MCAWebAndAPI.Service.dll" />
-    <Content Include="bin\MCAWebAndAPI.Service.pdb" />
-    <Content Include="bin\MCAWebAndAPI.Web.dll" />
-    <Content Include="bin\MCAWebAndAPI.Web.pdb" />
-    <Content Include="bin\Microsoft.AspNet.FriendlyUrls.dll" />
-    <Content Include="bin\Microsoft.AspNet.FriendlyUrls.xml" />
-    <Content Include="bin\Microsoft.AspNet.Web.Optimization.WebForms.dll" />
-    <Content Include="bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll" />
-    <Content Include="bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml" />
-    <Content Include="bin\Microsoft.ScriptManager.MSAjax.dll" />
-    <Content Include="bin\Microsoft.ScriptManager.WebForms.dll" />
-    <Content Include="bin\Microsoft.SharePoint.Client.dll" />
-    <Content Include="bin\Microsoft.SharePoint.Client.Runtime.dll" />
-    <Content Include="bin\Microsoft.Web.Infrastructure.dll" />
-    <Content Include="bin\Newtonsoft.Json.dll" />
-    <Content Include="bin\Newtonsoft.Json.xml" />
-    <Content Include="bin\nl-NL\Kendo.Mvc.resources.dll" />
-    <Content Include="bin\NLog.dll" />
-    <Content Include="bin\NLog.xml" />
-    <Content Include="bin\pl-PL\Kendo.Mvc.resources.dll" />
-    <Content Include="bin\Portable.Licensing.dll" />
-    <Content Include="bin\Portable.Licensing.xml" />
-    <Content Include="bin\pt-BR\Kendo.Mvc.resources.dll" />
-    <Content Include="bin\pt-PT\Kendo.Mvc.resources.dll" />
-    <Content Include="bin\ro-RO\Kendo.Mvc.resources.dll" />
-    <Content Include="bin\roslyn\csc.exe" />
-    <Content Include="bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll" />
-    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll" />
-    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.dll" />
-    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll" />
-    <Content Include="bin\roslyn\System.Collections.Immutable.dll" />
-    <Content Include="bin\roslyn\System.Reflection.Metadata.dll" />
-    <Content Include="bin\roslyn\vbc.exe" />
-    <Content Include="bin\roslyn\VBCSCompiler.exe" />
-    <Content Include="bin\ru-RU\Kendo.Mvc.resources.dll" />
-    <Content Include="bin\sk-SK\Kendo.Mvc.resources.dll" />
-    <Content Include="bin\sv-SE\Kendo.Mvc.resources.dll" />
-    <Content Include="bin\System.Net.Http.Formatting.dll" />
-    <Content Include="bin\System.Net.Http.Formatting.xml" />
-    <Content Include="bin\System.Web.Cors.dll" />
-    <Content Include="bin\System.Web.Helpers.dll" />
-    <Content Include="bin\System.Web.Helpers.xml" />
-    <Content Include="bin\System.Web.Http.dll" />
-    <Content Include="bin\System.Web.Http.xml" />
-    <Content Include="bin\System.Web.Mvc.dll" />
-    <Content Include="bin\System.Web.Mvc.xml" />
-    <Content Include="bin\System.Web.Optimization.dll" />
-    <Content Include="bin\System.Web.Optimization.xml" />
-    <Content Include="bin\System.Web.Razor.dll" />
-    <Content Include="bin\System.Web.Razor.xml" />
-    <Content Include="bin\System.Web.WebPages.Deployment.dll" />
-    <Content Include="bin\System.Web.WebPages.Deployment.xml" />
-    <Content Include="bin\System.Web.WebPages.dll" />
-    <Content Include="bin\System.Web.WebPages.Razor.dll" />
-    <Content Include="bin\System.Web.WebPages.Razor.xml" />
-    <Content Include="bin\System.Web.WebPages.xml" />
-    <Content Include="bin\T4MVCExtensions.dll" />
-    <Content Include="bin\tr-TR\Kendo.Mvc.resources.dll" />
-    <Content Include="bin\TwitterBootstrapMVC5.dll" />
-    <Content Include="bin\uk-UA\Kendo.Mvc.resources.dll" />
-    <Content Include="bin\WebGrease.dll" />
-    <Content Include="bin\zh-CN\Kendo.Mvc.resources.dll" />
     <Content Include="Content\bi.css" />
     <Content Include="Content\custom.css" />
     <Content Include="Content\home.css" />
@@ -320,10 +241,6 @@
     <Content Include="Content\kendo\2016.2.504\kendo.mobile.common.min.css" />
     <Content Include="Content\kendo\2016.2.504\kendo.mobile.fiori.min.css" />
     <Content Include="Content\kendo\2016.2.504\kendo.rtl.min.css" />
-    <Content Include="Content\kendo\2016.2.504\kendo.silver.min.css" />
-    <Content Include="Content\kendo\2016.2.504\kendo.silver.mobile.min.css" />
-    <Content Include="Content\kendo\2016.2.504\kendo.uniform.min.css" />
-    <Content Include="Content\kendo\2016.2.504\kendo.uniform.mobile.min.css" />
     <Content Include="Content\kendo\2016.2.504\textures\brushed-metal.png" />
     <Content Include="Content\kendo\2016.2.504\textures\dots1.png" />
     <Content Include="Content\kendo\2016.2.504\textures\dots10.png" />
@@ -393,10 +310,6 @@
     <Content Include="Content\kendo\2016.2.504\kendo.mobile.common.min.css.map" />
     <Content Include="Content\kendo\2016.2.504\kendo.mobile.fiori.min.css.map" />
     <Content Include="Content\kendo\2016.2.504\kendo.rtl.min.css.map" />
-    <Content Include="Content\kendo\2016.2.504\kendo.silver.min.css.map" />
-    <Content Include="Content\kendo\2016.2.504\kendo.silver.mobile.min.css.map" />
-    <Content Include="Content\kendo\2016.2.504\kendo.uniform.min.css.map" />
-    <Content Include="Content\kendo\2016.2.504\kendo.uniform.mobile.min.css.map" />
     <Content Include="Content\kendo\2016.2.504\fonts\DejaVu\DejaVuSans-Bold.ttf" />
     <Content Include="Content\kendo\2016.2.504\fonts\DejaVu\DejaVuSans-BoldOblique.ttf" />
     <Content Include="Content\kendo\2016.2.504\fonts\DejaVu\DejaVuSans-ExtraLight.ttf" />
@@ -415,20 +328,20 @@
     <Content Include="Content\kendo\2016.2.504\fonts\glyphs\KendoUIGlyphs.woff" />
     <Content Include="Content\kendo\2016.2.504\images\kendoui.ttf" />
     <Content Include="Content\kendo\2016.2.504\images\kendoui.woff" />
-    <None Include="bin\MCAWebAndAPI.Web.dll.config" />
-    <Content Include="bin\NLog.config" />
-    <Content Include="bin\roslyn\Microsoft.CSharp.Core.targets" />
-    <Content Include="bin\roslyn\Microsoft.VisualBasic.Core.targets" />
-    <Content Include="bin\roslyn\VBCSCompiler.exe.config" />
     <None Include="job_scheduling_data_2_0.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Properties\PublishProfiles\host.my-epmo.com.pubxml" />
     <None Include="Properties\PublishProfiles\mcai-ims-test-free - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\mcai-ims-test-free - Web Deploy.pubxml" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="img\favicon\favicon.ico" />
     <Content Include="img\mybg.png" />
+    <Content Include="logs\logfile.txt" />
     <Content Include="Scripts\app.config.js" />
     <Content Include="Scripts\app.min.js" />
     <Content Include="Scripts\bi-frame.js" />
@@ -597,7 +510,7 @@
     <Content Include="Views\CSV\Submit.cshtml" />
     <Content Include="Views\HRPayroll\CreateMonthlyFee.cshtml" />
     <Content Include="Views\HRPayroll\EditMonthlyFee.cshtml" />
-    <Content Include="Views\HRPSAManagement\Create.cshtml" />
+    <Content Include="Views\HRPSAManagement\CreatePSAManagement.cshtml" />
     <Content Include="Views\HRApplication\_ContactInformationDetails_Print.cshtml" />
     <Content Include="Views\HRApplication\_DocumentDetails_Print.cshtml" />
     <Content Include="Views\HRApplication\_EducationDetails_Print.cshtml" />
@@ -609,6 +522,20 @@
     <Content Include="Views\Shared\_LayoutPDF.cshtml" />
     <Content Include="Views\Shared\_Modal.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\GridTable.cshtml" />
+    <Content Include="Views\ASSAssetMaster\Edit.cshtml" />
+    <Content Include="Views\Error\Index.cshtml" />
+    <Content Include="Views\HRPSAManagement\_PSAManagementData.cshtml" />
+    <Content Include="Views\HRApplication\_DocumentDetails_Display.cshtml" />
+    <Content Include="Views\HRApplication\DisplayApplicationData.cshtml" />
+    <Content Include="Views\Success\Index.cshtml" />
+    <Content Include="Views\HRProfessional\EditProfessional.cshtml" />
+    <Content Include="Views\HRProfessional\_ContactInformationDetails.cshtml" />
+    <Content Include="Views\HRProfessional\_PersonalDetails.cshtml" />
+    <Content Include="Views\HRProfessional\_EducationDetails.cshtml" />
+    <Content Include="Views\HRProfessional\_TrainingDetails.cshtml" />
+    <Content Include="Views\HRProfessional\_InsuranceDetails.cshtml" />
+    <Content Include="Views\HRProfessional\_PayrollDetails.cshtml" />
+    <Content Include="Views\HRProfessional\_DependentDetails.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -644,11 +571,13 @@
     <Compile Include="Controllers\HRApplicationController.cs" />
     <Compile Include="Controllers\HRDataMasterController.cs" />
     <Compile Include="Controllers\HRPayrollController.cs" />
+    <Compile Include="Controllers\HRProfessionalController.cs" />
+    <Compile Include="Controllers\HRPSAManagementController.cs" />
     <Compile Include="Controllers\LocationController.cs" />
     <Compile Include="Controllers\ProjectHierarchyController.cs" />
-    <Compile Include="Controllers\HRPSAManagementController.cs" />
     <Compile Include="Controllers\PurchaseOrderController.cs" />
     <Compile Include="Controllers\RIAController.cs" />
+    <Compile Include="Controllers\SuccessController.cs" />
     <Compile Include="Controllers\TaskController.cs" />
     <Compile Include="Filters\HandleErrorAttribute.cs" />
     <Compile Include="Global.asax.cs">
@@ -660,6 +589,11 @@
     <Compile Include="Helpers\MathHelper.cs" />
     <Compile Include="Helpers\SessionManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="Resources\ConfigResource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -694,10 +628,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Code\" />
-    <Folder Include="App_Data\" />
     <Folder Include="Views\File\" />
-    <Folder Include="Views\HRProfessional\" />
-    <Folder Include="Views\Task\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MCAWebAndAPI.Model\MCAWebAndAPI.Model.csproj">
@@ -736,6 +667,8 @@
           <DevelopmentServerPort>15923</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:15923/</IISUrl>
+          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
+          <IISAppRootUrl>http://localhost:15923/</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
