@@ -92,15 +92,17 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             psaManagementService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
             var professionals = GetFromExistingSession();
-            return Json(professionals.Where(e => e.ID == id).Select(
+            return Json(professionals.OrderByDescending(e => e.PSAID).Where(e => e.ID == id).Select(
                     e =>
                     new
                     {
+                        e.PSAID,
                         e.ID,
                         e.JoinDate,
                         e.DateOfNewPSA,
                         e.PsaExpiryDate,
-                        e.ProjectOrUnit
+                        e.ProjectOrUnit,
+                        e.Position
                     }
                 ), JsonRequestBehavior.AllowGet);
         }
