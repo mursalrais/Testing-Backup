@@ -52,7 +52,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         public IEnumerable<PSAMaster> GetPSAs()
         {
             var models = new List<PSAMaster>();
-                foreach (var item in SPConnector.GetList(SP_PSA_LIST_NAME, _siteUrl))
+
+            foreach (var item in SPConnector.GetList(SP_PSA_LIST_NAME, _siteUrl))
             {
                 models.Add(ConvertToPSAModel(item));
             }
@@ -66,13 +67,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 ID = item["professional_x003a_ID"] == null ? "" :
                Convert.ToString((item["professional_x003a_ID"] as FieldLookupValue).LookupValue),
-                PSAID = Convert.ToString(item["ID"]),
                 JoinDate = Convert.ToString(item["joindate"]),
                 DateOfNewPSA = Convert.ToString(item["dateofnewpsa"]),
                 PsaExpiryDate = Convert.ToString(item["psaexpirydate"]),
                 ProjectOrUnit = Convert.ToString(item["ProjectOrUnit"]),
-                Position = item["position"] == null ? "" :
-               Convert.ToString((item["position"] as FieldLookupValue).LookupValue)
 
             };
         }
@@ -122,7 +120,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         private string GetDocumentUrl(int? iD)
         {
-            return string.Format(UrlResource.PSAManagementDocumentByID, _siteUrl, iD);
+            return string.Format(UrlResource.PSAManagementDocumentByID, _siteUrl);
         }
         
         public bool UpdatePSAManagement(PSAManagementVM psaManagement)
