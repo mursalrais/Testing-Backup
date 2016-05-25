@@ -73,7 +73,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 ProjectOrUnit = Convert.ToString(item["ProjectOrUnit"]),
                 Position = item["position"] == null ? "" :
                Convert.ToString((item["position"] as FieldLookupValue).LookupValue)
-
             };
         }
 
