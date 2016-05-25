@@ -12,9 +12,15 @@ using MCAWebAndAPI.Web.Filters;
 using MCAWebAndAPI.Web.Resources;
 using MCAWebAndAPI.Model.HR.DataMaster;
 using MCAWebAndAPI.Service.HR.Recruitment;
+using Elmah;
+using MCAWebAndAPI.Service.Converter;
+using MCAWebAndAPI.Service.HR.Common;
+using System.IO;
+using System.Web;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
+    [Filters.HandleError]
     public class HRPSAManagementController : Controller
     {
         IPSAManagementService psaManagementService;
@@ -32,51 +38,71 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult CreatePSAManagement(string siteUrl = null)
         {
             // Clear Existing Session Variables if any
-            if (System.Web.HttpContext.Current.Session.Keys.Count > 0)
-                System.Web.HttpContext.Current.Session.Clear();
+            SessionManager.RemoveAll();
 
             // MANDATORY: Set Site URL
             psaManagementService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-            System.Web.HttpContext.Current.Session["SiteUrl"] = siteUrl ?? ConfigResource.DefaultHRSiteUrl;
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             // Get blank ViewModel
-            var viewModel = psaManagementService.GetPopulatedModel();
+            var viewModel = psaManagementService.GetPSAManagement(null);
 
-            return View("Create", viewModel);
+            return View(viewModel);
         }
 
-        public ActionResult Edit(int ID, string site)
+        public ActionResult DisplayPSAManagement(string siteUrl = null, int? ID = null)
         {
+            // Clear Existing Session Variables if any
+            SessionManager.RemoveAll();
+
+            // MANDATORY: Set Site URL
+            psaManagementService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
             var viewModel = psaManagementService.GetPSAManagement(ID);
             return View(viewModel);
         }
 
         [HttpPost]
-       
-        public JsonResult Create(PSAManagementVM viewModel)
+        public ActionResult CreatePSAManagement(FormCollection form, PSAManagementVM viewModel)
         {
             // Check whether error is found
             if (!ModelState.IsValid)
             {
-                ModelState.AddModelError("500", "Internal Server Error");
-                return Json(new { success = false, urlToRedirect = "google.com" },
-                JsonRequestBehavior.AllowGet);
+                RedirectToAction("Index", "Error");
             }
 
-            psaManagementService.SetSiteUrl(System.Web.HttpContext.Current.Session["SiteUrl"] as string);
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            psaManagementService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
-            // Get Header ID after inster to SharePoint
-            var psaID = psaManagementService.CreatePSA(viewModel);
+            int? psaID = null;
+            try
+            {
+                psaID = psaManagementService.CreatePSAManagement(viewModel);
+            }
+            catch (Exception e)
+            {
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return RedirectToAction("Index", "Error");
+            }
 
-            // Clear session variables
-            System.Web.HttpContext.Current.Session.Clear();
+            try
+            {
+                psaManagementService.CreatePSAManagementDocuments(psaID, viewModel.Documents);
+            }
+            catch (Exception e)
+            {
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return RedirectToAction("Index", "Error");
+            }
 
-            // Return JSON
-            return Json(new { success = true, urlToRedirect = "google.com" },
-                JsonRequestBehavior.AllowGet);
+            return RedirectToAction("Index",
+                "Success",
+                new { successMessage = string.Format(MessageResource.SuccessCreateApplicationData, viewModel.psaNumber) });
+
         }
 
-        public ActionResult Update(PSAManagementVM psaManagement, string site)
+        /*public ActionResult Update(PSAManagementVM psaManagement, string site)
         {
             //return View(new AssetMasterVM());
             psaManagementService.UpdatePSAManagement(psaManagement);
@@ -84,114 +110,25 @@ namespace MCAWebAndAPI.Web.Controllers
             {
                 Script = string.Format("window.parent.location.href = '{0}'", "https://eceos2.sharepoint.com/sites/mca-dev/hr/_layouts/15/start.aspx#/Lists/PSA/AllItems.aspx")
             };
-        }
+        }*/
 
-        /*
-        public JsonResult Grid_Read([DataSourceRequest] DataSourceRequest request)
-        {
-            // Get from existing session variable or create new if doesn't exist
-            IEnumerable<AssetTransactionItemVM> viewModel = System.Web.HttpContext.Current.Session["AssetTransactionItemVM"] as List<AssetTransactionItemVM>
-                ?? new List<AssetTransactionItemVM>();
-
-            // Convert to Kendo DataSource
-            DataSourceResult result = viewModel.ToDataSourceResult(request);
-
-            // Convert to Json
-            var json = Json(result, JsonRequestBehavior.AllowGet);
-            json.MaxJsonLength = int.MaxValue;
-            return json;
-        }
-        */
-
-        /*
-        [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult Grid_Create([DataSourceRequest] DataSourceRequest request, [Bind(Prefix = "models")]IEnumerable<AssetTransactionItemVM> viewModel)
-        {
-            // CODE OF PRACTICE: Return immidiately if error found
-            if (viewModel == null || !ModelState.IsValid)
-                return Json(viewModel.ToDataSourceResult(request, ModelState));
-
-            // Get existing session variable if any otherwise create new object
-            var sessionVariables = System.Web.HttpContext.Current.Session["AssetTransactionItemVM"] as List<AssetTransactionItemVM>
-                ?? new List<AssetTransactionItemVM>();
-
-            foreach (var item in viewModel)
-            {
-                // Store in session variable
-                sessionVariables.Add(item);
-            }
-            // Kendo adds new Item on top, so we have to reverse the list
-            sessionVariables.Reverse();
-
-            // Overwrite existing session variable
-            System.Web.HttpContext.Current.Session["AssetTransactionItemVM"] = sessionVariables;
-
-            // Return JSON
-            return Json(sessionVariables.ToDataSourceResult(request, ModelState));
-        }
-        */
-
-        /*
-        [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult Grid_Update([DataSourceRequest] DataSourceRequest request, [Bind(Prefix = "models")]IEnumerable<AssetTransactionItemVM> viewModel)
-        {
-            // CODE OF PRACTICE: Return immidiately if error found
-            if (viewModel == null || !ModelState.IsValid)
-                return Json(viewModel.ToDataSourceResult(request, ModelState));
-
-            // Get existing session variable
-            var sessionVariables = System.Web.HttpContext.Current.Session["AssetTransactionItemVM"] as List<AssetTransactionItemVM>
-                ?? new List<AssetTransactionItemVM>();
-
-            foreach (var item in viewModel)
-            {
-                var obj = sessionVariables.FirstOrDefault(e => e.ID == item.ID);
-                obj = item;
-            }
-
-            // Overwrite existing session variable
-            System.Web.HttpContext.Current.Session["AssetTransactionItemVM"] = sessionVariables;
-
-            // Return JSON
-            return Json(sessionVariables.ToDataSourceResult(request, ModelState));
-        }
-        */
-
-        /*
-        [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult Grid_Destroy([DataSourceRequest] DataSourceRequest request, [Bind(Prefix = "models")]IEnumerable<AssetTransactionItemVM> viewModel)
-        {
-            // Check if parsed viewModel exist. CODE OF PRACTICE: Return immidiately if error found
-            if (!viewModel.Any())
-                return Json(viewModel.ToDataSourceResult(request, ModelState));
-
-            // Get existing session variable
-            var sessionVariables = System.Web.HttpContext.Current.Session["AssetTransactionItemVM"] as List<AssetTransactionItemVM>;
-
-            foreach (var item in viewModel)
-            {
-                var obj = sessionVariables.FirstOrDefault(e => e.ID == item.ID);
-                sessionVariables.Remove(obj);
-            }
-
-            System.Web.HttpContext.Current.Session["AssetTransactionItemVM"] = sessionVariables;
-            return Json(viewModel.ToDataSourceResult(request, ModelState));
-        }
-        */
+        
 
         public JsonResult GetPsa(string id)
         {
             psaManagementService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
             var professionals = GetFromExistingSession();
-            return Json(professionals.Where(e => e.ID == id).Select(
+            return Json(professionals.OrderByDescending(e => e.PSAID).Where(e => e.ID == id).Select(
                     e =>
                     new
                     {
+                        e.PSAID,
                         e.ID,
                         e.JoinDate,
                         e.DateOfNewPSA,
                         e.PsaExpiryDate,
-                        e.ProjectOrUnit
+                        e.ProjectOrUnit,
+                        e.Position
                     }
                 ), JsonRequestBehavior.AllowGet);
         }

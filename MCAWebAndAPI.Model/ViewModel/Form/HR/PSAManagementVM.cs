@@ -1,63 +1,41 @@
 ﻿using System;
+using MCAWebAndAPI.Model.Common;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MCAWebAndAPI.Model.ViewModel.Control;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Web;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
-    public class PSAManagementVM
+    public class PSAManagementVM : Item
     {
-        public int? ID { get; set; }
-
         [DisplayName("PSA Number")]
         public string psaNumber { get; set; }
 
-        private ComboBoxVM isrenewal = new ComboBoxVM { Choices = new string[] { "Yes", "No" } };
+        [UIHint("ComboBox")]
+        [DisplayName("Renewal?")]
+        public ComboBoxVM isrenewal { get; set; } = new ComboBoxVM { Choices = new string[] { "Yes", "No" } };
 
         [DisplayName("Renewal#")]
         public int renewalnumber { get; set; }
 
-        private ComboBoxVM ProjectOrUnit = new ComboBoxVM { Choices = new string[] { "GP", "HN", "PM" } };
-
-        DateTime? joinDate = DateTime.Now;
+        [UIHint("ComboBox")]
+        [DisplayName("Div/Project/Unit")]
+        public ComboBoxVM ProjectOrUnit { get; set; } = new ComboBoxVM { Choices = new string[] { "GP", "HN", "PM" } };
 
         [UIHint("Date")]
         [DisplayName("Join Date")]
-        public DateTime? joindate
-        {
-            get
-            {
-                return joinDate;
-            }
-
-            set
-            {
-                joinDate = value;
-            }
-        }
-
-        DateTime? dateofNewPSA = DateTime.Now;
+        public DateTime? joinDate { get; set; } = DateTime.Now;
 
         [UIHint("Date")]
         [DisplayName("Date of New PSA")]
-        public DateTime? dateofnewpsa
-        {
-            get
-            {
-                return dateofNewPSA;
-            }
+        public DateTime? dateofNewPSA { get; set; } = DateTime.Now;
 
-            set
-            {
-                dateofNewPSA = value;
-            }
-        }
-
-        AjaxComboBoxVM position = new AjaxComboBoxVM
+        
+        [UIHint("AjaxComboBox")]
+        [DisplayName("Position Title")]
+        public AjaxComboBoxVM position { get; set; } = new AjaxComboBoxVM
         {
             ActionName = "GetPositions",
             ControllerName = "HRDataMaster",
@@ -67,21 +45,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         };
 
         [UIHint("AjaxComboBox")]
-        [DisplayName("Position Title")]
-        public AjaxComboBoxVM Position
-        {
-            get
-            {
-                return position;
-            }
-
-            set
-            {
-                position = value;
-            }
-        }
-
-        AjaxComboBoxVM professional = new AjaxComboBoxVM
+        [DisplayName("Professional Name")]
+        public AjaxComboBoxVM professional { get; set; } = new AjaxComboBoxVM
         {
             ActionName = "GetProfessionals",
             ValueField = "ID",
@@ -90,69 +55,18 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             OnSelectEventName = "OnSelectAssetHolderFrom"
         };
 
-        [UIHint("AjaxComboBox")]
-        [DisplayName("Professional Name")]
-        public AjaxComboBoxVM Professional
-        {
-            get
-            {
-                return professional;
-            }
-
-            set
-            {
-                professional = value;
-            }
-        }
-
         [DisplayName("Tenure")]
         public int tenure { get; set; }
 
-        DateTime? pSAExpiryDate = DateTime.Now;
 
         [UIHint("Date")]
         [DisplayName("PSA Expiry Date")]
-        public DateTime? psaexpirydate
-        {
-            get
-            {
-                return pSAExpiryDate;
-            }
+        public DateTime? pSAExpiryDate { get; set; }
+        
 
-            set
-            {
-                pSAExpiryDate = value;
-            }
-        }
+        [UIHint("MultiFileUploader")]
+        public IEnumerable<HttpPostedFileBase> Documents { get; set; } = new List<HttpPostedFileBase>();
 
-        [UIHint("ComboBox")]
-        [DisplayName("Renewal?")]
-        public ComboBoxVM IsRenewal
-        {
-            get
-            {
-                return isrenewal;
-            }
-
-            set
-            {
-                isrenewal = value;
-            }
-        }
-
-        [UIHint("ComboBox")]
-        [DisplayName("Div/Project/Unit")]
-        public ComboBoxVM ProjectOrUnit1
-        {
-            get
-            {
-                return ProjectOrUnit;
-            }
-
-            set
-            {
-                ProjectOrUnit = value;
-            }
-        }
+        public string DocumentUrl { get; set; }
     }
 }

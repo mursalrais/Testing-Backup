@@ -1,0 +1,87 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+
+@model PSAManagementVM
+
+@{
+    ViewBag.Title = "CreatePSAManagement";
+}
+
+@using (Html.BeginForm("CreatePSAManagement", "HRPSAManagement", FormMethod.Post,
+                                                                 new
+                                                                 {
+                                                                     @class = "form-horizontal",
+                                                                     enctype = "multipart/form-data"
+                                                                 }))
+{
+    <fieldset>
+        <legend>PSA Management Data</legend>
+        <div class="row">
+            @Html.Partial("_PSAManagementData", Model)
+        </div>
+        <legend>Documents</legend>
+        <div class="row">
+            @Html.Partial("_DocumentDetails", Model)
+        </div>
+    </fieldset>
+    <div class="form-actions">
+        <div class="row">
+            <div class="col-md-12">
+                <button id="print-button" class="btn btn-default" type="button">
+                    Print
+                </button>
+                <button id="submit-button" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    Submit
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+    @section scripts{
+        <script type="text/javascript">
+          
+            
+            $(document).ready(function () {
+            $("#submit-button").click(function () {
+                $("form").submit();
+            });
+
+        });
+       
+        function onSuccess(data) {
+            window.location.href = data.urlToRedirect;
+        }
+
+        function onFailure(data) {
+            window.location.href = data.urlToRedirect;
+        }
+        
+        
+            function OnSelectAssetHolderFrom(e) {
+                var dataItem = this.dataItem(e.item);
+                var url = "/HRDataMaster/GetProfessionals/" + dataItem.ID;
+
+            }
+
+            function OnSelectPosition(e) {
+                var dataItem = this.dataItem(e.item);
+                var url = "/HRDataMaster/GetPositions/" + dataItem.ID;
+            }
+
+            $(document).ready(function () {
+
+                $("#tenure").on('input', function () {
+                    sumCal();
+                });
+
+                function sumCal() {
+                    var tenure = $("#tenure").val();
+                    var dateOfNewPSA = $("#dateofNewPSA").val();
+                    var psaexpirydate = new Date(new Date(dateOfNewPSA).setMonth(dateOfNewPSA.getMonth() + tenure));
+                    $("#pSAExpiryDate").val(psaexpirydate);
+                }
+            });
+            
+        </script>
+    }

@@ -1,0 +1,117 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model PSAManagementVM
+
+<div class="col-md-6">
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.psaNumber).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.EditorFor(m => m.psaNumber)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.isrenewal).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.EditorFor(m => m.isrenewal)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.renewalnumber).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.EditorFor(m => m.renewalnumber)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.ProjectOrUnit).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.EditorFor(m => m.ProjectOrUnit)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.position).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.EditorFor(m => m.position)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.professional).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.EditorFor(m => m.professional)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.joinDate).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.EditorFor(m => m.joinDate)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.dateofNewPSA).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.EditorFor(m => m.dateofNewPSA)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.tenure).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.EditorFor(m => m.tenure)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.pSAExpiryDate).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.DisplayFor(m => m.pSAExpiryDate)
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+
+
+            $(document).ready(function () {
+            $("#submit-button").click(function () {
+                $("form").submit();
+            });
+
+        });
+
+        function onSuccess(data) {
+            window.location.href = data.urlToRedirect;
+        }
+
+        function onFailure(data) {
+            window.location.href = data.urlToRedirect;
+        }
+
+
+            function OnSelectAssetHolderFrom(e) {
+                var dataItem = this.dataItem(e.item);
+                var url = "/HRDataMaster/GetProfessionals/" + dataItem.ID;
+
+            }
+
+            function OnSelectPosition(e) {
+                var dataItem = this.dataItem(e.item);
+                var url = "/HRDataMaster/GetPositions/" + dataItem.ID;
+            }
+    
+        
+            $(document).ready(function () {
+
+                $("#tenure").on('input', function () {
+                    sumCal();
+                });
+
+                function sumCal() {
+                    var tenure = $("#tenure").val();
+                    var dateOfNewPSA = $("#dateofNewPSA").val();
+                    var psaexpirydate = new Date(new Date(dateOfNewPSA).setMonth(dateOfNewPSA.getMonth() + tenure));;
+                    $("#pSAExpiryDate").val(psaexpirydate);
+                }
+            });
+
+            //var jan312009 = new Date(2009, 0, 31);
+            //var eightMonthsFromJan312009 = new Date(new Date(jan312009).setMonth(jan312009.getMonth() + 8));
+            
+    </script>
+}
