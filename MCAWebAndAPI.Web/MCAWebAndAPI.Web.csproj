@@ -536,6 +536,9 @@
     <Content Include="Views\HRProfessional\_InsuranceDetails.cshtml" />
     <Content Include="Views\HRProfessional\_PayrollDetails.cshtml" />
     <Content Include="Views\HRProfessional\_DependentDetails.cshtml" />
+    <Content Include="Views\HRPSAManagement\_DocumentDetails.cshtml" />
+    <Content Include="Views\HRPSAManagement\_DocumentDetailsDisplay.cshtml" />
+    <Content Include="Views\HRPSAManagement\DisplayPSAManagement.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

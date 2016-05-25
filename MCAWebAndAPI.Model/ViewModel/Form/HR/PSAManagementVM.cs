@@ -30,6 +30,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         [UIHint("Date")]
         [DisplayName("Date of New PSA")]
+        [Required]
         public DateTime? dateofNewPSA { get; set; } = DateTime.Now;
 
         
@@ -56,6 +57,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         };
 
         [DisplayName("Tenure")]
+        [Required]
         public int tenure { get; set; }
 
 
