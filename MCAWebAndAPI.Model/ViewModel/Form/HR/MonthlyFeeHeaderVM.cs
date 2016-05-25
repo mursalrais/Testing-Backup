@@ -9,6 +9,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
     {
         private int _iD;
 
+        [DisplayName("Professional ID")]
         public int? ProfessionalID { get; set; }
 
         public string ProjectUnit { get; set; }
@@ -26,47 +27,11 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             OnSelectEventName = "OnSelectProfessionalName"
         };
 
-        [UIHint("Date")]
-        public DateTime? JoinDate
-        {
-            get
-            {
-                return _joinDate;
-            }
+        public string JoinDate { get; set; }
 
-            set
-            {
-                _joinDate = value;
-            }
-        }
+        public string DateOfNewPsa { get; set; }
 
-        [UIHint("Date")]
-        public DateTime? DateOfNewPsa
-        {
-            get
-            {
-                return _dateOfNewPsa;
-            }
-
-            set
-            {
-                _dateOfNewPsa = value;
-            }
-        }
-
-        [UIHint("Date")]
-        public DateTime? EndOfContract
-        {
-            get
-            {
-                return _endOfContract;
-            }
-
-            set
-            {
-                _endOfContract = value;
-            }
-        }
+        public string EndOfContract { get; set; }
 
         [UIHint("Date")]
         public DateTime? DateOfNewFee
@@ -82,7 +47,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             }
         }
 
-        DateTime? _joinDate, _dateOfNewPsa, _endOfContract, _dateOfNewFee = DateTime.Now;
+        DateTime? _dateOfNewFee = DateTime.UtcNow;
 
         public int MonthlyFee { get; set; }
 

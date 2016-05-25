@@ -93,7 +93,7 @@ namespace MCAWebAndAPI.Service.HR.Common
                 tempID = Convert.ToInt32(item["ID"]);
                 if (!(collectionIDMonthlyFee.Any(e => e == tempID)))
                 {
-                    models.Add(ConvertToProfessionalModel_Light(item));
+                    models.Add(ConvertToProfessionalMonthlyFeeModel_Light(item));
                 }
             }
 
@@ -109,6 +109,16 @@ namespace MCAWebAndAPI.Service.HR.Common
             }
 
             return models;
+        }
+
+        private ProfessionalMaster ConvertToProfessionalMonthlyFeeModel_Light(ListItem item)
+        {
+            return new ProfessionalMaster
+            {
+                ID = Convert.ToInt32(item["ID"]),
+                Name = Convert.ToString(item["Title"]),
+                Status = Convert.ToString(item["maritalstatus"]),
+            };
         }
 
         /// <summary>
