@@ -1,0 +1,11 @@
+﻿@model Boolean
+
+@(Html.Kendo().CheckBoxFor(m => m)
+       .HtmlAttributes(new
+       {
+           @class = "form-control",
+           style = "width:100%;"
+       })
+      .Checked(Model)
+)
+@Html.ValidationMessageFor(model => model)

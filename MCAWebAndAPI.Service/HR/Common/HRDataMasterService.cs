@@ -124,8 +124,7 @@ namespace MCAWebAndAPI.Service.HR.Common
                 ID = Convert.ToInt32(item["ID"]),
                 Name = Convert.ToString(item["Title"]),
                 Status = Convert.ToString(item["maritalstatus"]),
-                Position = item["Position"] == null ? "" :
-               Convert.ToString((item["Position"] as FieldLookupValue).LookupValue)
+                Position = Convert.ToString(item["position"])
             };
         }
 

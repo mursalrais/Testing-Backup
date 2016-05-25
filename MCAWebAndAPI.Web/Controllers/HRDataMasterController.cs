@@ -28,9 +28,8 @@ namespace MCAWebAndAPI.Web.Controllers
                 new {
                     e.ID,
                     e.Name,
-                    e.Position,
                     e.Status,
-                    Desc = string.Format("{0} - {1}", e.Name, e.Position)
+                    Desc = string.Format("{0} - {1}", e.Name, e.Status)
                 }),
                 JsonRequestBehavior.AllowGet);
         }

@@ -11,9 +11,11 @@ namespace MCAWebAndAPI.Model.HR.DataMaster
 {
     public class PSAMaster
     {
-        public string Professional { get; set; }
+        public string PSAID { get; set; }
 
         public string ID { get; set; }
+
+        public string Position { get; set; }
 
         public string ProjectOrUnit { get; set; }
 
