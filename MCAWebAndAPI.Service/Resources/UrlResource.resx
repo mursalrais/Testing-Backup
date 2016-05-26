@@ -123,6 +123,9 @@
   <data name="MonthlyFee" xml:space="preserve">
     <value>List/MonthlyFee</value>
   </data>
+  <data name="Professional" xml:space="preserve">
+    <value>List/Professional Master</value>
+  </data>
   <data name="PSAManagementDocumentByID" xml:space="preserve">
     <value>{0}/PSA%20Documents/Forms/AllItems.aspx#InplviewHash3435d02c-8f08-40e0-afad-b011e601c7b1=</value>
   </data>

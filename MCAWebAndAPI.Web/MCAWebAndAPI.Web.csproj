@@ -609,6 +609,7 @@
     </Compile>
     <Compile Include="Helpers\BindHelper.cs" />
     <Compile Include="Helpers\HtmlExtensions.cs" />
+    <Compile Include="Helpers\JsonHelper.cs" />
     <Compile Include="Helpers\JsonpResult.cs" />
     <Compile Include="Helpers\MathHelper.cs" />
     <Compile Include="Helpers\SessionManager.cs" />
@@ -622,7 +623,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ConfigResource.resx</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Resources\MessageResource.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -670,11 +670,11 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ConfigResource.Designer.cs</LastGenOutput>
       <CustomToolNamespace>MCAWebAndAPI.Web.Resources</CustomToolNamespace>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\MessageResource.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>MessageResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>MCAWebAndAPI.Web.Resources</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
