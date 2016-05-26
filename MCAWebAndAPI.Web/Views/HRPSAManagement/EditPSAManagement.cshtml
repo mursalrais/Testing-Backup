@@ -2,15 +2,19 @@
 
 @model PSAManagementVM
 
-@using (Ajax.BeginForm("UpdatePSAManagement", "HRPSAManagement",
-                                                                FormMethod.Post,
-                                                                new AjaxOptions
-                                                                {
-                                                                    OnSuccess = "onSuccess",
-                                                                    OnFailure = "onFailure"
-                                                                }, new { @class = "form-horizontal" }))
+@{
+    ViewBag.Title = "Form Create PSA Management";
+}
+
+
+@using (Html.BeginForm("UpdatePSAManagement", "HRPSAManagement", FormMethod.Post,
+                                                                             new
+                                                                             {
+                                                                                 @class = "form-horizontal",
+                                                                                 enctype = "multipart/form-data"
+                                                                             }))
 {
-        
+
     <fieldset>
         <legend>Form Update PSA Management</legend>
         @Html.AntiForgeryToken()
@@ -76,9 +80,9 @@
             </div>
                @Html.HiddenFor(m => m.ID)
         </div>
-     @*<input class="k-button k-button-icontext k-grid-add" type="submit" value="Update" />
+     @*<input class="k-button k-button-icontext k-grid-add" type="submit" value="Update" />*@
     </fieldset>
-    *@
+    
 }
 
     <div class="form-actions">

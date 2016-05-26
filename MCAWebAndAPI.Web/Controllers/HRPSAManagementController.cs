@@ -51,7 +51,7 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         
-        public ActionResult UpdatePSAManagementData(string siteUrl = null, int? ID = null)
+        public ActionResult UpdatePSAManagement(string siteUrl = null, int? ID = null)
         {
             // Clear Existing Session Variables if any
             SessionManager.RemoveAll();
