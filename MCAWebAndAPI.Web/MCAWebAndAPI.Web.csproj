@@ -518,7 +518,7 @@
     <Content Include="Views\HRApplication\_SpecializationDetails_Print.cshtml" />
     <Content Include="Views\HRApplication\_TrainingDetails_Print.cshtml" />
     <Content Include="Views\HRApplication\_WorkingExperienceDetails_Print.cshtml" />
-    <Content Include="Views\HRPSAManagement\Edit.cshtml" />
+    <Content Include="Views\HRPSAManagement\EditPSAManagement.cshtml" />
     <Content Include="Views\Shared\_LayoutPDF.cshtml" />
     <Content Include="Views\Shared\_Modal.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\GridTable.cshtml" />

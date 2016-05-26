@@ -34,7 +34,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             updatedValues.Add("joindate", psaManagement.joinDate);
             updatedValues.Add("dateofnewpsa", psaManagement.dateofNewPSA);
             updatedValues.Add("tenure", psaManagement.tenure);
-            //updatedValues.Add("psaexpirydate", psaManagement.pSAExpiryDate);
 
             try
             {
@@ -104,17 +103,13 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.isrenewal.DefaultValue = Convert.ToString(listItem["isrenewal"]);
             viewModel.renewalnumber = Convert.ToInt32(listItem["renewalnumber"]);
             viewModel.ProjectOrUnit.DefaultValue = Convert.ToString(listItem["ProjectOrUnit"]);
-            //viewModel.position.DefaultValue = Convert.ToString(listItem["position"]);
             viewModel.position.DefaultValue = FormatUtil.ConvertLookupToID(listItem, "position") + string.Empty;
-            //viewModel.professional.DefaultValue = Convert.ToString(listItem["professional"]);
             viewModel.professional.DefaultValue = FormatUtil.ConvertLookupToID(listItem, "professional") + string.Empty;
             viewModel.joinDate = Convert.ToDateTime(listItem["joindate"]).ToLocalTime();
             viewModel.dateofNewPSA = Convert.ToDateTime(listItem["dateofnewpsa"]).ToLocalTime();
             viewModel.tenure = Convert.ToInt32(listItem["tenure"]);
-
             viewModel.pSAExpiryDate = Convert.ToDateTime(listItem["psaexpirydate"]).ToLocalTime();
 
-            //viewModel.Documents = GetDocuments(viewModel.ID);
             viewModel.DocumentUrl = GetDocumentUrl(viewModel.ID);
 
             return viewModel;
@@ -122,7 +117,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         private string GetDocumentUrl(int? iD)
         {
-            return string.Format(UrlResource.PSAManagementDocumentByID, _siteUrl);
+            return string.Format(UrlResource.PSAManagementDocumentByID, _siteUrl, iD);
         }
         
         public bool UpdatePSAManagement(PSAManagementVM psaManagement)
@@ -139,7 +134,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             columnValues.Add("joindate", psaManagement.joinDate.Value);
             columnValues.Add("dateofnewpsa", psaManagement.dateofNewPSA.Value);
             columnValues.Add("tenure", psaManagement.tenure);
-            //columnValues.Add("psaexpirydate", psaManagement.pSAExpiryDate.Value);
 
             try
             {
