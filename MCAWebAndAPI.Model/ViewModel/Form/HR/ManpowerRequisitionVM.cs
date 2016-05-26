@@ -8,7 +8,7 @@ using System.Web;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
-    public class ManpowerRequisition : Item
+    public class ManpowerRequisitionVM : Item
     {
         [UIHint("Date")]
         public DateTime? DateRequested { get; set; } = DateTime.Now.AddYears(-28);
@@ -16,7 +16,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         [UIHint("ComboBox")]
         [DisplayName("Division/Project/Unit")]
-        public ComboBoxVM DivisionProjectUnit { get; set; } = new GenderComboBoxVM();
+        public ComboBoxVM DivisionProjectUnit { get; set; } = new ComboBoxVM();
 
         [UIHint("AjaxComboBox")]
         public AjaxComboBoxVM ReportingTo { get; set; } = new AjaxComboBoxVM
@@ -24,7 +24,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             ControllerName = "HRDataMaster",
             ActionName = "GetProfessionals",
             ValueField = "ID",
-            TextField = "Title"
+            TextField = "Desc"
         };
 
         [DisplayName("No. Of Person")]
@@ -42,7 +42,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         };
 
         [UIHint("TextArea")]
-        public string PosisitionObjectives { get; set; }
+        public string PositionObjectives { get; set; }
 
         public Boolean IsKeyPosition { get; set; } = new Boolean();
 
@@ -52,11 +52,11 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             ControllerName = "HRDataMaster",
             ActionName = "GetProfessionals",
             ValueField = "ID",
-            TextField = "Title"
+            TextField = "Desc"
         };
 
         [UIHint("AjaxComboBox")]
-        public AjaxComboBoxVM Poisition { get; set; } = new AjaxComboBoxVM
+        public AjaxComboBoxVM Position { get; set; } = new AjaxComboBoxVM
         {
             ControllerName = "HRDataMaster",
             ActionName = "GetPositions",
@@ -70,7 +70,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             ControllerName = "HRDataMaster",
             ActionName = "GetProfessionals",
             ValueField = "ID",
-            TextField = "Title"
+            TextField = "Desc"
         };
 
         [UIHint("Date")]
