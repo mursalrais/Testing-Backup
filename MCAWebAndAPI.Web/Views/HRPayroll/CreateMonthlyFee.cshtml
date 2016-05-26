@@ -3,14 +3,14 @@
 @model MonthlyFeeVM
 
 @using (Ajax.BeginForm("SubmitMonthlyFee", "HRPayroll",
-                                                    FormMethod.Post,
-                                                    new AjaxOptions
-                                                    {
-                                                        OnSuccess = "onSuccess",
-                                                        OnFailure = "onFailure"
-                                                    }, new { @class = "form-horizontal" }))
+                                                                FormMethod.Post,
+                                                                new AjaxOptions
+                                                                {
+                                                                    OnSuccess = "onSuccess",
+                                                                    OnFailure = "onFailure"
+                                                                }, new { @class = "form-horizontal" }))
 {<fieldset>
-        <legend>Form Asset Transfer</legend>
+        <legend>Form Monthly Fee</legend>
         @Html.AntiForgeryToken()
         @Html.ValidationSummary()
 
@@ -87,6 +87,11 @@
                     @Html.EditorFor(m => m.Header.Currency)
                 </div>
             </div>
+            <div class="form-group">
+                <div class="col-md-8">
+                    @Html.HiddenFor(m => m.Header.ProfessionalNameEdit)
+                </div>
+            </div>
         </div>
     </fieldset>
 }
@@ -114,7 +119,11 @@
         });
 
         function onSuccess(data) {
-            parent.postMessage("Success", "https://eceos2.sharepoint.com");
+            var url = "/HRPayroll/PostMessage/"
+            $.getJSON(url, function(data) {
+                console.log(data.result);
+                console.log(data.dom);
+            });
         }
 
         function onFailure() {
@@ -127,9 +136,7 @@
             var urlPSA = "/HRPSAManagement/GetPSA/" + dataItem.ID;
             $.getJSON(url, function (result) {
                 $('#Header_ProfessionalID').prop('value', result[0].ID);
-                //$('#Header_JoinDate').prop('value', result[0].ProjectUnit);
-                //$('#Header_DateOfNewPsa').prop('value', result[0].Position);
-                //$('#Header_EndofContract').prop('value', result[0].Position);
+                $('#Header_ProfessionalNameEdit').prop('value', result[0].Name);
             })
             $.getJSON(urlPSA, function (result) {
                 $('#Header_ProjectUnit').prop('value', result[0].ProjectOrUnit);

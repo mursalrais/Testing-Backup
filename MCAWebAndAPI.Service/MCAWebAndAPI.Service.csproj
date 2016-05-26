@@ -183,8 +183,9 @@
       <LastGenOutput>ErrorResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\UrlResource.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>UrlResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>MCAWebAndAPI.Service.Resources</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
