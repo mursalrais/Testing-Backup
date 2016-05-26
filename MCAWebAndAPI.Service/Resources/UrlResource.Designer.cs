@@ -22,7 +22,7 @@ namespace MCAWebAndAPI.Service.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class UrlResource {
+    public class UrlResource {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace MCAWebAndAPI.Service.Resources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MCAWebAndAPI.Service.Resources.UrlResource", typeof(UrlResource).Assembly);
@@ -51,7 +51,7 @@ namespace MCAWebAndAPI.Service.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,9 +61,9 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}/Application%20Documents/Forms/AllItems.aspx#InplviewHash42bc0813-42d2-4539-82b2-c4f4d9945ece=FilterField1%3Dapplication%255Fx003a%255FID-FilterValue1%3D{1}.
+        ///   Looks up a localized string similar to {0}/Application%20Documents/Forms/AllItems.aspx#InplviewHash2b5b69fa-94aa-4a00-9fd3-c076a11aab23=FilterField1%3Dapplication%255Fx003a%255FID-FilterValue1%3D6{1}.
         /// </summary>
-        internal static string ApplicationDocumentByID {
+        public static string ApplicationDocumentByID {
             get {
                 return ResourceManager.GetString("ApplicationDocumentByID", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace MCAWebAndAPI.Service.Resources {
         /// <summary>
         ///   Looks up a localized string similar to {0}/PSA%20Documents/Forms/AllItems.aspx#InplviewHash3435d02c-8f08-40e0-afad-b011e601c7b1=.
         /// </summary>
-        internal static string PSAManagementDocumentByID {
+        public static string PSAManagementDocumentByID {
             get {
                 return ResourceManager.GetString("PSAManagementDocumentByID", resourceCulture);
             }
