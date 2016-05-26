@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MCAWebAndAPI.Model.HR.DataMaster;
+using System.Web;
+
 
 namespace MCAWebAndAPI.Service.HR.Recruitment
 {
@@ -19,5 +21,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         PSAManagementVM GetPSAManagement(int? ID);
         
         bool UpdatePSAManagement(PSAManagementVM psaManagement);
+
+        void CreatePSAManagementDocuments(int? headerID, IEnumerable<HttpPostedFileBase> documents);
     }
 }

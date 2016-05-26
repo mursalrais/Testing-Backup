@@ -1,0 +1,34 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model ManpowerRequisitionVM
+
+
+<div class="col-md-6">
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.SpecificTechnicalSkillQualification).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.EditorFor(m => m.SpecificTechnicalSkillQualification)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.OtherRequirements).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.EditorFor(m => m.OtherRequirements)
+        </div>
+    </div>
+</div>
+<div class="col-md-6">
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.PersonalAttributesCompetencies).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.EditorFor(m => m.PersonalAttributesCompetencies)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.Remarks).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.EditorFor(m => m.Remarks)
+        </div>
+    </div>
+</div>
+
+

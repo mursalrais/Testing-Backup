@@ -215,6 +215,17 @@ namespace MCAWebAndAPI.Service.Utils
             }
         }
 
+        public string[] GetChoiceFromList(string listName)
+        {
+            List<string> _choices = new List<string>();
+            var listItems = SPConnector.GetList(SP_ASSMAS_LIST_NAME, _siteUrl);
+            foreach (var item in listItems)
+            {
+                _choices.Add(item[listName].ToString());
+            }
+            return _choices.ToArray();
+        }
+
         public static string[] GetChoiceFieldValues(string listName, string fieldName, string siteUrl = null)
         {
             MapCredential(siteUrl);

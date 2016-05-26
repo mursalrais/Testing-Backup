@@ -17,11 +17,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
     public class PSAManagementService : IPSAManagementService
     {
         string _siteUrl;
-        //string _siteUrl = "https://eceos2.sharepoint.com/sites/mca-dev/hr/";
         static Logger logger = LogManager.GetCurrentClassLogger();
 
         const string SP_PSA_LIST_NAME = "PSA";
-               
+        const string SP_PSA_DOC_LIST_NAME = "PSA Documents";
+
         public int CreatePSAManagement(PSAManagementVM psaManagement)
         {
             var updatedValues = new Dictionary<string, object>();
@@ -29,12 +29,12 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             updatedValues.Add("isrenewal", psaManagement.isrenewal.Value);
             updatedValues.Add("renewalnumber", psaManagement.renewalnumber);
             updatedValues.Add("ProjectOrUnit", psaManagement.ProjectOrUnit.Value);
-            updatedValues.Add("position", new FieldLookupValue { LookupId = Convert.ToInt32(psaManagement.position.Value) });
-            updatedValues.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(psaManagement.professional.Value) });
+            updatedValues.Add("position", new FieldLookupValue { LookupId =  psaManagement.position.Value});
+            updatedValues.Add("professional", new FieldLookupValue { LookupId = psaManagement.professional.Value });
             updatedValues.Add("joindate", psaManagement.joinDate);
             updatedValues.Add("dateofnewpsa", psaManagement.dateofNewPSA);
             updatedValues.Add("tenure", psaManagement.tenure);
-            updatedValues.Add("psaexpirydate", psaManagement.pSAExpiryDate);
+            //updatedValues.Add("psaexpirydate", psaManagement.pSAExpiryDate);
 
             try
             {
@@ -52,8 +52,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         public IEnumerable<PSAMaster> GetPSAs()
         {
             var models = new List<PSAMaster>();
-
-            foreach (var item in SPConnector.GetList(SP_PSA_LIST_NAME, _siteUrl))
+                foreach (var item in SPConnector.GetList(SP_PSA_LIST_NAME, _siteUrl))
             {
                 models.Add(ConvertToPSAModel(item));
             }
@@ -67,11 +66,13 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 ID = item["professional_x003a_ID"] == null ? "" :
                Convert.ToString((item["professional_x003a_ID"] as FieldLookupValue).LookupValue),
+                PSAID = Convert.ToString(item["ID"]),
                 JoinDate = Convert.ToString(item["joindate"]),
                 DateOfNewPSA = Convert.ToString(item["dateofnewpsa"]),
                 PsaExpiryDate = Convert.ToString(item["psaexpirydate"]),
                 ProjectOrUnit = Convert.ToString(item["ProjectOrUnit"]),
-
+                Position = item["position"] == null ? "" :
+               Convert.ToString((item["position"] as FieldLookupValue).LookupValue)
             };
         }
 
@@ -96,22 +97,33 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         private PSAManagementVM ConvertToPSAManagementVM(ListItem listItem)
         {
             var viewModel = new PSAManagementVM();
+
             viewModel.ID = Convert.ToInt32(listItem["ID"]);
             viewModel.psaNumber = Convert.ToString(listItem["Title"]);
             viewModel.isrenewal.DefaultValue = Convert.ToString(listItem["isrenewal"]);
             viewModel.renewalnumber = Convert.ToInt32(listItem["renewalnumber"]);
             viewModel.ProjectOrUnit.DefaultValue = Convert.ToString(listItem["ProjectOrUnit"]);
-            viewModel.position.DefaultValue = Convert.ToString(listItem["position"]);
-            viewModel.professional.DefaultValue = Convert.ToString(listItem["professional"]);
+            //viewModel.position.DefaultValue = Convert.ToString(listItem["position"]);
+            viewModel.position.DefaultValue = FormatUtil.ConvertLookupToID(listItem, "position") + string.Empty;
+            //viewModel.professional.DefaultValue = Convert.ToString(listItem["professional"]);
+            viewModel.professional.DefaultValue = FormatUtil.ConvertLookupToID(listItem, "professional") + string.Empty;
             viewModel.joinDate = Convert.ToDateTime(listItem["joindate"]).ToLocalTime();
             viewModel.dateofNewPSA = Convert.ToDateTime(listItem["dateofnewpsa"]).ToLocalTime();
             viewModel.tenure = Convert.ToInt32(listItem["tenure"]);
+
             viewModel.pSAExpiryDate = Convert.ToDateTime(listItem["psaexpirydate"]).ToLocalTime();
 
+            //viewModel.Documents = GetDocuments(viewModel.ID);
+            viewModel.DocumentUrl = GetDocumentUrl(viewModel.ID);
 
             return viewModel;
         }
 
+        private string GetDocumentUrl(int? iD)
+        {
+            return string.Format(UrlResource.PSAManagementDocumentByID, _siteUrl, iD);
+        }
+        
         public bool UpdatePSAManagement(PSAManagementVM psaManagement)
         {
             var columnValues = new Dictionary<string, object>();
@@ -126,7 +138,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             columnValues.Add("joindate", psaManagement.joinDate.Value);
             columnValues.Add("dateofnewpsa", psaManagement.dateofNewPSA.Value);
             columnValues.Add("tenure", psaManagement.tenure);
-            columnValues.Add("psaexpirydate", psaManagement.pSAExpiryDate.Value);
+            //columnValues.Add("psaexpirydate", psaManagement.pSAExpiryDate.Value);
 
             try
             {
@@ -143,5 +155,32 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return true;
         }
 
+        private IEnumerable<HttpPostedFileBase> GetDocuments(int? iD)
+        {
+            var caml = @"<View>  
+            <Query> 
+               <Where><Eq><FieldRef Name='psa' LookupId='True' /><Value Type='Lookup'>" + iD
+               + @"</Value></Eq></Where> 
+            </Query>
+            <ViewFields><FieldRef Name='Title' /><FieldRef Name='ID' /><FieldRef Name='FileRef' /></ViewFields></View>";
+
+            throw new NotImplementedException();
+        }
+
+        public void CreatePSAManagementDocuments(int? psaID, IEnumerable<HttpPostedFileBase> documents)
+        {
+            foreach (var doc in documents)
+            {
+                try
+                {
+                    SPConnector.UploadDocument(SP_PSA_DOC_LIST_NAME, doc.FileName, doc.InputStream, _siteUrl);
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e.Message);
+                    throw new Exception(ErrorResource.SPInsertError);
+                }
+            }
+        }
     }
 }

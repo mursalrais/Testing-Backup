@@ -1,0 +1,70 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model ManpowerRequisitionVM
+
+@{
+    ViewBag.Title = "CreateManpowerRequisition";
+}
+
+@using (Html.BeginForm("CreateManpowerRequisition", "HRCreateManpowerRequisition", FormMethod.Post, 
+                                                     new
+                                                     { @class = "form-horizontal",
+                                                         enctype = "multipart/form-data" }))
+{
+    <fieldset>
+        <legend>General</legend>
+        <div class="row">
+            @Html.Partial("_General", Model)
+        </div>
+        <legend>Supporting Document</legend>
+        <div class="row">
+            @Html.Partial("_SupportingDocument", Model)
+        </div>
+        <legend>Working Relationship</legend>
+        @*<div class="row">
+            @Html.Partial("_WorkingRelationship", Model.WorkingRelationshipDetails)
+        </div>*@
+        <legend>Resources and Planning</legend>
+        <div class="row">
+            @Html.Partial("_ResourcesAndPlanning", Model)
+        </div>
+        <legend>Background Requirement</legend>
+        <div class="row">
+            @Html.Partial("_BackgroundRequirement", Model)
+        </div>
+        <legend>Specific Experience</legend>
+        <div class="row">
+            @Html.Partial("_Specificexperience", Model)
+        </div>
+        <legend>Other Requirements</legend>
+        <div class="row">
+            @Html.Partial("_OtherRequirements", Model)
+        </div>
+    </fieldset>
+    <div class="form-actions">
+        <div class="row">
+            <div class="col-md-12">
+                <button id="print-button" class="btn btn-default" type="button">
+                    Print
+                </button>
+                <button id="submit-button" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    Submit
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+@section scripts{
+
+    <script>
+        function onSelectIDCardType(e) {
+            var dataItem = this.dataItem(e.item);
+            if (dataItem === "KTP") {
+                $('#IDCardExpiry').closest('.form-group').show();
+            } else {
+                $('#IDCardExpiry').closest('.form-group').hide();
+            }
+        }
+    </script>
+}

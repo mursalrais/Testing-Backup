@@ -30,6 +30,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         [UIHint("Date")]
         [DisplayName("Date of New PSA")]
+        [Required]
         public DateTime? dateofNewPSA { get; set; } = DateTime.Now;
 
         
@@ -56,13 +57,18 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         };
 
         [DisplayName("Tenure")]
+        [Required]
         public int tenure { get; set; }
+
 
         [UIHint("Date")]
         [DisplayName("PSA Expiry Date")]
-        public DateTime? pSAExpiryDate { get; set; } = DateTime.Now;
+        public DateTime? pSAExpiryDate { get; set; }
+        
 
         [UIHint("MultiFileUploader")]
         public IEnumerable<HttpPostedFileBase> Documents { get; set; } = new List<HttpPostedFileBase>();
+
+        public string DocumentUrl { get; set; }
     }
 }

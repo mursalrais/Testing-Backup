@@ -68,5 +68,14 @@ namespace MCAWebAndAPI.Service.Resources {
                 return ResourceManager.GetString("ApplicationDocumentByID", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}/PSA%20Documents/Forms/AllItems.aspx#InplviewHash3435d02c-8f08-40e0-afad-b011e601c7b1=.
+        /// </summary>
+        internal static string PSAManagementDocumentByID {
+            get {
+                return ResourceManager.GetString("PSAManagementDocumentByID", resourceCulture);
+            }
+        }
     }
 }

@@ -59,7 +59,59 @@
     <div class="form-group">
         @Html.Bootstrap().LabelFor(m => m.pSAExpiryDate).Class("col-md-4 control-label")
         <div class="col-md-8">
-            @Html.EditorFor(m => m.pSAExpiryDate)
+            @Html.DisplayFor(m => m.pSAExpiryDate)
         </div>
     </div>
 </div>
+
+@section scripts{
+    <script type="text/javascript">
+
+
+            $(document).ready(function () {
+            $("#submit-button").click(function () {
+                $("form").submit();
+            });
+
+        });
+
+        function onSuccess(data) {
+            window.location.href = data.urlToRedirect;
+        }
+
+        function onFailure(data) {
+            window.location.href = data.urlToRedirect;
+        }
+
+
+            function OnSelectAssetHolderFrom(e) {
+                var dataItem = this.dataItem(e.item);
+                var url = "/HRDataMaster/GetProfessionals/" + dataItem.ID;
+
+            }
+
+            function OnSelectPosition(e) {
+                var dataItem = this.dataItem(e.item);
+                var url = "/HRDataMaster/GetPositions/" + dataItem.ID;
+            }
+    
+        
+            $(document).ready(function () {
+
+                $("#tenure").on('input', function () {
+                    sumCal();
+                });
+
+                function sumCal() {
+                    var tenure = $("#tenure").val();
+                    var dateOfNewPSA = $("#dateofNewPSA").val();
+                    var psaexpirydate = new Date(new Date(dateOfNewPSA).setMonth(dateOfNewPSA.getMonth() + tenure));;
+                    $("#pSAExpiryDate").val(psaexpirydate);
+                }
+            });
+
+            //var jan312009 = new Date(2009, 0, 31);
+            //var eightMonthsFromJan312009 = new Date(new Date(jan312009).setMonth(jan312009.getMonth() + 8));
+            
+    </script>
+}

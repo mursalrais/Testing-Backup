@@ -28,9 +28,8 @@ namespace MCAWebAndAPI.Web.Controllers
                 new {
                     e.ID,
                     e.Name,
-                    e.Position,
                     e.Status,
-                    Desc = string.Format("{0} - {1}", e.Name, e.Position)
+                    Desc = string.Format("{0} - {1}", e.Name, e.Status)
                 }),
                 JsonRequestBehavior.AllowGet);
         }
@@ -76,11 +75,11 @@ namespace MCAWebAndAPI.Web.Controllers
                 new {
                     e.ID,
                     e.Title,
-                    e.PositionStatus,
+                    e.positionStatus,
                     e.PositionManpowerRequisitionApprover1,
-                    e.PositionManpowerRequisitionApprover2,
+                    e.positionManpowerRequisitionApprover2,
                     e.Remarks,
-                    e.IsKeyPosition,
+                    e.isKeyPosition,
                     Desc = string.Format("{0}", e.Title)
                 }),
                 JsonRequestBehavior.AllowGet);

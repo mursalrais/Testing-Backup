@@ -95,7 +95,7 @@ namespace MCAWebAndAPI.Service.HR.Common
                 tempID = Convert.ToInt32(item["ID"]);
                 if (!(collectionIDMonthlyFee.Any(e => e == tempID)))
                 {
-                    models.Add(ConvertToProfessionalModel_Light(item));
+                    models.Add(ConvertToProfessionalMonthlyFeeModel_Light(item));
                 }
             }
 
@@ -111,6 +111,16 @@ namespace MCAWebAndAPI.Service.HR.Common
             }
 
             return models;
+        }
+
+        private ProfessionalMaster ConvertToProfessionalMonthlyFeeModel_Light(ListItem item)
+        {
+            return new ProfessionalMaster
+            {
+                ID = Convert.ToInt32(item["ID"]),
+                Name = Convert.ToString(item["Title"]),
+                Status = Convert.ToString(item["maritalstatus"]),
+            };
         }
 
         /// <summary>
@@ -145,14 +155,16 @@ namespace MCAWebAndAPI.Service.HR.Common
 
         private PositionsMaster ConvertToPositionsModel(ListItem item)
         {
-            return new PositionsMaster
-            {
-                ID = Convert.ToInt32(item["ID"]),
-                Title = Convert.ToString(item["Title"]),
-                //PositionStatus = Convert.ToString(item["positionstatus"]),
-                //Position = Convert.ToString(item["Position"]),
-                //ProjectUnit = Convert.ToString(item["ProjectUnit"])
-            };
+            var viewModel = new PositionsMaster();
+
+            viewModel.ID = Convert.ToInt32(item["ID"]);
+            viewModel.Title = Convert.ToString(item["Title"]);
+            viewModel.PositionManpowerRequisitionApprover1.Value = Convert.ToString(item["positionmanpowerrequisitionappro"]);
+            viewModel.positionManpowerRequisitionApprover2.Value = Convert.ToString(item["positionmanpowerrequisitionappro0"]);
+            viewModel.positionStatus.Value = Convert.ToString(item["positionstatus"]);
+            viewModel.Remarks = Convert.ToString(item["Remarks"]);
+            viewModel.isKeyPosition.Value = Convert.ToString(item["iskeyposition"]);
+            return viewModel;
         }
 
         public ProfessionalDataVM GetProfessionalData(int? ID)
