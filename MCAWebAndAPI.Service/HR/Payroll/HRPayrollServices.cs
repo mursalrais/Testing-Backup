@@ -18,14 +18,14 @@ namespace MCAWebAndAPI.Service.HR.Payroll
         public int CreateHeader(MonthlyFeeHeaderVM header)
         {
             var updatedValues = new Dictionary<string, object>();
-            //updatedValues.Add("MonthlyFee", header.ID);
+            updatedValues.Add("ProfessionalId", header.ProfessionalID);
             //updatedValues.Add("MonthlyFee", header.ProfessionalName);
             //updatedValues.Add("MonthlyFee", header.ProjectUnit);
             //updatedValues.Add("MonthlyFee", header.Position);
             //updatedValues.Add("MonthlyFee", header.Status);
             //updatedValues.Add("MonthlyFee", header.JoinDate);
             //updatedValues.Add("MonthlyFee", header.DateOfNewPsa);
-            updatedValues.Add("MonthlyFee", header.EndOfContract);
+            //updatedValues.Add("MonthlyFee", header.EndOfContract);
             updatedValues.Add("DateOfNewFee", header.DateOfNewFee);
             updatedValues.Add("MonthlyFee", header.MonthlyFee);
             updatedValues.Add("MonthlyFeeCurrency", header.Currency.Value);

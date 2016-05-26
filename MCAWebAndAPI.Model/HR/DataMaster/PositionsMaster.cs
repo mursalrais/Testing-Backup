@@ -18,74 +18,23 @@ namespace MCAWebAndAPI.Model.HR.DataMaster
         public string Title { get; set; }
 
         [UIHint("ComboBox")]
-        [DisplayName("Position Status")]
-        public ComboBoxVM PositionStatus
-        {
-            get
-            {
-                return positionStatus;
-            }
-
-            set
-            {
-                positionStatus = value;
-            }
-        }
+        [DisplayName("Position Manpower Requisition Approver 1")]
+        public ComboBoxVM PositionManpowerRequisitionApprover1 { get; set; } = new ComboBoxVM { Choices = new string[] { "DED", "ED" } };
 
         [UIHint("ComboBox")]
-        [DisplayName("Position Manpower Requisition Approver 1")]
-        public ComboBoxVM PositionManpowerRequisitionApprover1
-        {
-            get
-            {
-                return positionManpowerRequisitionApprover1;
-            }
+        [DisplayName("Position Status")]
+        public ComboBoxVM positionStatus { get; set; } = new ComboBoxVM { Choices = new string[] { "Active", "Inactive" } };
 
-            set
-            {
-                positionManpowerRequisitionApprover1 = value;
-            }
-        }
 
         [UIHint("ComboBox")]
         [DisplayName("Position Manpower Requisition Approver 2")]
-        public ComboBoxVM PositionManpowerRequisitionApprover2
-        {
-            get
-            {
-                return positionManpowerRequisitionApprover2;
-            }
-
-            set
-            {
-                positionManpowerRequisitionApprover2 = value;
-            }
-        }
-
-        private ComboBoxVM positionStatus = new ComboBoxVM { Choices = new string[] { "Active", "Inactive" } };
-
-        private ComboBoxVM positionManpowerRequisitionApprover1 = new ComboBoxVM { Choices = new string[] { "DED", "ED" } };
-
-        private ComboBoxVM positionManpowerRequisitionApprover2 = new ComboBoxVM { Choices = new string[] { "DED", "ED" } };
+        public ComboBoxVM positionManpowerRequisitionApprover2 { get; set; } = new ComboBoxVM { Choices = new string[] { "DED", "ED" } };
 
         [DisplayName("Remarks")]
         public string Remarks { get; set; }
 
         [UIHint("ComboBox")]
         [DisplayName("Is Key Position?")]
-        public ComboBoxVM IsKeyPosition
-        {
-            get
-            {
-                return isKeyPosition;
-            }
-
-            set
-            {
-                isKeyPosition = value;
-            }
-        }
-
-        private ComboBoxVM isKeyPosition = new ComboBoxVM { Choices = new string[] { "Yes", "No" } };
+        public ComboBoxVM isKeyPosition { get; set; } = new ComboBoxVM { Choices = new string[] { "Yes", "No" } };
     }
 }

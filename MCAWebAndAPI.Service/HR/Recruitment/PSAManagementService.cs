@@ -73,7 +73,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 ProjectOrUnit = Convert.ToString(item["ProjectOrUnit"]),
                 Position = item["position"] == null ? "" :
                Convert.ToString((item["position"] as FieldLookupValue).LookupValue)
-
             };
         }
 
@@ -98,6 +97,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         private PSAManagementVM ConvertToPSAManagementVM(ListItem listItem)
         {
             var viewModel = new PSAManagementVM();
+
             viewModel.ID = Convert.ToInt32(listItem["ID"]);
             viewModel.psaNumber = Convert.ToString(listItem["Title"]);
             viewModel.isrenewal.DefaultValue = Convert.ToString(listItem["isrenewal"]);
@@ -110,6 +110,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.joinDate = Convert.ToDateTime(listItem["joindate"]).ToLocalTime();
             viewModel.dateofNewPSA = Convert.ToDateTime(listItem["dateofnewpsa"]).ToLocalTime();
             viewModel.tenure = Convert.ToInt32(listItem["tenure"]);
+
             viewModel.pSAExpiryDate = Convert.ToDateTime(listItem["psaexpirydate"]).ToLocalTime();
 
             //viewModel.Documents = GetDocuments(viewModel.ID);

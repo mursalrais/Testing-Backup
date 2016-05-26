@@ -15,9 +15,15 @@
             @Html.Partial("_DocumentDetailsDisplay", Model.DocumentUrl)
         </div>
     </fieldset>
+
     <div class="form-actions">
         <div class="row">
-            <div class="col-md-12"><br /></div>
+            <div class="col-md-12">
+                <button id="submit-button" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    Submit
+                </button>
+            </div>
         </div>
     </div>
 </div>
@@ -27,12 +33,12 @@
     <script>
         
         
-            $(document).ready(function () {
+            /*$(document).ready(function () {
                 $('input').prop('readonly', 'true');
                 $('textarea').prop('readonly', 'true');
                 $('')
             });
-
+            */
             function OnSelectAssetHolderFrom(e) {
                 var dataItem = this.dataItem(e.item);
                 var url = "/HRDataMaster/GetProfessionals/" + dataItem.ID;
