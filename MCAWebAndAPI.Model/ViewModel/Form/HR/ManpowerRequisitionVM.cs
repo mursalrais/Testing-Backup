@@ -87,6 +87,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         public int BudgetManagement { get; set; }
 
+        [UIHint("CheckBoxItem")]
         public IEnumerable<CheckBoxItemVM> Workplan { get; set; } = new List<CheckBoxItemVM>();
 
         [UIHint("TextArea")]
