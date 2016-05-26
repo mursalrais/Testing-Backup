@@ -5,6 +5,7 @@ using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
 using System.Linq;
+using MCAWebAndAPI.Service.ProjectManagement.Common;
 
 namespace MCAWebAndAPI.Service.HR.Common
 {
@@ -74,6 +75,7 @@ namespace MCAWebAndAPI.Service.HR.Common
         const string SP_POSMAS_LIST_NAME = "Position Master";
         const string SP_MONFEE_LIST_NAME = "Monthly Fee";
 
+        
         public void SetSiteUrl(string siteUrl)
         {
             _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
@@ -157,6 +159,7 @@ namespace MCAWebAndAPI.Service.HR.Common
         {
             if (ID == null)
                 return new ProfessionalDataVM();
+
 
             var listItem = SPConnector.GetListItem(SP_POSMAS_LIST_NAME, ID, _siteUrl);
             return ConvertToProfessionalModel(listItem);

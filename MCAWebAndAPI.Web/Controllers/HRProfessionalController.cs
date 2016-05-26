@@ -1,4 +1,5 @@
-﻿using MCAWebAndAPI.Service.HR.Common;
+﻿using MCAWebAndAPI.Model.ViewModel.Form.HR;
+using MCAWebAndAPI.Service.HR.Common;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;
 using System;
@@ -18,7 +19,7 @@ namespace MCAWebAndAPI.Web.Controllers
             _service = new HRDataMasterService();
         }
 
-        public ActionResult EditProfessionalMaster(string siteUrl = null, int? ID = null)
+        public ActionResult EditProfessional(string siteUrl = null, int? ID = null)
         {
             SessionManager.RemoveAll();
 
@@ -30,5 +31,6 @@ namespace MCAWebAndAPI.Web.Controllers
 
             return View(viewModel);
         }
+        
     }
 }

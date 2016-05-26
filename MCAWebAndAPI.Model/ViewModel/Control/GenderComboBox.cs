@@ -8,7 +8,7 @@
             {
                 "Male",
                 "Female",
-                "Shemale"
+                "Transgender"
             };
             this.DefaultValue = "Male";
         }

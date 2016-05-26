@@ -1,7 +1,7 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.Asset
 
 @model AssignmentofAssetVM
-
+ 
 <form class="form-horizontal" method="post" action="/ASSAssignmentofAsset/Create" id="create-assign-of-asset-form">
     <fieldset>
         <legend>Form Assign of Asset</legend>
@@ -51,7 +51,7 @@
                         .Create(update => update.Action("EditingPopup_Create", "ASSAssignmentofAsset"))
                         .Update(update => update.Action("EditingPopup_Update", "ASSAssignmentofAsset"))
                         .Destroy(update => update.Action("EditingPopup_Destroy", "ASSAssignmentofAsset"))
-                )
+                        )
                 )
             </div>
         </div>

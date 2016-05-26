@@ -32,16 +32,13 @@ namespace MCAWebAndAPI.Web
             // Use the Development version of Modernizr to develop with and learn from. Then, when you’re
             // ready for production, use the build tool at http://modernizr.com to pick only the tests you need
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
-                            "~/Scripts/modernizr-*"));
+                            "~/Scripts/modernizr-2.6.2.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/apps")
-                .IncludeDirectory("~/Scripts/apps/common", "*.js", true));
 
             bundles.Add(new ScriptBundle("~/bundles/libScripts")
                 .Include(
                 "~/Scripts/libs/jquery.min",
-                "~/Scripts/libs/jszip.min.js",
-                "~/Scripts/libs/pako_deflate.min.js"));
+                "~/Scripts/libs/jszip.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/bi")
                 .Include("~/Scripts/bi-frame.js"));

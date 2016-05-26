@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MCAWebAndAPI.Model.ProjectManagement.Common;
 using MCAWebAndAPI.Model.ViewModel.Chart;
+using MCAWebAndAPI.Model.ViewModel.Control;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
 using NLog;
@@ -39,6 +40,8 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Common
 
             return model;
         }
+
+
 
         private SubActivity ConvertToSubActivityModel(ListItem item)
         {
@@ -443,6 +446,28 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Common
             }
 
             return wbs;
+        }
+
+        public IEnumerable<InGridComboBoxVM> GetProjectComboBox()
+        {
+            return new List<InGridComboBoxVM>()
+            {
+                new InGridComboBoxVM
+                {
+                    CategoryID = 1,
+                    CategoryName = "Green Prosperity"
+                },
+                new InGridComboBoxVM
+                {
+                    CategoryID = 2,
+                    CategoryName = "Health and Nutrition"
+                },
+                new InGridComboBoxVM
+                {
+                    CategoryID = 3,
+                    CategoryName = "Procurement Modernization"
+                }
+            };
         }
     }
 }

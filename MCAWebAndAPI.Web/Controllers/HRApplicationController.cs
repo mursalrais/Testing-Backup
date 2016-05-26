@@ -92,7 +92,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             try
             {
-                _service.CreateProfessionalDocuments(headerID, viewModel.Documents);
+                _service.CreateApplicationDocument(headerID, viewModel.Documents);
             }
             catch (Exception e)
             {

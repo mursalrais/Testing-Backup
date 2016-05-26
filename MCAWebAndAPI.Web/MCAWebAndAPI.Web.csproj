@@ -332,8 +332,8 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Properties\PublishProfiles\host.my-epmo.com.pubxml" />
-    <None Include="Properties\PublishProfiles\mcai-ims-test-free - FTP.pubxml" />
-    <None Include="Properties\PublishProfiles\mcai-ims-test-free - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\mcaims-dev - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\mcaims-dev - Web Deploy.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -532,10 +532,12 @@
     <Content Include="Views\HRProfessional\_ContactInformationDetails.cshtml" />
     <Content Include="Views\HRProfessional\_PersonalDetails.cshtml" />
     <Content Include="Views\HRProfessional\_EducationDetails.cshtml" />
-    <Content Include="Views\HRProfessional\_TrainingDetails.cshtml" />
     <Content Include="Views\HRProfessional\_InsuranceDetails.cshtml" />
     <Content Include="Views\HRProfessional\_PayrollDetails.cshtml" />
     <Content Include="Views\HRProfessional\_DependentDetails.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\InGridComboBox.cshtml" />
+    <Content Include="Views\HRProfessional\_OrganizationalDetails.cshtml" />
+    <Content Include="Views\HRProfessional\_TrainingDetails.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -598,6 +600,7 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ConfigResource.resx</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Resources\MessageResource.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -645,6 +648,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ConfigResource.Designer.cs</LastGenOutput>
       <CustomToolNamespace>MCAWebAndAPI.Web.Resources</CustomToolNamespace>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\MessageResource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
