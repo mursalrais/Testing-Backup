@@ -108,7 +108,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.joinDate = Convert.ToDateTime(listItem["joindate"]).ToLocalTime();
             viewModel.dateofNewPSA = Convert.ToDateTime(listItem["dateofnewpsa"]).ToLocalTime();
             viewModel.tenure = Convert.ToInt32(listItem["tenure"]);
-            viewModel.pSAExpiryDate = Convert.ToDateTime(listItem["psaexpirydate"]).ToLocalTime();
+            //viewModel.pSAExpiryDate = Convert.ToDateTime(listItem["psaexpirydate"]).ToLocalTime();
 
             viewModel.DocumentUrl = GetDocumentUrl(viewModel.ID);
 
@@ -126,9 +126,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             int ID = psaManagement.ID.Value;
 
             columnValues.Add("Title", psaManagement.psaNumber);
-            columnValues.Add("isrenewal", psaManagement.isrenewal);
+            columnValues.Add("isrenewal", psaManagement.isrenewal.Value);
             columnValues.Add("renewalnumber", psaManagement.renewalnumber);
-            columnValues.Add("ProjectOrUnit", psaManagement.ProjectOrUnit);
+            columnValues.Add("ProjectOrUnit", psaManagement.ProjectOrUnit.Value);
             columnValues.Add("position", new FieldLookupValue { LookupId = Convert.ToInt32(psaManagement.position.Value) });
             columnValues.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(psaManagement.professional.Value) });
             columnValues.Add("joindate", psaManagement.joinDate.Value);
