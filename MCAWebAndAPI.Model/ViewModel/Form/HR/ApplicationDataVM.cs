@@ -110,18 +110,14 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public string CurrentAddress { get; set; }
 
 
-        [UIHint("PhoneNumber")]
         public string Telephone { get; set; }
 
-        [UIHint("PhoneNumber")]
         public string CurrentTelephone { get; set; }
 
-        [UIHint("PhoneNumber")]
         [DisplayName("Mobile Number [1]")]
         [Required]
         public string MobileNumberOne { get; set; }
 
-        [UIHint("PhoneNumber")]
         [DisplayName("Mobile Number [2]")]
         public string MobileNumberTwo { get; set; }
 

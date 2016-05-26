@@ -1,0 +1,81 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model ApplicationDataVM
+
+
+<div class="col-xs-6">
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.FirstMiddleName).Class("col-xs-4 control-label")
+        <div class="col-xs-8">
+            @Html.DisplayFor(m => m.FirstMiddleName)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.LastName).Class("col-xs-4 control-label")
+        <div class="col-xs-8">
+            @Html.DisplayFor(m => m.LastName)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.PlaceOfBirth).Class("col-xs-4 control-label")
+        <div class="col-xs-8">
+            @Html.DisplayFor(m => m.PlaceOfBirth)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.DateOfBirth).Class("col-xs-4 control-label")
+        <div class="col-xs-8">
+            @Html.DisplayFor(m => m.DateOfBirth)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.MaritalStatus).Class("col-xs-4 control-label")
+        <div class="col-xs-8">
+            @Html.DisplayFor(m => m.MaritalStatus)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.BloodType).Class("col-xs-4 control-label")
+        <div class="col-xs-8">
+            @Html.DisplayFor(m => m.BloodType)
+        </div>
+    </div>
+</div>
+<div class="col-xs-6">
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.Gender).Class("col-xs-4 control-label")
+        <div class="col-xs-8">
+            @Html.DisplayFor(m => m.Gender)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.Nationality).Class("col-xs-4 control-label")
+        <div class="col-xs-8">
+            @Html.DisplayFor(m => m.Nationality)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.Religion).Class("col-xs-4 control-label")
+        <div class="col-xs-8">
+            @Html.DisplayFor(m => m.Religion)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.IDCardType).Class("col-xs-4 control-label")
+        <div class="col-xs-8">
+            @Html.DisplayFor(m => m.IDCardType)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.IDCardNumber).Class("col-xs-4 control-label")
+        <div class="col-xs-8">
+            @Html.DisplayFor(m => m.IDCardNumber)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.IDCardExpiry).Class("col-xs-4 control-label")
+        <div class="col-xs-8">
+            @Html.DisplayFor(m => m.IDCardExpiry)
+        </div>
+    </div>
+</div>
+

@@ -25,6 +25,7 @@
             columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
               "<input type='hidden' name='WorkingExperienceDetails[#= getWorkingExperienceDetail(data)#].ID' value='#= ID #' />"
             );
+            columns.Command(command => command.Destroy()).Width(100);
         })
         .DataSource(dataSource => dataSource.Ajax()
                    .Model(model =>

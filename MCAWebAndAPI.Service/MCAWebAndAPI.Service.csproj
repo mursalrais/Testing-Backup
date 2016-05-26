@@ -112,8 +112,10 @@
     <Compile Include="Converter\PDFConverter.cs" />
     <Compile Include="Finance\EventBudgetService.cs" />
     <Compile Include="Finance\IEventBudgetService.cs" />
+    <Compile Include="HR\Recruitment\HRManpowerRequisitionService.cs" />
     <Compile Include="HR\Recruitment\HRApplicationService.cs" />
     <Compile Include="HR\Common\HRDataMasterService.cs" />
+    <Compile Include="HR\Recruitment\IHRManpowerRequisitionService.cs" />
     <Compile Include="HR\Recruitment\IHRApplicationService.cs" />
     <Compile Include="HR\Common\IHRDataMasterService.cs" />
     <Compile Include="HR\Payroll\HRPayrollServices.cs" />

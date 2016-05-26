@@ -18,6 +18,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         void CreateWorkingExperienceDetails(int? headerID, IEnumerable<WorkingExperienceDetailVM> workingExperienceDetails);
 
-        void CreateProfessionalDocuments(int? headerID, IEnumerable<HttpPostedFileBase> documents);
+        void CreateApplicationDocument(int? headerID, IEnumerable<HttpPostedFileBase> documents);
     }
 }

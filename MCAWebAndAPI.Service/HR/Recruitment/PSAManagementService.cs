@@ -52,6 +52,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         public IEnumerable<PSAMaster> GetPSAs()
         {
             var models = new List<PSAMaster>();
+
                 foreach (var item in SPConnector.GetList(SP_PSA_LIST_NAME, _siteUrl))
             {
                 models.Add(ConvertToPSAModel(item));
@@ -66,13 +67,13 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 ID = item["professional_x003a_ID"] == null ? "" :
                Convert.ToString((item["professional_x003a_ID"] as FieldLookupValue).LookupValue),
-                PSAID = Convert.ToString(item["ID"]),
-                JoinDate = Convert.ToDateTime(item["joindate"]).ToLocalTime().ToShortDateString(),
-                DateOfNewPSA = Convert.ToDateTime(item["dateofnewpsa"]).ToLocalTime().ToShortDateString(),
-                PsaExpiryDate = Convert.ToDateTime(item["psaexpirydate"]).ToLocalTime().ToShortDateString(),
+                JoinDate = Convert.ToString(item["joindate"]),
+                DateOfNewPSA = Convert.ToString(item["dateofnewpsa"]),
+                PsaExpiryDate = Convert.ToString(item["psaexpirydate"]),
                 ProjectOrUnit = Convert.ToString(item["ProjectOrUnit"]),
                 Position = item["position"] == null ? "" :
                Convert.ToString((item["position"] as FieldLookupValue).LookupValue)
+
             };
         }
 
@@ -121,7 +122,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         private string GetDocumentUrl(int? iD)
         {
-            return string.Format(UrlResource.PSAManagementDocumentByID, _siteUrl, iD);
+            return string.Format(UrlResource.PSAManagementDocumentByID, _siteUrl);
         }
         
         public bool UpdatePSAManagement(PSAManagementVM psaManagement)
@@ -171,9 +172,12 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             foreach (var doc in documents)
             {
+                var updateValue = new Dictionary<string, object>();
+                updateValue.Add("psa", new FieldLookupValue { LookupId = Convert.ToInt32(psaID) });
+
                 try
                 {
-                    SPConnector.UploadDocument(SP_PSA_DOC_LIST_NAME, doc.FileName, doc.InputStream, _siteUrl);
+                    SPConnector.UploadDocument(SP_PSA_DOC_LIST_NAME, updateValue, doc.FileName, doc.InputStream, _siteUrl);
                 }
                 catch (Exception e)
                 {

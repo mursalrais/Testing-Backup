@@ -152,6 +152,47 @@ namespace MCAWebAndAPI.Service.Utils
             }
         }
 
+        public static void UploadDocument(string listName, Dictionary<string, object> columnValues, string docName, Stream fileStream, string siteUrl = null)
+        {
+            MapCredential(siteUrl);
+            using (ClientContext context = new ClientContext(siteUrl ?? CurUrl))
+            {
+                SecureString secureString = new SecureString();
+                Password.ToList().ForEach(secureString.AppendChar);
+                context.Credentials = new SharePointOnlineCredentials(UserName, secureString);
+
+                using (var fs = fileStream)
+                {
+                    List spList = context.Web.Lists.GetByTitle(listName);
+                    context.Load(spList.RootFolder);
+                    context.ExecuteQuery();
+
+                    // Upload the file first
+                    var fi = new FileInfo(docName);
+                    var fileUrl = string.Format("{0}/{1}", spList.RootFolder.ServerRelativeUrl, fi.Name);
+                    Microsoft.SharePoint.Client.File.SaveBinaryDirect(context, fileUrl, fs, true);
+
+                    // Get uploaded file
+                    Microsoft.SharePoint.Client.File fileUploaded = spList.RootFolder.Files.GetByUrl(fileUrl);
+                    context.Load(fileUploaded);
+                    context.ExecuteQuery();
+
+                    // Get list item from File
+                    ListItem newItem = fileUploaded.ListItemAllFields;
+                    context.Load(newItem);
+                    context.ExecuteQuery();
+
+                    // Modify column
+                    foreach (var key in columnValues.Keys)
+                    {
+                        newItem[key] = columnValues[key];
+                    }
+                    newItem.Update();
+                    context.ExecuteQuery();
+                }
+            }
+        }
+
         public static void UploadDocument(string listName, string docName, Stream fileStream, string siteUrl = null)
         {
             MapCredential(siteUrl);
@@ -177,21 +218,21 @@ namespace MCAWebAndAPI.Service.Utils
         public static string[] GetChoiceFieldValues(string listName, string fieldName, string siteUrl = null)
         {
             MapCredential(siteUrl);
-            using (ClientContext clientContext = new ClientContext(siteUrl ?? CurUrl))
+            using (ClientContext context = new ClientContext(siteUrl ?? CurUrl))
             {
 
                 SecureString secureString = new SecureString();
                 Password.ToList().ForEach(secureString.AppendChar);
-                clientContext.Credentials = new SharePointOnlineCredentials(UserName, secureString);
+                context.Credentials = new SharePointOnlineCredentials(UserName, secureString);
 
-                Web web = clientContext.Web;
+                Web web = context.Web;
                 var list = web.Lists.GetByTitle(listName);
-                clientContext.Load(list, d => d.Title);
-                clientContext.ExecuteQuery();
+                context.Load(list, d => d.Title);
+                context.ExecuteQuery();
 
-                var field = clientContext.CastTo<FieldChoice>(list.Fields.GetByInternalNameOrTitle(fieldName));
-                clientContext.Load(field, f => f.Choices);
-                clientContext.ExecuteQuery();
+                var field = context.CastTo<FieldChoice>(list.Fields.GetByInternalNameOrTitle(fieldName));
+                context.Load(field, f => f.Choices);
+                context.ExecuteQuery();
 
                 return field.Choices;
             }
@@ -201,20 +242,20 @@ namespace MCAWebAndAPI.Service.Utils
         public static bool SendEmail( string email, string content, string subject, string siteUrl= null)
         {
             MapCredential(siteUrl);
-            using (ClientContext clientContext = new ClientContext(siteUrl ?? CurUrl))
+            using (ClientContext context = new ClientContext(siteUrl ?? CurUrl))
             {
                 SecureString secureString = new SecureString();
                 Password.ToList().ForEach(secureString.AppendChar);
-                clientContext.Credentials = new SharePointOnlineCredentials(UserName, secureString);
+                context.Credentials = new SharePointOnlineCredentials(UserName, secureString);
 
                 EmailProperties properties = new EmailProperties();
                 properties.To = new string[] { email };
                 properties.Subject = subject;
                 properties.Body = content;
 
-                Utility.SendEmail(clientContext, properties);
+                Utility.SendEmail(context, properties);
 
-                clientContext.ExecuteQuery();
+                context.ExecuteQuery();
             }
             return true;
         }
@@ -222,20 +263,20 @@ namespace MCAWebAndAPI.Service.Utils
         public static bool SendEmails(IEnumerable<string> emails, string content, string subject, string siteUrl = null)
         {
             MapCredential(siteUrl);
-            using (ClientContext clientContext = new ClientContext(siteUrl ?? CurUrl))
+            using (ClientContext context = new ClientContext(siteUrl ?? CurUrl))
             {
                 SecureString secureString = new SecureString();
                 Password.ToList().ForEach(secureString.AppendChar);
-                clientContext.Credentials = new SharePointOnlineCredentials(UserName, secureString);
+                context.Credentials = new SharePointOnlineCredentials(UserName, secureString);
 
                 EmailProperties properties = new EmailProperties();
                 properties.To = emails;
                 properties.Subject = subject;
                 properties.Body = content;
 
-                Utility.SendEmail(clientContext, properties);
+                Utility.SendEmail(context, properties);
 
-                clientContext.ExecuteQuery();
+                context.ExecuteQuery();
             }
             return true;
         }

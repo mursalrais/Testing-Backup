@@ -9,7 +9,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
     public class WorkingRelationshipDetailVM : Item
     {
         [UIHint("AjaxComboBox")]
-        public AjaxComboBoxVM Poisition { get; set; } = new AjaxComboBoxVM
+        public AjaxComboBoxVM Position { get; set; } = new AjaxComboBoxVM
         {
             ControllerName = "HRDataMaster",
             ActionName = "GetPositions",
