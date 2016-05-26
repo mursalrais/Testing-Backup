@@ -100,14 +100,26 @@
         
             $(document).ready(function () {
 
+
                 $("#tenure").on('input', function () {
                     sumCal();
                 });
 
                 function sumCal() {
-                    var tenure = $("#tenure").val();
+
                     var dateOfNewPSA = $("#dateofNewPSA").val();
-                    var psaexpirydate = new Date(new Date(dateOfNewPSA).setMonth(dateOfNewPSA.getMonth() + tenure));;
+                    var dateofnewpsa = new Date(dateOfNewPSA);
+                    var monthpsa = dateofnewpsa.getMonth();
+                    var monthint = parseInt(monthpsa);
+                    var datepsa = dateofnewpsa.getDate();
+
+                    var tenure = $("#tenure").val();
+                    var tenureint = parseInt(tenure);
+                    var addtenure = tenureint + monthint;
+
+                    var setmonth = new Date(dateofnewpsa.setMonth(addtenure));
+
+                    var psaexpirydate = setmonth.getMonth() + 1 + '/' + setmonth.getDate() + '/' + setmonth.getFullYear();
                     $("#pSAExpiryDate").val(psaexpirydate);
                 }
             });

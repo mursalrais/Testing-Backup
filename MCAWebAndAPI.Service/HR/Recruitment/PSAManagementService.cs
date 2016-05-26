@@ -172,9 +172,12 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             foreach (var doc in documents)
             {
+                var updateValue = new Dictionary<string, object>();
+                updateValue.Add("psa", new FieldLookupValue { LookupId = Convert.ToInt32(psaID) });
+
                 try
                 {
-                    SPConnector.UploadDocument(SP_PSA_DOC_LIST_NAME, doc.FileName, doc.InputStream, _siteUrl);
+                    SPConnector.UploadDocument(SP_PSA_DOC_LIST_NAME, updateValue, doc.FileName, doc.InputStream, _siteUrl);
                 }
                 catch (Exception e)
                 {
