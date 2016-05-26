@@ -553,6 +553,9 @@
     <Content Include="Views\HRManpowerRequisition\_OtherRequirements.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Boolean.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\CheckBoxItem.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\InGridComboBox.cshtml" />
+    <Content Include="Views\HRProfessional\_OrganizationalDetails.cshtml" />
+    <Content Include="Views\HRProfessional\_TrainingDetails.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
