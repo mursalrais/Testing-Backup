@@ -22,7 +22,7 @@ namespace MCAWebAndAPI.Web.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class MessageResource {
+    public class MessageResource {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace MCAWebAndAPI.Web.Resources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MCAWebAndAPI.Web.Resources.MessageResource", typeof(MessageResource).Assembly);
@@ -51,7 +51,7 @@ namespace MCAWebAndAPI.Web.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,9 +61,18 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Congratulation. It works!.
+        /// </summary>
+        public static string SuccessCommon {
+            get {
+                return ResourceManager.GetString("SuccessCommon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Congratulation {0}! Your application has successfully been submitted..
         /// </summary>
-        internal static string SuccessCreateApplicationData {
+        public static string SuccessCreateApplicationData {
             get {
                 return ResourceManager.GetString("SuccessCreateApplicationData", resourceCulture);
             }
@@ -81,7 +90,7 @@ namespace MCAWebAndAPI.Web.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Congratulation {0}! To download the printed version of your application. &lt;br/&gt;&lt;br/&gt;&lt;a href=&quot;{1}&quot; target=&quot;_blank&quot; class=&quot;btn btn-labeled btn-default&quot;&gt; &lt;span class=&quot;btn-label&quot;&gt;&lt;i class=&quot;fa fa-file&quot;&gt;&lt;/i&gt;&lt;/span&gt;Download File&lt;/a&gt;.
         /// </summary>
-        internal static string SuccessPrintApplicationData {
+        public static string SuccessPrintApplicationData {
             get {
                 return ResourceManager.GetString("SuccessPrintApplicationData", resourceCulture);
             }

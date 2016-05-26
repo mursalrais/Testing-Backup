@@ -135,7 +135,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetPsa(string id)
         {
-            psaManagementService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            psaManagementService.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));
             var professionals = GetFromExistingSession();
             return Json(professionals.OrderByDescending(e => e.PSAID).Where(e => e.ID == id).Select(
                     e =>

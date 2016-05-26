@@ -10,10 +10,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
     public class OrganizationalDetailVM : Item
     {
         [UIHint("InGridComboBox")]
-        public InGridComboBoxVM Project { get; set; } = new InGridComboBoxVM
-        {
-            ViewDataKey = "Project"
-        }; 
+        public InGridComboBoxVM Project { get; set; } = new InGridComboBoxVM(); 
 
         public static IEnumerable<InGridComboBoxVM> GetProjectOptions()
         {
@@ -85,9 +82,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public DateTime? LastWorkingDay { get; set; } = DateTime.UtcNow;
 
         [UIHint("InGridComboBox")]
-        public InGridComboBoxVM ProfessionalStatus { get; set; } = new InGridComboBoxVM
-        {
-            ViewDataKey = "ProfessionalStatus"
-        };
+        public InGridComboBoxVM ProfessionalStatus { get; set; } = new InGridComboBoxVM();
     }
 }

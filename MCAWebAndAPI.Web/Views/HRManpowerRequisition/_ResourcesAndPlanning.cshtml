@@ -18,9 +18,15 @@
     <div class="form-group">
         @Html.Bootstrap().LabelFor(m => m.Workplan).Class("col-md-4 control-label")
         <div class="col-md-8">
-            @Html.EditorFor(m => m.Workplan)
+            @{
+                var arr = Model.Workplan.ToArray();
+                for (int i = 0; i < Model.Workplan.ToArray().Length; i++)
+                {
+                    @Html.EditorForModel(arr[i].Value);
+                }
+            }
         </div>
-    </div>    
+    </div>
 </div>
 
 

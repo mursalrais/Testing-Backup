@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace MCAWebAndAPI.Model.ViewModel.Control
 {
@@ -6,7 +7,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Control
     {
         public string Text { get; set; }
 
-        public bool Value { get; set; }
+        public Boolean? Value { get; set; }
         
     }
 }

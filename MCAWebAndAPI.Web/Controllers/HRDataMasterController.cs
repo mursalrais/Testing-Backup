@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using MCAWebAndAPI.Web.Resources;
 using System.Collections.Generic;
 using MCAWebAndAPI.Model.HR.DataMaster;
+using MCAWebAndAPI.Web.Helpers;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -20,7 +21,7 @@ namespace MCAWebAndAPI.Web.Controllers
         public JsonResult GetProfessionalMonthlyFees()
         {
             //TODO: Ask whether it is from BO or from HR
-            _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            _dataMasterService.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));
 
             var professionalmonthlyfee = GetFromProfessionalMonthlyFeesExistingSession();
 
@@ -52,6 +53,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetProfessional(int id)
         {
+            _dataMasterService.SetSiteUrl(System.Web.HttpContext.Current.Session["SiteUrl"] as string);
             var professionals = GetFromExistingSession();
             return Json(professionals.Where(e => e.ID == id).Select(
                     e =>

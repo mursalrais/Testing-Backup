@@ -28,5 +28,10 @@ namespace MCAWebAndAPI.Service.HR.Common
         IEnumerable<ProfessionalMaster> GetProfessionalMonthlyFees();
 
         IEnumerable<PositionsMaster> GetPositions();
+        int? CreateProfessionalData(ProfessionalDataVM viewModel);
+        void CreateEducationDetails(int? headerID, IEnumerable<EducationDetailVM> educationDetails);
+        void CreateTrainingDetails(int? headerID, IEnumerable<TrainingDetailVM> trainingDetails);
+        void CreateDependentDetails(int? headerID, IEnumerable<HttpPostedFileBase> documents);
+        void CreateOrganizationalDetails(int? headerID, IEnumerable<EducationDetailVM> educationDetails);
     }
 }

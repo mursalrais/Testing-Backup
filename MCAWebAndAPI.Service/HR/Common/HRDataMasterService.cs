@@ -6,6 +6,7 @@ using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
 using System.Linq;
 using MCAWebAndAPI.Service.ProjectManagement.Common;
+using System.Web;
 
 namespace MCAWebAndAPI.Service.HR.Common
 {
@@ -246,6 +247,31 @@ namespace MCAWebAndAPI.Service.HR.Common
 
             return viewModel;
 
+        }
+
+        public int? CreateProfessionalData(ProfessionalDataVM viewModel)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CreateEducationDetails(int? headerID, IEnumerable<EducationDetailVM> educationDetails)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CreateTrainingDetails(int? headerID, IEnumerable<TrainingDetailVM> trainingDetails)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CreateDependentDetails(int? headerID, IEnumerable<HttpPostedFileBase> documents)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CreateOrganizationalDetails(int? headerID, IEnumerable<EducationDetailVM> educationDetails)
+        {
+            throw new NotImplementedException();
         }
     }
 }

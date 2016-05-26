@@ -66,13 +66,13 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 ID = item["professional_x003a_ID"] == null ? "" :
                Convert.ToString((item["professional_x003a_ID"] as FieldLookupValue).LookupValue),
-                JoinDate = Convert.ToString(item["joindate"]),
-                DateOfNewPSA = Convert.ToString(item["dateofnewpsa"]),
-                PsaExpiryDate = Convert.ToString(item["psaexpirydate"]),
+                PSAID = Convert.ToString(item["ID"]),
+                JoinDate = Convert.ToDateTime(item["joindate"]).ToLocalTime().ToShortDateString(),
+                DateOfNewPSA = Convert.ToDateTime(item["dateofnewpsa"]).ToLocalTime().ToShortDateString(),
+                PsaExpiryDate = Convert.ToDateTime(item["psaexpirydate"]).ToLocalTime().ToShortDateString(),
                 ProjectOrUnit = Convert.ToString(item["ProjectOrUnit"]),
                 Position = item["position"] == null ? "" :
                Convert.ToString((item["position"] as FieldLookupValue).LookupValue)
-
             };
         }
 
