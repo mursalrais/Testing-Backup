@@ -8,3 +8,10 @@
 2016-05-21 21:40:04.0294 MCAWebAndAPI.Service.Asset.LocationMasterService Object reference not set to an instance of an object.
 2016-05-22 13:07:11.5173 MCAWebAndAPI.Service.HR.Recruitment.HRApplicationService The underlying connection was closed: An unexpected error occurred on a send.
 2016-05-22 14:38:35.6999 MCAWebAndAPI.Service.HR.Recruitment.HRApplicationService The remote name could not be resolved: 'eceos2.sharepoint.com'
+2016-05-25 18:05:29.1329 MCAWebAndAPI.Service.HR.Payroll.HRPayrollServices Access denied. You do not have permission to perform this action or access this resource.
+2016-05-26 14:20:44.2667 MCAWebAndAPI.Service.HR.Payroll.HRPayrollServices Column 'maritalstatus' does not exist. It may have been deleted by another user.  /sites/ims/hr/Lists/MonthlyFee
+2016-05-26 14:21:43.6914 MCAWebAndAPI.Service.HR.Payroll.HRPayrollServices Value does not fall within the expected range.
+2016-05-26 14:21:54.6563 MCAWebAndAPI.Service.HR.Payroll.HRPayrollServices Value does not fall within the expected range.
+2016-05-26 14:22:56.8371 MCAWebAndAPI.Service.HR.Payroll.HRPayrollServices Column 'maritalstatus' does not exist. It may have been deleted by another user.  /sites/ims/hr/Lists/MonthlyFee
+2016-05-26 14:26:43.8017 MCAWebAndAPI.Service.HR.Payroll.HRPayrollServices Column 'maritalstatus' does not exist. It may have been deleted by another user.  /sites/ims/hr/Lists/MonthlyFee
+2016-05-26 17:38:14.7414 MCAWebAndAPI.Service.HR.Payroll.HRPayrollServices Value does not fall within the expected range.

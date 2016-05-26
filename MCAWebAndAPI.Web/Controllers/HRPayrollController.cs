@@ -8,6 +8,8 @@ using System.Web.Mvc;
 using MCAWebAndAPI.Model.ViewModel.Control;
 using MCAWebAndAPI.Web.Filters;
 using MCAWebAndAPI.Web.Resources;
+using MCAWebAndAPI.Web.Helpers;
+using MCAWebAndAPI.Service.Resources;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -23,12 +25,11 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult CreateMonthlyFee(string siteUrl = null)
         {
             // Clear Existing Session Variables if any
-            if (System.Web.HttpContext.Current.Session.Keys.Count > 0)
-                System.Web.HttpContext.Current.Session.Clear();
+            SessionManager.RemoveAll();
 
             // MANDATORY: Set Site URL
             _hRPayrollService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-            System.Web.HttpContext.Current.Session["SiteUrl"] = siteUrl ?? ConfigResource.DefaultHRSiteUrl;
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             // Get blank ViewModel
             var viewModel = _hRPayrollService.GetPopulatedModel();
@@ -40,7 +41,6 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         [HttpPost]
-       
         public JsonResult SubmitMonthlyFee(MonthlyFeeVM viewModel)
         {
             _hRPayrollService.SetSiteUrl(System.Web.HttpContext.Current.Session["SiteUrl"] as string);
@@ -63,11 +63,27 @@ namespace MCAWebAndAPI.Web.Controllers
 
             //add to database
 
-            return new JsonResult()
+            return Json(new
             {
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet,
-                Data = new { result = "Success" }
-            };
+                result = "Success",
+                dom = SessionManager.Get<string>("SiteUrl"),
+                urlToRedirect =
+     string.Format("{0}/{1}", SessionManager.Get<string>("SiteUrl"), UrlResource.MonthlyFee)
+
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult PostMessage()
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            return Json(new
+            {
+                result = "Success",
+                dom = siteUrl,
+                urlToRedirect =
+string.Format("{0}/{1}", siteUrl, UrlResource.MonthlyFee)
+
+            }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult EditMonthlyFee(int ID, string siteUrl = null)
@@ -81,7 +97,7 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         [HttpPost]
-       
+
         public JsonResult UpdateMonthlyFee(MonthlyFeeVM _data, string site)
         {
             _hRPayrollService.SetSiteUrl(System.Web.HttpContext.Current.Session["SiteUrl"] as string);
@@ -99,11 +115,14 @@ namespace MCAWebAndAPI.Web.Controllers
 
             //add to database
 
-            return new JsonResult()
+            return Json(new
             {
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet,
-                Data = new { result = "Success" }
-            };
+                result = "Success",
+                dom = SessionManager.Get<string>("SiteUrl"),
+                urlToRedirect =
+                string.Format("{0}/{1}", SessionManager.Get<string>("SiteUrl"), UrlResource.MonthlyFee)
+
+            }, JsonRequestBehavior.AllowGet);
         }
 
 

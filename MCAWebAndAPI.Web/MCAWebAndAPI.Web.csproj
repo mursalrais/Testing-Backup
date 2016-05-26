@@ -556,6 +556,9 @@
     <Content Include="Views\Shared\EditorTemplates\InGridComboBox.cshtml" />
     <Content Include="Views\HRProfessional\_OrganizationalDetails.cshtml" />
     <Content Include="Views\HRProfessional\_TrainingDetails.cshtml" />
+    <Content Include="Views\HRPSAManagement\DisplayPSAManagement.cshtml" />
+    <Content Include="Views\HRPSAManagement\_DocumentDetails.cshtml" />
+    <Content Include="Views\HRPSAManagement\_DocumentDetailsDisplay.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

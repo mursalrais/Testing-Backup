@@ -70,7 +70,16 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}/PSA%20Documents/Forms/AllItems.aspx#InplviewHash3435d02c-8f08-40e0-afad-b011e601c7b1=.
+        ///   Looks up a localized string similar to List/MonthlyFee.
+        /// </summary>
+        public static string MonthlyFee {
+            get {
+                return ResourceManager.GetString("MonthlyFee", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}/PSA%20Documents/Forms/AllItems.aspx#InplviewHash3435d02c-8f08-40e0-afad-b011e601c7b1=FilterField1%3Dpsa%255Fx003a%255FID-FilterValue1%3D{1}.
         /// </summary>
         public static string PSAManagementDocumentByID {
             get {

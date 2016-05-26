@@ -120,6 +120,9 @@
   <data name="ApplicationDocumentByID" xml:space="preserve">
     <value>{0}/Application%20Documents/Forms/AllItems.aspx#InplviewHash2b5b69fa-94aa-4a00-9fd3-c076a11aab23=FilterField1%3Dapplication%255Fx003a%255FID-FilterValue1%3D6{1}</value>
   </data>
+  <data name="MonthlyFee" xml:space="preserve">
+    <value>List/MonthlyFee</value>
+  </data>
   <data name="PSAManagementDocumentByID" xml:space="preserve">
     <value>{0}/PSA%20Documents/Forms/AllItems.aspx#InplviewHash3435d02c-8f08-40e0-afad-b011e601c7b1=</value>
   </data>

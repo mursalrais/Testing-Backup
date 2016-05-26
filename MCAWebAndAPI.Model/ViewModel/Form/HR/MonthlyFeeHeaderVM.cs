@@ -18,6 +18,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         public string Status { get; set; }
 
+        [DisplayName("Professional Name")]
+        public string ProfessionalNameEdit { get; set; }
+
         AjaxComboBoxVM _professionalName = new AjaxComboBoxVM
         {
             ActionName = "GetProfessionalMonthlyFees",
@@ -34,20 +37,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public string EndOfContract { get; set; }
 
         [UIHint("Date")]
-        public DateTime? DateOfNewFee
-        {
-            get
-            {
-                return _dateOfNewFee;
-            }
-
-            set
-            {
-                _dateOfNewFee = value;
-            }
-        }
-
-        DateTime? _dateOfNewFee = DateTime.UtcNow;
+        public DateTime? DateOfNewFee { get; set; } = DateTime.UtcNow;
 
         public int MonthlyFee { get; set; }
 

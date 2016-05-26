@@ -10,7 +10,7 @@
                                                                     OnFailure = "onFailure"
                                                                 }, new { @class = "form-horizontal" }))
 {<fieldset>
-        <legend>Form Asset Transfer</legend>
+        <legend>Form Monthly Fee</legend>
         @Html.AntiForgeryToken()
         @Html.ValidationSummary()
 
@@ -22,9 +22,9 @@
                 </div>
             </div>
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.ProfessionalName).Class("col-md-4 control-label")
+                @Html.Bootstrap().LabelFor(m => m.Header.ProfessionalNameEdit).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Html.EditorFor(m => m.Header.ProfessionalName)
+                    @Html.DisplayFor(m => m.Header.ProfessionalNameEdit)
                 </div>
             </div>
             <div class="form-group">
