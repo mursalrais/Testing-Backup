@@ -61,7 +61,7 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://eceos2.sharepoint.com/sites/mca-dev/dev.
+        ///   Looks up a localized string similar to https://eceos2.sharepoint.com/sites/ims/ho.
         /// </summary>
         internal static string DefaultBOSiteUrl {
             get {
@@ -70,7 +70,7 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://eceos2.sharepoint.com/sites/mca-dev/hr.
+        ///   Looks up a localized string similar to https://eceos2.sharepoint.com/sites/ims/hr.
         /// </summary>
         internal static string DefaultHRSiteUrl {
             get {
@@ -79,7 +79,7 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://eceos2.sharepoint.com/sites/mca-dev.
+        ///   Looks up a localized string similar to https://eceos2.sharepoint.com/sites/ims.
         /// </summary>
         internal static string DefaultProgramSiteUrl {
             get {

@@ -1,43 +1,43 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
-@model ApplicationDataVM
+@model ManpowerRequisitionVM
 
 @{
-    ViewBag.Title = "CreateApplicationData";
+    ViewBag.Title = "CreateManpowerRequisition";
 }
 
-@using (Html.BeginForm("CreateApplicationData", "HRApplication", FormMethod.Post, 
+@using (Html.BeginForm("CreateManpowerRequisition", "HRCreateManpowerRequisition", FormMethod.Post, 
                                                      new
                                                      { @class = "form-horizontal",
                                                          enctype = "multipart/form-data" }))
 {
     <fieldset>
-        <legend>Personal Details</legend>
+        <legend>General</legend>
         <div class="row">
-            @Html.Partial("_PersonalDetails", Model)
+            @Html.Partial("_General", Model)
         </div>
-        <legend>Contact Information</legend>
+        <legend>Supporting Document</legend>
         <div class="row">
-            @Html.Partial("_ContactInformationDetails", Model)
+            @Html.Partial("_SupportingDocument", Model)
         </div>
-        <legend>Education</legend>
+        <legend>Working Relationship</legend>
+        @*<div class="row">
+            @Html.Partial("_WorkingRelationship", Model.WorkingRelationshipDetails)
+        </div>*@
+        <legend>Resources and Planning</legend>
         <div class="row">
-            @Html.Partial("_EducationDetails", Model.EducationDetails)
+            @Html.Partial("_ResourcesAndPlanning", Model)
         </div>
-        <legend>Training</legend>
+        <legend>Background Requirement</legend>
         <div class="row">
-            @Html.Partial("_TrainingDetails", Model.TrainingDetails)
+            @Html.Partial("_BackgroundRequirement", Model)
         </div>
-        <legend>Specialization</legend>
+        <legend>Specific Experience</legend>
         <div class="row">
-            @Html.Partial("_SpecializationDetails", Model)
+            @Html.Partial("_Specificexperience", Model)
         </div>
-        <legend>Working Experience</legend>
+        <legend>Other Requirements</legend>
         <div class="row">
-            @Html.Partial("_WorkingExperienceDetails", Model)
-        </div>
-        <legend>Documents</legend>
-        <div class="row">
-            @Html.Partial("_DocumentDetails", Model)
+            @Html.Partial("_OtherRequirements", Model)
         </div>
     </fieldset>
     <div class="form-actions">

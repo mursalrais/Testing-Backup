@@ -1,0 +1,32 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model IEnumerable<WorkingRelationshipDetailVM>
+
+
+<div class="col-md-12" style="margin-bottom: 20px">
+    @(Html.Kendo().Grid(Model)
+        .Name("WorkingRelationshipDetails")
+        .ToolBar(tools => tools.Create().Text("Add New"))
+        .Editable(editable => editable.Mode(GridEditMode.InCell).CreateAt(GridInsertRowPosition.Bottom))
+        .Columns(columns =>
+        {
+            columns.Bound(p => p.Position).ClientTemplate("#= Position #" +
+                          "<input type='hidden' name='WorkingExperienceDetails[#= getWorkingExperienceDetail(data)#].Position' value='#= Position #' />"
+                        );
+            columns.Bound(p => p.Relationship).ClientTemplate("#= Company #" +
+                               "<input type='hidden' name='WorkingExperienceDetails[#= getWorkingExperienceDetail(data)#].Company' value='#= Company #' />"
+                             );
+            columns.Bound(p => p.Frequency).ClientTemplate("#= Frequency #" +
+                               "<input type='hidden' name='WorkingExperienceDetails[#= getWorkingExperienceDetail(data)#].From' value='#= From #' />"
+                             );
+            
+        })
+        .DataSource(dataSource => dataSource.Ajax()
+                   .Model(model =>
+                   {
+                       model.Id(p => p.ID);
+                   })
+                   .ServerOperation(false)
+        )
+    )
+</div>
+

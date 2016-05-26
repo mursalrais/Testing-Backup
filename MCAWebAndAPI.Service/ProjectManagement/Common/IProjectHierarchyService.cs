@@ -1,5 +1,6 @@
 ﻿using MCAWebAndAPI.Model.ProjectManagement.Common;
 using MCAWebAndAPI.Model.ViewModel.Chart;
+using MCAWebAndAPI.Model.ViewModel.Control;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,8 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Common
         IEnumerable<WBSMapping> GetAllWBSMappings();
 
         IEnumerable<WBSMapping> GetWBSMappingsInProgram();
+
+        IEnumerable<InGridComboBoxVM> GetProjectComboBox();
 
         bool UpdateWBSMapping();
     }

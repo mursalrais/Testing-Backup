@@ -1,8 +1,11 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
 @model ProfessionalDataVM
 
-<h3>Health Insurance</h3>
 <div class="row">
+    <div class="col-md-12">
+        <label class="col-md-6">Health Insurance</label>
+        <div class="col-md-6"></div>
+    </div>
     <div class="col-md-6">
         <div class="form-group">
             @Html.Bootstrap().LabelFor(m => m.AccountNameForHI).Class("col-md-4 control-label")
@@ -51,8 +54,11 @@
     </div>
 </div>
 
-<h3>Components</h3>
 <div class="row">
+    <div class="col-md-12">
+        <label class="col-md-6">Components</label>
+        <div class="col-md-6"></div>
+    </div>
     <div class="col-md-6">
         <div class="form-group">
             @Html.Bootstrap().LabelFor(m => m.VendorAccountNumberRIForHI).Class("col-md-4 control-label")
@@ -79,10 +85,14 @@
             </div>
         </div>
     </div>
+    <div class="col-md-6"></div>
 </div>
 
-<h3>Saving Plan</h3>
 <div class="row">
+    <div class="col-md-12">
+        <label class="col-md-6">Saving Plan</label>
+        <div class="col-md-6"></div>
+    </div>
     <div class="col-md-6">
         <div class="form-group">
             @Html.Bootstrap().LabelFor(m => m.AccountNameForSP).Class("col-md-4 control-label")

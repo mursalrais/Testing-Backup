@@ -17,35 +17,34 @@
     new { @class = "form-horizontal"}))
 {
     <fieldset>
-        <legend>Personnal Details</legend>
+        <legend>Personal Details</legend>
         @Html.HiddenFor(m => m.ID)
         <div class="row">
             @Html.Partial("_PersonalDetails", Model)
         </div>
-        <legend>Contact Information</legend>
+        <legend>Organizational Details</legend>
         <div class="row">
             @Html.Partial("_OrganizationalDetails", Model.OrganizationalDetails)
         </div>
+        <legend>Contact Information Details</legend>
         <div class="row">
             @Html.Partial("_ContactInformationDetails", Model)
         </div>
-        <legend>Education</legend>
+        <legend>Education Details</legend>
         <div class="row">
             @Html.Partial("_EducationDetails", Model.EducationDetails)
         </div>
-        <legend>Training</legend>
+        <legend>Training Details</legend>
         <div class="row">
             @Html.Partial("_TrainingDetails", Model.TrainingDetails)
         </div>
-        <legend>Specialization</legend>
-        <div class="row">
+        <legend>Insurance Details</legend>
             @Html.Partial("_InsuranceDetails", Model)
-        </div>
-        <legend>Working Experience</legend>
+        <legend>Payroll Details</legend>
         <div class="row">
             @Html.Partial("_PayrollDetails", Model)
         </div>
-        <legend>Documents</legend>
+        <legend>Dependent Details</legend>
         <div class="row">
             @Html.Partial("_DependentDetails", Model.DependentDetails)
         </div>

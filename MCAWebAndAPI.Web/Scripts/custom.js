@@ -1,4 +1,15 @@
-﻿
+﻿function onUpload(e) {
+    var files = e.files;
+
+    $.each(files, function () {
+        if (this.size > 1 * 1024 * 1024) {
+            alert(this.name + " is too big!");
+            e.preventDefault(); // This cancels the upload for the file
+        }
+    });
+}
+
+
 function onBeginForm() {
     showLoading();
 }
@@ -23,7 +34,9 @@ function onSuccessForm(e) {
 
 // It is only used if embedded in SharePoint
 function onSuccessFormEmbed(data) {
-    parent.postMessage("Success", data.urlToRedirect);
+    parent.postMessage({ 
+        result: "Success", urlToRedirect: data
+    }, data);
 }
 
 function showLoading() {
