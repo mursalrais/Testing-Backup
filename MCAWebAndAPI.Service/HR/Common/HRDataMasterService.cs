@@ -118,6 +118,7 @@ namespace MCAWebAndAPI.Service.HR.Common
                 ID = Convert.ToInt32(item["ID"]),
                 Name = Convert.ToString(item["Title"]),
                 Status = Convert.ToString(item["maritalstatus"]),
+                Position = Convert.ToString(item["Position"])
             };
         }
 
@@ -134,7 +135,8 @@ namespace MCAWebAndAPI.Service.HR.Common
                 ID = Convert.ToInt32(item["ID"]),
                 Name = Convert.ToString(item["Title"]),
                 Status = Convert.ToString(item["maritalstatus"]),
-                Position = Convert.ToString(item["Position"])
+                Position = item["Position"] == null ? "" :
+               Convert.ToString((item["Position"] as FieldLookupValue).LookupValue)
             };
         }
 
