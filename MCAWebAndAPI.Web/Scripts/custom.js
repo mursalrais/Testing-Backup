@@ -9,13 +9,13 @@
     });
 }
 
-
 function onBeginForm() {
     showLoading();
 }
 
 function onFailureForm(e) {
-    $('#modal-html-content').html('<div class="alert alert-danger fade in">' + e.errorMessage + '</div>');
+    $('#modal-html-content').html('<div class="alert alert-danger fade in">'
+        + e.responseText.errorMessage + '</div>');
 }
 
 // Do not use this if embedded in SharePoint
@@ -25,18 +25,18 @@ function onCompleteForm() {
 }
 
 function onSuccessForm(e) {
-    if (e == null || e.successMessage == null)
+    if (e == null || e.responseText.successMessage == null)
         onFailureForm(e);
 
     $('#modal-html-content').html('<div class="alert alert-success alert-block"><h4 class="alert-heading">Success!</h4>'
-        + e.successMessage + '</div>');
+        + e.responseText.successMessage + '</div>');
 }
 
 // It is only used if embedded in SharePoint
-function onSuccessFormEmbed(data) {
-    parent.postMessage({ 
-        result: data.result, urlToRedirect: data.urlToRedirect
-    }, data.urlToRedirect);
+function onSuccessFormEmbed(response) {
+    setTimeout(function () {
+        parent.postMessage(response.responseText, response.responseText.urlToRedirect);
+    }, 3000);
 }
 
 function showLoading() {

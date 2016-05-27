@@ -22,6 +22,9 @@
         columns.Bound(p => p.PSANumber).ClientTemplate("#= PSANumber #" +
                            "<input type='hidden' name='OrganizationalDetails[#= getOrganizationalDetail(data)#].PSANumber' value='#= PSANumber #' />"
                          );
+
+        //TODO: To display in user-friendly format 
+
         columns.Bound(p => p.StartDate).ClientTemplate("#= StartDate.toDateString() #" +
                            "<input type='hidden' name='OrganizationalDetails[#= getOrganizationalDetail(data)#].StartDate' value='#= StartDate #' />"
                          );

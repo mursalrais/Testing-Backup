@@ -181,8 +181,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\ErrorResource.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ErrorResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>MCAWebAndAPI.Service.Resources</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\UrlResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

@@ -3,7 +3,7 @@
 @model PSAManagementVM
 
 @{
-    ViewBag.Title = "CreatePSAManagement";
+    ViewBag.Title = "Form Create PSA Management";
 }
 
 @using (Html.BeginForm("CreatePSAManagement", "HRPSAManagement", FormMethod.Post,
@@ -85,10 +85,6 @@
                     var addtenure = tenureint + monthint;
 
                     var setmonth = new Date(dateofnewpsa.setMonth(addtenure));
-
-                    console.log(setmonth.getDate());
-                    console.log(setmonth.getMonth());
-                    console.log(setmonth.getFullYear());
 
                     var psaexpirydate = setmonth.getMonth() + 1 + '/' + setmonth.getDate() + '/' + setmonth.getFullYear();
                     $("#pSAExpiryDate").val(psaexpirydate);

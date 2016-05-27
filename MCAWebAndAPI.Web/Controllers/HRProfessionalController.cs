@@ -1,15 +1,19 @@
-﻿using MCAWebAndAPI.Model.ViewModel.Form.HR;
+﻿using Elmah;
+using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using MCAWebAndAPI.Service.HR.Common;
+using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
+    [HandleError]
     public class HRProfessionalController : Controller
     {
         IHRDataMasterService _service;
@@ -31,6 +35,114 @@ namespace MCAWebAndAPI.Web.Controllers
 
             return View(viewModel);
         }
-        
+
+        [HttpPost]
+        public ActionResult EditProfessional(FormCollection form, ProfessionalDataVM viewModel)
+        {
+            if(!ModelState.IsValid)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                var errorMessages = BindHelper.GetErrorMessages(ModelState.Values);
+                return JsonHelper.GenerateJsonErrorResponse(errorMessages);
+            }
+
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            int? headerID = null;
+            try
+            {
+                headerID = _service.CreateProfessionalData(viewModel);
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            try
+            {
+                viewModel.OrganizationalDetails = BindOrganizationalDetails(form, viewModel.OrganizationalDetails);
+                _service.CreateOrganizationalDetails(headerID, viewModel.EducationDetails);
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            try
+            {
+                viewModel.EducationDetails = BindEducationDetails(form, viewModel.EducationDetails);
+                _service.CreateEducationDetails(headerID, viewModel.EducationDetails);
+            }
+            catch (Exception e)
+            {
+
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            try
+            {
+                viewModel.TrainingDetails = BindTrainingDetails(form, viewModel.TrainingDetails);
+                _service.CreateTrainingDetails(headerID, viewModel.TrainingDetails);
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+
+            try
+            {
+                _service.CreateDependentDetails(headerID, viewModel.Documents);
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            return JsonHelper.GenerateJsonSuccessResponse(UrlResource.Professional);
+        }
+
+        private IEnumerable<OrganizationalDetailVM> BindOrganizationalDetails(FormCollection form, IEnumerable<OrganizationalDetailVM> organizationalDetails)
+        {
+            var array = organizationalDetails.ToArray();
+
+            for (int i = 0; i < array.Length; i++)
+            {
+                array[i].LastWorkingDay = BindHelper.BindDateInGrid("OrganizationalDetails",
+                    i, "LastWorkingDay", form);
+            }
+            return array;
+        }
+
+        private IEnumerable<TrainingDetailVM> BindTrainingDetails(FormCollection form, IEnumerable<TrainingDetailVM> trainingDetails)
+        {
+            var array = trainingDetails.ToArray();
+            for (int i = 0; i < array.Length; i++)
+            {
+                array[i].Year = BindHelper.BindDateInGrid("TrainingDetails",
+                    i, "Year", form);
+            }
+
+            return array;
+        }
+
+        private IEnumerable<EducationDetailVM> BindEducationDetails(FormCollection form,
+            IEnumerable<EducationDetailVM> educationDetails)
+        {
+            var array = educationDetails.ToArray();
+            for (int i = 0; i < array.Length; i++)
+            {
+                array[i].YearOfGraduation = BindHelper.BindDateInGrid("EducationDetails",
+                    i, "YearOfGraduation", form);
+            }
+
+            return array;
+        }
     }
 }

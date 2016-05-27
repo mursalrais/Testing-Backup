@@ -61,7 +61,7 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}/Application%20Documents/Forms/AllItems.aspx#InplviewHash42bc0813-42d2-4539-82b2-c4f4d9945ece=FilterField1%3Dapplication%255Fx003a%255FID-FilterValue1%3D{1}.
+        ///   Looks up a localized string similar to {0}/Application%20Documents/Forms/AllItems.aspx#InplviewHash2b5b69fa-94aa-4a00-9fd3-c076a11aab23=FilterField1%3Dapplication%255Fx003a%255FID-FilterValue1%3D6{1}.
         /// </summary>
         public static string ApplicationDocumentByID {
             get {
@@ -70,11 +70,20 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lists/MonthlyFee.
+        ///   Looks up a localized string similar to List/MonthlyFee.
         /// </summary>
         public static string MonthlyFee {
             get {
                 return ResourceManager.GetString("MonthlyFee", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to List/Professional Master.
+        /// </summary>
+        public static string Professional {
+            get {
+                return ResourceManager.GetString("Professional", resourceCulture);
             }
         }
         

@@ -11,9 +11,5 @@ namespace MCAWebAndAPI.Model.ViewModel.Control
         public int CategoryID { get; set; }
 
         public string CategoryName { get; set; }
-
-        public string ViewDataKey { get; set; }
-
-        public IEnumerable<InGridComboBoxVM> BindTo { get; set; }
     }
 }
