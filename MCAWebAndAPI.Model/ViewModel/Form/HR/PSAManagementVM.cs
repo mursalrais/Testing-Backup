@@ -22,10 +22,12 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         [UIHint("ComboBox")]
         [DisplayName("Div/Project/Unit")]
+        [Required]
         public ComboBoxVM ProjectOrUnit { get; set; } = new ComboBoxVM { Choices = new string[] { "GP", "HN", "PM" } };
 
         [UIHint("Date")]
         [DisplayName("Join Date")]
+        [Required]
         public DateTime? joinDate { get; set; } = DateTime.Now;
 
         [UIHint("Date")]
@@ -36,6 +38,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         
         [UIHint("AjaxComboBox")]
         [DisplayName("Position Title")]
+        [Required]
         public AjaxComboBoxVM position { get; set; } = new AjaxComboBoxVM
         {
             ActionName = "GetPositions",
@@ -47,6 +50,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         [UIHint("AjaxComboBox")]
         [DisplayName("Professional Name")]
+        [Required]
         public AjaxComboBoxVM professional { get; set; } = new AjaxComboBoxVM
         {
             ActionName = "GetProfessionals",
@@ -63,10 +67,11 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         [UIHint("Date")]
         [DisplayName("PSA Expiry Date")]
-        public DateTime? pSAExpiryDate { get; set; }
+        public DateTime? pSAExpiryDate { get; set; } = DateTime.Now;
         
 
         [UIHint("MultiFileUploader")]
+        [Required]
         public IEnumerable<HttpPostedFileBase> Documents { get; set; } = new List<HttpPostedFileBase>();
 
         public string DocumentUrl { get; set; }

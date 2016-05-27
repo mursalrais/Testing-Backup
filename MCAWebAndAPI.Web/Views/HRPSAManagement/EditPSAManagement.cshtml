@@ -3,19 +3,31 @@
 @model PSAManagementVM
 
 @{
-    ViewBag.Title = "Form Create PSA Management";
+    ViewBag.Title = "Form Edit PSA Management";
 }
 
 
 @using (Html.BeginForm("UpdatePSAManagement", "HRPSAManagement", FormMethod.Post,
-                                                                             new
-                                                                             {
-                                                                                 @class = "form-horizontal",
-                                                                                 enctype = "multipart/form-data"
-                                                                             }))
+                                                                                         new
+                                                                                         {
+                                                                                             @class = "form-horizontal",
+                                                                                             enctype = "multipart/form-data"
+                                                                                         }))
 {
 
     <fieldset>
+        <legend>View PSA Management Data</legend>
+        <div class="row">
+            @Html.Partial("_PSAManagementDataEdit", Model)
+        </div>
+        <div class="row">
+            @Html.Partial("_DocumentDetailsDisplay", Model.DocumentUrl)
+        </div>
+    </fieldset>
+@*
+    <fieldset>
+
+
         <legend>Form Update PSA Management</legend>
         @Html.AntiForgeryToken()
         @Html.ValidationSummary()
@@ -76,13 +88,13 @@
                 </div>
             </div>
             <div class="row">
-                @Html.Partial("_DocumentDetailsDisplay", Model.DocumentUrl)
+                @Html.Partial("_DocumentDetails", Model)
             </div>
                @Html.HiddenFor(m => m.ID)
         </div>
-     @*<input class="k-button k-button-icontext k-grid-add" type="submit" value="Update" />*@
+     @*<input class="k-button k-button-icontext k-grid-add" type="submit" value="Update" />
     </fieldset>
-    
+*@
 }
 
     <div class="form-actions">

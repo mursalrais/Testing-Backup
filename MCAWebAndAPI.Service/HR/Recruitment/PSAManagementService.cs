@@ -10,6 +10,7 @@ using Microsoft.SharePoint.Client;
 using NLog;
 using System.Web;
 using MCAWebAndAPI.Service.Resources;
+using System.Globalization;
 
 
 namespace MCAWebAndAPI.Service.HR.Recruitment
@@ -108,7 +109,43 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.joinDate = Convert.ToDateTime(listItem["joindate"]).ToLocalTime();
             viewModel.dateofNewPSA = Convert.ToDateTime(listItem["dateofnewpsa"]).ToLocalTime();
             viewModel.tenure = Convert.ToInt32(listItem["tenure"]);
-            //viewModel.pSAExpiryDate = Convert.ToDateTime(listItem["psaexpirydate"]).ToLocalTime();
+            
+            viewModel.pSAExpiryDate = Convert.ToDateTime(listItem["psaexpirydate"]).ToLocalTime();
+
+            viewModel.DocumentUrl = GetDocumentUrl(viewModel.ID);
+
+            return viewModel;
+        }
+
+        public PSAManagementVM ViewPSAManagementData(int? ID)
+        {
+            var viewModel = new PSAManagementVM();
+            if (ID == null)
+                return viewModel;
+
+            var listItem = SPConnector.GetListItem(SP_PSA_LIST_NAME, ID, _siteUrl);
+            viewModel = ConvertToViewPSAManagementVM(listItem);
+
+            return viewModel;
+
+        }
+
+        private PSAManagementVM ConvertToViewPSAManagementVM(ListItem listItem)
+        {
+            var viewModel = new PSAManagementVM();
+
+            viewModel.ID = Convert.ToInt32(listItem["ID"]);
+            viewModel.psaNumber = Convert.ToString(listItem["Title"]);
+            viewModel.isrenewal.Value = Convert.ToString(listItem["isrenewal"]);
+            viewModel.renewalnumber = Convert.ToInt32(listItem["renewalnumber"]);
+            viewModel.ProjectOrUnit.Value = Convert.ToString(listItem["ProjectOrUnit"]);
+            viewModel.position.DefaultValue = FormatUtil.ConvertLookupToValue(listItem, "position");
+            viewModel.professional.DefaultValue = FormatUtil.ConvertLookupToValue(listItem, "professional");
+            viewModel.joinDate = Convert.ToDateTime(listItem["joindate"]).ToLocalTime();
+            viewModel.dateofNewPSA = Convert.ToDateTime(listItem["dateofnewpsa"]).ToLocalTime();
+            viewModel.tenure = Convert.ToInt32(listItem["tenure"]);
+
+            viewModel.pSAExpiryDate = Convert.ToDateTime(listItem["psaexpirydate"]).ToLocalTime();
 
             viewModel.DocumentUrl = GetDocumentUrl(viewModel.ID);
 
