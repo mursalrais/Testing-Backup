@@ -14,6 +14,9 @@ function onBeginForm() {
 }
 
 function onFailureForm(e) {
+    if (e.responseJSON.success)
+        onSuccessFormEmbed(e);
+
     $('#modal-html-content').html('<div class="alert alert-danger fade in">'
         + e.responseJSON.errorMessage + '</div>');
 }
