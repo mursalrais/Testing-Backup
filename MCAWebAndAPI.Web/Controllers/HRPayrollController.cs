@@ -10,6 +10,7 @@ using MCAWebAndAPI.Web.Filters;
 using MCAWebAndAPI.Web.Resources;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Service.Resources;
+using System.Net;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -34,38 +35,26 @@ namespace MCAWebAndAPI.Web.Controllers
             // Get blank ViewModel
             var viewModel = _hRPayrollService.GetPopulatedModel();
 
-            // Modify ViewModel based on spesific case, e.g., Asset Transfer is one of conditions in Asset transaction
-
             // Return to the name of the view and parse the model
             return View("CreateMonthlyFee", viewModel);
         }
 
         [HttpPost]
-        public JsonResult SubmitMonthlyFee(MonthlyFeeVM viewModel)
+        public ActionResult SubmitMonthlyFee(MonthlyFeeVM viewModel)
         {
-            _hRPayrollService.SetSiteUrl(System.Web.HttpContext.Current.Session["SiteUrl"] as string);
+            if (!ModelState.IsValid)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                var errorMessages = BindHelper.GetErrorMessages(ModelState.Values);
+                return JsonHelper.GenerateJsonErrorResponse(errorMessages);
+            }
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _hRPayrollService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             // Get Header ID after inster to SharePoint
             var headerID = _hRPayrollService.CreateHeader(viewModel.Header);
 
-            // Check whether error is found
-            if (!ModelState.IsValid)
-            {
-                return new JsonResult()
-                {
-                    JsonRequestBehavior = JsonRequestBehavior.AllowGet,
-                    Data = new { result = "Error" }
-                };
-            }
-
-            var siteUrl = SessionManager.Get<string>("SiteUrl");
-            return Json(new
-            {
-                result = "Success",
-                urlToRedirect =
-string.Format("{0}/{1}", siteUrl, UrlResource.MonthlyFee)
-
-            }, JsonRequestBehavior.AllowGet);
+            return JsonHelper.GenerateJsonSuccessResponse(UrlResource.MonthlyFee);
         }
 
         public ActionResult EditMonthlyFee(int ID, string siteUrl = null)
@@ -80,31 +69,21 @@ string.Format("{0}/{1}", siteUrl, UrlResource.MonthlyFee)
 
         [HttpPost]
 
-        public JsonResult UpdateMonthlyFee(MonthlyFeeVM _data, string site)
+        public ActionResult UpdateMonthlyFee(MonthlyFeeVM _data, string site)
         {
-            _hRPayrollService.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));
+            if (!ModelState.IsValid)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                var errorMessages = BindHelper.GetErrorMessages(ModelState.Values);
+                return JsonHelper.GenerateJsonErrorResponse(errorMessages);
+            }
+
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _hRPayrollService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             _hRPayrollService.UpdateHeader(_data);
 
-            if (!ModelState.IsValid)
-            {
-                return new JsonResult()
-                {
-                    JsonRequestBehavior = JsonRequestBehavior.AllowGet,
-                    Data = new { result = "Error" }
-                };
-            }
-
-            //add to database
-
-            var siteUrl = SessionManager.Get<string>("SiteUrl");
-            return Json(new
-            {
-                result = "Success",
-                urlToRedirect =
-string.Format("{0}/{1}", siteUrl, UrlResource.MonthlyFee)
-
-            }, JsonRequestBehavior.AllowGet);
+            return JsonHelper.GenerateJsonSuccessResponse(UrlResource.MonthlyFee);
         }
 
 
