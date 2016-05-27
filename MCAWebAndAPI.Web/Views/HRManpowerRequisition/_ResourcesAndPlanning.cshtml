@@ -17,8 +17,15 @@
     </div>
     <div class="form-group">
         @Html.Bootstrap().LabelFor(m => m.Workplan).Class("col-md-4 control-label")
-        <div class="col-md-8">
-            @Html.EditorFor(m => m.Workplan)
+        <div class="col-md-8">     
+            @{
+                var arr = Model.Workplan.ToArray();
+                foreach (var item in Model.Workplan)
+                {
+                    @Html.Kendo().CheckBox().Label(item.Text).Name(item.Text).Checked(item.Value);
+                    <br>
+                }
+            }    
         </div>
     </div>    
 </div>

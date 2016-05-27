@@ -1,4 +1,12 @@
 ﻿@model MCAWebAndAPI.Model.ViewModel.Control.CheckBoxItemVM
 
-@Html.CheckBoxFor
+@(Html.Kendo().CheckBoxFor(m => m)
+       .HtmlAttributes(new
+       {
+           @class = "form-control",
+           style = "width:100%;"
+       })
+      .Checked(Model.Value.Value)
+      .Label(Model.Text)
+)
 @Html.ValidationMessageFor(model => model)

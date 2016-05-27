@@ -10,13 +10,13 @@
         .Columns(columns =>
         {
             columns.Bound(p => p.Position).ClientTemplate("#= Position #" +
-                          "<input type='hidden' name='WorkingExperienceDetails[#= getWorkingExperienceDetail(data)#].Position' value='#= Position #' />"
+                          "<input type='hidden' name='WorkingRelationshipDetails[#= getWorkingRelationshipDetails(data)#].Position' value='#= Position #' />"
                         );
-            columns.Bound(p => p.Relationship).ClientTemplate("#= Company #" +
-                               "<input type='hidden' name='WorkingExperienceDetails[#= getWorkingExperienceDetail(data)#].Company' value='#= Company #' />"
+            columns.Bound(p => p.Relationship).ClientTemplate("#= Relationship #" +
+                               "<input type='hidden' name='WorkingRelationshipDetails[#= getWorkingRelationshipDetails(data)#].Relationship' value='#= Relationship #' />"
                              );
             columns.Bound(p => p.Frequency).ClientTemplate("#= Frequency #" +
-                               "<input type='hidden' name='WorkingExperienceDetails[#= getWorkingExperienceDetail(data)#].From' value='#= From #' />"
+                               "<input type='hidden' name='WorkingRelationshipDetails[#= getWorkingRelationshipDetails(data)#].Frequency' value='#= Frequency #' />"
                              );
             
         })
@@ -30,3 +30,10 @@
     )
 </div>
 
+<script>
+    function getWorkingRelationshipDetails(dataItem) {
+        var data = $("#WorkingRelationshipDetails").data("kendoGrid").dataSource.data();
+        console.log(data);
+        return data.indexOf(dataItem);
+    }
+</script>

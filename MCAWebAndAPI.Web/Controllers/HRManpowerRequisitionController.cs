@@ -157,7 +157,6 @@ namespace MCAWebAndAPI.Web.Controllers
 
             return array;
         }
-
         
         public ActionResult CreateManpowerRequisition(string siteUrl = null)
         {

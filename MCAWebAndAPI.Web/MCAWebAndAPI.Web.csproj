@@ -554,6 +554,9 @@
     <Content Include="Views\HRManpowerRequisition\_OtherRequirements.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Boolean.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\CheckBoxItem.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\InGridComboBox_Position.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\InGridComboBox_Relationship.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\InGridComboBox_Frequency.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
