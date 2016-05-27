@@ -7,6 +7,7 @@ using Microsoft.SharePoint.Client;
 using System.Linq;
 using MCAWebAndAPI.Service.ProjectManagement.Common;
 using System.Web;
+using NLog;
 
 namespace MCAWebAndAPI.Service.HR.Common
 {
@@ -75,7 +76,6 @@ namespace MCAWebAndAPI.Service.HR.Common
         const string SP_PROMAS_LIST_NAME = "Professional Master";
         const string SP_POSMAS_LIST_NAME = "Position Master";
         const string SP_MONFEE_LIST_NAME = "Monthly Fee";
-
         
         public void SetSiteUrl(string siteUrl)
         {
@@ -251,7 +251,19 @@ namespace MCAWebAndAPI.Service.HR.Common
 
         public int? CreateProfessionalData(ProfessionalDataVM viewModel)
         {
-            throw new NotImplementedException();
+            var updatedValues = new Dictionary<string, object>();
+
+
+            try
+            {
+
+            }catch(Exception e)
+            {
+                
+            }
+
+
+            return SPConnector.GetInsertedItemID(SP_PROMAS_LIST_NAME, _siteUrl);
         }
 
         public void CreateEducationDetails(int? headerID, IEnumerable<EducationDetailVM> educationDetails)

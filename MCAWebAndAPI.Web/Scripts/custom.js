@@ -37,6 +37,9 @@ function onSuccessFormEmbed(e) {
     if (e == null || e.responseJSON.successMessage == null)
         onFailureForm(e);
 
+    $('#modal-html-content').html('<div class="alert alert-success alert-block"><h4 class="alert-heading">Success!</h4>'
+        + e.responseJSON.successMessage + '</div>');
+
     setTimeout(function () {
         parent.postMessage(e.responseJSON, e.responseJSON.urlToRedirect);
     }, 3000);
