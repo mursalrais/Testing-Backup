@@ -5,6 +5,7 @@
     @(Html.Kendo().DropDownListFor(m => m.Value)
             .BindTo(Model.Choices)
             .DataValueField("Value")
+            .DataTextField("Value")
             .Filter("contains")
             .Value(Model.Value)
             .HtmlAttributes(new

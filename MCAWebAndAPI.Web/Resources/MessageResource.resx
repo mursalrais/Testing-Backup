@@ -117,10 +117,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="SuccessCommon" xml:space="preserve">
+    <value>Congratulation. It works!</value>
+  </data>
   <data name="SuccessCreateApplicationData" xml:space="preserve">
     <value>Congratulation {0}! Your application has successfully been submitted.</value>
   </data>
+  <data name="SuccessCreatePSAManagementData" xml:space="preserve">
+    <value>Congratulation {0}! Your PSA data has successfully been created.</value>
+  </data>
   <data name="SuccessPrintApplicationData" xml:space="preserve">
     <value>Congratulation {0}! To download the printed version of your application. &lt;br/&gt;&lt;br/&gt;&lt;a href="{1}" target="_blank" class="btn btn-labeled btn-default"&gt; &lt;span class="btn-label"&gt;&lt;i class="fa fa-file"&gt;&lt;/i&gt;&lt;/span&gt;Download File&lt;/a&gt;</value>
+  </data>
+  <data name="SuccessUpdatePSAManagementData" xml:space="preserve">
+    <value>Congratulation {0}! Your PSA data has successfully been updated.</value>
   </data>
 </root>

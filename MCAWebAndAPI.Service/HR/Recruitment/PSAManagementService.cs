@@ -34,7 +34,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             updatedValues.Add("joindate", psaManagement.joinDate);
             updatedValues.Add("dateofnewpsa", psaManagement.dateofNewPSA);
             updatedValues.Add("tenure", psaManagement.tenure);
-            //updatedValues.Add("psaexpirydate", psaManagement.pSAExpiryDate);
 
             try
             {
@@ -52,6 +51,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         public IEnumerable<PSAMaster> GetPSAs()
         {
             var models = new List<PSAMaster>();
+
                 foreach (var item in SPConnector.GetList(SP_PSA_LIST_NAME, _siteUrl))
             {
                 models.Add(ConvertToPSAModel(item));
@@ -67,9 +67,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 ID = item["professional_x003a_ID"] == null ? "" :
                Convert.ToString((item["professional_x003a_ID"] as FieldLookupValue).LookupValue),
                 PSAID = Convert.ToString(item["ID"]),
-                JoinDate = Convert.ToString(item["joindate"]),
-                DateOfNewPSA = Convert.ToString(item["dateofnewpsa"]),
-                PsaExpiryDate = Convert.ToString(item["psaexpirydate"]),
+                JoinDate = Convert.ToDateTime(item["joindate"]).ToLocalTime().ToShortDateString(),
+                DateOfNewPSA = Convert.ToDateTime(item["dateofnewpsa"]).ToLocalTime().ToShortDateString(),
+                PsaExpiryDate = Convert.ToDateTime(item["psaexpirydate"]).ToLocalTime().ToShortDateString(),
                 ProjectOrUnit = Convert.ToString(item["ProjectOrUnit"]),
                 Position = item["position"] == null ? "" :
                Convert.ToString((item["position"] as FieldLookupValue).LookupValue)
@@ -103,17 +103,13 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.isrenewal.DefaultValue = Convert.ToString(listItem["isrenewal"]);
             viewModel.renewalnumber = Convert.ToInt32(listItem["renewalnumber"]);
             viewModel.ProjectOrUnit.DefaultValue = Convert.ToString(listItem["ProjectOrUnit"]);
-            //viewModel.position.DefaultValue = Convert.ToString(listItem["position"]);
             viewModel.position.DefaultValue = FormatUtil.ConvertLookupToID(listItem, "position") + string.Empty;
-            //viewModel.professional.DefaultValue = Convert.ToString(listItem["professional"]);
             viewModel.professional.DefaultValue = FormatUtil.ConvertLookupToID(listItem, "professional") + string.Empty;
             viewModel.joinDate = Convert.ToDateTime(listItem["joindate"]).ToLocalTime();
             viewModel.dateofNewPSA = Convert.ToDateTime(listItem["dateofnewpsa"]).ToLocalTime();
             viewModel.tenure = Convert.ToInt32(listItem["tenure"]);
+            //viewModel.pSAExpiryDate = Convert.ToDateTime(listItem["psaexpirydate"]).ToLocalTime();
 
-            viewModel.pSAExpiryDate = Convert.ToDateTime(listItem["psaexpirydate"]).ToLocalTime();
-
-            //viewModel.Documents = GetDocuments(viewModel.ID);
             viewModel.DocumentUrl = GetDocumentUrl(viewModel.ID);
 
             return viewModel;
@@ -130,15 +126,14 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             int ID = psaManagement.ID.Value;
 
             columnValues.Add("Title", psaManagement.psaNumber);
-            columnValues.Add("isrenewal", psaManagement.isrenewal);
+            columnValues.Add("isrenewal", psaManagement.isrenewal.Value);
             columnValues.Add("renewalnumber", psaManagement.renewalnumber);
-            columnValues.Add("ProjectOrUnit", psaManagement.ProjectOrUnit);
+            columnValues.Add("ProjectOrUnit", psaManagement.ProjectOrUnit.Value);
             columnValues.Add("position", new FieldLookupValue { LookupId = Convert.ToInt32(psaManagement.position.Value) });
             columnValues.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(psaManagement.professional.Value) });
             columnValues.Add("joindate", psaManagement.joinDate.Value);
             columnValues.Add("dateofnewpsa", psaManagement.dateofNewPSA.Value);
             columnValues.Add("tenure", psaManagement.tenure);
-            //columnValues.Add("psaexpirydate", psaManagement.pSAExpiryDate.Value);
 
             try
             {
@@ -171,9 +166,12 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             foreach (var doc in documents)
             {
+                var updateValue = new Dictionary<string, object>();
+                updateValue.Add("psa", new FieldLookupValue { LookupId = Convert.ToInt32(psaID) });
+
                 try
                 {
-                    SPConnector.UploadDocument(SP_PSA_DOC_LIST_NAME, doc.FileName, doc.InputStream, _siteUrl);
+                    SPConnector.UploadDocument(SP_PSA_DOC_LIST_NAME, updateValue, doc.FileName, doc.InputStream, _siteUrl);
                 }
                 catch (Exception e)
                 {

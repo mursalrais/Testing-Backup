@@ -5,6 +5,9 @@ using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
 using System.Linq;
+using MCAWebAndAPI.Service.ProjectManagement.Common;
+using System.Web;
+using NLog;
 
 namespace MCAWebAndAPI.Service.HR.Common
 {
@@ -73,7 +76,7 @@ namespace MCAWebAndAPI.Service.HR.Common
         const string SP_PROMAS_LIST_NAME = "Professional Master";
         const string SP_POSMAS_LIST_NAME = "Position Master";
         const string SP_MONFEE_LIST_NAME = "Monthly Fee";
-
+        
         public void SetSiteUrl(string siteUrl)
         {
             _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
@@ -100,6 +103,27 @@ namespace MCAWebAndAPI.Service.HR.Common
             return models;
         }
 
+        public IEnumerable<ProfessionalMaster> GetProfessionalMonthlyFeesEdit()
+        {
+            var models = new List<ProfessionalMaster>();
+            int tempID;
+            List<int> collectionIDMonthlyFee = new List<int>();
+            foreach (var item in SPConnector.GetList(SP_MONFEE_LIST_NAME, _siteUrl))
+            {
+                collectionIDMonthlyFee.Add(Convert.ToInt32(item["ProfessionalId"]));
+            }
+            foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl))
+            {
+                tempID = Convert.ToInt32(item["ID"]);
+                if ((collectionIDMonthlyFee.Any(e => e == tempID)))
+                {
+                    models.Add(ConvertToProfessionalMonthlyFeeModel_Light(item));
+                }
+            }
+
+            return models;
+        }
+
         public IEnumerable<ProfessionalMaster> GetProfessionals()
         {
             var models = new List<ProfessionalMaster>();
@@ -118,6 +142,7 @@ namespace MCAWebAndAPI.Service.HR.Common
                 ID = Convert.ToInt32(item["ID"]),
                 Name = Convert.ToString(item["Title"]),
                 Status = Convert.ToString(item["maritalstatus"]),
+                Position = Convert.ToString(item["Position"])
             };
         }
 
@@ -169,6 +194,7 @@ namespace MCAWebAndAPI.Service.HR.Common
         {
             if (ID == null)
                 return new ProfessionalDataVM();
+
 
             var listItem = SPConnector.GetListItem(SP_POSMAS_LIST_NAME, ID, _siteUrl);
             return ConvertToProfessionalModel(listItem);
@@ -242,6 +268,43 @@ namespace MCAWebAndAPI.Service.HR.Common
 
             return viewModel;
 
+        }
+
+        public int? CreateProfessionalData(ProfessionalDataVM viewModel)
+        {
+            var updatedValues = new Dictionary<string, object>();
+
+
+            try
+            {
+
+            }catch(Exception e)
+            {
+                
+            }
+
+
+            return SPConnector.GetInsertedItemID(SP_PROMAS_LIST_NAME, _siteUrl);
+        }
+
+        public void CreateEducationDetails(int? headerID, IEnumerable<EducationDetailVM> educationDetails)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CreateTrainingDetails(int? headerID, IEnumerable<TrainingDetailVM> trainingDetails)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CreateDependentDetails(int? headerID, IEnumerable<HttpPostedFileBase> documents)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CreateOrganizationalDetails(int? headerID, IEnumerable<EducationDetailVM> educationDetails)
+        {
+            throw new NotImplementedException();
         }
     }
 }

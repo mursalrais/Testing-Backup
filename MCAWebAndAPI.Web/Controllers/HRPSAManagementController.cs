@@ -47,9 +47,10 @@ namespace MCAWebAndAPI.Web.Controllers
             // Get blank ViewModel
             var viewModel = psaManagementService.GetPSAManagement(null);
 
-            return View(viewModel);
+            return View("CreatePSAManagement", viewModel);
         }
 
+        
         public ActionResult DisplayPSAManagement(string siteUrl = null, int? ID = null)
         {
             // Clear Existing Session Variables if any
@@ -60,8 +61,9 @@ namespace MCAWebAndAPI.Web.Controllers
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             var viewModel = psaManagementService.GetPSAManagement(ID);
-            return View(viewModel);
+            return View("EditPSAManagement", viewModel);
         }
+        
 
         [HttpPost]
         public ActionResult CreatePSAManagement(FormCollection form, PSAManagementVM viewModel)
@@ -98,25 +100,42 @@ namespace MCAWebAndAPI.Web.Controllers
 
             return RedirectToAction("Index",
                 "Success",
-                new { successMessage = string.Format(MessageResource.SuccessCreateApplicationData, viewModel.psaNumber) });
+                new { successMessage = string.Format(MessageResource.SuccessCreatePSAManagementData, viewModel.psaNumber) });
 
         }
 
-        /*public ActionResult Update(PSAManagementVM psaManagement, string site)
+        public ActionResult UpdatePSAManagement(PSAManagementVM psaManagement, string site)
         {
-            //return View(new AssetMasterVM());
-            psaManagementService.UpdatePSAManagement(psaManagement);
-            return new JavaScriptResult
-            {
-                Script = string.Format("window.parent.location.href = '{0}'", "https://eceos2.sharepoint.com/sites/mca-dev/hr/_layouts/15/start.aspx#/Lists/PSA/AllItems.aspx")
-            };
-        }*/
+            psaManagementService.SetSiteUrl(System.Web.HttpContext.Current.Session["SiteUrl"] as string);
 
-        
+            psaManagementService.UpdatePSAManagement(psaManagement);
+
+            if (!ModelState.IsValid)
+            {
+                return new JsonResult()
+                {
+                    JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+                    Data = new { result = "Error" }
+                };
+            }
+
+            //add to database
+
+            /*
+            return new JsonResult()
+            {
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+                Data = new { result = "Success" }
+            };
+            */
+            return RedirectToAction("Index",
+                "Success",
+                new { successMessage = string.Format(MessageResource.SuccessUpdatePSAManagementData, psaManagement.psaNumber) });
+        }
 
         public JsonResult GetPsa(string id)
         {
-            psaManagementService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            psaManagementService.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));
             var professionals = GetFromExistingSession();
             return Json(professionals.OrderByDescending(e => e.PSAID).Where(e => e.ID == id).Select(
                     e =>

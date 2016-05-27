@@ -47,7 +47,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             updatedValue.Add("idcardtype", viewModel.IDCardType.Value);
             updatedValue.Add("idcardexpirydate", viewModel.IDCardExpiry);
             updatedValue.Add("nationality", new FieldLookupValue { LookupId = viewModel.Nationality.Value });
-            updatedValue.Add("applicationstatus", WorkflowUtil.DRAFT);
+            updatedValue.Add("applicationstatus", WorkflowUtil.ApplicationStatus.NEW.ToString());
 
             try
             {
@@ -85,13 +85,15 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             }
         }
 
-        public void CreateProfessionalDocuments(int? headerID, IEnumerable<HttpPostedFileBase> documents)
+        public void CreateApplicationDocument(int? headerID, IEnumerable<HttpPostedFileBase> documents)
         {
             foreach (var doc in documents)
             {
+                var updateValue = new Dictionary<string, object>();
+                updateValue.Add("application", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
                 try
                 {
-                    SPConnector.UploadDocument(SP_APPDOC_LIST_NAME, doc.FileName, doc.InputStream, _siteUrl);
+                    SPConnector.UploadDocument(SP_APPDOC_LIST_NAME, updateValue, doc.FileName, doc.InputStream, _siteUrl);
                 }
                 catch (Exception e)
                 {
@@ -131,8 +133,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 var updatedValue = new Dictionary<string, object>();
                 updatedValue.Add("Title", viewModel.Position);
                 updatedValue.Add("applicationcompany", viewModel.Company);
-                updatedValue.Add("applicationfrom", FormatUtil.ConvertToYearString(viewModel.From));
-                updatedValue.Add("applicationto", FormatUtil.ConvertToYearString(viewModel.To));
+                updatedValue.Add("applicationfrom", viewModel.From);
+                updatedValue.Add("applicationto", viewModel.To);
                 updatedValue.Add("application", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
                 updatedValue.Add("applicationjobdescription", viewModel.JobDescription);
 

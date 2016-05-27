@@ -6,11 +6,12 @@
                                                                 FormMethod.Post,
                                                                 new AjaxOptions
                                                                 {
-                                                                    OnSuccess = "onSuccess",
-                                                                    OnFailure = "onFailure"
+                                                                    OnBegin = "onBeginForm",
+                                                                    OnSuccess = "onSuccessFormEmbed",
+                                                                    OnFailure = "onFailureForm"
                                                                 }, new { @class = "form-horizontal" }))
 {<fieldset>
-        <legend>Form Asset Transfer</legend>
+        <legend>Form Monthly Fee</legend>
         @Html.AntiForgeryToken()
         @Html.ValidationSummary()
 
@@ -22,9 +23,9 @@
                 </div>
             </div>
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.ProfessionalName).Class("col-md-4 control-label")
+                @Html.Bootstrap().LabelFor(m => m.Header.ProfessionalNameEdit).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Html.EditorFor(m => m.Header.ProfessionalName)
+                    @Html.EditorFor(m => m.Header.ProfessionalNameEdit)
                 </div>
             </div>
             <div class="form-group">
@@ -92,6 +93,11 @@
                     @Html.HiddenFor(m => m.Header.ID)
                 </div>
             </div>
+            <div class="form-group">
+                <div class="col-md-8">
+                    @Html.HiddenFor(m => m.Header.Name)
+                </div>
+            </div>
         </div>
     </fieldset>
 }
@@ -118,23 +124,13 @@
             });
         });
 
-        function onSuccess(data) {
-            parent.postMessage("Success", "https://eceos2.sharepoint.com");
-        }
-
-        function onFailure() {
-            alert("Fail")
-        }
-
         function OnSelectProfessionalName(e) {
             var dataItem = this.dataItem(e.item);
             var url = "/HRDataMaster/GetProfessional/" + dataItem.ID;
             var urlPSA = "/HRPSAManagement/GetPSA/" + dataItem.ID;
             $.getJSON(url, function (result) {
                 $('#Header_ProfessionalID').prop('value', result[0].ID);
-                //$('#Header_JoinDate').prop('value', result[0].ProjectUnit);
-                //$('#Header_DateOfNewPsa').prop('value', result[0].Position);
-                //$('#Header_EndofContract').prop('value', result[0].Position);
+                $('#Header_Name').prop('value', result[0].Name);
             })
             $.getJSON(urlPSA, function (result) {
                 $('#Header_ProjectUnit').prop('value', result[0].ProjectOrUnit);

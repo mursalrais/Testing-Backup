@@ -332,8 +332,8 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Properties\PublishProfiles\host.my-epmo.com.pubxml" />
-    <None Include="Properties\PublishProfiles\mcai-ims-test-free - FTP.pubxml" />
-    <None Include="Properties\PublishProfiles\mcai-ims-test-free - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\mcaims-dev - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\mcaims-dev - Web Deploy.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -518,7 +518,7 @@
     <Content Include="Views\HRApplication\_SpecializationDetails_Print.cshtml" />
     <Content Include="Views\HRApplication\_TrainingDetails_Print.cshtml" />
     <Content Include="Views\HRApplication\_WorkingExperienceDetails_Print.cshtml" />
-    <Content Include="Views\HRPSAManagement\Edit.cshtml" />
+    <Content Include="Views\HRPSAManagement\EditPSAManagement.cshtml" />
     <Content Include="Views\Shared\_LayoutPDF.cshtml" />
     <Content Include="Views\Shared\_Modal.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\GridTable.cshtml" />
@@ -532,7 +532,6 @@
     <Content Include="Views\HRProfessional\_ContactInformationDetails.cshtml" />
     <Content Include="Views\HRProfessional\_PersonalDetails.cshtml" />
     <Content Include="Views\HRProfessional\_EducationDetails.cshtml" />
-    <Content Include="Views\HRProfessional\_TrainingDetails.cshtml" />
     <Content Include="Views\HRProfessional\_InsuranceDetails.cshtml" />
     <Content Include="Views\HRProfessional\_PayrollDetails.cshtml" />
     <Content Include="Views\HRProfessional\_DependentDetails.cshtml" />
@@ -554,9 +553,12 @@
     <Content Include="Views\HRManpowerRequisition\_OtherRequirements.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Boolean.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\CheckBoxItem.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\InGridComboBox_Position.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\InGridComboBox_Relationship.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\InGridComboBox_Frequency.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\InGridComboBox.cshtml" />
+    <Content Include="Views\HRProfessional\_OrganizationalDetails.cshtml" />
+    <Content Include="Views\HRProfessional\_TrainingDetails.cshtml" />
+    <Content Include="Views\HRPSAManagement\DisplayPSAManagement.cshtml" />
+    <Content Include="Views\HRPSAManagement\_DocumentDetails.cshtml" />
+    <Content Include="Views\HRPSAManagement\_DocumentDetailsDisplay.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -607,6 +609,7 @@
     </Compile>
     <Compile Include="Helpers\BindHelper.cs" />
     <Compile Include="Helpers\HtmlExtensions.cs" />
+    <Compile Include="Helpers\JsonHelper.cs" />
     <Compile Include="Helpers\JsonpResult.cs" />
     <Compile Include="Helpers\MathHelper.cs" />
     <Compile Include="Helpers\SessionManager.cs" />
@@ -669,8 +672,9 @@
       <CustomToolNamespace>MCAWebAndAPI.Web.Resources</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\MessageResource.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>MessageResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>MCAWebAndAPI.Web.Resources</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

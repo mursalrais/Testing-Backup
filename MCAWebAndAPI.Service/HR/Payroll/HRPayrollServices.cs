@@ -19,13 +19,13 @@ namespace MCAWebAndAPI.Service.HR.Payroll
         {
             var updatedValues = new Dictionary<string, object>();
             updatedValues.Add("ProfessionalId", header.ProfessionalID);
-            //updatedValues.Add("MonthlyFee", header.ProfessionalName);
-            //updatedValues.Add("MonthlyFee", header.ProjectUnit);
-            //updatedValues.Add("MonthlyFee", header.Position);
-            //updatedValues.Add("MonthlyFee", header.Status);
-            //updatedValues.Add("MonthlyFee", header.JoinDate);
-            //updatedValues.Add("MonthlyFee", header.DateOfNewPsa);
-            //updatedValues.Add("MonthlyFee", header.EndOfContract);
+            updatedValues.Add("professional", header.Name);
+            updatedValues.Add("ProjectOrUnit", header.ProjectUnit);
+            updatedValues.Add("position", header.Position);
+            updatedValues.Add("maritalstatus", header.Status);
+            updatedValues.Add("joindate", header.JoinDate);
+            updatedValues.Add("dateofnewpsa", header.DateOfNewPsa);
+            updatedValues.Add("psaexpirydate", header.EndOfContract);
             updatedValues.Add("DateOfNewFee", header.DateOfNewFee);
             updatedValues.Add("MonthlyFee", header.MonthlyFee);
             updatedValues.Add("MonthlyFeeCurrency", header.Currency.Value);
@@ -61,9 +61,17 @@ namespace MCAWebAndAPI.Service.HR.Payroll
         {
             var columnValues = new Dictionary<string, object>();
             int ID = header.Header.ID;
+            columnValues.Add("ProfessionalId", header.Header.ProfessionalID);
+            columnValues.Add("professional", header.Header.Name);
+            columnValues.Add("ProjectOrUnit", header.Header.ProjectUnit);
+            columnValues.Add("position", header.Header.Position);
+            columnValues.Add("maritalstatus", header.Header.Status);
+            columnValues.Add("joindate", header.Header.JoinDate);
+            columnValues.Add("dateofnewpsa", header.Header.DateOfNewPsa);
+            columnValues.Add("psaexpirydate", header.Header.EndOfContract);
             columnValues.Add("DateOfNewFee", header.Header.DateOfNewFee);
             columnValues.Add("MonthlyFee", header.Header.MonthlyFee);
-            columnValues.Add("AnnualFee", header.Header.AnnualFee);
+            //columnValues.Add("AnnualFee", header.Header.AnnualFee);
             columnValues.Add("MonthlyFeeCurrency", header.Header.Currency.Value);
 
             try
@@ -85,11 +93,18 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             var listItem = SPConnector.GetListItem(SP_HEADER_LIST_NAME, ID, _siteUrl);
             var viewModel = new MonthlyFeeVM();
 
-            viewModel.Header.DateOfNewFee = Convert.ToDateTime(listItem["DateOfNewFee"]);
+            viewModel.Header.ProfessionalID = Convert.ToInt16(listItem["ProfessionalId"]);
+            viewModel.Header.Name = Convert.ToString(listItem["professional"]);
+            viewModel.Header.ProjectUnit = Convert.ToString(listItem["ProjectOrUnit"]);
+            viewModel.Header.Position = Convert.ToString(listItem["position"]);
+            viewModel.Header.Status = Convert.ToString(listItem["maritalstatus"]);
+            viewModel.Header.JoinDate = Convert.ToString(listItem["joindate"]);
+            viewModel.Header.DateOfNewPsa = Convert.ToString(listItem["dateofnewpsa"]);
+            viewModel.Header.EndOfContract = Convert.ToString(listItem["psaexpirydate"]);
+            viewModel.Header.DateOfNewFee = Convert.ToDateTime(listItem["DateOfNewFee"]).ToLocalTime();
             viewModel.Header.MonthlyFee = Convert.ToInt32(listItem["MonthlyFee"]);
             viewModel.Header.AnnualFee = Convert.ToInt32(listItem["AnnualFee"]);
             viewModel.Header.Currency.Value = Convert.ToString(listItem["MonthlyFeeCurrency"]);
-            viewModel.Header.ProfessionalName.Value = Convert.ToInt32(listItem["ProfessionalId"]);
             viewModel.Header.ID = ID;
 
             return viewModel;

@@ -51,7 +51,6 @@ namespace MCAWebAndAPI.Model.ProjectManagement.Common
             {
                 return _start;
             }
-
             set
             {
                 _start = new DateTime(value.Ticks, DateTimeKind.Utc);

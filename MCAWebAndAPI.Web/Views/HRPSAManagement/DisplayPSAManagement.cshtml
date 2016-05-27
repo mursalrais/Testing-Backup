@@ -2,10 +2,18 @@
 @model PSAManagementVM
 
 @{
-    ViewBag.Title = "CreatePSAManagement";
+    ViewBag.Title = "Edit PSA Management";
 }
 
-<div class="form-horizontal">
+@using (Html.BeginForm("CreatePSAManagement", "HRPSAManagement", FormMethod.Post,
+                                                                             new
+                                                                             {
+                                                                                 @class = "form-horizontal",
+                                                                                 enctype = "multipart/form-data"
+                                                                             }))
+{
+
+@*<div class="form-horizontal">*@
     <fieldset>
         <legend>PSA Management</legend>
         <div class="row">
@@ -26,8 +34,8 @@
             </div>
         </div>
     </div>
-</div>
-
+@*</div>*@
+}
 @section scripts{
 
     <script>
@@ -39,6 +47,13 @@
                 $('')
             });
             */
+
+        $(document).ready(function () {
+            $("#submit-button").click(function () {
+                $("form").submit();
+            });
+        });
+
             function OnSelectAssetHolderFrom(e) {
                 var dataItem = this.dataItem(e.item);
                 var url = "/HRDataMaster/GetProfessionals/" + dataItem.ID;
@@ -57,9 +72,20 @@
                 });
 
                 function sumCal() {
-                    var tenure = $("#tenure").val();
+
                     var dateOfNewPSA = $("#dateofNewPSA").val();
-                    var psaexpirydate = new Date(new Date(dateOfNewPSA).setMonth(dateOfNewPSA.getMonth() + tenure));
+                    var dateofnewpsa = new Date(dateOfNewPSA);
+                    var monthpsa = dateofnewpsa.getMonth();
+                    var monthint = parseInt(monthpsa);
+                    var datepsa = dateofnewpsa.getDate();
+
+                    var tenure = $("#tenure").val();
+                    var tenureint = parseInt(tenure);
+                    var addtenure = tenureint + monthint;
+
+                    var setmonth = new Date(dateofnewpsa.setMonth(addtenure));
+
+                    var psaexpirydate = setmonth.getMonth() + 1 + '/' + setmonth.getDate() + '/' + setmonth.getFullYear();
                     $("#pSAExpiryDate").val(psaexpirydate);
                 }
             });

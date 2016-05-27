@@ -22,7 +22,7 @@ namespace MCAWebAndAPI.Service.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class ErrorResource {
+    public class ErrorResource {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace MCAWebAndAPI.Service.Resources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MCAWebAndAPI.Service.Resources.ErrorResource", typeof(ErrorResource).Assembly);
@@ -51,7 +51,7 @@ namespace MCAWebAndAPI.Service.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace MCAWebAndAPI.Service.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Cannot insert data into System. Please contact your IT Administrator..
         /// </summary>
-        internal static string SPInsertError {
+        public static string SPInsertError {
             get {
                 return ResourceManager.GetString("SPInsertError", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace MCAWebAndAPI.Service.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Cannot read data from System. Please contact your IT Administrator..
         /// </summary>
-        internal static string SPReadError {
+        public static string SPReadError {
             get {
                 return ResourceManager.GetString("SPReadError", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace MCAWebAndAPI.Service.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Cannot update data into System. Please contact your IT Administrator..
         /// </summary>
-        internal static string SPUpdateError {
+        public static string SPUpdateError {
             get {
                 return ResourceManager.GetString("SPUpdateError", resourceCulture);
             }

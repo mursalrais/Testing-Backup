@@ -1,0 +1,62 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model IEnumerable<OrganizationalDetailVM>
+
+<div class="col-md-12">
+
+    @(Html.Kendo().Grid(Model)
+    .Name("OrganizationalDetails")
+    .ToolBar(tools => tools.Create().Text("Add New Organization"))
+    .Editable(editable => editable.Mode(GridEditMode.InCell)
+    .CreateAt(GridInsertRowPosition.Bottom))
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.Project).ClientTemplate("#= Project.CategoryName #" +
+                           "<input type='hidden' name='OrganizationalDetails[#= getOrganizationalDetail(data)#].Project' value='#= Project #' />"
+                         ).EditorViewData(new { BindTo = OrganizationalDetailVM.GetProjectOptions() });
+        columns.Bound(p => p.Position).ClientTemplate("#= Position #" +
+                           "<input type='hidden' name='OrganizationalDetails[#= getOrganizationalDetail(data)#].Position' value='#= Position #' />"
+                         );
+        columns.Bound(p => p.Level).ClientTemplate("#= Level #" +
+                           "<input type='hidden' name='OrganizationalDetails[#= getOrganizationalDetail(data)#].Level' value='#= Level #' />"
+                         );
+        columns.Bound(p => p.PSANumber).ClientTemplate("#= PSANumber #" +
+                           "<input type='hidden' name='OrganizationalDetails[#= getOrganizationalDetail(data)#].PSANumber' value='#= PSANumber #' />"
+                         );
+
+        //TODO: To display in user-friendly format 
+
+        columns.Bound(p => p.StartDate).ClientTemplate("#= StartDate.toDateString() #" +
+                           "<input type='hidden' name='OrganizationalDetails[#= getOrganizationalDetail(data)#].StartDate' value='#= StartDate #' />"
+                         );
+        columns.Bound(p => p.LastWorkingDay).ClientTemplate("#= LastWorkingDay.toDateString() #" +
+                           "<input type='hidden' name='OrganizationalDetails[#= getOrganizationalDetail(data)#].LastWorkingDay' value='#= LastWorkingDay #' />"
+                         );
+        columns.Bound(p => p.ProfessionalStatus).ClientTemplate("#= ProfessionalStatus.CategoryName #" +
+                          "<input type='hidden' name='OrganizationalDetails[#= getOrganizationalDetail(data)#].ProfessionalStatus' value='#= ProfessionalStatus #' />"
+                        ).EditorViewData(new { BindTo = OrganizationalDetailVM.GetProfessionalStatusOptions() });
+        columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
+          "<input type='hidden' name='OrganizationalDetails[#= getOrganizationalDetail(data)#].ID' value='#= ID #' />"
+        );
+
+        columns.Command(command => command.Destroy()).Width(100);
+    })
+    .DataSource(dataSource => dataSource.Ajax()
+                   .Model(model =>
+                   {
+                       model.Id(p => p.ID);
+                       model.Field(m => m.Project).DefaultValue(OrganizationalDetailVM.GetProjectDefaultValue());
+                       model.Field(m => m.ProfessionalStatus).DefaultValue(OrganizationalDetailVM.GetProfessionalStatusDefaultValue());
+                       model.Field(m => m.StartDate).DefaultValue(DateTime.UtcNow);
+                       model.Field(m => m.LastWorkingDay).DefaultValue(DateTime.UtcNow);
+                   })
+                   .ServerOperation(false)
+     )
+    )
+</div>
+
+<script>
+    function getOrganizationalDetail(dataItem) {
+        var data = $("#OrganizationalDetails").data("kendoGrid").dataSource.data();
+        return data.indexOf(dataItem);
+    }
+</script>

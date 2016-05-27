@@ -1,1 +1,58 @@
-﻿
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model IEnumerable<DependentDetailVM>
+
+<div class="col-md-12">
+
+    @*
+        //TODO: To inspect why cannot bind
+    *@
+
+    @(Html.Kendo().Grid(Model)
+    .Name("DependentDetails")
+    .ToolBar(tools => tools.Create().Text("Add New Dependent"))
+    .Editable(editable => editable.Mode(GridEditMode.InCell)
+    .CreateAt(GridInsertRowPosition.Bottom))
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.Name).ClientTemplate("#= Name #" +
+                           "<input type='hidden' name='DependentDetails[#= getDependentDetail(data)#].Name' value='#= Name #' />"
+                         );
+        columns.Bound(p => p.Relationship).ClientTemplate("#= Relationship.CategoryName #" +
+                           "<input type='hidden' name='DependentDetails[#= getDependentDetail(data)#].Relationship' value='#= Relationship #' />"
+                         ).EditorViewData(new { BindTo = DependentDetailVM.GetRelationshipOptions() });
+        columns.Bound(p => p.PlaceOfBirth).ClientTemplate("#= PlaceOfBirth #" +
+                           "<input type='hidden' name='DependentDetails[#= getDependentDetail(data)#].PlaceOfBirth' value='#= PlaceOfBirth #' />"
+                         );
+        columns.Bound(p => p.DateOfBirth).ClientTemplate("#= DateOfBirth.toDateString() #" +
+                           "<input type='hidden' name='DependentDetails[#= getDependentDetail(data)#].DateOfBirth' value='#= DateOfBirth #' />"
+                         );
+        columns.Bound(p => p.InsuranceNumber).ClientTemplate("#= InsuranceNumber #" +
+                           "<input type='hidden' name='DependentDetails[#= getDependentDetail(data)#].InsuranceNumber' value='#= InsuranceNumber #' />"
+                         );
+        columns.Bound(p => p.Remark).ClientTemplate("#= Remark #" +
+                           "<input type='hidden' name='DependentDetails[#= getDependentDetail(data)#].Remark' value='#= Remark #' />"
+                         );
+        columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
+          "<input type='hidden' name='DependentDetails[#= getDependentDetail(data)#].ID' value='#= ID #' />"
+        );
+
+        columns.Command(command => command.Destroy()).Width(100);
+    })
+    .DataSource(dataSource => dataSource.Ajax()
+                   .Model(model =>
+                   {
+                       model.Id(p => p.ID);
+                       model.Field(m => m.Relationship).DefaultValue(DependentDetailVM.GetRelationshipDefaultValue());
+                       model.Field(m => m.DateOfBirth).DefaultValue(DateTime.Now.AddYears(-10));
+                   })
+                   .ServerOperation(false)
+                )
+    )
+</div>
+
+<script>
+    function getDependentDetail(dataItem) {
+        var data = $("#DependentDetails").data("kendoGrid").dataSource.data();
+        return data.indexOf(dataItem);
+    }
+</script>

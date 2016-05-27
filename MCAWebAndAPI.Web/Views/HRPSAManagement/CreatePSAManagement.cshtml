@@ -3,7 +3,7 @@
 @model PSAManagementVM
 
 @{
-    ViewBag.Title = "CreatePSAManagement";
+    ViewBag.Title = "Form Create PSA Management";
 }
 
 @using (Html.BeginForm("CreatePSAManagement", "HRPSAManagement", FormMethod.Post,
@@ -68,7 +68,6 @@
 
             $(document).ready(function () {
                              
-                
                 $("#tenure").on('input', function () {
                     sumCal();
                 });

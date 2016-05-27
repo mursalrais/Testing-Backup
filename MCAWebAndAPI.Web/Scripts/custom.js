@@ -1,10 +1,24 @@
-﻿
+﻿function onUpload(e) {
+    var files = e.files;
+
+    $.each(files, function () {
+        if (this.size > 1 * 1024 * 1024) {
+            alert(this.name + " is too big!");
+            e.preventDefault(); // This cancels the upload for the file
+        }
+    });
+}
+
 function onBeginForm() {
     showLoading();
 }
 
 function onFailureForm(e) {
-    $('#modal-html-content').html('<div class="alert alert-danger fade in">' + e.errorMessage + '</div>');
+    if (e.success)
+        onSuccessFormEmbed(e);
+
+    $('#modal-html-content').html('<div class="alert alert-danger fade in">'
+        + e.responseJSON.errorMessage + '</div>');
 }
 
 // Do not use this if embedded in SharePoint
@@ -22,8 +36,16 @@ function onSuccessForm(e) {
 }
 
 // It is only used if embedded in SharePoint
-function onSuccessFormEmbed(data) {
-    parent.postMessage("Success", data.urlToRedirect);
+function onSuccessFormEmbed(e) {
+    if (e == null || e.successMessage == null)
+        onFailureForm(e);
+
+    $('#modal-html-content').html('<div class="alert alert-success alert-block"><h4 class="alert-heading">Success!</h4>'
+        + e.successMessage + '</div>');
+
+    setTimeout(function () {
+        parent.postMessage(e, e.urlToRedirect);
+    }, 3000);
 }
 
 function showLoading() {
