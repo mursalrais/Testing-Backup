@@ -5,9 +5,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Control
 {
     public class CheckBoxItemVM
     {
-        public string Text { get; set; }
+        public string Text { get; set; } 
 
-        public Boolean? Value { get; set; }
-        
+        public Boolean Value { get; set; }    
+
     }
 }

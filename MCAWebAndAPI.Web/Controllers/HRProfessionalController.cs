@@ -1,4 +1,5 @@
 ﻿using Elmah;
+using MCAWebAndAPI.Model.ViewModel.Control;
 using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using MCAWebAndAPI.Service.HR.Common;
 using MCAWebAndAPI.Service.Resources;
@@ -94,7 +95,6 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-
             try
             {
                 _service.CreateDependentDetails(headerID, viewModel.Documents);
@@ -108,7 +108,36 @@ namespace MCAWebAndAPI.Web.Controllers
             return JsonHelper.GenerateJsonSuccessResponse(UrlResource.Professional);
         }
 
-        private IEnumerable<OrganizationalDetailVM> BindOrganizationalDetails(FormCollection form, IEnumerable<OrganizationalDetailVM> organizationalDetails)
+        private IEnumerable<DependentDetailVM> BindDependentDetails(FormCollection form, IEnumerable<DependentDetailVM> dependentDetails)
+        {
+            var array = dependentDetails.ToArray();
+            var arrayList = new List<DependentDetailVM>();
+            for (int i = 0; i < array.Length; i++)
+            {
+                var id = BindHelper.BindIntInGrid("DependentDetails", i, "ID", form);
+                var fullName = BindHelper.BindStringInGrid("DependentDetails", i, "FullName", form);
+                var relationship = (InGridComboBoxVM) BindHelper.BindObjectInGrid("DependentDetails", i, "Relationship", form);
+                var placeOfBirth = BindHelper.BindStringInGrid("DependentDetails", i, "PlaceOfBirth", form);
+                var dateOfBirth = BindHelper.BindDateInGrid("DependentDetails", i, "DateOfBirth", form);
+                var insuranceNumber = BindHelper.BindStringInGrid("DependentDetails", i, "InsuranceNumber", form);
+                var remark = BindHelper.BindStringInGrid("DependentDetails", i, "Remark", form);
+
+                arrayList.Add(new DependentDetailVM
+                {
+                    ID = id,
+                    FullName = fullName,
+                    Relationship = relationship, 
+                    PlaceOfBirth  = placeOfBirth, 
+                    DateOfBirth = dateOfBirth, 
+                    InsuranceNumber = insuranceNumber, 
+                    Remark = remark
+                });
+            }
+
+            return arrayList;
+        }
+
+        IEnumerable<OrganizationalDetailVM> BindOrganizationalDetails(FormCollection form, IEnumerable<OrganizationalDetailVM> organizationalDetails)
         {
             var array = organizationalDetails.ToArray();
 
@@ -120,7 +149,7 @@ namespace MCAWebAndAPI.Web.Controllers
             return array;
         }
 
-        private IEnumerable<TrainingDetailVM> BindTrainingDetails(FormCollection form, IEnumerable<TrainingDetailVM> trainingDetails)
+        IEnumerable<TrainingDetailVM> BindTrainingDetails(FormCollection form, IEnumerable<TrainingDetailVM> trainingDetails)
         {
             var array = trainingDetails.ToArray();
             for (int i = 0; i < array.Length; i++)
@@ -141,7 +170,6 @@ namespace MCAWebAndAPI.Web.Controllers
                 array[i].YearOfGraduation = BindHelper.BindDateInGrid("EducationDetails",
                     i, "YearOfGraduation", form);
             }
-
             return array;
         }
     }

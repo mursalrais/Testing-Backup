@@ -17,6 +17,7 @@ namespace MCAWebAndAPI.Web.Helpers
             {
                 Data = new
                 {
+                    success = false,
                     errorMessage = e.Message,
                     result = "Error"
                 },
@@ -31,6 +32,7 @@ namespace MCAWebAndAPI.Web.Helpers
             {
                 Data = new
                 {
+                    success = false,
                     errorMessage = errorMessages,
                     result = "Error"
                 },
@@ -40,10 +42,11 @@ namespace MCAWebAndAPI.Web.Helpers
 
         public static ActionResult GenerateJsonSuccessResponse(string url)
         {
-            return new JsonpResult
+            return new JsonResult
             {
                 Data = new
                 {
+                    success = true,
                     result = "Success",
                     successMessage = MessageResource.SuccessCommon,
                     urlToRedirect = url

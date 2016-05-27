@@ -8,42 +8,14 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
     public class WorkingRelationshipDetailVM : Item
     {
-        [UIHint("AjaxComboBox")]
-        public AjaxComboBoxVM Position { get; set; } = new AjaxComboBoxVM
-        {
-            ControllerName = "HRDataMaster",
-            ActionName = "GetPositions",
-            ValueField = "ID",
-            TextField = "Title"
-        };
+        [UIHint("InGridComboBox_Position")]
+        public InGridComboBoxVM Position { get; set; } = new InGridComboBoxVM();        
 
-        [UIHint("ComboBox")]
-        public ComboBoxVM Relationship { get; set; } = new ComboBoxVM
-        {
-            Choices = new string[]
-            {
-                "KTP",
-                "KITAS",
-                "Passport",
-                "SIM"
-            },
-            DefaultValue = "KTP",
-            OnSelectEventName = "onSelectRelationship"
-        };
+        [UIHint("InGridComboBox_Relationship")]
+        public InGridComboBoxVM Relationship { get; set; } = new InGridComboBoxVM();
 
-        [UIHint("ComboBox")]
-        public ComboBoxVM Frequency { get; set; } = new ComboBoxVM
-        {
-            Choices = new string[]
-            {
-                "KTP",
-                "KITAS",
-                "Passport",
-                "SIM"
-            },
-            DefaultValue = "KTP",
-            OnSelectEventName = "onSelectFrequency"
-        };        
+        [UIHint("InGridComboBox_Frequency")]
+        public InGridComboBoxVM Frequency { get; set; } = new InGridComboBoxVM();
 
     }
 }

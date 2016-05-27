@@ -17,16 +17,17 @@
     </div>
     <div class="form-group">
         @Html.Bootstrap().LabelFor(m => m.Workplan).Class("col-md-4 control-label")
-        <div class="col-md-8">
+        <div class="col-md-8">     
             @{
                 var arr = Model.Workplan.ToArray();
-                for (int i = 0; i < Model.Workplan.ToArray().Length; i++)
+                foreach (var item in Model.Workplan)
                 {
-                    @Html.EditorForModel(arr[i].Value);
+                    @Html.Kendo().CheckBox().Label(item.Text).Name(item.Text).Checked(item.Value);
+                    <br>
                 }
-            }
+            }    
         </div>
-    </div>
+    </div>    
 </div>
 
 

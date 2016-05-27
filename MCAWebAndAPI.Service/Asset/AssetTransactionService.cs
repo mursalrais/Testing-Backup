@@ -59,7 +59,6 @@ namespace MCAWebAndAPI.Service.Asset
 
         public IEnumerable<AssetTransactionItemVM> GetItems(int headerID)
         {
-            //TODO: Put filter get items having FK = header ID
             var caml = "";
 
             var listItems = SPConnector.GetList(SP_ITEMS_LIST_NAME, _siteUrl, caml);

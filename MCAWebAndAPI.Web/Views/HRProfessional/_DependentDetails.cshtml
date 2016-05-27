@@ -1,11 +1,8 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+
 @model IEnumerable<DependentDetailVM>
 
 <div class="col-md-12">
-
-    @*
-        //TODO: To inspect why cannot bind
-    *@
 
     @(Html.Kendo().Grid(Model)
     .Name("DependentDetails")
@@ -14,8 +11,8 @@
     .CreateAt(GridInsertRowPosition.Bottom))
     .Columns(columns =>
     {
-        columns.Bound(p => p.Name).ClientTemplate("#= Name #" +
-                           "<input type='hidden' name='DependentDetails[#= getDependentDetail(data)#].Name' value='#= Name #' />"
+        columns.Bound(p => p.FullName).ClientTemplate("#= FullName #" +
+                           "<input type='hidden' name='DependentDetails[#= getDependentDetail(data)#].FullName' value='#= FullName #' />"
                          );
         columns.Bound(p => p.Relationship).ClientTemplate("#= Relationship.CategoryName #" +
                            "<input type='hidden' name='DependentDetails[#= getDependentDetail(data)#].Relationship' value='#= Relationship #' />"
@@ -23,7 +20,7 @@
         columns.Bound(p => p.PlaceOfBirth).ClientTemplate("#= PlaceOfBirth #" +
                            "<input type='hidden' name='DependentDetails[#= getDependentDetail(data)#].PlaceOfBirth' value='#= PlaceOfBirth #' />"
                          );
-        columns.Bound(p => p.DateOfBirth).ClientTemplate("#= DateOfBirth.toDateString() #" +
+        columns.Bound(p => p.DateOfBirth).ClientTemplate("#= kendo.toString(DateOfBirth, 'y') #" +
                            "<input type='hidden' name='DependentDetails[#= getDependentDetail(data)#].DateOfBirth' value='#= DateOfBirth #' />"
                          );
         columns.Bound(p => p.InsuranceNumber).ClientTemplate("#= InsuranceNumber #" +

@@ -22,6 +22,26 @@ namespace MCAWebAndAPI.Web.Helpers
             return result;
         }
 
+        public static string BindStringInGrid(string prefix, int index, string postfix, FormCollection form)
+        {
+            var result = form[string.Format("{0}[{1}].{2}", prefix, index, postfix)] + string.Empty;
+
+            return result;
+        }
+
+        public static int BindIntInGrid(string prefix, int index, string postfix, FormCollection form)
+        {
+            var result = Convert.ToInt32(form[string.Format("{0}[{1}].{2}", prefix, index, postfix)]);
+
+            return result;
+        }
+
+        public static object BindObjectInGrid(string prefix, int index, string postfix, FormCollection form)
+        {
+            var result = form[string.Format("{0}[{1}].{2}", prefix, index, postfix)];
+            return result;
+        }
+
         public static string GetErrorMessages(ICollection<ModelState> modelStates)
         {
             var errorMessages = string.Empty;

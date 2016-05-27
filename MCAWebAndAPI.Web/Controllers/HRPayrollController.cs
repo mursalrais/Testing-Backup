@@ -11,6 +11,7 @@ using MCAWebAndAPI.Web.Resources;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Service.Resources;
 using System.Net;
+using System;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -52,9 +53,18 @@ namespace MCAWebAndAPI.Web.Controllers
             _hRPayrollService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             // Get Header ID after inster to SharePoint
-            var headerID = _hRPayrollService.CreateHeader(viewModel.Header);
+            try
+            {
+                var headerID = _hRPayrollService.CreateHeader(viewModel.Header);
+            }
+            catch (Exception e)
+            {
 
-            return JsonHelper.GenerateJsonSuccessResponse(UrlResource.MonthlyFee);
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.MonthlyFee);
         }
 
         public ActionResult EditMonthlyFee(int ID, string siteUrl = null)
@@ -83,7 +93,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             _hRPayrollService.UpdateHeader(_data);
 
-            return JsonHelper.GenerateJsonSuccessResponse(UrlResource.MonthlyFee);
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.MonthlyFee);
         }
 
 

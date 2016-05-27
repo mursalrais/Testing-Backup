@@ -8,8 +8,13 @@ namespace MCAWebAndAPI.Service.Utils
 {
     public class WorkflowUtil
     {
-        public const string DRAFT = "Draft";
-        public const string IN_PROGRESS = "In-Progress";
-        public const string APPROVED = "Approved";
+        public enum ApplicationStatus
+        {
+            NEW = 0, 
+            SHORTLISTED = 1,
+            DECLINED = -1,
+            RECOMMENDED = 2
+        }
+        
     }
 }
