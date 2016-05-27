@@ -6,8 +6,9 @@
                                                                 FormMethod.Post,
                                                                 new AjaxOptions
                                                                 {
-                                                                    OnSuccess = "onSuccess",
-                                                                    OnFailure = "onFailure"
+                                                                    OnBegin = "onBeginForm",
+                                                                    OnSuccess = "onSuccessFormEmbed",
+                                                                    OnFailure = "onFailureForm"
                                                                 }, new { @class = "form-horizontal" }))
 {<fieldset>
         <legend>Form Monthly Fee</legend>
@@ -118,23 +119,12 @@
             });
         });
 
-        function onSuccess(data) {
-            parent.postMessage("Success", "https://eceos2.sharepoint.com");
-        }
-
-        function onFailure() {
-            alert("Fail")
-        }
-
         function OnSelectProfessionalName(e) {
             var dataItem = this.dataItem(e.item);
             var url = "/HRDataMaster/GetProfessional/" + dataItem.ID;
             var urlPSA = "/HRPSAManagement/GetPSA/" + dataItem.ID;
             $.getJSON(url, function (result) {
                 $('#Header_ProfessionalID').prop('value', result[0].ID);
-                //$('#Header_JoinDate').prop('value', result[0].ProjectUnit);
-                //$('#Header_DateOfNewPsa').prop('value', result[0].Position);
-                //$('#Header_EndofContract').prop('value', result[0].Position);
             })
             $.getJSON(urlPSA, function (result) {
                 $('#Header_ProjectUnit').prop('value', result[0].ProjectOrUnit);
