@@ -6,8 +6,9 @@
                                                                 FormMethod.Post,
                                                                 new AjaxOptions
                                                                 {
-                                                                    OnSuccess = "onSuccess",
-                                                                    OnFailure = "onFailure"
+                                                                    OnBegin = "onBeginForm",
+                                                                    OnSuccess = "onSuccessFormEmbed",
+                                                                    OnFailure = "onFailureForm"
                                                                 }, new { @class = "form-horizontal" }))
 {<fieldset>
         <legend>Form Monthly Fee</legend>
@@ -117,18 +118,6 @@
                 $("form").submit();
             });
         });
-
-        function onSuccess(data) {
-            var url = "/HRPayroll/PostMessage/"
-            $.getJSON(url, function(data) {
-                console.log(data.result);
-                console.log(data.dom);
-            });
-        }
-
-        function onFailure() {
-            alert("Fail")
-        }
 
         function OnSelectProfessionalName(e) {
             var dataItem = this.dataItem(e.item);

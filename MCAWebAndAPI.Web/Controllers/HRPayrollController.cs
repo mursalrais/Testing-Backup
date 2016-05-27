@@ -48,9 +48,6 @@ namespace MCAWebAndAPI.Web.Controllers
             // Get Header ID after inster to SharePoint
             var headerID = _hRPayrollService.CreateHeader(viewModel.Header);
 
-            // Clear session variables
-            System.Web.HttpContext.Current.Session.Clear();
-
             // Check whether error is found
             if (!ModelState.IsValid)
             {
@@ -61,25 +58,10 @@ namespace MCAWebAndAPI.Web.Controllers
                 };
             }
 
-            //add to database
-
-            return Json(new
-            {
-                result = "Success",
-                dom = SessionManager.Get<string>("SiteUrl"),
-                urlToRedirect =
-     string.Format("{0}/{1}", SessionManager.Get<string>("SiteUrl"), UrlResource.MonthlyFee)
-
-            }, JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult PostMessage()
-        {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             return Json(new
             {
                 result = "Success",
-                dom = siteUrl,
                 urlToRedirect =
 string.Format("{0}/{1}", siteUrl, UrlResource.MonthlyFee)
 
@@ -89,7 +71,7 @@ string.Format("{0}/{1}", siteUrl, UrlResource.MonthlyFee)
         public ActionResult EditMonthlyFee(int ID, string siteUrl = null)
         {
             _hRPayrollService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-            System.Web.HttpContext.Current.Session["SiteUrl"] = siteUrl ?? ConfigResource.DefaultHRSiteUrl;
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             var viewModel = _hRPayrollService.GetHeader(ID);
 
@@ -100,7 +82,7 @@ string.Format("{0}/{1}", siteUrl, UrlResource.MonthlyFee)
 
         public JsonResult UpdateMonthlyFee(MonthlyFeeVM _data, string site)
         {
-            _hRPayrollService.SetSiteUrl(System.Web.HttpContext.Current.Session["SiteUrl"] as string);
+            _hRPayrollService.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));
 
             _hRPayrollService.UpdateHeader(_data);
 
@@ -115,12 +97,12 @@ string.Format("{0}/{1}", siteUrl, UrlResource.MonthlyFee)
 
             //add to database
 
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
             return Json(new
             {
                 result = "Success",
-                dom = SessionManager.Get<string>("SiteUrl"),
                 urlToRedirect =
-                string.Format("{0}/{1}", SessionManager.Get<string>("SiteUrl"), UrlResource.MonthlyFee)
+string.Format("{0}/{1}", siteUrl, UrlResource.MonthlyFee)
 
             }, JsonRequestBehavior.AllowGet);
         }

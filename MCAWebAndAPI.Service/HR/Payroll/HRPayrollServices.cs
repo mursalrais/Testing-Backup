@@ -61,17 +61,17 @@ namespace MCAWebAndAPI.Service.HR.Payroll
         {
             var columnValues = new Dictionary<string, object>();
             int ID = header.Header.ID;
-            columnValues.Add("ProfessionalId", header.Header.ProfessionalID);
-            columnValues.Add("professional", header.Header.ProfessionalName);
-            columnValues.Add("ProjectOrUnit", header.Header.ProjectUnit);
-            columnValues.Add("position", header.Header.Position);
-            columnValues.Add("maritalstatus", header.Header.Status);
-            columnValues.Add("joindate", header.Header.JoinDate);
-            columnValues.Add("dateofnewpsa", header.Header.DateOfNewPsa);
-            columnValues.Add("psaexpirydate", header.Header.EndOfContract);
+            //columnValues.Add("ProfessionalId", header.Header.ProfessionalID);
+            //columnValues.Add("professional", header.Header.ProfessionalName);
+            //columnValues.Add("ProjectOrUnit", header.Header.ProjectUnit);
+            //columnValues.Add("position", header.Header.Position);
+            //columnValues.Add("maritalstatus", header.Header.Status);
+            //columnValues.Add("joindate", header.Header.JoinDate);
+            //columnValues.Add("dateofnewpsa", header.Header.DateOfNewPsa);
+            //columnValues.Add("psaexpirydate", header.Header.EndOfContract);
             columnValues.Add("DateOfNewFee", header.Header.DateOfNewFee);
             columnValues.Add("MonthlyFee", header.Header.MonthlyFee);
-            columnValues.Add("AnnualFee", header.Header.AnnualFee);
+            //columnValues.Add("AnnualFee", header.Header.AnnualFee);
             columnValues.Add("MonthlyFeeCurrency", header.Header.Currency.Value);
 
             try

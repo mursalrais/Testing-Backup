@@ -35,8 +35,8 @@ function onSuccessForm(e) {
 // It is only used if embedded in SharePoint
 function onSuccessFormEmbed(data) {
     parent.postMessage({ 
-        result: "Success", urlToRedirect: data
-    }, data);
+        result: data.result, urlToRedirect: data.urlToRedirect
+    }, data.urlToRedirect);
 }
 
 function showLoading() {
