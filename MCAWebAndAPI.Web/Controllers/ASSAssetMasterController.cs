@@ -23,7 +23,6 @@ namespace MCAWebAndAPI.Web.Controllers
             _assetMasterService.SetSiteUrl(ConfigResource.DefaultBOSiteUrl);
             var result = _assetMasterService.GetAssetMasters();
 
-            //TODO: To map object based on other requirements
             return Json(result.Select(e => (new
             {
                 e.ID,
@@ -36,7 +35,6 @@ namespace MCAWebAndAPI.Web.Controllers
             _assetMasterService.SetSiteUrl(ConfigResource.DefaultBOSiteUrl);
             var result = _assetMasterService.GetAssetLocations();
 
-            //TODO: To map object based on other requirements
             return Json(result.Select(e => (new
             {
                 e.ID,

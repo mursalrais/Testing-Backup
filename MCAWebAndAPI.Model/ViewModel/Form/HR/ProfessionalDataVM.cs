@@ -15,12 +15,13 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [UIHint("EmailAddress")]
         public string OfficeEmail { get; set; }
 
+        public IEnumerable<DependentDetailVM> DependentDetails { get; set; } = new List<DependentDetailVM>();
+
         public IEnumerable<OrganizationalDetailVM> OrganizationalDetails { get; set; } = new List<OrganizationalDetailVM>();
 
         [RegularExpression("([0-9]+)")]
         public string Extension { get; set; }
 
-        public IEnumerable<DependentDetailVM> DependentDetails = new List<DependentDetailVM>();
        
         [DisplayName("Account Name")]
         public string AccountNameForHI { get; set; }

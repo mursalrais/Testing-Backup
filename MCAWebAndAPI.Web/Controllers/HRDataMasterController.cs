@@ -20,7 +20,6 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetProfessionalMonthlyFees()
         {
-            //TODO: Ask whether it is from BO or from HR
             _dataMasterService.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));
 
             var professionalmonthlyfee = GetFromProfessionalMonthlyFeesExistingSession();

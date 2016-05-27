@@ -8,7 +8,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
     public class DependentDetailVM : Item
     {
-        public string Name { get; set; }
+        public string FullName { get; set; }
 
         [UIHint("InGridComboBox")]
         public InGridComboBoxVM Relationship { get; set; } = new InGridComboBoxVM();
@@ -42,7 +42,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public string PlaceOfBirth { get; set; }
 
         [UIHint("Date")]
-        public DateTime? DateOfBirth { get; set; }
+        public DateTime? DateOfBirth { get; set; } = DateTime.Now.AddYears(-10);
 
         public string InsuranceNumber { get; set; }
 

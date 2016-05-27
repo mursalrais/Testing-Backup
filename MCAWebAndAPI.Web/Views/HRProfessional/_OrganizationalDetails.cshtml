@@ -12,7 +12,11 @@
     {
         columns.Bound(p => p.Project).ClientTemplate("#= Project.CategoryName #" +
                            "<input type='hidden' name='OrganizationalDetails[#= getOrganizationalDetail(data)#].Project' value='#= Project #' />"
-                         ).EditorViewData(new { BindTo = OrganizationalDetailVM.GetProjectOptions() });
+                         )
+                         .EditorViewData(new
+                         {
+                             BindTo = OrganizationalDetailVM.GetProjectOptions()
+                         });
         columns.Bound(p => p.Position).ClientTemplate("#= Position #" +
                            "<input type='hidden' name='OrganizationalDetails[#= getOrganizationalDetail(data)#].Position' value='#= Position #' />"
                          );
@@ -22,13 +26,10 @@
         columns.Bound(p => p.PSANumber).ClientTemplate("#= PSANumber #" +
                            "<input type='hidden' name='OrganizationalDetails[#= getOrganizationalDetail(data)#].PSANumber' value='#= PSANumber #' />"
                          );
-
-        //TODO: To display in user-friendly format 
-
-        columns.Bound(p => p.StartDate).ClientTemplate("#= StartDate.toDateString() #" +
+        columns.Bound(p => p.StartDate).ClientTemplate("#= kendo.toString(StartDate, 'd') #" +
                            "<input type='hidden' name='OrganizationalDetails[#= getOrganizationalDetail(data)#].StartDate' value='#= StartDate #' />"
                          );
-        columns.Bound(p => p.LastWorkingDay).ClientTemplate("#= LastWorkingDay.toDateString() #" +
+        columns.Bound(p => p.LastWorkingDay).ClientTemplate("#= kendo.toString(LastWorkingDay, 'd') #" +
                            "<input type='hidden' name='OrganizationalDetails[#= getOrganizationalDetail(data)#].LastWorkingDay' value='#= LastWorkingDay #' />"
                          );
         columns.Bound(p => p.ProfessionalStatus).ClientTemplate("#= ProfessionalStatus.CategoryName #" +
