@@ -14,7 +14,7 @@ function onBeginForm() {
 }
 
 function onFailureForm(e) {
-    if (e.responseJSON.success)
+    if (e.success)
         onSuccessFormEmbed(e);
 
     $('#modal-html-content').html('<div class="alert alert-danger fade in">'
@@ -28,23 +28,23 @@ function onCompleteForm() {
 }
 
 function onSuccessForm(e) {
-    if (e == null || e.responseJSON.successMessage == null)
+    if (e == null || e.successMessage == null)
         onFailureForm(e);
 
     $('#modal-html-content').html('<div class="alert alert-success alert-block"><h4 class="alert-heading">Success!</h4>'
-        + e.responseJSON.successMessage + '</div>');
+        + e.successMessage + '</div>');
 }
 
 // It is only used if embedded in SharePoint
 function onSuccessFormEmbed(e) {
-    if (e == null || e.responseJSON.successMessage == null)
+    if (e == null || e.successMessage == null)
         onFailureForm(e);
 
     $('#modal-html-content').html('<div class="alert alert-success alert-block"><h4 class="alert-heading">Success!</h4>'
-        + e.responseJSON.successMessage + '</div>');
+        + e.successMessage + '</div>');
 
     setTimeout(function () {
-        parent.postMessage(e.responseJSON, e.responseJSON.urlToRedirect);
+        parent.postMessage(e, e.urlToRedirect);
     }, 3000);
 }
 
