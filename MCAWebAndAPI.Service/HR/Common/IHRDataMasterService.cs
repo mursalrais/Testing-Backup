@@ -25,7 +25,9 @@ namespace MCAWebAndAPI.Service.HR.Common
         /// <returns></returns>
         IEnumerable<ProfessionalMaster> GetProfessionals();
 
-        IEnumerable<ProfessionalMaster> GetProfessionalMonthlyFees();
+        IEnumerable<ProfessionalMaster> GetProfessionalMonthlyFees(); 
+
+        IEnumerable<ProfessionalMaster> GetProfessionalMonthlyFeesEdit();
 
         IEnumerable<PositionsMaster> GetPositions();
         int? CreateProfessionalData(ProfessionalDataVM viewModel);

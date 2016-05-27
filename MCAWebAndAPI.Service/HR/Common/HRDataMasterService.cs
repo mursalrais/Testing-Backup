@@ -103,6 +103,27 @@ namespace MCAWebAndAPI.Service.HR.Common
             return models;
         }
 
+        public IEnumerable<ProfessionalMaster> GetProfessionalMonthlyFeesEdit()
+        {
+            var models = new List<ProfessionalMaster>();
+            int tempID;
+            List<int> collectionIDMonthlyFee = new List<int>();
+            foreach (var item in SPConnector.GetList(SP_MONFEE_LIST_NAME, _siteUrl))
+            {
+                collectionIDMonthlyFee.Add(Convert.ToInt32(item["ProfessionalId"]));
+            }
+            foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl))
+            {
+                tempID = Convert.ToInt32(item["ID"]);
+                if ((collectionIDMonthlyFee.Any(e => e == tempID)))
+                {
+                    models.Add(ConvertToProfessionalMonthlyFeeModel_Light(item));
+                }
+            }
+
+            return models;
+        }
+
         public IEnumerable<ProfessionalMaster> GetProfessionals()
         {
             var models = new List<ProfessionalMaster>();
