@@ -86,9 +86,11 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public int PersonnelManagement { get; set; }
 
         public int BudgetManagement { get; set; }
-
         [UIHint("CheckBoxItem")]
         public IEnumerable<CheckBoxItemVM> Workplan { get; set; } = new List<CheckBoxItemVM>();
+
+        [UIHint("CheckBoxItem")]
+        public CheckBoxItemVM workplanItem = new CheckBoxItemVM();
 
         [UIHint("TextArea")]
         public string TotalYrsOfExperience { get; set; }

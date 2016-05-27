@@ -6,6 +6,7 @@ using MCAWebAndAPI.Service.Utils;
 using NLog;
 using Microsoft.SharePoint.Client;
 using MCAWebAndAPI.Service.Resources;
+using MCAWebAndAPI.Model.ViewModel.Control;
 
 namespace MCAWebAndAPI.Service.HR.Recruitment
 {
@@ -14,7 +15,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         string _siteUrl;
         static Logger logger = LogManager.GetCurrentClassLogger();
 
-        const string SP_MANPOW_LIST_NAME = "Manpower%20Requisition";
+        const string SP_MANPOW_LIST_NAME = "Manpower Requisition";
         const string SP_WORKRE_LIST_NAME = "Manpower%20Requisition%20Working%20Relationship";
         const string SP_MANDOC_LIST_NAME = "Manpower%20Requisition%20Documents";
 
@@ -126,6 +127,19 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         public ManpowerRequisitionVM GetManpowerRequisition(int? ID)
         {
             var viewModel = new ManpowerRequisitionVM();
+            viewModel.DivisionProjectUnit.Choices = SPConnector.GetChoiceFieldValues(SP_MANPOW_LIST_NAME, "projectunit", _siteUrl);
+            var checkBoxItem = SPConnector.GetChoiceFieldValues(SP_MANPOW_LIST_NAME, "Workplan", _siteUrl);
+            var tempList = new List<CheckBoxItemVM>();
+            foreach (var item in checkBoxItem)
+            {
+                tempList.Add(new CheckBoxItemVM
+                {
+                    Text = item,Value=false
+                });
+            }
+
+            viewModel.Workplan = tempList; 
+            
             if (ID == null)
                 return viewModel;
 
