@@ -5,15 +5,7 @@
     ViewBag.Title = "View PSA Management Data";
 }
 
-@using (Html.BeginForm("ViewPSAManagement", "HRPSAManagement", FormMethod.Post,
-                                                                             new
-                                                                             {
-                                                                                 @class = "form-horizontal",
-                                                                                 enctype = "multipart/form-data"
-                                                                             }))
-{
-
-@*<div class="form-horizontal">*@
+<div class="form-horizontal">
     <fieldset>
         <legend>View PSA Management Data</legend>
         <div class="row">
@@ -23,18 +15,12 @@
             @Html.Partial("_DocumentDetailsDisplay", Model.DocumentUrl)
         </div>
     </fieldset>
-
     <div class="form-actions">
         <div class="row">
-            <div class="col-md-12">
-                <button id="submit-button" class="btn btn-primary" type="submit">
-                    <i class="fa fa-save"></i>
-                    Submit
-                </button>
-            </div>
+            <div class="col-sm-12"><br /></div>
         </div>
     </div>
-@*</div>*@
+</div>
 }
 @section scripts{
 
@@ -46,52 +32,6 @@
                 $('textarea').prop('readonly', 'true');
                 $('')
             });
-
-        /*
-        $(document).ready(function () {
-            $("#submit-button").click(function () {
-                $("form").submit();
-            });
-        });
-        */
-        /*
-            function OnSelectAssetHolderFrom(e) {
-                var dataItem = this.dataItem(e.item);
-                var url = "/HRDataMaster/GetProfessionals/" + dataItem.ID;
-
-            }
-
-            function OnSelectPosition(e) {
-                var dataItem = this.dataItem(e.item);
-                var url = "/HRDataMaster/GetPositions/" + dataItem.ID;
-            }
-        */
-        /*
-            $(document).ready(function () {
-
-                $("#tenure").on('input', function () {
-                    sumCal();
-                });
-
-                function sumCal() {
-
-                    var dateOfNewPSA = $("#dateofNewPSA").val();
-                    var dateofnewpsa = new Date(dateOfNewPSA);
-                    var monthpsa = dateofnewpsa.getMonth();
-                    var monthint = parseInt(monthpsa);
-                    var datepsa = dateofnewpsa.getDate();
-
-                    var tenure = $("#tenure").val();
-                    var tenureint = parseInt(tenure);
-                    var addtenure = tenureint + monthint;
-
-                    var setmonth = new Date(dateofnewpsa.setMonth(addtenure));
-
-                    var psaexpirydate = setmonth.getMonth() + 1 + '/' + setmonth.getDate() + '/' + setmonth.getFullYear();
-                    $("#pSAExpiryDate").val(psaexpirydate);
-                }
-            });
-            */
         
     </script>
 }
