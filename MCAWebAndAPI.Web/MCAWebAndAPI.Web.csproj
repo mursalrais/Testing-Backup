@@ -652,6 +652,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Code\" />
+    <Folder Include="Content\kendo\2016.2.504\Bootstrap\" />
     <Folder Include="Views\File\" />
   </ItemGroup>
   <ItemGroup>
