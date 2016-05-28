@@ -1,7 +1,7 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
 @model ApplicationDataVM
 
-<div class="col-md-12" style="margin-bottom: 20px">
+<div class="col-sm-12" style="margin-bottom: 20px">
     @(Html.Kendo().Grid(Model.WorkingExperienceDetails)
         .Name("WorkingExperienceDetails")
         .ToolBar(tools => tools.Create().Text("Add New Working Experience"))
@@ -38,18 +38,18 @@
         )
     )
 </div>
-<div class="col-md-6">
+<div class="col-sm-6">
     <div class="form-group">
-        @Html.Bootstrap().LabelFor(m => m.YearRelevanWork).Class("col-md-4 control-label")
-        <div class="col-md-8">
+        @Html.Bootstrap().LabelFor(m => m.YearRelevanWork).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
             @Html.Kendo().TextBoxFor(model => model.YearRelevanWork).HtmlAttributes(new { @class = "form-control", style = "width:100%;" })
         </div>
     </div>
 </div>
-<div class="col-md-6">
+<div class="col-sm-6">
     <div class="form-group">
-        @Html.Bootstrap().LabelFor(m => m.MonthRelevantWork).Class("col-md-4 control-label")
-        <div class="col-md-8">
+        @Html.Bootstrap().LabelFor(m => m.MonthRelevantWork).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
             @Html.Kendo().TextBoxFor(model => model.MonthRelevantWork).HtmlAttributes(new { @class = "form-control", style = "width:100%;" })
         </div>
     </div>
