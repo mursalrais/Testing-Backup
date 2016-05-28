@@ -1,4 +1,7 @@
 @model DateTime?
 
-@(Html.Kendo().TextBoxFor(model => model)
-    .HtmlAttributes(new { @class = "form-control", style = "width:100%;", @readonly = true }))
+@*@(Html.Kendo().TextBoxFor(model => model)*@
+    @*.HtmlAttributes(new { @class = "form-control", style = "width:100%;", @readonly = true }))*@
+
+@(Html.Kendo().TextBoxFor(model => model).Format("{0:M/dd/yyyy}")
+    .HtmlAttributes(new { @class = "form-control", style = "width:100%;", @readonly = true}))
