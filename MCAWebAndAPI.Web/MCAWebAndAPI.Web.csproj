@@ -460,11 +460,8 @@
     <Content Include="Scripts\kendo\2016.2.504\kendo.aspnetmvc.min.js.map" />
     <Content Include="Scripts\kendo\2016.2.504\kendo.core.min.js.map" />
     <Content Include="Scripts\kendo\2016.2.504\kendo.pdf.min.js.map" />
-    <Content Include="Views\Shared\EditorTemplates\InGridComboBox_Asset.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\CurrencyUSD.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\InGridAjaxComboBox.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\InGridComboBox_Location.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\InGridComboBox_WBS.cshtml" />
     <Content Include="Views\ASSLocationMaster\Create.cshtml" />
     <Content Include="Views\ASSLocationMaster\IFrame.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\TextArea.cshtml" />
