@@ -132,4 +132,7 @@
   <data name="UrlApplication" xml:space="preserve">
     <value>/Lists/Application</value>
   </data>
+  <data name="UrlPSA" xml:space="preserve">
+    <value>/List/PSA</value>
+  </data>
 </root>

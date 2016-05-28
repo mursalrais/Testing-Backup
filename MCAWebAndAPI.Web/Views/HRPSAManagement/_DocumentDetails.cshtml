@@ -1,10 +1,21 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
 @model PSAManagementVM
 
-<div class="col-md-6">
+@*
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Bootstrap().LabelFor(m => m.Documents).Class("col-md-2 control-label")
+            <div class="col-md-8">
+                @Html.EditorFor(m => m.Documents)
+            </div>
+        </div>
+    </div>
+*@
+
+<div class="col-md-12">
     <div class="form-group">
-        @Html.Bootstrap().LabelFor(m => m.Documents).Class("col-md-2 control-label")
-        <div class="col-md-8">
+        @Html.Bootstrap().LabelFor(m => m.Documents).Class("col-md-4 control-label")
+        <div class="col-md-6">
             @Html.EditorFor(m => m.Documents)
         </div>
     </div>

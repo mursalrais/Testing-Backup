@@ -21,7 +21,14 @@
             @Html.Partial("_PSAManagementDataEdit", Model)
         </div>
         <div class="row">
-            @Html.Partial("_DocumentDetailsDisplay", Model.DocumentUrl)
+        <div class="form-group">
+            @Html.Bootstrap().LabelFor(m => m).Class("col-md-4 control-label")
+            <div class="col-md-8">
+                <button id="application-document-button">
+                    Click Here to go to PSA Management Document
+                </button>
+            </div>
+        </div>
         </div>
     </fieldset>
 @*
@@ -100,9 +107,9 @@
     <div class="form-actions">
     <div class="row">
         <div class="col-md-12">
-            <button class="btn btn-default" type="submit">
-                Cancel
-            </button>
+            @*<button class="btn btn-default" type="submit">
+        Cancel
+    </button>*@
             <button id="submit-button" class="btn btn-primary" type="submit">
                 <i class="fa fa-save"></i>
                 Submit
@@ -117,6 +124,12 @@
             $("#submit-button").click(function () {
                 $("form").submit();
             });
+        });
+
+        $('#application-document-button').click(function () {
+            parent.postMessage({
+                result: "Success", urlToRedirect: "@Model"
+            }, "@Model");
         });
 
         function onSuccess(data) {

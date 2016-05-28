@@ -68,7 +68,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [UIHint("Date")]
         [DisplayName("PSA Expiry Date")]
         public DateTime? pSAExpiryDate { get; set; } = DateTime.Now;
-        
+
+        //public DateTime test { get; set; } = DateTime.Today
 
         [UIHint("MultiFileUploader")]
         [Required]
