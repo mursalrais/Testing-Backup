@@ -17,6 +17,7 @@ using MCAWebAndAPI.Service.Converter;
 using MCAWebAndAPI.Service.HR.Common;
 using System.IO;
 using System.Web;
+using System.Globalization;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -63,7 +64,19 @@ namespace MCAWebAndAPI.Web.Controllers
             var viewModel = psaManagementService.GetPSAManagement(ID);
             return View("EditPSAManagement", viewModel);
         }
-        
+
+        public ActionResult ViewPSAManagement(string siteUrl = null, int? ID = null)
+        {
+            // Clear Existing Session Variables if any
+            SessionManager.RemoveAll();
+
+            // MANDATORY: Set Site URL
+            psaManagementService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            var viewModel = psaManagementService.ViewPSAManagementData(ID);
+            return View("DisplayPSAManagement", viewModel);
+        }
 
         [HttpPost]
         public ActionResult CreatePSAManagement(FormCollection form, PSAManagementVM viewModel)
@@ -119,15 +132,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 };
             }
 
-            //add to database
-
-            /*
-            return new JsonResult()
-            {
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet,
-                Data = new { result = "Success" }
-            };
-            */
+            
             return RedirectToAction("Index",
                 "Success",
                 new { successMessage = string.Format(MessageResource.SuccessUpdatePSAManagementData, psaManagement.psaNumber) });

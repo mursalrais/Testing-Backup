@@ -95,5 +95,14 @@ namespace MCAWebAndAPI.Web.Resources {
                 return ResourceManager.GetString("UrlApplication", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to /List/PSA.
+        /// </summary>
+        internal static string UrlPSA {
+            get {
+                return ResourceManager.GetString("UrlPSA", resourceCulture);
+            }
+        }
     }
 }

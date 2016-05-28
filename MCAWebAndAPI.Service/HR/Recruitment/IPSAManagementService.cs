@@ -19,7 +19,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         int CreatePSAManagement(PSAManagementVM psaManagement);
 
         PSAManagementVM GetPSAManagement(int? ID);
-        
+
+        PSAManagementVM ViewPSAManagementData(int? ID);
+
         bool UpdatePSAManagement(PSAManagementVM psaManagement);
 
         void CreatePSAManagementDocuments(int? headerID, IEnumerable<HttpPostedFileBase> documents);

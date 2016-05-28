@@ -3,19 +3,38 @@
 @model PSAManagementVM
 
 @{
-    ViewBag.Title = "Form Create PSA Management";
+    ViewBag.Title = "Form Edit PSA Management";
 }
 
 
 @using (Html.BeginForm("UpdatePSAManagement", "HRPSAManagement", FormMethod.Post,
-                                                                             new
-                                                                             {
-                                                                                 @class = "form-horizontal",
-                                                                                 enctype = "multipart/form-data"
-                                                                             }))
+                                                                                         new
+                                                                                         {
+                                                                                             @class = "form-horizontal",
+                                                                                             enctype = "multipart/form-data"
+                                                                                         }))
 {
 
     <fieldset>
+        <legend>View PSA Management Data</legend>
+        <div class="row">
+            @Html.Partial("_PSAManagementDataEdit", Model)
+        </div>
+        <div class="row">
+        <div class="form-group">
+            @Html.Bootstrap().LabelFor(m => m).Class("col-md-4 control-label")
+            <div class="col-md-8">
+                <button id="application-document-button">
+                    Click Here to go to PSA Management Document
+                </button>
+            </div>
+        </div>
+        </div>
+    </fieldset>
+@*
+    <fieldset>
+
+
         <legend>Form Update PSA Management</legend>
         @Html.AntiForgeryToken()
         @Html.ValidationSummary()
@@ -76,21 +95,21 @@
                 </div>
             </div>
             <div class="row">
-                @Html.Partial("_DocumentDetailsDisplay", Model.DocumentUrl)
+                @Html.Partial("_DocumentDetails", Model)
             </div>
                @Html.HiddenFor(m => m.ID)
         </div>
-     @*<input class="k-button k-button-icontext k-grid-add" type="submit" value="Update" />*@
+     @*<input class="k-button k-button-icontext k-grid-add" type="submit" value="Update" />
     </fieldset>
-    
+*@
 }
 
     <div class="form-actions">
     <div class="row">
         <div class="col-md-12">
-            <button class="btn btn-default" type="submit">
-                Cancel
-            </button>
+            @*<button class="btn btn-default" type="submit">
+        Cancel
+    </button>*@
             <button id="submit-button" class="btn btn-primary" type="submit">
                 <i class="fa fa-save"></i>
                 Submit
@@ -105,6 +124,12 @@
             $("#submit-button").click(function () {
                 $("form").submit();
             });
+        });
+
+        $('#application-document-button').click(function () {
+            parent.postMessage({
+                result: "Success", urlToRedirect: "@Model"
+            }, "@Model");
         });
 
         function onSuccess(data) {

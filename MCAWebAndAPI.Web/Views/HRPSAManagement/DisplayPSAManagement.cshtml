@@ -2,10 +2,10 @@
 @model PSAManagementVM
 
 @{
-    ViewBag.Title = "Edit PSA Management";
+    ViewBag.Title = "View PSA Management Data";
 }
 
-@using (Html.BeginForm("CreatePSAManagement", "HRPSAManagement", FormMethod.Post,
+@using (Html.BeginForm("ViewPSAManagement", "HRPSAManagement", FormMethod.Post,
                                                                              new
                                                                              {
                                                                                  @class = "form-horizontal",
@@ -15,9 +15,9 @@
 
 @*<div class="form-horizontal">*@
     <fieldset>
-        <legend>PSA Management</legend>
+        <legend>View PSA Management Data</legend>
         <div class="row">
-            @Html.Partial("_PSAManagementData", Model)
+            @Html.Partial("_PSAManagementDataDisplay", Model)
         </div>
         <div class="row">
             @Html.Partial("_DocumentDetailsDisplay", Model.DocumentUrl)
@@ -41,19 +41,20 @@
     <script>
         
         
-            /*$(document).ready(function () {
+            $(document).ready(function () {
                 $('input').prop('readonly', 'true');
                 $('textarea').prop('readonly', 'true');
                 $('')
             });
-            */
 
+        /*
         $(document).ready(function () {
             $("#submit-button").click(function () {
                 $("form").submit();
             });
         });
-
+        */
+        /*
             function OnSelectAssetHolderFrom(e) {
                 var dataItem = this.dataItem(e.item);
                 var url = "/HRDataMaster/GetProfessionals/" + dataItem.ID;
@@ -64,7 +65,8 @@
                 var dataItem = this.dataItem(e.item);
                 var url = "/HRDataMaster/GetPositions/" + dataItem.ID;
             }
-
+        */
+        /*
             $(document).ready(function () {
 
                 $("#tenure").on('input', function () {
@@ -89,6 +91,7 @@
                     $("#pSAExpiryDate").val(psaexpirydate);
                 }
             });
+            */
         
     </script>
 }

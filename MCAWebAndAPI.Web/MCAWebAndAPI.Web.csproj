@@ -556,6 +556,8 @@
     <Content Include="Views\HRPSAManagement\DisplayPSAManagement.cshtml" />
     <Content Include="Views\HRPSAManagement\_DocumentDetails.cshtml" />
     <Content Include="Views\HRPSAManagement\_DocumentDetailsDisplay.cshtml" />
+    <Content Include="Views\HRPSAManagement\_PSAManagementDataDisplay.cshtml" />
+    <Content Include="Views\HRPSAManagement\_PSAManagementDataEdit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
