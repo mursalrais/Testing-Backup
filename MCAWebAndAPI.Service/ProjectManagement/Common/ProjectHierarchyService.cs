@@ -454,18 +454,18 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Common
             {
                 new InGridComboBoxVM
                 {
-                    CategoryID = 1,
-                    CategoryName = "Green Prosperity"
+                    Value = 1,
+                    Text = "Green Prosperity"
                 },
                 new InGridComboBoxVM
                 {
-                    CategoryID = 2,
-                    CategoryName = "Health and Nutrition"
+                    Value = 2,
+                    Text = "Health and Nutrition"
                 },
                 new InGridComboBoxVM
                 {
-                    CategoryID = 3,
-                    CategoryName = "Procurement Modernization"
+                    Value = 3,
+                    Text = "Procurement Modernization"
                 }
             };
         }

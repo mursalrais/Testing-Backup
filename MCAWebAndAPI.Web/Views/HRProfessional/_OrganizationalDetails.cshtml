@@ -10,7 +10,7 @@
     .CreateAt(GridInsertRowPosition.Bottom))
     .Columns(columns =>
     {
-        columns.Bound(p => p.Project).ClientTemplate("#= Project.CategoryName #" +
+        columns.Bound(p => p.Project).ClientTemplate("#= Project.Text #" +
                            "<input type='hidden' name='OrganizationalDetails[#= getOrganizationalDetail(data)#].Project' value='#= Project #' />"
                          )
                          .EditorViewData(new
@@ -32,7 +32,7 @@
         columns.Bound(p => p.LastWorkingDay).ClientTemplate("#= kendo.toString(LastWorkingDay, 'd') #" +
                            "<input type='hidden' name='OrganizationalDetails[#= getOrganizationalDetail(data)#].LastWorkingDay' value='#= LastWorkingDay #' />"
                          );
-        columns.Bound(p => p.ProfessionalStatus).ClientTemplate("#= ProfessionalStatus.CategoryName #" +
+        columns.Bound(p => p.ProfessionalStatus).ClientTemplate("#= ProfessionalStatus.Text #" +
                           "<input type='hidden' name='OrganizationalDetails[#= getOrganizationalDetail(data)#].ProfessionalStatus' value='#= ProfessionalStatus #' />"
                         ).EditorViewData(new { BindTo = OrganizationalDetailVM.GetProfessionalStatusOptions() });
         columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +

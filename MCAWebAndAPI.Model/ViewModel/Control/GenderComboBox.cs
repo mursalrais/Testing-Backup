@@ -10,7 +10,7 @@
                 "Female",
                 "Transgender"
             };
-            this.DefaultValue = "Male";
+            this.Value = "Male";
         }
     }
 }

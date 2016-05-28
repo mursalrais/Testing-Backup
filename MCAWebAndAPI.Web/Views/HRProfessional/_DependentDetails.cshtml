@@ -14,7 +14,7 @@
         columns.Bound(p => p.FullName).ClientTemplate("#= FullName #" +
                            "<input type='hidden' name='DependentDetails[#= getDependentDetail(data)#].FullName' value='#= FullName #' />"
                          );
-        columns.Bound(p => p.Relationship).ClientTemplate("#= Relationship.CategoryName #" +
+        columns.Bound(p => p.Relationship).ClientTemplate("#= Relationship.Text #" +
                            "<input type='hidden' name='DependentDetails[#= getDependentDetail(data)#].Relationship' value='#= Relationship #' />"
                          ).EditorViewData(new { BindTo = DependentDetailVM.GetRelationshipOptions() });
         columns.Bound(p => p.PlaceOfBirth).ClientTemplate("#= PlaceOfBirth #" +

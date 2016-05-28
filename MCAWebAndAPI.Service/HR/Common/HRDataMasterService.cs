@@ -8,75 +8,24 @@ using System.Linq;
 using MCAWebAndAPI.Service.ProjectManagement.Common;
 using System.Web;
 using NLog;
+using MCAWebAndAPI.Service.Resources;
+using MCAWebAndAPI.Model.ViewModel.Control;
 
 namespace MCAWebAndAPI.Service.HR.Common
 {
-    /// <summary>
-    /// <ViewFields>
-    //    <FieldRef Name = 'Title' />
-    //    < FieldRef Name='lastname' />
-    //    <FieldRef Name = 'Position' />
-    //    < FieldRef Name='placeofbirth' />
-    //    <FieldRef Name = 'dateofbirth' />
-    //    < FieldRef Name='maritalstatus' />
-    //    <FieldRef Name = 'bloodtype' />
-    //    < FieldRef Name='Gender' />
-    //    <FieldRef Name = 'Nationality' />
-    //    < FieldRef Name='Religion' />
-    //    <FieldRef Name = 'idcardtype' />
-    //    < FieldRef Name='idcardnumber' />
-    //    <FieldRef Name = 'idcardexpirydate' />
-    //    < FieldRef Name='permanentaddress' />
-    //    <FieldRef Name = 'permanentlandlinephone' />
-    //    < FieldRef Name='currentaddress' />
-    //    <FieldRef Name = 'currentlandlinephone' />
-    //    < FieldRef Name='emergencynumber' />
-    //    <FieldRef Name = 'officephone' />
-    //    < FieldRef Name='Extension' />
-    //    <FieldRef Name = 'NIK' />
-    //    < FieldRef Name='officeemail' />
-    //    <FieldRef Name = 'personalemail' />
-    //    < FieldRef Name='personalemail2' />
-    //    <FieldRef Name = 'mobilephonenr' />
-    //    < FieldRef Name='mobilephonenr2' />
-    //    <FieldRef Name = 'hiaccountname' />
-    //    < FieldRef Name='hiaccountnr' />
-    //    <FieldRef Name = 'hicurrency' />
-    //    < FieldRef Name='hibankname' />
-    //    <FieldRef Name = 'hibankbranchoffice' />
-    //    < FieldRef Name='hieffectivedate' />
-    //    <FieldRef Name = 'hienddate' />
-    //    < FieldRef Name='hiriaccountnr' />
-    //    <FieldRef Name = 'hirjaccountnr' />
-    //    < FieldRef Name='hirgaccountnr' />
-    //    <FieldRef Name = 'himaaccountnr' />
-    //    < FieldRef Name='spaccountname' />
-    //    <FieldRef Name = 'spaccountnr' />
-    //    < FieldRef Name='spcurrency' />
-    //    <FieldRef Name = 'spbankname' />
-    //    < FieldRef Name='spbranchoffice' />
-    //    <FieldRef Name = 'speffectivedate' />
-    //    < FieldRef Name='spenddate' />
-    //    <FieldRef Name = 'payrollaccountname' />
-    //    < FieldRef Name='payrollaccountnr' />
-    //    <FieldRef Name = 'payrollcurrency' />
-    //    < FieldRef Name='payrollbankname' />
-    //    <FieldRef Name = 'payrollbranchoffice' />
-    //    < FieldRef Name='payrollbankswiftcode' />
-    //    <FieldRef Name = 'payrolltaxstatus' />
-    //    < FieldRef Name='taxid' />
-    //    <FieldRef Name = 'nameintaxid' />
-    //    < FieldRef Name='taxaddress' />
-    //    <FieldRef Name = 'datavalidationstatus' /></ ViewFields >
-    //</ View >
-    /// </summary>
     public class HRDataMasterService : IHRDataMasterService
     {
         string _siteUrl;
         const string SP_PROMAS_LIST_NAME = "Professional Master";
         const string SP_POSMAS_LIST_NAME = "Position Master";
         const string SP_MONFEE_LIST_NAME = "Monthly Fee";
-        
+        const string SP_PROEDU_LIST_NAME = "Professional Education";
+        const string SP_PROTRAIN_LIST_NAME = "Professional Training";
+        const string SP_PROORG_LIST_NAME = "Professional Organization Detail";
+        const string SP_PRODEP_LIST_NAME = "Dependent";
+
+        static Logger logger = LogManager.GetCurrentClassLogger();
+
         public void SetSiteUrl(string siteUrl)
         {
             _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
@@ -195,80 +144,226 @@ namespace MCAWebAndAPI.Service.HR.Common
             if (ID == null)
                 return new ProfessionalDataVM();
 
-
-            var listItem = SPConnector.GetListItem(SP_POSMAS_LIST_NAME, ID, _siteUrl);
+            var listItem = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, ID, _siteUrl);
             return ConvertToProfessionalModel(listItem);
         }
-
-        /// <summary>
-   //       <ViewFields>
-   //   < FieldRef Name='nationality' />
-   //   <FieldRef Name = 'idcardtype' />
-   //   < FieldRef Name='idcardnumber' />
-   //   <FieldRef Name = 'idcardexpirydate' />
-   //   < FieldRef Name='permanentaddress' />
-   //   <FieldRef Name = 'permanentlandlinephone' />
-   //   < FieldRef Name='currentaddress' />
-   //   <FieldRef Name = 'currentlandlinephone' />
-   //   < FieldRef Name='emergencynumber' />
-   //   <FieldRef Name = 'officephone' />
-   //   < FieldRef Name='Extension' />
-   //   <FieldRef Name = 'NIK' />
-   //   < FieldRef Name='officeemail' />
-   //   <FieldRef Name = 'personalemail' />
-   //   < FieldRef Name='personalemail2' />
-   //   <FieldRef Name = 'mobilephonenr' />
-   //   < FieldRef Name='mobilephonenr2' />
-   //   <FieldRef Name = 'hiaccountname' />
-   //   < FieldRef Name='hiaccountnr' />
-   //   <FieldRef Name = 'hicurrency' />
-   //   < FieldRef Name='hibankname' />
-   //   <FieldRef Name = 'hibankbranchoffice' />
-   //   < FieldRef Name='hieffectivedate' />
-   //   <FieldRef Name = 'hienddate' />
-   //   < FieldRef Name='hiriaccountnr' />
-   //   <FieldRef Name = 'hirjaccountnr' />
-   //   < FieldRef Name='hirgaccountnr' />
-   //   <FieldRef Name = 'himaaccountnr' />
-   //   < FieldRef Name='spaccountname' />
-   //   <FieldRef Name = 'spaccountnr' />
-   //   < FieldRef Name='spcurrency' />
-   //   <FieldRef Name = 'spbankname' />
-   //   < FieldRef Name='spbranchoffice' />
-   //   <FieldRef Name = 'speffectivedate' />
-   //   < FieldRef Name='spenddate' />
-   //   <FieldRef Name = 'payrollaccountname' />
-   //   < FieldRef Name='payrollaccountnr' />
-   //   <FieldRef Name = 'payrollcurrency' />
-   //   < FieldRef Name='payrollbranchoffice' />
-   //   <FieldRef Name = 'payrollbankname' />
-   //   < FieldRef Name='payrollbankswiftcode' />
-   //   <FieldRef Name = 'payrolltaxstatus' />
-   //   < FieldRef Name='taxid' />
-   //   <FieldRef Name = 'nameintaxid' />
-   //   < FieldRef Name='taxaddress' />
-   //   <FieldRef Name = 'datavalidationstatus' />
-   //   < FieldRef Name='ID' />
-   //</ViewFields>
-        /// </summary>
-        /// <param name="listItem"></param>
-        /// <returns></returns>
+        
         private ProfessionalDataVM ConvertToProfessionalModel(ListItem listItem)
         {
             var viewModel = new ProfessionalDataVM();
+
             viewModel.ID = Convert.ToInt32(listItem["ID"]);
             viewModel.FirstMiddleName = Convert.ToString(listItem["Title"]);
             viewModel.LastName = Convert.ToString(listItem["lastname"]);
             viewModel.PlaceOfBirth = Convert.ToString(listItem["placeofbirth"]);
             viewModel.DateOfBirth = Convert.ToDateTime(listItem["dateofbirth"]);
+            viewModel.PermanentAddress =
+                FormatUtil.ConvertMultipleLine(Convert.ToString(listItem["permanentaddress"]));
+            viewModel.CurrentAddress =
+                FormatUtil.ConvertMultipleLine(Convert.ToString(listItem["currentaddress"]));
+            viewModel.IDCardNumber = Convert.ToString(listItem["idcardnumber"]);
+            viewModel.IDCardExpiry = Convert.ToDateTime(listItem["idcardexpirydate"]);
+            viewModel.Telephone = Convert.ToString(listItem["permanentlandlinephone"]);
+            viewModel.CurrentTelephone = Convert.ToString(listItem["currentlandlinephone"]);
+            viewModel.EmailAddresOne = Convert.ToString(listItem["personalemail"]);
+            viewModel.MobileNumberOne = Convert.ToString(listItem["mobilephonenr"]);
             viewModel.MaritalStatus.Value = Convert.ToString(listItem["maritalstatus"]);
             viewModel.BloodType.Value = Convert.ToString(listItem["bloodtype"]);
+            viewModel.Religion.Value = Convert.ToString(listItem["religion"]);
             viewModel.Gender.Value = Convert.ToString(listItem["gender"]);
-            viewModel.Religion.Value = Convert.ToString("religion");
+            viewModel.IDCardType.Value = Convert.ToString(listItem["idcardtype"]);
+            viewModel.IDCardExpiry = Convert.ToDateTime(listItem["idcardexpirydate"]);
+            viewModel.Nationality.Value = FormatUtil.ConvertLookupToID(listItem, "nationality");
+
+            // Fields not from Application Data
+            viewModel.EmergencyNumber = Convert.ToString(listItem["emergencynumber"]);
+            viewModel.OfficePhone = Convert.ToString(listItem["officephone"]);
+            viewModel.OfficeEmail = Convert.ToString(listItem["officeemail"]);
+            viewModel.Extension = Convert.ToString(listItem["Extension"]);
+
+            viewModel.AccountNameForHI = Convert.ToString(listItem["hiaccountname"]);
+            viewModel.BankNameForHI = Convert.ToString(listItem["hibankname"]);
+            viewModel.EffectiveDateForHI = Convert.ToDateTime(listItem["hieffectivedate"]);
+            viewModel.AccountNumberForHI = Convert.ToString(listItem["hiaccountnr"]);
+            viewModel.BranchOfficeForHI = Convert.ToString(listItem["hibankbranchoffice"]);
+            viewModel.EndDateForHI = Convert.ToDateTime(listItem["hienddate"]);
+            viewModel.CurrencyForHI.Value = Convert.ToString(listItem["hicurrency"]);
+
+            viewModel.VendorAccountNumberRIForHI = Convert.ToString(listItem["hiriaccountnr"]);
+            viewModel.VendorAccountNumberRJForHI = Convert.ToString(listItem["hirjaccountnr"]);
+            viewModel.VendorAccountNumberRGForHI = Convert.ToString(listItem["hirgaccountnr"]);
+            viewModel.VendorAccountNumberMAForHI = Convert.ToString(listItem["himaaccountnr"]);
+
+            viewModel.AccountNameForSP = Convert.ToString(listItem["spaccountname"]);
+            viewModel.BankNameForSP = Convert.ToString(listItem["spbankname"]);
+            viewModel.EffectiveDateForSP = Convert.ToDateTime(listItem["speffectivedate"]);
+            viewModel.AccountNumberForSP = Convert.ToString(listItem["spaccountnr"]);
+            viewModel.BranchOfficeForSP = Convert.ToString(listItem["spbranchoffice"]);
+            viewModel.EndDateForSP = Convert.ToDateTime(listItem["spenddate"]);
+            viewModel.CurrencyForSP.Value = Convert.ToString(listItem["spcurrency"]);
+
+            viewModel.AccountNameForPayroll = Convert.ToString(listItem["payrollaccountname"]);
+            viewModel.BankNameForPayroll = Convert.ToString(listItem["payrollbankname"]);
+            viewModel.AccountNumberForPayroll = Convert.ToString(listItem["payrollaccountnr"]);
+            viewModel.BranchOfficeForPayroll = Convert.ToString(listItem["payrollbranchoffice"]);
+            viewModel.CurrencyForPayroll.Value = Convert.ToString(listItem["payrollcurrency"]);
+            viewModel.BankSwiftCodeForPayroll = Convert.ToString(listItem["payrollbankswiftcode"]);
+            viewModel.TaxStatusForPayroll.Value = Convert.ToString(listItem["payrolltaxstatus"]);
+            viewModel.TaxIDForPayroll = Convert.ToString(listItem["taxid"]);
+            viewModel.TaxIDAddress = Convert.ToString(listItem["taxaddress"]);
+            viewModel.NIK = Convert.ToString(listItem["NIK"]);
+            viewModel.NameInTaxForPayroll = Convert.ToString(listItem["nameintaxid"]);
+
+            // Convert Details
+            viewModel.OrganizationalDetails = GetOrganizationalDetails(viewModel.ID);
+            viewModel.EducationDetails = GetEducationDetails(viewModel.ID);
+            viewModel.TrainingDetails = GetTrainingDetails(viewModel.ID);
+            viewModel.DependentDetails = GetDependentDetails(viewModel.ID);
 
             return viewModel;
-
         }
+
+        private IEnumerable<OrganizationalDetailVM> GetOrganizationalDetails(int? ID)
+        {
+            var caml = @"";
+
+            var organizationalDetails = new List<OrganizationalDetailVM>();
+            foreach (var item in SPConnector.GetList(SP_PROORG_LIST_NAME, _siteUrl, caml))
+            {
+                organizationalDetails.Add(ConvertToOrganizationalDetailVM(item));
+            }
+
+            return organizationalDetails;
+        }
+
+        private OrganizationalDetailVM ConvertToOrganizationalDetailVM(ListItem item)
+        {
+            return new OrganizationalDetailVM
+            {
+                ID = Convert.ToInt32(item["ID"]),
+                LastWorkingDay = Convert.ToDateTime(item["lastworkingday"]),
+                Level = Convert.ToString(item["Level"]),
+                Position = Convert.ToString(item["Position"]),
+                PSANumber = Convert.ToString(item["psanr"]),
+                StartDate = Convert.ToDateTime(item["startdate"]),
+                Project = OrganizationalDetailVM.GetProjectDefaultValue(
+                    FormatUtil.ConvertToInGridLookup(item, "projectunit")),
+                ProfessionalStatus = OrganizationalDetailVM.GetProfessionalStatusDefaultValue(
+                    FormatUtil.ConvertToInGridLookup(item, "Status"))
+            };
+        }
+
+        private IEnumerable<DependentDetailVM> GetDependentDetails(int? ID)
+        {
+            var caml = @"";
+
+            var dependentDetail = new List<DependentDetailVM>();
+
+            foreach (var item in SPConnector.GetList(SP_PRODEP_LIST_NAME, _siteUrl, caml))
+            {
+                dependentDetail.Add(ConvertToDependentDetailVM(item));
+            }
+
+            return dependentDetail;
+        }
+
+        
+        private DependentDetailVM ConvertToDependentDetailVM(ListItem item)
+        {
+            return new DependentDetailVM
+            {
+                ID = Convert.ToInt32(item["ID"]),
+                FullName = Convert.ToString(item["Title"]),
+                DateOfBirth = Convert.ToDateTime(item["dateofbirth"]),
+                InsuranceNumber = Convert.ToString(item["insurancenr"]),
+                PlaceOfBirth = Convert.ToString(item["placeofbirth"]),
+                Remark = FormatUtil.ConvertMultipleLine(Convert.ToString(item["remark"])),
+                Relationship = FormatUtil.ConvertToInGridLookup(item, "relationship")
+            };
+        }
+
+        //<ViewFields>
+        //   <FieldRef Name = 'Title' />
+        //   < FieldRef Name='applications' />
+        //   <FieldRef Name = 'university' />
+        //   < FieldRef Name='yearofgraduation' />
+        //   <FieldRef Name = 'remarks' />
+        //</ ViewFields >
+        private IEnumerable<EducationDetailVM> GetEducationDetails(int? iD)
+        {
+            var caml = @"<View>  
+            <Query> 
+               <Where><Eq><FieldRef Name='professional' LookupId='True' /><Value Type='Lookup'>" + iD + @"</Value></Eq></Where> 
+            </Query> 
+             <ViewFields>
+                <FieldRef Name='professional' />
+                <FieldRef Name='university' />
+                <FieldRef Name='yearofgraduation' />
+                <FieldRef Name='remarks' />
+                <FieldRef Name='Title' />
+                <FieldRef Name='ID' />
+             </ViewFields> 
+            </View>";
+
+            var eduacationDetails = new List<EducationDetailVM>();
+            foreach (var item in SPConnector.GetList(SP_PROEDU_LIST_NAME, _siteUrl, caml))
+            {
+                eduacationDetails.Add(ConvertToEducationDetailVM(item));
+            }
+            return eduacationDetails;
+        }
+
+        private EducationDetailVM ConvertToEducationDetailVM(ListItem item)
+        {
+            return new EducationDetailVM
+            {
+                ID = Convert.ToInt32(item["ID"]),
+                Subject = Convert.ToString(item["Title"]),
+                University = Convert.ToString(item["university"]),
+                YearOfGraduation = Convert.ToDateTime(item["yearofgraduation"]),
+                Remarks = Convert.ToString(item["remarks"])
+            };
+        }
+
+
+        private IEnumerable<TrainingDetailVM> GetTrainingDetails(int? iD)
+        {
+            var caml = @"<View>  
+            <Query> 
+               <Where><Eq><FieldRef Name='professional' LookupId='True' /><Value Type='Lookup'>" + iD
+               + @"</Value></Eq></Where> 
+            </Query> 
+             <ViewFields>
+                <FieldRef Name='ID' />
+                <FieldRef Name='Title' />
+                <FieldRef Name='traininginstitution' />
+                <FieldRef Name='trainingyear' />
+                <FieldRef Name='trainingremarks' />
+                <FieldRef Name='professional' />
+            </ViewFields> 
+            </View>";
+
+            var trainingDetails = new List<TrainingDetailVM>();
+            foreach (var item in SPConnector.GetList(SP_PROTRAIN_LIST_NAME, _siteUrl, caml))
+            {
+                trainingDetails.Add(ConvertToTrainingDetailVM(item));
+            }
+
+            return trainingDetails;
+        }
+
+        private TrainingDetailVM ConvertToTrainingDetailVM(ListItem item)
+        {
+            return new TrainingDetailVM
+            {
+                ID = Convert.ToInt32(item["ID"]),
+                Subject = Convert.ToString(item["Title"]),
+                Institution = Convert.ToString(item["traininginstitution"]),
+                Remarks = Convert.ToString(item["trainingremarks"]),
+                Year = Convert.ToDateTime(item["trainingyear"])
+            };
+        }
+
 
         public int? CreateProfessionalData(ProfessionalDataVM viewModel)
         {
@@ -283,18 +378,54 @@ namespace MCAWebAndAPI.Service.HR.Common
                 
             }
 
-
             return SPConnector.GetInsertedItemID(SP_PROMAS_LIST_NAME, _siteUrl);
         }
 
-        public void CreateEducationDetails(int? headerID, IEnumerable<EducationDetailVM> educationDetails)
+
+        public void CreateEducationDetails(int? headerID, IEnumerable<EducationDetailVM> viewModels)
         {
-            throw new NotImplementedException();
+            foreach (var viewModel in viewModels)
+            {
+                var updatedValue = new Dictionary<string, object>();
+                updatedValue.Add("Title", viewModel.Subject);
+                updatedValue.Add("university", viewModel.University);
+                updatedValue.Add("yearofgraduation", FormatUtil.ConvertToYearString(viewModel.YearOfGraduation));
+                updatedValue.Add("remarks", viewModel.Remarks);
+                updatedValue.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
+
+                try
+                {
+                    SPConnector.AddListItem(SP_PROEDU_LIST_NAME, updatedValue, _siteUrl);
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e.Message);
+                    throw new Exception(ErrorResource.SPInsertError);
+                }
+            }
         }
 
         public void CreateTrainingDetails(int? headerID, IEnumerable<TrainingDetailVM> trainingDetails)
         {
-            throw new NotImplementedException();
+            foreach (var viewModel in trainingDetails)
+            {
+                var updatedValue = new Dictionary<string, object>();
+                updatedValue.Add("Title", viewModel.Subject);
+                updatedValue.Add("traininginstitution", viewModel.Institution);
+                updatedValue.Add("trainingremarks", viewModel.Remarks);
+                updatedValue.Add("trainingyear", FormatUtil.ConvertToYearString(viewModel.Year));
+                updatedValue.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
+
+                try
+                {
+                    SPConnector.AddListItem(SP_PROTRAIN_LIST_NAME, updatedValue, _siteUrl);
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e.Message);
+                    throw new Exception(ErrorResource.SPInsertError);
+                }
+            }
         }
 
         public void CreateDependentDetails(int? headerID, IEnumerable<HttpPostedFileBase> documents)
@@ -305,6 +436,47 @@ namespace MCAWebAndAPI.Service.HR.Common
         public void CreateOrganizationalDetails(int? headerID, IEnumerable<EducationDetailVM> educationDetails)
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="viewModel"></param>
+        /// <returns></returns>
+        public int? CreateProfessionalData(ApplicationDataVM viewModel)
+        {
+            var updatedValue = new Dictionary<string, object>();
+
+            updatedValue.Add("Title", viewModel.FirstMiddleName);
+            updatedValue.Add("lastname", viewModel.LastName);
+            updatedValue.Add("placeofbirth", viewModel.PlaceOfBirth);
+            updatedValue.Add("dateofbirth", viewModel.DateOfBirth);
+            updatedValue.Add("idcardnumber", viewModel.IDCardNumber);
+            updatedValue.Add("permanentaddress", viewModel.PermanentAddress);
+            updatedValue.Add("permanentlandlinephone", FormatUtil.ConvertToCleanPhoneNumber(viewModel.Telephone));
+            updatedValue.Add("currentaddress", viewModel.CurrentAddress);
+            updatedValue.Add("currentlandlinephone", FormatUtil.ConvertToCleanPhoneNumber(viewModel.CurrentTelephone));
+            updatedValue.Add("personalemail", viewModel.EmailAddresOne);
+            updatedValue.Add("mobilephonenr", FormatUtil.ConvertToCleanPhoneNumber(viewModel.MobileNumberOne));
+            updatedValue.Add("maritalstatus", viewModel.MaritalStatus.Value);
+            updatedValue.Add("bloodtype", viewModel.BloodType.Value);
+            updatedValue.Add("religion", viewModel.Religion.Value);
+            updatedValue.Add("gender", viewModel.Gender.Value);
+            updatedValue.Add("idcardtype", viewModel.IDCardType.Value);
+            updatedValue.Add("idcardexpirydate", viewModel.IDCardExpiry);
+            updatedValue.Add("nationality", new FieldLookupValue { LookupId = (int)viewModel.Nationality.Value });
+
+            try
+            {
+                SPConnector.AddListItem(SP_PROMAS_LIST_NAME, updatedValue, _siteUrl);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.Message);
+                throw new Exception(e.Message);
+            }
+
+            return SPConnector.GetInsertedItemID(SP_PROMAS_LIST_NAME, _siteUrl);
         }
     }
 }

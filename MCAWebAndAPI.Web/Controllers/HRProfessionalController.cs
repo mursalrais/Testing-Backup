@@ -108,33 +108,54 @@ namespace MCAWebAndAPI.Web.Controllers
             return JsonHelper.GenerateJsonSuccessResponse(UrlResource.Professional);
         }
 
-        private IEnumerable<DependentDetailVM> BindDependentDetails(FormCollection form, IEnumerable<DependentDetailVM> dependentDetails)
+        [HttpPost]
+        public ActionResult CreateFromApplicationData(FormCollection form, ApplicationDataVM viewModel)
         {
-            var array = dependentDetails.ToArray();
-            var arrayList = new List<DependentDetailVM>();
-            for (int i = 0; i < array.Length; i++)
+            if (!ModelState.IsValid)
             {
-                var id = BindHelper.BindIntInGrid("DependentDetails", i, "ID", form);
-                var fullName = BindHelper.BindStringInGrid("DependentDetails", i, "FullName", form);
-                var relationship = (InGridComboBoxVM) BindHelper.BindObjectInGrid("DependentDetails", i, "Relationship", form);
-                var placeOfBirth = BindHelper.BindStringInGrid("DependentDetails", i, "PlaceOfBirth", form);
-                var dateOfBirth = BindHelper.BindDateInGrid("DependentDetails", i, "DateOfBirth", form);
-                var insuranceNumber = BindHelper.BindStringInGrid("DependentDetails", i, "InsuranceNumber", form);
-                var remark = BindHelper.BindStringInGrid("DependentDetails", i, "Remark", form);
-
-                arrayList.Add(new DependentDetailVM
-                {
-                    ID = id,
-                    FullName = fullName,
-                    Relationship = relationship, 
-                    PlaceOfBirth  = placeOfBirth, 
-                    DateOfBirth = dateOfBirth, 
-                    InsuranceNumber = insuranceNumber, 
-                    Remark = remark
-                });
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                var errorMessages = BindHelper.GetErrorMessages(ModelState.Values);
+                return JsonHelper.GenerateJsonErrorResponse(errorMessages);
             }
 
-            return arrayList;
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            int? headerID = null;
+            try
+            {
+                headerID = _service.CreateProfessionalData(viewModel);
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            try
+            {
+                viewModel.EducationDetails = BindEducationDetails(form, viewModel.EducationDetails);
+                _service.CreateEducationDetails(headerID, viewModel.EducationDetails);
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            try
+            {
+                viewModel.TrainingDetails = BindTrainingDetails(form, viewModel.TrainingDetails);
+                _service.CreateTrainingDetails(headerID, viewModel.TrainingDetails);
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            return JsonHelper.GenerateJsonSuccessResponse(
+                string.Format("{0}/{1}", siteUrl, UrlResource.Professional));
         }
 
         IEnumerable<OrganizationalDetailVM> BindOrganizationalDetails(FormCollection form, IEnumerable<OrganizationalDetailVM> organizationalDetails)

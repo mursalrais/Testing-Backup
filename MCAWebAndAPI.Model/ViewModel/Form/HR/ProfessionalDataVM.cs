@@ -8,10 +8,19 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
     public class ProfessionalDataVM : ApplicationDataVM
     {
+        /// <summary>
+        /// emergencynumber
+        /// </summary>
         public string EmergencyNumber { get; set; }
 
+        /// <summary>
+        /// officephone
+        /// </summary>
         public string OfficePhone { get; set; }
 
+        /// <summary>
+        /// officeemail
+        /// </summary>
         [UIHint("EmailAddress")]
         public string OfficeEmail { get; set; }
 
@@ -19,102 +28,197 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         public IEnumerable<OrganizationalDetailVM> OrganizationalDetails { get; set; } = new List<OrganizationalDetailVM>();
 
+        /// <summary>
+        /// Extension
+        /// </summary>
         [RegularExpression("([0-9]+)")]
         public string Extension { get; set; }
 
-       
+        /// <summary>
+        /// hiaccountname
+        /// </summary>
         [DisplayName("Account Name")]
         public string AccountNameForHI { get; set; }
 
+        /// <summary>
+        /// hiaccountnr
+        /// </summary>
         [DisplayName("Account Number")]
         public string AccountNumberForHI { get; set; }
 
+        /// <summary>
+        /// hibankname
+        /// </summary>
         [DisplayName("Bank Name")]
         public string BankNameForHI { get; set; }
 
+        /// <summary>
+        /// hibankbranchoffice
+        /// </summary>
         [DisplayName("Branch Office")]
         public string BranchOfficeForHI { get; set; }
-        
+
+        /// <summary>
+        /// hiriaccountnr
+        /// </summary>
         [DisplayName("RI")]
         public string VendorAccountNumberRIForHI { get; set; }
 
+        /// <summary>
+        /// hirjaccountnr
+        /// </summary>
         [DisplayName("RJ")]
         public string VendorAccountNumberRJForHI { get; set; }
 
-        [DisplayName("HI")]
+        /// <summary>
+        /// hirgaccountnr
+        /// </summary>
+        [DisplayName("RG")]
         public string VendorAccountNumberRGForHI { get; set; }
 
+        /// <summary>
+        /// himaaccountnr
+        /// </summary>
         [DisplayName("MA")]
         public string VendorAccountNumberMAForHI { get; set; }
 
+        /// <summary>
+        /// hicurrency
+        /// </summary>
         [UIHint("ComboBox")]
         [DisplayName("Currency")]
         public CurrencyComboBoxVM CurrencyForHI { get; set; } = new CurrencyComboBoxVM();
 
+        /// <summary>
+        /// spaccountname
+        /// </summary>
         [DisplayName("Account Name")]
         public string AccountNameForSP { get; set; }
 
+        /// <summary>
+        /// spbankname
+        /// </summary>
         [DisplayName("Bank Name")]
         public string BankNameForSP { get; set; }
 
+        /// <summary>
+        /// spaccountnr
+        /// </summary>
         [DisplayName("Account Number")]
         public string AccountNumberForSP { get; set; }
 
+        /// <summary>
+        /// spbranchoffice
+        /// </summary>
         [DisplayName("Branch Office")]
         public string BranchOfficeForSP { get; set; }
 
+        /// <summary>
+        /// payrollaccountname
+        /// </summary>
         [DisplayName("Account Name")]
         public string AccountNameForPayroll { get; set; }
 
+        /// <summary>
+        /// payrollaccountnr
+        /// </summary>
         [DisplayName("Account Number")]
         public string AccountNumberForPayroll { get; set; }
 
+        /// <summary>
+        /// payrollbankname
+        /// </summary>
         [DisplayName("Bank Name")]
         public string BankNameForPayroll { get; set; }
 
+        /// <summary>
+        /// payrollbranchoffice
+        /// </summary>
         [DisplayName("Branch Office")]
         public string BranchOfficeForPayroll { get; set; }
 
+        /// <summary>
+        /// taxid
+        /// </summary>
         [DisplayName("Tax ID")]
         public string TaxIDForPayroll { get; set; }
 
+        /// <summary>
+        /// NIK
+        /// </summary>
         [DisplayName("NIK")]
         public string NIK { get; set; }
 
+        /// <summary>
+        /// nameintaxid
+        /// </summary>
         [DisplayName("Name in Tax")]
         public string NameInTaxForPayroll { get; set; }
 
+        /// <summary>
+        /// payrollbankswiftcode
+        /// </summary>
         [DisplayName("Bank Swift Code")]
         public string BankSwiftCodeForPayroll { get; set; }
 
+        /// <summary>
+        /// taxaddress
+        /// </summary>
         [DisplayName("Tax ID Address")]
         [UIHint("TextArea")]
         public string TaxIDAddress { get; set; }
 
+        /// <summary>
+        /// payrollcurrency
+        /// </summary>
         [DisplayName("Currency")]
         [UIHint("ComboBox")]
         public CurrencyComboBoxVM CurrencyForPayroll { get; set; } = new CurrencyComboBoxVM();
 
+        /// <summary>
+        /// hieffectivedate
+        /// </summary>
         [UIHint("Date")]
         [DisplayName("Effective Date")]
         public DateTime? EffectiveDateForHI { get; set; } = DateTime.Now;
 
-
+        /// <summary>
+        /// hienddate
+        /// </summary>
         [UIHint("Date")]
         [DisplayName("End Date")]
         public DateTime? EndDateForHI { get; set; } = DateTime.Now;
 
+        /// <summary>
+        /// speffectivedate
+        /// </summary>
         [UIHint("Date")]
         [DisplayName("Effective Date")]
         public DateTime? EffectiveDateForSP { get; set; } = DateTime.Now;
 
+        /// <summary>
+        /// spenddate
+        /// </summary>
         [UIHint("Date")]
         [DisplayName("End Date")]
         public DateTime? EndDateForSP { get; set; } = DateTime.Now;
+
+        /// <summary>
+        /// payrolltaxstatus
+        /// </summary>
         [UIHint("ComboBox")]
         [DisplayName("Tax Status")]
-        public ComboBoxVM TaxStatusForPayroll { get; set; } = new ComboBoxVM();
+        public ComboBoxVM TaxStatusForPayroll { get; set; } = new ComboBoxVM
+        {
+            Choices = new string[]
+            {
+                "K/0","K/1", "K/2", "K/3", "TK/0", "TK/1"
+            }
+        };
 
+        /// <summary>
+        /// spcurrency
+        /// </summary>
         [UIHint("ComboBox")]
         [DisplayName("Currency")]
         public CurrencyComboBoxVM CurrencyForSP { get; set; } = new CurrencyComboBoxVM();

@@ -1,4 +1,5 @@
-﻿using MCAWebAndAPI.Model.Common;
+﻿using Kendo.Mvc.UI;
+using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Model.ViewModel.Control;
 using System;
 using System.Collections.Generic;
@@ -10,10 +11,48 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
     public class ApplicationDataVM : Item
     {
-       
         public IEnumerable<EducationDetailVM> EducationDetails { get; set; } = new List<EducationDetailVM>();
         public IEnumerable<TrainingDetailVM> TrainingDetails { get; set; } = new List<TrainingDetailVM>();
         public IEnumerable<WorkingExperienceDetailVM> WorkingExperienceDetails { get; set; } = new List<WorkingExperienceDetailVM>();
+
+        [UIHint("ComboBox")]
+        [DisplayName("Application Status")]
+        public ComboBoxVM WorkflowStatusOptions { get; set; } = new ComboBoxVM();
+
+        public static IEnumerable<string> GetWorkflowStatusOptions(string currentStatus = null)
+        {
+            switch (currentStatus)
+            {
+                case "NEW":
+                    return new string[]
+                    {
+                        Workflow.ApplicationStatus.SHORTLISTED.ToString(),
+                        Workflow.ApplicationStatus.DECLINED.ToString(),
+                        Workflow.ApplicationStatus.ACCEPTED.ToString()
+                    };
+                case "SHORTLISTED":
+                    return new string[]
+                    {
+                        Workflow.ApplicationStatus.NOT_RECOMMENDED.ToString(),
+                        Workflow.ApplicationStatus.RECOMMENDED.ToString(),
+                        Workflow.ApplicationStatus.ACCEPTED.ToString()
+                    };
+                default:
+                    return new string[]
+                   {
+                        Workflow.ApplicationStatus.SHORTLISTED.ToString(),
+                        Workflow.ApplicationStatus.DECLINED.ToString(),
+                        Workflow.ApplicationStatus.RECOMMENDED.ToString(),
+                        Workflow.ApplicationStatus.NOT_RECOMMENDED.ToString(),
+                        Workflow.ApplicationStatus.ACCEPTED.ToString()
+                   };
+            }
+        }
+        /// <summary>
+        /// applicationstatus
+        /// </summary>
+        public string ApplicationStatus { get; set; }
+
 
         [UIHint("MultiFileUploader")]
         public IEnumerable<HttpPostedFileBase> Documents { get; set; } = new List<HttpPostedFileBase>();
@@ -29,25 +68,43 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [DisplayName("Months of Relevant Work")]
         public int MonthRelevantWork { get; set; }
 
+        /// <summary>
+        /// Title
+        /// </summary>
         [DisplayName("First & Middle Name")]
         [Required]
         public string FirstMiddleName { get; set; }
 
+        /// <summary>
+        /// lastname
+        /// </summary>
         [Required]
         public string LastName { get; set; }
 
+        /// <summary>
+        /// placeofbirth
+        /// </summary>
         [Required]
         [DisplayName("Place of Birth")]
         public string PlaceOfBirth { get; set; }
 
+        /// <summary>
+        /// gender
+        /// </summary>
         [UIHint("ComboBox")]
         public GenderComboBoxVM Gender { get; set; } = new GenderComboBoxVM();
 
+        /// <summary>
+        /// dateofbirth
+        /// </summary>
         [UIHint("Date")]
         [Required]
         [DisplayName("Date of Birth")]
         public DateTime? DateOfBirth { get; set; } = DateTime.Now.AddYears(-28);
 
+        /// <summary>
+        /// nationality
+        /// </summary>
         [UIHint("AjaxComboBox")]
         public AjaxComboBoxVM Nationality { get; set; } = new AjaxComboBoxVM
         {
@@ -57,9 +114,15 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             TextField = "Title"
         };
 
+        /// <summary>
+        /// maritalstatus
+        /// </summary>
         [UIHint("ComboBox")]
         public MaritalStatusComboBoxVM MaritalStatus { get; set; } = new MaritalStatusComboBoxVM();
 
+        /// <summary>
+        /// bloodtype
+        /// </summary>
         [UIHint("ComboBox")]
         public ComboBoxVM BloodType { get; set; } = new ComboBoxVM
         {
@@ -70,12 +133,18 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
                 "O",
                 "AB"
             },
-            DefaultValue = "A"
+            Value = "A"
         };
 
+        /// <summary>
+        /// religion
+        /// </summary>
         [UIHint("ComboBox")]
         public ReligionComboBoxVM Religion { get; set; } = new ReligionComboBoxVM();
 
+        /// <summary>
+        /// idcardtype
+        /// </summary>
         [UIHint("ComboBox")]
         [DisplayName("ID Card Type")]
         [Required]
@@ -88,44 +157,73 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
                 "Passport",
                 "SIM"
             },
-            DefaultValue = "KTP", 
+            Value = "KTP", 
             OnSelectEventName = "onSelectIDCardType"
         };
 
+        /// <summary>
+        /// idcardnumber
+        /// </summary>
         [Required]
         [DisplayName("ID Card Number")]
         public string IDCardNumber { get; set; }
 
+        /// <summary>
+        /// idcardexpirydate
+        /// </summary>
         [UIHint("Date")]
         [DisplayName("ID Card Expiry")]
         public DateTime? IDCardExpiry { get; set; } = DateTime.Now;
 
+        /// <summary>
+        /// permanentaddress
+        /// </summary>
         [UIHint("TextArea")]
         [DataType(DataType.MultilineText)]
         [Required]
         public string PermanentAddress { get; set; }
 
+        /// <summary>
+        /// currentaddress
+        /// </summary>
         [UIHint("TextArea")]
         [DataType(DataType.MultilineText)]
         public string CurrentAddress { get; set; }
 
-
+        /// <summary>
+        /// permanentlandlinephone
+        /// </summary>
         public string Telephone { get; set; }
 
+        /// <summary>
+        /// currentlandlinephone
+        /// </summary>
         public string CurrentTelephone { get; set; }
 
+        /// <summary>
+        /// mobilephonenr
+        /// </summary>
         [DisplayName("Mobile Number [1]")]
         [Required]
         public string MobileNumberOne { get; set; }
 
+        /// <summary>
+        /// mobilephonenr2
+        /// </summary>
         [DisplayName("Mobile Number [2]")]
         public string MobileNumberTwo { get; set; }
 
+        /// <summary>
+        /// personalemail
+        /// </summary>
         [UIHint("EmailAddress")]
         [DisplayName("Email Address [1]")]
         [Required]
         public string EmailAddresOne { get; set; }
 
+        /// <summary>
+        /// personalemail2
+        /// </summary>
         [UIHint("EmailAddress")]
         [DisplayName("Email Address [2]")]
         public string EmailAddresTwo { get; set; }

@@ -52,8 +52,8 @@ namespace MCAWebAndAPI.Web.Controllers
             var assetMasters = _assetMasterService.GetAssetMasters();
             ViewData["InGridComboBox_Asset"] = assetMasters.Select(e => new InGridComboBoxVM
             {
-                CategoryID = e.ID ?? 0, 
-                CategoryName = e.AssetDesc
+                Value = e.ID ?? 0, 
+                Text = e.AssetDesc
             });
 
             ViewData["DefaultValue_Asset"] = assetMasters.FirstOrDefault(e => true);
@@ -61,8 +61,8 @@ namespace MCAWebAndAPI.Web.Controllers
             var locationMasters = _assetMasterService.GetAssetLocations();
             ViewData["InGridComboBox_Location"] = locationMasters.Select(e => new InGridComboBoxVM
             {
-                CategoryID = e.ID ?? 0,
-                CategoryName = e.Name
+                Value = e.ID ?? 0,
+                Text = e.Name
             });
             ViewData["DefaultValue_Location"] = assetMasters.FirstOrDefault(e => true);
         }

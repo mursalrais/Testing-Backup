@@ -15,7 +15,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Control
                 "Single",
                 "Divorced"
             };
-            DefaultValue = "Single";
+            Value = "Single";
         }
     }
 }
