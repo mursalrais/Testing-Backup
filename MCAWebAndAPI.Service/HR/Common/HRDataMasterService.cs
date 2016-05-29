@@ -660,5 +660,26 @@ namespace MCAWebAndAPI.Service.HR.Common
 
             return SPConnector.GetInsertedItemID(SP_PROMAS_LIST_NAME, _siteUrl);
         }
+
+        public ProfessionalDataVM GetProfessionalData(string userLoginName = null)
+        {
+            if (userLoginName == null)
+                return null;
+
+            var caml = @"<View>  
+                    <Query> 
+                       <Where><Eq><FieldRef Name='officeemail' /><Value Type='Text'>" + userLoginName + @"</Value></Eq></Where> 
+                    </Query> 
+                     <ViewFields><FieldRef Name='officeemail' /><FieldRef Name='ID' /></ViewFields> 
+                    </View>";
+
+            var professionalID = 0;
+            foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl, caml))
+            {
+                professionalID = Convert.ToInt32(item["ID"]);
+            }
+
+            return GetProfessionalData(professionalID);
+        }
     }
 }

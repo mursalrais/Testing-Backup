@@ -33,31 +33,24 @@ namespace MCAWebAndAPI.Web.Controllers
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             var viewModel = _service.GetProfessionalData(ID);
-
-            viewModel.DependentDetails = new List<DependentDetailVM> {
-                new DependentDetailVM
-                {
-                    ID = 1,
-                    FullName = "Dacil",
-                    InsuranceNumber = "918201982", 
-                    Relationship = new InGridComboBoxVM
-                    {
-                        Text = "Children"
-                    }
-                },
-                new DependentDetailVM
-                {
-                    ID = 2,
-                    FullName = "Pacil",
-                    InsuranceNumber = "asoasoas", 
-                    Relationship = new InGridComboBoxVM
-                    {
-                        Text = "Spouse"
-                    }
-                }
-            };
-
             return View(viewModel);
+        }
+
+        public ActionResult EditCurrentProfessional(string siteUrl = null, string userLoginName = null)
+        {
+            SessionManager.RemoveAll();
+
+            // MANDATORY: Set Site URL
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            var viewModel = _service.GetProfessionalData(userLoginName);
+
+            if (viewModel == null)
+                return RedirectToAction("Index", "Error", new { errorMessage = 
+                    string.Format(MessageResource.ErrorProfessionalNotFound, userLoginName)});
+     
+            return View("EditProfessional", viewModel);
         }
 
         [HttpPost]
