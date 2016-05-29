@@ -12,38 +12,46 @@
     .Columns(columns =>
     {
         columns.Bound(p => p.FullName).ClientTemplate("#= FullName #" +
-                           "<input type='hidden' name='DependentDetails[#= getDependentDetail(data)#].FullName' value='#= FullName #' />"
-                         );
+        "<input type='hidden' name='DependentDetails[#= getDependentDetail(data)#].FullName' value='#= FullName #' />"
+        );
         columns.Bound(p => p.Relationship).ClientTemplate("#= Relationship.Text #" +
-                           "<input type='hidden' name='DependentDetails[#= getDependentDetail(data)#].Relationship' value='#= Relationship #' />"
-                         ).EditorViewData(new { BindTo = DependentDetailVM.GetRelationshipOptions() });
+        "<input type='hidden' name='DependentDetails[#= getDependentDetail(data)#].Relationship' value='#= Relationship #' />"
+        ).EditorViewData(new { BindTo = DependentDetailVM.GetRelationshipOptions() });
         columns.Bound(p => p.PlaceOfBirth).ClientTemplate("#= PlaceOfBirth #" +
-                           "<input type='hidden' name='DependentDetails[#= getDependentDetail(data)#].PlaceOfBirth' value='#= PlaceOfBirth #' />"
-                         );
+        "<input type='hidden' name='DependentDetails[#= getDependentDetail(data)#].PlaceOfBirth' value='#= PlaceOfBirth #' />"
+        );
         columns.Bound(p => p.DateOfBirth).ClientTemplate("#= kendo.toString(DateOfBirth, 'y') #" +
-                           "<input type='hidden' name='DependentDetails[#= getDependentDetail(data)#].DateOfBirth' value='#= DateOfBirth #' />"
-                         );
+        "<input type='hidden' name='DependentDetails[#= getDependentDetail(data)#].DateOfBirth' value='#= DateOfBirth #' />"
+        );
         columns.Bound(p => p.InsuranceNumber).ClientTemplate("#= InsuranceNumber #" +
-                           "<input type='hidden' name='DependentDetails[#= getDependentDetail(data)#].InsuranceNumber' value='#= InsuranceNumber #' />"
-                         );
+        "<input type='hidden' name='DependentDetails[#= getDependentDetail(data)#].InsuranceNumber' value='#= InsuranceNumber #' />"
+        );
         columns.Bound(p => p.Remark).ClientTemplate("#= Remark #" +
-                           "<input type='hidden' name='DependentDetails[#= getDependentDetail(data)#].Remark' value='#= Remark #' />"
-                         );
+        "<input type='hidden' name='DependentDetails[#= getDependentDetail(data)#].Remark' value='#= Remark #' />"
+        );
         columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
-          "<input type='hidden' name='DependentDetails[#= getDependentDetail(data)#].ID' value='#= ID #' />"
+        "<input type='hidden' name='DependentDetails[#= getDependentDetail(data)#].ID' value='#= ID #' />"
         );
 
-        columns.Command(command => command.Destroy()).Width(100);
+        columns.Bound(p => p.EditMode).Width(100)
+        .ClientTemplate("<button id='DependentDetails[#= getDependentDetail(data)#].DeleteButton'" +
+        "class='btn btn-danger' type='button'" +
+        "onclick='onDeleteKendoDetail(event)'>Delete</button>" +
+        "<input type='hidden' name='DependentDetails[#= getDependentDetail(data)#].EditMode' value='#= EditMode #'/>");
+    })
+    .Events(e =>
+    {
+        e.Edit("onEditKendoDetail");
     })
     .DataSource(dataSource => dataSource.Ajax()
-                   .Model(model =>
-                   {
-                       model.Id(p => p.ID);
-                       model.Field(m => m.Relationship).DefaultValue(DependentDetailVM.GetRelationshipDefaultValue());
-                       model.Field(m => m.DateOfBirth).DefaultValue(DateTime.Now.AddYears(-10));
-                   })
-                   .ServerOperation(false)
-                )
+    .Model(model =>
+    {
+        model.Id(p => p.ID);
+        model.Field(m => m.Relationship).DefaultValue(DependentDetailVM.GetRelationshipDefaultValue());
+        model.Field(m => m.DateOfBirth).DefaultValue(DateTime.Now.AddYears(-10));
+    })
+    .ServerOperation(false)
+    )
     )
 </div>
 

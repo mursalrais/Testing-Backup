@@ -55,7 +55,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             catch (Exception e)
             {
                 logger.Error(e.Message);
-                throw new Exception(ErrorResource.SPInsertError);
+                throw e;
             }
 
             return SPConnector.GetInsertedItemID(SP_MANPOW_LIST_NAME, _siteUrl);
@@ -79,7 +79,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 catch (Exception e)
                 {
                     logger.Error(e.Message);
-                    throw new Exception(ErrorResource.SPInsertError);
+                    throw e;
                 }
             }
         }
@@ -95,7 +95,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 catch (Exception e)
                 {
                     logger.Error(e.Message);
-                    throw new Exception(ErrorResource.SPInsertError);
+                    throw e;
                 }
             }
         }
@@ -119,7 +119,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 catch (Exception e)
                 {
                     logger.Error(e.Message);
-                    throw new Exception(ErrorResource.SPInsertError);
+                    throw e;
                 }
             }
         }

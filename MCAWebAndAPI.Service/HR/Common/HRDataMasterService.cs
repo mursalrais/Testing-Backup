@@ -10,6 +10,7 @@ using System.Web;
 using NLog;
 using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Model.ViewModel.Control;
+using MCAWebAndAPI.Model.Common;
 
 namespace MCAWebAndAPI.Service.HR.Common
 {
@@ -364,21 +365,78 @@ namespace MCAWebAndAPI.Service.HR.Common
             };
         }
 
-
-        public int? CreateProfessionalData(ProfessionalDataVM viewModel)
+        public int? EditProfessionalData(ProfessionalDataVM viewModel)
         {
-            var updatedValues = new Dictionary<string, object>();
+            var updatedValue = new Dictionary<string, object>();
 
+            updatedValue.Add("Title", viewModel.FirstMiddleName);
+            updatedValue.Add("lastname", viewModel.LastName);
+            updatedValue.Add("placeofbirth", viewModel.PlaceOfBirth);
+            updatedValue.Add("dateofbirth", viewModel.DateOfBirth);
+            updatedValue.Add("idcardnumber", viewModel.IDCardNumber);
+            updatedValue.Add("permanentaddress", viewModel.PermanentAddress);
+            updatedValue.Add("permanentlandlinephone", FormatUtil.ConvertToCleanPhoneNumber(viewModel.Telephone));
+            updatedValue.Add("currentaddress", viewModel.CurrentAddress);
+            updatedValue.Add("currentlandlinephone", FormatUtil.ConvertToCleanPhoneNumber(viewModel.CurrentTelephone));
+            updatedValue.Add("personalemail", viewModel.EmailAddresOne);
+            updatedValue.Add("mobilephonenr", FormatUtil.ConvertToCleanPhoneNumber(viewModel.MobileNumberOne));
+            updatedValue.Add("maritalstatus", viewModel.MaritalStatus.Value);
+            updatedValue.Add("bloodtype", viewModel.BloodType.Value);
+            updatedValue.Add("religion", viewModel.Religion.Value);
+            updatedValue.Add("gender", viewModel.Gender.Value);
+            updatedValue.Add("idcardtype", viewModel.IDCardType.Value);
+            updatedValue.Add("idcardexpirydate", viewModel.IDCardExpiry);
+            updatedValue.Add("nationality", new FieldLookupValue { LookupId = (int)viewModel.Nationality.Value });
+
+            // Fields not from Application Data
+            updatedValue.Add("emergencynumber", viewModel.EmergencyNumber);
+            updatedValue.Add("officephone", viewModel.OfficePhone);
+            updatedValue.Add("officeemail", viewModel.OfficeEmail);
+            updatedValue.Add("Extension", viewModel.Extension);
+
+            updatedValue.Add("hiaccountname", viewModel.AccountNameForHI);
+            updatedValue.Add("hibankname", viewModel.BankNameForHI);
+            updatedValue.Add("hieffectivedate", viewModel.EffectiveDateForHI);
+            updatedValue.Add("hiaccountnr", viewModel.AccountNumberForHI);
+            updatedValue.Add("hibankbranchoffice", viewModel.BranchOfficeForHI);
+            updatedValue.Add("hienddate", viewModel.EndDateForHI);
+            updatedValue.Add("hicurrency", viewModel.CurrencyForHI.Value);
+
+            updatedValue.Add("hiriaccountnr", viewModel.VendorAccountNumberRIForHI);
+            updatedValue.Add("hirjaccountnr", viewModel.VendorAccountNumberRJForHI);
+            updatedValue.Add("hirgaccountnr", viewModel.VendorAccountNumberRGForHI);
+            updatedValue.Add("himaaccountnr", viewModel.VendorAccountNumberMAForHI);
+
+            updatedValue.Add("spaccountname", viewModel.AccountNameForSP);
+            updatedValue.Add("spbankname", viewModel.BankNameForSP);
+            updatedValue.Add("speffectivedate", viewModel.EffectiveDateForSP);
+            updatedValue.Add("spaccountnr", viewModel.AccountNumberForSP);
+            updatedValue.Add("spbranchoffice", viewModel.BranchOfficeForSP);
+            updatedValue.Add("spenddate", viewModel.EndDateForSP);
+            updatedValue.Add("spcurrency", viewModel.CurrencyForSP.Value);
+
+            updatedValue.Add("payrollaccountname", viewModel.AccountNameForPayroll);
+            updatedValue.Add("payrollbankname", viewModel.BankNameForPayroll);
+            updatedValue.Add("payrollaccountnr", viewModel.AccountNumberForPayroll);
+            updatedValue.Add("payrollbranchoffice", viewModel.BranchOfficeForPayroll);
+            updatedValue.Add("payrollcurrency", viewModel.CurrencyForPayroll.Value);
+            updatedValue.Add("payrollbankswiftcode", viewModel.BankSwiftCodeForPayroll);
+            updatedValue.Add("payrolltaxstatus", viewModel.TaxStatusForPayroll.Value);
+            updatedValue.Add("taxid", viewModel.TaxIDForPayroll);
+            updatedValue.Add("taxaddress", viewModel.TaxIDAddress);
+            updatedValue.Add("NIK", viewModel.NIK);
+            updatedValue.Add("nameintaxid", viewModel.NameInTaxForPayroll);
 
             try
             {
-
+                SPConnector.UpdateListItem(SP_PROMAS_LIST_NAME, viewModel.ID, updatedValue);
             }catch(Exception e)
             {
-                
+                logger.Error(e);
+                throw e;
             }
 
-            return SPConnector.GetInsertedItemID(SP_PROMAS_LIST_NAME, _siteUrl);
+            return viewModel.ID;
         }
 
 
@@ -386,6 +444,24 @@ namespace MCAWebAndAPI.Service.HR.Common
         {
             foreach (var viewModel in viewModels)
             {
+                if (Item.CheckIfSkipped(viewModel))
+                    continue;
+
+                if (Item.CheckIfDeleted(viewModel))
+                {
+                    try
+                    {
+                        SPConnector.DeleteListItem(SP_PROEDU_LIST_NAME, viewModel.ID, _siteUrl);
+
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error(e);
+                        throw e;
+                    }
+                    continue;
+                }
+
                 var updatedValue = new Dictionary<string, object>();
                 updatedValue.Add("Title", viewModel.Subject);
                 updatedValue.Add("university", viewModel.University);
@@ -395,12 +471,15 @@ namespace MCAWebAndAPI.Service.HR.Common
 
                 try
                 {
-                    SPConnector.AddListItem(SP_PROEDU_LIST_NAME, updatedValue, _siteUrl);
+                    if (Item.CheckIfUpdated(viewModel))
+                        SPConnector.UpdateListItem(SP_PROEDU_LIST_NAME, viewModel.ID, updatedValue, _siteUrl);
+                    else
+                        SPConnector.AddListItem(SP_PROEDU_LIST_NAME, updatedValue, _siteUrl);
                 }
                 catch (Exception e)
                 {
                     logger.Error(e.Message);
-                    throw new Exception(ErrorResource.SPInsertError);
+                    throw e;
                 }
             }
         }
@@ -409,6 +488,24 @@ namespace MCAWebAndAPI.Service.HR.Common
         {
             foreach (var viewModel in trainingDetails)
             {
+                if (Item.CheckIfSkipped(viewModel))
+                    continue;
+
+                if (Item.CheckIfDeleted(viewModel))
+                {
+                    try
+                    {
+                        SPConnector.DeleteListItem(SP_PROTRAIN_LIST_NAME, viewModel.ID, _siteUrl);
+
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error(e);
+                        throw e;
+                    }
+                    continue;
+                }
+
                 var updatedValue = new Dictionary<string, object>();
                 updatedValue.Add("Title", viewModel.Subject);
                 updatedValue.Add("traininginstitution", viewModel.Institution);
@@ -418,24 +515,109 @@ namespace MCAWebAndAPI.Service.HR.Common
 
                 try
                 {
-                    SPConnector.AddListItem(SP_PROTRAIN_LIST_NAME, updatedValue, _siteUrl);
+                    if (viewModel.ID == null)
+                        SPConnector.AddListItem(SP_PROTRAIN_LIST_NAME, updatedValue, _siteUrl);
+                    else
+                        SPConnector.UpdateListItem(SP_PROTRAIN_LIST_NAME, viewModel.ID, updatedValue, _siteUrl);
                 }
                 catch (Exception e)
                 {
                     logger.Error(e.Message);
-                    throw new Exception(ErrorResource.SPInsertError);
+                    throw e;
                 }
             }
         }
 
-        public void CreateDependentDetails(int? headerID, IEnumerable<HttpPostedFileBase> documents)
+        public void CreateDependentDetails(int? headerID, IEnumerable<DependentDetailVM> dependentDetails)
         {
-            throw new NotImplementedException();
+            foreach (var viewModel in dependentDetails)
+            {
+                if (Item.CheckIfSkipped(viewModel))
+                    continue;
+
+                if (Item.CheckIfDeleted(viewModel))
+                {
+                    try
+                    {
+                        SPConnector.DeleteListItem(SP_PRODEP_LIST_NAME, viewModel.ID, _siteUrl);
+
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error(e);
+                        throw e;
+                    }
+                    continue;
+                }
+
+                var updatedValue = new Dictionary<string, object>();
+                updatedValue.Add("Title", viewModel.FullName);
+                updatedValue.Add("relationship", viewModel.Relationship.Text);
+                updatedValue.Add("placeofbirth", viewModel.PlaceOfBirth);
+                updatedValue.Add("dateofbirth", viewModel.DateOfBirth);
+                updatedValue.Add("insurancenr", viewModel.InsuranceNumber);
+                updatedValue.Add("remark", viewModel.Remark);
+                updatedValue.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
+
+                try
+                {
+                    if (viewModel.ID == null)
+                        SPConnector.AddListItem(SP_PRODEP_LIST_NAME, updatedValue, _siteUrl);
+                    else
+                        SPConnector.UpdateListItem(SP_PRODEP_LIST_NAME, viewModel.ID, updatedValue, _siteUrl);
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e.Message);
+                    throw e;
+                }
+            }
         }
 
-        public void CreateOrganizationalDetails(int? headerID, IEnumerable<EducationDetailVM> educationDetails)
+        public void CreateOrganizationalDetails(int? headerID, IEnumerable<OrganizationalDetailVM> organizationalDetails)
         {
-            throw new NotImplementedException();
+            foreach (var viewModel in organizationalDetails)
+            {
+                if (Item.CheckIfSkipped(viewModel))
+                    continue;
+
+                if (Item.CheckIfDeleted(viewModel))
+                {
+                    try
+                    {
+                        SPConnector.DeleteListItem(SP_PROORG_LIST_NAME, viewModel.ID, _siteUrl);
+
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error(e);
+                        throw e;
+                    }
+                    continue;
+                }
+
+                var updatedValue = new Dictionary<string, object>();
+                updatedValue.Add("Position", viewModel.Position);
+                updatedValue.Add("Level", viewModel.Level);
+                updatedValue.Add("Status", viewModel.ProfessionalStatus.Text);
+                updatedValue.Add("projectunit", viewModel.Project.Text);
+                updatedValue.Add("startdate", viewModel.StartDate);
+                updatedValue.Add("lastworkingday", viewModel.LastWorkingDay);
+                updatedValue.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
+
+                try
+                {
+                    if (viewModel.ID == null)
+                        SPConnector.AddListItem(SP_PROORG_LIST_NAME, updatedValue, _siteUrl);
+                    else
+                        SPConnector.UpdateListItem(SP_PROORG_LIST_NAME, viewModel.ID, updatedValue, _siteUrl);
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e.Message);
+                    throw e;
+                }
+            }
         }
 
         /// <summary>

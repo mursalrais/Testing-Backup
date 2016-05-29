@@ -34,6 +34,29 @@ namespace MCAWebAndAPI.Web.Controllers
 
             var viewModel = _service.GetProfessionalData(ID);
 
+            viewModel.DependentDetails = new List<DependentDetailVM> {
+                new DependentDetailVM
+                {
+                    ID = 1,
+                    FullName = "Dacil",
+                    InsuranceNumber = "918201982", 
+                    Relationship = new InGridComboBoxVM
+                    {
+                        Text = "Children"
+                    }
+                },
+                new DependentDetailVM
+                {
+                    ID = 2,
+                    FullName = "Pacil",
+                    InsuranceNumber = "asoasoas", 
+                    Relationship = new InGridComboBoxVM
+                    {
+                        Text = "Spouse"
+                    }
+                }
+            };
+
             return View(viewModel);
         }
 
@@ -53,7 +76,7 @@ namespace MCAWebAndAPI.Web.Controllers
             int? headerID = null;
             try
             {
-                headerID = _service.CreateProfessionalData(viewModel);
+                headerID = _service.EditProfessionalData(viewModel);
             }
             catch (Exception e)
             {
@@ -64,7 +87,7 @@ namespace MCAWebAndAPI.Web.Controllers
             try
             {
                 viewModel.OrganizationalDetails = BindOrganizationalDetails(form, viewModel.OrganizationalDetails);
-                _service.CreateOrganizationalDetails(headerID, viewModel.EducationDetails);
+                _service.CreateOrganizationalDetails(headerID, viewModel.OrganizationalDetails);
             }
             catch (Exception e)
             {
@@ -97,7 +120,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             try
             {
-                _service.CreateDependentDetails(headerID, viewModel.Documents);
+                _service.CreateDependentDetails(headerID, viewModel.DependentDetails);
             }
             catch (Exception e)
             {
