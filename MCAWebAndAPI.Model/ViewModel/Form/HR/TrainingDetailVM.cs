@@ -6,12 +6,24 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
     public class TrainingDetailVM : Item
     {
+        /// <summary>
+        /// traininginstitution
+        /// </summary>
         public string Institution { get; set; }
 
+        /// <summary>
+        /// Title
+        /// </summary>
         public string Subject { get; set; }
 
+        /// <summary>
+        /// trainingyear
+        /// </summary>
         DateTime? _year = DateTime.Now;
-        
+
+        /// <summary>
+        /// trainingremarks
+        /// </summary>
         [UIHint("TextArea")]
         public string Remarks { get; set; }
 
