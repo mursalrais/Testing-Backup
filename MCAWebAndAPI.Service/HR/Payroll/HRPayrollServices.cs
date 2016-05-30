@@ -28,6 +28,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             updatedValues.Add("psaexpirydate", header.EndOfContract);
             updatedValues.Add("DateOfNewFee", header.DateOfNewFee);
             updatedValues.Add("MonthlyFee", header.MonthlyFee);
+            updatedValues.Add("AnnualFee", header.AnnualFee);
             updatedValues.Add("MonthlyFeeCurrency", header.Currency.Value);
             try
             {
@@ -60,7 +61,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
         public bool UpdateHeader(MonthlyFeeVM header)
         {
             var columnValues = new Dictionary<string, object>();
-            int ID = header.ID;
+            int? ID = header.ID;
             columnValues.Add("ProfessionalId", header.ProfessionalID);
             columnValues.Add("professional", header.Name);
             columnValues.Add("ProjectOrUnit", header.ProjectUnit);
@@ -71,7 +72,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             columnValues.Add("psaexpirydate", header.EndOfContract);
             columnValues.Add("DateOfNewFee", header.DateOfNewFee);
             columnValues.Add("MonthlyFee", header.MonthlyFee);
-            //columnValues.Add("AnnualFee", header.AnnualFee);
+            columnValues.Add("AnnualFee", header.AnnualFee);
             columnValues.Add("MonthlyFeeCurrency", header.Currency.Value);
 
             try
