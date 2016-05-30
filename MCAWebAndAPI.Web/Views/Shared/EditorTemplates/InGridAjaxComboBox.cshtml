@@ -1,13 +1,13 @@
 ﻿@model MCAWebAndAPI.Model.ViewModel.Control.AjaxComboBoxVM
 
 @(Html.Kendo().DropDownListFor(m => m)
-            .DataTextField((string)ViewData["DataTextField"])
-            .DataValueField((string)ViewData["DataValueField"])
-            .DataSource(source => source.Read(read => read.Action((string)ViewData["ActionName"],
-            (string)ViewData["ControllerName"])))
-            .HtmlAttributes(new
-            {
-                @class = "form-control",
-                style = "width:100%;"
-            })
+    .DataTextField((string)ViewData["DataTextField"])
+    .DataValueField((string)ViewData["DataValueField"])
+    .DataSource(source => source.Read(read => read.Action((string)ViewData["ActionName"],
+    (string)ViewData["ControllerName"])))
+    .HtmlAttributes(new
+    {
+        @class = "form-control",
+        style = "width:100%;"
+    })
 )

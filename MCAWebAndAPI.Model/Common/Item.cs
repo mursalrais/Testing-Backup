@@ -28,7 +28,7 @@ namespace MCAWebAndAPI.Model.Common
 
         public static bool CheckIfSkipped(Item item)
         {
-            // If existing item and not updated nor deleted, the skipped
+            // If existing item and not updated nor deleted, then skipped
             if (item.ID != null &&
                    !(item.EditMode == (int)Item.Mode.UPDATED || item.EditMode == (int)Mode.DELETED))
                 return true;

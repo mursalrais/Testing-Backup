@@ -21,7 +21,6 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Common
         const string SP_WBSMAPPING_IN_PROJECT_LIST_NAME = "WBSMapping";
         const string SP_WBSMAPPING_IN_PROGRAM_LIST_NAME = "WBS Mapping";
 
-
         const string IMS_PROJECT_HN_NAME = "Health and Nutrition";
         const string IMS_PROJECT_PM_NAME = "Procurement Modernization";
         const string IMS_PROJECT_GP_NAME = "Green Prosperity";
