@@ -55,7 +55,7 @@ namespace MCAWebAndAPI.Web.Controllers
             // Get Header ID after inster to SharePoint
             try
             {
-                var headerID = _hRPayrollService.CreateHeader(viewModel.Header);
+                var headerID = _hRPayrollService.CreateHeader(viewModel);
             }
             catch (Exception e)
             {

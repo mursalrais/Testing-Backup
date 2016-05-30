@@ -10,37 +10,56 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
     public class PSAManagementVM : Item
     {
-    
+        /// <summary>
+        /// WFPSANum
+        /// </summary>
         [DisplayName("PSA Number")]
-        public string PSANumber { get; set; }
+        public string psaNumber { get; set; }
 
+        /// <summary>
+        /// isrenewal
+        /// </summary>
         [UIHint("ComboBox")]
         [DisplayName("Renewal?")]
-        public ComboBoxVM IsRenewal { get; set; } = new ComboBoxVM { Choices = new string[] { "Yes", "No" } };
+        public ComboBoxVM isrenewal { get; set; } = new ComboBoxVM { Choices = new string[] { "Yes", "No" } };
 
+        /// <summary>
+        /// renewalnumber
+        /// </summary>
         [DisplayName("Renewal#")]
-        public int RenewalNumber { get; set; }
+        public int renewalnumber { get; set; }
 
+        /// <summary>
+        /// ProjectOrUnit
+        /// </summary>
         [UIHint("ComboBox")]
         [DisplayName("Div/Project/Unit")]
         [Required]
         public ComboBoxVM ProjectOrUnit { get; set; } = new ComboBoxVM { Choices = new string[] { "GP", "HN", "PM" } };
 
+        /// <summary>
+        /// joindate
+        /// </summary>
         [UIHint("Date")]
         [DisplayName("Join Date")]
         [Required]
-        public DateTime? JoinDate { get; set; } = DateTime.Now;
+        public DateTime? joinDate { get; set; } = DateTime.Now;
 
+        /// <summary>
+        /// dateofnewpsa
+        /// </summary>
         [UIHint("Date")]
         [DisplayName("Date of New PSA")]
         [Required]
-        public DateTime? DateOfNewPSA { get; set; } = DateTime.Now;
+        public DateTime? dateofNewPSA { get; set; } = DateTime.Now;
 
-        
+        /// <summary>
+        /// position
+        /// </summary>
         [UIHint("AjaxComboBox")]
         [DisplayName("Position Title")]
         [Required]
-        public AjaxComboBoxVM Position { get; set; } = new AjaxComboBoxVM
+        public AjaxComboBoxVM position { get; set; } = new AjaxComboBoxVM
         {
             ActionName = "GetPositions",
             ControllerName = "HRDataMaster",
@@ -49,10 +68,13 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             OnSelectEventName = "OnSelectPosition"
         };
 
+        /// <summary>
+        /// professional
+        /// </summary>
         [UIHint("AjaxComboBox")]
         [DisplayName("Professional Name")]
         [Required]
-        public AjaxComboBoxVM Professional { get; set; } = new AjaxComboBoxVM
+        public AjaxComboBoxVM professional { get; set; } = new AjaxComboBoxVM
         {
             ActionName = "GetProfessionals",
             ValueField = "ID",
@@ -61,14 +83,19 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             OnSelectEventName = "OnSelectAssetHolderFrom"
         };
 
+        /// <summary>
+        /// tenure
+        /// </summary>
         [DisplayName("Tenure")]
         [Required]
-        public int Tenure { get; set; }
+        public int tenure { get; set; }
 
-
+        /// <summary>
+        /// psaexpirydate
+        /// </summary>
         [UIHint("Date")]
         [DisplayName("PSA Expiry Date")]
-        public DateTime? PSAExpiryDate { get; set; } = DateTime.Now;
+        public DateTime? pSAExpiryDate { get; set; } = DateTime.Now;
 
         //public DateTime test { get; set; } = DateTime.Today
 

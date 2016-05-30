@@ -17,85 +17,85 @@
 
         <div class="col-md-12">
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.ProfessionalID).Class("col-md-4 control-label")
+                @Html.Bootstrap().LabelFor(m => m.ProfessionalID).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Html.DisplayFor(m => m.Header.ProfessionalID)
+                    @Html.DisplayFor(m => m.ProfessionalID)
                 </div>
             </div>
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.ProfessionalNameEdit).Class("col-md-4 control-label")
+                @Html.Bootstrap().LabelFor(m => m.ProfessionalNameEdit).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Html.EditorFor(m => m.Header.ProfessionalNameEdit)
+                    @Html.EditorFor(m => m.ProfessionalNameEdit)
                 </div>
             </div>
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.ProjectUnit).Class("col-md-4 control-label")
+                @Html.Bootstrap().LabelFor(m => m.ProjectUnit).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Html.DisplayFor(m => m.Header.ProjectUnit)
+                    @Html.DisplayFor(m => m.ProjectUnit)
                 </div>
             </div>
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.Position).Class("col-md-4 control-label")
+                @Html.Bootstrap().LabelFor(m => m.Position).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Html.DisplayFor(m => m.Header.Position)
+                    @Html.DisplayFor(m => m.Position)
                 </div>
             </div>
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.Status).Class("col-md-4 control-label")
+                @Html.Bootstrap().LabelFor(m => m.Status).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Html.DisplayFor(m => m.Header.Status)
+                    @Html.DisplayFor(m => m.Status)
                 </div>
             </div>
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.JoinDate).Class("col-md-4 control-label")
+                @Html.Bootstrap().LabelFor(m => m.JoinDate).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Html.DisplayFor(m => m.Header.JoinDate)
+                    @Html.DisplayFor(m => m.JoinDate)
                 </div>
             </div>
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.DateOfNewPsa).Class("col-md-4 control-label")
+                @Html.Bootstrap().LabelFor(m => m.DateOfNewPsa).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Html.DisplayFor(m => m.Header.DateOfNewPsa)
+                    @Html.DisplayFor(m => m.DateOfNewPsa)
                 </div>
             </div>
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.EndOfContract).Class("col-md-4 control-label")
+                @Html.Bootstrap().LabelFor(m => m.EndOfContract).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Html.DisplayFor(m => m.Header.EndOfContract)
+                    @Html.DisplayFor(m => m.EndOfContract)
                 </div>
             </div>
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.DateOfNewFee).Class("col-md-4 control-label")
+                @Html.Bootstrap().LabelFor(m => m.DateOfNewFee).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Html.EditorFor(m => m.Header.DateOfNewFee)
+                    @Html.EditorFor(m => m.DateOfNewFee)
                 </div>
             </div>
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.MonthlyFee).Class("col-md-4 control-label")
+                @Html.Bootstrap().LabelFor(m => m.MonthlyFee).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Html.EditorFor(m => m.Header.MonthlyFee)
+                    @Html.EditorFor(m => m.MonthlyFee)
                 </div>
             </div>
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.AnnualFee).Class("col-md-4 control-label")
+                @Html.Bootstrap().LabelFor(m => m.AnnualFee).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Html.DisplayFor(m => m.Header.AnnualFee)
+                    @Html.DisplayFor(m => m.AnnualFee)
                 </div>
             </div>
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.Currency).Class("col-md-4 control-label")
+                @Html.Bootstrap().LabelFor(m => m.Currency).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Html.EditorFor(m => m.Header.Currency)
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-8">
-                    @Html.HiddenFor(m => m.Header.ID)
+                    @Html.EditorFor(m => m.Currency)
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-md-8">
-                    @Html.HiddenFor(m => m.Header.Name)
+                    @Html.HiddenFor(m => m.ID)
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-8">
+                    @Html.HiddenFor(m => m.Name)
                 </div>
             </div>
         </div>
@@ -129,28 +129,28 @@
             var url = "/HRDataMaster/GetProfessional/" + dataItem.ID;
             var urlPSA = "/HRPSAManagement/GetPSA/" + dataItem.ID;
             $.getJSON(url, function (result) {
-                $('#Header_ProfessionalID').prop('value', result[0].ID);
-                $('#Header_Name').prop('value', result[0].Name);
+                $('#ProfessionalID').prop('value', result[0].ID);
+                $('#Name').prop('value', result[0].Name);
             })
             $.getJSON(urlPSA, function (result) {
-                $('#Header_ProjectUnit').prop('value', result[0].ProjectOrUnit);
-                $('#Header_Position').prop('value', result[0].Position);
-                $('#Header_JoinDate').prop('value', result[0].JoinDate);
-                $('#Header_DateOfNewPsa').prop('value', result[0].DateOfNewPSA);
-                $('#Header_EndOfContract').prop('value', result[0].PsaExpiryDate);
+                $('#ProjectUnit').prop('value', result[0].ProjectOrUnit);
+                $('#Position').prop('value', result[0].Position);
+                $('#JoinDate').prop('value', result[0].JoinDate);
+                $('#DateOfNewPsa').prop('value', result[0].DateOfNewPSA);
+                $('#EndOfContract').prop('value', result[0].PsaExpiryDate);
             })
         }
 
         $(document).ready(function () {
 
-            $("#Header_MonthlyFee").on('input', function () {
+            $("#MonthlyFee").on('input', function () {
                 sumCal();
             });
 
             function sumCal() {
-                var AnnualFee = $("#Header_MonthlyFee").val();
+                var AnnualFee = $("#MonthlyFee").val();
                 var Result = Number(AnnualFee) *12;
-                $("#Header_AnnualFee").val(Result);
+                $("#AnnualFee").val(Result);
             }
         });
 

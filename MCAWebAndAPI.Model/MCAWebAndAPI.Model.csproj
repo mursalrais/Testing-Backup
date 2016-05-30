@@ -129,7 +129,6 @@
     <Compile Include="ViewModel\Form\HR\DependentDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\EducationDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\ManpowerRequisitionVM.cs" />
-    <Compile Include="ViewModel\Form\HR\MonthlyFeeHeaderVM.cs" />
     <Compile Include="ViewModel\Form\HR\MonthlyFeeVM.cs" />
     <Compile Include="ViewModel\Form\HR\OrganizationalDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\ProfessionalDataVM.cs" />
