@@ -10,6 +10,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
     public class PSAManagementVM : Item
     {
+        
         [DisplayName("PSA Number")]
         public string psaNumber { get; set; }
 
