@@ -132,6 +132,9 @@
   <data name="SuccessPrintApplicationData" xml:space="preserve">
     <value>Congratulation {0}! To download the printed version of your application. &lt;br/&gt;&lt;br/&gt;&lt;a href="{1}" target="_blank" class="btn btn-labeled btn-default"&gt; &lt;span class="btn-label"&gt;&lt;i class="fa fa-file"&gt;&lt;/i&gt;&lt;/span&gt;Download File&lt;/a&gt;</value>
   </data>
+  <data name="SuccessUpdateApplicationStatus" xml:space="preserve">
+    <value>Congratulation! The application data of {0} has been set to {1}.</value>
+  </data>
   <data name="SuccessUpdatePSAManagementData" xml:space="preserve">
     <value>Congratulation {0}! Your PSA data has successfully been updated.</value>
   </data>
