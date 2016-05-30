@@ -15,5 +15,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         void CreateWorkingRelationshipDetails(int? headerID, IEnumerable<WorkingRelationshipDetailVM> workingRelationshipDetails);        
 
         void CreateManpowerRequisitionDocuments(int? headerID, IEnumerable<HttpPostedFileBase> documents);
+
+        bool UpdateManpowerRequisition(ManpowerRequisitionVM viewModel);
     }
 }

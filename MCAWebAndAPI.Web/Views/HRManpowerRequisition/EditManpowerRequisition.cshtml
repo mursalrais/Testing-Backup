@@ -2,10 +2,10 @@
 @model ManpowerRequisitionVM
 
 @{
-    ViewBag.Title = "CreateManpowerRequisition";
+    ViewBag.Title = "EditManpowerRequisition";
 }
 
-@using (Html.BeginForm("CreateManpowerRequisition", "HRManpowerRequisition", FormMethod.Post, 
+@using (Html.BeginForm("EditManpowerRequisition", "HRManpowerRequisition", FormMethod.Post, 
                                                      new
                                                      { @class = "form-horizontal",
                                                          enctype = "multipart/form-data" }))
@@ -39,6 +39,7 @@
         <div class="row">
             @Html.Partial("_OtherRequirements", Model)
         </div>
+        @Html.HiddenFor(m => m.ID);
     </fieldset>
     <div class="form-actions">
         <div class="row">

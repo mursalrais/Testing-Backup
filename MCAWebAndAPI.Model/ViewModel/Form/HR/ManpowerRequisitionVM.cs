@@ -79,7 +79,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public Boolean IsTravellingRequired { get; set; } = new Boolean();
 
         [UIHint("MultiFileUploader")]
-        public IEnumerable<HttpPostedFileBase> SupportingDocuments { get; set; } = new List<HttpPostedFileBase>();
+        public IEnumerable<HttpPostedFileBase> Documents { get; set; } = new List<HttpPostedFileBase>();
+        public string DocumentUrl { get; set; }
 
         public IEnumerable<WorkingRelationshipDetailVM> WorkingRelationshipDetails { get; set; } = new List<WorkingRelationshipDetailVM>(); 
 
