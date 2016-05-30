@@ -6,24 +6,41 @@
     @(Html.Kendo().Grid(Model)
         .Name("WorkingRelationshipDetails")
         .ToolBar(tools => tools.Create().Text("Add New"))
-        .Editable(editable => editable.Mode(GridEditMode.InCell).CreateAt(GridInsertRowPosition.Bottom))
+        .Editable(editable => editable.Mode(GridEditMode.InCell)
+        .CreateAt(GridInsertRowPosition.Bottom))
         .Columns(columns =>
         {
-            columns.Bound(p => p.Position).ClientTemplate("#= Position #" +
+            columns.Bound(p => p.Position).ClientTemplate("#= Position.Text #" +
                           "<input type='hidden' name='WorkingRelationshipDetails[#= getWorkingRelationshipDetails(data)#].Position' value='#= Position #' />"
-                        );
-            columns.Bound(p => p.Relationship).ClientTemplate("#= Relationship #" +
+                        ).EditorViewData(new
+                        {
+                            BindTo = WorkingRelationshipDetailVM.GetPositionOptions()
+                        });
+            columns.Bound(p => p.Relationship).ClientTemplate("#= Relationship.Text #" +
                                "<input type='hidden' name='WorkingRelationshipDetails[#= getWorkingRelationshipDetails(data)#].Relationship' value='#= Relationship #' />"
-                             );
-            columns.Bound(p => p.Frequency).ClientTemplate("#= Frequency #" +
+                             ).EditorViewData(new
+                             {
+                                 BindTo = WorkingRelationshipDetailVM.GetRelationshipOptions()
+                             });
+            columns.Bound(p => p.Frequency).ClientTemplate("#= Frequency.Text #" +
                                "<input type='hidden' name='WorkingRelationshipDetails[#= getWorkingRelationshipDetails(data)#].Frequency' value='#= Frequency #' />"
-                             );
-            
+                             ).EditorViewData(new
+                             {
+                                 BindTo = WorkingRelationshipDetailVM.GetFrequencyOptions()
+                             });
+            columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
+          "<input type='hidden' name='WorkingRelationshipDetails[#= getWorkingRelationshipDetails(data)#].ID' value='#= ID #' />"
+        );
+            columns.Command(command => command.Destroy()).Width(100);
+
         })
         .DataSource(dataSource => dataSource.Ajax()
                    .Model(model =>
                    {
                        model.Id(p => p.ID);
+                       model.Field(m => m.Position).DefaultValue(WorkingRelationshipDetailVM.GetPositionDefaultValue());
+                       model.Field(m => m.Frequency).DefaultValue(WorkingRelationshipDetailVM.GetFrequencyDefaultValue());
+                       model.Field(m => m.Relationship).DefaultValue(WorkingRelationshipDetailVM.GetRelationshipDefaultValue());
                    })
                    .ServerOperation(false)
         )

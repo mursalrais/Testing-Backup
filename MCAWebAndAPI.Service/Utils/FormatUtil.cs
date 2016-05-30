@@ -31,8 +31,12 @@ namespace MCAWebAndAPI.Service.Utils
         {
             if (string.IsNullOrEmpty(multipleLineValue))
                 return string.Empty;
-
-            var value = multipleLineValue.Split('>')[1].Split('<')[0];
+            var value = multipleLineValue;
+            if (value.Contains("div class"))
+            {
+                value = multipleLineValue.Split('>')[1].Split('<')[0];
+            }
+            
             return value;
         }
 
