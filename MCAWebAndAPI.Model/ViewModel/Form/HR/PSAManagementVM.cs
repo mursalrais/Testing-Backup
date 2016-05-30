@@ -10,15 +10,16 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
     public class PSAManagementVM : Item
     {
+    
         [DisplayName("PSA Number")]
-        public string psaNumber { get; set; }
+        public string PSANumber { get; set; }
 
         [UIHint("ComboBox")]
         [DisplayName("Renewal?")]
-        public ComboBoxVM isrenewal { get; set; } = new ComboBoxVM { Choices = new string[] { "Yes", "No" } };
+        public ComboBoxVM IsRenewal { get; set; } = new ComboBoxVM { Choices = new string[] { "Yes", "No" } };
 
         [DisplayName("Renewal#")]
-        public int renewalnumber { get; set; }
+        public int RenewalNumber { get; set; }
 
         [UIHint("ComboBox")]
         [DisplayName("Div/Project/Unit")]
@@ -28,18 +29,18 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [UIHint("Date")]
         [DisplayName("Join Date")]
         [Required]
-        public DateTime? joinDate { get; set; } = DateTime.Now;
+        public DateTime? JoinDate { get; set; } = DateTime.Now;
 
         [UIHint("Date")]
         [DisplayName("Date of New PSA")]
         [Required]
-        public DateTime? dateofNewPSA { get; set; } = DateTime.Now;
+        public DateTime? DateOfNewPSA { get; set; } = DateTime.Now;
 
         
         [UIHint("AjaxComboBox")]
         [DisplayName("Position Title")]
         [Required]
-        public AjaxComboBoxVM position { get; set; } = new AjaxComboBoxVM
+        public AjaxComboBoxVM Position { get; set; } = new AjaxComboBoxVM
         {
             ActionName = "GetPositions",
             ControllerName = "HRDataMaster",
@@ -51,7 +52,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [UIHint("AjaxComboBox")]
         [DisplayName("Professional Name")]
         [Required]
-        public AjaxComboBoxVM professional { get; set; } = new AjaxComboBoxVM
+        public AjaxComboBoxVM Professional { get; set; } = new AjaxComboBoxVM
         {
             ActionName = "GetProfessionals",
             ValueField = "ID",
@@ -62,12 +63,12 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         [DisplayName("Tenure")]
         [Required]
-        public int tenure { get; set; }
+        public int Tenure { get; set; }
 
 
         [UIHint("Date")]
         [DisplayName("PSA Expiry Date")]
-        public DateTime? pSAExpiryDate { get; set; } = DateTime.Now;
+        public DateTime? PSAExpiryDate { get; set; } = DateTime.Now;
 
         //public DateTime test { get; set; } = DateTime.Today
 
