@@ -113,7 +113,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             return RedirectToAction("Index",
                 "Success",
-                new { successMessage = string.Format(MessageResource.SuccessCreatePSAManagementData, viewModel.psaNumber) });
+                new { successMessage = string.Format(MessageResource.SuccessCreatePSAManagementData, viewModel.PSANumber) });
 
         }
 
@@ -135,7 +135,7 @@ namespace MCAWebAndAPI.Web.Controllers
             
             return RedirectToAction("Index",
                 "Success",
-                new { successMessage = string.Format(MessageResource.SuccessUpdatePSAManagementData, psaManagement.psaNumber) });
+                new { successMessage = string.Format(MessageResource.SuccessUpdatePSAManagementData, psaManagement.PSANumber) });
         }
 
         public JsonResult GetPsa(string id)
