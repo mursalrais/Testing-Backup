@@ -33,8 +33,24 @@ namespace MCAWebAndAPI.Web.Controllers
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             var viewModel = _service.GetProfessionalData(ID);
-
             return View(viewModel);
+        }
+
+        public ActionResult EditCurrentProfessional(string siteUrl = null, string userLoginName = null)
+        {
+            SessionManager.RemoveAll();
+
+            // MANDATORY: Set Site URL
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            var viewModel = _service.GetProfessionalData(userLoginName);
+
+            if (viewModel == null)
+                return RedirectToAction("Index", "Error", new { errorMessage = 
+                    string.Format(MessageResource.ErrorProfessionalNotFound, userLoginName)});
+     
+            return View("EditProfessional", viewModel);
         }
 
         [HttpPost]
@@ -53,7 +69,7 @@ namespace MCAWebAndAPI.Web.Controllers
             int? headerID = null;
             try
             {
-                headerID = _service.CreateProfessionalData(viewModel);
+                headerID = _service.EditProfessionalData(viewModel);
             }
             catch (Exception e)
             {
@@ -64,7 +80,7 @@ namespace MCAWebAndAPI.Web.Controllers
             try
             {
                 viewModel.OrganizationalDetails = BindOrganizationalDetails(form, viewModel.OrganizationalDetails);
-                _service.CreateOrganizationalDetails(headerID, viewModel.EducationDetails);
+                _service.CreateOrganizationalDetails(headerID, viewModel.OrganizationalDetails);
             }
             catch (Exception e)
             {
@@ -97,7 +113,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             try
             {
-                _service.CreateDependentDetails(headerID, viewModel.Documents);
+                _service.CreateDependentDetails(headerID, viewModel.DependentDetails);
             }
             catch (Exception e)
             {

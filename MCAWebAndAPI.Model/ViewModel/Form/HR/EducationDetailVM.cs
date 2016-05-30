@@ -7,14 +7,26 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
     public class EducationDetailVM : Item
     {
+        /// <summary>
+        /// university
+        /// </summary>
         public string University { get; set; }
 
+        /// <summary>
+        /// Title
+        /// </summary>
         public string Subject { get; set; }
 
+        /// <summary>
+        /// yearofgraduation
+        /// </summary>
         [DisplayName("Graduation")]
         [UIHint("Month")]
         public DateTime? YearOfGraduation { get; set; } = DateTime.Now;
 
+        /// <summary>
+        /// remarks
+        /// </summary>
         [UIHint("TextArea")]
         public string Remarks { get; set; }
 

@@ -90,7 +90,7 @@ namespace MCAWebAndAPI.Service.Utils
             }
         }
 
-        public static void UpdateListItem(string listName, int listItemID, Dictionary<string, object> updatedValues, string siteUrl = null)
+        public static void UpdateListItem(string listName, int? listItemID, Dictionary<string, object> updatedValues, string siteUrl = null)
         {
             MapCredential(siteUrl);
             using (ClientContext context = new ClientContext(siteUrl ?? CurUrl))
@@ -101,7 +101,7 @@ namespace MCAWebAndAPI.Service.Utils
 
                 // Get one listitem
                 List SPList = context.Web.Lists.GetByTitle(listName);
-                ListItem SPListItem = SPList.GetItemById(listItemID);
+                ListItem SPListItem = SPList.GetItemById(listItemID + string.Empty);
                 context.Load(SPListItem);
                 context.ExecuteQuery();
 
@@ -281,6 +281,22 @@ namespace MCAWebAndAPI.Service.Utils
             return true;
         }
 
+        public static void DeleteListItem(string listName, int? listItemID, string siteUrl)
+        {
+            MapCredential(siteUrl);
+            using (ClientContext context = new ClientContext(siteUrl ?? CurUrl))
+            {
+                SecureString secureString = new SecureString();
+                Password.ToList().ForEach(secureString.AppendChar);
+                context.Credentials = new SharePointOnlineCredentials(UserName, secureString);
 
+                // Get one listitem
+                List SPList = context.Web.Lists.GetByTitle(listName);
+                ListItem SPListItem = SPList.GetItemById(listItemID + string.Empty);
+
+                SPListItem.DeleteObject();
+                context.ExecuteQuery();
+            }
+        }
     }
 }

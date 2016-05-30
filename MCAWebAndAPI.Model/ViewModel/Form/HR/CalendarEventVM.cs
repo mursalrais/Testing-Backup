@@ -13,10 +13,19 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
        
         public int? ID { get; set; }
 
+        /// <summary>
+        /// EventCategory
+        /// </summary>
         private ComboBoxVM eventCategory = new ComboBoxVM { Choices=new string[] { "Company Birthday", "Public Holiday" } };
 
+        /// <summary>
+        /// CalendarEventDate
+        /// </summary>
         DateTime? calendarEventDate = DateTime.Now;
 
+        /// <summary>
+        /// Title
+        /// </summary>
         [DisplayName("Note")]
         public string Title { get; set; }
 
