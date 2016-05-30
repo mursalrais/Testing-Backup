@@ -1,6 +1,19 @@
 ﻿@model MCAWebAndAPI.Model.ViewModel.Control.InGridComboBoxVM
 
-@(Html.Kendo().DropDownListFor(m => m)
-        .DataValueField("CategoryID")
-        .DataTextField("CategoryName")
+@if (Model.Text.IsEmpty())
+{
+    @(Html.Kendo().DropDownListFor(m => m)
+        .DataValueField("Value")
+        .DataTextField("Text")
         .BindTo(((System.Collections.IEnumerable)ViewData["BindTo"])))
+}
+else
+{
+    @(Html.Kendo().DropDownListFor(m => m)
+        .DataValueField("Value")
+        .DataTextField("Text")
+        .Value(Model.Value + "")
+        .Text(Model.Text)
+        .BindTo(((System.Collections.IEnumerable)ViewData["BindTo"])))
+}
+

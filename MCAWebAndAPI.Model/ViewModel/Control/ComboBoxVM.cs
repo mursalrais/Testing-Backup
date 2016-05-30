@@ -8,7 +8,20 @@ namespace MCAWebAndAPI.Model.ViewModel.Control
 
         public string Value { get; set; }
 
-        public string DefaultValue { get; set; }
+        /// <summary>
+        /// A clone variable to value to prevent confusion
+        /// </summary>
+        public string Text
+        {
+            get
+            {
+                return Value;
+            }
+            set
+            {
+                Value = value;
+            }
+        }
 
         public string OnSelectEventName { get; set; }
     }

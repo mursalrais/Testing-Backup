@@ -19,7 +19,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Control
                  "Buddhism",
                  "Atheism"
              };
-            DefaultValue = "Islam";
+            Value = "Islam";
         }
     }
 }

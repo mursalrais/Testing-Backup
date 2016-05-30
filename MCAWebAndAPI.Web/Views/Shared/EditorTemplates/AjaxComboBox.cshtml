@@ -7,7 +7,8 @@
             .DataTextField(Model.TextField)
             .DataValueField(Model.ValueField)
             .DataSource(source => source.Read(read => read.Action(Model.ActionName, Model.ControllerName)))
-            .Value(Model.DefaultValue)
+            .Value(Model.Value + "")
+            .Text(Model.Text)
             .Filter("contains")
             .HtmlAttributes(new
             {
@@ -22,7 +23,8 @@ else
             .DataTextField(Model.TextField)
             .DataValueField(Model.ValueField)
             .DataSource(source => source.Read(read => read.Action(Model.ActionName, Model.ControllerName)))
-            .Value(Model.DefaultValue)
+            .Value(Model.Value + "")
+            .Text(Model.Text)
             .Events(ev => ev.Select(Model.OnSelectEventName))
             .Filter("contains")
             .HtmlAttributes(new

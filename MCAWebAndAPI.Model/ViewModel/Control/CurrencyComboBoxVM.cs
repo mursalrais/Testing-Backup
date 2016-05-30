@@ -16,7 +16,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Control
                 "IDR"
             };
 
-            this.DefaultValue = "IDR";
+            this.Value = "IDR";
         }
     }
 }

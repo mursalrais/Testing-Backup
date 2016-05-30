@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MCAWebAndAPI.Model.ViewModel.Control;
 
 namespace MCAWebAndAPI.Service.Utils
 {
@@ -82,5 +83,12 @@ namespace MCAWebAndAPI.Service.Utils
             return Convert.ToString((item[columnName] as FieldLookupValue).LookupValue);
         }
 
+        public static InGridComboBoxVM ConvertToInGridLookup(ListItem item, string columnName)
+        {
+            return new InGridComboBoxVM
+            {
+                Text = Convert.ToString(ConvertLookupToValue(item, columnName))
+            };
+        }
     }
 }

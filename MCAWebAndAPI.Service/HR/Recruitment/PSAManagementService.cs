@@ -30,8 +30,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             updatedValues.Add("isrenewal", psaManagement.IsRenewal.Value);
             updatedValues.Add("renewalnumber", psaManagement.RenewalNumber);
             updatedValues.Add("ProjectOrUnit", psaManagement.ProjectOrUnit.Value);
-            updatedValues.Add("position", new FieldLookupValue { LookupId =  psaManagement.Position.Value});
-            updatedValues.Add("professional", new FieldLookupValue { LookupId = psaManagement.Professional.Value });
+            updatedValues.Add("position", new FieldLookupValue { LookupId =  (int)psaManagement.Position.Value});
+            updatedValues.Add("professional", new FieldLookupValue { LookupId = (int)psaManagement.Professional.Value });
             updatedValues.Add("joindate", psaManagement.JoinDate);
             updatedValues.Add("dateofnewpsa", psaManagement.DateOfNewPSA);
             updatedValues.Add("tenure", psaManagement.Tenure);
@@ -43,7 +43,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             catch (Exception e)
             {
                 logger.Error(e.Message);
-                throw new Exception(ErrorResource.SPInsertError);
+                throw e;
             }
 
             return SPConnector.GetInsertedItemID(SP_PSA_LIST_NAME, _siteUrl);
@@ -104,11 +104,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             viewModel.ID = Convert.ToInt32(listItem["ID"]);
             viewModel.PSANumber = Convert.ToString(listItem["Title"]);
-            viewModel.IsRenewal.DefaultValue = Convert.ToString(listItem["isrenewal"]);
+            viewModel.IsRenewal.Text = Convert.ToString(listItem["isrenewal"]);
             viewModel.RenewalNumber = Convert.ToInt32(listItem["renewalnumber"]);
-            viewModel.ProjectOrUnit.DefaultValue = Convert.ToString(listItem["ProjectOrUnit"]);
-            viewModel.Position.DefaultValue = FormatUtil.ConvertLookupToID(listItem, "position") + string.Empty;
-            viewModel.Professional.DefaultValue = FormatUtil.ConvertLookupToID(listItem, "professional") + string.Empty;
+            viewModel.ProjectOrUnit.Value = Convert.ToString(listItem["ProjectOrUnit"]);
+            viewModel.Position.Text = FormatUtil.ConvertLookupToID(listItem, "position") + string.Empty;
+            viewModel.Professional.Text = FormatUtil.ConvertLookupToID(listItem, "professional") + string.Empty;
             viewModel.JoinDate = Convert.ToDateTime(listItem["joindate"]).ToLocalTime();
             viewModel.DateOfNewPSA = Convert.ToDateTime(listItem["dateofnewpsa"]).ToLocalTime();
             viewModel.Tenure = Convert.ToInt32(listItem["tenure"]);
@@ -142,8 +142,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.IsRenewal.Value = Convert.ToString(listItem["isrenewal"]);
             viewModel.RenewalNumber = Convert.ToInt32(listItem["renewalnumber"]);
             viewModel.ProjectOrUnit.Value = Convert.ToString(listItem["ProjectOrUnit"]);
-            viewModel.Position.DefaultValue = FormatUtil.ConvertLookupToValue(listItem, "position");
-            viewModel.Professional.DefaultValue = FormatUtil.ConvertLookupToValue(listItem, "professional");
+            viewModel.Position.Text = FormatUtil.ConvertLookupToValue(listItem, "position");
+            viewModel.Professional.Text = FormatUtil.ConvertLookupToValue(listItem, "professional");
             viewModel.JoinDate = Convert.ToDateTime(listItem["joindate"]).ToLocalTime();
             viewModel.DateOfNewPSA = Convert.ToDateTime(listItem["dateofnewpsa"]).ToLocalTime();
             viewModel.Tenure = Convert.ToInt32(listItem["tenure"]);
@@ -216,7 +216,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 catch (Exception e)
                 {
                     logger.Error(e.Message);
-                    throw new Exception(ErrorResource.SPInsertError);
+                    throw e;
                 }
             }
         }

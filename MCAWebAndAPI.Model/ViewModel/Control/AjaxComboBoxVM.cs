@@ -12,14 +12,12 @@ namespace MCAWebAndAPI.Model.ViewModel.Control
     /// </summary>
     public class AjaxComboBoxVM
     {
-        public AjaxComboBoxVM()
-        {
+  
+        public int? Value { get; set; }
 
-        }
+        public string Text { get; set; }
 
 
-        public int Value { get; set; }
-        
         /// <summary>
         /// Set name of field from JSON result that becomes value
         /// </summary>
@@ -41,9 +39,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Control
         public string ActionName { get; set; }
 
         public string OnSelectEventName { get; set; }
-
-        public string DefaultValue { get; set; }
-
 
         
     }

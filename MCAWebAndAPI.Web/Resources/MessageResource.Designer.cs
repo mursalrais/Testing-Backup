@@ -61,6 +61,15 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Professional data that uses email {0} is not found. Please contact your IT Administrator..
+        /// </summary>
+        public static string ErrorProfessionalNotFound {
+            get {
+                return ResourceManager.GetString("ErrorProfessionalNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Congratulation. It works!.
         /// </summary>
         public static string SuccessCommon {
@@ -81,7 +90,7 @@ namespace MCAWebAndAPI.Web.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Congratulation {0}! Your PSA data has successfully been created..
         /// </summary>
-        internal static string SuccessCreatePSAManagementData {
+        public static string SuccessCreatePSAManagementData {
             get {
                 return ResourceManager.GetString("SuccessCreatePSAManagementData", resourceCulture);
             }
@@ -99,7 +108,7 @@ namespace MCAWebAndAPI.Web.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Congratulation {0}! Your PSA data has successfully been updated..
         /// </summary>
-        internal static string SuccessUpdatePSAManagementData {
+        public static string SuccessUpdatePSAManagementData {
             get {
                 return ResourceManager.GetString("SuccessUpdatePSAManagementData", resourceCulture);
             }

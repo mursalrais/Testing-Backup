@@ -45,16 +45,16 @@ namespace MCAWebAndAPI.Service.Asset
             viewModel.Condition.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "Condition");
             viewModel.ProjectUnit.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "ProjectUnit");
 
-            viewModel.ProjectUnit.DefaultValue = Convert.ToString(listItem["ProjectUnit"]);
+            viewModel.ProjectUnit.Value = Convert.ToString(listItem["ProjectUnit"]);
             viewModel.Remarks = Convert.ToString(listItem["Remarks"]);
             viewModel.SerialNo = Convert.ToString(listItem["SerialNo"]);
             viewModel.Spesifications = Convert.ToString(listItem["Spesifications"]);            
             viewModel.WarrantyExpires = Convert.ToDateTime(listItem["WarranyExpires"]);
-            viewModel.AssetCategory.DefaultValue = Convert.ToString(listItem["AssetCategory"]);
+            viewModel.AssetCategory.Value = Convert.ToString(listItem["AssetCategory"]);
             viewModel.AssetDesc = Convert.ToString(listItem["Title"]);
-            viewModel.AssetLevel.DefaultValue = Convert.ToString(listItem["AssetLevel"]);
-            viewModel.AssetType.DefaultValue = Convert.ToString(listItem["AssetType"]);
-            viewModel.Condition.DefaultValue = Convert.ToString(listItem["Condition"]);
+            viewModel.AssetLevel.Value = Convert.ToString(listItem["AssetLevel"]);
+            viewModel.AssetType.Value = Convert.ToString(listItem["AssetType"]);
+            viewModel.Condition.Value = Convert.ToString(listItem["Condition"]);
             viewModel.ID = ID;
 
             return viewModel;

@@ -509,8 +509,6 @@
     <Content Include="Views\PMProjectHierarchy\ProjectStatusByActivity.cshtml" />
     <Content Include="Views\PMTask\TaskByResource.cshtml" />
     <Content Include="Views\PMTask\TaskWithSingleResource.cshtml" />
-    <Content Include="Views\Home\ScheduleTracking.cshtml" />
-    <Content Include="Views\Home\ProjectHealthByActivity.cshtml" />
     <Content Include="Views\PMProjectHierarchy\AllWBS.cshtml" />
     <Content Include="Views\Shared\_LayoutMin.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\CurrencyIDR.cshtml" />
@@ -567,14 +565,11 @@
     <Content Include="Views\HRApplication\CreateApplicationData.cshtml" />
     <Content Include="Views\HRApplication\_PersonalDetails.cshtml" />
     <Content Include="Views\HRApplication\_ContactInformationDetails.cshtml" />
-    <Content Include="Views\HRApplication\_EducationDetails.cshtml" />
-    <Content Include="Views\HRApplication\_TrainingDetails.cshtml" />
     <Content Include="Views\HRApplication\_SpecializationDetails.cshtml" />
     <Content Include="Views\HRApplication\_WorkingExperienceDetails.cshtml" />
     <Content Include="Views\HRApplication\_DocumentDetails.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\MultiFileUploader.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Month.cshtml" />
-    <Content Include="Views\Home\IndexGrid.cshtml" />
     <Content Include="Views\HRApplication\PrintApplicationData.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\Url.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\AjaxComboBox.cshtml" />
@@ -588,9 +583,6 @@
     <Content Include="Views\Shared\DisplayTemplates\GridForeignKey.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\HttpPostedFileBase.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\InGridAjaxComboBox.cshtml" />
-    <Content Include="Views\Shared\DisplayTemplates\InGridComboBox_Asset.cshtml" />
-    <Content Include="Views\Shared\DisplayTemplates\InGridComboBox_Location.cshtml" />
-    <Content Include="Views\Shared\DisplayTemplates\InGridComboBox_WBS.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\Integer.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\Month.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\MultiFileUploader.cshtml" />
@@ -625,7 +617,7 @@
     <Content Include="Views\HRProfessional\EditProfessional.cshtml" />
     <Content Include="Views\HRProfessional\_ContactInformationDetails.cshtml" />
     <Content Include="Views\HRProfessional\_PersonalDetails.cshtml" />
-    <Content Include="Views\HRProfessional\_EducationDetails.cshtml" />
+    <Content Include="Views\Shared\_EducationDetails.cshtml" />
     <Content Include="Views\HRProfessional\_InsuranceDetails.cshtml" />
     <Content Include="Views\HRProfessional\_PayrollDetails.cshtml" />
     <Content Include="Views\HRProfessional\_DependentDetails.cshtml" />
@@ -649,7 +641,7 @@
     <Content Include="Views\Shared\EditorTemplates\CheckBoxItem.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\InGridComboBox.cshtml" />
     <Content Include="Views\HRProfessional\_OrganizationalDetails.cshtml" />
-    <Content Include="Views\HRProfessional\_TrainingDetails.cshtml" />
+    <Content Include="Views\Shared\_TrainingDetails.cshtml" />
     <Content Include="Views\HRPSAManagement\DisplayPSAManagement.cshtml" />
     <Content Include="Views\HRPSAManagement\_DocumentDetails.cshtml" />
     <Content Include="Views\HRPSAManagement\_DocumentDetailsDisplay.cshtml" />

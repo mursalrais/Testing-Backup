@@ -1,11 +1,23 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@using MCAWebAndAPI.Service.Utils
+
 @model ApplicationDataVM
 
 @{
     ViewBag.Title = "CreateApplicationData";
 }
 
-<div class="form-horizontal">
+@using (Ajax.BeginForm("SetStatusApplicationData", "HRApplication", FormMethod.Post, new AjaxOptions
+{
+    OnBegin = "onBeginForm",
+    OnFailure = "onFailureForm",
+    OnSuccess = "onSuccessForm",
+    OnComplete = "onCompleteForm"
+}, new
+{
+    @class = "form-horizontal"
+}))
+{
     <fieldset>
         <legend>Personal Details</legend>
         <div class="row">
@@ -33,32 +45,64 @@
         </div>
         <legend>Documents</legend>
         <div class="row">
-            @Html.Partial("_DocumentDetails_Display", Model. DocumentUrl)
+            @Html.Partial("_DocumentDetails_Display", Model.DocumentUrl)
+        </div>
+        <legend>Application Status</legend>
+        <div class="row">
+            <div class="col-sm-6 pull-right">
+                @{
+                    Model.WorkflowStatusOptions.Choices = ApplicationDataVM.GetWorkflowStatusOptions(Model.ApplicationStatus);
+                }
+                @Html.Bootstrap().LabelFor(m => m.WorkflowStatusOptions).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.WorkflowStatusOptions)
+                </div>
+            </div>
+            <div class="col-sm-6"></div>
         </div>
     </fieldset>
     <div class="form-actions">
         <div class="row">
-            <div class="col-sm-12"><br/></div>
+            <div class="col-sm-12">
+                <button id="set-status-button" type="button" class="btn btn-primary">Set Status</button>
+            </div>
         </div>
     </div>
-</div>
+}
 
-    @section scripts{
+@section scripts{
 
-        <script>
-            function onSelectIDCardType(e) {
-                var dataItem = this.dataItem(e.item);
-                if (dataItem === "KTP") {
-                    $('#IDCardExpiry').closest('.form-group').show();
-                } else {
-                    $('#IDCardExpiry').closest('.form-group').hide();
-                }
+    <script>
+
+        $("#set-status-button").click(function (e) {
+            if (!$('form').valid()) {
+                alert('Please make sure that all required fields are filled');
+                return;
             }
 
-            $(document).ready(function () {
-                $('input').prop('readonly', 'true');
-                $('textarea').prop('readonly', 'true');
-                $('')
-            });
-        </script>
-    }
+            e.preventDefault();
+
+            // Get value from kendo dropdownlist
+            var applicationStatus = $('#WorkflowStatusOptions_Value').data("kendoDropDownList").value();
+            if (applicationStatus == 'ACCEPTED') {
+                $('form').prop('action', '/HRProfessional/CreateFromApplicationData');
+            }
+            $('form').submit();
+        });
+
+        function onSelectIDCardType(e) {
+            var dataItem = this.dataItem(e.item);
+            if (dataItem === "KTP") {
+                $('#IDCardExpiry').closest('.form-group').show();
+            } else {
+                $('#IDCardExpiry').closest('.form-group').hide();
+            }
+        }
+
+        $(document).ready(function () {
+            $('input').prop('readonly', 'true');
+            $('textarea').prop('readonly', 'true');
+            $('')
+        });
+    </script>
+}

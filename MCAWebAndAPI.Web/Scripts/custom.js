@@ -84,5 +84,32 @@ $(document).ready(function () {
         $('#print-button').click(printForm);
     }
 
-
 });
+
+function onEditKendoDetail(e) {
+    if (!e.model.isNew()) {
+        var container = e.container;
+        var tr = container.closest('tr');
+        var hiddenInput = tr.find("input[name*='EditMode']");
+
+        // 1 is Item.Mode.UPDATED
+        hiddenInput.val(1);
+    }
+}
+
+function onDeleteKendoDetail(e) {
+    var result = confirm("Are you sure you want to delete this item?");
+    if (!result) return;
+
+    var target = e.target || e.srcElement;
+    var button = $(target);
+    var tr = button.closest('tr');
+
+    // Set IsModified flag to True
+    hiddenInput = tr.find("input[name*='EditMode']");
+
+    // -1 is Item.Mode.DELETED
+    hiddenInput.val(-1);
+
+    tr.hide();
+}

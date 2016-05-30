@@ -6,6 +6,7 @@ using MCAWebAndAPI.Service.Utils;
 using NLog;
 using Microsoft.SharePoint.Client;
 using MCAWebAndAPI.Service.Resources;
+using MCAWebAndAPI.Model.Common;
 
 namespace MCAWebAndAPI.Service.HR.Recruitment
 {
@@ -19,6 +20,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         const string SP_APPWORK_LIST_NAME = "Application Working Experience";
         const string SP_APPTRAIN_LIST_NAME = "Application Training";
         const string SP_APPDOC_LIST_NAME = "Application Documents";
+
+        const string SP_PROMAS_LIST_NAME = "Professional Master";
 
         public int CreateApplicationData(ApplicationDataVM viewModel)
         {
@@ -46,8 +49,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             updatedValue.Add("gender", viewModel.Gender.Value);
             updatedValue.Add("idcardtype", viewModel.IDCardType.Value);
             updatedValue.Add("idcardexpirydate", viewModel.IDCardExpiry);
-            updatedValue.Add("nationality", new FieldLookupValue { LookupId = viewModel.Nationality.Value });
-            updatedValue.Add("applicationstatus", WorkflowUtil.ApplicationStatus.NEW.ToString());
+            updatedValue.Add("nationality", new FieldLookupValue { LookupId = (int)viewModel.Nationality.Value });
+            updatedValue.Add("applicationstatus", Workflow.ApplicationStatus.NEW.ToString());
 
             try
             {
@@ -56,7 +59,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             catch (Exception e)
             {
                 logger.Error(e.Message);
-                throw new Exception(ErrorResource.SPInsertError);
+                throw e;
             }
 
             return SPConnector.GetInsertedItemID(SP_APPDATA_LIST_NAME, _siteUrl);
@@ -80,7 +83,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 catch (Exception e)
                 {
                     logger.Error(e.Message);
-                    throw new Exception(ErrorResource.SPInsertError);
+                    throw e;
                 }
             }
         }
@@ -98,7 +101,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 catch (Exception e)
                 {
                     logger.Error(e.Message);
-                    throw new Exception(ErrorResource.SPInsertError);
+                    throw e;
                 }
             }
         }
@@ -121,7 +124,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 catch (Exception e)
                 {
                     logger.Error(e.Message);
-                    throw new Exception(ErrorResource.SPInsertError);
+                    throw e;
                 }
             }
         }
@@ -145,7 +148,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 catch (Exception e)
                 {
                     logger.Error(e.Message);
-                    throw new Exception(ErrorResource.SPInsertError);
+                    throw e;
                 }
             }
         }
@@ -187,13 +190,15 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 FormatUtil.ConvertMultipleLine(Convert.ToString(listItem["specializationfield"]));
             viewModel.YearRelevanWork = Convert.ToInt32(listItem["totalrelevantexperienceyears"]);
             viewModel.MonthRelevantWork = Convert.ToInt32(listItem["totalrelevantexperiencemonths"]);
-            viewModel.MaritalStatus.DefaultValue = Convert.ToString(listItem["maritalstatus"]);
-            viewModel.BloodType.DefaultValue = Convert.ToString(listItem["bloodtype"]);
-            viewModel.Religion.DefaultValue = Convert.ToString(listItem["religion"]);
-            viewModel.Gender.DefaultValue = Convert.ToString(listItem["gender"]);
-            viewModel.IDCardType.DefaultValue = Convert.ToString(listItem["idcardtype"]);
+            viewModel.MaritalStatus.Value = Convert.ToString(listItem["maritalstatus"]);
+            viewModel.BloodType.Value = Convert.ToString(listItem["bloodtype"]);
+            viewModel.Religion.Value = Convert.ToString(listItem["religion"]);
+            viewModel.Gender.Value = Convert.ToString(listItem["gender"]);
+            viewModel.IDCardType.Value = Convert.ToString(listItem["idcardtype"]);
             viewModel.IDCardExpiry = Convert.ToDateTime(listItem["idcardexpirydate"]);
-            viewModel.Nationality.DefaultValue = FormatUtil.ConvertLookupToID(listItem, "nationality") + string.Empty;
+            viewModel.Nationality.Value = FormatUtil.ConvertLookupToID(listItem, "nationality");
+            viewModel.ApplicationStatus = Convert.ToString(listItem["applicationstatus"]);
+
 
             // Convert Details
             viewModel.EducationDetails = GetEducationDetails(viewModel.ID);
@@ -318,13 +323,14 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 Year = Convert.ToDateTime(item["trainingyear"])
             };
         }
-   //<ViewFields>
-   //   <FieldRef Name = 'Title' />
-   //   < FieldRef Name='applications' />
-   //   <FieldRef Name = 'university' />
-   //   < FieldRef Name='yearofgraduation' />
-   //   <FieldRef Name = 'remarks' />
-   //</ ViewFields >
+
+       //<ViewFields>
+       //   <FieldRef Name = 'Title' />
+       //   < FieldRef Name='applications' />
+       //   <FieldRef Name = 'university' />
+       //   < FieldRef Name='yearofgraduation' />
+       //   <FieldRef Name = 'remarks' />
+       //</ ViewFields >
         private IEnumerable<EducationDetailVM> GetEducationDetails(int? iD)
         {
             var caml = @"<View>  
@@ -377,5 +383,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
         }
+        
     }
 }
