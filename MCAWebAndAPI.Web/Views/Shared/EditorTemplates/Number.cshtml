@@ -2,5 +2,6 @@
 
 @(Html.Kendo().NumericTextBoxFor(m => m)
       .HtmlAttributes(new { style = "width:100%" })
+      .Enable(true)
 )
 @Html.ValidationMessageFor(model => model)
