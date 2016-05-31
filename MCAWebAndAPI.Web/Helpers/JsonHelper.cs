@@ -54,5 +54,20 @@ namespace MCAWebAndAPI.Web.Helpers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
+
+        public static ActionResult GenerateJsonSuccessResponse(string url, string successMessage)
+        {
+            return new JsonResult
+            {
+                Data = new
+                {
+                    success = true,
+                    result = "Success",
+                    successMessage = successMessage,
+                    urlToRedirect = url
+                },
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
     }
 }

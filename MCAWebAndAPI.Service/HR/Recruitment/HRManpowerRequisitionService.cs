@@ -142,7 +142,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 var updatedValue = new Dictionary<string, object>();
                 updatedValue.Add("manpowerrequisition", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
-
+                updatedValue.Add("position", new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.PositionWorking.Value.Value) });
                 try
                 {
                     SPConnector.AddListItem(SP_WORKRE_LIST_NAME, updatedValue, _siteUrl);
@@ -248,7 +248,20 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         private IEnumerable<WorkingRelationshipDetailVM> GetWorkingRelationshipDetails(int? ID)
         {
-            var caml = @"";
+            var caml = "";
+            //var caml = @"<View>  
+            //<Query> 
+            //   <Where><Eq><FieldRef Name='application' LookupId='True' /><Value Type='Lookup'>" + ID + @"</Value></Eq></Where> 
+            //</Query> 
+            // <ViewFields>
+            //<FieldRef Name='ID' />
+            //<FieldRef Name='application' />
+            //<FieldRef Name='Title' />
+            //<FieldRef Name='applicationcompany' />
+            //<FieldRef Name='applicationfrom' />
+            //<FieldRef Name='applicationto' />
+            //<FieldRef Name='applicationjobdescription' /></ViewFields> 
+            //</View>";
 
             var WorkingRelationshipDetails = new List<WorkingRelationshipDetailVM>();
             foreach (var item in SPConnector.GetList(SP_WORKRE_LIST_NAME, _siteUrl, caml))
@@ -261,13 +274,23 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         private WorkingRelationshipDetailVM ConvertToWorkingRelationshipDetailVM(ListItem item)
         {
-            return new WorkingRelationshipDetailVM
-            {
-                ID = Convert.ToInt32(item["ID"]),
-                Position = WorkingRelationshipDetailVM.GetPositionDefaultValue(FormatUtil.ConvertToInGridLookup(item, "position")),
-                Frequency = WorkingRelationshipDetailVM.GetFrequencyDefaultValue(FormatUtil.ConvertToInGridLookup(item, "frequency")),
-                Relationship = WorkingRelationshipDetailVM.GetRelationshipDefaultValue(FormatUtil.ConvertToInGridLookup(item, "relationship"))
-            };
+            var viewModel = new WorkingRelationshipDetailVM();
+            viewModel.ID = Convert.ToInt32(item["ID"]);
+
+            var _position = item["position"] == null ? string.Empty : Convert.ToString((item["position"] as FieldLookupValue).LookupValue);
+            int _value = item["position"] == null ? 0 : (item["position"] as FieldLookupValue).LookupId;
+            var _temp = new AjaxComboBoxVM();
+            _temp.Text = _position;
+            _temp.Value = _value;
+            viewModel.PositionWorking = _temp;
+            return viewModel;
+            //return new WorkingRelationshipDetailVM
+            //{
+            //    ID = Convert.ToInt32(item["ID"]),
+            //    Position = WorkingRelationshipDetailVM.GetPositionDefaultValue(FormatUtil.ConvertToInGridLookup(item, "position")),
+            //    Frequency = WorkingRelationshipDetailVM.GetFrequencyDefaultValue(FormatUtil.ConvertToInGridLookup(item, "frequency")),
+            //    Relationship = WorkingRelationshipDetailVM.GetRelationshipDefaultValue(FormatUtil.ConvertToInGridLookup(item, "relationship"))
+            //};
         }
 
 

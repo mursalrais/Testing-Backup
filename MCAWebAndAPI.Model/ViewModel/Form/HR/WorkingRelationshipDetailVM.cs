@@ -10,48 +10,12 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
     public class WorkingRelationshipDetailVM : Item
     {
-        [UIHint("InGridComboBox")]
-        public InGridComboBoxVM Position { get; set; } = new InGridComboBoxVM();
-
-        public static IEnumerable<InGridComboBoxVM> GetPositionOptions()
+        [UIHint("InGridAjaxComboBox")]
+        public AjaxComboBoxVM PositionWorking { get; set; } = new AjaxComboBoxVM();
+                
+        public static AjaxComboBoxVM GetPositionDefaultValue(AjaxComboBoxVM model = null)
         {
-            var index = 0;
-            var options = new string[] {
-                "LGL",
-                "Ops - HR",
-                "CC - ESP",
-                "HN",
-                "Ops - P",
-                "ME",
-                "PM",
-                "GP",
-                "Ops - IT",
-                "Ops",
-                "CC - E",
-                "Ops - F",
-                "CC",
-                "EO",
-                "COM",
-                "CC - SGA",
-                "RI",
-                "HN - NST" };
-
-            return options.Select(e =>
-                new InGridComboBoxVM
-                {
-                    Value = ++index,
-                    Text = e
-                });
-        }
-
-        public static InGridComboBoxVM GetPositionDefaultValue(InGridComboBoxVM model = null)
-        {
-            var options = GetPositionOptions();
-            if (model == null || model.Value == null || string.IsNullOrEmpty(model.Text))
-                return options.FirstOrDefault();
-
-            return options.FirstOrDefault(e =>
-                e.Value == model.Value || e.Text == model.Text);
+            return new AjaxComboBoxVM() {};
         }
 
         [UIHint("InGridComboBox")]

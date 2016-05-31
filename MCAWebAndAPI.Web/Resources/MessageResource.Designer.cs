@@ -106,6 +106,15 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Congratulation! The application data of {0} has been set to {1}..
+        /// </summary>
+        public static string SuccessUpdateApplicationStatus {
+            get {
+                return ResourceManager.GetString("SuccessUpdateApplicationStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Congratulation {0}! Your PSA data has successfully been updated..
         /// </summary>
         public static string SuccessUpdatePSAManagementData {

@@ -17,3 +17,6 @@
 2016-05-26 17:38:14.7414 MCAWebAndAPI.Service.HR.Payroll.HRPayrollServices Value does not fall within the expected range.
 2016-05-26 17:59:19.2519 MCAWebAndAPI.Service.HR.Payroll.HRPayrollServices Value does not fall within the expected range.
 2016-05-26 18:04:20.1235 MCAWebAndAPI.Service.HR.Payroll.HRPayrollServices Value does not fall within the expected range.
+2016-05-30 13:08:01.9029 MCAWebAndAPI.Service.HR.Recruitment.HRManpowerRequisitionService Value does not fall within the expected range.
+2016-05-30 15:21:49.3743 MCAWebAndAPI.Service.HR.Recruitment.HRManpowerRequisitionService Operation is not valid due to the current state of the object.
+2016-05-30 15:24:04.1299 MCAWebAndAPI.Service.HR.Recruitment.HRManpowerRequisitionService Operation is not valid due to the current state of the object.

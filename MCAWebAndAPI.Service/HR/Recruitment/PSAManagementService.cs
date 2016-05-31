@@ -107,8 +107,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.IsRenewal.Text = Convert.ToString(listItem["isrenewal"]);
             viewModel.RenewalNumber = Convert.ToInt32(listItem["renewalnumber"]);
             viewModel.ProjectOrUnit.Value = Convert.ToString(listItem["ProjectOrUnit"]);
-            viewModel.Position.Text = FormatUtil.ConvertLookupToID(listItem, "position") + string.Empty;
-            viewModel.Professional.Text = FormatUtil.ConvertLookupToID(listItem, "professional") + string.Empty;
+            viewModel.Position.Value = FormatUtil.ConvertLookupToID(listItem, "position");
+            viewModel.Professional.Value = FormatUtil.ConvertLookupToID(listItem, "professional");
             viewModel.JoinDate = Convert.ToDateTime(listItem["joindate"]).ToLocalTime();
             viewModel.DateOfNewPSA = Convert.ToDateTime(listItem["dateofnewpsa"]).ToLocalTime();
             viewModel.Tenure = Convert.ToInt32(listItem["tenure"]);

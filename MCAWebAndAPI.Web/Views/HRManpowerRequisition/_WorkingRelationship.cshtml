@@ -1,6 +1,9 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
 @model IEnumerable<WorkingRelationshipDetailVM>
 
+@{ 
+    var index = 0;
+}
 
 <div class="col-md-12" style="margin-bottom: 20px">
     @(Html.Kendo().Grid(Model)
@@ -10,35 +13,44 @@
         .CreateAt(GridInsertRowPosition.Bottom))
         .Columns(columns =>
         {
-            columns.Bound(p => p.Position).ClientTemplate("#= Position.Text #" +
-                          "<input type='hidden' name='WorkingRelationshipDetails[#= getWorkingRelationshipDetails(data)#].Position' value='#= Position #' />"
+            columns.Bound(p => p.PositionWorking).ClientTemplate("#= PositionWorking.Title #" +
+                          "<input type='hidden' name='WorkingRelationshipDetails[#= getWorkingRelationshipDetails(data)#].PositionWorking.Value' value='#= PositionWorking.ID #' />"
                         ).EditorViewData(new
                         {
-                            BindTo = WorkingRelationshipDetailVM.GetPositionOptions()
+                            DataTextField = "Title",
+                            DataValueField = "ID",
+                            ControllerName = "HRDataMaster",
+                            ActionName = "GetPositions"
                         });
             columns.Bound(p => p.Relationship).ClientTemplate("#= Relationship.Text #" +
-                               "<input type='hidden' name='WorkingRelationshipDetails[#= getWorkingRelationshipDetails(data)#].Relationship' value='#= Relationship #' />"
+                               "<input type='hidden' name='WorkingRelationshipDetails[#= getWorkingRelationshipDetails(data)#].Relationship.Text' value='#= Relationship.Text #' />"
                              ).EditorViewData(new
                              {
                                  BindTo = WorkingRelationshipDetailVM.GetRelationshipOptions()
                              });
             columns.Bound(p => p.Frequency).ClientTemplate("#= Frequency.Text #" +
-                               "<input type='hidden' name='WorkingRelationshipDetails[#= getWorkingRelationshipDetails(data)#].Frequency' value='#= Frequency #' />"
+                               "<input type='hidden' name='WorkingRelationshipDetails[#= getWorkingRelationshipDetails(data)#].Frequency.Text' value='#= Frequency.Text #' />"
                              ).EditorViewData(new
                              {
                                  BindTo = WorkingRelationshipDetailVM.GetFrequencyOptions()
                              });
             columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
-          "<input type='hidden' name='WorkingRelationshipDetails[#= getWorkingRelationshipDetails(data)#].ID' value='#= ID #' />"
+          "<input type='hidden' name=WorkingRelationshipDetails[#= getWorkingRelationshipDetails(data)#].ID' value='#= ID #' />"
+
+          
         );
-            columns.Command(command => command.Destroy()).Width(100);
+            columns.Bound(p => p.EditMode).Width(100)
+         .ClientTemplate("<button id='WorkingRelationshipDetails[#= getWorkingRelationshipDetails(data)#].DeleteButton'" +
+         "class='btn btn-danger' type='button'" +
+         "onclick='onDeleteKendoDetail(event)'>Delete</button>" +
+         "<input type='hidden' name='WorkingRelationshipDetails[#= getWorkingRelationshipDetails(data)#].EditMode' value='#= EditMode #'/>");
 
         })
         .DataSource(dataSource => dataSource.Ajax()
                    .Model(model =>
                    {
                        model.Id(p => p.ID);
-                       model.Field(m => m.Position).DefaultValue(WorkingRelationshipDetailVM.GetPositionDefaultValue());
+                       model.Field(m => m.PositionWorking).DefaultValue(WorkingRelationshipDetailVM.GetPositionDefaultValue());
                        model.Field(m => m.Frequency).DefaultValue(WorkingRelationshipDetailVM.GetFrequencyDefaultValue());
                        model.Field(m => m.Relationship).DefaultValue(WorkingRelationshipDetailVM.GetRelationshipDefaultValue());
                    })

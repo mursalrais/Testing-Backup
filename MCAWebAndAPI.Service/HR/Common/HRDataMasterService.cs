@@ -226,7 +226,22 @@ namespace MCAWebAndAPI.Service.HR.Common
 
         private IEnumerable<OrganizationalDetailVM> GetOrganizationalDetails(int? ID)
         {
-            var caml = @"";
+            var caml = @"<View>  
+            <Query> 
+               <Where><Eq><FieldRef Name='professional' LookupId='True' /><Value Type='Lookup'>" + ID + @"</Value></Eq></Where> 
+            </Query> 
+             <ViewFields>
+                <FieldRef Name='Title' />
+                <FieldRef Name='projectunit' />
+                <FieldRef Name='Status' />
+                <FieldRef Name='Position' />
+                <FieldRef Name='Level' />
+                <FieldRef Name='psanr' />
+                <FieldRef Name='startdate' />
+                <FieldRef Name='lastworkingday' />
+                <FieldRef Name='ID' />
+             </ViewFields> 
+            </View>";
 
             var organizationalDetails = new List<OrganizationalDetailVM>();
             foreach (var item in SPConnector.GetList(SP_PROORG_LIST_NAME, _siteUrl, caml))
@@ -256,8 +271,20 @@ namespace MCAWebAndAPI.Service.HR.Common
 
         private IEnumerable<DependentDetailVM> GetDependentDetails(int? ID)
         {
-            var caml = @"";
-
+            var caml = @"<View>  
+            <Query> 
+               <Where><Eq><FieldRef Name='professional' LookupId='True' /><Value Type='Lookup'>" + ID + @"</Value></Eq></Where> 
+            </Query> 
+             <ViewFields>
+                <FieldRef Name='Title' />
+                <FieldRef Name='relationship' />
+                <FieldRef Name='placeofbirth' />
+                <FieldRef Name='dateofbirth' />
+                <FieldRef Name='insurancenr' />
+                <FieldRef Name='remarks' />
+                <FieldRef Name='ID' />
+             </ViewFields> 
+            </View>";
             var dependentDetail = new List<DependentDetailVM>();
 
             foreach (var item in SPConnector.GetList(SP_PRODEP_LIST_NAME, _siteUrl, caml))
@@ -283,13 +310,6 @@ namespace MCAWebAndAPI.Service.HR.Common
             };
         }
 
-        //<ViewFields>
-        //   <FieldRef Name = 'Title' />
-        //   < FieldRef Name='applications' />
-        //   <FieldRef Name = 'university' />
-        //   < FieldRef Name='yearofgraduation' />
-        //   <FieldRef Name = 'remarks' />
-        //</ ViewFields >
         private IEnumerable<EducationDetailVM> GetEducationDetails(int? iD)
         {
             var caml = @"<View>  
