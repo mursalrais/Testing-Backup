@@ -6,16 +6,7 @@
     ViewBag.Title = "Form Edit PSA Management";
 }
 
-@*
-    @using (Html.BeginForm("UpdatePSAManagement", "HRPSAManagement", FormMethod.Post,
-                                                                                             new
-                                                                                             {
-                                                                                                 @class = "form-horizontal",
-                                                                                                 enctype = "multipart/form-data"
-                                                                                             }))
-    {*@
-
-@using (Ajax.BeginForm("SetStatusApplicationData", "HRApplication", FormMethod.Post, new AjaxOptions
+@using (Ajax.BeginForm("UpdatePSAManagement", "HRPSAManagement", FormMethod.Post, new AjaxOptions
 {
     OnBegin = "onBeginForm",
     OnFailure = "onFailureForm",
@@ -29,106 +20,23 @@
 
 
     <fieldset>
-        <legend>View PSA Management Data</legend>
+        <legend>Edit PSA Management Data</legend>
         <div class="row">
             @Html.Partial("_PSAManagementDataEdit", Model)
         </div>
-        @*
-    <div class="row">
-    <div class="form-group">
-        @Html.Bootstrap().LabelFor(m => m).Class("col-md-4 control-label")
-        <div class="col-md-8">
-            <button id="application-document-button">
-                Click Here to go to PSA Management Document
-            </button>
-        </div>
-    </div>
-    </div>
-        *@
+        
         <legend>Documents</legend>
         <div class="row">
             @Html.Partial("_DocumentDetailsDisplay", Model.DocumentUrl)
         </div>
     </fieldset>
-@*
-    <fieldset>
 
-
-        <legend>Form Update PSA Management</legend>
-        @Html.AntiForgeryToken()
-        @Html.ValidationSummary()
-
-        <div class="col-md-6">
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.isrenewal).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.isrenewal)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.renewalnumber).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.renewalnumber)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.ProjectOrUnit).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.ProjectOrUnit)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.position).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.position)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.professional).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.professional)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.joinDate).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.joinDate)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.dateofNewPSA).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.dateofNewPSA)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.tenure).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.tenure)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.pSAExpiryDate).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.DisplayFor(m => m.pSAExpiryDate)
-                </div>
-            </div>
-            <div class="row">
-                @Html.Partial("_DocumentDetails", Model)
-            </div>
-               @Html.HiddenFor(m => m.ID)
-        </div>
-     @*<input class="k-button k-button-icontext k-grid-add" type="submit" value="Update" />
-    </fieldset>
-*@
 }
 
     <div class="form-actions">
     <div class="row">
         <div class="col-md-12">
-            @*<button class="btn btn-default" type="submit">
-        Cancel
-    </button>*@
+            
             <button id="submit-button" class="btn btn-primary" type="submit">
                 <i class="fa fa-save"></i>
                 Submit
@@ -194,6 +102,21 @@
                 $("#PSAExpiryDate").val(psaexpirydate);
             }
         });
+
+        function isrenewalChanged() {
+
+            if ($("#IsRenewal_Value").prop("value", "No"))
+            {
+
+                $("#RenewalNumber").prop("readonly", "true");
+                $("#RenewalNumber").prop("value", 0);
+            }
+            if ($("#IsRenewal_Value").prop("value", "Yes"))
+            {
+                $("#RenewalNumber").prop("readonly", "null");
+            }
+            ;
+        }
     </script>
 }
 
