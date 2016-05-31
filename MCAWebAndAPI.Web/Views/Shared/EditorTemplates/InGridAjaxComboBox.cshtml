@@ -1,6 +1,9 @@
-﻿@model MCAWebAndAPI.Model.ViewModel.Control.InGridComboBoxVM
+﻿@model MCAWebAndAPI.Model.ViewModel.Control.AjaxComboBoxVM
 
-@(Html.Kendo().DropDownListFor(m => m)
+@if (Model.Text.IsEmpty())
+{
+
+    @(Html.Kendo().DropDownListFor(m => m)
     .DataTextField((string)ViewData["DataTextField"])
     .DataValueField((string)ViewData["DataValueField"])
     .DataSource(source => source.Read(read => read.Action((string)ViewData["ActionName"],
@@ -10,4 +13,22 @@
         @class = "form-control",
         style = "width:100%;"
     })
-)
+    )
+
+}
+else
+{
+    @(Html.Kendo().DropDownListFor(m => m)
+    .DataTextField((string)ViewData["DataTextField"])
+    .DataValueField((string)ViewData["DataValueField"])
+    .DataSource(source => source.Read(read => read.Action((string)ViewData["ActionName"],
+    (string)ViewData["ControllerName"])))
+    .Text(Model.Text)
+    .Value(Model.Value + string.Empty)
+    .HtmlAttributes(new
+    {
+        @class = "form-control",
+        style = "width:100%;"
+    })
+    )
+}

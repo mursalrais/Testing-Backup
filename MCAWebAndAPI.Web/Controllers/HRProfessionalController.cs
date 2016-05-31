@@ -133,7 +133,6 @@ namespace MCAWebAndAPI.Web.Controllers
                 var errorMessages = BindHelper.GetErrorMessages(ModelState.Values);
                 return JsonHelper.GenerateJsonErrorResponse(errorMessages);
             }
-
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
              
@@ -194,7 +193,6 @@ namespace MCAWebAndAPI.Web.Controllers
                 array[i].Year = BindHelper.BindDateInGrid("TrainingDetails",
                     i, "Year", form);
             }
-
             return array;
         }
 

@@ -11,12 +11,11 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
     public class WorkingRelationshipDetailVM : Item
     {
         [UIHint("InGridAjaxComboBox")]
-        public InGridComboBoxVM Position { get; set; } = new InGridComboBoxVM();
+        public AjaxComboBoxVM PositionWorking { get; set; } = new AjaxComboBoxVM();
                 
-        public static InGridComboBoxVM GetPositionDefaultValue(InGridComboBoxVM model = null)
+        public static AjaxComboBoxVM GetPositionDefaultValue(AjaxComboBoxVM model = null)
         {
-            return new InGridComboBoxVM() { };
-            
+            return new AjaxComboBoxVM() {};
         }
 
         [UIHint("InGridComboBox")]

@@ -1,9 +1,5 @@
 ﻿using Microsoft.SharePoint.Client;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MCAWebAndAPI.Model.ViewModel.Control;
 
 namespace MCAWebAndAPI.Service.Utils
@@ -26,13 +22,19 @@ namespace MCAWebAndAPI.Service.Utils
             return stringNumber;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="multipleLineValue"></param>
+        /// <returns></returns>
         //<div class="ExternalClass0291F132E71045C9B5B5B26A60D6439C">Value here</div>
         public static string ConvertMultipleLine(string multipleLineValue)
         {
             if (string.IsNullOrEmpty(multipleLineValue))
                 return string.Empty;
             var value = multipleLineValue;
-            if (value.Contains("div class"))
+
+            if (value.Contains("<") && value.Contains(">"))
             {
                 value = multipleLineValue.Split('>')[1].Split('<')[0];
             }
@@ -40,6 +42,11 @@ namespace MCAWebAndAPI.Service.Utils
             return value;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="siteUrl"></param>
+        /// <returns></returns>
         public static string ConvertToCleanSiteUrl(string siteUrl)
         {
             var result = string.Empty;
@@ -53,6 +60,11 @@ namespace MCAWebAndAPI.Service.Utils
             return result;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="phoneNumber"></param>
+        /// <returns></returns>
         public static string ConvertToCleanPhoneNumber(string phoneNumber)
         {
             if (phoneNumber == null)
@@ -62,6 +74,11 @@ namespace MCAWebAndAPI.Service.Utils
             return result;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dateTime"></param>
+        /// <returns></returns>
         public static string ConvertToYearString(DateTime? dateTime)
         {
             if (dateTime == null)
@@ -69,6 +86,7 @@ namespace MCAWebAndAPI.Service.Utils
 
             return ((DateTime)dateTime).Year + string.Empty;
         }
+
 
         public static int? ConvertLookupToID(ListItem item, string columnName)
         {

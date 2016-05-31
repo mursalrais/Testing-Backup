@@ -624,8 +624,6 @@
     <Content Include="Views\HRManpowerRequisition\_DocumentDetails.cshtml" />
     <Content Include="Views\HRManpowerRequisition\_DocumentDetails_Display.cshtml" />
     <Content Include="Views\HRManpowerRequisition\_DocumentDetails_Print.cshtml" />
-    <Content Include="Views\HRManpowerRequisition\_WorkingExperienceDetails.cshtml" />
-    <Content Include="Views\HRManpowerRequisition\_WorkingExperienceDetails_Print.cshtml" />
     <Content Include="Views\HRManpowerRequisition\CreateManpowerRequisition.cshtml" />
     <Content Include="Views\HRManpowerRequisition\DisplayManpowerRequisition.cshtml" />
     <Content Include="Views\HRManpowerRequisition\PrintManpowerRequisition.cshtml" />
