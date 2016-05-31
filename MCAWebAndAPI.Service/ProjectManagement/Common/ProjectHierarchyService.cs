@@ -40,13 +40,12 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Common
             return model;
         }
 
-
-
         private SubActivity ConvertToSubActivityModel(ListItem item)
         {
             var model = new SubActivity();
             model.SubActivityName = Convert.ToString(item["Title"]);
-            model.ActivityName = item["Activity"] == null ? string.Empty : Convert.ToString((item["Activity"] as FieldLookupValue).LookupValue);
+            model.ActivityName = item["Activity"] == null ? string.Empty 
+                : Convert.ToString((item["Activity"] as FieldLookupValue).LookupValue);
             model.ScheduleStatus = Convert.ToString(item["Schedule_x0020_Status"]);
 
             return model;
