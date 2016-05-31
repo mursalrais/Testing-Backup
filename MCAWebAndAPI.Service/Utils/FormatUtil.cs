@@ -81,6 +81,7 @@ namespace MCAWebAndAPI.Service.Utils
 
         public static string ConvertLookupToValue(ListItem item, string columnName)
         {
+            var tes = item[columnName];
             if (item[columnName] == null)
                 return null;
 
