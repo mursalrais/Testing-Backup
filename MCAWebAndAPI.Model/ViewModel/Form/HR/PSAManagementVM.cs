@@ -21,12 +21,14 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// </summary>
         [UIHint("ComboBox")]
         [DisplayName("Renewal?")]
-        public ComboBoxVM IsRenewal { get; set; } = new ComboBoxVM { Choices = new string[] { "Yes", "No" } };
+        public ComboBoxVM IsRenewal { get; set; } = new ComboBoxVM { Choices = new string[] { "Yes", "No" }, OnSelectEventName = "isrenewalChanged"};
 
         /// <summary>
         /// renewalnumber
         /// </summary>
+        [UIHint("Integer")]
         [DisplayName("Renewal#")]
+        [Required]
         public int RenewalNumber { get; set; }
 
         /// <summary>

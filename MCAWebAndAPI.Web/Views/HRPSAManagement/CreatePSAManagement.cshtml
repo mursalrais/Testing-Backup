@@ -90,6 +90,16 @@
                     $("#PSAExpiryDate").val(psaexpirydate);
                 }
             });
-            
+
+            function isrenewalChanged() {
+
+                    if ($("#IsRenewal_Value").data("kendoDropDownList").value() == "Yes") {
+                        $("#RenewalNumber").data("kendoNumericTextBox").readonly(false);
+                    }
+                    else {
+                        $("#RenewalNumber").data("kendoNumericTextBox").readonly(true);
+                    }
+                    ;
+            }
         </script>
     }
