@@ -2,12 +2,14 @@
 using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using MCAWebAndAPI.Service.Converter;
 using MCAWebAndAPI.Service.HR.Recruitment;
+using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Web.Mvc;
 
 namespace MCAWebAndAPI.Web.Controllers
@@ -103,6 +105,29 @@ namespace MCAWebAndAPI.Web.Controllers
             return RedirectToAction("Index", 
                 "Success", 
                 new { successMessage = string.Format(MessageResource.SuccessCreateApplicationData, viewModel.FirstMiddleName)});
+        }
+
+        [HttpPost]
+        public ActionResult SetStatusApplicationData(ApplicationDataVM viewModel)
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl);
+
+            try
+            {
+                _service.SetApplicationStatus(viewModel);
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            var status = viewModel.WorkflowStatusOptions.Value;
+            var applicationOwner = string.Format("{0} {1}", viewModel.FirstMiddleName, viewModel.LastName);
+            return JsonHelper.GenerateJsonSuccessResponse(
+                string.Format("{0}/{1}", siteUrl, UrlResource.ApplicationData), 
+                string.Format(MessageResource.SuccessUpdateApplicationStatus, applicationOwner, status));
         }
 
         [HttpPost]

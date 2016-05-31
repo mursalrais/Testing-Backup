@@ -28,7 +28,7 @@ function onCompleteForm() {
 }
 
 function onSuccessForm(e) {
-    if (e == null || e.successMessage == null)
+    if (!e.success || e.successMessage == null)
         onFailureForm(e);
 
     $('#modal-html-content').html('<div class="alert alert-success alert-block"><h4 class="alert-heading">Success!</h4>'

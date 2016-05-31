@@ -383,6 +383,21 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
         }
-        
+
+        public void SetApplicationStatus(ApplicationDataVM viewModel)
+        {
+            var updatedValue = new Dictionary<string, object>();
+            updatedValue.Add("applicationstatus", viewModel.WorkflowStatusOptions.Value);
+
+            try
+            {
+                SPConnector.UpdateListItem(SP_APPDATA_LIST_NAME, viewModel.ID, updatedValue, _siteUrl);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e);
+                throw e;
+            }
+        }
     }
 }
