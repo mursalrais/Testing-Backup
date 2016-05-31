@@ -142,7 +142,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 var updatedValue = new Dictionary<string, object>();
                 updatedValue.Add("manpowerrequisition", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
-                updatedValue.Add("position", new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.Position.Value.Value) });
+                updatedValue.Add("position", new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.PositionWorking.Value.Value) });
                 try
                 {
                     SPConnector.AddListItem(SP_WORKRE_LIST_NAME, updatedValue, _siteUrl);
@@ -279,10 +279,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             var _position = item["position"] == null ? string.Empty : Convert.ToString((item["position"] as FieldLookupValue).LookupValue);
             int _value = item["position"] == null ? 0 : (item["position"] as FieldLookupValue).LookupId;
-            var _temp = new InGridComboBoxVM();
+            var _temp = new AjaxComboBoxVM();
             _temp.Text = _position;
             _temp.Value = _value;
-            viewModel.Position = _temp;
+            viewModel.PositionWorking = _temp;
             return viewModel;
             //return new WorkingRelationshipDetailVM
             //{
