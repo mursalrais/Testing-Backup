@@ -111,7 +111,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             //viewModel.ProjectOrUnit.Value = Convert.ToString(listItem["ProjectOrUnit"]);
             viewModel.ProjectOrUnit = Convert.ToString(listItem["ProjectOrUnit"]);
             //viewModel.Position.Value = FormatUtil.ConvertLookupToID(listItem, "position");
-            viewModel.Position = Convert.ToString(listItem["position"]);
+            /*viewModel.Position = listItem["Position"] == null ? "" :
+               Convert.ToString((listItem["Position"] as FieldLookupValue).LookupValue);*/
+            viewModel.Position = FormatUtil.ConvertLookupToValue(listItem, "position");
             viewModel.Professional.Value = FormatUtil.ConvertLookupToID(listItem, "professional");
             viewModel.JoinDate = Convert.ToDateTime(listItem["joindate"]).ToLocalTime();
             viewModel.DateOfNewPSA = Convert.ToDateTime(listItem["dateofnewpsa"]).ToLocalTime();
