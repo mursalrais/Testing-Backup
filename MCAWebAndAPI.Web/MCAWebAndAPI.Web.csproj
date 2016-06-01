@@ -429,6 +429,7 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Properties\PublishProfiles\host.my-epmo.com.pubxml" />
+    <None Include="Properties\PublishProfiles\ims production local.pubxml" />
     <None Include="Properties\PublishProfiles\mcaims-dev - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\mcaims-dev - Web Deploy.pubxml" />
     <None Include="Properties\Settings.settings">
@@ -646,6 +647,7 @@
     <Content Include="Views\HRPSAManagement\_PSAManagementDataDisplay.cshtml" />
     <Content Include="Views\HRPSAManagement\_PSAManagementDataEdit.cshtml" />
     <Content Include="Views\HRManpowerRequisition\EditManpowerRequisition.cshtml" />
+    <Content Include="Views\BIEmbed\WFP03HN.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
