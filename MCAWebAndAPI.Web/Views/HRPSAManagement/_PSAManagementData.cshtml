@@ -15,6 +15,12 @@
         </div>
     </div>
     <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.Professional).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.EditorFor(m => m.Professional)
+        </div>
+    </div>
+    <div class="form-group">
         @Html.Bootstrap().LabelFor(m => m.ProjectOrUnit).Class("col-md-4 control-label")
         <div class="col-md-8">
             @Html.EditorFor(m => m.ProjectOrUnit)
@@ -24,12 +30,6 @@
         @Html.Bootstrap().LabelFor(m => m.Position).Class("col-md-4 control-label")
         <div class="col-md-8">
             @Html.EditorFor(m => m.Position)
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.Bootstrap().LabelFor(m => m.Professional).Class("col-md-4 control-label")
-        <div class="col-md-8">
-            @Html.EditorFor(m => m.Professional)
         </div>
     </div>
     <div class="form-group">
