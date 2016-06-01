@@ -113,5 +113,11 @@ namespace MCAWebAndAPI.Service.Utils
                 Text = Convert.ToString(ConvertLookupToValue(item, columnName))
             };
         }
+
+        public static DateTime? ConvertYearStringToDateTime(ListItem item, string columnName)
+        {
+            var yearInt = Convert.ToInt32(item[columnName]);
+            return new DateTime(year: yearInt, month: 1, day: 1);    
+        }
     }
 }
