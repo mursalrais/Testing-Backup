@@ -40,7 +40,7 @@
           
             
             $(document).ready(function () {
-            $("#submit-button").click(function () {
+                $("#submit-button").click(function () {
                 $("form").submit();
             });
 
@@ -89,17 +89,24 @@
                     var psaexpirydate = setmonth.getMonth() + 1 + '/' + setmonth.getDate() + '/' + setmonth.getFullYear();
                     $("#PSAExpiryDate").val(psaexpirydate);
                 }
+                
             });
 
             function isrenewalChanged() {
 
-                    if ($("#IsRenewal_Value").data("kendoDropDownList").value() == "Yes") {
-                        $("#RenewalNumber").data("kendoNumericTextBox").readonly(false);
-                    }
-                    else {
-                        $("#RenewalNumber").data("kendoNumericTextBox").readonly(true);
-                    }
+                if ($("#IsRenewal_Value").prop("value", "No"))
+                {
+                    
+                    $("#RenewalNumber").prop("readonly", "true");
+                    $("#RenewalNumber").prop("value", 0);
+                }
+                if ($("#IsRenewal_Value").prop("value", "Yes"))
+                {
+                    $("#RenewalNumber").prop("readonly", "null");
+                }
                     ;
             }
+
+            
         </script>
     }

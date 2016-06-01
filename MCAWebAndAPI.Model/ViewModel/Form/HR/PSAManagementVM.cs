@@ -19,17 +19,29 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// isrenewal
         /// </summary>
+        /// 
+
         [UIHint("ComboBox")]
         [DisplayName("Renewal?")]
-        public ComboBoxVM IsRenewal { get; set; } = new ComboBoxVM { Choices = new string[] { "Yes", "No" }, OnSelectEventName = "isrenewalChanged"};
+        public ComboBoxVM IsRenewal { get; set; } = new ComboBoxVM
+        {
+            Choices = new string[] 
+            {
+                "Yes",
+                "No"
+            },
+            Value = "Yes",
+            OnSelectEventName = "isrenewalChanged"
+        };
 
         /// <summary>
         /// renewalnumber
         /// </summary>
-        [UIHint("Integer")]
+        //[RegularExpression("([1-9][1-9]*)", ErrorMessage = "Must Be Positive Number")]
+        //[UIHint("Integer")]
         [DisplayName("Renewal#")]
         [Required]
-        public int RenewalNumber { get; set; }
+        public int RenewalNumber { get; set;}
 
         /// <summary>
         /// ProjectOrUnit
@@ -37,7 +49,16 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [UIHint("ComboBox")]
         [DisplayName("Div/Project/Unit")]
         [Required]
-        public ComboBoxVM ProjectOrUnit { get; set; } = new ComboBoxVM { Choices = new string[] { "GP", "HN", "PM" } };
+        public ComboBoxVM ProjectOrUnit { get; set; } = new ComboBoxVM
+        {
+            Choices = new string[] 
+            {
+                "GP",
+                "HN",
+                "PM"
+            },
+            Value = "GP"
+        };
 
         /// <summary>
         /// joindate
