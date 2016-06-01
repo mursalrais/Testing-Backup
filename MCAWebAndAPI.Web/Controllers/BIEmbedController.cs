@@ -28,5 +28,10 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             return View();
         }
+
+        public ActionResult WFP03HN()
+        {
+            return View();
+        }
     }
 }
