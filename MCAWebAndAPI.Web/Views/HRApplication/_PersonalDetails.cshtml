@@ -79,3 +79,25 @@
     </div>
 </div>
 
+<script>
+    $(document).ready(function () {
+
+        var dropDownList = $("#IDCardType").data("kendoDropDownList");
+        
+
+
+    });
+
+    function togleIDCardExpiry(idCardType) {
+        if(idCardType == )
+    }
+
+    function onSelectIDCardType(e) {
+        var dataItem = this.dataItem(e.item);
+        if (dataItem !== "KTP") {
+            $('#IDCardExpiry').closest('.form-group').show();
+        } else {
+            $('#IDCardExpiry').closest('.form-group').hide();
+        }
+    }
+</script>

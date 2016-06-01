@@ -17,7 +17,6 @@ namespace MCAWebAndAPI.Web.Controllers
     [Filters.HandleError]
     public class HRApplicationController : Controller
     {
-
         IHRApplicationService _service;
 
         public HRApplicationController()
