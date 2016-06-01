@@ -96,6 +96,32 @@ namespace MCAWebAndAPI.Service.HR.Common
             };
         }
 
+        /*
+        public IEnumerable<ProfessionalMaster> GetProfessionalPositionProject()
+        {
+            var models = new List<ProfessionalMaster>();
+            foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl))
+            {
+                models.Add(ConvertToProfessionalModel_Light(item));
+            }
+
+            return models;
+        }
+        
+
+        private ProfessionalMaster ConvertToProfessionalMonthlyFeeModel_Light(ListItem item)
+        {
+            return new ProfessionalMaster
+            {
+                ID = Convert.ToInt32(item["ID"]),
+                Name = Convert.ToString(item["Title"]),
+                Status = Convert.ToString(item["maritalstatus"]),
+                Position = Convert.ToString(item["Position"])
+            };
+        }
+
+    */
+
         /// <summary>
         /// Convert to light-weight version of professional model.
         /// This is only used to display professional combo box
@@ -110,7 +136,8 @@ namespace MCAWebAndAPI.Service.HR.Common
                 Name = Convert.ToString(item["Title"]),
                 Status = Convert.ToString(item["maritalstatus"]),
                 Position = item["Position"] == null ? "" :
-               Convert.ToString((item["Position"] as FieldLookupValue).LookupValue)
+               Convert.ToString((item["Position"] as FieldLookupValue).LookupValue),
+                Project_Unit = Convert.ToString(item["Project_x002f_Unit"])
             };
         }
 

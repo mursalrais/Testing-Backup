@@ -19,8 +19,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// isrenewal
         /// </summary>
-        /// 
-
         [UIHint("ComboBox")]
         [DisplayName("Renewal?")]
         public ComboBoxVM IsRenewal { get; set; } = new ComboBoxVM
@@ -37,8 +35,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// renewalnumber
         /// </summary>
-        //[RegularExpression("([1-9][1-9]*)", ErrorMessage = "Must Be Positive Number")]
-        //[UIHint("Integer")]
         [DisplayName("Renewal#")]
         [Required]
         public int RenewalNumber { get; set;}
@@ -46,6 +42,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// ProjectOrUnit
         /// </summary>
+        /*
         [UIHint("ComboBox")]
         [DisplayName("Div/Project/Unit")]
         [Required]
@@ -59,6 +56,10 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             },
             Value = "GP"
         };
+        */
+
+        [DisplayName("Div/Project/Unit")]
+        public string ProjectOrUnit { get; set; }
 
         /// <summary>
         /// joindate
@@ -79,6 +80,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// position
         /// </summary>
+        /*
         [UIHint("AjaxComboBox")]
         [DisplayName("Position Title")]
         [Required]
@@ -90,6 +92,10 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             TextField = "Desc",
             OnSelectEventName = "OnSelectPosition"
         };
+        */
+
+        [DisplayName("Position Title")]
+        public string Position { get; set; }
 
         /// <summary>
         /// professional

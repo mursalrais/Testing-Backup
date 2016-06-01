@@ -19,5 +19,7 @@ namespace MCAWebAndAPI.Model.HR.DataMaster
 
         public string Status { get; set; }
 
+        public string Project_Unit { get; set; }
+
     }
 }

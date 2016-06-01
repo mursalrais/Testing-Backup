@@ -67,6 +67,25 @@ namespace MCAWebAndAPI.Web.Controllers
                 JsonRequestBehavior.AllowGet);
         }
 
+        /*
+        public JsonResult GetProfessionalPositionProject(int id)
+        {
+            _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+
+            var professionals = GetFromExistingSession();
+            return Json(professionals.Where(e => e.ID == id).Select(
+                    e =>
+                    new
+                    {
+                        e.ID,
+                        e.Name,
+                        e.Position,
+                        e.Status
+                    }
+                ), JsonRequestBehavior.AllowGet);
+        }
+        */
+
         public JsonResult GetProfessional(int id)
         {
             _dataMasterService.SetSiteUrl(System.Web.HttpContext.Current.Session["SiteUrl"] as string);
@@ -78,7 +97,8 @@ namespace MCAWebAndAPI.Web.Controllers
                         e.ID,
                         e.Name,
                         e.Position,
-                        e.Status
+                        e.Status,
+                        e.Project_Unit
                     }
                 ), JsonRequestBehavior.AllowGet);
         }
@@ -114,6 +134,19 @@ namespace MCAWebAndAPI.Web.Controllers
                 System.Web.HttpContext.Current.Session["ProfessionalMaster"] = professionals;
             return professionals;
         }
+
+        /*
+        private IEnumerable<ProfessionalMaster> GetFromProfessionalPositionProjectExistingSession()
+        {
+            //Get existing session variable
+            var sessionVariable = System.Web.HttpContext.Current.Session["ProfessionalMaster"] as IEnumerable<ProfessionalMaster>;
+            var professionals = sessionVariable ?? _dataMasterService.GetProfessionalPositionProject();
+
+            if (sessionVariable == null) // If no session variable is found
+                System.Web.HttpContext.Current.Session["ProfessionalMaster"] = professionals;
+            return professionals;
+        }
+        */
 
         private IEnumerable<ProfessionalMaster> GetFromProfessionalMonthlyFeesEditExistingSession()
         {

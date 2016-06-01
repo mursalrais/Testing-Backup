@@ -29,8 +29,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             updatedValues.Add("Title", psaManagement.PSANumber);
             updatedValues.Add("isrenewal", psaManagement.IsRenewal.Value);
             updatedValues.Add("renewalnumber", psaManagement.RenewalNumber);
-            updatedValues.Add("ProjectOrUnit", psaManagement.ProjectOrUnit.Value);
-            updatedValues.Add("position", new FieldLookupValue { LookupId =  (int)psaManagement.Position.Value});
+            /*updatedValues.Add("ProjectOrUnit", psaManagement.ProjectOrUnit.Value);*/
+            updatedValues.Add("ProjectOrUnit", psaManagement.ProjectOrUnit);
+            /*updatedValues.Add("position", new FieldLookupValue { LookupId =  (int)psaManagement.Position.Value});*/
+            updatedValues.Add("position", psaManagement.Position);
             updatedValues.Add("professional", new FieldLookupValue { LookupId = (int)psaManagement.Professional.Value });
             updatedValues.Add("joindate", psaManagement.JoinDate);
             updatedValues.Add("dateofnewpsa", psaManagement.DateOfNewPSA);
@@ -106,8 +108,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.PSANumber = Convert.ToString(listItem["Title"]);
             viewModel.IsRenewal.Text = Convert.ToString(listItem["isrenewal"]);
             viewModel.RenewalNumber = Convert.ToInt32(listItem["renewalnumber"]);
-            viewModel.ProjectOrUnit.Value = Convert.ToString(listItem["ProjectOrUnit"]);
-            viewModel.Position.Value = FormatUtil.ConvertLookupToID(listItem, "position");
+            //viewModel.ProjectOrUnit.Value = Convert.ToString(listItem["ProjectOrUnit"]);
+            viewModel.ProjectOrUnit = Convert.ToString(listItem["ProjectOrUnit"]);
+            //viewModel.Position.Value = FormatUtil.ConvertLookupToID(listItem, "position");
+            viewModel.Position = Convert.ToString(listItem["position"]);
             viewModel.Professional.Value = FormatUtil.ConvertLookupToID(listItem, "professional");
             viewModel.JoinDate = Convert.ToDateTime(listItem["joindate"]).ToLocalTime();
             viewModel.DateOfNewPSA = Convert.ToDateTime(listItem["dateofnewpsa"]).ToLocalTime();
@@ -141,8 +145,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.PSANumber = Convert.ToString(listItem["Title"]);
             viewModel.IsRenewal.Value = Convert.ToString(listItem["isrenewal"]);
             viewModel.RenewalNumber = Convert.ToInt32(listItem["renewalnumber"]);
-            viewModel.ProjectOrUnit.Value = Convert.ToString(listItem["ProjectOrUnit"]);
-            viewModel.Position.Text = FormatUtil.ConvertLookupToValue(listItem, "position");
+            /*viewModel.ProjectOrUnit.Value = Convert.ToString(listItem["ProjectOrUnit"]);*/
+            viewModel.ProjectOrUnit = Convert.ToString(listItem["ProjectOrUnit"]);
+            /*viewModel.Position.Text = FormatUtil.ConvertLookupToValue(listItem, "position");*/
+            viewModel.Position = Convert.ToString(listItem["Position"]);
             viewModel.Professional.Text = FormatUtil.ConvertLookupToValue(listItem, "professional");
             viewModel.JoinDate = Convert.ToDateTime(listItem["joindate"]).ToLocalTime();
             viewModel.DateOfNewPSA = Convert.ToDateTime(listItem["dateofnewpsa"]).ToLocalTime();
@@ -168,8 +174,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             columnValues.Add("Title", psaManagement.PSANumber);
             columnValues.Add("isrenewal", psaManagement.IsRenewal.Value);
             columnValues.Add("renewalnumber", psaManagement.RenewalNumber);
-            columnValues.Add("ProjectOrUnit", psaManagement.ProjectOrUnit.Value);
-            columnValues.Add("position", new FieldLookupValue { LookupId = Convert.ToInt32(psaManagement.Position.Value) });
+            /*columnValues.Add("ProjectOrUnit", psaManagement.ProjectOrUnit.Value);*/
+            columnValues.Add("ProjectOrUnit", psaManagement.ProjectOrUnit);
+            /*columnValues.Add("position", new FieldLookupValue { LookupId = Convert.ToInt32(psaManagement.Position.Value) });*/
+            columnValues.Add("position", psaManagement.Position);
             columnValues.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(psaManagement.Professional.Value) });
             columnValues.Add("joindate", psaManagement.JoinDate.Value);
             columnValues.Add("dateofnewpsa", psaManagement.DateOfNewPSA.Value);
