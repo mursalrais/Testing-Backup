@@ -28,8 +28,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
                 "Yes",
                 "No"
             },
-            Value = "Yes",
-            OnSelectEventName = "isrenewalChanged"
+            Value = "Yes"
+            //OnSelectEventName = "isrenewalChanged"
         };
 
         /// <summary>
@@ -42,22 +42,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// ProjectOrUnit
         /// </summary>
-        /*
-        [UIHint("ComboBox")]
-        [DisplayName("Div/Project/Unit")]
-        [Required]
-        public ComboBoxVM ProjectOrUnit { get; set; } = new ComboBoxVM
-        {
-            Choices = new string[] 
-            {
-                "GP",
-                "HN",
-                "PM"
-            },
-            Value = "GP"
-        };
-        */
-
         [DisplayName("Div/Project/Unit")]
         public string ProjectOrUnit { get; set; }
 
@@ -94,8 +78,10 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         };
         */
 
+        /*
         [DisplayName("Position Title")]
         public string Position { get; set; }
+        */
 
         /// <summary>
         /// professional
@@ -125,8 +111,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [UIHint("Date")]
         [DisplayName("PSA Expiry Date")]
         public DateTime? PSAExpiryDate { get; set; } = DateTime.Now;
-
-        //public DateTime test { get; set; } = DateTime.Today
 
         [UIHint("MultiFileUploader")]
         [Required]
