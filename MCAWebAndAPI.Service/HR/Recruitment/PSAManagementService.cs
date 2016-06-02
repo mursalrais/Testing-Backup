@@ -26,12 +26,13 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         public int CreatePSAManagement(PSAManagementVM psaManagement)
         {
             var updatedValues = new Dictionary<string, object>();
-            updatedValues.Add("Title", psaManagement.PSANumber);
+            //updatedValues.Add("Title", psaManagement.PSANumber);
             updatedValues.Add("isrenewal", psaManagement.IsRenewal.Value);
             updatedValues.Add("renewalnumber", psaManagement.RenewalNumber);
-            updatedValues.Add("ProjectOrUnit", psaManagement.ProjectOrUnit);
-            //updatedValues.Add("position", new FieldLookupValue { LookupId =  (int)psaManagement.Position});
+            updatedValues.Add("ProjectOrUnit", psaManagement.ProjectOrUnit.Value);
+            updatedValues.Add("position", new FieldLookupValue { LookupId =  (int)psaManagement.Position.Value});
             //updatedValues.Add("position", psaManagement.Position);
+            //updatedValues.Add("position_x003a_ID", new FieldLookupValue { LookupId = (int)psaManagement.PositionID });
             updatedValues.Add("professional", new FieldLookupValue { LookupId = (int)psaManagement.Professional.Value });
             updatedValues.Add("joindate", psaManagement.JoinDate);
             updatedValues.Add("dateofnewpsa", psaManagement.DateOfNewPSA);
@@ -107,7 +108,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.PSANumber = Convert.ToString(listItem["Title"]);
             viewModel.IsRenewal.Text = Convert.ToString(listItem["isrenewal"]);
             viewModel.RenewalNumber = Convert.ToInt32(listItem["renewalnumber"]);
-            viewModel.ProjectOrUnit = Convert.ToString(listItem["ProjectOrUnit"]);
+            viewModel.ProjectOrUnit.Value = Convert.ToString(listItem["ProjectOrUnit"]);
             //viewModel.Position.Value = FormatUtil.ConvertLookupToID(listItem, "position");
             /*viewModel.Position = listItem["Position"] == null ? "" :
                Convert.ToString((listItem["Position"] as FieldLookupValue).LookupValue);*/
@@ -145,7 +146,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.PSANumber = Convert.ToString(listItem["Title"]);
             viewModel.IsRenewal.Value = Convert.ToString(listItem["isrenewal"]);
             viewModel.RenewalNumber = Convert.ToInt32(listItem["renewalnumber"]);
-            viewModel.ProjectOrUnit = Convert.ToString(listItem["ProjectOrUnit"]);
+            viewModel.ProjectOrUnit.Value = Convert.ToString(listItem["ProjectOrUnit"]);
             /*viewModel.Position.Text = FormatUtil.ConvertLookupToValue(listItem, "position");*/
             //viewModel.Position = Convert.ToString(listItem["Position"]);
             viewModel.Professional.Text = FormatUtil.ConvertLookupToValue(listItem, "professional");

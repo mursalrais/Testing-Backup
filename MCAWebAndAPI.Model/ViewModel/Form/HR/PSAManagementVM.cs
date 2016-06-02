@@ -42,8 +42,33 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// ProjectOrUnit
         /// </summary>
+        /*[DisplayName("Div/Project/Unit")]
+        public string ProjectOrUnit { get; set; }*/
+
+        [UIHint("ComboBox")]
         [DisplayName("Div/Project/Unit")]
-        public string ProjectOrUnit { get; set; }
+        public ComboBoxVM ProjectOrUnit { get; set; } = new ComboBoxVM
+        {
+            Choices = new string[]
+            {
+                "Ops-P",
+                "ME",
+                "PM",
+                "GP",
+                "Ops -IT",
+                "Ops",
+                "CC -E",
+                "Ops -F",
+                "CC",
+                "EO",
+                "COM",
+                "CC -SGA",
+                "RI",
+                "HN -NST",
+                "No"
+            },
+            Value = "Ops-P"
+        };
 
         /// <summary>
         /// joindate
@@ -64,7 +89,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// position
         /// </summary>
-        /*
         [UIHint("AjaxComboBox")]
         [DisplayName("Position Title")]
         [Required]
@@ -76,13 +100,14 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             TextField = "Desc",
             OnSelectEventName = "OnSelectPosition"
         };
-        */
 
         /*
         [DisplayName("Position Title")]
         public string Position { get; set; }
         */
 
+        //public int PositionID { get; set; }
+        
         /// <summary>
         /// professional
         /// </summary>
