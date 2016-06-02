@@ -17,7 +17,11 @@ namespace MCAWebAndAPI.Model.HR.DataMaster
 
         public string Position { get; set; }
 
+        public int PositionId { get; set; }
+
         public string Status { get; set; }
+
+        public string Project_Unit { get; set; }
 
     }
 }

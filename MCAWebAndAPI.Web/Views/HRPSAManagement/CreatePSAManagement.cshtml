@@ -57,14 +57,16 @@
         
             function OnSelectAssetHolderFrom(e) {
                 var dataItem = this.dataItem(e.item);
-                var url = "/HRDataMaster/GetProfessionals/" + dataItem.ID;
+                var url = "/HRDataMaster/GetProfessional/" + dataItem.ID;
 
             }
 
+            
             function OnSelectPosition(e) {
                 var dataItem = this.dataItem(e.item);
                 var url = "/HRDataMaster/GetPositions/" + dataItem.ID;
             }
+           
 
             $(document).ready(function () {
                              
@@ -92,6 +94,7 @@
                 
             });
 
+            /*
             function isrenewalChanged() {
 
                 if ($("#IsRenewal_Value").prop("value", "No"))
@@ -106,7 +109,7 @@
                 }
                     ;
             }
-
+            */
             
         </script>
     }

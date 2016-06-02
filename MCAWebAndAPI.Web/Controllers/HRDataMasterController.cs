@@ -63,7 +63,8 @@ namespace MCAWebAndAPI.Web.Controllers
                     e.Name, 
                     e.Position,
                     e.Status,
-                    Desc = string.Format("{0} - {1}", e.Name, e.Position) }),
+                    e.Project_Unit,
+                    Desc = string.Format("{0}", e.Name) }),
                 JsonRequestBehavior.AllowGet);
         }
 
@@ -78,7 +79,9 @@ namespace MCAWebAndAPI.Web.Controllers
                         e.ID,
                         e.Name,
                         e.Position,
-                        e.Status
+                        e.Status,
+                        e.Project_Unit,
+                        e.PositionId
                     }
                 ), JsonRequestBehavior.AllowGet);
         }
