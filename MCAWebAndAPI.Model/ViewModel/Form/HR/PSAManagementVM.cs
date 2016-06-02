@@ -132,5 +132,22 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public IEnumerable<HttpPostedFileBase> Documents { get; set; } = new List<HttpPostedFileBase>();
 
         public string DocumentUrl { get; set; }
+
+        /// <summary>
+        /// DocumentType
+        /// </summary>
+        [UIHint("ComboBox")]
+        [DisplayName("Document Type")]
+        public ComboBoxVM DocumentType { get; set; } = new ComboBoxVM
+        {
+            Choices = new string[]
+            {
+                "PSA Document",
+                "MCC No Objection Letter"
+            },
+            Value = "PSA Document"
+        };
+
+        public string KeyPosition { get; set; }
     }
 }
