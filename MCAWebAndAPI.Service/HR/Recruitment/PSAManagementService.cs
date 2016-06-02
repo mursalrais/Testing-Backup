@@ -209,12 +209,13 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             throw new NotImplementedException();
         }
 
-        public void CreatePSAManagementDocuments(int? psaID, IEnumerable<HttpPostedFileBase> documents)
+        public void CreatePSAManagementDocuments(int? psaID, IEnumerable<HttpPostedFileBase> documents, PSAManagementVM psaManagmement)
         {
             foreach (var doc in documents)
             {
                 var updateValue = new Dictionary<string, object>();
                 updateValue.Add("psa", new FieldLookupValue { LookupId = Convert.ToInt32(psaID) });
+                updateValue.Add("documenttype", psaManagmement.DocumentType.Value);
 
                 try
                 {
