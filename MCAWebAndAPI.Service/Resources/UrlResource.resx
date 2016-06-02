@@ -132,4 +132,7 @@
   <data name="ApplicationData" xml:space="preserve">
     <value>Lists/Application</value>
   </data>
+  <data name="PSAManagement" xml:space="preserve">
+    <value>Lists/PSA</value>
+  </data>
 </root>

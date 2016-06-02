@@ -53,12 +53,15 @@
             });
         });
 
+        @*
         $('#application-document-button').click(function () {
             parent.postMessage({
                 result: "Success", urlToRedirect: "@Model"
             }, "@Model");
         });
+        *@
 
+        /*
         function onSuccess(data) {
             window.location.href = data.urlToRedirect;
         }
@@ -66,25 +69,17 @@
         function onFailure(data) {
             window.location.href = data.urlToRedirect;
         }
+        */
 
         function OnSelectAssetHolderFrom(e) {
             var dataItem = this.dataItem(e.item);
             var url = "/HRDataMaster/GetProfessional/" + dataItem.ID;
-
-            $.getJSON(url, function (result) {
-                //$('#Professional').prop('value', result[0].Name);
-                $('#ProjectOrUnit').prop('value', result[0].Project_Unit);
-                $('#Position').prop('value', result[0].Position);
-            })
-
         }
 
-        /*
         function OnSelectPosition(e) {
             var dataItem = this.dataItem(e.item);
             var url = "/HRDataMaster/GetPositions/" + dataItem.ID;
         }
-        */
 
         $(document).ready(function () {
 

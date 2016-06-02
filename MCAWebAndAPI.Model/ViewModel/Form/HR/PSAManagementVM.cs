@@ -42,9 +42,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// ProjectOrUnit
         /// </summary>
-        /*[DisplayName("Div/Project/Unit")]
-        public string ProjectOrUnit { get; set; }*/
-
         [UIHint("ComboBox")]
         [DisplayName("Div/Project/Unit")]
         public ComboBoxVM ProjectOrUnit { get; set; } = new ComboBoxVM
@@ -100,13 +97,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             TextField = "Desc",
             OnSelectEventName = "OnSelectPosition"
         };
-
-        /*
-        [DisplayName("Position Title")]
-        public string Position { get; set; }
-        */
-
-        //public int PositionID { get; set; }
         
         /// <summary>
         /// professional
