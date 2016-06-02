@@ -81,15 +81,14 @@
 
 <script>
     $(document).ready(function () {
-
-        var dropDownList = $("#IDCardType").data("kendoDropDownList");
-        
-
-
+        var dropDownValue = $("#IDCardType_Value").val();
+        togleIDCardExpiry(dropDownValue);
     });
 
     function togleIDCardExpiry(idCardType) {
-        if(idCardType == )
+        if (idCardType == "KTP") {
+            $('#IDCardExpiry').closest('.form-group').hide();
+        }
     }
 
     function onSelectIDCardType(e) {
@@ -98,6 +97,17 @@
             $('#IDCardExpiry').closest('.form-group').show();
         } else {
             $('#IDCardExpiry').closest('.form-group').hide();
+        }
+    }
+
+    function setIDCardTypeToKTP(e) {
+        var dataItem = this.dataItem(e.item);
+        if (dataItem.Text == "Indonesia") {
+            $('#IDCardExpiry').prop("value", "KTP");
+            togleIDCardExpiry("KTP");
+            $('#IDCardExpiry').prop("readonly", "true");
+        } else {
+            $('#IDCardExpiry').prop("readonly", null);
         }
     }
 </script>

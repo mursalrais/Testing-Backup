@@ -24,6 +24,20 @@ namespace MCAWebAndAPI.Web.Controllers
             _service = new HRApplicationService();
         }
 
+        public ActionResult ListVacantPositions(string siteUrl)
+        {
+            // Clear Existing Session Variables if any
+            SessionManager.RemoveAll();
+
+            // MANDATORY: Set Site URL
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            var viewModel = _service.GetVacantPositions();
+
+            return View();
+        }
+
         public ActionResult DisplayApplicationData(string siteUrl = null, int? ID = null)
         {
             // Clear Existing Session Variables if any
@@ -33,7 +47,7 @@ namespace MCAWebAndAPI.Web.Controllers
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
-            var viewModel = _service.GetApplicationData(ID);
+            var viewModel = _service.GetApplication(ID);
             return View(viewModel);
         }
 
@@ -51,7 +65,7 @@ namespace MCAWebAndAPI.Web.Controllers
             int? headerID = null;
             try
             {
-                headerID = _service.CreateApplicationData(viewModel);
+                headerID = _service.CreateApplication(viewModel);
             }
             catch (Exception e)
             {
@@ -216,7 +230,7 @@ namespace MCAWebAndAPI.Web.Controllers
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
-            var viewModel = _service.GetApplicationData(null);
+            var viewModel = _service.GetApplication(null);
             return View(viewModel);
         }
     }

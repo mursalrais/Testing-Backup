@@ -7,6 +7,7 @@ using NLog;
 using Microsoft.SharePoint.Client;
 using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Model.Common;
+using MCAWebAndAPI.Model.HR.DataMaster;
 
 namespace MCAWebAndAPI.Service.HR.Recruitment
 {
@@ -22,12 +23,15 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         const string SP_APPDOC_LIST_NAME = "Application Documents";
 
         const string SP_PROMAS_LIST_NAME = "Professional Master";
+        const string SP_POSMAS_LIST_NAME = "Position Master";
 
-        public int CreateApplicationData(ApplicationDataVM viewModel)
+        public int CreateApplication(ApplicationDataVM viewModel)
         {
             var updatedValue = new Dictionary<string, object>();
 
             updatedValue.Add("Title", viewModel.FirstMiddleName);
+            updatedValue.Add("position", viewModel.Position);
+
             updatedValue.Add("lastname", viewModel.LastName);
             updatedValue.Add("placeofbirth", viewModel.PlaceOfBirth);
             updatedValue.Add("dateofbirth", viewModel.DateOfBirth);
@@ -50,7 +54,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             updatedValue.Add("idcardtype", viewModel.IDCardType.Value);
             updatedValue.Add("idcardexpirydate", viewModel.IDCardExpiry);
             updatedValue.Add("nationality", new FieldLookupValue { LookupId = (int)viewModel.Nationality.Value });
-            updatedValue.Add("applicationstatus", Workflow.ApplicationStatus.NEW.ToString());
+            updatedValue.Add("applicationstatus", Workflow.GetApplicationStatus(Workflow.ApplicationStatus.NEW));
 
             try
             {
@@ -153,7 +157,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             }
         }
 
-        public ApplicationDataVM GetApplicationData(int? ID)
+        public ApplicationDataVM GetApplication(int? ID)
         {
             var viewModel = new ApplicationDataVM();
             if (ID == null)
@@ -398,6 +402,17 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 logger.Error(e);
                 throw e;
             }
+        }
+
+        public IEnumerable<ApplicationDataVM> GetApplications()
+        {
+            throw new NotImplementedException();
+        }
+
+        //TODO: To get active positions
+        public IEnumerable<PositionsMaster> GetVacantPositions()
+        {
+            throw new NotImplementedException();
         }
     }
 }

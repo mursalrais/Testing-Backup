@@ -1,4 +1,5 @@
-﻿using MCAWebAndAPI.Model.ViewModel.Form.HR;
+﻿using MCAWebAndAPI.Model.HR.DataMaster;
+using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using System.Collections.Generic;
 using System.Web;
 
@@ -8,9 +9,13 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
     {
         void SetSiteUrl(string siteUrl = null);
 
-        ApplicationDataVM GetApplicationData(int? ID);
+        IEnumerable<PositionsMaster> GetVacantPositions();
 
-        int CreateApplicationData(ApplicationDataVM viewModel);
+        IEnumerable<ApplicationDataVM> GetApplications();
+
+        ApplicationDataVM GetApplication(int? ID);
+
+        int CreateApplication(ApplicationDataVM viewModel);
 
         void CreateEducationDetails(int? headerID, IEnumerable<EducationDetailVM> educationDetails);
 

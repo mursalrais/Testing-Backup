@@ -75,10 +75,23 @@ namespace MCAWebAndAPI.Service.Converter
 
         public bool MassUpload(string ListName, DataTable CSVDataTable, string SiteUrl = null)
         {
+            var rowTotal = CSVDataTable.Rows.Count;
+            var columnTotal = CSVDataTable.Columns.Count;
+
             var updatedValues = new Dictionary<string, object>();
-            for (int i = 0; i < CSVDataTable.Rows.Count; i++)
+            var columnTypes = new string[columnTotal];
+
+            
+            // After Column Name, the first row should be Column Type
+            for (int i = 0; i < columnTotal; i++)
             {
-                for (int j = 0; j < CSVDataTable.Columns.Count; j++)
+                columnTypes[i] = Convert.ToString(CSVDataTable.Rows[0].ItemArray[i]);
+            }
+
+
+            for (int i = 0; i < rowTotal; i++)
+            {
+                for (int j = 0; j < columnTotal; j++)
                 {
                     updatedValues.Add(CSVDataTable.Columns[j].ColumnName, CSVDataTable.Rows[i].ItemArray[j]);
                 }
@@ -95,14 +108,7 @@ namespace MCAWebAndAPI.Service.Converter
                 updatedValues = new Dictionary<string, object>();
 
             }
-            //updatedValues.Add("Title", header.TransactionType);
-            //updatedValues.Add("AssignmentDate", header.Date);
-            //updatedValues.Add("HolderID", new FieldLookupValue { LookupId = Convert.ToInt32(header.AssetHolderFrom.Value) });
-            //updatedValues.Add("HolderIDTo", new FieldLookupValue { LookupId = Convert.ToInt32(header.AssetHolderTo.Value) });
-
-
-
-            //return SPConnector.GetInsertedItemID(SP_HEADER_LIST_NAME, _siteUrl);
+            
             return true;
         }
     }
