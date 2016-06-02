@@ -430,7 +430,6 @@
     </None>
     <None Include="Properties\PublishProfiles\host.my-epmo.com.pubxml" />
     <None Include="Properties\PublishProfiles\ims production local.pubxml" />
-    <None Include="Properties\PublishProfiles\mcaims-dev - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\mcaims-dev - Web Deploy.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -564,7 +563,7 @@
     <Content Include="Views\Shared\EditorTemplates\PhoneNumber.cshtml" />
     <Content Include="Views\HRDataMaster\CreateProfessionalData.cshtml" />
     <Content Include="Views\HRApplication\CreateApplicationData.cshtml" />
-    <Content Include="Views\HRApplication\_PersonalDetails.cshtml" />
+    <Content Include="Views\Shared\_PersonalDetails.cshtml" />
     <Content Include="Views\HRApplication\_ContactInformationDetails.cshtml" />
     <Content Include="Views\HRApplication\_SpecializationDetails.cshtml" />
     <Content Include="Views\HRApplication\_WorkingExperienceDetails.cshtml" />
@@ -617,7 +616,6 @@
     <Content Include="Views\Success\Index.cshtml" />
     <Content Include="Views\HRProfessional\EditProfessional.cshtml" />
     <Content Include="Views\HRProfessional\_ContactInformationDetails.cshtml" />
-    <Content Include="Views\HRProfessional\_PersonalDetails.cshtml" />
     <Content Include="Views\Shared\_EducationDetails.cshtml" />
     <Content Include="Views\HRProfessional\_InsuranceDetails.cshtml" />
     <Content Include="Views\HRProfessional\_PayrollDetails.cshtml" />
@@ -648,6 +646,7 @@
     <Content Include="Views\HRPSAManagement\_PSAManagementDataEdit.cshtml" />
     <Content Include="Views\HRManpowerRequisition\EditManpowerRequisition.cshtml" />
     <Content Include="Views\BIEmbed\WFP03HN.cshtml" />
+    <Content Include="Views\BIEmbed\WFP01HN.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

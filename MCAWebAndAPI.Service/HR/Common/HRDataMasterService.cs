@@ -341,7 +341,7 @@ namespace MCAWebAndAPI.Service.HR.Common
                 ID = Convert.ToInt32(item["ID"]),
                 Subject = Convert.ToString(item["Title"]),
                 University = Convert.ToString(item["university"]),
-                YearOfGraduation = Convert.ToDateTime(item["yearofgraduation"]),
+                YearOfGraduation = FormatUtil.ConvertYearStringToDateTime(item, "yearofgraduation"),
                 Remarks = Convert.ToString(item["remarks"])
             };
         }
@@ -381,7 +381,7 @@ namespace MCAWebAndAPI.Service.HR.Common
                 Subject = Convert.ToString(item["Title"]),
                 Institution = Convert.ToString(item["traininginstitution"]),
                 Remarks = Convert.ToString(item["trainingremarks"]),
-                Year = Convert.ToDateTime(item["trainingyear"])
+                Year = FormatUtil.ConvertYearStringToDateTime(item, "trainingyear")
             };
         }
 

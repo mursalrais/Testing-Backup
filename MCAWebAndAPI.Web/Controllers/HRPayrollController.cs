@@ -13,6 +13,9 @@ using MCAWebAndAPI.Service.Resources;
 using System.Net;
 using System;
 
+/// <summary>
+/// 
+/// </summary>
 namespace MCAWebAndAPI.Web.Controllers
 {
     public class HRPayrollController : Controller
@@ -52,14 +55,12 @@ namespace MCAWebAndAPI.Web.Controllers
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _hRPayrollService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
-            // Get Header ID after inster to SharePoint
             try
             {
                 var headerID = _hRPayrollService.CreateHeader(viewModel);
             }
             catch (Exception e)
             {
-
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
@@ -95,7 +96,6 @@ namespace MCAWebAndAPI.Web.Controllers
 
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.MonthlyFee);
         }
-
 
         // GET: HRMonthly
         public ActionResult Index()
