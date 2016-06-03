@@ -107,7 +107,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
             try
             {
-                psaManagementService.CreatePSAManagementDocuments(psaID, viewModel.Documents);
+                //psaManagementService.CreatePSAManagementDocuments(psaID, viewModel.Documents);
+                psaManagementService.CreatePSAManagementDocuments(psaID, viewModel.Documents, viewModel);
             }
             catch (Exception e)
             {

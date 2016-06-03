@@ -111,9 +111,6 @@ namespace MCAWebAndAPI.Service.HR.Common
                 Status = Convert.ToString(item["maritalstatus"]),
                 Position = item["Position"] == null ? "" :
                Convert.ToString((item["Position"] as FieldLookupValue).LookupValue)
-                //PositionId = item["Position_x003a_ID"] == null ? 0 : Convert.ToInt32((item["Position_x003a_ID"] as FieldLookupValue).LookupId),
-                //Position = Convert.ToString(item["Position"]),
-                //Project_Unit = Convert.ToString(item["Project_x002f_Unit"])
             };
         }
 
@@ -135,11 +132,7 @@ namespace MCAWebAndAPI.Service.HR.Common
 
             viewModel.ID = Convert.ToInt32(item["ID"]);
             viewModel.Title = Convert.ToString(item["Title"]);
-            viewModel.PositionManpowerRequisitionApprover1.Value = Convert.ToString(item["positionmanpowerrequisitionappro"]);
-            viewModel.positionManpowerRequisitionApprover2.Value = Convert.ToString(item["positionmanpowerrequisitionappro0"]);
-            viewModel.positionStatus.Value = Convert.ToString(item["positionstatus"]);
-            viewModel.Remarks = Convert.ToString(item["Remarks"]);
-            viewModel.isKeyPosition.Value = Convert.ToString(item["iskeyposition"]);
+            viewModel.isKeyPosition = Convert.ToString(item["iskeyposition"]);
             return viewModel;
         }
 
