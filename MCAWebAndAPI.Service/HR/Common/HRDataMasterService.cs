@@ -5,11 +5,7 @@ using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
 using System.Linq;
-using MCAWebAndAPI.Service.ProjectManagement.Common;
-using System.Web;
 using NLog;
-using MCAWebAndAPI.Service.Resources;
-using MCAWebAndAPI.Model.ViewModel.Control;
 using MCAWebAndAPI.Model.Common;
 
 namespace MCAWebAndAPI.Service.HR.Common

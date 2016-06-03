@@ -80,7 +80,7 @@
     <Compile Include="ViewModel\Control\AjaxComboBoxVM.cs" />
     <Compile Include="ViewModel\Control\ComboBoxVM.cs" />
     <Compile Include="ViewModel\Control\CurrencyComboBoxVM.cs" />
-    <Compile Include="ViewModel\Control\GenderComboBox.cs" />
+    <Compile Include="ViewModel\Control\GenderComboBoxVM.cs" />
     <Compile Include="ViewModel\Control\InGridComboBoxVM.cs" />
     <Compile Include="ViewModel\Control\MaritalStatusComboBoxVM.cs" />
     <Compile Include="ViewModel\Control\ReligionComboBoxVM.cs" />
