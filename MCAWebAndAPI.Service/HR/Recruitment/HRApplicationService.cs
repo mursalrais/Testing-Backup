@@ -34,6 +34,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             updatedValue.Add("Title", viewModel.FirstMiddleName);
             updatedValue.Add("position", viewModel.Position);
+            updatedValue.Add("manpowerrequisition", new FieldLookupValue { LookupId = (int)viewModel.ManpowerRequisitionID });
 
             updatedValue.Add("lastname", viewModel.LastName);
             updatedValue.Add("placeofbirth", viewModel.PlaceOfBirth);
@@ -428,7 +429,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 positions.Add(new PositionsMaster
                 {
-                    Title = FormatUtil.ConvertLookupToValue(item, "positionrequested"),
+                    PositionName = FormatUtil.ConvertLookupToValue(item, "positionrequested"),
                     ID = Convert.ToInt32(item["ID"])
                 });
             }

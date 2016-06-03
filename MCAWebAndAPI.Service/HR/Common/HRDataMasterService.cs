@@ -131,7 +131,7 @@ namespace MCAWebAndAPI.Service.HR.Common
             var viewModel = new PositionsMaster();
 
             viewModel.ID = Convert.ToInt32(item["ID"]);
-            viewModel.Title = Convert.ToString(item["Title"]);
+            viewModel.PositionName = Convert.ToString(item["Title"]);
             viewModel.isKeyPosition = Convert.ToString(item["iskeyposition"]);
             return viewModel;
         }

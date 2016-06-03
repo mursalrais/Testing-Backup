@@ -14,7 +14,7 @@ namespace MCAWebAndAPI.Model.HR.DataMaster
     {
 
         [DisplayName("Position Name")]
-        public string Title { get; set; }
+        public string PositionName { get; set; }
 
         /*
         [UIHint("ComboBox")]
