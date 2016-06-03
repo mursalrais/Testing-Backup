@@ -1,0 +1,35 @@
+﻿@using MCAWebAndAPI.Model.HR.DataMaster
+
+
+@{
+    ViewBag.Title = "List Vacant Positions";
+}
+
+@model IEnumerable<PositionsMaster>
+
+<div class="form-horizontal">
+    <fieldset>
+        <legend>Vacant Positions</legend>
+        <div class="row">
+            <div class="col-sm-12">
+                @(Html.Kendo().Grid(Model)
+        .Name("ListVacantPositions")
+        .Columns(columns =>
+        {
+            columns.Bound(p => p.Title);
+            columns.Bound(p => p.ID).Hidden()
+            .ClientTemplate("<a href='/HRApplication/CreateApplication?siteUrl=" + MCAWebAndAPI.Web.Resources.ConfigResource.DefaultHRSiteUrl +
+            "&ID=#= ID #&position=#= Position #' class='btn btn-labeled btn-warning'><span class='btn-label'><i class='glyphicon glyphicon-bookmark'></i></span>Apply</a>");
+        })
+        .DataSource(dataSource => dataSource.Ajax()
+                   .Model(model =>
+                   {
+                       model.Id(p => p.ID);
+                   })
+                   .ServerOperation(false)
+        )
+                )
+            </div>
+        </div>
+    </fieldset>
+</div>

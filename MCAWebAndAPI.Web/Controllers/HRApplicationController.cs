@@ -35,7 +35,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             var viewModel = _service.GetVacantPositions();
 
-            return View();
+            return View(viewModel);
         }
 
         public ActionResult DisplayApplicationData(string siteUrl = null, int? ID = null)
