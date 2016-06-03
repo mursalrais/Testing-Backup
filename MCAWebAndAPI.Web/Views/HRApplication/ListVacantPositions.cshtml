@@ -17,7 +17,8 @@
         .Columns(columns =>
         {
             columns.Bound(p => p.Title);
-            columns.Bound(p => p.ID).Hidden()
+            columns.Bound(p => p.ID).Hidden();
+            columns.Bound(p => p.EditMode).Width(100)
             .ClientTemplate("<a href='/HRApplication/CreateApplication?siteUrl=" + MCAWebAndAPI.Web.Resources.ConfigResource.DefaultHRSiteUrl +
             "&ID=#= ID #&position=#= Position #' class='btn btn-labeled btn-warning'><span class='btn-label'><i class='glyphicon glyphicon-bookmark'></i></span>Apply</a>");
         })
