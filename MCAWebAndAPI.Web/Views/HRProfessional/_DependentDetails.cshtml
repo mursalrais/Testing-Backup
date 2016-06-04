@@ -33,15 +33,17 @@
         "<input type='hidden' name='DependentDetails[#= getDependentDetail(data)#].ID' value='#= ID #' />"
         );
 
-        columns.Bound(p => p.EditMode).Width(100)
-        .ClientTemplate("<button id='DependentDetails[#= getDependentDetail(data)#].DeleteButton'" +
-        "class='btn btn-danger' type='button'" +
-        "onclick='onDeleteKendoDetail(event)'>Delete</button>" +
-        "<input type='hidden' name='DependentDetails[#= getDependentDetail(data)#].EditMode' value='#= EditMode #'/>");
+        columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
+           "<input type='hidden' name='DependentDetails[#= getDependentDetail(data)#].EditMode' value='#= EditMode #' />"
+         );
+
+        columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
+            .Click("onDeleteKendoDetail")).Width(100);
     })
     .Events(e =>
     {
         e.Edit("onEditKendoDetail");
+        e.DataBound("onDataBoundDependentDetails");
     })
     .DataSource(dataSource => dataSource.Ajax()
     .Model(model =>
@@ -59,5 +61,10 @@
     function getDependentDetail(dataItem) {
         var data = $("#DependentDetails").data("kendoGrid").dataSource.data();
         return data.indexOf(dataItem);
+    }
+
+    function onDataBoundDependentDetails(e) {
+        var grid = $("#DependentDetails").data("kendoGrid");
+        hideDeletedRowKendoDetail(grid);
     }
 </script>

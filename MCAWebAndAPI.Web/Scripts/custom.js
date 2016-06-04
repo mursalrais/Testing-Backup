@@ -28,20 +28,16 @@ function onCompleteForm() {
 }
 
 function onSuccessForm(e) {
-    if (!e.success || e.successMessage == null)
-        onFailureForm(e);
 
     $('#modal-html-content').html('<div class="alert alert-success alert-block"><h4 class="alert-heading">Success!</h4>'
-        + e.successMessage + '</div>');
+        + ( e.successMessage != null ? e.successMessage : "" ) + '</div>');
 }
 
 // It is only used if embedded in SharePoint
 function onSuccessFormEmbed(e) {
-    if (e == null || e.successMessage == null)
-        onFailureForm(e);
 
     $('#modal-html-content').html('<div class="alert alert-success alert-block"><h4 class="alert-heading">Success!</h4>'
-        + e.successMessage + '</div>');
+        + (e.successMessage != null ? e.successMessage : "") + '</div>');
 
     setTimeout(function () {
         parent.postMessage(e, e.urlToRedirect);
@@ -72,7 +68,6 @@ function printForm(e) {
     $('form').submit();
 }
 
-
 $('#remoteModal').on('hidden.bs.modal', function () {
     location.reload();
 })
@@ -90,10 +85,9 @@ function onEditKendoDetail(e) {
     if (!e.model.isNew()) {
         var container = e.container;
         var tr = container.closest('tr');
-        var hiddenInput = tr.find("input[name*='EditMode']");
-
+        var data = this.dataItem(tr); //get the row data so it can be referred later
         // 1 is Item.Mode.UPDATED
-        hiddenInput.val(1);
+        data.set("EditMode", 1);
     }
 }
 
@@ -101,15 +95,21 @@ function onDeleteKendoDetail(e) {
     var result = confirm("Are you sure you want to delete this item?");
     if (!result) return;
 
-    var target = e.target || e.srcElement;
-    var button = $(target);
-    var tr = button.closest('tr');
-
-    // Set IsModified flag to True
-    hiddenInput = tr.find("input[name*='EditMode']");
+    var tr = $(e.target).closest("tr"); //get the row
+    var data = this.dataItem(tr); //get the row data so it can be referred later
 
     // -1 is Item.Mode.DELETED
-    hiddenInput.val(-1);
+    data.set("EditMode", -1);
+}
 
-    tr.hide();
+function hideDeletedRowKendoDetail(grid) {
+    var gridData = grid.dataSource.view();
+
+    for (var i = 0; i < gridData.length; i++) {
+        var currentUid = gridData[i].uid;
+        if ((gridData[i].EditMode == -1)) {
+            var currenRow = grid.table.find("tr[data-uid='" + currentUid + "']");
+            currenRow.hide();
+        }
+    }
 }
