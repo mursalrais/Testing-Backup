@@ -79,7 +79,7 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://eceos2.sharepoint.com/sites/mca-dev.
+        ///   Looks up a localized string similar to https://mcai4.sharepoint.com/sites/ims.
         /// </summary>
         public static string DefaultProgramSiteUrl {
             get {

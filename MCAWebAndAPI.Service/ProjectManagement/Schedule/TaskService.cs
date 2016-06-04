@@ -159,11 +159,12 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
             var mainTaskItem = _updatedTaskCandidates.Values.FirstOrDefault(e => e.TaskValue.ParentId == 0);
 
             updatedColumns["Title"] = mainTaskItem.TaskValue.Title;
-            updatedColumns["PercentComplete"] = mainTaskItem.TaskValue.PercentComplete;
+            updatedColumns["_x0025__x0020_Complete"] = mainTaskItem.TaskValue.PercentComplete;
 
+            var latestID = SPConnector.GetLatestListItemID(SP_PROJECT_INFORMATION_LIST_NAME, _siteUrl);
             try
             {
-                SPConnector.UpdateListItem(SP_PROJECT_INFORMATION_LIST_NAME, 1, updatedColumns, _siteUrl);
+                SPConnector.UpdateListItem(SP_PROJECT_INFORMATION_LIST_NAME, latestID, updatedColumns, _siteUrl);
             }
             catch (Exception e)
             {
@@ -309,32 +310,32 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
                     if (item.GetFlag(TaskChangeFlagEnum.START_DATE))
                     {
                         updatedValues.Add("StartDate", item.TaskValue.StartDate);
-                        logger.Error(item.TaskValue.Id + ": Update " + TaskChangeFlagEnum.START_DATE.ToString() + " to " + item.TaskValue.StartDate);
+                        logger.Error(item.TaskValue.Id + ": Update " + TaskChangeFlagEnum.START_DATE + " to " + item.TaskValue.StartDate);
                     }
                     if (item.GetFlag(TaskChangeFlagEnum.DUE_DATE))
                     {
                         updatedValues.Add("DueDate", item.TaskValue.DueDate);
-                        logger.Error(item.TaskValue.Id + ": Update " + TaskChangeFlagEnum.START_DATE.ToString() + " to " + item.TaskValue.DueDate);
+                        logger.Error(item.TaskValue.Id + ": Update " + TaskChangeFlagEnum.START_DATE + " to " + item.TaskValue.DueDate);
                     }
                     if (item.GetFlag(TaskChangeFlagEnum.PERCENT_COMPLETE))
                     {
                         updatedValues.Add("PercentComplete", item.TaskValue.PercentComplete);
-                        logger.Error(item.TaskValue.Id + ": Update " + TaskChangeFlagEnum.PERCENT_COMPLETE.ToString() + " to " + item.TaskValue.PercentComplete);
+                        logger.Error(item.TaskValue.Id + ": Update " + TaskChangeFlagEnum.PERCENT_COMPLETE + " to " + item.TaskValue.PercentComplete);
                     }
                     if (item.GetFlag(TaskChangeFlagEnum.DURATION))
                     {
                         updatedValues.Add("Duration", item.TaskValue.Duration);
-                        logger.Error(item.TaskValue.Id + ": Update " + TaskChangeFlagEnum.DURATION.ToString() + " to " + item.TaskValue.Duration);
+                        logger.Error(item.TaskValue.Id + ": Update " + TaskChangeFlagEnum.DURATION + " to " + item.TaskValue.Duration);
                     }
                     if (item.GetFlag(TaskChangeFlagEnum.MILESTONE))
                     {
                         updatedValues.Add("Milestone", item.TaskValue.IsMilestone);
-                        logger.Error(item.TaskValue.Id + ": Update " + TaskChangeFlagEnum.MILESTONE.ToString() + " to " + item.TaskValue.IsMilestone);
+                        logger.Error(item.TaskValue.Id + ": Update " + TaskChangeFlagEnum.MILESTONE + " to " + item.TaskValue.IsMilestone);
                     }
                     if (item.GetFlag(TaskChangeFlagEnum.SUMMARY))
                     {
                         updatedValues.Add("Summary", item.TaskValue.IsSummaryTask);
-                        logger.Error(item.TaskValue.Id + ": Update " + TaskChangeFlagEnum.SUMMARY.ToString() + " to " + item.TaskValue.IsSummaryTask);
+                        logger.Error(item.TaskValue.Id + ": Update " + TaskChangeFlagEnum.SUMMARY + " to " + item.TaskValue.IsSummaryTask);
                     }
 
                     // Update to SharePoint

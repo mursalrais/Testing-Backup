@@ -70,7 +70,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 throw e;
             }
 
-            return SPConnector.GetInsertedItemID(SP_APPDATA_LIST_NAME, _siteUrl);
+            return SPConnector.GetLatestListItemID(SP_APPDATA_LIST_NAME, _siteUrl);
         }
 
         public void CreateEducationDetails(int? headerID, IEnumerable<EducationDetailVM> viewModels)

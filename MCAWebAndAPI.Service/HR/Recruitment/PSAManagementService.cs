@@ -48,7 +48,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 throw e;
             }
 
-            return SPConnector.GetInsertedItemID(SP_PSA_LIST_NAME, _siteUrl);
+            return SPConnector.GetLatestListItemID(SP_PSA_LIST_NAME, _siteUrl);
         }
 
         public IEnumerable<PSAMaster> GetPSAs()

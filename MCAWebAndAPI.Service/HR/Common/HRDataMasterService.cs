@@ -670,7 +670,7 @@ namespace MCAWebAndAPI.Service.HR.Common
                 throw new Exception(e.Message);
             }
 
-            return SPConnector.GetInsertedItemID(SP_PROMAS_LIST_NAME, _siteUrl);
+            return SPConnector.GetLatestListItemID(SP_PROMAS_LIST_NAME, _siteUrl);
         }
 
         public ProfessionalDataVM GetProfessionalData(string userLoginName = null)

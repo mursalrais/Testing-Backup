@@ -1,4 +1,6 @@
-﻿using MCAWebAndAPI.Service.ProjectManagement.Schedule;
+﻿using Elmah;
+using MCAWebAndAPI.Service.JobSchedulers.Schedulers;
+using MCAWebAndAPI.Service.ProjectManagement.Schedule;
 using MCAWebAndAPI.Web.Helpers;
 using System;
 using System.Collections.Generic;
@@ -17,6 +19,20 @@ namespace MCAWebAndAPI.Web.Controllers
         public TaskController()
         {
             taskService = new TaskService();
+        }
+
+        public ActionResult CalculateTask(string siteUrl = null)
+        {
+            try
+            {
+                TaskCalculationScheduler.DoNow_OnceEveryDay(siteUrl);
+            }
+            catch (Exception e)
+            {
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return RedirectToAction("Index", "Error");
+            }
+            return RedirectToAction("Index", "Success");
         }
 
         public ActionResult TaskByResource()

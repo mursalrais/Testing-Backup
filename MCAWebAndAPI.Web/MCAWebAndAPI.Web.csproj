@@ -648,6 +648,7 @@
     <Content Include="Views\BIEmbed\WFP03HN.cshtml" />
     <Content Include="Views\BIEmbed\WFP01HN.cshtml" />
     <Content Include="Views\HRApplication\ListVacantPositions.cshtml" />
+    <Content Include="Views\Task\CalculatePercentComplete.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
