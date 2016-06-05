@@ -1,0 +1,116 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Control
+@using MCAWebAndAPI.Web.Helpers
+
+@model CSVVM
+
+<div class="form-horizontal">
+    <fieldset>
+        <legend>CSV Uploader</legend>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.ListName).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.DisplayFor(m => m.ListName)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.File).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @(Html.Kendo().Upload()
+                        .Name("CSVFile")
+                        .HtmlAttributes(new { @class = "form-control"})
+                        .Events(e =>
+                        {
+                            e.Complete("onCompleteUploadCSV");
+                        })
+                        .Async(a => a
+                            .Save("Save", "CSV")
+                            .AutoUpload(true)
+                        )
+                        )
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6"></div>
+        </div>
+
+        <div class="row visible-after-uploaded">
+            <div class="col-sm-12">
+                @(Html.Kendo().Grid<dynamic>()
+    .Name("UploadGrid")
+    .Columns(columns =>
+    {
+        foreach (System.Data.DataColumn column in Model.DataTable.Columns)
+        {
+            var c = columns.Bound(column.ColumnName);
+        }
+    })
+    .Pageable()
+    .Sortable()
+    .Editable(ed => ed.Mode(GridEditMode.PopUp).CreateAt(GridInsertRowPosition.Bottom))
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .Model(model =>
+        {
+            var id = Model.DataTable.PrimaryKey[0].ColumnName;
+            model.Id(id);
+            foreach (System.Data.DataColumn column in Model.DataTable.Columns)
+            {
+                var field = model.Field(column.ColumnName, column.DataType);
+                if (column.ColumnName == id)
+                {
+                    field.Editable(false);
+                }
+
+            }
+        })
+        .Read(read => read.Action("Grid_Read", "CSV"))
+        .Update(update => update.Action("Grid_Update", "CSV"))
+    )
+                )
+
+
+            </div>
+        </div>
+        <div class="form-actions">
+            <div class="row">
+                <div class="col-sm-12">
+                    <button id="import-button" class="btn btn-primary visible-after-uploaded" type="button">
+                        <i class="fa fa-save"></i>
+                        Import
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </fieldset>
+</div>
+
+@section scripts{
+    
+    <script>
+
+        $(document).ready(function () {
+            $("#import-button").click(importCSV);
+            $(".visible-after-uploaded").hide();
+        });
+
+        function importCSV(e) {
+            var url = "/CSV/Submit?listName=" + "@Model.ListName";
+            $.getJSON(url, function (data) {
+                alert(data.succesMessage);
+            });
+        }
+
+        function onCompleteUploadCSV() {
+            var grid = $("#UploadGrid").data("kendoGrid");
+            grid.dataSource.read();
+            grid.refresh();
+
+            $(".visible-after-uploaded").show();
+        }
+    </script>
+
+}

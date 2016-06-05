@@ -4,10 +4,9 @@
 
 <form class="form-horizontal" method="post" action="/CSV/Upload" id="create-asset-acquisition-form">
     <fieldset>
-        <legend>Form Asset Acquisition</legend>
         <div class="row">
             <div class="col-md-12">
-                @Html.HiddenFor(m => m.ListName)  
+                @Html.HiddenFor(m => m.ListName)
                 @if (Model.DataTable.Columns.Count != 0)
                 {
                     @(Html.Kendo().Grid(Model.DataTable)
@@ -38,7 +37,7 @@
             )
                     )
                 }
-               
+
             </div>
         </div>
 

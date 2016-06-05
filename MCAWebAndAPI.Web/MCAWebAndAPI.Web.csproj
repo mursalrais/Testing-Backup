@@ -592,7 +592,7 @@
     <Content Include="Views\Shared\DisplayTemplates\TextArea.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\Time.cshtml" />
     <Content Include="Views\CalendarEvent\Create.cshtml" />
-    <Content Include="Views\CSV\Create.cshtml" />
+    <Content Include="Views\CSV\Upload.cshtml" />
     <Content Include="Views\CSV\Submit.cshtml" />
     <Content Include="Views\HRPayroll\CreateMonthlyFee.cshtml" />
     <Content Include="Views\HRPayroll\EditMonthlyFee.cshtml" />

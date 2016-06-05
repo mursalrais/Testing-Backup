@@ -102,6 +102,11 @@ form .k-button.k-upload-button {
     z-index: 1000;
 }
 
+.form-horizontal .k-dropzone > .k-button.k-upload-button {
+    left: 42%;
+    bottom: 12px;
+}
+
 span.field-validation-error {
     color: #b94a48;
     font-size: 85%;
