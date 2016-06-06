@@ -1,6 +1,7 @@
 ﻿using Microsoft.SharePoint.Client;
 using System;
 using MCAWebAndAPI.Model.ViewModel.Control;
+using System.Collections.Generic;
 
 namespace MCAWebAndAPI.Service.Utils
 {
@@ -87,7 +88,6 @@ namespace MCAWebAndAPI.Service.Utils
             return ((DateTime)dateTime).Year + string.Empty;
         }
 
-
         public static int? ConvertLookupToID(ListItem item, string columnName)
         {
             if (item[columnName] == null)
@@ -118,6 +118,51 @@ namespace MCAWebAndAPI.Service.Utils
         {
             var yearInt = Convert.ToInt32(item[columnName]);
             return new DateTime(year: yearInt, month: 1, day: 1);    
+        }
+
+        /// <summary>
+        /// Populate updated value based on given datatable
+        /// </summary>
+        /// <param name="updatedValue">Ref variable to update</param>
+        /// <param name="columnType"></param>
+        /// <param name="columnTechnicalName"></param>
+        /// <param name="columnValue"></param>
+        /// <param name="lookup">Indicate if the column is a lookup column</param>
+        /// <param name="skip">Indicate if the column must not be inserted to SharePoint</param>
+        public static void GenerateUpdatedValueFromGivenDataTable(
+            ref Dictionary<string, object> updatedValue, 
+            Type columnType, 
+            string columnTechnicalName,
+            object columnValue,
+            bool lookup = false, 
+            bool skip = false)
+        {
+            if (skip || string.Compare(columnTechnicalName, "ID", StringComparison.OrdinalIgnoreCase) == 0)
+                return;
+
+            if (lookup)
+            {
+                columnTechnicalName = columnTechnicalName.Split('_')[0];
+                updatedValue.Add(columnTechnicalName,
+                    new FieldLookupValue
+                    {
+                        LookupId = Convert.ToInt32(columnValue)
+                    });
+                return;
+            }
+
+            switch (columnType.FullName)
+            {
+                case "System.Int32":
+                    updatedValue.Add(columnTechnicalName, Convert.ToInt32(columnValue));
+                    break;
+                case "System.String":
+                    updatedValue.Add(columnTechnicalName, Convert.ToString(columnValue));
+                    break;
+                case "System.DateTime":
+                    updatedValue.Add(columnTechnicalName, Convert.ToDateTime(columnValue));
+                    break;
+            }
         }
     }
 }

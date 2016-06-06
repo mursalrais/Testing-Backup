@@ -38,7 +38,6 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             // Here we create a DataTable with four columns.
             DataTable table = new DataTable();
-        
             
             var column = new DataColumn("ID", typeof(int));
             table.Columns.Add(column);
@@ -49,22 +48,27 @@ namespace MCAWebAndAPI.Web.Controllers
             return table;
         }
 
-        public ActionResult Save(IEnumerable<HttpPostedFileBase> files)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="CSVFile"></param>
+        /// <returns></returns>
+        public ActionResult Save(IEnumerable<HttpPostedFileBase> CSVFile)
         {
             StreamReader reader = null;
             // The Name of the Upload component is "files"
-            if (files != null)
+            if (CSVFile != null)
             {
-                foreach (var file in files)
+                foreach (var file in CSVFile)
                 {
                     // Some browsers send file names with full path.
                     // We are only interested in the file name.
                     var fileName = Path.GetFileName(file.FileName);
-                    var tess = file.InputStream;
+                    var inputStream = file.InputStream;
                     
                     var physicalPath = Path.Combine(Server.MapPath("~/App_Data"), fileName);
 
-                    using (reader = new StreamReader(tess))
+                    using (reader = new StreamReader(inputStream))
                     {
                         var CSVDataTable = CSVConverter.Instance.ToDataTable(reader);
                         Session.Add("CSVDataTable", CSVDataTable);
@@ -76,7 +80,11 @@ namespace MCAWebAndAPI.Web.Controllers
             return Content("");
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         public JsonResult Grid_Read([DataSourceRequest] DataSourceRequest request)
         {
             // Get from existing session variable or create new if doesn't exist
@@ -102,6 +110,12 @@ namespace MCAWebAndAPI.Web.Controllers
             return json;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="viewModel"></param>
+        /// <returns></returns>
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult Grid_Create([DataSourceRequest] DataSourceRequest request, [Bind(Prefix = "models")]DataTable viewModel)
         {
@@ -168,14 +182,16 @@ namespace MCAWebAndAPI.Web.Controllers
             return json;
         }
 
+        public ActionResult DisplayGrid()
+        {
+            return PartialView("_DisplayGrid");
+        }
 
-        [HttpPost]
         public ActionResult Submit(string listName)
         {
             // Get existing session variable
             var sessionVariables = SessionManager.Get<DataTable>("CSVDataTable") ?? new DataTable();
             var siteUrl = SessionManager.Get<string>("SiteUrl");
-
 
             try
             {

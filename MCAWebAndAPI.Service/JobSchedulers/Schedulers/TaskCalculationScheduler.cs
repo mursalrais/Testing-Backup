@@ -3,13 +3,12 @@ using NLog;
 using Quartz;
 using Quartz.Impl;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Service.JobSchedulers.Schedulers
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class TaskCalculationScheduler
     {
         static Logger logger = LogManager.GetCurrentClassLogger();
