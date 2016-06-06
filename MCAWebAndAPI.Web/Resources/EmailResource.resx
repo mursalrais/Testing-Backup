@@ -117,25 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ApplicationDocumentByID" xml:space="preserve">
-    <value>{0}/Application%20Documents/Forms/AllItems.aspx#InplviewHash2b5b69fa-94aa-4a00-9fd3-c076a11aab23=FilterField1%3Dapplication%255Fx003a%255FID-FilterValue1%3D6{1}</value>
-  </data>
-  <data name="MonthlyFee" xml:space="preserve">
-    <value>Lists/MonthlyFee</value>
-  </data>
-  <data name="Professional" xml:space="preserve">
-    <value>Lists/Professional Master</value>
-  </data>
-  <data name="PSAManagementDocumentByID" xml:space="preserve">
-    <value>{0}/PSA%20Documents/Forms/AllItems.aspx#InplviewHash5093bda1-84bf-4cad-8652-286653d6a83f=FilterField1%3Dpsa%255Fx003a%255FID-FilterValue1%3D{1}</value>
-  </data>
-  <data name="ApplicationData" xml:space="preserve">
-    <value>Lists/Application</value>
-  </data>
-  <data name="PSAManagement" xml:space="preserve">
-    <value>Lists/PSA</value>
-  </data>
-  <data name="ProfessionalDisplayByID" xml:space="preserve">
-    <value>{0}/Lists/Professional%20Master/DispForm_Custom.aspx?ID={1}</value>
+  <data name="ProfessionalEmailValidation" xml:space="preserve">
+    <value>Hi Dude, accept my professional data. Just click on &lt;a href="{0}"&gt;this link&lt;/a&gt;! Accept it now or die!</value>
   </data>
 </root>

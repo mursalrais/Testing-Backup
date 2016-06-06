@@ -97,6 +97,15 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0}/Lists/Professional%20Master/DispForm_Custom.aspx?ID={1}.
+        /// </summary>
+        public static string ProfessionalDisplayByID {
+            get {
+                return ResourceManager.GetString("ProfessionalDisplayByID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lists/PSA.
         /// </summary>
         public static string PSAManagement {

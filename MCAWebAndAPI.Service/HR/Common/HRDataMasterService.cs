@@ -693,5 +693,19 @@ namespace MCAWebAndAPI.Service.HR.Common
 
             return GetProfessionalData(professionalID);
         }
+
+        public void SendEmailValidation(string emailMessages)
+        {
+            try
+            {
+                SPConnector.SendEmail("randi.prayengki@eceos.com", emailMessages, "Accept It Now!!", _siteUrl);
+
+            }
+            catch (Exception e)
+            {
+                logger.Error(e);
+                throw e;
+            }
+        }
     }
 }
