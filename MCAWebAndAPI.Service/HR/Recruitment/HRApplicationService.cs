@@ -7,6 +7,7 @@ using NLog;
 using Microsoft.SharePoint.Client;
 using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Model.Common;
+using MCAWebAndAPI.Model.HR.DataMaster;
 
 namespace MCAWebAndAPI.Service.HR.Recruitment
 {
@@ -22,12 +23,19 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         const string SP_APPDOC_LIST_NAME = "Application Documents";
 
         const string SP_PROMAS_LIST_NAME = "Professional Master";
+        const string SP_POSMAS_LIST_NAME = "Position Master";
 
-        public int CreateApplicationData(ApplicationDataVM viewModel)
+        const string SP_MANPOW_LIST_NAME = "Manpower Requisition";
+
+
+        public int CreateApplication(ApplicationDataVM viewModel)
         {
             var updatedValue = new Dictionary<string, object>();
 
             updatedValue.Add("Title", viewModel.FirstMiddleName);
+            updatedValue.Add("position", viewModel.Position);
+            updatedValue.Add("manpowerrequisition", new FieldLookupValue { LookupId = (int)viewModel.ManpowerRequisitionID });
+
             updatedValue.Add("lastname", viewModel.LastName);
             updatedValue.Add("placeofbirth", viewModel.PlaceOfBirth);
             updatedValue.Add("dateofbirth", viewModel.DateOfBirth);
@@ -50,7 +58,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             updatedValue.Add("idcardtype", viewModel.IDCardType.Value);
             updatedValue.Add("idcardexpirydate", viewModel.IDCardExpiry);
             updatedValue.Add("nationality", new FieldLookupValue { LookupId = (int)viewModel.Nationality.Value });
-            updatedValue.Add("applicationstatus", Workflow.ApplicationStatus.NEW.ToString());
+            updatedValue.Add("applicationstatus", Workflow.GetApplicationStatus(Workflow.ApplicationStatus.NEW));
 
             try
             {
@@ -62,7 +70,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 throw e;
             }
 
-            return SPConnector.GetInsertedItemID(SP_APPDATA_LIST_NAME, _siteUrl);
+            return SPConnector.GetLatestListItemID(SP_APPDATA_LIST_NAME, _siteUrl);
         }
 
         public void CreateEducationDetails(int? headerID, IEnumerable<EducationDetailVM> viewModels)
@@ -153,7 +161,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             }
         }
 
-        public ApplicationDataVM GetApplicationData(int? ID)
+        public ApplicationDataVM GetApplication(int? ID)
         {
             var viewModel = new ApplicationDataVM();
             if (ID == null)
@@ -169,9 +177,12 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         private ApplicationDataVM ConvertToApplicationDataVM(ListItem listItem)
         {
             var viewModel = new ApplicationDataVM();
+
+            viewModel.Position = Convert.ToString(listItem["position"]);
             viewModel.ID = Convert.ToInt32(listItem["ID"]);
             viewModel.FirstMiddleName = Convert.ToString(listItem["Title"]);
             viewModel.LastName = Convert.ToString(listItem["lastname"]);
+
             viewModel.PlaceOfBirth = Convert.ToString(listItem["placeofbirth"]);
             viewModel.DateOfBirth = Convert.ToDateTime(listItem["dateofbirth"]);
             viewModel.PermanentAddress =
@@ -207,7 +218,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.DocumentUrl = GetDocumentUrl(viewModel.ID);
 
             return viewModel;
-
         }
 
         private string GetDocumentUrl(int? iD)
@@ -219,7 +229,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             var caml = @"<View>  
             <Query> 
-               <Where><Eq><FieldRef Name='application' LookupId='True' /><Value Type='Lookup'>" + iD 
+               <Where><Eq><FieldRef Name='application' LookupId='True' /><Value Type='Lookup'>" + iD
                + @"</Value></Eq></Where> 
             </Query>
             <ViewFields><FieldRef Name='Title' /><FieldRef Name='ID' /><FieldRef Name='FileRef' /></ViewFields></View>";
@@ -244,7 +254,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             </View>";
 
             var workingExperienceDetails = new List<WorkingExperienceDetailVM>();
-            foreach(var item in SPConnector.GetList(SP_APPWORK_LIST_NAME, _siteUrl, caml))
+            foreach (var item in SPConnector.GetList(SP_APPWORK_LIST_NAME, _siteUrl, caml))
             {
                 workingExperienceDetails.Add(ConvertToWorkingExperienceDetailVM(item));
             }
@@ -279,7 +289,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             var caml = @"<View>  
             <Query> 
-               <Where><Eq><FieldRef Name='application' LookupId='True' /><Value Type='Lookup'>" + iD 
+               <Where><Eq><FieldRef Name='application' LookupId='True' /><Value Type='Lookup'>" + iD
                + @"</Value></Eq></Where> 
             </Query> 
              <ViewFields>
@@ -301,14 +311,13 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return trainingDetails;
         }
 
-
         /// <summary>
-       //<ViewFields>
-       //   <FieldRef Name = 'Title' />
-       //   < FieldRef Name='trainingyear' />
-       //   <FieldRef Name = 'traininginstitution' />
-       //   < FieldRef Name='trainingremarks' />
-       //</ViewFields>
+        //<ViewFields>
+        //   <FieldRef Name = 'Title' />
+        //   < FieldRef Name='trainingyear' />
+        //   <FieldRef Name = 'traininginstitution' />
+        //   < FieldRef Name='trainingremarks' />
+        //</ViewFields>
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
@@ -320,17 +329,17 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 Subject = Convert.ToString(item["Title"]),
                 Institution = Convert.ToString(item["traininginstitution"]),
                 Remarks = Convert.ToString(item["trainingremarks"]),
-                Year = Convert.ToDateTime(item["trainingyear"])
+                Year = FormatUtil.ConvertYearStringToDateTime(item, "trainingyear")
             };
         }
 
-       //<ViewFields>
-       //   <FieldRef Name = 'Title' />
-       //   < FieldRef Name='applications' />
-       //   <FieldRef Name = 'university' />
-       //   < FieldRef Name='yearofgraduation' />
-       //   <FieldRef Name = 'remarks' />
-       //</ ViewFields >
+        //<ViewFields>
+        //   <FieldRef Name = 'Title' />
+        //   < FieldRef Name='applications' />
+        //   <FieldRef Name = 'university' />
+        //   < FieldRef Name='yearofgraduation' />
+        //   <FieldRef Name = 'remarks' />
+        //</ ViewFields >
         private IEnumerable<EducationDetailVM> GetEducationDetails(int? iD)
         {
             var caml = @"<View>  
@@ -357,13 +366,13 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         }
 
         /// <summary>
-           // <ViewFields>
-           //   <FieldRef Name = 'Title' />
-           //   < FieldRef Name='university' />
-           //   <FieldRef Name = 'yearofgraduation' />
-           //   < FieldRef Name='remarks' />
-           //   <FieldRef Name = 'applications' />
-           //</ ViewFields >
+        // <ViewFields>
+        //   <FieldRef Name = 'Title' />
+        //   < FieldRef Name='university' />
+        //   <FieldRef Name = 'yearofgraduation' />
+        //   < FieldRef Name='remarks' />
+        //   <FieldRef Name = 'applications' />
+        //</ ViewFields >
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
@@ -374,7 +383,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 ID = Convert.ToInt32(item["ID"]),
                 Subject = Convert.ToString(item["Title"]),
                 University = Convert.ToString(item["university"]),
-                YearOfGraduation = Convert.ToDateTime(item["yearofgraduation"]),
+                YearOfGraduation = FormatUtil.ConvertYearStringToDateTime(item, "yearofgraduation"),
                 Remarks = Convert.ToString(item["remarks"])
             };
         }
@@ -398,6 +407,34 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 logger.Error(e);
                 throw e;
             }
+        }
+
+        public IEnumerable<ApplicationDataVM> GetApplications()
+        {
+            throw new NotImplementedException();
+        }
+
+        //TODO: To get active positions
+        public IEnumerable<PositionsMaster> GetVacantPositions()
+        {
+            var caml = @"<View>  
+                    <Query> 
+                       <Where><Eq><FieldRef Name='manpowerrequeststatus' /><Value Type='Choice'>Active</Value></Eq></Where><OrderBy><FieldRef Name='positionrequested_x003a_Position' /></OrderBy> 
+                    </Query> 
+                    <ViewFields><FieldRef Name='manpowerrequeststatus' /><FieldRef Name='ID' /><FieldRef Name='positionrequested' /><FieldRef Name='positionrequested_x003a_Position' /></ViewFields></View>"; 
+
+            var positions = new List<PositionsMaster>();
+            // ID is retrieved from ManPower ID not Position ID
+            foreach (var item in SPConnector.GetList(SP_MANPOW_LIST_NAME, _siteUrl, caml))
+            {
+                positions.Add(new PositionsMaster
+                {
+                    PositionName = FormatUtil.ConvertLookupToValue(item, "positionrequested"),
+                    ID = Convert.ToInt32(item["ID"])
+                });
+            }
+
+            return positions;
         }
     }
 }

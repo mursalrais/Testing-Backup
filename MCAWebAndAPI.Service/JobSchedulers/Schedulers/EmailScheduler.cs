@@ -1,12 +1,16 @@
 ﻿using MCAWebAndAPI.Service.JobSchedulers.Jobs;
+using NLog;
 using Quartz;
 using Quartz.Impl;
+using System;
 using System.Collections.Generic;
 
 namespace MCAWebAndAPI.Service.JobSchedulers.Schedulers
 {
     public class EmailScheduler
     {
+        static Logger logger = LogManager.GetCurrentClassLogger();
+
         /// <summary>
         /// 
         /// </summary>
@@ -14,7 +18,7 @@ namespace MCAWebAndAPI.Service.JobSchedulers.Schedulers
         /// <param name="subject"></param>
         /// <param name="body"></param>
         /// <param name="siteUrl"></param>
-        public static void SendNow_PerHour_UntilFiveTimes(IEnumerable<string> targetEmails, 
+        public static void SendNow_PerHourUntilFiveTimes(IEnumerable<string> targetEmails, 
             string subject, string body, string siteUrl = null)
         {
             // construct a scheduler factory
@@ -23,6 +27,7 @@ namespace MCAWebAndAPI.Service.JobSchedulers.Schedulers
             // get a scheduler
             IScheduler scheduler = scheduleFactory.GetScheduler();
             scheduler.Start();
+            logger.Debug(string.Format("{0} has been started at {1}", scheduler.SchedulerName, DateTime.Now.ToLongDateString()));
 
             var _targetEmails = string.Empty;
             foreach(var email in targetEmails)
@@ -49,5 +54,41 @@ namespace MCAWebAndAPI.Service.JobSchedulers.Schedulers
 
             scheduler.ScheduleJob(job, trigger);
         }
-    }
+
+
+        public static void SendNow_Once(IEnumerable<string> targetEmails,
+            string subject, string body, string siteUrl = null)
+        {
+            // construct a scheduler factory
+            ISchedulerFactory scheduleFactory = new StdSchedulerFactory();
+
+            // get a scheduler
+            IScheduler scheduler = scheduleFactory.GetScheduler();
+            scheduler.Start();
+            logger.Debug(string.Format("{0} has been started at {1}", scheduler.SchedulerName, DateTime.Now.ToLongDateString()));
+
+            var _targetEmails = string.Empty;
+            foreach (var email in targetEmails)
+            {
+                _targetEmails += email + ';';
+            }
+
+            IJobDetail job = JobBuilder.Create<EmailJob>()
+                .WithIdentity("email-job", "alert-jobs") // put job name and job category
+                .UsingJobData("target-emails", _targetEmails) // passing variable
+                .UsingJobData("subject", subject) // passing variable
+                .UsingJobData("body", body) // passing variable
+                .UsingJobData("site-url", siteUrl) // passing variable
+                .Build();
+
+            // Trigger the job to run now, and then every 1 hour
+            ITrigger trigger = TriggerBuilder.Create()
+              .WithIdentity("start-now-once", "onetime-triggers")
+              .StartNow() // start when?
+              .Build();
+
+            scheduler.ScheduleJob(job, trigger);
+        }
+
+      }
 }

@@ -5,11 +5,7 @@ using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
 using System.Linq;
-using MCAWebAndAPI.Service.ProjectManagement.Common;
-using System.Web;
 using NLog;
-using MCAWebAndAPI.Service.Resources;
-using MCAWebAndAPI.Model.ViewModel.Control;
 using MCAWebAndAPI.Model.Common;
 
 namespace MCAWebAndAPI.Service.HR.Common
@@ -131,12 +127,8 @@ namespace MCAWebAndAPI.Service.HR.Common
             var viewModel = new PositionsMaster();
 
             viewModel.ID = Convert.ToInt32(item["ID"]);
-            viewModel.Title = Convert.ToString(item["Title"]);
-            viewModel.PositionManpowerRequisitionApprover1.Value = Convert.ToString(item["positionmanpowerrequisitionappro"]);
-            viewModel.positionManpowerRequisitionApprover2.Value = Convert.ToString(item["positionmanpowerrequisitionappro0"]);
-            viewModel.positionStatus.Value = Convert.ToString(item["positionstatus"]);
-            viewModel.Remarks = Convert.ToString(item["Remarks"]);
-            viewModel.isKeyPosition.Value = Convert.ToString(item["iskeyposition"]);
+            viewModel.PositionName = Convert.ToString(item["Title"]);
+            viewModel.isKeyPosition = Convert.ToString(item["iskeyposition"]);
             return viewModel;
         }
 
@@ -341,7 +333,7 @@ namespace MCAWebAndAPI.Service.HR.Common
                 ID = Convert.ToInt32(item["ID"]),
                 Subject = Convert.ToString(item["Title"]),
                 University = Convert.ToString(item["university"]),
-                YearOfGraduation = Convert.ToDateTime(item["yearofgraduation"]),
+                YearOfGraduation = FormatUtil.ConvertYearStringToDateTime(item, "yearofgraduation"),
                 Remarks = Convert.ToString(item["remarks"])
             };
         }
@@ -381,7 +373,7 @@ namespace MCAWebAndAPI.Service.HR.Common
                 Subject = Convert.ToString(item["Title"]),
                 Institution = Convert.ToString(item["traininginstitution"]),
                 Remarks = Convert.ToString(item["trainingremarks"]),
-                Year = Convert.ToDateTime(item["trainingyear"])
+                Year = FormatUtil.ConvertYearStringToDateTime(item, "trainingyear")
             };
         }
 
@@ -678,7 +670,7 @@ namespace MCAWebAndAPI.Service.HR.Common
                 throw new Exception(e.Message);
             }
 
-            return SPConnector.GetInsertedItemID(SP_PROMAS_LIST_NAME, _siteUrl);
+            return SPConnector.GetLatestListItemID(SP_PROMAS_LIST_NAME, _siteUrl);
         }
 
         public ProfessionalDataVM GetProfessionalData(string userLoginName = null)
@@ -700,6 +692,20 @@ namespace MCAWebAndAPI.Service.HR.Common
             }
 
             return GetProfessionalData(professionalID);
+        }
+
+        public void SendEmailValidation(string emailMessages)
+        {
+            try
+            {
+                SPConnector.SendEmail("randi.prayengki@eceos.com", emailMessages, "Accept It Now!!", _siteUrl);
+
+            }
+            catch (Exception e)
+            {
+                logger.Error(e);
+                throw e;
+            }
         }
     }
 }

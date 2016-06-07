@@ -1,9 +1,8 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
 @model ProfessionalDataVM
 
-
 @{
-    ViewBag.Title = "Edit Professional";
+    ViewBag.Title = Model.ID != null ? "Edit Professional" : "Create Professional";
 }
 
 @using (Ajax.BeginForm("EditProfessional", "HRProfessional", FormMethod.Post,
@@ -52,15 +51,8 @@
     <div class="form-actions">
         <div class="row">
             <div class="col-sm-12">
-                <button id="validate-by-hr" class="btn" type="button">
+                <button id="validate-button" class="btn" type="submit">
                     Validate
-                </button>
-                <button id="print-button" class="btn btn-default" type="button">
-                    Print
-                </button>
-                <button id="submit-button" class="btn btn-primary" type="submit">
-                    <i class="fa fa-save"></i>
-                    Save
                 </button>
             </div>
         </div>
@@ -69,14 +61,5 @@
 
 @section scripts{
 
-    <script>
-        function onSelectIDCardType(e) {
-            var dataItem = this.dataItem(e.item);
-            if (dataItem === "KTP") {
-                $('#IDCardExpiry').closest('.form-group').show();
-            } else {
-                $('#IDCardExpiry').closest('.form-group').hide();
-            }
-        }
-    </script>
+   
 }

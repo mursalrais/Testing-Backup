@@ -19,6 +19,10 @@ using System.IO;
 using System.Web;
 using System.Globalization;
 
+using MCAWebAndAPI.Service.HR.Payroll;
+using MCAWebAndAPI.Service.Resources;
+using System.Net;
+
 namespace MCAWebAndAPI.Web.Controllers
 {
     [Filters.HandleError]
@@ -103,7 +107,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
             try
             {
-                psaManagementService.CreatePSAManagementDocuments(psaID, viewModel.Documents);
+                //psaManagementService.CreatePSAManagementDocuments(psaID, viewModel.Documents);
+                psaManagementService.CreatePSAManagementDocuments(psaID, viewModel.Documents, viewModel);
             }
             catch (Exception e)
             {
@@ -119,23 +124,28 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult UpdatePSAManagement(PSAManagementVM psaManagement, string site)
         {
-            psaManagementService.SetSiteUrl(System.Web.HttpContext.Current.Session["SiteUrl"] as string);
 
-            psaManagementService.UpdatePSAManagement(psaManagement);
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            psaManagementService.SetSiteUrl(siteUrl);
 
-            if (!ModelState.IsValid)
+            try
             {
-                return new JsonResult()
-                {
-                    JsonRequestBehavior = JsonRequestBehavior.AllowGet,
-                    Data = new { result = "Error" }
-                };
+                var headerID = psaManagementService.UpdatePSAManagement(psaManagement);
             }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+            return JsonHelper.GenerateJsonSuccessResponse(
+                string.Format("{0}/{1}", siteUrl, UrlResource.PSAManagement),
+                string.Format(MessageResource.SuccessUpdatePSAManagementData, psaManagement.PSANumber));
 
-
+            /*
             return RedirectToAction("Index",
                 "Success",
                 new { successMessage = string.Format(MessageResource.SuccessUpdatePSAManagementData, psaManagement.PSANumber) });
+            */
         }
 
         public JsonResult GetPsa(string id)

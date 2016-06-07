@@ -11,15 +11,16 @@ namespace MCAWebAndAPI.Model.ViewModel.Control
         public ReligionComboBoxVM() : base()
         {
             Choices = new string[]
-             {
-                 "Islam",
-                 "Protestantism",
-                 "Catholicism",
-                 "Hinduism",
-                 "Buddhism",
-                 "Atheism"
-             };
-            Value = "Islam";
+            {
+                "Islam",
+                "Protestantism",
+                "Catholicism",
+                "Hinduism",
+                "Buddhism",
+                "Atheism",
+                "Not Stated"
+            };
+            Value = "Not Stated";
         }
     }
 }

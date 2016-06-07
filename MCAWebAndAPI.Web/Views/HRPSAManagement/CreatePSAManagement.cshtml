@@ -57,14 +57,23 @@
         
             function OnSelectAssetHolderFrom(e) {
                 var dataItem = this.dataItem(e.item);
-                var url = "/HRDataMaster/GetProfessionals/" + dataItem.ID;
-
+                var url = "/HRDataMaster/GetProfessional/" + dataItem.ID;
             }
 
+            
             function OnSelectPosition(e) {
                 var dataItem = this.dataItem(e.item);
-                var url = "/HRDataMaster/GetPositions/" + dataItem.ID;
+                var urlKeyPosition = "/HRDataMaster/GetKeyPosition/" + dataItem.ID;
+                
+                $.getJSON(urlKeyPosition, function (result) {
+                    console.log(result[0].isKeyPosition);
+                    $('#KeyPosition').prop('value', result[0].isKeyPosition);
+                    $('#PositionManpowerRequisitionApprover1').prop('value', result[0].PositionManpowerRequisitionApprover1);
+                    $('#PositionStatus').prop('value', result[0].positionStatus);
+                    $('#PositionManpowerRequisitionApprover2').prop('value', result[0].positionManpowerRequisitionApprover2);
+                })
             }
+           
 
             $(document).ready(function () {
                              
@@ -92,6 +101,7 @@
                 
             });
 
+            /*
             function isrenewalChanged() {
 
                 if ($("#IsRenewal_Value").prop("value", "No"))
@@ -106,7 +116,7 @@
                 }
                     ;
             }
-
+            */
             
         </script>
     }

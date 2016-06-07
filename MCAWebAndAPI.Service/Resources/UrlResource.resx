@@ -132,6 +132,12 @@
   <data name="ApplicationData" xml:space="preserve">
     <value>Lists/Application</value>
   </data>
+  <data name="PSAManagement" xml:space="preserve">
+    <value>Lists/PSA</value>
+  </data>
+  <data name="ProfessionalDisplayByID" xml:space="preserve">
+    <value>{0}/Lists/Professional%20Master/DispForm_Custom.aspx?ID={1}</value>
+  </data>
   <data name="PlaceMaster" xml:space="preserve">
     <value>Lists/Location%20Master</value>
   </data>
