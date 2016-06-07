@@ -12,8 +12,6 @@ namespace MCAWebAndAPI.Service.HR.Payroll
 
         MonthlyFeeVM GetPopulatedModel(int? id = null);
 
-        MonthlyFeeVM GetHeader();
-
         MonthlyFeeVM GetHeader(int ID);
 
         int CreateHeader(MonthlyFeeVM header);

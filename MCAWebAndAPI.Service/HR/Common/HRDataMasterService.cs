@@ -56,7 +56,8 @@ namespace MCAWebAndAPI.Service.HR.Common
             List<int> collectionIDMonthlyFee = new List<int>();
             foreach (var item in SPConnector.GetList(SP_MONFEE_LIST_NAME, _siteUrl))
             {
-                collectionIDMonthlyFee.Add(Convert.ToInt32(item["ProfessionalId"]));
+                collectionIDMonthlyFee.Add(item["professional_x003a_ID"] == null ? 0 :
+               Convert.ToInt16((item["professional_x003a_ID"] as FieldLookupValue).LookupValue));
             }
             foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl))
             {
@@ -88,7 +89,6 @@ namespace MCAWebAndAPI.Service.HR.Common
                 ID = Convert.ToInt32(item["ID"]),
                 Name = Convert.ToString(item["Title"]),
                 Status = Convert.ToString(item["maritalstatus"]),
-                Position = Convert.ToString(item["Position"])
             };
         }
 

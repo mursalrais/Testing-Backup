@@ -53,15 +53,15 @@
             });
         });
 
-        @*
+       
         $('#application-document-button').click(function () {
             parent.postMessage({
                 result: "Success", urlToRedirect: "@Model"
             }, "@Model");
         });
-        *@
+        
 
-        /*
+        
         function onSuccess(data) {
             window.location.href = data.urlToRedirect;
         }
@@ -69,7 +69,7 @@
         function onFailure(data) {
             window.location.href = data.urlToRedirect;
         }
-        */
+        
 
         function OnSelectAssetHolderFrom(e) {
             var dataItem = this.dataItem(e.item);

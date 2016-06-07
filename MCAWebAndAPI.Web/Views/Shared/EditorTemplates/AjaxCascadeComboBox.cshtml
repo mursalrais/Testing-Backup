@@ -1,0 +1,31 @@
+﻿@model MCAWebAndAPI.Model.ViewModel.Control.AjaxCascadeComboboxVM
+
+@(Html.Kendo().DropDownListFor(m => m.Value)
+              .DataTextField(Model.TextField)
+              .DataValueField(Model.ValueField)
+              .Value(Model.Value + "")
+              .Text(Model.Text)
+              .Filter("contains")
+              .DataSource(source =>
+              {
+                  source.Read(read =>
+                  {
+                      read.Action(Model.ActionName, Model.ControllerName)
+                          .Data(Model.Filter);
+                  })
+                  .ServerFiltering(true);
+              })
+              .Enable(false)
+              .AutoBind(false)
+              .CascadeFrom(Model.Cascade)
+              .HtmlAttributes(new
+              {
+                @class = "form-control",
+                style = "width:100%;"
+              })
+)
+
+@Html.ValidationMessageFor(model => model)
+
+
+

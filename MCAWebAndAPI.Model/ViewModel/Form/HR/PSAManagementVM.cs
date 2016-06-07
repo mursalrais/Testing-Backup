@@ -28,8 +28,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
                 "Yes",
                 "No"
             },
-            Value = "Yes"
-            //OnSelectEventName = "isrenewalChanged"
+            Value = "Yes",
+            OnSelectEventName = "isrenewalChanged"
         };
 
         /// <summary>
@@ -136,6 +136,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// DocumentType
         /// </summary>
+        /*
         [UIHint("ComboBox")]
         [DisplayName("Document Type")]
         public ComboBoxVM DocumentType { get; set; } = new ComboBoxVM
@@ -147,7 +148,16 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             },
             Value = "PSA Document"
         };
+        */
+
+        public string DocumentType { get; set;}
 
         public string KeyPosition { get; set; }
+
+        /// <summary>
+        /// psaexpirydate
+        /// </summary>
+        [UIHint("Date")]
+        public DateTime? Created { get; set; } = DateTime.Now;
     }
 }

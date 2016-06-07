@@ -79,11 +79,20 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lists/MonthlyFee.
+        ///   Looks up a localized string similar to /Lists/MonthlyFee.
         /// </summary>
         public static string MonthlyFee {
             get {
                 return ResourceManager.GetString("MonthlyFee", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to /Lists/Location%20Master.
+        /// </summary>
+        public static string PlaceMaster {
+            get {
+                return ResourceManager.GetString("PlaceMaster", resourceCulture);
             }
         }
         
