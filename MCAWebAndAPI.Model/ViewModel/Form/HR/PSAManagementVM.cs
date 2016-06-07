@@ -33,11 +33,19 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         };
 
         /// <summary>
-        /// renewalnumber
+        /// renewalnumber for display value
         /// </summary>
+        [UIHint("Integer")]
         [DisplayName("Renewal#")]
         [Required]
         public int RenewalNumber { get; set;}
+
+        /// <summary>
+        /// renewalnumber for edit value
+        /// </summary>
+        [DisplayName("Renewal#")]
+        [Required]
+        public int PSARenewalNumber { get; set; }
 
         /// <summary>
         /// ProjectOrUnit
@@ -116,6 +124,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// tenure
         /// </summary>
+        [UIHint("Integer")]
         [DisplayName("Tenure")]
         [Required]
         public int Tenure { get; set; }

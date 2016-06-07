@@ -43,7 +43,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 ID = item["professional_x003a_ID"] == null ? 0 : Convert.ToInt32((item["professional_x003a_ID"] as FieldLookupValue).LookupId),
                 Created = Convert.ToDateTime(item["Created"]),
-                RenewalNumber = Convert.ToInt32(item["renewalnumber"])
+                PSARenewalNumber = Convert.ToInt32(item["renewalnumber"])
             };
         }
 
@@ -51,7 +51,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             var updatedValues = new Dictionary<string, object>();
             updatedValues.Add("isrenewal", psaManagement.IsRenewal.Value);
-            updatedValues.Add("renewalnumber", psaManagement.RenewalNumber);
+            updatedValues.Add("renewalnumber", psaManagement.PSARenewalNumber);
             updatedValues.Add("ProjectOrUnit", psaManagement.ProjectOrUnit.Value);
             updatedValues.Add("position", new FieldLookupValue { LookupId =  (int)psaManagement.Position.Value});
             updatedValues.Add("professional", new FieldLookupValue { LookupId = (int)psaManagement.Professional.Value });

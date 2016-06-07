@@ -65,9 +65,12 @@
 
                     $.getJSON(url, function (result) {
 
-                        var renewalnumber = result[0].RenewalNumber + 1;
-                        $('#RenewalNumber').prop('value', renewalnumber);
-                        $('#RenewalNumber').prop('readonly', true);
+                        var renewalnumber = result[0].PSARenewalNumber + 1;
+                        $('#PSARenewalNumber').prop('value', renewalnumber);
+                        //$('#PSARenewalNumber').data("kendoNumericTextBox").readonly(true);
+                        $('#PSARenewalNumber').prop('readonly', true);
+
+                        //$("#AssetCategory_Value").data("kendoDropDownList").enable(true);
                     })
                 }
                 
@@ -131,8 +134,8 @@
                 if ($("#IsRenewal_Value").prop("value", "No"))
                 {
                     
-                    $("#RenewalNumber").prop("readonly", "true");
-                    $("#RenewalNumber").prop("value", 0);
+                    $("#PSARenewalNumber").prop("readonly", "true");
+                    $("#PSARenewalNumber").prop("value", 0);
                 }
                     ;
             }
