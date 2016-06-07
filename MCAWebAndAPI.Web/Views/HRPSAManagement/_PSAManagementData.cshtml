@@ -3,18 +3,6 @@
 
 <div class="col-md-6">
     <div class="form-group">
-        @Html.Bootstrap().LabelFor(m => m.IsRenewal).Class("col-md-4 control-label")
-        <div class="col-md-8">
-            @Html.EditorFor(m => m.IsRenewal)
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.Bootstrap().LabelFor(m => m.RenewalNumber).Class("col-md-4 control-label")
-        <div class="col-md-8">
-            @Html.EditorFor(m => m.RenewalNumber)
-        </div>
-    </div>
-    <div class="form-group">
         @Html.Bootstrap().LabelFor(m => m.Professional).Class("col-md-4 control-label")
         <div class="col-md-8">
             @Html.EditorFor(m => m.Professional)
@@ -32,14 +20,23 @@
             @Html.EditorFor(m => m.Position)
         </div>
     </div>
-    @*
     <div class="form-group">
-        <div class="col-md-8">*@
-            @Html.HiddenFor(m => m.KeyPosition)
-    @*
+        @Html.Bootstrap().LabelFor(m => m.IsRenewal).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.EditorFor(m => m.IsRenewal)
         </div>
     </div>
-    *@
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.RenewalNumber).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.EditorFor(m => m.RenewalNumber)
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-8">
+            @Html.DisplayFor(m => m.KeyPosition)
+        </div>
+    </div>
     <div class="form-group">
         @Html.Bootstrap().LabelFor(m => m.JoinDate).Class("col-md-4 control-label")
         <div class="col-md-8">

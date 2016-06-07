@@ -57,26 +57,47 @@
         
             function OnSelectAssetHolderFrom(e) {
                 var dataItem = this.dataItem(e.item);
-                var url = "/HRDataMaster/GetProfessional/" + dataItem.ID;
+
+                if ($("#IsRenewal_Value").val() == "Yes")
+                {
+
+                    var url = "/HRPSAManagement/GetRenewal/" + dataItem.ID;
+
+                    $.getJSON(url, function (result) {
+
+                        var renewalnumber = result[0].RenewalNumber + 1;
+                        $('#RenewalNumber').prop('value', renewalnumber);
+                        $('#RenewalNumber').prop('readonly', true);
+                    })
+                }
+                
             }
 
             
             function OnSelectPosition(e) {
                 var dataItem = this.dataItem(e.item);
                 var urlKeyPosition = "/HRDataMaster/GetKeyPosition/" + dataItem.ID;
-                
+                               
                 $.getJSON(urlKeyPosition, function (result) {
-                    console.log(result[0].isKeyPosition);
-                    $('#KeyPosition').prop('value', result[0].isKeyPosition);
-                    $('#PositionManpowerRequisitionApprover1').prop('value', result[0].PositionManpowerRequisitionApprover1);
-                    $('#PositionStatus').prop('value', result[0].positionStatus);
-                    $('#PositionManpowerRequisitionApprover2').prop('value', result[0].positionManpowerRequisitionApprover2);
+
+                    if (result[0].isKeyPosition == "Yes")
+                    {
+                        $('#KeyPosition').prop('value', "The Position is Key Position");
+                        $('#DocumentType_Value').data("kendoDropDownList").enable(false);
+                        $('#DocumentType_Value').data("kendoDropDownList").value("MCC No Objection Letter");
+                    }
+                    else
+                    {
+                        $('#KeyPosition').prop('value', "The Position is Not Key Position");
+                        $('#DocumentType_Value').prop('readonly', "false");
+                        $('#DocumentType_Value').prop('readonly', "PSA Document");
+                    }
                 })
             }
-           
 
+            
             $(document).ready(function () {
-                             
+
                 $("#Tenure").on('input', function () {
                     sumCal();
                 });
@@ -98,11 +119,11 @@
                     var psaexpirydate = setmonth.getMonth() + 1 + '/' + setmonth.getDate() + '/' + setmonth.getFullYear();
                     $("#PSAExpiryDate").val(psaexpirydate);
                 }
-                
+
             });
 
-            /*
-            function isrenewalChanged() {
+            
+           function isrenewalChanged() {
 
                 if ($("#IsRenewal_Value").prop("value", "No"))
                 {
@@ -110,13 +131,9 @@
                     $("#RenewalNumber").prop("readonly", "true");
                     $("#RenewalNumber").prop("value", 0);
                 }
-                if ($("#IsRenewal_Value").prop("value", "Yes"))
-                {
-                    $("#RenewalNumber").prop("readonly", "null");
-                }
                     ;
             }
-            */
-            
+           
+                      
         </script>
     }
