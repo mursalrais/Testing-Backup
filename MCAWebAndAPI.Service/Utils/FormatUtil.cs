@@ -148,10 +148,7 @@ namespace MCAWebAndAPI.Service.Utils
 
                 columnTechnicalName = columnTechnicalName.Split('_')[0];
                 updatedValue.Add(columnTechnicalName,
-                    new FieldLookupValue
-                    {
-                        LookupId = Convert.ToInt32(columnValue)
-                    });
+                    new FieldLookupValue {LookupId = (int)columnValue });
                 return;
             }
 
@@ -166,7 +163,7 @@ namespace MCAWebAndAPI.Service.Utils
                 case "System.DateTime":
                     try
                     {
-                        var dateTimeValue = DateTime.ParseExact((string)columnValue, "DD-MM-YYY",
+                        var dateTimeValue = DateTime.ParseExact((string)columnValue, "DD-MM-YYYY",
                             System.Globalization.CultureInfo.InvariantCulture);
                         updatedValue.Add(columnTechnicalName, dateTimeValue);
                         break;
