@@ -552,7 +552,6 @@ namespace MCAWebAndAPI.Service.HR.Common
                     try
                     {
                         SPConnector.DeleteListItem(SP_PRODEP_LIST_NAME, viewModel.ID, _siteUrl);
-
                     }
                     catch (Exception e)
                     {

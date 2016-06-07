@@ -22,6 +22,12 @@ namespace MCAWebAndAPI.Model.Common
             DECLINED_TO_JOIN = 9
         }
 
+        public enum ProfessionalValidationStatus
+        {
+            VALIDATED = 0,
+            NEED_VALIDATION = 1
+        }
+
         public static string GetApplicationStatus(ApplicationStatus status)
         {
             switch (status)
@@ -47,8 +53,22 @@ namespace MCAWebAndAPI.Model.Common
                 case ApplicationStatus.DECLINED_TO_JOIN:
                     return "Declined To Join";
                 default:
-                    return string.Empty;
+                    return null;
             }
         }
+
+        public static string GetProfessionalValidationStatus(ProfessionalValidationStatus status)
+        {
+            switch(status)
+            {
+                case ProfessionalValidationStatus.VALIDATED:
+                    return "HR Validated";
+                case ProfessionalValidationStatus.NEED_VALIDATION:
+                    return "Need HR to Validate";
+                default: return null;
+            }
+        }
+
+
     }
 }

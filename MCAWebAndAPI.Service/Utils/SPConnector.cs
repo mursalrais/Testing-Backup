@@ -10,19 +10,18 @@ namespace MCAWebAndAPI.Service.Utils
 {
     public class SPConnector
     {
-        static string CurUrl = "https://eceos2.sharepoint.com/sites/mca-dev/hr";
-        static string UserName =  "sp.services@eceos.com";
-        static string Password = "Raja0432";
+        static string CurUrl = "";
+        static string UserName =  "";
+        static string Password = "";
 
         private static void MapCredential(string url)
         {
-            if (url == null || url.Contains("eceos"))
+            if (url.Contains("eceos"))
             {
                 UserName = "sp.services@eceos.com";
                 Password = "Raja0432";
             }
-
-            if (url.Contains("mcai"))
+            else if (url.Contains("mcai"))
             {
                 UserName = "admin.sharepoint@mca-indonesia.go.id";
                 Password = "admin123$";
@@ -147,8 +146,17 @@ namespace MCAWebAndAPI.Service.Utils
                 {
                     newItem[key] = columnValues[key];
                 }
-                newItem.Update();
-                context.ExecuteQuery();
+
+                try
+                {
+                    newItem.Update();
+                    context.ExecuteQuery();
+                }
+                catch (Exception e)
+                {
+                    throw e;
+                }
+              
             }
         }
 
@@ -275,7 +283,6 @@ namespace MCAWebAndAPI.Service.Utils
                 properties.Body = content;
 
                 Utility.SendEmail(context, properties);
-
                 context.ExecuteQuery();
             }
             return true;

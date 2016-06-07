@@ -1,5 +1,4 @@
-﻿using Elmah;
-using MCAWebAndAPI.Model.ViewModel.Control;
+﻿using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using MCAWebAndAPI.Service.HR.Common;
 using MCAWebAndAPI.Service.Resources;
@@ -9,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 
 namespace MCAWebAndAPI.Web.Controllers

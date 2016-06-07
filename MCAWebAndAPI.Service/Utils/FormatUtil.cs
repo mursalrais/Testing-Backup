@@ -142,6 +142,10 @@ namespace MCAWebAndAPI.Service.Utils
 
             if (lookup)
             {
+                // Means not filled
+                if ((int)columnValue <= 0)
+                    return;
+
                 columnTechnicalName = columnTechnicalName.Split('_')[0];
                 updatedValue.Add(columnTechnicalName,
                     new FieldLookupValue
@@ -160,8 +164,17 @@ namespace MCAWebAndAPI.Service.Utils
                     updatedValue.Add(columnTechnicalName, Convert.ToString(columnValue));
                     break;
                 case "System.DateTime":
-                    updatedValue.Add(columnTechnicalName, Convert.ToDateTime(columnValue));
-                    break;
+                    try
+                    {
+                        var dateTimeValue = DateTime.ParseExact((string)columnValue, "DD-MM-YYY",
+                            System.Globalization.CultureInfo.InvariantCulture);
+                        updatedValue.Add(columnTechnicalName, dateTimeValue);
+                        break;
+                    }
+                    catch (Exception e)
+                    {
+                        throw e;
+                    }
             }
         }
     }

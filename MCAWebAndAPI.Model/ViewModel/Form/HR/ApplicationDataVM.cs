@@ -28,7 +28,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// </summary>
         public string ApplicationStatus { get; set; }
 
-
         [UIHint("MultiFileUploader")]
         public IEnumerable<HttpPostedFileBase> Documents { get; set; } = new List<HttpPostedFileBase>();
 

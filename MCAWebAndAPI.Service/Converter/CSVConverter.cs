@@ -88,7 +88,16 @@ namespace MCAWebAndAPI.Service.Converter
                         if (string.Compare(col.ColumnName, "ID", StringComparison.OrdinalIgnoreCase) == 0)
                             row[col.ColumnName] = indexID++;
                         else
-                            row[col.ColumnName] = csv.GetField(col.DataType, i);
+                        {
+                            try
+                            {
+                                row[col.ColumnName] = csv.GetField(col.DataType, i);
+                            }
+                            catch (Exception e)
+                            {
+                                row[col.ColumnName] = -1;
+                            }
+                        }
                     }
 
                     dataTable.Rows.Add(row);
