@@ -50,8 +50,15 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [Required]
         public string FirstMiddleName { get; set; }
 
-
+        /// <summary>
+        /// position
+        /// </summary>
         public string Position { get; set; }
+
+        /// <summary>
+        /// manpowerrequisition
+        /// </summary>
+        public int? ManpowerRequisitionID { get; set; }
 
 
         /// <summary>

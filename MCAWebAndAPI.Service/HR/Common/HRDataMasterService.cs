@@ -5,11 +5,7 @@ using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
 using System.Linq;
-using MCAWebAndAPI.Service.ProjectManagement.Common;
-using System.Web;
 using NLog;
-using MCAWebAndAPI.Service.Resources;
-using MCAWebAndAPI.Model.ViewModel.Control;
 using MCAWebAndAPI.Model.Common;
 
 namespace MCAWebAndAPI.Service.HR.Common
@@ -60,7 +56,8 @@ namespace MCAWebAndAPI.Service.HR.Common
             List<int> collectionIDMonthlyFee = new List<int>();
             foreach (var item in SPConnector.GetList(SP_MONFEE_LIST_NAME, _siteUrl))
             {
-                collectionIDMonthlyFee.Add(Convert.ToInt32(item["ProfessionalId"]));
+                collectionIDMonthlyFee.Add(item["professional_x003a_ID"] == null ? 0 :
+               Convert.ToInt16((item["professional_x003a_ID"] as FieldLookupValue).LookupValue));
             }
             foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl))
             {
@@ -92,7 +89,6 @@ namespace MCAWebAndAPI.Service.HR.Common
                 ID = Convert.ToInt32(item["ID"]),
                 Name = Convert.ToString(item["Title"]),
                 Status = Convert.ToString(item["maritalstatus"]),
-                Position = Convert.ToString(item["Position"])
             };
         }
 
@@ -131,7 +127,7 @@ namespace MCAWebAndAPI.Service.HR.Common
             var viewModel = new PositionsMaster();
 
             viewModel.ID = Convert.ToInt32(item["ID"]);
-            viewModel.Title = Convert.ToString(item["Title"]);
+            viewModel.PositionName = Convert.ToString(item["Title"]);
             viewModel.isKeyPosition = Convert.ToString(item["iskeyposition"]);
             return viewModel;
         }
@@ -674,7 +670,7 @@ namespace MCAWebAndAPI.Service.HR.Common
                 throw new Exception(e.Message);
             }
 
-            return SPConnector.GetInsertedItemID(SP_PROMAS_LIST_NAME, _siteUrl);
+            return SPConnector.GetLatestListItemID(SP_PROMAS_LIST_NAME, _siteUrl);
         }
 
         public ProfessionalDataVM GetProfessionalData(string userLoginName = null)
@@ -696,6 +692,20 @@ namespace MCAWebAndAPI.Service.HR.Common
             }
 
             return GetProfessionalData(professionalID);
+        }
+
+        public void SendEmailValidation(string emailMessages)
+        {
+            try
+            {
+                SPConnector.SendEmail("randi.prayengki@eceos.com", emailMessages, "Accept It Now!!", _siteUrl);
+
+            }
+            catch (Exception e)
+            {
+                logger.Error(e);
+                throw e;
+            }
         }
     }
 }

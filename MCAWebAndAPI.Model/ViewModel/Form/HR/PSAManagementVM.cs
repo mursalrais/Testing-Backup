@@ -150,6 +150,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         };
         */
 
+        public string DocumentType { get; set;}
+
         public string KeyPosition { get; set; }
 
         /// <summary>

@@ -69,7 +69,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 throw e;
             }
 
-            return SPConnector.GetInsertedItemID(SP_PSA_LIST_NAME, _siteUrl);
+            return SPConnector.GetLatestListItemID(SP_PSA_LIST_NAME, _siteUrl);
         }
 
         public IEnumerable<PSAMaster> GetPSAs()
@@ -90,7 +90,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 ID = item["professional_x003a_ID"] == null ? "" :
                Convert.ToString((item["professional_x003a_ID"] as FieldLookupValue).LookupValue),
-                PSAID = Convert.ToString(item["ID"]),
+                PSAID = Convert.ToString(item["Created"]),
                 JoinDate = Convert.ToDateTime(item["joindate"]).ToLocalTime().ToShortDateString(),
                 DateOfNewPSA = Convert.ToDateTime(item["dateofnewpsa"]).ToLocalTime().ToShortDateString(),
                 PsaExpiryDate = Convert.ToDateTime(item["psaexpirydate"]).ToLocalTime().ToShortDateString(),
@@ -224,7 +224,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 var updateValue = new Dictionary<string, object>();
                 updateValue.Add("psa", new FieldLookupValue { LookupId = Convert.ToInt32(psaID) });
-                
+                updateValue.Add("documenttype", psaManagmement.DocumentType);
+
                 try
                 {
                     SPConnector.UploadDocument(SP_PSA_DOC_LIST_NAME, updateValue, doc.FileName, doc.InputStream, _siteUrl);

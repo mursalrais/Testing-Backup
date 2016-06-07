@@ -45,5 +45,7 @@ namespace MCAWebAndAPI.Service.HR.Common
         void CreateDependentDetails(int? headerID, IEnumerable<DependentDetailVM> documents);
         void CreateOrganizationalDetails(int? headerID, IEnumerable<OrganizationalDetailVM> organizationalDetails);
 
+        void SendEmailValidation(string emailMessages);
+
     }
 }

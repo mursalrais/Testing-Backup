@@ -6,16 +6,15 @@ using System.Threading.Tasks;
 using MCAWebAndAPI.Model.ViewModel.Control;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
-
+using MCAWebAndAPI.Model.Common;
 
 namespace MCAWebAndAPI.Model.HR.DataMaster
 {
-    public class PositionsMaster
+    public class PositionsMaster : Item
     {
-        public int ID { get; set; }
 
         [DisplayName("Position Name")]
-        public string Title { get; set; }
+        public string PositionName { get; set; }
 
         /*
         [UIHint("ComboBox")]

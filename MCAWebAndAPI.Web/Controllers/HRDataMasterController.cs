@@ -95,13 +95,13 @@ namespace MCAWebAndAPI.Web.Controllers
             return Json(positions.Select(e =>
                 new {
                     e.ID,
-                    e.Title,
+                    e.PositionName,
                     e.positionStatus,
                     e.PositionManpowerRequisitionApprover1,
                     e.positionManpowerRequisitionApprover2,
                     e.Remarks,
                     e.isKeyPosition,
-                    Desc = string.Format("{0}", e.Title)
+                    Desc = string.Format("{0}", e.PositionName)
                 }),
                 JsonRequestBehavior.AllowGet);
         }
@@ -115,7 +115,7 @@ namespace MCAWebAndAPI.Web.Controllers
             return Json(positions.Where(e => e.ID == id).Select(e =>
                 new {
                     e.ID,
-                    e.Title,
+                    e.PositionName,
                     e.positionStatus,
                     e.PositionManpowerRequisitionApprover1,
                     e.positionManpowerRequisitionApprover2,

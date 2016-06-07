@@ -13,6 +13,15 @@
     <fieldset>
         <legend>Personal Details</legend>
         <div class="row">
+            <div class="col-sm-6">
+                @Html.Bootstrap().LabelFor(m => m.Position).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.Position)
+                </div>
+                @Html.HiddenFor(m => m.ManpowerRequisitionID)
+            </div>
+        </div>
+        <div class="row">
             @Html.Partial("_PersonalDetails", Model)
         </div>
         <legend>Contact Information</legend>

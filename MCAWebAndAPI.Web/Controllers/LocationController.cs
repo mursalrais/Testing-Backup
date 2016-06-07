@@ -1,4 +1,5 @@
 ﻿using MCAWebAndAPI.Service.Common;
+using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;
 using System;
 using System.Collections.Generic;
@@ -24,7 +25,7 @@ namespace MCAWebAndAPI.Web.Controllers
         [OutputCache(Duration = (2 * 3600))]
         public JsonResult GetCountries()
         {
-            _locationService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            _locationService.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));
 
             var countries = _locationService.GetCountries();
 
@@ -36,7 +37,7 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         [OutputCache(Duration = (2 * 3600))]
-        public JsonResult GetProvince()
+        public JsonResult GetProvinces()
         {
             _locationService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
 
@@ -47,6 +48,61 @@ namespace MCAWebAndAPI.Web.Controllers
                 e.ID,
                 e.Title
             }), JsonRequestBehavior.AllowGet);
+        }
+
+        [OutputCache(Duration = (2 * 3600))]
+        public JsonResult GetParentLocations(string Level = null)
+        {
+            _locationService.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));
+
+            switch (Level)
+            {
+                case "Continent":
+                    var continents = _locationService.GetContinents();
+
+                    return Json(continents.Select(e => new
+                    {
+                        e.ID,
+                        e.Title
+                    }), JsonRequestBehavior.AllowGet);
+
+                case "Country":
+                    var countries = _locationService.GetContinents();
+
+                    return Json(countries.Select(e => new
+                    {
+                        e.ID,
+                        e.Title
+                    }), JsonRequestBehavior.AllowGet);
+
+                case "Province":
+                    var provinces = _locationService.GetCountries();
+
+                    return Json(provinces.Select(e => new
+                    {
+                        e.ID,
+                        e.Title
+                    }), JsonRequestBehavior.AllowGet);
+
+                case "City":
+                    var cities = _locationService.GetProvinces();
+
+                    return Json(cities.Select(e => new
+                    {
+                        e.ID,
+                        e.Title
+                    }), JsonRequestBehavior.AllowGet);
+            }
+            return new JsonResult
+            {
+                Data = new
+                {
+                    success = true,
+                    result = "Success",
+                    successMessage = MessageResource.SuccessCommon,
+                },
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
         }
 
     }

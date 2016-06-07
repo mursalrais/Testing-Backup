@@ -35,7 +35,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             var viewModel = _service.GetVacantPositions();
 
-            return View();
+            return View(viewModel);
         }
 
         public ActionResult DisplayApplicationData(string siteUrl = null, int? ID = null)
@@ -221,7 +221,7 @@ namespace MCAWebAndAPI.Web.Controllers
             return array;
         }
 
-        public ActionResult CreateApplicationData(string siteUrl = null)
+        public ActionResult CreateApplicationData(string siteUrl = null, int? ID = null, string position = null)
         {
             // Clear Existing Session Variables if any
             SessionManager.RemoveAll();
@@ -231,6 +231,8 @@ namespace MCAWebAndAPI.Web.Controllers
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             var viewModel = _service.GetApplication(null);
+            viewModel.Position = position;
+            viewModel.ManpowerRequisitionID = ID;
             return View(viewModel);
         }
     }

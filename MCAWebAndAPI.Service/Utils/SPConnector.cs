@@ -29,7 +29,7 @@ namespace MCAWebAndAPI.Service.Utils
             }
         }
 
-        internal static int GetInsertedItemID(string listName, string siteUrl = null, string caml = null)
+        internal static int GetLatestListItemID(string listName, string siteUrl = null, string caml = null)
         {
             string camlViewXml = caml ?? @"<View>  
             <Query> 

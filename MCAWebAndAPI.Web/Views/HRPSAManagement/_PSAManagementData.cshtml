@@ -60,7 +60,8 @@
         <div class="col-md-8">
             @Html.DisplayFor(m => m.PSAExpiryDate)
         </div>
-    </div>    
+    </div>
+    @Html.HiddenFor(m => m.DocumentType)    
 </div>
 
 @section scripts{

@@ -83,14 +83,17 @@
                     if (result[0].isKeyPosition == "Yes")
                     {
                         $('#KeyPosition').prop('value', "The Position is Key Position");
-                        $('#DocumentType_Value').data("kendoDropDownList").enable(false);
-                        $('#DocumentType_Value').data("kendoDropDownList").value("MCC No Objection Letter");
+                        $('#DocumentType').prop('value', "MCC No Objection Letter");
+
+                        //$('#DocumentType_Value').data("kendoDropDownList").enable(false);
+                        //$('#DocumentType_Value').data("kendoDropDownList").value("MCC No Objection Letter");
                     }
                     else
                     {
                         $('#KeyPosition').prop('value', "The Position is Not Key Position");
-                        $('#DocumentType_Value').prop('readonly', "false");
-                        $('#DocumentType_Value').prop('readonly', "PSA Document");
+                        $('#DocumentType').prop('value', "PSA Document");
+                        //$('#DocumentType_Value').prop('readonly', "false");
+                        //$('#DocumentType_Value').prop('readonly', "PSA Document");
                     }
                 })
             }

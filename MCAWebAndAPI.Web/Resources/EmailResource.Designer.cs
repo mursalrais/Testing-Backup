@@ -22,14 +22,14 @@ namespace MCAWebAndAPI.Web.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class ConfigResource {
+    public class EmailResource {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal ConfigResource() {
+        internal EmailResource() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace MCAWebAndAPI.Web.Resources {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MCAWebAndAPI.Web.Resources.ConfigResource", typeof(ConfigResource).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MCAWebAndAPI.Web.Resources.EmailResource", typeof(EmailResource).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,38 +61,11 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://eceos2.sharepoint.com/sites/mca-dev/ho.
+        ///   Looks up a localized string similar to Hi Dude, accept my professional data. Just click on &lt;a href=&quot;{0}&quot;&gt;this link&lt;/a&gt;! Accept it now or die!.
         /// </summary>
-        public static string DefaultBOSiteUrl {
+        public static string ProfessionalEmailValidation {
             get {
-                return ResourceManager.GetString("DefaultBOSiteUrl", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://eceos2.sharepoint.com/sites/mca-dev/hr.
-        /// </summary>
-        public static string DefaultHRSiteUrl {
-            get {
-                return ResourceManager.GetString("DefaultHRSiteUrl", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://eceos2.sharepoint.com/sites/mca-dev.
-        /// </summary>
-        public static string DefaultProgramSiteUrl {
-            get {
-                return ResourceManager.GetString("DefaultProgramSiteUrl", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to /List/PSA.
-        /// </summary>
-        public static string UrlPSA {
-            get {
-                return ResourceManager.GetString("UrlPSA", resourceCulture);
+                return ResourceManager.GetString("ProfessionalEmailValidation", resourceCulture);
             }
         }
     }

@@ -81,33 +81,43 @@
 
 <script>
     $(document).ready(function () {
-        var dropDownValue = $("#IDCardType_Value").val();
-        togleIDCardExpiry(dropDownValue);
+        var idCardDropDownValue = $("#IDCardType_Value").val();
+        toggleIDCardExpiry(idCardDropDownValue);
+
+        var nationalityDropDownList = $("#Nationality_Value").data("kendoDropDownList");
+        nationalityDropDownList.bind("dataBound", function (e) {
+            var nationalityDropDownValue = nationalityDropDownList.value();
+            toggleNationality(nationalityDropDownValue);
+        });
+
     });
 
-    function togleIDCardExpiry(idCardType) {
+    function toggleIDCardExpiry(idCardType) {
         if (idCardType == "KTP") {
             $('#IDCardExpiry').closest('.form-group').hide();
+        } else {
+            $('#IDCardExpiry').closest('.form-group').show();
+        }
+    }
+
+    function toggleNationality(nationality) {
+        if (nationality == "Indonesia") {
+            $('#IDCardExpiry').prop("value", "KTP");
+            toggleIDCardExpiry("KTP");
+            $('#IDCardExpiry').prop("readonly", "readonly");
+        } else {
+            $('#IDCardExpiry').prop("readonly", null);
         }
     }
 
     function onSelectIDCardType(e) {
         var dataItem = this.dataItem(e.item);
-        if (dataItem !== "KTP") {
-            $('#IDCardExpiry').closest('.form-group').show();
-        } else {
-            $('#IDCardExpiry').closest('.form-group').hide();
-        }
+        togleIDCardExpiry(dataItem);
     }
 
     function setIDCardTypeToKTP(e) {
         var dataItem = this.dataItem(e.item);
-        if (dataItem.Text == "Indonesia") {
-            $('#IDCardExpiry').prop("value", "KTP");
-            togleIDCardExpiry("KTP");
-            $('#IDCardExpiry').prop("readonly", "true");
-        } else {
-            $('#IDCardExpiry').prop("readonly", null);
-        }
+        var nationality = dataItem.Title;
+        toggleNationality(nationality);
     }
 </script>

@@ -13,10 +13,10 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
     public class TaskService : ITaskService
     {
         static Logger logger = LogManager.GetCurrentClassLogger();
-        const string SP_LIST_NAME = "Tasks";
+        const string SP_TASK_LIST_NAME = "Tasks";
         const string SP_PROJECT_INFORMATION_LIST_NAME = "Project Information";
         const string SP_ACTIVITY_LIST_NAME = "Activity";
-        const string SP_SUB_ACTIVITY_LIST_NAME = "SubActivity";
+        const string SP_SUB_ACTIVITY_LIST_NAME = "Sub Activity";
         string _siteUrl = null;
 
         /// <summary>
@@ -28,6 +28,71 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
             _baseLineTotal = new Dictionary<DateTime, int>();
             _planTotal = new Dictionary<DateTime, int>();
             _actualTotal = new Dictionary<DateTime, int>();
+        }
+
+        private double GetGroupPercentComplete(string groupName)
+        {
+            var caml = @"<View>  
+                <Query> 
+                    <Where><Eq><FieldRef Name='Title' /><Value Type='Text'>" + groupName + @"</Value></Eq></Where> 
+                </Query> 
+                    <ViewFields><FieldRef Name='Title' /><FieldRef Name='PercentComplete' /></ViewFields> 
+            </View>";
+
+            foreach (var item in SPConnector.GetList(SP_TASK_LIST_NAME, _siteUrl, caml))
+            {
+                return Convert.ToDouble(item["PercentComplete"]);
+            }
+            return 0;
+        }
+
+        private void CalculateSubActivity()
+        {
+            foreach (var item in SPConnector.GetList(SP_SUB_ACTIVITY_LIST_NAME, _siteUrl))
+            {
+                var subActivityID = Convert.ToInt32(item["ID"]);
+                var subActivityName = Convert.ToString(item["Title"]);
+                var subActivityPercentComplete = GetGroupPercentComplete(subActivityName);
+
+                var updatedValue = new Dictionary<string, object>();
+                updatedValue.Add("_x0025_Complete", subActivityPercentComplete);
+
+                try
+                {
+                    SPConnector.UpdateListItem(SP_SUB_ACTIVITY_LIST_NAME, subActivityID, updatedValue, _siteUrl);
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e);
+                    throw e;
+                }
+            }
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        private void CalculateActivity()
+        {
+            foreach (var item in SPConnector.GetList(SP_ACTIVITY_LIST_NAME, _siteUrl))
+            {
+                var activityID = Convert.ToInt32(item["ID"]);
+                var activityName = Convert.ToString(item["Title"]);
+                var activityPercentComplete = GetGroupPercentComplete(activityName);
+
+                var updatedValue = new Dictionary<string, object>();
+                updatedValue.Add("PercentComplete", activityPercentComplete);
+
+                try
+                {
+                    SPConnector.UpdateListItem(SP_ACTIVITY_LIST_NAME, activityID, updatedValue, _siteUrl);
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e);
+                    throw e;
+                }
+            }
         }
 
         /// <summary>
@@ -120,7 +185,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
             var allTaskListItems = new Dictionary<int, Task>();
 
             // Retrieve all SP List and copy to in-memory objects
-            foreach (var item in SPConnector.GetList(SP_LIST_NAME, _siteUrl))
+            foreach (var item in SPConnector.GetList(SP_TASK_LIST_NAME, _siteUrl))
             {
                 var taskItem = ConvertToModel(item);
                 allTaskListItems.Add(taskItem.Id, taskItem);
@@ -144,9 +209,61 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
                 PushToParentPercentCompleteArray(taskItem);
             }
 
-            CalculatePercentComplete();
-            UpdateSummaryTaskAfterCalculation();
-            UpdateProjectInformation();
+            try
+            {
+                CalculatePercentComplete();
+            }
+            catch (Exception e)
+            {
+                logger.Error(e);
+                throw e;
+            }
+            logger.Info("CalculatePercentComplete has been fired at " + DateTime.Now);
+
+            try
+            {
+                UpdateSummaryTaskAfterCalculation();
+            }
+            catch (Exception e)
+            {
+                logger.Error(e);
+                throw e;
+            }
+            logger.Info("UpdateSummaryTaskAfterCalculation has been fired at " + DateTime.Now);
+
+            try
+            {
+                CalculateSubActivity();
+            }
+            catch (Exception e)
+            {
+                logger.Error(e);
+                throw e;
+            }
+            logger.Info("CalculateSubActivity has been fired at " + DateTime.Now);
+
+            try
+            {
+                CalculateActivity();
+            }
+            catch (Exception e)
+            {
+                logger.Error(e);
+                throw e;
+            }
+            logger.Info("CalculateActivity has been fired at " + DateTime.Now);
+
+            try
+            {
+                UpdateProjectInformation();
+            }
+            catch (Exception e)
+            {
+                logger.Error(e);
+                throw e;
+            }
+            logger.Info("UpdateProjectInformation has been fired at " + DateTime.Now);
+
 
             var numberOfUpdatedTask = _updatedTaskCandidates.Values.Count(e => e.ShouldBeUpdated);
             // return number of summary tasks that have been updated
@@ -159,11 +276,12 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
             var mainTaskItem = _updatedTaskCandidates.Values.FirstOrDefault(e => e.TaskValue.ParentId == 0);
 
             updatedColumns["Title"] = mainTaskItem.TaskValue.Title;
-            updatedColumns["PercentComplete"] = mainTaskItem.TaskValue.PercentComplete;
+            updatedColumns["_x0025__x0020_Complete"] = mainTaskItem.TaskValue.PercentComplete;
 
+            var latestID = SPConnector.GetLatestListItemID(SP_PROJECT_INFORMATION_LIST_NAME, _siteUrl);
             try
             {
-                SPConnector.UpdateListItem(SP_PROJECT_INFORMATION_LIST_NAME, 1, updatedColumns, _siteUrl);
+                SPConnector.UpdateListItem(SP_PROJECT_INFORMATION_LIST_NAME, latestID, updatedColumns, _siteUrl);
             }
             catch (Exception e)
             {
@@ -309,37 +427,37 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
                     if (item.GetFlag(TaskChangeFlagEnum.START_DATE))
                     {
                         updatedValues.Add("StartDate", item.TaskValue.StartDate);
-                        logger.Error(item.TaskValue.Id + ": Update " + TaskChangeFlagEnum.START_DATE.ToString() + " to " + item.TaskValue.StartDate);
+                        logger.Error(item.TaskValue.Id + ": Update " + TaskChangeFlagEnum.START_DATE + " to " + item.TaskValue.StartDate);
                     }
                     if (item.GetFlag(TaskChangeFlagEnum.DUE_DATE))
                     {
                         updatedValues.Add("DueDate", item.TaskValue.DueDate);
-                        logger.Error(item.TaskValue.Id + ": Update " + TaskChangeFlagEnum.START_DATE.ToString() + " to " + item.TaskValue.DueDate);
+                        logger.Error(item.TaskValue.Id + ": Update " + TaskChangeFlagEnum.START_DATE + " to " + item.TaskValue.DueDate);
                     }
                     if (item.GetFlag(TaskChangeFlagEnum.PERCENT_COMPLETE))
                     {
                         updatedValues.Add("PercentComplete", item.TaskValue.PercentComplete);
-                        logger.Error(item.TaskValue.Id + ": Update " + TaskChangeFlagEnum.PERCENT_COMPLETE.ToString() + " to " + item.TaskValue.PercentComplete);
+                        logger.Error(item.TaskValue.Id + ": Update " + TaskChangeFlagEnum.PERCENT_COMPLETE + " to " + item.TaskValue.PercentComplete);
                     }
                     if (item.GetFlag(TaskChangeFlagEnum.DURATION))
                     {
                         updatedValues.Add("Duration", item.TaskValue.Duration);
-                        logger.Error(item.TaskValue.Id + ": Update " + TaskChangeFlagEnum.DURATION.ToString() + " to " + item.TaskValue.Duration);
+                        logger.Error(item.TaskValue.Id + ": Update " + TaskChangeFlagEnum.DURATION + " to " + item.TaskValue.Duration);
                     }
                     if (item.GetFlag(TaskChangeFlagEnum.MILESTONE))
                     {
                         updatedValues.Add("Milestone", item.TaskValue.IsMilestone);
-                        logger.Error(item.TaskValue.Id + ": Update " + TaskChangeFlagEnum.MILESTONE.ToString() + " to " + item.TaskValue.IsMilestone);
+                        logger.Error(item.TaskValue.Id + ": Update " + TaskChangeFlagEnum.MILESTONE + " to " + item.TaskValue.IsMilestone);
                     }
                     if (item.GetFlag(TaskChangeFlagEnum.SUMMARY))
                     {
                         updatedValues.Add("Summary", item.TaskValue.IsSummaryTask);
-                        logger.Error(item.TaskValue.Id + ": Update " + TaskChangeFlagEnum.SUMMARY.ToString() + " to " + item.TaskValue.IsSummaryTask);
+                        logger.Error(item.TaskValue.Id + ": Update " + TaskChangeFlagEnum.SUMMARY + " to " + item.TaskValue.IsSummaryTask);
                     }
 
                     // Update to SharePoint
                     try {
-                        SPConnector.UpdateListItem(SP_LIST_NAME, item.TaskValue.Id, updatedValues, _siteUrl);
+                        SPConnector.UpdateListItem(SP_TASK_LIST_NAME, item.TaskValue.Id, updatedValues, _siteUrl);
                     }
                     catch(Exception e)
                     {
@@ -355,7 +473,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
         public void UpdateTodayValue()
         {
             Dictionary<string, object> UpdateTodayValue = new Dictionary<string, object>();
-            var AllListItem = SPConnector.GetList(SP_LIST_NAME, _siteUrl);
+            var AllListItem = SPConnector.GetList(SP_TASK_LIST_NAME, _siteUrl);
             double days;
 
             foreach (var item in AllListItem)
@@ -371,7 +489,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
                     else
                         UpdateTodayValue["Today"] = days;
 
-                    SPConnector.UpdateListItem(SP_LIST_NAME, item.Id, UpdateTodayValue, _siteUrl);
+                    SPConnector.UpdateListItem(SP_TASK_LIST_NAME, item.Id, UpdateTodayValue, _siteUrl);
                 }
             }
         }
@@ -386,7 +504,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
         
         public Task Get(string title)
         {
-            var tasks = SPConnector.GetList(SP_LIST_NAME, _siteUrl);
+            var tasks = SPConnector.GetList(SP_TASK_LIST_NAME, _siteUrl);
             var task = tasks.First(e => title.Equals(Convert.ToString(e["Title"])));
             return new Task
             {
@@ -399,7 +517,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
         {
             List<Task> result = new List<Task>();
 
-            foreach (var item in SPConnector.GetList(SP_LIST_NAME, _siteUrl))
+            foreach (var item in SPConnector.GetList(SP_TASK_LIST_NAME, _siteUrl))
             {
                 result.Add(ConvertToModel(item));
             }
@@ -411,7 +529,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
         {
             List<Task> result = new List<Task>();
 
-            foreach (var item in SPConnector.GetList(SP_LIST_NAME, _siteUrl))
+            foreach (var item in SPConnector.GetList(SP_TASK_LIST_NAME, _siteUrl))
             {
                 result.AddRange(ConvertToModels(item));
             }
@@ -445,7 +563,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
         {
             var result = new List<GanttTasksVM>();
             var order = 0;
-            foreach (var item in SPConnector.GetList(SP_LIST_NAME, _siteUrl))
+            foreach (var item in SPConnector.GetList(SP_TASK_LIST_NAME, _siteUrl))
             {
                 result.Add(ConvertToGanttTaskVM(item, order++));
             }
@@ -501,7 +619,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
         public IEnumerable<ProjectScheduleSCurveVM> GenerateProjectScheduleSCurveChart()
         {
             // Populate each dictionary
-            foreach (var item in SPConnector.GetList(SP_LIST_NAME, _siteUrl))
+            foreach (var item in SPConnector.GetList(SP_TASK_LIST_NAME, _siteUrl))
             {
                 if (!Convert.ToBoolean(item["Summary"]) && !Convert.ToBoolean(item["Milestone"]))
                 {
@@ -588,7 +706,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
         public IEnumerable<ProjectStatusBarChartVM> GenerateProjectStatusBarChart()
         {
-            var list = SPConnector.GetList(SP_LIST_NAME, _siteUrl);
+            var list = SPConnector.GetList(SP_TASK_LIST_NAME, _siteUrl);
             var result = new List<ProjectStatusBarChartVM>();
 
             foreach (var item in list)
