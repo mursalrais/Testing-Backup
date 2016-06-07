@@ -190,7 +190,7 @@ namespace MCAWebAndAPI.Web.Controllers
                     new
                     {
                         e.ID,
-                        e.RenewalNumber
+                        e.PSARenewalNumber
                     }
                 ), JsonRequestBehavior.AllowGet);
         }
@@ -198,11 +198,11 @@ namespace MCAWebAndAPI.Web.Controllers
         private IEnumerable<PSAManagementVM> GetRenewalNumberFromExistingSession(int? id)
         {
             //Get existing session variable
-            var sessionVariable = System.Web.HttpContext.Current.Session["RenewalNumber"] as IEnumerable<PSAManagementVM>;
+            var sessionVariable = System.Web.HttpContext.Current.Session["PSARenewalNumber"] as IEnumerable<PSAManagementVM>;
             var renewalNumber = sessionVariable ?? psaManagementService.GetRenewalNumber(id);
 
             if (sessionVariable == null) // If no session variable is found
-                System.Web.HttpContext.Current.Session["RenewalNumber"] = renewalNumber;
+                System.Web.HttpContext.Current.Session["PSARenewalNumber"] = renewalNumber;
             return renewalNumber;
         }
 
