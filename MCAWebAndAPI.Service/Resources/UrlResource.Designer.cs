@@ -88,6 +88,15 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lists/Location%20Master.
+        /// </summary>
+        public static string PlaceMaster {
+            get {
+                return ResourceManager.GetString("PlaceMaster", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lists/Professional Master.
         /// </summary>
         public static string Professional {

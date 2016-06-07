@@ -112,6 +112,8 @@
     <Compile Include="Converter\PDFConverter.cs" />
     <Compile Include="Finance\EventBudgetService.cs" />
     <Compile Include="Finance\IEventBudgetService.cs" />
+    <Compile Include="HR\Travel\ITRPlaceMasterService.cs" />
+    <Compile Include="HR\Travel\TRPlaceMasterService.cs" />
     <Compile Include="HR\Recruitment\HRManpowerRequisitionService.cs" />
     <Compile Include="HR\Recruitment\HRApplicationService.cs" />
     <Compile Include="HR\Common\HRDataMasterService.cs" />
@@ -155,7 +157,6 @@
   <ItemGroup>
     <Folder Include="ContractProcurement\" />
     <Folder Include="HR\Leave\" />
-    <Folder Include="HR\Travel\" />
     <Folder Include="ProjectManagement\Finance\" />
     <Folder Include="ProjectManagement\Result\" />
   </ItemGroup>

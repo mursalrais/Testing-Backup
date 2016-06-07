@@ -51,7 +51,7 @@ namespace MCAWebAndAPI.Web.Controllers
             return View("CreatePSAManagement", viewModel);
         }
 
-        
+
         public ActionResult DisplayPSAManagement(string siteUrl = null, int? ID = null)
         {
             // Clear Existing Session Variables if any
@@ -132,7 +132,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 };
             }
 
-            
+
             return RedirectToAction("Index",
                 "Success",
                 new { successMessage = string.Format(MessageResource.SuccessUpdatePSAManagementData, psaManagement.PSANumber) });
@@ -142,11 +142,14 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             psaManagementService.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));
             var professionals = GetFromExistingSession();
-            return Json(professionals.OrderByDescending(e => e.PSAID).Where(e => e.ID == id).Select(
+            foreach (var item in professionals)
+            {
+                if (id == item.ID)
+                {
+                    return Json(professionals.Where(e => e.ID == id).OrderByDescending(e => e.DateOfNewPSA).Select(
                     e =>
                     new
                     {
-                        e.PSAID,
                         e.ID,
                         e.JoinDate,
                         e.DateOfNewPSA,
@@ -155,6 +158,21 @@ namespace MCAWebAndAPI.Web.Controllers
                         e.Position
                     }
                 ), JsonRequestBehavior.AllowGet);
+                }
+            }
+
+            return new JsonResult
+            {
+                Data = new
+                {
+                    errorMessage = "Error",
+                },
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+            //return new JsonResult()
+            //{
+            //    Data = new { result = "Error" }
+            //};
         }
 
         private IEnumerable<PSAMaster> GetFromExistingSession()

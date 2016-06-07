@@ -13,8 +13,8 @@ namespace MCAWebAndAPI.Service.Common
 
         IEnumerable<Location> GetCountries(int? parentId = null);
 
-        IEnumerable<Location> GetProvinces(int? parentId = null);
+        IEnumerable<Location> GetContinents(int? parentId = null);
 
-        IEnumerable<Location> GetCities(int? parentId = null);
+        IEnumerable<Location> GetProvinces(int? parentId = null);
     }
 }
