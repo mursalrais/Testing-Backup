@@ -119,7 +119,6 @@ namespace MCAWebAndAPI.Web.Controllers
             return RedirectToAction("Index",
                 "Success",
                 new { successMessage = string.Format(MessageResource.SuccessCreatePSAManagementData, viewModel.PSANumber) });
-
         }
 
         public ActionResult UpdatePSAManagement(PSAManagementVM psaManagement, string site)

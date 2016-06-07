@@ -223,6 +223,16 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             foreach (var doc in documents)
             {
                 var updateValue = new Dictionary<string, object>();
+
+                if (doc.FileName.IndexOf("MCC") >= 0)
+                {
+                    psaManagmement.DocumentType = "MCC No Objection Letter";
+                }
+                else
+                {
+                    psaManagmement.DocumentType = "PSA Document";
+                }
+                
                 updateValue.Add("psa", new FieldLookupValue { LookupId = Convert.ToInt32(psaID) });
                 updateValue.Add("documenttype", psaManagmement.DocumentType);
 
