@@ -89,6 +89,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// AnnualFee
         /// </summary>
+        [UIHint("Integer")]
         public int AnnualFee { get; set; }
 
         /// <summary>

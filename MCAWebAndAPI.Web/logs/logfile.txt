@@ -52,3 +52,7 @@ Parameter name: source
 2016-06-07 09:41:36.5911 MCAWebAndAPI.Service.HR.Travel.TRPlaceMasterService The 'sId' argument is invalid.
 2016-06-07 09:44:47.5236 MCAWebAndAPI.Service.HR.Travel.TRPlaceMasterService The 'sId' argument is invalid.
 2016-06-07 09:50:22.0689 MCAWebAndAPI.Service.HR.Travel.TRPlaceMasterService The 'sId' argument is invalid.
+2016-06-07 10:28:24.3241 MCAWebAndAPI.Service.Converter.CSVConverter System.IndexOutOfRangeException: Index was outside the bounds of the array.
+   at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in D:\Reza F. Fikri\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64
+2016-06-07 10:28:37.7531 MCAWebAndAPI.Service.Converter.CSVConverter System.IndexOutOfRangeException: Index was outside the bounds of the array.
+   at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in D:\Reza F. Fikri\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64

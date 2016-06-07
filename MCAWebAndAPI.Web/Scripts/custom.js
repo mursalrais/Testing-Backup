@@ -69,7 +69,6 @@ function printForm(e) {
 }
 
 $('#remoteModal').on('hidden.bs.modal', function () {
-    location.reload();
 })
 
 // To put all necessary functions triggerd when document is loaded 

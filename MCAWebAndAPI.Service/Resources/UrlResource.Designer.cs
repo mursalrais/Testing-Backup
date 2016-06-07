@@ -79,7 +79,7 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lists/MonthlyFee.
+        ///   Looks up a localized string similar to /Lists/MonthlyFee.
         /// </summary>
         public static string MonthlyFee {
             get {
@@ -88,7 +88,7 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lists/Location%20Master.
+        ///   Looks up a localized string similar to /Lists/Location%20Master.
         /// </summary>
         public static string PlaceMaster {
             get {

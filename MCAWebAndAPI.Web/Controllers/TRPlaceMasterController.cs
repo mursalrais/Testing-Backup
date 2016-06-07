@@ -94,7 +94,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             _tRPlaceMasterService.UpdateHeader(_data);
 
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.MonthlyFee);
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.PlaceMaster);
         }
 
         // GET: TRPlaceMaster
