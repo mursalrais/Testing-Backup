@@ -34,7 +34,7 @@ namespace MCAWebAndAPI.Service.HR.Travel
                 logger.Error(e.Message);
             }
 
-            return SPConnector.GetInsertedItemID(SP_HEADER_LIST_NAME, _siteUrl);
+            return SPConnector.GetLatestListItemID(SP_HEADER_LIST_NAME, _siteUrl);
         }
 
         public PlaceMasterVM GetHeader(int ID)
