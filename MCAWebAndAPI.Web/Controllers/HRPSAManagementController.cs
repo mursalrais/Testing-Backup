@@ -191,7 +191,8 @@ namespace MCAWebAndAPI.Web.Controllers
                     {
                         e.ID,
                         e.PSARenewalNumber,
-                        e.PSAExpiryDate
+                        e.ExpiryDateBefore
+                        //e.PSAExpiryDate
                     }
                 ), JsonRequestBehavior.AllowGet);
         }

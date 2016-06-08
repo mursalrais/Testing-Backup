@@ -61,11 +61,11 @@
 
                 var dateOfNewPSA = $("#DateOfNewPSA").val();
 
-                var datenewpsa = new Date(dateOfNewPSA);
-                var datenewpsainsecond = datenewpsa.getTime();
+                //var datenewpsa = new Date(dateOfNewPSA);
+                //var datenewpsainsecond = datenewpsa.getTime();
 
-                console.log(dateOfNewPSA);
-                console.log(datenewpsainsecond);
+                //console.log(dateOfNewPSA);
+                //console.log(datenewpsainsecond);
 
                 if ($("#IsRenewal_Value").val() == "Yes")
                 {
@@ -73,17 +73,45 @@
                     var url = "/HRPSAManagement/GetRenewal/" + dataItem.ID;
 
                     $.getJSON(url, function (result) {
-                        console.log(result);
+                        //console.log(result);
                         var renewalnumber = result[0].PSARenewalNumber + 1;
 
                         //var expirydate = result[0].PSAExpiryDate;
+                        var expirydatebefore = result[0].ExpiryDateBefore
+                        var expdate = new Date(expirydatebefore);
 
+                        var dateexpdate = expdate.getDate();
+                        var dateexpdateint = parseInt(dateexpdate);
+
+                        var calcexpdate = dateexpdateint + 1;
+
+                        var setexpdate = new Date(expdate.setDate(calcexpdate));
+                        var expirydate = setexpdate.getMonth() + 1 + '/' + setexpdate.getDate() + '/' + setexpdate.getFullYear();
                         //var testdate = new Date(expirydate);
 
-                        //console.log(expirydate);
+                        console.log(expirydate);
 
                         $('#PSARenewalNumber').prop('value', renewalnumber);
                         $('#PSARenewalNumber').prop('readonly', true);
+                        $('#ExpiryDateBefore').prop('value', expirydate);
+
+                        $("#DateOfNewPSA").data("kendoDatePicker").min(expirydate);
+
+
+                        var dateOfNewPSA = $("#DateOfNewPSA").val();
+                        var dateofnewpsa = new Date(dateOfNewPSA);
+                        var monthpsa = dateofnewpsa.getMonth();
+                        var monthint = parseInt(monthpsa);
+                        var datepsa = dateofnewpsa.getDate();
+
+                        var tenure = $("#Tenure").val();
+                        var tenureint = parseInt(tenure);
+                        var addtenure = tenureint + monthint;
+
+                        var setmonth = new Date(dateofnewpsa.setMonth(addtenure));
+
+                        var psaexpirydate = setmonth.getMonth() + 1 + '/' + setmonth.getDate() + '/' + setmonth.getFullYear();
+                        $("#PSAExpiryDate").val(psaexpirydate);
 
                         /*
                         if (datenewpsainsecond < expirydate)

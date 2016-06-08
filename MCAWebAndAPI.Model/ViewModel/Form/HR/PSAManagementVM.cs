@@ -135,7 +135,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [DisplayName("PSA Expiry Date")]
         public DateTime? PSAExpiryDate { get; set; } = DateTime.Now;
 
-        //public string expiry { get; set; }
+        public string ExpiryDateBefore { get; set; }
 
         /*
         [UIHint("Date")]

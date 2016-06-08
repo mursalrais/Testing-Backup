@@ -48,7 +48,14 @@
     <div class="form-group">
         @Html.Bootstrap().LabelFor(m => m.DateOfNewPSA).Class("col-md-4 control-label")
         <div class="col-md-8">
-            @Html.EditorFor(m => m.DateOfNewPSA)
+            @*@Html.EditorFor(m => m.DateOfNewPSA)*@
+            @(Html.Kendo().DatePickerFor(m => m.DateOfNewPSA).HtmlAttributes(new
+        {
+            @class = "form-control",
+            style = "width:100%;"
+        }))
+            @Html.ValidationMessageFor(model => model.DateOfNewPSA)
+
         </div>
     </div>
     <div class="form-group">
@@ -63,7 +70,17 @@
             @Html.DisplayFor(m => m.PSAExpiryDate)
         </div>
     </div>
+    @*
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.ExpiryDateBefore).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.DisplayFor(m => m.ExpiryDateBefore)
+        </div>
+    </div>
+    *@
     @Html.HiddenFor(m => m.DocumentType)    
+    @Html.HiddenFor(m => m.ExpiryDateBefore)
+    
 </div>
 
 @section scripts{
@@ -124,6 +141,7 @@
                 }
             });
 
+        /*
             function OnSelectAssetHolderFrom(e) {
                 var dataItem = this.dataItem(e.item);
 
@@ -165,6 +183,7 @@
 
 
             }
+            */
             
     </script>
 }
