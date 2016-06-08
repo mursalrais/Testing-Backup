@@ -120,4 +120,7 @@
   <data name="ProfessionalEmailValidation" xml:space="preserve">
     <value>Hi Dude, accept my professional data. Just click on &lt;a href="{0}"&gt;this link&lt;/a&gt;! Accept it now or die!</value>
   </data>
+  <data name="ProfessionalEmailValidationResponse" xml:space="preserve">
+    <value>Hi Bro, your professional data has been {0}.</value>
+  </data>
 </root>

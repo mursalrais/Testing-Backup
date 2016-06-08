@@ -59,7 +59,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// </summary>
         public int? ManpowerRequisitionID { get; set; }
 
-
         /// <summary>
         /// lastname
         /// </summary>
