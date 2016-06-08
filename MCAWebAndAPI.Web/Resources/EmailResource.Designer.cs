@@ -68,5 +68,14 @@ namespace MCAWebAndAPI.Web.Resources {
                 return ResourceManager.GetString("ProfessionalEmailValidation", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hi Bro, your professional data has been {0}..
+        /// </summary>
+        public static string ProfessionalEmailValidationResponse {
+            get {
+                return ResourceManager.GetString("ProfessionalEmailValidationResponse", resourceCulture);
+            }
+        }
     }
 }
