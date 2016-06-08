@@ -428,6 +428,7 @@
     <None Include="job_scheduling_data_2_0.xsd">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="JSLintNet.json" />
     <None Include="Properties\PublishProfiles\host.my-epmo.com.pubxml" />
     <None Include="Properties\PublishProfiles\mcaims-dev - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\mcaims-dev - Web Deploy.pubxml" />
@@ -563,7 +564,6 @@
     <Content Include="Views\Shared\EditorTemplates\PhoneNumber.cshtml" />
     <Content Include="Views\HRDataMaster\CreateProfessionalData.cshtml" />
     <Content Include="Views\HRApplication\CreateApplicationData.cshtml" />
-    <Content Include="Views\HRApplication\_PersonalDetails.cshtml" />
     <Content Include="Views\HRApplication\_ContactInformationDetails.cshtml" />
     <Content Include="Views\HRApplication\_SpecializationDetails.cshtml" />
     <Content Include="Views\HRApplication\_WorkingExperienceDetails.cshtml" />
@@ -592,8 +592,6 @@
     <Content Include="Views\Shared\DisplayTemplates\TextArea.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\Time.cshtml" />
     <Content Include="Views\CalendarEvent\Create.cshtml" />
-    <Content Include="Views\CSV\Create.cshtml" />
-    <Content Include="Views\CSV\Submit.cshtml" />
     <Content Include="Views\HRPayroll\CreateMonthlyFee.cshtml" />
     <Content Include="Views\HRPayroll\EditMonthlyFee.cshtml" />
     <Content Include="Views\HRPSAManagement\CreatePSAManagement.cshtml" />
@@ -616,7 +614,6 @@
     <Content Include="Views\Success\Index.cshtml" />
     <Content Include="Views\HRProfessional\EditProfessional.cshtml" />
     <Content Include="Views\HRProfessional\_ContactInformationDetails.cshtml" />
-    <Content Include="Views\HRProfessional\_PersonalDetails.cshtml" />
     <Content Include="Views\Shared\_EducationDetails.cshtml" />
     <Content Include="Views\HRProfessional\_InsuranceDetails.cshtml" />
     <Content Include="Views\HRProfessional\_PayrollDetails.cshtml" />
@@ -653,7 +650,10 @@
     <Content Include="Views\HRManpowerRequisition\_OtherRequirementsDisp.cshtml" />
     <Content Include="Views\HRManpowerRequisition\_ResourcesAndPlanningDisp.cshtml" />
     <Content Include="Views\HRManpowerRequisition\_SpecificexperienceDisp.cshtml" />
-    <Content Include="Views\HRManpowerRequisition\_WorkingRelationship - Copy.cshtml" />
+    <Content Include="Views\CSV\Upload.cshtml" />
+    <Content Include="Views\CSV\_DisplayGrid.cshtml" />
+    <Content Include="Views\HRApplication\ListVacantPositions.cshtml" />
+    <Content Include="Views\Shared\_PersonalDetails.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -719,6 +719,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ConfigResource.resx</DependentUpon>
     </Compile>
+    <Compile Include="Resources\EmailResource.Designer.cs" />
     <Compile Include="Resources\MessageResource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -768,6 +769,7 @@
       <LastGenOutput>ConfigResource.Designer.cs</LastGenOutput>
       <CustomToolNamespace>MCAWebAndAPI.Web.Resources</CustomToolNamespace>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\EmailResource.resx" />
     <EmbeddedResource Include="Resources\MessageResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>MessageResource.Designer.cs</LastGenOutput>
