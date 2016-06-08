@@ -95,6 +95,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 string.Format("{0}/{1}", siteUrl, UrlResource.Professional));
         }
 
+
         private IEnumerable<ShortlistDetailVM> BindShortlistDetails(FormCollection form,
            IEnumerable<ShortlistDetailVM> shortDetails)
         {
