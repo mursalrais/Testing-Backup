@@ -25,6 +25,7 @@ namespace MCAWebAndAPI.Service.JobSchedulers.Schedulers
                 scheduler.SchedulerName, DateTime.Now.ToLongDateString(), siteUrl));
 
             IJobDetail job = JobBuilder.Create<TaskCalculationJob>()
+                .WithIdentity("calculate-task-insite-" + siteUrl)
                 .UsingJobData("site-url", siteUrl) // passing variable
                 .Build();
 

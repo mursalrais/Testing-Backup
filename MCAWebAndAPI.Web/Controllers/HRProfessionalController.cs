@@ -1,6 +1,4 @@
-﻿using Elmah;
-using MCAWebAndAPI.Model.ViewModel.Control;
-using MCAWebAndAPI.Model.ViewModel.Form.HR;
+﻿using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using MCAWebAndAPI.Service.HR.Common;
 using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Web.Helpers;
@@ -9,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 
 namespace MCAWebAndAPI.Web.Controllers
@@ -33,6 +30,7 @@ namespace MCAWebAndAPI.Web.Controllers
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             var viewModel = _service.GetProfessionalData(ID);
+            ViewBag.IsHRView = true;
             return View(viewModel);
         }
 
@@ -49,7 +47,8 @@ namespace MCAWebAndAPI.Web.Controllers
             if (viewModel == null)
                 return RedirectToAction("Index", "Error", new { errorMessage = 
                     string.Format(MessageResource.ErrorProfessionalNotFound, username)});
-     
+
+            ViewBag.IsHRView = false;
             return View("EditProfessional", viewModel);
         }
 
@@ -95,7 +94,6 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
-
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
@@ -123,8 +121,26 @@ namespace MCAWebAndAPI.Web.Controllers
 
             try
             {
-                _service.SendEmailValidation(string.Format(EmailResource.ProfessionalEmailValidation,
-                    string.Format(UrlResource.ProfessionalDisplayByID, siteUrl, headerID)));
+                //TODO: To change with service retriving email from professional 
+                switch (viewModel.ValidationAction)
+                {
+                    case "ask-hr-to-validate-action":
+                        _service.SendEmailValidation(
+                            "randi.prayengki@eceos.com",
+                            string.Format(EmailResource.ProfessionalEmailValidation,
+                            string.Format(UrlResource.ProfessionalDisplayByID, siteUrl, headerID)));
+                        break;
+                    case "approve-action":
+                        _service.SendEmailValidation(
+                            "mariani.yosefi@eceos.com",
+                            string.Format(EmailResource.ProfessionalEmailValidationResponse), isApproved: true);
+                        break;
+                    case "reject-action":
+                        _service.SendEmailValidation(
+                            "mariani.yosefi@eceos.com",
+                            string.Format(EmailResource.ProfessionalEmailValidationResponse), isApproved: false);
+                        break;
+                }
             }
             catch (Exception e)
             {

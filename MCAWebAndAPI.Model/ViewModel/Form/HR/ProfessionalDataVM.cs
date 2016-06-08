@@ -1,4 +1,5 @@
 ﻿using MCAWebAndAPI.Model.ViewModel.Control;
+using MCAWebAndAPI.Model.Common;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,6 +9,14 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
     public class ProfessionalDataVM : ApplicationDataVM
     {
+        /// <summary>
+        /// datavalidationstatus
+        /// </summary>
+        public string ValidationStatus { get; set; } = 
+            Workflow.GetProfessionalValidationStatus(Workflow.ProfessionalValidationStatus.VALIDATED);
+
+        public string ValidationAction { get; set; }
+
         /// <summary>
         /// emergencynumber
         /// </summary>

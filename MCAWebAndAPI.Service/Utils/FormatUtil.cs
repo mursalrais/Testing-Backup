@@ -120,6 +120,15 @@ namespace MCAWebAndAPI.Service.Utils
             return new DateTime(year: yearInt, month: 1, day: 1);    
         }
 
+        public static AjaxComboBoxVM ConvertToInGridAjaxLookup(ListItem item, string columnName)
+        {
+            return new AjaxComboBoxVM
+            {
+                Text = (item[columnName] as FieldLookupValue).LookupValue,
+                Value = (item[columnName] as FieldLookupValue).LookupId
+            };
+        }
+
         /// <summary>
         /// Populate updated value based on given datatable
         /// </summary>
@@ -142,12 +151,13 @@ namespace MCAWebAndAPI.Service.Utils
 
             if (lookup)
             {
+                // Means not filled
+                if ((int)columnValue <= 0)
+                    return;
+
                 columnTechnicalName = columnTechnicalName.Split('_')[0];
                 updatedValue.Add(columnTechnicalName,
-                    new FieldLookupValue
-                    {
-                        LookupId = Convert.ToInt32(columnValue)
-                    });
+                    new FieldLookupValue {LookupId = (int)columnValue });
                 return;
             }
 
@@ -160,8 +170,17 @@ namespace MCAWebAndAPI.Service.Utils
                     updatedValue.Add(columnTechnicalName, Convert.ToString(columnValue));
                     break;
                 case "System.DateTime":
-                    updatedValue.Add(columnTechnicalName, Convert.ToDateTime(columnValue));
-                    break;
+                    try
+                    {
+                        var dateTimeValue = DateTime.ParseExact((string)columnValue, "DD-MM-YYYY",
+                            System.Globalization.CultureInfo.InvariantCulture);
+                        updatedValue.Add(columnTechnicalName, dateTimeValue);
+                        break;
+                    }
+                    catch (Exception e)
+                    {
+                        throw e;
+                    }
             }
         }
     }

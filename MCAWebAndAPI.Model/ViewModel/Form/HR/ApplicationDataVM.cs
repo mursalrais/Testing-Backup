@@ -28,7 +28,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// </summary>
         public string ApplicationStatus { get; set; }
 
-
         [UIHint("MultiFileUploader")]
         public IEnumerable<HttpPostedFileBase> Documents { get; set; } = new List<HttpPostedFileBase>();
 
@@ -59,7 +58,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// manpowerrequisition
         /// </summary>
         public int? ManpowerRequisitionID { get; set; }
-
 
         /// <summary>
         /// lastname

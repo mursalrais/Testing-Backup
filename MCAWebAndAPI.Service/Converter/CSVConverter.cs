@@ -88,7 +88,16 @@ namespace MCAWebAndAPI.Service.Converter
                         if (string.Compare(col.ColumnName, "ID", StringComparison.OrdinalIgnoreCase) == 0)
                             row[col.ColumnName] = indexID++;
                         else
-                            row[col.ColumnName] = csv.GetField(col.DataType, i);
+                        {
+                            try
+                            {
+                                row[col.ColumnName] = csv.GetField(col.DataType, i);
+                            }
+                            catch (Exception e)
+                            {
+                                row[col.ColumnName] = -1;
+                            }
+                        }
                     }
 
                     dataTable.Rows.Add(row);
@@ -135,7 +144,7 @@ namespace MCAWebAndAPI.Service.Converter
 
             var updatedValues = new Dictionary<string, object>();
             // Start from 1 since 0 is header 
-            for (int i = 1; i < rowTotal; i++)
+            for (int i = 0; i < rowTotal; i++)
             {
                 for (int j = 0; j < columnTotal; j++)
                 {

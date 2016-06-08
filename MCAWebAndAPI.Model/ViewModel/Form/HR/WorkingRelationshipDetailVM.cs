@@ -12,73 +12,112 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
     {
         [UIHint("InGridAjaxComboBox")]
         public AjaxComboBoxVM PositionWorking { get; set; } = new AjaxComboBoxVM();
-                
+
         public static AjaxComboBoxVM GetPositionDefaultValue(AjaxComboBoxVM model = null)
         {
-            return new AjaxComboBoxVM() {};
+            if (model == null)
+            {
+                return new AjaxComboBoxVM();
+            }
+            else
+            {
+                return model;
+
+            };
+        }
+                
+        [UIHint("InGridMultiSelect")]
+        public InGridMultiSelectVM Frequency { get; set; } = new InGridMultiSelectVM();
+
+        public static IEnumerable<InGridMultiSelectVM> GetFrequencyOptions()
+        {
+            var options = new string[]
+            {
+                "Daily", "Regularly", "When Necessary"
+            };
+
+            return options.Select(e =>
+              new InGridMultiSelectVM
+              {
+                  Text = e,
+                  isSelected = false
+              });
+
         }
 
-        [UIHint("InGridComboBox")]
-        public InGridComboBoxVM Relationship { get; set; } = new InGridComboBoxVM();
-        public static IEnumerable<InGridComboBoxVM> GetRelationshipOptions()
+        public static IEnumerable<InGridMultiSelectVM> GetFrequencyValues()
         {
-            var index = 0;
-            var options = new string[] {
+            var options = GetFrequencyOptions();
+            var values = options.Where(e => e.isSelected).Select(f =>
+                new InGridMultiSelectVM
+                {
+                    Text = f.Text,
+                    isSelected = true
+                });
+
+            return values;
+
+
+        }
+        
+        public static InGridMultiSelectVM GetFrequencyDefaultValue(InGridMultiSelectVM model = null)
+        {
+            var options = GetFrequencyOptions();
+            if (model == null || model.Text == null || string.IsNullOrEmpty(model.Text))
+                return new InGridMultiSelectVM();
+            
+            var tes = new InGridMultiSelectVM();
+            tes.Text = model.Text;
+            return tes;
+        }
+
+        [UIHint("InGridMultiSelect")]
+        public InGridMultiSelectVM Relationship { get; set; } = new InGridMultiSelectVM();
+
+        public static IEnumerable<InGridMultiSelectVM> GetRelationshipOptions()
+        {
+            var options = new string[]
+            {
                 "Reporting",
                 "Coordination",
                 "Liason",
                 "Supervision"
-                 };
+            };
 
             return options.Select(e =>
-                new InGridComboBoxVM
-                {
-                    Value = ++index,
-                    Text = e
-                });
+              new InGridMultiSelectVM
+              {
+                  Text = e,
+                  isSelected = false
+              });
+
         }
 
-        public static InGridComboBoxVM GetRelationshipDefaultValue(InGridComboBoxVM model = null)
-        {
-            var options = GetRelationshipOptions();
-            if (model == null || model.Value == null || string.IsNullOrEmpty(model.Text))
-                return options.FirstOrDefault();
-
-            return options.FirstOrDefault(e =>
-                e.Value == model.Value || e.Text == model.Text);
-        }
-
-        [UIHint("InGridComboBox")]
-        public InGridComboBoxVM Frequency { get; set; } = new InGridComboBoxVM();
-
-        public static IEnumerable<InGridComboBoxVM> GetFrequencyOptions()
-        {
-            var index = 0;
-            var options = new string[] {
-                "Daily",
-                "Regularly",
-                "When Necessary"
-
-
-                 };
-
-            return options.Select(e =>
-                new InGridComboBoxVM
-                {
-                    Value = ++index,
-                    Text = e
-                });
-        }
-
-        public static InGridComboBoxVM GetFrequencyDefaultValue(InGridComboBoxVM model = null)
+        public static IEnumerable<InGridMultiSelectVM> GetRelationshipValues()
         {
             var options = GetFrequencyOptions();
-            if (model == null || model.Value == null || string.IsNullOrEmpty(model.Text))
-                return options.FirstOrDefault();
+            var values = options.Select(f =>
+                new InGridMultiSelectVM
+                {
+                    Text = f.Text,
+                    isSelected = true
+                });
 
-            return options.FirstOrDefault(e =>
-                e.Value == model.Value || e.Text == model.Text);
+            return values;
+
+
         }
+        
+        public static InGridMultiSelectVM GetRelationshipDefaultValue(InGridMultiSelectVM model = null)
+        {
+            var options = GetFrequencyOptions();
+            if (model == null || model.Text == null || string.IsNullOrEmpty(model.Text))
+                return new InGridMultiSelectVM();
 
+            var tes = new InGridMultiSelectVM();
+            tes.Text = model.Text;
+            return tes;
+        }
+        
     }
 }

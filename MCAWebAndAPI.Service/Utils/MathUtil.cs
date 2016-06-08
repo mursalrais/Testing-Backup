@@ -11,7 +11,6 @@ namespace MCAWebAndAPI.Service.Utils
             var difference = .0001;
             return Math.Abs(value1 - value2) <= difference;
         }
-        
 
         public static DateTime ConvertToDateWithoutTime(DateTime dateTime) {
             var day = dateTime.Day;
