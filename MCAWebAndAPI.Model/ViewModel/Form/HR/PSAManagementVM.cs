@@ -124,7 +124,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// tenure
         /// </summary>
-        [UIHint("Integer")]
         [DisplayName("Tenure")]
         [Required]
         public int Tenure { get; set; }
@@ -135,6 +134,13 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [UIHint("Date")]
         [DisplayName("PSA Expiry Date")]
         public DateTime? PSAExpiryDate { get; set; } = DateTime.Now;
+
+        //public string expiry { get; set; }
+
+        /*
+        [UIHint("Date")]
+        public DateTime? ExpiryDateBefore { get; set; } = DateTime.Now;
+        */
 
         [UIHint("MultiFileUploader")]
         [Required]
@@ -161,7 +167,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         public string DocumentType { get; set;}
 
-        public string KeyPosition { get; set; }
+        //public string KeyPosition { get; set; }
+
+        //public string KeyPositionValue { get; set; }
 
         /// <summary>
         /// psaexpirydate

@@ -2,12 +2,34 @@
 @model PSAManagementVM
 
 <div class="col-sm-6">
+    @*
+    <div class="alert adjusted alert-info fade in">
+        <button class="close" data-dismiss="alert">
+            ×
+        </button>
+        <i class="fa-fw fa-lg fa fa-exclamation"></i>
+        <strong>@Html.DisplayFor(m => m.KeyPosition)</strong>
+    </div>
+    *@
     <div class="form-group">
         @Html.Bootstrap().LabelFor(m => m.Documents).Class("col-sm-4 control-label")
         <div class="col-sm-8">
-            @Html.EditorFor(m => m.Documents)
+            @(Html.Kendo().Upload()
+                .Name("Documents")
+                .Multiple(true)
+                .Events(e => e.Upload("onUpload"))
+            )
+            @Html.ValidationMessageFor(model => model.Documents)
         </div>
     </div>
+    @*
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.KeyPositionValue).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.DisplayFor(m => m.KeyPositionValue)
+        </div>
+    </div>
+    *@
     @*
     <div class="form-group">
         @Html.Bootstrap().LabelFor(m => m.DocumentType).Class("col-sm-4 control-label")
