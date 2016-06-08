@@ -20,7 +20,11 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         public static IEnumerable<string> GetWorkflowStatusOptions(string currentStatus = null)
         {
-            return new List<string>();
+            return new List<string>
+            {
+                Workflow.GetApplicationStatus(Workflow.ApplicationStatus.NEW),
+                Workflow.GetApplicationStatus(Workflow.ApplicationStatus.ONBOARD)
+            };
         }
 
         /// <summary>

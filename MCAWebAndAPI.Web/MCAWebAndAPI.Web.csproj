@@ -654,6 +654,7 @@
     <Content Include="Views\CSV\_DisplayGrid.cshtml" />
     <Content Include="Views\HRApplication\ListVacantPositions.cshtml" />
     <Content Include="Views\Shared\_PersonalDetails.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\AjaxCascadeComboBox.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
