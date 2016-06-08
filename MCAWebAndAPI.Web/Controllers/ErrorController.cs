@@ -9,9 +9,9 @@ namespace MCAWebAndAPI.Web.Controllers
     public class ErrorController : Controller
     {
         // GET: Error
-        public ActionResult Index()
+        public ActionResult Index(string errorMessage = null)
         {
-            return View();
+            return View(errorMessage);
         }
     }
 }

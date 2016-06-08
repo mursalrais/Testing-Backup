@@ -21,23 +21,59 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// </summary>
         [UIHint("ComboBox")]
         [DisplayName("Renewal?")]
-        public ComboBoxVM IsRenewal { get; set; } = new ComboBoxVM { Choices = new string[] { "Yes", "No" }, OnSelectEventName = "isrenewalChanged"};
+        public ComboBoxVM IsRenewal { get; set; } = new ComboBoxVM
+        {
+            Choices = new string[] 
+            {
+                "Yes",
+                "No"
+            },
+            Value = "Yes",
+            OnSelectEventName = "isrenewalChanged"
+        };
 
         /// <summary>
-        /// renewalnumber
+        /// renewalnumber for display value
         /// </summary>
         [UIHint("Integer")]
         [DisplayName("Renewal#")]
         [Required]
-        public int RenewalNumber { get; set; }
+        public int RenewalNumber { get; set;}
+
+        /// <summary>
+        /// renewalnumber for edit value
+        /// </summary>
+        [DisplayName("Renewal#")]
+        [Required]
+        public int PSARenewalNumber { get; set; }
 
         /// <summary>
         /// ProjectOrUnit
         /// </summary>
         [UIHint("ComboBox")]
         [DisplayName("Div/Project/Unit")]
-        [Required]
-        public ComboBoxVM ProjectOrUnit { get; set; } = new ComboBoxVM { Choices = new string[] { "GP", "HN", "PM" } };
+        public ComboBoxVM ProjectOrUnit { get; set; } = new ComboBoxVM
+        {
+            Choices = new string[]
+            {
+                "Ops-P",
+                "ME",
+                "PM",
+                "GP",
+                "Ops -IT",
+                "Ops",
+                "CC -E",
+                "Ops -F",
+                "CC",
+                "EO",
+                "COM",
+                "CC -SGA",
+                "RI",
+                "HN -NST",
+                "No"
+            },
+            Value = "Ops-P"
+        };
 
         /// <summary>
         /// joindate
@@ -69,7 +105,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             TextField = "Desc",
             OnSelectEventName = "OnSelectPosition"
         };
-
+        
         /// <summary>
         /// professional
         /// </summary>
@@ -88,6 +124,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// tenure
         /// </summary>
+        [UIHint("Integer")]
         [DisplayName("Tenure")]
         [Required]
         public int Tenure { get; set; }
@@ -99,12 +136,37 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [DisplayName("PSA Expiry Date")]
         public DateTime? PSAExpiryDate { get; set; } = DateTime.Now;
 
-        //public DateTime test { get; set; } = DateTime.Today
-
         [UIHint("MultiFileUploader")]
         [Required]
         public IEnumerable<HttpPostedFileBase> Documents { get; set; } = new List<HttpPostedFileBase>();
 
         public string DocumentUrl { get; set; }
+
+        /// <summary>
+        /// DocumentType
+        /// </summary>
+        /*
+        [UIHint("ComboBox")]
+        [DisplayName("Document Type")]
+        public ComboBoxVM DocumentType { get; set; } = new ComboBoxVM
+        {
+            Choices = new string[]
+            {
+                "PSA Document",
+                "MCC No Objection Letter"
+            },
+            Value = "PSA Document"
+        };
+        */
+
+        public string DocumentType { get; set;}
+
+        public string KeyPosition { get; set; }
+
+        /// <summary>
+        /// psaexpirydate
+        /// </summary>
+        [UIHint("Date")]
+        public DateTime? Created { get; set; } = DateTime.Now;
     }
 }

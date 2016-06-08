@@ -79,20 +79,20 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}/Manpower%20Requisition%20Documents/Forms/AllItems.aspx#InplviewHash1ad3b518-3da3-44cd-afac-6c686d40800e=FilterField1%3Dmanpowerrequestid-FilterValue1%3D{1}.
-        /// </summary>
-        public static string ManpowerDocumentByID {
-            get {
-                return ResourceManager.GetString("ManpowerDocumentByID", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Lists/MonthlyFee.
+        ///   Looks up a localized string similar to /Lists/MonthlyFee.
         /// </summary>
         public static string MonthlyFee {
             get {
                 return ResourceManager.GetString("MonthlyFee", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to /Lists/Location%20Master.
+        /// </summary>
+        public static string PlaceMaster {
+            get {
+                return ResourceManager.GetString("PlaceMaster", resourceCulture);
             }
         }
         
@@ -102,6 +102,24 @@ namespace MCAWebAndAPI.Service.Resources {
         public static string Professional {
             get {
                 return ResourceManager.GetString("Professional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}/Lists/Professional%20Master/DispForm_Custom.aspx?ID={1}.
+        /// </summary>
+        public static string ProfessionalDisplayByID {
+            get {
+                return ResourceManager.GetString("ProfessionalDisplayByID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lists/PSA.
+        /// </summary>
+        public static string PSAManagement {
+            get {
+                return ResourceManager.GetString("PSAManagement", resourceCulture);
             }
         }
         

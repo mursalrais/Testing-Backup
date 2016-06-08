@@ -7,6 +7,7 @@
                                                                 new AjaxOptions
                                                                 {
                                                                     OnBegin = "onBeginForm",
+                                                                    OnComplete = "onCompleteForm",
                                                                     OnSuccess = "onSuccessFormEmbed",
                                                                     OnFailure = "onFailureForm"
                                                                 }, new { @class = "form-horizontal" }))
@@ -88,11 +89,6 @@
                     @Html.EditorFor(m => m.Currency)
                 </div>
             </div>
-            <div class="form-group">
-                <div class="col-md-8">
-                    @Html.HiddenFor(m => m.Name)
-                </div>
-            </div>
         </div>
     </fieldset>
 }
@@ -125,14 +121,24 @@
             var urlPSA = "/HRPSAManagement/GetPSA/" + dataItem.ID;
             $.getJSON(url, function (result) {
                 $('#ProfessionalID').prop('value', result[0].ID);
-                $('#Name').prop('value', result[0].Name);
-            })
-            $.getJSON(urlPSA, function (result) {
-                $('#ProjectUnit').prop('value', result[0].ProjectOrUnit);
-                $('#Position').prop('value', result[0].Position);
-                $('#JoinDate').prop('value', result[0].JoinDate);
-                $('#DateOfNewPsa').prop('value', result[0].DateOfNewPSA);
-                $('#EndOfContract').prop('value', result[0].PsaExpiryDate);
+                $('#Status').prop('value', result[0].Status);
+                $.getJSON(urlPSA, function (result) {
+                    if (result.errorMessage == "Error") {
+                        $('#ProjectUnit').prop('value', "");
+                        $('#Position').prop('value', "");
+                        $('#JoinDate').prop('value', "");
+                        $('#DateOfNewPsa').prop('value', "");
+                        $('#EndOfContract').prop('value', "");
+                        alert("Professional Doesn't Have PSA");
+                    }
+                    else {
+                        $('#ProjectUnit').prop('value', result[0].ProjectOrUnit);
+                        $('#Position').prop('value', result[0].Position);
+                        $('#JoinDate').prop('value', result[0].JoinDate);
+                        $('#DateOfNewPsa').prop('value', result[0].DateOfNewPSA);
+                        $('#EndOfContract').prop('value', result[0].PsaExpiryDate);
+                    }
+                })
             })
         }
 

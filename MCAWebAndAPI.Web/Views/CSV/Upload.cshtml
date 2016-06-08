@@ -1,0 +1,80 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Control
+@using MCAWebAndAPI.Web.Helpers
+
+@model CSVVM
+
+<div class="form-horizontal">
+    <fieldset>
+        <legend>CSV Uploader</legend>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.ListName).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.DisplayFor(m => m.ListName)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.File).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @(Html.Kendo().Upload()
+                        .Name("CSVFile")
+                        .HtmlAttributes(new { @class = "form-control" })
+                        .Events(e =>
+                        {
+                            e.Complete("onCompleteUploadCSV");
+                        })
+                        .Async(a => a
+                            .Save("Save", "CSV")
+                            .AutoUpload(true)
+                        )
+                        )
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6"></div>
+        </div>
+
+        <div class="row visible-after-uploaded">
+            <div class="col-sm-12"id="grid-placeholder">
+            </div>
+        </div>
+        <div class="form-actions">
+            <div class="row">
+                <div class="col-sm-12">
+                    <button id="import-button" class="btn btn-primary visible-after-uploaded" type="button">
+                        <i class="fa fa-save"></i>
+                        Import
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </fieldset>
+
+</div>
+
+@section scripts{
+    
+    <script>
+
+        $(document).ready(function () {
+            $("#import-button").click(importCSV);
+            $(".visible-after-uploaded").hide();
+        });
+
+        function importCSV(e) {
+            var url = "/CSV/Submit?listName=" + "@Model.ListName";
+            $.getJSON(url, function (data) {
+                alert(data.succesMessage);
+            });
+        }
+
+        function onCompleteUploadCSV() {
+            $('#grid-placeholder').load('/CSV/DisplayGrid');
+            $(".visible-after-uploaded").show();
+        }
+    </script>
+
+}

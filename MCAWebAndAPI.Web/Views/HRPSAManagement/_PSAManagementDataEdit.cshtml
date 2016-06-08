@@ -3,15 +3,9 @@
 
 <div class="col-md-6">
     <div class="form-group">
-        @Html.Bootstrap().LabelFor(m => m.IsRenewal).Class("col-md-4 control-label")
+        @Html.Bootstrap().LabelFor(m => m.Professional).Class("col-md-4 control-label")
         <div class="col-md-8">
-            @Html.EditorFor(m => m.IsRenewal)
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.Bootstrap().LabelFor(m => m.RenewalNumber).Class("col-md-4 control-label")
-        <div class="col-md-8">
-            @Html.EditorFor(m => m.RenewalNumber)
+            @Html.DisplayFor(m => m.Professional)
         </div>
     </div>
     <div class="form-group">
@@ -27,9 +21,15 @@
         </div>
     </div>
     <div class="form-group">
-        @Html.Bootstrap().LabelFor(m => m.Professional).Class("col-md-4 control-label")
+        @Html.Bootstrap().LabelFor(m => m.IsRenewal).Class("col-md-4 control-label")
         <div class="col-md-8">
-            @Html.EditorFor(m => m.Professional)
+            @Html.DisplayFor(m => m.IsRenewal)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.RenewalNumber).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.DisplayFor(m => m.RenewalNumber)
         </div>
     </div>
     <div class="form-group">

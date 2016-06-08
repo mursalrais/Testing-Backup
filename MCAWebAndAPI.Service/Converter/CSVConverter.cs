@@ -5,9 +5,11 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using MCAWebAndAPI.Service.Utils;
+using NLog;
 
 namespace MCAWebAndAPI.Service.Converter
 {
+
     public class CSVConverter
     {
         static readonly Lazy<CSVConverter> lazy = new Lazy<CSVConverter>(() => new CSVConverter());
@@ -15,10 +17,7 @@ namespace MCAWebAndAPI.Service.Converter
 
         public static CSVConverter Instance { get { return lazy.Value; } }
 
-        CSVConverter()
-        {
-
-        }
+        Logger logger = LogManager.GetCurrentClassLogger();
 
         public IEnumerable<string[]> ToStrings(StreamReader fileReader)
         {
@@ -47,40 +46,122 @@ namespace MCAWebAndAPI.Service.Converter
 
         public DataTable ToDataTable(StreamReader fileReader)
         {
-            DataTable personList = new DataTable();
+            DataTable dataTable = new DataTable();
 
             using (var csv = new CsvReader(fileReader))
             {
-                var tes = csv.Configuration.Delimiter;
+                csv.Configuration.TrimHeaders = true;
                 csv.Configuration.Delimiter = ";";
+                csv.Configuration.IgnoreHeaderWhiteSpace = true;
                 csv.Read(); //Do a read so we can get the headers
-                foreach (var header in csv.FieldHeaders)
+
+                for (int i = 0; i < csv.FieldHeaders.Length; i++)
                 {
-                    personList.Columns.Add(header);
+                    string columnName, columnType = string.Empty;
+                    try
+                    {
+                        columnName = csv.FieldHeaders[i].Split(':')[0];
+                        columnType = csv.FieldHeaders[i].Split(':')[1];
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error(e);
+                        throw e;
+                    }
+
+                    columnName = columnName.Trim();
+                    var dataColumn = new DataColumn(columnName, Type.GetType(columnType));
+                    dataTable.Columns.Add(dataColumn);
+
+                    csv.FieldHeaders[i] = columnName;
                 }
 
+                var indexID = 0;
                 do //Do-while instead of a while loop because we already did the first Read()
                 {
-                    var row = personList.NewRow();
-                    foreach (DataColumn col in personList.Columns)
+                    var row = dataTable.NewRow();
+
+                    for (int i = 0; i < dataTable.Columns.Count; i++)
                     {
-                        row[col.ColumnName] = csv.GetField(col.DataType, col.ColumnName);
+                        var col = dataTable.Columns[i];
+
+                        if (string.Compare(col.ColumnName, "ID", StringComparison.OrdinalIgnoreCase) == 0)
+                            row[col.ColumnName] = indexID++;
+                        else
+                        {
+                            try
+                            {
+                                row[col.ColumnName] = csv.GetField(col.DataType, i);
+                            }
+                            catch (Exception e)
+                            {
+                                row[col.ColumnName] = -1;
+                            }
+                        }
                     }
-                    personList.Rows.Add(row);
+
+                    dataTable.Rows.Add(row);
                 }
                 while (csv.Read());
-                return personList;
+                return dataTable;
             }
+        }
+
+        private bool isSkipped(string columnName)
+        {
+            return columnName.Contains("_") 
+                && string.Compare(columnName.Split('_')[1], "skip", StringComparison.OrdinalIgnoreCase) == 0;
+        }
+
+        private bool isLookup(string columnName)
+        {
+            return columnName.Contains("_") 
+               && string.Compare(columnName.Split('_')[1], "lookup", StringComparison.OrdinalIgnoreCase) == 0;
         }
 
         public bool MassUpload(string ListName, DataTable CSVDataTable, string SiteUrl = null)
         {
-            var updatedValues = new Dictionary<string, object>();
-            for (int i = 0; i < CSVDataTable.Rows.Count; i++)
+            var rowTotal = CSVDataTable.Rows.Count;
+            var columnTotal = CSVDataTable.Columns.Count;
+            var columnTypes = new Type[columnTotal];
+            var columnTechnicalNames = new string[columnTotal];
+            
+            // After Column Name, the first row should be Column Type
+            for (int i = 0; i < columnTotal; i++)
             {
-                for (int j = 0; j < CSVDataTable.Columns.Count; j++)
+                //format header MUST be technicalname:type or technicalname_lookup:type technicalname_skip:type
+                try
                 {
-                    updatedValues.Add(CSVDataTable.Columns[j].ColumnName, CSVDataTable.Rows[i].ItemArray[j]);
+                    columnTechnicalNames[i] = CSVDataTable.Columns[i].ColumnName;
+                    columnTypes[i] = CSVDataTable.Columns[i].DataType;
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e);
+                    throw e;
+                }
+            }
+
+            var updatedValues = new Dictionary<string, object>();
+            // Start from 1 since 0 is header 
+            for (int i = 0; i < rowTotal; i++)
+            {
+                for (int j = 0; j < columnTotal; j++)
+                {
+                    if (isLookup(columnTechnicalNames[j]))
+                    {
+                        FormatUtil.GenerateUpdatedValueFromGivenDataTable(ref updatedValues, columnTypes[j],
+                            columnTechnicalNames[j], CSVDataTable.Rows[i].ItemArray[j], lookup: true, skip: false);
+                    }
+                    else if (isSkipped(columnTechnicalNames[j])){
+                        FormatUtil.GenerateUpdatedValueFromGivenDataTable(ref updatedValues, columnTypes[j],
+                           columnTechnicalNames[j], CSVDataTable.Rows[i].ItemArray[j], lookup: false, skip: true);
+                    }
+                    else
+                    {
+                        FormatUtil.GenerateUpdatedValueFromGivenDataTable(ref updatedValues, columnTypes[j],
+                          columnTechnicalNames[j], CSVDataTable.Rows[i].ItemArray[j], lookup: false, skip: false);
+                    }
                 }
                 try
                 {
@@ -88,21 +169,12 @@ namespace MCAWebAndAPI.Service.Converter
                 }
                 catch (Exception e)
                 {
-                    //logger.Error(e.Message);
-                    var tes = e.Message;
-                    return false;
+                    logger.Error(e);
+                    throw e;
                 }
                 updatedValues = new Dictionary<string, object>();
-
             }
-            //updatedValues.Add("Title", header.TransactionType);
-            //updatedValues.Add("AssignmentDate", header.Date);
-            //updatedValues.Add("HolderID", new FieldLookupValue { LookupId = Convert.ToInt32(header.AssetHolderFrom.Value) });
-            //updatedValues.Add("HolderIDTo", new FieldLookupValue { LookupId = Convert.ToInt32(header.AssetHolderTo.Value) });
-
-
-
-            //return SPConnector.GetInsertedItemID(SP_HEADER_LIST_NAME, _siteUrl);
+            
             return true;
         }
     }

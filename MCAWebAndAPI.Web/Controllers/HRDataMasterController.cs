@@ -63,7 +63,8 @@ namespace MCAWebAndAPI.Web.Controllers
                     e.Name, 
                     e.Position,
                     e.Status,
-                    Desc = string.Format("{0} - {1}", e.Name, e.Position) }),
+                    e.Project_Unit,
+                    Desc = string.Format("{0}", e.Name) }),
                 JsonRequestBehavior.AllowGet);
         }
 
@@ -78,7 +79,9 @@ namespace MCAWebAndAPI.Web.Controllers
                         e.ID,
                         e.Name,
                         e.Position,
-                        e.Status
+                        e.Status,
+                        e.Project_Unit,
+                        e.PositionId
                     }
                 ), JsonRequestBehavior.AllowGet);
         }
@@ -92,13 +95,33 @@ namespace MCAWebAndAPI.Web.Controllers
             return Json(positions.Select(e =>
                 new {
                     e.ID,
-                    e.Title,
+                    e.PositionName,
                     e.positionStatus,
                     e.PositionManpowerRequisitionApprover1,
                     e.positionManpowerRequisitionApprover2,
                     e.Remarks,
                     e.isKeyPosition,
-                    Desc = string.Format("{0}", e.Title)
+                    Desc = string.Format("{0}", e.PositionName)
+                }),
+                JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetKeyPosition(int id)
+        {
+            _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+
+            var positions = GetKeyPositionsExistingSession();
+
+            return Json(positions.Where(e => e.ID == id).Select(e =>
+                new {
+                    e.ID,
+                    e.PositionName,
+                    e.positionStatus,
+                    e.PositionManpowerRequisitionApprover1,
+                    e.positionManpowerRequisitionApprover2,
+                    e.Remarks,
+                    e.isKeyPosition
+                    //Desc = string.Format("{0}", e.Title)
                 }),
                 JsonRequestBehavior.AllowGet);
         }
@@ -152,6 +175,17 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         private IEnumerable<PositionsMaster> GetFromPositionsExistingSession()
+        {
+            //Get existing session variable
+            var sessionVariable = System.Web.HttpContext.Current.Session["PositionsMaster"] as IEnumerable<PositionsMaster>;
+            var positions = sessionVariable ?? _dataMasterService.GetPositions();
+
+            if (sessionVariable == null) // If no session variable is found
+                System.Web.HttpContext.Current.Session["PositionsMaster"] = positions;
+            return positions;
+        }
+
+        private IEnumerable<PositionsMaster> GetKeyPositionsExistingSession()
         {
             //Get existing session variable
             var sessionVariable = System.Web.HttpContext.Current.Session["PositionsMaster"] as IEnumerable<PositionsMaster>;

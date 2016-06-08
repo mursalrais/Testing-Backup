@@ -19,12 +19,22 @@ namespace MCAWebAndAPI.Web.Controllers
             return View();
         }
 
+        public ActionResult WFP01HN()
+        {
+            return View();
+        }
+
         public ActionResult WF03()
         {
             return View();
         }
 
         public ActionResult WFP03()
+        {
+            return View();
+        }
+
+        public ActionResult WFP03HN()
         {
             return View();
         }

@@ -20,59 +20,39 @@
 2016-05-30 13:08:01.9029 MCAWebAndAPI.Service.HR.Recruitment.HRManpowerRequisitionService Value does not fall within the expected range.
 2016-05-30 15:21:49.3743 MCAWebAndAPI.Service.HR.Recruitment.HRManpowerRequisitionService Operation is not valid due to the current state of the object.
 2016-05-30 15:24:04.1299 MCAWebAndAPI.Service.HR.Recruitment.HRManpowerRequisitionService Operation is not valid due to the current state of the object.
-2016-06-02 11:37:35.3945 MCAWebAndAPI.Service.HR.Recruitment.HRManpowerRequisitionService Cannot complete this action.
-
-Please try again.
-2016-06-03 14:42:51.0205 MCAWebAndAPI.Service.HR.Recruitment.HRManpowerRequisitionService Cannot complete this action.
-
-Please try again.
-2016-06-03 14:51:35.9832 MCAWebAndAPI.Service.HR.Recruitment.HRManpowerRequisitionService Cannot complete this action.
-
-Please try again.
-2016-06-03 15:01:16.7432 MCAWebAndAPI.Service.HR.Recruitment.HRManpowerRequisitionService Cannot complete this action.
-
-Please try again.
-2016-06-03 15:04:18.7503 MCAWebAndAPI.Service.HR.Recruitment.HRManpowerRequisitionService Cannot complete this action.
-
-Please try again.
-2016-06-03 15:15:01.4624 MCAWebAndAPI.Service.HR.Recruitment.HRManpowerRequisitionService Cannot complete this action.
-
-Please try again.
-2016-06-03 15:16:32.1078 MCAWebAndAPI.Service.HR.Recruitment.HRManpowerRequisitionService Value does not fall within the expected range.
-2016-06-03 15:29:55.3707 MCAWebAndAPI.Service.HR.Recruitment.HRManpowerRequisitionService Value does not fall within the expected range.
-2016-06-03 15:34:13.1281 MCAWebAndAPI.Service.HR.Recruitment.HRManpowerRequisitionService Cannot complete this action.
-
-Please try again.
-2016-06-03 15:39:40.5797 MCAWebAndAPI.Service.HR.Recruitment.HRManpowerRequisitionService Cannot complete this action.
-
-Please try again.
-2016-06-03 15:47:02.6725 MCAWebAndAPI.Service.HR.Recruitment.HRManpowerRequisitionService Cannot complete this action.
-
-Please try again.
-2016-06-03 15:56:39.1289 MCAWebAndAPI.Service.HR.Recruitment.HRManpowerRequisitionService Cannot complete this action.
-
-Please try again.
-2016-06-03 15:59:05.0622 MCAWebAndAPI.Service.HR.Recruitment.HRManpowerRequisitionService Cannot complete this action.
-
-Please try again.
-2016-06-03 15:59:52.1800 MCAWebAndAPI.Service.HR.Recruitment.HRManpowerRequisitionService Cannot complete this action.
-
-Please try again.
-2016-06-03 16:01:59.3572 MCAWebAndAPI.Service.HR.Recruitment.HRManpowerRequisitionService Cannot complete this action.
-
-Please try again.
-2016-06-03 16:03:43.4181 MCAWebAndAPI.Service.HR.Recruitment.HRManpowerRequisitionService Cannot complete this action.
-
-Please try again.
-2016-06-07 16:33:54.1133 MCAWebAndAPI.Service.HR.Recruitment.HRManpowerRequisitionService Cannot complete this action.
-
-Please try again.
-2016-06-07 16:35:09.7112 MCAWebAndAPI.Service.HR.Recruitment.HRManpowerRequisitionService Cannot complete this action.
-
-Please try again.
-2016-06-07 16:45:17.4953 MCAWebAndAPI.Service.HR.Recruitment.HRManpowerRequisitionService Cannot complete this action.
-
-Please try again.
-2016-06-08 10:46:24.5332 MCAWebAndAPI.Service.HR.Recruitment.HRManpowerRequisitionService Cannot complete this action.
-
-Please try again.
+2016-06-03 11:12:58.0727 MCAWebAndAPI.Service.HR.Travel.TRPlaceMasterService Invalid data has been used to update the list item. The field you are trying to update may be read only.
+2016-06-03 11:14:08.3833 MCAWebAndAPI.Service.HR.Travel.TRPlaceMasterService Invalid data has been used to update the list item. The field you are trying to update may be read only.
+2016-06-03 11:15:43.0057 MCAWebAndAPI.Service.HR.Travel.TRPlaceMasterService Invalid data has been used to update the list item. The field you are trying to update may be read only.
+2016-06-03 11:17:33.0316 MCAWebAndAPI.Service.HR.Travel.TRPlaceMasterService Invalid data has been used to update the list item. The field you are trying to update may be read only.
+2016-06-03 11:18:55.4209 MCAWebAndAPI.Service.HR.Travel.TRPlaceMasterService Invalid data has been used to update the list item. The field you are trying to update may be read only.
+2016-06-03 15:51:14.1580 MCAWebAndAPI.Service.HR.Payroll.HRPayrollServices Value cannot be null.
+Parameter name: source
+2016-06-03 16:08:01.7294 MCAWebAndAPI.Service.HR.Payroll.HRPayrollServices Value cannot be null.
+Parameter name: source
+2016-06-03 16:11:01.6767 MCAWebAndAPI.Service.HR.Payroll.HRPayrollServices Value cannot be null.
+Parameter name: source
+2016-06-06 14:58:19.6342 MCAWebAndAPI.Service.HR.Travel.TRPlaceMasterService Value cannot be null.
+Parameter name: source
+2016-06-06 15:03:59.5614 MCAWebAndAPI.Service.HR.Travel.TRPlaceMasterService Value cannot be null.
+Parameter name: source
+2016-06-06 15:04:40.1849 MCAWebAndAPI.Service.HR.Travel.TRPlaceMasterService Value cannot be null.
+Parameter name: source
+2016-06-06 15:05:41.3719 MCAWebAndAPI.Service.HR.Travel.TRPlaceMasterService Value cannot be null.
+Parameter name: source
+2016-06-06 15:07:57.0556 MCAWebAndAPI.Service.HR.Travel.TRPlaceMasterService Value cannot be null.
+Parameter name: source
+2016-06-06 15:08:37.8510 MCAWebAndAPI.Service.HR.Travel.TRPlaceMasterService Value cannot be null.
+Parameter name: source
+2016-06-06 15:09:49.3866 MCAWebAndAPI.Service.HR.Travel.TRPlaceMasterService Value cannot be null.
+Parameter name: source
+2016-06-06 17:35:35.8720 MCAWebAndAPI.Service.HR.Travel.TRPlaceMasterService The 'sId' argument is invalid.
+2016-06-06 17:35:56.1727 MCAWebAndAPI.Service.HR.Travel.TRPlaceMasterService The 'sId' argument is invalid.
+2016-06-06 17:36:22.3975 MCAWebAndAPI.Service.HR.Travel.TRPlaceMasterService The 'sId' argument is invalid.
+2016-06-06 17:37:51.7597 MCAWebAndAPI.Service.HR.Travel.TRPlaceMasterService The 'sId' argument is invalid.
+2016-06-07 09:41:36.5911 MCAWebAndAPI.Service.HR.Travel.TRPlaceMasterService The 'sId' argument is invalid.
+2016-06-07 09:44:47.5236 MCAWebAndAPI.Service.HR.Travel.TRPlaceMasterService The 'sId' argument is invalid.
+2016-06-07 09:50:22.0689 MCAWebAndAPI.Service.HR.Travel.TRPlaceMasterService The 'sId' argument is invalid.
+2016-06-07 10:28:24.3241 MCAWebAndAPI.Service.Converter.CSVConverter System.IndexOutOfRangeException: Index was outside the bounds of the array.
+   at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in D:\Reza F. Fikri\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64
+2016-06-07 10:28:37.7531 MCAWebAndAPI.Service.Converter.CSVConverter System.IndexOutOfRangeException: Index was outside the bounds of the array.
+   at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in D:\Reza F. Fikri\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64

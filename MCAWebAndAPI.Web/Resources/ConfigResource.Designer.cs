@@ -22,7 +22,7 @@ namespace MCAWebAndAPI.Web.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class ConfigResource {
+    public class ConfigResource {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace MCAWebAndAPI.Web.Resources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MCAWebAndAPI.Web.Resources.ConfigResource", typeof(ConfigResource).Assembly);
@@ -51,7 +51,7 @@ namespace MCAWebAndAPI.Web.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,45 +61,36 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://eceos2.sharepoint.com/sites/ims/ho.
+        ///   Looks up a localized string similar to https://eceos2.sharepoint.com/sites/mca-dev/ho.
         /// </summary>
-        internal static string DefaultBOSiteUrl {
+        public static string DefaultBOSiteUrl {
             get {
                 return ResourceManager.GetString("DefaultBOSiteUrl", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://eceos2.sharepoint.com/sites/ims/hr.
+        ///   Looks up a localized string similar to https://eceos2.sharepoint.com/sites/mca-dev/hr.
         /// </summary>
-        internal static string DefaultHRSiteUrl {
+        public static string DefaultHRSiteUrl {
             get {
                 return ResourceManager.GetString("DefaultHRSiteUrl", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://eceos2.sharepoint.com/sites/ims.
+        ///   Looks up a localized string similar to https://eceos2.sharepoint.com/sites/mca-dev.
         /// </summary>
-        internal static string DefaultProgramSiteUrl {
+        public static string DefaultProgramSiteUrl {
             get {
                 return ResourceManager.GetString("DefaultProgramSiteUrl", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to /Lists/Application.
-        /// </summary>
-        internal static string UrlApplication {
-            get {
-                return ResourceManager.GetString("UrlApplication", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to /List/PSA.
         /// </summary>
-        internal static string UrlPSA {
+        public static string UrlPSA {
             get {
                 return ResourceManager.GetString("UrlPSA", resourceCulture);
             }

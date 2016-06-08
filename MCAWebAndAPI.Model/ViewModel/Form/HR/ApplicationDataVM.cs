@@ -20,38 +20,13 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         public static IEnumerable<string> GetWorkflowStatusOptions(string currentStatus = null)
         {
-            switch (currentStatus)
-            {
-                case "NEW":
-                    return new string[]
-                    {
-                        Workflow.ApplicationStatus.SHORTLISTED.ToString(),
-                        Workflow.ApplicationStatus.DECLINED.ToString(),
-                        Workflow.ApplicationStatus.ACCEPTED.ToString()
-                    };
-                case "SHORTLISTED":
-                    return new string[]
-                    {
-                        Workflow.ApplicationStatus.NOT_RECOMMENDED.ToString(),
-                        Workflow.ApplicationStatus.RECOMMENDED.ToString(),
-                        Workflow.ApplicationStatus.ACCEPTED.ToString()
-                    };
-                default:
-                    return new string[]
-                   {
-                        Workflow.ApplicationStatus.SHORTLISTED.ToString(),
-                        Workflow.ApplicationStatus.DECLINED.ToString(),
-                        Workflow.ApplicationStatus.RECOMMENDED.ToString(),
-                        Workflow.ApplicationStatus.NOT_RECOMMENDED.ToString(),
-                        Workflow.ApplicationStatus.ACCEPTED.ToString()
-                   };
-            }
+            return new List<string>();
         }
+
         /// <summary>
         /// applicationstatus
         /// </summary>
         public string ApplicationStatus { get; set; }
-
 
         [UIHint("MultiFileUploader")]
         public IEnumerable<HttpPostedFileBase> Documents { get; set; } = new List<HttpPostedFileBase>();
@@ -73,6 +48,17 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [DisplayName("First & Middle Name")]
         [Required]
         public string FirstMiddleName { get; set; }
+
+        /// <summary>
+        /// position
+        /// </summary>
+        public string Position { get; set; }
+
+        /// <summary>
+        /// manpowerrequisition
+        /// </summary>
+        public int? ManpowerRequisitionID { get; set; }
+
 
         /// <summary>
         /// lastname
@@ -110,7 +96,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             ControllerName = "Location",
             ActionName = "GetCountries",
             ValueField = "ID",
-            TextField = "Title"
+            TextField = "Title", 
+            OnSelectEventName = "setIDCardTypeToKTP"
         };
 
         /// <summary>

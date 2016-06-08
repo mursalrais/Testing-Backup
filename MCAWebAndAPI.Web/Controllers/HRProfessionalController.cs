@@ -1,5 +1,4 @@
-﻿using Elmah;
-using MCAWebAndAPI.Model.ViewModel.Control;
+﻿using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using MCAWebAndAPI.Service.HR.Common;
 using MCAWebAndAPI.Service.Resources;
@@ -9,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 
 namespace MCAWebAndAPI.Web.Controllers
@@ -36,7 +34,7 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewModel);
         }
 
-        public ActionResult EditCurrentProfessional(string siteUrl = null, string userLoginName = null)
+        public ActionResult EditCurrentProfessional(string siteUrl = null, string username = null)
         {
             SessionManager.RemoveAll();
 
@@ -44,11 +42,11 @@ namespace MCAWebAndAPI.Web.Controllers
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
-            var viewModel = _service.GetProfessionalData(userLoginName);
+            var viewModel = _service.GetProfessionalData(username);
 
             if (viewModel == null)
                 return RedirectToAction("Index", "Error", new { errorMessage = 
-                    string.Format(MessageResource.ErrorProfessionalNotFound, userLoginName)});
+                    string.Format(MessageResource.ErrorProfessionalNotFound, username)});
      
             return View("EditProfessional", viewModel);
         }
@@ -121,6 +119,17 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
+            try
+            {
+                _service.SendEmailValidation(string.Format(EmailResource.ProfessionalEmailValidation,
+                    string.Format(UrlResource.ProfessionalDisplayByID, siteUrl, headerID)));
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+          
             return JsonHelper.GenerateJsonSuccessResponse(UrlResource.Professional);
         }
 

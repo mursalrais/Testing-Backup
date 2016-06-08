@@ -10,26 +10,25 @@ namespace MCAWebAndAPI.Service.Utils
 {
     public class SPConnector
     {
-        static string CurUrl = "https://eceos2.sharepoint.com/sites/mca-dev/hr";
-        static string UserName =  "sp.services@eceos.com";
-        static string Password = "Raja0432";
+        static string CurUrl = "";
+        static string UserName =  "";
+        static string Password = "";
 
         private static void MapCredential(string url)
         {
-            if (url == null || url.Contains("eceos"))
+            if (url.Contains("eceos"))
             {
                 UserName = "sp.services@eceos.com";
                 Password = "Raja0432";
             }
-
-            if (url.Contains("mcai"))
+            else if (url.Contains("mcai"))
             {
                 UserName = "admin.sharepoint@mca-indonesia.go.id";
                 Password = "admin123$";
             }
         }
 
-        internal static int GetInsertedItemID(string listName, string siteUrl = null, string caml = null)
+        internal static int GetLatestListItemID(string listName, string siteUrl = null, string caml = null)
         {
             string camlViewXml = caml ?? @"<View>  
             <Query> 
@@ -45,6 +44,47 @@ namespace MCAWebAndAPI.Service.Utils
             {
                 result = Convert.ToInt32(item["ID"]);
             }
+
+            return result;
+        }
+
+        internal static int GetRenewalNumber(string listname, int? professionalID, string siteUrl = null, string caml = null)
+        {
+            string camlViewXml = caml ??  @"<View><ViewFields>
+                            < FieldRef Name = 'renewalnumber' />
+                        </ViewFields>
+                        <OrderBy>
+                            <FieldRef Name = 'ID' Ascending = 'FALSE' />
+                        </OrderBy>
+                        <Where>
+                            <Eq>
+                                <FieldRef Name = 'professional_x003a_ID'/>
+                                <Value Type = 'Lookup'>" + professionalID + @"</Value>
+                            </Eq>
+                        </Where>
+                        <QueryOptions>
+                            <RowLimit> 1 </RowLimit>
+                        </QueryOptions >
+                        </View>";
+
+            /*
+            string camlViewXml = caml ?? @"<View>  
+            <Query> 
+               <OrderBy><FieldRef Name='ID' Ascending='FALSE' /><FieldRef Name='ID' Ascending='FALSE' /></OrderBy> 
+            </Query> 
+                <ViewFields><FieldRef Name='ID' /></ViewFields> 
+            <RowLimit>1</RowLimit> 
+            </View>";
+            */
+
+            var result = 1;
+            var list = GetList(listname, siteUrl, camlViewXml);
+            foreach (var item in list)
+            {
+                result = Convert.ToInt32(item["renewalnumber"]);
+            }
+
+            
 
             return result;
         }
@@ -147,8 +187,17 @@ namespace MCAWebAndAPI.Service.Utils
                 {
                     newItem[key] = columnValues[key];
                 }
-                newItem.Update();
-                context.ExecuteQuery();
+
+                try
+                {
+                    newItem.Update();
+                    context.ExecuteQuery();
+                }
+                catch (Exception e)
+                {
+                    throw e;
+                }
+              
             }
         }
 
@@ -275,7 +324,6 @@ namespace MCAWebAndAPI.Service.Utils
                 properties.Body = content;
 
                 Utility.SendEmail(context, properties);
-
                 context.ExecuteQuery();
             }
             return true;

@@ -8,6 +8,12 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
     public class ProfessionalDataVM : ApplicationDataVM
     {
+
+        /// <summary>
+        /// datavalidationstatus
+        /// </summary>
+        public string ValidationStatus { get; set; } = "HR Validated";
+
         /// <summary>
         /// emergencynumber
         /// </summary>

@@ -75,7 +75,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 throw new Exception(ErrorResource.SPInsertError);
             }
 
-            return SPConnector.GetInsertedItemID(SP_MANPOW_LIST_NAME, _siteUrl);
+            return SPConnector.GetLatestListItemID(SP_MANPOW_LIST_NAME, _siteUrl);
         }
 
         public bool UpdateStatus(ManpowerRequisitionVM viewModel)

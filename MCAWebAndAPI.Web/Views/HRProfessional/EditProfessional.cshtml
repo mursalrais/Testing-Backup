@@ -1,22 +1,35 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@using MCAWebAndAPI.Model.Common
+
 @model ProfessionalDataVM
 
-
 @{
-    ViewBag.Title = "Edit Professional";
+    ViewBag.Title = Model.ID != null ? "Edit Professional" : "Create Professional";
 }
 
 @using (Ajax.BeginForm("EditProfessional", "HRProfessional", FormMethod.Post,
-    new AjaxOptions
-    {
-        OnBegin = "onBeginForm", 
-        OnComplete = "onCompleteForm",
-        OnFailure = "onFailureForm",
-        OnSuccess = "onSuccessFormEmbed"
-    },
-    new { @class = "form-horizontal"}))
+                                                    new AjaxOptions
+                                                    {
+                                                        OnBegin = "onBeginForm",
+                                                        OnComplete = "onCompleteForm",
+                                                        OnFailure = "onFailureForm",
+                                                        OnSuccess = "onSuccessFormEmbed"
+                                                    },
+                                                    new { @class = "form-horizontal" }))
 {
     <fieldset>
+        <legend>Validation Status</legend>
+        <div class="row">
+            <div class="col-sm-6">
+                @Html.Bootstrap().LabelFor(m => m.ValidationStatus).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.ValidationStatus)
+                </div>
+            </div>
+            <div class="col-sm-6">
+
+            </div>
+        </div>
         <legend>Personal Details</legend>
         @Html.HiddenFor(m => m.ID)
         <div class="row">
@@ -39,7 +52,7 @@
             @Html.Partial("_TrainingDetails", Model.TrainingDetails)
         </div>
         <legend>Insurance Details</legend>
-            @Html.Partial("_InsuranceDetails", Model)
+        @Html.Partial("_InsuranceDetails", Model)
         <legend>Payroll Details</legend>
         <div class="row">
             @Html.Partial("_PayrollDetails", Model)
@@ -52,16 +65,30 @@
     <div class="form-actions">
         <div class="row">
             <div class="col-sm-12">
-                <button id="validate-by-hr" class="btn" type="button">
-                    Validate
-                </button>
-                <button id="print-button" class="btn btn-default" type="button">
-                    Print
-                </button>
-                <button id="submit-button" class="btn btn-primary" type="submit">
-                    <i class="fa fa-save"></i>
-                    Save
-                </button>
+
+                @if (Model.ValidationStatus ==
+                    Workflow.GetProfessionalValidationStatus(Workflow.ProfessionalValidationStatus.VALIDATED))
+                {
+                    if (!ViewBag.IsHRView)
+                    {
+                        <button id="ask-hr-to-validate-button" class="btn" type="submit">
+                            Ask HR to Validate
+                        </button>
+                    }
+                }
+                else
+                {
+                    if (ViewBag.IsHRView)
+                    {
+                        <button id="approve-button" class="btn" type="submit">
+                            Approve
+                        </button>
+                        <button id="reject-button" class="btn" type="submit">
+                            Reject
+                        </button>
+                    }
+                }
+
             </div>
         </div>
     </div>
@@ -70,13 +97,16 @@
 @section scripts{
 
     <script>
-        function onSelectIDCardType(e) {
-            var dataItem = this.dataItem(e.item);
-            if (dataItem === "KTP") {
-                $('#IDCardExpiry').closest('.form-group').show();
-            } else {
-                $('#IDCardExpiry').closest('.form-group').hide();
-            }
-        }
+
+        $(document).ready(function () {
+
+        });
+
+        $(document).ready(function () {
+
+        });
+
     </script>
+   
+
 }

@@ -8,9 +8,9 @@
             {
                 "Male",
                 "Female",
-                "Transgender"
+                "Not Stated"
             };
-            this.Value = "Male";
+            this.Value = "Not Stated";
         }
     }
 }

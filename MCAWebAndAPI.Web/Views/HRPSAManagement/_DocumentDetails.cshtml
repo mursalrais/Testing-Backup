@@ -1,17 +1,6 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
 @model PSAManagementVM
 
-@*
-    <div class="col-md-6">
-        <div class="form-group">
-            @Html.Bootstrap().LabelFor(m => m.Documents).Class("col-md-2 control-label")
-            <div class="col-md-8">
-                @Html.EditorFor(m => m.Documents)
-            </div>
-        </div>
-    </div>
-*@
-
 <div class="col-sm-6">
     <div class="form-group">
         @Html.Bootstrap().LabelFor(m => m.Documents).Class("col-sm-4 control-label")
@@ -19,4 +8,12 @@
             @Html.EditorFor(m => m.Documents)
         </div>
     </div>
+    @*
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.DocumentType).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.EditorFor(m => m.DocumentType)
+        </div>
+    </div>
+    *@
 </div>
