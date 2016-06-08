@@ -1,0 +1,20 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model ManpowerRequisitionVM
+
+
+<div class="col-md-6">
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.TotalYrsOfExperience).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.DisplayFor(m => m.TotalYrsOfExperience)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.MinimumEducation).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.DisplayFor(m => m.MinimumEducation)
+        </div>
+    </div>   
+</div>
+
+

@@ -14,7 +14,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// requestdate
         /// </summary>
         [UIHint("Date")]
-        public DateTime? DateRequested { get; set; } = DateTime.Now.AddYears(-28);
+        public DateTime? DateRequested { get; set; } = DateTime.Now;
         public Boolean IsOnBehalfOf { get; set; } = new Boolean();
 
         /// <summary>
@@ -119,6 +119,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         [UIHint("MultiFileUploader")]
         public IEnumerable<HttpPostedFileBase> Documents { get; set; } = new List<HttpPostedFileBase>();
+
+
         public string DocumentUrl { get; set; }
 
         public IEnumerable<WorkingRelationshipDetailVM> WorkingRelationshipDetails { get; set; } = new List<WorkingRelationshipDetailVM>();
@@ -190,8 +192,29 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// </summary>
         [UIHint("TextArea")]
         public string Remarks { get; set; }
-        
 
-        
+        [UIHint("ComboBox")]
+        [DisplayName("Status")]
+        public ComboBoxVM Status { get; set; } = new ComboBoxVM()
+        {
+            Choices = new string[]{
+                "Pending MCC Approval",
+                "Rejected by MCC",
+                "Approved by MCC",
+                "Active",
+                "Filled",
+                "Cancelled"
+            }
+        };
+
+        [UIHint("AjaxComboBox")]
+        [DisplayName("Position")]
+        public AjaxComboBoxVM PositionManpower { get; set; } = new AjaxComboBoxVM
+        {
+            ControllerName = "HRManpowerRequisition",
+            ActionName = "GetPositions",
+            ValueField = "ID",
+            TextField = "Position"
+        };
     }
 }

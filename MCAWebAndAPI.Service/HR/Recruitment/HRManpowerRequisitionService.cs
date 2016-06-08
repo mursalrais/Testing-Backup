@@ -7,6 +7,7 @@ using NLog;
 using Microsoft.SharePoint.Client;
 using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Model.ViewModel.Control;
+using MCAWebAndAPI.Model.Common;
 
 namespace MCAWebAndAPI.Service.HR.Recruitment
 {
@@ -21,7 +22,16 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         public int CreateManpowerRequisition(ManpowerRequisitionVM viewModel)
         {
-            var updatedValue = new Dictionary<string, object>();            
+            var updatedValue = new Dictionary<string, object>();
+
+            if(viewModel.Status.Value == "Pending Approval")
+            {
+                //kirim email
+            }
+            else
+            {
+                viewModel.Status.Value = "Draft";
+            }
 
             updatedValue.Add("expectedjoindate", viewModel.ExpectedJoinDate);
             updatedValue.Add("requestdate", viewModel.DateRequested);
@@ -53,6 +63,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             updatedValue.Add("personalattributes", viewModel.PersonalAttributesCompetencies);
             updatedValue.Add("otherrequirements", viewModel.OtherRequirements);
             updatedValue.Add("remarks", viewModel.Remarks);
+            updatedValue.Add("manpowerrequeststatus", viewModel.Status.Value);
 
             try
             {
@@ -65,6 +76,37 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             }
 
             return SPConnector.GetLatestListItemID(SP_MANPOW_LIST_NAME, _siteUrl);
+        }
+
+        public bool UpdateStatus(ManpowerRequisitionVM viewModel)
+        {
+            if (viewModel.Status.Value == "Approved")
+            {
+                //send email if Approved
+            }
+            else
+            {
+                //send email if Rejected
+                viewModel.Status.Value = "Rejected";
+            }
+            var updatedValue = new Dictionary<string, object>();
+            int ID = viewModel.ID.Value;
+            updatedValue.Add("manpowerrequeststatus", viewModel.Status.Value);            
+
+
+            try
+            {
+                SPConnector.UpdateListItem(SP_MANPOW_LIST_NAME, ID, updatedValue, _siteUrl);
+            }
+            catch (Exception e)
+            {
+                logger.Debug(e.Message);
+                return false;
+            }
+
+            //var entitiy = new PSAManagementVM();
+            //entitiy = psaManagement;
+            return true;
         }
 
         public bool UpdateManpowerRequisition(ManpowerRequisitionVM viewModel)
@@ -86,6 +128,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             updatedValue.Add("onbehalfof", new FieldLookupValue { LookupId = (int)viewModel.OnBehalfOf.Value });
 
             updatedValue.Add("projectunit", viewModel.DivisionProjectUnit.Value);
+            updatedValue.Add("manpowerrequeststatus", viewModel.Status.Value);
 
             updatedValue.Add("positionrequested", new FieldLookupValue { LookupId = (int)viewModel.Position.Value });
             updatedValue.Add("reportingto", new FieldLookupValue { LookupId = (int)viewModel.ReportingTo.Value });
@@ -123,6 +166,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             foreach (var doc in documents)
             {
                 var updateValue = new Dictionary<string, object>();
+                var type = doc.FileName.Split('-')[0].Trim();
+                if (type=="MCC")
+                {
+                    updateValue.Add("documenttype", "MCC Approval Letter");
+                }
                 updateValue.Add("manpowerrequestid", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
                 try
                 {
@@ -135,25 +183,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 }
             }
         }
-       
-        public void CreateWorkingRelationshipDetails(int? headerID, IEnumerable<WorkingRelationshipDetailVM> workingRelationshipDetails)
-        {
-            foreach (var viewModel in workingRelationshipDetails)
-            {
-                var updatedValue = new Dictionary<string, object>();
-                updatedValue.Add("manpowerrequisition", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
-                updatedValue.Add("position", new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.PositionWorking.Value.Value) });
-                try
-                {
-                    SPConnector.AddListItem(SP_WORKRE_LIST_NAME, updatedValue, _siteUrl);
-                }
-                catch (Exception e)
-                {
-                    logger.Error(e.Message);
-                    throw new Exception(ErrorResource.SPInsertError);
-                }
-            }
-        }
+
+
 
         public ManpowerRequisitionVM GetManpowerRequisition(int? ID)
         {
@@ -176,18 +207,18 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 return viewModel;
 
             var listItem = SPConnector.GetListItem(SP_MANPOW_LIST_NAME, ID, _siteUrl);
-            viewModel = ConvertToManpowerRequisitionVM(listItem,viewModel);
+            viewModel = ConvertToManpowerRequisitionVM(listItem, viewModel);
             viewModel.ID = ID;
-            
-           
+
+
             return viewModel;
 
         }
-               
+
         private ManpowerRequisitionVM ConvertToManpowerRequisitionVM(ListItem listItem, ManpowerRequisitionVM viewModel)
         {
             //var viewModel = new ManpowerRequisitionVM();
-            
+
             viewModel.ExpectedJoinDate = Convert.ToDateTime(listItem["expectedjoindate"]);
             viewModel.DateRequested = Convert.ToDateTime(listItem["requestdate"]);
 
@@ -202,6 +233,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             viewModel.OnBehalfOf.Value = FormatUtil.ConvertLookupToID(listItem, "onbehalfof");
             viewModel.DivisionProjectUnit.Value = Convert.ToString(listItem["projectunit"]);
+            viewModel.Status.Value = Convert.ToString(listItem["manpowerrequeststatus"]);
             //viewModel.workplanItem.Value;
 
             viewModel.Position.Value = FormatUtil.ConvertLookupToID(listItem, "positionrequested");
@@ -209,7 +241,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.JobLocation.Value = FormatUtil.ConvertLookupToID(listItem, "joblocation");
             viewModel.SecondaryReportingTo.Value = FormatUtil.ConvertLookupToID(listItem, "secondaryreportingto");
 
-            
+
 
             viewModel.PositionObjectives = FormatUtil.ConvertMultipleLine(Convert.ToString(listItem["Objectives"]));
             viewModel.TotalYrsOfExperience = FormatUtil.ConvertMultipleLine(Convert.ToString(listItem["totalyrsofexperience"]));
@@ -225,20 +257,22 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             // Convert Details
             viewModel.WorkingRelationshipDetails = GetWorkingRelationshipDetails(viewModel.ID);
 
+            viewModel.DocumentUrl = GetDocumentUrl(viewModel.ID);
+
             return viewModel;
 
         }
 
         private string GetDocumentUrl(int? iD)
         {
-            return string.Format(UrlResource.PSAManagementDocumentByID, _siteUrl, iD);
+            return string.Format(UrlResource.ManpowerDocumentByID, _siteUrl, iD);
         }
 
         private IEnumerable<HttpPostedFileBase> GetDocuments(int? iD)
         {
             var caml = @"<View>  
             <Query> 
-               <Where><Eq><FieldRef Name='application' LookupId='True' /><Value Type='Lookup'>" + iD 
+               <Where><Eq><FieldRef Name='application' LookupId='True' /><Value Type='Lookup'>" + iD
                + @"</Value></Eq></Where> 
             </Query>
             <ViewFields><FieldRef Name='Title' /><FieldRef Name='ID' /><FieldRef Name='FileRef' /></ViewFields></View>";
@@ -274,31 +308,144 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         private WorkingRelationshipDetailVM ConvertToWorkingRelationshipDetailVM(ListItem item)
         {
-            var viewModel = new WorkingRelationshipDetailVM();
-            viewModel.ID = Convert.ToInt32(item["ID"]);
 
-            var _position = item["position"] == null ? string.Empty : Convert.ToString((item["position"] as FieldLookupValue).LookupValue);
-            int _value = item["position"] == null ? 0 : (item["position"] as FieldLookupValue).LookupId;
-            var _temp = new AjaxComboBoxVM();
-            _temp.Text = _position;
-            _temp.Value = _value;
-            viewModel.PositionWorking = _temp;
-            return viewModel;
-            //return new WorkingRelationshipDetailVM
-            //{
-            //    ID = Convert.ToInt32(item["ID"]),
-            //    Position = WorkingRelationshipDetailVM.GetPositionDefaultValue(FormatUtil.ConvertToInGridLookup(item, "position")),
-            //    Frequency = WorkingRelationshipDetailVM.GetFrequencyDefaultValue(FormatUtil.ConvertToInGridLookup(item, "frequency")),
-            //    Relationship = WorkingRelationshipDetailVM.GetRelationshipDefaultValue(FormatUtil.ConvertToInGridLookup(item, "relationship"))
-            //};
+            var tes = Convert.ToInt32(item["ID"]);
+
+            var _frequencyArray = (string[])item["frequency"];
+            string _frequency = string.Join(",", _frequencyArray);
+
+            var _relationshipArray = (string[])item["relationship"];
+            string _relationship = string.Join(",", _relationshipArray);
+
+            return new WorkingRelationshipDetailVM
+            {
+                ID = Convert.ToInt32(item["ID"]),
+                PositionWorking = WorkingRelationshipDetailVM.GetPositionDefaultValue(FormatUtil.ConvertToInGridAjaxLookup(item, "position")),
+                Frequency = WorkingRelationshipDetailVM.GetFrequencyDefaultValue(new InGridMultiSelectVM { Text = _frequency }),
+                Relationship = WorkingRelationshipDetailVM.GetRelationshipDefaultValue(new InGridMultiSelectVM { Text = _relationship })
+            };
         }
-
 
         public void SetSiteUrl(string siteUrl = null)
         {
             _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
         }
 
-        
+        public void CreateManpowerRequisitionDetails(int? headerID, IEnumerable<EducationDetailVM> viewModels)
+        {
+            foreach (var viewModel in viewModels)
+            {
+                if (Item.CheckIfSkipped(viewModel))
+                    continue;
+
+                if (Item.CheckIfDeleted(viewModel))
+                {
+                    try
+                    {
+                        SPConnector.DeleteListItem(SP_WORKRE_LIST_NAME, viewModel.ID, _siteUrl);
+
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error(e);
+                        throw e;
+                    }
+                    continue;
+                }
+
+                var updatedValue = new Dictionary<string, object>();
+                updatedValue.Add("Title", viewModel.Subject);
+                updatedValue.Add("university", viewModel.University);
+                updatedValue.Add("yearofgraduation", FormatUtil.ConvertToYearString(viewModel.YearOfGraduation));
+                updatedValue.Add("remarks", viewModel.Remarks);
+                updatedValue.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
+
+                try
+                {
+                    if (Item.CheckIfUpdated(viewModel))
+                        SPConnector.UpdateListItem(SP_WORKRE_LIST_NAME, viewModel.ID, updatedValue, _siteUrl);
+                    else
+                        SPConnector.AddListItem(SP_WORKRE_LIST_NAME, updatedValue, _siteUrl);
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e.Message);
+                    throw e;
+                }
+            }
+        }
+
+        public void CreateWorkingRelationshipDetails(int? headerID, IEnumerable<WorkingRelationshipDetailVM> workingRelationshipDetails)
+        {
+            foreach (var viewModel in workingRelationshipDetails)
+            {
+                if (Item.CheckIfSkipped(viewModel))
+                    continue;
+                if (Item.CheckIfDeleted(viewModel))
+                {
+                    try
+                    {
+                        SPConnector.DeleteListItem(SP_WORKRE_LIST_NAME, viewModel.ID, _siteUrl);
+
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error(e);
+                        throw e;
+                    }
+                    continue;
+                }
+                var updatedValue = new Dictionary<string, object>();
+                string[] _frequency = viewModel.Frequency.Text.Split(',');
+                string[] _relationship = viewModel.Relationship.Text.Split(',');
+                updatedValue.Add("manpowerrequisition", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
+                updatedValue.Add("position", new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.PositionWorking.Value.Value) });
+                updatedValue.Add("frequency", _frequency);
+                updatedValue.Add("relationship", _relationship);
+                try
+                {
+                    SPConnector.AddListItem(SP_WORKRE_LIST_NAME, updatedValue, _siteUrl);
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e.Message);
+                    throw new Exception(ErrorResource.SPInsertError);
+                }
+            }
+        }
+
+        public ManpowerRequisitionVM GetRequestStatus()
+        {
+            var viewModel = new ManpowerRequisitionVM();
+            
+            viewModel.Status.Choices = new string[]
+            {
+                "Pending MCC Approval",
+                "Rejected by MCC",
+                "Approved by MCC",
+                "Active",
+                "Filled",
+                "Cancelled"
+            };
+
+
+            return viewModel;
+        }
+
+        public IEnumerable<ManpowerRequisitionVM> GetManpowerRequisitionAll()
+        {
+            var models = new List<ManpowerRequisitionVM>();
+            var itemModel = new ManpowerRequisitionVM();
+            foreach (var item in SPConnector.GetList(SP_MANPOW_LIST_NAME, _siteUrl))
+            {
+                itemModel = new ManpowerRequisitionVM();
+                itemModel.ID = Convert.ToInt32(item["ID"]);
+                itemModel.Position.Text = (item["positionrequested"] as FieldLookupValue).LookupValue;
+                models.Add(itemModel);
+            }
+
+            return models;
+        }
+
     }
 }
