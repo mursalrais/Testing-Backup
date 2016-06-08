@@ -45,6 +45,7 @@
             });
 
         });
+
        
         function onSuccess(data) {
             window.location.href = data.urlToRedirect;
@@ -58,21 +59,46 @@
             function OnSelectAssetHolderFrom(e) {
                 var dataItem = this.dataItem(e.item);
 
+                var dateOfNewPSA = $("#DateOfNewPSA").val();
+
+                var datenewpsa = new Date(dateOfNewPSA);
+                var datenewpsainsecond = datenewpsa.getTime();
+
+                console.log(dateOfNewPSA);
+                console.log(datenewpsainsecond);
+
                 if ($("#IsRenewal_Value").val() == "Yes")
                 {
 
                     var url = "/HRPSAManagement/GetRenewal/" + dataItem.ID;
 
                     $.getJSON(url, function (result) {
-
+                        console.log(result);
                         var renewalnumber = result[0].PSARenewalNumber + 1;
+
+                        //var expirydate = result[0].PSAExpiryDate;
+
+                        //var testdate = new Date(expirydate);
+
+                        //console.log(expirydate);
+
                         $('#PSARenewalNumber').prop('value', renewalnumber);
-                        //$('#PSARenewalNumber').data("kendoNumericTextBox").readonly(true);
                         $('#PSARenewalNumber').prop('readonly', true);
 
-                        //$("#AssetCategory_Value").data("kendoDropDownList").enable(true);
+                        /*
+                        if (datenewpsainsecond < expirydate)
+                        {
+                            console.log("Date of New PSA Less Than Expiry Date");
+                        }
+                        else
+                        {
+                            console.log("Date of New PSA More Than Expiry Date");
+                        }
+                        */
+
                     })
                 }
+
                 
             }
 
@@ -85,20 +111,20 @@
 
                     if (result[0].isKeyPosition == "Yes")
                     {
-                        $('#KeyPosition').prop('value', "The Position is Key Position");
+                        $('#KeyPosition').prop('value', "You must upload file with format name: MCCNoObjectionLetter-XXXX" + "XXXX is a ordering number such as: 0001");
                         $('#DocumentType').prop('value', "MCC No Objection Letter");
-
-                        //$('#DocumentType_Value').data("kendoDropDownList").enable(false);
-                        //$('#DocumentType_Value').data("kendoDropDownList").value("MCC No Objection Letter");
+                        $('#KeyPositionValue').prop('value', "Yes");
+                   
                     }
                     else
                     {
-                        $('#KeyPosition').prop('value', "The Position is Not Key Position");
+                        $('#KeyPosition').prop('value', "You must upload file with format name: PSADocuments-MMDDYYYY");
                         $('#DocumentType').prop('value', "PSA Document");
-                        //$('#DocumentType_Value').prop('readonly', "false");
-                        //$('#DocumentType_Value').prop('readonly', "PSA Document");
+                        $('#KeyPositionValue').prop('value', "No");
                     }
                 })
+
+                
             }
 
             
@@ -138,8 +164,32 @@
                     $("#PSARenewalNumber").prop("value", 0);
                 }
                     ;
-            }
-           
-                      
+           }
+
+            /*
+           function onUpload(e) {
+               var files = e.files;
+
+               var filesLength = files.name.length();
+               console.log(filesLength);
+
+               var indexMCC = files.name.indexOf("MCCNoObjectionLetter");
+               console.log(indexMCC);
+
+               $.each(files, function () {
+                   if (this.name.indexOf("MCCNoObjectionLetter") < 0) {
+                       alert(this.name + " error!");
+                       e.preventDefault(); // This cancels the upload for the file
+                   }
+               });
+               
+           }
+           */
+            /*
+           function expirydate()
+           {
+
+           }
+           */           
         </script>
     }
