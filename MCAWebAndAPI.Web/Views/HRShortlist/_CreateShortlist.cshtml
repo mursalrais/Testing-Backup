@@ -1,0 +1,51 @@
+﻿
+@{
+    ViewBag.Title = "_CreateShortlist";
+}
+
+@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model ApplicationShortlistVM
+
+
+<div class="col-xs-6">
+
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.Position).Class("col-xs-4 control-label")
+        <div class="col-xs-8">
+            @Html.EditorFor(m => m.Position)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.Candidate).Class("col-xs-4 control-label")
+        <div class="col-xs-8">
+            @Html.EditorFor(m => m.Candidate)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.InterviewerPanel).Class("col-xs-4 control-label")
+        <div class="col-xs-8">
+            @Html.EditorFor(m => m.InterviewerPanel)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.EmailMessage).Class("col-xs-4 control-label")
+        <div class="col-xs-8">
+            @Html.EditorFor(m => m.EmailMessage)
+        </div>
+    </div>
+    @*<div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.InterviewerDate).Class("col-xs-4 control-label")
+        <div class="col-xs-8">
+            @Html.EditorFor(m => m.InterviewerDate)
+        </div>
+    </div>*@
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.SendTo).Class("col-xs-4 control-label")
+        <div class="col-xs-8">
+            @Html.EditorFor(m => m.SendTo)
+        </div>
+    </div>
+    </div>
+  
+    
+
