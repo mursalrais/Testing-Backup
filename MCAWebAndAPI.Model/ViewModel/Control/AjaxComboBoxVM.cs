@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace MCAWebAndAPI.Model.ViewModel.Control
 {
     /// <summary>
-    /// Used of combo box that retrives choices from ajax get function
+    /// Used for combo box that retrives choices from ajax get function
     /// </summary>
     public class AjaxComboBoxVM
     {
@@ -38,6 +38,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Control
         /// </summary>
         public string ActionName { get; set; }
 
+        /// <summary>
+        /// Used when need a custom javascript function to handle on select event
+        /// </summary>
         public string OnSelectEventName { get; set; }
 
         

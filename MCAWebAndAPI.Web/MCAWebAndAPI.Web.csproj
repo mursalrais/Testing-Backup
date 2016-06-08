@@ -655,6 +655,9 @@
     <Content Include="Views\HRApplication\ListVacantPositions.cshtml" />
     <Content Include="Views\Shared\_PersonalDetails.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\AjaxCascadeComboBox.cshtml" />
+    <Content Include="Views\Task\CalculatePercentComplete.cshtml" />
+    <Content Include="Views\TRPlaceMaster\CreatePlaceMaster.cshtml" />
+    <Content Include="Views\TRPlaceMaster\EditPlaceMaster.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -699,6 +702,7 @@
     <Compile Include="Controllers\RIAController.cs" />
     <Compile Include="Controllers\SuccessController.cs" />
     <Compile Include="Controllers\TaskController.cs" />
+    <Compile Include="Controllers\TRPlaceMasterController.cs" />
     <Compile Include="Filters\HandleErrorAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -766,7 +770,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\ConfigResource.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ConfigResource.Designer.cs</LastGenOutput>
       <CustomToolNamespace>MCAWebAndAPI.Web.Resources</CustomToolNamespace>
     </EmbeddedResource>
