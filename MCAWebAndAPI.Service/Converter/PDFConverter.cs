@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using TuesPechkin;
 
 namespace MCAWebAndAPI.Service.Converter
-{
+{ 
     public sealed class PDFConverter
     {
         static IConverter converter;

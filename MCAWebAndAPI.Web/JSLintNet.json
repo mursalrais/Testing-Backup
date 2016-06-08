@@ -1,0 +1,7 @@
+﻿{
+  "version": "2.2.2",
+  "ignore": [
+    "\\obj\\"
+  ],
+  "globalVariables": []
+}

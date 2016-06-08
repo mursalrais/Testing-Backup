@@ -95,9 +95,9 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             viewModel.ProjectUnit = Convert.ToString(listItem["ProjectOrUnit"]);
             viewModel.Position = Convert.ToString(listItem["position"]);
             viewModel.Status = Convert.ToString(listItem["maritalstatus"]);
-            viewModel.JoinDate = Convert.ToString(listItem["joindate"]);
-            viewModel.DateOfNewPsa = Convert.ToString(listItem["dateofnewpsa"]);
-            viewModel.EndOfContract = Convert.ToString(listItem["psaexpirydate"]);
+            viewModel.JoinDate = Convert.ToDateTime(listItem["joindate"]).ToLocalTime().ToShortDateString();
+            viewModel.DateOfNewPsa = Convert.ToDateTime(listItem["dateofnewpsa"]).ToLocalTime().ToShortDateString();
+            viewModel.EndOfContract = Convert.ToDateTime(listItem["psaexpirydate"]).ToLocalTime().ToShortDateString();
             viewModel.DateOfNewFee = Convert.ToDateTime(listItem["DateOfNewFee"]).ToLocalTime();
             viewModel.MonthlyFee = Convert.ToInt32(listItem["MonthlyFee"]);
             viewModel.AnnualFee = Convert.ToInt32(listItem["AnnualFee"]);

@@ -190,7 +190,8 @@ namespace MCAWebAndAPI.Web.Controllers
                     new
                     {
                         e.ID,
-                        e.PSARenewalNumber
+                        e.PSARenewalNumber,
+                        e.PSAExpiryDate
                     }
                 ), JsonRequestBehavior.AllowGet);
         }
