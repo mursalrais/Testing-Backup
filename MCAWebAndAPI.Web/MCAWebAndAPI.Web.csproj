@@ -190,6 +190,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Readme\Elmah.txt" />
     <Content Include="bin\Antlr3.Runtime.dll" />
     <Content Include="bin\Antlr3.Runtime.pdb" />
     <Content Include="bin\AspNet.ScriptManager.bootstrap.dll" />
@@ -420,6 +421,12 @@
     <Content Include="Content\kendo\2016.2.504\fonts\glyphs\KendoUIGlyphs.woff" />
     <Content Include="Content\kendo\2016.2.504\images\kendoui.ttf" />
     <Content Include="Content\kendo\2016.2.504\images\kendoui.woff" />
+    <Content Include="App_Data\askjasjoi_Application.pdf" />
+    <Content Include="App_Data\Dewa_Application.pdf" />
+    <Content Include="App_Data\kjahkjhjah_Application.pdf" />
+    <Content Include="App_Data\Rahadian1_Application.pdf" />
+    <Content Include="App_Data\Rahadian_Application.pdf" />
+    <Content Include="App_Data\Randi_Application.pdf" />
     <None Include="bin\MCAWebAndAPI.Web.dll.config" />
     <Content Include="bin\NLog.config" />
     <Content Include="bin\roslyn\Microsoft.CSharp.Core.targets" />
@@ -654,6 +661,11 @@
     <Content Include="Views\HRManpowerRequisition\_ResourcesAndPlanningDisp.cshtml" />
     <Content Include="Views\HRManpowerRequisition\_SpecificexperienceDisp.cshtml" />
     <Content Include="Views\HRManpowerRequisition\_WorkingRelationship - Copy.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\AjaxCascadeComboBox.cshtml" />
+    <Content Include="Views\Task\CalculatePercentComplete.cshtml" />
+    <Content Include="Views\TRPlaceMaster\CreatePlaceMaster.cshtml" />
+    <Content Include="Views\TRPlaceMaster\EditPlaceMaster.cshtml" />
+    <Content Include="Views\Shared\_PersonalDetails.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -698,6 +710,7 @@
     <Compile Include="Controllers\RIAController.cs" />
     <Compile Include="Controllers\SuccessController.cs" />
     <Compile Include="Controllers\TaskController.cs" />
+    <Compile Include="Controllers\TRPlaceMasterController.cs" />
     <Compile Include="Filters\HandleErrorAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -719,6 +732,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ConfigResource.resx</DependentUpon>
     </Compile>
+    <Compile Include="Resources\EmailResource.Designer.cs" />
     <Compile Include="Resources\MessageResource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -750,7 +764,11 @@
     <Folder Include="App_Code\" />
     <Folder Include="bin\Resources\" />
     <Folder Include="Content\kendo\2016.2.504\Bootstrap\" />
+    <Folder Include="Content\Metro\" />
     <Folder Include="Views\File\" />
+    <Folder Include="Views\Location\" />
+    <Folder Include="Views\ProjectHierarchy\" />
+    <Folder Include="Views\PurchaseOrder\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MCAWebAndAPI.Model\MCAWebAndAPI.Model.csproj">
@@ -763,11 +781,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="App_Data\ConfigResource.resx" />
     <EmbeddedResource Include="Resources\ConfigResource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ConfigResource.Designer.cs</LastGenOutput>
       <CustomToolNamespace>MCAWebAndAPI.Web.Resources</CustomToolNamespace>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\EmailResource.resx" />
     <EmbeddedResource Include="Resources\MessageResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>MessageResource.Designer.cs</LastGenOutput>

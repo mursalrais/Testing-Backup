@@ -5,6 +5,7 @@ using MCAWebAndAPI.Web.Resources;
 using System.Collections.Generic;
 using MCAWebAndAPI.Model.HR.DataMaster;
 using MCAWebAndAPI.Web.Helpers;
+using System;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -134,8 +135,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
             return Json(positions.Select(e =>
                 new {
-                    Value = e.ID,
-                    Text = e.Title
+                    Value = Convert.ToString(e.ID),
+                    Text = e.PositionName
                 }),
                 JsonRequestBehavior.AllowGet);
         }
