@@ -126,6 +126,20 @@ namespace MCAWebAndAPI.Web.Controllers
                 JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetPositionsGrid()
+        {
+            _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+
+            var positions = GetFromPositionsExistingSession();
+
+            return Json(positions.Select(e =>
+                new {
+                    Value = e.ID,
+                    Text = e.Title
+                }),
+                JsonRequestBehavior.AllowGet);
+        }
+
 
         private IEnumerable<ProfessionalMaster> GetFromExistingSession()
         {

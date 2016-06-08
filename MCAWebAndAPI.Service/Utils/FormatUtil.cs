@@ -120,6 +120,15 @@ namespace MCAWebAndAPI.Service.Utils
             return new DateTime(year: yearInt, month: 1, day: 1);    
         }
 
+        public static AjaxComboBoxVM ConvertToInGridAjaxLookup(ListItem item, string columnName)
+        {
+            return new AjaxComboBoxVM
+            {
+                Text = (item[columnName] as FieldLookupValue).LookupValue,
+                Value = (item[columnName] as FieldLookupValue).LookupId
+            };
+        }
+
         /// <summary>
         /// Populate updated value based on given datatable
         /// </summary>

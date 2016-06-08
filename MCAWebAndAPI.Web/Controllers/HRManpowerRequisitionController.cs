@@ -24,7 +24,25 @@ namespace MCAWebAndAPI.Web.Controllers
             _service = new HRManpowerRequisitionService();
         }
 
-        public ActionResult EditManpowerRequisition(string siteUrl = null, int? ID = null)
+        [HttpPost]
+        public ActionResult ApprovalManpowerRequisition(FormCollection form, ManpowerRequisitionVM viewModel)
+        {
+            //if (!ModelState.IsValid)
+            //{
+            //    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            //    var errorMessages = BindHelper.GetErrorMessages(ModelState.Values);
+            //    return JsonHelper.GenerateJsonErrorResponse(errorMessages);
+            //}
+            _service.SetSiteUrl(System.Web.HttpContext.Current.Session["SiteUrl"] as string);
+
+            _service.UpdateStatus(viewModel);
+
+            return RedirectToAction("Index",
+                "Success",
+                new { successMessage = string.Format(MessageResource.SuccessCommon, viewModel.ID) });
+        }
+
+        public ActionResult ApprovalManpowerRequisition(string siteUrl = null, int? ID = null)
         {
             SessionManager.RemoveAll();
 
@@ -37,27 +55,85 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewModel);
         }
 
-        [HttpPost]
-        public ActionResult EditManpowerRequisition(FormCollection form, ManpowerRequisitionVM viewModel)
+        public ActionResult EditManpowerRequisition(string siteUrl = null, int? ID = null)
         {
-            _service.SetSiteUrl(System.Web.HttpContext.Current.Session["SiteUrl"] as string);
+            SessionManager.RemoveAll();
 
-            _service.UpdateManpowerRequisition(viewModel);
+            // MANDATORY: Set Site URL
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
-            if (!ModelState.IsValid)
+            var viewModel = _service.GetManpowerRequisition(ID);
+
+            return View(viewModel);
+        }
+        
+        public ActionResult EditStatusRequisition(string siteUrl = null)
+        {
+            SessionManager.RemoveAll();
+
+            // MANDATORY: Set Site URL
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            var viewModel = _service.GetRequestStatus();
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public ActionResult EditStatusRequisition(FormCollection form, ManpowerRequisitionVM viewModel)
+        {
+            _service.SetSiteUrl(System.Web.HttpContext.Current.Session["SiteUrl"] as string);     
+
+            try
             {
-                return new JsonResult()
-                {
-                    JsonRequestBehavior = JsonRequestBehavior.AllowGet,
-                    Data = new { result = "Error" }
-                };
+                _service.UpdateStatus(viewModel);
             }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
 
 
             return RedirectToAction("Index",
                 "Success",
                 new { successMessage = string.Format(MessageResource.SuccessCommon, viewModel.ID) });
         }
+        [HttpPost]
+        public ActionResult EditManpowerRequisition(FormCollection form, ManpowerRequisitionVM viewModel)
+        {
+            //if (!ModelState.IsValid)
+            //{
+            //    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            //    var errorMessages = BindHelper.GetErrorMessages(ModelState.Values);
+            //    return JsonHelper.GenerateJsonErrorResponse(errorMessages);
+            //}
+            _service.SetSiteUrl(System.Web.HttpContext.Current.Session["SiteUrl"] as string);
+
+            _service.UpdateManpowerRequisition(viewModel);
+
+            
+            try
+            {
+                viewModel.WorkingRelationshipDetails = BindWorkingExperienceDetails(form, viewModel.WorkingRelationshipDetails);
+                _service.CreateWorkingRelationshipDetails(viewModel.ID.Value, viewModel.WorkingRelationshipDetails);
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+
+
+            return RedirectToAction("Index",
+                "Success",
+                new { successMessage = string.Format(MessageResource.SuccessCommon, viewModel.ID) });
+        }
+
+
 
 
         public ActionResult DisplayManpowerRequisition(string siteUrl = null, int? ID = null)
@@ -73,15 +149,28 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewModel);
         }
 
+        public ActionResult CreateManpowerRequisition(string siteUrl = null)
+        {
+            // Clear Existing Session Variables if any
+            SessionManager.RemoveAll();
+
+            // MANDATORY: Set Site URL
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            var viewModel = _service.GetManpowerRequisition(null);
+            return View(viewModel);
+        }
+
         [HttpPost]
         public ActionResult CreateManpowerRequisition(FormCollection form, ManpowerRequisitionVM viewModel)
         {
-            if (!ModelState.IsValid)
-            {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                var errorMessages = BindHelper.GetErrorMessages(ModelState.Values);
-                return JsonHelper.GenerateJsonErrorResponse(errorMessages);
-            }
+            //if (!ModelState.IsValid)
+            //{
+            //    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            //    var errorMessages = BindHelper.GetErrorMessages(ModelState.Values);
+            //    return JsonHelper.GenerateJsonErrorResponse(errorMessages);
+            //}
 
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
@@ -99,7 +188,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             try
             {
-                viewModel.WorkingRelationshipDetails = BindWorkingExperienceDetails(form, viewModel.WorkingRelationshipDetails);
+                //viewModel.WorkingRelationshipDetails = BindWorkingExperienceDetails(form, viewModel.WorkingRelationshipDetails);
                 _service.CreateWorkingRelationshipDetails(headerID, viewModel.WorkingRelationshipDetails);
             }
             catch (Exception e)
@@ -131,6 +220,22 @@ namespace MCAWebAndAPI.Web.Controllers
            
         }
 
+        
+        public JsonResult GetPositions()
+        {
+            _service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", ConfigResource.DefaultHRSiteUrl);
+
+            var manpower = _service.GetManpowerRequisitionAll();
+
+            return Json(manpower.Select(e =>
+                new {
+                    e.ID,
+                    Position = e.Position.Text
+                }),
+                JsonRequestBehavior.AllowGet);
+        }
+
         private IEnumerable<WorkingRelationshipDetailVM> BindWorkingExperienceDetails(FormCollection form, IEnumerable<WorkingRelationshipDetailVM> workingRelationshipDetails)
         {
             var array = workingRelationshipDetails.ToArray();
@@ -138,22 +243,12 @@ namespace MCAWebAndAPI.Web.Controllers
             {
                // array[i]. = BindHelper.BindDateInGrid("WorkingRelationshipDetails",  i, "From", form);
               //  array[i].To = BindHelper.BindDateInGrid("WorkingRelationshipDetails",i, "To", form);
+             //y array[i].Frequency = ['Hello', 'World']
             }
 
             return array;
         }
         
-        public ActionResult CreateManpowerRequisition(string siteUrl = null)
-        {
-            // Clear Existing Session Variables if any
-            SessionManager.RemoveAll();
-
-            // MANDATORY: Set Site URL
-            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-
-            var viewModel = _service.GetManpowerRequisition(null);
-            return View(viewModel);
-        }
+       
     }
 }

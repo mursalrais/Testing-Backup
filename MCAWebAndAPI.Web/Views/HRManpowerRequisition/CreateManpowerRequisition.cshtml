@@ -39,17 +39,14 @@
         <div class="row">
             @Html.Partial("_OtherRequirements", Model)
         </div>
+         @Html.HiddenFor(m=>m.Status.Value)
+        
     </fieldset>
     <div class="form-actions">
         <div class="row">
             <div class="col-md-12">
-                <button id="print-button" class="btn btn-default" type="button">
-                    Print
-                </button>
-                <button id="submit-button" class="btn btn-primary" type="submit">
-                    <i class="fa fa-save"></i>
-                    Submit
-                </button>
+                <input type="button" class="btn btn-default" id="StatusDraft" name="StatusDraft" value="Save as Draft">     
+                <input type="button" class="btn btn-default" id="StatusSubmit" name="StatusSubmit" value="Submit for Approval">                
             </div>
         </div>
     </div>
@@ -58,6 +55,17 @@
 @section scripts{
 
     <script>
+        $(document).ready(function () {
+            $("#StatusSubmit").click(function () {
+                $("#Status_Value").val("Pending Approval")
+                $("form").submit();
+            });
+            $("#StatusDraft").click(function () {
+                $("#Status_Value").val("Draft")
+                $("form").submit();
+            });
+            
+        });
         function onSelectIDCardType(e) {
             var dataItem = this.dataItem(e.item);
             if (dataItem === "KTP") {

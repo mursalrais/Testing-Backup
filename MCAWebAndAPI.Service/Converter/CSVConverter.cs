@@ -144,7 +144,7 @@ namespace MCAWebAndAPI.Service.Converter
 
             var updatedValues = new Dictionary<string, object>();
             // Start from 1 since 0 is header 
-            for (int i = 1; i < rowTotal; i++)
+            for (int i = 0; i < rowTotal; i++)
             {
                 for (int j = 0; j < columnTotal; j++)
                 {
