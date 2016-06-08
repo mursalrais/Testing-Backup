@@ -76,6 +76,7 @@
     <Compile Include="ViewModel\Chart\ProjectScheduleSCurveVM.cs" />
     <Compile Include="ViewModel\Chart\ProjectStatusBarChartVM.cs" />
     <Compile Include="ViewModel\Control\CheckBoxVM.cs" />
+    <Compile Include="ViewModel\Control\InGridMultiSelectVM.cs" />
     <Compile Include="ViewModel\Control\CSVVM.cs" />
     <Compile Include="ViewModel\Control\AjaxComboBoxVM.cs" />
     <Compile Include="ViewModel\Control\ComboBoxVM.cs" />

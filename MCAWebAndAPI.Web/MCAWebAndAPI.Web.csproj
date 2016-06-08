@@ -628,7 +628,6 @@
     <Content Include="Views\HRManpowerRequisition\DisplayManpowerRequisition.cshtml" />
     <Content Include="Views\HRManpowerRequisition\PrintManpowerRequisition.cshtml" />
     <Content Include="Views\HRManpowerRequisition\_General.cshtml" />
-    <Content Include="Views\HRManpowerRequisition\_PersonalDetails_Print.cshtml" />
     <Content Include="Views\HRManpowerRequisition\_SupportingDocument.cshtml" />
     <Content Include="Views\HRManpowerRequisition\_WorkingRelationship.cshtml" />
     <Content Include="Views\HRManpowerRequisition\_ResourcesAndPlanning.cshtml" />
@@ -646,6 +645,15 @@
     <Content Include="Views\HRPSAManagement\_PSAManagementDataDisplay.cshtml" />
     <Content Include="Views\HRPSAManagement\_PSAManagementDataEdit.cshtml" />
     <Content Include="Views\HRManpowerRequisition\EditManpowerRequisition.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\InGridMultiSelect.cshtml" />
+    <Content Include="Views\HRManpowerRequisition\EditStatusRequisition.cshtml" />
+    <Content Include="Views\HRManpowerRequisition\ApprovalManpowerRequisition.cshtml" />
+    <Content Include="Views\HRManpowerRequisition\_BackgroundRequirementDisp.cshtml" />
+    <Content Include="Views\HRManpowerRequisition\_GeneralDisp.cshtml" />
+    <Content Include="Views\HRManpowerRequisition\_OtherRequirementsDisp.cshtml" />
+    <Content Include="Views\HRManpowerRequisition\_ResourcesAndPlanningDisp.cshtml" />
+    <Content Include="Views\HRManpowerRequisition\_SpecificexperienceDisp.cshtml" />
+    <Content Include="Views\HRManpowerRequisition\_WorkingRelationship - Copy.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -79,6 +79,15 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0}/Manpower%20Requisition%20Documents/Forms/AllItems.aspx#InplviewHash1ad3b518-3da3-44cd-afac-6c686d40800e=FilterField1%3Dmanpowerrequestid-FilterValue1%3D{1}.
+        /// </summary>
+        public static string ManpowerDocumentByID {
+            get {
+                return ResourceManager.GetString("ManpowerDocumentByID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lists/MonthlyFee.
         /// </summary>
         public static string MonthlyFee {

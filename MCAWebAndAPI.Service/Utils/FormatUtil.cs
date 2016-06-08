@@ -98,8 +98,7 @@ namespace MCAWebAndAPI.Service.Utils
 
 
         public static string ConvertLookupToValue(ListItem item, string columnName)
-        {
-            var tes = item[columnName];
+        {            
             if (item[columnName] == null)
                 return null;
 
@@ -111,6 +110,15 @@ namespace MCAWebAndAPI.Service.Utils
             return new InGridComboBoxVM
             {
                 Text = Convert.ToString(ConvertLookupToValue(item, columnName))
+            };
+        }
+
+        public static AjaxComboBoxVM ConvertToInGridAjaxLookup(ListItem item, string columnName)
+        {
+            return new AjaxComboBoxVM
+            {
+                Text = (item[columnName] as FieldLookupValue).LookupValue,
+                Value = (item[columnName] as FieldLookupValue).LookupId
             };
         }
     }

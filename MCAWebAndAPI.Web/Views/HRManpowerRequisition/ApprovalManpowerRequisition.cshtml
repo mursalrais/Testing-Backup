@@ -1,0 +1,90 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model ManpowerRequisitionVM
+
+@{
+    ViewBag.Title = "EditManpowerRequisition";
+}
+
+@using (Html.BeginForm("ApprovalManpowerRequisition", "HRManpowerRequisition", FormMethod.Post,
+                                                                 new
+                                                                 {
+                                                                     @class = "form-horizontal",
+                                                                     enctype = "multipart/form-data"
+                                                                 }))
+{
+    <fieldset>
+        <legend>General</legend>
+        <div class="row">
+            @Html.Partial("_GeneralDisp", Model)
+        </div>
+        <legend>Supporting Document</legend>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        <button id="application-document-button" class="btn btn-default" type="button">
+                            Click Here to go to Manpower Requisite Document
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+    $('#application-document-button').click(function () {
+        parent.postMessage({
+            result : "Success", urlToRedirect : "@Model.DocumentUrl" }, "@Model.DocumentUrl" );
+    });
+            </script>
+            <legend>Working Relationship</legend>
+            <div class="row">
+                @Html.Partial("_WorkingRelationship", Model.WorkingRelationshipDetails)
+            </div>
+            <legend>Resources and Planning</legend>
+            <div class="row">
+                @Html.Partial("_ResourcesAndPlanningDisp", Model)
+            </div>
+            <legend>Background Requirement</legend>
+            <div class="row">
+                @Html.Partial("_BackgroundRequirementDisp", Model)
+            </div>
+            <legend>Specific Experience</legend>
+            <div class="row">
+                @Html.Partial("_SpecificexperienceDisp", Model)
+            </div>
+            <legend>Other Requirements</legend>
+            <div class="row">
+                @Html.Partial("_OtherRequirementsDisp", Model)
+            </div>
+
+            @Html.HiddenFor(m => m.ID);
+            @Html.HiddenFor(m => m.Status.Value);
+</fieldset>
+    <div class="form-actions">
+        <div class="row">
+            <div class="col-md-12">
+                <input type="button" class="btn btn-default" id="StatusReturn" name="StatusReturn" value="Return to Requestor">
+                <input type="button" class="btn btn-default" id="StatusReject" name="StatusReject" value="Reject">
+                <input type="button" class="btn btn-default" id="StatusApprove" name="StatusApprove" value="Approve">        
+            </div>
+        </div>
+    </div>
+}
+
+@section scripts{
+
+    <script>
+        $(document).ready(function () {
+            $("#StatusApprove").click(function () {
+                $("#Status_Value").val("Approved");
+                $("form").submit();
+            });
+            $("#StatusReject").click(function () {
+                $("#Status_Value").val("Reject");
+                $("form").submit();
+            });
+
+        });
+        
+    </script>
+}
