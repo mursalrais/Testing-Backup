@@ -11,7 +11,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
     public class ApplicationShortlistVM : Item
     {
-        public IEnumerable<ShortlistDetailVM> ShortlistDetail { get; set; } = new List<ShortlistDetailVM>();
+        public IEnumerable<ShortlistDetailVM> ShortlistDetails { get; set; } = new List<ShortlistDetailVM>();
 
         /// <summary>
         /// Title
@@ -19,11 +19,11 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [UIHint("AjaxComboBox")]
         public AjaxComboBoxVM Position { get; set; } = new AjaxComboBoxVM
         {
-            ActionName = "",
-            ControllerName = "",
-            ValueField = "",
-            TextField = "",
-            OnSelectEventName = ""
+            ActionName = "GetPositions",
+            ControllerName = "HRDataMaster",
+            ValueField = "ID",
+            TextField = "PositionName"
+            
         };
 
         public string SendTo { get; set; }

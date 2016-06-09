@@ -1,0 +1,66 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+
+@model IEnumerable<ShortlistDetailVM>
+
+<div class="col-xs-12">
+
+    @(Html.Kendo().Grid(Model)
+    .Name("ShortlistDetails")
+    //.ToolBar(tools => tools.Create().Text("Add New Dependent"))                       
+    .Editable(editable => editable.Mode(GridEditMode.InCell)
+    .CreateAt(GridInsertRowPosition.Bottom))
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.Candidate).ClientTemplate("#= Candidate #" +
+        "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].Candidate' value='#= Candidate #' />");
+        columns.Bound(p => p.CV).ClientTemplate("#= CV #" +
+        "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].CV' value='#= CV #' />");
+        columns.Bound(p => p.Status).ClientTemplate("#= Status.Text #" +
+                           "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].GetStat' value='#= Status.Text #' />"
+                         )
+                         .EditorViewData(new
+                         {
+                             BindTo = ShortlistDetailVM.GetStatusOptions()
+                         });
+        columns.Bound(p => p.Remarks).ClientTemplate("#= Remarks #" +
+        "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].Remarks' value='#= Remarks #' />");
+
+        columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
+          "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].ID' value='#= ID #' />"
+        );
+
+        columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
+           "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].EditMode' value='#= EditMode #' />"
+         );
+        columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
+           .Click("onDeleteKendoDetail")).Width(100);
+    })
+    .Events(e =>
+    {
+        e.Edit("onEditKendoDetail");
+        e.DataBound("onDataBoundDependentDetails");
+    })
+    .DataSource(dataSource => dataSource.Ajax()
+    .Model(model =>
+    {
+        model.Id(p => p.ID);
+
+        model.Field(m => m.Status).DefaultValue(ShortlistDetailVM.GetStatusDefaultValue());
+    })
+    .ServerOperation(false)
+
+    )
+)
+</div>
+<script>
+    function GetDetailShortlist(dataItem) {
+        var data = $("#ShortlistDetails").data("kendoGrid").dataSource.data();
+        return data.indexOf(dataItem);
+    }
+
+    function onDataBoundDependentDetails(e) {
+        var grid = $("#ShortlistDetails").data("kendoGrid");
+        hideDeletedRowKendoDetail(grid);
+    }
+</script>
+

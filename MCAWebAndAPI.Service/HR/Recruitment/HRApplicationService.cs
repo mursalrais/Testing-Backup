@@ -34,7 +34,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             updatedValue.Add("Title", viewModel.FirstMiddleName);
             updatedValue.Add("position", viewModel.Position);
-            updatedValue.Add("manpowerrequisition", new FieldLookupValue { LookupId = (int)viewModel.ManpowerRequisitionID });
+            //updatedValue.Add("manpowerrequisition", new FieldLookupValue { LookupId = (int)viewModel.ManpowerRequisitionID });
 
             updatedValue.Add("lastname", viewModel.LastName);
             updatedValue.Add("placeofbirth", viewModel.PlaceOfBirth);
@@ -205,7 +205,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.BloodType.Value = Convert.ToString(listItem["bloodtype"]);
             viewModel.Religion.Value = Convert.ToString(listItem["religion"]);
             viewModel.Gender.Value = Convert.ToString(listItem["gender"]);
-            viewModel.IDCardType.Value = Convert.ToString(listItem["idcardtype"]);
+            //viewModel.IDCardType.Value = Convert.ToString(listItem["idcardtype"]);
             viewModel.IDCardExpiry = Convert.ToDateTime(listItem["idcardexpirydate"]);
             viewModel.Nationality.Value = FormatUtil.ConvertLookupToID(listItem, "nationality");
             viewModel.ApplicationStatus = Convert.ToString(listItem["applicationstatus"]);

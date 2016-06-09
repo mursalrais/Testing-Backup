@@ -79,45 +79,33 @@
     </div>
 </div>
 
-<script>
-    $(document).ready(function () {
-        var idCardDropDownValue = $("#IDCardType_Value").val();
-        toggleIDCardExpiry(idCardDropDownValue);
 
-        var nationalityDropDownList = $("#Nationality_Value").data("kendoDropDownList");
-        nationalityDropDownList.bind("dataBound", function (e) {
-            var nationalityDropDownValue = nationalityDropDownList.value();
-            toggleNationality(nationalityDropDownValue);
+    <script>
+        $(document).ready(function () {
+            var nationalityDropDownList = $("#Nationality_Value").data("kendoDropDownList");
+            nationalityDropDownList.bind("dataBound", function (e) {
+            });
+
         });
 
-    });
-
-    function toggleIDCardExpiry(idCardType) {
-        if (idCardType == "KTP") {
-            $('#IDCardExpiry').closest('.form-group').hide();
-        } else {
-            $('#IDCardExpiry').closest('.form-group').show();
+        function filterIDCardType(){
+            return {
+                nationality: $("#Nationality_Value").closest('span').find('span.k-input').text()
+            };
         }
-    }
 
-    function toggleNationality(nationality) {
-        if (nationality == "Indonesia") {
-            $('#IDCardExpiry').prop("value", "KTP");
-            toggleIDCardExpiry("KTP");
-            $('#IDCardExpiry').prop("readonly", "readonly");
-        } else {
-            $('#IDCardExpiry').prop("readonly", null);
+        function toggleIDCardExpiry(idCardType) {
+            if (idCardType == "e-KTP") {
+                $('#IDCardExpiry').closest('.form-group').hide();
+            } else {
+                $('#IDCardExpiry').closest('.form-group').show();
+            }
         }
-    }
 
-    function onSelectIDCardType(e) {
-        var dataItem = this.dataItem(e.item);
-        togleIDCardExpiry(dataItem);
-    }
+        function onSelectIDCardType(e) {
+            var dataItem = this.dataItem(e.item);
+            toggleIDCardExpiry(dataItem.Text);
+        }
 
-    function setIDCardTypeToKTP(e) {
-        var dataItem = this.dataItem(e.item);
-        var nationality = dataItem.Title;
-        toggleNationality(nationality);
-    }
-</script>
+    </script>
+
