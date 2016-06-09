@@ -61,22 +61,17 @@
 
                 var dateOfNewPSA = $("#DateOfNewPSA").val();
 
-                //var datenewpsa = new Date(dateOfNewPSA);
-                //var datenewpsainsecond = datenewpsa.getTime();
-
-                //console.log(dateOfNewPSA);
-                //console.log(datenewpsainsecond);
-
                 if ($("#IsRenewal_Value").val() == "Yes")
                 {
 
                     var url = "/HRPSAManagement/GetRenewal/" + dataItem.ID;
 
                     $.getJSON(url, function (result) {
-                        //console.log(result);
+                        
                         var renewalnumber = result[0].PSARenewalNumber + 1;
 
-                        //var expirydate = result[0].PSAExpiryDate;
+                        console.log("Renewal Number Sebelumnya: " + result[0].PSARenewalNumber);
+
                         var expirydatebefore = result[0].ExpiryDateBefore
                         var expdate = new Date(expirydatebefore);
 
@@ -87,15 +82,17 @@
 
                         var setexpdate = new Date(expdate.setDate(calcexpdate));
                         var expirydate = setexpdate.getMonth() + 1 + '/' + setexpdate.getDate() + '/' + setexpdate.getFullYear();
-                        //var testdate = new Date(expirydate);
-
-                        console.log(expirydate);
-
+                        
                         $('#PSARenewalNumber').prop('value', renewalnumber);
+                        $('#HidRenewalNumber').prop('value', renewalnumber);
+
+                        console.log("Hidden Renewal Number Seharusnya: " + $("#HidRenewalNumber").val());
+
                         $('#PSARenewalNumber').prop('readonly', true);
                         $('#ExpiryDateBefore').prop('value', expirydate);
 
                         $("#DateOfNewPSA").data("kendoDatePicker").min(expirydate);
+                        $('#DateOfNewPSA').prop('value', expirydate);
 
 
                         var dateOfNewPSA = $("#DateOfNewPSA").val();
@@ -113,24 +110,25 @@
                         var psaexpirydate = setmonth.getMonth() + 1 + '/' + setmonth.getDate() + '/' + setmonth.getFullYear();
                         $("#PSAExpiryDate").val(psaexpirydate);
 
-                        /*
-                        if (datenewpsainsecond < expirydate)
-                        {
-                            console.log("Date of New PSA Less Than Expiry Date");
-                        }
-                        else
-                        {
-                            console.log("Date of New PSA More Than Expiry Date");
-                        }
-                        */
-
+                        
                     })
                 }
+                else
+                {
+                    $("#PSARenewalNumber").prop("readonly", "true");
+                    $("#PSARenewalNumber").prop("value", 0);
 
-                
+                    var joinDate = $("#JoinDate").val();
+
+                    console.log("Join Date: " + joinDate);
+
+                    $('#DateOfNewPSA').prop('value', joinDate);
+                    $("#DateOfNewPSA").data("kendoDatePicker").min(joinDate);
+                    $("#PSAExpiryDate").val(joinDate);
+                }
+                             
             }
 
-            
             function OnSelectPosition(e) {
                 var dataItem = this.dataItem(e.item);
                 var urlKeyPosition = "/HRDataMaster/GetKeyPosition/" + dataItem.ID;
@@ -144,12 +142,14 @@
                         $('#KeyPositionValue').prop('value', "Yes");
                    
                     }
+                    /*
                     else
                     {
                         $('#KeyPosition').prop('value', "You must upload file with format name: PSADocuments-MMDDYYYY");
                         $('#DocumentType').prop('value', "PSA Document");
                         $('#KeyPositionValue').prop('value', "No");
                     }
+                    */
                 })
 
                 
@@ -182,18 +182,54 @@
 
             });
 
+            $(document).ready(function () {
+
+                
+                function onChange() {
+
+                    if ($("#IsRenewal_Value").val() == "No")
+                    {
+                        var joinDate = $("#JoinDate").val();
+
+                        console.log("Join Date: " + joinDate);
+
+                        $('#DateOfNewPSA').prop('value', joinDate);
+                        $("#DateOfNewPSA").data("kendoDatePicker").min(joinDate);
+                        $("#PSAExpiryDate").val(joinDate);
+
+                    }
+                    
+                }
+
+                $("#JoinDate").kendoDatePicker(
+                { change: onChange }
+                );
+
+            });
+
             
            function isrenewalChanged() {
 
-                if ($("#IsRenewal_Value").prop("value", "No"))
+               if ($("#IsRenewal_Value").val() == "No")
                 {
                     
                     $("#PSARenewalNumber").prop("readonly", "true");
                     $("#PSARenewalNumber").prop("value", 0);
                 }
-                    ;
-           }
+                else
+                {
+                    $("#PSARenewalNumber").prop("readonly", "true");
+                    var renewalnumber = $("#HidRenewalNumber").val();
+                    $('#PSARenewalNumber').prop('value', renewalnumber);
+                    var expirydate = $("#ExpiryDateBefore").val();
+                    $("#DateOfNewPSA").data("kendoDatePicker").min(expirydate);
+                    $('#PSAExpiryDate').prop('value', expirydate);
 
+                    console.log(renewalnumber);
+                    console.log(expirydate);
+                 }
+           }
+                
             /*
            function onUpload(e) {
                var files = e.files;

@@ -631,6 +631,7 @@
     <Content Include="Views\HRManpowerRequisition\_BackgroundRequirement.cshtml" />
     <Content Include="Views\HRManpowerRequisition\_Specificexperience.cshtml" />
     <Content Include="Views\HRManpowerRequisition\_OtherRequirements.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Boolean.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\CheckBoxItem.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\InGridComboBox.cshtml" />
     <Content Include="Views\HRProfessional\_OrganizationalDetails.cshtml" />
@@ -654,6 +655,7 @@
     <Content Include="Views\HRApplication\ListVacantPositions.cshtml" />
     <Content Include="Views\Shared\_PersonalDetails.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\AjaxCascadeComboBox.cshtml" />
+    <Content Include="Views\Task\CalculatePercentComplete.cshtml" />
     <Content Include="Views\TRPlaceMaster\CreatePlaceMaster.cshtml" />
     <Content Include="Views\TRPlaceMaster\EditPlaceMaster.cshtml" />
     <None Include="Web.Debug.config">
@@ -768,7 +770,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\ConfigResource.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ConfigResource.Designer.cs</LastGenOutput>
       <CustomToolNamespace>MCAWebAndAPI.Web.Resources</CustomToolNamespace>
     </EmbeddedResource>

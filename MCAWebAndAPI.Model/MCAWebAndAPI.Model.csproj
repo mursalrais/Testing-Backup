@@ -162,6 +162,7 @@
     <Compile Include="ViewModel\Gantt\GanttTasksVM.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="BackOffice\" />
     <Folder Include="bin\Release\" />
     <Folder Include="HR\PayRoll\" />
     <Folder Include="obj\Debug\TempPE\" />

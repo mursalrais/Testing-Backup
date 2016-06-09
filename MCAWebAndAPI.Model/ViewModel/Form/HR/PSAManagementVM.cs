@@ -48,6 +48,11 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public int PSARenewalNumber { get; set; }
 
         /// <summary>
+        /// to keep the next renewalnumber
+        /// </summary>
+        public int HidRenewalNumber { get; set; }
+
+        /// <summary>
         /// ProjectOrUnit
         /// </summary>
         [UIHint("ComboBox")]
