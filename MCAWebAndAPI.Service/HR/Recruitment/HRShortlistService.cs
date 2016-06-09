@@ -67,15 +67,45 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         //   < FieldRef Name='yearofgraduation' />
         //   <FieldRef Name = 'remarks' />
         //</ ViewFields >
-        private IEnumerable<ShortlistDetailVM> GetDetailShortlist(string Position)
+        private IEnumerable<ShortlistDetailVM> GetDetailShortlist(string Position = null)
         {
             var caml = @"<View>  
             <Query> 
-   <Where>
-      <Eq>
-         <FieldRef Name='position' />
-         <Value Type='Text'>AD, Community-based Renewable Energy</Value>
-      </Eq>
+      <Where>
+      <Or>
+         <Or>
+            <Or>
+               <Or>
+                  <Or>
+                     <Eq>
+                        <FieldRef Name='applicationstatus' />
+                        <Value Type='Text'>New</Value>
+                     </Eq>
+                     <Eq>
+                        <FieldRef Name='applicationstatus' />
+                        <Value Type='Text'>Shortlisted</Value>
+                     </Eq>
+                  </Or>
+                  <Eq>
+                     <FieldRef Name='applicationstatus' />
+                     <Value Type='Text'>Declined</Value>
+                  </Eq>
+               </Or>
+               <Eq>
+                  <FieldRef Name='applicationstatus' />
+                  <Value Type='Text'>NEW</Value>
+               </Eq>
+            </Or>
+            <Eq>
+               <FieldRef Name='applicationstatus' />
+               <Value Type='Text'>SHORTLISTED</Value>
+            </Eq>
+         </Or>
+         <Eq>
+            <FieldRef Name='applicationstatus' />
+            <Value Type='Text'>DECLINED</Value>
+         </Eq>
+      </Or>
    </Where>
             </Query> 
               <ViewFields>
@@ -151,6 +181,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             foreach (var viewModel in viewModels)
             {
+                if (Item.CheckIfSkipped(viewModel))
+                    continue;
+
                 if (Item.CheckIfDeleted(viewModel))
                 {
                     try
@@ -168,7 +201,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
                 var updatedValue = new Dictionary<string, object>();
                 updatedValue.Add("Title", viewModel.Candidate);
-                updatedValue.Add("applicationstatus", viewModel.Status);
+                updatedValue.Add("applicationstatus", viewModel.GetStat);
 
                 try
                 {

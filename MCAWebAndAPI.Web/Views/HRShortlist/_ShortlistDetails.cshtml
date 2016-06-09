@@ -6,7 +6,7 @@
 
     @(Html.Kendo().Grid(Model)
     .Name("ShortlistDetails")
-    //.ToolBar(tools => tools.Create().Text("Add New Dependent"))
+    //.ToolBar(tools => tools.Create().Text("Add New Dependent"))                       
     .Editable(editable => editable.Mode(GridEditMode.InCell)
     .CreateAt(GridInsertRowPosition.Bottom))
     .Columns(columns =>
@@ -16,7 +16,7 @@
         columns.Bound(p => p.CV).ClientTemplate("#= CV #" +
         "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].CV' value='#= CV #' />");
         columns.Bound(p => p.Status).ClientTemplate("#= Status.Text #" +
-                           "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].Status' value='#= Status #' />"
+                           "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].GetStat' value='#= Status.Text #' />"
                          )
                          .EditorViewData(new
                          {
@@ -28,6 +28,10 @@
         columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
           "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].ID' value='#= ID #' />"
         );
+
+        columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
+           "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].EditMode' value='#= EditMode #' />"
+         );
         columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
            .Click("onDeleteKendoDetail")).Width(100);
     })

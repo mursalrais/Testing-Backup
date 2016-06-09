@@ -24,6 +24,27 @@ namespace MCAWebAndAPI.Web.Controllers
             _service = new HRApplicationService();
         }
 
+        public ActionResult GetIDCardType(string nationality)
+        {
+            string[] result = {};
+            if (string.Compare(nationality, "Indonesia", StringComparison.OrdinalIgnoreCase) == 0)
+            {
+                result = new string[] { "e-KTP", "KTP"};
+                return Json(result.Select(e =>
+                new {
+                    Text = e, 
+                    Value = e
+                }), JsonRequestBehavior.AllowGet);
+            }
+
+            result = new string[] { "KITAS", "Passport"};
+            return Json(result.Select(e =>
+            new {
+                Text = e,
+                Value = e
+            }), JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult ListVacantPositions(string siteUrl)
         {
             // Clear Existing Session Variables if any
@@ -34,7 +55,6 @@ namespace MCAWebAndAPI.Web.Controllers
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             var viewModel = _service.GetVacantPositions();
-
             return View(viewModel);
         }
 
@@ -217,7 +237,6 @@ namespace MCAWebAndAPI.Web.Controllers
                 array[i].YearOfGraduation = BindHelper.BindDateInGrid("EducationDetails",
                     i, "YearOfGraduation", form);
             }
-
             return array;
         }
 

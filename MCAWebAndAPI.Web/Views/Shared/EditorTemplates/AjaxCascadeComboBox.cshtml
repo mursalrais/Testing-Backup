@@ -1,6 +1,8 @@
-﻿@model MCAWebAndAPI.Model.ViewModel.Control.AjaxCascadeComboboxVM
+﻿@model MCAWebAndAPI.Model.ViewModel.Control.AjaxCascadeComboBoxVM
 
-@(Html.Kendo().DropDownListFor(m => m.Value)
+@if (Model.OnSelectEventName.IsEmpty())
+{
+    @(Html.Kendo().DropDownListFor(m => m.Value)
               .DataTextField(Model.TextField)
               .DataValueField(Model.ValueField)
               .Value(Model.Value + "")
@@ -20,10 +22,40 @@
               .CascadeFrom(Model.Cascade)
               .HtmlAttributes(new
               {
-                @class = "form-control",
-                style = "width:100%;"
+                  @class = "form-control",
+                  style = "width:100%;"
               })
-)
+    )
+}
+else
+{
+    @(Html.Kendo().DropDownListFor(m => m.Value)
+              .DataTextField(Model.TextField)
+              .DataValueField(Model.ValueField)
+              .Value(Model.Value + "")
+              .Text(Model.Text)
+              .Filter("contains")
+              .DataSource(source =>
+              {
+                  source.Read(read =>
+                  {
+                      read.Action(Model.ActionName, Model.ControllerName)
+                          .Data(Model.Filter);
+                  })
+                  .ServerFiltering(true);
+              })
+              .Enable(false)
+              .AutoBind(false)
+              .Events(e => e.Change(Model.OnSelectEventName))
+              .CascadeFrom(Model.Cascade)
+              .HtmlAttributes(new
+              {
+                  @class = "form-control",
+                  style = "width:100%;"
+              })
+    )
+}
+
 
 @Html.ValidationMessageFor(model => model)
 

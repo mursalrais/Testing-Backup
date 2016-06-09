@@ -99,8 +99,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             ControllerName = "Location",
             ActionName = "GetCountries",
             ValueField = "ID",
-            TextField = "Title", 
-            OnSelectEventName = "setIDCardTypeToKTP"
+            TextField = "Title"
         };
 
         /// <summary>
@@ -134,19 +133,17 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// idcardtype
         /// </summary>
-        [UIHint("ComboBox")]
+        [UIHint("AjaxCascadeComboBox")]
         [DisplayName("ID Card Type")]
         [Required]
-        public ComboBoxVM IDCardType { get; set; } = new ComboBoxVM
+        public AjaxCascadeComboBoxVM IDCardType { get; set; } = new AjaxCascadeComboBoxVM
         {
-            Choices = new string[]
-            {
-                "KTP",
-                "KITAS",
-                "Passport",
-                "SIM"
-            },
-            Value = "KTP", 
+            ActionName = "GetIDCardType", 
+            ControllerName = "HRApplication", 
+            ValueField = "Value", 
+            TextField = "Text", 
+            Cascade = "Nationality_Value", 
+            Filter = "filterIDCardType",
             OnSelectEventName = "onSelectIDCardType"
         };
 

@@ -205,7 +205,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.BloodType.Value = Convert.ToString(listItem["bloodtype"]);
             viewModel.Religion.Value = Convert.ToString(listItem["religion"]);
             viewModel.Gender.Value = Convert.ToString(listItem["gender"]);
-            viewModel.IDCardType.Value = Convert.ToString(listItem["idcardtype"]);
+            //viewModel.IDCardType.Value = Convert.ToString(listItem["idcardtype"]);
             viewModel.IDCardExpiry = Convert.ToDateTime(listItem["idcardexpirydate"]);
             viewModel.Nationality.Value = FormatUtil.ConvertLookupToID(listItem, "nationality");
             viewModel.ApplicationStatus = Convert.ToString(listItem["applicationstatus"]);
