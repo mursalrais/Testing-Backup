@@ -89,7 +89,7 @@
 @section scripts{
 
     <script>
-        function onSelectIDCardType(e) {
+        $(document).ready(function () {
             $("#OnBehalfOf_Value").data("kendoDropDownList").enable(false);
             $("#IsOnBehalfOf").click(function () {
                 if (!$(this).is(":checked")) {
@@ -101,6 +101,16 @@
                 }
 
             });
-        }
-    </script>
+            $("#StatusSubmit").click(function () {
+                $("#Status_Value").val("Pending Approval")
+                $("form").submit();
+            });
+            $("#StatusDraft").click(function () {
+                $("#Status_Value").val("Draft")
+                $("form").submit();
+            });
+
+        });
+
+</script>
 }
