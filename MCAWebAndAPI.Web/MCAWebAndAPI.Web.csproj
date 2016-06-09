@@ -658,6 +658,9 @@
     <Content Include="Views\Task\CalculatePercentComplete.cshtml" />
     <Content Include="Views\TRPlaceMaster\CreatePlaceMaster.cshtml" />
     <Content Include="Views\TRPlaceMaster\EditPlaceMaster.cshtml" />
+    <Content Include="Views\HRShortlist\ShortlistData.cshtml" />
+    <Content Include="Views\HRShortlist\_CreateShortlist.cshtml" />
+    <Content Include="Views\HRShortlist\_ShortlistDetails.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -696,6 +699,7 @@
     <Compile Include="Controllers\HRPayrollController.cs" />
     <Compile Include="Controllers\HRProfessionalController.cs" />
     <Compile Include="Controllers\HRPSAManagementController.cs" />
+    <Compile Include="Controllers\HRShortlistController.cs" />
     <Compile Include="Controllers\LocationController.cs" />
     <Compile Include="Controllers\ProjectHierarchyController.cs" />
     <Compile Include="Controllers\PurchaseOrderController.cs" />

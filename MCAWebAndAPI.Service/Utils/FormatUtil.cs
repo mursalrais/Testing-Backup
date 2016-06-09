@@ -183,5 +183,10 @@ namespace MCAWebAndAPI.Service.Utils
                     }
             }
         }
+
+        public static string ConvertToMultipleLine(string jobDescription)
+        {
+            return string.Format("<p>{0}</p>", jobDescription);
+        }
     }
 }

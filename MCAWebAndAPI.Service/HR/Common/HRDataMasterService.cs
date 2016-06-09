@@ -21,6 +21,8 @@ namespace MCAWebAndAPI.Service.HR.Common
         const string SP_PROORG_LIST_NAME = "Professional Organization Detail";
         const string SP_PRODEP_LIST_NAME = "Dependent";
 
+        const string COMPANY_DOMAIN_EMAIL = "eceos.com";
+
         static Logger logger = LogManager.GetCurrentClassLogger();
 
         public void SetSiteUrl(string siteUrl)
@@ -165,7 +167,7 @@ namespace MCAWebAndAPI.Service.HR.Common
             viewModel.BloodType.Value = Convert.ToString(listItem["bloodtype"]);
             viewModel.Religion.Value = Convert.ToString(listItem["religion"]);
             viewModel.Gender.Value = Convert.ToString(listItem["gender"]);
-            viewModel.IDCardType.Value = Convert.ToString(listItem["idcardtype"]);
+            viewModel.IDCardType.Text = Convert.ToString(listItem["idcardtype"]);
             viewModel.IDCardExpiry = Convert.ToDateTime(listItem["idcardexpirydate"]);
             viewModel.Nationality.Value = FormatUtil.ConvertLookupToID(listItem, "nationality");
 
@@ -663,6 +665,9 @@ namespace MCAWebAndAPI.Service.HR.Common
             updatedValue.Add("idcardtype", viewModel.IDCardType.Value);
             updatedValue.Add("idcardexpirydate", viewModel.IDCardExpiry);
             updatedValue.Add("nationality", new FieldLookupValue { LookupId = (int)viewModel.Nationality.Value });
+
+            updatedValue.Add("officeemail", string.Format("{0}.{1}@{2}", viewModel.FirstMiddleName, viewModel.LastName,
+                COMPANY_DOMAIN_EMAIL));
 
             try
             {
