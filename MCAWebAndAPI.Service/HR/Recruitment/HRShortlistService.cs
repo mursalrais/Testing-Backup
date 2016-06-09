@@ -42,21 +42,19 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.Title = Convert.ToString(listItem["idcardexpirydate"]);
 
             // Convert Details
-            viewModel.ShortlistDetail = GetDetailShortlist();
+            //viewModel.ShortlistDetail = GetDetailShortlist();
             //viewModel.DocumentUrl = GetDocumentUrl(viewModel.ID);
 
             return viewModel;
         }
 
-        public ApplicationShortlistVM GetShortlist(int? ID)
+        public ApplicationShortlistVM GetShortlist(string Position)
         {
             var viewModel = new ApplicationShortlistVM();
-            if (ID == null)
-                viewModel.ShortlistDetail = GetDetailShortlist();
+            if (Position == null)
             return viewModel;
 
-            var listItem = SPConnector.GetListItem(SP_APPDATA_LIST_NAME, ID, _siteUrl);
-            viewModel = ConvertToApplicationDataVM(listItem);
+            viewModel.ShortlistDetail = GetDetailShortlist(Position);
 
             return viewModel;
 
@@ -69,36 +67,24 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         //   < FieldRef Name='yearofgraduation' />
         //   <FieldRef Name = 'remarks' />
         //</ ViewFields >
-        private IEnumerable<ShortlistDetailVM> GetDetailShortlist()
+        private IEnumerable<ShortlistDetailVM> GetDetailShortlist(string Position)
         {
             var caml = @"<View>  
-               <ViewFields>
+            <Query> 
+   <Where>
+      <Eq>
+         <FieldRef Name='position' />
+         <Value Type='Text'>AD, Community-based Renewable Energy</Value>
+      </Eq>
+   </Where>
+            </Query> 
+              <ViewFields>
       <FieldRef Name='Title' />
       <FieldRef Name='ID' />
       <FieldRef Name='applicationstatus' />
       <FieldRef Name='position' />
    </ViewFields>
-   <QueryOptions>
-      <IncludeMandatoryColumns>True</IncludeMandatoryColumns>
-   </QueryOptions>
-   <Where>
-      <Or>
-         <Or>
-            <Eq>
-               <FieldRef Name='applicationstatus' />
-               <Value Type='Text'>SHOTLISTED</Value>
-            </Eq>
-            <Eq>
-               <FieldRef Name='applicationstatus' />
-               <Value Type='Text'>NEW</Value>
-            </Eq>
-         </Or>
-         <Eq>
-            <FieldRef Name='applicationstatus' />
-            <Value Type='Text'>DECLINED</Value>
-         </Eq>
-      </Or>
-   </Where>
+   
             </View>";
 
             var eduacationDetails = new List<ShortlistDetailVM>();

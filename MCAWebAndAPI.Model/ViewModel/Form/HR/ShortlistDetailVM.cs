@@ -36,7 +36,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public static InGridComboBoxVM GetStatusDefaultValue(InGridComboBoxVM model = null)
         {
             var options = GetStatusOptions();
-            if (model == null || model.Value == null || string.IsNullOrEmpty(model.Text))
+            if (model == null || string.IsNullOrEmpty(model.Text))
                 return options.FirstOrDefault();
 
             return options.FirstOrDefault(e =>

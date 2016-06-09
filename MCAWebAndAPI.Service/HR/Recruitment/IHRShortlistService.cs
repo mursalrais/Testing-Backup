@@ -12,7 +12,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         IEnumerable<ApplicationShortlistVM> GetShortlists();
 
-        ApplicationShortlistVM GetShortlist(int? ID);
+        ApplicationShortlistVM GetShortlist(string Position);
 
         int? EditShortlistData(ShortlistDetailVM viewModel);
 
