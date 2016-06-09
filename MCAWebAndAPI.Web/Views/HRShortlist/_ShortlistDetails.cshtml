@@ -15,9 +15,6 @@
         "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].Candidate' value='#= Candidate #' />");
         columns.Bound(p => p.CV).ClientTemplate("#= CV #" +
         "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].CV' value='#= CV #' />");
-        //columns.Bound(p => p.Status).ClientTemplate("#= kendo.toString(Status, 'p') #" +
-        //                   "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].Status' value='#= Status #' />"
-        //                 ).EditorViewData(new { BindTo = ShortlistDetailVM.GetStatusOptions() });
         columns.Bound(p => p.Status).ClientTemplate("#= Status.Text #" +
                            "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].Status' value='#= Status #' />"
                          )
@@ -28,6 +25,8 @@
         columns.Bound(p => p.Remarks).ClientTemplate("#= Remarks #" +
         "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].Remarks' value='#= Remarks #' />");
 
+        columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
+           .Click("onDeleteKendoDetail")).Width(100);
     })
     .Events(e =>
     {
@@ -49,7 +48,6 @@
 <script>
     function GetDetailShortlist(dataItem) {
         var data = $("#ShortlistDetails").data("kendoGrid").dataSource.data();
-        console.log(dataItem);
         return data.indexOf(dataItem);
     }
 
