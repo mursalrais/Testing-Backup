@@ -56,6 +56,17 @@
 
     <script>
         $(document).ready(function () {
+            $("#OnBehalfOf_Value").data("kendoDropDownList").enable(false);
+            $("#IsOnBehalfOf").click(function () {
+                if (!$(this).is(":checked")) {
+                    $("#OnBehalfOf_Value").data("kendoDropDownList").enable(false);
+                }
+                else {
+                    
+                    $("#OnBehalfOf_Value").data("kendoDropDownList").enable(true);
+                }
+                    
+            });
             $("#StatusSubmit").click(function () {
                 $("#Status_Value").val("Pending Approval")
                 $("form").submit();
@@ -66,13 +77,6 @@
             });
             
         });
-        function onSelectIDCardType(e) {
-            var dataItem = this.dataItem(e.item);
-            if (dataItem === "KTP") {
-                $('#IDCardExpiry').closest('.form-group').show();
-            } else {
-                $('#IDCardExpiry').closest('.form-group').hide();
-            }
-        }
+        
     </script>
 }

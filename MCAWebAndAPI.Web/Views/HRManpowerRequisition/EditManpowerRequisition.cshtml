@@ -90,12 +90,17 @@
 
     <script>
         function onSelectIDCardType(e) {
-            var dataItem = this.dataItem(e.item);
-            if (dataItem === "KTP") {
-                $('#IDCardExpiry').closest('.form-group').show();
-            } else {
-                $('#IDCardExpiry').closest('.form-group').hide();
-            }
+            $("#OnBehalfOf_Value").data("kendoDropDownList").enable(false);
+            $("#IsOnBehalfOf").click(function () {
+                if (!$(this).is(":checked")) {
+                    $("#OnBehalfOf_Value").data("kendoDropDownList").enable(false);
+                }
+                else {
+
+                    $("#OnBehalfOf_Value").data("kendoDropDownList").enable(true);
+                }
+
+            });
         }
     </script>
 }

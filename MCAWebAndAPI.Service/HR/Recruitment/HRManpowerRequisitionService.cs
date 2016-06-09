@@ -42,10 +42,15 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             updatedValue.Add("budgetmgmt", viewModel.BudgetManagement);
 
             updatedValue.Add("isonbehalfof", viewModel.IsOnBehalfOf);
+            if (viewModel.IsOnBehalfOf)
+            {
+                updatedValue.Add("onbehalfof", new FieldLookupValue { LookupId = (int)viewModel.OnBehalfOf.Value });
+            }
+            
             updatedValue.Add("istravelrequired", viewModel.IsTravellingRequired);
             updatedValue.Add("iskeyposition", viewModel.IsKeyPosition);
 
-            updatedValue.Add("onbehalfof", new FieldLookupValue { LookupId = (int)viewModel.OnBehalfOf.Value });
+            
 
             updatedValue.Add("projectunit", viewModel.DivisionProjectUnit.Value);
 
@@ -124,8 +129,15 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             updatedValue.Add("isonbehalfof", viewModel.IsOnBehalfOf);
             updatedValue.Add("istravelrequired", viewModel.IsTravellingRequired);
             updatedValue.Add("iskeyposition", viewModel.IsKeyPosition);
-
-            updatedValue.Add("onbehalfof", new FieldLookupValue { LookupId = (int)viewModel.OnBehalfOf.Value });
+            if (viewModel.IsOnBehalfOf)
+            {
+                updatedValue.Add("onbehalfof", new FieldLookupValue { LookupId = (int)viewModel.OnBehalfOf.Value });
+            }
+            else
+            {
+                updatedValue.Add("onbehalfof", "");
+            }
+            
 
             updatedValue.Add("projectunit", viewModel.DivisionProjectUnit.Value);
             updatedValue.Add("manpowerrequeststatus", viewModel.Status.Value);
@@ -183,9 +195,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 }
             }
         }
-
-
-
+        
         public ManpowerRequisitionVM GetManpowerRequisition(int? ID)
         {
             var viewModel = new ManpowerRequisitionVM();
@@ -200,7 +210,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     Value = false
                 });
             }
-
+            
             viewModel.Workplan = tempList;
 
             if (ID == null)
