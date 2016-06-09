@@ -128,7 +128,7 @@
                 $('#ProfessionalID').prop('value', result[0].ID);
                 $('#Status').prop('value', result[0].Status);
                 $.getJSON(urlPSA, function (result) {
-                    if (result.errorMessage == "Error") {
+                    if (result.length == 0) {
                         $('#ProjectUnit').prop('value', "");
                         $('#Position').prop('value', "");
                         $('#JoinDate').prop('value', "");
