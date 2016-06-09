@@ -126,6 +126,7 @@
     <Compile Include="HR\Recruitment\IHRShortlistService.cs" />
     <Compile Include="HR\Recruitment\IPSAManagementService.cs" />
     <Compile Include="HR\Recruitment\PSAManagementService.cs" />
+    <Compile Include="JobSchedulers\Jobs\EmailExternalJob.cs" />
     <Compile Include="JobSchedulers\Jobs\EmailJob.cs" />
     <Compile Include="JobSchedulers\Jobs\TaskCalculationJob.cs" />
     <Compile Include="JobSchedulers\Schedulers\EmailScheduler.cs" />
@@ -149,6 +150,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>UrlResource.resx</DependentUpon>
     </Compile>
+    <Compile Include="Utils\EmailExternalUtil.cs" />
     <Compile Include="Utils\FormatUtil.cs" />
     <Compile Include="Utils\GraphicUtil.cs" />
     <Compile Include="Utils\MathUtil.cs" />

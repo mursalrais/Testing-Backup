@@ -33,7 +33,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             var updatedValue = new Dictionary<string, object>();
 
             updatedValue.Add("Title", viewModel.FirstMiddleName);
-            updatedValue.Add("position", viewModel.Position);
+            updatedValue.Add("vacantposition", 
+                new FieldLookupValue() { LookupId = (int)GetVacantPosition(viewModel.Position).ID });
+
             updatedValue.Add("manpowerrequisition", new FieldLookupValue { LookupId = (int)viewModel.ManpowerRequisitionID });
             updatedValue.Add("lastname", viewModel.LastName);
             updatedValue.Add("placeofbirth", viewModel.PlaceOfBirth);
@@ -65,11 +67,49 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             }
             catch (Exception e)
             {
-                logger.Error(e.Message);
+                logger.Error(e);
                 throw e;
             }
 
-            return SPConnector.GetLatestListItemID(SP_APPDATA_LIST_NAME, _siteUrl);
+            var ID = SPConnector.GetLatestListItemID(SP_APPDATA_LIST_NAME, _siteUrl);
+
+            // Update Document URL
+            updatedValue = new Dictionary<string, object>();
+            updatedValue.Add("documenturl", string.Format(UrlResource.ApplicationDocumentByID, _siteUrl, ID));
+            try
+            {
+                SPConnector.UpdateListItem(SP_APPDATA_LIST_NAME, ID, updatedValue, _siteUrl);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e);
+                throw e;
+            }
+
+            return ID;
+        }
+
+        private PositionsMaster GetVacantPosition(string position)
+        {
+            var caml = @"<View>  
+            <Query> 
+               <Where><Eq><FieldRef Name='Title' /><Value Type='Text'>" + position + 
+               @"</Value></Eq></Where> 
+            </Query> 
+                <ViewFields><FieldRef Name='ID' /><FieldRef Name='Title' /></ViewFields> 
+            </View>";
+
+            var vacantPosition = new PositionsMaster();
+            foreach (var item in SPConnector.GetList(SP_POSMAS_LIST_NAME, _siteUrl, caml))
+            {
+                vacantPosition = new PositionsMaster
+                {
+                    ID = Convert.ToInt32(item["ID"]),
+                    PositionName = Convert.ToString(item["Title"])
+                };
+            }
+
+            return vacantPosition;
         }
 
         public void CreateEducationDetails(int? headerID, IEnumerable<EducationDetailVM> viewModels)
@@ -171,7 +211,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel = ConvertToApplicationDataVM(listItem);
 
             return viewModel;
-
         }
 
         private ApplicationDataVM ConvertToApplicationDataVM(ListItem listItem)
@@ -209,7 +248,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.IDCardExpiry = Convert.ToDateTime(listItem["idcardexpirydate"]);
             viewModel.Nationality.Value = FormatUtil.ConvertLookupToID(listItem, "nationality");
             viewModel.ApplicationStatus = Convert.ToString(listItem["applicationstatus"]);
-
 
             // Convert Details
             viewModel.EducationDetails = GetEducationDetails(viewModel.ID);
