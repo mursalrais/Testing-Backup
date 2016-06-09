@@ -14,8 +14,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         ApplicationShortlistVM GetShortlist(string Position);
 
-        int? EditShortlistData(ShortlistDetailVM viewModel);
-
-        void CreateShortlistDataDetail(int? headerID, IEnumerable<ShortlistDetailVM> educationDetails);
+        void CreateShortlistDataDetail(int? headerID, IEnumerable<ShortlistDetailVM> ShortlistDetails);
     }
 }

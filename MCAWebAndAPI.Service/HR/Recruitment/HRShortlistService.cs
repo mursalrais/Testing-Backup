@@ -54,7 +54,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             if (Position == null)
             return viewModel;
 
-            viewModel.ShortlistDetail = GetDetailShortlist(Position);
+            viewModel.ShortlistDetails = GetDetailShortlist(Position);
 
             return viewModel;
 
@@ -146,40 +146,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
         }
 
-        public int? EditShortlistData(ShortlistDetailVM viewModel)
-        {
-            var updatedValue = new Dictionary<string, object>();
-
-            updatedValue.Add("Candidate", viewModel.Candidate);
-            updatedValue.Add("CV", viewModel.CV);
-            updatedValue.Add("EditMode", viewModel.EditMode);
-            updatedValue.Add("ID", viewModel.ID);
-            updatedValue.Add("Remarks", viewModel.Remarks);
-            updatedValue.Add("Status", viewModel.Status);
-            updatedValue.Add("Title", viewModel.Title);
-
-
-            try
-            {
-                SPConnector.UpdateListItem(SP_PROMAS_LIST_NAME, viewModel.ID, updatedValue);
-            }
-            catch (Exception e)
-            {
-                logger.Error(e);
-                throw e;
-            }
-
-            return viewModel.ID;
-        }
-
 
         public void CreateShortlistDataDetail(int? headerID, IEnumerable<ShortlistDetailVM> viewModels)
         {
             foreach (var viewModel in viewModels)
             {
-                if (Item.CheckIfSkipped(viewModel))
-                    continue;
-
                 if (Item.CheckIfDeleted(viewModel))
                 {
                     try
@@ -196,20 +167,12 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 }
 
                 var updatedValue = new Dictionary<string, object>();
-                updatedValue.Add("Candidate", viewModel.Candidate);
-                updatedValue.Add("CV", viewModel.CV);
-                updatedValue.Add("EditMode", viewModel.EditMode);
-                updatedValue.Add("ID", viewModel.ID);
-                updatedValue.Add("Remarks", viewModel.Remarks);
-                updatedValue.Add("Status", viewModel.Status);
-                updatedValue.Add("Title", viewModel.Title);
+                updatedValue.Add("Title", viewModel.Candidate);
+                updatedValue.Add("applicationstatus", viewModel.Status);
 
                 try
                 {
-                    if (Item.CheckIfUpdated(viewModel))
-                        SPConnector.UpdateListItem(SP_APPDATA_LIST_NAME, viewModel.ID, updatedValue, _siteUrl);
-                    else
-                        SPConnector.AddListItem(SP_APPDATA_LIST_NAME, updatedValue, _siteUrl);
+                   SPConnector.UpdateListItem(SP_APPDATA_LIST_NAME, viewModel.ID, updatedValue, _siteUrl);
                 }
                 catch (Exception e)
                 {
