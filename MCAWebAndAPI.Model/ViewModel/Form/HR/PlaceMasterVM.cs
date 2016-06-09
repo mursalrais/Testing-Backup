@@ -14,6 +14,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// Title
         /// </summary>
+        [Required(ErrorMessage = "Location Name is Required")]
         public string LocationName { get; set; }
 
         /// <summary>
