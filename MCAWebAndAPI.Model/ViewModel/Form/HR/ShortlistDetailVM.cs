@@ -12,6 +12,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         public string CV { get; set; }
 
+        public string GetStat { get; set; }
+
         [UIHint("InGridComboBox")]
         public InGridComboBoxVM Status { get; set; }  = new InGridComboBoxVM();
 
