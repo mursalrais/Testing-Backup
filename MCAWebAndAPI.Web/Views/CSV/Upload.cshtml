@@ -67,7 +67,7 @@
         function importCSV(e) {
             var url = "/CSV/Submit?listName=" + "@Model.ListName";
             $.getJSON(url, function (data) {
-                alert(data.succesMessage);
+                showModalWindow(data);
             });
         }
 

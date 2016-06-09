@@ -1,4 +1,17 @@
-﻿function onUpload(e) {
+﻿function showModalWindow(data) {
+    $("#remoteModal").modal('show');
+
+    if (data.success) {
+        $('#modal-html-content').html('<div class="alert alert-success alert-block"><h4 class="alert-heading">Success!</h4>'
+        + (data.successMessage != null ? data.successMessage : "") + '</div>');
+    } else {
+        $('#modal-html-content').html('<div class="alert alert-danger fade in"><h4 class="alert-heading">Failed</h4>'
+            + data.responseJSON.errorMessage + '</div>');
+    }
+}
+
+
+function onUpload(e) {
     var files = e.files;
 
     $.each(files, function () {
@@ -26,6 +39,7 @@ function onCompleteForm() {
     hideLoading();
     $("#remoteModal").modal('show');
 }
+
 
 function onSuccessForm(e) {
 
@@ -68,7 +82,9 @@ function printForm(e) {
     $('form').submit();
 }
 
+// Event when the modal window is closed
 $('#remoteModal').on('hidden.bs.modal', function () {
+
 })
 
 // To put all necessary functions triggerd when document is loaded 
@@ -112,3 +128,4 @@ function hideDeletedRowKendoDetail(grid) {
         }
     }
 }
+

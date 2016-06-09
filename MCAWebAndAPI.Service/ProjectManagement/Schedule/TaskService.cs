@@ -30,20 +30,28 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
             _actualTotal = new Dictionary<DateTime, int>();
         }
 
-        private double GetGroupPercentComplete(string groupName)
+        private Task GetTaskGroupValue(string groupName)
         {
             var caml = @"<View>  
                 <Query> 
                     <Where><Eq><FieldRef Name='Title' /><Value Type='Text'>" + groupName + @"</Value></Eq></Where> 
                 </Query> 
-                    <ViewFields><FieldRef Name='Title' /><FieldRef Name='PercentComplete' /></ViewFields> 
+                    <ViewFields><FieldRef Name='Title' /><FieldRef Name='StartDate' />
+                    <FieldRef Name='DueDate' />
+                    <FieldRef Name='PercentComplete' /></ViewFields> 
             </View>";
 
             foreach (var item in SPConnector.GetList(SP_TASK_LIST_NAME, _siteUrl, caml))
             {
-                return Convert.ToDouble(item["PercentComplete"]);
+                return
+                    new Task
+                    {
+                        PercentComplete = Convert.ToDouble(item["PercentComplete"]),
+                        StartDate = Convert.ToDateTime(item["StartDate"]),
+                        DueDate = Convert.ToDateTime(item["DueDate"])
+                    };
             }
-            return 0;
+            return null;
         }
 
         private void CalculateSubActivity()
@@ -52,10 +60,14 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
             {
                 var subActivityID = Convert.ToInt32(item["ID"]);
                 var subActivityName = Convert.ToString(item["Title"]);
-                var subActivityPercentComplete = GetGroupPercentComplete(subActivityName);
+                var task = GetTaskGroupValue(subActivityName);
+                if (task == null)
+                    continue;
 
                 var updatedValue = new Dictionary<string, object>();
-                updatedValue.Add("_x0025_Complete", subActivityPercentComplete);
+                updatedValue.Add("_x0025_Complete", task.PercentComplete);
+                updatedValue.Add("Start", task.StartDate);
+                updatedValue.Add("Finish", task.DueDate);
 
                 try
                 {
@@ -78,10 +90,14 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
             {
                 var activityID = Convert.ToInt32(item["ID"]);
                 var activityName = Convert.ToString(item["Title"]);
-                var activityPercentComplete = GetGroupPercentComplete(activityName);
+                var task = GetTaskGroupValue(activityName);
+                if (task == null)
+                    continue;
 
                 var updatedValue = new Dictionary<string, object>();
-                updatedValue.Add("PercentComplete", activityPercentComplete);
+                updatedValue.Add("PercentComplete", task.PercentComplete);
+                updatedValue.Add("Start", task.StartDate);
+                updatedValue.Add("Finish", task.DueDate);
 
                 try
                 {
@@ -255,7 +271,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
             try
             {
-                UpdateProjectInformation();
+                CalculateProjectInformation();
             }
             catch (Exception e)
             {
@@ -270,13 +286,15 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
             return numberOfUpdatedTask;
         }
 
-        private void UpdateProjectInformation()
+        private void CalculateProjectInformation()
         {
             Dictionary<string, object> updatedColumns = new Dictionary<string, object>();
             var mainTaskItem = _updatedTaskCandidates.Values.FirstOrDefault(e => e.TaskValue.ParentId == 0);
 
             updatedColumns["Title"] = mainTaskItem.TaskValue.Title;
             updatedColumns["_x0025__x0020_Complete"] = mainTaskItem.TaskValue.PercentComplete;
+            updatedColumns["Start"] = mainTaskItem.TaskValue.StartDate;
+            updatedColumns["Finish"] = mainTaskItem.TaskValue.DueDate;
 
             var latestID = SPConnector.GetLatestListItemID(SP_PROJECT_INFORMATION_LIST_NAME, _siteUrl);
             try
