@@ -1,0 +1,71 @@
+﻿
+@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model ApplicationShortlistVM
+
+@{ 
+    ViewBag.Title = "ShortlistData";
+}
+
+@using (Html.BeginForm("ShortlistData", "HRShortlist", FormMethod.Post, new {
+        @class = "form-horizontal",
+        enctype = "multipart/form-data"
+}))
+{
+    <fieldset>
+        <div class="row">
+            @*<div class="col-sm-6">
+                @Html.Bootstrap().LabelFor(m => m.Position).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.Position)
+                </div>
+                @Html.HiddenFor(m => m.ShortlistDetail)
+            </div>*@
+        </div>
+        <legend>Create Shortlist</legend>
+        @*<div class="row">
+            @Html.Partial("_CreateShortlist", Model)
+        </div>*@
+    
+
+        <legend>Candidate list</legend>
+        <div class="row">
+            @Html.Partial("_ShortlistDetails", Model.ShortlistDetail)
+        </div>
+
+        
+    </fieldset>
+    <div class="form-actions">
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.SendTo).Class("col-xs-4 control-label")
+                    <div class="col-xs-8">
+                        @Html.DisplayFor(m => m.SendTo)
+                    </div>
+                </div>
+                </div>
+                <div class="col-sm-8">
+
+                    @*<button id="submit-nextstep" class="btn btn-primary" type="submit">
+                        <i class="fa fa-save"></i>
+                        send to next step
+                    </button>*@
+                    <button id="submit-button" class="btn btn-primary" type="submit">
+                        <i class="fa fa-save"></i>
+                        save
+                    </button>
+                    @*<button id="submit-cancel" class="btn btn-primary" type="submit">
+                        <i class="fa fa-save"></i>
+                        cancel
+                    </button>*@
+
+                </div>
+            </div>
+    </div>
+}
+
+@section scripts{
+
+
+}
+

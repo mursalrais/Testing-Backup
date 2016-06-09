@@ -37,7 +37,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// parentlocation
         /// </summary>
         [UIHint("AjaxCascadeComboBox")]
-        public AjaxCascadeComboboxVM ParentLocation { get; set; } = new AjaxCascadeComboboxVM
+        public AjaxCascadeComboBoxVM ParentLocation { get; set; } = new AjaxCascadeComboBoxVM
         {
             ActionName = "GetParentLocations",
             ControllerName = "Location",

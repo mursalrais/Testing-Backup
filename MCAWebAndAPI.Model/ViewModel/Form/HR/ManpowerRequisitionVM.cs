@@ -39,12 +39,15 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// numberofperson
         /// </summary>
+
         [DisplayName("No. Of Person")]
+        [UIHint("Integer")]
         public int NoOfPerson { get; set; }
 
         /// <summary>
         /// Tenure
         /// </summary>
+        [UIHint("Integer")]
         public int Tenure { get; set; }
 
         /// <summary>
@@ -54,7 +57,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public AjaxComboBoxVM JobLocation { get; set; } = new AjaxComboBoxVM
         {
             ControllerName = "Location",
-            ActionName = "GetProvince",
+            ActionName = "GetProvinces",
             ValueField = "ID",
             TextField = "Title"
         };
@@ -91,7 +94,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             ControllerName = "HRDataMaster",
             ActionName = "GetPositions",
             ValueField = "ID",
-            TextField = "Title"
+            TextField = "PositionName"
         };
 
         /// <summary>
@@ -128,11 +131,13 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// personnelmgmt
         /// </summary>
+        [UIHint("Integer")]
         public int PersonnelManagement { get; set; }
 
         /// <summary>
         /// budgetmgmt
         /// </summary>
+        [UIHint("Integer")]
         public int BudgetManagement { get; set; }
         [UIHint("CheckBoxItem")]
         public IEnumerable<CheckBoxItemVM> Workplan { get; set; } = new List<CheckBoxItemVM>();

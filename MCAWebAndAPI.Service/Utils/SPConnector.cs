@@ -67,15 +67,6 @@ namespace MCAWebAndAPI.Service.Utils
                         </QueryOptions >
                         </View>";
 
-            /*
-            string camlViewXml = caml ?? @"<View>  
-            <Query> 
-               <OrderBy><FieldRef Name='ID' Ascending='FALSE' /><FieldRef Name='ID' Ascending='FALSE' /></OrderBy> 
-            </Query> 
-                <ViewFields><FieldRef Name='ID' /></ViewFields> 
-            <RowLimit>1</RowLimit> 
-            </View>";
-            */
 
             var result = 1;
             var list = GetList(listname, siteUrl, camlViewXml);

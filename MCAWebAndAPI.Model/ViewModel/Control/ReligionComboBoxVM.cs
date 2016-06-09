@@ -17,7 +17,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Control
                 "Catholicism",
                 "Hinduism",
                 "Buddhism",
-                "Atheism",
                 "Not Stated"
             };
             Value = "Not Stated";
