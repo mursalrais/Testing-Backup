@@ -1,0 +1,13 @@
+﻿@model MCAWebAndAPI.Model.ViewModel.Control.InGridMultiSelectVM
+
+@(Html.Kendo().MultiSelectFor(m => m)
+          .AutoClose(false)
+          .Placeholder("Select attendees...")
+          .DataTextField("Text")
+          .DataValueField("Text")
+          .BindTo(((System.Collections.IEnumerable)ViewData["BindTo"]))
+          .Value((System.Collections.IEnumerable)ViewData["Values"])
+          )
+    
+         
+)

@@ -16,7 +16,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
         const string SP_TASK_LIST_NAME = "Tasks";
         const string SP_PROJECT_INFORMATION_LIST_NAME = "Project Information";
         const string SP_ACTIVITY_LIST_NAME = "Activity";
-        const string SP_SUB_ACTIVITY_LIST_NAME = "SubActivity";
+        const string SP_SUB_ACTIVITY_LIST_NAME = "Sub Activity";
         string _siteUrl = null;
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
                 try
                 {
-                    SPConnector.UpdateListItem(SP_SUB_ACTIVITY_LIST_NAME, activityID, updatedValue, _siteUrl);
+                    SPConnector.UpdateListItem(SP_ACTIVITY_LIST_NAME, activityID, updatedValue, _siteUrl);
                 }
                 catch (Exception e)
                 {

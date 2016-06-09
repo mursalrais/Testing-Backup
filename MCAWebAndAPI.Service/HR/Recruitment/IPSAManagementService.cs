@@ -25,5 +25,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         bool UpdatePSAManagement(PSAManagementVM psaManagement);
 
         void CreatePSAManagementDocuments(int? headerID, IEnumerable<HttpPostedFileBase> documents, PSAManagementVM psaManagement);
+
+        IEnumerable<PSAManagementVM> GetRenewalNumber(int? professionalID);
     }
 }

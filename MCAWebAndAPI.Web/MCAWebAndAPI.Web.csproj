@@ -16,7 +16,7 @@
     <RootNamespace>MCAWebAndAPI.Web</RootNamespace>
     <AssemblyName>MCAWebAndAPI.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -428,8 +428,9 @@
     <None Include="job_scheduling_data_2_0.xsd">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="JSLintNet.json" />
     <None Include="Properties\PublishProfiles\host.my-epmo.com.pubxml" />
-    <None Include="Properties\PublishProfiles\ims production local.pubxml" />
+    <None Include="Properties\PublishProfiles\mcaims-dev - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\mcaims-dev - Web Deploy.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -563,7 +564,6 @@
     <Content Include="Views\Shared\EditorTemplates\PhoneNumber.cshtml" />
     <Content Include="Views\HRDataMaster\CreateProfessionalData.cshtml" />
     <Content Include="Views\HRApplication\CreateApplicationData.cshtml" />
-    <Content Include="Views\Shared\_PersonalDetails.cshtml" />
     <Content Include="Views\HRApplication\_ContactInformationDetails.cshtml" />
     <Content Include="Views\HRApplication\_SpecializationDetails.cshtml" />
     <Content Include="Views\HRApplication\_WorkingExperienceDetails.cshtml" />
@@ -592,8 +592,6 @@
     <Content Include="Views\Shared\DisplayTemplates\TextArea.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\Time.cshtml" />
     <Content Include="Views\CalendarEvent\Create.cshtml" />
-    <Content Include="Views\CSV\Upload.cshtml" />
-    <Content Include="Views\CSV\Submit.cshtml" />
     <Content Include="Views\HRPayroll\CreateMonthlyFee.cshtml" />
     <Content Include="Views\HRPayroll\EditMonthlyFee.cshtml" />
     <Content Include="Views\HRPSAManagement\CreatePSAManagement.cshtml" />
@@ -627,7 +625,6 @@
     <Content Include="Views\HRManpowerRequisition\DisplayManpowerRequisition.cshtml" />
     <Content Include="Views\HRManpowerRequisition\PrintManpowerRequisition.cshtml" />
     <Content Include="Views\HRManpowerRequisition\_General.cshtml" />
-    <Content Include="Views\HRManpowerRequisition\_PersonalDetails_Print.cshtml" />
     <Content Include="Views\HRManpowerRequisition\_SupportingDocument.cshtml" />
     <Content Include="Views\HRManpowerRequisition\_WorkingRelationship.cshtml" />
     <Content Include="Views\HRManpowerRequisition\_ResourcesAndPlanning.cshtml" />
@@ -645,13 +642,22 @@
     <Content Include="Views\HRPSAManagement\_PSAManagementDataDisplay.cshtml" />
     <Content Include="Views\HRPSAManagement\_PSAManagementDataEdit.cshtml" />
     <Content Include="Views\HRManpowerRequisition\EditManpowerRequisition.cshtml" />
-    <Content Include="Views\BIEmbed\WFP03HN.cshtml" />
-    <Content Include="Views\BIEmbed\WFP01HN.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\InGridMultiSelect.cshtml" />
+    <Content Include="Views\HRManpowerRequisition\EditStatusRequisition.cshtml" />
+    <Content Include="Views\HRManpowerRequisition\ApprovalManpowerRequisition.cshtml" />
+    <Content Include="Views\HRManpowerRequisition\_BackgroundRequirementDisp.cshtml" />
+    <Content Include="Views\HRManpowerRequisition\_GeneralDisp.cshtml" />
+    <Content Include="Views\HRManpowerRequisition\_OtherRequirementsDisp.cshtml" />
+    <Content Include="Views\HRManpowerRequisition\_ResourcesAndPlanningDisp.cshtml" />
+    <Content Include="Views\HRManpowerRequisition\_SpecificexperienceDisp.cshtml" />
+    <Content Include="Views\CSV\Upload.cshtml" />
+    <Content Include="Views\CSV\_DisplayGrid.cshtml" />
     <Content Include="Views\HRApplication\ListVacantPositions.cshtml" />
+    <Content Include="Views\Shared\_PersonalDetails.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\AjaxCascadeComboBox.cshtml" />
     <Content Include="Views\Task\CalculatePercentComplete.cshtml" />
-    <Content Include="Views\HRShortlist\ShortlistData.cshtml" />
-    <Content Include="Views\HRShortlist\_ShortlistDetails.cshtml" />
-    <Content Include="Views\HRShortlist\_CreateShortlist.cshtml" />
+    <Content Include="Views\TRPlaceMaster\CreatePlaceMaster.cshtml" />
+    <Content Include="Views\TRPlaceMaster\EditPlaceMaster.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -685,7 +691,6 @@
     <Compile Include="Controllers\FINEventBudgetController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HRApplicationController.cs" />
-    <Compile Include="Controllers\HRShortlistController.cs" />
     <Compile Include="Controllers\HRDataMasterController.cs" />
     <Compile Include="Controllers\HRManpowerRequisitionController.cs" />
     <Compile Include="Controllers\HRPayrollController.cs" />
@@ -697,6 +702,7 @@
     <Compile Include="Controllers\RIAController.cs" />
     <Compile Include="Controllers\SuccessController.cs" />
     <Compile Include="Controllers\TaskController.cs" />
+    <Compile Include="Controllers\TRPlaceMasterController.cs" />
     <Compile Include="Filters\HandleErrorAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -718,6 +724,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ConfigResource.resx</DependentUpon>
     </Compile>
+    <Compile Include="Resources\EmailResource.Designer.cs" />
     <Compile Include="Resources\MessageResource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -767,6 +774,7 @@
       <LastGenOutput>ConfigResource.Designer.cs</LastGenOutput>
       <CustomToolNamespace>MCAWebAndAPI.Web.Resources</CustomToolNamespace>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\EmailResource.resx" />
     <EmbeddedResource Include="Resources\MessageResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>MessageResource.Designer.cs</LastGenOutput>

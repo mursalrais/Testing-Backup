@@ -28,16 +28,24 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
                 "Yes",
                 "No"
             },
-            Value = "Yes"
-            //OnSelectEventName = "isrenewalChanged"
+            Value = "Yes",
+            OnSelectEventName = "isrenewalChanged"
         };
 
         /// <summary>
-        /// renewalnumber
+        /// renewalnumber for display value
         /// </summary>
+        [UIHint("Integer")]
         [DisplayName("Renewal#")]
         [Required]
         public int RenewalNumber { get; set;}
+
+        /// <summary>
+        /// renewalnumber for edit value
+        /// </summary>
+        [DisplayName("Renewal#")]
+        [Required]
+        public int PSARenewalNumber { get; set; }
 
         /// <summary>
         /// ProjectOrUnit
@@ -127,6 +135,13 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [DisplayName("PSA Expiry Date")]
         public DateTime? PSAExpiryDate { get; set; } = DateTime.Now;
 
+        //public string expiry { get; set; }
+
+        /*
+        [UIHint("Date")]
+        public DateTime? ExpiryDateBefore { get; set; } = DateTime.Now;
+        */
+
         [UIHint("MultiFileUploader")]
         [Required]
         public IEnumerable<HttpPostedFileBase> Documents { get; set; } = new List<HttpPostedFileBase>();
@@ -136,6 +151,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// DocumentType
         /// </summary>
+        /*
         [UIHint("ComboBox")]
         [DisplayName("Document Type")]
         public ComboBoxVM DocumentType { get; set; } = new ComboBoxVM
@@ -147,7 +163,18 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             },
             Value = "PSA Document"
         };
+        */
 
-        public string KeyPosition { get; set; }
+        public string DocumentType { get; set;}
+
+        //public string KeyPosition { get; set; }
+
+        //public string KeyPositionValue { get; set; }
+
+        /// <summary>
+        /// psaexpirydate
+        /// </summary>
+        [UIHint("Date")]
+        public DateTime? Created { get; set; } = DateTime.Now;
     }
 }

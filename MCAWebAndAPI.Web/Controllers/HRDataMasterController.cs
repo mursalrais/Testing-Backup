@@ -5,6 +5,7 @@ using MCAWebAndAPI.Web.Resources;
 using System.Collections.Generic;
 using MCAWebAndAPI.Model.HR.DataMaster;
 using MCAWebAndAPI.Web.Helpers;
+using System;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -122,6 +123,20 @@ namespace MCAWebAndAPI.Web.Controllers
                     e.Remarks,
                     e.isKeyPosition
                     //Desc = string.Format("{0}", e.Title)
+                }),
+                JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetPositionsGrid()
+        {
+            _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+
+            var positions = GetFromPositionsExistingSession();
+
+            return Json(positions.Select(e =>
+                new {
+                    Value = Convert.ToString(e.ID),
+                    Text = e.PositionName
                 }),
                 JsonRequestBehavior.AllowGet);
         }

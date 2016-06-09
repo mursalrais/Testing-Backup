@@ -14,7 +14,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// requestdate
         /// </summary>
         [UIHint("Date")]
-        public DateTime? DateRequested { get; set; } = DateTime.Now.AddYears(-28);
+        public DateTime? DateRequested { get; set; } = DateTime.Now;
         public Boolean IsOnBehalfOf { get; set; } = new Boolean();
 
         /// <summary>
@@ -39,12 +39,15 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// numberofperson
         /// </summary>
+
         [DisplayName("No. Of Person")]
+        [UIHint("Integer")]
         public int NoOfPerson { get; set; }
 
         /// <summary>
         /// Tenure
         /// </summary>
+        [UIHint("Integer")]
         public int Tenure { get; set; }
 
         /// <summary>
@@ -54,7 +57,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public AjaxComboBoxVM JobLocation { get; set; } = new AjaxComboBoxVM
         {
             ControllerName = "Location",
-            ActionName = "GetProvince",
+            ActionName = "GetProvinces",
             ValueField = "ID",
             TextField = "Title"
         };
@@ -91,7 +94,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             ControllerName = "HRDataMaster",
             ActionName = "GetPositions",
             ValueField = "ID",
-            TextField = "Title"
+            TextField = "PositionName"
         };
 
         /// <summary>
@@ -119,6 +122,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         [UIHint("MultiFileUploader")]
         public IEnumerable<HttpPostedFileBase> Documents { get; set; } = new List<HttpPostedFileBase>();
+
+
         public string DocumentUrl { get; set; }
 
         public IEnumerable<WorkingRelationshipDetailVM> WorkingRelationshipDetails { get; set; } = new List<WorkingRelationshipDetailVM>();
@@ -126,11 +131,13 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// personnelmgmt
         /// </summary>
+        [UIHint("Integer")]
         public int PersonnelManagement { get; set; }
 
         /// <summary>
         /// budgetmgmt
         /// </summary>
+        [UIHint("Integer")]
         public int BudgetManagement { get; set; }
         [UIHint("CheckBoxItem")]
         public IEnumerable<CheckBoxItemVM> Workplan { get; set; } = new List<CheckBoxItemVM>();
@@ -190,8 +197,29 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// </summary>
         [UIHint("TextArea")]
         public string Remarks { get; set; }
-        
 
-        
+        [UIHint("ComboBox")]
+        [DisplayName("Status")]
+        public ComboBoxVM Status { get; set; } = new ComboBoxVM()
+        {
+            Choices = new string[]{
+                "Pending MCC Approval",
+                "Rejected by MCC",
+                "Approved by MCC",
+                "Active",
+                "Filled",
+                "Cancelled"
+            }
+        };
+
+        [UIHint("AjaxComboBox")]
+        [DisplayName("Position")]
+        public AjaxComboBoxVM PositionManpower { get; set; } = new AjaxComboBoxVM
+        {
+            ControllerName = "HRManpowerRequisition",
+            ActionName = "GetPositions",
+            ValueField = "ID",
+            TextField = "Position"
+        };
     }
 }

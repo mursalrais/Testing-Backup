@@ -1,4 +1,6 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@using MCAWebAndAPI.Model.Common
+
 @model ProfessionalDataVM
 
 @{
@@ -6,16 +8,28 @@
 }
 
 @using (Ajax.BeginForm("EditProfessional", "HRProfessional", FormMethod.Post,
-    new AjaxOptions
-    {
-        OnBegin = "onBeginForm", 
-        OnComplete = "onCompleteForm",
-        OnFailure = "onFailureForm",
-        OnSuccess = "onSuccessFormEmbed"
-    },
-    new { @class = "form-horizontal"}))
+                                                                            new AjaxOptions
+                                                                            {
+                                                                                OnBegin = "onBeginForm",
+                                                                                OnComplete = "onCompleteForm",
+                                                                                OnFailure = "onFailureForm",
+                                                                                OnSuccess = "onSuccessFormEmbed"
+                                                                            },
+                                                                            new { @class = "form-horizontal" }))
 {
     <fieldset>
+        <legend>Validation Status</legend>
+        <div class="row">
+            <div class="col-sm-6">
+                @Html.Bootstrap().LabelFor(m => m.ValidationStatus).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.ValidationStatus)
+                </div>
+            </div>
+            <div class="col-sm-6">
+
+            </div>
+        </div>
         <legend>Personal Details</legend>
         @Html.HiddenFor(m => m.ID)
         <div class="row">
@@ -38,7 +52,7 @@
             @Html.Partial("_TrainingDetails", Model.TrainingDetails)
         </div>
         <legend>Insurance Details</legend>
-            @Html.Partial("_InsuranceDetails", Model)
+        @Html.Partial("_InsuranceDetails", Model)
         <legend>Payroll Details</legend>
         <div class="row">
             @Html.Partial("_PayrollDetails", Model)
@@ -47,13 +61,33 @@
         <div class="row">
             @Html.Partial("_DependentDetails", Model.DependentDetails)
         </div>
+        @Html.HiddenFor(m => m.ValidationAction)
     </fieldset>
     <div class="form-actions">
         <div class="row">
             <div class="col-sm-12">
-                <button id="validate-button" class="btn" type="submit">
-                    Validate
-                </button>
+
+                @if (ViewBag.IsHRView && Model.ValidationStatus ==
+                        Workflow.GetProfessionalValidationStatus(Workflow.ProfessionalValidationStatus.NEED_VALIDATION))
+                {
+                    <button id="ask-hr-to-validate-action" class="btn btn-submit" type="button">
+                        Ask HR to Validate
+                    </button>
+                }
+                else if (!ViewBag.IsHRView && Model.ValidationStatus ==
+                        Workflow.GetProfessionalValidationStatus(Workflow.ProfessionalValidationStatus.VALIDATED))
+
+                    
+                    if (ViewBag.IsHRView)
+                    {
+                        <button id="approve-action" class="btn btn-submit" type="button">
+                            Approve
+                        </button>
+                        <button id="reject-action" class="btn btn-submit" type="button">
+                            Reject
+                        </button>
+                    }
+
             </div>
         </div>
     </div>
@@ -61,5 +95,20 @@
 
 @section scripts{
 
-   
+    <script>
+
+        $(document).ready(function () {
+
+            $(".btn-submit").click(function (e) {
+                var button = $(e.target).closest("button"); //get the row
+                var id = button.prop('id');
+
+                $('#ValidationAction').prop('value', id);
+                $('form').submit();
+            });
+        });
+
+    </script>
+
+
 }

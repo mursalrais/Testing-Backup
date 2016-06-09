@@ -419,7 +419,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             var caml = @"<View>  
                     <Query> 
-                       <Where><Eq><FieldRef Name='manpowerrequeststatus' /><Value Type='Choice'>Active</Value></Eq></Where><OrderBy><FieldRef Name='positionrequested_x003a_Position' /></OrderBy> 
+                       <Where><Eq><FieldRef Name='manpowerrequeststatus' /><Value Type='Text'>Active</Value></Eq></Where><OrderBy><FieldRef Name='positionrequested_x003a_Position' /></OrderBy> 
                     </Query> 
                     <ViewFields><FieldRef Name='manpowerrequeststatus' /><FieldRef Name='ID' /><FieldRef Name='positionrequested' /><FieldRef Name='positionrequested_x003a_Position' /></ViewFields></View>"; 
 

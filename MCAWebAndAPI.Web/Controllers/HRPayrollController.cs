@@ -13,9 +13,6 @@ using MCAWebAndAPI.Service.Resources;
 using System.Net;
 using System;
 
-/// <summary>
-/// 
-/// </summary>
 namespace MCAWebAndAPI.Web.Controllers
 {
     public class HRPayrollController : Controller

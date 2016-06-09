@@ -35,7 +35,8 @@ namespace MCAWebAndAPI.Service.HR.Common
             List<int> collectionIDMonthlyFee = new List<int>();
             foreach (var item in SPConnector.GetList(SP_MONFEE_LIST_NAME, _siteUrl))
             {
-                collectionIDMonthlyFee.Add(Convert.ToInt32(item["ProfessionalId"]));
+                collectionIDMonthlyFee.Add(item["professional_x003a_ID"] == null ? 0 :
+               Convert.ToInt16((item["professional_x003a_ID"] as FieldLookupValue).LookupValue));
             }
             foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl))
             {
@@ -56,7 +57,8 @@ namespace MCAWebAndAPI.Service.HR.Common
             List<int> collectionIDMonthlyFee = new List<int>();
             foreach (var item in SPConnector.GetList(SP_MONFEE_LIST_NAME, _siteUrl))
             {
-                collectionIDMonthlyFee.Add(Convert.ToInt32(item["ProfessionalId"]));
+                collectionIDMonthlyFee.Add(item["professional_x003a_ID"] == null ? 0 :
+               Convert.ToInt16((item["professional_x003a_ID"] as FieldLookupValue).LookupValue));
             }
             foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl))
             {
@@ -88,7 +90,6 @@ namespace MCAWebAndAPI.Service.HR.Common
                 ID = Convert.ToInt32(item["ID"]),
                 Name = Convert.ToString(item["Title"]),
                 Status = Convert.ToString(item["maritalstatus"]),
-                Position = Convert.ToString(item["Position"])
             };
         }
 
@@ -441,8 +442,12 @@ namespace MCAWebAndAPI.Service.HR.Common
 
             try
             {
-                SPConnector.UpdateListItem(SP_PROMAS_LIST_NAME, viewModel.ID, updatedValue);
-            }catch(Exception e)
+                if(viewModel.ID == null)
+                    SPConnector.AddListItem(SP_PROMAS_LIST_NAME, updatedValue);
+                else
+                    SPConnector.UpdateListItem(SP_PROMAS_LIST_NAME, viewModel.ID, updatedValue);
+            }
+            catch(Exception e)
             {
                 logger.Error(e);
                 throw e;
@@ -552,7 +557,6 @@ namespace MCAWebAndAPI.Service.HR.Common
                     try
                     {
                         SPConnector.DeleteListItem(SP_PRODEP_LIST_NAME, viewModel.ID, _siteUrl);
-
                     }
                     catch (Exception e)
                     {
@@ -693,5 +697,41 @@ namespace MCAWebAndAPI.Service.HR.Common
 
             return GetProfessionalData(professionalID);
         }
+
+        public void SendEmailValidation(string emailTo, string emailMessages)
+        {
+            try
+            {
+                SPConnector.SendEmail(emailTo, emailMessages, "Professional Data Validation", _siteUrl);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e);
+                throw e;
+            }
+        }
+
+        public void SendEmailValidation(string emailTo, string emailMessages, bool isApproved)
+        {
+            SendEmailValidation(emailTo, string.Format(emailMessages, isApproved ? "Approved" : "Rejected"));
+        }
+
+        public void UpdateValidation(int? ID, string status)
+        {
+            var updatedValue = new Dictionary<string, object>();
+            updatedValue.Add("datavalidationstatus", status);
+
+            try
+            {
+                SPConnector.UpdateListItem(SP_PROMAS_LIST_NAME, ID, updatedValue);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e);
+                throw e;
+            }
+        }
+
+       
     }
 }

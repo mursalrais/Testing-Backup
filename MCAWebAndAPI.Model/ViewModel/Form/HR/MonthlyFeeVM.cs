@@ -11,6 +11,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// ProfessionalId
         /// </summary>
+        [UIHint("Integer")]
+        [Required(ErrorMessage = "Professional ID Field Is Required")]
         [DisplayName("Professional ID")]
         public int? ProfessionalID { get; set; }
 
@@ -28,11 +30,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// maritalstatus
         /// </summary>
         public string Status { get; set; }
-
-        /// <summary>
-        /// professional
-        /// </summary>
-        public string Name { get; set; }
 
         /// <summary>
         /// professional
@@ -64,6 +61,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// joindate
         /// </summary>
+        [Required(ErrorMessage = "Professional Doesn't Have PSA")]
         public string JoinDate { get; set; }
 
         /// <summary>
@@ -79,17 +77,21 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// DateOfNewFee
         /// </summary>
+        [Required(ErrorMessage = "Date Of New Fee Field Is Required")]
         [UIHint("Date")]
         public DateTime? DateOfNewFee { get; set; } = DateTime.UtcNow;
 
         /// <summary>
         /// MonthlyFee
         /// </summary>
+        [UIHint("Integer")]
+        [Range(1, Int32.MaxValue, ErrorMessage = "Monthly Fee Field Can't Be Zero or Negative")]
         public int MonthlyFee { get; set; }
 
         /// <summary>
         /// AnnualFee
         /// </summary>
+        [UIHint("Integer")]
         public int AnnualFee { get; set; }
 
         /// <summary>

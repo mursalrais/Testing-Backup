@@ -1,0 +1,96 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+
+@model PlaceMasterVM
+
+@using (Ajax.BeginForm("UpdatePlaceMaster", "TRPlaceMaster",
+                                                                                        FormMethod.Post,
+                                                                                        new AjaxOptions
+                                                                                        {
+                                                                                            OnBegin = "onBeginForm",
+                                                                                            OnComplete = "onCompleteForm",
+                                                                                            OnSuccess = "onSuccessFormEmbed",
+                                                                                            OnFailure = "onFailureForm"
+                                                                                        }, new { @class = "form-horizontal" }))
+{<fieldset>
+        <legend>Form Place Master</legend>
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary()
+
+        <div class="col-md-12">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.LocationName).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.LocationName)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.LevelOfPlace).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.LevelOfPlace)
+                </div>
+            </div>
+            <div class="form-group" id="ParentDiv">
+                @Html.Bootstrap().LabelFor(m => m.ParentLocation).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.ParentLocation)
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-8">
+                    @Html.HiddenFor(m => m.ID)
+                </div>
+            </div>
+        </div>
+    </fieldset>
+}
+
+<div class="form-actions">
+    <div class="row">
+        <div class="col-md-12">
+            <button class="btn btn-default" type="submit">
+                Cancel
+            </button>
+            <button id="submit-button" class="btn btn-primary" type="submit">
+                <i class="fa fa-save"></i>
+                Submit
+            </button>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+<script type="text/javascript">
+        $(document).ready(function () {
+            $("#submit-button").click(function () {
+                $("form").submit();
+            });
+        });
+
+        function OnSelectLevel() {
+            if ($("#LevelOfPlace_Value").val() == "Continent") {
+                $("#ParentDiv").hide();
+            }
+            if ($("#LevelOfPlace_Value").val() == "Country") {
+                $("#ParentDiv").show();
+            }
+            if ($("#LevelOfPlace_Value").val() == "Province") {
+                $("#ParentDiv").show();
+            }
+            if ($("#LevelOfPlace_Value").val() == "City") {
+                $("#ParentDiv").show();
+            }
+        }
+
+        $(function () {
+            if ($("#LevelOfPlace_Value").val() == "Continent") {
+                $("#ParentDiv").hide();
+            }
+        });
+
+        function filterLevel() {
+                return {
+                    Level: $("#LevelOfPlace_Value").val()
+                };
+            }
+</script>
+}

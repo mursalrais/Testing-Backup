@@ -20,7 +20,7 @@
                     <div class="col-sm-8">
                         @(Html.Kendo().Upload()
                         .Name("CSVFile")
-                        .HtmlAttributes(new { @class = "form-control"})
+                        .HtmlAttributes(new { @class = "form-control" })
                         .Events(e =>
                         {
                             e.Complete("onCompleteUploadCSV");
@@ -37,41 +37,7 @@
         </div>
 
         <div class="row visible-after-uploaded">
-            <div class="col-sm-12">
-                @(Html.Kendo().Grid<dynamic>()
-    .Name("UploadGrid")
-    .Columns(columns =>
-    {
-        foreach (System.Data.DataColumn column in Model.DataTable.Columns)
-        {
-            var c = columns.Bound(column.ColumnName);
-        }
-    })
-    .Pageable()
-    .Sortable()
-    .Editable(ed => ed.Mode(GridEditMode.PopUp).CreateAt(GridInsertRowPosition.Bottom))
-    .DataSource(dataSource => dataSource
-        .Ajax()
-        .Model(model =>
-        {
-            var id = Model.DataTable.PrimaryKey[0].ColumnName;
-            model.Id(id);
-            foreach (System.Data.DataColumn column in Model.DataTable.Columns)
-            {
-                var field = model.Field(column.ColumnName, column.DataType);
-                if (column.ColumnName == id)
-                {
-                    field.Editable(false);
-                }
-
-            }
-        })
-        .Read(read => read.Action("Grid_Read", "CSV"))
-        .Update(update => update.Action("Grid_Update", "CSV"))
-    )
-                )
-
-
+            <div class="col-sm-12"id="grid-placeholder">
             </div>
         </div>
         <div class="form-actions">
@@ -86,6 +52,7 @@
         </div>
 
     </fieldset>
+
 </div>
 
 @section scripts{
@@ -105,10 +72,7 @@
         }
 
         function onCompleteUploadCSV() {
-            var grid = $("#UploadGrid").data("kendoGrid");
-            grid.dataSource.read();
-            grid.refresh();
-
+            $('#grid-placeholder').load('/CSV/DisplayGrid');
             $(".visible-after-uploaded").show();
         }
     </script>

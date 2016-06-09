@@ -3,6 +3,7 @@
 @(Html.Kendo().Upload()
     .Name("Documents")
     .Multiple(true)
-    .Events(e => e.Upload("onUpload"))
+    .Events(e => 
+            e.Upload("onUpload"))
 )
 @Html.ValidationMessageFor(model => model)

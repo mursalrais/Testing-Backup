@@ -17,22 +17,21 @@ namespace MCAWebAndAPI.Service.HR.Payroll
         const string SP_HEADER_LIST_NAME = "Monthly Fee";
         public int CreateHeader(MonthlyFeeVM header)
         {
-            var updatedValues = new Dictionary<string, object>();
-            updatedValues.Add("ProfessionalId", header.ProfessionalID);
-            updatedValues.Add("professional", header.Name);
-            updatedValues.Add("ProjectOrUnit", header.ProjectUnit);
-            updatedValues.Add("position", header.Position);
-            updatedValues.Add("maritalstatus", header.Status);
-            updatedValues.Add("joindate", header.JoinDate);
-            updatedValues.Add("dateofnewpsa", header.DateOfNewPsa);
-            updatedValues.Add("psaexpirydate", header.EndOfContract);
-            updatedValues.Add("DateOfNewFee", header.DateOfNewFee);
-            updatedValues.Add("MonthlyFee", header.MonthlyFee);
-            updatedValues.Add("AnnualFee", header.AnnualFee);
-            updatedValues.Add("MonthlyFeeCurrency", header.Currency.Value);
+            var columnValues = new Dictionary<string, object>();
+            columnValues.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(header.ProfessionalName.Value) });
+            columnValues.Add("ProjectOrUnit", header.ProjectUnit);
+            columnValues.Add("position", header.Position);
+            columnValues.Add("maritalstatus", header.Status);
+            columnValues.Add("joindate", header.JoinDate);
+            columnValues.Add("dateofnewpsa", header.DateOfNewPsa);
+            columnValues.Add("psaexpirydate", header.EndOfContract);
+            columnValues.Add("DateOfNewFee", header.DateOfNewFee);
+            columnValues.Add("MonthlyFee", header.MonthlyFee);
+            columnValues.Add("AnnualFee", header.AnnualFee);
+            columnValues.Add("MonthlyFeeCurrency", header.Currency.Value);
             try
             {
-                SPConnector.AddListItem(SP_HEADER_LIST_NAME, updatedValues, _siteUrl);
+                SPConnector.AddListItem(SP_HEADER_LIST_NAME, columnValues, _siteUrl);
             }
             catch (Exception e)
             {
@@ -62,8 +61,6 @@ namespace MCAWebAndAPI.Service.HR.Payroll
         {
             var columnValues = new Dictionary<string, object>();
             int? ID = header.ID;
-            columnValues.Add("ProfessionalId", header.ProfessionalID);
-            columnValues.Add("professional", header.Name);
             columnValues.Add("ProjectOrUnit", header.ProjectUnit);
             columnValues.Add("position", header.Position);
             columnValues.Add("maritalstatus", header.Status);
@@ -93,15 +90,14 @@ namespace MCAWebAndAPI.Service.HR.Payroll
         {
             var listItem = SPConnector.GetListItem(SP_HEADER_LIST_NAME, ID, _siteUrl);
             var viewModel = new MonthlyFeeVM();
-
-            viewModel.ProfessionalID = Convert.ToInt16(listItem["ProfessionalId"]);
-            viewModel.Name = Convert.ToString(listItem["professional"]);
+            viewModel.ProfessionalID = listItem["professional_x003a_ID"] == null ? 0 :
+               Convert.ToInt16((listItem["professional_x003a_ID"] as FieldLookupValue).LookupValue);
             viewModel.ProjectUnit = Convert.ToString(listItem["ProjectOrUnit"]);
             viewModel.Position = Convert.ToString(listItem["position"]);
             viewModel.Status = Convert.ToString(listItem["maritalstatus"]);
-            viewModel.JoinDate = Convert.ToString(listItem["joindate"]);
-            viewModel.DateOfNewPsa = Convert.ToString(listItem["dateofnewpsa"]);
-            viewModel.EndOfContract = Convert.ToString(listItem["psaexpirydate"]);
+            viewModel.JoinDate = Convert.ToDateTime(listItem["joindate"]).ToLocalTime().ToShortDateString();
+            viewModel.DateOfNewPsa = Convert.ToDateTime(listItem["dateofnewpsa"]).ToLocalTime().ToShortDateString();
+            viewModel.EndOfContract = Convert.ToDateTime(listItem["psaexpirydate"]).ToLocalTime().ToShortDateString();
             viewModel.DateOfNewFee = Convert.ToDateTime(listItem["DateOfNewFee"]).ToLocalTime();
             viewModel.MonthlyFee = Convert.ToInt32(listItem["MonthlyFee"]);
             viewModel.AnnualFee = Convert.ToInt32(listItem["AnnualFee"]);
