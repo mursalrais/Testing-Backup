@@ -10,7 +10,6 @@ namespace MCAWebAndAPI.Model.Common
 {
     public abstract class Item
     {
-        [UIHint("Integer")]
         public int? ID { get; set; }
 
         public string Title { get; set; }

@@ -52,12 +52,6 @@ namespace MCAWebAndAPI.Web.Controllers
         [HttpPost]
         public ActionResult CreateProfessionalData(FormCollection form, ApplicationDataVM viewModel)
         {
-            if (!ModelState.IsValid)
-            {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                var errorMessages = BindHelper.GetErrorMessages(ModelState.Values);
-                return JsonHelper.GenerateJsonErrorResponse(errorMessages);
-            }
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
@@ -128,13 +122,7 @@ namespace MCAWebAndAPI.Web.Controllers
         [HttpPost]
         public ActionResult CreateApplicationData(FormCollection form, ApplicationDataVM viewModel)
         {
-            if (!ModelState.IsValid)
-            {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                var errorMessages = BindHelper.GetErrorMessages(ModelState.Values);
-                return RedirectToAction("Index", "Error", new { errorMessages = errorMessages });
-            }
-
+         
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
