@@ -189,7 +189,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 updatedValue.Add("applicationfrom", viewModel.From);
                 updatedValue.Add("applicationto", viewModel.To);
                 updatedValue.Add("application", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
-                updatedValue.Add("applicationjobdescription", viewModel.JobDescription);
+                updatedValue.Add("applicationjobdescription", viewModel.Remarks);
 
                 try
                 {
@@ -320,7 +320,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 ID = Convert.ToInt32(item["ID"]),
                 Company = Convert.ToString(item["applicationcompany"]),
                 Position = Convert.ToString(item["Title"]),
-                JobDescription = Convert.ToString(item["applicationjobdescription"]),
+                Remarks = Convert.ToString(item["applicationjobdescription"]),
                 From = Convert.ToDateTime(item["applicationfrom"]),
                 To = Convert.ToDateTime(item["applicationto"])
             };

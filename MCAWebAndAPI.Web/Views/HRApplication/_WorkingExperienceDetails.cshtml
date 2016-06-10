@@ -10,18 +10,20 @@
         {
             columns.Bound(p => p.Position).ClientTemplate("#= Position #" +
                           "<input type='hidden' name='WorkingExperienceDetails[#= getWorkingExperienceDetail(data)#].Position' value='#= Position #' />"
-                        );
+                        ).Width(300);
             columns.Bound(p => p.Company).ClientTemplate("#= Company #" +
                                "<input type='hidden' name='WorkingExperienceDetails[#= getWorkingExperienceDetail(data)#].Company' value='#= Company #' />"
-                             );
-            columns.Bound(p => p.From).ClientTemplate("#= From.getFullYear() #" +
+                             ).Width(400);
+            columns.Bound(p => p.From).ClientTemplate("#=getMonthName(From)#" + " " +  "#= From.getFullYear() #" +
                                "<input type='hidden' name='WorkingExperienceDetails[#= getWorkingExperienceDetail(data)#].From' value='#= From #' />"
-                             );
-            columns.Bound(p => p.To).ClientTemplate("#= To.getFullYear() #" +
+                             ).Width(150);
+            columns.Bound(p => p.To).ClientTemplate("#=getMonthName(To)#" + " " + "#= To.getFullYear() #" +
                                "<input type='hidden' name='WorkingExperienceDetails[#= getWorkingExperienceDetail(data)#].To' value='#= To #' />"
-                             );
-            columns.Bound(p => p.JobDescription).ClientTemplate("#= JobDescription #" +
-                               "<input type='hidden' name='WorkingExperienceDetails[#= getWorkingExperienceDetail(data)#].To' value='#= JobDescription #' />");
+                             ).Width(150);
+            columns.Bound(p => p.Remarks).ClientTemplate("#= Remarks #" +
+                            "<input type='hidden' name='WorkingExperienceDetails[#= getWorkingExperienceDetail(data)#].Remarks' value='#= Remarks #' />"
+                          );
+
             columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
               "<input type='hidden' name='WorkingExperienceDetails[#= getWorkingExperienceDetail(data)#].ID' value='#= ID #' />"
             );
