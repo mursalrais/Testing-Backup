@@ -21,7 +21,6 @@ namespace MCAWebAndAPI.Service.HR.Common
         const string SP_PROORG_LIST_NAME = "Professional Organization Detail";
         const string SP_PRODEP_LIST_NAME = "Dependent";
 
-        const string COMPANY_DOMAIN_EMAIL = "eceos.com";
 
         static Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -638,49 +637,6 @@ namespace MCAWebAndAPI.Service.HR.Common
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="viewModel"></param>
-        /// <returns></returns>
-        public int? CreateProfessionalData(ApplicationDataVM viewModel)
-        {
-            var updatedValue = new Dictionary<string, object>();
-
-            updatedValue.Add("Title", viewModel.FirstMiddleName);
-            updatedValue.Add("lastname", viewModel.LastName);
-            updatedValue.Add("placeofbirth", viewModel.PlaceOfBirth);
-            updatedValue.Add("dateofbirth", viewModel.DateOfBirth);
-            updatedValue.Add("idcardnumber", viewModel.IDCardNumber);
-            updatedValue.Add("permanentaddress", viewModel.PermanentAddress);
-            updatedValue.Add("permanentlandlinephone", FormatUtil.ConvertToCleanPhoneNumber(viewModel.Telephone));
-            updatedValue.Add("currentaddress", viewModel.CurrentAddress);
-            updatedValue.Add("currentlandlinephone", FormatUtil.ConvertToCleanPhoneNumber(viewModel.CurrentTelephone));
-            updatedValue.Add("personalemail", viewModel.EmailAddresOne);
-            updatedValue.Add("mobilephonenr", FormatUtil.ConvertToCleanPhoneNumber(viewModel.MobileNumberOne));
-            updatedValue.Add("maritalstatus", viewModel.MaritalStatus.Value);
-            updatedValue.Add("bloodtype", viewModel.BloodType.Value);
-            updatedValue.Add("religion", viewModel.Religion.Value);
-            updatedValue.Add("gender", viewModel.Gender.Value);
-            updatedValue.Add("idcardtype", viewModel.IDCardType.Value);
-            updatedValue.Add("idcardexpirydate", viewModel.IDCardExpiry);
-            updatedValue.Add("nationality", new FieldLookupValue { LookupId = (int)viewModel.Nationality.Value });
-
-            updatedValue.Add("officeemail", string.Format("{0}.{1}@{2}", viewModel.FirstMiddleName, viewModel.LastName,
-                COMPANY_DOMAIN_EMAIL));
-
-            try
-            {
-                SPConnector.AddListItem(SP_PROMAS_LIST_NAME, updatedValue, _siteUrl);
-            }
-            catch (Exception e)
-            {
-                logger.Error(e.Message);
-                throw new Exception(e.Message);
-            }
-
-            return SPConnector.GetLatestListItemID(SP_PROMAS_LIST_NAME, _siteUrl);
-        }
 
         public ProfessionalDataVM GetProfessionalData(string userLoginName = null)
         {
@@ -737,6 +693,24 @@ namespace MCAWebAndAPI.Service.HR.Common
             }
         }
 
-       
+        public PositionsMaster GetPosition(int id)
+        {
+            var caml = @"<View>  
+            <Query> 
+               <Where><Eq><FieldRef Name='ID' /><Value Type='Counter'>" + id + @"</Value></Eq></Where> 
+            </Query> 
+             <ViewFields><FieldRef Name='Title' /><FieldRef Name='ID' /></ViewFields> 
+      </View>";
+
+            var position = new PositionsMaster();
+            foreach (var item in SPConnector.GetList(SP_POSMAS_LIST_NAME, _siteUrl, caml))
+            {
+                position.ID = Convert.ToInt32(item["ID"]);
+                position.PositionName = Convert.ToString(item["Title"]);
+                //TODO: To add other neccessary property
+            }
+
+            return position;
+        }
     }
 }

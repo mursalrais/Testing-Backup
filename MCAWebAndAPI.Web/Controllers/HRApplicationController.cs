@@ -26,24 +26,78 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult GetIDCardType(string nationality)
         {
-            string[] result = {};
+            string[] result = { };
+
+            Dictionary<int, string> choice = _service.GetIDCardType();
+
             if (string.Compare(nationality, "Indonesia", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                result = new string[] { "e-KTP", "KTP"};
-                return Json(result.Select(e =>
-                new {
-                    Text = e, 
-                    Value = e
-                }), JsonRequestBehavior.AllowGet);
+                return Json(choice.Where(e => e.Value == "e-KTP" || e.Value == "KTP").Select(
+                    f => new {
+                        Value = f.Key, 
+                        Text = f.Value
+                    }
+                ), JsonRequestBehavior.AllowGet);
+                
             }
 
-            result = new string[] { "KITAS", "Passport"};
-            return Json(result.Select(e =>
-            new {
-                Text = e,
-                Value = e
-            }), JsonRequestBehavior.AllowGet);
+            return Json(choice.Where(e => e.Value == "KITAS" || e.Value == "Passport").Select(
+                   f => new {
+                       Value = f.Key,
+                       Text = f.Value
+                   }
+               ), JsonRequestBehavior.AllowGet);
         }
+
+        [HttpPost]
+        public ActionResult CreateProfessionalData(FormCollection form, ApplicationDataVM viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                var errorMessages = BindHelper.GetErrorMessages(ModelState.Values);
+                return JsonHelper.GenerateJsonErrorResponse(errorMessages);
+            }
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            int? headerID = null;
+            try
+            {
+                headerID = _service.CreateProfessionalData(viewModel);
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            try
+            {
+                viewModel.EducationDetails = BindEducationDetails(form, viewModel.EducationDetails);
+                _service.CreateEducationDetails(headerID, viewModel.EducationDetails);
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            try
+            {
+                viewModel.TrainingDetails = BindTrainingDetails(form, viewModel.TrainingDetails);
+                _service.CreateTrainingDetails(headerID, viewModel.TrainingDetails);
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            return JsonHelper.GenerateJsonSuccessResponse(
+                string.Format("{0}/{1}", siteUrl, UrlResource.Professional));
+        }
+
 
         public ActionResult ListVacantPositions(string siteUrl)
         {
@@ -76,7 +130,9 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                RedirectToAction("Index", "Error");
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                var errorMessages = BindHelper.GetErrorMessages(ModelState.Values);
+                return RedirectToAction("Index", "Error", new { errorMessages = errorMessages });
             }
 
             var siteUrl = SessionManager.Get<string>("SiteUrl");

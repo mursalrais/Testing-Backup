@@ -151,55 +151,6 @@ namespace MCAWebAndAPI.Web.Controllers
             return JsonHelper.GenerateJsonSuccessResponse(UrlResource.Professional);
         }
 
-        [HttpPost]
-        public ActionResult CreateFromApplicationData(FormCollection form, ApplicationDataVM viewModel)
-        {
-            if (!ModelState.IsValid)
-            {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                var errorMessages = BindHelper.GetErrorMessages(ModelState.Values);
-                return JsonHelper.GenerateJsonErrorResponse(errorMessages);
-            }
-            var siteUrl = SessionManager.Get<string>("SiteUrl");
-            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-             
-            int? headerID = null;
-            try
-            {
-                headerID = _service.CreateProfessionalData(viewModel);
-            }
-            catch (Exception e)
-            {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
-            }
-
-            try
-            {
-                viewModel.EducationDetails = BindEducationDetails(form, viewModel.EducationDetails);
-                _service.CreateEducationDetails(headerID, viewModel.EducationDetails);
-            }
-            catch (Exception e)
-            {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
-            }
-
-            try
-            {
-                viewModel.TrainingDetails = BindTrainingDetails(form, viewModel.TrainingDetails);
-                _service.CreateTrainingDetails(headerID, viewModel.TrainingDetails);
-            }
-            catch (Exception e)
-            {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
-            }
-
-            return JsonHelper.GenerateJsonSuccessResponse(
-                string.Format("{0}/{1}", siteUrl, UrlResource.Professional));
-        }
-
         IEnumerable<OrganizationalDetailVM> BindOrganizationalDetails(FormCollection form, IEnumerable<OrganizationalDetailVM> organizationalDetails)
         {
             var array = organizationalDetails.ToArray();

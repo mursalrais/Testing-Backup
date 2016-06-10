@@ -16,7 +16,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Control
                 "Divorced",
                 "Widow",
                 "Widower", 
-                "Black Widow"
+                "Black Widow ft Rita Ora"
             };
             Value = "Single";
         }
