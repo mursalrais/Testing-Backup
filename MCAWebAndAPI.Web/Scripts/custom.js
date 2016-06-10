@@ -81,6 +81,15 @@ function hideLoading() {
     $body.removeClass("loading");
 }
 
+function submitFormToPrint(url) {
+    if (!$('form').valid()) {
+        alert('Please make sure that all required fields are filled');
+        return;
+    }
+    $('form').prop('action', url);
+    $('form').submit();
+}
+
 function printForm(e) {
 
     if (!$('form').valid()) {

@@ -366,7 +366,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 var updatedValue = new Dictionary<string, object>();
                 updatedValue.Add("Title", viewModel.Subject);
                 updatedValue.Add("university", viewModel.University);
-                updatedValue.Add("yearofgraduation", FormatUtil.ConvertToYearString(viewModel.YearOfGraduation));
+                updatedValue.Add("yearofgraduation", FormatUtil.ConvertToDateString(viewModel.YearOfGraduation));
                 updatedValue.Add("remarks", viewModel.Remarks);
                 updatedValue.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
 

@@ -13,3 +13,17 @@
         </div>
     </div>
 </div>
+
+@section scripts{
+
+    <script>
+
+        $(document).ready(function () {
+            $('#back-button').click(function () {
+                var url = "@ViewBag.PreviousUrl";
+                window.location = url;
+            });
+        });
+
+    </script>
+}

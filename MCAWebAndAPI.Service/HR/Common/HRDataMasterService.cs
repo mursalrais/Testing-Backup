@@ -335,7 +335,7 @@ namespace MCAWebAndAPI.Service.HR.Common
                 ID = Convert.ToInt32(item["ID"]),
                 Subject = Convert.ToString(item["Title"]),
                 University = Convert.ToString(item["university"]),
-                YearOfGraduation = FormatUtil.ConvertYearStringToDateTime(item, "yearofgraduation"),
+                YearOfGraduation = FormatUtil.ConvertDateStringToDateTime(item, "yearofgraduation"),
                 Remarks = Convert.ToString(item["remarks"])
             };
         }
@@ -375,7 +375,7 @@ namespace MCAWebAndAPI.Service.HR.Common
                 Subject = Convert.ToString(item["Title"]),
                 Institution = Convert.ToString(item["traininginstitution"]),
                 Remarks = Convert.ToString(item["trainingremarks"]),
-                Year = FormatUtil.ConvertYearStringToDateTime(item, "trainingyear")
+                Year = FormatUtil.ConvertDateStringToDateTime(item, "trainingyear")
             };
         }
 
@@ -483,7 +483,7 @@ namespace MCAWebAndAPI.Service.HR.Common
                 var updatedValue = new Dictionary<string, object>();
                 updatedValue.Add("Title", viewModel.Subject);
                 updatedValue.Add("university", viewModel.University);
-                updatedValue.Add("yearofgraduation", FormatUtil.ConvertToYearString(viewModel.YearOfGraduation));
+                updatedValue.Add("yearofgraduation", FormatUtil.ConvertToDateString(viewModel.YearOfGraduation));
                 updatedValue.Add("remarks", viewModel.Remarks);
                 updatedValue.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
 
@@ -528,7 +528,7 @@ namespace MCAWebAndAPI.Service.HR.Common
                 updatedValue.Add("Title", viewModel.Subject);
                 updatedValue.Add("traininginstitution", viewModel.Institution);
                 updatedValue.Add("trainingremarks", viewModel.Remarks);
-                updatedValue.Add("trainingyear", FormatUtil.ConvertToYearString(viewModel.Year));
+                updatedValue.Add("trainingyear", FormatUtil.ConvertToDateString(viewModel.Year));
                 updatedValue.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
 
                 try

@@ -122,7 +122,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 var updatedValue = new Dictionary<string, object>();
                 updatedValue.Add("Title", viewModel.Subject);
                 updatedValue.Add("university", viewModel.University);
-                updatedValue.Add("yearofgraduation", FormatUtil.ConvertToYearString(viewModel.YearOfGraduation));
+                updatedValue.Add("yearofgraduation", FormatUtil.ConvertToDateString(viewModel.YearOfGraduation));
                 updatedValue.Add("applications", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
                 updatedValue.Add("remarks", viewModel.Remarks);
 
@@ -164,7 +164,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 updatedValue.Add("Title", viewModel.Subject);
                 updatedValue.Add("traininginstitution", viewModel.Institution);
                 updatedValue.Add("trainingremarks", viewModel.Remarks);
-                updatedValue.Add("trainingyear", FormatUtil.ConvertToYearString(viewModel.Year));
+                updatedValue.Add("trainingyear", FormatUtil.ConvertToDateString(viewModel.Year));
                 updatedValue.Add("application", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
 
                 try
@@ -370,7 +370,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 Subject = Convert.ToString(item["Title"]),
                 Institution = Convert.ToString(item["traininginstitution"]),
                 Remarks = Convert.ToString(item["trainingremarks"]),
-                Year = FormatUtil.ConvertYearStringToDateTime(item, "trainingyear")
+                Year = FormatUtil.ConvertDateStringToDateTime(item, "trainingyear")
             };
         }
 
@@ -424,7 +424,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 ID = Convert.ToInt32(item["ID"]),
                 Subject = Convert.ToString(item["Title"]),
                 University = Convert.ToString(item["university"]),
-                YearOfGraduation = FormatUtil.ConvertYearStringToDateTime(item, "yearofgraduation"),
+                YearOfGraduation = FormatUtil.ConvertDateStringToDateTime(item, "yearofgraduation"),
                 Remarks = Convert.ToString(item["remarks"])
             };
         }
