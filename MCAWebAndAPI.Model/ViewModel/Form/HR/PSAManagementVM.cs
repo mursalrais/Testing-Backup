@@ -48,6 +48,11 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public int PSARenewalNumber { get; set; }
 
         /// <summary>
+        /// to keep the next renewalnumber
+        /// </summary>
+        public int HidRenewalNumber { get; set; }
+
+        /// <summary>
         /// ProjectOrUnit
         /// </summary>
         [UIHint("ComboBox")]
@@ -135,7 +140,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [DisplayName("PSA Expiry Date")]
         public DateTime? PSAExpiryDate { get; set; } = DateTime.Now;
 
-        //public string expiry { get; set; }
+        public string ExpiryDateBefore { get; set; }
 
         /*
         [UIHint("Date")]
@@ -167,9 +172,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         public string DocumentType { get; set;}
 
-        //public string KeyPosition { get; set; }
+        public string KeyPosition { get; set; }
 
-        //public string KeyPositionValue { get; set; }
+        public string KeyPositionValue { get; set; }
 
         /// <summary>
         /// psaexpirydate

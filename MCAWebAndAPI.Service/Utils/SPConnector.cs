@@ -48,38 +48,6 @@ namespace MCAWebAndAPI.Service.Utils
             return result;
         }
 
-        internal static int GetRenewalNumber(string listname, int? professionalID, string siteUrl = null, string caml = null)
-        {
-            string camlViewXml = caml ??  @"<View><ViewFields>
-                            < FieldRef Name = 'renewalnumber' />
-                        </ViewFields>
-                        <OrderBy>
-                            <FieldRef Name = 'ID' Ascending = 'FALSE' />
-                        </OrderBy>
-                        <Where>
-                            <Eq>
-                                <FieldRef Name = 'professional_x003a_ID'/>
-                                <Value Type = 'Lookup'>" + professionalID + @"</Value>
-                            </Eq>
-                        </Where>
-                        <QueryOptions>
-                            <RowLimit> 1 </RowLimit>
-                        </QueryOptions >
-                        </View>";
-
-
-            var result = 1;
-            var list = GetList(listname, siteUrl, camlViewXml);
-            foreach (var item in list)
-            {
-                result = Convert.ToInt32(item["renewalnumber"]);
-            }
-
-            
-
-            return result;
-        }
-
         public static ListItemCollection GetList(string listName, string siteUrl = null, string caml = null)
         {
             MapCredential(siteUrl);

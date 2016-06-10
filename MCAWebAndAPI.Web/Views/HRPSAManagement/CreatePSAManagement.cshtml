@@ -61,48 +61,74 @@
 
                 var dateOfNewPSA = $("#DateOfNewPSA").val();
 
-                var datenewpsa = new Date(dateOfNewPSA);
-                var datenewpsainsecond = datenewpsa.getTime();
-
-                console.log(dateOfNewPSA);
-                console.log(datenewpsainsecond);
-
                 if ($("#IsRenewal_Value").val() == "Yes")
                 {
 
                     var url = "/HRPSAManagement/GetRenewal/" + dataItem.ID;
 
                     $.getJSON(url, function (result) {
-                        console.log(result);
+                        
                         var renewalnumber = result[0].PSARenewalNumber + 1;
 
-                        //var expirydate = result[0].PSAExpiryDate;
+                        console.log("Renewal Number Sebelumnya: " + result[0].PSARenewalNumber);
 
-                        //var testdate = new Date(expirydate);
+                        var expirydatebefore = result[0].ExpiryDateBefore
+                        var expdate = new Date(expirydatebefore);
 
-                        //console.log(expirydate);
+                        var dateexpdate = expdate.getDate();
+                        var dateexpdateint = parseInt(dateexpdate);
 
+                        var calcexpdate = dateexpdateint + 1;
+
+                        var setexpdate = new Date(expdate.setDate(calcexpdate));
+                        var expirydate = setexpdate.getMonth() + 1 + '/' + setexpdate.getDate() + '/' + setexpdate.getFullYear();
+                        
                         $('#PSARenewalNumber').prop('value', renewalnumber);
+                        $('#HidRenewalNumber').prop('value', renewalnumber);
+
+                        console.log("Hidden Renewal Number Seharusnya: " + $("#HidRenewalNumber").val());
+
                         $('#PSARenewalNumber').prop('readonly', true);
+                        $('#ExpiryDateBefore').prop('value', expirydate);
 
-                        /*
-                        if (datenewpsainsecond < expirydate)
-                        {
-                            console.log("Date of New PSA Less Than Expiry Date");
-                        }
-                        else
-                        {
-                            console.log("Date of New PSA More Than Expiry Date");
-                        }
-                        */
+                        $("#DateOfNewPSA").data("kendoDatePicker").min(expirydate);
+                        $('#DateOfNewPSA').prop('value', expirydate);
 
+
+                        var dateOfNewPSA = $("#DateOfNewPSA").val();
+                        var dateofnewpsa = new Date(dateOfNewPSA);
+                        var monthpsa = dateofnewpsa.getMonth();
+                        var monthint = parseInt(monthpsa);
+                        var datepsa = dateofnewpsa.getDate();
+
+                        var tenure = $("#Tenure").val();
+                        var tenureint = parseInt(tenure);
+                        var addtenure = tenureint + monthint;
+
+                        var setmonth = new Date(dateofnewpsa.setMonth(addtenure));
+
+                        var psaexpirydate = setmonth.getMonth() + 1 + '/' + setmonth.getDate() + '/' + setmonth.getFullYear();
+                        $("#PSAExpiryDate").val(psaexpirydate);
+
+                        
                     })
                 }
+                else
+                {
+                    $("#PSARenewalNumber").prop("readonly", "true");
+                    $("#PSARenewalNumber").prop("value", 0);
 
-                
+                    var joinDate = $("#JoinDate").val();
+
+                    console.log("Join Date: " + joinDate);
+
+                    $('#DateOfNewPSA').prop('value', joinDate);
+                    $("#DateOfNewPSA").data("kendoDatePicker").min(joinDate);
+                    $("#PSAExpiryDate").val(joinDate);
+                }
+                             
             }
 
-            
             function OnSelectPosition(e) {
                 var dataItem = this.dataItem(e.item);
                 var urlKeyPosition = "/HRDataMaster/GetKeyPosition/" + dataItem.ID;
@@ -116,12 +142,14 @@
                         $('#KeyPositionValue').prop('value', "Yes");
                    
                     }
+                    /*
                     else
                     {
                         $('#KeyPosition').prop('value', "You must upload file with format name: PSADocuments-MMDDYYYY");
                         $('#DocumentType').prop('value', "PSA Document");
                         $('#KeyPositionValue').prop('value', "No");
                     }
+                    */
                 })
 
                 
@@ -154,42 +182,121 @@
 
             });
 
+            $(document).ready(function () {
+
+                
+                function onChange() {
+
+                    if ($("#IsRenewal_Value").val() == "No")
+                    {
+                        var joinDate = $("#JoinDate").val();
+
+                        console.log("Join Date: " + joinDate);
+
+                        $('#DateOfNewPSA').prop('value', joinDate);
+                        $("#DateOfNewPSA").data("kendoDatePicker").min(joinDate);
+                        $("#PSAExpiryDate").val(joinDate);
+
+                    }
+                    
+                }
+
+                $("#JoinDate").kendoDatePicker(
+                { change: onChange }
+                );
+
+            });
+
             
            function isrenewalChanged() {
 
-                if ($("#IsRenewal_Value").prop("value", "No"))
+               if ($("#IsRenewal_Value").val() == "No")
                 {
                     
                     $("#PSARenewalNumber").prop("readonly", "true");
                     $("#PSARenewalNumber").prop("value", 0);
                 }
-                    ;
+                else
+                {
+                    $("#PSARenewalNumber").prop("readonly", "true");
+                    var renewalnumber = $("#HidRenewalNumber").val();
+                    $('#PSARenewalNumber').prop('value', renewalnumber);
+                    var expirydate = $("#ExpiryDateBefore").val();
+                    $("#DateOfNewPSA").data("kendoDatePicker").min(expirydate);
+                    $('#PSAExpiryDate').prop('value', expirydate);
+
+                    console.log(renewalnumber);
+                    console.log(expirydate);
+                 }
            }
 
-            /*
-           function onUpload(e) {
-               var files = e.files;
+           function onSelectPSA(e) {
+                 
+               //console.log("Upload :: " + getFileInfo(e));
+               $.each(e.files, function (index, value) {
+                   console.log("Index Document: " + index);
+                   console.log("Name: " + value.name);
+                   console.log("Size: " + value.size + " bytes");
+                   console.log("Extension: " + value.extension);
 
-               var filesLength = files.name.length();
-               console.log(filesLength);
+                   
+                   if ($("#KeyPositionValue").val() == "Yes") {
+                       if ((index == 0) || (index == 1)) {
+                           if (value.name.indexOf("MCCNoObjectionLetter") == null) {
+                               //alert(this.name + " is too big!");
+                               alert("You Must Upload MCCNoObjectionLetter Document");
+                               e.preventDefault();
+                           }
+                           else {
+                               //Hanya Untuk Testing
+                               alert("MCCNoObjectionLetter already exist");
+                               e.preventDefault();
+                           }
 
-               var indexMCC = files.name.indexOf("MCCNoObjectionLetter");
-               console.log(indexMCC);
+                           if (value.name.indexOf("PSADocument") == null) {
+                               alert("You Must Upload PSADocument Document");
+                               e.preventDefault();
+                           }
+                           else {
+                               alert("PSADocument already exist");
+                               e.preventDefault();
+                           }
+                           /*
+                                                      else
+                                                      {
+                                                          if (value.name.indexOf("MCCNoObjectionLetter") >= 0)
+                                                          {
+                                                              $('#DocumentType').prop('value', "MCC No Objection Letter");
+                                                          }
+                           
+                                                          if (value.name.indexOf("PSADocuments") >= 0)
+                                                          {
+                                                              $('#DocumentType').prop('value', "PSA Document");
+                                                          }
+                                                      }
+                                                      */
+                       }
 
-               $.each(files, function () {
-                   if (this.name.indexOf("MCCNoObjectionLetter") < 0) {
-                       alert(this.name + " error!");
-                       e.preventDefault(); // This cancels the upload for the file
+
+
+
+                   }
+                   else {
+                       if (index == 0) {
+                           if (value.name.indexOf("PSADocument") == null) {
+                               alert("You Must Upload PSADocument Document");
+                               e.preventDefault();
+                           }
+                           else {
+                               alert("PSADocument already exist");
+                               e.preventDefault();
+                           }
+                       }
                    }
                });
-               
+                
            }
-           */
-            /*
-           function expirydate()
-           {
 
-           }
-           */           
+                       
         </script>
     }
