@@ -22,8 +22,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         void CreateTrainingDetails(int? headerID, IEnumerable<TrainingDetailVM> trainingDetails);
 
         void CreateWorkingExperienceDetails(int? headerID, IEnumerable<WorkingExperienceDetailVM> workingExperienceDetails);
-
+        Dictionary<int, string> GetIDCardType();
         void CreateApplicationDocument(int? headerID, IEnumerable<HttpPostedFileBase> documents);
         void SetApplicationStatus(ApplicationDataVM viewModel);
+
+        int? CreateProfessionalData(ApplicationDataVM viewModel);
     }
 }

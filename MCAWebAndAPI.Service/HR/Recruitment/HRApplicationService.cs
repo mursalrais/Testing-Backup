@@ -8,6 +8,7 @@ using Microsoft.SharePoint.Client;
 using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Model.HR.DataMaster;
+using System.Linq;
 
 namespace MCAWebAndAPI.Service.HR.Recruitment
 {
@@ -26,6 +27,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         const string SP_POSMAS_LIST_NAME = "Position Master";
 
         const string SP_MANPOW_LIST_NAME = "Manpower Requisition";
+        const string COMPANY_DOMAIN_EMAIL = "eceos.com";
 
 
         public int CreateApplication(ApplicationDataVM viewModel)
@@ -33,7 +35,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             var updatedValue = new Dictionary<string, object>();
 
             updatedValue.Add("Title", viewModel.FirstMiddleName);
-            updatedValue.Add("position", viewModel.Position);
+            updatedValue.Add("vacantposition", 
+                new FieldLookupValue() { LookupId = (int)GetVacantPosition(viewModel.Position).ID });
+
             updatedValue.Add("manpowerrequisition", new FieldLookupValue { LookupId = (int)viewModel.ManpowerRequisitionID });
             updatedValue.Add("lastname", viewModel.LastName);
             updatedValue.Add("placeofbirth", viewModel.PlaceOfBirth);
@@ -54,7 +58,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             updatedValue.Add("bloodtype", viewModel.BloodType.Value);
             updatedValue.Add("religion", viewModel.Religion.Value);
             updatedValue.Add("gender", viewModel.Gender.Value);
-            updatedValue.Add("idcardtype", viewModel.IDCardType.Text);
+            updatedValue.Add("idcardtype", 
+                GetIDCardType().FirstOrDefault(e => e.Key == viewModel.IDCardType.Value).Value);
             updatedValue.Add("idcardexpirydate", viewModel.IDCardExpiry);
             updatedValue.Add("nationality", new FieldLookupValue { LookupId = (int)viewModel.Nationality.Value });
             updatedValue.Add("applicationstatus", Workflow.GetApplicationStatus(Workflow.ApplicationStatus.NEW));
@@ -65,11 +70,49 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             }
             catch (Exception e)
             {
-                logger.Error(e.Message);
+                logger.Error(e);
                 throw e;
             }
 
-            return SPConnector.GetLatestListItemID(SP_APPDATA_LIST_NAME, _siteUrl);
+            var ID = SPConnector.GetLatestListItemID(SP_APPDATA_LIST_NAME, _siteUrl);
+
+            // Update Document URL
+            updatedValue = new Dictionary<string, object>();
+            updatedValue.Add("documenturl", string.Format(UrlResource.ApplicationDocumentByID, _siteUrl, ID));
+            try
+            {
+                SPConnector.UpdateListItem(SP_APPDATA_LIST_NAME, ID, updatedValue, _siteUrl);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e);
+                throw e;
+            }
+
+            return ID;
+        }
+
+        private PositionsMaster GetVacantPosition(string position)
+        {
+            var caml = @"<View>  
+            <Query> 
+               <Where><Eq><FieldRef Name='Title' /><Value Type='Text'>" + position + 
+               @"</Value></Eq></Where> 
+            </Query> 
+                <ViewFields><FieldRef Name='ID' /><FieldRef Name='Title' /></ViewFields> 
+            </View>";
+
+            var vacantPosition = new PositionsMaster();
+            foreach (var item in SPConnector.GetList(SP_POSMAS_LIST_NAME, _siteUrl, caml))
+            {
+                vacantPosition = new PositionsMaster
+                {
+                    ID = Convert.ToInt32(item["ID"]),
+                    PositionName = Convert.ToString(item["Title"])
+                };
+            }
+
+            return vacantPosition;
         }
 
         public void CreateEducationDetails(int? headerID, IEnumerable<EducationDetailVM> viewModels)
@@ -146,8 +189,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 updatedValue.Add("applicationfrom", viewModel.From);
                 updatedValue.Add("applicationto", viewModel.To);
                 updatedValue.Add("application", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
-                updatedValue.Add("applicationjobdescription", 
-                    FormatUtil.ConvertToMultipleLine(viewModel.JobDescription));
+                updatedValue.Add("applicationjobdescription", viewModel.JobDescription);
 
                 try
                 {
@@ -171,14 +213,14 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel = ConvertToApplicationDataVM(listItem);
 
             return viewModel;
-
         }
 
         private ApplicationDataVM ConvertToApplicationDataVM(ListItem listItem)
         {
             var viewModel = new ApplicationDataVM();
 
-            viewModel.Position = Convert.ToString(listItem["position"]);
+            viewModel.Position = FormatUtil.ConvertLookupToID(listItem, "vacantposition") + string.Empty;
+
             viewModel.ID = Convert.ToInt32(listItem["ID"]);
             viewModel.FirstMiddleName = Convert.ToString(listItem["Title"]);
             viewModel.LastName = Convert.ToString(listItem["lastname"]);
@@ -209,7 +251,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.IDCardExpiry = Convert.ToDateTime(listItem["idcardexpirydate"]);
             viewModel.Nationality.Value = FormatUtil.ConvertLookupToID(listItem, "nationality");
             viewModel.ApplicationStatus = Convert.ToString(listItem["applicationstatus"]);
-
 
             // Convert Details
             viewModel.EducationDetails = GetEducationDetails(viewModel.ID);
@@ -435,6 +476,65 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             }
 
             return positions;
+        }
+
+        public Dictionary<int, string> GetIDCardType()
+        {
+            int index = 0;
+            var choice = new Dictionary<int, string>
+            {
+                { ++index, "e-KTP"},
+                { ++index, "KTP"},
+                { ++index, "KITAS"},
+                { ++index, "Passport"}
+            };
+
+            return choice;
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="viewModel"></param>
+        /// <returns></returns>
+        public int? CreateProfessionalData(ApplicationDataVM viewModel)
+        {
+            var updatedValue = new Dictionary<string, object>();
+
+            updatedValue.Add("Title", viewModel.FirstMiddleName);
+            updatedValue.Add("lastname", viewModel.LastName);
+            updatedValue.Add("placeofbirth", viewModel.PlaceOfBirth);
+            updatedValue.Add("dateofbirth", viewModel.DateOfBirth);
+            updatedValue.Add("idcardnumber", viewModel.IDCardNumber);
+            updatedValue.Add("permanentaddress", viewModel.PermanentAddress);
+            updatedValue.Add("permanentlandlinephone", FormatUtil.ConvertToCleanPhoneNumber(viewModel.Telephone));
+            updatedValue.Add("currentaddress", viewModel.CurrentAddress);
+            updatedValue.Add("currentlandlinephone", FormatUtil.ConvertToCleanPhoneNumber(viewModel.CurrentTelephone));
+            updatedValue.Add("personalemail", viewModel.EmailAddresOne);
+            updatedValue.Add("mobilephonenr", FormatUtil.ConvertToCleanPhoneNumber(viewModel.MobileNumberOne));
+            updatedValue.Add("maritalstatus", viewModel.MaritalStatus.Value);
+            updatedValue.Add("bloodtype", viewModel.BloodType.Value);
+            updatedValue.Add("religion", viewModel.Religion.Value);
+            updatedValue.Add("gender", viewModel.Gender.Value);
+            updatedValue.Add("idcardtype", GetIDCardType().FirstOrDefault(e => e.Key == viewModel.IDCardType.Value).Value);
+            updatedValue.Add("idcardexpirydate", viewModel.IDCardExpiry);
+            updatedValue.Add("nationality", new FieldLookupValue { LookupId = (int)viewModel.Nationality.Value });
+            updatedValue.Add("Position", new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.Position) });
+            updatedValue.Add("officeemail", string.Format("{0}.{1}@{2}", viewModel.FirstMiddleName, viewModel.LastName,
+                COMPANY_DOMAIN_EMAIL));
+
+            try
+            {
+                SPConnector.AddListItem(SP_PROMAS_LIST_NAME, updatedValue, _siteUrl);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.Message);
+                throw new Exception(e.Message);
+            }
+
+            return SPConnector.GetLatestListItemID(SP_PROMAS_LIST_NAME, _siteUrl);
         }
     }
 }

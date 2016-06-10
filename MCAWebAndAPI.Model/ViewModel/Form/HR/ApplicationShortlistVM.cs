@@ -11,7 +11,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
     public class ApplicationShortlistVM : Item
     {
-        public IEnumerable<ShortlistDetailVM> ShortlistDetail { get; set; } = new List<ShortlistDetailVM>();
+        public IEnumerable<ShortlistDetailVM> ShortlistDetails { get; set; } = new List<ShortlistDetailVM>();
 
         /// <summary>
         /// Title

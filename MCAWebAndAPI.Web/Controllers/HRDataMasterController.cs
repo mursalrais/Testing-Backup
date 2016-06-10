@@ -107,6 +107,16 @@ namespace MCAWebAndAPI.Web.Controllers
                 JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetPosition(int id)
+        {
+            _dataMasterService.SetSiteUrl(SessionManager.Get<string>("SiteUrl") ?? ConfigResource.DefaultHRSiteUrl);
+            var position = _dataMasterService.GetPosition(id);
+            return Json(new {
+                position.ID, 
+                position.PositionName
+            }, JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult GetKeyPosition(int id)
         {
             _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);

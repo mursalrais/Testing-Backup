@@ -38,8 +38,6 @@ namespace MCAWebAndAPI.Service.HR.Common
         IEnumerable<PositionsMaster> GetPositions();
         int? EditProfessionalData(ProfessionalDataVM viewModel);
         
-        int? CreateProfessionalData(ApplicationDataVM viewModel);
-
         void CreateEducationDetails(int? headerID, IEnumerable<EducationDetailVM> educationDetails);
         void CreateTrainingDetails(int? headerID, IEnumerable<TrainingDetailVM> trainingDetails);
         void CreateDependentDetails(int? headerID, IEnumerable<DependentDetailVM> documents);
@@ -47,5 +45,6 @@ namespace MCAWebAndAPI.Service.HR.Common
         void UpdateValidation(int? ID, string status);
         void SendEmailValidation(string emailTo, string emailMessages, bool isApproved);
         void SendEmailValidation(string emailTo, string emailMessages);
+        PositionsMaster GetPosition(int id);
     }
 }

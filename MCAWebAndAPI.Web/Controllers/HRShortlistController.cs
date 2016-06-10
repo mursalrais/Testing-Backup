@@ -41,49 +41,16 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult EditShortlistData(FormCollection form, ShortlistDetailVM viewModel)
-        {
-            if (!ModelState.IsValid)
-            {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                var errorMessages = BindHelper.GetErrorMessages(ModelState.Values);
-                return JsonHelper.GenerateJsonErrorResponse(errorMessages);
-            }
-
-            var siteUrl = SessionManager.Get<string>("SiteUrl");
-            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-
-            int? headerID = null;
-            try
-            {
-                headerID = _service.EditShortlistData(viewModel);
-            }
-            catch (Exception e)
-            {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
-            }
-
-            return JsonHelper.GenerateJsonSuccessResponse(UrlResource.Professional);
-        }
-
-        [HttpPost]
         public ActionResult ShortlistData(FormCollection form, ApplicationShortlistVM viewModel)
         {
-            if (!ModelState.IsValid)
-            {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                var errorMessages = BindHelper.GetErrorMessages(ModelState.Values);
-                return JsonHelper.GenerateJsonErrorResponse(errorMessages);
-            }
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             int? headerID = null;
             try
             {
-                viewModel.ShortlistDetail = BindShortlistDetails(form, viewModel.ShortlistDetail);
-                _service.CreateShortlistDataDetail(headerID, viewModel.ShortlistDetail);
+                viewModel.ShortlistDetails = BindShortlistDetails(form, viewModel.ShortlistDetails);
+                _service.CreateShortlistDataDetail(headerID, viewModel.ShortlistDetails);
             }
             catch (Exception e)
             {

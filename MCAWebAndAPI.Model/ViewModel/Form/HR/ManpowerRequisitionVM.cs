@@ -113,7 +113,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// expectedjoindate
         /// </summary>
         [UIHint("Date")]
-        public DateTime? ExpectedJoinDate { get; set; } = null;
+        public DateTime? ExpectedJoinDate { get; set; } =  DateTime.Now;
 
         /// <summary>
         /// istravelrequired

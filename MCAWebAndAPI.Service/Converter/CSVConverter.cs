@@ -169,8 +169,8 @@ namespace MCAWebAndAPI.Service.Converter
                 }
                 catch (Exception e)
                 {
-                    logger.Error(e);
-                    throw e;
+                    logger.Error(string.Format("{0} at ID: {1}", e.Message, i+1));
+                    throw new Exception(string.Format("An error occured at ID: {0}. Therefore, data on ID: {0} and afterwards have not been submitted.", i+1));
                 }
                 updatedValues = new Dictionary<string, object>();
             }

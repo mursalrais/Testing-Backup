@@ -13,7 +13,10 @@ namespace MCAWebAndAPI.Model.ViewModel.Control
             Choices = new string[] {
                 "Married",
                 "Single",
-                "Divorced"
+                "Divorced",
+                "Widow",
+                "Widower", 
+                "Black Widow ft Rita Ora"
             };
             Value = "Single";
         }
