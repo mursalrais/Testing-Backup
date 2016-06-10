@@ -142,6 +142,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         public string ExpiryDateBefore { get; set; }
 
+        public string NextExpiryDate { get; set; }
+
         /*
         [UIHint("Date")]
         public DateTime? ExpiryDateBefore { get; set; } = DateTime.Now;
