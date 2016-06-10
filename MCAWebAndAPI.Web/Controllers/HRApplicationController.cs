@@ -196,15 +196,16 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
             }
 
             var status = viewModel.WorkflowStatusOptions.Value;
             var applicationOwner = string.Format("{0} {1}", viewModel.FirstMiddleName, viewModel.LastName);
-            return JsonHelper.GenerateJsonSuccessResponse(
-                string.Format("{0}/{1}", siteUrl, UrlResource.ApplicationData), 
-                string.Format(MessageResource.SuccessUpdateApplicationStatus, applicationOwner, status));
+            
+            var message = string.Format(MessageResource.SuccessUpdateApplicationStatus, applicationOwner, status);
+            var prevUrl = string.Format("{0}/{1}", siteUrl, UrlResource.ApplicationData);
+            return RedirectToAction("Index", "Success", new { successMessage = message, previousUrl = prevUrl });
         }
 
         [HttpPost]
@@ -218,7 +219,7 @@ namespace MCAWebAndAPI.Web.Controllers
             string content;
             
             var view = ViewEngines.Engines.FindView(ControllerContext, relativePath, null);
-            ViewData.Model = viewModel;
+            ViewData.Model = AdjustViewModel(viewModel);
             var fileName = viewModel.FirstMiddleName + "_Application.pdf";
 
             using (var writer = new StringWriter())
@@ -244,6 +245,14 @@ namespace MCAWebAndAPI.Web.Controllers
                     return HttpNotFound();
                 return File(pdfBuf, "application/pdf");
             }
+        }
+
+        private object AdjustViewModel(ApplicationDataVM viewModel)
+        {
+            var iDCardID = viewModel.IDCardType.Value;
+            viewModel.IDCardType.Text = _service.GetIDCardType()[(int)iDCardID];
+
+            return viewModel;
         }
 
         private IEnumerable<WorkingExperienceDetailVM> BindWorkingExperienceDetails(FormCollection form, IEnumerable<WorkingExperienceDetailVM> workingExperienceDetails)

@@ -84,7 +84,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// MonthlyFee
         /// </summary>
-        [UIHint("Integer")]
         [Range(1, Int32.MaxValue, ErrorMessage = "Monthly Fee Field Can't Be Zero or Negative")]
         public int MonthlyFee { get; set; }
 

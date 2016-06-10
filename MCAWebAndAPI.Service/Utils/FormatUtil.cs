@@ -74,20 +74,7 @@ namespace MCAWebAndAPI.Service.Utils
             var result = phoneNumber.Replace("_", string.Empty);
             return result;
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="dateTime"></param>
-        /// <returns></returns>
-        public static string ConvertToYearString(DateTime? dateTime)
-        {
-            if (dateTime == null)
-                return null;
-
-            return ((DateTime)dateTime).Year + string.Empty;
-        }
-
+        
         public static int? ConvertLookupToID(ListItem item, string columnName)
         {
             if (item[columnName] == null)
@@ -114,10 +101,18 @@ namespace MCAWebAndAPI.Service.Utils
             };
         }
 
-        public static DateTime? ConvertYearStringToDateTime(ListItem item, string columnName)
+        public static DateTime? ConvertDateStringToDateTime(ListItem item, string columnName)
         {
-            var yearInt = Convert.ToInt32(item[columnName]);
-            return new DateTime(year: yearInt, month: 1, day: 1);    
+            var dateString = Convert.ToString(item[columnName]);
+
+            if (!dateString.Contains("/"))
+                return null;
+
+            // format: dd/mm/yyyy
+            var dateElements = Convert.ToString(item[columnName]).Split('/');
+            return new DateTime(year: Convert.ToInt32(dateElements[2]), 
+                month: Convert.ToInt32(dateElements[1]), 
+                day: Convert.ToInt32(dateElements[0]));    
         }
 
         public static AjaxComboBoxVM ConvertToInGridAjaxLookup(ListItem item, string columnName)
@@ -187,6 +182,15 @@ namespace MCAWebAndAPI.Service.Utils
         public static string ConvertToMultipleLine(string jobDescription)
         {
             return string.Format("<p>{0}</p>", jobDescription);
+        }
+
+        public static string ConvertToDateString(DateTime? date)
+        {
+            if (date == null)
+                return null;
+
+            var resultDate = (DateTime)date;
+            return string.Format("{0}/{1}/{2}", resultDate.Day, resultDate.Month, resultDate.Year);
         }
     }
 }

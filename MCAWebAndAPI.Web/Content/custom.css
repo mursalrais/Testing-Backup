@@ -102,6 +102,11 @@ form .k-button.k-upload-button {
     z-index: 1000;
 }
 
+form div.k-widget.k-grid.k-editable td {
+    white-space: pre-wrap;
+}
+
+
 .form-horizontal .k-dropzone > .k-button.k-upload-button {
     left: 42%;
     bottom: 12px;
