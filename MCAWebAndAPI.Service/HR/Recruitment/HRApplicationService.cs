@@ -35,7 +35,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             updatedValue.Add("Title", viewModel.FirstMiddleName);
             updatedValue.Add("position", viewModel.Position);
             updatedValue.Add("manpowerrequisition", new FieldLookupValue { LookupId = (int)viewModel.ManpowerRequisitionID });
-
             updatedValue.Add("lastname", viewModel.LastName);
             updatedValue.Add("placeofbirth", viewModel.PlaceOfBirth);
             updatedValue.Add("dateofbirth", viewModel.DateOfBirth);
@@ -55,7 +54,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             updatedValue.Add("bloodtype", viewModel.BloodType.Value);
             updatedValue.Add("religion", viewModel.Religion.Value);
             updatedValue.Add("gender", viewModel.Gender.Value);
-            updatedValue.Add("idcardtype", viewModel.IDCardType.Value);
+            updatedValue.Add("idcardtype", viewModel.IDCardType.Text);
             updatedValue.Add("idcardexpirydate", viewModel.IDCardExpiry);
             updatedValue.Add("nationality", new FieldLookupValue { LookupId = (int)viewModel.Nationality.Value });
             updatedValue.Add("applicationstatus", Workflow.GetApplicationStatus(Workflow.ApplicationStatus.NEW));
@@ -147,7 +146,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 updatedValue.Add("applicationfrom", viewModel.From);
                 updatedValue.Add("applicationto", viewModel.To);
                 updatedValue.Add("application", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
-                updatedValue.Add("applicationjobdescription", viewModel.JobDescription);
+                updatedValue.Add("applicationjobdescription", 
+                    FormatUtil.ConvertToMultipleLine(viewModel.JobDescription));
 
                 try
                 {
@@ -205,7 +205,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.BloodType.Value = Convert.ToString(listItem["bloodtype"]);
             viewModel.Religion.Value = Convert.ToString(listItem["religion"]);
             viewModel.Gender.Value = Convert.ToString(listItem["gender"]);
-            viewModel.IDCardType.Value = Convert.ToString(listItem["idcardtype"]);
+            viewModel.IDCardType.Text = Convert.ToString(listItem["idcardtype"]);
             viewModel.IDCardExpiry = Convert.ToDateTime(listItem["idcardexpirydate"]);
             viewModel.Nationality.Value = FormatUtil.ConvertLookupToID(listItem, "nationality");
             viewModel.ApplicationStatus = Convert.ToString(listItem["applicationstatus"]);

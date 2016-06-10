@@ -229,31 +229,74 @@
                     console.log(expirydate);
                  }
            }
-                
-            /*
-           function onUpload(e) {
-               var files = e.files;
 
-               var filesLength = files.name.length();
-               console.log(filesLength);
+           function onSelectPSA(e) {
+                 
+               //console.log("Upload :: " + getFileInfo(e));
+               $.each(e.files, function (index, value) {
+                   console.log("Index Document: " + index);
+                   console.log("Name: " + value.name);
+                   console.log("Size: " + value.size + " bytes");
+                   console.log("Extension: " + value.extension);
 
-               var indexMCC = files.name.indexOf("MCCNoObjectionLetter");
-               console.log(indexMCC);
+                   
+                   if ($("#KeyPositionValue").val() == "Yes") {
+                       if ((index == 0) || (index == 1)) {
+                           if (value.name.indexOf("MCCNoObjectionLetter") == null) {
+                               //alert(this.name + " is too big!");
+                               alert("You Must Upload MCCNoObjectionLetter Document");
+                               e.preventDefault();
+                           }
+                           else {
+                               //Hanya Untuk Testing
+                               alert("MCCNoObjectionLetter already exist");
+                               e.preventDefault();
+                           }
 
-               $.each(files, function () {
-                   if (this.name.indexOf("MCCNoObjectionLetter") < 0) {
-                       alert(this.name + " error!");
-                       e.preventDefault(); // This cancels the upload for the file
+                           if (value.name.indexOf("PSADocument") == null) {
+                               alert("You Must Upload PSADocument Document");
+                               e.preventDefault();
+                           }
+                           else {
+                               alert("PSADocument already exist");
+                               e.preventDefault();
+                           }
+                           /*
+                                                      else
+                                                      {
+                                                          if (value.name.indexOf("MCCNoObjectionLetter") >= 0)
+                                                          {
+                                                              $('#DocumentType').prop('value', "MCC No Objection Letter");
+                                                          }
+                           
+                                                          if (value.name.indexOf("PSADocuments") >= 0)
+                                                          {
+                                                              $('#DocumentType').prop('value', "PSA Document");
+                                                          }
+                                                      }
+                                                      */
+                       }
+
+
+
+
+                   }
+                   else {
+                       if (index == 0) {
+                           if (value.name.indexOf("PSADocument") == null) {
+                               alert("You Must Upload PSADocument Document");
+                               e.preventDefault();
+                           }
+                           else {
+                               alert("PSADocument already exist");
+                               e.preventDefault();
+                           }
+                       }
                    }
                });
-               
+                
            }
-           */
-            /*
-           function expirydate()
-           {
 
-           }
-           */           
+                       
         </script>
     }

@@ -5,7 +5,6 @@
 
 @{
     ViewBag.Title = "CreateApplicationData";
-
 }
 
 @using (Ajax.BeginForm("SetStatusApplicationData", "HRApplication", FormMethod.Post, new AjaxOptions
@@ -76,7 +75,6 @@
 @section scripts{
 
     <script>
-
         $("#set-status-button").click(function (e) {
             if (!$('form').valid()) {
                 alert('Please make sure that all required fields are filled');
@@ -87,7 +85,7 @@
 
             // Get value from kendo dropdownlist
             var applicationStatus = $('#WorkflowStatusOptions_Value').data("kendoDropDownList").value();
-            if (applicationStatus == @Workflow.GetApplicationStatus(Workflow.ApplicationStatus.ONBOARD) ) {
+            if (applicationStatus ==  "@Workflow.GetApplicationStatus(Workflow.ApplicationStatus.ONBOARD)" ) {
                 $('form').prop('action', '/HRProfessional/CreateFromApplicationData');
             }
             $('form').submit();
@@ -105,7 +103,6 @@
         $(document).ready(function () {
             $('input').prop('readonly', 'true');
             $('textarea').prop('readonly', 'true');
-            $('')
         });
     </script>
 }

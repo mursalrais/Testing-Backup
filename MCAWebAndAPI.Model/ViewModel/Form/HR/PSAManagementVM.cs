@@ -172,9 +172,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         public string DocumentType { get; set;}
 
-        //public string KeyPosition { get; set; }
+        public string KeyPosition { get; set; }
 
-        //public string KeyPositionValue { get; set; }
+        public string KeyPositionValue { get; set; }
 
         /// <summary>
         /// psaexpirydate
