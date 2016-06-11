@@ -12,21 +12,17 @@
 }))
 {
     <fieldset>
+        @Html.HiddenFor(m => m.ID)
+        @Html.HiddenFor(m => m.Position)
         <div class="row">
-            @*<div class="col-sm-6">
+            <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.Position).Class("col-sm-4 control-label")
                 <div class="col-sm-8">
-                    @Html.DisplayFor(m => m.Position)
+                    <input id="vacant-position" class="form-control" value="" />
                 </div>
-                @Html.HiddenFor(m => m.ShortlistDetail)
-            </div>*@
+            </div>
         </div>
-        <legend>Create Shortlist</legend>
-        @*<div class="row">
-            @Html.Partial("_CreateShortlist", Model)
-        </div>*@
-    
-
+       
         <legend>Candidate list</legend>
         <div class="row">
             @Html.Partial("_ShortlistDetails", Model.ShortlistDetails)
@@ -40,7 +36,7 @@
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.SendTo).Class("col-xs-4 control-label")
                     <div class="col-xs-8">
-                        @Html.DisplayFor(m => m.SendTo)
+                        @Html.EditorFor(m => m.SendTo)
                     </div>
                 </div>
                 </div>

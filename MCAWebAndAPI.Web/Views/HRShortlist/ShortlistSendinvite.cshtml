@@ -1,0 +1,93 @@
+﻿
+@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model ApplicationShortlistVM
+
+@{
+    ViewBag.Title = "ShortlistData";
+}
+
+@using (Html.BeginForm("ShortlistData", "HRShortlist", FormMethod.Post, new
+{
+    @class = "form-horizontal",
+    enctype = "multipart/form-data"
+}))
+{
+    <fieldset>
+        @Html.HiddenFor(m => m.ID)
+        @Html.HiddenFor(m => m.Position)
+        <div class="row">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Position).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    <input id="vacant-position" class="form-control" value="" />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Position).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.Position)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Candidate).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.Candidate)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.SendTo).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.SendTo)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.InterviewerDate).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.InterviewerDate)
+                    </div>
+                </div>
+              
+            </div>
+        </div>
+
+
+    </fieldset>
+    <div class="form-actions">
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.SendTo).Class("col-xs-4 control-label")
+                    <div class="col-xs-8">
+                        @Html.EditorFor(m => m.SendTo)
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+
+                @*<button id="submit-nextstep" class="btn btn-primary" type="submit">
+                        <i class="fa fa-save"></i>
+                        send to next step
+                    </button>*@
+                <button id="submit-button" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    save
+                </button>
+                @*<button id="submit-cancel" class="btn btn-primary" type="submit">
+                        <i class="fa fa-save"></i>
+                        cancel
+                    </button>*@
+
+            </div>
+        </div>
+    </div>
+}
+
+@section scripts{
+
+
+}
+
