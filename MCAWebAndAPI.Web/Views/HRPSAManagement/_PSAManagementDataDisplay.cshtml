@@ -51,9 +51,13 @@
         </div>
     </div>
     <div class="form-group">
-        @Html.Bootstrap().LabelFor(m => m.Tenure).Class("col-md-4 control-label")
+        @Html.Bootstrap().LabelFor(m => m.TenureString).Class("col-md-4 control-label")
         <div class="col-md-8">
-            @Html.DisplayFor(m => m.Tenure)
+            @Html.DisplayFor(m => m.TenureString)
+            @*@(Html.Kendo().NumericTextBoxFor(m => m.Tenure)
+    .HtmlAttributes(new { style = "width:100%" })
+
+          )*@
         </div>
     </div>
     <div class="form-group">
@@ -66,6 +70,12 @@
 
 @section scripts{
     <script type="text/javascript">
+
+        /*
+        $(document).ready(function () {
+            $("#Tenure").data("kendoNumericTextBox").readonly();
+        });
+        */
         /*
 
             $(document).ready(function () {

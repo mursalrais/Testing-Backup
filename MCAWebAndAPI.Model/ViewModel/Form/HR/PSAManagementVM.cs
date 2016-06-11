@@ -133,6 +133,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [Required]
         public int Tenure { get; set; }
 
+        [DisplayName("Tenure")]
+        public string TenureString { get; set; }
+
         /// <summary>
         /// psaexpirydate
         /// </summary>
