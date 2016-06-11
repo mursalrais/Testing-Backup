@@ -25,7 +25,7 @@ namespace MCAWebAndAPI.Web.Controllers
             _service = new HRShortlistService();
         }
 
-        public ActionResult ShortlistData(string siteurl = null, int? id = null, string position = null)
+        public ActionResult ShortlistData(string siteurl = null, string position = null, string username = null, string useraccess = null)
         {
             // clear existing session variables if any
             SessionManager.RemoveAll();
@@ -34,7 +34,7 @@ namespace MCAWebAndAPI.Web.Controllers
             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
 
-            var viewmodel = _service.GetShortlist(position);
+            var viewmodel = _service.GetShortlist(position, username, useraccess);
             //viewmodel.SendTo = "";
             //viewmodel.ID = id;
             return View(viewmodel);

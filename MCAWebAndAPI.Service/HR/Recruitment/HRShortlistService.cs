@@ -27,34 +27,37 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         const string SP_MANPOW_LIST_NAME = "Manpower Requisition";
 
-        private ApplicationShortlistVM ConvertToApplicationDataVM(ListItem listItem)
+        public string GetAccessData(string userLoginName = null)
         {
-            var viewModel = new ApplicationShortlistVM();
+            if (userLoginName == null)
+                return null;
 
-            viewModel.ID = Convert.ToInt32(listItem["ID"]);
-            viewModel.Candidate = Convert.ToString(listItem["placeofbirth"]);
-            viewModel.EditMode = Convert.ToInt32(listItem["dateofbirth"]);
-            //viewModel.EmailMessage = Convert.ToString(listItem["permanentaddress"]);
-            //viewModel.InterviewerDate = Convert.ToString(listItem["idcardexpirydate"]);
-            //viewModel.InterviewerPanel = Convert.ToString(listItem["idcardnumber"]);
-            //viewModel.SendTo = Convert.ToString(listItem["idcardexpirydate"]);
-            //viewModel.Time = Convert.ToString(listItem["idcardexpirydate"]);
-            viewModel.Title = Convert.ToString(listItem["idcardexpirydate"]);
+            var caml = @"<View>  
+                    <Query> 
+                       <Where><Eq><FieldRef Name='hiaccountname' /><Value Type='Text'>" + userLoginName + @"</Value></Eq></Where> 
+                    </Query> 
+                     <ViewFields><FieldRef Name='Position' /><FieldRef Name='ID' /></ViewFields> 
+                    </View>";
 
-            // Convert Details
-            //viewModel.ShortlistDetail = GetDetailShortlist();
-            //viewModel.DocumentUrl = GetDocumentUrl(viewModel.ID);
+            var useraccess = "";
+            foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl, caml))
+            {
+                useraccess = Convert.ToString(item["ID"]);
+            }
 
-            return viewModel;
+            return useraccess;
         }
 
-        public ApplicationShortlistVM GetShortlist(string Position)
+        public ApplicationShortlistVM GetShortlist(string position, string username, string useraccess)
         {
             var viewModel = new ApplicationShortlistVM();
-            if (Position == null)
+            if (position == null)
             return viewModel;
 
-            viewModel.ShortlistDetails = GetDetailShortlist(Position);
+            if (username != null)
+            useraccess = GetAccessData(username);
+
+            viewModel.ShortlistDetails = GetDetailShortlist(position, useraccess);
 
             return viewModel;
 
@@ -67,7 +70,99 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         //   < FieldRef Name='yearofgraduation' />
         //   <FieldRef Name = 'remarks' />
         //</ ViewFields >
-        private IEnumerable<ShortlistDetailVM> GetDetailShortlist(string Position = null)
+        private IEnumerable<ShortlistDetailVM> GetDetailShortlist(string Position, string useraccess)
+        {
+            var caml = "";
+            if (useraccess == "HR")
+            {
+                caml = @"<View>  
+            <Query> 
+      <Where>
+      <Or>
+         <Or>
+            <Or>
+               <Or>
+                  <Or>
+                     <Eq>
+                        <FieldRef Name='applicationstatus' />
+                        <Value Type='Text'>New</Value>
+                     </Eq>
+                     <Eq>
+                        <FieldRef Name='applicationstatus' />
+                        <Value Type='Text'>Shortlisted</Value>
+                     </Eq>
+                  </Or>
+                  <Eq>
+                     <FieldRef Name='applicationstatus' />
+                     <Value Type='Text'>Declined</Value>
+                  </Eq>
+               </Or>
+               <Eq>
+                  <FieldRef Name='applicationstatus' />
+                  <Value Type='Text'>NEW</Value>
+               </Eq>
+            </Or>
+            <Eq>
+               <FieldRef Name='applicationstatus' />
+               <Value Type='Text'>SHORTLISTED</Value>
+            </Eq>
+         </Or>
+         <Eq>
+            <FieldRef Name='applicationstatus' />
+            <Value Type='Text'>DECLINED</Value>
+         </Eq>
+      </Or>
+   </Where>
+            </Query> 
+              <ViewFields>
+      <FieldRef Name='Title' />
+      <FieldRef Name='ID' />
+      <FieldRef Name='applicationstatus' />
+      <FieldRef Name='position' />
+   </ViewFields>
+   
+            </View>";
+
+            }
+            else if(useraccess == "REQ")
+            {
+                caml = @"<View>  
+            <Query> 
+      <Where>
+       <Eq>
+         <FieldRef Name='applicationstatus' />
+         <Value Type='Text'>Shortlisted</Value>
+      </Eq>
+   </Where>
+            </Query> 
+              <ViewFields>
+      <FieldRef Name='Title' />
+      <FieldRef Name='ID' />
+      <FieldRef Name='applicationstatus' />
+      <FieldRef Name='position' />
+   </ViewFields>
+   
+            </View>";
+
+            }
+            
+            var eduacationDetails = new List<ShortlistDetailVM>();
+            foreach (var item in SPConnector.GetList(SP_APPDATA_LIST_NAME, _siteUrl, caml))
+            {
+                eduacationDetails.Add(ConvertToShortlistDetailVM(item));
+            }
+
+            return eduacationDetails;
+        }
+
+        //<ViewFields>
+        //   <FieldRef Name = 'Title' />
+        //   < FieldRef Name='applications' />
+        //   <FieldRef Name = 'university' />
+        //   < FieldRef Name='yearofgraduation' />
+        //   <FieldRef Name = 'remarks' />
+        //</ ViewFields >
+        private IEnumerable<ShortlistDetailVM> GetDetailShortlisted(string Position = null)
         {
             var caml = @"<View>  
             <Query> 
@@ -125,7 +220,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             return eduacationDetails;
         }
-
         /// <summary>
         // <ViewFields>
         //   <FieldRef Name = 'Title' />
@@ -139,10 +233,12 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         /// <returns></returns>
         private ShortlistDetailVM ConvertToShortlistDetailVM(ListItem item)
         {
+            int id = Convert.ToInt32(item["ID"]);
             return new ShortlistDetailVM
             {
                 Candidate = Convert.ToString(item["Title"]),
                 ID = Convert.ToInt32(item["ID"]),
+                DocumentUrl = GetDocumentUrl(id),
                 //Status = Convert.ToString(item["applicationstatus"]),
                 Remarks = Convert.ToString(item["position"]),
                 //Title = Convert.ToString(item["Title"])
@@ -165,6 +261,12 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 throw e;
             }
         }
+
+        private string GetDocumentUrl(int? iD)
+        {
+            return string.Format(UrlResource.ApplicationDocumentByID, _siteUrl, iD);
+        }
+
 
         public IEnumerable<ApplicationShortlistVM> GetShortlists()
         {
