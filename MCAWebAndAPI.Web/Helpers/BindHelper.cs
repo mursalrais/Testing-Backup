@@ -49,8 +49,7 @@ namespace MCAWebAndAPI.Web.Helpers
             {
                 foreach (var modelError in model.Errors)
                 {
-                    errorMessages += modelError.ErrorMessage;
-                    errorMessages += "<br/>";
+                    errorMessages += string.Format("{0}/n", modelError.ErrorMessage);
                 }
             }
             return errorMessages;

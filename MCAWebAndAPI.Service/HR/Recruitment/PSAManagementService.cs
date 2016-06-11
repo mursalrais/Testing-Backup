@@ -44,8 +44,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 ID = item["professional_x003a_ID"] == null ? 0 : Convert.ToInt32((item["professional_x003a_ID"] as FieldLookupValue).LookupId),
                 Created = Convert.ToDateTime(item["Created"]),
                 PSARenewalNumber = Convert.ToInt32(item["renewalnumber"]),
-                //expiry = Convert.ToDateTime(item["psaexpirydate"]).ToLocalTime().ToShortDateString()
-
+                ExpiryDateBefore = Convert.ToDateTime(item["psaexpirydate"]).ToLocalTime().ToShortDateString()
             };
         }
 
@@ -226,7 +225,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 var updateValue = new Dictionary<string, object>();
 
-                if (doc.FileName.IndexOf("MCCNoObjectionLetter") >= 0)
+                if (doc.FileName.IndexOf("MCC") >= 0)
                 {
                     psaManagmement.DocumentType = "MCC No Objection Letter";
                 }

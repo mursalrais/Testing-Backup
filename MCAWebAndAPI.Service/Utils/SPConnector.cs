@@ -48,38 +48,6 @@ namespace MCAWebAndAPI.Service.Utils
             return result;
         }
 
-        internal static int GetRenewalNumber(string listname, int? professionalID, string siteUrl = null, string caml = null)
-        {
-            string camlViewXml = caml ??  @"<View><ViewFields>
-                            < FieldRef Name = 'renewalnumber' />
-                        </ViewFields>
-                        <OrderBy>
-                            <FieldRef Name = 'ID' Ascending = 'FALSE' />
-                        </OrderBy>
-                        <Where>
-                            <Eq>
-                                <FieldRef Name = 'professional_x003a_ID'/>
-                                <Value Type = 'Lookup'>" + professionalID + @"</Value>
-                            </Eq>
-                        </Where>
-                        <QueryOptions>
-                            <RowLimit> 1 </RowLimit>
-                        </QueryOptions >
-                        </View>";
-
-
-            var result = 1;
-            var list = GetList(listname, siteUrl, camlViewXml);
-            foreach (var item in list)
-            {
-                result = Convert.ToInt32(item["renewalnumber"]);
-            }
-
-            
-
-            return result;
-        }
-
         public static ListItemCollection GetList(string listName, string siteUrl = null, string caml = null)
         {
             MapCredential(siteUrl);
@@ -98,8 +66,14 @@ namespace MCAWebAndAPI.Service.Utils
 
                 var SPListItems = SPList.GetItems(camlQuery);
                 context.Load(SPListItems);
-                context.ExecuteQuery();
-
+                try
+                {
+                    context.ExecuteQuery();
+                }
+                catch (Exception e)
+                {
+                    throw e;
+                }
                 return SPListItems;
             }
         }
@@ -116,7 +90,15 @@ namespace MCAWebAndAPI.Service.Utils
                 // Get one listitem
                 var SPListItem = context.Web.Lists.GetByTitle(listName).GetItemById((int)listItemID);
                 context.Load(SPListItem);
-                context.ExecuteQuery();
+
+                try
+                {
+                    context.ExecuteQuery();
+                }
+                catch (Exception e)
+                {
+                    throw e;
+                }
                 return SPListItem;
             }
         }
@@ -134,7 +116,15 @@ namespace MCAWebAndAPI.Service.Utils
                 List SPList = context.Web.Lists.GetByTitle(listName);
                 ListItem SPListItem = SPList.GetItemById(listItemID + string.Empty);
                 context.Load(SPListItem);
-                context.ExecuteQuery();
+
+                try
+                {
+                    context.ExecuteQuery();
+                }
+                catch (Exception e)
+                {
+                    throw e;
+                }
 
                 // Get current editor
                 var currentEditor = SPListItem["Editor"];
@@ -147,12 +137,28 @@ namespace MCAWebAndAPI.Service.Utils
                 
                 // Update columns remotely
                 SPListItem.Update();
-                context.ExecuteQuery();
+
+                try
+                {
+                    context.ExecuteQuery();
+                }
+                catch (Exception e)
+                {
+                    throw e;
+                }
 
                 // Set editor not to be SP Service
                 SPListItem["Editor"] = currentEditor;
                 SPListItem.Update();
-                context.ExecuteQuery();
+
+                try
+                {
+                    context.ExecuteQuery();
+                }
+                catch (Exception e)
+                {
+                    throw e;
+                }
             }
         }
 
@@ -215,12 +221,28 @@ namespace MCAWebAndAPI.Service.Utils
                     // Get uploaded file
                     Microsoft.SharePoint.Client.File fileUploaded = spList.RootFolder.Files.GetByUrl(fileUrl);
                     context.Load(fileUploaded);
-                    context.ExecuteQuery();
+
+                    try
+                    {
+                        context.ExecuteQuery();
+                    }
+                    catch (Exception e)
+                    {
+                        throw e;
+                    }
 
                     // Get list item from File
                     ListItem newItem = fileUploaded.ListItemAllFields;
                     context.Load(newItem);
-                    context.ExecuteQuery();
+
+                    try
+                    {
+                        context.ExecuteQuery();
+                    }
+                    catch (Exception e)
+                    {
+                        throw e;
+                    }
 
                     // Modify column
                     foreach (var key in columnValues.Keys)
@@ -228,7 +250,15 @@ namespace MCAWebAndAPI.Service.Utils
                         newItem[key] = columnValues[key];
                     }
                     newItem.Update();
-                    context.ExecuteQuery();
+
+                    try
+                    {
+                        context.ExecuteQuery();
+                    }
+                    catch (Exception e)
+                    {
+                        throw e;
+                    }
                 }
             }
         }
@@ -246,7 +276,15 @@ namespace MCAWebAndAPI.Service.Utils
                 {
                     List spList = context.Web.Lists.GetByTitle(listName);
                     context.Load(spList.RootFolder);
-                    context.ExecuteQuery();
+
+                    try
+                    {
+                        context.ExecuteQuery();
+                    }
+                    catch (Exception e)
+                    {
+                        throw e;
+                    }
 
                     var fi = new FileInfo(docName);
                     var fileUrl = string.Format("{0}/{1}", spList.RootFolder.ServerRelativeUrl, fi.Name);
@@ -268,11 +306,27 @@ namespace MCAWebAndAPI.Service.Utils
                 Web web = context.Web;
                 var list = web.Lists.GetByTitle(listName);
                 context.Load(list, d => d.Title);
-                context.ExecuteQuery();
+
+                try
+                {
+                    context.ExecuteQuery();
+                }
+                catch (Exception e)
+                {
+                    throw e;
+                }
 
                 var field = context.CastTo<FieldChoice>(list.Fields.GetByInternalNameOrTitle(fieldName));
                 context.Load(field, f => f.Choices);
-                context.ExecuteQuery();
+
+                try
+                {
+                    context.ExecuteQuery();
+                }
+                catch (Exception e)
+                {
+                    throw e;
+                }
 
                 return field.Choices;
             }
@@ -295,7 +349,14 @@ namespace MCAWebAndAPI.Service.Utils
 
                 Utility.SendEmail(context, properties);
 
-                context.ExecuteQuery();
+                try
+                {
+                    context.ExecuteQuery();
+                }
+                catch (Exception e)
+                {
+                    throw e;
+                }
             }
             return true;
         }
@@ -315,7 +376,15 @@ namespace MCAWebAndAPI.Service.Utils
                 properties.Body = content;
 
                 Utility.SendEmail(context, properties);
-                context.ExecuteQuery();
+
+                try
+                {
+                    context.ExecuteQuery();
+                }
+                catch (Exception e)
+                {
+                    throw e;
+                }
             }
             return true;
         }
@@ -334,7 +403,15 @@ namespace MCAWebAndAPI.Service.Utils
                 ListItem SPListItem = SPList.GetItemById(listItemID + string.Empty);
 
                 SPListItem.DeleteObject();
-                context.ExecuteQuery();
+
+                try
+                {
+                    context.ExecuteQuery();
+                }
+                catch (Exception e)
+                {
+                    throw e;
+                }
             }
         }
     }

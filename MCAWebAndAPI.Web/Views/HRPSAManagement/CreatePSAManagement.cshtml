@@ -61,48 +61,66 @@
 
                 var dateOfNewPSA = $("#DateOfNewPSA").val();
 
-                var datenewpsa = new Date(dateOfNewPSA);
-                var datenewpsainsecond = datenewpsa.getTime();
+                var url = "/HRPSAManagement/GetRenewal/" + dataItem.ID;
 
-                console.log(dateOfNewPSA);
-                console.log(datenewpsainsecond);
+                $.getJSON(url, function (result) {
 
-                if ($("#IsRenewal_Value").val() == "Yes")
-                {
+                    console.log(result);
 
-                    var url = "/HRPSAManagement/GetRenewal/" + dataItem.ID;
+                    if (result.length != 0) {
+                        console.log("Ada Data PSA Sebelumnya")
 
-                    $.getJSON(url, function (result) {
-                        console.log(result);
                         var renewalnumber = result[0].PSARenewalNumber + 1;
 
-                        //var expirydate = result[0].PSAExpiryDate;
+                        var expirydatebefore = result[0].ExpiryDateBefore
+                        var expdate = new Date(expirydatebefore);
 
-                        //var testdate = new Date(expirydate);
+                        var dateexpdate = expdate.getDate();
+                        var dateexpdateint = parseInt(dateexpdate);
 
-                        //console.log(expirydate);
+                        var calcexpdate = dateexpdateint + 1;
 
-                        $('#PSARenewalNumber').prop('value', renewalnumber);
-                        $('#PSARenewalNumber').prop('readonly', true);
+                        var setexpdate = new Date(expdate.setDate(calcexpdate));
+                        var expirydate = setexpdate.getMonth() + 1 + '/' + setexpdate.getDate() + '/' + setexpdate.getFullYear();
 
-                        /*
-                        if (datenewpsainsecond < expirydate)
-                        {
-                            console.log("Date of New PSA Less Than Expiry Date");
-                        }
-                        else
-                        {
-                            console.log("Date of New PSA More Than Expiry Date");
-                        }
-                        */
+                        $('#HidRenewalNumber').prop('value', renewalnumber);
+                        $('#ExpiryDateBefore').prop('value', expirydate);
 
-                    })
-                }
+                        $("#IsRenewal_Value").data("kendoDropDownList").select(0);
+                        $("#IsRenewal_Value").data("kendoDropDownList").readonly();
 
-                
+                        $("#PSARenewalNumber").prop("readonly", "false");
+                        $("#PSARenewalNumber").prop("value", renewalnumber);
+
+                        $("#DateOfNewPSA").data("kendoDatePicker").min(expirydate);
+                        $("#DateOfNewPSA").prop('value', expirydate);
+
+                        $("#Tenure").prop('value', 0);
+
+                        $("#PSAExpiryDate").prop('value', expirydate);
+                    }
+
+                    if (result.length == 0)
+                    {
+                        $("#IsRenewal_Value").data("kendoDropDownList").select(1);
+                        $("#IsRenewal_Value").data("kendoDropDownList").readonly();
+
+                        $("#PSARenewalNumber").prop("readonly", "true");
+                        $("#PSARenewalNumber").prop("value", 0);
+
+                        var joinDate = $("#JoinDate").val();
+
+                        $("#DateOfNewPSA").data("kendoDatePicker").min(joinDate);
+                        $("#DateOfNewPSA").prop("value", joinDate);
+
+                        $("#Tenure").prop('value', 0);
+
+                        $("#PSAExpiryDate").prop('value', joinDate);
+                    }
+
+                })             
             }
 
-            
             function OnSelectPosition(e) {
                 var dataItem = this.dataItem(e.item);
                 var urlKeyPosition = "/HRDataMaster/GetKeyPosition/" + dataItem.ID;
@@ -111,15 +129,15 @@
 
                     if (result[0].isKeyPosition == "Yes")
                     {
-                        $('#KeyPosition').prop('value', "You must upload file with format name: MCCNoObjectionLetter-XXXX" + "XXXX is a ordering number such as: 0001");
+                        $('#KeyPosition').prop('value', "You must upload file with the file name format: MCC-PSA-MMDDYYYY");
                         $('#DocumentType').prop('value', "MCC No Objection Letter");
                         $('#KeyPositionValue').prop('value', "Yes");
                    
                     }
                     else
                     {
-                        $('#KeyPosition').prop('value', "You must upload file with format name: PSADocuments-MMDDYYYY");
-                        $('#DocumentType').prop('value', "PSA Document");
+                        $('#KeyPosition').prop('value', "You must upload file with the file name format: PSA-MMDDYYYY");
+                        $('#DocumentType').prop('value', "MCC No Objection Letter");
                         $('#KeyPositionValue').prop('value', "No");
                     }
                 })
@@ -154,42 +172,109 @@
 
             });
 
+            $(document).ready(function () {
+
+                
+                function onChange() {
+
+                    if ($("#IsRenewal_Value").val() == "No")
+                    {
+                        var joinDate = $("#JoinDate").val();
+
+                        console.log("Join Date: " + joinDate);
+
+                        $('#DateOfNewPSA').prop('value', joinDate);
+                        $("#DateOfNewPSA").data("kendoDatePicker").min(joinDate);
+                        $("#PSAExpiryDate").val(joinDate);
+
+                    }
+                    
+                }
+
+                $("#JoinDate").kendoDatePicker(
+                { change: onChange }
+                );
+
+            });
+
             
            function isrenewalChanged() {
 
-                if ($("#IsRenewal_Value").prop("value", "No"))
-                {
-                    
-                    $("#PSARenewalNumber").prop("readonly", "true");
-                    $("#PSARenewalNumber").prop("value", 0);
-                }
-                    ;
-           }
-
-            /*
-           function onUpload(e) {
-               var files = e.files;
-
-               var filesLength = files.name.length();
-               console.log(filesLength);
-
-               var indexMCC = files.name.indexOf("MCCNoObjectionLetter");
-               console.log(indexMCC);
-
-               $.each(files, function () {
-                   if (this.name.indexOf("MCCNoObjectionLetter") < 0) {
-                       alert(this.name + " error!");
-                       e.preventDefault(); // This cancels the upload for the file
-                   }
-               });
                
-           }
-           */
-            /*
-           function expirydate()
-           {
+               if ($("#IsRenewal_Value").val() == "Yes")
+                {
+                    $("#PSARenewalNumber").prop("readonly", "true");
+                    var renewalnumber = $("#HidRenewalNumber").val();
+                    $('#PSARenewalNumber').prop('value', renewalnumber);
+                    var expirydate = $("#ExpiryDateBefore").val();
+                    $("#DateOfNewPSA").data("kendoDatePicker").min(expirydate);
+                    $('#PSAExpiryDate').prop('value', expirydate);
 
+                    
+                 }
            }
-           */           
+
+           function onSelectPSA(e) {
+                 
+               $.each(e.files, function (index, value) {
+                   console.log("Index Document: " + index);
+                   console.log("Name: " + value.name);
+                   console.log("Index of MCC: " + value.name.indexOf("MCCNoObjectionLetter"));
+                   console.log("Size: " + value.size + " bytes");
+                   console.log("Extension: " + value.extension);
+
+                   
+                   if ($("#KeyPositionValue").val() == "Yes")
+                   {
+                       if ((index == 0))
+                       {
+                           if (value.name.indexOf("MCC") < 0)
+                           {
+                               alert("You Must Upload MCC Document");
+                               e.preventDefault();
+                           }
+                           if (value.name.indexOf("MCC") >= 0)
+                           {
+                               //Hanya Untuk Testing
+                               //alert("MCC already exist");
+                               $('#DocumentType').prop('value', "MCC No Objection Letter");
+                               //e.preventDefault();
+                           }
+                       }
+                       if(index == 1)
+                       {
+                           if (value.name.indexOf("PSA") < 0)
+                           {
+                               alert("You Must Upload PSADocument Document");
+                               e.preventDefault();
+                           }
+                           if (value.name.indexOf("PSA") >= 0)
+                           {
+                               //Hanya Untuk Testing
+                               //alert("PSADocument already exist");
+                               $('#DocumentType').prop('value', "PSA Document");
+                               //e.preventDefault();
+                           }
+                       }
+                   }
+                   else
+                   {
+                       if (value.name.indexOf("PSA") < 0) {
+                           alert("You Must Upload PSADocument Document");
+                           e.preventDefault();
+                       }
+                       if (value.name.indexOf("PSA") >= 0) {
+                           //Hanya Untuk Testing
+                           //alert("PSADocument already exist");
+                           $('#DocumentType').prop('value', "PSA Document");
+                           //e.preventDefault();
+                       }
+                   }
+                   
+               });
+                
+           }
+
+                       
         </script>
     }

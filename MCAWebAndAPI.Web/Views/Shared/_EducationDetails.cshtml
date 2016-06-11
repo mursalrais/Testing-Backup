@@ -2,7 +2,6 @@
 @model IEnumerable<EducationDetailVM>
 
 <div class="col-sm-12">
-
     @(Html.Kendo().Grid(Model)
     .Name("EducationDetails")
     .ToolBar(tools => tools.Create().Text("Add New Education"))
@@ -12,13 +11,13 @@
     {
         columns.Bound(p => p.University).ClientTemplate("#= University #" +
                            "<input type='hidden' name='EducationDetails[#= getEducationDetail(data)#].University' value='#= University #' />"
-                         );
+                         ).Width(300);
         columns.Bound(p => p.Subject).ClientTemplate("#= Subject #" +
                            "<input type='hidden' name='EducationDetails[#= getEducationDetail(data)#].Subject' value='#= Subject #' />"
-                         );
-        columns.Bound(p => p.YearOfGraduation).ClientTemplate("#= YearOfGraduation.getFullYear() #" +
+                         ).Width(350);
+        columns.Bound(p => p.YearOfGraduation).ClientTemplate("#=getMonthName(YearOfGraduation)#" + " " + "#= YearOfGraduation.getFullYear() #" +
                            "<input type='hidden' name='EducationDetails[#= getEducationDetail(data)#].YearOfGraduation' value='#= YearOfGraduation #' />"
-                         );
+                         ).Width(150);
         columns.Bound(p => p.Remarks).ClientTemplate("#= Remarks #" +
                            "<input type='hidden' name='EducationDetails[#= getEducationDetail(data)#].Remarks' value='#= Remarks #' />"
                          );

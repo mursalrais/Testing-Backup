@@ -47,21 +47,16 @@
 
 @section scripts{
     <script type="text/javascript">
-        $(document).ready(function () {
-            $("#submit-button").click(function () {
+
+
+            $(document).ready(function () {
+                $("#submit-button").click(function () {
                 $("form").submit();
             });
+
         });
 
-       
-        $('#application-document-button').click(function () {
-            parent.postMessage({
-                result: "Success", urlToRedirect: "@Model"
-            }, "@Model");
-        });
-        
 
-        
         function onSuccess(data) {
             window.location.href = data.urlToRedirect;
         }
@@ -69,59 +64,223 @@
         function onFailure(data) {
             window.location.href = data.urlToRedirect;
         }
-        
 
-        function OnSelectAssetHolderFrom(e) {
-            var dataItem = this.dataItem(e.item);
-            var url = "/HRDataMaster/GetProfessional/" + dataItem.ID;
-        }
 
-        function OnSelectPosition(e) {
-            var dataItem = this.dataItem(e.item);
-            var url = "/HRDataMaster/GetPositions/" + dataItem.ID;
-        }
-
-        $(document).ready(function () {
-
-            $("#Tenure").on('input', function () {
-                sumCal();
-            });
-
-            function sumCal() {
+            function OnSelectAssetHolderFrom(e) {
+                var dataItem = this.dataItem(e.item);
 
                 var dateOfNewPSA = $("#DateOfNewPSA").val();
-                var dateofnewpsa = new Date(dateOfNewPSA);
-                var monthpsa = dateofnewpsa.getMonth();
-                var monthint = parseInt(monthpsa);
-                var datepsa = dateofnewpsa.getDate();
 
-                var tenure = $("#Tenure").val();
-                var tenureint = parseInt(tenure);
-                var addtenure = tenureint + monthint;
+                var url = "/HRPSAManagement/GetRenewal/" + dataItem.ID;
 
-                var setmonth = new Date(dateofnewpsa.setMonth(addtenure));
+                $.getJSON(url, function (result) {
 
-                var psaexpirydate = setmonth.getMonth() + 1 + '/' + setmonth.getDate() + '/' + setmonth.getFullYear();
-                $("#PSAExpiryDate").val(psaexpirydate);
+                    console.log(result);
+
+                    if (result.length != 0) {
+                        console.log("Ada Data PSA Sebelumnya")
+
+                        var renewalnumber = result[0].PSARenewalNumber + 1;
+
+                        var expirydatebefore = result[0].ExpiryDateBefore
+                        var expdate = new Date(expirydatebefore);
+
+                        var dateexpdate = expdate.getDate();
+                        var dateexpdateint = parseInt(dateexpdate);
+
+                        var calcexpdate = dateexpdateint + 1;
+
+                        var setexpdate = new Date(expdate.setDate(calcexpdate));
+                        var expirydate = setexpdate.getMonth() + 1 + '/' + setexpdate.getDate() + '/' + setexpdate.getFullYear();
+
+                        $('#HidRenewalNumber').prop('value', renewalnumber);
+                        $('#ExpiryDateBefore').prop('value', expirydate);
+
+                        $("#IsRenewal_Value").data("kendoDropDownList").select(0);
+                        $("#IsRenewal_Value").data("kendoDropDownList").readonly();
+
+                        $("#PSARenewalNumber").prop("readonly", "false");
+                        $("#PSARenewalNumber").prop("value", renewalnumber);
+
+                        $("#DateOfNewPSA").data("kendoDatePicker").min(expirydate);
+                        $("#DateOfNewPSA").prop('value', expirydate);
+
+                        $("#Tenure").prop('value', 0);
+
+                        $("#PSAExpiryDate").prop('value', expirydate);
+                    }
+
+                    if (result.length == 0)
+                    {
+                        $("#IsRenewal_Value").data("kendoDropDownList").select(1);
+                        $("#IsRenewal_Value").data("kendoDropDownList").readonly();
+
+                        $("#PSARenewalNumber").prop("readonly", "true");
+                        $("#PSARenewalNumber").prop("value", 0);
+
+                        var joinDate = $("#JoinDate").val();
+
+                        $("#DateOfNewPSA").data("kendoDatePicker").min(joinDate);
+                        $("#DateOfNewPSA").prop("value", joinDate);
+
+                        $("#Tenure").prop('value', 0);
+
+                        $("#PSAExpiryDate").prop('value', joinDate);
+                    }
+
+                })
             }
-        });
 
-        /*
-        function isrenewalChanged() {
+            function OnSelectPosition(e) {
+                var dataItem = this.dataItem(e.item);
+                var urlKeyPosition = "/HRDataMaster/GetKeyPosition/" + dataItem.ID;
 
-            if ($("#IsRenewal_Value").prop("value", "No"))
-            {
+                $.getJSON(urlKeyPosition, function (result) {
 
-                $("#RenewalNumber").prop("readonly", "true");
-                $("#RenewalNumber").prop("value", 0);
+                    if (result[0].isKeyPosition == "Yes")
+                    {
+                        $('#KeyPosition').prop('value', "You must upload file with format name: MCCNoObjectionLetter-XXXX" + "XXXX is a ordering number such as: 0001");
+                        $('#DocumentType').prop('value', "MCC No Objection Letter");
+                        $('#KeyPositionValue').prop('value', "Yes");
+
+                    }
+                    /*
+                    else
+                    {
+                        $('#KeyPosition').prop('value', "You must upload file with format name: PSADocuments-MMDDYYYY");
+                        $('#DocumentType').prop('value', "PSA Document");
+                        $('#KeyPositionValue').prop('value', "No");
+                    }
+                    */
+                })
+
+
             }
-            if ($("#IsRenewal_Value").prop("value", "Yes"))
-            {
-                $("#RenewalNumber").prop("readonly", "null");
-            }
-            ;
-        }
-        */
+
+
+            $(document).ready(function () {
+
+                $("#Tenure").on('input', function () {
+                    sumCal();
+                });
+
+                function sumCal() {
+
+                    var dateOfNewPSA = $("#DateOfNewPSA").val();
+                    var dateofnewpsa = new Date(dateOfNewPSA);
+                    var monthpsa = dateofnewpsa.getMonth();
+                    var monthint = parseInt(monthpsa);
+                    var datepsa = dateofnewpsa.getDate();
+
+                    var tenure = $("#Tenure").val();
+                    var tenureint = parseInt(tenure);
+                    var addtenure = tenureint + monthint;
+
+                    var setmonth = new Date(dateofnewpsa.setMonth(addtenure));
+
+                    var psaexpirydate = setmonth.getMonth() + 1 + '/' + setmonth.getDate() + '/' + setmonth.getFullYear();
+                    $("#PSAExpiryDate").val(psaexpirydate);
+                }
+
+            });
+
+            $(document).ready(function () {
+
+
+                function onChange() {
+
+                    if ($("#IsRenewal_Value").val() == "No")
+                    {
+                        var joinDate = $("#JoinDate").val();
+
+                        console.log("Join Date: " + joinDate);
+
+                        $('#DateOfNewPSA').prop('value', joinDate);
+                        $("#DateOfNewPSA").data("kendoDatePicker").min(joinDate);
+                        $("#PSAExpiryDate").val(joinDate);
+
+                    }
+
+                }
+
+                $("#JoinDate").kendoDatePicker(
+                { change: onChange }
+                );
+
+            });
+
+
+           function isrenewalChanged() {
+
+               /*
+               if ($("#IsRenewal_Value").val() == "No")
+                {
+
+                    $("#PSARenewalNumber").prop("readonly", "true");
+                    $("#PSARenewalNumber").prop("value", 0);
+                }
+                */
+               if ($("#IsRenewal_Value").val() == "Yes")
+                {
+                    $("#PSARenewalNumber").prop("readonly", "true");
+                    var renewalnumber = $("#HidRenewalNumber").val();
+                    $('#PSARenewalNumber').prop('value', renewalnumber);
+                    var expirydate = $("#ExpiryDateBefore").val();
+                    $("#DateOfNewPSA").data("kendoDatePicker").min(expirydate);
+                    $('#PSAExpiryDate').prop('value', expirydate);
+
+                    //console.log(renewalnumber);
+                    //console.log(expirydate);
+                 }
+           }
+
+           function onSelectPSA(e) {
+
+               //console.log("Upload :: " + getFileInfo(e));
+               $.each(e.files, function (index, value) {
+                   console.log("Index Document: " + index);
+                   console.log("Name: " + value.name);
+                   console.log("Index of MCC: " + value.name.indexOf("MCCNoObjectionLetter"));
+                   console.log("Size: " + value.size + " bytes");
+                   console.log("Extension: " + value.extension);
+
+
+                   if ($("#KeyPositionValue").val() == "Yes")
+                   {
+                       if ((index == 0))
+                       {
+                           if (value.name.indexOf("MCCNoObjectionLetter") < 0)
+                           {
+                               alert("You Must Upload MCCNoObjectionLetter Document");
+                               e.preventDefault();
+                           }
+                           if (value.name.indexOf("MCCNoObjectionLetter") >= 0)
+                           {
+                               //Hanya Untuk Testing
+                               alert("MCCNoObjectionLetter already exist");
+                               e.preventDefault();
+                           }
+                       }
+                       if(index == 1)
+                       {
+                           if (value.name.indexOf("PSADocument") < 0)
+                           {
+                               alert("You Must Upload PSADocument Document");
+                               e.preventDefault();
+                           }
+                           if (value.name.indexOf("PSADocument") >= 0)
+                           {
+                               //Hanya Untuk Testing
+                               alert("PSADocument already exist");
+                               e.preventDefault();
+                           }
+                       }
+                   }
+
+               });
+
+           }
+
+
     </script>
 }
-
