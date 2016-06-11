@@ -225,7 +225,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 var updateValue = new Dictionary<string, object>();
 
-                if (doc.FileName.IndexOf("MCCNoObjectionLetter") >= 0)
+                if (doc.FileName.IndexOf("MCC") >= 0)
                 {
                     psaManagmement.DocumentType = "MCC No Objection Letter";
                 }

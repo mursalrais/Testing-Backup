@@ -129,19 +129,17 @@
 
                     if (result[0].isKeyPosition == "Yes")
                     {
-                        $('#KeyPosition').prop('value', "You must upload file with format name: MCCNoObjectionLetter-XXXX" + "XXXX is a ordering number such as: 0001");
+                        $('#KeyPosition').prop('value', "You must upload file with the file name format: MCC-PSA-MMDDYYYY");
                         $('#DocumentType').prop('value', "MCC No Objection Letter");
                         $('#KeyPositionValue').prop('value', "Yes");
                    
                     }
-                    /*
                     else
                     {
-                        $('#KeyPosition').prop('value', "You must upload file with format name: PSADocuments-MMDDYYYY");
-                        $('#DocumentType').prop('value', "PSA Document");
+                        $('#KeyPosition').prop('value', "You must upload file with the file name format: PSA-MMDDYYYY");
+                        $('#DocumentType').prop('value', "MCC No Objection Letter");
                         $('#KeyPositionValue').prop('value', "No");
                     }
-                    */
                 })
 
                 
@@ -202,14 +200,7 @@
             
            function isrenewalChanged() {
 
-               /*
-               if ($("#IsRenewal_Value").val() == "No")
-                {
-                    
-                    $("#PSARenewalNumber").prop("readonly", "true");
-                    $("#PSARenewalNumber").prop("value", 0);
-                }
-                */
+               
                if ($("#IsRenewal_Value").val() == "Yes")
                 {
                     $("#PSARenewalNumber").prop("readonly", "true");
@@ -219,14 +210,12 @@
                     $("#DateOfNewPSA").data("kendoDatePicker").min(expirydate);
                     $('#PSAExpiryDate').prop('value', expirydate);
 
-                    //console.log(renewalnumber);
-                    //console.log(expirydate);
+                    
                  }
            }
 
            function onSelectPSA(e) {
                  
-               //console.log("Upload :: " + getFileInfo(e));
                $.each(e.files, function (index, value) {
                    console.log("Index Document: " + index);
                    console.log("Name: " + value.name);
@@ -239,31 +228,46 @@
                    {
                        if ((index == 0))
                        {
-                           if (value.name.indexOf("MCCNoObjectionLetter") < 0)
+                           if (value.name.indexOf("MCC") < 0)
                            {
-                               alert("You Must Upload MCCNoObjectionLetter Document");
+                               alert("You Must Upload MCC Document");
                                e.preventDefault();
                            }
-                           if (value.name.indexOf("MCCNoObjectionLetter") >= 0)
+                           if (value.name.indexOf("MCC") >= 0)
                            {
                                //Hanya Untuk Testing
-                               alert("MCCNoObjectionLetter already exist");
-                               e.preventDefault();
+                               //alert("MCC already exist");
+                               $('#DocumentType').prop('value', "MCC No Objection Letter");
+                               //e.preventDefault();
                            }
                        }
                        if(index == 1)
                        {
-                           if (value.name.indexOf("PSADocument") < 0)
+                           if (value.name.indexOf("PSA") < 0)
                            {
                                alert("You Must Upload PSADocument Document");
                                e.preventDefault();
                            }
-                           if (value.name.indexOf("PSADocument") >= 0)
+                           if (value.name.indexOf("PSA") >= 0)
                            {
                                //Hanya Untuk Testing
-                               alert("PSADocument already exist");
-                               e.preventDefault();
+                               //alert("PSADocument already exist");
+                               $('#DocumentType').prop('value', "PSA Document");
+                               //e.preventDefault();
                            }
+                       }
+                   }
+                   else
+                   {
+                       if (value.name.indexOf("PSA") < 0) {
+                           alert("You Must Upload PSADocument Document");
+                           e.preventDefault();
+                       }
+                       if (value.name.indexOf("PSA") >= 0) {
+                           //Hanya Untuk Testing
+                           //alert("PSADocument already exist");
+                           $('#DocumentType').prop('value', "PSA Document");
+                           //e.preventDefault();
                        }
                    }
                    
