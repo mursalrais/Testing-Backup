@@ -163,9 +163,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.RenewalNumber = Convert.ToInt32(listItem["renewalnumber"]);
             viewModel.ProjectOrUnit.Value = Convert.ToString(listItem["ProjectOrUnit"]);
             viewModel.Professional.Text = FormatUtil.ConvertLookupToValue(listItem, "professional");
+            viewModel.Position.Text = FormatUtil.ConvertLookupToValue(listItem, "position");
             viewModel.JoinDate = Convert.ToDateTime(listItem["joindate"]).ToLocalTime();
             viewModel.DateOfNewPSA = Convert.ToDateTime(listItem["dateofnewpsa"]).ToLocalTime();
-            viewModel.Tenure = Convert.ToInt32(listItem["tenure"]);
+            viewModel.TenureString = Convert.ToString(listItem["tenure"]);
 
             viewModel.PSAExpiryDate = Convert.ToDateTime(listItem["psaexpirydate"]).ToLocalTime();
 
@@ -225,7 +226,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 var updateValue = new Dictionary<string, object>();
 
-                if (doc.FileName.IndexOf("MCCNoObjectionLetter") >= 0)
+                if (doc.FileName.IndexOf("MCC") >= 0)
                 {
                     psaManagmement.DocumentType = "MCC No Objection Letter";
                 }

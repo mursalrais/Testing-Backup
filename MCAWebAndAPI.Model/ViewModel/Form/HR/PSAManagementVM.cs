@@ -133,6 +133,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [Required]
         public int Tenure { get; set; }
 
+        [DisplayName("Tenure")]
+        public string TenureString { get; set; }
+
         /// <summary>
         /// psaexpirydate
         /// </summary>
@@ -141,6 +144,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public DateTime? PSAExpiryDate { get; set; } = DateTime.Now;
 
         public string ExpiryDateBefore { get; set; }
+
+        public string NextExpiryDate { get; set; }
 
         /*
         [UIHint("Date")]

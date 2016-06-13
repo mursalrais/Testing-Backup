@@ -12,7 +12,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         IEnumerable<ApplicationShortlistVM> GetShortlists();
 
-        ApplicationShortlistVM GetShortlist(string Position);
+        ApplicationShortlistVM GetShortlist(string position, string username, string useraccess);
 
         void CreateShortlistDataDetail(int? headerID, IEnumerable<ShortlistDetailVM> ShortlistDetails);
     }

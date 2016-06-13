@@ -182,19 +182,20 @@ namespace MCAWebAndAPI.Web.Controllers
         public JsonResult GetRenewal(int id)
         {
             psaManagementService.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));
-            
+
             var renewalNumber = GetRenewalNumberFromExistingSession(id);
 
+
             return Json(renewalNumber.OrderByDescending(e => e.Created).Where(e => e.ID == id).Select(
-                    e =>
-                    new
-                    {
-                        e.ID,
-                        e.PSARenewalNumber,
-                        e.ExpiryDateBefore
+                e =>
+                new
+                {
+                    e.ID,
+                    e.PSARenewalNumber,
+                    e.ExpiryDateBefore
                         //e.PSAExpiryDate
                     }
-                ), JsonRequestBehavior.AllowGet);
+            ), JsonRequestBehavior.AllowGet);
         }
 
         private IEnumerable<PSAManagementVM> GetRenewalNumberFromExistingSession(int? id)

@@ -13,10 +13,8 @@
     {
         columns.Bound(p => p.Candidate).ClientTemplate("#= Candidate #" +
         "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].Candidate' value='#= Candidate #' />");
-        columns.Bound(p => p.CV).ClientTemplate("#= CV #" +
-        "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].CV' value='#= CV #' />");
-        columns.Bound(p => p.Status).ClientTemplate("#= Status.Text #" +
-                           "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].GetStat' value='#= Status.Text #' />"
+        columns.Bound(p => p.DocumentUrl).ClientTemplate("<a href='#= DocumentUrl #'>get file</a>");
+        columns.Bound(p => p.Status).ClientTemplate("#= Status.Text #"
                          )
                          .EditorViewData(new
                          {
