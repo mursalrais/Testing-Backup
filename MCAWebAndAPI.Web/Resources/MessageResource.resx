@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ErrorEditInActivePSA" xml:space="preserve">
-    <value>Unable In Active PSA</value>
+    <value>Unable Edit Inactive PSA</value>
   </data>
   <data name="ErrorProfessionalNotFound" xml:space="preserve">
     <value>Professional data that uses email {0} is not found. Please contact your IT Administrator.</value>
