@@ -17,6 +17,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         static Logger logger = LogManager.GetCurrentClassLogger();
 
         const string SP_APPDATA_LIST_NAME = "Application";
+        const string SP_APPINTV_LIST_NAME = "Application Interview";
+        const string SP_APPINVPANEL_LIST_NAME = "Interview Invitation to Panel";
         const string SP_APPEDU_LIST_NAME = "Application Education";
         const string SP_APPWORK_LIST_NAME = "Application Working Experience";
         const string SP_APPTRAIN_LIST_NAME = "Application Training";
@@ -48,6 +50,40 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return useraccess;
         }
 
+        private ApplicationShortlistVM ConvertToShortlistDataVM(ListItem listItem)
+        {
+            var viewModel = new ApplicationShortlistVM();
+
+            viewModel.ID = Convert.ToInt32(listItem["ID"]);
+            viewModel.Position = FormatUtil.ConvertLookupToID(listItem, "vacantposition") + string.Empty;
+            viewModel.Candidate = Convert.ToString(listItem["Title"]);
+            viewModel.SendTo = Convert.ToString(listItem[""]);
+
+            return viewModel;
+        }
+
+        private ApplicationShortlistVM ConvertToSendIntvDataVM(ListItem listItem)
+        {
+            var viewModel = new ApplicationShortlistVM();
+
+            viewModel.Position = Convert.ToString(listItem["vacantposition"]);
+            viewModel.Candidate = Convert.ToString(listItem["Title"]);
+            viewModel.SendTo = Convert.ToString(listItem["personalemail"]);
+
+            return viewModel;
+        }
+
+        private ApplicationShortlistVM ConvertToInviteIntvDataVM(ListItem listItem)
+        {
+            var viewModel = new ApplicationShortlistVM();
+            
+            viewModel.InterviewerDate = Convert.ToDateTime(listItem["interviewdatetime"]);
+
+            viewModel.EmailMessage = Convert.ToString(listItem["EmailMessage"]);
+
+            return viewModel;
+        }
+
         public ApplicationShortlistVM GetShortlist(string position, string username, string useraccess)
         {
             var viewModel = new ApplicationShortlistVM();
@@ -58,6 +94,19 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             useraccess = GetAccessData(username);
 
             viewModel.ShortlistDetails = GetDetailShortlist(position, useraccess);
+
+            return viewModel;
+
+        }
+
+        public ApplicationShortlistVM GetShortlistSend(int? ID)
+        {
+            var viewModel = new ApplicationShortlistVM();
+            if (ID == null)
+                return viewModel;
+
+            var listItemdt = SPConnector.GetListItem(SP_APPDATA_LIST_NAME, ID, _siteUrl);
+            viewModel = ConvertToSendIntvDataVM(listItemdt);
 
             return viewModel;
 
@@ -78,6 +127,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 caml = @"<View>  
             <Query> 
       <Where>
+    <And>
       <Or>
          <Or>
             <Or>
@@ -112,6 +162,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             <Value Type='Text'>DECLINED</Value>
          </Eq>
       </Or>
+         <Eq>
+            <FieldRef Name='position' LookupId='True' /><Value Type='Lookup'>" + Position + @"</Value>
+         </Eq>
+      </And>
    </Where>
             </Query> 
               <ViewFields>
@@ -141,18 +195,17 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
       <FieldRef Name='applicationstatus' />
       <FieldRef Name='position' />
    </ViewFields>
-   
             </View>";
 
             }
             
-            var eduacationDetails = new List<ShortlistDetailVM>();
+            var shortlistDetails = new List<ShortlistDetailVM>();
             foreach (var item in SPConnector.GetList(SP_APPDATA_LIST_NAME, _siteUrl, caml))
             {
-                eduacationDetails.Add(ConvertToShortlistDetailVM(item));
+                shortlistDetails.Add(ConvertToShortlistDetailVM(item));
             }
 
-            return eduacationDetails;
+            return shortlistDetails;
         }
 
         //<ViewFields>
@@ -237,8 +290,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return new ShortlistDetailVM
             {
                 Candidate = Convert.ToString(item["Title"]),
+                Candidatemail = Convert.ToString(item["Title"]),
                 ID = Convert.ToInt32(item["ID"]),
                 DocumentUrl = GetDocumentUrl(id),
+                GetStat = Convert.ToString(item["applicationstatus"]),
                 //Status = Convert.ToString(item["applicationstatus"]),
                 Remarks = Convert.ToString(item["position"]),
                 //Title = Convert.ToString(item["Title"])
@@ -267,7 +322,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return string.Format(UrlResource.ApplicationDocumentByID, _siteUrl, iD);
         }
 
-
         public IEnumerable<ApplicationShortlistVM> GetShortlists()
         {
             throw new NotImplementedException();
@@ -277,7 +331,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
         }
-
 
         public void CreateShortlistDataDetail(int? headerID, IEnumerable<ShortlistDetailVM> viewModels)
         {
@@ -314,8 +367,61 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     logger.Error(e.Message);
                     throw e;
                 }
+                
             }
         }
 
+        public void CreateShortlistInviteIntv(int? headerID, ApplicationShortlistVM viewModel)
+        {
+            var updatedValue = new Dictionary<string, object>();
+
+            foreach (var list in viewModel.ShortlistDetails)
+            {
+                updatedValue.Add("Title", list.Candidate);
+                updatedValue.Add("emailfrom", list.Candidatemail);
+                updatedValue.Add("emailto", viewModel.SendTo);
+                updatedValue.Add("emailmessage", viewModel.EmailMessage);
+                updatedValue.Add("emaildate", DateTime.Now);
+
+                try
+                {
+                    SPConnector.AddListItem(SP_APPINVPANEL_LIST_NAME, updatedValue, _siteUrl);
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e.Message);
+                    throw e;
+                }
+
+                if (viewModel.SendToCandidate == true)
+                {
+                    SPConnector.SendEmail(viewModel.EmailFrom, viewModel.EmailMessage, "Interview Invitation", _siteUrl);
+                }
+                
+            }
+             SPConnector.SendEmail(viewModel.SendTo, viewModel.EmailMessage, "Interview Invitation", _siteUrl);
+        }
+
+        public void CreateShorlistSendintv(int? headerID, ApplicationShortlistVM viewModel)
+        {
+            var updatedValue = new Dictionary<string, object>();
+
+            updatedValue.Add("interviewdatetime", viewModel.InterviewerDate);
+            //updatedValue.Add("interviewerpanel", viewModel.InterviewerPanel);
+            updatedValue.Add("invitationemailmessage", viewModel.Message);
+            updatedValue.Add("invitationemaildate", DateTime.Now);
+
+            try
+            {
+                SPConnector.AddListItem(SP_APPINTV_LIST_NAME, updatedValue, _siteUrl);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.Message);
+                throw e;
+            }
+
+            SPConnector.SendEmail(viewModel.EmailFrom, viewModel.EmailMessage, "Interview Invitation", _siteUrl);
+        }
     }
 }
