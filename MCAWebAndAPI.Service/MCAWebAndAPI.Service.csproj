@@ -150,7 +150,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>UrlResource.resx</DependentUpon>
     </Compile>
-    <Compile Include="Utils\EmailExternalUtil.cs" />
+    <Compile Include="Utils\EmailUtil.cs" />
     <Compile Include="Utils\FormatUtil.cs" />
     <Compile Include="Utils\GraphicUtil.cs" />
     <Compile Include="Utils\MathUtil.cs" />

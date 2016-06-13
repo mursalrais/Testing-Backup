@@ -27,5 +27,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         void SetApplicationStatus(ApplicationDataVM viewModel);
 
         int? CreateProfessionalData(ApplicationDataVM viewModel);
+
     }
 }

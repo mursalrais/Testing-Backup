@@ -24,7 +24,7 @@ function showModalWindow(data) {
 }
 
 
-function onUpload(e) {
+function onSelectMultipleFileUploader(e) {
     var files = e.files;
 
     $.each(files, function () {

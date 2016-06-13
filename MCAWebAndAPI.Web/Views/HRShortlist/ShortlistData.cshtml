@@ -42,10 +42,10 @@
                 </div>
                 <div class="col-sm-8">
 
-                    @*<button id="submit-nextstep" class="btn btn-primary" type="submit">
-                        <i class="fa fa-save"></i>
+                    <button id="submit-nextstep" class="btn btn-primary" type="submit">
+                        <i class="fa fa-send"></i>
                         send to next step
-                    </button>*@
+                    </button>
                     <button id="submit-button" class="btn btn-primary" type="submit">
                         <i class="fa fa-save"></i>
                         save
@@ -58,10 +58,28 @@
                 </div>
             </div>
     </div>
+    
 }
 
 @section scripts{
 
+    @*<script>
+        $(document).ready(function () {
+            $('input').prop('readonly', 'true');
+            $('textarea').prop('readonly', 'true');
 
+            var positionID = $("#Position").val();
+            var url = "/HRDataMaster/GetPosition/" + positionID;
+            $.getJSON(url, function (data) {
+                $("#vacant-position").prop("value", data.PositionName);
+            })
+
+            $('#print-display-button').click(function (e) {
+                var url = "/HRApplication/PrintApplicationData";
+                submitFormToPrint(url);
+            });
+
+        });
+    </script>*@
 }
 

@@ -3,10 +3,10 @@
 @model ApplicationShortlistVM
 
 @{
-    ViewBag.Title = "ShortlistData";
+    ViewBag.Title = "ShortlistSendinvite";
 }
 
-@using (Html.BeginForm("ShortlistData", "HRShortlist", FormMethod.Post, new
+@using (Html.BeginForm("ShortlistSendInvite", "HRShortlist", FormMethod.Post, new
 {
     @class = "form-horizontal",
     enctype = "multipart/form-data"
@@ -15,42 +15,40 @@
     <fieldset>
         @Html.HiddenFor(m => m.ID)
         @Html.HiddenFor(m => m.Position)
-        <div class="row">
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Position).Class("col-sm-4 control-label")
-                <div class="col-sm-8">
-                    <input id="vacant-position" class="form-control" value="" />
-                </div>
-            </div>
-        </div>
-
+       
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.Position).Class("col-sm-4 control-label")
                     <div class="col-sm-8">
-                        @Html.EditorFor(m => m.Position)
+                        @Html.EditorFor(m => m.Position, new { disabled = "disabled" })
                     </div>
                 </div>
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.Candidate).Class("col-sm-4 control-label")
                     <div class="col-sm-8">
-                        @Html.EditorFor(m => m.Candidate)
+                        @Html.EditorFor(m => m.Candidate, new { disabled = "disabled" })
                     </div>
                 </div>
-                <div class="form-group">
+                @*<div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.SendTo).Class("col-sm-4 control-label")
                     <div class="col-sm-8">
-                        @Html.EditorFor(m => m.SendTo)
+                        @Html.EditorFor(m => m.SendTo, new { disabled = "disabled" })
                     </div>
-                </div>
+                </div>*@
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.InterviewerDate).Class("col-sm-4 control-label")
                     <div class="col-sm-8">
                         @Html.EditorFor(m => m.InterviewerDate)
                     </div>
                 </div>
-              
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Message).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.Message)
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -73,13 +71,13 @@
                         send to next step
                     </button>*@
                 <button id="submit-button" class="btn btn-primary" type="submit">
-                    <i class="fa fa-save"></i>
-                    save
+                    <i class="fa fa-send"></i>
+                    Send Email To Candidate
                 </button>
-                @*<button id="submit-cancel" class="btn btn-primary" type="submit">
-                        <i class="fa fa-save"></i>
+                <button id="submit-cancel" class="btn btn-primary" type="submit">
+                        <i class="fa fa-cancel"></i>
                         cancel
-                    </button>*@
+                    </button>
 
             </div>
         </div>
