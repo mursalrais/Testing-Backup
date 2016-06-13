@@ -181,7 +181,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             return RedirectToAction("Index", 
                 "Success", 
-                new { successMessage = string.Format(MessageResource.SuccessCreateApplicationData, viewModel.FirstMiddleName)});
+                new { errorMessage = string.Format(MessageResource.SuccessCreateApplicationData, viewModel.FirstMiddleName)});
         }
 
         [HttpPost]

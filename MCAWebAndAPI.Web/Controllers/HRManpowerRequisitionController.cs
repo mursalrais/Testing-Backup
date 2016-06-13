@@ -39,7 +39,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             return RedirectToAction("Index",
                 "Success",
-                new { successMessage = string.Format(MessageResource.SuccessCommon, viewModel.ID) });
+                new { errorMessage = string.Format(MessageResource.SuccessCommon, viewModel.ID) });
         }
 
         public ActionResult ApprovalManpowerRequisition(string siteUrl = null, int? ID = null)
@@ -99,7 +99,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             return RedirectToAction("Index",
                 "Success",
-                new { successMessage = string.Format(MessageResource.SuccessCommon, viewModel.ID) });
+                new { errorMessage = string.Format(MessageResource.SuccessCommon, viewModel.ID) });
         }
         [HttpPost]
         public ActionResult EditManpowerRequisition(FormCollection form, ManpowerRequisitionVM viewModel)
@@ -130,7 +130,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             return RedirectToAction("Index",
                 "Success",
-                new { successMessage = string.Format(MessageResource.SuccessCommon, viewModel.ID) });
+                new { errorMessage = string.Format(MessageResource.SuccessCommon, viewModel.ID) });
         }
 
 
@@ -210,7 +210,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             return RedirectToAction("Index",
                 "Success",
-                new { successMessage = string.Format(MessageResource.SuccessCommon, viewModel.ID) });
+                new { errorMessage = string.Format(MessageResource.SuccessCommon, viewModel.ID) });
         }
 
         [HttpPost]
