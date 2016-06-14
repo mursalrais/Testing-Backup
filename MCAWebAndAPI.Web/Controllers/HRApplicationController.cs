@@ -182,7 +182,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
             try
             {
-                EmailUtil.Send(viewModel.EmailAddresOne, "Confirmation", "Hi Dude, thanks for submitting your application!");
+                EmailUtil.Send(viewModel.EmailAddresOne, "Confirmation", 
+                    "Hi Dude, thanks for submitting your application!");
             }
             catch (Exception e)
             {

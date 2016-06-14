@@ -121,7 +121,6 @@ namespace MCAWebAndAPI.Web.Controllers
 
             try
             {
-                //TODO: To change with service retriving email from professional 
                 switch (viewModel.ValidationAction)
                 {
                     case "ask-hr-to-validate-action":

@@ -22,10 +22,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         const string SP_APPWORK_LIST_NAME = "Application Working Experience";
         const string SP_APPTRAIN_LIST_NAME = "Application Training";
         const string SP_APPDOC_LIST_NAME = "Application Documents";
-
         const string SP_PROMAS_LIST_NAME = "Professional Master";
         const string SP_POSMAS_LIST_NAME = "Position Master";
-
         const string SP_MANPOW_LIST_NAME = "Manpower Requisition";
         const string COMPANY_DOMAIN_EMAIL = "eceos.com";
 

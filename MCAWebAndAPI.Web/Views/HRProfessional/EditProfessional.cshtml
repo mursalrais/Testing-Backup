@@ -71,7 +71,7 @@
                     Ask HR to Validate
                 </button>
 
-                @if (ViewBag.IsHRView && Model.ValidationStatus ==
+                @if (!ViewBag.IsHRView && Model.ValidationStatus ==
                         Workflow.GetProfessionalValidationStatus(Workflow.ProfessionalValidationStatus.NEED_VALIDATION))
                 {
                     <button id="ask-hr-to-validate-action" class="btn btn-submit" type="button">
