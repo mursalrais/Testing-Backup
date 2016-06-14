@@ -59,6 +59,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.Candidate = Convert.ToString(listItem["Title"]);
             viewModel.SendTo = Convert.ToString(listItem[""]);
 
+
             return viewModel;
         }
 
@@ -127,24 +128,23 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 caml = @"<View>  
             <Query> 
       <Where>
-    <And>
-      <Or>
+<Or>
          <Or>
             <Or>
                <Or>
                   <Or>
                      <Eq>
                         <FieldRef Name='applicationstatus' />
-                        <Value Type='Text'>New</Value>
+                        <Value Type='Text'>Shortlisted</Value>
                      </Eq>
                      <Eq>
                         <FieldRef Name='applicationstatus' />
-                        <Value Type='Text'>Shortlisted</Value>
+                        <Value Type='Text'>Declined</Value>
                      </Eq>
                   </Or>
                   <Eq>
                      <FieldRef Name='applicationstatus' />
-                     <Value Type='Text'>Declined</Value>
+                     <Value Type='Text'>New</Value>
                   </Eq>
                </Or>
                <Eq>
@@ -154,24 +154,21 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             </Or>
             <Eq>
                <FieldRef Name='applicationstatus' />
-               <Value Type='Text'>SHORTLISTED</Value>
+               <Value Type='Text'>DECLINED</Value>
             </Eq>
          </Or>
          <Eq>
             <FieldRef Name='applicationstatus' />
-            <Value Type='Text'>DECLINED</Value>
+            <Value Type='Text'>SHORTLISTED</Value>
          </Eq>
       </Or>
-         <Eq>
-            <FieldRef Name='position' LookupId='True' /><Value Type='Lookup'>" + Position + @"</Value>
-         </Eq>
-      </And>
    </Where>
             </Query> 
               <ViewFields>
       <FieldRef Name='Title' />
       <FieldRef Name='ID' />
       <FieldRef Name='applicationstatus' />
+      <FieldRef Name='applicationremarks' />
       <FieldRef Name='position' />
    </ViewFields>
    
@@ -183,16 +180,23 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 caml = @"<View>  
             <Query> 
       <Where>
-       <Eq>
-         <FieldRef Name='applicationstatus' />
-         <Value Type='Text'>Shortlisted</Value>
-      </Eq>
+       <Or>
+         <Eq>
+            <FieldRef Name='applicationstatus' />
+            <Value Type='Text'>Shortlisted</Value>
+         </Eq>
+         <Eq>
+            <FieldRef Name='applicationstatus' />
+            <Value Type='Text'>Declined</Value>
+         </Eq>
+      </Or>
    </Where>
             </Query> 
               <ViewFields>
       <FieldRef Name='Title' />
       <FieldRef Name='ID' />
       <FieldRef Name='applicationstatus' />
+      <FieldRef Name='applicationremarks' />
       <FieldRef Name='position' />
    </ViewFields>
             </View>";
@@ -286,17 +290,20 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         /// <returns></returns>
         private ShortlistDetailVM ConvertToShortlistDetailVM(ListItem item)
         {
-            int id = Convert.ToInt32(item["ID"]);
             return new ShortlistDetailVM
             {
                 Candidate = Convert.ToString(item["Title"]),
                 Candidatemail = Convert.ToString(item["Title"]),
                 ID = Convert.ToInt32(item["ID"]),
-                DocumentUrl = GetDocumentUrl(id),
+                DocumentUrl = GetDocumentUrl(Convert.ToInt32(item["ID"])),
+                Status = ShortlistDetailVM.GetStatusDefaultValue(
+                    new Model.ViewModel.Control.InGridComboBoxVM
+                    {
+                        Text = Convert.ToString(item["applicationstatus"])
+                    }),
+
                 GetStat = Convert.ToString(item["applicationstatus"]),
-                //Status = Convert.ToString(item["applicationstatus"]),
-                Remarks = Convert.ToString(item["position"]),
-                //Title = Convert.ToString(item["Title"])
+                Remarks = Convert.ToString(item["applicationremarks"]),
 
             };
         }
@@ -332,7 +339,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
         }
 
-        public void CreateShortlistDataDetail(int? headerID, IEnumerable<ShortlistDetailVM> viewModels)
+        public void UpdateShortlistDataDetail(int? headerID, IEnumerable<ShortlistDetailVM> viewModels)
         {
             foreach (var viewModel in viewModels)
             {
@@ -357,6 +364,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 var updatedValue = new Dictionary<string, object>();
                 updatedValue.Add("Title", viewModel.Candidate);
                 updatedValue.Add("applicationstatus", viewModel.GetStat);
+                updatedValue.Add("applicationremarks", viewModel.Remarks);
 
                 try
                 {
@@ -395,11 +403,13 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
                 if (viewModel.SendToCandidate == true)
                 {
-                    SPConnector.SendEmail(viewModel.EmailFrom, viewModel.EmailMessage, "Interview Invitation", _siteUrl);
+                    EmailUtil.Send(viewModel.EmailFrom, "Interview Invitation", viewModel.EmailMessage + " < a href = 'https://eceos2.sharepoint.com/sites/ims/hr/Lists/Professional%20Master/DispForm_Custom.aspx?ID=3' > Open candidates' profiles for this position</a>");
                 }
                 
             }
-             SPConnector.SendEmail(viewModel.SendTo, viewModel.EmailMessage, "Interview Invitation", _siteUrl);
+
+            EmailUtil.Send("ahmadsobari89@gmail.com", "Interview Invitation", "<div><label>"+ viewModel.EmailMessage + "</label></div>" +
+                           "<a href = 'https://eceos2.sharepoint.com/sites/ims/hr/Lists/Professional%20Master/DispForm_Custom.aspx?ID=3' > Open candidates' profiles for this position</a>");
         }
 
         public void CreateShorlistSendintv(int? headerID, ApplicationShortlistVM viewModel)
@@ -421,7 +431,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 throw e;
             }
 
-            SPConnector.SendEmail(viewModel.EmailFrom, viewModel.EmailMessage, "Interview Invitation", _siteUrl);
+            EmailUtil.Send(viewModel.EmailFrom, "Interview Invitation", viewModel.EmailMessage);
+
         }
     }
 }

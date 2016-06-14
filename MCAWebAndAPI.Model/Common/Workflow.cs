@@ -25,7 +25,8 @@ namespace MCAWebAndAPI.Model.Common
         public enum ProfessionalValidationStatus
         {
             VALIDATED = 0,
-            NEED_VALIDATION = 1
+            NEED_VALIDATION = 1, 
+            REJECTED = 2
         }
 
         public static string GetApplicationStatus(ApplicationStatus status)
@@ -65,6 +66,8 @@ namespace MCAWebAndAPI.Model.Common
                     return "HR Validated";
                 case ProfessionalValidationStatus.NEED_VALIDATION:
                     return "Need HR to Validate";
+                case ProfessionalValidationStatus.REJECTED:
+                    return "Rejected";
                 default: return null;
             }
         }
