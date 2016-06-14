@@ -27,7 +27,6 @@ namespace MCAWebAndAPI.Service.Common
             {
                 locations.Add(ConvertToLocationModel(item));
             }
-
             return locations;
         }
 
@@ -47,11 +46,9 @@ namespace MCAWebAndAPI.Service.Common
             {
                 locations.Add(ConvertToLocationModel(item));
             }
-
             return locations;
         }
-
-
+        
         public IEnumerable<Location> GetContinents(int? parentId)
         {
             var caml = @"
@@ -68,7 +65,6 @@ namespace MCAWebAndAPI.Service.Common
             {
                 locations.Add(ConvertToLocationModel(item));
             }
-
             return locations;
         }
 
