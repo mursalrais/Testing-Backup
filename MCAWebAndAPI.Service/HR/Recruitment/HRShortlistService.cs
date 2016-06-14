@@ -359,7 +359,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
                 var updatedValue = new Dictionary<string, object>();
                 updatedValue.Add("Title", viewModel.Candidate);
-                updatedValue.Add("applicationstatus", viewModel.Status);
+                updatedValue.Add("applicationstatus", viewModel.GetStat);
                 updatedValue.Add("applicationremarks", viewModel.Remarks);
 
                 try

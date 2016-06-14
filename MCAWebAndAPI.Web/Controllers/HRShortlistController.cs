@@ -42,10 +42,12 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult ShortlistData(FormCollection form, ApplicationShortlistVM viewModel)
+        public ActionResult UpdateShortlistData(FormCollection form, ApplicationShortlistVM viewModel)
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            var testget = form[""];
 
             int? headerID = null;
             try
@@ -59,7 +61,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            SPConnector.SendEmail(viewModel.SendTo, "Data list candidate has been send", "Interview Invitation", siteUrl);
+            EmailUtil.Send(viewModel.SendTo, "Shortlist Data", "Data list candidate has been send");
 
             return JsonHelper.GenerateJsonSuccessResponse(
                 string.Format("{0}/{1}", siteUrl, UrlResource.Professional));
@@ -81,7 +83,7 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult ShortlistSendInvite(FormCollection form, ApplicationShortlistVM viewModel)
+        public ActionResult CreateSendInvite(FormCollection form, ApplicationShortlistVM viewModel)
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
@@ -118,7 +120,7 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult ShortlistIntvinvite(FormCollection form, ApplicationShortlistVM viewModel)
+        public ActionResult CreateIntvinvite(FormCollection form, ApplicationShortlistVM viewModel)
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
@@ -142,6 +144,12 @@ namespace MCAWebAndAPI.Web.Controllers
         private IEnumerable<ShortlistDetailVM> BindShortlistDetails(FormCollection form, IEnumerable<ShortlistDetailVM> shortDetails)
         {
             var array = shortDetails.ToArray();
+            for (int i = 0; i < array.Length; i++)
+            {
+                array[i].GetStat = BindHelper.BindStringInGrid("ShortlistDetails",
+                    i, "Status", form);
+
+            }
             return array;
         }
     }
