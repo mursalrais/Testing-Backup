@@ -39,7 +39,6 @@ namespace MCAWebAndAPI.Web.Controllers
                         Text = f.Value
                     }
                 ), JsonRequestBehavior.AllowGet);
-                
             }
 
             return Json(choice.Where(e => e.Value == "KITAS" || e.Value == "Passport").Select(
@@ -289,7 +288,6 @@ namespace MCAWebAndAPI.Web.Controllers
                 array[i].Year = BindHelper.BindDateInGrid("TrainingDetails",
                     i, "Year", form);
             }
-
             return array;
         }
 
