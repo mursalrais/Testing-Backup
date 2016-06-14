@@ -51,7 +51,7 @@ namespace MCAWebAndAPI.Web.Controllers
             try
             {
                 viewModel.ShortlistDetails = BindShortlistDetails(form, viewModel.ShortlistDetails);
-                _service.CreateShortlistDataDetail(headerID, viewModel.ShortlistDetails);
+                _service.UpdateShortlistDataDetail(headerID, viewModel.ShortlistDetails);
             }
             catch (Exception e)
             {

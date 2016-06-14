@@ -32,6 +32,7 @@
 
     </fieldset>
     <div class="form-actions">
+        <div class="row">
             <div class="col-sm-12">
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.InterviewerPanel).Class("col-sm-2 control-label")
@@ -41,42 +42,44 @@
                 </div>
             </div>
 
-                <div class="col-sm-12">
-                    <div class="form-group">
-                        @Html.Bootstrap().LabelFor(m => m.EmailMessage).Class("col-sm-2 control-label")
-                        <div class="col-sm-8">
-                            @Html.EditorFor(m => m.EmailMessage)
-                        </div>
+            <div class="col-sm-12">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.EmailMessage).Class("col-sm-2 control-label")
+                    <div class="col-sm-8">
+
+                        @Html.EditorFor(m => m.EmailMessage)
                     </div>
                 </div>
+            </div>
 
-        <div class="col-sm-12">
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.SendToCandidate).Class("col-sm-2 control-label")
-                <div class="col-sm-2 pull-left">
-                    @Html.CheckBoxFor(m => m.SendToCandidate)
+            <div class="col-sm-12">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.SendToCandidate).Class("col-sm-2 control-label")
+                    <div class="col-sm-2 pull-left">
+                        @Html.CheckBoxFor(m => m.SendToCandidate)
+                    </div>
                 </div>
             </div>
-        </div>
 
 
             <div class="col-sm-12">
 
                 @*<button id="submit-nextstep" class="btn btn-primary" type="submit">
-                        <i class="fa fa-save"></i>
-                        send to next step
-                    </button>*@
+                    <i class="fa fa-save"></i>
+                    send to next step
+                </button>*@
                 <button id="submit-button" class="btn btn-primary" type="submit">
                     <i class="fa fa-send"></i>
                     Send Email to Interviewer Panel
                 </button>
                 @*<button id="submit-cancel" class="btn btn-primary" type="submit">
-                        <i class="fa fa-save"></i>
-                        cancel
-                    </button>*@
+                    <i class="fa fa-save"></i>
+                    cancel
+                </button>*@
 
             </div>
-    </div>
+        </div>
+        </div>
 }
 
 @section scripts{
