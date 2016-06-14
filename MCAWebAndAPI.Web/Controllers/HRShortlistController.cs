@@ -36,7 +36,7 @@ namespace MCAWebAndAPI.Web.Controllers
             SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
 
             var viewmodel = _service.GetShortlist(position, username, useraccess);
-            //viewmodel.SendTo = "";
+
             //viewmodel.ID = id;
             return View(viewmodel);
         }

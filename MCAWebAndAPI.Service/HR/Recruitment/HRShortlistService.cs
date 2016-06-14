@@ -290,16 +290,20 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         /// <returns></returns>
         private ShortlistDetailVM ConvertToShortlistDetailVM(ListItem item)
         {
-            int id = Convert.ToInt32(item["ID"]);
             return new ShortlistDetailVM
             {
                 Candidate = Convert.ToString(item["Title"]),
                 Candidatemail = Convert.ToString(item["Title"]),
                 ID = Convert.ToInt32(item["ID"]),
-                DocumentUrl = GetDocumentUrl(id),
+                DocumentUrl = GetDocumentUrl(Convert.ToInt32(item["ID"])),
+                Status = ShortlistDetailVM.GetStatusDefaultValue(
+                    new Model.ViewModel.Control.InGridComboBoxVM
+                    {
+                        Text = Convert.ToString(item["applicationstatus"])
+                    }),
+
                 GetStat = Convert.ToString(item["applicationstatus"]),
                 Remarks = Convert.ToString(item["applicationremarks"]),
-                //Title = Convert.ToString(item["Title"])
 
             };
         }

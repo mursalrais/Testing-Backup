@@ -13,9 +13,9 @@
     {
         columns.Bound(p => p.Candidate).ClientTemplate("#= Candidate #" +
         "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].Candidate' value='#= Candidate #' />");
-        columns.Bound(p => p.DocumentUrl).ClientTemplate("<a href='#= DocumentUrl #'>get file</a>");
-        columns.Bound(p => p.Status).ClientTemplate("#= Status.Text #" +
-            "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].Status' value='#= Status.Text #' />"
+        columns.Bound(p => p.DocumentUrl).ClientTemplate(" <a href='#= DocumentUrl #'>get file</a>");
+        columns.Bound(p => p.Status).ClientTemplate("#= Status #" +
+            "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].Status' value='#= Status #' />"
                          )
                          .EditorViewData(new
                          {
@@ -56,6 +56,10 @@
 )
 </div>
 <script>
+    $(document).ready(function () {
+        console.log();
+    });
+    
     function GetDetailShortlist(dataItem) {
         var data = $("#ShortlistDetails").data("kendoGrid").dataSource.data();
         return data.indexOf(dataItem);
