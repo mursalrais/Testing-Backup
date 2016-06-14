@@ -6,7 +6,7 @@
 
     @(Html.Kendo().Grid(Model)
     .Name("ShortlistDetails")
-    //.ToolBar(tools => tools.Create().Text("Add New Dependent"))                       
+    //.ToolBar(tools => tools.Create().Text("Add New Dependent"))
     .Editable(editable => editable.Mode(GridEditMode.InCell)
     .CreateAt(GridInsertRowPosition.Bottom))
     .Columns(columns =>
@@ -14,12 +14,8 @@
         columns.Bound(p => p.Candidate).ClientTemplate("#= Candidate #" +
         "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].Candidate' value='#= Candidate #' />");
         columns.Bound(p => p.DocumentUrl).ClientTemplate("<a href='#= DocumentUrl #'>get file</a>");
-        columns.Bound(p => p.Status).ClientTemplate("#= Status.Text #"
-                         )
-                         .EditorViewData(new
-                         {
-                             BindTo = ShortlistDetailVM.GetStatusOptions()
-                         });
+        columns.Bound(p => p.GetStat).ClientTemplate("#= GetStat #" +
+        "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].GetStat' value='#= GetStat #' />");
         columns.Bound(p => p.Remarks).ClientTemplate("#= Remarks #" +
         "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].Remarks' value='#= Remarks #' />");
 
@@ -52,7 +48,7 @@
     .ServerOperation(false)
 
     )
-)
+    )
 </div>
 <script>
     function GetDetailShortlist(dataItem) {

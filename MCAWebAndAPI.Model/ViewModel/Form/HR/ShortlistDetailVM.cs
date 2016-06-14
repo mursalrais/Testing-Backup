@@ -13,6 +13,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
     {
         public string Candidate { get; set; }
 
+        public string Candidatemail { get; set; }
+
         public string CV { get; set; }
 
         [UIHint("MultiFileUploader")]
