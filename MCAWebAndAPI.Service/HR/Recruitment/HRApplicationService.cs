@@ -521,6 +521,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             updatedValue.Add("Position", new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.Position) });
             updatedValue.Add("officeemail", string.Format("{0}.{1}@{2}", viewModel.FirstMiddleName, viewModel.LastName,
                 COMPANY_DOMAIN_EMAIL));
+            updatedValue.Add("datavalidationstatus", Workflow.GetProfessionalValidationStatus(Workflow.ProfessionalValidationStatus.VALIDATED));
 
             try
             {

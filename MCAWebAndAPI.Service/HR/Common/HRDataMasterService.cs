@@ -440,6 +440,7 @@ namespace MCAWebAndAPI.Service.HR.Common
             updatedValue.Add("taxaddress", viewModel.TaxIDAddress);
             updatedValue.Add("NIK", viewModel.NIK);
             updatedValue.Add("nameintaxid", viewModel.NameInTaxForPayroll);
+            updatedValue.Add("datavalidationstatus", Workflow.GetProfessionalValidationStatus(Workflow.ProfessionalValidationStatus.NEED_VALIDATION));
 
             try
             {
@@ -709,10 +710,25 @@ namespace MCAWebAndAPI.Service.HR.Common
                 position.PositionName = Convert.ToString(item["Title"]);
                 //TODO: To add other neccessary property
             }
-
+             
             return position;
         }
 
-       
+        public void SetValidationStatus(int? id, Workflow.ProfessionalValidationStatus validationStatus)
+        {
+            var updatedValue = new Dictionary<string, object>();
+            updatedValue.Add("datavalidationstatus", Workflow.GetProfessionalValidationStatus(validationStatus));
+
+            try
+            {
+                SPConnector.UpdateListItem(SP_PROMAS_LIST_NAME, id, updatedValue, _siteUrl);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e);
+                throw e;
+            }
+
+        }
     }
 }
