@@ -661,6 +661,9 @@
     <Content Include="Views\HRShortlist\ShortlistData.cshtml" />
     <Content Include="Views\HRShortlist\_CreateShortlist.cshtml" />
     <Content Include="Views\HRShortlist\_ShortlistDetails.cshtml" />
+    <Content Include="Views\HRShortlist\ShortlistSendinvite.cshtml" />
+    <Content Include="Views\HRShortlist\ShortlistIntvinvite.cshtml" />
+    <Content Include="Views\HRShortlist\_IntvinviteDetails.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
