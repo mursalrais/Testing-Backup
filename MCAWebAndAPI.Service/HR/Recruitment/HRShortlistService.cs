@@ -67,7 +67,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             var viewModel = new ApplicationShortlistVM();
 
-            viewModel.Position = Convert.ToString(listItem["vacantposition"]);
+            viewModel.Position = FormatUtil.ConvertLookupToID(listItem, "vacantposition") + string.Empty;
             viewModel.Candidate = Convert.ToString(listItem["Title"]);
             viewModel.SendTo = Convert.ToString(listItem["personalemail"]);
 
@@ -93,6 +93,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             if (username != null)
             useraccess = GetAccessData(username);
+
 
             viewModel.ShortlistDetails = GetDetailShortlist(position, useraccess);
 
@@ -128,38 +129,14 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 caml = @"<View>  
             <Query> 
       <Where>
-<Or>
          <Or>
-            <Or>
-               <Or>
-                  <Or>
-                     <Eq>
-                        <FieldRef Name='applicationstatus' />
-                        <Value Type='Text'>Shortlisted</Value>
-                     </Eq>
-                     <Eq>
-                        <FieldRef Name='applicationstatus' />
-                        <Value Type='Text'>Declined</Value>
-                     </Eq>
-                  </Or>
-                  <Eq>
-                     <FieldRef Name='applicationstatus' />
-                     <Value Type='Text'>New</Value>
-                  </Eq>
-               </Or>
-               <Eq>
-                  <FieldRef Name='applicationstatus' />
-                  <Value Type='Text'>NEW</Value>
-               </Eq>
-            </Or>
-            <Eq>
-               <FieldRef Name='applicationstatus' />
-               <Value Type='Text'>DECLINED</Value>
-            </Eq>
-         </Or>
          <Eq>
             <FieldRef Name='applicationstatus' />
-            <Value Type='Text'>SHORTLISTED</Value>
+            <Value Type='Text'>New</Value>
+         </Eq>
+         <Eq>
+            <FieldRef Name='applicationstatus' />
+            <Value Type='Text'>NEW</Value>
          </Eq>
       </Or>
    </Where>
@@ -202,6 +179,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             </View>";
 
             }
+
+
             
             var shortlistDetails = new List<ShortlistDetailVM>();
             foreach (var item in SPConnector.GetList(SP_APPDATA_LIST_NAME, _siteUrl, caml))
@@ -297,31 +276,15 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 ID = Convert.ToInt32(item["ID"]),
                 DocumentUrl = GetDocumentUrl(Convert.ToInt32(item["ID"])),
                 Status = ShortlistDetailVM.GetStatusDefaultValue(
-                    new Model.ViewModel.Control.InGridComboBoxVM
+                    new Model.ViewModel.Control.AjaxComboBoxVM
                     {
-                        Text = Convert.ToString(item["applicationstatus"])
+                        Text = Convert.ToString(item["applicationstatus"]),
                     }),
 
                 GetStat = Convert.ToString(item["applicationstatus"]),
                 Remarks = Convert.ToString(item["applicationremarks"]),
 
             };
-        }
-
-        public void GetVacantPositions(PositionsMaster viewModel)
-        {
-            var updatedValue = new Dictionary<string, object>();
-            updatedValue.Add("applicationstatus", viewModel.PositionName);
-
-            try
-            {
-                SPConnector.UpdateListItem(SP_APPDATA_LIST_NAME, viewModel.ID, updatedValue, _siteUrl);
-            }
-            catch (Exception e)
-            {
-                logger.Error(e);
-                throw e;
-            }
         }
 
         private string GetDocumentUrl(int? iD)
@@ -400,15 +363,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     logger.Error(e.Message);
                     throw e;
                 }
-
-                if (viewModel.SendToCandidate == true)
-                {
-                    EmailUtil.Send(viewModel.EmailFrom, "Interview Invitation", viewModel.EmailMessage + " < a href = 'https://eceos2.sharepoint.com/sites/ims/hr/Lists/Professional%20Master/DispForm_Custom.aspx?ID=3' > Open candidates' profiles for this position</a>");
-                }
-                
             }
 
-            EmailUtil.Send("ahmadsobari89@gmail.com", "Interview Invitation", "<div><label>"+ viewModel.EmailMessage + "</label></div>" +
+            EmailUtil.Send(viewModel.SendTo, "Interview Invitation", "<div><label>"+ viewModel.EmailMessage + "</label></div>" +
                            "<a href = 'https://eceos2.sharepoint.com/sites/ims/hr/Lists/Professional%20Master/DispForm_Custom.aspx?ID=3' > Open candidates' profiles for this position</a>");
         }
 
