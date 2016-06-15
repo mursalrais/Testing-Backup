@@ -4,6 +4,6 @@
     .Name("Documents")
     .Multiple(true)
     .Events(e => 
-            e.Upload("onUpload"))
+            e.Select("onSelectMultipleFileUploader"))
 )
 @Html.ValidationMessageFor(model => model)

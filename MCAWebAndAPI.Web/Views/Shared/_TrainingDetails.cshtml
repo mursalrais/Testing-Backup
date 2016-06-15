@@ -11,11 +11,11 @@
     {
         columns.Bound(p => p.Institution).ClientTemplate("#= Institution #" +
                            "<input type='hidden' name='TrainingDetails[#= getTrainingDetail(data)#].Institution' value='#= Institution #' />"
-                         ).Width(400);
+                         ).Width(300);
         columns.Bound(p => p.Subject).ClientTemplate("#= Subject #" +
                            "<input type='hidden' name='TrainingDetails[#= getTrainingDetail(data)#].Subject' value='#= Subject #' />"
-                         ).Width(400);
-        columns.Bound(p => p.Year).ClientTemplate("#= Year.getFullYear() #" +
+                         ).Width(350);
+        columns.Bound(p => p.Year).ClientTemplate("#=getMonthName(Year) #" + " " +  "#= Year.getFullYear() #" +
                            "<input type='hidden' name='TrainingDetails[#= getTrainingDetail(data)#].Year' value='#= Year #' />"
                          ).Width(200);
         columns.Bound(p => p.Remarks).ClientTemplate("#= Remarks #" +

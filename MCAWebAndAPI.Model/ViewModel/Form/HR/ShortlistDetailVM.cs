@@ -1,7 +1,10 @@
-﻿using MCAWebAndAPI.Model.Common;
-using MCAWebAndAPI.Model.ViewModel.Control;
+﻿using System;
+using MCAWebAndAPI.Model.Common;
 using System.Collections.Generic;
+using MCAWebAndAPI.Model.ViewModel.Control;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Web;
 using System.Linq;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.HR
@@ -10,10 +13,21 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
     {
         public string Candidate { get; set; }
 
+        public string Candidatemail { get; set; }
+
         public string CV { get; set; }
+
+        [UIHint("MultiFileUploader")]
+        [Required]
+        public IEnumerable<HttpPostedFileBase> Documents { get; set; } = new List<HttpPostedFileBase>();
+
+        public string DocumentUrl { get; set; }
 
         public string GetStat { get; set; }
 
+        /// <summary>
+        /// statusaplication
+        /// </summary>
         [UIHint("InGridComboBox")]
         public InGridComboBoxVM Status { get; set; }  = new InGridComboBoxVM();
 

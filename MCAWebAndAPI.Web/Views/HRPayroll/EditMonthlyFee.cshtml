@@ -16,81 +16,81 @@
         @Html.AntiForgeryToken()
         @Html.ValidationSummary()
 
-        <div class="col-md-12">
+        <div class="col-sm-12">
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.ProfessionalID).Class("col-md-4 control-label")
-                <div class="col-md-8">
+                @Html.Bootstrap().LabelFor(m => m.ProfessionalID).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
                     @Html.DisplayFor(m => m.ProfessionalID)
                 </div>
             </div>
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.ProfessionalNameEdit).Class("col-md-4 control-label")
-                <div class="col-md-8">
+                @Html.Bootstrap().LabelFor(m => m.ProfessionalNameEdit).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
                     @Html.EditorFor(m => m.ProfessionalNameEdit)
                 </div>
             </div>
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.ProjectUnit).Class("col-md-4 control-label")
-                <div class="col-md-8">
+                @Html.Bootstrap().LabelFor(m => m.ProjectUnit).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
                     @Html.DisplayFor(m => m.ProjectUnit)
                 </div>
             </div>
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Position).Class("col-md-4 control-label")
-                <div class="col-md-8">
+                @Html.Bootstrap().LabelFor(m => m.Position).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
                     @Html.DisplayFor(m => m.Position)
                 </div>
             </div>
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Status).Class("col-md-4 control-label")
-                <div class="col-md-8">
+                @Html.Bootstrap().LabelFor(m => m.Status).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
                     @Html.DisplayFor(m => m.Status)
                 </div>
             </div>
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.JoinDate).Class("col-md-4 control-label")
-                <div class="col-md-8">
+                @Html.Bootstrap().LabelFor(m => m.JoinDate).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
                     @Html.DisplayFor(m => m.JoinDate)
                 </div>
             </div>
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.DateOfNewPsa).Class("col-md-4 control-label")
-                <div class="col-md-8">
+                @Html.Bootstrap().LabelFor(m => m.DateOfNewPsa).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
                     @Html.DisplayFor(m => m.DateOfNewPsa)
                 </div>
             </div>
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.EndOfContract).Class("col-md-4 control-label")
-                <div class="col-md-8">
+                @Html.Bootstrap().LabelFor(m => m.EndOfContract).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
                     @Html.DisplayFor(m => m.EndOfContract)
                 </div>
             </div>
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.DateOfNewFee).Class("col-md-4 control-label")
-                <div class="col-md-8">
+                @Html.Bootstrap().LabelFor(m => m.DateOfNewFee).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
                     @Html.EditorFor(m => m.DateOfNewFee)
                 </div>
             </div>
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.MonthlyFee).Class("col-md-4 control-label")
-                <div class="col-md-8">
+                @Html.Bootstrap().LabelFor(m => m.MonthlyFee).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
                     @Html.EditorFor(m => m.MonthlyFee)
                 </div>
             </div>
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.AnnualFee).Class("col-md-4 control-label")
-                <div class="col-md-8">
+                @Html.Bootstrap().LabelFor(m => m.AnnualFee).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
                     @Html.DisplayFor(m => m.AnnualFee)
                 </div>
             </div>
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Currency).Class("col-md-4 control-label")
-                <div class="col-md-8">
+                @Html.Bootstrap().LabelFor(m => m.Currency).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
                     @Html.EditorFor(m => m.Currency)
                 </div>
             </div>
             <div class="form-group">
-                <div class="col-md-8">
+                <div class="col-sm-8">
                     @Html.HiddenFor(m => m.ID)
                 </div>
             </div>
@@ -100,10 +100,7 @@
 
 <div class="form-actions">
     <div class="row">
-        <div class="col-md-12">
-            <button class="btn btn-default" type="submit">
-                Cancel
-            </button>
+        <div class="col-sm-12">
             <button id="submit-button" class="btn btn-primary" type="submit">
                 <i class="fa fa-save"></i>
                 Submit

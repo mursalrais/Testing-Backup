@@ -118,15 +118,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="DefaultBOSiteUrl" xml:space="preserve">
-    <value>https://eceos2.sharepoint.com/sites/ims/ho</value>
+    <value>https://eceos2.sharepoint.com/sites/mca-dev/ho</value>
     <comment>To Change when Migrated</comment>
   </data>
   <data name="DefaultHRSiteUrl" xml:space="preserve">
-    <value>https://eceos2.sharepoint.com/sites/ims/hr</value>
+    <value>https://eceos2.sharepoint.com/sites/mca-dev/hr</value>
     <comment>To Change when Migrated</comment>
   </data>
   <data name="DefaultProgramSiteUrl" xml:space="preserve">
-    <value>https://eceos2.sharepoint.com/sites/ims</value>
+    <value>https://eceos2.sharepoint.com/sites/mca-dev</value>
     <comment>To Change when Migrated</comment>
   </data>
   <data name="UrlPSA" xml:space="preserve">

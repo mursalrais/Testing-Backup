@@ -6,27 +6,23 @@
     ViewBag.Title = "ShortlistData";
 }
 
-@using (Html.BeginForm("ShortlistData", "HRShortlist", FormMethod.Post, new {
+@using (Html.BeginForm("UpdateShortlistData", "HRShortlist", FormMethod.Post, new {
         @class = "form-horizontal",
         enctype = "multipart/form-data"
 }))
 {
     <fieldset>
+        @Html.HiddenFor(m => m.ID)
+        @Html.HiddenFor(m => m.Position)
         <div class="row">
-            @*<div class="col-sm-6">
+            <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.Position).Class("col-sm-4 control-label")
                 <div class="col-sm-8">
-                    @Html.DisplayFor(m => m.Position)
+                    <input id="vacant-position" class="form-control" value="" />
                 </div>
-                @Html.HiddenFor(m => m.ShortlistDetail)
-            </div>*@
+            </div>
         </div>
-        <legend>Create Shortlist</legend>
-        @*<div class="row">
-            @Html.Partial("_CreateShortlist", Model)
-        </div>*@
-    
-
+       
         <legend>Candidate list</legend>
         <div class="row">
             @Html.Partial("_ShortlistDetails", Model.ShortlistDetails)
@@ -40,16 +36,16 @@
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.SendTo).Class("col-xs-4 control-label")
                     <div class="col-xs-8">
-                        @Html.DisplayFor(m => m.SendTo)
+                        @Html.EditorFor(m => m.SendTo)
                     </div>
                 </div>
                 </div>
                 <div class="col-sm-8">
 
-                    @*<button id="submit-nextstep" class="btn btn-primary" type="submit">
-                        <i class="fa fa-save"></i>
+                    <button id="submit-nextstep" class="btn btn-primary" type="submit">
+                        <i class="fa fa-send"></i>
                         send to next step
-                    </button>*@
+                    </button>
                     <button id="submit-button" class="btn btn-primary" type="submit">
                         <i class="fa fa-save"></i>
                         save
@@ -62,10 +58,28 @@
                 </div>
             </div>
     </div>
+    
 }
 
 @section scripts{
 
+    @*<script>
+        $(document).ready(function () {
+            $('input').prop('readonly', 'true');
+            $('textarea').prop('readonly', 'true');
 
+            var positionID = $("#Position").val();
+            var url = "/HRDataMaster/GetPosition/" + positionID;
+            $.getJSON(url, function (data) {
+                $("#vacant-position").prop("value", data.PositionName);
+            })
+
+            $('#print-display-button').click(function (e) {
+                var url = "/HRApplication/PrintApplicationData";
+                submitFormToPrint(url);
+            });
+
+        });
+    </script>*@
 }
 

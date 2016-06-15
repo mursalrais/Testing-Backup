@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Web;
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.Client;
+using MCAWebAndAPI.Model.Common;
 
 namespace MCAWebAndAPI.Service.HR.Common
 {
@@ -46,5 +47,6 @@ namespace MCAWebAndAPI.Service.HR.Common
         void SendEmailValidation(string emailTo, string emailMessages, bool isApproved);
         void SendEmailValidation(string emailTo, string emailMessages);
         PositionsMaster GetPosition(int id);
+        void SetValidationStatus(int? id, Workflow.ProfessionalValidationStatus validationStatus);
     }
 }

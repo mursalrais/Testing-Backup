@@ -44,7 +44,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 ID = item["professional_x003a_ID"] == null ? 0 : Convert.ToInt32((item["professional_x003a_ID"] as FieldLookupValue).LookupId),
                 Created = Convert.ToDateTime(item["Created"]),
                 PSARenewalNumber = Convert.ToInt32(item["renewalnumber"]),
-                //expiry = Convert.ToDateTime(item["psaexpirydate"]).ToLocalTime().ToShortDateString()
+                ExpiryDateBefore = Convert.ToDateTime(item["psaexpirydate"]).ToLocalTime().ToShortDateString(),
+                PSAId = Convert.ToInt32(item["ID"])
 
             };
         }
@@ -52,6 +53,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         public int CreatePSAManagement(PSAManagementVM psaManagement)
         {
             var updatedValues = new Dictionary<string, object>();
+
+            var psaStatus = "Active";
+
             updatedValues.Add("isrenewal", psaManagement.IsRenewal.Value);
             updatedValues.Add("renewalnumber", psaManagement.PSARenewalNumber);
             updatedValues.Add("ProjectOrUnit", psaManagement.ProjectOrUnit.Value);
@@ -60,6 +64,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             updatedValues.Add("joindate", psaManagement.JoinDate);
             updatedValues.Add("dateofnewpsa", psaManagement.DateOfNewPSA);
             updatedValues.Add("tenure", psaManagement.Tenure);
+            updatedValues.Add("initiateperformanceplan", psaManagement.PerformancePlan.Value);
+            updatedValues.Add("psastatus", psaStatus);
 
             try
             {
@@ -135,6 +141,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.DateOfNewPSA = Convert.ToDateTime(listItem["dateofnewpsa"]).ToLocalTime();
             viewModel.Tenure = Convert.ToInt32(listItem["tenure"]);
             viewModel.PSAExpiryDate = Convert.ToDateTime(listItem["psaexpirydate"]).ToLocalTime();
+            viewModel.PSAStatus.Text = Convert.ToString(listItem["psastatus"]);
 
             viewModel.DocumentUrl = GetDocumentUrl(viewModel.ID);
 
@@ -164,9 +171,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.RenewalNumber = Convert.ToInt32(listItem["renewalnumber"]);
             viewModel.ProjectOrUnit.Value = Convert.ToString(listItem["ProjectOrUnit"]);
             viewModel.Professional.Text = FormatUtil.ConvertLookupToValue(listItem, "professional");
+            viewModel.Position.Text = FormatUtil.ConvertLookupToValue(listItem, "position");
             viewModel.JoinDate = Convert.ToDateTime(listItem["joindate"]).ToLocalTime();
             viewModel.DateOfNewPSA = Convert.ToDateTime(listItem["dateofnewpsa"]).ToLocalTime();
-            viewModel.Tenure = Convert.ToInt32(listItem["tenure"]);
+            viewModel.TenureString = Convert.ToString(listItem["tenure"]);
+            viewModel.PerformancePlan.Value = Convert.ToString(listItem["initiateperformanceplan"]);
 
             viewModel.PSAExpiryDate = Convert.ToDateTime(listItem["psaexpirydate"]).ToLocalTime();
 
@@ -179,7 +188,29 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             return string.Format(UrlResource.PSAManagementDocumentByID, _siteUrl, iD);
         }
-        
+
+        public bool UpdatePSAStatus(int psaID)
+        {
+            var columnValues = new Dictionary<string, object>();
+            int ID = psaID;
+            string psaStatus = "Non Active";
+
+            columnValues.Add("psastatus", psaStatus);
+
+            try
+            {
+                SPConnector.UpdateListItem(SP_PSA_LIST_NAME, ID, columnValues, _siteUrl);
+            }
+            catch (Exception e)
+            {
+                logger.Debug(e.Message);
+                return false;
+            }
+
+            return true;
+        }
+
+
         public bool UpdatePSAManagement(PSAManagementVM psaManagement)
         {
             var columnValues = new Dictionary<string, object>();
@@ -192,6 +223,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             columnValues.Add("joindate", psaManagement.JoinDate.Value);
             columnValues.Add("dateofnewpsa", psaManagement.DateOfNewPSA.Value);
             columnValues.Add("tenure", psaManagement.Tenure);
+            columnValues.Add("initiateperformanceplan", psaManagement.PerformancePlan.Value);
 
             try
             {
@@ -226,7 +258,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 var updateValue = new Dictionary<string, object>();
 
-                if (doc.FileName.IndexOf("MCCNoObjectionLetter") >= 0)
+                if (doc.FileName.IndexOf("MCC") >= 0)
                 {
                     psaManagmement.DocumentType = "MCC No Objection Letter";
                 }

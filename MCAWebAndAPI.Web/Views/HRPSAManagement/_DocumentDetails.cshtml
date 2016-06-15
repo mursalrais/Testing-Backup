@@ -1,8 +1,7 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
 @model PSAManagementVM
 
-<div class="col-sm-6">
-    @*
+<div class="col-sm-10">
     <div class="alert adjusted alert-info fade in">
         <button class="close" data-dismiss="alert">
             ×
@@ -10,15 +9,18 @@
         <i class="fa-fw fa-lg fa fa-exclamation"></i>
         <strong>@Html.DisplayFor(m => m.KeyPosition)</strong>
     </div>
-    *@
     <div class="form-group">
         @Html.Bootstrap().LabelFor(m => m.Documents).Class("col-sm-4 control-label")
         <div class="col-sm-8">
             @(Html.Kendo().Upload()
                 .Name("Documents")
+                .HtmlAttributes(new { @class = "form-control" })
                 .Multiple(true)
-                .Events(e => e.Upload("onUpload"))
-            )
+                .Events(e =>e
+                    .Select("onSelectPSA")
+                )
+                
+               )
             @Html.ValidationMessageFor(model => model.Documents)
         </div>
     </div>

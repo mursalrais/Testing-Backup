@@ -10,7 +10,7 @@
             columns.Bound(p => p.Company);
             columns.Bound(p => p.From);
             columns.Bound(p => p.To);
-            columns.Bound(p => p.JobDescription);
+            columns.Bound(p => p.Remarks);
         })
         .DataSource(dataSource => dataSource.Ajax()
                    .Model(model =>

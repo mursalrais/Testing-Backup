@@ -22,10 +22,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         const string SP_APPWORK_LIST_NAME = "Application Working Experience";
         const string SP_APPTRAIN_LIST_NAME = "Application Training";
         const string SP_APPDOC_LIST_NAME = "Application Documents";
-
         const string SP_PROMAS_LIST_NAME = "Professional Master";
         const string SP_POSMAS_LIST_NAME = "Position Master";
-
         const string SP_MANPOW_LIST_NAME = "Manpower Requisition";
         const string COMPANY_DOMAIN_EMAIL = "eceos.com";
 
@@ -122,7 +120,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 var updatedValue = new Dictionary<string, object>();
                 updatedValue.Add("Title", viewModel.Subject);
                 updatedValue.Add("university", viewModel.University);
-                updatedValue.Add("yearofgraduation", FormatUtil.ConvertToYearString(viewModel.YearOfGraduation));
+                updatedValue.Add("yearofgraduation", FormatUtil.ConvertToDateString(viewModel.YearOfGraduation));
                 updatedValue.Add("applications", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
                 updatedValue.Add("remarks", viewModel.Remarks);
 
@@ -164,7 +162,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 updatedValue.Add("Title", viewModel.Subject);
                 updatedValue.Add("traininginstitution", viewModel.Institution);
                 updatedValue.Add("trainingremarks", viewModel.Remarks);
-                updatedValue.Add("trainingyear", FormatUtil.ConvertToYearString(viewModel.Year));
+                updatedValue.Add("trainingyear", FormatUtil.ConvertToDateString(viewModel.Year));
                 updatedValue.Add("application", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
 
                 try
@@ -189,7 +187,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 updatedValue.Add("applicationfrom", viewModel.From);
                 updatedValue.Add("applicationto", viewModel.To);
                 updatedValue.Add("application", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
-                updatedValue.Add("applicationjobdescription", viewModel.JobDescription);
+                updatedValue.Add("applicationjobdescription", viewModel.Remarks);
 
                 try
                 {
@@ -320,7 +318,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 ID = Convert.ToInt32(item["ID"]),
                 Company = Convert.ToString(item["applicationcompany"]),
                 Position = Convert.ToString(item["Title"]),
-                JobDescription = Convert.ToString(item["applicationjobdescription"]),
+                Remarks = Convert.ToString(item["applicationjobdescription"]),
                 From = Convert.ToDateTime(item["applicationfrom"]),
                 To = Convert.ToDateTime(item["applicationto"])
             };
@@ -370,7 +368,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 Subject = Convert.ToString(item["Title"]),
                 Institution = Convert.ToString(item["traininginstitution"]),
                 Remarks = Convert.ToString(item["trainingremarks"]),
-                Year = FormatUtil.ConvertYearStringToDateTime(item, "trainingyear")
+                Year = FormatUtil.ConvertDateStringToDateTime(item, "trainingyear")
             };
         }
 
@@ -424,7 +422,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 ID = Convert.ToInt32(item["ID"]),
                 Subject = Convert.ToString(item["Title"]),
                 University = Convert.ToString(item["university"]),
-                YearOfGraduation = FormatUtil.ConvertYearStringToDateTime(item, "yearofgraduation"),
+                YearOfGraduation = FormatUtil.ConvertDateStringToDateTime(item, "yearofgraduation"),
                 Remarks = Convert.ToString(item["remarks"])
             };
         }
@@ -523,6 +521,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             updatedValue.Add("Position", new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.Position) });
             updatedValue.Add("officeemail", string.Format("{0}.{1}@{2}", viewModel.FirstMiddleName, viewModel.LastName,
                 COMPANY_DOMAIN_EMAIL));
+            updatedValue.Add("datavalidationstatus", Workflow.GetProfessionalValidationStatus(Workflow.ProfessionalValidationStatus.VALIDATED));
 
             try
             {

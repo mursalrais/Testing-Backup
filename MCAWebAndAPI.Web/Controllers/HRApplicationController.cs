@@ -3,6 +3,7 @@ using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using MCAWebAndAPI.Service.Converter;
 using MCAWebAndAPI.Service.HR.Recruitment;
 using MCAWebAndAPI.Service.Resources;
+using MCAWebAndAPI.Service.Utils;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;
 using System;
@@ -38,7 +39,6 @@ namespace MCAWebAndAPI.Web.Controllers
                         Text = f.Value
                     }
                 ), JsonRequestBehavior.AllowGet);
-                
             }
 
             return Json(choice.Where(e => e.Value == "KITAS" || e.Value == "Passport").Select(
@@ -52,12 +52,6 @@ namespace MCAWebAndAPI.Web.Controllers
         [HttpPost]
         public ActionResult CreateProfessionalData(FormCollection form, ApplicationDataVM viewModel)
         {
-            if (!ModelState.IsValid)
-            {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                var errorMessages = BindHelper.GetErrorMessages(ModelState.Values);
-                return JsonHelper.GenerateJsonErrorResponse(errorMessages);
-            }
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
@@ -128,13 +122,7 @@ namespace MCAWebAndAPI.Web.Controllers
         [HttpPost]
         public ActionResult CreateApplicationData(FormCollection form, ApplicationDataVM viewModel)
         {
-            if (!ModelState.IsValid)
-            {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                var errorMessages = BindHelper.GetErrorMessages(ModelState.Values);
-                return RedirectToAction("Index", "Error", new { errorMessages = errorMessages });
-            }
-
+         
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
@@ -146,7 +134,7 @@ namespace MCAWebAndAPI.Web.Controllers
             catch (Exception e)
             {
                 ErrorSignal.FromCurrentContext().Raise(e);
-                return RedirectToAction("Index", "Error");
+                return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
             }
 
             try
@@ -157,7 +145,7 @@ namespace MCAWebAndAPI.Web.Controllers
             catch (Exception e)
             {
                 ErrorSignal.FromCurrentContext().Raise(e);
-                return RedirectToAction("Index", "Error");
+                return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
             }
 
             try
@@ -168,7 +156,7 @@ namespace MCAWebAndAPI.Web.Controllers
             catch(Exception e)
             {
                 ErrorSignal.FromCurrentContext().Raise(e);
-                return RedirectToAction("Index", "Error");
+                return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
             }
 
             try
@@ -178,7 +166,7 @@ namespace MCAWebAndAPI.Web.Controllers
             }catch(Exception e)
             {
                 ErrorSignal.FromCurrentContext().Raise(e);
-                return RedirectToAction("Index", "Error");
+                return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
             }
 
             try
@@ -188,12 +176,23 @@ namespace MCAWebAndAPI.Web.Controllers
             catch (Exception e)
             {
                 ErrorSignal.FromCurrentContext().Raise(e);
-                return RedirectToAction("Index", "Error");
+                return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
+            }
+
+            try
+            {
+                EmailUtil.Send(viewModel.EmailAddresOne, "Confirmation", 
+                    "Hi Dude, thanks for submitting your application!");
+            }
+            catch (Exception e)
+            {
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
             }
 
             return RedirectToAction("Index", 
                 "Success", 
-                new { successMessage = string.Format(MessageResource.SuccessCreateApplicationData, viewModel.FirstMiddleName)});
+                new { errorMessage = string.Format(MessageResource.SuccessCreateApplicationData, viewModel.FirstMiddleName)});
         }
 
         [HttpPost]
@@ -208,15 +207,16 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
             }
 
             var status = viewModel.WorkflowStatusOptions.Value;
             var applicationOwner = string.Format("{0} {1}", viewModel.FirstMiddleName, viewModel.LastName);
-            return JsonHelper.GenerateJsonSuccessResponse(
-                string.Format("{0}/{1}", siteUrl, UrlResource.ApplicationData), 
-                string.Format(MessageResource.SuccessUpdateApplicationStatus, applicationOwner, status));
+            
+            var message = string.Format(MessageResource.SuccessUpdateApplicationStatus, applicationOwner, status);
+            var prevUrl = string.Format("{0}/{1}", siteUrl, UrlResource.ApplicationData);
+            return RedirectToAction("Index", "Success", new { successMessage = message, previousUrl = prevUrl });
         }
 
         [HttpPost]
@@ -230,7 +230,7 @@ namespace MCAWebAndAPI.Web.Controllers
             string content;
             
             var view = ViewEngines.Engines.FindView(ControllerContext, relativePath, null);
-            ViewData.Model = viewModel;
+            ViewData.Model = AdjustViewModel(viewModel);
             var fileName = viewModel.FirstMiddleName + "_Application.pdf";
 
             using (var writer = new StringWriter())
@@ -258,6 +258,14 @@ namespace MCAWebAndAPI.Web.Controllers
             }
         }
 
+        private object AdjustViewModel(ApplicationDataVM viewModel)
+        {
+            var iDCardID = viewModel.IDCardType.Value;
+            viewModel.IDCardType.Text = _service.GetIDCardType()[(int)iDCardID];
+
+            return viewModel;
+        }
+
         private IEnumerable<WorkingExperienceDetailVM> BindWorkingExperienceDetails(FormCollection form, IEnumerable<WorkingExperienceDetailVM> workingExperienceDetails)
         {
             var array = workingExperienceDetails.ToArray();
@@ -280,7 +288,6 @@ namespace MCAWebAndAPI.Web.Controllers
                 array[i].Year = BindHelper.BindDateInGrid("TrainingDetails",
                     i, "Year", form);
             }
-
             return array;
         }
 

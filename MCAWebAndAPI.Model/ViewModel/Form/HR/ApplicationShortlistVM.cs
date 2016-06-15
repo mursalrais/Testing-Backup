@@ -14,29 +14,39 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public IEnumerable<ShortlistDetailVM> ShortlistDetails { get; set; } = new List<ShortlistDetailVM>();
 
         /// <summary>
-        /// Title
+        /// position
         /// </summary>
-        [UIHint("AjaxComboBox")]
-        public AjaxComboBoxVM Position { get; set; } = new AjaxComboBoxVM
-        {
-            ActionName = "GetPositions",
-            ControllerName = "HRDataMaster",
-            ValueField = "ID",
-            TextField = "PositionName"
-            
-        };
-
+        [Required]
         public string SendTo { get; set; }
 
+        public string EmailFrom { get; set; }
+
+        /// <summary>
+        /// position
+        /// </summary>
         public string InterviewerPanel { get; set; }
+
+        public Boolean SendToCandidate { get; set; }
 
         [UIHint("TextArea")]
         public string EmailMessage { get; set; }
 
+        [UIHint("TextArea")]
+        public string Message { get; set; }
+
         public string Candidate { get; set; }
 
+        public string Position { get; set; }
+
+        /// <summary>
+        /// InterviewerDate
+        /// </summary>
         [UIHint("Date")]
-        public string InterviewerDate { get; set; } = DateTime.UtcNow.ToShortDateString();
+        [DisplayName("ID Card Expiry")]
+        public DateTime? InterviewerDate { get; set; } = DateTime.Now;
+
+        //[UIHint("Date")]
+        //public string InterviewerDate { get; set; } = DateTime.UtcNow.ToShortDateString();
 
         [UIHint("Date")]
         public string Time { get; set; } = DateTime.UtcNow.ToShortTimeString();

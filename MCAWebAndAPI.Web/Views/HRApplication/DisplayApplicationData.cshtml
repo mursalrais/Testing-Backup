@@ -7,13 +7,7 @@
     ViewBag.Title = "CreateApplicationData";
 }
 
-@using (Ajax.BeginForm("SetStatusApplicationData", "HRApplication", FormMethod.Post, new AjaxOptions
-{
-    OnBegin = "onBeginForm",
-    OnFailure = "onFailureForm",
-    OnSuccess = "onSuccessForm",
-    OnComplete = "onCompleteForm"
-}, new
+@using (Html.BeginForm("SetStatusApplicationData", "HRApplication", FormMethod.Post, new
 {
     @class = "form-horizontal"
 }))
@@ -78,11 +72,12 @@
     <div class="form-actions">
         <div class="row">
             <div class="col-sm-12">
+                <button id="print-display-button" type="button" class="btn btn-primary">Print</button>
                 <button id="set-status-button" type="button" class="btn btn-primary">Set Status</button>
             </div>
         </div>
     </div>
-                    }
+}
 
 @section scripts{
 
@@ -112,6 +107,12 @@
             $.getJSON(url, function (data) {
                 $("#vacant-position").prop("value", data.PositionName);
             })
+
+            $('#print-display-button').click(function (e) {
+                var url = "/HRApplication/PrintApplicationData";
+                submitFormToPrint(url);
+            });
+
         });
     </script>
 }

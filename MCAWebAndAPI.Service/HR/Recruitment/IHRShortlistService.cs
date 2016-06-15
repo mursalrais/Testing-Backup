@@ -9,11 +9,17 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
     {
         void SetSiteUrl(string siteUrl = null);
 
-
         IEnumerable<ApplicationShortlistVM> GetShortlists();
 
-        ApplicationShortlistVM GetShortlist(string Position);
+        ApplicationShortlistVM GetShortlist(string position, string username, string useraccess);
 
-        void CreateShortlistDataDetail(int? headerID, IEnumerable<ShortlistDetailVM> ShortlistDetails);
+        ApplicationShortlistVM GetShortlistSend(int? ID);
+
+        void UpdateShortlistDataDetail(int? headerID, IEnumerable<ShortlistDetailVM> ShortlistDetails);
+
+        void CreateShortlistInviteIntv(int? headerID, ApplicationShortlistVM ShortlistDetails);
+
+        void CreateShorlistSendintv(int? headerID, ApplicationShortlistVM ShortlistDetails);
+        
     }
 }
