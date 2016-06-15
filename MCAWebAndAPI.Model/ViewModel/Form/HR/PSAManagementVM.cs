@@ -47,6 +47,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [Required]
         public int PSARenewalNumber { get; set; }
 
+        public int PSAId { get; set; }
+
         /// <summary>
         /// to keep the next renewalnumber
         /// </summary>
@@ -147,34 +149,13 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         public string NextExpiryDate { get; set; }
 
-        /*
-        [UIHint("Date")]
-        public DateTime? ExpiryDateBefore { get; set; } = DateTime.Now;
-        */
-
         [UIHint("MultiFileUploader")]
         [Required]
         public IEnumerable<HttpPostedFileBase> Documents { get; set; } = new List<HttpPostedFileBase>();
 
         public string DocumentUrl { get; set; }
 
-        /// <summary>
-        /// DocumentType
-        /// </summary>
-        /*
-        [UIHint("ComboBox")]
-        [DisplayName("Document Type")]
-        public ComboBoxVM DocumentType { get; set; } = new ComboBoxVM
-        {
-            Choices = new string[]
-            {
-                "PSA Document",
-                "MCC No Objection Letter"
-            },
-            Value = "PSA Document"
-        };
-        */
-
+        
         public string DocumentType { get; set;}
 
         public string KeyPosition { get; set; }
@@ -182,9 +163,39 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public string KeyPositionValue { get; set; }
 
         /// <summary>
-        /// psaexpirydate
+        /// Created Date
         /// </summary>
         [UIHint("Date")]
         public DateTime? Created { get; set; } = DateTime.Now;
+
+        /// <summary>
+        /// PSA Status
+        /// </summary>
+        [UIHint("ComboBox")]
+        public ComboBoxVM PSAStatus { get; set; } = new ComboBoxVM
+        {
+            Choices = new string[]
+            {
+                "Active",
+                "Non Active"
+            },
+            Value = "Active"
+        };
+
+        /// <summary>
+        /// Initiate Performance Plan
+        /// </summary>
+        [UIHint("Initiate Performance Plan")]
+        [UIHint("ComboBox")]
+        public ComboBoxVM PerformancePlan { get; set; } = new ComboBoxVM
+        {
+            Choices = new string[]
+            {
+                "No",
+                "Yes"
+            },
+            Value = "No"
+        };
+
     }
 }

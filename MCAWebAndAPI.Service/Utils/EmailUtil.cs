@@ -23,6 +23,7 @@ namespace MCAWebAndAPI.Service.Utils
             mail.To.Add(new MailAddress(emailAddress));
             mail.Subject = subject;
             mail.Body = emailMessage;
+            mail.IsBodyHtml = true;
 
             smtp.Send(mail);
         }

@@ -61,6 +61,15 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unable Edit Inactive PSA.
+        /// </summary>
+        public static string ErrorEditInActivePSA {
+            get {
+                return ResourceManager.GetString("ErrorEditInActivePSA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Professional data that uses email {0} is not found. Please contact your IT Administrator..
         /// </summary>
         public static string ErrorProfessionalNotFound {

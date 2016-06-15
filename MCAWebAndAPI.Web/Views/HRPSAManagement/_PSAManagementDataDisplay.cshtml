@@ -54,10 +54,6 @@
         @Html.Bootstrap().LabelFor(m => m.TenureString).Class("col-md-4 control-label")
         <div class="col-md-8">
             @Html.DisplayFor(m => m.TenureString)
-            @*@(Html.Kendo().NumericTextBoxFor(m => m.Tenure)
-    .HtmlAttributes(new { style = "width:100%" })
-
-          )*@
         </div>
     </div>
     <div class="form-group">
@@ -66,72 +62,17 @@
             @Html.DisplayFor(m => m.PSAExpiryDate)
         </div>
     </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.PerformancePlan).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.DisplayFor(m => m.PerformancePlan)
+        </div>
+    </div>
 </div>
 
 @section scripts{
     <script type="text/javascript">
 
-        /*
-        $(document).ready(function () {
-            $("#Tenure").data("kendoNumericTextBox").readonly();
-        });
-        */
-        /*
-
-            $(document).ready(function () {
-            $("#submit-button").click(function () {
-                $("form").submit();
-            });
-
-        });
-
-        function onSuccess(data) {
-            window.location.href = data.urlToRedirect;
-        }
-
-        function onFailure(data) {
-            window.location.href = data.urlToRedirect;
-        }
-
-
-            function OnSelectAssetHolderFrom(e) {
-                var dataItem = this.dataItem(e.item);
-                var url = "/HRDataMaster/GetProfessionals/" + dataItem.ID;
-
-            }
-
-            function OnSelectPosition(e) {
-                var dataItem = this.dataItem(e.item);
-                var url = "/HRDataMaster/GetPositions/" + dataItem.ID;
-            }
-
-
-            $(document).ready(function () {
-
-
-                $("#tenure").on('input', function () {
-                    sumCal();
-                });
-
-                function sumCal() {
-
-                    var dateOfNewPSA = $("#dateofNewPSA").val();
-                    var dateofnewpsa = new Date(dateOfNewPSA);
-                    var monthpsa = dateofnewpsa.getMonth();
-                    var monthint = parseInt(monthpsa);
-                    var datepsa = dateofnewpsa.getDate();
-
-                    var tenure = $("#tenure").val();
-                    var tenureint = parseInt(tenure);
-                    var addtenure = tenureint + monthint;
-
-                    var setmonth = new Date(dateofnewpsa.setMonth(addtenure));
-
-                    var psaexpirydate = setmonth.getMonth() + 1 + '/' + setmonth.getDate() + '/' + setmonth.getFullYear();
-                    $("#pSAExpiryDate").val(psaexpirydate);
-                }
-            });
-            */
-
+        
     </script>
 }

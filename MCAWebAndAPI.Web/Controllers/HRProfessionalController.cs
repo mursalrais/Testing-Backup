@@ -1,4 +1,5 @@
-﻿using MCAWebAndAPI.Model.ViewModel.Form.HR;
+﻿using MCAWebAndAPI.Model.Common;
+using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using MCAWebAndAPI.Service.HR.Common;
 using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Web.Helpers;
@@ -121,21 +122,24 @@ namespace MCAWebAndAPI.Web.Controllers
 
             try
             {
-                //TODO: To change with service retriving email from professional 
+                // TODO: To change based on position
                 switch (viewModel.ValidationAction)
                 {
                     case "ask-hr-to-validate-action":
+                        _service.SetValidationStatus(headerID, Workflow.ProfessionalValidationStatus.NEED_VALIDATION);
                         _service.SendEmailValidation(
                             "randi.prayengki@eceos.com",
                             string.Format(EmailResource.ProfessionalEmailValidation,
                             string.Format(UrlResource.ProfessionalDisplayByID, siteUrl, headerID)));
                         break;
                     case "approve-action":
+                        _service.SetValidationStatus(headerID, Workflow.ProfessionalValidationStatus.VALIDATED);
                         _service.SendEmailValidation(
                             "mariani.yosefi@eceos.com",
                             string.Format(EmailResource.ProfessionalEmailValidationResponse), isApproved: true);
                         break;
                     case "reject-action":
+                        _service.SetValidationStatus(headerID, Workflow.ProfessionalValidationStatus.REJECTED);
                         _service.SendEmailValidation(
                             "mariani.yosefi@eceos.com",
                             string.Format(EmailResource.ProfessionalEmailValidationResponse), isApproved: false);

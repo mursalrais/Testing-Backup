@@ -15,7 +15,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         ApplicationShortlistVM GetShortlistSend(int? ID);
 
-        void CreateShortlistDataDetail(int? headerID, IEnumerable<ShortlistDetailVM> ShortlistDetails);
+        void UpdateShortlistDataDetail(int? headerID, IEnumerable<ShortlistDetailVM> ShortlistDetails);
 
         void CreateShortlistInviteIntv(int? headerID, ApplicationShortlistVM ShortlistDetails);
 

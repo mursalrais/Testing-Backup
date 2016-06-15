@@ -70,6 +70,8 @@
                     if (result.length != 0) {
                         console.log("Ada Data PSA Sebelumnya")
 
+                        var psaID = result[0].PSAId;
+
                         var renewalnumber = result[0].PSARenewalNumber + 1;
 
                         var expirydatebefore = result[0].ExpiryDateBefore
@@ -85,6 +87,7 @@
 
                         $('#HidRenewalNumber').prop('value', renewalnumber);
                         $('#ExpiryDateBefore').prop('value', expirydate);
+                        $('#PSAId').prop('value', psaID);
 
                         $("#IsRenewal_Value").data("kendoDropDownList").select(0);
                         $("#IsRenewal_Value").data("kendoDropDownList").readonly();
@@ -107,6 +110,10 @@
 
                         $("#PSARenewalNumber").prop("readonly", "true");
                         $("#PSARenewalNumber").prop("value", 0);
+
+                        $('#PSAId').prop('value', 0);
+
+                        
 
                         var joinDate = $("#JoinDate").val();
 
@@ -235,10 +242,7 @@
                            }
                            if (value.name.indexOf("MCC") >= 0)
                            {
-                               //Hanya Untuk Testing
-                               //alert("MCC already exist");
                                $('#DocumentType').prop('value', "MCC No Objection Letter");
-                               //e.preventDefault();
                            }
                        }
                        if(index == 1)
@@ -250,10 +254,7 @@
                            }
                            if (value.name.indexOf("PSA") >= 0)
                            {
-                               //Hanya Untuk Testing
-                               //alert("PSADocument already exist");
                                $('#DocumentType').prop('value', "PSA Document");
-                               //e.preventDefault();
                            }
                        }
                    }
@@ -264,10 +265,7 @@
                            e.preventDefault();
                        }
                        if (value.name.indexOf("PSA") >= 0) {
-                           //Hanya Untuk Testing
-                           //alert("PSADocument already exist");
                            $('#DocumentType').prop('value', "PSA Document");
-                           //e.preventDefault();
                        }
                    }
                    
