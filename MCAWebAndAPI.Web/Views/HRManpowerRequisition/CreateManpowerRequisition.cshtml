@@ -55,7 +55,28 @@
 @section scripts{
 
     <script>
+        function onPositionChange(e) {
+            console.log(e);
+            var dataItem = this.dataItem(e.item);
+            //var urlKeyPosition = "/HRDataMaster/GetKeyPosition/" + dataItem.ID;
+            if (dataItem.isKeyPosition == "Yes") {
+                //$('#KeyPositionValue').prop('value', "Yes");
+                $("label[for='Yes']").show();
+                $("label[for='No']").hide();
+                $("#IsKeyPosition").val(true);
+
+            }
+            else {
+                $("label[for='No']").show();
+                $("label[for='Yes']").hide();
+                $("#IsKeyPosition").val(false);
+            }
+
+        };
         $(document).ready(function () {
+            $("#IsKeyPosition").val(true);
+            $("label[for='Yes']").show();
+            $("label[for='No']").hide();
             $("#OnBehalfOf_Value").data("kendoDropDownList").enable(false);
             $("#IsOnBehalfOf").click(function () {
                 if (!$(this).is(":checked")) {

@@ -74,10 +74,7 @@
     <div class="form-actions">
         <div class="row">
             <div class="col-md-12">
-                <button id="print-button" class="btn btn-default" type="button">
-                    Print
-                </button>
-                <button id="submit-button" class="btn btn-primary" type="submit">
+                <button id="submit-button" class="btn btn-primary" type="button">
                     <i class="fa fa-save"></i>
                     Save
                 </button>
@@ -89,27 +86,53 @@
 @section scripts{
 
     <script>
+        function onPositionChange(e) {
+            var dataItem = $("#Position_Value").data("kendoDropDownList").dataItem(e.item);
+            //var urlKeyPosition = "/HRDataMaster/GetKeyPosition/" + dataItem.ID;
+                if (dataItem.isKeyPosition == "Yes") {
+                    //$('#KeyPositionValue').prop('value', "Yes");
+                    $("label[for='Yes']").show();
+                    $("label[for='No']").hide();
+                    $("#IsKeyPosition").val(true);
+
+                }
+                else {
+                    $("label[for='No']").show();
+                    $("label[for='Yes']").hide();
+                    $("#IsKeyPosition").val(false);
+                }
+            
+        };
         $(document).ready(function () {
+            
             $("#OnBehalfOf_Value").data("kendoDropDownList").enable(false);
             $("#IsOnBehalfOf").click(function () {
                 if (!$(this).is(":checked")) {
                     $("#OnBehalfOf_Value").data("kendoDropDownList").enable(false);
                 }
                 else {
-
                     $("#OnBehalfOf_Value").data("kendoDropDownList").enable(true);
                 }
 
             });
-            $("#StatusSubmit").click(function () {
-                $("#Status_Value").val("Pending Approval")
-                $("form").submit();
-            });
-            $("#StatusDraft").click(function () {
-                $("#Status_Value").val("Draft")
-                $("form").submit();
-            });
+            $("#submit-button").click(function () {
 
+                var isDocumentMCCUploaded = true;
+                $("form").submit();
+            });
+            var isKeyPosition = $("#IsKeyPosition").val();
+            if (isKeyPosition == "True") {
+                //$('#KeyPositionValue').prop('value', "Yes");
+                $("label[for='Yes']").show();
+                $("label[for='No']").hide();
+                //$("#IsKeyPosition").val(true);
+
+            }
+            else {
+                $("label[for='No']").show();
+                $("label[for='Yes']").hide();
+                //$("#IsKeyPosition").val(false);
+            }
         });
 
 </script>

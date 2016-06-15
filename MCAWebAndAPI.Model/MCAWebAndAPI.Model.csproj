@@ -139,6 +139,7 @@
     <Compile Include="ViewModel\Form\HR\InterviewDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\InterviewerResultVM.cs" />
     <Compile Include="ViewModel\Form\HR\ManpowerRequisitionVM.cs" />
+    <Compile Include="ViewModel\Form\HR\MonthlyFeeDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\MonthlyFeeVM.cs" />
     <Compile Include="ViewModel\Form\HR\OrganizationalDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\OutputDetailVM.cs" />
