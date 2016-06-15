@@ -55,7 +55,7 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewModel);
         }
 
-        public ActionResult EditManpowerRequisition(string siteUrl = null, int? ID = null)
+        public ActionResult EditManpowerRequisition(string siteUrl = null, int? ID = null, string username = null)
         {
             SessionManager.RemoveAll();
 
@@ -64,7 +64,8 @@ namespace MCAWebAndAPI.Web.Controllers
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             var viewModel = _service.GetManpowerRequisition(ID);
-
+            string position = _service.GetPosition(username);
+            ViewBag.IsHRView = username;
             return View(viewModel);
         }
         
@@ -133,7 +134,19 @@ namespace MCAWebAndAPI.Web.Controllers
                 new { successMessage = string.Format(MessageResource.SuccessCommon, viewModel.ID) });
         }
 
+        //public JsonResult GetPositionsGrid()
+        //{
+        //    _service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
 
+        //    var positions = GetFromPositionsExistingSession();
+
+        //    return Json(positions.Select(e =>
+        //        new {
+        //            Value = Convert.ToString(e.ID),
+        //            Text = e.PositionName
+        //        }),
+        //        JsonRequestBehavior.AllowGet);
+        //}
 
 
         public ActionResult DisplayManpowerRequisition(string siteUrl = null, int? ID = null)
@@ -218,23 +231,8 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             return View();
            
-        }
-
+        }        
         
-        public JsonResult GetPositions()
-        {
-            _service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
-            SessionManager.Set("SiteUrl", ConfigResource.DefaultHRSiteUrl);
-
-            var manpower = _service.GetManpowerRequisitionAll();
-
-            return Json(manpower.Select(e =>
-                new {
-                    e.ID,
-                    Position = e.Position.Text
-                }),
-                JsonRequestBehavior.AllowGet);
-        }
 
         private IEnumerable<WorkingRelationshipDetailVM> BindWorkingExperienceDetails(FormCollection form, IEnumerable<WorkingRelationshipDetailVM> workingRelationshipDetails)
         {
@@ -243,7 +241,6 @@ namespace MCAWebAndAPI.Web.Controllers
             {
                // array[i]. = BindHelper.BindDateInGrid("WorkingRelationshipDetails",  i, "From", form);
               //  array[i].To = BindHelper.BindDateInGrid("WorkingRelationshipDetails",i, "To", form);
-             //y array[i].Frequency = ['Hello', 'World']
             }
 
             return array;

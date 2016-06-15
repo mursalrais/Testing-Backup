@@ -117,7 +117,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         public bool UpdateManpowerRequisition(ManpowerRequisitionVM viewModel)
         {
             var updatedValue = new Dictionary<string, object>();
-            int ID = viewModel.ID.Value;
+            int ID = viewModel.ID.Value;            
+
             updatedValue.Add("expectedjoindate", viewModel.ExpectedJoinDate);
             updatedValue.Add("requestdate", viewModel.DateRequested);
 
@@ -212,13 +213,13 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             }
             
             viewModel.Workplan = tempList;
-
+            viewModel.ID = ID;
             if (ID == null)
                 return viewModel;
 
             var listItem = SPConnector.GetListItem(SP_MANPOW_LIST_NAME, ID, _siteUrl);
             viewModel = ConvertToManpowerRequisitionVM(listItem, viewModel);
-            viewModel.ID = ID;
+            
 
 
             return viewModel;
@@ -292,20 +293,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         private IEnumerable<WorkingRelationshipDetailVM> GetWorkingRelationshipDetails(int? ID)
         {
-            var caml = "";
-            //var caml = @"<View>  
-            //<Query> 
-            //   <Where><Eq><FieldRef Name='application' LookupId='True' /><Value Type='Lookup'>" + ID + @"</Value></Eq></Where> 
-            //</Query> 
-            // <ViewFields>
-            //<FieldRef Name='ID' />
-            //<FieldRef Name='application' />
-            //<FieldRef Name='Title' />
-            //<FieldRef Name='applicationcompany' />
-            //<FieldRef Name='applicationfrom' />
-            //<FieldRef Name='applicationto' />
-            //<FieldRef Name='applicationjobdescription' /></ViewFields> 
-            //</View>";
+            var caml = @"<View><Query><Where><Eq><FieldRef Name='manpowerrequisition' /><Value Type='Lookup'>"+ID.ToString()+"</Value></Eq></Where></Query></View>";
+
+
 
             var WorkingRelationshipDetails = new List<WorkingRelationshipDetailVM>();
             foreach (var item in SPConnector.GetList(SP_WORKRE_LIST_NAME, _siteUrl, caml))
@@ -457,5 +447,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return models;
         }
 
+        public string GetPosition(string username)
+        {           
+            return "HR";
+        }
     }
 }

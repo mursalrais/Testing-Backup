@@ -643,7 +643,6 @@
     <Content Include="Views\HRPSAManagement\_PSAManagementDataEdit.cshtml" />
     <Content Include="Views\HRManpowerRequisition\EditManpowerRequisition.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\InGridMultiSelect.cshtml" />
-    <Content Include="Views\HRManpowerRequisition\EditStatusRequisition.cshtml" />
     <Content Include="Views\HRManpowerRequisition\ApprovalManpowerRequisition.cshtml" />
     <Content Include="Views\HRManpowerRequisition\_BackgroundRequirementDisp.cshtml" />
     <Content Include="Views\HRManpowerRequisition\_GeneralDisp.cshtml" />
@@ -661,6 +660,7 @@
     <Content Include="Views\HRShortlist\ShortlistData.cshtml" />
     <Content Include="Views\HRShortlist\_CreateShortlist.cshtml" />
     <Content Include="Views\HRShortlist\_ShortlistDetails.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\Boolean.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

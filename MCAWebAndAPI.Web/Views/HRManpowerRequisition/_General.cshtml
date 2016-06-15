@@ -97,7 +97,9 @@
     <div class="form-group">
         @Html.Bootstrap().LabelFor(m => m.IsKeyPosition).Class("col-md-4 control-label")
         <div class="col-md-8">
-            @Html.DisplayFor(m => m.IsKeyPosition)
+            @Html.Kendo().CheckBox().Checked(true).Enable(false).Name("Yes")
+            @Html.Kendo().CheckBox().Checked(false).Enable(false).Name("No")
+            @Html.HiddenFor(m=>m.IsKeyPosition)
         </div>
     </div>
 </div>
