@@ -16,8 +16,8 @@
         @Html.HiddenFor(m => m.Position)
         <div class="row">
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Position).Class("col-sm-4 control-label")
-                <div class="col-sm-8">
+                @Html.Bootstrap().LabelFor(m => m.Position).Class("col-sm-2 control-label")
+                <div class="col-sm-6">
                     <input id="vacant-position" class="form-control" value="" />
                 </div>
             </div>
@@ -63,23 +63,18 @@
 
 @section scripts{
 
-    @*<script>
+    <script>
         $(document).ready(function () {
             $('input').prop('readonly', 'true');
             $('textarea').prop('readonly', 'true');
-
+            debugger;
             var positionID = $("#Position").val();
             var url = "/HRDataMaster/GetPosition/" + positionID;
             $.getJSON(url, function (data) {
                 $("#vacant-position").prop("value", data.PositionName);
             })
 
-            $('#print-display-button').click(function (e) {
-                var url = "/HRApplication/PrintApplicationData";
-                submitFormToPrint(url);
-            });
-
         });
-    </script>*@
+    </script>
 }
 
