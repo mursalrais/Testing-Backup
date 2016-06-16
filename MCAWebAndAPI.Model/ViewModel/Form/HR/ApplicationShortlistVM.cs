@@ -36,6 +36,12 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         public string Candidate { get; set; }
 
+
+        /// <summary>
+        /// Title
+        /// </summary>
+        [DisplayName("Position")]
+        [Required]
         public string Position { get; set; }
 
         /// <summary>

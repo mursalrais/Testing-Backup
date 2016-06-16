@@ -51,17 +51,6 @@
                     </div>
                 </div>
             </div>
-
-            <div class="col-sm-12">
-                <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.SendToCandidate).Class("col-sm-2 control-label")
-                    <div class="col-sm-2 pull-left">
-                        @Html.CheckBoxFor(m => m.SendToCandidate)
-                    </div>
-                </div>
-            </div>
-
-
             <div class="col-sm-12">
 
                 @*<button id="submit-nextstep" class="btn btn-primary" type="submit">
@@ -83,7 +72,17 @@
 }
 
 @section scripts{
+    <script>
+        $(document).ready(function () {
+            $("#vacant-position").prop('readonly', 'true');
+            var positionID = $("#Position").val();
+            var url = "/HRDataMaster/GetPosition/" + positionID;
+            $.getJSON(url, function (data) {
+                $("#vacant-position").prop("value", data.PositionName);
+            })
 
+        });
+    </script>
 
 }
 

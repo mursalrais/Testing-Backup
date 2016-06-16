@@ -153,5 +153,19 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             return array;
         }
+
+        public JsonResult GetStatusGrid()
+        {
+            _service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+
+            var positions = ShortlistDetailVM.GetStatusOptions();
+
+            return Json(positions.Select(e =>
+                new {
+                    Value = Convert.ToString(e.Value),
+                    Text = e.Text
+                }),
+                JsonRequestBehavior.AllowGet);
+        }
     }
 }
