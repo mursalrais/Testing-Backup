@@ -28,6 +28,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         IEnumerable<PSAManagementVM> GetRenewalNumber(int? professionalID);
 
-        bool UpdatePSAStatus(int psaID);
+        bool UpdateStatusPSA(PSAManagementVM psaManagement);
     }
 }
