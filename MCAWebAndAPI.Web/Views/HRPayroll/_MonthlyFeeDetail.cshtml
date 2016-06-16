@@ -19,8 +19,8 @@
         columns.Bound(p => p.AnnualFee).ClientTemplate("#= AnnualFee #" +
                    "<input type='hidden' name='MonthlyFeeDetails[#= getMonthlyFeeDetail(data)#].AnnualFee' value='#= AnnualFee #' />"
                  );
-        columns.Bound(p => p.Currency).ClientTemplate("#= Currency.Text #" +
-                   "<input type='hidden' name='MonthlyFeeDetails[#= getMonthlyFeeDetail(data)#].Currency.Text' value='#= Currency.Text #' />"
+        columns.Bound(p => p.Currency).ClientTemplate("#= Currency #" +
+                   "<input type='hidden' name='MonthlyFeeDetails[#= getMonthlyFeeDetail(data)#].Currency' value='#= Currency #' />"
                  )
                  .EditorViewData(new
                  {
