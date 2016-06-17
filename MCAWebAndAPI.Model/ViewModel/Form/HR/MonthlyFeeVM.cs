@@ -20,6 +20,11 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public int? ProfessionalID { get; set; }
 
         /// <summary>
+        /// professional
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
         /// ProjectOrUnit
         /// </summary>
         public string ProjectUnit { get; set; }
@@ -41,8 +46,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [UIHint("AjaxComboBox")]
         public AjaxComboBoxVM ProfessionalNameEdit { get; set; } = new AjaxComboBoxVM
         {
-            ActionName = "GetProfessionalMonthlyFeesEdit",
-            ControllerName = "HRDataMaster",
+            ActionName = "GetMonthlyFees",
+            ControllerName = "HRPayroll",
             ValueField = "ID",
             TextField = "Name",
             OnSelectEventName = "OnSelectProfessionalName"

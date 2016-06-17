@@ -60,6 +60,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
         {
             var columnValues = new Dictionary<string, object>();
             int? ID = header.ID;
+            columnValues.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(header.ProfessionalNameEdit.Value) });
             columnValues.Add("ProjectOrUnit", header.ProjectUnit);
             columnValues.Add("position", header.Position);
             columnValues.Add("maritalstatus", header.Status);
@@ -81,6 +82,26 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             return true;
     }
 
+        public IEnumerable<MonthlyFeeVM> GetMonthlyFees()
+        {
+            var models = new List<MonthlyFeeVM>();
+            foreach (var item in SPConnector.GetList(SP_HEADER_LIST_NAME, _siteUrl))
+            {
+                    models.Add(ConvertToMonthlyFeeModel_Light(item));
+            }
+            return models;
+        }
+
+        private MonthlyFeeVM ConvertToMonthlyFeeModel_Light(ListItem item)
+        {
+            return new MonthlyFeeVM
+            {
+                ID = FormatUtil.ConvertLookupToID(item, "professional_x003a_ID"),
+                Name = FormatUtil.ConvertLookupToValue(item, "professional"),
+            Status = Convert.ToString(item["maritalstatus"]),
+            };
+        }
+
         public MonthlyFeeVM GetHeader(int? ID)
         {
             var listItem = SPConnector.GetListItem(SP_HEADER_LIST_NAME, ID, _siteUrl);
@@ -92,8 +113,8 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             var viewModel = new MonthlyFeeVM();
 
             viewModel.ID = Convert.ToInt32(listItem["ID"]);
-            viewModel.ProfessionalID = listItem["professional_x003a_ID"] == null ? 0 :
-             Convert.ToInt16((listItem["professional_x003a_ID"] as FieldLookupValue).LookupValue);
+            viewModel.ProfessionalNameEdit.Value = FormatUtil.ConvertLookupToID(listItem, "professional");
+            viewModel.ProfessionalID = FormatUtil.ConvertLookupToID(listItem, "professional_x003a_ID");
             viewModel.ProjectUnit = Convert.ToString(listItem["ProjectOrUnit"]);
             viewModel.Position = Convert.ToString(listItem["position"]);
             viewModel.Status = Convert.ToString(listItem["maritalstatus"]);
@@ -146,9 +167,10 @@ namespace MCAWebAndAPI.Service.HR.Payroll
         }
         private IEnumerable<MonthlyFeeDetailVM> GetMonthlyFeeDetails(int? ID)
         {
+            var caml = @"<View><Query><Where><Eq><FieldRef Name='monthlyfeeid' /><Value Type='Lookup'>" + ID.ToString() + "</Value></Eq></Where></Query></View>";
 
             var MonthlyFeeDetails = new List<MonthlyFeeDetailVM>();
-            foreach (var item in SPConnector.GetList(SP_DETAIL_LIST_NAME, _siteUrl))
+            foreach (var item in SPConnector.GetList(SP_DETAIL_LIST_NAME, _siteUrl, caml))
             {
                 MonthlyFeeDetails.Add(ConvertToMonthlyFeeDetailVM(item));
             }
@@ -161,11 +183,11 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             return new MonthlyFeeDetailVM
             {
                 ID = Convert.ToInt32(item["ID"]),
-                DateOfNewFee = FormatUtil.ConvertDateStringToDateTime(item, "monthlyfee"),
+                DateOfNewFee = Convert.ToDateTime(item["dateofnewfee"]),
                 MonthlyFee = Convert.ToInt32(item["monthlyfee"]),
                 AnnualFee = Convert.ToInt32(item["annualfee"]),
                 Currency = MonthlyFeeDetailVM.GetCurrencyDefaultValue(
-                    new Model.ViewModel.Control.InGridComboBoxVM
+                    new Model.ViewModel.Control.AjaxComboBoxVM
                     {
                         Text = Convert.ToString(item["currency"])
                     }),

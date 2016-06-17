@@ -14,6 +14,8 @@ namespace MCAWebAndAPI.Service.HR.Payroll
 
         MonthlyFeeVM GetHeader(int? ID);
 
+        IEnumerable<MonthlyFeeVM> GetMonthlyFees();
+
         int CreateHeader(MonthlyFeeVM header);
 
         bool UpdateHeader(MonthlyFeeVM header);
