@@ -25,6 +25,10 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         public string GetStat { get; set; }
 
+        public Boolean neednextintv { get; set; }
+
+        public string neednexttext { get; set; }
+
         /// <summary>
         /// statusaplication
         /// </summary>
