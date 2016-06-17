@@ -14,16 +14,18 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// dateofnewfee
         /// </summary>
         [UIHint("Date")]
-        public DateTime? DateOfNewFee { get; set; } = DateTime.Now;
+        public DateTime? DateOfNewFee { get; set; } = DateTime.UtcNow;
 
         /// <summary>
         /// monthlyfee
         /// </summary>
+        [UIHint("Integer")]
         public int MonthlyFee { get; set; }
 
         /// <summary>
         /// annualfee
         /// </summary>
+        [UIHint("Integer")]
         public int AnnualFee { get; set; }
 
         /// <summary>

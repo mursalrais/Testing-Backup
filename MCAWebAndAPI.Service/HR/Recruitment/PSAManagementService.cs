@@ -45,7 +45,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 Created = Convert.ToDateTime(item["Created"]),
                 PSARenewalNumber = Convert.ToInt32(item["renewalnumber"]),
                 ExpiryDateBefore = Convert.ToDateTime(item["psaexpirydate"]).ToLocalTime().ToShortDateString(),
-                PSAId = Convert.ToInt32(item["ID"])
+                ExpireDateBefore = Convert.ToDateTime(item["psaexpirydate"]).ToLocalTime(),
+                PSAId = Convert.ToInt32(item["ID"]),
+                DateOfNewPSABefore = Convert.ToDateTime(item["dateofnewpsa"]).ToLocalTime(),
+                DateNewPSABefore = Convert.ToDateTime(item["dateofnewpsa"]).ToLocalTime().ToShortDateString()
 
             };
         }
@@ -53,8 +56,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         public int CreatePSAManagement(PSAManagementVM psaManagement)
         {
             var updatedValues = new Dictionary<string, object>();
-
-            var psaStatus = "Active";
 
             updatedValues.Add("isrenewal", psaManagement.IsRenewal.Value);
             updatedValues.Add("renewalnumber", psaManagement.PSARenewalNumber);
@@ -65,7 +66,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             updatedValues.Add("dateofnewpsa", psaManagement.DateOfNewPSA);
             updatedValues.Add("tenure", psaManagement.Tenure);
             updatedValues.Add("initiateperformanceplan", psaManagement.PerformancePlan.Value);
-            updatedValues.Add("psastatus", psaStatus);
+            updatedValues.Add("psastatus", psaManagement.PSAStatus.Value);
+            updatedValues.Add("hiddenexpirydate", psaManagement.HiddenExpiryDate);
 
             try
             {
@@ -189,13 +191,15 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return string.Format(UrlResource.PSAManagementDocumentByID, _siteUrl, iD);
         }
 
-        public bool UpdatePSAStatus(int psaID)
+        public bool UpdateStatusPSA(PSAManagementVM psaManagement)
         {
             var columnValues = new Dictionary<string, object>();
-            int ID = psaID;
-            string psaStatus = "Non Active";
+            int ID = psaManagement.PSAId ;
+            string psaStatus = psaManagement.PSAStatus.Value;
+            DateTime hiddenexpirydate = psaManagement.HiddenExpiryDate.Value;
 
             columnValues.Add("psastatus", psaStatus);
+            columnValues.Add("hiddenexpirydate", hiddenexpirydate);
 
             try
             {

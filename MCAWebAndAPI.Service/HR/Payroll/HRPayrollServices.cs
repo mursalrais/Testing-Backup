@@ -165,7 +165,10 @@ namespace MCAWebAndAPI.Service.HR.Payroll
                 MonthlyFee = Convert.ToInt32(item["monthlyfee"]),
                 AnnualFee = Convert.ToInt32(item["annualfee"]),
                 Currency = MonthlyFeeDetailVM.GetCurrencyDefaultValue(
-                    FormatUtil.ConvertToInGridLookup(item, "currency"))
+                    new Model.ViewModel.Control.InGridComboBoxVM
+                    {
+                        Text = Convert.ToString(item["currency"])
+                    }),
             };
         }
     }
