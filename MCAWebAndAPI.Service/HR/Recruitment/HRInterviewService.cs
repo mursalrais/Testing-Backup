@@ -372,7 +372,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 updatedValue.Add("Title", list.Candidate);
                 updatedValue.Add("emailfrom", list.Candidatemail);
-                updatedValue.Add("emailto", viewModel.SendTo);
+                updatedValue.Add("emailto", viewModel.InterviewerPanel);
                 updatedValue.Add("emailmessage", viewModel.EmailMessage);
                 updatedValue.Add("emaildate", DateTime.Now);
 

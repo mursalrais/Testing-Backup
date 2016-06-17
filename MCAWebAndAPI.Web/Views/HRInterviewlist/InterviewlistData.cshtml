@@ -5,7 +5,7 @@
     ViewBag.Title = "InterviewlistData";
 }
 
-@using (Html.BeginForm("CreateSendIntvResult", "HRShortlist", FormMethod.Post, new
+@using (Html.BeginForm("CreateSendIntvResult", "HRInterviewlist", FormMethod.Post, new
 {
     @class = "form-horizontal",
     enctype = "multipart/form-data"
@@ -52,11 +52,11 @@
             </div>
             <div class="col-sm-12">
 
-                @*<button id="submit-nextstep" class="btn btn-primary" type="submit">
-                        <i class="fa fa-save"></i>
-                        send to next step
-                    </button>*@
                 <button id="submit-button" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    save
+                </button>
+                <button id="sendmail-button" class="btn btn-primary" type="button">
                     <i class="fa fa-send"></i>
                     Send Email to Interviewer Panel
                 </button>
