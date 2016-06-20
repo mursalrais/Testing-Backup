@@ -1,10 +1,17 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Mail;
+using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Service.Utils
 {
     public class EmailUtil
     {
+        public async static Task SendAsync(string emailAddress, string subject, string emailMessage)
+        {
+            Send(emailAddress, subject, emailMessage);
+        }
+
         public static void Send(string emailAddress, string subject, string emailMessage)
         {
             var smtp = new SmtpClient();
@@ -25,7 +32,10 @@ namespace MCAWebAndAPI.Service.Utils
             mail.Body = emailMessage;
             mail.IsBodyHtml = true;
 
-            smtp.Send(mail);
+            foreach (var item in mail.To)
+            {
+                smtp.SendAsync(mail.From.Address, item.Address, mail.Subject, mail.Body, DateTime.Now);
+            }
         }
     }
 }

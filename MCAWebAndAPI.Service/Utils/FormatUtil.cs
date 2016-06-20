@@ -115,6 +115,14 @@ namespace MCAWebAndAPI.Service.Utils
                 day: Convert.ToInt32(dateElements[0]));    
         }
 
+        internal static InGridComboBoxVM ConvertToInGridComboBox(ListItem item, string columnName)
+        {
+            return new InGridComboBoxVM
+            {
+                Text = Convert.ToString(item[columnName])
+            };
+        }
+
         public static AjaxComboBoxVM ConvertToInGridAjaxLookup(ListItem item, string columnName)
         {
             return new AjaxComboBoxVM

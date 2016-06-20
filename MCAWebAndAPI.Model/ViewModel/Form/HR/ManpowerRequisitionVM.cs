@@ -41,13 +41,13 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// </summary>
 
         [DisplayName("No. Of Person")]
-        [UIHint("Integer")]
+        [UIHint("Int32")]
         public int NoOfPerson { get; set; }
 
         /// <summary>
         /// Tenure
         /// </summary>
-        [UIHint("Integer")]
+        [UIHint("Int32")]
         public int Tenure { get; set; }
 
         /// <summary>
@@ -131,13 +131,13 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// personnelmgmt
         /// </summary>
-        [UIHint("Integer")]
+        [UIHint("Int32")]
         public int PersonnelManagement { get; set; }
 
         /// <summary>
         /// budgetmgmt
         /// </summary>
-        [UIHint("Integer")]
+        [UIHint("Int32")]
         public int BudgetManagement { get; set; }
         [UIHint("CheckBoxItem")]
         public IEnumerable<CheckBoxItemVM> Workplan { get; set; } = new List<CheckBoxItemVM>();

@@ -90,18 +90,16 @@ namespace MCAWebAndAPI.Web.Controllers
         public JsonResult GetPositions()
         {
             _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
-
-            var positions = GetFromPositionsExistingSession();
+            var positions = GetFromPositionExistingSession();
 
             return Json(positions.Select(e =>
                 new {
                     e.ID,
                     e.PositionName,
-                    e.positionStatus,
-                    e.PositionManpowerRequisitionApprover1,
-                    e.positionManpowerRequisitionApprover2,
+                    e.PositionStatus,
                     e.Remarks,
-                    e.isKeyPosition,
+                    e.Unit,
+                    e.IsKeyPosition,
                     Desc = string.Format("{0}", e.PositionName)
                 }),
                 JsonRequestBehavior.AllowGet);
@@ -109,8 +107,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetPosition(int id)
         {
-            _dataMasterService.SetSiteUrl(SessionManager.Get<string>("SiteUrl") ?? ConfigResource.DefaultHRSiteUrl);
-            var position = _dataMasterService.GetPosition(id);
+            _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            var position = GetFromPositionExistingSession().FirstOrDefault(e => e.ID == id);
             return Json(new {
                 position.ID, 
                 position.PositionName
@@ -120,19 +118,14 @@ namespace MCAWebAndAPI.Web.Controllers
         public JsonResult GetKeyPosition(int id)
         {
             _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
-
             var positions = GetKeyPositionsExistingSession();
-
             return Json(positions.Where(e => e.ID == id).Select(e =>
                 new {
                     e.ID,
                     e.PositionName,
-                    e.positionStatus,
-                    e.PositionManpowerRequisitionApprover1,
-                    e.positionManpowerRequisitionApprover2,
+                    e.PositionStatus,
                     e.Remarks,
-                    e.isKeyPosition
-                    //Desc = string.Format("{0}", e.Title)
+                    e.IsKeyPosition
                 }),
                 JsonRequestBehavior.AllowGet);
         }
@@ -141,7 +134,7 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
 
-            var positions = GetFromPositionsExistingSession();
+            var positions = GetFromPositionExistingSession();
 
             return Json(positions.Select(e =>
                 new {
@@ -185,21 +178,21 @@ namespace MCAWebAndAPI.Web.Controllers
             return professionalmonthlyfees;
         }
 
-        private IEnumerable<PositionsMaster> GetFromPositionsExistingSession()
+        private IEnumerable<PositionMaster> GetFromPositionExistingSession()
         {
             //Get existing session variable
-            var sessionVariable = System.Web.HttpContext.Current.Session["PositionsMaster"] as IEnumerable<PositionsMaster>;
+            var sessionVariable = SessionManager.Get<IEnumerable<PositionMaster>>("PositionMaster");
             var positions = sessionVariable ?? _dataMasterService.GetPositions();
 
             if (sessionVariable == null) // If no session variable is found
-                System.Web.HttpContext.Current.Session["PositionsMaster"] = positions;
+                SessionManager.Set<IEnumerable<PositionMaster>>("PositionMaster", positions);
             return positions;
         }
 
-        private IEnumerable<PositionsMaster> GetKeyPositionsExistingSession()
+        private IEnumerable<PositionMaster> GetKeyPositionsExistingSession()
         {
             //Get existing session variable
-            var sessionVariable = System.Web.HttpContext.Current.Session["PositionsMaster"] as IEnumerable<PositionsMaster>;
+            var sessionVariable = System.Web.HttpContext.Current.Session["PositionsMaster"] as IEnumerable<PositionMaster>;
             var positions = sessionVariable ?? _dataMasterService.GetPositions();
 
             if (sessionVariable == null) // If no session variable is found

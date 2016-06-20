@@ -10,7 +10,7 @@ namespace MCAWebAndAPI.Model.Common
 {
     public abstract class Item
     {
-        [UIHint("Integer")]
+        [UIHint("Int32")]
         public int? ID { get; set; }
 
         public string Title { get; set; }
@@ -19,7 +19,7 @@ namespace MCAWebAndAPI.Model.Common
         /// To detect if any property has been changed (when editing in kendo grid)
         /// </summary>
         [DisplayName("Action")]
-        [UIHint("Integer")]
+        [UIHint("Int32")]
         public int EditMode { get; set; } = (int)Mode.CREATED;
 
         public enum Mode

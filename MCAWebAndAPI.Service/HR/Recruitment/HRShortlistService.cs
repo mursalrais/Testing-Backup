@@ -308,7 +308,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             };
         }
 
-        public void GetVacantPositions(PositionsMaster viewModel)
+        public void GetVacantPositions(PositionMaster viewModel)
         {
             var updatedValue = new Dictionary<string, object>();
             updatedValue.Add("applicationstatus", viewModel.PositionName);

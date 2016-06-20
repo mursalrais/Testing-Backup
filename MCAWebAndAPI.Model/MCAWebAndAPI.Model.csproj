@@ -52,7 +52,7 @@
     <Compile Include="Common\Item.cs" />
     <Compile Include="Common\Location.cs" />
     <Compile Include="Common\Workflow.cs" />
-    <Compile Include="HR\DataMaster\PositionsMaster.cs" />
+    <Compile Include="HR\DataMaster\PositionMaster.cs" />
     <Compile Include="HR\DataMaster\ProfessionalMaster.cs" />
     <Compile Include="HR\DataMaster\PSAMaster.cs" />
     <Compile Include="obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
@@ -123,6 +123,8 @@
     <Compile Include="ViewModel\Form\Asset\AssignmentofAssetVM.cs" />
     <Compile Include="ViewModel\Form\Asset\LocationMasterVM.cs" />
     <Compile Include="ViewModel\Form\Asset\LocationMasterHeaderVM.cs" />
+    <Compile Include="ViewModel\Form\Common\WorkflowItemVM.cs" />
+    <Compile Include="ViewModel\Form\Common\WorkflowRouterVM.cs" />
     <Compile Include="ViewModel\Form\Finance\EventBudgetHeaderVM.cs" />
     <Compile Include="ViewModel\Form\Finance\EventBudgetItemVM.cs" />
     <Compile Include="ViewModel\Form\Finance\EventBudgetVM.cs" />
