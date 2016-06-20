@@ -16,17 +16,16 @@ using System.Web.Mvc;
 namespace MCAWebAndAPI.Web.Controllers
 {
     [Filters.HandleError]
-    public class HRShortlistController : Controller
+    public class HRInterviewlistController : Controller
     {
-        IHRShortlistService _service;
+        IHRInterviewService _service;
 
-
-        public HRShortlistController()
+        public HRInterviewlistController()
         {
-            _service = new HRShortlistService();
+            _service = new HRInterviewService();
         }
 
-        public ActionResult ShortlistData(string siteurl = null, string position = null, string username = null, string useraccess = null)
+        public ActionResult InterviewlistData(string siteurl = null, string position = null, string username = null, string useraccess = null)
         {
             // clear existing session variables if any
             SessionManager.RemoveAll();
@@ -35,7 +34,7 @@ namespace MCAWebAndAPI.Web.Controllers
             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
 
-            var viewmodel = _service.GetShortlist(position, username, useraccess);
+            var viewmodel = _service.GetInterviewlist(position, username, useraccess);
 
             //viewmodel.ID = id;
             return View(viewmodel);
@@ -114,14 +113,14 @@ namespace MCAWebAndAPI.Web.Controllers
             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
 
-            var viewmodel = _service.GetShortlist(position, username, useraccess);
+            var viewmodel = _service.GetInterviewlist(position, username, useraccess);
             //viewmodel.SendTo = "";
 
             return View(viewmodel);
         }
 
         [HttpPost]
-        public ActionResult CreateIntvinvite(FormCollection form, ApplicationShortlistVM viewModel)
+        public ActionResult CreateSendIntvResult(FormCollection form, ApplicationShortlistVM viewModel)
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);

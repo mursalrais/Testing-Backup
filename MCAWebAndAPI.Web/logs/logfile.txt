@@ -56,3 +56,17 @@ Parameter name: source
    at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in D:\Reza F. Fikri\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64
 2016-06-07 10:28:37.7531 MCAWebAndAPI.Service.Converter.CSVConverter System.IndexOutOfRangeException: Index was outside the bounds of the array.
    at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in D:\Reza F. Fikri\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64
+2016-06-13 11:08:59.4273 MCAWebAndAPI.Service.HR.Recruitment.HRShortlistService Column 'interviewdatetime' does not exist. It may have been deleted by another user.  /sites/ims/hr/Lists/Interview Invitation to Panel
+2016-06-13 12:39:04.0746 MCAWebAndAPI.Service.HR.Recruitment.HRShortlistService Column 'interviewerdate' does not exist. It may have been deleted by another user.  /sites/ims/hr/Lists/ApplicationInterview
+2016-06-17 14:09:24.5975 MCAWebAndAPI.Service.HR.Recruitment.HRInterviewService Invalid look-up value.
+
+A look-up field contains invalid data. Please check the value and try again.
+2016-06-17 14:10:56.9866 MCAWebAndAPI.Service.HR.Recruitment.HRInterviewService Invalid look-up value.
+
+A look-up field contains invalid data. Please check the value and try again.
+2016-06-17 14:12:26.4878 MCAWebAndAPI.Service.HR.Recruitment.HRInterviewService Invalid look-up value.
+
+A look-up field contains invalid data. Please check the value and try again.
+2016-06-17 14:13:32.0936 MCAWebAndAPI.Service.HR.Recruitment.HRInterviewService Invalid look-up value.
+
+A look-up field contains invalid data. Please check the value and try again.

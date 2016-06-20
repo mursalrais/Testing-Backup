@@ -2,13 +2,14 @@
 @using MCAWebAndAPI.Model.ViewModel.Form.HR
 @model ApplicationShortlistVM
 
-@{ 
+@{
     ViewBag.Title = "ShortlistData";
 }
 
-@using (Html.BeginForm("UpdateShortlistData", "HRShortlist", FormMethod.Post, new {
-        @class = "form-horizontal",
-        enctype = "multipart/form-data"
+@using (Html.BeginForm("UpdateShortlistData", "HRShortlist", FormMethod.Post, new
+{
+    @class = "form-horizontal",
+    enctype = "multipart/form-data"
 }))
 {
     <fieldset>
@@ -16,19 +17,25 @@
         @Html.HiddenFor(m => m.Position)
         <div class="row">
             <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Candidate).Class("col-sm-2 control-label")
+                <div class="col-sm-6">
+                    <input id="val-candidate" class="form-control" value="" />
+                </div>
+            </div>
+            <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.Position).Class("col-sm-2 control-label")
                 <div class="col-sm-6">
                     <input id="vac-position" class="form-control" value="" />
                 </div>
             </div>
         </div>
-       
+
         <legend>Candidate list</legend>
         <div class="row">
             @Html.Partial("_ShortlistDetails", Model.ShortlistDetails)
         </div>
 
-        
+
     </fieldset>
     <div class="form-actions">
         <div class="row">
@@ -39,26 +46,26 @@
                         @Html.EditorFor(m => m.SendTo)
                     </div>
                 </div>
-                </div>
-                <div class="col-sm-8">
+            </div>
+            <div class="col-sm-8">
 
-                    <button id="submit-nextstep" class="btn btn-primary" type="submit">
-                        <i class="fa fa-send"></i>
-                        send to next step
-                    </button>
-                    <button id="submit-button" class="btn btn-primary" type="submit">
-                        <i class="fa fa-save"></i>
-                        save
-                    </button>
-                    @*<button id="submit-cancel" class="btn btn-primary" type="submit">
+                <button id="submit-nextstep" class="btn btn-primary" type="submit">
+                    <i class="fa fa-send"></i>
+                    send to next step
+                </button>
+                <button id="submit-button" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    save
+                </button>
+                @*<button id="submit-cancel" class="btn btn-primary" type="submit">
                         <i class="fa fa-save"></i>
                         cancel
                     </button>*@
 
-                </div>
             </div>
+        </div>
     </div>
-    
+
 }
 
 @section scripts{
@@ -66,8 +73,12 @@
     <script>
         $(document).ready(function () {
             $("#vac-position").prop('readonly', 'true');
+            $("#val-candidate").prop($("#Candidate").val());
+
+
             var positionID = $("#Position").val();
             $("#vac-position").prop("value", positionID);
+
             var url = "/HRDataMaster/GetPosition/" + positionID;
             $.getJSON(url, function (data) {
                 $("#vac-position").prop("value", positionID);

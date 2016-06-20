@@ -94,7 +94,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             ControllerName = "HRDataMaster",
             ActionName = "GetPositions",
             ValueField = "ID",
-            TextField = "PositionName"
+            TextField = "PositionName",
+            OnSelectEventName = "onPositionChange"
         };
 
         /// <summary>
@@ -212,14 +213,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             }
         };
 
-        [UIHint("AjaxComboBox")]
-        [DisplayName("Position")]
-        public AjaxComboBoxVM PositionManpower { get; set; } = new AjaxComboBoxVM
-        {
-            ControllerName = "HRManpowerRequisition",
-            ActionName = "GetPositions",
-            ValueField = "ID",
-            TextField = "Position"
-        };
+        
     }
 }

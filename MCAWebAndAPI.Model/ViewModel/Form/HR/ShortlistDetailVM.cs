@@ -21,15 +21,21 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [Required]
         public IEnumerable<HttpPostedFileBase> Documents { get; set; } = new List<HttpPostedFileBase>();
 
+        [DisplayName("Curriculum Vitae")]
         public string DocumentUrl { get; set; }
 
         public string GetStat { get; set; }
 
+        public Boolean neednextintv { get; set; }
+
+        [DisplayName("Need next interview")]
+        public string neednexttext { get; set; }
+
         /// <summary>
         /// statusaplication
         /// </summary>
-        [UIHint("InGridComboBox")]
-        public InGridComboBoxVM Status { get; set; }  = new InGridComboBoxVM();
+        [UIHint("InGridAjaxComboBox")]
+        public AjaxComboBoxVM Status { get; set; }  = new AjaxComboBoxVM();
 
         public static IEnumerable<InGridComboBoxVM> GetStatusOptions()
         {
@@ -46,17 +52,18 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
                     Text = e
                 });
         }
-
-        public static InGridComboBoxVM GetStatusDefaultValue(InGridComboBoxVM model = null)
+        
+        public static AjaxComboBoxVM GetStatusDefaultValue(AjaxComboBoxVM model = null)
         {
-            var options = GetStatusOptions();
-            if (model == null || string.IsNullOrEmpty(model.Text))
-                return options.FirstOrDefault();
-
-            return options.FirstOrDefault(e =>
-                e.Value == model.Value || e.Text == model.Text);
+            if (model == null)
+            {
+                return new AjaxComboBoxVM();
+            }
+            else
+            {
+                return model;
+            }
         }
-
         public string Remarks { get; set; }
     }
 }

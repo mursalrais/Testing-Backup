@@ -661,8 +661,13 @@
     <Content Include="Views\HRShortlist\ShortlistData.cshtml" />
     <Content Include="Views\HRShortlist\_CreateShortlist.cshtml" />
     <Content Include="Views\HRShortlist\_ShortlistDetails.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\InGridAjaxCascadeComboBox.cshtml" />
-    <Content Include="Views\Shared\_WorkflowDetails.cshtml" />
+    <Content Include="Views\HRShortlist\ShortlistSendinvite.cshtml" />
+    <Content Include="Views\HRShortlist\ShortlistIntvinvite.cshtml" />
+    <Content Include="Views\HRShortlist\_IntvinviteDetails.cshtml" />
+    <Content Include="Views\HRInterviewlist\InterviewlistData.cshtml" />
+    <Content Include="Views\HRInterviewlist\_IntvinviteDetails.cshtml" />
+    <Content Include="Views\HRInterviewlist\InputInterviewResult.cshtml" />
+    <Content Include="Views\HRInterviewlist\_InterviewResultlist.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -697,6 +702,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HRApplicationController.cs" />
     <Compile Include="Controllers\HRDataMasterController.cs" />
+    <Compile Include="Controllers\HRInterviewlistController.cs" />
     <Compile Include="Controllers\HRManpowerRequisitionController.cs" />
     <Compile Include="Controllers\HRPayrollController.cs" />
     <Compile Include="Controllers\HRProfessionalController.cs" />

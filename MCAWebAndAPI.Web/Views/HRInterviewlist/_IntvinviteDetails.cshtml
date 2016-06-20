@@ -1,27 +1,27 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+
 @model IEnumerable<ShortlistDetailVM>
 
 <div class="col-xs-12">
 
     @(Html.Kendo().Grid(Model)
     .Name("ShortlistDetails")
-    .ToolBar(tools => tools.Create().Text("Add New Dependent"))
+    //.ToolBar(tools => tools.Create().Text("Add New Dependent"))
     .Editable(editable => editable.Mode(GridEditMode.InCell)
     .CreateAt(GridInsertRowPosition.Bottom))
     .Columns(columns =>
     {
-        columns.Bound(p => p.Candidate).ClientTemplate("#= Candidate #" +
+        columns.Bound(p => p.Candidate).ClientTemplate("<a href=''>#= Candidate #</a>" +
         "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].Candidate' value='#= Candidate #' />");
-        columns.Bound(p => p.DocumentUrl).ClientTemplate(" <a href='#= DocumentUrl #'>get file</a>");
-        columns.Bound(p => p.Status).ClientTemplate("#= Status.Text #" +
-                          "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].Status.Text' value='#= Status.Text #' />"
-                        ).EditorViewData(new
-                        {
-                            DataTextField = "Text",
-                            DataValueField = "Value",
-                            ControllerName = "HRShortlist",
-                            ActionName = "GetStatusGrid"
-                        });
+
+        columns.Bound(p => p.DocumentUrl).ClientTemplate("<a href='#= DocumentUrl #'>get file</a>");
+
+        columns.Bound(p => p.GetStat).ClientTemplate("#= GetStat #" +
+        "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].GetStat' value='#= GetStat #' />");
+
+        columns.Bound(p => p.neednexttext).ClientTemplate("#= neednexttext #" +
+        "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].neednexttext' value='#= neednexttext #' />");
+
         columns.Bound(p => p.Remarks).ClientTemplate("#= Remarks #" +
         "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].Remarks' value='#= Remarks #' />");
 
@@ -54,13 +54,9 @@
     .ServerOperation(false)
 
     )
-)
+    )
 </div>
 <script>
-    $(document).ready(function () {
-        console.log();
-    });
-    
     function GetDetailShortlist(dataItem) {
         var data = $("#ShortlistDetails").data("kendoGrid").dataSource.data();
         return data.indexOf(dataItem);
@@ -71,4 +67,6 @@
         hideDeletedRowKendoDetail(grid);
     }
 </script>
+
+
 

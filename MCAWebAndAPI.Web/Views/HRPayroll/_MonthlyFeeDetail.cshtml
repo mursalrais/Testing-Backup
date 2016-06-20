@@ -1,0 +1,75 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model IEnumerable<MonthlyFeeDetailVM>
+
+<div class="col-sm-12">
+
+    @(Html.Kendo().Grid(Model)
+        .Name("MonthlyFeeDetails")
+        .ToolBar(tools => tools.Create().Text("Add New Fee"))
+        .Editable(editable => editable.Mode(GridEditMode.InCell)
+        .CreateAt(GridInsertRowPosition.Bottom))
+        .Columns(columns =>
+        {
+            columns.Bound(p => p.DateOfNewFee).ClientTemplate("#= kendo.toString(DateOfNewFee, 'MM-dd-yyyy') #" +
+            "<input type='hidden' name='MonthlyFeeDetails[#= getMonthlyFeeDetail(data)#].DateOfNewFee' value='#= DateOfNewFee #' />"
+            );
+            columns.Bound(p => p.MonthlyFee).ClientTemplate("#= MonthlyFee #" +
+            "<input type='hidden' name='MonthlyFeeDetails[#= getMonthlyFeeDetail(data)#].MonthlyFee' '[#= getAnnualFee(data)#]' value='#= MonthlyFee #' />"
+            );
+            columns.Bound(p => p.AnnualFee).Locked().ClientTemplate("#= AnnualFee #" +
+            "<input type='hidden' name='MonthlyFeeDetails[#= getMonthlyFeeDetail(data)#].AnnualFee' value='#= AnnualFee #' />"
+            );
+            columns.Bound(p => p.Currency).ClientTemplate("#= Currency.Text #" +
+            "<input type='hidden' name='MonthlyFeeDetails[#= getMonthlyFeeDetail(data)#].Currency.Text' value='#= Currency.Text #' />"
+            )
+            .EditorViewData(new
+            {
+                //BindTo = MonthlyFeeDetailVM.GetCurrencyOptions()
+                DataTextField = "Text",
+                DataValueField = "Value",
+                ControllerName = "HRPayroll",
+                ActionName = "GetCurrencyGrid"
+            });
+            columns.Bound(p => p.ID).ClientTemplate("#= ID #" +
+            "<input type='hidden' name='MonthlyFeeDetails[#= getMonthlyFeeDetail(data)#].ID' value='#= ID #' />"
+            );
+
+            columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
+            "<input type='hidden' name='MonthlyFeeDetails[#= getMonthlyFeeDetail(data)#].EditMode' value='#= EditMode #' />"
+            );
+
+            columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
+            .Click("onDeleteKendoDetail")).Width(100);
+        })
+        .Events(e =>
+        {
+            e.Edit("onEditKendoDetail");
+            e.DataBound("onDataBoundMonthlyFeeDetails");
+        })
+        .DataSource(dataSource => dataSource.Ajax()
+        .Model(model =>
+        {
+            model.Id(p => p.ID);
+            model.Field(m => m.DateOfNewFee).DefaultValue(DateTime.UtcNow);
+            model.Field(m => m.Currency).DefaultValue(MonthlyFeeDetailVM.GetCurrencyDefaultValue());
+        })
+        .ServerOperation(false)
+        )
+    )
+</div>
+
+<script>
+    function getAnnualFee(dataItem) {
+        dataItem.set('AnnualFee', dataItem.MonthlyFee * 12);
+    }
+
+    function getMonthlyFeeDetail(dataItem) {
+        var data = $("#MonthlyFeeDetails").data("kendoGrid").dataSource.data();
+        return data.indexOf(dataItem);
+    }
+
+    function onDataBoundMonthlyFeeDetails(e) {
+        var grid = $("#MonthlyFeeDetails").data("kendoGrid");
+        hideDeletedRowKendoDetail(grid);
+    }
+</script>

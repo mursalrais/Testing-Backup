@@ -13,6 +13,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
     {
         public IEnumerable<ShortlistDetailVM> ShortlistDetails { get; set; } = new List<ShortlistDetailVM>();
 
+        public IEnumerable<InterviewDetailVM> InterviewlistDetails { get; set; } = new List<InterviewDetailVM>();
+
         /// <summary>
         /// position
         /// </summary>
@@ -36,8 +38,14 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         public string Candidate { get; set; }
 
-        public string Position { get; set; }
 
+        /// <summary>
+        /// Title
+        /// </summary>
+        [DisplayName("Position")]
+        [Required]
+        public string Position { get; set; }
+        
         /// <summary>
         /// InterviewerDate
         /// </summary>

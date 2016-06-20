@@ -1,12 +1,11 @@
-﻿
-@using MCAWebAndAPI.Model.ViewModel.Form.HR
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
 @model ApplicationShortlistVM
 
 @{
-    ViewBag.Title = "ShortlistIntvinvite";
+    ViewBag.Title = "InterviewlistData";
 }
 
-@using (Html.BeginForm("CreateIntvinvite", "HRShortlist", FormMethod.Post, new
+@using (Html.BeginForm("CreateSendIntvResult", "HRInterviewlist", FormMethod.Post, new
 {
     @class = "form-horizontal",
     enctype = "multipart/form-data"
@@ -53,22 +52,22 @@
             </div>
             <div class="col-sm-12">
 
-                @*<button id="submit-nextstep" class="btn btn-primary" type="submit">
-                    <i class="fa fa-save"></i>
-                    send to next step
-                </button>*@
                 <button id="submit-button" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    save
+                </button>
+                <button id="sendmail-button" class="btn btn-primary" type="button">
                     <i class="fa fa-send"></i>
                     Send Email to Interviewer Panel
                 </button>
                 @*<button id="submit-cancel" class="btn btn-primary" type="submit">
-                    <i class="fa fa-save"></i>
-                    cancel
-                </button>*@
+                        <i class="fa fa-save"></i>
+                        cancel
+                    </button>*@
 
             </div>
         </div>
-        </div>
+    </div>
 }
 
 @section scripts{
@@ -76,6 +75,8 @@
         $(document).ready(function () {
             $("#vacant-position").prop('readonly', 'true');
             var positionID = $("#Position").val();
+            $("#vacant-position").prop("value", positionID);
+
             var url = "/HRDataMaster/GetPosition/" + positionID;
             $.getJSON(url, function (data) {
                 $("#vacant-position").prop("value", data.PositionName);
