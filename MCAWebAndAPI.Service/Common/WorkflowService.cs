@@ -97,8 +97,7 @@ namespace MCAWebAndAPI.Service.Common
             var viewModel = new WorkflowItemVM();
             viewModel.Level = Convert.ToString(item["approverlevel"]);
             viewModel.ApproverUnit = FormatUtil.ConvertToInGridComboBox(item, "approverunit");
-            viewModel.ApproverPosition = FormatUtil.ConvertToInGridAjaxComboBox(item, "approverposition");
-
+            viewModel.ApproverPosition = FormatUtil.ConvertToInGridAjaxCascadeComboBox(item, "approverposition");
             return viewModel;
         }
 

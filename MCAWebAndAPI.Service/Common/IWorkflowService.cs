@@ -18,6 +18,7 @@ namespace MCAWebAndAPI.Service.Common
         void CreateTransactionWorkflow(string workflowTransactionListName, string transactionLookupColumnName, 
             int headerID, IEnumerable<WorkflowItemVM> workflowItems);
 
-        void SendApprovalRequest(string workflowTransactionListName, string transactionLookupColumnName, int headerID, int level, string message);
+        void SendApprovalRequest(string workflowTransactionListName, string transactionLookupColumnName, 
+            int headerID, int level, string message);
     }
 }

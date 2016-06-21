@@ -24,10 +24,10 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Common
         public InGridComboBoxVM ApproverUnit { get; set; } = new InGridComboBoxVM();
 
         [UIHint("InGridAjaxCascadeComboBox")]
-        public AjaxCascadeComboBoxVM ApproverPosition { get; set; } = new AjaxCascadeComboBoxVM();
+        public AjaxComboBoxVM ApproverPosition { get; set; } = new AjaxComboBoxVM();
 
         [UIHint("InGridAjaxCascadeComboBox")]
-        public AjaxCascadeComboBoxVM ApproverUserName { get; set; } = new AjaxCascadeComboBoxVM();
+        public AjaxComboBoxVM ApproverUserName { get; set; } = new AjaxComboBoxVM();
 
         public static IEnumerable<InGridComboBoxVM> GetUnitOptions()
         {

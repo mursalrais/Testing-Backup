@@ -4,7 +4,6 @@ using MCAWebAndAPI.Model.ViewModel.Form.Common;
 using MCAWebAndAPI.Service.Common;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -70,7 +69,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
 
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult Grid_Update([DataSourceRequest] DataSourceRequest request, [Bind(Prefix = "models")]IEnumerable<WorkflowItemVM> viewModel)
+        public ActionResult Grid_Update([DataSourceRequest] DataSourceRequest request,
+            [Bind(Prefix = "models")]IEnumerable<WorkflowItemVM> viewModel)
         {
             // Get existing session variable
             var sessionVariables = SessionManager.Get<IEnumerable<WorkflowItemVM>>("WorkflowItems");
