@@ -153,9 +153,9 @@ namespace MCAWebAndAPI.Web.Controllers
                 SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)headerID);
 
             Task sendApprovalRequestTask = WorkflowHelper.SendApprovalRequestAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
-                SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)headerID, level: 1,
-                MessageResource.SuccessCommon);
-
+                SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)headerID, 1,
+                EmailResource.ApplicationSubmissionNotification);
+             
             Task sendTask = EmailUtil.SendAsync(viewModel.EmailAddresOne, "Application Submission Confirmation",
                   EmailResource.ApplicationSubmissionNotification);
             // END Demo
