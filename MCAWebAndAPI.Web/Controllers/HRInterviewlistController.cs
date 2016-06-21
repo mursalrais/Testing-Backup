@@ -41,7 +41,7 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult UpdateShortlistData(FormCollection form, ApplicationShortlistVM viewModel)
+        public ActionResult CreateInterviewlistData(FormCollection form, ApplicationShortlistVM viewModel)
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
@@ -52,8 +52,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             try
             {
-                viewModel.ShortlistDetails = BindShortlistDetails(form, viewModel.ShortlistDetails);
-                _service.UpdateShortlistDataDetail(headerID, viewModel.ShortlistDetails);
+                _service.CreateInterviewDataDetail(headerID, viewModel);
             }
             catch (Exception e)
             {
@@ -67,7 +66,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 string.Format("{0}/{1}", siteUrl, UrlResource.Professional));
         }
 
-        public ActionResult ShortlistSendInvite(string siteurl = null, int? ID = null)
+        public ActionResult InputInterviewResult(string siteurl = null, int? ID = null)
         {
             // clear existing session variables if any
             SessionManager.RemoveAll();
@@ -76,14 +75,14 @@ namespace MCAWebAndAPI.Web.Controllers
             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
 
-            var viewmodel = _service.GetShortlistSend(ID);
+            var viewmodel = _service.GetResultlistInterview(ID);
             //viewmodel.SendTo = "";
             //viewmodel.ID = id;
             return View(viewmodel);
         }
 
         [HttpPost]
-        public ActionResult CreateSendInvite(FormCollection form, ApplicationShortlistVM viewModel)
+        public ActionResult CreateInputResultInterview(FormCollection form, ApplicationShortlistVM viewModel)
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
@@ -92,7 +91,7 @@ namespace MCAWebAndAPI.Web.Controllers
             try
             {
                 viewModel.ShortlistDetails = BindShortlistDetails(form, viewModel.ShortlistDetails);
-                _service.CreateShorlistSendintv(headerID, viewModel);
+                _service.CreateInputIntvResult(headerID, viewModel);
             }
             catch (Exception e)
             {
@@ -104,7 +103,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 string.Format("{0}/{1}", siteUrl, UrlResource.Professional));
         }
 
-        public ActionResult ShortlistIntvinvite(string siteurl = null, string position = null, string username = null, string useraccess = null)
+        public ActionResult InputInterviewResultDetail(string siteurl = null, int? ID = null)
         {
             // clear existing session variables if any
             SessionManager.RemoveAll();
@@ -113,33 +112,12 @@ namespace MCAWebAndAPI.Web.Controllers
             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
 
-            var viewmodel = _service.GetInterviewlist(position, username, useraccess);
+            var viewmodel = _service.GetResultlistInterview(ID);
             //viewmodel.SendTo = "";
-
+            //viewmodel.ID = id;
             return View(viewmodel);
         }
 
-        [HttpPost]
-        public ActionResult CreateSendIntvResult(FormCollection form, ApplicationShortlistVM viewModel)
-        {
-            var siteUrl = SessionManager.Get<string>("SiteUrl");
-            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-
-            int? headerID = null;
-            try
-            {
-                viewModel.ShortlistDetails = BindShortlistDetails(form, viewModel.ShortlistDetails);
-                _service.CreateShortlistInviteIntv(headerID, viewModel);
-            }
-            catch (Exception e)
-            {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
-            }
-
-            return JsonHelper.GenerateJsonSuccessResponse(
-                string.Format("{0}/{1}", siteUrl, UrlResource.Professional));
-        }
 
         private IEnumerable<ShortlistDetailVM> BindShortlistDetails(FormCollection form, IEnumerable<ShortlistDetailVM> shortDetails)
         {

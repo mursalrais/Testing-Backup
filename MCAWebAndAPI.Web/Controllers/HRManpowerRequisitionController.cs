@@ -64,44 +64,18 @@ namespace MCAWebAndAPI.Web.Controllers
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             var viewModel = _service.GetManpowerRequisition(ID);
-            string position = _service.GetPosition(username);
-            ViewBag.IsHRView = username;
+            string position = _service.GetPosition(username, siteUrl);
+            if (position.Contains("HR"))
+            {
+                ViewBag.IsHRView = true;
+            }
+            else
+            {
+                ViewBag.IsHRView = false;
+            }
             return View(viewModel);
         }
-        
-        public ActionResult EditStatusRequisition(string siteUrl = null)
-        {
-            SessionManager.RemoveAll();
-
-            // MANDATORY: Set Site URL
-            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-
-            var viewModel = _service.GetRequestStatus();
-            return View(viewModel);
-        }
-
-        [HttpPost]
-        public ActionResult EditStatusRequisition(FormCollection form, ManpowerRequisitionVM viewModel)
-        {
-            _service.SetSiteUrl(System.Web.HttpContext.Current.Session["SiteUrl"] as string);     
-
-            try
-            {
-                _service.UpdateStatus(viewModel);
-            }
-            catch (Exception e)
-            {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
-            }
-
-
-
-            return RedirectToAction("Index",
-                "Success",
-                new { errorMessage = string.Format(MessageResource.SuccessCommon, viewModel.ID) });
-        }
+                
         [HttpPost]
         public ActionResult EditManpowerRequisition(FormCollection form, ManpowerRequisitionVM viewModel)
         {
@@ -112,6 +86,21 @@ namespace MCAWebAndAPI.Web.Controllers
             //    return JsonHelper.GenerateJsonErrorResponse(errorMessages);
             //}
             _service.SetSiteUrl(System.Web.HttpContext.Current.Session["SiteUrl"] as string);
+            try
+            {
+                _service.CreateManpowerRequisitionDocuments(viewModel.ID, viewModel.Documents);
+            }
+            catch (Exception e)
+            {
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return RedirectToAction("Index", "Error");
+            }
+
+            // check if status changed to active and checked if mcc aproval document already uploaded
+            if (viewModel.Status.Value == "Active")
+            {
+
+            }
 
             _service.UpdateManpowerRequisition(viewModel);
 
@@ -133,22 +122,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 "Success",
                 new { errorMessage = string.Format(MessageResource.SuccessCommon, viewModel.ID) });
         }
-
-        //public JsonResult GetPositionsGrid()
-        //{
-        //    _service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
-
-        //    var positions = GetFromPositionsExistingSession();
-
-        //    return Json(positions.Select(e =>
-        //        new {
-        //            Value = Convert.ToString(e.ID),
-        //            Text = e.PositionName
-        //        }),
-        //        JsonRequestBehavior.AllowGet);
-        //}
-
-
+           
         public ActionResult DisplayManpowerRequisition(string siteUrl = null, int? ID = null)
         {
             // Clear Existing Session Variables if any
@@ -233,7 +207,6 @@ namespace MCAWebAndAPI.Web.Controllers
            
         }        
         
-
         private IEnumerable<WorkingRelationshipDetailVM> BindWorkingExperienceDetails(FormCollection form, IEnumerable<WorkingRelationshipDetailVM> workingRelationshipDetails)
         {
             var array = workingRelationshipDetails.ToArray();
@@ -245,7 +218,26 @@ namespace MCAWebAndAPI.Web.Controllers
 
             return array;
         }
-        
-       
+
+        //public JsonResult GetDocumentMCC(int id)
+        //{
+        //    _service.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));
+
+        //    var isDocumentMCCExist = _service.CheckDocumentMCC(id);
+
+
+        //    return Json(isDocumentMCCExist.Where(e => e.ID == id).Select(
+        //        e =>
+        //        new
+        //        {
+        //            e.ID,
+        //            e.PSARenewalNumber,
+        //            e.ExpiryDateBefore,
+        //            e.PSAId
+        //        }
+        //    ), JsonRequestBehavior.AllowGet);
+        //}
+
+
     }
 }

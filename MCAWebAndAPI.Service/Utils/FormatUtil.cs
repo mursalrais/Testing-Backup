@@ -115,26 +115,9 @@ namespace MCAWebAndAPI.Service.Utils
                 day: Convert.ToInt32(dateElements[0]));    
         }
 
-        internal static InGridComboBoxVM ConvertToInGridComboBox(ListItem item, string columnName)
-        {
-            return new InGridComboBoxVM
-            {
-                Text = Convert.ToString(item[columnName])
-            };
-        }
-
-        public static AjaxComboBoxVM ConvertToInGridAjaxComboBox(ListItem item, string columnName)
+        public static AjaxComboBoxVM ConvertToInGridAjaxLookup(ListItem item, string columnName)
         {
             return new AjaxComboBoxVM
-            {
-                Text = (item[columnName] as FieldLookupValue).LookupValue,
-                Value = (item[columnName] as FieldLookupValue).LookupId
-            };
-        }
-
-        public static AjaxCascadeComboBoxVM ConvertToInGridAjaxCascadeComboBox(ListItem item, string columnName)
-        {
-            return new AjaxCascadeComboBoxVM
             {
                 Text = (item[columnName] as FieldLookupValue).LookupValue,
                 Value = (item[columnName] as FieldLookupValue).LookupId

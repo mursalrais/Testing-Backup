@@ -5,7 +5,7 @@
     ViewBag.Title = "InterviewlistData";
 }
 
-@using (Html.BeginForm("CreateSendIntvResult", "HRInterviewlist", FormMethod.Post, new
+@using (Html.BeginForm("CreateInterviewlistData", "HRInterviewlist", FormMethod.Post, new
 {
     @class = "form-horizontal",
     enctype = "multipart/form-data"
@@ -14,6 +14,7 @@
     <fieldset>
         @Html.HiddenFor(m => m.ID)
         @Html.HiddenFor(m => m.Position)
+        @Html.HiddenFor(m => m.Candidate)
         <div class="row">
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.Position).Class("col-sm-2 control-label")

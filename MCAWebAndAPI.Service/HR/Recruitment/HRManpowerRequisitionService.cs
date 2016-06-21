@@ -23,7 +23,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         public int CreateManpowerRequisition(ManpowerRequisitionVM viewModel)
         {
             var updatedValue = new Dictionary<string, object>();
-
             if(viewModel.Status.Value == "Pending Approval")
             {
                 //kirim email
@@ -54,7 +53,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             updatedValue.Add("projectunit", viewModel.DivisionProjectUnit.Value);
 
-            updatedValue.Add("positionrequested", new FieldLookupValue { LookupId = (int)viewModel.Position.Value });
+            updatedValue.Add("positionrequested", new FieldLookupValue { LookupId = (int)viewModel.Position.Value });           
             updatedValue.Add("reportingto", new FieldLookupValue { LookupId = (int)viewModel.ReportingTo.Value });
             updatedValue.Add("joblocation", new FieldLookupValue { LookupId = (int)viewModel.JobLocation.Value });
             updatedValue.Add("secondaryreportingto", new FieldLookupValue { LookupId = (int)viewModel.SecondaryReportingTo.Value });
@@ -139,9 +138,13 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 updatedValue.Add("onbehalfof", "");
             }
             
-
+            if (!(string.IsNullOrEmpty(viewModel.Status.Value)))
+            {
+                updatedValue.Add("manpowerrequeststatus", viewModel.Status.Value);
+            }
             updatedValue.Add("projectunit", viewModel.DivisionProjectUnit.Value);
-            updatedValue.Add("manpowerrequeststatus", viewModel.Status.Value);
+         
+           
 
             updatedValue.Add("positionrequested", new FieldLookupValue { LookupId = (int)viewModel.Position.Value });
             updatedValue.Add("reportingto", new FieldLookupValue { LookupId = (int)viewModel.ReportingTo.Value });
@@ -307,10 +310,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         }
 
         private WorkingRelationshipDetailVM ConvertToWorkingRelationshipDetailVM(ListItem item)
-        {
-
-            var tes = Convert.ToInt32(item["ID"]);
-
+        {            
             var _frequencyArray = (string[])item["frequency"];
             string _frequency = string.Join(",", _frequencyArray);
 
@@ -320,7 +320,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return new WorkingRelationshipDetailVM
             {
                 ID = Convert.ToInt32(item["ID"]),
-                PositionWorking = WorkingRelationshipDetailVM.GetPositionDefaultValue(FormatUtil.ConvertToInGridAjaxComboBox(item, "position")),
+                PositionWorking = WorkingRelationshipDetailVM.GetPositionDefaultValue(FormatUtil.ConvertToInGridAjaxLookup(item, "position")),
                 Frequency = WorkingRelationshipDetailVM.GetFrequencyDefaultValue(new InGridMultiSelectVM { Text = _frequency }),
                 Relationship = WorkingRelationshipDetailVM.GetRelationshipDefaultValue(new InGridMultiSelectVM { Text = _relationship })
             };
@@ -447,9 +447,18 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return models;
         }
 
-        public string GetPosition(string username)
-        {           
-            return "HR";
+        public string GetPosition(string username,string siteUrl)
+        {
+            var caml = @"<View><Query><Where><Eq><FieldRef Name='officeemail' /><Value Type='Text'>"+username+@"</Value></Eq></Where></Query><ViewFields><FieldRef Name='Position' /></ViewFields><QueryOptions /></View>";
+            var listItem = SPConnector.GetList("Professional Master", siteUrl, caml);
+            string position = "";
+            foreach (var item in listItem)
+            {
+                position = FormatUtil.ConvertLookupToValue(item, "Position");
+            }            
+             
+            return position;
         }
+        
     }
 }

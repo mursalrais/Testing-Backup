@@ -11,7 +11,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace MCAWebAndAPI.Web.Controllers
@@ -19,9 +18,7 @@ namespace MCAWebAndAPI.Web.Controllers
     [Filters.HandleError]
     public class HRApplicationController : Controller
     {
-        readonly IHRApplicationService _service;
-        const string SP_TRANSACTION_WORKFLOW_LIST_NAME = "Manpower Requisition Workflow";
-        const string SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME = "manpowerrequisition";
+        IHRApplicationService _service;
 
         public HRApplicationController()
         {
@@ -53,7 +50,7 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateProfessionalData(FormCollection form, ApplicationDataVM viewModel)
+        public ActionResult CreateProfessionalData(FormCollection form, ApplicationDataVM viewModel)
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
@@ -69,17 +66,21 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            viewModel.EducationDetails = BindEducationDetails(form, viewModel.EducationDetails);
-            Task createEducationDetailsTask = _service.CreateEducationDetailsAsync(headerID, viewModel.EducationDetails);
-
-            viewModel.TrainingDetails = BindTrainingDetails(form, viewModel.TrainingDetails);
-            Task createTrainingDetailsTask = _service.CreateTrainingDetailsAsync(headerID, viewModel.TrainingDetails);
-
-            Task allTasks = Task.WhenAll(createEducationDetailsTask, createEducationDetailsTask);
+            try
+            {
+                viewModel.EducationDetails = BindEducationDetails(form, viewModel.EducationDetails);
+                _service.CreateEducationDetails(headerID, viewModel.EducationDetails);
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
 
             try
             {
-                await allTasks;
+                viewModel.TrainingDetails = BindTrainingDetails(form, viewModel.TrainingDetails);
+                _service.CreateTrainingDetails(headerID, viewModel.TrainingDetails);
             }
             catch (Exception e)
             {
@@ -114,12 +115,12 @@ namespace MCAWebAndAPI.Web.Controllers
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
-            var viewModel = _service.GetApplicationAsync(ID);
+            var viewModel = _service.GetApplication(ID);
             return View(viewModel);
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateApplicationData(FormCollection form, ApplicationDataVM viewModel)
+        public ActionResult CreateApplicationData(FormCollection form, ApplicationDataVM viewModel)
         {
          
             var siteUrl = SessionManager.Get<string>("SiteUrl");
@@ -136,36 +137,52 @@ namespace MCAWebAndAPI.Web.Controllers
                 return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
             }
 
-            viewModel.EducationDetails = BindEducationDetails(form, viewModel.EducationDetails);
-            Task createEducationDetailsTask = _service.CreateEducationDetailsAsync(headerID, viewModel.EducationDetails);
-
-            viewModel.TrainingDetails = BindTrainingDetails(form, viewModel.TrainingDetails);
-            Task createTrainingDetailsTask = _service.CreateTrainingDetailsAsync(headerID, viewModel.TrainingDetails);
-
-            viewModel.WorkingExperienceDetails = BindWorkingExperienceDetails(form, viewModel.WorkingExperienceDetails);
-            Task createWorkingExperienceDetailsTask = _service.CreateWorkingExperienceDetailsAsync(headerID, viewModel.WorkingExperienceDetails);
-
-            Task createApplicationDocumentTask = _service.CreateApplicationDocumentAsync(headerID, viewModel.Documents);
-
-            // BEGIN Demo 
-            headerID = 45; // This MUST NOT be hardcoded. It is hardcoded as it is just a demo
-            Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateTransactionWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
-                SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int) headerID);
-
-            Task sendApprovalRequestTask = WorkflowHelper.SendApprovalRequestAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
-                SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)headerID, 1, 
-                MessageResource.SuccessCommon);
-
-            Task sendTask = EmailUtil.SendAsync(viewModel.EmailAddresOne, "Application Submission Confirmation",
-                  EmailResource.ApplicationSubmissionNotification);
-            // END Demo
-
-            Task allTasks = Task.WhenAll(createEducationDetailsTask, createTrainingDetailsTask,
-                createWorkingExperienceDetailsTask, createApplicationDocumentTask);
+            try
+            {
+                viewModel.EducationDetails = BindEducationDetails(form, viewModel.EducationDetails);
+                _service.CreateEducationDetails(headerID, viewModel.EducationDetails);
+            }
+            catch (Exception e)
+            {
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
+            }
 
             try
             {
-                await allTasks;
+                viewModel.TrainingDetails = BindTrainingDetails(form, viewModel.TrainingDetails);
+                _service.CreateTrainingDetails(headerID, viewModel.TrainingDetails);
+            }
+            catch(Exception e)
+            {
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
+            }
+
+            try
+            {
+                viewModel.WorkingExperienceDetails = BindWorkingExperienceDetails(form, viewModel.WorkingExperienceDetails);
+                _service.CreateWorkingExperienceDetails(headerID, viewModel.WorkingExperienceDetails);
+            }catch(Exception e)
+            {
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
+            }
+
+            try
+            {
+                _service.CreateApplicationDocument(headerID, viewModel.Documents);
+            }
+            catch (Exception e)
+            {
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
+            }
+
+            try
+            {
+                EmailUtil.Send(viewModel.EmailAddresOne, "Confirmation", 
+                    "Hi Dude, thanks for submitting your application!");
             }
             catch (Exception e)
             {
@@ -175,8 +192,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             return RedirectToAction("Index", 
                 "Success", 
-                new { errorMessage = 
-                string.Format(MessageResource.SuccessCreateApplicationData, viewModel.FirstMiddleName)});
+                new { errorMessage = string.Format(MessageResource.SuccessCreateApplicationData, viewModel.FirstMiddleName)});
         }
 
         [HttpPost]
@@ -209,13 +225,13 @@ namespace MCAWebAndAPI.Web.Controllers
             viewModel.EducationDetails = BindEducationDetails(form, viewModel.EducationDetails);
             viewModel.TrainingDetails = BindTrainingDetails(form, viewModel.TrainingDetails);
             viewModel.WorkingExperienceDetails = BindWorkingExperienceDetails(form, viewModel.WorkingExperienceDetails);
-            ViewData.Model = AdjustViewModel(viewModel);
 
-            const string RelativePath = "~/Views/HRApplication/PrintApplicationData.cshtml";
-            var view = ViewEngines.Engines.FindView(ControllerContext, RelativePath, null);
-            var fileName = viewModel.FirstMiddleName + "_Application.pdf";
-            byte[] pdfBuf = null;
+            const string relativePath = "~/Views/HRApplication/PrintApplicationData.cshtml";
             string content;
+            
+            var view = ViewEngines.Engines.FindView(ControllerContext, relativePath, null);
+            ViewData.Model = AdjustViewModel(viewModel);
+            var fileName = viewModel.FirstMiddleName + "_Application.pdf";
 
             using (var writer = new StringWriter())
             {
@@ -225,6 +241,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 content = writer.ToString();
 
                 // Get PDF Bytes
+                byte[] pdfBuf = null;
                 try
                 {
                     pdfBuf = PDFConverter.Instance.ConvertFromHTML(fileName, content);
@@ -234,10 +251,11 @@ namespace MCAWebAndAPI.Web.Controllers
                     ErrorSignal.FromCurrentContext().Raise(e);
                     RedirectToAction("Index", "Error");
                 }
+
+                if (pdfBuf == null)
+                    return HttpNotFound();
+                return File(pdfBuf, "application/pdf");
             }
-            if (pdfBuf == null)
-                return HttpNotFound();
-            return File(pdfBuf, "application/pdf");
         }
 
         private object AdjustViewModel(ApplicationDataVM viewModel)
@@ -297,12 +315,6 @@ namespace MCAWebAndAPI.Web.Controllers
             var viewModel = _service.GetApplication(null);
             viewModel.Position = position;
             viewModel.ManpowerRequisitionID = ID;
-
-            // Used for Workflow Router
-            ViewBag.ListName = "Day-Off%20Request";
-            ViewBag.RequestorUserLogin = "yunita.ajah@eceos.com"; 
-
-            // This var should be taken from passing parameter
             return View(viewModel);
         }
     }

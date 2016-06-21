@@ -14,7 +14,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// ProfessionalId
         /// </summary>
-        [UIHint("Int32")]
+        [UIHint("Integer")]
         [Required(ErrorMessage = "Professional ID Field Is Required")]
         [DisplayName("Professional ID")]
         public int? ProfessionalID { get; set; }
