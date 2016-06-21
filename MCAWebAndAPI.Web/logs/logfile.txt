@@ -57,3 +57,42 @@ Parameter name: source
 2016-06-07 10:28:37.7531 MCAWebAndAPI.Service.Converter.CSVConverter System.IndexOutOfRangeException: Index was outside the bounds of the array.
    at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in D:\Reza F. Fikri\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64
 2016-06-13 11:44:55.1176 MCAWebAndAPI.Service.HR.Recruitment.HRManpowerRequisitionService Value does not fall within the expected range.
+2016-06-20 11:45:15.1326 MCAWebAndAPI.Service.HR.Recruitment.PerformanceMonitoringService Microsoft.SharePoint.Client.ServerException: Column 'manpowerrequisition' does not exist. It may have been deleted by another user.  /sites/mca-dev/hr/Lists/PerformancePlan
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in D:\SharepointIMSWEBandAPI\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 196
+   at MCAWebAndAPI.Service.HR.Recruitment.PerformanceMonitoringService.CreatePerformanceMonitoringDetails(Nullable`1 headerID) in D:\SharepointIMSWEBandAPI\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Recruitment\PerformanceMonitoringService.cs:line 67
+2016-06-20 11:53:51.4938 MCAWebAndAPI.Service.HR.Recruitment.PerformanceMonitoringService Microsoft.SharePoint.Client.ServerException: Invalid data has been used to update the list item. The field you are trying to update may be read only.
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in D:\SharepointIMSWEBandAPI\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 196
+   at MCAWebAndAPI.Service.HR.Recruitment.PerformanceMonitoringService.CreatePerformanceMonitoringDetails(Nullable`1 headerID) in D:\SharepointIMSWEBandAPI\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Recruitment\PerformanceMonitoringService.cs:line 67
+2016-06-20 11:57:03.3676 MCAWebAndAPI.Service.HR.Recruitment.PerformanceMonitoringService Microsoft.SharePoint.Client.ServerException: Invalid data has been used to update the list item. The field you are trying to update may be read only.
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in D:\SharepointIMSWEBandAPI\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 196
+   at MCAWebAndAPI.Service.HR.Recruitment.PerformanceMonitoringService.CreatePerformanceMonitoringDetails(Nullable`1 headerID) in D:\SharepointIMSWEBandAPI\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Recruitment\PerformanceMonitoringService.cs:line 67
+2016-06-20 12:06:13.4800 MCAWebAndAPI.Service.HR.Recruitment.PerformanceMonitoringService Microsoft.SharePoint.Client.ServerException: Column 'performanceplan_x003a_ID' does not exist. It may have been deleted by another user.  /sites/mca-dev/hr/Lists/ProfessionalPerformancePlan
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in D:\SharepointIMSWEBandAPI\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 196
+   at MCAWebAndAPI.Service.HR.Recruitment.PerformanceMonitoringService.CreatePerformanceMonitoringDetails(Nullable`1 headerID) in D:\SharepointIMSWEBandAPI\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Recruitment\PerformanceMonitoringService.cs:line 67
+2016-06-20 12:11:54.6802 MCAWebAndAPI.Service.HR.Recruitment.PerformanceMonitoringService Microsoft.SharePoint.Client.ServerException: The e-mail message cannot be sent. Make sure the e-mail has a valid recipient.
+   at MCAWebAndAPI.Service.Utils.SPConnector.SendEmail(String email, String content, String subject, String siteUrl) in D:\SharepointIMSWEBandAPI\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 359
+   at MCAWebAndAPI.Service.HR.Recruitment.PerformanceMonitoringService.CreatePerformanceMonitoringDetails(Nullable`1 headerID) in D:\SharepointIMSWEBandAPI\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Recruitment\PerformanceMonitoringService.cs:line 79
+2016-06-20 12:14:52.5004 MCAWebAndAPI.Service.HR.Recruitment.PerformanceMonitoringService Microsoft.SharePoint.Client.ServerException: The e-mail message cannot be sent. Make sure the e-mail has a valid recipient.
+   at MCAWebAndAPI.Service.Utils.SPConnector.SendEmail(String email, String content, String subject, String siteUrl) in D:\SharepointIMSWEBandAPI\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 359
+   at MCAWebAndAPI.Service.HR.Recruitment.PerformanceMonitoringService.CreatePerformanceMonitoringDetails(Nullable`1 headerID) in D:\SharepointIMSWEBandAPI\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Recruitment\PerformanceMonitoringService.cs:line 79
+2016-06-20 12:35:42.5804 MCAWebAndAPI.Service.HR.Recruitment.PerformanceMonitoringService System.Net.Mail.SmtpException: Mailbox unavailable. The server response was: 5.3.4 554-554 5.2.0 STOREDRV.Deliver; delivery result banner
+   at System.Net.Mail.DataStopCommand.CheckResponse(SmtpStatusCode statusCode, String serverResponse)
+   at System.Net.Mail.DataStopCommand.Send(SmtpConnection conn)
+   at System.Net.ClosableStream.Close()
+   at System.Net.Mail.SmtpClient.Send(MailMessage message)
+   at MCAWebAndAPI.Service.Utils.EmailUtil.Send(String emailAddress, String subject, String emailMessage) in D:\SharepointIMSWEBandAPI\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\EmailUtil.cs:line 28
+   at MCAWebAndAPI.Service.HR.Recruitment.PerformanceMonitoringService.CreatePerformanceMonitoringDetails(Nullable`1 headerID) in D:\SharepointIMSWEBandAPI\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Recruitment\PerformanceMonitoringService.cs:line 80
+2016-06-20 12:38:08.3521 MCAWebAndAPI.Service.HR.Recruitment.PerformanceMonitoringService System.Net.Mail.SmtpException: Mailbox unavailable. The server response was: 5.3.4 554-554 5.2.0 STOREDRV.Deliver; delivery result banner
+   at System.Net.Mail.DataStopCommand.CheckResponse(SmtpStatusCode statusCode, String serverResponse)
+   at System.Net.Mail.DataStopCommand.Send(SmtpConnection conn)
+   at System.Net.ClosableStream.Close()
+   at System.Net.Mail.SmtpClient.Send(MailMessage message)
+   at MCAWebAndAPI.Service.Utils.EmailUtil.Send(String emailAddress, String subject, String emailMessage) in D:\SharepointIMSWEBandAPI\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\EmailUtil.cs:line 28
+   at MCAWebAndAPI.Service.HR.Recruitment.PerformanceMonitoringService.CreatePerformanceMonitoringDetails(Nullable`1 headerID) in D:\SharepointIMSWEBandAPI\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Recruitment\PerformanceMonitoringService.cs:line 80
+2016-06-20 12:41:30.8007 MCAWebAndAPI.Service.HR.Recruitment.PerformanceMonitoringService System.Net.Mail.SmtpException: Mailbox unavailable. The server response was: 5.3.4 554-554 5.2.0 STOREDRV.Deliver; delivery result banner
+   at System.Net.Mail.DataStopCommand.CheckResponse(SmtpStatusCode statusCode, String serverResponse)
+   at System.Net.Mail.DataStopCommand.Send(SmtpConnection conn)
+   at System.Net.ClosableStream.Close()
+   at System.Net.Mail.SmtpClient.Send(MailMessage message)
+   at MCAWebAndAPI.Service.Utils.EmailUtil.Send(String emailAddress, String subject, String emailMessage) in D:\SharepointIMSWEBandAPI\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\EmailUtil.cs:line 28
+   at MCAWebAndAPI.Service.HR.Recruitment.PerformanceMonitoringService.CreatePerformanceMonitoringDetails(Nullable`1 headerID) in D:\SharepointIMSWEBandAPI\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Recruitment\PerformanceMonitoringService.cs:line 81

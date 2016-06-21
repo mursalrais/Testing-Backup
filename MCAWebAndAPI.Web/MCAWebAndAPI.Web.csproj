@@ -661,6 +661,9 @@
     <Content Include="Views\HRShortlist\_CreateShortlist.cshtml" />
     <Content Include="Views\HRShortlist\_ShortlistDetails.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\Boolean.cshtml" />
+    <Content Include="Views\HRPerformanceMonitoring\PerformanceMonitoring.cshtml" />
+    <Content Include="Views\HRPerformanceMonitoring\_PerformancePlanMonitoring.cshtml" />
+    <Content Include="Views\HRPerformanceMonitoring\_Detail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -697,6 +700,7 @@
     <Compile Include="Controllers\HRDataMasterController.cs" />
     <Compile Include="Controllers\HRManpowerRequisitionController.cs" />
     <Compile Include="Controllers\HRPayrollController.cs" />
+    <Compile Include="Controllers\HRPerformanceMonitoringController.cs" />
     <Compile Include="Controllers\HRProfessionalController.cs" />
     <Compile Include="Controllers\HRPSAManagementController.cs" />
     <Compile Include="Controllers\HRShortlistController.cs" />
@@ -796,18 +800,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
-          <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>15923</DevelopmentServerPort>
-          <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:15923/</IISUrl>
-          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
-          <IISAppRootUrl>http://localhost:15923/</IISAppRootUrl>
-          <NTLMAuthentication>False</NTLMAuthentication>
-          <UseCustomServer>False</UseCustomServer>
-          <CustomServerUrl>
-          </CustomServerUrl>
-          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+          <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
       <UserProperties UseCdnSupport="False" />

@@ -1,0 +1,61 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model PerformanceMonitoringVM
+
+@if (Model.ID == null)
+{
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Bootstrap().LabelFor(m => m.Period).Class("col-md-4 control-label")
+            <div class="col-md-8">
+                @Html.EditorFor(m => m.Period)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.Bootstrap().LabelFor(m => m.LatestCreationDate).Class("col-md-4 control-label")
+            <div class="col-md-8">
+                @Html.EditorFor(m => m.LatestCreationDate)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.Bootstrap().LabelFor(m => m.LatestDateApproval1).Class("col-md-4 control-label")
+            <div class="col-md-8">
+                @Html.EditorFor(m => m.LatestDateApproval1)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.Bootstrap().LabelFor(m => m.LatestDateApproval2).Class("col-md-4 control-label")
+            <div class="col-md-8">
+                @Html.EditorFor(m => m.LatestDateApproval2)
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Bootstrap().LabelFor(m => m.Period).Class("col-md-4 control-label")
+            <div class="col-md-8">
+                @Html.DisplayFor(m => m.Period)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.Bootstrap().LabelFor(m => m.LatestCreationDate).Class("col-md-4 control-label")
+            <div class="col-md-8">
+                @Html.DisplayFor(m => m.LatestCreationDate)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.Bootstrap().LabelFor(m => m.LatestDateApproval1).Class("col-md-4 control-label")
+            <div class="col-md-8">
+                @Html.DisplayFor(m => m.LatestDateApproval1)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.Bootstrap().LabelFor(m => m.LatestDateApproval2).Class("col-md-4 control-label")
+            <div class="col-md-8">
+                @Html.DisplayFor(m => m.LatestDateApproval2)
+            </div>
+        </div>
+    </div>
+}

@@ -24,6 +24,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         bool UpdateStatus(ManpowerRequisitionVM viewModel);
 
-        string GetPosition(string username);
+        string GetPosition(string username,string siteUrl);
+        
     }
 }
