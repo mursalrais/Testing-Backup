@@ -2,7 +2,6 @@
 
 @if (Model.Text.IsEmpty())
 {
-
     @(Html.Kendo().DropDownListFor(m => m)
     .DataTextField((string)ViewData["DataTextField"])
     .DataValueField((string)ViewData["DataValueField"])

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Web;
+using System.Linq;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
@@ -28,6 +29,10 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// </summary>
         public string InterviewerPanel { get; set; }
 
+        public string InterviewSummary { get; set; }
+
+        public string Result { get; set; }
+
         public Boolean SendToCandidate { get; set; }
 
         [UIHint("TextArea")]
@@ -38,6 +43,29 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         public string Candidate { get; set; }
 
+        [UIHint("TextArea")]
+        public string Remarks { get; set; }
+
+
+        /// <summary>
+        /// Result Interview
+        /// </summary>
+        [UIHint("ComboBox")]
+        [DisplayName("Result")]
+        public ComboBoxVM GetResultOptions { get; set; } = new ComboBoxVM
+        {
+            Choices = new string[]
+            {
+                "Recomended",
+                "Not Recomended",
+                "For Other Position",
+                "Pending MCC Approval",
+                "Rejected by MCC",
+                "On Board",
+                "Decline to Join"
+            },
+            Value = "Recomended"
+        };
 
         /// <summary>
         /// Title
@@ -46,11 +74,15 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [Required]
         public string Position { get; set; }
         
+        [DisplayName("Attach Document")]
+        [UIHint("MultiFileUploader")]
+        public IEnumerable<HttpPostedFileBase> AttDocuments { get; set; } = new List<HttpPostedFileBase>();
+
         /// <summary>
         /// InterviewerDate
         /// </summary>
         [UIHint("Date")]
-        [DisplayName("ID Card Expiry")]
+        [DisplayName("Interview Date")]
         public DateTime? InterviewerDate { get; set; } = DateTime.Now;
 
         //[UIHint("Date")]
@@ -58,5 +90,25 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         [UIHint("Date")]
         public string Time { get; set; } = DateTime.UtcNow.ToShortTimeString();
+
+        [UIHint("ComboBox")]
+        public ComboBoxVM RecommendedForPosition { get; set; } = new ComboBoxVM()
+        {
+            Choices = new string[]
+            {
+                "Recommended",
+                "Not Recommended",
+                "For Other Position",
+                "Pending MCC Approval",
+                "Rejected by MCC",
+                "On Board",
+                "Decline to Join"
+            }
+        };
+
+        public Boolean NeedNextInterviewer { get; set; } = new Boolean();
+
+        [UIHint("MultiFileUploader")]
+        public IEnumerable<HttpPostedFileBase> Documents { get; set; } = new List<HttpPostedFileBase>();
     }
 }
