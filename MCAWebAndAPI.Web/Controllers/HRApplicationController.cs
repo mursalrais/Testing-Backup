@@ -31,7 +31,6 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult GetIDCardType(string nationality)
         {
             string[] result = { };
-
             Dictionary<int, string> choice = _service.GetIDCardType();
 
             if (string.Compare(nationality, "Indonesia", StringComparison.OrdinalIgnoreCase) == 0)
@@ -94,9 +93,6 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult ListVacantPositions(string siteUrl)
         {
-            // Clear Existing Session Variables if any
-            SessionManager.RemoveAll();
-
             // MANDATORY: Set Site URL
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
@@ -105,24 +101,20 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewModel);
         }
 
-        public ActionResult DisplayApplicationData(string siteUrl = null, int? ID = null)
+        public async Task<ActionResult> DisplayApplicationData(string siteUrl = null, int? ID = null)
         {
-            // Clear Existing Session Variables if any
-            SessionManager.RemoveAll();
-
             // MANDATORY: Set Site URL
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
-            var viewModel = _service.GetApplicationAsync(ID);
+            var viewModel = await _service.GetApplicationAsync(ID);
             return View(viewModel);
         }
 
         [HttpPost]
         public async Task<ActionResult> CreateApplicationData(FormCollection form, ApplicationDataVM viewModel)
         {
-
-            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            var siteUrl = SessionManager.Get<string>("SiteUrl") ?? ConfigResource.DefaultHRSiteUrl;
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             int? headerID = null;
@@ -185,7 +177,7 @@ namespace MCAWebAndAPI.Web.Controllers
         [HttpPost]
         public ActionResult SetStatusApplicationData(ApplicationDataVM viewModel)
         {
-            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            var siteUrl = SessionManager.Get<string>("SiteUrl") ?? ConfigResource.DefaultHRSiteUrl;
             _service.SetSiteUrl(siteUrl);
 
             try
@@ -290,22 +282,20 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult CreateApplicationData(string siteUrl = null, int? ID = null, string position = null)
         {
-            // Clear Existing Session Variables if any
-            SessionManager.RemoveAll();
-
             // MANDATORY: Set Site URL
-            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            _service.SetSiteUrl(siteUrl);
+            SessionManager.Set("SiteUrl", siteUrl);
 
             var viewModel = _service.GetApplication(null);
             viewModel.Position = position;
             viewModel.ManpowerRequisitionID = ID;
 
             // Used for Workflow Router
-            ViewBag.ListName = "Day-Off%20Request";
-            ViewBag.RequestorUserLogin = "yunita.ajah@eceos.com";
+            ViewBag.ListName = "Manpower Requisition";
 
             // This var should be taken from passing parameter
+            ViewBag.RequestorUserLogin = "yunita.ajah@eceos.com";
+
             return View(viewModel);
         }
     }

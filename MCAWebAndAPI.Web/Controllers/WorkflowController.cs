@@ -2,11 +2,13 @@
 using Kendo.Mvc.UI;
 using MCAWebAndAPI.Model.ViewModel.Form.Common;
 using MCAWebAndAPI.Service.Common;
+using MCAWebAndAPI.Service.HR.Common;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace MCAWebAndAPI.Web.Controllers
@@ -20,12 +22,16 @@ namespace MCAWebAndAPI.Web.Controllers
             _service = new WorkflowService();
         }
 
-        public JsonResult GetApproverPositions(string listName, string requestorPosition,
-            string requestorUnit)
+        public JsonResult GetApproverPositions(int approverUnit)
         {
             _service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            var listName = SessionManager.Get<string>("WorkflowRouterListName");
+            var requestorPosition = SessionManager.Get<string>("WorkflowRouterRequestorPosition");
+            var requestorUnitName = SessionManager.Get<string>("WorkflowRouterRequestorUnit");
+            var approverUnitName = WorkflowItemVM.GetUnitOptions().FirstOrDefault(e => e.Value == approverUnit).Text;
 
-            var viewModel = _service.GetPositionsInWorkflow(listName, requestorPosition, requestorUnit);
+            var viewModel = _service.GetPositionsInWorkflow(listName, approverUnitName, 
+                requestorUnitName, requestorPosition);
             return Json(viewModel.Select(e => new {
                 e.ID,
                 e.PositionName
@@ -35,7 +41,6 @@ namespace MCAWebAndAPI.Web.Controllers
         public JsonResult GetApproverNames(string position)
         {
             _service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
-
             var viewModel = _service.GetApproverNames(position);
             return Json(viewModel.Select(e => new
             {
@@ -45,14 +50,19 @@ namespace MCAWebAndAPI.Web.Controllers
             }), JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult DisplayWorkflowRouter(string listName, string requestor)
+        public async Task<ActionResult> DisplayWorkflowRouter(string listName, string requestor)
         {
             _service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
-            var viewModel = _service.GetWorkflowRouter(listName, requestor);
+            var viewModel = await _service.GetWorkflowRouter(listName, requestor);
             SessionManager.Set("WorkflowItems", viewModel.WorkflowItems);
-            return PartialView("_WorkflowDetails", viewModel);
+            SessionManager.Set("WorkflowRouterListName", viewModel.ListName);
+            SessionManager.Set("WorkflowRouterRequestorUnit", viewModel.RequestorUnit);
+            SessionManager.Set("WorkflowRouterRequestorPosition", viewModel.RequestorPosition);
+
+            return View("_WorkflowDetails", viewModel);
         }
 
+        [HttpPost]
         public JsonResult Grid_Read([DataSourceRequest] DataSourceRequest request)
         {
             // Get from existing session variable or create new if doesn't exist
@@ -66,9 +76,8 @@ namespace MCAWebAndAPI.Web.Controllers
             json.MaxJsonLength = int.MaxValue;
             return json;
         }
-
-
-        [AcceptVerbs(HttpVerbs.Post)]
+        
+        [HttpPost]
         public ActionResult Grid_Update([DataSourceRequest] DataSourceRequest request,
             [Bind(Prefix = "models")]IEnumerable<WorkflowItemVM> viewModel)
         {

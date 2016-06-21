@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace MCAWebAndAPI.Web.Controllers
@@ -22,29 +23,24 @@ namespace MCAWebAndAPI.Web.Controllers
             _service = new HRDataMasterService();
         }
 
-        public ActionResult EditProfessional(string siteUrl = null, int? ID = null)
+        public async Task<ActionResult> EditProfessional(string siteUrl = null, int? ID = null)
         {
-            SessionManager.RemoveAll();
-
             // MANDATORY: Set Site URL
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
-            var viewModel = _service.GetProfessionalData(ID);
+            var viewModel = await _service.GetProfessionalDataAsync(ID);
             ViewBag.IsHRView = true;
             return View(viewModel);
         }
 
         public ActionResult EditCurrentProfessional(string siteUrl = null, string username = null)
         {
-            SessionManager.RemoveAll();
-
             // MANDATORY: Set Site URL
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             var viewModel = _service.GetProfessionalData(username);
-
             if (viewModel == null)
                 return RedirectToAction("Index", "Error", new { errorMessage = 
                     string.Format(MessageResource.ErrorProfessionalNotFound, username)});
@@ -54,7 +50,7 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult EditProfessional(FormCollection form, ProfessionalDataVM viewModel)
+        public async Task<ActionResult> EditProfessional(FormCollection form, ProfessionalDataVM viewModel)
         {
             if(!ModelState.IsValid)
             {
@@ -77,49 +73,16 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            try
-            {
-                viewModel.OrganizationalDetails = BindOrganizationalDetails(form, viewModel.OrganizationalDetails);
-                _service.CreateOrganizationalDetails(headerID, viewModel.OrganizationalDetails);
-            }
-            catch (Exception e)
-            {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
-            }
+            viewModel.OrganizationalDetails = BindOrganizationalDetails(form, viewModel.OrganizationalDetails);
+            Task createOrganizationalDetailsTask = _service.CreateOrganizationalDetailsAsync(headerID, viewModel.OrganizationalDetails);
+            viewModel.EducationDetails = BindEducationDetails(form, viewModel.EducationDetails);
+            Task createEducationDetailsTask = _service.CreateEducationDetailsAsync(headerID, viewModel.EducationDetails);
+            viewModel.TrainingDetails = BindTrainingDetails(form, viewModel.TrainingDetails);
+            Task createTrainingDetailsTask = _service.CreateTrainingDetailsAsync(headerID, viewModel.TrainingDetails);
+            Task createDependentDetailsTask = _service.CreateDependentDetailsAsync(headerID, viewModel.DependentDetails);
 
-            try
-            {
-                viewModel.EducationDetails = BindEducationDetails(form, viewModel.EducationDetails);
-                _service.CreateEducationDetails(headerID, viewModel.EducationDetails);
-            }
-            catch (Exception e)
-            {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
-            }
-
-            try
-            {
-                viewModel.TrainingDetails = BindTrainingDetails(form, viewModel.TrainingDetails);
-                _service.CreateTrainingDetails(headerID, viewModel.TrainingDetails);
-            }
-            catch (Exception e)
-            {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
-            }
-
-            try
-            {
-                _service.CreateDependentDetails(headerID, viewModel.DependentDetails);
-            }
-            catch (Exception e)
-            {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
-            }
-
+            Task allTask = Task.WhenAll(createOrganizationalDetailsTask, createEducationDetailsTask, createTrainingDetailsTask, createDependentDetailsTask);
+            await allTask;
             try
             {
                 // TODO: To change based on position

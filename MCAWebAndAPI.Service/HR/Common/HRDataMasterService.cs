@@ -7,6 +7,7 @@ using Microsoft.SharePoint.Client;
 using System.Linq;
 using NLog;
 using MCAWebAndAPI.Model.Common;
+using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Service.HR.Common
 {
@@ -118,9 +119,77 @@ namespace MCAWebAndAPI.Service.HR.Common
                 return new ProfessionalDataVM();
 
             var listItem = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, ID, _siteUrl);
-            return ConvertToProfessionalModel(listItem);
+            var viewModel = ConvertToProfessionalModel(listItem);
+            viewModel = GetProfessionalDetails(viewModel);
+            return viewModel;
         }
-        
+
+        public async Task<ProfessionalDataVM> GetProfessionalDataAsync(int? ID)
+        {
+            if (ID == null)
+                return new ProfessionalDataVM();
+
+            var listItem = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, ID, _siteUrl);
+            var viewModel = ConvertToProfessionalModel(listItem);
+            viewModel = await GetProfessionalDetailsAsync(viewModel);
+            return viewModel;
+        }
+
+        private async Task<ProfessionalDataVM> GetProfessionalDetailsAsync(ProfessionalDataVM viewModel)
+        {
+            Task<IEnumerable<OrganizationalDetailVM>> getOrganizationDetailsTask = GetOrganizationalDetailsAsync(viewModel.ID);
+            Task<IEnumerable<EducationDetailVM>> getEducationDetailsTask = GetEducationDetailsAsync(viewModel.ID);
+            Task<IEnumerable<TrainingDetailVM>> getTrainingDetailsTask = GetTrainingDetailsAsync(viewModel.ID);
+            Task<IEnumerable<DependentDetailVM>> getDependantDetailsTask = GetDependentDetailsAsync(viewModel.ID);
+
+            try
+            {
+                viewModel.OrganizationalDetails = await getOrganizationDetailsTask;
+                viewModel.EducationDetails = await getEducationDetailsTask;
+                viewModel.TrainingDetails = await getTrainingDetailsTask;
+                viewModel.DependentDetails = await getDependantDetailsTask;
+            }
+            catch (Exception e)
+            {
+                logger.Error(e);
+                throw e;
+            }
+
+            return viewModel;
+        }
+
+        private async Task<IEnumerable<DependentDetailVM>> GetDependentDetailsAsync(int? iD)
+        {
+            return GetDependentDetails(iD);
+        }
+
+        private async Task<IEnumerable<TrainingDetailVM>> GetTrainingDetailsAsync(int? iD)
+        {
+            return GetTrainingDetails(iD);
+        }
+
+        private async Task<IEnumerable<EducationDetailVM>> GetEducationDetailsAsync(int? iD)
+        {
+            return GetEducationDetails(iD);
+        }
+
+        private async Task<IEnumerable<OrganizationalDetailVM>> GetOrganizationalDetailsAsync(int? iD)
+        {
+            return GetOrganizationalDetails(iD);
+        }
+
+        private ProfessionalDataVM GetProfessionalDetails(ProfessionalDataVM viewModel)
+        {
+            viewModel.OrganizationalDetails = GetOrganizationalDetails(viewModel.ID);
+            viewModel.EducationDetails = GetEducationDetails(viewModel.ID);
+            viewModel.TrainingDetails = GetTrainingDetails(viewModel.ID);
+            viewModel.DependentDetails = GetDependentDetails(viewModel.ID);
+
+            return viewModel;
+        }
+
+
+
         private ProfessionalDataVM ConvertToProfessionalModel(ListItem listItem)
         {
             var viewModel = new ProfessionalDataVM();
@@ -188,13 +257,12 @@ namespace MCAWebAndAPI.Service.HR.Common
             viewModel.NameInTaxForPayroll = Convert.ToString(listItem["nameintaxid"]);
 
             // Convert Details
-            viewModel.OrganizationalDetails = GetOrganizationalDetails(viewModel.ID);
-            viewModel.EducationDetails = GetEducationDetails(viewModel.ID);
-            viewModel.TrainingDetails = GetTrainingDetails(viewModel.ID);
-            viewModel.DependentDetails = GetDependentDetails(viewModel.ID);
+            
 
             return viewModel;
         }
+
+
 
         private IEnumerable<OrganizationalDetailVM> GetOrganizationalDetails(int? ID)
         {
@@ -266,7 +334,6 @@ namespace MCAWebAndAPI.Service.HR.Common
 
             return dependentDetail;
         }
-
         
         private DependentDetailVM ConvertToDependentDetailVM(ListItem item)
         {
@@ -707,6 +774,26 @@ namespace MCAWebAndAPI.Service.HR.Common
                 throw e;
             }
 
+        }
+
+        public async Task CreateEducationDetailsAsync(int? headerID, IEnumerable<EducationDetailVM> educationDetails)
+        {
+            CreateEducationDetails(headerID, educationDetails);
+        }
+
+        public async Task CreateTrainingDetailsAsync(int? headerID, IEnumerable<TrainingDetailVM> trainingDetails)
+        {
+            CreateTrainingDetails(headerID, trainingDetails);
+        }
+
+        public async Task CreateDependentDetailsAsync(int? headerID, IEnumerable<DependentDetailVM> documents)
+        {
+            CreateDependentDetails(headerID, documents);
+        }
+
+        public async Task CreateOrganizationalDetailsAsync(int? headerID, IEnumerable<OrganizationalDetailVM> organizationalDetails)
+        {
+            CreateOrganizationalDetails(headerID, organizationalDetails);
         }
     }
 }

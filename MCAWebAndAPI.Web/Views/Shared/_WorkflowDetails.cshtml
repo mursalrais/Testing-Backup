@@ -3,13 +3,15 @@
 
 @model WorkflowRouterVM
 
+
 <div class="col-sm-12">
     @(Html.Kendo().Grid<WorkflowItemVM>
         ()
         .Name("WorkflowDetails")
-        .Editable(editable => editable.Mode(GridEditMode.InCell))
+        .Editable(editable => editable.Mode(GridEditMode.InLine))
         .Columns(columns =>
         {
+            columns.Bound(p => p.ID).Hidden();
             columns.Bound(p => p.Level).Width(150);
             columns.Bound(p => p.ApproverUnit).ClientTemplate("#=  ApproverUnit.Text #").Width(350)
             .EditorViewData(
@@ -17,7 +19,8 @@
             {
                 BindTo = WorkflowItemVM.GetUnitOptions()
             });
-            columns.Bound(p => p.ApproverPosition).Width(300).EditorViewData(
+            columns.Bound(p => p.ApproverPosition).Width(300).ClientTemplate("#= ApproverPosition.Text #")
+            .EditorViewData(
             new
             {
                 DataTextField = "PositionName",
@@ -25,9 +28,10 @@
                 ActionName = "GetApproverPositions",
                 ControllerName = "Workflow",
                 Filter = "filterApproverPosition",
-                Cascade = "ApproverUnit_Value"
+                Cascade = "ApproverUnit"
             });
-            columns.Bound(p => p.ApproverUserName).Width(400).EditorViewData(
+            columns.Bound(p => p.ApproverUserName).Width(400).ClientTemplate("#= ApproverUserName.Text #")
+            .EditorViewData(
             new
             {
                 DataTextField = "Name",
@@ -35,8 +39,10 @@
                 ActionName = "GetApproverNames",
                 ControllerName = "Workflow",
                 Filter = "filterApproverName",
-                Cascade = "ApproverPosition_Value"
+                Cascade = "ApproverPosition"
             });
+            columns.Command(p => p.Edit().Text("Edit").HtmlAttributes(new { @title = "Edit" })).Width(220);
+
         })
         .DataSource(
         dataSource =>
@@ -47,30 +53,45 @@
             model.Field(m => m.ApproverPosition).DefaultValue(AjaxComboBoxVM.GetDefaultValue());
             model.Field(m => m.ApproverUserName).DefaultValue(AjaxComboBoxVM.GetDefaultValue());
             model.Field(p => p.Level).Editable(false);
-        }).ServerOperation(true)
-        .Read(read => read.Action("Grid_Read", "Workflow"))
-        .Update(update => update.Action("Grid_Update", "Workflow"))
+        })
+        .Read(read => read.Action("Grid_Read", "Workflow").Type(HttpVerbs.Post))
+        .Update(update => update.Action("Grid_Update", "Workflow").Type(HttpVerbs.Post))
         )
-        )
+    )
 
 </div>
 
 <script>
-    function filterApproverPosition() {
-        var listName = '@Model.ListName';
-        var requestorPosition = '@Model.RequestorPosition';
-        var requestorUnit = $("#ApproverUnit_Value").data("kendoDropDownList").value();
 
+    function onChangeWorkflowDetails(e) {
+        if (e.action == "itemchange") {
+            if (e.field == "ApproverUnit") {
+                var model = e.items[0];
+                model.set("ApproverPosition", 0);
+            }
+
+            if (e.field == "ApproverPosition") {
+                var model = e.items[0];
+                model.set("ApproverUserName", 0);
+            }
+        }
+    }
+
+    function getCurrentEditedModel() {
+        var grid = $("#WorkflowDetails").data("kendoGrid");
+        var editRow = grid.tbody.find("tr:has(.k-edit-cell)");
+        return grid.dataItem(editRow);
+    }
+
+    function filterApproverPosition(e) {
         return {
-            listName,
-            requestorPosition,
-            requestorUnit
+            approverUnit: $("#ApproverUnit").data("kendoDropDownList").value()
         };
     }
 
     function filterApproverName(e) {
         return {
-            position:  $("#ApproverPosition_Value").data("kendoDropDownList").value()
+            position: $("#ApproverPosition").data("kendoDropDownList").value()
         };
     }
 
