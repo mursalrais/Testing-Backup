@@ -105,11 +105,12 @@ namespace MCAWebAndAPI.Service.Common
             
             var viewModel = new WorkflowItemVM();
             viewModel.ApproverPosition = FormatUtil.ConvertToInGridAjaxComboBox(item, "approverposition");
-            Task<IEnumerable<ProfessionalMaster>> getApproverNamesTask = GetApproverNamesAsync(viewModel.ApproverPosition.Text);
+            Task<IEnumerable<ProfessionalMaster>> getApproverNamesTask = 
+                GetApproverNamesAsync(viewModel.ApproverPosition.Text);
 
             viewModel.Level = Convert.ToString(item["approverlevel"]);
             viewModel.ApproverUnit =
-                WorkflowItemVM.GetUnitDefaultValue(new Model.ViewModel.Control.InGridComboBoxVM
+                WorkflowItemVM.GetUnitDefaultValue(new InGridComboBoxVM
                 {
                     Text = Convert.ToString(item["approverunit"])
                 });
@@ -133,6 +134,22 @@ namespace MCAWebAndAPI.Service.Common
         private async Task<IEnumerable<ProfessionalMaster>> GetApproverNamesAsync(string position)
         {
             return GetApproverNames(position);
+        }
+
+        private string GetApproverUserLogin(int userID)
+        {
+            var caml = @"<View>  
+            <Query> 
+               <Where><Eq><FieldRef Name='ID' /><Value Type='Counter'>" + userID + @"</Value></Eq></Where> 
+            </Query> 
+             <ViewFields><FieldRef Name='officeemail' /></ViewFields> 
+            </View>";
+
+            foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl, caml))
+            {
+                return Convert.ToString(item["officeemail"]);
+            }
+            return null;
         }
 
         public IEnumerable<ProfessionalMaster> GetApproverNames(string position)
@@ -197,7 +214,7 @@ namespace MCAWebAndAPI.Service.Common
             var updatedValue = new Dictionary<string, object>();
             updatedValue.Add(transactionLookupColumnName, new FieldLookupValue { LookupId = headerID });
             updatedValue.Add("approverlevel", workflowItem.Level);
-            updatedValue.Add("approver", workflowItem.ApproverUserName);
+            updatedValue.Add("approver", GetApproverUserLogin((int)workflowItem.ApproverUserName.Value));
             updatedValue.Add("requestor", requestor);
             SPConnector.AddListItem(workflowTransactionListName, updatedValue, _siteUrl);
         }
