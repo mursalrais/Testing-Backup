@@ -664,6 +664,8 @@
     <Content Include="Views\HRShortlist\ShortlistSendinvite.cshtml" />
     <Content Include="Views\HRShortlist\ShortlistIntvinvite.cshtml" />
     <Content Include="Views\HRShortlist\_IntvinviteDetails.cshtml" />
+    <Content Include="Views\HRExitProcedure\CreateExitProcedure.cshtml" />
+    <Content Include="Views\HRExitProcedure\_ExitProcedureData.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -698,6 +700,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HRApplicationController.cs" />
     <Compile Include="Controllers\HRDataMasterController.cs" />
+    <Compile Include="Controllers\HRExitProcedureController.cs" />
     <Compile Include="Controllers\HRManpowerRequisitionController.cs" />
     <Compile Include="Controllers\HRPayrollController.cs" />
     <Compile Include="Controllers\HRProfessionalController.cs" />

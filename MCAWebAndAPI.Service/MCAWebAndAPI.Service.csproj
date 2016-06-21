@@ -112,8 +112,8 @@
     <Compile Include="Converter\PDFConverter.cs" />
     <Compile Include="Finance\EventBudgetService.cs" />
     <Compile Include="Finance\IEventBudgetService.cs" />
-    <Compile Include="HR\Recruitment\ISetPSAStatusService.cs" />
-    <Compile Include="HR\Recruitment\SetPSAStatusService.cs" />
+    <Compile Include="HR\Recruitment\ExitProcedureService.cs" />
+    <Compile Include="HR\Recruitment\IExitProcedureService.cs" />
     <Compile Include="HR\Travel\ITRPlaceMasterService.cs" />
     <Compile Include="HR\Travel\TRPlaceMasterService.cs" />
     <Compile Include="HR\Recruitment\HRManpowerRequisitionService.cs" />
