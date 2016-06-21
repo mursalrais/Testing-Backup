@@ -66,35 +66,15 @@
                 </div>
             </div>
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.DateOfNewFee).Class("col-sm-4 control-label")
-                <div class="col-sm-8">
-                    @Html.EditorFor(m => m.DateOfNewFee)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.MonthlyFee).Class("col-sm-4 control-label")
-                <div class="col-sm-8">
-                    @Html.EditorFor(m => m.MonthlyFee)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.AnnualFee).Class("col-sm-4 control-label")
-                <div class="col-sm-8">
-                    @Html.DisplayFor(m => m.AnnualFee)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Currency).Class("col-sm-4 control-label")
-                <div class="col-sm-8">
-                    @Html.EditorFor(m => m.Currency)
-                </div>
-            </div>
-            <div class="form-group">
                 <div class="col-sm-8">
                     @Html.HiddenFor(m => m.ID)
                 </div>
             </div>
         </div>
+     <legend>Monthly Fee Detail</legend>
+     <div class="row">
+         @Html.Partial("_MonthlyFeeDetail", Model.MonthlyFeeDetails)
+     </div>
     </fieldset>
 }
 
@@ -120,6 +100,7 @@
         function OnSelectProfessionalName(e) {
             var dataItem = this.dataItem(e.item);
             var url = "/HRDataMaster/GetProfessional/" + dataItem.ID;
+            console.log(dataItem.ID);
             var urlPSA = "/HRPSAManagement/GetPSA/" + dataItem.ID;
             $.getJSON(url, function (result) {
                 $('#ProfessionalID').prop('value', result[0].ID);
@@ -143,19 +124,5 @@
                 })
             })
         }
-
-        $(document).ready(function () {
-
-            $("#MonthlyFee").on('input', function () {
-                sumCal();
-            });
-
-            function sumCal() {
-                var AnnualFee = $("#MonthlyFee").val();
-                var Result = Number(AnnualFee) *12;
-                $("#AnnualFee").val(Result);
-            }
-        });
-
 </script>
 }

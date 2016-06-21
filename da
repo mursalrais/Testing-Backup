@@ -1,0 +1,909 @@
+[33mcommit 622ecd736040d7f4774d0e05063d47cf38877440[m
+Author: ahmadsobari <ahmadsobari89@gmail.com>
+Date:   Tue Jun 21 13:43:16 2016 +0700
+
+    after add create function to interviewcontroller
+    
+    add function on controller, service
+
+[1mdiff --git a/MCAWebAndAPI.Model/MCAWebAndAPI.Model.csproj b/MCAWebAndAPI.Model/MCAWebAndAPI.Model.csproj[m
+[1mindex 70cf9f7..c536944 100644[m
+[1m--- a/MCAWebAndAPI.Model/MCAWebAndAPI.Model.csproj[m
+[1m+++ b/MCAWebAndAPI.Model/MCAWebAndAPI.Model.csproj[m
+[36m@@ -141,7 +141,6 @@[m
+     <Compile Include="ViewModel\Form\HR\IndividualGoalDetailVM.cs" />[m
+     <Compile Include="ViewModel\Form\HR\InsuranceClaimVM.cs" />[m
+     <Compile Include="ViewModel\Form\HR\InterviewDetailVM.cs" />[m
+[31m-    <Compile Include="ViewModel\Form\HR\InterviewerResultVM.cs" />[m
+     <Compile Include="ViewModel\Form\HR\InterviewlistDetailVM.cs" />[m
+     <Compile Include="ViewModel\Form\HR\ManpowerRequisitionVM.cs" />[m
+     <Compile Include="ViewModel\Form\HR\MonthlyFeeDetailVM.cs" />[m
+[1mdiff --git a/MCAWebAndAPI.Model/ViewModel/Form/HR/InterviewDetailVM.cs b/MCAWebAndAPI.Model/ViewModel/Form/HR/InterviewDetailVM.cs[m
+[1mindex 40bad8f..d2737d9 100644[m
+[1m--- a/MCAWebAndAPI.Model/ViewModel/Form/HR/InterviewDetailVM.cs[m
+[1m+++ b/MCAWebAndAPI.Model/ViewModel/Form/HR/InterviewDetailVM.cs[m
+[36m@@ -1,11 +1,7 @@[m
+[31m-﻿using Kendo.Mvc.UI;[m
+[31m-using MCAWebAndAPI.Model.Common;[m
+[31m-using MCAWebAndAPI.Model.ViewModel.Control;[m
+[32m+[m[32m﻿using MCAWebAndAPI.Model.Common;[m
+ using System;[m
+[31m-using System.Collections.Generic;[m
+ using System.ComponentModel;[m
+ using System.ComponentModel.DataAnnotations;[m
+[31m-using System.Web;[m
+ [m
+ namespace MCAWebAndAPI.Model.ViewModel.Form.HR[m
+ {[m
+[1mdiff --git a/MCAWebAndAPI.Model/ViewModel/Form/HR/InterviewerResultVM.cs b/MCAWebAndAPI.Model/ViewModel/Form/HR/InterviewerResultVM.cs[m
+[1mdeleted file mode 100644[m
+[1mindex 4335dbb..0000000[m
+[1m--- a/MCAWebAndAPI.Model/ViewModel/Form/HR/InterviewerResultVM.cs[m
+[1m+++ /dev/null[m
+[36m@@ -1,48 +0,0 @@[m
+[31m-﻿using Kendo.Mvc.UI;[m
+[31m-using MCAWebAndAPI.Model.Common;[m
+[31m-using MCAWebAndAPI.Model.ViewModel.Control;[m
+[31m-using System;[m
+[31m-using System.Collections.Generic;[m
+[31m-using System.ComponentModel;[m
+[31m-using System.ComponentModel.DataAnnotations;[m
+[31m-using System.Web;[m
+[31m-[m
+[31m-namespace MCAWebAndAPI.Model.ViewModel.Form.HR[m
+[31m-{[m
+[31m-    public class InterviewerResultVM : ApplicationShortlistVM  [m
+[31m-    {[m
+[31m-        public IEnumerable<ShortlistedDetailVM> ShortlistedDetail { get; set; } = new List<ShortlistedDetailVM>();[m
+[31m-        public IEnumerable<InterviewDetailVM> InterviewDetail { get; set; } = new List<InterviewDetailVM>();[m
+[31m-[m
+[31m-        [UIHint("ComboBox")][m
+[31m-        public ComboBoxVM Result { get; set; } = new ComboBoxVM()[m
+[31m-        {[m
+[31m-            Choices = new string[][m
+[31m-            {[m
+[31m-                "Recommended",[m
+[31m-                "Not Recommended",[m
+[31m-                "For Other Position"[m
+[31m-            }[m
+[31m-        };[m
+[31m-[m
+[31m-        [UIHint("ComboBox")][m
+[31m-        public ComboBoxVM RecommendedForPosition { get; set; } = new ComboBoxVM()[m
+[31m-        {[m
+[31m-            Choices = new string[][m
+[31m-            {[m
+[31m-"Recommended",[m
+[31m-"Not Recommended",[m
+[31m-"For Other Position",[m
+[31m-"Pending MCC Approval",[m
+[31m-"Rejected by MCC",[m
+[31m-"On Board",[m
+[31m-"Decline to Join"[m
+[31m-            }[m
+[31m-        };[m
+[31m-[m
+[31m-        public Boolean NeedNextInterviewer { get; set; } = new Boolean();[m
+[31m-[m
+[31m-        [UIHint("MultiFileUploader")][m
+[31m-        public IEnumerable<HttpPostedFileBase> Documents { get; set; } = new List<HttpPostedFileBase>();[m
+[31m-    }[m
+[31m-}[m
+[1mdiff --git a/MCAWebAndAPI.Service/HR/Recruitment/HRInterviewService.cs b/MCAWebAndAPI.Service/HR/Recruitment/HRInterviewService.cs[m
+[1mindex 2fcc159..343fa0f 100644[m
+[1m--- a/MCAWebAndAPI.Service/HR/Recruitment/HRInterviewService.cs[m
+[1m+++ b/MCAWebAndAPI.Service/HR/Recruitment/HRInterviewService.cs[m
+[36m@@ -48,45 +48,103 @@[m [mpublic string GetAccessData(string userLoginName = null)[m
+             return useraccess;[m
+         }[m
+ [m
+[31m-        private ApplicationShortlistVM ConvertToShortlistDataVM(ListItem listItem)[m
+[32m+[m[32m        private ApplicationShortlistVM ConvertToResultInterviewDataVM(ListItem listItem)[m
+         {[m
+             var viewModel = new ApplicationShortlistVM();[m
+ [m
+             viewModel.ID = Convert.ToInt32(listItem["ID"]);[m
+             viewModel.Position = FormatUtil.ConvertLookupToID(listItem, "vacantposition") + string.Empty;[m
+             viewModel.Candidate = Convert.ToString(listItem["Title"]);[m
+[31m-            viewModel.SendTo = Convert.ToString(listItem[""]);[m
+ [m
+[32m+[m[32m            // Convert Details[m
+[32m+[m[32m            viewModel.InterviewlistDetails = GetInputInterviewResult(viewModel.ID);[m
+[32m+[m[32m            return viewModel;[m
+[32m+[m[32m        }[m
+[32m+[m
+[32m+[m[32m        public ApplicationShortlistVM GetResultlistInterview(int? ID)[m
+[32m+[m[32m        {[m
+[32m+[m[32m            var viewModel = new ApplicationShortlistVM();[m
+[32m+[m[32m            if (ID == null)[m
+[32m+[m[32m                return viewModel;[m
+[32m+[m
+[32m+[m[32m            var listItemdt = SPConnector.GetListItem(SP_APPDATA_LIST_NAME, ID, _siteUrl);[m
+[32m+[m[32m            viewModel = ConvertToResultInterviewDataVM(listItemdt);[m
+[32m+[m
+[32m+[m[32m            viewModel.InterviewlistDetails = GetInputInterviewResult(viewModel.ID);[m
+[32m+[m
+[32m+[m[32m            return viewModel;[m
+[32m+[m
+[32m+[m[32m        }[m
+[32m+[m
+[32m+[m[32m        //<ViewFields>[m
+[32m+[m[32m        //   <FieldRef Name = 'Title' />[m
+[32m+[m[32m        //   < FieldRef Name='applications' />[m
+[32m+[m[32m        //   <FieldRef Name = 'university' />[m
+[32m+[m[32m        //   < FieldRef Name='yearofgraduation' />[m
+[32m+[m[32m        //   <FieldRef Name = 'remarks' />[m
+[32m+[m[32m        //</ ViewFields >[m
+[32m+[m[32m        private IEnumerable<InterviewDetailVM> GetInputInterviewResult(int? ID)[m
+[32m+[m[32m        {[m
+[32m+[m[32m            var caml = @"<Query>[m
+[32m+[m[32m                           <Where>[m
+[32m+[m[32m                              <Eq>[m
+[32m+[m[32m                                 <FieldRef Name='ID' />[m
+[32m+[m[32m                                 <Value Type='Counter'>" + ID + @"</Value>[m
+[32m+[m[32m                              </Eq>[m
+[32m+[m[32m                           </Where>[m
+[32m+[m[32m                        </Query>[m
+[32m+[m[32m                        <ViewFields>[m
+[32m+[m[32m                           <FieldRef Name='interviewdatetime' />[m
+[32m+[m[32m                           <FieldRef Name='interviewpanel' />[m
+[32m+[m[32m                           <FieldRef Name='invitationemaildate' />[m
+[32m+[m[32m                           <FieldRef Name='invitationemailfrom' />[m
+[32m+[m[32m                           <FieldRef Name='invitationemailmessage' />[m
+[32m+[m[32m                           <FieldRef Name='interviewsummary' />[m
+[32m+[m[32m                           <FieldRef Name='interviewresult' />[m
+[32m+[m[32m                        </ViewFields>[m
+[32m+[m[32m                        <QueryOptions />";[m
+[32m+[m
+[32m+[m[32m            var Interviewdetails = new List<InterviewDetailVM>();[m
+[32m+[m[32m            foreach (var item in SPConnector.GetList(SP_APPINTV_LIST_NAME, _siteUrl, caml))[m
+[32m+[m[32m            {[m
+[32m+[m[32m                Interviewdetails.Add(ConvertToInterviewResultDataVM(item));[m
+[32m+[m[32m            }[m
+[32m+[m
+[32m+[m[32m            return Interviewdetails;[m
+[32m+[m[32m        }[m
+[32m+[m
+[32m+[m[32m        private InterviewDetailVM ConvertToInterviewResultDataVM(ListItem listItem)[m
+[32m+[m[32m        {[m
+[32m+[m[32m            var viewModel = new InterviewDetailVM();[m
+[32m+[m
+[32m+[m[32m            viewModel.Date = Convert.ToDateTime(listItem["interviewdatetime"]);[m
+[32m+[m[32m            viewModel.InterviewPanel = Convert.ToString(listItem["interviewpanel"]);[m
+[32m+[m[32m            viewModel.InterviewSummary = Convert.ToString(listItem["interviewsummary"]);[m
+[32m+[m[32m            viewModel.Result = Convert.ToString(listItem["interviewresult"]);[m
+ [m
+             return viewModel;[m
+         }[m
+ [m
+[31m-        private ApplicationShortlistVM ConvertToSendIntvDataVM(ListItem listItem)[m
+[32m+[m[32m        public void CreateApplicationDocument(int? headerID, IEnumerable<HttpPostedFileBase> documents)[m
+         {[m
+[31m-            var viewModel = new ApplicationShortlistVM();[m
+[31m-[m
+[31m-            viewModel.Position = FormatUtil.ConvertLookupToID(listItem, "vacantposition") + string.Empty;[m
+[31m-            viewModel.Candidate = Convert.ToString(listItem["Title"]);[m
+[31m-            viewModel.SendTo = Convert.ToString(listItem["personalemail"]);[m
+[31m-[m
+[31m-            return viewModel;[m
+[31m-        }[m
+[31m-[m
+[31m-        private ApplicationShortlistVM ConvertToInviteIntvDataVM(ListItem listItem)[m
+[31m-        {[m
+[31m-            var viewModel = new ApplicationShortlistVM();[m
+[31m-[m
+[31m-            viewModel.InterviewerDate = Convert.ToDateTime(listItem["interviewdatetime"]);[m
+[31m-[m
+[31m-            viewModel.EmailMessage = Convert.ToString(listItem["EmailMessage"]);[m
+[31m-[m
+[31m-            return viewModel;[m
+[32m+[m[32m            foreach (var doc in documents)[m
+[32m+[m[32m            {[m
+[32m+[m[32m                var updateValue = new Dictionary<string, object>();[m
+[32m+[m[32m                updateValue.Add("application", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });[m
+[32m+[m[32m                try[m
+[32m+[m[32m                {[m
+[32m+[m[32m                    SPConnector.UploadDocument(SP_APPDOC_LIST_NAME, updateValue, doc.FileName, doc.InputStream, _siteUrl);[m
+[32m+[m[32m                }[m
+[32m+[m[32m                catch (Exception e)[m
+[32m+[m[32m                {[m
+[32m+[m[32m                    logger.Error(e.Message);[m
+[32m+[m[32m                    throw e;[m
+[32m+[m[32m                }[m
+[32m+[m[32m            }[m
+         }[m
+ [m
+         public ApplicationShortlistVM GetInterviewlist(string position, string username, string useraccess)[m
+         {[m
+[31m-            var viewModel = new ApplicationShortlistVM();[m
+[31m-[m
+             if (position == null)[m
+                 return null;[m
+ [m
+[36m@@ -114,11 +172,7 @@[m [mpublic ApplicationShortlistVM GetInterviewlist(string position, string username,[m
+                 applicationID = Convert.ToInt32(item["ID"]);[m
+             }[m
+ [m
+[31m-[m
+[31m-            viewModel = GetInterviewlist(applicationID, username, useraccess, position);[m
+[31m-            viewModel.Position = position;[m
+[31m-[m
+[31m-            return viewModel;[m
+[32m+[m[32m            return GetInterviewlist(applicationID, username, useraccess, position);[m
+         }[m
+ [m
+         public ApplicationShortlistVM GetInterviewlist(int ID, string username, string useraccess, string position)[m
+[36m@@ -138,19 +192,6 @@[m [mpublic ApplicationShortlistVM GetInterviewlist(int ID, string username, string u[m
+ [m
+         }[m
+ [m
+[31m-        public ApplicationShortlistVM GetShortlistSend(int? ID)[m
+[31m-        {[m
+[31m-            var viewModel = new ApplicationShortlistVM();[m
+[31m-            if (ID == null)[m
+[31m-                return viewModel;[m
+[31m-[m
+[31m-            var listItemdt = SPConnector.GetListItem(SP_APPDATA_LIST_NAME, ID, _siteUrl);[m
+[31m-            viewModel = ConvertToSendIntvDataVM(listItemdt);[m
+[31m-[m
+[31m-            return viewModel;[m
+[31m-[m
+[31m-        }[m
+[31m-        [m
+         //<ViewFields>[m
+         //   <FieldRef Name = 'Title' />[m
+         //   < FieldRef Name='applications' />[m
+[36m@@ -199,71 +240,6 @@[m [mprivate IEnumerable<ShortlistDetailVM> GetDetailInterviewlist(int Position, stri[m
+             return shortlistDetails;[m
+         }[m
+ [m
+[31m-        //<ViewFields>[m
+[31m-        //   <FieldRef Name = 'Title' />[m
+[31m-        //   < FieldRef Name='applications' />[m
+[31m-        //   <FieldRef Name = 'university' />[m
+[31m-        //   < FieldRef Name='yearofgraduation' />[m
+[31m-        //   <FieldRef Name = 'remarks' />[m
+[31m-        //</ ViewFields >[m
+[31m-        private IEnumerable<ShortlistDetailVM> GetDetailShortlisted(string Position = null)[m
+[31m-        {[m
+[31m-            var caml = @"<View>  [m
+[31m-            <Query> [m
+[31m-      <Where>[m
+[31m-      <Or>[m
+[31m-         <Or>[m
+[31m-            <Or>[m
+[31m-               <Or>[m
+[31m-                  <Or>[m
+[31m-                     <Eq>[m
+[31m-                        <FieldRef Name='applicationstatus' />[m
+[31m-                        <Value Type='Text'>New</Value>[m
+[31m-                     </Eq>[m
+[31m-                     <Eq>[m
+[31m-                        <FieldRef Name='applicationstatus' />[m
+[31m-                        <Value Type='Text'>Shortlisted</Value>[m
+[31m-                     </Eq>[m
+[31m-                  </Or>[m
+[31m-                  <Eq>[m
+[31m-                     <FieldRef Name='applicationstatus' />[m
+[31m-                     <Value Type='Text'>Declined</Value>[m
+[31m-                  </Eq>[m
+[31m-               </Or>[m
+[31m-               <Eq>[m
+[31m-                  <FieldRef Name='applicationstatus' />[m
+[31m-                  <Value Type='Text'>NEW</Value>[m
+[31m-               </Eq>[m
+[31m-            </Or>[m
+[31m-            <Eq>[m
+[31m-               <FieldRef Name='applicationstatus' />[m
+[31m-               <Value Type='Text'>SHORTLISTED</Value>[m
+[31m-            </Eq>[m
+[31m-         </Or>[m
+[31m-         <Eq>[m
+[31m-            <FieldRef Name='applicationstatus' />[m
+[31m-            <Value Type='Text'>DECLINED</Value>[m
+[31m-         </Eq>[m
+[31m-      </Or>[m
+[31m-   </Where>[m
+[31m-            </Query> [m
+[31m-              <ViewFields>[m
+[31m-      <FieldRef Name='Title' />[m
+[31m-      <FieldRef Name='ID' />[m
+[31m-      <FieldRef Name='applicationstatus' />[m
+[31m-      <FieldRef Name='position' />[m
+[31m-   </ViewFields>[m
+[31m-   [m
+[31m-            </View>";[m
+[31m-[m
+[31m-            var eduacationDetails = new List<ShortlistDetailVM>();[m
+[31m-            foreach (var item in SPConnector.GetList(SP_APPDATA_LIST_NAME, _siteUrl, caml))[m
+[31m-            {[m
+[31m-                eduacationDetails.Add(ConvertToInterviewDetailVM(item));[m
+[31m-            }[m
+[31m-[m
+[31m-            return eduacationDetails;[m
+[31m-        }[m
+         /// <summary>[m
+         // <ViewFields>[m
+         //   <FieldRef Name = 'Title' />[m
+[36m@@ -277,18 +253,6 @@[m [mprivate IEnumerable<ShortlistDetailVM> GetDetailShortlisted(string Position = nu[m
+         /// <returns></returns>[m
+         private ShortlistDetailVM ConvertToInterviewDetailVM(ListItem item)[m
+         {[m
+[31m-            string yesno = "-";[m
+[31m-[m
+[31m-            //switch (Convert.ToBoolean(item[""]))[m
+[31m-            //{[m
+[31m-            //    case true:[m
+[31m-            //        yesno.Equals("yes");[m
+[31m-            //        break;[m
+[31m-            //    case false:[m
+[31m-            //        yesno.Equals("no");[m
+[31m-            //        break;[m
+[31m-            //}[m
+[31m-[m
+             return new ShortlistDetailVM[m
+             {[m
+                 Candidate = Convert.ToString(item["Title"]),[m
+[36m@@ -303,8 +267,6 @@[m [mprivate ShortlistDetailVM ConvertToInterviewDetailVM(ListItem item)[m
+ [m
+                 GetStat = Convert.ToString(item["applicationstatus"]),[m
+                 Remarks = Convert.ToString(item["applicationremarks"]),[m
+[31m-                neednexttext = "yes dulu"[m
+[31m-[m
+ [m
+             };[m
+         }[m
+[36m@@ -314,7 +276,7 @@[m [mprivate string GetDocumentUrl(int? iD)[m
+             return string.Format(UrlResource.ApplicationDocumentByID, _siteUrl, iD);[m
+         }[m
+ [m
+[31m-        public IEnumerable<ApplicationShortlistVM> GetShortlists()[m
+[32m+[m[32m        public IEnumerable<ApplicationShortlistVM> GetInterviewlists()[m
+         {[m
+             throw new NotImplementedException();[m
+         }[m
+[36m@@ -324,61 +286,22 @@[m [mpublic void SetSiteUrl(string siteUrl = null)[m
+             _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);[m
+         }[m
+ [m
+[31m-        public void UpdateShortlistDataDetail(int? headerID, IEnumerable<ShortlistDetailVM> viewModels)[m
+[32m+[m[32m        public void CreateInterviewDataDetail(int? headerID, ApplicationShortlistVM viewModel)[m
+         {[m
+[31m-            foreach (var viewModel in viewModels)[m
+[31m-            {[m
+[31m-                if (Item.CheckIfSkipped(viewModel))[m
+[31m-                    continue;[m
+ [m
+[31m-                if (Item.CheckIfDeleted(viewModel))[m
+[31m-                {[m
+[31m-                    try[m
+[31m-                    {[m
+[31m-                        SPConnector.DeleteListItem(SP_APPDATA_LIST_NAME, viewModel.ID, _siteUrl);[m
+[31m-[m
+[31m-                    }[m
+[31m-                    catch (Exception e)[m
+[31m-                    {[m
+[31m-                        logger.Error(e);[m
+[31m-                        throw e;[m
+[31m-                    }[m
+[31m-                    continue;[m
+[31m-                }[m
+[31m-[m
+[31m-                var updatedValue = new Dictionary<string, object>();[m
+[31m-                updatedValue.Add("Title", viewModel.Candidate);[m
+[31m-                updatedValue.Add("applicationstatus", viewModel.Status.Text);[m
+[31m-                updatedValue.Add("applicationremarks", viewModel.Remarks);[m
+[31m-[m
+[31m-                try[m
+[31m-                {[m
+[31m-                    SPConnector.UpdateListItem(SP_APPDATA_LIST_NAME, viewModel.ID, updatedValue, _siteUrl);[m
+[31m-                }[m
+[31m-                catch (Exception e)[m
+[31m-                {[m
+[31m-                    logger.Error(e.Message);[m
+[31m-                    throw e;[m
+[31m-                }[m
+[31m-[m
+[31m-            }[m
+[31m-        }[m
+[31m-[m
+[31m-        public void CreateShortlistInviteIntv(int? headerID, ApplicationShortlistVM viewModel)[m
+[31m-        {[m
+[31m-            var updatedValue = new Dictionary<string, object>();[m
+[32m+[m[32m            var createdValue = new Dictionary<string, object>();[m
+ [m
+             foreach (var list in viewModel.ShortlistDetails)[m
+             {[m
+[31m-                updatedValue.Add("Title", list.Candidate);[m
+[31m-                updatedValue.Add("emailfrom", list.Candidatemail);[m
+[31m-                updatedValue.Add("emailto", viewModel.InterviewerPanel);[m
+[31m-                updatedValue.Add("emailmessage", viewModel.EmailMessage);[m
+[31m-                updatedValue.Add("emaildate", DateTime.Now);[m
+[32m+[m[32m                createdValue.Add("Title", list.Candidate);[m
+[32m+[m[32m                createdValue.Add("emailfrom", list.Candidatemail);[m
+[32m+[m[32m                createdValue.Add("emailto", null);[m
+[32m+[m[32m                createdValue.Add("emailmessage", viewModel.EmailMessage);[m
+[32m+[m[32m                createdValue.Add("emaildate", viewModel.InterviewerDate);[m
+ [m
+                 try[m
+                 {[m
+[31m-                    SPConnector.AddListItem(SP_APPINVPANEL_LIST_NAME, updatedValue, _siteUrl);[m
+[32m+[m[32m                    SPConnector.AddListItem(SP_APPINVPANEL_LIST_NAME, createdValue, _siteUrl);[m
+                 }[m
+                 catch (Exception e)[m
+                 {[m
+[36m@@ -387,22 +310,25 @@[m [mpublic void CreateShortlistInviteIntv(int? headerID, ApplicationShortlistVM view[m
+                 }[m
+             }[m
+ [m
+[31m-            EmailUtil.Send(viewModel.SendTo, "Interview Invitation", "<div><label>" + viewModel.EmailMessage + "</label></div>" +[m
+[32m+[m[32m            EmailUtil.Send(viewModel.SendTo, "Interview Result", "<div><label>" + viewModel.EmailMessage + "</label></div>" +[m
+                            "<a href = 'https://eceos2.sharepoint.com/sites/ims/hr/Lists/Professional%20Master/DispForm_Custom.aspx?ID=3' > Open candidates' profiles for this position</a>");[m
+[32m+[m
+         }[m
+ [m
+[31m-        public void CreateShorlistSendintv(int? headerID, ApplicationShortlistVM viewModel)[m
+[32m+[m[32m        public void CreateInputIntvResult(int? headerID, ApplicationShortlistVM viewModel)[m
+         {[m
+[31m-            var updatedValue = new Dictionary<string, object>();[m
+[32m+[m[32m            var createdValue = new Dictionary<string, object>();[m
+[32m+[m
+[32m+[m[32m            createdValue.Add("interviewdatetime", viewModel.InterviewerDate);[m
+[32m+[m[32m            createdValue.Add("interviewpanel", viewModel.InterviewerPanel);[m
+[32m+[m[32m            createdValue.Add("interviewsummary", viewModel.InterviewSummary);[m
+[32m+[m[32m            createdValue.Add("Title", viewModel.Candidate);[m
+[32m+[m[32m            createdValue.Add("interviewresult", viewModel.GetResultOptions.Value);[m
+ [m
+[31m-            updatedValue.Add("interviewdatetime", viewModel.InterviewerDate);[m
+[31m-            //updatedValue.Add("interviewerpanel", viewModel.InterviewerPanel);[m
+[31m-            updatedValue.Add("invitationemailmessage", viewModel.Message);[m
+[31m-            updatedValue.Add("invitationemaildate", DateTime.Now);[m
+ [m
+             try[m
+             {[m
+[31m-                SPConnector.AddListItem(SP_APPINTV_LIST_NAME, updatedValue, _siteUrl);[m
+[32m+[m[32m                SPConnector.AddListItem(SP_APPINTV_LIST_NAME, createdValue, _siteUrl);[m
+             }[m
+             catch (Exception e)[m
+             {[m
+[1mdiff --git a/MCAWebAndAPI.Service/HR/Recruitment/IHRInterviewService.cs b/MCAWebAndAPI.Service/HR/Recruitment/IHRInterviewService.cs[m
+[1mindex 9e385aa..fcf64cf 100644[m
+[1m--- a/MCAWebAndAPI.Service/HR/Recruitment/IHRInterviewService.cs[m
+[1m+++ b/MCAWebAndAPI.Service/HR/Recruitment/IHRInterviewService.cs[m
+[36m@@ -9,18 +9,16 @@[m [mpublic interface IHRInterviewService[m
+     {[m
+         void SetSiteUrl(string siteUrl = null);[m
+ [m
+[31m-        IEnumerable<ApplicationShortlistVM> GetShortlists();[m
+[32m+[m[32m        IEnumerable<ApplicationShortlistVM> GetInterviewlists();[m
+ [m
+         ApplicationShortlistVM GetInterviewlist(string position, string username, string useraccess);[m
+ [m
+[31m-        ApplicationShortlistVM GetShortlistSend(int? ID);[m
+[32m+[m[32m        ApplicationShortlistVM GetResultlistInterview(int? ID);[m
+ [m
+[31m-        void UpdateShortlistDataDetail(int? headerID, IEnumerable<ShortlistDetailVM> ShortlistDetails);[m
+[31m-[m
+[31m-        void CreateShortlistInviteIntv(int? headerID, ApplicationShortlistVM ShortlistDetails);[m
+[31m-[m
+[31m-        void CreateShorlistSendintv(int? headerID, ApplicationShortlistVM ShortlistDetails);[m
+[32m+[m[32m        void CreateInterviewDataDetail(int? headerID, ApplicationShortlistVM list);[m
+ [m
+[32m+[m[32m        void CreateInputIntvResult(int? headerID, ApplicationShortlistVM list);[m
+[32m+[m[41m        [m
+     }[m
+ }[m
+ [m
+[1mdiff --git a/MCAWebAndAPI.Web/Controllers/HRInterviewlistController.cs b/MCAWebAndAPI.Web/Controllers/HRInterviewlistController.cs[m
+[1mindex 9bb69cc..8a353a4 100644[m
+[1m--- a/MCAWebAndAPI.Web/Controllers/HRInterviewlistController.cs[m
+[1m+++ b/MCAWebAndAPI.Web/Controllers/HRInterviewlistController.cs[m
+[36m@@ -41,7 +41,7 @@[m [mpublic ActionResult InterviewlistData(string siteurl = null, string position = n[m
+         }[m
+ [m
+         [HttpPost][m
+[31m-        public ActionResult UpdateShortlistData(FormCollection form, ApplicationShortlistVM viewModel)[m
+[32m+[m[32m        public ActionResult CreateInterviewlistData(FormCollection form, ApplicationShortlistVM viewModel)[m
+         {[m
+             var siteUrl = SessionManager.Get<string>("SiteUrl");[m
+             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);[m
+[36m@@ -52,8 +52,7 @@[m [mpublic ActionResult UpdateShortlistData(FormCollection form, ApplicationShortlis[m
+ [m
+             try[m
+             {[m
+[31m-                viewModel.ShortlistDetails = BindShortlistDetails(form, viewModel.ShortlistDetails);[m
+[31m-                _service.UpdateShortlistDataDetail(headerID, viewModel.ShortlistDetails);[m
+[32m+[m[32m                _service.CreateInterviewDataDetail(headerID, viewModel);[m
+             }[m
+             catch (Exception e)[m
+             {[m
+[36m@@ -67,7 +66,7 @@[m [mpublic ActionResult UpdateShortlistData(FormCollection form, ApplicationShortlis[m
+                 string.Format("{0}/{1}", siteUrl, UrlResource.Professional));[m
+         }[m
+ [m
+[31m-        public ActionResult ShortlistSendInvite(string siteurl = null, int? ID = null)[m
+[32m+[m[32m        public ActionResult InputInterviewResult(string siteurl = null, int? ID = null)[m
+         {[m
+             // clear existing session variables if any[m
+             SessionManager.RemoveAll();[m
+[36m@@ -76,14 +75,14 @@[m [mpublic ActionResult ShortlistSendInvite(string siteurl = null, int? ID = null)[m
+             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);[m
+             SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);[m
+ [m
+[31m-            var viewmodel = _service.GetShortlistSend(ID);[m
+[32m+[m[32m            var viewmodel = _service.GetResultlistInterview(ID);[m
+             //viewmodel.SendTo = "";[m
+             //viewmodel.ID = id;[m
+             return View(viewmodel);[m
+         }[m
+ [m
+         [HttpPost][m
+[31m-        public ActionResult CreateSendInvite(FormCollection form, ApplicationShortlistVM viewModel)[m
+[32m+[m[32m        public ActionResult CreateInputResultInterview(FormCollection form, ApplicationShortlistVM viewModel)[m
+         {[m
+             var siteUrl = SessionManager.Get<string>("SiteUrl");[m
+             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);[m
+[36m@@ -92,7 +91,7 @@[m [mpublic ActionResult CreateSendInvite(FormCollection form, ApplicationShortlistVM[m
+             try[m
+             {[m
+                 viewModel.ShortlistDetails = BindShortlistDetails(form, viewModel.ShortlistDetails);[m
+[31m-                _service.CreateShorlistSendintv(headerID, viewModel);[m
+[32m+[m[32m                _service.CreateInputIntvResult(headerID, viewModel);[m
+             }[m
+             catch (Exception e)[m
+             {[m
+[36m@@ -104,7 +103,7 @@[m [mpublic ActionResult CreateSendInvite(FormCollection form, ApplicationShortlistVM[m
+                 string.Format("{0}/{1}", siteUrl, UrlResource.Professional));[m
+         }[m
+ [m
+[31m-        public ActionResult ShortlistIntvinvite(string siteurl = null, string position = null, string username = null, string useraccess = null)[m
+[32m+[m[32m        public ActionResult InputInterviewResultDetail(string siteurl = null, int? ID = null)[m
+         {[m
+             // clear existing session variables if any[m
+             SessionManager.RemoveAll();[m
+[36m@@ -113,33 +112,12 @@[m [mpublic ActionResult ShortlistIntvinvite(string siteurl = null, string position =[m
+             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);[m
+             SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);[m
+ [m
+[31m-            var viewmodel = _service.GetInterviewlist(position, username, useraccess);[m
+[32m+[m[32m            var viewmodel = _service.GetResultlistInterview(ID);[m
+             //viewmodel.SendTo = "";[m
+[31m-[m
+[32m+[m[32m            //viewmodel.ID = id;[m
+             return View(viewmodel);[m
+         }[m
+ [m
+[31m-        [HttpPost][m
+[31m-        public ActionResult CreateSendIntvResult(FormCollection form, ApplicationShortlistVM viewModel)[m
+[31m-        {[m
+[31m-            var siteUrl = SessionManager.Get<string>("SiteUrl");[m
+[31m-            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);[m
+[31m-[m
+[31m-            int? headerID = null;[m
+[31m-            try[m
+[31m-            {[m
+[31m-                viewModel.ShortlistDetails = BindShortlistDetails(form, viewModel.ShortlistDetails);[m
+[31m-                _service.CreateShortlistInviteIntv(headerID, viewModel);[m
+[31m-            }[m
+[31m-            catch (Exception e)[m
+[31m-            {[m
+[31m-                Response.StatusCode = (int)HttpStatusCode.BadRequest;[m
+[31m-                return JsonHelper.GenerateJsonErrorResponse(e);[m
+[31m-            }[m
+[31m-[m
+[31m-            return JsonHelper.GenerateJsonSuccessResponse([m
+[31m-                string.Format("{0}/{1}", siteUrl, UrlResource.Professional));[m
+[31m-        }[m
+ [m
+         private IEnumerable<ShortlistDetailVM> BindShortlistDetails(FormCollection form, IEnumerable<ShortlistDetailVM> shortDetails)[m
+         {[m
+[1mdiff --git a/MCAWebAndAPI.Web/MCAWebAndAPI.Web.csproj b/MCAWebAndAPI.Web/MCAWebAndAPI.Web.csproj[m
+[1mindex 0eb9c23..d3b8b20 100644[m
+[1m--- a/MCAWebAndAPI.Web/MCAWebAndAPI.Web.csproj[m
+[1m+++ b/MCAWebAndAPI.Web/MCAWebAndAPI.Web.csproj[m
+[36m@@ -668,6 +668,8 @@[m
+     <Content Include="Views\HRInterviewlist\_IntvinviteDetails.cshtml" />[m
+     <Content Include="Views\HRInterviewlist\InputInterviewResult.cshtml" />[m
+     <Content Include="Views\HRInterviewlist\_InterviewResultlist.cshtml" />[m
+[32m+[m[32m    <Content Include="Views\HRInterviewlist\InputInterviewResultDetail.cshtml" />[m
+[32m+[m[32m    <Content Include="Views\HRInterviewlist\_InputInterviewResultDetail.cshtml" />[m
+     <None Include="Web.Debug.config">[m
+       <DependentUpon>Web.config</DependentUpon>[m
+     </None>[m
+[1mdiff --git a/MCAWebAndAPI.Web/Views/HRInterviewlist/InputInterviewResult.cshtml b/MCAWebAndAPI.Web/Views/HRInterviewlist/InputInterviewResult.cshtml[m
+[1mindex 2eb286c..2c5e0ee 100644[m
+[1m--- a/MCAWebAndAPI.Web/Views/HRInterviewlist/InputInterviewResult.cshtml[m
+[1m+++ b/MCAWebAndAPI.Web/Views/HRInterviewlist/InputInterviewResult.cshtml[m
+[36m@@ -1,12 +1,11 @@[m
+[31m-﻿[m
+[31m-@using MCAWebAndAPI.Model.ViewModel.Form.HR[m
+[32m+[m[32m﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR[m
+ @model ApplicationShortlistVM[m
+ [m
+ @{[m
+     ViewBag.Title = "ShortlistData";[m
+ }[m
+ [m
+[31m-@using (Html.BeginForm("UpdateShortlistData", "HRShortlist", FormMethod.Post, new[m
+[32m+[m[32m@using (Html.BeginForm("CreateInterviewDataDetail", "HRInterviewlist", FormMethod.Post, new[m
+ {[m
+     @class = "form-horizontal",[m
+     enctype = "multipart/form-data"[m
+[36m@@ -15,6 +14,7 @@[m
+     <fieldset>[m
+         @Html.HiddenFor(m => m.ID)[m
+         @Html.HiddenFor(m => m.Position)[m
+[32m+[m[32m        @Html.HiddenFor(m => m.Candidate)[m
+         <div class="row">[m
+             <div class="form-group">[m
+                 @Html.Bootstrap().LabelFor(m => m.Candidate).Class("col-sm-2 control-label")[m
+[36m@@ -32,39 +32,67 @@[m
+ [m
+         <legend>Candidate list</legend>[m
+         <div class="row">[m
+[31m-            @Html.Partial("_ShortlistDetails", Model.ShortlistDetails)[m
+[32m+[m[32m            @Html.Partial("_InterviewResultlist", Model.InterviewlistDetails)[m
+         </div>[m
+ [m
+ [m
+     </fieldset>[m
+     <div class="form-actions">[m
+         <div class="row">[m
+[31m-            <div class="col-sm-4">[m
+[32m+[m[41m          [m
+[32m+[m[32m             <div class="col-sm-4">[m
+                 <div class="form-group">[m
+[31m-                    @Html.Bootstrap().LabelFor(m => m.SendTo).Class("col-xs-4 control-label")[m
+[32m+[m[32m                    @Html.Bootstrap().LabelFor(m => m.Remarks).Class("col-xs-4 control-label")[m
+                     <div class="col-xs-8">[m
+[31m-                        @Html.EditorFor(m => m.SendTo)[m
+[32m+[m[32m                        @Html.EditorFor(m => m.Remarks)[m
+                     </div>[m
+                 </div>[m
+             </div>[m
+[31m-            <div class="col-sm-8">[m
+[32m+[m[32m            </div>[m
+[32m+[m[32m        <div class="row">[m
+ [m
+[31m-                <button id="submit-nextstep" class="btn btn-primary" type="submit">[m
+[32m+[m[32m            <div class="col-sm-4">[m
+[32m+[m[32m                <div class="form-group">[m
+[32m+[m[32m                    @Html.Bootstrap().LabelFor(m => m.GetResultOptions).Class("col-xs-4 control-label")[m
+[32m+[m[32m                    <div class="col-xs-8">[m
+[32m+[m[32m                        @Html.EditorFor(m => m.GetResultOptions)[m
+[32m+[m[32m                    </div>[m
+[32m+[m[32m                </div>[m
+[32m+[m[32m            </div>[m
+[32m+[m[32m            </div>[m
+[32m+[m[32m        <div class="row">[m
+[32m+[m[32m            <div class="col-sm-4">[m
+[32m+[m[32m                <div class="form-group">[m
+[32m+[m[32m                    @Html.Bootstrap().LabelFor(m => m.AttDocuments).Class("col-xs-4 control-label")[m
+[32m+[m[32m                    <div class="col-xs-8">[m
+[32m+[m[32m                        @Html.EditorFor(m => m.AttDocuments)[m
+[32m+[m[32m                    </div>[m
+[32m+[m[32m                </div>[m
+[32m+[m[32m            </div>[m
+[32m+[m[32m            </div>[m
+[32m+[m[32m        <div class="row">[m
+[32m+[m[32m            <div class="col-sm-4">[m
+[32m+[m[32m                <div class="form-group">[m
+[32m+[m[32m                    @Html.Bootstrap().LabelFor(m => m.NeedNextInterviewer).Class("col-xs-4 control-label")[m
+[32m+[m[32m                    <div class="col-xs-8">[m
+[32m+[m[32m                        @Html.EditorFor(m => m.NeedNextInterviewer)[m
+[32m+[m[32m                    </div>[m
+[32m+[m[32m                </div>[m
+[32m+[m[32m            </div>[m
+[32m+[m[32m            </div>[m
+[32m+[m[41m        [m
+[32m+[m[32m            <div class="col-sm-8">[m
+[32m+[m[32m                <button id="submit-cancel" class="btn btn-primary" type="button">[m
+                     <i class="fa fa-send"></i>[m
+[31m-                    send to next step[m
+[32m+[m[32m                    cancel[m
+                 </button>[m
+                 <button id="submit-button" class="btn btn-primary" type="submit">[m
+                     <i class="fa fa-save"></i>[m
+                     save[m
+                 </button>[m
+[31m-                @*<button id="submit-cancel" class="btn btn-primary" type="submit">[m
+[31m-                        <i class="fa fa-save"></i>[m
+[31m-                        cancel[m
+[31m-                    </button>*@[m
+ [m
+             </div>[m
+         </div>[m
+[31m-    </div>[m
+ [m
+ }[m
+ [m
+[1mdiff --git a/MCAWebAndAPI.Web/Views/HRInterviewlist/InputInterviewResultDetail.cshtml b/MCAWebAndAPI.Web/Views/HRInterviewlist/InputInterviewResultDetail.cshtml[m
+[1mnew file mode 100644[m
+[1mindex 0000000..5558f7f[m
+[1m--- /dev/null[m
+[1m+++ b/MCAWebAndAPI.Web/Views/HRInterviewlist/InputInterviewResultDetail.cshtml[m
+[36m@@ -0,0 +1,103 @@[m
+[32m+[m[32m﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR[m
+[32m+[m[32m@model ApplicationShortlistVM[m
+[32m+[m
+[32m+[m[32m@{[m
+[32m+[m[32m    ViewBag.Title = "InputInterviewResultDetail";[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32m@using (Html.BeginForm("CreateInputResultInterview", "HRInterviewlist", FormMethod.Post, new[m
+[32m+[m[32m{[m
+[32m+[m[32m    @class = "form-horizontal",[m
+[32m+[m[32m    enctype = "multipart/form-data"[m
+[32m+[m[32m}))[m
+[32m+[m[32m{[m
+[32m+[m[32m    <fieldset>[m
+[32m+[m[32m        @Html.HiddenFor(m => m.ID)[m
+[32m+[m[32m        @Html.HiddenFor(m => m.Position)[m
+[32m+[m
+[32m+[m[32m        <div class="row">[m
+[32m+[m[32m            <div class="col-sm-6">[m
+[32m+[m[32m                <div class="form-group">[m
+[32m+[m[32m                    @Html.Bootstrap().LabelFor(m => m.Position).Class("col-sm-2 control-label")[m
+[32m+[m[32m                    <div class="col-sm-6">[m
+[32m+[m[32m                        <input id="vacant-position" class="form-control" value="" />[m
+[32m+[m[32m                    </div>[m
+[32m+[m[32m                </div>[m
+[32m+[m[32m                <div class="form-group">[m
+[32m+[m[32m                    @Html.Bootstrap().LabelFor(m => m.Candidate).Class("col-sm-4 control-label")[m
+[32m+[m[32m                    <div class="col-sm-8">[m
+[32m+[m[32m                        @Html.EditorFor(m => m.Candidate)[m
+[32m+[m[32m                    </div>[m
+[32m+[m[32m                </div>[m
+[32m+[m[32m                <div class="form-group">[m
+[32m+[m[32m                    @Html.Bootstrap().LabelFor(m => m.InterviewerDate).Class("col-sm-4 control-label")[m
+[32m+[m[32m                    <div class="col-sm-8">[m
+[32m+[m[32m                        @Html.EditorFor(m => m.InterviewerDate)[m
+[32m+[m[32m                    </div>[m
+[32m+[m[32m                </div>[m
+[32m+[m[32m                <div class="form-group">[m
+[32m+[m[32m                    @Html.Bootstrap().LabelFor(m => m.InterviewerPanel).Class("col-sm-4 control-label")[m
+[32m+[m[32m                    <div class="col-sm-8">[m
+[32m+[m[32m                        @Html.EditorFor(m => m.InterviewerPanel)[m
+[32m+[m[32m                    </div>[m
+[32m+[m[32m                </div>[m
+[32m+[m[32m                <div class="form-group">[m
+[32m+[m[32m                    @Html.Bootstrap().LabelFor(m => m.InterviewSummary).Class("col-sm-4 control-label")[m
+[32m+[m[32m                    <div class="col-sm-8">[m
+[32m+[m[32m                        @Html.EditorFor(m => m.InterviewSummary)[m
+[32m+[m[32m                    </div>[m
+[32m+[m[32m                </div>[m
+[32m+[m[32m            </div>[m
+[32m+[m[32m        </div>[m
+[32m+[m
+[32m+[m
+[32m+[m[32m    </fieldset>[m
+[32m+[m[32m    <div class="form-actions">[m
+[32m+[m[32m        <div class="row">[m
+[32m+[m[32m            <div class="col-sm-4">[m
+[32m+[m[32m                <div class="form-group">[m
+[32m+[m[32m                    @Html.Bootstrap().LabelFor(m => m.GetResultOptions).Class("col-xs-4 control-label")[m
+[32m+[m[32m                    <div class="col-xs-8">[m
+[32m+[m[32m                        @Html.EditorFor(m => m.GetResultOptions)[m
+[32m+[m[32m                    </div>[m
+[32m+[m[32m                </div>[m
+[32m+[m[32m            </div>[m
+[32m+[m[32m            <div class="col-sm-8">[m
+[32m+[m
+[32m+[m[32m                @*<button id="submit-nextstep" class="btn btn-primary" type="submit">[m
+[32m+[m[32m                        <i class="fa fa-save"></i>[m
+[32m+[m[32m                        send to next step[m
+[32m+[m[32m                    </button>*@[m
+[32m+[m[32m                <button id="submit-button" class="btn btn-primary" type="submit">[m
+[32m+[m[32m                    <i class="fa fa-send"></i>[m
+[32m+[m[32m                    Send Email To Candidate[m
+[32m+[m[32m                </button>[m
+[32m+[m[32m                <button id="submit-cancel" class="btn btn-primary" type="submit">[m
+[32m+[m[32m                    <i class="fa fa-cancel"></i>[m
+[32m+[m[32m                    cancel[m
+[32m+[m[32m                </button>[m
+[32m+[m
+[32m+[m[32m            </div>[m
+[32m+[m[32m        </div>[m
+[32m+[m[32m    </div>[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32m@section scripts{[m
+[32m+[m
+[32m+[m[32m    <script>[m
+[32m+[m[32m        $(document).ready(function () {[m
+[32m+[m[32m            $("#vacant-position").prop('readonly', 'true');[m
+[32m+[m[32m            $("#Candidate").prop('readonly', 'true');[m
+[32m+[m
+[32m+[m[32m            debugger;[m
+[32m+[m[32m            var positionID = $("#Position").val();[m
+[32m+[m[32m            var url = "/HRDataMaster/GetPosition/" + positionID;[m
+[32m+[m[32m            $.getJSON(url, function (data) {[m
+[32m+[m[32m                $("#vacant-position").prop("value", data.PositionName);[m
+[32m+[m[32m            })[m
+[32m+[m
+[32m+[m[32m        });[m
+[32m+[m[32m    </script>[m
+[32m+[m
+[32m+[m[32m}[m
+[32m+[m
+[1mdiff --git a/MCAWebAndAPI.Web/Views/HRInterviewlist/InterviewlistData.cshtml b/MCAWebAndAPI.Web/Views/HRInterviewlist/InterviewlistData.cshtml[m
+[1mindex 2f6be67..b5e7aec 100644[m
+[1m--- a/MCAWebAndAPI.Web/Views/HRInterviewlist/InterviewlistData.cshtml[m
+[1m+++ b/MCAWebAndAPI.Web/Views/HRInterviewlist/InterviewlistData.cshtml[m
+[36m@@ -5,7 +5,7 @@[m
+     ViewBag.Title = "InterviewlistData";[m
+ }[m
+ [m
+[31m-@using (Html.BeginForm("CreateSendIntvResult", "HRInterviewlist", FormMethod.Post, new[m
+[32m+[m[32m@using (Html.BeginForm("CreateInterviewlistData", "HRInterviewlist", FormMethod.Post, new[m
+ {[m
+     @class = "form-horizontal",[m
+     enctype = "multipart/form-data"[m
+[36m@@ -14,6 +14,7 @@[m
+     <fieldset>[m
+         @Html.HiddenFor(m => m.ID)[m
+         @Html.HiddenFor(m => m.Position)[m
+[32m+[m[32m        @Html.HiddenFor(m => m.Candidate)[m
+         <div class="row">[m
+             <div class="form-group">[m
+                 @Html.Bootstrap().LabelFor(m => m.Position).Class("col-sm-2 control-label")[m
+[1mdiff --git a/MCAWebAndAPI.Web/Views/HRInterviewlist/_InputInterviewResultDetail.cshtml b/MCAWebAndAPI.Web/Views/HRInterviewlist/_InputInterviewResultDetail.cshtml[m
+[1mnew file mode 100644[m
+[1mindex 0000000..1c4cef9[m
+[1m--- /dev/null[m
+[1m+++ b/MCAWebAndAPI.Web/Views/HRInterviewlist/_InputInterviewResultDetail.cshtml[m
+[36m@@ -0,0 +1,8 @@[m
+[32m+[m[32m﻿[m
+[32m+[m[32m@{[m
+[32m+[m[32m    ViewBag.Title = "_InputInterviewResultDetail";[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32m@using MCAWebAndAPI.Model.ViewModel.Form.HR[m
+[32m+[m[32m@model InterviewDetailVM[m
+[32m+[m
+[1mdiff --git a/MCAWebAndAPI.Web/Views/HRInterviewlist/_InterviewResultlist.cshtml b/MCAWebAndAPI.Web/Views/HRInterviewlist/_InterviewResultlist.cshtml[m
+[1mindex b9092bd..113e541 100644[m
+[1m--- a/MCAWebAndAPI.Web/Views/HRInterviewlist/_InterviewResultlist.cshtml[m
+[1m+++ b/MCAWebAndAPI.Web/Views/HRInterviewlist/_InterviewResultlist.cshtml[m
+[36m@@ -37,8 +37,6 @@[m
+     .Model(model =>[m
+     {[m
+         model.Id(p => p.ID);[m
+[31m-[m
+[31m-        model.Field(m => m.Status).DefaultValue(ShortlistDetailVM.GetStatusDefaultValue());[m
+     })[m
+     .ServerOperation(false)[m
+ [m
+[1mdiff --git a/MCAWebAndAPI.Web/Views/HRInterviewlist/_IntvinviteDetails.cshtml b/MCAWebAndAPI.Web/Views/HRInterviewlist/_IntvinviteDetails.cshtml[m
+[1mindex e81ee1f..c7296f0 100644[m
+[1m--- a/MCAWebAndAPI.Web/Views/HRInterviewlist/_IntvinviteDetails.cshtml[m
+[1m+++ b/MCAWebAndAPI.Web/Views/HRInterviewlist/_IntvinviteDetails.cshtml[m
+[36m@@ -11,7 +11,7 @@[m
+     .CreateAt(GridInsertRowPosition.Bottom))[m
+     .Columns(columns =>[m
+     {[m
+[31m-        columns.Bound(p => p.Candidate).ClientTemplate("<a href=''>#= Candidate #</a>" +[m
+[32m+[m[32m        columns.Bound(p => p.Candidate).ClientTemplate("<a href='http://localhost:15923/HRInterviewlist/InputInterviewResult?siteUrl=https://eceos2.sharepoint.com/sites/ims/hr&ID=#= ID #'>#= Candidate #</a>" +[m
+         "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].Candidate' value='#= Candidate #' />");[m
+ [m
+         columns.Bound(p => p.DocumentUrl).ClientTemplate("<a href='#= DocumentUrl #'>get file</a>");[m
+[1mdiff --git a/MCAWebAndAPI.Web/logs/logfile.txt b/MCAWebAndAPI.Web/logs/logfile.txt[m
+[1mindex 39f8af6..c4c3d21 100644[m
+[1m--- a/MCAWebAndAPI.Web/logs/logfile.txt[m
+[1m+++ b/MCAWebAndAPI.Web/logs/logfile.txt[m
+[36m@@ -70,3 +70,15 @@[m [mA look-up field contains invalid data. Please check the value and try again.[m
+ 2016-06-17 14:13:32.0936 MCAWebAndAPI.Service.HR.Recruitment.HRInterviewService Invalid look-up value.[m
+ [m
+ A look-up field contains invalid data. Please check the value and try again.[m
+[32m+[m[32m2016-06-20 16:26:55.7651 MCAWebAndAPI.Service.HR.Recruitment.HRInterviewService Column 'interviewdatetime' does not exist. It may have been deleted by another user.  /sites/ims/hr/Lists/Interview Invitation to Panel[m
+[32m+[m[32m2016-06-20 16:31:34.5639 MCAWebAndAPI.Service.HR.Recruitment.HRInterviewService Invalid look-up value.[m
+[32m+[m
+[32m+[m[32mA look-up field contains invalid data. Please check the value and try again.[m
+[32m+[m[32m2016-06-20 21:59:24.5531 MCAWebAndAPI.Service.HR.Recruitment.HRInterviewService Operation is not valid due to the current state of the object.[m
+[32m+[m[32m2016-06-20 22:05:43.4356 MCAWebAndAPI.Service.HR.Recruitment.HRInterviewService Operation is not valid due to the current state of the object.[m
+[32m+[m[32m2016-06-21 09:55:41.5792 MCAWebAndAPI.Service.HR.Recruitment.HRInterviewService Invalid look-up value.[m
+[32m+[m
+[32m+[m[32mA look-up field contains invalid data. Please check the value and try again.[m
+[32m+[m[32m2016-06-21 10:13:25.4544 MCAWebAndAPI.Service.HR.Recruitment.HRInterviewService Invalid look-up value.[m
+[32m+[m
+[32m+[m[32mA look-up field contains invalid data. Please check the value and try again.[m

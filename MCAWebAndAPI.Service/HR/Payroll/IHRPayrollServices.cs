@@ -12,10 +12,14 @@ namespace MCAWebAndAPI.Service.HR.Payroll
 
         MonthlyFeeVM GetPopulatedModel(int? id = null);
 
-        MonthlyFeeVM GetHeader(int ID);
+        MonthlyFeeVM GetHeader(int? ID);
+
+        IEnumerable<MonthlyFeeVM> GetMonthlyFees();
 
         int CreateHeader(MonthlyFeeVM header);
 
         bool UpdateHeader(MonthlyFeeVM header);
+
+        void CreateMonthlyFeeDetails(int? headerID, IEnumerable<MonthlyFeeDetailVM> monthlyFeeDetails);
     }
 }

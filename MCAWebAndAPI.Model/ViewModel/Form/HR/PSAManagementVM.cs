@@ -145,9 +145,17 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [DisplayName("PSA Expiry Date")]
         public DateTime? PSAExpiryDate { get; set; } = DateTime.Now;
 
+        public DateTime? HiddenExpiryDate { get; set; } = DateTime.Now;
+
         public string ExpiryDateBefore { get; set; }
 
+        public DateTime? ExpireDateBefore { get; set; } = DateTime.Now;
+
         public string NextExpiryDate { get; set; }
+
+       public DateTime? DateOfNewPSABefore { get; set; } = DateTime.Now;
+
+       public string DateNewPSABefore { get; set; }
 
         [UIHint("MultiFileUploader")]
         [Required]

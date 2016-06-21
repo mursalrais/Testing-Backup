@@ -3,11 +3,14 @@ using MCAWebAndAPI.Model.ViewModel.Control;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using MCAWebAndAPI.Model.Common;
+using System.Collections.Generic;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
     public class MonthlyFeeVM : Item
     {
+        public IEnumerable<MonthlyFeeDetailVM> MonthlyFeeDetails { get; set; } = new List<MonthlyFeeDetailVM>();
+
         /// <summary>
         /// ProfessionalId
         /// </summary>
@@ -15,6 +18,11 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [Required(ErrorMessage = "Professional ID Field Is Required")]
         [DisplayName("Professional ID")]
         public int? ProfessionalID { get; set; }
+
+        /// <summary>
+        /// professional
+        /// </summary>
+        public string Name { get; set; }
 
         /// <summary>
         /// ProjectOrUnit
@@ -38,8 +46,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [UIHint("AjaxComboBox")]
         public AjaxComboBoxVM ProfessionalNameEdit { get; set; } = new AjaxComboBoxVM
         {
-            ActionName = "GetProfessionalMonthlyFeesEdit",
-            ControllerName = "HRDataMaster",
+            ActionName = "GetMonthlyFees",
+            ControllerName = "HRPayroll",
             ValueField = "ID",
             TextField = "Name",
             OnSelectEventName = "OnSelectProfessionalName"
@@ -73,37 +81,5 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// psaexpirydate
         /// </summary>
         public string EndOfContract { get; set; }
-
-        /// <summary>
-        /// DateOfNewFee
-        /// </summary>
-        [Required(ErrorMessage = "Date Of New Fee Field Is Required")]
-        [UIHint("Date")]
-        public DateTime? DateOfNewFee { get; set; } = DateTime.UtcNow;
-
-        /// <summary>
-        /// MonthlyFee
-        /// </summary>
-        [Range(1, Int32.MaxValue, ErrorMessage = "Monthly Fee Field Can't Be Zero or Negative")]
-        public int MonthlyFee { get; set; }
-
-        /// <summary>
-        /// AnnualFee
-        /// </summary>
-        [UIHint("Integer")]
-        public int AnnualFee { get; set; }
-
-        /// <summary>
-        /// MonthlyFeeCurrency
-        /// </summary>
-        [UIHint("ComboBox")]
-        public ComboBoxVM Currency { get; set; } = new ComboBoxVM
-        {
-            Choices = new string[]
-            {
-                "USD",
-                "IDR"
-            }
-        };
     }
 }

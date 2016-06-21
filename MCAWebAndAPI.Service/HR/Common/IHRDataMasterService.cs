@@ -34,8 +34,6 @@ namespace MCAWebAndAPI.Service.HR.Common
 
         IEnumerable<ProfessionalMaster> GetProfessionalMonthlyFees(); 
 
-        IEnumerable<ProfessionalMaster> GetProfessionalMonthlyFeesEdit();
-
         IEnumerable<PositionsMaster> GetPositions();
         int? EditProfessionalData(ProfessionalDataVM viewModel);
         

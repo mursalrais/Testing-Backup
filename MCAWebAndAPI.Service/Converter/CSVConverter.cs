@@ -51,7 +51,7 @@ namespace MCAWebAndAPI.Service.Converter
             using (var csv = new CsvReader(fileReader))
             {
                 csv.Configuration.TrimHeaders = true;
-                csv.Configuration.Delimiter = ";";
+                csv.Configuration.Delimiter = ",";
                 csv.Configuration.IgnoreHeaderWhiteSpace = true;
                 csv.Read(); //Do a read so we can get the headers
 
