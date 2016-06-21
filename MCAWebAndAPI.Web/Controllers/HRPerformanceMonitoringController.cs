@@ -54,7 +54,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             int? ID = viewModel.ID;
             //if id == 0 / null then create else update
-            if (viewModel.Status == null)
+            if (ID == null)
             {                
                 try
                 {
