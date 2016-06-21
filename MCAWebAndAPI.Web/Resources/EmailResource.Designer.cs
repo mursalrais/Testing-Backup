@@ -61,7 +61,32 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hi Dude, accept my professional data. Just click on &lt;a href=&quot;{0}&quot;&gt;this link&lt;/a&gt;! Accept it now or die!.
+        ///   Looks up a localized string similar to &lt;p&gt;
+        ///&lt;strong&gt;Dear Applicant,&lt;/strong&gt;
+        ///&lt;/p&gt;
+        ///&lt;p&gt;
+        ///This email is sent to you to notify that your application form has been submitted successfully. Thank you. 
+        ///&lt;/p&gt;
+        ///Regards, 
+        ///&lt;/br&gt;
+        ///MCA Indonesia
+        ///Recruitment Team.
+        /// </summary>
+        public static string ApplicationSubmissionNotification {
+            get {
+                return ResourceManager.GetString("ApplicationSubmissionNotification", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;p&gt;
+        ///&lt;strong&gt;Dear HR Team,&lt;/strong&gt;
+        ///&lt;/p&gt;
+        ///&lt;p&gt;
+        ///This email is sent to you to notify that there is a request which required your action to validate the professional data. Kindly check the link as per below to go to direct page accordingly. You may check your personal page in IMS (My Approval View). Thank you. 
+        ///&lt;/p&gt;
+        ///
+        ///Link : &lt;a href=&quot;{0}&quot;&gt;Click Here&lt;/a&gt;.
         /// </summary>
         public static string ProfessionalEmailValidation {
             get {
@@ -70,7 +95,12 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hi Bro, your professional data has been {0}..
+        ///   Looks up a localized string similar to &lt;p&gt;
+        ///&lt;strong&gt;Dear Requestor,&lt;/strong&gt;
+        ///&lt;/p&gt;
+        ///&lt;p&gt;
+        ///This email is sent to you to notify that your approval request has been responded by the HR Team. Thank you. 
+        ///&lt;/p&gt;.
         /// </summary>
         public static string ProfessionalEmailValidationResponse {
             get {

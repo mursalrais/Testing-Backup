@@ -87,7 +87,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 logger.Error(e);
                 throw e;
             }
-
             return ID;
         }
 

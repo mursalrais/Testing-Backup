@@ -4,35 +4,41 @@
 @model WorkflowRouterVM
 
 <div class="col-sm-12">
-    @(Html.Kendo().Grid<WorkflowItemVM>()
-    .Name("WorkflowDetails")
-    .Editable(editable => editable.Mode(GridEditMode.InCell))
-    .Columns(columns =>
-    {
-        columns.Bound(p => p.Level).Width(150);
-        columns.Bound(p => p.ApproverUnit).ClientTemplate("#=  ApproverUnit.Text #").Width(350).EditorViewData(
+    @(Html.Kendo().Grid<WorkflowItemVM>
+        ()
+        .Name("WorkflowDetails")
+        .Editable(editable => editable.Mode(GridEditMode.InCell))
+        .Columns(columns =>
+        {
+            columns.Bound(p => p.Level).Width(150);
+            columns.Bound(p => p.ApproverUnit).ClientTemplate("#=  ApproverUnit.Text #").Width(350)
+            .EditorViewData(
             new
             {
                 BindTo = WorkflowItemVM.GetUnitOptions()
             });
-        columns.Bound(p => p.ApproverPosition).Width(300).EditorViewData(
+            columns.Bound(p => p.ApproverPosition).Width(300).EditorViewData(
             new
             {
                 DataTextField = "PositionName",
                 DataValueField = "PositionName",
                 ActionName = "GetApproverPositions",
                 ControllerName = "Workflow",
+                Filter = "filterApproverPosition",
+                Cascade = "ApproverUnit_Value"
             });
-        columns.Bound(p => p.ApproverUserName).Width(400).EditorViewData(
+            columns.Bound(p => p.ApproverUserName).Width(400).EditorViewData(
             new
             {
                 DataTextField = "Name",
                 DataValueField = "UserLogin",
                 ActionName = "GetApproverNames",
-                ControllerName = "Workflow"
+                ControllerName = "Workflow",
+                Filter = "filterApproverName",
+                Cascade = "ApproverPosition_Value"
             });
-    })
-    .DataSource(
+        })
+        .DataSource(
         dataSource =>
         dataSource.Ajax().Model(model =>
         {
@@ -44,8 +50,8 @@
         }).ServerOperation(true)
         .Read(read => read.Action("Grid_Read", "Workflow"))
         .Update(update => update.Action("Grid_Update", "Workflow"))
-     )
-    )
+        )
+        )
 
 </div>
 
@@ -53,7 +59,7 @@
     function filterApproverPosition() {
         var listName = '@Model.ListName';
         var requestorPosition = '@Model.RequestorPosition';
-        var requestorUnit = '@Model.RequestorUnit';
+        var requestorUnit = $("#ApproverUnit_Value").data("kendoDropDownList").value();
 
         return {
             listName,
@@ -62,12 +68,9 @@
         };
     }
 
-    function filterApproverName(e) {        
-        var tr = $(e.target).closest("tr"); //get the row
-        var position = tr.find("input[name*='ApproverPosition']").closest('span').find('span.k-input').text();
-        
+    function filterApproverName(e) {
         return {
-            position
+            position:  $("#ApproverPosition_Value").data("kendoDropDownList").value()
         };
     }
 

@@ -11,11 +11,7 @@ namespace MCAWebAndAPI.Web.Helpers
 {
     public class WorkflowHelper
     {
-        private static IWorkflowService _service;
-        public WorkflowHelper()
-        {
-            _service = new WorkflowService();
-        }
+        private static IWorkflowService _service = new WorkflowService();
 
         public async static Task CreateTransactionWorkflowAsync(string workflowTransactionListName, string transactionLookupColumnName,
             int headerID)

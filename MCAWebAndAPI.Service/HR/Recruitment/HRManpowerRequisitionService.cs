@@ -320,7 +320,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return new WorkingRelationshipDetailVM
             {
                 ID = Convert.ToInt32(item["ID"]),
-                PositionWorking = WorkingRelationshipDetailVM.GetPositionDefaultValue(FormatUtil.ConvertToInGridAjaxLookup(item, "position")),
+                PositionWorking = WorkingRelationshipDetailVM.GetPositionDefaultValue(FormatUtil.ConvertToInGridAjaxComboBox(item, "position")),
                 Frequency = WorkingRelationshipDetailVM.GetFrequencyDefaultValue(new InGridMultiSelectVM { Text = _frequency }),
                 Relationship = WorkingRelationshipDetailVM.GetRelationshipDefaultValue(new InGridMultiSelectVM { Text = _relationship })
             };

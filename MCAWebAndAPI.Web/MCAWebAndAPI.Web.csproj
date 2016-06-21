@@ -668,6 +668,8 @@
     <Content Include="Views\HRInterviewlist\_IntvinviteDetails.cshtml" />
     <Content Include="Views\HRInterviewlist\InputInterviewResult.cshtml" />
     <Content Include="Views\HRInterviewlist\_InterviewResultlist.cshtml" />
+    <Content Include="Views\Shared\_WorkflowDetails.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\InGridAjaxCascadeComboBox.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -738,7 +740,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ConfigResource.resx</DependentUpon>
     </Compile>
-    <Compile Include="Resources\EmailResource.Designer.cs" />
+    <Compile Include="Resources\EmailResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EmailResource.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resources\MessageResource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -788,7 +794,10 @@
       <LastGenOutput>ConfigResource.Designer.cs</LastGenOutput>
       <CustomToolNamespace>MCAWebAndAPI.Web.Resources</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\EmailResource.resx" />
+    <EmbeddedResource Include="Resources\EmailResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>EmailResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\MessageResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>MessageResource.Designer.cs</LastGenOutput>

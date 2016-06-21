@@ -251,7 +251,7 @@ namespace MCAWebAndAPI.Service.HR.Common
             viewModel.ID = Convert.ToInt32(item["ID"]);
             viewModel.LastWorkingDay = Convert.ToDateTime(item["lastworkingday"]);
             viewModel.Level = Convert.ToString(item["Level"]);
-            viewModel.Position = FormatUtil.ConvertToInGridAjaxLookup(item, "Position");
+            viewModel.Position = FormatUtil.ConvertToInGridAjaxComboBox(item, "Position");
             viewModel.PSANumber = Convert.ToString(item["psanr"]);
             viewModel.StartDate = Convert.ToDateTime(item["startdate"]);
             viewModel.Project = OrganizationalDetailVM.GetProjectDefaultValue(
@@ -634,7 +634,6 @@ namespace MCAWebAndAPI.Service.HR.Common
                 }
             }
         }
-
 
         public ProfessionalDataVM GetProfessionalData(string userLoginName = null)
         {

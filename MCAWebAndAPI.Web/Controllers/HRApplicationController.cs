@@ -70,22 +70,16 @@ namespace MCAWebAndAPI.Web.Controllers
             }
 
             viewModel.EducationDetails = BindEducationDetails(form, viewModel.EducationDetails);
-            Task createEducationTask = _service.CreateEducationDetailsAsync(headerID, viewModel.EducationDetails);
+            Task createEducationDetailsTask = _service.CreateEducationDetailsAsync(headerID, viewModel.EducationDetails);
+
+            viewModel.TrainingDetails = BindTrainingDetails(form, viewModel.TrainingDetails);
+            Task createTrainingDetailsTask = _service.CreateTrainingDetailsAsync(headerID, viewModel.TrainingDetails);
+
+            Task allTasks = Task.WhenAll(createEducationDetailsTask, createEducationDetailsTask);
 
             try
             {
-                viewModel.TrainingDetails = BindTrainingDetails(form, viewModel.TrainingDetails);
-                _service.CreateTrainingDetails(headerID, viewModel.TrainingDetails);
-            }
-            catch (Exception e)
-            {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
-            }
-
-            try
-            {
-                await createEducationTask;
+                await allTasks;
             }
             catch (Exception e)
             {
@@ -154,15 +148,16 @@ namespace MCAWebAndAPI.Web.Controllers
             Task createApplicationDocumentTask = _service.CreateApplicationDocumentAsync(headerID, viewModel.Documents);
 
             // BEGIN Demo 
-            headerID = 45;
+            headerID = 45; // This MUST NOT be hardcoded. It is hardcoded as it is just a demo
             Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateTransactionWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
                 SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int) headerID);
 
-            Task sendTask = EmailUtil.SendAsync(viewModel.EmailAddresOne, "Application Confirmation",
-                    "Hi Dude, thanks for submitting your application!");
-
             Task sendApprovalRequestTask = WorkflowHelper.SendApprovalRequestAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
-                SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)headerID, 1, MessageResource.SuccessCommon);
+                SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)headerID, 1, 
+                MessageResource.SuccessCommon);
+
+            Task sendTask = EmailUtil.SendAsync(viewModel.EmailAddresOne, "Application Submission Confirmation",
+                  EmailResource.ApplicationSubmissionNotification);
             // END Demo
 
             Task allTasks = Task.WhenAll(createEducationDetailsTask, createTrainingDetailsTask,
@@ -180,7 +175,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
             return RedirectToAction("Index", 
                 "Success", 
-                new { errorMessage = string.Format(MessageResource.SuccessCreateApplicationData, viewModel.FirstMiddleName)});
+                new { errorMessage = 
+                string.Format(MessageResource.SuccessCreateApplicationData, viewModel.FirstMiddleName)});
         }
 
         [HttpPost]

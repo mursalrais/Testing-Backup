@@ -123,9 +123,18 @@ namespace MCAWebAndAPI.Service.Utils
             };
         }
 
-        public static AjaxComboBoxVM ConvertToInGridAjaxLookup(ListItem item, string columnName)
+        public static AjaxComboBoxVM ConvertToInGridAjaxComboBox(ListItem item, string columnName)
         {
             return new AjaxComboBoxVM
+            {
+                Text = (item[columnName] as FieldLookupValue).LookupValue,
+                Value = (item[columnName] as FieldLookupValue).LookupId
+            };
+        }
+
+        public static AjaxCascadeComboBoxVM ConvertToInGridAjaxCascadeComboBox(ListItem item, string columnName)
+        {
+            return new AjaxCascadeComboBoxVM
             {
                 Text = (item[columnName] as FieldLookupValue).LookupValue,
                 Value = (item[columnName] as FieldLookupValue).LookupId
