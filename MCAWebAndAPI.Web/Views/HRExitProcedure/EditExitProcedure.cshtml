@@ -1,0 +1,88 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+
+@model ExitProcedureVM
+
+@{
+    ViewBag.Title = "Form Edit Exit Procedure";
+}
+
+@using (Ajax.BeginForm("UpdateExitProcedure", "HRExitProcedure", FormMethod.Post, new AjaxOptions
+{
+    OnBegin = "onBeginForm",
+    OnFailure = "onFailureForm",
+    OnSuccess = "onSuccessForm",
+    OnComplete = "onCompleteForm"
+}, new
+{
+    @class = "form-horizontal"
+}))
+{
+
+
+    <fieldset>
+        <legend>Edit Exit Procedure Data</legend>
+        <div class="row">
+            @Html.Partial("_ExitProcedureDataEdit", Model)
+        </div>
+    </fieldset>
+
+}
+
+<div class="form-actions">
+    <div class="row">
+        <div class="col-md-12">
+
+            <button id="submit-button" class="btn btn-primary" type="submit">
+                <i class="fa fa-save"></i>
+                Submit
+            </button>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+
+
+            $(document).ready(function () {
+                $("#submit-button").click(function () {
+                $("form").submit();
+            });
+
+        });
+
+
+        function onSuccess(data) {
+            window.location.href = data.urlToRedirect;
+        }
+
+        function onFailure(data) {
+            window.location.href = data.urlToRedirect;
+        }
+
+
+        function OnSelectAssetHolderFrom(e) {
+            var dataItem = this.dataItem(e.item);
+            var url = "/HRDataMaster/GetProfessional/" + dataItem.ID;
+
+
+            $.getJSON(url, function (result) {
+
+                $('#Professional').prop('value', result[0].Name);
+                $('#ProjectUnit').prop('value', result[0].Project_Unit);
+                $('#Position').prop('value', result[0].Position);
+
+            })
+
+            var dataItem = this.dataItem(e.item);
+            var url = "/HRPSAManagement/GetJoinDate/" + dataItem.ID;
+
+            $.getJSON(url, function (result) {
+
+                $('#JoinDate').prop('value', result[0].StrJoinDate);
+
+            })
+        }
+
+        </script>
+}

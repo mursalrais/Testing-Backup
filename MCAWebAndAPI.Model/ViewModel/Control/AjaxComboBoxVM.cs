@@ -43,6 +43,18 @@ namespace MCAWebAndAPI.Model.ViewModel.Control
         /// </summary>
         public string OnSelectEventName { get; set; }
 
-        
+        public static AjaxComboBoxVM GetDefaultValue(AjaxComboBoxVM model = null)
+        {
+            var viewModel = new AjaxComboBoxVM
+            {
+                Text = string.Empty
+            };
+            if (model == null)
+                return viewModel;
+
+            viewModel.Text = model.Text;
+            viewModel.Value = model.Value;
+            return viewModel;
+        }
     }
 }

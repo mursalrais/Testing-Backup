@@ -53,6 +53,28 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             };
         }
 
+
+        public IEnumerable<PSAManagementVM> GetJoinDate(int? professionalID)
+        {
+            var joindate = new List<PSAManagementVM>();
+
+            foreach (var item in SPConnector.GetList(SP_PSA_LIST_NAME, _siteUrl))
+            {
+                joindate.Add(ConvertToJoinDate(item));
+            }
+
+            return joindate;
+        }
+
+        private PSAManagementVM ConvertToJoinDate(ListItem item)
+        {
+            return new PSAManagementVM
+            {
+                ID = item["professional_x003a_ID"] == null ? 0 : Convert.ToInt32((item["professional_x003a_ID"] as FieldLookupValue).LookupId),
+                StrJoinDate = Convert.ToDateTime(item["joindate"]).ToLocalTime().ToShortDateString()
+            };
+        }
+
         public int CreatePSAManagement(PSAManagementVM psaManagement)
         {
             var updatedValues = new Dictionary<string, object>();

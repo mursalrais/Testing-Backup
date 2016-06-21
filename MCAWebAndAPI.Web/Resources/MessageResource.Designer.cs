@@ -97,6 +97,15 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Congratulation {0}! Exit Procedure Data has successfully been created..
+        /// </summary>
+        public static string SuccessCreateExitProcedureData {
+            get {
+                return ResourceManager.GetString("SuccessCreateExitProcedureData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Congratulation {0}! Your PSA data has successfully been created..
         /// </summary>
         public static string SuccessCreatePSAManagementData {
@@ -120,6 +129,15 @@ namespace MCAWebAndAPI.Web.Resources {
         public static string SuccessUpdateApplicationStatus {
             get {
                 return ResourceManager.GetString("SuccessUpdateApplicationStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Congratulation {0}! Exit Procedure Data has successfully been updated..
+        /// </summary>
+        public static string SuccessUpdateExitProcedure {
+            get {
+                return ResourceManager.GetString("SuccessUpdateExitProcedure", resourceCulture);
             }
         }
         

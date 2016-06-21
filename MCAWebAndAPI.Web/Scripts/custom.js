@@ -107,7 +107,7 @@ function printForm(e) {
 // Event when the modal window is closed
 $('#remoteModal').on('hidden.bs.modal', function () {
 
-})
+});
 
 
 function onEditKendoDetail(e) {
@@ -158,4 +158,14 @@ function getMonthName(date) {
     month[10] = "November";
     month[11] = "December";
     return month[date.getMonth()];
+}
+
+function getWorkflowDetail(dataItem) {
+    var data = $("#WorkflowDetails").data("kendoGrid").dataSource.data();
+    return data.indexOf(dataItem);
+}
+
+function displayWorkflowRouter(domID, listName, requestor) {
+    var url = "/Workflow/DisplayWorkflowRouter?listName=" + listName + "&requestor=" + requestor;
+    $('#' + domID).load(url);
 }

@@ -14,5 +14,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         void SetSiteUrl(string siteUrl);
 
         ExitProcedureVM GetExitProcedure(int? ID);
+
+        int CreateExitProcedure(ExitProcedureVM exitProcedure);
+
+        bool UpdateExitProcedure(ExitProcedureVM exitProcedure);
     }
 }

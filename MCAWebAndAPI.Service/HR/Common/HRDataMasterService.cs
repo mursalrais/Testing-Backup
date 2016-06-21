@@ -21,7 +21,6 @@ namespace MCAWebAndAPI.Service.HR.Common
         const string SP_PROORG_LIST_NAME = "Professional Organization Detail";
         const string SP_PRODEP_LIST_NAME = "Dependent";
 
-
         static Logger logger = LogManager.GetCurrentClassLogger();
 
         public void SetSiteUrl(string siteUrl)
@@ -58,7 +57,7 @@ namespace MCAWebAndAPI.Service.HR.Common
             List<int> collectionIDMonthlyFee = new List<int>();
             foreach (var item in SPConnector.GetList(SP_MONFEE_LIST_NAME, _siteUrl))
             {
-                collectionIDMonthlyFee.Add(item["professional_x003a_ID"] == null ? 0 :
+               collectionIDMonthlyFee.Add(item["professional_x003a_ID"] == null ? 0 :
                Convert.ToInt16((item["professional_x003a_ID"] as FieldLookupValue).LookupValue));
             }
             foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl))
@@ -113,9 +112,9 @@ namespace MCAWebAndAPI.Service.HR.Common
             };
         }
 
-        public IEnumerable<PositionsMaster> GetPositions()
+        public IEnumerable<PositionMaster> GetPositions()
         {
-            var models = new List<PositionsMaster>();
+            var models = new List<PositionMaster>();
 
             foreach (var item in SPConnector.GetList(SP_POSMAS_LIST_NAME, _siteUrl))
             {
@@ -125,13 +124,13 @@ namespace MCAWebAndAPI.Service.HR.Common
             return models;
         }
 
-        private PositionsMaster ConvertToPositionsModel(ListItem item)
+        private PositionMaster ConvertToPositionsModel(ListItem item)
         {
-            var viewModel = new PositionsMaster();
+            var viewModel = new PositionMaster();
 
             viewModel.ID = Convert.ToInt32(item["ID"]);
             viewModel.PositionName = Convert.ToString(item["Title"]);
-            viewModel.isKeyPosition = Convert.ToString(item["iskeyposition"]);
+            viewModel.IsKeyPosition = Convert.ToString(item["iskeyposition"]);
             return viewModel;
         }
 
@@ -249,19 +248,18 @@ namespace MCAWebAndAPI.Service.HR.Common
 
         private OrganizationalDetailVM ConvertToOrganizationalDetailVM(ListItem item)
         {
-            return new OrganizationalDetailVM
-            {
-                ID = Convert.ToInt32(item["ID"]),
-                LastWorkingDay = Convert.ToDateTime(item["lastworkingday"]),
-                Level = Convert.ToString(item["Level"]),
-                Position = Convert.ToString(item["Position"]),
-                PSANumber = Convert.ToString(item["psanr"]),
-                StartDate = Convert.ToDateTime(item["startdate"]),
-                Project = OrganizationalDetailVM.GetProjectDefaultValue(
-                    FormatUtil.ConvertToInGridLookup(item, "projectunit")),
-                ProfessionalStatus = OrganizationalDetailVM.GetProfessionalStatusDefaultValue(
-                    FormatUtil.ConvertToInGridLookup(item, "Status"))
-            };
+            var viewModel = new OrganizationalDetailVM();
+            viewModel.ID = Convert.ToInt32(item["ID"]);
+            viewModel.LastWorkingDay = Convert.ToDateTime(item["lastworkingday"]);
+            viewModel.Level = Convert.ToString(item["Level"]);
+            viewModel.Position = FormatUtil.ConvertToInGridAjaxLookup(item, "Position");
+            viewModel.PSANumber = Convert.ToString(item["psanr"]);
+            viewModel.StartDate = Convert.ToDateTime(item["startdate"]);
+            viewModel.Project = OrganizationalDetailVM.GetProjectDefaultValue(
+                    FormatUtil.ConvertToInGridLookup(item, "projectunit"));
+            viewModel.ProfessionalStatus = OrganizationalDetailVM.GetProfessionalStatusDefaultValue(
+                    FormatUtil.ConvertToInGridLookup(item, "Status"));
+            return viewModel;
         }
 
         private IEnumerable<DependentDetailVM> GetDependentDetails(int? ID)
@@ -605,7 +603,6 @@ namespace MCAWebAndAPI.Service.HR.Common
                     try
                     {
                         SPConnector.DeleteListItem(SP_PROORG_LIST_NAME, viewModel.ID, _siteUrl);
-
                     }
                     catch (Exception e)
                     {
@@ -616,7 +613,7 @@ namespace MCAWebAndAPI.Service.HR.Common
                 }
 
                 var updatedValue = new Dictionary<string, object>();
-                updatedValue.Add("Position", viewModel.Position);
+                updatedValue.Add("Position", new FieldLookupValue { LookupId = (int)viewModel.Position.Value });
                 updatedValue.Add("Level", viewModel.Level);
                 updatedValue.Add("Status", viewModel.ProfessionalStatus.Text);
                 updatedValue.Add("projectunit", viewModel.Project.Text);
@@ -695,7 +692,7 @@ namespace MCAWebAndAPI.Service.HR.Common
             }
         }
 
-        public PositionsMaster GetPosition(int id)
+        public PositionMaster GetPosition(int id)
         {
             var caml = @"<View>  
             <Query> 
@@ -704,7 +701,7 @@ namespace MCAWebAndAPI.Service.HR.Common
              <ViewFields><FieldRef Name='Title' /><FieldRef Name='ID' /></ViewFields> 
       </View>";
 
-            var position = new PositionsMaster();
+            var position = new PositionMaster();
             foreach (var item in SPConnector.GetList(SP_POSMAS_LIST_NAME, _siteUrl, caml))
             {
                 position.ID = Convert.ToInt32(item["ID"]);

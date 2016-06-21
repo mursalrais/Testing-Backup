@@ -17,9 +17,15 @@
                          {
                              BindTo = OrganizationalDetailVM.GetProjectOptions()
                          });
-        columns.Bound(p => p.Position).ClientTemplate("#= Position #" +
-                           "<input type='hidden' name='OrganizationalDetails[#= getOrganizationalDetail(data)#].Position' value='#= Position #' />"
-                         );
+        columns.Bound(p => p.Position).ClientTemplate("#= Position.Text #" +
+                           "<input type='hidden' name='OrganizationalDetails[#= getOrganizationalDetail(data)#].Position' value='#= Position.Value #' />"
+                         ).EditorViewData(new
+                         {
+                             DataTextField = "Text",
+                             DataValueField = "Value",
+                             ControllerName = "HRDataMaster",
+                             ActionName = "GetPositionsGrid"
+                         });
         columns.Bound(p => p.Level).ClientTemplate("#= Level #" +
                            "<input type='hidden' name='OrganizationalDetails[#= getOrganizationalDetail(data)#].Level' value='#= Level #' />"
                          );
@@ -56,6 +62,7 @@
                    {
                        model.Id(p => p.ID);
                        model.Field(m => m.Project).DefaultValue(OrganizationalDetailVM.GetProjectDefaultValue());
+                       model.Field(m => m.Position).DefaultValue(OrganizationalDetailVM.GetPositionDefaultValue());
                        model.Field(m => m.ProfessionalStatus).DefaultValue(OrganizationalDetailVM.GetProfessionalStatusDefaultValue());
                        model.Field(m => m.StartDate).DefaultValue(DateTime.UtcNow);
                        model.Field(m => m.LastWorkingDay).DefaultValue(DateTime.UtcNow);
@@ -70,10 +77,8 @@
         var data = $("#OrganizationalDetails").data("kendoGrid").dataSource.data();
         return data.indexOf(dataItem);
     }
-
     function onDataBoundOrganizationalDetails(e) {
         var grid = $("#OrganizationalDetails").data("kendoGrid");
         hideDeletedRowKendoDetail(grid);
     }
-
 </script>

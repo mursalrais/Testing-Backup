@@ -9,6 +9,7 @@ using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Model.HR.DataMaster;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Service.HR.Recruitment
 {
@@ -90,7 +91,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return ID;
         }
 
-        private PositionsMaster GetVacantPosition(string position)
+        private PositionMaster GetVacantPosition(string position)
         {
             var caml = @"<View>  
             <Query> 
@@ -100,10 +101,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 <ViewFields><FieldRef Name='ID' /><FieldRef Name='Title' /></ViewFields> 
             </View>";
 
-            var vacantPosition = new PositionsMaster();
+            var vacantPosition = new PositionMaster();
             foreach (var item in SPConnector.GetList(SP_POSMAS_LIST_NAME, _siteUrl, caml))
             {
-                vacantPosition = new PositionsMaster
+                vacantPosition = new PositionMaster
                 {
                     ID = Convert.ToInt32(item["ID"]),
                     PositionName = Convert.ToString(item["Title"])
@@ -152,6 +153,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     throw e;
                 }
             }
+        }
+
+        public async Task CreateTrainingDetailsAsync(int? headerID, IEnumerable<TrainingDetailVM> trainingDetails)
+        {
+            CreateTrainingDetails(headerID, trainingDetails);
         }
 
         public void CreateTrainingDetails(int? headerID, IEnumerable<TrainingDetailVM> trainingDetails)
@@ -209,9 +215,22 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             var listItem = SPConnector.GetListItem(SP_APPDATA_LIST_NAME, ID, _siteUrl);
             viewModel = ConvertToApplicationDataVM(listItem);
+            viewModel = GetApplicationDetails(viewModel);
 
             return viewModel;
         }
+
+        public async Task<ApplicationDataVM> GetApplicationAsync(int? ID)
+        {
+            var viewModel = new ApplicationDataVM();
+            if (ID == null)
+                return viewModel;
+
+            var listItem = SPConnector.GetListItem(SP_APPDATA_LIST_NAME, ID, _siteUrl);
+            viewModel = ConvertToApplicationDataVM(listItem);
+            return await GetApplicationDetailsAsync(viewModel);
+        }
+
 
         private ApplicationDataVM ConvertToApplicationDataVM(ListItem listItem)
         {
@@ -249,14 +268,38 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.IDCardExpiry = Convert.ToDateTime(listItem["idcardexpirydate"]);
             viewModel.Nationality.Value = FormatUtil.ConvertLookupToID(listItem, "nationality");
             viewModel.ApplicationStatus = Convert.ToString(listItem["applicationstatus"]);
+            return viewModel;
+        }
 
-            // Convert Details
+        private ApplicationDataVM GetApplicationDetails(ApplicationDataVM viewModel)
+        {
             viewModel.EducationDetails = GetEducationDetails(viewModel.ID);
             viewModel.TrainingDetails = GetTrainingDetails(viewModel.ID);
             viewModel.WorkingExperienceDetails = GetWorkingExperienceDetails(viewModel.ID);
             viewModel.DocumentUrl = GetDocumentUrl(viewModel.ID);
 
             return viewModel;
+        }
+
+        private async Task<ApplicationDataVM> GetApplicationDetailsAsync(ApplicationDataVM viewModel)
+        {
+            Task<IEnumerable<EducationDetailVM>> getEducationTask = GetEducationDetailsAsync(viewModel.ID);
+            Task<IEnumerable<TrainingDetailVM>> getTrainingTask = GetTrainingDetailsAsync(viewModel.ID);
+            Task<IEnumerable<WorkingExperienceDetailVM>> getWorkingExperienceTask = GetWorkingExperienceDetailsAsync(viewModel.ID);
+
+            Task allTasks = Task.WhenAll(getEducationTask, getTrainingTask, getWorkingExperienceTask);
+            await allTasks;
+            viewModel.EducationDetails = await getEducationTask;
+            viewModel.TrainingDetails = await getTrainingTask;
+            viewModel.WorkingExperienceDetails = await getWorkingExperienceTask;
+            viewModel.DocumentUrl = GetDocumentUrl(viewModel.ID);
+
+            return viewModel;
+        }
+
+        private async Task<IEnumerable<WorkingExperienceDetailVM>> GetWorkingExperienceDetailsAsync(int? iD)
+        {
+            return GetWorkingExperienceDetails(iD);
         }
 
         private string GetDocumentUrl(int? iD)
@@ -372,6 +415,16 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             };
         }
 
+        private async Task<IEnumerable<EducationDetailVM>> GetEducationDetailsAsync(int? iD)
+        {
+            return GetEducationDetails(iD);
+        }
+
+        private async Task<IEnumerable<TrainingDetailVM>> GetTrainingDetailsAsync(int? ID)
+        {
+            return GetTrainingDetails(ID);
+        }
+
         //<ViewFields>
         //   <FieldRef Name = 'Title' />
         //   < FieldRef Name='applications' />
@@ -454,7 +507,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         }
 
         //TODO: To get active positions
-        public IEnumerable<PositionsMaster> GetVacantPositions()
+        public IEnumerable<PositionMaster> GetVacantPositions()
         {
             var caml = @"<View>  
                     <Query> 
@@ -462,11 +515,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     </Query> 
                     <ViewFields><FieldRef Name='manpowerrequeststatus' /><FieldRef Name='ID' /><FieldRef Name='positionrequested' /><FieldRef Name='positionrequested_x003a_Position' /></ViewFields></View>"; 
 
-            var positions = new List<PositionsMaster>();
+            var positions = new List<PositionMaster>();
             // ID is retrieved from ManPower ID not Position ID
             foreach (var item in SPConnector.GetList(SP_MANPOW_LIST_NAME, _siteUrl, caml))
             {
-                positions.Add(new PositionsMaster
+                positions.Add(new PositionMaster
                 {
                     PositionName = FormatUtil.ConvertLookupToValue(item, "positionrequested"),
                     ID = Convert.ToInt32(item["ID"])
@@ -534,6 +587,21 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             }
 
             return SPConnector.GetLatestListItemID(SP_PROMAS_LIST_NAME, _siteUrl);
+        }
+
+        public async Task CreateEducationDetailsAsync(int? headerID, IEnumerable<EducationDetailVM> educationDetails)
+        {
+            CreateEducationDetails(headerID, educationDetails);
+        }
+
+        public async Task CreateWorkingExperienceDetailsAsync(int? headerID, IEnumerable<WorkingExperienceDetailVM> workingExperienceDetails)
+        {
+            CreateWorkingExperienceDetails(headerID, workingExperienceDetails);
+        }
+
+        public async Task CreateApplicationDocumentAsync(int? headerID, IEnumerable<HttpPostedFileBase> documents)
+        {
+            CreateApplicationDocument(headerID, documents);
         }
     }
 }

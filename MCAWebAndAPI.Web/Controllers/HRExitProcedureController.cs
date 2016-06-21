@@ -53,5 +53,82 @@ namespace MCAWebAndAPI.Web.Controllers
 
             return View("CreateExitProcedure", viewModel);
         }
+
+        [HttpPost]
+        public ActionResult CreateExitProcedure(FormCollection form, ExitProcedureVM viewModel)
+        {
+            // Check whether error is found
+            if (!ModelState.IsValid)
+            {
+                RedirectToAction("Index", "Error");
+            }
+
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            exitProcedureService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            int? exitProcID = null;
+
+            try
+            {
+                exitProcID = exitProcedureService.CreateExitProcedure(viewModel);
+            }
+            catch (Exception e)
+            {
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return RedirectToAction("Index", "Error");
+            }
+
+            /*
+            try
+            {
+                exitProcedureService.CreatePSAManagementDocuments(exitProcID, viewModel.Documents, viewModel);
+            }
+            catch (Exception e)
+            {
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return RedirectToAction("Index", "Error");
+            }
+            */
+
+            return RedirectToAction("Index",
+                "Success",
+                new { errorMessage = string.Format(MessageResource.SuccessCreateExitProcedureData, exitProcID) });
+        }
+
+        public ActionResult DisplayExitProcedure(string siteUrl = null, int? ID = null)
+        {
+            // Clear Existing Session Variables if any
+            SessionManager.RemoveAll();
+
+            // MANDATORY: Set Site URL
+            exitProcedureService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            var viewModel = exitProcedureService.GetExitProcedure(ID);
+
+            return View("EditExitProcedure", viewModel);
+        }
+
+        public ActionResult UpdateExitProcedure(ExitProcedureVM exitProcedure, string site)
+        {
+
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            exitProcedureService.SetSiteUrl(siteUrl);
+
+            try
+            {
+                var headerID = exitProcedureService.UpdateExitProcedure(exitProcedure);
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            return RedirectToAction("Index",
+                "Success",
+                new { errorMessage = string.Format(MessageResource.SuccessUpdateExitProcedure, exitProcedure.ID) });
+
+        }
     }
 }

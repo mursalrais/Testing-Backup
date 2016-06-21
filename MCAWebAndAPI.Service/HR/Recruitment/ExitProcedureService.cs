@@ -56,22 +56,74 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.ExitReason.Value =  Convert.ToString(listItem["exitreason"]);
             viewModel.ReasonDesc = FormatUtil.ConvertMultipleLine(Convert.ToString(listItem["reasondescription"]));
 
-            /*
-            viewModel.IsRenewal.Text = Convert.ToString(listItem["isrenewal"]);
-            viewModel.RenewalNumber = Convert.ToInt32(listItem["renewalnumber"]);
-            viewModel.ProjectOrUnit.Value = Convert.ToString(listItem["ProjectOrUnit"]);
-            viewModel.Position.Value = FormatUtil.ConvertLookupToID(listItem, "position");
-            viewModel.Professional.Text = FormatUtil.ConvertLookupToValue(listItem, "professional");
-            viewModel.JoinDate = Convert.ToDateTime(listItem["joindate"]).ToLocalTime();
-            viewModel.DateOfNewPSA = Convert.ToDateTime(listItem["dateofnewpsa"]).ToLocalTime();
-            viewModel.Tenure = Convert.ToInt32(listItem["tenure"]);
-            viewModel.PSAExpiryDate = Convert.ToDateTime(listItem["psaexpirydate"]).ToLocalTime();
-            viewModel.PSAStatus.Text = Convert.ToString(listItem["psastatus"]);
-
-            viewModel.DocumentUrl = GetDocumentUrl(viewModel.ID);
-            */
-
             return viewModel;
+        }
+
+        public int CreateExitProcedure(ExitProcedureVM exitProcedure)
+        {
+            var updatedValues = new Dictionary<string, object>();
+
+            updatedValues.Add("requestdate", exitProcedure.RequestDate);
+            updatedValues.Add("professional", new FieldLookupValue { LookupId = (int)exitProcedure.Professional.Value });
+            //Cek lagi nama fieldnya
+            updatedValues.Add("ProjectOrUnit", exitProcedure.ProjectUnit);
+            //Cek lagi nama fieldnya
+            updatedValues.Add("position", exitProcedure.Position);
+            updatedValues.Add("mobilenumber", exitProcedure.PhoneNumber);
+            updatedValues.Add("officeemail", exitProcedure.EmailAddress);
+            updatedValues.Add("currentaddress", exitProcedure.CurrentAddress);
+            //Cek lagi nama fieldnya
+            updatedValues.Add("joindate", exitProcedure.JoinDate);
+            updatedValues.Add("lastworkingdate", exitProcedure.LastWorkingDate);
+            updatedValues.Add("exitreason", exitProcedure.ExitReason.Value);
+            updatedValues.Add("reasondescription", exitProcedure.ReasonDesc);
+
+            try
+            {
+                SPConnector.AddListItem(SP_EXP_LIST_NAME, updatedValues, _siteUrl);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.Message);
+                throw e;
+            }
+
+            return SPConnector.GetLatestListItemID(SP_EXP_LIST_NAME, _siteUrl);
+        }
+
+        public bool UpdateExitProcedure(ExitProcedureVM exitProcedure)
+        {
+            var columnValues = new Dictionary<string, object>();
+            int ID = exitProcedure.ID.Value;
+
+            columnValues.Add("requestdate", exitProcedure.RequestDate.Value);
+            columnValues.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(exitProcedure.Professional.Value) });
+            //Cek lagi nama fieldnya
+            columnValues.Add("ProjectOrUnit", exitProcedure.ProjectUnit);
+            //Cek lagi nama fieldnya
+            columnValues.Add("position", exitProcedure.Position);
+            columnValues.Add("mobilenumber", exitProcedure.PhoneNumber);
+            columnValues.Add("officeemail", exitProcedure.EmailAddress);
+            columnValues.Add("currentaddress", exitProcedure.CurrentAddress);
+            //Cek lagi nama fieldnya
+            columnValues.Add("joindate", exitProcedure.JoinDate.Value);
+            columnValues.Add("lastworkingdate", exitProcedure.LastWorkingDate.Value);
+            columnValues.Add("exitreason", exitProcedure.ExitReason.Value);
+            columnValues.Add("reasondescription", exitProcedure.ReasonDesc);
+            
+            try
+            {
+                SPConnector.UpdateListItem(SP_EXP_LIST_NAME, ID, columnValues, _siteUrl);
+            }
+            catch (Exception e)
+            {
+                logger.Debug(e.Message);
+                return false;
+            }
+
+            var entitiy = new ExitProcedureVM();
+            entitiy = exitProcedure;
+            return true;
         }
     }
 }

@@ -55,6 +55,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [Required]
         public DateTime? JoinDate { get; set; } = DateTime.Now;
 
+        public string StringJoinDate { get; set; }
+
         [UIHint("Date")]
         [DisplayName("Last Working Date")]
         [Required]

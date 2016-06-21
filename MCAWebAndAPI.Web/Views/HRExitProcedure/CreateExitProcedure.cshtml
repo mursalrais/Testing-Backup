@@ -1,0 +1,79 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+
+@model ExitProcedureVM
+
+@{
+    ViewBag.Title = "Form Create Exit Procedure";
+}
+
+@using (Html.BeginForm("CreateExitProcedure", "HRExitProcedure", FormMethod.Post,
+                                                                             new
+                                                                             {
+                                                                                 @class = "form-horizontal",
+                                                                                 enctype = "multipart/form-data"
+                                                                             }))
+{
+    <fieldset>
+        <legend>Exit Procedure Data</legend>
+        <div class="row">
+            @Html.Partial("_ExitProcedureData", Model)
+        </div>
+    </fieldset>
+    <div class="form-actions">
+        <div class="row">
+            <div class="col-md-12">
+                <button id="submit-button" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    Submit
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+@section scripts{
+    <script type="text/javascript">
+
+
+        $(document).ready(function ()
+        {
+            $("#submit-button").click(function ()
+            {
+                $("form").submit();
+            });
+        });
+
+        function onSuccess(data)
+        {
+            window.location.href = data.urlToRedirect;
+        }
+
+        function onFailure(data)
+        {
+            window.location.href = data.urlToRedirect;
+        }
+
+        function OnSelectAssetHolderFrom(e) {
+            var dataItem = this.dataItem(e.item);
+            var url = "/HRDataMaster/GetProfessional/" + dataItem.ID;
+
+
+            $.getJSON(url, function (result) {
+
+                $('#Professional').prop('value', result[0].Name);
+                $('#ProjectUnit').prop('value', result[0].Project_Unit);
+                $('#Position').prop('value', result[0].Position);
+
+            })
+
+            var dataItem = this.dataItem(e.item);
+            var url = "/HRPSAManagement/GetJoinDate/" + dataItem.ID;
+
+            $.getJSON(url, function (result) {
+
+                $('#JoinDate').prop('value', result[0].StrJoinDate);
+
+            })
+        }
+    </script>
+}

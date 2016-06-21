@@ -19,10 +19,10 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult Upload(string siteUrl = null, string listName  = null)
         {
             if (siteUrl == null || listName == null)
-                return RedirectToAction("Index", "Error", new { errorMessage = "Parameter cannot be null" });
+                return RedirectToAction(actionName: "Index", controllerName: "Error", routeValues: new { errorMessage = "Parameter cannot be null" });
 
             SessionManager.RemoveAll();
-            SessionManager.Set("SiteUrl", siteUrl);
+            SessionManager.Set(key: "SiteUrl", entity: siteUrl);
 
             var emptyTable = GenerateEmptyDataTable();
             SessionManager.Set("CSVDataTable", emptyTable);
@@ -37,7 +37,7 @@ namespace MCAWebAndAPI.Web.Controllers
         private DataTable GenerateEmptyDataTable()
         {
             // Here we create a DataTable with four columns.
-            DataTable table = new DataTable();
+            var table = new DataTable();
             
             var column = new DataColumn("ID", typeof(int));
             table.Columns.Add(column);
