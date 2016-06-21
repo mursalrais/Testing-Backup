@@ -9,7 +9,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
     {
         void SetSiteUrl(string siteUrl = null);
 
-        IEnumerable<PositionsMaster> GetVacantPositions();
+        IEnumerable<PositionMaster> GetVacantPositions();
 
         IEnumerable<ApplicationDataVM> GetApplications();
 

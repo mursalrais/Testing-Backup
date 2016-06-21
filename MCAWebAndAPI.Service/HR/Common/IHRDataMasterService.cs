@@ -34,7 +34,7 @@ namespace MCAWebAndAPI.Service.HR.Common
 
         IEnumerable<ProfessionalMaster> GetProfessionalMonthlyFees(); 
 
-        IEnumerable<PositionsMaster> GetPositions();
+        IEnumerable<PositionMaster> GetPositions();
         int? EditProfessionalData(ProfessionalDataVM viewModel);
         
         void CreateEducationDetails(int? headerID, IEnumerable<EducationDetailVM> educationDetails);
@@ -44,7 +44,7 @@ namespace MCAWebAndAPI.Service.HR.Common
         void UpdateValidation(int? ID, string status);
         void SendEmailValidation(string emailTo, string emailMessages, bool isApproved);
         void SendEmailValidation(string emailTo, string emailMessages);
-        PositionsMaster GetPosition(int id);
+        PositionMaster GetPosition(int id);
         void SetValidationStatus(int? id, Workflow.ProfessionalValidationStatus validationStatus);
     }
 }

@@ -90,9 +90,9 @@ namespace MCAWebAndAPI.Service.HR.Common
             };
         }
 
-        public IEnumerable<PositionsMaster> GetPositions()
+        public IEnumerable<PositionMaster> GetPositions()
         {
-            var models = new List<PositionsMaster>();
+            var models = new List<PositionMaster>();
 
             foreach (var item in SPConnector.GetList(SP_POSMAS_LIST_NAME, _siteUrl))
             {
@@ -102,13 +102,13 @@ namespace MCAWebAndAPI.Service.HR.Common
             return models;
         }
 
-        private PositionsMaster ConvertToPositionsModel(ListItem item)
+        private PositionMaster ConvertToPositionsModel(ListItem item)
         {
-            var viewModel = new PositionsMaster();
+            var viewModel = new PositionMaster();
 
             viewModel.ID = Convert.ToInt32(item["ID"]);
             viewModel.PositionName = Convert.ToString(item["Title"]);
-            viewModel.isKeyPosition = Convert.ToString(item["iskeyposition"]);
+            viewModel.IsKeyPosition = Convert.ToString(item["iskeyposition"]);
             return viewModel;
         }
 
@@ -235,9 +235,9 @@ namespace MCAWebAndAPI.Service.HR.Common
                 PSANumber = Convert.ToString(item["psanr"]),
                 StartDate = Convert.ToDateTime(item["startdate"]),
                 Project = OrganizationalDetailVM.GetProjectDefaultValue(
-                    FormatUtil.ConvertToInGridLookup(item, "projectunit")),
+                    FormatUtil.ConvertToInGridComboBox(item, "projectunit")),
                 ProfessionalStatus = OrganizationalDetailVM.GetProfessionalStatusDefaultValue(
-                    FormatUtil.ConvertToInGridLookup(item, "Status"))
+                    FormatUtil.ConvertToInGridComboBox(item, "Status"))
             };
         }
 
@@ -278,7 +278,7 @@ namespace MCAWebAndAPI.Service.HR.Common
                 InsuranceNumber = Convert.ToString(item["insurancenr"]),
                 PlaceOfBirth = Convert.ToString(item["placeofbirth"]),
                 Remark = FormatUtil.ConvertMultipleLine(Convert.ToString(item["remark"])),
-                Relationship = FormatUtil.ConvertToInGridLookup(item, "relationship")
+                Relationship = FormatUtil.ConvertToInGridComboBox(item, "relationship")
             };
         }
 
@@ -672,7 +672,7 @@ namespace MCAWebAndAPI.Service.HR.Common
             }
         }
 
-        public PositionsMaster GetPosition(int id)
+        public PositionMaster GetPosition(int id)
         {
             var caml = @"<View>  
             <Query> 
@@ -681,7 +681,7 @@ namespace MCAWebAndAPI.Service.HR.Common
              <ViewFields><FieldRef Name='Title' /><FieldRef Name='ID' /></ViewFields> 
       </View>";
 
-            var position = new PositionsMaster();
+            var position = new PositionMaster();
             foreach (var item in SPConnector.GetList(SP_POSMAS_LIST_NAME, _siteUrl, caml))
             {
                 position.ID = Convert.ToInt32(item["ID"]);
