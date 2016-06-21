@@ -19,6 +19,7 @@
     <fieldset>
         <legend>Performance Plan Monitoring</legend>
         <div class="row">
+            @Html.HiddenFor(x=>x.ID)
             @Html.Partial("_PerformancePlanMonitoring", Model)
         </div>
         <div class="form-actions">
