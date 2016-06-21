@@ -50,7 +50,7 @@ namespace MCAWebAndAPI.Web.Controllers
             }), JsonRequestBehavior.AllowGet);
         }
 
-        public async Task<ActionResult> DisplayWorkflowRouter(string listName, string requestor)
+        public async Task<ActionResult> DisplayWorkflowRouter(string listName, string requestor, bool isPartial = true)
         {
             _service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
             var viewModel = await _service.GetWorkflowRouter(listName, requestor);
@@ -59,6 +59,8 @@ namespace MCAWebAndAPI.Web.Controllers
             SessionManager.Set("WorkflowRouterRequestorUnit", viewModel.RequestorUnit);
             SessionManager.Set("WorkflowRouterRequestorPosition", viewModel.RequestorPosition);
 
+            if (isPartial)
+                return PartialView("_WorkflowDetails", viewModel);
             return View("_WorkflowDetails", viewModel);
         }
 

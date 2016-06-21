@@ -139,18 +139,20 @@ namespace MCAWebAndAPI.Web.Controllers
 
             Task createApplicationDocumentTask = _service.CreateApplicationDocumentAsync(headerID, viewModel.Documents);
 
-            // BEGIN Demo 
+            // BEGIN Workflow Demo 
             headerID = 45; // This MUST NOT be hardcoded. It is hardcoded as it is just a demo
             Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateTransactionWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
                 SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)headerID);
 
+            // Send to Level 1 Approver
             Task sendApprovalRequestTask = WorkflowHelper.SendApprovalRequestAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
                 SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)headerID, 1,
-                EmailResource.ApplicationSubmissionNotification);
-             
+                string.Format(EmailResource.WorkflowAskForApproval, UrlResource.ApplicationData));
+
+            // END Workflow Demo
+
             Task sendTask = EmailUtil.SendAsync(viewModel.EmailAddresOne, "Application Submission Confirmation",
-                  EmailResource.ApplicationSubmissionNotification);
-            // END Demo
+                 EmailResource.ApplicationSubmissionNotification);
 
             Task allTasks = Task.WhenAll(createEducationDetailsTask, createTrainingDetailsTask,
                 createWorkingExperienceDetailsTask, createApplicationDocumentTask);
@@ -291,7 +293,7 @@ namespace MCAWebAndAPI.Web.Controllers
             viewModel.ManpowerRequisitionID = ID;
 
             // Used for Workflow Router
-            ViewBag.ListName = "Manpower Requisition";
+            ViewBag.ListName = "Manpower%20Requisition";
 
             // This var should be taken from passing parameter
             ViewBag.RequestorUserLogin = "yunita.ajah@eceos.com";

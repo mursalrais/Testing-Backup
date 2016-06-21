@@ -748,7 +748,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ConfigResource.resx</DependentUpon>
     </Compile>
-    <Compile Include="Resources\EmailResource.Designer.cs" />
+    <Compile Include="Resources\EmailResource1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EmailResource.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resources\MessageResource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -798,7 +802,10 @@
       <LastGenOutput>ConfigResource.Designer.cs</LastGenOutput>
       <CustomToolNamespace>MCAWebAndAPI.Web.Resources</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\EmailResource.resx" />
+    <EmbeddedResource Include="Resources\EmailResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>EmailResource1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\MessageResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>MessageResource.Designer.cs</LastGenOutput>

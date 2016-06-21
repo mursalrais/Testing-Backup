@@ -147,4 +147,13 @@ Link : &lt;a href="{0}"&gt;Click Here&lt;/a&gt;</value>
 This email is sent to you to notify that your approval request has been responded by the HR Team. Thank you. 
 &lt;/p&gt;</value>
   </data>
+  <data name="WorkflowAskForApproval" xml:space="preserve">
+    <value>&lt;p&gt;
+    &lt;strong&gt;Dear Approver&lt;/strong&gt;
+&lt;/p&gt;
+&lt;p&gt;
+    Please review the following form request:    
+&lt;/p&gt;
+Link: &lt;a href="{0}"&gt;Click Here&lt;/a&gt;</value>
+  </data>
 </root>
