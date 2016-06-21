@@ -70,3 +70,15 @@ A look-up field contains invalid data. Please check the value and try again.
 2016-06-17 14:13:32.0936 MCAWebAndAPI.Service.HR.Recruitment.HRInterviewService Invalid look-up value.
 
 A look-up field contains invalid data. Please check the value and try again.
+2016-06-20 16:26:55.7651 MCAWebAndAPI.Service.HR.Recruitment.HRInterviewService Column 'interviewdatetime' does not exist. It may have been deleted by another user.  /sites/ims/hr/Lists/Interview Invitation to Panel
+2016-06-20 16:31:34.5639 MCAWebAndAPI.Service.HR.Recruitment.HRInterviewService Invalid look-up value.
+
+A look-up field contains invalid data. Please check the value and try again.
+2016-06-20 21:59:24.5531 MCAWebAndAPI.Service.HR.Recruitment.HRInterviewService Operation is not valid due to the current state of the object.
+2016-06-20 22:05:43.4356 MCAWebAndAPI.Service.HR.Recruitment.HRInterviewService Operation is not valid due to the current state of the object.
+2016-06-21 09:55:41.5792 MCAWebAndAPI.Service.HR.Recruitment.HRInterviewService Invalid look-up value.
+
+A look-up field contains invalid data. Please check the value and try again.
+2016-06-21 10:13:25.4544 MCAWebAndAPI.Service.HR.Recruitment.HRInterviewService Invalid look-up value.
+
+A look-up field contains invalid data. Please check the value and try again.

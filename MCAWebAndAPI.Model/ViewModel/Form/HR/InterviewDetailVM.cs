@@ -1,11 +1,7 @@
-﻿using Kendo.Mvc.UI;
-using MCAWebAndAPI.Model.Common;
-using MCAWebAndAPI.Model.ViewModel.Control;
+﻿using MCAWebAndAPI.Model.Common;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Web;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {

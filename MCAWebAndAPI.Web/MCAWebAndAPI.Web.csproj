@@ -668,6 +668,8 @@
     <Content Include="Views\HRInterviewlist\_IntvinviteDetails.cshtml" />
     <Content Include="Views\HRInterviewlist\InputInterviewResult.cshtml" />
     <Content Include="Views\HRInterviewlist\_InterviewResultlist.cshtml" />
+    <Content Include="Views\HRInterviewlist\InputInterviewResultDetail.cshtml" />
+    <Content Include="Views\HRInterviewlist\_InputInterviewResultDetail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
