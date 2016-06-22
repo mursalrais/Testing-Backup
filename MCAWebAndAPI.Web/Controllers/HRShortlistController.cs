@@ -3,9 +3,9 @@ using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using MCAWebAndAPI.Service.Converter;
 using MCAWebAndAPI.Service.HR.Recruitment;
 using MCAWebAndAPI.Service.Resources;
+using MCAWebAndAPI.Web.Resources;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Service.Utils;
-using MCAWebAndAPI.Web.Resources;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -62,7 +62,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            EmailUtil.Send(viewModel.SendTo, "Shortlist Data", "Data list candidate has been send");
+            _service.SendEmailValidation(viewModel.SendTo, EmailResource.EmailShortlistData);
 
             return JsonHelper.GenerateJsonSuccessResponse(
                 string.Format("{0}/{1}", siteUrl, UrlResource.Professional));
@@ -130,7 +130,7 @@ namespace MCAWebAndAPI.Web.Controllers
             try
             {
                 viewModel.ShortlistDetails = BindShortlistDetails(form, viewModel.ShortlistDetails);
-                _service.CreateShortlistInviteIntv(headerID, viewModel);
+                _service.CreateShortlistInviteIntv(headerID, viewModel, EmailResource.EmailInterviewResult);
             }
             catch (Exception e)
             {

@@ -107,5 +107,24 @@ namespace MCAWebAndAPI.Web.Resources {
                 return ResourceManager.GetString("ProfessionalEmailValidationResponse", resourceCulture);
             }
         }
+
+        public static string EmailInterviewResult {
+            get {
+                return ResourceManager.GetString("EmailInterviewResult", resourceCulture);
+            }
+        }
+
+        public static string EmailShortlistData { 
+        get {
+                return ResourceManager.GetString("EmailShortlistData", resourceCulture);
+            }
+        }
+
+        public static object EmailCandidateShortlist {
+            get
+            {
+                return ResourceManager.GetString("EmailInterviewResult", resourceCulture);
+            }
+        }
     }
 }

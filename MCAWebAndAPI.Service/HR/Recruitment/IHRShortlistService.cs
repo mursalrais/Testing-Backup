@@ -17,9 +17,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         void UpdateShortlistDataDetail(int? headerID, IEnumerable<ShortlistDetailVM> ShortlistDetails);
 
-        void CreateShortlistInviteIntv(int? headerID, ApplicationShortlistVM ShortlistDetails);
+        void CreateShortlistInviteIntv(int? headerID, ApplicationShortlistVM ShortlistDetails, string mailsubject);
 
         void CreateShorlistSendintv(int? headerID, ApplicationShortlistVM ShortlistDetails);
-        
+
+        void SendEmailValidation(string mailto, string mailmessage);
+
     }
 }

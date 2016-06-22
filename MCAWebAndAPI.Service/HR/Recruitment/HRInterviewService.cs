@@ -290,13 +290,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
 
             var createdValue = new Dictionary<string, object>();
-
-            foreach (var list in viewModel.ShortlistDetails)
-            {
-                createdValue.Add("Title", list.Candidate);
-                createdValue.Add("emailfrom", list.Candidatemail);
-                createdValue.Add("emailto", null);
-                createdValue.Add("emailmessage", viewModel.EmailMessage);
+            
+                createdValue.Add("Title", viewModel.Candidate );
+                createdValue.Add("emailfrom", viewModel.Position);
+                createdValue.Add("emailto", viewModel.Remarks);
+                createdValue.Add("emailmessage", viewModel.GetResultOptions);
                 createdValue.Add("emaildate", viewModel.InterviewerDate);
 
                 try
@@ -308,10 +306,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     logger.Error(e.Message);
                     throw e;
                 }
-            }
 
             EmailUtil.Send(viewModel.SendTo, "Interview Result", "<div><label>" + viewModel.EmailMessage + "</label></div>" +
-                           "<a href = 'https://eceos2.sharepoint.com/sites/ims/hr/Lists/Professional%20Master/DispForm_Custom.aspx?ID=3' > Open candidates' profiles for this position</a>");
+                           "<a href = 'https://eceos2.sharepoint.com/sites/mca-dev/hr/Lists/Professional%20Master/DispForm_Custom.aspx?ID=3' > Open candidates' profiles for this position</a>");
 
         }
 
@@ -338,6 +335,19 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             EmailUtil.Send(viewModel.EmailFrom, "Interview Invitation", viewModel.EmailMessage);
 
+        }
+
+        public void SendEmailValidation(string emailTo, string emailMessages)
+        {
+            try
+            {
+                EmailUtil.Send(emailTo, "Shortlist Candidate Data", emailMessages);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e);
+                throw e;
+            }
         }
     }
 }
