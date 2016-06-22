@@ -18,10 +18,11 @@
             )
             .EditorViewData(new
             {
-                DataTextField = "Text",
+                BindTo = ProjectOrUnitGoalsDetailVM.GetCategoryOptions()
+                @*DataTextField = "Text",
                 DataValueField = "Value",
                 ControllerName = "HRPerformancePlan",
-                ActionName = "GetCategoryGrid"
+                ActionName = "GetCategoryGrid"*@
             });
             columns.Bound(p => p.IndividualGoalAndPlan).ClientTemplate("#= IndividualGoalAndPlan #" +
             "<input type='hidden' name='ProjectOrUnitGoalsDetails[#= getProfessionalPerformancePlanDetail(data)#].IndividualGoalAndPlan' value='#= IndividualGoalAndPlan #' />"

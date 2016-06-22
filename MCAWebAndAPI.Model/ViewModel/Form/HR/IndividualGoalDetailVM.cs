@@ -15,10 +15,10 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// individualgoalcategory
         /// </summary>
-        [UIHint("InGridAjaxComboBox")]
-        public AjaxComboBoxVM Category { get; set; } = new AjaxComboBoxVM();
+        [UIHint("InGridComboBox")]
+        public InGridComboBoxVM Category { get; set; } = new InGridComboBoxVM();
 
-        public static IEnumerable<AjaxComboBoxVM> GetCategoryOptions()
+        public static IEnumerable<InGridComboBoxVM> GetCategoryOptions()
         {
             var index = 0;
             var options = new string[] 
@@ -31,14 +31,14 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             };
 
             return options.Select(e =>
-                new AjaxComboBoxVM
+                new InGridComboBoxVM
                 {
                     Value = ++index,
                     Text = e
                 });
         }
 
-        public static AjaxComboBoxVM GetCategoryDefaultValue(AjaxComboBoxVM model = null)
+        public static InGridComboBoxVM GetCategoryDefaultValue(InGridComboBoxVM model = null)
         {
             var options = GetCategoryOptions();
             if (model == null || model.Value == null || string.IsNullOrEmpty(model.Text))
@@ -57,7 +57,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// individualgoalweight
         /// </summary>
-        [UIHint("Integer")]
+        [UIHint("Int32")]
         public int Weight { get; set; }
 
         /// <summary>

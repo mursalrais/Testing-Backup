@@ -67,7 +67,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 updatedValue.Add("individualgoalremarks", viewModel.Remarks);
                 try
                 {
-                    SPConnector.AddListItem(SP_PPPIG_LIST_NAME, updatedValue, _siteUrl);
+                    if (Item.CheckIfUpdated(viewModel))
+                        SPConnector.UpdateListItem(SP_PPPIG_LIST_NAME, viewModel.ID, updatedValue, _siteUrl);
+                    else
+                        SPConnector.AddListItem(SP_PPPIG_LIST_NAME, updatedValue, _siteUrl);
                 }
                 catch (Exception e)
                 {
@@ -121,7 +124,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 ID = Convert.ToInt32(item["ID"]),
                 ProjectOrUnitGoals = Convert.ToString(item["projectunitgoals"]),
                 Category = IndividualGoalDetailVM.GetCategoryDefaultValue(
-                    new Model.ViewModel.Control.AjaxComboBoxVM
+                    new Model.ViewModel.Control.InGridComboBoxVM
                     {
                         Text = Convert.ToString(item["individualgoalcategory"])
                     }),
