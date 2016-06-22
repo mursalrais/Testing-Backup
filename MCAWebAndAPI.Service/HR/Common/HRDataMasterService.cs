@@ -87,7 +87,8 @@ namespace MCAWebAndAPI.Service.HR.Common
                 Name = Convert.ToString(item["Title"]),
                 Status = Convert.ToString(item["maritalstatus"]),
                 Position = item["Position"] == null ? "" :
-               Convert.ToString((item["Position"] as FieldLookupValue).LookupValue)
+               Convert.ToString((item["Position"] as FieldLookupValue).LookupValue),
+                Project_Unit = Convert.ToString(item["Project_x002f_Unit"])
             };
         }
 

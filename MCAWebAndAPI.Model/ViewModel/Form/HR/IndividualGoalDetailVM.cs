@@ -15,24 +15,30 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// individualgoalcategory
         /// </summary>
-        [UIHint("InGridComboBox")]
-        public InGridComboBoxVM Category { get; set; }
+        [UIHint("InGridAjaxComboBox")]
+        public AjaxComboBoxVM Category { get; set; } = new AjaxComboBoxVM();
 
-        public static IEnumerable<InGridComboBoxVM> GetCategoryOptions()
+        public static IEnumerable<AjaxComboBoxVM> GetCategoryOptions()
         {
             var index = 0;
-            var options = new string[] {
-                "Program Management"};
+            var options = new string[] 
+            {
+                "Program Management",
+                "Leadership & Operational Excellence",
+                "Outreach & Partnership",
+                "Organizational Development",
+                "Teamwork & Professionalism"
+            };
 
             return options.Select(e =>
-                new InGridComboBoxVM
+                new AjaxComboBoxVM
                 {
                     Value = ++index,
                     Text = e
                 });
         }
 
-        public static InGridComboBoxVM GetCategoryDefaultValue(InGridComboBoxVM model = null)
+        public static AjaxComboBoxVM GetCategoryDefaultValue(AjaxComboBoxVM model = null)
         {
             var options = GetCategoryOptions();
             if (model == null || model.Value == null || string.IsNullOrEmpty(model.Text))
@@ -51,12 +57,12 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// individualgoalweight
         /// </summary>
+        [UIHint("Integer")]
         public int Weight { get; set; }
 
         /// <summary>
         /// individualgoalremarks
         /// </summary>
-        [UIHint("TextArea")]
         public string Remarks { get; set; }
     }
 }

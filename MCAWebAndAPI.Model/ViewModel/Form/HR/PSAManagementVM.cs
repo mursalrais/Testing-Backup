@@ -90,6 +90,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [Required]
         public DateTime? JoinDate { get; set; } = DateTime.Now;
 
+        public string StrJoinDate { get; set; }
+
         /// <summary>
         /// dateofnewpsa
         /// </summary>

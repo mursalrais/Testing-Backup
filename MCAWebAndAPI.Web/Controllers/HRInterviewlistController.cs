@@ -3,6 +3,7 @@ using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using MCAWebAndAPI.Service.Converter;
 using MCAWebAndAPI.Service.HR.Recruitment;
 using MCAWebAndAPI.Service.Resources;
+using MCAWebAndAPI.Web.Resources;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Service.Utils;
 using MCAWebAndAPI.Web.Resources;
@@ -60,7 +61,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            EmailUtil.Send(viewModel.SendTo, "Shortlist Data", "Data list candidate has been send");
+            _service.SendEmailValidation(viewModel.SendTo, EmailResource.EmailInterviewResult);
 
             return JsonHelper.GenerateJsonSuccessResponse(
                 string.Format("{0}/{1}", siteUrl, UrlResource.Professional));
@@ -82,7 +83,7 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateInputResultInterview(FormCollection form, ApplicationShortlistVM viewModel)
+        public ActionResult InputResultInterview(FormCollection form, ApplicationShortlistVM viewModel)
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
@@ -112,12 +113,11 @@ namespace MCAWebAndAPI.Web.Controllers
             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
 
-            var viewmodel = _service.GetResultlistInterview(ID);
+            var viewmodel = _service.GetResultlistInterview(ID); 
             //viewmodel.SendTo = "";
             //viewmodel.ID = id;
             return View(viewmodel);
         }
-
 
         private IEnumerable<ShortlistDetailVM> BindShortlistDetails(FormCollection form, IEnumerable<ShortlistDetailVM> shortDetails)
         {
