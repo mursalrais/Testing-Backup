@@ -16,7 +16,7 @@
     <RootNamespace>MCAWebAndAPI.Web</RootNamespace>
     <AssemblyName>MCAWebAndAPI.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -672,14 +672,17 @@
     <Content Include="Views\HRPerformanceMonitoring\_Detail.cshtml" />
     <Content Include="Views\HRPerformanceMonitoring\_PerformancePlanMonitoring.cshtml" />
     <Content Include="Views\Shared\_WorkflowDetails.cshtml" />
-    <Content Include="Views\Shared\DisplayTemplates\Boolean.cshtml" />
-    <Content Include="Views\Shared\DisplayTemplates\Int32.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\InGridAjaxCascadeComboBox.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\Int32.cshtml" />
+    <Content Include="Views\HRPerformancePlan\EditPerformancePlan.cshtml" />
+    <Content Include="Views\HRPerformancePlan\_PerformancePlanDetail.cshtml" />
     <Content Include="Views\HRExitProcedure\CreateExitProcedure.cshtml" />
     <Content Include="Views\HRExitProcedure\EditExitProcedure.cshtml" />
     <Content Include="Views\HRExitProcedure\_ExitProcedureData.cshtml" />
     <Content Include="Views\HRExitProcedure\_ExitProcedureDataEdit.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\InGridAjaxCascadeComboBox.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Int32.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\Int32.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\Boolean.cshtml" />
+    <Content Include="Views\HRPayroll\_MonthlyFeeDetail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -719,6 +722,7 @@
     <Compile Include="Controllers\HRManpowerRequisitionController.cs" />
     <Compile Include="Controllers\HRPayrollController.cs" />
     <Compile Include="Controllers\HRPerformanceMonitoringController.cs" />
+    <Compile Include="Controllers\HRPerformancePlanController.cs" />
     <Compile Include="Controllers\HRProfessionalController.cs" />
     <Compile Include="Controllers\HRPSAManagementController.cs" />
     <Compile Include="Controllers\HRShortlistController.cs" />
@@ -753,7 +757,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ConfigResource.resx</DependentUpon>
     </Compile>
-    <Compile Include="Resources\EmailResource1.Designer.cs">
+    <Compile Include="Resources\EmailResource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>EmailResource.resx</DependentUpon>
@@ -809,7 +813,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\EmailResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>EmailResource1.Designer.cs</LastGenOutput>
+      <LastGenOutput>EmailResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\MessageResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
