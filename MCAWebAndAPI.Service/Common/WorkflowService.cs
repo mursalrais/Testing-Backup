@@ -201,7 +201,7 @@ namespace MCAWebAndAPI.Service.Common
             var emails = new List<string>();
             foreach (var item in SPConnector.GetList(workflowTransactionListName, _siteUrl, caml))
             {
-                emails.Add(Convert.ToString(item["approver"]));
+                emails.Add(Convert.ToString(item["approver0"]));
             }
             foreach (var item in emails)
             {
@@ -214,8 +214,8 @@ namespace MCAWebAndAPI.Service.Common
             var updatedValue = new Dictionary<string, object>();
             updatedValue.Add(transactionLookupColumnName, new FieldLookupValue { LookupId = headerID });
             updatedValue.Add("approverlevel", workflowItem.Level);
-            updatedValue.Add("approver", GetApproverUserLogin((int)workflowItem.ApproverUserName.Value));
-            updatedValue.Add("requestor", requestor);
+            updatedValue.Add("approver0", GetApproverUserLogin((int)workflowItem.ApproverUserName.Value));
+            updatedValue.Add("requestor0", requestor);
             SPConnector.AddListItem(workflowTransactionListName, updatedValue, _siteUrl);
         }
     }
