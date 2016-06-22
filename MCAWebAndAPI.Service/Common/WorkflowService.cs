@@ -4,6 +4,9 @@ using MCAWebAndAPI.Model.HR.DataMaster;
 using MCAWebAndAPI.Model.ViewModel.Form.Common;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
+using System.Threading.Tasks;
+using System.Linq;
+using MCAWebAndAPI.Model.ViewModel.Control;
 
 namespace MCAWebAndAPI.Service.Common
 {
@@ -15,14 +18,19 @@ namespace MCAWebAndAPI.Service.Common
         const string SP_POSMAS_LIST_NAME = "Position Master";
 
         public IEnumerable<PositionMaster> GetPositionsInWorkflow(string listName, 
-            string requestorUnit, string requestorPosition)
+            string approverUnit, string requestorUnit, string requestorPosition)
         {
             var caml = @"<View>  
             <Query> 
-               <Where><And><And><Eq><FieldRef Name='requestorposition' /><Value Type='Lookup'>" + 
-                requestorPosition + @"</Value></Eq><Eq><FieldRef Name='requestorunit' /><Value Type='Choice'>" + 
-                requestorUnit + @"</Value></Eq></And><Eq><FieldRef Name='transactiontype' /><Value Type='Choice'>" + 
-                listName + @"</Value></Eq></And></Where> 
+               <Where><And><And><And><Eq>
+                <FieldRef Name='approverunit' /><Value Type='Choice'>" 
+                    + approverUnit + @"</Value></Eq><Eq>
+                <FieldRef Name='requestorposition' /><Value Type='Lookup'>"
+                    + requestorPosition + @"</Value></Eq></And><Eq>
+                <FieldRef Name='requestorunit' /><Value Type='Choice'>"
+                    + requestorUnit + @"</Value></Eq></And><Eq>
+                <FieldRef Name='transactiontype' /><Value Type='Choice'>"
+                    + listName + @"</Value></Eq></And></Where> 
             </Query> 
                 <ViewFields><FieldRef Name='approverposition' /></ViewFields> 
             </View>";
@@ -41,7 +49,7 @@ namespace MCAWebAndAPI.Service.Common
         }
        
 
-        public WorkflowRouterVM GetWorkflowRouter(string listName, string requestor)
+        public async Task<WorkflowRouterVM> GetWorkflowRouter(string listName, string requestor)
         {
             var viewModel = new WorkflowRouterVM();
             viewModel.ListName = listName; 
@@ -83,7 +91,7 @@ namespace MCAWebAndAPI.Service.Common
                     StringComparison.OrdinalIgnoreCase) == 0)
                 continue;
 
-                var vm = ConvertToWorkflowItemVM(item);
+                var vm = await ConvertToWorkflowItemVM(item);
                 workflowItems.Add(vm);
             }
 
@@ -92,18 +100,56 @@ namespace MCAWebAndAPI.Service.Common
             return viewModel;
         }
 
-        private WorkflowItemVM ConvertToWorkflowItemVM(ListItem item)
+        private async Task<WorkflowItemVM> ConvertToWorkflowItemVM(ListItem item)
         {
+            
             var viewModel = new WorkflowItemVM();
-            viewModel.Level = Convert.ToString(item["approverlevel"]);
-            viewModel.ApproverUnit = FormatUtil.ConvertToInGridComboBox(item, "approverunit");
             viewModel.ApproverPosition = FormatUtil.ConvertToInGridAjaxComboBox(item, "approverposition");
+            Task<IEnumerable<ProfessionalMaster>> getApproverNamesTask = 
+                GetApproverNamesAsync(viewModel.ApproverPosition.Text);
+
+            viewModel.Level = Convert.ToString(item["approverlevel"]);
+            viewModel.ApproverUnit =
+                WorkflowItemVM.GetUnitDefaultValue(new InGridComboBoxVM
+                {
+                    Text = Convert.ToString(item["approverunit"])
+                });
+
+            var userNames = await getApproverNamesTask;
+            var userName = userNames.FirstOrDefault();
+            viewModel.ApproverUserName = AjaxComboBoxVM.GetDefaultValue(new AjaxComboBoxVM
+            {
+                Text = userName.Name,
+                Value = userName.ID
+            });
+
             return viewModel;
         }
 
         public void SetSiteUrl(string siteUrl)
         {
             _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
+        }
+
+        private async Task<IEnumerable<ProfessionalMaster>> GetApproverNamesAsync(string position)
+        {
+            return GetApproverNames(position);
+        }
+
+        private string GetApproverUserLogin(int userID)
+        {
+            var caml = @"<View>  
+            <Query> 
+               <Where><Eq><FieldRef Name='ID' /><Value Type='Counter'>" + userID + @"</Value></Eq></Where> 
+            </Query> 
+             <ViewFields><FieldRef Name='officeemail' /></ViewFields> 
+            </View>";
+
+            foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl, caml))
+            {
+                return Convert.ToString(item["officeemail"]);
+            }
+            return null;
         }
 
         public IEnumerable<ProfessionalMaster> GetApproverNames(string position)
@@ -168,7 +214,7 @@ namespace MCAWebAndAPI.Service.Common
             var updatedValue = new Dictionary<string, object>();
             updatedValue.Add(transactionLookupColumnName, new FieldLookupValue { LookupId = headerID });
             updatedValue.Add("approverlevel", workflowItem.Level);
-            updatedValue.Add("approver", workflowItem.ApproverUserName);
+            updatedValue.Add("approver", GetApproverUserLogin((int)workflowItem.ApproverUserName.Value));
             updatedValue.Add("requestor", requestor);
             SPConnector.AddListItem(workflowTransactionListName, updatedValue, _siteUrl);
         }

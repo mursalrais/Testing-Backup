@@ -1,13 +1,21 @@
-﻿using System;
+﻿using Kendo.Mvc.UI;
+using MCAWebAndAPI.Model.Common;
+using MCAWebAndAPI.Model.ViewModel.Control;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Web;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
-    public class ProjectOrUnitGoalsDetailVM
+    public class ProjectOrUnitGoalsDetailVM : IndividualGoalDetailVM
     {
+        /// <summary>
+        /// projectunitgoals
+        /// </summary>
+        [UIHint("TextArea")]
         public string ProjectOrUnitGoals { get; set; }
     }
 }

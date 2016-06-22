@@ -19,13 +19,13 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// monthlyfee
         /// </summary>
-        [UIHint("Integer")]
+        [UIHint("Int32")]
         public int MonthlyFee { get; set; }
 
         /// <summary>
         /// annualfee
         /// </summary>
-        [UIHint("Integer")]
+        [UIHint("Int32")]
         public int AnnualFee { get; set; }
 
         /// <summary>

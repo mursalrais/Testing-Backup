@@ -1,7 +1,7 @@
 ﻿using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using MCAWebAndAPI.Model.ViewModel.Form.HR;
-using MCAWebAndAPI.Service.HR.Payroll;
+using MCAWebAndAPI.Service.HR.Recruitment;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
@@ -15,33 +15,33 @@ using System;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
-    public class HRPayrollController : Controller
+    public class HRPerformancePlanController : Controller
     {
-        IHRPayrollServices _hRPayrollService;
+        IHRPerformancePlanService _hRPerformancePlanService;
 
-        public HRPayrollController()
+        public HRPerformancePlanController()
         {
-            _hRPayrollService = new HRPayrollServices();
+            _hRPerformancePlanService = new HRPerformancePlanService();
         }
 
-        public ActionResult CreateMonthlyFee(string siteUrl = null)
+        public ActionResult CreatePerformancePlan(string siteUrl = null)
         {
             // Clear Existing Session Variables if any
             SessionManager.RemoveAll();
 
             // MANDATORY: Set Site URL
-            _hRPayrollService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            _hRPerformancePlanService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             // Get blank ViewModel
-            var viewModel = _hRPayrollService.GetPopulatedModel();
+            var viewModel = _hRPerformancePlanService.GetPopulatedModel();
 
             // Return to the name of the view and parse the model
-            return View("CreateMonthlyFee", viewModel);
+            return View("CreatePerformancePlan", viewModel);
         }
 
         [HttpPost]
-        public ActionResult SubmitMonthlyFee(FormCollection form, MonthlyFeeVM viewModel)
+        public ActionResult SubmitPerformancePlan(FormCollection form, ProfessionalPerformancePlanVM viewModel)
         {
             //if (!ModelState.IsValid)
             //{
@@ -50,12 +50,12 @@ namespace MCAWebAndAPI.Web.Controllers
             //    return JsonHelper.GenerateJsonErrorResponse(errorMessages);
             //}
             var siteUrl = SessionManager.Get<string>("SiteUrl");
-            _hRPayrollService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            _hRPerformancePlanService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             int? headerID = null;
             try
             {
-                headerID = _hRPayrollService.CreateHeader(viewModel);
+                headerID = _hRPerformancePlanService.CreateHeader(viewModel);
             }
             catch (Exception e)
             {
@@ -65,8 +65,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             try
             {
-                viewModel.MonthlyFeeDetails = BindMonthlyFeeDetailDetails(form, viewModel.MonthlyFeeDetails);
-                _hRPayrollService.CreateMonthlyFeeDetails(headerID, viewModel.MonthlyFeeDetails);
+                _hRPerformancePlanService.CreatePerformancePlanDetails(headerID, viewModel.ProjectOrUnitGoalsDetails);
             }
             catch (Exception e)
             {
@@ -74,21 +73,21 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.MonthlyFee);
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.ProfessionalPerformancePlan);
         }
 
-        public ActionResult EditMonthlyFee(int ID, string siteUrl = null)
+        public ActionResult EditPerformancePlan(int ID, string siteUrl = null)
         {
-            _hRPayrollService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            _hRPerformancePlanService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
-            var viewModel = _hRPayrollService.GetHeader(ID);
+            var viewModel = _hRPerformancePlanService.GetHeader(ID);
 
             return View(viewModel);
         }
 
         [HttpPost]
-        public ActionResult UpdateMonthlyFee(FormCollection form, MonthlyFeeVM viewModel, string site)
+        public ActionResult UpdatePerformancePlan(FormCollection form, ProfessionalPerformancePlanVM viewModel, string site)
         {
             //if (!ModelState.IsValid)
             //{
@@ -98,14 +97,13 @@ namespace MCAWebAndAPI.Web.Controllers
             //}
 
             var siteUrl = SessionManager.Get<string>("SiteUrl");
-            _hRPayrollService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            _hRPerformancePlanService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
-            _hRPayrollService.UpdateHeader(viewModel);
+            _hRPerformancePlanService.UpdateHeader(viewModel);
 
             try
             {
-                viewModel.MonthlyFeeDetails = BindMonthlyFeeDetailDetails(form, viewModel.MonthlyFeeDetails);
-                _hRPayrollService.CreateMonthlyFeeDetails(viewModel.ID, viewModel.MonthlyFeeDetails);
+                _hRPerformancePlanService.CreatePerformancePlanDetails(viewModel.ID, viewModel.ProjectOrUnitGoalsDetails);
             }
             catch (Exception e)
             {
@@ -113,27 +111,15 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.MonthlyFee);
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.ProfessionalPerformancePlan);
         }
 
-        IEnumerable<MonthlyFeeDetailVM> BindMonthlyFeeDetailDetails(FormCollection form, IEnumerable<MonthlyFeeDetailVM> monthlyFeeDetails)
-        {
-            var array = monthlyFeeDetails.ToArray();
-
-            for (int i = 0; i < array.Length; i++)
-            {
-                array[i].DateOfNewFee = BindHelper.BindDateInGrid("MonthlyFeeDetails",
-                    i, "DateOfNewFee", form);
-            }
-            return array;
-        }
-
-        public JsonResult GetCurrencyGrid()
+        public JsonResult GetCategoryGrid()
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
-            _hRPayrollService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            _hRPerformancePlanService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
-            var currency = MonthlyFeeDetailVM.GetCurrencyOptions();
+            var currency = ProjectOrUnitGoalsDetailVM.GetCategoryOptions();
 
             return Json(currency.Select(e =>
                 new {

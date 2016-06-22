@@ -126,5 +126,20 @@ namespace MCAWebAndAPI.Web.Resources {
                 return ResourceManager.GetString("EmailInterviewResult", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;p&gt;
+        ///    &lt;strong&gt;Dear Approver&lt;/strong&gt;
+        ///&lt;/p&gt;
+        ///&lt;p&gt;
+        ///    Please review the following form request:    
+        ///&lt;/p&gt;
+        ///Link: &lt;a href=&quot;{0}&quot;&gt;Click Here&lt;/a&gt;.
+        /// </summary>
+        public static string WorkflowAskForApproval {
+            get {
+                return ResourceManager.GetString("WorkflowAskForApproval", resourceCulture);
+            }
+        }
     }
 }

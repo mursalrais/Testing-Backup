@@ -67,11 +67,11 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Common
         public static InGridComboBoxVM GetUnitDefaultValue(InGridComboBoxVM model = null)
         {
             var options = GetUnitOptions();
-            if (model == null || model.Value == null || string.IsNullOrEmpty(model.Text))
+            if (model == null || (model.Value == null && model.Text == null) || string.IsNullOrEmpty(model.Text))
                 return options.FirstOrDefault();
 
-            return options.FirstOrDefault(e =>
-                e.Value == model.Value || e.Text == model.Text);
+            return options.FirstOrDefault(e => e.Value == null ? 
+                e.Value == model.Value : e.Text == model.Text);
         }
     }
 }

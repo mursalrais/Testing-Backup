@@ -22,7 +22,7 @@ namespace MCAWebAndAPI.Web.Helpers
         public static void CreateTransactionWorkflow(string workflowTransactionListName, string transactionLookupColumnName,
             int headerID)
         {
-            var workflowItems = SessionManager.Get<IEnumerable<WorkflowItemVM>>("");
+            var workflowItems = SessionManager.Get<IEnumerable<WorkflowItemVM>>("WorkflowItems");
 
             _service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
             _service.CreateTransactionWorkflow(workflowTransactionListName, transactionLookupColumnName, headerID, workflowItems);

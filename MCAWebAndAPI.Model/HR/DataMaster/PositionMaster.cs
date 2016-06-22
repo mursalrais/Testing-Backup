@@ -7,7 +7,7 @@ namespace MCAWebAndAPI.Model.HR.DataMaster
     {
         /// <summary>
         /// Title
-        /// </summary>
+        /// </summary> 
         [DisplayName("Position Name")]
         public string PositionName { get; set; }
 

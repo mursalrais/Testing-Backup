@@ -289,6 +289,24 @@ namespace MCAWebAndAPI.Web.Controllers
             
         }
 
+        public JsonResult GetPSAs()
+        {
+            psaManagementService.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));
+            var psas = GetFromExistingSession();
+            return Json(psas.OrderByDescending(e => e.PSAID).Select(
+                e =>
+                new
+                {
+                    e.PSAID,
+                    e.ID,
+                    e.JoinDate,
+                    e.DateOfNewPSA,
+                    e.PsaExpiryDate,
+                    e.ProjectOrUnit,
+                    e.Position
+                }), JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult GetPsa(string id)
         {
             psaManagementService.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));
@@ -336,8 +354,26 @@ namespace MCAWebAndAPI.Web.Controllers
                     e.ExpireDateBefore,
                     e.PSAId,
                     e.DateOfNewPSABefore,
-                    e.DateNewPSABefore
+                    e.DateNewPSABefore,
+                    e.JoinDate
                     }
+            ), JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetJoinDate(int id)
+        {
+            psaManagementService.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));
+
+            var joindate = GetJoinDateFromExistingSession(id);
+
+
+            return Json(joindate.OrderByDescending(e => e.Created).Where(e => e.ID == id).Select(
+                e =>
+                new
+                {
+                    e.ID,
+                    e.StrJoinDate
+                }
             ), JsonRequestBehavior.AllowGet);
         }
 
@@ -350,6 +386,17 @@ namespace MCAWebAndAPI.Web.Controllers
             if (sessionVariable == null) // If no session variable is found
                 System.Web.HttpContext.Current.Session["PSARenewalNumber"] = renewalNumber;
             return renewalNumber;
+        }
+
+        private IEnumerable<PSAManagementVM> GetJoinDateFromExistingSession(int? id)
+        {
+            //Get existing session variable
+            var sessionVariable = System.Web.HttpContext.Current.Session["PSAJoinDate"] as IEnumerable<PSAManagementVM>;
+            var joindate = sessionVariable ?? psaManagementService.GetJoinDate(id);
+
+            if (sessionVariable == null) // If no session variable is found
+                System.Web.HttpContext.Current.Session["PSAJoinDate"] = joindate;
+            return joindate;
         }
 
     }

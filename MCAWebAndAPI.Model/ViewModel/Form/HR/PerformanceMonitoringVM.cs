@@ -18,7 +18,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// period
         /// </summary>
         /// 
-        [UIHint("Integer")]
+        [UIHint("Int32")]
         public int? Period { get; set; }
 
         /// <summary>

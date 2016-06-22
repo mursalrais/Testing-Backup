@@ -14,9 +14,9 @@
             "<input type='hidden' name='MonthlyFeeDetails[#= getMonthlyFeeDetail(data)#].DateOfNewFee' value='#= DateOfNewFee #' />"
             );
             columns.Bound(p => p.MonthlyFee).ClientTemplate("#= MonthlyFee #" +
-            "<input type='hidden' name='MonthlyFeeDetails[#= getMonthlyFeeDetail(data)#].MonthlyFee' '[#= getAnnualFee(data)#]' value='#= MonthlyFee #' />"
+            "<input type='hidden' name='MonthlyFeeDetails[#= getMonthlyFeeDetail(data)#].MonthlyFee [#= getAnnualFee(data)#]' value='#= MonthlyFee #' />"
             );
-            columns.Bound(p => p.AnnualFee).Locked().ClientTemplate("#= AnnualFee #" +
+            columns.Bound(p => p.AnnualFee).ClientTemplate("#= AnnualFee #" +
             "<input type='hidden' name='MonthlyFeeDetails[#= getMonthlyFeeDetail(data)#].AnnualFee' value='#= AnnualFee #' />"
             );
             columns.Bound(p => p.Currency).ClientTemplate("#= Currency.Text #" +
@@ -24,13 +24,12 @@
             )
             .EditorViewData(new
             {
-                //BindTo = MonthlyFeeDetailVM.GetCurrencyOptions()
                 DataTextField = "Text",
                 DataValueField = "Value",
                 ControllerName = "HRPayroll",
                 ActionName = "GetCurrencyGrid"
             });
-            columns.Bound(p => p.ID).ClientTemplate("#= ID #" +
+            columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
             "<input type='hidden' name='MonthlyFeeDetails[#= getMonthlyFeeDetail(data)#].ID' value='#= ID #' />"
             );
 

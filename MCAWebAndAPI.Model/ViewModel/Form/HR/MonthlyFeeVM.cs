@@ -14,7 +14,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// ProfessionalId
         /// </summary>
-        [UIHint("Integer")]
+        [UIHint("Int32")]
         [Required(ErrorMessage = "Professional ID Field Is Required")]
         [DisplayName("Professional ID")]
         public int? ProfessionalID { get; set; }
@@ -46,8 +46,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [UIHint("AjaxComboBox")]
         public AjaxComboBoxVM ProfessionalNameEdit { get; set; } = new AjaxComboBoxVM
         {
-            ActionName = "GetMonthlyFees",
-            ControllerName = "HRPayroll",
+            ActionName = "GetProfessionalMonthlyFeesEdit",
+            ControllerName = "HRDataMaster",
             ValueField = "ID",
             TextField = "Name",
             OnSelectEventName = "OnSelectProfessionalName"
