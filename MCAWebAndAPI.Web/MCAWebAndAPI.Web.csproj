@@ -680,6 +680,10 @@
     <Content Include="Views\HRExitProcedure\EditExitProcedure.cshtml" />
     <Content Include="Views\HRExitProcedure\_ExitProcedureData.cshtml" />
     <Content Include="Views\HRExitProcedure\_ExitProcedureDataEdit.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\InGridAjaxCascadeComboBox.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Int32.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\Int32.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\Boolean.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
