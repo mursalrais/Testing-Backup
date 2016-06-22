@@ -106,7 +106,8 @@ namespace MCAWebAndAPI.Service.HR.Common
             return new ProfessionalMaster
             {
                 ID = Convert.ToInt32(item["ID"]),
-                Name = Convert.ToString(item["Title"]),
+                FirstMiddleName = Convert.ToString(item["Title"]),
+                Name = Convert.ToString(item["Title"]) + " " + Convert.ToString(item["lastname"]),
                 Status = Convert.ToString(item["maritalstatus"]),
                 Position = item["Position"] == null ? "" :
                Convert.ToString((item["Position"] as FieldLookupValue).LookupValue),
