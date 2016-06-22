@@ -28,8 +28,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult InterviewlistData(string siteurl = null, string position = null, string username = null, string useraccess = null)
         {
-            // clear existing session variables if any
-            SessionManager.RemoveAll();
+
+
 
             //mandatory: set site url
             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
@@ -69,8 +69,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult InputInterviewResult(string siteurl = null, int? ID = null)
         {
-            // clear existing session variables if any
-            SessionManager.RemoveAll();
+
+
 
             //mandatory: set site url
             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
@@ -106,8 +106,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult InputInterviewResultDetail(string siteurl = null, int? ID = null)
         {
-            // clear existing session variables if any
-            SessionManager.RemoveAll();
+
+
 
             //mandatory: set site url
             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);

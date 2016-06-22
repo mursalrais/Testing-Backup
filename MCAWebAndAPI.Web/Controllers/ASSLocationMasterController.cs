@@ -40,7 +40,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult Create(string siteUrl = null, string userId = null)
         {
-            // Clear Existing Session Variables if any
+
             if (System.Web.HttpContext.Current.Session.Keys.Count > 0)
                 System.Web.HttpContext.Current.Session.Clear();
 

@@ -28,8 +28,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult ShortlistData(string siteurl = null, string position = null, string username = null, string useraccess = null)
         {
-            // clear existing session variables if any
-            SessionManager.RemoveAll();
+
+
 
             //mandatory: set site url
             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
@@ -70,8 +70,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult ShortlistSendInvite(string siteurl = null, int? ID = null)
         {
-            // clear existing session variables if any
-            SessionManager.RemoveAll();
+
+
 
             //mandatory: set site url
             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
@@ -107,8 +107,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult ShortlistIntvinvite(string siteurl = null, string position = null, string username = null, string useraccess = null)
         {
-            // clear existing session variables if any
-            SessionManager.RemoveAll();
+
+
 
             //mandatory: set site url
             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);

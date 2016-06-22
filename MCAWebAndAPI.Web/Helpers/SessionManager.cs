@@ -41,7 +41,7 @@ namespace MCAWebAndAPI.Web.Helpers
 
         public static void RemoveAll()
         {
-            // Clear Existing Session Variables if any
+
             if (HttpContext.Current.Session.Keys.Count > 0)
                 HttpContext.Current.Session.Clear();
 

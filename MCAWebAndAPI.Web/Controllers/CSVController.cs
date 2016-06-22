@@ -21,7 +21,7 @@ namespace MCAWebAndAPI.Web.Controllers
             if (siteUrl == null || listName == null)
                 return RedirectToAction("Index", "Error", new { errorMessage = "Parameter cannot be null" });
 
-            SessionManager.RemoveAll();
+
             SessionManager.Set("SiteUrl", siteUrl);
 
             var emptyTable = GenerateEmptyDataTable();
