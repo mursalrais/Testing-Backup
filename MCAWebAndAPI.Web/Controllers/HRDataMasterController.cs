@@ -59,6 +59,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 new {
                     e.ID,
                     e.Name, 
+                    e.FirstMiddleName,
                     e.Position,
                     e.Status,
                     e.Project_Unit,
@@ -76,6 +77,7 @@ namespace MCAWebAndAPI.Web.Controllers
                     {
                         e.ID,
                         e.Name,
+                        e.FirstMiddleName,
                         e.Position,
                         e.Status,
                         e.Project_Unit,

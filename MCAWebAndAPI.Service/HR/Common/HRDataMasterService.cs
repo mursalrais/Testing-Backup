@@ -52,6 +52,28 @@ namespace MCAWebAndAPI.Service.HR.Common
             return models;
         }
 
+        public IEnumerable<ProfessionalMaster> GetProfessionalMonthlyFeesEdit()
+        {
+            var models = new List<ProfessionalMaster>();
+            int tempID;
+            List<int> collectionIDMonthlyFee = new List<int>();
+            foreach (var item in SPConnector.GetList(SP_MONFEE_LIST_NAME, _siteUrl))
+            {
+                collectionIDMonthlyFee.Add(item["professional_x003a_ID"] == null ? 0 :
+               Convert.ToInt16((item["professional_x003a_ID"] as FieldLookupValue).LookupValue));
+            }
+            foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl))
+            {
+                tempID = Convert.ToInt32(item["ID"]);
+                if ((collectionIDMonthlyFee.Any(e => e == tempID)))
+                {
+                    models.Add(ConvertToProfessionalMonthlyFeeModel_Light(item));
+                }
+            }
+
+            return models;
+        }
+
         public IEnumerable<ProfessionalMaster> GetProfessionals()
         {
             var models = new List<ProfessionalMaster>();
@@ -84,7 +106,8 @@ namespace MCAWebAndAPI.Service.HR.Common
             return new ProfessionalMaster
             {
                 ID = Convert.ToInt32(item["ID"]),
-                Name = Convert.ToString(item["Title"]),
+                FirstMiddleName = Convert.ToString(item["Title"]),
+                Name = Convert.ToString(item["Title"]) + " " + Convert.ToString(item["lastname"]),
                 Status = Convert.ToString(item["maritalstatus"]),
                 Position = item["Position"] == null ? "" :
                Convert.ToString((item["Position"] as FieldLookupValue).LookupValue),
@@ -134,28 +157,6 @@ namespace MCAWebAndAPI.Service.HR.Common
             var viewModel = ConvertToProfessionalModel(listItem);
             viewModel = await GetProfessionalDetailsAsync(viewModel);
             return viewModel;
-        }
-
-        public IEnumerable<ProfessionalMaster> GetProfessionalMonthlyFeesEdit()
-        {
-            var models = new List<ProfessionalMaster>();
-            int tempID;
-            List<int> collectionIDMonthlyFee = new List<int>();
-            foreach (var item in SPConnector.GetList(SP_MONFEE_LIST_NAME, _siteUrl))
-            {
-                collectionIDMonthlyFee.Add(item["professional_x003a_ID"] == null ? 0 :
-               Convert.ToInt16((item["professional_x003a_ID"] as FieldLookupValue).LookupValue));
-            }
-            foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl))
-            {
-                tempID = Convert.ToInt32(item["ID"]);
-                if ((collectionIDMonthlyFee.Any(e => e == tempID)))
-                {
-                    models.Add(ConvertToProfessionalMonthlyFeeModel_Light(item));
-                }
-            }
-
-            return models;
         }
 
         private async Task<ProfessionalDataVM> GetProfessionalDetailsAsync(ProfessionalDataVM viewModel)
