@@ -22,7 +22,7 @@ namespace MCAWebAndAPI.Service.HR.Common
         Task<ProfessionalDataVM> GetProfessionalDataAsync(int? ID);
 
         ProfessionalDataVM GetProfessionalData(string userLoginName = null);
-
+        
         /// <summary>
         /// Used to get lightweight professional data, e.g., name, position.
         /// Suitable for combobox

@@ -518,7 +518,6 @@
     <Content Include="Views\Shared\EditorTemplates\Email.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\EmailAddress.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\GridForeignKey.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\Integer.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Number.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Password.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\String.cshtml" />
@@ -583,7 +582,6 @@
     <Content Include="Views\Shared\DisplayTemplates\GridForeignKey.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\HttpPostedFileBase.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\InGridAjaxComboBox.cshtml" />
-    <Content Include="Views\Shared\DisplayTemplates\Integer.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\Month.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\MultiFileUploader.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\Number.cshtml" />
@@ -674,6 +672,14 @@
     <Content Include="Views\HRPerformanceMonitoring\_Detail.cshtml" />
     <Content Include="Views\HRPerformanceMonitoring\_PerformancePlanMonitoring.cshtml" />
     <Content Include="Views\Shared\_WorkflowDetails.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\Boolean.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\Int32.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\InGridAjaxCascadeComboBox.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Int32.cshtml" />
+    <Content Include="Views\HRExitProcedure\CreateExitProcedure.cshtml" />
+    <Content Include="Views\HRExitProcedure\EditExitProcedure.cshtml" />
+    <Content Include="Views\HRExitProcedure\_ExitProcedureData.cshtml" />
+    <Content Include="Views\HRExitProcedure\_ExitProcedureDataEdit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -708,6 +714,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HRApplicationController.cs" />
     <Compile Include="Controllers\HRDataMasterController.cs" />
+    <Compile Include="Controllers\HRExitProcedureController.cs" />
     <Compile Include="Controllers\HRInterviewlistController.cs" />
     <Compile Include="Controllers\HRManpowerRequisitionController.cs" />
     <Compile Include="Controllers\HRPayrollController.cs" />
@@ -746,7 +753,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ConfigResource.resx</DependentUpon>
     </Compile>
-    <Compile Include="Resources\EmailResource.Designer.cs" />
+    <Compile Include="Resources\EmailResource1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EmailResource.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resources\MessageResource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -796,7 +807,10 @@
       <LastGenOutput>ConfigResource.Designer.cs</LastGenOutput>
       <CustomToolNamespace>MCAWebAndAPI.Web.Resources</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\EmailResource.resx" />
+    <EmbeddedResource Include="Resources\EmailResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>EmailResource1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\MessageResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>MessageResource.Designer.cs</LastGenOutput>
