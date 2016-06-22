@@ -69,7 +69,8 @@
 
             $.getJSON(url, function (result) {
 
-                $('#Professional').prop('value', result[0].Name);
+                $('#FullName').prop('value', result[0].Name);
+                $('#Professional').prop('value', result[0].FirstMiddleName);
                 $('#ProjectUnit').prop('value', result[0].Project_Unit);
                 $('#Position').prop('value', result[0].Position);
 
