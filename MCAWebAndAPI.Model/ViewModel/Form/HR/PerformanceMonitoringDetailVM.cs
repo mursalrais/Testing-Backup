@@ -19,5 +19,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public string PlanStatus { get; set; }
 
         public string PlanIndicator { get; set; }
+
+        public string Email { get; set; }
     }
 }

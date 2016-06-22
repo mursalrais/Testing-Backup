@@ -1,12 +1,11 @@
-﻿
-@using MCAWebAndAPI.Model.ViewModel.Form.HR
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
 @model ApplicationShortlistVM
 
 @{
     ViewBag.Title = "ShortlistData";
 }
 
-@using (Html.BeginForm("UpdateShortlistData", "HRShortlist", FormMethod.Post, new
+@using (Html.BeginForm("CreateInterviewDataDetail", "HRInterviewlist", FormMethod.Post, new
 {
     @class = "form-horizontal",
     enctype = "multipart/form-data"
@@ -15,6 +14,7 @@
     <fieldset>
         @Html.HiddenFor(m => m.ID)
         @Html.HiddenFor(m => m.Position)
+        @Html.HiddenFor(m => m.Candidate)
         <div class="row">
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.Candidate).Class("col-sm-2 control-label")
@@ -32,39 +32,67 @@
 
         <legend>Candidate list</legend>
         <div class="row">
-            @Html.Partial("_ShortlistDetails", Model.ShortlistDetails)
+            @Html.Partial("_InterviewResultlist", Model.InterviewlistDetails)
         </div>
 
 
     </fieldset>
     <div class="form-actions">
         <div class="row">
-            <div class="col-sm-4">
+          
+             <div class="col-sm-4">
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.SendTo).Class("col-xs-4 control-label")
+                    @Html.Bootstrap().LabelFor(m => m.Remarks).Class("col-xs-4 control-label")
                     <div class="col-xs-8">
-                        @Html.EditorFor(m => m.SendTo)
+                        @Html.EditorFor(m => m.Remarks)
                     </div>
                 </div>
             </div>
-            <div class="col-sm-8">
+            </div>
+        <div class="row">
 
-                <button id="submit-nextstep" class="btn btn-primary" type="submit">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.GetResultOptions).Class("col-xs-4 control-label")
+                    <div class="col-xs-8">
+                        @Html.EditorFor(m => m.GetResultOptions)
+                    </div>
+                </div>
+            </div>
+            </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.AttDocuments).Class("col-xs-4 control-label")
+                    <div class="col-xs-8">
+                        @Html.EditorFor(m => m.AttDocuments)
+                    </div>
+                </div>
+            </div>
+            </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.NeedNextInterviewer).Class("col-xs-4 control-label")
+                    <div class="col-xs-8">
+                        @Html.EditorFor(m => m.NeedNextInterviewer)
+                    </div>
+                </div>
+            </div>
+            </div>
+        
+            <div class="col-sm-8">
+                <button id="submit-cancel" class="btn btn-primary" type="button">
                     <i class="fa fa-send"></i>
-                    send to next step
+                    cancel
                 </button>
                 <button id="submit-button" class="btn btn-primary" type="submit">
                     <i class="fa fa-save"></i>
                     save
                 </button>
-                @*<button id="submit-cancel" class="btn btn-primary" type="submit">
-                        <i class="fa fa-save"></i>
-                        cancel
-                    </button>*@
 
             </div>
         </div>
-    </div>
 
 }
 

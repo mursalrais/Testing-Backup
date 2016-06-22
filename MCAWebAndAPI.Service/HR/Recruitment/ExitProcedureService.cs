@@ -27,6 +27,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
         }
 
+        //Display Exit Procedure Data based on ID
         public ExitProcedureVM GetExitProcedure(int? ID)
         {
             var viewModel = new ExitProcedureVM();

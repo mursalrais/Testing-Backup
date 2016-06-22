@@ -39,7 +39,7 @@ namespace MCAWebAndAPI.Service.Utils
             {
                 value = multipleLineValue.Split('>')[1].Split('<')[0];
             }
-            
+             
             return value;
         }
 
@@ -93,7 +93,7 @@ namespace MCAWebAndAPI.Service.Utils
             return Convert.ToString((item[columnName] as FieldLookupValue).LookupValue);
         }
 
-        public static InGridComboBoxVM ConvertToInGridLookup(ListItem item, string columnName)
+        public static InGridComboBoxVM ConvertToInGridComboBox(ListItem item, string columnName)
         {
             return new InGridComboBoxVM
             {
@@ -115,15 +115,7 @@ namespace MCAWebAndAPI.Service.Utils
                 day: Convert.ToInt32(dateElements[0]));    
         }
 
-        internal static InGridComboBoxVM ConvertToInGridComboBox(ListItem item, string columnName)
-        {
-            return new InGridComboBoxVM
-            {
-                Text = Convert.ToString(item[columnName])
-            };
-        }
-
-        public static AjaxComboBoxVM ConvertToInGridAjaxLookup(ListItem item, string columnName)
+        public static AjaxComboBoxVM ConvertToInGridAjaxComboBox(ListItem item, string columnName)
         {
             return new AjaxComboBoxVM
             {

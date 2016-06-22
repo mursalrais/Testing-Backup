@@ -11,8 +11,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 {
     public interface IExitProcedureService
     {
+
         void SetSiteUrl(string siteUrl);
 
+        //Display Exit Procedure Data based on ID
         ExitProcedureVM GetExitProcedure(int? ID);
 
         int CreateExitProcedure(ExitProcedureVM exitProcedure);

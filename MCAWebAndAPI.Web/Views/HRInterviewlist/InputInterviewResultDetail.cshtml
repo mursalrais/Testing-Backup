@@ -1,0 +1,103 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model ApplicationShortlistVM
+
+@{
+    ViewBag.Title = "InputInterviewResultDetail";
+}
+
+@using (Html.BeginForm("CreateInputResultInterview", "HRInterviewlist", FormMethod.Post, new
+{
+    @class = "form-horizontal",
+    enctype = "multipart/form-data"
+}))
+{
+    <fieldset>
+        @Html.HiddenFor(m => m.ID)
+        @Html.HiddenFor(m => m.Position)
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Position).Class("col-sm-2 control-label")
+                    <div class="col-sm-6">
+                        <input id="vacant-position" class="form-control" value="" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Candidate).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.Candidate)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.InterviewerDate).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.InterviewerDate)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.InterviewerPanel).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.InterviewerPanel)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.InterviewSummary).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.InterviewSummary)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </fieldset>
+    <div class="form-actions">
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.GetResultOptions).Class("col-xs-4 control-label")
+                    <div class="col-xs-8">
+                        @Html.EditorFor(m => m.GetResultOptions)
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+
+                @*<button id="submit-nextstep" class="btn btn-primary" type="submit">
+                        <i class="fa fa-save"></i>
+                        send to next step
+                    </button>*@
+                <button id="submit-button" class="btn btn-primary" type="submit">
+                    <i class="fa fa-send"></i>
+                    Send Email To Candidate
+                </button>
+                <button id="submit-cancel" class="btn btn-primary" type="submit">
+                    <i class="fa fa-cancel"></i>
+                    cancel
+                </button>
+
+            </div>
+        </div>
+    </div>
+}
+
+@section scripts{
+
+    <script>
+        $(document).ready(function () {
+            $("#vacant-position").prop('readonly', 'true');
+            $("#Candidate").prop('readonly', 'true');
+
+            debugger;
+            var positionID = $("#Position").val();
+            var url = "/HRDataMaster/GetPosition/" + positionID;
+            $.getJSON(url, function (data) {
+                $("#vacant-position").prop("value", data.PositionName);
+            })
+
+        });
+    </script>
+
+}
+

@@ -34,7 +34,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             var updatedValue = new Dictionary<string, object>();
 
             updatedValue.Add("Title", viewModel.FirstMiddleName);
-            updatedValue.Add("vacantposition", 
+            updatedValue.Add("vacantposition",
                 new FieldLookupValue() { LookupId = (int)GetVacantPosition(viewModel.Position).ID });
 
             updatedValue.Add("manpowerrequisition", new FieldLookupValue { LookupId = (int)viewModel.ManpowerRequisitionID });
@@ -57,7 +57,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             updatedValue.Add("bloodtype", viewModel.BloodType.Value);
             updatedValue.Add("religion", viewModel.Religion.Value);
             updatedValue.Add("gender", viewModel.Gender.Value);
-            updatedValue.Add("idcardtype", 
+            updatedValue.Add("idcardtype",
                 GetIDCardType().FirstOrDefault(e => e.Key == viewModel.IDCardType.Value).Value);
             updatedValue.Add("idcardexpirydate", viewModel.IDCardExpiry);
             updatedValue.Add("nationality", new FieldLookupValue { LookupId = (int)viewModel.Nationality.Value });
@@ -95,7 +95,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             var caml = @"<View>  
             <Query> 
-               <Where><Eq><FieldRef Name='Title' /><Value Type='Text'>" + position + 
+               <Where><Eq><FieldRef Name='Title' /><Value Type='Text'>" + position +
                @"</Value></Eq></Where> 
             </Query> 
                 <ViewFields><FieldRef Name='ID' /><FieldRef Name='Title' /></ViewFields> 
@@ -513,7 +513,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     <Query> 
                        <Where><Eq><FieldRef Name='manpowerrequeststatus' /><Value Type='Text'>Active</Value></Eq></Where><OrderBy><FieldRef Name='positionrequested_x003a_Position' /></OrderBy> 
                     </Query> 
-                    <ViewFields><FieldRef Name='manpowerrequeststatus' /><FieldRef Name='ID' /><FieldRef Name='positionrequested' /><FieldRef Name='positionrequested_x003a_Position' /></ViewFields></View>"; 
+                    <ViewFields><FieldRef Name='manpowerrequeststatus' /><FieldRef Name='ID' /><FieldRef Name='positionrequested' /><FieldRef Name='positionrequested_x003a_Position' /></ViewFields></View>";
 
             var positions = new List<PositionMaster>();
             // ID is retrieved from ManPower ID not Position ID

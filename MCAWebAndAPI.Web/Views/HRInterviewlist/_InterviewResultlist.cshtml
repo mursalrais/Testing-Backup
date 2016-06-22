@@ -37,8 +37,6 @@
     .Model(model =>
     {
         model.Id(p => p.ID);
-
-        model.Field(m => m.Status).DefaultValue(ShortlistDetailVM.GetStatusDefaultValue());
     })
     .ServerOperation(false)
 

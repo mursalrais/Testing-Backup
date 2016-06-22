@@ -12,7 +12,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Control
     /// </summary>
     public class AjaxComboBoxVM
     {
-  
+
         public int? Value { get; set; }
 
         public string Text { get; set; }

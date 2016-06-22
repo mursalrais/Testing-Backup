@@ -54,6 +54,7 @@ namespace MCAWebAndAPI.Web.Controllers
             return View("CreateExitProcedure", viewModel);
         }
 
+        //Submit every data in Exit Procedure to List
         [HttpPost]
         public ActionResult CreateExitProcedure(FormCollection form, ExitProcedureVM viewModel)
         {

@@ -289,6 +289,24 @@ namespace MCAWebAndAPI.Web.Controllers
             
         }
 
+        public JsonResult GetPSAs()
+        {
+            psaManagementService.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));
+            var psas = GetFromExistingSession();
+            return Json(psas.OrderByDescending(e => e.PSAID).Select(
+                e =>
+                new
+                {
+                    e.PSAID,
+                    e.ID,
+                    e.JoinDate,
+                    e.DateOfNewPSA,
+                    e.PsaExpiryDate,
+                    e.ProjectOrUnit,
+                    e.Position
+                }), JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult GetPsa(string id)
         {
             psaManagementService.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));

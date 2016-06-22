@@ -10,6 +10,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
     public class ExitProcedureVM : Item
     {
+        //Request Date
         [UIHint("Date")]
         [DisplayName("Request Date")]
         [Required]
