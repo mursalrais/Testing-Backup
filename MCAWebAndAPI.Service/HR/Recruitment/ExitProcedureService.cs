@@ -48,7 +48,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             viewModel.ID = Convert.ToInt32(listItem["ID"]);
             viewModel.RequestDate = Convert.ToDateTime(listItem["requestdate"]).ToLocalTime();
-            viewModel.Professional.Text = FormatUtil.ConvertLookupToValue(listItem, "professional");
+            viewModel.Professional.Text = Convert.ToString(listItem["Title"]);
+
+            //viewModel.Professional.Text = FormatUtil.ConvertLookupToValue(listItem, "professional");
             viewModel.Position = Convert.ToString(listItem["position"]);
             viewModel.PhoneNumber = Convert.ToString(listItem["mobilenumber"]);
             viewModel.EmailAddress = Convert.ToString(listItem["officeemail"]);
@@ -64,10 +66,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             var updatedValues = new Dictionary<string, object>();
 
+            updatedValues.Add("Title", exitProcedure.FullName);
             updatedValues.Add("requestdate", exitProcedure.RequestDate);
             updatedValues.Add("professional", new FieldLookupValue { LookupId = (int)exitProcedure.Professional.Value });
             //Cek lagi nama fieldnya
-            updatedValues.Add("ProjectOrUnit", exitProcedure.ProjectUnit);
+            updatedValues.Add("projectunit", exitProcedure.ProjectUnit);
             //Cek lagi nama fieldnya
             updatedValues.Add("position", exitProcedure.Position);
             updatedValues.Add("mobilenumber", exitProcedure.PhoneNumber);
@@ -100,7 +103,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             columnValues.Add("requestdate", exitProcedure.RequestDate.Value);
             columnValues.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(exitProcedure.Professional.Value) });
             //Cek lagi nama fieldnya
-            columnValues.Add("ProjectOrUnit", exitProcedure.ProjectUnit);
+            columnValues.Add("projectunit", exitProcedure.ProjectUnit);
             //Cek lagi nama fieldnya
             columnValues.Add("position", exitProcedure.Position);
             columnValues.Add("mobilenumber", exitProcedure.PhoneNumber);

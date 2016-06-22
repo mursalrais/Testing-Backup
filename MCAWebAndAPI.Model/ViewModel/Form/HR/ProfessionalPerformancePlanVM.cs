@@ -30,7 +30,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [UIHint("TextArea")]
         public string RecommendedActivities { get; set; }
 
-        [UIHint("Integer")]
+        [UIHint("Int32")]
         public int? ProfessionalID { get; set; }
 
         public string Position { get; set; }

@@ -131,7 +131,10 @@ namespace MCAWebAndAPI.Service.HR.Payroll
                 updatedValue.Add("currency", viewModel.Currency.Text);
                 try
                 {
-                    SPConnector.AddListItem(SP_DETAIL_LIST_NAME, updatedValue, _siteUrl);
+                    if (Item.CheckIfUpdated(viewModel))
+                        SPConnector.UpdateListItem(SP_DETAIL_LIST_NAME, viewModel.ID, updatedValue, _siteUrl);
+                    else
+                        SPConnector.AddListItem(SP_DETAIL_LIST_NAME, updatedValue, _siteUrl);
                 }
                 catch (Exception e)
                 {

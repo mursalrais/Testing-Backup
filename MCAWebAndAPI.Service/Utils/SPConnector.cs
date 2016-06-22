@@ -185,7 +185,6 @@ namespace MCAWebAndAPI.Service.Utils
                     newItem[key] = columnValues[key];
                 }
                 
-
                 try
                 {
                     newItem.Update();
@@ -195,7 +194,6 @@ namespace MCAWebAndAPI.Service.Utils
                 {
                     throw e;
                 }
-              
             }
         }
 
