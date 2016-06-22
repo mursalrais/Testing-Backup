@@ -16,13 +16,19 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// individualgoalcategory
         /// </summary>
         [UIHint("InGridComboBox")]
-        public InGridComboBoxVM Category { get; set; }
+        public InGridComboBoxVM Category { get; set; } = new InGridComboBoxVM();
 
         public static IEnumerable<InGridComboBoxVM> GetCategoryOptions()
         {
             var index = 0;
-            var options = new string[] {
-                "Program Management"};
+            var options = new string[] 
+            {
+                "Program Management",
+                "Leadership & Operational Excellence",
+                "Outreach & Partnership",
+                "Organizational Development",
+                "Teamwork & Professionalism"
+            };
 
             return options.Select(e =>
                 new InGridComboBoxVM
@@ -51,12 +57,12 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// individualgoalweight
         /// </summary>
+        [UIHint("Int32")]
         public int Weight { get; set; }
 
         /// <summary>
         /// individualgoalremarks
         /// </summary>
-        [UIHint("TextArea")]
         public string Remarks { get; set; }
     }
 }

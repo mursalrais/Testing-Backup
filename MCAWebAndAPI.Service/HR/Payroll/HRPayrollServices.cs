@@ -40,11 +40,6 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             return SPConnector.GetLatestListItemID(SP_HEADER_LIST_NAME, _siteUrl);
         }
 
-        public MonthlyFeeVM GetHeader()
-        {
-            throw new NotImplementedException();
-        }
-
         public MonthlyFeeVM GetPopulatedModel(int? id = null)
         {
             var model = new MonthlyFeeVM();
@@ -81,26 +76,6 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             entitiy = header;
             return true;
     }
-
-        public IEnumerable<MonthlyFeeVM> GetMonthlyFees()
-        {
-            var models = new List<MonthlyFeeVM>();
-            foreach (var item in SPConnector.GetList(SP_HEADER_LIST_NAME, _siteUrl))
-            {
-                    models.Add(ConvertToMonthlyFeeModel_Light(item));
-            }
-            return models;
-        }
-
-        private MonthlyFeeVM ConvertToMonthlyFeeModel_Light(ListItem item)
-        {
-            return new MonthlyFeeVM
-            {
-                ID = FormatUtil.ConvertLookupToID(item, "professional_x003a_ID"),
-                Name = FormatUtil.ConvertLookupToValue(item, "professional"),
-            Status = Convert.ToString(item["maritalstatus"]),
-            };
-        }
 
         public MonthlyFeeVM GetHeader(int? ID)
         {
@@ -156,7 +131,10 @@ namespace MCAWebAndAPI.Service.HR.Payroll
                 updatedValue.Add("currency", viewModel.Currency.Text);
                 try
                 {
-                    SPConnector.AddListItem(SP_DETAIL_LIST_NAME, updatedValue, _siteUrl);
+                    if (Item.CheckIfUpdated(viewModel))
+                        SPConnector.UpdateListItem(SP_DETAIL_LIST_NAME, viewModel.ID, updatedValue, _siteUrl);
+                    else
+                        SPConnector.AddListItem(SP_DETAIL_LIST_NAME, updatedValue, _siteUrl);
                 }
                 catch (Exception e)
                 {

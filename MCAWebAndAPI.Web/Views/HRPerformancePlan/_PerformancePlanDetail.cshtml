@@ -1,0 +1,98 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model IEnumerable<ProjectOrUnitGoalsDetailVM>
+
+<div class="col-sm-12">
+
+    @(Html.Kendo().Grid(Model)
+        .Name("ProjectOrUnitGoalsDetails")
+        .ToolBar(tools => tools.Create().Text("Add New"))
+        .Editable(editable => editable.Mode(GridEditMode.InCell)
+        .CreateAt(GridInsertRowPosition.Bottom))
+        .Columns(columns =>
+        {
+            columns.Bound(p => p.ProjectOrUnitGoals).ClientTemplate("#= ProjectOrUnitGoals #" +
+            "<input type='hidden' name='ProjectOrUnitGoalsDetails[#= getProfessionalPerformancePlanDetail(data)#].ProjectOrUnitGoals' value='#= ProjectOrUnitGoals #' />"
+            );
+            columns.Bound(p => p.Category).ClientTemplate("#= Category.Text #" +
+            "<input type='hidden' name='ProjectOrUnitGoalsDetails[#= getProfessionalPerformancePlanDetail(data)#].Category.Text' value='#= Category.Text #' />"
+            )
+            .EditorViewData(new
+            {
+                BindTo = ProjectOrUnitGoalsDetailVM.GetCategoryOptions()
+                @*DataTextField = "Text",
+                DataValueField = "Value",
+                ControllerName = "HRPerformancePlan",
+                ActionName = "GetCategoryGrid"*@
+            });
+            columns.Bound(p => p.IndividualGoalAndPlan).ClientTemplate("#= IndividualGoalAndPlan #" +
+            "<input type='hidden' name='ProjectOrUnitGoalsDetails[#= getProfessionalPerformancePlanDetail(data)#].IndividualGoalAndPlan' value='#= IndividualGoalAndPlan #' />"
+            );
+            columns.Bound(p => p.Weight).ClientTemplate("#= Weight #" +
+            "<input type='hidden' name='ProjectOrUnitGoalsDetails[#= getProfessionalPerformancePlanDetail(data)#].Weight' value='#= Weight #' />"
+            );
+            columns.Bound(p => p.Remarks).ClientTemplate("#= Remarks #" +
+            "<input type='hidden' name='ProjectOrUnitGoalsDetails[#= getProfessionalPerformancePlanDetail(data)#].Remarks' value='#= Remarks #' />"
+            );
+            columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
+            "<input type='hidden' name='ProjectOrUnitGoalsDetails[#= getProfessionalPerformancePlanDetail(data)#].ID' value='#= ID #' />"
+            );
+            columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
+            "<input type='hidden' name='ProjectOrUnitGoalsDetails[#= getProfessionalPerformancePlanDetail(data)#].EditMode' value='#= EditMode #' />"
+            );
+            columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
+            .Click("onDeleteKendoDetail")).Width(100);
+            columns.Command(command => command.Custom("Add Same Project").Click("addNewCustomRow")).Width(180);
+        })
+        .Events(e =>
+        {
+            e.Edit("onCustomEditKendoDetail");
+            e.DataBound("onDataBoundProjectOrUnitGoalsDetails");
+        })
+        .DataSource(dataSource => dataSource.Ajax()
+        .Model(model =>
+        {
+            model.Id(p => p.ID);
+            model.Field(m => m.Category).DefaultValue(ProjectOrUnitGoalsDetailVM.GetCategoryDefaultValue());
+        })
+        .ServerOperation(false)
+        )
+    )
+</div>
+
+<script>
+
+    var isCustomAdd = false;
+    var customRowDataItem;
+
+    function addNewCustomRow(e) {
+        e.preventDefault();
+
+        customRowDataItem = this.dataItem($(e.currentTarget).closest("tr"));    
+        isCustomAdd = true;
+        this.addRow();
+    }
+
+    function onCustomEditKendoDetail(e) {
+        if (!e.model.isNew()) {
+            var container = e.container;
+            var tr = container.closest('tr');
+            var data = this.dataItem(tr); //get the row data so it can be referred later
+            // 1 is Item.Mode.UPDATED
+            data.set("EditMode", 1);
+        }   
+        if (isCustomAdd && e.model.isNew()) {
+            isCustomAdd = false;
+            $(e.container).find("[name='ProjectOrUnitGoals']").val(customRowDataItem.ProjectOrUnitGoals).change();
+        }
+    }
+
+    function getProfessionalPerformancePlanDetail(dataItem) {
+        var data = $("#ProjectOrUnitGoalsDetails").data("kendoGrid").dataSource.data();
+        return data.indexOf(dataItem);
+    }
+
+    function onDataBoundProjectOrUnitGoalsDetails(e) {
+        var grid = $("#ProjectOrUnitGoalsDetails").data("kendoGrid");
+        hideDeletedRowKendoDetail(grid);
+    }
+</script>

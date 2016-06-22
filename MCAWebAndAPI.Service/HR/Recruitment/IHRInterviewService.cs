@@ -18,7 +18,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         void CreateInterviewDataDetail(int? headerID, ApplicationShortlistVM list);
 
         void CreateInputIntvResult(int? headerID, ApplicationShortlistVM list);
-        
+
+        void SendEmailValidation(string emailto, string emailmessage);
+
     }
 }
 

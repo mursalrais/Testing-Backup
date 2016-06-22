@@ -385,7 +385,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             }
         }
 
-        public void CreateShortlistInviteIntv(int? headerID, ApplicationShortlistVM viewModel)
+        public void CreateShortlistInviteIntv(int? headerID, ApplicationShortlistVM viewModel, string mailsubject)
         {
             var updatedValue = new Dictionary<string, object>();
 
@@ -408,8 +408,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 }
             }
 
-            EmailUtil.Send(viewModel.SendTo, "Interview Invitation", "<div><label>"+ viewModel.EmailMessage + "</label></div>" +
-                           "<a href = 'https://eceos2.sharepoint.com/sites/ims/hr/Lists/Professional%20Master/DispForm_Custom.aspx?ID=3' > Open candidates' profiles for this position</a>");
+            EmailUtil.Send(viewModel.SendTo, "Interview Invitation", "<div><label>"+ viewModel.EmailMessage + "</label></div>" + mailsubject);
         }
 
         public void CreateShorlistSendintv(int? headerID, ApplicationShortlistVM viewModel)
@@ -431,8 +430,21 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 throw e;
             }
 
-            EmailUtil.Send(viewModel.EmailFrom, "Interview Invitation", viewModel.EmailMessage);
+            SendEmailValidation(viewModel.EmailFrom, viewModel.EmailMessage);
 
+        }
+
+        public void SendEmailValidation(string emailTo, string emailMessages)
+        {
+            try
+            {
+                EmailUtil.Send(emailTo, "Shortlist Candidate Data", emailMessages);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e);
+                throw e;
+            }
         }
     }
 }

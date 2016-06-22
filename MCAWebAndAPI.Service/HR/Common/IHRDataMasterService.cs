@@ -30,7 +30,9 @@ namespace MCAWebAndAPI.Service.HR.Common
         /// <returns></returns>
         IEnumerable<ProfessionalMaster> GetProfessionals();
 
-        IEnumerable<ProfessionalMaster> GetProfessionalMonthlyFees(); 
+        IEnumerable<ProfessionalMaster> GetProfessionalMonthlyFees();
+
+        IEnumerable<ProfessionalMaster> GetProfessionalMonthlyFeesEdit();
 
         IEnumerable<PositionMaster> GetPositions();
 
@@ -51,6 +53,7 @@ namespace MCAWebAndAPI.Service.HR.Common
         void CreateOrganizationalDetails(int? headerID, IEnumerable<OrganizationalDetailVM> organizationalDetails);
         Task CreateOrganizationalDetailsAsync(int? headerID, IEnumerable<OrganizationalDetailVM> organizationalDetails);
 
+        IEnumerable<ProfessionalMaster> GetProfessionalMonthlyFeesEdit();
 
         void UpdateValidation(int? ID, string status);
         void SendEmailValidation(string emailTo, string emailMessages, bool isApproved);

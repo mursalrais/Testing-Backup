@@ -211,3 +211,5 @@ GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
 MCAWebAndAPI.Web/MCAWebAndAPI.Web.csproj
+MCAWebAndAPI.Web/Resources/EmailResource1.Designer.cs
+MCAWebAndAPI.Web/Resources/EmailResource1.Designer.cs

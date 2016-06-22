@@ -79,6 +79,47 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;a href = &apos;https://eceos2.sharepoint.com/sites/ims/hr/Lists/Professional%20Master/DispForm_Custom.aspx?ID=3&apos; &gt; Open candidates&apos; profiles for this position&lt;/a&gt;.
+        /// </summary>
+        public static string EmailCandidateShortlist {
+            get {
+                return ResourceManager.GetString("EmailCandidateShortlist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;p&gt;
+        ///&lt;strong&gt;Dear Requestor,&lt;/strong&gt;
+        ///&lt;/p&gt;
+        ///&lt;p&gt;
+        ///This email is sent to you to notify that your HR, Interview Result data list. 
+        ///
+        ///Thank you. 
+        ///&lt;/p&gt;.
+        /// </summary>
+        public static string EmailInterviewResult {
+            get {
+                return ResourceManager.GetString("EmailInterviewResult", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;p&gt;
+        ///&lt;strong&gt;Dear Requestor,&lt;/strong&gt;
+        ///&lt;/p&gt;
+        ///&lt;p&gt;
+        ///This email is sent to you to notify that your HR, Shortlisted Result data list. 
+        ///
+        ///Thank you. 
+        ///&lt;/p&gt;.
+        /// </summary>
+        public static string EmailShortlistData {
+            get {
+                return ResourceManager.GetString("EmailShortlistData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;p&gt;
         ///&lt;strong&gt;Dear HR Team,&lt;/strong&gt;
         ///&lt;/p&gt;

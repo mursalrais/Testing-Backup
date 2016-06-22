@@ -124,6 +124,15 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to /Lists/ProfessionalPerformancePlan.
+        /// </summary>
+        public static string ProfessionalPerformancePlan {
+            get {
+                return ResourceManager.GetString("ProfessionalPerformancePlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lists/PSA.
         /// </summary>
         public static string PSAManagement {
