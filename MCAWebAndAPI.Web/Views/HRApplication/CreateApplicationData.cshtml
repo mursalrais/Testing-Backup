@@ -6,65 +6,70 @@
 }
 
 @using (Html.BeginForm("CreateApplicationData", "HRApplication", FormMethod.Post, 
-                                                     new
-                                                     { @class = "form-horizontal",
-                                                         enctype = "multipart/form-data" }))
+new
+{ @class = "form-horizontal",
+enctype = "multipart/form-data" }))
 {
-    <fieldset>
-        <legend>Personal Details</legend>
-        <div class="row">
-            <div class="col-sm-6">
-                @Html.Bootstrap().LabelFor(m => m.Position).Class("col-sm-4 control-label")
-                <div class="col-sm-8">
-                    @Html.DisplayFor(m => m.Position)
-                </div>
-                @Html.HiddenFor(m => m.ManpowerRequisitionID)
+<fieldset>
+    <legend>Personal Details</legend>
+    <div class="row">
+        <div class="col-sm-6">
+            @Html.Bootstrap().LabelFor(m => m.Position).Class("col-sm-4 control-label")
+            <div class="col-sm-8">
+                @Html.DisplayFor(m => m.Position)
             </div>
-        </div>
-        <div class="row">
-            @Html.Partial("_PersonalDetails", Model)
-        </div>
-        <legend>Contact Information</legend>
-        <div class="row">
-            @Html.Partial("_ContactInformationDetails", Model)
-        </div>
-        <legend>Education</legend>
-        <div class="row">
-            @Html.Partial("_EducationDetails", Model.EducationDetails)
-        </div>
-        <legend>Training</legend>
-        <div class="row">
-            @Html.Partial("_TrainingDetails", Model.TrainingDetails)
-        </div>
-        <legend>Specialization</legend>
-        <div class="row">
-            @Html.Partial("_SpecializationDetails", Model)
-        </div>
-        <legend>Working Experience</legend>
-        <div class="row">
-            @Html.Partial("_WorkingExperienceDetails", Model)
-        </div>
-        <legend>Documents</legend>
-        <div class="row">
-            @Html.Partial("_DocumentDetails", Model)
-        </div>
-    </fieldset>
-    <div class="form-actions">
-        <div class="row">
-            <div class="col-sm-12">
-                <button id="print-button" class="btn btn-default" type="button">
-                    Print
-                </button>
-                <button id="submit-button" class="btn btn-primary" type="submit">
-                    <i class="fa fa-save"></i>
-                    Submit
-                </button>
-            </div>
+            @Html.HiddenFor(m => m.ManpowerRequisitionID)
         </div>
     </div>
+    <div class="row">
+        @Html.Partial("_PersonalDetails", Model)
+    </div>
+    <legend>Contact Information</legend>
+    <div class="row">
+        @Html.Partial("_ContactInformationDetails", Model)
+    </div>
+    <legend>Education</legend>
+    <div class="row">
+        @Html.Partial("_EducationDetails", Model.EducationDetails)
+    </div>
+    <legend>Training</legend>
+    <div class="row">
+        @Html.Partial("_TrainingDetails", Model.TrainingDetails)
+    </div>
+    <legend>Specialization</legend>
+    <div class="row">
+        @Html.Partial("_SpecializationDetails", Model)
+    </div>
+    <legend>Working Experience</legend>
+    <div class="row">
+        @Html.Partial("_WorkingExperienceDetails", Model)
+    </div>
+    <legend>Documents</legend>
+    <div class="row">
+        @Html.Partial("_DocumentDetails", Model)
+    </div>
+    <legend>Approval Workflow</legend>
+    <div id="workflow-placeholder" class="row"/>
+</fieldset>
+<div class="form-actions">
+    <div class="row">
+        <div class="col-sm-12">
+            <button id="print-button" class="btn btn-default" type="button">
+                Print
+            </button>
+            <button id="submit-button" class="btn btn-primary" type="submit">
+                <i class="fa fa-save"></i>
+                Submit
+            </button>
+        </div>
+    </div>
+</div>
 }
 
 @section scripts{
-
-    
+    <script>
+        $(document).ready(function () {
+            displayWorkflowRouter("workflow-placeholder", "@ViewBag.ListName", "@ViewBag.RequestorUserLogin");
+        });
+    </script>
 }

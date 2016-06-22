@@ -1,0 +1,98 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model ExitProcedureVM
+
+
+<div class="col-md-6">
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.RequestDate).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.EditorFor(m => m.RequestDate)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.Professional).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.EditorFor(m => m.Professional)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.ProjectUnit).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.DisplayFor(m => m.ProjectUnit)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.Position).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.DisplayFor(m => m.Position)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.PhoneNumber).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.EditorFor(m => m.PhoneNumber)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.EmailAddress).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.EditorFor(m => m.EmailAddress)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.CurrentAddress).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.EditorFor(m => m.CurrentAddress)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.JoinDate).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.DisplayFor(m => m.JoinDate)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.LastWorkingDate).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.EditorFor(m => m.LastWorkingDate)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.ExitReason).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.EditorFor(m => m.ExitReason)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.ReasonDesc).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.EditorFor(m => m.ReasonDesc)
+        </div>
+    </div>
+
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+
+
+        $(document).ready(function ()
+        {
+            $("#submit-button").click(function ()
+            {
+                $("form").submit();
+            });
+
+        });
+
+        function onSuccess(data)
+        {
+            window.location.href = data.urlToRedirect;
+        }
+
+        function onFailure(data)
+        {
+            window.location.href = data.urlToRedirect;
+        }
+    </script>
+}

@@ -1,0 +1,60 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+
+@model IEnumerable<InterviewDetailVM>
+
+<div class="col-xs-12">
+
+    @(Html.Kendo().Grid(Model)
+    .Name("InterviewlistDetails")
+    .ToolBar(tools => tools.Create().Text("Add Interview"))
+    .Editable(editable => editable.Mode(GridEditMode.InCell)
+    .CreateAt(GridInsertRowPosition.Bottom))
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.Date).ClientTemplate("<a href=''>#= Date #</a>" +
+        "<input type='hidden' name='InterviewlistDetails[#= GetDetailShortlist(data)#].Date' value='#= Date #' />");
+
+        columns.Bound(p => p.InterviewPanel).ClientTemplate("<a href=''>#= interviewpanel #</a>" +
+        "<input type='hidden' name='InterviewlistDetails[#= GetDetailShortlist(data)#].interviewpanel' value='#= interviewpanel #' />");
+
+        columns.Bound(p => p.InterviewSummary).ClientTemplate("<a href=''>#= Candidate #</a>" +
+       "<input type='hidden' name='InterviewlistDetails[#= GetDetailShortlist(data)#].Candidate' value='#= Candidate #' />");
+        columns.Bound(p => p.Result).ClientTemplate("<a href=''>#= Candidate #</a>" +
+       "<input type='hidden' name='InterviewlistDetails[#= GetDetailShortlist(data)#].Candidate' value='#= Candidate #' />");
+
+        columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
+           "<input type='hidden' name='InterviewlistDetails[#= GetDetailShortlist(data)#].EditMode' value='#= EditMode #' />"
+         );
+        columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
+           .Click("onDeleteKendoDetail")).Width(100);
+    })
+    .Events(e =>
+    {
+        e.Edit("onEditKendoDetail");
+        e.DataBound("onDataBoundDependentDetails");
+    })
+    .DataSource(dataSource => dataSource.Ajax()
+    .Model(model =>
+    {
+        model.Id(p => p.ID);
+    })
+    .ServerOperation(false)
+
+    )
+    )
+</div>
+<script>
+    function GetDetailShortlist(dataItem) {
+        var data = $("#InterviewlistDetails").data("kendoGrid").dataSource.data();
+        return data.indexOf(dataItem);
+    }
+
+    function onDataBoundDependentDetails(e) {
+        var grid = $("#InterviewlistDetails").data("kendoGrid");
+        hideDeletedRowKendoDetail(grid);
+    }
+</script>
+
+
+
+

@@ -129,6 +129,9 @@
   <data name="SuccessCreateApplicationData" xml:space="preserve">
     <value>Congratulation {0}! Your application has successfully been submitted.</value>
   </data>
+  <data name="SuccessCreateExitProcedureData" xml:space="preserve">
+    <value>Congratulation {0}! Exit Procedure Data has successfully been created.</value>
+  </data>
   <data name="SuccessCreatePSAManagementData" xml:space="preserve">
     <value>Congratulation {0}! Your PSA data has successfully been created.</value>
   </data>
@@ -137,6 +140,9 @@
   </data>
   <data name="SuccessUpdateApplicationStatus" xml:space="preserve">
     <value>Congratulation! The application data of {0} has been set to {1}.</value>
+  </data>
+  <data name="SuccessUpdateExitProcedure" xml:space="preserve">
+    <value>Congratulation {0}! Exit Procedure Data has successfully been updated.</value>
   </data>
   <data name="SuccessUpdatePSAManagementData" xml:space="preserve">
     <value>Congratulation {0}! Your PSA data has successfully been updated.</value>

@@ -7,6 +7,7 @@ using Microsoft.SharePoint.Client;
 using System.Linq;
 using NLog;
 using MCAWebAndAPI.Model.Common;
+using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Service.HR.Common
 {
@@ -51,34 +52,12 @@ namespace MCAWebAndAPI.Service.HR.Common
             return models;
         }
 
-        public IEnumerable<ProfessionalMaster> GetProfessionalMonthlyFeesEdit()
-        {
-            var models = new List<ProfessionalMaster>();
-            int tempID;
-            List<int> collectionIDMonthlyFee = new List<int>();
-            foreach (var item in SPConnector.GetList(SP_MONFEE_LIST_NAME, _siteUrl))
-            {
-                collectionIDMonthlyFee.Add(item["professional_x003a_ID"] == null ? 0 :
-               Convert.ToInt16((item["professional_x003a_ID"] as FieldLookupValue).LookupValue));
-            }
-            foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl))
-            {
-                tempID = Convert.ToInt32(item["ID"]);
-                if ((collectionIDMonthlyFee.Any(e => e == tempID)))
-                {
-                    models.Add(ConvertToProfessionalMonthlyFeeModel_Light(item));
-                }
-            }
-
-            return models;
-        }
-
         public IEnumerable<ProfessionalMaster> GetProfessionals()
         {
             var models = new List<ProfessionalMaster>();
-            foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl))
+            foreach(var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl))
             {
-                models.Add(ConvertToProfessionalModel_Light(item));
+                    models.Add(ConvertToProfessionalModel_Light(item));
             }
 
             return models;
@@ -108,13 +87,14 @@ namespace MCAWebAndAPI.Service.HR.Common
                 Name = Convert.ToString(item["Title"]),
                 Status = Convert.ToString(item["maritalstatus"]),
                 Position = item["Position"] == null ? "" :
-               Convert.ToString((item["Position"] as FieldLookupValue).LookupValue)
+               Convert.ToString((item["Position"] as FieldLookupValue).LookupValue),
+                Project_Unit = Convert.ToString(item["Project_x002f_Unit"])
             };
         }
 
-        public IEnumerable<PositionsMaster> GetPositions()
+        public IEnumerable<PositionMaster> GetPositions()
         {
-            var models = new List<PositionsMaster>();
+            var models = new List<PositionMaster>();
 
             foreach (var item in SPConnector.GetList(SP_POSMAS_LIST_NAME, _siteUrl))
             {
@@ -124,13 +104,13 @@ namespace MCAWebAndAPI.Service.HR.Common
             return models;
         }
 
-        private PositionsMaster ConvertToPositionsModel(ListItem item)
+        private PositionMaster ConvertToPositionsModel(ListItem item)
         {
-            var viewModel = new PositionsMaster();
+            var viewModel = new PositionMaster();
 
             viewModel.ID = Convert.ToInt32(item["ID"]);
             viewModel.PositionName = Convert.ToString(item["Title"]);
-            viewModel.isKeyPosition = Convert.ToString(item["iskeyposition"]);
+            viewModel.IsKeyPosition = Convert.ToString(item["iskeyposition"]);
             return viewModel;
         }
 
@@ -140,8 +120,76 @@ namespace MCAWebAndAPI.Service.HR.Common
                 return new ProfessionalDataVM();
 
             var listItem = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, ID, _siteUrl);
-            return ConvertToProfessionalModel(listItem);
+            var viewModel = ConvertToProfessionalModel(listItem);
+            viewModel = GetProfessionalDetails(viewModel);
+            return viewModel;
         }
+
+        public async Task<ProfessionalDataVM> GetProfessionalDataAsync(int? ID)
+        {
+            if (ID == null)
+                return new ProfessionalDataVM();
+
+            var listItem = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, ID, _siteUrl);
+            var viewModel = ConvertToProfessionalModel(listItem);
+            viewModel = await GetProfessionalDetailsAsync(viewModel);
+            return viewModel;
+        }
+
+        private async Task<ProfessionalDataVM> GetProfessionalDetailsAsync(ProfessionalDataVM viewModel)
+        {
+            Task<IEnumerable<OrganizationalDetailVM>> getOrganizationDetailsTask = GetOrganizationalDetailsAsync(viewModel.ID);
+            Task<IEnumerable<EducationDetailVM>> getEducationDetailsTask = GetEducationDetailsAsync(viewModel.ID);
+            Task<IEnumerable<TrainingDetailVM>> getTrainingDetailsTask = GetTrainingDetailsAsync(viewModel.ID);
+            Task<IEnumerable<DependentDetailVM>> getDependantDetailsTask = GetDependentDetailsAsync(viewModel.ID);
+
+            try
+            {
+                viewModel.OrganizationalDetails = await getOrganizationDetailsTask;
+                viewModel.EducationDetails = await getEducationDetailsTask;
+                viewModel.TrainingDetails = await getTrainingDetailsTask;
+                viewModel.DependentDetails = await getDependantDetailsTask;
+            }
+            catch (Exception e)
+            {
+                logger.Error(e);
+                throw e;
+            }
+
+            return viewModel;
+        }
+
+        private async Task<IEnumerable<DependentDetailVM>> GetDependentDetailsAsync(int? iD)
+        {
+            return GetDependentDetails(iD);
+        }
+
+        private async Task<IEnumerable<TrainingDetailVM>> GetTrainingDetailsAsync(int? iD)
+        {
+            return GetTrainingDetails(iD);
+        }
+
+        private async Task<IEnumerable<EducationDetailVM>> GetEducationDetailsAsync(int? iD)
+        {
+            return GetEducationDetails(iD);
+        }
+
+        private async Task<IEnumerable<OrganizationalDetailVM>> GetOrganizationalDetailsAsync(int? iD)
+        {
+            return GetOrganizationalDetails(iD);
+        }
+
+        private ProfessionalDataVM GetProfessionalDetails(ProfessionalDataVM viewModel)
+        {
+            viewModel.OrganizationalDetails = GetOrganizationalDetails(viewModel.ID);
+            viewModel.EducationDetails = GetEducationDetails(viewModel.ID);
+            viewModel.TrainingDetails = GetTrainingDetails(viewModel.ID);
+            viewModel.DependentDetails = GetDependentDetails(viewModel.ID);
+
+            return viewModel;
+        }
+
+
 
         private ProfessionalDataVM ConvertToProfessionalModel(ListItem listItem)
         {
@@ -210,13 +258,12 @@ namespace MCAWebAndAPI.Service.HR.Common
             viewModel.NameInTaxForPayroll = Convert.ToString(listItem["nameintaxid"]);
 
             // Convert Details
-            viewModel.OrganizationalDetails = GetOrganizationalDetails(viewModel.ID);
-            viewModel.EducationDetails = GetEducationDetails(viewModel.ID);
-            viewModel.TrainingDetails = GetTrainingDetails(viewModel.ID);
-            viewModel.DependentDetails = GetDependentDetails(viewModel.ID);
+            
 
             return viewModel;
         }
+
+
 
         private IEnumerable<OrganizationalDetailVM> GetOrganizationalDetails(int? ID)
         {
@@ -257,9 +304,9 @@ namespace MCAWebAndAPI.Service.HR.Common
                 PSANumber = Convert.ToString(item["psanr"]),
                 StartDate = Convert.ToDateTime(item["startdate"]),
                 Project = OrganizationalDetailVM.GetProjectDefaultValue(
-                    FormatUtil.ConvertToInGridLookup(item, "projectunit")),
+                    FormatUtil.ConvertToInGridComboBox(item, "projectunit")),
                 ProfessionalStatus = OrganizationalDetailVM.GetProfessionalStatusDefaultValue(
-                    FormatUtil.ConvertToInGridLookup(item, "Status"))
+                    FormatUtil.ConvertToInGridComboBox(item, "Status"))
             };
         }
 
@@ -288,8 +335,7 @@ namespace MCAWebAndAPI.Service.HR.Common
 
             return dependentDetail;
         }
-
-
+        
         private DependentDetailVM ConvertToDependentDetailVM(ListItem item)
         {
             return new DependentDetailVM
@@ -300,7 +346,7 @@ namespace MCAWebAndAPI.Service.HR.Common
                 InsuranceNumber = Convert.ToString(item["insurancenr"]),
                 PlaceOfBirth = Convert.ToString(item["placeofbirth"]),
                 Remark = FormatUtil.ConvertMultipleLine(Convert.ToString(item["remark"])),
-                Relationship = FormatUtil.ConvertToInGridLookup(item, "relationship")
+                Relationship = FormatUtil.ConvertToInGridComboBox(item, "relationship")
             };
         }
 
@@ -444,12 +490,12 @@ namespace MCAWebAndAPI.Service.HR.Common
 
             try
             {
-                if (viewModel.ID == null)
+                if(viewModel.ID == null)
                     SPConnector.AddListItem(SP_PROMAS_LIST_NAME, updatedValue);
                 else
                     SPConnector.UpdateListItem(SP_PROMAS_LIST_NAME, viewModel.ID, updatedValue);
             }
-            catch (Exception e)
+            catch(Exception e)
             {
                 logger.Error(e);
                 throw e;
@@ -694,7 +740,7 @@ namespace MCAWebAndAPI.Service.HR.Common
             }
         }
 
-        public PositionsMaster GetPosition(int id)
+        public PositionMaster GetPosition(int id)
         {
             var caml = @"<View>  
             <Query> 
@@ -703,14 +749,14 @@ namespace MCAWebAndAPI.Service.HR.Common
              <ViewFields><FieldRef Name='Title' /><FieldRef Name='ID' /></ViewFields> 
       </View>";
 
-            var position = new PositionsMaster();
+            var position = new PositionMaster();
             foreach (var item in SPConnector.GetList(SP_POSMAS_LIST_NAME, _siteUrl, caml))
             {
                 position.ID = Convert.ToInt32(item["ID"]);
                 position.PositionName = Convert.ToString(item["Title"]);
                 //TODO: To add other neccessary property
             }
-
+             
             return position;
         }
 
@@ -729,6 +775,26 @@ namespace MCAWebAndAPI.Service.HR.Common
                 throw e;
             }
 
+        }
+
+        public async Task CreateEducationDetailsAsync(int? headerID, IEnumerable<EducationDetailVM> educationDetails)
+        {
+            CreateEducationDetails(headerID, educationDetails);
+        }
+
+        public async Task CreateTrainingDetailsAsync(int? headerID, IEnumerable<TrainingDetailVM> trainingDetails)
+        {
+            CreateTrainingDetails(headerID, trainingDetails);
+        }
+
+        public async Task CreateDependentDetailsAsync(int? headerID, IEnumerable<DependentDetailVM> documents)
+        {
+            CreateDependentDetails(headerID, documents);
+        }
+
+        public async Task CreateOrganizationalDetailsAsync(int? headerID, IEnumerable<OrganizationalDetailVM> organizationalDetails)
+        {
+            CreateOrganizationalDetails(headerID, organizationalDetails);
         }
     }
 }

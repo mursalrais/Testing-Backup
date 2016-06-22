@@ -1,14 +1,10 @@
-﻿using MCAWebAndAPI.Web.Filters;
+﻿using MCAWebAndAPI.Web.Helpers;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using System.Web.Security;
-using System.Web.SessionState;
 
 namespace MCAWebAndAPI.Web
 {
@@ -20,7 +16,12 @@ namespace MCAWebAndAPI.Web
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-            AntiForgeryConfig.SuppressXFrameOptionsHeader = true; 
+            AntiForgeryConfig.SuppressXFrameOptionsHeader = true;
+
+            // Removing all the view engines
+            ViewEngines.Engines.Clear();
+            //Add Razor Engine (which we are using)
+            ViewEngines.Engines.Add(new CsHtmlRazorViewEngine());
         }
         
     }

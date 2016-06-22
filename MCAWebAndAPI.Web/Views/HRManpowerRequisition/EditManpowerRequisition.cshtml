@@ -6,11 +6,11 @@
 }
 
 @using (Html.BeginForm("EditManpowerRequisition", "HRManpowerRequisition", FormMethod.Post,
-                                                                 new
-                                                                 {
-                                                                     @class = "form-horizontal",
-                                                                     enctype = "multipart/form-data"
-                                                                 }))
+                                                                             new
+                                                                             {
+                                                                                 @class = "form-horizontal",
+                                                                                 enctype = "multipart/form-data"
+                                                                             }))
 {
     <fieldset>
         <legend>General</legend>
@@ -31,12 +31,15 @@
             </div>
 
             <script>
-    $('#application-document-button').click(function () {
-        parent.postMessage({
-            result : "Success", urlToRedirect : "@Model.DocumentUrl" }, "@Model.DocumentUrl" );
-    });
+                $('#application-document-button').click(function () {
+                    parent.postMessage({
+                        result : "Success", urlToRedirect : "@Model.DocumentUrl" }, "@Model.DocumentUrl" );
+                });
             </script>
 
+        </div>
+        <div class="row">
+            @Html.Partial("_SupportingDocument", Model)
         </div>
         <legend>Working Relationship</legend>
         <div class="row">
@@ -58,17 +61,21 @@
         <div class="row">
             @Html.Partial("_OtherRequirements", Model)
         </div>
-        <legend>Status</legend>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.Status).Class("col-md-4 control-label")
-                    <div class="col-md-8">
-                        @Html.EditorFor(m => m.Status)
+        @if (ViewBag.IsHRView)
+        {
+            <legend>Status</legend>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Bootstrap().LabelFor(m => m.Status).Class("col-md-4 control-label")
+                        <div class="col-md-8">
+                            @Html.EditorFor(m => m.Status)
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        }
+
         @Html.HiddenFor(m => m.ID);
     </fieldset>
     <div class="form-actions">
@@ -89,22 +96,34 @@
         function onPositionChange(e) {
             var dataItem = $("#Position_Value").data("kendoDropDownList").dataItem(e.item);
             //var urlKeyPosition = "/HRDataMaster/GetKeyPosition/" + dataItem.ID;
-                if (dataItem.isKeyPosition == "Yes") {
-                    //$('#KeyPositionValue').prop('value', "Yes");
-                    $("label[for='Yes']").show();
-                    $("label[for='No']").hide();
-                    $("#IsKeyPosition").val(true);
+            if (dataItem.isKeyPosition == "Yes") {                
+                $("label[for='Yes']").show();
+                $("label[for='No']").hide();
+                $("#IsKeyPosition").val(true);
 
-                }
-                else {
-                    $("label[for='No']").show();
-                    $("label[for='Yes']").hide();
-                    $("#IsKeyPosition").val(false);
-                }
-            
+            }
+            else {
+                $("label[for='No']").show();
+                $("label[for='Yes']").hide();
+                $("#IsKeyPosition").val(false);
+            }
+
         };
         $(document).ready(function () {
+            var id = $("#ID").val();            
+            var isHR = '@(ViewBag.IsHRView)';
             
+            if (isHR == "True") {
+                var initialStatusValue = $("#Status_Value").attr("value");
+                var dropdownStatus = $("#Status_Value").data("kendoDropDownList");
+                var oldChoices = dropdownStatus.dataSource.data();
+                if (oldChoices.indexOf(initialStatusValue) == -1) {
+                    oldChoices.unshift(initialStatusValue);
+                    dropdownStatus.dataSource.data(oldChoices);
+                    dropdownStatus.select(0);
+                }
+            }
+
             $("#OnBehalfOf_Value").data("kendoDropDownList").enable(false);
             $("#IsOnBehalfOf").click(function () {
                 if (!$(this).is(":checked")) {
@@ -117,23 +136,28 @@
             });
             $("#submit-button").click(function () {
 
-                var isDocumentMCCUploaded = true;
+                if (isHR == "True") {
+                    //var url = "/HRManpowerRequisitio/GetDocumentMCC/" +id;                    
+
+                }
+
+
                 $("form").submit();
+                });
+                var isKeyPosition = $("#IsKeyPosition").val();
+                if (isKeyPosition == "True") {
+                    //$('#KeyPositionValue').prop('value', "Yes");
+                    $("label[for='Yes']").show();
+                    $("label[for='No']").hide();
+                    //$("#IsKeyPosition").val(true);
+
+                }
+                else {
+                    $("label[for='No']").show();
+                    $("label[for='Yes']").hide();
+                    //$("#IsKeyPosition").val(false);
+                }
             });
-            var isKeyPosition = $("#IsKeyPosition").val();
-            if (isKeyPosition == "True") {
-                //$('#KeyPositionValue').prop('value', "Yes");
-                $("label[for='Yes']").show();
-                $("label[for='No']").hide();
-                //$("#IsKeyPosition").val(true);
 
-            }
-            else {
-                $("label[for='No']").show();
-                $("label[for='Yes']").hide();
-                //$("#IsKeyPosition").val(false);
-            }
-        });
-
-</script>
+    </script>
 }

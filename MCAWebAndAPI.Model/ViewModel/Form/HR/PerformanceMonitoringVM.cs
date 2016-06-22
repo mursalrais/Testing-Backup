@@ -11,31 +11,34 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
     public class PerformanceMonitoringVM : Item
     {
-        public IEnumerable<PerformanceMonitoringDetailVM> PerformancePlanMonitoringDetail { get; set; } = new List<PerformanceMonitoringDetailVM>();
-
-        public string IntiationDate { get; set; }
+        [UIHint("Date")]
+        public DateTime? IntiationDate { get; set; } = DateTime.UtcNow;
 
         /// <summary>
         /// period
         /// </summary>
-        public string Period { get; set; }
+        /// 
+        [UIHint("Int32")]
+        public int? Period { get; set; }
 
         /// <summary>
         /// maxdateforpendingapproval1
         /// </summary>
         [UIHint("Date")]
-        public DateTime? MaxDateForPending1 { get; set; } = DateTime.UtcNow;
+        public DateTime? LatestCreationDate { get; set; } = DateTime.UtcNow;
 
         /// <summary>
         /// maxdateforpendingapproval2
         /// </summary>
         [UIHint("Date")]
-        public DateTime? MaxDateForPending2 { get; set; } = DateTime.UtcNow;
+        public DateTime? LatestDateApproval1 { get; set; } = DateTime.UtcNow;
 
-        /// <summary>
-        /// maxdateforapproved
-        /// </summary>
         [UIHint("Date")]
-        public DateTime? MaxDateForApprove { get; set; } = DateTime.UtcNow;
+        public DateTime? LatestDateApproval2 { get; set; } = DateTime.UtcNow;
+
+        public string Status { get; set; }
+
+        public IEnumerable<PerformanceMonitoringDetailVM> PerformanceMonitoringDetails { get; set; } = new List<PerformanceMonitoringDetailVM>();
+
     }
 }

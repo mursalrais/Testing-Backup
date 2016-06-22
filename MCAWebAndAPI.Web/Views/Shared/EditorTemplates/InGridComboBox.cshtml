@@ -5,6 +5,7 @@
     @(Html.Kendo().DropDownListFor(m => m)
         .DataValueField("Value")
         .DataTextField("Text")
+        .Filter("contains")
         .BindTo(((System.Collections.IEnumerable)ViewData["BindTo"])))
 }
 else
@@ -14,6 +15,7 @@ else
         .DataTextField("Text")
         .Value(Model.Value + "")
         .Text(Model.Text)
+        .Filter("contains")
         .BindTo(((System.Collections.IEnumerable)ViewData["BindTo"])))
 }
 
