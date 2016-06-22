@@ -158,6 +158,28 @@ namespace MCAWebAndAPI.Service.HR.Common
             return viewModel;
         }
 
+        public IEnumerable<ProfessionalMaster> GetProfessionalMonthlyFeesEdit()
+        {
+            var models = new List<ProfessionalMaster>();
+            int tempID;
+            List<int> collectionIDMonthlyFee = new List<int>();
+            foreach (var item in SPConnector.GetList(SP_MONFEE_LIST_NAME, _siteUrl))
+            {
+                collectionIDMonthlyFee.Add(item["professional_x003a_ID"] == null ? 0 :
+               Convert.ToInt16((item["professional_x003a_ID"] as FieldLookupValue).LookupValue));
+            }
+            foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl))
+            {
+                tempID = Convert.ToInt32(item["ID"]);
+                if ((collectionIDMonthlyFee.Any(e => e == tempID)))
+                {
+                    models.Add(ConvertToProfessionalMonthlyFeeModel_Light(item));
+                }
+            }
+
+            return models;
+        }
+
         private async Task<ProfessionalDataVM> GetProfessionalDetailsAsync(ProfessionalDataVM viewModel)
         {
             Task<IEnumerable<OrganizationalDetailVM>> getOrganizationDetailsTask = GetOrganizationalDetailsAsync(viewModel.ID);
