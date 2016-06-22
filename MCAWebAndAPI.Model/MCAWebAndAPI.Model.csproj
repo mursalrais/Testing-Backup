@@ -153,6 +153,7 @@
     <Compile Include="ViewModel\Form\HR\PerformancePlanVM.cs" />
     <Compile Include="ViewModel\Form\HR\PlaceMasterVM.cs" />
     <Compile Include="ViewModel\Form\HR\ProfessionalDataVM.cs" />
+    <Compile Include="ViewModel\Form\HR\ProfessionalPerformancePlanVM.cs" />
     <Compile Include="ViewModel\Form\HR\ProjectOrUnitGoalsDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\PSAManagementVM.cs" />
     <Compile Include="ViewModel\Form\HR\ShortlistDetailVM.cs" />

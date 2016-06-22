@@ -51,12 +51,34 @@ namespace MCAWebAndAPI.Service.HR.Common
             return models;
         }
 
+        public IEnumerable<ProfessionalMaster> GetProfessionalMonthlyFeesEdit()
+        {
+            var models = new List<ProfessionalMaster>();
+            int tempID;
+            List<int> collectionIDMonthlyFee = new List<int>();
+            foreach (var item in SPConnector.GetList(SP_MONFEE_LIST_NAME, _siteUrl))
+            {
+                collectionIDMonthlyFee.Add(item["professional_x003a_ID"] == null ? 0 :
+               Convert.ToInt16((item["professional_x003a_ID"] as FieldLookupValue).LookupValue));
+            }
+            foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl))
+            {
+                tempID = Convert.ToInt32(item["ID"]);
+                if ((collectionIDMonthlyFee.Any(e => e == tempID)))
+                {
+                    models.Add(ConvertToProfessionalMonthlyFeeModel_Light(item));
+                }
+            }
+
+            return models;
+        }
+
         public IEnumerable<ProfessionalMaster> GetProfessionals()
         {
             var models = new List<ProfessionalMaster>();
-            foreach(var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl))
+            foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl))
             {
-                    models.Add(ConvertToProfessionalModel_Light(item));
+                models.Add(ConvertToProfessionalModel_Light(item));
             }
 
             return models;
@@ -120,7 +142,7 @@ namespace MCAWebAndAPI.Service.HR.Common
             var listItem = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, ID, _siteUrl);
             return ConvertToProfessionalModel(listItem);
         }
-        
+
         private ProfessionalDataVM ConvertToProfessionalModel(ListItem listItem)
         {
             var viewModel = new ProfessionalDataVM();
@@ -267,7 +289,7 @@ namespace MCAWebAndAPI.Service.HR.Common
             return dependentDetail;
         }
 
-        
+
         private DependentDetailVM ConvertToDependentDetailVM(ListItem item)
         {
             return new DependentDetailVM
@@ -422,12 +444,12 @@ namespace MCAWebAndAPI.Service.HR.Common
 
             try
             {
-                if(viewModel.ID == null)
+                if (viewModel.ID == null)
                     SPConnector.AddListItem(SP_PROMAS_LIST_NAME, updatedValue);
                 else
                     SPConnector.UpdateListItem(SP_PROMAS_LIST_NAME, viewModel.ID, updatedValue);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 logger.Error(e);
                 throw e;
@@ -688,7 +710,7 @@ namespace MCAWebAndAPI.Service.HR.Common
                 position.PositionName = Convert.ToString(item["Title"]);
                 //TODO: To add other neccessary property
             }
-             
+
             return position;
         }
 

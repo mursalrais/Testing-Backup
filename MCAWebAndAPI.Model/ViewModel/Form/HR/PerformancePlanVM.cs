@@ -11,13 +11,19 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
     public class PerformancePlanVM : Item
     {
-        public IEnumerable<ProjectOrUnitGoalsDetailVM> ProjectOrUnitGoalsDetail { get; set; } = new List<ProjectOrUnitGoalsDetailVM>();
-        public IEnumerable<IndividualGoalDetailVM> IndividualGoalDetail { get; set; } = new List<IndividualGoalDetailVM>();
-
+        /// <summary>
+        /// professional
+        /// </summary>
         public string Name { get; set; }
 
+        /// <summary>
+        /// Position
+        /// </summary>
         public string PositionAndDepartement { get; set; }
 
+        /// <summary>
+        /// Title
+        /// </summary>
         public string PerformancePeriod { get; set; }
     }
 }

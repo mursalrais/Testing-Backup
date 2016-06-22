@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 namespace MCAWebAndAPI.Service.HR.Payroll
 {
     public interface IHRPayrollServices
@@ -13,8 +14,6 @@ namespace MCAWebAndAPI.Service.HR.Payroll
         MonthlyFeeVM GetPopulatedModel(int? id = null);
 
         MonthlyFeeVM GetHeader(int? ID);
-
-        IEnumerable<MonthlyFeeVM> GetMonthlyFees();
 
         int CreateHeader(MonthlyFeeVM header);
 
