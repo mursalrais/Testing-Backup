@@ -27,7 +27,7 @@
             columns.Bound(p => p.IndividualGoalAndPlan).ClientTemplate("#= IndividualGoalAndPlan #" +
             "<input type='hidden' name='ProjectOrUnitGoalsDetails[#= getProfessionalPerformancePlanDetail(data)#].IndividualGoalAndPlan' value='#= IndividualGoalAndPlan #' />"
             );
-            columns.Bound(p => p.Weight).ClientTemplate("#= Weight #" +
+            columns.Bound(p => p.Weight).ClientTemplate("#= Weight + & #" +
             "<input type='hidden' name='ProjectOrUnitGoalsDetails[#= getProfessionalPerformancePlanDetail(data)#].Weight' value='#= Weight #' />"
             );
             columns.Bound(p => p.Remarks).ClientTemplate("#= Remarks #" +

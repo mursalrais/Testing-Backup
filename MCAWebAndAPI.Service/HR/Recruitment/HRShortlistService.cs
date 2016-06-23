@@ -158,26 +158,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             if (useraccess == "HR")
             {
                 caml = @"<View>  
-            <Query> 
-       <Where>
-          <And>
-             <Eq>
-                <FieldRef Name='manpowerrequisition' />
-                <Value Type='Lookup'>"+ Position +@"</Value>
-             </Eq>
-             <Or>
-                <Eq>
-                   <FieldRef Name='applicationstatus' />
-                   <Value Type='Text'>New</Value>
-                </Eq>
-                <Eq>
-                   <FieldRef Name='applicationstatus' />
-                   <Value Type='Text'>NEW</Value>
-                </Eq>
-             </Or>
-          </And>
-       </Where>
-            </Query> 
+          
               <ViewFields>
       <FieldRef Name='Title' />
       <FieldRef Name='ID' />

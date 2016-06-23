@@ -16,7 +16,7 @@
     <RootNamespace>MCAWebAndAPI.Web</RootNamespace>
     <AssemblyName>MCAWebAndAPI.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -518,7 +518,6 @@
     <Content Include="Views\Shared\EditorTemplates\Email.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\EmailAddress.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\GridForeignKey.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\Integer.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Number.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Password.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\String.cshtml" />
@@ -583,7 +582,6 @@
     <Content Include="Views\Shared\DisplayTemplates\GridForeignKey.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\HttpPostedFileBase.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\InGridAjaxComboBox.cshtml" />
-    <Content Include="Views\Shared\DisplayTemplates\Integer.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\Month.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\MultiFileUploader.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\Number.cshtml" />
@@ -684,6 +682,7 @@
     <Content Include="Views\Shared\EditorTemplates\Int32.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\Int32.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\Boolean.cshtml" />
+    <Content Include="Views\HRPayroll\_MonthlyFeeDetail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
