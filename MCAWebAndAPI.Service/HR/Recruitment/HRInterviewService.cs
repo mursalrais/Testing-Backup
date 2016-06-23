@@ -54,6 +54,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             viewModel.ID = Convert.ToInt32(listItem["ID"]);
             viewModel.Position = FormatUtil.ConvertLookupToID(listItem, "vacantposition") + string.Empty;
+            viewModel.OtherPosition.Value = FormatUtil.ConvertLookupToID(listItem, "recommendedforposition");
             viewModel.Candidate = Convert.ToString(listItem["Title"]);
 
             // Convert Details
@@ -292,15 +293,16 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             var createdValue = new Dictionary<string, object>();
             
                 createdValue.Add("Title", viewModel.Candidate );
-                createdValue.Add("emailfrom", viewModel.Position);
-                createdValue.Add("emailto", viewModel.Remarks);
-                createdValue.Add("emailmessage", viewModel.GetResultOptions);
-                createdValue.Add("emaildate", viewModel.InterviewerDate);
+                createdValue.Add("applicationremarks", viewModel.Remarks);
+                createdValue.Add("applicationstatus", viewModel.GetResultOptions.Value);
+                createdValue.Add("recommendedforposition", viewModel.OtherPosition.Value);
+                createdValue.Add("neednextinterview", viewModel.NeedNextInterviewer);
+                //createdValue.Add("documenturl", viewModel.AttDocuments);
 
-                try
-                {
-                    SPConnector.AddListItem(SP_APPINVPANEL_LIST_NAME, createdValue, _siteUrl);
-                }
+            try
+            {
+                SPConnector.UpdateListItem(SP_APPDATA_LIST_NAME, viewModel.ID, createdValue, _siteUrl);
+            }
                 catch (Exception e)
                 {
                     logger.Error(e.Message);

@@ -372,7 +372,8 @@ namespace MCAWebAndAPI.Web.Controllers
                 new
                 {
                     e.ID,
-                    e.StrJoinDate
+                    e.StrJoinDate,
+                    e.PSANumber
                 }
             ), JsonRequestBehavior.AllowGet);
         }

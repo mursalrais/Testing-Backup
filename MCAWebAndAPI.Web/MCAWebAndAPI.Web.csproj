@@ -683,6 +683,8 @@
     <Content Include="Views\Shared\DisplayTemplates\Int32.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\Boolean.cshtml" />
     <Content Include="Views\HRPayroll\_MonthlyFeeDetail.cshtml" />
+    <Content Include="Views\HRExitProcedure\DisplayExitProcedure.cshtml" />
+    <Content Include="Views\HRExitProcedure\_ExitProcedureDataDisplay.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

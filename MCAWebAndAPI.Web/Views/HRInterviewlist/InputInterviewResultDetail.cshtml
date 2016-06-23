@@ -12,6 +12,7 @@
 }))
 {
     <fieldset>
+        @TempData.
         @Html.HiddenFor(m => m.ID)
         @Html.HiddenFor(m => m.Position)
 
@@ -57,7 +58,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.GetResultOptions).Class("col-xs-4 control-label")
-                    <div class="col-xs-8">
+                    <div class="col-xs-6">
                         @Html.EditorFor(m => m.GetResultOptions)
                     </div>
                 </div>
@@ -70,9 +71,9 @@
                     </button>*@
                 <button id="submit-button" class="btn btn-primary" type="submit">
                     <i class="fa fa-send"></i>
-                    Send Email To Candidate
+                    Save
                 </button>
-                <button id="submit-cancel" class="btn btn-primary" type="submit">
+                <button id="submit-cancel" class="btn btn-primary" type="button">
                     <i class="fa fa-cancel"></i>
                     cancel
                 </button>
@@ -88,8 +89,6 @@
         $(document).ready(function () {
             $("#vacant-position").prop('readonly', 'true');
             $("#Candidate").prop('readonly', 'true');
-
-            debugger;
             var positionID = $("#Position").val();
             var url = "/HRDataMaster/GetPosition/" + positionID;
             $.getJSON(url, function (data) {
