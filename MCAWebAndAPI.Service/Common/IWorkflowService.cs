@@ -23,5 +23,6 @@ namespace MCAWebAndAPI.Service.Common
 
         void SendApprovalRequest(string workflowTransactionListName, string transactionLookupColumnName, 
             int headerID, int level, string message);
+        string GetPositionName(int position);
     }
 }

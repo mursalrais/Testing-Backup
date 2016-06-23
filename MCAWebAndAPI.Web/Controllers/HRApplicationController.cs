@@ -20,9 +20,7 @@ namespace MCAWebAndAPI.Web.Controllers
     public class HRApplicationController : Controller
     {
         readonly IHRApplicationService _service;
-        const string SP_TRANSACTION_WORKFLOW_LIST_NAME = "Manpower Requisition Workflow";
-        const string SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME = "manpowerrequisition";
-
+        
         public HRApplicationController()
         {
             _service = new HRApplicationService();
@@ -90,7 +88,6 @@ namespace MCAWebAndAPI.Web.Controllers
                 string.Format("{0}/{1}", siteUrl, UrlResource.Professional));
         }
 
-
         public ActionResult ListVacantPositions(string siteUrl)
         {
             // MANDATORY: Set Site URL
@@ -139,17 +136,6 @@ namespace MCAWebAndAPI.Web.Controllers
 
             Task createApplicationDocumentTask = _service.CreateApplicationDocumentAsync(headerID, viewModel.Documents);
 
-            // BEGIN Workflow Demo 
-            headerID = 45; // This MUST NOT be hardcoded. It is hardcoded as it is just a demo
-            Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateTransactionWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
-                SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)headerID);
-
-            // Send to Level 1 Approver
-            Task sendApprovalRequestTask = WorkflowHelper.SendApprovalRequestAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
-                SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)headerID, 1,
-                string.Format(EmailResource.WorkflowAskForApproval, UrlResource.ApplicationData));
-
-            // END Workflow Demo
 
             Task sendTask = EmailUtil.SendAsync(viewModel.EmailAddresOne, "Application Submission Confirmation",
                  EmailResource.ApplicationSubmissionNotification);
@@ -291,12 +277,6 @@ namespace MCAWebAndAPI.Web.Controllers
             var viewModel = _service.GetApplication(null);
             viewModel.Position = position;
             viewModel.ManpowerRequisitionID = ID;
-
-            // Used for Workflow Router
-            ViewBag.ListName = "Manpower%20Requisition";
-
-            // This var should be taken from passing parameter
-            ViewBag.RequestorUserLogin = "yunita.ajah@eceos.com";
 
             return View(viewModel);
         }

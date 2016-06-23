@@ -2,7 +2,7 @@
 
 @if (Model.OnSelectEventName.IsEmpty())
 {
-    @(Html.Kendo().DropDownListFor(m => m)
+    @(Html.Kendo().DropDownListFor(m => m.Value).ValuePrimitive(true)
               .DataTextField((string)ViewData["DataTextField"])
               .DataValueField((string)ViewData["DataValueField"])
               .Filter("contains")
