@@ -64,7 +64,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             var viewModel = new ExitProcedureVM();
 
-            
             if (ID == null)
             {
                 return viewModel;
@@ -133,6 +132,46 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             var entitiy = new ExitProcedureVM();
             entitiy = exitProcedure;
             return true;
+        }
+
+        public ExitProcedureVM ViewExitProcedure(int? ID)
+        {
+            var viewModel = new ExitProcedureVM();
+            if (ID == null)
+                return viewModel;
+
+            var listItem = SPConnector.GetListItem(SP_EXP_LIST_NAME, ID, _siteUrl);
+            viewModel = ConvertToViewExitProcedureVM(listItem);
+
+            return viewModel;
+
+        }
+
+        private ExitProcedureVM ConvertToViewExitProcedureVM(ListItem listItem)
+        {
+            var viewModel = new ExitProcedureVM();
+
+            viewModel.ID = Convert.ToInt32(listItem["ID"]);
+            viewModel.RequestDate = Convert.ToDateTime(listItem["requestdate"]).ToLocalTime();
+            viewModel.Professional.Text = FormatUtil.ConvertLookupToValue(listItem, "professional");
+            viewModel.FullName = Convert.ToString(listItem["Title"]);
+            viewModel.ProjectUnit = Convert.ToString(listItem["projectunit"]);
+            viewModel.Position = Convert.ToString(listItem["position"]);
+            viewModel.PhoneNumber = Convert.ToString(listItem["mobilenumber"]);
+            viewModel.EmailAddress = Convert.ToString(listItem["officeemail"]);
+            viewModel.CurrentAddress = Convert.ToString(listItem["currentaddress"]);
+            viewModel.JoinDate = Convert.ToDateTime(listItem["joindate"]).ToLocalTime();
+            viewModel.LastWorkingDate = Convert.ToDateTime(listItem["lastworkingdate"]).ToLocalTime();
+            viewModel.ExitReason.Value = Convert.ToString(listItem["exitreason"]);
+            viewModel.ReasonDesc = Convert.ToString(listItem["reasondescription"]);
+            viewModel.PSANumber = Convert.ToString(listItem["psanumber"]);
+
+            /*
+            
+            viewModel.DocumentUrl = GetDocumentUrl(viewModel.ID);
+            */
+
+            return viewModel;
         }
     }
 }

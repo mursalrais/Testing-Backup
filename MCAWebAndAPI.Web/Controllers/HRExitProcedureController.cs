@@ -141,5 +141,18 @@ namespace MCAWebAndAPI.Web.Controllers
                 new { errorMessage = string.Format(MessageResource.SuccessUpdateExitProcedure, exitProcedure.ID) });
 
         }
+
+        public ActionResult ViewExitProcedure(string siteUrl = null, int? ID = null)
+        {
+            // Clear Existing Session Variables if any
+            SessionManager.RemoveAll();
+
+            // MANDATORY: Set Site URL
+            exitProcedureService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            var viewModel = exitProcedureService.ViewExitProcedure(ID);
+            return View("DisplayExitProcedure", viewModel);
+        }
     }
 }
