@@ -80,5 +80,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [DisplayName("Reason Description")]
         [Required]
         public string ReasonDesc { get; set; }
+
+        public string PSANumber { get; set; }
     }
 }

@@ -53,8 +53,6 @@ namespace MCAWebAndAPI.Service.HR.Common
         void CreateOrganizationalDetails(int? headerID, IEnumerable<OrganizationalDetailVM> organizationalDetails);
         Task CreateOrganizationalDetailsAsync(int? headerID, IEnumerable<OrganizationalDetailVM> organizationalDetails);
 
-        IEnumerable<ProfessionalMaster> GetProfessionalMonthlyFeesEdit();
-
         void UpdateValidation(int? ID, string status);
         void SendEmailValidation(string emailTo, string emailMessages, bool isApproved);
         void SendEmailValidation(string emailTo, string emailMessages);

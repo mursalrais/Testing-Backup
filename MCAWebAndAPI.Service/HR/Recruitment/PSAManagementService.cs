@@ -71,7 +71,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return new PSAManagementVM
             {
                 ID = item["professional_x003a_ID"] == null ? 0 : Convert.ToInt32((item["professional_x003a_ID"] as FieldLookupValue).LookupId),
-                StrJoinDate = Convert.ToDateTime(item["joindate"]).ToLocalTime().ToShortDateString()
+                StrJoinDate = Convert.ToDateTime(item["joindate"]).ToLocalTime().ToShortDateString(),
+                PSANumber = Convert.ToString(item["Title"])
             };
         }
 

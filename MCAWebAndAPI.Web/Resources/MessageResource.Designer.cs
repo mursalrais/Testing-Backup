@@ -61,6 +61,15 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to Edit Exit Procedure.
+        /// </summary>
+        public static string ErrorEditExitProcedure {
+            get {
+                return ResourceManager.GetString("ErrorEditExitProcedure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unable Edit Inactive PSA.
         /// </summary>
         public static string ErrorEditInActivePSA {
