@@ -96,7 +96,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 new { errorMessage = string.Format(MessageResource.SuccessCreateExitProcedureData, exitProcID) });
         }
 
-        public ActionResult DisplayExitProcedure(string siteUrl = null, int? ID = null)
+        public ActionResult DisplayExitProcedure(int? ID = null, string siteUrl = null)
         {
             // Clear Existing Session Variables if any
             SessionManager.RemoveAll();
@@ -107,7 +107,17 @@ namespace MCAWebAndAPI.Web.Controllers
 
             var viewModel = exitProcedureService.GetExitProcedure(ID);
 
-            return View("EditExitProcedure", viewModel);
+
+            if(viewModel.ID != null)
+            {
+                return View("EditExitProcedure", viewModel);
+            }
+            else
+            {
+                return RedirectToAction("Index",
+                "Error",
+                new { errorMessage = string.Format(MessageResource.ErrorEditExitProcedure) });
+            }
         }
 
         public ActionResult UpdateExitProcedure(ExitProcedureVM exitProcedure, string site)
@@ -130,6 +140,19 @@ namespace MCAWebAndAPI.Web.Controllers
                 "Success",
                 new { errorMessage = string.Format(MessageResource.SuccessUpdateExitProcedure, exitProcedure.ID) });
 
+        }
+
+        public ActionResult ViewExitProcedure(string siteUrl = null, int? ID = null)
+        {
+            // Clear Existing Session Variables if any
+            SessionManager.RemoveAll();
+
+            // MANDATORY: Set Site URL
+            exitProcedureService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            var viewModel = exitProcedureService.ViewExitProcedure(ID);
+            return View("DisplayExitProcedure", viewModel);
         }
     }
 }

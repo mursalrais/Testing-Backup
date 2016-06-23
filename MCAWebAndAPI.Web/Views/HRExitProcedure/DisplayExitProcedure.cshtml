@@ -1,0 +1,33 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model ExitProcedureVM
+
+@{
+    ViewBag.Title = "View Exit Procedure Data";
+}
+
+<div class="form-horizontal">
+    <fieldset>
+        <legend>View Exit Procedure Data</legend>
+        <div class="row">
+            @Html.Partial("_ExitProcedureDataDisplay", Model)
+        </div>
+    </fieldset>
+    <div class="form-actions">
+        <div class="row">
+            <div class="col-sm-12"><br /></div>
+        </div>
+    </div>
+</div>
+@section scripts{
+
+    <script>
+
+
+            $(document).ready(function () {
+                $('input').prop('readonly', 'true');
+                $('textarea').prop('readonly', 'true');
+                $('')
+            });
+
+    </script>
+}

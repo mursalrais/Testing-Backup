@@ -82,7 +82,5 @@ A look-up field contains invalid data. Please check the value and try again.
 2016-06-21 10:13:25.4544 MCAWebAndAPI.Service.HR.Recruitment.HRInterviewService Invalid look-up value.
 
 A look-up field contains invalid data. Please check the value and try again.
-2016-06-22 13:29:59.4584 MCAWebAndAPI.Service.HR.Recruitment.HRManpowerRequisitionService The underlying connection was closed: A connection that was expected to be kept alive was closed by the server.
-2016-06-22 14:57:26.7598 MCAWebAndAPI.Service.HR.Recruitment.HRManpowerRequisitionService Document MCC Aprroval must be uploaded first!
-2016-06-22 15:00:50.8290 MCAWebAndAPI.Service.HR.Recruitment.HRManpowerRequisitionService Document MCC Aprroval must be uploaded first!
-2016-06-22 15:07:24.2754 MCAWebAndAPI.Service.HR.Recruitment.HRManpowerRequisitionService Document MCC Aprroval must be uploaded first!
+2016-06-22 13:12:50.8488 MCAWebAndAPI.Service.HR.Recruitment.HRInterviewService Value cannot be null.
+2016-06-22 13:17:30.1472 MCAWebAndAPI.Service.HR.Recruitment.HRInterviewService Value cannot be null.

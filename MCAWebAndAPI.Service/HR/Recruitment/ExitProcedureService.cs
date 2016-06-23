@@ -28,40 +28,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         }
 
         //Display Exit Procedure Data based on ID
-        public ExitProcedureVM GetExitProcedure(int? ID)
-        {
-            var viewModel = new ExitProcedureVM();
-            if (ID == null)
-            {
-                return viewModel;
-            }
-
-            var listItem = SPConnector.GetListItem(SP_EXP_LIST_NAME, ID, _siteUrl);
-            viewModel = ConvertToExitProcedureVM(listItem);
-
-            return viewModel;
-        }
-
-        private ExitProcedureVM ConvertToExitProcedureVM(ListItem listItem)
-        {
-            var viewModel = new ExitProcedureVM();
-
-            viewModel.ID = Convert.ToInt32(listItem["ID"]);
-            viewModel.RequestDate = Convert.ToDateTime(listItem["requestdate"]).ToLocalTime();
-            viewModel.Professional.Text = Convert.ToString(listItem["Title"]);
-
-            //viewModel.Professional.Text = FormatUtil.ConvertLookupToValue(listItem, "professional");
-            viewModel.Position = Convert.ToString(listItem["position"]);
-            viewModel.PhoneNumber = Convert.ToString(listItem["mobilenumber"]);
-            viewModel.EmailAddress = Convert.ToString(listItem["officeemail"]);
-            viewModel.CurrentAddress = FormatUtil.ConvertMultipleLine(Convert.ToString(listItem["currentaddress"]));
-            viewModel.LastWorkingDate = Convert.ToDateTime(listItem["lastworkingdate"]).ToLocalTime();
-            viewModel.ExitReason.Value =  Convert.ToString(listItem["exitreason"]);
-            viewModel.ReasonDesc = FormatUtil.ConvertMultipleLine(Convert.ToString(listItem["reasondescription"]));
-
-            return viewModel;
-        }
-
+        
         public int CreateExitProcedure(ExitProcedureVM exitProcedure)
         {
             var updatedValues = new Dictionary<string, object>();
@@ -69,18 +36,16 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             updatedValues.Add("Title", exitProcedure.FullName);
             updatedValues.Add("requestdate", exitProcedure.RequestDate);
             updatedValues.Add("professional", new FieldLookupValue { LookupId = (int)exitProcedure.Professional.Value });
-            //Cek lagi nama fieldnya
             updatedValues.Add("projectunit", exitProcedure.ProjectUnit);
-            //Cek lagi nama fieldnya
             updatedValues.Add("position", exitProcedure.Position);
             updatedValues.Add("mobilenumber", exitProcedure.PhoneNumber);
             updatedValues.Add("officeemail", exitProcedure.EmailAddress);
             updatedValues.Add("currentaddress", exitProcedure.CurrentAddress);
-            //Cek lagi nama fieldnya
             updatedValues.Add("joindate", exitProcedure.JoinDate);
             updatedValues.Add("lastworkingdate", exitProcedure.LastWorkingDate);
             updatedValues.Add("exitreason", exitProcedure.ExitReason.Value);
             updatedValues.Add("reasondescription", exitProcedure.ReasonDesc);
+            updatedValues.Add("psanumber", exitProcedure.PSANumber);
 
             try
             {
@@ -95,6 +60,45 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return SPConnector.GetLatestListItemID(SP_EXP_LIST_NAME, _siteUrl);
         }
 
+        public ExitProcedureVM GetExitProcedure(int? ID)
+        {
+            var viewModel = new ExitProcedureVM();
+
+            if (ID == null)
+            {
+                return viewModel;
+            }
+            else
+            {
+                var listItem = SPConnector.GetListItem(SP_EXP_LIST_NAME, ID, _siteUrl);
+                viewModel = ConvertToExitProcedureVM(listItem);
+            }
+
+            return viewModel;
+        }
+
+        private ExitProcedureVM ConvertToExitProcedureVM(ListItem listItem)
+        {
+            var viewModel = new ExitProcedureVM();
+
+            viewModel.ID = Convert.ToInt32(listItem["ID"]);
+            viewModel.RequestDate = Convert.ToDateTime(listItem["requestdate"]).ToLocalTime();
+            viewModel.FullName = Convert.ToString(listItem["Title"]);
+            viewModel.Professional.Value = FormatUtil.ConvertLookupToID(listItem, "professional");
+            viewModel.ProjectUnit = Convert.ToString(listItem["projectunit"]);
+            viewModel.Position = Convert.ToString(listItem["position"]);
+            viewModel.PhoneNumber = Convert.ToString(listItem["mobilenumber"]);
+            viewModel.EmailAddress = Convert.ToString(listItem["officeemail"]);
+            viewModel.CurrentAddress = Convert.ToString(listItem["currentaddress"]);
+            viewModel.JoinDate = Convert.ToDateTime(listItem["joindate"]).ToLocalTime();
+            viewModel.LastWorkingDate = Convert.ToDateTime(listItem["lastworkingdate"]).ToLocalTime();
+            viewModel.ExitReason.Value = Convert.ToString(listItem["exitreason"]);
+            viewModel.ReasonDesc = Convert.ToString(listItem["reasondescription"]);
+            viewModel.PSANumber = Convert.ToString(listItem["psanumber"]);
+
+            return viewModel;
+        }
+
         public bool UpdateExitProcedure(ExitProcedureVM exitProcedure)
         {
             var columnValues = new Dictionary<string, object>();
@@ -102,18 +106,18 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             columnValues.Add("requestdate", exitProcedure.RequestDate.Value);
             columnValues.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(exitProcedure.Professional.Value) });
-            //Cek lagi nama fieldnya
+            columnValues.Add("Title", exitProcedure.FullName);
             columnValues.Add("projectunit", exitProcedure.ProjectUnit);
-            //Cek lagi nama fieldnya
             columnValues.Add("position", exitProcedure.Position);
             columnValues.Add("mobilenumber", exitProcedure.PhoneNumber);
             columnValues.Add("officeemail", exitProcedure.EmailAddress);
             columnValues.Add("currentaddress", exitProcedure.CurrentAddress);
-            //Cek lagi nama fieldnya
             columnValues.Add("joindate", exitProcedure.JoinDate.Value);
             columnValues.Add("lastworkingdate", exitProcedure.LastWorkingDate.Value);
             columnValues.Add("exitreason", exitProcedure.ExitReason.Value);
             columnValues.Add("reasondescription", exitProcedure.ReasonDesc);
+            columnValues.Add("psanumber", exitProcedure.PSANumber);
+
             
             try
             {
@@ -128,6 +132,46 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             var entitiy = new ExitProcedureVM();
             entitiy = exitProcedure;
             return true;
+        }
+
+        public ExitProcedureVM ViewExitProcedure(int? ID)
+        {
+            var viewModel = new ExitProcedureVM();
+            if (ID == null)
+                return viewModel;
+
+            var listItem = SPConnector.GetListItem(SP_EXP_LIST_NAME, ID, _siteUrl);
+            viewModel = ConvertToViewExitProcedureVM(listItem);
+
+            return viewModel;
+
+        }
+
+        private ExitProcedureVM ConvertToViewExitProcedureVM(ListItem listItem)
+        {
+            var viewModel = new ExitProcedureVM();
+
+            viewModel.ID = Convert.ToInt32(listItem["ID"]);
+            viewModel.RequestDate = Convert.ToDateTime(listItem["requestdate"]).ToLocalTime();
+            viewModel.Professional.Text = FormatUtil.ConvertLookupToValue(listItem, "professional");
+            viewModel.FullName = Convert.ToString(listItem["Title"]);
+            viewModel.ProjectUnit = Convert.ToString(listItem["projectunit"]);
+            viewModel.Position = Convert.ToString(listItem["position"]);
+            viewModel.PhoneNumber = Convert.ToString(listItem["mobilenumber"]);
+            viewModel.EmailAddress = Convert.ToString(listItem["officeemail"]);
+            viewModel.CurrentAddress = Convert.ToString(listItem["currentaddress"]);
+            viewModel.JoinDate = Convert.ToDateTime(listItem["joindate"]).ToLocalTime();
+            viewModel.LastWorkingDate = Convert.ToDateTime(listItem["lastworkingdate"]).ToLocalTime();
+            viewModel.ExitReason.Value = Convert.ToString(listItem["exitreason"]);
+            viewModel.ReasonDesc = Convert.ToString(listItem["reasondescription"]);
+            viewModel.PSANumber = Convert.ToString(listItem["psanumber"]);
+
+            /*
+            
+            viewModel.DocumentUrl = GetDocumentUrl(viewModel.ID);
+            */
+
+            return viewModel;
         }
     }
 }

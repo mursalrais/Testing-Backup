@@ -6,16 +6,13 @@
 
     @(Html.Kendo().Grid(Model)
     .Name("InterviewlistDetails")
-    .ToolBar(tools => tools.Create().Text("Add Interview"))
-    .Editable(editable => editable.Mode(GridEditMode.InCell)
-    .CreateAt(GridInsertRowPosition.Bottom))
     .Columns(columns =>
     {
         columns.Bound(p => p.Date).ClientTemplate("<a href=''>#= Date #</a>" +
         "<input type='hidden' name='InterviewlistDetails[#= GetDetailShortlist(data)#].Date' value='#= Date #' />");
 
-        columns.Bound(p => p.InterviewPanel).ClientTemplate("<a href=''>#= interviewpanel #</a>" +
-        "<input type='hidden' name='InterviewlistDetails[#= GetDetailShortlist(data)#].interviewpanel' value='#= interviewpanel #' />");
+        columns.Bound(p => p.InterviewPanel).ClientTemplate("<a href=''>#= InterviewPanel #</a>" +
+        "<input type='hidden' name='InterviewlistDetails[#= GetDetailShortlist(data)#].InterviewPanel' value='#= InterviewPanel #' />");
 
         columns.Bound(p => p.InterviewSummary).ClientTemplate("<a href=''>#= Candidate #</a>" +
        "<input type='hidden' name='InterviewlistDetails[#= GetDetailShortlist(data)#].Candidate' value='#= Candidate #' />");
@@ -25,8 +22,7 @@
         columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
            "<input type='hidden' name='InterviewlistDetails[#= GetDetailShortlist(data)#].EditMode' value='#= EditMode #' />"
          );
-        columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
-           .Click("onDeleteKendoDetail")).Width(100);
+       
     })
     .Events(e =>
     {

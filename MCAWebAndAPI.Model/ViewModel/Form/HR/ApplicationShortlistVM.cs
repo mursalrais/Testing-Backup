@@ -73,7 +73,22 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [DisplayName("Position")]
         [Required]
         public string Position { get; set; }
-        
+
+        /// <summary>
+        /// positionrequested
+        /// </summary>
+        [DisplayName("Other Position")]
+        [UIHint("AjaxComboBox")]
+        public AjaxComboBoxVM OtherPosition { get; set; } = new AjaxComboBoxVM
+        {
+            ControllerName = "HRDataMaster",
+            ActionName = "GetPositions",
+            ValueField = "ID",
+            TextField = "PositionName",
+            OnSelectEventName = "onPositionChange"
+        };
+
+
         [DisplayName("Attach Document")]
         [UIHint("MultiFileUploader")]
         public IEnumerable<HttpPostedFileBase> AttDocuments { get; set; } = new List<HttpPostedFileBase>();
@@ -106,7 +121,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             }
         };
 
-        public Boolean NeedNextInterviewer { get; set; } = new Boolean();
+        
+    public Boolean NeedNextInterviewer { get; set; } = new Boolean();
 
         [UIHint("MultiFileUploader")]
         public IEnumerable<HttpPostedFileBase> Documents { get; set; } = new List<HttpPostedFileBase>();
