@@ -2,27 +2,28 @@
 
 @model IEnumerable<InterviewDetailVM>
 
-<div class="col-xs-12">
+<div class="col-md-12" style="margin-bottom: 20px; margin-top: 5px">
 
     @(Html.Kendo().Grid(Model)
     .Name("InterviewlistDetails")
     .Columns(columns =>
     {
-        columns.Bound(p => p.Date).ClientTemplate("<a href=''>#= Date #</a>" +
-        "<input type='hidden' name='InterviewlistDetails[#= GetDetailShortlist(data)#].Date' value='#= Date #' />");
+        columns.Bound(p => p.Date).ClientTemplate("#= DateString #" +
+        "<input type='hidden' name='InterviewlistDetails[#= GetDetailShortlist(data)#].Date' value='#= Date #' />").Width(100);
 
-        columns.Bound(p => p.InterviewPanel).ClientTemplate("<a href=''>#= InterviewPanel #</a>" +
-        "<input type='hidden' name='InterviewlistDetails[#= GetDetailShortlist(data)#].InterviewPanel' value='#= InterviewPanel #' />");
+        columns.Bound(p => p.InterviewPanel).ClientTemplate("#= InterviewPanel #" +
+        "<input type='hidden' name='InterviewlistDetails[#= GetDetailShortlist(data)#].InterviewPanel' value='#= InterviewPanel #' />").Width(100);
 
-        columns.Bound(p => p.InterviewSummary).ClientTemplate("<a href=''>#= Candidate #</a>" +
-       "<input type='hidden' name='InterviewlistDetails[#= GetDetailShortlist(data)#].Candidate' value='#= Candidate #' />");
-        columns.Bound(p => p.Result).ClientTemplate("<a href=''>#= Candidate #</a>" +
-       "<input type='hidden' name='InterviewlistDetails[#= GetDetailShortlist(data)#].Candidate' value='#= Candidate #' />");
+        columns.Bound(p => p.InterviewSummary).ClientTemplate("#= InterviewSummary #" +
+       "<input type='hidden' name='InterviewlistDetails[#= GetDetailShortlist(data)#].InterviewSummary' value='#= InterviewSummary #' />").Width(100);
+
+        columns.Bound(p => p.Result).ClientTemplate("#= Result #" +
+       "<input type='hidden' name='InterviewlistDetails[#= GetDetailShortlist(data)#].Result' value='#= Result #' />").Width(100);
 
         columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
            "<input type='hidden' name='InterviewlistDetails[#= GetDetailShortlist(data)#].EditMode' value='#= EditMode #' />"
-         );
-       
+         ).Width(100);
+        
     })
     .Events(e =>
     {

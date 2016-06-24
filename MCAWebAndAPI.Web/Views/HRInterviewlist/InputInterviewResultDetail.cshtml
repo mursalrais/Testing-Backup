@@ -64,11 +64,6 @@
                 </div>
             </div>
             <div class="col-sm-8">
-
-                @*<button id="submit-nextstep" class="btn btn-primary" type="submit">
-                        <i class="fa fa-save"></i>
-                        send to next step
-                    </button>*@
                 <button id="submit-button" class="btn btn-primary" type="submit">
                     <i class="fa fa-send"></i>
                     Save
@@ -89,6 +84,7 @@
         $(document).ready(function () {
             $("#vacant-position").prop('readonly', 'true');
             $("#Candidate").prop('readonly', 'true');
+            debugger;
             var positionID = $("#Position").val();
             var url = "/HRDataMaster/GetPosition/" + positionID;
             $.getJSON(url, function (data) {
