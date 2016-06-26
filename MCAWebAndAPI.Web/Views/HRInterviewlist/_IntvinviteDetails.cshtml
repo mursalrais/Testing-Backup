@@ -11,7 +11,7 @@
     .CreateAt(GridInsertRowPosition.Bottom))
     .Columns(columns =>
     {
-        columns.Bound(p => p.Candidate).ClientTemplate("<a href='http://localhost:15923/HRInterviewlist/InputInterviewResult?siteUrl=https://eceos2.sharepoint.com/sites/mca-dev/hr&ID=#= ID #'>#= Candidate #</a>" +
+        columns.Bound(p => p.Candidate).ClientTemplate("<a readonly='readonly' href='http://mcaims-dev.azurewebsites.net/HRInterviewlist/InputInterviewResult?siteUrl=https://eceos2.sharepoint.com/sites/mca-dev/hr&ID=#= ID #'>#= Candidate #</a>" +
         "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].Candidate' value='#= Candidate #' />");
 
         columns.Bound(p => p.DocumentUrl).ClientTemplate("<a href='#= DocumentUrl #'>get file</a>");

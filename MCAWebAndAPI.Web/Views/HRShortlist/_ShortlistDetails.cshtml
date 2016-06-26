@@ -5,9 +5,6 @@
 
     @(Html.Kendo().Grid(Model)
     .Name("ShortlistDetails")
-    .ToolBar(tools => tools.Create().Text("Add New Dependent"))
-    .Editable(editable => editable.Mode(GridEditMode.InCell)
-    .CreateAt(GridInsertRowPosition.Bottom))
     .Columns(columns =>
     {
         columns.Bound(p => p.Candidate).ClientTemplate("#= Candidate #" +
@@ -36,8 +33,7 @@
         columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
            "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].EditMode' value='#= EditMode #' />"
          );
-        columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
-           .Click("onDeleteKendoDetail")).Width(100);
+        
     })
     .Events(e =>
     {
