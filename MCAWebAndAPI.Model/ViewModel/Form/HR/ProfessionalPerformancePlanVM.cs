@@ -1,6 +1,7 @@
 ﻿using MCAWebAndAPI.Model.Common;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
@@ -15,18 +16,21 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// majorstrength
         /// </summary>
+        [DisplayName("1.Briefly describe major strengths of the professional as they relate to the assigned job duties and responsibilities.")]
         [UIHint("TextArea")]
         public string MajorStrength { get; set; }
 
         /// <summary>
         /// performancearea
         /// </summary>
+        [DisplayName("2. Briefly describe those performance areas that could be strengthened or improved.")]
         [UIHint("TextArea")]
         public string PerformanceArea { get; set; }
 
         /// <summary>
         /// recommendedactivities	
         /// </summary>
+        [DisplayName("3. If applicable, indicate recommended activities to improve professional's performance.")]
         [UIHint("TextArea")]
         public string RecommendedActivities { get; set; }
 
@@ -34,5 +38,13 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public int? ProfessionalID { get; set; }
 
         public string Position { get; set; }
+
+        public string ProfessionalEmail { get; set; }
+
+        public string ProfessionalEmailMessage { get; set; }
+
+        public string StatusDraft { get; set; }
+
+
     }
 }

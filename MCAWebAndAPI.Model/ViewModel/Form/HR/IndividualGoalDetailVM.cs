@@ -60,6 +60,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [UIHint("Int32")]
         public int Weight { get; set; }
 
+        public int TotalWeight { get; set; }
+
         /// <summary>
         /// individualgoalremarks
         /// </summary>

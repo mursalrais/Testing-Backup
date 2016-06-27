@@ -19,15 +19,11 @@
             .EditorViewData(new
             {
                 BindTo = ProjectOrUnitGoalsDetailVM.GetCategoryOptions()
-                @*DataTextField = "Text",
-                DataValueField = "Value",
-                ControllerName = "HRPerformancePlan",
-                ActionName = "GetCategoryGrid"*@
             });
             columns.Bound(p => p.IndividualGoalAndPlan).ClientTemplate("#= IndividualGoalAndPlan #" +
             "<input type='hidden' name='ProjectOrUnitGoalsDetails[#= getProfessionalPerformancePlanDetail(data)#].IndividualGoalAndPlan' value='#= IndividualGoalAndPlan #' />"
             );
-            columns.Bound(p => p.Weight).ClientTemplate("#= Weight + & #" +
+            columns.Bound(p => p.Weight).ClientTemplate("#= Weight #%" +
             "<input type='hidden' name='ProjectOrUnitGoalsDetails[#= getProfessionalPerformancePlanDetail(data)#].Weight' value='#= Weight #' />"
             );
             columns.Bound(p => p.Remarks).ClientTemplate("#= Remarks #" +
@@ -58,6 +54,9 @@
         )
     )
 </div>
+<div id="=Total">
+    
+</div>
 
 <script>
 
@@ -67,7 +66,7 @@
     function addNewCustomRow(e) {
         e.preventDefault();
 
-        customRowDataItem = this.dataItem($(e.currentTarget).closest("tr"));    
+        customRowDataItem = this.dataItem($(e.currentTarget).closest("tr"));
         isCustomAdd = true;
         this.addRow();
     }
@@ -79,7 +78,7 @@
             var data = this.dataItem(tr); //get the row data so it can be referred later
             // 1 is Item.Mode.UPDATED
             data.set("EditMode", 1);
-        }   
+        }
         if (isCustomAdd && e.model.isNew()) {
             isCustomAdd = false;
             $(e.container).find("[name='ProjectOrUnitGoals']").val(customRowDataItem.ProjectOrUnitGoals).change();
