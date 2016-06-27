@@ -96,7 +96,7 @@
         function onPositionChange(e) {
             var dataItem = $("#Position_Value").data("kendoDropDownList").dataItem(e.item);
             //var urlKeyPosition = "/HRDataMaster/GetKeyPosition/" + dataItem.ID;
-            if (dataItem.isKeyPosition == "Yes") {                
+            if (dataItem.IsKeyPosition == "Yes") {                
                 $("label[for='Yes']").show();
                 $("label[for='No']").hide();
                 $("#IsKeyPosition").val(true);

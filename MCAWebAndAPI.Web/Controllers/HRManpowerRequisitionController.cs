@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace MCAWebAndAPI.Web.Controllers
@@ -17,7 +18,9 @@ namespace MCAWebAndAPI.Web.Controllers
     [Filters.HandleError]
     public class HRManpowerRequisitionController : Controller
     {
-        IHRManpowerRequisitionService _service;
+        readonly IHRManpowerRequisitionService _service;
+        const string SP_TRANSACTION_WORKFLOW_LIST_NAME = "Manpower Requisition Workflow";
+        const string SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME = "manpowerrequisition";
 
         public HRManpowerRequisitionController()
         {
@@ -75,7 +78,7 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             return View(viewModel);
         }
-                
+
         [HttpPost]
         public ActionResult EditManpowerRequisition(FormCollection form, ManpowerRequisitionVM viewModel)
         {
@@ -96,15 +99,18 @@ namespace MCAWebAndAPI.Web.Controllers
                 return RedirectToAction("Index", "Error");
             }
 
-            // check if status changed to active and checked if mcc aproval document already uploaded
-            if (viewModel.Status.Value == "Active")
-            {
 
+            try
+            {
+                _service.UpdateManpowerRequisition(viewModel);
+            }
+            catch (Exception e)
+            {
+                return JsonHelper.GenerateJsonErrorResponse(e.Message);
             }
 
-            _service.UpdateManpowerRequisition(viewModel);
 
-            
+
             try
             {
                 viewModel.WorkingRelationshipDetails = BindWorkingExperienceDetails(form, viewModel.WorkingRelationshipDetails);
@@ -122,8 +128,8 @@ namespace MCAWebAndAPI.Web.Controllers
                 "Success",
                 new { errorMessage = string.Format(MessageResource.SuccessCommon, viewModel.ID) });
         }
-           
-        public ActionResult DisplayManpowerRequisition(string siteUrl = null, int? ID = null)
+
+        public async Task<ActionResult> DisplayManpowerRequisition(string siteUrl = null, int? ID = null)
         {
             // Clear Existing Session Variables if any
             SessionManager.RemoveAll();
@@ -132,11 +138,11 @@ namespace MCAWebAndAPI.Web.Controllers
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
-            var viewModel = _service.GetManpowerRequisition(ID);
+            var viewModel = await _service.GetManpowerRequisitionAsync(ID);
             return View(viewModel);
         }
 
-        public ActionResult CreateManpowerRequisition(string siteUrl = null)
+        public ActionResult CreateManpowerRequisition(string siteUrl = null, string username = null)
         {
             // Clear Existing Session Variables if any
             SessionManager.RemoveAll();
@@ -144,13 +150,19 @@ namespace MCAWebAndAPI.Web.Controllers
             // MANDATORY: Set Site URL
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            // Used for Workflow Router
+            ViewBag.ListName = "Manpower%20Requisition";
+
+            // This var should be taken from passing parameter
+            ViewBag.RequestorUserLogin = "yunita.ajah@eceos.com";
 
             var viewModel = _service.GetManpowerRequisition(null);
             return View(viewModel);
         }
 
         [HttpPost]
-        public ActionResult CreateManpowerRequisition(FormCollection form, ManpowerRequisitionVM viewModel)
+        public async Task<ActionResult> CreateManpowerRequisition(FormCollection form, ManpowerRequisitionVM viewModel)
         {
             //if (!ModelState.IsValid)
             //{
@@ -169,51 +181,74 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
             }
+
+            Task CreateWorkingRelationshipDetailsTask = _service.CreateWorkingRelationshipDetailsAsync(headerID, viewModel.WorkingRelationshipDetails);
+            Task CreateManpowerRequisitionDocumentsTask = _service.CreateManpowerRequisitionDocumentsSync(headerID, viewModel.Documents);
+            
+
+            // BEGIN Workflow Demo 
+            //headerID = 45; // This MUST NOT be hardcoded. It is hardcoded as it is just a demo
+            Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateTransactionWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
+                SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)headerID);
+
+            // Send to Level 1 Approver
+            Task sendApprovalRequestTask = WorkflowHelper.SendApprovalRequestAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
+                SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)headerID, 1,
+                string.Format(EmailResource.WorkflowAskForApproval, UrlResource.ManpowerRequisition));
+
+            // END Workflow Demo
+
+            //Task sendTask = EmailUtil.SendAsync(viewModel.EmailAddresOne, "Application Submission Confirmation",
+            //     EmailResource.ApplicationSubmissionNotification);
+
+            Task allTasks = Task.WhenAll(CreateWorkingRelationshipDetailsTask, CreateManpowerRequisitionDocumentsTask);
+
+            //try
+            //{
+            //    _service.CreateManpowerRequisitionDocuments(headerID, viewModel.Documents);
+            //}
+            //catch (Exception e)
+            //{
+            //    ErrorSignal.FromCurrentContext().Raise(e);
+            //    return RedirectToAction("Index", "Error");
+            //}
 
             try
             {
-                //viewModel.WorkingRelationshipDetails = BindWorkingExperienceDetails(form, viewModel.WorkingRelationshipDetails);
-                _service.CreateWorkingRelationshipDetails(headerID, viewModel.WorkingRelationshipDetails);
-            }
-            catch (Exception e)
-            {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
-            }
-            try
-            {
-                _service.CreateManpowerRequisitionDocuments(headerID, viewModel.Documents);
+                await allTasks;
             }
             catch (Exception e)
             {
                 ErrorSignal.FromCurrentContext().Raise(e);
-                return RedirectToAction("Index", "Error");
+                return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
             }
-
-
 
             return RedirectToAction("Index",
                 "Success",
-                new { errorMessage = string.Format(MessageResource.SuccessCommon, viewModel.ID) });
+                new
+                {
+                    errorMessage =
+                string.Format(MessageResource.SuccessCreateApplicationData, viewModel.Position.Value)
+                });
         }
 
         [HttpPost]
         public ActionResult PrintManpowerRequisition(FormCollection form, ManpowerRequisitionVM viewModel)
         {
             return View();
-           
-        }        
-        
+
+        }
+
         private IEnumerable<WorkingRelationshipDetailVM> BindWorkingExperienceDetails(FormCollection form, IEnumerable<WorkingRelationshipDetailVM> workingRelationshipDetails)
         {
             var array = workingRelationshipDetails.ToArray();
             for (int i = 0; i < array.Length; i++)
             {
-               // array[i]. = BindHelper.BindDateInGrid("WorkingRelationshipDetails",  i, "From", form);
-              //  array[i].To = BindHelper.BindDateInGrid("WorkingRelationshipDetails",i, "To", form);
+                // array[i]. = BindHelper.BindDateInGrid("WorkingRelationshipDetails",  i, "From", form);
+                //  array[i].To = BindHelper.BindDateInGrid("WorkingRelationshipDetails",i, "To", form);
             }
 
             return array;
