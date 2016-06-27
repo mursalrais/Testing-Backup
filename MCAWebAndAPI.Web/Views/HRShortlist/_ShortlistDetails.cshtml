@@ -5,14 +5,18 @@
 
     @(Html.Kendo().Grid(Model)
     .Name("ShortlistDetails")
+        .Editable(editable => editable.Mode(GridEditMode.InCell)
+        .CreateAt(GridInsertRowPosition.Bottom))
     .Columns(columns =>
     {
         columns.Bound(p => p.Candidate).ClientTemplate("#= Candidate #" +
         "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].Candidate' value='#= Candidate #' />");
-        columns.Bound(p => p.DocumentUrl).ClientTemplate(" <a href='#= DocumentUrl #'>get file</a>");
+        columns.Bound(p => p.DocumentUrl).ClientTemplate(
+        " <a href='#= DocumentUrl #'>get file</a>");
         columns.Bound(p => p.Status).ClientTemplate("#= Status.Text #" +
                           "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].Status.Text' value='#= Status.Text #' />"
-                        ).EditorViewData(new
+                        )
+                        .EditorViewData(new
                         {
                             DataTextField = "Text",
                             DataValueField = "Value",

@@ -452,5 +452,25 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 throw e;
             }
         }
+
+        public PositionMaster GetPosition(int id)
+        {
+            var caml = @"<View>  
+            <Query> 
+               <Where><Eq><FieldRef Name='ID' /><Value Type='Counter'>" + id + @"</Value></Eq></Where> 
+            </Query> 
+             <ViewFields><FieldRef Name='Title' /><FieldRef Name='ID' /></ViewFields> 
+      </View>";
+
+            var position = new PositionMaster();
+            foreach (var item in SPConnector.GetList(SP_POSMAS_LIST_NAME, _siteUrl, caml))
+            {
+                position.ID = Convert.ToInt32(item["ID"]);
+                position.PositionName = Convert.ToString(item["Title"]);
+                //TODO: To add other neccessary property
+            }
+
+            return position;
+        }
     }
 }

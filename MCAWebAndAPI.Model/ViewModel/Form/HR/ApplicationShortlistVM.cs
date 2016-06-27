@@ -86,6 +86,18 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             TextField = "PositionName"
         };
 
+        /// <summary>
+        /// positionrequested
+        /// </summary>
+        [DisplayName("Choose Position")]
+        [UIHint("AjaxComboBox")]
+        public AjaxComboBoxVM ActivePosition { get; set; } = new AjaxComboBoxVM
+        {
+            ControllerName = "HRShortlist",
+            ActionName = "GetPositions",
+            ValueField = "ID",
+            TextField = "PositionName"
+        };
 
         [DisplayName("Attach Document")]
         [UIHint("MultiFileUploader")]
