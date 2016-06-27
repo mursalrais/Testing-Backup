@@ -70,11 +70,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 return viewModel;
             }
-            else
-            {
-                var listItem = SPConnector.GetListItem(SP_EXP_LIST_NAME, ID, _siteUrl);
-                viewModel = ConvertToExitProcedureVM(listItem);
-            }
+
+            var listItem = SPConnector.GetListItem(SP_EXP_LIST_NAME, ID, _siteUrl);
+            viewModel = ConvertToExitProcedureVM(listItem);
 
             return viewModel;
         }
@@ -184,9 +182,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
                 exitProcedure.DocumentType = "Exit Procedure";
 
-                updateValue.Add("exitprocedure", exProcID);
+                //updateValue.Add("exitprocedureid", exProcID);
                 updateValue.Add("documenttype", "Exit Procedure");
-                //updateValue.Add("professional", new FieldLookupValue { LookupId = (int)exitProcedure.Professional.Value });
+                updateValue.Add("exitprocedureid", new FieldLookupValue { LookupId = Convert.ToInt32(exProcID) });
+                updateValue.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(exitProcedure.Professional.Value) });
                 //updateValue.Add("exitprocedure", new FieldLookupValue { LookupId = Convert.ToInt32(exProcID) });
 
 

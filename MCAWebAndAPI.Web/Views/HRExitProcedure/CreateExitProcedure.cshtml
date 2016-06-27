@@ -19,6 +19,12 @@
         <div class="row">
             @Html.Partial("_ExitProcedureData", Model)
         </div>
+        @*
+    <legend>Exit Procedure Checklist</legend>
+    <div class="row">
+        @Html.Partial("_ExitProcedureChecklist", Model.ExitProcedureChecklist)
+    </div>
+        *@
         <legend>Documents</legend>
         <div class="row">
             @Html.Partial("_Documents", Model)
@@ -87,9 +93,16 @@
         function onSelectExitProcedure(e) {
 
             $.each(e.files, function (index, value) {
-             
+                console.log("Index Document: " + index);
+                console.log("Name: " + value.name);
+                console.log("Size: " + value.size + " bytes");
+                console.log("Extension: " + value.extension);
+
+                      
             });
 
         }
+
+        
     </script>
 }

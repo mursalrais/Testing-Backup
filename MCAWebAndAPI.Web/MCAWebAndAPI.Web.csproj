@@ -686,6 +686,7 @@
     <Content Include="Views\HRExitProcedure\DisplayExitProcedure.cshtml" />
     <Content Include="Views\HRExitProcedure\_ExitProcedureDataDisplay.cshtml" />
     <Content Include="Views\HRExitProcedure\_Documents.cshtml" />
+    <Content Include="Views\HRExitProcedure\_ExitProcedureChecklist.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
