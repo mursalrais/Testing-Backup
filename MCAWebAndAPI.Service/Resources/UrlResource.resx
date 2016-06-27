@@ -150,4 +150,7 @@
   <data name="ProfessionalPerformancePlan" xml:space="preserve">
     <value>/Lists/ProfessionalPerformancePlan</value>
   </data>
+  <data name="ManpowerRequisition" xml:space="preserve">
+    <value>Lists/Manpower%20Requisition</value>
+  </data>
 </root>

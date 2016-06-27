@@ -54,12 +54,12 @@
 
 @section scripts{
 
+
     <script>
-        function onPositionChange(e) {
-            console.log(e);
+        function onPositionChange(e) {            
             var dataItem = this.dataItem(e.item);
             //var urlKeyPosition = "/HRDataMaster/GetKeyPosition/" + dataItem.ID;
-            if (dataItem.isKeyPosition == "Yes") {
+            if (dataItem.IsKeyPosition == "Yes") {
                 //$('#KeyPositionValue').prop('value', "Yes");
                 $("label[for='Yes']").show();
                 $("label[for='No']").hide();
@@ -71,9 +71,12 @@
                 $("label[for='Yes']").hide();
                 $("#IsKeyPosition").val(false);
             }
+            console.log(dataItem);
 
         };
         $(document).ready(function () {
+            displayWorkflowRouter("workflow-placeholder", "@ViewBag.ListName", "@ViewBag.RequestorUserLogin");
+
             $("#IsKeyPosition").val(true);
             $("label[for='Yes']").show();
             $("label[for='No']").hide();

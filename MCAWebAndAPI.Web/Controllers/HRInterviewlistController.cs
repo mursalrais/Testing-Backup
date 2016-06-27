@@ -79,6 +79,7 @@ namespace MCAWebAndAPI.Web.Controllers
             var viewmodel = _service.GetResultlistInterview(ID);
             //viewmodel.SendTo = "";
             //viewmodel.ID = id;
+
             return View(viewmodel);
         }
 

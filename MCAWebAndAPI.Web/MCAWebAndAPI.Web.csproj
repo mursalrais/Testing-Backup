@@ -16,7 +16,7 @@
     <RootNamespace>MCAWebAndAPI.Web</RootNamespace>
     <AssemblyName>MCAWebAndAPI.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -213,9 +213,7 @@
     <Content Include="bin\fr-FR\Kendo.Mvc.resources.dll" />
     <Content Include="bin\it-IT\Kendo.Mvc.resources.dll" />
     <Content Include="bin\Kendo.Mvc.dll" />
-    <Content Include="bin\Kendo.Mvc.xml">
-      <SubType>Designer</SubType>
-    </Content>
+    <Content Include="bin\Kendo.Mvc.xml" />
     <Content Include="bin\MCAWebAndAPI.Model.dll" />
     <Content Include="bin\MCAWebAndAPI.Model.pdb" />
     <Content Include="bin\MCAWebAndAPI.Service.dll" />
@@ -685,10 +683,9 @@
     <Content Include="Views\Shared\DisplayTemplates\Int32.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\Boolean.cshtml" />
     <Content Include="Views\HRPayroll\_MonthlyFeeDetail.cshtml" />
-    <Content Include="Views\HRPerformancePlan\PrintPerformancePlan.cshtml" />
-    <Content Include="Views\HRPerformancePlan\_PerformancePlanDetail_Print.cshtml" />
-    <Content Include="Views\HRPerformancePlan\_PerfromancePlan_Print.cshtml" />
-    <Content Include="Views\HRPerformancePlan\_ProfessionalPerformancePlan_Print.cshtml" />
+    <Content Include="Views\HRExitProcedure\DisplayExitProcedure.cshtml" />
+    <Content Include="Views\HRExitProcedure\_ExitProcedureDataDisplay.cshtml" />
+    <Content Include="Views\HRExitProcedure\_Documents.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -825,7 +822,6 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>MessageResource.Designer.cs</LastGenOutput>
       <CustomToolNamespace>MCAWebAndAPI.Web.Resources</CustomToolNamespace>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

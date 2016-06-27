@@ -8,6 +8,7 @@ using Microsoft.SharePoint.Client;
 using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Model.ViewModel.Control;
 using MCAWebAndAPI.Model.Common;
+using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Service.HR.Recruitment
 {
@@ -115,6 +116,17 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         public bool UpdateManpowerRequisition(ManpowerRequisitionVM viewModel)
         {
+            // check if status changed to active and checked if mcc aproval document already uploaded
+            if ((viewModel.Status.Value == "Active") && (viewModel.IsKeyPosition))
+            {
+                string caml = @"<View><Query><Where><And><Eq><FieldRef Name='documenttype' /><Value Type='Choice'>MCC Approval Letter</Value></Eq><Eq><FieldRef Name='manpowerrequestid' /><Value Type='Lookup'>"+viewModel.ID+@"</Value></Eq></And></Where></Query><ViewFields /><QueryOptions /></View>";
+                var document = SPConnector.GetList(SP_MANDOC_LIST_NAME, _siteUrl, caml);
+                if (document.Count == 0)
+                {
+                    logger.Debug("Document MCC Aprroval must be uploaded first!");
+                    throw new Exception("Document MCC Aprroval must be uploaded first!");
+                }
+            }
             var updatedValue = new Dictionary<string, object>();
             int ID = viewModel.ID.Value;            
 
@@ -228,6 +240,60 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return viewModel;
 
         }
+        public async Task<ManpowerRequisitionVM> GetManpowerRequisitionAsync(int? ID)
+        {
+            var viewModel = new ManpowerRequisitionVM();
+            var checkBoxItem = SPConnector.GetChoiceFieldValues(SP_MANPOW_LIST_NAME, "Workplan", _siteUrl);
+            viewModel.DivisionProjectUnit.Choices = SPConnector.GetChoiceFieldValues(SP_MANPOW_LIST_NAME, "projectunit", _siteUrl);
+            var tempList = new List<CheckBoxItemVM>();
+            foreach (var item in checkBoxItem)
+            {
+                tempList.Add(new CheckBoxItemVM
+                {
+                    Text = item,
+                    Value = false
+                });
+            }
+
+            viewModel.Workplan = tempList;
+            viewModel.ID = ID;
+            if (ID == null)
+                return viewModel;
+
+            var listItem = SPConnector.GetListItem(SP_MANPOW_LIST_NAME, ID, _siteUrl);
+            viewModel =  ConvertToManpowerRequisitionVM(listItem, viewModel);
+
+            viewModel.WorkingRelationshipDetails =  GetWorkingRelationshipDetails(viewModel.ID);
+
+            //viewModel.DocumentUrl =  GetDocumentUrl(viewModel.ID);
+
+            return await GetManpowerRequisitionDetailsAsync(viewModel);
+        }
+
+        private ManpowerRequisitionVM GetManpowerRequisitionDetail(ManpowerRequisitionVM viewModel)
+        {
+            viewModel.WorkingRelationshipDetails = GetWorkingRelationshipDetails(viewModel.ID);
+            viewModel.DocumentUrl = GetDocumentUrl(viewModel.ID);
+
+            return viewModel;
+        }
+
+        private async Task<ManpowerRequisitionVM> GetManpowerRequisitionDetailsAsync(ManpowerRequisitionVM viewModel)
+        {
+            Task<IEnumerable<WorkingRelationshipDetailVM>> getWorkingRelationshipTask = GetWorkingRelationshipDetailsAsyn(viewModel.ID);
+            
+            Task allTasks = Task.WhenAll(getWorkingRelationshipTask, getWorkingRelationshipTask);
+            await allTasks;
+            viewModel.WorkingRelationshipDetails = await getWorkingRelationshipTask;
+            viewModel.DocumentUrl = GetDocumentUrl(viewModel.ID);
+
+            return viewModel;
+        }
+
+        private async Task<IEnumerable<WorkingRelationshipDetailVM>> GetWorkingRelationshipDetailsAsyn(int? iD)
+        {
+            return GetWorkingRelationshipDetails(iD);
+        }
 
         private ManpowerRequisitionVM ConvertToManpowerRequisitionVM(ListItem listItem, ManpowerRequisitionVM viewModel)
         {
@@ -266,12 +332,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.PersonalAttributesCompetencies = FormatUtil.ConvertMultipleLine(Convert.ToString(listItem["personalattributes"]));
             viewModel.OtherRequirements = FormatUtil.ConvertMultipleLine(Convert.ToString(listItem["otherrequirements"]));
             viewModel.Remarks = FormatUtil.ConvertMultipleLine(Convert.ToString(listItem["remarks"]));
-
-
-            // Convert Details
-            viewModel.WorkingRelationshipDetails = GetWorkingRelationshipDetails(viewModel.ID);
-
-            viewModel.DocumentUrl = GetDocumentUrl(viewModel.ID);
+                      
 
             return viewModel;
 
@@ -455,10 +516,22 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             foreach (var item in listItem)
             {
                 position = FormatUtil.ConvertLookupToValue(item, "Position");
-            }            
-             
+            }
+            if (position==null)
+            {
+                position = "";
+            } 
             return position;
         }
-        
+
+        public async Task CreateWorkingRelationshipDetailsAsync(int? headerID, IEnumerable<WorkingRelationshipDetailVM> workingRelationshipDetails)
+        {
+            CreateWorkingRelationshipDetails(headerID, workingRelationshipDetails);
+        }
+
+        public async Task CreateManpowerRequisitionDocumentsSync(int? headerID, IEnumerable<HttpPostedFileBase> documents)
+        {
+            CreateManpowerRequisitionDocuments(headerID, documents);
+        }
     }
 }

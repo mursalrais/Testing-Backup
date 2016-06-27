@@ -88,6 +88,15 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lists/Manpower%20Requisition.
+        /// </summary>
+        public static string ManpowerRequisition {
+            get {
+                return ResourceManager.GetString("ManpowerRequisition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to /Lists/MonthlyFee.
         /// </summary>
         public static string MonthlyFee {

@@ -19,6 +19,10 @@
         <div class="row">
             @Html.Partial("_ExitProcedureData", Model)
         </div>
+        <legend>Documents</legend>
+        <div class="row">
+            @Html.Partial("_Documents", Model)
+        </div>
     </fieldset>
     <div class="form-actions">
         <div class="row">
@@ -74,8 +78,18 @@
             $.getJSON(url, function (result) {
 
                 $('#JoinDate').prop('value', result[0].StrJoinDate);
+                $('#PSANumber').prop('value', result[0].PSANumber);
 
+                console.log("PSA Number: " + result[0].PSANumber);
             })
+        }
+
+        function onSelectExitProcedure(e) {
+
+            $.each(e.files, function (index, value) {
+             
+            });
+
         }
     </script>
 }

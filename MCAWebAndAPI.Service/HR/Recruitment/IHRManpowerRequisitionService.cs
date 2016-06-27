@@ -1,6 +1,7 @@
 ﻿using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using System.Collections.Generic;
 using System.Web;
+using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Service.HR.Recruitment
 {
@@ -25,6 +26,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         bool UpdateStatus(ManpowerRequisitionVM viewModel);
 
         string GetPosition(string username,string siteUrl);
-        
+        Task<ManpowerRequisitionVM> GetManpowerRequisitionAsync(int? iD);
+        Task CreateWorkingRelationshipDetailsAsync(int? headerID, IEnumerable<WorkingRelationshipDetailVM> workingRelationshipDetails);
+        Task CreateManpowerRequisitionDocumentsSync(int? headerID, IEnumerable<HttpPostedFileBase> documents);
     }
 }
