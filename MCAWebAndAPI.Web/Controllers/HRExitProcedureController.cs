@@ -24,15 +24,13 @@ namespace MCAWebAndAPI.Web.Controllers
         /// <param name="siteUrl"></param>
         /// <returns></returns>
         public ActionResult CreateExitProcedure(string siteUrl = null)
-        {
-            
+        {  
             // MANDATORY: Set Site URL
             exitProcedureService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             // Get blank ViewModel
             var viewModel = exitProcedureService.GetExitProcedure(null);
-
             return View("CreateExitProcedure", viewModel);
         }
 
@@ -50,7 +48,6 @@ namespace MCAWebAndAPI.Web.Controllers
             exitProcedureService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             int? exitProcID = null;
-
             try
             {
                 exitProcID = exitProcedureService.CreateExitProcedure(viewModel);
@@ -127,7 +124,6 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult ViewExitProcedure(string siteUrl = null, int? ID = null)
         {
             // Clear Existing Session Variables if any
-            SessionManager.RemoveAll();
 
             // MANDATORY: Set Site URL
             exitProcedureService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
