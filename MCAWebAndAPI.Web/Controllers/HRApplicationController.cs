@@ -71,7 +71,6 @@ namespace MCAWebAndAPI.Web.Controllers
 
             viewModel.TrainingDetails = BindTrainingDetails(form, viewModel.TrainingDetails);
             Task createTrainingDetailsTask = _service.CreateTrainingDetailsAsync(headerID, viewModel.TrainingDetails);
-
             Task allTasks = Task.WhenAll(createEducationDetailsTask, createEducationDetailsTask);
 
             try
@@ -127,19 +126,13 @@ namespace MCAWebAndAPI.Web.Controllers
 
             viewModel.EducationDetails = BindEducationDetails(form, viewModel.EducationDetails);
             Task createEducationDetailsTask = _service.CreateEducationDetailsAsync(headerID, viewModel.EducationDetails);
-
             viewModel.TrainingDetails = BindTrainingDetails(form, viewModel.TrainingDetails);
             Task createTrainingDetailsTask = _service.CreateTrainingDetailsAsync(headerID, viewModel.TrainingDetails);
-
             viewModel.WorkingExperienceDetails = BindWorkingExperienceDetails(form, viewModel.WorkingExperienceDetails);
             Task createWorkingExperienceDetailsTask = _service.CreateWorkingExperienceDetailsAsync(headerID, viewModel.WorkingExperienceDetails);
-
             Task createApplicationDocumentTask = _service.CreateApplicationDocumentAsync(headerID, viewModel.Documents);
-
-
             Task sendTask = EmailUtil.SendAsync(viewModel.EmailAddresOne, "Application Submission Confirmation",
                  EmailResource.ApplicationSubmissionNotification);
-
             Task allTasks = Task.WhenAll(createEducationDetailsTask, createTrainingDetailsTask,
                 createWorkingExperienceDetailsTask, createApplicationDocumentTask);
 
@@ -245,7 +238,7 @@ namespace MCAWebAndAPI.Web.Controllers
             return array;
         }
 
-        private IEnumerable<TrainingDetailVM> BindTrainingDetails(FormCollection form, IEnumerable<TrainingDetailVM> trainingDetails)
+        IEnumerable<TrainingDetailVM> BindTrainingDetails(FormCollection form, IEnumerable<TrainingDetailVM> trainingDetails)
         {
             var array = trainingDetails.ToArray();
             for (int i = 0; i < array.Length; i++)
@@ -256,7 +249,7 @@ namespace MCAWebAndAPI.Web.Controllers
             return array;
         }
 
-        private IEnumerable<EducationDetailVM> BindEducationDetails(FormCollection form,
+        IEnumerable<EducationDetailVM> BindEducationDetails(FormCollection form,
             IEnumerable<EducationDetailVM> educationDetails)
         {
             var array = educationDetails.ToArray();

@@ -1,4 +1,6 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@using MCAWebAndAPI.Model.ViewModel.Control
+
 @model IEnumerable<OrganizationalDetailVM>
 
 <div class="col-sm-12">
@@ -62,7 +64,7 @@
                    {
                        model.Id(p => p.ID);
                        model.Field(m => m.Project).DefaultValue(OrganizationalDetailVM.GetProjectDefaultValue());
-                       model.Field(m => m.Position).DefaultValue(OrganizationalDetailVM.GetPositionDefaultValue());
+                       model.Field(m => m.Position).DefaultValue(AjaxComboBoxVM.GetDefaultValue());
                        model.Field(m => m.ProfessionalStatus).DefaultValue(OrganizationalDetailVM.GetProfessionalStatusDefaultValue());
                        model.Field(m => m.StartDate).DefaultValue(DateTime.UtcNow);
                        model.Field(m => m.LastWorkingDay).DefaultValue(DateTime.UtcNow);

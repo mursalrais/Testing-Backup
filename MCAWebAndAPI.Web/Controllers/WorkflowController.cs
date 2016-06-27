@@ -16,10 +16,16 @@ namespace MCAWebAndAPI.Web.Controllers
     public class WorkflowController : Controller
     {
         readonly IWorkflowService _service;
-
         public WorkflowController()
         {
             _service = new WorkflowService();
+        }
+
+        public ActionResult DisplayMyApprovalRequest(string siteUrl = null, string userLogin = null)
+        {
+            _service.SetSiteUrl(siteUrl);
+
+            return View();
         }
 
         public JsonResult GetApproverPositions(int approverUnit)

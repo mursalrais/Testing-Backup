@@ -300,8 +300,6 @@ namespace MCAWebAndAPI.Service.HR.Common
             return viewModel;
         }
 
-
-
         private IEnumerable<OrganizationalDetailVM> GetOrganizationalDetails(int? ID)
         {
             var caml = @"<View>  
@@ -337,7 +335,7 @@ namespace MCAWebAndAPI.Service.HR.Common
                 ID = Convert.ToInt32(item["ID"]),
                 LastWorkingDay = Convert.ToDateTime(item["lastworkingday"]),
                 Level = Convert.ToString(item["Level"]),
-                Position = Convert.ToString(item["Position"]),
+                Position = FormatUtil.ConvertToInGridAjaxComboBox(item, "Position"),
                 PSANumber = Convert.ToString(item["psanr"]),
                 StartDate = Convert.ToDateTime(item["startdate"]),
                 Project = OrganizationalDetailVM.GetProjectDefaultValue(
