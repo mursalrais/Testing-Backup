@@ -18,6 +18,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         static Logger logger = LogManager.GetCurrentClassLogger();
         const string SP_PPPIG_LIST_NAME = "PPP Individual Goal";
         const string SP_PPP_LIST_NAME = "Professional Performance Plan";
+        const string SP_PPE_LIST_NAME = "Professional Performance Evaluation";
 
         public int CreateHeader(ProfessionalPerformancePlanVM header)
         {
@@ -123,7 +124,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 ID = Convert.ToInt32(item["ID"]),
                 ProjectOrUnitGoals = Convert.ToString(item["projectunitgoals"]),
-                Category = IndividualGoalDetailVM.GetCategoryDefaultValue(
+                Category = ProjectOrUnitGoalsDetailVM.GetCategoryDefaultValue(
                     new Model.ViewModel.Control.InGridComboBoxVM
                     {
                         Text = Convert.ToString(item["individualgoalcategory"])
@@ -165,6 +166,29 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         public void SetSiteUrl(string siteUrl = null)
         {
             _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
+        }
+
+        public ProfessionalPerformancePlanVM GetProfessionalEmail(int? ID)
+        {
+            var viewModel = new ProfessionalPerformancePlanVM();
+            if (ID == null)
+                return viewModel;
+
+            var listItem = SPConnector.GetListItem(SP_PPP_LIST_NAME, ID, _siteUrl);
+            viewModel = ConvertToSendIntvDataVM(listItem);
+
+            return viewModel;
+        }
+
+        private ProfessionalPerformancePlanVM ConvertToSendIntvDataVM(ListItem listItem)
+        {
+            var viewModel = new ProfessionalPerformancePlanVM();
+
+            viewModel.ProfessionalEmail = "rezaf.fikri@gmail.com";
+            viewModel.ProfessionalEmailMessage = "ISI MESSAGE";
+            EmailUtil.Send(viewModel.ProfessionalEmail, "ApproverProccess", "<div><label>" + viewModel.ProfessionalEmailMessage + "</label></div>" + "TES");
+
+            return viewModel;
         }
     }
 }

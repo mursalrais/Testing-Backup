@@ -22,7 +22,6 @@ namespace MCAWebAndAPI.Service.HR.Common
         const string SP_PROORG_LIST_NAME = "Professional Organization Detail";
         const string SP_PRODEP_LIST_NAME = "Dependent";
 
-
         static Logger logger = LogManager.GetCurrentClassLogger();
 
         public void SetSiteUrl(string siteUrl)
@@ -109,8 +108,8 @@ namespace MCAWebAndAPI.Service.HR.Common
                 FirstMiddleName = Convert.ToString(item["Title"]),
                 Name = Convert.ToString(item["Title"]) + " " + Convert.ToString(item["lastname"]),
                 Status = Convert.ToString(item["maritalstatus"]),
-                Position = item["Position"] == null ? "" :
-               Convert.ToString((item["Position"] as FieldLookupValue).LookupValue),
+                Position = item["Position"] == null ? string.Empty :
+                        Convert.ToString((item["Position"] as FieldLookupValue).LookupValue),
                 Project_Unit = Convert.ToString(item["Project_x002f_Unit"])
             };
         }
@@ -127,6 +126,11 @@ namespace MCAWebAndAPI.Service.HR.Common
             return models;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         private PositionMaster ConvertToPositionsModel(ListItem item)
         {
             var viewModel = new PositionMaster();
@@ -137,6 +141,11 @@ namespace MCAWebAndAPI.Service.HR.Common
             return viewModel;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ID"></param>
+        /// <returns></returns>
         public ProfessionalDataVM GetProfessionalData(int? ID)
         {
             if (ID == null)
@@ -148,6 +157,11 @@ namespace MCAWebAndAPI.Service.HR.Common
             return viewModel;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ID"></param>
+        /// <returns></returns>
         public async Task<ProfessionalDataVM> GetProfessionalDataAsync(int? ID)
         {
             if (ID == null)
@@ -286,8 +300,6 @@ namespace MCAWebAndAPI.Service.HR.Common
             return viewModel;
         }
 
-
-
         private IEnumerable<OrganizationalDetailVM> GetOrganizationalDetails(int? ID)
         {
             var caml = @"<View>  
@@ -323,7 +335,7 @@ namespace MCAWebAndAPI.Service.HR.Common
                 ID = Convert.ToInt32(item["ID"]),
                 LastWorkingDay = Convert.ToDateTime(item["lastworkingday"]),
                 Level = Convert.ToString(item["Level"]),
-                Position = Convert.ToString(item["Position"]),
+                Position = FormatUtil.ConvertToInGridAjaxComboBox(item, "Position"),
                 PSANumber = Convert.ToString(item["psanr"]),
                 StartDate = Convert.ToDateTime(item["startdate"]),
                 Project = OrganizationalDetailVM.GetProjectDefaultValue(
@@ -663,6 +675,8 @@ namespace MCAWebAndAPI.Service.HR.Common
 
         public void CreateOrganizationalDetails(int? headerID, IEnumerable<OrganizationalDetailVM> organizationalDetails)
         {
+            var index = 0;
+            var length = organizationalDetails.Count();
             foreach (var viewModel in organizationalDetails)
             {
                 if (Item.CheckIfSkipped(viewModel))
@@ -704,9 +718,18 @@ namespace MCAWebAndAPI.Service.HR.Common
                     logger.Error(e.Message);
                     throw e;
                 }
+
+                if (++index == length)
+                {
+                    UpdateCurrentPSAAndOrganization(viewModel);
+                }
             }
         }
 
+        private void UpdateCurrentPSAAndOrganization(OrganizationalDetailVM viewModel)
+        {
+
+        }
 
         public ProfessionalDataVM GetProfessionalData(string userLoginName = null)
         {

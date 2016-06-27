@@ -28,8 +28,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult ShortlistData(string siteurl = null, string position = null, string username = null, string useraccess = null)
         {
-            // clear existing session variables if any
-            SessionManager.RemoveAll();
+
+
 
             //mandatory: set site url
             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
@@ -70,8 +70,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult ShortlistSendInvite(string siteurl = null, int? ID = null)
         {
-            // clear existing session variables if any
-            SessionManager.RemoveAll();
+
+
 
             //mandatory: set site url
             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
@@ -107,8 +107,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult ShortlistIntvinvite(string siteurl = null, string position = null, string username = null, string useraccess = null)
         {
-            // clear existing session variables if any
-            SessionManager.RemoveAll();
+
+
 
             //mandatory: set site url
             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
@@ -156,7 +156,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetStatusGrid()
         {
-            _service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             var positions = ShortlistDetailVM.GetStatusOptions();
 

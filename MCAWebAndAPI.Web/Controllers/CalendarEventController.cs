@@ -28,7 +28,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
 
         {
-            // Clear Existing Session Variables if any
+
             if (System.Web.HttpContext.Current.Session.Keys.Count > 0)
                 System.Web.HttpContext.Current.Session.Clear();
 

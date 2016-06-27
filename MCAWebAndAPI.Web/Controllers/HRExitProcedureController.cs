@@ -1,26 +1,10 @@
-﻿using Kendo.Mvc.Extensions;
-using Kendo.Mvc.UI;
-using MCAWebAndAPI.Model.ViewModel.Form.HR;
-using MCAWebAndAPI.Service.HR;
-using System.Collections.Generic;
-using System.Linq;
+﻿using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using System.Web.Mvc;
 using System;
 using MCAWebAndAPI.Web.Helpers;
-using MCAWebAndAPI.Model.ViewModel.Control;
-using MCAWebAndAPI.Web.Filters;
 using MCAWebAndAPI.Web.Resources;
-using MCAWebAndAPI.Model.HR.DataMaster;
 using MCAWebAndAPI.Service.HR.Recruitment;
 using Elmah;
-using MCAWebAndAPI.Service.Converter;
-using MCAWebAndAPI.Service.HR.Common;
-using System.IO;
-using System.Web;
-using System.Globalization;
-using MCAWebAndAPI.Service.JobSchedulers.Schedulers;
-using MCAWebAndAPI.Service.HR.Payroll;
-using MCAWebAndAPI.Service.Resources;
 using System.Net;
 
 namespace MCAWebAndAPI.Web.Controllers
@@ -40,17 +24,13 @@ namespace MCAWebAndAPI.Web.Controllers
         /// <param name="siteUrl"></param>
         /// <returns></returns>
         public ActionResult CreateExitProcedure(string siteUrl = null)
-        {
-            // Clear Existing Session Variables if any
-            SessionManager.RemoveAll();
-
+        {  
             // MANDATORY: Set Site URL
             exitProcedureService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             // Get blank ViewModel
             var viewModel = exitProcedureService.GetExitProcedure(null);
-
             return View("CreateExitProcedure", viewModel);
         }
 
@@ -68,7 +48,6 @@ namespace MCAWebAndAPI.Web.Controllers
             exitProcedureService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             int? exitProcID = null;
-
             try
             {
                 exitProcID = exitProcedureService.CreateExitProcedure(viewModel);
@@ -96,8 +75,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult DisplayExitProcedure(int? ID = null, string siteUrl = null)
         {
-            // Clear Existing Session Variables if any
-            SessionManager.RemoveAll();
+
+
 
             // MANDATORY: Set Site URL
             exitProcedureService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
@@ -143,7 +122,6 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult ViewExitProcedure(string siteUrl = null, int? ID = null)
         {
             // Clear Existing Session Variables if any
-            SessionManager.RemoveAll();
 
             // MANDATORY: Set Site URL
             exitProcedureService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);

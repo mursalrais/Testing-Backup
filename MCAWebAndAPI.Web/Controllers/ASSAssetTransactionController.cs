@@ -28,7 +28,7 @@ namespace MCAWebAndAPI.Web.Controllers
         /// <returns></returns>
         public ActionResult CreateAssetTransfer(string siteUrl = null)
         {
-            SessionManager.RemoveAll(); 
+ 
 
             // MANDATORY: Set Site URL
             _assetTransactionService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);

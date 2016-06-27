@@ -1,8 +1,8 @@
 ﻿using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
+using MCAWebAndAPI.Model.HR.DataMaster;
 using MCAWebAndAPI.Model.ViewModel.Form.Common;
 using MCAWebAndAPI.Service.Common;
-using MCAWebAndAPI.Service.HR.Common;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;
 using System.Collections.Generic;
@@ -16,10 +16,16 @@ namespace MCAWebAndAPI.Web.Controllers
     public class WorkflowController : Controller
     {
         readonly IWorkflowService _service;
-
         public WorkflowController()
         {
             _service = new WorkflowService();
+        }
+
+        public ActionResult DisplayMyApprovalRequest(string siteUrl = null, string userLogin = null)
+        {
+            _service.SetSiteUrl(siteUrl);
+
+            return View();
         }
 
         public JsonResult GetApproverPositions(int approverUnit)
@@ -38,15 +44,18 @@ namespace MCAWebAndAPI.Web.Controllers
             }), JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetApproverNames(string position)
+        public JsonResult GetApproverNames(int position)
         {
             _service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
-            var viewModel = _service.GetApproverNames(position);
+            var positionName = _service.GetPositionName(position);
+            var viewModel = SessionManager.Get<IEnumerable<ProfessionalMaster>>("WorkflowApprovers", "Position" + position)
+                ?? _service.GetApproverNames(positionName);
+            SessionManager.Set("WorkflowApprovers", "Position"+ position, viewModel);
+
             return Json(viewModel.Select(e => new
             {
                 e.ID, 
-                e.Name, 
-                e.UserLogin
+                e.Name
             }), JsonRequestBehavior.AllowGet);
         }
 

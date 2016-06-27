@@ -15,6 +15,7 @@
         @Html.HiddenFor(m => m.ID)
         @Html.HiddenFor(m => m.Position)
         <div class="row">
+
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.Position).Class("col-sm-2 control-label")
                 <div class="col-sm-6">
@@ -66,12 +67,12 @@
     <script>
         $(document).ready(function () {
             $("#vac-position").prop('readonly', 'true');
+            debugger;
             var positionID = $("#Position").val();
-            $("#vac-position").prop("value", positionID);
-            var url = "/HRDataMaster/GetPosition/" + positionID;
-            $.getJSON(url, function (data) {
-                $("#vac-position").prop("value", positionID);
-            })
+            //var url = "/HRDataMaster/GetPosition/" + positionID;
+            //$.getJSON(url, function (data) {
+            //    $("#vac-position").prop("value", positionID);
+            //})
 
         });
     </script>
