@@ -736,6 +736,7 @@
     <Compile Include="Controllers\SuccessController.cs" />
     <Compile Include="Controllers\TaskController.cs" />
     <Compile Include="Controllers\TRPlaceMasterController.cs" />
+    <Compile Include="Controllers\UpdateManualController.cs" />
     <Compile Include="Controllers\WorkflowController.cs" />
     <Compile Include="Filters\HandleErrorAttribute.cs" />
     <Compile Include="Global.asax.cs">

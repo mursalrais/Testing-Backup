@@ -156,7 +156,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetStatusGrid()
         {
-            _service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             var positions = ShortlistDetailVM.GetStatusOptions();
 
