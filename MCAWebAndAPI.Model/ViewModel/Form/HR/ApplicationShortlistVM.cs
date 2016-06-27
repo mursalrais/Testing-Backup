@@ -64,7 +64,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
                 "On Board",
                 "Decline to Join"
             },
-            Value = "Recomended"
         };
 
         /// <summary>
@@ -84,8 +83,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             ControllerName = "HRDataMaster",
             ActionName = "GetPositions",
             ValueField = "ID",
-            TextField = "PositionName",
-            OnSelectEventName = "onPositionChange"
+            TextField = "PositionName"
         };
 
 
@@ -107,6 +105,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public string Time { get; set; } = DateTime.UtcNow.ToShortTimeString();
 
         [UIHint("ComboBox")]
+        [DisplayName("Result")]
         public ComboBoxVM RecommendedForPosition { get; set; } = new ComboBoxVM()
         {
             Choices = new string[]
@@ -118,7 +117,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
                 "Rejected by MCC",
                 "On Board",
                 "Decline to Join"
-            }
+            },
+            OnSelectEventName = "onPositionChange"
         };
 
         

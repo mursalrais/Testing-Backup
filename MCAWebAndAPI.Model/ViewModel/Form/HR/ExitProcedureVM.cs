@@ -65,6 +65,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public DateTime? LastWorkingDate { get; set; } = DateTime.Now;
 
         [UIHint("ComboBox")]
+        [Required]
         public ComboBoxVM ExitReason { get; set; } = new ComboBoxVM
         {
             Choices = new string[]
@@ -81,6 +82,17 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [Required]
         public string ReasonDesc { get; set; }
 
+        [DisplayName("PSA No.")]
         public string PSANumber { get; set; }
+
+        [UIHint("MultiFileUploader")]
+        [Required]
+        public IEnumerable<HttpPostedFileBase> Documents { get; set; } = new List<HttpPostedFileBase>();
+
+        public string DocumentUrl { get; set; }
+
+        public string DocumentType { get; set; }
+
+        public IEnumerable<ExitProcedureChecklistVM> ExitProcedureChecklist { get; set; } = new List<ExitProcedureChecklistVM>();
     }
 }

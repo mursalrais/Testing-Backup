@@ -2,17 +2,14 @@
 
 @model ProfessionalPerformancePlanVM
 
-@using (Ajax.BeginForm("UpdatePerformancePlan", "HRPerformancePlan",
-                                                                            FormMethod.Post,
-                                                                            new AjaxOptions
-                                                                            {
-                                                                                OnBegin = "onBeginForm",
-                                                                                OnComplete = "onCompleteForm",
-                                                                                OnSuccess = "onSuccessFormEmbed",
-                                                                                OnFailure = "onFailureForm"
-                                                                            }, new { @class = "form-horizontal" }))
+@using (Html.BeginForm("UpdatePerformancePlan", "HRPerformancePlan", FormMethod.Post,
+                        new
+                        {
+                            @class = "form-horizontal",
+                            enctype = "multipart/form-data"
+                        }))
 {<fieldset>
-        <legend>Form Monthly Fee</legend>
+        <legend>Form Performance Plan</legend>
         @Html.AntiForgeryToken()
         @Html.ValidationSummary()
 
@@ -40,46 +37,55 @@
         <div class="row">
             @Html.Partial("_PerformancePlanDetail", Model.ProjectOrUnitGoalsDetails)
         </div>
-
-     <div class="col-sm-12">
-         <div class="form-group">
-             @Html.Bootstrap().LabelFor(m => m.MajorStrength).Class("col-sm-4 control-label")
-             <div class="col-sm-8">
-                 @Html.EditorFor(m => m.MajorStrength)
-             </div>
-         </div>
-         <div class="form-group">
-             @Html.Bootstrap().LabelFor(m => m.PerformanceArea).Class("col-sm-4 control-label")
-             <div class="col-sm-8">
-                 @Html.EditorFor(m => m.PerformanceArea)
-             </div>
-         </div>
-         <div class="form-group">
-             @Html.Bootstrap().LabelFor(m => m.RecommendedActivities).Class("col-sm-4 control-label")
-             <div class="col-sm-8">
-                 @Html.EditorFor(m => m.RecommendedActivities)
-             </div>
-         </div>
-         <div class="form-group">
-             <div class="col-sm-8">
-                 @Html.HiddenFor(m => m.ID)
-             </div>
-         </div>
-         <div class="form-group">
-             <div class="col-sm-8">
-                 @Html.HiddenFor(m => m.ProfessionalID)
-             </div>
-         </div>
-     </div>
+        <div class="col-sm-12">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.MajorStrength).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.MajorStrength)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.PerformanceArea).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.PerformanceArea)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.RecommendedActivities).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.RecommendedActivities)
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-8">
+                    @Html.HiddenFor(m => m.ID)
+                </div>
+                <div class="col-sm-8">
+                    @Html.HiddenFor(m => m.ProfessionalID)
+                </div>
+            </div>
+            <div class="form-group" id="ParentDiv">
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.StatusDraft)
+                </div>
+            </div>
+        </div>
     </fieldset>
 }
 
 <div class="form-actions">
     <div class="row">
         <div class="col-sm-12">
+            <button id="submit-draft-button" class="btn btn-primary" type="submit">
+                <i class="fa fa-save"></i>
+                Submit For Approval
+            </button>
             <button id="submit-button" class="btn btn-primary" type="submit">
                 <i class="fa fa-save"></i>
-                Submit
+                Save As Draft
+            </button>
+            <button id="print-button" class="btn btn-primary" type="button">
+                Print
             </button>
         </div>
     </div>
@@ -89,17 +95,42 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $("#submit-button").click(function () {
+                $("#StatusDraft").val("Draft")
+                $("#ParentDiv").show();
+                $("form").submit();
+            });
+        });
+
+        $(document).ready(function () {
+            $("#submit-draft-button").click(function () {
+                $("#StatusDraft").val("Submit")
+                $("#ParentDiv").hide();
                 $("form").submit();
             });
         });
 
         $(function () {
+            $("#ParentDiv").hide();
             var ID = $("#ProfessionalID").val();
             var url = "/HRDataMaster/GetProfessional/" + ID;
 
             $.getJSON(url, function (result) {
                 $('#PositionAndDepartement').prop('value', result[0].Position);
             })
+        });
+
+        $(document).ready(function () {
+            $('#print-button').click(function (e) {
+                $("#StatusDraft").val("Draft")
+                $("#ParentDiv").show();
+                var url = "/HRPerformancePlan/PrintPerformancePlan";
+                submitFormToPrint(url);
+            });
+
+        });
+
+        $(document).ready(function () {
+            displayWorkflowRouter("workflow-placeholder", "@ViewBag.ListName", "@ViewBag.RequestorUserLogin");
         });
     </script>
 }

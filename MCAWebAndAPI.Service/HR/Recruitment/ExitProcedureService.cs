@@ -20,7 +20,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         static Logger logger = LogManager.GetCurrentClassLogger();
 
         const string SP_EXP_LIST_NAME = "Exit Procedure";
-        const string SP_PSA_DOC_LIST_NAME = "Professional Documents";
+        const string SP_EXP_DOC_LIST_NAME = "ExitProcedureDocuments";
+        //const string SP_PSA_DOC_LIST_NAME = "Professional Documents";
+        //const string SP_PSA_DOC_LIST_NAME = "PSA Documents";
 
         public void SetSiteUrl(string siteUrl)
         {
@@ -172,6 +174,33 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             */
 
             return viewModel;
+        }
+
+        public void CreateExitProcedureDocuments(int? exProcID, IEnumerable<HttpPostedFileBase> documents, ExitProcedureVM exitProcedure)
+        {
+            foreach (var doc in documents)
+            {
+                var updateValue = new Dictionary<string, object>();
+
+                exitProcedure.DocumentType = "Exit Procedure";
+
+                updateValue.Add("exitprocedure", exProcID);
+                updateValue.Add("documenttype", "Exit Procedure");
+                //updateValue.Add("professional", new FieldLookupValue { LookupId = (int)exitProcedure.Professional.Value });
+                //updateValue.Add("exitprocedure", new FieldLookupValue { LookupId = Convert.ToInt32(exProcID) });
+
+
+
+                try
+                {
+                    SPConnector.UploadDocument(SP_EXP_DOC_LIST_NAME, updateValue, doc.FileName, doc.InputStream, _siteUrl);
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e.Message);
+                    throw e;
+                }
+            }
         }
     }
 }

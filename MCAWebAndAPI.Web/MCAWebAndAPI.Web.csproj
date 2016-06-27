@@ -16,7 +16,7 @@
     <RootNamespace>MCAWebAndAPI.Web</RootNamespace>
     <AssemblyName>MCAWebAndAPI.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -685,6 +685,7 @@
     <Content Include="Views\HRPayroll\_MonthlyFeeDetail.cshtml" />
     <Content Include="Views\HRExitProcedure\DisplayExitProcedure.cshtml" />
     <Content Include="Views\HRExitProcedure\_ExitProcedureDataDisplay.cshtml" />
+    <Content Include="Views\HRExitProcedure\_Documents.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

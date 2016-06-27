@@ -57,6 +57,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.OtherPosition.Value = FormatUtil.ConvertLookupToID(listItem, "recommendedforposition");
             viewModel.Candidate = Convert.ToString(listItem["Title"]);
 
+
             // Convert Details
             viewModel.InterviewlistDetails = GetInputInterviewResult(viewModel.ID);
             return viewModel;
@@ -70,8 +71,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             var listItemdt = SPConnector.GetListItem(SP_APPDATA_LIST_NAME, ID, _siteUrl);
             viewModel = ConvertToResultInterviewDataVM(listItemdt);
-
+            
             viewModel.InterviewlistDetails = GetInputInterviewResult(viewModel.ID);
+
+            viewModel.RecommendedForPosition.Text = GetLastResult(viewModel.ID).ToString();
 
             return viewModel;
 
@@ -118,13 +121,51 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             var viewModel = new InterviewDetailVM();
 
-            viewModel.Date = Convert.ToDateTime(listItem["interviewdatetime"]);
+            viewModel.DateString = Convert.ToDateTime(listItem["interviewdatetime"]).ToShortDateString();
             viewModel.InterviewPanel = Convert.ToString(listItem["interviewpanel"]);
             viewModel.InterviewSummary = Convert.ToString(listItem["interviewsummary"]);
             viewModel.Result = Convert.ToString(listItem["interviewresult"]);
 
+
             return viewModel;
         }
+
+        private string GetLastResult(int? ID)
+        {
+            var viewModel = new ApplicationShortlistVM();
+            var caml = @"
+                         <Query> 
+                            <Where>
+                              <Eq>
+                                 <FieldRef Name='ID' />
+                                 <Value Type='Counter'>" + ID + @"</Value>
+                              </Eq>
+                           </Where>
+                           <OrderBy><FieldRef Name='ID' Ascending='FALSE' /><FieldRef Name='Editor' Ascending='FALSE' /></OrderBy> 
+                        </Query> 
+                        <ViewFields> 
+                           <FieldRef Name='interviewresult' /></ViewFields> 
+                        <RowLimit>1</RowLimit> ";
+
+            var result = "";
+            var list = SPConnector.GetList(SP_APPINTV_LIST_NAME, _siteUrl, caml);
+            foreach (var item in list)
+            {
+                result = Convert.ToString(item["interviewresult"]);
+            }
+
+            return result;
+        }
+
+        private ApplicationShortlistVM ConvertToLastResultDataVM(ListItem listItem)
+        {
+            var viewModel = new ApplicationShortlistVM();
+
+            viewModel.Result = Convert.ToString(listItem["interviewresult"]);
+
+            return viewModel;
+        }
+
 
         public void CreateApplicationDocument(int? headerID, IEnumerable<HttpPostedFileBase> documents)
         {
@@ -203,26 +244,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         private IEnumerable<ShortlistDetailVM> GetDetailInterviewlist(int Position, string useraccess)
         {
             var caml = @"<View>  
-                                <Query> 
-                          <Where>
-                              <And>
-                                 <Eq>
-                                    <FieldRef Name='manpowerrequisition' />
-                                    <Value Type='Lookup'>" + Position + @"</Value>
-                                 </Eq>
-                                 <Or>
-                                    <Eq>
-                                       <FieldRef Name='applicationstatus' />
-                                       <Value Type='Text'>Shortlisted</Value>
-                                    </Eq>
-                                    <Eq>
-                                       <FieldRef Name='applicationstatus' />
-                                       <Value Type='Text'>Recomended</Value>
-                                    </Eq>
-                                 </Or>
-                              </And>
-                       </Where>
-                                </Query> 
+                               
                                   <ViewFields>
                           <FieldRef Name='Title' />
                           <FieldRef Name='ID' />
@@ -294,7 +316,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             
                 createdValue.Add("Title", viewModel.Candidate );
                 createdValue.Add("applicationremarks", viewModel.Remarks);
-                createdValue.Add("applicationstatus", viewModel.GetResultOptions.Value);
+                createdValue.Add("applicationstatus", viewModel.RecommendedForPosition.Value);
                 createdValue.Add("recommendedforposition", viewModel.OtherPosition.Value);
                 createdValue.Add("neednextinterview", viewModel.NeedNextInterviewer);
                 //createdValue.Add("documenturl", viewModel.AttDocuments);
@@ -350,6 +372,23 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 logger.Error(e);
                 throw e;
             }
+        }
+
+        public Dictionary<int, string> GetStatusResult()
+        {
+            int index = 0;
+            var choice = new Dictionary<int, string>
+            {
+                { ++index, "Recomended"},
+                { ++index, "Not Recomended"},
+                { ++index, "For Other Position"},
+                { ++index, "Pending MCC Approval"},
+                { ++index, "Rejected by MCC"},
+                { ++index, "On Board"},
+                { ++index, "Decline to Join"}
+            };
+
+            return choice;
         }
     }
 }

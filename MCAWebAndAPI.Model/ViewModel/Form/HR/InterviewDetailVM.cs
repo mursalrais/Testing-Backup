@@ -8,7 +8,11 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
     public class InterviewDetailVM : Item
     {
         [UIHint("Date")]
-        public DateTime? Date { get; set; } = DateTime.UtcNow;
+        [DisplayName("Date")]
+        public string Date { get; set; }
+
+        [DisplayName("Date")]
+        public string DateString { get; set; }
 
         public string InterviewPanel { get; set; }
 

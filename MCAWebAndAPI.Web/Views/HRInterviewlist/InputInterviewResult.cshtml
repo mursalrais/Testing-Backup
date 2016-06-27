@@ -36,9 +36,9 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        @Html.Bootstrap().LabelFor(m => m.GetResultOptions).Class("col-xs-2 control-label")
+                        @Html.Bootstrap().LabelFor(m => m.RecommendedForPosition).Class("col-xs-2 control-label")
                         <div class="col-xs-2">
-                            @Html.EditorFor(m => m.GetResultOptions)
+                            @Html.EditorFor(m => m.RecommendedForPosition)
                         </div>
                     </div>
                 <div class="form-group">
@@ -55,24 +55,13 @@
                     </div>
                     <div class="form-group">
                         @Html.Bootstrap().LabelFor(m => m.NeedNextInterviewer).Class("col-xs-2 control-label")
-                        <div class="col-xs-2">
-                            @Html.EditorFor(m => m.NeedNextInterviewer)
+                        <div class="col-xs-2 pull-left">
+                                @Html.RadioButtonFor(m => m.NeedNextInterviewer, true) Yes
+                                @Html.RadioButtonFor(m => m.NeedNextInterviewer, false) No
                         </div>
                     </div>
-            <div class="row">
-                <label class="col-xs-2 control-label"> Interview Result list </label>
-                </div>
 
-            <a id="btn-addnew" class="btn btn-primary" href="http://localhost:15923/HRInterviewlist/InputInterviewResultDetail?siteUrl=https://eceos2.sharepoint.com/sites/ims/hr&ID=@Model.ID" >
-                <i class="fa fa-plus"></i>
-                Add Interview
-            </a>
-
-                <div class="row">
-                    @Html.Partial("_InterviewResultlist", Model.InterviewlistDetails)
-                </div>
-
-                <div class="col-sm-10">
+                <div class="col-sm-12">
                     <button id="submit-cancel" class="btn btn-primary" type="button">
                         <i class="fa fa-send"></i>
                         cancel
@@ -83,6 +72,15 @@
                     </button>
                 </div>
             </div>
+
+        <a id="btn-addnew" class="btn btn-primary pull-left" href="http://mcaims-dev.azurewebsites.net/HRInterviewlist/InputInterviewResultDetail?siteUrl=https://eceos2.sharepoint.com/sites/mca-dev/hr&ID=@Model.ID">
+            <i class="fa fa-plus"></i>
+            Add Interview
+        </a>
+        <legend>Interview Result list</legend>
+        <div class="row">
+            @Html.Partial("_InterviewResultlist", Model.InterviewlistDetails)
+        </div>
     </fieldset>
 
 }
@@ -90,13 +88,21 @@
 @section scripts{
 
     <script>
-        function onGetResultOptionsChange(e) {
-            var dataItem = $("#GetResultOptions_Value").data("kendoDropDownList").dataItem(e.item);
-            //var urlKeyPosition = "/HRDataMaster/GetKeyPosition/" + dataItem.ID;
+        function onPositionChange(e) {
+            var res = $("#RecommendedForPosition_Value").val();
+            if (res == "For Other Position")
+            {
+                $("#OtherPosition_Value").data("kendoDropDownList").enable(true);
+            }
         };
+
+
         $(document).ready(function () {
+            $("#OtherPosition_Value").data("kendoDropDownList").enable(false);
             $("#vac-position").prop('readonly', 'true');
             $("#val-candidate").prop('readonly', 'true');
+
+            NeedNextInterviewer
 
             $("#val-candidate").prop("value", $("#Candidate").val());
 
@@ -106,6 +112,7 @@
             $.getJSON(url, function (data) {
                 $("#vac-position").prop("value", data.PositionName);
             })
+         
         });
 
       
