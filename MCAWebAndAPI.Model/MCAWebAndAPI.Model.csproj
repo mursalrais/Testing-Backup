@@ -139,6 +139,7 @@
     <Compile Include="ViewModel\Form\HR\ClaimPaymentDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\DependentDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\EducationDetailVM.cs" />
+    <Compile Include="ViewModel\Form\HR\ExitProcedureChecklistVM.cs" />
     <Compile Include="ViewModel\Form\HR\ExitProcedureVM.cs" />
     <Compile Include="ViewModel\Form\HR\FactorEvaluatedDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\IndividualGoalDetailVM.cs" />

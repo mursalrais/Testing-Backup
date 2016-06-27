@@ -79,17 +79,15 @@ namespace MCAWebAndAPI.Web.Controllers
                 return RedirectToAction("Index", "Error");
             }
 
-            /*
             try
             {
-                exitProcedureService.CreatePSAManagementDocuments(exitProcID, viewModel.Documents, viewModel);
+                exitProcedureService.CreateExitProcedureDocuments(exitProcID, viewModel.Documents, viewModel);
             }
             catch (Exception e)
             {
                 ErrorSignal.FromCurrentContext().Raise(e);
                 return RedirectToAction("Index", "Error");
             }
-            */
 
             return RedirectToAction("Index",
                 "Success",
