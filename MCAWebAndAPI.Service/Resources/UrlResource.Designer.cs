@@ -79,7 +79,7 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0]/ExitProcedureDocuments/Forms/AllItems.aspx#InplviewHashf78f203c-f7a1-4179-9fbc-868e50a402cf=FilterField1%3Dexitprocedureid-FilterValue1%3D{1}.
+        ///   Looks up a localized string similar to {0}/ExitProcedureDocuments/Forms/AllItems.aspx#InplviewHashf78f203c-f7a1-4179-9fbc-868e50a402cf=FilterField1%3Dexitprocedureid-FilterValue1%3D{1}.
         /// </summary>
         public static string ExitProcedureDocumentByID {
             get {

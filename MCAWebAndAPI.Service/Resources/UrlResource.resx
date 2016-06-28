@@ -154,6 +154,6 @@
     <value>Lists/Manpower%20Requisition</value>
   </data>
   <data name="ExitProcedureDocumentByID" xml:space="preserve">
-    <value>{0]/ExitProcedureDocuments/Forms/AllItems.aspx#InplviewHashf78f203c-f7a1-4179-9fbc-868e50a402cf=FilterField1%3Dexitprocedureid-FilterValue1%3D{1}</value>
+    <value>{0}/ExitProcedureDocuments/Forms/AllItems.aspx#InplviewHashf78f203c-f7a1-4179-9fbc-868e50a402cf=FilterField1%3Dexitprocedureid-FilterValue1%3D{1}</value>
   </data>
 </root>
