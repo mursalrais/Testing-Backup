@@ -55,8 +55,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.ID = Convert.ToInt32(listItem["ID"]);
             viewModel.Position = FormatUtil.ConvertLookupToID(listItem, "vacantposition") + string.Empty;
             viewModel.Candidate = Convert.ToString(listItem["Title"]);
-            viewModel.SendTo = Convert.ToString(listItem[""]);
-
 
             return viewModel;
         }
@@ -207,16 +205,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 <FieldRef Name='manpowerrequisition' />
                 <Value Type='Lookup'>" + Position + @"</Value>
              </Eq>
-             <Or>
                 <Eq>
                    <FieldRef Name='applicationstatus' />
                    <Value Type='Text'>Shortlisted</Value>
                 </Eq>
-                <Eq>
-                   <FieldRef Name='applicationstatus' />
-                   <Value Type='Text'>Declined</Value>
-                </Eq>
-             </Or>
           </And>
    </Where>
             </Query> 
@@ -242,71 +234,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return shortlistDetails;
         }
 
-        //<ViewFields>
-        //   <FieldRef Name = 'Title' />
-        //   < FieldRef Name='applications' />
-        //   <FieldRef Name = 'university' />
-        //   < FieldRef Name='yearofgraduation' />
-        //   <FieldRef Name = 'remarks' />
-        //</ ViewFields >
-        private IEnumerable<ShortlistDetailVM> GetDetailShortlisted(string Position = null)
-        {
-            var caml = @"<View>  
-            <Query> 
-      <Where>
-      <Or>
-         <Or>
-            <Or>
-               <Or>
-                  <Or>
-                     <Eq>
-                        <FieldRef Name='applicationstatus' />
-                        <Value Type='Text'>New</Value>
-                     </Eq>
-                     <Eq>
-                        <FieldRef Name='applicationstatus' />
-                        <Value Type='Text'>Shortlisted</Value>
-                     </Eq>
-                  </Or>
-                  <Eq>
-                     <FieldRef Name='applicationstatus' />
-                     <Value Type='Text'>Declined</Value>
-                  </Eq>
-               </Or>
-               <Eq>
-                  <FieldRef Name='applicationstatus' />
-                  <Value Type='Text'>NEW</Value>
-               </Eq>
-            </Or>
-            <Eq>
-               <FieldRef Name='applicationstatus' />
-               <Value Type='Text'>SHORTLISTED</Value>
-            </Eq>
-         </Or>
-         <Eq>
-            <FieldRef Name='applicationstatus' />
-            <Value Type='Text'>DECLINED</Value>
-         </Eq>
-      </Or>
-   </Where>
-            </Query> 
-              <ViewFields>
-      <FieldRef Name='Title' />
-      <FieldRef Name='ID' />
-      <FieldRef Name='applicationstatus' />
-      <FieldRef Name='position' />
-   </ViewFields>
-   
-            </View>";
-
-            var eduacationDetails = new List<ShortlistDetailVM>();
-            foreach (var item in SPConnector.GetList(SP_APPDATA_LIST_NAME, _siteUrl, caml))
-            {
-                eduacationDetails.Add(ConvertToShortlistDetailVM(item));
-            }
-
-            return eduacationDetails;
-        }
         /// <summary>
         // <ViewFields>
         //   <FieldRef Name = 'Title' />
@@ -416,7 +343,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 }
             }
 
-            EmailUtil.Send(viewModel.SendTo, "Interview Invitation", "<div><label>"+ viewModel.EmailMessage + "</label></div>" + mailsubject);
+            EmailUtil.Send(viewModel.InterviewerPanel, "Interview Invitation", "<div><label>"+ viewModel.EmailMessage + "</label></div>" + mailsubject);
         }
 
         public void CreateShorlistSendintv(int? headerID, ApplicationShortlistVM viewModel)
@@ -455,22 +382,37 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             }
         }
 
-        public PositionMaster GetPosition()
+        public IEnumerable<PositionMaster> GetPositions()
         {
             var caml = @"<View>  
-             <ViewFields><FieldRef Name='Title' /><FieldRef Name='ID' /></ViewFields> 
-      </View>";
+                    <Query> 
+                       <Where><Eq><FieldRef Name='manpowerrequeststatus' /><Value Type='Text'>Active</Value></Eq></Where><OrderBy><FieldRef Name='positionrequested_x003a_Position' /></OrderBy> 
+                    </Query> 
+                    <ViewFields><FieldRef Name='manpowerrequeststatus' /><FieldRef Name='ID' /><FieldRef Name='positionrequested' /><FieldRef Name='positionrequested_x003a_Position' /></ViewFields></View>";
+             
+            var models = new List<PositionMaster>();
 
-            var position = new PositionMaster();
-            foreach (var item in SPConnector.GetList(SP_POSMAS_LIST_NAME, _siteUrl, caml))
+            foreach (var item in SPConnector.GetList(SP_MANPOW_LIST_NAME, _siteUrl, caml))
             {
-                position.ID = Convert.ToInt32(item["ID"]);
-                position.PositionName = Convert.ToString(item["Title"]);
-                //TODO: To add other neccessary property
+                models.Add(ConvertToPositionsModel(item));
             }
 
-            return position;
+            return models;
+        
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        private PositionMaster ConvertToPositionsModel(ListItem item)
+        {
+            var viewModel = new PositionMaster();
+
+            viewModel.ID = Convert.ToInt32(item["ID"]);
+            viewModel.PositionName = FormatUtil.ConvertLookupToValue(item, "positionrequested");
+            return viewModel;
+        }
     }
 }

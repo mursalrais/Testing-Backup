@@ -100,10 +100,12 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [UIHint("AjaxComboBox")]
         public AjaxComboBoxVM ActivePosition { get; set; } = new AjaxComboBoxVM
         {
-            ControllerName = "HRDataMaster",
-            ActionName = "GetPositions",
-            ValueField = "ID",
-            TextField = "PositionName"
+            ControllerName = "HRShortlist",
+            ActionName = "GetPosition",
+            ValueField = "PositionName",
+            TextField = "PositionName",
+            OnSelectEventName = "OnChangeActivePosition"
+            
         };
 
         [DisplayName("Attach Document")]
