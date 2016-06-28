@@ -167,11 +167,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             <FieldRef Name='manpowerrequisition' />
             <Value Type='Lookup'>"+ Position +@"</Value>
          </Eq>
-         <Or>
-            <Eq>
-               <FieldRef Name='applicationstatus' />
-               <Value Type='Text'>Shortlisted</Value>
-            </Eq>
             <Or>
                <Eq>
                   <FieldRef Name='applicationstatus' />
@@ -181,7 +176,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                   <FieldRef Name='applicationstatus' />
                   <Value Type='Text'>NEW</Value>
                </Eq>
-            </Or>
          </Or>
       </And>
    </Where>
