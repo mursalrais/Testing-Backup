@@ -230,6 +230,9 @@ namespace MCAWebAndAPI.Service.HR.Common
 
             viewModel.ID = Convert.ToInt32(listItem["ID"]);
             viewModel.FirstMiddleName = Convert.ToString(listItem["Title"]);
+            viewModel.CurrentPosition.Value = FormatUtil.ConvertLookupToID(listItem, "Position");
+            viewModel.JoinDate = Convert.ToDateTime(listItem["Join_x0020_Date"]);
+            viewModel.ProfessionalStatus.Value = Convert.ToString(listItem["Professional_x0020_Status"]);
             viewModel.LastName = Convert.ToString(listItem["lastname"]);
             viewModel.PlaceOfBirth = Convert.ToString(listItem["placeofbirth"]);
             viewModel.DateOfBirth = Convert.ToDateTime(listItem["dateofbirth"]);
@@ -459,6 +462,10 @@ namespace MCAWebAndAPI.Service.HR.Common
             var updatedValue = new Dictionary<string, object>();
 
             updatedValue.Add("Title", viewModel.FirstMiddleName);
+            updatedValue.Add("Position", new FieldLookupValue
+                { LookupId = (int) viewModel.CurrentPosition.Value });
+            updatedValue.Add("Professional_x0020_Status", viewModel.ProfessionalStatus.Value);
+            updatedValue.Add("Join_x0020_Date", viewModel.JoinDate);
             updatedValue.Add("lastname", viewModel.LastName);
             updatedValue.Add("placeofbirth", viewModel.PlaceOfBirth);
             updatedValue.Add("dateofbirth", viewModel.DateOfBirth);

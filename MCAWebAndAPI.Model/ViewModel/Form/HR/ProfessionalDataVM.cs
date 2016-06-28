@@ -9,6 +9,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
     public class ProfessionalDataVM : ApplicationDataVM
     {
+        /// <summary>
+        /// Position
+        /// </summary>
         [UIHint("AjaxComboBox")]
         public AjaxComboBoxVM CurrentPosition { get; set; } = new AjaxComboBoxVM
         {
@@ -18,6 +21,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             ValueField = "ID"
         };
 
+        /// <summary>
+        /// Professional_x0020_Status
+        /// </summary>
         [UIHint("ComboBox")]
         public ComboBoxVM ProfessionalStatus { get; set; } = new ComboBoxVM
         {
@@ -28,6 +34,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             }
         };
 
+        /// <summary>
+        /// Join_x0020_Date
+        /// </summary>
         [UIHint("Date")]
         public DateTime? JoinDate { get; set; } = DateTime.Now;
 
