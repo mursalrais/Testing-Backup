@@ -73,11 +73,8 @@ namespace MCAWebAndAPI.Web.Controllers
                 new { errorMessage = string.Format(MessageResource.SuccessCreateExitProcedureData, exitProcID) });
         }
 
-        public ActionResult DisplayExitProcedure(int? ID = null, string siteUrl = null)
+        public ActionResult DisplayExitProcedure(string siteUrl = null, int? ID = null)
         {
-
-
-
             // MANDATORY: Set Site URL
             exitProcedureService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);

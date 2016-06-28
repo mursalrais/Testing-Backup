@@ -121,6 +121,21 @@ namespace MCAWebAndAPI.Web.Resources {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;p&gt;
+        ///    &lt;strong&gt;Dear Respective Professional&lt;/strong&gt;
+        ///&lt;/p&gt;
+        ///&lt;p&gt;
+        ///    This email is sent to you to notify that you are required to create Performance Plan. Creating and approval plan process will take maximum 5 working days. Therefore, do prepare your plan accordingly. Kindly check the link as per below to go to direct page accordingly. Thank you.
+        ///&lt;/p&gt;
+        ///Link: &lt;a href=&quot;{0}&quot;&gt;Click Here&lt;/a&gt;.
+        /// </summary>
+        public static string PerformancePlan {
+            get {
+                return ResourceManager.GetString("PerformancePlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;p&gt;
         ///&lt;strong&gt;Dear HR Team,&lt;/strong&gt;
         ///&lt;/p&gt;
         ///&lt;p&gt;

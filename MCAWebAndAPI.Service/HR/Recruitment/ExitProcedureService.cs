@@ -70,11 +70,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 return viewModel;
             }
-            else
-            {
-                var listItem = SPConnector.GetListItem(SP_EXP_LIST_NAME, ID, _siteUrl);
-                viewModel = ConvertToExitProcedureVM(listItem);
-            }
+
+            var listItem = SPConnector.GetListItem(SP_EXP_LIST_NAME, ID, _siteUrl);
+            viewModel = ConvertToExitProcedureVM(listItem);
 
             return viewModel;
         }
@@ -98,9 +96,16 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.ReasonDesc = Convert.ToString(listItem["reasondescription"]);
             viewModel.PSANumber = Convert.ToString(listItem["psanumber"]);
 
+            viewModel.DocumentUrl = GetDocumentUrl(viewModel.ID);
+
             return viewModel;
         }
 
+        private string GetDocumentUrl(int? iD)
+        {
+            return string.Format(UrlResource.ExitProcedureDocumentByID, _siteUrl, iD);
+        }
+        
         public bool UpdateExitProcedure(ExitProcedureVM exitProcedure)
         {
             var columnValues = new Dictionary<string, object>();
@@ -167,11 +172,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.ExitReason.Value = Convert.ToString(listItem["exitreason"]);
             viewModel.ReasonDesc = Convert.ToString(listItem["reasondescription"]);
             viewModel.PSANumber = Convert.ToString(listItem["psanumber"]);
-
-            /*
             
             viewModel.DocumentUrl = GetDocumentUrl(viewModel.ID);
-            */
 
             return viewModel;
         }
@@ -184,13 +186,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
                 exitProcedure.DocumentType = "Exit Procedure";
 
-                updateValue.Add("exitprocedure", exProcID);
                 updateValue.Add("documenttype", "Exit Procedure");
-                //updateValue.Add("professional", new FieldLookupValue { LookupId = (int)exitProcedure.Professional.Value });
-                //updateValue.Add("exitprocedure", new FieldLookupValue { LookupId = Convert.ToInt32(exProcID) });
-
-
-
+                updateValue.Add("exitprocedureid", new FieldLookupValue { LookupId = Convert.ToInt32(exProcID) });
+                updateValue.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(exitProcedure.Professional.Value) });
+                
                 try
                 {
                     SPConnector.UploadDocument(SP_EXP_DOC_LIST_NAME, updateValue, doc.FileName, doc.InputStream, _siteUrl);

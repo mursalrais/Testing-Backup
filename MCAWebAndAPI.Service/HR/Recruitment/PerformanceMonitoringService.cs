@@ -1,17 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MCAWebAndAPI.Model.ViewModel.Form.HR;
-using MCAWebAndAPI.Model.HR.DataMaster;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
 using NLog;
-using System.Web;
 using MCAWebAndAPI.Service.Resources;
-using System.Globalization;
-
 
 namespace MCAWebAndAPI.Service.HR.Recruitment
 {
@@ -19,7 +12,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
     {
         string _siteUrl;
         static Logger logger = LogManager.GetCurrentClassLogger();
-
+        
         const string SP_LIST_NAME = "Performance Plan";
         const string SP_DETAIL_LIST_NAME = "Professional Performance Plan";
 
@@ -52,12 +45,12 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         public bool UpdatePerformanceMonitoring(PerformanceMonitoringVM PerformanceMonitoring)
         {
             var updatedValues = new Dictionary<string, object>();
-           
+
             updatedValues.Add("ppstatus", "Closed");
 
             try
             {
-                SPConnector.UpdateListItem(SP_LIST_NAME,PerformanceMonitoring.ID ,updatedValues, _siteUrl);
+                SPConnector.UpdateListItem(SP_LIST_NAME, PerformanceMonitoring.ID, updatedValues, _siteUrl);
             }
             catch (Exception e)
             {
@@ -95,9 +88,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 //send email to professional
                 try
                 {
+                    string EmailMessage = "<p>< strong > Dear Respective Professional</ strong ></ p >   < p >This email is sent to you to notify that you are required to create Performance Plan. Creating and approval plan process will take maximum 5 working days. Therefore, do prepare your plan accordingly.Kindly check the link as  per below to go to direct page accordingly.Thank you.</ p >";
                     //SPConnector.SendEmail(emailTo, "TES", "Notifikasi Professional Master tentang Performance Monitoring Service", _siteUrl);
-                   // EmailUtil.Send(emailTo, "TES", "<div><label>Notifikasi Professional Master tentang Performance Monitoring Service </label></div>");
-                   // EmailUtil.Send("anugerahseptian@gmail.com", "TES", "<div><label>Notifikasi Professional Master tentang Performance Monitoring Service </label></div>");
+                    EmailUtil.Send(emailTo, "Notify to initiate Performance Plan", string.Format(EmailMessage, UrlResource.ApplicationData));
+
                 }
                 catch (Exception e)
                 {
@@ -131,26 +125,26 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             var viewModel = new PerformanceMonitoringVM();
 
             viewModel.ID = Convert.ToInt32(listItem["ID"]);
-            viewModel.Period = Convert.ToInt32(listItem["Title"]);
+            viewModel.Period.Value = Convert.ToString(listItem["Title"]);
             viewModel.LatestCreationDate = Convert.ToDateTime(listItem["latestdateforcreation"]).ToLocalTime();
             viewModel.LatestDateApproval1 = Convert.ToDateTime(listItem["latestdateforapproval1"]).ToLocalTime();
             viewModel.LatestDateApproval2 = Convert.ToDateTime(listItem["latestdateforapproval2"]).ToLocalTime();
             viewModel.Status = Convert.ToString(listItem["ppstatus"]);
 
-            DateTime Now =  DateTime.UtcNow.ToLocalTime();
+            DateTime Now = DateTime.UtcNow.ToLocalTime();
 
             //get Detail
-            var caml = @"<View><Query><Where><Eq><FieldRef Name='performanceplan_x003a_ID' /><Value Type='Lookup'>"+viewModel.ID.Value.ToString()+ "</Value></Eq></Where></Query><ViewFields><FieldRef Name='ID' /><FieldRef Name='professional' /><FieldRef Name='performanceplan' /><FieldRef Name='pppstatus' /></ViewFields><QueryOptions /></View>";
+            var caml = @"<View><Query><Where><Eq><FieldRef Name='performanceplan_x003a_ID' /><Value Type='Lookup'>" + viewModel.ID.Value.ToString() + "</Value></Eq></Where></Query><ViewFields><FieldRef Name='ID' /><FieldRef Name='professional' /><FieldRef Name='performanceplan' /><FieldRef Name='pppstatus' /></ViewFields><QueryOptions /></View>";
 
             var PerformancePlanMonitoringDetails = new List<PerformanceMonitoringDetailVM>();
             string color;
             foreach (var item in SPConnector.GetList(SP_DETAIL_LIST_NAME, _siteUrl, caml))
             {
-                if ((Convert.ToString(item["pppstatus"])!= "Approved") && (viewModel.LatestDateApproval2.Value >= Now))
+                if ((Convert.ToString(item["pppstatus"]) != "Approved") && (viewModel.LatestDateApproval2.Value >= Now))
                 {
                     color = "yellow";
                 }
-                else if((Convert.ToString(item["pppstatus"]) == "Approved"))
+                else if ((Convert.ToString(item["pppstatus"]) == "Approved"))
                 {
                     color = "green";
                 }
@@ -171,6 +165,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return viewModel;
         }
 
-        
+
     }
 }

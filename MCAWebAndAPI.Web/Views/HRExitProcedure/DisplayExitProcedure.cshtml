@@ -11,6 +11,10 @@
         <div class="row">
             @Html.Partial("_ExitProcedureDataDisplay", Model)
         </div>
+        <legend>Documents</legend>
+        <div class="row">
+            @Html.Partial("_DocumentDetailsDisplay", Model.DocumentUrl)
+        </div>
     </fieldset>
     <div class="form-actions">
         <div class="row">

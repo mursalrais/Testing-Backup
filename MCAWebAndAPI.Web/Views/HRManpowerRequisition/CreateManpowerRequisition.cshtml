@@ -39,6 +39,8 @@
         <div class="row">
             @Html.Partial("_OtherRequirements", Model)
         </div>
+        <legend>Approval Workflow</legend>
+        <div id="workflow-placeholder" class="row" />
          @Html.HiddenFor(m=>m.Status.Value)
         
     </fieldset>
@@ -76,6 +78,7 @@
         };
         $(document).ready(function () {
             displayWorkflowRouter("workflow-placeholder", "@ViewBag.ListName", "@ViewBag.RequestorUserLogin");
+
 
             $("#IsKeyPosition").val(true);
             $("label[for='Yes']").show();
