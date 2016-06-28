@@ -689,6 +689,8 @@
     <Content Include="Views\HRPerformancePlan\_PerformancePlanDetail_Print.cshtml" />
     <Content Include="Views\HRPerformancePlan\_PerfromancePlan_Print.cshtml" />
     <Content Include="Views\HRProfessional\_PersonalDetailsProfessional.cshtml" />
+    <Content Include="Views\HRPerformancePlan\_ProfessionalPerformancePlan_Print.cshtml" />
+    <Content Include="Views\HRPerformancePlan\PrintPerformancePlan.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
