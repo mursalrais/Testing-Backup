@@ -187,7 +187,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             }
         }
 
-        public ApplicationShortlistVM GetInterviewlist(string position, string username, string useraccess)
+        public ApplicationShortlistVM GetInterviewlist(int? position, string username, string useraccess)
         {
             if (position == null)
                 return null;
@@ -195,19 +195,13 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             var caml = @"<View>  
                     <Query> 
                        <Where>
-                          <And>
                              <Eq>
-                                <FieldRef Name='iskeyposition' />
-                                <Value Type='Boolean'>true</Value>
+                                <FieldRef Name='positionrequested_x003a_ID' />
+                                <Value Type='Lookup'>" + position + @"</Value>
                              </Eq>
-                             <Eq>
-                                <FieldRef Name='positionrequested' />
-                                <Value Type='Lookup'>Temporary Data Entry</Value>
-                             </Eq>
-                          </And>
                        </Where>
                     </Query> 
-                     <ViewFields><FieldRef Name='Position' /><FieldRef Name='ID' /></ViewFields> 
+                     <ViewFields><FieldRef Name='ID' /></ViewFields> 
                     </View>";
 
             var applicationID = 0;
@@ -219,7 +213,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return GetInterviewlist(applicationID, username, useraccess, position);
         }
 
-        public ApplicationShortlistVM GetInterviewlist(int ID, string username, string useraccess, string position)
+        public ApplicationShortlistVM GetInterviewlist(int ID, string username, string useraccess, int? position)
         {
             var viewModel = new ApplicationShortlistVM();
             if (ID == 0)
@@ -230,7 +224,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
 
             viewModel.ShortlistDetails = GetDetailInterviewlist(ID, useraccess);
-            viewModel.Position = position;
+            viewModel.Position = Convert.ToString(position);
 
             return viewModel;
 
@@ -260,7 +254,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                                         </Eq>
                                         <Eq>
                                            <FieldRef Name='applicationstatus' />
-                                           <Value Type='Text'>Declined</Value>
+                                           <Value Type='Text'>Recomended</Value>
                                         </Eq>
                                      </Or>
                                   </And>
