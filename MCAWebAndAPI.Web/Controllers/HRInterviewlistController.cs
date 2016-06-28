@@ -7,6 +7,7 @@ using MCAWebAndAPI.Web.Resources;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Service.Utils;
 using MCAWebAndAPI.Web.Resources;
+using System.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -28,8 +29,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult InterviewlistData(string siteurl = null, string position = null, string username = null, string useraccess = null)
         {
-            // clear existing session variables if any
-            SessionManager.RemoveAll();
+
+
 
             //mandatory: set site url
             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
@@ -49,11 +50,12 @@ namespace MCAWebAndAPI.Web.Controllers
 
             var testget = form[""];
 
-            int? headerID = null;
+            int? headerID = viewModel.ID;
 
             try
             {
                 _service.CreateInterviewDataDetail(headerID, viewModel);
+                Task CreateManpowerRequisitionDocumentsTask = _service.CreateInterviewDocumentsSync(headerID, viewModel.Documents);
             }
             catch (Exception e)
             {
@@ -61,16 +63,24 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
+            EmailUtil.Send(viewModel.SendTo, "Interview Result", "<div><label>" + viewModel.EmailMessage + "</label></div>" +
+                          "<a href = 'https://eceos2.sharepoint.com/sites/mca-dev/hr/Lists/Professional%20Master/DispForm_Custom.aspx?ID=3' > Open candidates' profiles for this position</a>");
+
             _service.SendEmailValidation(viewModel.SendTo, EmailResource.EmailInterviewResult);
 
-            return JsonHelper.GenerateJsonSuccessResponse(
-                string.Format("{0}/{1}", siteUrl, UrlResource.Professional));
+            return RedirectToAction("Index",
+               "Success",
+               new
+               {
+                   errorMessage =
+               string.Format(MessageResource.SuccessCreateApplicationData, viewModel.Candidate)
+               });
         }
 
         public ActionResult InputInterviewResult(string siteurl = null, int? ID = null)
         {
-            // clear existing session variables if any
-            SessionManager.RemoveAll();
+
+
 
             //mandatory: set site url
             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
@@ -89,7 +99,7 @@ namespace MCAWebAndAPI.Web.Controllers
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
-            int? headerID = null;
+            int? headerID = viewModel.ID;
             try
             {
                 viewModel.ShortlistDetails = BindShortlistDetails(form, viewModel.ShortlistDetails);
@@ -101,14 +111,19 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(
-                string.Format("{0}/{1}", siteUrl, UrlResource.Professional));
+            return RedirectToAction("InputInterviewResult",
+               "HRInterviewlist",
+               new
+               {
+                   siteurl = "https://eceos2.sharepoint.com/sites/mca-dev/hr",
+                   ID = headerID
+               });
         }
 
         public ActionResult InputInterviewResultDetail(string siteurl = null, int? ID = null)
         {
-            // clear existing session variables if any
-            SessionManager.RemoveAll();
+
+
 
             //mandatory: set site url
             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);

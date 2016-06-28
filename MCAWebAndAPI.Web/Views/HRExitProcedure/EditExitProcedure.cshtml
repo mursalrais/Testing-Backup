@@ -25,6 +25,10 @@
         <div class="row">
             @Html.Partial("_ExitProcedureDataEdit", Model)
         </div>
+        <legend>Documents</legend>
+        <div class="row">
+            @Html.Partial("_DocumentDetailsDisplay", Model.DocumentUrl)
+        </div>
     </fieldset>
 
 }

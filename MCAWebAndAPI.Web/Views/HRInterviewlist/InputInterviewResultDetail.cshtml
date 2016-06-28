@@ -12,7 +12,6 @@
 }))
 {
     <fieldset>
-        @TempData.
         @Html.HiddenFor(m => m.ID)
         @Html.HiddenFor(m => m.Position)
 
@@ -84,7 +83,6 @@
         $(document).ready(function () {
             $("#vacant-position").prop('readonly', 'true');
             $("#Candidate").prop('readonly', 'true');
-            debugger;
             var positionID = $("#Position").val();
             var url = "/HRDataMaster/GetPosition/" + positionID;
             $.getJSON(url, function (data) {

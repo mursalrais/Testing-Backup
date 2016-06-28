@@ -20,6 +20,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         bool UpdateHeader(ProfessionalPerformancePlanVM header);
 
         void CreatePerformancePlanDetails(int? headerID, IEnumerable<ProjectOrUnitGoalsDetailVM> performancePlanDetails);
- 
+
+        ProfessionalPerformancePlanVM GetProfessionalEmail(int? ID);
+
+
     }
 }

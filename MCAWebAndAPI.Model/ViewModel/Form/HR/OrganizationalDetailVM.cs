@@ -95,18 +95,17 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
               });
         }
 
-
         /// <summary>
         /// Status
         /// </summary>
         [UIHint("InGridComboBox")]
         public InGridComboBoxVM ProfessionalStatus { get; set; } = new InGridComboBoxVM();
 
-
         /// <summary>
         /// Position
         /// </summary>
-        public string Position { get; set; }
+        [UIHint("InGridAjaxComboBox")]
+        public AjaxComboBoxVM Position { get; set; } = new AjaxComboBoxVM();
 
         /// <summary>
         /// Level

@@ -20,7 +20,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         static Logger logger = LogManager.GetCurrentClassLogger();
 
         const string SP_EXP_LIST_NAME = "Exit Procedure";
-        const string SP_PSA_DOC_LIST_NAME = "Professional Documents";
+        const string SP_EXP_DOC_LIST_NAME = "ExitProcedureDocuments";
+        //const string SP_PSA_DOC_LIST_NAME = "Professional Documents";
+        //const string SP_PSA_DOC_LIST_NAME = "PSA Documents";
 
         public void SetSiteUrl(string siteUrl)
         {
@@ -68,11 +70,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 return viewModel;
             }
-            else
-            {
-                var listItem = SPConnector.GetListItem(SP_EXP_LIST_NAME, ID, _siteUrl);
-                viewModel = ConvertToExitProcedureVM(listItem);
-            }
+
+            var listItem = SPConnector.GetListItem(SP_EXP_LIST_NAME, ID, _siteUrl);
+            viewModel = ConvertToExitProcedureVM(listItem);
 
             return viewModel;
         }
@@ -96,9 +96,16 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.ReasonDesc = Convert.ToString(listItem["reasondescription"]);
             viewModel.PSANumber = Convert.ToString(listItem["psanumber"]);
 
+            viewModel.DocumentUrl = GetDocumentUrl(viewModel.ID);
+
             return viewModel;
         }
 
+        private string GetDocumentUrl(int? iD)
+        {
+            return string.Format(UrlResource.ExitProcedureDocumentByID, _siteUrl, iD);
+        }
+        
         public bool UpdateExitProcedure(ExitProcedureVM exitProcedure)
         {
             var columnValues = new Dictionary<string, object>();
@@ -165,13 +172,34 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.ExitReason.Value = Convert.ToString(listItem["exitreason"]);
             viewModel.ReasonDesc = Convert.ToString(listItem["reasondescription"]);
             viewModel.PSANumber = Convert.ToString(listItem["psanumber"]);
-
-            /*
             
             viewModel.DocumentUrl = GetDocumentUrl(viewModel.ID);
-            */
 
             return viewModel;
+        }
+
+        public void CreateExitProcedureDocuments(int? exProcID, IEnumerable<HttpPostedFileBase> documents, ExitProcedureVM exitProcedure)
+        {
+            foreach (var doc in documents)
+            {
+                var updateValue = new Dictionary<string, object>();
+
+                exitProcedure.DocumentType = "Exit Procedure";
+
+                updateValue.Add("documenttype", "Exit Procedure");
+                updateValue.Add("exitprocedureid", new FieldLookupValue { LookupId = Convert.ToInt32(exProcID) });
+                updateValue.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(exitProcedure.Professional.Value) });
+                
+                try
+                {
+                    SPConnector.UploadDocument(SP_EXP_DOC_LIST_NAME, updateValue, doc.FileName, doc.InputStream, _siteUrl);
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e.Message);
+                    throw e;
+                }
+            }
         }
     }
 }

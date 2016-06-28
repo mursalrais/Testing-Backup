@@ -20,9 +20,7 @@ namespace MCAWebAndAPI.Web.Controllers
     public class HRApplicationController : Controller
     {
         readonly IHRApplicationService _service;
-        const string SP_TRANSACTION_WORKFLOW_LIST_NAME = "Manpower Requisition Workflow";
-        const string SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME = "manpowerrequisition";
-
+        
         public HRApplicationController()
         {
             _service = new HRApplicationService();
@@ -73,7 +71,6 @@ namespace MCAWebAndAPI.Web.Controllers
 
             viewModel.TrainingDetails = BindTrainingDetails(form, viewModel.TrainingDetails);
             Task createTrainingDetailsTask = _service.CreateTrainingDetailsAsync(headerID, viewModel.TrainingDetails);
-
             Task allTasks = Task.WhenAll(createEducationDetailsTask, createEducationDetailsTask);
 
             try
@@ -89,7 +86,6 @@ namespace MCAWebAndAPI.Web.Controllers
             return JsonHelper.GenerateJsonSuccessResponse(
                 string.Format("{0}/{1}", siteUrl, UrlResource.Professional));
         }
-
 
         public ActionResult ListVacantPositions(string siteUrl)
         {
@@ -130,30 +126,13 @@ namespace MCAWebAndAPI.Web.Controllers
 
             viewModel.EducationDetails = BindEducationDetails(form, viewModel.EducationDetails);
             Task createEducationDetailsTask = _service.CreateEducationDetailsAsync(headerID, viewModel.EducationDetails);
-
             viewModel.TrainingDetails = BindTrainingDetails(form, viewModel.TrainingDetails);
             Task createTrainingDetailsTask = _service.CreateTrainingDetailsAsync(headerID, viewModel.TrainingDetails);
-
             viewModel.WorkingExperienceDetails = BindWorkingExperienceDetails(form, viewModel.WorkingExperienceDetails);
             Task createWorkingExperienceDetailsTask = _service.CreateWorkingExperienceDetailsAsync(headerID, viewModel.WorkingExperienceDetails);
-
             Task createApplicationDocumentTask = _service.CreateApplicationDocumentAsync(headerID, viewModel.Documents);
-
-            // BEGIN Workflow Demo 
-            headerID = 45; // This MUST NOT be hardcoded. It is hardcoded as it is just a demo
-            Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateTransactionWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
-                SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)headerID);
-
-            // Send to Level 1 Approver
-            Task sendApprovalRequestTask = WorkflowHelper.SendApprovalRequestAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
-                SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)headerID, 1,
-                string.Format(EmailResource.WorkflowAskForApproval, UrlResource.ApplicationData));
-
-            // END Workflow Demo
-
             Task sendTask = EmailUtil.SendAsync(viewModel.EmailAddresOne, "Application Submission Confirmation",
                  EmailResource.ApplicationSubmissionNotification);
-
             Task allTasks = Task.WhenAll(createEducationDetailsTask, createTrainingDetailsTask,
                 createWorkingExperienceDetailsTask, createApplicationDocumentTask);
 
@@ -259,7 +238,7 @@ namespace MCAWebAndAPI.Web.Controllers
             return array;
         }
 
-        private IEnumerable<TrainingDetailVM> BindTrainingDetails(FormCollection form, IEnumerable<TrainingDetailVM> trainingDetails)
+        IEnumerable<TrainingDetailVM> BindTrainingDetails(FormCollection form, IEnumerable<TrainingDetailVM> trainingDetails)
         {
             var array = trainingDetails.ToArray();
             for (int i = 0; i < array.Length; i++)
@@ -270,7 +249,7 @@ namespace MCAWebAndAPI.Web.Controllers
             return array;
         }
 
-        private IEnumerable<EducationDetailVM> BindEducationDetails(FormCollection form,
+        IEnumerable<EducationDetailVM> BindEducationDetails(FormCollection form,
             IEnumerable<EducationDetailVM> educationDetails)
         {
             var array = educationDetails.ToArray();
@@ -291,12 +270,6 @@ namespace MCAWebAndAPI.Web.Controllers
             var viewModel = _service.GetApplication(null);
             viewModel.Position = position;
             viewModel.ManpowerRequisitionID = ID;
-
-            // Used for Workflow Router
-            ViewBag.ListName = "Manpower%20Requisition";
-
-            // This var should be taken from passing parameter
-            ViewBag.RequestorUserLogin = "yunita.ajah@eceos.com";
 
             return View(viewModel);
         }

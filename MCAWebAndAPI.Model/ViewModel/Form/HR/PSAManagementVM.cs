@@ -90,6 +90,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [Required]
         public DateTime? JoinDate { get; set; } = DateTime.Now;
 
+        /// <summary>
+        /// joindate in string format
+        /// </summary>
         public string StrJoinDate { get; set; }
 
         /// <summary>
@@ -163,9 +166,14 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [Required]
         public IEnumerable<HttpPostedFileBase> Documents { get; set; } = new List<HttpPostedFileBase>();
 
+        /// <summary>
+        /// Url to access document
+        /// </summary>
         public string DocumentUrl { get; set; }
 
-        
+        /// <summary>
+        /// Type of document
+        /// </summary>
         public string DocumentType { get; set;}
 
         public string KeyPosition { get; set; }

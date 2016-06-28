@@ -74,12 +74,11 @@
 @section scripts{
     <script>
         $(document).ready(function () {
+            debugger;
             $("#vacant-position").prop('readonly', 'true');
+
             var positionID = $("#Position").val();
-            var url = "/HRDataMaster/GetPosition/" + positionID;
-            $.getJSON(url, function (data) {
-                $("#vacant-position").prop("value", data.PositionName);
-            })
+            $("#vacant-position").prop("value", positionID);
 
         });
     </script>

@@ -26,8 +26,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult CreateMonthlyFee(string siteUrl = null)
         {
-            // Clear Existing Session Variables if any
-            SessionManager.RemoveAll();
+
+
 
             // MANDATORY: Set Site URL
             _hRPayrollService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);

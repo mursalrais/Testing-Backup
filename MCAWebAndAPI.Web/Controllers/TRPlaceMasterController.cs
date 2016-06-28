@@ -27,8 +27,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult CreatePlaceMaster(string siteUrl = null)
         {
-            // Clear Existing Session Variables if any
-            SessionManager.RemoveAll();
+
+
 
             // MANDATORY: Set Site URL
             _tRPlaceMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);

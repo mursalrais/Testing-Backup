@@ -28,7 +28,6 @@ namespace MCAWebAndAPI.Web.Controllers
             // MANDATORY: Set Site URL
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-
             var viewModel = await _service.GetProfessionalDataAsync(ID);
             ViewBag.IsHRView = true;
             return View(viewModel);
@@ -114,14 +113,12 @@ namespace MCAWebAndAPI.Web.Controllers
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
-          
             return JsonHelper.GenerateJsonSuccessResponse(UrlResource.Professional);
         }
 
         IEnumerable<OrganizationalDetailVM> BindOrganizationalDetails(FormCollection form, IEnumerable<OrganizationalDetailVM> organizationalDetails)
         {
             var array = organizationalDetails.ToArray();
-
             for (int i = 0; i < array.Length; i++)
             {
                 array[i].LastWorkingDay = BindHelper.BindDateInGrid("OrganizationalDetails",

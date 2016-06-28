@@ -47,7 +47,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult ApprovalManpowerRequisition(string siteUrl = null, int? ID = null)
         {
-            SessionManager.RemoveAll();
+
 
             // MANDATORY: Set Site URL
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
@@ -60,7 +60,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult EditManpowerRequisition(string siteUrl = null, int? ID = null, string username = null)
         {
-            SessionManager.RemoveAll();
+
 
             // MANDATORY: Set Site URL
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
@@ -131,8 +131,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public async Task<ActionResult> DisplayManpowerRequisition(string siteUrl = null, int? ID = null)
         {
-            // Clear Existing Session Variables if any
-            SessionManager.RemoveAll();
+
+
 
             // MANDATORY: Set Site URL
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
@@ -144,8 +144,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult CreateManpowerRequisition(string siteUrl = null, string username = null)
         {
-            // Clear Existing Session Variables if any
-            SessionManager.RemoveAll();
+
+
 
             // MANDATORY: Set Site URL
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);

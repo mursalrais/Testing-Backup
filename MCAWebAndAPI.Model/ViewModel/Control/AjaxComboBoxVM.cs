@@ -1,22 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MCAWebAndAPI.Model.ViewModel.Control
+﻿namespace MCAWebAndAPI.Model.ViewModel.Control
 {
     /// <summary>
     /// Used for combo box that retrives choices from ajax get function
     /// </summary>
     public class AjaxComboBoxVM
     {
-
         public int? Value { get; set; }
 
         public string Text { get; set; }
-
 
         /// <summary>
         /// Set name of field from JSON result that becomes value

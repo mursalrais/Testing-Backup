@@ -48,8 +48,6 @@ enctype = "multipart/form-data" }))
     <div class="row">
         @Html.Partial("_DocumentDetails", Model)
     </div>
-    <legend>Approval Workflow</legend>
-    <div id="workflow-placeholder" class="row"/>
 </fieldset>
 <div class="form-actions">
     <div class="row">
@@ -69,7 +67,7 @@ enctype = "multipart/form-data" }))
 @section scripts{
     <script>
         $(document).ready(function () {
-            displayWorkflowRouter("workflow-placeholder", "@ViewBag.ListName", "@ViewBag.RequestorUserLogin");
+
         });
     </script>
 }

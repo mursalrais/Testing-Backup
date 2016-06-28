@@ -84,3 +84,12 @@ A look-up field contains invalid data. Please check the value and try again.
 A look-up field contains invalid data. Please check the value and try again.
 2016-06-22 13:12:50.8488 MCAWebAndAPI.Service.HR.Recruitment.HRInterviewService Value cannot be null.
 2016-06-22 13:17:30.1472 MCAWebAndAPI.Service.HR.Recruitment.HRInterviewService Value cannot be null.
+2016-06-27 10:32:48.6130 MCAWebAndAPI.Service.HR.Recruitment.HRInterviewService Cannot invoke method or retrieve property from null object. Object returned by the following call stack is null. "ListItemAllFields
+"
+2016-06-27 10:37:16.2965 MCAWebAndAPI.Service.HR.Recruitment.HRInterviewService Cannot invoke method or retrieve property from null object. Object returned by the following call stack is null. "ListItemAllFields
+"
+2016-06-28 12:02:57.4377 MCAWebAndAPI.Service.HR.Recruitment.HRShortlistService System.ArgumentNullException: Value cannot be null.
+Parameter name: address
+   at System.Net.Mail.MailAddress..ctor(String address, String displayName, Encoding displayNameEncoding)
+   at MCAWebAndAPI.Service.Utils.EmailUtil.Send(String emailAddress, String subject, String emailMessage) in C:\Users\sobari\Documents\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\EmailUtil.cs:line 30
+   at MCAWebAndAPI.Service.HR.Recruitment.HRShortlistService.SendEmailValidation(String emailTo, String emailMessages) in C:\Users\sobari\Documents\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Recruitment\HRShortlistService.cs:line 450

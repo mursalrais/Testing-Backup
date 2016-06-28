@@ -1,7 +1,6 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
 @model ApplicationDataVM
 
-
 <div class="col-sm-6">
     <div class="form-group">
         @Html.Bootstrap().LabelFor(m => m.FirstMiddleName).Class("col-sm-4 control-label")
@@ -79,32 +78,31 @@
     </div>
 </div>
 
-    <script>
-        $(document).ready(function () {
-            var nationalityDropDownList = $("#Nationality_Value").data("kendoDropDownList");
-            nationalityDropDownList.bind("dataBound", function (e) {
-            });
-
+<script>
+    $(document).ready(function () {
+        var nationalityDropDownList = $("#Nationality_Value").data("kendoDropDownList");
+        nationalityDropDownList.bind("dataBound", function (e) {
         });
 
-        function filterIDCardType(){
-            return {
-                nationality: $("#Nationality_Value").closest('span').find('span.k-input').text()
-            };
+    });
+
+    function filterIDCardType(){
+        return {
+            nationality: $("#Nationality_Value").closest('span').find('span.k-input').text()
+        };
+    }
+
+    function toggleIDCardExpiry(idCardType) {
+        if (idCardType == "e-KTP") {
+            $('#IDCardExpiry').closest('.form-group').hide();
+        } else {
+            $('#IDCardExpiry').closest('.form-group').show();
         }
+    }
 
-        function toggleIDCardExpiry(idCardType) {
-            if (idCardType == "e-KTP") {
-                $('#IDCardExpiry').closest('.form-group').hide();
-            } else {
-                $('#IDCardExpiry').closest('.form-group').show();
-            }
-        }
+    function onSelectIDCardType(e) {
+        var dataItem = this.dataItem(e.item);
+        toggleIDCardExpiry(dataItem.Text);
+    }
 
-        function onSelectIDCardType(e) {
-            var dataItem = this.dataItem(e.item);
-            toggleIDCardExpiry(dataItem.Text);
-        }
-
-    </script>
-
+</script>

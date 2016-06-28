@@ -42,8 +42,8 @@ namespace MCAWebAndAPI.Web.Controllers
         /// <returns></returns>
         public ActionResult CreatePSAManagement(string siteUrl = null)
         {
-            // Clear Existing Session Variables if any
-            SessionManager.RemoveAll();
+
+
 
             // MANDATORY: Set Site URL
             psaManagementService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
@@ -58,9 +58,6 @@ namespace MCAWebAndAPI.Web.Controllers
         
         public ActionResult DisplayPSAManagement(string siteUrl = null, int? ID = null)
         {
-            // Clear Existing Session Variables if any
-            SessionManager.RemoveAll();
-
             // MANDATORY: Set Site URL
             psaManagementService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
@@ -81,8 +78,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult ViewPSAManagement(string siteUrl = null, int? ID = null)
         {
-            // Clear Existing Session Variables if any
-            SessionManager.RemoveAll();
+
+
 
             // MANDATORY: Set Site URL
             psaManagementService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
