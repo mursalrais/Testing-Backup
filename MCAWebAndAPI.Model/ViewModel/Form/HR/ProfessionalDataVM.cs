@@ -9,6 +9,28 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
     public class ProfessionalDataVM : ApplicationDataVM
     {
+        [UIHint("AjaxComboBox")]
+        public AjaxComboBoxVM CurrentPosition { get; set; } = new AjaxComboBoxVM
+        {
+            ActionName = "GetPositions",
+            ControllerName = "HRDataMaster",
+            TextField = "PositionName",
+            ValueField = "ID"
+        };
+
+        [UIHint("ComboBox")]
+        public ComboBoxVM ProfessionalStatus { get; set; } = new ComboBoxVM
+        {
+            Choices = new string[]
+            {
+                "Active",
+                "Non Active"
+            }
+        };
+
+        [UIHint("Date")]
+        public DateTime? JoinDate { get; set; } = DateTime.Now;
+
         /// <summary>
         /// datavalidationstatus
         /// </summary>

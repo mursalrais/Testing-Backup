@@ -6,14 +6,17 @@ using System.Threading.Tasks;
 using MCAWebAndAPI.Model.ViewModel.Control;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using MCAWebAndAPI.Model.Common;
 
 namespace MCAWebAndAPI.Model.HR.DataMaster
 {
-    public class PSAMaster
+    public class PSAMaster : Item
     {
         public string PSAID { get; set; }
 
-        public string ID { get; set; }
+        public string PSANumber { get; set; }
+
+        public string ProfessionalID { get; set; }
 
         public string Position { get; set; }
 

@@ -1,0 +1,125 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model ProfessionalDataVM
+
+<div class="col-sm-6">
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.FirstMiddleName).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.EditorFor(m => m.FirstMiddleName)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.LastName).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.EditorFor(m => m.LastName)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.CurrentPosition).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.EditorFor(m => m.CurrentPosition)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.PlaceOfBirth).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.EditorFor(m => m.PlaceOfBirth)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.DateOfBirth).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.EditorFor(m => m.DateOfBirth)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.MaritalStatus).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.EditorFor(m => m.MaritalStatus)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.BloodType).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.EditorFor(m => m.BloodType)
+        </div>
+    </div>
+</div>
+<div class="col-sm-6">
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.Gender).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.EditorFor(m => m.Gender)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.Nationality).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.EditorFor(m => m.Nationality)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.Religion).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.EditorFor(m => m.Religion)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.IDCardType).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.EditorFor(m => m.IDCardType)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.IDCardNumber).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.EditorFor(m => m.IDCardNumber)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.IDCardExpiry).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.EditorFor(m => m.IDCardExpiry)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.JoinDate).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.EditorFor(m => m.JoinDate)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.ProfessionalStatus).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.EditorFor(m => m.ProfessionalStatus)
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var nationalityDropDownList = $("#Nationality_Value").data("kendoDropDownList");
+        nationalityDropDownList.bind("dataBound", function (e) {
+        });
+    });
+
+    function filterIDCardType(){
+        return {
+            nationality: $("#Nationality_Value").closest('span').find('span.k-input').text()
+        };
+    }
+
+    function toggleIDCardExpiry(idCardType) {
+        if (idCardType == "e-KTP") {
+            $('#IDCardExpiry').closest('.form-group').hide();
+        } else {
+            $('#IDCardExpiry').closest('.form-group').show();
+        }
+    }
+
+    function onSelectIDCardType(e) {
+        var dataItem = this.dataItem(e.item);
+        toggleIDCardExpiry(dataItem.Text);
+    }
+
+</script>
