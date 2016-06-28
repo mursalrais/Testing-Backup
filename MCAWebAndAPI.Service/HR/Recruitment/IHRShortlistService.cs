@@ -23,6 +23,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         void SendEmailValidation(string mailto, string mailmessage);
 
-        PositionMaster GetPosition();
+        IEnumerable<PositionMaster> GetPositions();
     }
 }

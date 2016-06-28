@@ -1,6 +1,7 @@
 ﻿using Elmah;
 using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using MCAWebAndAPI.Service.Converter;
+using MCAWebAndAPI.Model.HR.DataMaster;
 using MCAWebAndAPI.Service.HR.Recruitment;
 using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Web.Resources;
@@ -169,15 +170,28 @@ namespace MCAWebAndAPI.Web.Controllers
                 JsonRequestBehavior.AllowGet);
         }
 
+
         public JsonResult GetPosition()
         {
-            _service.SetSiteUrl(SessionManager.Get<string>("SiteUrl") ?? ConfigResource.DefaultHRSiteUrl);
-            var position = _service.GetPosition();
-            return Json(new
-            {
-                position.ID,
-                position.PositionName
-            }, JsonRequestBehavior.AllowGet);
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            var sessionVariable = System.Web.HttpContext.Current.Session["PositionMaster"] as IEnumerable<PositionMaster>;
+            var positions = sessionVariable ?? _service.GetPositions();
+
+            if (sessionVariable == null) // If no session variable is found
+                System.Web.HttpContext.Current.Session["PositionMaster"] = positions;
+
+            return Json(positions.Select(e =>
+                new {
+                    e.ID,
+                    e.PositionName,
+                    e.PositionStatus,
+                    e.Remarks,
+                    e.IsKeyPosition,
+                    Desc = string.Format("{0}", e.PositionName)
+                }),
+                JsonRequestBehavior.AllowGet);
         }
     }
 }
