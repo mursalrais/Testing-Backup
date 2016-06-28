@@ -26,7 +26,7 @@ namespace MCAWebAndAPI.Web.Controllers
             _service = new HRShortlistService();
         }
 
-        public ActionResult ShortlistData(string siteurl = null, string position = null, string username = null, string useraccess = null)
+        public ActionResult ShortlistData(string siteurl = null, string position = null, string username = null, string useraccess = null, params int[] positionid)
         {
 
 
@@ -167,6 +167,17 @@ namespace MCAWebAndAPI.Web.Controllers
                     Text = e.Text
                 }),
                 JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetPosition()
+        {
+            _service.SetSiteUrl(SessionManager.Get<string>("SiteUrl") ?? ConfigResource.DefaultHRSiteUrl);
+            var position = _service.GetPosition();
+            return Json(new
+            {
+                position.ID,
+                position.PositionName
+            }, JsonRequestBehavior.AllowGet);
         }
     }
 }
