@@ -85,6 +85,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         public ApplicationShortlistVM GetShortlist(string position, string username, string useraccess)
         {
+            var viewModel = new ApplicationShortlistVM();
+
             if (position == null)
                 return null;
 
@@ -453,12 +455,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             }
         }
 
-        public PositionMaster GetPosition(int id)
+        public PositionMaster GetPosition()
         {
             var caml = @"<View>  
-            <Query> 
-               <Where><Eq><FieldRef Name='ID' /><Value Type='Counter'>" + id + @"</Value></Eq></Where> 
-            </Query> 
              <ViewFields><FieldRef Name='Title' /><FieldRef Name='ID' /></ViewFields> 
       </View>";
 
@@ -472,5 +471,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             return position;
         }
+
     }
 }
