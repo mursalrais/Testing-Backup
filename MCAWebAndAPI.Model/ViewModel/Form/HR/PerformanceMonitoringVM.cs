@@ -18,8 +18,27 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// period
         /// </summary>
         /// 
-        [UIHint("Int32")]
-        public int? Period { get; set; }
+
+        private static string[] GetPeriodChoices()
+        {
+            List<string> PeriodChoices = new List<string>();
+            int YearNow = DateTime.Now.Year;            
+            for (int i = 0; i < 10; i++)
+            {
+                PeriodChoices.Add(YearNow.ToString());
+                YearNow++;
+            }
+            return PeriodChoices.ToArray();
+
+        }
+
+        [UIHint("ComboBox")]
+        public ComboBoxVM Period { get; set; } = new ComboBoxVM
+        {
+            Choices = GetPeriodChoices(),
+            Value = DateTime.Now.Year.ToString()
+
+        };
 
         /// <summary>
         /// maxdateforpendingapproval1

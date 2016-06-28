@@ -155,7 +155,7 @@ namespace MCAWebAndAPI.Web.Controllers
             ViewBag.ListName = "Manpower%20Requisition";
 
             // This var should be taken from passing parameter
-            ViewBag.RequestorUserLogin = "yunita.ajah@eceos.com";
+            ViewBag.RequestorUserLogin = "anugerahseptian@gmail.com";
 
             var viewModel = _service.GetManpowerRequisition(null);
             return View(viewModel);
@@ -190,7 +190,6 @@ namespace MCAWebAndAPI.Web.Controllers
             
 
             // BEGIN Workflow Demo 
-            //headerID = 45; // This MUST NOT be hardcoded. It is hardcoded as it is just a demo
             Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateTransactionWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
                 SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)headerID);
 
@@ -205,17 +204,7 @@ namespace MCAWebAndAPI.Web.Controllers
             //     EmailResource.ApplicationSubmissionNotification);
 
             Task allTasks = Task.WhenAll(CreateWorkingRelationshipDetailsTask, CreateManpowerRequisitionDocumentsTask);
-
-            //try
-            //{
-            //    _service.CreateManpowerRequisitionDocuments(headerID, viewModel.Documents);
-            //}
-            //catch (Exception e)
-            //{
-            //    ErrorSignal.FromCurrentContext().Raise(e);
-            //    return RedirectToAction("Index", "Error");
-            //}
-
+                        
             try
             {
                 await allTasks;
@@ -254,24 +243,7 @@ namespace MCAWebAndAPI.Web.Controllers
             return array;
         }
 
-        //public JsonResult GetDocumentMCC(int id)
-        //{
-        //    _service.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));
-
-        //    var isDocumentMCCExist = _service.CheckDocumentMCC(id);
-
-
-        //    return Json(isDocumentMCCExist.Where(e => e.ID == id).Select(
-        //        e =>
-        //        new
-        //        {
-        //            e.ID,
-        //            e.PSARenewalNumber,
-        //            e.ExpiryDateBefore,
-        //            e.PSAId
-        //        }
-        //    ), JsonRequestBehavior.AllowGet);
-        //}
+       
 
 
     }

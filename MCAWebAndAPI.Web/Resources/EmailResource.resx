@@ -152,6 +152,15 @@ This email is sent to you to notify that your HR, Shortlisted Result data list.
 Thank you. 
 &lt;/p&gt;</value>
   </data>
+  <data name="PerformancePlan" xml:space="preserve">
+    <value>&lt;p&gt;
+    &lt;strong&gt;Dear Respective Professional&lt;/strong&gt;
+&lt;/p&gt;
+&lt;p&gt;
+    This email is sent to you to notify that you are required to create Performance Plan. Creating and approval plan process will take maximum 5 working days. Therefore, do prepare your plan accordingly. Kindly check the link as per below to go to direct page accordingly. Thank you.
+&lt;/p&gt;
+Link: &lt;a href="{0}"&gt;Click Here&lt;/a&gt;</value>
+  </data>
   <data name="ProfessionalEmailValidation" xml:space="preserve">
     <value>&lt;p&gt;
 &lt;strong&gt;Dear HR Team,&lt;/strong&gt;
