@@ -30,7 +30,7 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult InterviewlistData(string siteurl = null, int? manID = null)
         {
             // clear existing session variables if any
-            SessionManager.RemoveAll();
+            //SessionManager.RemoveAll();
 
             //mandatory: set site url
             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
