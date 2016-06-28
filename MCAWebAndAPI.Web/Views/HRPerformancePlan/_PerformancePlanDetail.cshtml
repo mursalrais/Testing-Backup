@@ -1,9 +1,9 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
-@model IEnumerable<ProjectOrUnitGoalsDetailVM>
+@model ProfessionalPerformancePlanVM
 
 <div class="col-sm-12">
 
-    @(Html.Kendo().Grid(Model)
+    @(Html.Kendo().Grid(Model.ProjectOrUnitGoalsDetails)
         .Name("ProjectOrUnitGoalsDetails")
         .ToolBar(tools => tools.Create().Text("Add New"))
         .Editable(editable => editable.Mode(GridEditMode.InCell)
@@ -53,9 +53,6 @@
         .ServerOperation(false)
         )
     )
-</div>
-<div id="=Total">
-    
 </div>
 
 <script>
