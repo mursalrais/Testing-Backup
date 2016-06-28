@@ -58,9 +58,6 @@ namespace MCAWebAndAPI.Web.Controllers
         
         public ActionResult DisplayPSAManagement(string siteUrl = null, int? ID = null)
         {
-
-
-
             // MANDATORY: Set Site URL
             psaManagementService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);

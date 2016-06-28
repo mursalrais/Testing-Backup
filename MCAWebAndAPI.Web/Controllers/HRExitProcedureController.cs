@@ -75,9 +75,6 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult DisplayExitProcedure(int? ID = null, string siteUrl = null)
         {
-
-
-
             // MANDATORY: Set Site URL
             exitProcedureService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
