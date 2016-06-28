@@ -149,7 +149,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         //   <FieldRef Name = 'remarks' />
         //</ ViewFields >
         private IEnumerable<ShortlistDetailVM> GetDetailShortlist(int manPosition, string useraccess)
-        {
+         {
             var caml = "";
             if (useraccess == "HR")
             {
