@@ -54,6 +54,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             viewModel.ID = Convert.ToInt32(listItem["ID"]);
             viewModel.Position = FormatUtil.ConvertLookupToID(listItem, "vacantposition") + string.Empty;
+            viewModel.ActivePosition.Text = FormatUtil.ConvertLookupToID(listItem, "vacantposition") + string.Empty;
             viewModel.Candidate = Convert.ToString(listItem["Title"]);
 
             return viewModel;
@@ -126,6 +127,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             
             viewModel.ShortlistDetails = GetDetailShortlist(ID, useraccess);
+            viewModel.ActivePosition.Text = position;
             viewModel.Position = position;
 
             return viewModel;

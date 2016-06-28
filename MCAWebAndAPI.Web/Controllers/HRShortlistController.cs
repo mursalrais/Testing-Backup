@@ -176,11 +176,7 @@ namespace MCAWebAndAPI.Web.Controllers
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
-            var sessionVariable = System.Web.HttpContext.Current.Session["PositionMaster"] as IEnumerable<PositionMaster>;
-            var positions = sessionVariable ?? _service.GetPositions();
-
-            if (sessionVariable == null) // If no session variable is found
-                System.Web.HttpContext.Current.Session["PositionMaster"] = positions;
+            var positions = _service.GetPositions();
 
             return Json(positions.Select(e =>
                 new {

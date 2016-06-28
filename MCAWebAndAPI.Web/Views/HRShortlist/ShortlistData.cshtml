@@ -72,16 +72,18 @@
 
     <script>
         function OnChangeActivePosition(e) {
-            debugger;
             var dataItem = this.dataItem(e.item);
-
-            window.location = 'http://localhost:15923/HRShortlist/ShortlistData?siteUrl=https://eceos2.sharepoint.com/sites/ims/hr&useraccess=HR&position=' + dataItem.PositionName;
+            window.location = 'http://mcaims-dev.azurewebsites.net/HRShortlist/ShortlistData?siteUrl=https://eceos2.sharepoint.com/sites/ims/hr&useraccess=HR&position=' + dataItem.PositionName;
         };
 
         $(document).ready(function () {
             $("#vac-position").prop('readonly', 'true');
             var positionID = $("#Position").val();
             $("#vac-position").prop("value", positionID);
+            debugger;
+            var dropdownlist = $("#ActivePosition_Value").data("kendoDropDownList");
+            dropdownlist.select(positionID);
+
         });
     </script>
 }
