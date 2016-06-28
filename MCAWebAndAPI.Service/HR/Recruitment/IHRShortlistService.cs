@@ -11,7 +11,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         IEnumerable<ApplicationShortlistVM> GetShortlists();
 
-        ApplicationShortlistVM GetShortlist(string position, string username, string useraccess);
+        ApplicationShortlistVM GetShortlist(int? position, string username, string useraccess);
 
         ApplicationShortlistVM GetShortlistSend(int? ID);
 

@@ -102,7 +102,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         {
             ControllerName = "HRShortlist",
             ActionName = "GetPosition",
-            ValueField = "PositionName",
+            ValueField = "ID",
             TextField = "PositionName",
             OnSelectEventName = "OnChangeActivePosition"
             

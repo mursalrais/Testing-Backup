@@ -79,8 +79,12 @@
         $(document).ready(function () {
             $("#vac-position").prop('readonly', 'true');
             var positionID = $("#Position").val();
-            $("#vac-position").prop("value", positionID);
-            debugger;
+          
+            var url = "/HRDataMaster/GetPosition/" + positionID;
+            $.getJSON(url, function (data) {
+                $("#vac-position").prop("value", data.PositionName);
+            })
+
             var dropdownlist = $("#ActivePosition_Value").data("kendoDropDownList");
             dropdownlist.select(positionID);
 

@@ -82,7 +82,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return viewModel;
         }
 
-        public ApplicationShortlistVM GetShortlist(string position, string username, string useraccess)
+        public ApplicationShortlistVM GetShortlist(int? position, string username, string useraccess)
         {
             var viewModel = new ApplicationShortlistVM();
 
@@ -92,19 +92,13 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             var caml = @"<View>  
                     <Query> 
                        <Where>
-                          <And>
                              <Eq>
-                                <FieldRef Name='iskeyposition' />
-                                <Value Type='Boolean'>true</Value>
+                                <FieldRef Name='positionrequested_x003a_ID' />
+                                <Value Type='Lookup'>" + position +@"</Value>
                              </Eq>
-                             <Eq>
-                                <FieldRef Name='positionrequested' />
-                                <Value Type='Lookup'>Temporary Data Entry</Value>
-                             </Eq>
-                          </And>
                        </Where>
                     </Query> 
-                     <ViewFields><FieldRef Name='Position' /><FieldRef Name='ID' /></ViewFields> 
+                     <ViewFields><FieldRef Name='ID' /></ViewFields> 
                     </View>";
 
             var applicationID = 0;
@@ -116,7 +110,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return GetShortlist(applicationID, username, useraccess, position);
         }
 
-        public ApplicationShortlistVM GetShortlist(int ID, string username, string useraccess, string position)
+        public ApplicationShortlistVM GetShortlist(int ID, string username, string useraccess, int? position)
         {
             var viewModel = new ApplicationShortlistVM();
             if (ID == 0)
@@ -127,8 +121,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             
             viewModel.ShortlistDetails = GetDetailShortlist(ID, useraccess);
-            viewModel.ActivePosition.Text = position;
-            viewModel.Position = position;
+            viewModel.ActivePosition.Text = Convert.ToString(position);
+            viewModel.Position = Convert.ToString(position);
 
             return viewModel;
 
@@ -154,7 +148,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         //   < FieldRef Name='yearofgraduation' />
         //   <FieldRef Name = 'remarks' />
         //</ ViewFields >
-        private IEnumerable<ShortlistDetailVM> GetDetailShortlist(int Position, string useraccess)
+        private IEnumerable<ShortlistDetailVM> GetDetailShortlist(int manPosition, string useraccess)
         {
             var caml = "";
             if (useraccess == "HR")
@@ -165,7 +159,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
            <And>
          <Eq>
             <FieldRef Name='manpowerrequisition' />
-            <Value Type='Lookup'>"+ Position +@"</Value>
+            <Value Type='Lookup'>"+ manPosition + @"</Value>
          </Eq>
             <Or>
                <Eq>
@@ -199,7 +193,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
           <And>
              <Eq>
                 <FieldRef Name='manpowerrequisition' />
-                <Value Type='Lookup'>" + Position + @"</Value>
+                <Value Type='Lookup'>" + manPosition + @"</Value>
              </Eq>
                 <Eq>
                    <FieldRef Name='applicationstatus' />

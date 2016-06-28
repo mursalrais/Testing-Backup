@@ -27,7 +27,7 @@ namespace MCAWebAndAPI.Web.Controllers
             _service = new HRShortlistService();
         }
 
-        public ActionResult ShortlistData(string siteurl = null, string position = null, string username = null, string useraccess = null, params int[] positionid)
+        public ActionResult ShortlistData(string siteurl = null, int? position = null, string username = null, string useraccess = null, params int[] positionid)
         {
 
 
@@ -106,7 +106,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 string.Format("{0}/{1}", siteUrl, UrlResource.Professional));
         }
 
-        public ActionResult ShortlistIntvinvite(string siteurl = null, string position = null, string username = null, string useraccess = null)
+        public ActionResult ShortlistIntvinvite(string siteurl = null, int? position = null, string username = null, string useraccess = null)
         {
 
 
