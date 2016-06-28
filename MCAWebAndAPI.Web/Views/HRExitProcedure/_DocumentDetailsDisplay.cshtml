@@ -1,0 +1,22 @@
+﻿@model string
+
+@using MCAWebAndAPI.Web.Resources
+
+<div class="col-sm-6">
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            <button id="application-document-button" class="btn btn-default">
+                Click Here to go to Exit Procedure Document
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#application-document-button').click(function () {
+        parent.postMessage({
+            result : "Success", urlToRedirect : "@Model" }, "@Model" );
+    });
+</script>
+

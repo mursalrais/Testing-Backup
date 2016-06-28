@@ -6,6 +6,7 @@ using MCAWebAndAPI.Service.Utils;
 using NLog;
 using Microsoft.SharePoint.Client;
 using MCAWebAndAPI.Service.Resources;
+using System.Threading.Tasks;
 using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Model.HR.DataMaster;
 
@@ -56,6 +57,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.Position = FormatUtil.ConvertLookupToID(listItem, "vacantposition") + string.Empty;
             viewModel.OtherPosition.Value = FormatUtil.ConvertLookupToID(listItem, "recommendedforposition");
             viewModel.Candidate = Convert.ToString(listItem["Title"]);
+            viewModel.SendTo = Convert.ToString(listItem["personalemail"]);
 
 
             // Convert Details
@@ -185,7 +187,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             }
         }
 
-        public ApplicationShortlistVM GetInterviewlist(string position, string username, string useraccess)
+        public ApplicationShortlistVM GetInterviewlist(int? position, string username, string useraccess)
         {
             if (position == null)
                 return null;
@@ -193,19 +195,13 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             var caml = @"<View>  
                     <Query> 
                        <Where>
-                          <And>
                              <Eq>
-                                <FieldRef Name='iskeyposition' />
-                                <Value Type='Boolean'>true</Value>
+                                <FieldRef Name='positionrequested_x003a_ID' />
+                                <Value Type='Lookup'>" + position + @"</Value>
                              </Eq>
-                             <Eq>
-                                <FieldRef Name='positionrequested' />
-                                <Value Type='Lookup'>Temporary Data Entry</Value>
-                             </Eq>
-                          </And>
                        </Where>
                     </Query> 
-                     <ViewFields><FieldRef Name='Position' /><FieldRef Name='ID' /></ViewFields> 
+                     <ViewFields><FieldRef Name='ID' /></ViewFields> 
                     </View>";
 
             var applicationID = 0;
@@ -217,7 +213,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return GetInterviewlist(applicationID, username, useraccess, position);
         }
 
-        public ApplicationShortlistVM GetInterviewlist(int ID, string username, string useraccess, string position)
+        public ApplicationShortlistVM GetInterviewlist(int ID, string username, string useraccess, int? position)
         {
             var viewModel = new ApplicationShortlistVM();
             if (ID == 0)
@@ -228,7 +224,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
 
             viewModel.ShortlistDetails = GetDetailInterviewlist(ID, useraccess);
-            viewModel.Position = position;
+            viewModel.Position = Convert.ToString(position);
 
             return viewModel;
 
@@ -243,9 +239,28 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         //</ ViewFields >
         private IEnumerable<ShortlistDetailVM> GetDetailInterviewlist(int Position, string useraccess)
         {
-            var caml = @"<View>  
-                               
-                                  <ViewFields>
+            var caml = @"<view>
+                        <Query> 
+                              <Where>
+                                  <And>
+                                     <Eq>
+                                        <FieldRef Name='manpowerrequisition' />
+                                        <Value Type='Lookup'>" + Position + @"</Value>
+                                     </Eq>
+                                     <Or>
+                                        <Eq>
+                                           <FieldRef Name='applicationstatus' />
+                                           <Value Type='Text'>Shortlisted</Value>
+                                        </Eq>
+                                        <Eq>
+                                           <FieldRef Name='applicationstatus' />
+                                           <Value Type='Text'>Recomended</Value>
+                                        </Eq>
+                                     </Or>
+                                  </And>
+                                 </Where>
+                         </Query> 
+                       <ViewFields>
                           <FieldRef Name='Title' />
                           <FieldRef Name='ID' />
                           <FieldRef Name='applicationstatus' />
@@ -323,7 +338,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             try
             {
-                SPConnector.UpdateListItem(SP_APPDATA_LIST_NAME, viewModel.ID, createdValue, _siteUrl);
+                SPConnector.UpdateListItem(SP_APPDATA_LIST_NAME, headerID, createdValue, _siteUrl);
+                
             }
                 catch (Exception e)
                 {
@@ -331,9 +347,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     throw e;
                 }
 
-            EmailUtil.Send(viewModel.SendTo, "Interview Result", "<div><label>" + viewModel.EmailMessage + "</label></div>" +
-                           "<a href = 'https://eceos2.sharepoint.com/sites/mca-dev/hr/Lists/Professional%20Master/DispForm_Custom.aspx?ID=3' > Open candidates' profiles for this position</a>");
-
+           
         }
 
         public void CreateInputIntvResult(int? headerID, ApplicationShortlistVM viewModel)
@@ -357,7 +371,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 throw e;
             }
 
-            EmailUtil.Send(viewModel.EmailFrom, "Interview Invitation", viewModel.EmailMessage);
+            EmailUtil.Send(viewModel.InterviewerPanel, "Interview Invitation", viewModel.EmailMessage);
 
         }
 
@@ -390,5 +404,99 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             return choice;
         }
+
+        public async Task CreateInterviewDocumentsSync(int? headerID, IEnumerable<HttpPostedFileBase> documents)
+        {
+            CreateInterviewDocuments(headerID, documents);
+        }
+
+        public void CreateInterviewDocuments(int? headerID, IEnumerable<HttpPostedFileBase> documents)
+        {
+            foreach (var doc in documents)
+            {
+                var updateValue = new Dictionary<string, object>();
+               
+                updateValue.Add("FileRef", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
+
+                try
+                {
+                    SPConnector.UploadDocument(SP_APPDATA_LIST_NAME, updateValue, doc.FileName, doc.InputStream, _siteUrl);
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e.Message);
+                    throw new Exception(ErrorResource.SPInsertError);
+                }
+            }
+        }
+
+        public IEnumerable<ShortlistDetailVM> GetUpdatedata(string useraccess)
+        {
+            var caml = @"<view>
+                        <Query> 
+                              <Where>
+                                    <Or>
+                                        <Eq>
+                                           <FieldRef Name='applicationstatus' />
+                                           <Value Type='Text'>Shortlisted</Value>
+                                        </Eq>
+                                        <Or>
+                                           <Eq>
+                                              <FieldRef Name='applicationstatus' />
+                                              <Value Type='Text'>New</Value>
+                                           </Eq>
+                                           <Eq>
+                                              <FieldRef Name='applicationstatus' />
+                                              <Value Type='Text'>NEW</Value>
+                                           </Eq>
+                                        </Or>
+                                     </Or>
+                                 </Where>
+                         </Query> 
+                       <ViewFields>
+                          <FieldRef Name='Title' />
+                          <FieldRef Name='ID' />
+                          <FieldRef Name='applicationstatus' />
+                          <FieldRef Name='applicationremarks' />
+                          <FieldRef Name='position' />
+                       </ViewFields>
+                                </View>";
+
+            var shortlistDetails = new List<ShortlistDetailVM>();
+            foreach (var item in SPConnector.GetList(SP_APPDATA_LIST_NAME, _siteUrl, caml))
+            {
+                shortlistDetails.Add(ConvertToShortlistDetailVM(item));
+            }
+
+            return shortlistDetails;
+        }
+
+        private ShortlistDetailVM ConvertToShortlistDetailVM(ListItem item)
+        {
+            return new ShortlistDetailVM
+            {
+                ID = Convert.ToInt32(item["ID"])
+            };
+        }
+
+        public void UpdateManualDataDetail(ShortlistDetailVM viewModel, int? manID)
+        {
+            var createdValue = new Dictionary<string, object>();
+
+            createdValue.Add("manpowerrequisition", manID);
+
+            try
+            {
+                SPConnector.UpdateListItem(SP_APPDATA_LIST_NAME, viewModel.ID, createdValue, _siteUrl);
+
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.Message);
+                throw e;
+            }
+
+        }
+
     }
 }

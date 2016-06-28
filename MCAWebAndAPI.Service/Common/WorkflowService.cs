@@ -218,5 +218,11 @@ namespace MCAWebAndAPI.Service.Common
             updatedValue.Add("requestor0", requestor);
             SPConnector.AddListItem(workflowTransactionListName, updatedValue, _siteUrl);
         }
+
+        public string GetPositionName(int position)
+        {
+            var item = SPConnector.GetListItem(SP_POSMAS_LIST_NAME, position, _siteUrl);
+            return Convert.ToString(item["Title"]);
+        }
     }
 }

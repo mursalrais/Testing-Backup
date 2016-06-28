@@ -17,6 +17,14 @@
         @Html.HiddenFor(m => m.Position)
         <div class="row">
             <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.ActivePosition).Class("col-md-2 control-label")
+                <div class="col-md-3">
+                    @Html.EditorFor(m => m.ActivePosition)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.Position).Class("col-sm-2 control-label")
                 <div class="col-sm-8">
                     <input id="vacant-position" class="form-control" value="" />
@@ -73,13 +81,22 @@
 
 @section scripts{
     <script>
+        function OnChangeActivePosition(e) {
+            var dataItem = this.dataItem(e.item);
+            window.location = 'http://mcaims-dev.azurewebsites.net/HRInterviewlist/InterviewlistData?siteUrl=https://eceos2.sharepoint.com/sites/ims/hr&useraccess=HR&position=' + dataItem.PositionName;
+        };
+
+
         $(document).ready(function () {
+            debugger;
             $("#vacant-position").prop('readonly', 'true');
             var positionID = $("#Position").val();
+
             var url = "/HRDataMaster/GetPosition/" + positionID;
             $.getJSON(url, function (data) {
                 $("#vacant-position").prop("value", data.PositionName);
             })
+
 
         });
     </script>

@@ -6,7 +6,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
     {
         int CreatePerformanceMonitoring(PerformanceMonitoringVM PerformanceMonitoring);
         bool UpdatePerformanceMonitoring(PerformanceMonitoringVM viewModel);
-        void CreatePerformanceMonitoringDetails(int? headerID);
+        void CreatePerformanceMonitoringDetails(int? headerID, string emailMessage);
         void SetSiteUrl(string siteUrl);
         PerformanceMonitoringVM GetPerformanceMonitoring(int? ID);
     }

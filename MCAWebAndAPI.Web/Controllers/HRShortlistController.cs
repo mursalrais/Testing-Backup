@@ -1,6 +1,7 @@
 ﻿using Elmah;
 using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using MCAWebAndAPI.Service.Converter;
+using MCAWebAndAPI.Model.HR.DataMaster;
 using MCAWebAndAPI.Service.HR.Recruitment;
 using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Web.Resources;
@@ -26,10 +27,10 @@ namespace MCAWebAndAPI.Web.Controllers
             _service = new HRShortlistService();
         }
 
-        public ActionResult ShortlistData(string siteurl = null, string position = null, string username = null, string useraccess = null)
+        public ActionResult ShortlistData(string siteurl = null, int? position = null, string username = null, string useraccess = null, params int[] positionid)
         {
-            // clear existing session variables if any
-            SessionManager.RemoveAll();
+
+
 
             //mandatory: set site url
             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
@@ -70,8 +71,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult ShortlistSendInvite(string siteurl = null, int? ID = null)
         {
-            // clear existing session variables if any
-            SessionManager.RemoveAll();
+
+
 
             //mandatory: set site url
             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
@@ -105,11 +106,8 @@ namespace MCAWebAndAPI.Web.Controllers
                 string.Format("{0}/{1}", siteUrl, UrlResource.Professional));
         }
 
-        public ActionResult ShortlistIntvinvite(string siteurl = null, string position = null, string username = null, string useraccess = null)
+        public ActionResult ShortlistIntvinvite(string siteurl = null, int? position = null, string username = null, string useraccess = null)
         {
-            // clear existing session variables if any
-            SessionManager.RemoveAll();
-
             //mandatory: set site url
             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
@@ -156,7 +154,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetStatusGrid()
         {
-            _service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             var positions = ShortlistDetailVM.GetStatusOptions();
 
@@ -164,6 +163,26 @@ namespace MCAWebAndAPI.Web.Controllers
                 new {
                     Value = Convert.ToString(e.Value),
                     Text = e.Text
+                }),
+                JsonRequestBehavior.AllowGet);
+        }
+
+
+        public JsonResult GetPosition()
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            var positions = _service.GetPositions();
+
+            return Json(positions.Select(e =>
+                new {
+                    e.ID,
+                    e.PositionName,
+                    e.PositionStatus,
+                    e.Remarks,
+                    e.IsKeyPosition,
+                    Desc = string.Format("{0}", e.PositionName)
                 }),
                 JsonRequestBehavior.AllowGet);
         }

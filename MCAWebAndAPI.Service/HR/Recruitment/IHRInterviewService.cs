@@ -1,6 +1,7 @@
 ﻿using MCAWebAndAPI.Model.HR.DataMaster;
 using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace MCAWebAndAPI.Service.HR.Recruitment
@@ -11,7 +12,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         IEnumerable<ApplicationShortlistVM> GetInterviewlists();
 
-        ApplicationShortlistVM GetInterviewlist(string position, string username, string useraccess);
+        ApplicationShortlistVM GetInterviewlist(int? position, string username, string useraccess);
 
         ApplicationShortlistVM GetResultlistInterview(int? ID);
 
@@ -21,6 +22,12 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         void SendEmailValidation(string emailto, string emailmessage);
 
+        Task CreateInterviewDocumentsSync(int? headerID, IEnumerable<HttpPostedFileBase> documents);
+
+        IEnumerable<ShortlistDetailVM> GetUpdatedata(string url);
+
+        void UpdateManualDataDetail(ShortlistDetailVM list, int? manID);
+        
     }
 }
 

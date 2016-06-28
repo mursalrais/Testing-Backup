@@ -15,7 +15,16 @@ namespace MCAWebAndAPI.Web.Helpers
                 return default(T);
             }
             return (T)HttpContext.Current.Session[key];
+        }
 
+        public static T Get<T>(string key, string group)
+        {
+            object sessionObject = HttpContext.Current.Session[group + "_" + key];
+            if (sessionObject == null)
+            {
+                return default(T);
+            }
+            return (T)HttpContext.Current.Session[group + "_" + key];
         }
 
         public static T Get<T>(string key, T defaultValue)
@@ -29,9 +38,25 @@ namespace MCAWebAndAPI.Web.Helpers
             return (T)HttpContext.Current.Session[key];
         }
 
+        public static T Get<T>(string key, string group, T defaultValue)
+        {
+            object sessionObject = HttpContext.Current.Session[group + "_" + key];
+            if (sessionObject == null)
+            {
+                HttpContext.Current.Session[group + "_" + key] = defaultValue;
+            }
+
+            return (T)HttpContext.Current.Session[group + "_" + key];
+        }
+
         public static void Set<T>(string key, T entity)
         {
             HttpContext.Current.Session[key] = entity;
+        }
+
+        public static void Set<T>(string key, string group, T entity)
+        {
+            HttpContext.Current.Session[group + "_" + key] = entity;
         }
 
         public static void Remove(string key)
@@ -39,12 +64,10 @@ namespace MCAWebAndAPI.Web.Helpers
             HttpContext.Current.Session.Remove(key);
         }
 
-        public static void RemoveAll()
+        public static void RemoveAllSessions()
         {
-            // Clear Existing Session Variables if any
             if (HttpContext.Current.Session.Keys.Count > 0)
                 HttpContext.Current.Session.Clear();
-
         }
 
     }

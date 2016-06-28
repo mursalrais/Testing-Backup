@@ -16,20 +16,27 @@
         @Html.HiddenFor(m => m.Position)
         <div class="row">
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Position).Class("col-sm-2 control-label")
-                <div class="col-sm-6">
-                    <input id="vac-position" class="form-control" value="" />
+                @Html.Bootstrap().LabelFor(m => m.ActivePosition).Class("col-md-2 control-label")
+                <div class="col-md-3">
+                    @Html.EditorFor(m => m.ActivePosition)
                 </div>
             </div>
         </div>
-       
-        <legend>Candidate list</legend>
         <div class="row">
-            @Html.Partial("_ShortlistDetails", Model.ShortlistDetails)
-        </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Position).Class("col-md-2 control-label")
+                <div class="col-md-3">
+                    <input id="vac-position" class="form-control" value="" />
+                    </div>
+                </div>
+            </div>
+            <legend>Candidate list</legend>
+            <div class="row">
+                @Html.Partial("_ShortlistDetails", Model.ShortlistDetails)
+            </div>
 
-        
-    </fieldset>
+
+</fieldset>
     <div class="form-actions">
         <div class="row">
             <div class="col-sm-4">
@@ -64,14 +71,22 @@
 @section scripts{
 
     <script>
+        function OnChangeActivePosition(e) {
+            var dataItem = this.dataItem(e.item);
+            window.location = 'http://mcaims-dev.azurewebsites.net/HRShortlist/ShortlistData?siteUrl=https://eceos2.sharepoint.com/sites/ims/hr&useraccess=HR&position=' + dataItem.PositionName;
+        };
+
         $(document).ready(function () {
             $("#vac-position").prop('readonly', 'true');
             var positionID = $("#Position").val();
-            $("#vac-position").prop("value", positionID);
+          
             var url = "/HRDataMaster/GetPosition/" + positionID;
             $.getJSON(url, function (data) {
-                $("#vac-position").prop("value", positionID);
+                $("#vac-position").prop("value", data.PositionName);
             })
+
+            var dropdownlist = $("#ActivePosition_Value").data("kendoDropDownList");
+            dropdownlist.select(positionID);
 
         });
     </script>

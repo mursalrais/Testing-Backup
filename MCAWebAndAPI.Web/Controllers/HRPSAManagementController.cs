@@ -1,26 +1,14 @@
 ﻿using Kendo.Mvc.Extensions;
-using Kendo.Mvc.UI;
 using MCAWebAndAPI.Model.ViewModel.Form.HR;
-using MCAWebAndAPI.Service.HR;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using System;
 using MCAWebAndAPI.Web.Helpers;
-using MCAWebAndAPI.Model.ViewModel.Control;
-using MCAWebAndAPI.Web.Filters;
 using MCAWebAndAPI.Web.Resources;
 using MCAWebAndAPI.Model.HR.DataMaster;
 using MCAWebAndAPI.Service.HR.Recruitment;
 using Elmah;
-using MCAWebAndAPI.Service.Converter;
-using MCAWebAndAPI.Service.HR.Common;
-using System.IO;
-using System.Web;
-using System.Globalization;
-using MCAWebAndAPI.Service.JobSchedulers.Schedulers;
-using MCAWebAndAPI.Service.HR.Payroll;
-using MCAWebAndAPI.Service.Resources;
 using System.Net;
 
 namespace MCAWebAndAPI.Web.Controllers
@@ -42,25 +30,18 @@ namespace MCAWebAndAPI.Web.Controllers
         /// <returns></returns>
         public ActionResult CreatePSAManagement(string siteUrl = null)
         {
-            // Clear Existing Session Variables if any
-            SessionManager.RemoveAll();
-
             // MANDATORY: Set Site URL
             psaManagementService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             // Get blank ViewModel
             var viewModel = psaManagementService.GetPSAManagement(null);
-
             return View("CreatePSAManagement", viewModel);
         }
 
         
         public ActionResult DisplayPSAManagement(string siteUrl = null, int? ID = null)
         {
-            // Clear Existing Session Variables if any
-            SessionManager.RemoveAll();
-
             // MANDATORY: Set Site URL
             psaManagementService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
@@ -81,9 +62,6 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult ViewPSAManagement(string siteUrl = null, int? ID = null)
         {
-            // Clear Existing Session Variables if any
-            SessionManager.RemoveAll();
-
             // MANDATORY: Set Site URL
             psaManagementService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
@@ -297,8 +275,10 @@ namespace MCAWebAndAPI.Web.Controllers
                 e =>
                 new
                 {
-                    e.PSAID,
                     e.ID,
+                    e.PSAID,
+                    e.PSANumber,
+                    e.ProfessionalID,
                     e.JoinDate,
                     e.DateOfNewPSA,
                     e.PsaExpiryDate,
@@ -311,12 +291,12 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             psaManagementService.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));
             var professionals = GetFromExistingSession();
-            return Json(professionals.OrderByDescending(e => e.PSAID).Where(e => e.ID == id).Select(
+            return Json(professionals.OrderByDescending(e => e.PSAID).Where(e => e.ProfessionalID == id).Select(
                     e =>
                     new
                     {
                         e.PSAID,
-                        e.ID,
+                        e.ProfessionalID,
                         e.JoinDate,
                         e.DateOfNewPSA,
                         e.PsaExpiryDate,

@@ -19,17 +19,28 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// Approver Position
         /// </summary>
-        [UIHint("AjaxComboBox")]
-        [DisplayName("Approver Position")]
-        [Required]
-        public AjaxComboBoxVM ApproverPosition { get; set; } = new AjaxComboBoxVM
+        [UIHint("InGridAjaxComboBox")]
+        public AjaxComboBoxVM ApproverPosition { get; set; } = new AjaxComboBoxVM();
+
+        /// <summary>
+        /// Get Position Default Value
+        /// </summary>
+        public static AjaxComboBoxVM GetPositionDefaultValue(AjaxComboBoxVM model = null)
         {
-            ActionName = "GetPositions",
-            ControllerName = "HRDataMaster",
-            ValueField = "ID",
-            TextField = "Desc",
-            OnSelectEventName = "OnSelectPosition"
-        };
+            if (model == null)
+            {
+                return new AjaxComboBoxVM();
+            }
+            else
+            {
+                return model;
+            }
+        }
+
+        /// <summary>
+        /// Position ID
+        /// </summary>
+        public int PositionID { get; set; }
 
         /// <summary>
         /// Approver Name
@@ -49,7 +60,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// </summary>
         [UIHint("ComboBox")]
         [DisplayName("Indicator")]
-        public ComboBoxVM ProjectOrUnit { get; set; } = new ComboBoxVM
+        public ComboBoxVM CheckListItemApproval { get; set; } = new ComboBoxVM
         {
             Choices = new string[]
             {

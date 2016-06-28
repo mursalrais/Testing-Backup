@@ -32,8 +32,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult CreatePerformancePlan(string siteUrl = null, int? ID = null, string position = null)
         {
-            // Clear Existing Session Variables if any
-            SessionManager.RemoveAll();
+
+
 
             // MANDATORY: Set Site URL
             _hRPerformancePlanService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);

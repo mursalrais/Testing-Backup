@@ -3,10 +3,8 @@
 
 @model WorkflowRouterVM
 
-
 <div class="col-sm-12">
-    @(Html.Kendo().Grid<WorkflowItemVM>
-        ()
+    @(Html.Kendo().Grid<WorkflowItemVM>()
         .Name("WorkflowDetails")
         .Editable(editable => editable.Mode(GridEditMode.InLine))
         .Columns(columns =>
@@ -24,7 +22,7 @@
             new
             {
                 DataTextField = "PositionName",
-                DataValueField = "PositionName",
+                DataValueField = "ID",
                 ActionName = "GetApproverPositions",
                 ControllerName = "Workflow",
                 Filter = "filterApproverPosition",
@@ -35,53 +33,31 @@
             new
             {
                 DataTextField = "Name",
-                DataValueField = "UserLogin",
+                DataValueField = "ID",
                 ActionName = "GetApproverNames",
                 ControllerName = "Workflow",
                 Filter = "filterApproverName",
-                Cascade = "ApproverPosition"
+                Cascade = "ApproverPosition_Value"
             });
             columns.Command(p => p.Edit().Text("Edit").HtmlAttributes(new { @title = "Edit" })).Width(220);
-
         })
         .DataSource(
-        dataSource =>
-        dataSource.Ajax().Model(model =>
-        {
-            model.Id(p => p.ID);
-            model.Field(p => p.ApproverUnit).DefaultValue(WorkflowItemVM.GetUnitDefaultValue());
-            model.Field(m => m.ApproverPosition).DefaultValue(AjaxComboBoxVM.GetDefaultValue());
-            model.Field(m => m.ApproverUserName).DefaultValue(AjaxComboBoxVM.GetDefaultValue());
-            model.Field(p => p.Level).Editable(false);
-        })
+            dataSource =>
+            dataSource.Ajax().Model(model =>
+            {
+                model.Id(p => p.ID);
+                model.Field(p => p.ApproverUnit).DefaultValue(WorkflowItemVM.GetUnitDefaultValue());
+                model.Field(m => m.ApproverPosition).DefaultValue(AjaxComboBoxVM.GetDefaultValue());
+                model.Field(m => m.ApproverUserName).DefaultValue(AjaxComboBoxVM.GetDefaultValue());
+                model.Field(p => p.Level).Editable(false);
+            })
         .Read(read => read.Action("Grid_Read", "Workflow").Type(HttpVerbs.Post))
         .Update(update => update.Action("Grid_Update", "Workflow").Type(HttpVerbs.Post))
         )
     )
-
 </div>
 
 <script>
-
-    function onChangeWorkflowDetails(e) {
-        if (e.action == "itemchange") {
-            if (e.field == "ApproverUnit") {
-                var model = e.items[0];
-                model.set("ApproverPosition", 0);
-            }
-
-            if (e.field == "ApproverPosition") {
-                var model = e.items[0];
-                model.set("ApproverUserName", 0);
-            }
-        }
-    }
-
-    function getCurrentEditedModel() {
-        var grid = $("#WorkflowDetails").data("kendoGrid");
-        var editRow = grid.tbody.find("tr:has(.k-edit-cell)");
-        return grid.dataItem(editRow);
-    }
 
     function filterApproverPosition(e) {
         return {
@@ -91,7 +67,7 @@
 
     function filterApproverName(e) {
         return {
-            position: $("#ApproverPosition").data("kendoDropDownList").value()
+            position: $("#ApproverPosition_Value").data("kendoDropDownList").value()
         };
     }
 

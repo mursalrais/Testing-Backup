@@ -28,8 +28,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult PerformanceMonitoring(int? ID = null,string type = null,string siteUrl = null)
         {
-            // Clear Existing Session Variables if any
-            SessionManager.RemoveAll();
+
+
 
             // MANDATORY: Set Site URL
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
@@ -68,13 +68,13 @@ namespace MCAWebAndAPI.Web.Controllers
 
                 try
                 {
-                    _service.CreatePerformanceMonitoringDetails(ID);
+                    _service.CreatePerformanceMonitoringDetails(ID,EmailResource.PerformancePlan);
                 }
                 catch (Exception e)
                 {
                     ErrorSignal.FromCurrentContext().Raise(e);
                     return RedirectToAction("Index", "Error");
-                }
+                }                
             }
             else
             {

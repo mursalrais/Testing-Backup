@@ -1,5 +1,5 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
-@model ApplicationDataVM
+@model ProfessionalDataVM
 
 <div class="col-sm-6">
     <div class="form-group">
@@ -12,6 +12,12 @@
         @Html.Bootstrap().LabelFor(m => m.LastName).Class("col-sm-4 control-label")
         <div class="col-sm-8">
             @Html.EditorFor(m => m.LastName)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.CurrentPosition).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.EditorFor(m => m.CurrentPosition)
         </div>
     </div>
     <div class="form-group">
@@ -76,6 +82,18 @@
             @Html.EditorFor(m => m.IDCardExpiry)
         </div>
     </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.JoinDate).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.EditorFor(m => m.JoinDate)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.ProfessionalStatus).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.EditorFor(m => m.ProfessionalStatus)
+        </div>
+    </div>
 </div>
 
 <script>
@@ -83,7 +101,6 @@
         var nationalityDropDownList = $("#Nationality_Value").data("kendoDropDownList");
         nationalityDropDownList.bind("dataBound", function (e) {
         });
-
     });
 
     function filterIDCardType(){

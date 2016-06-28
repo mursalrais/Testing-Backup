@@ -26,7 +26,5 @@ namespace MCAWebAndAPI.Model.HR.DataMaster
         public string Project_Unit { get; set; }
 
         public string UserLogin { get; set; }
-
-
     }
 }
