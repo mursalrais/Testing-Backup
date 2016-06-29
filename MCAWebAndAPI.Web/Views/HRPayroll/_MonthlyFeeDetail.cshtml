@@ -14,7 +14,7 @@
             "<input type='hidden' name='MonthlyFeeDetails[#= getMonthlyFeeDetail(data)#].DateOfNewFee' value='#= DateOfNewFee #' />"
             );
             columns.Bound(p => p.MonthlyFee).ClientTemplate("#= MonthlyFee #" +
-            "<input type='hidden' name='MonthlyFeeDetails[#= getMonthlyFeeDetail(data)#].MonthlyFee [#= getAnnualFee(data)#]' value='#= MonthlyFee #' />"
+            "<input type='hidden' name='MonthlyFeeDetails[#= getMonthlyFeeDetail(data)#].MonthlyFee' value='#= MonthlyFee #' />"
             );
             columns.Bound(p => p.AnnualFee).ClientTemplate("#= AnnualFee #" +
             "<input type='hidden' name='MonthlyFeeDetails[#= getMonthlyFeeDetail(data)#].AnnualFee' value='#= AnnualFee #' />"
@@ -24,10 +24,7 @@
             )
             .EditorViewData(new
             {
-                DataTextField = "Text",
-                DataValueField = "Value",
-                ControllerName = "HRPayroll",
-                ActionName = "GetCurrencyGrid"
+                BindTo = ProjectOrUnitGoalsDetailVM.GetCategoryOptions()
             });
             columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
             "<input type='hidden' name='MonthlyFeeDetails[#= getMonthlyFeeDetail(data)#].ID' value='#= ID #' />"
@@ -58,12 +55,9 @@
 </div>
 
 <script>
-    function getAnnualFee(dataItem) {
-        dataItem.set('AnnualFee', dataItem.MonthlyFee * 12);
-    }
-
     function getMonthlyFeeDetail(dataItem) {
         var data = $("#MonthlyFeeDetails").data("kendoGrid").dataSource.data();
+        dataItem.set('AnnualFee', dataItem.MonthlyFee * 12);
         return data.indexOf(dataItem);
     }
 

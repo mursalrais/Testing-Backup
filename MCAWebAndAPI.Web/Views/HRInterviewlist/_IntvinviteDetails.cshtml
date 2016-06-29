@@ -19,7 +19,7 @@
         columns.Bound(p => p.GetStat).ClientTemplate("#= GetStat #" +
         "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].GetStat' value='#= GetStat #' />");
 
-        columns.Bound(p => p.neednexttext).ClientTemplate("#= neednexttext #" +
+        columns.Bound(p => p.neednextintv).ClientTemplate("#= neednextintv ? 'Yes' : 'No' #" +
         "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].neednexttext' value='#= neednexttext #' />");
 
         columns.Bound(p => p.Remarks).ClientTemplate("#= Remarks #" +

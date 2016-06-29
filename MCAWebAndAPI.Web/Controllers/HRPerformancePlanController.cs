@@ -130,7 +130,10 @@ namespace MCAWebAndAPI.Web.Controllers
             int sum = 0;
             foreach (var viewModelDetail in Detail)
             {
-                sum = sum + viewModelDetail.Weight;
+                if (viewModelDetail.EditMode != -1)
+                {
+                    sum = sum + viewModelDetail.Weight;
+                }
             }
 
             if (sum != 100)
@@ -173,13 +176,13 @@ namespace MCAWebAndAPI.Web.Controllers
                 if (viewModel.StatusForm == "Initiated")
                     _hRPerformancePlanService.SendEmail(viewModel, SP_TRANSACTION_WORKFLOW_LIST_NAME,
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.ID, 1,
-                    string.Format("Ask For Approval To Level 1"), string.Format(""));
+                    string.Format("Dear Respective Approver,This email is sent to you to notify that there is a request which required your action to approve.Kindly check the link as per below to go to direct page accordingly.You may check your personal page in IMS(My Approval View).Thank you.Link: { 0}{1}/EditFormApprover_Custom.aspx?ID={2}", siteUrl, UrlResource.ProfessionalPerformancePlan, viewModel.ID), string.Format(""));
 
                 // Send to Level 2 Approver and Requestor
                 if (viewModel.StatusForm == "Pending Approval 1 of 2")
                     _hRPerformancePlanService.SendEmail(viewModel, SP_TRANSACTION_WORKFLOW_LIST_NAME,
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.ID, 2,
-                    string.Format("Ask For Approval To Level 2"), string.Format("Approved by Level 1"));
+                                       string.Format("Dear Respective Approver,This email is sent to you to notify that there is a request which required your action to approve.Kindly check the link as per below to go to direct page accordingly.You may check your personal page in IMS(My Approval View).Thank you.Link: { 0}{1}/EditFormApprover_Custom.aspx?ID={2}", siteUrl, UrlResource.ProfessionalPerformancePlan, viewModel.ID), string.Format("Approved By Level 1"));
 
                 // Send to Requestor
                 if (viewModel.StatusForm == "Pending Approval 2 of 2")

@@ -31,10 +31,10 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// currency
         /// </summary>
-        [UIHint("InGridAjaxComboBox")]
-        public AjaxComboBoxVM Currency { get; set; } = new AjaxComboBoxVM();
+        [UIHint("InAjaxComboBox")]
+        public InGridComboBoxVM Currency { get; set; } = new InGridComboBoxVM();
 
-        public static IEnumerable<AjaxComboBoxVM> GetCurrencyOptions()
+        public static IEnumerable<InGridComboBoxVM> GetCurrencyOptions()
         {
             var index = 0;
             var options = new string[]
@@ -44,14 +44,14 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             };
 
             return options.Select(e =>
-              new AjaxComboBoxVM
+              new InGridComboBoxVM
               {
                   Value = ++index,
                   Text = e
               });
         }
 
-        public static AjaxComboBoxVM GetCurrencyDefaultValue(AjaxComboBoxVM model = null)
+        public static InGridComboBoxVM GetCurrencyDefaultValue(InGridComboBoxVM model = null)
         {
             var options = GetCurrencyOptions();
             if (model == null || model.Value == null || string.IsNullOrEmpty(model.Text))

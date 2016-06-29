@@ -123,6 +123,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.ShortlistDetails = GetDetailShortlist(ID, useraccess);
             viewModel.ActivePosition.Text = Convert.ToString(position);
             viewModel.Position = Convert.ToString(position);
+            viewModel.useraccess = Convert.ToString(useraccess);
 
             return viewModel;
 
