@@ -12,6 +12,9 @@
 {
     <fieldset>
         <legend>General</legend>
+        @Html.HiddenFor(m => m.Status.Value)
+        @Html.HiddenFor(m => m.Username)
+        @Html.HiddenFor(m => m.EmailOnBehalf)
         <div class="row">
             @Html.Partial("_General", Model)
         </div>
@@ -41,7 +44,7 @@
         </div>
         <legend>Approval Workflow</legend>
         <div id="workflow-placeholder" class="row" />
-         @Html.HiddenFor(m=>m.Status.Value)
+        
         
     </fieldset>
     <div class="form-actions">
@@ -58,6 +61,10 @@
 
 
     <script>
+        function OnBehalfOfChange(e) {
+            var dataItem = this.dataItem(e.item);
+            $("#EmailOnBehalf").prop("value", dataItem.OfficeEmail);
+        }
         function onPositionChange(e) {            
             var dataItem = this.dataItem(e.item);
             //var urlKeyPosition = "/HRDataMaster/GetKeyPosition/" + dataItem.ID;
@@ -95,11 +102,11 @@
                     
             });
             $("#StatusSubmit").click(function () {
-                $("#Status_Value").val("Pending Approval")
+                $("#Status_Value").prop("value","Pending Approval");
                 $("form").submit();
             });
             $("#StatusDraft").click(function () {
-                $("#Status_Value").val("Draft")
+                $("#Status_Value").prop("value", "Draft");
                 $("form").submit();
             });
             

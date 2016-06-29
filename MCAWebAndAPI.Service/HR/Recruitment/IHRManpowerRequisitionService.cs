@@ -29,5 +29,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         Task<ManpowerRequisitionVM> GetManpowerRequisitionAsync(int? iD);
         Task CreateWorkingRelationshipDetailsAsync(int? headerID, IEnumerable<WorkingRelationshipDetailVM> workingRelationshipDetails);
         Task CreateManpowerRequisitionDocumentsSync(int? headerID, IEnumerable<HttpPostedFileBase> documents);
+        string getEmailOnBehalf(int? ID);
     }
 }
