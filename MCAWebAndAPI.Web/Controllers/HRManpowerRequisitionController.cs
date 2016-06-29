@@ -238,7 +238,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 {
                     if (viewModel.EmailOnBehalf != null || viewModel.EmailOnBehalf !="")
                     {
-                        Task sendOnBehalf = EmailUtil.SendAsync("anugerahseptian@gmail.com", "Application Submission Confirmation", string.Format(EmailResource.ManpowerApproval,siteUrl, headerID));
+                        Task sendOnBehalf = EmailUtil.SendAsync(viewModel.EmailOnBehalf, "Application Submission Confirmation", string.Format(EmailResource.ManpowerApproval,siteUrl, headerID));
                     }
                 }
                 
