@@ -34,6 +34,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             }
         };
 
+
         /// <summary>
         /// Join_x0020_Date
         /// </summary>
@@ -176,38 +177,13 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// </summary>
         [DisplayName("Branch Office")]
         public string BranchOfficeForPayroll { get; set; }
-
-        /// <summary>
-        /// taxid
-        /// </summary>
-        [DisplayName("Tax ID")]
-        public string TaxIDForPayroll { get; set; }
-
-        /// <summary>
-        /// NIK
-        /// </summary>
-        [DisplayName("NIK")]
-        public string NIK { get; set; }
-
-        /// <summary>
-        /// nameintaxid
-        /// </summary>
-        [DisplayName("Name in Tax")]
-        public string NameInTaxForPayroll { get; set; }
-
+       
         /// <summary>
         /// payrollbankswiftcode
         /// </summary>
         [DisplayName("Bank Swift Code")]
         public string BankSwiftCodeForPayroll { get; set; }
-
-        /// <summary>
-        /// taxaddress
-        /// </summary>
-        [DisplayName("Tax ID Address")]
-        [UIHint("TextArea")]
-        public string TaxIDAddress { get; set; }
-
+        
         /// <summary>
         /// payrollcurrency
         /// </summary>

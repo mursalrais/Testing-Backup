@@ -288,11 +288,7 @@ namespace MCAWebAndAPI.Service.HR.Common
             viewModel.CurrencyForPayroll.Value = Convert.ToString(listItem["payrollcurrency"]);
             viewModel.BankSwiftCodeForPayroll = Convert.ToString(listItem["payrollbankswiftcode"]);
             viewModel.TaxStatusForPayroll.Value = Convert.ToString(listItem["payrolltaxstatus"]);
-            viewModel.TaxIDForPayroll = Convert.ToString(listItem["taxid"]);
-            viewModel.TaxIDAddress = Convert.ToString(listItem["taxaddress"]);
-            viewModel.NIK = Convert.ToString(listItem["NIK"]);
-            viewModel.NameInTaxForPayroll = Convert.ToString(listItem["nameintaxid"]);
-
+            
             // Convert Details
             
 
@@ -518,10 +514,6 @@ namespace MCAWebAndAPI.Service.HR.Common
             updatedValue.Add("payrollcurrency", viewModel.CurrencyForPayroll.Value);
             updatedValue.Add("payrollbankswiftcode", viewModel.BankSwiftCodeForPayroll);
             updatedValue.Add("payrolltaxstatus", viewModel.TaxStatusForPayroll.Value);
-            updatedValue.Add("taxid", viewModel.TaxIDForPayroll);
-            updatedValue.Add("taxaddress", viewModel.TaxIDAddress);
-            updatedValue.Add("NIK", viewModel.NIK);
-            updatedValue.Add("nameintaxid", viewModel.NameInTaxForPayroll);
             updatedValue.Add("datavalidationstatus", Workflow.GetProfessionalValidationStatus(Workflow.ProfessionalValidationStatus.NEED_VALIDATION));
 
             try
