@@ -24,10 +24,7 @@
             )
             .EditorViewData(new
             {
-                DataTextField = "Text",
-                DataValueField = "Value",
-                ControllerName = "HRPayroll",
-                ActionName = "GetCurrencyGrid"
+                BindTo = ProjectOrUnitGoalsDetailVM.GetCategoryOptions()
             });
             columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
             "<input type='hidden' name='MonthlyFeeDetails[#= getMonthlyFeeDetail(data)#].ID' value='#= ID #' />"
