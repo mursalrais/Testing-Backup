@@ -73,7 +73,9 @@
     <script>
         function OnChangeActivePosition(e) {
             var dataItem = this.dataItem(e.item);
-            window.location = 'http://mcaims-dev.azurewebsites.net/HRShortlist/ShortlistData?siteUrl=https://eceos2.sharepoint.com/sites/ims/hr&useraccess=HR&position=' + dataItem.PositionName;
+            debugger;
+
+            window.location = "/HRShortlist/ShortlistData?siteurl=&position=" + dataItem.ID + "&username=&useraccess=HR";
         };
 
         $(document).ready(function () {
