@@ -24,7 +24,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         public int CreateManpowerRequisition(ManpowerRequisitionVM viewModel)
         {
             var updatedValue = new Dictionary<string, object>();
-            if(viewModel.Status.Value == "Pending Approval")
+            if(viewModel.Status.Value == "Pending Approval 1 of 2")
             {
                 //kirim email
             }
@@ -85,15 +85,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         public bool UpdateStatus(ManpowerRequisitionVM viewModel)
         {
-            if (viewModel.Status.Value == "Approved")
-            {
-                //send email if Approved
-            }
-            else
-            {
-                //send email if Rejected
-                viewModel.Status.Value = "Rejected";
-            }
+            
             var updatedValue = new Dictionary<string, object>();
             int ID = viewModel.ID.Value;
             updatedValue.Add("manpowerrequeststatus", viewModel.Status.Value);            

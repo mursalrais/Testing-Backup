@@ -37,9 +37,31 @@ namespace MCAWebAndAPI.Web.Controllers
             //    var errorMessages = BindHelper.GetErrorMessages(ModelState.Values);
             //    return JsonHelper.GenerateJsonErrorResponse(errorMessages);
             //}
-            _service.SetSiteUrl(System.Web.HttpContext.Current.Session["SiteUrl"] as string);
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
-            _service.UpdateStatus(viewModel);
+            try
+            {
+                _service.UpdateStatus(viewModel);
+            }
+            catch (Exception e)
+            {
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
+            }
+
+            if (viewModel.Status.Value == "Pending Approval 2 of 2")
+            {
+                
+                // Send to Level 2 Approver
+                Task sendApprovalRequestTask = WorkflowHelper.SendApprovalRequestAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
+                    SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.ID, 2,
+                    string.Format(EmailResource.ManpowerApproval, siteUrl, viewModel.ID));
+
+                
+
+                // END Workflow Demo
+            }
 
             return RedirectToAction("Index",
                 "Success",
@@ -53,6 +75,15 @@ namespace MCAWebAndAPI.Web.Controllers
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             var viewModel = await _service.GetManpowerRequisitionAsync(ID);
+            if (viewModel.Status.Value == "Pending Approval 1 of 2")
+            {
+                ViewBag.State = "Pending Approval 2 of 2";
+            }
+            else
+            {
+                ViewBag.State = "Approved";
+            }
+            
 
             return View(viewModel);
         }
@@ -187,7 +218,7 @@ namespace MCAWebAndAPI.Web.Controllers
             Task CreateWorkingRelationshipDetailsTask = _service.CreateWorkingRelationshipDetailsAsync(headerID, viewModel.WorkingRelationshipDetails);
             Task CreateManpowerRequisitionDocumentsTask = _service.CreateManpowerRequisitionDocumentsSync(headerID, viewModel.Documents);
 
-            if (viewModel.Status.Value == "Pending Approval")
+            if (viewModel.Status.Value == "Pending Approval 1 of 2")
             {
                 // BEGIN Workflow Demo 
                 Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateTransactionWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
