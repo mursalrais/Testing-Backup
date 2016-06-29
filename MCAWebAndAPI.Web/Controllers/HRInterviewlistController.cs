@@ -29,9 +29,6 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult InterviewlistData(string siteurl = null, int? position = null, string username = null, string useraccess = null)
         {
-
-
-
             //mandatory: set site url
             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);

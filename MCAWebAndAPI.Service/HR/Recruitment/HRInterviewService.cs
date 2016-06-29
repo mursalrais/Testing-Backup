@@ -254,7 +254,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                                         </Eq>
                                         <Eq>
                                            <FieldRef Name='applicationstatus' />
-                                           <Value Type='Text'>Recomended</Value>
+                                           <Value Type='Text'>Recommended</Value>
                                         </Eq>
                                      </Or>
                                   </And>
@@ -266,6 +266,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                           <FieldRef Name='applicationstatus' />
                           <FieldRef Name='applicationremarks' />
                           <FieldRef Name='position' />
+                          <FieldRef Name='neednextinterview' />
                        </ViewFields>
                                 </View>";
 
@@ -305,7 +306,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
                 GetStat = Convert.ToString(item["applicationstatus"]),
                 Remarks = Convert.ToString(item["applicationremarks"]),
-
+                neednextintv = Convert.ToBoolean(item["neednextinterview"])
             };
         }
 
@@ -435,6 +436,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             var caml = @"<view>
                         <Query> 
                               <Where>
+                                   <And>
+                                        <Eq>
+                                           <FieldRef Name='ID' />
+                                            <Value Type='Counter'>37</Value>
+                                        </Eq>
                                     <Or>
                                         <Eq>
                                            <FieldRef Name='applicationstatus' />
@@ -451,6 +457,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                                            </Eq>
                                         </Or>
                                      </Or>
+                                    </And>
                                  </Where>
                          </Query> 
                        <ViewFields>
@@ -487,6 +494,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             try
             {
+
                 SPConnector.UpdateListItem(SP_APPDATA_LIST_NAME, viewModel.ID, createdValue, _siteUrl);
 
             }
