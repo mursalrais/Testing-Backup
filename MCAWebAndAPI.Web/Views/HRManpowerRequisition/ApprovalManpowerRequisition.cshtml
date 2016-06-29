@@ -76,7 +76,7 @@
     <script>
         $(document).ready(function () {
             $("#StatusApprove").click(function () {
-                $("#Status_Value").val(@ViewBag.State);
+                $("#Status_Value").val("@ViewBag.State");
                 $("form").submit();
             });
             $("#StatusReject").click(function () {
