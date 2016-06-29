@@ -116,8 +116,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             if (ID == 0)
             return viewModel;
 
-            if (username != null)
-            useraccess = GetAccessData(username);
+            //if (username != null && username != "")
+            //useraccess = GetAccessData(username);
 
             
             viewModel.ShortlistDetails = GetDetailShortlist(ID, useraccess);
@@ -378,7 +378,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     <Query> 
                        <Where><Eq><FieldRef Name='manpowerrequeststatus' /><Value Type='Text'>Active</Value></Eq></Where><OrderBy><FieldRef Name='positionrequested_x003a_Position' /></OrderBy> 
                     </Query> 
-                    <ViewFields><FieldRef Name='manpowerrequeststatus' /><FieldRef Name='ID' /><FieldRef Name='positionrequested' /><FieldRef Name='positionrequested_x003a_Position' /></ViewFields></View>";
+                    <ViewFields><FieldRef Name='manpowerrequeststatus' /> <FieldRef Name='ID' /><FieldRef Name='positionrequested' /><FieldRef Name='positionrequested_x003a_Position' /><FieldRef Name='positionrequested_x003a_ID' /></ViewFields></View>";
              
             var models = new List<PositionMaster>();
 
@@ -400,7 +400,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             var viewModel = new PositionMaster();
 
-            viewModel.ID = Convert.ToInt32(item["ID"]);
+            viewModel.ID = Convert.ToInt32(FormatUtil.ConvertLookupToValue(item, "positionrequested_x003a_ID"));
             viewModel.PositionName = FormatUtil.ConvertLookupToValue(item, "positionrequested");
             return viewModel;
         }

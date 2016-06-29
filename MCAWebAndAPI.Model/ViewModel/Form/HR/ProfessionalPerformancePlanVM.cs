@@ -37,14 +37,26 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [UIHint("Int32")]
         public int? ProfessionalID { get; set; }
 
+        /// <summary>
+        /// position	
+        /// </summary>
         public string Position { get; set; }
 
         public string ProfessionalEmail { get; set; }
 
         public string ProfessionalEmailMessage { get; set; }
 
-        public string StatusDraft { get; set; }
+        /// <summary>
+        /// pppstatus
+        /// </summary>
+        public string StatusForm { get; set; }
 
+        public string Requestor { get; set; }
+
+        /// <summary>
+        /// statusworkflow
+        /// </summary>
+        public string StatusWorkflow { get; set; }
 
     }
 }

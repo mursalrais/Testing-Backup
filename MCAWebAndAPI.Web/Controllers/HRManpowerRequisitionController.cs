@@ -58,10 +58,10 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewModel);
         }
 
-        public ActionResult EditManpowerRequisition(string siteUrl = null, int? ID = null, string username = null)
+        public ActionResult EditManpowerRequisition(string siteUrl = null, int? ID = null, string username = null, int ApprovalPage = 0)
         {
 
-
+            
             // MANDATORY: Set Site URL
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);

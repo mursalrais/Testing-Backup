@@ -1,13 +1,15 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@using MCAWebAndAPI.Web.Helpers
+
 
 @model ProfessionalPerformancePlanVM
 
-@using (Html.BeginForm("UpdatePerformancePlan", "HRPerformancePlan", FormMethod.Post,
-                        new
-                        {
-                            @class = "form-horizontal",
-                            enctype = "multipart/form-data"
-                        }))
+@using (Html.BeginForm("EditPerformancePlan", "HRPerformancePlan", FormMethod.Post,
+                                                new
+                                                {
+                                                    @class = "form-horizontal",
+                                                    enctype = "multipart/form-data"
+                                                }))
 {<fieldset>
         <legend>Form Performance Plan</legend>
         @Html.AntiForgeryToken()
@@ -35,7 +37,7 @@
         </div>
         <legend>Professional Perfromance Plan Detail</legend>
         <div class="row">
-            @Html.Partial("_PerformancePlanDetail", Model.ProjectOrUnitGoalsDetails)
+            @Html.Partial("_PerformancePlanDetail", Model)
         </div>
         <div class="col-sm-12">
             <div class="form-group">
@@ -63,74 +65,145 @@
                 <div class="col-sm-8">
                     @Html.HiddenFor(m => m.ProfessionalID)
                 </div>
+                <div class="col-sm-8">
+                    @Html.HiddenFor(m => m.Requestor)
+                </div>
+                <div class="col-sm-8">
+                    @Html.HiddenFor(m => m.StatusWorkflow)
+                </div>
             </div>
             <div class="form-group" id="ParentDiv">
                 <div class="col-sm-8">
-                    @Html.DisplayFor(m => m.StatusDraft)
+                    @Html.DisplayFor(m => m.StatusForm)
                 </div>
             </div>
         </div>
+        @if (Model.Requestor != null)
+        {
+            <legend>Approval Workflow</legend>
+            <div id="workflow-placeholder" class="row" />
+        }
     </fieldset>
 }
 
-<div class="form-actions">
-    <div class="row">
-        <div class="col-sm-12">
-            <button id="submit-draft-button" class="btn btn-primary" type="submit">
-                <i class="fa fa-save"></i>
-                Submit For Approval
-            </button>
-            <button id="submit-button" class="btn btn-primary" type="submit">
-                <i class="fa fa-save"></i>
-                Save As Draft
-            </button>
-            <button id="print-button" class="btn btn-primary" type="button">
-                Print
-            </button>
+@if (Model.Requestor != null && Model.StatusForm == "Initiated" || Model.StatusForm == "Draft")
+{
+    <div class="form-actions">
+        <div class="row">
+            <div class="col-sm-12">
+                <button id="submit-button" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    Submit For Approval
+                </button>
+                <button id="submit-draft-button" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    Save As Draft
+                </button>
+                <button id="print-button" class="btn btn-primary" type="button">
+                    Print
+                </button>
+            </div>
         </div>
     </div>
-</div>
+}
+
+@if (Model.Requestor == null && Model.StatusForm == "Pending Approval 1 of 2")
+{
+    <div class="form-actions">
+        <div class="row">
+            <div class="col-sm-12">
+                <button id="approver1-button" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    Approve
+                </button>
+                <button id="reject1-button" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    Reject
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+@if (Model.Requestor == null && Model.StatusForm == "Pending Approval 2 of 2")
+{
+    <div class="form-actions">
+        <div class="row">
+            <div class="col-sm-12">
+                <button id="approver2-button" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    Approve
+                </button>
+                <button id="reject2-button" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    Reject
+                </button>
+            </div>
+        </div>
+    </div>
+}
 
 @section scripts{
     <script type="text/javascript">
         $(document).ready(function () {
             $("#submit-button").click(function () {
-                $("#StatusDraft").val("Draft")
-                $("#ParentDiv").show();
+                $("#StatusForm").val("Initiated")
+                $("#ParentDiv").hide();
                 $("form").submit();
             });
         });
 
         $(document).ready(function () {
             $("#submit-draft-button").click(function () {
-                $("#StatusDraft").val("Submit")
-                $("#ParentDiv").hide();
+                $("#StatusForm").val("Draft")
+                $("#ParentDiv").show();
                 $("form").submit();
             });
         });
 
         $(function () {
             $("#ParentDiv").hide();
-            var ID = $("#ProfessionalID").val();
-            var url = "/HRDataMaster/GetProfessional/" + ID;
-
-            $.getJSON(url, function (result) {
-                $('#PositionAndDepartement').prop('value', result[0].Position);
-            })
         });
 
         $(document).ready(function () {
             $('#print-button').click(function (e) {
-                $("#StatusDraft").val("Draft")
                 $("#ParentDiv").show();
                 var url = "/HRPerformancePlan/PrintPerformancePlan";
                 submitFormToPrint(url);
             });
-
         });
 
         $(document).ready(function () {
-            displayWorkflowRouter("workflow-placeholder", "@ViewBag.ListName", "@ViewBag.RequestorUserLogin");
+            $("#approver1-button").click(function () {
+                $("form").submit();
+            });
+        });
+
+        $(document).ready(function () {
+            $("#approver2-button").click(function () {
+                $("form").submit();
+            });
+        });
+
+        $(document).ready(function () {
+            $('#reject1-button').click(function (e) {
+                $("#StatusForm").val("Reject1")
+                $("form").submit();
+            });
+        });
+
+        $(document).ready(function () {
+            $('#reject2-button').click(function (e) {
+                $("#StatusForm").val("Reject2")
+                $("form").submit();
+            });
+        });
+
+        $(document).ready(function () {
+            var Requestor = '@(SessionManager.Get<string>("RequestorUserLogin"))';
+            if (Requestor != null) {
+                displayWorkflowRouter("workflow-placeholder", "@ViewBag.ListName", Requestor);
+            }
         });
     </script>
 }

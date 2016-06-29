@@ -60,7 +60,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return true;
         }
 
-        public void CreatePerformanceMonitoringDetails(int? headerID)
+        public void CreatePerformanceMonitoringDetails(int? headerID, string emailMessage)
         {
             //Get All Active Professional
             var caml = @"<View><Query><Where><Eq><FieldRef Name='Professional_x0020_Status' /><Value Type='Choice'>Active</Value></Eq></Where></Query><ViewFields><FieldRef Name='ID' /><FieldRef Name='Title' /><FieldRef Name='officeemail' /></ViewFields><QueryOptions /></View>";
@@ -87,10 +87,12 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
                 //send email to professional
                 try
-                {
-                    string EmailMessage = "<p>< strong > Dear Respective Professional</ strong ></ p >   < p >This email is sent to you to notify that you are required to create Performance Plan. Creating and approval plan process will take maximum 5 working days. Therefore, do prepare your plan accordingly.Kindly check the link as  per below to go to direct page accordingly.Thank you.</ p >";
-                    //SPConnector.SendEmail(emailTo, "TES", "Notifikasi Professional Master tentang Performance Monitoring Service", _siteUrl);
-                    EmailUtil.Send(emailTo, "Notify to initiate Performance Plan", string.Format(EmailMessage, UrlResource.ApplicationData));
+                {                    
+                    if (emailTo == "" || emailTo == null)
+                    {
+                        emailTo = "anugerahseptian@gmail.com";
+                    }                   
+                    EmailUtil.Send(emailTo, "Notify to initiate Performance Plan", string.Format(emailMessage, UrlResource.ProfessionalPerformancePlan));
 
                 }
                 catch (Exception e)
@@ -140,18 +142,64 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             string color;
             foreach (var item in SPConnector.GetList(SP_DETAIL_LIST_NAME, _siteUrl, caml))
             {
-                if ((Convert.ToString(item["pppstatus"]) != "Approved") && (viewModel.LatestDateApproval2.Value >= Now))
-                {
-                    color = "yellow";
-                }
-                else if ((Convert.ToString(item["pppstatus"]) == "Approved"))
+                if ((Convert.ToString(item["pppstatus"]) == "Approved"))
                 {
                     color = "green";
+                }
+                else if((Convert.ToString(item["pppstatus"]) == "Initiated") || (Convert.ToString(item["pppstatus"]) == "Draft"))
+                {
+                    if (Now<=viewModel.LatestCreationDate)
+                    {
+                        color = "green";
+                    }
+                    else if((Now>viewModel.LatestCreationDate) && (Now <= viewModel.LatestDateApproval1))
+                    {
+                        color = "yellow";
+                    }
+                    else
+                    {
+                        color = "red";
+                    }
+                }
+                else if ((Convert.ToString(item["pppstatus"]) == "Pending Approval 1 of 2"))
+                {
+                    if (Now<=viewModel.LatestDateApproval2)
+                    {
+                        color = "green";
+                    }
+                    else
+                    {
+                        color = "red";
+                    }
+                }
+                else if ((Convert.ToString(item["pppstatus"]) == "Pending Approval 2 of 2"))
+                {
+                    if (Now <= viewModel.LatestDateApproval2)
+                    {
+                        color = "green";
+                    }
+                    else
+                    {
+                        color = "red";
+                    }
                 }
                 else
                 {
                     color = "red";
                 }
+
+                //if ((Convert.ToString(item["pppstatus"]) != "Approved") && (viewModel.LatestDateApproval2.Value >= Now))
+                //{
+                //    color = "yellow";
+                //}
+                //else if ((Convert.ToString(item["pppstatus"]) == "Approved"))
+                //{
+                //    color = "green";
+                //}
+                //else
+                //{
+                //    color = "red";
+                //}
                 PerformancePlanMonitoringDetails.Add(new PerformanceMonitoringDetailVM
                 {
                     ID = Convert.ToInt32(item["ID"]),

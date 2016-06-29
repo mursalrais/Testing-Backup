@@ -27,14 +27,16 @@ namespace MCAWebAndAPI.Web.Controllers
             _service = new HRShortlistService();
         }
 
-        public ActionResult ShortlistData(string siteurl = null, int? position = null, string username = null, string useraccess = null, params int[] positionid)
+        public ActionResult ShortlistData(string siteurl = null, int? position = null, string username = null, string useraccess = null)
         {
-
-
-
             //mandatory: set site url
+
+            var siteUrl = siteurl ?? SessionManager.Get<string>("SiteUrl");
+            if (siteurl == "")
+            {
+                siteurl = SessionManager.Get<string>("SiteUrl");
+            }
             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
-            SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
 
             var viewmodel = _service.GetShortlist(position, username, useraccess);
 

@@ -15,12 +15,15 @@ using System;
 using System.IO;
 using MCAWebAndAPI.Service.Converter;
 using Elmah;
+using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
     public class HRPerformancePlanController : Controller
     {
         IHRPerformancePlanService _hRPerformancePlanService;
+        const string SP_TRANSACTION_WORKFLOW_LIST_NAME = "Professional Performance Plan Workflow";
+        const string SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME = "professionalperformanceplan";
 
         public HRPerformancePlanController()
         {
@@ -38,28 +41,22 @@ namespace MCAWebAndAPI.Web.Controllers
 
             // Get blank ViewModel
             var viewModel = _hRPerformancePlanService.GetPopulatedModel();
-            viewModel.Position = position;
-            viewModel.ProfessionalID = ID;
+            //viewModel.Position = position;
+            //viewModel.ProfessionalID = ID;
 
-            // Used for Workflow Router
-            ViewBag.ListName = "Manpower%20Requisition";
+            //// Used for Workflow Router
+            //ViewBag.ListName = "Manpower%20Requisition";
 
-            // This var should be taken from passing parameter
-            ViewBag.RequestorUserLogin = "yunita.ajah@eceos.com";
+            //// This var should be taken from passing parameter
+            //viewModel.Requestor = "yunita.ajah@eceos.com";
 
             // Return to the name of the view and parse the model
-            return View("CreatePerformancePlan", viewModel);
+            return View("PrintPerformancePlan", viewModel);
         }
 
         [HttpPost]
-        public ActionResult SubmitPerformancePlan(FormCollection form, ProfessionalPerformancePlanVM viewModel)
+        public async Task<ActionResult> SubmitPerformancePlan(FormCollection form, ProfessionalPerformancePlanVM viewModel)
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            //    var errorMessages = BindHelper.GetErrorMessages(ModelState.Values);
-            //    return JsonHelper.GenerateJsonErrorResponse(errorMessages);
-            //}
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _hRPerformancePlanService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
@@ -70,13 +67,29 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
             }
+
+            // BEGIN Workflow Demo 
+            headerID = 125; // This MUST NOT be hardcoded. It is hardcoded as it is just a demo
+            Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateTransactionWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
+                SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)headerID);
+
+            // Send to Level 1 Approver
+            Task sendApprovalRequestTask = WorkflowHelper.SendApprovalRequestAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
+                SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)headerID, 1,
+                string.Format(EmailResource.WorkflowAskForApproval, UrlResource.ApplicationData));
+
+            // END Workflow Demo
+
+            Task createPerformancePlanDetailsTask = _hRPerformancePlanService.CreatePerformancePlanDetailsAsync(headerID, viewModel.ProjectOrUnitGoalsDetails);
+
+            Task allTasks = Task.WhenAll(createPerformancePlanDetailsTask);
 
             try
             {
-                _hRPerformancePlanService.CreatePerformancePlanDetails(headerID, viewModel.ProjectOrUnitGoalsDetails);
+                await allTasks;
             }
             catch (Exception e)
             {
@@ -87,62 +100,113 @@ namespace MCAWebAndAPI.Web.Controllers
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.ProfessionalPerformancePlan);
         }
 
-        public ActionResult EditPerformancePlan(int ID, string siteUrl = null)
+        public ActionResult EditPerformancePlan(string siteUrl = null, int? ID = null, string requestor = null)
         {
             _hRPerformancePlanService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             var viewModel = _hRPerformancePlanService.GetHeader(ID);
+            viewModel.Requestor = requestor;
+            viewModel.ID = ID;
+
+            // Used for Workflow Router
+            ViewBag.ListName = "Professional%20Performance%20Plan";
+
+
+            // This var should be taken from passing parameter
+            if (requestor != null)
+                SessionManager.Set("RequestorUserLogin", requestor);
 
             return View(viewModel);
         }
 
         [HttpPost]
-        public ActionResult UpdatePerformancePlan(FormCollection form, ProfessionalPerformancePlanVM viewModel, string site)
+        public async Task<ActionResult> EditPerformancePlan(FormCollection form, ProfessionalPerformancePlanVM viewModel, string site)
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            //    var errorMessages = BindHelper.GetErrorMessages(ModelState.Values);
-            //    return JsonHelper.GenerateJsonErrorResponse(errorMessages);
-            //}
-
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _hRPerformancePlanService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
+            var Detail = viewModel.ProjectOrUnitGoalsDetails;
+            int sum = 0;
+            foreach (var viewModelDetail in Detail)
+            {
+                if (viewModelDetail.EditMode != -1)
+                {
+                    sum = sum + viewModelDetail.Weight;
+                }
+            }
+
+            if (sum != 100)
+            {
+                ModelState.AddModelError("ModelInvalid", "Weight must be total 100%");
+                return View("EditPerformancePlan", viewModel);
+            }
+
             _hRPerformancePlanService.UpdateHeader(viewModel);
 
+            if (viewModel.StatusWorkflow == "No")
+            {
+                Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateTransactionWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
+                    SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.ID);
+
+                //Task sendApprovalRequestTask = WorkflowHelper.SendApprovalRequestAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
+                //    SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.ID, 1,
+                //    string.Format(EmailResource.WorkflowAskForApproval, UrlResource.ApplicationData));
+            }
+            if (viewModel.Requestor != null)
+            {
+                Task createPerformancePlanDetailsTask = _hRPerformancePlanService.CreatePerformancePlanDetailsAsync(viewModel.ID, viewModel.ProjectOrUnitGoalsDetails);
+
+                Task allTasks = Task.WhenAll(createPerformancePlanDetailsTask);
+
+                try
+                {
+                    await allTasks;
+                }
+                catch (Exception e)
+                {
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    return JsonHelper.GenerateJsonErrorResponse(e);
+                }
+            }
+
             try
             {
-                 _hRPerformancePlanService.CreateHeader(viewModel);
+                // Send to Level 1 Approver
+                if (viewModel.StatusForm == "Initiated")
+                    _hRPerformancePlanService.SendEmail(viewModel, SP_TRANSACTION_WORKFLOW_LIST_NAME,
+                    SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.ID, 1,
+                    string.Format("Ask For Approval Level 1, Link: {0}{1}/EditFormApprover_Custom.aspx?ID={2}", siteUrl, UrlResource.ProfessionalPerformancePlan, viewModel.ID), string.Format(""));
+
+                // Send to Level 2 Approver and Requestor
+                if (viewModel.StatusForm == "Pending Approval 1 of 2")
+                    _hRPerformancePlanService.SendEmail(viewModel, SP_TRANSACTION_WORKFLOW_LIST_NAME,
+                    SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.ID, 2,
+                    string.Format("Ask For Approval Level 2, Link: {0}{1}/EditFormApprover_Custom.aspx?ID={2}", siteUrl, UrlResource.ProfessionalPerformancePlan, viewModel.ID), string.Format("Approved by Level 1"));
+
+                // Send to Requestor
+                if (viewModel.StatusForm == "Pending Approval 2 of 2")
+                    _hRPerformancePlanService.SendEmail(viewModel, SP_TRANSACTION_WORKFLOW_LIST_NAME,
+                    SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.ID, 2,
+                    string.Format(""), string.Format("Approved by Level 2"));
+
+                // Send to Requestor
+                if (viewModel.StatusForm == "Reject1")
+                    _hRPerformancePlanService.SendEmail(viewModel, SP_TRANSACTION_WORKFLOW_LIST_NAME,
+                    SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.ID, 1,
+                    string.Format(""), string.Format("Rejected by Approver Level 1"));
+
+                // Send to Requestor
+                if (viewModel.StatusForm == "Reject2")
+                    _hRPerformancePlanService.SendEmail(viewModel, SP_TRANSACTION_WORKFLOW_LIST_NAME,
+                    SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.ID, 1,
+                    string.Format(""), string.Format("Rejected by Approver Level 2"));
             }
             catch (Exception e)
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
-
-            try
-            {
-                _hRPerformancePlanService.CreatePerformancePlanDetails(viewModel.ID, viewModel.ProjectOrUnitGoalsDetails);
-            }
-            catch (Exception e)
-            {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
-            }
-
-            try
-            {
-                if (viewModel.StatusDraft == "Submit")
-                    _hRPerformancePlanService.GetProfessionalEmail(viewModel.ID);
-            }
-            catch (Exception e)
-            {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
-            }
-
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.ProfessionalPerformancePlan);
         }
 
@@ -186,7 +250,8 @@ namespace MCAWebAndAPI.Web.Controllers
             var currency = ProjectOrUnitGoalsDetailVM.GetCategoryOptions();
 
             return Json(currency.Select(e =>
-                new {
+                new
+                {
                     Value = Convert.ToString(e.Value),
                     Text = e.Text
                 }),

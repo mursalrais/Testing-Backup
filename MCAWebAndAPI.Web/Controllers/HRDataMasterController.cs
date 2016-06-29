@@ -34,20 +34,21 @@ namespace MCAWebAndAPI.Web.Controllers
                 JsonRequestBehavior.AllowGet);
         }
 
-        //public JsonResult GetProfessionalMonthlyFeesEdit()
-        //{
-        //    _dataMasterService.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));
+        public JsonResult GetProfessionalMonthlyFeesEdit()
+        {
+            _dataMasterService.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));
 
-        //    var professionalmonthlyfee = GetFromProfessionalMonthlyFeesEditExistingSession();
-        //    return Json(professionalmonthlyfee.Select(e =>
-        //        new {
-        //            e.ID,
-        //            e.Name,
-        //            e.Status,
-        //            Desc = string.Format("{0} - {1}", e.Name, e.Status)
-        //        }),
-        //        JsonRequestBehavior.AllowGet);
-        //}
+            var professionalmonthlyfee = GetFromProfessionalMonthlyFeesEditExistingSession();
+            return Json(professionalmonthlyfee.Select(e =>
+                new
+                {
+                    e.ID,
+                    e.Name,
+                    e.Status,
+                    Desc = string.Format("{0} - {1}", e.Name, e.Status)
+                }),
+                JsonRequestBehavior.AllowGet);
+        }
 
         public JsonResult GetProfessionals()
         {
@@ -169,16 +170,16 @@ namespace MCAWebAndAPI.Web.Controllers
             return professionalmonthlyfees;
         }
 
-        //private IEnumerable<ProfessionalMaster> GetFromProfessionalMonthlyFeesEditExistingSession()
-        //{
-        //    //Get existing session variable
-        //    var sessionVariable = System.Web.HttpContext.Current.Session["ProfessionalMasterMonthlyFeesEdit"] as IEnumerable<ProfessionalMaster>;
-        //    var professionalmonthlyfees = sessionVariable ?? _dataMasterService.GetProfessionalMonthlyFeesEdit();
+        private IEnumerable<ProfessionalMaster> GetFromProfessionalMonthlyFeesEditExistingSession()
+        {
+            //Get existing session variable
+            var sessionVariable = System.Web.HttpContext.Current.Session["ProfessionalMasterMonthlyFeesEdit"] as IEnumerable<ProfessionalMaster>;
+            var professionalmonthlyfees = sessionVariable ?? _dataMasterService.GetProfessionalMonthlyFeesEdit();
 
-        //    if (sessionVariable == null) // If no session variable is found
-        //        System.Web.HttpContext.Current.Session["ProfessionalMasterMonthlyFeesEdit"] = professionalmonthlyfees;
-        //    return professionalmonthlyfees;
-        //}
+            if (sessionVariable == null) // If no session variable is found
+                System.Web.HttpContext.Current.Session["ProfessionalMasterMonthlyFeesEdit"] = professionalmonthlyfees;
+            return professionalmonthlyfees;
+        }
 
         private IEnumerable<PositionMaster> GetFromPositionsExistingSession()
         {
