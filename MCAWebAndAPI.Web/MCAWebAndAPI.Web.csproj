@@ -691,6 +691,9 @@
     <Content Include="Views\HRProfessional\_PersonalDetailsProfessional.cshtml" />
     <Content Include="Views\HRPerformancePlan\_ProfessionalPerformancePlan_Print.cshtml" />
     <Content Include="Views\HRPerformancePlan\PrintPerformancePlan.cshtml" />
+    <Content Include="Views\HRPerformanceEvaluation\_Detail.cshtml" />
+    <Content Include="Views\HRPerformanceEvaluation\_PerformancePlanEvaluation.cshtml" />
+    <Content Include="Views\HRPerformanceEvaluation\PerformanceEvaluation.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -729,6 +732,7 @@
     <Compile Include="Controllers\HRInterviewlistController.cs" />
     <Compile Include="Controllers\HRManpowerRequisitionController.cs" />
     <Compile Include="Controllers\HRPayrollController.cs" />
+    <Compile Include="Controllers\HRPerformanceEvaluationController.cs" />
     <Compile Include="Controllers\HRPerformanceMonitoringController.cs" />
     <Compile Include="Controllers\HRPerformancePlanController.cs" />
     <Compile Include="Controllers\HRProfessionalController.cs" />

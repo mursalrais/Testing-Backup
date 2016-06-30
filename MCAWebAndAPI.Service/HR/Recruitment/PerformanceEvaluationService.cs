@@ -8,24 +8,24 @@ using MCAWebAndAPI.Service.Resources;
 
 namespace MCAWebAndAPI.Service.HR.Recruitment
 {
-    public class PerformanceMonitoringService : IPerformanceMonitoringService
+    public class PerformanceEvaluationService : IPerformanceEvaluationService
     {
         string _siteUrl;
         static Logger logger = LogManager.GetCurrentClassLogger();
         
-        const string SP_LIST_NAME = "Performance Plan";
-        const string SP_DETAIL_LIST_NAME = "Professional Performance Plan";
+        const string SP_LIST_NAME = "Performance Evaluation";
+        const string SP_DETAIL_LIST_NAME = "Professional Performance Evaluation";
 
-        public int CreatePerformanceMonitoring(PerformanceMonitoringVM PerformanceMonitoring)
+        public int CreatePerformanceEvaluation(PerformanceEvaluationVM PerformanceEvaluation)
         {
             var updatedValues = new Dictionary<string, object>();
 
-            updatedValues.Add("Title", PerformanceMonitoring.Period.Value);
-            updatedValues.Add("latestdateforcreation", PerformanceMonitoring.LatestCreationDate.Value);
-            updatedValues.Add("latestdateforapproval1", PerformanceMonitoring.LatestDateApproval1.Value);
-            updatedValues.Add("latestdateforapproval2", PerformanceMonitoring.LatestDateApproval2.Value);
-            updatedValues.Add("ppstatus", "Open");
-            updatedValues.Add("initiationdate", DateTime.UtcNow);
+            updatedValues.Add("Title", PerformanceEvaluation.Period.Value);
+            updatedValues.Add("latestdateforcreation", PerformanceEvaluation.LatestCreationDate.Value);
+            updatedValues.Add("latestdateforapproval1", PerformanceEvaluation.LatestDateApproval1.Value);
+            updatedValues.Add("latestdateforapproval2", PerformanceEvaluation.LatestDateApproval2.Value);
+            updatedValues.Add("pestatus", "Open");
+            //updatedValues.Add("initiationdate", DateTime.UtcNow);
 
             try
             {
@@ -42,16 +42,15 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return SPConnector.GetLatestListItemID(SP_LIST_NAME, _siteUrl);
         }
 
-        public bool UpdatePerformanceMonitoring(PerformanceMonitoringVM PerformanceMonitoring)
+        public bool UpdatePerformanceEvaluation(PerformanceEvaluationVM PerformanceEvaluation)
         {
             var updatedValues = new Dictionary<string, object>();
 
-            updatedValues.Add("ppstatus", "Closed");
+            updatedValues.Add("pestatus", "Closed");
             updatedValues.Add("closingdate", DateTime.UtcNow.ToLocalTime());
-
             try
             {
-                SPConnector.UpdateListItem(SP_LIST_NAME, PerformanceMonitoring.ID, updatedValues, _siteUrl);
+                SPConnector.UpdateListItem(SP_LIST_NAME, PerformanceEvaluation.ID, updatedValues, _siteUrl);
             }
             catch (Exception e)
             {
@@ -61,7 +60,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return true;
         }
 
-        public void CreatePerformanceMonitoringDetails(int? headerID, string emailMessage)
+        public void CreatePerformanceEvaluationDetails(int? headerID, string emailMessage)
         {
             //Get All Active Professional
             var caml = @"<View><Query><Where><Eq><FieldRef Name='Professional_x0020_Status' /><Value Type='Choice'>Active</Value></Eq></Where></Query><ViewFields><FieldRef Name='ID' /><FieldRef Name='Title' /><FieldRef Name='officeemail' /></ViewFields><QueryOptions /></View>";
@@ -71,8 +70,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             foreach (var item in listItem)
             {
                 updatedValues = new Dictionary<string, object>();
-                updatedValues.Add("performanceplan", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
-                updatedValues.Add("pppstatus", "Initiated");
+                updatedValues.Add("performanceevaluation", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
+                updatedValues.Add("ppestatus", "Initiated");
                 updatedValues.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(item["ID"]) });
                 emailTo = Convert.ToString(item["officeemail"]);
                 try
@@ -109,47 +108,46 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
         }
 
-        public PerformanceMonitoringVM GetPerformanceMonitoring(int? ID)
+        public PerformanceEvaluationVM GetPerformanceEvaluation(int? ID)
         {
-            var viewModel = new PerformanceMonitoringVM();
+            var viewModel = new PerformanceEvaluationVM();
             if (ID == null)
             {
                 return viewModel;
             }
 
             var listItem = SPConnector.GetListItem(SP_LIST_NAME, ID, _siteUrl);
-            viewModel = ConvertToPerformanceMonitoringVM(listItem);
+            viewModel = ConvertToPerformanceEvaluationVM(listItem);
 
             return viewModel;
         }
 
-        private PerformanceMonitoringVM ConvertToPerformanceMonitoringVM(ListItem listItem)
+        private PerformanceEvaluationVM ConvertToPerformanceEvaluationVM(ListItem listItem)
         {
-            var viewModel = new PerformanceMonitoringVM();
-
-            DateTime Now = DateTime.UtcNow.ToLocalTime();
+            var viewModel = new PerformanceEvaluationVM();
 
             viewModel.ID = Convert.ToInt32(listItem["ID"]);
             viewModel.Period.Value = Convert.ToString(listItem["Title"]);
             viewModel.LatestCreationDate = Convert.ToDateTime(listItem["latestdateforcreation"]).ToLocalTime();
             viewModel.LatestDateApproval1 = Convert.ToDateTime(listItem["latestdateforapproval1"]).ToLocalTime();
             viewModel.LatestDateApproval2 = Convert.ToDateTime(listItem["latestdateforapproval2"]).ToLocalTime();
-            viewModel.Status = Convert.ToString(listItem["ppstatus"]);
+            viewModel.Status = Convert.ToString(listItem["pestatus"]);
             viewModel.IntiationDate = Convert.ToDateTime(listItem["Created"]).ToLocalTime();
 
+            DateTime Now = DateTime.UtcNow.ToLocalTime();
 
             //get Detail
-            var caml = @"<View><Query><Where><Eq><FieldRef Name='performanceplan_x003a_ID' /><Value Type='Lookup'>" + viewModel.ID.Value.ToString() + "</Value></Eq></Where></Query><ViewFields><FieldRef Name='ID' /><FieldRef Name='professional' /><FieldRef Name='performanceplan' /><FieldRef Name='pppstatus' /></ViewFields><QueryOptions /></View>";
+            var caml = @"<View><Query><Where><Eq><FieldRef Name='performanceevaluation_x003a_ID' /><Value Type='Lookup'>" + viewModel.ID.Value.ToString() + "</Value></Eq></Where></Query><ViewFields><FieldRef Name='ID' /><FieldRef Name='professional' /><FieldRef Name='Name='performanceevaluation' /><FieldRef Name='ppestatus' /></ViewFields><QueryOptions /></View>";
 
-            var PerformancePlanMonitoringDetails = new List<PerformanceMonitoringDetailVM>();
+            var PerformancePlanEvaluationDetails = new List<PerformanceEvaluationDetailVM>();
             string color;
             foreach (var item in SPConnector.GetList(SP_DETAIL_LIST_NAME, _siteUrl, caml))
             {
-                if ((Convert.ToString(item["pppstatus"]) == "Approved"))
+                if ((Convert.ToString(item["ppestatus"]) == "Approved") || (Convert.ToString(item["ppestatus"]) == "Rejected"))
                 {
                     color = "green";
                 }
-                else if((Convert.ToString(item["pppstatus"]) == "Initiated") || (Convert.ToString(item["pppstatus"]) == "Draft"))
+                else if((Convert.ToString(item["ppestatus"]) == "Initiated") || (Convert.ToString(item["ppestatus"]) == "Draft"))
                 {
                     if (Now<=viewModel.LatestCreationDate)
                     {
@@ -164,7 +162,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                         color = "red";
                     }
                 }
-                else if ((Convert.ToString(item["pppstatus"]) == "Pending Approval 1 of 2"))
+                else if ((Convert.ToString(item["ppestatus"]) == "Pending Approval 1 of 2"))
                 {
                     if (Now<=viewModel.LatestDateApproval2)
                     {
@@ -175,7 +173,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                         color = "red";
                     }
                 }
-                else if ((Convert.ToString(item["pppstatus"]) == "Pending Approval 2 of 2"))
+                else if ((Convert.ToString(item["ppestatus"]) == "Pending Approval 2 of 2"))
                 {
                     if (Now <= viewModel.LatestDateApproval2)
                     {
@@ -190,29 +188,17 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 {
                     color = "red";
                 }
-
-                //if ((Convert.ToString(item["pppstatus"]) != "Approved") && (viewModel.LatestDateApproval2.Value >= Now))
-                //{
-                //    color = "yellow";
-                //}
-                //else if ((Convert.ToString(item["pppstatus"]) == "Approved"))
-                //{
-                //    color = "green";
-                //}
-                //else
-                //{
-                //    color = "red";
-                //}
-                PerformancePlanMonitoringDetails.Add(new PerformanceMonitoringDetailVM
+                
+                PerformancePlanEvaluationDetails.Add(new PerformanceEvaluationDetailVM
                 {
                     ID = Convert.ToInt32(item["ID"]),
                     EmployeeName = Convert.ToString((item["professional"] as FieldLookupValue).LookupValue),
-                    PlanStatus = Convert.ToString(item["pppstatus"]),
+                    PlanStatus = Convert.ToString(item["ppestatus"]),
                     PlanIndicator = color
                 });
             }
 
-            viewModel.PerformanceMonitoringDetails = PerformancePlanMonitoringDetails;
+            viewModel.PerformanceEvaluationDetails = PerformancePlanEvaluationDetails;
             return viewModel;
         }
 

@@ -120,7 +120,9 @@
     <Compile Include="HR\Recruitment\IExitProcedureService.cs" />
     <Compile Include="HR\Recruitment\IHRInterviewService.cs" />
     <Compile Include="HR\Recruitment\IHRPerformancePlanService.cs" />
+    <Compile Include="HR\Recruitment\IPerformanceEvaluationService.cs" />
     <Compile Include="HR\Recruitment\IPerformanceMonitoringService.cs" />
+    <Compile Include="HR\Recruitment\PerformanceEvaluationService.cs" />
     <Compile Include="HR\Recruitment\PerformanceMonitoringService.cs" />
     <Compile Include="HR\Travel\ITRPlaceMasterService.cs" />
     <Compile Include="HR\Travel\TRPlaceMasterService.cs" />
