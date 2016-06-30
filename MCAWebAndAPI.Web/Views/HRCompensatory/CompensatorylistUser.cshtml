@@ -1,0 +1,68 @@
+﻿
+@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model CompensatoryVM
+
+@{
+    ViewBag.Title = "ShortlistData";
+}
+
+@using (Html.BeginForm("UpdateShortlistData", "HRShortlist", FormMethod.Post, new
+{
+    @class = "form-horizontal",
+    enctype = "multipart/form-data"
+}))
+{
+    <fieldset>
+        @Html.HiddenFor(m => m.ID)
+        <div class="row">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.CmpYearDate).Class("col-md-2 control-label")
+                <div class="col-md-3">
+                    @Html.EditorFor(m => m.CmpYearDate)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.CmpName).Class("col-md-2 control-label")
+                <div class="col-md-3">
+                    <input id="vac-position" class="form-control" value="" />
+                </div>
+            </div>
+        </div>
+        <legend>Compensatory list</legend>
+        <div class="row">
+            @Html.Partial("_ShortlistDetails", Model.CompensatoryDetails)
+        </div>
+
+    </fieldset>
+}
+
+@section scripts{
+
+    <script>
+        function OnChangeActivePosition(e) {
+            var dataItem = this.dataItem(e.item);
+            window.location = "/HRShortlist/ShortlistData?siteurl=&position=" + dataItem.ID + "&username=&useraccess=" + $("#useraccess").val() + "";
+        };
+
+        $(document).ready(function () {
+            $("#vac-position").prop('readonly', 'true');
+            var positionID = $("#Position").val();
+
+            var url = "/HRDataMaster/GetPosition/" + positionID;
+            $.getJSON(url, function (data) {
+                $("#vac-position").prop("value", data.PositionName);
+            })
+
+            var dropdownlist = $("#ActivePosition_Value").data("kendoDropDownList");
+            dropdownlist.select(positionID);
+
+        });
+    </script>
+}
+
+
+
+
+

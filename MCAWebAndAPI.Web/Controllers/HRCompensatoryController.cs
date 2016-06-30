@@ -17,17 +17,16 @@ using System.Web.Mvc;
 namespace MCAWebAndAPI.Web.Controllers
 {
     [Filters.HandleError]
-    public class HRShortlistController : Controller
+    public class HRCompensatoryController : Controller
     {
-        IHRShortlistService _service;
+        IHRCompensatoryService _service;
 
-
-        public HRShortlistController()
+        public HRCompensatoryController()
         {
-            _service = new HRShortlistService();
+            _service = new HRCompensatoryService();
         }
 
-        public ActionResult ShortlistData(string siteurl = null, int? position = null, string username = null, string useraccess = null)
+        public ActionResult CompensatorylistUser(string siteurl = null, int? ID = null, int? position = null)
         {
             //mandatory: set site url
 
@@ -38,7 +37,7 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
 
-            var viewmodel = _service.GetShortlist(position, username, useraccess);
+            var viewmodel = _service.GetComplist(ID);
 
             //viewmodel.ID = id;
             return View(viewmodel);
@@ -58,76 +57,6 @@ namespace MCAWebAndAPI.Web.Controllers
             {
                 viewModel.ShortlistDetails = BindShortlistDetails(form, viewModel.ShortlistDetails);
                 _service.UpdateShortlistDataDetail(headerID, viewModel.ShortlistDetails);
-            }
-            catch (Exception e)
-            {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
-            }
-
-            _service.SendEmailValidation(viewModel.SendTo, EmailResource.EmailShortlistData);
-
-            return JsonHelper.GenerateJsonSuccessResponse(
-                string.Format("{0}/{1}", siteUrl, UrlResource.Professional));
-        }
-
-        public ActionResult ShortlistSendInvite(string siteurl = null, int? ID = null)
-        {
-            //mandatory: set site url
-            _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
-            SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
-
-            var viewmodel = _service.GetShortlistSend(ID);
-            //viewmodel.SendTo = "";
-            //viewmodel.ID = id;
-            return View(viewmodel);
-        }
-
-        [HttpPost]
-        public ActionResult CreateSendInvite(FormCollection form, ApplicationShortlistVM viewModel)
-        {
-            var siteUrl = SessionManager.Get<string>("SiteUrl");
-            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-
-            int? headerID = null;
-            try
-            {
-                viewModel.ShortlistDetails = BindShortlistDetails(form, viewModel.ShortlistDetails);
-                _service.CreateShorlistSendintv(headerID, viewModel);
-            }
-            catch (Exception e)
-            {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
-            }
-
-            return JsonHelper.GenerateJsonSuccessResponse(
-                string.Format("{0}/{1}", siteUrl, UrlResource.Professional));
-        }
-
-        public ActionResult ShortlistIntvinvite(string siteurl = null, int? position = null, string username = null, string useraccess = null)
-        {
-            //mandatory: set site url
-            _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
-            SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
-
-            var viewmodel = _service.GetShortlist(position, username, useraccess);
-            //viewmodel.SendTo = "";
-
-            return View(viewmodel);
-        }
-
-        [HttpPost]
-        public ActionResult CreateIntvinvite(FormCollection form, ApplicationShortlistVM viewModel)
-        {
-            var siteUrl = SessionManager.Get<string>("SiteUrl");
-            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-
-            int? headerID = null;
-            try
-            {
-                viewModel.ShortlistDetails = BindShortlistDetails(form, viewModel.ShortlistDetails);
-                _service.CreateShortlistInviteIntv(headerID, viewModel, EmailResource.EmailInterviewResult);
             }
             catch (Exception e)
             {
@@ -165,7 +94,6 @@ namespace MCAWebAndAPI.Web.Controllers
                 }),
                 JsonRequestBehavior.AllowGet);
         }
-
 
         public JsonResult GetPosition()
         {

@@ -30,8 +30,12 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult InterviewlistData(string siteurl = null, int? position = null, string username = null, string useraccess = null)
         {
             //mandatory: set site url
+            var siteUrl = siteurl ?? SessionManager.Get<string>("SiteUrl");
+            if (siteurl == "")
+            {
+                siteurl = SessionManager.Get<string>("SiteUrl");
+            }
             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
-            SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
 
             var viewmodel = _service.GetInterviewlist(position, username, useraccess);
 

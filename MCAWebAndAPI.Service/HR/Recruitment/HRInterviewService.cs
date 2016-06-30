@@ -219,12 +219,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             if (ID == 0)
                 return viewModel;
 
-            if (username != null)
-                useraccess = GetAccessData(username);
-
-
             viewModel.ShortlistDetails = GetDetailInterviewlist(ID, useraccess);
             viewModel.Position = Convert.ToString(position);
+            viewModel.useraccess = Convert.ToString(useraccess);
 
             return viewModel;
 
