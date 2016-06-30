@@ -86,7 +86,28 @@
     </fieldset>
 }
 
-@if (Model.Requestor != null && Model.StatusForm == "Initiated" || Model.StatusForm == "Draft")
+@if (Model.Requestor != null && Model.StatusForm == "Initiated")
+{
+    <div class="form-actions">
+        <div class="row">
+            <div class="col-sm-12">
+                <button id="submit-button" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    Submit For Approval
+                </button>
+                <button id="submit-draft-initiate-button" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    Save As Draft
+                </button>
+                <button id="print-button" class="btn btn-primary" type="button">
+                    Print
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+@if (Model.Requestor != null && Model.StatusForm == "Draft")
 {
     <div class="form-actions">
         <div class="row">
@@ -147,15 +168,22 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $("#submit-button").click(function () {
-                $("#StatusForm").val("Initiated")
                 $("#ParentDiv").hide();
                 $("form").submit();
             });
         });
 
         $(document).ready(function () {
+            $("#submit-draft-initiate-button").click(function () {
+                $("#StatusForm").val("DraftInitiated")
+                $("#ParentDiv").show();
+                $("form").submit();
+            });
+        });
+
+        $(document).ready(function () {
             $("#submit-draft-button").click(function () {
-                $("#StatusForm").val("Draft")
+                $("#StatusForm").val("DraftDraft")
                 $("#ParentDiv").show();
                 $("form").submit();
             });

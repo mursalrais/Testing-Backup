@@ -16,7 +16,7 @@
     <RootNamespace>MCAWebAndAPI.Web</RootNamespace>
     <AssemblyName>MCAWebAndAPI.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -561,7 +561,7 @@
     <Content Include="Views\ASSLocationMaster\IFrame.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\TextArea.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\PhoneNumber.cshtml" />
-    <Content Include="Views\HRDataMaster\CreateProfessionalData.cshtml" />
+    <Content Include="Views\HRApplication\HRDataMaster\CreateProfessionalData.cshtml" />
     <Content Include="Views\HRApplication\CreateApplicationData.cshtml" />
     <Content Include="Views\HRApplication\_ContactInformationDetails.cshtml" />
     <Content Include="Views\HRApplication\_SpecializationDetails.cshtml" />
@@ -672,7 +672,7 @@
     <Content Include="Views\HRPerformanceMonitoring\_Detail.cshtml" />
     <Content Include="Views\HRPerformanceMonitoring\_PerformancePlanMonitoring.cshtml" />
     <Content Include="Views\Shared\_WorkflowDetails.cshtml" />
-    <Content Include="Views\HRPerformancePlan\EditPerformancePlan.cshtml" />
+    <Content Include="Views\HRPerformancePlan\PerformancePlan.cshtml" />
     <Content Include="Views\HRPerformancePlan\_PerformancePlanDetail.cshtml" />
     <Content Include="Views\HRExitProcedure\CreateExitProcedure.cshtml" />
     <Content Include="Views\HRExitProcedure\EditExitProcedure.cshtml" />
@@ -686,14 +686,14 @@
     <Content Include="Views\HRExitProcedure\DisplayExitProcedure.cshtml" />
     <Content Include="Views\HRExitProcedure\_ExitProcedureDataDisplay.cshtml" />
     <Content Include="Views\HRExitProcedure\_Documents.cshtml" />
+    <Content Include="Views\HRExitProcedure\_ExitProcedureChecklist.cshtml" />
+    <Content Include="Views\HRExitProcedure\_DocumentDetailsDisplay.cshtml" />
+    <Content Include="Views\HRPerformancePlan\PrintPerformancePlan.cshtml" />
     <Content Include="Views\HRPerformancePlan\_PerformancePlanDetail_Print.cshtml" />
     <Content Include="Views\HRPerformancePlan\_PerfromancePlan_Print.cshtml" />
-    <Content Include="Views\HRProfessional\_PersonalDetailsProfessional.cshtml" />
     <Content Include="Views\HRPerformancePlan\_ProfessionalPerformancePlan_Print.cshtml" />
-    <Content Include="Views\HRPerformancePlan\PrintPerformancePlan.cshtml" />
-    <Content Include="Views\HRPerformanceEvaluation\_Detail.cshtml" />
-    <Content Include="Views\HRPerformanceEvaluation\_PerformancePlanEvaluation.cshtml" />
-    <Content Include="Views\HRPerformanceEvaluation\PerformanceEvaluation.cshtml" />
+    <Content Include="Views\HRCompensatory\CompensatorylistUser.cshtml" />
+    <Content Include="Views\HRCompensatory\_CompensantoryDetails.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -727,12 +727,12 @@
     <Compile Include="Controllers\FINEventBudgetController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HRApplicationController.cs" />
+    <Compile Include="Controllers\HRCompensatoryController.cs" />
     <Compile Include="Controllers\HRDataMasterController.cs" />
     <Compile Include="Controllers\HRExitProcedureController.cs" />
     <Compile Include="Controllers\HRInterviewlistController.cs" />
     <Compile Include="Controllers\HRManpowerRequisitionController.cs" />
     <Compile Include="Controllers\HRPayrollController.cs" />
-    <Compile Include="Controllers\HRPerformanceEvaluationController.cs" />
     <Compile Include="Controllers\HRPerformanceMonitoringController.cs" />
     <Compile Include="Controllers\HRPerformancePlanController.cs" />
     <Compile Include="Controllers\HRProfessionalController.cs" />

@@ -8,6 +8,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Common
 {
     public class WorkflowItemVM : Item
     {
+        public string ItemExitProcedure { get; set; }
+
         public string ListName { get; set; }
 
         public string Level { get; set; }

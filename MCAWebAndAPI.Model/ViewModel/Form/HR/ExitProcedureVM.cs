@@ -139,5 +139,14 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public string DocumentType { get; set; }
 
         public IEnumerable<ExitProcedureChecklistVM> ExitProcedureChecklist { get; set; } = new List<ExitProcedureChecklistVM>();
+
+        public string Requestor { get; set; }
+
+        public string ListName { get; set; }
+
+        public string RequestorUnit { get; set; }
+
+        public string RequestorPosition { get; set; }
+
     }
 }
