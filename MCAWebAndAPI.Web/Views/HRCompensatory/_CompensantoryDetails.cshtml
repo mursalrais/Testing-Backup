@@ -1,0 +1,72 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model IEnumerable<CompensatoryDetailVM>
+
+<div class="col-xs-12">
+
+    @(Html.Kendo().Grid(Model)
+    .Name("ComplistDetails")
+        .Editable(editable => editable.Mode(GridEditMode.InCell)
+        .CreateAt(GridInsertRowPosition.Bottom))
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.CmpID).ClientTemplate("#= CmpID #" +
+        "<input type='hidden' name='ComplistDetails[#= GetDetailComplist(data)#].CmpID' value='#= CmpID #' />");
+
+        columns.Bound(p => p.CmpDate).ClientTemplate(
+        "<input type='hidden' name='ComplistDetails[#= GetDetailComplist(data)#].CmpDate' value='#= CmpDate #' />");
+
+        columns.Bound(p => p.StartTime).ClientTemplate("#= StartTime #" +
+        "<input type='hidden' name='ComplistDetails[#= GetDetailComplist(data)#].StartTime' value='#= StartTime #' />");
+
+        columns.Bound(p => p.FinishTime).ClientTemplate("#= FinishTime #" +
+        "<input type='hidden' name='ComplistDetails[#= GetDetailComplist(data)#].FinishTime' value='#= FinishTime #' />");
+
+        columns.Bound(p => p.CmpTotalHours).ClientTemplate("#= CmpTotalHours #" +
+        "<input type='hidden' name='ComplistDetails[#= GetDetailComplist(data)#].CmpTotalHours' value='#= CmpTotalHours #' />");
+
+        columns.Bound(p => p.TotalDay).ClientTemplate("#= TotalDay #" +
+        "<input type='hidden' name='ComplistDetails[#= GetDetailComplist(data)#].TotalDay' value='#= TotalDay #' />");
+
+        columns.Bound(p => p.remarks).ClientTemplate("#= remarks #" +
+       "<input type='hidden' name='ComplistDetails[#= GetDetailComplist(data)#].remarks' value='#= remarks #' />");
+
+        columns.Bound(p => p.AppStatus).ClientTemplate("#= AppStatus #" +
+       "<input type='hidden' name='ComplistDetails[#= GetDetailComplist(data)#].AppStatus' value='#= AppStatus #' />");
+
+        columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
+           "<input type='hidden' name='ComplistDetails[#= GetDetailComplist(data)#].EditMode' value='#= EditMode #' />"
+         );
+
+    })
+    .Events(e =>
+    {
+        e.Edit("onEditKendoDetail");
+        e.DataBound("onDataBoundDependentDetails");
+    })
+    .DataSource(dataSource => dataSource.Ajax()
+    .Model(model =>
+    {
+        model.Id(p => p.ID);
+
+    })
+    .ServerOperation(false)
+
+    )
+    )
+</div>
+<script>
+    $(document).ready(function () {
+        console.log();
+    });
+
+    function GetDetailComplist(dataItem) {
+        var data = $("#ComplistDetails").data("kendoGrid").dataSource.data();
+        return data.indexOf(dataItem);
+    }
+
+    function onDataBoundDependentDetails(e) {
+        var grid = $("#ComplistDetails").data("kendoGrid");
+        hideDeletedRowKendoDetail(grid);
+    }
+</script>
+

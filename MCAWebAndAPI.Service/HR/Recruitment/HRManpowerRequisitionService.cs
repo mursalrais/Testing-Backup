@@ -24,7 +24,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         public int CreateManpowerRequisition(ManpowerRequisitionVM viewModel)
         {
             var updatedValue = new Dictionary<string, object>();
-            if(viewModel.Status.Value == "Pending Approval")
+            if(viewModel.Status.Value == "Pending Approval 1 of 2")
             {
                 //kirim email
             }
@@ -85,15 +85,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         public bool UpdateStatus(ManpowerRequisitionVM viewModel)
         {
-            if (viewModel.Status.Value == "Approved")
-            {
-                //send email if Approved
-            }
-            else
-            {
-                //send email if Rejected
-                viewModel.Status.Value = "Rejected";
-            }
+            
             var updatedValue = new Dictionary<string, object>();
             int ID = viewModel.ID.Value;
             updatedValue.Add("manpowerrequeststatus", viewModel.Status.Value);            
@@ -311,16 +303,20 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.IsTravellingRequired = Convert.ToBoolean(listItem["istravelrequired"]);
             viewModel.IsKeyPosition = Convert.ToBoolean(listItem["iskeyposition"]);
 
-            viewModel.OnBehalfOf.Value = FormatUtil.ConvertLookupToID(listItem, "onbehalfof");
+            viewModel.OnBehalfOf.Value = (listItem["onbehalfof"] as FieldLookupValue).LookupId;
+            viewModel.OnBehalfOf.Text = (listItem["onbehalfof"] as FieldLookupValue).LookupValue;
             viewModel.DivisionProjectUnit.Value = Convert.ToString(listItem["projectunit"]);
             viewModel.Status.Value = Convert.ToString(listItem["manpowerrequeststatus"]);
             //viewModel.workplanItem.Value;
 
-            viewModel.Position.Value = FormatUtil.ConvertLookupToID(listItem, "positionrequested");
-            viewModel.ReportingTo.Value = FormatUtil.ConvertLookupToID(listItem, "reportingto");
-            viewModel.JobLocation.Value = FormatUtil.ConvertLookupToID(listItem, "joblocation");
-            viewModel.SecondaryReportingTo.Value = FormatUtil.ConvertLookupToID(listItem, "secondaryreportingto");
-
+            viewModel.Position.Value = (listItem["positionrequested"] as FieldLookupValue).LookupId;
+            viewModel.Position.Text = (listItem["positionrequested"] as FieldLookupValue).LookupValue;
+            viewModel.ReportingTo.Value = (listItem["reportingto"] as FieldLookupValue).LookupId;
+            viewModel.ReportingTo.Text = (listItem["reportingto"] as FieldLookupValue).LookupValue;
+            viewModel.JobLocation.Value = (listItem["joblocation"] as FieldLookupValue).LookupId;
+            viewModel.JobLocation.Text = (listItem["joblocation"] as FieldLookupValue).LookupValue;
+            viewModel.SecondaryReportingTo.Value = (listItem["secondaryreportingto"] as FieldLookupValue).LookupId;
+            viewModel.SecondaryReportingTo.Text = (listItem["secondaryreportingto"] as FieldLookupValue).LookupValue;
 
 
             viewModel.PositionObjectives = FormatUtil.ConvertMultipleLine(Convert.ToString(listItem["Objectives"]));
@@ -532,6 +528,12 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         public async Task CreateManpowerRequisitionDocumentsSync(int? headerID, IEnumerable<HttpPostedFileBase> documents)
         {
             CreateManpowerRequisitionDocuments(headerID, documents);
+        }
+
+        public string getEmailOnBehalf(int? ID)
+        {
+
+            return "ad";
         }
     }
 }

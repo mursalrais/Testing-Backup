@@ -46,6 +46,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [UIHint("TextArea")]
         public string Remarks { get; set; }
 
+        public string useraccess { get; set; }
 
         /// <summary>
         /// Result Interview

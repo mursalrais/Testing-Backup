@@ -14,6 +14,7 @@
     <fieldset>
         @Html.HiddenFor(m => m.ID)
         @Html.HiddenFor(m => m.Position)
+        @Html.HiddenFor(m => m.useraccess)
         <div class="row">
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.ActivePosition).Class("col-md-2 control-label")
@@ -73,9 +74,7 @@
     <script>
         function OnChangeActivePosition(e) {
             var dataItem = this.dataItem(e.item);
-            debugger;
-
-            window.location = "/HRShortlist/ShortlistData?siteurl=&position=" + dataItem.ID + "&username=&useraccess=HR";
+            window.location = "/HRShortlist/ShortlistData?siteurl=&position=" + dataItem.ID + "&username=&useraccess=" + $("#useraccess").val() + "";
         };
 
         $(document).ready(function () {

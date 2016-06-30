@@ -42,7 +42,7 @@
                             <i class="fa fa-save"></i>
                             Initiate Plan Process
                         </button>
-                        if (Model.PerformanceMonitoringDetails.All(x => x.PlanIndicator == "green") && Model.Status == "Open")
+                        if (Model.PerformanceMonitoringDetails.All(x => x.PlanIndicator == "green") && (Model.Status == "Open") && (Model.PerformanceMonitoringDetails.All(x => x.PlanStatus == "Approved")))
                         {
                             <button id="close" class="btn btn-primary" type="submit">
                                 <i class="fa fa-save"></i>

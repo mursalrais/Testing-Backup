@@ -123,6 +123,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.ShortlistDetails = GetDetailShortlist(ID, useraccess);
             viewModel.ActivePosition.Text = Convert.ToString(position);
             viewModel.Position = Convert.ToString(position);
+            viewModel.useraccess = Convert.ToString(useraccess);
 
             return viewModel;
 
@@ -312,10 +313,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         public void CreateShortlistInviteIntv(int? headerID, ApplicationShortlistVM viewModel, string mailsubject)
         {
-            var updatedValue = new Dictionary<string, object>();
-
             foreach (var list in viewModel.ShortlistDetails)
             {
+                var updatedValue = new Dictionary<string, object>();
                 updatedValue.Add("Title", list.Candidate);
                 updatedValue.Add("emailfrom", list.Candidatemail);
                 updatedValue.Add("emailto", viewModel.SendTo);
@@ -355,7 +355,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 throw e;
             }
 
-            SendEmailValidation(viewModel.EmailFrom, viewModel.EmailMessage);
+            SendEmailValidation(viewModel.SendTo, viewModel.EmailMessage);
 
         }
 
