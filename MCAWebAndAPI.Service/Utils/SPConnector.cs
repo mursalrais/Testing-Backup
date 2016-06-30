@@ -77,7 +77,7 @@ namespace MCAWebAndAPI.Service.Utils
                 return SPListItems;
             }
         }
-        
+
         public static ListItem GetListItem(string listName, int? listItemID, string siteUrl = null)
         {
             MapCredential(siteUrl);

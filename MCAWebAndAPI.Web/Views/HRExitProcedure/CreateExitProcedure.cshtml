@@ -40,6 +40,12 @@
             </div>
         </div>
     </div>
+
+    if (Model.Requestor != null)
+    {
+        <legend>Approval Workflow</legend>
+        <div id="workflow-placeholder" class="row"></div>
+    }
 }
 
 @section scripts{
@@ -93,16 +99,15 @@
         function onSelectExitProcedure(e) {
 
             $.each(e.files, function (index, value) {
-                console.log("Index Document: " + index);
-                console.log("Name: " + value.name);
-                console.log("Size: " + value.size + " bytes");
-                console.log("Extension: " + value.extension);
-
-                      
+                
             });
 
         }
 
-        
+        $(document).ready(function () {
+            displayWorkflowRouterExitProcedure("workflow-placeholder", "@ViewBag.ListName", "@ViewBag.RequestorUserLogin");
+        });
+
+
     </script>
 }

@@ -24,5 +24,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         ExitProcedureVM ViewExitProcedure(int? ID);
 
         void CreateExitProcedureDocuments(int? headerID, IEnumerable<HttpPostedFileBase> documents, ExitProcedureVM exitProcedure);
+
     }
 }

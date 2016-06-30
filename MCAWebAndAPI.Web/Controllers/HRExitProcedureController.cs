@@ -6,6 +6,7 @@ using MCAWebAndAPI.Web.Resources;
 using MCAWebAndAPI.Service.HR.Recruitment;
 using Elmah;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -23,7 +24,7 @@ namespace MCAWebAndAPI.Web.Controllers
         /// </summary>
         /// <param name="siteUrl"></param>
         /// <returns></returns>
-        public ActionResult CreateExitProcedure(string siteUrl = null)
+        public ActionResult CreateExitProcedure(string siteUrl = null, string requestor = null)
         {  
             // MANDATORY: Set Site URL
             exitProcedureService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
@@ -31,6 +32,19 @@ namespace MCAWebAndAPI.Web.Controllers
 
             // Get blank ViewModel
             var viewModel = exitProcedureService.GetExitProcedure(null);
+
+            viewModel.Requestor = requestor;
+
+            ViewBag.ListName = "Exit%20Procedure";
+            ViewBag.RequestorUserLogin = requestor;
+
+            /*
+            if (requestor != null)
+            {
+                SessionManager.Set("RequestorUserLogin", requestor);
+            }
+            */
+
             return View("CreateExitProcedure", viewModel);
         }
 

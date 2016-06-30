@@ -13,7 +13,9 @@
         .CreateAt(GridInsertRowPosition.Bottom))
         .Columns(columns =>
         {
-            columns.Bound(p => p.ApproverPosition).ClientTemplate("#=ApproverPosition.Text #" +
+            //columns.Bound(p => p.Items).ClientTemplate("#=printItems(Items)#");
+            //columns.Bound(o => o.AssetSubType).ClientTemplate("#=printAssetSubType(AssetSubType)#");
+            columns.Bound(p => p.ApproverPosition).Width(150).ClientTemplate("#=ApproverPosition.Text #" +
                           "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklist(data)#].ApproverPosition.Value' value='#= ApproverPosition.Value #' />"
                         ).EditorViewData(new
                         {
@@ -80,7 +82,9 @@
                .Model(model =>
                {
                    model.Id(p => p.ID);
-                   model.Field(m => m.ApproverPosition).DefaultValue(WorkingRelationshipDetailVM.GetPositionDefaultValue());
+                   //model.Field(m => m.Item).DefaultValue(ExitProcedureChecklistVM.GetItemDefaultValue());
+                   //model.Field(m => m.Items);
+                   model.Field(p => p.ApproverPosition).DefaultValue(ExitProcedureChecklistVM.GetPositionDefaultValue());
                    //model.Field(m => m.Relationship).DefaultValue(WorkingRelationshipDetailVM.GetRelationshipDefaultValue());
                    //model.Field(m => m.Frequency).DefaultValue(WorkingRelationshipDetailVM.GetFrequencyDefaultValue());
                })
@@ -90,7 +94,7 @@
 
 </div>
 
-<script>
+<script type="text/javascript">
     function getExitProcedureChecklist(dataItem)
     {
         var data = $("#ExitProcedureChecklist").data("kendoGrid").dataSource.data();
@@ -101,8 +105,18 @@
         hideDeletedRowKendoDetail(grid);
     }
 
-    $(document).ready(function () {
 
+    function printItems(Items)
+    {
+        var result = "";
+        var j = Items.length;
+        for(var i = 0; i < j; i++) {
+            result += Items[i];
+        }
+        return result;
+    }
+
+    $(document).ready(function () {
 
         function onChange() {
             

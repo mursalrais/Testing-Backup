@@ -21,6 +21,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         const string SP_EXP_LIST_NAME = "Exit Procedure";
         const string SP_EXP_DOC_LIST_NAME = "ExitProcedureDocuments";
+        const string SP_WFL_MAP_MSR_LIST_NAME = "Workflow Mapping Master";
         //const string SP_PSA_DOC_LIST_NAME = "Professional Documents";
         //const string SP_PSA_DOC_LIST_NAME = "PSA Documents";
 

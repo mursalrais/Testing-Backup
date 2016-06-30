@@ -561,7 +561,7 @@
     <Content Include="Views\ASSLocationMaster\IFrame.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\TextArea.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\PhoneNumber.cshtml" />
-    <Content Include="Views\HRDataMaster\CreateProfessionalData.cshtml" />
+    <Content Include="Views\HRApplication\HRDataMaster\CreateProfessionalData.cshtml" />
     <Content Include="Views\HRApplication\CreateApplicationData.cshtml" />
     <Content Include="Views\HRApplication\_ContactInformationDetails.cshtml" />
     <Content Include="Views\HRApplication\_SpecializationDetails.cshtml" />
@@ -688,6 +688,10 @@
     <Content Include="Views\HRExitProcedure\_Documents.cshtml" />
     <Content Include="Views\HRExitProcedure\_ExitProcedureChecklist.cshtml" />
     <Content Include="Views\HRExitProcedure\_DocumentDetailsDisplay.cshtml" />
+    <Content Include="Views\HRPerformancePlan\PrintPerformancePlan.cshtml" />
+    <Content Include="Views\HRPerformancePlan\_PerformancePlanDetail_Print.cshtml" />
+    <Content Include="Views\HRPerformancePlan\_PerfromancePlan_Print.cshtml" />
+    <Content Include="Views\HRPerformancePlan\_ProfessionalPerformancePlan_Print.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
