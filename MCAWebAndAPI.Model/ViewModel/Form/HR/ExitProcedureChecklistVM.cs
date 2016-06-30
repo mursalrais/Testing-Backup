@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Web;
+using System.Linq;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
@@ -18,12 +19,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         public string ApproverLevel { get; set; }
 
-        public string ApproverUnit { get; set; }
-
         public string AppPosition { get; set; }
-
-        public string IsDefault { get; set; }
-
+       
         public string WorkflowType { get; set; }
         
         /// <summary>
@@ -31,12 +28,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// </summary>
         [DisplayName("Item")]
         public string Item { get; set; }
-
-        /// <summary>
-        /// Approver Position
-        /// </summary>
-        [UIHint("InGridAjaxComboBox")]
-        public AjaxComboBoxVM ApproverPosition { get; set; } = new AjaxComboBoxVM();
 
         /// <summary>
         /// Get Position Default Value
@@ -91,6 +82,70 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// </summary>
         [UIHint("TextArea")]
         public string Remarks { get; set; }
+
+        public string ItemExitProcedure { get; set; }
+
+        public string ListName { get; set; }
+
+        public string Level { get; set; }
+
+        public bool IsDefault { get; set; }
+
+        public bool IsSequential { get; set; }
+
+        [UIHint("InGridComboBox")]
+        public InGridComboBoxVM ApproverUnit { get; set; } = new InGridComboBoxVM();
+
+        [UIHint("InGridAjaxCascadeComboBox")]
+        public AjaxComboBoxVM ApproverPosition { get; set; } = new AjaxComboBoxVM();
+
+        [UIHint("InGridAjaxCascadeComboBox")]
+        public AjaxComboBoxVM ApproverUserName { get; set; } = new AjaxComboBoxVM();
+
+        public static IEnumerable<InGridComboBoxVM> GetUnitOptions()
+        {
+            var index = 0;
+            var options = new string[] {
+                "Executive Director",
+                "Executive Officer",
+                "Legal Unit",
+                "Monitoring & Evaluation Unit",
+                "Communications & Outreach Unit",
+                "Risk & Audit Unit",
+                "Program Div.",
+                "Procurement Modernization Project",
+                "Community-Based Health & Nutrition Project",
+                "Green Prosperity Project",
+                "Cross-Cutting Sector",
+                "Economic Analysis Unit",
+                "Social & Gender Assessment Unit",
+                "Environment & Social Performance Unit",
+                "Operations Support Div.",
+                "Finance Unit",
+                "Procurement Unit",
+                "Information Technology Unit",
+                "Human Resources Unit",
+                "Office Support Unit",
+                "Fiscal Agent (FA)",
+                "Procurement Agent (PA)"};
+
+            return options.Select(e =>
+                new InGridComboBoxVM
+                {
+                    Value = ++index,
+                    Text = e
+                });
+        }
+
+        public static InGridComboBoxVM GetUnitDefaultValue(InGridComboBoxVM model = null)
+        {
+            var options = GetUnitOptions();
+            if (model == null || (model.Value == null && model.Text == null) || string.IsNullOrEmpty(model.Text))
+                return options.FirstOrDefault();
+
+            return options.FirstOrDefault(e => e.Value == null ?
+                e.Value == model.Value : e.Text == model.Text);
+        }
 
     }
 }

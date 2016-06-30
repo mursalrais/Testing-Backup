@@ -54,6 +54,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             viewModel.ID = Convert.ToInt32(listItem["ID"]);
             viewModel.Position = FormatUtil.ConvertLookupToID(listItem, "vacantposition") + string.Empty;
+            viewModel.ActivePosition.Text = FormatUtil.ConvertLookupToID(listItem, "vacantposition") + string.Empty;
             viewModel.Candidate = Convert.ToString(listItem["Title"]);
 
             return viewModel;
@@ -81,7 +82,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return viewModel;
         }
 
-        public ApplicationShortlistVM GetShortlist(string position, string username, string useraccess)
+        public ApplicationShortlistVM GetShortlist(int? position, string username, string useraccess)
         {
             var viewModel = new ApplicationShortlistVM();
 
@@ -91,19 +92,13 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             var caml = @"<View>  
                     <Query> 
                        <Where>
-                          <And>
                              <Eq>
-                                <FieldRef Name='iskeyposition' />
-                                <Value Type='Boolean'>true</Value>
+                                <FieldRef Name='positionrequested_x003a_ID' />
+                                <Value Type='Lookup'>" + position +@"</Value>
                              </Eq>
-                             <Eq>
-                                <FieldRef Name='positionrequested' />
-                                <Value Type='Lookup'>Temporary Data Entry</Value>
-                             </Eq>
-                          </And>
                        </Where>
                     </Query> 
-                     <ViewFields><FieldRef Name='Position' /><FieldRef Name='ID' /></ViewFields> 
+                     <ViewFields><FieldRef Name='ID' /></ViewFields> 
                     </View>";
 
             var applicationID = 0;
@@ -115,18 +110,20 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return GetShortlist(applicationID, username, useraccess, position);
         }
 
-        public ApplicationShortlistVM GetShortlist(int ID, string username, string useraccess, string position)
+        public ApplicationShortlistVM GetShortlist(int ID, string username, string useraccess, int? position)
         {
             var viewModel = new ApplicationShortlistVM();
             if (ID == 0)
             return viewModel;
 
-            if (username != null)
-            useraccess = GetAccessData(username);
+            //if (username != null && username != "")
+            //useraccess = GetAccessData(username);
 
             
             viewModel.ShortlistDetails = GetDetailShortlist(ID, useraccess);
-            viewModel.Position = position;
+            viewModel.ActivePosition.Text = Convert.ToString(position);
+            viewModel.Position = Convert.ToString(position);
+            viewModel.useraccess = Convert.ToString(useraccess);
 
             return viewModel;
 
@@ -152,8 +149,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         //   < FieldRef Name='yearofgraduation' />
         //   <FieldRef Name = 'remarks' />
         //</ ViewFields >
-        private IEnumerable<ShortlistDetailVM> GetDetailShortlist(int Position, string useraccess)
-        {
+        private IEnumerable<ShortlistDetailVM> GetDetailShortlist(int manPosition, string useraccess)
+         {
             var caml = "";
             if (useraccess == "HR")
             {
@@ -163,13 +160,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
            <And>
          <Eq>
             <FieldRef Name='manpowerrequisition' />
-            <Value Type='Lookup'>"+ Position +@"</Value>
+            <Value Type='Lookup'>"+ manPosition + @"</Value>
          </Eq>
-         <Or>
-            <Eq>
-               <FieldRef Name='applicationstatus' />
-               <Value Type='Text'>Shortlisted</Value>
-            </Eq>
             <Or>
                <Eq>
                   <FieldRef Name='applicationstatus' />
@@ -179,7 +171,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                   <FieldRef Name='applicationstatus' />
                   <Value Type='Text'>NEW</Value>
                </Eq>
-            </Or>
          </Or>
       </And>
    </Where>
@@ -203,7 +194,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
           <And>
              <Eq>
                 <FieldRef Name='manpowerrequisition' />
-                <Value Type='Lookup'>" + Position + @"</Value>
+                <Value Type='Lookup'>" + manPosition + @"</Value>
              </Eq>
                 <Eq>
                    <FieldRef Name='applicationstatus' />
@@ -322,10 +313,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         public void CreateShortlistInviteIntv(int? headerID, ApplicationShortlistVM viewModel, string mailsubject)
         {
-            var updatedValue = new Dictionary<string, object>();
-
             foreach (var list in viewModel.ShortlistDetails)
             {
+                var updatedValue = new Dictionary<string, object>();
                 updatedValue.Add("Title", list.Candidate);
                 updatedValue.Add("emailfrom", list.Candidatemail);
                 updatedValue.Add("emailto", viewModel.SendTo);
@@ -365,7 +355,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 throw e;
             }
 
-            SendEmailValidation(viewModel.EmailFrom, viewModel.EmailMessage);
+            SendEmailValidation(viewModel.SendTo, viewModel.EmailMessage);
 
         }
 
@@ -388,7 +378,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     <Query> 
                        <Where><Eq><FieldRef Name='manpowerrequeststatus' /><Value Type='Text'>Active</Value></Eq></Where><OrderBy><FieldRef Name='positionrequested_x003a_Position' /></OrderBy> 
                     </Query> 
-                    <ViewFields><FieldRef Name='manpowerrequeststatus' /><FieldRef Name='ID' /><FieldRef Name='positionrequested' /><FieldRef Name='positionrequested_x003a_Position' /></ViewFields></View>";
+                    <ViewFields><FieldRef Name='manpowerrequeststatus' /> <FieldRef Name='ID' /><FieldRef Name='positionrequested' /><FieldRef Name='positionrequested_x003a_Position' /><FieldRef Name='positionrequested_x003a_ID' /></ViewFields></View>";
              
             var models = new List<PositionMaster>();
 
@@ -410,7 +400,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             var viewModel = new PositionMaster();
 
-            viewModel.ID = Convert.ToInt32(item["ID"]);
+            viewModel.ID = Convert.ToInt32(FormatUtil.ConvertLookupToValue(item, "positionrequested_x003a_ID"));
             viewModel.PositionName = FormatUtil.ConvertLookupToValue(item, "positionrequested");
             return viewModel;
         }

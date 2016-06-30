@@ -11,6 +11,9 @@ using NLog;
 using System.Web;
 using MCAWebAndAPI.Service.Resources;
 using System.Globalization;
+using MCAWebAndAPI.Model.ViewModel.Form.Common;
+using MCAWebAndAPI.Model.ViewModel.Control;
+
 
 namespace MCAWebAndAPI.Service.HR.Recruitment
 {
@@ -21,9 +24,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         const string SP_EXP_LIST_NAME = "Exit Procedure";
         const string SP_EXP_DOC_LIST_NAME = "ExitProcedureDocuments";
-        const string SP_WFL_MAP_MSR_LIST_NAME = "Workflow Mapping Master";
-        //const string SP_PSA_DOC_LIST_NAME = "Professional Documents";
-        //const string SP_PSA_DOC_LIST_NAME = "PSA Documents";
+        const string SP_WORKFLOW_LISTNAME = "Workflow Mapping Master";
+        const string SP_PROMAS_LIST_NAME = "Professional Master";
+        const string SP_POSMAS_LIST_NAME = "Position Master";
 
         public void SetSiteUrl(string siteUrl)
         {
@@ -31,7 +34,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         }
 
         //Display Exit Procedure Data based on ID
-        
+
         public int CreateExitProcedure(ExitProcedureVM exitProcedure)
         {
             var updatedValues = new Dictionary<string, object>();
@@ -106,7 +109,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             return string.Format(UrlResource.ExitProcedureDocumentByID, _siteUrl, iD);
         }
-        
+
         public bool UpdateExitProcedure(ExitProcedureVM exitProcedure)
         {
             var columnValues = new Dictionary<string, object>();
@@ -126,7 +129,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             columnValues.Add("reasondescription", exitProcedure.ReasonDesc);
             columnValues.Add("psanumber", exitProcedure.PSANumber);
 
-            
+
             try
             {
                 SPConnector.UpdateListItem(SP_EXP_LIST_NAME, ID, columnValues, _siteUrl);
@@ -173,7 +176,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.ExitReason.Value = Convert.ToString(listItem["exitreason"]);
             viewModel.ReasonDesc = Convert.ToString(listItem["reasondescription"]);
             viewModel.PSANumber = Convert.ToString(listItem["psanumber"]);
-            
+
             viewModel.DocumentUrl = GetDocumentUrl(viewModel.ID);
 
             return viewModel;
@@ -190,7 +193,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 updateValue.Add("documenttype", "Exit Procedure");
                 updateValue.Add("exitprocedureid", new FieldLookupValue { LookupId = Convert.ToInt32(exProcID) });
                 updateValue.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(exitProcedure.Professional.Value) });
-                
+
                 try
                 {
                     SPConnector.UploadDocument(SP_EXP_DOC_LIST_NAME, updateValue, doc.FileName, doc.InputStream, _siteUrl);
@@ -201,6 +204,177 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     throw e;
                 }
             }
+        }
+
+        public async Task<ExitProcedureVM> GetWorkflowRouterExitProcedure(string listName, string requestor)
+        {
+            var viewModel = new ExitProcedureVM();
+            //var viewModel = new WorkflowRouterVM();
+            viewModel.ListName = listName;
+
+            // Get Position in Professional Master
+            var caml = @"<View><Query><Where><Eq>
+                <FieldRef Name='officeemail' /><Value Type='Text'>" + requestor +
+                @"</Value></Eq></Where></Query><ViewFields><FieldRef Name='Position' /><FieldRef Name='Project_x002f_Unit' /></ViewFields><QueryOptions /></View>";
+
+            int? positionID = 0;
+            foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl, caml))
+            {
+                viewModel.RequestorPosition = FormatUtil.ConvertLookupToValue(item, "Position");
+                positionID = FormatUtil.ConvertLookupToID(item, "Position");
+
+                break;
+            }
+
+            // Get Unit in Position Master
+            var position = SPConnector.GetListItem(SP_POSMAS_LIST_NAME, positionID, _siteUrl);
+            viewModel.RequestorUnit = Convert.ToString(position["projectunit"]);
+
+            // Get List of Workflow Items based on List name, Requestor Position, and Requestor Unit
+            caml = @"<View>  
+            <Query> 
+               <Where><And><And><Eq><FieldRef Name='requestorposition' /><Value Type='Lookup'>" + viewModel.RequestorPosition +
+               @"</Value></Eq><Eq><FieldRef Name='requestorunit' /><Value Type='Choice'>" + viewModel.RequestorUnit + @"</Value></Eq></And><Eq>
+               <FieldRef Name='transactiontype' /><Value Type='Choice'>" + listName + @"</Value></Eq></And></Where> 
+            <OrderBy><FieldRef Name='approverlevel' /></OrderBy>
+            </Query> 
+            </View>";
+
+            var exitProcedureCheckList = new List<ExitProcedureChecklistVM>();
+            foreach (var item in SPConnector.GetList(SP_WORKFLOW_LISTNAME, _siteUrl, caml))
+            {
+                if (string.Compare(Convert.ToString(item["isdefault"]), "No",
+                    StringComparison.OrdinalIgnoreCase) == 0
+                    &&
+                    string.Compare(Convert.ToString(item["workflowtype"]), "Sequential",
+                    StringComparison.OrdinalIgnoreCase) == 0)
+                    continue;
+
+                var vm = await ConvertToExitProcedureChecklistVM(item);
+                exitProcedureCheckList.Add(vm);
+            }
+
+            //viewModel.WorkflowItems = workflowItems;
+            viewModel.ExitProcedureChecklist = exitProcedureCheckList;
+
+            return viewModel;
+        }
+
+        private async Task<ExitProcedureChecklistVM> ConvertToExitProcedureChecklistVM(ListItem item)
+        {
+
+            var viewModel = new ExitProcedureChecklistVM();
+            viewModel.ApproverPosition = FormatUtil.ConvertToInGridAjaxComboBox(item, "approverposition");
+            Task<IEnumerable<ProfessionalMaster>> getApproverNamesTask =
+                GetApproverNamesAsync(viewModel.ApproverPosition.Text);
+
+            viewModel.Level = Convert.ToString(item["approverlevel"]);
+
+            if (viewModel.Level == "1")
+            {
+                viewModel.ItemExitProcedure = "Close-Out/Handover Report";
+            }
+            else if (viewModel.Level == "2")
+            {
+                viewModel.ItemExitProcedure = "MCA Indonesia Propietary Information";
+            }
+            else if (viewModel.Level == "3")
+            {
+                viewModel.ItemExitProcedure = "Laptop/Desktop";
+            }
+            else if (viewModel.Level == "4")
+            {
+                viewModel.ItemExitProcedure = "SAP Password, Computer Password";
+            }
+            else if (viewModel.Level == "5")
+            {
+                viewModel.ItemExitProcedure = "IT Tools";
+            }
+            else if (viewModel.Level == "6")
+            {
+                viewModel.ItemExitProcedure = "Keys (Drawers,desk,etc)";
+            }
+            else if (viewModel.Level == "7")
+            {
+                viewModel.ItemExitProcedure = "Car";
+            }
+            else if (viewModel.Level == "8")
+            {
+                viewModel.ItemExitProcedure = "Advance Statement";
+            }
+            else if (viewModel.Level == "9")
+            {
+                viewModel.ItemExitProcedure = "Travel Statement";
+            }
+            else if (viewModel.Level == "10")
+            {
+                viewModel.ItemExitProcedure = "Resignation/Separation Letter";
+            }
+            else if (viewModel.Level == "11")
+            {
+                viewModel.ItemExitProcedure = "Timesheet/Leave Form";
+            }
+            else if (viewModel.Level == "12")
+            {
+                viewModel.ItemExitProcedure = "Exit Interview/NDA";
+            }
+            else if (viewModel.Level == "13")
+            {
+                viewModel.ItemExitProcedure = "Insurance Card";
+            }
+            else if (viewModel.Level == "14")
+            {
+                viewModel.ItemExitProcedure = "ID Card & Access Card";
+            }
+
+            viewModel.ApproverUnit =
+                ExitProcedureChecklistVM.GetUnitDefaultValue(new InGridComboBoxVM
+                {
+                    Text = Convert.ToString(item["approverunit"])
+                });
+
+            var userNames = await getApproverNamesTask;
+            var userName = userNames.FirstOrDefault();
+            viewModel.ApproverUserName = AjaxComboBoxVM.GetDefaultValue(new AjaxComboBoxVM
+            {
+                Text = userName.Name,
+                Value = userName.ID
+            });
+
+            return viewModel;
+        }
+
+        private async Task<IEnumerable<ProfessionalMaster>> GetApproverNamesAsync(string position)
+        {
+            return GetApproverNames(position);
+        }
+
+        public IEnumerable<ProfessionalMaster> GetApproverNames(string position)
+        {
+            var caml = @"<View>  
+            <Query> 
+               <Where><Eq><FieldRef Name='Position' /><Value Type='Lookup'>" + position + @"</Value></Eq></Where> 
+            </Query> 
+             <ViewFields><FieldRef Name='ID' /><FieldRef Name='Title' /><FieldRef Name='officeemail' /></ViewFields> 
+            </View>";
+
+            var viewModel = new List<ProfessionalMaster>();
+            foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl, caml))
+            {
+                viewModel.Add(ConvertToProfessionalMasterVM(item));
+            }
+
+            return viewModel;
+        }
+
+        private ProfessionalMaster ConvertToProfessionalMasterVM(ListItem item)
+        {
+            return new ProfessionalMaster
+            {
+                ID = Convert.ToInt32(item["ID"]),
+                Name = Convert.ToString(item["Title"]),
+                UserLogin = Convert.ToString(item["officeemail"])
+            };
         }
     }
 }

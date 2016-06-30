@@ -16,7 +16,7 @@
     <RootNamespace>MCAWebAndAPI.Web</RootNamespace>
     <AssemblyName>MCAWebAndAPI.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -672,7 +672,7 @@
     <Content Include="Views\HRPerformanceMonitoring\_Detail.cshtml" />
     <Content Include="Views\HRPerformanceMonitoring\_PerformancePlanMonitoring.cshtml" />
     <Content Include="Views\Shared\_WorkflowDetails.cshtml" />
-    <Content Include="Views\HRPerformancePlan\EditPerformancePlan.cshtml" />
+    <Content Include="Views\HRPerformancePlan\PerformancePlan.cshtml" />
     <Content Include="Views\HRPerformancePlan\_PerformancePlanDetail.cshtml" />
     <Content Include="Views\HRExitProcedure\CreateExitProcedure.cshtml" />
     <Content Include="Views\HRExitProcedure\EditExitProcedure.cshtml" />
@@ -692,6 +692,8 @@
     <Content Include="Views\HRPerformancePlan\_PerformancePlanDetail_Print.cshtml" />
     <Content Include="Views\HRPerformancePlan\_PerfromancePlan_Print.cshtml" />
     <Content Include="Views\HRPerformancePlan\_ProfessionalPerformancePlan_Print.cshtml" />
+    <Content Include="Views\HRCompensatory\CompensatorylistUser.cshtml" />
+    <Content Include="Views\HRCompensatory\_CompensantoryDetails.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -725,6 +727,7 @@
     <Compile Include="Controllers\FINEventBudgetController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HRApplicationController.cs" />
+    <Compile Include="Controllers\HRCompensatoryController.cs" />
     <Compile Include="Controllers\HRDataMasterController.cs" />
     <Compile Include="Controllers\HRExitProcedureController.cs" />
     <Compile Include="Controllers\HRInterviewlistController.cs" />

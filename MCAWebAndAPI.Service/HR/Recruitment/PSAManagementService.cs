@@ -121,9 +121,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             return new PSAMaster
             {
-                ID = item["professional_x003a_ID"] == null ? "" :
+                ID = Convert.ToInt32(item["ID"]),
+                ProfessionalID = item["professional_x003a_ID"] == null ? string.Empty :
                Convert.ToString((item["professional_x003a_ID"] as FieldLookupValue).LookupValue),
                 PSAID = Convert.ToString(item["Created"]),
+                PSANumber = Convert.ToString(item["Title"]),
                 JoinDate = Convert.ToDateTime(item["joindate"]).ToLocalTime().ToShortDateString(),
                 DateOfNewPSA = Convert.ToDateTime(item["dateofnewpsa"]).ToLocalTime().ToShortDateString(),
                 PsaExpiryDate = Convert.ToDateTime(item["psaexpirydate"]).ToLocalTime().ToShortDateString(),

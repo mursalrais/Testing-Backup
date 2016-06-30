@@ -51,6 +51,7 @@ namespace MCAWebAndAPI.Service.Common
 
         public async Task<WorkflowRouterVM> GetWorkflowRouter(string listName, string requestor)
         {
+            
 
             var viewModel = new WorkflowRouterVM();
             viewModel.ListName = listName;
@@ -64,10 +65,7 @@ namespace MCAWebAndAPI.Service.Common
             foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl, caml))
             {
                 viewModel.RequestorPosition = FormatUtil.ConvertLookupToValue(item, "Position");
-                viewModel.RequestorUnit = Convert.ToString(item["Project_x002f_Unit"]);
                 positionID = FormatUtil.ConvertLookupToID(item, "Position");
-
-                if
 
                 break;
             }

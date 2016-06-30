@@ -93,3 +93,10 @@ Parameter name: address
    at System.Net.Mail.MailAddress..ctor(String address, String displayName, Encoding displayNameEncoding)
    at MCAWebAndAPI.Service.Utils.EmailUtil.Send(String emailAddress, String subject, String emailMessage) in C:\Users\sobari\Documents\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\EmailUtil.cs:line 30
    at MCAWebAndAPI.Service.HR.Recruitment.HRShortlistService.SendEmailValidation(String emailTo, String emailMessages) in C:\Users\sobari\Documents\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Recruitment\HRShortlistService.cs:line 450
+2016-06-29 11:42:27.5907 MCAWebAndAPI.Service.HR.Recruitment.HRInterviewService Column 'positioin' does not exist. It may have been deleted by another user.  /sites/ims/hr/Lists/Application
+2016-06-29 11:42:27.6893 MCAWebAndAPI.Service.HR.Recruitment.HRInterviewService Column 'positioin' does not exist. It may have been deleted by another user.  /sites/ims/hr/Lists/Application
+2016-06-30 09:53:05.6640 MCAWebAndAPI.Service.HR.Recruitment.HRShortlistService System.ArgumentNullException: Value cannot be null.
+Parameter name: address
+   at System.Net.Mail.MailAddress..ctor(String address, String displayName, Encoding displayNameEncoding)
+   at MCAWebAndAPI.Service.Utils.EmailUtil.Send(String emailAddress, String subject, String emailMessage) in C:\Users\sobari\Documents\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\EmailUtil.cs:line 30
+   at MCAWebAndAPI.Service.HR.Recruitment.HRShortlistService.SendEmailValidation(String emailTo, String emailMessages) in C:\Users\sobari\Documents\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Recruitment\HRShortlistService.cs:line 366

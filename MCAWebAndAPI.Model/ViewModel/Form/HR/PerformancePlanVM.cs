@@ -22,7 +22,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public string PositionAndDepartement { get; set; }
 
         /// <summary>
-        /// Title
+        /// performanceplan
         /// </summary>
         public string PerformancePeriod { get; set; }
     }

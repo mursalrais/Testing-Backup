@@ -38,13 +38,6 @@ namespace MCAWebAndAPI.Web.Controllers
             ViewBag.ListName = "Exit%20Procedure";
             ViewBag.RequestorUserLogin = requestor;
 
-            /*
-            if (requestor != null)
-            {
-                SessionManager.Set("RequestorUserLogin", requestor);
-            }
-            */
-
             return View("CreateExitProcedure", viewModel);
         }
 
@@ -141,5 +134,23 @@ namespace MCAWebAndAPI.Web.Controllers
             var viewModel = exitProcedureService.ViewExitProcedure(ID);
             return View("DisplayExitProcedure", viewModel);
         }
+
+        public async Task<ActionResult> DisplayWorkflowRouterExitProcedure(string listName, string requestor, bool isPartial = true)
+        {
+            exitProcedureService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            var viewModel = await exitProcedureService.GetWorkflowRouterExitProcedure(listName, requestor);
+            //var viewModel = await _service.GetWorkflowRouterRequestorPosition(listName, requestorPosition);
+            SessionManager.Set("WorkflowItems", viewModel.ExitProcedureChecklist);
+            SessionManager.Set("WorkflowRouterListName", viewModel.ListName);
+            SessionManager.Set("WorkflowRouterRequestorUnit", viewModel.RequestorUnit);
+            SessionManager.Set("WorkflowRouterRequestorPosition", viewModel.RequestorPosition);
+
+
+            if (isPartial)
+                return PartialView("_WorkflowDetails", viewModel);
+            return View("_WorkflowDetails", viewModel);
+
+        }
+
     }
 }

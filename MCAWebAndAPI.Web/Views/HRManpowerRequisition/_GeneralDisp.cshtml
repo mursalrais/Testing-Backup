@@ -24,7 +24,7 @@
     <div class="form-group">
         @Html.Bootstrap().LabelFor(m => m.ReportingTo).Class("col-md-4 control-label")
         <div class="col-md-8">
-            @Html.DisplayFor(m => m.ReportingTo)
+            @Html.DisplayFor(m => m.ReportingTo.Text)
         </div>
     </div>
     <div class="form-group">
@@ -42,7 +42,7 @@
     <div class="form-group">
         @Html.Bootstrap().LabelFor(m => m.JobLocation).Class("col-md-4 control-label")
         <div class="col-md-8">
-            @Html.DisplayFor(m => m.JobLocation)
+            @Html.DisplayFor(m => m.JobLocation.Text)
         </div>
     </div>
 </div>
@@ -55,19 +55,19 @@
     <div class="form-group">
         @Html.Bootstrap().LabelFor(m => m.OnBehalfOf).Class("col-md-4 control-label")
         <div class="col-md-8">
-            @Html.DisplayFor(m => m.OnBehalfOf)
+            @Html.DisplayFor(m => m.OnBehalfOf.Text)
         </div>
     </div>
     <div class="form-group">
         @Html.Bootstrap().LabelFor(m => m.Position).Class("col-md-4 control-label")
         <div class="col-md-8">
-            @Html.DisplayFor(m => m.Position)
+            @Html.DisplayFor(m => m.Position.Text)
         </div>
     </div>
     <div class="form-group">
         @Html.Bootstrap().LabelFor(m => m.SecondaryReportingTo).Class("col-md-4 control-label")
         <div class="col-md-8">
-            @Html.DisplayFor(m => m.SecondaryReportingTo)
+            @Html.DisplayFor(m => m.SecondaryReportingTo.Text)
         </div>
     </div>
     <div class="form-group">

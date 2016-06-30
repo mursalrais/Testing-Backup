@@ -93,8 +93,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             viewModel.ID = Convert.ToInt32(listItem["ID"]);
             viewModel.Name = FormatUtil.ConvertLookupToValue(listItem, "professional");
+            viewModel.StatusWorkflow = Convert.ToString(listItem["statusworkflow"]);
             viewModel.ProfessionalID = FormatUtil.ConvertLookupToID(listItem, "professional_x003a_ID");
+            viewModel.PositionAndDepartement = FormatUtil.ConvertLookupToValue(listItem, "Position");
             viewModel.PerformancePeriod = FormatUtil.ConvertLookupToValue(listItem, "performanceplan");
+            viewModel.StatusForm = Convert.ToString(listItem["pppstatus"]);
             viewModel.MajorStrength = Convert.ToString(listItem["majorstrength"]);
             viewModel.PerformanceArea = Convert.ToString(listItem["performancearea"]);
             viewModel.RecommendedActivities = viewModel.PerformanceArea = Convert.ToString(listItem["recommendedactivities"]);
@@ -145,10 +148,34 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             var columnValues = new Dictionary<string, object>();
             int? ID = header.ID;
+            if (header.StatusForm == "Initiated")
+            {
+                columnValues.Add("pppstatus", "Pending Approval 1 of 2");
+            }
+            if (header.StatusForm == "Draft")
+            {
+                columnValues.Add("pppstatus", "Pending Approval 1 of 2");
+            }
+            if (header.Requestor == null && header.StatusForm == "Pending Approval 1 of 2")
+            {
+                columnValues.Add("pppstatus", "Pending Approval 2 of 2");
+            }
+            if (header.Requestor == null && header.StatusForm == "Pending Approval 2 of 2")
+            {
+                columnValues.Add("pppstatus", "Approved");
+            }
+            if (header.StatusForm == "DraftInitiated" || header.StatusForm == "DraftDraft")
+            {
+                columnValues.Add("pppstatus", "Draft");
+            }
+            if (header.StatusForm == "Reject1" || header.StatusForm == "Reject2")
+            {
+                columnValues.Add("pppstatus", "Rejected");
+            }
+
             columnValues.Add("majorstrength", header.MajorStrength);
             columnValues.Add("performancearea", header.PerformanceArea);
             columnValues.Add("recommendedactivities", header.RecommendedActivities);
-
             try
             {
                 SPConnector.UpdateListItem(SP_PPP_LIST_NAME, ID, columnValues, _siteUrl);
@@ -168,27 +195,72 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
         }
 
-        public ProfessionalPerformancePlanVM GetProfessionalEmail(int? ID)
+        public async Task CreatePerformancePlanDetailsAsync(int? headerID, IEnumerable<ProjectOrUnitGoalsDetailVM> performancePlanDetails)
         {
-            var viewModel = new ProfessionalPerformancePlanVM();
-            if (ID == null)
-                return viewModel;
-
-            var listItem = SPConnector.GetListItem(SP_PPP_LIST_NAME, ID, _siteUrl);
-            viewModel = ConvertToSendIntvDataVM(listItem);
-
-            return viewModel;
+            CreatePerformancePlanDetails(headerID, performancePlanDetails);
         }
 
-        private ProfessionalPerformancePlanVM ConvertToSendIntvDataVM(ListItem listItem)
+        public void SendEmail(ProfessionalPerformancePlanVM header, string workflowTransactionListName, string transactionLookupColumnName, int headerID, int level, string messageForApprover, string messageForRequestor)
         {
-            var viewModel = new ProfessionalPerformancePlanVM();
+            var camlprof = @"<View>  
+          <Query> 
+               <Where><Eq><FieldRef Name='ID' /><Value Type='Counter'>" + headerID + @" </Value></Eq></Where> 
+            </Query> 
+             <ViewFields><FieldRef Name='ID' /><FieldRef Name='professional_x003a_Office_x0020_' /></ViewFields> 
+            </View>";
 
-            viewModel.ProfessionalEmail = "rezaf.fikri@gmail.com";
-            viewModel.ProfessionalEmailMessage = "ISI MESSAGE";
-            EmailUtil.Send(viewModel.ProfessionalEmail, "ApproverProccess", "<div><label>" + viewModel.ProfessionalEmailMessage + "</label></div>" + "TES");
+            var caml = @"<View>  
+            <Query> 
+               <Where><And><Eq><FieldRef Name='" + transactionLookupColumnName + @"' />
+               <Value Type='Lookup'>" + headerID + @"</Value></Eq><Eq>
+               <FieldRef Name='approverlevel' /><Value Type='Choice'>" + level + @"</Value></Eq></And></Where> 
+            </Query> 
+            </View>";
 
-            return viewModel;
+            var emails = new List<string>();
+            var professionalEmail = new List<string>();
+
+            if (header.StatusForm == "Initiated" || header.StatusForm == "Pending Approval 1 of 2")
+            {
+                foreach (var item in SPConnector.GetList(workflowTransactionListName, _siteUrl, caml))
+                {
+                    emails.Add(Convert.ToString(item["approver0"]));
+                }
+                foreach (var item in emails)
+                {
+                    EmailUtil.Send(item, "Ask for Approval", messageForApprover);
+                    //SPConnector.SendEmail(item, message, "Ask for Approval Level 2", _siteUrl);
+                }
+
+                if (header.StatusForm == "Pending Approval 1 of 2")
+                {
+                    foreach (var item in SPConnector.GetList(SP_PPP_LIST_NAME, _siteUrl, camlprof))
+                    {
+                        professionalEmail.Add(item["professional_x003a_Office_x0020_"] == null ? "" :
+                        Convert.ToString((item["professional_x003a_Office_x0020_"] as FieldLookupValue).LookupValue));
+                    }
+
+                    foreach (var item in professionalEmail)
+                    {
+                        EmailUtil.Send(item, "Approved by Level 1", messageForRequestor);
+                        //SPConnector.SendEmail(item, "Approved by Level 1", _siteUrl);
+                    }
+                }
+            }
+            else
+            {
+                foreach (var item in SPConnector.GetList(SP_PPP_LIST_NAME, _siteUrl, camlprof))
+                {
+                    professionalEmail.Add(item["professional_x003a_Office_x0020_"] == null ? "" :
+                   Convert.ToString((item["professional_x003a_Office_x0020_"] as FieldLookupValue).LookupValue));
+                }
+                foreach (var item in professionalEmail)
+                {
+                    EmailUtil.Send(item, "Status", messageForRequestor);
+                    //SPConnector.SendEmail(item, message, "Ask for Approval", _siteUrl);
+                }
+            }
+
         }
     }
 }

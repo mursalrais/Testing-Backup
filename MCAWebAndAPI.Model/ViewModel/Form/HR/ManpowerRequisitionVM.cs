@@ -68,6 +68,10 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [UIHint("TextArea")]
         public string PositionObjectives { get; set; }
 
+        public string Username { get; set; }
+
+        public string EmailOnBehalf { get; set; }
+
         /// <summary>
         /// iskeyposition
         /// </summary>
@@ -82,7 +86,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             ControllerName = "HRDataMaster",
             ActionName = "GetProfessionals",
             ValueField = "ID",
-            TextField = "Desc"
+            TextField = "Desc",
+            OnSelectEventName="OnBehalfOfChange"
         };
 
         /// <summary>

@@ -25,5 +25,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         void CreateExitProcedureDocuments(int? headerID, IEnumerable<HttpPostedFileBase> documents, ExitProcedureVM exitProcedure);
 
+        Task<ExitProcedureVM> GetWorkflowRouterExitProcedure(string listName, string requestor);
+
     }
 }

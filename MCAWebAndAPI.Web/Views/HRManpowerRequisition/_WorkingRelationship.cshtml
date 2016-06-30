@@ -44,12 +44,15 @@
 
 
         );
-            columns.Bound(p => p.EditMode).Width(100)
-         .ClientTemplate("<button id='WorkingRelationshipDetails[#= getWorkingRelationshipDetails(data)#].DeleteButton'" +
-         "class='btn btn-danger' type='button'" +
-         "onclick='onDeleteKendoDetail(event)'>Delete</button>" +
-         "<input type='hidden' name='WorkingRelationshipDetails[#= getWorkingRelationshipDetails(data)#].EditMode' value='#= EditMode #'/>");
-
+            columns.Bound(p => p.EditMode).Hidden()
+         .ClientTemplate("#= EditMode #<input type='hidden' name='WorkingRelationshipDetails[#= getWorkingRelationshipDetails(data)#].EditMode' value='#= EditMode #' />");
+            columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
+            .Click("onDeleteKendoDetail")).Width(100);
+        })
+        .Events(e =>
+        {
+            e.Edit("onEditKendoDetail");
+            e.DataBound("onDataBoundWorkingRelationship");
         })
         .DataSource(dataSource => dataSource.Ajax()
                    .Model(model =>
@@ -82,5 +85,22 @@
         }
         return item;
     }
-    $
+
+    function onCustomEditKendoDetail(e) {
+        if (!e.model.isNew()) {
+            var container = e.container;
+            var tr = container.closest('tr');
+            var data = this.dataItem(tr); //get the row data so it can be referred later
+            // 1 is Item.Mode.UPDATED
+            data.set("EditMode", 1);
+        }
+        if (isCustomAdd && e.model.isNew()) {
+            isCustomAdd = false;
+            $(e.container).find("[name='WorkingRelationshipDetails']").val(customRowDataItem.WorkingRelationshipDetails).change();
+        }
+    }
+    function onDataBoundWorkingRelationship(e) {
+        var grid = $("#WorkingRelationshipDetails").data("kendoGrid");
+        hideDeletedRowKendoDetail(grid);
+    }
 </script>

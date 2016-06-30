@@ -2,6 +2,7 @@
 using MCAWebAndAPI.Model.ViewModel.Control;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
@@ -12,6 +13,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// projectunit
         /// </summary>
+        [DisplayName("Project/Unit")]
         [UIHint("InGridComboBox")]
         public InGridComboBoxVM Project { get; set; } = new InGridComboBoxVM();
 
@@ -60,9 +62,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
                 e.Value == model.Value || e.Text == model.Text);
         }
 
-        public static InGridComboBoxVM GetProfessionalStatusDefaultValue(InGridComboBoxVM model = null)
+        public static InGridComboBoxVM GetPSAStatusDefaultValue(InGridComboBoxVM model = null)
         {
-            var options = GetProfessionalStatusOptions();
+            var options = GetPSAStatusOptions();
 
             if (model == null || model.Value == null || string.IsNullOrEmpty(model.Text))
                 return options.FirstOrDefault();
@@ -77,7 +79,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// Resigned
         /// </summary>
         /// <returns></returns>
-        public static IEnumerable<InGridComboBoxVM> GetProfessionalStatusOptions()
+        public static IEnumerable<InGridComboBoxVM> GetPSAStatusOptions()
         {
             var index = 0;
             var options = new string[]
@@ -99,7 +101,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// Status
         /// </summary>
         [UIHint("InGridComboBox")]
-        public InGridComboBoxVM ProfessionalStatus { get; set; } = new InGridComboBoxVM();
+        [DisplayName("PSA Status")]
+        public InGridComboBoxVM PSAStatus { get; set; } = new InGridComboBoxVM();
 
         /// <summary>
         /// Position
@@ -115,20 +118,21 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// psanr
         /// </summary>
-        public string PSANumber { get; set; }
+        [UIHint("InGridAjaxComboBox")]
+        public AjaxComboBoxVM PSANumber { get; set; } = new AjaxComboBoxVM();
 
         /// <summary>
         /// startdate
         /// </summary>
         [UIHint("Date")]
+        [DisplayName("PSA Start Date")]
         public DateTime? StartDate { get; set; } = DateTime.UtcNow;
 
         /// <summary>
         /// lastworkingday
         /// </summary>
         [UIHint("Date")]
+        [DisplayName("PSA Expiry Date")]
         public DateTime? LastWorkingDay { get; set; } = DateTime.UtcNow;
-
-        
     }
 }

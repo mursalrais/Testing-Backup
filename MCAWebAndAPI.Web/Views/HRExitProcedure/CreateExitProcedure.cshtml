@@ -19,12 +19,13 @@
         <div class="row">
             @Html.Partial("_ExitProcedureData", Model)
         </div>
-        @*
-    <legend>Exit Procedure Checklist</legend>
-    <div class="row">
-        @Html.Partial("_ExitProcedureChecklist", Model.ExitProcedureChecklist)
-    </div>
-        *@
+
+        @if (Model.Requestor != null)
+        {
+            <legend>Approval Workflow</legend>
+            <div id="workflow-placeholder" class="row"></div>
+        }
+        
         <legend>Documents</legend>
         <div class="row">
             @Html.Partial("_Documents", Model)
@@ -41,11 +42,7 @@
         </div>
     </div>
 
-    if (Model.Requestor != null)
-    {
-        <legend>Approval Workflow</legend>
-        <div id="workflow-placeholder" class="row"></div>
-    }
+    
 }
 
 @section scripts{

@@ -10,6 +10,38 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
     public class ProfessionalDataVM : ApplicationDataVM
     {
         /// <summary>
+        /// Position
+        /// </summary>
+        [UIHint("AjaxComboBox")]
+        public AjaxComboBoxVM CurrentPosition { get; set; } = new AjaxComboBoxVM
+        {
+            ActionName = "GetPositions",
+            ControllerName = "HRDataMaster",
+            TextField = "PositionName",
+            ValueField = "ID"
+        };
+
+        /// <summary>
+        /// Professional_x0020_Status
+        /// </summary>
+        [UIHint("ComboBox")]
+        public ComboBoxVM ProfessionalStatus { get; set; } = new ComboBoxVM
+        {
+            Choices = new string[]
+            {
+                "Active",
+                "Non Active"
+            }
+        };
+
+
+        /// <summary>
+        /// Join_x0020_Date
+        /// </summary>
+        [UIHint("Date")]
+        public DateTime? JoinDate { get; set; } = DateTime.Now;
+
+        /// <summary>
         /// datavalidationstatus
         /// </summary>
         public string ValidationStatus { get; set; } = 
@@ -145,38 +177,13 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// </summary>
         [DisplayName("Branch Office")]
         public string BranchOfficeForPayroll { get; set; }
-
-        /// <summary>
-        /// taxid
-        /// </summary>
-        [DisplayName("Tax ID")]
-        public string TaxIDForPayroll { get; set; }
-
-        /// <summary>
-        /// NIK
-        /// </summary>
-        [DisplayName("NIK")]
-        public string NIK { get; set; }
-
-        /// <summary>
-        /// nameintaxid
-        /// </summary>
-        [DisplayName("Name in Tax")]
-        public string NameInTaxForPayroll { get; set; }
-
+       
         /// <summary>
         /// payrollbankswiftcode
         /// </summary>
         [DisplayName("Bank Swift Code")]
         public string BankSwiftCodeForPayroll { get; set; }
-
-        /// <summary>
-        /// taxaddress
-        /// </summary>
-        [DisplayName("Tax ID Address")]
-        [UIHint("TextArea")]
-        public string TaxIDAddress { get; set; }
-
+        
         /// <summary>
         /// payrollcurrency
         /// </summary>

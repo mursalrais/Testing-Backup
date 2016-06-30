@@ -12,7 +12,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         IEnumerable<ApplicationShortlistVM> GetInterviewlists();
 
-        ApplicationShortlistVM GetInterviewlist(string position, string username, string useraccess);
+        ApplicationShortlistVM GetInterviewlist(int? position, string username, string useraccess);
 
         ApplicationShortlistVM GetResultlistInterview(int? ID);
 

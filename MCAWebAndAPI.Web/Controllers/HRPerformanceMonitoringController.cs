@@ -68,13 +68,13 @@ namespace MCAWebAndAPI.Web.Controllers
 
                 try
                 {
-                    _service.CreatePerformanceMonitoringDetails(ID);
+                    _service.CreatePerformanceMonitoringDetails(ID,EmailResource.PerformancePlan);
                 }
                 catch (Exception e)
                 {
                     ErrorSignal.FromCurrentContext().Raise(e);
                     return RedirectToAction("Index", "Error");
-                }
+                }                
             }
             else
             {

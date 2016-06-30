@@ -127,20 +127,5 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             return array;
         }
-
-        public JsonResult GetCurrencyGrid()
-        {
-            var siteUrl = SessionManager.Get<string>("SiteUrl");
-            _hRPayrollService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-
-            var currency = MonthlyFeeDetailVM.GetCurrencyOptions();
-
-            return Json(currency.Select(e =>
-                new {
-                    Value = Convert.ToString(e.Value),
-                    Text = e.Text
-                }),
-                JsonRequestBehavior.AllowGet);
-        }
     }
 }

@@ -73,12 +73,22 @@
 
 @section scripts{
     <script>
+        function OnChangeActivePosition(e) {
+            var dataItem = this.dataItem(e.item);
+            window.location = "/HRShortlist/ShortlistData?siteurl=&position=" + dataItem.ID + "&username=&useraccess=HR";
+        };
+
+
         $(document).ready(function () {
             debugger;
             $("#vacant-position").prop('readonly', 'true');
-
             var positionID = $("#Position").val();
-            $("#vacant-position").prop("value", positionID);
+
+            var url = "/HRDataMaster/GetPosition/" + positionID;
+            $.getJSON(url, function (data) {
+                $("#vacant-position").prop("value", data.PositionName);
+            })
+
 
         });
     </script>
