@@ -16,7 +16,7 @@
     <RootNamespace>MCAWebAndAPI.Web</RootNamespace>
     <AssemblyName>MCAWebAndAPI.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -672,7 +672,7 @@
     <Content Include="Views\HRPerformanceMonitoring\_Detail.cshtml" />
     <Content Include="Views\HRPerformanceMonitoring\_PerformancePlanMonitoring.cshtml" />
     <Content Include="Views\Shared\_WorkflowDetails.cshtml" />
-    <Content Include="Views\HRPerformancePlan\EditPerformancePlan.cshtml" />
+    <Content Include="Views\HRPerformancePlan\PerformancePlan.cshtml" />
     <Content Include="Views\HRPerformancePlan\_PerformancePlanDetail.cshtml" />
     <Content Include="Views\HRExitProcedure\CreateExitProcedure.cshtml" />
     <Content Include="Views\HRExitProcedure\EditExitProcedure.cshtml" />

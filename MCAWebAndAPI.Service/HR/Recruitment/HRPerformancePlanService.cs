@@ -164,10 +164,15 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 columnValues.Add("pppstatus", "Approved");
             }
-            if (header.StatusForm == "Reject1" || header.StatusForm == "Reject2")
+            if (header.StatusForm == "DraftInitiated" || header.StatusForm == "DraftDraft")
             {
                 columnValues.Add("pppstatus", "Draft");
             }
+            if (header.StatusForm == "Reject1" || header.StatusForm == "Reject2")
+            {
+                columnValues.Add("pppstatus", "Rejected");
+            }
+
             columnValues.Add("majorstrength", header.MajorStrength);
             columnValues.Add("performancearea", header.PerformanceArea);
             columnValues.Add("recommendedactivities", header.RecommendedActivities);
