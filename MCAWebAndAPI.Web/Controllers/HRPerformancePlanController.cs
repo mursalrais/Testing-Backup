@@ -30,32 +30,29 @@ namespace MCAWebAndAPI.Web.Controllers
             _hRPerformancePlanService = new HRPerformancePlanService();
         }
 
-        public ActionResult CreatePerformancePlan(string siteUrl = null, int? ID = null, string position = null)
+        public ActionResult CreatePerformancePlan(string siteUrl = null, int? ID = null, string requestor = null)
         {
-
-
-
             // MANDATORY: Set Site URL
             _hRPerformancePlanService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             // Get blank ViewModel
-            var viewModel = _hRPerformancePlanService.GetPopulatedModel();
-            //viewModel.Position = position;
-            //viewModel.ProfessionalID = ID;
+            var viewModel = _hRPerformancePlanService.GetPopulatedModel(requestor);
+            viewModel.Requestor = requestor;
 
-            //// Used for Workflow Router
-            //ViewBag.ListName = "Manpower%20Requisition";
+                ViewBag.Action = "CreatePerformancePlan";
 
-            //// This var should be taken from passing parameter
-            //viewModel.Requestor = "yunita.ajah@eceos.com";
+            // Used for Workflow Router
+            ViewBag.ListName = "Professional%20Performance%20Plan";
+            // This var should be taken from passing parameter
+            if (requestor != null)
+                SessionManager.Set("RequestorUserLogin", requestor);
 
-            // Return to the name of the view and parse the model
-            return View("PrintPerformancePlan", viewModel);
+            return View("PerformancePlan", viewModel);
         }
 
         [HttpPost]
-        public async Task<ActionResult> SubmitPerformancePlan(FormCollection form, ProfessionalPerformancePlanVM viewModel)
+        public async Task<ActionResult> CreatePerformancePlan(FormCollection form, ProfessionalPerformancePlanVM viewModel)
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _hRPerformancePlanService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
@@ -71,17 +68,27 @@ namespace MCAWebAndAPI.Web.Controllers
                 return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
             }
 
-            // BEGIN Workflow Demo 
-            headerID = 125; // This MUST NOT be hardcoded. It is hardcoded as it is just a demo
-            Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateTransactionWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
-                SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)headerID);
+            var Detail = viewModel.ProjectOrUnitGoalsDetails;
+            int sum = 0;
+            foreach (var viewModelDetail in Detail)
+            {
+                if (viewModelDetail.EditMode != -1)
+                {
+                    sum = sum + viewModelDetail.Weight;
+                }
+            }
 
-            // Send to Level 1 Approver
-            Task sendApprovalRequestTask = WorkflowHelper.SendApprovalRequestAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
-                SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)headerID, 1,
-                string.Format(EmailResource.WorkflowAskForApproval, UrlResource.ApplicationData));
+            if (sum != 100)
+            {
+                ModelState.AddModelError("ModelInvalid", "Weight must be total 100%");
+                return View("PerformancePlan", viewModel);
+            }
 
-            // END Workflow Demo
+            if (viewModel.StatusForm != "DraftInitiated")
+            {
+                Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateTransactionWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
+                    SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)headerID);
+            }
 
             Task createPerformancePlanDetailsTask = _hRPerformancePlanService.CreatePerformancePlanDetailsAsync(headerID, viewModel.ProjectOrUnitGoalsDetails);
 
@@ -90,6 +97,20 @@ namespace MCAWebAndAPI.Web.Controllers
             try
             {
                 await allTasks;
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            try
+            {
+                // Send to Level 1 Approver
+                if (viewModel.StatusForm != "DraftInitiated")
+                    _hRPerformancePlanService.SendEmail(viewModel, SP_TRANSACTION_WORKFLOW_LIST_NAME,
+                    SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)headerID, 1,
+                    string.Format("Dear Respective Approver,This email is sent to you to notify that there is a request which required your action to approve.Kindly check the link as per below to go to direct page accordingly.You may check your personal page in IMS(My Approval View).Thank you.Link: {0}{1}/EditFormApprover_Custom.aspx?ID={2}", siteUrl, UrlResource.ProfessionalPerformancePlan, viewModel.ID), string.Format(""));
             }
             catch (Exception e)
             {
@@ -109,9 +130,10 @@ namespace MCAWebAndAPI.Web.Controllers
             viewModel.Requestor = requestor;
             viewModel.ID = ID;
 
+            ViewBag.Action = "CreatePerformancePlan";
+
             // Used for Workflow Router
             ViewBag.ListName = "Professional%20Performance%20Plan";
-
 
             // This var should be taken from passing parameter
             if (requestor != null)
