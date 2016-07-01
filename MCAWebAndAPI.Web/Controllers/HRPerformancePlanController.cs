@@ -130,7 +130,7 @@ namespace MCAWebAndAPI.Web.Controllers
             viewModel.Requestor = requestor;
             viewModel.ID = ID;
 
-            ViewBag.Action = "CreatePerformancePlan";
+            ViewBag.Action = "EditPerformancePlan";
 
             // Used for Workflow Router
             ViewBag.ListName = "Professional%20Performance%20Plan";
