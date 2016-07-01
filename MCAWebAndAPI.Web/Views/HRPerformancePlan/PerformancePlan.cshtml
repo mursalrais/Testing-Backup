@@ -4,7 +4,7 @@
 
 @model ProfessionalPerformancePlanVM
 
-@using (Html.BeginForm("EditPerformancePlan", "HRPerformancePlan", FormMethod.Post,
+@using (Html.BeginForm((string)ViewBag.Action, "HRPerformancePlan", FormMethod.Post,
                                                 new
                                                 {
                                                     @class = "form-horizontal",
@@ -69,7 +69,13 @@
                     @Html.HiddenFor(m => m.Requestor)
                 </div>
                 <div class="col-sm-8">
-                    @Html.HiddenFor(m => m.StatusWorkflow)
+                    @Html.HiddenFor(m => m.NameID)
+                </div>
+                <div class="col-sm-8">
+                    @Html.HiddenFor(m => m.PositionAndDepartementID)
+                </div>
+                <div class="col-sm-8">
+                    @Html.HiddenFor(m => m.PerformancePeriodID)
                 </div>
             </div>
             <div class="form-group" id="ParentDiv">
@@ -86,7 +92,7 @@
     </fieldset>
 }
 
-@if (Model.Requestor != null && Model.StatusForm == "Initiated")
+@if (Model.ID == null)
 {
     <div class="form-actions">
         <div class="row">
@@ -99,8 +105,23 @@
                     <i class="fa fa-save"></i>
                     Save As Draft
                 </button>
-                <button id="print-button" class="btn btn-primary" type="button">
-                    Print
+            </div>
+        </div>
+    </div>
+}
+
+@if (Model.Requestor != null && Model.StatusForm == "Initiated")
+{
+    <div class="form-actions">
+        <div class="row">
+            <div class="col-sm-12">
+                <button id="submit-button" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    Submit For Approval
+                </button>
+                <button id="submit-draft-initiate-button" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    Save As Draft
                 </button>
             </div>
         </div>
@@ -119,9 +140,6 @@
                 <button id="submit-draft-button" class="btn btn-primary" type="submit">
                     <i class="fa fa-save"></i>
                     Save As Draft
-                </button>
-                <button id="print-button" class="btn btn-primary" type="button">
-                    Print
                 </button>
             </div>
         </div>
@@ -158,6 +176,18 @@
                 <button id="reject2-button" class="btn btn-primary" type="submit">
                     <i class="fa fa-save"></i>
                     Reject
+                </button>
+            </div>
+        </div>
+    </div>
+}
+@if (Model.StatusForm == "Approved")
+{
+    <div class="form-actions">
+        <div class="row">
+            <div class="col-sm-12">
+                <button id="print-button" class="btn btn-primary" type="button">
+                    Print
                 </button>
             </div>
         </div>

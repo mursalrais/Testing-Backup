@@ -16,14 +16,22 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// </summary>
         public string Name { get; set; }
 
+        public int? NameID { get; set; }
+
         /// <summary>
         /// Position
         /// </summary>
         public string PositionAndDepartement { get; set; }
 
+        public int? PositionAndDepartementID { get; set; }
+
         /// <summary>
         /// performanceplan
         /// </summary>
         public string PerformancePeriod { get; set; }
+
+        public int? PerformancePeriodID { get; set; }
+
+        public int DatetimeCaml { get; set; } = DateTime.UtcNow.Year;
     }
 }

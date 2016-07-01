@@ -18,6 +18,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         static Logger logger = LogManager.GetCurrentClassLogger();
         const string SP_PPPIG_LIST_NAME = "PPP Individual Goal";
         const string SP_PPP_LIST_NAME = "Professional Performance Plan";
+        const string SP_PP_LIST_NAME = "Performance Plan";
         const string SP_PPE_LIST_NAME = "Professional Performance Evaluation";
 
         public int CreateHeader(ProfessionalPerformancePlanVM header)
@@ -26,6 +27,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             columnValues.Add("majorstrength", header.MajorStrength);
             columnValues.Add("performancearea", header.PerformanceArea);
             columnValues.Add("recommendedactivities", header.RecommendedActivities);
+            columnValues.Add("professional", new FieldLookupValue { LookupId = (int)header.NameID });
+            columnValues.Add("Position", new FieldLookupValue { LookupId = (int)header.PositionAndDepartementID });
+            columnValues.Add("performanceplan", new FieldLookupValue { LookupId = (int)header.PerformancePeriodID });
+            columnValues.Add("pppstatus", "Pending Approval 1 of 2");
             try
             {
                 SPConnector.AddListItem(SP_PPP_LIST_NAME, columnValues, _siteUrl);
@@ -93,7 +98,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             viewModel.ID = Convert.ToInt32(listItem["ID"]);
             viewModel.Name = FormatUtil.ConvertLookupToValue(listItem, "professional");
-            viewModel.StatusWorkflow = Convert.ToString(listItem["statusworkflow"]);
             viewModel.ProfessionalID = FormatUtil.ConvertLookupToID(listItem, "professional_x003a_ID");
             viewModel.PositionAndDepartement = FormatUtil.ConvertLookupToValue(listItem, "Position");
             viewModel.PerformancePeriod = FormatUtil.ConvertLookupToValue(listItem, "performanceplan");
@@ -138,10 +142,37 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             };
         }
 
-        public ProfessionalPerformancePlanVM GetPopulatedModel(int? id = null)
+        public ProfessionalPerformancePlanVM GetPopulatedModel(string requestor = null)
         {
             var model = new ProfessionalPerformancePlanVM();
+
+            int dateTemp;
+            string emailTemp;
+            var models = new List<ProfessionalPerformancePlanVM>();
+            foreach (var item in SPConnector.GetList(SP_PP_LIST_NAME, _siteUrl))
+            {
+                dateTemp = Convert.ToInt32(item["Title"]);
+                if (model.DatetimeCaml == dateTemp)
+                {
+                    model.PerformancePeriod = Convert.ToString(item["Title"]);
+                    model.PerformancePeriodID = Convert.ToInt32(item["ID"]);
+                }
+            }
+
+            foreach (var item in SPConnector.GetList(SP_PPP_LIST_NAME, _siteUrl))
+            {
+                emailTemp = FormatUtil.ConvertLookupToValue(item, "professional_x003a_Office_x0020_");
+                if (requestor == emailTemp)
+                {
+                    model.Name = FormatUtil.ConvertLookupToValue(item, "professional");
+                    model.NameID = FormatUtil.ConvertLookupToID(item, "professional");
+                    model.PositionAndDepartement = FormatUtil.ConvertLookupToValue(item, "Position");
+                    model.PositionAndDepartementID = FormatUtil.ConvertLookupToID(item, "Position");
+                }
+            }
+
             return model;
+
         }
 
         public bool UpdateHeader(ProfessionalPerformancePlanVM header)
@@ -220,7 +251,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             var emails = new List<string>();
             var professionalEmail = new List<string>();
 
-            if (header.StatusForm == "Initiated" || header.StatusForm == "Pending Approval 1 of 2")
+            if (header.StatusForm == "Initiated" || header.StatusForm == "Pending Approval 1 of 2"|| header.StatusForm == null)
             {
                 foreach (var item in SPConnector.GetList(workflowTransactionListName, _siteUrl, caml))
                 {
@@ -260,7 +291,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     //SPConnector.SendEmail(item, message, "Ask for Approval", _siteUrl);
                 }
             }
-
         }
     }
 }

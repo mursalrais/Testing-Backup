@@ -61,7 +61,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public async Task<ActionResult> DisplayWorkflowRouter(string listName, string requestor, bool isPartial = true)
         {
-            _service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             var viewModel = await _service.GetWorkflowRouter(listName, requestor);
             SessionManager.Set("WorkflowItems", viewModel.WorkflowItems);
             SessionManager.Set("WorkflowRouterListName", viewModel.ListName);

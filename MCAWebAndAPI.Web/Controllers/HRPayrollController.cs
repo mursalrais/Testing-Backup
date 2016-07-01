@@ -90,13 +90,6 @@ namespace MCAWebAndAPI.Web.Controllers
         [HttpPost]
         public ActionResult UpdateMonthlyFee(FormCollection form, MonthlyFeeVM viewModel, string site)
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            //    var errorMessages = BindHelper.GetErrorMessages(ModelState.Values);
-            //    return JsonHelper.GenerateJsonErrorResponse(errorMessages);
-            //}
-
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _hRPayrollService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
