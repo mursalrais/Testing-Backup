@@ -30,6 +30,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             columnValues.Add("professional", new FieldLookupValue { LookupId = (int)header.NameID });
             columnValues.Add("Position", new FieldLookupValue { LookupId = (int)header.PositionAndDepartementID });
             columnValues.Add("performanceplan", new FieldLookupValue { LookupId = (int)header.PerformancePeriodID });
+            columnValues.Add("pppstatus", "Pending Approval 1 of 2");
             try
             {
                 SPConnector.AddListItem(SP_PPP_LIST_NAME, columnValues, _siteUrl);
