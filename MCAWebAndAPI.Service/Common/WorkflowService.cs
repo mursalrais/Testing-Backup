@@ -51,19 +51,22 @@ namespace MCAWebAndAPI.Service.Common
 
         public async Task<WorkflowRouterVM> GetWorkflowRouter(string listName, string requestor)
         {
+            
+
             var viewModel = new WorkflowRouterVM();
-            viewModel.ListName = listName; 
+            viewModel.ListName = listName;
 
             // Get Position in Professional Master
             var caml = @"<View><Query><Where><Eq>
-                <FieldRef Name='officeemail' /><Value Type='Text'>" + requestor + 
-                @"</Value></Eq></Where></Query><ViewFields><FieldRef Name='Position' /></ViewFields><QueryOptions /></View>";
+                <FieldRef Name='officeemail' /><Value Type='Text'>" + requestor +
+                @"</Value></Eq></Where></Query><ViewFields><FieldRef Name='Position' /><FieldRef Name='Project_x002f_Unit' /></ViewFields><QueryOptions /></View>";
 
             int? positionID = 0;
             foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl, caml))
             {
                 viewModel.RequestorPosition = FormatUtil.ConvertLookupToValue(item, "Position");
                 positionID = FormatUtil.ConvertLookupToID(item, "Position");
+
                 break;
             }
 
@@ -84,7 +87,7 @@ namespace MCAWebAndAPI.Service.Common
             var workflowItems = new List<WorkflowItemVM>();
             foreach (var item in SPConnector.GetList(SP_WORKFLOW_LISTNAME, _siteUrl, caml))
             {
-                if( string.Compare(Convert.ToString(item["isdefault"]), "No",
+                if ( string.Compare(Convert.ToString(item["isdefault"]), "No",
                     StringComparison.OrdinalIgnoreCase) == 0
                     && 
                     string.Compare(Convert.ToString(item["workflowtype"]), "Sequential", 
@@ -109,6 +112,64 @@ namespace MCAWebAndAPI.Service.Common
                 GetApproverNamesAsync(viewModel.ApproverPosition.Text);
 
             viewModel.Level = Convert.ToString(item["approverlevel"]);
+
+            if(viewModel.Level == "1")
+            {
+                viewModel.ItemExitProcedure = "Close-Out/Handover Report";
+            }
+            else if(viewModel.Level == "2")
+            {
+                viewModel.ItemExitProcedure = "MCA Indonesia Propietary Information";
+            }
+            else if (viewModel.Level == "3")
+            {
+                viewModel.ItemExitProcedure = "Laptop/Desktop";
+            }
+            else if (viewModel.Level == "4")
+            {
+                viewModel.ItemExitProcedure = "SAP Password, Computer Password";
+            }
+            else if (viewModel.Level == "5")
+            {
+                viewModel.ItemExitProcedure = "IT Tools";
+            }
+            else if (viewModel.Level == "6")
+            {
+                viewModel.ItemExitProcedure = "Keys (Drawers,desk,etc)";
+            }
+            else if (viewModel.Level == "7")
+            {
+                viewModel.ItemExitProcedure = "Car";
+            }
+            else if (viewModel.Level == "8")
+            {
+                viewModel.ItemExitProcedure = "Advance Statement";
+            }
+            else if (viewModel.Level == "9")
+            {
+                viewModel.ItemExitProcedure = "Travel Statement";
+            }
+            else if (viewModel.Level == "10")
+            {
+                viewModel.ItemExitProcedure = "Resignation/Separation Letter";
+            }
+            else if (viewModel.Level == "11")
+            {
+                viewModel.ItemExitProcedure = "Timesheet/Leave Form";
+            }
+            else if (viewModel.Level == "12")
+            {
+                viewModel.ItemExitProcedure = "Exit Interview/NDA";
+            }
+            else if (viewModel.Level == "13")
+            {
+                viewModel.ItemExitProcedure = "Insurance Card";
+            }
+            else if (viewModel.Level == "14")
+            {
+                viewModel.ItemExitProcedure = "ID Card & Access Card";
+            }
+
             viewModel.ApproverUnit =
                 WorkflowItemVM.GetUnitDefaultValue(new InGridComboBoxVM
                 {

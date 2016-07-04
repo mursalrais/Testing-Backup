@@ -11,19 +11,53 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
     public class PerformanceEvaluationVM : Item
     {
-        public IEnumerable<FactorEvaluatedDetailVM> FactorEvaluatedDetail { get; set; } = new List<FactorEvaluatedDetailVM>();
-        public IEnumerable<OutputDetailVM> OutputDetail { get; set; } = new List<OutputDetailVM>();
+        [UIHint("Date")]
+        public DateTime? IntiationDate { get; set; } = DateTime.UtcNow;
 
         /// <summary>
-        /// professionalname
+        /// period
         /// </summary>
-        public string Name { get; set; }
+        /// 
 
-        public string TitleAndDepartement { get; set; }
+        private static string[] GetPeriodChoices()
+        {
+            List<string> PeriodChoices = new List<string>();
+            int YearNow = DateTime.Now.Year;            
+            for (int i = 0; i < 10; i++)
+            {
+                PeriodChoices.Add(YearNow.ToString());
+                YearNow++;
+            }
+            return PeriodChoices.ToArray();
+
+        }
+
+        [UIHint("ComboBox")]
+        public ComboBoxVM Period { get; set; } = new ComboBoxVM
+        {
+            Choices = GetPeriodChoices(),
+            Value = DateTime.Now.Year.ToString()
+
+        };
 
         /// <summary>
-        /// pppperiod
+        /// maxdateforpendingapproval1
         /// </summary>
-        public string PerformancePeriod { get; set; }
+        [UIHint("Date")]
+        public DateTime? LatestCreationDate { get; set; } = DateTime.UtcNow;
+
+        /// <summary>
+        /// maxdateforpendingapproval2
+        /// </summary>
+        [UIHint("Date")]
+        public DateTime? LatestDateApproval1 { get; set; } = DateTime.UtcNow;
+
+        [UIHint("Date")]
+        public DateTime? LatestDateApproval2 { get; set; } = DateTime.UtcNow;
+
+        public string Status { get; set; }
+
+        public IEnumerable<PerformanceEvaluationDetailVM> PerformanceEvaluationDetails { get; set; } = new List<PerformanceEvaluationDetailVM>();
+
     }
 }

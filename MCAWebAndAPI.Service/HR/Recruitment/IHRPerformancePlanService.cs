@@ -11,7 +11,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
     {
         void SetSiteUrl(string siteUrl = null);
 
-        ProfessionalPerformancePlanVM GetPopulatedModel(int? id = null);
+        ProfessionalPerformancePlanVM GetPopulatedModel(string requestor = null);
 
         ProfessionalPerformancePlanVM GetHeader(int? ID);
 

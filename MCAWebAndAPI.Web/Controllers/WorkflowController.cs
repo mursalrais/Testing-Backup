@@ -61,7 +61,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public async Task<ActionResult> DisplayWorkflowRouter(string listName, string requestor, bool isPartial = true)
         {
-            _service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             var viewModel = await _service.GetWorkflowRouter(listName, requestor);
             SessionManager.Set("WorkflowItems", viewModel.WorkflowItems);
             SessionManager.Set("WorkflowRouterListName", viewModel.ListName);
@@ -72,6 +73,25 @@ namespace MCAWebAndAPI.Web.Controllers
                 return PartialView("_WorkflowDetails", viewModel);
             return View("_WorkflowDetails", viewModel);
         }
+
+        
+        public async Task<ActionResult> DisplayWorkflowRouterExitProcedure(string listName, string requestor, bool isPartial = true)
+        {
+            _service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            var viewModel = await _service.GetWorkflowRouter(listName, requestor);
+            //var viewModel = await _service.GetWorkflowRouterRequestorPosition(listName, requestorPosition);
+            SessionManager.Set("WorkflowItems", viewModel.WorkflowItems);
+            SessionManager.Set("WorkflowRouterListName", viewModel.ListName);
+            SessionManager.Set("WorkflowRouterRequestorUnit", viewModel.RequestorUnit);
+            SessionManager.Set("WorkflowRouterRequestorPosition", viewModel.RequestorPosition);
+            
+            
+            if (isPartial)
+                return PartialView("_WorkflowDetails", viewModel);
+            return View("_WorkflowDetails", viewModel);
+            
+        }
+        
 
         [HttpPost]
         public JsonResult Grid_Read([DataSourceRequest] DataSourceRequest request)

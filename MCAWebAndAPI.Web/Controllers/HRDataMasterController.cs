@@ -52,7 +52,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetProfessionals()
         {
-            _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            _dataMasterService.SetSiteUrl(ConfigResource.DefaultQAHRSiteUrl);
 
             var professionals = GetFromExistingSession();
 
@@ -90,7 +90,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetPositions()
         {
-            _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            _dataMasterService.SetSiteUrl(ConfigResource.DefaultQAHRSiteUrl);
 
             var positions = GetFromPositionsExistingSession();
 

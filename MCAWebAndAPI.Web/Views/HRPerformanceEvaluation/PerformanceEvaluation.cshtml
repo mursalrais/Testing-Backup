@@ -1,12 +1,15 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
 
-@model PSAManagementVM
+@model PerformanceEvaluationVM
 
 @{
-    ViewBag.Title = "Form Create PSA Management";
+    ViewBag.Title = "Form Create Performance Evaluation";
+    
+
+
 }
 
-@using (Html.BeginForm("CreatePSAManagement", "HRPSAManagement", FormMethod.Post,
+@using (Html.BeginForm("PerformanceEvaluation", "HRPerformanceEvaluation", FormMethod.Post,
                                                                  new
                                                                  {
                                                                      @class = "form-horizontal",
@@ -14,25 +17,63 @@
                                                                  }))
 {
     <fieldset>
-        <legend>PSA Management Data</legend>
+        <legend>Performance Plan Evaluation</legend>
         <div class="row">
-            @Html.Partial("_PSAManagementData", Model)
+            @Html.HiddenFor(x=>x.ID)
+            @Html.Partial("_PerformancePlanEvaluation", Model)
         </div>
-        <legend>Documents</legend>
-        <div class="row">
-            @Html.Partial("_DocumentDetails", Model)
-        </div>
-    </fieldset>
-    <div class="form-actions">
-        <div class="row">
-            <div class="col-md-12">
-                <button id="submit-button" class="btn btn-primary" type="submit">
-                    <i class="fa fa-save"></i>
-                    Submit
-                </button>
+        <div class="form-actions">
+            <div class="row">
+                <div class="col-md-12">
+                    @if (Model.ID == null)
+                    {
+                        <button id="initiate" class="btn btn-primary" type="submit">
+                            <i class="fa fa-save"></i>
+                            Initiate Plan Process
+                        </button>
+                        <button id="close" class="btn btn-primary" type="submit" disabled>
+                            <i class="fa fa-save"></i>
+                            Close Plan Process
+                        </button>
+                    }
+                    else
+                    {
+                        <button id="initiate" class="btn btn-primary" type="submit" disabled>
+                            <i class="fa fa-save"></i>
+                            Initiate Plan Process
+                        </button>
+                        if (Model.PerformanceEvaluationDetails.All(x => x.PlanIndicator == "green") && (Model.Status == "Open") && (Model.PerformanceEvaluationDetails.All(x => x.PlanStatus == "Approved")))
+                        {
+                            <button id="close" class="btn btn-primary" type="submit">
+                                <i class="fa fa-save"></i>
+                                Close Plan Process
+                            </button>
+                        }
+                        else
+                        {
+                            <button id="close" class="btn btn-primary" type="submit" disabled>
+                                <i class="fa fa-save"></i>
+                                Close Plan Process
+                            </button>
+                        }
+                    }
+                </div>
             </div>
         </div>
-    </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.IntiationDate).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.DisplayFor(m => m.IntiationDate)
+                </div>
+            </div>
+        </div>
+        <legend></legend>
+        <div class="row">
+            @Html.Partial("_Detail", Model.PerformanceEvaluationDetails)
+        </div>
+    </fieldset>
+   
 }
 
     @section scripts{
@@ -68,34 +109,12 @@
                     console.log(result);
 
                     if (result.length != 0) {
-                        //console.log("Ada Data PSA Sebelumnya")
+                        console.log("Ada Data PSA Sebelumnya")
 
                         var psaID = result[0].PSAId;
 
                         var renewalnumber = result[0].PSARenewalNumber + 1;
 
-                        var dateofnewpsabefore = result[0].DateNewPSABefore;
-                        //console.log("result[0].DateNewPSABefore:" + dateofnewpsabefore);
-
-                        var dateofnewpsa = new Date(dateofnewpsabefore);
-                        //console.log("dateofnewpsa: " + dateofnewpsa);
-
-                        var datenewpsa = dateofnewpsa.getDate();
-                        //console.log("datenewpsa: " + datenewpsa);
-
-                        var datenewpsaint = parseInt(datenewpsa);
-                        //console.log("datenewpsaint: " + datenewpsaint);
-
-                        var calcdatenewpsa = datenewpsaint + 1;
-                        //console.log("calcdatenewpsa" + calcdatenewpsa);
-
-                        var setdateofpsa = new Date(dateofnewpsa.setDate(calcdatenewpsa));
-                        //console.log("setdateofpsa: " + setdateofpsa);
-
-                        var datepsa = setdateofpsa.getMonth() + 1 + '/' + setdateofpsa.getDate() + '/' + setdateofpsa.getFullYear();
-                        //console.log("datepsa: " + datepsa);
-
-                        //Kalkulasi Date of New PSA Kontrak Baru, tanggal paling awal adalah expire date kontrak sebelumnya + 1
                         var expirydatebefore = result[0].ExpiryDateBefore
                         var expdate = new Date(expirydatebefore);
 
@@ -106,14 +125,9 @@
 
                         var setexpdate = new Date(expdate.setDate(calcexpdate));
                         var expirydate = setexpdate.getMonth() + 1 + '/' + setexpdate.getDate() + '/' + setexpdate.getFullYear();
-                        
+
                         $('#HidRenewalNumber').prop('value', renewalnumber);
                         $('#ExpiryDateBefore').prop('value', expirydate);
-                        $('#ExpireDateBefore').prop('value', result[0].ExpiryDateBefore);
-                        //console.log("ExpireDateBefore: " + result[0].ExpireDateBefore);
-                        console.log("ExpiryDateBefore: " + result[0].ExpiryDateBefore);
-
-
                         $('#PSAId').prop('value', psaID);
 
                         $("#IsRenewal_Value").data("kendoDropDownList").select(0);
@@ -122,15 +136,12 @@
                         $("#PSARenewalNumber").prop("readonly", "false");
                         $("#PSARenewalNumber").prop("value", renewalnumber);
 
-                        $("#DateOfNewPSA").data("kendoDatePicker").min(datepsa);
-                        $("#DateOfNewPSA").prop('value', datepsa);
+                        $("#DateOfNewPSA").data("kendoDatePicker").min(expirydate);
+                        $("#DateOfNewPSA").prop('value', expirydate);
 
                         $("#Tenure").prop('value', 0);
 
                         $("#PSAExpiryDate").prop('value', expirydate);
-
-                        $("#DateOfNewPSABefore").prop('value', dateofnewpsabefore);
-
                     }
 
                     if (result.length == 0)
@@ -138,11 +149,8 @@
                         $("#IsRenewal_Value").data("kendoDropDownList").select(1);
                         $("#IsRenewal_Value").data("kendoDropDownList").readonly();
 
-                        //$("#PSARenewalNumber").prop("readonly", "true");
+                        $("#PSARenewalNumber").prop("readonly", "true");
                         $("#PSARenewalNumber").prop("value", 0);
-
-                        var psarenewalnumber = $("#PSARenewalNumber").data("kendoNumericTextBox");
-                        psarenewalnumber.readonly();
 
                         $('#PSAId').prop('value', 0);
 
@@ -167,9 +175,7 @@
                                
                 $.getJSON(urlKeyPosition, function (result) {
 
-                    
-
-                    if (result[0].IsKeyPosition == "Yes")
+                    if (result[0].isKeyPosition == "Yes")
                     {
                         $('#KeyPosition').prop('value', "You must upload file with the file name format: MCC-PSA-MMDDYYYY");
                         $('#DocumentType').prop('value', "MCC No Objection Letter");
@@ -190,23 +196,9 @@
             
             $(document).ready(function () {
 
-
-                $("#Tenure").kendoNumericTextBox({
-                    change: onChange,
-                    spin: onSpin
-                
-
-                //$("#Tenure").on('input', function () {
-                //    sumCal();
+                $("#Tenure").on('input', function () {
+                    sumCal();
                 });
-
-                function onChange() {
-                    sumCal();
-                }
-
-                function onSpin() {
-                    sumCal();
-                }
 
                 function sumCal() {
 
@@ -223,9 +215,6 @@
                     var setmonth = new Date(dateofnewpsa.setMonth(addtenure));
 
                     var psaexpirydate = setmonth.getMonth() + 1 + '/' + setmonth.getDate() + '/' + setmonth.getFullYear();
-
-                    console.log(psaexpirydate)
-
                     $("#PSAExpiryDate").val(psaexpirydate);
                 }
 

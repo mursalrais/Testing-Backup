@@ -1,4 +1,5 @@
 ﻿using MCAWebAndAPI.Model.Common;
+using MCAWebAndAPI.Model.ViewModel.Control;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -38,13 +39,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public int? ProfessionalID { get; set; }
 
         /// <summary>
-        /// position	
+        /// Position	
         /// </summary>
         public string Position { get; set; }
-
-        public string ProfessionalEmail { get; set; }
-
-        public string ProfessionalEmailMessage { get; set; }
 
         /// <summary>
         /// pppstatus
@@ -52,11 +49,5 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public string StatusForm { get; set; }
 
         public string Requestor { get; set; }
-
-        /// <summary>
-        /// statusworkflow
-        /// </summary>
-        public string StatusWorkflow { get; set; }
-
     }
 }

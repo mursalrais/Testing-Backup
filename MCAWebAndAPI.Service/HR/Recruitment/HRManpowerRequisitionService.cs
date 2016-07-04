@@ -434,6 +434,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         public void CreateWorkingRelationshipDetails(int? headerID, IEnumerable<WorkingRelationshipDetailVM> workingRelationshipDetails)
         {
+            //update title become header ID
+            var updatedValue = new Dictionary<string, object>();
+            updatedValue.Add("Title", headerID);
+
+            SPConnector.UpdateListItem(SP_MANPOW_LIST_NAME, headerID, updatedValue);
             foreach (var viewModel in workingRelationshipDetails)
             {
                 if (Item.CheckIfSkipped(viewModel))
@@ -452,7 +457,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     }
                     continue;
                 }
-                var updatedValue = new Dictionary<string, object>();
+                updatedValue = new Dictionary<string, object>();
                 string[] _frequency = viewModel.Frequency.Text.Split(',');
                 string[] _relationship = viewModel.Relationship.Text.Split(',');
                 updatedValue.Add("manpowerrequisition", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
