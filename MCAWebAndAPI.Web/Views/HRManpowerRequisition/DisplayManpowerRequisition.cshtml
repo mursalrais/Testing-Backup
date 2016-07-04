@@ -1,64 +1,72 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
-@model ApplicationDataVM
+@model ManpowerRequisitionVM
 
 @{
-    ViewBag.Title = "CreateApplicationData";
+    ViewBag.Title = "Display Manpower Requisition";
 }
 
-<div class="form-horizontal">
+@using (Html.BeginForm("DisplayManpowerRequisition", "HRManpowerRequisition", FormMethod.Post,
+                                                                             new
+                                                                             {
+                                                                                 @class = "form-horizontal",
+                                                                                 enctype = "multipart/form-data"
+                                                                             }))
+{
     <fieldset>
-        <legend>Personnal Details</legend>
+        <legend>General</legend>
         <div class="row">
-            @Html.Partial("_PersonalDetails", Model)
+            @Html.Partial("_GeneralDisp", Model)
         </div>
-        <legend>Contact Information</legend>
+        <legend>Supporting Document</legend>
         <div class="row">
-            @Html.Partial("_ContactInformationDetails", Model)
-        </div>
-        <legend>Education</legend>
-        <div class="row">
-            @Html.Partial("_EducationDetails", Model.EducationDetails)
-        </div>
-        <legend>Training</legend>
-        <div class="row">
-            @Html.Partial("_TrainingDetails", Model.TrainingDetails)
-        </div>
-        <legend>Specialization</legend>
-        <div class="row">
-            @Html.Partial("_SpecializationDetails", Model)
-        </div>
-        <legend>Working Experience</legend>
-        <div class="row">
-            @Html.Partial("_WorkingExperienceDetails", Model)
-        </div>
-        <legend>Documents</legend>
-        <div class="row">
-            @Html.Partial("_DocumentDetails_Display", Model. DocumentUrl)
-        </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        <button id="application-document-button" class="btn btn-default" type="button">
+                            Click Here to go to Manpower Requisite Document
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+    $('#application-document-button').click(function () {
+        parent.postMessage({
+            result : "Success", urlToRedirect : "@Model.DocumentUrl" }, "@Model.DocumentUrl" );
+    });
+            </script>
+            <legend>Working Relationship</legend>
+            <div class="row">
+                @Html.Partial("_WorkingRelationship", Model.WorkingRelationshipDetails)
+            </div>
+            <legend>Resources and Planning</legend>
+            <div class="row">
+                @Html.Partial("_ResourcesAndPlanningDisp", Model)
+            </div>
+            <legend>Background Requirement</legend>
+            <div class="row">
+                @Html.Partial("_BackgroundRequirementDisp", Model)
+            </div>
+            <legend>Specific Experience</legend>
+            <div class="row">
+                @Html.Partial("_SpecificexperienceDisp", Model)
+            </div>
+            <legend>Other Requirements</legend>
+            <div class="row">
+                @Html.Partial("_OtherRequirementsDisp", Model)
+            </div>
+
+            @Html.HiddenFor(m => m.ID);
+            @Html.HiddenFor(m => m.Status.Value);
     </fieldset>
-    <div class="form-actions">
-        <div class="row">
-            <div class="col-md-12"><br/></div>
-        </div>
-    </div>
-</div>
+   
+}
 
-    @section scripts{
+@section scripts{
 
-        <script>
-            function onSelectIDCardType(e) {
-                var dataItem = this.dataItem(e.item);
-                if (dataItem === "KTP") {
-                    $('#IDCardExpiry').closest('.form-group').show();
-                } else {
-                    $('#IDCardExpiry').closest('.form-group').hide();
-                }
-            }
+    <script>
+       
 
-            $(document).ready(function () {
-                $('input').prop('readonly', 'true');
-                $('textarea').prop('readonly', 'true');
-                $('')
-            });
-        </script>
-    }
+    </script>
+}

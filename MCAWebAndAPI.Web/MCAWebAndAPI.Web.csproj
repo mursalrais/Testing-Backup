@@ -16,7 +16,7 @@
     <RootNamespace>MCAWebAndAPI.Web</RootNamespace>
     <AssemblyName>MCAWebAndAPI.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -694,6 +694,9 @@
     <Content Include="Views\HRPerformancePlan\_ProfessionalPerformancePlan_Print.cshtml" />
     <Content Include="Views\HRCompensatory\CompensatorylistUser.cshtml" />
     <Content Include="Views\HRCompensatory\_CompensantoryDetails.cshtml" />
+    <Content Include="Views\HRPerformanceEvaluation\PerformanceEvaluation.cshtml" />
+    <Content Include="Views\HRPerformanceEvaluation\_Detail.cshtml" />
+    <Content Include="Views\HRPerformanceEvaluation\_PerformancePlanEvaluation.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -733,6 +736,7 @@
     <Compile Include="Controllers\HRInterviewlistController.cs" />
     <Compile Include="Controllers\HRManpowerRequisitionController.cs" />
     <Compile Include="Controllers\HRPayrollController.cs" />
+    <Compile Include="Controllers\HRPerformanceEvaluationController.cs" />
     <Compile Include="Controllers\HRPerformanceMonitoringController.cs" />
     <Compile Include="Controllers\HRPerformancePlanController.cs" />
     <Compile Include="Controllers\HRProfessionalController.cs" />

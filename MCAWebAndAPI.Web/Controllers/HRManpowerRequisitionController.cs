@@ -164,14 +164,12 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public async Task<ActionResult> DisplayManpowerRequisition(string siteUrl = null, int? ID = null)
         {
-
-
-
             // MANDATORY: Set Site URL
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             var viewModel = await _service.GetManpowerRequisitionAsync(ID);
+            
             return View(viewModel);
         }
 
