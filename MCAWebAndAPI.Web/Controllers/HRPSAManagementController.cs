@@ -31,8 +31,8 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult CreatePSAManagement(string siteUrl = null)
         {
             // MANDATORY: Set Site URL
-            psaManagementService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            psaManagementService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultQAHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultQAHRSiteUrl);
 
             // Get blank ViewModel
             var viewModel = psaManagementService.GetPSAManagement(null);
@@ -43,8 +43,8 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult DisplayPSAManagement(string siteUrl = null, int? ID = null)
         {
             // MANDATORY: Set Site URL
-            psaManagementService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            psaManagementService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultQAHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultQAHRSiteUrl);
 
             var viewModel = psaManagementService.GetPSAManagement(ID);
 
@@ -63,8 +63,8 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult ViewPSAManagement(string siteUrl = null, int? ID = null)
         {
             // MANDATORY: Set Site URL
-            psaManagementService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            psaManagementService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultQAHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultQAHRSiteUrl);
 
             var viewModel = psaManagementService.ViewPSAManagementData(ID);
             return View("DisplayPSAManagement", viewModel);
@@ -80,7 +80,7 @@ namespace MCAWebAndAPI.Web.Controllers
             }
 
             var siteUrl = SessionManager.Get<string>("SiteUrl");
-            psaManagementService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            psaManagementService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultQAHRSiteUrl);
 
             int? psaID = null;
 
