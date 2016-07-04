@@ -91,6 +91,72 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return GetComplisted(compID, ID);
         }
 
+        private int GetCompID(int? ID)
+        {
+            var viewModel = new CompensatoryVM();
+
+            var caml = @"<View>  
+                    <Query> 
+                       <Where>
+                             <Eq>
+                                <FieldRef Name='professional_x003a_ID' />
+                                <Value Type='Lookup'>" + ID + @"</Value>
+                             </Eq>
+                       </Where>
+                    </Query> 
+                     <ViewFields> <FieldRef Name='Title' />
+                       <FieldRef Name='ID' /></ViewFields> 
+                    </View>";
+
+            var compID = 0;
+            foreach (var item in SPConnector.GetList(SP_COMREQ_LIST_NAME, _siteUrl, caml))
+            {
+                compID = Convert.ToInt32(item["ID"]);
+            }
+
+            return compID;
+        }
+
+        public CompensatoryVM GetComplistActive()
+        {
+            var viewModel = new CompensatoryVM();
+
+            var caml = @"<View>  
+                    <Query> 
+                       <Where>
+                             <Eq>
+                                 <FieldRef Name='Professional_x0020_Status' />
+                                 <Value Type='Choice'>Active</Value>
+                              </Eq>
+                       </Where>
+                    </Query> 
+                     <ViewFields> 
+                       <FieldRef Name='Title' />
+                       <FieldRef Name='ID' />
+                       <FieldRef Name='Project_x002f_Unit' />
+                       <FieldRef Name='Position' />
+                     </ViewFields> 
+                    </View>";
+
+            var shortlist = new List<ListCompensatoryVM>();
+
+            foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl, caml))
+            {
+                shortlist.Add(new ListCompensatoryVM
+                {
+                    CmpID = Convert.ToInt32(item["ID"]),
+                    CmpName = Convert.ToString(item["Title"]),
+                    CmpProjUnit = Convert.ToString(item["Project_x002f_Unit"]),
+                    CmpPosition = FormatUtil.ConvertLookupToValue(item, "Position"),
+                    listCompensatoryDetails = GetCompDetailist(GetCompID(Convert.ToInt32(item["ID"])))
+                });
+            }
+
+            viewModel.CompensatorytoList = shortlist;
+
+            return viewModel;
+        }
+
         private CompensatoryVM GetComplisted(int? ID, int? idPro )
         {
             var viewModel = new CompensatoryVM();

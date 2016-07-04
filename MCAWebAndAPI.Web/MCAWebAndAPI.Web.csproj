@@ -695,6 +695,8 @@
     <Content Include="Views\HRCompensatory\_CompensantoryDetails.cshtml" />
     <Content Include="Views\HRCompensatory\InputCompensatoryUser.cshtml" />
     <Content Include="Views\HRCompensatory\_InputCompensantoryDetails.cshtml" />
+    <Content Include="Views\HRCompensatory\InputCompensatoryHR.cshtml" />
+    <Content Include="Views\HRCompensatory\ListCompensatoryDetails.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

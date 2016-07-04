@@ -31,12 +31,13 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             //mandatory: set site url
 
-            var siteUrl = siteurl ?? SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
+
             if (siteurl == "")
             {
                 siteurl = SessionManager.Get<string>("SiteUrl");
             }
-            _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
 
             var viewmodel = _service.GetShortlist(position, username, useraccess);
 

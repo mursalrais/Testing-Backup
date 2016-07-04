@@ -1,0 +1,75 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model IEnumerable<ListCompensatoryVM>
+
+
+@using (@Html.BeginForm())
+{
+
+foreach(var comp in Model.CompensatorytoList)
+{
+    <ul>
+        <li>@comp.ID</li>
+        <li>@comp.CmpName</li>
+        <li>@comp.CmpProjUnit</li>
+    </ul>
+}
+
+@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model CompensatoryVM
+
+@{
+    ViewBag.Title = "InputCompensatoryData";
+}
+
+@using (Html.BeginForm("CreateCompensatoryData", "HRCompensatory", FormMethod.Post, new
+{
+    @class = "form-horizontal",
+    enctype = "multipart/form-data"
+}))
+{
+    <div class="form-actions">
+        <fieldset>
+            @Html.HiddenFor(m => m.CmpID)
+            @Html.HiddenFor(m => m.CmpName)
+            @Html.HiddenFor(m => m.CmpPosition)
+            <div class="row">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.CmpName).Class("col-md-2 control-label")
+                    <div class="col-md-3">
+                        <input class="k-textbox form-control" id="NamePos" style="width:100%;">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.CmpProjUnit).Class("col-md-2 control-label")
+                    <div class="col-md-3">
+                        @Html.EditorFor(m => m.CmpProjUnit)
+                    </div>
+                </div>
+            </div>
+            <legend>Compensatory list</legend>
+            <div class="row">
+                @Html.Partial("_InputCompensantoryDetails", Model.CompensatoryDetails)
+            </div>
+
+        </fieldset>
+        <div class="row">
+            <div class="col-sm-8">
+                <button id="submit-button" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    save
+                </button>
+                @*<button id="submit-cancel" class="btn btn-primary" type="button">
+                        <i class="fa fa-save"></i>
+                        cancel
+                    </button>*@
+            </div>
+        </div>
+    </div>
+}
+
+
+
+
+
