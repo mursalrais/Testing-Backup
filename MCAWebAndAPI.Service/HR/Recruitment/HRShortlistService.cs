@@ -8,6 +8,7 @@ using Microsoft.SharePoint.Client;
 using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Model.HR.DataMaster;
+using System.Linq;
 
 namespace MCAWebAndAPI.Service.HR.Recruitment
 {
@@ -54,7 +55,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             viewModel.ID = Convert.ToInt32(listItem["ID"]);
             viewModel.Position = FormatUtil.ConvertLookupToID(listItem, "vacantposition") + string.Empty;
-            viewModel.ActivePosition.Text = FormatUtil.ConvertLookupToID(listItem, "vacantposition") + string.Empty;
+            viewModel.ActivePosition.Value = FormatUtil.ConvertLookupToID(listItem, "manpowerrequisition") ;
             viewModel.Candidate = Convert.ToString(listItem["Title"]);
 
             return viewModel;
@@ -101,13 +102,13 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                      <ViewFields><FieldRef Name='ID' /></ViewFields> 
                     </View>";
 
-            var applicationID = 0;
+            var manpowerID = 0;
             foreach (var item in SPConnector.GetList(SP_MANPOW_LIST_NAME, _siteUrl, caml))
             {
-                applicationID = Convert.ToInt32(item["ID"]);
+                manpowerID = Convert.ToInt32(item["ID"]);
             }
 
-            return GetShortlist(applicationID, username, useraccess, position);
+            return GetShortlist(manpowerID, username, useraccess, position);
         }
 
         public ApplicationShortlistVM GetShortlist(int ID, string username, string useraccess, int? position)
@@ -121,7 +122,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             
             viewModel.ShortlistDetails = GetDetailShortlist(ID, useraccess);
-            viewModel.ActivePosition.Text = Convert.ToString(position);
+            viewModel.ActivePosition.Value = Convert.ToInt32(position);
             viewModel.Position = Convert.ToString(position);
             viewModel.useraccess = Convert.ToString(useraccess);
 
@@ -214,8 +215,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             }
 
-
-            
             var shortlistDetails = new List<ShortlistDetailVM>();
             foreach (var item in SPConnector.GetList(SP_APPDATA_LIST_NAME, _siteUrl, caml))
             {
@@ -341,7 +340,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             var updatedValue = new Dictionary<string, object>();
 
             updatedValue.Add("interviewdatetime", viewModel.InterviewerDate);
-            //updatedValue.Add("interviewerpanel", viewModel.InterviewerPanel);
             updatedValue.Add("invitationemailmessage", viewModel.Message);
             updatedValue.Add("invitationemaildate", DateTime.Now);
 
@@ -382,9 +380,25 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
              
             var models = new List<PositionMaster>();
 
+            //foreach (var item in SPConnector.GetList(SP_MANPOW_LIST_NAME, _siteUrl, caml))
+            //{
+            //    models.Add(ConvertToPositionsModel(item));
+            //}
+
+            int tempID;
+            List<int> collectionIDShortlist = new List<int>();
             foreach (var item in SPConnector.GetList(SP_MANPOW_LIST_NAME, _siteUrl, caml))
             {
-                models.Add(ConvertToPositionsModel(item));
+                collectionIDShortlist.Add(item["positionrequested_x003a_ID"] == null ? 0 :
+               Convert.ToInt16((item["positionrequested_x003a_ID"] as FieldLookupValue).LookupValue));
+            }
+            foreach (var item in SPConnector.GetList(SP_MANPOW_LIST_NAME, _siteUrl, caml))
+            {
+                tempID = Convert.ToInt32(item["ID"]);
+                if (!(collectionIDShortlist.Any(e => e == tempID)))
+                {
+                    models.Add(ConvertToPositionsModel(item));
+                }
             }
 
             return models;

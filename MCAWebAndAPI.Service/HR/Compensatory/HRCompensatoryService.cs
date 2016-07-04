@@ -26,6 +26,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         const string SP_PROMAS_LIST_NAME = "Professional Master";
         const string SP_POSMAS_LIST_NAME = "Position Master";
         const string SP_MANPOW_LIST_NAME = "Manpower Requisition";
+        const string SP_COMDET_LIST_NAME = "Compensatory Request Detail";
+        const string SP_COMREQ_LIST_NAME = "Compensatory Request";
 
         public string GetAccessData(string userLoginName = null)
         {
@@ -48,12 +50,14 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return useraccess;
         }
 
-        private CompensatoryVM ConvertToShortlistDataVM(ListItem listItem)
+        private CompensatoryVM ConvertCompInputTolistDataVM(ListItem listItem)
         {
             var viewModel = new CompensatoryVM();
 
-            viewModel.ID = Convert.ToInt32(listItem["ID"]);
+            viewModel.CmpID = Convert.ToInt32(listItem["ID"]);
             viewModel.CmpName = Convert.ToString(listItem["Title"]);
+            viewModel.CmpProjUnit = Convert.ToString(listItem["Project_x002f_Unit"]);
+            viewModel.CmpPosition = FormatUtil.ConvertLookupToValue(listItem, "Position");
 
             return viewModel;
         }
@@ -69,7 +73,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     <Query> 
                        <Where>
                              <Eq>
-                                <FieldRef Name='positionrequested_x003a_ID' />
+                                <FieldRef Name='professional_x003a_ID' />
                                 <Value Type='Lookup'>" + ID + @"</Value>
                              </Eq>
                        </Where>
@@ -79,22 +83,24 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     </View>";
 
             var compID = 0;
-            foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl, caml))
+            foreach (var item in SPConnector.GetList(SP_COMREQ_LIST_NAME, _siteUrl, caml))
             {
                 compID = Convert.ToInt32(item["ID"]);
             }
 
-            return GetComplisted(compID);
+            return GetComplisted(compID, ID);
         }
 
-        private CompensatoryVM GetComplisted(int? ID)
+        private CompensatoryVM GetComplisted(int? ID, int? idPro )
         {
             var viewModel = new CompensatoryVM();
-            if (ID == 0)
+
+            if (idPro == 0)
                 return viewModel;
 
-            var listItemdt = SPConnector.GetListItem(SP_APPDATA_LIST_NAME, ID, _siteUrl);
-            viewModel = ConvertToShortlistDataVM(listItemdt);
+            var listItem = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, idPro, _siteUrl);
+            viewModel = ConvertCompInputTolistDataVM(listItem);
+
 
             viewModel.CompensatoryDetails = GetCompDetailist(ID);
 
@@ -134,20 +140,13 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                                <FieldRef Name='visibleto' />
                                <FieldRef Name='ID' />
                                <FieldRef Name='Attachments' />
-                               <FieldRef Name='LinkTitleNoMenu' />
-                               <FieldRef Name='LinkTitle' />
-                               <FieldRef Name='DocIcon' />
-                               <FieldRef Name='ItemChildCount' />
-                               <FieldRef Name='FolderChildCount' />
-                               <FieldRef Name='AppAuthor' />
-                               <FieldRef Name='AppEditor' />
                             </ViewFields>
                            </View>";
 
             var shortlistDetails = new List<CompensatoryDetailVM>();
-            foreach (var item in SPConnector.GetList(SP_APPDATA_LIST_NAME, _siteUrl, caml))
+            foreach (var item in SPConnector.GetList(SP_COMDET_LIST_NAME, _siteUrl, caml))
             {
-                shortlistDetails.Add(ConvertToShortlistDetailVM(item));
+                shortlistDetails.Add(ConvertToCompDetailVM(item));
             }
             return shortlistDetails;
         }
@@ -155,18 +154,19 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         /// <summary>
         /// </summary>
 
-        private CompensatoryDetailVM ConvertToShortlistDetailVM(ListItem item)
+        private CompensatoryDetailVM ConvertToCompDetailVM(ListItem item)
         {
             return new CompensatoryDetailVM
             {
-                CmpID = Convert.ToInt32(item["Title"]),
-                CmpDate = Convert.ToDateTime(item["Title"]),
-                StartTime = Convert.ToDateTime(item["ID"]),
-                FinishTime = Convert.ToDateTime(item["ID"]),
-                CmpTotalHours = Convert.ToInt32(item["applicationstatus"]),
-                TotalDay = Convert.ToInt32(item["applicationremarks"]),
-                remarks = Convert.ToString(item["applicationremarks"]),
-                AppStatus = Convert.ToString(item["applicationremarks"]),
+                CmpActiv = Convert.ToString(item["Title"]),
+                CmpID = Convert.ToInt32(item["ID"]),
+                CmpDate = Convert.ToDateTime(item["compensatorydate"]),
+                StartTime = Convert.ToDateTime(item["compensatorystarttime"]),
+                FinishTime = Convert.ToDateTime(item["compensatoryendtime"]),
+                CmpTotalHours = Convert.ToInt32(item["totalhours"]),
+                TotalDay = Convert.ToInt32(item["totaldays"]),
+                remarks = Convert.ToString(item["remarks"]),
+                AppStatus = Convert.ToString(item["compensatorystatus"]),
             };
         }
 
@@ -175,9 +175,47 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
         }
 
-        public void UpdateShortlistDataDetail(int? headerID, IEnumerable<ShortlistDetailVM> viewModels)
+        public void CreateCompensatoryData(int? headerID, CompensatoryVM viewModels)
         {
-            foreach (var viewModel in viewModels)
+            var CreateValue = new Dictionary<string, object>();
+
+            CreateValue.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(viewModels.CmpID) });
+
+            try
+            {
+                SPConnector.AddListItem(SP_COMREQ_LIST_NAME, CreateValue, _siteUrl);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.Message);
+                throw e;
+            }
+
+            var caml = @"<View>  
+                  <Query> 
+                    <Where>
+                        <Eq>
+                        <FieldRef Name='professional_x003a_ID' />
+                        <Value Type='Lookup'>" + viewModels.CmpID + @"</Value>
+                        </Eq>
+                    </Where>
+                        <OrderBy>
+                            <FieldRef Name='Created' Ascending='False' />
+                        </OrderBy>
+                  </Query> 
+                  <ViewFields>
+                      <FieldRef Name='ID' />
+                  </ViewFields>
+                <RowLimit>1</RowLimit> 
+            </View>";
+
+            var CompID = 0;
+            foreach (var item in SPConnector.GetList(SP_COMREQ_LIST_NAME, _siteUrl, caml))
+            {
+                CompID = Convert.ToInt32(item["ID"]);
+            }
+
+            foreach (var viewModel in viewModels.CompensatoryDetails)
             {
                 if (Item.CheckIfSkipped(viewModel))
                     continue;
@@ -186,8 +224,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 {
                     try
                     {
-                        SPConnector.DeleteListItem(SP_APPDATA_LIST_NAME, viewModel.ID, _siteUrl);
-
+                        SPConnector.DeleteListItem(SP_COMDET_LIST_NAME, viewModel.ID, _siteUrl);
                     }
                     catch (Exception e)
                     {
@@ -198,13 +235,19 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 }
 
                 var updatedValue = new Dictionary<string, object>();
-                updatedValue.Add("Title", viewModel.Candidate);
-                updatedValue.Add("applicationstatus", viewModel.Status.Text);
-                updatedValue.Add("applicationremarks", viewModel.Remarks);
+                
+                updatedValue.Add("compensatoryrequest", CompID);
+                updatedValue.Add("Title", viewModel.CmpActiv);
+                updatedValue.Add("compensatorydate", viewModel.CmpDate);
+                updatedValue.Add("compensatorystarttime", viewModel.StartTime);
+                updatedValue.Add("compensatoryendtime", viewModel.FinishTime);
+                updatedValue.Add("totalhours", viewModel.CmpTotalHours);
+                updatedValue.Add("totaldays", viewModel.TotalDay);
+                updatedValue.Add("remarks", viewModel.remarks);
 
                 try
                 {
-                    SPConnector.UpdateListItem(SP_APPDATA_LIST_NAME, viewModel.ID, updatedValue, _siteUrl);
+                    SPConnector.AddListItem(SP_COMDET_LIST_NAME, updatedValue, _siteUrl);
                 }
                 catch (Exception e)
                 {

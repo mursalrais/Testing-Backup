@@ -24,6 +24,12 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
                 Workflow.GetApplicationStatus(Workflow.ApplicationStatus.ONBOARD)
             };
         }
+        /// <head>
+        /// CompensatoryID
+        /// </head>
+        /// 
+        [DisplayName("CompID")]
+        public int? CmpID { get; set; }
 
         /// <head>
         /// CompensatoryDay
@@ -36,15 +42,15 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// CompensatoryInitial
         /// </head>
         /// 
-        [DisplayName("Initial")]
-        public string CmpInit { get; set; }
+        [DisplayName("Position")]
+        public string CmpPosition { get; set; }
 
         /// <head>
         /// CompensatoryPosition
         /// </head>
         /// 
-        [DisplayName("Position")]
-        public string CmpPosition { get; set; }
+        [DisplayName("Project/Unit")]
+        public string CmpProjUnit { get; set; }
 
         /// <head>
         /// CompensatoryYearDate
