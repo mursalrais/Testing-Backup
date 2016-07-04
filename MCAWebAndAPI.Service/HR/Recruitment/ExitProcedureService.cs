@@ -376,5 +376,105 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 UserLogin = Convert.ToString(item["officeemail"])
             };
         }
+
+        public IEnumerable<PositionMaster> GetPositionsInWorkflow(string listName,
+            string approverUnit, string requestorUnit, string requestorPosition)
+        {
+            var caml = @"<View>  
+            <Query> 
+               <Where><And><And><And><Eq>
+                <FieldRef Name='approverunit' /><Value Type='Choice'>"
+                    + approverUnit + @"</Value></Eq><Eq>
+                <FieldRef Name='requestorposition' /><Value Type='Lookup'>"
+                    + requestorPosition + @"</Value></Eq></And><Eq>
+                <FieldRef Name='requestorunit' /><Value Type='Choice'>"
+                    + requestorUnit + @"</Value></Eq></And><Eq>
+                <FieldRef Name='transactiontype' /><Value Type='Choice'>"
+                    + listName + @"</Value></Eq></And></Where> 
+            </Query> 
+                <ViewFields><FieldRef Name='approverposition' /></ViewFields> 
+            </View>";
+
+            var positions = new List<PositionMaster>();
+            foreach (var item in SPConnector.GetList(SP_WORKFLOW_LISTNAME, _siteUrl, caml))
+            {
+                positions.Add(new PositionMaster
+                {
+                    ID = FormatUtil.ConvertLookupToID(item, "approverposition"),
+                    PositionName = FormatUtil.ConvertLookupToValue(item, "approverposition")
+                });
+            }
+
+            return positions;
+        }
+
+        public string GetPositionName(int position)
+        {
+            var item = SPConnector.GetListItem(SP_POSMAS_LIST_NAME, position, _siteUrl);
+            return Convert.ToString(item["Title"]);
+        }
+
+        //public void CreateExitProcedureChecklist(ExitProcedureChecklistVM exitProcedureChecklist)
+        //{
+        //    var updatedValues = new Dictionary<string, object>();
+
+        //    updatedValues.Add("Title", exitProcedure.FullName);
+        //    updatedValues.Add("requestdate", exitProcedure.RequestDate);
+        //    updatedValues.Add("professional", new FieldLookupValue { LookupId = (int)exitProcedure.Professional.Value });
+        //    updatedValues.Add("projectunit", exitProcedure.ProjectUnit);
+        //    updatedValues.Add("position", exitProcedure.Position);
+        //    updatedValues.Add("mobilenumber", exitProcedure.PhoneNumber);
+        //    updatedValues.Add("officeemail", exitProcedure.EmailAddress);
+        //    updatedValues.Add("currentaddress", exitProcedure.CurrentAddress);
+        //    updatedValues.Add("joindate", exitProcedure.JoinDate);
+        //    updatedValues.Add("lastworkingdate", exitProcedure.LastWorkingDate);
+        //    updatedValues.Add("exitreason", exitProcedure.ExitReason.Value);
+        //    updatedValues.Add("reasondescription", exitProcedure.ReasonDesc);
+        //    updatedValues.Add("psanumber", exitProcedure.PSANumber);
+
+        //    try
+        //    {
+        //        SPConnector.AddListItem(SP_EXP_LIST_NAME, updatedValues, _siteUrl);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        logger.Error(e.Message);
+        //        throw e;
+        //    }
+
+        //    return SPConnector.GetLatestListItemID(SP_EXP_LIST_NAME, _siteUrl);
+
+        //    /*
+        //    var entity = new ExitProcedureChecklistVM();
+
+        //    //var updatedValues = new Dictionary<string, object>();
+        //    entity.ApproverUnit.Value = (int)exitProcedureChecklist.ApproverUnit.Value;
+        //    entity.ApproverPosition.Value = (int)exitProcedureChecklist.ApproverPosition.Value;
+        //    entity.ApproverUserName.Value = (int)exitProcedureChecklist.ApproverUserName.Value;
+        //    entity.Level = exitProcedureChecklist.Level;
+
+        //    entity.
+
+        //    /*
+        //    if (entity.CategoryID == null)
+        //    {
+        //        entity.CategoryID = 1;
+        //    }
+        //    */
+
+        //    /*
+        //    if (product.Category != null)
+        //    {
+        //        entity.CategoryID = product.Category.CategoryID;
+        //    }
+        //    */
+
+        //    /*
+        //    exit.Products.Add(entity);
+        //    entities.SaveChanges();
+
+        //    product.ProductID = entity.ProductID;
+        //    */
+        //}
     }
 }

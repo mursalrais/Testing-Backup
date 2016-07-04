@@ -1,170 +1,83 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
-@model IEnumerable<ExitProcedureChecklistVM>
+@using MCAWebAndAPI.Model.ViewModel.Control
 
-@{
-    var index = 0;
-}
+@model ExitProcedureVM
 
-<div class="col-md-12" style="margin-bottom: 20px">
-    @(Html.Kendo().Grid(Model)
+<div class="col-sm-12">
+    @(Html.Kendo().Grid<ExitProcedureChecklistVM>()
         .Name("ExitProcedureChecklist")
-        .ToolBar(tools => tools.Create().Text("Add New"))
-        .Editable(editable => editable.Mode(GridEditMode.InCell)
-        .CreateAt(GridInsertRowPosition.Bottom))
+        //.ToolBar(tools => tools.Create().Text("Add New Fee"))
+        .Editable(editable => editable.Mode(GridEditMode.InLine))
         .Columns(columns =>
         {
-            //columns.Bound(p => p.Items).ClientTemplate("#=printItems(Items)#");
-            //columns.Bound(o => o.AssetSubType).ClientTemplate("#=printAssetSubType(AssetSubType)#");
-            columns.Bound(p => p.ApproverPosition).Width(150).ClientTemplate("#=ApproverPosition.Text #" +
-                          "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklist(data)#].ApproverPosition.Value' value='#= ApproverPosition.Value #' />"
-                        ).EditorViewData(new
-                        {
-                            DataTextField = "Text",
-                            DataValueField = "Value",
-                            ControllerName = "HRDataMaster",
-                            ActionName = "GetPositionsGrid"
-                        });
-
-            /*
-            columns.Bound(p => p.Relationship).ClientTemplate("#= getMultiValue(Relationship) #" +
-                               "<input type='hidden' name='WorkingRelationshipDetails[#= getWorkingRelationshipDetails(data)#].Relationship.Text' value='#= getMultiValue(Relationship) #' />"
-                             ).EditorViewData(new
-                             {
-                                 BindTo = WorkingRelationshipDetailVM.GetRelationshipOptions(),
-                                 Values = WorkingRelationshipDetailVM.GetRelationshipValues()
-
-                             });
-            */
-            columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
-                  "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklist(data)#].ID' value='#= ID #' />"
-                );
-
-            columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
-            "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklist(data)#].EditMode' value='#= EditMode #' />"
-          );
-
-            columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
-                .Click("onDeleteKendoDetail")).Width(100);
-            /*
-            columns.Bound(p => p.Frequency).ClientTemplate("#= getMultiValue(Frequency) #" +
-                               "<input type='hidden' name='WorkingRelationshipDetails[#= getWorkingRelationshipDetails(data)#].Frequency.Text' value='#=getMultiValue(Frequency) #' />"
-                             ).EditorViewData(new
-                             {
-                                 BindTo = WorkingRelationshipDetailVM.GetFrequencyOptions(),
-                                 Values = WorkingRelationshipDetailVM.GetFrequencyValues()
-
-                             });
-            */
-
-            /*
-            columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
-          "<input type='hidden' name=WorkingRelationshipDetails[#= getWorkingRelationshipDetails(data)#].ID value=#= ID # />"
-
-
-        );
-            */
-
-            /*
-            columns.Bound(p => p.EditMode).Width(100)
-     .ClientTemplate("<button id='ExitProcedureChecklist[#= getExitProcedureChecklist(data)#].DeleteButton'" +
-     "class='btn btn-danger' type='button'" +
-     "onclick='onDeleteKendoDetail(event)'>Delete</button>" +
-     "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklist(data)#].EditMode' value='#= EditMode #'/>");
-            */
+            columns.Bound(p => p.ID).Hidden();
+            columns.Bound(p => p.Level).Width(150);
+            columns.Bound(p => p.ApproverUnit).ClientTemplate("#=  ApproverUnit.Text #").Width(350)
+            .EditorViewData(
+            new
+            {
+                BindTo = ExitProcedureChecklistVM.GetUnitOptions()
+            });
+            columns.Bound(p => p.ApproverPosition).Width(300).ClientTemplate("#= ApproverPosition.Text #")
+            .EditorViewData(
+            new
+            {
+                DataTextField = "PositionName",
+                DataValueField = "ID",
+                ActionName = "GetApproverPositions",
+                ControllerName = "HRExitProcedure",
+                Filter = "filterApproverPosition",
+                Cascade = "ApproverUnit"
+            });
+            columns.Bound(p => p.ApproverUserName).Width(400).ClientTemplate("#= ApproverUserName.Text #")
+            .EditorViewData(
+            new
+            {
+                DataTextField = "Name",
+                DataValueField = "ID",
+                ActionName = "GetApproverNames",
+                ControllerName = "HRExitProcedure",
+                Filter = "filterApproverName",
+                Cascade = "ApproverPosition_Value"
+            });
+            //columns.Command(p => p.Edit().Text("Edit").HtmlAttributes(new { @title = "Edit" })).Width(220);
+            columns.Command(command => { command.Edit();}).Width(220);
         })
-        .Events(e =>
-        {
-            e.Edit("onEditKendoDetail");
-            e.DataBound("onDataBoundExitProcedureChecklist");
-
-        })
-    .DataSource(dataSource => dataSource.Ajax()
-               .Model(model =>
-               {
-                   model.Id(p => p.ID);
-                   //model.Field(m => m.Item).DefaultValue(ExitProcedureChecklistVM.GetItemDefaultValue());
-                   //model.Field(m => m.Items);
-                   model.Field(p => p.ApproverPosition).DefaultValue(ExitProcedureChecklistVM.GetPositionDefaultValue());
-                   //model.Field(m => m.Relationship).DefaultValue(WorkingRelationshipDetailVM.GetRelationshipDefaultValue());
-                   //model.Field(m => m.Frequency).DefaultValue(WorkingRelationshipDetailVM.GetFrequencyDefaultValue());
-               })
-               .ServerOperation(false)
+        .ToolBar(toolbar => toolbar.Create())
+        .Pageable()
+        .Sortable()
+        .Scrollable()
+        .DataSource(
+            dataSource => dataSource
+            .Ajax()
+            .PageSize(10)
+            .Model(model =>
+            {
+                model.Id(p => p.ID);
+                model.Field(p => p.ApproverUnit).DefaultValue(ExitProcedureChecklistVM.GetUnitDefaultValue());
+                model.Field(m => m.ApproverPosition).DefaultValue(AjaxComboBoxVM.GetDefaultValue());
+                model.Field(m => m.ApproverUserName).DefaultValue(AjaxComboBoxVM.GetDefaultValue());
+                model.Field(p => p.Level).Editable(false);
+            })
+        .Create(update => update.Action("Grid_Create", "HRExitProcedure").Type(HttpVerbs.Post))
+        .Read(read => read.Action("Grid_Read", "HRExitProcedure").Type(HttpVerbs.Post))
+        .Update(update => update.Action("Grid_Update", "HRExitProcedure").Type(HttpVerbs.Post))
+        //.Destroy(update => update.Action("Grid_Destroy", "HRExitProcedure").Type(HttpVerbs.Post))
+        )
     )
-)
-
 </div>
 
-<script type="text/javascript">
-    function getExitProcedureChecklist(dataItem)
-    {
-        var data = $("#ExitProcedureChecklist").data("kendoGrid").dataSource.data();
-        return data.indexOf(dataItem);
-    }
-    function onDataBoundExitProcedureChecklist(e) {
-        var grid = $("#ExitProcedureChecklist").data("kendoGrid");
-        hideDeletedRowKendoDetail(grid);
+<script>
+
+    function filterApproverPosition(e) {
+        return {
+            approverUnit: $("#ApproverUnit").data("kendoDropDownList").value()
+        };
     }
 
-
-    function printItems(Items)
-    {
-        var result = "";
-        var j = Items.length;
-        for(var i = 0; i < j; i++) {
-            result += Items[i];
-        }
-        return result;
+    function filterApproverName(e) {
+        return {
+            position: $("#ApproverPosition_Value").data("kendoDropDownList").value()
+        };
     }
-
-    $(document).ready(function () {
-
-        function onChange() {
-            
-            var approverID = $("ApproverPosition").val();
-
-            console.log("Approver ID: " + approverID);
-
-            /*
-
-            if ($("#IsRenewal_Value").val() == "No") {
-                var joinDate = $("#JoinDate").val();
-
-                console.log("Join Date: " + joinDate);
-
-                $('#DateOfNewPSA').prop('value', joinDate);
-                $("#DateOfNewPSA").data("kendoDatePicker").min(joinDate);
-                $("#PSAExpiryDate").val(joinDate);
-
-            }
-            */
-
-        }
-
-        $("#ApproverPosition").kendoGrid(
-        { change: onChange }
-        );
-
-    });
-    /*
-    function getWorkingRelationshipDetails(dataItem) {
-        var data = $("#WorkingRelationshipDetails").data("kendoGrid").dataSource.data();
-
-        return data.indexOf(dataItem);
-    }
-    */
-
-    /*
-    function getMultiValue(dataItem) {
-        var item = [];
-        if (dataItem.Text != null) {
-            var _temp = dataItem.Text.split(',');
-            item = _temp;
-        }
-
-        for (var i = 0; i < dataItem.length; i++) {
-            item.push(dataItem[i].Text);
-        }
-        return item;
-    }
-    */
 </script>

@@ -7,6 +7,15 @@ using MCAWebAndAPI.Service.HR.Recruitment;
 using Elmah;
 using System.Net;
 using System.Threading.Tasks;
+using System.Linq;
+using MCAWebAndAPI.Model.HR.DataMaster;
+using Kendo.Mvc.Extensions;
+using Kendo.Mvc.UI;
+using MCAWebAndAPI.Model.ViewModel.Form.Common;
+using MCAWebAndAPI.Service.Common;
+using System.Collections.Generic;
+using System.Data;
+
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -140,17 +149,155 @@ namespace MCAWebAndAPI.Web.Controllers
             exitProcedureService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
             var viewModel = await exitProcedureService.GetWorkflowRouterExitProcedure(listName, requestor);
             //var viewModel = await _service.GetWorkflowRouterRequestorPosition(listName, requestorPosition);
-            SessionManager.Set("WorkflowItems", viewModel.ExitProcedureChecklist);
-            SessionManager.Set("WorkflowRouterListName", viewModel.ListName);
-            SessionManager.Set("WorkflowRouterRequestorUnit", viewModel.RequestorUnit);
-            SessionManager.Set("WorkflowRouterRequestorPosition", viewModel.RequestorPosition);
+            SessionManager.Set("ExitProcedureChecklist", viewModel.ExitProcedureChecklist);
+            SessionManager.Set("ExitProcedureListName", viewModel.ListName);
+            SessionManager.Set("ExitProcedureRequestorUnit", viewModel.RequestorUnit);
+            SessionManager.Set("ExitProcedureRequestorPosition", viewModel.RequestorPosition);
 
-
+            /*
             if (isPartial)
                 return PartialView("_WorkflowDetails", viewModel);
             return View("_WorkflowDetails", viewModel);
+            */
+            
+            if (isPartial)
+                return PartialView("_ExitProcedureChecklist", viewModel);
+            return View("_ExitProcedureChecklist", viewModel);
 
         }
+
+        public JsonResult GetApproverPositions(int approverUnit)
+        {
+            exitProcedureService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            var listName = SessionManager.Get<string>("ExitProcedureListName");
+            var requestorPosition = SessionManager.Get<string>("ExitProcedureRequestorPosition");
+            var requestorUnitName = SessionManager.Get<string>("ExitProcedureRequestorUnit");
+            var approverUnitName = ExitProcedureChecklistVM.GetUnitOptions().FirstOrDefault(e => e.Value == approverUnit).Text;
+
+            var viewModel = exitProcedureService.GetPositionsInWorkflow(listName, approverUnitName,
+                requestorUnitName, requestorPosition);
+            return Json(viewModel.Select(e => new {
+                e.ID,
+                e.PositionName
+            }), JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetApproverNames(int position)
+        {
+            exitProcedureService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            var positionName = exitProcedureService.GetPositionName(position);
+            var viewModel = SessionManager.Get<IEnumerable<ProfessionalMaster>>("WorkflowApprovers", "Position" + position)
+                ?? exitProcedureService.GetApproverNames(positionName);
+            SessionManager.Set("WorkflowApprovers", "Position" + position, viewModel);
+
+            return Json(viewModel.Select(e => new
+            {
+                e.ID,
+                e.Name
+            }), JsonRequestBehavior.AllowGet);
+        }
+
+        
+
+        [HttpPost]
+        public JsonResult Grid_Read([DataSourceRequest] DataSourceRequest request)
+        {
+            // Get from existing session variable or create new if doesn't exist
+            var exitProcedureChecklist = SessionManager.Get<IEnumerable<ExitProcedureChecklistVM>>("ExitProcedureChecklist");
+
+            // Convert to Kendo DataSource
+            DataSourceResult result = exitProcedureChecklist.ToDataSourceResult(request);
+
+            // Convert to Json
+            var json = Json(result, JsonRequestBehavior.AllowGet);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+
+        /*
+        [HttpPost]
+        public ActionResult Grid_Update([DataSourceRequest] DataSourceRequest request,
+            [Bind(Prefix = "models")] ExitProcedureChecklistVM viewModel)
+        {
+            if (viewModel != null && ModelState.IsValid)
+            {
+                exitProcedureService.UpdateExitProcedureChecklist(viewModel);
+            }
+
+            return Json(new[] { viewModel }.ToDataSourceResult(request, ModelState));
+        }
+        */
+        
+        [HttpPost]
+        public ActionResult Grid_Update([DataSourceRequest] DataSourceRequest request,
+            [Bind(Prefix = "models")]IEnumerable<ExitProcedureChecklistVM> viewModel)
+        {
+            // Get existing session variable
+            var sessionVariables = SessionManager.Get<IEnumerable<ExitProcedureChecklistVM>>("ExitProcedureChecklist");
+
+            
+            
+            /*
+            foreach (var item in viewModel)
+            {
+                var obj = sessionVariables.FirstOrDefault(e => e.ID != item.ID);
+                obj = item;
+            }
+            */
+
+            // Overwrite existing session variable
+            SessionManager.Set("ExitProcedureChecklist", sessionVariables);
+
+            // Return JSON
+            DataSourceResult result = sessionVariables.ToDataSourceResult(request);
+            var json = Json(result, JsonRequestBehavior.AllowGet);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+
+        [HttpPost]
+        public JsonResult Grid_Create([DataSourceRequest] DataSourceRequest request,
+            [Bind(Prefix = "models")]IEnumerable<ExitProcedureChecklistVM> viewModel)
+        {
+            var sessionVariables = SessionManager.Get<IEnumerable<ExitProcedureChecklistVM>>("ExitProcedureChecklist");
+
+            sessionVariables = viewModel;
+
+            SessionManager.Set("ExitProcedureChecklist", sessionVariables);
+            //foreach (var item in viewModel)
+            //{
+            //    if(sessionVariables.FirstOrDefault(e => e.ID) == )
+
+            //    var obj = sessionVariables.FirstOrDefault(e => e.ID == item.ID);
+            //    obj = item;
+            //}
+
+            //if (viewModel != null && ModelState.IsValid)
+            //{
+            //    exitProcedureService.CreateExitProcedureChecklist(viewModel);
+            //}
+
+            //return Json(new[] { viewModel }.ToDataSourceResult(request, ModelState));
+
+            // Return JSON
+            DataSourceResult result = sessionVariables.ToDataSourceResult(request);
+            var json = Json(result, JsonRequestBehavior.AllowGet);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+
+        
+        //[HttpPost]
+        //public ActionResult Grid_Destroy([DataSourceRequest] DataSourceRequest request,
+        //    [Bind(Prefix = "models")] ExitProcedureChecklistVM viewModel)
+        //{
+        //    if (viewModel != null)
+        //    {
+        //        exitProcedureService.DestroyExitProcedureChecklist(viewModel);
+        //    }
+
+        //    return Json(new[] { viewModel }.ToDataSourceResult(request, ModelState));
+        //}
 
     }
 }
