@@ -35,7 +35,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// renewalnumber for display value
         /// </summary>
-        [UIHint("Int32")]
         [DisplayName("Renewal#")]
         [Required]
         public int RenewalNumber { get; set;}
@@ -144,6 +143,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// tenure
         /// </summary>
+        [UIHint("Int32")]
         [DisplayName("Tenure")]
         [Required]
         public int Tenure { get; set; }
