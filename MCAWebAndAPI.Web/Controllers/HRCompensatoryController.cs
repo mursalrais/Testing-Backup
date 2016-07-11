@@ -26,11 +26,30 @@ namespace MCAWebAndAPI.Web.Controllers
             _service = new HRCompensatoryService();
         }
 
-        public ActionResult CompensatorylistUser(string siteurl = null, int? ID = null, int? position = null)
+        public ActionResult InputCompensatoryUser(string siteurl = null, int? ID = null)
         {
             //mandatory: set site url
+            _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
 
-            var siteUrl = siteurl ?? SessionManager.Get<string>("SiteUrl");
+            if (siteurl == "")
+            {
+                siteurl = SessionManager.Get<string>("SiteUrl");
+            }
+            _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
+
+            var viewmodel = _service.GetComplist(ID);
+
+            //viewmodel.ID = id;
+            return View(viewmodel);
+        }
+         
+        public ActionResult InputCompensatoryHR(string siteurl = null, int? ID = null)
+        {
+            //mandatory: set site url
+            _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
+
             if (siteurl == "")
             {
                 siteurl = SessionManager.Get<string>("SiteUrl");
@@ -43,8 +62,32 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewmodel);
         }
 
+        public ActionResult CompensatorylistUser(string siteurl = null, int? ID = null)
+        {
+            //mandatory: set site url
+            _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
+
+            var viewmodel = _service.GetComplist(ID);
+
+            //viewmodel.ID = id;
+            return View(viewmodel);
+        }
+
+        public ActionResult CompensatorylistHR(string siteurl = null, int? ID = null)
+        {
+            //mandatory: set site url
+            _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
+
+            var viewmodel = _service.GetComplistActive();
+
+            //viewmodel.ID = id;
+            return View(viewmodel);
+        }
+
         [HttpPost]
-        public ActionResult UpdateShortlistData(FormCollection form, ApplicationShortlistVM viewModel)
+        public ActionResult CreateCompensatoryData(FormCollection form, CompensatoryVM viewModel)
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
@@ -55,8 +98,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             try
             {
-                viewModel.ShortlistDetails = BindShortlistDetails(form, viewModel.ShortlistDetails);
-                _service.UpdateShortlistDataDetail(headerID, viewModel.ShortlistDetails);
+                _service.CreateCompensatoryData(headerID, viewModel);
             }
             catch (Exception e)
             {
@@ -68,12 +110,12 @@ namespace MCAWebAndAPI.Web.Controllers
                 string.Format("{0}/{1}", siteUrl, UrlResource.Professional));
         }
 
-        private IEnumerable<ShortlistDetailVM> BindShortlistDetails(FormCollection form, IEnumerable<ShortlistDetailVM> shortDetails)
+        private IEnumerable<CompensatoryDetailVM> BindShortlistDetails(FormCollection form, IEnumerable<CompensatoryDetailVM> compDetails)
         {
-            var array = shortDetails.ToArray();
+            var array = compDetails.ToArray();
             for (int i = 0; i < array.Length; i++)
             {
-                array[i].GetStat = BindHelper.BindStringInGrid("ShortlistDetails",
+                array[i].AppStatus = BindHelper.BindStringInGrid("ComplistDetails",
                     i, "Status", form);
 
             }

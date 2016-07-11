@@ -435,8 +435,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                               <Where>
                                    <And>
                                         <Eq>
-                                           <FieldRef Name='ID' />
-                                            <Value Type='Counter'>37</Value>
+                                           <FieldRef Name='manpowerrequisition' />
+                                            <Value Type='Counter'>45</Value>
                                         </Eq>
                                     <Or>
                                         <Eq>
@@ -450,7 +450,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                                            </Eq>
                                            <Eq>
                                               <FieldRef Name='applicationstatus' />
-                                              <Value Type='Text'>NEW</Value>
+                                              <Value Type='Text'>Declined</Value>
                                            </Eq>
                                         </Or>
                                      </Or>
@@ -487,7 +487,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             var createdValue = new Dictionary<string, object>();
 
-            createdValue.Add("manpowerrequisition", manID);
+            createdValue.Add("applicationstatus", "New");
 
             try
             {

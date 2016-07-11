@@ -31,12 +31,13 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             //mandatory: set site url
 
-            var siteUrl = siteurl ?? SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
+
             if (siteurl == "")
             {
                 siteurl = SessionManager.Get<string>("SiteUrl");
             }
-            _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
 
             var viewmodel = _service.GetShortlist(position, username, useraccess);
 
@@ -166,13 +167,23 @@ namespace MCAWebAndAPI.Web.Controllers
                 JsonRequestBehavior.AllowGet);
         }
 
+        private IEnumerable<PositionMaster> GetShortlistPositionExistingSession()
+        {
+            //Get existing session variable
+            var sessionVariable = System.Web.HttpContext.Current.Session["ShortlistPositionActive"] as IEnumerable<PositionMaster>;
+            var shortlistpositionactive = sessionVariable ?? _service.GetPositions();
+
+            if (sessionVariable == null) // If no session variable is found
+                System.Web.HttpContext.Current.Session["ShortlistPositionActive"] = shortlistpositionactive;
+            return shortlistpositionactive;
+        }
 
         public JsonResult GetPosition()
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
-            var positions = _service.GetPositions();
+            var positions = GetShortlistPositionExistingSession();
 
             return Json(positions.Select(e =>
                 new {

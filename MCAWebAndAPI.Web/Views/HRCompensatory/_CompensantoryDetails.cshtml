@@ -5,6 +5,7 @@
 
     @(Html.Kendo().Grid(Model)
     .Name("ComplistDetails")
+    .ToolBar(tools => tools.Create().Text("Add New"))
         .Editable(editable => editable.Mode(GridEditMode.InCell)
         .CreateAt(GridInsertRowPosition.Bottom))
     .Columns(columns =>

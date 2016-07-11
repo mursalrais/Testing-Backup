@@ -1,0 +1,147 @@
+﻿
+@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model CompensatoryVM
+
+@{
+    ViewBag.Title = "InputCompensatoryData";
+}
+
+@using (Html.BeginForm("CreateCompensatoryData", "HRCompensatory", FormMethod.Post, new
+{
+    @class = "form-horizontal",
+    enctype = "multipart/form-data"
+}))
+{
+    <div class="form-actions">
+        <fieldset>
+            @Html.HiddenFor(m => m.CmpID)
+            @Html.HiddenFor(m => m.CmpName)
+            @Html.HiddenFor(m => m.CmpPosition)
+            <div class="row">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.CmpName).Class("col-md-2 control-label")
+                    <div class="col-md-3">
+                        <input class="k-textbox form-control" id="NamePos" style="width:100%;">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.CmpProjUnit).Class("col-md-2 control-label")
+                    <div class="col-md-3">
+                        @Html.EditorFor(m => m.CmpProjUnit)
+                    </div>
+                </div>
+            </div>
+            <legend>Compensatory list</legend>
+            <div class="row">
+                @Html.Partial("_InputCompensantoryDetails", Model.CompensatoryDetails)
+            </div>
+
+        </fieldset>
+        <div class="row">
+            <div class="col-sm-8">
+                <button id="submit-button" class="btn btn-primary" type="submit" onclick="onValidateKendoDetail">
+                    <i class="fa fa-save"></i>
+                    save
+                </button>
+                @*<button id="submit-cancel" class="btn btn-primary" type="button">
+                    <i class="fa fa-save"></i>
+                    cancel
+                </button>*@
+            </div>
+        </div>
+    </div>
+}
+
+@section scripts{
+
+    <script>
+       
+        $(document).ready(function () {
+            var positionID = $("#CmpName").val() +" - "+ $("#CmpPosition").val();
+            $("#NamePos").prop("value", positionID);
+
+        });
+
+        function onValidateKendoDetail(e) {
+            var i = -1
+            var j = -1
+            rowgrid.each(function (e) {
+                i++;
+                var xdate = $("#Dateid" + i).val();
+                rowgrid.each(function (e) {
+                    j++;
+                    var ydate = $("#Dateid" + i).val();
+                    if (i !== j) {
+                        debugger;
+                        if (xdate == ydate) {
+                            alert("date you have chosen already exists")
+                        }
+                    }
+                });
+
+                if (data.CmpDate == xdate)
+                    debugger;
+            });
+        }
+
+        function onChangeKendoDetail(e) {
+                var container = e.container;
+                var tr = container.closest('tr');
+                var data = this.dataItem(tr); //get the row data so it can be referred later
+                // 1 is Item.Mode.UPDATED
+                var day = data.CmpDate.getDay();
+                var start = data.StartTime.getHours();
+                var finish = data.FinishTime.getHours();
+                var range;
+                var rowgrid = $("#CompensatoryDetails").data("kendoGrid").tbody.find("tr");
+                var i = -1
+                var j = -1
+                var tr = container.closest('tr');
+
+                rowgrid.each(function (e) {
+                    i++;
+                    var xdate = $("#Dateid" + i).val();
+                    rowgrid.each(function (e) {
+                        j++;
+                        var ydate = $("#Dateid" + i).val();
+                        if (i !== j)
+                        {
+                            if (xdate == ydate )
+                            {
+                                alert("date you have chosen already exists")
+                            }
+                        }
+                    });
+                });
+
+                if (start < finish)
+                {
+                    range = finish - start
+                    data.set("CmpTotalHours", range);
+                    data.CmpTotalHours = range;
+                    data.set("TotalDay", range/24)
+                }
+
+                data.set("EditMode", 1);
+        }
+
+        function getDayName(date) {
+            var day = new Array();
+            day[0] = "Monday";
+            day[1] = "Tuesday";
+            day[2] = "Wednesday";
+            day[3] = "Thursday";
+            day[4] = "Friday";
+            day[5] = "Saturday";
+            day[6] = "Sunday";
+            return day[date.getDay()];
+        }
+    </script>
+}
+
+
+
+
+

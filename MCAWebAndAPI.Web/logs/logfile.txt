@@ -100,3 +100,7 @@ Parameter name: address
    at System.Net.Mail.MailAddress..ctor(String address, String displayName, Encoding displayNameEncoding)
    at MCAWebAndAPI.Service.Utils.EmailUtil.Send(String emailAddress, String subject, String emailMessage) in C:\Users\sobari\Documents\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\EmailUtil.cs:line 30
    at MCAWebAndAPI.Service.HR.Recruitment.HRShortlistService.SendEmailValidation(String emailTo, String emailMessages) in C:\Users\sobari\Documents\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Recruitment\HRShortlistService.cs:line 366
+2016-07-01 10:57:31.1668 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Column 'professional_x003a_ID' does not exist. It may have been deleted by another user.  /sites/ims/hr/Lists/CompensatoryRequest
+2016-07-01 13:58:49.1973 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Invalid data has been used to update the list item. The field you are trying to update may be read only.
+2016-07-01 14:25:52.4730 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Invalid data has been used to update the list item. The field you are trying to update may be read only.
+2016-07-01 14:34:48.4672 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Column 'professional' does not exist. It may have been deleted by another user.  /sites/ims/hr/Lists/CompensatoryRequest

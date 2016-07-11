@@ -11,7 +11,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         CompensatoryVM GetComplist(int? ID);
 
-        void UpdateShortlistDataDetail(int? headerID, IEnumerable<ShortlistDetailVM> ShortlistDetails);
+        CompensatoryVM GetComplistActive();
+
+        void CreateCompensatoryData(int? headerID, CompensatoryVM CompensatoryList);
 
         IEnumerable<PositionMaster> GetPositions();
     }
