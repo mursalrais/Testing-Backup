@@ -66,7 +66,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            _service.SendEmailValidation(viewModel.SendTo, EmailResource.EmailShortlistData);
+            _service.SendEmailValidation(viewModel.SendTo, "https://eceos2.sharepoint.com/sites/ims/hr/Lists/Application/ShortlistREQ.aspx" + EmailResource.EmailShortlistData);
 
             return JsonHelper.GenerateJsonSuccessResponse(
                 string.Format("{0}/{1}", siteUrl, UrlResource.Professional));
@@ -183,7 +183,7 @@ namespace MCAWebAndAPI.Web.Controllers
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
-            var positions = GetShortlistPositionExistingSession();
+             var positions = GetShortlistPositionExistingSession();
 
             return Json(positions.Select(e =>
                 new {
