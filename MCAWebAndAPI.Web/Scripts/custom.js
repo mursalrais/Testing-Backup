@@ -116,6 +116,7 @@ function onEditKendoDetail(e) {
         var tr = container.closest('tr');
         var data = this.dataItem(tr); //get the row data so it can be referred later
         // 1 is Item.Mode.UPDATED
+        debugger;
         data.set("EditMode", 1);
     }
 }

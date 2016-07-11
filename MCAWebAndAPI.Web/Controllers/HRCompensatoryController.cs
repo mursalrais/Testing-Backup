@@ -43,7 +43,7 @@ namespace MCAWebAndAPI.Web.Controllers
             //viewmodel.ID = id;
             return View(viewmodel);
         }
-
+         
         public ActionResult InputCompensatoryHR(string siteurl = null, int? ID = null)
         {
             //mandatory: set site url
@@ -69,6 +69,18 @@ namespace MCAWebAndAPI.Web.Controllers
             SessionManager.Set("SiteUrl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
 
             var viewmodel = _service.GetComplist(ID);
+
+            //viewmodel.ID = id;
+            return View(viewmodel);
+        }
+
+        public ActionResult CompensatorylistHR(string siteurl = null, int? ID = null)
+        {
+            //mandatory: set site url
+            _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
+
+            var viewmodel = _service.GetComplistActive();
 
             //viewmodel.ID = id;
             return View(viewmodel);

@@ -29,6 +29,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// </summary>
         /// 
         [DisplayName("Day")]
+        [Editable(false)]
         public string CmpDay { get; set; }
 
         /// <summary>
@@ -36,6 +37,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// </summary>
         /// 
         [DisplayName("Date")]
+        [DataType(DataType.Date)]
         [UIHint("Date")]
         public DateTime? CmpDate { get; set; } = DateTime.Now;
 
@@ -46,7 +48,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [DataType(DataType.Time)]
         [DisplayFormat(DataFormatString = "{0:HH:mm}", ApplyFormatInEditMode = true), Display(Name = "Time (Start)")]
         public DateTime? StartTime { get; set; }
-
+        
         /// <summary>
         /// CompensatoryTimeFinish
         /// </summary>

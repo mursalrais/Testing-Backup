@@ -13,23 +13,21 @@
         columns.Bound(p => p.CmpActiv).ClientTemplate("#= CmpActiv #" +
         "<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].CmpActiv' value='#= CmpActiv #' />");
 
-        columns.Bound(p => p.CmpDate).ClientTemplate(
-        "<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].CmpDate' value='#= CmpDate #' />");
+        columns.Bound(p => p.CmpDate).ClientTemplate("#= kendo.toString(CmpDate, \"MM/dd/yyyy \") #" +
+            "<input type='hidden' id='Dateid#= GetDetailComplist(data)#' name='CompensatoryDetails[#= GetDetailComplist(data)#].CmpDate' value='#= CmpDate #' />");
 
-        columns.Bound(p => p.CmpDay).ClientTemplate("#= CmpDay #" +
-       "<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].CmpDay' value='#= CmpDay #' />");
+        columns.Bound(p => p.CmpDate).ClientTemplate("#=getDayName(CmpDate)#"
+                           ).Width(150);
 
-        columns.Bound(p => p.StartTime).ClientTemplate("#= StartTime #" +
-        "<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].StartTime' value='#= StartTime #' />");
+        columns.Bound(p => p.StartTime).ClientTemplate("#= kendo.toString(StartTime, \"hh:mm tt\") #" +
+        "<input id='start' type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].StartTime' value='#= StartTime #' />");
 
-        columns.Bound(p => p.FinishTime).ClientTemplate("#= FinishTime #" +
-        "<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].FinishTime' value='#= FinishTime #' />");
+        columns.Bound(p => p.FinishTime).ClientTemplate("#= kendo.toString(FinishTime, \"hh:mm tt\") #" +
+       "<input id='end' type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].StartTime' value='#= FinishTime #' />");
 
-        columns.Bound(p => p.CmpTotalHours).Locked().ClientTemplate("#= CmpTotalHours #" +
-        "<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].CmpTotalHours' value='#= CmpTotalHours #' />");
+        columns.Bound(p => p.CmpTotalHours).ClientTemplate("<input name='CompensatoryDetails[#= GetDetailComplist(data)#].CmpTotalHours' value='#= CmpTotalHours #' style='width: 15px; border: none; background-color: transparent' />");
 
-        columns.Bound(p => p.TotalDay).ClientTemplate("#= TotalDay #" +
-        "<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].TotalDay' value='#= TotalDay #' />");
+        columns.Bound(p => p.TotalDay).ClientTemplate("<input name='CompensatoryDetails[#= GetDetailComplist(data)#].TotalDay' value='#= TotalDay #' style='width: 20px; border: none; background-color: transparent' />");
 
         columns.Bound(p => p.remarks).ClientTemplate("#= remarks #" +
        "<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].remarks' value='#= remarks #' />");
@@ -41,7 +39,7 @@
     })
     .Events(e =>
     {
-        e.Edit("onEditKendoDetail");
+        e.Edit("onChangeKendoDetail");
         e.DataBound("onDataBoundDependentDetails");
     })
     .DataSource(dataSource => dataSource.Ajax()
@@ -51,7 +49,6 @@
 
     })
     .ServerOperation(false)
-
     )
 )
 </div>
@@ -60,7 +57,7 @@
         console.log();
     });
 
-    function GetDetailComplist(dataItem) {
+     function GetDetailComplist(dataItem) {
         var data = $("#CompensatoryDetails").data("kendoGrid").dataSource.data();
         return data.indexOf(dataItem);
     }
@@ -69,5 +66,7 @@
         var grid = $("#CompensatoryDetails").data("kendoGrid");
         hideDeletedRowKendoDetail(grid);
     }
+
+   
 </script>
 

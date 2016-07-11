@@ -117,17 +117,35 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return compID;
         }
 
+       
+
         public CompensatoryVM GetComplistActive()
         {
             var viewModel = new CompensatoryVM();
+            var shortlist = new List<ListCompensatoryVM>();
 
-            var caml = @"<View>  
+            var caml1 = @"<View>  
+                     <ViewFields> 
+                       <FieldRef Name='professional_x003a_ID' />
+                     </ViewFields> 
+                    </View>";
+
+            foreach (var item1 in SPConnector.GetList(SP_COMREQ_LIST_NAME, _siteUrl, caml1))
+            {
+
+                var caml2 = @"<View>  
                     <Query> 
-                       <Where>
+                        <Where>
+                          <And>
                              <Eq>
-                                 <FieldRef Name='Professional_x0020_Status' />
-                                 <Value Type='Choice'>Active</Value>
-                              </Eq>
+                                <FieldRef Name='Professional_x0020_Status' />
+                                <Value Type='Choice'>Active</Value>
+                             </Eq>
+                             <Eq>
+                                <FieldRef Name='ID' />
+                                <Value Type='Counter'>" + Convert.ToInt32(FormatUtil.ConvertLookupToValue(item1, "professional_x003a_ID")) + @"</Value>
+                             </Eq>
+                          </And>
                        </Where>
                     </Query> 
                      <ViewFields> 
@@ -138,20 +156,20 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                      </ViewFields> 
                     </View>";
 
-            var shortlist = new List<ListCompensatoryVM>();
 
-            foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl, caml))
-            {
-                shortlist.Add(new ListCompensatoryVM
+                foreach (var item2 in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl, caml2))
                 {
-                    CmpID = Convert.ToInt32(item["ID"]),
-                    CmpName = Convert.ToString(item["Title"]),
-                    CmpProjUnit = Convert.ToString(item["Project_x002f_Unit"]),
-                    CmpPosition = FormatUtil.ConvertLookupToValue(item, "Position"),
-                    listCompensatoryDetails = GetCompDetailist(GetCompID(Convert.ToInt32(item["ID"])))
-                });
-            }
+                    shortlist.Add(new ListCompensatoryVM
+                    {
+                        CmpID = Convert.ToInt32(item2["ID"]),
+                        CmpName = Convert.ToString(item2["Title"]),
+                        CmpProjUnit = Convert.ToString(item2["Project_x002f_Unit"]),
+                        CmpPosition = FormatUtil.ConvertLookupToValue(item2, "Position"),
+                        listCompensatoryDetails = GetCompDetailist(GetCompID(Convert.ToInt32(item2["ID"])))
+                    });
+                }
 
+            }
             viewModel.CompensatorytoList = shortlist;
 
             return viewModel;
@@ -214,6 +232,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 shortlistDetails.Add(ConvertToCompDetailVM(item));
             }
+
             return shortlistDetails;
         }
 

@@ -58,7 +58,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// CompensatoryYearDate
         /// <head>
         [DisplayName("YearDate")]
-        public DateTime? CmpYearDate { get; set; }
+        public string CmpYearDate { get; set; }
 
     }
 }
