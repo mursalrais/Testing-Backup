@@ -11,8 +11,9 @@
         .Columns(columns =>
         {
             columns.Bound(p => p.ID).Hidden();
-            columns.Bound(p => p.Level).Width(150);
-            columns.Bound(p => p.ApproverUnit).ClientTemplate("#=  ApproverUnit.Text #").Width(350)
+            //columns.Bound(p => p.Level).Width(150);
+            columns.Bound(p => p.ItemExitProcedure).Width(200);
+            columns.Bound(p => p.ApproverUnit).Hidden().ClientTemplate("#=  ApproverUnit.Text #").Width(350)
             .EditorViewData(
             new
             {
@@ -29,7 +30,7 @@
                 Filter = "filterApproverPosition",
                 Cascade = "ApproverUnit"
             });
-            columns.Bound(p => p.ApproverUserName).Width(400).ClientTemplate("#= ApproverUserName.Text #")
+            columns.Bound(p => p.ApproverUserName).Width(200).ClientTemplate("#= ApproverUserName.Text #")
             .EditorViewData(
             new
             {
@@ -40,13 +41,21 @@
                 Filter = "filterApproverName",
                 Cascade = "ApproverPosition_Value"
             });
+            columns.Bound(p => p.DateOfApproval).Format("DD/MM/YYYY");
+            columns.Bound(p => p.CheckListItemApproval)
+            .EditorViewData(
+            new
+            {
+                BindTo = ExitProcedureChecklistVM.GetCheckListItemApproval()
+            });
+            columns.Bound(p => p.Remarks);
             //columns.Command(p => p.Edit().Text("Edit").HtmlAttributes(new { @title = "Edit" })).Width(220);
             columns.Command(command => { command.Edit();}).Width(220);
         })
         .ToolBar(toolbar => toolbar.Create())
-        .Pageable()
-        .Sortable()
-        .Scrollable()
+        //.Pageable()
+        //.Sortable()
+        //.Scrollable()
         .DataSource(
             dataSource => dataSource
             .Ajax()
@@ -57,7 +66,11 @@
                 model.Field(p => p.ApproverUnit).DefaultValue(ExitProcedureChecklistVM.GetUnitDefaultValue());
                 model.Field(m => m.ApproverPosition).DefaultValue(AjaxComboBoxVM.GetDefaultValue());
                 model.Field(m => m.ApproverUserName).DefaultValue(AjaxComboBoxVM.GetDefaultValue());
-                model.Field(p => p.Level).Editable(false);
+                //model.Field(p => p.Level).Editable(false);
+                model.Field(p => p.ItemExitProcedure);
+                model.Field(p => p.DateOfApproval);
+                model.Field(p => p.CheckListItemApproval).DefaultValue(ExitProcedureChecklistVM.GetCheckListItemApprovalDefaultValue());
+                model.Field(p => p.Remarks);
             })
         .Create(update => update.Action("Grid_Create", "HRExitProcedure").Type(HttpVerbs.Post))
         .Read(read => read.Action("Grid_Read", "HRExitProcedure").Type(HttpVerbs.Post))

@@ -273,59 +273,70 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             if (viewModel.Level == "1")
             {
                 viewModel.ItemExitProcedure = "Close-Out/Handover Report";
+                viewModel.Remarks = "";
             }
             else if (viewModel.Level == "2")
             {
                 viewModel.ItemExitProcedure = "MCA Indonesia Propietary Information";
+                viewModel.Remarks = "";
             }
             else if (viewModel.Level == "3")
             {
                 viewModel.ItemExitProcedure = "Laptop/Desktop";
+                viewModel.Remarks = "";
             }
             else if (viewModel.Level == "4")
             {
                 viewModel.ItemExitProcedure = "SAP Password, Computer Password";
+                viewModel.Remarks = "";
             }
             else if (viewModel.Level == "5")
             {
                 viewModel.ItemExitProcedure = "IT Tools";
+                viewModel.Remarks = "";
             }
             else if (viewModel.Level == "6")
             {
                 viewModel.ItemExitProcedure = "Keys (Drawers,desk,etc)";
+                viewModel.Remarks = "";
             }
             else if (viewModel.Level == "7")
             {
                 viewModel.ItemExitProcedure = "Car";
+                viewModel.Remarks = "";
             }
             else if (viewModel.Level == "8")
             {
                 viewModel.ItemExitProcedure = "Advance Statement";
+                viewModel.Remarks = "Rp 5.000.000";
+
             }
             else if (viewModel.Level == "9")
             {
                 viewModel.ItemExitProcedure = "Travel Statement";
+                viewModel.Remarks = "Rp 2.000.000";
             }
-            else if (viewModel.Level == "10")
-            {
-                viewModel.ItemExitProcedure = "Resignation/Separation Letter";
-            }
-            else if (viewModel.Level == "11")
-            {
-                viewModel.ItemExitProcedure = "Timesheet/Leave Form";
-            }
-            else if (viewModel.Level == "12")
-            {
-                viewModel.ItemExitProcedure = "Exit Interview/NDA";
-            }
-            else if (viewModel.Level == "13")
-            {
-                viewModel.ItemExitProcedure = "Insurance Card";
-            }
-            else if (viewModel.Level == "14")
-            {
-                viewModel.ItemExitProcedure = "ID Card & Access Card";
-            }
+            
+            //else if (viewModel.Level == "10")
+            //{
+            //    viewModel.ItemExitProcedure = "Resignation/Separation Letter";
+            //}
+            //else if (viewModel.Level == "11")
+            //{
+            //    viewModel.ItemExitProcedure = "Timesheet/Leave Form";
+            //}
+            //else if (viewModel.Level == "12")
+            //{
+            //    viewModel.ItemExitProcedure = "Exit Interview/NDA";
+            //}
+            //else if (viewModel.Level == "13")
+            //{
+            //    viewModel.ItemExitProcedure = "Insurance Card";
+            //}
+            //else if (viewModel.Level == "14")
+            //{
+            //    viewModel.ItemExitProcedure = "ID Card & Access Card";
+            //}
 
             viewModel.ApproverUnit =
                 ExitProcedureChecklistVM.GetUnitDefaultValue(new InGridComboBoxVM
