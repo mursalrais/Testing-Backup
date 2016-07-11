@@ -11,15 +11,14 @@
         .Columns(columns =>
         {
             columns.Bound(p => p.ID).Hidden();
-            //columns.Bound(p => p.Level).Width(150);
-            columns.Bound(p => p.ItemExitProcedure).Width(200);
-            columns.Bound(p => p.ApproverUnit).Hidden().ClientTemplate("#=  ApproverUnit.Text #").Width(350)
+            columns.Bound(p => p.ItemExitProcedure);
+            columns.Bound(p => p.ApproverUnit).ClientTemplate("#=  ApproverUnit.Text #")
             .EditorViewData(
             new
             {
                 BindTo = ExitProcedureChecklistVM.GetUnitOptions()
             });
-            columns.Bound(p => p.ApproverPosition).Width(300).ClientTemplate("#= ApproverPosition.Text #")
+            columns.Bound(p => p.ApproverPosition).ClientTemplate("#= ApproverPosition.Text #")
             .EditorViewData(
             new
             {
@@ -30,7 +29,7 @@
                 Filter = "filterApproverPosition",
                 Cascade = "ApproverUnit"
             });
-            columns.Bound(p => p.ApproverUserName).Width(200).ClientTemplate("#= ApproverUserName.Text #")
+            columns.Bound(p => p.ApproverUserName).ClientTemplate("#= ApproverUserName.Text #")
             .EditorViewData(
             new
             {
@@ -41,21 +40,17 @@
                 Filter = "filterApproverName",
                 Cascade = "ApproverPosition_Value"
             });
-            columns.Bound(p => p.DateOfApproval).Format("DD/MM/YYYY");
-            columns.Bound(p => p.CheckListItemApproval)
+            columns.Bound(p => p.DateOfApproval).Hidden().ClientTemplate("#= kendo.toString(DateOfApproval, 'MM/dd/yyyy') #");
+            columns.Bound(p => p.CheckListItemApproval).Hidden().ClientTemplate("#= CheckListItemApproval.Text #")
             .EditorViewData(
             new
             {
                 BindTo = ExitProcedureChecklistVM.GetCheckListItemApproval()
             });
             columns.Bound(p => p.Remarks);
-            //columns.Command(p => p.Edit().Text("Edit").HtmlAttributes(new { @title = "Edit" })).Width(220);
-            columns.Command(command => { command.Edit();}).Width(220);
+            columns.Command(command => { command.Edit(); });
         })
         .ToolBar(toolbar => toolbar.Create())
-        //.Pageable()
-        //.Sortable()
-        //.Scrollable()
         .DataSource(
             dataSource => dataSource
             .Ajax()
@@ -66,7 +61,6 @@
                 model.Field(p => p.ApproverUnit).DefaultValue(ExitProcedureChecklistVM.GetUnitDefaultValue());
                 model.Field(m => m.ApproverPosition).DefaultValue(AjaxComboBoxVM.GetDefaultValue());
                 model.Field(m => m.ApproverUserName).DefaultValue(AjaxComboBoxVM.GetDefaultValue());
-                //model.Field(p => p.Level).Editable(false);
                 model.Field(p => p.ItemExitProcedure);
                 model.Field(p => p.DateOfApproval);
                 model.Field(p => p.CheckListItemApproval).DefaultValue(ExitProcedureChecklistVM.GetCheckListItemApprovalDefaultValue());

@@ -171,13 +171,6 @@ function displayWorkflowRouter(domID, listName, requestor) {
     $('#' + domID).load(url);
 }
 
-/*
-function displayWorkflowRouterExitProcedure(domID, listName, requestor) {
-    var url = "/Workflow/DisplayWorkflowRouterExitProcedure?listName=" + listName + "&requestor=" + requestor;
-    $('#' + domID).load(url);
-}
-*/
-
 function displayWorkflowRouterExitProcedure(domID, listName, requestor) {
     var url = "/HRExitProcedure/DisplayWorkflowRouterExitProcedure?listName=" + listName + "&requestor=" + requestor;
     $('#' + domID).load(url);
