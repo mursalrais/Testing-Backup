@@ -138,8 +138,11 @@
                         $("#IsRenewal_Value").data("kendoDropDownList").select(1);
                         $("#IsRenewal_Value").data("kendoDropDownList").readonly();
 
-                        $("#PSARenewalNumber").prop("readonly", "true");
+                        //$("#PSARenewalNumber").prop("readonly", "true");
                         $("#PSARenewalNumber").prop("value", 0);
+
+                        var psarenewalnumber = $("#PSARenewalNumber").data("kendoNumericTextBox");
+                        psarenewalnumber.readonly();
 
                         $('#PSAId').prop('value', 0);
 
@@ -164,7 +167,9 @@
                                
                 $.getJSON(urlKeyPosition, function (result) {
 
-                    if (result[0].isKeyPosition == "Yes")
+                    
+
+                    if (result[0].IsKeyPosition == "Yes")
                     {
                         $('#KeyPosition').prop('value', "You must upload file with the file name format: MCC-PSA-MMDDYYYY");
                         $('#DocumentType').prop('value', "MCC No Objection Letter");
@@ -185,9 +190,23 @@
             
             $(document).ready(function () {
 
-                $("#Tenure").on('input', function () {
-                    sumCal();
+
+                $("#Tenure").kendoNumericTextBox({
+                    change: onChange,
+                    spin: onSpin
+                
+
+                //$("#Tenure").on('input', function () {
+                //    sumCal();
                 });
+
+                function onChange() {
+                    sumCal();
+                }
+
+                function onSpin() {
+                    sumCal();
+                }
 
                 function sumCal() {
 
@@ -204,6 +223,9 @@
                     var setmonth = new Date(dateofnewpsa.setMonth(addtenure));
 
                     var psaexpirydate = setmonth.getMonth() + 1 + '/' + setmonth.getDate() + '/' + setmonth.getFullYear();
+
+                    console.log(psaexpirydate)
+
                     $("#PSAExpiryDate").val(psaexpirydate);
                 }
 

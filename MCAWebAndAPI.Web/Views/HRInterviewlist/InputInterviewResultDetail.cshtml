@@ -56,9 +56,9 @@
         <div class="row">
             <div class="col-sm-4">
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.GetResultOptions).Class("col-xs-4 control-label")
+                    @Html.Bootstrap().LabelFor(m => m.InterviewResultOption).Class("col-xs-4 control-label")
                     <div class="col-xs-6">
-                        @Html.EditorFor(m => m.GetResultOptions)
+                        @Html.EditorFor(m => m.InterviewResultOption)
                     </div>
                 </div>
             </div>
@@ -90,6 +90,13 @@
             })
 
         });
+
+        function onResultOptionChange(e) {
+            var res = $("#RecommendedForPosition_Value").val();
+            if (res == "For Other Position") {
+                $("#OtherPosition_Value").data("kendoDropDownList").enable(true);
+            }
+        };
     </script>
 
 }

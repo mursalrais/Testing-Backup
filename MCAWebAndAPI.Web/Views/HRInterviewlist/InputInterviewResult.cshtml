@@ -91,9 +91,11 @@
     <script>
         function onPositionChange(e) {
             var res = $("#RecommendedForPosition_Value").val();
-            if (res == "For Other Position")
-            {
+            if (res == "For Other Position") {
                 $("#OtherPosition_Value").data("kendoDropDownList").enable(true);
+            }
+            else {
+                $("#OtherPosition_Value").data("kendoDropDownList").enable(false);
             }
         };
 

@@ -273,65 +273,79 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             if (viewModel.Level == "1")
             {
                 viewModel.ItemExitProcedure = "Close-Out/Handover Report";
+                viewModel.Remarks = "";
             }
             else if (viewModel.Level == "2")
             {
                 viewModel.ItemExitProcedure = "MCA Indonesia Propietary Information";
+                viewModel.Remarks = "";
             }
             else if (viewModel.Level == "3")
             {
                 viewModel.ItemExitProcedure = "Laptop/Desktop";
+                viewModel.Remarks = "";
             }
             else if (viewModel.Level == "4")
             {
                 viewModel.ItemExitProcedure = "SAP Password, Computer Password";
+                viewModel.Remarks = "";
             }
             else if (viewModel.Level == "5")
             {
                 viewModel.ItemExitProcedure = "IT Tools";
+                viewModel.Remarks = "";
             }
             else if (viewModel.Level == "6")
             {
                 viewModel.ItemExitProcedure = "Keys (Drawers,desk,etc)";
+                viewModel.Remarks = "";
             }
             else if (viewModel.Level == "7")
             {
                 viewModel.ItemExitProcedure = "Car";
+                viewModel.Remarks = "";
             }
             else if (viewModel.Level == "8")
             {
                 viewModel.ItemExitProcedure = "Advance Statement";
+                viewModel.Remarks = "Rp 5.000.000";
+
             }
             else if (viewModel.Level == "9")
             {
                 viewModel.ItemExitProcedure = "Travel Statement";
+                viewModel.Remarks = "Rp 2.000.000";
             }
-            else if (viewModel.Level == "10")
-            {
-                viewModel.ItemExitProcedure = "Resignation/Separation Letter";
-            }
-            else if (viewModel.Level == "11")
-            {
-                viewModel.ItemExitProcedure = "Timesheet/Leave Form";
-            }
-            else if (viewModel.Level == "12")
-            {
-                viewModel.ItemExitProcedure = "Exit Interview/NDA";
-            }
-            else if (viewModel.Level == "13")
-            {
-                viewModel.ItemExitProcedure = "Insurance Card";
-            }
-            else if (viewModel.Level == "14")
-            {
-                viewModel.ItemExitProcedure = "ID Card & Access Card";
-            }
+            
+            //else if (viewModel.Level == "10")
+            //{
+            //    viewModel.ItemExitProcedure = "Resignation/Separation Letter";
+            //}
+            //else if (viewModel.Level == "11")
+            //{
+            //    viewModel.ItemExitProcedure = "Timesheet/Leave Form";
+            //}
+            //else if (viewModel.Level == "12")
+            //{
+            //    viewModel.ItemExitProcedure = "Exit Interview/NDA";
+            //}
+            //else if (viewModel.Level == "13")
+            //{
+            //    viewModel.ItemExitProcedure = "Insurance Card";
+            //}
+            //else if (viewModel.Level == "14")
+            //{
+            //    viewModel.ItemExitProcedure = "ID Card & Access Card";
+            //}
 
             viewModel.ApproverUnit =
                 ExitProcedureChecklistVM.GetUnitDefaultValue(new InGridComboBoxVM
                 {
                     Text = Convert.ToString(item["approverunit"])
                 });
+
+            viewModel.CheckListItemApproval =
+                ExitProcedureChecklistVM.GetCheckListItemApprovalDefaultValue();
 
             var userNames = await getApproverNamesTask;
             var userName = userNames.FirstOrDefault();
@@ -376,5 +390,105 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 UserLogin = Convert.ToString(item["officeemail"])
             };
         }
+
+        public IEnumerable<PositionMaster> GetPositionsInWorkflow(string listName,
+            string approverUnit, string requestorUnit, string requestorPosition)
+        {
+            var caml = @"<View>  
+            <Query> 
+               <Where><And><And><And><Eq>
+                <FieldRef Name='approverunit' /><Value Type='Choice'>"
+                    + approverUnit + @"</Value></Eq><Eq>
+                <FieldRef Name='requestorposition' /><Value Type='Lookup'>"
+                    + requestorPosition + @"</Value></Eq></And><Eq>
+                <FieldRef Name='requestorunit' /><Value Type='Choice'>"
+                    + requestorUnit + @"</Value></Eq></And><Eq>
+                <FieldRef Name='transactiontype' /><Value Type='Choice'>"
+                    + listName + @"</Value></Eq></And></Where> 
+            </Query> 
+                <ViewFields><FieldRef Name='approverposition' /></ViewFields> 
+            </View>";
+
+            var positions = new List<PositionMaster>();
+            foreach (var item in SPConnector.GetList(SP_WORKFLOW_LISTNAME, _siteUrl, caml))
+            {
+                positions.Add(new PositionMaster
+                {
+                    ID = FormatUtil.ConvertLookupToID(item, "approverposition"),
+                    PositionName = FormatUtil.ConvertLookupToValue(item, "approverposition")
+                });
+            }
+
+            return positions;
+        }
+
+        public string GetPositionName(int position)
+        {
+            var item = SPConnector.GetListItem(SP_POSMAS_LIST_NAME, position, _siteUrl);
+            return Convert.ToString(item["Title"]);
+        }
+
+        //public void CreateExitProcedureChecklist(ExitProcedureChecklistVM exitProcedureChecklist)
+        //{
+        //    var updatedValues = new Dictionary<string, object>();
+
+        //    updatedValues.Add("Title", exitProcedure.FullName);
+        //    updatedValues.Add("requestdate", exitProcedure.RequestDate);
+        //    updatedValues.Add("professional", new FieldLookupValue { LookupId = (int)exitProcedure.Professional.Value });
+        //    updatedValues.Add("projectunit", exitProcedure.ProjectUnit);
+        //    updatedValues.Add("position", exitProcedure.Position);
+        //    updatedValues.Add("mobilenumber", exitProcedure.PhoneNumber);
+        //    updatedValues.Add("officeemail", exitProcedure.EmailAddress);
+        //    updatedValues.Add("currentaddress", exitProcedure.CurrentAddress);
+        //    updatedValues.Add("joindate", exitProcedure.JoinDate);
+        //    updatedValues.Add("lastworkingdate", exitProcedure.LastWorkingDate);
+        //    updatedValues.Add("exitreason", exitProcedure.ExitReason.Value);
+        //    updatedValues.Add("reasondescription", exitProcedure.ReasonDesc);
+        //    updatedValues.Add("psanumber", exitProcedure.PSANumber);
+
+        //    try
+        //    {
+        //        SPConnector.AddListItem(SP_EXP_LIST_NAME, updatedValues, _siteUrl);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        logger.Error(e.Message);
+        //        throw e;
+        //    }
+
+        //    return SPConnector.GetLatestListItemID(SP_EXP_LIST_NAME, _siteUrl);
+
+        //    /*
+        //    var entity = new ExitProcedureChecklistVM();
+
+        //    //var updatedValues = new Dictionary<string, object>();
+        //    entity.ApproverUnit.Value = (int)exitProcedureChecklist.ApproverUnit.Value;
+        //    entity.ApproverPosition.Value = (int)exitProcedureChecklist.ApproverPosition.Value;
+        //    entity.ApproverUserName.Value = (int)exitProcedureChecklist.ApproverUserName.Value;
+        //    entity.Level = exitProcedureChecklist.Level;
+
+        //    entity.
+
+        //    /*
+        //    if (entity.CategoryID == null)
+        //    {
+        //        entity.CategoryID = 1;
+        //    }
+        //    */
+
+        //    /*
+        //    if (product.Category != null)
+        //    {
+        //        entity.CategoryID = product.Category.CategoryID;
+        //    }
+        //    */
+
+        //    /*
+        //    exit.Products.Add(entity);
+        //    entities.SaveChanges();
+
+        //    product.ProductID = entity.ProductID;
+        //    */
+        //}
     }
 }

@@ -24,6 +24,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [DisplayName("Curriculum Vitae")]
         public string DocumentUrl { get; set; }
 
+        [DisplayName("Status")]
         public string GetStat { get; set; }
 
         public Boolean neednextintv { get; set; }

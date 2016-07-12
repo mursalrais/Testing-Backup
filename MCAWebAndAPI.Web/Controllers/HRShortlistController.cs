@@ -30,13 +30,16 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult ShortlistData(string siteurl = null, int? position = null, string username = null, string useraccess = null)
         {
             //mandatory: set site url
-
-            var siteUrl = siteurl ?? SessionManager.Get<string>("SiteUrl");
             if (siteurl == "")
             {
                 siteurl = SessionManager.Get<string>("SiteUrl");
+                _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
             }
-            _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
+            else
+            {
+                _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
+                SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
+            }
 
             var viewmodel = _service.GetShortlist(position, username, useraccess);
 
@@ -65,7 +68,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            _service.SendEmailValidation(viewModel.SendTo, EmailResource.EmailShortlistData);
+            _service.SendEmailValidation(viewModel.SendTo, "https://eceos2.sharepoint.com/sites/ims/hr/Lists/Application/ShortlistREQ.aspx"+" "+ EmailResource.EmailShortlistData);
 
             return JsonHelper.GenerateJsonSuccessResponse(
                 string.Format("{0}/{1}", siteUrl, UrlResource.Professional));
@@ -166,13 +169,23 @@ namespace MCAWebAndAPI.Web.Controllers
                 JsonRequestBehavior.AllowGet);
         }
 
+        private IEnumerable<PositionMaster> GetShortlistPositionExistingSession()
+        {
+            //Get existing session variable
+            var sessionVariable = System.Web.HttpContext.Current.Session["ShortlistPositionActive"] as IEnumerable<PositionMaster>;
+            var shortlistpositionactive = sessionVariable ?? _service.GetPositions();
+
+            if (sessionVariable == null) // If no session variable is found
+                System.Web.HttpContext.Current.Session["ShortlistPositionActive"] = shortlistpositionactive;
+            return shortlistpositionactive;
+        }
 
         public JsonResult GetPosition()
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
-            var positions = _service.GetPositions();
+             var positions = GetShortlistPositionExistingSession();
 
             return Json(positions.Select(e =>
                 new {

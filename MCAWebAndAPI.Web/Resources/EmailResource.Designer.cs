@@ -79,7 +79,7 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;a href = &apos;https://eceos2.sharepoint.com/sites/ims/hr/Lists/Professional%20Master/DispForm_Custom.aspx?ID=3&apos; &gt; Open candidates&apos; profiles for this position&lt;/a&gt;.
+        ///   Looks up a localized string similar to &apos;https://eceos2.sharepoint.com/sites/ims/hr/Lists/Professional%20Master/DispForm_Custom.aspx?ID=3&apos;.
         /// </summary>
         public static string EmailCandidateShortlist {
             get {
@@ -88,14 +88,11 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;p&gt;
-        ///&lt;strong&gt;Dear Requestor,&lt;/strong&gt;
-        ///&lt;/p&gt;
-        ///&lt;p&gt;
+        ///   Looks up a localized string similar to .                                                                                                          Dear Requestor,
+        ///
         ///This email is sent to you to notify that your HR, Interview Result data list. 
         ///
-        ///Thank you. 
-        ///&lt;/p&gt;.
+        ///Thank you..
         /// </summary>
         public static string EmailInterviewResult {
             get {
@@ -104,14 +101,11 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;p&gt;
-        ///&lt;strong&gt;Dear Requestor,&lt;/strong&gt;
-        ///&lt;/p&gt;
-        ///&lt;p&gt;
-        ///This email is sent to you to notify that your HR, Shortlisted Result data list. 
+        ///   Looks up a localized string similar to .                                                                                                         Dear Requestor,
         ///
-        ///Thank you. 
-        ///&lt;/p&gt;.
+        ///This email is Shortlisted Candidate Result data from HR,
+        ///
+        ///Thank you..
         /// </summary>
         public static string EmailShortlistData {
             get {

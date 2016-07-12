@@ -29,6 +29,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// </summary>
         public string InterviewerPanel { get; set; }
 
+        [UIHint("TextArea")]
         public string InterviewSummary { get; set; }
 
         public string Result { get; set; }
@@ -119,10 +120,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [UIHint("Date")]
         [DisplayName("Interview Date")]
         public DateTime? InterviewerDate { get; set; } = DateTime.Now;
-
+        
         //[UIHint("Date")]
         //public string InterviewerDate { get; set; } = DateTime.UtcNow.ToShortDateString();
-
         [UIHint("Date")]
         public string Time { get; set; } = DateTime.UtcNow.ToShortTimeString();
 
@@ -143,8 +143,32 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             OnSelectEventName = "onPositionChange"
         };
 
-        
-    public Boolean NeedNextInterviewer { get; set; } = new Boolean();
+        [UIHint("ComboBox")]
+        [DisplayName("Result")]
+        public ComboBoxVM InterviewResultOption { get; set; } = new ComboBoxVM()
+        {
+            Choices = new string[]
+           {
+                "Recommended",
+                "Not Recommended",
+                "For Other Position",
+           },
+            OnSelectEventName = "onResultOptionChange"
+        };
+
+        public static AjaxComboBoxVM GetPositionDefaultValue(AjaxComboBoxVM model = null)
+        {
+            if (model == null)
+            {
+                return new AjaxComboBoxVM();
+            }
+            else
+            {
+                return model;
+            }
+        }
+
+        public Boolean NeedNextInterviewer { get; set; } = new Boolean();
 
         [UIHint("MultiFileUploader")]
         public IEnumerable<HttpPostedFileBase> Documents { get; set; } = new List<HttpPostedFileBase>();

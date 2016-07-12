@@ -1,31 +1,18 @@
-﻿using MCAWebAndAPI.Model.Common;
-using MCAWebAndAPI.Model.ViewModel.Control;
-using System;
+﻿using System;
+using MCAWebAndAPI.Model.Common;
 using System.Collections.Generic;
+using MCAWebAndAPI.Model.ViewModel.Control;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Web;
+using System.Linq;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
-    public class CompensatoryVM : Item
+    public class ListCompensatoryVM : Item
     {
-        public IEnumerable<ListCompensatoryVM> CompensatorytoList { get; set; } = new List<ListCompensatoryVM>();
+        public IEnumerable<CompensatoryDetailVM> listCompensatoryDetails { get; set; } = new List<CompensatoryDetailVM>();
 
-        public IEnumerable<CompensatoryDetailVM> CompensatoryDetails { get; set; } = new List<CompensatoryDetailVM>();
-
-        [UIHint("ComboBox")]
-        [DisplayName("Application Status")]
-        public ComboBoxVM WorkflowStatusOptions { get; set; } = new ComboBoxVM();
-
-        public static IEnumerable<string> GetWorkflowStatusOptions(string currentStatus = null)
-        {
-            return new List<string>
-            {
-                Workflow.GetApplicationStatus(Workflow.ApplicationStatus.NEW),
-                Workflow.GetApplicationStatus(Workflow.ApplicationStatus.ONBOARD)
-            };
-        }
         /// <head>
         /// CompensatoryID
         /// </head>
@@ -62,4 +49,3 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
     }
 }
-

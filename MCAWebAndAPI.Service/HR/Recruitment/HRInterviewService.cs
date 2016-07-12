@@ -245,15 +245,21 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                                         <Value Type='Lookup'>" + Position + @"</Value>
                                      </Eq>
                                      <Or>
-                                        <Eq>
-                                           <FieldRef Name='applicationstatus' />
-                                           <Value Type='Text'>Shortlisted</Value>
-                                        </Eq>
-                                        <Eq>
-                                           <FieldRef Name='applicationstatus' />
-                                           <Value Type='Text'>Recommended</Value>
-                                        </Eq>
-                                     </Or>
+                                    <Eq>
+                                        <FieldRef Name='applicationstatus' />
+                                        <Value Type='Text'>Shortlisted</Value>
+                                    </Eq>
+                                    <Or>
+                                    <Eq>
+                                        <FieldRef Name='applicationstatus' />
+                                        <Value Type='Text'>Recommended</Value>
+                                    </Eq>
+                                    <Eq>
+                                        <FieldRef Name='applicationstatus' />
+                                        <Value Type='Text'>Not Recommended</Value>
+                                    </Eq>
+                                    </Or>
+                                    </Or>
                                   </And>
                                  </Where>
                          </Query> 
@@ -264,6 +270,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                           <FieldRef Name='applicationremarks' />
                           <FieldRef Name='position' />
                           <FieldRef Name='neednextinterview' />
+                          <FieldRef Name='personalemail' />
                        </ViewFields>
                                 </View>";
 
@@ -292,7 +299,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return new ShortlistDetailVM
             {
                 Candidate = Convert.ToString(item["Title"]),
-                Candidatemail = Convert.ToString(item["Title"]),
+                Candidatemail = Convert.ToString(item["personalemail"]),
                 ID = Convert.ToInt32(item["ID"]),
                 DocumentUrl = GetDocumentUrl(Convert.ToInt32(item["ID"])),
                 Status = ShortlistDetailVM.GetStatusDefaultValue(
@@ -356,7 +363,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             createdValue.Add("interviewpanel", viewModel.InterviewerPanel);
             createdValue.Add("interviewsummary", viewModel.InterviewSummary);
             createdValue.Add("Title", viewModel.Candidate);
-            createdValue.Add("interviewresult", viewModel.GetResultOptions.Value);
+            createdValue.Add("interviewresult", viewModel.InterviewResultOption.Value);
 
 
             try
@@ -435,8 +442,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                               <Where>
                                    <And>
                                         <Eq>
-                                           <FieldRef Name='ID' />
-                                            <Value Type='Counter'>37</Value>
+                                           <FieldRef Name='manpowerrequisition' />
+                                            <Value Type='Counter'>45</Value>
                                         </Eq>
                                     <Or>
                                         <Eq>
@@ -450,7 +457,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                                            </Eq>
                                            <Eq>
                                               <FieldRef Name='applicationstatus' />
-                                              <Value Type='Text'>NEW</Value>
+                                              <Value Type='Text'>Declined</Value>
                                            </Eq>
                                         </Or>
                                      </Or>
@@ -487,7 +494,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             var createdValue = new Dictionary<string, object>();
 
-            createdValue.Add("manpowerrequisition", manID);
+            createdValue.Add("applicationstatus", "New");
 
             try
             {

@@ -1,0 +1,72 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model IEnumerable<CompensatoryDetailVM>
+
+<div class="col-xs-12">
+
+    @(Html.Kendo().Grid(Model)
+    .Name("CompensatoryDetails")
+    .ToolBar(tools => tools.Create().Text("Add New"))
+        .Editable(editable => editable.Mode(GridEditMode.InCell)
+        .CreateAt(GridInsertRowPosition.Bottom))
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.CmpActiv).ClientTemplate("#= CmpActiv #" +
+        "<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].CmpActiv' value='#= CmpActiv #' />");
+
+        columns.Bound(p => p.CmpDate).ClientTemplate("#= kendo.toString(CmpDate, \"MM/dd/yyyy \") #" +
+            "<input type='hidden' id='Dateid#= GetDetailComplist(data)#' name='CompensatoryDetails[#= GetDetailComplist(data)#].CmpDate' value='#= CmpDate #' />");
+
+        columns.Bound(p => p.CmpDate).ClientTemplate("#=getDayName(CmpDate)#"
+                           ).Width(150);
+
+        columns.Bound(p => p.StartTime).ClientTemplate("#= kendo.toString(StartTime, \"hh:mm tt\") #" +
+        "<input id='start' type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].StartTime' value='#= StartTime #' />");
+
+        columns.Bound(p => p.FinishTime).ClientTemplate("#= kendo.toString(FinishTime, \"hh:mm tt\") #" +
+       "<input id='end' type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].StartTime' value='#= FinishTime #' />");
+
+        columns.Bound(p => p.CmpTotalHours).ClientTemplate("<input name='CompensatoryDetails[#= GetDetailComplist(data)#].CmpTotalHours' value='#= CmpTotalHours #' style='width: 15px; border: none; background-color: transparent' />");
+
+        columns.Bound(p => p.TotalDay).ClientTemplate("<input name='CompensatoryDetails[#= GetDetailComplist(data)#].TotalDay' value='#= TotalDay #' style='width: 20px; border: none; background-color: transparent' />");
+
+        columns.Bound(p => p.remarks).ClientTemplate("#= remarks #" +
+       "<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].remarks' value='#= remarks #' />");
+
+        columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
+           "<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].EditMode' value='#= EditMode #' />"
+         );
+
+    })
+    .Events(e =>
+    {
+        e.Edit("onChangeKendoDetail");
+        e.DataBound("onDataBoundDependentDetails");
+    })
+    .DataSource(dataSource => dataSource.Ajax()
+    .Model(model =>
+    {
+        model.Id(p => p.ID);
+
+    })
+    .ServerOperation(false)
+    )
+)
+</div>
+<script>
+    $(document).ready(function () {
+        console.log();
+    });
+
+     function GetDetailComplist(dataItem) {
+        var data = $("#CompensatoryDetails").data("kendoGrid").dataSource.data();
+        return data.indexOf(dataItem);
+    }
+
+    function onDataBoundDependentDetails(e) {
+        var grid = $("#CompensatoryDetails").data("kendoGrid");
+        hideDeletedRowKendoDetail(grid);
+    }
+
+   
+</script>
+

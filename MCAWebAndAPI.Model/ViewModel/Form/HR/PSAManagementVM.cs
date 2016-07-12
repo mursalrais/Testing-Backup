@@ -35,7 +35,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// renewalnumber for display value
         /// </summary>
-        [UIHint("Int32")]
         [DisplayName("Renewal#")]
         [Required]
         public int RenewalNumber { get; set;}
@@ -63,21 +62,29 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         {
             Choices = new string[]
             {
-                "Ops-P",
-                "ME",
-                "PM",
-                "GP",
-                "Ops -IT",
-                "Ops",
-                "CC -E",
-                "Ops -F",
-                "CC",
-                "EO",
-                "COM",
-                "CC -SGA",
-                "RI",
-                "HN -NST",
-                "No"
+                "Executive Director",
+                "Executive Officer",
+                "Legal Unit",
+                "Monitoring & Evaluation Unit",
+                "Communications & Outreach Unit",
+                "Risk & Audit Unit",
+                "Program Div.",
+                "Procurement Modernization Project",
+                "Community-Based Health & Nutrition Project",
+                "Green Prosperity Project",
+                "Cross-Cutting Sector",
+                "Economic Analysis Unit",
+                "Social & Gender Assessment Unit",
+                "Environment & Social Performance Unit",
+                "Operations Support Div.",
+                "Finance Unit",
+                "Procurement Unit",
+                "Information Technology Unit",
+                "Human Resources Unit",
+                "Office Support Unit",
+                "Fiscal Agent (FA)",
+                "Procurement Agent (PA)"
+
             },
             Value = "Ops-P"
         };
@@ -136,6 +143,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// tenure
         /// </summary>
+        [UIHint("Int32")]
         [DisplayName("Tenure")]
         [Required]
         public int Tenure { get; set; }

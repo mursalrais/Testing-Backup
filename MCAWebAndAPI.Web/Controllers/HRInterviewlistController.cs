@@ -6,7 +6,6 @@ using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Web.Resources;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Service.Utils;
-using MCAWebAndAPI.Web.Resources;
 using System.Threading.Tasks;
 using System;
 using System.Collections.Generic;
@@ -55,7 +54,11 @@ namespace MCAWebAndAPI.Web.Controllers
 
             try
             {
-                _service.CreateInterviewDataDetail(headerID, viewModel);
+                foreach (var list in viewModel.ShortlistDetails)
+                {
+                    EmailUtil.Send(list.Candidatemail, "Interview Result", "https://eceos2.sharepoint.com/sites/mca-dev/hr/Lists/Professional%20Master/DispForm_Custom.aspx?ID="+ viewModel.ID+"" + EmailResource.EmailInterviewResult);
+                }
+
                 Task CreateManpowerRequisitionDocumentsTask = _service.CreateInterviewDocumentsSync(headerID, viewModel.Documents);
             }
             catch (Exception e)
@@ -64,10 +67,9 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            EmailUtil.Send(viewModel.SendTo, "Interview Result", "<div><label>" + viewModel.EmailMessage + "</label></div>" +
-                          "<a href = 'https://eceos2.sharepoint.com/sites/mca-dev/hr/Lists/Professional%20Master/DispForm_Custom.aspx?ID=3' > Open candidates' profiles for this position</a>");
+            EmailUtil.Send(viewModel.InterviewerPanel, "Interview Result", viewModel.EmailMessage + "  " + "https://eceos2.sharepoint.com/sites/ims/hr/Lists/Application/Interviewlistdata.aspx");
 
-            _service.SendEmailValidation(viewModel.SendTo, EmailResource.EmailInterviewResult);
+            _service.SendEmailValidation(viewModel.InterviewerPanel, EmailResource.EmailInterviewResult);
 
             return RedirectToAction("Index",
                "Success",
@@ -80,9 +82,6 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult InputInterviewResult(string siteurl = null, int? ID = null)
         {
-
-
-
             //mandatory: set site url
             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
@@ -123,8 +122,6 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult InputInterviewResultDetail(string siteurl = null, int? ID = null)
         {
-
-
 
             //mandatory: set site url
             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);

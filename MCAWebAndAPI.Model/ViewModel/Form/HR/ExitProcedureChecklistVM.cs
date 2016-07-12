@@ -62,20 +62,31 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [DisplayName("Date of Approval")]
         public DateTime? DateOfApproval { get; set; } = DateTime.Now;
 
+        [UIHint("InAjaxComboBox")]
+        public InGridComboBoxVM CheckListItemApproval { get; set; } = new InGridComboBoxVM();
+
+
         /// <summary>
         /// Checklist Item Approval
         /// </summary>
-        [UIHint("ComboBox")]
-        [DisplayName("Indicator")]
-        public ComboBoxVM CheckListItemApproval { get; set; } = new ComboBoxVM
+        //[UIHint("ComboBox")]
+        //[DisplayName("Indicator")]
+        public static IEnumerable<InGridComboBoxVM> GetCheckListItemApproval()
         {
-            Choices = new string[]
+            var index = 0;
+            var options = new string[]
             {
-                "Approved",
-                "Pending Approval"
-            },
-            Value = "Approved"
-        };
+                "Pending Approval",
+                "Approved"
+            };
+
+            return options.Select(e =>
+                new InGridComboBoxVM
+                {
+                    Value = ++index,
+                    Text = e
+                });
+        }
 
         /// <summary>
         /// Remarks
@@ -95,7 +106,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         [UIHint("InGridComboBox")]
         public InGridComboBoxVM ApproverUnit { get; set; } = new InGridComboBoxVM();
-
+        
         [UIHint("InGridAjaxCascadeComboBox")]
         public AjaxComboBoxVM ApproverPosition { get; set; } = new AjaxComboBoxVM();
 
@@ -140,6 +151,16 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public static InGridComboBoxVM GetUnitDefaultValue(InGridComboBoxVM model = null)
         {
             var options = GetUnitOptions();
+            if (model == null || (model.Value == null && model.Text == null) || string.IsNullOrEmpty(model.Text))
+                return options.FirstOrDefault();
+
+            return options.FirstOrDefault(e => e.Value == null ?
+                e.Value == model.Value : e.Text == model.Text);
+        }
+
+        public static InGridComboBoxVM GetCheckListItemApprovalDefaultValue(InGridComboBoxVM model = null)
+        {
+            var options = GetCheckListItemApproval();
             if (model == null || (model.Value == null && model.Text == null) || string.IsNullOrEmpty(model.Text))
                 return options.FirstOrDefault();
 

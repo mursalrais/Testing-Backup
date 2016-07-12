@@ -27,5 +27,19 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         Task<ExitProcedureVM> GetWorkflowRouterExitProcedure(string listName, string requestor);
 
+        IEnumerable<PositionMaster> GetPositionsInWorkflow(string listName,
+            string approverUnit,
+            string requestorPosition,
+            string requestorUnit);
+
+        string GetPositionName(int position);
+
+        IEnumerable<ProfessionalMaster> GetApproverNames(string position);
+
+        //void CreateExitProcedureChecklist(ExitProcedureChecklistVM exitProcedureChecklist);
+
+        //void UpdateExitProcedureChecklist(ExitProcedureChecklistVM exitProcedureChecklist);
+
+        //void DestroyExitProcedureChecklist(ExitProcedureChecklistVM exitProcedureChecklist);
     }
 }

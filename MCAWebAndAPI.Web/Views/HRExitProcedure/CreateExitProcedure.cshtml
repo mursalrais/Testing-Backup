@@ -20,12 +20,14 @@
             @Html.Partial("_ExitProcedureData", Model)
         </div>
 
-        @if (Model.Requestor != null)
-        {
-            <legend>Approval Workflow</legend>
-            <div id="workflow-placeholder" class="row"></div>
-        }
         
+    @if (Model.Requestor != null)
+    {
+        <legend>Approval Workflow</legend>
+        <div id="workflow-placeholder" class="row"></div>
+    }
+        
+
         <legend>Documents</legend>
         <div class="row">
             @Html.Partial("_Documents", Model)
