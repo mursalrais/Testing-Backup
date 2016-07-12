@@ -130,27 +130,21 @@ MCA Indonesia
 Recruitment Team</value>
   </data>
   <data name="EmailCandidateShortlist" xml:space="preserve">
-    <value>&lt;a href = 'https://eceos2.sharepoint.com/sites/ims/hr/Lists/Professional%20Master/DispForm_Custom.aspx?ID=3' &gt; Open candidates' profiles for this position&lt;/a&gt;</value>
+    <value>'https://eceos2.sharepoint.com/sites/ims/hr/Lists/Professional%20Master/DispForm_Custom.aspx?ID=3'</value>
   </data>
   <data name="EmailInterviewResult" xml:space="preserve">
-    <value>&lt;p&gt;
-&lt;strong&gt;Dear Requestor,&lt;/strong&gt;
-&lt;/p&gt;
-&lt;p&gt;
+    <value>.                                                                                                          Dear Requestor,
+
 This email is sent to you to notify that your HR, Interview Result data list. 
 
-Thank you. 
-&lt;/p&gt;</value>
+Thank you.</value>
   </data>
   <data name="EmailShortlistData" xml:space="preserve">
-    <value>&lt;p&gt;
-&lt;strong&gt;Dear Requestor,&lt;/strong&gt;
-&lt;/p&gt;
-&lt;p&gt;
+    <value>.                                                                                                         Dear Requestor,
+
 This email is Shortlisted Candidate Result data from HR,
 
-Thank you. 
-&lt;/p&gt;</value>
+Thank you.</value>
   </data>
   <data name="ManpowerApproval" xml:space="preserve">
     <value>&lt;p&gt;

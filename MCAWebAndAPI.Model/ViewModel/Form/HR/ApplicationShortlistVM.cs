@@ -29,6 +29,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// </summary>
         public string InterviewerPanel { get; set; }
 
+        [UIHint("TextArea")]
         public string InterviewSummary { get; set; }
 
         public string Result { get; set; }
@@ -140,6 +141,19 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
                 "Decline to Join"
             },
             OnSelectEventName = "onPositionChange"
+        };
+
+        [UIHint("ComboBox")]
+        [DisplayName("Result")]
+        public ComboBoxVM InterviewResultOption { get; set; } = new ComboBoxVM()
+        {
+            Choices = new string[]
+           {
+                "Recommended",
+                "Not Recommended",
+                "For Other Position",
+           },
+            OnSelectEventName = "onResultOptionChange"
         };
 
         public static AjaxComboBoxVM GetPositionDefaultValue(AjaxComboBoxVM model = null)

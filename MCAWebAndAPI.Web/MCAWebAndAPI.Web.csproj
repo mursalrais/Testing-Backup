@@ -561,7 +561,6 @@
     <Content Include="Views\ASSLocationMaster\IFrame.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\TextArea.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\PhoneNumber.cshtml" />
-    <Content Include="Views\HRDataMaster\CreateProfessionalData.cshtml" />
     <Content Include="Views\HRApplication\CreateApplicationData.cshtml" />
     <Content Include="Views\HRApplication\_ContactInformationDetails.cshtml" />
     <Content Include="Views\HRApplication\_SpecializationDetails.cshtml" />
@@ -672,7 +671,6 @@
     <Content Include="Views\HRPerformanceMonitoring\_Detail.cshtml" />
     <Content Include="Views\HRPerformanceMonitoring\_PerformancePlanMonitoring.cshtml" />
     <Content Include="Views\Shared\_WorkflowDetails.cshtml" />
-    <Content Include="Views\HRPerformancePlan\EditPerformancePlan.cshtml" />
     <Content Include="Views\HRPerformancePlan\_PerformancePlanDetail.cshtml" />
     <Content Include="Views\HRExitProcedure\CreateExitProcedure.cshtml" />
     <Content Include="Views\HRExitProcedure\EditExitProcedure.cshtml" />
@@ -812,6 +810,7 @@
     <Folder Include="bin\Resources\" />
     <Folder Include="Content\kendo\2016.2.504\Bootstrap\" />
     <Folder Include="Views\File\" />
+    <Folder Include="Views\HRDataMaster\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MCAWebAndAPI.Model\MCAWebAndAPI.Model.csproj">
