@@ -30,13 +30,15 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult ShortlistData(string siteurl = null, int? position = null, string username = null, string useraccess = null)
         {
             //mandatory: set site url
-
-            _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
-            SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
-
             if (siteurl == "")
             {
                 siteurl = SessionManager.Get<string>("SiteUrl");
+                _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
+            }
+            else
+            {
+                _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
+                SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
             }
 
             var viewmodel = _service.GetShortlist(position, username, useraccess);
@@ -66,7 +68,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            _service.SendEmailValidation(viewModel.SendTo, "https://eceos2.sharepoint.com/sites/ims/hr/Lists/Application/ShortlistREQ.aspx" + EmailResource.EmailShortlistData);
+            _service.SendEmailValidation(viewModel.SendTo, "https://eceos2.sharepoint.com/sites/ims/hr/Lists/Application/ShortlistREQ.aspx"+" "+ EmailResource.EmailShortlistData);
 
             return JsonHelper.GenerateJsonSuccessResponse(
                 string.Format("{0}/{1}", siteUrl, UrlResource.Professional));

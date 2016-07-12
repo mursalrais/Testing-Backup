@@ -12,5 +12,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Common
         public string Requestor { get; set; }
 
         public DateTime DateOfRequest { get; set; } = DateTime.Now;
+
+        public int LookupID { get; set; }
+
+        public string LinkLookupUp { get; set; }
     }
 }

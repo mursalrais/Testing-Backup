@@ -1,0 +1,23 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model ProfessionalPerformanceEvaluationVM
+
+<div class="col-sm-12">
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.Name).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.DisplayFor(m => m.Name)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.PositionAndDepartement).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.DisplayFor(m => m.PositionAndDepartement)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.PerformancePeriod).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.DisplayFor(m => m.PerformancePeriod)
+        </div>
+    </div>
+</div>

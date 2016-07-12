@@ -28,7 +28,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         const string SP_MANPOW_LIST_NAME = "Manpower Requisition";
         const string COMPANY_DOMAIN_EMAIL = "eceos.com";
 
-
         public int CreateApplication(ApplicationDataVM viewModel)
         {
             var updatedValue = new Dictionary<string, object>();
@@ -74,7 +73,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             }
 
             var ID = SPConnector.GetLatestListItemID(SP_APPDATA_LIST_NAME, _siteUrl);
-
             // Update Document URL
             updatedValue = new Dictionary<string, object>();
             updatedValue.Add("documenturl", string.Format(UrlResource.ApplicationDocumentByID, _siteUrl, ID));
@@ -230,7 +228,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel = ConvertToApplicationDataVM(listItem);
             return await GetApplicationDetailsAsync(viewModel);
         }
-
 
         private ApplicationDataVM ConvertToApplicationDataVM(ListItem listItem)
         {
@@ -506,17 +503,18 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             throw new NotImplementedException();
         }
 
-        //TODO: To get active positions
         public IEnumerable<PositionMaster> GetVacantPositions()
         {
+            var status = "Active";
             var caml = @"<View>  
                     <Query> 
-                       <Where><Eq><FieldRef Name='manpowerrequeststatus' /><Value Type='Text'>Active</Value></Eq></Where><OrderBy><FieldRef Name='positionrequested_x003a_Position' /></OrderBy> 
+                       <Where><Eq><FieldRef Name='manpowerrequeststatus' /><Value Type='Text'>" 
+                    + status + @"</Value></Eq></Where><OrderBy><FieldRef Name='positionrequested_x003a_Position' /></OrderBy> 
                     </Query> 
                     <ViewFields><FieldRef Name='manpowerrequeststatus' /><FieldRef Name='ID' /><FieldRef Name='positionrequested' /><FieldRef Name='positionrequested_x003a_Position' /></ViewFields></View>";
 
             var positions = new List<PositionMaster>();
-            // ID is retrieved from ManPower ID not Position ID
+            // ID is retrieved from ManPower ID, not Position ID
             foreach (var item in SPConnector.GetList(SP_MANPOW_LIST_NAME, _siteUrl, caml))
             {
                 positions.Add(new PositionMaster
@@ -542,7 +540,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             return choice;
         }
-
 
         /// <summary>
         /// 

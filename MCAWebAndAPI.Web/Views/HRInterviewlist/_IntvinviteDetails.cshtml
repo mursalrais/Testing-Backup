@@ -6,7 +6,6 @@
 
     @(Html.Kendo().Grid(Model)
     .Name("ShortlistDetails")
-    //.ToolBar(tools => tools.Create().Text("Add New Dependent"))
     .Editable(editable => editable.Mode(GridEditMode.InCell)
     .CreateAt(GridInsertRowPosition.Bottom))
     .Columns(columns =>

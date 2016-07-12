@@ -80,7 +80,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return viewModel;
         }
 
-        public ApplicationShortlistVM GetShortlist(int? position, string username, string useraccess)
+        public ApplicationShortlistVM GetShortlist( int? position, string username, string useraccess)
         {
             var viewModel = new ApplicationShortlistVM();
 
