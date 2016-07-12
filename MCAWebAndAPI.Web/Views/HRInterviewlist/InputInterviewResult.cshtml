@@ -17,7 +17,6 @@
         @Html.HiddenFor(m => m.Candidate)
         @Html.HiddenFor(m => m.SendTo)
         
-        <div class="form-actions">
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.Candidate).Class("col-sm-2 control-label")
                     <div class="col-sm-6">
@@ -62,17 +61,18 @@
                         </div>
                     </div>
 
-                <div class="col-sm-12">
-                    <button id="submit-cancel" class="btn btn-primary" type="button">
-                        <i class="fa fa-send"></i>
-                        cancel
-                    </button>
-                    <button id="submit-button" class="btn btn-primary" type="submit">
-                        <i class="fa fa-save"></i>
-                        save
-                    </button>
-                </div>
+        <div class="form-actions">
+            <div class="col-sm-12">
+                <button id="submit-cancel" class="btn btn-primary" type="button">
+                    <i class="fa fa-send"></i>
+                    cancel
+                </button>
+                <button id="submit-button" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    save
+                </button>
             </div>
+        </div>
 
         <a id="btn-addnew" class="btn btn-primary pull-left" href="http://mcaims-dev.azurewebsites.net/HRInterviewlist/InputInterviewResultDetail?siteUrl=https://eceos2.sharepoint.com/sites/mca-dev/hr&ID=@Model.ID">
             <i class="fa fa-plus"></i>

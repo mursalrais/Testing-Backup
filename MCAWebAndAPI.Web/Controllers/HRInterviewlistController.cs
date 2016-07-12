@@ -52,6 +52,36 @@ namespace MCAWebAndAPI.Web.Controllers
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
+            var testget = form[""];
+
+            int? headerID = viewModel.ID;
+
+            try
+            {
+                _service.CreateInterviewDataDetail(headerID, viewModel);
+                Task CreateManpowerRequisitionDocumentsTask = _service.CreateInterviewDocumentsSync(headerID, viewModel.Documents);
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            return RedirectToAction("Index",
+               "Success",
+               new
+               {
+                   errorMessage =
+               string.Format(MessageResource.SuccessCreateApplicationData, viewModel.Candidate)
+               });
+        }
+
+        [HttpPost]
+        public ActionResult SendMailCandidate(FormCollection form, ApplicationShortlistVM viewModel)
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
             try
             {
                 foreach (var list in viewModel.ShortlistDetails)
