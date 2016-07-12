@@ -153,13 +153,7 @@ namespace MCAWebAndAPI.Web.Controllers
             SessionManager.Set("ExitProcedureListName", viewModel.ListName);
             SessionManager.Set("ExitProcedureRequestorUnit", viewModel.RequestorUnit);
             SessionManager.Set("ExitProcedureRequestorPosition", viewModel.RequestorPosition);
-
-            /*
-            if (isPartial)
-                return PartialView("_WorkflowDetails", viewModel);
-            return View("_WorkflowDetails", viewModel);
-            */
-            
+                      
             if (isPartial)
                 return PartialView("_ExitProcedureChecklist", viewModel);
             return View("_ExitProcedureChecklist", viewModel);
@@ -196,8 +190,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 e.Name
             }), JsonRequestBehavior.AllowGet);
         }
-
-        
+              
 
         [HttpPost]
         public JsonResult Grid_Read([DataSourceRequest] DataSourceRequest request)
@@ -214,28 +207,12 @@ namespace MCAWebAndAPI.Web.Controllers
             return json;
         }
 
-        /*
-        [HttpPost]
-        public ActionResult Grid_Update([DataSourceRequest] DataSourceRequest request,
-            [Bind(Prefix = "models")] ExitProcedureChecklistVM viewModel)
-        {
-            if (viewModel != null && ModelState.IsValid)
-            {
-                exitProcedureService.UpdateExitProcedureChecklist(viewModel);
-            }
-
-            return Json(new[] { viewModel }.ToDataSourceResult(request, ModelState));
-        }
-        */
-        
         [HttpPost]
         public ActionResult Grid_Update([DataSourceRequest] DataSourceRequest request,
             [Bind(Prefix = "models")]IEnumerable<ExitProcedureChecklistVM> viewModel)
         {
             // Get existing session variable
             var sessionVariables = SessionManager.Get<IEnumerable<ExitProcedureChecklistVM>>("ExitProcedureChecklist");
-
-            
             
             /*
             foreach (var item in viewModel)
@@ -244,6 +221,8 @@ namespace MCAWebAndAPI.Web.Controllers
                 obj = item;
             }
             */
+
+            //DataSourceResult result = sessionVariables.ToDataSourceResult(request);
 
             // Overwrite existing session variable
             SessionManager.Set("ExitProcedureChecklist", sessionVariables);
@@ -261,26 +240,10 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             var sessionVariables = SessionManager.Get<IEnumerable<ExitProcedureChecklistVM>>("ExitProcedureChecklist");
 
-            sessionVariables = viewModel;
-
             SessionManager.Set("ExitProcedureChecklist", sessionVariables);
-            //foreach (var item in viewModel)
-            //{
-            //    if(sessionVariables.FirstOrDefault(e => e.ID) == )
 
-            //    var obj = sessionVariables.FirstOrDefault(e => e.ID == item.ID);
-            //    obj = item;
-            //}
-
-            //if (viewModel != null && ModelState.IsValid)
-            //{
-            //    exitProcedureService.CreateExitProcedureChecklist(viewModel);
-            //}
-
-            //return Json(new[] { viewModel }.ToDataSourceResult(request, ModelState));
-
-            // Return JSON
             DataSourceResult result = sessionVariables.ToDataSourceResult(request);
+
             var json = Json(result, JsonRequestBehavior.AllowGet);
             json.MaxJsonLength = int.MaxValue;
             return json;

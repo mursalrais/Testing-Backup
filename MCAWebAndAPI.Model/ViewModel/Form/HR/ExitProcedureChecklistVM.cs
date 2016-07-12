@@ -62,6 +62,10 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [DisplayName("Date of Approval")]
         public DateTime? DateOfApproval { get; set; } = DateTime.Now;
 
+        [UIHint("InAjaxComboBox")]
+        public InGridComboBoxVM CheckListItemApproval { get; set; } = new InGridComboBoxVM();
+
+
         /// <summary>
         /// Checklist Item Approval
         /// </summary>
@@ -72,8 +76,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             var index = 0;
             var options = new string[]
             {
-                "Approved",
-                "Pending Approval"
+                "Pending Approval",
+                "Approved"
             };
 
             return options.Select(e =>
@@ -102,10 +106,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         [UIHint("InGridComboBox")]
         public InGridComboBoxVM ApproverUnit { get; set; } = new InGridComboBoxVM();
-
-        [UIHint("InGridComboBox")]
-        public InGridComboBoxVM CheckListItemApproval { get; set; } = new InGridComboBoxVM();
-
+        
         [UIHint("InGridAjaxCascadeComboBox")]
         public AjaxComboBoxVM ApproverPosition { get; set; } = new AjaxComboBoxVM();
 

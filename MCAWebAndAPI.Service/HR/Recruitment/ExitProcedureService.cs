@@ -344,6 +344,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     Text = Convert.ToString(item["approverunit"])
                 });
 
+            viewModel.CheckListItemApproval =
+                ExitProcedureChecklistVM.GetCheckListItemApprovalDefaultValue();
+
             var userNames = await getApproverNamesTask;
             var userName = userNames.FirstOrDefault();
             viewModel.ApproverUserName = AjaxComboBoxVM.GetDefaultValue(new AjaxComboBoxVM

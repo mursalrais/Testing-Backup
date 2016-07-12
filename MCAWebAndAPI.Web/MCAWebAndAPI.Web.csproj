@@ -561,7 +561,6 @@
     <Content Include="Views\ASSLocationMaster\IFrame.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\TextArea.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\PhoneNumber.cshtml" />
-    <Content Include="Views\HRDataMaster\CreateProfessionalData.cshtml" />
     <Content Include="Views\HRApplication\CreateApplicationData.cshtml" />
     <Content Include="Views\HRApplication\_ContactInformationDetails.cshtml" />
     <Content Include="Views\HRApplication\_SpecializationDetails.cshtml" />
@@ -672,7 +671,6 @@
     <Content Include="Views\HRPerformanceMonitoring\_Detail.cshtml" />
     <Content Include="Views\HRPerformanceMonitoring\_PerformancePlanMonitoring.cshtml" />
     <Content Include="Views\Shared\_WorkflowDetails.cshtml" />
-    <Content Include="Views\HRPerformancePlan\EditPerformancePlan.cshtml" />
     <Content Include="Views\HRPerformancePlan\_PerformancePlanDetail.cshtml" />
     <Content Include="Views\HRExitProcedure\CreateExitProcedure.cshtml" />
     <Content Include="Views\HRExitProcedure\EditExitProcedure.cshtml" />
@@ -697,10 +695,17 @@
     <Content Include="Views\HRCompensatory\_InputCompensantoryDetails.cshtml" />
     <Content Include="Views\HRCompensatory\InputCompensatoryHR.cshtml" />
     <Content Include="Views\HRCompensatory\CompensatorylistHR.cshtml" />
+    <Content Include="Views\HRExitProcedure\_ExitProcedureChecklist.cshtml" />
+    <Content Include="Views\HRExitProcedure\_DocumentDetailsDisplay.cshtml" />
     <Content Include="Views\HRPerformanceEvaluation\PerformanceEvaluation.cshtml" />
     <Content Include="Views\HRPerformanceEvaluation\_Detail.cshtml" />
     <Content Include="Views\HRPerformanceEvaluation\_PerformancePlanEvaluation.cshtml" />
-    <Content Include="Views\Workflow\DisplayPendingApprovalItems.cshtml" />
+    <Content Include="Views\HRPerformancePlan\PerformancePlan.cshtml" />
+    <Content Include="Views\HRProfessionalPerformanceEvaluation\ProfessionalPerformanceEvaluation.cshtml" />
+    <Content Include="Views\HRProfessionalPerformanceEvaluation\_ProfessionalPerformanceEvaluationDetail.cshtml" />
+    <Content Include="Views\HRProfessionalPerformanceEvaluation\_ProfessionalPerformanceEvaluationDetail_Print.cshtml" />
+    <Content Include="Views\HRProfessionalPerformanceEvaluation\_ProfessionalPerformanceEvaluation_Print.cshtml" />
+    <Content Include="Views\HRProfessionalPerformanceEvaluation\PrintProfessionalPerformanceEvaluation.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -744,6 +749,7 @@
     <Compile Include="Controllers\HRPerformanceMonitoringController.cs" />
     <Compile Include="Controllers\HRPerformancePlanController.cs" />
     <Compile Include="Controllers\HRProfessionalController.cs" />
+    <Compile Include="Controllers\HRProfessionalPerformanceEvaluationController.cs" />
     <Compile Include="Controllers\HRPSAManagementController.cs" />
     <Compile Include="Controllers\HRShortlistController.cs" />
     <Compile Include="Controllers\LocationController.cs" />
@@ -815,6 +821,7 @@
     <Folder Include="bin\Resources\" />
     <Folder Include="Content\kendo\2016.2.504\Bootstrap\" />
     <Folder Include="Views\File\" />
+    <Folder Include="Views\HRDataMaster\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MCAWebAndAPI.Model\MCAWebAndAPI.Model.csproj">

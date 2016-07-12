@@ -24,7 +24,7 @@
             )
             .EditorViewData(new
             {
-                BindTo = ProjectOrUnitGoalsDetailVM.GetCategoryOptions()
+                BindTo = MonthlyFeeDetailVM.GetCurrencyOptions()
             });
             columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
             "<input type='hidden' name='MonthlyFeeDetails[#= getMonthlyFeeDetail(data)#].ID' value='#= ID #' />"

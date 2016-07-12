@@ -53,10 +53,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             var viewModel = new ApplicationShortlistVM();
 
-            viewModel.ID = Convert.ToInt32(listItem["ID"]);
-            viewModel.Position = FormatUtil.ConvertLookupToID(listItem, "vacantposition") + string.Empty;
             viewModel.ActivePosition.Value = FormatUtil.ConvertLookupToID(listItem, "manpowerrequisition") ;
-            viewModel.Candidate = Convert.ToString(listItem["Title"]);
 
             return viewModel;
         }
@@ -83,7 +80,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return viewModel;
         }
 
-        public ApplicationShortlistVM GetShortlist(int? position, string username, string useraccess)
+        public ApplicationShortlistVM GetShortlist( int? position, string username, string useraccess)
         {
             var viewModel = new ApplicationShortlistVM();
 
@@ -116,10 +113,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             var viewModel = new ApplicationShortlistVM();
             if (ID == 0)
             return viewModel;
-
-            //if (username != null && username != "")
-            //useraccess = GetAccessData(username);
-
             
             viewModel.ShortlistDetails = GetDetailShortlist(ID, useraccess);
             viewModel.ActivePosition.Value = Convert.ToInt32(position);
@@ -182,6 +175,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
       <FieldRef Name='applicationstatus' />
       <FieldRef Name='applicationremarks' />
       <FieldRef Name='position' />
+      <FieldRef Name='personalemail' />
    </ViewFields>
    
             </View>";
@@ -210,6 +204,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
       <FieldRef Name='applicationstatus' />
       <FieldRef Name='applicationremarks' />
       <FieldRef Name='position' />
+      <FieldRef Name='personalemail' />
    </ViewFields>
             </View>";
 
@@ -240,7 +235,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return new ShortlistDetailVM
             {
                 Candidate = Convert.ToString(item["Title"]),
-                Candidatemail = Convert.ToString(item["Title"]),
+                Candidatemail = Convert.ToString(item["personalemail"]),
                 ID = Convert.ToInt32(item["ID"]),
                 DocumentUrl = GetDocumentUrl(Convert.ToInt32(item["ID"])),
                 Status = ShortlistDetailVM.GetStatusDefaultValue(
@@ -251,6 +246,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
                 GetStat = Convert.ToString(item["applicationstatus"]),
                 Remarks = Convert.ToString(item["applicationremarks"]),
+                
 
             };
         }
@@ -330,6 +326,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     logger.Error(e.Message);
                     throw e;
                 }
+                EmailUtil.Send(list.Candidatemail, "Interview Invitation", viewModel.EmailMessage + "   " + "https://eceos2.sharepoint.com/sites/ims/hr/Lists/Professional%20Master/DispForm_Custom.aspx?ID="+ viewModel.ID +"" + mailsubject);
             }
 
             EmailUtil.Send(viewModel.InterviewerPanel, "Interview Invitation", "<div><label>"+ viewModel.EmailMessage + "</label></div>" + mailsubject);
