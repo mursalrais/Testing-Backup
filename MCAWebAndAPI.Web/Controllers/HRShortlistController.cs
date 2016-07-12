@@ -68,7 +68,14 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            _service.SendEmailValidation(viewModel.SendTo, "https://eceos2.sharepoint.com/sites/ims/hr/Lists/Application/ShortlistREQ.aspx"+" "+ EmailResource.EmailShortlistData);
+            char[] delimiterChars = { ' ', ',', ';' };
+
+            string[] words = viewModel.SendTo.Split(delimiterChars);
+
+            foreach (string mail in words)
+            {
+                _service.SendEmailValidation(mail, "https://eceos2.sharepoint.com/sites/ims/hr/Lists/Application/ShortlistREQ.aspx" + " " + EmailResource.EmailShortlistData);
+            }
 
             return JsonHelper.GenerateJsonSuccessResponse(
                 string.Format("{0}/{1}", siteUrl, UrlResource.Professional));

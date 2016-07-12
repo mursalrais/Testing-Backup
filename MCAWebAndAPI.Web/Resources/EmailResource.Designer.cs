@@ -88,7 +88,7 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .                                                                                                          Dear Requestor,
+        ///   Looks up a localized string similar to  Dear Requestor,
         ///
         ///This email is sent to you to notify that your HR, Interview Result data list. 
         ///

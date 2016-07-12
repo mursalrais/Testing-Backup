@@ -329,7 +329,14 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 EmailUtil.Send(list.Candidatemail, "Interview Invitation", viewModel.EmailMessage + "   " + "https://eceos2.sharepoint.com/sites/ims/hr/Lists/Professional%20Master/DispForm_Custom.aspx?ID="+ viewModel.ID +"" + mailsubject);
             }
 
-            EmailUtil.Send(viewModel.InterviewerPanel, "Interview Invitation", "<div><label>"+ viewModel.EmailMessage + "</label></div>" + mailsubject);
+            char[] delimiterChars = { ' ', ',', ';' };
+
+            string[] words = viewModel.InterviewerPanel.Split(delimiterChars);
+
+            foreach (string mail in words)
+            {
+                EmailUtil.Send(mail, "Interview Invitation", "<div><label>" + viewModel.EmailMessage + "</label></div>" + mailsubject);
+            }
         }
 
         public void CreateShorlistSendintv(int? headerID, ApplicationShortlistVM viewModel)
