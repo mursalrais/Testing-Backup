@@ -259,21 +259,5 @@ namespace MCAWebAndAPI.Web.Controllers
                 return HttpNotFound();
             return File(pdfBuf, "application/pdf");
         }
-
-        public JsonResult GetCategoryGrid()
-        {
-            var siteUrl = SessionManager.Get<string>("SiteUrl");
-            _hRPerformancePlanService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-
-            var currency = ProjectOrUnitGoalsDetailVM.GetCategoryOptions();
-
-            return Json(currency.Select(e =>
-                new
-                {
-                    Value = Convert.ToString(e.Value),
-                    Text = e.Text
-                }),
-                JsonRequestBehavior.AllowGet);
-        }
     }
 }

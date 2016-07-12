@@ -11,7 +11,7 @@
                                                                                         enctype = "multipart/form-data"
                                                                                     }))
 {<fieldset>
-        <legend>Form Performance Plan</legend>
+        <legend>Form Professional Performance Evaluation</legend>
         @Html.AntiForgeryToken()
         @Html.ValidationSummary()
 
@@ -35,7 +35,7 @@
                 </div>
             </div>
         </div>
-        <legend>Professional Perfromance Plan Detail</legend>
+        <legend>Professional Performance Evaluation Detail</legend>
         <div class="row">
             @Html.Partial("_ProfessionalPerformanceEvaluationDetail", Model)
         </div>
@@ -137,10 +137,6 @@
                     <i class="fa fa-save"></i>
                     Approve
                 </button>
-                <button id="reject1-button" class="btn btn-primary" type="submit">
-                    <i class="fa fa-save"></i>
-                    Reject
-                </button>
             </div>
         </div>
     </div>
@@ -155,15 +151,11 @@
                     <i class="fa fa-save"></i>
                     Approve
                 </button>
-                <button id="reject2-button" class="btn btn-primary" type="submit">
-                    <i class="fa fa-save"></i>
-                    Reject
-                </button>
             </div>
         </div>
     </div>
 }
-@if (Model.StatusForm == "Approved")
+@if (Model.Requestor != null || Model.StatusForm == "Approved")
 {
     <div class="form-actions">
         <div class="row">
@@ -208,7 +200,7 @@
         $(document).ready(function () {
             $('#print-button').click(function (e) {
                 $("#ParentDiv").show();
-                var url = "/HRPerformancePlan/PrintPerformancePlan";
+                var url = "/HRProfessionalPerformanceEvaluation/PrintProfessionalPerformanceEvaluation";
                 submitFormToPrint(url);
             });
         });
@@ -221,20 +213,6 @@
 
         $(document).ready(function () {
             $("#approver2-button").click(function () {
-                $("form").submit();
-            });
-        });
-
-        $(document).ready(function () {
-            $('#reject1-button').click(function (e) {
-                $("#StatusForm").val("Reject1")
-                $("form").submit();
-            });
-        });
-
-        $(document).ready(function () {
-            $('#reject2-button').click(function (e) {
-                $("#StatusForm").val("Reject2")
                 $("form").submit();
             });
         });

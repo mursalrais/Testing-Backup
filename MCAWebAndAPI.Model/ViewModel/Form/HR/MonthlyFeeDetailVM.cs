@@ -31,7 +31,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// currency
         /// </summary>
-        [UIHint("InAjaxComboBox")]
+        [UIHint("InGridComboBox")]
         public InGridComboBoxVM Currency { get; set; } = new InGridComboBoxVM();
 
         public static IEnumerable<InGridComboBoxVM> GetCurrencyOptions()

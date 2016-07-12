@@ -82,8 +82,6 @@ namespace MCAWebAndAPI.Web.Controllers
                 Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateTransactionWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.ID);
             }
-            if (viewModel.Requestor != null)
-            {
                 Task createPerformancePlanDetailsTask = _hRProfessionalPerformanceEvaluationService.CreatePerformanceEvaluationDetailsAsync(viewModel.ID, viewModel.ProfessionalPerformanceEvaluationDetails);
 
                 Task allTasks = Task.WhenAll(createPerformancePlanDetailsTask);
@@ -97,7 +95,6 @@ namespace MCAWebAndAPI.Web.Controllers
                     Response.StatusCode = (int)HttpStatusCode.BadRequest;
                     return JsonHelper.GenerateJsonErrorResponse(e);
                 }
-            }
 
             try
             {
@@ -118,18 +115,6 @@ namespace MCAWebAndAPI.Web.Controllers
                     _hRProfessionalPerformanceEvaluationService.SendEmail(viewModel, SP_TRANSACTION_WORKFLOW_LIST_NAME,
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.ID, 2,
                     string.Format(""), string.Format("Approved by Level 2"));
-
-                // Send to Requestor
-                if (viewModel.StatusForm == "Reject1")
-                    _hRProfessionalPerformanceEvaluationService.SendEmail(viewModel, SP_TRANSACTION_WORKFLOW_LIST_NAME,
-                    SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.ID, 1,
-                    string.Format(""), string.Format("Rejected by Approver Level 1"));
-
-                // Send to Requestor
-                if (viewModel.StatusForm == "Reject2")
-                    _hRProfessionalPerformanceEvaluationService.SendEmail(viewModel, SP_TRANSACTION_WORKFLOW_LIST_NAME,
-                    SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.ID, 1,
-                    string.Format(""), string.Format("Rejected by Approver Level 2"));
             }
             catch (Exception e)
             {
@@ -137,6 +122,38 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.ProfessionalPerformancePlan);
+        }
+
+        [HttpPost]
+        public ActionResult PrintProfessionalPerformanceEvaluation(FormCollection form, ProfessionalPerformancePlanVM viewModel)
+        {
+            const string RelativePath = "~/Views/HRProfessionalPerformanceEvaluation/PrintProfessionalPerformanceEvaluation.cshtml";
+            var view = ViewEngines.Engines.FindView(ControllerContext, RelativePath, null);
+            var fileName = viewModel.Name + "_ProfessionalPerformanceEvaluation.pdf";
+            byte[] pdfBuf = null;
+            string content;
+
+            using (var writer = new StringWriter())
+            {
+                var context = new ViewContext(ControllerContext, view.View, ViewData, TempData, writer);
+                view.View.Render(context, writer);
+                writer.Flush();
+                content = writer.ToString();
+
+                // Get PDF Bytes
+                try
+                {
+                    pdfBuf = PDFConverter.Instance.ConvertFromHTML(fileName, content);
+                }
+                catch (Exception e)
+                {
+                    ErrorSignal.FromCurrentContext().Raise(e);
+                    RedirectToAction("Index", "Error");
+                }
+            }
+            if (pdfBuf == null)
+                return HttpNotFound();
+            return File(pdfBuf, "application/pdf");
         }
     }
 }

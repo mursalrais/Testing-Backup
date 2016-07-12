@@ -278,7 +278,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     }
                 }
             }
-            else
+            if (header.StatusForm == "Pending Approval 2 of 2" || header.StatusForm == "Reject1" || header.StatusForm == "Reject2")
             {
                 foreach (var item in SPConnector.GetList(SP_PPP_LIST_NAME, _siteUrl, camlprof))
                 {

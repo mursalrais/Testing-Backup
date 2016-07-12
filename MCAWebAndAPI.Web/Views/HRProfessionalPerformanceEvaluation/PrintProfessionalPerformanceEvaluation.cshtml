@@ -1,0 +1,21 @@
+﻿
+@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model ProfessionalPerformanceEvaluationVM
+
+@{
+    ViewBag.Title = "Print Professional Performance Evaluation";
+    Layout = "~/Views/Shared/_LayoutPDF.cshtml";
+}
+
+<div class="form-horizontal">
+    <fieldset>
+        <legend>Professional Performance Evaluation</legend>
+        <div class="row">
+            @Html.Partial("_ProfessionalPerformanceEvaluation_Print", Model)
+        </div>
+        @*<legend>Professional Performance Evaluation Details</legend>
+        <div class="row">
+            @Html.Partial("_ProfessionalPerformanceEvaluationDetail_Print", Model)
+        </div>*@
+    </fieldset>
+</div>

@@ -16,7 +16,7 @@
     <RootNamespace>MCAWebAndAPI.Web</RootNamespace>
     <AssemblyName>MCAWebAndAPI.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -697,6 +697,15 @@
     <Content Include="Views\HRCompensatory\CompensatorylistHR.cshtml" />
     <Content Include="Views\HRExitProcedure\_ExitProcedureChecklist.cshtml" />
     <Content Include="Views\HRExitProcedure\_DocumentDetailsDisplay.cshtml" />
+    <Content Include="Views\HRPerformanceEvaluation\PerformanceEvaluation.cshtml" />
+    <Content Include="Views\HRPerformanceEvaluation\_Detail.cshtml" />
+    <Content Include="Views\HRPerformanceEvaluation\_PerformancePlanEvaluation.cshtml" />
+    <Content Include="Views\HRPerformancePlan\PerformancePlan.cshtml" />
+    <Content Include="Views\HRProfessionalPerformanceEvaluation\ProfessionalPerformanceEvaluation.cshtml" />
+    <Content Include="Views\HRProfessionalPerformanceEvaluation\_ProfessionalPerformanceEvaluationDetail.cshtml" />
+    <Content Include="Views\HRProfessionalPerformanceEvaluation\_ProfessionalPerformanceEvaluationDetail_Print.cshtml" />
+    <Content Include="Views\HRProfessionalPerformanceEvaluation\_ProfessionalPerformanceEvaluation_Print.cshtml" />
+    <Content Include="Views\HRProfessionalPerformanceEvaluation\PrintProfessionalPerformanceEvaluation.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -736,9 +745,11 @@
     <Compile Include="Controllers\HRInterviewlistController.cs" />
     <Compile Include="Controllers\HRManpowerRequisitionController.cs" />
     <Compile Include="Controllers\HRPayrollController.cs" />
+    <Compile Include="Controllers\HRPerformanceEvaluationController.cs" />
     <Compile Include="Controllers\HRPerformanceMonitoringController.cs" />
     <Compile Include="Controllers\HRPerformancePlanController.cs" />
     <Compile Include="Controllers\HRProfessionalController.cs" />
+    <Compile Include="Controllers\HRProfessionalPerformanceEvaluationController.cs" />
     <Compile Include="Controllers\HRPSAManagementController.cs" />
     <Compile Include="Controllers\HRShortlistController.cs" />
     <Compile Include="Controllers\LocationController.cs" />

@@ -26,7 +26,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             columnValues.Add("professional", new FieldLookupValue { LookupId = (int)header.NameID });
             columnValues.Add("Position", new FieldLookupValue { LookupId = (int)header.PositionAndDepartementID });
             columnValues.Add("performanceplan", new FieldLookupValue { LookupId = (int)header.PerformancePeriodID });
-            columnValues.Add("pppstatus", "Pending Approval 1 of 2");
+            columnValues.Add("ppestatus", "Pending Approval 1 of 2");
             try
             {
                 SPConnector.AddListItem(SP_PPE_LIST_NAME, columnValues, _siteUrl);
@@ -67,6 +67,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 updatedValue.Add("individualgoalplanactualweight", viewModel.ActualWeight);
                 updatedValue.Add("individualgoalplanscore", viewModel.Score);
                 updatedValue.Add("individualgoalplantotalscore", viewModel.TotalScore);
+                updatedValue.Add("output", viewModel.Output);
                 try
                 {
                     if (Item.CheckIfUpdated(viewModel))
@@ -222,7 +223,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     }
                 }
             }
-            else
+            if (header.StatusForm == "Pending Approval 2 of 2")
             {
                 foreach (var item in SPConnector.GetList(SP_PPE_LIST_NAME, _siteUrl, camlprof))
                 {
@@ -248,27 +249,27 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             int? ID = header.ID;
             if (header.StatusForm == "Initiated")
             {
-                columnValues.Add("pppstatus", "Pending Approval 1 of 2");
+                columnValues.Add("ppestatus", "Pending Approval 1 of 2");
             }
             if (header.StatusForm == "Draft")
             {
-                columnValues.Add("pppstatus", "Pending Approval 1 of 2");
+                columnValues.Add("ppestatus", "Pending Approval 1 of 2");
             }
             if (header.Requestor == null && header.StatusForm == "Pending Approval 1 of 2")
             {
-                columnValues.Add("pppstatus", "Pending Approval 2 of 2");
+                columnValues.Add("ppestatus", "Pending Approval 2 of 2");
             }
             if (header.Requestor == null && header.StatusForm == "Pending Approval 2 of 2")
             {
-                columnValues.Add("pppstatus", "Approved");
+                columnValues.Add("ppestatus", "Approved");
             }
             if (header.StatusForm == "DraftInitiated" || header.StatusForm == "DraftDraft")
             {
-                columnValues.Add("pppstatus", "Draft");
+                columnValues.Add("ppestatus", "Draft");
             }
             if (header.StatusForm == "Reject1" || header.StatusForm == "Reject2")
             {
-                columnValues.Add("pppstatus", "Rejected");
+                columnValues.Add("ppestatus", "Rejected");
             }
             try
             {
