@@ -148,6 +148,20 @@ namespace MCAWebAndAPI.Web.Controllers
                 JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetProfessionalsGrid()
+        {
+            _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+
+            var professional = GetFromExistingSession();
+
+            return Json(professional.Select(e =>
+                new {
+                    Value = Convert.ToString(e.ID),
+                    Text = e.Name
+                }),
+                JsonRequestBehavior.AllowGet);
+        }
+
 
         private IEnumerable<ProfessionalMaster> GetFromExistingSession()
         {

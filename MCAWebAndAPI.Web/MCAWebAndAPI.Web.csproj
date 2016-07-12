@@ -699,6 +699,7 @@
     <Content Include="Views\HRCompensatory\CompensatorylistHR.cshtml" />
     <Content Include="Views\HRExitProcedure\_ExitProcedureChecklist.cshtml" />
     <Content Include="Views\HRExitProcedure\_DocumentDetailsDisplay.cshtml" />
+    <Content Include="Views\HRPerformancePlan\PerformancePlan.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -23,10 +23,12 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         static Logger logger = LogManager.GetCurrentClassLogger();
 
         const string SP_EXP_LIST_NAME = "Exit Procedure";
+        const string SP_EXP_CHECK_LIST_NAME = "Exit Procedure Checklist";
         const string SP_EXP_DOC_LIST_NAME = "ExitProcedureDocuments";
         const string SP_WORKFLOW_LISTNAME = "Workflow Mapping Master";
         const string SP_PROMAS_LIST_NAME = "Professional Master";
         const string SP_POSMAS_LIST_NAME = "Position Master";
+
 
         public void SetSiteUrl(string siteUrl)
         {
@@ -77,6 +79,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             var listItem = SPConnector.GetListItem(SP_EXP_LIST_NAME, ID, _siteUrl);
             viewModel = ConvertToExitProcedureVM(listItem);
+            viewModel = GetExitProcedureDetails(viewModel);
 
             return viewModel;
         }
@@ -103,6 +106,62 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.DocumentUrl = GetDocumentUrl(viewModel.ID);
 
             return viewModel;
+        }
+
+        private ExitProcedureVM GetExitProcedureDetails(ExitProcedureVM viewModel)
+        {
+            viewModel.ExitProcedureChecklist = GetExitProcedureChecklist(viewModel.ID);
+
+            return viewModel;
+        }
+
+        private IEnumerable<ExitProcedureChecklistVM> GetExitProcedureChecklist(int? iD)
+        {
+          var caml = @"<View>
+            <Query> 
+               <Where><Eq><FieldRef Name='exitprocedure' LookupId='True' /><Value Type='Lookup'>" + iD + @"</Value></Eq></Where> 
+            </Query> 
+             <ViewFields>
+                <FieldRef Name='approverlevel' />
+                <FieldRef Name='approvername' />
+                <FieldRef Name='approverposition' />
+                <FieldRef Name='approverposition_x003a_ID' />
+                <FieldRef Name='checklistitemapproval' />
+                <FieldRef Name='dateofapproval' />
+                <FieldRef Name='approverunit' />
+                <FieldRef Name='remarks' />
+                <FieldRef Name='transactiontype' />
+                <FieldRef Name='requestorunit' />
+                <FieldRef Name='requestorposition' />
+                <FieldRef Name='requestorposition_x003a_ID' />
+                <FieldRef Name='approverlevel' />
+                <FieldRef Name='approverunit' />
+                <FieldRef Name='isdefault' />
+                <FieldRef Name='workflowtype' />
+                <FieldRef Name='exitprocedure' />
+                <FieldRef Name='Title' />
+                <FieldRef Name='ID' />
+             </ViewFields> 
+            </View>";
+
+            var exitProcedureChecklist = new List<ExitProcedureChecklistVM>();
+
+            foreach (var item in SPConnector.GetList(SP_EXP_CHECK_LIST_NAME, _siteUrl, caml))
+            {
+                exitProcedureChecklist.Add(ConvertToExitProcedureChecklist(item));
+            }
+
+            return exitProcedureChecklist;
+        }
+
+        private ExitProcedureChecklistVM ConvertToExitProcedureChecklist(ListItem item)
+        {
+            return new ExitProcedureChecklistVM
+            {
+                ID = Convert.ToInt32(item["ID"]),
+                ItemExitProcedure = Convert.ToString(item["Title"]),
+                Remarks = Convert.ToString(item["remarks"])
+            };
         }
 
         private string GetDocumentUrl(int? iD)

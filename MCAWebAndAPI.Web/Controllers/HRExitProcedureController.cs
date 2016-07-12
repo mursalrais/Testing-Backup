@@ -190,7 +190,6 @@ namespace MCAWebAndAPI.Web.Controllers
                 e.Name
             }), JsonRequestBehavior.AllowGet);
         }
-              
 
         [HttpPost]
         public JsonResult Grid_Read([DataSourceRequest] DataSourceRequest request)
@@ -249,7 +248,7 @@ namespace MCAWebAndAPI.Web.Controllers
             return json;
         }
 
-        
+
         //[HttpPost]
         //public ActionResult Grid_Destroy([DataSourceRequest] DataSourceRequest request,
         //    [Bind(Prefix = "models")] ExitProcedureChecklistVM viewModel)
