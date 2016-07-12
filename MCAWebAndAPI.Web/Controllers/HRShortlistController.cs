@@ -72,10 +72,22 @@ namespace MCAWebAndAPI.Web.Controllers
 
             string[] words = viewModel.SendTo.Split(delimiterChars);
 
-            foreach (string mail in words)
+
+            if (viewModel.useraccess == "HR")
             {
-                _service.SendEmailValidation(mail, ""+ siteUrl + "/Lists/Application/ShortlistREQ.aspx" + " " + EmailResource.EmailShortlistData);
+                foreach (string mail in words)
+                {
+                    _service.SendEmailValidation(mail, "" + siteUrl + "/Lists/Application/ShortlistREQ.aspx" + " " + EmailResource.EmailShortlistData);
+                }
             }
+            else if (viewModel.useraccess == "REQ")
+            {
+                foreach (string mail in words)
+                {
+                    _service.SendEmailValidation(mail, "" + siteUrl + "/Lists/Application/Interviewlistdata.aspx?ID="+ viewModel.Position+"" + " " + EmailResource.EmailShortlistData);
+                }
+            }
+           
 
             return JsonHelper.GenerateJsonSuccessResponse(
                 string.Format("{0}/{1}", siteUrl, UrlResource.Professional));
@@ -116,7 +128,7 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         public ActionResult ShortlistIntvinvite(string siteurl = null, int? position = null, string username = null, string useraccess = null)
-        {
+         {
             //mandatory: set site url
             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);

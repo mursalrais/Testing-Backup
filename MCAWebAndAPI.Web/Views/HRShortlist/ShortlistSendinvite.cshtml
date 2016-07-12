@@ -15,7 +15,6 @@
     <fieldset>
         @Html.HiddenFor(m => m.ID)
         @Html.HiddenFor(m => m.Position)
-       
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
@@ -34,6 +33,12 @@
                     @Html.Bootstrap().LabelFor(m => m.InterviewerDate).Class("col-sm-4 control-label")
                     <div class="col-sm-8">
                         @Html.EditorFor(m => m.InterviewerDate)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.InterviewerTime).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.InterviewerTime)
                     </div>
                 </div>
                 <div class="form-group">

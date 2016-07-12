@@ -119,8 +119,16 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// </summary>
         [UIHint("Date")]
         [DisplayName("Interview Date")]
-        public DateTime? InterviewerDate { get; set; } = DateTime.Now;
-        
+        public DateTime? InterviewerDate { get; set; }
+
+        /// <summary>
+        /// InterviewTime
+        /// </summary>
+        /// 
+        [DataType(DataType.Time)]
+        [DisplayFormat(DataFormatString = "{0:HH:mm}", ApplyFormatInEditMode = true), Display(Name = "Interview Time")]
+        public DateTime? InterviewerTime { get; set; }
+
         //[UIHint("Date")]
         //public string InterviewerDate { get; set; } = DateTime.UtcNow.ToShortDateString();
         [UIHint("Date")]

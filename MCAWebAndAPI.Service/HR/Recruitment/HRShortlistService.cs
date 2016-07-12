@@ -348,8 +348,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         public void CreateShorlistSendintv(int? headerID, ApplicationShortlistVM viewModel)
         {
             var updatedValue = new Dictionary<string, object>();
-
-            updatedValue.Add("interviewdatetime", viewModel.InterviewerDate);
+            updatedValue.Add("interviewdatetime", viewModel.InterviewerDate.Value.Date + viewModel.InterviewerTime.Value.TimeOfDay);
             updatedValue.Add("invitationemailmessage", viewModel.Message);
             updatedValue.Add("invitationemaildate", DateTime.Now);
 
@@ -363,7 +362,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 throw e;
             }
 
-            SendEmailValidation(viewModel.SendTo, viewModel.EmailMessage);
+            SendEmailValidation(viewModel.SendTo, viewModel.Message);
 
         }
 
