@@ -90,10 +90,16 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             var caml = @"<View>  
                     <Query> 
                        <Where>
-                             <Eq>
-                                <FieldRef Name='positionrequested_x003a_ID' />
-                                <Value Type='Lookup'>" + position +@"</Value>
-                             </Eq>
+                             <And>
+                                 <Eq>
+                                    <FieldRef Name='positionrequested_x003a_ID' />
+                                    <Value Type='Lookup'>"+ position +@"</Value>
+                                 </Eq>
+                                 <Eq>
+                                    <FieldRef Name='manpowerrequeststatus' />
+                                    <Value Type='Text'>Active</Value>
+                                 </Eq>
+                              </And>
                        </Where>
                     </Query> 
                      <ViewFields><FieldRef Name='ID' /></ViewFields> 
