@@ -7,7 +7,7 @@
         .Columns(columns =>
         {
             columns.Bound(p => p.ProjectOrUnitGoals);
-            columns.Bound(p => p.Category);
+            columns.Bound(p => p.Category).ClientTemplate("#= Category.Text #");
             columns.Bound(p => p.IndividualGoalAndPlan);
             columns.Bound(p => p.Weight);
             columns.Bound(p => p.Remarks);
