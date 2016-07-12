@@ -21,11 +21,12 @@ namespace MCAWebAndAPI.Web.Controllers
             _service = new WorkflowService();
         }
 
-        public ActionResult DisplayMyApprovalRequest(string siteUrl = null, string userLogin = null)
+        //TODO: To get all list of approval assigned to him/her
+        public async Task<ActionResult> DisplayPendingApprovalItems(string siteUrl = null, string userLogin = null)
         {
             _service.SetSiteUrl(siteUrl);
-
-            return View();
+            var viewModel = await _service.GetPendingApprovalItemsAsync(userLogin);
+            return View(viewModel);
         }
 
         public JsonResult GetApproverPositions(int approverUnit)
@@ -36,7 +37,7 @@ namespace MCAWebAndAPI.Web.Controllers
             var requestorUnitName = SessionManager.Get<string>("WorkflowRouterRequestorUnit");
             var approverUnitName = WorkflowItemVM.GetUnitOptions().FirstOrDefault(e => e.Value == approverUnit).Text;
 
-            var viewModel = _service.GetPositionsInWorkflow(listName, approverUnitName, 
+            var viewModel = _service.GetPositionsInWorkflow(listName, approverUnitName,
                 requestorUnitName, requestorPosition);
             return Json(viewModel.Select(e => new {
                 e.ID,
@@ -85,14 +86,11 @@ namespace MCAWebAndAPI.Web.Controllers
             SessionManager.Set("WorkflowRouterRequestorUnit", viewModel.RequestorUnit);
             SessionManager.Set("WorkflowRouterRequestorPosition", viewModel.RequestorPosition);
             
-            
             if (isPartial)
                 return PartialView("_WorkflowDetails", viewModel);
-            return View("_WorkflowDetails", viewModel);
-            
+            return View("_WorkflowDetails", viewModel);   
         }
         
-
         [HttpPost]
         public JsonResult Grid_Read([DataSourceRequest] DataSourceRequest request)
         {

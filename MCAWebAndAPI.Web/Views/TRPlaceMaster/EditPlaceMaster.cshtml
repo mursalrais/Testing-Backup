@@ -3,14 +3,14 @@
 @model PlaceMasterVM
 
 @using (Ajax.BeginForm("UpdatePlaceMaster", "TRPlaceMaster",
-                                                                                        FormMethod.Post,
-                                                                                        new AjaxOptions
-                                                                                        {
-                                                                                            OnBegin = "onBeginForm",
-                                                                                            OnComplete = "onCompleteForm",
-                                                                                            OnSuccess = "onSuccessFormEmbed",
-                                                                                            OnFailure = "onFailureForm"
-                                                                                        }, new { @class = "form-horizontal" }))
+    FormMethod.Post,
+    new AjaxOptions
+    {
+        OnBegin = "onBeginForm",
+        OnComplete = "onCompleteForm",
+        OnSuccess = "onSuccessFormEmbed",
+        OnFailure = "onFailureForm"
+    }, new { @class = "form-horizontal" }))
 {<fieldset>
         <legend>Form Place Master</legend>
         @Html.AntiForgeryToken()

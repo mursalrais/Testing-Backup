@@ -80,9 +80,6 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult InputInterviewResult(string siteurl = null, int? ID = null)
         {
-
-
-
             //mandatory: set site url
             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);

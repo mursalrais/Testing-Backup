@@ -1,0 +1,27 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Common
+@model IEnumerable<PendingApprovalItemVM>
+
+@(Html.Kendo().Grid(Model)
+    .Name("PendingApprovalItems")
+    .Columns(columns => {
+        columns.Bound(m => m.Requestor);
+        columns.Bound(m => m.Level);
+        columns.Bound(m => m.DateOfRequest);
+        columns.Command(c => c.Custom("ViewDetails").Click("showDetails"));
+    })
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .Model(model => model.Field(m => m.DateOfRequest).Editable(false))
+        .Group(group => group.Add(g => g.TransactionName)))
+)
+
+<script type="text/javascript">
+
+    function showDetails(e) {
+        e.preventDefault();
+        var tr = $(e.currentTarget).closest("tr");
+        var dataItem = this.dataItem(tr);
+        
+        location.href = dataItem.LinkLookupUp;
+    }
+</script>
