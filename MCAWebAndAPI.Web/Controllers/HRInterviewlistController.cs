@@ -52,18 +52,12 @@ namespace MCAWebAndAPI.Web.Controllers
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
-            var testget = form[""];
-
-            int? headerID = viewModel.ID;
-
             try
             {
                 foreach (var list in viewModel.ShortlistDetails)
                 {
                     EmailUtil.Send(list.Candidatemail, "Interview Result", "https://eceos2.sharepoint.com/sites/mca-dev/hr/Lists/Professional%20Master/DispForm_Custom.aspx?ID="+ viewModel.ID+"" + EmailResource.EmailInterviewResult);
                 }
-
-                Task CreateManpowerRequisitionDocumentsTask = _service.CreateInterviewDocumentsSync(headerID, viewModel.Documents);
             }
             catch (Exception e)
             {
@@ -71,10 +65,18 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            EmailUtil.Send(viewModel.InterviewerPanel, "Interview Result", viewModel.EmailMessage + "  " + "https://eceos2.sharepoint.com/sites/ims/hr/Lists/Application/Interviewlistdata.aspx");
+            char[] delimiterChars = { ' ', ',', ';' };
 
-            _service.SendEmailValidation(viewModel.InterviewerPanel, EmailResource.EmailInterviewResult);
+            string[] words = viewModel.InterviewerPanel.Split(delimiterChars);
 
+            foreach (string mail in words)
+            {
+                if (mail != "")
+                {
+                    _service.SendEmailValidation(mail, "http://mcaims-dev.azurewebsites.net/HRInterviewlist/InterviewlistData?siteUrl=https://eceos2.sharepoint.com/sites/ims/hr&useraccess=REQ&position=" + viewModel.Position + "" + EmailResource.EmailInterviewResult);
+                }
+            }
+               
             return RedirectToAction("Index",
                "Success",
                new

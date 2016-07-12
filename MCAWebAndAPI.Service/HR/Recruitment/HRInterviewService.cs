@@ -376,8 +376,17 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 throw e;
             }
 
-            EmailUtil.Send(viewModel.InterviewerPanel, "Interview Invitation", viewModel.EmailMessage);
+            char[] delimiterChars = { ' ', ',', ';' };
 
+            string[] words = viewModel.InterviewerPanel.Split(delimiterChars);
+
+            foreach (string mail in words)
+            {
+                if (mail != "")
+                {
+                    EmailUtil.Send(mail, "Interview Invitation", viewModel.EmailMessage);
+                }
+            }
         }
 
         public void SendEmailValidation(string emailTo, string emailMessages)
