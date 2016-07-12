@@ -15,6 +15,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         void SetSiteUrl(string siteUrl);
 
         //Display Exit Procedure Data based on ID
+        ExitProcedureVM GetExitProcedure(int? ID, string siteUrl, string requestor, string listName);
+
         ExitProcedureVM GetExitProcedure(int? ID);
 
         int CreateExitProcedure(ExitProcedureVM exitProcedure);
@@ -25,7 +27,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         void CreateExitProcedureDocuments(int? headerID, IEnumerable<HttpPostedFileBase> documents, ExitProcedureVM exitProcedure);
 
-        Task<ExitProcedureVM> GetWorkflowRouterExitProcedure(string listName, string requestor);
+        //Task<ExitProcedureVM> GetWorkflowRouterExitProcedure(string listName, string requestor);
+
+        ExitProcedureVM GetWorkflowExitProcedure(string listName, string requestor);
 
         IEnumerable<PositionMaster> GetPositionsInWorkflow(string listName,
             string approverUnit,

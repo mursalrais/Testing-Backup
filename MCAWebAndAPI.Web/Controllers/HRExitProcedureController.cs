@@ -39,16 +39,35 @@ namespace MCAWebAndAPI.Web.Controllers
             exitProcedureService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
-            // Get blank ViewModel
-            var viewModel = exitProcedureService.GetExitProcedure(null);
+            //ViewBag.ListName = "Exit%20Procedure";
 
-            viewModel.Requestor = requestor;
+            ViewBag.ListName = "Exit Procedure";
 
-            ViewBag.ListName = "Exit%20Procedure";
+            var listName = ViewBag.ListName;
+
             ViewBag.RequestorUserLogin = requestor;
+            
+            // Get blank ViewModel
+            var viewModel = exitProcedureService.GetExitProcedure(null, siteUrl, requestor, listName);
 
             return View("CreateExitProcedure", viewModel);
         }
+
+        //public async Task<ActionResult> DisplayWorkflowRouterExitProcedure(string listName, string requestor, bool isPartial = true)
+        //{
+        //    exitProcedureService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+        //    var viewModel = await exitProcedureService.GetWorkflowRouterExitProcedure(listName, requestor);
+        //    //var viewModel = await _service.GetWorkflowRouterRequestorPosition(listName, requestorPosition);
+        //    SessionManager.Set("ExitProcedureChecklist", viewModel.ExitProcedureChecklist);
+        //    SessionManager.Set("ExitProcedureListName", viewModel.ListName);
+        //    SessionManager.Set("ExitProcedureRequestorUnit", viewModel.RequestorUnit);
+        //    SessionManager.Set("ExitProcedureRequestorPosition", viewModel.RequestorPosition);
+
+        //    if (isPartial)
+        //        return PartialView("_ExitProcedureChecklist", viewModel);
+        //    return View("_ExitProcedureChecklist", viewModel);
+
+        //}
 
         //Submit every data in Exit Procedure to List
         [HttpPost]
@@ -144,21 +163,7 @@ namespace MCAWebAndAPI.Web.Controllers
             return View("DisplayExitProcedure", viewModel);
         }
 
-        public async Task<ActionResult> DisplayWorkflowRouterExitProcedure(string listName, string requestor, bool isPartial = true)
-        {
-            exitProcedureService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
-            var viewModel = await exitProcedureService.GetWorkflowRouterExitProcedure(listName, requestor);
-            //var viewModel = await _service.GetWorkflowRouterRequestorPosition(listName, requestorPosition);
-            SessionManager.Set("ExitProcedureChecklist", viewModel.ExitProcedureChecklist);
-            SessionManager.Set("ExitProcedureListName", viewModel.ListName);
-            SessionManager.Set("ExitProcedureRequestorUnit", viewModel.RequestorUnit);
-            SessionManager.Set("ExitProcedureRequestorPosition", viewModel.RequestorPosition);
-                      
-            if (isPartial)
-                return PartialView("_ExitProcedureChecklist", viewModel);
-            return View("_ExitProcedureChecklist", viewModel);
-
-        }
+        
 
         public JsonResult GetApproverPositions(int approverUnit)
         {
