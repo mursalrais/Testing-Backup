@@ -100,3 +100,11 @@ Parameter name: address
    at System.Net.Mail.MailAddress..ctor(String address, String displayName, Encoding displayNameEncoding)
    at MCAWebAndAPI.Service.Utils.EmailUtil.Send(String emailAddress, String subject, String emailMessage) in C:\Users\sobari\Documents\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\EmailUtil.cs:line 30
    at MCAWebAndAPI.Service.HR.Recruitment.HRShortlistService.SendEmailValidation(String emailTo, String emailMessages) in C:\Users\sobari\Documents\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Recruitment\HRShortlistService.cs:line 366
+2016-07-11 16:41:46.2488 MCAWebAndAPI.Service.HR.Recruitment.HRProfessionalPerformanceEvaluationService The 'sId' argument is invalid.
+2016-07-11 16:44:40.8141 MCAWebAndAPI.Service.HR.Recruitment.HRProfessionalPerformanceEvaluationService The 'sId' argument is invalid.
+2016-07-11 16:48:06.9359 MCAWebAndAPI.Service.HR.Recruitment.HRProfessionalPerformanceEvaluationService Column 'pppstatus' does not exist. It may have been deleted by another user.  /sites/mca-dev/hr/Lists/ProfessionalPerformanceEvaluation
+2016-07-11 16:48:16.5914 MCAWebAndAPI.Service.HR.Recruitment.HRProfessionalPerformanceEvaluationService Column 'projectunitgoals' does not exist. It may have been deleted by another user.  /sites/mca-dev/hr/Lists/ProfessionalPerformanceEvaluationOutput
+2016-07-11 16:51:08.6377 MCAWebAndAPI.Service.HR.Recruitment.HRProfessionalPerformanceEvaluationService Column 'pppstatus' does not exist. It may have been deleted by another user.  /sites/mca-dev/hr/Lists/ProfessionalPerformanceEvaluation
+2016-07-11 16:51:58.9730 MCAWebAndAPI.Service.HR.Recruitment.HRProfessionalPerformanceEvaluationService Column 'projectunitgoals' does not exist. It may have been deleted by another user.  /sites/mca-dev/hr/Lists/ProfessionalPerformanceEvaluationOutput
+2016-07-11 16:54:34.2133 MCAWebAndAPI.Service.HR.Recruitment.HRProfessionalPerformanceEvaluationService Column 'pppstatus' does not exist. It may have been deleted by another user.  /sites/mca-dev/hr/Lists/ProfessionalPerformanceEvaluation
+2016-07-12 12:02:14.1305 MCAWebAndAPI.Service.HR.Recruitment.HRProfessionalPerformanceEvaluationService Column 'pppstatus' does not exist. It may have been deleted by another user.  /sites/mca-dev/hr/Lists/ProfessionalPerformanceEvaluation
