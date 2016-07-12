@@ -86,7 +86,7 @@ namespace MCAWebAndAPI.Web.Controllers
             {
                 foreach (var list in viewModel.ShortlistDetails)
                 {
-                    EmailUtil.Send(list.Candidatemail, "Interview Result", "https://eceos2.sharepoint.com/sites/mca-dev/hr/Lists/Professional%20Master/DispForm_Custom.aspx?ID="+ viewModel.ID+"" + EmailResource.EmailInterviewResult);
+                    EmailUtil.Send(list.Candidatemail, "Interview Result", "" + siteUrl + "/Lists/Professional%20Master/DispForm_Custom.aspx?ID=" + viewModel.ID+"" + EmailResource.EmailInterviewResult);
                 }
             }
             catch (Exception e)
@@ -151,7 +151,7 @@ namespace MCAWebAndAPI.Web.Controllers
                "HRInterviewlist",
                new
                {
-                   siteurl = "https://eceos2.sharepoint.com/sites/mca-dev/hr",
+                   siteurl = siteUrl,
                    ID = headerID
                });
         }

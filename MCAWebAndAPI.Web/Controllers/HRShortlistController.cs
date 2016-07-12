@@ -74,7 +74,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             foreach (string mail in words)
             {
-                _service.SendEmailValidation(mail, "https://eceos2.sharepoint.com/sites/ims/hr/Lists/Application/ShortlistREQ.aspx" + " " + EmailResource.EmailShortlistData);
+                _service.SendEmailValidation(mail, ""+ siteUrl + "/Lists/Application/ShortlistREQ.aspx" + " " + EmailResource.EmailShortlistData);
             }
 
             return JsonHelper.GenerateJsonSuccessResponse(

@@ -365,7 +365,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             createdValue.Add("Title", viewModel.Candidate);
             createdValue.Add("interviewresult", viewModel.InterviewResultOption.Value);
 
-
             try
             {
                 SPConnector.AddListItem(SP_APPINTV_LIST_NAME, createdValue, _siteUrl);
