@@ -84,6 +84,7 @@
         columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
             .Click("onDeleteKendoDetail")).Width(100);
     })
+    .Pageable()
     .Events(e =>
     {
         //e.Change("onChange");
@@ -101,7 +102,9 @@
                        model.Field(m => m.DateOfApproval).DefaultValue(DateTime.UtcNow);
                    })
                    .ServerOperation(false)
+                   .PageSize(10)
      )
+     
     )
 
 

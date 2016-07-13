@@ -117,8 +117,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                @"</Value></Eq><Eq><FieldRef Name='requestorunit' /><Value Type='Choice'>" + viewModel.RequestorUnit + @"</Value></Eq></And><Eq>
                <FieldRef Name='transactiontype' /><Value Type='Choice'>" + listName + @"</Value></Eq></And></Where> 
             <OrderBy><FieldRef Name='approverlevel' /></OrderBy>
-            </Query> 
-            </View>";
+            </Query>
+                
+            </View>
+";
 
             var exitProcedureCheckList = new List<ExitProcedureChecklistVM>();
             foreach (var item in SPConnector.GetList(SP_WORKFLOW_LISTNAME, _siteUrl, caml))
@@ -146,8 +148,16 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             var viewModel = new ExitProcedureChecklistVM();
             viewModel.ApproverPosition = FormatUtil.ConvertToInGridAjaxComboBox(item, "approverposition");
 
+            viewModel.ApproverUnit =
+                ExitProcedureChecklistVM.GetUnitDefaultValue(new InGridComboBoxVM
+                {
+                    Text = Convert.ToString(item["approverunit"])
+                });
+
             //Task<IEnumerable<ProfessionalMaster>> getApproverNamesTask =
             //    GetApproverNamesAsync(viewModel.ApproverPosition.Text);
+
+            var approvernames = GetApproverUserName(viewModel.ApproverPosition.Text, viewModel.ApproverUnit.Text);
 
             viewModel.Level = Convert.ToString(item["approverlevel"]);
 
@@ -198,22 +208,16 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 viewModel.Remarks = "Rp 2.000.000";
             }
 
-            viewModel.ApproverUnit =
-                ExitProcedureChecklistVM.GetUnitDefaultValue(new InGridComboBoxVM
-                {
-                    Text = Convert.ToString(item["approverunit"])
-                });
-
             viewModel.CheckListItemApproval =
                 ExitProcedureChecklistVM.GetCheckListItemApprovalDefaultValue();
 
             //var userNames = await getApproverNamesTask;
-            //var userName = userNames.FirstOrDefault();
-            //viewModel.ApproverUserName = AjaxComboBoxVM.GetDefaultValue(new AjaxComboBoxVM
-            //{
-            //    Text = userName.Name,
-            //    Value = userName.ID
-            //});
+            var userName = approvernames.FirstOrDefault();
+            viewModel.ApproverUserName = AjaxComboBoxVM.GetDefaultValue(new AjaxComboBoxVM
+            {
+                Text = userName.Name,
+                Value = userName.ID
+            });
 
             return viewModel;
         }
@@ -567,6 +571,35 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             <Query> 
                <Where><Eq><FieldRef Name='Position' /><Value Type='Lookup'>" + position + @"</Value></Eq></Where> 
             </Query> 
+             <ViewFields><FieldRef Name='ID' /><FieldRef Name='Title' /><FieldRef Name='officeemail' /></ViewFields> 
+            </View>";
+
+            var viewModel = new List<ProfessionalMaster>();
+            foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl, caml))
+            {
+                viewModel.Add(ConvertToProfessionalMasterVM(item));
+            }
+
+            return viewModel;
+        }
+
+        public IEnumerable<ProfessionalMaster> GetApproverUserName(string position, string projectunit)
+        {
+            var caml = @"<View>  
+            <Query>
+                <Where>
+      <And>
+         <Eq>
+            <FieldRef Name='Project_x002f_Unit' />
+            <Value Type='Choice'>" + projectunit + @"</Value>
+         </Eq>
+         <Eq>
+            <FieldRef Name='Position' />
+            <Value Type='Lookup'>" + position + @"</Value>
+         </Eq>
+      </And>
+   </Where>
+     </Query> 
              <ViewFields><FieldRef Name='ID' /><FieldRef Name='Title' /><FieldRef Name='officeemail' /></ViewFields> 
             </View>";
 
