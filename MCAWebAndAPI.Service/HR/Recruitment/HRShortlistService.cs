@@ -53,7 +53,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             var viewModel = new ApplicationShortlistVM();
 
-            viewModel.ActivePosition.Value = FormatUtil.ConvertLookupToID(listItem, "manpowerrequisition") ;
+            viewModel.ActivePosition.Value = FormatUtil.ConvertLookupToID(listItem, "manpowerrequisition");
 
             return viewModel;
         }
@@ -72,7 +72,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         private ApplicationShortlistVM ConvertToInviteIntvDataVM(ListItem listItem)
         {
             var viewModel = new ApplicationShortlistVM();
-            
+
             viewModel.InterviewerDate = Convert.ToDateTime(listItem["interviewdatetime"]);
 
             viewModel.EmailMessage = Convert.ToString(listItem["EmailMessage"]);
@@ -80,7 +80,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return viewModel;
         }
 
-        public ApplicationShortlistVM GetShortlist( int? position, string username, string useraccess)
+        public ApplicationShortlistVM GetShortlist(int? position, string username, string useraccess)
         {
             var viewModel = new ApplicationShortlistVM();
 
@@ -93,7 +93,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                              <And>
                                  <Eq>
                                     <FieldRef Name='positionrequested_x003a_ID' />
-                                    <Value Type='Lookup'>"+ position +@"</Value>
+                                    <Value Type='Lookup'>" + position + @"</Value>
                                  </Eq>
                                  <Eq>
                                     <FieldRef Name='manpowerrequeststatus' />
@@ -118,10 +118,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             var viewModel = new ApplicationShortlistVM();
             if (ID == 0)
-            return viewModel;
-            
+                return viewModel;
+
             viewModel.ShortlistDetails = GetDetailShortlist(ID, useraccess);
-            viewModel.ActivePosition.Value = Convert.ToInt32(position);
+            //viewModel.ActivePosition.Value = Convert.ToInt32(position);
             viewModel.Position = Convert.ToString(position);
             viewModel.useraccess = Convert.ToString(useraccess);
 
@@ -150,7 +150,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         //   <FieldRef Name = 'remarks' />
         //</ ViewFields >
         private IEnumerable<ShortlistDetailVM> GetDetailShortlist(int manPosition, string useraccess)
-         {
+        {
             var caml = "";
             if (useraccess == "HR")
             {
@@ -160,7 +160,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
            <And>
          <Eq>
             <FieldRef Name='manpowerrequisition' />
-            <Value Type='Lookup'>"+ manPosition + @"</Value>
+            <Value Type='Lookup'>" + manPosition + @"</Value>
          </Eq>
             <Or>
                <Eq>
@@ -187,7 +187,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             </View>";
 
             }
-            else if(useraccess == "REQ")
+            else if (useraccess == "REQ")
             {
                 caml = @"<View>  
             <Query> 
@@ -252,7 +252,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
                 GetStat = Convert.ToString(item["applicationstatus"]),
                 Remarks = Convert.ToString(item["applicationremarks"]),
-                
+
 
             };
         }
@@ -301,14 +301,14 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
                 try
                 {
-                   SPConnector.UpdateListItem(SP_APPDATA_LIST_NAME, viewModel.ID, updatedValue, _siteUrl);
+                    SPConnector.UpdateListItem(SP_APPDATA_LIST_NAME, viewModel.ID, updatedValue, _siteUrl);
                 }
                 catch (Exception e)
                 {
                     logger.Error(e.Message);
                     throw e;
                 }
-                
+
             }
         }
 
@@ -332,7 +332,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     logger.Error(e.Message);
                     throw e;
                 }
-                EmailUtil.Send(list.Candidatemail, "Interview Invitation", viewModel.EmailMessage + "   " + ""+ _siteUrl + "/Lists/Professional%20Master/DispForm_Custom.aspx?ID="+ viewModel.ID +"" + mailsubject);
+                EmailUtil.Send(list.Candidatemail, "Interview Invitation", viewModel.EmailMessage + "   " + "" + _siteUrl + "/Lists/Professional%20Master/DispForm_Custom.aspx?ID=" + viewModel.ID + "" + mailsubject);
             }
 
             char[] delimiterChars = { ' ', ',', ';' };
@@ -386,7 +386,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                        <Where><Eq><FieldRef Name='manpowerrequeststatus' /><Value Type='Text'>Active</Value></Eq></Where><OrderBy><FieldRef Name='positionrequested_x003a_Position' /></OrderBy> 
                     </Query> 
                     <ViewFields><FieldRef Name='manpowerrequeststatus' /> <FieldRef Name='ID' /><FieldRef Name='positionrequested' /><FieldRef Name='positionrequested_x003a_Position' /><FieldRef Name='positionrequested_x003a_ID' /></ViewFields></View>";
-             
+
             var models = new List<PositionMaster>();
 
             //foreach (var item in SPConnector.GetList(SP_MANPOW_LIST_NAME, _siteUrl, caml))
@@ -410,8 +410,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 }
             }
 
+            models.Add(new PositionMaster() { ID = 0, PositionName = "-- Select --" });
+
             return models;
-        
+
         }
 
         /// <summary>

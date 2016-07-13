@@ -242,7 +242,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         //</ ViewFields >
         private IEnumerable<ShortlistDetailVM> GetDetailInterviewlist(int Position, string useraccess)
         {
-            var caml = @"<view>
+            var caml = "";
+
+            if (useraccess == "REQ")
+            {
+                caml = @"<view>
                         <Query> 
                               <Where>
                                   <And>
@@ -279,6 +283,47 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                           <FieldRef Name='personalemail' />
                        </ViewFields>
                                 </View>";
+            }
+            else if (useraccess == "RES")
+            {
+                caml = @"<view>
+                        <Query> 
+                              <Where>
+                                  <And>
+                                     <Eq>
+                                        <FieldRef Name='manpowerrequisition' />
+                                        <Value Type='Lookup'>"+ Position +@"</Value>
+                                     </Eq>
+                                     <And>
+                                        <Eq>
+                                           <FieldRef Name='neednextinterview' />
+                                           <Value Type='Choice'>Yes</Value>
+                                        </Eq>
+                                        <Or>
+                                           <Eq>
+                                              <FieldRef Name='applicationstatus' />
+                                              <Value Type='Text'>Shortlisted</Value>
+                                           </Eq>
+                                           <Eq>
+                                              <FieldRef Name='applicationstatus' />
+                                              <Value Type='Text'>Recommended</Value>
+                                           </Eq>
+                                        </Or>
+                                     </And>
+                                  </And>
+                               </Where>
+                         </Query> 
+                       <ViewFields>
+                          <FieldRef Name='Title' />
+                          <FieldRef Name='ID' />
+                          <FieldRef Name='applicationstatus' />
+                          <FieldRef Name='applicationremarks' />
+                          <FieldRef Name='position' />
+                          <FieldRef Name='neednextinterview' />
+                          <FieldRef Name='personalemail' />
+                       </ViewFields>
+                                </View>";
+            }
 
             var shortlistDetails = new List<ShortlistDetailVM>();
             foreach (var item in SPConnector.GetList(SP_APPDATA_LIST_NAME, _siteUrl, caml))

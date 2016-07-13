@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Web;
+using System.Web.Mvc;
 using System.Linq;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.HR
@@ -106,8 +107,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             ActionName = "GetPosition",
             ValueField = "ID",
             TextField = "PositionName",
-            OnSelectEventName = "OnChangeActivePosition"
-            
+            OnSelectEventName = "OnChangeActivePosition",
+
         };
 
         [DisplayName("Attach Document")]

@@ -23,6 +23,7 @@
                             ControllerName = "HRShortlist",
                             ActionName = "GetStatusGrid"
                         });
+
         columns.Bound(p => p.Remarks).ClientTemplate("#= Remarks #" +
         "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].Remarks' value='#= Remarks #' />");
 

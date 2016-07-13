@@ -221,6 +221,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
              var positions = GetShortlistPositionExistingSession();
 
+            positions = positions.OrderBy(x => x.ID);
+
             return Json(positions.Select(e =>
                 new {
                     e.ID,

@@ -46,6 +46,26 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewmodel);
         }
 
+        public ActionResult NextInterviewlist(string siteurl = null, int? position = null, string username = null, string useraccess = null)
+        {
+            //mandatory: set site url
+            if (siteurl == "")
+            {
+                siteurl = SessionManager.Get<string>("SiteUrl");
+                _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
+            }
+            else
+            {
+                _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
+                SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
+            }
+
+            var viewmodel = _service.GetInterviewlist(position, username, useraccess);
+
+            //viewmodel.ID = id;
+            return View(viewmodel);
+        }
+
         [HttpPost]
         public ActionResult CreateInterviewlistData(FormCollection form, ApplicationShortlistVM viewModel)
         {
