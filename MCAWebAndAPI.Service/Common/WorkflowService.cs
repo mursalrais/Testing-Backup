@@ -240,11 +240,11 @@ namespace MCAWebAndAPI.Service.Common
             };
         }
 
-        public void CreateTransactionWorkflow(string workflowTransactionListName, string transactionLookupColumnName, int headerID, IEnumerable<WorkflowItemVM> workflowItems)
+        public void CreateTransactionWorkflow(string workflowTransactionListName, string transactionLookupColumnName, int headerID, IEnumerable<WorkflowItemVM> workflowItems, string requestor = null)
         {
             foreach (var item in workflowItems)
             {
-                CreateTransactionWorkflowItem(workflowTransactionListName, transactionLookupColumnName, headerID, item);
+                CreateTransactionWorkflowItem(workflowTransactionListName, transactionLookupColumnName, headerID, item, requestor);
             }
         }
 

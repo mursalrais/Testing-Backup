@@ -11,9 +11,7 @@ namespace MCAWebAndAPI.Web.Controllers
 {
     public class HRDataMasterController : Controller
     {
-
         IHRDataMasterService _dataMasterService;
-
         public HRDataMasterController()
         {
             _dataMasterService = new HRDataMasterService();
@@ -22,7 +20,6 @@ namespace MCAWebAndAPI.Web.Controllers
         public JsonResult GetProfessionalMonthlyFees()
         {
             _dataMasterService.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));
-
             var professionalmonthlyfee = GetFromProfessionalMonthlyFeesExistingSession();
             return Json(professionalmonthlyfee.Select(e =>
                 new {
@@ -37,7 +34,6 @@ namespace MCAWebAndAPI.Web.Controllers
         public JsonResult GetProfessionalMonthlyFeesEdit()
         {
             _dataMasterService.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));
-
             var professionalmonthlyfee = GetFromProfessionalMonthlyFeesEditExistingSession();
             return Json(professionalmonthlyfee.Select(e =>
                 new
@@ -53,9 +49,7 @@ namespace MCAWebAndAPI.Web.Controllers
         public JsonResult GetProfessionals()
         {
             _dataMasterService.SetSiteUrl(ConfigResource.DefaultQAHRSiteUrl);
-
             var professionals = GetFromExistingSession();
-
             return Json(professionals.Select(e => 
                 new {
                     e.ID,
@@ -65,7 +59,8 @@ namespace MCAWebAndAPI.Web.Controllers
                     e.Status,
                     e.OfficeEmail,
                     e.Project_Unit,
-                    Desc = string.Format("{0}", e.Name) }),
+                    Desc = string.Format("{0}", e.Name)
+                }),
                 JsonRequestBehavior.AllowGet);
         }
 
@@ -119,9 +114,7 @@ namespace MCAWebAndAPI.Web.Controllers
         public JsonResult GetKeyPosition(int id)
         {
             _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
-
             var positions = GetKeyPositionsExistingSession();
-
             return Json(positions.Where(e => e.ID == id).Select(e =>
                 new {
                     e.ID,
@@ -147,7 +140,6 @@ namespace MCAWebAndAPI.Web.Controllers
                 }),
                 JsonRequestBehavior.AllowGet);
         }
-
 
         private IEnumerable<ProfessionalMaster> GetFromExistingSession()
         {
