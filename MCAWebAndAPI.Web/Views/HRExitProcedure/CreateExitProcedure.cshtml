@@ -20,12 +20,24 @@
             @Html.Partial("_ExitProcedureData", Model)
         </div>
 
+        <legend>Exit Procedure Checklist</legend>
+        <div class="row">
+            @Html.Partial("_ExitProcedureChecklist", Model.ExitProcedureChecklist)
+        </div>
+
         
-    @if (Model.Requestor != null)
+        @*<legend>Exit Procedure Checklist</legend>
+        <div id="workflow-placeholder" class="row">
+
+            @Html.Partial("_ExitProcedureChecklist", Model)
+        </div>*@
+
+        
+    @*@if (Model.Requestor != null)
     {
         <legend>Approval Workflow</legend>
         <div id="workflow-placeholder" class="row"></div>
-    }
+    }*@
         
 
         <legend>Documents</legend>
@@ -106,6 +118,14 @@
         $(document).ready(function () {
             displayWorkflowRouterExitProcedure("workflow-placeholder", "@ViewBag.ListName", "@ViewBag.RequestorUserLogin");
         });
+
+
+        /*
+        function displayWorkflowRouterExitProcedure(domID, listName, requestor) {
+            var url = "/HRExitProcedure/DisplayWorkflowRouterExitProcedure?listName=" + listName + "&requestor=" + requestor;
+            $('#' + domID).load(url);
+        }
+        */
 
 
     </script>

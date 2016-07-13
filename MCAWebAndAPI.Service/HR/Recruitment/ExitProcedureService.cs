@@ -23,10 +23,12 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         static Logger logger = LogManager.GetCurrentClassLogger();
 
         const string SP_EXP_LIST_NAME = "Exit Procedure";
+        const string SP_EXP_CHECK_LIST_NAME = "Exit Procedure Checklist";
         const string SP_EXP_DOC_LIST_NAME = "ExitProcedureDocuments";
         const string SP_WORKFLOW_LISTNAME = "Workflow Mapping Master";
         const string SP_PROMAS_LIST_NAME = "Professional Master";
         const string SP_POSMAS_LIST_NAME = "Position Master";
+
 
         public void SetSiteUrl(string siteUrl)
         {
@@ -66,6 +68,210 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return SPConnector.GetLatestListItemID(SP_EXP_LIST_NAME, _siteUrl);
         }
 
+        public ExitProcedureVM GetExitProcedure(int? ID, string siteUrl, string requestor, string listName)
+        {
+            var viewModel = new ExitProcedureVM();
+
+            if (ID == null)
+            {
+                viewModel = GetWorkflowExitProcedure(listName, requestor);
+
+                return viewModel;
+            }
+
+            var listItem = SPConnector.GetListItem(SP_EXP_LIST_NAME, ID, _siteUrl);
+            viewModel = ConvertToExitProcedureVM(listItem);
+            viewModel = GetExitProcedureDetails(viewModel);
+
+            return viewModel;
+        }
+
+        public ExitProcedureVM GetWorkflowExitProcedure(string listName, string requestor)
+        {
+            var viewModel = new ExitProcedureVM();
+            //var viewModel = new WorkflowRouterVM();
+            viewModel.ListName = listName;
+
+            // Get Position in Professional Master
+            var caml = @"<View><Query><Where><Eq>
+                <FieldRef Name='officeemail' /><Value Type='Text'>" + requestor +
+                @"</Value></Eq></Where></Query><ViewFields><FieldRef Name='Position' /><FieldRef Name='Project_x002f_Unit' /></ViewFields><QueryOptions /></View>";
+
+            int? positionID = 0;
+            foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl, caml))
+            {
+                viewModel.RequestorPosition = FormatUtil.ConvertLookupToValue(item, "Position");
+                positionID = FormatUtil.ConvertLookupToID(item, "Position");
+
+                break;
+            }
+
+            // Get Unit in Position Master
+            var position = SPConnector.GetListItem(SP_POSMAS_LIST_NAME, positionID, _siteUrl);
+            viewModel.RequestorUnit = Convert.ToString(position["projectunit"]);
+
+            // Get List of Workflow Items based on List name, Requestor Position, and Requestor Unit
+            caml = @"<View>  
+            <Query> 
+               <Where><And><And><Eq><FieldRef Name='requestorposition' /><Value Type='Lookup'>" + viewModel.RequestorPosition +
+               @"</Value></Eq><Eq><FieldRef Name='requestorunit' /><Value Type='Choice'>" + viewModel.RequestorUnit + @"</Value></Eq></And><Eq>
+               <FieldRef Name='transactiontype' /><Value Type='Choice'>" + listName + @"</Value></Eq></And></Where> 
+            <OrderBy><FieldRef Name='approverlevel' /></OrderBy>
+            </Query> 
+            </View>";
+
+            var exitProcedureCheckList = new List<ExitProcedureChecklistVM>();
+            foreach (var item in SPConnector.GetList(SP_WORKFLOW_LISTNAME, _siteUrl, caml))
+            {
+                if (string.Compare(Convert.ToString(item["isdefault"]), "No",
+                    StringComparison.OrdinalIgnoreCase) == 0
+                    &&
+                    string.Compare(Convert.ToString(item["workflowtype"]), "Sequential",
+                    StringComparison.OrdinalIgnoreCase) == 0)
+                    continue;
+
+                var vm = ConvertToExitProcedureChecklistVM(item);
+                exitProcedureCheckList.Add(vm);
+            }
+
+            //viewModel.WorkflowItems = workflowItems;
+            viewModel.ExitProcedureChecklist = exitProcedureCheckList;
+
+            return viewModel;
+        }
+
+        private ExitProcedureChecklistVM ConvertToExitProcedureChecklistVM(ListItem item)
+        {
+
+            var viewModel = new ExitProcedureChecklistVM();
+            viewModel.ApproverPosition = FormatUtil.ConvertToInGridAjaxComboBox(item, "approverposition");
+
+            //Task<IEnumerable<ProfessionalMaster>> getApproverNamesTask =
+            //    GetApproverNamesAsync(viewModel.ApproverPosition.Text);
+
+            viewModel.Level = Convert.ToString(item["approverlevel"]);
+
+            if (viewModel.Level == "1")
+            {
+                viewModel.ItemExitProcedure = "Close-Out/Handover Report";
+                viewModel.Remarks = "";
+            }
+            else if (viewModel.Level == "2")
+            {
+                viewModel.ItemExitProcedure = "MCA Indonesia Propietary Information";
+                viewModel.Remarks = "";
+            }
+            else if (viewModel.Level == "3")
+            {
+                viewModel.ItemExitProcedure = "Laptop/Desktop";
+                viewModel.Remarks = "";
+            }
+            else if (viewModel.Level == "4")
+            {
+                viewModel.ItemExitProcedure = "SAP Password, Computer Password";
+                viewModel.Remarks = "";
+            }
+            else if (viewModel.Level == "5")
+            {
+                viewModel.ItemExitProcedure = "IT Tools";
+                viewModel.Remarks = "";
+            }
+            else if (viewModel.Level == "6")
+            {
+                viewModel.ItemExitProcedure = "Keys (Drawers,desk,etc)";
+                viewModel.Remarks = "";
+            }
+            else if (viewModel.Level == "7")
+            {
+                viewModel.ItemExitProcedure = "Car";
+                viewModel.Remarks = "";
+            }
+            else if (viewModel.Level == "8")
+            {
+                viewModel.ItemExitProcedure = "Advance Statement";
+                viewModel.Remarks = "Rp 5.000.000";
+
+            }
+            else if (viewModel.Level == "9")
+            {
+                viewModel.ItemExitProcedure = "Travel Statement";
+                viewModel.Remarks = "Rp 2.000.000";
+            }
+
+            viewModel.ApproverUnit =
+                ExitProcedureChecklistVM.GetUnitDefaultValue(new InGridComboBoxVM
+                {
+                    Text = Convert.ToString(item["approverunit"])
+                });
+
+            viewModel.CheckListItemApproval =
+                ExitProcedureChecklistVM.GetCheckListItemApprovalDefaultValue();
+
+            //var userNames = await getApproverNamesTask;
+            //var userName = userNames.FirstOrDefault();
+            //viewModel.ApproverUserName = AjaxComboBoxVM.GetDefaultValue(new AjaxComboBoxVM
+            //{
+            //    Text = userName.Name,
+            //    Value = userName.ID
+            //});
+
+            return viewModel;
+        }
+
+        //public async Task<ExitProcedureVM> GetWorkflowRouterExitProcedure(string listName, string requestor)
+        //{
+        //    var viewModel = new ExitProcedureVM();
+        //    //var viewModel = new WorkflowRouterVM();
+        //    viewModel.ListName = listName;
+
+        //    // Get Position in Professional Master
+        //    var caml = @"<View><Query><Where><Eq>
+        //        <FieldRef Name='officeemail' /><Value Type='Text'>" + requestor +
+        //        @"</Value></Eq></Where></Query><ViewFields><FieldRef Name='Position' /><FieldRef Name='Project_x002f_Unit' /></ViewFields><QueryOptions /></View>";
+
+        //    int? positionID = 0;
+        //    foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl, caml))
+        //    {
+        //        viewModel.RequestorPosition = FormatUtil.ConvertLookupToValue(item, "Position");
+        //        positionID = FormatUtil.ConvertLookupToID(item, "Position");
+
+        //        break;
+        //    }
+
+        //    // Get Unit in Position Master
+        //    var position = SPConnector.GetListItem(SP_POSMAS_LIST_NAME, positionID, _siteUrl);
+        //    viewModel.RequestorUnit = Convert.ToString(position["projectunit"]);
+
+        //    // Get List of Workflow Items based on List name, Requestor Position, and Requestor Unit
+        //    caml = @"<View>  
+        //    <Query> 
+        //       <Where><And><And><Eq><FieldRef Name='requestorposition' /><Value Type='Lookup'>" + viewModel.RequestorPosition +
+        //       @"</Value></Eq><Eq><FieldRef Name='requestorunit' /><Value Type='Choice'>" + viewModel.RequestorUnit + @"</Value></Eq></And><Eq>
+        //       <FieldRef Name='transactiontype' /><Value Type='Choice'>" + listName + @"</Value></Eq></And></Where> 
+        //    <OrderBy><FieldRef Name='approverlevel' /></OrderBy>
+        //    </Query> 
+        //    </View>";
+
+        //    var exitProcedureCheckList = new List<ExitProcedureChecklistVM>();
+        //    foreach (var item in SPConnector.GetList(SP_WORKFLOW_LISTNAME, _siteUrl, caml))
+        //    {
+        //        if (string.Compare(Convert.ToString(item["isdefault"]), "No",
+        //            StringComparison.OrdinalIgnoreCase) == 0
+        //            &&
+        //            string.Compare(Convert.ToString(item["workflowtype"]), "Sequential",
+        //            StringComparison.OrdinalIgnoreCase) == 0)
+        //            continue;
+
+        //        var vm = await ConvertToExitProcedureChecklistVM(item);
+        //        exitProcedureCheckList.Add(vm);
+        //    }
+
+        //    //viewModel.WorkflowItems = workflowItems;
+        //    viewModel.ExitProcedureChecklist = exitProcedureCheckList;
+
+        //    return viewModel;
+        //}
+
         public ExitProcedureVM GetExitProcedure(int? ID)
         {
             var viewModel = new ExitProcedureVM();
@@ -77,9 +283,12 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             var listItem = SPConnector.GetListItem(SP_EXP_LIST_NAME, ID, _siteUrl);
             viewModel = ConvertToExitProcedureVM(listItem);
+            viewModel = GetExitProcedureDetails(viewModel);
 
             return viewModel;
         }
+
+        
 
         private ExitProcedureVM ConvertToExitProcedureVM(ListItem listItem)
         {
@@ -103,6 +312,62 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.DocumentUrl = GetDocumentUrl(viewModel.ID);
 
             return viewModel;
+        }
+
+        private ExitProcedureVM GetExitProcedureDetails(ExitProcedureVM viewModel)
+        {
+            viewModel.ExitProcedureChecklist = GetExitProcedureChecklist(viewModel.ID);
+
+            return viewModel;
+        }
+
+        private IEnumerable<ExitProcedureChecklistVM> GetExitProcedureChecklist(int? iD)
+        {
+          var caml = @"<View>
+            <Query> 
+               <Where><Eq><FieldRef Name='exitprocedure' LookupId='True' /><Value Type='Lookup'>" + iD + @"</Value></Eq></Where> 
+            </Query> 
+             <ViewFields>
+                <FieldRef Name='approverlevel' />
+                <FieldRef Name='approvername' />
+                <FieldRef Name='approverposition' />
+                <FieldRef Name='approverposition_x003a_ID' />
+                <FieldRef Name='checklistitemapproval' />
+                <FieldRef Name='dateofapproval' />
+                <FieldRef Name='approverunit' />
+                <FieldRef Name='remarks' />
+                <FieldRef Name='transactiontype' />
+                <FieldRef Name='requestorunit' />
+                <FieldRef Name='requestorposition' />
+                <FieldRef Name='requestorposition_x003a_ID' />
+                <FieldRef Name='approverlevel' />
+                <FieldRef Name='approverunit' />
+                <FieldRef Name='isdefault' />
+                <FieldRef Name='workflowtype' />
+                <FieldRef Name='exitprocedure' />
+                <FieldRef Name='Title' />
+                <FieldRef Name='ID' />
+             </ViewFields> 
+            </View>";
+
+            var exitProcedureChecklist = new List<ExitProcedureChecklistVM>();
+
+            foreach (var item in SPConnector.GetList(SP_EXP_CHECK_LIST_NAME, _siteUrl, caml))
+            {
+                exitProcedureChecklist.Add(ConvertToExitProcedureChecklist(item));
+            }
+
+            return exitProcedureChecklist;
+        }
+
+        private ExitProcedureChecklistVM ConvertToExitProcedureChecklist(ListItem item)
+        {
+            return new ExitProcedureChecklistVM
+            {
+                ID = Convert.ToInt32(item["ID"]),
+                ItemExitProcedure = Convert.ToString(item["Title"]),
+                Remarks = Convert.ToString(item["remarks"])
+            };
         }
 
         private string GetDocumentUrl(int? iD)
@@ -206,162 +471,95 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             }
         }
 
-        public async Task<ExitProcedureVM> GetWorkflowRouterExitProcedure(string listName, string requestor)
-        {
-            var viewModel = new ExitProcedureVM();
-            //var viewModel = new WorkflowRouterVM();
-            viewModel.ListName = listName;
+        
 
-            // Get Position in Professional Master
-            var caml = @"<View><Query><Where><Eq>
-                <FieldRef Name='officeemail' /><Value Type='Text'>" + requestor +
-                @"</Value></Eq></Where></Query><ViewFields><FieldRef Name='Position' /><FieldRef Name='Project_x002f_Unit' /></ViewFields><QueryOptions /></View>";
 
-            int? positionID = 0;
-            foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl, caml))
-            {
-                viewModel.RequestorPosition = FormatUtil.ConvertLookupToValue(item, "Position");
-                positionID = FormatUtil.ConvertLookupToID(item, "Position");
+        //private async Task<ExitProcedureChecklistVM> ConvertToExitProcedureChecklistVM(ListItem item)
+        //{
 
-                break;
-            }
+        //    var viewModel = new ExitProcedureChecklistVM();
+        //    viewModel.ApproverPosition = FormatUtil.ConvertToInGridAjaxComboBox(item, "approverposition");
+        //    Task<IEnumerable<ProfessionalMaster>> getApproverNamesTask =
+        //        GetApproverNamesAsync(viewModel.ApproverPosition.Text);
 
-            // Get Unit in Position Master
-            var position = SPConnector.GetListItem(SP_POSMAS_LIST_NAME, positionID, _siteUrl);
-            viewModel.RequestorUnit = Convert.ToString(position["projectunit"]);
+        //    viewModel.Level = Convert.ToString(item["approverlevel"]);
 
-            // Get List of Workflow Items based on List name, Requestor Position, and Requestor Unit
-            caml = @"<View>  
-            <Query> 
-               <Where><And><And><Eq><FieldRef Name='requestorposition' /><Value Type='Lookup'>" + viewModel.RequestorPosition +
-               @"</Value></Eq><Eq><FieldRef Name='requestorunit' /><Value Type='Choice'>" + viewModel.RequestorUnit + @"</Value></Eq></And><Eq>
-               <FieldRef Name='transactiontype' /><Value Type='Choice'>" + listName + @"</Value></Eq></And></Where> 
-            <OrderBy><FieldRef Name='approverlevel' /></OrderBy>
-            </Query> 
-            </View>";
+        //    if (viewModel.Level == "1")
+        //    {
+        //        viewModel.ItemExitProcedure = "Close-Out/Handover Report";
+        //        viewModel.Remarks = "";
+        //    }
+        //    else if (viewModel.Level == "2")
+        //    {
+        //        viewModel.ItemExitProcedure = "MCA Indonesia Propietary Information";
+        //        viewModel.Remarks = "";
+        //    }
+        //    else if (viewModel.Level == "3")
+        //    {
+        //        viewModel.ItemExitProcedure = "Laptop/Desktop";
+        //        viewModel.Remarks = "";
+        //    }
+        //    else if (viewModel.Level == "4")
+        //    {
+        //        viewModel.ItemExitProcedure = "SAP Password, Computer Password";
+        //        viewModel.Remarks = "";
+        //    }
+        //    else if (viewModel.Level == "5")
+        //    {
+        //        viewModel.ItemExitProcedure = "IT Tools";
+        //        viewModel.Remarks = "";
+        //    }
+        //    else if (viewModel.Level == "6")
+        //    {
+        //        viewModel.ItemExitProcedure = "Keys (Drawers,desk,etc)";
+        //        viewModel.Remarks = "";
+        //    }
+        //    else if (viewModel.Level == "7")
+        //    {
+        //        viewModel.ItemExitProcedure = "Car";
+        //        viewModel.Remarks = "";
+        //    }
+        //    else if (viewModel.Level == "8")
+        //    {
+        //        viewModel.ItemExitProcedure = "Advance Statement";
+        //        viewModel.Remarks = "Rp 5.000.000";
 
-            var exitProcedureCheckList = new List<ExitProcedureChecklistVM>();
-            foreach (var item in SPConnector.GetList(SP_WORKFLOW_LISTNAME, _siteUrl, caml))
-            {
-                if (string.Compare(Convert.ToString(item["isdefault"]), "No",
-                    StringComparison.OrdinalIgnoreCase) == 0
-                    &&
-                    string.Compare(Convert.ToString(item["workflowtype"]), "Sequential",
-                    StringComparison.OrdinalIgnoreCase) == 0)
-                    continue;
-
-                var vm = await ConvertToExitProcedureChecklistVM(item);
-                exitProcedureCheckList.Add(vm);
-            }
-
-            //viewModel.WorkflowItems = workflowItems;
-            viewModel.ExitProcedureChecklist = exitProcedureCheckList;
-
-            return viewModel;
-        }
-
-        private async Task<ExitProcedureChecklistVM> ConvertToExitProcedureChecklistVM(ListItem item)
-        {
-
-            var viewModel = new ExitProcedureChecklistVM();
-            viewModel.ApproverPosition = FormatUtil.ConvertToInGridAjaxComboBox(item, "approverposition");
-            Task<IEnumerable<ProfessionalMaster>> getApproverNamesTask =
-                GetApproverNamesAsync(viewModel.ApproverPosition.Text);
-
-            viewModel.Level = Convert.ToString(item["approverlevel"]);
-
-            if (viewModel.Level == "1")
-            {
-                viewModel.ItemExitProcedure = "Close-Out/Handover Report";
-                viewModel.Remarks = "";
-            }
-            else if (viewModel.Level == "2")
-            {
-                viewModel.ItemExitProcedure = "MCA Indonesia Propietary Information";
-                viewModel.Remarks = "";
-            }
-            else if (viewModel.Level == "3")
-            {
-                viewModel.ItemExitProcedure = "Laptop/Desktop";
-                viewModel.Remarks = "";
-            }
-            else if (viewModel.Level == "4")
-            {
-                viewModel.ItemExitProcedure = "SAP Password, Computer Password";
-                viewModel.Remarks = "";
-            }
-            else if (viewModel.Level == "5")
-            {
-                viewModel.ItemExitProcedure = "IT Tools";
-                viewModel.Remarks = "";
-            }
-            else if (viewModel.Level == "6")
-            {
-                viewModel.ItemExitProcedure = "Keys (Drawers,desk,etc)";
-                viewModel.Remarks = "";
-            }
-            else if (viewModel.Level == "7")
-            {
-                viewModel.ItemExitProcedure = "Car";
-                viewModel.Remarks = "";
-            }
-            else if (viewModel.Level == "8")
-            {
-                viewModel.ItemExitProcedure = "Advance Statement";
-                viewModel.Remarks = "Rp 5.000.000";
-
-            }
-            else if (viewModel.Level == "9")
-            {
-                viewModel.ItemExitProcedure = "Travel Statement";
-                viewModel.Remarks = "Rp 2.000.000";
-            }
+        //    }
+        //    else if (viewModel.Level == "9")
+        //    {
+        //        viewModel.ItemExitProcedure = "Travel Statement";
+        //        viewModel.Remarks = "Rp 2.000.000";
+        //    }
             
-            //else if (viewModel.Level == "10")
-            //{
-            //    viewModel.ItemExitProcedure = "Resignation/Separation Letter";
-            //}
-            //else if (viewModel.Level == "11")
-            //{
-            //    viewModel.ItemExitProcedure = "Timesheet/Leave Form";
-            //}
-            //else if (viewModel.Level == "12")
-            //{
-            //    viewModel.ItemExitProcedure = "Exit Interview/NDA";
-            //}
-            //else if (viewModel.Level == "13")
-            //{
-            //    viewModel.ItemExitProcedure = "Insurance Card";
-            //}
-            //else if (viewModel.Level == "14")
-            //{
-            //    viewModel.ItemExitProcedure = "ID Card & Access Card";
-            //}
+        //    viewModel.ApproverUnit =
+        //        ExitProcedureChecklistVM.GetUnitDefaultValue(new InGridComboBoxVM
+        //        {
+        //            Text = Convert.ToString(item["approverunit"])
+        //        });
 
-            viewModel.ApproverUnit =
-                ExitProcedureChecklistVM.GetUnitDefaultValue(new InGridComboBoxVM
-                {
-                    Text = Convert.ToString(item["approverunit"])
-                });
+        //    viewModel.CheckListItemApproval =
+        //        ExitProcedureChecklistVM.GetCheckListItemApprovalDefaultValue();
 
-            viewModel.CheckListItemApproval =
-                ExitProcedureChecklistVM.GetCheckListItemApprovalDefaultValue();
+        //    var userNames = await getApproverNamesTask;
+        //    var userName = userNames.FirstOrDefault();
+        //    viewModel.ApproverUserName = AjaxComboBoxVM.GetDefaultValue(new AjaxComboBoxVM
+        //    {
+        //        Text = userName.Name,
+        //        Value = userName.ID
+        //    });
 
-            var userNames = await getApproverNamesTask;
-            var userName = userNames.FirstOrDefault();
-            viewModel.ApproverUserName = AjaxComboBoxVM.GetDefaultValue(new AjaxComboBoxVM
-            {
-                Text = userName.Name,
-                Value = userName.ID
-            });
+        //    return viewModel;
+        //}
 
-            return viewModel;
-        }
+        //private async Task<IEnumerable<ProfessionalMaster>> GetApproverNamesAsync(string position)
+        //{
+        //    return GetApproverNames(position);
+        //}
 
-        private async Task<IEnumerable<ProfessionalMaster>> GetApproverNamesAsync(string position)
-        {
-            return GetApproverNames(position);
-        }
+        //private <IEnumerable<ProfessionalMaster>> GetApproverNamesAsync(string position)
+        //{
+        //    return GetApproverNames(position);
+        //}
 
         public IEnumerable<ProfessionalMaster> GetApproverNames(string position)
         {

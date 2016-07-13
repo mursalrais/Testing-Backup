@@ -88,15 +88,6 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://eceos2.sharepoint.com/sites/ims/hr.
-        /// </summary>
-        public static string DefaultQAHRSiteUrl {
-            get {
-                return ResourceManager.GetString("DefaultQAHRSiteUrl", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to /List/PSA.
         /// </summary>
         public static string UrlPSA {
