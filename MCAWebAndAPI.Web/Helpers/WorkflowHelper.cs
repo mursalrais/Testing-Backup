@@ -11,7 +11,7 @@ namespace MCAWebAndAPI.Web.Helpers
 {
     public class WorkflowHelper
     {
-        private static IWorkflowService _service = new WorkflowService();
+        static IWorkflowService _service = new WorkflowService();
 
         public async static Task CreateTransactionWorkflowAsync(string workflowTransactionListName, string transactionLookupColumnName,
             int headerID)
@@ -24,8 +24,10 @@ namespace MCAWebAndAPI.Web.Helpers
         {
             var workflowItems = SessionManager.Get<IEnumerable<WorkflowItemVM>>("WorkflowItems");
             var siteUrl = SessionManager.Get<string>("SiteUrl");
-            _service.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));
-            _service.CreateTransactionWorkflow(workflowTransactionListName, transactionLookupColumnName, headerID, workflowItems);
+            var userLogin = SessionManager.Get<string>("UserLogin");
+
+            _service.SetSiteUrl(siteUrl);
+            _service.CreateTransactionWorkflow(workflowTransactionListName, transactionLookupColumnName, headerID, workflowItems, userLogin);
         }
 
         public async static Task SendApprovalRequestAsync(string workflowTransactionListName, string transactionLookupColumnName,

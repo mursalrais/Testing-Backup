@@ -20,12 +20,10 @@ namespace MCAWebAndAPI.Web.Controllers
     public class HRApplicationController : Controller
     {
         readonly IHRApplicationService _service;
-        
         public HRApplicationController()
         {
             _service = new HRApplicationService();
         }
-
         public ActionResult GetIDCardType(string nationality)
         {
             string[] result = { };
@@ -40,7 +38,6 @@ namespace MCAWebAndAPI.Web.Controllers
                     }
                 ), JsonRequestBehavior.AllowGet);
             }
-
             return Json(choice.Where(e => e.Value == "KITAS" || e.Value == "Passport").Select(
                    f => new {
                        Value = f.Key,

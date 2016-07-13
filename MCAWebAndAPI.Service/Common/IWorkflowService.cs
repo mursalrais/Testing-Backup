@@ -21,7 +21,7 @@ namespace MCAWebAndAPI.Service.Common
         Task<WorkflowRouterVM> GetWorkflowRouter(string listName, string requestor);
 
         void CreateTransactionWorkflow(string workflowTransactionListName, string transactionLookupColumnName, 
-            int headerID, IEnumerable<WorkflowItemVM> workflowItems);
+            int headerID, IEnumerable<WorkflowItemVM> workflowItems, string requestor = null);
 
         void SendApprovalRequest(string workflowTransactionListName, string transactionLookupColumnName, 
             int headerID, int level, string message);
