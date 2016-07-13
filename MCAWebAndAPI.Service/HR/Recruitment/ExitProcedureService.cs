@@ -211,6 +211,15 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.CheckListItemApproval =
                 ExitProcedureChecklistVM.GetCheckListItemApprovalDefaultValue();
 
+            if(viewModel.CheckListItemApproval.Text == "Pending Approval")
+            {
+                viewModel.ApprovalIndicator = "red";
+            }
+            if(viewModel.CheckListItemApproval.Text == "Approved")
+            {
+                viewModel.ApprovalIndicator = "green";
+            }
+            
             //var userNames = await getApproverNamesTask;
             var userName = approvernames.FirstOrDefault();
             viewModel.ApproverUserName = AjaxComboBoxVM.GetDefaultValue(new AjaxComboBoxVM
