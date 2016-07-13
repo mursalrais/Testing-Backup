@@ -87,10 +87,15 @@ namespace MCAWebAndAPI.Web.Controllers
                     _service.SendEmailValidation(mail, "" + siteUrl + "/Lists/Application/Interviewlistdata.aspx?ID="+ viewModel.Position+"" + " " + EmailResource.EmailShortlistData);
                 }
             }
-           
 
-            return JsonHelper.GenerateJsonSuccessResponse(
-                string.Format("{0}/{1}", siteUrl, UrlResource.Professional));
+
+            return RedirectToAction("Index",
+                "Success",
+                new
+                {
+                    errorMessage =
+                string.Format(MessageResource.SuccessCreateApplicationData, viewModel.Position)
+                });
         }
 
         public ActionResult ShortlistSendInvite(string siteurl = null, int? ID = null)
@@ -123,8 +128,13 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(
-                string.Format("{0}/{1}", siteUrl, UrlResource.Professional));
+            return RedirectToAction("Index",
+               "Success",
+               new
+               {
+                   errorMessage =
+               string.Format(MessageResource.SuccessCreateApplicationData, viewModel.Candidate)
+               });
         }
 
         public ActionResult ShortlistIntvinvite(string siteurl = null, int? position = null, string username = null, string useraccess = null)
@@ -157,8 +167,13 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(
-                string.Format("{0}/{1}", siteUrl, UrlResource.Professional));
+            return RedirectToAction("Index",
+               "Success",
+               new
+               {
+                   errorMessage =
+               string.Format(MessageResource.SuccessCreateApplicationData, viewModel.Position)
+               });
         }
 
         private IEnumerable<ShortlistDetailVM> BindShortlistDetails(FormCollection form, IEnumerable<ShortlistDetailVM> shortDetails)
