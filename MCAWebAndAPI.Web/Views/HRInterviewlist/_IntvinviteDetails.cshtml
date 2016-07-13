@@ -35,8 +35,7 @@
         columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
            "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].EditMode' value='#= EditMode #' />"
          );
-        columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
-           .Click("onDeleteKendoDetail")).Width(100);
+       
     })
     .Events(e =>
     {

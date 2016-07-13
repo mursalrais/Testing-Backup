@@ -63,6 +63,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             var viewModel = new ApplicationShortlistVM();
 
             viewModel.Position = FormatUtil.ConvertLookupToID(listItem, "vacantposition") + string.Empty;
+            viewModel.ActivePosition = ApplicationShortlistVM.GetPositionDefaultValue(
+                    new Model.ViewModel.Control.AjaxComboBoxVM
+                    {
+                        Text = Convert.ToString(viewModel.Position),
+                    });
             viewModel.Candidate = Convert.ToString(listItem["Title"]);
             viewModel.SendTo = Convert.ToString(listItem["personalemail"]);
 
@@ -121,7 +126,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 return viewModel;
 
             viewModel.ShortlistDetails = GetDetailShortlist(ID, useraccess);
-            //viewModel.ActivePosition.Value = Convert.ToInt32(position);
+            viewModel.ActivePosition.Value = Convert.ToInt32(position);
             viewModel.Position = Convert.ToString(position);
             viewModel.useraccess = Convert.ToString(useraccess);
 
@@ -409,8 +414,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     models.Add(ConvertToPositionsModel(item));
                 }
             }
-
-            models.Add(new PositionMaster() { ID = 0, PositionName = "-- Select --" });
 
             return models;
 

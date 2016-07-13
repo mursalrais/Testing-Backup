@@ -70,13 +70,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         };
 
         /// <summary>
-        /// positionrequested
-        /// </summary>
-        [DisplayName("PositionID")]
-        [UIHint("AjaxComboBox")]
-        public AjaxComboBoxVM PositionActiv { get; set; }
-
-        /// <summary>
         /// Title
         /// </summary>
         [DisplayName("Position")]

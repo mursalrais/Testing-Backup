@@ -226,6 +226,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 return viewModel;
 
             viewModel.ShortlistDetails = GetDetailInterviewlist(ID, useraccess);
+            viewModel.ActivePosition.Value = Convert.ToInt32(position);
             viewModel.Position = Convert.ToString(position);
             viewModel.useraccess = Convert.ToString(useraccess);
 

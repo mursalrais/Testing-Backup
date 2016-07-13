@@ -11,6 +11,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
     public class ShortlistDetailVM : Item
     {
+        [Editable(false)]
         public string Candidate { get; set; }
 
         public string Candidatemail { get; set; }
@@ -22,6 +23,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public IEnumerable<HttpPostedFileBase> Documents { get; set; } = new List<HttpPostedFileBase>();
 
         [DisplayName("Curriculum Vitae")]
+        [Editable(false)]
         public string DocumentUrl { get; set; }
 
         [DisplayName("Status")]

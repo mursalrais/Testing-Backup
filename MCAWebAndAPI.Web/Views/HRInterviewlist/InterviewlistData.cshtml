@@ -24,15 +24,6 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Position).Class("col-sm-2 control-label")
-                <div class="col-sm-8">
-                    <input id="vacant-position" class="form-control" value="" />
-                </div>
-            </div>
-        </div>
-
         <legend>Candidate list</legend>
         <div class="row">
             @Html.Partial("_IntvinviteDetails", Model.ShortlistDetails)
@@ -89,16 +80,6 @@
         };
 
         $(document).ready(function () {
-            $("#vacant-position").prop('readonly', 'true');
-            $("#vacant-position").prop('readonly', 'true');
-            var positionID = $("#Position").val();
-            $("#vacant-position").prop("value", positionID);
-
-            var url = "/HRDataMaster/GetPosition/" + positionID;
-            $.getJSON(url, function (data) {
-                $("#vacant-position").prop("value", data.PositionName);
-            })
-
         });
     </script>
 
