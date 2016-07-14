@@ -12,7 +12,7 @@
         columns.Bound(p => p.Candidate).ClientTemplate("#= Candidate #" +
         "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].Candidate' value='#= Candidate #' />");
         columns.Bound(p => p.DocumentUrl).ClientTemplate(
-        " <a href='#= DocumentUrl #'>get file</a>");
+        " <a readonly='readonly' href='#= DocumentUrl #' target='_parent'>get file</a>");
         columns.Bound(p => p.Status).ClientTemplate("#= Status.Text #" +
                           "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].Status.Text' value='#= Status.Text #' />"
                         )

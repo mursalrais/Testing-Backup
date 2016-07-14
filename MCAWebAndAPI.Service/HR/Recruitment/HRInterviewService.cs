@@ -362,7 +362,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
                 GetStat = Convert.ToString(item["applicationstatus"]),
                 Remarks = Convert.ToString(item["applicationremarks"]),
-                neednextintv = Convert.ToBoolean(item["neednextinterview"])
+                neednextintv = Convert.ToBoolean(item["neednextinterview"]),
             };
         }
 

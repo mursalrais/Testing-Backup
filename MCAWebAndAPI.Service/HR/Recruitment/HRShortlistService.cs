@@ -178,6 +178,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                </Eq>
          </Or>
       </And>
+
+
+
    </Where>
             </Query> 
               <ViewFields>
@@ -197,17 +200,23 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 caml = @"<View>  
             <Query> 
       <Where>
-          <And>
-             <Eq>
-                <FieldRef Name='manpowerrequisition' />
-                <Value Type='Lookup'>" + manPosition + @"</Value>
-             </Eq>
-                <Eq>
-                   <FieldRef Name='applicationstatus' />
-                   <Value Type='Text'>Shortlisted</Value>
-                </Eq>
-          </And>
-   </Where>
+            <And>
+                 <Eq>
+                    <FieldRef Name='manpowerrequisition' />
+                    <Value Type='Lookup'>" + manPosition + @"</Value>
+                 </Eq>
+                 <And>
+                    <Eq>
+                       <FieldRef Name='manpowerrequisition_x003a_Manpow' />
+                       <Value Type='Lookup'>Active</Value>
+                    </Eq>
+                    <Eq>
+                       <FieldRef Name='applicationstatus' />
+                       <Value Type='Text'>Shortlisted</Value>
+                    </Eq>
+                 </And>
+              </And>
+           </Where>
             </Query> 
               <ViewFields>
       <FieldRef Name='Title' />
@@ -346,7 +355,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             foreach (string mail in words)
             {
-                EmailUtil.Send(mail, "Interview Invitation", "<div><label>" + viewModel.EmailMessage + "</label></div>" + mailsubject);
+                EmailUtil.Send(mail, "Interview Invitation", viewModel.EmailMessage + mailsubject);
             }
         }
 

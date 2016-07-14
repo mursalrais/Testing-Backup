@@ -11,6 +11,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
     public class ShortlistDetailVM : Item
     {
+        public string SiteUrl { get; set; }
+
         [Editable(false)]
         public string Candidate { get; set; }
 

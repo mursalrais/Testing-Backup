@@ -17,6 +17,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         public IEnumerable<InterviewDetailVM> InterviewlistDetails { get; set; } = new List<InterviewDetailVM>();
 
+        public string SiteUrl { get; set; }
+
         /// <summary>
         /// position
         /// </summary>

@@ -72,22 +72,22 @@ namespace MCAWebAndAPI.Web.Controllers
 
             string[] words = viewModel.SendTo.Split(delimiterChars);
 
-
             if (viewModel.useraccess == "HR")
             {
                 foreach (string mail in words)
                 {
-                    _service.SendEmailValidation(mail, "" + siteUrl + "/Lists/Application/ShortlistREQ.aspx" + " " + EmailResource.EmailShortlistData);
+                    string bodymailHR = string.Format(EmailResource.EmailShortlistToRequestor, "" + siteUrl + "/Lists/Application/ShortlistREQ.aspx?ID=" + viewModel.Position);
+                    _service.SendEmailValidation(mail, bodymailHR);
                 }
             }
             else if (viewModel.useraccess == "REQ")
             {
                 foreach (string mail in words)
                 {
-                    _service.SendEmailValidation(mail, "" + siteUrl + "/Lists/Application/Interviewlistdata.aspx?ID="+ viewModel.Position+"" + " " + EmailResource.EmailShortlistData);
+                    string bodymailREQ = string.Format(EmailResource.EmailShortlistToHR, "" + siteUrl + "/Lists/Application/Interviewlistdata.aspx?ID=" + viewModel.Position);
+                    _service.SendEmailValidation(mail, bodymailREQ);
                 }
             }
-
 
             return RedirectToAction("Index",
                 "Success",
@@ -159,7 +159,7 @@ namespace MCAWebAndAPI.Web.Controllers
             try
             {
                 viewModel.ShortlistDetails = BindShortlistDetails(form, viewModel.ShortlistDetails);
-                _service.CreateShortlistInviteIntv(headerID, viewModel, EmailResource.EmailInterviewResult);
+                _service.CreateShortlistInviteIntv(headerID, viewModel, EmailResource.EmailShortlistToInterviewPanel);
             }
             catch (Exception e)
             {
