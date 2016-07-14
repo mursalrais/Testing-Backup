@@ -40,10 +40,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         IEnumerable<ProfessionalMaster> GetApproverNames(string position);
 
-        //void CreateExitProcedureChecklist(ExitProcedureChecklistVM exitProcedureChecklist);
-
-        //void UpdateExitProcedureChecklist(ExitProcedureChecklistVM exitProcedureChecklist);
-
-        //void DestroyExitProcedureChecklist(ExitProcedureChecklistVM exitProcedureChecklist);
+        Task CreateExitProcedureChecklistAsync(int? exitProcID, IEnumerable<ExitProcedureChecklistVM> exitProcedureChecklist);
     }
 }

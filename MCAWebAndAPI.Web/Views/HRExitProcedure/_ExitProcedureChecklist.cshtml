@@ -73,7 +73,7 @@
                        "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].Remarks' value='#= Remarks #' />"
                      );
 
-    columns.Bound(p => p.ApprovalIndicator).Template(@<div>@item.ApprovalIndicator</div>);
+    columns.Bound(p => p.ApprovalIndicator).Template(@<div style="width: 25px; height: 25px; background: red">@item.ApprovalIndicator</div>);
 
         columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
           "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ID' value='#= ID #' />"

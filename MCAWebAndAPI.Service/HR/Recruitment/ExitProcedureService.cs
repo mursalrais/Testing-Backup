@@ -13,6 +13,7 @@ using MCAWebAndAPI.Service.Resources;
 using System.Globalization;
 using MCAWebAndAPI.Model.ViewModel.Form.Common;
 using MCAWebAndAPI.Model.ViewModel.Control;
+using MCAWebAndAPI.Model.Common;
 
 
 namespace MCAWebAndAPI.Service.HR.Recruitment
@@ -24,7 +25,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         const string SP_EXP_LIST_NAME = "Exit Procedure";
         const string SP_EXP_CHECK_LIST_NAME = "Exit Procedure Checklist";
-        const string SP_EXP_DOC_LIST_NAME = "ExitProcedureDocuments";
+        const string SP_EXP_DOC_LIST_NAME = "Exit Procedure Documents";
         const string SP_WORKFLOW_LISTNAME = "Workflow Mapping Master";
         const string SP_PROMAS_LIST_NAME = "Professional Master";
         const string SP_POSMAS_LIST_NAME = "Position Master";
@@ -75,6 +76,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             if (ID == null)
             {
                 viewModel = GetWorkflowExitProcedure(listName, requestor);
+
+                //SessionManager.Set("ExitPrcedureChecklist", viewModel.ExitProcedureChecklist);
 
                 return viewModel;
             }
@@ -148,6 +151,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             var viewModel = new ExitProcedureChecklistVM();
             viewModel.ApproverPosition = FormatUtil.ConvertToInGridAjaxComboBox(item, "approverposition");
 
+            viewModel.IsDefault = Convert.ToString(item["isdefault"]);
+
             viewModel.ApproverUnit =
                 ExitProcedureChecklistVM.GetUnitDefaultValue(new InGridComboBoxVM
                 {
@@ -160,6 +165,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             var approvernames = GetApproverUserName(viewModel.ApproverPosition.Text, viewModel.ApproverUnit.Text);
 
             viewModel.Level = Convert.ToString(item["approverlevel"]);
+
+            viewModel.WorkflowType = Convert.ToString(item["workflowtype"]);
 
             if (viewModel.Level == "1")
             {
@@ -229,6 +236,62 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             });
 
             return viewModel;
+        }
+
+        public async Task CreateExitProcedureChecklistAsync(int? exitProcID, IEnumerable<ExitProcedureChecklistVM> exitProcedureChecklist)
+        {
+            CreateExitProcedureChecklist(exitProcID, exitProcedureChecklist);
+        }
+
+        public void CreateExitProcedureChecklist(int? exitProcID, IEnumerable<ExitProcedureChecklistVM> ExitProcedureChecklist)
+        {
+            foreach (var viewModel in ExitProcedureChecklist)
+            {
+                if (Item.CheckIfSkipped(viewModel))
+                    continue;
+                //if (Item.CheckIfDeleted(viewModel))
+                //{
+                //    try
+                //    {
+                //        SPConnector.DeleteListItem(SP_PPPIG_LIST_NAME, viewModel.ID, _siteUrl);
+
+                //    }
+                //    catch (Exception e)
+                //    {
+                //        logger.Error(e);
+                //        throw e;
+                //    }
+                //    continue;
+                //}
+                var updatedValue = new Dictionary<string, object>();
+
+                updatedValue.Add("item", viewModel.ItemExitProcedure);
+                updatedValue.Add("approverposition", new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.ApproverPosition.Value) });
+                updatedValue.Add("approvername", new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.ApproverUserName.Value) });
+                updatedValue.Add("checklistitemapproval", viewModel.CheckListItemApproval.Text);
+                updatedValue.Add("dateofapproval", viewModel.DateOfApproval.Value.ToLocalTime());
+                updatedValue.Add("remarks", viewModel.Remarks);
+                updatedValue.Add("requestorunit", viewModel.RequestorUnit);
+                updatedValue.Add("requestorposition", viewModel.RequestorPosition);
+                updatedValue.Add("approverlevel", viewModel.Level);
+                updatedValue.Add("approverunit", viewModel.ApproverUnit.Text);
+                updatedValue.Add("isdefault", viewModel.IsDefault);
+                updatedValue.Add("workflowtype", viewModel.WorkflowType);
+                updatedValue.Add("exitprocedure", new FieldLookupValue { LookupId = Convert.ToInt32(exitProcID) });
+
+                try
+                {
+                    if (Item.CheckIfUpdated(viewModel))
+                        SPConnector.UpdateListItem(SP_EXP_CHECK_LIST_NAME, viewModel.ID, updatedValue, _siteUrl);
+                    else
+                        SPConnector.AddListItem(SP_EXP_CHECK_LIST_NAME, updatedValue, _siteUrl);
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e.Message);
+                    throw new Exception(ErrorResource.SPInsertError);
+                }
+            }
         }
 
         //public async Task<ExitProcedureVM> GetWorkflowRouterExitProcedure(string listName, string requestor)

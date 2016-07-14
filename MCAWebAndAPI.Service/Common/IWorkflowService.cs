@@ -1,5 +1,6 @@
 ﻿using MCAWebAndAPI.Model.HR.DataMaster;
 using MCAWebAndAPI.Model.ViewModel.Form.Common;
+using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -22,6 +23,9 @@ namespace MCAWebAndAPI.Service.Common
 
         void CreateTransactionWorkflow(string workflowTransactionListName, string transactionLookupColumnName, 
             int headerID, IEnumerable<WorkflowItemVM> workflowItems, string requestor = null);
+
+        void CreateExitProcedureChecklistWorkflow(string workflowTransactionListName, string transactionLookupColumnName,
+            int exitProcID, IEnumerable<ExitProcedureChecklistVM> exitProcedureChecklist, string requestor = null);
 
         void SendApprovalRequest(string workflowTransactionListName, string transactionLookupColumnName, 
             int headerID, int level, string message);

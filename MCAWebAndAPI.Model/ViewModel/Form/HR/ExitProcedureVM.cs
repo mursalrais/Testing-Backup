@@ -148,5 +148,10 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         public string RequestorPosition { get; set; }
 
+        /// <summary>
+        /// Exit Procedure Status
+        /// </summary>
+        public string StatusForm { get; set; }
+
     }
 }

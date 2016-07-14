@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using MCAWebAndAPI.Model.HR.DataMaster;
 using MCAWebAndAPI.Model.ViewModel.Form.Common;
+using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
 using System.Threading.Tasks;
@@ -248,6 +249,14 @@ namespace MCAWebAndAPI.Service.Common
             }
         }
 
+        public void CreateExitProcedureChecklistWorkflow(string workflowTransactionListName, string transactionLookupColumnName, int exitProcID, IEnumerable<ExitProcedureChecklistVM> exitProcedureChecklist, string requestor = null)
+        {
+            foreach (var item in exitProcedureChecklist)
+            {
+                CreateExitProcedureWorkflowItem(workflowTransactionListName, transactionLookupColumnName, exitProcID, item, requestor);
+            }
+        }
+
         public void SendApprovalRequest(string workflowTransactionListName, 
             string transactionLookupColumnName, int headerID, int level, string message)
         {
@@ -276,6 +285,16 @@ namespace MCAWebAndAPI.Service.Common
             updatedValue.Add(transactionLookupColumnName, new FieldLookupValue { LookupId = headerID });
             updatedValue.Add("approverlevel", workflowItem.Level);
             updatedValue.Add("approver0", GetApproverUserLogin((int)workflowItem.ApproverUserName.Value));
+            updatedValue.Add("requestor0", requestor);
+            SPConnector.AddListItem(workflowTransactionListName, updatedValue, _siteUrl);
+        }
+
+        private void CreateExitProcedureWorkflowItem(string workflowTransactionListName, string transactionLookupColumnName, int exitProcID, ExitProcedureChecklistVM exiProcedureChecklist, string requestor = null)
+        {
+            var updatedValue = new Dictionary<string, object>();
+            updatedValue.Add(transactionLookupColumnName, new FieldLookupValue { LookupId = exitProcID });
+            updatedValue.Add("approverlevel", exiProcedureChecklist.Level);
+            updatedValue.Add("approver0", GetApproverUserLogin((int)exiProcedureChecklist.ApproverUserName.Value));
             updatedValue.Add("requestor0", requestor);
             SPConnector.AddListItem(workflowTransactionListName, updatedValue, _siteUrl);
         }

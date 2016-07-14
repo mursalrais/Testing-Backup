@@ -23,6 +23,9 @@ namespace MCAWebAndAPI.Web.Controllers
     {
         IExitProcedureService exitProcedureService;
 
+        const string SP_TRANSACTION_WORKFLOW_LIST_NAME = "Exit Procedure Workflow";
+        const string SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME = "exitprocedure";
+
         public HRExitProcedureController()
         {
             exitProcedureService = new ExitProcedureService();
@@ -39,16 +42,22 @@ namespace MCAWebAndAPI.Web.Controllers
             exitProcedureService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
-            //ViewBag.ListName = "Exit%20Procedure";
-
             ViewBag.ListName = "Exit Procedure";
 
             var listName = ViewBag.ListName;
 
             ViewBag.RequestorUserLogin = requestor;
-            
+
+            if (requestor != null)
+                SessionManager.Set("RequestorUserLogin", requestor);
+
             // Get blank ViewModel
             var viewModel = exitProcedureService.GetExitProcedure(null, siteUrl, requestor, listName);
+
+            SessionManager.Set("ExitProcedureChecklist", viewModel.ExitProcedureChecklist);
+            SessionManager.Set("WorkflowRouterListName", viewModel.ListName);
+            SessionManager.Set("WorkflowRouterRequestorUnit", viewModel.RequestorUnit);
+            SessionManager.Set("WorkflowRouterRequestorPosition", viewModel.RequestorPosition);
 
             return View("CreateExitProcedure", viewModel);
         }
@@ -90,8 +99,10 @@ namespace MCAWebAndAPI.Web.Controllers
             catch (Exception e)
             {
                 ErrorSignal.FromCurrentContext().Raise(e);
-                return RedirectToAction("Index", "Error");
+                return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
             }
+
+            var exitProcedureChecklist = viewModel.ExitProcedureChecklist;
 
             try
             {
@@ -102,6 +113,14 @@ namespace MCAWebAndAPI.Web.Controllers
                 ErrorSignal.FromCurrentContext().Raise(e);
                 return RedirectToAction("Index", "Error");
             }
+
+            if (viewModel.StatusForm == "Draft")
+            {
+                Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateExitProcedureWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
+                    SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)exitProcID);
+            }
+
+            Task createPerformancePlanDetailsTask = exitProcedureService.CreateExitProcedureChecklistAsync(exitProcID, viewModel.ExitProcedureChecklist);
 
             return RedirectToAction("Index",
                 "Success",

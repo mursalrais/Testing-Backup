@@ -48,13 +48,18 @@
     <div class="form-actions">
         <div class="row">
             <div class="col-md-12">
-                <button id="submit-button" class="btn btn-primary" type="submit">
+                <button id="" class="btn btn-primary" type="submit">
                     <i class="fa fa-save"></i>
-                    Submit
+                    Submit for Approval
+                </button>
+                <button id="submit-draft-initiate-button" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    Save As Draft
                 </button>
             </div>
         </div>
     </div>
+    
 
     
 }
@@ -67,6 +72,14 @@
         {
             $("#submit-button").click(function ()
             {
+                $("form").submit();
+            });
+        });
+
+        $(document).ready(function () {
+            $("#submit-draft-initiate-button").click(function () {
+                $("#StatusForm").val("Draft")
+                $("#ParentDiv").show();
                 $("form").submit();
             });
         });
