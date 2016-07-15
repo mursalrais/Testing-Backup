@@ -182,7 +182,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
                 e.Value == model.Value : e.Text == model.Text);
         }
 
-        
+        public string ApprovalIndicator { get; set; }
 
     }
 }

@@ -9,27 +9,27 @@
     .CreateAt(GridInsertRowPosition.Bottom))
     .Columns(columns =>
     {
-        columns.Bound(p => p.ItemExitProcedure).ClientTemplate("#= ItemExitProcedure #" +
-                           "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ItemExitProcedure' value='#= ItemExitProcedure #' />"
-                         );
+    columns.Bound(p => p.ItemExitProcedure).ClientTemplate("#= ItemExitProcedure #" +
+                       "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ItemExitProcedure' value='#= ItemExitProcedure #' />"
+                     );
 
-        columns.Bound(p => p.ApproverUnit).ClientTemplate("#= ApproverUnit.Text #" +
-            "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ApproverUnit.Text' value='#= ApproverUnit.Text #' />"
-            )
-            .EditorViewData(new
+    columns.Bound(p => p.ApproverUnit).ClientTemplate("#= ApproverUnit.Text #" +
+        "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ApproverUnit.Text' value='#= ApproverUnit.Text #' />"
+        )
+        .EditorViewData(new
+        {
+            BindTo = ExitProcedureChecklistVM.GetUnitOptions()
+        });
+
+    columns.Bound(p => p.ApproverPosition).ClientTemplate("#= ApproverPosition.Text #" +
+                      "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ApproverPosition.Value' value='#= ApproverPosition.Value #' />")
+            .EditorViewData(
+            new
             {
-                BindTo = ExitProcedureChecklistVM.GetUnitOptions()
-            });
-
-        columns.Bound(p => p.ApproverPosition).ClientTemplate("#= ApproverPosition.Text #" +
-                          "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ApproverPosition.Value' value='#= ApproverPosition.Value #' />")
-                .EditorViewData(
-                new
-                {
-                    DataTextField = "Text",
-                    DataValueField = "Value",
-                    ControllerName = "HRDataMaster",
-                    ActionName = "GetPositionsGrid"
+                DataTextField = "Text",
+                DataValueField = "Value",
+                ControllerName = "HRDataMaster",
+                ActionName = "GetPositionsGrid"
 
                     //DataTextField = "PositionName",
                     //DataValueField = "ID",
@@ -39,15 +39,15 @@
                     //Cascade = "ApproverUnit"
                 });
 
-        columns.Bound(p => p.ApproverUserName).ClientTemplate("#= ApproverUserName.Text #" +
-                          "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ApproverUserName.Value' value='#= ApproverUserName.Value #' />")
-                .EditorViewData(
-                new
-                {
-                    DataTextField = "Text",
-                    DataValueField = "Value",
-                    ControllerName = "HRDataMaster",
-                    ActionName = "GetProfessionalsGrid"
+    columns.Bound(p => p.ApproverUserName).ClientTemplate("#= ApproverUserName.Text #" +
+                      "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ApproverUserName.Value' value='#= ApproverUserName.Value #' />")
+            .EditorViewData(
+            new
+            {
+                DataTextField = "Text",
+                DataValueField = "Value",
+                ControllerName = "HRDataMaster",
+                ActionName = "GetProfessionalsGrid"
 
                     //DataTextField = "Name",
                     //DataValueField = "ID",
@@ -57,21 +57,23 @@
                     //Cascade = "ApproverPosition_Value"
                 });
 
-        columns.Bound(p => p.DateOfApproval).ClientTemplate("#= kendo.toString(DateOfApproval, 'MM/dd/yyyy') #" +
-            "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].DateOfApproval' value='#= DateOfApproval #' />"
-            );
+    columns.Bound(p => p.DateOfApproval).ClientTemplate("#= kendo.toString(DateOfApproval, 'MM/dd/yyyy') #" +
+        "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].DateOfApproval' value='#= DateOfApproval #' />"
+        );
 
-        columns.Bound(p => p.CheckListItemApproval).ClientTemplate("#= CheckListItemApproval.Text #" +
-            "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].CheckListItemApproval.Text' value='#= CheckListItemApproval.Text #' />"
-            )
-            .EditorViewData(new
-            {
-                BindTo = ExitProcedureChecklistVM.GetCheckListItemApproval()
-            });
+    columns.Bound(p => p.CheckListItemApproval).ClientTemplate("#= CheckListItemApproval.Text #" +
+        "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].CheckListItemApproval.Text' value='#= CheckListItemApproval.Text #' />"
+        )
+        .EditorViewData(new
+        {
+            BindTo = ExitProcedureChecklistVM.GetCheckListItemApproval()
+        });
 
-        columns.Bound(p => p.Remarks).ClientTemplate("#= Remarks #" +
-                           "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].Remarks' value='#= Remarks #' />"
-                         );
+    columns.Bound(p => p.Remarks).ClientTemplate("#= Remarks #" +
+                       "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].Remarks' value='#= Remarks #' />"
+                     );
+
+    columns.Bound(p => p.ApprovalIndicator).Template(@<div>@item.ApprovalIndicator</div>);
 
         columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
           "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ID' value='#= ID #' />"
@@ -84,6 +86,7 @@
         columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
             .Click("onDeleteKendoDetail")).Width(100);
     })
+    .Pageable()
     .Events(e =>
     {
         //e.Change("onChange");
@@ -99,9 +102,12 @@
                        model.Field(m => m.ApproverPosition).DefaultValue(ExitProcedureChecklistVM.GetPositionDefaultValue());
                        model.Field(m => m.ApproverUserName).DefaultValue(ExitProcedureChecklistVM.GetApproverUserNameDefaultValue());
                        model.Field(m => m.DateOfApproval).DefaultValue(DateTime.UtcNow);
+
                    })
                    .ServerOperation(false)
+                   .PageSize(10)
      )
+
     )
 
 
