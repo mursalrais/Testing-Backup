@@ -159,7 +159,21 @@ namespace MCAWebAndAPI.Web.Controllers
             try
             {
                 viewModel.ShortlistDetails = BindShortlistDetails(form, viewModel.ShortlistDetails);
-                _service.CreateShortlistInviteIntv(headerID, viewModel, EmailResource.EmailShortlistToInterviewPanel);
+                _service.CreateShortlistInviteIntv(headerID, viewModel);
+
+                foreach (var item in viewModel.ShortlistDetails)
+                {
+                    EmailUtil.Send(item.Candidatemail, "Interview Invitation for Position " + viewModel.PositionName + " (based on respective position)", string.Format(EmailResource.EmailInterviewToInterviewCandidate, viewModel.EmailMessage, _service.GetMailUrl(item.ID, "INTV")));
+                }
+
+                char[] delimiterChars = { ' ', ',', ';' };
+
+                string[] words = viewModel.InterviewerPanel.Split(delimiterChars);
+
+                foreach (string mail in words)
+                {
+                    EmailUtil.Send(mail, "Interview Invitation for Position " + viewModel.PositionName + " (based on respective position)", string.Format(EmailResource.EmailInterviewToInterviewPanel, viewModel.EmailMessage, string.Format(UrlResource.ShortlistEmailLinkREQ, siteUrl, viewModel.Position)));
+                }
             }
             catch (Exception e)
             {

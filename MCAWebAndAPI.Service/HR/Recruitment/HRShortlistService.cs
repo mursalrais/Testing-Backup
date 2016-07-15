@@ -327,7 +327,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             }
         }
 
-        public void CreateShortlistInviteIntv(int? headerID, ApplicationShortlistVM viewModel, string mailsubject)
+        public void CreateShortlistInviteIntv(int? headerID, ApplicationShortlistVM viewModel)
         {
             foreach (var list in viewModel.ShortlistDetails)
             {
@@ -345,17 +345,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 {
                     logger.Error(e.Message);
                     throw e;
-                }
-                    EmailUtil.Send(list.Candidatemail, "Interview Invitation", viewModel.EmailMessage + "   " + "" + GetMailUrl(viewModel.ID, "INTV") + mailsubject);
-            }
-
-            char[] delimiterChars = { ' ', ',', ';' };
-
-            string[] words = viewModel.InterviewerPanel.Split(delimiterChars);
-
-            foreach (string mail in words)
-            {
-                EmailUtil.Send(mail, "Interview Invitation", viewModel.EmailMessage + mailsubject);
+                }  
             }
         }
 

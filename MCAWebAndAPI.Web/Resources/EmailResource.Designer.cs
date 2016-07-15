@@ -88,6 +88,25 @@ namespace MCAWebAndAPI.Web.Resources {
         ///
         ///Thank you..
         /// </summary>
+        public static string EmailInterviewToInterviewCandidate {
+            get {
+                return ResourceManager.GetString("EmailInterviewToInterviewCandidate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dear Interview Panel,
+        ///
+        ///{0}
+        ///
+        ///This email is sent to you to notify that here is the latest list of shortlisted candidate. This list
+        ///
+        ///requires your action to review as well as to prepare the Interview process for further action.
+        ///
+        ///Kindly check the link as per below to go to direct page accordingly. Thank you.
+        ///
+        ///Link : {1}.
+        /// </summary>
         public static string EmailInterviewToInterviewPanel {
             get {
                 return ResourceManager.GetString("EmailInterviewToInterviewPanel", resourceCulture);
@@ -114,13 +133,15 @@ namespace MCAWebAndAPI.Web.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Dear Interview Panel,
         ///
+        ///{0}
+        ///
         ///This email is sent to you to notify that here is the latest list of shortlisted candidate. This list
         ///
         ///requires your action to review as well as to prepare the Interview process for further action.
         ///
         ///Kindly check the link as per below to go to direct page accordingly. Thank you.
         ///
-        ///Link : {0}.
+        ///Link : {1}.
         /// </summary>
         public static string EmailShortlistToInterviewPanel {
             get {
