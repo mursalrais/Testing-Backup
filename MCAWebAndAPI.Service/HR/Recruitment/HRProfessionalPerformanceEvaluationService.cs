@@ -68,6 +68,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 updatedValue.Add("individualgoalplanscore", viewModel.Score);
                 updatedValue.Add("individualgoalplantotalscore", viewModel.TotalScore);
                 updatedValue.Add("output", viewModel.Output);
+
                 try
                 {
                     if (Item.CheckIfUpdated(viewModel))
@@ -129,6 +130,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return new ProfessionalPerformanceEvaluationDetailVM
             {
                 ID = Convert.ToInt32(item["ID"]),
+                ProfessionalPerformanceEvaluationId = item["professionalperformanceevaluatio"] == null ? 0 :
+                        Convert.ToInt32((item["professionalperformanceevaluatio"] as FieldLookupValue).LookupValue),
                 Category = ProfessionalPerformanceEvaluationDetailVM.GetCategoryDefaultValue(
                     new Model.ViewModel.Control.InGridComboBoxVM
                     {

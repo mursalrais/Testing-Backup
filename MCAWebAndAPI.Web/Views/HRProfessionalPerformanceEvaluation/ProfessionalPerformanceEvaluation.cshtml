@@ -110,7 +110,7 @@
     </div>
 }
 
-@if (Model.Requestor != null && Model.StatusForm == "Created")
+@if (Model.Requestor != null && Model.StatusForm == "Draft")
 {
     <div class="form-actions">
         <div class="row">
@@ -155,7 +155,7 @@
         </div>
     </div>
 }
-@if (Model.Requestor != null || Model.StatusForm == "Approved")
+@if (Model.Requestor != null & Model.StatusForm == "Approved")
 {
     <div class="form-actions">
         <div class="row">

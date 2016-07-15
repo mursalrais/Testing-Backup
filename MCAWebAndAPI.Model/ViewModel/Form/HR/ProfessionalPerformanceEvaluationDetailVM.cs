@@ -28,7 +28,13 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [Range(0, 5, ErrorMessage = "Only 0-5")]
         public int TotalScore { get; set; }
 
+        [UIHint("Int32")]
+        [Range(0, 5, ErrorMessage = "Only 0-5")]
+        public int OverallTotalScore { get; set; }
+
         [UIHint("TextArea")]
         public string Output { get; set; }
+
+        public int? ProfessionalPerformanceEvaluationId { get; set; }
     }
 }

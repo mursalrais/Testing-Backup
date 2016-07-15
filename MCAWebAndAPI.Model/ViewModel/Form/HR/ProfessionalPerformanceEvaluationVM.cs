@@ -15,5 +15,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public string StatusForm { get; set; }
 
         public string Requestor { get; set; }
+
+        public int OverallTotalScore { get; set; }
     }
 }

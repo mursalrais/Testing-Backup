@@ -89,8 +89,8 @@
         }
 
         function getProfessionalPerformancePlanDetail(dataItem) {
+            dataItem.set('TotalScore', (dataItem.ActualWeight / 100) * dataItem.Score);
             var data = $("#ProfessionalPerformanceEvaluationDetails").data("kendoGrid").dataSource.data();
-            dataItem.set('TotalScore', (dataItem.ActualWeight/100) * dataItem.Score);
             return data.indexOf(dataItem);
         }
 
