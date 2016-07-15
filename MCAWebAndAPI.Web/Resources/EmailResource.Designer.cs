@@ -79,11 +79,18 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;https://eceos2.sharepoint.com/sites/ims/hr/Lists/Professional%20Master/DispForm_Custom.aspx?ID=3&apos;.
+        ///   Looks up a localized string similar to Dear Interview Panel,
+        ///
+        ///This email is sent to you to notify that here is the latest result of previous Interview that requires for the next interview. 
+        ///
+        ///To view the detail, please click following link: 
+        ///{0}
+        ///
+        ///Thank you..
         /// </summary>
-        public static string EmailCandidateShortlist {
+        public static string EmailInterviewToInterviewPanel {
             get {
-                return ResourceManager.GetString("EmailCandidateShortlist", resourceCulture);
+                return ResourceManager.GetString("EmailInterviewToInterviewPanel", resourceCulture);
             }
         }
         

@@ -61,6 +61,15 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0}/Lists/Application/inputInterviewResultDetail.aspx?ID={1}.
+        /// </summary>
+        public static string AddInterviewInvitation {
+            get {
+                return ResourceManager.GetString("AddInterviewInvitation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lists/Application.
         /// </summary>
         public static string ApplicationData {
@@ -84,6 +93,15 @@ namespace MCAWebAndAPI.Service.Resources {
         public static string ExitProcedureDocumentByID {
             get {
                 return ResourceManager.GetString("ExitProcedureDocumentByID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}/Lists/Application/Interviewlistdata.aspx?ID={1}.
+        /// </summary>
+        public static string InterviewDataList {
+            get {
+                return ResourceManager.GetString("InterviewDataList", resourceCulture);
             }
         }
         
@@ -165,6 +183,42 @@ namespace MCAWebAndAPI.Service.Resources {
         public static string PSAManagementDocumentByID {
             get {
                 return ResourceManager.GetString("PSAManagementDocumentByID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}/Lists/Application/InputInterviewResult.aspx?ID={1}.
+        /// </summary>
+        public static string ShortlistCandidateUrl {
+            get {
+                return ResourceManager.GetString("ShortlistCandidateUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}/Lists/Application/ShortlistREQ.aspx?ID={1}.
+        /// </summary>
+        public static string ShortlistEmailLinkHR {
+            get {
+                return ResourceManager.GetString("ShortlistEmailLinkHR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}/Lists/Professional%20Master/DispForm_Custom.aspx?ID={1}.
+        /// </summary>
+        public static string ShortlistEmailLinkInterview {
+            get {
+                return ResourceManager.GetString("ShortlistEmailLinkInterview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}/Lists/Application/Interviewlistdata.aspx?ID={1}.
+        /// </summary>
+        public static string ShortlistEmailLinkREQ {
+            get {
+                return ResourceManager.GetString("ShortlistEmailLinkREQ", resourceCulture);
             }
         }
     }

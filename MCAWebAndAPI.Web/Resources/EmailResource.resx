@@ -129,8 +129,15 @@ Regards,
 MCA Indonesia
 Recruitment Team</value>
   </data>
-  <data name="EmailCandidateShortlist" xml:space="preserve">
-    <value>'https://eceos2.sharepoint.com/sites/ims/hr/Lists/Professional%20Master/DispForm_Custom.aspx?ID=3'</value>
+  <data name="EmailInterviewToInterviewPanel" xml:space="preserve">
+    <value>Dear Interview Panel,
+
+This email is sent to you to notify that here is the latest result of previous Interview that requires for the next interview. 
+
+To view the detail, please click following link: 
+{0}
+
+Thank you.</value>
   </data>
   <data name="EmailShortlistToHR" xml:space="preserve">
     <value>Dear HR Team,

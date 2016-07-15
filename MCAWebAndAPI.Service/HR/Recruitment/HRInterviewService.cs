@@ -52,14 +52,12 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         private ApplicationShortlistVM ConvertToResultInterviewDataVM(ListItem listItem)
         {
             var viewModel = new ApplicationShortlistVM();
-
             viewModel.ID = Convert.ToInt32(listItem["ID"]);
             viewModel.Position = FormatUtil.ConvertLookupToID(listItem, "vacantposition") + string.Empty;
             viewModel.OtherPosition.Value = FormatUtil.ConvertLookupToID(listItem, "recommendedforposition");
             viewModel.Candidate = Convert.ToString(listItem["Title"]);
             viewModel.SendTo = Convert.ToString(listItem["personalemail"]);
-
-
+            viewModel.InterviewerUrl = string.Format(UrlResource.AddInterviewInvitation, _siteUrl, Convert.ToInt32(listItem["ID"]));
             // Convert Details
             viewModel.InterviewlistDetails = GetInputInterviewResult(viewModel.ID);
             return viewModel;
@@ -73,7 +71,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             var listItemdt = SPConnector.GetListItem(SP_APPDATA_LIST_NAME, ID, _siteUrl);
             viewModel = ConvertToResultInterviewDataVM(listItemdt);
-            
             viewModel.InterviewlistDetails = GetInputInterviewResult(viewModel.ID);
 
             viewModel.RecommendedForPosition.Text = GetLastResult(viewModel.ID).ToString();
@@ -353,6 +350,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 Candidate = Convert.ToString(item["Title"]),
                 Candidatemail = Convert.ToString(item["personalemail"]),
                 ID = Convert.ToInt32(item["ID"]),
+                CandidateUrl = GetCandidateUrl(Convert.ToInt32(item["ID"])),
                 DocumentUrl = GetDocumentUrl(Convert.ToInt32(item["ID"])),
                 Status = ShortlistDetailVM.GetStatusDefaultValue(
                     new Model.ViewModel.Control.AjaxComboBoxVM
@@ -367,6 +365,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         }
 
         private string GetDocumentUrl(int? iD)
+        {
+            return string.Format(UrlResource.ApplicationDocumentByID, _siteUrl, iD);
+        }
+
+        private string GetCandidateUrl(int? iD)
         {
             return string.Format(UrlResource.ApplicationDocumentByID, _siteUrl, iD);
         }

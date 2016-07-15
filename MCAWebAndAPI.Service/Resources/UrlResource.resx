@@ -156,4 +156,22 @@
   <data name="ExitProcedureDocumentByID" xml:space="preserve">
     <value>{0}/ExitProcedureDocuments/Forms/AllItems.aspx#InplviewHashf78f203c-f7a1-4179-9fbc-868e50a402cf=FilterField1%3Dexitprocedureid-FilterValue1%3D{1}</value>
   </data>
+  <data name="AddInterviewInvitation" xml:space="preserve">
+    <value>{0}/Lists/Application/inputInterviewResultDetail.aspx?ID={1}</value>
+  </data>
+  <data name="InterviewDataList" xml:space="preserve">
+    <value>{0}/Lists/Application/Interviewlistdata.aspx?ID={1}</value>
+  </data>
+  <data name="ShortlistCandidateUrl" xml:space="preserve">
+    <value>{0}/Lists/Application/InputInterviewResult.aspx?ID={1}</value>
+  </data>
+  <data name="ShortlistEmailLinkHR" xml:space="preserve">
+    <value>{0}/Lists/Application/ShortlistREQ.aspx?ID={1}</value>
+  </data>
+  <data name="ShortlistEmailLinkInterview" xml:space="preserve">
+    <value>{0}/Lists/Professional%20Master/DispForm_Custom.aspx?ID={1}</value>
+  </data>
+  <data name="ShortlistEmailLinkREQ" xml:space="preserve">
+    <value>{0}/Lists/Application/Interviewlistdata.aspx?ID={1}</value>
+  </data>
 </root>

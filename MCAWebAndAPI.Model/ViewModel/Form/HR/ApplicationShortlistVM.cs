@@ -32,6 +32,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// </summary>
         public string InterviewerPanel { get; set; }
 
+        public string InterviewerUrl { get; set; }
+
         [UIHint("TextArea")]
         public string InterviewSummary { get; set; }
 
@@ -70,6 +72,13 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
                 "Decline to Join"
             },
         };
+
+        /// <summary>
+        /// Title
+        /// </summary>
+        [DisplayName("Position")]
+        [Required]
+        public string PositionName { get; set; }
 
         /// <summary>
         /// Title

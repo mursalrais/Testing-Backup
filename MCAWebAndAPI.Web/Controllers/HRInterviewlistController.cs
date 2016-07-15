@@ -104,35 +104,30 @@ namespace MCAWebAndAPI.Web.Controllers
 
             try
             {
-                foreach (var list in viewModel.ShortlistDetails)
+                char[] delimiterChars = { ' ', ',', ';' };
+
+                string[] words = viewModel.InterviewerPanel.Split(delimiterChars);
+
+                foreach (string mail in words)
                 {
-                    EmailUtil.Send(list.Candidatemail, "Interview Result", "" + siteUrl + "/Lists/Professional%20Master/DispForm_Custom.aspx?ID=" + viewModel.ID+"" + EmailResource.EmailCandidateShortlist);
+                    if (mail != "")
+                    {
+                        EmailUtil.Send(mail, "Next Process Interview for position " + viewModel.PositionName + " (based on respective position)", string.Format(EmailResource.EmailInterviewToInterviewPanel, string.Format(UrlResource.InterviewDataList, siteUrl, viewModel.Position)));
+                    }
                 }
+
             }
             catch (Exception e)
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
-
-            char[] delimiterChars = { ' ', ',', ';' };
-
-            string[] words = viewModel.InterviewerPanel.Split(delimiterChars);
-
-            foreach (string mail in words)
-            {
-                if (mail != "")
-                {
-                    _service.SendEmailValidation(mail, "http://mcaims-dev.azurewebsites.net/HRInterviewlist/InterviewlistData?siteUrl=https://eceos2.sharepoint.com/sites/ims/hr&useraccess=REQ&position=" + viewModel.Position + "" + EmailResource.EmailShortlistToInterviewPanel);
-                }
-            }
-               
+          
             return RedirectToAction("Index",
                "Success",
                new
                {
-                   errorMessage =
-               string.Format(MessageResource.SuccessCreateApplicationData, viewModel.Candidate)
+                   errorMessage = string.Format(MessageResource.SuccessCreateApplicationData, viewModel.Candidate)
                });
         }
 

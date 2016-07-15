@@ -9,7 +9,7 @@
     .CreateAt(GridInsertRowPosition.Bottom))
     .Columns(columns =>
     {
-        columns.Bound(p => p.Candidate).ClientTemplate("<a readonly='readonly' href='https://eceos2.sharepoint.com/sites/mca-dev/hr/Lists/Application/InputInterviewResult.aspx?ID=#= ID #' target='_parent'>#= Candidate #</a>" +
+        columns.Bound(p => p.Candidate).ClientTemplate("<a readonly='readonly' href='#= CandidateUrl #' target='_parent'>#= Candidate #</a>" +
         "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].Candidate' value='#= Candidate #' />");
 
         columns.Bound(p => p.DocumentUrl).ClientTemplate("<a href='#= DocumentUrl #'>get file</a>");
@@ -17,8 +17,7 @@
         columns.Bound(p => p.GetStat).ClientTemplate("#= GetStat #" +
         "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].GetStat' value='#= GetStat #' />");
 
-        columns.Bound(p => p.neednextintv).ClientTemplate("#= neednextintv ? 'Yes' : 'No' #" +
-        "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].neednexttext' value='#= neednexttext #' />");
+        columns.Bound(p => p.neednextintv).ClientTemplate("<input type='' id='ShortlistDetails[#= GetDetailShortlist(data)#].neednexttext' name='ShortlistDetails[#= GetDetailShortlist(data)#].neednexttext' value='#= neednextintv ? 'Yes' : 'No' #' style='width: 20px; border: none; background-color: transparent' />");
 
         columns.Bound(p => p.Remarks).ClientTemplate("#= Remarks #" +
         "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].Remarks' value='#= Remarks #' />");
@@ -63,6 +62,59 @@
     function onDataBoundDependentDetails(e) {
         var grid = $("#ShortlistDetails").data("kendoGrid");
         hideDeletedRowKendoDetail(grid);
+        debugger;
+
+        var data = this._data;
+
+        for (var i = 0; i < this._data.length; i++) {
+            var dataItem = data[i];
+            var status = dataItem.GetStat;
+            if (status == "Shortlisted") {
+                //$("ShortlistDetails[" + i + "].neednexttext").addClass("hidden");
+                //dataItem.set("neednextintv", "");
+            }
+            //var tr = $("#grid").find("[data-uid='" + dataItem.uid + "']");
+            // use the table row (tr) and data item (dataItem)
+        }
+    }
+
+
+    function onChangeKendoDetail(e) {
+        var container = e.container;
+        var tr = container.closest('tr');
+        var data = this.dataItem(tr); //get the row data so it can be referred later
+        // 1 is Item.Mode.UPDATED
+        var day = data.CmpDate.getDay();
+        var start = data.StartTime.getHours();
+        var finish = data.FinishTime.getHours();
+        var range;
+        var rowgrid = $("#CompensatoryDetails").data("kendoGrid").tbody.find("tr");
+        var i = -1
+        var j = -1
+        var tr = container.closest('tr');
+
+        rowgrid.each(function (e) {
+            i++;
+            var xdate = $("#Dateid" + i).val();
+            rowgrid.each(function (e) {
+                j++;
+                var ydate = $("#Dateid" + i).val();
+                if (i !== j) {
+                    if (xdate == ydate) {
+                        alert("date you have chosen already exists")
+                    }
+                }
+            });
+        });
+
+        if (start < finish) {
+            range = finish - start
+            data.set("CmpTotalHours", range);
+            data.CmpTotalHours = range;
+            data.set("TotalDay", range / 24)
+        }
+
+        data.set("EditMode", 1);
     }
 </script>
 

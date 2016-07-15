@@ -346,7 +346,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     logger.Error(e.Message);
                     throw e;
                 }
-                EmailUtil.Send(list.Candidatemail, "Interview Invitation", viewModel.EmailMessage + "   " + "" + _siteUrl + "/Lists/Professional%20Master/DispForm_Custom.aspx?ID=" + viewModel.ID + "" + mailsubject);
+                    EmailUtil.Send(list.Candidatemail, "Interview Invitation", viewModel.EmailMessage + "   " + "" + GetMailUrl(viewModel.ID, "INTV") + mailsubject);
             }
 
             char[] delimiterChars = { ' ', ',', ';' };
@@ -393,7 +393,27 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             }
         }
 
+        public string GetMailUrl(int?ID, string User)
+        {
+            string Url = "";
+
+            if (User == "HR")
+            {
+               Url = string.Format(UrlResource.ShortlistEmailLinkHR, _siteUrl, ID);
+            }
+            else if(User == "REQ")
+                    {
+                Url = string.Format(UrlResource.ShortlistEmailLinkREQ, _siteUrl, ID);
+            }
+            else if (User == "INTV")
+            {
+                Url = string.Format(UrlResource.ShortlistEmailLinkInterview, _siteUrl, ID);
+            }
+            return Url;
+        }
+
         public IEnumerable<PositionMaster> GetPositions()
+
         {
             var caml = @"<View>  
                     <Query> 

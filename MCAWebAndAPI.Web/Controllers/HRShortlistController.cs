@@ -76,7 +76,7 @@ namespace MCAWebAndAPI.Web.Controllers
             {
                 foreach (string mail in words)
                 {
-                    string bodymailHR = string.Format(EmailResource.EmailShortlistToRequestor, "" + siteUrl + "/Lists/Application/ShortlistREQ.aspx?ID=" + viewModel.Position);
+                    string bodymailHR = string.Format(EmailResource.EmailShortlistToRequestor, _service.GetMailUrl(Convert.ToInt32(viewModel.Position), viewModel.useraccess));
                     _service.SendEmailValidation(mail, bodymailHR);
                 }
             }
@@ -84,7 +84,7 @@ namespace MCAWebAndAPI.Web.Controllers
             {
                 foreach (string mail in words)
                 {
-                    string bodymailREQ = string.Format(EmailResource.EmailShortlistToHR, "" + siteUrl + "/Lists/Application/Interviewlistdata.aspx?ID=" + viewModel.Position);
+                    string bodymailREQ = string.Format(EmailResource.EmailShortlistToHR, _service.GetMailUrl(Convert.ToInt32(viewModel.Position), viewModel.useraccess));
                     _service.SendEmailValidation(mail, bodymailREQ);
                 }
             }

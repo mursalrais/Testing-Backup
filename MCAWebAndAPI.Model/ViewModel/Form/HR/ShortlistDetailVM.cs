@@ -24,13 +24,16 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [Required]
         public IEnumerable<HttpPostedFileBase> Documents { get; set; } = new List<HttpPostedFileBase>();
 
-        [DisplayName("Curriculum Vitae")]
         [Editable(false)]
         public string DocumentUrl { get; set; }
+
+        [Editable(false)]
+        public string CandidateUrl { get; set; }
 
         [DisplayName("Status")]
         public string GetStat { get; set; }
 
+        [DisplayName("Need next interview")]
         public Boolean neednextintv { get; set; }
 
         [DisplayName("Need next interview")]
