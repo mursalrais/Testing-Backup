@@ -273,6 +273,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                          </Query> 
                        <ViewFields>
                           <FieldRef Name='Title' />
+                          <FieldRef Name='lastname' />
                           <FieldRef Name='ID' />
                           <FieldRef Name='applicationstatus' />
                           <FieldRef Name='applicationremarks' />
@@ -290,7 +291,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                                   <And>
                                      <Eq>
                                         <FieldRef Name='manpowerrequisition' />
-                                        <Value Type='Lookup'>"+ Position +@"</Value>
+                                        <Value Type='Lookup'>"+ Position + @"</Value>
                                      </Eq>
                                      <And>
                                         <Eq>
@@ -313,6 +314,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                          </Query> 
                        <ViewFields>
                           <FieldRef Name='Title' />
+                          <FieldRef Name='lastname' />
                           <FieldRef Name='ID' />
                           <FieldRef Name='applicationstatus' />
                           <FieldRef Name='applicationremarks' />
@@ -347,7 +349,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             return new ShortlistDetailVM
             {
-                Candidate = Convert.ToString(item["Title"]),
+                Candidate = Convert.ToString(item["Title"]) + " " + Convert.ToString(item["lastname"]),
                 Candidatemail = Convert.ToString(item["personalemail"]),
                 ID = Convert.ToInt32(item["ID"]),
                 CandidateUrl = GetCandidateUrl(Convert.ToInt32(item["ID"])),
@@ -389,7 +391,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             var createdValue = new Dictionary<string, object>();
             
-                createdValue.Add("Title", viewModel.Candidate );
                 createdValue.Add("applicationremarks", viewModel.Remarks);
                 createdValue.Add("applicationstatus", viewModel.RecommendedForPosition.Value);
                 createdValue.Add("recommendedforposition", viewModel.OtherPosition.Value);

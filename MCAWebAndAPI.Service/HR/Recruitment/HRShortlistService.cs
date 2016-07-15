@@ -185,6 +185,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             </Query> 
               <ViewFields>
       <FieldRef Name='Title' />
+      <FieldRef Name='lastname' />
       <FieldRef Name='ID' />
       <FieldRef Name='applicationstatus' />
       <FieldRef Name='applicationremarks' />
@@ -220,6 +221,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             </Query> 
               <ViewFields>
       <FieldRef Name='Title' />
+      <FieldRef Name='lastname' />
       <FieldRef Name='ID' />
       <FieldRef Name='applicationstatus' />
       <FieldRef Name='applicationremarks' />
@@ -254,7 +256,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             return new ShortlistDetailVM
             {
-                Candidate = Convert.ToString(item["Title"]),
+                Candidate = Convert.ToString(item["Title"]) + " " + Convert.ToString(item["lastname"]),
                 Candidatemail = Convert.ToString(item["personalemail"]),
                 ID = Convert.ToInt32(item["ID"]),
                 DocumentUrl = GetDocumentUrl(Convert.ToInt32(item["ID"])),
@@ -273,7 +275,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         private string GetDocumentUrl(int? iD)
         {
-            return string.Format(UrlResource.ApplicationDocumentByID, _siteUrl, iD);
+            return string.Format(UrlResource.CVDocumentByID, _siteUrl, iD);
         }
 
         public IEnumerable<ApplicationShortlistVM> GetShortlists()
@@ -309,7 +311,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 }
 
                 var updatedValue = new Dictionary<string, object>();
-                updatedValue.Add("Title", viewModel.Candidate);
                 updatedValue.Add("applicationstatus", viewModel.Status.Text);
                 updatedValue.Add("applicationremarks", viewModel.Remarks);
 
@@ -331,7 +332,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             foreach (var list in viewModel.ShortlistDetails)
             {
                 var updatedValue = new Dictionary<string, object>();
-                updatedValue.Add("Title", list.Candidate);
                 updatedValue.Add("emailfrom", list.Candidatemail);
                 updatedValue.Add("emailto", viewModel.SendTo);
                 updatedValue.Add("emailmessage", viewModel.EmailMessage);

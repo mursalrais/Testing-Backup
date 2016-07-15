@@ -88,6 +88,15 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0}/Application%20Documents/Forms/AllItems.aspx#InplviewHash4adbc69d-4587-40ad-8645-58b419984117=FilterField1%3Dapplication%255Fx003a%255FID-FilterValue1%3D{1}.
+        /// </summary>
+        public static string CVDocumentByID {
+            get {
+                return ResourceManager.GetString("CVDocumentByID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0}/ExitProcedureDocuments/Forms/AllItems.aspx#InplviewHashf78f203c-f7a1-4179-9fbc-868e50a402cf=FilterField1%3Dexitprocedureid-FilterValue1%3D{1}.
         /// </summary>
         public static string ExitProcedureDocumentByID {
