@@ -162,7 +162,7 @@
   <data name="InterviewDataList" xml:space="preserve">
     <value>{0}/Lists/Application/Interviewlistdata.aspx?ID={1}</value>
   </data>
-  <data name="ShortlistCandidateUrl" xml:space="preserve">
+  <data name="InterviewInputResult" xml:space="preserve">
     <value>{0}/Lists/Application/InputInterviewResult.aspx?ID={1}</value>
   </data>
   <data name="ShortlistEmailLinkHR" xml:space="preserve">

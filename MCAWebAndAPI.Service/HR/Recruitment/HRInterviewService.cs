@@ -368,12 +368,12 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         private string GetDocumentUrl(int? iD)
         {
-            return string.Format(UrlResource.ApplicationDocumentByID, _siteUrl, iD);
+            return string.Format(UrlResource.CVDocumentByID, _siteUrl, iD);
         }
 
         private string GetCandidateUrl(int? iD)
         {
-            return string.Format(UrlResource.ApplicationDocumentByID, _siteUrl, iD);
+            return string.Format(UrlResource.InterviewInputResult, _siteUrl, iD);
         }
 
         public IEnumerable<ApplicationShortlistVM> GetInterviewlists()
