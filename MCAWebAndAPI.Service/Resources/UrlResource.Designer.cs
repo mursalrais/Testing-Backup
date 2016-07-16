@@ -115,11 +115,20 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}/Lists/Application/Interviewlist.aspx?ID={1}.
+        ///   Looks up a localized string similar to {0}/Lists/Application/InputInterviewResult.aspx?ID={1}.
         /// </summary>
         public static string InterviewInputResult {
             get {
                 return ResourceManager.GetString("InterviewInputResult", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}/Lists/Application/Interviewlist.aspx?ID={1}.
+        /// </summary>
+        public static string InterviewPanelList {
+            get {
+                return ResourceManager.GetString("InterviewPanelList", resourceCulture);
             }
         }
         

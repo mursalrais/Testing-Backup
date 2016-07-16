@@ -163,7 +163,7 @@
     <value>{0}/Lists/Application/Interviewlistdata.aspx?ID={1}</value>
   </data>
   <data name="InterviewInputResult" xml:space="preserve">
-    <value>{0}/Lists/Application/Interviewlist.aspx?ID={1}</value>
+    <value>{0}/Lists/Application/InputInterviewResult.aspx?ID={1}</value>
   </data>
   <data name="ShortlistEmailLinkHR" xml:space="preserve">
     <value>{0}/Lists/Application/ShortlistREQ.aspx?ID={1}</value>
@@ -176,5 +176,8 @@
   </data>
   <data name="CVDocumentByID" xml:space="preserve">
     <value>{0}/Application%20Documents/Forms/AllItems.aspx#InplviewHash4adbc69d-4587-40ad-8645-58b419984117=FilterField1%3Dapplication%255Fx003a%255FID-FilterValue1%3D{1}</value>
+  </data>
+  <data name="InterviewPanelList" xml:space="preserve">
+    <value>{0}/Lists/Application/Interviewlist.aspx?ID={1}</value>
   </data>
 </root>

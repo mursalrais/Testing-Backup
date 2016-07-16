@@ -112,7 +112,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 {
                     if (mail != "")
                     {
-                        string link = string.Format(UrlResource.InterviewInputResult, siteUrl, viewModel.Position);
+                        string link = string.Format(UrlResource.InterviewPanelList, siteUrl, viewModel.Position);
 
                         string mailbody = string.Format(EmailResource.EmailInterviewToInterviewPanel, viewModel.EmailMessage, link);
 
