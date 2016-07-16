@@ -3,7 +3,7 @@
 @model IEnumerable<ShortlistDetailVM>
 
 <div class="col-xs-12">
-    @(Html.Kendo().Grid(Model)
+    @(Html.Kendo().Grid(Model)  
     .Name("ShortlistDetails")
     .Editable(editable => editable.Mode(GridEditMode.InCell)
     .CreateAt(GridInsertRowPosition.Bottom))
@@ -78,44 +78,6 @@
         }
     }
 
-
-    function onChangeKendoDetail(e) {
-        var container = e.container;
-        var tr = container.closest('tr');
-        var data = this.dataItem(tr); //get the row data so it can be referred later
-        // 1 is Item.Mode.UPDATED
-        var day = data.CmpDate.getDay();
-        var start = data.StartTime.getHours();
-        var finish = data.FinishTime.getHours();
-        var range;
-        var rowgrid = $("#CompensatoryDetails").data("kendoGrid").tbody.find("tr");
-        var i = -1
-        var j = -1
-        var tr = container.closest('tr');
-
-        rowgrid.each(function (e) {
-            i++;
-            var xdate = $("#Dateid" + i).val();
-            rowgrid.each(function (e) {
-                j++;
-                var ydate = $("#Dateid" + i).val();
-                if (i !== j) {
-                    if (xdate == ydate) {
-                        alert("date you have chosen already exists")
-                    }
-                }
-            });
-        });
-
-        if (start < finish) {
-            range = finish - start
-            data.set("CmpTotalHours", range);
-            data.CmpTotalHours = range;
-            data.set("TotalDay", range / 24)
-        }
-
-        data.set("EditMode", 1);
-    }
 </script>
 
 

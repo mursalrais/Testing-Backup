@@ -61,7 +61,7 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}/Lists/Application/inputInterviewResultDetail.aspx?ID={1}.
+        ///   Looks up a localized string similar to {0}/Lists/Application/InputInterviewResultDetail.aspx?ID={1}.
         /// </summary>
         public static string AddInterviewInvitation {
             get {
@@ -106,7 +106,7 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}/Lists/Application/Interviewlistdata.aspx?ID={1}.
+        ///   Looks up a localized string similar to {0}/Lists/Application/Interviewlistdata.aspx?POSID={1}.
         /// </summary>
         public static string InterviewDataList {
             get {
@@ -124,7 +124,7 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}/Lists/Application/Interviewlist.aspx?ID={1}.
+        ///   Looks up a localized string similar to {0}/Lists/Application/Interviewlist.aspx?POSID={1}.
         /// </summary>
         public static string InterviewPanelList {
             get {
@@ -214,7 +214,7 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}/Lists/Application/ShortlistREQ.aspx?ID={1}.
+        ///   Looks up a localized string similar to {0}/Lists/Application/ShortlistREQ.aspx?POSID={1}.
         /// </summary>
         public static string ShortlistEmailLinkHR {
             get {
@@ -232,11 +232,20 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}/Lists/Application/Interviewlistdata.aspx?ID={1}.
+        ///   Looks up a localized string similar to {0}/Lists/Application/Interviewlistdata.aspx?POSID={1}.
         /// </summary>
         public static string ShortlistEmailLinkREQ {
             get {
                 return ResourceManager.GetString("ShortlistEmailLinkREQ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string ShortlistInterviewPanel {
+            get {
+                return ResourceManager.GetString("ShortlistInterviewPanel", resourceCulture);
             }
         }
     }

@@ -259,6 +259,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 Candidate = Convert.ToString(item["Title"]) + " " + Convert.ToString(item["lastname"]),
                 Candidatemail = Convert.ToString(item["personalemail"]),
                 ID = Convert.ToInt32(item["ID"]),
+                CandidateUrl = GetCandidateUrl(Convert.ToInt32(item["ID"])),
                 DocumentUrl = GetDocumentUrl(Convert.ToInt32(item["ID"])),
                 Status = ShortlistDetailVM.GetStatusDefaultValue(
                     new Model.ViewModel.Control.AjaxComboBoxVM
@@ -276,6 +277,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         private string GetDocumentUrl(int? iD)
         {
             return string.Format(UrlResource.CVDocumentByID, _siteUrl, iD);
+        }
+
+        private string GetCandidateUrl(int? iD)
+        {
+            return string.Format(UrlResource.ProfessionalDisplayByID, _siteUrl, iD);
         }
 
         public IEnumerable<ApplicationShortlistVM> GetShortlists()

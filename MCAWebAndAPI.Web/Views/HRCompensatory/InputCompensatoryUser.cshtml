@@ -45,10 +45,6 @@
                     <i class="fa fa-save"></i>
                     save
                 </button>
-                @*<button id="submit-cancel" class="btn btn-primary" type="button">
-                    <i class="fa fa-save"></i>
-                    cancel
-                </button>*@
             </div>
         </div>
     </div>
@@ -100,21 +96,21 @@
                 var j = -1
                 var tr = container.closest('tr');
 
-                rowgrid.each(function (e) {
-                    i++;
-                    var xdate = $("#Dateid" + i).val();
-                    rowgrid.each(function (e) {
-                        j++;
-                        var ydate = $("#Dateid" + i).val();
-                        if (i !== j)
-                        {
-                            if (xdate == ydate )
-                            {
-                                alert("date you have chosen already exists")
-                            }
-                        }
-                    });
-                });
+                //rowgrid.each(function (e) {
+                //    i++;
+                //    var xdate = $("#Dateid" + i).val();
+                //    rowgrid.each(function (e) {
+                //        j++;
+                //        var ydate = $("#Dateid" + i).val();
+                //        if (i !== j)
+                //        {
+                //            if (xdate == ydate )
+                //            {
+                //                alert("date you have chosen already exists")
+                //            }
+                //        }
+                //    });
+                //});
 
                 if (start < finish)
                 {

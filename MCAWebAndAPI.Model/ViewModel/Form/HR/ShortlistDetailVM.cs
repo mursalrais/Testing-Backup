@@ -27,7 +27,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [Editable(false)]
         public string DocumentUrl { get; set; }
 
-        [Editable(false)]
         public string CandidateUrl { get; set; }
 
         [DisplayName("Status")]

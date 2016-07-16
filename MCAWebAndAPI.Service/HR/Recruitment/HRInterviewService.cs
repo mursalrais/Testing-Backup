@@ -395,7 +395,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 createdValue.Add("applicationstatus", viewModel.RecommendedForPosition.Value);
                 createdValue.Add("recommendedforposition", viewModel.OtherPosition.Value);
                 createdValue.Add("neednextinterview", viewModel.NeedNextInterviewer);
-                //createdValue.Add("documenturl", viewModel.AttDocuments);
 
             try
             {
@@ -407,8 +406,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     logger.Error(e.Message);
                     throw e;
                 }
-
-           
         }
 
         public void CreateInputIntvResult(int? headerID, ApplicationShortlistVM viewModel)

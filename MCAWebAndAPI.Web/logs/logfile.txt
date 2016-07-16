@@ -106,3 +106,5 @@ Parameter name: address
 2016-07-01 14:34:48.4672 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Column 'professional' does not exist. It may have been deleted by another user.  /sites/ims/hr/Lists/CompensatoryRequest
 2016-07-11 15:34:04.2130 MCAWebAndAPI.Service.HR.Recruitment.HRShortlistService The underlying connection was closed: An unexpected error occurred on a receive.
 2016-07-12 09:25:37.2679 MCAWebAndAPI.Service.HR.Recruitment.HRInterviewService The 'sId' argument is invalid.
+2016-07-16 11:54:25.7641 MCAWebAndAPI.Service.HR.Recruitment.HRInterviewService Cannot invoke method or retrieve property from null object. Object returned by the following call stack is null. "ListItemAllFields
+"

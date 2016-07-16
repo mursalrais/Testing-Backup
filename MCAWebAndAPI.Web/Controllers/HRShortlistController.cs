@@ -149,6 +149,18 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewmodel);
         }
 
+        public ActionResult ShortlistInterviewPanel(string siteurl = null, int? position = null, string username = null, string useraccess = null)
+        {
+            //mandatory: set site url
+            _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
+
+            var viewmodel = _service.GetShortlist(position, username, useraccess);
+            //viewmodel.SendTo = "";
+
+            return View(viewmodel);
+        }
+
         [HttpPost]
         public ActionResult CreateIntvinvite(FormCollection form, ApplicationShortlistVM viewModel)
         {
@@ -160,11 +172,6 @@ namespace MCAWebAndAPI.Web.Controllers
             {
                 viewModel.ShortlistDetails = BindShortlistDetails(form, viewModel.ShortlistDetails);
                 _service.CreateShortlistInviteIntv(headerID, viewModel);
-
-                foreach (var item in viewModel.ShortlistDetails)
-                {
-                    EmailUtil.Send(item.Candidatemail, "Interview Invitation for Position " + viewModel.PositionName + " (based on respective position)", string.Format(EmailResource.EmailInterviewToInterviewCandidate, viewModel.EmailMessage, _service.GetMailUrl(item.ID, "INTV")));
-                }
 
                 char[] delimiterChars = { ' ', ',', ';' };
 

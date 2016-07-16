@@ -10,8 +10,9 @@
     .CreateAt(GridInsertRowPosition.Bottom))
     .Columns(columns =>
     {
-        columns.Bound(p => p.Candidate).ClientTemplate("#= Candidate #" +
+        columns.Bound(p => p.Candidate).ClientTemplate("<a readonly='readonly' href='#= CandidateUrl #' target='_parent'>#= Candidate #</a>" +
         "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].Candidate' value='#= Candidate #' />");
+
         columns.Bound(p => p.DocumentUrl).ClientTemplate("<a readonly='readonly' href='#= DocumentUrl #' target='_parent'>get file</a>");
         columns.Bound(p => p.GetStat).ClientTemplate("#= GetStat #" +
         "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].GetStat' value='#= GetStat #' />");
