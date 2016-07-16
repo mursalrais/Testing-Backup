@@ -132,16 +132,6 @@ Recruitment Team</value>
   <data name="EmailInterviewToInterviewCandidate" xml:space="preserve">
     <value>Dear Interview Panel,
 
-This email is sent to you to notify that here is the latest result of previous Interview that requires for the next interview. 
-
-To view the detail, please click following link: 
-{0}
-
-Thank you.</value>
-  </data>
-  <data name="EmailInterviewToInterviewPanel" xml:space="preserve">
-    <value>Dear Interview Panel,
-
 {0}
 
 This email is sent to you to notify that here is the latest list of shortlisted candidate. This list
@@ -151,6 +141,17 @@ requires your action to review as well as to prepare the Interview process for f
 Kindly check the link as per below to go to direct page accordingly. Thank you.
 
 Link : {1}</value>
+  </data>
+  <data name="EmailInterviewToInterviewPanel" xml:space="preserve">
+    <value>Dear Interview Panel,
+
+This email is sent to you to notify that here is the latest result of previous Interview that requires for the next interview. 
+
+To view the detail, please click following link: 
+
+{0}
+
+Thank you.</value>
   </data>
   <data name="EmailShortlistToHR" xml:space="preserve">
     <value>Dear HR Team,

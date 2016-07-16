@@ -112,7 +112,11 @@ namespace MCAWebAndAPI.Web.Controllers
                 {
                     if (mail != "")
                     {
-                        EmailUtil.Send(mail, "Next Process Interview for position " + viewModel.PositionName + " (based on respective position)", string.Format(EmailResource.EmailInterviewToInterviewPanel, string.Format(UrlResource.InterviewDataList, siteUrl, viewModel.Position)));
+                        string link = string.Format(UrlResource.InterviewInputResult, siteUrl, viewModel.Position);
+
+                        string mailbody = string.Format(EmailResource.EmailInterviewToInterviewPanel, link);
+
+                        EmailUtil.Send(mail, "Next Process Interview for position " + viewModel.PositionName + " (based on respective position)", mailbody);
                     }
                 }
 

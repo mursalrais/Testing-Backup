@@ -413,7 +413,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         public void CreateInputIntvResult(int? headerID, ApplicationShortlistVM viewModel)
         {
-            var createdValue = new Dictionary<string, object>();
+             var createdValue = new Dictionary<string, object>();
 
             createdValue.Add("interviewdatetime", viewModel.InterviewerDate);
             createdValue.Add("interviewpanel", viewModel.InterviewerPanel);
@@ -439,7 +439,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 if (mail != "")
                 {
-                    EmailUtil.Send(mail, "Interview Invitation", viewModel.EmailMessage);
+                    EmailUtil.Send(mail, "Interview Invitation", viewModel.InterviewSummary);
                 }
             }
         }
