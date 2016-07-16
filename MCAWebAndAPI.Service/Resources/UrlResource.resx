@@ -163,7 +163,7 @@
     <value>{0}/Lists/Application/Interviewlistdata.aspx?ID={1}</value>
   </data>
   <data name="InterviewInputResult" xml:space="preserve">
-    <value>{0}/Lists/Application/InputInterviewResult.aspx?ID={1}</value>
+    <value>{0}/Lists/Application/Interviewlist.aspx?ID={1}</value>
   </data>
   <data name="ShortlistEmailLinkHR" xml:space="preserve">
     <value>{0}/Lists/Application/ShortlistREQ.aspx?ID={1}</value>
