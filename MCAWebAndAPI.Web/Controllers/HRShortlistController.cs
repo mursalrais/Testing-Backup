@@ -179,7 +179,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
                 foreach (string mail in words)
                 {
-                    string linkmail = string.Format(UrlResource.ShortlistEmailLinkREQ, siteUrl, viewModel.Position);
+                    string linkmail = string.Format(UrlResource.ShortlistInterviewPanel, siteUrl, viewModel.Position);
                     string bodymail = string.Format(EmailResource.EmailShortlistToInterviewPanel, viewModel.EmailMessage, linkmail);
 
                     EmailUtil.Send(mail, "Interview Invitation for Position " + viewModel.PositionName + " (based on respective position)", bodymail);

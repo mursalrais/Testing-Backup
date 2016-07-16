@@ -181,6 +181,6 @@
     <value>{0}/Lists/Application/Interviewlist.aspx?POSID={1}</value>
   </data>
   <data name="ShortlistInterviewPanel" xml:space="preserve">
-    <value />
+    <value>{0}/Lists/Application/ShortlistInterviewPanel.aspx?POSID={1}</value>
   </data>
 </root>

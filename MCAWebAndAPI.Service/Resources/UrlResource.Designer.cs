@@ -241,7 +241,7 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to {0}/Lists/Application/ShortlistInterviewPanel.aspx?POSID={1}.
         /// </summary>
         public static string ShortlistInterviewPanel {
             get {
