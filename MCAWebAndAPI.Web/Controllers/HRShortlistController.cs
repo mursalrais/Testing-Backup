@@ -172,7 +172,10 @@ namespace MCAWebAndAPI.Web.Controllers
 
                 foreach (string mail in words)
                 {
-                    EmailUtil.Send(mail, "Interview Invitation for Position " + viewModel.PositionName + " (based on respective position)", string.Format(EmailResource.EmailInterviewToInterviewPanel, viewModel.EmailMessage, string.Format(UrlResource.ShortlistEmailLinkREQ, siteUrl, viewModel.Position)));
+                    string linkmail = string.Format(UrlResource.ShortlistEmailLinkREQ, siteUrl, viewModel.Position);
+                    string bodymail = string.Format(EmailResource.EmailShortlistToInterviewPanel, viewModel.EmailMessage, linkmail);
+
+                    EmailUtil.Send(mail, "Interview Invitation for Position " + viewModel.PositionName + " (based on respective position)", bodymail);
                 }
             }
             catch (Exception e)

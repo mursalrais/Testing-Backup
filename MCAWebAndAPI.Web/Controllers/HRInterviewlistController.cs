@@ -85,15 +85,15 @@ namespace MCAWebAndAPI.Web.Controllers
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse(e);
-            } 
+            }
 
-            return RedirectToAction("Index",
-               "Success",
-               new
-               {
-                   errorMessage =
-               string.Format(MessageResource.SuccessCreateApplicationData, viewModel.Candidate)
-               });
+            return RedirectToAction("InputInterviewResult",
+              "HRInterviewlist",
+              new
+              {
+                  siteurl = siteUrl,
+                  ID = headerID
+              });
         }
 
         [HttpPost]
@@ -139,6 +139,7 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             //mandatory: get site url
             _service.SetSiteUrl(siteurl ?? SessionManager.Get<string>("SiteUrl"));
+            SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
 
             var viewmodel = _service.GetResultlistInterview(ID);
             viewmodel.SiteUrl = siteurl;

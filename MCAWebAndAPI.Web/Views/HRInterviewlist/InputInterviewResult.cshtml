@@ -63,7 +63,7 @@
 
         <div class="form-actions">
             <div class="col-sm-12">
-                <button id="submit-cancel" class="btn btn-primary" type="button">
+                <button id="submit-cancel" acti class="btn btn-primary" type="button" onClick="history.go(0)" >
                     <i class="fa fa-send"></i>
                     cancel
                 </button>
@@ -115,7 +115,13 @@
             $.getJSON(url, function (data) {
                 $("#vac-position").prop("value", data.PositionName);
             })
-         
+            var res = $("#RecommendedForPosition_Value").val();
+            if (res == "For Other Position") {
+                $("#OtherPosition_Value").data("kendoDropDownList").enable(true);
+            }
+            else {
+                $("#OtherPosition_Value").data("kendoDropDownList").enable(false);
+            }
         });
 
       
