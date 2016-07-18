@@ -20,15 +20,23 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [Range(0, 100, ErrorMessage = "Only 0-100")]
         public int ActualWeight { get; set; }
 
-        [UIHint("Int32")]
+        [UIHint("Decimal")]
         [Range(0, 5 ,ErrorMessage = "Only 0-5")]
-        public int Score { get; set; }
+        public decimal Score { get; set; }
+
+        [UIHint("Decimal")]
+        [Range(0, 5, ErrorMessage = "Only 0-5")]
+        public decimal TotalScore { get; set; }
+
+        public int TotalScoreHidden { get; set; }
 
         [UIHint("Int32")]
         [Range(0, 5, ErrorMessage = "Only 0-5")]
-        public int TotalScore { get; set; }
+        public int OverallTotalScore { get; set; }
 
         [UIHint("TextArea")]
         public string Output { get; set; }
+
+        public int? ProfessionalPerformanceEvaluationId { get; set; }
     }
 }

@@ -68,6 +68,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 updatedValue.Add("individualgoalplanscore", viewModel.Score);
                 updatedValue.Add("individualgoalplantotalscore", viewModel.TotalScore);
                 updatedValue.Add("output", viewModel.Output);
+
                 try
                 {
                     if (Item.CheckIfUpdated(viewModel))
@@ -129,6 +130,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return new ProfessionalPerformanceEvaluationDetailVM
             {
                 ID = Convert.ToInt32(item["ID"]),
+                ProfessionalPerformanceEvaluationId = item["professionalperformanceevaluatio"] == null ? 0 :
+                        Convert.ToInt32((item["professionalperformanceevaluatio"] as FieldLookupValue).LookupValue),
                 Category = ProfessionalPerformanceEvaluationDetailVM.GetCategoryDefaultValue(
                     new Model.ViewModel.Control.InGridComboBoxVM
                     {
@@ -137,8 +140,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 IndividualGoalAndPlan = Convert.ToString(item["individualgoalplan"]),
                 PlannedWeight = Convert.ToInt32(item["individualgoalweight"]),
                 ActualWeight = Convert.ToInt32(item["individualgoalplanactualweight"]),
-                Score = Convert.ToInt32(item["individualgoalplanscore"]),
-                TotalScore = Convert.ToInt32(item["individualgoalplantotalscore"]),
+                Score = Convert.ToDecimal(item["individualgoalplanscore"]),
+                TotalScore = Convert.ToDecimal(item["individualgoalplantotalscore"]),
                 Output = Convert.ToString(item["output"]),
             };
         }
@@ -271,6 +274,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 columnValues.Add("ppestatus", "Rejected");
             }
+            columnValues.Add("overalltotalscore", header.OverallTotalScore);
             try
             {
                 SPConnector.UpdateListItem(SP_PPE_LIST_NAME, ID, columnValues, _siteUrl);
