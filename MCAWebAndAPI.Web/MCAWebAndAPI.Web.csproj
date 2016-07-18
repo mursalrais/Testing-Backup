@@ -707,6 +707,8 @@
     <Content Include="Views\HRProfessionalPerformanceEvaluation\_ProfessionalPerformanceEvaluation_Print.cshtml" />
     <Content Include="Views\HRProfessionalPerformanceEvaluation\PrintProfessionalPerformanceEvaluation.cshtml" />
     <Content Include="Views\Workflow\DisplayPendingApprovalItems.cshtml" />
+    <Content Include="Views\HRExitProcedure\ViewExitProcedureForApprover.cshtml" />
+    <Content Include="Views\HRExitProcedure\_ExitProcedureDataForApprover.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

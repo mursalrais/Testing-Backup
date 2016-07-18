@@ -184,5 +184,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         public string ApprovalIndicator { get; set; }
 
+        public string ApprovalMail { get; set; }
+
     }
 }

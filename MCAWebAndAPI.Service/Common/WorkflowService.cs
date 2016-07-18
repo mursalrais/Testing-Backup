@@ -17,6 +17,7 @@ namespace MCAWebAndAPI.Service.Common
         const string SP_WORKFLOW_LISTNAME = "Workflow Mapping Master";
         const string SP_PROMAS_LIST_NAME = "Professional Master";
         const string SP_POSMAS_LIST_NAME = "Position Master";
+        const string SP_EXIT_CHECKLIST_LIST_NAME = "Exit Procedure Checklist";
 
         public IEnumerable<PositionMaster> GetPositionsInWorkflow(string listName, 
             string approverUnit, string requestorUnit, string requestorPosition)
@@ -294,8 +295,10 @@ namespace MCAWebAndAPI.Service.Common
             var updatedValue = new Dictionary<string, object>();
             updatedValue.Add(transactionLookupColumnName, new FieldLookupValue { LookupId = exitProcID });
             updatedValue.Add("approverlevel", exiProcedureChecklist.Level);
-            updatedValue.Add("approver0", GetApproverUserLogin((int)exiProcedureChecklist.ApproverUserName.Value));
-            updatedValue.Add("requestor0", requestor);
+            updatedValue.Add("approver", GetApproverUserLogin((int)exiProcedureChecklist.ApproverUserName.Value));
+            updatedValue.Add("requestor", requestor);
+            updatedValue.Add("Title", exiProcedureChecklist.ItemExitProcedure);
+
             SPConnector.AddListItem(workflowTransactionListName, updatedValue, _siteUrl);
         }
 

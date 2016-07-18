@@ -13,7 +13,7 @@
                                                                                  enctype = "multipart/form-data"
                                                                              }))
 {
-    
+
     <fieldset>
         <legend>Exit Procedure Data</legend>
         <div class="row">
@@ -25,61 +25,46 @@
             @Html.Partial("_ExitProcedureChecklist", Model.ExitProcedureChecklist)
         </div>
 
-        
-        @*<legend>Exit Procedure Checklist</legend>
-        <div id="workflow-placeholder" class="row">
-
-            @Html.Partial("_ExitProcedureChecklist", Model)
-        </div>*@
-
-        
-    @*@if (Model.Requestor != null)
-    {
-        <legend>Approval Workflow</legend>
-        <div id="workflow-placeholder" class="row"></div>
-    }*@
-        
-
         <legend>Documents</legend>
         <div class="row">
             @Html.Partial("_Documents", Model)
         </div>
     </fieldset>
+}
+
+@if (Model.ID == null)
+{
     <div class="form-actions">
         <div class="row">
             <div class="col-md-12">
-                <button id="" class="btn btn-primary" type="submit">
+                <button id="submit-for-approval" class="btn btn-primary" type="submit">
                     <i class="fa fa-save"></i>
                     Submit for Approval
                 </button>
                 <button id="submit-draft-initiate-button" class="btn btn-primary" type="submit">
                     <i class="fa fa-save"></i>
-                    Save As Draft
+                    Save
                 </button>
             </div>
         </div>
     </div>
-    
-
-    
 }
+   
 
 @section scripts{
     <script type="text/javascript">
 
 
-        $(document).ready(function ()
-        {
-            $("#submit-button").click(function ()
-            {
+        $(document).ready(function () {
+            $("#submit-for-approval").click(function () {
+                $("#StatusForm").val("Pending Approval")
                 $("form").submit();
-            });
-        });
+    });
+});
 
         $(document).ready(function () {
             $("#submit-draft-initiate-button").click(function () {
                 $("#StatusForm").val("Draft")
-                $("#ParentDiv").show();
                 $("form").submit();
             });
         });
@@ -128,18 +113,9 @@
 
         }
 
-        $(document).ready(function () {
+        @*$(document).ready(function () {
             displayWorkflowRouterExitProcedure("workflow-placeholder", "@ViewBag.ListName", "@ViewBag.RequestorUserLogin");
-        });
-
-
-        /*
-        function displayWorkflowRouterExitProcedure(domID, listName, requestor) {
-            var url = "/HRExitProcedure/DisplayWorkflowRouterExitProcedure?listName=" + listName + "&requestor=" + requestor;
-            $('#' + domID).load(url);
-        }
-        */
-
-
+        });*@
+               
     </script>
 }

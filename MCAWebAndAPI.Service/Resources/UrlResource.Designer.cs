@@ -79,11 +79,38 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to /Lists/Exit%20Procedure.
+        /// </summary>
+        public static string ExitProcedure {
+            get {
+                return ResourceManager.GetString("ExitProcedure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0}/ExitProcedureDocuments/Forms/AllItems.aspx#InplviewHashf78f203c-f7a1-4179-9fbc-868e50a402cf=FilterField1%3Dexitprocedureid-FilterValue1%3D{1}.
         /// </summary>
         public static string ExitProcedureDocumentByID {
             get {
                 return ResourceManager.GetString("ExitProcedureDocumentByID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to /_layouts/15/WopiFrame.aspx?sourcedoc={2E1A7EB1-E5BD-4F38-A1DF-E43C7DEF0CF4}&amp;file=Exit%20Interview%20Form.docx&amp;action=default.
+        /// </summary>
+        public static string ExitProcedureExitInterviewForm {
+            get {
+                return ResourceManager.GetString("ExitProcedureExitInterviewForm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to /_layouts/15/WopiFrame.aspx?sourcedoc={3242C181-0557-4827-AD0E-F089CFE63AED}&amp;file=Non%20Disclosure%20Agreement.docx&amp;action=default.
+        /// </summary>
+        public static string ExitProcedureNonDisclosureAgreement {
+            get {
+                return ResourceManager.GetString("ExitProcedureNonDisclosureAgreement", resourceCulture);
             }
         }
         
