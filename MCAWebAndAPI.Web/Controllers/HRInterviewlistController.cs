@@ -87,12 +87,12 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            return RedirectToAction("InputInterviewResult",
+            return RedirectToAction("InterviewlistData",
               "HRInterviewlist",
               new
               {
                   siteurl = siteUrl,
-                  ID = headerID
+                  position = viewModel.Position
               });
         }
 

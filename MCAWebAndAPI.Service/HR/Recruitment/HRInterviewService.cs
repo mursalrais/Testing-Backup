@@ -71,8 +71,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             var listItemdt = SPConnector.GetListItem(SP_APPDATA_LIST_NAME, ID, _siteUrl);
             viewModel = ConvertToResultInterviewDataVM(listItemdt);
-            viewModel.InterviewlistDetails = GetInputInterviewResult(viewModel.ID);
-
             viewModel.RecommendedForPosition.Text = GetLastResult(viewModel.ID).ToString();
 
             return viewModel;
@@ -88,11 +86,12 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         //</ ViewFields >
         private IEnumerable<InterviewDetailVM> GetInputInterviewResult(int? ID)
         {
-            var caml = @"<Query>
+            var caml = @"<View>
+                        <Query>
                            <Where>
                               <Eq>
-                                 <FieldRef Name='ID' />
-                                 <Value Type='Counter'>" + ID + @"</Value>
+                                 <FieldRef Name='application_x003a_ID' />
+                                 <Value Type='Lookup'>" + ID + @"</Value>
                               </Eq>
                            </Where>
                         </Query>
@@ -104,8 +103,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                            <FieldRef Name='invitationemailmessage' />
                            <FieldRef Name='interviewsummary' />
                            <FieldRef Name='interviewresult' />
-                        </ViewFields>
-                        <QueryOptions />";
+                        </ViewFields></View>";
 
             var Interviewdetails = new List<InterviewDetailVM>();
             foreach (var item in SPConnector.GetList(SP_APPINTV_LIST_NAME, _siteUrl, caml))
@@ -412,6 +410,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
              var createdValue = new Dictionary<string, object>();
 
+            createdValue.Add("application",  headerID);
             createdValue.Add("interviewdatetime", viewModel.InterviewerDate);
             createdValue.Add("interviewpanel", viewModel.InterviewerPanel);
             createdValue.Add("interviewsummary", viewModel.InterviewSummary);
