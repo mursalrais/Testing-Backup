@@ -108,12 +108,13 @@ namespace MCAWebAndAPI.Web.Controllers
             }
 
             return RedirectToAction("InterviewlistData",
-              "HRInterviewlist",
-              new
-              {
-                  siteurl = siteUrl,
-                  position = viewModel.Position
-              });
+               "HRInterviewlist",
+               new
+               {
+                   siteurl = siteUrl,
+                   useraccess = "REQ",
+                   position = viewModel.Position
+               });
         }
 
         [HttpPost]

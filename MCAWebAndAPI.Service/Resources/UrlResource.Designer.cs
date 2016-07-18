@@ -124,6 +124,15 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0}/Lists/Application/Interviewlist.aspx?POSID={1}.
+        /// </summary>
+        public static string InterviewList {
+            get {
+                return ResourceManager.GetString("InterviewList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0}/Lists/Application/InterviewPanellist.aspx?POSID={1}.
         /// </summary>
         public static string InterviewPanelList {
