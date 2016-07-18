@@ -60,15 +60,18 @@ namespace MCAWebAndAPI.Web.Controllers
             var Detail = viewModel.ProfessionalPerformanceEvaluationDetails;
             int sumPlanned = 0;
             int sumActual = 0;
+            decimal totalTotalScore = 0;
+            var countData = Detail.Count();
             foreach (var viewModelDetail in Detail)
             {
+                totalTotalScore = totalTotalScore + viewModelDetail.TotalScore;
                 if (viewModelDetail.EditMode != -1)
                 {
                     sumPlanned = sumPlanned + viewModelDetail.PlannedWeight;
                     sumActual = sumActual + viewModelDetail.ActualWeight;
                 }
             }
-
+            viewModel.OverallTotalScore = totalTotalScore / countData;
             if (sumPlanned != 100 & sumActual != 100)
             {
                 ModelState.AddModelError("ModelInvalid", "Weight must be total 100%");
