@@ -29,6 +29,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         public string CandidateUrl { get; set; }
 
+        public string ProfesionalUrl { get; set; }
+
         [DisplayName("Status")]
         public string GetStat { get; set; }
 

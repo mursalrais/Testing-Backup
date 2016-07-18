@@ -178,7 +178,7 @@
     <value>{0}/Application%20Documents/Forms/AllItems.aspx#InplviewHash4adbc69d-4587-40ad-8645-58b419984117=FilterField1%3Dapplication%255Fx003a%255FID-FilterValue1%3D{1}</value>
   </data>
   <data name="InterviewPanelList" xml:space="preserve">
-    <value>{0}/Lists/Application/Interviewlist.aspx?POSID={1}</value>
+    <value>{0}/Lists/Application/InterviewPanellist.aspx?POSID={1}</value>
   </data>
   <data name="ShortlistInterviewPanel" xml:space="preserve">
     <value>{0}/Lists/Application/ShortlistInterviewPanel.aspx?POSID={1}</value>

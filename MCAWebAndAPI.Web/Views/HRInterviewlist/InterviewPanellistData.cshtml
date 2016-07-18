@@ -2,7 +2,7 @@
 @model ApplicationShortlistVM
 
 @{
-    ViewBag.Title = "InterviewlistData";
+    ViewBag.Title = "InterviewPanellistData";
 }
 
 @using (Html.BeginForm("SendMailCandidate", "HRInterviewlist", FormMethod.Post, new
@@ -12,11 +12,7 @@
 }))
 {
     <fieldset>
-        @Html.HiddenFor(m => m.ID)
         @Html.HiddenFor(m => m.Position)
-        @Html.HiddenFor(m => m.PositionName)
-        @Html.HiddenFor(m => m.Candidate)
-        @Html.HiddenFor(m => m.useraccess)
         <div class="row">
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.ActivePosition).Class("col-md-2 control-label")
@@ -27,38 +23,12 @@
         </div>
         <legend>Candidate list</legend>
         <div class="row">
-            @Html.Partial("_IntvinviteDetails", Model.ShortlistDetails)
+            @Html.Partial("_IntvinvitePanelDetails", Model.ShortlistDetails)
         </div>
 
 
     </fieldset>
     <div class="form-actions">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.InterviewerPanel).Class("col-sm-2 control-label")
-                    <div class="col-sm-6">
-                        @Html.EditorFor(m => m.InterviewerPanel)
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-12">
-                <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.EmailMessage).Class("col-sm-2 control-label")
-                    <div class="col-sm-8">
-
-                        @Html.EditorFor(m => m.EmailMessage)
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-12">
-                <button id="sendmail-button" class="btn btn-primary" type="submit">
-                    <i class="fa fa-send"></i>
-                    Send Email to Interviewer Panel
-                </button>
-            </div>
-        </div>
     </div>
 }
 
@@ -71,7 +41,6 @@
         };
 
         $(document).ready(function () {
-
             var positionID = $("#Position").val();
             var url = "/HRDataMaster/GetPosition/" + positionID;
             $.getJSON(url, function (data) {

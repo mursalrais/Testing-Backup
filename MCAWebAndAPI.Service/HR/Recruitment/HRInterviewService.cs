@@ -242,35 +242,42 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             if (useraccess == "REQ")
             {
-                caml = @"<view>
-                        <Query> 
-                              <Where>
-                                  <And>
-                                     <Eq>
-                                        <FieldRef Name='manpowerrequisition' />
-                                        <Value Type='Lookup'>" + Position + @"</Value>
-                                     </Eq>
-                                     <Or>
+                caml = @"
+                        <View>
+                           <Query>
+                           <Where>
+                              <And>
+                                 <Eq>
+                                    <FieldRef Name='manpowerrequisition' />
+                                    <Value Type='Lookup'>" + Position + @"</Value>
+                                 </Eq>
+                                 <And>
                                     <Eq>
-                                        <FieldRef Name='applicationstatus' />
-                                        <Value Type='Text'>Shortlisted</Value>
+                                       <FieldRef Name='manpowerrequisition_x003a_Manpow' />
+                                       <Value Type='Lookup'>Active</Value>
                                     </Eq>
                                     <Or>
-                                    <Eq>
-                                        <FieldRef Name='applicationstatus' />
-                                        <Value Type='Text'>Recommended</Value>
-                                    </Eq>
-                                    <Eq>
-                                        <FieldRef Name='applicationstatus' />
-                                        <Value Type='Text'>Not Recommended</Value>
-                                    </Eq>
+                                       <Eq>
+                                          <FieldRef Name='applicationstatus' />
+                                          <Value Type='Text'>Shortlisted</Value>
+                                       </Eq>
+                                       <Or>
+                                          <Eq>
+                                             <FieldRef Name='applicationstatus' />
+                                             <Value Type='Text'>Recommended</Value>
+                                          </Eq>
+                                          <Eq>
+                                             <FieldRef Name='applicationstatus' />
+                                             <Value Type='Text'>Not Recommended</Value>
+                                          </Eq>
+                                       </Or>
                                     </Or>
-                                    </Or>
-                                  </And>
-                                 </Where>
-                         </Query> 
-                       <ViewFields>
-                          <FieldRef Name='Title' />
+                                 </And>
+                              </And>
+                           </Where>
+                        </Query>
+                        <ViewFields>
+                           <FieldRef Name='Title' />
                           <FieldRef Name='lastname' />
                           <FieldRef Name='ID' />
                           <FieldRef Name='applicationstatus' />
@@ -278,10 +285,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                           <FieldRef Name='position' />
                           <FieldRef Name='neednextinterview' />
                           <FieldRef Name='personalemail' />
-                       </ViewFields>
-                                </View>";
+                        </ViewFields>
+                        </View>";
             }
-            else if (useraccess == "RES")
+            else if (useraccess == "PAN")
             {
                 caml = @"<view>
                         <Query> 
@@ -351,6 +358,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 Candidatemail = Convert.ToString(item["personalemail"]),
                 ID = Convert.ToInt32(item["ID"]),
                 CandidateUrl = GetCandidateUrl(Convert.ToInt32(item["ID"])),
+                ProfesionalUrl = GetProfesionalUrl(Convert.ToInt32(item["ID"])),
                 DocumentUrl = GetDocumentUrl(Convert.ToInt32(item["ID"])),
                 Status = ShortlistDetailVM.GetStatusDefaultValue(
                     new Model.ViewModel.Control.AjaxComboBoxVM
@@ -374,6 +382,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return string.Format(UrlResource.InterviewInputResult, _siteUrl, iD);
         }
 
+        private string GetProfesionalUrl(int? iD)
+        {
+            return string.Format(UrlResource.ProfessionalDisplayByID, _siteUrl, iD);
+        }
+        
         public IEnumerable<ApplicationShortlistVM> GetInterviewlists()
         {
             throw new NotImplementedException();
