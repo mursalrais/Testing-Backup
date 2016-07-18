@@ -28,6 +28,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [Range(0, 5, ErrorMessage = "Only 0-5")]
         public int TotalScore { get; set; }
 
+        public int TotalScoreHidden { get; set; }
+
         [UIHint("Int32")]
         [Range(0, 5, ErrorMessage = "Only 0-5")]
         public int OverallTotalScore { get; set; }
