@@ -9,8 +9,8 @@ using System.Linq;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.HR
     {
-        public class CompensatoryDetailVM : Item
-        {
+    public class CompensatoryDetailVM : Item
+    {
 
         /// <summary>
         /// CompensatoryID
@@ -22,6 +22,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// CompensatoryActivities
         /// </summary>
         [DisplayName("Activities")]
+        [Required]
         public string CmpActiv { get; set; }
 
         /// <summary>

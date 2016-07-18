@@ -311,33 +311,32 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             foreach (var viewModel in viewModels.CompensatoryDetails)
             {
-                if (Item.CheckIfCreated(viewModel))
-                {
-                    var cratedValueDetail = new Dictionary<string, object>();
-
-                    cratedValueDetail.Add("compensatoryrequest", cmpID);
-                    cratedValueDetail.Add("Title", viewModel.CmpActiv);
-                    cratedValueDetail.Add("compensatorydate", viewModel.CmpDate);
-                    cratedValueDetail.Add("compensatorystarttime", viewModel.StartTime);
-                    cratedValueDetail.Add("compensatoryendtime", viewModel.FinishTime);
-                    cratedValueDetail.Add("totalhours", viewModel.CmpTotalHours);
-                    cratedValueDetail.Add("totaldays", viewModel.TotalDay);
-                    cratedValueDetail.Add("remarks", viewModel.remarks);
-
-                    try
-                    {
-                        SPConnector.AddListItem(SP_COMDET_LIST_NAME, cratedValueDetail, _siteUrl);
-                    }
-                    catch (Exception e)
-                    {
-                        logger.Error(e.Message);
-                        throw e;
-                    }
-                    continue;
-                }
-
                 if (Item.CheckIfUpdated(viewModel))
                 {
+                    if (viewModel.CmpID == null)
+                    {
+                        var cratedValueDetail = new Dictionary<string, object>();
+
+                        cratedValueDetail.Add("compensatoryrequest", cmpID);
+                        cratedValueDetail.Add("Title", viewModel.CmpActiv);
+                        cratedValueDetail.Add("compensatorydate", viewModel.CmpDate);
+                        cratedValueDetail.Add("compensatorystarttime", viewModel.StartTime);
+                        cratedValueDetail.Add("compensatoryendtime", viewModel.FinishTime);
+                        cratedValueDetail.Add("totalhours", viewModel.CmpTotalHours);
+                        cratedValueDetail.Add("totaldays", viewModel.TotalDay);
+                        cratedValueDetail.Add("remarks", viewModel.remarks);
+
+                        try
+                        {
+                            SPConnector.AddListItem(SP_COMDET_LIST_NAME, cratedValueDetail, _siteUrl);
+                        }
+                        catch (Exception e)
+                        {
+                            logger.Error(e.Message);
+                            throw e;
+                        }
+                    }
+
                     var updatedValue = new Dictionary<string, object>();
 
                     updatedValue.Add("Title", viewModel.CmpActiv);

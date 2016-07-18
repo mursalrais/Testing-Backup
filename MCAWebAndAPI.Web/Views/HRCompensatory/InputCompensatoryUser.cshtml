@@ -57,7 +57,7 @@
         $(document).ready(function () {
             var positionID = $("#CmpName").val() +" - "+ $("#CmpPosition").val();
             $("#NamePos").prop("value", positionID);
-
+            $("#EditMode").prop("value", "2");
         });
 
         function onValidateKendoDetail(e) {
@@ -124,6 +124,7 @@
         }
 
         function getDayName(date) {
+            debugger;
             var day = new Array();
             day[0] = "Monday";
             day[1] = "Tuesday";
@@ -132,7 +133,11 @@
             day[4] = "Friday";
             day[5] = "Saturday";
             day[6] = "Sunday";
-            return day[date.getDay()];
+
+            if(date != null)
+            {
+                return day[date.getDay()];
+            };
         }
     </script>
 }
