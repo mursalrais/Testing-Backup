@@ -312,7 +312,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                                        <Or>
                                           <Eq>
                                              <FieldRef Name='applicationstatus' />
-                                             <Value Type='Text'>Shortlisted</Value>
+                                             <Value Type='Text'>For Other Position</Value>
                                           </Eq>
                                           <Eq>
                                              <FieldRef Name='applicationstatus' />

@@ -63,13 +63,13 @@
 
         <div class="form-actions">
             <div class="col-sm-12">
-                <button id="submit-cancel" acti class="btn btn-primary" type="button" onClick="history.go(0)" >
-                    <i class="fa fa-send"></i>
-                    cancel
-                </button>
                 <button id="submit-button" class="btn btn-primary" type="submit">
                     <i class="fa fa-save"></i>
                     save
+                </button>
+                <button id="submit-cancel" acti class="btn btn-primary" type="button" onClick="history.go(0)">
+                    <i class="fa fa-send"></i>
+                    cancel
                 </button>
             </div>
         </div>
@@ -97,6 +97,15 @@
             else {
                 $("#OtherPosition_Value").data("kendoDropDownList").enable(false);
             }
+
+            if (res == "Recommended" || res == "For Other Position")
+            {
+                $('input[name=NeedNextInterviewer ]').attr("disabled", false);
+            }
+            else
+            {
+                $('input[name=NeedNextInterviewer ]').attr("disabled", true);
+            }
         };
 
 
@@ -104,6 +113,7 @@
             $("#OtherPosition_Value").data("kendoDropDownList").enable(false);
             $("#vac-position").prop('readonly', 'true');
             $("#val-candidate").prop('readonly', 'true');
+            $('input[name=NeedNextInterviewer ]').attr("disabled", true);
 
             NeedNextInterviewer
 

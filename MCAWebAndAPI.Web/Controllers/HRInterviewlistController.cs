@@ -107,14 +107,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            return RedirectToAction("InterviewlistData",
-               "HRInterviewlist",
-               new
-               {
-                   siteurl = siteUrl,
-                   position = Convert.ToInt32(viewModel.Position),
-                   useraccess = "REQ"
-               });
+            return Redirect(string.Format(UrlResource.InterviewList, siteUrl, viewModel.Position));
         }
 
         [HttpPost]
