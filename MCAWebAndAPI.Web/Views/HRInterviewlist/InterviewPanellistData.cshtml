@@ -15,9 +15,9 @@
         @Html.HiddenFor(m => m.Position)
         <div class="row">
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.ActivePosition).Class("col-md-2 control-label")
-                <div class="col-md-3">
-                    @Html.EditorFor(m => m.ActivePosition)
+                @Html.Bootstrap().LabelFor(m => m.Position).Class("col-sm-2 control-label")
+                <div class="col-sm-6">
+                    <input id="PositionName" class="form-control" value="" />
                 </div>
             </div>
         </div>
@@ -35,12 +35,8 @@
 @section scripts{
 
     <script>
-        function OnChangeActivePosition(e) {
-            var dataItem = this.dataItem(e.item);
-            window.location = "/HRInterviewlist/InterviewlistData?siteurl=&position=" + dataItem.ID + "&username=&useraccess=" + $("#useraccess").val() + "";
-        };
-
         $(document).ready(function () {
+            $("#PositionName").prop('readonly', 'true');
             var positionID = $("#Position").val();
             var url = "/HRDataMaster/GetPosition/" + positionID;
             $.getJSON(url, function (data) {

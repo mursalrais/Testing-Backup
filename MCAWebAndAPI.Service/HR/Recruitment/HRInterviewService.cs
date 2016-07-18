@@ -290,44 +290,51 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             }
             else if (useraccess == "PAN")
             {
-                caml = @"<view>
-                        <Query> 
-                              <Where>
-                                  <And>
-                                     <Eq>
-                                        <FieldRef Name='manpowerrequisition' />
-                                        <Value Type='Lookup'>"+ Position + @"</Value>
-                                     </Eq>
-                                     <And>
-                                        <Eq>
-                                           <FieldRef Name='neednextinterview' />
-                                           <Value Type='Choice'>Yes</Value>
-                                        </Eq>
-                                        <Or>
-                                           <Eq>
-                                              <FieldRef Name='applicationstatus' />
-                                              <Value Type='Text'>Shortlisted</Value>
-                                           </Eq>
-                                           <Eq>
-                                              <FieldRef Name='applicationstatus' />
-                                              <Value Type='Text'>Recommended</Value>
-                                           </Eq>
-                                        </Or>
-                                     </And>
-                                  </And>
-                               </Where>
-                         </Query> 
-                       <ViewFields>
-                          <FieldRef Name='Title' />
-                          <FieldRef Name='lastname' />
-                          <FieldRef Name='ID' />
-                          <FieldRef Name='applicationstatus' />
-                          <FieldRef Name='applicationremarks' />
-                          <FieldRef Name='position' />
-                          <FieldRef Name='neednextinterview' />
-                          <FieldRef Name='personalemail' />
-                       </ViewFields>
-                                </View>";
+                caml = @"
+                        <View>
+                        <Query>
+                           <Where>
+                              <And>
+                                 <Eq>
+                                    <FieldRef Name='manpowerrequisition' />
+                                    <Value Type='Lookup'>" + Position + @"</Value>
+                                 </Eq>
+                                 <And>
+                                    <Eq>
+                                       <FieldRef Name='manpowerrequisition_x003a_Manpow' />
+                                       <Value Type='Lookup'>Active</Value>
+                                    </Eq>
+                                    <And>
+                                       <Eq>
+                                          <FieldRef Name='neednextinterview' />
+                                          <Value Type='Choice'>Yes</Value>
+                                       </Eq>
+                                       <Or>
+                                          <Eq>
+                                             <FieldRef Name='applicationstatus' />
+                                             <Value Type='Text'>Shortlisted</Value>
+                                          </Eq>
+                                          <Eq>
+                                             <FieldRef Name='applicationstatus' />
+                                             <Value Type='Text'>Recommended</Value>
+                                          </Eq>
+                                       </Or>
+                                    </And>
+                                 </And>
+                              </And>
+                           </Where>
+                        </Query>
+                        <ViewFields>
+                                <FieldRef Name='Title' />
+                                <FieldRef Name='lastname' />
+                                <FieldRef Name='ID' />
+                                <FieldRef Name='applicationstatus' />
+                                <FieldRef Name='applicationremarks' />
+                                <FieldRef Name='position' />
+                                <FieldRef Name='neednextinterview' />
+                                <FieldRef Name='personalemail' />
+                        </ViewFields>
+                        </View>";
             }
 
             var shortlistDetails = new List<ShortlistDetailVM>();

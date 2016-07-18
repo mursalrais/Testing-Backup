@@ -107,9 +107,14 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            var viewmodel = _service.GetInterviewlist(Convert.ToInt32(viewModel.Position), "", "REQ");
-
-            return View("InterviewlistData", viewmodel);
+            return RedirectToAction("InterviewlistData",
+               "HRInterviewlist",
+               new
+               {
+                   siteurl = siteUrl,
+                   position = Convert.ToInt32(viewModel.Position),
+                   useraccess = "REQ"
+               });
         }
 
         [HttpPost]
