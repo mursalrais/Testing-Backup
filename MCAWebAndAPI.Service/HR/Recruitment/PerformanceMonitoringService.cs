@@ -12,7 +12,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
     {
         string _siteUrl;
         static Logger logger = LogManager.GetCurrentClassLogger();
-        
+
         const string SP_LIST_NAME = "Performance Plan";
         const string SP_DETAIL_LIST_NAME = "Professional Performance Plan";
 
@@ -58,21 +58,49 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 logger.Debug(e.Message);
                 return false;
             }
+
+            
+
+            var caml = @"<View><Query><Where><Eq><FieldRef Name='performanceplan_x003a_ID' /><Value Type='Lookup'>"+ PerformanceMonitoring.ID + "</Value></Eq></Where></Query><ViewFields><FieldRef Name='ID' /></ViewFields><QueryOptions /></View>";
+            var listItem = SPConnector.GetList(SP_DETAIL_LIST_NAME, _siteUrl, caml);
+            foreach (var item in listItem)
+            {
+                updatedValues = new Dictionary<string, object>();
+                updatedValues.Add("ppstatus", "Closed");
+                try
+                {
+                    SPConnector.UpdateListItem(SP_DETAIL_LIST_NAME, Convert.ToInt32(item["ID"]), updatedValues, _siteUrl);
+                }
+                catch (Exception e)
+                {
+                    logger.Debug(e.Message);
+                    return false;
+                }
+
+            }
+
+
             return true;
         }
 
         public void CreatePerformanceMonitoringDetails(int? headerID, string emailMessage)
         {
             //Get All Active Professional
-            var caml = @"<View><Query><Where><Eq><FieldRef Name='Professional_x0020_Status' /><Value Type='Choice'>Active</Value></Eq></Where></Query><ViewFields><FieldRef Name='ID' /><FieldRef Name='Title' /><FieldRef Name='officeemail' /></ViewFields><QueryOptions /></View>";
+            var caml = @"<View><Query><Where><Eq><FieldRef Name='Professional_x0020_Status' /><Value Type='Choice'>Active</Value></Eq></Where></Query><ViewFields><FieldRef Name='ID' /><FieldRef Name='Title' /><FieldRef Name='officeemail' /><FieldRef Name='Position_x003a_ID' /></ViewFields><QueryOptions /></View>";
             var listItem = SPConnector.GetList("Professional Master", _siteUrl, caml);
             var updatedValues = new Dictionary<string, object>();
             string emailTo;
+            int tes;
             foreach (var item in listItem)
             {
                 updatedValues = new Dictionary<string, object>();
                 updatedValues.Add("performanceplan", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
                 updatedValues.Add("pppstatus", "Initiated");
+                updatedValues.Add("ppstatus", "Open");
+                if (((item["Position_x003a_ID"] as FieldLookupValue)) != null)
+                {
+                    updatedValues.Add("Position", (item["Position_x003a_ID"] as FieldLookupValue).LookupId);
+                }
                 updatedValues.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(item["ID"]) });
                 emailTo = Convert.ToString(item["officeemail"]);
                 try
@@ -88,11 +116,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
                 //send email to professional
                 try
-                {                    
+                {
                     if (emailTo == "" || emailTo == null)
                     {
                         emailTo = "anugerahseptian@gmail.com";
-                    }                   
+                    }
                     EmailUtil.Send(emailTo, "Notify to initiate Performance Plan", string.Format(emailMessage, UrlResource.ProfessionalPerformancePlan));
 
                 }
@@ -149,13 +177,13 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 {
                     color = "green";
                 }
-                else if((Convert.ToString(item["pppstatus"]) == "Initiated") || (Convert.ToString(item["pppstatus"]) == "Draft"))
+                else if ((Convert.ToString(item["pppstatus"]) == "Initiated") || (Convert.ToString(item["pppstatus"]) == "Draft"))
                 {
-                    if (Now<=viewModel.LatestCreationDate)
+                    if (Now <= viewModel.LatestCreationDate)
                     {
                         color = "green";
                     }
-                    else if((Now>viewModel.LatestCreationDate) && (Now <= viewModel.LatestDateApproval1))
+                    else if ((Now > viewModel.LatestCreationDate) && (Now <= viewModel.LatestDateApproval1))
                     {
                         color = "yellow";
                     }
@@ -166,7 +194,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 }
                 else if ((Convert.ToString(item["pppstatus"]) == "Pending Approval 1 of 2"))
                 {
-                    if (Now<=viewModel.LatestDateApproval2)
+                    if (Now <= viewModel.LatestDateApproval2)
                     {
                         color = "green";
                     }
