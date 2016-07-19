@@ -43,7 +43,7 @@ namespace MCAWebAndAPI.Web.Controllers
             // Check whether error is found
             if (!ModelState.IsValid)
             {
-                return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
+                return RedirectToAction("Index", "Error");
             }
 
             var siteUrl = SessionManager.Get<string>("SiteUrl");
