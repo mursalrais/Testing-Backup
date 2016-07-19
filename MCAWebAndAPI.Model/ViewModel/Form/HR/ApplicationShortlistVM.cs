@@ -73,6 +73,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             },
         };
 
+        public int? ManPos { get; set; }
+
         /// <summary>
         /// Title
         /// </summary>
@@ -180,8 +182,19 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
                 return model;
             }
         }
-
-        public Boolean NeedNextInterviewer { get; set; } = new Boolean();
+   
+        [UIHint("ComboBox")]
+        [DisplayName("Need Next Interviewer")]
+        public ComboBoxVM NeedNextInterviewer { get; set; } = new ComboBoxVM()
+        {
+            Choices = new string[]
+            {
+                "",
+                "Yes",
+                "No"
+            },
+            //OnSelectEventName = "onPositionChange"
+        };
 
         [UIHint("MultiFileUploader")]
         public IEnumerable<HttpPostedFileBase> Documents { get; set; } = new List<HttpPostedFileBase>();

@@ -58,6 +58,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.Candidate = Convert.ToString(listItem["Title"]);
             viewModel.SendTo = Convert.ToString(listItem["personalemail"]);
             viewModel.InterviewerUrl = string.Format(UrlResource.AddInterviewInvitation, _siteUrl, Convert.ToInt32(listItem["ID"]));
+            viewModel.NeedNextInterviewer.Value = Convert.ToString(listItem["neednextinterview"]);
             // Convert Details
             viewModel.InterviewlistDetails = GetInputInterviewResult(viewModel.ID);
             return viewModel;
@@ -113,6 +114,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             return Interviewdetails;
         }
+
 
         private InterviewDetailVM ConvertToInterviewResultDataVM(ListItem listItem)
         {
@@ -375,7 +377,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
                 GetStat = Convert.ToString(item["applicationstatus"]),
                 Remarks = Convert.ToString(item["applicationremarks"]),
-                neednextintv = Convert.ToBoolean(item["neednextinterview"]),
+                neednextintv = Convert.ToString(item["neednextinterview"]),
             };
         }
 
@@ -412,7 +414,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 createdValue.Add("applicationremarks", viewModel.Remarks);
                 createdValue.Add("applicationstatus", viewModel.RecommendedForPosition.Value);
                 createdValue.Add("recommendedforposition", viewModel.OtherPosition.Value);
-                createdValue.Add("neednextinterview", viewModel.NeedNextInterviewer);
+                createdValue.Add("neednextinterview", viewModel.NeedNextInterviewer.Value);
 
             try
             {
