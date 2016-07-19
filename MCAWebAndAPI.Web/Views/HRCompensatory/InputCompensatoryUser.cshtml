@@ -14,12 +14,12 @@
 {
     <div class="form-actions">
         <fieldset>
-            @Html.HiddenFor(m => m.CmpID)
-            @Html.HiddenFor(m => m.CmpName)
-            @Html.HiddenFor(m => m.CmpPosition)
+            @Html.HiddenFor(m => m.cmpID)
+            @Html.HiddenFor(m => m.cmpName)
+            @Html.HiddenFor(m => m.cmpPosition)
             <div class="row">
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.CmpName).Class("col-md-2 control-label")
+                    @Html.Bootstrap().LabelFor(m => m.cmpName).Class("col-md-2 control-label")
                     <div class="col-md-3">
                         <input class="k-textbox form-control" id="NamePos" style="width:100%;">
                     </div>
@@ -27,9 +27,9 @@
             </div>
             <div class="row">
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.CmpProjUnit).Class("col-md-2 control-label")
+                    @Html.Bootstrap().LabelFor(m => m.cmpProjUnit).Class("col-md-2 control-label")
                     <div class="col-md-3">
-                        @Html.EditorFor(m => m.CmpProjUnit)
+                        @Html.EditorFor(m => m.cmpProjUnit)
                     </div>
                 </div>
             </div>
@@ -45,10 +45,6 @@
                     <i class="fa fa-save"></i>
                     save
                 </button>
-                @*<button id="submit-cancel" class="btn btn-primary" type="button">
-                    <i class="fa fa-save"></i>
-                    cancel
-                </button>*@
             </div>
         </div>
     </div>
@@ -61,7 +57,7 @@
         $(document).ready(function () {
             var positionID = $("#CmpName").val() +" - "+ $("#CmpPosition").val();
             $("#NamePos").prop("value", positionID);
-
+            $("#EditMode").prop("value", "2");
         });
 
         function onValidateKendoDetail(e) {
@@ -91,7 +87,7 @@
                 var tr = container.closest('tr');
                 var data = this.dataItem(tr); //get the row data so it can be referred later
                 // 1 is Item.Mode.UPDATED
-                var day = data.CmpDate.getDay();
+                //var day = data.CmpDate.getDay();
                 var start = data.StartTime.getHours();
                 var finish = data.FinishTime.getHours();
                 var range;
@@ -100,21 +96,21 @@
                 var j = -1
                 var tr = container.closest('tr');
 
-                rowgrid.each(function (e) {
-                    i++;
-                    var xdate = $("#Dateid" + i).val();
-                    rowgrid.each(function (e) {
-                        j++;
-                        var ydate = $("#Dateid" + i).val();
-                        if (i !== j)
-                        {
-                            if (xdate == ydate )
-                            {
-                                alert("date you have chosen already exists")
-                            }
-                        }
-                    });
-                });
+                //rowgrid.each(function (e) {
+                //    i++;
+                //    var xdate = $("#Dateid" + i).val();
+                //    rowgrid.each(function (e) {
+                //        j++;
+                //        var ydate = $("#Dateid" + i).val();
+                //        if (i !== j)
+                //        {
+                //            if (xdate == ydate )
+                //            {
+                //                alert("date you have chosen already exists")
+                //            }
+                //        }
+                //    });
+                //});
 
                 if (start < finish)
                 {
@@ -128,6 +124,7 @@
         }
 
         function getDayName(date) {
+            debugger;
             var day = new Array();
             day[0] = "Monday";
             day[1] = "Tuesday";
@@ -136,7 +133,11 @@
             day[4] = "Friday";
             day[5] = "Saturday";
             day[6] = "Sunday";
-            return day[date.getDay()];
+
+            if(date != null)
+            {
+                return day[date.getDay()];
+            };
         }
     </script>
 }

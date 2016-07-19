@@ -1,0 +1,49 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model ApplicationShortlistVM
+
+@{
+    ViewBag.Title = "InterviewPanellistData";
+}
+
+@using (Html.BeginForm("SendMailCandidate", "HRInterviewlist", FormMethod.Post, new
+{
+    @class = "form-horizontal",
+    enctype = "multipart/form-data"
+}))
+{
+    <fieldset>
+        @Html.HiddenFor(m => m.Position)
+        <div class="row">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Position).Class("col-sm-2 control-label")
+                <div class="col-sm-6">
+                    <input id="PositionName" class="form-control" value="" />
+                </div>
+            </div>
+        </div>
+        <legend>Candidate list</legend>
+        <div class="row">
+            @Html.Partial("_IntvinvitePanelDetails", Model.ShortlistDetails)
+        </div>
+
+
+    </fieldset>
+    <div class="form-actions">
+    </div>
+}
+
+@section scripts{
+
+    <script>
+        $(document).ready(function () {
+            $("#PositionName").prop('readonly', 'true');
+            var positionID = $("#Position").val();
+            var url = "/HRDataMaster/GetPosition/" + positionID;
+            $.getJSON(url, function (data) {
+                $("#PositionName").prop("value", data.PositionName);
+            })
+        });
+    </script>
+
+}
+

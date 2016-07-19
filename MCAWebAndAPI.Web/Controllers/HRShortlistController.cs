@@ -68,10 +68,34 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            _service.SendEmailValidation(viewModel.SendTo, "https://eceos2.sharepoint.com/sites/ims/hr/Lists/Application/ShortlistREQ.aspx"+" "+ EmailResource.EmailShortlistData);
+            char[] delimiterChars = { ' ', ',', ';' };
 
-            return JsonHelper.GenerateJsonSuccessResponse(
-                string.Format("{0}/{1}", siteUrl, UrlResource.Professional));
+            string[] words = viewModel.SendTo.Split(delimiterChars);
+
+            if (viewModel.useraccess == "HR")
+            {
+                foreach (string mail in words)
+                {
+                    string bodymailHR = string.Format(EmailResource.EmailShortlistToRequestor, _service.GetMailUrl(Convert.ToInt32(viewModel.Position), viewModel.useraccess));
+                    _service.SendEmailValidation(mail, bodymailHR);
+                }
+            }
+            else if (viewModel.useraccess == "REQ")
+            {
+                foreach (string mail in words)
+                {
+                    string bodymailREQ = string.Format(EmailResource.EmailShortlistToHR, _service.GetMailUrl(Convert.ToInt32(viewModel.Position), viewModel.useraccess));
+                    _service.SendEmailValidation(mail, bodymailREQ);
+                }
+            }
+
+            return RedirectToAction("Index",
+                "Success",
+                new
+                {
+                    errorMessage =
+                string.Format(MessageResource.SuccessCreateApplicationData, viewModel.Position)
+                });
         }
 
         public ActionResult ShortlistSendInvite(string siteurl = null, int? ID = null)
@@ -104,11 +128,28 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(
-                string.Format("{0}/{1}", siteUrl, UrlResource.Professional));
+            return RedirectToAction("Index",
+               "Success",
+               new
+               {
+                   errorMessage =
+               string.Format(MessageResource.SuccessCreateApplicationData, viewModel.Candidate)
+               });
         }
 
         public ActionResult ShortlistIntvinvite(string siteurl = null, int? position = null, string username = null, string useraccess = null)
+         {
+            //mandatory: set site url
+            _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
+
+            var viewmodel = _service.GetShortlist(position, username, useraccess);
+            //viewmodel.SendTo = "";
+
+            return View(viewmodel);
+        }
+
+        public ActionResult ShortlistInterviewPanel(string siteurl = null, int? position = null, string username = null, string useraccess = null)
         {
             //mandatory: set site url
             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
@@ -130,7 +171,19 @@ namespace MCAWebAndAPI.Web.Controllers
             try
             {
                 viewModel.ShortlistDetails = BindShortlistDetails(form, viewModel.ShortlistDetails);
-                _service.CreateShortlistInviteIntv(headerID, viewModel, EmailResource.EmailInterviewResult);
+                _service.CreateShortlistInviteIntv(headerID, viewModel);
+
+                char[] delimiterChars = { ' ', ',', ';' };
+
+                string[] words = viewModel.InterviewerPanel.Split(delimiterChars);
+
+                foreach (string mail in words)
+                {
+                    string linkmail = string.Format(UrlResource.ShortlistInterviewPanel, siteUrl, viewModel.Position);
+                    string bodymail = string.Format(EmailResource.EmailShortlistToInterviewPanel, viewModel.EmailMessage, linkmail);
+
+                    EmailUtil.Send(mail, "Interview Invitation for Position " + viewModel.PositionName + " (based on respective position)", bodymail);
+                }
             }
             catch (Exception e)
             {
@@ -138,8 +191,13 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(
-                string.Format("{0}/{1}", siteUrl, UrlResource.Professional));
+            return RedirectToAction("Index",
+               "Success",
+               new
+               {
+                   errorMessage =
+               string.Format(MessageResource.SuccessCreateApplicationData, viewModel.Position)
+               });
         }
 
         private IEnumerable<ShortlistDetailVM> BindShortlistDetails(FormCollection form, IEnumerable<ShortlistDetailVM> shortDetails)
@@ -186,6 +244,8 @@ namespace MCAWebAndAPI.Web.Controllers
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
              var positions = GetShortlistPositionExistingSession();
+
+            positions = positions.OrderBy(x => x.ID);
 
             return Json(positions.Select(e =>
                 new {

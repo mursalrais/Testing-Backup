@@ -29,12 +29,56 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult InterviewlistData(string siteurl = null, int? position = null, string username = null, string useraccess = null)
         {
             //mandatory: set site url
-            var siteUrl = siteurl ?? SessionManager.Get<string>("SiteUrl");
             if (siteurl == "")
             {
                 siteurl = SessionManager.Get<string>("SiteUrl");
+                _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
             }
-            _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
+            else
+            {
+                _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
+                SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
+            }
+
+            var viewmodel = _service.GetInterviewlist(position, username, useraccess);
+
+            //viewmodel.ID = id;
+            return View(viewmodel);
+        }
+
+        public ActionResult NextInterviewlist(string siteurl = null, int? position = null, string username = null, string useraccess = null)
+        {
+            //mandatory: set site url
+            if (siteurl == "")
+            {
+                siteurl = SessionManager.Get<string>("SiteUrl");
+                _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
+            }
+            else
+            {
+                _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
+                SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
+            }
+
+            var viewmodel = _service.GetInterviewlist(position, username, useraccess);
+
+            //viewmodel.ID = id;
+            return View(viewmodel);
+        }
+
+        public ActionResult InterviewPanellistData(string siteurl = null, int? position = null, string username = null, string useraccess = null)
+        {
+            //mandatory: set site url
+            if (siteurl == "")
+            {
+                siteurl = SessionManager.Get<string>("SiteUrl");
+                _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
+            }
+            else
+            {
+                _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
+                SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
+            }
 
             var viewmodel = _service.GetInterviewlist(position, username, useraccess);
 
@@ -54,11 +98,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             try
             {
-                foreach (var list in viewModel.ShortlistDetails)
-                {
-                    EmailUtil.Send(list.Candidatemail, "Interview Result", "https://eceos2.sharepoint.com/sites/mca-dev/hr/Lists/Professional%20Master/DispForm_Custom.aspx?ID="+ viewModel.ID+"" + EmailResource.EmailInterviewResult);
-                }
-
+                _service.CreateInterviewDataDetail(headerID, viewModel);
                 Task CreateManpowerRequisitionDocumentsTask = _service.CreateInterviewDocumentsSync(headerID, viewModel.Documents);
             }
             catch (Exception e)
@@ -67,27 +107,62 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            EmailUtil.Send(viewModel.InterviewerPanel, "Interview Result", viewModel.EmailMessage + "  " + "https://eceos2.sharepoint.com/sites/ims/hr/Lists/Application/Interviewlistdata.aspx");
+            return RedirectToAction("InputInterviewResult",
+               "HRInterviewlist",
+               new
+               {
+                   siteurl = siteUrl,
+                   ID = viewModel.ID
+               });
+        }
 
-            _service.SendEmailValidation(viewModel.InterviewerPanel, EmailResource.EmailInterviewResult);
+        [HttpPost]
+        public ActionResult SendMailCandidate(FormCollection form, ApplicationShortlistVM viewModel)
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
+            try
+            {
+                char[] delimiterChars = { ' ', ',', ';' };
+
+                string[] words = viewModel.InterviewerPanel.Split(delimiterChars);
+
+                foreach (string mail in words)
+                {
+                    if (mail != "")
+                    {
+                        string link = string.Format(UrlResource.InterviewPanelList, siteUrl, viewModel.Position);
+
+                        string mailbody = string.Format(EmailResource.EmailInterviewToInterviewPanel, viewModel.EmailMessage, link);
+
+                        EmailUtil.Send(mail, "Next Process Interview for position " + viewModel.PositionName + " (based on respective position)", mailbody);
+                    }
+                }
+
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+          
             return RedirectToAction("Index",
                "Success",
                new
                {
-                   errorMessage =
-               string.Format(MessageResource.SuccessCreateApplicationData, viewModel.Candidate)
+                   errorMessage = string.Format(MessageResource.SuccessCreateApplicationData, viewModel.Candidate)
                });
         }
 
         public ActionResult InputInterviewResult(string siteurl = null, int? ID = null)
         {
-            //mandatory: set site url
-            _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
+            //mandatory: get site url
+            _service.SetSiteUrl(siteurl ?? SessionManager.Get<string>("SiteUrl"));
             SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
 
             var viewmodel = _service.GetResultlistInterview(ID);
-            //viewmodel.SendTo = "";
+            viewmodel.SiteUrl = siteurl;
             //viewmodel.ID = id;
 
             return View(viewmodel);
@@ -115,7 +190,7 @@ namespace MCAWebAndAPI.Web.Controllers
                "HRInterviewlist",
                new
                {
-                   siteurl = "https://eceos2.sharepoint.com/sites/mca-dev/hr",
+                   siteurl = siteUrl,
                    ID = headerID
                });
         }
