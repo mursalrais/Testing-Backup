@@ -16,7 +16,7 @@
     <RootNamespace>MCAWebAndAPI.Web</RootNamespace>
     <AssemblyName>MCAWebAndAPI.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -34,7 +34,7 @@
     <DefineConstants>TRACE;DEBUG;ght</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PublishDatabases>false</PublishDatabases>
+    <PublishDatabases>true</PublishDatabases>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -190,6 +190,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Readme\Elmah.txt" />
     <Content Include="bin\Antlr3.Runtime.dll" />
     <Content Include="bin\Antlr3.Runtime.pdb" />
     <Content Include="bin\AspNet.ScriptManager.bootstrap.dll" />
@@ -420,6 +421,12 @@
     <Content Include="Content\kendo\2016.2.504\fonts\glyphs\KendoUIGlyphs.woff" />
     <Content Include="Content\kendo\2016.2.504\images\kendoui.ttf" />
     <Content Include="Content\kendo\2016.2.504\images\kendoui.woff" />
+    <Content Include="App_Data\askjasjoi_Application.pdf" />
+    <Content Include="App_Data\Dewa_Application.pdf" />
+    <Content Include="App_Data\kjahkjhjah_Application.pdf" />
+    <Content Include="App_Data\Rahadian1_Application.pdf" />
+    <Content Include="App_Data\Rahadian_Application.pdf" />
+    <Content Include="App_Data\Randi_Application.pdf" />
     <None Include="bin\MCAWebAndAPI.Web.dll.config" />
     <Content Include="bin\NLog.config" />
     <Content Include="bin\roslyn\Microsoft.CSharp.Core.targets" />
@@ -442,6 +449,30 @@
     <Content Include="logs\logfile.txt" />
     <Content Include="Scripts\app.config.js" />
     <Content Include="Scripts\app.min.js" />
+    <Content Include="Scripts\apps\charts\KendoChartDonuts.js" />
+    <Content Include="Scripts\apps\charts\KendoChartProjectGantt.js" />
+    <Content Include="Scripts\apps\charts\KendoChartProjectPercentage.js" />
+    <Content Include="Scripts\apps\charts\KendoChartProjectStatusByActivity.js" />
+    <Content Include="Scripts\apps\charts\KendoChartProjectStatusByProject.js" />
+    <Content Include="Scripts\apps\charts\KendoChartRIA.js" />
+    <Content Include="Scripts\apps\charts\KendoChartRIAPriority.js" />
+    <Content Include="Scripts\apps\charts\KendoChartRIAResource.js" />
+    <Content Include="Scripts\apps\charts\KendoChartRIAStatus.js" />
+    <Content Include="Scripts\apps\charts\KendoChartScheduleSCurve.js" />
+    <Content Include="Scripts\apps\charts\KendoChartTaskResource.js" />
+    <Content Include="Scripts\apps\charts\KendoChartUtils.js" />
+    <Content Include="Scripts\apps\common\Commands.js" />
+    <Content Include="Scripts\apps\common\Utils.js" />
+    <Content Include="Scripts\apps\grids\KendoGridActivity.js" />
+    <Content Include="Scripts\apps\grids\KendoGridBudgetActualReport.js" />
+    <Content Include="Scripts\apps\grids\KendoGridFinancialReport.js" />
+    <Content Include="Scripts\apps\grids\KendoGridProject.js" />
+    <Content Include="Scripts\apps\grids\KendoGridScheduler.js" />
+    <Content Include="Scripts\apps\grids\KendoGridTasks.js" />
+    <Content Include="Scripts\apps\grids\KendoGridTaskWithSingleResource.js" />
+    <Content Include="Scripts\apps\grids\KendoGridUtils.js" />
+    <Content Include="Scripts\apps\grids\KendoGridWBS.js" />
+    <Content Include="Scripts\apps\sliders\jQuerySlider.js" />
     <Content Include="Scripts\bi-frame.js" />
     <Content Include="Scripts\custom.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -827,6 +858,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Code\" />
+    <Folder Include="aspnet_client\system_web\2_0_50727\" />
+    <Folder Include="aspnet_client\system_web\4_0_30319\" />
     <Folder Include="bin\Resources\" />
     <Folder Include="Content\kendo\2016.2.504\Bootstrap\" />
     <Folder Include="Views\File\" />
@@ -843,6 +876,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="App_Data\ConfigResource.resx" />
     <EmbeddedResource Include="Resources\ConfigResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ConfigResource.Designer.cs</LastGenOutput>
