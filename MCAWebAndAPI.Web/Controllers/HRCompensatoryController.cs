@@ -26,7 +26,7 @@ namespace MCAWebAndAPI.Web.Controllers
             _service = new HRCompensatoryService();
         }
 
-        public ActionResult InputCompensatoryUser(string siteurl = null, int? ID = null)
+        public ActionResult InputCompensatoryUser(string siteurl = null, int? iD = null)
         {
             //mandatory: set site url
             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
@@ -38,7 +38,7 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
 
-            var viewmodel = _service.GetComplist(ID);
+            var viewmodel = _service.GetComplist(iD);
 
             //viewmodel.ID = id;
             return View(viewmodel);

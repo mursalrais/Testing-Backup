@@ -281,7 +281,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         private string GetCandidateUrl(int? iD)
         {
-            return string.Format(UrlResource.ProfessionalDisplayByID, _siteUrl, iD);
+            return string.Format(UrlResource.ApplicationDisplayByID, _siteUrl, iD);
         }
 
         public IEnumerable<ApplicationShortlistVM> GetShortlists()

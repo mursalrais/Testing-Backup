@@ -199,4 +199,7 @@
   <data name="InterviewList" xml:space="preserve">
     <value>{0}/Lists/Application/Interviewlist.aspx?POSID={1}</value>
   </data>
+  <data name="ApplicationDisplayByID" xml:space="preserve">
+    <value>{0}/Lists/Application/DispForm.aspx?ID={1}</value>
+  </data>
 </root>

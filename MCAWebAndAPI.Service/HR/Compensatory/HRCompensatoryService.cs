@@ -54,19 +54,19 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             var viewModel = new CompensatoryVM();
 
-            viewModel.CmpID = Convert.ToInt32(listItem["ID"]);
-            viewModel.CmpName = Convert.ToString(listItem["Title"]);
-            viewModel.CmpProjUnit = Convert.ToString(listItem["Project_x002f_Unit"]);
-            viewModel.CmpPosition = FormatUtil.ConvertLookupToValue(listItem, "Position");
+            viewModel.cmpID = Convert.ToInt32(listItem["ID"]);
+            viewModel.cmpName = Convert.ToString(listItem["Title"]);
+            viewModel.cmpProjUnit = Convert.ToString(listItem["Project_x002f_Unit"]);
+            viewModel.cmpPosition = FormatUtil.ConvertLookupToValue(listItem, "Position");
 
             return viewModel;
         }
 
-        public CompensatoryVM GetComplist(int? ID)
+        public CompensatoryVM GetComplist(int? iD)
         {
             var viewModel = new CompensatoryVM();
 
-            if (ID == null)
+            if (iD == null)
                 return null;
 
             var caml = @"<View>  
@@ -74,7 +74,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                        <Where>
                              <Eq>
                                 <FieldRef Name='professional_x003a_ID' />
-                                <Value Type='Lookup'>" + ID + @"</Value>
+                                <Value Type='Lookup'>" + iD + @"</Value>
                              </Eq>
                        </Where>
                     </Query> 
@@ -88,7 +88,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 compID = Convert.ToInt32(item["ID"]);
             }
 
-            return GetComplisted(compID, ID);
+            return GetComplisted(compID, iD);
         }
 
         private int GetCompID(int? ID)
@@ -288,27 +288,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return CompID;
         }
 
-        public void CreateCompensatoryData(int? headerID, CompensatoryVM viewModels)
+        public void CreateCompensatoryData(int? cmpID, CompensatoryVM viewModels)
         {
-            int cmpID = getidComp(viewModels.CmpID);
-
-            if (cmpID == 0)
-            {
-                var CreateValueHeader = new Dictionary<string, object>();
-
-                CreateValueHeader.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(viewModels.CmpID) });
-
-                try
-                {
-                    SPConnector.AddListItem(SP_COMREQ_LIST_NAME, CreateValueHeader, _siteUrl);
-                }
-                catch (Exception e)
-                {
-                    logger.Error(e.Message);
-                    throw e;
-                }
-            }
-
             foreach (var viewModel in viewModels.CompensatoryDetails)
             {
                 if (Item.CheckIfUpdated(viewModel))
