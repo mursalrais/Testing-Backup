@@ -1,9 +1,9 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
 @model ProfessionalPerformanceEvaluationVM
 
-    <div class="col-sm-12">
+<div class="col-sm-12">
 
-        @(Html.Kendo().Grid(Model.ProfessionalPerformanceEvaluationDetails)
+    @(Html.Kendo().Grid(Model.ProfessionalPerformanceEvaluationDetails)
         .Name("ProfessionalPerformanceEvaluationDetails")
         .ToolBar(tools => tools.Create().Text("Add New"))
         .Editable(editable => editable.Mode(GridEditMode.InCell)
@@ -41,16 +41,16 @@
             columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
             "<input type='hidden' name='ProfessionalPerformanceEvaluationDetails[#= getProfessionalPerformancePlanDetail(data)#].EditMode' value='#= EditMode #' />"
             );
-            columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
-            .Click("onDeleteKendoDetail")).Width(100);
-            columns.Command(command => command.Custom("Add Same Project").Click("addNewCustomRow")).Width(180);
         })
         .Events(e =>
         {
-            e.Edit("onCustomEditKendoDetail");
+            e.Edit("onEditKendoDetail");
             e.DataBound("onDataBoundProfessionalPerformanceEvaluationDetails");
         })
-        .DataSource(dataSource => dataSource.Ajax()
+        .DataSource(dataSource => dataSource.Ajax().Events(events =>
+        {
+            events.Change("onChange");
+        })
         .Model(model =>
         {
             model.Id(p => p.ID);
@@ -58,43 +58,48 @@
         })
         .ServerOperation(false)
         )
-        )
+    )
+</div>
+<div class="col-sm-12">
+    <div class="form-actions">
+        <div class="form-group">
+            @Html.Bootstrap().LabelFor(m => m.OverallTotalScore).Class("col-sm-4 control-label")
+            <div class="col-sm-8">
+                @Html.DisplayFor(m => m.OverallTotalScore)
+            </div>
+        </div>
     </div>
+</div>
 
-    <script>
-
-        var isCustomAdd = false;
-        var customRowDataItem;
-        function addNewCustomRow(e) {
-            e.preventDefault();
-
-            customRowDataItem = this.dataItem($(e.currentTarget).closest("tr"));
-            isCustomAdd = true;
-            this.addRow();
-        }
-
-        function onCustomEditKendoDetail(e) {
-            if (!e.model.isNew()) {
-                var container = e.container;
-                var tr = container.closest('tr');
-                var data = this.dataItem(tr); //get the row data so it can be referred later
-                // 1 is Item.Mode.UPDATED
-                data.set("EditMode", 1);
-            }
-            if (isCustomAdd && e.model.isNew()) {
-                isCustomAdd = false;
-                $(e.container).find("[name='ProjectOrUnitGoals']").val(customRowDataItem.ProjectOrUnitGoals).change();
+<script>
+    function onChange(e) {
+        var overallTotalScore = 0;
+        var recordsOnCurrentView = 0;
+        if (e.action === "itemchange") {
+            if (e.field === "ActualWeight" || e.field === "Score") {
+                var model = e.items[0];
+                var TotalScore = (model.ActualWeight / 100) * model.Score;
+                model.set('TotalScore', (TotalScore));
+                var grid = $("#ProfessionalPerformanceEvaluationDetails").data("kendoGrid")
+                var dataSource = grid.dataSource;
+                //records on current view / page
+                recordsOnCurrentView = dataSource.view().length;
+                for (var i = 0; i < recordsOnCurrentView; i++) {
+                    overallTotalScore = overallTotalScore + dataSource._data[i].TotalScore;
+                }
+                overallTotalScore = overallTotalScore / recordsOnCurrentView;
+                $('#OverallTotalScore').prop('value', overallTotalScore);
             }
         }
+    }
 
-        function getProfessionalPerformancePlanDetail(dataItem) {
-            dataItem.set('TotalScore', (dataItem.ActualWeight / 100) * dataItem.Score);
-            var data = $("#ProfessionalPerformanceEvaluationDetails").data("kendoGrid").dataSource.data();
-            return data.indexOf(dataItem);
-        }
+    function getProfessionalPerformancePlanDetail(dataItem) {
+        var data = $("#ProfessionalPerformanceEvaluationDetails").data("kendoGrid").dataSource.data();
+        return data.indexOf(dataItem);
+    }
 
-        function onDataBoundProfessionalPerformanceEvaluationDetails(e) {
-            var grid = $("#ProfessionalPerformanceEvaluationDetails").data("kendoGrid");
-            hideDeletedRowKendoDetail(grid);
-        }
-    </script>
+    function onDataBoundProfessionalPerformanceEvaluationDetails(e) {
+        var grid = $("#ProfessionalPerformanceEvaluationDetails").data("kendoGrid");
+        hideDeletedRowKendoDetail(grid);
+    }
+</script>

@@ -26,7 +26,7 @@ namespace MCAWebAndAPI.Web.Controllers
             _service = new HRCompensatoryService();
         }
 
-        public ActionResult InputCompensatoryUser(string siteurl = null, int? ID = null)
+        public ActionResult InputCompensatoryUser(string siteurl = null, int? iD = null)
         {
             //mandatory: set site url
             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
@@ -38,7 +38,7 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
 
-            var viewmodel = _service.GetComplist(ID);
+            var viewmodel = _service.GetComplist(iD);
 
             //viewmodel.ID = id;
             return View(viewmodel);
@@ -98,6 +98,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             try
             {
+                viewModel.CompensatoryDetails = BindCompensatorylistDetails(form, viewModel.CompensatoryDetails);
                 _service.CreateCompensatoryData(headerID, viewModel);
             }
             catch (Exception e)
@@ -110,14 +111,19 @@ namespace MCAWebAndAPI.Web.Controllers
                 string.Format("{0}/{1}", siteUrl, UrlResource.Professional));
         }
 
-        private IEnumerable<CompensatoryDetailVM> BindShortlistDetails(FormCollection form, IEnumerable<CompensatoryDetailVM> compDetails)
+        private IEnumerable<CompensatoryDetailVM> BindCompensatorylistDetails(FormCollection form, IEnumerable<CompensatoryDetailVM> compDetails)
         {
             var array = compDetails.ToArray();
             for (int i = 0; i < array.Length; i++)
             {
-                array[i].AppStatus = BindHelper.BindStringInGrid("ComplistDetails",
-                    i, "Status", form);
+                array[i].CmpDate = BindHelper.BindDateInGrid("CompensatoryDetails",
+                    i, "CmpDate", form);
 
+                array[i].StartTime = BindHelper.BindDateInGrid("CompensatoryDetails",
+                    i, "StartTime", form);
+
+                array[i].FinishTime = BindHelper.BindDateInGrid("CompensatoryDetails",
+                    i, "FinishTime", form);
             }
             return array;
         }

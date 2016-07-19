@@ -14,7 +14,9 @@
     <fieldset>
         @Html.HiddenFor(m => m.ID)
         @Html.HiddenFor(m => m.Position)
+        @Html.HiddenFor(m => m.PositionName)
         @Html.HiddenFor(m => m.useraccess)
+        
         <div class="row">
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.ActivePosition).Class("col-md-2 control-label")
@@ -23,14 +25,6 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Position).Class("col-md-2 control-label")
-                <div class="col-md-3">
-                    <input id="vac-position" class="form-control" value="" />
-                    </div>
-                </div>
-            </div>
             <legend>Candidate list</legend>
             <div class="row">
                 @Html.Partial("_ShortlistDetails", Model.ShortlistDetails)
@@ -75,21 +69,18 @@
 
         function OnChangeActivePosition(e) {
             var dataItem = this.dataItem(e.item);
-            window.location = "/HRShortlist/ShortlistData?siteurl=&position=" + dataItem.ID + "&username=&useraccess=" + $("#useraccess").val() + "";
+            if (dataItem.ID != 0) {
+                window.location = "/HRShortlist/ShortlistData?siteurl=&position=" + dataItem.ID + "&username=&useraccess=" + $("#useraccess").val() + "";
+            }
         };
 
         $(document).ready(function () {
-            $("#vac-position").prop('readonly', 'true');
+
             var positionID = $("#Position").val();
-          
             var url = "/HRDataMaster/GetPosition/" + positionID;
             $.getJSON(url, function (data) {
-                $("#vac-position").prop("value", data.PositionName);
+                $("#PositionName").prop("value", data.PositionName);
             })
-
-            var dropdownlist = $("#ActivePosition_Value").data("kendoDropDownList");
-            dropdownlist.select(positionID);
-
         });
     </script>
 }

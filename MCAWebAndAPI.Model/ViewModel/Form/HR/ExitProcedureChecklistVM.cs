@@ -111,7 +111,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         public string Level { get; set; }
 
-        public bool IsDefault { get; set; }
+        public string IsDefault { get; set; }
 
         public bool IsSequential { get; set; }
 
@@ -183,6 +183,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         }
 
         public string ApprovalIndicator { get; set; }
+
+        public string ApprovalMail { get; set; }
 
     }
 }

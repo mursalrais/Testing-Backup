@@ -1,0 +1,49 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model ExitProcedureForApproverVM
+
+
+<div class="col-md-6">
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.RequestorMail).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.DisplayFor(m => m.RequestorMail)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.ItemExitProcedure).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.DisplayFor(m => m.ItemExitProcedure)
+        </div>
+    </div>
+    @Html.HiddenFor(m => m.ApproverLevel)
+    @Html.HiddenFor(m => m.ExitProcedureID)
+    @Html.HiddenFor(m => m.ApproverMail)
+    @Html.HiddenFor(m => m.ChecklistItemApproval)
+    @Html.HiddenFor(m => m.ExitCheckListID)
+
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+
+
+        $(document).ready(function ()
+        {
+            $("#submit-button").click(function ()
+            {
+                $("form").submit();
+            });
+
+        });
+
+        function onSuccess(data)
+        {
+            window.location.href = data.urlToRedirect;
+        }
+
+        function onFailure(data)
+        {
+            window.location.href = data.urlToRedirect;
+        }
+    </script>
+}

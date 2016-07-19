@@ -14,10 +14,10 @@
     <fieldset>
         @Html.HiddenFor(m => m.ID)
         @Html.HiddenFor(m => m.Position)
+        @Html.HiddenFor(m => m.ManPos)
         @Html.HiddenFor(m => m.Candidate)
         @Html.HiddenFor(m => m.SendTo)
         
-        <div class="form-actions">
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.Candidate).Class("col-sm-2 control-label")
                     <div class="col-sm-6">
@@ -57,24 +57,28 @@
                     <div class="form-group">
                         @Html.Bootstrap().LabelFor(m => m.NeedNextInterviewer).Class("col-xs-2 control-label")
                         <div class="col-xs-2 pull-left">
-                                @Html.RadioButtonFor(m => m.NeedNextInterviewer, true) Yes
-                                @Html.RadioButtonFor(m => m.NeedNextInterviewer, false) No
+                                @Html.EditorFor(m => m.NeedNextInterviewer)
                         </div>
                     </div>
 
-                <div class="col-sm-12">
-                    <button id="submit-cancel" class="btn btn-primary" type="button">
-                        <i class="fa fa-send"></i>
-                        cancel
+        <div class="form-actions">
+            <div class="col-sm-12">
+                    <button id="submit-cancel" acti class="btn btn-primary" type="button" onClick="history.go(-1)">
+                        <i class="fa fa-back"></i>
+                        back
                     </button>
                     <button id="submit-button" class="btn btn-primary" type="submit">
                         <i class="fa fa-save"></i>
                         save
                     </button>
+                    <button id="submit-cancel" acti class="btn btn-primary" type="button" onClick="history.go(0)">
+                        <i class="fa fa-send"></i>
+                        cancel
+                    </button>
                 </div>
-            </div>
+        </div>
 
-        <a id="btn-addnew" class="btn btn-primary pull-left" href="http://mcaims-dev.azurewebsites.net/HRInterviewlist/InputInterviewResultDetail?siteUrl=https://eceos2.sharepoint.com/sites/mca-dev/hr&ID=@Model.ID">
+        <a target='_parent' id="btn-addnew" class="btn btn-primary pull-left" href="@Model.InterviewerUrl">
             <i class="fa fa-plus"></i>
             Add Interview
         </a>
@@ -91,6 +95,7 @@
     <script>
         function onPositionChange(e) {
             var res = $("#RecommendedForPosition_Value").val();
+
             if (res == "For Other Position") {
                 $("#OtherPosition_Value").data("kendoDropDownList").enable(true);
             }
@@ -101,12 +106,9 @@
 
 
         $(document).ready(function () {
-            $("#OtherPosition_Value").data("kendoDropDownList").enable(false);
             $("#vac-position").prop('readonly', 'true');
             $("#val-candidate").prop('readonly', 'true');
-
-            NeedNextInterviewer
-
+            
             $("#val-candidate").prop("value", $("#Candidate").val());
 
             var positionID = $("#Position").val();
@@ -115,7 +117,14 @@
             $.getJSON(url, function (data) {
                 $("#vac-position").prop("value", data.PositionName);
             })
-         
+            var res = $("#RecommendedForPosition_Value").val();
+
+            if (res == "For Other Position") {
+                $("#OtherPosition_Value").data("kendoDropDownList").enable(true);
+            }
+            else {
+                $("#OtherPosition_Value").data("kendoDropDownList").enable(false);
+            }
         });
 
       

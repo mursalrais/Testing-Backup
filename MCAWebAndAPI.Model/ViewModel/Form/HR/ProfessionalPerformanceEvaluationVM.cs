@@ -16,6 +16,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         public string Requestor { get; set; }
 
-        public int OverallTotalScore { get; set; }
+        public decimal OverallTotalScore { get; set; }
     }
 }
