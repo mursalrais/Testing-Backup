@@ -39,8 +39,15 @@ namespace MCAWebAndAPI.Web.Controllers
             // Get blank ViewModel
             var viewModel = _hRPerformancePlanService.GetPopulatedModel(requestor);
             viewModel.Requestor = requestor;
-
-                ViewBag.Action = "CreatePerformancePlan";
+            if (requestor != null)
+            {
+                viewModel.Requestor = requestor;
+            }
+            if (ID != null)
+            {
+                viewModel.ID = ID;
+            }
+            ViewBag.Action = "CreatePerformancePlan";
 
             // Used for Workflow Router
             ViewBag.ListName = "Professional%20Performance%20Plan";
@@ -127,13 +134,20 @@ namespace MCAWebAndAPI.Web.Controllers
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             var viewModel = _hRPerformancePlanService.GetHeader(ID);
-            viewModel.Requestor = requestor;
-            viewModel.ID = ID;
+            if (requestor != null)
+            {
+                viewModel.Requestor = requestor;
+            }
+            if (ID != null)
+            {
+                viewModel.ID = ID;
+            }
 
             ViewBag.Action = "EditPerformancePlan";
 
             // Used for Workflow Router
             ViewBag.ListName = "Professional%20Performance%20Plan";
+            SessionManager.Set("ListName", ViewBag.ListName);
 
             // This var should be taken from passing parameter
             if (requestor != null)

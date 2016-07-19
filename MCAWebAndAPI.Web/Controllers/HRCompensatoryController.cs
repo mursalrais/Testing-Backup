@@ -44,7 +44,7 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewmodel);
         }
          
-        public ActionResult InputCompensatoryHR(string siteurl = null, int? ID = null)
+        public ActionResult InputCompensatoryHR(string siteurl = null, int? iD = null)
         {
             //mandatory: set site url
             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
@@ -56,19 +56,19 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
 
-            var viewmodel = _service.GetComplist(ID);
+            var viewmodel = _service.GetComplist(iD);
 
             //viewmodel.ID = id;
             return View(viewmodel);
         }
 
-        public ActionResult CompensatorylistUser(string siteurl = null, int? ID = null)
+        public ActionResult CompensatorylistUser(string siteurl = null, int? iD = null)
         {
             //mandatory: set site url
             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
 
-            var viewmodel = _service.GetComplist(ID);
+            var viewmodel = _service.GetComplist(iD);
 
             //viewmodel.ID = id;
             return View(viewmodel);
