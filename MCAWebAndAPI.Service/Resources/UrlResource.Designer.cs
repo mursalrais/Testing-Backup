@@ -88,11 +88,19 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
+<<<<<<< HEAD
         ///   Looks up a localized string similar to {0}/Application%20Documents/Forms/AllItems.aspx#InplviewHash4adbc69d-4587-40ad-8645-58b419984117=FilterField1%3Dapplication%255Fx003a%255FID-FilterValue1%3D{1}.
         /// </summary>
         public static string CVDocumentByID {
             get {
                 return ResourceManager.GetString("CVDocumentByID", resourceCulture);
+=======
+        ///   Looks up a localized string similar to /Lists/Exit%20Procedure.
+        /// </summary>
+        public static string ExitProcedure {
+            get {
+                return ResourceManager.GetString("ExitProcedure", resourceCulture);
+>>>>>>> origin/master
             }
         }
         
@@ -106,15 +114,24 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
+<<<<<<< HEAD
         ///   Looks up a localized string similar to {0}/Lists/Application/Interviewlistdata.aspx?POSID={1}.
         /// </summary>
         public static string InterviewDataList {
             get {
                 return ResourceManager.GetString("InterviewDataList", resourceCulture);
+=======
+        ///   Looks up a localized string similar to /_layouts/15/WopiFrame.aspx?sourcedoc={2E1A7EB1-E5BD-4F38-A1DF-E43C7DEF0CF4}&amp;file=Exit%20Interview%20Form.docx&amp;action=default.
+        /// </summary>
+        public static string ExitProcedureExitInterviewForm {
+            get {
+                return ResourceManager.GetString("ExitProcedureExitInterviewForm", resourceCulture);
+>>>>>>> origin/master
             }
         }
         
         /// <summary>
+<<<<<<< HEAD
         ///   Looks up a localized string similar to {0}/Lists/Application/InputInterviewResult.aspx?ID={1}.
         /// </summary>
         public static string InterviewInputResult {
@@ -138,6 +155,13 @@ namespace MCAWebAndAPI.Service.Resources {
         public static string InterviewPanelList {
             get {
                 return ResourceManager.GetString("InterviewPanelList", resourceCulture);
+=======
+        ///   Looks up a localized string similar to /_layouts/15/WopiFrame.aspx?sourcedoc={3242C181-0557-4827-AD0E-F089CFE63AED}&amp;file=Non%20Disclosure%20Agreement.docx&amp;action=default.
+        /// </summary>
+        public static string ExitProcedureNonDisclosureAgreement {
+            get {
+                return ResourceManager.GetString("ExitProcedureNonDisclosureAgreement", resourceCulture);
+>>>>>>> origin/master
             }
         }
         
@@ -201,6 +225,15 @@ namespace MCAWebAndAPI.Service.Resources {
         public static string ProfessionalPerformancePlan {
             get {
                 return ResourceManager.GetString("ProfessionalPerformancePlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to /Lists/ProfessionalPerformanceEvaluation.
+        /// </summary>
+        public static string ProfessionalPerfromanceEvaluation {
+            get {
+                return ResourceManager.GetString("ProfessionalPerfromanceEvaluation", resourceCulture);
             }
         }
         
