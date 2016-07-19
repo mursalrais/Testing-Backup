@@ -57,13 +57,33 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 logger.Debug(e.Message);
                 return false;
             }
+
+
+            var caml = @"<View><Query><Where><Eq><FieldRef Name='performanceevaluation_x003a_ID' /><Value Type='Lookup'>" + PerformanceEvaluation.ID + "</Value></Eq></Where></Query><ViewFields><FieldRef Name='ID' /></ViewFields><QueryOptions /></View>";
+            var listItem = SPConnector.GetList(SP_DETAIL_LIST_NAME, _siteUrl, caml);
+            foreach (var item in listItem)
+            {
+                updatedValues = new Dictionary<string, object>();
+                updatedValues.Add("pestatus", "Closed");
+                try
+                {
+                    SPConnector.UpdateListItem(SP_DETAIL_LIST_NAME, Convert.ToInt32(item["ID"]), updatedValues, _siteUrl);
+                }
+                catch (Exception e)
+                {
+                    logger.Debug(e.Message);
+                    return false;
+                }
+
+            }
+
             return true;
         }
 
         public void CreatePerformanceEvaluationDetails(int? headerID, string emailMessage)
         {
             //Get All Active Professional
-            var caml = @"<View><Query><Where><Eq><FieldRef Name='Professional_x0020_Status' /><Value Type='Choice'>Active</Value></Eq></Where></Query><ViewFields><FieldRef Name='ID' /><FieldRef Name='Title' /><FieldRef Name='officeemail' /></ViewFields><QueryOptions /></View>";
+            var caml = @"<View><Query><Where><Eq><FieldRef Name='Professional_x0020_Status' /><Value Type='Choice'>Active</Value></Eq></Where></Query><ViewFields><FieldRef Name='ID' /><FieldRef Name='Title' /><FieldRef Name='officeemail' /><FieldRef Name='Position_x003a_ID' /></ViewFields><QueryOptions /></View>";
             var listItem = SPConnector.GetList("Professional Master", _siteUrl, caml);
             var updatedValues = new Dictionary<string, object>();
             string emailTo;
@@ -72,6 +92,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 updatedValues = new Dictionary<string, object>();
                 updatedValues.Add("performanceevaluation", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
                 updatedValues.Add("ppestatus", "Initiated");
+                updatedValues.Add("pestatus", "Open");
+                if (((item["Position_x003a_ID"] as FieldLookupValue)) != null)
+                {
+                    updatedValues.Add("Position", (item["Position_x003a_ID"] as FieldLookupValue).LookupId);
+                }
                 updatedValues.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(item["ID"]) });
                 emailTo = Convert.ToString(item["officeemail"]);
                 try
@@ -193,8 +218,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 {
                     ID = Convert.ToInt32(item["ID"]),
                     EmployeeName = Convert.ToString((item["professional"] as FieldLookupValue).LookupValue),
-                    PlanStatus = Convert.ToString(item["ppestatus"]),
-                    PlanIndicator = color
+                    EvaluationStatus = Convert.ToString(item["ppestatus"]),
+                    EvaluationIndicator = color
                 });
             }
 

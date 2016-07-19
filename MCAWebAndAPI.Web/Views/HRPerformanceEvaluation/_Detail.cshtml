@@ -10,9 +10,9 @@
         .Name("Details")
         .Columns(columns =>
         {
-            columns.Bound(p => p.EmployeeName);
-            columns.Bound(p => p.PlanStatus);
-            columns.Bound(p => p.PlanIndicator).Template(@<div style="width:25px;height: 25px;-webkit-border-radius: 25px;-moz-border-radius: 25px;border-radius: 25px;background: @item.PlanIndicator;"></div>);
+        columns.Bound(p => p.EmployeeName);
+        columns.Bound(p => p.EvaluationStatus);
+        columns.Bound(p => p.EvaluationIndicator).Template(@<div style="width:25px;height: 25px;-webkit-border-radius: 25px;-moz-border-radius: 25px;border-radius: 25px;background: @item.EvaluationIndicator;"></div>);
         })
         );
 </div>

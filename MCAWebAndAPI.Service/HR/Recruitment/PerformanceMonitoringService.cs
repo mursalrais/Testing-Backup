@@ -90,7 +90,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             var listItem = SPConnector.GetList("Professional Master", _siteUrl, caml);
             var updatedValues = new Dictionary<string, object>();
             string emailTo;
-            int tes;
             foreach (var item in listItem)
             {
                 updatedValues = new Dictionary<string, object>();
