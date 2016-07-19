@@ -73,22 +73,22 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     <Query> 
                        <Where>
                              <Eq>
-                                <FieldRef Name='professional_x003a_ID' />
+                                <FieldRef Name='ID' />
                                 <Value Type='Lookup'>" + iD + @"</Value>
                              </Eq>
                        </Where>
                     </Query> 
                      <ViewFields> <FieldRef Name='Title' />
-                       <FieldRef Name='ID' /></ViewFields> 
+                          <FieldRef Name='professional_x003a_ID' /></ViewFields> 
                     </View>";
 
-            var compID = 0;
+            var profID = 0;
             foreach (var item in SPConnector.GetList(SP_COMREQ_LIST_NAME, _siteUrl, caml))
             {
-                compID = Convert.ToInt32(item["ID"]);
+                profID = Convert.ToInt32(FormatUtil.ConvertLookupToID(item, "professional_x003a_ID") + string.Empty);
             }
 
-            return GetComplisted(compID, iD);
+            return GetComplisted(iD, profID);
         }
 
         private int GetCompID(int? ID)
@@ -117,12 +117,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return compID;
         }
 
-       
-
         public CompensatoryVM GetComplistActive()
         {
             var viewModel = new CompensatoryVM();
-            var shortlist = new List<ListCompensatoryVM>();
 
             var caml1 = @"<View>  
                      <ViewFields> 
@@ -159,19 +156,14 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
                 foreach (var item2 in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl, caml2))
                 {
-                    shortlist.Add(new ListCompensatoryVM
-                    {
-                        CmpID = Convert.ToInt32(item2["ID"]),
-                        CmpName = Convert.ToString(item2["Title"]),
-                        CmpProjUnit = Convert.ToString(item2["Project_x002f_Unit"]),
-                        CmpPosition = FormatUtil.ConvertLookupToValue(item2, "Position"),
-                        listCompensatoryDetails = GetCompDetailist(GetCompID(Convert.ToInt32(item2["ID"])))
-                    });
+                    viewModel.cmpID = Convert.ToInt32(item2["ID"]);
+                    viewModel.cmpName = Convert.ToString(item2["Title"]);
+                    viewModel.cmpProjUnit = Convert.ToString(item2["Project_x002f_Unit"]);
+                    viewModel.cmpPosition = FormatUtil.ConvertLookupToValue(item2, "Position");
+                    viewModel.CompensatoryDetails = GetCompDetailist(GetCompID(Convert.ToInt32(item2["ID"])));
                 }
 
             }
-            viewModel.CompensatorytoList = shortlist;
-
             return viewModel;
         }
 
