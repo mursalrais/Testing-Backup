@@ -10,8 +10,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
     public class CompensatoryVM : Item
     {
-        public IEnumerable<ListCompensatoryVM> CompensatorytoList { get; set; } = new List<ListCompensatoryVM>();
-
         public IEnumerable<CompensatoryDetailVM> CompensatoryDetails { get; set; } = new List<CompensatoryDetailVM>();
 
         [UIHint("ComboBox")]
