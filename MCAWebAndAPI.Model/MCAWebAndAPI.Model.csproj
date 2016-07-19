@@ -143,6 +143,7 @@
     <Compile Include="ViewModel\Form\HR\DependentDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\EducationDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\ExitProcedureChecklistVM.cs" />
+    <Compile Include="ViewModel\Form\HR\ExitProcedureForApproverVM.cs" />
     <Compile Include="ViewModel\Form\HR\ExitProcedureVM.cs" />
     <Compile Include="ViewModel\Form\HR\FactorEvaluatedDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\IndividualGoalDetailVM.cs" />
@@ -162,6 +163,8 @@
     <Compile Include="ViewModel\Form\HR\PerformancePlanVM.cs" />
     <Compile Include="ViewModel\Form\HR\PlaceMasterVM.cs" />
     <Compile Include="ViewModel\Form\HR\ProfessionalDataVM.cs" />
+    <Compile Include="ViewModel\Form\HR\ProfessionalPerformanceEvaluationDetailVM.cs" />
+    <Compile Include="ViewModel\Form\HR\ProfessionalPerformanceEvaluationVM.cs" />
     <Compile Include="ViewModel\Form\HR\ProfessionalPerformancePlanVM.cs" />
     <Compile Include="ViewModel\Form\HR\ProjectOrUnitGoalsDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\PSAManagementVM.cs" />

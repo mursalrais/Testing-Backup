@@ -1,0 +1,61 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+
+@model ExitProcedureForApproverVM
+
+@{
+    ViewBag.Title = "Form for Approver To Approved";
+}
+
+@using (Html.BeginForm("UpdateChecklistItemApprover", "HRExitProcedure", FormMethod.Post,
+                                                                                         new
+                                                                                         {
+                                                                                             @class = "form-horizontal",
+                                                                                             enctype = "multipart/form-data"
+                                                                                         }))
+{
+
+    <fieldset>
+        <legend>Exit Procedure Data</legend>
+        <div class="row">
+            @Html.Partial("_ExitProcedureDataForApprover", Model)
+        </div>
+    </fieldset>
+}
+
+@if (Model.ID == null)
+{
+    <div class="form-actions">
+        <div class="row">
+            <div class="col-md-12">
+                <button id="submit-for-approved" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    Approved
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+
+@section scripts{
+    <script type="text/javascript">
+
+
+        $(document).ready(function () {
+            $("#submit-for-approved").click(function () {
+                $("#ChecklistItemApproval").val("Approved")
+                $("form").submit();
+    });
+});
+
+        function onSuccess(data)
+        {
+            window.location.href = data.urlToRedirect;
+        }
+
+        function onFailure(data)
+        {
+            window.location.href = data.urlToRedirect;
+        }
+    </script>
+}

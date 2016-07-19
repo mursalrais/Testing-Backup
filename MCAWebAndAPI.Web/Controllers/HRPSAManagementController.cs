@@ -31,8 +31,8 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult CreatePSAManagement(string siteUrl = null)
         {
             // MANDATORY: Set Site URL
-            psaManagementService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultQAHRSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultQAHRSiteUrl);
+            psaManagementService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             // Get blank ViewModel
             var viewModel = psaManagementService.GetPSAManagement(null);
@@ -43,8 +43,8 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult DisplayPSAManagement(string siteUrl = null, int? ID = null)
         {
             // MANDATORY: Set Site URL
-            psaManagementService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultQAHRSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultQAHRSiteUrl);
+            psaManagementService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             var viewModel = psaManagementService.GetPSAManagement(ID);
 
@@ -63,8 +63,8 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult ViewPSAManagement(string siteUrl = null, int? ID = null)
         {
             // MANDATORY: Set Site URL
-            psaManagementService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultQAHRSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultQAHRSiteUrl);
+            psaManagementService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             var viewModel = psaManagementService.ViewPSAManagementData(ID);
             return View("DisplayPSAManagement", viewModel);
@@ -80,7 +80,7 @@ namespace MCAWebAndAPI.Web.Controllers
             }
 
             var siteUrl = SessionManager.Get<string>("SiteUrl");
-            psaManagementService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultQAHRSiteUrl);
+            psaManagementService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             int? psaID = null;
 
@@ -216,24 +216,6 @@ namespace MCAWebAndAPI.Web.Controllers
                     }
                     else if((currentDate > viewModel.DateOfNewPSABefore) && (currentDate > viewModel.ExpireDateBefore))
                     {
-                        //try
-                        //{
-
-                        //    DateTime dateofnewpsa = DateTime.Now;
-
-                        //    dateofnewpsa = viewModel.DateOfNewPSA.Value;
-                        //    DateTime dateofnewpsaminoneday = dateofnewpsa.AddDays(-1);
-
-                        //    viewModel.HiddenExpiryDate = dateofnewpsaminoneday;
-                        //    viewModel.PSAStatus.Value = "Active";
-                        //    psaManagementService.UpdateStatusPSA(viewModel);
-                        //}
-                        //catch (Exception e)
-                        //{
-                        //    ErrorSignal.FromCurrentContext().Raise(e);
-                        //    return RedirectToAction("Index", "Error");
-                        //}
-
                         try
                         {
                             viewModel.PSAStatus.Value = "Non Active";
@@ -306,26 +288,6 @@ namespace MCAWebAndAPI.Web.Controllers
                     }
                     else if((currentDate > viewModel.DateOfNewPSABefore) && (currentDate > viewModel.ExpireDateBefore))
                     {
-                        //try
-                        //{
-                        //    //DateTime dateofnewpsa = DateTime.Now;
-
-                        //    //dateofnewpsa = viewModel.DateOfNewPSA.Value;
-                        //    //DateTime dateofnewpsaminoneday = dateofnewpsa.AddDays(-1);
-
-                        //    //viewModel.ExpireDateBefore = dateofnewpsaminoneday;
-
-                        //    //viewModel.HiddenExpiryDate = dateofnewpsaminoneday;
-                        //    viewModel.PSAStatus.Value = "Non Active";
-
-                        //    psaManagementService.UpdateStatusPSA(viewModel);
-                        //}
-                        //catch (Exception e)
-                        //{
-                        //    ErrorSignal.FromCurrentContext().Raise(e);
-                        //    return RedirectToAction("Index", "Error");
-                        //}
-
                         try
                         {
                             viewModel.PSAStatus.Value = "Active";

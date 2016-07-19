@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using MCAWebAndAPI.Model.HR.DataMaster;
 using MCAWebAndAPI.Model.ViewModel.Form.Common;
+using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
 using System.Threading.Tasks;
@@ -16,6 +17,7 @@ namespace MCAWebAndAPI.Service.Common
         const string SP_WORKFLOW_LISTNAME = "Workflow Mapping Master";
         const string SP_PROMAS_LIST_NAME = "Professional Master";
         const string SP_POSMAS_LIST_NAME = "Position Master";
+        const string SP_EXIT_CHECKLIST_LIST_NAME = "Exit Procedure Checklist";
 
         public IEnumerable<PositionMaster> GetPositionsInWorkflow(string listName, 
             string approverUnit, string requestorUnit, string requestorPosition)
@@ -51,8 +53,6 @@ namespace MCAWebAndAPI.Service.Common
 
         public async Task<WorkflowRouterVM> GetWorkflowRouter(string listName, string requestor)
         {
-            
-
             var viewModel = new WorkflowRouterVM();
             viewModel.ListName = listName;
 
@@ -201,8 +201,9 @@ namespace MCAWebAndAPI.Service.Common
         {
             var caml = @"<View>  
             <Query> 
-               <Where><Eq><FieldRef Name='ID' /><Value Type='Counter'>" + userID + @"</Value></Eq></Where> 
-            </Query> 
+               <Where><Eq><FieldRef Name='ID' /><Value Type='Counter'>" 
+                + userID + @"</Value></Eq></Where> 
+            </Query>
              <ViewFields><FieldRef Name='officeemail' /></ViewFields> 
             </View>";
 
@@ -231,7 +232,7 @@ namespace MCAWebAndAPI.Service.Common
             return viewModel;
         }
 
-        private ProfessionalMaster ConvertToProfessionalMasterVM(ListItem item)
+        ProfessionalMaster ConvertToProfessionalMasterVM(ListItem item)
         {
             return new ProfessionalMaster
             {
@@ -241,15 +242,24 @@ namespace MCAWebAndAPI.Service.Common
             };
         }
 
-        public void CreateTransactionWorkflow(string workflowTransactionListName, string transactionLookupColumnName, int headerID, IEnumerable<WorkflowItemVM> workflowItems)
+        public void CreateTransactionWorkflow(string workflowTransactionListName, string transactionLookupColumnName, int headerID, IEnumerable<WorkflowItemVM> workflowItems, string requestor = null)
         {
             foreach (var item in workflowItems)
             {
-                CreateTransactionWorkflowItem(workflowTransactionListName, transactionLookupColumnName, headerID, item);
+                CreateTransactionWorkflowItem(workflowTransactionListName, transactionLookupColumnName, headerID, item, requestor);
             }
         }
 
-        public void SendApprovalRequest(string workflowTransactionListName, string transactionLookupColumnName, int headerID, int level, string message)
+        public void CreateExitProcedureChecklistWorkflow(string workflowTransactionListName, string transactionLookupColumnName, int exitProcID, IEnumerable<ExitProcedureChecklistVM> exitProcedureChecklist, string requestor = null)
+        {
+            foreach (var item in exitProcedureChecklist)
+            {
+                CreateExitProcedureWorkflowItem(workflowTransactionListName, transactionLookupColumnName, exitProcID, item, requestor);
+            }
+        }
+
+        public void SendApprovalRequest(string workflowTransactionListName, 
+            string transactionLookupColumnName, int headerID, int level, string message)
         {
             var caml = @"<View>  
             <Query> 
@@ -280,10 +290,85 @@ namespace MCAWebAndAPI.Service.Common
             SPConnector.AddListItem(workflowTransactionListName, updatedValue, _siteUrl);
         }
 
+        private void CreateExitProcedureWorkflowItem(string workflowTransactionListName, string transactionLookupColumnName, int exitProcID, ExitProcedureChecklistVM exiProcedureChecklist, string requestor = null)
+        {
+            var updatedValue = new Dictionary<string, object>();
+            updatedValue.Add(transactionLookupColumnName, new FieldLookupValue { LookupId = exitProcID });
+            updatedValue.Add("approverlevel", exiProcedureChecklist.Level);
+            updatedValue.Add("approver", GetApproverUserLogin((int)exiProcedureChecklist.ApproverUserName.Value));
+            updatedValue.Add("requestor", requestor);
+            updatedValue.Add("Title", exiProcedureChecklist.ItemExitProcedure);
+
+            SPConnector.AddListItem(workflowTransactionListName, updatedValue, _siteUrl);
+        }
+
         public string GetPositionName(int position)
         {
             var item = SPConnector.GetListItem(SP_POSMAS_LIST_NAME, position, _siteUrl);
             return Convert.ToString(item["Title"]);
+        }
+
+        public async Task<IEnumerable<PendingApprovalItemVM>> GetPendingApprovalItemsAsync(string userLogin)
+        {
+            var getManpowerRequisitionWorkflow = GetPendingApprovalItemsAsync(userLogin, "Manpower Requisition", "manpowerrequisition");
+            var getCompensatoryRequestWorkflow = GetPendingApprovalItemsAsync(userLogin, "Compensatory Request", "compensatoryrequest");
+            var getDayOffRequestWorkflow = GetPendingApprovalItemsAsync(userLogin, "Day-Off Request", "dayoffrequest");
+            var getExitProcedureWorkflow = GetPendingApprovalItemsAsync(userLogin, "Exit Procedure", "exitprocedure");
+            var getPayrollRunWorkflow = GetPendingApprovalItemsAsync(userLogin, "Payroll Run", "payrollrun");
+            var getProfessionalPerformanceEvaluationWorkflow = GetPendingApprovalItemsAsync(userLogin, "Professional Performance Evaluation", "professionalperformanceevaluation");
+            var getProfessionalPerformancePlanWorkflow = GetPendingApprovalItemsAsync(userLogin, "Professional Performance Plan", "professionalperformanceplan");
+            var getTimesheetWorkflow = GetPendingApprovalItemsAsync(userLogin, "Timesheet", "timesheet");
+
+            var allTask = Task.WhenAll(
+                getManpowerRequisitionWorkflow, 
+                getCompensatoryRequestWorkflow, 
+                getDayOffRequestWorkflow, 
+                getExitProcedureWorkflow,
+                getPayrollRunWorkflow,
+                getProfessionalPerformanceEvaluationWorkflow,
+                getProfessionalPerformancePlanWorkflow,
+                getTimesheetWorkflow);
+
+            await allTask;
+            var pendingApprovalItems = new List<PendingApprovalItemVM>();
+            pendingApprovalItems.AddRange(await getManpowerRequisitionWorkflow);
+            pendingApprovalItems.AddRange(await getCompensatoryRequestWorkflow);
+            pendingApprovalItems.AddRange(await getDayOffRequestWorkflow);
+            pendingApprovalItems.AddRange(await getExitProcedureWorkflow);
+            pendingApprovalItems.AddRange(await getPayrollRunWorkflow);
+            pendingApprovalItems.AddRange(await getProfessionalPerformanceEvaluationWorkflow);
+            pendingApprovalItems.AddRange(await getProfessionalPerformancePlanWorkflow);
+            pendingApprovalItems.AddRange(await getTimesheetWorkflow);
+
+            return pendingApprovalItems;
+        }
+
+        async Task<IEnumerable<PendingApprovalItemVM>> GetPendingApprovalItemsAsync(string userLogin,
+            string listName, string lookupColumnName)
+        {
+            var caml = @"<View><Query><Where><And><Contains><FieldRef Name='approver0' /><Value Type='Text'>"
+                + userLogin + @"</Value></Contains><Eq><FieldRef Name='currentstate' /><Value Type='Choice'>Yes</Value></Eq></And></Where></Query></View>";
+            var viewModel = new List<PendingApprovalItemVM>();
+            var workflowListName = string.Format("{0} {1}", listName, "Workflow");
+
+            foreach (var item in SPConnector.GetList(workflowListName, _siteUrl, caml))
+            {
+                viewModel.Add(ConvertToPendingApprovalItemVM(item, listName, lookupColumnName));
+            }
+            return viewModel;
+        }
+
+        PendingApprovalItemVM ConvertToPendingApprovalItemVM(ListItem item, string listName, string lookupColumnName)
+        {
+
+            return new PendingApprovalItemVM
+            {
+                Requestor = Convert.ToString(item["requestor0"]),
+                Level = Convert.ToString(item["approverlevel"]),
+                DateOfRequest = Convert.ToDateTime(item["Created"]),
+                LookupID = (int)FormatUtil.ConvertLookupToID(item, lookupColumnName),
+                TransactionName = listName
+            };
         }
     }
 }

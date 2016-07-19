@@ -1,80 +1,136 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
-@using MCAWebAndAPI.Model.ViewModel.Control
-
-@model ExitProcedureVM
+@model IEnumerable<ExitProcedureChecklistVM>
 
 <div class="col-sm-12">
-    @(Html.Kendo().Grid<ExitProcedureChecklistVM>()
-        .Name("ExitProcedureChecklist")
-        //.ToolBar(tools => tools.Create().Text("Add New Fee"))
-        .Editable(editable => editable.Mode(GridEditMode.InLine))
-        .Columns(columns =>
-        {
-            columns.Bound(p => p.ID).Hidden();
-            columns.Bound(p => p.ItemExitProcedure);
-            columns.Bound(p => p.ApproverUnit).ClientTemplate("#=  ApproverUnit.Text #")
-            .EditorViewData(
-            new
-            {
-                BindTo = ExitProcedureChecklistVM.GetUnitOptions()
-            });
-            columns.Bound(p => p.ApproverPosition).ClientTemplate("#= ApproverPosition.Text #")
-            .EditorViewData(
-            new
-            {
-                DataTextField = "PositionName",
-                DataValueField = "ID",
-                ActionName = "GetApproverPositions",
-                ControllerName = "HRExitProcedure",
-                Filter = "filterApproverPosition",
-                Cascade = "ApproverUnit"
-            });
-            columns.Bound(p => p.ApproverUserName).ClientTemplate("#= ApproverUserName.Text #")
-            .EditorViewData(
-            new
-            {
-                DataTextField = "Name",
-                DataValueField = "ID",
-                ActionName = "GetApproverNames",
-                ControllerName = "HRExitProcedure",
-                Filter = "filterApproverName",
-                Cascade = "ApproverPosition_Value"
-            });
-            columns.Bound(p => p.DateOfApproval).Hidden().ClientTemplate("#= kendo.toString(DateOfApproval, 'MM/dd/yyyy') #");
-            columns.Bound(p => p.CheckListItemApproval).Hidden().ClientTemplate("#= CheckListItemApproval.Text #")
-            .EditorViewData(
-            new
-            {
-                BindTo = ExitProcedureChecklistVM.GetCheckListItemApproval()
-            });
-            columns.Bound(p => p.Remarks);
-            columns.Command(command => { command.Edit(); });
-        })
-        .ToolBar(toolbar => toolbar.Create())
-        .DataSource(
-            dataSource => dataSource
-            .Ajax()
-            .PageSize(10)
-            .Model(model =>
-            {
-                model.Id(p => p.ID);
-                model.Field(p => p.ApproverUnit).DefaultValue(ExitProcedureChecklistVM.GetUnitDefaultValue());
-                model.Field(m => m.ApproverPosition).DefaultValue(AjaxComboBoxVM.GetDefaultValue());
-                model.Field(m => m.ApproverUserName).DefaultValue(AjaxComboBoxVM.GetDefaultValue());
-                model.Field(p => p.ItemExitProcedure);
-                model.Field(p => p.DateOfApproval);
-                model.Field(p => p.CheckListItemApproval).DefaultValue(ExitProcedureChecklistVM.GetCheckListItemApprovalDefaultValue());
-                model.Field(p => p.Remarks);
-            })
-        .Create(update => update.Action("Grid_Create", "HRExitProcedure").Type(HttpVerbs.Post))
-        .Read(read => read.Action("Grid_Read", "HRExitProcedure").Type(HttpVerbs.Post))
-        .Update(update => update.Action("Grid_Update", "HRExitProcedure").Type(HttpVerbs.Post))
-        //.Destroy(update => update.Action("Grid_Destroy", "HRExitProcedure").Type(HttpVerbs.Post))
+    @(Html.Kendo().Grid(Model)
+    .Name("ExitProcedureChecklist")
+    .ToolBar(tools => tools.Create().Text("Add New ExitProcedureChecklist"))
+    .Editable(editable => editable.Mode(GridEditMode.InCell)
+    .CreateAt(GridInsertRowPosition.Bottom))
+    .Columns(columns =>
+    {
+    columns.Bound(p => p.ItemExitProcedure).ClientTemplate("#= ItemExitProcedure #" +
+                       "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ItemExitProcedure' value='#= ItemExitProcedure #' />"
+                     );
+
+    columns.Bound(p => p.ApproverUnit).ClientTemplate("#= ApproverUnit.Text #" +
+        "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ApproverUnit.Text' value='#= ApproverUnit.Text #' />"
         )
+        .EditorViewData(new
+        {
+            BindTo = ExitProcedureChecklistVM.GetUnitOptions()
+        });
+
+    columns.Bound(p => p.ApproverPosition).ClientTemplate("#= ApproverPosition.Text #" +
+                      "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ApproverPosition.Value' value='#= ApproverPosition.Value #' />")
+            .EditorViewData(
+            new
+            {
+                DataTextField = "Text",
+                DataValueField = "Value",
+                ControllerName = "HRDataMaster",
+                ActionName = "GetPositionsGrid"
+
+                });
+
+    columns.Bound(p => p.ApproverUserName).ClientTemplate("#= ApproverUserName.Text #" +
+                      "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ApproverUserName.Value' value='#= ApproverUserName.Value #' />")
+            .EditorViewData(
+            new
+            {
+                DataTextField = "Text",
+                DataValueField = "Value",
+                ControllerName = "HRDataMaster",
+                ActionName = "GetProfessionalsGrid"
+
+                });
+
+    columns.Bound(p => p.DateOfApproval).ClientTemplate("#= kendo.toString(DateOfApproval, 'MM/dd/yyyy') #" +
+        "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].DateOfApproval' value='#= DateOfApproval #' />"
+        );
+
+    columns.Bound(p => p.CheckListItemApproval).ClientTemplate("#= CheckListItemApproval.Text #" +
+        "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].CheckListItemApproval.Text' value='#= CheckListItemApproval.Text #' />"
+        )
+        .EditorViewData(new
+        {
+            BindTo = ExitProcedureChecklistVM.GetCheckListItemApproval()
+        });
+
+    columns.Bound(p => p.Remarks).ClientTemplate("#= Remarks #" +
+                       "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].Remarks' value='#= Remarks #' />"
+                     );
+
+    columns.Bound(p => p.ApprovalIndicator).Template(@<div style="width: 25px; height: 25px; background: red">@item.ApprovalIndicator</div>);
+
+        columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
+          "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ID' value='#= ID #' />"
+        );
+
+        columns.Bound(p => p.ApprovalMail).Hidden().ClientTemplate("#= ApprovalMail #" +
+          "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ApprovalMail' value='#= ApprovalMail #' />"
+        );
+
+        columns.Bound(p => p.WorkflowType).Hidden().ClientTemplate("#= WorkflowType #" +
+          "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].WorkflowType' value='#= WorkflowType #' />"
+        );
+
+        columns.Bound(p => p.IsDefault).Hidden().ClientTemplate("#= IsDefault #" +
+          "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].IsDefault' value='#= IsDefault #' />"
+        );
+
+        columns.Bound(p => p.Level).Hidden().ClientTemplate("#= Level #" +
+          "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].Level' value='#= Level #' />"
+        );
+
+        columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
+          "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].EditMode' value='#= EditMode #' />"
+        );
+
+
+        columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
+            .Click("onDeleteKendoDetail")).Width(100);
+    })
+    .Pageable()
+    .Events(e =>
+    {
+        //e.Change("onChange");
+        e.Edit("onEditKendoDetail");
+        e.DataBound("onDataBoundExitProcedureChecklists");
+    })
+    .DataSource(dataSource => dataSource.Ajax()
+                   .Model(model =>
+                   {
+                       model.Id(p => p.ID);
+                       model.Id(p => p.ApprovalMail);
+                       model.Id(p => p.WorkflowType);
+                       model.Id(p => p.IsDefault);
+                       model.Id(p => p.Level);
+                       model.Field(m => m.CheckListItemApproval).DefaultValue(ExitProcedureChecklistVM.GetCheckListItemApprovalDefaultValue());
+                       model.Field(m => m.ApproverUnit).DefaultValue(ExitProcedureChecklistVM.GetUnitDefaultValue());
+                       model.Field(m => m.ApproverPosition).DefaultValue(ExitProcedureChecklistVM.GetPositionDefaultValue());
+                       model.Field(m => m.ApproverUserName).DefaultValue(ExitProcedureChecklistVM.GetApproverUserNameDefaultValue());
+                       model.Field(m => m.DateOfApproval).DefaultValue(DateTime.UtcNow);
+
+                   })
+                   .ServerOperation(false)
+                   .PageSize(10)
+     )
+
     )
 </div>
 
 <script>
+
+    function getExitProcedureChecklists(dataItem) {
+        var data = $("#ExitProcedureChecklist").data("kendoGrid").dataSource.data();
+        return data.indexOf(dataItem);
+    }
+
+    function onDataBoundExitProcedureChecklists(e) {
+        var grid = $("#ExitProcedureChecklist").data("kendoGrid");
+        hideDeletedRowKendoDetail(grid);
+    }
 
     function filterApproverPosition(e) {
         return {

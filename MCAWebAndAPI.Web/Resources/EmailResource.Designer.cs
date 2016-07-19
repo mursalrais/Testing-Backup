@@ -234,6 +234,32 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dear Respective Approver,
+        ///
+        ///This email is sent to you to notify that there is a request which required your action to approve. Kindly check the link as per below to go to direct page accordingly. You may check your personal page in IMS (My Approval View). Thank you. 
+        ///
+        ///Link :   {0}{1}/EditFormApprover_Custom.aspx?ID={2}.
+        /// </summary>
+        public static string ProfessionalPerformancePlan {
+            get {
+                return ResourceManager.GetString("ProfessionalPerformancePlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dear Respective Approver,
+        ///
+        ///This email is sent to you to notify that there is a request which required your action to approve. Kindly check the link as per below to go to direct page accordingly. You may check your personal page in IMS (My Approval View). Thank you. 
+        ///
+        ///Link :  {0}{1}/EditFormApprover_Custom.aspx?ID={2}.
+        /// </summary>
+        public static string ProfessionalPerfromanceEvaluation {
+            get {
+                return ResourceManager.GetString("ProfessionalPerfromanceEvaluation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;p&gt;
         ///    &lt;strong&gt;Dear Approver&lt;/strong&gt;
         ///&lt;/p&gt;

@@ -11,23 +11,17 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
     public class ExitProcedureChecklistVM : Item
     {
-        public string TransactionType { get; set; }
-
-        public string RequestorUnit { get; set; }
-
-        public string RequestorPosition { get; set; }
-
-        public string ApproverLevel { get; set; }
-
-        public string AppPosition { get; set; }
-       
-        public string WorkflowType { get; set; }
-        
         /// <summary>
         /// Exit Checklist Item 
         /// </summary>
         [DisplayName("Item")]
         public string Item { get; set; }
+
+        public string ItemExitProcedure { get; set; }
+
+        //[UIHint("InGridAjaxCascadeComboBox")]
+        [UIHint("InGridAjaxComboBox")]
+        public AjaxComboBoxVM ApproverPosition { get; set; } = new AjaxComboBoxVM();
 
         /// <summary>
         /// Get Position Default Value
@@ -45,32 +39,27 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         }
 
         /// <summary>
-        /// Position ID
-        /// </summary>
-        public int PositionID { get; set; }
-
-        /// <summary>
         /// Approver Name
         /// </summary>
         [DisplayName("Approver Name")]
         public string ApproverName { get; set; }
 
         /// <summary>
-        /// Date of Approval
-        /// </summary>
-        [UIHint("Date")]
-        [DisplayName("Date of Approval")]
-        public DateTime? DateOfApproval { get; set; } = DateTime.Now;
-
-        [UIHint("InAjaxComboBox")]
-        public InGridComboBoxVM CheckListItemApproval { get; set; } = new InGridComboBoxVM();
-
-
-        /// <summary>
         /// Checklist Item Approval
         /// </summary>
-        //[UIHint("ComboBox")]
-        //[DisplayName("Indicator")]
+        [UIHint("InGridComboBox")]
+        public InGridComboBoxVM CheckListItemApproval { get; set; } = new InGridComboBoxVM();
+
+        public static InGridComboBoxVM GetCheckListItemApprovalDefaultValue(InGridComboBoxVM model = null)
+        {
+            var options = GetCheckListItemApproval();
+            if (model == null || (model.Value == null && model.Text == null) || string.IsNullOrEmpty(model.Text))
+                return options.FirstOrDefault();
+
+            return options.FirstOrDefault(e => e.Value == null ?
+                e.Value == model.Value : e.Text == model.Text);
+        }
+
         public static IEnumerable<InGridComboBoxVM> GetCheckListItemApproval()
         {
             var index = 0;
@@ -89,30 +78,65 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         }
 
         /// <summary>
+        /// Date of Approval
+        /// </summary>
+        [UIHint("Date")]
+        [DisplayName("Date of Approval")]
+        public DateTime? DateOfApproval { get; set; } = DateTime.Now;
+
+        /// <summary>
         /// Remarks
         /// </summary>
         [UIHint("TextArea")]
         public string Remarks { get; set; }
 
-        public string ItemExitProcedure { get; set; }
+        public string TransactionType { get; set; }
+
+        public string RequestorUnit { get; set; }
+        
+        public string RequestorPosition { get; set; }
+
+        public string ApproverLevel { get; set; }
+
+        public string AppPosition { get; set; }
+       
+        public string WorkflowType { get; set; }
+        
+        /// <summary>
+        /// Position ID
+        /// </summary>
+        public int PositionID { get; set; }
 
         public string ListName { get; set; }
 
         public string Level { get; set; }
 
-        public bool IsDefault { get; set; }
+        public string IsDefault { get; set; }
 
         public bool IsSequential { get; set; }
+
+        [UIHint("InGridAjaxComboBox")]
+        public AjaxComboBoxVM ApproverUserName { get; set; } = new AjaxComboBoxVM();
+
+        /// <summary>
+        /// Get Position Default Value
+        /// </summary>
+        public static AjaxComboBoxVM GetApproverUserNameDefaultValue(AjaxComboBoxVM model = null)
+        {
+            if (model == null)
+            {
+                return new AjaxComboBoxVM();
+            }
+            else
+            {
+                return model;
+            }
+        }
 
         [UIHint("InGridComboBox")]
         public InGridComboBoxVM ApproverUnit { get; set; } = new InGridComboBoxVM();
         
-        [UIHint("InGridAjaxCascadeComboBox")]
-        public AjaxComboBoxVM ApproverPosition { get; set; } = new AjaxComboBoxVM();
-
-        [UIHint("InGridAjaxCascadeComboBox")]
-        public AjaxComboBoxVM ApproverUserName { get; set; } = new AjaxComboBoxVM();
-
+        
         public static IEnumerable<InGridComboBoxVM> GetUnitOptions()
         {
             var index = 0;
@@ -158,15 +182,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
                 e.Value == model.Value : e.Text == model.Text);
         }
 
-        public static InGridComboBoxVM GetCheckListItemApprovalDefaultValue(InGridComboBoxVM model = null)
-        {
-            var options = GetCheckListItemApproval();
-            if (model == null || (model.Value == null && model.Text == null) || string.IsNullOrEmpty(model.Text))
-                return options.FirstOrDefault();
+        public string ApprovalIndicator { get; set; }
 
-            return options.FirstOrDefault(e => e.Value == null ?
-                e.Value == model.Value : e.Text == model.Text);
-        }
+        public string ApprovalMail { get; set; }
 
     }
 }

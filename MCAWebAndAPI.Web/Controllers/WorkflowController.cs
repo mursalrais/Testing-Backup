@@ -5,6 +5,7 @@ using MCAWebAndAPI.Model.ViewModel.Form.Common;
 using MCAWebAndAPI.Service.Common;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;
+
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -21,11 +22,12 @@ namespace MCAWebAndAPI.Web.Controllers
             _service = new WorkflowService();
         }
 
-        public ActionResult DisplayMyApprovalRequest(string siteUrl = null, string userLogin = null)
+        //TODO: To get all list of approval assigned to him/her
+        public async Task<ActionResult> DisplayPendingApprovalItems(string siteUrl = null, string userLogin = null)
         {
             _service.SetSiteUrl(siteUrl);
-
-            return View();
+            var viewModel = await _service.GetPendingApprovalItemsAsync(userLogin);
+            return View(viewModel);
         }
 
         public JsonResult GetApproverPositions(int approverUnit)
@@ -36,7 +38,7 @@ namespace MCAWebAndAPI.Web.Controllers
             var requestorUnitName = SessionManager.Get<string>("WorkflowRouterRequestorUnit");
             var approverUnitName = WorkflowItemVM.GetUnitOptions().FirstOrDefault(e => e.Value == approverUnit).Text;
 
-            var viewModel = _service.GetPositionsInWorkflow(listName, approverUnitName, 
+            var viewModel = _service.GetPositionsInWorkflow(listName, approverUnitName,
                 requestorUnitName, requestorPosition);
             return Json(viewModel.Select(e => new {
                 e.ID,
@@ -73,26 +75,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 return PartialView("_WorkflowDetails", viewModel);
             return View("_WorkflowDetails", viewModel);
         }
-
         
-        public async Task<ActionResult> DisplayWorkflowRouterExitProcedure(string listName, string requestor, bool isPartial = true)
-        {
-            _service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
-            var viewModel = await _service.GetWorkflowRouter(listName, requestor);
-            //var viewModel = await _service.GetWorkflowRouterRequestorPosition(listName, requestorPosition);
-            SessionManager.Set("WorkflowItems", viewModel.WorkflowItems);
-            SessionManager.Set("WorkflowRouterListName", viewModel.ListName);
-            SessionManager.Set("WorkflowRouterRequestorUnit", viewModel.RequestorUnit);
-            SessionManager.Set("WorkflowRouterRequestorPosition", viewModel.RequestorPosition);
-            
-            
-            if (isPartial)
-                return PartialView("_WorkflowDetails", viewModel);
-            return View("_WorkflowDetails", viewModel);
-            
-        }
-        
-
         [HttpPost]
         public JsonResult Grid_Read([DataSourceRequest] DataSourceRequest request)
         {

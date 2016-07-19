@@ -84,7 +84,7 @@ namespace MCAWebAndAPI.Web.Controllers
             await allTask;
             try
             {
-                // TODO: To change based on position
+                // TODO: To change email address based on position
                 switch (viewModel.ValidationAction)
                 {
                     case "ask-hr-to-validate-action":
@@ -138,7 +138,7 @@ namespace MCAWebAndAPI.Web.Controllers
             return array;
         }
 
-        private IEnumerable<EducationDetailVM> BindEducationDetails(FormCollection form,
+        IEnumerable<EducationDetailVM> BindEducationDetails(FormCollection form,
             IEnumerable<EducationDetailVM> educationDetails)
         {
             var array = educationDetails.ToArray();

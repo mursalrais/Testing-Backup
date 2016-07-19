@@ -28,9 +28,6 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult PerformanceMonitoring(int? ID = null,string type = null,string siteUrl = null)
         {
-
-
-
             // MANDATORY: Set Site URL
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);

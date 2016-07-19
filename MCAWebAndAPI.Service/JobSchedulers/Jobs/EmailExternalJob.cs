@@ -9,7 +9,6 @@ namespace MCAWebAndAPI.Service.JobSchedulers.Jobs
 {
     public class EmailExternalJob : IJob
     {
-        //TODO: To finish external email with outlook account
         public void Execute(IJobExecutionContext context)
         {
             JobKey key = context.JobDetail.Key;
