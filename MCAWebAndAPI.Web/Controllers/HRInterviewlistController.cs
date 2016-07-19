@@ -112,8 +112,7 @@ namespace MCAWebAndAPI.Web.Controllers
                new
                {
                    siteurl = siteUrl,
-                   ID = headerID,
-                   useraccess = "REQ"
+                   ID = viewModel.ID
                });
         }
 

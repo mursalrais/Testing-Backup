@@ -827,7 +827,7 @@
     <Folder Include="App_Code\" />
     <Folder Include="bin\Resources\" />
     <Folder Include="Content\kendo\2016.2.504\Bootstrap\" />
-    <Folder Include="Views\Error\File\" />
+    <Folder Include="Views\File\" />
     <Folder Include="Views\HRDataMaster\" />
   </ItemGroup>
   <ItemGroup>
