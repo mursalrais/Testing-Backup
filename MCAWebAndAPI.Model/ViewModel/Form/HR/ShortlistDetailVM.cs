@@ -35,12 +35,11 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public string GetStat { get; set; }
 
         [DisplayName("Need next interview")]
-        public string neednextintv { get; set; }
+        public Boolean neednextintv { get; set; }
 
         [DisplayName("Need next interview")]
         public string neednexttext { get; set; }
 
-       
         /// <summary>
         /// statusaplication
         /// </summary>

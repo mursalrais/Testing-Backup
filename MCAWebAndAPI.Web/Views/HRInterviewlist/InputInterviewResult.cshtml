@@ -14,7 +14,6 @@
     <fieldset>
         @Html.HiddenFor(m => m.ID)
         @Html.HiddenFor(m => m.Position)
-        @Html.HiddenFor(m => m.ManPos)
         @Html.HiddenFor(m => m.Candidate)
         @Html.HiddenFor(m => m.SendTo)
         
@@ -57,25 +56,22 @@
                     <div class="form-group">
                         @Html.Bootstrap().LabelFor(m => m.NeedNextInterviewer).Class("col-xs-2 control-label")
                         <div class="col-xs-2 pull-left">
-                                @Html.EditorFor(m => m.NeedNextInterviewer)
+                                @Html.RadioButtonFor(m => m.NeedNextInterviewer, true) Yes
+                                @Html.RadioButtonFor(m => m.NeedNextInterviewer, false) No
                         </div>
                     </div>
 
         <div class="form-actions">
             <div class="col-sm-12">
-                    <button id="submit-cancel" acti class="btn btn-primary" type="button" onClick="history.go(-1)">
-                        <i class="fa fa-back"></i>
-                        back
-                    </button>
-                    <button id="submit-button" class="btn btn-primary" type="submit">
-                        <i class="fa fa-save"></i>
-                        save
-                    </button>
-                    <button id="submit-cancel" acti class="btn btn-primary" type="button" onClick="history.go(0)">
-                        <i class="fa fa-send"></i>
-                        cancel
-                    </button>
-                </div>
+                <button id="submit-button" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    save
+                </button>
+                <button id="submit-cancel" acti class="btn btn-primary" type="button" onClick="history.go(0)">
+                    <i class="fa fa-send"></i>
+                    cancel
+                </button>
+            </div>
         </div>
 
         <a target='_parent' id="btn-addnew" class="btn btn-primary pull-left" href="@Model.InterviewerUrl">
@@ -95,20 +91,32 @@
     <script>
         function onPositionChange(e) {
             var res = $("#RecommendedForPosition_Value").val();
-
             if (res == "For Other Position") {
                 $("#OtherPosition_Value").data("kendoDropDownList").enable(true);
             }
             else {
                 $("#OtherPosition_Value").data("kendoDropDownList").enable(false);
             }
+
+            if (res == "Recommended" || res == "For Other Position")
+            {
+                $('input[name=NeedNextInterviewer ]').attr("disabled", false);
+            }
+            else
+            {
+                $('input[name=NeedNextInterviewer ]').attr("disabled", true);
+            }
         };
 
 
         $(document).ready(function () {
+            $("#OtherPosition_Value").data("kendoDropDownList").enable(false);
             $("#vac-position").prop('readonly', 'true');
             $("#val-candidate").prop('readonly', 'true');
-            
+            $('input[name=NeedNextInterviewer ]').attr("disabled", true);
+
+            NeedNextInterviewer
+
             $("#val-candidate").prop("value", $("#Candidate").val());
 
             var positionID = $("#Position").val();
@@ -118,7 +126,6 @@
                 $("#vac-position").prop("value", data.PositionName);
             })
             var res = $("#RecommendedForPosition_Value").val();
-
             if (res == "For Other Position") {
                 $("#OtherPosition_Value").data("kendoDropDownList").enable(true);
             }
