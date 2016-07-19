@@ -43,11 +43,10 @@
             );
             columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
             .Click("onDeleteKendoDetail")).Width(100);
-            columns.Command(command => command.Custom("Add Same Project").Click("addNewCustomRow")).Width(180);
         })
         .Events(e =>
         {
-            e.Edit("onCustomEditKendoDetail");
+            e.Edit("onEditKendoDetail");
             e.DataBound("onDataBoundProfessionalPerformanceEvaluationDetails");
         })
         .DataSource(dataSource => dataSource.Ajax().Events(events =>
@@ -61,58 +60,42 @@
         })
         .ServerOperation(false)
         )
-        )
+    )
 </div>
-
-<div class="row">
-    @Html.DisplayFor(m => m.OverallTotalScore)
+<div class="col-sm-12">
+    <div class="form-actions">
+        <div class="form-group">
+            @Html.Bootstrap().LabelFor(m => m.OverallTotalScore).Class("col-sm-4 control-label")
+            <div class="col-sm-8">
+                @Html.DisplayFor(m => m.OverallTotalScore)
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
-
-    var isCustomAdd = false;
-    var customRowDataItem;
-    var AllItems;
-    function addNewCustomRow(e) {
-        e.preventDefault();
-
-        customRowDataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        isCustomAdd = true;
-        this.addRow();
-    }
-
-    function onCustomEditKendoDetail(e) {
-        if (!e.model.isNew()) {
-            var container = e.container;
-            var tr = container.closest('tr');
-            var data = this.dataItem(tr); //get the row data so it can be referred later
-            // 1 is Item.Mode.UPDATED
-            data.set("EditMode", 1);
-        }
-        if (isCustomAdd && e.model.isNew()) {
-            isCustomAdd = false;
-            $(e.container).find("[name='ProjectOrUnitGoals']").val(customRowDataItem.ProjectOrUnitGoals).change();
-        }
-    }
-
     function onChange(e) {
+        var overallTotalScore = 0;
+        var recordsOnCurrentView = 0;
         if (e.action === "itemchange") {
             if (e.field === "ActualWeight" || e.field === "Score") {
                 var model = e.items[0];
                 var TotalScore = (model.ActualWeight / 100) * model.Score;
                 model.set('TotalScore', (TotalScore));
-                //var overallTotalScore = parseInt("0");
-                //for (var i = 0; i < e.items.length; i++) {
-                //    overallTotalScore = overallTotalScore + e.items.TotalScore;
-                //}
-                //console.log(e.items);
-                //$('#OverallTotalScore').prop('value', overallTotalScore);
+                var grid = $("#ProfessionalPerformanceEvaluationDetails").data("kendoGrid")
+                var dataSource = grid.dataSource;
+                //records on current view / page
+                recordsOnCurrentView = dataSource.view().length;
+                for (var i = 0; i < recordsOnCurrentView; i++) {
+                    overallTotalScore = overallTotalScore + dataSource._data[i].TotalScore;
+                }
+                overallTotalScore = overallTotalScore / recordsOnCurrentView;
+                $('#OverallTotalScore').prop('value', overallTotalScore);
             }
         }
     }
 
     function getProfessionalPerformancePlanDetail(dataItem) {
-        AllItems = dataItem;
         var data = $("#ProfessionalPerformanceEvaluationDetails").data("kendoGrid").dataSource.data();
         return data.indexOf(dataItem);
     }
