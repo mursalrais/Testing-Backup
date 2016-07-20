@@ -31,5 +31,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         IEnumerable<PSAManagementVM> GetJoinDate(int? professionalID);
 
         bool UpdateStatusPSA(PSAManagementVM psaManagement);
+
+        void SendMailPerformancePlan(string professionalMail, string mailContent);
     }
 }
