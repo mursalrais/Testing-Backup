@@ -58,7 +58,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.Candidate = Convert.ToString(listItem["Title"]);
             viewModel.SendTo = Convert.ToString(listItem["personalemail"]);
             viewModel.InterviewerUrl = string.Format(UrlResource.AddInterviewInvitation, _siteUrl, Convert.ToInt32(listItem["ID"]));
+            viewModel.Remarks = Convert.ToString(listItem["applicationremarks"]); 
             viewModel.NeedNextInterviewer.Value = Convert.ToString(listItem["neednextinterview"]);
+            viewModel.RecommendedForPosition.Value = Convert.ToString(listItem["applicationstatus"]);
+            viewModel.InterviewResultOption.Value = GetLastResult(viewModel.ID).ToString();
             // Convert Details
             viewModel.InterviewlistDetails = GetInputInterviewResult(viewModel.ID);
             return viewModel;
@@ -72,7 +75,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             var listItemdt = SPConnector.GetListItem(SP_APPDATA_LIST_NAME, ID, _siteUrl);
             viewModel = ConvertToResultInterviewDataVM(listItemdt);
-            viewModel.RecommendedForPosition.Text = GetLastResult(viewModel.ID).ToString();
 
             return viewModel;
 

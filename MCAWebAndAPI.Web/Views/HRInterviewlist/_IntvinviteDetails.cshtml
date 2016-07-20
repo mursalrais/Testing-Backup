@@ -14,10 +14,9 @@
 
         columns.Bound(p => p.DocumentUrl).ClientTemplate("<a href='#= DocumentUrl #'>get file</a>");
 
-        columns.Bound(p => p.GetStat).ClientTemplate("#= GetStat #" +
-        "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].GetStat' value='#= GetStat #' />");
+        columns.Bound(p => p.GetStat).ClientTemplate("<input name='ShortlistDetails[#= GetDetailShortlist(data)#].GetStat' value='#= GetStat #' style='width: 150px; border: none; background-color: transparent' readonly='readonly'/>");
 
-        columns.Bound(p => p.neednextintv).ClientTemplate("<input type='' id='ShortlistDetails[#= GetDetailShortlist(data)#].neednexttext' name='ShortlistDetails[#= GetDetailShortlist(data)#].neednexttext' value='#= neednextintv ? 'Yes' : 'No' #' style='width: 30px; border: none; background-color: transparent' />");
+        columns.Bound(p => p.neednextintv).ClientTemplate("<input name='ShortlistDetails[#= GetDetailShortlist(data)#].neednextintv' value='#= neednextintv #' style='width: 30px; border: none; background-color: transparent' readonly='readonly'/>");
 
         columns.Bound(p => p.Remarks).ClientTemplate("#= Remarks #" +
         "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].Remarks' value='#= Remarks #' />");

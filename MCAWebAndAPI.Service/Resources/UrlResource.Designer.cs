@@ -277,7 +277,7 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}/Lists/Professional%20Master/DispForm_Custom.aspx?ID={1}.
+        ///   Looks up a localized string similar to {0}/Lists/Application/DispForm.aspx?ID={1}.
         /// </summary>
         public static string ShortlistEmailLinkInterview {
             get {

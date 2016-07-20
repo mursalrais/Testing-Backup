@@ -182,7 +182,7 @@
     <value>{0}/Lists/Application/ShortlistREQ.aspx?POSID={1}</value>
   </data>
   <data name="ShortlistEmailLinkInterview" xml:space="preserve">
-    <value>{0}/Lists/Professional%20Master/DispForm_Custom.aspx?ID={1}</value>
+    <value>{0}/Lists/Application/DispForm.aspx?ID={1}</value>
   </data>
   <data name="ShortlistEmailLinkREQ" xml:space="preserve">
     <value>{0}/Lists/Application/Interviewlistdata.aspx?POSID={1}</value>

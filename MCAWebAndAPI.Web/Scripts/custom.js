@@ -121,6 +121,7 @@ function onEditKendoDetail(e) {
     }
 }
 
+
 function onDeleteKendoDetail(e) {
     var result = confirm("Are you sure you want to delete this item?");
     if (!result) return;

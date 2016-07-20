@@ -697,10 +697,6 @@
     <Content Include="Views\HRCompensatory\CompensatorylistHR.cshtml" />
     <Content Include="Views\HRExitProcedure\_ExitProcedureChecklist.cshtml" />
     <Content Include="Views\HRExitProcedure\_DocumentDetailsDisplay.cshtml" />
-    <Content Include="Views\HRInterviewlist\NextInterviewlist.cshtml" />
-    <Content Include="Views\HRShortlist\ShortlistInterviewPanel.cshtml" />
-    <Content Include="Views\HRInterviewlist\InterviewPanellistData.cshtml" />
-    <Content Include="Views\HRInterviewlist\_IntvinvitePanelDetails.cshtml" />
     <Content Include="Views\HRPerformanceEvaluation\PerformanceEvaluation.cshtml" />
     <Content Include="Views\HRPerformanceEvaluation\_Detail.cshtml" />
     <Content Include="Views\HRPerformanceEvaluation\_PerformancePlanEvaluation.cshtml" />
@@ -713,8 +709,7 @@
     <Content Include="Views\Workflow\DisplayPendingApprovalItems.cshtml" />
     <Content Include="Views\HRExitProcedure\ViewExitProcedureForApprover.cshtml" />
     <Content Include="Views\HRExitProcedure\_ExitProcedureDataForApprover.cshtml" />
-    <Content Include="Views\Shared\DisplayTemplates\Decimal.cshtml" />
-    <Content Include="Views\HRCompensatory\ListCompensatoryDetails.cshtml" />
+    <Content Include="Views\HRExitProcedure\_ExitProcedureChecklistForApprover.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

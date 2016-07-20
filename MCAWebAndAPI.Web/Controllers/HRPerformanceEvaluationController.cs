@@ -63,7 +63,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 catch (Exception e)
                 {
                     ErrorSignal.FromCurrentContext().Raise(e);
-                    return RedirectToAction("Index", "Error");
+                    return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
                 }
 
                 try
@@ -73,7 +73,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 catch (Exception e)
                 {
                     ErrorSignal.FromCurrentContext().Raise(e);
-                    return RedirectToAction("Index", "Error");
+                    return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
                 }                
             }
             else
@@ -86,7 +86,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 catch (Exception e)
                 {
                     ErrorSignal.FromCurrentContext().Raise(e);
-                    return RedirectToAction("Index", "Error");
+                    return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
                 }
             }
             return RedirectToAction("PerformanceEvaluation", new { ID = ID });

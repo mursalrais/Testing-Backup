@@ -13,6 +13,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// Professional Full Name
         /// </summary>
+        [DisplayName("Professional Name")]
         public string FullName { get; set; }
 
         /// <summary>
@@ -150,15 +151,21 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         public IEnumerable<ExitProcedureChecklistVM> ExitProcedureChecklist { get; set; } = new List<ExitProcedureChecklistVM>();
 
+        [DisplayName("Professional")]
         public string Requestor { get; set; }
 
         public string ListName { get; set; }
 
         public string RequestorUnit { get; set; }
 
+        [DisplayName("Position")]
         public string RequestorPosition { get; set; }
 
         public string StatusForm { get; set; }
+
+        public string ApproverMail { get; set; }
+
+        public string UserPermission { get; set; }
         
         ///// <summary>
         ///// Exit Procedure Status
