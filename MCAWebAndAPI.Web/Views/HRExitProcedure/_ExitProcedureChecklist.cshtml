@@ -102,10 +102,10 @@
                    .Model(model =>
                    {
                        model.Id(p => p.ID);
-                       model.Id(p => p.ApprovalMail);
-                       model.Id(p => p.WorkflowType);
-                       model.Id(p => p.IsDefault);
-                       model.Id(p => p.Level);
+                       model.Field(p => p.ApprovalMail);
+                       model.Field(p => p.WorkflowType);
+                       model.Field(p => p.IsDefault);
+                       model.Field(p => p.Level);
                        model.Field(m => m.CheckListItemApproval).DefaultValue(ExitProcedureChecklistVM.GetCheckListItemApprovalDefaultValue());
                        model.Field(m => m.ApproverUnit).DefaultValue(ExitProcedureChecklistVM.GetUnitDefaultValue());
                        model.Field(m => m.ApproverPosition).DefaultValue(ExitProcedureChecklistVM.GetPositionDefaultValue());

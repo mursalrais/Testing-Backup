@@ -709,6 +709,7 @@
     <Content Include="Views\Workflow\DisplayPendingApprovalItems.cshtml" />
     <Content Include="Views\HRExitProcedure\ViewExitProcedureForApprover.cshtml" />
     <Content Include="Views\HRExitProcedure\_ExitProcedureDataForApprover.cshtml" />
+    <Content Include="Views\HRExitProcedure\_ExitProcedureChecklistForApprover.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

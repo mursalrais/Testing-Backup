@@ -110,7 +110,9 @@ namespace MCAWebAndAPI.Service.HR.Common
                 Position = item["Position"] == null ? string.Empty :
                         Convert.ToString((item["Position"] as FieldLookupValue).LookupValue),
                 Project_Unit = Convert.ToString(item["Project_x002f_Unit"]),
-                OfficeEmail = Convert.ToString(item["officeemail"])
+                OfficeEmail = Convert.ToString(item["officeemail"]),
+                PSANumber = Convert.ToString(item["PSAnumber"]),
+                JoinDate = Convert.ToDateTime(item["Join_x0020_Date"]).ToLocalTime()
             };
         }
 

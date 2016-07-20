@@ -14,7 +14,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         void SetSiteUrl(string siteUrl);
 
         //Display Exit Procedure Data based on ID
-        ExitProcedureVM GetExitProcedure(int? ID, string siteUrl, string requestor, string listName);
+        ExitProcedureVM GetExitProcedure(int? ID, string siteUrl, string requestor, string listName, string user);
 
         ExitProcedureVM GetExitProcedure(int? ID);
 
@@ -32,7 +32,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         //Task<ExitProcedureVM> GetWorkflowRouterExitProcedure(string listName, string requestor);
 
-        ExitProcedureVM GetWorkflowExitProcedure(string listName, string requestor);
+        ExitProcedureVM GetWorkflowExitProcedure(string listName, string requestor, string user);
 
         IEnumerable<PositionMaster> GetPositionsInWorkflow(string listName,
             string approverUnit,
@@ -43,8 +43,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         IEnumerable<ProfessionalMaster> GetApproverNames(string position);
 
-        
-
         Task CreateExitProcedureChecklistAsync(int? exitProcID, IEnumerable<ExitProcedureChecklistVM> exitProcedureChecklist, string requestorposition, string requestorunit);
 
         void SendEmail(ExitProcedureVM header, string workflowTransactionListName, string transactionLookupColumnName,
@@ -52,6 +50,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         void SendMailDocument(string requestorMail, string documentExitProcedure);
 
-
+        ExitProcedureVM GetExitProcedureForApprove(int? ID, string siteUrl, string approver);
     }
 }

@@ -182,9 +182,40 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
                 e.Value == model.Value : e.Text == model.Text);
         }
 
+        [UIHint("InGridComboBox")]
+        public InGridComboBoxVM ApproverIndicator { get; set; } = new InGridComboBoxVM();
+
+        public static IEnumerable<InGridComboBoxVM> GetApproverIndicator()
+        {
+            var index = 0;
+            var options = new string[] {
+                "No",
+                "Yes"
+            };
+
+            return options.Select(e =>
+                new InGridComboBoxVM
+                {
+                    Value = ++index,
+                    Text = e
+                });
+        }
+
+        public static InGridComboBoxVM GetApproverIndicatorDefaultValue(InGridComboBoxVM model = null)
+        {
+            var options = GetApproverIndicator();
+            if (model == null || (model.Value == null && model.Text == null) || string.IsNullOrEmpty(model.Text))
+                return options.FirstOrDefault();
+
+            return options.FirstOrDefault(e => e.Value == null ?
+                e.Value == model.Value : e.Text == model.Text);
+        }
+
         public string ApprovalIndicator { get; set; }
 
         public string ApprovalMail { get; set; }
+
+
 
     }
 }

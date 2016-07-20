@@ -1,6 +1,6 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
 
-@model ExitProcedureForApproverVM
+@model ExitProcedureVM
 
 @{
     ViewBag.Title = "Form for Approver To Approved";
@@ -19,22 +19,26 @@
         <div class="row">
             @Html.Partial("_ExitProcedureDataForApprover", Model)
         </div>
+
+        <legend>Exit Procedure Checklist</legend>
+        <div class="row">
+            @Html.Partial("_ExitProcedureChecklistForApprover", Model.ExitProcedureChecklist)
+        </div>
     </fieldset>
 }
 
-@if (Model.ID == null)
-{
     <div class="form-actions">
         <div class="row">
             <div class="col-md-12">
-                <button id="submit-for-approved" class="btn btn-primary" type="submit">
+                <button id="approved-by-approver" class="btn btn-primary" type="submit">
                     <i class="fa fa-save"></i>
-                    Approved
+                    Save
                 </button>
+                
             </div>
         </div>
     </div>
-}
+
 
 
 @section scripts{
