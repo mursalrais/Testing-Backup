@@ -19,6 +19,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         const string SP_PPPIG_LIST_NAME = "PPP Individual Goal";
         const string SP_PPP_LIST_NAME = "Professional Performance Plan";
         const string SP_PP_LIST_NAME = "Performance Plan";
+        const string SP_PM_LIST_NAME = "Professional Master";
         const string SP_PPE_LIST_NAME = "Professional Performance Evaluation";
 
         public int CreateHeader(ProfessionalPerformancePlanVM header)
@@ -159,13 +160,13 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 }
             }
 
-            foreach (var item in SPConnector.GetList(SP_PPP_LIST_NAME, _siteUrl))
+            foreach (var item in SPConnector.GetList(SP_PM_LIST_NAME, _siteUrl))
             {
-                emailTemp = FormatUtil.ConvertLookupToValue(item, "professional_x003a_Office_x0020_");
+                emailTemp = Convert.ToString(item["officeemail"]);
                 if (requestor == emailTemp)
                 {
-                    model.Name = FormatUtil.ConvertLookupToValue(item, "professional");
-                    model.NameID = FormatUtil.ConvertLookupToID(item, "professional");
+                    model.Name = Convert.ToString(item["Title"]);
+                    model.NameID = Convert.ToInt32(item["ID"]);
                     model.PositionAndDepartement = FormatUtil.ConvertLookupToValue(item, "Position");
                     model.PositionAndDepartementID = FormatUtil.ConvertLookupToID(item, "Position");
                 }
