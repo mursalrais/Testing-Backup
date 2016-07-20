@@ -169,4 +169,37 @@
   <data name="ExitProcedureExitInterviewForm" xml:space="preserve">
     <value>/_layouts/15/WopiFrame.aspx?sourcedoc={2E1A7EB1-E5BD-4F38-A1DF-E43C7DEF0CF4}&amp;file=Exit%20Interview%20Form.docx&amp;action=default</value>
   </data>
+  <data name="AddInterviewInvitation" xml:space="preserve">
+    <value>{0}/Lists/Application/InputInterviewResultDetail.aspx?ID={1}</value>
+  </data>
+  <data name="InterviewDataList" xml:space="preserve">
+    <value>{0}/Lists/Application/Interviewlistdata.aspx?POSID={1}</value>
+  </data>
+  <data name="InterviewInputResult" xml:space="preserve">
+    <value>{0}/Lists/Application/InputInterviewResult.aspx?ID={1}</value>
+  </data>
+  <data name="ShortlistEmailLinkHR" xml:space="preserve">
+    <value>{0}/Lists/Application/ShortlistREQ.aspx?POSID={1}</value>
+  </data>
+  <data name="ShortlistEmailLinkInterview" xml:space="preserve">
+    <value>{0}/Lists/Application/DispForm.aspx?ID={1}</value>
+  </data>
+  <data name="ShortlistEmailLinkREQ" xml:space="preserve">
+    <value>{0}/Lists/Application/Interviewlistdata.aspx?POSID={1}</value>
+  </data>
+  <data name="CVDocumentByID" xml:space="preserve">
+    <value>{0}/Application%20Documents/Forms/AllItems.aspx#InplviewHash4adbc69d-4587-40ad-8645-58b419984117=FilterField1%3Dapplication%255Fx003a%255FID-FilterValue1%3D{1}</value>
+  </data>
+  <data name="InterviewPanelList" xml:space="preserve">
+    <value>{0}/Lists/Application/InterviewPanellist.aspx?POSID={1}</value>
+  </data>
+  <data name="ShortlistInterviewPanel" xml:space="preserve">
+    <value>{0}/Lists/Application/ShortlistInterviewPanel.aspx?POSID={1}</value>
+  </data>
+  <data name="InterviewList" xml:space="preserve">
+    <value>{0}/Lists/Application/Interviewlist.aspx?POSID={1}</value>
+  </data>
+  <data name="ApplicationDisplayByID" xml:space="preserve">
+    <value>{0}/Lists/Application/DispForm.aspx?ID={1}</value>
+  </data>
 </root>

@@ -16,6 +16,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         public string InterviewPanel { get; set; }
 
+        [UIHint("TextArea")]
         public string InterviewSummary { get; set; }
 
         public string Result { get; set; }

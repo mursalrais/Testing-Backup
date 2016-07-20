@@ -79,37 +79,93 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;https://eceos2.sharepoint.com/sites/ims/hr/Lists/Professional%20Master/DispForm_Custom.aspx?ID=3&apos;.
+        ///   Looks up a localized string similar to Dear Interview Panel,
+        ///
+        ///{0}
+        ///
+        ///This email is sent to you to notify that here is the latest list of shortlisted candidate. This list
+        ///
+        ///requires your action to review as well as to prepare the Interview process for further action.
+        ///
+        ///Kindly check the link as per below to go to direct page accordingly. Thank you.
+        ///
+        ///Link : {1}.
         /// </summary>
-        public static string EmailCandidateShortlist {
+        public static string EmailInterviewToInterviewCandidate {
             get {
-                return ResourceManager.GetString("EmailCandidateShortlist", resourceCulture);
+                return ResourceManager.GetString("EmailInterviewToInterviewCandidate", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .                                                                                                          Dear Requestor,
+        ///   Looks up a localized string similar to Dear Interview Panel,
         ///
-        ///This email is sent to you to notify that your HR, Interview Result data list. 
+        ///{0}
         ///
-        ///Thank you..
+        ///This email is sent to you to notify that here is the latest list of shortlisted candidate. This list
+        ///
+        ///requires your action to review as well as to prepare the Interview process for further action.
+        ///
+        ///Kindly check the link as per below to go to direct page accordingly. Thank you.
+        ///
+        ///Link : {1}.
         /// </summary>
-        public static string EmailInterviewResult {
+        public static string EmailInterviewToInterviewPanel {
             get {
-                return ResourceManager.GetString("EmailInterviewResult", resourceCulture);
+                return ResourceManager.GetString("EmailInterviewToInterviewPanel", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .                                                                                                         Dear Requestor,
+        ///   Looks up a localized string similar to Dear HR Team,
         ///
-        ///This email is Shortlisted Candidate Result data from HR,
+        ///This email is sent to you to notify that here is the latest list of shortlisted candidate. This list
         ///
-        ///Thank you..
+        ///requires your action to send to Interview Panel for further action. Kindly check the link as per
+        ///
+        ///below to go to direct page accordingly. Thank you.
+        ///
+        ///Link : {0}.
         /// </summary>
-        public static string EmailShortlistData {
+        public static string EmailShortlistToHR {
             get {
-                return ResourceManager.GetString("EmailShortlistData", resourceCulture);
+                return ResourceManager.GetString("EmailShortlistToHR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dear Interview Panel,
+        ///
+        ///{0}
+        ///
+        ///This email is sent to you to notify that here is the latest list of shortlisted candidate. This list
+        ///
+        ///requires your action to review as well as to prepare the Interview process for further action.
+        ///
+        ///Kindly check the link as per below to go to direct page accordingly. Thank you.
+        ///
+        ///Link : {1}.
+        /// </summary>
+        public static string EmailShortlistToInterviewPanel {
+            get {
+                return ResourceManager.GetString("EmailShortlistToInterviewPanel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dear Respective Requestor,
+        ///
+        ///This email is sent to you to notify that here is the list of shortlisted candidate from HR. This list
+        ///
+        ///requires your action to select the most suitable candidate for this position. Kindly check the link
+        ///
+        ///as per below to go to direct page accordingly. Thank you.
+        ///
+        ///Link : {0}.
+        /// </summary>
+        public static string EmailShortlistToRequestor {
+            get {
+                return ResourceManager.GetString("EmailShortlistToRequestor", resourceCulture);
             }
         }
         

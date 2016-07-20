@@ -36,13 +36,21 @@ namespace MCAWebAndAPI.Web.Controllers
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             var viewModel = _hRProfessionalPerformanceEvaluationService.GetHeader(ID);
-            viewModel.Requestor = requestor;
-            viewModel.ID = ID;
+            if (requestor != null)
+            {
+                viewModel.Requestor = requestor;
+            }
+            if (ID != null)
+            {
+                viewModel.ID = ID;
+            }
 
             ViewBag.Action = "EditPerformanceEvaluation";
 
+
             // Used for Workflow Router
             ViewBag.ListName = "Professional%20Performance%20Evaluation";
+            SessionManager.Set("ListName", ViewBag.ListName);
 
             // This var should be taken from passing parameter
             if (requestor != null)
@@ -72,7 +80,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 }
             }
             viewModel.OverallTotalScore = totalTotalScore / countData;
-            if (sumPlanned != 100 & sumActual != 100)
+            if (sumPlanned != 100 || sumActual != 100)
             {
                 ModelState.AddModelError("ModelInvalid", "Weight must be total 100%");
                 return View("ProfessionalPerformanceEvaluation", viewModel);

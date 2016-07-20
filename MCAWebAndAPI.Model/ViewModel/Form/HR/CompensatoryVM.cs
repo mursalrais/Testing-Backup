@@ -10,8 +10,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
     public class CompensatoryVM : Item
     {
-        public IEnumerable<ListCompensatoryVM> CompensatorytoList { get; set; } = new List<ListCompensatoryVM>();
-
         public IEnumerable<CompensatoryDetailVM> CompensatoryDetails { get; set; } = new List<CompensatoryDetailVM>();
 
         [UIHint("ComboBox")]
@@ -31,34 +29,34 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// </head>
         /// 
         [DisplayName("CompID")]
-        public int? CmpID { get; set; }
+        public int? cmpID { get; set; }
 
         /// <head>
         /// CompensatoryDay
         /// </head>
         /// 
         [DisplayName("Name")]
-        public string CmpName { get; set; }
+        public string cmpName { get; set; }
 
         /// <head>
         /// CompensatoryInitial
         /// </head>
         /// 
         [DisplayName("Position")]
-        public string CmpPosition { get; set; }
+        public string cmpPosition { get; set; }
 
         /// <head>
         /// CompensatoryPosition
         /// </head>
         /// 
         [DisplayName("Project/Unit")]
-        public string CmpProjUnit { get; set; }
+        public string cmpProjUnit { get; set; }
 
         /// <head>
         /// CompensatoryYearDate
         /// <head>
         [DisplayName("YearDate")]
-        public string CmpYearDate { get; set; }
+        public string cmpYearDate { get; set; }
 
     }
 }
