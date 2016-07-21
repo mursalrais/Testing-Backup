@@ -53,7 +53,6 @@ namespace MCAWebAndAPI.Web.Controllers
             // Get blank ViewModel
             var viewModel = exitProcedureService.GetExitProcedure(null, siteUrl, requestor, listName, user);
 
-
             if (user == "HR")
             {
                 viewModel.UserPermission = "HR";
@@ -187,27 +186,12 @@ namespace MCAWebAndAPI.Web.Controllers
                 return RedirectToAction("Index", "Error");
             }
 
-            if (viewModel.StatusForm == "Draft")
+            if ((viewModel.StatusForm == "Draft")||(viewModel.StatusForm == "Pending Approval")|| (viewModel.StatusForm == "Saved by HR")||(viewModel.StatusForm == "Approved by HR"))
             {
                 Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateExitProcedureWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)exitProcID);
             }
-            else if(viewModel.StatusForm == "Pending Approval")
-            {
-                Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateExitProcedureWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
-                    SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)exitProcID);
-            }
-            else if (viewModel.StatusForm == "Saved by HR")
-            {
-                Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateExitProcedureWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
-                    SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)exitProcID);
-            }
-            else if (viewModel.StatusForm == "Approved by HR")
-            {
-                Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateExitProcedureWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
-                    SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)exitProcID);
-            }
-
+            
             try
             {
                 if (viewModel.StatusForm == "Pending Approval")

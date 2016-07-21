@@ -66,7 +66,7 @@
         </div>
     </div>
 
-    ViewBag.ProfessionalMail = Model.RequestorMailAddress;
+    
 }
 
    
@@ -125,11 +125,26 @@
                 $('#ProjectUnit').prop('value', result[0].Project_Unit);
                 $('#Position').prop('value', result[0].Position);
                 $('#PSANumber').prop('value', result[0].PSANumber);
-                $('#JoinDate').prop('value', result[0].JoinDate);
-                $('#RequestorMailAddress').prop('value', result[0].OfficeEmail);
-                $('#ProfessionalID').prop('value', result[0].ID);
+                
+                //var date = result[0].JoinDate;
 
                 
+
+                //var month = result[0].JoinDate.getMonth();
+                //var year = result[0].JoinDate.getYear();
+
+                
+                //var joinDate = month + '/' + date + '/' + year;
+
+                //console.log(date);
+                //console.log(month);
+                //console.log(year);
+
+
+                $('#JoinDate').prop('value', result[0].JoinDateTemp);
+
+                $('#RequestorMailAddress').prop('value', result[0].OfficeEmail);
+                $('#ProfessionalID').prop('value', result[0].ID);
 
             })
                       

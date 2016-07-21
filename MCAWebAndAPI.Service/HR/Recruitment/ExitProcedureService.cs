@@ -79,7 +79,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 statusExitProcedure = "Draft";
             }
-            else
+            else if(exitProcedure.StatusForm == "Approved by HR")
             {
                 statusExitProcedure = "Approved";
             }

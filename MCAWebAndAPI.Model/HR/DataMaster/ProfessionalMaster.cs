@@ -31,7 +31,10 @@ namespace MCAWebAndAPI.Model.HR.DataMaster
 
         public string PSANumber { get; set; }
 
+        
         public DateTime JoinDate { get; set; } = DateTime.Now;
+
+        public string JoinDateTemp { get; set; }
 
     }
 }

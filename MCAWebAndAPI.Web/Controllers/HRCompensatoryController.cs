@@ -38,8 +38,14 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
 
-            var viewmodel = _service.GetComplist(iD);
+            var viewmodel = _service.GetComplistbyCmpid(iD);
 
+            int? cmpID = iD;
+
+            if (cmpID == null)
+                return View(viewmodel);
+
+            viewmodel.cmpID = cmpID;
             //viewmodel.ID = id;
             return View(viewmodel);
         }
@@ -56,7 +62,7 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
 
-            var viewmodel = _service.GetComplist(iD);
+            var viewmodel = _service.GetComplistbyProfid(iD);
 
             //viewmodel.ID = id;
             return View(viewmodel);
@@ -68,7 +74,7 @@ namespace MCAWebAndAPI.Web.Controllers
             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
 
-            var viewmodel = _service.GetComplist(iD);
+            var viewmodel = _service.GetComplistbyCmpid(iD);
 
             //viewmodel.ID = id;
             return View(viewmodel);
@@ -94,12 +100,12 @@ namespace MCAWebAndAPI.Web.Controllers
 
             var testget = form[""];
 
-            int? headerID = null;
+            int? cmpID = viewModel.cmpID;
 
             try
             {
                 viewModel.CompensatoryDetails = BindCompensatorylistDetails(form, viewModel.CompensatoryDetails);
-                _service.CreateCompensatoryData(headerID, viewModel);
+                _service.CreateCompensatoryData(cmpID, viewModel);
             }
             catch (Exception e)
             {
@@ -107,8 +113,12 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(
-                string.Format("{0}/{1}", siteUrl, UrlResource.Professional));
+            return RedirectToAction("Index",
+               "Success",
+               new
+               {
+                   errorMessage = string.Format(MessageResource.SuccessCreateCompensatoryData, viewModel.cmpName)
+               });
         }
 
         private IEnumerable<CompensatoryDetailVM> BindCompensatorylistDetails(FormCollection form, IEnumerable<CompensatoryDetailVM> compDetails)
@@ -119,10 +129,10 @@ namespace MCAWebAndAPI.Web.Controllers
                 array[i].CmpDate = BindHelper.BindDateInGrid("CompensatoryDetails",
                     i, "CmpDate", form);
 
-                array[i].StartTime = BindHelper.BindDateInGrid("CompensatoryDetails",
+                array[i].StartTime = array[i].CmpDate + BindHelper.BindTimeInGrid("CompensatoryDetails",
                     i, "StartTime", form);
 
-                array[i].FinishTime = BindHelper.BindDateInGrid("CompensatoryDetails",
+                array[i].FinishTime = array[i].CmpDate + BindHelper.BindTimeInGrid("CompensatoryDetails",
                     i, "FinishTime", form);
             }
             return array;
