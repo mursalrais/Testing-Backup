@@ -129,22 +129,66 @@ Regards,
 MCA Indonesia
 Recruitment Team</value>
   </data>
-  <data name="EmailCandidateShortlist" xml:space="preserve">
-    <value>'https://eceos2.sharepoint.com/sites/ims/hr/Lists/Professional%20Master/DispForm_Custom.aspx?ID=3'</value>
+  <data name="EmailInterviewToInterviewCandidate" xml:space="preserve">
+    <value>Dear Interview Panel,
+
+{0}
+
+This email is sent to you to notify that here is the latest list of shortlisted candidate. This list
+
+requires your action to review as well as to prepare the Interview process for further action.
+
+Kindly check the link as per below to go to direct page accordingly. Thank you.
+
+Link : {1}</value>
   </data>
-  <data name="EmailInterviewResult" xml:space="preserve">
-    <value>.                                                                                                          Dear Requestor,
+  <data name="EmailInterviewToInterviewPanel" xml:space="preserve">
+    <value>Dear Interview Panel,
 
-This email is sent to you to notify that your HR, Interview Result data list. 
+{0}
 
-Thank you.</value>
+This email is sent to you to notify that here is the latest list of shortlisted candidate. This list
+
+requires your action to review as well as to prepare the Interview process for further action.
+
+Kindly check the link as per below to go to direct page accordingly. Thank you.
+
+Link : {1}</value>
   </data>
-  <data name="EmailShortlistData" xml:space="preserve">
-    <value>.                                                                                                         Dear Requestor,
+  <data name="EmailShortlistToHR" xml:space="preserve">
+    <value>Dear HR Team,
 
-This email is Shortlisted Candidate Result data from HR,
+This email is sent to you to notify that here is the latest list of shortlisted candidate. This list
 
-Thank you.</value>
+requires your action to send to Interview Panel for further action. Kindly check the link as per
+
+below to go to direct page accordingly. Thank you.
+
+Link : {0}</value>
+  </data>
+  <data name="EmailShortlistToInterviewPanel" xml:space="preserve">
+    <value>Dear Interview Panel,
+
+{0}
+
+This email is sent to you to notify that here is the latest list of shortlisted candidate. This list
+
+requires your action to review as well as to prepare the Interview process for further action.
+
+Kindly check the link as per below to go to direct page accordingly. Thank you.
+
+Link : {1}</value>
+  </data>
+  <data name="EmailShortlistToRequestor" xml:space="preserve">
+    <value>Dear Respective Requestor,
+
+This email is sent to you to notify that here is the list of shortlisted candidate from HR. This list
+
+requires your action to select the most suitable candidate for this position. Kindly check the link
+
+as per below to go to direct page accordingly. Thank you.
+
+Link : {0}</value>
   </data>
   <data name="ManpowerApproval" xml:space="preserve">
     <value>&lt;p&gt;

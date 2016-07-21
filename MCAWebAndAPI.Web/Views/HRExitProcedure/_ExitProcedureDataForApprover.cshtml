@@ -1,0 +1,61 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model ExitProcedureVM
+
+
+
+
+<div class="col-md-6">
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.Requestor).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.DisplayFor(m => m.Requestor)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.Position).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.DisplayFor(m => m.Position)
+        </div>
+    </div>
+    @Html.HiddenFor(m => m.ID)
+    @Html.HiddenFor(m => m.ProjectUnit)
+    @Html.HiddenFor(m => m.JoinDate)
+    @Html.HiddenFor(m => m.StatusForm)
+    @Html.HiddenFor(m => m.PSANumber)
+    @Html.HiddenFor(m => m.RequestDate)
+    @Html.HiddenFor(m => m.LastWorkingDate)
+    @Html.HiddenFor(m => m.ExitReason.Value)
+    @Html.HiddenFor(m => m.Professional.Value)
+    @Html.HiddenFor(m => m.ReasonDesc)
+    @Html.HiddenFor(m => m.RequestorPosition)
+    @Html.HiddenFor(m => m.RequestorUnit)
+
+    @Html.HiddenFor(m => m.ProfessionalID)
+    @Html.HiddenFor(m => m.RequestorMailAddress)
+
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+
+
+        $(document).ready(function ()
+        {
+            $("#submit-button").click(function ()
+            {
+                $("form").submit();
+            });
+
+        });
+
+        function onSuccess(data)
+        {
+            window.location.href = data.urlToRedirect;
+        }
+
+        function onFailure(data)
+        {
+            window.location.href = data.urlToRedirect;
+        }
+    </script>
+}

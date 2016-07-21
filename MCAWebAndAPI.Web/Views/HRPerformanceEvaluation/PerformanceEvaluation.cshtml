@@ -17,7 +17,7 @@
                                                                  }))
 {
     <fieldset>
-        <legend>Performance Plan Evaluation</legend>
+        <legend>Performance Evaluation Evaluation</legend>
         <div class="row">
             @Html.HiddenFor(x=>x.ID)
             @Html.Partial("_PerformancePlanEvaluation", Model)
@@ -29,31 +29,31 @@
                     {
                         <button id="initiate" class="btn btn-primary" type="submit">
                             <i class="fa fa-save"></i>
-                            Initiate Plan Process
+                            Initiate Evaluation Process
                         </button>
                         <button id="close" class="btn btn-primary" type="submit" disabled>
                             <i class="fa fa-save"></i>
-                            Close Plan Process
+                            Close Evaluation Process
                         </button>
                     }
                     else
                     {
                         <button id="initiate" class="btn btn-primary" type="submit" disabled>
                             <i class="fa fa-save"></i>
-                            Initiate Plan Process
+                            Initiate Evaluation Process
                         </button>
-                        if (Model.PerformanceEvaluationDetails.All(x => x.PlanIndicator == "green") && (Model.Status == "Open") && (Model.PerformanceEvaluationDetails.All(x => x.PlanStatus == "Approved")))
+                        if (Model.PerformanceEvaluationDetails.All(x => x.EvaluationStatus == "green") && (Model.Status == "Open") && (Model.PerformanceEvaluationDetails.All(x => x.EvaluationStatus == "Approved")))
                         {
                             <button id="close" class="btn btn-primary" type="submit">
                                 <i class="fa fa-save"></i>
-                                Close Plan Process
+                                Close Evaluation Process
                             </button>
                         }
                         else
                         {
                             <button id="close" class="btn btn-primary" type="submit" disabled>
                                 <i class="fa fa-save"></i>
-                                Close Plan Process
+                                Close Evaluation Process
                             </button>
                         }
                     }

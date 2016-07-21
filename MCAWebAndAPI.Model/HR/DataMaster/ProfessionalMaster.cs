@@ -28,5 +28,13 @@ namespace MCAWebAndAPI.Model.HR.DataMaster
         public string UserLogin { get; set; }
 
         public string OfficeEmail { get; set; }
+
+        public string PSANumber { get; set; }
+
+        
+        public DateTime JoinDate { get; set; } = DateTime.Now;
+
+        public string JoinDateTemp { get; set; }
+
     }
 }

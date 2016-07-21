@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;
+using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Model.HR.DataMaster;
 using MCAWebAndAPI.Service.HR.Recruitment;
 using Elmah;
@@ -93,7 +94,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 {
                     try
                     {
-                        viewModel.PSAStatus.Value = "Non Active";
+                        viewModel.PSAStatus.Value = "Inactive";
                         viewModel.HiddenExpiryDate = viewModel.PSAExpiryDate;
                         psaID = psaManagementService.CreatePSAManagement(viewModel);
                     }
@@ -253,7 +254,7 @@ namespace MCAWebAndAPI.Web.Controllers
                             viewModel.ExpireDateBefore = dateofnewpsaminoneday;
 
                             viewModel.HiddenExpiryDate = dateofnewpsaminoneday;
-                            viewModel.PSAStatus.Value = "Non Active";
+                            viewModel.PSAStatus.Value = "Active";
 
                             psaManagementService.UpdateStatusPSA(viewModel);
                         }
@@ -338,6 +339,11 @@ namespace MCAWebAndAPI.Web.Controllers
                         }
                     }
                 }      
+            }
+
+            if(viewModel.PerformancePlan.Value == "Yes")
+            {
+                psaManagementService.SendMailPerformancePlan(viewModel.ProfessionalMail, string.Format("Please kindly click this url to create Performance Plan:{0}{1}/NewForm_Custom.aspx", siteUrl, UrlResource.ProfessionalPerformancePlan));
             }
 
             
@@ -436,7 +442,8 @@ namespace MCAWebAndAPI.Web.Controllers
                     e.PSAId,
                     e.DateOfNewPSABefore,
                     e.DateNewPSABefore,
-                    e.JoinDate
+                    e.JoinDate,
+                    e.ProfessionalMail
                     }
             ), JsonRequestBehavior.AllowGet);
         }

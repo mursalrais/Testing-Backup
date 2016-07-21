@@ -106,4 +106,12 @@ Parameter name: address
 2016-07-01 14:34:48.4672 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Column 'professional' does not exist. It may have been deleted by another user.  /sites/ims/hr/Lists/CompensatoryRequest
 2016-07-11 15:34:04.2130 MCAWebAndAPI.Service.HR.Recruitment.HRShortlistService The underlying connection was closed: An unexpected error occurred on a receive.
 2016-07-12 09:25:37.2679 MCAWebAndAPI.Service.HR.Recruitment.HRInterviewService The 'sId' argument is invalid.
-2016-07-15 13:17:03.0556 MCAWebAndAPI.Service.HR.Recruitment.HRProfessionalPerformanceEvaluationService The 'sId' argument is invalid.
+2016-07-16 11:54:25.7641 MCAWebAndAPI.Service.HR.Recruitment.HRInterviewService Cannot invoke method or retrieve property from null object. Object returned by the following call stack is null. "ListItemAllFields
+"
+2016-07-18 10:37:08.9379 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Column 'compensatorydate' does not exist. It may have been deleted by another user.  /sites/mca-dev/hr/Lists/Application
+2016-07-18 10:47:28.3114 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Column 'compensatorydate' does not exist. It may have been deleted by another user.  /sites/mca-dev/hr/Lists/Application
+2016-07-19 17:54:44.5502 MCAWebAndAPI.Service.HR.Recruitment.HRInterviewService Cannot invoke method or retrieve property from null object. Object returned by the following call stack is null. "ListItemAllFields
+"
+2016-07-19 17:57:57.8580 MCAWebAndAPI.Service.HR.Recruitment.HRInterviewService Cannot invoke method or retrieve property from null object. Object returned by the following call stack is null. "ListItemAllFields
+"
+2016-07-20 10:27:53.9260 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService The 'sId' argument is invalid.

@@ -13,7 +13,7 @@
                                                                                  enctype = "multipart/form-data"
                                                                              }))
 {
-    
+
     <fieldset>
         <legend>Exit Procedure Data</legend>
         <div class="row">
@@ -25,32 +25,42 @@
             @Html.Partial("_ExitProcedureChecklist", Model.ExitProcedureChecklist)
         </div>
 
-        
-        @*<legend>Exit Procedure Checklist</legend>
-        <div id="workflow-placeholder" class="row">
-
-            @Html.Partial("_ExitProcedureChecklist", Model)
-        </div>*@
-
-        
-    @*@if (Model.Requestor != null)
-    {
-        <legend>Approval Workflow</legend>
-        <div id="workflow-placeholder" class="row"></div>
-    }*@
-        
-
         <legend>Documents</legend>
         <div class="row">
             @Html.Partial("_Documents", Model)
         </div>
     </fieldset>
+}
+
+@if (Model.UserPermission == "Professional")
+{
     <div class="form-actions">
         <div class="row">
             <div class="col-md-12">
-                <button id="submit-button" class="btn btn-primary" type="submit">
+                <button id="submit-for-approval" class="btn btn-primary" type="submit">
                     <i class="fa fa-save"></i>
-                    Submit
+                    Submit for Approval
+                </button>
+                <button id="submit-draft-initiate-button" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    Save
+                </button>
+            </div>
+        </div>
+    </div>
+}
+@if (Model.UserPermission == "HR")
+{
+    <div class="form-actions">
+        <div class="row">
+            <div class="col-md-12">
+                <button id="approved-by-hr" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    Approve
+                </button>
+                <button id="save-by-hr" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    Save
                 </button>
             </div>
         </div>
@@ -59,14 +69,36 @@
     
 }
 
+   
+
 @section scripts{
     <script type="text/javascript">
 
 
-        $(document).ready(function ()
-        {
-            $("#submit-button").click(function ()
-            {
+        $(document).ready(function () {
+            $("#submit-for-approval").click(function () {
+                $("#StatusForm").val("Pending Approval")
+                $("form").submit();
+    });
+});
+
+        $(document).ready(function () {
+            $("#submit-draft-initiate-button").click(function () {
+                $("#StatusForm").val("Draft")
+                $("form").submit();
+            });
+        });
+
+        $(document).ready(function () {
+            $("#approved-by-hr").click(function () {
+                $("#StatusForm").val("Approved by HR")
+                $("form").submit();
+            });
+        });
+
+        $(document).ready(function () {
+            $("#save-by-hr").click(function () {
+                $("#StatusForm").val("Saved by HR")
                 $("form").submit();
             });
         });
@@ -89,22 +121,33 @@
             $.getJSON(url, function (result) {
 
                 $('#FullName').prop('value', result[0].Name);
-                $('#Professional').prop('value', result[0].FirstMiddleName);
+                //$('#Professional').prop('value', result[0].FirstMiddleName);
                 $('#ProjectUnit').prop('value', result[0].Project_Unit);
                 $('#Position').prop('value', result[0].Position);
-
-            })
-
-            var dataItem = this.dataItem(e.item);
-            var url = "/HRPSAManagement/GetJoinDate/" + dataItem.ID;
-
-            $.getJSON(url, function (result) {
-
-                $('#JoinDate').prop('value', result[0].StrJoinDate);
                 $('#PSANumber').prop('value', result[0].PSANumber);
+                
+                //var date = result[0].JoinDate;
 
-                console.log("PSA Number: " + result[0].PSANumber);
+                
+
+                //var month = result[0].JoinDate.getMonth();
+                //var year = result[0].JoinDate.getYear();
+
+                
+                //var joinDate = month + '/' + date + '/' + year;
+
+                //console.log(date);
+                //console.log(month);
+                //console.log(year);
+
+
+                $('#JoinDate').prop('value', result[0].JoinDateTemp);
+
+                $('#RequestorMailAddress').prop('value', result[0].OfficeEmail);
+                $('#ProfessionalID').prop('value', result[0].ID);
+
             })
+                      
         }
 
         function onSelectExitProcedure(e) {
@@ -115,18 +158,6 @@
 
         }
 
-        $(document).ready(function () {
-            displayWorkflowRouterExitProcedure("workflow-placeholder", "@ViewBag.ListName", "@ViewBag.RequestorUserLogin");
-        });
-
-
-        /*
-        function displayWorkflowRouterExitProcedure(domID, listName, requestor) {
-            var url = "/HRExitProcedure/DisplayWorkflowRouterExitProcedure?listName=" + listName + "&requestor=" + requestor;
-            $('#' + domID).load(url);
-        }
-        */
-
-
+                      
     </script>
 }

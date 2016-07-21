@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Web;
+using System.Web.Mvc;
 using System.Linq;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.HR
@@ -15,6 +16,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public IEnumerable<ShortlistDetailVM> ShortlistDetails { get; set; } = new List<ShortlistDetailVM>();
 
         public IEnumerable<InterviewDetailVM> InterviewlistDetails { get; set; } = new List<InterviewDetailVM>();
+
+        public string SiteUrl { get; set; }
 
         /// <summary>
         /// position
@@ -28,6 +31,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// position
         /// </summary>
         public string InterviewerPanel { get; set; }
+
+        public string InterviewerUrl { get; set; }
 
         [UIHint("TextArea")]
         public string InterviewSummary { get; set; }
@@ -68,12 +73,14 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             },
         };
 
+        public int? ManPos { get; set; }
+
         /// <summary>
-        /// positionrequested
+        /// Title
         /// </summary>
-        [DisplayName("PositionID")]
-        [UIHint("AjaxComboBox")]
-        public AjaxComboBoxVM PositionActiv { get; set; }
+        [DisplayName("Position")]
+        [Required]
+        public string PositionName { get; set; }
 
         /// <summary>
         /// Title
@@ -106,8 +113,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             ActionName = "GetPosition",
             ValueField = "ID",
             TextField = "PositionName",
-            OnSelectEventName = "OnChangeActivePosition"
-            
+            OnSelectEventName = "OnChangeActivePosition",
+
         };
 
         [DisplayName("Attach Document")]
@@ -119,8 +126,16 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// </summary>
         [UIHint("Date")]
         [DisplayName("Interview Date")]
-        public DateTime? InterviewerDate { get; set; } = DateTime.Now;
-        
+        public DateTime? InterviewerDate { get; set; }
+
+        /// <summary>
+        /// InterviewTime
+        /// </summary>
+        /// 
+        [DataType(DataType.Time)]
+        [DisplayFormat(DataFormatString = "{0:HH:mm}", ApplyFormatInEditMode = true), Display(Name = "Interview Time")]
+        public DateTime? InterviewerTime { get; set; }
+
         //[UIHint("Date")]
         //public string InterviewerDate { get; set; } = DateTime.UtcNow.ToShortDateString();
         [UIHint("Date")]
@@ -167,8 +182,19 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
                 return model;
             }
         }
-
-        public Boolean NeedNextInterviewer { get; set; } = new Boolean();
+   
+        [UIHint("ComboBox")]
+        [DisplayName("Need Next Interviewer")]
+        public ComboBoxVM NeedNextInterviewer { get; set; } = new ComboBoxVM()
+        {
+            Choices = new string[]
+            {
+                "",
+                "Yes",
+                "No"
+            },
+            //OnSelectEventName = "onPositionChange"
+        };
 
         [UIHint("MultiFileUploader")]
         public IEnumerable<HttpPostedFileBase> Documents { get; set; } = new List<HttpPostedFileBase>();

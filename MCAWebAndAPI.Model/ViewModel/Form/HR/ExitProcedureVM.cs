@@ -13,6 +13,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// Professional Full Name
         /// </summary>
+        [DisplayName("Professional Name")]
         public string FullName { get; set; }
 
         /// <summary>
@@ -37,6 +38,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             TextField = "Desc",
             OnSelectEventName = "OnSelectAssetHolderFrom"
         };
+
+
+        public int ProfessionalID { get; set; }
 
         /// <summary>
         /// Professional's Project Unit
@@ -68,6 +72,12 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public string EmailAddress { get; set; }
 
         /// <summary>
+        /// Professional's Mail Address
+        /// </summary>
+        [UIHint("EmailAddress")]
+        public string RequestorMailAddress { get; set; }
+
+        /// <summary>
         /// Professional's Current Address
         /// </summary>
         [UIHint("TextArea")]
@@ -76,18 +86,19 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [Required]
         public string CurrentAddress { get; set; }
 
-        /// <summary>
-        /// Professional's Join Date
-        /// </summary>
+        ///// <summary>
+        ///// Professional's Join Date
+        ///// </summary>
         [UIHint("Date")]
         [DisplayName("Join Date")]
         [Required]
         public DateTime? JoinDate { get; set; } = DateTime.Now;
 
-        /// <summary>
-        /// Professional's Join Date in String Format
-        /// </summary>
-        public string StringJoinDate { get; set; }
+        ///// <summary>
+        ///// Professional's Join Date in String Format
+        ///// </summary>
+        [UIHint("Date")]
+        public DateTime ProfessionalJoinDate { get; set; } = DateTime.Now;
 
         /// <summary>
         /// Professional's Last Working Date
@@ -140,13 +151,37 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         public IEnumerable<ExitProcedureChecklistVM> ExitProcedureChecklist { get; set; } = new List<ExitProcedureChecklistVM>();
 
+        [DisplayName("Professional")]
         public string Requestor { get; set; }
 
         public string ListName { get; set; }
 
         public string RequestorUnit { get; set; }
 
+        [DisplayName("Position")]
         public string RequestorPosition { get; set; }
+
+        public string StatusForm { get; set; }
+
+        public string ApproverMail { get; set; }
+
+        public string UserPermission { get; set; }
+        
+        ///// <summary>
+        ///// Exit Procedure Status
+        ///// </summary>
+        //[UIHint("ComboBox")]
+        //[Required]
+        //public ComboBoxVM StatusForm { get; set; } = new ComboBoxVM
+        //{
+        //    Choices = new string[]
+        //    {
+        //        "Draft",
+        //        "Pending Approval",
+        //        "Approved"
+        //    },
+        //    Value = "Draft"
+        //};
 
     }
 }
