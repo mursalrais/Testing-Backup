@@ -243,7 +243,7 @@ namespace MCAWebAndAPI.Web.Controllers
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
-             var positions = GetShortlistPositionExistingSession();
+            var positions = GetShortlistPositionExistingSession();
 
             positions = positions.OrderBy(x => x.ID);
 
