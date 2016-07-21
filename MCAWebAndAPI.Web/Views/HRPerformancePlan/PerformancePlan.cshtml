@@ -5,11 +5,11 @@
 @model ProfessionalPerformancePlanVM
 
 @using (Html.BeginForm((string)ViewBag.Action, "HRPerformancePlan", FormMethod.Post,
-                                                new
-                                                {
-                                                    @class = "form-horizontal",
-                                                    enctype = "multipart/form-data"
-                                                }))
+                                                            new
+                                                            {
+                                                                @class = "form-horizontal",
+                                                                enctype = "multipart/form-data"
+                                                            }))
 {<fieldset>
         <legend>Form Performance Plan</legend>
         @Html.AntiForgeryToken()
@@ -127,23 +127,25 @@
         </div>
     </div>
 }
-
-@if (Model.Requestor != null && Model.StatusForm == "Draft")
+@if (Model.Requestor != null)
 {
-    <div class="form-actions">
-        <div class="row">
-            <div class="col-sm-12">
-                <button id="submit-button" class="btn btn-primary" type="submit">
-                    <i class="fa fa-save"></i>
-                    Submit For Approval
-                </button>
-                <button id="submit-draft-button" class="btn btn-primary" type="submit">
-                    <i class="fa fa-save"></i>
-                    Save As Draft
-                </button>
+    if (Model.StatusForm == "Draft" || Model.StatusForm == "Pending Approval 1 of 2" || Model.StatusForm == "Pending Approval 2 of 2")
+    {
+        <div class="form-actions">
+            <div class="row">
+                <div class="col-sm-12">
+                    <button id="submit-button" class="btn btn-primary" type="submit">
+                        <i class="fa fa-save"></i>
+                        Submit For Approval
+                    </button>
+                    <button id="submit-draft-button" class="btn btn-primary" type="submit">
+                        <i class="fa fa-save"></i>
+                        Save As Draft
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
+    }
 }
 
 @if (Model.Requestor == null && Model.StatusForm == "Pending Approval 1 of 2")
@@ -151,7 +153,7 @@
     <div class="form-actions">
         <div class="row">
             <div class="col-sm-12">
-                <button id="approver1-button" class="btn btn-primary" type="submit">
+                <button id="submit-button" class="btn btn-primary" type="submit">
                     <i class="fa fa-save"></i>
                     Approve
                 </button>
@@ -169,7 +171,7 @@
     <div class="form-actions">
         <div class="row">
             <div class="col-sm-12">
-                <button id="approver2-button" class="btn btn-primary" type="submit">
+                <button id="submit-button" class="btn btn-primary" type="submit">
                     <i class="fa fa-save"></i>
                     Approve
                 </button>
@@ -198,7 +200,6 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $("#submit-button").click(function () {
-                $("#ParentDiv").hide();
                 $("form").submit();
             });
         });
@@ -206,7 +207,13 @@
         $(document).ready(function () {
             $("#submit-draft-initiate-button").click(function () {
                 $("#StatusForm").val("DraftInitiated")
-                $("#ParentDiv").show();
+                $("form").submit();
+            });
+        });
+
+        $(document).ready(function () {
+            $("#submit-pending-button").click(function () {
+                $("#StatusForm").val("SubmitPending")
                 $("form").submit();
             });
         });
@@ -214,7 +221,6 @@
         $(document).ready(function () {
             $("#submit-draft-button").click(function () {
                 $("#StatusForm").val("DraftDraft")
-                $("#ParentDiv").show();
                 $("form").submit();
             });
         });
@@ -228,18 +234,6 @@
                 $("#ParentDiv").show();
                 var url = "/HRPerformancePlan/PrintPerformancePlan";
                 submitFormToPrint(url);
-            });
-        });
-
-        $(document).ready(function () {
-            $("#approver1-button").click(function () {
-                $("form").submit();
-            });
-        });
-
-        $(document).ready(function () {
-            $("#approver2-button").click(function () {
-                $("form").submit();
             });
         });
 
