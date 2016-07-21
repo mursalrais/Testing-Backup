@@ -136,7 +136,6 @@
     <Compile Include="ViewModel\Form\HR\ApplicationShortlistVM.cs" />
     <Compile Include="ViewModel\Form\HR\CalendarEventVM.cs" />
     <Compile Include="ViewModel\Form\HR\ClaimComponentDetailVM.cs" />
-    <Compile Include="ViewModel\Form\HR\ClaimPaymentDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\CompensatoryDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\CompensatoryVM.cs" />
     <Compile Include="ViewModel\Form\HR\DependentDetailVM.cs" />
@@ -150,6 +149,7 @@
     <Compile Include="ViewModel\Form\HR\InterviewDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\InterviewlistDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\ManpowerRequisitionVM.cs" />
+    <Compile Include="ViewModel\Form\HR\MedicalClaimDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\MonthlyFeeDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\MonthlyFeeVM.cs" />
     <Compile Include="ViewModel\Form\HR\OrganizationalDetailVM.cs" />

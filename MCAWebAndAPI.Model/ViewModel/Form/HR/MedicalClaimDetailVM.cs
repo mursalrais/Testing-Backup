@@ -2,7 +2,6 @@
 using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Model.ViewModel.Control;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -11,7 +10,7 @@ using System.Web;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
-    public class ClaimComponentDetailVM : Item
+    public class MedicalClaimDetailVM : Item
     {
         /// <summary>
         /// insuranceclaimid
@@ -78,6 +77,14 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [Required(ErrorMessage = "Receipt Date Field Is Required")]
         public DateTime? ReceiptDate { get; set; } = DateTime.UtcNow;
 
+        [DisplayName("WBS")]
+        [Required(ErrorMessage = "WBS Field Is Required")]
+        public string WBS { get; set; }
+
+        [DisplayName("GL Code")]
+        [Required(ErrorMessage = "GL Code Field Is Required")]
+        public string GLCode { get; set; }
+
         /// <summary>
         /// claimcomponentremarks
         /// </summary>
@@ -87,7 +94,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public static InGridComboBoxVM GetCurrencyDefaultValue(InGridComboBoxVM model = null)
         {
             var options = GetCurrencyOptions();
-          
+
             if (model == null || model.Value == null || string.IsNullOrEmpty(model.Text))
                 return options.FirstOrDefault();
 
