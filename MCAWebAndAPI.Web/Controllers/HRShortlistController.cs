@@ -103,7 +103,6 @@ namespace MCAWebAndAPI.Web.Controllers
             SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
 
             var viewmodel = _service.GetShortlistSend(ID);
-            //viewmodel.SendTo = "";
             //viewmodel.ID = id;
             return View(viewmodel);
         }
