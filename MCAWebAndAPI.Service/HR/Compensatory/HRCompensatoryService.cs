@@ -54,7 +54,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             var viewModel = new CompensatoryVM();
 
-            viewModel.cmpID = Convert.ToInt32(listItem["ID"]);
             viewModel.cmpName = Convert.ToString(listItem["Title"]);
             viewModel.cmpProjUnit = Convert.ToString(listItem["Project_x002f_Unit"]);
             viewModel.cmpPosition = FormatUtil.ConvertLookupToValue(listItem, "Position");
@@ -62,7 +61,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return viewModel;
         }
 
-        public CompensatoryVM GetComplist(int? iD)
+        public CompensatoryVM GetComplistbyCmpid(int? iD)
         {
             var viewModel = new CompensatoryVM();
 
@@ -89,6 +88,35 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             }
 
             return GetComplisted(iD, profID);
+        }
+
+        public CompensatoryVM GetComplistbyProfid(int? iD)
+        {
+            var viewModel = new CompensatoryVM();
+
+            if (iD == null)
+                return null;
+
+            var caml = @"<View>  
+                    <Query> 
+                       <Where>
+                             <Eq>
+                                <FieldRef Name='professional_x003a_ID' />
+                                <Value Type='Lookup'>" + iD + @"</Value>
+                             </Eq>
+                       </Where>
+                    </Query> 
+                     <ViewFields> <FieldRef Name='Title' />
+                          <FieldRef Name='ID' /></ViewFields> 
+                    </View>";
+
+            var cmpID = 0;
+            foreach (var item in SPConnector.GetList(SP_COMREQ_LIST_NAME, _siteUrl, caml))
+            {
+                cmpID = Convert.ToInt32(item["ID"]);
+            }
+
+            return GetComplisted(cmpID, iD);
         }
 
         private int GetCompID(int? ID)
@@ -309,26 +337,29 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                             throw e;
                         }
                     }
-
-                    var updatedValue = new Dictionary<string, object>();
-
-                    updatedValue.Add("Title", viewModel.CmpActiv);
-                    updatedValue.Add("compensatorydate", viewModel.CmpDate);
-                    updatedValue.Add("compensatorystarttime", viewModel.StartTime);
-                    updatedValue.Add("compensatoryendtime", viewModel.FinishTime);
-                    updatedValue.Add("totalhours", viewModel.CmpTotalHours);
-                    updatedValue.Add("totaldays", viewModel.TotalDay);
-                    updatedValue.Add("remarks", viewModel.remarks);
-
-                    try
+                    else
                     {
-                        SPConnector.UpdateListItem(SP_APPDATA_LIST_NAME, cmpID, updatedValue, _siteUrl);
+                        var updatedValue = new Dictionary<string, object>();
 
-                    }
-                    catch (Exception e)
-                    {
-                        logger.Error(e.Message);
-                        throw e;
+                        updatedValue.Add("Title", viewModel.CmpActiv);
+                        updatedValue.Add("compensatoryrequest", cmpID);
+                        updatedValue.Add("compensatorydate", viewModel.CmpDate);
+                        updatedValue.Add("compensatorystarttime", viewModel.StartTime);
+                        updatedValue.Add("compensatoryendtime", viewModel.FinishTime);
+                        updatedValue.Add("totalhours", viewModel.CmpTotalHours);
+                        updatedValue.Add("totaldays", viewModel.TotalDay);
+                        updatedValue.Add("remarks", viewModel.remarks);
+
+                        try
+                        {
+                            SPConnector.UpdateListItem(SP_COMDET_LIST_NAME, viewModel.CmpID, updatedValue, _siteUrl);
+
+                        }
+                        catch (Exception e)
+                        {
+                            logger.Error(e.Message);
+                            throw e;
+                        }
                     }
                     continue;
                 }
@@ -337,7 +368,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 {
                     try
                     {
-                        SPConnector.DeleteListItem(SP_COMDET_LIST_NAME, viewModel.ID, _siteUrl);
+                        SPConnector.DeleteListItem(SP_COMDET_LIST_NAME, viewModel.CmpID, _siteUrl);
                     }
                     catch (Exception e)
                     {

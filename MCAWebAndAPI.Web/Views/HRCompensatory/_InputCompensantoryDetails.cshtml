@@ -43,13 +43,10 @@
     })
     .Events(e =>
     {
-        e.Edit("onEditKendoDetail");
+        e.Edit("onChange");
         e.DataBound("onDataBoundDependentDetails");
     })
-    .DataSource(dataSource => dataSource.Ajax().Events(events =>
-    {
-        events.Change("onChange");
-    })
+    .DataSource(dataSource => dataSource.Ajax()
 
     .Model(model =>
     {
@@ -71,10 +68,7 @@
     }
 
     function onChange(e) {
-        debugger;
         var container = e.container;
-
-        if (container != "undefined") {
             var tr = container.closest('tr');
             var data = this.dataItem(tr); //get the row data so it can be referred later
             // 1 is Item.Mode.UPDATED
@@ -92,10 +86,10 @@
                 var xdate = $("#Dateid" + i).val();
                 rowgrid.each(function (e) {
                     j++;
-                    var ydate = $("#Dateid" + i).val();
+                    var ydate = $("#Dateid" + j).val();
                     if (i !== j) {
                         if (xdate == ydate) {
-                            alert("date you have chosen already exists")
+                            alert("Date you have chosen already exists, please choose another date..!!")
                         }
                     }
                 });
@@ -107,8 +101,8 @@
                 data.CmpTotalHours = range;
                 data.set("TotalDay", range / 24)
             }
+            data.set("EditMode", 1);
         }
-    }
    
 </script>
 

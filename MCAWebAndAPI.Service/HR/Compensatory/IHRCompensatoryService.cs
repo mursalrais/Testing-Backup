@@ -9,7 +9,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
     {
         void SetSiteUrl(string siteUrl = null);
 
-        CompensatoryVM GetComplist(int? ID);
+        CompensatoryVM GetComplistbyCmpid(int? iD);
+
+        CompensatoryVM GetComplistbyProfid(int? iD);
 
         CompensatoryVM GetComplistActive();
 

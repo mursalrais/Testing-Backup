@@ -132,6 +132,9 @@
   <data name="SuccessCreateApplicationData" xml:space="preserve">
     <value>Congratulation {0}! Your application has successfully been submitted.</value>
   </data>
+  <data name="SuccessCreateCompensatoryData" xml:space="preserve">
+    <value>Congratulation {0}! Your Compensatory has successfully been submitted.</value>
+  </data>
   <data name="SuccessCreateExitProcedureData" xml:space="preserve">
     <value>Congratulation {0}! Exit Procedure Data has successfully been created.</value>
   </data>
