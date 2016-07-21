@@ -155,6 +155,14 @@ Kindly check the link as per below to go to direct page accordingly. Thank you.
 
 Link : {1}</value>
   </data>
+  <data name="EmailShortlistToCandidate" xml:space="preserve">
+    <value>Dear Candidate Interview,
+
+{0}
+
+you are invited to interview on : {1}
+At hour : {2}</value>
+  </data>
   <data name="EmailShortlistToHR" xml:space="preserve">
     <value>Dear HR Team,
 

@@ -371,9 +371,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 logger.Error(e.Message);
                 throw e;
             }
-
-            SendEmailValidation(viewModel.SendTo, viewModel.Message);
-
+            
         }
 
         public void SendEmailValidation(string emailTo, string emailMessages)

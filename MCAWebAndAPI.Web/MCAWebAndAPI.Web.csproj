@@ -911,6 +911,7 @@
     <Content Include="Global.asax" />
     <Content Include="Site.Master" />
     <Content Include="ViewSwitcher.ascx" />
+    <Content Include="Views\HRShortlist\ShortlistInterviewPanel.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -1241,7 +1242,6 @@
     <Content Include="Scripts\kendo\2016.2.714\kendo.web.min.js.map" />
     <Content Include="Scripts\kendo\2016.2.714\kendo.webcomponents.min.js.map" />
     <Content Include="Scripts\kendo\2016.2.714\kendo.window.min.js.map" />
-    <Content Include="Views\HRShortlist\ShortlistInterviewPanel.cshtml" />
     <Content Include="Views\HRInterviewlist\InterviewPanellistData.cshtml" />
     <Content Include="Views\HRInterviewlist\NextInterviewlist.cshtml" />
     <Content Include="Views\HRInterviewlist\_IntvinvitePanelDetails.cshtml" />

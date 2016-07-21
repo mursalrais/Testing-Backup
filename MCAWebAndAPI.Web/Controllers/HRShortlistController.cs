@@ -131,6 +131,14 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
+            var dateintv = viewModel.InterviewerDate.Value.ToString("yyyy-MM-dd");
+
+            var timeintv = viewModel.InterviewerTime.Value.ToString("HH:mm");
+
+            string bodymailREQ = string.Format(EmailResource.EmailShortlistToCandidate, viewModel.Message, dateintv, timeintv);
+
+            _service.SendEmailValidation(viewModel.SendTo, bodymailREQ);
+
             return RedirectToAction("Index",
                "Success",
                new
@@ -218,7 +226,7 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             return array;
         }
-
+        
         public JsonResult GetStatusGrid()
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");

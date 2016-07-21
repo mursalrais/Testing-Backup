@@ -117,6 +117,20 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dear Candidate Interview,
+        ///
+        ///{0}
+        ///
+        ///you are invited to interview on : {1}
+        ///At hour : {2}.
+        /// </summary>
+        public static string EmailShortlistToCandidate {
+            get {
+                return ResourceManager.GetString("EmailShortlistToCandidate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dear HR Team,
         ///
         ///This email is sent to you to notify that here is the latest list of shortlisted candidate. This list
