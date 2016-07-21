@@ -138,7 +138,7 @@ This email is sent to you to notify that here is the latest list of shortlisted 
 
 requires your action to review as well as to prepare the Interview process for further action.
 
-Kindly check the link as per below to go to direct page accordingly. Thank you.
+Kindly check the link as per below to go to direct page accordingly.  Thank you.
 
 Link : {1}</value>
   </data>
@@ -154,6 +154,14 @@ requires your action to review as well as to prepare the Interview process for f
 Kindly check the link as per below to go to direct page accordingly. Thank you.
 
 Link : {1}</value>
+  </data>
+  <data name="EmailShortlistToCandidate" xml:space="preserve">
+    <value>Dear Candidate Interview,
+
+{0}
+
+you are invited to interview on : {1}
+At hour : {2}</value>
   </data>
   <data name="EmailShortlistToHR" xml:space="preserve">
     <value>Dear HR Team,

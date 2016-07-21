@@ -100,7 +100,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             try
             {
-                viewModel.CompensatoryDetails = BindCompensatorylistDetails(form, viewModel.CompensatoryDetails);
+                viewModel.CompensatoryDetails = BindCompensatorylistDateTime(form, viewModel.CompensatoryDetails);
                 _service.CreateCompensatoryData(cmpID, viewModel);
             }
             catch (Exception e)
@@ -117,7 +117,7 @@ namespace MCAWebAndAPI.Web.Controllers
                });
         }
 
-        private IEnumerable<CompensatoryDetailVM> BindCompensatorylistDetails(FormCollection form, IEnumerable<CompensatoryDetailVM> compDetails)
+        private IEnumerable<CompensatoryDetailVM> BindCompensatorylistDateTime(FormCollection form, IEnumerable<CompensatoryDetailVM> compDetails)
         {
             var array = compDetails.ToArray();
             for (int i = 0; i < array.Length; i++)
