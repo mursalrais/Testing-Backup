@@ -115,3 +115,9 @@ Parameter name: address
 2016-07-19 17:57:57.8580 MCAWebAndAPI.Service.HR.Recruitment.HRInterviewService Cannot invoke method or retrieve property from null object. Object returned by the following call stack is null. "ListItemAllFields
 "
 2016-07-20 10:27:53.9260 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService The 'sId' argument is invalid.
+2016-07-21 18:03:29.8652 MCAWebAndAPI.Service.HR.InsuranceClaim.InsuranceClaimService List 'InsuranceClaim' does not exist at site with URL 'https://eceos2.sharepoint.com/sites/mca-dev/hr'.
+2016-07-21 22:14:56.6280 MCAWebAndAPI.Service.HR.InsuranceClaim.InsuranceClaimService Column 'medicalclaimtype' does not exist. It may have been deleted by another user.  /sites/mca-dev/hr/Lists/ClaimPayment
+2016-07-21 22:22:23.2994 MCAWebAndAPI.Service.HR.InsuranceClaim.InsuranceClaimService Column 'paymenttype' does not exist. It may have been deleted by another user.  /sites/mca-dev/hr/Lists/ClaimPayment
+2016-07-21 22:25:06.4694 MCAWebAndAPI.Service.HR.InsuranceClaim.InsuranceClaimService Column 'paymenttype' does not exist. It may have been deleted by another user.  /sites/mca-dev/hr/Lists/ClaimPayment
+2016-07-21 22:35:35.4018 MCAWebAndAPI.Service.HR.InsuranceClaim.InsuranceClaimService Column 'paymenttype' does not exist. It may have been deleted by another user.  /sites/mca-dev/hr/Lists/ClaimPayment
+2016-07-21 22:36:03.9389 MCAWebAndAPI.Service.HR.InsuranceClaim.InsuranceClaimService Column 'paymenttype' does not exist. It may have been deleted by another user.  /sites/mca-dev/hr/Lists/ClaimPayment

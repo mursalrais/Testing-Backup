@@ -10,7 +10,7 @@ using System.Web;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
-    public class MedicalClaimDetailVM : Item
+    public class ClaimPaymentDetailVM : Item
     {
         /// <summary>
         /// insuranceclaimid

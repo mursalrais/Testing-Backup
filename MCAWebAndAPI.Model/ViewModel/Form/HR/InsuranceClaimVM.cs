@@ -11,7 +11,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
     public class InsuranceClaimVM : Item
     {
-        public IEnumerable<MedicalClaimDetailVM> MedicalClaimDetails { get; set; } = new List<MedicalClaimDetailVM>();
+        public IEnumerable<ClaimPaymentDetailVM> ClaimPaymentDetails { get; set; } = new List<ClaimPaymentDetailVM>();
         public IEnumerable<ClaimComponentDetailVM> ClaimComponentDetails { get; set; } = new List<ClaimComponentDetailVM>();
 
         [UIHint("Int32")]
@@ -45,7 +45,11 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [UIHint("AjaxComboBox")]
         public AjaxComboBoxVM DependantName { get; set; } = new AjaxComboBoxVM
         {
-
+            ActionName = "GetDependants",
+            ControllerName = "HRDataMaster",
+            ValueField = "ID",
+            TextField = "Name",
+            OnSelectEventName = "OnSelectDependantName"
         };
 
       [UIHint("ComboBox")]

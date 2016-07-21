@@ -22,7 +22,7 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
 
        void CreateClaimComponentDetails(int? headerId, IEnumerable<ClaimComponentDetailVM> claimComponentDetails);
 
-        void CreateMedicalClaimDetails(int? headerId, IEnumerable<MedicalClaimDetailVM> medicalClaimDetails);
+        void CreateClaimPaymentDetails(int? headerId, IEnumerable<ClaimPaymentDetailVM> claimPaymentDetails);
 
 
     }

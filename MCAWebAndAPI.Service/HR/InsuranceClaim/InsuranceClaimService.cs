@@ -15,16 +15,16 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
         string _siteUrl;
         static Logger logger = LogManager.GetCurrentClassLogger();
 
-        const string SP_HEADER_LIST_NAME = "InsuranceClaim";
-        const string SP_COMPONENT_LIST_NAME = "ClaimComponent";
-        const string SP_MEDIC_LIST_NAME = "MedicalClaim";
+        const string SP_HEADER_LIST_NAME = "Insurance Claim";
+        const string SP_COMPONENT_LIST_NAME = "Claim Component";
+        const string SP_PAYMENT_LIST_NAME = "Claim Payment";
         public void SetSiteUrl(string siteUrl = null)
         {
             _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
         }
 
   
-        private InsuranceClaimVM ConvertToApplicationDataVM(ListItem listItem)
+        private InsuranceClaimVM ConvertToInsuranceClaimVM(ListItem listItem)
         {
 
             var viewModel = new InsuranceClaimVM
@@ -52,7 +52,7 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
             if (ID == null)
                 return viewModel;
 
-            viewModel = ConvertToApplicationDataVM(
+            viewModel = ConvertToInsuranceClaimVM(
                 SPConnector.GetListItem(SP_HEADER_LIST_NAME, ID, _siteUrl));
 
             // Convert List Item to ViewModel
@@ -70,7 +70,6 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
            var columnValues = new Dictionary<string, object>
            {
                {"professional", new FieldLookupValue {LookupId = Convert.ToInt32(header.ProfessionalName.Value)}},
-               {"Title", header.Type.Text},
                {"claimtype", header.Type.Text},
                {"claimdate", header.ClaimDate}
            };
@@ -107,13 +106,15 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
                     }
                     continue;
                 }
-                var updatedValue = new Dictionary<string, object>();
-                updatedValue.Add("insuranceclaim", new FieldLookupValue { LookupId = Convert.ToInt32(headerId) });
-                updatedValue.Add("claimcomponenttype", viewModel.Type.Text);
-                updatedValue.Add("claimcomponentcurrency", viewModel.Currency.Text);
-                updatedValue.Add("claimcomponentamount", viewModel.Amount);
-                updatedValue.Add("claimcomponentreceiptdate", viewModel.ReceiptDate);
-                updatedValue.Add("claimcomponentremarks", viewModel.Remarks);
+                var updatedValue = new Dictionary<string, object>
+                {
+                    {"insuranceclaim", new FieldLookupValue {LookupId = Convert.ToInt32(headerId)}},
+                    {"claimcomponenttype", viewModel.Type.Text},
+                    {"claimcomponentcurrency", viewModel.Currency.Text},
+                    {"claimcomponentamount", viewModel.Amount},
+                    {"claimcomponentreceiptdate", viewModel.ReceiptDate},
+                    {"claimcomponentremarks", viewModel.Remarks}
+                };
                 try
                 {
                     if (Item.CheckIfUpdated(viewModel))
@@ -130,9 +131,9 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
             }
         }
 
-       public void CreateMedicalClaimDetails(int? headerId, IEnumerable<MedicalClaimDetailVM> medicalClaimDetails)
+       public void CreateClaimPaymentDetails(int? headerId, IEnumerable<ClaimPaymentDetailVM> claimPaymentDetails)
        {
-            foreach (var viewModel in medicalClaimDetails)
+            foreach (var viewModel in claimPaymentDetails)
             {
                 if (Item.CheckIfSkipped(viewModel))
                     continue;
@@ -140,7 +141,7 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
                 {
                     try
                     {
-                        SPConnector.DeleteListItem(SP_MEDIC_LIST_NAME, viewModel.ID, _siteUrl);
+                        SPConnector.DeleteListItem(SP_PAYMENT_LIST_NAME, viewModel.ID, _siteUrl);
 
                     }
                     catch (Exception e)
@@ -153,20 +154,20 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
                 var updatedValue = new Dictionary<string, object>
                 {
                     {"insuranceclaim", new FieldLookupValue {LookupId = Convert.ToInt32(headerId)}},
-                    {"medicalclaimtype", viewModel.Type.Text},
-                    {"medicalclaimcurrency", viewModel.Currency.Text},
-                    {"medicalclaimamount", viewModel.Amount},
-                    {"medicalclaimreceiptdate", viewModel.ReceiptDate},
-                    {"medicalclaimremarks", viewModel.Remarks},
-                    {"medicalclaimWBS", viewModel.WBS},
-                    {"medicalclaimGL", viewModel.GLCode}
+                    {"paymentstatus", viewModel.Type.Text},
+                    {"paymentcurrency", viewModel.Currency.Text},
+                    {"paymentamount", viewModel.Amount},
+                    {"paymentdate", viewModel.ReceiptDate},
+                    {"paymentremarks", viewModel.Remarks},
+                    {"paymentwbsid", viewModel.WBS},
+                    {"paymentglcode", viewModel.GLCode}
                 };
                 try
                 {
                     if (Item.CheckIfUpdated(viewModel))
-                        SPConnector.UpdateListItem(SP_MEDIC_LIST_NAME, viewModel.ID, updatedValue, _siteUrl);
+                        SPConnector.UpdateListItem(SP_PAYMENT_LIST_NAME, viewModel.ID, updatedValue, _siteUrl);
                     else
-                        SPConnector.AddListItem(SP_MEDIC_LIST_NAME, updatedValue, _siteUrl);
+                        SPConnector.AddListItem(SP_PAYMENT_LIST_NAME, updatedValue, _siteUrl);
                 }
                 catch (Exception e)
                 {

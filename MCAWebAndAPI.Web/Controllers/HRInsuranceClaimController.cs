@@ -68,8 +68,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
             try
             {
-                viewModel.MedicalClaimDetails = BindMedicalClaimDetails(form, viewModel.MedicalClaimDetails);
-                _service.CreateMedicalClaimDetails(headerID, viewModel.MedicalClaimDetails);
+                viewModel.ClaimPaymentDetails = BindClaimPaymentDetails(form, viewModel.ClaimPaymentDetails);
+                _service.CreateClaimPaymentDetails(headerID, viewModel.ClaimPaymentDetails);
             }
             catch (Exception e)
             {
@@ -96,14 +96,14 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
 
-        IEnumerable<MedicalClaimDetailVM> BindMedicalClaimDetails(FormCollection form,
-           IEnumerable<MedicalClaimDetailVM> medicalClaimDetails)
+        IEnumerable<ClaimPaymentDetailVM> BindClaimPaymentDetails(FormCollection form,
+           IEnumerable<ClaimPaymentDetailVM> medicalClaimDetails)
         {
             var array = medicalClaimDetails.ToArray();
 
             for (int i = 0; i < array.Length; i++)
             {
-                array[i].ReceiptDate = BindHelper.BindDateInGrid("MedicalClaimDetails",
+                array[i].ReceiptDate = BindHelper.BindDateInGrid("ClaimPaymentDetails",
                     i, "ReceiptDate", form);
             }
             return array;
