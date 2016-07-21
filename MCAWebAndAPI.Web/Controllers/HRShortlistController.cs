@@ -75,7 +75,10 @@ namespace MCAWebAndAPI.Web.Controllers
                 foreach (string mail in words)
                 {
                     string bodymailHR = string.Format(EmailResource.EmailShortlistToRequestor, _service.GetMailUrl(Convert.ToInt32(viewModel.Position), viewModel.useraccess));
-                    _service.SendEmailValidation(mail, bodymailHR);
+                    if (mail != "")
+                    {
+                        _service.SendEmailValidation(mail, bodymailHR);
+                    }
                 }
             }
             else if (viewModel.useraccess == "REQ")
@@ -83,7 +86,10 @@ namespace MCAWebAndAPI.Web.Controllers
                 foreach (string mail in words)
                 {
                     string bodymailREQ = string.Format(EmailResource.EmailShortlistToHR, _service.GetMailUrl(Convert.ToInt32(viewModel.Position), viewModel.useraccess));
-                    _service.SendEmailValidation(mail, bodymailREQ);
+                    if (mail != "")
+                    {
+                        _service.SendEmailValidation(mail, bodymailREQ);
+                    }
                 }
             }
 
@@ -180,7 +186,10 @@ namespace MCAWebAndAPI.Web.Controllers
 
                     string bodymail = string.Format(EmailResource.EmailShortlistToInterviewPanel, viewModel.EmailMessage, linkmail);
 
-                    EmailUtil.Send(mail, "Interview Invitation for Position " + viewModel.PositionName + " (based on respective position)", bodymail);
+                    if (mail != "")
+                    {
+                        EmailUtil.Send(mail, "Interview Invitation for Position " + viewModel.PositionName + " (based on respective position)", bodymail);
+                    }
                 }
             }
             catch (Exception e)

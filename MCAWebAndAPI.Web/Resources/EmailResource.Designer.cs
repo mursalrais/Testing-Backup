@@ -87,7 +87,7 @@ namespace MCAWebAndAPI.Web.Resources {
         ///
         ///requires your action to review as well as to prepare the Interview process for further action.
         ///
-        ///Kindly check the link as per below to go to direct page accordingly. Thank you.
+        ///Kindly check the link as per below to go to direct page accordingly.  Thank you.
         ///
         ///Link : {1}.
         /// </summary>
