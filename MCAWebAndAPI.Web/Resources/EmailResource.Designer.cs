@@ -87,7 +87,7 @@ namespace MCAWebAndAPI.Web.Resources {
         ///
         ///requires your action to review as well as to prepare the Interview process for further action.
         ///
-        ///Kindly check the link as per below to go to direct page accordingly. Thank you.
+        ///Kindly check the link as per below to go to direct page accordingly.  Thank you.
         ///
         ///Link : {1}.
         /// </summary>
@@ -113,6 +113,20 @@ namespace MCAWebAndAPI.Web.Resources {
         public static string EmailInterviewToInterviewPanel {
             get {
                 return ResourceManager.GetString("EmailInterviewToInterviewPanel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dear Candidate Interview,
+        ///
+        ///{0}
+        ///
+        ///you are invited to interview on : {1}
+        ///At hour : {2}.
+        /// </summary>
+        public static string EmailShortlistToCandidate {
+            get {
+                return ResourceManager.GetString("EmailShortlistToCandidate", resourceCulture);
             }
         }
         
