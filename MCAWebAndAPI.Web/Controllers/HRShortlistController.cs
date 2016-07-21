@@ -21,7 +21,6 @@ namespace MCAWebAndAPI.Web.Controllers
     {
         IHRShortlistService _service;
 
-
         public HRShortlistController()
         {
             _service = new HRShortlistService();

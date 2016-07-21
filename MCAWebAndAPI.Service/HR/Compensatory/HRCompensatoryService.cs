@@ -57,6 +57,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.cmpName = Convert.ToString(listItem["Title"]);
             viewModel.cmpProjUnit = Convert.ToString(listItem["Project_x002f_Unit"]);
             viewModel.cmpPosition = FormatUtil.ConvertLookupToValue(listItem, "Position");
+            viewModel.ddlProfessional.Value = Convert.ToInt32(listItem["ID"]);
+            viewModel.ddlProfessional.Text = Convert.ToString(listItem["Title"]);
 
             return viewModel;
         }
@@ -189,6 +191,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     viewModel.cmpProjUnit = Convert.ToString(item2["Project_x002f_Unit"]);
                     viewModel.cmpPosition = FormatUtil.ConvertLookupToValue(item2, "Position");
                     viewModel.CompensatoryDetails = GetCompDetailist(GetCompID(Convert.ToInt32(item2["ID"])));
+                    viewModel.ddlProfessional.Value = (item2["ID"] as FieldLookupValue).LookupId;
+                    viewModel.ddlProfessional.Text = (item2["Title"] as FieldLookupValue).LookupValue;
                 }
 
             }
@@ -203,9 +207,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 return viewModel;
 
             var listItem = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, idPro, _siteUrl);
+            viewModel.ddlProfessional.Value = Convert.ToInt32(idPro);
             viewModel = ConvertCompInputTolistDataVM(listItem);
-
-
+            viewModel.cmpID = ID;
             viewModel.CompensatoryDetails = GetCompDetailist(ID);
 
             return viewModel;
@@ -265,6 +269,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 CmpActiv = Convert.ToString(item["Title"]),
                 CmpID = Convert.ToInt32(item["ID"]),
+                CmpHID = Convert.ToInt32(item["compensatoryrequest"]),
                 CmpDate = Convert.ToDateTime(item["compensatorydate"]),
                 StartTime = Convert.ToDateTime(item["compensatorystarttime"]),
                 FinishTime = Convert.ToDateTime(item["compensatoryendtime"]),

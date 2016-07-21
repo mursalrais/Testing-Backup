@@ -40,27 +40,23 @@ namespace MCAWebAndAPI.Web.Controllers
 
             var viewmodel = _service.GetComplistbyCmpid(iD);
 
-            int? cmpID = iD;
-
-            if (cmpID == null)
-                return View(viewmodel);
-
-            viewmodel.cmpID = cmpID;
+            viewmodel.cmpID = iD;
             //viewmodel.ID = id;
             return View(viewmodel);
         }
          
         public ActionResult InputCompensatoryHR(string siteurl = null, int? iD = null)
         {
-            //mandatory: set site url
-            _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
-            SessionManager.Set("SiteUrl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
-
             if (siteurl == "")
             {
                 siteurl = SessionManager.Get<string>("SiteUrl");
+                _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
             }
-            _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
+            else
+            {
+                _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
+                SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
+            }
 
             var viewmodel = _service.GetComplistbyProfid(iD);
 
@@ -153,23 +149,5 @@ namespace MCAWebAndAPI.Web.Controllers
                 JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetPosition()
-        {
-            var siteUrl = SessionManager.Get<string>("SiteUrl");
-            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-
-            var positions = _service.GetPositions();
-
-            return Json(positions.Select(e =>
-                new {
-                    e.ID,
-                    e.PositionName,
-                    e.PositionStatus,
-                    e.Remarks,
-                    e.IsKeyPosition,
-                    Desc = string.Format("{0}", e.PositionName)
-                }),
-                JsonRequestBehavior.AllowGet);
-        }
     }
 }

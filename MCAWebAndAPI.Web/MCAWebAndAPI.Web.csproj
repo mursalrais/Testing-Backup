@@ -714,6 +714,7 @@
     <Content Include="Views\HRInterviewlist\_IntvinvitePanelDetails.cshtml" />
     <Content Include="Views\HRInterviewlist\InterviewPanellistData.cshtml" />
     <Content Include="Views\HRInterviewlist\NextInterviewlist.cshtml" />
+    <Content Include="Views\HRCompensatory\ListCompensatoryDetails.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
