@@ -41,7 +41,6 @@ namespace MCAWebAndAPI.Web.Controllers
             }
 
             var viewmodel = _service.GetShortlist(position, username, useraccess);
-
             //viewmodel.ID = id;
             return View(viewmodel);
         }
