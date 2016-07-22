@@ -202,4 +202,10 @@
   <data name="ApplicationDisplayByID" xml:space="preserve">
     <value>{0}/Lists/Application/DispForm.aspx?ID={1}</value>
   </data>
+  <data name="PerformanceEvaluation" xml:space="preserve">
+    <value>/Lists/PerformanceEvaluation/</value>
+  </data>
+  <data name="PerformancePlan" xml:space="preserve">
+    <value>/Lists/PerformancePlan/</value>
+  </data>
 </root>

@@ -36,6 +36,8 @@ namespace MCAWebAndAPI.Service.HR.Common
 
         IEnumerable<PositionMaster> GetPositions();
 
+        IEnumerable<PositionMaster> GetPositionsManpower(string Level);
+
         int? EditProfessionalData(ProfessionalDataVM viewModel);
         
         void CreateEducationDetails(int? headerID, IEnumerable<EducationDetailVM> educationDetails);

@@ -75,7 +75,8 @@ namespace MCAWebAndAPI.Service.HR.Common
         public IEnumerable<ProfessionalMaster> GetProfessionals()
         {
             var models = new List<ProfessionalMaster>();
-            foreach(var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl))
+            var caml = @"<View><Query><OrderBy><FieldRef Name='Title' Ascending='True' /></OrderBy></Query><ViewFields><FieldRef Name='ID' /><FieldRef Name='ContentType' /><FieldRef Name='Title' /><FieldRef Name='Modified' /><FieldRef Name='Created' /><FieldRef Name='Author' /><FieldRef Name='Editor' /><FieldRef Name='_UIVersionString' /><FieldRef Name='Attachments' /><FieldRef Name='Edit' /><FieldRef Name='LinkTitleNoMenu' /><FieldRef Name='LinkTitle' /><FieldRef Name='DocIcon' /><FieldRef Name='ItemChildCount' /><FieldRef Name='FolderChildCount' /><FieldRef Name='AppAuthor' /><FieldRef Name='AppEditor' /><FieldRef Name='lastname' /><FieldRef Name='Join_x0020_Date' /><FieldRef Name='Professional_x0020_Status' /><FieldRef Name='Project_x002f_Unit' /><FieldRef Name='Position' /><FieldRef Name='placeofbirth' /><FieldRef Name='dateofbirth' /><FieldRef Name='maritalstatus' /><FieldRef Name='bloodtype' /><FieldRef Name='gender' /><FieldRef Name='nationality' /><FieldRef Name='religion' /><FieldRef Name='idcardtype' /><FieldRef Name='idcardnumber' /><FieldRef Name='idcardexpirydate' /><FieldRef Name='permanentaddress' /><FieldRef Name='permanentlandlinephone' /><FieldRef Name='currentaddress' /><FieldRef Name='currentlandlinephone' /><FieldRef Name='emergencynumber' /><FieldRef Name='officephone' /><FieldRef Name='Extension' /><FieldRef Name='NIK' /><FieldRef Name='officeemail' /><FieldRef Name='personalemail' /><FieldRef Name='personalemail2' /><FieldRef Name='mobilephonenr' /><FieldRef Name='mobilephonenr2' /><FieldRef Name='hiaccountname' /><FieldRef Name='hiaccountnr' /><FieldRef Name='hicurrency' /><FieldRef Name='hibankname' /><FieldRef Name='hibankbranchoffice' /><FieldRef Name='hieffectivedate' /><FieldRef Name='hienddate' /><FieldRef Name='hiriaccountnr' /><FieldRef Name='hirjaccountnr' /><FieldRef Name='hirgaccountnr' /><FieldRef Name='himaaccountnr' /><FieldRef Name='spaccountname' /><FieldRef Name='spaccountnr' /><FieldRef Name='spcurrency' /><FieldRef Name='spbankname' /><FieldRef Name='spbranchoffice' /><FieldRef Name='speffectivedate' /><FieldRef Name='spenddate' /><FieldRef Name='payrollaccountname' /><FieldRef Name='payrollaccountnr' /><FieldRef Name='payrollcurrency' /><FieldRef Name='payrollbankname' /><FieldRef Name='payrollbranchoffice' /><FieldRef Name='payrollbankswiftcode' /><FieldRef Name='payrolltaxstatus' /><FieldRef Name='taxid' /><FieldRef Name='nameintaxid' /><FieldRef Name='taxaddress' /><FieldRef Name='datavalidationstatus' /><FieldRef Name='Position_x003a_ID' /><FieldRef Name='nationality_x003a_ID' /><FieldRef Name='visibleto' /><FieldRef Name='PSAnumber' /><FieldRef Name='PSAstartdate' /><FieldRef Name='PSAexpirydate' /><FieldRef Name='WFSendEmailNotificationProfessio' /><FieldRef Name='psastatus' /><FieldRef Name='psastatus_x003a_ID' /></ViewFields><QueryOptions /></View>";
+            foreach(var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl,caml))
             {
                     models.Add(ConvertToProfessionalModel_Light(item));
             }
@@ -121,6 +122,18 @@ namespace MCAWebAndAPI.Service.HR.Common
             var models = new List<PositionMaster>();
 
             foreach (var item in SPConnector.GetList(SP_POSMAS_LIST_NAME, _siteUrl))
+            {
+                models.Add(ConvertToPositionsModel(item));
+            }
+
+            return models;
+        }
+
+        public IEnumerable<PositionMaster> GetPositionsManpower(string Level)
+        {
+            var models = new List<PositionMaster>();
+            string caml = @"<View><Query><Where><Eq><FieldRef Name='projectunit' /><Value Type='Choice'>"+Level+"</Value></Eq></Where></Query><ViewFields><FieldRef Name='ID' /><FieldRef Name='ContentType' /><FieldRef Name='Title' /><FieldRef Name='Modified' /><FieldRef Name='Created' /><FieldRef Name='Author' /><FieldRef Name='Editor' /><FieldRef Name='_UIVersionString' /><FieldRef Name='Attachments' /><FieldRef Name='Edit' /><FieldRef Name='LinkTitleNoMenu' /><FieldRef Name='LinkTitle' /><FieldRef Name='DocIcon' /><FieldRef Name='ItemChildCount' /><FieldRef Name='FolderChildCount' /><FieldRef Name='AppAuthor' /><FieldRef Name='AppEditor' /><FieldRef Name='iskeyposition' /><FieldRef Name='positionstatus' /><FieldRef Name='Remarks' /><FieldRef Name='projectunit' /></ViewFields><QueryOptions /></View>";
+            foreach (var item in SPConnector.GetList(SP_POSMAS_LIST_NAME, _siteUrl, caml))
             {
                 models.Add(ConvertToPositionsModel(item));
             }
@@ -861,5 +874,7 @@ namespace MCAWebAndAPI.Service.HR.Common
         {
             CreateOrganizationalDetails(headerID, organizationalDetails);
         }
+
+       
     }
 }

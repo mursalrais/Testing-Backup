@@ -14,6 +14,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// requestdate
         /// </summary>
         [UIHint("Date")]
+        [Required]
         public DateTime? DateRequested { get; set; } = DateTime.Now;
         public Boolean IsOnBehalfOf { get; set; } = new Boolean();
 
@@ -21,13 +22,15 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// projectunit
         /// </summary>
         [UIHint("ComboBox")]
-        [DisplayName("Division/Project/Unit")]
+        [DisplayName("Project Unit")]
+        [Required]
         public ComboBoxVM DivisionProjectUnit { get; set; } = new ComboBoxVM();
 
         /// <summary>
         /// reportingto
         /// </summary>
         [UIHint("AjaxComboBox")]
+        [Required]
         public AjaxComboBoxVM ReportingTo { get; set; } = new AjaxComboBoxVM
         {
             ControllerName = "HRDataMaster",
@@ -42,18 +45,21 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         [DisplayName("No. Of Person")]
         [UIHint("Int32")]
+        [Required]
         public int NoOfPerson { get; set; }
 
         /// <summary>
         /// Tenure
         /// </summary>
         [UIHint("Int32")]
+        [Required]
         public int Tenure { get; set; }
 
         /// <summary>
         /// joblocation
         /// </summary>
         [UIHint("AjaxComboBox")]
+        [Required]
         public AjaxComboBoxVM JobLocation { get; set; } = new AjaxComboBoxVM
         {
             ControllerName = "Location",
@@ -66,6 +72,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// Objectives
         /// </summary>
         [UIHint("TextArea")]
+        [Required]
         public string PositionObjectives { get; set; }
 
         public string Username { get; set; }
@@ -87,20 +94,25 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             ActionName = "GetProfessionals",
             ValueField = "ID",
             TextField = "Desc",
-            OnSelectEventName="OnBehalfOfChange"
+            OnSelectEventName = "OnBehalfOfChange"
         };
 
         /// <summary>
         /// positionrequested
         /// </summary>
-        [UIHint("AjaxComboBox")]
-        public AjaxComboBoxVM Position { get; set; } = new AjaxComboBoxVM
+        [UIHint("AjaxCascadeComboBox")]
+        [Required]
+        public AjaxCascadeComboBoxVM Position { get; set; } = new AjaxCascadeComboBoxVM
         {
             ControllerName = "HRDataMaster",
-            ActionName = "GetPositions",
+            ActionName = "GetPositionsManpower",
             ValueField = "ID",
             TextField = "PositionName",
-            OnSelectEventName = "onPositionChange"
+            //OnSelectEventName = "onPositionChange",
+            Filter = "filterLevel",
+            Cascade = "DivisionProjectUnit_Value"
+
+
         };
 
         /// <summary>
@@ -119,7 +131,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// expectedjoindate
         /// </summary>
         [UIHint("Date")]
-        public DateTime? ExpectedJoinDate { get; set; } =  DateTime.Now;
+        [Required]
+        public DateTime? ExpectedJoinDate { get; set; } = DateTime.Now;
 
         /// <summary>
         /// istravelrequired
@@ -138,14 +151,17 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// personnelmgmt
         /// </summary>
         [UIHint("Int32")]
+        [Required]
         public int PersonnelManagement { get; set; }
 
         /// <summary>
         /// budgetmgmt
         /// </summary>
         [UIHint("Int32")]
+        [Required]
         public int BudgetManagement { get; set; }
         [UIHint("CheckBoxItem")]
+        [Required]
         public IEnumerable<CheckBoxItemVM> Workplan { get; set; } = new List<CheckBoxItemVM>();
 
         /// <summary>
@@ -158,30 +174,36 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// totalyrsofexperience
         /// </summary>
         [UIHint("TextArea")]
+        [Required]
+        [DisplayName("Total Years of Experience")]
         public string TotalYrsOfExperience { get; set; }
 
         /// <summary>
         /// minimumeducation
         /// </summary>
         [UIHint("TextArea")]
+        [Required]
         public string MinimumEducation { get; set; }
 
         /// <summary>
         /// Industry
         /// </summary>
         [UIHint("TextArea")]
+        [Required]
         public string Industry { get; set; }
 
         /// <summary>
         /// minimumyrsofrelatedexperience
         /// </summary>
         [UIHint("TextArea")]
+        [DisplayName("Minimum Years of Experience in Related Field")]
         public string MinimumYrsOfExperienceInRelatedField { get; set; }
 
         /// <summary>
         /// specifictechnicalskill
         /// </summary>
         [DisplayName("Specific Technical Skill/Qualification")]
+        [Required]
         [UIHint("TextArea")]
         public string SpecificTechnicalSkillQualification { get; set; }
 
@@ -190,6 +212,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// </summary>
         [DisplayName("Personal Attributes & Competencies")]
         [UIHint("TextArea")]
+        [Required]
         public string PersonalAttributesCompetencies { get; set; }
 
         /// <summary>
@@ -218,6 +241,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             }
         };
 
-        
+
     }
 }
