@@ -211,13 +211,25 @@ namespace MCAWebAndAPI.Web.Controllers
                     string.Format(EmailResource.ProfessionalPerformancePlan, siteUrl, UrlResource.ProfessionalPerformancePlan, viewModel.ID), string.Format(""));
 
                 // Send to Level 2 Approver and Requestor
-                if (viewModel.StatusForm == "Pending Approval 1 of 2")
+                if (viewModel.Requestor == null && viewModel.StatusForm == "Pending Approval 1 of 2")
                     _hRPerformancePlanService.SendEmail(viewModel, SP_TRANSACTION_WORKFLOW_LIST_NAME,
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.ID, 2,
                     string.Format(EmailResource.ProfessionalPerformancePlan, siteUrl, UrlResource.ProfessionalPerformancePlan, viewModel.ID), string.Format("Approved By Level 1"));
 
+                // Send to Level 1 Approver
+                if (viewModel.Requestor != null && viewModel.StatusForm == "Pending Approval 1 of 2")
+                    _hRPerformancePlanService.SendEmail(viewModel, SP_TRANSACTION_WORKFLOW_LIST_NAME,
+                    SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.ID, 1,
+                    string.Format(EmailResource.ProfessionalPerformancePlan, siteUrl, UrlResource.ProfessionalPerformancePlan, viewModel.ID), string.Format(""));
+
+                // Send to Level 2 Approver
+                if (viewModel.Requestor != null && viewModel.StatusForm == "Pending Approval 2 of 2")
+                    _hRPerformancePlanService.SendEmail(viewModel, SP_TRANSACTION_WORKFLOW_LIST_NAME,
+                    SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.ID, 2,
+                    string.Format(EmailResource.ProfessionalPerformancePlan, siteUrl, UrlResource.ProfessionalPerformancePlan, viewModel.ID), string.Format(""));
+
                 // Send to Requestor
-                if (viewModel.StatusForm == "Pending Approval 2 of 2")
+                if (viewModel.Requestor == null && viewModel.StatusForm == "Pending Approval 2 of 2")
                     _hRPerformancePlanService.SendEmail(viewModel, SP_TRANSACTION_WORKFLOW_LIST_NAME,
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.ID, 2,
                     string.Format(""), string.Format("Approved by Level 2"));

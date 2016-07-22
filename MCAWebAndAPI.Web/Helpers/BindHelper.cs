@@ -56,6 +56,18 @@ namespace MCAWebAndAPI.Web.Helpers
 
         }
 
-        
+        public static TimeSpan? BindTimeInGrid(string prefix, int index, string postfix, FormCollection form)
+        {
+            var dateStrings = (form[string.Format("{0}[{1}].{2}", prefix, index, postfix)] + string.Empty).Split(' ');
+
+            //"Mon Nov 21 2011 19:53:08 GMT+0700 (SE Asia Standard Time) -> Nov 21 2011"
+            var dateString = dateStrings[4];
+
+            DateTime dt = DateTime.ParseExact(dateString, "HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+
+            var result = dt.TimeOfDay;
+
+            return result;
+        }
     }
 }

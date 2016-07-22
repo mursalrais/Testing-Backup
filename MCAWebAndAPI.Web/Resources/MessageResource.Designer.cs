@@ -106,6 +106,15 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Congratulation {0}! Your Compensatory has successfully been submitted..
+        /// </summary>
+        public static string SuccessCreateCompensatoryData {
+            get {
+                return ResourceManager.GetString("SuccessCreateCompensatoryData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Congratulation {0}! Exit Procedure Data has successfully been created..
         /// </summary>
         public static string SuccessCreateExitProcedureData {

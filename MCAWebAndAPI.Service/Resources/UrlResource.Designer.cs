@@ -142,6 +142,15 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to /Lists/InsuranceClaim.
+        /// </summary>
+        public static string InsuranceClaim {
+            get {
+                return ResourceManager.GetString("InsuranceClaim", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0}/Lists/Application/Interviewlistdata.aspx?POSID={1}.
         /// </summary>
         public static string InterviewDataList {

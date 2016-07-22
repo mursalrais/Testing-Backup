@@ -30,7 +30,6 @@
             @Html.Partial("_IntvinviteDetails", Model.ShortlistDetails)
         </div>
 
-
     </fieldset>
     <div class="form-actions">
   
@@ -44,7 +43,6 @@
             window.location = "/HRShortlist/ShortlistData?siteurl=&position=" + dataItem.ID + "&username=&useraccess=HR";
         };
 
-
         $(document).ready(function () {
             debugger;
             $("#vacant-position").prop('readonly', 'true');
@@ -54,10 +52,8 @@
             $.getJSON(url, function (data) {
                 $("#vacant-position").prop("value", data.PositionName);
                 $("#PositionName").prop("value", data.PositionName);
-
             })
         });
-
     </script>
 
 }

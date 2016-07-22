@@ -24,6 +24,20 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
                 Workflow.GetApplicationStatus(Workflow.ApplicationStatus.ONBOARD)
             };
         }
+
+        /// <summary>
+        /// ddlProfessional
+        /// </summary>
+        [DisplayName("Name")]
+        [UIHint("AjaxComboBox")]
+        public AjaxComboBoxVM ddlProfessional { get; set; } = new AjaxComboBoxVM
+        {
+            ControllerName = "HRDataMaster",
+            ActionName = "GetProfessionals",
+            ValueField = "ID",
+            TextField = "Desc",
+            OnSelectEventName = "OnChangeProfessional"
+        };
         /// <head>
         /// CompensatoryID
         /// </head>

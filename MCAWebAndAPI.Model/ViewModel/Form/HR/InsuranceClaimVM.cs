@@ -11,56 +11,75 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
     public class InsuranceClaimVM : Item
     {
-        public IEnumerable<ClaimPaymentDetailVM> ClaimPaymentDetail { get; set; } = new List<ClaimPaymentDetailVM>();
-        public IEnumerable<ClaimComponentDetailVM> ClaimComponentDetail { get; set; } = new List<ClaimComponentDetailVM>();
+        public IEnumerable<ClaimPaymentDetailVM> ClaimPaymentDetails { get; set; } = new List<ClaimPaymentDetailVM>();
+        public IEnumerable<ClaimComponentDetailVM> ClaimComponentDetails { get; set; } = new List<ClaimComponentDetailVM>();
+
+        [UIHint("Int32")]
+        [Required(ErrorMessage = "Professional ID Field Is Required")]
+        [DisplayName("Professional ID")]
+        public int? ProfessionalID { get; set; }
 
         /// <summary>
-        /// professionalid
+        /// professional
         /// </summary>
-        public int ProfessionalID { get; set; }
-
-        /// <summary>
-        /// dependentid
-        /// </summary>
-        public int DependentID { get; set; }
-
-        public string ProfessionalName { get; set; }
-
-        /// <summary>
-        /// type
-        /// </summary>
-        [UIHint("ComboBox")]
-        public ComboBoxVM Type { get; set; } = new ComboBoxVM
+        [UIHint("AjaxComboBox")]
+        public AjaxComboBoxVM ProfessionalName { get; set; } = new AjaxComboBoxVM
         {
-            Choices = new string[]
-            {
-                ""
-            }
+            ActionName = "GetProfessionals",
+            ControllerName = "HRDataMaster",
+            ValueField = "ID",
+            TextField = "Name"
         };
+       
+       
+        public string Name { get; set; }
 
-        public int? OrganizationInsuranceID { get; set; }
+       [UIHint("Date")]
+        [Required(ErrorMessage = "Claim Date Field Is Required")]
+        public DateTime? ClaimDate { get; set; }
+
+        public string Position { get; set; }
+
+        public int DependentID { get; set; }
 
         [UIHint("AjaxComboBox")]
         public AjaxComboBoxVM DependantName { get; set; } = new AjaxComboBoxVM
         {
-
+            ActionName = "GetDependants",
+            ControllerName = "HRDataMaster",
+            ValueField = "ID",
+            TextField = "Name",
+            OnSelectEventName = "OnSelectDependantName"
         };
 
-        public int IndividualInsuranceNumber { get; set; }
+      [UIHint("ComboBox")]
+        public ComboBoxVM Type { get; set; } = new ComboBoxVM
+        {
+            Choices = new string[]
+            {
+                "Professional",
+                "Dependent",
+            },
+            Value = "Professional"
+        };
+        
+        public int? IndividualInsuranceNumber { get; set; }
 
-        [UIHint("Date")]
-        public DateTime? SubmissonDate { get; set; }
+        public int? OrganizationInsuranceID { get; set; }
 
-        /// <summary>
-        /// claimstatus
-        /// </summary>
         [UIHint("ComboBox")]
+        [Required(ErrorMessage = "Claim Status Field Is Required")]
         public ComboBoxVM ClaimStatus { get; set; } = new ComboBoxVM
         {
             Choices = new string[]
             {
-                ""
-            }
+                    "Draft", "Need HR to Validate", "Validated by HR", "Submitted to AXA", "Rejected","Paid"
+            },
+            Value = "Draft"
+
         };
+
+       
+
     }
 }

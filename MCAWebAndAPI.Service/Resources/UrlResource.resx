@@ -202,4 +202,7 @@
   <data name="ApplicationDisplayByID" xml:space="preserve">
     <value>{0}/Lists/Application/DispForm.aspx?ID={1}</value>
   </data>
+  <data name="InsuranceClaim" xml:space="preserve">
+    <value>/Lists/InsuranceClaim</value>
+  </data>
 </root>

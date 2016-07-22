@@ -17,6 +17,7 @@
             @Html.HiddenFor(m => m.cmpID)
             @Html.HiddenFor(m => m.cmpName)
             @Html.HiddenFor(m => m.cmpPosition)
+            <input type="hidden" id="loadpage" value="0">
             <div class="row">
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.cmpName).Class("col-md-2 control-label")
@@ -39,15 +40,17 @@
             </div>
 
         </fieldset>
-        <div class="row">
-            <div class="col-sm-8">
-                <button id="submit-button" class="btn btn-primary" type="submit" onclick="onValidateKendoDetail">
-                    <i class="fa fa-save"></i>
-                    save
-                </button>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="pull-right">
+                        <button id="submit-button" class="btn btn-primary" type="submit" onclick="onValidateKendoDetail">
+                            <i class="fa fa-save"></i>
+                            save
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
 }
 
 @section scripts{
@@ -59,28 +62,6 @@
             //$("#NamePos").prop("value", positionID);
             //$("#EditMode").prop("value", "2");
         });
-
-        function onValidateKendoDetail(e) {
-            var i = -1
-            var j = -1
-            rowgrid.each(function (e) {
-                i++;
-                var xdate = $("#Dateid" + i).val();
-                rowgrid.each(function (e) {
-                    j++;
-                    var ydate = $("#Dateid" + i).val();
-                    if (i !== j) {
-                        debugger;
-                        if (xdate == ydate) {
-                            alert("date you have chosen already exists")
-                        }
-                    }
-                });
-
-                if (data.CmpDate == xdate)
-                    debugger;
-            });
-        }
 
         function getDayName(date) {
             var day = new Array();

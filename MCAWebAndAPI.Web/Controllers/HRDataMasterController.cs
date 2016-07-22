@@ -222,5 +222,50 @@ namespace MCAWebAndAPI.Web.Controllers
             return positions;
         }
 
+
+        private IEnumerable<DependentMaster> GetFromExistingSessionDependent()
+        {
+            //Get existing session variable
+            var sessionVariable = System.Web.HttpContext.Current.Session["DependentMaster"] as IEnumerable<DependentMaster>;
+            var dependents = sessionVariable ?? _dataMasterService.GetDependents();
+
+            if (sessionVariable == null) // If no session variable is found
+                System.Web.HttpContext.Current.Session["DependentMaster"] = dependents;
+            return dependents;
+        }
+
+        public JsonResult GetDependants()
+        {
+            _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+
+            var dependents = GetFromExistingSessionDependent();
+
+            return Json(dependents.Select(e =>
+                new
+                {
+                    e.ID,
+                    e.Name,
+                    e.InsuranceNumber,
+                    e.OrganizationInsurance,
+                    Desc = string.Format("{0}", e.Name)
+                }),
+                JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetDependant(int id)
+        {
+            _dataMasterService.SetSiteUrl(System.Web.HttpContext.Current.Session["SiteUrl"] as string);
+            var dependents = GetFromExistingSessionDependent();
+            return Json(dependents.Where(e => e.ID == id).Select(
+                    e =>
+                    new
+                    {
+                        e.ID,
+                        e.Name,
+                        e.InsuranceNumber,
+                        e.OrganizationInsurance
+                    }
+                ), JsonRequestBehavior.AllowGet);
+        }
+
     }
 }

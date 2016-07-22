@@ -19,6 +19,12 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public int? CmpID { get; set; }
 
         /// <summary>
+        /// CompensatoryID
+        /// </summary>
+        [DisplayName("ID")]
+        public int? CmpHID { get; set; }
+
+        /// <summary>
         /// CompensatoryActivities
         /// </summary>
         [DisplayName("Activities")]

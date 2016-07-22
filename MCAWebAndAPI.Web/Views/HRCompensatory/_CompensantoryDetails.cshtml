@@ -13,14 +13,14 @@
         columns.Bound(p => p.CmpID).ClientTemplate("#= CmpID #" +
         "<input type='hidden' name='ComplistDetails[#= GetDetailComplist(data)#].CmpID' value='#= CmpID #' />");
 
-        columns.Bound(p => p.CmpDate).ClientTemplate(
-        "<input type='hidden' name='ComplistDetails[#= GetDetailComplist(data)#].CmpDate' value='#= CmpDate #' />");
+        columns.Bound(p => p.CmpDate).ClientTemplate("#= kendo.toString(CmpDate, \"MM/dd/yyyy \") #" +
+        "<input type='hidden' id='Dateid#= GetDetailComplist(data)#' name='CompensatoryDetails[#= GetDetailComplist(data)#].CmpDate' value='#= CmpDate #' />");
 
-        columns.Bound(p => p.StartTime).ClientTemplate("#= StartTime #" +
-        "<input type='hidden' name='ComplistDetails[#= GetDetailComplist(data)#].StartTime' value='#= StartTime #' />");
+        columns.Bound(p => p.StartTime).ClientTemplate("#= kendo.toString(StartTime, \"hh:mm tt\") #" +
+       "<input id='start' type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].StartTime' value='#= StartTime #' />");
 
-        columns.Bound(p => p.FinishTime).ClientTemplate("#= FinishTime #" +
-        "<input type='hidden' name='ComplistDetails[#= GetDetailComplist(data)#].FinishTime' value='#= FinishTime #' />");
+        columns.Bound(p => p.FinishTime).ClientTemplate("#= kendo.toString(FinishTime, \"hh:mm tt\") #" +
+       "<input id='end' type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].FinishTime' value='#= FinishTime #' />");
 
         columns.Bound(p => p.CmpTotalHours).ClientTemplate("#= CmpTotalHours #" +
         "<input type='hidden' name='ComplistDetails[#= GetDetailComplist(data)#].CmpTotalHours' value='#= CmpTotalHours #' />");
@@ -48,6 +48,11 @@
     .Model(model =>
     {
         model.Id(p => p.ID);
+
+    })
+    .Group(model =>
+    {
+        model.AddDescending(p => p.CmpDate);
 
     })
     .ServerOperation(false)
