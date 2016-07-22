@@ -269,7 +269,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 CmpActiv = Convert.ToString(item["Title"]),
                 CmpID = Convert.ToInt32(item["ID"]),
-                CmpHID = Convert.ToInt32(item["compensatoryrequest"]),
+                CmpHID = Convert.ToInt32(FormatUtil.ConvertLookupToValue(item, "compensatoryrequest")),
                 CmpDate = Convert.ToDateTime(item["compensatorydate"]),
                 StartTime = Convert.ToDateTime(item["compensatorystarttime"]),
                 FinishTime = Convert.ToDateTime(item["compensatoryendtime"]),
@@ -347,7 +347,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                         var updatedValue = new Dictionary<string, object>();
 
                         updatedValue.Add("Title", viewModel.CmpActiv);
-                        updatedValue.Add("compensatoryrequest", cmpID);
+                        updatedValue.Add("compensatoryrequest", viewModel.CmpHID);
                         updatedValue.Add("compensatorydate", viewModel.CmpDate);
                         updatedValue.Add("compensatorystarttime", viewModel.StartTime);
                         updatedValue.Add("compensatoryendtime", viewModel.FinishTime);

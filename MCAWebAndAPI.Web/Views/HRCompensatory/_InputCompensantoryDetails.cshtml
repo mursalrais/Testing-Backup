@@ -32,6 +32,10 @@
         columns.Bound(p => p.remarks).ClientTemplate("#= remarks #" +
         "<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].remarks' value='#= remarks #' />");
 
+        columns.Bound(p => p.CmpHID).Hidden().ClientTemplate("#= CmpHID #" +
+       "<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].CmpHID' value='#= CmpHID #' />"
+        );
+
         columns.Bound(p => p.CmpID).Hidden().ClientTemplate("#= CmpID #" +
         "<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].CmpID' value='#= CmpID #' />"
          );
