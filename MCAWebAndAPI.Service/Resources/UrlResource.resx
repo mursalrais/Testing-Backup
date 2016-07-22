@@ -1,0 +1,208 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ApplicationDocumentByID" xml:space="preserve">
+    <value>{0}/Application%20Documents/Forms/AllItems.aspx#InplviewHashc902afed-7be4-4799-9502-1818597c2223=FilterField1%3Dapplication%255Fx003a%255FID-FilterValue1%3D{1}</value>
+    <comment>Need to change in migration</comment>
+  </data>
+  <data name="MonthlyFee" xml:space="preserve">
+    <value>/Lists/MonthlyFee</value>
+  </data>
+  <data name="Professional" xml:space="preserve">
+    <value>Lists/Professional Master</value>
+  </data>
+  <data name="PSAManagementDocumentByID" xml:space="preserve">
+    <value>{0}/PSA%20Documents/Forms/AllItems.aspx#InplviewHash5093bda1-84bf-4cad-8652-286653d6a83f=FilterField1%3Dpsa%255Fx003a%255FID-FilterValue1%3D{1}</value>
+    <comment>Need to change in migration</comment>
+  </data>
+  <data name="ApplicationData" xml:space="preserve">
+    <value>Lists/Application</value>
+  </data>
+  <data name="PSAManagement" xml:space="preserve">
+    <value>Lists/PSA</value>
+  </data>
+  <data name="ProfessionalDisplayByID" xml:space="preserve">
+    <value>{0}/Lists/Professional%20Master/DispForm_Custom.aspx?ID={1}</value>
+  </data>
+  <data name="PlaceMaster" xml:space="preserve">
+    <value>/Lists/Location%20Master</value>
+  </data>
+  <data name="ManpowerDocumentByID" xml:space="preserve">
+    <value>{0}/Manpower%20Requisition%20Documents/Forms/AllItems.aspx#InplviewHash1ad3b518-3da3-44cd-afac-6c686d40800e=FilterField1%3Dmanpowerrequestid-FilterValue1%3D{1}</value>
+    <comment>Need to change in migration</comment>
+  </data>
+  <data name="ProfessionalPerformancePlan" xml:space="preserve">
+    <value>/Lists/ProfessionalPerformancePlan</value>
+  </data>
+  <data name="ManpowerRequisition" xml:space="preserve">
+    <value>Lists/Manpower%20Requisition</value>
+  </data>
+  <data name="ExitProcedureDocumentByID" xml:space="preserve">
+    <value>{0}/ExitProcedureDocuments/Forms/AllItems.aspx#InplviewHashf78f203c-f7a1-4179-9fbc-868e50a402cf=FilterField1%3Dexitprocedureid-FilterValue1%3D{1}</value>
+    <comment>Need to change in migration</comment>
+  </data>
+  <data name="ProfessionalPerfromanceEvaluation" xml:space="preserve">
+    <value>/Lists/ProfessionalPerformanceEvaluation</value>
+  </data>
+  <data name="ExitProcedure" xml:space="preserve">
+    <value>/Lists/Exit%20Procedure</value>
+  </data>
+  <data name="ExitProcedureNonDisclosureAgreement" xml:space="preserve">
+    <value>/_layouts/15/WopiFrame.aspx?sourcedoc={3242C181-0557-4827-AD0E-F089CFE63AED}&amp;file=Non%20Disclosure%20Agreement.docx&amp;action=default</value>
+  </data>
+  <data name="ExitProcedureExitInterviewForm" xml:space="preserve">
+    <value>/_layouts/15/WopiFrame.aspx?sourcedoc={2E1A7EB1-E5BD-4F38-A1DF-E43C7DEF0CF4}&amp;file=Exit%20Interview%20Form.docx&amp;action=default</value>
+  </data>
+  <data name="AddInterviewInvitation" xml:space="preserve">
+    <value>{0}/Lists/Application/InputInterviewResultDetail.aspx?ID={1}</value>
+  </data>
+  <data name="InterviewDataList" xml:space="preserve">
+    <value>{0}/Lists/Application/Interviewlistdata.aspx?POSID={1}</value>
+  </data>
+  <data name="InterviewInputResult" xml:space="preserve">
+    <value>{0}/Lists/Application/InputInterviewResult.aspx?ID={1}</value>
+  </data>
+  <data name="ShortlistEmailLinkHR" xml:space="preserve">
+    <value>{0}/Lists/Application/ShortlistREQ.aspx?POSID={1}</value>
+  </data>
+  <data name="ShortlistEmailLinkInterview" xml:space="preserve">
+    <value>{0}/Lists/Application/DispForm.aspx?ID={1}</value>
+  </data>
+  <data name="ShortlistEmailLinkREQ" xml:space="preserve">
+    <value>{0}/Lists/Application/Interviewlistdata.aspx?POSID={1}</value>
+  </data>
+  <data name="CVDocumentByID" xml:space="preserve">
+    <value>{0}/Application%20Documents/Forms/AllItems.aspx#InplviewHash4adbc69d-4587-40ad-8645-58b419984117=FilterField1%3Dapplication%255Fx003a%255FID-FilterValue1%3D{1}</value>
+  </data>
+  <data name="InterviewPanelList" xml:space="preserve">
+    <value>{0}/Lists/Application/InterviewPanellist.aspx?POSID={1}</value>
+  </data>
+  <data name="ShortlistInterviewPanel" xml:space="preserve">
+    <value>{0}/Lists/Application/ShortlistInterviewPanel.aspx?POSID={1}</value>
+  </data>
+  <data name="InterviewList" xml:space="preserve">
+    <value>{0}/Lists/Application/Interviewlist.aspx?POSID={1}</value>
+  </data>
+  <data name="ApplicationDisplayByID" xml:space="preserve">
+    <value>{0}/Lists/Application/DispForm.aspx?ID={1}</value>
+  </data>
+  <data name="InsuranceClaim" xml:space="preserve">
+    <value>/Lists/InsuranceClaim</value>
+  </data>
+</root>

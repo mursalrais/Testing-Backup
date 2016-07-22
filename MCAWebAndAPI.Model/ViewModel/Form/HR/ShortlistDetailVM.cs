@@ -51,7 +51,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         {
             var index = 0;
             var options = new string[] {
-                "New",
                 "Shortlisted",
                 "Declined"};
 

@@ -44,8 +44,8 @@ namespace MCAWebAndAPI.Web
                 .Include("~/Scripts/bi-frame.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/kendo")
-                .Include("~/Scripts/kendo/2016.2.504/kendo.all.min.js",
-                 "~/Scripts/kendo/2016.2.504/kendo.aspnetmvc.min.js"));
+                .Include("~/Scripts/kendo/2016.2.714/kendo.all.min.js",
+                 "~/Scripts/kendo/2016.2.714/kendo.aspnetmvc.min.js"));
 
             ScriptManager.ScriptResourceMapping.AddDefinition(
                 "respond",
@@ -66,9 +66,9 @@ namespace MCAWebAndAPI.Web
                 "~/Content/bi.css"));
 
             bundles.Add(new StyleBundle("~/Content/kendo").Include(
-                "~/Content/kendo/2016.2.504/kendo.common-fiori.min.css",
-                "~/Content/kendo/2016.2.504/kendo.fiori.min.css",
-                "~/Content/kendo/2016.2.504/kendo.dataviz.fiori.min.css"));
+                "~/Content/kendo/2016.2.714/kendo.common-fiori.min.css",
+                "~/Content/kendo/2016.2.714/kendo.fiori.min.css",
+                "~/Content/kendo/2016.2.714/kendo.dataviz.fiori.min.css"));
 
 
         }

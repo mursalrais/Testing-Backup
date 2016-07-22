@@ -21,7 +21,6 @@ namespace MCAWebAndAPI.Web.Controllers
     {
         IHRShortlistService _service;
 
-
         public HRShortlistController()
         {
             _service = new HRShortlistService();
@@ -42,7 +41,6 @@ namespace MCAWebAndAPI.Web.Controllers
             }
 
             var viewmodel = _service.GetShortlist(position, username, useraccess);
-
             //viewmodel.ID = id;
             return View(viewmodel);
         }
@@ -77,7 +75,10 @@ namespace MCAWebAndAPI.Web.Controllers
                 foreach (string mail in words)
                 {
                     string bodymailHR = string.Format(EmailResource.EmailShortlistToRequestor, _service.GetMailUrl(Convert.ToInt32(viewModel.Position), viewModel.useraccess));
-                    _service.SendEmailValidation(mail, bodymailHR);
+                    if (mail != "")
+                    {
+                        _service.SendEmailValidation(mail, bodymailHR);
+                    }
                 }
             }
             else if (viewModel.useraccess == "REQ")
@@ -85,7 +86,10 @@ namespace MCAWebAndAPI.Web.Controllers
                 foreach (string mail in words)
                 {
                     string bodymailREQ = string.Format(EmailResource.EmailShortlistToHR, _service.GetMailUrl(Convert.ToInt32(viewModel.Position), viewModel.useraccess));
-                    _service.SendEmailValidation(mail, bodymailREQ);
+                    if (mail != "")
+                    {
+                        _service.SendEmailValidation(mail, bodymailREQ);
+                    }
                 }
             }
 
@@ -105,7 +109,6 @@ namespace MCAWebAndAPI.Web.Controllers
             SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
 
             var viewmodel = _service.GetShortlistSend(ID);
-            //viewmodel.SendTo = "";
             //viewmodel.ID = id;
             return View(viewmodel);
         }
@@ -127,6 +130,14 @@ namespace MCAWebAndAPI.Web.Controllers
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
+
+            var dateintv = viewModel.InterviewerDate.Value.ToString("yyyy-MM-dd");
+
+            var timeintv = viewModel.InterviewerTime.Value.ToString("HH:mm");
+
+            string bodymailREQ = string.Format(EmailResource.EmailShortlistToCandidate, viewModel.Message, dateintv, timeintv);
+
+            _service.SendEmailValidation(viewModel.SendTo, bodymailREQ);
 
             return RedirectToAction("Index",
                "Success",
@@ -183,7 +194,10 @@ namespace MCAWebAndAPI.Web.Controllers
 
                     string bodymail = string.Format(EmailResource.EmailShortlistToInterviewPanel, viewModel.EmailMessage, linkmail);
 
-                    EmailUtil.Send(mail, "Interview Invitation for Position " + viewModel.PositionName + " (based on respective position)", bodymail);
+                    if (mail != "")
+                    {
+                        EmailUtil.Send(mail, "Interview Invitation for Position " + viewModel.PositionName + " (based on respective position)", bodymail);
+                    }
                 }
             }
             catch (Exception e)
@@ -212,7 +226,7 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             return array;
         }
-
+        
         public JsonResult GetStatusGrid()
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
@@ -244,7 +258,7 @@ namespace MCAWebAndAPI.Web.Controllers
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
-             var positions = GetShortlistPositionExistingSession();
+            var positions = GetShortlistPositionExistingSession();
 
             positions = positions.OrderBy(x => x.ID);
 

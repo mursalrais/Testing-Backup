@@ -1,0 +1,83 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model IEnumerable<ClaimComponentDetailVM>
+
+<div class="col-sm-12">
+    @(Html.Kendo().Grid(Model)
+          .Name("ClaimComponentDetails")
+          .ToolBar(tools => tools.Create().Text("Add New Component"))
+          .Editable(editable => editable.Mode(GridEditMode.InCell)
+              .CreateAt(GridInsertRowPosition.Bottom))
+          .Columns(columns =>
+          {
+              columns.Bound(p => p.Type).ClientTemplate("#= Type.Text #" +
+                           "<input type='hidden' name='ClaimComponentDetails[#= getComponentDetail(data)#].Type.Text' value='#= Type.Text #' />"
+                 )
+                 .EditorViewData(new
+                 {
+                     BindTo = ClaimComponentDetailVM.GetTypeOptions(),
+                 }
+                 ).Width(250)
+                  .ClientFooterTemplate("Total :");
+              columns.Bound(p => p.Currency).ClientTemplate("#= Currency.Text #" +
+                           "<input type='hidden' name='ClaimComponentDetails[#= getComponentDetail(data)#].Currency.Text' value='#= Currency.Text #' />"
+                 )
+                 .EditorViewData(new
+                 {
+                     BindTo = ClaimComponentDetailVM.GetCurrencyOptions(),
+                 }
+                 ).Width(200);
+
+              columns.Bound(p => p.Amount).ClientTemplate("#= Amount #" +
+                             "<input type='hidden' name='ClaimComponentDetails[#= getComponentDetail(data)#].Amount' value='#= Amount #' />"
+              ).Width(200)
+               .ClientFooterTemplate("#=sum#");
+              columns.Bound(p => p.ReceiptDate).ClientTemplate("#= kendo.toString(ReceiptDate, 'MM-dd-yyyy') #" +
+                            "<input type='hidden' name='ClaimComponentDetails[#= getComponentDetail(data)#].ReceiptDate' value='#= ReceiptDate #' />"
+              ).Width(200);
+              columns.Bound(p => p.Remarks).ClientTemplate("#= Remarks #" +
+                           "<input type='hidden' name='ClaimComponentDetails[#= getComponentDetail(data)#].Remarks' value='#= Remarks #' />"
+              );
+              columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
+                "<input type='hidden' name='ClaimComponentDetails[#= getComponentDetail(data)#].ID' value='#= ID #' />"
+              );
+              columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
+                           "<input type='hidden' name='ClaimComponentDetails[#= getComponentDetail(data)#].EditMode' value='#= EditMode #' />"
+              );
+              columns.Command(command => command.Custom("Delete").HtmlAttributes(new {@class = "btn btn-danger"})
+                  .Click("onDeleteKendoDetail")).Width(100);
+             
+          })
+          .Events(e =>
+          {
+              e.Edit("onEditKendoDetail");
+              e.DataBound("onDataBoundComponentDetails");
+          })
+          .DataSource(dataSource => dataSource.Ajax()
+          .Aggregates(aggregates =>
+          {
+              aggregates.Add(p => p.Amount).Sum();
+          })
+
+              .Model(model =>
+              {
+                  model.Id(p => p.ID);
+                  model.Field(m => m.ReceiptDate).DefaultValue(DateTime.UtcNow);
+                  model.Field(m => m.Currency).DefaultValue(ClaimComponentDetailVM.GetCurrencyDefaultValue());
+                  model.Field(m => m.Type).DefaultValue(ClaimComponentDetailVM.GetTypeDefaultValue());
+              })
+              .ServerOperation(false)
+          )
+          )
+</div>
+<script>
+    function getComponentDetail(dataItem) {
+        var data = $("#ClaimComponentDetails").data("kendoGrid").dataSource.data();
+        return data.indexOf(dataItem);
+    }
+
+    function onDataBoundComponentDetails(e) {
+        var grid = $("#ClaimComponentDetails").data("kendoGrid");
+        hideDeletedRowKendoDetail(grid);
+    }
+
+</script>

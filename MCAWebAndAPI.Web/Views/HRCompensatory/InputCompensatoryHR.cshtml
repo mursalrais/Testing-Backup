@@ -14,22 +14,23 @@
 {
     <div class="form-actions">
         <fieldset>
-            @Html.HiddenFor(m => m.CmpID)
-            @Html.HiddenFor(m => m.CmpName)
-            @Html.HiddenFor(m => m.CmpPosition)
+            @Html.HiddenFor(m => m.cmpID)
+            @Html.HiddenFor(m => m.cmpName)
+            @Html.HiddenFor(m => m.cmpPosition)
+            <input type="hidden" id="loadpage" value="0">
             <div class="row">
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.CmpName).Class("col-md-2 control-label")
+                    @Html.Bootstrap().LabelFor(m => m.ddlProfessional).Class("col-md-2 control-label")
                     <div class="col-md-3">
-                        <input class="k-textbox form-control" id="NamePos" style="width:100%;">
+                        @Html.EditorFor(m => m.ddlProfessional)
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.CmpProjUnit).Class("col-md-2 control-label")
+                    @Html.Bootstrap().LabelFor(m => m.cmpProjUnit).Class("col-md-2 control-label")
                     <div class="col-md-3">
-                        @Html.EditorFor(m => m.CmpProjUnit)
+                        @Html.EditorFor(m => m.cmpProjUnit)
                     </div>
                 </div>
             </div>
@@ -40,15 +41,13 @@
 
         </fieldset>
         <div class="row">
-            <div class="col-sm-8">
-                <button id="submit-button" class="btn btn-primary" type="submit">
-                    <i class="fa fa-save"></i>
-                    save
-                </button>
-                @*<button id="submit-cancel" class="btn btn-primary" type="button">
+            <div class="col-sm-12">
+                <div class="pull-right">
+                    <button id="submit-button" class="btn btn-primary" type="submit" onclick="onValidateKendoDetail">
                         <i class="fa fa-save"></i>
-                        cancel
-                    </button>*@
+                        save
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -58,12 +57,33 @@
 
     <script>
 
+        function OnChangeProfessional(e) {
+            var dataItem = this.dataItem(e.item);
+            if (dataItem.ID != 0) {
+                window.location = "/HRCompensatory/InputCompensatoryHR?siteurl=&iD=" + dataItem.ID + "";
+            }
+        };
+
         $(document).ready(function () {
-            debugger;
-            alert($('#EditMode').val());
             var positionID = $("#CmpName").val() +" - "+ $("#CmpPosition").val();
             $("#NamePos").prop("value", positionID);
         });
+
+        function getDayName(date) {
+            var day = new Array();
+            day[0] = "Monday";
+            day[1] = "Tuesday";
+            day[2] = "Wednesday";
+            day[3] = "Thursday";
+            day[4] = "Friday";
+            day[5] = "Saturday";
+            day[6] = "Sunday";
+
+            if(date != null)
+            {
+                return day[date.getDay()];
+            };
+        }
     </script>
 }
 

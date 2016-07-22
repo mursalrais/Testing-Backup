@@ -19,7 +19,7 @@
         <div class="row">
             @Html.Partial("_ExitProcedureDataForApprover", Model)
         </div>
-
+        
         <legend>Exit Procedure Checklist</legend>
         <div class="row">
             @Html.Partial("_ExitProcedureChecklistForApprover", Model.ExitProcedureChecklist)
@@ -46,8 +46,8 @@
 
 
         $(document).ready(function () {
-            $("#submit-for-approved").click(function () {
-                $("#ChecklistItemApproval").val("Approved")
+            $("#approved-by-approver").click(function () {
+                $("#StatusForm").val("Approved")
                 $("form").submit();
     });
 });

@@ -53,26 +53,51 @@ namespace MCAWebAndAPI.Web.Controllers
             // Get blank ViewModel
             var viewModel = exitProcedureService.GetExitProcedure(null, siteUrl, requestor, listName, user);
 
-
-            if (user == "HR")
+            if(user == "Professional")
+            {
+                viewModel.UserPermission = "Professional";
+            }
+            else if(user == "HR")
             {
                 viewModel.UserPermission = "HR";
-                
             }
-            else if(user == null)
-            {
-                
-                viewModel.UserPermission = "Professional";
-               
-            }
+            
+                SessionManager.Set("UserLogin", requestor);
+                SessionManager.Set("ExitProcedureChecklist", viewModel.ExitProcedureChecklist);
+                SessionManager.Set("WorkflowRouterListName", viewModel.ListName);
+                SessionManager.Set("WorkflowRouterRequestorUnit", viewModel.RequestorUnit);
+                SessionManager.Set("WorkflowRouterRequestorPosition", viewModel.RequestorPosition);
+
+            return View("CreateExitProcedure", viewModel);
+
+        }
+
+        public ActionResult CreateExitProcedureHR(int? ID, string user, string siteUrl = null, string requestor = null)
+        {
+            // MANDATORY: Set Site URL
+            exitProcedureService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            ViewBag.ListName = "Exit Procedure";
+
+            var listName = ViewBag.ListName;
+
+            ViewBag.RequestorUserLogin = requestor;
+
+            SessionManager.Set("RequestorUserLogin", requestor);
+
+            // Get blank ViewModel
+            var viewModel = exitProcedureService.GetExitProcedureHR(null, siteUrl, requestor, listName, user);
+
+            viewModel.UserPermission = "HR";
             
             SessionManager.Set("UserLogin", requestor);
             SessionManager.Set("ExitProcedureChecklist", viewModel.ExitProcedureChecklist);
             SessionManager.Set("WorkflowRouterListName", viewModel.ListName);
             SessionManager.Set("WorkflowRouterRequestorUnit", viewModel.RequestorUnit);
             SessionManager.Set("WorkflowRouterRequestorPosition", viewModel.RequestorPosition);
-
-            return View("CreateExitProcedure", viewModel);
+            
+            return View("_ExitProcedureChecklist", viewModel);
 
         }
 
@@ -90,34 +115,13 @@ namespace MCAWebAndAPI.Web.Controllers
 
             var viewModel = exitProcedureService.GetExitProcedureForApprove(ID, siteUrl, approver);
 
+            viewModel.ApproverMail = approver;
+
             return View("ViewExitProcedureForApprover", viewModel);
-
-            //if (level == null)
-            //{
-            //    SessionManager.Set("RequestorUserLogin", requestor);
-
-            //    // Get blank ViewModel
-            //    var viewModel = exitProcedureService.GetExitProcedure(null, siteUrl, requestor, listName);
-
-            //    SessionManager.Set("ExitProcedureChecklist", viewModel.ExitProcedureChecklist);
-            //    SessionManager.Set("WorkflowRouterListName", viewModel.ListName);
-            //    SessionManager.Set("WorkflowRouterRequestorUnit", viewModel.RequestorUnit);
-            //    SessionManager.Set("WorkflowRouterRequestorPosition", viewModel.RequestorPosition);
-            //    SessionManager.Set("UserLogin", requestor);
-
-            //    return View("CreateExitProcedure", viewModel);
-            //}
-            //else
-            //{
-            //    var viewModel = exitProcedureService.GetExitProcedureApprover(ID, siteUrl, requestor, level);
-
-            //    return View("ViewExitProcedureForApprover", viewModel);
-            //}
-
         }
 
         [HttpPost]
-        public ActionResult UpdateChecklistItemApprover(FormCollection form, ExitProcedureForApproverVM viewModel)
+        public ActionResult UpdateChecklistItemApprover(FormCollection form, ExitProcedureVM viewModel)
         {
             // Check whether error is found
             if (!ModelState.IsValid)
@@ -128,20 +132,18 @@ namespace MCAWebAndAPI.Web.Controllers
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             exitProcedureService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
-            try
-            {
-                var updateChecklist = exitProcedureService.UpdateExitChecklistStatus(viewModel);
-            }
-            catch (Exception e)
-            {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
-            }
+            viewModel.ExitProcedureChecklist = BindExitProcedureChecklist(form, viewModel.ExitProcedureChecklist);
+            exitProcedureService.UpdateExitChecklist(viewModel, viewModel.ExitProcedureChecklist);
 
-            return RedirectToAction("Index",
-                "Success",
-                new { errorMessage = string.Format(MessageResource.SuccessUpdateExitProcedure) });
+            string checklistStatusApproved = "Pending Approval";
 
+            exitProcedureService.CheckPendingApproval(viewModel.ID, checklistStatusApproved);
+                        
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.ExitProcedure);
+
+            //return RedirectToAction("Index",
+            //    "Success",
+            //    new { errorMessage = string.Format(MessageResource.SuccessCreateExitProcedureData, exitProcID) });
         }
 
         //Submit every data in Exit Procedure to List
@@ -187,27 +189,12 @@ namespace MCAWebAndAPI.Web.Controllers
                 return RedirectToAction("Index", "Error");
             }
 
-            if (viewModel.StatusForm == "Draft")
+            if ((viewModel.StatusForm == "Draft")||(viewModel.StatusForm == "Pending Approval")|| (viewModel.StatusForm == "Saved by HR")||(viewModel.StatusForm == "Approved by HR"))
             {
                 Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateExitProcedureWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)exitProcID);
             }
-            else if(viewModel.StatusForm == "Pending Approval")
-            {
-                Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateExitProcedureWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
-                    SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)exitProcID);
-            }
-            else if (viewModel.StatusForm == "Saved by HR")
-            {
-                Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateExitProcedureWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
-                    SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)exitProcID);
-            }
-            else if (viewModel.StatusForm == "Approved by HR")
-            {
-                Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateExitProcedureWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
-                    SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)exitProcID);
-            }
-
+            
             try
             {
                 if (viewModel.StatusForm == "Pending Approval")

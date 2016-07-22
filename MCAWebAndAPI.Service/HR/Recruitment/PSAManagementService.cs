@@ -48,7 +48,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 ExpireDateBefore = Convert.ToDateTime(item["psaexpirydate"]).ToLocalTime(),
                 PSAId = Convert.ToInt32(item["ID"]),
                 DateOfNewPSABefore = Convert.ToDateTime(item["dateofnewpsa"]).ToLocalTime(),
-                DateNewPSABefore = Convert.ToDateTime(item["dateofnewpsa"]).ToLocalTime().ToShortDateString()
+                DateNewPSABefore = Convert.ToDateTime(item["dateofnewpsa"]).ToLocalTime().ToShortDateString(),
+                //ProfessionalMail = Convert.ToString(item["Professional_x0020_Name_x003a_Of"])
+                ProfessionalMail = item["Professional_x0020_Name_x003a_Of"] == null? "" : Convert.ToString((item["Professional_x0020_Name_x003a_Of"] as FieldLookupValue).LookupValue)
 
             };
         }
@@ -91,6 +93,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             updatedValues.Add("initiateperformanceplan", psaManagement.PerformancePlan.Value);
             updatedValues.Add("psastatus", psaManagement.PSAStatus.Value);
             updatedValues.Add("hiddenexpirydate", psaManagement.HiddenExpiryDate);
+
+            
 
             try
             {
@@ -309,6 +313,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     throw e;
                 }
             }
+        }
+
+        public void SendMailPerformancePlan(string professionalMail, string mailContent)
+        {
+            EmailUtil.Send(professionalMail, "Create Performance Plan", mailContent);
         }
     }
 }

@@ -12,14 +12,25 @@
         </div>
     </div>
     <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.ProjectUnit).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.DisplayFor(m => m.ProjectUnit)
+        </div>
+    </div>
+    <div class="form-group">
         @Html.Bootstrap().LabelFor(m => m.Position).Class("col-md-4 control-label")
         <div class="col-md-8">
             @Html.DisplayFor(m => m.Position)
         </div>
     </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.JoinDate).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.DisplayFor(m => m.JoinDate)
+        </div>
+    </div>
+    
     @Html.HiddenFor(m => m.ID)
-    @Html.HiddenFor(m => m.ProjectUnit)
-    @Html.HiddenFor(m => m.JoinDate)
     @Html.HiddenFor(m => m.StatusForm)
     @Html.HiddenFor(m => m.PSANumber)
     @Html.HiddenFor(m => m.RequestDate)
@@ -29,9 +40,10 @@
     @Html.HiddenFor(m => m.ReasonDesc)
     @Html.HiddenFor(m => m.RequestorPosition)
     @Html.HiddenFor(m => m.RequestorUnit)
-
+    @Html.HiddenFor(m => m.ApproverMail)
     @Html.HiddenFor(m => m.ProfessionalID)
     @Html.HiddenFor(m => m.RequestorMailAddress)
+
 
 </div>
 

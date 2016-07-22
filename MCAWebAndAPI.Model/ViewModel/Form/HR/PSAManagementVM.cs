@@ -223,5 +223,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             Value = "No"
         };
 
+        public string ProfessionalMail { get; set; }
+
     }
 }
