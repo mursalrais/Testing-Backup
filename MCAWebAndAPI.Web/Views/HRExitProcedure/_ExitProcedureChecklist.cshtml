@@ -21,29 +21,49 @@
             BindTo = ExitProcedureChecklistVM.GetUnitOptions()
         });
 
-    columns.Bound(p => p.ApproverPosition).ClientTemplate("#= ApproverPosition.Text #" +
-                      "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ApproverPosition.Value' value='#= ApproverPosition.Value #' />")
-            .EditorViewData(
-            new
-            {
-                DataTextField = "Text",
-                DataValueField = "Value",
-                ControllerName = "HRDataMaster",
-                ActionName = "GetPositionsGrid"
+    columns.Bound(p => p.ProfessionalUnit).Hidden().ClientTemplate("#= ProfessionalUnit.Text #" +
+    "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ProfessionalUnit.Text' value='#= ProfessionalUnit.Text #' />"
+    )
+    .EditorViewData(new
+    {
+        BindTo = ExitProcedureChecklistVM.GetProfessionalUnitOptions()
+    });
 
-                });
+    columns.Bound(p => p.ApproverPosition).ClientTemplate("#= ApproverPosition.Text #" +
+                  "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ApproverPosition.Value' value='#= ApproverPosition.Value #' />")
+        .EditorViewData(
+        new
+        {
+            DataTextField = "Text",
+            DataValueField = "Value",
+            ControllerName = "HRDataMaster",
+            ActionName = "GetPositionsGrid"
+
+        });
+
+    columns.Bound(p => p.ProfessionalPosition).Hidden().ClientTemplate("#= ProfessionalPosition.Text #" +
+                  "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ProfessionalPosition.Value' value='#= ProfessionalPosition.Value #' />")
+        .EditorViewData(
+        new
+        {
+            DataTextField = "Text",
+            DataValueField = "Value",
+            ControllerName = "HRDataMaster",
+            ActionName = "GetPositionsGrid"
+
+        });
 
     columns.Bound(p => p.ApproverUserName).ClientTemplate("#= ApproverUserName.Text #" +
-                      "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ApproverUserName.Value' value='#= ApproverUserName.Value #' />")
-            .EditorViewData(
-            new
-            {
-                DataTextField = "Text",
-                DataValueField = "Value",
-                ControllerName = "HRDataMaster",
-                ActionName = "GetProfessionalsGrid"
+                  "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ApproverUserName.Value' value='#= ApproverUserName.Value #' />")
+        .EditorViewData(
+        new
+        {
+            DataTextField = "Text",
+            DataValueField = "Value",
+            ControllerName = "HRDataMaster",
+            ActionName = "GetProfessionalsGrid"
 
-                });
+        });
 
     columns.Bound(p => p.DateOfApproval).ClientTemplate("#= kendo.toString(DateOfApproval, 'MM/dd/yyyy') #" +
         "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].DateOfApproval' value='#= DateOfApproval #' />"
