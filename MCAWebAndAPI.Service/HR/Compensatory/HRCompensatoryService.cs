@@ -191,8 +191,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     viewModel.cmpProjUnit = Convert.ToString(item2["Project_x002f_Unit"]);
                     viewModel.cmpPosition = FormatUtil.ConvertLookupToValue(item2, "Position");
                     viewModel.CompensatoryDetails = GetCompDetailist(GetCompID(Convert.ToInt32(item2["ID"])));
-                    viewModel.ddlProfessional.Value = (item2["ID"] as FieldLookupValue).LookupId;
-                    viewModel.ddlProfessional.Text = (item2["Title"] as FieldLookupValue).LookupValue;
                 }
 
             }
