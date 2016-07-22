@@ -35,7 +35,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             ActionName = "GetProfessionals",
             ValueField = "ID",
             ControllerName = "HRDataMaster",
-            TextField = "Desc",
+            TextField = "Name",
             OnSelectEventName = "OnSelectAssetHolderFrom"
         };
 
@@ -166,6 +166,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public string ApproverMail { get; set; }
 
         public string UserPermission { get; set; }
+
+        public string ProfessionalPersonalMail { get; set; }
         
         ///// <summary>
         ///// Exit Procedure Status

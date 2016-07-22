@@ -60,7 +60,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             }
 
             updatedValues.Add("mobilenumber", exitProcedure.PhoneNumber);
-            updatedValues.Add("officeemail", exitProcedure.EmailAddress);
+            updatedValues.Add("officeemail", exitProcedure.ProfessionalPersonalMail);
             updatedValues.Add("currentaddress", exitProcedure.CurrentAddress);
             updatedValues.Add("lastworkingdate", exitProcedure.LastWorkingDate);
             updatedValues.Add("exitreason", exitProcedure.ExitReason.Value);
@@ -75,14 +75,14 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 statusExitProcedure = "Draft";
             }
-            else if(exitProcedure.StatusForm == "Saved by HR")
-            {
-                statusExitProcedure = "Draft";
-            }
-            else if(exitProcedure.StatusForm == "Approved by HR")
-            {
-                statusExitProcedure = "Approved";
-            }
+            //else if(exitProcedure.StatusForm == "Saved by HR")
+            //{
+            //    statusExitProcedure = "Draft";
+            //}
+            //else if(exitProcedure.StatusForm == "Approved by HR")
+            //{
+            //    statusExitProcedure = "Approved";
+            //}
 
             updatedValues.Add("status", statusExitProcedure);
             
@@ -103,19 +103,22 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             var viewModel = new ExitProcedureVM();
 
-            if ((ID == null && user == null))
+            if (ID == null)
             {
-                viewModel = GetWorkflowExitProcedure(listName, requestor, user);
+                if (user == "HR")
+                {
+                    viewModel = GetWorkflowExitProcedure(listName, requestor, user);
 
-                return viewModel;
+                    return viewModel;
+                }
+                if (user == null)
+               {
+                    viewModel = GetWorkflowExitProcedure(listName, requestor, user);
+
+                    return viewModel;
+               }
             }
-            if (ID == null && user == "HR")
-            {
-                viewModel = GetWorkflowExitProcedure(listName, requestor, user);
-
-                return viewModel;
-            }
-
+            
             var listItem = SPConnector.GetListItem(SP_EXP_LIST_NAME, ID, _siteUrl);
             viewModel = ConvertToExitProcedureVM(listItem);
             viewModel = GetExitProcedureDetails(viewModel);
@@ -195,11 +198,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             // Get Position in Professional Master
             var caml = @"<View><Query><Where><Eq>
                 <FieldRef Name='officeemail' /><Value Type='Text'>" + requestor +
-                @"</Value></Eq></Where></Query><ViewFields><FieldRef Name='ID' /><FieldRef Name='Position' /><FieldRef Name='Project_x002f_Unit' /><FieldRef Name='Title' /><FieldRef Name='lastname' /><FieldRef Name='Join_x0020_Date' /><FieldRef Name='officeemail' /><FieldRef Name='PSAnumber' /></ViewFields><QueryOptions /></View>";
+                @"</Value></Eq></Where></Query></View>";
 
             int? positionID = 0;
 
-            if(user == "Professional")
+            if(user == null)
             {
                 foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl, caml))
                 {
@@ -210,6 +213,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     viewModel.ProfessionalID = Convert.ToInt32(item["ID"]);
                     viewModel.ProfessionalJoinDate = Convert.ToDateTime(item["Join_x0020_Date"]).ToLocalTime();
                     viewModel.RequestorMailAddress = Convert.ToString(item["officeemail"]);
+                    viewModel.ProfessionalPersonalMail = Convert.ToString(item["personalemail"]);
                     viewModel.PSANumber = Convert.ToString(item["PSAnumber"]);
                     break;
                 }
@@ -218,8 +222,15 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl, caml))
                 {
-                    positionID = FormatUtil.ConvertLookupToID(item, "Position");
                     viewModel.RequestorPosition = FormatUtil.ConvertLookupToValue(item, "Position");
+                    viewModel.FullName = Convert.ToString(item["Title"]) + " " + Convert.ToString(item["lastname"]);
+                    viewModel.ProjectUnit = Convert.ToString(item["Project_x002f_Unit"]);
+                    positionID = FormatUtil.ConvertLookupToID(item, "Position");
+                    viewModel.ProfessionalID = Convert.ToInt32(item["ID"]);
+                    viewModel.ProfessionalJoinDate = Convert.ToDateTime(item["Join_x0020_Date"]).ToLocalTime();
+                    viewModel.RequestorMailAddress = Convert.ToString(item["officeemail"]);
+                    viewModel.ProfessionalPersonalMail = Convert.ToString(item["personalemail"]);
+                    viewModel.PSANumber = Convert.ToString(item["PSAnumber"]);
                     break;
                 }
             }

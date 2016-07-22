@@ -53,16 +53,16 @@ namespace MCAWebAndAPI.Web.Controllers
             // Get blank ViewModel
             var viewModel = exitProcedureService.GetExitProcedure(null, siteUrl, requestor, listName, user);
 
-            if(user == "Professional")
+            if(user == null)
             {
                 viewModel.UserPermission = "Professional";
             }
-            else if(user == "HR")
+            else if (user == "HR")
             {
                 viewModel.UserPermission = "HR";
             }
-            
-                SessionManager.Set("UserLogin", requestor);
+
+            SessionManager.Set("UserLogin", requestor);
                 SessionManager.Set("ExitProcedureChecklist", viewModel.ExitProcedureChecklist);
                 SessionManager.Set("WorkflowRouterListName", viewModel.ListName);
                 SessionManager.Set("WorkflowRouterRequestorUnit", viewModel.RequestorUnit);

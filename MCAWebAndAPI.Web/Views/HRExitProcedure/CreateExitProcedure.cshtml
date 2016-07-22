@@ -14,6 +14,9 @@
                                                                              }))
 {
 
+    
+if (Model.UserPermission == "Professional")
+{
     <fieldset>
         <legend>Exit Procedure Data</legend>
         <div class="row">
@@ -30,6 +33,31 @@
             @Html.Partial("_Documents", Model)
         </div>
     </fieldset>
+}
+if (Model.UserPermission == "HR")
+{
+    <fieldset>
+        <legend>Exit Procedure Data</legend>
+        <div class="row">
+            @Html.Partial("_ExitProcedureDataHR", Model)
+        </div>
+
+        <legend>Exit Procedure Checklist</legend>
+        <div class="row">
+            @Html.Partial("_ExitProcedureChecklist", Model.ExitProcedureChecklist)
+        </div>
+
+        <div id="testFunction" class="row">
+
+        </div>
+
+        <legend>Documents</legend>
+        <div class="row">
+            @Html.Partial("_Documents", Model)
+        </div>
+    </fieldset>
+}
+
 }
 
 @if (Model.UserPermission == "Professional")
@@ -131,7 +159,20 @@
 
             })
 
-            var url = "/HRExitProcedure/CreateExitProcedureHR?" @Model.ID + @Model.RequestorMailAddress;
+            //var urlProfessional = "/HRExitProcedure/CreateExitProcedureHR?siteUrl=https://eceos2.sharepoint.com/sites/mca-dev/hr&requestor=" + result[0].OfficeEmail + "&user=HR";
+
+            function testfunction() {
+                var url = "/Workflow/DisplayWorkflowRouter?listName=" + listName + "&requestor=" + requestor;
+                $('#testFunction').load(url);
+            }
+
+            //$.getJSON(urlProfessional, function () {
+
+                
+
+            //})
+
+            //var url = "/HRExitProcedure/DisplayWorkflowRouterExitProcedure?listName=" + listName + "&requestor=" + requestor;
                       
         }
 
