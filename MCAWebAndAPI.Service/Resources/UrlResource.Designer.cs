@@ -214,7 +214,7 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to /Lists/PerformanceEvaluation/.
+        ///   Looks up a localized string similar to /Lists/PerformanceEvaluation.
         /// </summary>
         public static string PerformanceEvaluation {
             get {
@@ -223,7 +223,7 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to /Lists/PerformancePlan/.
+        ///   Looks up a localized string similar to /Lists/PerformancePlan.
         /// </summary>
         public static string PerformancePlan {
             get {
