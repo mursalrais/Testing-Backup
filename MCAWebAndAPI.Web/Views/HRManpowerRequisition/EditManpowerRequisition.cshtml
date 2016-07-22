@@ -93,6 +93,16 @@
 @section scripts{
 
     <script>
+
+        function filterLevel() {
+            console.log("jalan");
+            return {
+                Level: $("#DivisionProjectUnit_Value").val()
+            };
+            console.log(Level);
+
+        }
+
         function onPositionChange(e) {
             var dataItem = $("#Position_Value").data("kendoDropDownList").dataItem(e.item);
             //var urlKeyPosition = "/HRDataMaster/GetKeyPosition/" + dataItem.ID;

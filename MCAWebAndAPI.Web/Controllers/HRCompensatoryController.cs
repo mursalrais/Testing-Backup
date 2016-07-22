@@ -76,13 +76,20 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewmodel);
         }
 
-        public ActionResult CompensatorylistHR(string siteurl = null, int? ID = null)
+        public ActionResult CompensatorylistHR(string siteurl = null, int? iD = null)
         {
-            //mandatory: set site url
-            _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
-            SessionManager.Set("SiteUrl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
+            if (siteurl == "")
+            {
+                siteurl = SessionManager.Get<string>("SiteUrl");
+                _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
+            }
+            else
+            {
+                _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
+                SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
+            }
 
-            var viewmodel = _service.GetComplistActive();
+            var viewmodel = _service.GetComplistbyProfid(iD);
 
             //viewmodel.ID = id;
             return View(viewmodel);

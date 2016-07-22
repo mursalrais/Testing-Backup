@@ -205,4 +205,10 @@
   <data name="InsuranceClaim" xml:space="preserve">
     <value>/Lists/InsuranceClaim</value>
   </data>
+  <data name="PerformanceEvaluation" xml:space="preserve">
+    <value>/Lists/PerformanceEvaluation</value>
+  </data>
+  <data name="PerformancePlan" xml:space="preserve">
+    <value>/Lists/PerformancePlan</value>
+  </data>
 </root>

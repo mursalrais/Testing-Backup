@@ -61,11 +61,21 @@
 
 
     <script>
+
+        function filterLevel() {
+            console.log("jalan");
+            return {
+                Level: $("#DivisionProjectUnit_Value").val()
+            };
+            console.log(Level);
+
+        }
+
         function OnBehalfOfChange(e) {
             var dataItem = this.dataItem(e.item);
             $("#EmailOnBehalf").prop("value", dataItem.OfficeEmail);
         }
-        function onPositionChange(e) {            
+        function onPositionChange(e) {
             var dataItem = this.dataItem(e.item);
             //var urlKeyPosition = "/HRDataMaster/GetKeyPosition/" + dataItem.ID;
             if (dataItem.IsKeyPosition == "Yes") {
@@ -96,10 +106,10 @@
                     $("#OnBehalfOf_Value").data("kendoDropDownList").enable(false);
                 }
                 else {
-                    
+
                     $("#OnBehalfOf_Value").data("kendoDropDownList").enable(true);
                 }
-                    
+
             });
             $("#StatusSubmit").click(function () {
                 $("#Status_Value").prop("value", "Pending Approval 1 of 2");
@@ -109,8 +119,9 @@
                 $("#Status_Value").prop("value", "Draft");
                 $("form").submit();
             });
-            
+
         });
-        
+
+
     </script>
 }

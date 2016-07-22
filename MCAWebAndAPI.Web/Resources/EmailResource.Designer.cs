@@ -203,13 +203,24 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;p&gt;
-        ///    &lt;strong&gt;Dear Respective Professional&lt;/strong&gt;
-        ///&lt;/p&gt;
-        ///&lt;p&gt;
+        ///   Looks up a localized string similar to Dear Respective Professional
+        ///
+        ///    This email is sent to you to notify that you are required to create Performance Evaluation. Creating and approval plan process will take maximum 5 working days. Therefore, do prepare your plan accordingly. Kindly check the link as per below to go to direct page accordingly. Thank you.
+        ///
+        ///Link :   {0}/Lists/ProfessionalPerformanceEvaluation/EditForm_Custom.aspx?ID={1}.
+        /// </summary>
+        public static string PerformanceEvaluation {
+            get {
+                return ResourceManager.GetString("PerformanceEvaluation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dear Respective Professional
+        ///
         ///    This email is sent to you to notify that you are required to create Performance Plan. Creating and approval plan process will take maximum 5 working days. Therefore, do prepare your plan accordingly. Kindly check the link as per below to go to direct page accordingly. Thank you.
-        ///&lt;/p&gt;
-        ///Link: &lt;a href=&quot;{0}&quot;&gt;Click Here&lt;/a&gt;.
+        ///
+        ///Link :   {0}/Lists/ProfessionalPerformancePlan/EditForm_Custom.aspx?ID={1}.
         /// </summary>
         public static string PerformancePlan {
             get {
