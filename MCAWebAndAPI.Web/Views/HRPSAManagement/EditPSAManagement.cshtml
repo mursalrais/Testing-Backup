@@ -75,39 +75,28 @@
 
                 $.getJSON(url, function (result) {
 
-                    console.log(result);
-
                     if (result.length != 0) {
-                        console.log("Ada Data PSA Sebelumnya")
-
+                        
                         var renewalnumber = result[0].PSARenewalNumber + 1;
-
                         var expirydatebefore = result[0].ExpiryDateBefore
                         var expdate = new Date(expirydatebefore);
-
                         var dateexpdate = expdate.getDate();
                         var dateexpdateint = parseInt(dateexpdate);
-
                         var calcexpdate = dateexpdateint + 1;
-
                         var setexpdate = new Date(expdate.setDate(calcexpdate));
                         var expirydate = setexpdate.getMonth() + 1 + '/' + setexpdate.getDate() + '/' + setexpdate.getFullYear();
 
                         $('#HidRenewalNumber').prop('value', renewalnumber);
                         $('#ExpiryDateBefore').prop('value', expirydate);
-
                         $("#IsRenewal_Value").data("kendoDropDownList").select(0);
                         $("#IsRenewal_Value").data("kendoDropDownList").readonly();
-
                         $("#PSARenewalNumber").prop("readonly", "false");
                         $("#PSARenewalNumber").prop("value", renewalnumber);
-
                         $("#DateOfNewPSA").data("kendoDatePicker").min(expirydate);
                         $("#DateOfNewPSA").prop('value', expirydate);
-
                         $("#Tenure").prop('value', 0);
-
                         $("#PSAExpiryDate").prop('value', expirydate);
+                        $("#LastWorkingDate").prop('value', expirydate);
                     }
 
                     if (result.length == 0)
@@ -126,33 +115,34 @@
                         $("#Tenure").prop('value', 0);
 
                         $("#PSAExpiryDate").prop('value', joinDate);
+                        $("#LastWorkingDate").prop('value', joinDate);
                     }
 
                 })
             }
 
-            function OnSelectPosition(e) {
-                var dataItem = this.dataItem(e.item);
-                var urlKeyPosition = "/HRDataMaster/GetKeyPosition/" + dataItem.ID;
+            //function OnSelectPosition(e) {
+            //    var dataItem = this.dataItem(e.item);
+            //    var urlKeyPosition = "/HRDataMaster/GetKeyPosition/" + dataItem.ID;
 
-                $.getJSON(urlKeyPosition, function (result) {
+            //    $.getJSON(urlKeyPosition, function (result) {
 
-                    if (result[0].isKeyPosition == "Yes")
-                    {
-                        $('#KeyPosition').prop('value', "You must upload file with format name: MCCNoObjectionLetter-XXXX" + "XXXX is a ordering number such as: 0001");
-                        $('#DocumentType').prop('value', "MCC No Objection Letter");
-                        $('#KeyPositionValue').prop('value', "Yes");
+            //        if (result[0].isKeyPosition == "Yes")
+            //        {
+            //            $('#KeyPosition').prop('value', "You must upload file with format name: MCCNoObjectionLetter-XXXX" + "XXXX is a ordering number such as: 0001");
+            //            $('#DocumentType').prop('value', "MCC No Objection Letter");
+            //            $('#KeyPositionValue').prop('value', "Yes");
 
-                    }
-                    /*
-                    else
-                    {
-                        $('#KeyPosition').prop('value', "You must upload file with format name: PSADocuments-MMDDYYYY");
-                        $('#DocumentType').prop('value', "PSA Document");
-                        $('#KeyPositionValue').prop('value', "No");
-                    }
-                    */
-                })
+            //        }
+            //        /*
+            //        else
+            //        {
+            //            $('#KeyPosition').prop('value', "You must upload file with format name: PSADocuments-MMDDYYYY");
+            //            $('#DocumentType').prop('value', "PSA Document");
+            //            $('#KeyPositionValue').prop('value', "No");
+            //        }
+            //        */
+            //    })
 
 
             }
@@ -180,6 +170,7 @@
 
                     var psaexpirydate = setmonth.getMonth() + 1 + '/' + setmonth.getDate() + '/' + setmonth.getFullYear();
                     $("#PSAExpiryDate").val(psaexpirydate);
+                    $("#LastWorkingDate").val(psaexpirydate);
                 }
 
             });
@@ -193,11 +184,10 @@
                     {
                         var joinDate = $("#JoinDate").val();
 
-                        console.log("Join Date: " + joinDate);
-
                         $('#DateOfNewPSA').prop('value', joinDate);
                         $("#DateOfNewPSA").data("kendoDatePicker").min(joinDate);
                         $("#PSAExpiryDate").val(joinDate);
+                        $("#LastWorkingDate").val(joinDate);
 
                     }
 
@@ -228,58 +218,51 @@
                     var expirydate = $("#ExpiryDateBefore").val();
                     $("#DateOfNewPSA").data("kendoDatePicker").min(expirydate);
                     $('#PSAExpiryDate').prop('value', expirydate);
+                    $('#LastWorkingDate').prop('value', expirydate);
 
-                    //console.log(renewalnumber);
-                    //console.log(expirydate);
+                    
                  }
            }
 
-           function onSelectPSA(e) {
+           //function onSelectPSA(e) {
 
-               //console.log("Upload :: " + getFileInfo(e));
-               $.each(e.files, function (index, value) {
-                   console.log("Index Document: " + index);
-                   console.log("Name: " + value.name);
-                   console.log("Index of MCC: " + value.name.indexOf("MCCNoObjectionLetter"));
-                   console.log("Size: " + value.size + " bytes");
-                   console.log("Extension: " + value.extension);
+           //    $.each(e.files, function (index, value) {
+                   
+           //        if ($("#KeyPositionValue").val() == "Yes")
+           //        {
+           //            if ((index == 0))
+           //            {
+           //                if (value.name.indexOf("MCCNoObjectionLetter") < 0)
+           //                {
+           //                    alert("You Must Upload MCCNoObjectionLetter Document");
+           //                    e.preventDefault();
+           //                }
+           //                if (value.name.indexOf("MCCNoObjectionLetter") >= 0)
+           //                {
+           //                    //Hanya Untuk Testing
+           //                    alert("MCCNoObjectionLetter already exist");
+           //                    e.preventDefault();
+           //                }
+           //            }
+           //            if(index == 1)
+           //            {
+           //                if (value.name.indexOf("PSADocument") < 0)
+           //                {
+           //                    alert("You Must Upload PSADocument Document");
+           //                    e.preventDefault();
+           //                }
+           //                if (value.name.indexOf("PSADocument") >= 0)
+           //                {
+           //                    //Hanya Untuk Testing
+           //                    alert("PSADocument already exist");
+           //                    e.preventDefault();
+           //                }
+           //            }
+           //        }
 
+           //    });
 
-                   if ($("#KeyPositionValue").val() == "Yes")
-                   {
-                       if ((index == 0))
-                       {
-                           if (value.name.indexOf("MCCNoObjectionLetter") < 0)
-                           {
-                               alert("You Must Upload MCCNoObjectionLetter Document");
-                               e.preventDefault();
-                           }
-                           if (value.name.indexOf("MCCNoObjectionLetter") >= 0)
-                           {
-                               //Hanya Untuk Testing
-                               alert("MCCNoObjectionLetter already exist");
-                               e.preventDefault();
-                           }
-                       }
-                       if(index == 1)
-                       {
-                           if (value.name.indexOf("PSADocument") < 0)
-                           {
-                               alert("You Must Upload PSADocument Document");
-                               e.preventDefault();
-                           }
-                           if (value.name.indexOf("PSADocument") >= 0)
-                           {
-                               //Hanya Untuk Testing
-                               alert("PSADocument already exist");
-                               e.preventDefault();
-                           }
-                       }
-                   }
-
-               });
-
-           }
+           //}
 
 
     </script>

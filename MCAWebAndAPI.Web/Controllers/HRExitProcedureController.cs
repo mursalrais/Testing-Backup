@@ -25,6 +25,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
         const string SP_TRANSACTION_WORKFLOW_LIST_NAME = "Exit Procedure Workflow";
         const string SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME = "exitprocedure";
+        const string SP_EXP_CHECK_LIST = "Exit Procedure Checklist";
 
         public HRExitProcedureController()
         {
@@ -162,14 +163,7 @@ namespace MCAWebAndAPI.Web.Controllers
                     }
                 }
             }
-
-            
-
-            
-
-            
-
-                 
+     
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.ExitProcedure);
 
             //return RedirectToAction("Index",
@@ -206,8 +200,10 @@ namespace MCAWebAndAPI.Web.Controllers
             string requestorposition = Convert.ToString(viewModel.RequestorPosition);
             string requestorunit = Convert.ToString(viewModel.RequestorUnit);
 
+            int? positionID = exitProcedureService.GetPositionID(requestorposition, requestorunit, 0, 0);
+
             viewModel.ExitProcedureChecklist = BindExitProcedureChecklist(form, viewModel.ExitProcedureChecklist);
-            Task createExitProcedureChecklist = exitProcedureService.CreateExitProcedureChecklistAsync(exitProcID, viewModel.ExitProcedureChecklist, requestorposition, requestorunit);
+            Task createExitProcedureChecklist = exitProcedureService.CreateExitProcedureChecklistAsync(exitProcID, viewModel.ExitProcedureChecklist, requestorposition, requestorunit, positionID);
 
             try
             {
@@ -220,11 +216,11 @@ namespace MCAWebAndAPI.Web.Controllers
                 return RedirectToAction("Index", "Error");
             }
 
-            if ((viewModel.StatusForm == "Draft")||(viewModel.StatusForm == "Pending Approval")|| (viewModel.StatusForm == "Saved by HR")||(viewModel.StatusForm == "Approved by HR"))
-            {
-                Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateExitProcedureWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
-                    SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)exitProcID);
-            }
+            //if ((viewModel.StatusForm == "Draft")||(viewModel.StatusForm == "Pending Approval")|| (viewModel.StatusForm == "Saved by HR")||(viewModel.StatusForm == "Approved by HR"))
+            //{
+            //    Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateExitProcedureWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
+            //        SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)exitProcID);
+            //}
             
             try
             {
@@ -232,7 +228,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 {
                     exitProcedureService.SendMailDocument(viewModel.RequestorMailAddress, string.Format("Thank You For Your Request, Please kindly download Non Disclosure Document on this url: {0}{1} and Exit Interview Form on this url: {2}{3}", siteUrl, UrlResource.ExitProcedureNonDisclosureAgreement, siteUrl, UrlResource.ExitProcedureExitInterviewForm));
 
-                    exitProcedureService.SendEmail(viewModel, SP_TRANSACTION_WORKFLOW_LIST_NAME,
+                    exitProcedureService.SendEmail(viewModel, SP_EXP_CHECK_LIST,
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)exitProcID,
                     string.Format("Dear Respective Approver : {0}{1}/ViewExitProcedureForApprover.aspx?ID={2}", siteUrl, UrlResource.ExitProcedure, viewModel.ID), string.Format("Message for Requestor"));
                     
@@ -293,8 +289,10 @@ namespace MCAWebAndAPI.Web.Controllers
             string requestorposition = Convert.ToString(exitProcedure.RequestorPosition);
             string requestorunit = Convert.ToString(exitProcedure.RequestorUnit);
 
+            int? positionID = exitProcedureService.GetPositionID(requestorposition, requestorunit, 0, 0);
+
             exitProcedure.ExitProcedureChecklist = BindExitProcedureChecklist(form, exitProcedure.ExitProcedureChecklist);
-            Task createExitProcedureChecklist = exitProcedureService.CreateExitProcedureChecklistAsync(exitProcedure.ID, exitProcedure.ExitProcedureChecklist, requestorposition, requestorunit);
+            Task createExitProcedureChecklist = exitProcedureService.CreateExitProcedureChecklistAsync(exitProcedure.ID, exitProcedure.ExitProcedureChecklist, requestorposition, requestorunit, positionID);
 
             //if ((exitProcedure.StatusForm == "Draft") || (exitProcedure.StatusForm == "Pending Approval") || (exitProcedure.StatusForm == "Saved by HR") || (exitProcedure.StatusForm == "Approved by HR"))
             //{

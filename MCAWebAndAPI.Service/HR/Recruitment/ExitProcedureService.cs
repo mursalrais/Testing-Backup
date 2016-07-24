@@ -427,15 +427,17 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return viewModel;
         }
 
-        public async Task CreateExitProcedureChecklistAsync(int? exitProcID, IEnumerable<ExitProcedureChecklistVM> exitProcedureChecklist, string requestorposition, string requestorunit)
+        public async Task CreateExitProcedureChecklistAsync(int? exitProcID, IEnumerable<ExitProcedureChecklistVM> exitProcedureChecklist, string requestorposition, string requestorunit, int? positionID)
         {
-            CreateExitProcedureChecklist(exitProcID, exitProcedureChecklist, requestorposition, requestorunit);
+            CreateExitProcedureChecklist(exitProcID, exitProcedureChecklist, requestorposition, requestorunit, positionID);
         }
 
         
 
-        public void CreateExitProcedureChecklist(int? exitProcID, IEnumerable<ExitProcedureChecklistVM> ExitProcedureChecklist, string requestorposition, string requestorunit)
+        public void CreateExitProcedureChecklist(int? exitProcID, IEnumerable<ExitProcedureChecklistVM> ExitProcedureChecklist, string requestorposition, string requestorunit, int? positionID)
         {
+            
+
             foreach (var viewModel in ExitProcedureChecklist)
             {
                 if (Item.CheckIfSkipped(viewModel))
@@ -463,12 +465,19 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 updatedValue.Add("checklistitemapproval", viewModel.CheckListItemApproval.Text);
                 updatedValue.Add("dateofapproval", viewModel.DateOfApproval);
                 updatedValue.Add("remarks", viewModel.Remarks);
-                updatedValue.Add("requestorunit", viewModel.ProfessionalUnit.Text);
-                updatedValue.Add("requestorposition", new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.ProfessionalPosition.Value) });
+                updatedValue.Add("requestorunit", requestorunit);
+                updatedValue.Add("requestorposition", new FieldLookupValue { LookupId = Convert.ToInt32(positionID) });
                 updatedValue.Add("approverlevel", viewModel.Level);
                 updatedValue.Add("approverunit", viewModel.ApproverUnit.Text);
                 updatedValue.Add("isdefault", viewModel.IsDefault);
-                updatedValue.Add("approvalmail", viewModel.ApprovalMail);
+
+                if((viewModel.ApprovalMail != null) || (viewModel.ApprovalMail == null))
+                {
+                    var item = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, viewModel.ApproverUserName.Value, _siteUrl);
+
+                    updatedValue.Add("approvalmail", Convert.ToString(item["officeemail"]));
+                }
+                
                 updatedValue.Add("exitprocedure", new FieldLookupValue { LookupId = Convert.ToInt32(exitProcID) });
 
                 try
@@ -916,9 +925,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             if (header.StatusForm == "Pending Approval")
             {
-                foreach (var item in SPConnector.GetList(SP_EXP_WF_LIST_NAME, _siteUrl, camlapprover))
+                foreach (var item in SPConnector.GetList(SP_EXP_CHECK_LIST_NAME, _siteUrl, camlapprover))
                 {
-                    emails.Add(Convert.ToString(item["approver"]));
+                    emails.Add(Convert.ToString(item["approvalmail"]));
                 }
                 foreach (var item in emails)
                 {
@@ -1039,7 +1048,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             try
             {
-                SPConnector.UpdateListItem(SP_EXP_LIST_NAME, psaID, columnValues, _siteUrl);
+                SPConnector.UpdateListItem(SP_PSA_LIST_NAME, psaID, columnValues, _siteUrl);
             }
             catch (Exception e)
             {
@@ -1048,6 +1057,42 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             }
 
             return true;
+        }
+
+        public int GetPositionID(string requestorposition, string requestorunit, int positionID, int number)
+        {
+            var caml = @"<View>  
+            <Query> 
+               <Where><And><Eq><FieldRef Name='Title' /><Value Type='Text'>" + requestorposition + @"</Value></Eq><Eq><FieldRef Name='projectunit' /><Value Type='Choice'>" + requestorunit + @"</Value></Eq></And></Where> 
+            </Query> 
+      </View>";
+
+            //int positionID = 0;
+            //int number = 0;
+
+            foreach (var item in SPConnector.GetList(SP_POSMAS_LIST_NAME, _siteUrl, caml))
+            {
+                if(item["ID"] != null)
+                {
+                    positionID = Convert.ToInt32(item["ID"]);
+                    number = 1;
+                    break;
+                }
+                else
+                {
+                    number = 0;
+                }
+            }
+
+            if(number == 1)
+            {
+                return positionID;
+            }
+            else
+            {
+                return 0;
+            }
+            
         }
     }
 }

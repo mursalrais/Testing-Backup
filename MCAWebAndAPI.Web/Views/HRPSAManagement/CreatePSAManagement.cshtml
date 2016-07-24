@@ -81,13 +81,17 @@
                             return false;
                         }
                     }
+                    else
+                    {
+                        $("form").submit();
+                    }
+                }
+                else
+                {
+                    $("form").submit();
                 }
             }
 
-            
-        
-
-       
         function onSuccess(data) {
             
             window.location.href = data.urlToRedirect;
@@ -108,12 +112,8 @@
 
                 $.getJSON(url, function (result) {
 
-                    console.log(result);
-
                     if (result.length != 0) {
 
-                        console.log("Sudah ada kontrak sebelumnya");
-                        
                         var psaID = result[0].PSAId;
                         var renewalnumber = result[0].PSARenewalNumber + 1;
                         var dateofnewpsabefore = result[0].DateNewPSABefore;
@@ -145,23 +145,19 @@
                         $("#PSARenewalNumber").prop("readonly", "false");
                         $("#PSARenewalNumber").prop("value", renewalnumber);
 
-                        console.log("Renewal Number Sebelumnya: " +  $("#PSARenewalNumber").val())
-
                         $("#DateOfNewPSA").data("kendoDatePicker").min(datepsa);
                         $("#DateOfNewPSA").prop('value', datepsa);
 
                         $("#Tenure").prop('value', 0);
 
                         $("#PSAExpiryDate").prop('value', expirydate);
+                        $("#LastWorkingDate").prop('value', expirydate);
 
                         $("#DateOfNewPSABefore").prop('value', dateofnewpsabefore);
 
                         $("#ProfessionalMail").prop('value', result[0].ProfessionalMail);
 
-                        console.log("Date of New PSA: " + datepsa);
-                        console.log("Date of PSA Before: " + dateofnewpsabefore);
-                        console.log("PSA Expiry Date: " + expirydate);
-                        console.log("Expire Date Before: " + result[0].ExpiryDateBefore);
+                        
                     }
 
                     if (result.length == 0)
@@ -177,16 +173,13 @@
 
                         $('#PSAId').prop('value', 0);
 
-                        
-
                         var joinDate = $("#JoinDate").val();
 
                         $("#DateOfNewPSA").data("kendoDatePicker").min(joinDate);
                         $("#DateOfNewPSA").prop("value", joinDate);
-
                         $("#Tenure").prop('value', 0);
-
                         $("#PSAExpiryDate").prop('value', joinDate);
+                        $("#LastWorkingDate").prop('value', joinDate);
                     }
 
                 })             
@@ -246,16 +239,13 @@
                     var psaexpirydate = setmonth.getMonth() + 1 + '/' + setmonth.getDate() + '/' + setmonth.getFullYear();
 
                     $("#PSAExpiryDate").val(psaexpirydate);
+                    $("#LastWorkingDate").val(psaexpirydate);
 
                     var datepsa = $("#DateOfNewPSA").val();
                     var dateofnewpsabefore = $("#DateOfNewPSABefore").val();
                     var expirydate = $("#DateOfNewPSABefore").val();
                     var expiredatebefore = $("#ExpireDateBefore").val();
-
-                    console.log("Date of New PSA: " + datepsa);
-                    console.log("Date of PSA Before: " + dateofnewpsabefore);
-                    console.log("PSA Expiry Date: " + psaexpirydate);
-                    console.log("Expire Date Before: " + expiredatebefore);
+                                      
                 }
 
             });
