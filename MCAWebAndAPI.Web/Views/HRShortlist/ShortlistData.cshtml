@@ -52,11 +52,6 @@
                         <i class="fa fa-save"></i>
                         save
                     </button>
-                    @*<button id="submit-cancel" class="btn btn-primary" type="submit">
-                        <i class="fa fa-save"></i>
-                        cancel
-                    </button>*@
-
                 </div>
             </div>
     </div>
@@ -77,6 +72,12 @@
         $(document).ready(function () {
 
             var positionID = $("#Position").val();
+            var User = $("#useraccess").val();
+
+            if (User == "REQ") {
+                $("#ActivePosition_Value ").data("kendoDropDownList").enable(false);
+            }
+
             var url = "/HRDataMaster/GetPosition/" + positionID;
             $.getJSON(url, function (data) {
                 $("#PositionName").prop("value", data.PositionName);

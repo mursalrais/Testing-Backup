@@ -32,6 +32,9 @@
         columns.Bound(p => p.remarks).ClientTemplate("#= remarks #" +
         "<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].remarks' value='#= remarks #' />");
 
+        columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
+           .Click("onDeleteKendoDetail")).Width(100);
+
         columns.Bound(p => p.CmpHID).Hidden().ClientTemplate("#= CmpHID #" +
        "<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].CmpHID' value='#= CmpHID #' />"
         );
@@ -74,11 +77,10 @@
     function onChange(e) {
         var container = e.container;
             var tr = container.closest('tr');
-            var data = this.dataItem(tr); //get the row data so it can be referred later
-            // 1 is Item.Mode.UPDATED
-            //var day = data.CmpDate.getDay();
+            var data = this.dataItem(tr); 
             var start = data.StartTime.getHours();
             var finish = data.FinishTime.getHours();
+            var finishsec = data.FinishTime.getHours();
             var range;
             var rowgrid = $("#CompensatoryDetails").data("kendoGrid").tbody.find("tr");
             var i = -1
@@ -98,12 +100,16 @@
                     }
                 });
             });
+            debugger;
+            if ((finish + finishsec) <= start) {
+                alert("FinishTime can not be smaller than the starttime..!!")
+            }
 
             if (start < finish) {
                 range = finish - start
                 data.set("CmpTotalHours", range);
                 data.CmpTotalHours = range;
-                data.set("TotalDay", range / 24)
+                data.set("TotalDay", range / 12)
             }
             data.set("EditMode", 1);
         }

@@ -17,12 +17,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         static Logger logger = LogManager.GetCurrentClassLogger();
 
         const string SP_APPDATA_LIST_NAME = "Application";
-        const string SP_APPINTV_LIST_NAME = "Application Interview";
-        const string SP_APPINVPANEL_LIST_NAME = "Interview Invitation to Panel";
-        const string SP_APPEDU_LIST_NAME = "Application Education";
-        const string SP_APPWORK_LIST_NAME = "Application Working Experience";
-        const string SP_APPTRAIN_LIST_NAME = "Application Training";
-        const string SP_APPDOC_LIST_NAME = "Application Documents";
         const string SP_PROMAS_LIST_NAME = "Professional Master";
         const string SP_POSMAS_LIST_NAME = "Position Master";
         const string SP_MANPOW_LIST_NAME = "Manpower Requisition";
@@ -55,6 +49,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             var viewModel = new CompensatoryVM();
 
             viewModel.cmpName = Convert.ToString(listItem["Title"]);
+            viewModel.cmpEmail = Convert.ToString(listItem["officeemail"]);
             viewModel.cmpProjUnit = Convert.ToString(listItem["Project_x002f_Unit"]);
             viewModel.cmpPosition = FormatUtil.ConvertLookupToValue(listItem, "Position");
             viewModel.ddlProfessional.Value = Convert.ToInt32(listItem["ID"]);
@@ -197,7 +192,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return viewModel;
         }
 
-        private CompensatoryVM GetComplisted(int? ID, int? idPro )
+        private CompensatoryVM GetComplisted(int? ID, int? idPro)
         {
             var viewModel = new CompensatoryVM();
 
@@ -211,7 +206,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.CompensatoryDetails = GetCompDetailist(ID);
 
             return viewModel;
-
         }
 
         //<ViewFields>
@@ -417,6 +411,52 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.ID = Convert.ToInt32(FormatUtil.ConvertLookupToValue(item, "positionrequested_x003a_ID"));
             viewModel.PositionName = FormatUtil.ConvertLookupToValue(item, "positionrequested");
             return viewModel;
+        }
+
+        public bool UpdateHeader(CompensatoryVM header)
+        {
+            var columnValues = new Dictionary<string, object>();
+            int? ID = header.ID;
+            if (header.StatusForm == "Initiated")
+            {
+                columnValues.Add("pppstatus", "Pending Approval 1 of 2");
+            }
+            if (header.StatusForm == "Draft")
+            {
+                columnValues.Add("pppstatus", "Pending Approval 1 of 2");
+            }
+            if (header.Requestor == null && header.StatusForm == "Pending Approval 1 of 2")
+            {
+                columnValues.Add("pppstatus", "Pending Approval 2 of 2");
+            }
+            if (header.Requestor == null && header.StatusForm == "Pending Approval 2 of 2")
+            {
+                columnValues.Add("pppstatus", "Approved");
+            }
+            if (header.StatusForm == "DraftInitiated" || header.StatusForm == "DraftDraft")
+            {
+                columnValues.Add("pppstatus", "Draft");
+            }
+            if (header.StatusForm == "Reject1" || header.StatusForm == "Reject2")
+            {
+                columnValues.Add("pppstatus", "Rejected");
+            }
+
+            //columnValues.Add("majorstrength", header.);
+            //columnValues.Add("performancearea", header.PerformanceArea);
+            //columnValues.Add("recommendedactivities", header.RecommendedActivities);
+            try
+            {
+                SPConnector.UpdateListItem(SP_COMREQ_LIST_NAME, ID, columnValues, _siteUrl);
+            }
+            catch (Exception e)
+            {
+                logger.Debug(e.Message);
+                return false;
+            }
+            var entitiy = new CompensatoryVM();
+            entitiy = header;
+            return true;
         }
     }
 }
