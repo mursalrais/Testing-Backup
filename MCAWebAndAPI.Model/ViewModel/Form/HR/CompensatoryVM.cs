@@ -46,6 +46,13 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public int? cmpID { get; set; }
 
         /// <head>
+        /// CompensatoryEmail
+        /// </head>
+        /// 
+        [DisplayName("Email")]
+        public string cmpEmail { get; set; }
+
+        /// <head>
         /// CompensatoryDay
         /// </head>
         /// 
@@ -72,6 +79,12 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [DisplayName("YearDate")]
         public string cmpYearDate { get; set; }
 
+        /// <summary>
+        /// pppstatus
+        /// </summary>
+        public string StatusForm { get; set; }
+
+        public string Requestor { get; set; }
     }
 }
 
