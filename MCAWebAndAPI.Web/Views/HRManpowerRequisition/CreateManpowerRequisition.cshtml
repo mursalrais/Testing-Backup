@@ -50,8 +50,8 @@
     <div class="form-actions">
         <div class="row">
             <div class="col-md-12">
-                <input type="button" class="btn btn-default" id="StatusDraft" name="StatusDraft" value="Save as Draft">     
-                <input type="button" class="btn btn-default" id="StatusSubmit" name="StatusSubmit" value="Submit for Approval">                
+                <input type="button" class="btn btn-default" id="StatusSubmit" name="StatusSubmit" value="Submit for Approval">        
+                <input type="button" class="btn btn-default" id="StatusDraft" name="StatusDraft" value="Save as Draft">             
             </div>
         </div>
     </div>
@@ -63,11 +63,9 @@
     <script>
 
         function filterLevel() {
-            console.log("jalan");
             return {
-                Level: $("#DivisionProjectUnit_Value").val()
+                Level: $('#DivisionProjectUnit_Value').data("kendoDropDownList").dataItem($('#DivisionProjectUnit_Value').data("kendoDropDownList").select())
             };
-            console.log(Level);
 
         }
 
@@ -90,7 +88,6 @@
                 $("label[for='Yes']").hide();
                 $("#IsKeyPosition").val(false);
             }
-            console.log(dataItem);
 
         };
         $(document).ready(function () {
@@ -113,6 +110,8 @@
             });
             $("#StatusSubmit").click(function () {
                 $("#Status_Value").prop("value", "Pending Approval 1 of 2");
+                var projectUnit = $('#DivisionProjectUnit_Value').data("kendoDropDownList").dataItem($('#DivisionProjectUnit_Value').data("kendoDropDownList").select()).ProjectUnit;
+                $('#ProjectUnitString').prop("value", projectUnit);
                 $("form").submit();
             });
             $("#StatusDraft").click(function () {
