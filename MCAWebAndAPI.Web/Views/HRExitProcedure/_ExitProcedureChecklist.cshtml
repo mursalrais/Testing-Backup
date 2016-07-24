@@ -112,7 +112,6 @@ ActionName = "GetProfessionalsGrid"
             .Click("onDeleteKendoDetail")).Width(100);
     })
     .Pageable()
-    .Filterable()
     .Events(e =>
     {
         //e.Change("onChange");
@@ -124,9 +123,9 @@ ActionName = "GetProfessionalsGrid"
                    {
                        model.Id(p => p.ID);
                        model.Field(p => p.ApprovalMail);
-                       model.Field(p => p.WorkflowType);
-                       model.Field(p => p.IsDefault);
-                       model.Field(p => p.Level);
+                       model.Field(p => p.WorkflowType).DefaultValue("Parallel");
+                       model.Field(p => p.IsDefault).DefaultValue("Yes");
+                       model.Field(p => p.Level).DefaultValue("1");
                        model.Field(m => m.CheckListItemApproval).DefaultValue(ExitProcedureChecklistVM.GetCheckListItemApprovalDefaultValue());
                        model.Field(m => m.ApproverUnit).DefaultValue(ExitProcedureChecklistVM.GetUnitDefaultValue());
                        model.Field(m => m.ApproverPosition).DefaultValue(ExitProcedureChecklistVM.GetPositionDefaultValue());
@@ -134,6 +133,7 @@ ActionName = "GetProfessionalsGrid"
                        model.Field(m => m.DateOfApproval).DefaultValue(DateTime.UtcNow);
                        model.Field(m => m.ProfessionalUnit).DefaultValue(ExitProcedureChecklistVM.GetProfessionalUnitDefaultValue());
                        model.Field(m => m.ProfessionalPosition).DefaultValue(ExitProcedureChecklistVM.GetProfessionalPositionDefaultValue());
+                       
                    })
                    .ServerOperation(false)
                    .PageSize(10)

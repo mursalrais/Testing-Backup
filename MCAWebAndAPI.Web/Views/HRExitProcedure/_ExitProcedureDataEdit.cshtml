@@ -9,10 +9,11 @@
             @Html.EditorFor(m => m.RequestDate)
         </div>
     </div>
+
     <div class="form-group">
-        @Html.Bootstrap().LabelFor(m => m.Professional).Class("col-md-4 control-label")
+        @Html.Bootstrap().LabelFor(m => m.FullName).Class("col-md-4 control-label")
         <div class="col-md-8">
-            @Html.EditorFor(m => m.Professional)
+            @Html.DisplayFor(m => m.FullName)
         </div>
     </div>
     <div class="form-group">
@@ -22,9 +23,9 @@
         </div>
     </div>
     <div class="form-group">
-        @Html.Bootstrap().LabelFor(m => m.Position).Class("col-md-4 control-label")
+        @Html.Bootstrap().LabelFor(m => m.RequestorPosition).Class("col-md-4 control-label")
         <div class="col-md-8">
-            @Html.DisplayFor(m => m.Position)
+            @Html.DisplayFor(m => m.RequestorPosition)
         </div>
     </div>
     <div class="form-group">
@@ -34,9 +35,9 @@
         </div>
     </div>
     <div class="form-group">
-        @Html.Bootstrap().LabelFor(m => m.EmailAddress).Class("col-md-4 control-label")
+        @Html.Bootstrap().LabelFor(m => m.ProfessionalPersonalMail).Class("col-md-4 control-label")
         <div class="col-md-8">
-            @Html.EditorFor(m => m.EmailAddress)
+            @Html.EditorFor(m => m.ProfessionalPersonalMail)
         </div>
     </div>
     <div class="form-group">
@@ -46,9 +47,9 @@
         </div>
     </div>
     <div class="form-group">
-        @Html.Bootstrap().LabelFor(m => m.JoinDate).Class("col-md-4 control-label")
+        @Html.Bootstrap().LabelFor(m => m.ProfessionalJoinDate).Class("col-md-4 control-label")
         <div class="col-md-8">
-            @Html.DisplayFor(m => m.JoinDate)
+            @Html.DisplayFor(m => m.ProfessionalJoinDate)
         </div>
     </div>
     <div class="form-group">
@@ -69,9 +70,16 @@
             @Html.EditorFor(m => m.ReasonDesc)
         </div>
     </div>
-    @Html.HiddenFor(m => m.FullName)
-    @Html.HiddenFor(m => m.ID)
+
     @Html.HiddenFor(m => m.PSANumber)
+    @Html.HiddenFor(m => m.Professional)
+    @Html.HiddenFor(m => m.RequestorPosition)
+    @Html.HiddenFor(m => m.RequestorUnit)
+    @Html.HiddenFor(m => m.StatusForm)
+    @Html.HiddenFor(m => m.ProfessionalID)
+    @Html.HiddenFor(m => m.RequestorMailAddress)
+    @Html.HiddenFor(m => m.UserPermission)
+
 </div>
 
 @section scripts{

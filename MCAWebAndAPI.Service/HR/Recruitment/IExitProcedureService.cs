@@ -56,6 +56,14 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         bool CheckPendingApproval(int? id, string checklistStatusApproved);
 
-        //bool UpdateExitProcedureStatus(int? id, )
+        bool UpdateExitProcedureStatus(int? id, string statusExitProcedure);
+
+        string GetPSANumberOnExitProcedure(int? id);
+
+        int GetPSAId(string psaNumber);
+
+        System.DateTime GetLastWorkingDate(int? exitProcID);
+
+        bool UpdateLastWorkingDateOnPSA(int? psaID, System.DateTime lastWorkingDate);
     }
 }

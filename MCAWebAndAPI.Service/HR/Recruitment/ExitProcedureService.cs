@@ -458,7 +458,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
                 updatedValue.Add("Title", viewModel.ItemExitProcedure);
                 updatedValue.Add("approverposition", new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.ApproverPosition.Value) });
-                updatedValue.Add("approvername", Convert.ToString(viewModel.ApproverUserName.Text));
+                updatedValue.Add("approverusername", new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.ApproverUserName.Value) });
+                //updatedValue.Add("approvername", Convert.ToString(viewModel.ApproverUserName.Text));
                 updatedValue.Add("checklistitemapproval", viewModel.CheckListItemApproval.Text);
                 updatedValue.Add("dateofapproval", viewModel.DateOfApproval);
                 updatedValue.Add("remarks", viewModel.Remarks);
@@ -508,11 +509,14 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.FullName = Convert.ToString(listItem["Title"]);
             viewModel.Professional.Value = FormatUtil.ConvertLookupToID(listItem, "professional");
             viewModel.ProjectUnit = Convert.ToString(listItem["projectunit"]);
+            //viewModel.Position = FormatUtil.ConvertLookupToValue(listItem, "position");
+            viewModel.RequestorPosition = Convert.ToString(listItem["position"]);
             viewModel.Position = Convert.ToString(listItem["position"]);
             viewModel.PhoneNumber = Convert.ToString(listItem["mobilenumber"]);
-            viewModel.EmailAddress = Convert.ToString(listItem["officeemail"]);
+            viewModel.ProfessionalPersonalMail = Convert.ToString(listItem["officeemail"]);
             viewModel.CurrentAddress = Convert.ToString(listItem["currentaddress"]);
             viewModel.JoinDate = Convert.ToDateTime(listItem["joindate"]).ToLocalTime();
+            viewModel.ProfessionalJoinDate = Convert.ToDateTime(listItem["joindate"]).ToLocalTime();
             viewModel.LastWorkingDate = Convert.ToDateTime(listItem["lastworkingdate"]).ToLocalTime();
             viewModel.ExitReason.Value = Convert.ToString(listItem["exitreason"]);
             viewModel.ReasonDesc = Convert.ToString(listItem["reasondescription"]);
@@ -520,8 +524,13 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.Requestor = Convert.ToString(listItem["Title"]);
             viewModel.StatusForm = Convert.ToString(listItem["status"]);
 
+            viewModel.ExitProcedureChecklist = GetExitProcedureChecklist(viewModel.ID);
+            viewModel.DocumentUrl = GetDocumentUrl(viewModel.ID);
+
             return viewModel;
         }
+
+
         
         public ExitProcedureVM GetExitProcedure(int? ID)
         {
@@ -594,28 +603,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
           var caml = @"<View>
             <Query> 
                <Where><Eq><FieldRef Name='exitprocedure' LookupId='True' /><Value Type='Lookup'>" + iD + @"</Value></Eq></Where> 
-            </Query> 
-             <ViewFields>
-                <FieldRef Name='approverlevel' />
-                <FieldRef Name='approvername' />
-                <FieldRef Name='approverposition' />
-                <FieldRef Name='approverposition_x003a_ID' />
-                <FieldRef Name='checklistitemapproval' />
-                <FieldRef Name='dateofapproval' />
-                <FieldRef Name='approverunit' />
-                <FieldRef Name='remarks' />
-                <FieldRef Name='transactiontype' />
-                <FieldRef Name='requestorunit' />
-                <FieldRef Name='requestorposition' />
-                <FieldRef Name='requestorposition_x003a_ID' />
-                <FieldRef Name='approverlevel' />
-                <FieldRef Name='approverunit' />
-                <FieldRef Name='isdefault' />
-                <FieldRef Name='workflowtype' />
-                <FieldRef Name='exitprocedure' />
-                <FieldRef Name='Title' />
-                <FieldRef Name='ID' />
-             </ViewFields> 
+            </Query>  
             </View>";
 
             
@@ -635,7 +623,22 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 ID = Convert.ToInt32(item["ID"]),
                 ItemExitProcedure = Convert.ToString(item["Title"]),
-                Remarks = Convert.ToString(item["remarks"])
+                Remarks = Convert.ToString(item["remarks"]),
+                ApproverUnit = ExitProcedureChecklistVM.GetUnitDefaultValue(
+                    new Model.ViewModel.Control.InGridComboBoxVM
+                    {
+                        Text = Convert.ToString(item["approverunit"])
+                    }
+                    ),
+                DateOfApproval = Convert.ToDateTime(item["dateofapproval"]).ToLocalTime(),
+                CheckListItemApproval = ExitProcedureChecklistVM.GetCheckListItemApprovalDefaultValue(
+                    new Model.ViewModel.Control.InGridComboBoxVM
+                    {
+                        Text = Convert.ToString(item["checklistitemapproval"])
+                    }
+                    ),
+                ApproverPosition = ExitProcedureChecklistVM.GetPositionDefaultValue(FormatUtil.ConvertToInGridAjaxComboBox(item, "approverposition")),
+                ApproverUserName = ExitProcedureChecklistVM.GetApproverUserNameDefaultValue(FormatUtil.ConvertToInGridAjaxComboBox(item, "approverusername"))
             };
         }
 
@@ -648,7 +651,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             var columnValues = new Dictionary<string, object>();
             int ID = exitProcedure.ID.Value;
-
+            
             columnValues.Add("requestdate", exitProcedure.RequestDate.Value);
             columnValues.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(exitProcedure.Professional.Value) });
             columnValues.Add("Title", exitProcedure.FullName);
@@ -663,6 +666,14 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             columnValues.Add("reasondescription", exitProcedure.ReasonDesc);
             columnValues.Add("psanumber", exitProcedure.PSANumber);
 
+            if(exitProcedure.StatusForm == "Draft")
+            {
+                columnValues.Add("status", exitProcedure.StatusForm);
+            }
+            else
+            {
+                columnValues.Add("status", exitProcedure.StatusForm);
+            }
 
             try
             {
@@ -951,43 +962,92 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             }
             else
             {
-                var statusExitProcedure = "Approved";
-                var columnValues = new Dictionary<string, object>();
-
-                columnValues.Add("status", statusExitProcedure);
-
-                try
-                {
-                    SPConnector.UpdateListItem(SP_EXP_LIST_NAME, id, columnValues, _siteUrl);
-                }
-                catch (Exception e)
-                {
-                    logger.Debug(e.Message);
-                    return false;
-                }
-
                 return false;
             }
         }
 
-        //public bool UpdateExitProcedureStatus(int? id, string checklistStatusApproved)
-        //{
-        //    var statusExitProcedure = "Approved";
-        //    var columnValues = new Dictionary<string, object>();
+        public bool UpdateExitProcedureStatus(int? id, string checklistStatusApproved)
+        {
+            var columnValues = new Dictionary<string, object>();
 
-        //    columnValues.Add("status", statusExitProcedure);
+            columnValues.Add("status", checklistStatusApproved);
 
-        //    try
-        //    {
-        //        SPConnector.UpdateListItem(SP_EXP_LIST_NAME, id, columnValues, _siteUrl);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        logger.Debug(e.Message);
-        //        return false;
-        //    }
+            try
+            {
+                SPConnector.UpdateListItem(SP_EXP_LIST_NAME, id, columnValues, _siteUrl);
+            }
+            catch (Exception e)
+            {
+                logger.Debug(e.Message);
+                return false;
+            }
 
-        //    return true;
-        //}
+            return true;
+        }
+
+        public string GetPSANumberOnExitProcedure(int? id)
+        {
+            string psaNumber;
+
+            var caml = @"<View>  
+            <Query> 
+               <Where><Eq><FieldRef Name='ID' /><Value Type='Counter'>" + id + @"</Value></Eq></Where> 
+            </Query> 
+      </View>";
+
+            var item = SPConnector.GetListItem(SP_EXP_LIST_NAME, id, _siteUrl);
+
+            psaNumber = Convert.ToString(item["psanumber"]);
+
+            return psaNumber;
+        }
+
+        public int GetPSAId(string psaNumber)
+        {
+            int psaID = 0;
+
+            var caml = @"<View>  
+            <Query> 
+               <Where><Eq><FieldRef Name='Title' /><Value Type='Text'>" + psaNumber + @"</Value></Eq></Where> 
+            </Query> 
+      </View>";
+
+            foreach (var item in SPConnector.GetList(SP_PSA_LIST_NAME, _siteUrl, caml))
+            {
+                psaID = Convert.ToInt32(item["ID"]);
+
+                if (psaID != 0)
+                    break;
+            }
+
+            return psaID;
+        }
+
+        public DateTime GetLastWorkingDate(int? exitProcID)
+        {
+            var item = SPConnector.GetListItem(SP_EXP_LIST_NAME, exitProcID, _siteUrl);
+            DateTime lastWorkingDate = Convert.ToDateTime(item["lastworkingdate"]);
+
+            return lastWorkingDate;
+        }
+
+        public bool UpdateLastWorkingDateOnPSA(int? psaID, DateTime lastWorkingDate)
+        {
+            var columnValues = new Dictionary<string, object>();
+
+            columnValues.Add("lastworkingdate", lastWorkingDate);
+
+            try
+            {
+                SPConnector.UpdateListItem(SP_EXP_LIST_NAME, psaID, columnValues, _siteUrl);
+            }
+            catch (Exception e)
+            {
+                logger.Debug(e.Message);
+                return false;
+            }
+
+            return true;
+        }
     }
 }

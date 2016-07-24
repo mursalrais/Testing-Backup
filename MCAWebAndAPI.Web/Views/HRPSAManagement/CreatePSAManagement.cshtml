@@ -26,7 +26,7 @@
     <div class="form-actions">
         <div class="row">
             <div class="col-md-12">
-                <button id="submit-button" class="btn btn-primary" type="submit">
+                <button id="submit-button" class="btn btn-primary" type="button" onclick="checkOverlapping()">
                     <i class="fa fa-save"></i>
                     Submit
                 </button>
@@ -38,20 +38,63 @@
     @section scripts{
         <script type="text/javascript">
           
-            
-            $(document).ready(function () {
-                $("#submit-button").click(function () {
-                $("form").submit();
-            });
+            function checkOverlapping() {
+                var psaRenewalNumber = $("#PSARenewalNumber").val()
 
-        });
+                if (psaRenewalNumber != 0) {
+
+                    var dateOfNewPSA = $("#DateOfNewPSA").val();
+                    var dateofNewPSADate = new Date(dateOfNewPSA);
+                    var psaExpiryDate = $("#PSAExpiryDate").val();
+                    var psaExpiryDateDate = new Date(psaExpiryDate);
+                    var dateOfNewPSABefore = $("#DateOfNewPSABefore").val();
+                    var dateofNewPSABeforeDate = new Date(dateOfNewPSABefore);
+                    var psaExpiredDateBefore = $('#ExpireDateBefore').val();
+                    var psaExpiryDateBeforeDate = new Date(psaExpiredDateBefore);
+
+                    //Cek Overlapping Date of New PSA
+                    if ((dateofNewPSADate > dateofNewPSABeforeDate) && (dateofNewPSADate < psaExpiryDateBeforeDate)) {
+                        //Warning overlapping star tdate
+
+                        var confirmationValue = confirm("Date of New PSA for New Contract is less than PSA Expiry Date on last contract");
+                        if (confirmationValue == true) {
+                            $("form").submit();
+                        }
+                        if (confirmationValue == false) {
+
+                            return false;
+                        }
+                    }
+                        //Cek Overlapping PSA Expired Date
+                    else if ((dateofNewPSADate > dateofNewPSABeforeDate) && (dateofNewPSADate < psaExpiryDateBeforeDate) && (psaExpiryDateDate < psaExpiredDateBeforeDate)) {
+                        //Warning overlapping star date dan end date
+                        var confirmationValue = confirm("Range date of New Contract is between of last contract")
+                        if (confirmationValue == true) {
+
+                            alert("(dateOfNewPSA > dateOfNewPSABefore) && (dateOfNewPSA < psaExpiredDateBefore) && (psaExpiryDate < psaExpiredDateBefore) dan (confirmationValue == true)");
+
+                            $("form").submit();
+                        }
+                        if (confirmationValue == false) {
+
+                            alert("(dateOfNewPSA > dateOfNewPSABefore) && (dateOfNewPSA < psaExpiredDateBefore) && (psaExpiryDate < psaExpiredDateBefore) dan (confirmationValue == false)");
+                            return false;
+                        }
+                    }
+                }
+            }
+
+            
+        
 
        
         function onSuccess(data) {
+            
             window.location.href = data.urlToRedirect;
         }
 
         function onFailure(data) {
+            
             window.location.href = data.urlToRedirect;
         }
         
@@ -68,52 +111,32 @@
                     console.log(result);
 
                     if (result.length != 0) {
-                        //console.log("Ada Data PSA Sebelumnya")
 
+                        console.log("Sudah ada kontrak sebelumnya");
+                        
                         var psaID = result[0].PSAId;
-
                         var renewalnumber = result[0].PSARenewalNumber + 1;
-
                         var dateofnewpsabefore = result[0].DateNewPSABefore;
-                        //console.log("result[0].DateNewPSABefore:" + dateofnewpsabefore);
-
                         var dateofnewpsa = new Date(dateofnewpsabefore);
-                        //console.log("dateofnewpsa: " + dateofnewpsa);
-
                         var datenewpsa = dateofnewpsa.getDate();
-                        //console.log("datenewpsa: " + datenewpsa);
-
                         var datenewpsaint = parseInt(datenewpsa);
-                        //console.log("datenewpsaint: " + datenewpsaint);
-
                         var calcdatenewpsa = datenewpsaint + 1;
-                        //console.log("calcdatenewpsa" + calcdatenewpsa);
-
                         var setdateofpsa = new Date(dateofnewpsa.setDate(calcdatenewpsa));
-                        //console.log("setdateofpsa: " + setdateofpsa);
-
                         var datepsa = setdateofpsa.getMonth() + 1 + '/' + setdateofpsa.getDate() + '/' + setdateofpsa.getFullYear();
-                        //console.log("datepsa: " + datepsa);
-
+                        
                         //Kalkulasi Date of New PSA Kontrak Baru, tanggal paling awal adalah expire date kontrak sebelumnya + 1
                         var expirydatebefore = result[0].ExpiryDateBefore
                         var expdate = new Date(expirydatebefore);
-
                         var dateexpdate = expdate.getDate();
                         var dateexpdateint = parseInt(dateexpdate);
-
                         var calcexpdate = dateexpdateint + 1;
-
                         var setexpdate = new Date(expdate.setDate(calcexpdate));
                         var expirydate = setexpdate.getMonth() + 1 + '/' + setexpdate.getDate() + '/' + setexpdate.getFullYear();
                         
                         $('#HidRenewalNumber').prop('value', renewalnumber);
                         $('#ExpiryDateBefore').prop('value', expirydate);
                         $('#ExpireDateBefore').prop('value', result[0].ExpiryDateBefore);
-                        //console.log("ExpireDateBefore: " + result[0].ExpireDateBefore);
-                        console.log("ExpiryDateBefore: " + result[0].ExpiryDateBefore);
-
-
+                        
                         $('#PSAId').prop('value', psaID);
 
                         $("#IsRenewal_Value").data("kendoDropDownList").select(0);
@@ -121,6 +144,8 @@
 
                         $("#PSARenewalNumber").prop("readonly", "false");
                         $("#PSARenewalNumber").prop("value", renewalnumber);
+
+                        console.log("Renewal Number Sebelumnya: " +  $("#PSARenewalNumber").val())
 
                         $("#DateOfNewPSA").data("kendoDatePicker").min(datepsa);
                         $("#DateOfNewPSA").prop('value', datepsa);
@@ -133,6 +158,10 @@
 
                         $("#ProfessionalMail").prop('value', result[0].ProfessionalMail);
 
+                        console.log("Date of New PSA: " + datepsa);
+                        console.log("Date of PSA Before: " + dateofnewpsabefore);
+                        console.log("PSA Expiry Date: " + expirydate);
+                        console.log("Expire Date Before: " + result[0].ExpiryDateBefore);
                     }
 
                     if (result.length == 0)
@@ -140,7 +169,7 @@
                         $("#IsRenewal_Value").data("kendoDropDownList").select(1);
                         $("#IsRenewal_Value").data("kendoDropDownList").readonly();
 
-                        //$("#PSARenewalNumber").prop("readonly", "true");
+                        
                         $("#PSARenewalNumber").prop("value", 0);
 
                         var psarenewalnumber = $("#PSARenewalNumber").data("kendoNumericTextBox");
@@ -169,7 +198,6 @@
                                
                 $.getJSON(urlKeyPosition, function (result) {
 
-                    
 
                     if (result[0].IsKeyPosition == "Yes")
                     {
@@ -191,15 +219,9 @@
 
             
             $(document).ready(function () {
-
-
                 $("#Tenure").kendoNumericTextBox({
                     change: onChange,
                     spin: onSpin
-                
-
-                //$("#Tenure").on('input', function () {
-                //    sumCal();
                 });
 
                 function onChange() {
@@ -217,32 +239,33 @@
                     var monthpsa = dateofnewpsa.getMonth();
                     var monthint = parseInt(monthpsa);
                     var datepsa = dateofnewpsa.getDate();
-
                     var tenure = $("#Tenure").val();
                     var tenureint = parseInt(tenure);
                     var addtenure = tenureint + monthint;
-
                     var setmonth = new Date(dateofnewpsa.setMonth(addtenure));
-
                     var psaexpirydate = setmonth.getMonth() + 1 + '/' + setmonth.getDate() + '/' + setmonth.getFullYear();
 
-                    console.log(psaexpirydate)
-
                     $("#PSAExpiryDate").val(psaexpirydate);
+
+                    var datepsa = $("#DateOfNewPSA").val();
+                    var dateofnewpsabefore = $("#DateOfNewPSABefore").val();
+                    var expirydate = $("#DateOfNewPSABefore").val();
+                    var expiredatebefore = $("#ExpireDateBefore").val();
+
+                    console.log("Date of New PSA: " + datepsa);
+                    console.log("Date of PSA Before: " + dateofnewpsabefore);
+                    console.log("PSA Expiry Date: " + psaexpirydate);
+                    console.log("Expire Date Before: " + expiredatebefore);
                 }
 
             });
 
             $(document).ready(function () {
-
-                
-                function onChange() {
+                    function onChange() {
 
                     if ($("#IsRenewal_Value").val() == "No")
                     {
                         var joinDate = $("#JoinDate").val();
-
-                        console.log("Join Date: " + joinDate);
 
                         $('#DateOfNewPSA').prop('value', joinDate);
                         $("#DateOfNewPSA").data("kendoDatePicker").min(joinDate);
@@ -278,13 +301,7 @@
            function onSelectPSA(e) {
                  
                $.each(e.files, function (index, value) {
-                   console.log("Index Document: " + index);
-                   console.log("Name: " + value.name);
-                   console.log("Index of MCC: " + value.name.indexOf("MCCNoObjectionLetter"));
-                   console.log("Size: " + value.size + " bytes");
-                   console.log("Extension: " + value.extension);
-
-                   
+                                      
                    if ($("#KeyPositionValue").val() == "Yes")
                    {
                        if ((index == 0))
