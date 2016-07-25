@@ -70,10 +70,22 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         public ApplicationShortlistVM GetResultlistInterview(int? ID)
         {
             var viewModel = new ApplicationShortlistVM();
+
+            ListItem listItemdt;
+
             if (ID == null)
                 return viewModel;
 
-            var listItemdt = SPConnector.GetListItem(SP_APPDATA_LIST_NAME, ID, _siteUrl);
+            try
+            {
+                listItemdt = SPConnector.GetListItem(SP_APPDATA_LIST_NAME, ID, _siteUrl);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.Message);
+                throw e;
+            }
+
             viewModel = ConvertToResultInterviewDataVM(listItemdt);
 
             return viewModel;

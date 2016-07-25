@@ -80,7 +80,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public string cmpYearDate { get; set; }
 
         /// <summary>
-        /// pppstatus
+        /// crstatus
         /// </summary>
         public string StatusForm { get; set; }
 

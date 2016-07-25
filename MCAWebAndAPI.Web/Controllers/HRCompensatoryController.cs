@@ -54,8 +54,10 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewmodel);
         }
          
-        public ActionResult InputCompensatoryHR(string siteurl = null, int? iD = null)
+        public ActionResult InputCompensatoryHR(string siteurl = null, int? iD = null, int? idCmp = null)
         {
+            var viewmodel = new CompensatoryVM();
+
             if (siteurl == "")
             {
                 siteurl = SessionManager.Get<string>("SiteUrl");
@@ -67,9 +69,15 @@ namespace MCAWebAndAPI.Web.Controllers
                 SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
             }
 
-            var viewmodel = _service.GetComplistbyProfid(iD);
+            if (idCmp == null)
+            {
+                viewmodel = _service.GetComplistbyProfid(iD);
+            }
+            else
+            {
+                viewmodel = _service.GetComplistbyCmpid(iD);
+            }
 
-            //viewmodel.ID = id;
             return View(viewmodel);
         }
 
