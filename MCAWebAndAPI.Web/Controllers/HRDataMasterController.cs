@@ -55,6 +55,7 @@ namespace MCAWebAndAPI.Web.Controllers
             _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
 
             var professionals = GetFromExistingSession();
+            professionals = professionals.OrderBy(e => e.FirstMiddleName);
 
             return Json(professionals.Select(e => 
                 new {
@@ -135,6 +136,7 @@ namespace MCAWebAndAPI.Web.Controllers
             _dataMasterService.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));
 
             var positions = _dataMasterService.GetPositionsManpower(Level);
+            positions = positions.OrderBy(e => e.PositionName);
 
             return Json(positions.Select(e =>
                 new {
