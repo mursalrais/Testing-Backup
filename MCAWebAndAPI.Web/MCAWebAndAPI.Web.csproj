@@ -1228,6 +1228,9 @@
     <Content Include="Views\HRInsuranceClaim\CreateInsuranceClaim.cshtml" />
     <Content Include="Views\HRInsuranceClaim\_ClaimComponentDetail.cshtml" />
     <Content Include="Views\HRInsuranceClaim\_MedicalClaimDetail.cshtml" />
+    <Content Include="Views\HRInsuranceClaim\EditInsuranceClaim.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\DropDown.cshtml" />
+    <Content Include="Views\HRInsuranceClaim\SubmitAXA.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -872,12 +872,22 @@ namespace MCAWebAndAPI.Service.HR.Common
                 ID = Convert.ToInt32(item["ID"]),
                 InsuranceNumber = Convert.ToString(item["insurancenr"]),
                 OrganizationInsurance = Convert.ToString(item["insurancenr"]) ,
-                Name = FormatUtil.ConvertLookupToValue(item, "professional")
+                Name=Convert.ToString(item["Title"])
+               // Name = FormatUtil.ConvertLookupToValue(item, "professional")
             };
         }
-        public IEnumerable<DependentMaster> GetDependents()
+        public IEnumerable<DependentMaster>     GetDependents()
         {
-            var models = new List<DependentMaster>();
+            var models = new List<DependentMaster>
+            {
+                new DependentMaster
+                {
+                    ID = 0,
+                    Name = ""
+                }
+            };
+
+
             foreach (var item in SPConnector.GetList(SP_PRODEP_LIST_NAME, _siteUrl))
             {
                 models.Add(ConvertToDependentModel_Light(item));

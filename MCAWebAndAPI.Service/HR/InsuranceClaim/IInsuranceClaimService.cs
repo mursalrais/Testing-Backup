@@ -13,17 +13,17 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
 
         void SetSiteUrl(string siteUrl = null);
 
-       // int CreateInsuranceClaim(InsuranceClaimVM viewModel);
+      
+        InsuranceClaimVM GetInsuranceHeader(int? ID, string useremail = null);
 
-        InsuranceClaimVM GetInsurance(int? ID);
-
-        InsuranceClaimVM GetPopulatedModel(int? id = null);
+        InsuranceClaimVM GetPopulatedModel(string useremail = null);
         int CreateHeader(InsuranceClaimVM header);
 
        void CreateClaimComponentDetails(int? headerId, IEnumerable<ClaimComponentDetailVM> claimComponentDetails);
 
         void CreateClaimPaymentDetails(int? headerId, IEnumerable<ClaimPaymentDetailVM> claimPaymentDetails);
 
+        bool UpdateHeader(InsuranceClaimVM header);
 
     }
 }
