@@ -55,6 +55,7 @@ namespace MCAWebAndAPI.Web.Controllers
             _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
 
             var professionals = GetFromExistingSession();
+            professionals = professionals.OrderBy(e => e.FirstMiddleName);
 
             return Json(professionals.Select(e => 
                 new {
@@ -92,11 +93,50 @@ namespace MCAWebAndAPI.Web.Controllers
                 ), JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetProjectUnits()
+        {
+            _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+
+            var positions = GetFromPositionsExistingSession();
+            positions = positions.GroupBy(e => e.ProjectUnit).Select(y => y.First());
+            return Json(positions.Select(e =>
+                new {
+                    e.ID,
+                    e.PositionName,
+                    e.PositionStatus,
+                    e.Remarks,
+                    e.IsKeyPosition,
+                    e.ProjectUnit,
+                    Desc = string.Format("{0}", e.PositionName)
+                }),
+                JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult GetPositions()
         {
             _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
 
             var positions = GetFromPositionsExistingSession();
+            return Json(positions.Select(e =>
+                new {
+                    e.ID,
+                    e.PositionName,
+                    e.PositionStatus,
+                    e.Remarks,
+                    e.IsKeyPosition,
+                    e.ProjectUnit,
+                    Desc = string.Format("{0}", e.PositionName)
+                }),
+                JsonRequestBehavior.AllowGet);
+        }
+
+        [OutputCache(Duration = (2 * 3600))]
+        public JsonResult GetPositionsManpower(string Level = null)
+        {
+            _dataMasterService.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));
+
+            var positions = _dataMasterService.GetPositionsManpower(Level);
+            positions = positions.OrderBy(e => e.PositionName);
 
             return Json(positions.Select(e =>
                 new {
@@ -147,7 +187,7 @@ namespace MCAWebAndAPI.Web.Controllers
             return Json(positions.Select(e =>
                 new {
                     Value = Convert.ToString(e.ID),
-                    Text = e.PositionName
+                    Text = e.ProjectUnit+" - "+ e.PositionName
                 }),
                 JsonRequestBehavior.AllowGet);
         }
@@ -201,6 +241,17 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         private IEnumerable<PositionMaster> GetFromPositionsExistingSession()
+        {
+            //Get existing session variable
+            var sessionVariable = System.Web.HttpContext.Current.Session["PositionMaster"] as IEnumerable<PositionMaster>;
+            var positions = sessionVariable ?? _dataMasterService.GetPositions();
+
+            if (sessionVariable == null) // If no session variable is found
+                System.Web.HttpContext.Current.Session["PositionMaster"] = positions;
+            return positions;
+        }
+
+        private IEnumerable<PositionMaster> GetFromPositionsManpowerExistingSession()
         {
             //Get existing session variable
             var sessionVariable = System.Web.HttpContext.Current.Session["PositionMaster"] as IEnumerable<PositionMaster>;

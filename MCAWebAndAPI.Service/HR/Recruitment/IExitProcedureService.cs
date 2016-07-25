@@ -16,6 +16,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         //Display Exit Procedure Data based on ID
         ExitProcedureVM GetExitProcedure(int? ID, string siteUrl, string requestor, string listName, string user);
 
+        ExitProcedureVM GetExitProcedureHR(int? ID, string siteUrl, string requestor, string listName, string user);
+
         ExitProcedureVM GetExitProcedure(int? ID);
 
         ExitProcedureForApproverVM GetExitProcedureApprover(int? ID, string siteUrl, string requestor, int? level);
@@ -24,7 +26,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         bool UpdateExitProcedure(ExitProcedureVM exitProcedure);
 
-        bool UpdateExitChecklistStatus(ExitProcedureForApproverVM exitProcedureForApprover);
+        bool UpdateExitChecklist(ExitProcedureVM exitProcedure, IEnumerable<ExitProcedureChecklistVM> ExitProcedureChecklist);
 
         ExitProcedureVM ViewExitProcedure(int? ID);
 
@@ -43,7 +45,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         IEnumerable<ProfessionalMaster> GetApproverNames(string position);
 
-        Task CreateExitProcedureChecklistAsync(int? exitProcID, IEnumerable<ExitProcedureChecklistVM> exitProcedureChecklist, string requestorposition, string requestorunit);
+        Task CreateExitProcedureChecklistAsync(int? exitProcID, IEnumerable<ExitProcedureChecklistVM> exitProcedureChecklist, string requestorposition, string requestorunit, int? positionID);
 
         void SendEmail(ExitProcedureVM header, string workflowTransactionListName, string transactionLookupColumnName,
             int exitProcID, string messageForApprover, string messageForRequestor);
@@ -51,5 +53,19 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         void SendMailDocument(string requestorMail, string documentExitProcedure);
 
         ExitProcedureVM GetExitProcedureForApprove(int? ID, string siteUrl, string approver);
+
+        bool CheckPendingApproval(int? id, string checklistStatusApproved);
+
+        bool UpdateExitProcedureStatus(int? id, string statusExitProcedure);
+
+        string GetPSANumberOnExitProcedure(int? id);
+
+        int GetPSAId(string psaNumber);
+
+        System.DateTime GetLastWorkingDate(int? exitProcID);
+
+        bool UpdateLastWorkingDateOnPSA(int? psaID, System.DateTime lastWorkingDate);
+
+        int GetPositionID(string requestorposition, string requestorunit, int positionID, int number);
     }
 }

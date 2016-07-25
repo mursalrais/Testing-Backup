@@ -14,6 +14,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// requestdate
         /// </summary>
         [UIHint("Date")]
+        [Required]
         public DateTime? DateRequested { get; set; } = DateTime.Now;
         public Boolean IsOnBehalfOf { get; set; } = new Boolean();
 
@@ -21,13 +22,36 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// projectunit
         /// </summary>
         [UIHint("ComboBox")]
-        [DisplayName("Division/Project/Unit")]
-        public ComboBoxVM DivisionProjectUnit { get; set; } = new ComboBoxVM();
+        [DisplayName("Project Unit")]
+        [Required]
+        public ComboBoxVM DivisionProjectUnit { get; set; } = new ComboBoxVM()
+        {
+            Choices = new string[]
+            {
+                "Communications & Outreach Unit",
+                "Community-Based Health & Nutrition Project",
+                "Cross-Cutting Sector",
+                "Economic Analysis Unit",
+                "Environment & Social Performance Unit",
+                "Executive Director",
+                "Finance Unit",
+                "Human Resources Unit",
+                "Information Technology Unit",
+                "Legal Unit",
+                "Monitoring & Evaluation Unit",
+                "Office Support Unit",
+                "Operations Support Div.",
+                "Procurement Modernization Project",
+                "Program Div."
+
+            }
+        };
 
         /// <summary>
         /// reportingto
         /// </summary>
         [UIHint("AjaxComboBox")]
+        [Required]
         public AjaxComboBoxVM ReportingTo { get; set; } = new AjaxComboBoxVM
         {
             ControllerName = "HRDataMaster",
@@ -42,18 +66,22 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         [DisplayName("No. Of Person")]
         [UIHint("Int32")]
+        [Required]
         public int NoOfPerson { get; set; }
 
         /// <summary>
         /// Tenure
         /// </summary>
         [UIHint("Int32")]
+        [Required]
+        [DisplayName("Tenure (Month)")]
         public int Tenure { get; set; }
 
         /// <summary>
         /// joblocation
         /// </summary>
         [UIHint("AjaxComboBox")]
+        [Required]
         public AjaxComboBoxVM JobLocation { get; set; } = new AjaxComboBoxVM
         {
             ControllerName = "Location",
@@ -66,11 +94,14 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// Objectives
         /// </summary>
         [UIHint("TextArea")]
+        [Required]
         public string PositionObjectives { get; set; }
 
         public string Username { get; set; }
 
         public string EmailOnBehalf { get; set; }
+
+        public string ProjectUnitString { get; set; }
 
         /// <summary>
         /// iskeyposition
@@ -87,20 +118,24 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             ActionName = "GetProfessionals",
             ValueField = "ID",
             TextField = "Desc",
-            OnSelectEventName="OnBehalfOfChange"
+            OnSelectEventName = "OnBehalfOfChange"
         };
 
         /// <summary>
         /// positionrequested
         /// </summary>
-        [UIHint("AjaxComboBox")]
-        public AjaxComboBoxVM Position { get; set; } = new AjaxComboBoxVM
+        [UIHint("AjaxCascadeComboBox")]
+        [Required]
+        public AjaxCascadeComboBoxVM Position { get; set; } = new AjaxCascadeComboBoxVM
         {
             ControllerName = "HRDataMaster",
-            ActionName = "GetPositions",
+            ActionName = "GetPositionsManpower",
             ValueField = "ID",
             TextField = "PositionName",
-            OnSelectEventName = "onPositionChange"
+            OnSelectEventName = "onPositionChange",
+            Filter = "filterLevel",
+            Cascade = "DivisionProjectUnit_Value"
+
         };
 
         /// <summary>
@@ -119,7 +154,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// expectedjoindate
         /// </summary>
         [UIHint("Date")]
-        public DateTime? ExpectedJoinDate { get; set; } =  DateTime.Now;
+        [Required]
+        public DateTime? ExpectedJoinDate { get; set; } = DateTime.Now;
 
         /// <summary>
         /// istravelrequired
@@ -127,6 +163,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public Boolean IsTravellingRequired { get; set; } = new Boolean();
 
         [UIHint("MultiFileUploader")]
+        [DisplayName("Documents (Max. 2MB)")]
         public IEnumerable<HttpPostedFileBase> Documents { get; set; } = new List<HttpPostedFileBase>();
 
 
@@ -138,14 +175,19 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// personnelmgmt
         /// </summary>
         [UIHint("Int32")]
+        [Required]
+        [DisplayName("Personnel Management (persons)")]
         public int PersonnelManagement { get; set; }
 
         /// <summary>
         /// budgetmgmt
         /// </summary>
         [UIHint("Int32")]
+        [Required]
+        [DisplayName("Budget Management (USD)")]
         public int BudgetManagement { get; set; }
         [UIHint("CheckBoxItem")]
+        [Required]
         public IEnumerable<CheckBoxItemVM> Workplan { get; set; } = new List<CheckBoxItemVM>();
 
         /// <summary>
@@ -158,30 +200,36 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// totalyrsofexperience
         /// </summary>
         [UIHint("TextArea")]
+        [Required]
+        [DisplayName("Total Years of Experience")]
         public string TotalYrsOfExperience { get; set; }
 
         /// <summary>
         /// minimumeducation
         /// </summary>
         [UIHint("TextArea")]
+        [Required]
         public string MinimumEducation { get; set; }
 
         /// <summary>
         /// Industry
         /// </summary>
         [UIHint("TextArea")]
+        [Required]
         public string Industry { get; set; }
 
         /// <summary>
         /// minimumyrsofrelatedexperience
         /// </summary>
         [UIHint("TextArea")]
+        [DisplayName("Minimum Years of Experience in Related Field")]
         public string MinimumYrsOfExperienceInRelatedField { get; set; }
 
         /// <summary>
         /// specifictechnicalskill
         /// </summary>
         [DisplayName("Specific Technical Skill/Qualification")]
+        [Required]
         [UIHint("TextArea")]
         public string SpecificTechnicalSkillQualification { get; set; }
 
@@ -190,6 +238,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// </summary>
         [DisplayName("Personal Attributes & Competencies")]
         [UIHint("TextArea")]
+        [Required]
         public string PersonalAttributesCompetencies { get; set; }
 
         /// <summary>
@@ -218,6 +267,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             }
         };
 
-        
+
     }
 }

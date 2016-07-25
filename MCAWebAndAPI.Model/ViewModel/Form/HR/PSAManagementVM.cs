@@ -158,6 +158,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [DisplayName("PSA Expiry Date")]
         public DateTime? PSAExpiryDate { get; set; } = DateTime.Now;
 
+        [UIHint("Date")]
+        public DateTime? LastWorkingDate { get; set; } = DateTime.Now;
+
         public DateTime? HiddenExpiryDate { get; set; } = DateTime.Now;
 
         public string ExpiryDateBefore { get; set; }

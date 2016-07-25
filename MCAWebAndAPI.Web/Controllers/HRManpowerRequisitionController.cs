@@ -52,13 +52,13 @@ namespace MCAWebAndAPI.Web.Controllers
 
             if (viewModel.Status.Value == "Pending Approval 2 of 2")
             {
-                
+
                 // Send to Level 2 Approver
                 Task sendApprovalRequestTask = WorkflowHelper.SendApprovalRequestAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.ID, 2,
                     string.Format(EmailResource.ManpowerApproval, siteUrl, viewModel.ID));
 
-                
+
 
                 // END Workflow Demo
             }
@@ -83,7 +83,7 @@ namespace MCAWebAndAPI.Web.Controllers
             {
                 ViewBag.State = "Approved";
             }
-            
+
 
             return View(viewModel);
         }
@@ -169,7 +169,7 @@ namespace MCAWebAndAPI.Web.Controllers
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             var viewModel = await _service.GetManpowerRequisitionAsync(ID);
-            
+
             return View(viewModel);
         }
 
@@ -224,22 +224,22 @@ namespace MCAWebAndAPI.Web.Controllers
 
                 // Send to Level 1 Approver
                 Task sendApprovalRequestTask = WorkflowHelper.SendApprovalRequestAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
-                    SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)headerID, 1,
+                   SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)headerID, 1,
                     string.Format(EmailResource.ManpowerApproval, siteUrl, headerID));
 
                 //send to requestor
                 Task sendRequestor = EmailUtil.SendAsync(viewModel.Username, "Application Submission Confirmation",
-                 string.Format(EmailResource.ManpowerApproval, siteUrl, headerID));
+                  string.Format(EmailResource.ManpowerApproval, siteUrl, headerID));
 
                 //send to onBehalf
                 if ((viewModel.IsOnBehalfOf == true))
                 {
-                    if (viewModel.EmailOnBehalf != null || viewModel.EmailOnBehalf !="")
+                    if (viewModel.EmailOnBehalf != null || viewModel.EmailOnBehalf != "")
                     {
                         Task sendOnBehalf = EmailUtil.SendAsync(viewModel.EmailOnBehalf, "Application Submission Confirmation", string.Format(EmailResource.ManpowerApproval,siteUrl, headerID));
                     }
                 }
-                
+
 
 
 
@@ -247,10 +247,10 @@ namespace MCAWebAndAPI.Web.Controllers
             }
 
 
-            
+
 
             Task allTasks = Task.WhenAll(CreateWorkingRelationshipDetailsTask, CreateManpowerRequisitionDocumentsTask);
-                        
+
             try
             {
                 await allTasks;
@@ -289,7 +289,7 @@ namespace MCAWebAndAPI.Web.Controllers
             return array;
         }
 
-       
+
 
 
     }

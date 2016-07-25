@@ -1,18 +1,21 @@
-﻿using Elmah;
+﻿using Kendo.Mvc.Extensions;
+using Kendo.Mvc.UI;
 using MCAWebAndAPI.Model.ViewModel.Form.HR;
-using MCAWebAndAPI.Service.Converter;
-using MCAWebAndAPI.Model.HR.DataMaster;
 using MCAWebAndAPI.Service.HR.Recruitment;
-using MCAWebAndAPI.Service.Resources;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
+using MCAWebAndAPI.Model.ViewModel.Control;
+using MCAWebAndAPI.Web.Filters;
 using MCAWebAndAPI.Web.Resources;
 using MCAWebAndAPI.Web.Helpers;
-using MCAWebAndAPI.Service.Utils;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+using MCAWebAndAPI.Service.Resources;
 using System.Net;
-using System.Web.Mvc;
+using System;
+using System.IO;
+using MCAWebAndAPI.Service.Converter;
+using Elmah;
+using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -20,6 +23,8 @@ namespace MCAWebAndAPI.Web.Controllers
     public class HRCompensatoryController : Controller
     {
         IHRCompensatoryService _service;
+        const string SP_TRANSACTION_WORKFLOW_LIST_NAME = "Compensatory Request Workflow";
+        const string SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME = "compensatoryrequest";
 
         public HRCompensatoryController()
         {
@@ -38,14 +43,57 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
 
+            ViewBag.ListName = "Compensatory%20Request";
+
             var viewmodel = _service.GetComplistbyCmpid(iD);
 
             viewmodel.cmpID = iD;
-            //viewmodel.ID = id;
+            if(viewmodel.cmpEmail != null)
+            SessionManager.Set("RequestorUserLogin", viewmodel.cmpEmail);
+
             return View(viewmodel);
         }
          
-        public ActionResult InputCompensatoryHR(string siteurl = null, int? iD = null)
+        public ActionResult InputCompensatoryHR(string siteurl = null, int? iD = null, int? idCmp = null)
+        {
+            var viewmodel = new CompensatoryVM();
+
+            if (siteurl == "")
+            {
+                siteurl = SessionManager.Get<string>("SiteUrl");
+                _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
+            }
+            else
+            {
+                _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
+                SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
+            }
+
+            if (idCmp == null)
+            {
+                viewmodel = _service.GetComplistbyProfid(iD);
+            }
+            else
+            {
+                viewmodel = _service.GetComplistbyCmpid(iD);
+            }
+
+            return View(viewmodel);
+        }
+
+        public ActionResult CompensatorylistUser(string siteurl = null, int? iD = null)
+        {
+            //mandatory: set site url
+            _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
+
+            var viewmodel = _service.GetComplistbyCmpid(iD);
+
+            //viewmodel.ID = id;
+            return View(viewmodel);
+        }
+
+        public ActionResult CompensatorylistHR(string siteurl = null, int? iD = null)
         {
             if (siteurl == "")
             {
@@ -64,32 +112,8 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewmodel);
         }
 
-        public ActionResult CompensatorylistUser(string siteurl = null, int? iD = null)
-        {
-            //mandatory: set site url
-            _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
-            SessionManager.Set("SiteUrl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
-
-            var viewmodel = _service.GetComplistbyCmpid(iD);
-
-            //viewmodel.ID = id;
-            return View(viewmodel);
-        }
-
-        public ActionResult CompensatorylistHR(string siteurl = null, int? ID = null)
-        {
-            //mandatory: set site url
-            _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
-            SessionManager.Set("SiteUrl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
-
-            var viewmodel = _service.GetComplistActive();
-
-            //viewmodel.ID = id;
-            return View(viewmodel);
-        }
-
         [HttpPost]
-        public ActionResult CreateCompensatoryData(FormCollection form, CompensatoryVM viewModel)
+        public async Task<ActionResult> CreateCompensatoryData(FormCollection form, CompensatoryVM viewModel)
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
@@ -107,6 +131,14 @@ namespace MCAWebAndAPI.Web.Controllers
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            _service.UpdateHeader(viewModel);
+
+            if (viewModel.StatusForm != "DraftInitiated")
+            {
+                Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateTransactionWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
+                    SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.cmpID);
             }
 
             return RedirectToAction("Index",

@@ -214,6 +214,24 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to /Lists/PerformanceEvaluation.
+        /// </summary>
+        public static string PerformanceEvaluation {
+            get {
+                return ResourceManager.GetString("PerformanceEvaluation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to /Lists/PerformancePlan.
+        /// </summary>
+        public static string PerformancePlan {
+            get {
+                return ResourceManager.GetString("PerformancePlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to /Lists/Location%20Master.
         /// </summary>
         public static string PlaceMaster {

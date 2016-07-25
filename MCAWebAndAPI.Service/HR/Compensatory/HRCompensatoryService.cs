@@ -17,12 +17,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         static Logger logger = LogManager.GetCurrentClassLogger();
 
         const string SP_APPDATA_LIST_NAME = "Application";
-        const string SP_APPINTV_LIST_NAME = "Application Interview";
-        const string SP_APPINVPANEL_LIST_NAME = "Interview Invitation to Panel";
-        const string SP_APPEDU_LIST_NAME = "Application Education";
-        const string SP_APPWORK_LIST_NAME = "Application Working Experience";
-        const string SP_APPTRAIN_LIST_NAME = "Application Training";
-        const string SP_APPDOC_LIST_NAME = "Application Documents";
         const string SP_PROMAS_LIST_NAME = "Professional Master";
         const string SP_POSMAS_LIST_NAME = "Position Master";
         const string SP_MANPOW_LIST_NAME = "Manpower Requisition";
@@ -55,6 +49,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             var viewModel = new CompensatoryVM();
 
             viewModel.cmpName = Convert.ToString(listItem["Title"]);
+            viewModel.cmpEmail = Convert.ToString(listItem["officeemail"]);
             viewModel.cmpProjUnit = Convert.ToString(listItem["Project_x002f_Unit"]);
             viewModel.cmpPosition = FormatUtil.ConvertLookupToValue(listItem, "Position");
             viewModel.ddlProfessional.Value = Convert.ToInt32(listItem["ID"]);
@@ -66,6 +61,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         public CompensatoryVM GetComplistbyCmpid(int? iD)
         {
             var viewModel = new CompensatoryVM();
+            string crstatus = "";
 
             if (iD == null)
                 return null;
@@ -79,22 +75,44 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                              </Eq>
                        </Where>
                     </Query> 
-                     <ViewFields> <FieldRef Name='Title' />
-                          <FieldRef Name='professional_x003a_ID' /></ViewFields> 
+                     <ViewFields> 
+                          <FieldRef Name='Title' />
+                          <FieldRef Name='professional_x003a_ID' />
+                          <FieldRef Name='crstatus' />
+                     </ViewFields> 
                     </View>";
 
             var profID = 0;
             foreach (var item in SPConnector.GetList(SP_COMREQ_LIST_NAME, _siteUrl, caml))
             {
                 profID = Convert.ToInt32(FormatUtil.ConvertLookupToID(item, "professional_x003a_ID") + string.Empty);
+                crstatus = Convert.ToString(item["crstatus"]);
             }
 
-            return GetComplisted(iD, profID);
+            if (crstatus == "")
+            {
+                var updatedValue = new Dictionary<string, object>();
+
+                updatedValue.Add("crstatus", "Pending Approval 1 of 2");
+
+                try
+                {
+                    SPConnector.UpdateListItem(SP_COMREQ_LIST_NAME, iD, updatedValue, _siteUrl);
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e.Message);
+                    throw e;
+                }
+            }
+
+            return GetComplisted(iD, profID, crstatus);
         }
 
         public CompensatoryVM GetComplistbyProfid(int? iD)
         {
             var viewModel = new CompensatoryVM();
+            string crstatus = "";
 
             if (iD == null)
                 return null;
@@ -108,22 +126,44 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                              </Eq>
                        </Where>
                     </Query> 
-                     <ViewFields> <FieldRef Name='Title' />
-                          <FieldRef Name='ID' /></ViewFields> 
+                     <ViewFields> 
+                          <FieldRef Name='Title' />
+                          <FieldRef Name='ID' />
+                          <FieldRef Name='crstatus' />
+                     </ViewFields> 
                     </View>";
 
             var cmpID = 0;
             foreach (var item in SPConnector.GetList(SP_COMREQ_LIST_NAME, _siteUrl, caml))
             {
                 cmpID = Convert.ToInt32(item["ID"]);
+                crstatus = Convert.ToString(item["crstatus"]);
             }
 
-            return GetComplisted(cmpID, iD);
+            if (crstatus == "")
+            {
+                var updatedValue = new Dictionary<string, object>();
+
+                updatedValue.Add("crstatus", "Pending Approval 1 of 2");
+
+                try
+                {
+                    SPConnector.UpdateListItem(SP_COMREQ_LIST_NAME, iD, updatedValue, _siteUrl);
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e.Message);
+                    throw e;
+                }
+            }
+
+            return GetComplisted(cmpID, iD, crstatus);
         }
 
         private int GetCompID(int? ID)
         {
             var viewModel = new CompensatoryVM();
+            string appstatus;
 
             var caml = @"<View>  
                     <Query> 
@@ -135,14 +175,16 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                        </Where>
                     </Query> 
                      <ViewFields> <FieldRef Name='Title' />
-                       <FieldRef Name='ID' /></ViewFields> 
+                       <FieldRef Name='ID' /> <FieldRef Name='crstatus' /></ViewFields> 
                     </View>";
 
             var compID = 0;
             foreach (var item in SPConnector.GetList(SP_COMREQ_LIST_NAME, _siteUrl, caml))
             {
+                appstatus = Convert.ToString(item["crstatus"]); 
                 compID = Convert.ToInt32(item["ID"]);
             }
+
 
             return compID;
         }
@@ -159,7 +201,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             foreach (var item1 in SPConnector.GetList(SP_COMREQ_LIST_NAME, _siteUrl, caml1))
             {
-
                 var caml2 = @"<View>  
                     <Query> 
                         <Where>
@@ -191,15 +232,13 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     viewModel.cmpProjUnit = Convert.ToString(item2["Project_x002f_Unit"]);
                     viewModel.cmpPosition = FormatUtil.ConvertLookupToValue(item2, "Position");
                     viewModel.CompensatoryDetails = GetCompDetailist(GetCompID(Convert.ToInt32(item2["ID"])));
-                    viewModel.ddlProfessional.Value = (item2["ID"] as FieldLookupValue).LookupId;
-                    viewModel.ddlProfessional.Text = (item2["Title"] as FieldLookupValue).LookupValue;
                 }
 
             }
             return viewModel;
         }
 
-        private CompensatoryVM GetComplisted(int? ID, int? idPro )
+        private CompensatoryVM GetComplisted(int? ID, int? idPro, string crstatus)
         {
             var viewModel = new CompensatoryVM();
 
@@ -210,10 +249,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.ddlProfessional.Value = Convert.ToInt32(idPro);
             viewModel = ConvertCompInputTolistDataVM(listItem);
             viewModel.cmpID = ID;
+            viewModel.StatusForm = crstatus;
             viewModel.CompensatoryDetails = GetCompDetailist(ID);
 
             return viewModel;
-
         }
 
         //<ViewFields>
@@ -269,7 +308,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 CmpActiv = Convert.ToString(item["Title"]),
                 CmpID = Convert.ToInt32(item["ID"]),
-                CmpHID = Convert.ToInt32(item["compensatoryrequest"]),
+                CmpHID = Convert.ToInt32(FormatUtil.ConvertLookupToValue(item, "compensatoryrequest")),
                 CmpDate = Convert.ToDateTime(item["compensatorydate"]),
                 StartTime = Convert.ToDateTime(item["compensatorystarttime"]),
                 FinishTime = Convert.ToDateTime(item["compensatoryendtime"]),
@@ -347,7 +386,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                         var updatedValue = new Dictionary<string, object>();
 
                         updatedValue.Add("Title", viewModel.CmpActiv);
-                        updatedValue.Add("compensatoryrequest", cmpID);
+                        updatedValue.Add("compensatoryrequest", viewModel.CmpHID);
                         updatedValue.Add("compensatorydate", viewModel.CmpDate);
                         updatedValue.Add("compensatorystarttime", viewModel.StartTime);
                         updatedValue.Add("compensatoryendtime", viewModel.FinishTime);
@@ -382,9 +421,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     }
                     continue;
                 }
-
-               
-
             }
         }
 
@@ -419,6 +455,45 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.ID = Convert.ToInt32(FormatUtil.ConvertLookupToValue(item, "positionrequested_x003a_ID"));
             viewModel.PositionName = FormatUtil.ConvertLookupToValue(item, "positionrequested");
             return viewModel;
+        }
+
+        public bool UpdateHeader(CompensatoryVM header)
+        {
+            var columnValues = new Dictionary<string, object>();
+
+            int? ID = header.ID;
+
+            if (header.StatusForm == "Draft")
+            {
+                columnValues.Add("crstatus", "Pending Approval 1 of 2");
+            }
+
+            if (header.StatusForm == "Pending Approval 2 of 2")
+            {
+                columnValues.Add("crstatus", "Approved");
+            }
+
+            if (header.StatusForm == "DraftInitiated" || header.StatusForm == "DraftDraft")
+            {
+                columnValues.Add("crstatus", "Draft");
+            }
+            if (header.StatusForm == "Reject1" || header.StatusForm == "Reject2")
+            {
+                columnValues.Add("crstatus", "Rejected");
+            }
+
+            try
+            {
+                SPConnector.UpdateListItem(SP_COMREQ_LIST_NAME, ID, columnValues, _siteUrl);
+            }
+            catch (Exception e)
+            {
+                logger.Debug(e.Message);
+                return false;
+            }
+            var entitiy = new CompensatoryVM();
+            entitiy = header;
+            return true;
         }
     }
 }

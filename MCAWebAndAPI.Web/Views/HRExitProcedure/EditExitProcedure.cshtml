@@ -25,6 +25,12 @@
         <div class="row">
             @Html.Partial("_ExitProcedureDataEdit", Model)
         </div>
+
+        <legend>Exit Procedure Checklist</legend>
+        <div class="row">
+            @Html.Partial("_ExitProcedureChecklist", Model.ExitProcedureChecklist)
+        </div>
+
         <legend>Documents</legend>
         <div class="row">
             @Html.Partial("_DocumentDetailsDisplay", Model.DocumentUrl)
@@ -36,10 +42,13 @@
 <div class="form-actions">
     <div class="row">
         <div class="col-md-12">
-
-            <button id="submit-button" class="btn btn-primary" type="submit">
+            <button id="submit-for-approval" class="btn btn-primary" type="submit">
                 <i class="fa fa-save"></i>
-                Submit
+                Submit for Approval
+            </button>
+            <button id="submit-draft-initiate-button" class="btn btn-primary" type="submit">
+                <i class="fa fa-save"></i>
+                Save
             </button>
         </div>
     </div>
@@ -49,7 +58,21 @@
     <script type="text/javascript">
 
 
-            $(document).ready(function () {
+        $(document).ready(function () {
+            $("#submit-for-approval").click(function () {
+                $("#StatusForm").val("Pending Approval")
+                $("form").submit();
+            });
+        });
+
+        $(document).ready(function () {
+            $("#submit-draft-initiate-button").click(function () {
+                $("#StatusForm").val("Draft")
+                $("form").submit();
+            });
+        });
+
+        $(document).ready(function () {
                 $("#submit-button").click(function () {
                 $("form").submit();
             });
@@ -80,15 +103,15 @@
 
             })
 
-            var dataItem = this.dataItem(e.item);
-            var url = "/HRPSAManagement/GetJoinDate/" + dataItem.ID;
+            //var dataItem = this.dataItem(e.item);
+            //var url = "/HRPSAManagement/GetJoinDate/" + dataItem.ID;
 
-            $.getJSON(url, function (result) {
+            //$.getJSON(url, function (result) {
 
-                $('#JoinDate').prop('value', result[0].StrJoinDate);
-                $('#PSANumber').prop('value', result[0].PSANumber);
+            //    $('#JoinDate').prop('value', result[0].StrJoinDate);
+            //    $('#PSANumber').prop('value', result[0].PSANumber);
 
-            })
+            //})
         }
 
         </script>
