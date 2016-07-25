@@ -14,7 +14,6 @@
     enctype = "multipart/form-data"
 }))
 {
-    <div class="form-actions">
         <fieldset>
             @Html.AntiForgeryToken()
             @Html.ValidationSummary()
@@ -42,27 +41,26 @@
             <div class="row">
                 @Html.Partial("_InputCompensantoryDetails", Model.CompensatoryDetails)
             </div>
+            <div class="col-sm-12">
+
+                <div class="form-group" id="ParentDiv">
+                    <div class="col-sm-8">
+                        @Html.DisplayFor(m => m.StatusForm)
+                    </div>
+                </div>
+            </div>
+
             @if (Model.cmpEmail != null)
             {
                 <legend>Approval Workflow</legend>
                 <div id="workflow-placeholder" class="row" />
             }
+            
 
-        </fieldset>
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="pull-right">
-                        <button id="submit-button" class="btn btn-primary" type="submit" onclick="onValidateKendoDetail">
-                            <i class="fa fa-save"></i>
-                            save
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
+</fieldset>
 }
 
-@if (Model.ID == null)
+@if (Model.StatusForm != "")
 {
     <div class="form-actions">
         <div class="row">
@@ -80,7 +78,8 @@
     </div>
 }
 
-@if (Model.cmpEmail == null && Model.StatusForm == "Pending Approval 1 of 2")
+
+@if (Model.StatusForm == "Pending Approval 1 of 2")
 {
     <div class="form-actions">
         <div class="row">
@@ -114,6 +113,12 @@
     <script type="text/javascript">
         $(document).ready(function () {
             debugger;
+
+            $("#submit-button").click(function () {
+                $("form").submit();
+            });
+
+
             var Requestor = '@(SessionManager.Get<string>("RequestorUserLogin"))';
             if (Requestor != null) {
                 displayWorkflowRouter("workflow-placeholder", "@ViewBag.ListName", Requestor);

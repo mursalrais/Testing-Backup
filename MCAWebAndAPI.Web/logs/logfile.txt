@@ -121,3 +121,6 @@ Parameter name: address
 2016-07-21 22:25:06.4694 MCAWebAndAPI.Service.HR.InsuranceClaim.InsuranceClaimService Column 'paymenttype' does not exist. It may have been deleted by another user.  /sites/mca-dev/hr/Lists/ClaimPayment
 2016-07-21 22:35:35.4018 MCAWebAndAPI.Service.HR.InsuranceClaim.InsuranceClaimService Column 'paymenttype' does not exist. It may have been deleted by another user.  /sites/mca-dev/hr/Lists/ClaimPayment
 2016-07-21 22:36:03.9389 MCAWebAndAPI.Service.HR.InsuranceClaim.InsuranceClaimService Column 'paymenttype' does not exist. It may have been deleted by another user.  /sites/mca-dev/hr/Lists/ClaimPayment
+2016-07-24 16:52:00.6661 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService The 'sId' argument is invalid.
+2016-07-24 17:16:25.9453 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService The 'sId' argument is invalid.
+2016-07-25 09:01:20.9835 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Item does not exist. It may have been deleted by another user.
