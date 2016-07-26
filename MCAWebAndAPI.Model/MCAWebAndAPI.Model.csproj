@@ -145,6 +145,8 @@
     <Compile Include="ViewModel\Form\HR\ExitProcedureForApproverVM.cs" />
     <Compile Include="ViewModel\Form\HR\ExitProcedureVM.cs" />
     <Compile Include="ViewModel\Form\HR\FactorEvaluatedDetailVM.cs" />
+    <Compile Include="ViewModel\Form\HR\FeeSlipDetailVM.cs" />
+    <Compile Include="ViewModel\Form\HR\FeeSlipVM.cs" />
     <Compile Include="ViewModel\Form\HR\IndividualGoalDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\InsuranceClaimVM.cs" />
     <Compile Include="ViewModel\Form\HR\InterviewDetailVM.cs" />

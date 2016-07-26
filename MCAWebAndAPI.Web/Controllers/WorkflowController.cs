@@ -46,12 +46,13 @@ namespace MCAWebAndAPI.Web.Controllers
             }), JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetApproverNames(int position)
+        public JsonResult GetApproverNames(int unit, int position)
         {
             _service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            var unitName = _service.GetUnitName(unit);
             var positionName = _service.GetPositionName(position);
             var viewModel = SessionManager.Get<IEnumerable<ProfessionalMaster>>("WorkflowApprovers", "Position" + position)
-                ?? _service.GetApproverNames(positionName);
+                ?? _service.GetApproverNames(unitName ,positionName);
             SessionManager.Set("WorkflowApprovers", "Position"+ position, viewModel);
 
             return Json(viewModel.Select(e => new
