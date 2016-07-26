@@ -517,11 +517,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 var updateValue = new Dictionary<string, object>();
                
-                updateValue.Add("FileRef", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
+                updateValue.Add("application", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
 
                 try
                 {
-                    SPConnector.UploadDocument(SP_APPDATA_LIST_NAME, updateValue, doc.FileName, doc.InputStream, _siteUrl);
+                    SPConnector.UploadDocument(SP_APPDOC_LIST_NAME, updateValue, doc.FileName, doc.InputStream, _siteUrl);
                 }
                 catch (Exception e)
                 {

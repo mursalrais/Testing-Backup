@@ -124,3 +124,4 @@ Parameter name: address
 2016-07-24 16:52:00.6661 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService The 'sId' argument is invalid.
 2016-07-24 17:16:25.9453 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService The 'sId' argument is invalid.
 2016-07-25 09:01:20.9835 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Item does not exist. It may have been deleted by another user.
+2016-07-26 14:10:37.1982 MCAWebAndAPI.Service.HR.Recruitment.HRInterviewService Invalid data has been used to update the list item. The field you are trying to update may be read only.

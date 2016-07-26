@@ -138,6 +138,7 @@
     <Compile Include="ViewModel\Form\HR\CalendarEventVM.cs" />
     <Compile Include="ViewModel\Form\HR\ClaimComponentDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\CompensatoryDetailVM.cs" />
+    <Compile Include="ViewModel\Form\HR\CompensatoryMasterVM.cs" />
     <Compile Include="ViewModel\Form\HR\CompensatoryVM.cs" />
     <Compile Include="ViewModel\Form\HR\DependentDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\EducationDetailVM.cs" />
