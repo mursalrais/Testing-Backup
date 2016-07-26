@@ -61,7 +61,7 @@ namespace MCAWebAndAPI.Web.Controllers
             _assetMasterService.CreateAssetMaster(_data);
             return new JavaScriptResult
             {
-                Script = string.Format("window.parent.location.href = '{0}'", "https://eceos2.sharepoint.com/sites/mca-dev/dev/Lists/AssetMaster/AllItems.aspx")
+                Script = string.Format("window.parent.location.href = '{0}'", "https://eceos2.sharepoint.com/sites/mca-dev/bo/Lists/AssetMaster/AllItems.aspx")
             };
         }
 
@@ -71,7 +71,7 @@ namespace MCAWebAndAPI.Web.Controllers
             _assetMasterService.UpdateAssetMaster(_data);
             return new JavaScriptResult
             {
-                Script = string.Format("window.parent.location.href = '{0}'", "https://eceos2.sharepoint.com/sites/mca-dev/dev/Lists/AssetMaster/AllItems.aspx")
+                Script = string.Format("window.parent.location.href = '{0}'", "https://eceos2.sharepoint.com/sites/mca-dev/bo/Lists/AssetMaster/AllItems.aspx")
             };
         }
 

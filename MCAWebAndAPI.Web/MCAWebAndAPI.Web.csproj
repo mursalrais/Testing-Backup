@@ -35,6 +35,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PublishDatabases>false</PublishDatabases>
+    <IncludeIisSettings>false</IncludeIisSettings>
+    <IncludeAppPool>false</IncludeAppPool>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -63,7 +66,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Kendo.Mvc">
-      <HintPath>..\..\..\..\Downloads\MCA-tools\Kendo.Mvc.dll</HintPath>
+      <HintPath>..\..\WORK\Outsourcing\IMS-Web-and-API-master\Kendo.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.Web.Optimization.WebForms">
       <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.WebForms.1.1.3\lib\net45\Microsoft.AspNet.Web.Optimization.WebForms.dll</HintPath>
@@ -74,6 +77,10 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.SharePoint.Client, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files\Common Files\Microsoft Shared\Web Server Extensions\15\ISAPI\Microsoft.SharePoint.Client.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -1349,16 +1356,6 @@
     <Folder Include="Views\HRDataMaster\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MCAWebAndAPI.Model\MCAWebAndAPI.Model.csproj">
-      <Project>{0b0761cd-8a08-4527-b895-a26c36224046}</Project>
-      <Name>MCAWebAndAPI.Model</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MCAWebAndAPI.Service\MCAWebAndAPI.Service.csproj">
-      <Project>{529feab6-e31e-4332-a499-75240b2c85ed}</Project>
-      <Name>MCAWebAndAPI.Service</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Resources\ConfigResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ConfigResource.Designer.cs</LastGenOutput>
@@ -1373,6 +1370,16 @@
       <LastGenOutput>MessageResource.Designer.cs</LastGenOutput>
       <CustomToolNamespace>MCAWebAndAPI.Web.Resources</CustomToolNamespace>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MCAWebAndAPI.Model\MCAWebAndAPI.Model.csproj">
+      <Project>{0b0761cd-8a08-4527-b895-a26c36224046}</Project>
+      <Name>MCAWebAndAPI.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MCAWebAndAPI.Service\MCAWebAndAPI.Service.csproj">
+      <Project>{529feab6-e31e-4332-a499-75240b2c85ed}</Project>
+      <Name>MCAWebAndAPI.Service</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -1389,9 +1396,9 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>15923</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:15924/</IISUrl>
+          <IISUrl>http://localhost:15923/</IISUrl>
           <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
-          <IISAppRootUrl>http://localhost:15924/</IISAppRootUrl>
+          <IISAppRootUrl>http://localhost:15923/</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
