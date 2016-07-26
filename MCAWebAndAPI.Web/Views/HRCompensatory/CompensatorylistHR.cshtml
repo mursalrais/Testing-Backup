@@ -3,36 +3,40 @@
 @model CompensatoryVM
 
 @{
-    ViewBag.Title = "CompensatorylistData";
+    ViewBag.Title = "ShortlistData";
 }
-<style>p { margin: 20px 0 0 0;}
-</style>
-    <legend>Compensatory list</legend>
-    @foreach (var comp in Model.CompensatorytoList)
-    {
+
+@using (Html.BeginForm("UpdateShortlistData", "HRShortlist", FormMethod.Post, new
+{
+    @class = "form-horizontal",
+    enctype = "multipart/form-data"
+}))
+{
     <fieldset>
-        @Html.HiddenFor(m => comp.CmpID)
+        @Html.HiddenFor(m => m.cmpID)
+        @Html.HiddenFor(m => m.cmpName)
+        @Html.HiddenFor(m => m.cmpPosition)
         <div class="row">
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.cmpYearDate).Class("col-md-2 control-label")
+                @Html.Bootstrap().LabelFor(m => m.ddlProfessional).Class("col-md-2 control-label")
                 <div class="col-md-3">
-                    @Html.EditorFor(m => comp.CmpYearDate)
+                    @Html.EditorFor(m => m.ddlProfessional)
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => comp.CmpName).Class("col-md-2 control-label")
+                @Html.Bootstrap().LabelFor(m => m.cmpProjUnit).Class("col-md-2 control-label")
                 <div class="col-md-3">
-                    @Html.EditorFor(m => comp.CmpName)
+                    @Html.EditorFor(m => m.cmpProjUnit)
                 </div>
             </div>
         </div>
-       
+        <legend>Compensatory list</legend>
         <div class="row">
-            @Html.Partial("_CompensantoryDetails", comp.listCompensatoryDetails)
+            @Html.Partial("_CompensantoryDetails", Model.CompensatoryDetails)
         </div>
-        
+
     </fieldset>
 }
 
@@ -40,21 +44,29 @@
 
     <script>
 
+        function OnChangeProfessional(e) {
+            var dataItem = this.dataItem(e.item);
+            if (dataItem.ID != 0) {
+                window.location = "/HRCompensatory/CompensatorylistHR?siteurl=&iD=" + dataItem.ID + "";
+            }
+        };
+
         $(document).ready(function () {
-        //    $("#vac-position").prop('readonly', 'true');
-        //    var positionID = $("#Position").val();
+            $("#vac-position").prop('readonly', 'true');
+            var positionID = $("#Position").val();
 
-        //    var url = "/HRDataMaster/GetPosition/" + positionID;
-        //    $.getJSON(url, function (data) {
-        //        $("#vac-position").prop("value", data.PositionName);
-        //    })
+            var url = "/HRDataMaster/GetPosition/" + positionID;
+            $.getJSON(url, function (data) {
+                $("#vac-position").prop("value", data.PositionName);
+            })
 
-        //    var dropdownlist = $("#ActivePosition_Value").data("kendoDropDownList");
-        //    dropdownlist.select(positionID);
+            var dropdownlist = $("#ActivePosition_Value").data("kendoDropDownList");
+            dropdownlist.select(positionID);
 
         });
     </script>
 }
+
 
 
 

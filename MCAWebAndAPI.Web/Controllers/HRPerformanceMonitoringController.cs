@@ -1,6 +1,7 @@
 ﻿using Elmah;
 using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using MCAWebAndAPI.Service.HR.Recruitment;
+using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;
 using System;
@@ -86,7 +87,7 @@ namespace MCAWebAndAPI.Web.Controllers
                     return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
                 }
             }
-            return RedirectToAction("PerformanceMonitoring", new { ID = ID });
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.PerformancePlan);
         }
 
     }

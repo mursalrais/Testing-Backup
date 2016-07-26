@@ -843,6 +843,7 @@ namespace MCAWebAndAPI.Service.HR.Common
 
         }
 
+       
         public async Task CreateEducationDetailsAsync(int? headerID, IEnumerable<EducationDetailVM> educationDetails)
         {
             CreateEducationDetails(headerID, educationDetails);
@@ -862,5 +863,38 @@ namespace MCAWebAndAPI.Service.HR.Common
         {
             CreateOrganizationalDetails(headerID, organizationalDetails);
         }
+
+        private DependentMaster ConvertToDependentModel_Light(ListItem item)
+        {
+          
+            return new DependentMaster
+            {
+                ID = Convert.ToInt32(item["ID"]),
+                InsuranceNumber = Convert.ToString(item["insurancenr"]),
+                OrganizationInsurance = Convert.ToString(item["insurancenr"]) ,
+                Name=Convert.ToString(item["Title"])
+               // Name = FormatUtil.ConvertLookupToValue(item, "professional")
+            };
+        }
+        public IEnumerable<DependentMaster>     GetDependents()
+        {
+            var models = new List<DependentMaster>
+            {
+                new DependentMaster
+                {
+                    ID = 0,
+                    Name = ""
+                }
+            };
+
+
+            foreach (var item in SPConnector.GetList(SP_PRODEP_LIST_NAME, _siteUrl))
+            {
+                models.Add(ConvertToDependentModel_Light(item));
+            }
+
+            return models;
+        }
+
     }
 }

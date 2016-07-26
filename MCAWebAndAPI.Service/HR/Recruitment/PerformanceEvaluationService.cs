@@ -87,6 +87,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             var listItem = SPConnector.GetList("Professional Master", _siteUrl, caml);
             var updatedValues = new Dictionary<string, object>();
             string emailTo;
+            int IdDetail;
             foreach (var item in listItem)
             {
                 updatedValues = new Dictionary<string, object>();
@@ -103,6 +104,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 {
                     SPConnector.AddListItem(SP_DETAIL_LIST_NAME, updatedValues, _siteUrl);
                 }
+
                 catch (Exception e)
                 {
                     logger.Error(e);
@@ -116,9 +118,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     if (emailTo == "" || emailTo == null)
                     {
                         emailTo = "anugerahseptian@gmail.com";
-                    }                   
-                    EmailUtil.Send(emailTo, "Notify to initiate Performance Plan", string.Format(emailMessage, UrlResource.ProfessionalPerformancePlan));
+                    }
 
+                    IdDetail =   SPConnector.GetLatestListItemID(SP_DETAIL_LIST_NAME, _siteUrl);
+                    EmailUtil.Send(emailTo, "Notify to initiate Performance Evaluation", string.Format(emailMessage, _siteUrl,IdDetail));
+                    
                 }
                 catch (Exception e)
                 {

@@ -38,6 +38,25 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             }
         }
 
+        //[UIHint("InGridAjaxCascadeComboBox")]
+        [UIHint("InGridAjaxComboBox")]
+        public AjaxComboBoxVM ProfessionalPosition { get; set; } = new AjaxComboBoxVM();
+
+        /// <summary>
+        /// Get Position Default Value
+        /// </summary>
+        public static AjaxComboBoxVM GetProfessionalPositionDefaultValue(AjaxComboBoxVM model = null)
+        {
+            if (model == null)
+            {
+                return new AjaxComboBoxVM();
+            }
+            else
+            {
+                return model;
+            }
+        }
+
         /// <summary>
         /// Approver Name
         /// </summary>
@@ -93,15 +112,15 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public string TransactionType { get; set; }
 
         public string RequestorUnit { get; set; }
-        
+
         public string RequestorPosition { get; set; }
 
         public string ApproverLevel { get; set; }
 
         public string AppPosition { get; set; }
-       
+
         public string WorkflowType { get; set; }
-        
+
         /// <summary>
         /// Position ID
         /// </summary>
@@ -135,8 +154,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         [UIHint("InGridComboBox")]
         public InGridComboBoxVM ApproverUnit { get; set; } = new InGridComboBoxVM();
-        
-        
+
+
         public static IEnumerable<InGridComboBoxVM> GetUnitOptions()
         {
             var index = 0;
@@ -175,6 +194,55 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public static InGridComboBoxVM GetUnitDefaultValue(InGridComboBoxVM model = null)
         {
             var options = GetUnitOptions();
+            if (model == null || (model.Value == null && model.Text == null) || string.IsNullOrEmpty(model.Text))
+                return options.FirstOrDefault();
+
+            return options.FirstOrDefault(e => e.Value == null ?
+                e.Value == model.Value : e.Text == model.Text);
+        }
+
+        [UIHint("InGridComboBox")]
+        public InGridComboBoxVM ProfessionalUnit { get; set; } = new InGridComboBoxVM();
+
+
+        public static IEnumerable<InGridComboBoxVM> GetProfessionalUnitOptions()
+        {
+            var index = 0;
+            var options = new string[] {
+                "Executive Director",
+                "Executive Officer",
+                "Legal Unit",
+                "Monitoring & Evaluation Unit",
+                "Communications & Outreach Unit",
+                "Risk & Audit Unit",
+                "Program Div.",
+                "Procurement Modernization Project",
+                "Community-Based Health & Nutrition Project",
+                "Green Prosperity Project",
+                "Cross-Cutting Sector",
+                "Economic Analysis Unit",
+                "Social & Gender Assessment Unit",
+                "Environment & Social Performance Unit",
+                "Operations Support Div.",
+                "Finance Unit",
+                "Procurement Unit",
+                "Information Technology Unit",
+                "Human Resources Unit",
+                "Office Support Unit",
+                "Fiscal Agent (FA)",
+                "Procurement Agent (PA)"};
+
+            return options.Select(e =>
+                new InGridComboBoxVM
+                {
+                    Value = ++index,
+                    Text = e
+                });
+        }
+
+        public static InGridComboBoxVM GetProfessionalUnitDefaultValue(InGridComboBoxVM model = null)
+        {
+            var options = GetProfessionalUnitOptions();
             if (model == null || (model.Value == null && model.Text == null) || string.IsNullOrEmpty(model.Text))
                 return options.FirstOrDefault();
 

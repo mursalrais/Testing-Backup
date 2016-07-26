@@ -1,5 +1,7 @@
 ﻿
 @using MCAWebAndAPI.Model.ViewModel.Form.HR
+@using MCAWebAndAPI.Web.Helpers
+
 @model CompensatoryVM
 
 @{
@@ -12,8 +14,9 @@
     enctype = "multipart/form-data"
 }))
 {
-    <div class="form-actions">
         <fieldset>
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary()
             @Html.HiddenFor(m => m.cmpID)
             @Html.HiddenFor(m => m.cmpName)
             @Html.HiddenFor(m => m.cmpPosition)
@@ -38,29 +41,88 @@
             <div class="row">
                 @Html.Partial("_InputCompensantoryDetails", Model.CompensatoryDetails)
             </div>
+            <div class="col-sm-12">
 
-        </fieldset>
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="pull-right">
-                        <button id="submit-button" class="btn btn-primary" type="submit" onclick="onValidateKendoDetail">
-                            <i class="fa fa-save"></i>
-                            save
-                        </button>
+                <div class="form-group" id="ParentDiv">
+                    <div class="col-sm-8">
+                        @Html.DisplayFor(m => m.StatusForm)
                     </div>
                 </div>
             </div>
-        </div>
+
+            @if (Model.cmpEmail != null)
+            {
+                <legend>Approval Workflow</legend>
+                <div id="workflow-placeholder" class="row" />
+            }
+            
+
+</fieldset>
 }
 
+@if (Model.StatusForm != "")
+{
+    <div class="form-actions">
+        <div class="row">
+            <div class="col-sm-12">
+                <button id="submit-button" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    Submit For Approval
+                </button>
+                <button id="submit-draft-initiate-button" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    Save As Draft
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+
+@if (Model.StatusForm == "Pending Approval 1 of 2")
+{
+    <div class="form-actions">
+        <div class="row">
+            <div class="col-sm-12">
+                <button id="submit-button" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    Approve
+                </button>
+                <button id="reject1-button" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    Reject
+                </button>
+            </div>
+        </div>
+    </div>
+}
+@if (Model.StatusForm == "Approved")
+{
+    <div class="form-actions">
+        <div class="row">
+            <div class="col-sm-12">
+                <button id="print-button" class="btn btn-primary" type="button">
+                    Print
+                </button>
+            </div>
+        </div>
+    </div>
+}
 @section scripts{
 
-    <script>
-       
+    <script type="text/javascript">
         $(document).ready(function () {
-            //var positionID = $("#CmpName").val() +" - "+ $("#CmpPosition").val();
-            //$("#NamePos").prop("value", positionID);
-            //$("#EditMode").prop("value", "2");
+            debugger;
+
+            $("#submit-button").click(function () {
+                $("form").submit();
+            });
+
+
+            var Requestor = '@(SessionManager.Get<string>("RequestorUserLogin"))';
+            if (Requestor != null) {
+                displayWorkflowRouter("workflow-placeholder", "@ViewBag.ListName", Requestor);
+            }
         });
 
         function getDayName(date) {

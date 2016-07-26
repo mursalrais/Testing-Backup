@@ -142,6 +142,15 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to /Lists/InsuranceClaim.
+        /// </summary>
+        public static string InsuranceClaim {
+            get {
+                return ResourceManager.GetString("InsuranceClaim", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0}/Lists/Application/Interviewlistdata.aspx?POSID={1}.
         /// </summary>
         public static string InterviewDataList {
@@ -201,6 +210,24 @@ namespace MCAWebAndAPI.Service.Resources {
         public static string MonthlyFee {
             get {
                 return ResourceManager.GetString("MonthlyFee", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to /Lists/PerformanceEvaluation.
+        /// </summary>
+        public static string PerformanceEvaluation {
+            get {
+                return ResourceManager.GetString("PerformanceEvaluation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to /Lists/PerformancePlan.
+        /// </summary>
+        public static string PerformancePlan {
+            get {
+                return ResourceManager.GetString("PerformancePlan", resourceCulture);
             }
         }
         

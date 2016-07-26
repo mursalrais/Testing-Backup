@@ -1,0 +1,32 @@
+﻿@model MCAWebAndAPI.Model.ViewModel.Control.DropDownVM
+
+@if (Model.OnSelectEventName.IsEmpty())
+{
+    @(Html.Kendo().DropDownListFor(m => m.Value)
+            .BindTo(Model.Choices)
+            .DataTextField("Text")
+            .DataValueField("Value")
+            .Filter("contains")
+            .HtmlAttributes(new
+            {
+                @class = "form-control",
+                style = "width:100%;"
+            })
+    )
+}
+else
+{
+    @(Html.Kendo().DropDownListFor(m => m.Value)
+            .BindTo(Model.Choices)
+            .Filter("contains")
+            .Events(e => e.Select(Model.OnSelectEventName))
+            .DataTextField("Text")
+            .DataValueField("Value")
+            .HtmlAttributes(new
+            {
+                @class = "form-control",
+                style = "width:100%;"
+            })
+    )
+}
+@Html.ValidationMessageFor(model => model)

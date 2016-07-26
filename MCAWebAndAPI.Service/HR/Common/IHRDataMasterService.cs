@@ -36,6 +36,8 @@ namespace MCAWebAndAPI.Service.HR.Common
 
         IEnumerable<PositionMaster> GetPositions();
 
+        IEnumerable<PositionMaster> GetPositionsManpower(string Level);
+
         int? EditProfessionalData(ProfessionalDataVM viewModel);
         
         void CreateEducationDetails(int? headerID, IEnumerable<EducationDetailVM> educationDetails);
@@ -58,5 +60,9 @@ namespace MCAWebAndAPI.Service.HR.Common
         void SendEmailValidation(string emailTo, string emailMessages);
         PositionMaster GetPosition(int id);
         void SetValidationStatus(int? id, Workflow.ProfessionalValidationStatus validationStatus);
+
+
+        IEnumerable<DependentMaster> GetDependents();
+
     }
 }

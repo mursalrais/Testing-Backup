@@ -14,6 +14,7 @@
 {
     <fieldset>
         <legend>General</legend>
+
         <div class="row">
             @Html.Partial("_General", Model)
         </div>
@@ -93,6 +94,19 @@
 @section scripts{
 
     <script>
+
+        function filterLevel() {
+            return {
+                Level: $('#DivisionProjectUnit_Value').data("kendoDropDownList").dataItem($('#DivisionProjectUnit_Value').data("kendoDropDownList").select())
+            };
+
+        }
+
+        function OnBehalfOfChange(e) {
+            var dataItem = this.dataItem(e.item);
+            $("#EmailOnBehalf").prop("value", dataItem.OfficeEmail);
+        }
+
         function onPositionChange(e) {
             var dataItem = $("#Position_Value").data("kendoDropDownList").dataItem(e.item);
             //var urlKeyPosition = "/HRDataMaster/GetKeyPosition/" + dataItem.ID;
