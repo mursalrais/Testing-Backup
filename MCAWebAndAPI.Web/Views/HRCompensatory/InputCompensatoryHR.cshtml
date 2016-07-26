@@ -34,10 +34,20 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.ddlCompensatoryID).Class("col-md-2 control-label")
+                    <div class="col-md-3">
+                        @Html.EditorFor(m => m.ddlCompensatoryID)
+                    </div>
+                </div>
+            </div>
             <legend>Compensatory list</legend>
             <div class="row">
-                @Html.Partial("_InputCompensantoryDetails", Model.CompensatoryDetails)
+                @*@Html.Partial("_InputCompensantoryDetails", Model.CompensatoryDetails)*@
             </div>
+
+            <div id="compensatorylist-placeholder" class="row" />
 
         </fieldset>
         <div class="row">
@@ -57,11 +67,37 @@
 
     <script>
 
-        function OnChangeProfessional(e) {
+        function filterLevel() {
+            return {
+                idProf: $('#ddlProfessional_Value').data("kendoDropDownList").dataItem($('#ddlProfessional_Value').data("kendoDropDownList").select()).ID
+            };
+        }
+
+        function getUrlVars() {
+            var vars = {};
+            var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,
+            function (m, key, value) {
+                vars[key] = value;
+            });
+            return vars;
+        }
+
+        function OnChangeCompensatory(e) {
+            debugger;
             var dataItem = this.dataItem(e.item);
-            if (dataItem.ID != 0) {
-                window.location = "/HRCompensatory/InputCompensatoryHR?siteurl=&iD=" + dataItem.ID + "";
-            }
+            var idComp = dataItem.ID
+            var idProf = getUrlVars()["iD"];
+
+            //$("#CompensatoryDetails").data("kendoGrid").dataSource.data([]);
+            //$("#CompensatoryDetails").data("kendoGrid").refresh();
+
+            var url = "/HRCompensatory/GetCompensatoryDetails?idComp=" + idComp;
+            
+            $('#compensatorylist-placeholder').load(url);
+
+            //if (dataItem.ID != 0 && IdProf == null) {
+            //    window.location = "/HRCompensatory/InputCompensatoryHR?siteurl=&idCmp=" + dataItem.ID + "";
+            //}
         };
 
         $(document).ready(function () {
@@ -84,6 +120,57 @@
                 return day[date.getDay()];
             };
         }
+
+        function onChange(e) {
+            var container = e.container;
+            var tr = container.closest('tr');
+            var data = this.dataItem(tr);
+            var start = data.StartTime.getHours();
+            var finish = data.FinishTime.getHours();
+            var finishsec = data.FinishTime.getHours();
+            var range;
+            var rowgrid = $("#CompensatoryDetails").data("kendoGrid").tbody.find("tr");
+            var i = -1
+            var j = -1
+            var tr = container.closest('tr');
+
+            rowgrid.each(function (e) {
+                i++;
+                var xdate = $("#Dateid" + i).val();
+                rowgrid.each(function (e) {
+                    j++;
+                    var ydate = $("#Dateid" + j).val();
+                    if (i !== j) {
+                        if (xdate == ydate) {
+                            alert("Date you have chosen already exists, please choose another date..!!")
+                        }
+                    }
+                });
+            });
+            debugger;
+            if ((finish + finishsec) <= start) {
+                alert("FinishTime can not be smaller than the starttime..!!")
+            }
+
+            if (start < finish) {
+                range = finish - start
+                data.set("CmpTotalHours", range);
+                data.CmpTotalHours = range;
+                data.set("TotalDay", range / 12)
+            }
+            data.set("EditMode", 1);
+        }
+
+        function onDataBoundDependentDetails(e) {
+            var grid = $("#CompensatoryDetails").data("kendoGrid");
+            hideDeletedRowKendoDetail(grid);
+        }
+
+        function GetDetailComplist(dataItem) {
+            var data = $("#CompensatoryDetails").data("kendoGrid").dataSource.data();
+            return data.indexOf(dataItem);
+        }
+
     </script>
 }
 

@@ -129,20 +129,6 @@ namespace MCAWebAndAPI.Service.HR.Common
             return models;
         }
 
-        public IEnumerable<PositionMaster> GetPositionsManpower(string Level)
-        { 
-
-            string caml = @"<View><Query><Where><Eq><FieldRef Name='projectunit' /><Value Type='Choice'>" + Level+"</Value></Eq></Where></Query><ViewFields><FieldRef Name='ID' /><FieldRef Name='ContentType' /><FieldRef Name='Title' /><FieldRef Name='Modified' /><FieldRef Name='Created' /><FieldRef Name='Author' /><FieldRef Name='Editor' /><FieldRef Name='_UIVersionString' /><FieldRef Name='Attachments' /><FieldRef Name='Edit' /><FieldRef Name='LinkTitleNoMenu' /><FieldRef Name='LinkTitle' /><FieldRef Name='DocIcon' /><FieldRef Name='ItemChildCount' /><FieldRef Name='FolderChildCount' /><FieldRef Name='AppAuthor' /><FieldRef Name='AppEditor' /><FieldRef Name='projectunit' /><FieldRef Name='iskeyposition' /><FieldRef Name='positionstatus' /><FieldRef Name='Remarks' /></ViewFields><QueryOptions /></View>";
-            var models = new List<PositionMaster>();
-
-            foreach (var item in SPConnector.GetList(SP_POSMAS_LIST_NAME, _siteUrl,caml))
-            {
-                models.Add(ConvertToPositionsModel(item));
-            }
-
-            return models;
-        }
-
         /// <summary>
         /// 
         /// </summary>
@@ -155,7 +141,6 @@ namespace MCAWebAndAPI.Service.HR.Common
             viewModel.ID = Convert.ToInt32(item["ID"]);
             viewModel.PositionName = Convert.ToString(item["Title"]);
             viewModel.IsKeyPosition = Convert.ToString(item["iskeyposition"]);
-            viewModel.ProjectUnit = Convert.ToString(item["projectunit"]);
             return viewModel;
         }
 
@@ -550,7 +535,8 @@ namespace MCAWebAndAPI.Service.HR.Common
 
             return viewModel.ID;
         }
-        
+
+
         public void CreateEducationDetails(int? headerID, IEnumerable<EducationDetailVM> viewModels)
         {
             foreach (var viewModel in viewModels)
@@ -839,7 +825,7 @@ namespace MCAWebAndAPI.Service.HR.Common
              
             return position;
         }
-        
+
         public void SetValidationStatus(int? id, Workflow.ProfessionalValidationStatus validationStatus)
         {
             var updatedValue = new Dictionary<string, object>();
@@ -856,7 +842,8 @@ namespace MCAWebAndAPI.Service.HR.Common
             }
 
         }
-               
+
+       
         public async Task CreateEducationDetailsAsync(int? headerID, IEnumerable<EducationDetailVM> educationDetails)
         {
             CreateEducationDetails(headerID, educationDetails);
@@ -885,13 +872,22 @@ namespace MCAWebAndAPI.Service.HR.Common
                 ID = Convert.ToInt32(item["ID"]),
                 InsuranceNumber = Convert.ToString(item["insurancenr"]),
                 OrganizationInsurance = Convert.ToString(item["insurancenr"]) ,
-                Name = FormatUtil.ConvertLookupToValue(item, "professional")
+                Name=Convert.ToString(item["Title"])
+               // Name = FormatUtil.ConvertLookupToValue(item, "professional")
             };
         }
-
-        public IEnumerable<DependentMaster> GetDependents()
+        public IEnumerable<DependentMaster>     GetDependents()
         {
-            var models = new List<DependentMaster>();
+            var models = new List<DependentMaster>
+            {
+                new DependentMaster
+                {
+                    ID = 0,
+                    Name = ""
+                }
+            };
+
+
             foreach (var item in SPConnector.GetList(SP_PRODEP_LIST_NAME, _siteUrl))
             {
                 models.Add(ConvertToDependentModel_Light(item));

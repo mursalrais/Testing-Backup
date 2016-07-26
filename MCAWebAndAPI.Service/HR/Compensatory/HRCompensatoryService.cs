@@ -8,6 +8,8 @@ using Microsoft.SharePoint.Client;
 using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Model.HR.DataMaster;
+using System.Threading.Tasks;
+using System.Linq;
 
 namespace MCAWebAndAPI.Service.HR.Recruitment
 {
@@ -64,7 +66,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             string crstatus = "";
 
             if (iD == null)
-                return null;
+                return viewModel;
 
             var caml = @"<View>  
                     <Query> 
@@ -424,24 +426,50 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             }
         }
 
-        public IEnumerable<PositionMaster> GetPositions()
+        public IEnumerable<CompensatoryMasterVM> GetCompensatoryId(int? idProf)
         {
             var caml = @"<View>  
                     <Query> 
-                       <Where><Eq><FieldRef Name='manpowerrequeststatus' /><Value Type='Text'>Active</Value></Eq></Where><OrderBy><FieldRef Name='positionrequested_x003a_Position' /></OrderBy> 
+                        <Where>
+                          <Eq>
+                             <FieldRef Name='professional_x003a_ID' />
+                             <Value Type='Lookup'>"+ idProf +@"</Value>
+                          </Eq>
+                       </Where>
                     </Query> 
-                    <ViewFields><FieldRef Name='manpowerrequeststatus' /> <FieldRef Name='ID' /><FieldRef Name='positionrequested' /><FieldRef Name='positionrequested_x003a_Position' /><FieldRef Name='positionrequested_x003a_ID' /></ViewFields></View>";
+                    <ViewFields>
+                       <FieldRef Name='Title' />
+                       <FieldRef Name='submitteddate' />
+                       <FieldRef Name='ID' />
+                    </ViewFields></View>";
 
-            var models = new List<PositionMaster>();
+            var models = new List<CompensatoryMasterVM>();
 
-            foreach (var item in SPConnector.GetList(SP_MANPOW_LIST_NAME, _siteUrl, caml))
+            foreach (var item in SPConnector.GetList(SP_COMREQ_LIST_NAME, _siteUrl, caml))
             {
-                models.Add(ConvertToPositionsModel(item));
+                models.Add(ConvertToCompensatoryMasterModel(item));
             }
 
+            models = models.OrderBy(e => e.CompensatoryDate).ToList();
             return models;
 
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private CompensatoryMasterVM ConvertToCompensatoryMasterModel(ListItem item)
+        {
+            var viewModel = new CompensatoryMasterVM();
+
+            viewModel.ID = Convert.ToInt32(item["ID"]);
+            viewModel.CompensatoryID = Convert.ToInt32(item["ID"]);
+            viewModel.CompensatoryDate = Convert.ToDateTime(item["submitteddate"]);
+            viewModel.CompensatoryTitle = Convert.ToString(item["Title"]);
+
+            return viewModel;
+        }
+
 
         /// <summary>
         /// 
@@ -494,6 +522,48 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             var entitiy = new CompensatoryVM();
             entitiy = header;
             return true;
+        }
+
+
+       public async Task<CompensatoryVM> GetCompensatoryDetailGrid(int? idComp)
+        {
+            var viewModel = new CompensatoryVM();
+
+            var caml = @"<View>  
+                              <Query> 
+                            <Where>
+                             <Eq>
+                                <FieldRef Name='compensatoryrequest' />
+                                <Value Type='Lookup'>" + idComp + @"</Value>
+                             </Eq>
+                            </Where>
+                                </Query> 
+                               <Query />
+                            <ViewFields>
+                               <FieldRef Name='Title' />
+                               <FieldRef Name='compensatoryrequest' />
+                               <FieldRef Name='compensatorydate' />
+                               <FieldRef Name='compensatorystarttime' />
+                               <FieldRef Name='compensatoryendtime' />
+                               <FieldRef Name='totalhours' />
+                               <FieldRef Name='totaldays' />
+                               <FieldRef Name='remarks' />
+                               <FieldRef Name='compensatorystatus' />
+                               <FieldRef Name='visibleto' />
+                               <FieldRef Name='ID' />
+                               <FieldRef Name='Attachments' />
+                            </ViewFields>
+                           </View>";
+
+            var compensatorylistDetails = new List<CompensatoryDetailVM>();
+            foreach (var item in SPConnector.GetList(SP_COMDET_LIST_NAME, _siteUrl, caml))
+            {
+                compensatorylistDetails.Add(ConvertToCompDetailVM(item));
+            }
+
+            viewModel.CompensatoryDetails = compensatorylistDetails;
+
+            return viewModel;
         }
     }
 }

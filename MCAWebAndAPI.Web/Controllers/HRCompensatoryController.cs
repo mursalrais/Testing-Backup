@@ -181,5 +181,32 @@ namespace MCAWebAndAPI.Web.Controllers
                 JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetCompensatoryddl(int? idProf = null)
+        {
+            _service.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));
+
+            var positions = _service.GetCompensatoryId(idProf);
+
+            return Json(positions.Select(e =>
+                new {
+                    e.ID,
+                    e.CompensatoryID,
+                    e.CompensatoryDate,
+                    e.CompensatoryTitle,
+                    Desc = string.Format("{0} {1}", e.CompensatoryDate, e.CompensatoryTitle)
+                }),
+                JsonRequestBehavior.AllowGet);
+        }
+
+        public async Task<ActionResult> GetCompensatoryDetails(int idComp)
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            var viewmodel = _service.GetComplistbyCmpid(idComp);
+
+            return PartialView("_InputCompensantoryDetails", viewmodel.CompensatoryDetails);
+        }
+
     }
 }

@@ -1,0 +1,83 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+
+@model FeeSlipVM
+
+@using (Ajax.BeginForm("CreateFeeSlip", "HRFeeSlip",
+                                                                            FormMethod.Post,
+                                                                            new AjaxOptions
+                                                                            {
+                                                                                OnBegin = "onBeginForm",
+                                                                                OnComplete = "onCompleteForm",
+                                                                                OnSuccess = "onSuccessFormEmbed",
+                                                                                OnFailure = "onFailureForm"
+                                                                            }, new { @class = "form-horizontal" }))
+{<fieldset>
+        <legend>Form Monthly Fee</legend>
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary()
+
+        <div class="col-sm-12">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Slip).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.Slip)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.ProfessionalID).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.ProfessionalID)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Name).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.Name)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.JoiningDate).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.JoiningDate)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Designation).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.Designation)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.PaymentMode).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.PaymentMode)
+                </div>
+            </div>
+        </div>
+        <legend>Fee Slip Detail</legend>
+        <div class="row">
+            @Html.Partial("_FeeSlipDetails", Model)
+        </div>
+    </fieldset>
+}
+
+<div class="form-actions">
+    <div class="row">
+        <div class="col-sm-12">
+            <button id="submit-button" class="btn btn-primary" type="submit">
+                <i class="fa fa-save"></i>
+                Submit
+            </button>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#submit-button").click(function () {
+                $("form").submit();
+            });
+        });
+    </script>
+}

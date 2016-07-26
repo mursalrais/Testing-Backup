@@ -197,6 +197,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         };
 
         [UIHint("MultiFileUploader")]
+        [DisplayName("Documents (Max. 2MB)")]
         public IEnumerable<HttpPostedFileBase> Documents { get; set; } = new List<HttpPostedFileBase>();
     }
 }

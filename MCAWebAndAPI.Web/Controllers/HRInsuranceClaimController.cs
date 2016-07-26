@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
-using Elmah;
+using Kendo.Mvc.Extensions;
+using Kendo.Mvc.UI;
 using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using MCAWebAndAPI.Service.HR.InsuranceClaim;
 using MCAWebAndAPI.Service.Resources;
@@ -25,11 +24,12 @@ namespace MCAWebAndAPI.Web.Controllers
             _service = new InsuranceClaimService();
         }
 
-        public ActionResult CreateInsuranceClaim(string siteUrl = null, int? ID = null)
+        //public ActionResult CreateInsuranceClaim(string siteUrl = null, string useremail = "junindar@gmail.com")
+             public ActionResult CreateInsuranceClaim(string siteUrl = null, string useremail = null)
         {
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-            var viewModel = _service.GetPopulatedModel();
+            var viewModel = _service.GetPopulatedModel(useremail);
 
             return View("CreateInsuranceClaim", viewModel);
 
@@ -66,16 +66,34 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            try
-            {
-                viewModel.ClaimPaymentDetails = BindClaimPaymentDetails(form, viewModel.ClaimPaymentDetails);
-                _service.CreateClaimPaymentDetails(headerID, viewModel.ClaimPaymentDetails);
-            }
-            catch (Exception e)
-            {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
-            }
+          
+
+            //send email to professional
+            //try
+            //{
+            //    if (emailTo == "" || emailTo == null)
+            //    {
+            //        emailTo = "anugerahseptian@gmail.com";
+            //    }
+            //    EmailUtil.Send(emailTo, "Notify to initiate Performance Plan", string.Format(emailMessage, UrlResource.ProfessionalPerformancePlan));
+
+            //}
+            //catch (Exception e)
+            //{
+            //    logger.Error(e);
+            //    throw e;
+            //}
+
+            //try
+            //{
+            //    viewModel.ClaimPaymentDetails = BindClaimPaymentDetails(form, viewModel.ClaimPaymentDetails);
+            //    _service.CreateClaimPaymentDetails(headerID, viewModel.ClaimPaymentDetails);
+            //}
+            //catch (Exception e)
+            //{
+            //    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            //    return JsonHelper.GenerateJsonErrorResponse(e);
+            //}
 
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.InsuranceClaim);
            // return JsonHelper.GenerateJsonSuccessResponse(siteUrl);
@@ -108,6 +126,61 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             return array;
         }
+
+
+        public ActionResult EditInsuranceClaim(string siteUrl ,int ? ID , string useremail = null)
+        {
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            var viewModel = _service.GetInsuranceHeader(ID, useremail);
+
+            return View(viewModel);
+        }
+
+
+        public ActionResult UpdateInsuranceClaim(FormCollection form, InsuranceClaimVM viewModel, string site)
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            _service.UpdateHeader(viewModel);
+
+
+            try
+            {
+                viewModel.ClaimComponentDetails = BindClaimComponentDetails(form, viewModel.ClaimComponentDetails);
+                _service.CreateClaimComponentDetails(viewModel.ID, viewModel.ClaimComponentDetails);
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            //try
+            //{
+            //    viewModel.ClaimPaymentDetails = BindClaimPaymentDetails(form, viewModel.ClaimPaymentDetails);
+            //    _service.CreateClaimPaymentDetails(viewModel.ID, viewModel.ClaimPaymentDetails);
+            //}
+            //catch (Exception e)
+            //{
+            //    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            //    return JsonHelper.GenerateJsonErrorResponse(e);
+            //}
+
+
+
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.InsuranceClaim);
+        }
+
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult EditingInline_Destroy([DataSourceRequest] DataSourceRequest request, ClaimComponentDetailVM component)
+        {
+            return Json(new[] { component }.ToDataSourceResult(request, ModelState));
+        }
+
 
     }
 }
