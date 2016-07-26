@@ -15,7 +15,7 @@ namespace MCAWebAndAPI.Service.Common
             string requestorPosition, 
             string requestorUnit);
 
-        IEnumerable<ProfessionalMaster> GetApproverNames(string position);
+        IEnumerable<ProfessionalMaster> GetApproverNames(string unit, string position);
 
         Task<IEnumerable<PendingApprovalItemVM>> GetPendingApprovalItemsAsync(string userLogin);
 
@@ -31,5 +31,7 @@ namespace MCAWebAndAPI.Service.Common
             int headerID, int level, string message);
 
         string GetPositionName(int position);
+
+        string GetUnitName(int unit);
     }
 }

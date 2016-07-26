@@ -26,9 +26,6 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult CreateMonthlyFee(string siteUrl = null)
         {
-
-
-
             // MANDATORY: Set Site URL
             _hRPayrollService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
@@ -43,12 +40,6 @@ namespace MCAWebAndAPI.Web.Controllers
         [HttpPost]
         public ActionResult SubmitMonthlyFee(FormCollection form, MonthlyFeeVM viewModel)
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            //    var errorMessages = BindHelper.GetErrorMessages(ModelState.Values);
-            //    return JsonHelper.GenerateJsonErrorResponse(errorMessages);
-            //}
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _hRPayrollService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 

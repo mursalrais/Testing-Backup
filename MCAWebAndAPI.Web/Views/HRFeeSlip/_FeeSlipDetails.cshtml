@@ -1,0 +1,73 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model FeeSlipVM
+
+<div class="col-sm-12">
+
+    @(Html.Kendo().Grid(Model.FeeSlipDetails)
+        .Name("FeeSlipDetails")
+        .ToolBar(tools => tools.Create().Text("Add New Fee"))
+        .Editable(editable => editable.Mode(GridEditMode.InCell)
+        .CreateAt(GridInsertRowPosition.Bottom))
+        .Columns(columns =>
+        {
+            columns.Bound(p => p.Fee).ClientTemplate("#= Fee #" +
+            "<input type='hidden' name='FeeSlipDetails[#= getFeeSlipDetail(data)#].FeeSlip' value='#= Fee #' />"
+            );
+            columns.Bound(p => p.Deduction).ClientTemplate("#= Deduction #" +
+            "<input type='hidden' name='FeeSlipDetails[#= getFeeSlipDetail(data)#].FeeSlip' value='#= Deduction #' />"
+            );
+            columns.Bound(p => p.TotalIncome).ClientTemplate("#= TotalIncome #" +
+            "<input type='hidden' name='FeeSlipDetails[#= getFeeSlipDetail(data)#].AnnualFee' value='#= TotalIncome #' />"
+            );
+            columns.Bound(p => p.TotalDeduction).ClientTemplate("#= TotalDeduction #" +
+            "<input type='hidden' name='FeeSlipDetails[#= getFeeSlipDetail(data)#].Currency.Text' value='#= TotalDeduction #' />"
+            );
+
+            columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
+            "<input type='hidden' name='FeeSlipDetails[#= getFeeSlipDetail(data)#].ID' value='#= ID #' />"
+            );
+
+            columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
+            "<input type='hidden' name='FeeSlipDetails[#= getFeeSlipDetail(data)#].EditMode' value='#= EditMode #' />"
+            );
+
+            columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
+            .Click("onDeleteKendoDetail")).Width(100);
+        })
+        .Events(e =>
+        {
+            e.Edit("onEditKendoDetail");
+            e.DataBound("onDataBoundFeeSlipDetails");
+        })
+        .DataSource(dataSource => dataSource.Ajax()
+        .Model(model =>
+        {
+            model.Id(p => p.ID);
+        })
+        .ServerOperation(false)
+        )
+    )
+</div>
+
+<div class="col-sm-12">
+    <div class="form-actions">
+        <div class="form-group">
+            @Html.Bootstrap().LabelFor(m => m.TakeHomePay).Class("col-sm-4 control-label")
+            <div class="col-sm-8">
+                @Html.DisplayFor(m => m.TakeHomePay)
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function getFeeSlipDetail(dataItem) {
+        var data = $("#FeeSlipDetails").data("kendoGrid").dataSource.data();
+        return data.indexOf(dataItem);
+    }
+
+    function onDataBoundFeeSlipDetails(e) {
+        var grid = $("#FeeSlipDetails").data("kendoGrid");
+        hideDeletedRowKendoDetail(grid);
+    }
+</script>

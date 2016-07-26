@@ -16,7 +16,7 @@
     <RootNamespace>MCAWebAndAPI.Web</RootNamespace>
     <AssemblyName>MCAWebAndAPI.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -34,7 +34,7 @@
     <DefineConstants>TRACE;DEBUG;ght</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PublishDatabases>true</PublishDatabases>
+    <PublishDatabases>false</PublishDatabases>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -1228,10 +1228,9 @@
     <Content Include="Views\HRInsuranceClaim\CreateInsuranceClaim.cshtml" />
     <Content Include="Views\HRInsuranceClaim\_ClaimComponentDetail.cshtml" />
     <Content Include="Views\HRInsuranceClaim\_MedicalClaimDetail.cshtml" />
-    <Content Include="Views\HRExitProcedure\_ExitProcedureDataHR.cshtml" />
-    <Content Include="Views\HRExitProcedure\ViewExitProcedureForApprover.cshtml" />
-    <Content Include="Views\HRExitProcedure\_ExitProcedureChecklistForApprover.cshtml" />
-    <Content Include="Views\HRExitProcedure\_ExitProcedureDataForApprover.cshtml" />
+    <Content Include="Views\HRInsuranceClaim\EditInsuranceClaim.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\DropDown.cshtml" />
+    <Content Include="Views\HRInsuranceClaim\SubmitAXA.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1390,9 +1389,9 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>15923</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:15923/</IISUrl>
+          <IISUrl>http://localhost:15924/</IISUrl>
           <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
-          <IISAppRootUrl>http://localhost:15923/</IISAppRootUrl>
+          <IISAppRootUrl>http://localhost:15924/</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
