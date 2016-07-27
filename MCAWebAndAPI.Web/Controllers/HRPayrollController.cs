@@ -68,14 +68,18 @@ namespace MCAWebAndAPI.Web.Controllers
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.MonthlyFee);
         }
 
-        public ActionResult EditMonthlyFee(int ID, string siteUrl = null)
+        public ActionResult EditMonthlyFee(int ID, string siteUrl = null, string Display = null)
         {
             _hRPayrollService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             var viewModel = _hRPayrollService.GetHeader(ID);
-
-            return View(viewModel);
+            var form = "EditMonthlyFee";
+            if (Display == "Yes")
+            {
+                form = "DisplayMonthlyFee";
+            }
+            return View(form, viewModel);
         }
 
         [HttpPost]

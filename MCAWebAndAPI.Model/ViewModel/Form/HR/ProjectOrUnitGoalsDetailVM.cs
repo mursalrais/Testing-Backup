@@ -16,6 +16,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// projectunitgoals
         /// </summary>
         [UIHint("TextArea")]
+        [Required]
         public string ProjectOrUnitGoals { get; set; }
     }
 }

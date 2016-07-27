@@ -41,17 +41,18 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public static InGridComboBoxVM GetCategoryDefaultValue(InGridComboBoxVM model = null)
         {
             var options = GetCategoryOptions();
-            if (model == null || model.Value == null || string.IsNullOrEmpty(model.Text))
+            if (model == null || (model.Value == null && model.Text == null) || string.IsNullOrEmpty(model.Text))
                 return options.FirstOrDefault();
 
-            return options.FirstOrDefault(e =>
-                e.Value == model.Value || e.Text == model.Text);
+            return options.FirstOrDefault(e => e.Value == null ?
+                e.Value == model.Value : e.Text == model.Text);
         }
 
         /// <summary>
         /// individualgoalplan
         /// </summary>
         [UIHint("TextArea")]
+        [Required]
         public string IndividualGoalAndPlan { get; set; }
 
         /// <summary>
@@ -59,8 +60,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// </summary>
         [UIHint("Int32")]
         public int Weight { get; set; }
-
-        public int TotalWeight { get; set; }
 
         /// <summary>
         /// individualgoalremarks

@@ -9,6 +9,7 @@ using Microsoft.SharePoint.Client;
 using NLog;
 using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Service.Resources;
+using MCAWebAndAPI.Model.ViewModel.Control;
 
 namespace MCAWebAndAPI.Service.HR.Recruitment
 {
@@ -71,7 +72,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 updatedValue.Add("individualgoalcategory", viewModel.Category.Text);
                 updatedValue.Add("individualgoalplan", viewModel.IndividualGoalAndPlan);
                 updatedValue.Add("individualgoalweight", viewModel.Weight);
-                updatedValue.Add("individualgoalremarks", viewModel.Remarks);
+                if (viewModel.Remarks != null)
+                {
+                    updatedValue.Add("individualgoalremarks", viewModel.Remarks);
+                }
                 try
                 {
                     if (Item.CheckIfUpdated(viewModel))
@@ -132,8 +136,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 ID = Convert.ToInt32(item["ID"]),
                 ProjectOrUnitGoals = Convert.ToString(item["projectunitgoals"]),
-                Category = ProjectOrUnitGoalsDetailVM.GetCategoryDefaultValue(
-                    new Model.ViewModel.Control.InGridComboBoxVM
+                Category = IndividualGoalDetailVM.GetCategoryDefaultValue(
+                    new InGridComboBoxVM
                     {
                         Text = Convert.ToString(item["individualgoalcategory"])
                     }),

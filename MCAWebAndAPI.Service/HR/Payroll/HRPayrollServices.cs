@@ -90,6 +90,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
 
             viewModel.ID = Convert.ToInt32(listItem["ID"]);
             viewModel.ProfessionalNameEdit.Value = FormatUtil.ConvertLookupToID(listItem, "professional");
+            viewModel.ProfessionalNameString = FormatUtil.ConvertLookupToValue(listItem, "professional");
             viewModel.ProfessionalID = FormatUtil.ConvertLookupToID(listItem, "professional_x003a_ID");
             viewModel.ProjectUnit = Convert.ToString(listItem["ProjectOrUnit"]);
             viewModel.Position = Convert.ToString(listItem["position"]);
