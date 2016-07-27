@@ -50,8 +50,8 @@
     <div class="form-actions">
         <div class="row">
             <div class="col-md-12">
-                <input type="button" class="btn btn-default" id="StatusDraft" name="StatusDraft" value="Save as Draft">     
-                <input type="button" class="btn btn-default" id="StatusSubmit" name="StatusSubmit" value="Submit for Approval">                
+                <input type="button" class="btn btn-default" id="StatusSubmit" name="StatusSubmit" value="Submit for Approval">        
+                <input type="button" class="btn btn-default" id="StatusDraft" name="StatusDraft" value="Save as Draft">             
             </div>
         </div>
     </div>
@@ -63,11 +63,9 @@
     <script>
 
         function filterLevel() {
-            console.log("jalan");
             return {
-                Level: $("#DivisionProjectUnit_Value").val()
+                Level: $('#DivisionProjectUnit_Value').data("kendoDropDownList").dataItem($('#DivisionProjectUnit_Value').data("kendoDropDownList").select())
             };
-            console.log(Level);
 
         }
 
@@ -90,12 +88,12 @@
                 $("label[for='Yes']").hide();
                 $("#IsKeyPosition").val(false);
             }
-            console.log(dataItem);
 
         };
         $(document).ready(function () {
             displayWorkflowRouter("workflow-placeholder", "@ViewBag.ListName", "@ViewBag.RequestorUserLogin");
-
+            
+           
 
             $("#IsKeyPosition").val(true);
             $("label[for='Yes']").show();
@@ -112,8 +110,23 @@
 
             });
             $("#StatusSubmit").click(function () {
-                $("#Status_Value").prop("value", "Pending Approval 1 of 2");
-                $("form").submit();
+                if ($('#WorkflowDetails').length) {
+                    var approverLength = $('#WorkflowDetails').data("kendoGrid").tbody.find("tr").length;
+                    if (approverLength == 2) {
+                        $("#Status_Value").prop("value", "Pending Approval 1 of 2");
+                    }
+                    else if (approverLength == 1) {
+                        $("#Status_Value").prop("value", "Pending Approval 1 of 1");
+                    }
+                    var projectUnit = $('#DivisionProjectUnit_Value').data("kendoDropDownList").dataItem($('#DivisionProjectUnit_Value').data("kendoDropDownList").select()).ProjectUnit;
+                    $('#ProjectUnitString').prop("value", projectUnit);
+                    $("form").submit();
+                } else {
+                    alert("Approval Workflow Have not loaded completely");
+                    return false;
+                }
+                
+                
             });
             $("#StatusDraft").click(function () {
                 $("#Status_Value").prop("value", "Draft");

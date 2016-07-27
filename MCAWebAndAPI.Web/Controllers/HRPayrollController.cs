@@ -26,9 +26,6 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult CreateMonthlyFee(string siteUrl = null)
         {
-
-
-
             // MANDATORY: Set Site URL
             _hRPayrollService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
@@ -43,12 +40,6 @@ namespace MCAWebAndAPI.Web.Controllers
         [HttpPost]
         public ActionResult SubmitMonthlyFee(FormCollection form, MonthlyFeeVM viewModel)
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            //    var errorMessages = BindHelper.GetErrorMessages(ModelState.Values);
-            //    return JsonHelper.GenerateJsonErrorResponse(errorMessages);
-            //}
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _hRPayrollService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
@@ -77,14 +68,18 @@ namespace MCAWebAndAPI.Web.Controllers
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.MonthlyFee);
         }
 
-        public ActionResult EditMonthlyFee(int ID, string siteUrl = null)
+        public ActionResult EditMonthlyFee(int ID, string siteUrl = null, string Display = null)
         {
             _hRPayrollService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             var viewModel = _hRPayrollService.GetHeader(ID);
-
-            return View(viewModel);
+            var form = "EditMonthlyFee";
+            if (Display == "Yes")
+            {
+                form = "DisplayMonthlyFee";
+            }
+            return View(form, viewModel);
         }
 
         [HttpPost]

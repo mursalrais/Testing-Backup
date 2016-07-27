@@ -40,9 +40,14 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Mvc">
       <HintPath>C:\Program Files (x86)\Microsoft ASP.NET\ASP.NET Web Stack 5\Packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\MCAWebAndAPI.Web\bin\System.Web.WebPages.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -55,6 +60,8 @@
     <Compile Include="Common\Item.cs" />
     <Compile Include="Common\Location.cs" />
     <Compile Include="Common\Workflow.cs" />
+    <Compile Include="ConditionalRequiredAttribute.cs" />
+    <Compile Include="EqualityExpression.cs" />
     <Compile Include="HR\DataMaster\DependentMaster.cs" />
     <Compile Include="HR\DataMaster\PositionMaster.cs" />
     <Compile Include="HR\DataMaster\ProfessionalMaster.cs" />
@@ -81,6 +88,7 @@
     <Compile Include="ViewModel\Chart\ProjectStatusBarChartVM.cs" />
     <Compile Include="ViewModel\Control\AjaxCascadeComboboxVM.cs" />
     <Compile Include="ViewModel\Control\CheckBoxVM.cs" />
+    <Compile Include="ViewModel\Control\DropDownVM.cs" />
     <Compile Include="ViewModel\Control\InGridMultiSelectVM.cs" />
     <Compile Include="ViewModel\Control\CSVVM.cs" />
     <Compile Include="ViewModel\Control\AjaxComboBoxVM.cs" />
@@ -138,6 +146,7 @@
     <Compile Include="ViewModel\Form\HR\CalendarEventVM.cs" />
     <Compile Include="ViewModel\Form\HR\ClaimComponentDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\CompensatoryDetailVM.cs" />
+    <Compile Include="ViewModel\Form\HR\CompensatoryMasterVM.cs" />
     <Compile Include="ViewModel\Form\HR\CompensatoryVM.cs" />
     <Compile Include="ViewModel\Form\HR\DependentDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\EducationDetailVM.cs" />
@@ -145,6 +154,8 @@
     <Compile Include="ViewModel\Form\HR\ExitProcedureForApproverVM.cs" />
     <Compile Include="ViewModel\Form\HR\ExitProcedureVM.cs" />
     <Compile Include="ViewModel\Form\HR\FactorEvaluatedDetailVM.cs" />
+    <Compile Include="ViewModel\Form\HR\FeeSlipDetailVM.cs" />
+    <Compile Include="ViewModel\Form\HR\FeeSlipVM.cs" />
     <Compile Include="ViewModel\Form\HR\IndividualGoalDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\InsuranceClaimVM.cs" />
     <Compile Include="ViewModel\Form\HR\InterviewDetailVM.cs" />

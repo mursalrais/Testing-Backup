@@ -34,16 +34,41 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         {
             ControllerName = "HRDataMaster",
             ActionName = "GetProfessionals",
+            OnSelectEventName = "OnChangeProffesional",
             ValueField = "ID",
-            TextField = "Desc",
-            OnSelectEventName = "OnChangeProfessional"
+            TextField = "Desc"
         };
+
+        /// <summary>
+        /// positionrequested
+        /// </summary>
+        [UIHint("AjaxCascadeComboBox")]
+        [DisplayName("Compensatory Title")]
+        [Required]
+        public AjaxCascadeComboBoxVM ddlCompensatoryID { get; set; } = new AjaxCascadeComboBoxVM
+        {
+            ControllerName = "HRCompensatory",
+            ActionName = "GetCompensatoryddl",
+            ValueField = "ID",
+            TextField = "CompensatoryTitle",
+            OnSelectEventName = "OnChangeCompensatory",
+            Filter = "filterLevel",
+            Cascade = "ddlProfessional_Value"
+        };
+
         /// <head>
         /// CompensatoryID
         /// </head>
         /// 
         [DisplayName("CompID")]
         public int? cmpID { get; set; }
+
+        /// <head>
+        /// CompensatoryEmail
+        /// </head>
+        /// 
+        [DisplayName("Email")]
+        public string cmpEmail { get; set; }
 
         /// <head>
         /// CompensatoryDay
@@ -72,6 +97,12 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [DisplayName("YearDate")]
         public string cmpYearDate { get; set; }
 
+        /// <summary>
+        /// crstatus
+        /// </summary>
+        public string StatusForm { get; set; }
+
+        public string Requestor { get; set; }
     }
 }
 

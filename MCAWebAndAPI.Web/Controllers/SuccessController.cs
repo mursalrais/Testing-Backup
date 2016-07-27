@@ -14,5 +14,12 @@ namespace MCAWebAndAPI.Web.Controllers
             ViewBag.PreviousUrl = previousUrl;
             return View();
         }
+
+        public ActionResult ErrorMessage(string eMessage = null, string previousUrl = null)
+        {
+            ViewBag.SuccessMessage = eMessage;
+            ViewBag.PreviousUrl = previousUrl;
+            return View();
+        }
     }
 }

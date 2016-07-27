@@ -108,8 +108,12 @@ namespace MCAWebAndAPI.Service.Common
             
             var viewModel = new WorkflowItemVM();
             viewModel.ApproverPosition = FormatUtil.ConvertToInGridAjaxComboBox(item, "approverposition");
+            viewModel.ApproverUnit = WorkflowItemVM.GetUnitDefaultValue(new InGridComboBoxVM
+            {
+                Text = Convert.ToString(item["approverunit"])
+            });
             Task<IEnumerable<ProfessionalMaster>> getApproverNamesTask = 
-                GetApproverNamesAsync(viewModel.ApproverPosition.Text);
+                GetApproverNamesAsync(viewModel.ApproverUnit.Text ,viewModel.ApproverPosition.Text);
 
             viewModel.Level = Convert.ToString(item["approverlevel"]);
 
@@ -192,9 +196,9 @@ namespace MCAWebAndAPI.Service.Common
             _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
         }
 
-        private async Task<IEnumerable<ProfessionalMaster>> GetApproverNamesAsync(string position)
+        private async Task<IEnumerable<ProfessionalMaster>> GetApproverNamesAsync(string unit, string position)
         {
-            return GetApproverNames(position);
+            return GetApproverNames(unit, position);
         }
 
         private string GetApproverUserLogin(int userID)
@@ -214,14 +218,14 @@ namespace MCAWebAndAPI.Service.Common
             return null;
         }
 
-        public IEnumerable<ProfessionalMaster> GetApproverNames(string position)
+        public IEnumerable<ProfessionalMaster> GetApproverNames(string unit, string position)
         {
             var caml = @"<View>  
             <Query> 
-               <Where><Eq><FieldRef Name='Position' /><Value Type='Lookup'>" + position + @"</Value></Eq></Where> 
+               <Where><And><Eq><FieldRef Name='Project_x002f_Unit' /><Value Type='Choice'>" + unit + @"</Value></Eq><Eq><FieldRef Name='Position' /><Value Type='Lookup'>" + position + @"</Value></Eq></And></Where> 
             </Query> 
-             <ViewFields><FieldRef Name='ID' /><FieldRef Name='Title' /><FieldRef Name='officeemail' /></ViewFields> 
-            </View>";
+             <ViewFields><FieldRef Name='ID' /><FieldRef Name='officeemail' /><FieldRef Name='Title' /></ViewFields> 
+      </View>";  
 
             var viewModel = new List<ProfessionalMaster>();
             foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl, caml))
@@ -306,6 +310,12 @@ namespace MCAWebAndAPI.Service.Common
         {
             var item = SPConnector.GetListItem(SP_POSMAS_LIST_NAME, position, _siteUrl);
             return Convert.ToString(item["Title"]);
+        }
+
+        public string GetUnitName(int unit)
+        {
+            var item = SPConnector.GetListItem(SP_POSMAS_LIST_NAME, unit, _siteUrl);
+            return Convert.ToString(item["Project_x002f_Unit"]);
         }
 
         public async Task<IEnumerable<PendingApprovalItemVM>> GetPendingApprovalItemsAsync(string userLogin)

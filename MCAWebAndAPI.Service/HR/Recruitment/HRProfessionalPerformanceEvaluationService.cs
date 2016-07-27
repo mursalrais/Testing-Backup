@@ -9,6 +9,7 @@ using Microsoft.SharePoint.Client;
 using NLog;
 using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Service.Resources;
+using MCAWebAndAPI.Model.ViewModel.Control;
 
 namespace MCAWebAndAPI.Service.HR.Recruitment
 {
@@ -132,8 +133,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 ID = Convert.ToInt32(item["ID"]),
                 ProfessionalPerformanceEvaluationId = item["professionalperformanceevaluatio"] == null ? 0 :
                         Convert.ToInt32((item["professionalperformanceevaluatio"] as FieldLookupValue).LookupValue),
-                Category = ProfessionalPerformanceEvaluationDetailVM.GetCategoryDefaultValue(
-                    new Model.ViewModel.Control.InGridComboBoxVM
+                Category = IndividualGoalDetailVM.GetCategoryDefaultValue(
+                    new InGridComboBoxVM
                     {
                         Text = Convert.ToString(item["individualgoalcategory"])
                     }),

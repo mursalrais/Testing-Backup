@@ -45,7 +45,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         IEnumerable<ProfessionalMaster> GetApproverNames(string position);
 
-        Task CreateExitProcedureChecklistAsync(int? exitProcID, IEnumerable<ExitProcedureChecklistVM> exitProcedureChecklist, string requestorposition, string requestorunit);
+        Task CreateExitProcedureChecklistAsync(int? exitProcID, IEnumerable<ExitProcedureChecklistVM> exitProcedureChecklist, string requestorposition, string requestorunit, int? positionID);
 
         void SendEmail(ExitProcedureVM header, string workflowTransactionListName, string transactionLookupColumnName,
             int exitProcID, string messageForApprover, string messageForRequestor);
@@ -56,6 +56,16 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         bool CheckPendingApproval(int? id, string checklistStatusApproved);
 
-        //bool UpdateExitProcedureStatus(int? id, )
+        bool UpdateExitProcedureStatus(int? id, string statusExitProcedure);
+
+        string GetPSANumberOnExitProcedure(int? id);
+
+        int GetPSAId(string psaNumber);
+
+        System.DateTime GetLastWorkingDate(int? exitProcID);
+
+        bool UpdateLastWorkingDateOnPSA(int? psaID, System.DateTime lastWorkingDate);
+
+        int GetPositionID(string requestorposition, string requestorunit, int positionID, int number);
     }
 }

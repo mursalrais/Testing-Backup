@@ -1,5 +1,7 @@
 ﻿
 @using MCAWebAndAPI.Model.ViewModel.Form.HR
+@using MCAWebAndAPI.Web.Helpers
+
 @model CompensatoryVM
 
 @{
@@ -12,7 +14,6 @@
     enctype = "multipart/form-data"
 }))
 {
-    <div class="form-actions">
         <fieldset>
             @Html.HiddenFor(m => m.cmpID)
             @Html.HiddenFor(m => m.cmpName)
@@ -20,53 +21,129 @@
             <input type="hidden" id="loadpage" value="0">
             <div class="row">
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.ddlProfessional).Class("col-md-2 control-label")
-                    <div class="col-md-3">
+                    @Html.Bootstrap().LabelFor(m => m.ddlProfessional).Class("col-xs-2 control-label")
+                    <div class="col-xs-3">
                         @Html.EditorFor(m => m.ddlProfessional)
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.cmpProjUnit).Class("col-md-2 control-label")
-                    <div class="col-md-3">
+                    @Html.Bootstrap().LabelFor(m => m.cmpProjUnit).Class("col-xs-2 control-label")
+                    <div class="col-xs-3">
                         @Html.EditorFor(m => m.cmpProjUnit)
                     </div>
                 </div>
             </div>
-            <legend>Compensatory list</legend>
             <div class="row">
-                @Html.Partial("_InputCompensantoryDetails", Model.CompensatoryDetails)
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.ddlCompensatoryID).Class("col-xs-2 control-label")
+                    <div class="col-xs-3">
+                        @Html.EditorFor(m => m.ddlCompensatoryID)
+                    </div>
+                </div>
             </div>
-
-        </fieldset>
-        <div class="row">
             <div class="col-sm-12">
-                <div class="pull-right">
-                    <button id="submit-button" class="btn btn-primary" type="submit" onclick="onValidateKendoDetail">
+                <div class="form-group" id="ParentDiv">
+                    <div class="col-sm-8">
+                        @Html.DisplayFor(m => m.StatusForm)
+                    </div>
+                </div>
+            </div>
+            <legend>Compensatory list</legend>
+            <div id="compensatorylist" class="row" ></div>
+
+            <legend>Approval Workflow</legend>
+            <div id="workflow-placeholder" class="row" ></div>
+
+            </fieldset>
+}
+
+            <div class="row pull-right">
+                <div class="col-sm-12">
+                    <button id="submit-button" class="btn btn-primary" type="submit">
                         <i class="fa fa-save"></i>
-                        save
+                        Submit For Approval
+                    </button>
+                    <button id="submit-draft-initiate-button" class="btn btn-primary" type="submit">
+                        <i class="fa fa-save"></i>
+                        Save As Draft
                     </button>
                 </div>
             </div>
-        </div>
-    </div>
-}
+
+        
+        @if (Model.StatusForm == "Pending Approval 1 of 2")
+        {
+            <div class="row">
+                <div class="col-sm-12">
+                    <button id="submit-button" class="btn btn-success" type="submit">
+                        <i class="fa fa-save"></i>
+                        Approve
+                    </button>
+                    <button id="reject1-button" class="btn btn-danger" type="submit">
+                        <i class="fa fa-save"></i>
+                        Reject
+                    </button>
+                </div>
+            </div>
+        }
+        @if (Model.StatusForm == "Approved")
+        {
+                <div class="row pull-right">
+                    <div class="col-sm-12">
+                        <button id="print-button" class="btn btn-primary" type="button">
+                            Print
+                        </button>
+                    </div>
+                </div>
+        }
+
 
 @section scripts{
 
     <script>
 
-        function OnChangeProfessional(e) {
+        function filterLevel() {
+            return {
+                idProf: $('#ddlProfessional_Value').data("kendoDropDownList").dataItem($('#ddlProfessional_Value').data("kendoDropDownList").select()).ID
+            };
+        }
+
+        function OnChangeCompensatory(e) {
             var dataItem = this.dataItem(e.item);
-            if (dataItem.ID != 0) {
-                window.location = "/HRCompensatory/InputCompensatoryHR?siteurl=&iD=" + dataItem.ID + "";
+            var idComp = dataItem.ID;
+            var CompStatus = dataItem.CompensatoryStatus;
+
+            $("#StatusForm").prop("value", CompStatus);
+
+            var url = "/HRCompensatory/GetCompensatoryDetails?idComp=" + idComp;
+
+            $('#compensatorylist').load(url, function( response, status, xhr ) {
+                if (status == "success") {
+                    hideLoading();
+                }
+            });
+            $("#cmpID").prop("value", idComp);
+        };
+
+        function OnChangeProffesional(e) {
+            var dataItem = this.dataItem(e.item);
+            var eMail = dataItem.OfficeEmail
+
+            showLoading();
+            if (eMail != null) {
+                displayWorkflowRouter("workflow-placeholder", "@ViewBag.ListName", eMail);
             }
         };
 
         $(document).ready(function () {
             var positionID = $("#CmpName").val() +" - "+ $("#CmpPosition").val();
             $("#NamePos").prop("value", positionID);
+
+            $("#submit-button").click(function () {
+                $("form").submit();
+            });
         });
 
         function getDayName(date) {
@@ -84,6 +161,57 @@
                 return day[date.getDay()];
             };
         }
+
+        function onChange(e) {
+            var container = e.container;
+            var tr = container.closest('tr');
+            var data = this.dataItem(tr);
+            var start = data.StartTime.getHours();
+            var finish = data.FinishTime.getHours();
+            var finishsec = data.FinishTime.getHours();
+            var range;
+            var rowgrid = $("#CompensatoryDetails").data("kendoGrid").tbody.find("tr");
+            var i = -1
+            var j = -1
+            var tr = container.closest('tr');
+
+            rowgrid.each(function (e) {
+                i++;
+                var xdate = $("#Dateid" + i).val();
+                rowgrid.each(function (e) {
+                    j++;
+                    var ydate = $("#Dateid" + j).val();
+                    if (i !== j) {
+                        if (xdate == ydate) {
+                            alert("Date you have chosen already exists, please choose another date..!!")
+                        }
+                    }
+                });
+            });
+            debugger;
+            if ((finish + finishsec) <= start) {
+                alert("FinishTime can not be smaller than the starttime..!!")
+            }
+
+            if (start < finish) {
+                range = finish - start
+                data.set("CmpTotalHours", range);
+                data.CmpTotalHours = range;
+                data.set("TotalDay", range / 12)
+            }
+            data.set("EditMode", 1);
+        }
+
+        function onDataBoundDependentDetails(e) {
+            var grid = $("#CompensatoryDetails").data("kendoGrid");
+            hideDeletedRowKendoDetail(grid);
+        }
+
+        function GetDetailComplist(dataItem) {
+            var data = $("#CompensatoryDetails").data("kendoGrid").dataSource.data();
+            return data.indexOf(dataItem);
+        }
+
     </script>
 }
 

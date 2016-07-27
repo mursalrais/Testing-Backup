@@ -32,6 +32,9 @@
         columns.Bound(p => p.remarks).ClientTemplate("#= remarks #" +
         "<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].remarks' value='#= remarks #' />");
 
+        columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
+           .Click("onDeleteKendoDetail")).Width(100);
+
         columns.Bound(p => p.CmpHID).Hidden().ClientTemplate("#= CmpHID #" +
        "<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].CmpHID' value='#= CmpHID #' />"
         );
@@ -61,52 +64,5 @@
 )
 </div>
 <script>
-      function GetDetailComplist(dataItem) {
-        var data = $("#CompensatoryDetails").data("kendoGrid").dataSource.data();
-        return data.indexOf(dataItem);
-    }
-
-    function onDataBoundDependentDetails(e) {
-        var grid = $("#CompensatoryDetails").data("kendoGrid");
-        hideDeletedRowKendoDetail(grid);
-    }
-
-    function onChange(e) {
-        var container = e.container;
-            var tr = container.closest('tr');
-            var data = this.dataItem(tr); //get the row data so it can be referred later
-            // 1 is Item.Mode.UPDATED
-            //var day = data.CmpDate.getDay();
-            var start = data.StartTime.getHours();
-            var finish = data.FinishTime.getHours();
-            var range;
-            var rowgrid = $("#CompensatoryDetails").data("kendoGrid").tbody.find("tr");
-            var i = -1
-            var j = -1
-            var tr = container.closest('tr');
-
-            rowgrid.each(function (e) {
-                i++;
-                var xdate = $("#Dateid" + i).val();
-                rowgrid.each(function (e) {
-                    j++;
-                    var ydate = $("#Dateid" + j).val();
-                    if (i !== j) {
-                        if (xdate == ydate) {
-                            alert("Date you have chosen already exists, please choose another date..!!")
-                        }
-                    }
-                });
-            });
-
-            if (start < finish) {
-                range = finish - start
-                data.set("CmpTotalHours", range);
-                data.CmpTotalHours = range;
-                data.set("TotalDay", range / 24)
-            }
-            data.set("EditMode", 1);
-        }
-   
 </script>
 

@@ -93,8 +93,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             updatedValues.Add("initiateperformanceplan", psaManagement.PerformancePlan.Value);
             updatedValues.Add("psastatus", psaManagement.PSAStatus.Value);
             updatedValues.Add("hiddenexpirydate", psaManagement.HiddenExpiryDate);
+            updatedValues.Add("lastworkingdate", psaManagement.LastWorkingDate);
 
-            
 
             try
             {
@@ -172,6 +172,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.DateOfNewPSA = Convert.ToDateTime(listItem["dateofnewpsa"]).ToLocalTime();
             viewModel.Tenure = Convert.ToInt32(listItem["tenure"]);
             viewModel.PSAExpiryDate = Convert.ToDateTime(listItem["psaexpirydate"]).ToLocalTime();
+            viewModel.LastWorkingDate = Convert.ToDateTime(listItem["lastworkingdate"]).ToLocalTime();
             viewModel.PSAStatus.Text = Convert.ToString(listItem["psastatus"]);
 
             viewModel.DocumentUrl = GetDocumentUrl(viewModel.ID);
