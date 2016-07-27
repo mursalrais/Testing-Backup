@@ -177,6 +177,16 @@
 
             $("#TimesheetDetails_WorkingDays").data("kendoGrid").dataSource.read();
             $("#TimesheetDetails_WorkingDays").data("kendoGrid").refresh();
+
+            var periodPicker = $("#Period").data("kendoDatePicker");
+            var period = periodPicker.value();
+
+            var startPicker = $("#From").data("kendoDatePicker");
+            startPicker.min(period);
+        
+            var endPicker = $("#To").data("kendoDatePicker");
+            endPicker.min(period);
+
         }
 
         function onCompleteAddTimesheet(e) {
