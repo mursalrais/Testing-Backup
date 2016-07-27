@@ -12,7 +12,6 @@
     enctype = "multipart/form-data"
 }))
 {
-    <div class="form-actions">
         <fieldset>
             @Html.HiddenFor(m => m.cmpID)
             @Html.HiddenFor(m => m.cmpName)
@@ -50,18 +49,51 @@
             <div id="compensatorylist-placeholder" class="row" />
 
         </fieldset>
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="pull-right">
-                    <button id="submit-button" class="btn btn-primary" type="submit" onclick="onValidateKendoDetail">
+}
+
+        @if (Model.StatusForm != "")
+        {
+                <div class="row pull-right">
+                    <div class="col-sm-12">
+                        <button id="submit-button" class="btn btn-primary" type="submit">
+                            <i class="fa fa-save"></i>
+                            Submit For Approval
+                        </button>
+                        <button id="submit-draft-initiate-button" class="btn btn-primary" type="submit">
+                            <i class="fa fa-save"></i>
+                            Save As Draft
+                        </button>
+                    </div>
+                </div>
+        }
+
+
+        @if (Model.StatusForm == "Pending Approval 1 of 2")
+        {
+            <div class="row">
+                <div class="col-sm-12">
+                    <button id="submit-button" class="btn btn-success" type="submit">
                         <i class="fa fa-save"></i>
-                        save
+                        Approve
+                    </button>
+                    <button id="reject1-button" class="btn btn-danger" type="submit">
+                        <i class="fa fa-save"></i>
+                        Reject
                     </button>
                 </div>
             </div>
-        </div>
-    </div>
-}
+        }
+        @if (Model.StatusForm == "Approved")
+        {
+                <div class="row pull-right">
+                    <div class="col-sm-12">
+                        <button id="print-button" class="btn btn-primary" type="button">
+                            Print
+                        </button>
+                    </div>
+                </div>
+        }
+
 
 @section scripts{
 
@@ -83,26 +115,26 @@
         }
 
         function OnChangeCompensatory(e) {
-            debugger;
             var dataItem = this.dataItem(e.item);
             var idComp = dataItem.ID
             var idProf = getUrlVars()["iD"];
-
-            //$("#CompensatoryDetails").data("kendoGrid").dataSource.data([]);
-            //$("#CompensatoryDetails").data("kendoGrid").refresh();
-
             var url = "/HRCompensatory/GetCompensatoryDetails?idComp=" + idComp;
-            
-            $('#compensatorylist-placeholder').load(url);
 
-            //if (dataItem.ID != 0 && IdProf == null) {
-            //    window.location = "/HRCompensatory/InputCompensatoryHR?siteurl=&idCmp=" + dataItem.ID + "";
-            //}
+            showLoading();
+            $('#compensatorylist-placeholder').load(url, function( response, status, xhr ) {
+                if (status == "success") {
+                    hideLoading();
+            }
+        });
         };
 
         $(document).ready(function () {
             var positionID = $("#CmpName").val() +" - "+ $("#CmpPosition").val();
             $("#NamePos").prop("value", positionID);
+
+            $("#submit-button").click(function () {
+                $("form").submit();
+            });
         });
 
         function getDayName(date) {

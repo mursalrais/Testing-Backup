@@ -90,6 +90,12 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public string Position { get; set; }
 
         /// <summary>
+        /// Title
+        /// </summary>
+        [DisplayName("File on Attachment")]
+        public string Attachmentname { get; set; }
+
+        /// <summary>
         /// positionrequested
         /// </summary>
         [DisplayName("Other Position")]
