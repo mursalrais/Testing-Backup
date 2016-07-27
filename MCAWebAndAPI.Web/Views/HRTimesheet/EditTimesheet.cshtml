@@ -1,0 +1,209 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@using MCAWebAndAPI.Service.Utils
+@model TimesheetVM
+
+<div class="form-horizontal">
+    <fieldset>
+        <legend>Timesheet</legend>
+        <div class="row">
+            <div class="col-sm-6">
+                @using (Ajax.BeginForm("UpdatePeriod", "HRTimesheet", new AjaxOptions
+                {
+                    OnComplete = "onCompleteUpdatePeriod"
+                }, new { id = "FormUpdatePeriod" }))
+                {
+                    @Html.HiddenFor(m => m.UserLogin)
+                    <div class="form-group">
+                        @Html.Bootstrap().LabelFor(m => m.Period).Class("col-sm-4 control-label")
+                        <div class="col-sm-8">
+                            @Html.EditorFor(m => m.Period)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.Bootstrap().LabelFor(m => m.Name).Class("col-sm-4 control-label")
+                        <div class="col-sm-8">
+                            @Html.DisplayFor(m => m.Name)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.Bootstrap().LabelFor(m => m.ProjectUnit).Class("col-sm-4 control-label")
+                        <div class="col-sm-8">
+                            @Html.DisplayFor(m => m.ProjectUnit)
+                        </div>
+                    </div>
+
+                    <button id="submit-button-update-period" class="btn btn-primary pull-right" type="submit">Set</button>
+                }
+            </div>
+            <div class="col-sm-6">
+
+            </div>
+        </div>
+        <br />
+        <legend>Holidays and Day-Off</legend>
+        <div class="row">
+            <div class="col-sm-12">
+                @(Html.Kendo()
+                    .Grid<TimesheetDetailVM>()
+                    .Name("TimesheetDetails_Holidays")
+                    .Columns(columns =>
+                    {
+                        columns.Bound(p => p.Date).ClientTemplate("#= getDayOfWeek(Date) #" + ", " + "#= kendo.toString(Date, 'd') #");
+                        columns.Bound(p => p.Status);
+                        columns.Bound(p => p.FullHalf)
+                  .ClientFooterTemplate("Total Day: #=sum#")
+                  .ClientGroupFooterTemplate("Subtotal Day: #=sum#");
+                    })
+                    .DataSource(dataSource => dataSource
+                       .Ajax()
+                       .Aggregates(aggregates =>
+                       {
+                           aggregates.Add(p => p.FullHalf).Sum();
+                       })
+                       .Read("Grid_ReadHolidays", "HRTimesheet")
+                       .Group(group => group.Add(p => p.Type))
+                    )
+                )
+            </div>
+        </div>
+        <br />
+        <legend>Working Days</legend>
+        <div class="row">
+            <div class="col-sm-12">
+                @(Html.Kendo()
+                    .Grid<TimesheetDetailVM>()
+                    .Name("TimesheetDetails_WorkingDays")
+                    .Columns(columns =>
+                    {
+                        columns.Bound(p => p.Date).ClientTemplate("#= getDayOfWeek(Date) #" + ", " + "#= kendo.toString(Date, 'd') #");
+                        columns.Bound(p => p.Location);
+                        columns.Bound(p => p.FullHalf)
+                         .ClientFooterTemplate("Total Day: #=sum#");
+                        columns.Bound(p => p.Type).Hidden()
+                            .ClientGroupHeaderTemplate("Working Days");
+                    })
+                    .DataSource(dataSource => dataSource
+                       .Ajax()
+                       .Read("Grid_ReadWorkingDays", "HRTimesheet")
+                       .Sort(s => s.Add(p => p.Date).Ascending())
+                       .Aggregates(aggregates =>
+                       {
+                           aggregates.Add(p => p.FullHalf).Sum();
+                       })
+                       .Group(group => group.Add(p => p.Type))
+                    )
+                )
+            </div>
+        </div>
+        <br />
+        <br />
+        <legend>Add Working Day</legend>
+        <div class="row">
+            <div class="col-sm-6">
+                @using (Ajax.BeginForm("AddTimesheet", "HRTimesheet", new AjaxOptions
+            {
+                OnComplete = "onCompleteAddTimesheet"
+            }, new { id = "FormAddTimesheet" }))
+            {
+                    <div class="form-group">
+                        @Html.Bootstrap().LabelFor(m => m.From).Class("col-sm-4 control-label")
+                        <div class="col-sm-8">
+                            @(Html.Kendo().DatePicker()
+                              .Name("From")
+                              .Value(Model.From)
+                              .Min(((DateTime)Model.Period).GetFirstPayrollDay())
+                              .Max(DateTime.Today)
+                              .Events(e => e.Change("startChange"))
+                              .HtmlAttributes(new { @class = "form-control", style = "width: 100%" })
+                            )
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.Bootstrap().LabelFor(m => m.To).Class("col-sm-4 control-label")
+                        <div class="col-sm-8">
+                            @(Html.Kendo().DatePicker()
+                              .Name("To")
+                              .Value(Model.To)
+                              .Min(((DateTime)Model.Period).GetFirstPayrollDay())
+                              .Max(DateTime.Today)
+                              .Events(e => e.Change("endChange"))
+                              .HtmlAttributes(new { @class = "form-control", style = "width: 100%" })
+                            )
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.Bootstrap().LabelFor(m => m.Location).Class("col-sm-4 control-label")
+                        <div class="col-sm-8">
+                            @Html.EditorFor(m => m.Location)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.Bootstrap().LabelFor(m => m.IsFullDay).Class("col-sm-4 control-label")
+                        <div class="col-sm-8">
+                            @Html.EditorFor(m => m.IsFullDay)
+                        </div>
+                    </div>
+                    <button id="submit-button-add-timesheet" class="btn btn-primary pull-right" type="submit">Add Working Day</button>
+                }
+            </div>
+            <div class="col-sm-6"></div>
+        </div>
+
+    </fieldset>
+
+
+
+
+
+</div>
+
+@section scripts{
+
+    <script>
+        $(document).ready(function () {
+            $("#submit-button-update-period").click(function () {
+                $("form#FormUpdatePeriod").submit();
+            });
+
+            $("#submit-button-add-timesheet").click(function () {
+                $("form#FormAddTimesheet").submit();
+            });
+
+        });
+
+        function onCompleteUpdatePeriod(e) {
+            $("#TimesheetDetails_Holidays").data("kendoGrid").dataSource.read();
+            $("#TimesheetDetails_Holidays").data("kendoGrid").refresh();
+
+            $("#TimesheetDetails_WorkingDays").data("kendoGrid").dataSource.read();
+            $("#TimesheetDetails_WorkingDays").data("kendoGrid").refresh();
+        }
+
+        function onCompleteAddTimesheet(e) {
+            $("#TimesheetDetails_WorkingDays").data("kendoGrid").dataSource.read();
+            $("#TimesheetDetails_WorkingDays").data("kendoGrid").refresh();
+        }
+
+        function startChange() {
+            var endPicker = $("#To").data("kendoDatePicker"),
+                startDate = this.value();
+
+            if (startDate) {
+                startDate = new Date(startDate);
+                startDate.setDate(startDate.getDate());
+                endPicker.min(startDate);
+            }
+        }
+
+        function endChange() {
+            var startPicker = $("#From").data("kendoDatePicker"),
+                endDate = this.value();
+
+            if (endDate) {
+                endDate = new Date(endDate);
+                endDate.setDate(endDate.getDate());
+                startPicker.max(endDate);
+            }
+        }
+    </script>
+}

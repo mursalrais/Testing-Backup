@@ -161,6 +161,18 @@ function getMonthName(date) {
     return month[date.getMonth()];
 }
 
+function getDayOfWeek(date) {
+    var weekday = new Array(7);
+    weekday[0] = "Sunday";
+    weekday[1] = "Monday";
+    weekday[2] = "Tuesday";
+    weekday[3] = "Wednesday";
+    weekday[4] = "Thursday";
+    weekday[5] = "Friday";
+    weekday[6] = "Saturday";
+    return weekday[date.getDay()];
+}
+
 function getWorkflowDetail(dataItem) {
     var data = $("#WorkflowDetails").data("kendoGrid").dataSource.data();
     return data.indexOf(dataItem);

@@ -26,6 +26,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         const string SP_PROMAS_LIST_NAME = "Professional Master";
         const string SP_POSMAS_LIST_NAME = "Position Master";
         const string SP_MANPOW_LIST_NAME = "Manpower Requisition";
+
+        //TODO: To change by using correct domain email
         const string COMPANY_DOMAIN_EMAIL = "eceos.com";
 
         public int CreateApplication(ApplicationDataVM viewModel)

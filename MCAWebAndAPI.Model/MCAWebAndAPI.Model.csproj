@@ -169,6 +169,8 @@
     <Compile Include="ViewModel\Form\HR\PSAManagementVM.cs" />
     <Compile Include="ViewModel\Form\HR\ShortlistDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\ShortlistedDetailVM.cs" />
+    <Compile Include="ViewModel\Form\HR\TimesheetDetailVM.cs" />
+    <Compile Include="ViewModel\Form\HR\TimesheetVM.cs" />
     <Compile Include="ViewModel\Form\HR\TrainingDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\WorkingExperienceDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\WorkingRelationshipDetailVM.cs" />

@@ -1228,6 +1228,7 @@
     <Content Include="Views\HRInsuranceClaim\CreateInsuranceClaim.cshtml" />
     <Content Include="Views\HRInsuranceClaim\_ClaimComponentDetail.cshtml" />
     <Content Include="Views\HRInsuranceClaim\_MedicalClaimDetail.cshtml" />
+    <Content Include="Views\HRTimesheet\EditTimesheet.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1275,6 +1276,7 @@
     <Compile Include="Controllers\HRProfessionalPerformanceEvaluationController.cs" />
     <Compile Include="Controllers\HRPSAManagementController.cs" />
     <Compile Include="Controllers\HRShortlistController.cs" />
+    <Compile Include="Controllers\HRTimesheetController.cs" />
     <Compile Include="Controllers\LocationController.cs" />
     <Compile Include="Controllers\ProjectHierarchyController.cs" />
     <Compile Include="Controllers\PurchaseOrderController.cs" />
