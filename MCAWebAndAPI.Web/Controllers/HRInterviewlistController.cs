@@ -158,8 +158,8 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult InputInterviewResult(string siteurl = null, int? ID = null)
         {
             //mandatory: get site url
-            _service.SetSiteUrl(siteurl ?? SessionManager.Get<string>("SiteUrl"));
-            SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
+            _service.SetSiteUrl(siteurl);
+            SessionManager.Set("siteurl", siteurl);
 
             var viewmodel = _service.GetResultlistInterview(ID);
             viewmodel.SiteUrl = siteurl;
