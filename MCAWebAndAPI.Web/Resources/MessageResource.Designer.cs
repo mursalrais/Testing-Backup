@@ -88,9 +88,9 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Application data is sufficient to created as professional data 
+        ///   Looks up a localized string similar to Applicant&apos;s Data is not sufficient to inserted as Professional Data, 
         ///
-        ///Please proceed data Applicant..!!.
+        ///Please complate the Applicant&apos;s data.
         /// </summary>
         public static string ErrorUpdateProfessional {
             get {
