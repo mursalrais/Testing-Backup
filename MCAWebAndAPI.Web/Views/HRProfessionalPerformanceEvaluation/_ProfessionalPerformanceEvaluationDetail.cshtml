@@ -32,7 +32,7 @@
             columns.Bound(p => p.TotalScore).ClientTemplate("#= TotalScore #" +
             "<input type='hidden' name='ProfessionalPerformanceEvaluationDetails[#= getProfessionalPerformancePlanDetail(data)#].TotalScore' value='#= TotalScore #' />"
             );
-            columns.Bound(p => p.Output).ClientTemplate("#= Output #" +
+            columns.Bound(p => p.Output).ClientTemplate(" <textarea style='overflow: auto; width: 300px; height: 70px; margin-top: 0px;margin-bottom: 0px; border: none; background-color: transparent' disable>#= Output #</textarea>" +
             "<input type='hidden' name='ProfessionalPerformanceEvaluationDetails[#= getProfessionalPerformancePlanDetail(data)#].Output' value='#= Output #' />"
             );
             columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
