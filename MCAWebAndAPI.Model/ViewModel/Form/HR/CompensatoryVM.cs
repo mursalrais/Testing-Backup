@@ -34,6 +34,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         {
             ControllerName = "HRDataMaster",
             ActionName = "GetProfessionals",
+            OnSelectEventName = "OnChangeProffesional",
             ValueField = "ID",
             TextField = "Desc"
         };

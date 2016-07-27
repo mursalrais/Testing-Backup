@@ -463,13 +463,13 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             try
             {
                 SPConnector.UpdateListItem(SP_APPDATA_LIST_NAME, headerID, createdValue, _siteUrl);
-                
             }
-                catch (Exception e)
-                {
-                    logger.Error(e.Message);
-                    throw e;
-                }
+            catch (Exception e)
+            {
+                logger.Error(e.Message);
+                throw e;
+            }
+            
         }
 
         public void CreateInputIntvResult(int? headerID, ApplicationShortlistVM viewModel)
