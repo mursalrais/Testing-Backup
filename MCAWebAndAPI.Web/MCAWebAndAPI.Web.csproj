@@ -1239,6 +1239,7 @@
     <Content Include="Views\HRFeeSlip\_FeeSlipDetails.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\Decimal.cshtml" />
     <Content Include="Views\HRPayroll\DisplayMonthlyFee.cshtml" />
+    <Content Include="Views\Success\ErrorMessage.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

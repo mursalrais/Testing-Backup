@@ -88,6 +88,17 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Application data is sufficient to created as professional data 
+        ///
+        ///Please proceed data Applicant..!!.
+        /// </summary>
+        public static string ErrorUpdateProfessional {
+            get {
+                return ResourceManager.GetString("ErrorUpdateProfessional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Congratulation. It works!.
         /// </summary>
         public static string SuccessCommon {

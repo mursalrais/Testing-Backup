@@ -126,7 +126,12 @@ namespace MCAWebAndAPI.Web.Controllers
                 catch (Exception e)
                 {
                     Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                    return JsonHelper.GenerateJsonErrorResponse(e);
+                    return RedirectToAction("ErrorMessage",
+                       "Success",
+                       new
+                       {
+                           eMessage = MessageResource.ErrorUpdateProfessional
+                       });
                 }
             }
 
