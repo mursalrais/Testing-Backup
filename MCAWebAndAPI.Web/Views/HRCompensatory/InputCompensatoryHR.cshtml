@@ -1,5 +1,7 @@
 ﻿
 @using MCAWebAndAPI.Model.ViewModel.Form.HR
+@using MCAWebAndAPI.Web.Helpers
+
 @model CompensatoryVM
 
 @{
@@ -19,24 +21,24 @@
             <input type="hidden" id="loadpage" value="0">
             <div class="row">
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.ddlProfessional).Class("col-md-2 control-label")
-                    <div class="col-md-3">
+                    @Html.Bootstrap().LabelFor(m => m.ddlProfessional).Class("col-xs-2 control-label")
+                    <div class="col-xs-3">
                         @Html.EditorFor(m => m.ddlProfessional)
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.cmpProjUnit).Class("col-md-2 control-label")
-                    <div class="col-md-3">
+                    @Html.Bootstrap().LabelFor(m => m.cmpProjUnit).Class("col-xs-2 control-label")
+                    <div class="col-xs-3">
                         @Html.EditorFor(m => m.cmpProjUnit)
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.ddlCompensatoryID).Class("col-md-2 control-label")
-                    <div class="col-md-3">
+                    @Html.Bootstrap().LabelFor(m => m.ddlCompensatoryID).Class("col-xs-2 control-label")
+                    <div class="col-xs-3">
                         @Html.EditorFor(m => m.ddlCompensatoryID)
                     </div>
                 </div>
@@ -49,35 +51,28 @@
                 </div>
             </div>
             <legend>Compensatory list</legend>
-            <div id="compensatorylist-placeholder" class="row" />
+            <div id="compensatorylist" class="row" ></div>
 
-           
+            <legend>Approval Workflow</legend>
+            <div id="workflow-placeholder" class="row" ></div>
 
-    @if (Model.cmpEmail != null)
-    {
-        <legend>Approval Workflow</legend>
-                <div id="workflow-placeholder" class="row" />
-    }
-        </fieldset>
+            </fieldset>
 }
 
-        @if (Model.StatusForm != "")
-        {
-                <div class="row pull-right">
-                    <div class="col-sm-12">
-                        <button id="submit-button" class="btn btn-primary" type="submit">
-                            <i class="fa fa-save"></i>
-                            Submit For Approval
-                        </button>
-                        <button id="submit-draft-initiate-button" class="btn btn-primary" type="submit">
-                            <i class="fa fa-save"></i>
-                            Save As Draft
-                        </button>
-                    </div>
+            <div class="row pull-right">
+                <div class="col-sm-12">
+                    <button id="submit-button" class="btn btn-primary" type="submit">
+                        <i class="fa fa-save"></i>
+                        Submit For Approval
+                    </button>
+                    <button id="submit-draft-initiate-button" class="btn btn-primary" type="submit">
+                        <i class="fa fa-save"></i>
+                        Save As Draft
+                    </button>
                 </div>
-        }
+            </div>
 
-
+        
         @if (Model.StatusForm == "Pending Approval 1 of 2")
         {
             <div class="row">
@@ -117,15 +112,29 @@
 
         function OnChangeCompensatory(e) {
             var dataItem = this.dataItem(e.item);
-            var idComp = dataItem.ID
+            var idComp = dataItem.ID;
+            var CompStatus = dataItem.CompensatoryStatus;
+
+            $("#StatusForm").prop("value", CompStatus);
+
             var url = "/HRCompensatory/GetCompensatoryDetails?idComp=" + idComp;
 
-            showLoading();
-            $('#compensatorylist-placeholder').load(url, function( response, status, xhr ) {
+            $('#compensatorylist').load(url, function( response, status, xhr ) {
                 if (status == "success") {
                     hideLoading();
+                }
+            });
+            $("#cmpID").prop("value", idComp);
+        };
+
+        function OnChangeProffesional(e) {
+            var dataItem = this.dataItem(e.item);
+            var eMail = dataItem.OfficeEmail
+
+            showLoading();
+            if (eMail != null) {
+                displayWorkflowRouter("workflow-placeholder", "@ViewBag.ListName", eMail);
             }
-        });
         };
 
         $(document).ready(function () {

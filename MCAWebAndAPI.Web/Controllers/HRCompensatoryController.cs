@@ -78,6 +78,12 @@ namespace MCAWebAndAPI.Web.Controllers
                 viewmodel = _service.GetComplistbyCmpid(iD);
             }
 
+            ViewBag.ListName = "Compensatory%20Request";
+
+            viewmodel.cmpID = iD;
+            if (viewmodel.cmpEmail != null)
+                SessionManager.Set("RequestorUserLogin", viewmodel.cmpEmail);
+
             return View(viewmodel);
         }
 
@@ -185,14 +191,15 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             _service.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));
 
-            var positions = _service.GetCompensatoryId(idProf);
+            var comps = _service.GetCompensatoryId(idProf);
 
-            return Json(positions.Select(e =>
+            return Json(comps.Select(e =>
                 new {
                     e.ID,
                     e.CompensatoryID,
                     e.CompensatoryDate,
                     e.CompensatoryTitle,
+                    e.CompensatoryStatus,
                     Desc = string.Format("{0} {1}", e.CompensatoryDate, e.CompensatoryTitle)
                 }),
                 JsonRequestBehavior.AllowGet);

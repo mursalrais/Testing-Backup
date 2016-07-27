@@ -433,13 +433,14 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                         <Where>
                           <Eq>
                              <FieldRef Name='professional_x003a_ID' />
-                             <Value Type='Lookup'>"+ idProf +@"</Value>
+                             <Value Type='Lookup'>"+ idProf + @"</Value>
                           </Eq>
                        </Where>
                     </Query> 
                     <ViewFields>
                        <FieldRef Name='Title' />
                        <FieldRef Name='submitteddate' />
+                       <FieldRef Name='crstatus' />
                        <FieldRef Name='ID' />
                     </ViewFields></View>";
 
@@ -466,6 +467,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.CompensatoryID = Convert.ToInt32(item["ID"]);
             viewModel.CompensatoryDate = Convert.ToDateTime(item["submitteddate"]);
             viewModel.CompensatoryTitle = Convert.ToString(item["Title"]);
+            viewModel.CompensatoryStatus = Convert.ToString(item["crstatus"]);
 
             return viewModel;
         }
@@ -489,11 +491,16 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             var columnValues = new Dictionary<string, object>();
 
-            int? ID = header.ID;
+            int? ID = header.cmpID;
 
             if (header.StatusForm == "Draft")
             {
                 columnValues.Add("crstatus", "Pending Approval 1 of 2");
+            }
+
+            if (header.StatusForm == "Pending Approval 1 of 2")
+            {
+                columnValues.Add("crstatus", "Pending Approval 2 of 2");
             }
 
             if (header.StatusForm == "Pending Approval 2 of 2")
