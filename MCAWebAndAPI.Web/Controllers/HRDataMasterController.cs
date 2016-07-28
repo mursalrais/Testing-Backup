@@ -66,7 +66,8 @@ namespace MCAWebAndAPI.Web.Controllers
                     e.Status,
                     e.OfficeEmail,
                     e.Project_Unit,
-                    Desc = string.Format("{0}", e.Name) }),
+                    Desc = string.Format("{0}", e.Name),
+                    Desc1 = string.Format("{0} - {1}", e.Name, e.Position) }),
                 JsonRequestBehavior.AllowGet);
         }
 
