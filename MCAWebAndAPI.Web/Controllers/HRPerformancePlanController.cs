@@ -51,6 +51,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
             // Used for Workflow Router
             ViewBag.ListName = "Professional%20Performance%20Plan";
+            SessionManager.Set("ListName", ViewBag.ListName);
+
             // This var should be taken from passing parameter
             if (requestor != null)
                 SessionManager.Set("RequestorUserLogin", requestor);
@@ -77,16 +79,73 @@ namespace MCAWebAndAPI.Web.Controllers
 
             var Detail = viewModel.ProjectOrUnitGoalsDetails;
             int sum = 0;
+            string project = null;
+            string individual = null;
             foreach (var viewModelDetail in Detail)
             {
                 if (viewModelDetail.EditMode != -1)
                 {
+                    if (viewModelDetail.ProjectOrUnitGoals == null)
+                    {
+                        viewModelDetail.ProjectOrUnitGoals = "";
+                        project = "Empty";
+                    }
+
+                    if (viewModelDetail.IndividualGoalAndPlan == null)
+                    {
+                        viewModelDetail.IndividualGoalAndPlan = "";
+                        individual = "Empty";
+                    }
+
+                    if (viewModelDetail.Remarks == null)
+                    {
+                        viewModelDetail.Remarks = "";
+                    }
+
                     sum = sum + viewModelDetail.Weight;
                 }
+            }
+            if (project == "Empty")
+            {
+                if (viewModel.StatusForm == "DraftInitiated")
+                {
+                    viewModel.StatusForm = "Initiated";
+                }
+                if (viewModel.StatusForm == "DraftDraft")
+                {
+                    viewModel.StatusForm = "Draft";
+                }
+
+                ModelState.AddModelError("ModelInvalid", "Project Or Unit Goals is Required");
+                return View("PerformancePlan", viewModel);
+            }
+
+            if (individual == "Empty")
+            {
+                if (viewModel.StatusForm == "DraftInitiated")
+                {
+                    viewModel.StatusForm = "Initiated";
+                }
+                if (viewModel.StatusForm == "DraftDraft")
+                {
+                    viewModel.StatusForm = "Draft";
+                }
+
+                ModelState.AddModelError("ModelInvalid", "Individual Goal And Plan is Required");
+                return View("PerformancePlan", viewModel);
             }
 
             if (sum != 100)
             {
+                if (viewModel.StatusForm == "DraftInitiated")
+                {
+                    viewModel.StatusForm = "Initiated";
+                }
+                if (viewModel.StatusForm == "DraftDraft")
+                {
+                    viewModel.StatusForm = "Draft";
+                }
+
                 ModelState.AddModelError("ModelInvalid", "Weight must be total 100%");
                 return View("PerformancePlan", viewModel);
             }
@@ -164,16 +223,73 @@ namespace MCAWebAndAPI.Web.Controllers
 
             var Detail = viewModel.ProjectOrUnitGoalsDetails;
             int sum = 0;
+            string project = null;
+            string individual = null;
             foreach (var viewModelDetail in Detail)
             {
                 if (viewModelDetail.EditMode != -1)
                 {
+                    if (viewModelDetail.ProjectOrUnitGoals == null)
+                    {
+                        viewModelDetail.ProjectOrUnitGoals = "";
+                        project = "Empty";
+                    }
+
+                    if (viewModelDetail.IndividualGoalAndPlan == null)
+                    {
+                        viewModelDetail.IndividualGoalAndPlan = "";
+                        individual = "Empty";
+                    }
+
+                    if (viewModelDetail.Remarks == null)
+                    {
+                        viewModelDetail.Remarks = "";
+                    }
+
                     sum = sum + viewModelDetail.Weight;
                 }
+            }
+            if (project == "Empty")
+            {
+                if (viewModel.StatusForm == "DraftInitiated")
+                {
+                    viewModel.StatusForm = "Initiated";
+                }
+                if (viewModel.StatusForm == "DraftDraft")
+                {
+                    viewModel.StatusForm = "Draft";
+                }
+
+                ModelState.AddModelError("ModelInvalid", "Project Or Unit Goals is Required");
+                return View("PerformancePlan", viewModel);
+            }
+
+            if (individual == "Empty")
+            {
+                if (viewModel.StatusForm == "DraftInitiated")
+                {
+                    viewModel.StatusForm = "Initiated";
+                }
+                if (viewModel.StatusForm == "DraftDraft")
+                {
+                    viewModel.StatusForm = "Draft";
+                }
+
+                ModelState.AddModelError("ModelInvalid", "Individual Goal And Plan is Required");
+                return View("PerformancePlan", viewModel);
             }
 
             if (sum != 100)
             {
+                if (viewModel.StatusForm == "DraftInitiated")
+                {
+                    viewModel.StatusForm = "Initiated";
+                }
+                if (viewModel.StatusForm == "DraftDraft")
+                {
+                    viewModel.StatusForm = "Draft";
+                }
+
                 ModelState.AddModelError("ModelInvalid", "Weight must be total 100%");
                 return View("PerformancePlan", viewModel);
             }

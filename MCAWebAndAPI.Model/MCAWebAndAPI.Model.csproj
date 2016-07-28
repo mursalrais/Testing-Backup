@@ -154,6 +154,7 @@
     <Compile Include="ViewModel\Form\HR\InsuranceClaimVM.cs" />
     <Compile Include="ViewModel\Form\HR\InterviewDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\InterviewlistDetailVM.cs" />
+    <Compile Include="ViewModel\Form\HR\LocationMasterVM.cs" />
     <Compile Include="ViewModel\Form\HR\ManpowerRequisitionVM.cs" />
     <Compile Include="ViewModel\Form\HR\ClaimPaymentDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\MonthlyFeeDetailVM.cs" />

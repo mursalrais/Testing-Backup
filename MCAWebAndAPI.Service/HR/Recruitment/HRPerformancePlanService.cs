@@ -100,9 +100,12 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         private ProfessionalPerformancePlanVM ConvertToProfessionalPerformancePlanModel(ListItem listItem)
         {
             var viewModel = new ProfessionalPerformancePlanVM();
-
+            string firstName;
+            string lastName;
             viewModel.ID = Convert.ToInt32(listItem["ID"]);
-            viewModel.Name = FormatUtil.ConvertLookupToValue(listItem, "professional");
+            firstName = FormatUtil.ConvertLookupToValue(listItem, "professional");
+            lastName = FormatUtil.ConvertLookupToValue(listItem, "professional_x003a_Last_x0020_Na");
+            viewModel.Name = string.Format("{0} {1}", firstName, lastName);
             viewModel.ProfessionalID = FormatUtil.ConvertLookupToID(listItem, "professional_x003a_ID");
             viewModel.PositionAndDepartement = FormatUtil.ConvertLookupToValue(listItem, "Position");
             viewModel.PerformancePeriod = FormatUtil.ConvertLookupToValue(listItem, "performanceplan");

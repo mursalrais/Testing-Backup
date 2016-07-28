@@ -6,16 +6,17 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Web;
-using System.Linq;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
-    public class ProjectOrUnitGoalsDetailVM : IndividualGoalDetailVM
+    public class LocationMasterVM
     {
-        /// <summary>
-        /// projectunitgoals
-        /// </summary>
-        [UIHint("TextArea")]
-        public string ProjectOrUnitGoals { get; set; }
+        public AjaxComboBoxVM MyProperty { get; set; } = new AjaxComboBoxVM();
+
+        public string Office { get; set; }
+
+        public int Floor { get; set; }
+
+        public string Room { get; set; }
     }
 }

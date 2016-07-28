@@ -253,8 +253,9 @@
 
         $(document).ready(function () {
             var Requestor = '@(SessionManager.Get<string>("RequestorUserLogin"))';
+            var ListName = '@(SessionManager.Get<string>("ListName"))';
             if (Requestor != null) {
-                displayWorkflowRouter("workflow-placeholder", "@ViewBag.ListName", Requestor);
+                displayWorkflowRouter("workflow-placeholder", ListName, Requestor);
             }
         });
     </script>
