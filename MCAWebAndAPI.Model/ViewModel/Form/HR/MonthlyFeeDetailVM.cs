@@ -54,11 +54,11 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public static InGridComboBoxVM GetCurrencyDefaultValue(InGridComboBoxVM model = null)
         {
             var options = GetCurrencyOptions();
-            if (model == null || model.Value == null || string.IsNullOrEmpty(model.Text))
+            if (model == null || (model.Value == null && model.Text == null) || string.IsNullOrEmpty(model.Text))
                 return options.FirstOrDefault();
 
-            return options.FirstOrDefault(e =>
-                e.Value == model.Value || e.Text == model.Text);
+            return options.FirstOrDefault(e => e.Value == null ?
+                e.Value == model.Value : e.Text == model.Text);
         }
     }
 }

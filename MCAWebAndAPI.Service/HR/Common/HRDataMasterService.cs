@@ -112,7 +112,7 @@ namespace MCAWebAndAPI.Service.HR.Common
                 Project_Unit = Convert.ToString(item["Project_x002f_Unit"]),
                 OfficeEmail = Convert.ToString(item["officeemail"]),
                 PSANumber = Convert.ToString(item["PSAnumber"]),
-                //JoinDate = Convert.ToDateTime(item["Join_x0020_Date"]).ToLongDateString();
+                JoinDate = Convert.ToDateTime(item["Join_x0020_Date"]),
                 JoinDateTemp = Convert.ToDateTime(item["Join_x0020_Date"]).ToLocalTime().ToShortDateString()
             };
         }
@@ -896,6 +896,20 @@ namespace MCAWebAndAPI.Service.HR.Common
             foreach (var item in SPConnector.GetList(SP_PRODEP_LIST_NAME, _siteUrl))
             {
                 models.Add(ConvertToDependentModel_Light(item));
+            }
+
+            return models;
+        }
+
+        public IEnumerable<PositionMaster> GetPositionsManpower(string Level)
+        {
+
+            string caml = @"<View><Query><Where><Eq><FieldRef Name='projectunit' /><Value Type='Choice'>" + Level + "</Value></Eq></Where></Query><ViewFields><FieldRef Name='ID' /><FieldRef Name='ContentType' /><FieldRef Name='Title' /><FieldRef Name='Modified' /><FieldRef Name='Created' /><FieldRef Name='Author' /><FieldRef Name='Editor' /><FieldRef Name='_UIVersionString' /><FieldRef Name='Attachments' /><FieldRef Name='Edit' /><FieldRef Name='LinkTitleNoMenu' /><FieldRef Name='LinkTitle' /><FieldRef Name='DocIcon' /><FieldRef Name='ItemChildCount' /><FieldRef Name='FolderChildCount' /><FieldRef Name='AppAuthor' /><FieldRef Name='AppEditor' /><FieldRef Name='projectunit' /><FieldRef Name='iskeyposition' /><FieldRef Name='positionstatus' /><FieldRef Name='Remarks' /></ViewFields><QueryOptions /></View>";
+            var models = new List<PositionMaster>();
+
+            foreach (var item in SPConnector.GetList(SP_POSMAS_LIST_NAME, _siteUrl, caml))
+            {
+                models.Add(ConvertToPositionsModel(item));
             }
 
             return models;

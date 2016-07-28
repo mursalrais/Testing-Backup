@@ -97,6 +97,15 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to /Lists/Compensatory%20Request.
+        /// </summary>
+        public static string Compensatory {
+            get {
+                return ResourceManager.GetString("Compensatory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0}/Application%20Documents/Forms/AllItems.aspx#InplviewHash4adbc69d-4587-40ad-8645-58b419984117=FilterField1%3Dapplication%255Fx003a%255FID-FilterValue1%3D{1}.
         /// </summary>
         public static string CVDocumentByID {

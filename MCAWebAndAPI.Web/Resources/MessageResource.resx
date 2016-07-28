@@ -126,6 +126,11 @@
   <data name="ErrorProfessionalNotFound" xml:space="preserve">
     <value>Professional data that uses email {0} is not found. Please contact your IT Administrator.</value>
   </data>
+  <data name="ErrorUpdateProfessional" xml:space="preserve">
+    <value>Applicant's Data is not sufficient to inserted as Professional Data, 
+
+Please complate the Applicant's data</value>
+  </data>
   <data name="SuccessCommon" xml:space="preserve">
     <value>Congratulation. It works!</value>
   </data>

@@ -53,6 +53,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             OnSelectEventName = "OnSelectProfessionalName"
         };
 
+        public string ProfessionalNameString { get; set; }
+
         /// <summary>
         /// professional
         /// </summary>

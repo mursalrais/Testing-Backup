@@ -78,15 +78,15 @@
                     @Html.HiddenFor(m => m.PerformancePeriodID)
                 </div>
             </div>
-            <div class="form-group" id="ParentDiv">
+            <div class="form-group">
                 <div class="col-sm-8">
-                    @Html.DisplayFor(m => m.StatusForm)
+                    @Html.HiddenFor(m => m.StatusForm)
                 </div>
             </div>
         </div>
         @if (Model.Requestor != null)
         {
-            <legend>Approval Workflow</legend>
+            <legend>Approval Path</legend>
             <div id="workflow-placeholder" class="row" />
         }
     </fieldset>
@@ -253,8 +253,9 @@
 
         $(document).ready(function () {
             var Requestor = '@(SessionManager.Get<string>("RequestorUserLogin"))';
+            var ListName = '@(SessionManager.Get<string>("ListName"))';
             if (Requestor != null) {
-                displayWorkflowRouter("workflow-placeholder", "@ViewBag.ListName", Requestor);
+                displayWorkflowRouter("workflow-placeholder", ListName, Requestor);
             }
         });
     </script>
