@@ -105,7 +105,9 @@
     <Compile Include="Asset\IAssetTransferService.cs" />
     <Compile Include="Asset\IAssignmentofAssetService.cs" />
     <Compile Include="Asset\ILocationMasterService.cs" />
+    <Compile Include="Asset\ILocationService.cs" />
     <Compile Include="Asset\LocationMasterService.cs" />
+    <Compile Include="Asset\LocationService.cs" />
     <Compile Include="Common\ILocationService.cs" />
     <Compile Include="Common\IWorkflowService.cs" />
     <Compile Include="Common\LocationService.cs" />

@@ -52,7 +52,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// individualgoalplan
         /// </summary>
         [UIHint("TextArea")]
-        [Required]
         public string IndividualGoalAndPlan { get; set; }
 
         /// <summary>
