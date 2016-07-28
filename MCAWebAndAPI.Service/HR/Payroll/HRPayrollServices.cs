@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
 using NLog;
 using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Service.Resources;
+using MCAWebAndAPI.Service.HR.Common;
 
 namespace MCAWebAndAPI.Service.HR.Payroll
 {
@@ -16,8 +14,11 @@ namespace MCAWebAndAPI.Service.HR.Payroll
     {
         string _siteUrl;
         static Logger logger = LogManager.GetCurrentClassLogger();
-        const string SP_HEADER_LIST_NAME = "Monthly Fee";
-        const string SP_DETAIL_LIST_NAME = "Monthly Fee Detail";
+        const string SP_MON_FEE_LIST_NAME = "Monthly Fee";
+        const string SP_MON_FEE_DETAIL_LIST_NAME = "Monthly Fee Detail";
+
+        IHRDataMasterService _dataMasterService = new HRDataMasterService();
+        
 
         public int CreateHeader(MonthlyFeeVM header)
         {
@@ -31,14 +32,14 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             columnValues.Add("psaexpirydate", header.EndOfContract);
             try
             {
-                SPConnector.AddListItem(SP_HEADER_LIST_NAME, columnValues, _siteUrl);
+                SPConnector.AddListItem(SP_MON_FEE_LIST_NAME, columnValues, _siteUrl);
             }
             catch (Exception e)
             {
                 logger.Error(e.Message);
             }
 
-            return SPConnector.GetLatestListItemID(SP_HEADER_LIST_NAME, _siteUrl);
+            return SPConnector.GetLatestListItemID(SP_MON_FEE_LIST_NAME, _siteUrl);
         }
 
         public MonthlyFeeVM GetPopulatedModel(int? id = null)
@@ -66,7 +67,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
 
             try
             {
-                SPConnector.UpdateListItem(SP_HEADER_LIST_NAME, ID, columnValues, _siteUrl);
+                SPConnector.UpdateListItem(SP_MON_FEE_LIST_NAME, ID, columnValues, _siteUrl);
             }
             catch (Exception e)
             {
@@ -80,7 +81,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
 
         public MonthlyFeeVM GetHeader(int? ID)
         {
-            var listItem = SPConnector.GetListItem(SP_HEADER_LIST_NAME, ID, _siteUrl);
+            var listItem = SPConnector.GetListItem(SP_MON_FEE_LIST_NAME, ID, _siteUrl);
             return ConvertToMonthlyFeeModel(listItem);
         }
 
@@ -115,7 +116,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
                 {
                     try
                     {
-                        SPConnector.DeleteListItem(SP_DETAIL_LIST_NAME, viewModel.ID, _siteUrl);
+                        SPConnector.DeleteListItem(SP_MON_FEE_DETAIL_LIST_NAME, viewModel.ID, _siteUrl);
 
                     }
                     catch (Exception e)
@@ -134,9 +135,9 @@ namespace MCAWebAndAPI.Service.HR.Payroll
                 try
                 {
                     if (Item.CheckIfUpdated(viewModel))
-                        SPConnector.UpdateListItem(SP_DETAIL_LIST_NAME, viewModel.ID, updatedValue, _siteUrl);
+                        SPConnector.UpdateListItem(SP_MON_FEE_DETAIL_LIST_NAME, viewModel.ID, updatedValue, _siteUrl);
                     else
-                        SPConnector.AddListItem(SP_DETAIL_LIST_NAME, updatedValue, _siteUrl);
+                        SPConnector.AddListItem(SP_MON_FEE_DETAIL_LIST_NAME, updatedValue, _siteUrl);
                 }
                 catch (Exception e)
                 {
@@ -150,7 +151,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             var caml = @"<View><Query><Where><Eq><FieldRef Name='monthlyfeeid' /><Value Type='Lookup'>" + ID.ToString() + "</Value></Eq></Where></Query></View>";
 
             var MonthlyFeeDetails = new List<MonthlyFeeDetailVM>();
-            foreach (var item in SPConnector.GetList(SP_DETAIL_LIST_NAME, _siteUrl, caml))
+            foreach (var item in SPConnector.GetList(SP_MON_FEE_DETAIL_LIST_NAME, _siteUrl, caml))
             {
                 MonthlyFeeDetails.Add(ConvertToMonthlyFeeDetailVM(item));
             }
@@ -172,6 +173,28 @@ namespace MCAWebAndAPI.Service.HR.Payroll
                         Text = Convert.ToString(item["currency"])
                     }),
             };
+        }
+
+        public IEnumerable<PayrollDetailVM> GetPayrollDetails(DateTime period)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<PayrollWorksheetDetailVM> GetPayrollWorksheetDetails(DateTime period)
+        {
+            var startDate = period.GetFirstPayrollDay();
+            var finishDate = period.GetLastPayrollDay();
+            
+
+            var dateRange = startDate.EachDay(finishDate);
+            
+
+            foreach (var item in dateRange)
+            {
+
+            }
+
+            throw new NotImplementedException();
         }
     }
 }

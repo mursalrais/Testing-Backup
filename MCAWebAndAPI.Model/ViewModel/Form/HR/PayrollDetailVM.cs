@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
     public class PayrollDetailVM
     {
-
         [DisplayName("Professional ID")]
         public string ProfessionalID { get; set; }
 
@@ -46,14 +41,11 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [DisplayName("Unpaid Day-Off")]
         public double UnpaidDayOff { get; set; }
 
-
         [DisplayName("Base")]
         public double Base { get; set; }
 
-
         [DisplayName("Adjustment")]
         public double Adjustment { get; set; }
-
 
         [DisplayName("Spot Award")]
         public double SpotAward { get; set; }
@@ -70,7 +62,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [DisplayName("Day-Off Balance")]
         public double DayOffBalance { get; set; }
 
-
         [DisplayName("Payment ")]
         public double Payment { get; set; }
 
@@ -80,13 +71,11 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [DisplayName("Take Home Pay")]
         public double TakeHomePay { get; set; }
 
-
         [DisplayName("Saving Fund")]
         public double SavingFund { get; set; }
 
         [DisplayName("Bank Account Name ")]
         public string BankAccountName { get; set; }
-
 
         [DisplayName("Currency")]
         public string BankAccountCurrency { get; set; }
@@ -94,13 +83,10 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [DisplayName("Bank Account Number ")]
         public string BankAccountNumber { get; set; }
 
-
         [DisplayName("Bank Name")]
         public string BankName { get; set; }
 
-
         [DisplayName("Branch Office")]
         public string BankBranchOffice { get; set; }
-
     }
 }

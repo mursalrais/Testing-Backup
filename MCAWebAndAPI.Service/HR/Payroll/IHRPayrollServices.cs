@@ -1,9 +1,6 @@
 ﻿using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Service.HR.Payroll
 {
@@ -20,5 +17,9 @@ namespace MCAWebAndAPI.Service.HR.Payroll
         bool UpdateHeader(MonthlyFeeVM header);
 
         void CreateMonthlyFeeDetails(int? headerID, IEnumerable<MonthlyFeeDetailVM> monthlyFeeDetails);
+
+        IEnumerable<PayrollDetailVM> GetPayrollDetails(DateTime period);
+
+        IEnumerable<PayrollWorksheetDetailVM> GetPayrollWorksheetDetails(DateTime period);
     }
 }

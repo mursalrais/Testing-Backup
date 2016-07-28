@@ -161,6 +161,7 @@
     <Compile Include="ViewModel\Form\HR\OrganizationalDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\OutputDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\PayrollDetailVM.cs" />
+    <Compile Include="ViewModel\Form\HR\PayrollWorksheetDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\PerformanceEvaluationDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\PerformanceMonitoringDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\PerformanceEvaluationVM.cs" />
