@@ -61,7 +61,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.Remarks = Convert.ToString(listItem["applicationremarks"]); 
             viewModel.NeedNextInterviewer.Value = Convert.ToString(listItem["neednextinterview"]);
             viewModel.RecommendedForPosition.Value = Convert.ToString(listItem["applicationstatus"]);
+            viewModel.Attachmentname = GetAttachment(viewModel.ID);
             viewModel.InterviewResultOption.Value = GetLastResult(viewModel.ID).ToString();
+
             // Convert Details
             viewModel.InterviewlistDetails = GetInputInterviewResult(viewModel.ID);
             return viewModel;
@@ -145,7 +147,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         private string GetLastResult(int? ID)
         {
-            var viewModel = new ApplicationShortlistVM();
             var caml = @"
                          <Query> 
                             <Where>
@@ -166,6 +167,35 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 result = Convert.ToString(item["interviewresult"]);
             }
+
+            return result;
+        }
+
+        private string GetAttachment(int? ID)
+        {
+            var caml = @"<view>
+                         <Query> 
+                            <Where>
+                            <Eq>
+                                <FieldRef Name='application_x003a_ID' />
+                                <Value Type='Lookup'>" + ID + @"</Value>
+                            </Eq>
+                           </Where>
+                           <OrderBy><FieldRef Name='ID' Ascending='FALSE' /><FieldRef Name='Created' Ascending='FALSE' /></OrderBy> 
+                        </Query> 
+                        <ViewFields> 
+                              <FieldRef Name='FileLeafRef' />
+                        </ViewFields><RowLimit>4</RowLimit></view>";
+
+            List<string> filelist = new List<string>();
+
+            var list = SPConnector.GetList(SP_APPDOC_LIST_NAME, _siteUrl, caml);
+            foreach (var item in list)
+            {
+                filelist.Add(Convert.ToString(item["FileLeafRef"]));
+            }
+
+            var result = string.Join(", ", filelist.ToArray());
 
             return result;
         }
@@ -433,13 +463,13 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             try
             {
                 SPConnector.UpdateListItem(SP_APPDATA_LIST_NAME, headerID, createdValue, _siteUrl);
-                
             }
-                catch (Exception e)
-                {
-                    logger.Error(e.Message);
-                    throw e;
-                }
+            catch (Exception e)
+            {
+                logger.Error(e.Message);
+                throw e;
+            }
+            
         }
 
         public void CreateInputIntvResult(int? headerID, ApplicationShortlistVM viewModel)

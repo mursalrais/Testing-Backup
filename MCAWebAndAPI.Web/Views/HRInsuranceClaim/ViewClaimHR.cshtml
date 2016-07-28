@@ -1,0 +1,59 @@
+﻿
+@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model ViewInsuranceProfessionalVM
+<div class="col-sm-12">
+  
+
+
+
+
+</div>
+<script>
+    function editRedirect(e) {
+        e.preventDefault();
+
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+
+        window.top.location.href = dataItem.URL + '/Lists/InsuranceClaim/EditForm.aspx?ID=' + dataItem.ID;
+
+    }
+
+    function deleteRedirect(e) {
+        var result = confirm("Are you sure you want to delete this item?");
+        if (!result) return;
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        $.ajax({
+            url: '/HRInsuranceClaim/deleteClaimId/' + dataItem.ID,
+            type: "POST",
+            success: function () {
+                window.top.location.href = dataItem.URL + '/Lists/InsuranceClaim/Allitems.aspx';
+            },
+            error: function (err) {
+                alert("Error while deleting item: " + JSON.stringify(err));
+            }
+
+        });
+
+
+
+    }
+
+
+    $("#newRedirect").click(function (e) {
+        e.preventDefault();
+        window.top.location.href = $("#URL").val() + '/Lists/InsuranceClaim/NewForm.aspx';
+    });
+
+
+
+
+    function additionalInfo() {
+        return {
+            useremail: $("#Email").val()
+        }
+
+    }
+
+</script>
+

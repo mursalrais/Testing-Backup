@@ -105,7 +105,9 @@
     <Compile Include="Asset\IAssetTransferService.cs" />
     <Compile Include="Asset\IAssignmentofAssetService.cs" />
     <Compile Include="Asset\ILocationMasterService.cs" />
+    <Compile Include="Asset\ILocationService.cs" />
     <Compile Include="Asset\LocationMasterService.cs" />
+    <Compile Include="Asset\LocationService.cs" />
     <Compile Include="Common\ILocationService.cs" />
     <Compile Include="Common\IWorkflowService.cs" />
     <Compile Include="Common\LocationService.cs" />
@@ -118,6 +120,8 @@
     <Compile Include="HR\Compensatory\IHRCompensatoryService.cs" />
     <Compile Include="HR\InsuranceClaim\IInsuranceClaimService.cs" />
     <Compile Include="HR\InsuranceClaim\InsuranceClaimService.cs" />
+    <Compile Include="HR\Payroll\FeeSlipService.cs" />
+    <Compile Include="HR\Payroll\IFeeSlipService.cs" />
     <Compile Include="HR\Recruitment\ExitProcedureService.cs" />
     <Compile Include="HR\Recruitment\HRInterviewService.cs" />
     <Compile Include="HR\Recruitment\HRPerformancePlanService.cs" />
@@ -130,6 +134,8 @@
     <Compile Include="HR\Recruitment\IPerformanceMonitoringService.cs" />
     <Compile Include="HR\Recruitment\PerformanceEvaluationService.cs" />
     <Compile Include="HR\Recruitment\PerformanceMonitoringService.cs" />
+    <Compile Include="HR\Timesheet\ITimesheetService.cs" />
+    <Compile Include="HR\Timesheet\TimesheetService.cs" />
     <Compile Include="HR\Travel\ITRPlaceMasterService.cs" />
     <Compile Include="HR\Travel\TRPlaceMasterService.cs" />
     <Compile Include="HR\Recruitment\HRManpowerRequisitionService.cs" />
@@ -168,6 +174,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>UrlResource.resx</DependentUpon>
     </Compile>
+    <Compile Include="Utils\DateTimeExtensions.cs" />
     <Compile Include="Utils\EmailUtil.cs" />
     <Compile Include="Utils\FormatUtil.cs" />
     <Compile Include="Utils\GraphicUtil.cs" />

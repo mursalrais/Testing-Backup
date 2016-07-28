@@ -1,0 +1,107 @@
+﻿
+@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model ViewInsuranceProfessionalVM
+<div class="col-sm-12">
+    @Html.HiddenFor(m => m.URL)
+    @Html.HiddenFor(m => m.Email)
+    @(Html.Kendo().Grid<dynamic>()
+          .Name("gridDataView")
+          .Columns(columns =>
+          {
+              foreach (System.Data.DataColumn column in Model.dtDetails.Columns)
+              {
+
+                  var c = columns.Bound(column.ColumnName);
+                  if (column.DataType.FullName == "System.Double")
+                  {
+                      c.ClientTemplate("#= kendo.toString(" + column.ColumnName + ",'n0') # ");
+                      c.Title("Claim Amount");
+                  }
+                  else
+                  {
+                      c.ClientTemplate("#=" + column.ColumnName + " # ");
+                  }
+                  if (column.ColumnName == "ClaimDate")
+                  {
+                      c.Title("Claim Date");
+                  }
+                  if (column.ColumnName == "ID" || column.ColumnName == "Year" || column.ColumnName == "URL")
+                  {
+                      c.Hidden();
+                  }
+
+              }
+
+              columns.Command(command => command.Custom("Edit").Click("editRedirect"));
+              columns.Command(command => command.Custom("Delete").Click("deleteRedirect"));
+          })
+          .ToolBar(toolbar =>
+          {
+              toolbar.Custom().Text("New Item").HtmlAttributes(new { id = "newRedirect" });
+          })
+          .DataSource(dataSource => dataSource
+              .Ajax()
+              .Group(g => g.Add("Year", typeof(int))
+              )
+              .Model(model =>
+              {
+                  var id = "ID";
+                  model.Id(id);
+              })
+
+          .Read(read => read.Action("ReadProfessional", "HRInsuranceClaim").Data("additionalInfo"))
+    )
+    )
+
+
+
+</div>
+<script>
+    function editRedirect(e) {
+        e.preventDefault();
+
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+
+        window.top.location.href = dataItem.URL + '/Lists/InsuranceClaim/EditForm.aspx?ID=' + dataItem.ID;
+
+    }
+
+    function deleteRedirect(e) {
+        var result = confirm("Are you sure you want to delete this item?");
+        if (!result) return;
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        $.ajax({
+            url: '/HRInsuranceClaim/deleteClaimId/' + dataItem.ID,
+            type: "POST",
+            success: function () {
+                window.top.location.href = dataItem.URL + '/Lists/InsuranceClaim/Allitems.aspx';
+            },
+            error: function (err) {
+                alert("Error while deleting item: " + JSON.stringify(err));
+            }
+
+        });
+
+
+
+    }
+
+
+    $("#newRedirect").click(function (e) {
+        e.preventDefault();
+        window.top.location.href = $("#URL").val() + '/Lists/InsuranceClaim/NewForm.aspx';
+    });
+
+
+
+
+    function additionalInfo() {
+        return {
+            useremail: $("#Email").val()
+        }
+
+    }
+
+</script>
+

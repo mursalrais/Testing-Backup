@@ -34,8 +34,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         {
             ControllerName = "HRDataMaster",
             ActionName = "GetProfessionals",
+            OnSelectEventName = "OnChangeProffesional",
             ValueField = "ID",
-            TextField = "Desc"
+            TextField = "Desc1"
         };
 
         /// <summary>
@@ -53,6 +54,20 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             OnSelectEventName = "OnChangeCompensatory",
             Filter = "filterLevel",
             Cascade = "ddlProfessional_Value"
+        };
+
+        /// <summary>
+        /// positionrequested
+        /// </summary>
+        [UIHint("AjaxComboBox")]
+        [DisplayName("Compensatory Title")]
+        public AjaxComboBoxVM ddlUserCompensatoryID { get; set; } = new AjaxComboBoxVM
+        {
+            ControllerName = "HRCompensatory",
+            ActionName = "GetUserCompensatoryddl",
+            ValueField = "ID",
+            TextField = "Desc",
+            OnSelectEventName = "OnChangeCompensatory"
         };
 
         /// <head>

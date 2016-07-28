@@ -16,6 +16,7 @@ using System.IO;
 using MCAWebAndAPI.Service.Converter;
 using Elmah;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -48,7 +49,9 @@ namespace MCAWebAndAPI.Web.Controllers
             var viewmodel = _service.GetComplistbyCmpid(iD);
 
             viewmodel.cmpID = iD;
-            if(viewmodel.cmpEmail != null)
+            SessionManager.Set("IdComp", Convert.ToString(iD));
+
+            if (viewmodel.cmpEmail != null)
             SessionManager.Set("RequestorUserLogin", viewmodel.cmpEmail);
 
             return View(viewmodel);
@@ -77,6 +80,12 @@ namespace MCAWebAndAPI.Web.Controllers
             {
                 viewmodel = _service.GetComplistbyCmpid(iD);
             }
+
+            ViewBag.ListName = "Compensatory%20Request";
+
+            viewmodel.cmpID = iD;
+            if (viewmodel.cmpEmail != null)
+                SessionManager.Set("RequestorUserLogin", viewmodel.cmpEmail);
 
             return View(viewmodel);
         }
@@ -133,7 +142,10 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            _service.UpdateHeader(viewModel);
+            if (viewModel.StatusForm != "submit")
+            {
+                _service.UpdateHeader(viewModel);
+            }
 
             if (viewModel.StatusForm != "DraftInitiated")
             {
@@ -141,12 +153,7 @@ namespace MCAWebAndAPI.Web.Controllers
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.cmpID);
             }
 
-            return RedirectToAction("Index",
-               "Success",
-               new
-               {
-                   errorMessage = string.Format(MessageResource.SuccessCreateCompensatoryData, viewModel.cmpName)
-               });
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.Compensatory);
         }
 
         private IEnumerable<CompensatoryDetailVM> BindCompensatorylistDateTime(FormCollection form, IEnumerable<CompensatoryDetailVM> compDetails)
@@ -183,27 +190,55 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetCompensatoryddl(int? idProf = null)
         {
-            _service.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
-            var positions = _service.GetCompensatoryId(idProf);
+            var comps = _service.GetCompensatoryIdbyProf(idProf);
 
-            return Json(positions.Select(e =>
+            return Json(comps.Select(e =>
                 new {
                     e.ID,
                     e.CompensatoryID,
                     e.CompensatoryDate,
                     e.CompensatoryTitle,
+                    e.CompensatoryStatus,
                     Desc = string.Format("{0} {1}", e.CompensatoryDate, e.CompensatoryTitle)
                 }),
                 JsonRequestBehavior.AllowGet);
         }
 
-        public async Task<ActionResult> GetCompensatoryDetails(int idComp)
+        public JsonResult GetUserCompensatoryddl()
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
-            var viewmodel = _service.GetComplistbyCmpid(idComp);
+            var getComp = SessionManager.Get<string>("IdComp");
+
+            var comps = _service.GetCompensatoryId(Convert.ToInt32(getComp)); 
+
+            return Json(comps.Select(e =>
+                new {
+                    e.ID,
+                    e.CompensatoryID,
+                    e.CompensatoryDate,
+                    e.CompensatoryTitle,
+                    e.CompensatoryStatus,
+                    Desc = string.Format("{0} {1}", e.CompensatoryDate, e.CompensatoryTitle)
+                }),
+                JsonRequestBehavior.AllowGet);
+        }
+
+        public async Task<ActionResult> GetCompensatoryDetails(int? idComp)
+        {
+            var viewmodel = new CompensatoryVM();
+
+            if (idComp == null)
+                return PartialView("_InputCompensantoryDetails", viewmodel.CompensatoryDetails);
+
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            viewmodel = _service.GetComplistbyCmpid(idComp);
 
             return PartialView("_InputCompensantoryDetails", viewmodel.CompensatoryDetails);
         }

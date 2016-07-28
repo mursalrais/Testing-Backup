@@ -18,7 +18,7 @@
             )
             .EditorViewData(new
             {
-                BindTo = ProjectOrUnitGoalsDetailVM.GetCategoryOptions()
+                BindTo = IndividualGoalDetailVM.GetCategoryOptions()
             });
             columns.Bound(p => p.IndividualGoalAndPlan).ClientTemplate("#= IndividualGoalAndPlan #" +
             "<input type='hidden' name='ProjectOrUnitGoalsDetails[#= getProfessionalPerformancePlanDetail(data)#].IndividualGoalAndPlan' value='#= IndividualGoalAndPlan #' />"
@@ -48,7 +48,7 @@
         .Model(model =>
         {
             model.Id(p => p.ID);
-            model.Field(m => m.Category).DefaultValue(ProjectOrUnitGoalsDetailVM.GetCategoryDefaultValue());
+            model.Field(p => p.Category).DefaultValue(ProjectOrUnitGoalsDetailVM.GetCategoryDefaultValue());
         })
         .ServerOperation(false)
         )

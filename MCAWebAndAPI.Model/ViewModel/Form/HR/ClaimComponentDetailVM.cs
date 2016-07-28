@@ -31,7 +31,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
                 "Medical Examination",
                 "Laboratorium",
                 "Prescription",
-                "Medical Check Up",
                 "Others",
             };
 
@@ -83,6 +82,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// </summary>
         [UIHint("TextArea")]
         public string Remarks { get; set; }
+
+       
 
         public static InGridComboBoxVM GetCurrencyDefaultValue(InGridComboBoxVM model = null)
         {

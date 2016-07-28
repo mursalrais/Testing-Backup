@@ -14,7 +14,7 @@
         columns.Bound(p => p.InterviewPanel).ClientTemplate("#= InterviewPanel #" +
         "<input type='hidden' name='InterviewlistDetails[#= GetDetailShortlist(data)#].InterviewPanel' value='#= InterviewPanel #' />");
 
-        columns.Bound(p => p.InterviewSummary).ClientTemplate("<input name='InterviewlistDetails[#= GetDetailShortlist(data)#].InterviewSummary' value='#= InterviewSummary #' style='width: 300px; height: 200px; border: none; background-color: transparent' />");
+        columns.Bound(p => p.InterviewSummary).ClientTemplate("<textarea name='InterviewlistDetails[#= GetDetailShortlist(data)#].InterviewSummary' style='width: 300px; height: 50px; border: none; background-color: transparent' disable> #= InterviewSummary #</textarea>");
 
         columns.Bound(p => p.Result).ClientTemplate("#= Result #" +
        "<input type='hidden' name='InterviewlistDetails[#= GetDetailShortlist(data)#].Result' value='#= Result #' />");

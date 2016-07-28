@@ -112,7 +112,7 @@ namespace MCAWebAndAPI.Service.HR.Common
                 Project_Unit = Convert.ToString(item["Project_x002f_Unit"]),
                 OfficeEmail = Convert.ToString(item["officeemail"]),
                 PSANumber = Convert.ToString(item["PSAnumber"]),
-                //JoinDate = Convert.ToDateTime(item["Join_x0020_Date"]).ToLongDateString();
+                JoinDate = Convert.ToDateTime(item["Join_x0020_Date"]),
                 JoinDateTemp = Convert.ToDateTime(item["Join_x0020_Date"]).ToLocalTime().ToShortDateString()
             };
         }
@@ -127,6 +127,11 @@ namespace MCAWebAndAPI.Service.HR.Common
             }
 
             return models;
+        }
+
+        public IEnumerable<PositionMaster> GetPositionsManpower(string Level)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

@@ -1234,9 +1234,13 @@
     <Content Include="Views\HRCompensatory\ListCompensatoryDetails.cshtml" />
     <Content Include="Views\HRInsuranceClaim\CreateInsuranceClaim.cshtml" />
     <Content Include="Views\HRInsuranceClaim\_ClaimComponentDetail.cshtml" />
-    <Content Include="Views\HRInsuranceClaim\_MedicalClaimDetail.cshtml" />
     <Content Include="Views\HRInsuranceClaim\EditInsuranceClaim.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DropDown.cshtml" />
+    <Content Include="Views\HRInsuranceClaim\SubmitAxa.cshtml" />
+    <Content Include="Views\HRInsuranceClaim\_ClaimComponentAXA.cshtml" />
+    <Content Include="Views\HRInsuranceClaim\ExportToExcel.cshtml" />
+    <Content Include="Views\HRInsuranceClaim\ViewClaimProfessional.cshtml" />
+    <Content Include="Views\HRInsuranceClaim\ViewClaimHR.cshtml" />
     <Content Include="Views\HRInsuranceClaim\SubmitAXA.cshtml" />
     <Content Include="Views\ASSAssetMaster\Upload.cshtml" />
     <Content Include="Views\ASSAssetMaster\_DisplayGrid.cshtml" />
@@ -1362,6 +1366,7 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ConfigResource.Designer.cs</LastGenOutput>
       <CustomToolNamespace>MCAWebAndAPI.Web.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\EmailResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
