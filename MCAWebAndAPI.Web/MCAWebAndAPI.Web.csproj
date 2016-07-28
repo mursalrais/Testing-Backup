@@ -944,8 +944,8 @@
     <Content Include="Views\ASSAssetScrapping\Edit.cshtml" />
     <Content Include="Views\ASSAssetSmallValueAsset\Create.cshtml" />
     <Content Include="Views\ASSAssetTransfer\Create.cshtml" />
-    <Content Include="Views\ASSAssignmentofAsset\Create.cshtml" />
-    <Content Include="Views\ASSAssignmentofAsset\Edit.cshtml" />
+    <Content Include="Views\ASSAssetTransaction\ASSAssignmentofAsset\Create.cshtml" />
+    <Content Include="Views\ASSAssetTransaction\ASSAssignmentofAsset\Edit.cshtml" />
     <Content Include="Views\Shared\_LayoutHome.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\BIEmbed\WFP03.cshtml" />
@@ -1238,6 +1238,8 @@
     <Content Include="Views\HRInsuranceClaim\EditInsuranceClaim.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DropDown.cshtml" />
     <Content Include="Views\HRInsuranceClaim\SubmitAXA.cshtml" />
+    <Content Include="Views\ASSAssetMaster\Upload.cshtml" />
+    <Content Include="Views\ASSAssetMaster\_DisplayGrid.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
