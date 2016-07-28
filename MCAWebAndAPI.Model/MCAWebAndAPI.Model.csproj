@@ -35,7 +35,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Kendo.Mvc">
-      <HintPath>..\MCAWebAndAPI.Web\bin\Kendo.Mvc.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Telerik\UI for ASP.NET MVC Q2 2016\wrappers\aspnetmvc\Binaries\Mvc5\Kendo.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -44,10 +44,6 @@
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Mvc">
       <HintPath>C:\Program Files (x86)\Microsoft ASP.NET\ASP.NET Web Stack 5\Packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\MCAWebAndAPI.Web\bin\System.Web.WebPages.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -60,8 +56,6 @@
     <Compile Include="Common\Item.cs" />
     <Compile Include="Common\Location.cs" />
     <Compile Include="Common\Workflow.cs" />
-    <Compile Include="ConditionalRequiredAttribute.cs" />
-    <Compile Include="EqualityExpression.cs" />
     <Compile Include="HR\DataMaster\DependentMaster.cs" />
     <Compile Include="HR\DataMaster\PositionMaster.cs" />
     <Compile Include="HR\DataMaster\ProfessionalMaster.cs" />
@@ -167,6 +161,7 @@
     <Compile Include="ViewModel\Form\HR\MonthlyFeeVM.cs" />
     <Compile Include="ViewModel\Form\HR\OrganizationalDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\OutputDetailVM.cs" />
+    <Compile Include="ViewModel\Form\HR\PayrollDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\PerformanceEvaluationDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\PerformanceMonitoringDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\PerformanceEvaluationVM.cs" />
@@ -181,6 +176,8 @@
     <Compile Include="ViewModel\Form\HR\PSAManagementVM.cs" />
     <Compile Include="ViewModel\Form\HR\ShortlistDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\ShortlistedDetailVM.cs" />
+    <Compile Include="ViewModel\Form\HR\TimesheetDetailVM.cs" />
+    <Compile Include="ViewModel\Form\HR\TimesheetVM.cs" />
     <Compile Include="ViewModel\Form\HR\TrainingDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\WorkingExperienceDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\WorkingRelationshipDetailVM.cs" />

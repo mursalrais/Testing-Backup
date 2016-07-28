@@ -99,19 +99,6 @@ namespace MCAWebAndAPI.Web.Controllers
 
             int? headerID = viewModel.ID;
 
-            try
-            {
-                _service.CreateInterviewDataDetail(headerID, viewModel);
-                Task CreateManpowerRequisitionDocumentsTask = _service.CreateInterviewDocumentsSync(headerID, viewModel.Documents);
-
-            }
-            catch (Exception e)
-            {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
-            }
-
-
             if (viewModel.RecommendedForPosition.Value == "On Board")
             {
                 var viewModelApp = new ApplicationDataVM();
@@ -126,8 +113,25 @@ namespace MCAWebAndAPI.Web.Controllers
                 catch (Exception e)
                 {
                     Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                    return JsonHelper.GenerateJsonErrorResponse(e);
+                    return RedirectToAction("ErrorMessage",
+                       "Success",
+                       new
+                       {
+                           eMessage = MessageResource.ErrorUpdateProfessional
+                       });
                 }
+            }
+
+            try
+            {
+                _service.CreateInterviewDataDetail(headerID, viewModel);
+                Task CreateManpowerRequisitionDocumentsTask = _service.CreateInterviewDocumentsSync(headerID, viewModel.Documents);
+
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
             return RedirectToAction("InputInterviewResult",
