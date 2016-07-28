@@ -60,8 +60,6 @@
     <Compile Include="Common\Item.cs" />
     <Compile Include="Common\Location.cs" />
     <Compile Include="Common\Workflow.cs" />
-    <Compile Include="ConditionalRequiredAttribute.cs" />
-    <Compile Include="EqualityExpression.cs" />
     <Compile Include="HR\DataMaster\DependentMaster.cs" />
     <Compile Include="HR\DataMaster\PositionMaster.cs" />
     <Compile Include="HR\DataMaster\ProfessionalMaster.cs" />
@@ -154,6 +152,8 @@
     <Compile Include="ViewModel\Form\HR\ExitProcedureVM.cs" />
     <Compile Include="ViewModel\Form\HR\FactorEvaluatedDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\IndividualGoalDetailVM.cs" />
+    <Compile Include="ViewModel\Form\HR\ViewInsuranceProfessionalVM.cs" />
+    <Compile Include="ViewModel\Form\HR\InsuranceClaimAXAVM.cs" />
     <Compile Include="ViewModel\Form\HR\InsuranceClaimVM.cs" />
     <Compile Include="ViewModel\Form\HR\InterviewDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\InterviewlistDetailVM.cs" />

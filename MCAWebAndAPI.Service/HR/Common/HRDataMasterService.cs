@@ -129,6 +129,11 @@ namespace MCAWebAndAPI.Service.HR.Common
             return models;
         }
 
+        public IEnumerable<PositionMaster> GetPositionsManpower(string Level)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// 
         /// </summary>
