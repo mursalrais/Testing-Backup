@@ -52,7 +52,8 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
 
         private IEnumerable<ClaimComponentDetailVM> GetComponentDetails(int? id)
         {
-            var caml = @"<View><Query><Where><Eq><FieldRef Name='insuranceclaim' /><Value Type='Lookup'>" + id.ToString() + "</Value></Eq></Where></Query></View>";
+            var caml = @"<View><Query><Where><Eq><FieldRef Name='insuranceclaim' />
+            <Value Type='Lookup'>" + id.ToString() + "</Value></Eq></Where></Query></View>";
 
             var componentDetails = new List<ClaimComponentDetailVM>();
             foreach (var item in SPConnector.GetList(SpComponentListName, _siteUrl, caml))
@@ -128,7 +129,7 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
                     Text = Convert.ToString(listItem["claimtype"]),
                     Value = Convert.ToString(listItem["claimtype"])
                 },
-              
+                ProfessionalTextName = Convert.ToString(listItem["Title"])
             };
 
             if (!string.IsNullOrEmpty(Convert.ToString(listItem["claimtotal"])))
@@ -236,36 +237,40 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
         //    return dataTable;
         //}
 
-        private DataTable GetComponentType()
-        {
-            var dt = new DataTable();
-            dt.Columns.Add("Title", typeof(string));
-            var caml = @"<View><Query><Where><Gt><FieldRef Name='ID' />
-            <Value Type='Number'>0</Value></Gt></Where></Query></View>";
+        //private DataTable GetComponentType()
+        //{
+        //    var dt = new DataTable();
+        //    dt.Columns.Add("Title", typeof(string));
+        //    var caml = @"<View><Query><Where><Gt><FieldRef Name='ID' />
+        //    <Value Type='Number'>0</Value></Gt></Where></Query></View>";
 
-            foreach (var item in SPConnector.GetList("Insurance Claim Type", _siteUrl, caml))
-            {
-                DataRow row = dt.NewRow();
+        //    foreach (var item in SPConnector.GetList("Insurance Claim Type", _siteUrl, caml))
+        //    {
+        //        DataRow row = dt.NewRow();
 
-                row["Title"] = Convert.ToString(item["Title"]);
-                dt.Rows.Add(row);
-            }
+        //        row["Title"] = Convert.ToString(item["Title"]);
+        //        dt.Rows.Add(row);
+        //    }
 
-            return dt;
-        }
+        //    return dt;
+        //}
 
       public DataTable getComponentAXAdetails()
         {
-            var dtType = GetComponentType();
+            //var dtType = GetComponentType();
             var dtAxa = new DataTable();
+            //dtAxa.Columns.Add("ID", typeof(int));
             dtAxa.Columns.Add("ProfessionalName", typeof(string));
             dtAxa.Columns.Add("DependentName", typeof(string));
             dtAxa.Columns.Add("ReceiptDate", typeof(string));
-            for (int i = 0; i <= dtType.Rows.Count - 1; i++)
-            {
-                dtAxa.Columns.Add(dtType.Rows[i]["Title"].ToString().Replace(" ",""), typeof(double));
-                dtAxa.Columns[dtType.Rows[i]["Title"].ToString().Replace(" ", "")].DefaultValue = 0;
-            }
+            dtAxa.Columns.Add("MedicalExamination", typeof(double));
+            dtAxa.Columns.Add("Prescription", typeof(double));
+            dtAxa.Columns.Add("Others", typeof(double));
+            //for (int i = 0; i <= dtType.Rows.Count - 1; i++)
+            //{
+            //    dtAxa.Columns.Add(dtType.Rows[i]["Title"].ToString().Replace(" ",""), typeof(double));
+            //    dtAxa.Columns[dtType.Rows[i]["Title"].ToString().Replace(" ", "")].DefaultValue = 0;
+            //}
 
             dtAxa.Columns.Add("TotalAmount", typeof(double));
             dtAxa.Columns["TotalAmount"].DefaultValue = 0;
@@ -273,7 +278,7 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
 
            
             var caml = @"<View><Query><Where><Eq><FieldRef Name='claimstatus' />
-            <Value Type='Text'>Validated by HR</Value></Eq></Where></Query></View>";
+            <Value Type='Choice'>Validated by HR</Value></Eq></Where></Query></View>";
 
             foreach (var item in SPConnector.GetList(SpHeaderListName, _siteUrl, caml))
             {
@@ -283,36 +288,51 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
 
                 row["ProfessionalName"] = professional.Name;
                 row["DependentName"] = FormatUtil.ConvertLookupToValue(item, "dependent");
-                row["ReceiptDate"] = DateTime.Now.ToString("dd/MMM/yyyy");
+                //row["ReceiptDate"] = DateTime.Now.ToString("dd/MMM/yyyy");
 
                 var camldetail = @"<View><Query><Where><Eq><FieldRef Name='insuranceclaim' />
                     <Value Type='Lookup'>" + id + "</Value></Eq></Where></Query></View>";
 
-
-                var dictType = new Dictionary<string, double>();
+                row["MedicalExamination"] = 0.0;
+                row["Prescription"] = 0.0;
+                row["Others"] = 0.0;
+                // var dictType = new Dictionary<string, double>();
                 var dTotal = 0.0;
+                var iDetail = 0;
                 foreach (var itemdetail in SPConnector.GetList(SpComponentListName, _siteUrl, camldetail))
                 {
 
                     var strClaimType = Convert.ToString(itemdetail["claimcomponenttype"]).Replace(" ", "");
-                    dictType.Add(strClaimType, Convert.ToDouble(itemdetail["claimcomponentamount"]));
+                    //if (strClaimType == "MedicalExamination")
+                    //{
+                    row[strClaimType] = Convert.ToDouble(itemdetail["claimcomponentamount"]);
+                    //}
+                    dTotal += Convert.ToDouble(itemdetail["claimcomponentamount"]);
+                    if (iDetail == 0)
+                    {
+                        row["ReceiptDate"] = Convert.ToDateTime(itemdetail["claimcomponentreceiptdate"]).AddDays(1).ToString("dd/MMM/yyyy");
+                        row["Remarks"] = Convert.ToString(itemdetail["claimcomponentremarks"]);
+                    }
+                  
+                    iDetail++;
+                    //dictType.Add(strClaimType, Convert.ToDouble(itemdetail["claimcomponentamount"]));
                 }
 
-                for (int i = 0; i <= dtType.Rows.Count - 1; i++)
-                {
-                    var strcomType = dtType.Rows[i]["Title"].ToString().Replace(" ", "");
-                    if (dictType.ContainsKey(strcomType))
-                    {
-                        row[strcomType] = dictType[strcomType];
-                        dTotal += dictType[strcomType];
-                    }
-                    else
-                    {
-                        row[strcomType] = 0;
-                    }
-                }
+                //for (int i = 0; i <= dtType.Rows.Count - 1; i++)
+                //{
+                //    var strcomType = dtType.Rows[i]["Title"].ToString().Replace(" ", "");
+                //    if (dictType.ContainsKey(strcomType))
+                //    {
+                //        row[strcomType] = dictType[strcomType];
+                //        dTotal += dictType[strcomType];
+                //    }
+                //    else
+                //    {
+                //        row[strcomType] = 0;
+                //    }
+                //}
                 row["TotalAmount"] = dTotal;
-                row["Remarks"] = "";
+               
                 dtAxa.Rows.Add(row);
             }
 
@@ -323,7 +343,7 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
         public ViewInsuranceProfessionalVM getViewProfessionalClaimDefault(string useremail = null)
         {
             var dtView = new DataTable();
-            dtView.Columns.Add("ID", typeof(string));
+             dtView.Columns.Add("ID", typeof(string));
             dtView.Columns.Add("Name", typeof(string));
             dtView.Columns.Add("Position", typeof(string));
             dtView.Columns.Add("ClaimDate", typeof(string));
@@ -377,8 +397,8 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
             if (status != "All items")
             {
                 caml = @"<View><Query><Where><Or>
-                        <Eq><FieldRef Name='claimstatus' /><Value Type='Text'>Need HR to Validate</Value></Eq>
-                        <Eq><FieldRef Name='claimstatus' /><Value Type='Text'>Validated by HR</Value></Eq>
+                        <Eq><FieldRef Name='claimstatus' /><Value Type='Choice'>Need HR to Validate</Value></Eq>
+                        <Eq><FieldRef Name='claimstatus' /><Value Type='Choice'>Validated by HR</Value></Eq>
                         </Or></Where></Query></View>";
             }
 
@@ -401,9 +421,140 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
 
         }
 
+        public ViewInsuranceProfessionalVM getViewAXADefault()
+        {
+            var dtView = new DataTable();
+            dtView.Columns.Add("No", typeof(string));
+            dtView.Columns.Add("BatchNo", typeof(string));
+            dtView.Columns.Add("SubmissionDate", typeof(string));
+            dtView.Columns.Add("ProfessionalName", typeof(string));
+            dtView.Columns.Add("DependentName", typeof(string));
+            dtView.Columns.Add("ReceiptDate", typeof(string));
+            dtView.Columns.Add("MedicalExamination", typeof(double));
+            dtView.Columns.Add("Prescription", typeof(double));
+            dtView.Columns.Add("Others", typeof(double));
+            dtView.Columns.Add("Total", typeof(double));
+            dtView.Columns.Add("Remarks", typeof(string));
+
+            dtView.PrimaryKey = new[] { dtView.Columns["No"] };
+            var viewModel = new ViewInsuranceProfessionalVM();
+            viewModel.Email = "";
+            viewModel.URL = _siteUrl;
+            viewModel.dtDetails = dtView;
+            return viewModel;
+        }
+
+        public DataTable getViewAXA()
+        {
+            var dtView = new DataTable();
+            dtView.Columns.Add("No", typeof(string));
+            dtView.Columns.Add("BatchNo", typeof(string));
+            dtView.Columns.Add("SubmissionDate", typeof(string));
+            dtView.Columns.Add("ProfessionalName", typeof(string));
+            dtView.Columns.Add("DependentName", typeof(string));
+            dtView.Columns.Add("ReceiptDate", typeof(string));
+            dtView.Columns.Add("MedicalExamination", typeof(double));
+            dtView.Columns.Add("Prescription", typeof(double));
+            dtView.Columns.Add("Others", typeof(double));
+            dtView.Columns.Add("Total", typeof(double));
+            dtView.Columns.Add("Remarks", typeof(string));
+            
+            dtView.PrimaryKey = new[] { dtView.Columns["No"] };
+
+            string caml =  @"<View>  
+            <Query> 
+               <OrderBy><FieldRef Name='ID' Ascending='FALSE' /><FieldRef Name='ID' Ascending='FALSE' /></OrderBy> 
+            </Query> 
+             <RowLimit>1</RowLimit> 
+            </View>";
+            string  strbatch="", dateSubmission="";
+
+            foreach (var item in SPConnector.GetList("SubmitAXA", _siteUrl, caml))
+            {
+                strbatch = Convert.ToString(item["BatchNo"]);
+                dateSubmission = Convert.ToDateTime(item["SubmissionDate"]).ToString("dd/MMM/yyyy");
+    
+            }
+
+            caml = @"<View><Query><Where>
+                        <Eq><FieldRef Name='claimstatus' /><Value Type='Choice'>Submitted to AXA</Value></Eq>
+                        </Where></Query></View>";
+            var iNo = 1;
+
+            foreach (var item in SPConnector.GetList(SpHeaderListName, _siteUrl, caml))
+            {
+                var professional = GetProfessionalPosition(FormatUtil.ConvertLookupToID(item, "professional"));
+                int id = Convert.ToInt32(item["ID"]);
+                DataRow row = dtView.NewRow();
+                row["No"] = iNo;
+                row["BatchNo"] = strbatch;
+                row["SubmissionDate"] = dateSubmission;
+                row["ProfessionalName"] = professional.Name;
+                row["DependentName"] = FormatUtil.ConvertLookupToValue(item, "dependent");
+              
+
+                var camldetail = @"<View><Query><Where><Eq><FieldRef Name='insuranceclaim' />
+                    <Value Type='Lookup'>" + id + "</Value></Eq></Where></Query></View>";
+
+                row["MedicalExamination"] = 0.0;
+                row["Prescription"] = 0.0;
+                row["Others"] = 0.0;
+
+                var dTotal = 0.0;
+                var iDetail = 0;
+                foreach (var itemdetail in SPConnector.GetList(SpComponentListName, _siteUrl, camldetail))
+                {
+
+                    var strClaimType = Convert.ToString(itemdetail["claimcomponenttype"]).Replace(" ", "");
+                    row[strClaimType] = Convert.ToDouble(itemdetail["claimcomponentamount"]);
+                    dTotal += Convert.ToDouble(itemdetail["claimcomponentamount"]);
+                    if (iDetail == 0)
+                    {
+                        row["ReceiptDate"] = Convert.ToDateTime(itemdetail["claimcomponentreceiptdate"]).AddDays(1).ToString("dd/MMM/yyyy");
+                        row["Remarks"] = Convert.ToString(itemdetail["claimcomponentremarks"]);
+                    }
+                    iDetail++;
+                }
+
+                row["Total"] = dTotal;
+
+                dtView.Rows.Add(row);
+                iNo++;
+            }
+
+          
+            
+
+                return dtView;
+
+        }
+
         public void DeleteClaim(int? ID)
         {
             SPConnector.DeleteListItem(SpHeaderListName,ID, _siteUrl);
+        }
+
+        public void CreateAxa(InsuranceClaimAXAVM header)
+        {
+            var columnValues = new Dictionary<string, object>
+           {
+
+               {"Title", header.Sender},
+               {"BatchNo", header.BatchNo},
+               {"Recepient", header.Recepient},
+               {"SubmissionDate", header.SubmissionDate},
+           };
+
+            var caml = @"<View><Query><Where><Eq><FieldRef Name='claimstatus' />
+            <Value Type='Choice'>Validated by HR</Value></Eq></Where></Query></View>";
+            var columnValuesupdate = new Dictionary<string, object>
+            {{"claimstatus", "Submitted to AXA"}};
+            foreach (var item in SPConnector.GetList(SpHeaderListName, _siteUrl, caml))
+            {
+                SPConnector.UpdateListItem(SpHeaderListName, Convert.ToInt32(item["ID"]), columnValuesupdate, _siteUrl);
+            }
+
+            SPConnector.AddListItem("SubmitAXA", columnValues, _siteUrl);
         }
 
         //public DataTable getViewProfessionalClaim(string useremail = null)
@@ -507,11 +658,21 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
         public InsuranceClaimAXAVM GetPopulatedModelAXA()
         {
 
-
+            var dtAxa = new DataTable();
+           // dtAxa.Columns.Add("ID", typeof(int));
+            dtAxa.Columns.Add("ProfessionalName", typeof(string));
+            dtAxa.Columns.Add("DependentName", typeof(string));
+            dtAxa.Columns.Add("ReceiptDate", typeof(string));
+            dtAxa.Columns.Add("MedicalExamination", typeof(double));
+            dtAxa.Columns.Add("Prescription", typeof(double));
+            dtAxa.Columns.Add("Others", typeof(double));
+            dtAxa.Columns.Add("TotalAmount", typeof(double));
+            dtAxa.Columns["TotalAmount"].DefaultValue = 0;
+            dtAxa.Columns.Add("Remarks", typeof(string));
 
             var viewModel = new InsuranceClaimAXAVM
             {
-                dtDetails = getComponentAXAdetails(),
+                dtDetails = dtAxa,
                 BatchNo = "",
                 Recepient = "",
                 Sender = "",
@@ -552,7 +713,7 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
                 strBody += @"This email is sent to you to notify that there is a request which required your action
                     to validate the insurance claim of " + strName + ". Please complete the validation process immediately.<br>";
                 strBody += "<br>To view the detail, please click following link:<br>";
-                strBody += _siteUrl + UrlResource.InsuranceClaim + "/editform_custom?ID="+id;
+                strBody += _siteUrl + UrlResource.InsuranceClaim + "/custom_EditForm.aspx?ID=" + id;
                 strBody += "<br><br>Thank you for your attention.";
 
                 
@@ -578,7 +739,8 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
             int ID =0;
             var columnValues = new Dictionary<string, object>
            {
-              
+               {"Title", header.ProfessionalTextName},
+               {"Position", header.Position},
                {"claimtype", header.Type.Text},
                {"claimdate", header.ClaimDate},
                {"claimstatus", header.ClaimStatus},
@@ -725,6 +887,8 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
             {
                 columnValues.Add("professional", header.ProfessionalID);
             }
+            columnValues.Add("Title", header.ProfessionalTextName);
+            columnValues.Add("Position", header.Position);
             columnValues.Add("claimtype", header.Type.Text);
             columnValues.Add("claimdate", header.ClaimDate);
             columnValues.Add("claimstatus", header.ClaimStatus);

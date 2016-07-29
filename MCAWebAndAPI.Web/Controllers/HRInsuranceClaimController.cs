@@ -37,37 +37,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
         }
 
-        public ActionResult SubmitAxa(string siteUrl = null)
-        {
-            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-            var viewModel = _service.GetPopulatedModelAXA();
-
-            return View(viewModel);
-           
-        }
-
-
-        public ActionResult ExportToExcel(string siteUrl = null)
-        {
-            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-            var viewModel = _service.GetPopulatedModelAXA();
-            //Response.AddHeader("Content-Type", "application/vnd.ms-excel");
-            return View(viewModel);
-
-        }
-
-
-        [HttpPost]
-        public ActionResult ExportAxa()
-        {
-            var siteUrl = SessionManager.Get<string>("SiteUrl");
-            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-          
-            return RedirectToAction("SubmitAxa", "HRInsuranceClaim");
-        }
-
+      
 
         [HttpPost]
         public ActionResult SubmitInsuranceClaim(FormCollection form, InsuranceClaimVM viewModel)
@@ -242,6 +212,48 @@ namespace MCAWebAndAPI.Web.Controllers
 
             return null;
         }
+
+
+
+        public ActionResult SubmitAxa(string siteUrl = null)
+        {
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            var viewModel = _service.GetPopulatedModelAXA();
+
+            return View(viewModel);
+
+        }
+
+
+        public ActionResult ExportToExcel(string siteUrl = null)
+        {
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            var viewModel = _service.getViewAXADefault();
+
+            return View(viewModel);
+
+        }
+
+
+        [HttpPost]
+        public ActionResult RedirectExportToExcel(FormCollection form, InsuranceClaimAXAVM viewModel)
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            _service.CreateAxa(viewModel);
+            return RedirectToAction("ExportToExcel", "HRInsuranceClaim");
+        }
+
+        public ActionResult ReadExportExcel([DataSourceRequest] DataSourceRequest request)
+        {
+            _service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", ConfigResource.DefaultHRSiteUrl);
+            DataTable data = _service.getViewAXA();
+            return Json(data.ToDataSourceResult(request));
+        }
+
 
     }
 }

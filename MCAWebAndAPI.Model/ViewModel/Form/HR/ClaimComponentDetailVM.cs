@@ -29,7 +29,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             var options = new string[]
             {
                 "Medical Examination",
-                "Laboratorium",
                 "Prescription",
                 "Others",
             };

@@ -61,7 +61,7 @@
 
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
 
-        window.top.location.href = dataItem.URL + '/Lists/InsuranceClaim/EditForm.aspx?ID=' + dataItem.ID;
+        window.top.location.href = dataItem.URL + '/Lists/InsuranceClaim/custom_EditForm.aspx?ID=' + dataItem.ID;
 
     }
 
@@ -74,7 +74,7 @@
             url: '/HRInsuranceClaim/deleteClaimId/' + dataItem.ID,
             type: "POST",
             success: function () {
-                window.top.location.href = dataItem.URL + '/Lists/InsuranceClaim/Allitems.aspx';
+                window.top.location.href = dataItem.URL + '/Lists/InsuranceClaim/';
             },
             error: function (err) {
                 alert("Error while deleting item: " + JSON.stringify(err));
@@ -89,7 +89,7 @@
 
     $("#newRedirect").click(function (e) {
         e.preventDefault();
-        window.top.location.href = $("#URL").val() + '/Lists/InsuranceClaim/NewForm.aspx';
+        window.top.location.href = $("#URL").val() + '/Lists/InsuranceClaim/custom_NewForm.aspx';
     });
 
 
