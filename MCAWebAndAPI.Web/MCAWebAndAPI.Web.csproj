@@ -1232,8 +1232,9 @@
     <Content Include="Views\HRInsuranceClaim\SubmitAxa.cshtml" />
     <Content Include="Views\HRInsuranceClaim\_ClaimComponentAXA.cshtml" />
     <Content Include="Views\HRInsuranceClaim\ExportToExcel.cshtml" />
-    <Content Include="Views\HRInsuranceClaim\ViewClaimProfessional.cshtml" />
-    <Content Include="Views\HRInsuranceClaim\ViewClaimHR.cshtml" />
+    <Content Include="Views\HRInsuranceClaim\ViewClaimAll.cshtml" />
+    <Content Include="Views\HRInsuranceClaim\ViewClaimOutStanding.cshtml" />
+    <Content Include="Views\HRInsuranceClaim\ViewClaim.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -1,11 +1,11 @@
 ﻿
 @using MCAWebAndAPI.Model.ViewModel.Form.HR
 @model ViewInsuranceProfessionalVM
-<div class="col-sm-12">
+<div class="row">
     @Html.HiddenFor(m => m.URL)
     @Html.HiddenFor(m => m.Email)
     @(Html.Kendo().Grid<dynamic>()
-          .Name("gridDataView")
+          .Name("gridDataViewOut")
           .Columns(columns =>
           {
               foreach (System.Data.DataColumn column in Model.dtDetails.Columns)
@@ -35,21 +35,16 @@
               columns.Command(command => command.Custom("Edit").Click("editRedirect"));
               columns.Command(command => command.Custom("Delete").Click("deleteRedirect"));
           })
-          .ToolBar(toolbar =>
-          {
-              toolbar.Custom().Text("New Item").HtmlAttributes(new { id = "newRedirect" });
-          })
-          .DataSource(dataSource => dataSource
+         .DataSource(dataSource => dataSource
               .Ajax()
-              .Group(g => g.Add("Year", typeof(int))
-              )
+              .PageSize(20)
               .Model(model =>
               {
                   var id = "ID";
                   model.Id(id);
               })
 
-          .Read(read => read.Action("ReadProfessional", "HRInsuranceClaim").Data("additionalInfo"))
+          .Read(read => read.Action("ReadClaimOutStanding", "HRInsuranceClaim"))
     )
     )
 
@@ -88,20 +83,7 @@
     }
 
 
-    $("#newRedirect").click(function (e) {
-        e.preventDefault();
-        window.top.location.href = $("#URL").val() + '/Lists/InsuranceClaim/NewForm.aspx';
-    });
 
-
-
-
-    function additionalInfo() {
-        return {
-            useremail: $("#Email").val()
-        }
-
-    }
 
 </script>
 

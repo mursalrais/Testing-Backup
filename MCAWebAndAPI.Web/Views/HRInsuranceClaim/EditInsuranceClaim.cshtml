@@ -6,14 +6,22 @@
 }
 
 
-@using (Html.BeginForm("UpdateInsuranceClaim", "HRInsuranceClaim", FormMethod.Post,
+@*@using (Html.BeginForm("UpdateInsuranceClaim", "HRInsuranceClaim", FormMethod.Post,
                                                                       new
                                                                       {
                                                                           @class = "form-horizontal",
                                                                           enctype = "multipart/form-data"
-                                                                      }))
+                                                                      }))*@
 
-
+@using (Ajax.BeginForm("UpdateInsuranceClaim", "HRInsuranceClaim",
+                                                                                        FormMethod.Post,
+                                                                                        new AjaxOptions
+                                                                                        {
+                                                                                            OnBegin = "onBeginForm",
+                                                                                            OnComplete = "onCompleteForm",
+                                                                                            OnSuccess = "onSuccessFormEmbed",
+                                                                                            OnFailure = "onFailureForm"
+                                                                                        }, new { @class = "form-horizontal" }))
 
 {
     <fieldset>

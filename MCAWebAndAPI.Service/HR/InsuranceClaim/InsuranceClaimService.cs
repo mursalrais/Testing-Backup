@@ -337,13 +337,68 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
 
        
 
-            if (useremail == null) return viewModel;
+            
 
             viewModel.Email = useremail;
             viewModel.URL = _siteUrl;
             viewModel.dtDetails = dtView;
 
+            if (!string.IsNullOrEmpty(useremail))
+            {
+                var caml = @"<View><Query><Where><Eq><FieldRef Name='officeemail' /><Value Type='Text'>" + useremail +
+             "</Value></Eq></Where></Query></View>";
+
+                foreach (var item in SPConnector.GetList("Professional Master", _siteUrl, caml))
+                {
+                    var strUnit = Convert.ToString(item["Project_x002f_Unit"]);
+
+                    viewModel.UserPermission = strUnit == "Human Resources Unit" ? "HR" : "Professional";
+                }
+            }
+
             return viewModel;
+        }
+
+        public DataTable getViewClaimHR(string status = null)
+        {
+            var dtView = new DataTable();
+            dtView.Columns.Add("ID", typeof(string));
+            dtView.Columns.Add("Name", typeof(string));
+            dtView.Columns.Add("Position", typeof(string));
+            dtView.Columns.Add("ClaimDate", typeof(string));
+            dtView.Columns.Add("ClaimAmount", typeof(double));
+            dtView.Columns.Add("Status", typeof(string));
+            dtView.Columns.Add("Year", typeof(int));
+            dtView.Columns.Add("URL", typeof(string));
+            dtView.PrimaryKey = new[] { dtView.Columns["ID"] };
+
+            var caml = "";
+
+            if (status != "All items")
+            {
+                caml = @"<View><Query><Where><Or>
+                        <Eq><FieldRef Name='claimstatus' /><Value Type='Text'>Need HR to Validate</Value></Eq>
+                        <Eq><FieldRef Name='claimstatus' /><Value Type='Text'>Validated by HR</Value></Eq>
+                        </Or></Where></Query></View>";
+            }
+
+            foreach (var item in SPConnector.GetList(SpHeaderListName, _siteUrl, caml))
+            {
+                var professional = GetProfessionalPosition(FormatUtil.ConvertLookupToID(item, "professional"));
+                DataRow row = dtView.NewRow();
+                row["ID"] = Convert.ToInt32(item["ID"]);
+                row["Name"] = professional.Name;
+                row["Position"] = professional.Position;
+                row["ClaimDate"] = DateTime.Now.ToString("dd/MMM/yyyy");
+                row["ClaimAmount"] = Convert.ToDouble(item["claimtotal"]);
+                row["Status"] = Convert.ToString(item["claimstatus"]);
+                row["Year"] = Convert.ToInt32(item["claimyear"]);
+                row["URL"] = _siteUrl;
+                dtView.Rows.Add(row);
+            }
+
+            return dtView;
+
         }
 
         public void DeleteClaim(int? ID)
