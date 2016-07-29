@@ -1241,6 +1241,8 @@
     <Content Include="Views\HRPayroll\DisplayMonthlyFee.cshtml" />
     <Content Include="Views\Success\ErrorMessage.cshtml" />
     <Content Include="Views\HRTimesheet\EditTimesheet.cshtml" />
+    <Content Include="Views\HRCompensatory\PrintCompensatoryRequest.cshtml" />
+    <Content Include="Views\HRCompensatory\_CompensatoryRequest_Print.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

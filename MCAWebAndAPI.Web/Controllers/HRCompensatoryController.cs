@@ -243,5 +243,37 @@ namespace MCAWebAndAPI.Web.Controllers
             return PartialView("_InputCompensantoryDetails", viewmodel.CompensatoryDetails);
         }
 
+        [HttpPost]
+        public ActionResult PrintCompensatoryRequest(FormCollection form, CompensatoryVM viewModel)
+        {
+            const string RelativePath = "~/Views/HRCompensatory/PrintCompensatoryRequest.cshtml";
+            var view = ViewEngines.Engines.FindView(ControllerContext, RelativePath, null);
+            var fileName = viewModel.cmpName + viewModel.cmpYearDate + "_CompensatoryRequest.pdf";
+            byte[] pdfBuf = null;
+            string content;
+
+            using (var writer = new StringWriter())
+            {
+                var context = new ViewContext(ControllerContext, view.View, ViewData, TempData, writer);
+                view.View.Render(context, writer);
+                writer.Flush();
+                content = writer.ToString();
+
+                // Get PDF Bytes
+                try
+                {
+                    pdfBuf = PDFConverter.Instance.ConvertFromHTML(fileName, content);
+                }
+                catch (Exception e)
+                {
+                    ErrorSignal.FromCurrentContext().Raise(e);
+                    RedirectToAction("Index", "Error");
+                }
+            }
+            if (pdfBuf == null)
+                return HttpNotFound();
+            return File(pdfBuf, "application/pdf");
+        }
+
     }
 }
