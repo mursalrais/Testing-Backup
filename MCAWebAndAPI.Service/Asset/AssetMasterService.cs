@@ -361,7 +361,7 @@ namespace MCAWebAndAPI.Service.Asset
 
         public string GetAssetIDForMainAsset(string category, string projectunit, string type)
         {
-            if(category == "Fixed Asset")
+            if (category == "Fixed Asset")
             {
                 category = "FX";
             }
@@ -372,7 +372,7 @@ namespace MCAWebAndAPI.Service.Asset
             var assetID = GetAssetIDCode(category, projectunit, type);
             var lastNumber = GetAssetIDLastNumber(assetID);
             assetID += "-" + FormatUtil.ConvertToDigitNumber(lastNumber, 4);
-
+            
             return assetID;
         }
     }

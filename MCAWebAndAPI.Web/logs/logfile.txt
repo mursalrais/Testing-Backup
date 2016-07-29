@@ -143,3 +143,5 @@ Parameter name: address
 2016-07-28 15:19:32.5386 MCAWebAndAPI.Service.Converter.CSVConverter String was not recognized as a valid DateTime. at ID: 1
 2016-07-28 15:20:45.9197 MCAWebAndAPI.Service.Converter.CSVConverter Column 'Specifications' does not exist. It may have been deleted by another user.  /sites/mca-dev/BO/Lists/AssetMaster at ID: 1
 2016-07-28 15:28:54.0301 MCAWebAndAPI.Service.Converter.CSVConverter Column 'Specifications' does not exist. It may have been deleted by another user.  /sites/mca-dev/BO/Lists/AssetMaster at ID: 1
+2016-07-29 09:31:38.9421 MCAWebAndAPI.Service.Converter.CSVConverter System.IndexOutOfRangeException: Index was outside the bounds of the array.
+   at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in D:\iMa\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64
