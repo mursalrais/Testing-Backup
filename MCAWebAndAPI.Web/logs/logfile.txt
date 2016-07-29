@@ -145,3 +145,14 @@ Parameter name: address
 2016-07-28 15:28:54.0301 MCAWebAndAPI.Service.Converter.CSVConverter Column 'Specifications' does not exist. It may have been deleted by another user.  /sites/mca-dev/BO/Lists/AssetMaster at ID: 1
 2016-07-29 09:31:38.9421 MCAWebAndAPI.Service.Converter.CSVConverter System.IndexOutOfRangeException: Index was outside the bounds of the array.
    at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in D:\iMa\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64
+2016-07-29 17:32:28.3008 MCAWebAndAPI.Service.Converter.CSVConverter System.IndexOutOfRangeException: Index was outside the bounds of the array.
+   at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in D:\iMa\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64
+2016-07-29 17:33:03.7764 MCAWebAndAPI.Service.Converter.CSVConverter System.IndexOutOfRangeException: Index was outside the bounds of the array.
+   at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in D:\iMa\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64
+2016-07-29 17:33:33.9761 MCAWebAndAPI.Service.Converter.CSVConverter System.IndexOutOfRangeException: Index was outside the bounds of the array.
+   at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in D:\iMa\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64
+2016-07-29 17:41:38.4026 MCAWebAndAPI.Service.Converter.CSVConverter String was not recognized as a valid DateTime. at ID: 1
+2016-07-29 17:50:08.3582 MCAWebAndAPI.Service.Converter.CSVConverter String was not recognized as a valid DateTime. at ID: 1
+2016-07-29 17:52:51.6219 MCAWebAndAPI.Service.Converter.CSVConverter String was not recognized as a valid DateTime. at ID: 1
+2016-07-29 17:54:54.6291 MCAWebAndAPI.Service.Converter.CSVConverter Column 'Specifications' does not exist. It may have been deleted by another user.  /sites/mca-dev/BO/Lists/AssetMaster at ID: 1
+2016-07-29 18:11:41.8977 MCAWebAndAPI.Service.Converter.CSVConverter Column 'Specifications' does not exist. It may have been deleted by another user.  /sites/mca-dev/BO/Lists/AssetMaster at ID: 1
