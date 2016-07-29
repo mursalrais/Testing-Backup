@@ -1,7 +1,60 @@
-﻿
-@{
-    ViewBag.Title = "Create";
-}
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Asset
 
-<h2>Create</h2>
+@model AssignmentofAssetVM
+ 
+<form class="form-horizontal" method="post" action="/ASSAssignmentofAsset/Create" id="create-assign-of-asset-form">
+    <fieldset>
+        <legend>Form Assign of Asset</legend>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Header.TransactionType).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.DisplayFor(m => m.Header.TransactionType)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Header.AssetHolder).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.Header.AssetHolder)
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Header.Date).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.Header.Date)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                @(Html.Kendo().Grid(Model.Items)
+                    .Name("assignment-of-asset-items-grid")
+                    .Columns(columns =>
+                    {
+                        columns.Bound(p => p.NewAsset);
+                        columns.Bound(p => p.Item);
+                        columns.Bound(p => p.AssetNo);
+                        columns.Bound(p => p.SubAssetNo);
+                        columns.Bound(p => p.AssetDescription);
+                        columns.Bound(p => p.OfficeName);
+                        columns.Bound(p => p.FloorName);
+                        columns.Bound(p => p.RoomName);
+                        columns.Command(command => { command.Edit(); command.Destroy(); }).Width(250);
+                    })
+                    .ToolBar(toolbar => toolbar.Create())
+                    .Editable(editable => editable.Mode(GridEditMode.PopUp))
+                    .DataSource(dataSource => dataSource
+                        .Ajax()
+                        .Model(model => model.Id(p => p.Id))
+                        .Create(update => update.Action("EditingPopup_Create", "ASSAssignmentofAsset"))
+                        .Update(update => update.Action("EditingPopup_Update", "ASSAssignmentofAsset"))
+                        .Destroy(update => update.Action("EditingPopup_Destroy", "ASSAssignmentofAsset"))
+                        )
+                )
+            </div>
+        </div>
+    </fieldset>
 
+</form>
