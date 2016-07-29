@@ -1232,6 +1232,8 @@
     <Content Include="Views\HRExitProcedure\ViewExitProcedureForApprover.cshtml" />
     <Content Include="Views\HRExitProcedure\_ExitProcedureChecklistForApprover.cshtml" />
     <Content Include="Views\HRExitProcedure\_ExitProcedureDataForApprover.cshtml" />
+    <Content Include="Views\HRExitProcedure\CreateExitProcedureHR.cshtml" />
+    <Content Include="Views\HRExitProcedure\_ExitProcedureChecklistForHR.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

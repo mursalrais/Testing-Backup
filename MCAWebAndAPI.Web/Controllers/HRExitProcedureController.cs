@@ -54,16 +54,7 @@ namespace MCAWebAndAPI.Web.Controllers
             // Get blank ViewModel
             var viewModel = exitProcedureService.GetExitProcedure(null, siteUrl, requestor, listName, user);
 
-            if(user == null)
-            {
-                viewModel.UserPermission = "Professional";
-            }
-            else if (user == "HR")
-            {
-                viewModel.UserPermission = "HR";
-            }
-
-            SessionManager.Set("UserLogin", requestor);
+                SessionManager.Set("UserLogin", requestor);
                 SessionManager.Set("ExitProcedureChecklist", viewModel.ExitProcedureChecklist);
                 SessionManager.Set("WorkflowRouterListName", viewModel.ListName);
                 SessionManager.Set("WorkflowRouterRequestorUnit", viewModel.RequestorUnit);
@@ -73,7 +64,33 @@ namespace MCAWebAndAPI.Web.Controllers
 
         }
 
-        public ActionResult CreateExitProcedureHR(int? ID, string user, string siteUrl = null, string requestor = null)
+        public ActionResult DisplayExitChecklistForHR(string professionalMail, string siteUrl = null, bool isPartial = true)
+        {
+            exitProcedureService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            ViewBag.ListName = "Exit Procedure";
+
+            var listName = ViewBag.ListName;
+
+            ViewBag.RequestorUserLogin = professionalMail;
+
+            SessionManager.Set("RequestorUserLogin", professionalMail);
+
+            var viewModel = exitProcedureService.GetExitChecklistForHR(null, siteUrl, professionalMail, listName);
+
+            SessionManager.Set("ExitProcedureChecklist", viewModel.ExitProcedureChecklist);
+            SessionManager.Set("WorkflowRouterListName", viewModel.ListName);
+            SessionManager.Set("WorkflowRouterRequestorUnit", viewModel.RequestorUnit);
+            SessionManager.Set("WorkflowRouterRequestorPosition", viewModel.RequestorPosition);
+
+            if (isPartial)
+                return PartialView("_ExitProcedureChecklistForHR", viewModel.ExitProcedureChecklist);
+            return View("_ExitProcedureChecklistForHR", viewModel.ExitProcedureChecklist);
+
+        }
+
+        public ActionResult CreateExitProcedureHR(int? ID, string siteUrl = null, string requestor = null)
         {
             // MANDATORY: Set Site URL
             exitProcedureService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
@@ -88,17 +105,9 @@ namespace MCAWebAndAPI.Web.Controllers
             SessionManager.Set("RequestorUserLogin", requestor);
 
             // Get blank ViewModel
-            var viewModel = exitProcedureService.GetExitProcedureHR(null, siteUrl, requestor, listName, user);
+            var viewModel = exitProcedureService.GetExitProcedureHR(null, siteUrl);
 
-            viewModel.UserPermission = "HR";
-            
-            SessionManager.Set("UserLogin", requestor);
-            SessionManager.Set("ExitProcedureChecklist", viewModel.ExitProcedureChecklist);
-            SessionManager.Set("WorkflowRouterListName", viewModel.ListName);
-            SessionManager.Set("WorkflowRouterRequestorUnit", viewModel.RequestorUnit);
-            SessionManager.Set("WorkflowRouterRequestorPosition", viewModel.RequestorPosition);
-            
-            return View("_ExitProcedureChecklist", viewModel);
+            return View("CreateExitProcedureHR", viewModel);
 
         }
 
@@ -196,9 +205,9 @@ namespace MCAWebAndAPI.Web.Controllers
             }
 
             var exitProcedureChecklist = viewModel.ExitProcedureChecklist;
-
-            string requestorposition = Convert.ToString(viewModel.RequestorPosition);
-            string requestorunit = Convert.ToString(viewModel.RequestorUnit);
+            
+            string requestorposition = Convert.ToString(viewModel.Position);
+            string requestorunit = Convert.ToString(viewModel.ProjectUnit);
 
             int? positionID = exitProcedureService.GetPositionID(requestorposition, requestorunit, 0, 0);
 
@@ -207,7 +216,6 @@ namespace MCAWebAndAPI.Web.Controllers
 
             try
             {
-                
                 exitProcedureService.CreateExitProcedureDocuments(exitProcID, viewModel.Documents, viewModel);
             }
             catch (Exception e)
@@ -216,12 +224,17 @@ namespace MCAWebAndAPI.Web.Controllers
                 return RedirectToAction("Index", "Error");
             }
 
-            //if ((viewModel.StatusForm == "Draft")||(viewModel.StatusForm == "Pending Approval")|| (viewModel.StatusForm == "Saved by HR")||(viewModel.StatusForm == "Approved by HR"))
-            //{
-            //    Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateExitProcedureWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
-            //        SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)exitProcID);
-            //}
-            
+            //Cek Status Record
+            string exitProcedureStatus = exitProcedureService.GetExitProcedureStatus(exitProcID);
+
+            if (exitProcedureStatus == "Approved")
+            {
+                DateTime lastWorkingDate = exitProcedureService.GetLastWorkingDate(exitProcID);
+                string psaNumber = exitProcedureService.GetPSANumberOnExitProcedure(exitProcID);
+                int psaID = exitProcedureService.GetPSAId(psaNumber);
+                exitProcedureService.UpdateLastWorkingDateOnPSA(psaID, lastWorkingDate);
+            }
+
             try
             {
                 if (viewModel.StatusForm == "Pending Approval")
@@ -231,7 +244,6 @@ namespace MCAWebAndAPI.Web.Controllers
                     exitProcedureService.SendEmail(viewModel, SP_EXP_CHECK_LIST,
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)exitProcID,
                     string.Format("Dear Respective Approver : {0}{1}/ViewExitProcedureForApprover.aspx?ID={2}", siteUrl, UrlResource.ExitProcedure, viewModel.ID), string.Format("Message for Requestor"));
-                    
                 }
             }
             catch (Exception e)
@@ -381,5 +393,7 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             return array;
         }
+
+        
     }
 }

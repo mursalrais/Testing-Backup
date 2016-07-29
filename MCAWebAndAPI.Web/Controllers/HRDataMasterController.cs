@@ -85,9 +85,10 @@ namespace MCAWebAndAPI.Web.Controllers
                         e.Project_Unit,
                         e.PositionId, 
                         e.PSANumber,
-                        //e.JoinDate,
-                        e.JoinDateTemp,
-                        e.OfficeEmail
+                        e.JoinDate,
+                        e.OfficeEmail, 
+                        e.PersonalMail,
+                        e.JoinDateTemp
                     }
                 ), JsonRequestBehavior.AllowGet);
         }
