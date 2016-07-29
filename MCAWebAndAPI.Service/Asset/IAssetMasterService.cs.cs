@@ -24,6 +24,8 @@ namespace MCAWebAndAPI.Service.Asset
 
         AssetMasterVM GetAssetMaster(int ID);
 
+        string GetAssetIDForMainAsset(string category, string projectunit, string type);
+
 
 
     }

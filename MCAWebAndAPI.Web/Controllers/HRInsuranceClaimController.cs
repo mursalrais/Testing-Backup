@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
@@ -8,12 +9,13 @@ using Kendo.Mvc.UI;
 using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using MCAWebAndAPI.Service.HR.InsuranceClaim;
 using MCAWebAndAPI.Service.Resources;
-using MCAWebAndAPI.Service.Utils;
+//using MCAWebAndAPI.Service.Utils;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
+    // ReSharper disable once InconsistentNaming
     public class HRInsuranceClaimController : Controller
     {
 
@@ -24,7 +26,7 @@ namespace MCAWebAndAPI.Web.Controllers
             _service = new InsuranceClaimService();
         }
 
-        //public ActionResult CreateInsuranceClaim(string siteUrl = null, string useremail = "junindar@gmail.com")
+      
              public ActionResult CreateInsuranceClaim(string siteUrl = null, string useremail = null)
         {
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
@@ -35,6 +37,38 @@ namespace MCAWebAndAPI.Web.Controllers
 
         }
 
+        public ActionResult SubmitAxa(string siteUrl = null)
+        {
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            var viewModel = _service.GetPopulatedModelAXA();
+
+            return View(viewModel);
+           
+        }
+
+
+        public ActionResult ExportToExcel(string siteUrl = null)
+        {
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            var viewModel = _service.GetPopulatedModelAXA();
+            //Response.AddHeader("Content-Type", "application/vnd.ms-excel");
+            return View(viewModel);
+
+        }
+
+
+        [HttpPost]
+        public ActionResult ExportAxa()
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+          
+            return RedirectToAction("SubmitAxa", "HRInsuranceClaim");
+        }
+
+
         [HttpPost]
         public ActionResult SubmitInsuranceClaim(FormCollection form, InsuranceClaimVM viewModel)
         {
@@ -42,10 +76,10 @@ namespace MCAWebAndAPI.Web.Controllers
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
-            int? headerID = null;
+            int? headerId;
             try
             {
-                  headerID = _service.CreateHeader(viewModel);
+                  headerId = _service.CreateHeader(viewModel);
             }
             catch (Exception e)
             {
@@ -58,7 +92,7 @@ namespace MCAWebAndAPI.Web.Controllers
             try
             {
                 viewModel.ClaimComponentDetails = BindClaimComponentDetails(form, viewModel.ClaimComponentDetails);
-                _service.CreateClaimComponentDetails(headerID, viewModel.ClaimComponentDetails);
+                _service.CreateClaimComponentDetails(headerId, viewModel.ClaimComponentDetails);
             }
             catch (Exception e)
             {
@@ -66,37 +100,8 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-          
-
-            //send email to professional
-            //try
-            //{
-            //    if (emailTo == "" || emailTo == null)
-            //    {
-            //        emailTo = "anugerahseptian@gmail.com";
-            //    }
-            //    EmailUtil.Send(emailTo, "Notify to initiate Performance Plan", string.Format(emailMessage, UrlResource.ProfessionalPerformancePlan));
-
-            //}
-            //catch (Exception e)
-            //{
-            //    logger.Error(e);
-            //    throw e;
-            //}
-
-            //try
-            //{
-            //    viewModel.ClaimPaymentDetails = BindClaimPaymentDetails(form, viewModel.ClaimPaymentDetails);
-            //    _service.CreateClaimPaymentDetails(headerID, viewModel.ClaimPaymentDetails);
-            //}
-            //catch (Exception e)
-            //{
-            //    Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            //    return JsonHelper.GenerateJsonErrorResponse(e);
-            //}
-
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.InsuranceClaim);
-           // return JsonHelper.GenerateJsonSuccessResponse(siteUrl);
+
         }
 
 
@@ -114,26 +119,26 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
 
-        IEnumerable<ClaimPaymentDetailVM> BindClaimPaymentDetails(FormCollection form,
-           IEnumerable<ClaimPaymentDetailVM> medicalClaimDetails)
-        {
-            var array = medicalClaimDetails.ToArray();
+        //IEnumerable<ClaimPaymentDetailVM> BindClaimPaymentDetails(FormCollection form,
+        //   IEnumerable<ClaimPaymentDetailVM> medicalClaimDetails)
+        //{
+        //    var array = medicalClaimDetails.ToArray();
 
-            for (int i = 0; i < array.Length; i++)
-            {
-                array[i].ReceiptDate = BindHelper.BindDateInGrid("ClaimPaymentDetails",
-                    i, "ReceiptDate", form);
-            }
-            return array;
-        }
+        //    for (int i = 0; i < array.Length; i++)
+        //    {
+        //        array[i].ReceiptDate = BindHelper.BindDateInGrid("ClaimPaymentDetails",
+        //            i, "ReceiptDate", form);
+        //    }
+        //    return array;
+        //}
 
 
-        public ActionResult EditInsuranceClaim(string siteUrl ,int ? ID , string useremail = null)
+        public ActionResult EditInsuranceClaim(string siteUrl ,int ? id , string useremail = null)
         {
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
-            var viewModel = _service.GetInsuranceHeader(ID, useremail);
+            var viewModel = _service.GetInsuranceHeader(id, useremail);
 
             return View(viewModel);
         }
@@ -158,29 +163,85 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            //try
-            //{
-            //    viewModel.ClaimPaymentDetails = BindClaimPaymentDetails(form, viewModel.ClaimPaymentDetails);
-            //    _service.CreateClaimPaymentDetails(viewModel.ID, viewModel.ClaimPaymentDetails);
-            //}
-            //catch (Exception e)
-            //{
-            //    Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            //    return JsonHelper.GenerateJsonErrorResponse(e);
-            //}
-
-
-
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.InsuranceClaim);
         }
 
-
-        [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult EditingInline_Destroy([DataSourceRequest] DataSourceRequest request, ClaimComponentDetailVM component)
+        public ActionResult Read([DataSourceRequest] DataSourceRequest request)
         {
-            return Json(new[] { component }.ToDataSourceResult(request, ModelState));
+            _service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl",  ConfigResource.DefaultHRSiteUrl);
+            DataTable data = _service.getComponentAXAdetails();
+            return Json(data.ToDataSourceResult(request));
         }
 
+
+      
+  
+
+        public ActionResult ViewClaim(string siteUrl = null, string useremail = null)
+        {
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            var viewModel = _service.getViewProfessionalClaimDefault(useremail);
+
+            return View(viewModel);
+
+        }
+
+        public ActionResult ViewClaimAll(string siteUrl = null)
+        {
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            var viewModel = _service.getViewProfessionalClaimDefault();
+
+            return View(viewModel);
+
+        }
+
+        public ActionResult ViewClaimOutStanding(string siteUrl = null)
+        {
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            var viewModel = _service.getViewProfessionalClaimDefault();
+
+            return View(viewModel);
+
+        }
+
+        public ActionResult ReadProfessional([DataSourceRequest] DataSourceRequest request, string useremail = null)
+        {
+            _service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", ConfigResource.DefaultHRSiteUrl);
+            DataTable data = _service.getViewProfessionalClaim(useremail);
+            return Json(data.ToDataSourceResult(request));
+        }
+
+        public ActionResult ReadClaimAll([DataSourceRequest] DataSourceRequest request)
+        {
+            _service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", ConfigResource.DefaultHRSiteUrl);
+            DataTable data = _service.getViewClaimHR("All items");
+            return Json(data.ToDataSourceResult(request));
+        }
+
+        public ActionResult ReadClaimOutStanding([DataSourceRequest] DataSourceRequest request)
+        {
+            _service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", ConfigResource.DefaultHRSiteUrl);
+            DataTable data = _service.getViewClaimHR("Outstanding Claim");
+            return Json(data.ToDataSourceResult(request));
+        }
+
+
+        public JsonResult DeleteClaimId(int id, string siteUrl = null)
+        {
+            _service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", ConfigResource.DefaultHRSiteUrl);
+            _service.DeleteClaim(id);
+           
+
+            return null;
+        }
 
     }
 }

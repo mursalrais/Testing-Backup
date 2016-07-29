@@ -125,12 +125,21 @@ Parameter name: address
 2016-07-24 17:16:25.9453 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService The 'sId' argument is invalid.
 2016-07-25 09:01:20.9835 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Item does not exist. It may have been deleted by another user.
 2016-07-26 14:10:37.1982 MCAWebAndAPI.Service.HR.Recruitment.HRInterviewService Invalid data has been used to update the list item. The field you are trying to update may be read only.
-2016-07-27 16:14:50.8514 MCAWebAndAPI.Service.HR.Recruitment.HRApplicationService Cannot complete this action.
-
-Please try again.
-2016-07-27 16:33:40.7128 MCAWebAndAPI.Service.HR.Recruitment.HRApplicationService Cannot complete this action.
-
-Please try again.
-2016-07-27 16:52:12.6016 MCAWebAndAPI.Service.HR.Recruitment.HRApplicationService Cannot complete this action.
-
-Please try again.
+2016-07-28 13:32:30.0718 MCAWebAndAPI.Service.Converter.CSVConverter System.IndexOutOfRangeException: Index was outside the bounds of the array.
+   at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in D:\iMa\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64
+2016-07-28 13:33:13.4193 MCAWebAndAPI.Service.Converter.CSVConverter System.IndexOutOfRangeException: Index was outside the bounds of the array.
+   at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in D:\iMa\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64
+2016-07-28 13:34:13.7474 MCAWebAndAPI.Service.Converter.CSVConverter System.IndexOutOfRangeException: Index was outside the bounds of the array.
+   at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in D:\iMa\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64
+2016-07-28 13:46:34.3291 MCAWebAndAPI.Service.Converter.CSVConverter System.IndexOutOfRangeException: Index was outside the bounds of the array.
+   at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in D:\iMa\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64
+2016-07-28 14:01:53.1187 MCAWebAndAPI.Service.Converter.CSVConverter System.IndexOutOfRangeException: Index was outside the bounds of the array.
+   at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in D:\iMa\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64
+2016-07-28 14:35:57.9014 MCAWebAndAPI.Service.Converter.CSVConverter String was not recognized as a valid DateTime. at ID: 1
+2016-07-28 14:36:03.2617 MCAWebAndAPI.Service.Converter.CSVConverter String was not recognized as a valid DateTime. at ID: 1
+2016-07-28 14:37:37.1403 MCAWebAndAPI.Service.Converter.CSVConverter String was not recognized as a valid DateTime. at ID: 1
+2016-07-28 14:43:23.7691 MCAWebAndAPI.Service.Converter.CSVConverter String was not recognized as a valid DateTime. at ID: 1
+2016-07-28 14:56:41.7758 MCAWebAndAPI.Service.Converter.CSVConverter String was not recognized as a valid DateTime. at ID: 1
+2016-07-28 15:19:32.5386 MCAWebAndAPI.Service.Converter.CSVConverter String was not recognized as a valid DateTime. at ID: 1
+2016-07-28 15:20:45.9197 MCAWebAndAPI.Service.Converter.CSVConverter Column 'Specifications' does not exist. It may have been deleted by another user.  /sites/mca-dev/BO/Lists/AssetMaster at ID: 1
+2016-07-28 15:28:54.0301 MCAWebAndAPI.Service.Converter.CSVConverter Column 'Specifications' does not exist. It may have been deleted by another user.  /sites/mca-dev/BO/Lists/AssetMaster at ID: 1

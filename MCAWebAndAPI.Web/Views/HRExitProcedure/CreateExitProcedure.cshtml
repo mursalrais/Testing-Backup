@@ -15,8 +15,6 @@
 {
 
     
-if (Model.UserPermission == "Professional")
-{
     <fieldset>
         <legend>Exit Procedure Data</legend>
         <div class="row">
@@ -33,35 +31,9 @@ if (Model.UserPermission == "Professional")
             @Html.Partial("_Documents", Model)
         </div>
     </fieldset>
-}
-if (Model.UserPermission == "HR")
-{
-    <fieldset>
-        <legend>Exit Procedure Data</legend>
-        <div class="row">
-            @Html.Partial("_ExitProcedureDataHR", Model)
-        </div>
-
-        <legend>Exit Procedure Checklist</legend>
-        <div class="row">
-            @Html.Partial("_ExitProcedureChecklist", Model.ExitProcedureChecklist)
-        </div>
-
-        <div id="testFunction" class="row">
-
-        </div>
-
-        <legend>Documents</legend>
-        <div class="row">
-            @Html.Partial("_Documents", Model)
-        </div>
-    </fieldset>
-}
 
 }
 
-@if (Model.UserPermission == "Professional")
-{
     <div class="form-actions">
         <div class="row">
             <div class="col-md-12">
@@ -76,28 +48,6 @@ if (Model.UserPermission == "HR")
             </div>
         </div>
     </div>
-}
-@if (Model.UserPermission == "HR")
-{
-    <div class="form-actions">
-        <div class="row">
-            <div class="col-md-12">
-                <button id="approved-by-hr" class="btn btn-primary" type="submit">
-                    <i class="fa fa-save"></i>
-                    Approve
-                </button>
-                <button id="save-by-hr" class="btn btn-primary" type="submit">
-                    <i class="fa fa-save"></i>
-                    Save
-                </button>
-            </div>
-        </div>
-    </div>
-
-    
-}
-
-   
 
 @section scripts{
     <script type="text/javascript">
@@ -158,22 +108,7 @@ if (Model.UserPermission == "HR")
                 $('#ProfessionalID').prop('value', result[0].ID);
 
             })
-
-            //var urlProfessional = "/HRExitProcedure/CreateExitProcedureHR?siteUrl=https://eceos2.sharepoint.com/sites/mca-dev/hr&requestor=" + result[0].OfficeEmail + "&user=HR";
-
-            function testfunction() {
-                var url = "/Workflow/DisplayWorkflowRouter?listName=" + listName + "&requestor=" + requestor;
-                $('#testFunction').load(url);
-            }
-
-            //$.getJSON(urlProfessional, function () {
-
-                
-
-            //})
-
-            //var url = "/HRExitProcedure/DisplayWorkflowRouterExitProcedure?listName=" + listName + "&requestor=" + requestor;
-                      
+          
         }
 
         function onSelectExitProcedure(e) {

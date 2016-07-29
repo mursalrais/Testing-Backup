@@ -6,14 +6,22 @@
 }
 
 
-@using (Html.BeginForm("UpdateInsuranceClaim", "HRInsuranceClaim", FormMethod.Post,
+@*@using (Html.BeginForm("UpdateInsuranceClaim", "HRInsuranceClaim", FormMethod.Post,
                                                                       new
                                                                       {
                                                                           @class = "form-horizontal",
                                                                           enctype = "multipart/form-data"
-                                                                      }))
+                                                                      }))*@
 
-
+@using (Ajax.BeginForm("UpdateInsuranceClaim", "HRInsuranceClaim",
+                                                                                        FormMethod.Post,
+                                                                                        new AjaxOptions
+                                                                                        {
+                                                                                            OnBegin = "onBeginForm",
+                                                                                            OnComplete = "onCompleteForm",
+                                                                                            OnSuccess = "onSuccessFormEmbed",
+                                                                                            OnFailure = "onFailureForm"
+                                                                                        }, new { @class = "form-horizontal" }))
 
 {
     <fieldset>
@@ -77,7 +85,7 @@
 
         <legend>Claim Component</legend>
         <div class="row">
-            @Html.Partial("_ClaimComponentDetail", Model.ClaimComponentDetails)
+            @Html.Partial("_ClaimComponentDetail", Model)
         </div>
 
         @if (Model.UserPermission == "HR")
@@ -151,10 +159,16 @@
 @section scripts{
     <script type="text/javascript">
         $(document)
-            .ready(function() {
+            .ready(function () {
+                var strtype = $("#Type_Value").data("kendoDropDownList").text();
                 var dependent = $("#DependantName_Value").data("kendoDropDownList");
                 var professional = $("#ProfessionalName_Value").data("kendoDropDownList");
-                dependent.enable(false);
+                if (strtype === "Dependent") {
+                    dependent.enable(true);
+                } else {
+                    dependent.enable(false);
+                }
+               
                 var strPermission = $("#UserPermission").val();
                 var strClaim = $("#ClaimStatus").val();
                 if (strPermission !== "HR") {
@@ -276,6 +290,7 @@
                 function(result) {
                     $('#Position').prop('value', result[0].Position);
                     $('#ProfessionalTextName').prop('value', result[0].Name);
+                    $('#ProfessionalID').prop('value', result[0].ID);
                 });
         }
 
