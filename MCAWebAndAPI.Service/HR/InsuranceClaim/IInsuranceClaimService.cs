@@ -36,6 +36,8 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
 
         ViewInsuranceProfessionalVM getViewProfessionalClaimDefault(string useremail = null);
 
-       void DeleteClaim(int? ID);
+        DataTable getViewClaimHR(string status = null);
+
+        void DeleteClaim(int? ID);
     }
 }

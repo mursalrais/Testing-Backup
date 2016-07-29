@@ -16,9 +16,21 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         public DataTable dtDetails { get; set; } = new DataTable();
 
-    
+        public string UserPermission { get; set; }
         public string Email { get; set; }
         public string URL { get; set; }
+
+        [UIHint("DropDown")]
+        public DropDownVM ClaimStatus { get; set; } = new DropDownVM
+        {
+            Choices = new[]
+            {
+                new DropDownVM() {Text="Outstanding Claim" ,Value = "Outstanding Claim"},
+                 new DropDownVM() {Text="All Items" ,Value = "All Items"}
+            },
+
+           
+        };
 
     }
 }

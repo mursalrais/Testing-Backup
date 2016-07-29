@@ -65,7 +65,7 @@ namespace MCAWebAndAPI.Web.Controllers
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
           
-            return RedirectToAction("ExportToExcel", "HRInsuranceClaim");
+            return RedirectToAction("SubmitAxa", "HRInsuranceClaim");
         }
 
 
@@ -175,7 +175,10 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
 
-        public ActionResult ViewClaimProfessional(string siteUrl = null, string useremail = null)
+      
+  
+
+        public ActionResult ViewClaim(string siteUrl = null, string useremail = null)
         {
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
@@ -185,6 +188,25 @@ namespace MCAWebAndAPI.Web.Controllers
 
         }
 
+        public ActionResult ViewClaimAll(string siteUrl = null)
+        {
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            var viewModel = _service.getViewProfessionalClaimDefault();
+
+            return View(viewModel);
+
+        }
+
+        public ActionResult ViewClaimOutStanding(string siteUrl = null)
+        {
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            var viewModel = _service.getViewProfessionalClaimDefault();
+
+            return View(viewModel);
+
+        }
 
         public ActionResult ReadProfessional([DataSourceRequest] DataSourceRequest request, string useremail = null)
         {
@@ -194,14 +216,21 @@ namespace MCAWebAndAPI.Web.Controllers
             return Json(data.ToDataSourceResult(request));
         }
 
-        public ActionResult DeleteClaim([DataSourceRequest] DataSourceRequest request, string id = null)
+        public ActionResult ReadClaimAll([DataSourceRequest] DataSourceRequest request)
         {
             _service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", ConfigResource.DefaultHRSiteUrl);
-            DataTable data = _service.getViewProfessionalClaim();
+            DataTable data = _service.getViewClaimHR("All items");
             return Json(data.ToDataSourceResult(request));
         }
 
+        public ActionResult ReadClaimOutStanding([DataSourceRequest] DataSourceRequest request)
+        {
+            _service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", ConfigResource.DefaultHRSiteUrl);
+            DataTable data = _service.getViewClaimHR("Outstanding Claim");
+            return Json(data.ToDataSourceResult(request));
+        }
 
 
         public JsonResult DeleteClaimId(int id, string siteUrl = null)

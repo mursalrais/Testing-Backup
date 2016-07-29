@@ -16,7 +16,7 @@
     <RootNamespace>MCAWebAndAPI.Web</RootNamespace>
     <AssemblyName>MCAWebAndAPI.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -34,10 +34,7 @@
     <DefineConstants>TRACE;DEBUG;ght</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PublishDatabases>false</PublishDatabases>
-    <IncludeIisSettings>false</IncludeIisSettings>
-    <IncludeAppPool>false</IncludeAppPool>
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PublishDatabases>true</PublishDatabases>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -66,7 +63,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Kendo.Mvc">
-      <HintPath>..\..\WORK\Outsourcing\IMS-Web-and-API-master\Kendo.Mvc.dll</HintPath>
+      <HintPath>..\..\..\..\Downloads\MCA-tools\Kendo.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.Web.Optimization.WebForms">
       <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.WebForms.1.1.3\lib\net45\Microsoft.AspNet.Web.Optimization.WebForms.dll</HintPath>
@@ -77,10 +74,6 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.SharePoint.Client, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files\Common Files\Microsoft Shared\Web Server Extensions\15\ISAPI\Microsoft.SharePoint.Client.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -944,8 +937,8 @@
     <Content Include="Views\ASSAssetScrapping\Edit.cshtml" />
     <Content Include="Views\ASSAssetSmallValueAsset\Create.cshtml" />
     <Content Include="Views\ASSAssetTransfer\Create.cshtml" />
-    <Content Include="Views\ASSAssetTransaction\ASSAssignmentofAsset\Create.cshtml" />
-    <Content Include="Views\ASSAssetTransaction\ASSAssignmentofAsset\Edit.cshtml" />
+    <Content Include="Views\ASSAssignmentofAsset\Create.cshtml" />
+    <Content Include="Views\ASSAssignmentofAsset\Edit.cshtml" />
     <Content Include="Views\Shared\_LayoutHome.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\BIEmbed\WFP03.cshtml" />
@@ -1234,16 +1227,13 @@
     <Content Include="Views\HRCompensatory\ListCompensatoryDetails.cshtml" />
     <Content Include="Views\HRInsuranceClaim\CreateInsuranceClaim.cshtml" />
     <Content Include="Views\HRInsuranceClaim\_ClaimComponentDetail.cshtml" />
-    <Content Include="Views\HRInsuranceClaim\EditInsuranceClaim.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\DropDown.cshtml" />
-    <Content Include="Views\HRInsuranceClaim\SubmitAxa.cshtml" />
-    <Content Include="Views\HRInsuranceClaim\_ClaimComponentAXA.cshtml" />
-    <Content Include="Views\HRInsuranceClaim\ExportToExcel.cshtml" />
-    <Content Include="Views\HRInsuranceClaim\ViewClaimProfessional.cshtml" />
-    <Content Include="Views\HRInsuranceClaim\ViewClaimHR.cshtml" />
-    <Content Include="Views\HRInsuranceClaim\SubmitAXA.cshtml" />
-    <Content Include="Views\ASSAssetMaster\Upload.cshtml" />
-    <Content Include="Views\ASSAssetMaster\_DisplayGrid.cshtml" />
+    <Content Include="Views\HRInsuranceClaim\_MedicalClaimDetail.cshtml" />
+    <Content Include="Views\HRExitProcedure\_ExitProcedureDataHR.cshtml" />
+    <Content Include="Views\HRExitProcedure\ViewExitProcedureForApprover.cshtml" />
+    <Content Include="Views\HRExitProcedure\_ExitProcedureChecklistForApprover.cshtml" />
+    <Content Include="Views\HRExitProcedure\_ExitProcedureDataForApprover.cshtml" />
+    <Content Include="Views\HRExitProcedure\CreateExitProcedureHR.cshtml" />
+    <Content Include="Views\HRExitProcedure\_ExitProcedureChecklistForHR.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1362,11 +1352,20 @@
     <Folder Include="Views\HRDataMaster\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MCAWebAndAPI.Model\MCAWebAndAPI.Model.csproj">
+      <Project>{0b0761cd-8a08-4527-b895-a26c36224046}</Project>
+      <Name>MCAWebAndAPI.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MCAWebAndAPI.Service\MCAWebAndAPI.Service.csproj">
+      <Project>{529feab6-e31e-4332-a499-75240b2c85ed}</Project>
+      <Name>MCAWebAndAPI.Service</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
     <EmbeddedResource Include="Resources\ConfigResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ConfigResource.Designer.cs</LastGenOutput>
       <CustomToolNamespace>MCAWebAndAPI.Web.Resources</CustomToolNamespace>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\EmailResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -1377,16 +1376,6 @@
       <LastGenOutput>MessageResource.Designer.cs</LastGenOutput>
       <CustomToolNamespace>MCAWebAndAPI.Web.Resources</CustomToolNamespace>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MCAWebAndAPI.Model\MCAWebAndAPI.Model.csproj">
-      <Project>{0b0761cd-8a08-4527-b895-a26c36224046}</Project>
-      <Name>MCAWebAndAPI.Model</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MCAWebAndAPI.Service\MCAWebAndAPI.Service.csproj">
-      <Project>{529feab6-e31e-4332-a499-75240b2c85ed}</Project>
-      <Name>MCAWebAndAPI.Service</Name>
-    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

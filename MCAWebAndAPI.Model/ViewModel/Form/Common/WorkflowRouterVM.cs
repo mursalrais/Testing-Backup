@@ -16,5 +16,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Common
         public string RequestorPosition { get; set; }
 
         public IEnumerable<WorkflowItemVM> WorkflowItems { get; set; } = new List<WorkflowItemVM>();
+
+
     }
 }

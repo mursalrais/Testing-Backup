@@ -31,7 +31,7 @@
                   })
                   );
               columns.Bound("Remarks");
-              columns.Command(command => command.Custom("Edit").Click("editRedirect")).Width(180);
+             
           })
 
           .DataSource(dataSource => dataSource
@@ -49,17 +49,6 @@
 
 </div>
 <script>
-    function editRedirect(e) {
-        e.preventDefault();
-
-        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        //alert(dataItem.ProfessionalName);
-        window.top.location.href = "http://www.example.com?id=" + dataItem.ProfessionalName;
-
-        //var wnd = $("#Details").data("kendoWindow");
-
-        //wnd.content(detailsTemplate(dataItem));
-        //wnd.center().open();
-    }
+  
 </script>
 
