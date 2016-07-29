@@ -8,6 +8,8 @@ using Microsoft.SharePoint.Client;
 using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Model.HR.DataMaster;
+using System.Threading.Tasks;
+using System.Linq;
 
 namespace MCAWebAndAPI.Service.HR.Recruitment
 {
@@ -61,9 +63,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         public CompensatoryVM GetComplistbyCmpid(int? iD)
         {
             var viewModel = new CompensatoryVM();
+            string crstatus = "";
 
             if (iD == null)
-                return null;
+                return viewModel;
 
             var caml = @"<View>  
                     <Query> 
@@ -74,22 +77,44 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                              </Eq>
                        </Where>
                     </Query> 
-                     <ViewFields> <FieldRef Name='Title' />
-                          <FieldRef Name='professional_x003a_ID' /></ViewFields> 
+                     <ViewFields> 
+                          <FieldRef Name='Title' />
+                          <FieldRef Name='professional_x003a_ID' />
+                          <FieldRef Name='crstatus' />
+                     </ViewFields> 
                     </View>";
 
             var profID = 0;
             foreach (var item in SPConnector.GetList(SP_COMREQ_LIST_NAME, _siteUrl, caml))
             {
                 profID = Convert.ToInt32(FormatUtil.ConvertLookupToID(item, "professional_x003a_ID") + string.Empty);
+                crstatus = Convert.ToString(item["crstatus"]);
             }
 
-            return GetComplisted(iD, profID);
+            if (crstatus == "")
+            {
+                var updatedValue = new Dictionary<string, object>();
+
+                updatedValue.Add("crstatus", "Pending Approval 1 of 2");
+
+                try
+                {
+                    SPConnector.UpdateListItem(SP_COMREQ_LIST_NAME, iD, updatedValue, _siteUrl);
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e.Message);
+                    throw e;
+                }
+            }
+
+            return GetComplisted(iD, profID, crstatus);
         }
 
         public CompensatoryVM GetComplistbyProfid(int? iD)
         {
             var viewModel = new CompensatoryVM();
+            string crstatus = "";
 
             if (iD == null)
                 return null;
@@ -103,22 +128,44 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                              </Eq>
                        </Where>
                     </Query> 
-                     <ViewFields> <FieldRef Name='Title' />
-                          <FieldRef Name='ID' /></ViewFields> 
+                     <ViewFields> 
+                          <FieldRef Name='Title' />
+                          <FieldRef Name='ID' />
+                          <FieldRef Name='crstatus' />
+                     </ViewFields> 
                     </View>";
 
             var cmpID = 0;
             foreach (var item in SPConnector.GetList(SP_COMREQ_LIST_NAME, _siteUrl, caml))
             {
                 cmpID = Convert.ToInt32(item["ID"]);
+                crstatus = Convert.ToString(item["crstatus"]);
             }
 
-            return GetComplisted(cmpID, iD);
+            if (crstatus == "")
+            {
+                var updatedValue = new Dictionary<string, object>();
+
+                updatedValue.Add("crstatus", "Pending Approval 1 of 2");
+
+                try
+                {
+                    SPConnector.UpdateListItem(SP_COMREQ_LIST_NAME, iD, updatedValue, _siteUrl);
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e.Message);
+                    throw e;
+                }
+            }
+
+            return GetComplisted(cmpID, iD, crstatus);
         }
 
         private int GetCompID(int? ID)
         {
             var viewModel = new CompensatoryVM();
+            string appstatus;
 
             var caml = @"<View>  
                     <Query> 
@@ -130,14 +177,16 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                        </Where>
                     </Query> 
                      <ViewFields> <FieldRef Name='Title' />
-                       <FieldRef Name='ID' /></ViewFields> 
+                       <FieldRef Name='ID' /> <FieldRef Name='crstatus' /></ViewFields> 
                     </View>";
 
             var compID = 0;
             foreach (var item in SPConnector.GetList(SP_COMREQ_LIST_NAME, _siteUrl, caml))
             {
+                appstatus = Convert.ToString(item["crstatus"]); 
                 compID = Convert.ToInt32(item["ID"]);
             }
+
 
             return compID;
         }
@@ -154,7 +203,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             foreach (var item1 in SPConnector.GetList(SP_COMREQ_LIST_NAME, _siteUrl, caml1))
             {
-
                 var caml2 = @"<View>  
                     <Query> 
                         <Where>
@@ -192,7 +240,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return viewModel;
         }
 
-        private CompensatoryVM GetComplisted(int? ID, int? idPro)
+        private CompensatoryVM GetComplisted(int? ID, int? idPro, string crstatus)
         {
             var viewModel = new CompensatoryVM();
 
@@ -203,6 +251,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.ddlProfessional.Value = Convert.ToInt32(idPro);
             viewModel = ConvertCompInputTolistDataVM(listItem);
             viewModel.cmpID = ID;
+            viewModel.StatusForm = crstatus;
             viewModel.CompensatoryDetails = GetCompDetailist(ID);
 
             return viewModel;
@@ -374,27 +423,65 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     }
                     continue;
                 }
-
-               
-
             }
         }
 
-        public IEnumerable<PositionMaster> GetPositions()
+        public IEnumerable<CompensatoryMasterVM> GetCompensatoryIdbyProf(int? idProf)
         {
             var caml = @"<View>  
                     <Query> 
-                       <Where><Eq><FieldRef Name='manpowerrequeststatus' /><Value Type='Text'>Active</Value></Eq></Where><OrderBy><FieldRef Name='positionrequested_x003a_Position' /></OrderBy> 
+                        <Where>
+                          <Eq>
+                             <FieldRef Name='professional_x003a_ID' />
+                             <Value Type='Lookup'>"+ idProf + @"</Value>
+                          </Eq>
+                       </Where>
                     </Query> 
-                    <ViewFields><FieldRef Name='manpowerrequeststatus' /> <FieldRef Name='ID' /><FieldRef Name='positionrequested' /><FieldRef Name='positionrequested_x003a_Position' /><FieldRef Name='positionrequested_x003a_ID' /></ViewFields></View>";
+                    <ViewFields>
+                       <FieldRef Name='Title' />
+                       <FieldRef Name='submitteddate' />
+                       <FieldRef Name='crstatus' />
+                       <FieldRef Name='ID' />
+                    </ViewFields></View>";
 
-            var models = new List<PositionMaster>();
+            var models = new List<CompensatoryMasterVM>();
 
-            foreach (var item in SPConnector.GetList(SP_MANPOW_LIST_NAME, _siteUrl, caml))
+            foreach (var item in SPConnector.GetList(SP_COMREQ_LIST_NAME, _siteUrl, caml))
             {
-                models.Add(ConvertToPositionsModel(item));
+                models.Add(ConvertToCompensatoryMasterModel(item));
             }
 
+            models = models.OrderBy(e => e.CompensatoryDate).ToList();
+            return models;
+
+        }
+
+        public IEnumerable<CompensatoryMasterVM> GetCompensatoryId(int? idComp)
+        {
+            var caml = @"<View>  
+                    <Query> 
+                        <Where>
+                          <Eq>
+                             <FieldRef Name='ID' />
+                             <Value Type='Counter'>"+ idComp + @"</Value>
+                          </Eq>
+                       </Where>
+                    </Query> 
+                    <ViewFields>
+                       <FieldRef Name='Title' />
+                       <FieldRef Name='submitteddate' />
+                       <FieldRef Name='crstatus' />
+                       <FieldRef Name='ID' />
+                    </ViewFields></View>";
+
+            var models = new List<CompensatoryMasterVM>();
+
+            foreach (var item in SPConnector.GetList(SP_COMREQ_LIST_NAME, _siteUrl, caml))
+            {
+                models.Add(ConvertToCompensatoryMasterModel(item));
+            }
+
+            models = models.OrderBy(e => e.CompensatoryDate).ToList();
             return models;
 
         }
@@ -402,49 +489,45 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        private PositionMaster ConvertToPositionsModel(ListItem item)
+        private CompensatoryMasterVM ConvertToCompensatoryMasterModel(ListItem item)
         {
-            var viewModel = new PositionMaster();
+            var viewModel = new CompensatoryMasterVM();
 
-            viewModel.ID = Convert.ToInt32(FormatUtil.ConvertLookupToValue(item, "positionrequested_x003a_ID"));
-            viewModel.PositionName = FormatUtil.ConvertLookupToValue(item, "positionrequested");
+            viewModel.ID = Convert.ToInt32(item["ID"]);
+            viewModel.CompensatoryID = Convert.ToInt32(item["ID"]);
+            viewModel.CompensatoryDate = Convert.ToDateTime(item["submitteddate"]);
+            viewModel.CompensatoryTitle = Convert.ToString(item["Title"]);
+            viewModel.CompensatoryStatus = Convert.ToString(item["crstatus"]);
+
             return viewModel;
         }
 
         public bool UpdateHeader(CompensatoryVM header)
         {
             var columnValues = new Dictionary<string, object>();
-            int? ID = header.ID;
-            if (header.StatusForm == "Initiated")
-            {
-                columnValues.Add("pppstatus", "Pending Approval 1 of 2");
-            }
+
+            int? ID = header.cmpID;
+
             if (header.StatusForm == "Draft")
             {
-                columnValues.Add("pppstatus", "Pending Approval 1 of 2");
-            }
-            if (header.Requestor == null && header.StatusForm == "Pending Approval 1 of 2")
-            {
-                columnValues.Add("pppstatus", "Pending Approval 2 of 2");
-            }
-            if (header.Requestor == null && header.StatusForm == "Pending Approval 2 of 2")
-            {
-                columnValues.Add("pppstatus", "Approved");
-            }
-            if (header.StatusForm == "DraftInitiated" || header.StatusForm == "DraftDraft")
-            {
-                columnValues.Add("pppstatus", "Draft");
-            }
-            if (header.StatusForm == "Reject1" || header.StatusForm == "Reject2")
-            {
-                columnValues.Add("pppstatus", "Rejected");
+                columnValues.Add("crstatus", "Draft");
             }
 
-            //columnValues.Add("majorstrength", header.);
-            //columnValues.Add("performancearea", header.PerformanceArea);
-            //columnValues.Add("recommendedactivities", header.RecommendedActivities);
+            if (header.StatusForm == "Reject")
+            {
+                columnValues.Add("crstatus", "Rejected");
+            }
+
+            if (header.StatusForm == "Pending Approval 1 of 2")
+            {
+                columnValues.Add("crstatus", "Pending Approval 2 of 2");
+            }
+
+            if (header.StatusForm == "Pending Approval 2 of 2")
+            {
+                columnValues.Add("crstatus", "Approved");
+            }
+
             try
             {
                 SPConnector.UpdateListItem(SP_COMREQ_LIST_NAME, ID, columnValues, _siteUrl);
@@ -457,6 +540,48 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             var entitiy = new CompensatoryVM();
             entitiy = header;
             return true;
+        }
+
+
+       public async Task<CompensatoryVM> GetCompensatoryDetailGrid(int? idComp)
+        {
+            var viewModel = new CompensatoryVM();
+
+            var caml = @"<View>  
+                              <Query> 
+                            <Where>
+                             <Eq>
+                                <FieldRef Name='compensatoryrequest' />
+                                <Value Type='Lookup'>" + idComp + @"</Value>
+                             </Eq>
+                            </Where>
+                                </Query> 
+                               <Query />
+                            <ViewFields>
+                               <FieldRef Name='Title' />
+                               <FieldRef Name='compensatoryrequest' />
+                               <FieldRef Name='compensatorydate' />
+                               <FieldRef Name='compensatorystarttime' />
+                               <FieldRef Name='compensatoryendtime' />
+                               <FieldRef Name='totalhours' />
+                               <FieldRef Name='totaldays' />
+                               <FieldRef Name='remarks' />
+                               <FieldRef Name='compensatorystatus' />
+                               <FieldRef Name='visibleto' />
+                               <FieldRef Name='ID' />
+                               <FieldRef Name='Attachments' />
+                            </ViewFields>
+                           </View>";
+
+            var compensatorylistDetails = new List<CompensatoryDetailVM>();
+            foreach (var item in SPConnector.GetList(SP_COMDET_LIST_NAME, _siteUrl, caml))
+            {
+                compensatorylistDetails.Add(ConvertToCompDetailVM(item));
+            }
+
+            viewModel.CompensatoryDetails = compensatorylistDetails;
+
+            return viewModel;
         }
     }
 }

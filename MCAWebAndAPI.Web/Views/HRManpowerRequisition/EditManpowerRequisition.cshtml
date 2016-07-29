@@ -14,6 +14,7 @@
 {
     <fieldset>
         <legend>General</legend>
+
         <div class="row">
             @Html.Partial("_General", Model)
         </div>
@@ -95,12 +96,15 @@
     <script>
 
         function filterLevel() {
-            console.log("jalan");
             return {
-                Level: $("#DivisionProjectUnit_Value").val()
+                Level: $('#DivisionProjectUnit_Value').data("kendoDropDownList").dataItem($('#DivisionProjectUnit_Value').data("kendoDropDownList").select())
             };
-            console.log(Level);
 
+        }
+
+        function OnBehalfOfChange(e) {
+            var dataItem = this.dataItem(e.item);
+            $("#EmailOnBehalf").prop("value", dataItem.OfficeEmail);
         }
 
         function onPositionChange(e) {

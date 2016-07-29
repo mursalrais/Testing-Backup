@@ -1,0 +1,90 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model InsuranceClaimAXAVM
+
+@{
+    ViewBag.Title = "Form Submit Insurance AXA";
+}
+
+
+@using (Html.BeginForm("ExportAxa", "HRInsuranceClaim", FormMethod.Post,
+                                                                      new
+                                                                      {
+                                                                          @class = "form-horizontal",
+                                                                          enctype = "multipart/form-data"
+                                                                      }))
+
+
+
+{
+    <fieldset>
+
+        @*@Html.AntiForgeryToken()
+        @Html.ValidationSummary()*@
+      
+        <div class="col-sm-6">
+
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Sender).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.Sender)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.BatchNo).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.BatchNo)
+                </div>
+            </div>
+           
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Recepient).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.Recepient)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.SubmissionDate).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.SubmissionDate)
+                </div>
+            </div>
+           
+
+        </div>
+
+       
+        <div class="row">
+            @Html.Partial("_ClaimComponentAXA",Model.dtDetails)
+        </div>
+
+
+
+    </fieldset>
+    <div class="form-actions">
+        <div class="row">
+            <div class="col-sm-12">
+                <button id="submit-to-axa" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    Export to Excel
+                </button>
+            </div>
+        </div>
+    </div>
+}
+@section scripts{
+    <script type="text/javascript">
+        $(document)
+            .ready(function () {
+
+                //$("#submit-to-axa")
+                //        .click(function () {
+                //            var grid = $("#gridDataView").data("kendoGrid");
+                //            grid.saveAsExcel();
+                //        });
+
+            }
+            );
+    </script>
+}

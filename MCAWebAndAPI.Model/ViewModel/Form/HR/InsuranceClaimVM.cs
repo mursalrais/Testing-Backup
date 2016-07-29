@@ -11,13 +11,15 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
     public class InsuranceClaimVM : Item
     {
-        public IEnumerable<ClaimPaymentDetailVM> ClaimPaymentDetails { get; set; } = new List<ClaimPaymentDetailVM>();
+       // public IEnumerable<ClaimPaymentDetailVM> ClaimPaymentDetails { get; set; } = new List<ClaimPaymentDetailVM>();
         public IEnumerable<ClaimComponentDetailVM> ClaimComponentDetails { get; set; } = new List<ClaimComponentDetailVM>();
 
         [UIHint("Int32")]
         [Required(ErrorMessage = "Professional ID Field Is Required")]
         [DisplayName("Professional ID")]
         public int? ProfessionalID { get; set; }
+
+        public string ProfessionalTextName { get; set; }
 
         /// <summary>
         /// professional
@@ -28,22 +30,23 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             ActionName = "GetProfessionals",
             ControllerName = "HRDataMaster",
             ValueField = "ID",
-            TextField = "Name"
+            TextField = "Name",
+             OnSelectEventName = "OnSelectProfessionalName"
         };
        
        
-        public string Name { get; set; }
-
        [UIHint("Date")]
         [Required(ErrorMessage = "Claim Date Field Is Required")]
         public DateTime? ClaimDate { get; set; }
 
+        
         public string Position { get; set; }
 
-        public int DependentID { get; set; }
+        public int? DependentID { get; set; }
 
+      
         [UIHint("AjaxComboBox")]
-        public AjaxComboBoxVM DependantName { get; set; } = new AjaxComboBoxVM
+       public AjaxComboBoxVM DependantName { get; set; } = new AjaxComboBoxVM
         {
             ActionName = "GetDependants",
             ControllerName = "HRDataMaster",
@@ -52,34 +55,54 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             OnSelectEventName = "OnSelectDependantName"
         };
 
-      [UIHint("ComboBox")]
-        public ComboBoxVM Type { get; set; } = new ComboBoxVM
+        [UIHint("DropDown")]
+        public DropDownVM Type { get; set; } = new DropDownVM
         {
-            Choices = new string[]
-            {
-                "Professional",
-                "Dependent",
+            Choices = new[]
+              {
+                new DropDownVM() {Text="Professional" ,Value = "Professional"},
+                 new DropDownVM() {Text="Dependent" ,Value = "Dependent"}
             },
-            Value = "Professional"
+
+            OnSelectEventName = "OnSelectType"
         };
-        
-        public int? IndividualInsuranceNumber { get; set; }
 
-        public int? OrganizationInsuranceID { get; set; }
 
-        [UIHint("ComboBox")]
+        public string IndividualInsuranceNumber { get; set; }
+
+        [DisplayName("Organization Insurance ID")]
+        public string OrganizationInsuranceID { get; set; }
+
         [Required(ErrorMessage = "Claim Status Field Is Required")]
-        public ComboBoxVM ClaimStatus { get; set; } = new ComboBoxVM
+        public string ClaimStatus { get; set; }
+
+        public string UserPermission { get; set; }
+
+        public string VisibleTo { get; set; }
+
+        [UIHint("DropDown")]
+        [DisplayName("Claim Status")]
+        [Required(ErrorMessage = "Claim Status Field Is Required")]
+        public DropDownVM ClaimStatusHR { get; set; } = new DropDownVM
         {
-            Choices = new string[]
+            Choices = new[]
             {
-                    "Draft", "Need HR to Validate", "Validated by HR", "Submitted to AXA", "Rejected","Paid"
+                 new DropDownVM() {Text=String.Empty,Value = String.Empty},
+                 new DropDownVM() {Text="Need HR to Validate" ,Value = "Need HR to Validate"},
+                 new DropDownVM() {Text="Validated by HR" ,Value = "Validated by HR"},
+                 new DropDownVM() {Text="Submitted to AXA" ,Value = "Submitted to AXA"},
+                 new DropDownVM() {Text="Rejected" ,Value = "Rejected"},
+                 new DropDownVM() {Text="Paid" ,Value = "Paid"}
             },
-            Value = "Draft"
+           
+            OnSelectEventName = "OnSelectClaim"
+           
 
         };
 
-       
 
+        public string TotalAmount { get; set; }
+
+        public int Year { get; set; }
     }
 }

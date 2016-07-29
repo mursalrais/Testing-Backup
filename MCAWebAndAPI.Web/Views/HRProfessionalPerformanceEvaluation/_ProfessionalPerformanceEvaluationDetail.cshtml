@@ -15,7 +15,7 @@
             )
             .EditorViewData(new
             {
-                BindTo = ProjectOrUnitGoalsDetailVM.GetCategoryOptions()
+                BindTo = IndividualGoalDetailVM.GetCategoryOptions()
             });
             columns.Bound(p => p.IndividualGoalAndPlan).ClientTemplate("#= IndividualGoalAndPlan #" +
             "<input type='hidden' name='ProfessionalPerformanceEvaluationDetails[#= getProfessionalPerformancePlanDetail(data)#].IndividualGoalAndPlan' value='#= IndividualGoalAndPlan #' />"
@@ -32,7 +32,7 @@
             columns.Bound(p => p.TotalScore).ClientTemplate("#= TotalScore #" +
             "<input type='hidden' name='ProfessionalPerformanceEvaluationDetails[#= getProfessionalPerformancePlanDetail(data)#].TotalScore' value='#= TotalScore #' />"
             );
-            columns.Bound(p => p.Output).ClientTemplate("#= Output #" +
+            columns.Bound(p => p.Output).ClientTemplate(" <textarea style=' width: 300px; height: 70px; margin-top: 0px;margin-bottom: 0px; border: none; background-color: transparent' disable>#= Output #</textarea>" +
             "<input type='hidden' name='ProfessionalPerformanceEvaluationDetails[#= getProfessionalPerformancePlanDetail(data)#].Output' value='#= Output #' />"
             );
             columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
@@ -54,14 +54,14 @@
         .Model(model =>
         {
             model.Id(p => p.ID);
-            model.Field(m => m.Category).DefaultValue(ProjectOrUnitGoalsDetailVM.GetCategoryDefaultValue());
+            model.Field(p => p.Category).DefaultValue(IndividualGoalDetailVM.GetCategoryDefaultValue());
         })
         .ServerOperation(false)
         )
     )
 </div>
-<div class="col-sm-12">
-    <div class="form-actions">
+
+    <div class="col-sm-12">
         <div class="form-group">
             @Html.Bootstrap().LabelFor(m => m.OverallTotalScore).Class("col-sm-4 control-label")
             <div class="col-sm-8">
@@ -69,7 +69,6 @@
             </div>
         </div>
     </div>
-</div>
 
 <script>
     function onChange(e) {

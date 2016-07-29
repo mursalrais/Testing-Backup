@@ -18,12 +18,14 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
         private ComboBoxVM _assetNoAssetDesc;
         private ComboBoxVM _condition;
 
+        [Required]
         public string AssetDesc { get; set; }
         public string SerialNo { get; set; }
         public string Spesifications { get; set; }
         public string Remarks { get; set; }
         public DateTime? WarrantyExpires { get; set; }
         [UIHint("ComboBox")]
+        [Required]
         public ComboBoxVM AssetLevel
         {
             get
@@ -34,7 +36,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
                         Choices = new string[]
                         {
                             ""
-                        }                       
+                        },
+                        OnSelectEventName = "onAssetLevelChange"                    
                     };
                 return _assetLevel;
             }
@@ -45,6 +48,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
         }
 
         [UIHint("ComboBox")]
+        [Required]
         public ComboBoxVM AssetCategory
         {
             get
@@ -63,6 +67,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
         }
 
         [UIHint("ComboBox")]
+        [Required]
         public ComboBoxVM ProjectUnit
         {
             get
@@ -84,6 +89,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
         }
 
         [UIHint("ComboBox")]
+        [Required]
         public ComboBoxVM AssetType
         {
             get
@@ -105,6 +111,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
         }
 
         [UIHint("ComboBox")]
+        [Required]
+        [DisplayName("Asset ID")]
         public ComboBoxVM AssetNoAssetDesc
         {
             get
@@ -116,6 +124,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
                         {
                             ""
                         }
+                        ,OnSelectEventName = "onAssetIDChange"
                     };
                 return _assetNoAssetDesc;
             }

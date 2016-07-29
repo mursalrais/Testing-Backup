@@ -1,4 +1,7 @@
-﻿@using MCAWebAndAPI.Model.ViewModel.Form.Asset
+﻿
+
+
+@using MCAWebAndAPI.Model.ViewModel.Form.Asset
 
 @model AssetMasterVM
 
@@ -75,7 +78,9 @@
                 </div>
             </div>
         </div>
-        <input class="k-button k-button-icontext k-grid-add" type="submit" />
+        <center>
+            <input class="k-button k-button-icontext k-grid-add" type="submit" value="Submit" />
+        </center>
     </fieldset>
 
 </form>
@@ -96,57 +101,100 @@
             alert(message);
         }
     }
-    function onChange() {
-        if (this.element.attr("id") == "AssetLevel_Value") {
-            if ($("#AssetLevel_Value").data("kendoDropDownList").value() == "Main Asset") {
-                $("#AssetCategory_Value").data("kendoDropDownList").enable(true);
-                $("#AssetCategory_Value").data("kendoDropDownList").select(0);
 
-                $("#ProjectUnit_Value").data("kendoDropDownList").enable(true);
-                $("#ProjectUnit_Value").data("kendoDropDownList").select(0);
+    function onAssetIDChange()
+    {
+        var id = $("#AssetNoAssetDesc_Value").data("kendoDropDownList").value();
+        var splitid = id.split("-");
 
-                $("#AssetType_Value").data("kendoDropDownList").enable(true);
-                $("#AssetType_Value").data("kendoDropDownList").select(0);
+        var cats = ["FXA", "SVA"];
+        var pos = ["GP","HN","PM","ME","PC"];
+        var types = ["LA", "BU", "CO", "CE", "CS", "OE", "FF", "VE", "OT"];
 
-
-                $("#AssetNoAssetDesc_Value").data("kendoDropDownList").enable(false);
-                $("#AssetNoAssetDesc_Value").data("kendoDropDownList").value("");
-
+        for (var i = 0; i < cats.length; i++)
+        {
+            if (splitid[0] == cats[i]) {
+                $("#AssetCategory_Value").data("kendoDropDownList").select(i);
+                break;
             }
-            else {
-                $("#AssetCategory_Value").data("kendoDropDownList").enable(false);
-                $("#AssetCategory_Value").data("kendoDropDownList").value("");
-
-                $("#ProjectUnit_Value").data("kendoDropDownList").enable(false);
-                $("#ProjectUnit_Value").data("kendoDropDownList").value("");
-
-                $("#AssetType_Value").data("kendoDropDownList").enable(false);
-                $("#AssetType_Value").data("kendoDropDownList").value("");
-
-                $("#AssetNoAssetDesc_Value").data("kendoDropDownList").enable(true);
-                $("#AssetNoAssetDesc_Value").data("kendoDropDownList").select(0);
-            }
-
-            ;
         }
 
+        for (var i = 0; i < pos.length; i++) {
+            if (splitid[1] == pos[i]) {
+                $("#ProjectUnit_Value").data("kendoDropDownList").select(i);
+                break;
+            }
+        }
+
+        for (var i = 0; i < types.length; i++) {
+            if (splitid[2] == types[i]) {
+                //alert("satu : " + $("#AssetType_Value").data("kendoDropDownList").value());
+                $("#AssetType_Value").data("kendoDropDownList").select(i);
+                break;
+            }
+        }
+
+        $("#AssetCategory_Value").data("kendoDropDownList").enable(false);
+        $("#ProjectUnit_Value").data("kendoDropDownList").enable(false);
+        $("#AssetType_Value").data("kendoDropDownList").enable(false);
+    }
+
+    function onAssetLevelChange() {
+        if ($("#AssetLevel_Value").data("kendoDropDownList").value() == "Main Asset") {
+            $("#AssetCategory_Value").data("kendoDropDownList").enable(true);
+            $("#AssetCategory_Value").data("kendoDropDownList").select(0);
+
+            $("#ProjectUnit_Value").data("kendoDropDownList").enable(true);
+            $("#ProjectUnit_Value").data("kendoDropDownList").select(0);
+
+            $("#AssetType_Value").data("kendoDropDownList").enable(true);
+            $("#AssetType_Value").data("kendoDropDownList").select(0);
+
+
+            $("#AssetNoAssetDesc_Value").data("kendoDropDownList").enable(false);
+            $("#AssetNoAssetDesc_Value").data("kendoDropDownList").value("");
+
+        }
+        else
+        {
+            $("#AssetCategory_Value").data("kendoDropDownList").enable(false);
+            $("#AssetCategory_Value").data("kendoDropDownList").value("");
+
+            $("#ProjectUnit_Value").data("kendoDropDownList").enable(false);
+            $("#ProjectUnit_Value").data("kendoDropDownList").value("");
+
+            $("#AssetType_Value").data("kendoDropDownList").enable(false);
+            $("#AssetType_Value").data("kendoDropDownList").value("");
+
+            $("#AssetNoAssetDesc_Value").data("kendoDropDownList").enable(true);
+            $("#AssetNoAssetDesc_Value").data("kendoDropDownList").select("");
+        }
     }
     $(function () {
-        $("#AssetCategory_Value").data("kendoDropDownList").enable(true);
-        $("#AssetCategory_Value").data("kendoDropDownList").select(0);
+        if ($("#AssetLevel_Value").data("kendoDropDownList").value() == "Main Asset")
+        {
+            $("#AssetNoAssetDesc_Value").data("kendoDropDownList").enable(false);
+            $("#AssetNoAssetDesc_Value").data("kendoDropDownList").value("");
 
-        $("#ProjectUnit_Value").data("kendoDropDownList").enable(true);
-        $("#ProjectUnit_Value").data("kendoDropDownList").select(0);
+            $("#AssetCategory_Value").data("kendoDropDownList").enable(true);
+            $("#AssetCategory_Value").data("kendoDropDownList").select(0);
 
-        $("#AssetType_Value").data("kendoDropDownList").enable(true);
-        $("#AssetType_Value").data("kendoDropDownList").select(0);
+            $("#ProjectUnit_Value").data("kendoDropDownList").enable(true);
+            $("#ProjectUnit_Value").data("kendoDropDownList").select(0);
 
-
-        $("#AssetNoAssetDesc_Value").data("kendoDropDownList").enable(false);
-        $("#AssetNoAssetDesc_Value").data("kendoDropDownList").value("");
+            $("#AssetType_Value").data("kendoDropDownList").enable(true);
+            $("#AssetType_Value").data("kendoDropDownList").select(0);
+        }
+        else
+        {
+            $("#AssetNoAssetDesc_Value").data("kendoDropDownList").enable(true);
+            $("#AssetCategory_Value").data("kendoDropDownList").enable(false);
+            $("#ProjectUnit_Value").data("kendoDropDownList").enable(false);
+            $("#AssetType_Value").data("kendoDropDownList").enable(false);
+        }
     });
 
-</script>
+    </script>
 }
 
 

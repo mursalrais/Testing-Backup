@@ -69,12 +69,20 @@ namespace MCAWebAndAPI.Web.Controllers
             int sumPlanned = 0;
             int sumActual = 0;
             decimal totalTotalScore = 0;
+            string outputTemp = "";
             var countData = Detail.Count();
             foreach (var viewModelDetail in Detail)
             {
                 totalTotalScore = totalTotalScore + viewModelDetail.TotalScore;
+
                 if (viewModelDetail.EditMode != -1)
                 {
+                    if (viewModelDetail.Output == null)
+                    {
+                        outputTemp = "Empty";
+                        viewModelDetail.Output = "";
+                    }
+
                     sumPlanned = sumPlanned + viewModelDetail.PlannedWeight;
                     sumActual = sumActual + viewModelDetail.ActualWeight;
                 }
@@ -82,7 +90,29 @@ namespace MCAWebAndAPI.Web.Controllers
             viewModel.OverallTotalScore = totalTotalScore / countData;
             if (sumPlanned != 100 || sumActual != 100)
             {
+                if (viewModel.StatusForm == "DraftInitiated")
+                {
+                    viewModel.StatusForm = "Initiated";
+                }
+                if (viewModel.StatusForm == "DraftDraft")
+                {
+                    viewModel.StatusForm = "Draft";
+                }
                 ModelState.AddModelError("ModelInvalid", "Weight must be total 100%");
+                return View("ProfessionalPerformanceEvaluation", viewModel);
+            }
+
+            if (outputTemp == "Empty")
+            {
+                if (viewModel.StatusForm == "DraftInitiated")
+                {
+                    viewModel.StatusForm = "Initiated";
+                }
+                if (viewModel.StatusForm == "DraftDraft")
+                {
+                    viewModel.StatusForm = "Draft";
+                }
+                ModelState.AddModelError("ModelInvalid", "Output is Required");
                 return View("ProfessionalPerformanceEvaluation", viewModel);
             }
 

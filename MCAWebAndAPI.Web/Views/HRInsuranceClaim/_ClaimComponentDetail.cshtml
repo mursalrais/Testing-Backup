@@ -1,8 +1,8 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
-@model IEnumerable<ClaimComponentDetailVM>
+@model InsuranceClaimVM
 
 <div class="col-sm-12">
-    @(Html.Kendo().Grid(Model)
+    @(Html.Kendo().Grid(Model.ClaimComponentDetails)
           .Name("ClaimComponentDetails")
           .ToolBar(tools => tools.Create().Text("Add New Component"))
           .Editable(editable => editable.Mode(GridEditMode.InCell)
@@ -10,42 +10,45 @@
           .Columns(columns =>
           {
               columns.Bound(p => p.Type).ClientTemplate("#= Type.Text #" +
-                           "<input type='hidden' name='ClaimComponentDetails[#= getComponentDetail(data)#].Type.Text' value='#= Type.Text #' />"
-                 )
-                 .EditorViewData(new
-                 {
-                     BindTo = ClaimComponentDetailVM.GetTypeOptions(),
-                 }
-                 ).Width(250)
-                  .ClientFooterTemplate("Total :");
+                                                        "<input type='hidden' name='ClaimComponentDetails[#= getComponentDetail(data)#].Type.Text' value='#= Type.Text #' />"
+                  )
+                  .EditorViewData(new
+                  {
+                      BindTo = ClaimComponentDetailVM.GetTypeOptions(),
+                  }
+                  ).Width(250);
+                 // .ClientFooterTemplate("Total :");
               columns.Bound(p => p.Currency).ClientTemplate("#= Currency.Text #" +
-                           "<input type='hidden' name='ClaimComponentDetails[#= getComponentDetail(data)#].Currency.Text' value='#= Currency.Text #' />"
-                 )
-                 .EditorViewData(new
-                 {
-                     BindTo = ClaimComponentDetailVM.GetCurrencyOptions(),
-                 }
-                 ).Width(200);
+                                                            "<input type='hidden' name='ClaimComponentDetails[#= getComponentDetail(data)#].Currency.Text' value='#= Currency.Text #' />"
+                  )
+                  .EditorViewData(new
+                  {
+                      BindTo = ClaimComponentDetailVM.GetCurrencyOptions(),
+                  }
+                  ).Width(200);
 
-              columns.Bound(p => p.Amount).ClientTemplate("#= Amount #" +
-                             "<input type='hidden' name='ClaimComponentDetails[#= getComponentDetail(data)#].Amount' value='#= Amount #' />"
-              ).Width(200)
-               .ClientFooterTemplate("#=sum#");
+              columns.Bound(p => p.Amount).ClientTemplate("#= kendo.toString(Amount,'n0') #" +
+                                                          "<input type='hidden' name='ClaimComponentDetails[#= getComponentDetail(data)#].Amount' value='#= Amount #' />"
+                  ).Width(200);
+                 // .ClientFooterTemplate("#= kendo.toString(sum, 'n0') #");
               columns.Bound(p => p.ReceiptDate).ClientTemplate("#= kendo.toString(ReceiptDate, 'MM-dd-yyyy') #" +
-                            "<input type='hidden' name='ClaimComponentDetails[#= getComponentDetail(data)#].ReceiptDate' value='#= ReceiptDate #' />"
-              ).Width(200);
+                                                               "<input type='hidden' name='ClaimComponentDetails[#= getComponentDetail(data)#].ReceiptDate' value='#= ReceiptDate #' />"
+                  ).Width(200);
               columns.Bound(p => p.Remarks).ClientTemplate("#= Remarks #" +
-                           "<input type='hidden' name='ClaimComponentDetails[#= getComponentDetail(data)#].Remarks' value='#= Remarks #' />"
-              );
+                                                           "<input type='hidden' name='ClaimComponentDetails[#= getComponentDetail(data)#].Remarks' value='#= Remarks #' />"
+                  );
               columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
-                "<input type='hidden' name='ClaimComponentDetails[#= getComponentDetail(data)#].ID' value='#= ID #' />"
-              );
+                                                               "<input type='hidden' name='ClaimComponentDetails[#= getComponentDetail(data)#].ID' value='#= ID #' />"
+                  );
               columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
-                           "<input type='hidden' name='ClaimComponentDetails[#= getComponentDetail(data)#].EditMode' value='#= EditMode #' />"
-              );
-              columns.Command(command => command.Custom("Delete").HtmlAttributes(new {@class = "btn btn-danger"})
-                  .Click("onDeleteKendoDetail")).Width(100);
-             
+                                                                     "<input type='hidden' name='ClaimComponentDetails[#= getComponentDetail(data)#].EditMode' value='#= EditMode #' />"
+                  );
+              columns.Command(command =>
+              {
+                  command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
+                      .Click("onDeleteKendoDetailplus");
+              }).Width(100);
+
           })
           .Events(e =>
           {
@@ -53,10 +56,14 @@
               e.DataBound("onDataBoundComponentDetails");
           })
           .DataSource(dataSource => dataSource.Ajax()
-          .Aggregates(aggregates =>
+          .Events(events =>
           {
-              aggregates.Add(p => p.Amount).Sum();
+              events.Change("onChange");
           })
+              //.Aggregates(aggregates =>
+              //{
+              //    aggregates.Add(p => p.Amount).Sum();
+              //})
 
               .Model(model =>
               {
@@ -67,8 +74,25 @@
               })
               .ServerOperation(false)
           )
-          )
+    )
+
+
+    
+
 </div>
+
+<div class="col-sm-12">
+    <div class="form-actions">
+        <div class="form-group">
+            @Html.Bootstrap().LabelFor(m => m.TotalAmount).Class("col-sm-4 control-label")
+            <div class="col-sm-8">
+                @Html.DisplayFor(m => m.TotalAmount)
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script>
     function getComponentDetail(dataItem) {
         var data = $("#ClaimComponentDetails").data("kendoGrid").dataSource.data();
@@ -76,8 +100,64 @@
     }
 
     function onDataBoundComponentDetails(e) {
-        var grid = $("#ClaimComponentDetails").data("kendoGrid");
-        hideDeletedRowKendoDetail(grid);
+        //var grid = $("#ClaimComponentDetails").data("kendoGrid");
+        //hideDeletedRowKendoDetail(grid);
+
+        var gridData = $("#ClaimComponentDetails").data("kendoGrid");
+
+        for (var i = 0; i < gridData.length; i++) {
+            var currentUid = gridData[i].uid;
+            if ((gridData[i].EditMode == -1)) {
+                var currenRow = grid.table.find("tr[data-uid='" + currentUid + "']");
+                currenRow.delete();
+            }
+        }
+
     }
+
+    function onDeleteKendoDetailplus(e) {
+        var result = confirm("Are you sure you want to delete this item?");
+        if (!result) return;
+
+        var tr = $(e.target).closest("tr"); //get the row
+        var data = this.dataItem(tr); //get the row data so it can be referred later
+
+
+        var overallTotalScore =0.0;
+        overallTotalScore = $('#TotalAmount').val();
+        overallTotalScore = overallTotalScore - data.Amount;
+  
+        $('#TotalAmount').prop('value', format1(overallTotalScore));
+
+        // -1 is Item.Mode.DELETED
+        data.set("EditMode", -1);
+
+        
+    }
+
+    function format1(n) {
+        return  n.toFixed(0).replace(/./g, function (c, i, a) {
+            return i > 0 && c !== "." && (a.length - i) % 3 === 0 ? "," + c : c;
+        });
+    }
+
+    function onChange(e) {
+        var overallTotalScore =0.0;
+        var recordsOnCurrentView = 0;
+        if (e.action === "itemchange") {
+            if (e.field === "Amount") {
+                var grid = $("#ClaimComponentDetails").data("kendoGrid");
+                var dataSource = grid.dataSource;
+                //records on current view / page
+                recordsOnCurrentView = dataSource.view().length;
+
+                for (var i = 0; i < recordsOnCurrentView; i++) {
+                    overallTotalScore = overallTotalScore + dataSource._data[i].Amount;
+                }
+                $('#TotalAmount').prop('value', format1(overallTotalScore));
+            }
+        }
+    }
+
 
 </script>

@@ -55,6 +55,7 @@ namespace MCAWebAndAPI.Web.Controllers
             _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
 
             var professionals = GetFromExistingSession();
+            professionals = professionals.OrderBy(e => e.FirstMiddleName);
 
             return Json(professionals.Select(e => 
                 new {
@@ -65,7 +66,8 @@ namespace MCAWebAndAPI.Web.Controllers
                     e.Status,
                     e.OfficeEmail,
                     e.Project_Unit,
-                    Desc = string.Format("{0}", e.Name) }),
+                    Desc = string.Format("{0}", e.Name),
+                    Desc1 = string.Format("{0} - {1}", e.Name, e.Position) }),
                 JsonRequestBehavior.AllowGet);
         }
 
@@ -93,12 +95,12 @@ namespace MCAWebAndAPI.Web.Controllers
                 ), JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetPositions()
+        public JsonResult GetProjectUnits()
         {
             _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
 
             var positions = GetFromPositionsExistingSession();
-
+            positions = positions.GroupBy(e => e.ProjectUnit).Select(y => y.First());
             return Json(positions.Select(e =>
                 new {
                     e.ID,
@@ -106,6 +108,25 @@ namespace MCAWebAndAPI.Web.Controllers
                     e.PositionStatus,
                     e.Remarks,
                     e.IsKeyPosition,
+                    e.ProjectUnit,
+                    Desc = string.Format("{0}", e.PositionName)
+                }),
+                JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetPositions()
+        {
+            _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+
+            var positions = GetFromPositionsExistingSession();
+            return Json(positions.Select(e =>
+                new {
+                    e.ID,
+                    e.PositionName,
+                    e.PositionStatus,
+                    e.Remarks,
+                    e.IsKeyPosition,
+                    e.ProjectUnit,
                     Desc = string.Format("{0}", e.PositionName)
                 }),
                 JsonRequestBehavior.AllowGet);
@@ -117,6 +138,7 @@ namespace MCAWebAndAPI.Web.Controllers
             _dataMasterService.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));
 
             var positions = _dataMasterService.GetPositionsManpower(Level);
+            positions = positions.OrderBy(e => e.PositionName);
 
             return Json(positions.Select(e =>
                 new {
@@ -167,7 +189,7 @@ namespace MCAWebAndAPI.Web.Controllers
             return Json(positions.Select(e =>
                 new {
                     Value = Convert.ToString(e.ID),
-                    Text = e.PositionName
+                    Text = e.ProjectUnit+" - "+ e.PositionName
                 }),
                 JsonRequestBehavior.AllowGet);
         }

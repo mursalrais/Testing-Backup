@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Optimization;
+﻿using System.Web.Optimization;
 using System.Web.UI;
 
 namespace MCAWebAndAPI.Web
 {
     public class BundleConfig
     {
-        // For more information on Bundling, visit http://go.microsoft.com/fwlink/?LinkID=303951
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/WebFormsJs").Include(
@@ -70,7 +65,8 @@ namespace MCAWebAndAPI.Web
                 "~/Content/kendo/2016.2.714/kendo.fiori.min.css",
                 "~/Content/kendo/2016.2.714/kendo.dataviz.fiori.min.css"));
 
-
+            bundles.IgnoreList.Ignore("*.unobtrusive-ajax.min.js", OptimizationMode.WhenDisabled);
+            bundles.IgnoreList.Ignore("*.unobtrusive-ajax.js", OptimizationMode.WhenDisabled);
         }
     }
 }

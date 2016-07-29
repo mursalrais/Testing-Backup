@@ -16,6 +16,8 @@ namespace MCAWebAndAPI.Model.HR.DataMaster
         /// </summary>
         public string PositionStatus { get; set; }
 
+        public string ProjectUnit { get; set; }
+
         /// <summary>
         /// Remarks
         /// </summary>
@@ -31,6 +33,8 @@ namespace MCAWebAndAPI.Model.HR.DataMaster
         /// projectunit
         /// </summary>
         public string Unit { get; set; }
+
+
 
     }
 }

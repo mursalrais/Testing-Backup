@@ -1,0 +1,117 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+
+@model MonthlyFeeVM
+
+@using (Ajax.BeginForm("UpdateMonthlyFee", "HRPayroll",
+                                                                            FormMethod.Post,
+                                                                            new AjaxOptions
+                                                                            {
+                                                                                OnBegin = "onBeginForm",
+                                                                                OnComplete = "onCompleteForm",
+                                                                                OnSuccess = "onSuccessFormEmbed",
+                                                                                OnFailure = "onFailureForm"
+                                                                            }, new { @class = "form-horizontal" }))
+{<fieldset>
+        <legend>Form Monthly Fee</legend>
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary()
+
+        <div class="col-sm-12">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.ProfessionalID).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.ProfessionalID)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.ProfessionalNameEdit).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.ProfessionalNameString)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.ProjectUnit).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.ProjectUnit)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Position).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.Position)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Status).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.Status)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.JoinDate).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.JoinDate)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.DateOfNewPsa).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.DateOfNewPsa)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.EndOfContract).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.EndOfContract)
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-8">
+                    @Html.HiddenFor(m => m.ID)
+                </div>
+            </div>
+        </div>
+        <legend>Monthly Fee Detail</legend>
+        <div class="row">
+            @Html.Partial("_MonthlyFeeDetail", Model.MonthlyFeeDetails)
+        </div>
+    </fieldset>
+}
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#submit-button").click(function () {
+                $("form").submit();
+            });
+        });
+
+        function OnSelectProfessionalName(e) {
+            var dataItem = this.dataItem(e.item);
+            var url = "/HRDataMaster/GetProfessional/" + dataItem.ID;
+            console.log(dataItem.ID);
+            var urlPSA = "/HRPSAManagement/GetPSA/" + dataItem.ID;
+            $.getJSON(url, function (result) {
+                $('#ProfessionalID').prop('value', result[0].ID);
+                $('#Status').prop('value', result[0].Status);
+                $.getJSON(urlPSA, function (result) {
+                    if (result.length == 0) {
+                        $('#ProjectUnit').prop('value', "");
+                        $('#Position').prop('value', "");
+                        $('#JoinDate').prop('value', "");
+                        $('#DateOfNewPsa').prop('value', "");
+                        $('#EndOfContract').prop('value', "");
+                        alert("Professional Doesn't Have PSA");
+                    }
+                    else {
+                        $('#ProjectUnit').prop('value', result[0].ProjectOrUnit);
+                        $('#Position').prop('value', result[0].Position);
+                        $('#JoinDate').prop('value', result[0].JoinDate);
+                        $('#DateOfNewPsa').prop('value', result[0].DateOfNewPSA);
+                        $('#EndOfContract').prop('value', result[0].PsaExpiryDate);
+                    }
+                })
+            })
+        }
+    </script>
+}

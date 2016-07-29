@@ -1,99 +1,156 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
 @model InsuranceClaimVM
 
-@{
-    ViewBag.Title = "Form Submit Insurance Claim";
-}
 
 
-@using (Html.BeginForm("SubmitInsuranceClaim", "HRInsuranceClaim", FormMethod.Post,
-                                              new
-                                              {
-                                                @class = "form-horizontal",
-                                                enctype = "multipart/form-data"
-                                                }))
+@*@using (Html.BeginForm("SubmitInsuranceClaim", "HRInsuranceClaim", FormMethod.Post,
+    new
+    {
+        @class = "form-horizontal",
+        enctype = "multipart/form-data"
+    }))*@
 
+@using (Ajax.BeginForm("SubmitInsuranceClaim", "HRInsuranceClaim",
+                                                                            FormMethod.Post,
+                                                                            new AjaxOptions
+                                                                            {
+                                                                                OnBegin = "onBeginForm",
+                                                                                OnComplete = "onCompleteForm",
+                                                                                OnSuccess = "onSuccessFormEmbed",
+                                                                                OnFailure = "onFailureForm"
+                                                                            }, new { @class = "form-horizontal" }))
 
 
 {
     <fieldset>
-        
+
         @Html.AntiForgeryToken()
         @Html.ValidationSummary()
-
-
+        @Html.HiddenFor(m => m.ProfessionalTextName)
+        @Html.HiddenFor(m => m.ProfessionalID)
+        @Html.HiddenFor(m => m.UserPermission)
+        @Html.HiddenFor(m => m.ClaimStatus)
+        @Html.HiddenFor(m => m.VisibleTo)
         <div class="col-sm-6">
 
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.ProfessionalName).Class("col-sm-4 control-label")
-                <div class="col-sm-8">
-                    @Html.EditorFor(m => m.ProfessionalName)
+                    @Html.Bootstrap().LabelFor(m => m.ProfessionalName).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.ProfessionalName)
+                    </div>
                 </div>
-            </div>
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Type).Class("col-sm-4 control-label")
-                <div class="col-sm-8">
-                    @Html.EditorFor(m => m.Type)
+                    @Html.Bootstrap().LabelFor(m => m.Position).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.DisplayFor(m => m.Position)
+                    </div>
                 </div>
-            </div>
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.OrganizationInsuranceID).Class("col-sm-4 control-label")
-                <div class="col-sm-8">
-                    @Html.DisplayFor(m => m.OrganizationInsuranceID)
+                    @Html.Bootstrap().LabelFor(m => m.Type).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.Type)
+                    </div>
                 </div>
-            </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.OrganizationInsuranceID).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.DisplayFor(m => m.OrganizationInsuranceID)
+                    </div>
+                </div>
         </div>
-        <div class="col-sm-6">
-            <div class="form-group">
+         <div class="col-sm-6">
+        <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.ClaimDate).Class("col-sm-4 control-label")
                 <div class="col-sm-8">
                     @Html.EditorFor(m => m.ClaimDate)
                 </div>
             </div>
-            <div class="form-group">
+        <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.DependantName).Class("col-sm-4 control-label")
                 <div class="col-sm-8">
                     @Html.EditorFor(m => m.DependantName)
                 </div>
             </div>
-            <div class="form-group">
+        <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.IndividualInsuranceNumber).Class("col-sm-4 control-label")
                 <div class="col-sm-8">
                     @Html.DisplayFor(m => m.IndividualInsuranceNumber)
                 </div>
             </div>
-        </div>
+
+          </div>
 
         <legend>Claim Component</legend>
-        <div class="row">
-            @Html.Partial("_ClaimComponentDetail", Model.ClaimComponentDetails)
-        </div>
+            <div class="row">
+                @Html.Partial("_ClaimComponentDetail", Model)
+            </div>
 
-        <legend>Medical Check Up Claim</legend>
-        <div class="row">
-            @Html.Partial("_MedicalClaimDetail", Model.ClaimPaymentDetails)
-        </div>
+
 
     </fieldset>
     <div class="form-actions">
         <div class="row">
             <div class="col-sm-12">
-             
-                <button id="submit-button" class="btn btn-primary" type="submit">
+                <button id="submit-to-hr-button" class="btn btn-primary" type="submit">
                     <i class="fa fa-save"></i>
-                    Submit
+                    Validate to HR
+                </button>
+                <button id="save-button" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    Save As Draft
                 </button>
             </div>
         </div>
     </div>
 }
 @section scripts{
-   <script type="text/javascript">
-        $(document).ready(function () {
-            $("#submit-button").click(function () {
-                $("form").submit();
+    <script type="text/javascript">
+
+        $(document)
+            .ready(function () {
+                var dependent = $("#DependantName_Value").data("kendoDropDownList");
+                var professional = $("#ProfessionalName_Value").data("kendoDropDownList");
+                dependent.enable(false);
+                var strPermission = $("#UserPermission").val();
+                if (strPermission !== "HR") {
+                    professional.enable(false);
+                }
+
+                $("#save-button")
+                    .click(function() {
+                        var strtype = $("#Type_Value").data("kendoDropDownList").text();
+                        var strDependent = $("#DependantName_Value").data("kendoDropDownList").text();
+
+
+                        if (strtype === "Dependent" && strDependent === '') {
+                            alert('Dependent Name field is required');
+                        } else {
+                            $("#ClaimStatus").val("Draft");
+                            $("form").submit();
+
+                        }
+
+                    });
+
+                $("#submit-to-hr-button")
+                    .click(function() {
+                        var strtype = $("#Type_Value").data("kendoDropDownList").text();
+                        var strDependent = $("#DependantName_Value").data("kendoDropDownList").text();
+
+
+                        if (strtype === "Dependent" && strDependent === '') {
+                            alert('Dependent Name field is required');
+                        } else {
+                            $("#ClaimStatus").val("Need HR to Validate");
+                            $("form").submit();
+                        }
+
+                    });
+
+
             });
-        });
+
+
 
         function OnSelectDependantName(e) {
             var dataItem = this.dataItem(e.item);
@@ -107,5 +164,33 @@
 
                 });
         }
-</script>
+
+        function OnSelectType(e) {
+
+            var dataItem = this.dataItem(e.item);
+            var dependent = $("#DependantName_Value").data("kendoDropDownList");
+            $('#IndividualInsuranceNumber').prop('value', '');
+            $('#OrganizationInsuranceID').prop('value', '');
+            if (dataItem.Text === 'Professional') {
+                dependent.enable(false);
+            } else {
+                dependent.enable(true);
+            }
+            dependent.select(0);
+        }
+
+        function OnSelectProfessionalName(e) {
+            var dataItem = this.dataItem(e.item);
+            var url = "/HRDataMaster/GetProfessional/" + dataItem.ID;
+
+            $.getJSON(url,
+                function(result) {
+                    $('#Position').prop('value', result[0].Position);
+                    $('#ProfessionalTextName').prop('value', result[0].Name);
+                    $('#ProfessionalID').prop('value', result[0].ID);
+                });
+        }
+
+
+    </script>
 }

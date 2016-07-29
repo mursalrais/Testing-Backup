@@ -24,7 +24,28 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [UIHint("ComboBox")]
         [DisplayName("Project Unit")]
         [Required]
-        public ComboBoxVM DivisionProjectUnit { get; set; } = new ComboBoxVM();
+        public ComboBoxVM DivisionProjectUnit { get; set; } = new ComboBoxVM()
+        {
+            Choices = new string[]
+            {
+                "Communications & Outreach Unit",
+                "Community-Based Health & Nutrition Project",
+                "Cross-Cutting Sector",
+                "Economic Analysis Unit",
+                "Environment & Social Performance Unit",
+                "Executive Director",
+                "Finance Unit",
+                "Human Resources Unit",
+                "Information Technology Unit",
+                "Legal Unit",
+                "Monitoring & Evaluation Unit",
+                "Office Support Unit",
+                "Operations Support Div.",
+                "Procurement Modernization Project",
+                "Program Div."
+
+            }
+        };
 
         /// <summary>
         /// reportingto
@@ -53,6 +74,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// </summary>
         [UIHint("Int32")]
         [Required]
+        [DisplayName("Tenure (Month)")]
         public int Tenure { get; set; }
 
         /// <summary>
@@ -78,6 +100,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public string Username { get; set; }
 
         public string EmailOnBehalf { get; set; }
+
+        public string ProjectUnitString { get; set; }
 
         /// <summary>
         /// iskeyposition
@@ -108,10 +132,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             ActionName = "GetPositionsManpower",
             ValueField = "ID",
             TextField = "PositionName",
-            //OnSelectEventName = "onPositionChange",
+            OnSelectEventName = "onPositionChange",
             Filter = "filterLevel",
             Cascade = "DivisionProjectUnit_Value"
-
 
         };
 
@@ -140,6 +163,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public Boolean IsTravellingRequired { get; set; } = new Boolean();
 
         [UIHint("MultiFileUploader")]
+        [DisplayName("Documents (Max. 2MB)")]
         public IEnumerable<HttpPostedFileBase> Documents { get; set; } = new List<HttpPostedFileBase>();
 
 
@@ -152,6 +176,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// </summary>
         [UIHint("Int32")]
         [Required]
+        [DisplayName("Personnel Management (persons)")]
         public int PersonnelManagement { get; set; }
 
         /// <summary>
@@ -159,6 +184,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// </summary>
         [UIHint("Int32")]
         [Required]
+        [DisplayName("Budget Management (USD)")]
         public int BudgetManagement { get; set; }
         [UIHint("CheckBoxItem")]
         [Required]

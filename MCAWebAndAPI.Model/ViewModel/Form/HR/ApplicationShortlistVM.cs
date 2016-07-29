@@ -1,13 +1,10 @@
-﻿using Kendo.Mvc.UI;
-using MCAWebAndAPI.Model.Common;
+﻿using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Model.ViewModel.Control;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Web;
-using System.Web.Mvc;
-using System.Linq;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
@@ -88,6 +85,12 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [DisplayName("Position")]
         [Required]
         public string Position { get; set; }
+
+        /// <summary>
+        /// Title
+        /// </summary>
+        [DisplayName("File on Attachment")]
+        public string Attachmentname { get; set; }
 
         /// <summary>
         /// positionrequested
@@ -197,6 +200,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         };
 
         [UIHint("MultiFileUploader")]
+        [DisplayName("Documents (Max. 2MB)")]
         public IEnumerable<HttpPostedFileBase> Documents { get; set; } = new List<HttpPostedFileBase>();
     }
 }

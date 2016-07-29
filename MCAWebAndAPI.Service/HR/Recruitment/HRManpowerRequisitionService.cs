@@ -9,6 +9,7 @@ using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Model.ViewModel.Control;
 using MCAWebAndAPI.Model.Common;
 using System.Threading.Tasks;
+using MCAWebAndAPI.Model.HR.DataMaster;
 
 namespace MCAWebAndAPI.Service.HR.Recruitment
 {
@@ -24,7 +25,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         public int CreateManpowerRequisition(ManpowerRequisitionVM viewModel)
         {
             var updatedValue = new Dictionary<string, object>();
-            if(viewModel.Status.Value == "Pending Approval 1 of 2")
+            if((viewModel.Status.Value == "Pending Approval 1 of 2") || (viewModel.Status.Value == "Pending Approval 1 of 1"))
             {
                 //kirim email
             }
@@ -76,11 +77,27 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             }
             catch (Exception e)
             {
-                logger.Error(e.Message);
-                throw new Exception(ErrorResource.SPInsertError);
+                logger.Error(e);
+                throw e;
             }
 
-            return SPConnector.GetLatestListItemID(SP_MANPOW_LIST_NAME, _siteUrl);
+            int IDManpower = SPConnector.GetLatestListItemID(SP_MANPOW_LIST_NAME, _siteUrl);
+            updatedValue = new Dictionary<string, object>();
+            
+            updatedValue.Add("Title", IDManpower);
+
+
+            try
+            {
+                SPConnector.UpdateListItem(SP_MANPOW_LIST_NAME, IDManpower, updatedValue, _siteUrl);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e);
+                throw e;
+            }
+
+            return IDManpower;
         }
 
         public bool UpdateStatus(ManpowerRequisitionVM viewModel)
@@ -208,7 +225,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             var viewModel = new ManpowerRequisitionVM();
             var checkBoxItem = SPConnector.GetChoiceFieldValues(SP_MANPOW_LIST_NAME, "Workplan", _siteUrl);
-            viewModel.DivisionProjectUnit.Choices = SPConnector.GetChoiceFieldValues(SP_MANPOW_LIST_NAME, "projectunit", _siteUrl);
+            //viewModel.DivisionProjectUnit.Choices = SPConnector.GetChoiceFieldValues(SP_MANPOW_LIST_NAME, "projectunit", _siteUrl);
+            
+            
             var tempList = new List<CheckBoxItemVM>();
             foreach (var item in checkBoxItem)
             {
@@ -236,7 +255,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             var viewModel = new ManpowerRequisitionVM();
             var checkBoxItem = SPConnector.GetChoiceFieldValues(SP_MANPOW_LIST_NAME, "Workplan", _siteUrl);
-            viewModel.DivisionProjectUnit.Choices = SPConnector.GetChoiceFieldValues(SP_MANPOW_LIST_NAME, "projectunit", _siteUrl);
+            //viewModel.DivisionProjectUnit.Choices = SPConnector.GetChoiceFieldValues(SP_MANPOW_LIST_NAME, "projectunit", _siteUrl);
             var tempList = new List<CheckBoxItemVM>();
             foreach (var item in checkBoxItem)
             {
@@ -303,14 +322,23 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.IsTravellingRequired = Convert.ToBoolean(listItem["istravelrequired"]);
             viewModel.IsKeyPosition = Convert.ToBoolean(listItem["iskeyposition"]);
 
-            viewModel.OnBehalfOf.Value = (listItem["onbehalfof"] as FieldLookupValue).LookupId;
-            viewModel.OnBehalfOf.Text = (listItem["onbehalfof"] as FieldLookupValue).LookupValue;
-            viewModel.DivisionProjectUnit.Value = Convert.ToString(listItem["projectunit"]);
+            if ((listItem["onbehalfof"] as FieldLookupValue) != null)
+            {
+                viewModel.OnBehalfOf.Value = (listItem["onbehalfof"] as FieldLookupValue).LookupId;
+                viewModel.OnBehalfOf.Text = (listItem["onbehalfof"] as FieldLookupValue).LookupValue;
+            }            
+            
             viewModel.Status.Value = Convert.ToString(listItem["manpowerrequeststatus"]);
             //viewModel.workplanItem.Value;
 
+
+            //viewModel.DivisionProjectUnit.Text = Convert.ToString(listItem["projectunit"]);
+            viewModel.DivisionProjectUnit.Value = Convert.ToString(listItem["projectunit"]);
+
             viewModel.Position.Value = (listItem["positionrequested"] as FieldLookupValue).LookupId;
             viewModel.Position.Text = (listItem["positionrequested"] as FieldLookupValue).LookupValue;
+
+            //viewModel.DivisionProjectUnit.Text = (listItem["projectunit"] as FieldLookupValue).LookupValue;
             viewModel.ReportingTo.Value = (listItem["reportingto"] as FieldLookupValue).LookupId;
             viewModel.ReportingTo.Text = (listItem["reportingto"] as FieldLookupValue).LookupValue;
             viewModel.JobLocation.Value = (listItem["joblocation"] as FieldLookupValue).LookupId;
@@ -354,9 +382,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         private IEnumerable<WorkingRelationshipDetailVM> GetWorkingRelationshipDetails(int? ID)
         {
             var caml = @"<View><Query><Where><Eq><FieldRef Name='manpowerrequisition' /><Value Type='Lookup'>"+ID.ToString()+"</Value></Eq></Where></Query></View>";
-
-
-
             var WorkingRelationshipDetails = new List<WorkingRelationshipDetailVM>();
             foreach (var item in SPConnector.GetList(SP_WORKRE_LIST_NAME, _siteUrl, caml))
             {
@@ -434,11 +459,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         public void CreateWorkingRelationshipDetails(int? headerID, IEnumerable<WorkingRelationshipDetailVM> workingRelationshipDetails)
         {
-            //update title become header ID
-            var updatedValue = new Dictionary<string, object>();
-            updatedValue.Add("Title", headerID);
+            ////update title become header ID
+            //var updatedValue = new Dictionary<string, object>();
+            //updatedValue.Add("Title", headerID);
 
-            SPConnector.UpdateListItem(SP_MANPOW_LIST_NAME, headerID, updatedValue);
+            //SPConnector.UpdateListItem(SP_MANPOW_LIST_NAME, headerID, updatedValue);
             foreach (var viewModel in workingRelationshipDetails)
             {
                 if (Item.CheckIfSkipped(viewModel))
@@ -457,7 +482,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     }
                     continue;
                 }
-                updatedValue = new Dictionary<string, object>();
+                var updatedValue = new Dictionary<string, object>();
                 string[] _frequency = viewModel.Frequency.Text.Split(',');
                 string[] _relationship = viewModel.Relationship.Text.Split(',');
                 updatedValue.Add("manpowerrequisition", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
