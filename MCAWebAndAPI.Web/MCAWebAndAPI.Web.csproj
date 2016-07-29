@@ -1242,6 +1242,13 @@
     <Content Include="Views\HRCompensatory\_CompensatoryRequest_Print.cshtml" />
     <Content Include="Views\ASSAssignmentofAsset\Create.cshtml" />
     <Content Include="Views\ASSAssignmentofAsset\Edit.cshtml" />
+    <Content Include="Views\HRInsuranceClaim\EditInsuranceClaim.cshtml" />
+    <Content Include="Views\HRInsuranceClaim\ExportToExcel.cshtml" />
+    <Content Include="Views\HRInsuranceClaim\SubmitAXA.cshtml" />
+    <Content Include="Views\HRInsuranceClaim\ViewClaim.cshtml" />
+    <Content Include="Views\HRInsuranceClaim\ViewClaimAll.cshtml" />
+    <Content Include="Views\HRInsuranceClaim\ViewClaimOutStanding.cshtml" />
+    <Content Include="Views\HRInsuranceClaim\_ClaimComponentAXA.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
