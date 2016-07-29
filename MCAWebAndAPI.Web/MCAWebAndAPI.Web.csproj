@@ -16,7 +16,7 @@
     <RootNamespace>MCAWebAndAPI.Web</RootNamespace>
     <AssemblyName>MCAWebAndAPI.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -34,7 +34,7 @@
     <DefineConstants>TRACE;DEBUG;ght</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PublishDatabases>false</PublishDatabases>
+    <PublishDatabases>true</PublishDatabases>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -62,8 +62,9 @@
       <HintPath>..\packages\Elmah.Mvc.2.1.2\lib\net40\Elmah.Mvc.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Kendo.Mvc">
-      <HintPath>..\..\..\..\Downloads\MCA-tools\Kendo.Mvc.dll</HintPath>
+    <Reference Include="Kendo.Mvc, Version=2016.2.504.545, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\KENDOUIMVC\2016.2.714.545\Kendo.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.Web.Optimization.WebForms">
       <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.WebForms.1.1.3\lib\net45\Microsoft.AspNet.Web.Optimization.WebForms.dll</HintPath>
@@ -937,8 +938,6 @@
     <Content Include="Views\ASSAssetScrapping\Edit.cshtml" />
     <Content Include="Views\ASSAssetSmallValueAsset\Create.cshtml" />
     <Content Include="Views\ASSAssetTransfer\Create.cshtml" />
-    <Content Include="Views\ASSAssignmentofAsset\Create.cshtml" />
-    <Content Include="Views\ASSAssignmentofAsset\Edit.cshtml" />
     <Content Include="Views\Shared\_LayoutHome.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\BIEmbed\WFP03.cshtml" />
@@ -1227,14 +1226,30 @@
     <Content Include="Views\HRCompensatory\ListCompensatoryDetails.cshtml" />
     <Content Include="Views\HRInsuranceClaim\CreateInsuranceClaim.cshtml" />
     <Content Include="Views\HRInsuranceClaim\_ClaimComponentDetail.cshtml" />
+    <Content Include="Views\HRInsuranceClaim\_MedicalClaimDetail.cshtml" />
+    <Content Include="Views\HRExitProcedure\_ExitProcedureDataHR.cshtml" />
+    <Content Include="Views\HRExitProcedure\ViewExitProcedureForApprover.cshtml" />
+    <Content Include="Views\HRExitProcedure\_ExitProcedureChecklistForApprover.cshtml" />
+    <Content Include="Views\HRExitProcedure\_ExitProcedureDataForApprover.cshtml" />
+    <Content Include="Views\HRExitProcedure\_ExitProcedureDataHR.cshtml" />
+    <Content Include="Views\HRExitProcedure\ViewExitProcedureForApprover.cshtml" />
+    <Content Include="Views\HRFeeSlip\FeeSlip.cshtml" />
+    <Content Include="Views\HRFeeSlip\_FeeSlipDetails.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\Decimal.cshtml" />
+    <Content Include="Views\HRPayroll\DisplayMonthlyFee.cshtml" />
+    <Content Include="Views\Success\ErrorMessage.cshtml" />
+    <Content Include="Views\HRTimesheet\EditTimesheet.cshtml" />
+    <Content Include="Views\HRCompensatory\PrintCompensatoryRequest.cshtml" />
+    <Content Include="Views\HRCompensatory\_CompensatoryRequest_Print.cshtml" />
+    <Content Include="Views\ASSAssignmentofAsset\Create.cshtml" />
+    <Content Include="Views\ASSAssignmentofAsset\Edit.cshtml" />
     <Content Include="Views\HRInsuranceClaim\EditInsuranceClaim.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\DropDown.cshtml" />
-    <Content Include="Views\HRInsuranceClaim\SubmitAxa.cshtml" />
-    <Content Include="Views\HRInsuranceClaim\_ClaimComponentAXA.cshtml" />
     <Content Include="Views\HRInsuranceClaim\ExportToExcel.cshtml" />
+    <Content Include="Views\HRInsuranceClaim\SubmitAXA.cshtml" />
+    <Content Include="Views\HRInsuranceClaim\ViewClaim.cshtml" />
     <Content Include="Views\HRInsuranceClaim\ViewClaimAll.cshtml" />
     <Content Include="Views\HRInsuranceClaim\ViewClaimOutStanding.cshtml" />
-    <Content Include="Views\HRInsuranceClaim\ViewClaim.cshtml" />
+    <Content Include="Views\HRInsuranceClaim\_ClaimComponentAXA.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1367,7 +1382,6 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ConfigResource.Designer.cs</LastGenOutput>
       <CustomToolNamespace>MCAWebAndAPI.Web.Resources</CustomToolNamespace>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\EmailResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -1396,7 +1410,7 @@
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:15923/</IISUrl>
           <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
-          <IISAppRootUrl>http://localhost:15924/</IISAppRootUrl>
+          <IISAppRootUrl>http://localhost:15923/</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

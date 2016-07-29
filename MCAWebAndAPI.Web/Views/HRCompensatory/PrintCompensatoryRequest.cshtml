@@ -1,0 +1,17 @@
+﻿
+@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model CompensatoryVM
+
+@{
+    ViewBag.Title = "Print Compensatory Request";
+    Layout = "~/Views/Shared/_LayoutPDF.cshtml";
+}
+
+<div class="form-horizontal">
+    <fieldset>
+        <legend>Performance Plan</legend>
+        <div class="row">
+            @Html.Partial("_CompensatoryRequest_Print", Model)
+        </div>
+    </fieldset>
+</div>

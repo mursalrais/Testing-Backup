@@ -5,7 +5,7 @@
 @model CompensatoryVM
 
 @{
-    ViewBag.Title = "InputCompensatoryData";
+    ViewBag.Title = "Input Compensatory HR";
 }
 
 @using (Html.BeginForm("CreateCompensatoryData", "HRCompensatory", FormMethod.Post, new AjaxOptions
@@ -25,7 +25,7 @@
         <div class="row">
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.ddlProfessional).Class("col-xs-2 control-label")
-                <div class="col-xs-3">
+                <div class="col-xs-4">
                     @Html.EditorFor(m => m.ddlProfessional)
                 </div>
             </div>
@@ -99,9 +99,7 @@
             <legend>Approval Workflow</legend>
             <div id="workflow-placeholder" class="row"></div>
 
-            @if (Model.StatusForm == "Approved")
-            {
-                <div class="row pull-right">
+                <div class="row">
                     <div class="col-sm-12">
                         <button id="print-button" class="btn btn-primary" type="button">
                             <i class="fa fa-print"></i>
@@ -109,23 +107,19 @@
                         </button>
                     </div>
                 </div>
-            }
-            @if (Model.StatusForm == "Pending Approval 1 of 2" || Model.StatusForm == "Pending Approval 2 of 2")
-            {
+
                 <div class="row pull-right">
                     <div class="col-sm-12">
-                        <button id="submit-button" class="btn btn-success" type="submit">
+                        <button id="approve-button" class="btn btn-success" type="submit">
                             <i class="fa fa-thumbs-o-up"></i>
                             Approve
                         </button>
-                        <button id="reject1-button" class="btn btn-danger" type="submit">
+                        <button id="reject-button" class="btn btn-danger" type="submit">
                             <i class="fa fa-thumbs-o-down"></i>
                             Reject
                         </button>
                     </div>
                 </div>
-            }
-
 
             @section scripts{
 
@@ -149,6 +143,21 @@
                         }
                             $("#StatusForm").prop("value", CompStatus);
                             
+                            if (CompStatus == 'Approved') {
+                                $('#print-button').removeClass('hide');
+                                $('#approve-button').addClass('hide');
+                                $('#reject-button').addClass('hide');
+                                $('#cancel-button').addClass('hide');
+                                $('#submit-draft-initiate-button').addClass('hide');
+                            }
+
+                            if (CompStatus == 'Pending Approval 1 of 2' || CompStatus == 'Pending Approval 2 of 2')
+                            {
+                                $('#print-button').addClass('hide');
+                                $('#approve-button').removeClass('hide')
+                                $('#reject-button').removeClass('hide')
+                            }
+
                             var url = "/HRCompensatory/GetCompensatoryDetails?idComp=" + idComp;
                             showLoading();
                             $('#compensatorylist').load(url, function (response, status, xhr) {
@@ -156,6 +165,7 @@
                                     hideLoading();
                                 }
                             });
+
                             $("#cmpID").prop("value", idComp);
                         
                     };
@@ -198,19 +208,23 @@
                             $("form").submit();
                         });
 
+                        $("#approve-button").click(function () {
+                            $("form").submit();
+                        });
+
                         $("#submit-draft-button").click(function () {
                             $("#StatusForm").val("Draft")
                             $("form").submit();
                         });
 
-                        $('#reject1-button').click(function (e) {
+                        $('#reject-button').click(function (e) {
                             $("#StatusForm").val("Reject")
                             $("form").submit();
                         });
 
                         $('#print-button').click(function (e) {
                             $("#ParentDiv").show();
-                            var url = "/HRPerformancePlan/PrintPerformancePlan";
+                            var url = "/HRCompensatory/PrintCompensatoryRequest";
                             submitFormToPrint(url);
                         });
 

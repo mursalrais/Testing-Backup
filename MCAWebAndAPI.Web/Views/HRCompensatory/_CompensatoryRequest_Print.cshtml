@@ -1,0 +1,33 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model CompensatoryVM
+
+<div class="col-xs-6">
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.cmpName).Class("col-xs-4 control-label")
+        <div class="col-sm-8">
+            @Html.DisplayFor(m => m.cmpName)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.cmpProjUnit).Class("col-xs-4 control-label")
+        <div class="col-sm-8">
+            @Html.DisplayFor(m => m.cmpProjUnit)
+        </div>
+    </div>
+</div>
+<div class="col-xs-6">
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.cmpYearDate).Class("col-xs-4 control-label")
+        <div class="col-sm-8">
+            @Html.DisplayFor(m => m.cmpYearDate)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.cmpPosition).Class("col-xs-4 control-label")
+        <div class="col-sm-8">
+            @Html.DisplayFor(m => m.cmpPosition)
+        </div>
+    </div>
+   
+</div>
+

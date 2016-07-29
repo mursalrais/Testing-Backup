@@ -55,7 +55,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.ID = Convert.ToInt32(listItem["ID"]);
             viewModel.Position = FormatUtil.ConvertLookupToID(listItem, "vacantposition") + string.Empty;
             viewModel.OtherPosition.Value = FormatUtil.ConvertLookupToID(listItem, "recommendedforposition");
-            viewModel.Candidate = Convert.ToString(listItem["Title"]);
+            viewModel.Candidate = Convert.ToString(listItem["Title"]) + " " + Convert.ToString(listItem["lastname"]);
             viewModel.SendTo = Convert.ToString(listItem["personalemail"]);
             viewModel.InterviewerUrl = string.Format(UrlResource.AddInterviewInvitation, _siteUrl, Convert.ToInt32(listItem["ID"]));
             viewModel.Remarks = Convert.ToString(listItem["applicationremarks"]); 
