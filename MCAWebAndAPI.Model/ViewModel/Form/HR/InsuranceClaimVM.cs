@@ -55,19 +55,19 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             OnSelectEventName = "OnSelectDependantName"
         };
 
-      [UIHint("DropDown")]
+        [UIHint("DropDown")]
         public DropDownVM Type { get; set; } = new DropDownVM
         {
             Choices = new[]
-            {
+              {
                 new DropDownVM() {Text="Professional" ,Value = "Professional"},
                  new DropDownVM() {Text="Dependent" ,Value = "Dependent"}
             },
-           
+
             OnSelectEventName = "OnSelectType"
         };
 
-      
+
         public string IndividualInsuranceNumber { get; set; }
 
         [DisplayName("Organization Insurance ID")]
@@ -100,16 +100,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         };
 
-        [Required(ErrorMessage = "Sender Field Is Required")]
-        public string Sender { get; set; }
 
-        [Required(ErrorMessage = "Recepient Field Is Required")]
-        public string Recepient { get; set; }
+        public string TotalAmount { get; set; }
 
-        [Required(ErrorMessage = "Batch No Field Is Required")]
-        public string BatchNo { get; set; }
-
-        [Required(ErrorMessage = "Submission Date Field Is Required")]
-        public DateTime? SubmissionDate { get; set; }
+        public int Year { get; set; }
     }
 }

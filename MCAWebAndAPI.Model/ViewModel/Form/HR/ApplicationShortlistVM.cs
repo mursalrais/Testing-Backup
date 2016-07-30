@@ -27,6 +27,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// position
         /// </summary>
+        [EmailAddress]
+        [Required]
         public string InterviewerPanel { get; set; }
 
         public string InterviewerUrl { get; set; }

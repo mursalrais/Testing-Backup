@@ -211,4 +211,7 @@
   <data name="PerformancePlan" xml:space="preserve">
     <value>/Lists/PerformancePlan</value>
   </data>
+  <data name="Compensatory" xml:space="preserve">
+    <value>/Lists/Compensatory%20Request</value>
+  </data>
 </root>

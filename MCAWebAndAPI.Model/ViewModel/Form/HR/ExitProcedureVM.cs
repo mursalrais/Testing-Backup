@@ -168,7 +168,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public string UserPermission { get; set; }
 
         public string ProfessionalPersonalMail { get; set; }
-        
+
+        public int PositionID { get; set; }
+
         ///// <summary>
         ///// Exit Procedure Status
         ///// </summary>

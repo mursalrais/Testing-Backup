@@ -16,9 +16,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         //Display Exit Procedure Data based on ID
         ExitProcedureVM GetExitProcedure(int? ID, string siteUrl, string requestor, string listName, string user);
 
-        ExitProcedureVM GetExitProcedureHR(int? ID, string siteUrl, string requestor, string listName, string user);
+        ExitProcedureVM GetExitProcedureHR(int? ID, string siteUrl);
 
         ExitProcedureVM GetExitProcedure(int? ID);
+
+        ExitProcedureVM GetExitChecklistForHR(int? ID, string siteUrl, string professionalMail, string listName);
 
         ExitProcedureForApproverVM GetExitProcedureApprover(int? ID, string siteUrl, string requestor, int? level);
 
@@ -67,5 +69,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         bool UpdateLastWorkingDateOnPSA(int? psaID, System.DateTime lastWorkingDate);
 
         int GetPositionID(string requestorposition, string requestorunit, int positionID, int number);
+
+        string GetExitProcedureStatus(int? exitProcID);
     }
 }

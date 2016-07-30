@@ -11,7 +11,7 @@ namespace MCAWebAndAPI.Service.Asset
 {
     public class AssetMasterService : IAssetMasterService
     {
-        string _siteUrl = "https://eceos2.sharepoint.com/sites/mca-dev/dev/";
+        string _siteUrl = "https://eceos2.sharepoint.com/sites/mca-dev/bo/";
         static Logger logger = LogManager.GetCurrentClassLogger();
         const string SP_ASSMAS_LIST_NAME = "Asset Master";
 
@@ -24,11 +24,11 @@ namespace MCAWebAndAPI.Service.Asset
         {
             var viewModel = new AssetMasterVM();
             viewModel.AssetNoAssetDesc.Choices = GetChoiceFromList("AssetID");
-            viewModel.AssetLevel.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "AssetLevel");
-            viewModel.AssetCategory.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "AssetCategory");
-            viewModel.AssetType.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "AssetType");
-            viewModel.Condition.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "Condition");
-            viewModel.ProjectUnit.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "ProjectUnit");
+            viewModel.AssetLevel.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "AssetLevel", _siteUrl);
+            viewModel.AssetCategory.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "AssetCategory", _siteUrl);
+            viewModel.AssetType.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "AssetType", _siteUrl);
+            viewModel.Condition.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "Condition", _siteUrl);
+            viewModel.ProjectUnit.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "ProjectUnit", _siteUrl);
 
             return viewModel;
         }
@@ -39,22 +39,23 @@ namespace MCAWebAndAPI.Service.Asset
             var viewModel = new AssetMasterVM();
 
             viewModel.AssetNoAssetDesc.Choices = GetChoiceFromList("AssetID");
-            viewModel.AssetLevel.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "AssetLevel");
-            viewModel.AssetCategory.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "AssetCategory");
-            viewModel.AssetType.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "AssetType");
-            viewModel.Condition.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "Condition");
-            viewModel.ProjectUnit.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "ProjectUnit");
+            viewModel.AssetLevel.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "AssetLevel", _siteUrl);
+            viewModel.AssetCategory.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "AssetCategory", _siteUrl);
+            viewModel.AssetType.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "AssetType", _siteUrl);
+            viewModel.Condition.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "Condition", _siteUrl);
+            viewModel.ProjectUnit.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "ProjectUnit", _siteUrl);
 
             viewModel.ProjectUnit.Value = Convert.ToString(listItem["ProjectUnit"]);
             viewModel.Remarks = Convert.ToString(listItem["Remarks"]);
             viewModel.SerialNo = Convert.ToString(listItem["SerialNo"]);
-            viewModel.Spesifications = Convert.ToString(listItem["Spesifications"]);            
+            viewModel.Spesifications = Convert.ToString(listItem["Spesifications"]);
             viewModel.WarrantyExpires = Convert.ToDateTime(listItem["WarranyExpires"]);
             viewModel.AssetCategory.Value = Convert.ToString(listItem["AssetCategory"]);
             viewModel.AssetDesc = Convert.ToString(listItem["Title"]);
             viewModel.AssetLevel.Value = Convert.ToString(listItem["AssetLevel"]);
             viewModel.AssetType.Value = Convert.ToString(listItem["AssetType"]);
             viewModel.Condition.Value = Convert.ToString(listItem["Condition"]);
+            viewModel.AssetNoAssetDesc.Value = Convert.ToString(listItem["AssetID"]);
             viewModel.ID = ID;
 
             return viewModel;
@@ -64,13 +65,37 @@ namespace MCAWebAndAPI.Service.Asset
         {
             var columnValues = new Dictionary<string, object>();
             string _assetID = GenerateAssetID(assetMaster);
-            columnValues.Add("AssetCategory", assetMaster.AssetCategory.Value);
+
+            if (assetMaster.AssetLevel.Value == "Sub Asset")
+            {
+                var qCaml = @"<View><Query>
+                           <Where>
+                              <Eq>
+                                 <FieldRef Name='AssetID' />
+                                 <Value Type='Text'>"+ _assetID + @"</Value>
+                              </Eq>
+                           </Where>
+                        </Query></View>";
+                var listItem = SPConnector.GetList(SP_ASSMAS_LIST_NAME, _siteUrl, qCaml);
+
+                foreach(var item in listItem)
+                {
+                    columnValues.Add("AssetCategory", Convert.ToString(item["AssetCategory"]));
+                    columnValues.Add("AssetType", Convert.ToString(item["AssetType"]));
+                    columnValues.Add("ProjectUnit", Convert.ToString(item["ProjectUnit"]));
+                }
+            }
+            else
+            {
+                columnValues.Add("AssetCategory", assetMaster.AssetCategory.Value);
+                columnValues.Add("AssetType", assetMaster.AssetType.Value);
+                columnValues.Add("ProjectUnit", assetMaster.ProjectUnit.Value);
+            }
+
             columnValues.Add("Title", assetMaster.AssetDesc);
             columnValues.Add("AssetLevel", assetMaster.AssetLevel.Value);
             columnValues.Add("AssetID", _assetID);
-            columnValues.Add("AssetType", assetMaster.AssetType.Value);
             columnValues.Add("Condition", assetMaster.Condition.Value);
-            columnValues.Add("ProjectUnit", assetMaster.ProjectUnit.Value);
             columnValues.Add("Remarks", assetMaster.Remarks);
             columnValues.Add("SerialNo", assetMaster.SerialNo);
             columnValues.Add("Spesifications", assetMaster.Spesifications);
@@ -82,9 +107,7 @@ namespace MCAWebAndAPI.Service.Asset
             {
                 columnValues.Add("WarranyExpires", null);
             }
-
-
-
+            
             try
             {
                 SPConnector.AddListItem(SP_ASSMAS_LIST_NAME, columnValues, _siteUrl);
@@ -97,20 +120,44 @@ namespace MCAWebAndAPI.Service.Asset
             var entitiy = new AssetMasterVM();
             entitiy = assetMaster;
             return true;
-        }      
+        }
 
         public bool UpdateAssetMaster(AssetMasterVM assetMaster)
         {
             var columnValues = new Dictionary<string, object>();
             int ID = assetMaster.ID.Value;
             string _assetID = GenerateAssetID(assetMaster);
-            columnValues.Add("AssetCategory", assetMaster.AssetCategory.Value);
+
+            if (assetMaster.AssetLevel.Value == "Sub Asset")
+            {
+                //make sure
+                if(_assetID.Length > 14)
+                {
+                    string[] splitID = _assetID.Split('-');
+                    if(splitID[0] == "FXA")
+                    {
+                        columnValues.Add("AssetCategory", "Fixed Asset");
+                    }
+                    else
+                    {
+                        columnValues.Add("AssetCategory", "Small Value Asset");
+                    }
+                    
+                    columnValues.Add("ProjectUnit", Convert.ToString(splitID[1]));
+                    columnValues.Add("AssetType", Convert.ToString(splitID[2]));
+                }
+            }
+            else
+            {
+                columnValues.Add("AssetCategory", assetMaster.AssetCategory.Value);
+                columnValues.Add("AssetType", assetMaster.AssetType.Value);
+                columnValues.Add("ProjectUnit", assetMaster.ProjectUnit.Value);
+            }
+
             columnValues.Add("Title", assetMaster.AssetDesc);
             columnValues.Add("AssetLevel", assetMaster.AssetLevel.Value);
             columnValues.Add("AssetID", _assetID);
-            columnValues.Add("AssetType", assetMaster.AssetType.Value);
             columnValues.Add("Condition", assetMaster.Condition.Value);
-            columnValues.Add("ProjectUnit", assetMaster.ProjectUnit.Value);
             columnValues.Add("Remarks", assetMaster.Remarks);
             columnValues.Add("SerialNo", assetMaster.SerialNo);
             columnValues.Add("Spesifications", assetMaster.Spesifications);
@@ -134,10 +181,11 @@ namespace MCAWebAndAPI.Service.Asset
         {
             var viewModels = new List<AssetMasterVM>();
 
-            foreach(var item in SPConnector.GetList(SP_ASSMAS_LIST_NAME, _siteUrl))
+            foreach (var item in SPConnector.GetList(SP_ASSMAS_LIST_NAME, _siteUrl))
             {
-                viewModels.Add(new AssetMasterVM {
-                    ID = Convert.ToInt32(item["ID"]), 
+                viewModels.Add(new AssetMasterVM
+                {
+                    ID = Convert.ToInt32(item["ID"]),
                     AssetDesc = Convert.ToString(item["Title"])
                 });
             }
@@ -174,9 +222,56 @@ namespace MCAWebAndAPI.Service.Asset
         private string GenerateAssetIDForSubAsset(AssetMasterVM assetMaster)
         {
             var assetID = assetMaster.AssetNoAssetDesc.Value;
-            var lastNumber = GetAssetIDLastNumber(assetID);
-            assetID += "-" + FormatUtil.ConvertToDigitNumber(lastNumber, 2);
+            var lastNumber = GetAssetIDLastNumberForSubAsset(assetID);
+            assetID += "-" + FormatUtil.ConvertToDigitNumber(Convert.ToInt32(lastNumber), 3);
             return assetID;
+        }
+
+        private object GetAssetIDLastNumberForSubAsset(string assetID, string from = null)
+        {
+            var caml = @"<View>  
+                <Query> 
+                    <Where><Contains><FieldRef Name='AssetID' /><Value Type='Text'>"
+                + assetID
+                + @"</Value></Contains></Where> 
+                </Query> 
+                <ViewFields><FieldRef Name='AssetID' /></ViewFields> 
+            </View>";
+            var listItem = SPConnector.GetList(SP_ASSMAS_LIST_NAME, _siteUrl, caml);
+            if(from == "sub asset" && listItem.Count == 0)
+            {
+                return 0;
+            }
+
+            var numbers = new List<int>();
+            var aID = new List<string>();
+            foreach (var item in listItem)
+            {
+                aID.Add(Convert.ToString(item["AssetID"]));
+            }
+
+            if (aID.Count > 1)
+            {
+                for (int x = 0; x < aID.Count; x++)
+                {
+                    if (aID[x].Length <= 14)
+                    {
+                        aID.RemoveAt(x);
+                        x = -1;
+                    }
+                    else
+                    {
+                        var itemNumber = Convert.ToInt32(aID.Max().Split('-')[4]);
+                        numbers.Add(itemNumber);
+                    }
+                }
+            }
+            else
+            {
+                return 1;
+            }
+
+            return numbers.Max() + 1;
         }
 
         private string GenerateAssetIDForMainAsset(AssetMasterVM assetMaster)
@@ -225,8 +320,6 @@ namespace MCAWebAndAPI.Service.Asset
                     numbers.Add(itemNumber);
                 }
             }
-
-
             return numbers.Max() + 1;
         }
 
@@ -234,7 +327,7 @@ namespace MCAWebAndAPI.Service.Asset
         {
             var result = string.Compare(assetCategory, "Fixed Asset", StringComparison.OrdinalIgnoreCase) == 0 ?
                 "FXA" : "SVA";
-            return result += "-"+projectUnit+"-" + assetType;
+            return result += "-" + projectUnit + "-" + assetType;
         }
 
         private string[] GetChoiceFromList(string listName)
@@ -243,7 +336,10 @@ namespace MCAWebAndAPI.Service.Asset
             var listItems = SPConnector.GetList(SP_ASSMAS_LIST_NAME, _siteUrl);
             foreach (var item in listItems)
             {
-                _choices.Add(item[listName].ToString());
+                if (Convert.ToString(item[listName]).Length == 14)
+                {
+                    _choices.Add(item[listName].ToString());
+                }
             }
             return _choices.ToArray();
         }
@@ -265,6 +361,54 @@ namespace MCAWebAndAPI.Service.Asset
             };
         }
 
-        
+        public string GetAssetIDForMainAsset(string category, string projectunit, string type)
+        {
+            if (category == "Fixed Asset")
+            {
+                category = "FX";
+            }
+            else
+            {
+                category = "SVA";
+            }
+            var assetID = GetAssetIDCode(category, projectunit, type);
+            var lastNumber = GetAssetIDLastNumber(assetID);
+            assetID += "-" + FormatUtil.ConvertToDigitNumber(lastNumber, 4);
+            
+            return assetID;
+        }
+
+        public string GetAssetIDForSubAsset(string category, string projectunit, string type, int number)
+        {
+            if (category == "Fixed Asset")
+            {
+                category = "FX";
+            }
+            else
+            {
+                category = "SVA";
+            }
+            var assetID = GetAssetIDCode(category, projectunit, type);
+            var lastNumber = GetAssetIDLastNumber(assetID);
+            assetID += "-" + FormatUtil.ConvertToDigitNumber(lastNumber, 4);
+
+            return assetID;
+        }
+
+        public string GetAssetIDForSubAsset(string assetID)
+        {
+            List<string> similarAssetIDs = new List<string>();
+            var lastNumber = GetAssetIDLastNumberForSubAsset(assetID, "sub asset");
+            if(Convert.ToInt32(lastNumber) == 0)
+            {
+                assetID = "";
+            }
+            else
+            {
+                assetID += "-" + FormatUtil.ConvertToDigitNumber(Convert.ToInt32(lastNumber), 3);
+            }            
+
+            return assetID;
+        }
     }
 }

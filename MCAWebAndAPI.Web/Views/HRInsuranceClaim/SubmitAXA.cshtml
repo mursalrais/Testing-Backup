@@ -1,12 +1,12 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
-@model InsuranceClaimVM
+@model InsuranceClaimAXAVM
 
 @{
-    ViewBag.Title = "Form Edit Insurance Claim";
+    ViewBag.Title = "Form Submit Insurance AXA";
 }
 
 
-@using (Html.BeginForm("UpdateInsuranceClaim", "HRInsuranceClaim", FormMethod.Post,
+@using (Html.BeginForm("RedirectExportToExcel", "HRInsuranceClaim", FormMethod.Post,
                                                                       new
                                                                       {
                                                                           @class = "form-horizontal",
@@ -18,269 +18,73 @@
 {
     <fieldset>
 
-        @Html.AntiForgeryToken()
-        @Html.ValidationSummary()
-       
+        @*@Html.AntiForgeryToken()
+        @Html.ValidationSummary()*@
+      
         <div class="col-sm-6">
 
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.Sender).Class("col-sm-4 control-label")
                 <div class="col-sm-8">
-                    @Html.EditorFor(m => m.ProfessionalName)
+                    @Html.EditorFor(m => m.Sender)
                 </div>
             </div>
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Position).Class("col-sm-4 control-label")
+                @Html.Bootstrap().LabelFor(m => m.BatchNo).Class("col-sm-4 control-label")
                 <div class="col-sm-8">
-                    @Html.DisplayFor(m => m.Position)
+                    @Html.EditorFor(m => m.BatchNo)
                 </div>
             </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Type).Class("col-sm-4 control-label")
-                <div class="col-sm-8">
-                    @Html.EditorFor(m => m.Type)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.OrganizationInsuranceID).Class("col-sm-4 control-label")
-                <div class="col-sm-8">
-                    @Html.DisplayFor(m => m.OrganizationInsuranceID)
-                </div>
-            </div>
+           
         </div>
         <div class="col-sm-6">
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.ClaimDate).Class("col-sm-4 control-label")
+                @Html.Bootstrap().LabelFor(m => m.Recepient).Class("col-sm-4 control-label")
                 <div class="col-sm-8">
-                    @Html.EditorFor(m => m.ClaimDate)
+                    @Html.EditorFor(m => m.Recepient)
                 </div>
             </div>
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.DependantName).Class("col-sm-4 control-label")
+                @Html.Bootstrap().LabelFor(m => m.SubmissionDate).Class("col-sm-4 control-label")
                 <div class="col-sm-8">
-                    @Html.EditorFor(m => m.DependantName)
+                    @Html.EditorFor(m => m.SubmissionDate)
                 </div>
             </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.IndividualInsuranceNumber).Class("col-sm-4 control-label")
-                <div class="col-sm-8">
-                    @Html.DisplayFor(m => m.IndividualInsuranceNumber)
-                </div>
-            </div>
-
-        </div>
-
-        <legend>Claim Component</legend>
-        <div class="row">
-            @Html.Partial("_ClaimComponentDetail", Model.ClaimComponentDetails)
-        </div>
-
-        @if (Model.UserPermission == "HR")
-        {
-            <div class="row">
-
-            </div>
-
-            <div class="col-sm-6">
-                <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.ClaimStatusHR).Class("col-sm-4 control-label")
-                    <div class="col-sm-8">
-
-                        @Html.EditorFor(m => m.ClaimStatusHR)
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-6">
-                <div class="form-group">
-                    @Html.Label("Validated by HR/Submitted to AXA/Paid/Rejected")
-                   
-                </div>
-            </div>
-
-
-               
-
-
            
 
-        }
+        </div>
+
+       
+        <div class="row">
+            @Html.Partial("_ClaimComponentAXA",Model.dtDetails)
+        </div>
 
 
-</fieldset>
-    if (Model.UserPermission == "HR")
-    {
-        <div class="form-actions">
-            <div class="row">
-                <div class="col-sm-12">
-                    <button id="submit-by-byhr-button" class="btn btn-primary" type="submit">
-                        <i class="fa fa-save"></i>
-                        Validated by HR
-                    </button>
-                    <button id="save-button-byhr" class="btn btn-primary" type="submit">
-                        <i class="fa fa-save"></i>
-                        Save As Draft
-                    </button>
-                </div>
+
+    </fieldset>
+    <div class="form-actions">
+        <div class="row">
+            <div class="col-sm-12">
+                <button id="submit-to-axa" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    Export to Excel
+                </button>
             </div>
         </div>
-    }
-    if (Model.UserPermission == "Professional")
-    {
-        <div class="form-actions">
-            <div class="row">
-                <div class="col-sm-12">
-                    <button id="submit-to-hr-button" class="btn btn-primary" type="submit">
-                        <i class="fa fa-save"></i>
-                        Validate to HR
-                    </button>
-                    <button id="save-button" class="btn btn-primary" type="submit">
-                        <i class="fa fa-save"></i>
-                        Save As Draft
-                    </button>
-                </div>
-            </div>
-        </div>
-    }
+    </div>
 }
 @section scripts{
     <script type="text/javascript">
         $(document)
-            .ready(function() {
-                var dependent = $("#DependantName_Value").data("kendoDropDownList");
-                var professional = $("#ProfessionalName_Value").data("kendoDropDownList");
-                dependent.enable(false);
-                var strPermission = $("#UserPermission").val();
-                var strClaim = $("#ClaimStatus").val();
-                if (strPermission !== "HR") {
-                    professional.enable(false);
-                    if (strClaim != "Draft") {
-                        $("#save-button").prop("disabled", true);
-                        $("#submit-to-hr-button").prop("disabled", true);
-                    }
-                }
-                if (strPermission === "HR") {
-                    if (strClaim != "Draft") {
-                        $("#save-button-byhr").hide();
-                    }
-                }
+            .ready(function () {
 
-                $("#save-button")
-                    .click(function() {
-                        var strtype = $("#Type_Value").data("kendoDropDownList").text();
-                        var strDependent = $("#DependantName_Value").data("kendoDropDownList").text();
+                //$("#submit-to-axa")
+                //        .click(function () {
+                //            var grid = $("#gridDataView").data("kendoGrid");
+                //            grid.saveAsExcel();
+                //        });
 
-
-                        if (strtype === "Dependent" && strDependent === '') {
-                            alert('Dependent Name field is required');
-                        } else {
-                            $("#ClaimStatus").val("Draft");
-                            $("form").submit();
-                        }
-
-                    });
-
-
-
-                $("#submit-to-hr-button")
-                    .click(function() {
-                        var strtype = $("#Type_Value").data("kendoDropDownList").text();
-                        var strDependent = $("#DependantName_Value").data("kendoDropDownList").text();
-
-
-                        if (strtype === "Dependent" && strDependent === '') {
-                            alert('Dependent Name field is required');
-                        } else {
-                            $("#ClaimStatus").val("Need HR to Validate");
-                            $("form").submit();
-                        }
-
-                    });
-
-
-
-                $("#save-button-byhr")
-                  .click(function () {
-                      var strtype = $("#Type_Value").data("kendoDropDownList").text();
-                      var strDependent = $("#DependantName_Value").data("kendoDropDownList").text();
-                     
-
-                      if (strtype === "Dependent" && strDependent === '') {
-                          alert('Dependent Name field is required');
-                      } else {
-                          $("#ClaimStatus").val("Draft");
-                          $("form").submit();
-                      }
-
-                  });
-
-                $("#submit-by-byhr-button")
-                   .click(function () {
-                       var strtype = $("#Type_Value").data("kendoDropDownList").text();
-                       var strDependent = $("#DependantName_Value").data("kendoDropDownList").text();
-                       var strClaim = $("#ClaimStatusHR_Value").data("kendoDropDownList").text();
-
-                       if (strtype === "Dependent" && strDependent === '') {
-                           alert('Dependent Name field is required');
-                           return;
-                       }
-                       //else if (strClaim === "") {
-                       //    alert('Claim Status field is required');
-                       //    return;
-                      // }
-                       else {
-                           $("form").submit();
-                       }
-
-                   });
-
-            });
-
-        function OnSelectDependantName(e) {
-            var dataItem = this.dataItem(e.item);
-            var url = "/HRDataMaster/GetDependant/" + dataItem.ID;
-            $('#IndividualInsuranceNumber').prop('value', '');
-            $('#OrganizationInsuranceID').prop('value', '');
-            $.getJSON(url,
-                function(result) {
-                    $('#IndividualInsuranceNumber').prop('value', result[0].InsuranceNumber);
-                    $('#OrganizationInsuranceID').prop('value', result[0].OrganizationInsurance);
-
-                });
-        }
-
-        function OnSelectType(e) {
-
-            var dataItem = this.dataItem(e.item);
-            var dependent = $("#DependantName_Value").data("kendoDropDownList");
-            $('#IndividualInsuranceNumber').prop('value', '');
-            $('#OrganizationInsuranceID').prop('value', '');
-            if (dataItem.Text === 'Professional') {
-                dependent.enable(false);
-            } else {
-                dependent.enable(true);
             }
-            dependent.select(0);
-        }
-
-        function OnSelectProfessionalName(e) {
-            var dataItem = this.dataItem(e.item);
-            var url = "/HRDataMaster/GetProfessional/" + dataItem.ID;
-
-            $.getJSON(url,
-                function(result) {
-                    $('#Position').prop('value', result[0].Position);
-
-                });
-        }
-
-        function OnSelectClaim(e) {
-            var dataItem = this.dataItem(e.item);
-            if (dataItem.Text !== '') {
-                $("#ClaimStatus").val(dataItem.Text);
-            }
-        }
-
-
+            );
     </script>
 }

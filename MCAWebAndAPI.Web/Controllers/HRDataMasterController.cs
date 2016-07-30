@@ -66,7 +66,8 @@ namespace MCAWebAndAPI.Web.Controllers
                     e.Status,
                     e.OfficeEmail,
                     e.Project_Unit,
-                    Desc = string.Format("{0}", e.Name) }),
+                    Desc = string.Format("{0}", e.Name),
+                    Desc1 = string.Format("{0} - {1}", e.Name, e.Position) }),
                 JsonRequestBehavior.AllowGet);
         }
 
@@ -86,9 +87,10 @@ namespace MCAWebAndAPI.Web.Controllers
                         e.Project_Unit,
                         e.PositionId, 
                         e.PSANumber,
-                        //e.JoinDate,
-                        e.JoinDateTemp,
-                        e.OfficeEmail
+                        e.JoinDate,
+                        e.OfficeEmail, 
+                        e.PersonalMail,
+                        e.JoinDateTemp
                     }
                 ), JsonRequestBehavior.AllowGet);
         }

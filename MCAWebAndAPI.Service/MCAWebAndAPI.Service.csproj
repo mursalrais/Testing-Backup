@@ -191,12 +191,6 @@
     <Folder Include="ResourceAndContract\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MCAWebAndAPI.Model\MCAWebAndAPI.Model.csproj">
-      <Project>{0b0761cd-8a08-4527-b895-a26c36224046}</Project>
-      <Name>MCAWebAndAPI.Model</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="bin\Debug\MCAWebAndAPI.Service.dll" />
     <Content Include="bin\Debug\MCAWebAndAPI.Service.pdb" />
     <Content Include="NLog.config">
@@ -222,6 +216,12 @@
       <CustomToolNamespace>MCAWebAndAPI.Service.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MCAWebAndAPI.Model\MCAWebAndAPI.Model.csproj">
+      <Project>{0b0761cd-8a08-4527-b895-a26c36224046}</Project>
+      <Name>MCAWebAndAPI.Model</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

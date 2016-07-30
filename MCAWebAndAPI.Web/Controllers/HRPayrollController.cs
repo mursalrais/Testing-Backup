@@ -115,5 +115,13 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             return array;
         }
+
+        IEnumerable<PayrollWorksheetDetailVM> GetPayrollWorksheetDetails(DateTime period)
+        {
+            var payrollWorksheetDetails = new List<PayrollWorksheetDetailVM>();
+
+            return payrollWorksheetDetails;
+        }
+
     }
 }

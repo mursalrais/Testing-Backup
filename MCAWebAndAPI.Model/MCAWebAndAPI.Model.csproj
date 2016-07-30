@@ -150,6 +150,8 @@
     <Compile Include="ViewModel\Form\HR\FeeSlipDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\FeeSlipVM.cs" />
     <Compile Include="ViewModel\Form\HR\IndividualGoalDetailVM.cs" />
+    <Compile Include="ViewModel\Form\HR\ViewInsuranceProfessionalVM.cs" />
+    <Compile Include="ViewModel\Form\HR\InsuranceClaimAXAVM.cs" />
     <Compile Include="ViewModel\Form\HR\InsuranceClaimVM.cs" />
     <Compile Include="ViewModel\Form\HR\InterviewDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\InterviewlistDetailVM.cs" />
@@ -160,6 +162,7 @@
     <Compile Include="ViewModel\Form\HR\OrganizationalDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\OutputDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\PayrollDetailVM.cs" />
+    <Compile Include="ViewModel\Form\HR\PayrollWorksheetDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\PerformanceEvaluationDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\PerformanceMonitoringDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\PerformanceEvaluationVM.cs" />

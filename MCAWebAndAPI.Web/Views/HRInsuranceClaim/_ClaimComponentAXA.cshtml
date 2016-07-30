@@ -1,0 +1,54 @@
+﻿@model System.Data.DataTable
+
+<div class="col-sm-12">
+    @(Html.Kendo().Grid<dynamic>()
+          .Name("gridDataView")
+          .Columns(columns =>
+          {
+              foreach (System.Data.DataColumn column in Model.Columns)
+              {
+
+                  if (column.DataType.FullName != "System.Double" && column.ColumnName != "Remarks")
+                  {
+                      columns.Bound(column.ColumnName);
+                  }
+
+              }
+              columns.Group(group => group
+                  .Title("Claim Component")
+                  .Columns(info =>
+                  {
+                      foreach (System.Data.DataColumn column in Model.Columns)
+                      {
+                          if (column.DataType.FullName == "System.Double")
+                          {
+                              info.Bound(column.ColumnName).ClientTemplate("#= kendo.toString(" + column.ColumnName + ",'n0') #");
+
+                          }
+                      }
+
+
+                  })
+                  );
+              columns.Bound("Remarks");
+             
+          })
+
+          .DataSource(dataSource => dataSource
+              .Ajax()
+              .Model(model =>
+              {
+
+              })
+
+              .Read(read => read.Action("Read", "HRInsuranceClaim"))
+
+          )
+          )
+
+
+</div>
+<script>
+  
+</script>
+
