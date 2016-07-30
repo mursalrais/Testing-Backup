@@ -128,7 +128,6 @@
     <Compile Include="ViewModel\Form\Asset\AssignmentofAssetItemVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssignmentofAssetVM.cs" />
     <Compile Include="ViewModel\Form\Asset\LocationMasterVM.cs" />
-    <Compile Include="ViewModel\Form\Asset\LocationMasterHeaderVM.cs" />
     <Compile Include="ViewModel\Form\Common\PendingApprovalItemVM.cs" />
     <Compile Include="ViewModel\Form\Common\WorkflowItemVM.cs" />
     <Compile Include="ViewModel\Form\Common\WorkflowRouterVM.cs" />
@@ -154,7 +153,6 @@
     <Compile Include="ViewModel\Form\HR\InsuranceClaimVM.cs" />
     <Compile Include="ViewModel\Form\HR\InterviewDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\InterviewlistDetailVM.cs" />
-    <Compile Include="ViewModel\Form\HR\LocationMasterVM.cs" />
     <Compile Include="ViewModel\Form\HR\ManpowerRequisitionVM.cs" />
     <Compile Include="ViewModel\Form\HR\ClaimPaymentDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\MonthlyFeeDetailVM.cs" />

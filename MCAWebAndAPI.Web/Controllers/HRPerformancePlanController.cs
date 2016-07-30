@@ -39,23 +39,12 @@ namespace MCAWebAndAPI.Web.Controllers
             // Get blank ViewModel
             var viewModel = _hRPerformancePlanService.GetPopulatedModel(requestor);
             viewModel.Requestor = requestor;
-            if (requestor != null)
-            {
-                viewModel.Requestor = requestor;
-            }
-            if (ID != null)
-            {
-                viewModel.ID = ID;
-            }
+            viewModel.ID = ID;
             ViewBag.Action = "CreatePerformancePlan";
 
             // Used for Workflow Router
             ViewBag.ListName = "Professional%20Performance%20Plan";
-            SessionManager.Set("ListName", ViewBag.ListName);
-
-            // This var should be taken from passing parameter
-            if (requestor != null)
-                SessionManager.Set("RequestorUserLogin", requestor);
+            ViewBag.Requestor = requestor;
 
             return View("PerformancePlan", viewModel);
         }
@@ -78,12 +67,13 @@ namespace MCAWebAndAPI.Web.Controllers
             }
 
             var Detail = viewModel.ProjectOrUnitGoalsDetails;
+            var Count = Detail.Count();
             int sum = 0;
             string project = null;
             string individual = null;
             foreach (var viewModelDetail in Detail)
             {
-                if (viewModelDetail.EditMode != -1)
+                if (viewModelDetail.EditMode != -1 && Count != 0)
                 {
                     if (viewModelDetail.ProjectOrUnitGoals == null)
                     {
@@ -116,8 +106,8 @@ namespace MCAWebAndAPI.Web.Controllers
                     viewModel.StatusForm = "Draft";
                 }
 
-                ModelState.AddModelError("ModelInvalid", "Project Or Unit Goals is Required");
-                return View("PerformancePlan", viewModel);
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse("Project Or Unit Goals is Required");
             }
 
             if (individual == "Empty")
@@ -131,11 +121,11 @@ namespace MCAWebAndAPI.Web.Controllers
                     viewModel.StatusForm = "Draft";
                 }
 
-                ModelState.AddModelError("ModelInvalid", "Individual Goal And Plan is Required");
-                return View("PerformancePlan", viewModel);
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse("Individual Goal And Plan is Required");
             }
 
-            if (sum != 100)
+            if (sum != 100 && Count != 0)
             {
                 if (viewModel.StatusForm == "DraftInitiated")
                 {
@@ -146,8 +136,8 @@ namespace MCAWebAndAPI.Web.Controllers
                     viewModel.StatusForm = "Draft";
                 }
 
-                ModelState.AddModelError("ModelInvalid", "Weight must be total 100%");
-                return View("PerformancePlan", viewModel);
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse("Weight must be total 100%");
             }
 
             if (viewModel.StatusForm != "DraftInitiated")
@@ -193,24 +183,13 @@ namespace MCAWebAndAPI.Web.Controllers
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             var viewModel = _hRPerformancePlanService.GetHeader(ID);
-            if (requestor != null)
-            {
-                viewModel.Requestor = requestor;
-            }
-            if (ID != null)
-            {
-                viewModel.ID = ID;
-            }
-
+            viewModel.Requestor = requestor;
+            viewModel.ID = ID;
             ViewBag.Action = "EditPerformancePlan";
 
             // Used for Workflow Router
             ViewBag.ListName = "Professional%20Performance%20Plan";
-            SessionManager.Set("ListName", ViewBag.ListName);
-
-            // This var should be taken from passing parameter
-            if (requestor != null)
-                SessionManager.Set("RequestorUserLogin", requestor);
+            ViewBag.Requestor = requestor;
 
             return View("PerformancePlan", viewModel);
         }
@@ -222,76 +201,81 @@ namespace MCAWebAndAPI.Web.Controllers
             _hRPerformancePlanService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             var Detail = viewModel.ProjectOrUnitGoalsDetails;
+            var Count = Detail.Count();
             int sum = 0;
             string project = null;
             string individual = null;
-            foreach (var viewModelDetail in Detail)
+            if (Count != 0)
             {
-                if (viewModelDetail.EditMode != -1)
+                foreach (var viewModelDetail in Detail)
                 {
-                    if (viewModelDetail.ProjectOrUnitGoals == null)
+                    if (viewModelDetail.EditMode != -1)
                     {
-                        viewModelDetail.ProjectOrUnitGoals = "";
-                        project = "Empty";
+                        if (viewModelDetail.ProjectOrUnitGoals == null)
+                        {
+                            viewModelDetail.ProjectOrUnitGoals = "";
+                            project = "Empty";
+                        }
+
+                        if (viewModelDetail.IndividualGoalAndPlan == null)
+                        {
+                            viewModelDetail.IndividualGoalAndPlan = "";
+                            individual = "Empty";
+                        }
+
+                        if (viewModelDetail.Remarks == null)
+                        {
+                            viewModelDetail.Remarks = "";
+                        }
+
+                        sum = sum + viewModelDetail.Weight;
+                    }
+                }
+
+                if (project == "Empty")
+                {
+                    if (viewModel.StatusForm == "DraftInitiated")
+                    {
+                        viewModel.StatusForm = "Initiated";
+                    }
+                    if (viewModel.StatusForm == "DraftDraft")
+                    {
+                        viewModel.StatusForm = "Draft";
                     }
 
-                    if (viewModelDetail.IndividualGoalAndPlan == null)
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    return JsonHelper.GenerateJsonErrorResponse("Project Or Unit Goals is Required");
+                }
+
+                if (individual == "Empty")
+                {
+                    if (viewModel.StatusForm == "DraftInitiated")
                     {
-                        viewModelDetail.IndividualGoalAndPlan = "";
-                        individual = "Empty";
+                        viewModel.StatusForm = "Initiated";
+                    }
+                    if (viewModel.StatusForm == "DraftDraft")
+                    {
+                        viewModel.StatusForm = "Draft";
                     }
 
-                    if (viewModelDetail.Remarks == null)
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    return JsonHelper.GenerateJsonErrorResponse("Individual Goal And Plan is Required");
+                }
+
+                if (sum != 100)
+                {
+                    if (viewModel.StatusForm == "DraftInitiated")
                     {
-                        viewModelDetail.Remarks = "";
+                        viewModel.StatusForm = "Initiated";
+                    }
+                    if (viewModel.StatusForm == "DraftDraft")
+                    {
+                        viewModel.StatusForm = "Draft";
                     }
 
-                    sum = sum + viewModelDetail.Weight;
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    return JsonHelper.GenerateJsonErrorResponse("Weight must be total 100%");
                 }
-            }
-            if (project == "Empty")
-            {
-                if (viewModel.StatusForm == "DraftInitiated")
-                {
-                    viewModel.StatusForm = "Initiated";
-                }
-                if (viewModel.StatusForm == "DraftDraft")
-                {
-                    viewModel.StatusForm = "Draft";
-                }
-
-                ModelState.AddModelError("ModelInvalid", "Project Or Unit Goals is Required");
-                return View("PerformancePlan", viewModel);
-            }
-
-            if (individual == "Empty")
-            {
-                if (viewModel.StatusForm == "DraftInitiated")
-                {
-                    viewModel.StatusForm = "Initiated";
-                }
-                if (viewModel.StatusForm == "DraftDraft")
-                {
-                    viewModel.StatusForm = "Draft";
-                }
-
-                ModelState.AddModelError("ModelInvalid", "Individual Goal And Plan is Required");
-                return View("PerformancePlan", viewModel);
-            }
-
-            if (sum != 100)
-            {
-                if (viewModel.StatusForm == "DraftInitiated")
-                {
-                    viewModel.StatusForm = "Initiated";
-                }
-                if (viewModel.StatusForm == "DraftDraft")
-                {
-                    viewModel.StatusForm = "Draft";
-                }
-
-                ModelState.AddModelError("ModelInvalid", "Weight must be total 100%");
-                return View("PerformancePlan", viewModel);
             }
 
             _hRPerformancePlanService.UpdateHeader(viewModel);
@@ -367,6 +351,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
+
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.ProfessionalPerformancePlan);
         }
 
