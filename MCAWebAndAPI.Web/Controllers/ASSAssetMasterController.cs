@@ -271,23 +271,40 @@ namespace MCAWebAndAPI.Web.Controllers
             int x = 0;
             foreach (DataRow d in SessionManager.Get<DataTable>("CSVDataTable").Rows)
             {
-                res = _assetMasterService.GetAssetIDForMainAsset(createAssID.Rows[x].ItemArray[2].ToString(), createAssID.Rows[x].ItemArray[3].ToString(), createAssID.Rows[x].ItemArray[4].ToString());
-                if (assetIDs.Contains(res))
+                if(createAssID.Rows[x].ItemArray[0].ToString() == "")
                 {
-                    //split
-                    string[] breakk = res.Split('-');
-                    int num = Convert.ToInt32(breakk[3]);
-                    //FormatUtil.ConvertToDigitNumber(lastNumber, 4);
-                    num = num + 1;
-                    breakk[3] = FormatUtil.ConvertToDigitNumber(num, 4);
-                    res = breakk[0] + "-" + breakk[1] + "-" + breakk[2] + "-" + breakk[3];
-                    //get the number + 1
+                    res = _assetMasterService.GetAssetIDForMainAsset(createAssID.Rows[x].ItemArray[2].ToString(), createAssID.Rows[x].ItemArray[3].ToString(), createAssID.Rows[x].ItemArray[4].ToString());
+                    if (assetIDs.Contains(res))
+                    {
+                        //split
+                        string[] breakk = res.Split('-');
+                        int num = Convert.ToInt32(breakk[3]);
+                        //FormatUtil.ConvertToDigitNumber(lastNumber, 4);
+                        num = num + 1;
+                        breakk[3] = FormatUtil.ConvertToDigitNumber(num, 4);
+                        res = breakk[0] + "-" + breakk[1] + "-" + breakk[2] + "-" + breakk[3];
+                        //get the number + 1
 
+                    }
+                    else
+                    {
+                        assetIDs.Add(res);
+                    }
                 }
                 else
                 {
-                    assetIDs.Add(res);
+                    //cek if assetID parent is exist
+                    var assetIDss = _assetMasterService.GetAssetIDForSubAsset(createAssID.Rows[x].ItemArray[0].ToString());
+                    if(assetIDss == "")
+                    {
+                        return JsonHelper.GenerateJsonErrorResponse(assetIDss);
+                    }
+                    else
+                    {
+                        res = assetIDss;
+                    }
                 }
+
                 d["AssetID"] = res;
                 x++;
             }

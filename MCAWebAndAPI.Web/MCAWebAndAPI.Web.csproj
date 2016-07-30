@@ -1055,7 +1055,6 @@
     <Content Include="Views\HRInterviewlist\InputInterviewResult.cshtml" />
     <Content Include="Views\HRInterviewlist\_InterviewResultlist.cshtml" />
     <Content Include="Views\HRInterviewlist\InputInterviewResultDetail.cshtml" />
-    <Content Include="Views\HRInterviewlist\_InputInterviewResultDetail.cshtml" />
     <Content Include="Views\HRPerformanceMonitoring\PerformanceMonitoring.cshtml" />
     <Content Include="Views\HRPerformanceMonitoring\_Detail.cshtml" />
     <Content Include="Views\HRPerformanceMonitoring\_PerformancePlanMonitoring.cshtml" />

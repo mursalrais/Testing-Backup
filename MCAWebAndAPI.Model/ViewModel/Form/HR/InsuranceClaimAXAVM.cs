@@ -29,9 +29,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         [Required(ErrorMessage = "Submission Date Field Is Required")]
         [UIHint("Date")]
-        public DateTime? SubmissionDate { get; set; }
+        public DateTime? SubmissionDate { get; set; } = DateTime.Now;
 
-      
+
 
     }
 }

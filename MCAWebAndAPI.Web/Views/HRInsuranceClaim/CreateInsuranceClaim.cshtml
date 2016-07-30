@@ -3,22 +3,14 @@
 
 
 
-@*@using (Html.BeginForm("SubmitInsuranceClaim", "HRInsuranceClaim", FormMethod.Post,
+@using (Html.BeginForm("SubmitInsuranceClaim", "HRInsuranceClaim", FormMethod.Post,
     new
     {
         @class = "form-horizontal",
         enctype = "multipart/form-data"
-    }))*@
+    }))
 
-@using (Ajax.BeginForm("SubmitInsuranceClaim", "HRInsuranceClaim",
-                                                                            FormMethod.Post,
-                                                                            new AjaxOptions
-                                                                            {
-                                                                                OnBegin = "onBeginForm",
-                                                                                OnComplete = "onCompleteForm",
-                                                                                OnSuccess = "onSuccessFormEmbed",
-                                                                                OnFailure = "onFailureForm"
-                                                                            }, new { @class = "form-horizontal" }))
+
 
 
 {

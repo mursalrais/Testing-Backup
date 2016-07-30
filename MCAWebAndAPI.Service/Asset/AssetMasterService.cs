@@ -227,7 +227,7 @@ namespace MCAWebAndAPI.Service.Asset
             return assetID;
         }
 
-        private object GetAssetIDLastNumberForSubAsset(string assetID)
+        private object GetAssetIDLastNumberForSubAsset(string assetID, string from = null)
         {
             var caml = @"<View>  
                 <Query> 
@@ -238,8 +238,10 @@ namespace MCAWebAndAPI.Service.Asset
                 <ViewFields><FieldRef Name='AssetID' /></ViewFields> 
             </View>";
             var listItem = SPConnector.GetList(SP_ASSMAS_LIST_NAME, _siteUrl, caml);
-            //if (listItem.Count == 0) // if not found
-            //    return 1;
+            if(from == "sub asset" && listItem.Count == 0)
+            {
+                return 0;
+            }
 
             var numbers = new List<int>();
             var aID = new List<string>();
@@ -373,6 +375,39 @@ namespace MCAWebAndAPI.Service.Asset
             var lastNumber = GetAssetIDLastNumber(assetID);
             assetID += "-" + FormatUtil.ConvertToDigitNumber(lastNumber, 4);
             
+            return assetID;
+        }
+
+        public string GetAssetIDForSubAsset(string category, string projectunit, string type, int number)
+        {
+            if (category == "Fixed Asset")
+            {
+                category = "FX";
+            }
+            else
+            {
+                category = "SVA";
+            }
+            var assetID = GetAssetIDCode(category, projectunit, type);
+            var lastNumber = GetAssetIDLastNumber(assetID);
+            assetID += "-" + FormatUtil.ConvertToDigitNumber(lastNumber, 4);
+
+            return assetID;
+        }
+
+        public string GetAssetIDForSubAsset(string assetID)
+        {
+            List<string> similarAssetIDs = new List<string>();
+            var lastNumber = GetAssetIDLastNumberForSubAsset(assetID, "sub asset");
+            if(Convert.ToInt32(lastNumber) == 0)
+            {
+                assetID = "";
+            }
+            else
+            {
+                assetID += "-" + FormatUtil.ConvertToDigitNumber(Convert.ToInt32(lastNumber), 3);
+            }            
+
             return assetID;
         }
     }
