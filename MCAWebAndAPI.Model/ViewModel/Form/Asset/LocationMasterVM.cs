@@ -1,30 +1,32 @@
 ﻿using System;
+using MCAWebAndAPI.Model.ViewModel.Control;
+using MCAWebAndAPI.Model.ViewModel.Form.HR;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using MCAWebAndAPI.Model.Common;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 {
-    public class LocationMasterVM
+    public class LocationMasterVM : PlaceMasterVM
     {
-        private LocationMasterHeaderVM _header;
+        public IEnumerable<PlaceMasterVM> PlaceMasters { get; set; } = new List<PlaceMasterVM>();
 
-        public LocationMasterHeaderVM Header
+        [UIHint("AjaxComboBox")]
+        public AjaxComboBoxVM Province { get; set; } = new AjaxComboBoxVM
         {
-            get
-            {
-                if (_header == null)
-                {
-                    _header = new LocationMasterHeaderVM();
-                }
-                return _header;
-            }
+            ActionName = "GetLocationMaster",
+            ControllerName = "ASSLocationMaster",
+            ValueField = "ID",
+            TextField = "Title",
+        };
 
-            set
-            {
-                _header = value;
-            }
-        }
+        public string OfficeName { get; set; }
+
+        public int FloorName { get; set; }
+
+        public string RoomName { get; set; }
+
+        public string Remarks { get; set; }
     }
 }

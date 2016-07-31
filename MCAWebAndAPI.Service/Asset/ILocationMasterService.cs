@@ -9,14 +9,18 @@ namespace MCAWebAndAPI.Service.Asset
 {
     public interface ILocationMasterService
     {
-        void SetSiteUrl(string siteUrl);
+        void SetSiteUrl(string siteUrl = null);
 
-        LocationMasterVM GetLocationMaster();
+        LocationMasterVM GetPopulatedModel();
 
-        bool CreateLocationMaster(LocationMasterVM locationMaster);
+        LocationMasterVM GetHeader(int? ID);
 
-        bool DeleteLocationMasterVM(LocationMasterVM locationMaster);
+        void UpdateProvince(IEnumerable<LocationMasterVM> locationMasters);
 
-        bool UpdateLocationMasterVM(LocationMasterVM locationMaster);
+        IEnumerable<LocationMasterVM> GetLocationMaster();
+
+        int CreateHeader(LocationMasterVM header, string province, string office, int floor, string room);
+
+        bool UpdateHeader(LocationMasterVM header);
     }
 }
