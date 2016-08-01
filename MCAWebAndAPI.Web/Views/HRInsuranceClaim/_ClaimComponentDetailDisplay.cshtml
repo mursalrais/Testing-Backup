@@ -4,9 +4,6 @@
 <div class="col-sm-12">
     @(Html.Kendo().Grid(Model.ClaimComponentDetails)
           .Name("ClaimComponentDetails")
-          .ToolBar(tools => tools.Create().Text("Add New Component"))
-          .Editable(editable => editable.Mode(GridEditMode.InCell)
-              .CreateAt(GridInsertRowPosition.Bottom))
           .Columns(columns =>
           {
               columns.Bound(p => p.Type).ClientTemplate("#= Type.Text #" +
@@ -43,11 +40,7 @@
               columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
                                                                      "<input type='hidden' name='ClaimComponentDetails[#= getComponentDetail(data)#].EditMode' value='#= EditMode #' />"
                   );
-              columns.Command(command =>
-              {
-                  command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
-                      .Click("onDeleteKendoDetailplus");
-              }).Width(100);
+             
 
           })
           .Events(e =>
@@ -97,10 +90,9 @@
  
         $(document)
         .ready(function() {
-            //var overallTotalScore = 0;
-            //overallTotalScore = parseFloat($('#TotalAmount').val());
-            //    alert(overallTotalScore);
-            //$('#TotalAmountTemp').prop('value', format1(overallTotalScore));
+            var overallTotalScore = 0;
+            overallTotalScore = parseFloat($('#TotalAmount').val());
+            $('#TotalAmountTemp').prop('value', format1(overallTotalScore));
 
             });
 

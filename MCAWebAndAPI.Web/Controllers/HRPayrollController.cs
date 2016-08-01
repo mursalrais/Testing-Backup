@@ -116,12 +116,58 @@ namespace MCAWebAndAPI.Web.Controllers
             return array;
         }
 
-        IEnumerable<PayrollWorksheetDetailVM> GetPayrollWorksheetDetails(DateTime period)
+        public ActionResult DisplayPayrollWorksheet(string siteUrl)
         {
-            var payrollWorksheetDetails = new List<PayrollWorksheetDetailVM>();
+            SessionManager.Set("SiteUrl", siteUrl);
+            _hRPayrollService.SetSiteUrl(siteUrl);
 
-            return payrollWorksheetDetails;
+            var viewModelPayroll = _hRPayrollService.GetPayrollWorksheetDetails(null);
+            SessionManager.Set("PayrollWorksheetDetailVM", viewModelPayroll);
+
+            var viewModel = new PayrollRunVM();  
+            return View(viewModel);
         }
 
+        [HttpPost]
+        public ActionResult UpdatePeriodWorksheet(PayrollRunVM viewModel)
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _hRPayrollService.SetSiteUrl(siteUrl);
+
+            IEnumerable<PayrollWorksheetDetailVM> viewModelPayroll = new List<PayrollWorksheetDetailVM>();
+            try
+            {
+                viewModelPayroll = _hRPayrollService.GetPayrollWorksheetDetails(viewModel.From);
+            }
+            catch (Exception e)
+            {
+                return Json(new { message = e.Message }, JsonRequestBehavior.AllowGet);
+            }
+
+            SessionManager.Set("PayrollWorksheetDetailVM", viewModelPayroll);
+
+            return Json(new { message = "Period has been updated" }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GridWorksheet_Read([DataSourceRequest] DataSourceRequest request)
+        {
+            // Get from existing session variable or create new if doesn't exist
+            var items = SessionManager.Get<IEnumerable<PayrollWorksheetDetailVM>>("PayrollWorksheetDetailVM");
+
+            // Convert to Kendo DataSource
+            DataSourceResult result = items.ToDataSourceResult(request);
+
+            // Convert to Json
+            var json = Json(result, JsonRequestBehavior.AllowGet);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+
+        [HttpPost]
+        public ActionResult GridWorksheet_ExportExcel(string contentType, string base64, string fileName)
+        {
+            var fileContents = Convert.FromBase64String(base64);
+            return File(fileContents, contentType, fileName);
+        }
     }
 }

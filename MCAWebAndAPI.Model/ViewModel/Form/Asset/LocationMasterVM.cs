@@ -28,5 +28,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
         public string RoomName { get; set; }
 
         public string Remarks { get; set; }
+
+        public string Update { get; set; }
     }
 }

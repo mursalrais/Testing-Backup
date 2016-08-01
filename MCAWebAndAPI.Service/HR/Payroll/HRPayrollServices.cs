@@ -7,6 +7,8 @@ using NLog;
 using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Service.HR.Common;
+using MCAWebAndAPI.Service.HR.Recruitment;
+using System.Linq;
 
 namespace MCAWebAndAPI.Service.HR.Payroll
 {
@@ -16,6 +18,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
         static Logger logger = LogManager.GetCurrentClassLogger();
         const string SP_MON_FEE_LIST_NAME = "Monthly Fee";
         const string SP_MON_FEE_DETAIL_LIST_NAME = "Monthly Fee Detail";
+        const string SP_PSA_LIST_NAME = "PSA";
 
         IHRDataMasterService _dataMasterService = new HRDataMasterService();
         
@@ -180,21 +183,23 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             throw new NotImplementedException();
         }
 
-        public IEnumerable<PayrollWorksheetDetailVM> GetPayrollWorksheetDetails(DateTime period)
+        public IEnumerable<PayrollWorksheetDetailVM> GetPayrollWorksheetDetails(DateTime? periodParam)
         {
+            var worksheet = new List<PayrollWorksheetDetailVM>();
+
+            if (periodParam == null)
+                return worksheet;
+
+            var period = (DateTime)periodParam;
             var startDate = period.GetFirstPayrollDay();
             var finishDate = period.GetLastPayrollDay();
-            
-
             var dateRange = startDate.EachDay(finishDate);
-            
+            var professionalIDs = worksheet.GetValidProfessionalIDs(startDate, _siteUrl);
 
-            foreach (var item in dateRange)
-            {
-
-            }
-
-            throw new NotImplementedException();
+            worksheet.PopulateRows(dateRange, professionalIDs);
+            worksheet.PopulateColumns_Dummy(dateRange, professionalIDs);
+            return worksheet;
         }
+        
     }
 }

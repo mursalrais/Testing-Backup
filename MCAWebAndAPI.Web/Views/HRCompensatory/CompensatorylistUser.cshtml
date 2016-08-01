@@ -35,13 +35,13 @@
         </div>
         <legend>Compensatory list</legend>
         <div class="row">
-            @if (Model.Requestor == "HR")
+            @if (Model.Requestor == null)
             {
-                @Html.Partial("_CompensantoryDetailsHR", Model.CompensatoryDetails)
+                @Html.Partial("_CompensatoryDetailsHR", Model.CompensatoryDetails)
             }
             else
             {
-                @Html.Partial("_CompensantoryDetails", Model.CompensatoryDetails)
+                @Html.Partial("_CompensatoryDetails", Model.CompensatoryDetails)
 
             }
         </div>
