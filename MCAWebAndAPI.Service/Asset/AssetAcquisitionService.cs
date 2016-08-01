@@ -25,51 +25,75 @@ namespace MCAWebAndAPI.Service.Asset
             _siteUrl = siteUrl;
         }
 
-        public AssetAcquisitionVM GetAssetAcquisition()
+        public AssetAcquisitionHeaderVM GetPopulatedModel(int? ID = default(int?))
         {
-            throw new NotImplementedException();
+            var model = new AssetAcquisitionHeaderVM();
+
+            return model;
         }
 
-        public bool CreateAssetAcquisition(AssetAcquisitionVM assetAcquisition)
+        public AssetAcquisitionHeaderVM GetHeader(int? ID)
         {
-            throw new NotImplementedException();
+            var listitem = SPConnector.GetListItem(SP_ASSACQ_LIST_NAME, ID, _siteUrl);
+
+            return ConvertToHeaderModel(listitem);
         }
 
-        public bool UpdateAssetAcquisition(AssetAcquisitionVM assetAcquisition)
+        private AssetAcquisitionHeaderVM ConvertToHeaderModel(ListItem listitem)
         {
-            throw new NotImplementedException();
+            var viewmodel = new AssetAcquisitionHeaderVM();
+
+            viewmodel.ID = Convert.ToInt32(listitem["ID"]);
+            viewmodel.TransactionType = Convert.ToString(listitem["TransactionType"]);
+            viewmodel.AcceptanceMemoNoID.Value = FormatUtil.ConvertLookupToID(listitem, "");
+            viewmodel.AcceptanceMemoNoString = FormatUtil.ConvertLookupToValue(listitem, "");
+            viewmodel.Vendor = Convert.ToString(listitem["Vendor"]);
+            viewmodel.PoNo = Convert.ToString(listitem["PoNo"]);
+            viewmodel.PurchaseDate = Convert.ToDateTime(listitem["PurchaseDate"]);
+            viewmodel.PurchaseDescription = Convert.ToString(listitem["PurchaseDescription"]);
+
+            //viewmodel.AssetAcquisitionDetails = GetAssetDetails(viewmodel.ID);
+
+            return viewmodel;
         }
 
-        IEnumerable<AssetAcquisitionVM> IAssetAcquisitionService.GetAssetAcquisition()
-        {
-            throw new NotImplementedException();
-        }
+        //private IEnumerable<AssetAcquisitionItemVM> GetAssetDetails(int? iD)
+        //{
+        //    var caml = "";
 
-        public AssetAcquisitionVM GetAssetAcquisitionItems_Dummy()
-        {
-            var viewModel = new AssetAcquisitionVM();
+        //    var details = new List<AssetAcquisitionItemVM>();
+        //    foreach(var item in SPConnector.GetList(SP_ASSACQDetails_LIST_NAME, _siteUrl, caml))
+        //    {
+        //        details.Add(ConvertToItemModel(item));
+        //    }
+        //    return details;
+        //}
+
+        //private AssetAcquisitionItemVM ConvertToItemModel(ListItem item)
+        //{
+        //    return new AssetAcquisitionItemVM
+        //    {
+        //        ID = Convert.ToInt32(item["ID"]),
+        //        PoLineItem = Convert.ToString(item["PoLineItem"]),
+        //        AssetSubAssetID = FormatUtil.ConvertLookupToID(item, "");
 
 
+        //};
+        //}
 
-            return viewModel;
-        }
+        //public int CreateHeader(AssetAcquisitionHeaderVM header)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        public bool CreateAssetAcquisition_Dummy(AssetAcquisitionItemVM assetAcquisition)
-        {
-            var entity = new AssetAcquisitionItemVM();
-            entity = assetAcquisition;
-            return true;
-        }
+        //public bool UpdateHeader(AssetAcquisitionHeaderVM header)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        public bool UpdateAssetAcquisition_Dummy(AssetAcquisitionItemVM assetAcquisition)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool DestroyAssetAcquisition_Dummy(AssetAcquisitionItemVM assetAcquisition)
-        {
-            throw new NotImplementedException();
-        }
-
+        //public void CreateDetails(int? headerID, IEnumerable<AssetAcquisitionItemVM> details)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

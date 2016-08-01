@@ -10,147 +10,32 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 {
     public class AssetAcquisitionHeaderVM : Item
     {
-        private DateTime _purchaseDate;
-        private ComboBoxVM _oldTransactionId, _purchaseDesc, _assetSubAsset, _wbs;
+        public IEnumerable<AssetAcquisitionItemVM> AssetAcquisitionDetails { get; set; }
+        public int? Id { get; set; }
 
-        public int Id { get; set; }
+        private ComboBoxVM _accepMemoNo;
 
         public string TransactionType { get; set; }
 
-        [DisplayName("PO Line Item")]
-        public string PoLineItem { get; set; }
-
-        [UIHint("Currency")]
-        [DisplayName("Cost (IDR)")]
-        public decimal CostIdr { get; set; }
-
-        [UIHint("Currency")]
-        [DisplayName("Cost (USD)")]
-        public decimal CostUsd { get; set; }
-
-        public DateTime PurchaseDate
+        public AjaxComboBoxVM AcceptanceMemoNoID { get; set; } = new AjaxComboBoxVM
         {
-            get
-            {
-                if (_purchaseDate == null)
-                {
-                    _purchaseDate = new DateTime();
-                }
-                return _purchaseDate;
-            }
+            ActionName = "GetAcceptanceMemoNos",
+            ControllerName = "ASSAssetAcquisition",
+            ValueField = "ID",
+            //TextField = String.Format("{0}-{1}","ID","Title"),
+            TextField = "Title",
+            OnSelectEventName = "OnSelectAcceptMemoNo"
+        };
 
-            set
-            {
-                _purchaseDate = value;
-            }
-        }
+        public string AcceptanceMemoNoString { get; set; }
 
-        [DisplayName("Old Transaction ID")]
-        [UIHint("ComboBox")]
-        public ComboBoxVM OldTransactionId
-        {
-            get
-            {
-                if (_oldTransactionId == null)
-                {
-                    _oldTransactionId = new ComboBoxVM()
-                    {
-                        Choices = new string[]
-                        {
-                            "1",
-                            "2",
-                            "3"
-                        }
-                    };
-                }
-                return _oldTransactionId;
-            }
+        public string Vendor { get; set; }
 
-            set
-            {
-                _oldTransactionId = value;
-            }
-        }
+        public string PoNo { get; set; }
 
-        [DisplayName("Purchase Description")]
-        [UIHint("ComboBox")]
-        public ComboBoxVM PurchaseDesc
-        {
-            get
-            {
-                if (_purchaseDesc == null)
-                {
-                    _purchaseDesc = new ComboBoxVM()
-                    {
-                        Choices = new string[]
-                        {
-                            "Cash",
-                            "AP",
-                            "Warranty"
-                        }
-                    };
-                }
-                return _purchaseDesc;
-            }
+        [UIHint("Date")]
+        public DateTime? PurchaseDate { get; set; }
 
-            set
-            {
-                _purchaseDesc = value;
-            }
-        }
-
-        [DisplayName("Asset-Sub Asset")]
-        [UIHint("ComboBox")]
-        public ComboBoxVM AssetSubAsset
-        {
-            get
-            {
-                if (_assetSubAsset == null)
-                {
-                    _assetSubAsset = new ComboBoxVM()
-                    {
-                        Choices = new string[]
-                        {
-                            "Procurement",
-                            "Green",
-                            "Health"
-                        }
-                    };
-                }
-                return _assetSubAsset;
-            }
-
-            set
-            {
-                _assetSubAsset = value;
-            }
-        }
-
-        [UIHint("ComboBox")]
-        public ComboBoxVM Wbs
-        {
-            get
-            {
-                if (_wbs == null)
-                {
-                    _wbs = new ComboBoxVM()
-                    {
-                        Choices = new string[]
-                        {
-                            "1",
-                            "2",
-                            "3"
-                        }
-                    };
-                }
-                return _wbs;
-            }
-
-            set
-            {
-                _wbs = value;
-            }
-        }
-
+        public string PurchaseDescription { get; set; }
     }
 }

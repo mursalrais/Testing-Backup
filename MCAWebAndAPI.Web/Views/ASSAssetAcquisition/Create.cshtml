@@ -2,40 +2,56 @@
 
 
 
-@model AssetAcquisitionVM
+@model AssetAcquisitionHeaderVM
 
 <form class="form-horizontal" method="post" action="/ASSassetAcquisition/Create" id="create-asset-acquisition-form">
     <fieldset>
         <legend>Form Asset Replacement</legend>
         <div class="col-md-6">
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.TransactionType).Class("col-md-4 control-label")
+                @Html.Bootstrap().LabelFor(m => m.TransactionType).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Html.DisplayFor(m => m.Header.TransactionType)
+                    @Html.DisplayFor(m => m.TransactionType)
                 </div>
             </div>
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.OldTransactionId).Class("col-md-4 control-label")
+                @Html.Bootstrap().LabelFor(m => m.AcceptanceMemoNoID).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Html.EditorFor(m => m.Header.OldTransactionId)
+                    @Html.EditorFor(m => m.AcceptanceMemoNoID)
                 </div>
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.PurchaseDate).Class("col-md-4 control-label")
+                @Html.Bootstrap().LabelFor(m => m.Vendor).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Html.EditorFor(m => m.Header.PurchaseDate)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.PurchaseDesc).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.Header.PurchaseDesc)
+                    @Html.DisplayFor(m => m.Vendor)
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.PoNo).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.DisplayFor(m => m.PoNo)
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.PurchaseDate).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.PurchaseDate)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.PurchaseDescription).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.PurchaseDescription)
+                </div>
+            </div>
+        </div>
+        @*<div class="row">
             <div class="col-md-12">
                 @(Html.Kendo().Grid(Model.Items)
                     .Name("asset-acquisition-items-grid")
@@ -64,7 +80,7 @@
                 )
                 )
             </div>
-        </div>
+        </div>*@
     </fieldset>
 
 </form>
