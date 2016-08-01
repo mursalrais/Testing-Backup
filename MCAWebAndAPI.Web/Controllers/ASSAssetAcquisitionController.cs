@@ -3,7 +3,12 @@ using Kendo.Mvc.UI;
 using MCAWebAndAPI.Model.ViewModel.Form.Asset;
 using MCAWebAndAPI.Service.Asset;
 using MCAWebAndAPI.Web.Helpers;
+using MCAWebAndAPI.Web.Resources;
+using System;
+using System.Net;
 using System.Web.Mvc;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -16,38 +21,45 @@ namespace MCAWebAndAPI.Web.Controllers
             _assetAcquisitionService = new AssetAcquisitionService();
         }
 
-        // GET: ASSAssetAcquisition
-        public ActionResult Index()
-        {
-            return View();
-        }
-
         public ActionResult Create()
         {
-            var viewModel = _assetAcquisitionService.GetAssetAcquisition_Dummy();
+            var viewModel = _assetAcquisitionService.GetAssetAcquisitionItems_Dummy();
 
             return View(viewModel);
         }
 
-        [HttpPost]
-        public ActionResult Submit(AssetAcquisitionVM _data)
+        public ActionResult Edit()
         {
-            //return View(new AssetAcquisitionVM());
-            var data = _data;
+            var viewModel = new AssetAcquisitionVM();
 
-            return this.Jsonp(data);
+            return View(viewModel);
         }
 
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult EditingPopup_Create([DataSourceRequest] DataSourceRequest request, AssetAcquisitionItemVM _assetAcquisitionVM)
+        public ActionResult EditingPopup_Create([DataSourceRequest] DataSourceRequest request, AssetAcquisitionItemVM _AssetAcqItemVM)
         {
-            if (_assetAcquisitionVM != null && ModelState.IsValid)
+            if (_AssetAcqItemVM != null && ModelState.IsValid)
             {
-                _assetAcquisitionService.CreateAssetAcquisitionItem_dummy(_assetAcquisitionVM);
-                //productService.Create(_assetAcquisitionItem);
+                _assetAcquisitionService.CreateAssetAcquisition_Dummy(_AssetAcqItemVM);
             }
 
-            return Json(new[] { _assetAcquisitionVM }.ToDataSourceResult(request, ModelState));
+            return Json(new[] { _AssetAcqItemVM }.ToDataSourceResult(request, ModelState));
+        }
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult EditingPopup_Update()
+        {
+            var viewModel = new AssetAcquisitionVM();
+
+            return View(viewModel);
+        }
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult EditingPopup_Destroy()
+        {
+            var viewModel = new AssetAcquisitionVM();
+
+            return View(viewModel);
         }
     }
 }

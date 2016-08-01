@@ -14,6 +14,9 @@
 {
     <fieldset>
         @Html.HiddenFor(m => m.ID)
+        @Html.HiddenFor(m => m.cmpTitle)
+        @Html.HiddenFor(m => m.Requestor)
+
         <div class="row">
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.cmpYearDate).Class("col-md-2 control-label")
@@ -24,15 +27,23 @@
         </div>
         <div class="row">
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.cmpName).Class("col-md-2 control-label")
+                @Html.Bootstrap().LabelFor(m => m.cmpTitle).Class("col-md-2 control-label")
                 <div class="col-md-3">
-                    <input id="vac-position" class="form-control" value="" />
+                    <input id="com-title" class="form-control" value="" />
                 </div>
             </div>
         </div>
         <legend>Compensatory list</legend>
         <div class="row">
-            @Html.Partial("_CompensantoryDetails", Model.CompensatoryDetails)
+            @if (Model.Requestor == "HR")
+            {
+                @Html.Partial("_CompensantoryDetailsHR", Model.CompensatoryDetails)
+            }
+            else
+            {
+                @Html.Partial("_CompensantoryDetails", Model.CompensatoryDetails)
+
+            }
         </div>
 
     </fieldset>
@@ -43,16 +54,10 @@
     <script>
         
         $(document).ready(function () {
-            $("#vac-position").prop('readonly', 'true');
-            var positionID = $("#Position").val();
+            debugger;
+            $("#com-title").prop('readonly', 'true');
+            $("#com-title").prop("value", $("#cmpTitle").val());
 
-            var url = "/HRDataMaster/GetPosition/" + positionID;
-            $.getJSON(url, function (data) {
-                $("#vac-position").prop("value", data.PositionName);
-            })
-
-            var dropdownlist = $("#ActivePosition_Value").data("kendoDropDownList");
-            dropdownlist.select(positionID);
 
         });
     </script>

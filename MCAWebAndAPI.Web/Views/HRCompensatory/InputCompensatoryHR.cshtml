@@ -20,7 +20,10 @@
     <fieldset>
         @Html.HiddenFor(m => m.cmpID)
         @Html.HiddenFor(m => m.cmpName)
+        @Html.HiddenFor(m => m.cmpTitle)
         @Html.HiddenFor(m => m.cmpPosition)
+        @Html.HiddenFor(m => m.cmpYearDate)
+
         <input type="hidden" id="loadpage" value="0">
         <div class="row">
             <div class="form-group">
@@ -127,8 +130,6 @@
                     $(document).ready(function () {
                         var positionID = $("#CmpName").val() + " - " + $("#CmpPosition").val();
                         $("#NamePos").prop("value", positionID);
-
-
 
                         $("#cancel-button").click(function () {
                             
