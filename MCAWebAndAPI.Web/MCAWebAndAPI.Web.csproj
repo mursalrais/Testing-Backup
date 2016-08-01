@@ -890,6 +890,7 @@
     <Content Include="Global.asax" />
     <Content Include="Site.Master" />
     <Content Include="ViewSwitcher.ascx" />
+    <Content Include="Views\FINEventBudget\Create.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -918,7 +919,6 @@
     <Content Include="Views\Shared\EditorTemplates\String.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Time.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Url.cshtml" />
-    <Content Include="Views\FINEventBudget\Create.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\String.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\ComboBox.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\HttpPostedFileBase.cshtml" />
@@ -1266,7 +1266,7 @@
     <Compile Include="Controllers\CSVController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\FileController.cs" />
-    <Compile Include="Controllers\FINEventBudgetController.cs" />
+    <Compile Include="Controllers\Finance\FINSPHLController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HRApplicationController.cs" />
     <Compile Include="Controllers\HRCompensatoryController.cs" />
