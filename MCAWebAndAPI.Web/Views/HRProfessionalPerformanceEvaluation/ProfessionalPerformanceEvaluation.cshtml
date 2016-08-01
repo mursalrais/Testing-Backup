@@ -4,13 +4,17 @@
 
 @model ProfessionalPerformanceEvaluationVM
 
-@using (Html.BeginForm((string)ViewBag.Action, "HRProfessionalPerformanceEvaluation", FormMethod.Post,
-                                                                                    new
-                                                                                    {
-                                                                                        @class = "form-horizontal",
-                                                                                        enctype = "multipart/form-data"
-                                                                                    }))
-{<fieldset>
+@if (Model.StatusForm != "Approved")
+{
+    using (Ajax.BeginForm((string)ViewBag.Action, "HRProfessionalPerformanceEvaluation", FormMethod.Post,
+                                                                                                        new AjaxOptions
+                                                                                                        {
+                                                                                                            OnBegin = "onBeginForm",
+                                                                                                            OnComplete = "onCompleteForm",
+                                                                                                            OnSuccess = "onSuccessFormEmbed",
+                                                                                                            OnFailure = "onFailureForm"
+                                                                                                        }, new { @class = "form-horizontal" }))
+    {<fieldset>
         <legend>Form Professional Performance Evaluation</legend>
         @Html.AntiForgeryToken()
         @Html.ValidationSummary()
@@ -60,21 +64,21 @@
                     @Html.HiddenFor(m => m.PerformancePeriodID)
                 </div>
             </div>
-            <div class="form-group" id="ParentDiv">
+            <div class="form-group">
                 <div class="col-sm-8">
-                    @Html.DisplayFor(m => m.StatusForm)
+                    @Html.HiddenFor(m => m.StatusForm)
                 </div>
             </div>
         </div>
         @if (Model.Requestor != null)
         {
-            <legend>Approval Workflow</legend>
+            <legend>Approval Path</legend>
             <div id="workflow-placeholder" class="row" />
         }
     </fieldset>
-}
+    }
 
-@if (Model.ID == null)
+if (Model.ID == null)
 {
     <div class="form-actions">
         <div class="row">
@@ -92,7 +96,7 @@
     </div>
 }
 
-@if (Model.Requestor != null && Model.StatusForm == "Initiated")
+if (Model.Requestor != null && Model.StatusForm == "Initiated")
 {
     <div class="form-actions">
         <div class="row">
@@ -110,7 +114,7 @@
     </div>
 }
 
-@if (Model.Requestor != null && Model.StatusForm == "Draft")
+if (Model.Requestor != null && Model.StatusForm == "Draft")
 {
     <div class="form-actions">
         <div class="row">
@@ -128,7 +132,7 @@
     </div>
 }
 
-@if (Model.Requestor == null && Model.StatusForm == "Pending Approval 1 of 2")
+if (Model.Requestor == null && Model.StatusForm == "Pending Approval 1 of 2")
 {
     <div class="form-actions">
         <div class="row">
@@ -142,7 +146,7 @@
     </div>
 }
 
-@if (Model.Requestor == null && Model.StatusForm == "Pending Approval 2 of 2")
+if (Model.Requestor == null && Model.StatusForm == "Pending Approval 2 of 2")
 {
     <div class="form-actions">
         <div class="row">
@@ -155,8 +159,80 @@
         </div>
     </div>
 }
+}
 @if (Model.Requestor != null & Model.StatusForm == "Approved")
 {
+    using (Html.BeginForm((string)ViewBag.Action, "HRProfessionalPerformanceEvaluation", FormMethod.Post,
+                                                                                    new
+                                                                                    {
+                                                                                        @class = "form-horizontal",
+                                                                                        enctype = "multipart/form-data"
+                                                                                    }))
+
+    {<fieldset>
+        <legend>Form Professional Performance Evaluation</legend>
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary()
+
+        <div class="col-sm-12">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Name).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.Name)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.PositionAndDepartement).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.PositionAndDepartement)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.PerformancePeriod).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.PerformancePeriod)
+                </div>
+            </div>
+        </div>
+        <legend>Professional Performance Evaluation Detail</legend>
+        <div class="row">
+            @Html.Partial("_ProfessionalPerformanceEvaluationDetail", Model)
+        </div>
+        <div class="col-sm-12">
+            <div class="form-group">
+                <div class="col-sm-8">
+                    @Html.HiddenFor(m => m.ID)
+                </div>
+                <div class="col-sm-8">
+                    @Html.HiddenFor(m => m.ProfessionalID)
+                </div>
+                <div class="col-sm-8">
+                    @Html.HiddenFor(m => m.Requestor)
+                </div>
+                <div class="col-sm-8">
+                    @Html.HiddenFor(m => m.NameID)
+                </div>
+                <div class="col-sm-8">
+                    @Html.HiddenFor(m => m.PositionAndDepartementID)
+                </div>
+                <div class="col-sm-8">
+                    @Html.HiddenFor(m => m.PerformancePeriodID)
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-8">
+                    @Html.HiddenFor(m => m.StatusForm)
+                </div>
+            </div>
+        </div>
+        @if (Model.Requestor != null)
+        {
+            <legend>Approval Path</legend>
+            <div id="workflow-placeholder" class="row" />
+        }
+    </fieldset>
+    }
+
     <div class="form-actions">
         <div class="row">
             <div class="col-sm-12">
@@ -172,7 +248,6 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $("#submit-button").click(function () {
-                $("#ParentDiv").hide();
                 $("form").submit();
             });
         });
@@ -180,7 +255,6 @@
         $(document).ready(function () {
             $("#submit-draft-initiate-button").click(function () {
                 $("#StatusForm").val("DraftInitiated")
-                $("#ParentDiv").show();
                 $("form").submit();
             });
         });
@@ -188,18 +262,12 @@
         $(document).ready(function () {
             $("#submit-draft-button").click(function () {
                 $("#StatusForm").val("DraftDraft")
-                $("#ParentDiv").show();
                 $("form").submit();
             });
         });
 
-        $(function () {
-            $("#ParentDiv").hide();
-        });
-
         $(document).ready(function () {
             $('#print-button').click(function (e) {
-                $("#ParentDiv").show();
                 var url = "/HRProfessionalPerformanceEvaluation/PrintProfessionalPerformanceEvaluation";
                 submitFormToPrint(url);
             });
@@ -218,11 +286,9 @@
         });
 
         $(document).ready(function () {
-            var Requestor = '@(SessionManager.Get<string>("RequestorUserLogin"))';
-            var ListName = '@(SessionManager.Get<string>("ListName"))';
-            console.log(Requestor);
+            var Requestor = "@ViewBag.Requestor";
             if (Requestor != null) {
-                displayWorkflowRouter("workflow-placeholder", ListName, Requestor);
+                displayWorkflowRouter("workflow-placeholder", "@ViewBag.ListName", Requestor);
             }
         });
     </script>

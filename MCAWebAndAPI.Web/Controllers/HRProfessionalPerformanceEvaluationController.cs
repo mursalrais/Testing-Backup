@@ -36,25 +36,14 @@ namespace MCAWebAndAPI.Web.Controllers
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             var viewModel = _hRProfessionalPerformanceEvaluationService.GetHeader(ID);
-            if (requestor != null)
-            {
-                viewModel.Requestor = requestor;
-            }
-            if (ID != null)
-            {
-                viewModel.ID = ID;
-            }
-
+            viewModel.Requestor = requestor;
+            viewModel.ID = ID;
             ViewBag.Action = "EditPerformanceEvaluation";
 
 
             // Used for Workflow Router
             ViewBag.ListName = "Professional%20Performance%20Evaluation";
-            SessionManager.Set("ListName", ViewBag.ListName);
-
-            // This var should be taken from passing parameter
-            if (requestor != null)
-                SessionManager.Set("RequestorUserLogin", requestor);
+            ViewBag.Requestor = requestor;
 
             return View("ProfessionalPerformanceEvaluation", viewModel);
         }
@@ -69,21 +58,55 @@ namespace MCAWebAndAPI.Web.Controllers
             int sumPlanned = 0;
             int sumActual = 0;
             decimal totalTotalScore = 0;
+            string outputTemp = "";
             var countData = Detail.Count();
-            foreach (var viewModelDetail in Detail)
+            if (countData != 0)
             {
-                totalTotalScore = totalTotalScore + viewModelDetail.TotalScore;
-                if (viewModelDetail.EditMode != -1)
+                foreach (var viewModelDetail in Detail)
                 {
-                    sumPlanned = sumPlanned + viewModelDetail.PlannedWeight;
-                    sumActual = sumActual + viewModelDetail.ActualWeight;
+                    if (viewModelDetail.EditMode != -1)
+                    {
+                        if (viewModelDetail.Output == null)
+                        {
+                            outputTemp = "Empty";
+                            viewModelDetail.Output = "";
+                        }
+
+                        totalTotalScore = totalTotalScore + viewModelDetail.TotalScore;
+                        sumPlanned = sumPlanned + viewModelDetail.PlannedWeight;
+                        sumActual = sumActual + viewModelDetail.ActualWeight;
+                    }
                 }
-            }
-            viewModel.OverallTotalScore = totalTotalScore / countData;
-            if (sumPlanned != 100 || sumActual != 100)
-            {
-                ModelState.AddModelError("ModelInvalid", "Weight must be total 100%");
-                return View("ProfessionalPerformanceEvaluation", viewModel);
+
+                viewModel.OverallTotalScore = totalTotalScore / countData;
+
+                if (sumPlanned != 100 || sumActual != 100)
+                {
+                    if (viewModel.StatusForm == "DraftInitiated")
+                    {
+                        viewModel.StatusForm = "Initiated";
+                    }
+                    if (viewModel.StatusForm == "DraftDraft")
+                    {
+                        viewModel.StatusForm = "Draft";
+                    }
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    return JsonHelper.GenerateJsonErrorResponse("Weight must be total 100%");
+                }
+
+                if (outputTemp == "Empty")
+                {
+                    if (viewModel.StatusForm == "DraftInitiated")
+                    {
+                        viewModel.StatusForm = "Initiated";
+                    }
+                    if (viewModel.StatusForm == "DraftDraft")
+                    {
+                        viewModel.StatusForm = "Draft";
+                    }
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    return JsonHelper.GenerateJsonErrorResponse("Output is Required");
+                }
             }
 
             _hRProfessionalPerformanceEvaluationService.UpdateHeader(viewModel);
@@ -93,19 +116,19 @@ namespace MCAWebAndAPI.Web.Controllers
                 Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateTransactionWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.ID);
             }
-                Task createPerformancePlanDetailsTask = _hRProfessionalPerformanceEvaluationService.CreatePerformanceEvaluationDetailsAsync(viewModel.ID, viewModel.ProfessionalPerformanceEvaluationDetails);
+            Task createPerformancePlanDetailsTask = _hRProfessionalPerformanceEvaluationService.CreatePerformanceEvaluationDetailsAsync(viewModel.ID, viewModel.ProfessionalPerformanceEvaluationDetails);
 
-                Task allTasks = Task.WhenAll(createPerformancePlanDetailsTask);
+            Task allTasks = Task.WhenAll(createPerformancePlanDetailsTask);
 
-                try
-                {
-                    await allTasks;
-                }
-                catch (Exception e)
-                {
-                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                    return JsonHelper.GenerateJsonErrorResponse(e);
-                }
+            try
+            {
+                await allTasks;
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
 
             try
             {
@@ -132,7 +155,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.ProfessionalPerformancePlan);
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.ProfessionalPerfromanceEvaluation);
         }
 
         [HttpPost]

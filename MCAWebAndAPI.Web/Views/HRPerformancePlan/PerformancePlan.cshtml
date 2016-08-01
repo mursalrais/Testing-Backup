@@ -4,13 +4,200 @@
 
 @model ProfessionalPerformancePlanVM
 
-@using (Html.BeginForm((string)ViewBag.Action, "HRPerformancePlan", FormMethod.Post,
-                                                            new
-                                                            {
-                                                                @class = "form-horizontal",
-                                                                enctype = "multipart/form-data"
-                                                            }))
-{<fieldset>
+@if (Model.StatusForm != "Approved")
+{
+    using (Ajax.BeginForm((string)ViewBag.Action, "HRPerformancePlan", FormMethod.Post,
+                                                                                            new AjaxOptions
+                                                                                            {
+                                                                                                OnBegin = "onBeginForm",
+                                                                                                OnComplete = "onCompleteForm",
+                                                                                                OnSuccess = "onSuccessFormEmbed",
+                                                                                                OnFailure = "onFailureForm"
+                                                                                            }, new { @class = "form-horizontal" }))
+
+    {<fieldset>
+            <legend>Form Performance Plan</legend>
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary()
+
+            <div class="col-sm-12">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Name).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.DisplayFor(m => m.Name)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.PositionAndDepartement).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.DisplayFor(m => m.PositionAndDepartement)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.PerformancePeriod).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.DisplayFor(m => m.PerformancePeriod)
+                    </div>
+                </div>
+            </div>
+            <legend>Professional Perfromance Plan Detail</legend>
+            <div class="row">
+                @Html.Partial("_PerformancePlanDetail", Model)
+            </div>
+            <div class="col-sm-12">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.MajorStrength).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.MajorStrength)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.PerformanceArea).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.PerformanceArea)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.RecommendedActivities).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.RecommendedActivities)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-8">
+                        @Html.HiddenFor(m => m.ID)
+                    </div>
+                    <div class="col-sm-8">
+                        @Html.HiddenFor(m => m.ProfessionalID)
+                    </div>
+                    <div class="col-sm-8">
+                        @Html.HiddenFor(m => m.Requestor)
+                    </div>
+                    <div class="col-sm-8">
+                        @Html.HiddenFor(m => m.NameID)
+                    </div>
+                    <div class="col-sm-8">
+                        @Html.HiddenFor(m => m.PositionAndDepartementID)
+                    </div>
+                    <div class="col-sm-8">
+                        @Html.HiddenFor(m => m.PerformancePeriodID)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-8">
+                        @Html.HiddenFor(m => m.StatusForm)
+                    </div>
+                </div>
+            </div>
+            @if (Model.Requestor != null)
+            {
+                <legend>Approval Path</legend>
+                <div id="workflow-placeholder" class="row" />
+            }
+        </fieldset>
+    }
+    if (Model.ID == null)
+    {
+        <div class="form-actions">
+            <div class="row">
+                <div class="col-sm-12">
+                    <button id="submit-button" class="btn btn-primary" type="submit">
+                        <i class="fa fa-save"></i>
+                        Submit For Approval
+                    </button>
+                    <button id="submit-draft-initiate-button" class="btn btn-primary" type="submit">
+                        <i class="fa fa-save"></i>
+                        Save As Draft
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+
+    if (Model.Requestor != null && Model.StatusForm == "Initiated")
+    {
+        <div class="form-actions">
+            <div class="row">
+                <div class="col-sm-12">
+                    <button id="submit-button" class="btn btn-primary" type="submit">
+                        <i class="fa fa-save"></i>
+                        Submit For Approval
+                    </button>
+                    <button id="submit-draft-initiate-button" class="btn btn-primary" type="submit">
+                        <i class="fa fa-save"></i>
+                        Save As Draft
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+    if (Model.Requestor != null)
+    {
+        if (Model.StatusForm == "Draft" || Model.StatusForm == "Pending Approval 1 of 2" || Model.StatusForm == "Pending Approval 2 of 2")
+        {
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <button id="submit-button" class="btn btn-primary" type="submit">
+                            <i class="fa fa-save"></i>
+                            Submit For Approval
+                        </button>
+                        <button id="submit-draft-button" class="btn btn-primary" type="submit">
+                            <i class="fa fa-save"></i>
+                            Save As Draft
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+
+    if (Model.Requestor == null && Model.StatusForm == "Pending Approval 1 of 2")
+    {
+        <div class="form-actions">
+            <div class="row">
+                <div class="col-sm-12">
+                    <button id="submit-button" class="btn btn-primary" type="submit">
+                        <i class="fa fa-save"></i>
+                        Approve
+                    </button>
+                    <button id="reject1-button" class="btn btn-primary" type="submit">
+                        <i class="fa fa-save"></i>
+                        Reject
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+
+    if (Model.Requestor == null && Model.StatusForm == "Pending Approval 2 of 2")
+    {
+        <div class="form-actions">
+            <div class="row">
+                <div class="col-sm-12">
+                    <button id="submit-button" class="btn btn-primary" type="submit">
+                        <i class="fa fa-save"></i>
+                        Approve
+                    </button>
+                    <button id="reject2-button" class="btn btn-primary" type="submit">
+                        <i class="fa fa-save"></i>
+                        Reject
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+@if (Model.Requestor != null & Model.StatusForm == "Approved")
+{
+    using (Html.BeginForm((string)ViewBag.Action, "HRPerformancePlan", FormMethod.Post,
+                                                                                    new
+                                                                                    {
+                                                                                        @class = "form-horizontal",
+                                                                                        enctype = "multipart/form-data"
+                                                                                    }))
+    {<fieldset>
         <legend>Form Performance Plan</legend>
         @Html.AntiForgeryToken()
         @Html.ValidationSummary()
@@ -78,113 +265,20 @@
                     @Html.HiddenFor(m => m.PerformancePeriodID)
                 </div>
             </div>
-            <div class="form-group" id="ParentDiv">
+            <div class="form-group">
                 <div class="col-sm-8">
-                    @Html.DisplayFor(m => m.StatusForm)
+                    @Html.HiddenFor(m => m.StatusForm)
                 </div>
             </div>
         </div>
         @if (Model.Requestor != null)
         {
-            <legend>Approval Workflow</legend>
-            <div id="workflow-placeholder" class="row" />
+            <legend>Approval Path</legend>
+                <div id="workflow-placeholder" class="row" />
         }
     </fieldset>
-}
-
-@if (Model.ID == null)
-{
-    <div class="form-actions">
-        <div class="row">
-            <div class="col-sm-12">
-                <button id="submit-button" class="btn btn-primary" type="submit">
-                    <i class="fa fa-save"></i>
-                    Submit For Approval
-                </button>
-                <button id="submit-draft-initiate-button" class="btn btn-primary" type="submit">
-                    <i class="fa fa-save"></i>
-                    Save As Draft
-                </button>
-            </div>
-        </div>
-    </div>
-}
-
-@if (Model.Requestor != null && Model.StatusForm == "Initiated")
-{
-    <div class="form-actions">
-        <div class="row">
-            <div class="col-sm-12">
-                <button id="submit-button" class="btn btn-primary" type="submit">
-                    <i class="fa fa-save"></i>
-                    Submit For Approval
-                </button>
-                <button id="submit-draft-initiate-button" class="btn btn-primary" type="submit">
-                    <i class="fa fa-save"></i>
-                    Save As Draft
-                </button>
-            </div>
-        </div>
-    </div>
-}
-@if (Model.Requestor != null)
-{
-    if (Model.StatusForm == "Draft" || Model.StatusForm == "Pending Approval 1 of 2" || Model.StatusForm == "Pending Approval 2 of 2")
-    {
-        <div class="form-actions">
-            <div class="row">
-                <div class="col-sm-12">
-                    <button id="submit-button" class="btn btn-primary" type="submit">
-                        <i class="fa fa-save"></i>
-                        Submit For Approval
-                    </button>
-                    <button id="submit-draft-button" class="btn btn-primary" type="submit">
-                        <i class="fa fa-save"></i>
-                        Save As Draft
-                    </button>
-                </div>
-            </div>
-        </div>
     }
-}
 
-@if (Model.Requestor == null && Model.StatusForm == "Pending Approval 1 of 2")
-{
-    <div class="form-actions">
-        <div class="row">
-            <div class="col-sm-12">
-                <button id="submit-button" class="btn btn-primary" type="submit">
-                    <i class="fa fa-save"></i>
-                    Approve
-                </button>
-                <button id="reject1-button" class="btn btn-primary" type="submit">
-                    <i class="fa fa-save"></i>
-                    Reject
-                </button>
-            </div>
-        </div>
-    </div>
-}
-
-@if (Model.Requestor == null && Model.StatusForm == "Pending Approval 2 of 2")
-{
-    <div class="form-actions">
-        <div class="row">
-            <div class="col-sm-12">
-                <button id="submit-button" class="btn btn-primary" type="submit">
-                    <i class="fa fa-save"></i>
-                    Approve
-                </button>
-                <button id="reject2-button" class="btn btn-primary" type="submit">
-                    <i class="fa fa-save"></i>
-                    Reject
-                </button>
-            </div>
-        </div>
-    </div>
-}
-@if (Model.StatusForm == "Approved")
-{
     <div class="form-actions">
         <div class="row">
             <div class="col-sm-12">
@@ -225,13 +319,8 @@
             });
         });
 
-        $(function () {
-            $("#ParentDiv").hide();
-        });
-
         $(document).ready(function () {
             $('#print-button').click(function (e) {
-                $("#ParentDiv").show();
                 var url = "/HRPerformancePlan/PrintPerformancePlan";
                 submitFormToPrint(url);
             });
@@ -252,7 +341,7 @@
         });
 
         $(document).ready(function () {
-            var Requestor = '@(SessionManager.Get<string>("RequestorUserLogin"))';
+            var Requestor = "@ViewBag.Requestor";
             if (Requestor != null) {
                 displayWorkflowRouter("workflow-placeholder", "@ViewBag.ListName", Requestor);
             }

@@ -426,20 +426,51 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             }
         }
 
-        public IEnumerable<CompensatoryMasterVM> GetCompensatoryId(int? idProf)
+        public IEnumerable<CompensatoryMasterVM> GetCompensatoryIdbyProf(int? idProf)
         {
             var caml = @"<View>  
                     <Query> 
                         <Where>
                           <Eq>
                              <FieldRef Name='professional_x003a_ID' />
-                             <Value Type='Lookup'>"+ idProf +@"</Value>
+                             <Value Type='Lookup'>"+ idProf + @"</Value>
                           </Eq>
                        </Where>
                     </Query> 
                     <ViewFields>
                        <FieldRef Name='Title' />
                        <FieldRef Name='submitteddate' />
+                       <FieldRef Name='crstatus' />
+                       <FieldRef Name='ID' />
+                    </ViewFields></View>";
+
+            var models = new List<CompensatoryMasterVM>();
+
+            foreach (var item in SPConnector.GetList(SP_COMREQ_LIST_NAME, _siteUrl, caml))
+            {
+                models.Add(ConvertToCompensatoryMasterModel(item));
+            }
+
+            models = models.OrderBy(e => e.CompensatoryDate).ToList();
+            return models;
+
+        }
+
+        public IEnumerable<CompensatoryMasterVM> GetCompensatoryId(int? idComp)
+        {
+            var caml = @"<View>  
+                    <Query> 
+                        <Where>
+                          <Eq>
+                             <FieldRef Name='ID' />
+                             <Value Type='Counter'>"+ idComp + @"</Value>
+                          </Eq>
+                       </Where>
+                    </Query> 
+                    <ViewFields>
+                       <FieldRef Name='Title' />
+                       <FieldRef Name='submitteddate' />
+                       <FieldRef Name='crstatus' />
                        <FieldRef Name='ID' />
                     </ViewFields></View>";
 
@@ -466,22 +497,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.CompensatoryID = Convert.ToInt32(item["ID"]);
             viewModel.CompensatoryDate = Convert.ToDateTime(item["submitteddate"]);
             viewModel.CompensatoryTitle = Convert.ToString(item["Title"]);
+            viewModel.CompensatoryStatus = Convert.ToString(item["crstatus"]);
 
-            return viewModel;
-        }
-
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        private PositionMaster ConvertToPositionsModel(ListItem item)
-        {
-            var viewModel = new PositionMaster();
-
-            viewModel.ID = Convert.ToInt32(FormatUtil.ConvertLookupToValue(item, "positionrequested_x003a_ID"));
-            viewModel.PositionName = FormatUtil.ConvertLookupToValue(item, "positionrequested");
             return viewModel;
         }
 
@@ -489,25 +506,26 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             var columnValues = new Dictionary<string, object>();
 
-            int? ID = header.ID;
+            int? ID = header.cmpID;
 
             if (header.StatusForm == "Draft")
             {
-                columnValues.Add("crstatus", "Pending Approval 1 of 2");
+                columnValues.Add("crstatus", "Draft");
+            }
+
+            if (header.StatusForm == "Reject")
+            {
+                columnValues.Add("crstatus", "Rejected");
+            }
+
+            if (header.StatusForm == "Pending Approval 1 of 2")
+            {
+                columnValues.Add("crstatus", "Pending Approval 2 of 2");
             }
 
             if (header.StatusForm == "Pending Approval 2 of 2")
             {
                 columnValues.Add("crstatus", "Approved");
-            }
-
-            if (header.StatusForm == "DraftInitiated" || header.StatusForm == "DraftDraft")
-            {
-                columnValues.Add("crstatus", "Draft");
-            }
-            if (header.StatusForm == "Reject1" || header.StatusForm == "Reject2")
-            {
-                columnValues.Add("crstatus", "Rejected");
             }
 
             try

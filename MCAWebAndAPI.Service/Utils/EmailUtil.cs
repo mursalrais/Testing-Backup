@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Mail;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Service.Utils
@@ -63,10 +64,23 @@ namespace MCAWebAndAPI.Service.Utils
             mail.Body = emailMessage;
             mail.IsBodyHtml = true;
 
-            foreach (var item in mail.To)
-            {
-                smtp.SendAsync(mail.From.Address, item.Address, mail.Subject, mail.Body, DateTime.Now);
-            }
+           
+            smtp.Send(mail);
+
+            //foreach (var item in mail.To)
+            //{
+            //    smtp.SendAsync(mail.From.Address, item.Address, mail.Subject, mail.Body, DateTime.Now);
+            //}
+        }
+
+        public static bool IsValidEmailId(string InputEmail)
+        {
+            Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
+            Match match = regex.Match(InputEmail);
+            if (match.Success)
+                return true;
+            else
+                return false;
         }
     }
 }

@@ -1,0 +1,90 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model ViewInsuranceProfessionalVM
+
+@Html.HiddenFor(m => m.URL)
+@Html.HiddenFor(m => m.Email)
+<div class="col-sm-12">
+    @(Html.Kendo().Grid<dynamic>()
+          .Name("gridDataView")
+          .Columns(columns =>
+          {
+              foreach (System.Data.DataColumn column in Model.dtDetails.Columns)
+              {
+
+                  if (column.DataType.FullName != "System.Double" && column.ColumnName != "Remarks")
+                  {
+                      columns.Bound(column.ColumnName);
+                  }
+
+              }
+              columns.Group(group => group
+                  .Title("Claim Component")
+                  .Columns(info =>
+                  {
+                      foreach (System.Data.DataColumn column in Model.dtDetails.Columns)
+                      {
+                          if (column.DataType.FullName == "System.Double")
+                          {
+                              info.Bound(column.ColumnName).ClientTemplate("#= kendo.toString(" + column.ColumnName + ",'n0') #");
+
+                          }
+                      }
+
+
+                  })
+                  );
+              columns.Bound("Remarks");
+
+          })
+          .ToolBar(tools => tools.Excel())
+          .Excel(excel => excel
+            .FileName("Products.xlsx")
+        )
+          .DataSource(dataSource => dataSource
+              .Ajax()
+              .Model(model =>
+              {
+
+              })
+
+              .Read(read => read.Action("ReadExportExcel", "HRInsuranceClaim"))
+
+          )
+    )
+
+
+</div>
+
+<script type="text/javascript">
+    
+
+    function functionExport() {
+        var dfrd = $.Deferred();
+        setTimeout(function () {
+            // doing async stuff
+            var grid = $("#gridDataView").data("kendoGrid");
+            grid.saveAsExcel();
+            dfrd.resolve();
+        }, 60000);
+        return dfrd.promise();
+    }
+
+    
+
+    $(document)
+        .ready(function () {
+
+
+            //$(function () {
+            //    functionExport().done(function () {
+            //       window.top.location.href = $("#URL").val() + '/Lists/InsuranceClaim/';
+
+            //    });
+            //});
+
+            }
+
+        );
+</script>
+
+

@@ -21,9 +21,12 @@ namespace MCAWebAndAPI.Web.Controllers
     {
         IHRInterviewService _service;
 
+        IHRApplicationService _serviceApplication;
+
         public HRInterviewlistController()
         {
             _service = new HRInterviewService();
+            _serviceApplication = new HRApplicationService();
         }
 
         public ActionResult InterviewlistData(string siteurl = null, int? position = null, string username = null, string useraccess = null)
@@ -96,10 +99,34 @@ namespace MCAWebAndAPI.Web.Controllers
 
             int? headerID = viewModel.ID;
 
+            if (viewModel.RecommendedForPosition.Value == "On Board")
+            {
+                var viewModelApp = new ApplicationDataVM();
+                _serviceApplication.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+                viewModelApp = _serviceApplication.GetApplication(headerID);
+
+                try
+                {
+                    _serviceApplication.CreateProfessionalData(viewModelApp);
+                }
+                catch (Exception e)
+                {
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    return RedirectToAction("ErrorMessage",
+                       "Success",
+                       new
+                       {
+                           eMessage = MessageResource.ErrorUpdateProfessional
+                       });
+                }
+            }
+
             try
             {
                 _service.CreateInterviewDataDetail(headerID, viewModel);
                 Task CreateManpowerRequisitionDocumentsTask = _service.CreateInterviewDocumentsSync(headerID, viewModel.Documents);
+
             }
             catch (Exception e)
             {

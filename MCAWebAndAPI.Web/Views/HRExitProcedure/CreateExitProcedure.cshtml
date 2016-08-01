@@ -15,8 +15,6 @@
 {
 
     
-if (Model.UserPermission == "Professional")
-{
     <fieldset>
         <legend>Exit Procedure Data</legend>
         <div class="row">
@@ -33,103 +31,63 @@ if (Model.UserPermission == "Professional")
             @Html.Partial("_Documents", Model)
         </div>
     </fieldset>
-}
-if (Model.UserPermission == "HR")
-{
-    <fieldset>
-        <legend>Exit Procedure Data</legend>
-        <div class="row">
-            @Html.Partial("_ExitProcedureDataHR", Model)
-        </div>
-
-        <legend>Exit Procedure Checklist</legend>
-        <div class="row">
-            @Html.Partial("_ExitProcedureChecklist", Model.ExitProcedureChecklist)
-        </div>
-
-        <div id="testFunction" class="row">
-
-        </div>
-
-        <legend>Documents</legend>
-        <div class="row">
-            @Html.Partial("_Documents", Model)
-        </div>
-    </fieldset>
-}
 
 }
 
-@if (Model.UserPermission == "Professional")
-{
     <div class="form-actions">
         <div class="row">
             <div class="col-md-12">
-                <button id="submit-for-approval" class="btn btn-primary" type="submit">
+                <button id="submit-for-approval" class="btn btn-primary" type="button" onclick="checkDocumentSubmitApproval()">
                     <i class="fa fa-save"></i>
                     Submit for Approval
                 </button>
-                <button id="submit-draft-initiate-button" class="btn btn-primary" type="submit">
+                <button id="submit-draft-initiate-button" class="btn btn-primary" type="button" onclick="checkDocumentSubmitDraft()">
                     <i class="fa fa-save"></i>
                     Save
                 </button>
             </div>
         </div>
     </div>
-}
-@if (Model.UserPermission == "HR")
-{
-    <div class="form-actions">
-        <div class="row">
-            <div class="col-md-12">
-                <button id="approved-by-hr" class="btn btn-primary" type="submit">
-                    <i class="fa fa-save"></i>
-                    Approve
-                </button>
-                <button id="save-by-hr" class="btn btn-primary" type="submit">
-                    <i class="fa fa-save"></i>
-                    Save
-                </button>
-            </div>
-        </div>
-    </div>
-
-    
-}
-
-   
 
 @section scripts{
     <script type="text/javascript">
-
-
-        $(document).ready(function () {
-            $("#submit-for-approval").click(function () {
-                $("#StatusForm").val("Pending Approval")
+        function checkDocumentSubmitApproval()
+        {
+            if ($(".k-file").length == 0)
+            {
+                alert("Please upload Document");
+            }
+            else
+            {
+                $("#StatusForm").val("Pending Approval");
                 $("form").submit();
-    });
-});
+            }
+        }
 
-        $(document).ready(function () {
-            $("#submit-draft-initiate-button").click(function () {
+        function checkDocumentSubmitDraft()
+        {
+            if ($(".k-file").length == 0) {
+                alert("Please upload Document");
+            }
+            else {
                 $("#StatusForm").val("Draft")
                 $("form").submit();
-            });
-        });
+            }
+        }
+        
+//        $(document).ready(function () {
+//            $("#submit-for-approval").click(function () {
+//                $("#StatusForm").val("Pending Approval")
+//                $("form").submit();
+//    });
+//});
 
-        $(document).ready(function () {
-            $("#approved-by-hr").click(function () {
-                $("#StatusForm").val("Approved by HR")
-                $("form").submit();
-            });
-        });
-
-        $(document).ready(function () {
-            $("#save-by-hr").click(function () {
-                $("#StatusForm").val("Saved by HR")
-                $("form").submit();
-            });
-        });
+        //$(document).ready(function () {
+        //    $("#submit-draft-initiate-button").click(function () {
+        //        $("#StatusForm").val("Draft")
+        //        $("form").submit();
+        //    });
+        //});
 
         function onSuccess(data)
         {
@@ -149,7 +107,6 @@ if (Model.UserPermission == "HR")
             $.getJSON(url, function (result) {
 
                 $('#FullName').prop('value', result[0].Name);
-                //$('#Professional').prop('value', result[0].FirstMiddleName);
                 $('#ProjectUnit').prop('value', result[0].Project_Unit);
                 $('#Position').prop('value', result[0].Position);
                 $('#PSANumber').prop('value', result[0].PSANumber);
@@ -158,31 +115,13 @@ if (Model.UserPermission == "HR")
                 $('#ProfessionalID').prop('value', result[0].ID);
 
             })
-
-            //var urlProfessional = "/HRExitProcedure/CreateExitProcedureHR?siteUrl=https://eceos2.sharepoint.com/sites/mca-dev/hr&requestor=" + result[0].OfficeEmail + "&user=HR";
-
-            function testfunction() {
-                var url = "/Workflow/DisplayWorkflowRouter?listName=" + listName + "&requestor=" + requestor;
-                $('#testFunction').load(url);
-            }
-
-            //$.getJSON(urlProfessional, function () {
-
-                
-
-            //})
-
-            //var url = "/HRExitProcedure/DisplayWorkflowRouterExitProcedure?listName=" + listName + "&requestor=" + requestor;
-                      
+          
         }
 
-        function onSelectExitProcedure(e) {
+        //function onCompleteExitProcedure(e) {
 
-            $.each(e.files, function (index, value) {
-                
-            });
-
-        }
+        //    $('#CheckDocument').prop('value', "Completed");
+        //}
 
                       
     </script>

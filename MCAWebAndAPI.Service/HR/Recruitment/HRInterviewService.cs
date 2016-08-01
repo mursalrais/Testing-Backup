@@ -55,7 +55,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.ID = Convert.ToInt32(listItem["ID"]);
             viewModel.Position = FormatUtil.ConvertLookupToID(listItem, "vacantposition") + string.Empty;
             viewModel.OtherPosition.Value = FormatUtil.ConvertLookupToID(listItem, "recommendedforposition");
-            viewModel.Candidate = Convert.ToString(listItem["Title"]);
+            viewModel.Candidate = Convert.ToString(listItem["Title"]) + " " + Convert.ToString(listItem["lastname"]);
             viewModel.SendTo = Convert.ToString(listItem["personalemail"]);
             viewModel.InterviewerUrl = string.Format(UrlResource.AddInterviewInvitation, _siteUrl, Convert.ToInt32(listItem["ID"]));
             viewModel.Remarks = Convert.ToString(listItem["applicationremarks"]); 
@@ -463,13 +463,13 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             try
             {
                 SPConnector.UpdateListItem(SP_APPDATA_LIST_NAME, headerID, createdValue, _siteUrl);
-                
             }
-                catch (Exception e)
-                {
-                    logger.Error(e.Message);
-                    throw e;
-                }
+            catch (Exception e)
+            {
+                logger.Error(e.Message);
+                throw e;
+            }
+            
         }
 
         public void CreateInputIntvResult(int? headerID, ApplicationShortlistVM viewModel)
@@ -501,7 +501,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 if (mail != "")
                 {
-                    EmailUtil.Send(mail, "Interview Invitation", viewModel.InterviewSummary);
+                    if (EmailUtil.IsValidEmailId(mail))
+                    {
+                        EmailUtil.Send(mail, "Interview Invitation", viewModel.InterviewSummary);
+                    }
                 }
             }
         }

@@ -2,52 +2,66 @@
 
 @model LocationMasterVM
 
-@using (Ajax.BeginForm("Submit", "ASSLocationMaster", null,
-                                                new AjaxOptions
-                                                {
-                                                    OnFailure = "OnFailure",
-                                                    OnSuccess = "OnSuccess"
-                                                }))
-{
-    @Html.ValidationSummary(true)
-    <fieldset>
-        <legend>Form Location Master Data</legend>
-        <div class="col-md-6">
+@using (Ajax.BeginForm("CreateLocationMaster", "ASSLocationMaster",
+                                                                            FormMethod.Post,
+                                                                            new AjaxOptions
+                                                                            {
+                                                                                OnBegin = "onBeginForm",
+                                                                                OnComplete = "onCompleteForm",
+                                                                                OnSuccess = "onSuccessFormEmbed",
+                                                                                OnFailure = "onFailureForm"
+                                                                            }, new { @class = "form-horizontal" }))
+{<fieldset>
+        <legend>Form Location Master</legend>
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary()
+
+        <div class="col-sm-12">
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.Remarks).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.Header.Remarks)
+                @Html.Bootstrap().LabelFor(m => m.Province).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.Province)
                 </div>
             </div>
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.OfficeName).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.Header.OfficeName)
+                @Html.Bootstrap().LabelFor(m => m.OfficeName).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.OfficeName)
                 </div>
             </div>
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.FloorName).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.Header.FloorName)
+                @Html.Bootstrap().LabelFor(m => m.FloorName).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.FloorName)
                 </div>
             </div>
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.RoomName).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.Header.RoomName)
+                @Html.Bootstrap().LabelFor(m => m.RoomName).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.RoomName)
                 </div>
             </div>
-            <input class="k-button k-button-icontext k-grid-add" type="submit" value="Save" id="btnSave" />
-            <input class="k-button k-button-icontext k-grid-add" type="button" value="Cancel" onclick="location.href='@Url.Action("Create", "ASSLocationMaster")';" />
         </div>
     </fieldset>
 }
-<script>
-    function OnSuccess(data) {
-        parent.postMessage("Success", "https://eceos2.sharepoint.com");
-    }
 
-    function OnFailure() {
-        alert("Fail")
-    }
-</script>
+<div class="form-actions">
+    <div class="row">
+        <div class="col-sm-12">
+            <button id="submit-button" class="btn btn-primary" type="submit">
+                <i class="fa fa-save"></i>
+                Submit
+            </button>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#submit-button").click(function () {
+                $("form").submit();
+            });
+        });
+    </script>
+}

@@ -31,10 +31,12 @@ namespace MCAWebAndAPI.Model.HR.DataMaster
 
         public string PSANumber { get; set; }
 
-        
+        [UIHint("Date")]
         public DateTime JoinDate { get; set; } = DateTime.Now;
 
         public string JoinDateTemp { get; set; }
+
+        public string PersonalMail { get; set; }
 
     }
 }

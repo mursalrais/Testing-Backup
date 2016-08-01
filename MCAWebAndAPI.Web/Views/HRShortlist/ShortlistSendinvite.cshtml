@@ -81,7 +81,7 @@
             $("#Candidate").prop('readonly', 'true');
             $('#SendTo').prop("readonly", 'true');
             
-            debugger;
+            
             var positionID = $("#Position").val();
             var url = "/HRDataMaster/GetPosition/" + positionID;
             $.getJSON(url, function (data) {

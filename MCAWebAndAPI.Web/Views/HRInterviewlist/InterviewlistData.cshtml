@@ -19,8 +19,8 @@
         @Html.HiddenFor(m => m.useraccess)
         <div class="row">
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.ActivePosition).Class("col-md-2 control-label")
-                <div class="col-md-3">
+                @Html.Bootstrap().LabelFor(m => m.ActivePosition).Class("col-xs-2 control-label")
+                <div class="col-xs-3">
                     @Html.EditorFor(m => m.ActivePosition)
                 </div>
             </div>
@@ -38,7 +38,7 @@
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.InterviewerPanel).Class("col-sm-2 control-label")
                     <div class="col-sm-6">
-                        @Html.EditorFor(m => m.InterviewerPanel)
+                        @Html.TextBoxFor(m => m.InterviewerPanel, new { @class = "form-control", @onblur = "validatmail()", style = "height:40px; weight:40px;", @placeholder = "Please Input Email" })
                     </div>
                 </div>
             </div>
@@ -78,6 +78,12 @@
                 $("#PositionName").prop("value", data.PositionName);
             })
         });
+
+        function validatmail() {
+            
+            validatemail("InterviewerPanel");
+        }
+
     </script>
 
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,6 +18,8 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
         InsuranceClaimVM GetInsuranceHeader(int? ID, string useremail = null);
 
         InsuranceClaimVM GetPopulatedModel(string useremail = null);
+
+        InsuranceClaimAXAVM GetPopulatedModelAXA();
         int CreateHeader(InsuranceClaimVM header);
 
        void CreateClaimComponentDetails(int? headerId, IEnumerable<ClaimComponentDetailVM> claimComponentDetails);
@@ -25,5 +28,22 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
 
         bool UpdateHeader(InsuranceClaimVM header);
 
+       DataTable getComponentAXAdetails();
+
+        // DataTable getViewProfessionalClaim(string useremail = null);
+
+        DataTable getViewProfessionalClaim(string useremail = null);
+
+        ViewInsuranceProfessionalVM getViewProfessionalClaimDefault(string useremail = null);
+
+        DataTable getViewClaimHR(string status = null);
+
+        void DeleteClaim(int? ID);
+
+        void CreateAxa(InsuranceClaimAXAVM header);
+
+        ViewInsuranceProfessionalVM getViewAXADefault();
+
+        DataTable getViewAXA();
     }
 }

@@ -1,210 +1,301 @@
 ﻿
 @using MCAWebAndAPI.Model.ViewModel.Form.HR
+@using MCAWebAndAPI.Web.Helpers
+
 @model CompensatoryVM
 
 @{
-    ViewBag.Title = "InputCompensatoryData";
+    ViewBag.Title = "Input Compensatory HR";
 }
 
-@using (Html.BeginForm("CreateCompensatoryData", "HRCompensatory", FormMethod.Post, new
+@using (Html.BeginForm("CreateCompensatoryData", "HRCompensatory", FormMethod.Post, new AjaxOptions
 {
-    @class = "form-horizontal",
-    enctype = "multipart/form-data"
+    OnBegin = "onBeginForm",
+    OnComplete = "onCompleteForm",
+    OnSuccess = "onSuccessFormEmbed",
+    OnFailure = "onFailureForm"
+
 }))
 {
-        <fieldset>
-            @Html.HiddenFor(m => m.cmpID)
-            @Html.HiddenFor(m => m.cmpName)
-            @Html.HiddenFor(m => m.cmpPosition)
-            <input type="hidden" id="loadpage" value="0">
-            <div class="row">
-                <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.ddlProfessional).Class("col-md-2 control-label")
-                    <div class="col-md-3">
-                        @Html.EditorFor(m => m.ddlProfessional)
-                    </div>
+    <fieldset>
+        @Html.HiddenFor(m => m.cmpID)
+        @Html.HiddenFor(m => m.cmpName)
+        @Html.HiddenFor(m => m.cmpPosition)
+        <input type="hidden" id="loadpage" value="0">
+        <div class="row">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.ddlProfessional).Class("col-xs-2 control-label")
+                <div class="col-xs-4">
+                    @Html.EditorFor(m => m.ddlProfessional)
                 </div>
             </div>
-            <div class="row">
-                <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.cmpProjUnit).Class("col-md-2 control-label")
-                    <div class="col-md-3">
-                        @Html.EditorFor(m => m.cmpProjUnit)
-                    </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.cmpProjUnit).Class("col-xs-2 control-label")
+                <div class="col-xs-3">
+                    @Html.EditorFor(m => m.cmpProjUnit)
                 </div>
             </div>
-            <div class="row">
-                <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.ddlCompensatoryID).Class("col-md-2 control-label")
-                    <div class="col-md-3">
-                        @Html.EditorFor(m => m.ddlCompensatoryID)
-                    </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.ddlCompensatoryID).Class("col-xs-2 control-label")
+                <div class="col-xs-3">
+                    @Html.EditorFor(m => m.ddlCompensatoryID)
                 </div>
             </div>
-            <div class="col-sm-12">
-                <div class="form-group" id="ParentDiv">
-                    <div class="col-sm-8">
-                        @Html.DisplayFor(m => m.StatusForm)
-                    </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="form-group" id="ParentDiv">
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.StatusForm)
                 </div>
             </div>
-            <legend>Compensatory list</legend>
-            <div id="compensatorylist-placeholder" class="row" />
+        </div>
+        <legend>Compensatory list</legend>
+        <div id="compensatorylist" class="row"></div>
 
-           
+        <button id="submitonly-button" class="btn btn-primary" type="submit">
+            <i class="fa fa-save"></i>
+            Submit
+        </button>
 
-    @if (Model.cmpEmail != null)
-    {
-        <legend>Approval Workflow</legend>
-                <div id="workflow-placeholder" class="row" />
-    }
-        </fieldset>
+    </fieldset>
 }
 
-        @if (Model.StatusForm != "")
-        {
-                <div class="row pull-right">
-                    <div class="col-sm-12">
-                        <button id="submit-button" class="btn btn-primary" type="submit">
-                            <i class="fa fa-save"></i>
-                            Submit For Approval
-                        </button>
-                        <button id="submit-draft-initiate-button" class="btn btn-primary" type="submit">
-                            <i class="fa fa-save"></i>
-                            Save As Draft
-                        </button>
-                    </div>
-                </div>
-        }
+@if (Model.StatusForm == "")
+{
+    <div class="row pull-right">
+        <div class="col-sm-12">
+            <button id="submit-button" class="btn btn-primary" type="submit">
+                <i class="fa fa-save"></i>
+                Submit For Approval
+            </button>
+            <button id="submit-draft-initiate-button" class="btn btn-primary" type="submit">
+                <i class="fa fa-clipboard"></i>
+                Save As Draft
+            </button>
+        </div>
+    </div>
+}
 
-
-        @if (Model.StatusForm == "Pending Approval 1 of 2")
-        {
-            <div class="row">
-                <div class="col-sm-12">
-                    <button id="submit-button" class="btn btn-success" type="submit">
-                        <i class="fa fa-save"></i>
-                        Approve
-                    </button>
-                    <button id="reject1-button" class="btn btn-danger" type="submit">
-                        <i class="fa fa-save"></i>
-                        Reject
-                    </button>
-                </div>
+@if (Model.StatusForm == "Draft")
+{
+    <div class="row pull-right">
+        <div class="col-sm-12">
+            <button id="submit-draft-initiate-button" class="btn btn-primary" type="submit">
+                <i class="fa fa-clipboard"></i>
+                Save As Draft
+            </button>
+            <button id="cancel-button" class="btn btn-primary">
+                <i class="fa fa-ban"></i>
+                Cancel
+            </button>
             </div>
-        }
-        @if (Model.StatusForm == "Approved")
-        {
-                <div class="row pull-right">
+        </div>
+            }
+
+            <legend>Approval Workflow</legend>
+            <div id="workflow-placeholder" class="row"></div>
+
+                <div class="row">
                     <div class="col-sm-12">
                         <button id="print-button" class="btn btn-primary" type="button">
+                            <i class="fa fa-print"></i>
                             Print
                         </button>
                     </div>
                 </div>
-        }
+
+                <div class="row pull-right">
+                    <div class="col-sm-12">
+                        <button id="approve-button" class="btn btn-success" type="submit">
+                            <i class="fa fa-thumbs-o-up"></i>
+                            Approve
+                        </button>
+                        <button id="reject-button" class="btn btn-danger" type="submit">
+                            <i class="fa fa-thumbs-o-down"></i>
+                            Reject
+                        </button>
+                    </div>
+                </div>
+
+            @section scripts{
+
+                <script>
+                    $(document).ready(function () {
+                        var positionID = $("#CmpName").val() + " - " + $("#CmpPosition").val();
+                        $("#NamePos").prop("value", positionID);
 
 
-@section scripts{
 
-    <script>
+                        $("#cancel-button").click(function () {
+                            
+                            showLoading();
+                            var url = "/HRCompensatory/GetCompensatoryDetails?idComp=" + $("#cmpID").val();
 
-        function filterLevel() {
-            return {
-                idProf: $('#ddlProfessional_Value').data("kendoDropDownList").dataItem($('#ddlProfessional_Value').data("kendoDropDownList").select()).ID
-            };
-        }
+                            $('#compensatorylist').load(url, function (response, status, xhr) {
+                                if (status == "success") {
+                                    hideLoading();
+                                }
+                            });
+                        });
 
-        function OnChangeCompensatory(e) {
-            var dataItem = this.dataItem(e.item);
-            var idComp = dataItem.ID
-            var url = "/HRCompensatory/GetCompensatoryDetails?idComp=" + idComp;
+                        $("#submitonly-button").click(function () {
+                            $("#StatusForm").val("submit")
+                            $("form").submit();
+                        });
 
-            showLoading();
-            $('#compensatorylist-placeholder').load(url, function( response, status, xhr ) {
-                if (status == "success") {
-                    hideLoading();
-            }
-        });
-        };
+                        $("#submit-button").click(function () {
+                            $("form").submit();
+                        });
 
-        $(document).ready(function () {
-            var positionID = $("#CmpName").val() +" - "+ $("#CmpPosition").val();
-            $("#NamePos").prop("value", positionID);
+                        $("#approve-button").click(function () {
+                            $("form").submit();
+                        });
 
-            $("#submit-button").click(function () {
-                $("form").submit();
-            });
-        });
+                        $("#submit-draft-button").click(function () {
+                            $("#StatusForm").val("Draft")
+                            $("form").submit();
+                        });
 
-        function getDayName(date) {
-            var day = new Array();
-            day[0] = "Monday";
-            day[1] = "Tuesday";
-            day[2] = "Wednesday";
-            day[3] = "Thursday";
-            day[4] = "Friday";
-            day[5] = "Saturday";
-            day[6] = "Sunday";
+                        $('#reject-button').click(function (e) {
+                            $("#StatusForm").val("Reject")
+                            $("form").submit();
+                        });
 
-            if(date != null)
-            {
-                return day[date.getDay()];
-            };
-        }
+                        $('#print-button').click(function (e) {
+                            $("#ParentDiv").show();
+                            var url = "/HRCompensatory/PrintCompensatoryRequest";
+                            submitFormToPrint(url);
+                        });
 
-        function onChange(e) {
-            var container = e.container;
-            var tr = container.closest('tr');
-            var data = this.dataItem(tr);
-            var start = data.StartTime.getHours();
-            var finish = data.FinishTime.getHours();
-            var finishsec = data.FinishTime.getHours();
-            var range;
-            var rowgrid = $("#CompensatoryDetails").data("kendoGrid").tbody.find("tr");
-            var i = -1
-            var j = -1
-            var tr = container.closest('tr');
+                    });
 
-            rowgrid.each(function (e) {
-                i++;
-                var xdate = $("#Dateid" + i).val();
-                rowgrid.each(function (e) {
-                    j++;
-                    var ydate = $("#Dateid" + j).val();
-                    if (i !== j) {
-                        if (xdate == ydate) {
-                            alert("Date you have chosen already exists, please choose another date..!!")
-                        }
+                    function filterLevel() {
+                        return {
+                            idProf: $('#ddlProfessional_Value').data("kendoDropDownList").dataItem($('#ddlProfessional_Value').data("kendoDropDownList").select()).ID
+                        };
                     }
-                });
-            });
-            debugger;
-            if ((finish + finishsec) <= start) {
-                alert("FinishTime can not be smaller than the starttime..!!")
+
+                    function OnChangeCompensatory(e) {
+                        
+                        var dataItem = this.dataItem(e.item);
+                        var idComp = null;
+                        var CompStatus = null;
+
+                        if (dataItem != null) {
+                            idComp = dataItem.ID;
+                            CompStatus = dataItem.CompensatoryStatus;
+                        }
+                            $("#StatusForm").prop("value", CompStatus);
+                            
+                            if (CompStatus == 'Approved') {
+                                $('#print-button').removeClass('hide');
+                                $('#approve-button').addClass('hide');
+                                $('#reject-button').addClass('hide');
+                                $('#cancel-button').addClass('hide');
+                                $('#submit-draft-initiate-button').addClass('hide');
+                            }
+
+                            if (CompStatus == 'Pending Approval 1 of 2' || CompStatus == 'Pending Approval 2 of 2')
+                            {
+                                $('#print-button').addClass('hide');
+                                $('#approve-button').removeClass('hide')
+                                $('#reject-button').removeClass('hide')
+                            }
+
+                            var url = "/HRCompensatory/GetCompensatoryDetails?idComp=" + idComp;
+                            showLoading();
+                            $('#compensatorylist').load(url, function (response, status, xhr) {
+                                if (status == "success") {
+                                    hideLoading();
+                                }
+                            });
+
+                            $("#cmpID").prop("value", idComp);
+                        
+                    };
+
+                    function OnChangeProffesional(e) {
+                        var dataItem = this.dataItem(e.item);
+                        var eMail = dataItem.OfficeEmail
+
+                        showLoading();
+                        if (eMail != null) {
+                            displayWorkflowRouter("workflow-placeholder", "@ViewBag.ListName", eMail);
+                            hideLoading();
+                        }
+                    };
+
+                    function getDayName(date) {
+                        var day = new Array();
+                        day[0] = "Monday";
+                        day[1] = "Tuesday";
+                        day[2] = "Wednesday";
+                        day[3] = "Thursday";
+                        day[4] = "Friday";
+                        day[5] = "Saturday";
+                        day[6] = "Sunday";
+
+                        if (date != null) {
+                            return day[date.getDay()];
+                        };
+                    }
+
+                    function onChange(e) {
+                        var container = e.container;
+                        var tr = container.closest('tr');
+                        var data = this.dataItem(tr);
+                        var start = data.StartTime.getHours();
+                        var finish = data.FinishTime.getHours();
+                        var finishsec = data.FinishTime.getHours();
+                        var range;
+                        var rowgrid = $("#CompensatoryDetails").data("kendoGrid").tbody.find("tr");
+                        var i = -1
+                        var j = -1
+                        var tr = container.closest('tr');
+
+                        rowgrid.each(function (e) {
+                            i++;
+                            var xdate = $("#Dateid" + i).val();
+                            rowgrid.each(function (e) {
+                                j++;
+                                var ydate = $("#Dateid" + j).val();
+                                if (i !== j) {
+                                    if (xdate == ydate) {
+                                        alert("Date you have chosen already exists, please choose another date..!!")
+                                    }
+                                }
+                            });
+                        });
+                        
+                        if ((finish + finishsec) <= start) {
+                            alert("FinishTime can not be smaller than the starttime..!!")
+                        }
+
+                        if (start < finish) {
+                            range = finish - start
+                            data.set("CmpTotalHours", range);
+                            data.CmpTotalHours = range;
+                            data.set("TotalDay", range / 12)
+                        }
+                        data.set("EditMode", 1);
+                    }
+
+                    function onDataBoundDependentDetails(e) {
+                        var grid = $("#CompensatoryDetails").data("kendoGrid");
+                        hideDeletedRowKendoDetail(grid);
+                    }
+
+                    function GetDetailComplist(dataItem) {
+                        var data = $("#CompensatoryDetails").data("kendoGrid").dataSource.data();
+                        return data.indexOf(dataItem);
+                    }
+
+                </script>
             }
-
-            if (start < finish) {
-                range = finish - start
-                data.set("CmpTotalHours", range);
-                data.CmpTotalHours = range;
-                data.set("TotalDay", range / 12)
-            }
-            data.set("EditMode", 1);
-        }
-
-        function onDataBoundDependentDetails(e) {
-            var grid = $("#CompensatoryDetails").data("kendoGrid");
-            hideDeletedRowKendoDetail(grid);
-        }
-
-        function GetDetailComplist(dataItem) {
-            var data = $("#CompensatoryDetails").data("kendoGrid").dataSource.data();
-            return data.indexOf(dataItem);
-        }
-
-    </script>
-}
 
 
 

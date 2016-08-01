@@ -161,6 +161,18 @@ function getMonthName(date) {
     return month[date.getMonth()];
 }
 
+function getDayOfWeek(date) {
+    var weekday = new Array(7);
+    weekday[0] = "Sunday";
+    weekday[1] = "Monday";
+    weekday[2] = "Tuesday";
+    weekday[3] = "Wednesday";
+    weekday[4] = "Thursday";
+    weekday[5] = "Friday";
+    weekday[6] = "Saturday";
+    return weekday[date.getDay()];
+}
+
 function getWorkflowDetail(dataItem) {
     var data = $("#WorkflowDetails").data("kendoGrid").dataSource.data();
     return data.indexOf(dataItem);
@@ -175,5 +187,31 @@ function displayWorkflowRouter(domID, listName, requestor) {
 function displayWorkflowRouterExitProcedure(domID, listName, requestor) {
     var url = "/HRExitProcedure/DisplayWorkflowRouterExitProcedure?listName=" + listName + "&requestor=" + requestor;
     $('#' + domID).load(url);
+}
+
+function getvalidateEmail(email) {
+    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+}
+
+function validatemail(domID) {
+
+    var mail = $('#' + domID).val();
+
+    var emailArray = mail.split(/(\n|\s|,)/);
+
+    for (i = 0; i < emailArray.length; i++) {
+        var emailtxt = emailArray[i];
+
+        if (!((emailtxt == ",") || (emailtxt == "") || (emailtxt == " "))) {
+            if (getvalidateEmail(emailArray[i])) {
+                $('#' + domID).css("color", "green");
+            } else {
+                alert(emailArray[i] + " is not valid email format");
+                $('#' + domID).css("color", "red");
+                $('#' + domID).focus();
+            }
+        }
+    }
 }
 
