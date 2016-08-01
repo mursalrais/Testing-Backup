@@ -63,7 +63,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Kendo.Mvc">
-      <HintPath>..\..\..\..\Downloads\MCA-tools\Kendo.Mvc.dll</HintPath>
+      <HintPath>..\..\..\bckp code\bin\Kendo.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.Web.Optimization.WebForms">
       <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.WebForms.1.1.3\lib\net45\Microsoft.AspNet.Web.Optimization.WebForms.dll</HintPath>
@@ -1081,7 +1081,6 @@
     <Content Include="Views\HRPerformancePlan\_ProfessionalPerformancePlan_Print.cshtml" />
     <Content Include="Views\HRPerformancePlan\PrintPerformancePlan.cshtml" />
     <Content Include="Views\HRCompensatory\CompensatorylistUser.cshtml" />
-    <Content Include="Views\HRCompensatory\_CompensantoryDetails.cshtml" />
     <Content Include="Views\HRCompensatory\InputCompensatoryUser.cshtml" />
     <Content Include="Views\HRCompensatory\_InputCompensantoryDetails.cshtml" />
     <Content Include="Views\HRCompensatory\InputCompensatoryHR.cshtml" />
@@ -1236,7 +1235,7 @@
     <Content Include="Views\HRExitProcedure\_ExitProcedureChecklistForHR.cshtml" />
     <Content Include="Views\HRFeeSlip\FeeSlip.cshtml" />
     <Content Include="Views\HRFeeSlip\_FeeSlipDetails.cshtml" />
-    <Content Include="Views\HRCompensatory\_CompensantoryDetailsHR.cshtml" />
+    <Content Include="Views\HRCompensatory\_CompensatoryDetailsHR.cshtml" />
     <Content Include="Views\HRCompensatory\_CompensatoryDetails.cshtml" />
     <Content Include="Views\HRCompensatory\_CompensatoryRequestDetails_Print.cshtml" />
     <Content Include="Views\HRCompensatory\_CompensatoryRequest_Print.cshtml" />
