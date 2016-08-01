@@ -16,7 +16,7 @@
     <RootNamespace>MCAWebAndAPI.Web</RootNamespace>
     <AssemblyName>MCAWebAndAPI.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -1224,9 +1224,7 @@
     <Content Include="Views\HRInterviewlist\NextInterviewlist.cshtml" />
     <Content Include="Views\HRInterviewlist\_IntvinvitePanelDetails.cshtml" />
     <Content Include="Views\HRCompensatory\ListCompensatoryDetails.cshtml" />
-    <Content Include="Views\HRInsuranceClaim\CreateInsuranceClaim.cshtml" />
     <Content Include="Views\HRInsuranceClaim\_ClaimComponentDetail.cshtml" />
-    <Content Include="Views\HRInsuranceClaim\_MedicalClaimDetail.cshtml" />
     <Content Include="Views\HRExitProcedure\_ExitProcedureDataHR.cshtml" />
     <Content Include="Views\HRExitProcedure\ViewExitProcedureForApprover.cshtml" />
     <Content Include="Views\HRExitProcedure\_ExitProcedureChecklistForApprover.cshtml" />
@@ -1250,6 +1248,10 @@
     <Content Include="Views\HRInsuranceClaim\ViewClaimAll.cshtml" />
     <Content Include="Views\HRInsuranceClaim\ViewClaimOutStanding.cshtml" />
     <Content Include="Views\HRInsuranceClaim\_ClaimComponentAXA.cshtml" />
+    <Content Include="Views\HRInsuranceClaim\CreateInsuranceClaim.cshtml" />
+    <Content Include="Views\HRInsuranceClaim\DisplayInsuranceClaim.cshtml" />
+    <Content Include="Views\HRInsuranceClaim\_ClaimComponentDetailDisplay.cshtml" />
+    <Content Include="Views\HRInsuranceClaim\PrintToPDF.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -6,12 +6,15 @@
 }
 
 
-@using (Html.BeginForm("UpdateInsuranceClaim", "HRInsuranceClaim", FormMethod.Post,
-                                                                      new
-                                                                      {
-                                                                          @class = "form-horizontal",
-                                                                          enctype = "multipart/form-data"
-                                                                      }))
+@using (Ajax.BeginForm("UpdateInsuranceClaim", "HRInsuranceClaim",
+                                                                            FormMethod.Post,
+                                                                            new AjaxOptions
+                                                                            {
+                                                                                OnBegin = "onBeginForm",
+                                                                                OnComplete = "onCompleteForm",
+                                                                                OnSuccess = "onSuccessFormEmbed",
+                                                                                OnFailure = "onFailureForm"
+                                                                            }, new { @class = "form-horizontal" }))
 
 
 
@@ -99,7 +102,6 @@
             <div class="col-sm-6">
                 <div class="form-group">
                     @Html.Label("Validated by HR/Submitted to AXA/Paid/Rejected")
-                   
                 </div>
             </div>
 
@@ -262,11 +264,11 @@
 
         function OnSelectType(e) {
 
-            var dataItem = this.dataItem(e.item);
+            var dataItem = this.dataItem(e.item.index());
             var dependent = $("#DependantName_Value").data("kendoDropDownList");
             $('#IndividualInsuranceNumber').prop('value', '');
             $('#OrganizationInsuranceID').prop('value', '');
-            if (dataItem.Text === 'Professional') {
+            if (dataItem === 'Professional') {
                 dependent.enable(false);
             } else {
                 dependent.enable(true);
@@ -287,9 +289,9 @@
         }
 
         function OnSelectClaim(e) {
-            var dataItem = this.dataItem(e.item);
-            if (dataItem.Text !== '') {
-                $("#ClaimStatus").val(dataItem.Text);
+            var dataItem = this.dataItem(e.item.index());
+            if (dataItem !== '') {
+                $("#ClaimStatus").val(dataItem);
             }
         }
 

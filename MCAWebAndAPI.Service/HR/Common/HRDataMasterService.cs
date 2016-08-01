@@ -891,5 +891,25 @@ namespace MCAWebAndAPI.Service.HR.Common
         {
             throw new NotImplementedException();
         }
+
+        public IEnumerable<DependentMaster> GetDependentsForInsurance()
+        {
+            var models = new List<DependentMaster>();
+
+            var _default = new DependentMaster
+            {
+                ID = 0,
+                InsuranceNumber = "",
+                OrganizationInsurance = "",
+                Name = ""
+            };
+            models.Add(_default);
+            foreach (var item in SPConnector.GetList(SP_PRODEP_LIST_NAME, _siteUrl))
+            {
+                models.Add(ConvertToDependentModel_Light(item));
+            }
+
+            return models;
+        }
     }
 }

@@ -48,24 +48,37 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [UIHint("AjaxComboBox")]
        public AjaxComboBoxVM DependantName { get; set; } = new AjaxComboBoxVM
         {
-            ActionName = "GetDependants",
+            ActionName = "GetDependantsForInsurance",
             ControllerName = "HRDataMaster",
             ValueField = "ID",
             TextField = "Name",
             OnSelectEventName = "OnSelectDependantName"
         };
 
-        [UIHint("DropDown")]
-        public DropDownVM Type { get; set; } = new DropDownVM
-        {
-            Choices = new[]
-              {
-                new DropDownVM() {Text="Professional" ,Value = "Professional"},
-                 new DropDownVM() {Text="Dependent" ,Value = "Dependent"}
-            },
 
+        [UIHint("ComboBox")]
+        public ComboBoxVM Type { get; set; } = new ComboBoxVM
+        {
+            Choices = new string[]
+          {
+                            "Professional",
+                            "Dependent"
+          },
             OnSelectEventName = "OnSelectType"
         };
+
+
+        //[UIHint("DropDown")]
+        //public DropDownVM Type { get; set; } = new DropDownVM
+        //{
+        //    Choices = new[]
+        //      {
+        //        new DropDownVM() {Text="Professional" ,Value = "Professional"},
+        //         new DropDownVM() {Text="Dependent" ,Value = "Dependent"}
+        //    },
+
+        //    OnSelectEventName = "OnSelectType"
+        //};
 
 
         public string IndividualInsuranceNumber { get; set; }
@@ -80,29 +93,53 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         public string VisibleTo { get; set; }
 
-        [UIHint("DropDown")]
-        [DisplayName("Claim Status")]
-        [Required(ErrorMessage = "Claim Status Field Is Required")]
-        public DropDownVM ClaimStatusHR { get; set; } = new DropDownVM
-        {
-            Choices = new[]
-            {
-                 new DropDownVM() {Text=String.Empty,Value = String.Empty},
-                 new DropDownVM() {Text="Need HR to Validate" ,Value = "Need HR to Validate"},
-                 new DropDownVM() {Text="Validated by HR" ,Value = "Validated by HR"},
-                 new DropDownVM() {Text="Submitted to AXA" ,Value = "Submitted to AXA"},
-                 new DropDownVM() {Text="Rejected" ,Value = "Rejected"},
-                 new DropDownVM() {Text="Paid" ,Value = "Paid"}
-            },
-           
-            OnSelectEventName = "OnSelectClaim"
-           
 
+        [UIHint("ComboBox")]
+        [DisplayName("Claim Status")]
+        public ComboBoxVM ClaimStatusHR { get; set; } = new ComboBoxVM
+        {
+            Choices = new string[]
+           {
+                String.Empty,
+                            "Need HR to Validate",
+                            "Validated by HR",
+                            "Submitted to AXA",
+                            "Rejected",
+                            "Paid"
+           },
+            OnSelectEventName = "OnSelectClaim"
         };
 
 
-        public string TotalAmount { get; set; }
+        //[UIHint("DropDown")]
+        //[DisplayName("Claim Status")]
+        //[Required(ErrorMessage = "Claim Status Field Is Required")]
+        //public DropDownVM ClaimStatusHR { get; set; } = new DropDownVM
+        //{
+        //    Choices = new[]
+        //    {
+        //         new DropDownVM() {Text=String.Empty,Value = String.Empty},
+        //         new DropDownVM() {Text="Need HR to Validate" ,Value = "Need HR to Validate"},
+        //         new DropDownVM() {Text="Validated by HR" ,Value = "Validated by HR"},
+        //         new DropDownVM() {Text="Submitted to AXA" ,Value = "Submitted to AXA"},
+        //         new DropDownVM() {Text="Rejected" ,Value = "Rejected"},
+        //         new DropDownVM() {Text="Paid" ,Value = "Paid"}
+        //    },
+
+        //    OnSelectEventName = "OnSelectClaim"
+
+
+        //};
+
+
+        //[UIHint("Number")]
+        public decimal TotalAmount { get; set; }
+
+        [DisplayName("Total Amount")]
+        public decimal TotalAmountTemp { get; set; }
 
         public int Year { get; set; }
+
+        public string URL { get; set; }
     }
 }

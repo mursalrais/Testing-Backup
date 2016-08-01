@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
+using Elmah;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using MCAWebAndAPI.Model.ViewModel.Form.HR;
+using MCAWebAndAPI.Service.Converter;
 using MCAWebAndAPI.Service.HR.InsuranceClaim;
 using MCAWebAndAPI.Service.Resources;
 //using MCAWebAndAPI.Service.Utils;
@@ -69,8 +72,8 @@ namespace MCAWebAndAPI.Web.Controllers
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
-
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.InsuranceClaim);
+            var strPages = viewModel.UserPermission == "HR" ? "/sitePages/hrInsuranceView.aspx" : "/sitePages/ProfessionalClaim.aspx";
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + strPages);
 
         }
 
@@ -113,6 +116,16 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewModel);
         }
 
+        public ActionResult DisplayInsuranceClaim(string siteUrl, int? id, string useremail = null)
+        {
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            var viewModel = _service.GetInsuranceHeader(id, useremail);
+
+            return View(viewModel);
+        }
+
 
         public ActionResult UpdateInsuranceClaim(FormCollection form, InsuranceClaimVM viewModel, string site)
         {
@@ -133,7 +146,8 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.InsuranceClaim);
+            var strPages = viewModel.UserPermission == "HR" ? "/sitePages/hrInsuranceView.aspx" : "/sitePages/ProfessionalClaim.aspx";
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + strPages);
         }
 
         public ActionResult Read([DataSourceRequest] DataSourceRequest request)
@@ -226,27 +240,89 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
 
-        public ActionResult ExportToExcel(string siteUrl = null)
+        public ActionResult PrintToPDF(FormCollection form, InsuranceClaimAXAVM viewModel)
         {
+            //_service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            //SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            //var viewModel = _service.getViewAXADefault();
+
+            //return View(viewModel);
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-            var viewModel = _service.getViewAXADefault();
+            //_service.CreateAxa(viewModel);
 
-            return View(viewModel);
+            viewModel.dtDetails = _service.getViewAXA();
 
+
+            const string RelativePath = "~/Views/HRInsuranceClaim/PrintToPDF.cshtml";
+            var view = ViewEngines.Engines.FindView(ControllerContext, RelativePath, null);
+            var fileName = "_Application.pdf";
+            byte[] pdfBuf = null;
+            string content;
+            using (var writer = new StringWriter())
+            {
+                var context = new ViewContext(ControllerContext, view.View, ViewData, TempData, writer);
+                view.View.Render(context, writer);
+                writer.Flush();
+                content = writer.ToString();
+
+                // Get PDF Bytes
+                try
+                {
+                    pdfBuf = PDFConverter.Instance.ConvertFromHTML(fileName, content);
+                }
+                catch (Exception e)
+                {
+                    ErrorSignal.FromCurrentContext().Raise(e);
+                    RedirectToAction("Index", "Error");
+                }
+            }
+            if (pdfBuf == null)
+                return HttpNotFound();
+            return File(pdfBuf, "application/pdf");
         }
 
 
         [HttpPost]
-        public ActionResult RedirectExportToExcel(FormCollection form, InsuranceClaimAXAVM viewModel)
+        public ActionResult RedirectPrintToPDF(FormCollection form, InsuranceClaimAXAVM viewModel)
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-            _service.CreateAxa(viewModel);
-            return RedirectToAction("ExportToExcel", "HRInsuranceClaim");
+            //_service.CreateAxa(viewModel);
+
+            viewModel.dtDetails = _service.getViewAXA();
+
+
+            const string RelativePath = "~/Views/HRInsuranceClaim/PrintToPDF.cshtml";
+            var view = ViewEngines.Engines.FindView(ControllerContext, RelativePath, null);
+            var fileName = "_Application.pdf";
+            byte[] pdfBuf = null;
+            string content;
+            using (var writer = new StringWriter())
+            {
+                var context = new ViewContext(ControllerContext, view.View, ViewData, TempData, writer);
+                view.View.Render(context, writer);
+                writer.Flush();
+                content = writer.ToString();
+
+                // Get PDF Bytes
+                try
+                {
+                    pdfBuf = PDFConverter.Instance.ConvertFromHTML(fileName, content);
+                }
+                catch (Exception e)
+                {
+                    ErrorSignal.FromCurrentContext().Raise(e);
+                    RedirectToAction("Index", "Error");
+                }
+            }
+            if (pdfBuf == null)
+                return HttpNotFound();
+            return File(pdfBuf, "application/pdf");
+            // return RedirectToAction("PrintToPDF", "HRInsuranceClaim");
         }
 
-        public ActionResult ReadExportExcel([DataSourceRequest] DataSourceRequest request)
+        public ActionResult ReadPrintToPDF([DataSourceRequest] DataSourceRequest request)
         {
             _service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", ConfigResource.DefaultHRSiteUrl);
@@ -254,6 +330,43 @@ namespace MCAWebAndAPI.Web.Controllers
             return Json(data.ToDataSourceResult(request));
         }
 
+
+        //[HttpPost]
+        //public ActionResult PrintApplicationData(FormCollection form, ApplicationDataVM viewModel)
+        //{
+        //    viewModel.EducationDetails = BindEducationDetails(form, viewModel.EducationDetails);
+        //    viewModel.TrainingDetails = BindTrainingDetails(form, viewModel.TrainingDetails);
+        //    viewModel.WorkingExperienceDetails = BindWorkingExperienceDetails(form, viewModel.WorkingExperienceDetails);
+        //    ViewData.Model = AdjustViewModel(viewModel);
+
+        //    const string RelativePath = "~/Views/HRApplication/PrintApplicationData.cshtml";
+        //    var view = ViewEngines.Engines.FindView(ControllerContext, RelativePath, null);
+        //    var fileName = viewModel.FirstMiddleName + "_Application.pdf";
+        //    byte[] pdfBuf = null;
+        //    string content;
+
+        //    using (var writer = new StringWriter())
+        //    {
+        //        var context = new ViewContext(ControllerContext, view.View, ViewData, TempData, writer);
+        //        view.View.Render(context, writer);
+        //        writer.Flush();
+        //        content = writer.ToString();
+
+        //        // Get PDF Bytes
+        //        try
+        //        {
+        //            pdfBuf = PDFConverter.Instance.ConvertFromHTML(fileName, content);
+        //        }
+        //        catch (Exception e)
+        //        {
+        //            ErrorSignal.FromCurrentContext().Raise(e);
+        //            RedirectToAction("Index", "Error");
+        //        }
+        //    }
+        //    if (pdfBuf == null)
+        //        return HttpNotFound();
+        //    return File(pdfBuf, "application/pdf");
+        //}
 
     }
 }
