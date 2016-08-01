@@ -1,91 +1,90 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
-@model InsuranceClaimAXAVM
+@model ViewInsuranceProfessionalVM
 
-@{
-    ViewBag.Title = "Form Submit Insurance AXA";
-}
+@Html.HiddenFor(m => m.URL)
+@Html.HiddenFor(m => m.Email)
+<div class="col-sm-12">
+    @(Html.Kendo().Grid<dynamic>()
+          .Name("gridDataView")
+          .Columns(columns =>
+          {
+              foreach (System.Data.DataColumn column in Model.dtDetails.Columns)
+              {
 
+                  if (column.DataType.FullName != "System.Double" && column.ColumnName != "Remarks")
+                  {
+                      columns.Bound(column.ColumnName);
+                  }
 
-@using (Html.BeginForm("ExportToExcel", "HRInsuranceClaim", FormMethod.Post,
-                                                                      new
-                                                                      {
-                                                                          @class = "form-horizontal",
-                                                                          enctype = "multipart/form-data"
-                                                                      }))
+              }
+              columns.Group(group => group
+                  .Title("Claim Component")
+                  .Columns(info =>
+                  {
+                      foreach (System.Data.DataColumn column in Model.dtDetails.Columns)
+                      {
+                          if (column.DataType.FullName == "System.Double")
+                          {
+                              info.Bound(column.ColumnName).ClientTemplate("#= kendo.toString(" + column.ColumnName + ",'n0') #");
 
-
-
-{
-    <fieldset>
-
-        @*@Html.AntiForgeryToken()
-        @Html.ValidationSummary()*@
-      
-        <div class="col-sm-6">
-
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Sender).Class("col-sm-4 control-label")
-                <div class="col-sm-8">
-                    @Html.EditorFor(m => m.Sender)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.BatchNo).Class("col-sm-4 control-label")
-                <div class="col-sm-8">
-                    @Html.EditorFor(m => m.BatchNo)
-                </div>
-            </div>
-           
-        </div>
-        <div class="col-sm-6">
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Recepient).Class("col-sm-4 control-label")
-                <div class="col-sm-8">
-                    @Html.EditorFor(m => m.Recepient)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.SubmissionDate).Class("col-sm-4 control-label")
-                <div class="col-sm-8">
-                    @Html.EditorFor(m => m.SubmissionDate)
-                </div>
-            </div>
-           
-
-        </div>
-
-       
-        <div class="row">
-            @Html.Partial("_ClaimComponentAXA",Model.dtDetails)
-        </div>
+                          }
+                      }
 
 
+                  })
+                  );
+              columns.Bound("Remarks");
 
-    </fieldset>
-    <div class="form-actions">
-        <div class="row">
-            <div class="col-sm-12">
-                <button id="submit-to-axa" class="btn btn-primary" type="submit">
-                    <i class="fa fa-save"></i>
-                    Export to Excel
-                </button>
-            </div>
-        </div>
-    </div>
-}
-@section scripts{
-    <script type="text/javascript">
-        $(document)
-            .ready(function () {
+          })
+          .ToolBar(tools => tools.Excel())
+          .Excel(excel => excel
+            .FileName("Products.xlsx")
+        )
+          .DataSource(dataSource => dataSource
+              .Ajax()
+              .Model(model =>
+              {
 
-                $("#submit-to-axa")
-                        .click(function () {
-                            //var grid = $("#gridDataView").data("kendoGrid");
-                            //grid.saveAsExcel();
-                            //window.top.location.href = "http://www.example.com";
-                        });
+              })
+
+              .Read(read => read.Action("ReadExportExcel", "HRInsuranceClaim"))
+
+          )
+    )
+
+
+</div>
+
+<script type="text/javascript">
+    
+
+    function functionExport() {
+        var dfrd = $.Deferred();
+        setTimeout(function () {
+            // doing async stuff
+            var grid = $("#gridDataView").data("kendoGrid");
+            grid.saveAsExcel();
+            dfrd.resolve();
+        }, 60000);
+        return dfrd.promise();
+    }
+
+    
+
+    $(document)
+        .ready(function () {
+
+
+            //$(function () {
+            //    functionExport().done(function () {
+            //       window.top.location.href = $("#URL").val() + '/Lists/InsuranceClaim/';
+
+            //    });
+            //});
 
             }
-            );
-    </script>
-}
+
+        );
+</script>
+
+

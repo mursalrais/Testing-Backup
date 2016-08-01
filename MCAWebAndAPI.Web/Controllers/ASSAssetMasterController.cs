@@ -1,6 +1,4 @@
-﻿using Kendo.Mvc.Extensions;
-using Kendo.Mvc.UI;
-using MCAWebAndAPI.Model.ViewModel.Control;
+﻿using MCAWebAndAPI.Model.ViewModel.Control;
 using MCAWebAndAPI.Model.ViewModel.Form.Asset;
 using MCAWebAndAPI.Service.Asset;
 using MCAWebAndAPI.Web.Helpers;
@@ -13,6 +11,9 @@ using System.Collections.Generic;
 using System.Web;
 using System.IO;
 using MCAWebAndAPI.Service.Converter;
+using MCAWebAndAPI.Service.Utils;
+using Kendo.Mvc.UI;
+using Kendo.Mvc.Extensions;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -266,17 +267,46 @@ namespace MCAWebAndAPI.Web.Controllers
             // Get existing session variable
             DataTable createAssID = SessionManager.Get<DataTable>("CSVDataTable");
             var res = "";
-            for(int x=0;x<createAssID.Rows.Count;x++)
+            List<string> assetIDs = new List<string>();
+            int x = 0;
+            foreach (DataRow d in SessionManager.Get<DataTable>("CSVDataTable").Rows)
             {
                 if(createAssID.Rows[x].ItemArray[0].ToString() == "")
                 {
                     res = _assetMasterService.GetAssetIDForMainAsset(createAssID.Rows[x].ItemArray[2].ToString(), createAssID.Rows[x].ItemArray[3].ToString(), createAssID.Rows[x].ItemArray[4].ToString());
-                    foreach (DataRow d in SessionManager.Get<DataTable>("CSVDataTable").Rows)
+                    if (assetIDs.Contains(res))
                     {
-                        d["AssetID"] = res;
+                        //split
+                        string[] breakk = res.Split('-');
+                        int num = Convert.ToInt32(breakk[3]);
+                        //FormatUtil.ConvertToDigitNumber(lastNumber, 4);
+                        num = num + 1;
+                        breakk[3] = FormatUtil.ConvertToDigitNumber(num, 4);
+                        res = breakk[0] + "-" + breakk[1] + "-" + breakk[2] + "-" + breakk[3];
+                        //get the number + 1
+
                     }
-                    //kasih jagaan jika lebih dari satu dengan assetID yg sama, karena blm tersimpan d List
+                    else
+                    {
+                        assetIDs.Add(res);
+                    }
                 }
+                else
+                {
+                    //cek if assetID parent is exist
+                    var assetIDss = _assetMasterService.GetAssetIDForSubAsset(createAssID.Rows[x].ItemArray[0].ToString());
+                    if(assetIDss == "")
+                    {
+                        return JsonHelper.GenerateJsonErrorResponse(assetIDss);
+                    }
+                    else
+                    {
+                        res = assetIDss;
+                    }
+                }
+
+                d["AssetID"] = res;
+                x++;
             }
             var sessionVariables = SessionManager.Get<DataTable>("CSVDataTable") ?? new DataTable();
             var siteUrl = SessionManager.Get<string>("SiteUrl");

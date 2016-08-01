@@ -30,7 +30,6 @@
                 @Html.Partial("_ShortlistDetails", Model.ShortlistDetails)
             </div>
 
-
 </fieldset>
     <div class="form-actions">
         <div class="row">
@@ -38,7 +37,9 @@
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.SendTo).Class("col-xs-4 control-label")
                     <div class="col-xs-8">
-                        @Html.EditorFor(m => m.SendTo)
+                        @Html.TextBoxFor(m => m.SendTo, new { @class = "form-control", @onblur = "validatmail()", style = "height:40px; weight:40px; ", @placeholder = "Please Input Email" })
+
+
                     </div>
                 </div>
                 </div>
@@ -83,6 +84,12 @@
                 $("#PositionName").prop("value", data.PositionName);
             })
         });
+
+        function validatmail() {
+            
+            validatemail("SendTo");
+        }
+
     </script>
 }
 

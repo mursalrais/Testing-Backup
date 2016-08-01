@@ -26,7 +26,7 @@ namespace MCAWebAndAPI.Service.Asset
 
         string GetAssetIDForMainAsset(string category, string projectunit, string type);
 
-
-
+        string GetAssetIDForSubAsset(string assetID);
+        
     }
 }

@@ -27,6 +27,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// position
         /// </summary>
+        [Required(ErrorMessage = "Please Input Email")]
         public string InterviewerPanel { get; set; }
 
         public string InterviewerUrl { get; set; }

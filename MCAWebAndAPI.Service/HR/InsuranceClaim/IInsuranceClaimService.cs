@@ -39,5 +39,11 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
         DataTable getViewClaimHR(string status = null);
 
         void DeleteClaim(int? ID);
+
+        void CreateAxa(InsuranceClaimAXAVM header);
+
+        ViewInsuranceProfessionalVM getViewAXADefault();
+
+        DataTable getViewAXA();
     }
 }
