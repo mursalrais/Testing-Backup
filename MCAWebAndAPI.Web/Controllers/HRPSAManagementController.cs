@@ -11,7 +11,6 @@ using MCAWebAndAPI.Model.HR.DataMaster;
 using MCAWebAndAPI.Service.HR.Recruitment;
 using Elmah;
 using System.Net;
-using MCAWebAndAPI.Service.HR.Leave;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
