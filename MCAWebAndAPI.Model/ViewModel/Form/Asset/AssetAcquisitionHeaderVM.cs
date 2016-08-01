@@ -46,7 +46,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
                     {
                         Choices = new string[]
                         {
-                            ""
+                            
                         }
                         ,OnSelectEventName = "onAcceptanceMemoChange"
                     };
