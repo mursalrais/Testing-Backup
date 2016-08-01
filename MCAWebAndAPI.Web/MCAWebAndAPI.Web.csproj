@@ -1071,7 +1071,6 @@
     <Content Include="Views\HRInterviewlist\InputInterviewResult.cshtml" />
     <Content Include="Views\HRInterviewlist\_InterviewResultlist.cshtml" />
     <Content Include="Views\HRInterviewlist\InputInterviewResultDetail.cshtml" />
-    <Content Include="Views\HRInterviewlist\_InputInterviewResultDetail.cshtml" />
     <Content Include="Views\HRPerformanceMonitoring\PerformanceMonitoring.cshtml" />
     <Content Include="Views\HRPerformanceMonitoring\_Detail.cshtml" />
     <Content Include="Views\HRPerformanceMonitoring\_PerformancePlanMonitoring.cshtml" />
@@ -1095,7 +1094,6 @@
     <Content Include="Views\HRPerformancePlan\_ProfessionalPerformancePlan_Print.cshtml" />
     <Content Include="Views\HRPerformancePlan\PrintPerformancePlan.cshtml" />
     <Content Include="Views\HRCompensatory\CompensatorylistUser.cshtml" />
-    <Content Include="Views\HRCompensatory\_CompensantoryDetails.cshtml" />
     <Content Include="Views\HRCompensatory\InputCompensatoryUser.cshtml" />
     <Content Include="Views\HRCompensatory\_InputCompensantoryDetails.cshtml" />
     <Content Include="Views\HRCompensatory\InputCompensatoryHR.cshtml" />

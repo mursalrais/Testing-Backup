@@ -15,6 +15,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         
         const string SP_LIST_NAME = "Performance Evaluation";
         const string SP_DETAIL_LIST_NAME = "Professional Performance Evaluation";
+        const string SP_DETAIL_LIST_PLAN = "Professional Performance Plan";
+        const string SP_PLAN_ = "";
 
         public int CreatePerformanceEvaluation(PerformanceEvaluationVM PerformanceEvaluation)
         {
@@ -25,7 +27,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             updatedValues.Add("latestdateforapproval1", PerformanceEvaluation.LatestDateApproval1.Value);
             updatedValues.Add("latestdateforapproval2", PerformanceEvaluation.LatestDateApproval2.Value);
             updatedValues.Add("pestatus", "Open");
-            //updatedValues.Add("initiationdate", DateTime.UtcNow);
 
             try
             {
