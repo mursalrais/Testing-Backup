@@ -5,16 +5,12 @@
     ViewBag.Title = "Form Edit Insurance Claim";
 }
 
-
-@using (Ajax.BeginForm("UpdateInsuranceClaim", "HRInsuranceClaim",
-                                                                            FormMethod.Post,
-                                                                            new AjaxOptions
-                                                                            {
-                                                                                OnBegin = "onBeginForm",
-                                                                                OnComplete = "onCompleteForm",
-                                                                                OnSuccess = "onSuccessFormEmbed",
-                                                                                OnFailure = "onFailureForm"
-                                                                            }, new { @class = "form-horizontal" }))
+@using (Html.BeginForm("EditInsuranceClaim", "HRInsuranceClaim", FormMethod.Post,
+                                                                                  new
+                                                                                  {
+                                                                                      @class = "form-horizontal",
+                                                                                      enctype = "multipart/form-data"
+                                                                                  }))
 
 
 
@@ -188,6 +184,7 @@
                             alert('Dependent Name field is required');
                         } else {
                             $("#ClaimStatus").val("Draft");
+                            $('form').prop('action', '/HRInsuranceClaim/UpdateInsuranceClaim');
                             $("form").submit();
                         }
 
@@ -205,6 +202,7 @@
                             alert('Dependent Name field is required');
                         } else {
                             $("#ClaimStatus").val("Need HR to Validate");
+                            $('form').prop('action', '/HRInsuranceClaim/UpdateInsuranceClaim');
                             $("form").submit();
                         }
 
@@ -222,6 +220,7 @@
                           alert('Dependent Name field is required');
                       } else {
                           $("#ClaimStatus").val("Draft");
+                          $('form').prop('action', '/HRInsuranceClaim/UpdateInsuranceClaim');
                           $("form").submit();
                       }
 
@@ -237,11 +236,12 @@
                            alert('Dependent Name field is required');
                            return;
                        }
-                       //else if (strClaim === "") {
-                       //    alert('Claim Status field is required');
-                       //    return;
-                      // }
+                       else if (strClaim === "") {
+                           alert('Claim Status field is required');
+                           return;
+                       }
                        else {
+                           $('form').prop('action', '/HRInsuranceClaim/UpdateInsuranceClaim');
                            $("form").submit();
                        }
 

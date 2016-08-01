@@ -31,32 +31,7 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
             _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
         }
 
-        private FieldUserValue   GetUser()
-        {
-            //  var spContext = SharePointContextProvider.Current.GetSharePointContext(Context);
-             string UserName = "";
-             string Password = "";
-            UserName = "sp.services@eceos.com";
-            Password = "Raja0432";
-            using (ClientContext clientContext = new ClientContext("https://eceos2.sharepoint.com/sites/mca-dev"))
-            {
-                SecureString secureString = new SecureString();
-                Password.ToList().ForEach(secureString.AppendChar);
-                clientContext.Credentials = new SharePointOnlineCredentials(UserName, secureString);
-                Web communitySite = clientContext.Site.OpenWeb("hr");
-                clientContext.Load(communitySite);
-                clientContext.ExecuteQuery();
-
-                User newUser = communitySite.EnsureUser("i:0#.f|membership|junindar.tasripin@eceos.com");
-                clientContext.Load(newUser);
-                clientContext.ExecuteQuery();
-
-                FieldUserValue userValue = new FieldUserValue();
-                userValue.LookupId = newUser.Id;
-                return userValue;
-
-            }
-        }
+      
         private ClaimComponentDetailVM ConvertToComponentDetailVM(ListItem item)
         {
             return new ClaimComponentDetailVM
@@ -237,6 +212,8 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
                 var strUnit = Convert.ToString(item["Project_x002f_Unit"]);
 
                 viewModel.UserPermission = strUnit == "Human Resources Unit" ? "HR" : "Professional";
+               // viewModel.URL = _siteUrl;
+               // viewModel = _siteUrl;
             }
 
             return viewModel;
@@ -781,9 +758,10 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
                {"claimtype", header.Type.Text},
                {"claimdate", header.ClaimDate},
                {"claimstatus", header.ClaimStatus},
-               {"claimyear", header.ClaimDate.Value.Year},
-                 {"visibleto", GetUser()},
+               {"claimyear", header.ClaimDate.Value.Year}
            };
+
+        
 
             if (!string.IsNullOrEmpty(Convert.ToString(header.TotalAmount)))
             {
@@ -794,6 +772,7 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
             {
                 columnValues.Add("professional",
                     new FieldLookupValue { LookupId = Convert.ToInt32(header.ProfessionalName.Value) });
+                header.ProfessionalID = Convert.ToInt32(header.ProfessionalName.Value);
             }
             else
             {
@@ -804,6 +783,10 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
             {
                 columnValues.Add("dependent", new FieldLookupValue { LookupId = Convert.ToInt32(header.DependantName.Value) });
             }
+
+            var professional = GetProfessionalPosition(header.ProfessionalID);
+            columnValues.Add("visibleto", SPConnector.GetUser(professional.OfficeEmail,_siteUrl));
+
             try
             {
                 SPConnector.AddListItem(SpHeaderListName, columnValues, _siteUrl);

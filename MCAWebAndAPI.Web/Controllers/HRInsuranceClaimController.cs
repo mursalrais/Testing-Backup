@@ -40,7 +40,16 @@ namespace MCAWebAndAPI.Web.Controllers
 
         }
 
-      
+        public ActionResult Redirect(string siteUrl = null)
+        {
+           _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            var viewModel = _service.GetPopulatedModel();
+            viewModel.URL = siteUrl;
+            return View("Redirect", viewModel);
+
+        }
+
 
         [HttpPost]
         public ActionResult SubmitInsuranceClaim(FormCollection form, InsuranceClaimVM viewModel)
@@ -73,7 +82,8 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
             var strPages = viewModel.UserPermission == "HR" ? "/sitePages/hrInsuranceView.aspx" : "/sitePages/ProfessionalClaim.aspx";
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + strPages);
+
+             return RedirectToAction("Redirect","HRInsuranceClaim", new { siteUrl = siteUrl + strPages });
 
         }
 
@@ -147,7 +157,8 @@ namespace MCAWebAndAPI.Web.Controllers
             }
 
             var strPages = viewModel.UserPermission == "HR" ? "/sitePages/hrInsuranceView.aspx" : "/sitePages/ProfessionalClaim.aspx";
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + strPages);
+            return RedirectToAction("Redirect", "HRInsuranceClaim", new { siteUrl = siteUrl + strPages });
+            // return JsonHelper.GenerateJsonSuccessResponse(siteUrl + strPages);
         }
 
         public ActionResult Read([DataSourceRequest] DataSourceRequest request)
