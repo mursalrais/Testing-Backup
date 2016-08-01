@@ -1250,6 +1250,8 @@
     <Content Include="Views\HRInsuranceClaim\_ClaimComponentDetailDisplay.cshtml" />
     <Content Include="Views\HRInsuranceClaim\PrintToPDF.cshtml" />
     <Content Include="Views\HRInsuranceClaim\Redirect.cshtml" />
+    <Content Include="Views\ASSAssetMaster\_DisplayGrid.cshtml" />
+    <Content Include="Views\ASSAssetMaster\Upload.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
