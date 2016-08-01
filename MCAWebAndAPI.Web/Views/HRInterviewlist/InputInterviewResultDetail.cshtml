@@ -38,7 +38,7 @@
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.InterviewerPanel).Class("col-sm-4 control-label")
                     <div class="col-sm-8">
-                        @Html.EditorFor(m => m.InterviewerPanel, new { htmlAttributes = new { placeholder = "Please input Email" } })
+                        @Html.TextBoxFor(m => m.InterviewerPanel, new { @class = "form-control",  @onblur = "validatmail()" ,style = "height:40px; weight:40px; ", @placeholder = "Please Input Email" })
                     </div>
                 </div>
                 <div class="form-group">
@@ -76,14 +76,15 @@
 
     <script>
         $(document).ready(function () {
+
             $("#vacant-position").prop('readonly', 'true');
             $("#Candidate").prop('readonly', 'true');
             var positionID = $("#Position").val();
+
             var url = "/HRDataMaster/GetPosition/" + positionID;
             $.getJSON(url, function (data) {
                 $("#vacant-position").prop("value", data.PositionName);
             })
-
         });
 
         function onResultOptionChange(e) {
@@ -92,6 +93,12 @@
                 $("#OtherPosition_Value").data("kendoDropDownList").enable(true);
             }
         };
+
+        function validatmail() {
+            
+            validatemail("InterviewerPanel");
+        }
+        
     </script>
 
 }

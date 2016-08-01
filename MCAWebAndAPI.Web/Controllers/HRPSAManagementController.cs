@@ -11,6 +11,7 @@ using MCAWebAndAPI.Model.HR.DataMaster;
 using MCAWebAndAPI.Service.HR.Recruitment;
 using Elmah;
 using System.Net;
+using MCAWebAndAPI.Service.HR.Leave;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -18,10 +19,12 @@ namespace MCAWebAndAPI.Web.Controllers
     public class HRPSAManagementController : Controller
     {
         IPSAManagementService psaManagementService;
+        //IHRDayOffBalanceService dayOffService;
 
         public HRPSAManagementController()
         {
             psaManagementService = new PSAManagementService();
+            //dayOffService = new HRDayOffBalanceService();
         }
 
         /// <summary>
@@ -90,6 +93,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 //viewModel.PSAStatus.Value = "Inactive";
                 //viewModel.HiddenExpiryDate = viewModel.PSAExpiryDate;
                 psaID = psaManagementService.CreatePSAManagement(viewModel);
+                //dayOffService.PopulateBalance(psaID.Value,viewModel,"Create");
             }
             catch (Exception e)
             {

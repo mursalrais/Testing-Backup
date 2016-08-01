@@ -9,11 +9,11 @@
                 .Name("Documents")
                 .HtmlAttributes(new { @class = "form-control" })
                 .Multiple(true)
-                .Events(e => e
-                    .Select("onSelectExitProcedure")
+                //.Events(e => e
+                //.Complete("onCompleteExitProcedure")
                 )
 
-            )
+            
             @Html.ValidationMessageFor(model => model.Documents)
         </div>
     </div>
