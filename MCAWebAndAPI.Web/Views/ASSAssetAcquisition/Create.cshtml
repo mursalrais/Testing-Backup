@@ -1,91 +1,66 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.Asset
 
-@model AssetAcquisitionVM
 
-<form class="form-horizontal" method="post" action="/ASSAssetAcquisition/Submit" id="create-asset-acquisition-form">
+
+@model AssetAcquisitionHeaderVM
+
+@using (Ajax.BeginForm("Submit", "ASSAssetAcquisition",
+                                                                            FormMethod.Post,
+                                                                            new AjaxOptions
+                                                                            {
+                                                                                OnBegin = "onBeginForm",
+                                                                                OnComplete = "onCompleteForm",
+                                                                                OnSuccess = "onSuccessFormEmbed",
+                                                                                OnFailure = "onFailureForm"
+                                                                            }, new { @class = "form-horizontal" }))
+{
     <fieldset>
-        <legend>Form Asset Acquisition</legend>
+        <legend>Form Monthly Fee</legend>
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary()
 
-        <div class="col-md-6">
+        <div class="col-sm-12">
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.TransactionType).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.DisplayFor(m => m.Header.TransactionType)
+                @Html.Bootstrap().LabelFor(m => m.TransactionType).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.TransactionType)
                 </div>
             </div>
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.AcceptanceMemoNo).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.Header.AcceptanceMemoNo)
+                @Html.Bootstrap().LabelFor(m => m.AcceptanceMemoNo).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.AcceptanceMemoNo)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Vendor).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.Vendor)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.PoNo).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.PoNo)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.PurchaseDate).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.PurchaseDate)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.PurchaseDescription).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.PurchaseDescription)
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.PurchaseDate).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.Header.PurchaseDate)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.PurchaseDescription).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.Header.PurchaseDescription)
-                </div>
-            </div>
-        </div>
-
+        <legend>Monthly Fee Detail</legend>
         <div class="row">
-            <div class="col-md-12">
-                @(Html.Kendo().Grid(Model.Items)
-                    .Name("asset-acquisition-items-grid")
-                    .Columns(columns =>
-                    {
-                        columns.Bound(p => p.CostUSD);
-                        columns.Bound(p => p.AssetDescription);
-                        columns.Bound(p => p.New);
-                        columns.Bound(p => p.item);
-                        columns.Bound(p => p.Id).EditorTemplateName("ReadOnlyTemplate");
-                        columns.Command(command => { command.Edit(); command.Destroy(); }).Width(250);
-                    })
-                    .ToolBar(toolbar => toolbar.Create())
-                    .Editable(editable => editable.Mode(GridEditMode.PopUp))
-                    .DataSource(dataSource => dataSource
-                        .Ajax()
-                        .Events(events =>events.Error("error_handler"))
-                        .Model(model => 
-                        {
-                            model.Id(p => p.Id);
-                            model.Field(p => p.Id).Editable(false);
-                        })
-                        .Create(update => update.Action("EditingPopup_Create", "ASSAssetAcquisition"))
-                        .Read(read => read.Action("Create", "ASSAssetAcquisition"))
-                        .Update(update => update.Action("EditingPopup_Update", "ASSAssetAcquisition"))
-                        .Destroy(update => update.Action("EditingPopup_Destroy", "ASSAssetAcquisition"))
-                        )
-                )
-            </div>
+            @Html.Partial("_AssetAcqDetail", Model.AssetAcquisitionItems)
         </div>
-
-        <input class="k-button k-button-icontext k-grid-add" type="submit" />
     </fieldset>
-    
-</form>
-<script type="text/javascript">
-    function error_handler(e) {
-        if (e.errors) {
-            var message = "Errors:\n";
-            $.each(e.errors, function (key, value) {
-                if ('errors' in value) {
-                    $.each(value.errors, function () {
-                        message += this + "\n";
-                    });
-                }
-            });
-            alert(message);
-        }
-    }
 
-</script>
-
-
+}

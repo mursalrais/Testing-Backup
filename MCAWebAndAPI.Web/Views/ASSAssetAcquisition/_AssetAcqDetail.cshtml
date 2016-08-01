@@ -1,0 +1,45 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Asset
+
+
+
+@model IEnumerable<AssetAcquisitionItemVM>
+
+<div class="col-sm-12">
+
+    @(Html.Kendo().Grid(Model)
+        .Name("AssetAcquisitionItems")
+        .ToolBar(tools => tools.Create().Text("Add New Asset Acquisition Detail"))
+        .Editable(editable => editable.Mode(GridEditMode.InCell)
+        .CreateAt(GridInsertRowPosition.Bottom))
+        .Columns(columns =>
+        {
+            columns.Bound(p => p.POLineItem).ClientTemplate("#= kendo.toString(POLineItem, 'MM-dd-yyyy') #" +
+            "<input type='hidden' name='AssetAcquisitionItems[#= GetAssetAcqDetails(data)#].POLineItem' value='#= DateOfNewFee #' />"
+            );
+
+            columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
+            .Click("onDeleteKendoDetail")).Width(100);
+        })
+        .Events(e =>
+        {
+            e.Edit("onEditKendoDetail");
+            e.DataBound("onDataBoundMonthlyFeeDetails");
+        })
+        .DataSource(dataSource => dataSource.Ajax()
+        .Model(model =>
+        {
+            model.Id(p => p.ID);
+            //model.Field(m => m.DateOfNewFee).DefaultValue(DateTime.UtcNow);
+            //model.Field(m => m.Currency).DefaultValue(MonthlyFeeDetailVM.GetCurrencyDefaultValue());
+        })
+        .ServerOperation(false)
+        )
+    )
+</div>
+
+<script>
+    function onDataBoundMonthlyFeeDetails(e) {
+        var grid = $("#MonthlyFeeDetails").data("kendoGrid");
+        hideDeletedRowKendoDetail(grid);
+    }
+</script>

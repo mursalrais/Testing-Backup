@@ -3,7 +3,12 @@ using Kendo.Mvc.UI;
 using MCAWebAndAPI.Model.ViewModel.Form.Asset;
 using MCAWebAndAPI.Service.Asset;
 using MCAWebAndAPI.Web.Helpers;
+using MCAWebAndAPI.Web.Resources;
+using System;
+using System.Net;
 using System.Web.Mvc;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -16,38 +21,15 @@ namespace MCAWebAndAPI.Web.Controllers
             _assetAcquisitionService = new AssetAcquisitionService();
         }
 
-        // GET: ASSAssetAcquisition
-        public ActionResult Index()
+       public ActionResult CreateHeader(string siteUrl = null)
         {
-            return View();
-        }
+            //a must
+            //_assetAcquisitionService.SetSiteUrl(siteUrl);
+            //SessionManager.Set<string>("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
-        public ActionResult Create()
-        {
-            var viewModel = _assetAcquisitionService.GetAssetAcquisition_Dummy();
-
-            return View(viewModel);
-        }
-
-        [HttpPost]
-        public ActionResult Submit(AssetAcquisitionVM _data)
-        {
-            //return View(new AssetAcquisitionVM());
-            var data = _data;
-
-            return this.Jsonp(data);
-        }
-
-        [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult EditingPopup_Create([DataSourceRequest] DataSourceRequest request, AssetAcquisitionItemVM _assetAcquisitionVM)
-        {
-            if (_assetAcquisitionVM != null && ModelState.IsValid)
-            {
-                _assetAcquisitionService.CreateAssetAcquisitionItem_dummy(_assetAcquisitionVM);
-                //productService.Create(_assetAcquisitionItem);
-            }
-
-            return Json(new[] { _assetAcquisitionVM }.ToDataSourceResult(request, ModelState));
+            //get blank viewmodel
+            var viewmodel = _assetAcquisitionService.getPopulatedModel();
+            return View("Create", viewmodel);
         }
     }
 }

@@ -4,30 +4,35 @@ using System;
 using MCAWebAndAPI.Model.ViewModel.Control;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using MCAWebAndAPI.Model.Common;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 {
-    public class AssetAcquisitionHeaderVM
+    public class AssetAcquisitionHeaderVM : Item
     {
         public int Id { get; set; }
-        private DateTime _warrantyExpires;
-        private ComboBoxVM _acceptanceMemoNo;        
+        private DateTime _purchaseDate;
+        private ComboBoxVM _acceptanceMemoNo;
 
+        public IEnumerable<AssetAcquisitionItemVM> AssetAcquisitionItems { get; set; } = new List<AssetAcquisitionItemVM>();
         public string TransactionType { get; set; }
-        public string PurchaseDescription { get; set; }      
+        public string PurchaseDescription { get; set; }
+        public string Vendor { get; set; }
+        public string PoNo { get; set; }
 
+        [UIHint("Date")]
         public DateTime PurchaseDate
         {
             get
             {
-                if (_warrantyExpires == null)
-                    _warrantyExpires = new DateTime();
-                return _warrantyExpires;
+                if (_purchaseDate == null)
+                    _purchaseDate = new DateTime();
+                return _purchaseDate;
             }
 
             set
             {
-                _warrantyExpires = value;
+                _purchaseDate = value;
             }
         }
 
@@ -41,10 +46,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
                     {
                         Choices = new string[]
                         {
-                            "Acceptance Memo No 1",
-                            "Acceptance Memo No 2",
-                            "Acceptance Memo No 3"
+                            ""
                         }
+                        ,OnSelectEventName = "onAcceptanceMemoChange"
                     };
                 return _acceptanceMemoNo;
             }

@@ -1249,6 +1249,7 @@
     <Content Include="Views\HRInsuranceClaim\ViewClaimAll.cshtml" />
     <Content Include="Views\HRInsuranceClaim\ViewClaimOutStanding.cshtml" />
     <Content Include="Views\HRInsuranceClaim\_ClaimComponentAXA.cshtml" />
+    <Content Include="Views\ASSAssetAcquisition\_AssetAcqDetail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
