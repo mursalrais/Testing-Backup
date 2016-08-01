@@ -5,20 +5,27 @@ using System.Text;
 using System.Threading.Tasks;
 using MCAWebAndAPI.Model.ViewModel.Form.Asset;
 using NLog;
+using MCAWebAndAPI.Service.Utils;
+using MCAWebAndAPI.Model.Common;
+using MCAWebAndAPI.Service.Resources;
+using Microsoft.SharePoint.Client;
 
 namespace MCAWebAndAPI.Service.Asset
 {
     public class AssetAcquisitionService : IAssetAcquisitionService
     {
-        string _siteUrl = null;
+        string _siteUrl = "https://eceos2.sharepoint.com/sites/mca-dev/bo/";
         static Logger logger = LogManager.GetCurrentClassLogger();
+        const string SP_ASSACQ_LIST_NAME = "Asset Acqusitiion";
+        const string SP_ASSACQDetails_LIST_NAME = "Asset Acqusitiion Details";
+        const string SP_ACC_MEMO_LIST_NAME = "Acceptance Memo";
 
         public void SetSiteUrl(string siteUrl)
         {
             _siteUrl = siteUrl;
         }
 
-        public AssetAcquisitionVM GetAssetAcquisitions()
+        public AssetAcquisitionVM GetAssetAcquisition()
         {
             throw new NotImplementedException();
         }
@@ -28,45 +35,41 @@ namespace MCAWebAndAPI.Service.Asset
             throw new NotImplementedException();
         }
 
-        public bool CreateAssetAcquisition_dummy(AssetAcquisitionVM assetAcquisition)
-        {
-            var entitiy = new AssetAcquisitionVM();
-            entitiy = assetAcquisition;
-            return true;
-        }
-
-        public bool CreateAssetAcquisitionItem_dummy(AssetAcquisitionItemVM assetAcquisition)
-        {
-            var entitiy = new AssetAcquisitionItemVM();
-            entitiy = assetAcquisition;
-            return true;
-        }
-
         public bool UpdateAssetAcquisition(AssetAcquisitionVM assetAcquisition)
         {
             throw new NotImplementedException();
         }
 
-        IEnumerable<AssetAcquisitionVM> IAssetAcquisitionService.GetAssetAcquisitions()
+        IEnumerable<AssetAcquisitionVM> IAssetAcquisitionService.GetAssetAcquisition()
         {
             throw new NotImplementedException();
         }
 
-        public AssetAcquisitionVM GetAssetAcquisition_Dummy()
+        public AssetAcquisitionVM GetAssetAcquisitionItems_Dummy()
         {
             var viewModel = new AssetAcquisitionVM();
 
-            var list = new List<AssetAcquisitionItemVM>();
-            list.Add(new AssetAcquisitionItemVM()
-            {
-                AssetDescription = "Asseasfas",
-                CostUSD = 20000,
-                New = "Newwww",
-                Id = 1                
-            });
-            viewModel.Items = list;
+
 
             return viewModel;
         }
+
+        public bool CreateAssetAcquisition_Dummy(AssetAcquisitionItemVM assetAcquisition)
+        {
+            var entity = new AssetAcquisitionItemVM();
+            entity = assetAcquisition;
+            return true;
+        }
+
+        public bool UpdateAssetAcquisition_Dummy(AssetAcquisitionItemVM assetAcquisition)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool DestroyAssetAcquisition_Dummy(AssetAcquisitionItemVM assetAcquisition)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

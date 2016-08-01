@@ -20,7 +20,10 @@
     <fieldset>
         @Html.HiddenFor(m => m.cmpID)
         @Html.HiddenFor(m => m.cmpName)
+        @Html.HiddenFor(m => m.cmpTitle)
         @Html.HiddenFor(m => m.cmpPosition)
+        @Html.HiddenFor(m => m.cmpYearDate)
+
         <input type="hidden" id="loadpage" value="0">
         <div class="row">
             <div class="form-group">
@@ -124,6 +127,52 @@
             @section scripts{
 
                 <script>
+                    $(document).ready(function () {
+                        var positionID = $("#CmpName").val() + " - " + $("#CmpPosition").val();
+                        $("#NamePos").prop("value", positionID);
+
+                        $("#cancel-button").click(function () {
+                            
+                            showLoading();
+                            var url = "/HRCompensatory/GetCompensatoryDetails?idComp=" + $("#cmpID").val();
+
+                            $('#compensatorylist').load(url, function (response, status, xhr) {
+                                if (status == "success") {
+                                    hideLoading();
+                                }
+                            });
+                        });
+
+                        $("#submitonly-button").click(function () {
+                            $("#StatusForm").val("submit")
+                            $("form").submit();
+                        });
+
+                        $("#submit-button").click(function () {
+                            $("form").submit();
+                        });
+
+                        $("#approve-button").click(function () {
+                            $("form").submit();
+                        });
+
+                        $("#submit-draft-button").click(function () {
+                            $("#StatusForm").val("Draft")
+                            $("form").submit();
+                        });
+
+                        $('#reject-button').click(function (e) {
+                            $("#StatusForm").val("Reject")
+                            $("form").submit();
+                        });
+
+                        $('#print-button').click(function (e) {
+                            $("#ParentDiv").show();
+                            var url = "/HRCompensatory/PrintCompensatoryRequest";
+                            submitFormToPrint(url);
+                        });
+
+                    });
 
                     function filterLevel() {
                         return {
@@ -132,7 +181,7 @@
                     }
 
                     function OnChangeCompensatory(e) {
-                        debugger;
+                        
                         var dataItem = this.dataItem(e.item);
                         var idComp = null;
                         var CompStatus = null;
@@ -181,55 +230,6 @@
                         }
                     };
 
-                    $(document).ready(function () {
-                        var positionID = $("#CmpName").val() + " - " + $("#CmpPosition").val();
-                        $("#NamePos").prop("value", positionID);
-
-
-
-                        $("#cancel-button").click(function () {
-                            debugger;
-                            showLoading();
-                            var url = "/HRCompensatory/GetCompensatoryDetails?idComp=" + $("#cmpID").val();
-
-                            $('#compensatorylist').load(url, function (response, status, xhr) {
-                                if (status == "success") {
-                                    hideLoading();
-                                }
-                            });
-                        });
-
-                        $("#submitonly-button").click(function () {
-                            $("#StatusForm").val("submit")
-                            $("form").submit();
-                        });
-
-                        $("#submit-button").click(function () {
-                            $("form").submit();
-                        });
-
-                        $("#approve-button").click(function () {
-                            $("form").submit();
-                        });
-
-                        $("#submit-draft-button").click(function () {
-                            $("#StatusForm").val("Draft")
-                            $("form").submit();
-                        });
-
-                        $('#reject-button').click(function (e) {
-                            $("#StatusForm").val("Reject")
-                            $("form").submit();
-                        });
-
-                        $('#print-button').click(function (e) {
-                            $("#ParentDiv").show();
-                            var url = "/HRCompensatory/PrintCompensatoryRequest";
-                            submitFormToPrint(url);
-                        });
-
-                    });
-
                     function getDayName(date) {
                         var day = new Array();
                         day[0] = "Monday";
@@ -271,7 +271,7 @@
                                 }
                             });
                         });
-                        debugger;
+                        
                         if ((finish + finishsec) <= start) {
                             alert("FinishTime can not be smaller than the starttime..!!")
                         }

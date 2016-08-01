@@ -171,21 +171,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         public int PositionID { get; set; }
 
-        ///// <summary>
-        ///// Exit Procedure Status
-        ///// </summary>
-        //[UIHint("ComboBox")]
-        //[Required]
-        //public ComboBoxVM StatusForm { get; set; } = new ComboBoxVM
-        //{
-        //    Choices = new string[]
-        //    {
-        //        "Draft",
-        //        "Pending Approval",
-        //        "Approved"
-        //    },
-        //    Value = "Draft"
-        //};
-
+        
     }
 }

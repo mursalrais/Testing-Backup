@@ -190,6 +190,11 @@ namespace MCAWebAndAPI.Web.Controllers
                 RedirectToAction("Index", "Error");
             }
 
+            //if(viewModel.CheckDocument == "Not Completed")
+            //{
+            //    ModelState.AddModelError("Model Invalid", );   
+            //}
+
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             exitProcedureService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 

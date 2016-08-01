@@ -38,7 +38,7 @@
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.InterviewerPanel).Class("col-sm-2 control-label")
                     <div class="col-sm-6">
-                        @Html.EditorFor(m => m.InterviewerPanel)
+                        @Html.TextBoxFor(m => m.InterviewerPanel, new { @class = "form-control", @onblur = "validatmail()", style = "height:40px; weight:40px; ", @placeholder = "Please Input Email" })
                     </div>
                 </div>
             </div>
@@ -53,20 +53,10 @@
                 </div>
             </div>
             <div class="col-sm-12">
-
-                @*<button id="submit-nextstep" class="btn btn-primary" type="submit">
-                    <i class="fa fa-save"></i>
-                    send to next step
-                </button>*@
                 <button id="submit-button" class="btn btn-primary" type="submit">
                     <i class="fa fa-send"></i>
                     Send Email to Interviewer Panel
                 </button>
-                @*<button id="submit-cancel" class="btn btn-primary" type="submit">
-                    <i class="fa fa-save"></i>
-                    cancel
-                </button>*@
-
             </div>
         </div>
         </div>
@@ -81,7 +71,7 @@
 
 
         $(document).ready(function () {
-            debugger;
+            
             $("#vacant-position").prop('readonly', 'true');
             var positionID = $("#Position").val();
 
@@ -92,7 +82,12 @@
 
             })
         });
-         
+
+        function validatmail() {
+            
+            validatemail("InterviewerPanel");
+        }
+
     </script>
 
 }

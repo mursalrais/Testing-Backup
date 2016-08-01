@@ -61,17 +61,6 @@
     function onDataBoundDependentDetails(e) {
         var grid = $("#ShortlistDetails").data("kendoGrid");
         hideDeletedRowKendoDetail(grid);
-        debugger;
-
-        var data = this._data;
-
-        for (var i = 0; i < this._data.length; i++) {
-            var dataItem = data[i];
-            var status = dataItem.GetStat;
-            if (status == "Shortlisted") {
-                document.getElementById('ShortlistDetails['+ i +'].neednexttext').style.display = 'none';
-            }
-        }
     }
 
 </script>

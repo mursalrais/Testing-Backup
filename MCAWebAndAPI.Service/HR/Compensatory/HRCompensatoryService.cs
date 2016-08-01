@@ -46,12 +46,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return useraccess;
         }
 
-        private CompensatoryVM ConvertCompInputTolistDataVM(ListItem listItem)
+        private CompensatoryVM ConvertCompInputTolistDataVM(ListItem listItem, CompensatoryVM viewModel)
         {
-            var viewModel = new CompensatoryVM();
-
-            viewModel.cmpName = Convert.ToString(listItem["Title"]);
             viewModel.cmpEmail = Convert.ToString(listItem["officeemail"]);
+            viewModel.cmpName = Convert.ToString(listItem["Title"]) + Convert.ToString(listItem["lastname"]);
             viewModel.cmpProjUnit = Convert.ToString(listItem["Project_x002f_Unit"]);
             viewModel.cmpPosition = FormatUtil.ConvertLookupToValue(listItem, "Position");
             viewModel.ddlProfessional.Value = Convert.ToInt32(listItem["ID"]);
@@ -81,6 +79,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                           <FieldRef Name='Title' />
                           <FieldRef Name='professional_x003a_ID' />
                           <FieldRef Name='crstatus' />
+                          <FieldRef Name='Created' />
                      </ViewFields> 
                     </View>";
 
@@ -89,6 +88,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 profID = Convert.ToInt32(FormatUtil.ConvertLookupToID(item, "professional_x003a_ID") + string.Empty);
                 crstatus = Convert.ToString(item["crstatus"]);
+                viewModel.cmpTitle = Convert.ToString(item["Title"]);
+                viewModel.cmpYearDate = Convert.ToString(item["Created"]);
             }
 
             if (crstatus == "")
@@ -108,7 +109,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 }
             }
 
-            return GetComplisted(iD, profID, crstatus);
+            return GetComplisted(iD, profID, crstatus, viewModel);
         }
 
         public CompensatoryVM GetComplistbyProfid(int? iD)
@@ -131,6 +132,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                      <ViewFields> 
                           <FieldRef Name='Title' />
                           <FieldRef Name='ID' />
+                          <FieldRef Name='Created' />
                           <FieldRef Name='crstatus' />
                      </ViewFields> 
                     </View>";
@@ -140,6 +142,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 cmpID = Convert.ToInt32(item["ID"]);
                 crstatus = Convert.ToString(item["crstatus"]);
+                viewModel.cmpTitle = Convert.ToString(item["Title"]);
+                viewModel.cmpYearDate = Convert.ToString(item["Created"]);
             }
 
             if (crstatus == "")
@@ -159,7 +163,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 }
             }
 
-            return GetComplisted(cmpID, iD, crstatus);
+            return GetComplisted(cmpID, iD, crstatus, viewModel);
         }
 
         private int GetCompID(int? ID)
@@ -177,7 +181,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                        </Where>
                     </Query> 
                      <ViewFields> <FieldRef Name='Title' />
-                       <FieldRef Name='ID' /> <FieldRef Name='crstatus' /></ViewFields> 
+                       <FieldRef Name='ID' /> 
+                       <FieldRef Name='crstatus' />
+                     </ViewFields> 
                     </View>";
 
             var compID = 0;
@@ -230,29 +236,26 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 foreach (var item2 in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl, caml2))
                 {
                     viewModel.cmpID = Convert.ToInt32(item2["ID"]);
-                    viewModel.cmpName = Convert.ToString(item2["Title"]);
                     viewModel.cmpProjUnit = Convert.ToString(item2["Project_x002f_Unit"]);
                     viewModel.cmpPosition = FormatUtil.ConvertLookupToValue(item2, "Position");
-                    viewModel.CompensatoryDetails = GetCompDetailist(GetCompID(Convert.ToInt32(item2["ID"])));
+                    viewModel.CompensatoryDetails = GetCompDetailist(GetCompID(Convert.ToInt32(item2["ID"])), viewModel);
                 }
 
             }
             return viewModel;
         }
 
-        private CompensatoryVM GetComplisted(int? ID, int? idPro, string crstatus)
+        private CompensatoryVM GetComplisted(int? ID, int? idPro, string crstatus, CompensatoryVM viewModel)
         {
-            var viewModel = new CompensatoryVM();
-
             if (idPro == 0)
                 return viewModel;
 
             var listItem = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, idPro, _siteUrl);
             viewModel.ddlProfessional.Value = Convert.ToInt32(idPro);
-            viewModel = ConvertCompInputTolistDataVM(listItem);
+            viewModel = ConvertCompInputTolistDataVM(listItem, viewModel);
             viewModel.cmpID = ID;
             viewModel.StatusForm = crstatus;
-            viewModel.CompensatoryDetails = GetCompDetailist(ID);
+            viewModel.CompensatoryDetails = GetCompDetailist(ID, viewModel);
 
             return viewModel;
         }
@@ -264,7 +267,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         //   < FieldRef Name='yearofgraduation' />
         //   <FieldRef Name = 'remarks' />
         //</ ViewFields >
-        private IEnumerable<CompensatoryDetailVM> GetCompDetailist(int? ID)
+        private IEnumerable<CompensatoryDetailVM> GetCompDetailist(int? ID, CompensatoryVM viewModel)
         {
             var caml = @"<View>  
                               <Query> 
@@ -296,6 +299,12 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             foreach (var item in SPConnector.GetList(SP_COMDET_LIST_NAME, _siteUrl, caml))
             {
                 shortlistDetails.Add(ConvertToCompDetailVM(item));
+                shortlistDetails.Add(new CompensatoryDetailVM
+                {
+                    CmpProjUnit = viewModel.cmpProjUnit,
+                    CmpPos = viewModel.cmpPosition
+                });
+
             }
 
             return shortlistDetails;

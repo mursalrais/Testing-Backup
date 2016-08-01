@@ -501,7 +501,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 if (mail != "")
                 {
-                    EmailUtil.Send(mail, "Interview Invitation", viewModel.InterviewSummary);
+                    if (EmailUtil.IsValidEmailId(mail))
+                    {
+                        EmailUtil.Send(mail, "Interview Invitation", viewModel.InterviewSummary);
+                    }
                 }
             }
         }

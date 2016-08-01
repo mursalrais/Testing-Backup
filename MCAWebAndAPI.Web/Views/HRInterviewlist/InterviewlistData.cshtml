@@ -38,7 +38,7 @@
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.InterviewerPanel).Class("col-sm-2 control-label")
                     <div class="col-sm-6">
-                        @Html.EditorFor(m => m.InterviewerPanel)
+                        @Html.TextBoxFor(m => m.InterviewerPanel, new { @class = "form-control", @onblur = "validatmail()", style = "height:40px; weight:40px;", @placeholder = "Please Input Email" })
                     </div>
                 </div>
             </div>
@@ -78,6 +78,12 @@
                 $("#PositionName").prop("value", data.PositionName);
             })
         });
+
+        function validatmail() {
+            
+            validatemail("InterviewerPanel");
+        }
+
     </script>
 
 }

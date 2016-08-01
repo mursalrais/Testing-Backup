@@ -10,6 +10,8 @@ using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Model.ViewModel.Control;
 using MCAWebAndAPI.Web.Filters;
 using MCAWebAndAPI.Web.Resources;
+using System.Net;
+using MCAWebAndAPI.Service.Resources;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -22,62 +24,103 @@ namespace MCAWebAndAPI.Web.Controllers
             _locationMasterService = new LocationMasterService();
         }
 
-        // GET: ASSLocationMaster
-        public ActionResult Index()
+        public ActionResult CreateLocationMaster(string siteUrl = null)
         {
-            return View();
-        }
-
-        public ActionResult Edit()
-        {
-            return View();
-        }
-
-        public ActionResult IFrame()
-        {
-            return View();
-        }
-
-        public ActionResult Create(string siteUrl = null, string userId = null)
-        {
-
-            if (System.Web.HttpContext.Current.Session.Keys.Count > 0)
-                System.Web.HttpContext.Current.Session.Clear();
-
             // MANDATORY: Set Site URL
-            _locationMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            System.Web.HttpContext.Current.Session["SiteUrl"] = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
+            _locationMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
-            var viewModel = _locationMasterService.GetLocationMaster();
+            ViewBag.Action = "CreateLocationMaster";
 
-            return View(viewModel);
+            // Get blank ViewModel
+            var viewModel = _locationMasterService.GetPopulatedModel();
+
+            // Return to the name of the view and parse the model
+            return View("Create", viewModel);
         }
-
-        //public ActionResult SubmitEvent(LocationMasterVM[] Options)
-        //{
-        //    return Json(new { status = "Success", message = "Success" });
-        //}
 
         [HttpPost]
-        public JsonResult Submit(LocationMasterVM _data)
+        public ActionResult CreateLocationMaster(FormCollection form, LocationMasterVM viewModel)
         {
-            _locationMasterService.CreateLocationMaster(_data);
-            if (!ModelState.IsValid)
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _locationMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            int? headerID = null;
+            try
             {
-                return new JsonResult()
+                headerID = _locationMasterService.CreateHeader(viewModel, viewModel.Province.Text, viewModel.OfficeName, viewModel.FloorName, viewModel.RoomName);
+                if (headerID == 0)
                 {
-                    JsonRequestBehavior = JsonRequestBehavior.AllowGet,
-                    Data = new { result = "Error" }
-                };
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    return JsonHelper.GenerateJsonErrorResponse("This Location is Already Exist");
+                }
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            //add to database
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.MonthlyFee);
+        }
 
-            return new JsonResult()
+        public JsonResult GetLocationMaster()
+        {
+            _locationMasterService.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));
+
+            var professionalmonthlyfee = GetFromLocationMasterExistingSession();
+            return Json(professionalmonthlyfee.Select(e =>
+                new
+                {
+                    e.ID,
+                    e.Title
+                }),
+                JsonRequestBehavior.AllowGet);
+        }
+
+        private IEnumerable<LocationMasterVM> GetFromLocationMasterExistingSession()
+        {
+            //Get existing session variable
+            var sessionVariable = System.Web.HttpContext.Current.Session["LocationMaster"] as IEnumerable<LocationMasterVM>;
+            var locationMaster = sessionVariable ?? _locationMasterService.GetLocationMaster();
+
+            if (sessionVariable == null) // If no session variable is found
+                System.Web.HttpContext.Current.Session["LocationMaster"] = locationMaster;
+            return locationMaster;
+        }
+
+        public ActionResult UpdateProvince(string siteUrl = null, string Update = null)
+        {
+            // MANDATORY: Set Site URL
+            _locationMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            ViewBag.Action = "UpdateProvince";
+            var viewModel = _locationMasterService.GetPopulatedModel();
+            
+            viewModel.Update = Update;
+
+            // Return to the name of the view and parse the model
+            return View("Create");
+        }
+
+        [HttpPost]
+        public ActionResult UpdateProvince(FormCollection form, LocationMasterVM viewModel)
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _locationMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            try
             {
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet,
-                Data = new { result = "Success" }
-            };
+                var province = _locationMasterService.UpdateProvince();
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.MonthlyFee);
         }
     }
 }

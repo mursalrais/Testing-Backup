@@ -105,21 +105,19 @@
     <Compile Include="Asset\IAssetTransferService.cs" />
     <Compile Include="Asset\IAssignmentofAssetService.cs" />
     <Compile Include="Asset\ILocationMasterService.cs" />
-    <Compile Include="Asset\ILocationService.cs" />
     <Compile Include="Asset\LocationMasterService.cs" />
-    <Compile Include="Asset\LocationService.cs" />
     <Compile Include="Common\ILocationService.cs" />
     <Compile Include="Common\IWorkflowService.cs" />
     <Compile Include="Common\LocationService.cs" />
     <Compile Include="Common\WorkflowService.cs" />
     <Compile Include="Converter\CSVConverter.cs" />
     <Compile Include="Converter\PDFConverter.cs" />
-    <Compile Include="Finance\EventBudgetService.cs" />
-    <Compile Include="Finance\IEventBudgetService.cs" />
     <Compile Include="HR\Compensatory\HRCompensatoryService.cs" />
     <Compile Include="HR\Compensatory\IHRCompensatoryService.cs" />
     <Compile Include="HR\InsuranceClaim\IInsuranceClaimService.cs" />
     <Compile Include="HR\InsuranceClaim\InsuranceClaimService.cs" />
+    <Compile Include="HR\Leave\HRDayOffBalanceService.cs" />
+    <Compile Include="HR\Leave\IHRDayOffBalanceService.cs" />
     <Compile Include="HR\Payroll\FeeSlipService.cs" />
     <Compile Include="HR\Payroll\IFeeSlipService.cs" />
     <Compile Include="HR\Recruitment\ExitProcedureService.cs" />
@@ -132,6 +130,7 @@
     <Compile Include="HR\Recruitment\IHRProfessionalPerformanceEvaluationService.cs" />
     <Compile Include="HR\Recruitment\IPerformanceEvaluationService.cs" />
     <Compile Include="HR\Recruitment\IPerformanceMonitoringService.cs" />
+    <Compile Include="HR\Recruitment\PayrollHelper.cs" />
     <Compile Include="HR\Recruitment\PerformanceEvaluationService.cs" />
     <Compile Include="HR\Recruitment\PerformanceMonitoringService.cs" />
     <Compile Include="HR\Timesheet\ITimesheetService.cs" />
@@ -187,7 +186,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ContractProcurement\" />
-    <Folder Include="HR\Leave\" />
+    <Folder Include="Finance\" />
     <Folder Include="ProjectManagement\Finance\" />
     <Folder Include="ProjectManagement\Result\" />
     <Folder Include="ResourceAndContract\" />
