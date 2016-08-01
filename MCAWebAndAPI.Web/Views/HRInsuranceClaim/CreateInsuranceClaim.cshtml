@@ -3,13 +3,15 @@
 
 
 
-@using (Html.BeginForm("SubmitInsuranceClaim", "HRInsuranceClaim", FormMethod.Post,
-    new
-    {
-        @class = "form-horizontal",
-        enctype = "multipart/form-data"
-    }))
-
+@using (Ajax.BeginForm("SubmitInsuranceClaim", "HRInsuranceClaim",
+                                                                            FormMethod.Post,
+                                                                            new AjaxOptions
+                                                                            {
+                                                                                OnBegin = "onBeginForm",
+                                                                                OnComplete = "onCompleteForm",
+                                                                                OnSuccess = "onSuccessFormEmbed",
+                                                                                OnFailure = "onFailureForm"
+                                                                            }, new { @class = "form-horizontal" }))
 
 
 
@@ -23,6 +25,7 @@
         @Html.HiddenFor(m => m.UserPermission)
         @Html.HiddenFor(m => m.ClaimStatus)
         @Html.HiddenFor(m => m.VisibleTo)
+        @Html.HiddenFor(m => m.TotalAmount)
         <div class="col-sm-6">
 
             <div class="form-group">
@@ -159,11 +162,11 @@
 
         function OnSelectType(e) {
 
-            var dataItem = this.dataItem(e.item);
+            var dataItem = this.dataItem(e.item.index());
             var dependent = $("#DependantName_Value").data("kendoDropDownList");
             $('#IndividualInsuranceNumber').prop('value', '');
             $('#OrganizationInsuranceID').prop('value', '');
-            if (dataItem.Text === 'Professional') {
+            if (dataItem === 'Professional') {
                 dependent.enable(false);
             } else {
                 dependent.enable(true);
