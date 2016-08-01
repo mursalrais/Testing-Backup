@@ -63,7 +63,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Kendo.Mvc">
-      <HintPath>..\..\..\..\Downloads\MCA-tools\Kendo.Mvc.dll</HintPath>
+      <HintPath>..\MCAWebAndAPI.Model\bin\Debug\Kendo.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.Web.Optimization.WebForms">
       <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.WebForms.1.1.3\lib\net45\Microsoft.AspNet.Web.Optimization.WebForms.dll</HintPath>
@@ -175,7 +175,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Readme\Elmah.txt" />
     <Content Include="bin\Antlr3.Runtime.dll" />
     <Content Include="bin\Antlr3.Runtime.pdb" />
     <Content Include="bin\AspNet.ScriptManager.bootstrap.dll" />
@@ -694,20 +693,10 @@
     <Content Include="Content\kendo\2016.2.714\fonts\glyphs\KendoUIGlyphs.woff" />
     <Content Include="Content\kendo\2016.2.714\images\kendoui.ttf" />
     <Content Include="Content\kendo\2016.2.714\images\kendoui.woff" />
-    <Content Include="App_Data\askjasjoi_Application.pdf" />
-    <Content Include="App_Data\Dewa_Application.pdf" />
-    <Content Include="App_Data\kjahkjhjah_Application.pdf" />
-    <Content Include="App_Data\Rahadian1_Application.pdf" />
-    <Content Include="App_Data\Rahadian_Application.pdf" />
-    <Content Include="App_Data\Randi_Application.pdf" />
     <None Include="job_scheduling_data_2_0.xsd">
       <SubType>Designer</SubType>
     </None>
     <Content Include="JSLintNet.json" />
-    <Content Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
-    <Content Include="obj\Debug\MCAWebAndAPI.Web.csproj.GenerateResource.Cache" />
-    <Content Include="obj\Debug\MCAWebAndAPI.Web.csprojResolveAssemblyReference.cache" />
-    <None Include="obj\Debug\__TestProfilesForFilePreview__\mcaims-dev - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\host.my-epmo.com.pubxml" />
     <None Include="Properties\PublishProfiles\mcaims-dev - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\mcaims-dev - Web Deploy.pubxml" />
@@ -719,10 +708,6 @@
     <Content Include="img\favicon\favicon.ico" />
     <Content Include="img\mybg.png" />
     <Content Include="logs\logfile.txt" />
-    <Content Include="obj\Debug\Package\FilePreviewParameter.xml" />
-    <Content Include="obj\Debug\TempPE\Resources.ConfigResource.Designer.cs.dll" />
-    <Content Include="obj\Debug\TempPE\Resources.EmailResource.Designer.cs.dll" />
-    <Content Include="obj\Debug\TempPE\Resources.MessageResource.Designer.cs.dll" />
     <Content Include="Scripts\app.config.js" />
     <Content Include="Scripts\app.min.js" />
     <Content Include="Scripts\bi-frame.js" />
@@ -933,7 +918,6 @@
     <Content Include="Views\Shared\EditorTemplates\String.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Time.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Url.cshtml" />
-    <Content Include="Views\FINEventBudget\Create.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\String.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\ComboBox.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\HttpPostedFileBase.cshtml" />
@@ -952,8 +936,6 @@
     <Content Include="Views\ASSAssetScrapping\Edit.cshtml" />
     <Content Include="Views\ASSAssetSmallValueAsset\Create.cshtml" />
     <Content Include="Views\ASSAssetTransfer\Create.cshtml" />
-    <Content Include="Views\ASSAssignmentofAsset\Create.cshtml" />
-    <Content Include="Views\ASSAssignmentofAsset\Edit.cshtml" />
     <Content Include="Views\Shared\_LayoutHome.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\BIEmbed\WFP03.cshtml" />
@@ -1244,19 +1226,32 @@
     <Content Include="Views\HRExitProcedure\ViewExitProcedureForApprover.cshtml" />
     <Content Include="Views\HRExitProcedure\_ExitProcedureChecklistForApprover.cshtml" />
     <Content Include="Views\HRExitProcedure\_ExitProcedureDataForApprover.cshtml" />
-    <Content Include="Views\HRExitProcedure\CreateExitProcedureHR.cshtml" />
-    <Content Include="Views\HRExitProcedure\_ExitProcedureChecklistForHR.cshtml" />
+    <Content Include="Views\HRExitProcedure\_ExitProcedureDataHR.cshtml" />
+    <Content Include="Views\HRExitProcedure\ViewExitProcedureForApprover.cshtml" />
     <Content Include="Views\HRFeeSlip\FeeSlip.cshtml" />
     <Content Include="Views\HRFeeSlip\_FeeSlipDetails.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\Decimal.cshtml" />
+    <Content Include="Views\HRPayroll\DisplayMonthlyFee.cshtml" />
+    <Content Include="Views\Success\ErrorMessage.cshtml" />
+    <Content Include="Views\HRTimesheet\EditTimesheet.cshtml" />
+    <Content Include="Views\HRCompensatory\PrintCompensatoryRequest.cshtml" />
+    <Content Include="Views\HRCompensatory\_CompensatoryRequest_Print.cshtml" />
+    <Content Include="Views\ASSAssignmentofAsset\Create.cshtml" />
+    <Content Include="Views\ASSAssignmentofAsset\Edit.cshtml" />
+    <Content Include="Views\HRInsuranceClaim\EditInsuranceClaim.cshtml" />
+    <Content Include="Views\HRInsuranceClaim\ExportToExcel.cshtml" />
+    <Content Include="Views\HRInsuranceClaim\SubmitAXA.cshtml" />
+    <Content Include="Views\HRInsuranceClaim\ViewClaim.cshtml" />
+    <Content Include="Views\HRInsuranceClaim\ViewClaimAll.cshtml" />
+    <Content Include="Views\HRInsuranceClaim\ViewClaimOutStanding.cshtml" />
+    <Content Include="Views\HRInsuranceClaim\_ClaimComponentAXA.cshtml" />
+    <Content Include="Views\HRPayroll\DisplayPayrollWorksheet.cshtml" />
+    <Content Include="Views\ASSAssetAcquisition\Edit.cshtml" />
+    <Content Include="Views\ASSAssetAcquisition\_Details.cshtml" />
     <Content Include="Views\HRCompensatory\_CompensantoryDetailsHR.cshtml" />
     <Content Include="Views\HRCompensatory\_CompensatoryDetails.cshtml" />
     <Content Include="Views\HRCompensatory\_CompensatoryRequestDetails_Print.cshtml" />
-    <Content Include="Views\HRCompensatory\_CompensatoryRequest_Print.cshtml" />
-    <Content Include="Views\HRCompensatory\PrintCompensatoryRequest.cshtml" />
-    <Content Include="Views\ASSAssetMaster\_DisplayGrid.cshtml" />
-    <Content Include="Views\ASSAssetMaster\Upload.cshtml" />
-    <Content Include="Views\HRPayroll\DisplayMonthlyFee.cshtml" />
-    <Content Include="Views\HRTimesheet\EditTimesheet.cshtml" />
+    <Content Include="Views\HRCompensatory\_CompensatoryDetailsHR.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1287,7 +1282,6 @@
     <Compile Include="Controllers\CSVController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\FileController.cs" />
-    <Compile Include="Controllers\FINEventBudgetController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HRApplicationController.cs" />
     <Compile Include="Controllers\HRCompensatoryController.cs" />
@@ -1327,9 +1321,6 @@
     <Compile Include="Helpers\MathHelper.cs" />
     <Compile Include="Helpers\SessionManager.cs" />
     <Compile Include="Helpers\WorkflowHelper.cs" />
-    <Compile Include="obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
-    <Compile Include="obj\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
-    <Compile Include="obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -1390,10 +1381,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="obj\Debug\MCAWebAndAPI.Web.Resources.ConfigResource.resources" />
-    <EmbeddedResource Include="App_Data\ConfigResource.resx" />
-    <EmbeddedResource Include="obj\Debug\MCAWebAndAPI.Web.Resources.EmailResource.resources" />
-    <EmbeddedResource Include="obj\Debug\MCAWebAndAPI.Web.Resources.MessageResource.resources" />
     <EmbeddedResource Include="Resources\ConfigResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ConfigResource.Designer.cs</LastGenOutput>

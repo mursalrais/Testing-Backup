@@ -33,9 +33,12 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
             get
             {
                 if (_items == null)
+                {
                     _items = new List<AssetAcquisitionItemVM>();
+                }
                 return _items;
             }
+
             set
             {
                 _items = value;

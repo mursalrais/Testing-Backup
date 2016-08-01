@@ -91,7 +91,7 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         public ActionResult CompensatorylistUser(string siteurl = null, int? iD = null, string userAccess = null)
-        {
+       {
             //mandatory: set site url
             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
