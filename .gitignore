@@ -213,3 +213,15 @@ ModelManifest.xml
 MCAWebAndAPI.Web/MCAWebAndAPI.Web.csproj
 MCAWebAndAPI.Web/Resources/EmailResource1.Designer.cs
 MCAWebAndAPI.Web/Resources/EmailResource1.Designer.cs
+/MCAWebAndAPI.Service/Finance/TaxReimbursementService.cs
+/MCAWebAndAPI.Service/Finance/TaxExemptionDataService.cs
+/MCAWebAndAPI.Service/Finance/RequisitionNoteService.cs
+/MCAWebAndAPI.Service/Finance/ITaxReimbursementService.cs
+/MCAWebAndAPI.Service/Finance/ITaxExemptionDataService.cs
+/MCAWebAndAPI.Service/Finance/ISPHLService.cs
+/MCAWebAndAPI.Service/Finance/IRequisitionNote.cs
+/MCAWebAndAPI.Model/Finance/RequisitionNote
+/MCAWebAndAPI.Model/ViewModel/Form/Finance/RequisitionNoteDetailVM.cs
+/MCAWebAndAPI.Model/ViewModel/Form/Finance/TaxReimbursementVM.cs
+/MCAWebAndAPI.Model/ViewModel/Form/Finance/TaxExemptionDataVM.cs
+/MCAWebAndAPI.Web/Controllers/Finance/FINRequisitionNoteController.cs

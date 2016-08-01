@@ -88,6 +88,13 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// CompensatoryDay
         /// </head>
         /// 
+        [DisplayName("Job Title")]
+        public string cmpTitle { get; set; }
+
+        /// <head>
+        /// CompensatoryDay
+        /// </head>
+        /// 
         [DisplayName("Name")]
         public string cmpName { get; set; }
 

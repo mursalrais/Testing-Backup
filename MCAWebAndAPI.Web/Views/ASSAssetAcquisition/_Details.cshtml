@@ -1,6 +1,8 @@
-﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Asset
 
-@model IEnumerable<MonthlyFeeDetailVM>
+
+
+@model IEnumerable<AssetAcquisitionItemVM>
 
 <div class="col-sm-12">
 
@@ -13,22 +15,6 @@
         {
             columns.Bound(p => p.DateOfNewFee).ClientTemplate("#= kendo.toString(DateOfNewFee, 'MM-dd-yyyy') #" +
             "<input type='hidden' name='MonthlyFeeDetails[#= getMonthlyFeeDetail(data)#].DateOfNewFee' value='#= DateOfNewFee #' />"
-            );
-            columns.Bound(p => p.MonthlyFee).ClientTemplate("#= MonthlyFee #" +
-            "<input type='hidden' name='MonthlyFeeDetails[#= getMonthlyFeeDetail(data)#].MonthlyFee' value='#= MonthlyFee #' />"
-            );
-            columns.Bound(p => p.AnnualFee).ClientTemplate("#= AnnualFee #" +
-            "<input type='hidden' name='MonthlyFeeDetails[#= getMonthlyFeeDetail(data)#].AnnualFee' value='#= AnnualFee #' />"
-            );
-            columns.Bound(p => p.Currency).ClientTemplate("#= Currency.Text #" +
-            "<input type='hidden' name='MonthlyFeeDetails[#= getMonthlyFeeDetail(data)#].Currency.Text' value='#= Currency.Text #' />"
-            )
-            .EditorViewData(new
-            {
-                BindTo = MonthlyFeeDetailVM.GetCurrencyOptions()
-            });
-            columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
-            "<input type='hidden' name='MonthlyFeeDetails[#= getMonthlyFeeDetail(data)#].ID' value='#= ID #' />"
             );
 
             columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
@@ -48,7 +34,7 @@
         {
             model.Id(p => p.ID);
             model.Field(m => m.DateOfNewFee).DefaultValue(DateTime.UtcNow);
-            model.Field(m => m.Currency).DefaultValue(MonthlyFeeDetailVM.GetCurrencyDefaultValue());
+            //model.Field(m => m.Currency).DefaultValue(AssetAcquisitionItemVM.GetCurrencyDefaultValue());
         })
         .ServerOperation(false)
         )
