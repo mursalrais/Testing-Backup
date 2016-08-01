@@ -16,7 +16,7 @@
     <RootNamespace>MCAWebAndAPI.Web</RootNamespace>
     <AssemblyName>MCAWebAndAPI.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -62,9 +62,8 @@
       <HintPath>..\packages\Elmah.Mvc.2.1.2\lib\net40\Elmah.Mvc.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Kendo.Mvc, Version=2016.2.504.545, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\KENDOUIMVC\2016.2.714.545\Kendo.Mvc.dll</HintPath>
+    <Reference Include="Kendo.Mvc">
+      <HintPath>..\..\..\..\Downloads\MCA-tools\Kendo.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.Web.Optimization.WebForms">
       <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.WebForms.1.1.3\lib\net45\Microsoft.AspNet.Web.Optimization.WebForms.dll</HintPath>
@@ -938,6 +937,8 @@
     <Content Include="Views\ASSAssetScrapping\Edit.cshtml" />
     <Content Include="Views\ASSAssetSmallValueAsset\Create.cshtml" />
     <Content Include="Views\ASSAssetTransfer\Create.cshtml" />
+    <Content Include="Views\ASSAssignmentofAsset\Create.cshtml" />
+    <Content Include="Views\ASSAssignmentofAsset\Edit.cshtml" />
     <Content Include="Views\Shared\_LayoutHome.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\BIEmbed\WFP03.cshtml" />
@@ -948,6 +949,7 @@
     <Content Include="Views\Shared\EditorTemplates\CurrencyUSD.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\InGridAjaxComboBox.cshtml" />
     <Content Include="Views\ASSLocationMaster\Create.cshtml" />
+    <Content Include="Views\ASSLocationMaster\IFrame.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\TextArea.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\PhoneNumber.cshtml" />
     <Content Include="Views\HRApplication\CreateApplicationData.cshtml" />
@@ -1230,26 +1232,10 @@
     <Content Include="Views\HRExitProcedure\ViewExitProcedureForApprover.cshtml" />
     <Content Include="Views\HRExitProcedure\_ExitProcedureChecklistForApprover.cshtml" />
     <Content Include="Views\HRExitProcedure\_ExitProcedureDataForApprover.cshtml" />
-    <Content Include="Views\HRExitProcedure\_ExitProcedureDataHR.cshtml" />
-    <Content Include="Views\HRExitProcedure\ViewExitProcedureForApprover.cshtml" />
+    <Content Include="Views\HRExitProcedure\CreateExitProcedureHR.cshtml" />
+    <Content Include="Views\HRExitProcedure\_ExitProcedureChecklistForHR.cshtml" />
     <Content Include="Views\HRFeeSlip\FeeSlip.cshtml" />
     <Content Include="Views\HRFeeSlip\_FeeSlipDetails.cshtml" />
-    <Content Include="Views\Shared\DisplayTemplates\Decimal.cshtml" />
-    <Content Include="Views\HRPayroll\DisplayMonthlyFee.cshtml" />
-    <Content Include="Views\Success\ErrorMessage.cshtml" />
-    <Content Include="Views\HRTimesheet\EditTimesheet.cshtml" />
-    <Content Include="Views\HRCompensatory\PrintCompensatoryRequest.cshtml" />
-    <Content Include="Views\HRCompensatory\_CompensatoryRequest_Print.cshtml" />
-    <Content Include="Views\ASSAssignmentofAsset\Create.cshtml" />
-    <Content Include="Views\ASSAssignmentofAsset\Edit.cshtml" />
-    <Content Include="Views\HRInsuranceClaim\EditInsuranceClaim.cshtml" />
-    <Content Include="Views\HRInsuranceClaim\ExportToExcel.cshtml" />
-    <Content Include="Views\HRInsuranceClaim\SubmitAXA.cshtml" />
-    <Content Include="Views\HRInsuranceClaim\ViewClaim.cshtml" />
-    <Content Include="Views\HRInsuranceClaim\ViewClaimAll.cshtml" />
-    <Content Include="Views\HRInsuranceClaim\ViewClaimOutStanding.cshtml" />
-    <Content Include="Views\HRInsuranceClaim\_ClaimComponentAXA.cshtml" />
-    <Content Include="Views\ASSAssetAcquisition\_AssetAcqDetail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1286,6 +1272,7 @@
     <Compile Include="Controllers\HRCompensatoryController.cs" />
     <Compile Include="Controllers\HRDataMasterController.cs" />
     <Compile Include="Controllers\HRExitProcedureController.cs" />
+    <Compile Include="Controllers\HRFeeSlipController.cs" />
     <Compile Include="Controllers\HRInsuranceClaimController.cs" />
     <Compile Include="Controllers\HRInterviewlistController.cs" />
     <Compile Include="Controllers\HRManpowerRequisitionController.cs" />
@@ -1297,6 +1284,7 @@
     <Compile Include="Controllers\HRProfessionalPerformanceEvaluationController.cs" />
     <Compile Include="Controllers\HRPSAManagementController.cs" />
     <Compile Include="Controllers\HRShortlistController.cs" />
+    <Compile Include="Controllers\HRTimesheetController.cs" />
     <Compile Include="Controllers\LocationController.cs" />
     <Compile Include="Controllers\ProjectHierarchyController.cs" />
     <Compile Include="Controllers\PurchaseOrderController.cs" />
