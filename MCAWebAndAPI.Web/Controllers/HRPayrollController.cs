@@ -116,11 +116,41 @@ namespace MCAWebAndAPI.Web.Controllers
             return array;
         }
 
-        IEnumerable<PayrollWorksheetDetailVM> GetPayrollWorksheetDetails(DateTime period)
+        public ActionResult DisplayPayrollWorksheet(string siteUrl)
         {
-            var payrollWorksheetDetails = new List<PayrollWorksheetDetailVM>();
+            SessionManager.Set("SiteUrl", siteUrl);
+            _hRPayrollService.SetSiteUrl(siteUrl);
 
-            return payrollWorksheetDetails;
+
+            var viewModel = new PayrollRunVM();  
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public ActionResult UpdatePeriodWorksheet(PayrollRunVM viewModel)
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _hRPayrollService.SetSiteUrl(siteUrl);
+
+            var viewModelPayroll = new List<PayrollWorksheetDetailVM>();
+            try
+            {
+                viewModelPayroll = _hRPayrollService.GetPayrollWorksheetDetails(viewModel.From).ToList();
+            }
+            catch (Exception e)
+            {
+                return Json(new { message = e.Message }, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new { message = "Period has been updated" }, JsonRequestBehavior.AllowGet);
+        }
+
+
+        [HttpPost]
+        public ActionResult GridWorksheet_ExportExcel(string contentType, string base64, string fileName)
+        {
+            var fileContents = Convert.FromBase64String(base64);
+            return File(fileContents, contentType, fileName);
         }
 
     }

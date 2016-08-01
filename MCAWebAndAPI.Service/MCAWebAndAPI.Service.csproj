@@ -112,8 +112,6 @@
     <Compile Include="Common\WorkflowService.cs" />
     <Compile Include="Converter\CSVConverter.cs" />
     <Compile Include="Converter\PDFConverter.cs" />
-    <Compile Include="Finance\EventBudgetService.cs" />
-    <Compile Include="Finance\IEventBudgetService.cs" />
     <Compile Include="HR\Compensatory\HRCompensatoryService.cs" />
     <Compile Include="HR\Compensatory\IHRCompensatoryService.cs" />
     <Compile Include="HR\InsuranceClaim\IInsuranceClaimService.cs" />
@@ -132,6 +130,7 @@
     <Compile Include="HR\Recruitment\IHRProfessionalPerformanceEvaluationService.cs" />
     <Compile Include="HR\Recruitment\IPerformanceEvaluationService.cs" />
     <Compile Include="HR\Recruitment\IPerformanceMonitoringService.cs" />
+    <Compile Include="HR\Recruitment\PayrollHelper.cs" />
     <Compile Include="HR\Recruitment\PerformanceEvaluationService.cs" />
     <Compile Include="HR\Recruitment\PerformanceMonitoringService.cs" />
     <Compile Include="HR\Timesheet\ITimesheetService.cs" />
@@ -187,6 +186,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ContractProcurement\" />
+    <Folder Include="Finance\" />
     <Folder Include="ProjectManagement\Finance\" />
     <Folder Include="ProjectManagement\Result\" />
     <Folder Include="ResourceAndContract\" />

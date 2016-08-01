@@ -1,0 +1,104 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+
+@model PayrollRunVM
+
+<div class="form-horizontal">
+    <fieldset>
+        <legend>Period Payroll</legend>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.From).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.From)
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.To).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.To)
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.ThirteenMonthDate).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.DisplayFor(m => m.ThirteenMonthDate)
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group"></div>
+            </div>
+        </div>
+        <legend>Payroll Worksheet Details</legend>
+        <div class="row">
+            <div class="col-sm-12">
+                @(Html.Kendo().Grid<PayrollWorksheetDetailVM>()
+                    .Name("PayrollWorksheetGrid")
+                    .Columns(columns =>
+                    {
+                        columns.Bound(e => e.PayrollDate).Width(150).Locked(true).Lockable(false);
+                        columns.Bound(e => e.Last13thMonthDate).Width(150).Locked(true);
+                        columns.Bound(e => e.Name).Width(350).Locked(true);
+                        columns.Bound(e => e.ProjectUnit).Width(200);
+                        columns.Bound(e => e.Position).Width(200);
+                        columns.Bound(e => e.JoinDate);
+                        columns.Bound(e => e.DateOfNewPSA);
+                        columns.Bound(e => e.LastWorkingDate);
+                        columns.Bound(e => e.PSANumber);
+                        columns.Bound(e => e.DateOfNewFee);
+                        columns.Bound(e => e.EndDate);
+                        columns.Bound(e => e.MonthlyFeeMaster);
+                        columns.Bound(e => e.TotalWorkingDays);
+                        columns.Bound(e => e.PropotionalMonthlyFee);
+                        columns.Bound(e => e.Remarks);
+                        columns.Bound(e => e.DaysRequestUnpaid);
+                        columns.Bound(e => e.UnpaidDayOff);
+                        columns.Bound(e => e.Base);
+                        columns.Bound(e => e.Adjustment);
+                        columns.Bound(e => e.SpotAward);
+                        columns.Bound(e => e.RetentionPayment);
+                        columns.Bound(e => e.Overtime);
+                        columns.Bound(e => e.LastWorkingDatePSAGreaterThan);
+                        columns.Bound(e => e.LastWorkingDatePSALessThan);
+                        columns.Bound(e => e.ThirteenthMonthFinal);
+                        columns.Bound(e => e.BalanceWithoutPSA);
+                        columns.Bound(e => e.BalanceWithPSA);
+                        columns.Bound(e => e.DayOffBalance);
+                        columns.Bound(e => e.Payment);
+                        columns.Bound(e => e.Deduction);
+                        columns.Bound(e => e.TakeHomePay);
+                        columns.Bound(e => e.SavingFund);
+                        columns.Bound(e => e.BankAccountName);
+                        columns.Bound(e => e.Currency);
+                        columns.Bound(e => e.BankAccountNumber);
+                        columns.Bound(e => e.BankName);
+                        columns.Bound(e => e.BankBranchOffice);
+                    })
+                    .Excel(excel => excel
+                        .FileName("Kendo UI Grid Export.xlsx")
+                        .Filterable(true)
+                        .ProxyURL(Url.Action("GridWorksheet_ExportExcel", "HRPayroll"))
+                    )
+                    .DataSource(dataSource => dataSource
+                        .Ajax()
+                        .Read(read => read.Action("GridWorksheet_Read", "HRPayroll"))
+                    )
+                    .Scrollable(scrollable => scrollable.Height(600))
+                    .Reorderable(reorderable => reorderable.Columns(true))
+                    .Resizable(resizable => resizable.Columns(true))
+                    .Filterable()
+                    .Sortable()
+                    .Groupable()
+                    .ColumnMenu()
+                )
+            </div>
+        </div>
+    </fieldset>
+</div>

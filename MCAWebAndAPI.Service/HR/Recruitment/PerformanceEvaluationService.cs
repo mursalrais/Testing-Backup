@@ -166,7 +166,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             DateTime Now = DateTime.UtcNow.ToLocalTime();
 
             //get Detail
-            var caml = @"<View><Query><Where><Eq><FieldRef Name='performanceevaluation_x003a_ID' /><Value Type='Lookup'>" + viewModel.ID.Value.ToString() + "</Value></Eq></Where></Query><ViewFields><FieldRef Name='ID' /><FieldRef Name='professional' /><FieldRef Name='Name='performanceevaluation' /><FieldRef Name='ppestatus' /></ViewFields><QueryOptions /></View>";
+            var caml = @"<View><Query><Where><Eq><FieldRef Name='performanceevaluation_x003a_ID' /><Value Type='Lookup'>" + viewModel.ID.Value.ToString() + "</Value></Eq></Where></Query><ViewFields><FieldRef Name='ID' /><FieldRef Name='professional' /><FieldRef Name='Name='performanceevaluation' /><FieldRef Name='ppestatus' /><FieldRef Name='professional_x003a_Last_x0020_Na' /></ViewFields><QueryOptions /></View>";
 
             var PerformancePlanEvaluationDetails = new List<PerformanceEvaluationDetailVM>();
             string color;
@@ -221,7 +221,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 PerformancePlanEvaluationDetails.Add(new PerformanceEvaluationDetailVM
                 {
                     ID = Convert.ToInt32(item["ID"]),
-                    EmployeeName = Convert.ToString((item["professional"] as FieldLookupValue).LookupValue),
+                    EmployeeName = Convert.ToString((item["professional"] as FieldLookupValue).LookupValue)+" "+ Convert.ToString((item["professional_x003a_Last_x0020_Na"] as FieldLookupValue).LookupValue),
                     EvaluationStatus = Convert.ToString(item["ppestatus"]),
                     EvaluationIndicator = color
                 });
