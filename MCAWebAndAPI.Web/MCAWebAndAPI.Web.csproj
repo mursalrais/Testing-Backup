@@ -940,7 +940,6 @@
     <Content Include="Views\BIEmbed\WF01.cshtml" />
     <Content Include="Views\BIEmbed\WFP01.cshtml" />
     <Content Include="Views\BIEmbed\WF03.cshtml" />
-    <Content Include="Views\ASSAssetAcquisition\Create.cshtml" />
     <Content Include="Views\ASSAssetCheckForm\Create.cshtml" />
     <Content Include="Views\ASSAssetCheckResultApprove\Create.cshtml" />
     <Content Include="Views\ASSAssetCheckResult\Create.cshtml" />
@@ -1260,6 +1259,9 @@
     <Content Include="Views\ASSAssetMaster\Upload.cshtml" />
     <Content Include="Views\HRPayroll\DisplayMonthlyFee.cshtml" />
     <Content Include="Views\HRTimesheet\EditTimesheet.cshtml" />
+    <Content Include="Views\ASSAssetAcquisition\Create.cshtml" />
+    <Content Include="Views\ASSAssetAcquisition\Edit.cshtml" />
+    <Content Include="Views\ASSAssetAcquisition\_Details.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

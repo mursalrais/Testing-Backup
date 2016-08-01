@@ -11,23 +11,26 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 {
     public class AssetAcquisitionItemVM : Item
     {
-        [DisplayName("Cost (USD)")]
-        [UIHint("Currency")]
-        public decimal? CostUSD { get; set; }
-
         public int Id { get; set; }
 
-        [DisplayName("Cost (IDR)")]
-        [UIHint("Currency")]
-        public decimal? CostIDR { get; set; }
+        public string NewAsset { get; set; }
 
-        public string WBSDescription { get; set; }
-        public string WBSNo { get; set; }
+        public string Item { get; set; }
+
+        public string PoLineItem { get; set; }
+
+        public int AssetNo { get; set; }
+
+        public int AssetSubNo { get; set; }
+
         public string AssetDescription { get; set; }
-        public string AssetSubAsset { get; set; }
-        public string AssetNo { get; set; }
-        public string POLineItem { get; set; }
-        public string Remakrs { get; set; }
-        public string Status { get; set; }
+
+        public int WbsId { get; set; }
+
+        public string WbsDescription { get; set; }
+
+        public decimal CostIdr { get; set; }
+
+        public decimal CostUsd { get; set; }
     }
 }

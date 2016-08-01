@@ -12,10 +12,18 @@ namespace MCAWebAndAPI.Service.Asset
     {
         void SetSiteUrl(string siteUrl);
 
-        AssetAcquisitionHeaderVM getPopulatedModel(int? id = null);
-        AssetAcquisitionHeaderVM getHeader(int? ID);
-        int createHeader(AssetAcquisitionHeaderVM header);
-        bool updateHeader(AssetAcquisitionHeaderVM header);
-        void createAssetAcquisitionItems(int? headerID, IEnumerable<AssetAcquisitionItemVM> items);
+        IEnumerable<AssetAcquisitionVM> GetAssetAcquisition();
+
+        bool CreateAssetAcquisition(AssetAcquisitionVM assetAcquisition);
+
+        bool UpdateAssetAcquisition(AssetAcquisitionVM assetAcquisition);
+
+        bool CreateAssetAcquisition_Dummy(AssetAcquisitionItemVM assetAcquisition);
+
+        bool UpdateAssetAcquisition_Dummy(AssetAcquisitionItemVM assetAcquisition);
+
+        bool DestroyAssetAcquisition_Dummy(AssetAcquisitionItemVM assetAcquisition);
+
+        AssetAcquisitionVM GetAssetAcquisitionItems_Dummy();
     }
 }

@@ -21,15 +21,45 @@ namespace MCAWebAndAPI.Web.Controllers
             _assetAcquisitionService = new AssetAcquisitionService();
         }
 
-       public ActionResult CreateHeader(string siteUrl = null)
+        public ActionResult Create()
         {
-            //a must
-            //_assetAcquisitionService.SetSiteUrl(siteUrl);
-            //SessionManager.Set<string>("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            var viewModel = _assetAcquisitionService.GetAssetAcquisitionItems_Dummy();
 
-            //get blank viewmodel
-            var viewmodel = _assetAcquisitionService.getPopulatedModel();
-            return View("Create", viewmodel);
+            return View(viewModel);
+        }
+
+        public ActionResult Edit()
+        {
+            var viewModel = new AssetAcquisitionVM();
+
+            return View(viewModel);
+        }
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult EditingPopup_Create([DataSourceRequest] DataSourceRequest request, AssetAcquisitionItemVM _AssetAcqItemVM)
+        {
+            if (_AssetAcqItemVM != null && ModelState.IsValid)
+            {
+                _assetAcquisitionService.CreateAssetAcquisition_Dummy(_AssetAcqItemVM);
+            }
+
+            return Json(new[] { _AssetAcqItemVM }.ToDataSourceResult(request, ModelState));
+        }
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult EditingPopup_Update()
+        {
+            var viewModel = new AssetAcquisitionVM();
+
+            return View(viewModel);
+        }
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult EditingPopup_Destroy()
+        {
+            var viewModel = new AssetAcquisitionVM();
+
+            return View(viewModel);
         }
     }
 }
