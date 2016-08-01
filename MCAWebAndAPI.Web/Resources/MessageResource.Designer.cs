@@ -61,6 +61,15 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Compensatory time requested by Professional: (please complete the form, have it verified by the HR Unit before have it signed/approved by the Manager).
+        /// </summary>
+        public static string CompensatoryPrintText {
+            get {
+                return ResourceManager.GetString("CompensatoryPrintText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to Edit Exit Procedure.
         /// </summary>
         public static string ErrorEditExitProcedure {
