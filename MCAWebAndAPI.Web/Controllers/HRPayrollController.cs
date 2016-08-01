@@ -145,13 +145,11 @@ namespace MCAWebAndAPI.Web.Controllers
             return Json(new { message = "Period has been updated" }, JsonRequestBehavior.AllowGet);
         }
 
-
         [HttpPost]
         public ActionResult GridWorksheet_ExportExcel(string contentType, string base64, string fileName)
         {
             var fileContents = Convert.FromBase64String(base64);
             return File(fileContents, contentType, fileName);
         }
-
     }
 }
