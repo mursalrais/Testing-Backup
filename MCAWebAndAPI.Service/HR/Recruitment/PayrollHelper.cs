@@ -36,6 +36,13 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return payrollWorksheet;
         }
 
+        /// <summary>
+        /// Please note that this is only a dummy logic
+        /// </summary>
+        /// <param name="payrollWorksheet"></param>
+        /// <param name="dateRange"></param>
+        /// <param name="ids"></param>
+        /// <returns></returns>
         public static List<PayrollWorksheetDetailVM> PopulateColumns_Dummy(this List<PayrollWorksheetDetailVM> payrollWorksheet, IEnumerable<DateTime> dateRange, IEnumerable<int> ids)
         {
             var index = 0;
@@ -43,8 +50,15 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 foreach (var date in dateRange)
                 {
-                    
+                    payrollWorksheet[index].Name = _names[index];
+                    payrollWorksheet[index].MonthlyFeeMaster = 3 * 1000000 + index * 1000000;
+                    payrollWorksheet[index].TotalWorkingDays = 21;
+                    payrollWorksheet[index].DaysRequestUnpaid = (date.Day * (index + 1)) % 21 == 0 ? 1 : 0;
+                    payrollWorksheet[index].LastWorkingDate = DateTime.Today.AddDays((10 + index) % 30);
+                    payrollWorksheet[index].JoinDate = new DateTime(2016, 1, (index + 1) % 30);
+                    payrollWorksheet[index].Last13thMonthDate = new DateTime(2016, 7, 11);
                 }
+                index++;
             }
             return payrollWorksheet;
         }
@@ -82,7 +96,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         private static async Task<IEnumerable<PSAManagementVM>> GetPSAs(IEnumerable<int> ids)
         {
-            return await Task.WhenAll(ids.Select(i => GetPSA(i)));
+            var results = await Task.WhenAll(ids.Select(i => GetPSA(i)));
+            return results.OrderBy(e => e.ID);
         }
 
         private static async Task<IEnumerable<ProfessionalDataVM>> GetProfessionals(IEnumerable<int> ids)
@@ -94,6 +109,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         private static async Task<IEnumerable<MonthlyFeeDetailVM>> GetMonthlyFees(IEnumerable<int> ids)
         {
             var results = await Task.WhenAll(ids.Select(i => GetMonthlyFee(i)));
+            //ID refers to Professional ID
             return results.OrderBy(e => e.ID);
         }
 

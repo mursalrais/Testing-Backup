@@ -1301,7 +1301,6 @@
     <Compile Include="Controllers\HRTimesheetController.cs" />
     <Compile Include="Controllers\LocationController.cs" />
     <Compile Include="Controllers\ProjectHierarchyController.cs" />
-    <Compile Include="Controllers\PurchaseOrderController.cs" />
     <Compile Include="Controllers\RIAController.cs" />
     <Compile Include="Controllers\SuccessController.cs" />
     <Compile Include="Controllers\TaskController.cs" />
