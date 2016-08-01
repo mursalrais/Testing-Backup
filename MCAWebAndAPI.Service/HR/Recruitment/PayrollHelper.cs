@@ -36,7 +36,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return payrollWorksheet;
         }
 
-        public static async Task<List<PayrollWorksheetDetailVM>> PopulateColumns_Dummy(this List<PayrollWorksheetDetailVM> payrollWorksheet, IEnumerable<DateTime> dateRange, IEnumerable<int> ids)
+        public static List<PayrollWorksheetDetailVM> PopulateColumns_Dummy(this List<PayrollWorksheetDetailVM> payrollWorksheet, IEnumerable<DateTime> dateRange, IEnumerable<int> ids)
         {
             var index = 0;
             foreach (var profID in _names)

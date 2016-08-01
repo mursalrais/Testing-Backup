@@ -132,10 +132,10 @@ namespace MCAWebAndAPI.Web.Controllers
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _hRPayrollService.SetSiteUrl(siteUrl);
 
-            var viewModel = new List<PayrollWorksheetDetailVM>();
+            var viewModelPayroll = new List<PayrollWorksheetDetailVM>();
             try
             {
-                viewModel = _hRPayrollService.GetPayrollWorksheetDetails();
+                viewModelPayroll = _hRPayrollService.GetPayrollWorksheetDetails(viewModel.From).ToList();
             }
             catch (Exception e)
             {

@@ -1248,6 +1248,8 @@
     <Content Include="Views\HRInsuranceClaim\ViewClaimOutStanding.cshtml" />
     <Content Include="Views\HRInsuranceClaim\_ClaimComponentAXA.cshtml" />
     <Content Include="Views\HRPayroll\DisplayPayrollWorksheet.cshtml" />
+    <Content Include="Views\ASSAssetAcquisition\Edit.cshtml" />
+    <Content Include="Views\ASSAssetAcquisition\_Details.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1278,7 +1280,6 @@
     <Compile Include="Controllers\CSVController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\FileController.cs" />
-    <Compile Include="Controllers\FINEventBudgetController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HRApplicationController.cs" />
     <Compile Include="Controllers\HRCompensatoryController.cs" />

@@ -198,7 +198,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             var professionalIDs = worksheet.GetValidProfessionalIDs(startDate, _siteUrl);
 
             worksheet.PopulateRows(dateRange, professionalIDs);
-            worksheet.PopulateColumns_Dummy(professionalIDs);
+            worksheet.PopulateColumns_Dummy(dateRange, professionalIDs);
             return worksheet;
         }
         

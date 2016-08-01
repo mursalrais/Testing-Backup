@@ -37,7 +37,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
                         {
                             ""
                         },
-                        OnSelectEventName = "onAssetLevelChange"                    
+                        OnSelectEventName = "onAssetLevelChange"
                     };
                 return _assetLevel;
             }
@@ -56,7 +56,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
                 if (_assetCategory == null)
                     _assetCategory = new ComboBoxVM()
                     {
-                        
+
                     };
                 return _assetCategory;
             }
@@ -124,7 +124,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
                         {
                             ""
                         }
-                        ,OnSelectEventName = "onAssetIDChange"
+                        ,
+                        OnSelectEventName = "onAssetIDChange"
                     };
                 return _assetNoAssetDesc;
             }

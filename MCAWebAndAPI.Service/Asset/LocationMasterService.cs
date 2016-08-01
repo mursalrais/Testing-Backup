@@ -27,7 +27,7 @@ namespace MCAWebAndAPI.Service.Asset
       </View>";
             int error = 0;
             var locationTemp = SPConnector.GetList(SP_LOCATIONMASTER_LISTNAME, _siteUrl, caml).Count();
-            if (locationTemp > 0)
+            if (locationTemp != 0)
             {
                 return error;
             }
@@ -87,11 +87,41 @@ namespace MCAWebAndAPI.Service.Asset
             return new LocationMasterVM
             {
                 ID = Convert.ToInt32(item["ID"]),
-                Title = Convert.ToString(item["Title"]),
+                Title = Convert.ToString(item["Province"]),
             };
         }
 
-        public void UpdateProvince(IEnumerable<LocationMasterVM> locationMasters)
+        private IEnumerable<LocationMasterVM> GetPlaceMasters()
+        {
+            var caml = @"<View>  
+            <Query> 
+               <Where><Eq><FieldRef Name='Level' /><Value Type='Choice'>Province</Value></Eq></Where> 
+            </Query> 
+      </View>";
+
+            var LocationMaster = new List<LocationMasterVM>();
+
+            var siteHR = _siteUrl.Replace("/bo", "/hr");
+
+            foreach (var item in SPConnector.GetList(SP_LOCATIONMASTER_LISTNAME, _siteUrl, caml))
+            {
+
+                LocationMaster.Add(ConvertToProvinceVM(item));
+            }
+
+            return LocationMaster;
+        }
+
+        private LocationMasterVM ConvertToProvinceVM(ListItem item)
+        {
+            return new LocationMasterVM
+            {
+                ID = Convert.ToInt32(item["ID"]),
+                LocationName = Convert.ToString(item["Title"])
+            };
+        }
+
+        public LocationMasterVM UpdateProvince()
         {
             var viewModel = new LocationMasterVM();
             Int32 IDProvince = 0;
@@ -100,7 +130,7 @@ namespace MCAWebAndAPI.Service.Asset
                 IDProvince = Convert.ToInt32(item["ID"]);
                 try
                 {
-                    SPConnector.DeleteListItem(SP_LOCATIONMASTER_LISTNAME, IDProvince, _siteUrl);
+                    SPConnector.DeleteListItem(SP_PROVINCE_LISTNAME, IDProvince, _siteUrl);
                 }
                 catch (Exception e)
                 {
@@ -125,28 +155,7 @@ namespace MCAWebAndAPI.Service.Asset
                     throw new Exception(ErrorResource.SPInsertError);
                 }
             }
-        }
-
-        private IEnumerable<LocationMasterVM> GetPlaceMasters()
-        {
-            var caml = "";
-            var LocationMaster = new List<LocationMasterVM>();
-            foreach (var item in SPConnector.GetList(SP_LOCATIONMASTER_LISTNAME, _siteUrl))
-            {
-
-                LocationMaster.Add(ConvertToProvinceVM(item));
-            }
-
-            return LocationMaster;
-        }
-
-        private LocationMasterVM ConvertToProvinceVM(ListItem item)
-        {
-            return new LocationMasterVM
-            {
-                ID = Convert.ToInt32(item["ID"]),
-                LocationName = Convert.ToString(item["Title"])
-            };
+            return viewModel;
         }
     }
 }

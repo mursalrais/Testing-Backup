@@ -1,0 +1,30 @@
+﻿
+@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model CompensatoryVM
+
+<div class="col-xs-12">
+
+    @(Html.Kendo().Grid(Model.CompensatoryDetails)
+    .Name("_CompensatoryRequestDetails_Print")
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.CmpActiv);
+
+        //columns.Bound(p => p.CmpDate).ClientTemplate("#= kendo.toString(CmpDate, \"MM/dd/yyyy \") #");
+
+        ////columns.Bound(p => p.CmpDate).ClientTemplate("#=getDayName(CmpDate)#"
+        ////                   ).Width(150);
+
+        //columns.Bound(p => p.StartTime).ClientTemplate("#= kendo.toString(StartTime, \"hh:mm tt\") #");
+
+        //columns.Bound(p => p.FinishTime).ClientTemplate("#= kendo.toString(FinishTime, \"hh:mm tt\") #");
+    })
+    .DataSource(dataSource => dataSource.Ajax()
+    .Model(model =>
+    {
+        model.Id(p => p.ID);
+    })
+    )
+    )
+</div>
+   
