@@ -261,7 +261,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             if (header.Requestor != null)
             {
-                if (header.StatusForm == "Initiated" || header.StatusForm == "Pending Approval 1 of 2" || header.StatusForm == "Pending Approval 2 of 2" || header.StatusForm == null)
+                if (header.StatusForm == "Initiated" || header.StatusForm == "Pending Approval 1 of 2" || header.StatusForm == "Pending Approval 2 of 2" || header.StatusForm == null || header.StatusForm == "Draft")
                 {
                     foreach (var item in SPConnector.GetList(workflowTransactionListName, _siteUrl, caml))
                     {
