@@ -27,7 +27,7 @@ namespace MCAWebAndAPI.Service.Asset
       </View>";
             int error = 0;
             var locationTemp = SPConnector.GetList(SP_LOCATIONMASTER_LISTNAME, _siteUrl, caml).Count();
-            if (locationTemp > 0)
+            if (locationTemp != 0)
             {
                 return error;
             }

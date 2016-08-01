@@ -37,11 +37,11 @@
     <div class="form-actions">
         <div class="row">
             <div class="col-md-12">
-                <button id="submit-for-approval" class="btn btn-primary" type="submit">
+                <button id="submit-for-approval" class="btn btn-primary" type="button" onclick="checkDocumentSubmitApproval()">
                     <i class="fa fa-save"></i>
                     Submit for Approval
                 </button>
-                <button id="submit-draft-initiate-button" class="btn btn-primary" type="submit">
+                <button id="submit-draft-initiate-button" class="btn btn-primary" type="button" onclick="checkDocumentSubmitDraft()">
                     <i class="fa fa-save"></i>
                     Save
                 </button>
@@ -51,35 +51,43 @@
 
 @section scripts{
     <script type="text/javascript">
-
-
-        $(document).ready(function () {
-            $("#submit-for-approval").click(function () {
-                $("#StatusForm").val("Pending Approval")
+        function checkDocumentSubmitApproval()
+        {
+            if ($(".k-file").length == 0)
+            {
+                alert("Please upload Document");
+            }
+            else
+            {
+                $("#StatusForm").val("Pending Approval");
                 $("form").submit();
-    });
-});
+            }
+        }
 
-        $(document).ready(function () {
-            $("#submit-draft-initiate-button").click(function () {
+        function checkDocumentSubmitDraft()
+        {
+            if ($(".k-file").length == 0) {
+                alert("Please upload Document");
+            }
+            else {
                 $("#StatusForm").val("Draft")
                 $("form").submit();
-            });
-        });
+            }
+        }
+        
+//        $(document).ready(function () {
+//            $("#submit-for-approval").click(function () {
+//                $("#StatusForm").val("Pending Approval")
+//                $("form").submit();
+//    });
+//});
 
-        $(document).ready(function () {
-            $("#approved-by-hr").click(function () {
-                $("#StatusForm").val("Approved by HR")
-                $("form").submit();
-            });
-        });
-
-        $(document).ready(function () {
-            $("#save-by-hr").click(function () {
-                $("#StatusForm").val("Saved by HR")
-                $("form").submit();
-            });
-        });
+        //$(document).ready(function () {
+        //    $("#submit-draft-initiate-button").click(function () {
+        //        $("#StatusForm").val("Draft")
+        //        $("form").submit();
+        //    });
+        //});
 
         function onSuccess(data)
         {
@@ -99,7 +107,6 @@
             $.getJSON(url, function (result) {
 
                 $('#FullName').prop('value', result[0].Name);
-                //$('#Professional').prop('value', result[0].FirstMiddleName);
                 $('#ProjectUnit').prop('value', result[0].Project_Unit);
                 $('#Position').prop('value', result[0].Position);
                 $('#PSANumber').prop('value', result[0].PSANumber);
@@ -111,13 +118,10 @@
           
         }
 
-        function onSelectExitProcedure(e) {
+        //function onCompleteExitProcedure(e) {
 
-            $.each(e.files, function (index, value) {
-                
-            });
-
-        }
+        //    $('#CheckDocument').prop('value', "Completed");
+        //}
 
                       
     </script>
