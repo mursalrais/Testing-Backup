@@ -891,6 +891,7 @@
     <Content Include="Global.asax" />
     <Content Include="Site.Master" />
     <Content Include="ViewSwitcher.ascx" />
+    <Content Include="Views\HRCompensatory\_CompensantoryDetails.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -1077,7 +1078,6 @@
     <Content Include="Views\HRPerformancePlan\_ProfessionalPerformancePlan_Print.cshtml" />
     <Content Include="Views\HRPerformancePlan\PrintPerformancePlan.cshtml" />
     <Content Include="Views\HRCompensatory\CompensatorylistUser.cshtml" />
-    <Content Include="Views\HRCompensatory\_CompensantoryDetails.cshtml" />
     <Content Include="Views\HRCompensatory\InputCompensatoryUser.cshtml" />
     <Content Include="Views\HRCompensatory\_InputCompensantoryDetails.cshtml" />
     <Content Include="Views\HRCompensatory\InputCompensatoryHR.cshtml" />
@@ -1254,6 +1254,11 @@
     <Content Include="Views\ASSAssetMaster\Upload.cshtml" />
     <Content Include="Views\ASSAssetAcquisition\_Details.cshtml" />
     <Content Include="Views\HRPayroll\DisplayPayrollWorksheet.cshtml" />
+    <Content Include="Views\HRCompensatory\_CompensatoryDetails.cshtml" />
+    <Content Include="Views\HRCompensatory\_CompensatoryDetailsHR.cshtml" />
+    <Content Include="Views\HRCompensatory\_CompensatoryRequestDetails_Print.cshtml" />
+    <Content Include="Views\HRCompensatory\_InputCompensatoryDetailsUser.cshtml" />
+    <Content Include="Views\HRCompensatory\_CompensantoryDetailsHR.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

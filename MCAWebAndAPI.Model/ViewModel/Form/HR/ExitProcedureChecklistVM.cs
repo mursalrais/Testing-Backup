@@ -283,7 +283,40 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         public string ApprovalMail { get; set; }
 
+        /// <summary>
+        /// Checklist Item Approval
+        /// </summary>
+        [UIHint("InGridComboBox")]
+        public InGridComboBoxVM IsDefaultTemp { get; set; } = new InGridComboBoxVM();
 
+        public static InGridComboBoxVM GetIsDefaultTempValue(InGridComboBoxVM model = null)
+        {
+            var options = GetIsDefaultTemp();
+            if (model == null || (model.Value == null && model.Text == null) || string.IsNullOrEmpty(model.Text))
+                return options.FirstOrDefault();
 
+            return options.FirstOrDefault(e => e.Value == null ?
+                e.Value == model.Value : e.Text == model.Text);
+        }
+
+        public static IEnumerable<InGridComboBoxVM> GetIsDefaultTemp()
+        {
+            var index = 0;
+            var options = new string[]
+            {
+                "Yes",
+                "No"
+            };
+
+            return options.Select(e =>
+                new InGridComboBoxVM
+                {
+                    Value = ++index,
+                    Text = e
+                });
+        }
+
+        [UIHint("Date")]
+        public DateTime? StartDateApproval { get; set; } = DateTime.Now;
     }
 }

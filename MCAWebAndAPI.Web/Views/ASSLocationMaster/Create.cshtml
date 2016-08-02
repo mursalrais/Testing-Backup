@@ -15,8 +15,7 @@
         <legend>Form Location Master</legend>
         @Html.AntiForgeryToken()
         @Html.ValidationSummary()
-    @if (Model.Update != "Update")
-    {
+
         <div class="col-sm-12">
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.Province).Class("col-sm-4 control-label")
@@ -43,12 +42,6 @@
                 </div>
             </div>
         </div>
-    }
-
-    @if (Model.Update == "Update")
-    {
-
-    }
     </fieldset>
 }
 
