@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MCAWebAndAPI.Service.HR.Recruitment
+namespace MCAWebAndAPI.Service.HR.Payroll
 {
     public static class PayrollHelper
     {
@@ -19,20 +19,18 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         public static List<PayrollWorksheetDetailVM> PopulateRows(this List<PayrollWorksheetDetailVM> payrollWorksheet, IEnumerable<DateTime> dateRange, IEnumerable<int> professionalIDs)
         {
-           
-            var index = 0;
-            foreach (var profID in _names)
+            for (int i = 0; i < _names.Length; i++)
             {
                 foreach (var item in dateRange)
                 {
                     payrollWorksheet.Add(new PayrollWorksheetDetailVM
                     {
                         PayrollDate = item,
-                        ProfessionalID = index
+                        ProfessionalID = i
                     });
                 }
-                index++;
             }
+
             return payrollWorksheet;
         }
 
@@ -46,19 +44,19 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         public static List<PayrollWorksheetDetailVM> PopulateColumns_Dummy(this List<PayrollWorksheetDetailVM> payrollWorksheet, IEnumerable<DateTime> dateRange, IEnumerable<int> ids)
         {
             var index = 0;
-            foreach (var profID in _names)
+            for (int indexName = 0; indexName < _names.Length; indexName++)
             {
-                foreach (var date in dateRange)
+                var dateLength = dateRange.Count();
+                for (int indexDate = 0; indexDate < dateLength; indexDate++, index++)
                 {
-                    payrollWorksheet[index].Name = _names[index];
-                    payrollWorksheet[index].MonthlyFeeMaster = 3 * 1000000 + index * 1000000;
+                    payrollWorksheet[index].Name = _names[indexName];
+                    payrollWorksheet[index].MonthlyFeeMaster = 3 * 100000;
                     payrollWorksheet[index].TotalWorkingDays = 21;
-                    payrollWorksheet[index].DaysRequestUnpaid = (date.Day * (index + 1)) % 21 == 0 ? 1 : 0;
-                    payrollWorksheet[index].LastWorkingDate = DateTime.Today.AddDays((10 + index) % 30);
-                    payrollWorksheet[index].JoinDate = new DateTime(2016, 1, (index + 1) % 30);
+                    payrollWorksheet[index].DaysRequestUnpaid = (dateRange.ToArray()[indexDate].Day * (indexName + 1)) % 21 == 0 ? 1 : 0;
+                    payrollWorksheet[index].LastWorkingDate = DateTime.Today.AddDays((10 + indexName) % 30);
+                    payrollWorksheet[index].JoinDate = new DateTime(2016, 1, (indexName + 1) % 30);
                     payrollWorksheet[index].Last13thMonthDate = new DateTime(2016, 7, 11);
                 }
-                index++;
             }
             return payrollWorksheet;
         }

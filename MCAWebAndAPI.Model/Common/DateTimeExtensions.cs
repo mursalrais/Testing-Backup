@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace MCAWebAndAPI.Service.Utils
+namespace MCAWebAndAPI.Model.Common
 {
     public static class DateTimeExtensions
     {

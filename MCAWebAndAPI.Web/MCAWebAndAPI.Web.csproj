@@ -871,6 +871,7 @@
     <Content Include="Site.Master" />
     <Content Include="ViewSwitcher.ascx" />
     <Content Include="Views\HRCompensatory\_CompensantoryDetails.cshtml" />
+    <Content Include="Views\HRPayroll\DisplayPayrollWorksheet.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -1228,20 +1229,15 @@
     <Content Include="Views\HRInsuranceClaim\DisplayInsuranceClaim.cshtml" />
     <Content Include="Views\HRInsuranceClaim\_ClaimComponentDetailDisplay.cshtml" />
     <Content Include="Views\HRInsuranceClaim\PrintToPDF.cshtml" />
-
-    <Content Include="Views\HRPayroll\DisplayPayrollWorksheet.cshtml" />
-
     <Content Include="Views\HRInsuranceClaim\Redirect.cshtml" />
     <Content Include="Views\ASSAssetMaster\_DisplayGrid.cshtml" />
     <Content Include="Views\ASSAssetMaster\Upload.cshtml" />
     <Content Include="Views\ASSAssetAcquisition\_Details.cshtml" />
-    <Content Include="Views\HRPayroll\DisplayPayrollWorksheet.cshtml" />
     <Content Include="Views\HRCompensatory\_CompensatoryDetails.cshtml" />
     <Content Include="Views\HRCompensatory\_CompensatoryDetailsHR.cshtml" />
     <Content Include="Views\HRCompensatory\_CompensatoryRequestDetails_Print.cshtml" />
     <Content Include="Views\HRCompensatory\_InputCompensatoryDetailsUser.cshtml" />
     <Content Include="Views\HRCompensatory\_CompensantoryDetailsHR.cshtml" />
-
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
