@@ -47,7 +47,7 @@
                     .Name("TimesheetDetails_Holidays")
                     .Columns(columns =>
                     {
-                        columns.Bound(p => p.Date).ClientTemplate("#= getDayOfWeek(Date) #" + ", " + "#= kendo.toString(Date, 'd') #");
+                        columns.Bound(p => p.Date).Format("{0:dddd, MMM d, yyyy}");
                         columns.Bound(p => p.Status);
                         columns.Bound(p => p.FullHalf)
                   .ClientFooterTemplate("Total Day: #=sum#")
@@ -74,7 +74,7 @@
                     .Name("TimesheetDetails_WorkingDays")
                     .Columns(columns =>
                     {
-                        columns.Bound(p => p.Date).ClientTemplate("#= getDayOfWeek(Date) #" + ", " + "#= kendo.toString(Date, 'd') #");
+                        columns.Bound(p => p.Date).Format("{0:dddd, MMM d, yyyy}");
                         columns.Bound(p => p.Location);
                         columns.Bound(p => p.FullHalf)
                          .ClientFooterTemplate("Total Day: #=sum#");
@@ -109,8 +109,7 @@
                         <div class="col-sm-8">
                             @(Html.Kendo().DatePicker()
                               .Name("From")
-                              .Value(Model.From)
-                              .Min(((DateTime)Model.Period).GetFirstPayrollDay())
+                              .Value(DateTime.Today.AddDays(-7))
                               .Max(DateTime.Today)
                               .Events(e => e.Change("startChange"))
                               .HtmlAttributes(new { @class = "form-control", style = "width: 100%" })
@@ -122,8 +121,8 @@
                         <div class="col-sm-8">
                             @(Html.Kendo().DatePicker()
                               .Name("To")
-                              .Value(Model.To)
-                              .Min(((DateTime)Model.Period).GetFirstPayrollDay())
+                              .Value(DateTime.Today)
+                              .Min(DateTime.Today.AddDays(-7))
                               .Max(DateTime.Today)
                               .Events(e => e.Change("endChange"))
                               .HtmlAttributes(new { @class = "form-control", style = "width: 100%" })

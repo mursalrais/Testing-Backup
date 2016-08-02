@@ -17,7 +17,10 @@ namespace MCAWebAndAPI.Web
                 .Include("~/Scripts/bi-frame.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/kendo")
-                .Include("~/Scripts/kendo/2016.2.714/kendo.all.min.js",
+                .Include(
+                 "~/Scripts/kendo/2016.2.714/pake_deflate.min.js",
+                 "~/Scripts/kendo/2016.2.714/jszip.min.js",
+                 "~/Scripts/kendo/2016.2.714/kendo.all.min.js",
                  "~/Scripts/kendo/2016.2.714/kendo.aspnetmvc.min.js"));
 
             ScriptManager.ScriptResourceMapping.AddDefinition(

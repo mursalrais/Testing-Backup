@@ -194,10 +194,12 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             var startDate = period.GetFirstPayrollDay();
             var finishDate = period.GetLastPayrollDay();
             var dateRange = startDate.EachDay(finishDate);
-            var professionalIDs = worksheet.GetValidProfessionalIDs(startDate, _siteUrl);
+
+            // dummy
+            var professionalIDs = new int[] { 1, 2, 3, 4 } ;
 
             worksheet.PopulateRows(dateRange, professionalIDs);
-            worksheet.PopulateColumns_Dummy(dateRange, professionalIDs);
+           // worksheet.PopulateColumns_Dummy(dateRange, professionalIDs);
             return worksheet;
         }
         

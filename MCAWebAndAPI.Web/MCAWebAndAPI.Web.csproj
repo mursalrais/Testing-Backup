@@ -451,8 +451,10 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\kendo.modernizr.custom.js" />
     <None Include="Scripts\kendo\2016.2.714\kendo.all.min.intellisense.js" />
+    <Content Include="Scripts\kendo\2016.2.714\jszip.min.js" />
     <Content Include="Scripts\kendo\2016.2.714\kendo.all.min.js" />
     <Content Include="Scripts\kendo\2016.2.714\kendo.aspnetmvc.min.js" />
+    <Content Include="Scripts\kendo\2016.2.714\pako_deflate.min.js" />
     <Content Include="Scripts\libs\angular.min.js" />
     <Content Include="Scripts\libs\jquery.min.js" />
     <Content Include="Scripts\libs\jszip.min.js" />

@@ -17,6 +17,28 @@ namespace MCAWebAndAPI.Service.HR.Payroll
                 "Joko Tingkir"
             };
 
+        private static string[] _positions = new string[] {
+                "Walikota",
+                "Bupati",
+                "Adipati",
+                "Presiden"
+            };
+
+        private static string[] _units = new string[] {
+                "Solo",
+                "Magetan",
+                "Tegal",
+                "Zimbabwe"
+            };
+
+        private static double[] _monthlyFees = new double[]
+        {
+            12000000d,
+            32000000d,
+            25000000d,
+            54000000d
+        };
+
         public static List<PayrollWorksheetDetailVM> PopulateRows(this List<PayrollWorksheetDetailVM> payrollWorksheet, IEnumerable<DateTime> dateRange, IEnumerable<int> professionalIDs)
         {
             for (int i = 0; i < _names.Length; i++)
@@ -28,7 +50,9 @@ namespace MCAWebAndAPI.Service.HR.Payroll
                         PayrollDate = item,
                         ProfessionalID = i,
                         Name = _names[i],
-                        MonthlyFeeMaster = 300000,
+                        ProjectUnit = _units[i],
+                        Position = _positions[i],
+                        MonthlyFeeMaster = _monthlyFees[i],
                         TotalWorkingDays = 21,
                         DaysRequestUnpaid = new Random().Next() % 17 == 0 ? 1 : 0,
                         JoinDate = new DateTime(2016, 1, 1),
