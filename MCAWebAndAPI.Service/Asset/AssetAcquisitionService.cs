@@ -16,8 +16,8 @@ namespace MCAWebAndAPI.Service.Asset
     {
         string _siteUrl = "https://eceos2.sharepoint.com/sites/mca-dev/bo/";
         static Logger logger = LogManager.GetCurrentClassLogger();
-        const string SP_ASSACQ_LIST_NAME = "Asset Acqusitiion";
-        const string SP_ASSACQDetails_LIST_NAME = "Asset Acqusitiion Details";
+        const string SP_ASSACQ_LIST_NAME = "Asset Acquisition";
+        const string SP_ASSACQDetails_LIST_NAME = "Asset Acquisition Details";
         const string SP_ACC_MEMO_LIST_NAME = "Acceptance Memo";
 
         public void SetSiteUrl(string siteUrl)
@@ -28,72 +28,75 @@ namespace MCAWebAndAPI.Service.Asset
         public AssetAcquisitionHeaderVM GetPopulatedModel(int? ID = default(int?))
         {
             var model = new AssetAcquisitionHeaderVM();
+            model.TransactionType = Convert.ToString("Asset Acquisition");
+            model.AccpMemo.Choices = GetChoicesFromList("ID","Title");
 
             return model;
         }
 
+        private IEnumerable<string> GetChoicesFromList(string v1, string v2 = null)
+        {
+            List<string> _choices = new List<string>();
+            var listItems = SPConnector.GetList(SP_ACC_MEMO_LIST_NAME, _siteUrl);
+            foreach (var item in listItems)
+            {
+                _choices.Add(item[v1] + "-" + item[v2].ToString());
+                //_choices.Add(item[v1] + "-" + item[v2].ToString());
+            }
+            return _choices.ToArray();
+        }
+
+        public bool CreateHeader(AssetAcquisitionHeaderVM viewmodel)
+        {
+            var columnValues = new Dictionary<string, object>();
+            //columnValues.add
+            columnValues.Add("Title", viewmodel.TransactionType);
+            string[] memo = viewmodel.AccpMemo.Value.Split('-');
+            //columnValues.Add("Acceptance_x0020_Memo_x0020_No", memo[1]);
+            columnValues.Add("Acceptance_x0020_Memo_x0020_No", new FieldLookupValue { LookupId = Convert.ToInt32(memo[0])});
+            columnValues.Add("Vendor", viewmodel.Vendor);
+            columnValues.Add("PO_x0020_No", viewmodel.PoNo);
+            columnValues.Add("Purchase_x0020_Date", viewmodel.PurchaseDate);
+            columnValues.Add("Purchase_x0020_Description", viewmodel.PurchaseDescription);
+
+            try
+            {
+                SPConnector.AddListItem(SP_ASSACQ_LIST_NAME, columnValues, _siteUrl);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.Message);
+                return false;
+            }
+            var entitiy = new AssetAcquisitionHeaderVM();
+            entitiy = viewmodel;
+            return true;
+        }
+
         public AssetAcquisitionHeaderVM GetHeader(int? ID)
         {
-            var listitem = SPConnector.GetListItem(SP_ASSACQ_LIST_NAME, ID, _siteUrl);
-
-            return ConvertToHeaderModel(listitem);
+            throw new NotImplementedException();
         }
 
-        private AssetAcquisitionHeaderVM ConvertToHeaderModel(ListItem listitem)
+        public IEnumerable<AssetMasterVM> GetAssetSubAsset()
         {
-            var viewmodel = new AssetAcquisitionHeaderVM();
+            var models = new List<AssetMasterVM>();
 
-            viewmodel.ID = Convert.ToInt32(listitem["ID"]);
-            viewmodel.TransactionType = Convert.ToString(listitem["TransactionType"]);
-            viewmodel.AcceptanceMemoNoID.Value = FormatUtil.ConvertLookupToID(listitem, "");
-            viewmodel.AcceptanceMemoNoString = FormatUtil.ConvertLookupToValue(listitem, "");
-            viewmodel.Vendor = Convert.ToString(listitem["Vendor"]);
-            viewmodel.PoNo = Convert.ToString(listitem["PoNo"]);
-            viewmodel.PurchaseDate = Convert.ToDateTime(listitem["PurchaseDate"]);
-            viewmodel.PurchaseDescription = Convert.ToString(listitem["PurchaseDescription"]);
+            foreach (var item in SPConnector.GetList("Asset Master", _siteUrl))
+            {
+                models.Add(ConvertToModel(item));
+            }
 
-            //viewmodel.AssetAcquisitionDetails = GetAssetDetails(viewmodel.ID);
-
-            return viewmodel;
+            return models;
         }
 
-        //private IEnumerable<AssetAcquisitionItemVM> GetAssetDetails(int? iD)
-        //{
-        //    var caml = "";
+        private AssetMasterVM ConvertToModel(ListItem item)
+        {
+            var viewModel = new AssetMasterVM();
 
-        //    var details = new List<AssetAcquisitionItemVM>();
-        //    foreach(var item in SPConnector.GetList(SP_ASSACQDetails_LIST_NAME, _siteUrl, caml))
-        //    {
-        //        details.Add(ConvertToItemModel(item));
-        //    }
-        //    return details;
-        //}
-
-        //private AssetAcquisitionItemVM ConvertToItemModel(ListItem item)
-        //{
-        //    return new AssetAcquisitionItemVM
-        //    {
-        //        ID = Convert.ToInt32(item["ID"]),
-        //        PoLineItem = Convert.ToString(item["PoLineItem"]),
-        //        AssetSubAssetID = FormatUtil.ConvertLookupToID(item, "");
-
-
-        //};
-        //}
-
-        //public int CreateHeader(AssetAcquisitionHeaderVM header)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public bool UpdateHeader(AssetAcquisitionHeaderVM header)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public void CreateDetails(int? headerID, IEnumerable<AssetAcquisitionItemVM> details)
-        //{
-        //    throw new NotImplementedException();
-        //}
+            viewModel.ID = Convert.ToInt32(item["ID"]);
+            viewModel.AssetDesc = Convert.ToString(item["AssetDescription"]);
+            return viewModel;
+        }
     }
 }

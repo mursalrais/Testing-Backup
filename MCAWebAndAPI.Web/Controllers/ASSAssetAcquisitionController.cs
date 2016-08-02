@@ -27,5 +27,41 @@ namespace MCAWebAndAPI.Web.Controllers
 
             return View(viewModel);
         }
+
+        [HttpPost]
+        public ActionResult Submit(AssetAcquisitionHeaderVM _data, string site)
+        {
+            //return View(new AssetMasterVM());
+            _assetAcquisitionService.CreateHeader(_data);
+            return new JavaScriptResult
+            {
+                Script = string.Format("window.parent.location.href = '{0}'", "https://eceos2.sharepoint.com/sites/mca-dev/bo/Lists/AssetAcquisition/AllItems.aspx")
+            };
+        }
+
+        public JsonResult GetAssetSubSAssetGrid()
+        {
+            _assetAcquisitionService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+
+            var positions = GetFromPositionsExistingSession();
+
+            return Json(positions.Select(e =>
+                new {
+                    Value = Convert.ToString(e.ID),
+                    Text = e.AssetNoAssetDesc + " - " + e.AssetDesc
+                }),
+                JsonRequestBehavior.AllowGet);
+        }
+
+        private IEnumerable<AssetMasterVM> GetFromPositionsExistingSession()
+        {
+            //Get existing session variable
+            var sessionVariable = System.Web.HttpContext.Current.Session["AssetSubAsset"] as IEnumerable<AssetMasterVM>;
+            var positions = sessionVariable ?? _assetAcquisitionService.GetAssetSubAsset();
+
+            if (sessionVariable == null) // If no session variable is found
+                System.Web.HttpContext.Current.Session["AssetSubAsset"] = positions;
+            return positions;
+        }
     }
 }
