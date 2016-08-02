@@ -62,8 +62,9 @@
       <HintPath>..\packages\Elmah.Mvc.2.1.2\lib\net40\Elmah.Mvc.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Kendo.Mvc">
-      <HintPath>..\MCAWebAndAPI.Model\bin\Debug\Kendo.Mvc.dll</HintPath>
+    <Reference Include="Kendo.Mvc, Version=2016.2.504.545, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\KENDOUIMVC\2016.2.714.545\Kendo.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.Web.Optimization.WebForms">
       <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.WebForms.1.1.3\lib\net45\Microsoft.AspNet.Web.Optimization.WebForms.dll</HintPath>
@@ -890,6 +891,7 @@
     <Content Include="Global.asax" />
     <Content Include="Site.Master" />
     <Content Include="ViewSwitcher.ascx" />
+    <Content Include="Views\HRCompensatory\_CompensantoryDetails.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -1219,9 +1221,7 @@
     <Content Include="Views\HRInterviewlist\NextInterviewlist.cshtml" />
     <Content Include="Views\HRInterviewlist\_IntvinvitePanelDetails.cshtml" />
     <Content Include="Views\HRCompensatory\ListCompensatoryDetails.cshtml" />
-    <Content Include="Views\HRInsuranceClaim\CreateInsuranceClaim.cshtml" />
     <Content Include="Views\HRInsuranceClaim\_ClaimComponentDetail.cshtml" />
-    <Content Include="Views\HRInsuranceClaim\_MedicalClaimDetail.cshtml" />
     <Content Include="Views\HRExitProcedure\_ExitProcedureDataHR.cshtml" />
     <Content Include="Views\HRExitProcedure\ViewExitProcedureForApprover.cshtml" />
     <Content Include="Views\HRExitProcedure\_ExitProcedureChecklistForApprover.cshtml" />
@@ -1245,13 +1245,20 @@
     <Content Include="Views\HRInsuranceClaim\ViewClaimAll.cshtml" />
     <Content Include="Views\HRInsuranceClaim\ViewClaimOutStanding.cshtml" />
     <Content Include="Views\HRInsuranceClaim\_ClaimComponentAXA.cshtml" />
-    <Content Include="Views\HRPayroll\DisplayPayrollWorksheet.cshtml" />
-    <Content Include="Views\ASSAssetAcquisition\Edit.cshtml" />
+    <Content Include="Views\HRInsuranceClaim\CreateInsuranceClaim.cshtml" />
+    <Content Include="Views\HRInsuranceClaim\DisplayInsuranceClaim.cshtml" />
+    <Content Include="Views\HRInsuranceClaim\_ClaimComponentDetailDisplay.cshtml" />
+    <Content Include="Views\HRInsuranceClaim\PrintToPDF.cshtml" />
+    <Content Include="Views\HRInsuranceClaim\Redirect.cshtml" />
+    <Content Include="Views\ASSAssetMaster\_DisplayGrid.cshtml" />
+    <Content Include="Views\ASSAssetMaster\Upload.cshtml" />
     <Content Include="Views\ASSAssetAcquisition\_Details.cshtml" />
+    <Content Include="Views\HRPayroll\DisplayPayrollWorksheet.cshtml" />
     <Content Include="Views\HRCompensatory\_CompensatoryDetails.cshtml" />
-    <Content Include="Views\HRCompensatory\_CompensatoryRequestDetails_Print.cshtml" />
     <Content Include="Views\HRCompensatory\_CompensatoryDetailsHR.cshtml" />
+    <Content Include="Views\HRCompensatory\_CompensatoryRequestDetails_Print.cshtml" />
     <Content Include="Views\HRCompensatory\_InputCompensatoryDetailsUser.cshtml" />
+    <Content Include="Views\HRCompensatory\_CompensantoryDetailsHR.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1282,6 +1289,7 @@
     <Compile Include="Controllers\CSVController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\FileController.cs" />
+    <Compile Include="Controllers\FINEventBudgetController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HRApplicationController.cs" />
     <Compile Include="Controllers\HRCompensatoryController.cs" />
@@ -1302,7 +1310,6 @@
     <Compile Include="Controllers\HRTimesheetController.cs" />
     <Compile Include="Controllers\LocationController.cs" />
     <Compile Include="Controllers\ProjectHierarchyController.cs" />
-    <Compile Include="Controllers\PurchaseOrderController.cs" />
     <Compile Include="Controllers\RIAController.cs" />
     <Compile Include="Controllers\SuccessController.cs" />
     <Compile Include="Controllers\TaskController.cs" />
@@ -1368,6 +1375,7 @@
     <Folder Include="App_Code\" />
     <Folder Include="bin\Resources\" />
     <Folder Include="Views\File\" />
+    <Folder Include="Views\FINEventBudget\" />
     <Folder Include="Views\HRDataMaster\" />
   </ItemGroup>
   <ItemGroup>
