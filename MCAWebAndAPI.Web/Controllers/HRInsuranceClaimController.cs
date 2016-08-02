@@ -250,19 +250,37 @@ namespace MCAWebAndAPI.Web.Controllers
 
         }
 
+        //public ActionResult PrintToPDF2(string siteUrl = null)
+        //{
+        //    _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+        //    SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+        //    var viewModel = _service.getViewAXADefault();
 
-        public ActionResult PrintToPDF(FormCollection form, InsuranceClaimAXAVM viewModel)
+        //    return View("PrintToPDF",viewModel);
+        //}
+
+       // public ActionResult PrintToPDF(FormCollection form, InsuranceClaimAXAVM viewModel)
+            public ActionResult PrintToPDF()
         {
             //_service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             //SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             //var viewModel = _service.getViewAXADefault();
 
             //return View(viewModel);
+           
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             //_service.CreateAxa(viewModel);
 
-            viewModel.dtDetails = _service.getViewAXA();
+            var viewModel = new InsuranceClaimAXAVM
+            {
+                dtDetails = _service.getComponentAXAdetails(),
+                BatchNo = "",
+                Recepient = "",
+                Sender = "",
+                URL = siteUrl,
+                SubmissionDate = DateTime.Now
+            };
 
 
             const string RelativePath = "~/Views/HRInsuranceClaim/PrintToPDF.cshtml";
@@ -280,7 +298,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 // Get PDF Bytes
                 try
                 {
-                    pdfBuf = PDFConverter.Instance.ConvertFromHTML(fileName, content);
+                    pdfBuf = PDFConverter.Instance.ConvertFromHTMLLandscape(fileName, content);
                 }
                 catch (Exception e)
                 {

@@ -154,16 +154,7 @@
 @section scripts{
 
     <script>
-        $(document).ready(function () {
-            $("#submit-button-update-period").click(function () {
-                $("form#FormUpdatePeriod").submit();
-            });
 
-            $("#submit-button-add-timesheet").click(function () {
-                $("form#FormAddTimesheet").submit();
-            });
-
-        });
 
         function onCompleteUpdatePeriod(e) {
             $("#TimesheetDetails_Holidays").data("kendoGrid").dataSource.read();

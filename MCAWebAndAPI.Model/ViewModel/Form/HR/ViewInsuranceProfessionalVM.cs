@@ -20,7 +20,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public string Email { get; set; }
         public string URL { get; set; }
 
-        [UIHint("DropDown")]
+        [UIHint("ComboBox")]
         public DropDownVM ClaimStatus { get; set; } = new DropDownVM
         {
             Choices = new[]

@@ -78,7 +78,7 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
             models.FirstMiddleName = Convert.ToString(item["Title"]);
             models.OfficeEmail = Convert.ToString(item["officeemail"]);
             models.Name = Convert.ToString(item["Title"]) + " " + Convert.ToString(item["lastname"]);
-
+            models.InsuranceAccountNumber = Convert.ToString(item["hiaccountnr"]);
 
             return models;
 
@@ -94,7 +94,7 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
             var item = SPConnector.GetListItem("Dependent", id, _siteUrl);
 
             models.InsuranceNumber = Convert.ToString(item["insurancenr"]);
-            models.OrganizationInsurance = Convert.ToString(item["insurancenr"]);
+            //models.OrganizationInsurance = Convert.ToString(item["insurancenr"]);
 
 
             return models;
@@ -147,6 +147,7 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
 
             viewModel.Position = professional.Position;
             viewModel.ProfessionalTextName = professional.Name;
+            viewModel.OrganizationInsuranceID = professional.InsuranceAccountNumber;
 
             if (viewModel.ID != null)
             {
@@ -157,7 +158,7 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
             {
                 var dependent = GetDependent(viewModel.DependentID);
                 viewModel.IndividualInsuranceNumber = dependent.InsuranceNumber;
-                viewModel.OrganizationInsuranceID = dependent.OrganizationInsurance;
+               // viewModel.OrganizationInsuranceID = dependent.OrganizationInsurance;
             }
 
             return viewModel;
@@ -209,6 +210,7 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
                 viewModel.ProfessionalName.Text = Convert.ToString(item["Title"]);
                 viewModel.Position = FormatUtil.ConvertLookupToValue(item, "Position");
                 viewModel.VisibleTo = Convert.ToString(item["officeemail"]);
+                viewModel.OrganizationInsuranceID = Convert.ToString(item["hiaccountnr"]);
                 var strUnit = Convert.ToString(item["Project_x002f_Unit"]);
 
                 viewModel.UserPermission = strUnit == "Human Resources Unit" ? "HR" : "Professional";
@@ -707,15 +709,16 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
             var strBody = "";
             if (strStatus == "Need HR to Validate")
             {
-                var caml = @"<View><Query><Where><Eq><FieldRef Name='Project_x002f_Unit' />
-                <Value Type='Text'>Human Resources Unit</Value></Eq></Where></Query></View>";
-
-                foreach (var item in SPConnector.GetList("Professional Master", _siteUrl, caml))
+                //var caml = @"<View><Query><Where><Eq><FieldRef Name='Project_x002f_Unit' />
+                //<Value Type='Text'>Human Resources Unit</Value></Eq></Where></Query></View>";
+                var caml = @"<View><Query><Where><Gt><FieldRef Name='ID' />
+                <Value Type='Number'>0</Value></Gt></Where></Query></View>";
+                foreach (var item in SPConnector.GetList("HR Email Insurance", _siteUrl, caml))
                 {
-                    if (!string.IsNullOrEmpty(Convert.ToString(item["officeemail"])))
+                   
+                    string strOfficeEmail = FormatUtil.ConvertLookupToValue(item, "professional_x003a_Office_x0020_");
+                    if (!string.IsNullOrEmpty(strOfficeEmail))
                     {
-                        string strOfficeEmail = "";
-                        strOfficeEmail = Convert.ToString(item["officeemail"]);
                         lstEmail.Add(strOfficeEmail);
                     }
                 }
@@ -785,7 +788,7 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
             }
 
             var professional = GetProfessionalPosition(header.ProfessionalID);
-            columnValues.Add("visibleto", SPConnector.GetUser(professional.OfficeEmail,_siteUrl));
+            columnValues.Add("visibleto", SPConnector.GetUser(professional.OfficeEmail,_siteUrl,"hr"));
 
             try
             {
