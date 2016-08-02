@@ -123,7 +123,7 @@
                         }
                             $("#StatusForm").prop("value", CompStatus);
 
-                            var url = "/HRCompensatory/GetCompensatoryDetails?idComp=" + idComp;
+                            var url = "/HRCompensatory/GetCompensatoryDetailsUser?idComp=" + idComp;
                             showLoading();
                             $('#compensatorylist').load(url, function (response, status, xhr) {
                                 if (status == "success") {
@@ -154,7 +154,7 @@
 
                         var cmpId = $("#cmpID").val();
 
-                        var url = "/HRCompensatory/GetCompensatoryDetails?idComp=" + cmpId;
+                        var url = "/HRCompensatory/GetCompensatoryDetailsUser?idComp=" + cmpId;
                         showLoading();
                         $('#compensatorylist').load(url, function (response, status, xhr) {
                             if (status == "success") {
@@ -164,7 +164,7 @@
 
                         $("#cancel-button").click(function () {
                             showLoading();
-                            var url = "/HRCompensatory/GetCompensatoryDetails?idComp=" + $("#cmpID").val();
+                            var url = "/HRCompensatory/GetCompensatoryDetailsUser?idComp=" + $("#cmpID").val();
 
                             $('#compensatorylist').load(url, function (response, status, xhr) {
                                 if (status == "success") {
@@ -250,7 +250,7 @@
                             range = finish - start
                             data.set("CmpTotalHours", range);
                             data.CmpTotalHours = range;
-                            data.set("TotalDay", range / 12)
+                            data.set("TotalDay", range / 4)
                         }
                         data.set("EditMode", 1);
                     }
