@@ -239,6 +239,21 @@ namespace MCAWebAndAPI.Web.Controllers
             return PartialView("_InputCompensantoryDetails", viewmodel.CompensatoryDetails);
         }
 
+        public async Task<ActionResult> GetCompensatoryDetailsUser(int? idComp)
+        {
+            var viewmodel = new CompensatoryVM();
+
+            if (idComp == null)
+                return PartialView("_InputCompensantoryDetails", viewmodel.CompensatoryDetails);
+
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            viewmodel = _service.GetComplistbyCmpid(idComp);
+
+            return PartialView("_InputCompensatoryDetailsUser", viewmodel.CompensatoryDetails);
+        }
+
         [HttpPost]
         public ActionResult PrintCompensatoryRequest(FormCollection form, CompensatoryVM viewModel)
         {

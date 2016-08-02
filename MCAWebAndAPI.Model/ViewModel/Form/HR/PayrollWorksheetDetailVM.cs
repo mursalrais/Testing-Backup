@@ -1,15 +1,16 @@
 ﻿using System;
 using System.ComponentModel;
+using MCAWebAndAPI.Model.Common;
+using System.ComponentModel.DataAnnotations;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
     /// <summary>
     /// ViewModel used to export Timesheet calculation result as an excel file
     /// </summary>
-    public class PayrollWorksheetDetailVM
+    public class PayrollWorksheetDetailVM : Item
     {
         public int ProfessionalID { get; set; }
-
 
         [DisplayName("Payroll Date")]
         public DateTime PayrollDate { get; set; }
@@ -59,7 +60,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         {
             get
             {
-                return MonthlyFeeMaster / TotalWorkingDays;
+                return (MonthlyFeeMaster / TotalWorkingDays).ConvertInfinityOrNanToZero();
             }
         }
 
@@ -78,7 +79,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         {
             get
             {
-                return PropotionalMonthlyFee / DaysRequestUnpaid;
+                return (PropotionalMonthlyFee / DaysRequestUnpaid).ConvertInfinityOrNanToZero();
             }
         }
 
@@ -90,7 +91,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         {
             get
             {
-                return PropotionalMonthlyFee - UnpaidDayOff;
+                return (PropotionalMonthlyFee - UnpaidDayOff).ConvertInfinityOrNanToZero();
             }
         }
 
@@ -114,7 +115,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         {
             get
             {
-                return ((LastWorkingDate.Subtract(JoinDate).Days) + 1) / (365 * MonthlyFeeMaster);
+                return ((LastWorkingDate.Subtract(JoinDate).Days) + 1) / (365 * MonthlyFeeMaster).ConvertInfinityOrNanToZero();
             }
         }
 
@@ -126,7 +127,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         {
             get
             {
-                return ((LastWorkingDate.Subtract(Last13thMonthDate).Days) + 1) / (365 * MonthlyFeeMaster);
+                return ((LastWorkingDate.Subtract(Last13thMonthDate).Days) + 1) / (365 * MonthlyFeeMaster).ConvertInfinityOrNanToZero();
             }
         }
 
@@ -138,7 +139,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         {
             get
             {
-                return LastWorkingDatePSAGreaterThan + LastWorkingDatePSALessThan;
+                return (LastWorkingDatePSAGreaterThan + LastWorkingDatePSALessThan).ConvertInfinityOrNanToZero();
             }
         }
 
@@ -156,7 +157,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         {
             get
             {
-                return (BalanceWithoutPSA + BalanceWithPSA) * PropotionalMonthlyFee;
+                return ((BalanceWithoutPSA + BalanceWithPSA) * PropotionalMonthlyFee).ConvertInfinityOrNanToZero();
             }
         }
 
@@ -168,7 +169,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         {
             get
             {
-                return Base + Adjustment + SpotAward + RetentionPayment + Overtime + ThirteenthMonthFinal + DayOffBalance;
+                return (Base + Adjustment + SpotAward + RetentionPayment + Overtime + ThirteenthMonthFinal + DayOffBalance).ConvertInfinityOrNanToZero();
             }
         }
 
@@ -183,7 +184,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         {
             get
             {
-                return Payment + Deduction;
+                return (Payment + Deduction).ConvertInfinityOrNanToZero();
             }
         }
 
@@ -192,7 +193,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         {
             get
             {
-                return 5 / 100 * Base;
+                return (5 / 100 * Base).ConvertInfinityOrNanToZero();
             }
         }
 
