@@ -426,7 +426,7 @@
       <SubType>Designer</SubType>
     </None>
     <Content Include="JSLintNet.json" />
-    <None Include="Properties\PublishProfiles\host.my-epmo.com.pubxml" />
+    <None Include="Properties\PublishProfiles\host.my-epmo.com - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\mcaims-dev - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\mcaims-dev - Web Deploy.pubxml" />
     <None Include="Properties\Settings.settings">

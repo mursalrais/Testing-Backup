@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using MCAWebAndAPI.Model.Common;
+using System.ComponentModel.DataAnnotations;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
