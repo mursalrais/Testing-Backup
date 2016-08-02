@@ -2,16 +2,12 @@
 @model IEnumerable<CompensatoryDetailVM>
 
 <div class="col-xs-12">
+
     @(Html.Kendo().Grid(Model)
     .Name("ComplistDetails")
     .Columns(columns =>
     {
-        columns.Bound(p => p.CmpProjUnit).ClientTemplate("#= CmpProjUnit #" +
-        "<input type='hidden' name='ComplistDetails[#= GetDetailComplist(data)#].CmpProjUnit' value='#= CmpProjUnit #' />");
-
-        columns.Bound(p => p.CmpPos).ClientTemplate("#= CmpPos #" +
-        "<input type='hidden' name='ComplistDetails[#= GetDetailComplist(data)#].CmpPos' value='#= CmpPos #' />");
-
+       
         columns.Bound(p => p.CmpHID).ClientTemplate("#= CmpHID #" +
         "<input type='hidden' name='ComplistDetails[#= GetDetailComplist(data)#].CmpHID' value='#= CmpHID #' />");
 
@@ -77,4 +73,6 @@
         hideDeletedRowKendoDetail(grid);
     }
 </script>
+
+
 

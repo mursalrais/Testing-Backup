@@ -891,6 +891,7 @@
     <Content Include="Global.asax" />
     <Content Include="Site.Master" />
     <Content Include="ViewSwitcher.ascx" />
+    <Content Include="Views\HRCompensatory\_CompensantoryDetails.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -1077,7 +1078,6 @@
     <Content Include="Views\HRPerformancePlan\_ProfessionalPerformancePlan_Print.cshtml" />
     <Content Include="Views\HRPerformancePlan\PrintPerformancePlan.cshtml" />
     <Content Include="Views\HRCompensatory\CompensatorylistUser.cshtml" />
-    <Content Include="Views\HRCompensatory\_CompensantoryDetails.cshtml" />
     <Content Include="Views\HRCompensatory\InputCompensatoryUser.cshtml" />
     <Content Include="Views\HRCompensatory\_InputCompensantoryDetails.cshtml" />
     <Content Include="Views\HRCompensatory\InputCompensatoryHR.cshtml" />
@@ -1250,6 +1250,15 @@
     <Content Include="Views\HRInsuranceClaim\_ClaimComponentDetailDisplay.cshtml" />
     <Content Include="Views\HRInsuranceClaim\PrintToPDF.cshtml" />
     <Content Include="Views\HRInsuranceClaim\Redirect.cshtml" />
+    <Content Include="Views\ASSAssetMaster\_DisplayGrid.cshtml" />
+    <Content Include="Views\ASSAssetMaster\Upload.cshtml" />
+    <Content Include="Views\ASSAssetAcquisition\_Details.cshtml" />
+    <Content Include="Views\HRPayroll\DisplayPayrollWorksheet.cshtml" />
+    <Content Include="Views\HRCompensatory\_CompensatoryDetails.cshtml" />
+    <Content Include="Views\HRCompensatory\_CompensatoryDetailsHR.cshtml" />
+    <Content Include="Views\HRCompensatory\_CompensatoryRequestDetails_Print.cshtml" />
+    <Content Include="Views\HRCompensatory\_InputCompensatoryDetailsUser.cshtml" />
+    <Content Include="Views\HRCompensatory\_CompensantoryDetailsHR.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1286,6 +1295,7 @@
     <Compile Include="Controllers\HRCompensatoryController.cs" />
     <Compile Include="Controllers\HRDataMasterController.cs" />
     <Compile Include="Controllers\HRExitProcedureController.cs" />
+    <Compile Include="Controllers\HRFeeSlipController.cs" />
     <Compile Include="Controllers\HRInsuranceClaimController.cs" />
     <Compile Include="Controllers\HRInterviewlistController.cs" />
     <Compile Include="Controllers\HRManpowerRequisitionController.cs" />
@@ -1297,6 +1307,7 @@
     <Compile Include="Controllers\HRProfessionalPerformanceEvaluationController.cs" />
     <Compile Include="Controllers\HRPSAManagementController.cs" />
     <Compile Include="Controllers\HRShortlistController.cs" />
+    <Compile Include="Controllers\HRTimesheetController.cs" />
     <Compile Include="Controllers\LocationController.cs" />
     <Compile Include="Controllers\ProjectHierarchyController.cs" />
     <Compile Include="Controllers\RIAController.cs" />

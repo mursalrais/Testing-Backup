@@ -171,6 +171,10 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         public int PositionID { get; set; }
 
-        
+        ///// <summary>
+        ///// Professional's Join Date in String Format
+        ///// </summary>
+        [UIHint("Date")]
+        public DateTime StartDateApproval { get; set; } = DateTime.Now;
     }
 }

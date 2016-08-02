@@ -47,7 +47,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         IEnumerable<ProfessionalMaster> GetApproverNames(string position);
 
-        Task CreateExitProcedureChecklistAsync(int? exitProcID, IEnumerable<ExitProcedureChecklistVM> exitProcedureChecklist, string requestorposition, string requestorunit, int? positionID);
+        Task CreateExitProcedureChecklistAsync(ExitProcedureVM exitProcedure, int? exitProcID, IEnumerable<ExitProcedureChecklistVM> exitProcedureChecklist, string requestorposition, string requestorunit, int? positionID);
 
         void SendEmail(ExitProcedureVM header, string workflowTransactionListName, string transactionLookupColumnName,
             int exitProcID, string messageForApprover, string messageForRequestor);

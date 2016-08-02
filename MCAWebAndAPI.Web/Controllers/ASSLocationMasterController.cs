@@ -89,19 +89,25 @@ namespace MCAWebAndAPI.Web.Controllers
             return locationMaster;
         }
 
-        public ActionResult UpdateProvince(string siteUrl = null, string Update = null)
+        public ActionResult UpdateProvince(string siteUrl = null)
         {
             // MANDATORY: Set Site URL
             _locationMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             ViewBag.Action = "UpdateProvince";
-            var viewModel = _locationMasterService.GetPopulatedModel();
-            
-            viewModel.Update = Update;
 
-            // Return to the name of the view and parse the model
-            return View("Create");
+            try
+            {
+                var province = _locationMasterService.UpdateProvince();
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.MonthlyFee);
         }
 
         [HttpPost]
