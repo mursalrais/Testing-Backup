@@ -147,3 +147,4 @@ Parameter name: address
 2016-08-01 10:58:57.0159 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Item does not exist. It may have been deleted by another user.
 2016-08-01 11:09:18.5270 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Item does not exist. It may have been deleted by another user.
 2016-08-01 11:11:32.3030 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Item does not exist. It may have been deleted by another user.
+2016-08-01 19:53:57.2985 MCAWebAndAPI.Service.Asset.LocationMasterService List 'Place Master' does not exist at site with URL 'https://eceos2.sharepoint.com/sites/mca-dev/BO'.
