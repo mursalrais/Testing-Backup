@@ -38,7 +38,7 @@
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.InterviewerPanel).Class("col-sm-2 control-label")
                     <div class="col-sm-6">
-                        @Html.TextBoxFor(m => m.InterviewerPanel, new { @class = "form-control", @onblur = "validatmail()", style = "height:40px; weight:40px; ", @placeholder = "Please Input Email" })
+                        @Html.TextBoxFor(m => m.InterviewerPanel, new { @class = "form-control", @onblur = "validatmail()", style = "height:40px; width: 450px; ", @placeholder = "Input Email (ex : user@mydomain.com; user@mydomain.com)" })
                     </div>
                 </div>
             </div>

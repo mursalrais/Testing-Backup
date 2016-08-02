@@ -8,14 +8,14 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
     public class PayrollRunVM : Item
     {
         [UIHint("Date")]
-        public DateTime From { get; set; }
+        public DateTime From { get; set; } = DateTime.Today;
 
         [UIHint("Date")]
-        public DateTime To { get; set; }
+        public DateTime To { get; set; } = DateTime.Today.AddDays(30);
 
         [UIHint("Date")]
         [DisplayName("13th Month Date")]
-        public DateTime ThirteenMonthDate { get; set; }
+        public DateTime ThirteenMonthDate { get; set; } = DateTime.Today.AddMonths(5);
 
     }
 }

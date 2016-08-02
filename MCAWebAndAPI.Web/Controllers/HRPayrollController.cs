@@ -121,6 +121,8 @@ namespace MCAWebAndAPI.Web.Controllers
             SessionManager.Set("SiteUrl", siteUrl);
             _hRPayrollService.SetSiteUrl(siteUrl);
 
+            var viewModelPayroll = _hRPayrollService.GetPayrollWorksheetDetails(null);
+            SessionManager.Set("PayrollWorksheetDetailVM", viewModelPayroll);
 
             var viewModel = new PayrollRunVM();  
             return View(viewModel);
@@ -132,17 +134,33 @@ namespace MCAWebAndAPI.Web.Controllers
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _hRPayrollService.SetSiteUrl(siteUrl);
 
-            var viewModelPayroll = new List<PayrollWorksheetDetailVM>();
+            IEnumerable<PayrollWorksheetDetailVM> viewModelPayroll = new List<PayrollWorksheetDetailVM>();
             try
             {
-                viewModelPayroll = _hRPayrollService.GetPayrollWorksheetDetails(viewModel.From).ToList();
+                viewModelPayroll = _hRPayrollService.GetPayrollWorksheetDetails(viewModel.From);
             }
             catch (Exception e)
             {
                 return Json(new { message = e.Message }, JsonRequestBehavior.AllowGet);
             }
 
+            SessionManager.Set("PayrollWorksheetDetailVM", viewModelPayroll);
+
             return Json(new { message = "Period has been updated" }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GridWorksheet_Read([DataSourceRequest] DataSourceRequest request)
+        {
+            // Get from existing session variable or create new if doesn't exist
+            var items = SessionManager.Get<IEnumerable<PayrollWorksheetDetailVM>>("PayrollWorksheetDetailVM");
+
+            // Convert to Kendo DataSource
+            DataSourceResult result = items.ToDataSourceResult(request);
+
+            // Convert to Json
+            var json = Json(result, JsonRequestBehavior.AllowGet);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
         }
 
         [HttpPost]

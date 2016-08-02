@@ -64,5 +64,7 @@ namespace MCAWebAndAPI.Service.HR.Common
 
         IEnumerable<DependentMaster> GetDependents();
 
+        IEnumerable<DependentMaster> GetDependentsForInsurance();
+
     }
 }
