@@ -1,6 +1,6 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
 @using MCAWebAndAPI.Service.Utils
-
+ 
 @model PayrollRunVM
 
 <div class="form-horizontal">
@@ -19,7 +19,6 @@
                             @(Html.Kendo().DatePicker()
                           .Name("From")
                           .Value(Model.From)
-                          .Min((Model.From.AddDays(-1)).GetFirstPayrollDay())
                           .Max(DateTime.Today)
                           .Events(e => e.Change("startChange"))
                           .HtmlAttributes(new { @class = "form-control", style = "width: 100%" })
@@ -32,7 +31,7 @@
                             @(Html.Kendo().DatePicker()
                           .Name("To")
                           .Value(Model.To)
-                          .Min((Model.From.AddDays(-1)).GetFirstPayrollDay())
+                          .Min(Model.From)
                           .Max((Model.From).GetLastPayrollDay())
                           .Events(e => e.Change("endChange"))
                           .HtmlAttributes(new { @class = "form-control", style = "width: 100%" })
@@ -55,7 +54,8 @@
         <legend>Payroll Worksheet Details</legend>
         <div class="row">
             <div class="col-sm-12">
-                @(Html.Kendo().Grid<PayrollWorksheetDetailVM>()
+                @(Html.Kendo()
+                    .Grid<PayrollWorksheetDetailVM>()
                     .Name("PayrollWorksheetGrid")
                     .Columns(columns =>
                     {
@@ -97,22 +97,12 @@
                         columns.Bound(e => e.BankName).Width(200);
                         columns.Bound(e => e.BankBranchOffice).Width(200);
                     })
-                    .Excel(excel => excel
-                        .FileName("Kendo UI Grid Export.xlsx")
-                        .Filterable(true)
-                        .ProxyURL(Url.Action("GridWorksheet_ExportExcel", "HRPayroll"))
-                    )
+                    .Scrollable(s => s.Height(600))
                     .DataSource(dataSource => dataSource
                         .Ajax()
                         .Read(read => read.Action("GridWorksheet_Read", "HRPayroll"))
+                        .Sort(s => s.Add(c => c.Name))
                     )
-                    .Scrollable(scrollable => scrollable.Height(600))
-                    .Reorderable(reorderable => reorderable.Columns(true))
-                    .Resizable(resizable => resizable.Columns(true))
-                    .Filterable()
-                    .Sortable()
-                    .Groupable()
-                    .ColumnMenu()
                 )
             </div>
         </div>
@@ -122,12 +112,6 @@
 @section scripts{
 
     <script>
-        $(document).ready(function () {
-            $("#submit-button-update-period").click(function () {
-                $("#form-update-period").submit();
-            });
-
-        });
 
         function onCompleteUpdatePeriod(e) {
             $("#PayrollWorksheetGrid").data("kendoGrid").dataSource.read();

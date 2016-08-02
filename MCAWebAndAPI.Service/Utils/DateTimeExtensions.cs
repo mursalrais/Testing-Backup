@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Service.Utils
 {
@@ -10,20 +7,26 @@ namespace MCAWebAndAPI.Service.Utils
     {
         public static DateTime GetFirstPayrollDay(this DateTime startDate)
         {
-            var month = startDate.Month;
-            var year = startDate.Year;
+            var firstDate = startDate;
+            if (startDate.Day <= 20)
+                firstDate = startDate.AddMonths(-1);
+
+            var month = firstDate.Month;
+            var year = firstDate.Year;
 
             return new DateTime(year, month, 20);
         }
 
         public static DateTime GetLastPayrollDay(this DateTime startDate)
         {
-            var month = startDate.Month;
-            var year = startDate.Year;
+            var finishDate = startDate;
+            if (startDate.Day >= 20)
+                finishDate = startDate.AddMonths(1);
 
-            if (month == 12)
-                return new DateTime(year + 1, 1, 19);
-            return new DateTime(year, month + 1, 19);
+            var month = finishDate.Month;
+            var year = finishDate.Year;
+
+            return new DateTime(year, month, 19);
         }
 
         public static DateTime GetSameDayInNextMonth(this DateTime startDate)

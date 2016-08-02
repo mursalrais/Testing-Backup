@@ -121,7 +121,7 @@ namespace MCAWebAndAPI.Web.Controllers
             SessionManager.Set("SiteUrl", siteUrl);
             _hRPayrollService.SetSiteUrl(siteUrl);
 
-            var viewModelPayroll = _hRPayrollService.GetPayrollWorksheetDetails(null);
+            var viewModelPayroll = _hRPayrollService.GetPayrollWorksheetDetails(DateTime.Today);
             SessionManager.Set("PayrollWorksheetDetailVM", viewModelPayroll);
 
             var viewModel = new PayrollRunVM();  
@@ -149,6 +149,7 @@ namespace MCAWebAndAPI.Web.Controllers
             return Json(new { message = "Period has been updated" }, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
         public ActionResult GridWorksheet_Read([DataSourceRequest] DataSourceRequest request)
         {
             // Get from existing session variable or create new if doesn't exist
@@ -158,9 +159,7 @@ namespace MCAWebAndAPI.Web.Controllers
             DataSourceResult result = items.ToDataSourceResult(request);
 
             // Convert to Json
-            var json = Json(result, JsonRequestBehavior.AllowGet);
-            json.MaxJsonLength = int.MaxValue;
-            return json;
+            return Json(result); ;
         }
 
         [HttpPost]
