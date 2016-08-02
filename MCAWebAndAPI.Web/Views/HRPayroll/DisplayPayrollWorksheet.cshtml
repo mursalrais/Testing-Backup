@@ -1,6 +1,6 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
 @using MCAWebAndAPI.Service.Utils
- 
+
 @model PayrollRunVM
 
 <div class="form-horizontal">
@@ -55,53 +55,19 @@
         <div class="row">
             <div class="col-sm-12">
                 @(Html.Kendo()
-                    .Grid<PayrollWorksheetDetailVM>()
-                    .Name("PayrollWorksheetGrid")
-                    .Columns(columns =>
-                    {
-                        columns.Bound(e => e.PayrollDate).Width(150).Locked(true).Lockable(false);
-                        columns.Bound(e => e.Last13thMonthDate).Width(150).Locked(true);
-                        columns.Bound(e => e.Name).Width(350).Locked(true);
-                        columns.Bound(e => e.ProjectUnit).Width(200);
-                        columns.Bound(e => e.Position).Width(200);
-                        columns.Bound(e => e.JoinDate).Width(200);
-                        columns.Bound(e => e.DateOfNewPSA).Width(200);
-                        columns.Bound(e => e.LastWorkingDate).Width(200);
-                        columns.Bound(e => e.PSANumber).Width(200);
-                        columns.Bound(e => e.DateOfNewFee).Width(200);
-                        columns.Bound(e => e.EndDate).Width(200);
-                        columns.Bound(e => e.MonthlyFeeMaster).Width(200);
-                        columns.Bound(e => e.TotalWorkingDays).Width(200);
-                        columns.Bound(e => e.PropotionalMonthlyFee).Width(200);
-                        columns.Bound(e => e.Remarks).Width(200);
-                        columns.Bound(e => e.DaysRequestUnpaid).Width(200);
-                        columns.Bound(e => e.UnpaidDayOff).Width(200);
-                        columns.Bound(e => e.Base).Width(200);
-                        columns.Bound(e => e.Adjustment).Width(200);
-                        columns.Bound(e => e.SpotAward).Width(200);
-                        columns.Bound(e => e.RetentionPayment).Width(200);
-                        columns.Bound(e => e.Overtime).Width(200);
-                        columns.Bound(e => e.LastWorkingDatePSAGreaterThan).Width(200);
-                        columns.Bound(e => e.LastWorkingDatePSALessThan).Width(200);
-                        columns.Bound(e => e.ThirteenthMonthFinal).Width(200);
-                        columns.Bound(e => e.BalanceWithoutPSA).Width(200);
-                        columns.Bound(e => e.BalanceWithPSA).Width(200);
-                        columns.Bound(e => e.DayOffBalance).Width(200);
-                        columns.Bound(e => e.Payment).Width(200);
-                        columns.Bound(e => e.Deduction).Width(200);
-                        columns.Bound(e => e.TakeHomePay).Width(200);
-                        columns.Bound(e => e.SavingFund).Width(200);
-                        columns.Bound(e => e.BankAccountName).Width(200);
-                        columns.Bound(e => e.Currency).Width(200);
-                        columns.Bound(e => e.BankAccountNumber).Width(200);
-                        columns.Bound(e => e.BankName).Width(200);
-                        columns.Bound(e => e.BankBranchOffice).Width(200);
-                    })
-                    .Scrollable(s => s.Height(600))
-                    .DataSource(dataSource => dataSource
-                        .Ajax()
-                        .Read(read => read.Action("GridWorksheet_Read", "HRPayroll"))
-                        .Sort(s => s.Add(c => c.Name))
+        .Grid<PayrollWorksheetDetailVM>()
+        .Name("PayrollWorksheetGrid")
+        .Columns(columns =>
+        {
+            columns.Bound(e => e.PayrollDate);
+            columns.Bound(e => e.Name);
+            
+        })
+        .Scrollable(s => s.Height(600))
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .Read(read => read.Action("GridWorksheet_Read", "HRPayroll"))
+            .Sort(s => s.Add(c => c.Name))
                     )
                 )
             </div>
@@ -112,12 +78,10 @@
 @section scripts{
 
     <script>
-
         function onCompleteUpdatePeriod(e) {
             $("#PayrollWorksheetGrid").data("kendoGrid").dataSource.read();
             $("#PayrollWorksheetGrid").data("kendoGrid").refresh();
         }
-
 
         function startChange() {
             var endPicker = $("#To").data("kendoDatePicker"),

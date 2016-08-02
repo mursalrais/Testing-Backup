@@ -153,13 +153,13 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult GridWorksheet_Read([DataSourceRequest] DataSourceRequest request)
         {
             // Get from existing session variable or create new if doesn't exist
-            var items = SessionManager.Get<IEnumerable<PayrollWorksheetDetailVM>>("PayrollWorksheetDetailVM");
+            IEnumerable<PayrollWorksheetDetailVM> items = SessionManager.Get<IEnumerable<PayrollWorksheetDetailVM>>("PayrollWorksheetDetailVM");
 
             // Convert to Kendo DataSource
             DataSourceResult result = items.ToDataSourceResult(request);
 
             // Convert to Json
-            return Json(result); ;
+            return Json(result);
         }
 
         [HttpPost]
