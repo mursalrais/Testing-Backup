@@ -203,7 +203,7 @@ function validatemail(domID) {
     for (i = 0; i < emailArray.length; i++) {
         var emailtxt = emailArray[i];
 
-        if (!((emailtxt == ",") || (emailtxt == "") || (emailtxt == " "))) {
+        if (!((emailtxt == ";") || (emailtxt == ",") || (emailtxt == "") || (emailtxt == " "))) {
             if (getvalidateEmail(emailArray[i])) {
                 $('#' + domID).css("color", "green");
             } else {
