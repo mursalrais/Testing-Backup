@@ -1,0 +1,156 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model InsuranceClaimVM
+
+@{
+    ViewBag.Title = "Display Insurance Claim";
+}
+
+
+
+
+
+
+
+    <fieldset>
+
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary()
+        @Html.HiddenFor(m => m.ProfessionalTextName)
+        @Html.HiddenFor(m => m.UserPermission)
+        @Html.HiddenFor(m => m.ClaimStatus)
+        @Html.HiddenFor(m => m.VisibleTo)
+        @Html.HiddenFor(m => m.ProfessionalID)
+        @Html.HiddenFor(m => m.ID)
+        @Html.HiddenFor(m => m.URL)
+        <div class="col-sm-6">
+
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.ProfessionalName).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.ProfessionalTextName)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Position).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.Position)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Type).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.Type)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.OrganizationInsuranceID).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.OrganizationInsuranceID)
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.ClaimDate).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.ClaimDate)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.DependantName).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.DependantName)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.IndividualInsuranceNumber).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.IndividualInsuranceNumber)
+                </div>
+            </div>
+
+        </div>
+
+        <legend>Claim Component</legend>
+        <div class="row">
+            @Html.Partial("_ClaimComponentDetailDisplay", Model)
+        </div>
+
+     
+
+</fieldset>
+   
+        <div class="form-actions">
+            <div class="row">
+                <div class="col-sm-12">
+                    <button id="submit-to-cancel" class="btn btn-primary">
+                       
+                        Cancel
+                    </button>
+             
+                </div>
+            </div>
+        </div>
+    
+
+@section scripts{
+    <script type="text/javascript">
+        $(document)
+            .ready(function() {
+
+                $("#submit-to-cancel").kendoButton({
+                    click: function (e) {
+                    var strPermission = $("#UserPermission").val();
+
+                    if (strPermission === "HR") {
+
+                        window.top.location.href = $("#URL").val() + '/sitePages/hrInsuranceView.aspx';
+                    } else if (strPermission === "Professional") {
+                        window.top.location.href = $("#URL").val() + '/sitePages/ProfessionalClaim.aspx';
+                    }
+                }
+            });
+        });
+
+        function OnSelectDependantName(e) {
+            var dataItem = this.dataItem(e.item);
+            var url = "/HRDataMaster/GetDependant/" + dataItem.ID;
+            $('#IndividualInsuranceNumber').prop('value', '');
+            $('#OrganizationInsuranceID').prop('value', '');
+            $.getJSON(url,
+                function(result) {
+                    $('#IndividualInsuranceNumber').prop('value', result[0].InsuranceNumber);
+                    $('#OrganizationInsuranceID').prop('value', result[0].OrganizationInsurance);
+
+                });
+        }
+
+        function OnSelectType(e) {
+
+            var dataItem = this.dataItem(e.item.index());
+            var dependent = $("#DependantName_Value").data("kendoDropDownList");
+            $('#IndividualInsuranceNumber').prop('value', '');
+            $('#OrganizationInsuranceID').prop('value', '');
+            if (dataItem === 'Professional') {
+                dependent.enable(false);
+            } else {
+                dependent.enable(true);
+            }
+            dependent.select(0);
+        }
+
+        function OnSelectProfessionalName(e) {
+            var dataItem = this.dataItem(e.item);
+            var url = "/HRDataMaster/GetProfessional/" + dataItem.ID;
+
+            $.getJSON(url,
+                function(result) {
+                    $('#Position').prop('value', result[0].Position);
+                    $('#ProfessionalTextName').prop('value', result[0].Name);
+                    $('#ProfessionalID').prop('value', result[0].ID);
+                });
+        }
+
+
+    </script>
+}

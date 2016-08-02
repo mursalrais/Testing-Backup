@@ -61,6 +61,15 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Compensatory time requested by Professional: (please complete the form, have it verified by the HR Unit before have it signed/approved by the Manager).
+        /// </summary>
+        public static string CompensatoryPrintText {
+            get {
+                return ResourceManager.GetString("CompensatoryPrintText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to Edit Exit Procedure.
         /// </summary>
         public static string ErrorEditExitProcedure {
@@ -142,7 +151,18 @@ namespace MCAWebAndAPI.Web.Resources {
                 return ResourceManager.GetString("SuccessCreatePSAManagementData", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to  {0}  has successfully been submitted..
+        /// </summary>
+        public static string SuccessCreateFINSPHLData
+        {
+            get
+            {
+                return ResourceManager.GetString("SuccessCreateSPHLData", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to Congratulation {0}! To download the printed version of your application. &lt;br/&gt;&lt;br/&gt;&lt;a href=&quot;{1}&quot; target=&quot;_blank&quot; class=&quot;btn btn-labeled btn-default&quot;&gt; &lt;span class=&quot;btn-label&quot;&gt;&lt;i class=&quot;fa fa-file&quot;&gt;&lt;/i&gt;&lt;/span&gt;Download File&lt;/a&gt;.
         /// </summary>

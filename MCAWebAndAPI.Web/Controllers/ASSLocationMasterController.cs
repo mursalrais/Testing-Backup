@@ -30,6 +30,8 @@ namespace MCAWebAndAPI.Web.Controllers
             _locationMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
+            ViewBag.Action = "CreateLocationMaster";
+
             // Get blank ViewModel
             var viewModel = _locationMasterService.GetPopulatedModel();
 
@@ -49,8 +51,8 @@ namespace MCAWebAndAPI.Web.Controllers
                 headerID = _locationMasterService.CreateHeader(viewModel, viewModel.Province.Text, viewModel.OfficeName, viewModel.FloorName, viewModel.RoomName);
                 if (headerID == 0)
                 {
-                    ModelState.AddModelError("ModelInvalid", "This Location is Already Exist");
-                    return View("Create", viewModel);
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    return JsonHelper.GenerateJsonErrorResponse("This Location is Already Exist");
                 }
             }
             catch (Exception e)
@@ -85,6 +87,46 @@ namespace MCAWebAndAPI.Web.Controllers
             if (sessionVariable == null) // If no session variable is found
                 System.Web.HttpContext.Current.Session["LocationMaster"] = locationMaster;
             return locationMaster;
+        }
+
+        public ActionResult UpdateProvince(string siteUrl = null)
+        {
+            // MANDATORY: Set Site URL
+            _locationMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            ViewBag.Action = "UpdateProvince";
+
+            try
+            {
+                var province = _locationMasterService.UpdateProvince();
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.MonthlyFee);
+        }
+
+        [HttpPost]
+        public ActionResult UpdateProvince(FormCollection form, LocationMasterVM viewModel)
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _locationMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            try
+            {
+                var province = _locationMasterService.UpdateProvince();
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.MonthlyFee);
         }
     }
 }

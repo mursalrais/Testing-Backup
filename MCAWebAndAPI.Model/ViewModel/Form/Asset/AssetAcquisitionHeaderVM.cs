@@ -4,55 +4,56 @@ using System;
 using MCAWebAndAPI.Model.ViewModel.Control;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using MCAWebAndAPI.Model.Common;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 {
-    public class AssetAcquisitionHeaderVM
+    public class AssetAcquisitionHeaderVM : Item
     {
-        public int Id { get; set; }
-        private DateTime _warrantyExpires;
-        private ComboBoxVM _acceptanceMemoNo;        
+        private ComboBoxVM _accmemo;
 
-        public string TransactionType { get; set; }
-        public string PurchaseDescription { get; set; }      
+        public IEnumerable<AssetAcquisitionItemVM> Details { get; set; } = new List<AssetAcquisitionItemVM>();
 
-        public DateTime PurchaseDate
-        {
-            get
-            {
-                if (_warrantyExpires == null)
-                    _warrantyExpires = new DateTime();
-                return _warrantyExpires;
-            }
+        public string  TransactionType { get; set; }
 
-            set
-            {
-                _warrantyExpires = value;
-            }
-        }
-
+        [DisplayName("Aceptance Memo No")]
         [UIHint("ComboBox")]
-        public ComboBoxVM AcceptanceMemoNo
+        public ComboBoxVM AccpMemo
         {
             get
             {
-                if (_acceptanceMemoNo == null)
-                    _acceptanceMemoNo = new ComboBoxVM()
+                if (_accmemo == null)
+                {
+                    _accmemo = new ComboBoxVM()
                     {
                         Choices = new string[]
                         {
-                            "Acceptance Memo No 1",
-                            "Acceptance Memo No 2",
-                            "Acceptance Memo No 3"
+                            "1",
+                            "2",
+                            "3"
                         }
                     };
-                return _acceptanceMemoNo;
+                }
+                return _accmemo;
             }
+
             set
             {
-                _acceptanceMemoNo = value;
+                _accmemo = value;
             }
         }
 
+        public string Vendor { get; set; }
+        public string PoNo { get; set; }
+
+        [UIHint("Date")]
+        public DateTime PurchaseDate { get; set; }
+
+        public string  PurchaseDescription { get; set; }
+
+
     }
 }
+
+
+

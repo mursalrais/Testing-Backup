@@ -2,7 +2,7 @@
 
 @model LocationMasterVM
 
-@using (Ajax.BeginForm("CreateLocationMaster", "ASSLocationMaster",
+@using (Ajax.BeginForm((string)ViewBag.Action, "ASSLocationMaster",
                                                                             FormMethod.Post,
                                                                             new AjaxOptions
                                                                             {

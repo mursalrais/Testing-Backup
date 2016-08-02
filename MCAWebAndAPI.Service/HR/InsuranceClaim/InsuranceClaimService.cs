@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
+using System.Security;
+
 //using System.Reflection;
 using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Model.HR.DataMaster;
@@ -28,7 +31,7 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
             _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
         }
 
-
+      
         private ClaimComponentDetailVM ConvertToComponentDetailVM(ListItem item)
         {
             return new ClaimComponentDetailVM
@@ -129,12 +132,15 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
                     Text = Convert.ToString(listItem["claimtype"]),
                     Value = Convert.ToString(listItem["claimtype"])
                 },
-                ProfessionalTextName = Convert.ToString(listItem["Title"])
+                ProfessionalTextName = Convert.ToString(listItem["Title"]),
+                URL= _siteUrl
             };
 
             if (!string.IsNullOrEmpty(Convert.ToString(listItem["claimtotal"])))
             {
-                viewModel.TotalAmount = Convert.ToDouble(listItem["claimtotal"]).ToString("n0");
+               // viewModel.TotalAmount = Convert.ToDouble(listItem["claimtotal"]).ToString("n0");
+                viewModel.TotalAmount = Convert.ToDecimal(listItem["claimtotal"]);
+                viewModel.TotalAmountTemp = Convert.ToDecimal(listItem["claimtotal"]);
             }
 
             var professional = GetProfessionalPosition(viewModel.ProfessionalID);
@@ -206,6 +212,8 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
                 var strUnit = Convert.ToString(item["Project_x002f_Unit"]);
 
                 viewModel.UserPermission = strUnit == "Human Resources Unit" ? "HR" : "Professional";
+               // viewModel.URL = _siteUrl;
+               // viewModel = _siteUrl;
             }
 
             return viewModel;
@@ -476,9 +484,11 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
     
             }
 
-            caml = @"<View><Query><Where>
-                        <Eq><FieldRef Name='claimstatus' /><Value Type='Choice'>Submitted to AXA</Value></Eq>
-                        </Where></Query></View>";
+            caml = @"<View><Query><Where><And>
+                        <Eq><FieldRef Name='claimstatus' />
+                        <Value Type='Choice'>Submitted to AXA</Value></Eq>
+                        <Eq><FieldRef Name='BatchNo' /><Value Type='Text'>" + strbatch + 
+                        "</Value></Eq></And></Where></Query></View>";
             var iNo = 1;
 
             foreach (var item in SPConnector.GetList(SpHeaderListName, _siteUrl, caml))
@@ -548,7 +558,10 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
             var caml = @"<View><Query><Where><Eq><FieldRef Name='claimstatus' />
             <Value Type='Choice'>Validated by HR</Value></Eq></Where></Query></View>";
             var columnValuesupdate = new Dictionary<string, object>
-            {{"claimstatus", "Submitted to AXA"}};
+            {
+                {"claimstatus", "Submitted to AXA"},
+                {"BatchNo", header.BatchNo}
+            };
             foreach (var item in SPConnector.GetList(SpHeaderListName, _siteUrl, caml))
             {
                 SPConnector.UpdateListItem(SpHeaderListName, Convert.ToInt32(item["ID"]), columnValuesupdate, _siteUrl);
@@ -676,6 +689,7 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
                 BatchNo = "",
                 Recepient = "",
                 Sender = "",
+                URL = _siteUrl,
                 SubmissionDate = DateTime.Now
             };
 
@@ -744,15 +758,21 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
                {"claimtype", header.Type.Text},
                {"claimdate", header.ClaimDate},
                {"claimstatus", header.ClaimStatus},
-               {"claimyear", header.ClaimDate.Value.Year},
+               {"claimyear", header.ClaimDate.Value.Year}
            };
 
-            if (!string.IsNullOrEmpty(header.TotalAmount)) columnValues.Add("claimtotal", Convert.ToDouble(header.TotalAmount)); 
+        
+
+            if (!string.IsNullOrEmpty(Convert.ToString(header.TotalAmount)))
+            {
+                columnValues.Add("claimtotal", Convert.ToDouble(header.TotalAmount));
+            } 
 
             if (header.ProfessionalName.Value != null)
             {
                 columnValues.Add("professional",
                     new FieldLookupValue { LookupId = Convert.ToInt32(header.ProfessionalName.Value) });
+                header.ProfessionalID = Convert.ToInt32(header.ProfessionalName.Value);
             }
             else
             {
@@ -763,6 +783,10 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
             {
                 columnValues.Add("dependent", new FieldLookupValue { LookupId = Convert.ToInt32(header.DependantName.Value) });
             }
+
+            var professional = GetProfessionalPosition(header.ProfessionalID);
+            columnValues.Add("visibleto", SPConnector.GetUser(professional.OfficeEmail,_siteUrl));
+
             try
             {
                 SPConnector.AddListItem(SpHeaderListName, columnValues, _siteUrl);
@@ -893,7 +917,10 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
             columnValues.Add("claimdate", header.ClaimDate);
             columnValues.Add("claimstatus", header.ClaimStatus);
             columnValues.Add("claimyear", header.ClaimDate.Value.Year);
-            if (!string.IsNullOrEmpty(header.TotalAmount)) columnValues.Add("claimtotal", Convert.ToDouble(header.TotalAmount));
+            if (!string.IsNullOrEmpty((Convert.ToString(header.TotalAmount))))
+            {
+                columnValues.Add("claimtotal", Convert.ToDouble(header.TotalAmount));
+            }
 
 
             if (header.Type.Text == "Dependent")

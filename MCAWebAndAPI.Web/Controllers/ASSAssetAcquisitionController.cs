@@ -3,7 +3,12 @@ using Kendo.Mvc.UI;
 using MCAWebAndAPI.Model.ViewModel.Form.Asset;
 using MCAWebAndAPI.Service.Asset;
 using MCAWebAndAPI.Web.Helpers;
+using MCAWebAndAPI.Web.Resources;
+using System;
+using System.Net;
 using System.Web.Mvc;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -16,38 +21,47 @@ namespace MCAWebAndAPI.Web.Controllers
             _assetAcquisitionService = new AssetAcquisitionService();
         }
 
-        // GET: ASSAssetAcquisition
-        public ActionResult Index()
-        {
-            return View();
-        }
-
         public ActionResult Create()
         {
-            var viewModel = _assetAcquisitionService.GetAssetAcquisition_Dummy();
+            var viewModel = _assetAcquisitionService.GetPopulatedModel();
 
             return View(viewModel);
         }
 
         [HttpPost]
-        public ActionResult Submit(AssetAcquisitionVM _data)
+        public ActionResult Submit(AssetAcquisitionHeaderVM _data, string site)
         {
-            //return View(new AssetAcquisitionVM());
-            var data = _data;
-
-            return this.Jsonp(data);
+            //return View(new AssetMasterVM());
+            _assetAcquisitionService.CreateHeader(_data);
+            return new JavaScriptResult
+            {
+                Script = string.Format("window.parent.location.href = '{0}'", "https://eceos2.sharepoint.com/sites/mca-dev/bo/Lists/AssetAcquisition/AllItems.aspx")
+            };
         }
 
-        [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult EditingPopup_Create([DataSourceRequest] DataSourceRequest request, AssetAcquisitionItemVM _assetAcquisitionVM)
+        public JsonResult GetAssetSubSAssetGrid()
         {
-            if (_assetAcquisitionVM != null && ModelState.IsValid)
-            {
-                _assetAcquisitionService.CreateAssetAcquisitionItem_dummy(_assetAcquisitionVM);
-                //productService.Create(_assetAcquisitionItem);
-            }
+            _assetAcquisitionService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
 
-            return Json(new[] { _assetAcquisitionVM }.ToDataSourceResult(request, ModelState));
+            var positions = GetFromPositionsExistingSession();
+
+            return Json(positions.Select(e =>
+                new {
+                    Value = Convert.ToString(e.ID),
+                    Text = e.AssetNoAssetDesc + " - " + e.AssetDesc
+                }),
+                JsonRequestBehavior.AllowGet);
+        }
+
+        private IEnumerable<AssetMasterVM> GetFromPositionsExistingSession()
+        {
+            //Get existing session variable
+            var sessionVariable = System.Web.HttpContext.Current.Session["AssetSubAsset"] as IEnumerable<AssetMasterVM>;
+            var positions = sessionVariable ?? _assetAcquisitionService.GetAssetSubAsset();
+
+            if (sessionVariable == null) // If no session variable is found
+                System.Web.HttpContext.Current.Session["AssetSubAsset"] = positions;
+            return positions;
         }
     }
 }

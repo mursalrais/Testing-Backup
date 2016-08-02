@@ -82,34 +82,46 @@
 </div>
 
 <div class="col-sm-12">
-    <div class="form-actions">
+   
         <div class="form-group">
-            @Html.Bootstrap().LabelFor(m => m.TotalAmount).Class("col-sm-4 control-label")
+            @Html.Bootstrap().LabelFor(m => m.TotalAmountTemp).Class("col-sm-4 control-label")
             <div class="col-sm-8">
-                @Html.DisplayFor(m => m.TotalAmount)
+                @Html.DisplayFor(m => m.TotalAmountTemp)
             </div>
         </div>
-    </div>
+    @Html.HiddenFor(m => m.TotalAmount)
 </div>
 
 
 <script>
+ 
+        $(document)
+        .ready(function() {
+            //var overallTotalScore = 0;
+            //overallTotalScore = parseFloat($('#TotalAmount').val());
+            //    alert(overallTotalScore);
+            //$('#TotalAmountTemp').prop('value', format1(overallTotalScore));
+
+            });
+
     function getComponentDetail(dataItem) {
         var data = $("#ClaimComponentDetails").data("kendoGrid").dataSource.data();
         return data.indexOf(dataItem);
     }
 
     function onDataBoundComponentDetails(e) {
-        //var grid = $("#ClaimComponentDetails").data("kendoGrid");
-        //hideDeletedRowKendoDetail(grid);
+        var grid = $("#ClaimComponentDetails").data("kendoGrid");
 
-        var gridData = $("#ClaimComponentDetails").data("kendoGrid");
-
+        var gridData = grid.dataSource.view();
+        var dataSource = grid.dataSource;
         for (var i = 0; i < gridData.length; i++) {
             var currentUid = gridData[i].uid;
             if ((gridData[i].EditMode == -1)) {
                 var currenRow = grid.table.find("tr[data-uid='" + currentUid + "']");
-                currenRow.delete();
+                var cell = currenRow.find("td:eq(2)");
+                cell.text(0);
+                dataSource._data[i].Amount=0.0;
+                currenRow.hide();
             }
         }
 
@@ -123,12 +135,14 @@
         var data = this.dataItem(tr); //get the row data so it can be referred later
 
 
-        var overallTotalScore =0.0;
+        var overallTotalScore = 0;
         overallTotalScore = $('#TotalAmount').val();
-        overallTotalScore = overallTotalScore - data.Amount;
-  
-        $('#TotalAmount').prop('value', format1(overallTotalScore));
+        if (data.Amount > 0) {
+            overallTotalScore = parseFloat(overallTotalScore) - parseFloat(data.Amount);
+        }
 
+        $('#TotalAmount').prop('value', overallTotalScore);
+        $('#TotalAmountTemp').prop('value', format1(overallTotalScore));
         // -1 is Item.Mode.DELETED
         data.set("EditMode", -1);
 
@@ -152,9 +166,10 @@
                 recordsOnCurrentView = dataSource.view().length;
 
                 for (var i = 0; i < recordsOnCurrentView; i++) {
-                    overallTotalScore = overallTotalScore + dataSource._data[i].Amount;
+                    overallTotalScore = overallTotalScore + parseFloat(dataSource._data[i].Amount);
                 }
-                $('#TotalAmount').prop('value', format1(overallTotalScore));
+                $('#TotalAmount').prop('value', overallTotalScore);
+                $('#TotalAmountTemp').prop('value', format1(overallTotalScore));
             }
         }
     }

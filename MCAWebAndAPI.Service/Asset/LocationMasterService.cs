@@ -27,7 +27,7 @@ namespace MCAWebAndAPI.Service.Asset
       </View>";
             int error = 0;
             var locationTemp = SPConnector.GetList(SP_LOCATIONMASTER_LISTNAME, _siteUrl, caml).Count();
-            if (locationTemp > 0)
+            if (locationTemp != 0)
             {
                 return error;
             }
@@ -87,51 +87,23 @@ namespace MCAWebAndAPI.Service.Asset
             return new LocationMasterVM
             {
                 ID = Convert.ToInt32(item["ID"]),
-                Title = Convert.ToString(item["Title"]),
+                Title = Convert.ToString(item["Province"]),
             };
-        }
-
-        public void UpdateProvince(IEnumerable<LocationMasterVM> locationMasters)
-        {
-            var viewModel = new LocationMasterVM();
-            Int32 IDProvince = 0;
-            foreach (var item in SPConnector.GetList(SP_PROVINCE_LISTNAME, _siteUrl))
-            {
-                IDProvince = Convert.ToInt32(item["ID"]);
-                try
-                {
-                    SPConnector.DeleteListItem(SP_LOCATIONMASTER_LISTNAME, IDProvince, _siteUrl);
-                }
-                catch (Exception e)
-                {
-                    logger.Error(e);
-                    throw e;
-                }
-            }
-
-            viewModel.PlaceMasters = GetPlaceMasters();
-
-            foreach (var model in viewModel.PlaceMasters)
-            {
-                var updatedValue = new Dictionary<string, object>();
-                updatedValue.Add("Province", viewModel.LocationName);
-                try
-                {
-                    SPConnector.AddListItem(SP_LOCATIONMASTER_LISTNAME, updatedValue, _siteUrl);
-                }
-                catch (Exception e)
-                {
-                    logger.Error(e.Message);
-                    throw new Exception(ErrorResource.SPInsertError);
-                }
-            }
         }
 
         private IEnumerable<LocationMasterVM> GetPlaceMasters()
         {
-            var caml = "";
+            var caml = @"<View>  
+            <Query> 
+               <Where><Eq><FieldRef Name='Level' /><Value Type='Choice'>Province</Value></Eq></Where> 
+            </Query> 
+      </View>";
+
             var LocationMaster = new List<LocationMasterVM>();
-            foreach (var item in SPConnector.GetList(SP_LOCATIONMASTER_LISTNAME, _siteUrl))
+            var site = _siteUrl;
+            var siteHR = site.Replace("/bo", "/hr");
+
+            foreach (var item in SPConnector.GetList(SP_LOCATIONMASTER_LISTNAME, siteHR, caml))
             {
 
                 LocationMaster.Add(ConvertToProvinceVM(item));
@@ -147,6 +119,53 @@ namespace MCAWebAndAPI.Service.Asset
                 ID = Convert.ToInt32(item["ID"]),
                 LocationName = Convert.ToString(item["Title"])
             };
+        }
+
+        public LocationMasterVM UpdateProvince()
+        {
+            var viewModel = new LocationMasterVM();
+
+            var site = _siteUrl;
+            var siteHR = site.Replace("/bo", "/hr");
+
+            viewModel.PlaceMasters = GetPlaceMasters();
+
+            var collectionProvince = new List<string>();
+            var collectionLocation = new List<string>();
+            var collectionIDLocation = new List<int>();
+
+            foreach (var item in SPConnector.GetList(SP_PROVINCE_LISTNAME, _siteUrl))
+            {
+                collectionProvince.Add(Convert.ToString(item["Province"]));
+            }
+
+            foreach (var item in SPConnector.GetList(SP_LOCATIONMASTER_LISTNAME, siteHR))
+            {
+                collectionIDLocation.Add(Convert.ToInt32(item["ID"]));
+                collectionLocation.Add(Convert.ToString(item["Title"]));
+            }
+
+            foreach (var model in viewModel.PlaceMasters)
+            {
+                var updatedValue = new Dictionary<string, object>();
+
+                if (!(collectionProvince.Any(e => e == model.LocationName)))
+                {
+                    updatedValue.Add("Province", model.LocationName);
+
+                    try
+                    {
+                        SPConnector.AddListItem(SP_PROVINCE_LISTNAME, updatedValue, _siteUrl);
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error(e.Message);
+                        throw new Exception(ErrorResource.SPInsertError);
+                    }
+                }
+            }
+
+            return viewModel;
         }
     }
 }

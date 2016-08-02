@@ -1,0 +1,170 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model InsuranceClaimVM
+
+<div class="col-sm-12">
+    @(Html.Kendo().Grid(Model.ClaimComponentDetails)
+          .Name("ClaimComponentDetails")
+          .Columns(columns =>
+          {
+              columns.Bound(p => p.Type).ClientTemplate("#= Type.Text #" +
+                                                        "<input type='hidden' name='ClaimComponentDetails[#= getComponentDetail(data)#].Type.Text' value='#= Type.Text #' />"
+                  )
+                  .EditorViewData(new
+                  {
+                      BindTo = ClaimComponentDetailVM.GetTypeOptions(),
+                  }
+                  ).Width(250);
+                 // .ClientFooterTemplate("Total :");
+              columns.Bound(p => p.Currency).ClientTemplate("#= Currency.Text #" +
+                                                            "<input type='hidden' name='ClaimComponentDetails[#= getComponentDetail(data)#].Currency.Text' value='#= Currency.Text #' />"
+                  )
+                  .EditorViewData(new
+                  {
+                      BindTo = ClaimComponentDetailVM.GetCurrencyOptions(),
+                  }
+                  ).Width(200);
+
+              columns.Bound(p => p.Amount).ClientTemplate("#= kendo.toString(Amount,'n0') #" +
+                                                          "<input type='hidden' name='ClaimComponentDetails[#= getComponentDetail(data)#].Amount' value='#= Amount #' />"
+                  ).Width(200);
+                 // .ClientFooterTemplate("#= kendo.toString(sum, 'n0') #");
+              columns.Bound(p => p.ReceiptDate).ClientTemplate("#= kendo.toString(ReceiptDate, 'MM-dd-yyyy') #" +
+                                                               "<input type='hidden' name='ClaimComponentDetails[#= getComponentDetail(data)#].ReceiptDate' value='#= ReceiptDate #' />"
+                  ).Width(200);
+              columns.Bound(p => p.Remarks).ClientTemplate("#= Remarks #" +
+                                                           "<input type='hidden' name='ClaimComponentDetails[#= getComponentDetail(data)#].Remarks' value='#= Remarks #' />"
+                  );
+              columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
+                                                               "<input type='hidden' name='ClaimComponentDetails[#= getComponentDetail(data)#].ID' value='#= ID #' />"
+                  );
+              columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
+                                                                     "<input type='hidden' name='ClaimComponentDetails[#= getComponentDetail(data)#].EditMode' value='#= EditMode #' />"
+                  );
+             
+
+          })
+          .Events(e =>
+          {
+              e.Edit("onEditKendoDetail");
+              e.DataBound("onDataBoundComponentDetails");
+          })
+          .DataSource(dataSource => dataSource.Ajax()
+          .Events(events =>
+          {
+              events.Change("onChange");
+          })
+              //.Aggregates(aggregates =>
+              //{
+              //    aggregates.Add(p => p.Amount).Sum();
+              //})
+
+              .Model(model =>
+              {
+                  model.Id(p => p.ID);
+                  model.Field(m => m.ReceiptDate).DefaultValue(DateTime.UtcNow);
+                  model.Field(m => m.Currency).DefaultValue(ClaimComponentDetailVM.GetCurrencyDefaultValue());
+                  model.Field(m => m.Type).DefaultValue(ClaimComponentDetailVM.GetTypeDefaultValue());
+              })
+              .ServerOperation(false)
+          )
+    )
+
+
+    
+
+</div>
+
+<div class="col-sm-12">
+   
+        <div class="form-group">
+            @Html.Bootstrap().LabelFor(m => m.TotalAmountTemp).Class("col-sm-4 control-label")
+            <div class="col-sm-8">
+                @Html.DisplayFor(m => m.TotalAmountTemp)
+            </div>
+        </div>
+    @Html.HiddenFor(m => m.TotalAmount)
+</div>
+
+
+<script>
+ 
+        $(document)
+        .ready(function() {
+            var overallTotalScore = 0;
+            overallTotalScore = parseFloat($('#TotalAmount').val());
+            $('#TotalAmountTemp').prop('value', format1(overallTotalScore));
+
+            });
+
+    function getComponentDetail(dataItem) {
+        var data = $("#ClaimComponentDetails").data("kendoGrid").dataSource.data();
+        return data.indexOf(dataItem);
+    }
+
+    function onDataBoundComponentDetails(e) {
+        var grid = $("#ClaimComponentDetails").data("kendoGrid");
+
+        var gridData = grid.dataSource.view();
+        var dataSource = grid.dataSource;
+        for (var i = 0; i < gridData.length; i++) {
+            var currentUid = gridData[i].uid;
+            if ((gridData[i].EditMode == -1)) {
+                var currenRow = grid.table.find("tr[data-uid='" + currentUid + "']");
+                var cell = currenRow.find("td:eq(2)");
+                cell.text(0);
+                dataSource._data[i].Amount=0.0;
+                currenRow.hide();
+            }
+        }
+
+    }
+
+    function onDeleteKendoDetailplus(e) {
+        var result = confirm("Are you sure you want to delete this item?");
+        if (!result) return;
+
+        var tr = $(e.target).closest("tr"); //get the row
+        var data = this.dataItem(tr); //get the row data so it can be referred later
+
+
+        var overallTotalScore = 0;
+        overallTotalScore = $('#TotalAmount').val();
+        if (data.Amount > 0) {
+            overallTotalScore = parseFloat(overallTotalScore) - parseFloat(data.Amount);
+        }
+
+        $('#TotalAmount').prop('value', overallTotalScore);
+        $('#TotalAmountTemp').prop('value', format1(overallTotalScore));
+        // -1 is Item.Mode.DELETED
+        data.set("EditMode", -1);
+
+        
+    }
+
+    function format1(n) {
+        return  n.toFixed(0).replace(/./g, function (c, i, a) {
+            return i > 0 && c !== "." && (a.length - i) % 3 === 0 ? "," + c : c;
+        });
+    }
+
+    function onChange(e) {
+        var overallTotalScore =0.0;
+        var recordsOnCurrentView = 0;
+        if (e.action === "itemchange") {
+            if (e.field === "Amount") {
+                var grid = $("#ClaimComponentDetails").data("kendoGrid");
+                var dataSource = grid.dataSource;
+                //records on current view / page
+                recordsOnCurrentView = dataSource.view().length;
+
+                for (var i = 0; i < recordsOnCurrentView; i++) {
+                    overallTotalScore = overallTotalScore + parseFloat(dataSource._data[i].Amount);
+                }
+                $('#TotalAmount').prop('value', overallTotalScore);
+                $('#TotalAmountTemp').prop('value', format1(overallTotalScore));
+            }
+        }
+    }
+
+
+</script>

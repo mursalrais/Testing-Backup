@@ -15,7 +15,7 @@ namespace MCAWebAndAPI.Service.Asset
 
         LocationMasterVM GetHeader(int? ID);
 
-        void UpdateProvince(IEnumerable<LocationMasterVM> locationMasters);
+        LocationMasterVM UpdateProvince();
 
         IEnumerable<LocationMasterVM> GetLocationMaster();
 
