@@ -16,8 +16,8 @@ namespace MCAWebAndAPI.Service.Asset
     {
         string _siteUrl = "https://eceos2.sharepoint.com/sites/mca-dev/bo/";
         static Logger logger = LogManager.GetCurrentClassLogger();
-        const string SP_ASSACQ_LIST_NAME = "Asset Acqusitiion";
-        const string SP_ASSACQDetails_LIST_NAME = "Asset Acqusitiion Details";
+        const string SP_ASSACQ_LIST_NAME = "Asset Acquisition";
+        const string SP_ASSACQDetails_LIST_NAME = "Asset Acquisition Details";
         const string SP_ACC_MEMO_LIST_NAME = "Acceptance Memo";
 
         public void SetSiteUrl(string siteUrl)
@@ -25,51 +25,92 @@ namespace MCAWebAndAPI.Service.Asset
             _siteUrl = siteUrl;
         }
 
-        public AssetAcquisitionVM GetAssetAcquisition()
+        public AssetAcquisitionHeaderVM GetPopulatedModel(int? ID = default(int?))
         {
-            throw new NotImplementedException();
+            var model = new AssetAcquisitionHeaderVM();
+            model.TransactionType = Convert.ToString("Asset Acquisition");
+            model.AccpMemo.Choices = GetChoicesFromList(SP_ACC_MEMO_LIST_NAME, "ID","Title");
+
+            return model;
         }
 
-        public bool CreateAssetAcquisition(AssetAcquisitionVM assetAcquisition)
+        private IEnumerable<string> GetChoicesFromList(string listname, string v1, string v2 = null)
         {
-            throw new NotImplementedException();
+            List<string> _choices = new List<string>();
+            var listItems = SPConnector.GetList(listname, _siteUrl);
+            foreach (var item in listItems)
+            {
+                if(v2 != null)
+                {
+                    _choices.Add(item[v1] + "-" + item[v2].ToString());
+                }
+                else
+                {
+                    _choices.Add(item[v1].ToString());
+                }
+            }
+            return _choices.ToArray();
         }
 
-        public bool UpdateAssetAcquisition(AssetAcquisitionVM assetAcquisition)
+        public bool CreateHeader(AssetAcquisitionHeaderVM viewmodel)
         {
-            throw new NotImplementedException();
-        }
+            var columnValues = new Dictionary<string, object>();
+            //columnValues.add
+            columnValues.Add("Title", viewmodel.TransactionType);
+            string[] memo = viewmodel.AccpMemo.Value.Split('-');
+            //columnValues.Add("Acceptance_x0020_Memo_x0020_No", memo[1]);
+            columnValues.Add("Acceptance_x0020_Memo_x0020_No", new FieldLookupValue { LookupId = Convert.ToInt32(memo[0])});
+            columnValues.Add("Vendor", viewmodel.Vendor);
+            columnValues.Add("PO_x0020_No", viewmodel.PoNo);
+            columnValues.Add("Purchase_x0020_Date", viewmodel.PurchaseDate);
+            columnValues.Add("Purchase_x0020_Description", viewmodel.PurchaseDescription);
 
-        IEnumerable<AssetAcquisitionVM> IAssetAcquisitionService.GetAssetAcquisition()
-        {
-            throw new NotImplementedException();
-        }
-
-        public AssetAcquisitionVM GetAssetAcquisitionItems_Dummy()
-        {
-            var viewModel = new AssetAcquisitionVM();
-
-
-
-            return viewModel;
-        }
-
-        public bool CreateAssetAcquisition_Dummy(AssetAcquisitionItemVM assetAcquisition)
-        {
-            var entity = new AssetAcquisitionItemVM();
-            entity = assetAcquisition;
+            try
+            {
+                SPConnector.AddListItem(SP_ASSACQ_LIST_NAME, columnValues, _siteUrl);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.Message);
+                return false;
+            }
+            var entitiy = new AssetAcquisitionHeaderVM();
+            entitiy = viewmodel;
             return true;
         }
 
-        public bool UpdateAssetAcquisition_Dummy(AssetAcquisitionItemVM assetAcquisition)
+        public AssetAcquisitionHeaderVM GetHeader(int? ID)
         {
             throw new NotImplementedException();
         }
 
-        public bool DestroyAssetAcquisition_Dummy(AssetAcquisitionItemVM assetAcquisition)
+        public IEnumerable<AssetMasterVM> GetAssetSubAsset()
         {
-            throw new NotImplementedException();
+            var models = new List<AssetMasterVM>();
+
+            foreach (var item in SPConnector.GetList("Asset Master", _siteUrl))
+            {
+                models.Add(ConvertToModel(item));
+            }
+
+            return models;
         }
 
+        private AssetMasterVM ConvertToModel(ListItem item)
+        {
+            var viewModel = new AssetMasterVM();
+
+            viewModel.ID = Convert.ToInt32(item["ID"]);
+            viewModel.AssetDesc = Convert.ToString(item["AssetDescription"]);
+            return viewModel;
+        }
+
+        public AssetAcquisitionItemVM GetPopulatedModelItem(int? ID = default(int?))
+        {
+            var model = new AssetAcquisitionItemVM();
+            model.AssetSubAsset.Choices = GetChoicesFromList("Asset Master", "AssetID");
+
+            return model;
+        }
     }
 }

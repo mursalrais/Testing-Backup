@@ -33,5 +33,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         public string URL { get; set; }
 
+        public string Year { get; set; }
+
     }
 }

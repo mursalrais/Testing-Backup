@@ -10,50 +10,21 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 {
     public class AssetAcquisitionHeaderVM : Item
     {
-        private DateTime _purchaseDate;
-        private ComboBoxVM _oldTransactionId, _purchaseDesc, _assetSubAsset, _wbs;
+        private ComboBoxVM _accmemo;
 
-        public int Id { get; set; }
+        public IEnumerable<AssetAcquisitionItemVM> Details { get; set; } = new List<AssetAcquisitionItemVM>();
 
-        public string TransactionType { get; set; }
+        public string  TransactionType { get; set; }
 
-        [DisplayName("PO Line Item")]
-        public string PoLineItem { get; set; }
-
-        [UIHint("Currency")]
-        [DisplayName("Cost (IDR)")]
-        public decimal CostIdr { get; set; }
-
-        [UIHint("Currency")]
-        [DisplayName("Cost (USD)")]
-        public decimal CostUsd { get; set; }
-
-        public DateTime PurchaseDate
-        {
-            get
-            {
-                if (_purchaseDate == null)
-                {
-                    _purchaseDate = new DateTime();
-                }
-                return _purchaseDate;
-            }
-
-            set
-            {
-                _purchaseDate = value;
-            }
-        }
-
-        [DisplayName("Old Transaction ID")]
+        [DisplayName("Aceptance Memo No")]
         [UIHint("ComboBox")]
-        public ComboBoxVM OldTransactionId
+        public ComboBoxVM AccpMemo
         {
             get
             {
-                if (_oldTransactionId == null)
+                if (_accmemo == null)
                 {
-                    _oldTransactionId = new ComboBoxVM()
+                    _accmemo = new ComboBoxVM()
                     {
                         Choices = new string[]
                         {
@@ -63,94 +34,26 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
                         }
                     };
                 }
-                return _oldTransactionId;
+                return _accmemo;
             }
 
             set
             {
-                _oldTransactionId = value;
+                _accmemo = value;
             }
         }
 
-        [DisplayName("Purchase Description")]
-        [UIHint("ComboBox")]
-        public ComboBoxVM PurchaseDesc
-        {
-            get
-            {
-                if (_purchaseDesc == null)
-                {
-                    _purchaseDesc = new ComboBoxVM()
-                    {
-                        Choices = new string[]
-                        {
-                            "Cash",
-                            "AP",
-                            "Warranty"
-                        }
-                    };
-                }
-                return _purchaseDesc;
-            }
+        public string Vendor { get; set; }
+        public string PoNo { get; set; }
 
-            set
-            {
-                _purchaseDesc = value;
-            }
-        }
+        [UIHint("Date")]
+        public DateTime PurchaseDate { get; set; }
 
-        [DisplayName("Asset-Sub Asset")]
-        [UIHint("ComboBox")]
-        public ComboBoxVM AssetSubAsset
-        {
-            get
-            {
-                if (_assetSubAsset == null)
-                {
-                    _assetSubAsset = new ComboBoxVM()
-                    {
-                        Choices = new string[]
-                        {
-                            "Procurement",
-                            "Green",
-                            "Health"
-                        }
-                    };
-                }
-                return _assetSubAsset;
-            }
+        public string  PurchaseDescription { get; set; }
 
-            set
-            {
-                _assetSubAsset = value;
-            }
-        }
-
-        [UIHint("ComboBox")]
-        public ComboBoxVM Wbs
-        {
-            get
-            {
-                if (_wbs == null)
-                {
-                    _wbs = new ComboBoxVM()
-                    {
-                        Choices = new string[]
-                        {
-                            "1",
-                            "2",
-                            "3"
-                        }
-                    };
-                }
-                return _wbs;
-            }
-
-            set
-            {
-                _wbs = value;
-            }
-        }
 
     }
 }
+
+
+

@@ -38,5 +38,7 @@ namespace MCAWebAndAPI.Model.HR.DataMaster
 
         public string PersonalMail { get; set; }
 
+        public string InsuranceAccountNumber { get; set; }
+
     }
 }

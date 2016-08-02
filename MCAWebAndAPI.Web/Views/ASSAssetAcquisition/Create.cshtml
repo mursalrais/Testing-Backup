@@ -2,69 +2,57 @@
 
 
 
-@model AssetAcquisitionVM
+@model AssetAcquisitionHeaderVM
 
-<form class="form-horizontal" method="post" action="/ASSassetAcquisition/Create" id="create-asset-acquisition-form">
+<form class="form-horizontal" method="post" action="/ASSassetAcquisition/Submit" id="create-asset-acquisition-form">
     <fieldset>
-        <legend>Form Asset Replacement</legend>
+        <legend>Form Asset Acquisition</legend>
         <div class="col-md-6">
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.TransactionType).Class("col-md-4 control-label")
+                @Html.Bootstrap().LabelFor(m => m.TransactionType).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Html.DisplayFor(m => m.Header.TransactionType)
+                    @Html.EditorFor(m => m.TransactionType)
                 </div>
             </div>
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.OldTransactionId).Class("col-md-4 control-label")
+                @Html.Bootstrap().LabelFor(m => m.AccpMemo).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Html.EditorFor(m => m.Header.OldTransactionId)
+                    @Html.EditorFor(m => m.AccpMemo)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Vendor).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.Vendor)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.PoNo).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.PoNo)
                 </div>
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.PurchaseDate).Class("col-md-4 control-label")
+                @Html.Bootstrap().LabelFor(m => m.PurchaseDate).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Html.EditorFor(m => m.Header.PurchaseDate)
+                    @Html.EditorFor(m => m.PurchaseDate)
                 </div>
             </div>
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.PurchaseDesc).Class("col-md-4 control-label")
+                @Html.Bootstrap().LabelFor(m => m.PurchaseDescription).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Html.EditorFor(m => m.Header.PurchaseDesc)
+                    @Html.EditorFor(m => m.PurchaseDescription)
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-12">
-                @(Html.Kendo().Grid(Model.Items)
-                    .Name("asset-acquisition-items-grid")
-                    .Columns(columns =>
-                    {
-                        columns.Bound(p => p.NewAsset);
-                        columns.Bound(p => p.Item);
-                        columns.Bound(p => p.PoLineItem);
-                        columns.Bound(p => p.AssetNo);
-                        columns.Bound(p => p.AssetSubNo);
-                        columns.Bound(p => p.AssetDescription);
-                        columns.Bound(p => p.WbsId);
-                        columns.Bound(p => p.WbsDescription);
-                        columns.Bound(p => p.CostIdr);
-                        columns.Bound(p => p.CostUsd);
-                        columns.Command(command => { command.Edit(); command.Destroy(); }).Width(250);
-                    })
-                    .ToolBar(toolbar => toolbar.Create())
-                    .Editable(editable => editable.Mode(GridEditMode.PopUp))
-                    .DataSource(dataSource => dataSource
-                        .Ajax()
-                        .Model(model => model.Id(p => p.Id))
-                        .Create(update => update.Action("EditingPopup_Create", "ASSassetAcquisition"))
-                        .Update(update => update.Action("EditingPopup_Update", "ASSassetAcquisition"))
-                        .Destroy(update => update.Action("EditingPopup_Destroy", "ASSassetAcquisition"))
-                )
-                )
-            </div>
+        <div>
+            @Html.Partial("_Details", Model.Details)
         </div>
+        <center>
+            <input class="k-button k-button-icontext k-grid-add" type="submit" value="Submit" />
+        </center>
     </fieldset>
 
 </form>

@@ -83,7 +83,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         public string IndividualInsuranceNumber { get; set; }
 
-        [DisplayName("Organization Insurance ID")]
+        [DisplayName("Insurance Account Number")]
+        [Required(ErrorMessage = "Insurance Account Numbe Field Is Required")]
         public string OrganizationInsuranceID { get; set; }
 
         [Required(ErrorMessage = "Claim Status Field Is Required")]

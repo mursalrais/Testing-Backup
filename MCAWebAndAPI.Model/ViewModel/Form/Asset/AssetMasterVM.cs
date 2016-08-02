@@ -23,6 +23,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
         public string SerialNo { get; set; }
         public string Spesifications { get; set; }
         public string Remarks { get; set; }
+
+        [UIHint("Date")]
         public DateTime? WarrantyExpires { get; set; }
         [UIHint("ComboBox")]
         [Required]

@@ -870,6 +870,7 @@
     <Content Include="Global.asax" />
     <Content Include="Site.Master" />
     <Content Include="ViewSwitcher.ascx" />
+    <Content Include="Views\HRCompensatory\_CompensantoryDetails.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -898,7 +899,6 @@
     <Content Include="Views\Shared\EditorTemplates\String.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Time.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Url.cshtml" />
-    <Content Include="Views\FINEventBudget\Create.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\String.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\ComboBox.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\HttpPostedFileBase.cshtml" />
@@ -927,7 +927,6 @@
     <Content Include="Views\Shared\EditorTemplates\CurrencyUSD.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\InGridAjaxComboBox.cshtml" />
     <Content Include="Views\ASSLocationMaster\Create.cshtml" />
-    <Content Include="Views\ASSLocationMaster\IFrame.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\TextArea.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\PhoneNumber.cshtml" />
     <Content Include="Views\HRApplication\CreateApplicationData.cshtml" />
@@ -1035,7 +1034,6 @@
     <Content Include="Views\HRInterviewlist\InputInterviewResult.cshtml" />
     <Content Include="Views\HRInterviewlist\_InterviewResultlist.cshtml" />
     <Content Include="Views\HRInterviewlist\InputInterviewResultDetail.cshtml" />
-    <Content Include="Views\HRInterviewlist\_InputInterviewResultDetail.cshtml" />
     <Content Include="Views\HRPerformanceMonitoring\PerformanceMonitoring.cshtml" />
     <Content Include="Views\HRPerformanceMonitoring\_Detail.cshtml" />
     <Content Include="Views\HRPerformanceMonitoring\_PerformancePlanMonitoring.cshtml" />
@@ -1059,7 +1057,6 @@
     <Content Include="Views\HRPerformancePlan\_ProfessionalPerformancePlan_Print.cshtml" />
     <Content Include="Views\HRPerformancePlan\PrintPerformancePlan.cshtml" />
     <Content Include="Views\HRCompensatory\CompensatorylistUser.cshtml" />
-    <Content Include="Views\HRCompensatory\_CompensantoryDetails.cshtml" />
     <Content Include="Views\HRCompensatory\InputCompensatoryUser.cshtml" />
     <Content Include="Views\HRCompensatory\_InputCompensantoryDetails.cshtml" />
     <Content Include="Views\HRCompensatory\InputCompensatoryHR.cshtml" />
@@ -1231,7 +1228,20 @@
     <Content Include="Views\HRInsuranceClaim\DisplayInsuranceClaim.cshtml" />
     <Content Include="Views\HRInsuranceClaim\_ClaimComponentDetailDisplay.cshtml" />
     <Content Include="Views\HRInsuranceClaim\PrintToPDF.cshtml" />
+
     <Content Include="Views\HRPayroll\DisplayPayrollWorksheet.cshtml" />
+
+    <Content Include="Views\HRInsuranceClaim\Redirect.cshtml" />
+    <Content Include="Views\ASSAssetMaster\_DisplayGrid.cshtml" />
+    <Content Include="Views\ASSAssetMaster\Upload.cshtml" />
+    <Content Include="Views\ASSAssetAcquisition\_Details.cshtml" />
+    <Content Include="Views\HRPayroll\DisplayPayrollWorksheet.cshtml" />
+    <Content Include="Views\HRCompensatory\_CompensatoryDetails.cshtml" />
+    <Content Include="Views\HRCompensatory\_CompensatoryDetailsHR.cshtml" />
+    <Content Include="Views\HRCompensatory\_CompensatoryRequestDetails_Print.cshtml" />
+    <Content Include="Views\HRCompensatory\_InputCompensatoryDetailsUser.cshtml" />
+    <Content Include="Views\HRCompensatory\_CompensantoryDetailsHR.cshtml" />
+
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1347,6 +1357,7 @@
     <Folder Include="App_Code\" />
     <Folder Include="bin\Resources\" />
     <Folder Include="Views\File\" />
+    <Folder Include="Views\FINEventBudget\" />
     <Folder Include="Views\HRDataMaster\" />
   </ItemGroup>
   <ItemGroup>
