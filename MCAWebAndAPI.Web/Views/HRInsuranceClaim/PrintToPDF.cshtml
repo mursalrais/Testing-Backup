@@ -1,5 +1,5 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
-@model ViewInsuranceProfessionalVM
+@model InsuranceClaimAXAVM
 
 @{
     ViewBag.Title = "Print AXA";
@@ -10,8 +10,8 @@
 
     <fieldset>
 
-            @Html.HiddenFor(m => m.URL)
-            @Html.HiddenFor(m => m.Email)
+        @Html.HiddenFor(m => m.URL)
+
         <div class="wrp">&nbsp;</div>
         <div class="wrp">
 
@@ -95,7 +95,7 @@
             <div class="wrp">&nbsp;</div>
             <div class="wrpTTD">Randi</div>
         </div>
-</fieldset>
+    </fieldset>
 </div>
 
 <style type="text/css">
@@ -105,59 +105,17 @@
         font-size: 150%;
     }
 
-     .wrpTTD {
+    .wrpTTD {
         width: 100%;
         text-align: center;
-
     }
 
-       .wrpFont {
+    .wrpFont {
         width: 100%;
         text-align: center;
         font-size: 20%;
     }
-   
 </style>
-@*<div class="form-actions">
-        <div class="row">
-            <div class="col-sm-12">
-                <button id="submit-to-axa" class="btn btn-primary">
-                    @*<i class="fa fa-save"></i>
-                    Back
-                </button>
-            </div>
-        </div>
-    </div>
-    <script type="text/javascript">
 
-
-        function functionExport() {
-            var dfrd = $.Deferred();
-            setTimeout(function () {
-                // doing async stuff
-                var grid = $("#gridDataView").data("kendoGrid");
-                grid.saveAsExcel();
-                dfrd.resolve();
-            }, 1000);
-            return dfrd.promise();
-        }
-
-
-
-        $(document)
-            .ready(function () {
-
-
-                //$(function () {
-                //    functionExport().done(function () {
-                //       window.top.location.href = $("#URL").val() + '/Lists/InsuranceClaim/';
-
-                //    });
-                //});
-
-            }
-
-            );
-    </script>*@
 
 

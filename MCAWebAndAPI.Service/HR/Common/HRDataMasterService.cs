@@ -114,7 +114,8 @@ namespace MCAWebAndAPI.Service.HR.Common
                 PSANumber = Convert.ToString(item["PSAnumber"]),
                 PersonalMail = Convert.ToString(item["personalemail"]),
                 JoinDate = Convert.ToDateTime(item["Join_x0020_Date"]).ToLocalTime(),
-                JoinDateTemp = Convert.ToDateTime(item["Join_x0020_Date"]).ToLocalTime().ToShortDateString()
+                JoinDateTemp = Convert.ToDateTime(item["Join_x0020_Date"]).ToLocalTime().ToShortDateString(),
+                InsuranceAccountNumber = Convert.ToString(item["hiaccountnr"])
             };
         }
 

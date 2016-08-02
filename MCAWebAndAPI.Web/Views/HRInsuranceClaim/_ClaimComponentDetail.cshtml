@@ -101,7 +101,9 @@
             //overallTotalScore = parseFloat($('#TotalAmount').val());
             //    alert(overallTotalScore);
             //$('#TotalAmountTemp').prop('value', format1(overallTotalScore));
-
+            var overallTotalScore = 0;
+            overallTotalScore = parseFloat($('#TotalAmount').val());
+            $('#TotalAmountTemp').prop('value', format1(overallTotalScore));
             });
 
     function getComponentDetail(dataItem) {
