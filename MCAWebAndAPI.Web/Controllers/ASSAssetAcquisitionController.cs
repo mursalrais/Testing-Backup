@@ -23,43 +23,45 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult Create()
         {
-            var viewModel = _assetAcquisitionService.GetAssetAcquisitionItems_Dummy();
+            var viewModel = _assetAcquisitionService.GetPopulatedModel();
 
             return View(viewModel);
         }
 
-        public ActionResult Edit()
+        [HttpPost]
+        public ActionResult Submit(AssetAcquisitionHeaderVM _data, string site)
         {
-            var viewModel = new AssetAcquisitionVM();
-
-            return View(viewModel);
-        }
-
-        [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult EditingPopup_Create([DataSourceRequest] DataSourceRequest request, AssetAcquisitionItemVM _AssetAcqItemVM)
-        {
-            if (_AssetAcqItemVM != null && ModelState.IsValid)
+            //return View(new AssetMasterVM());
+            _assetAcquisitionService.CreateHeader(_data);
+            return new JavaScriptResult
             {
-                _assetAcquisitionService.CreateAssetAcquisition_Dummy(_AssetAcqItemVM);
-            }
-
-            return Json(new[] { _AssetAcqItemVM }.ToDataSourceResult(request, ModelState));
+                Script = string.Format("window.parent.location.href = '{0}'", "https://eceos2.sharepoint.com/sites/mca-dev/bo/Lists/AssetAcquisition/AllItems.aspx")
+            };
         }
 
-        [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult EditingPopup_Update()
+        public JsonResult GetAssetSubSAssetGrid()
         {
-            var viewModel = new AssetAcquisitionVM();
+            _assetAcquisitionService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
 
-            return View(viewModel);
+            var positions = GetFromPositionsExistingSession();
+
+            return Json(positions.Select(e =>
+                new {
+                    Value = Convert.ToString(e.ID),
+                    Text = e.AssetNoAssetDesc + " - " + e.AssetDesc
+                }),
+                JsonRequestBehavior.AllowGet);
         }
 
-        [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult EditingPopup_Destroy()
+        private IEnumerable<AssetMasterVM> GetFromPositionsExistingSession()
         {
-            var viewModel = new AssetAcquisitionVM();
+            //Get existing session variable
+            var sessionVariable = System.Web.HttpContext.Current.Session["AssetSubAsset"] as IEnumerable<AssetMasterVM>;
+            var positions = sessionVariable ?? _assetAcquisitionService.GetAssetSubAsset();
 
-            return View(viewModel);
+            if (sessionVariable == null) // If no session variable is found
+                System.Web.HttpContext.Current.Session["AssetSubAsset"] = positions;
+            return positions;
         }
     }
 }

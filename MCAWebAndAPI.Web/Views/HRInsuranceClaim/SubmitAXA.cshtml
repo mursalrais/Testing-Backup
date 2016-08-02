@@ -6,7 +6,7 @@
 }
 
 
-@using (Html.BeginForm("RedirectExportToExcel", "HRInsuranceClaim", FormMethod.Post,
+@using (Html.BeginForm("PrintToPDF", "HRInsuranceClaim", FormMethod.Post,
                                                                       new
                                                                       {
                                                                           @class = "form-horizontal",
@@ -20,7 +20,7 @@
 
         @*@Html.AntiForgeryToken()
         @Html.ValidationSummary()*@
-      
+        @Html.HiddenFor(m => m.URL)
         <div class="col-sm-6">
 
             <div class="form-group">
@@ -35,7 +35,7 @@
                     @Html.EditorFor(m => m.BatchNo)
                 </div>
             </div>
-           
+
         </div>
         <div class="col-sm-6">
             <div class="form-group">
@@ -50,41 +50,57 @@
                     @Html.EditorFor(m => m.SubmissionDate)
                 </div>
             </div>
-           
+
 
         </div>
 
-       
+
         <div class="row">
-            @Html.Partial("_ClaimComponentAXA",Model.dtDetails)
+            @Html.Partial("_ClaimComponentAXA", Model.dtDetails)
         </div>
 
 
 
     </fieldset>
+
     <div class="form-actions">
         <div class="row">
             <div class="col-sm-12">
+             
+                <button id="back-to-hr" class="btn btn-primary" type="submit">
+                    Back
+                </button>
                 <button id="submit-to-axa" class="btn btn-primary" type="submit">
-                    <i class="fa fa-save"></i>
-                    Export to Excel
+                    Print to PDF
                 </button>
             </div>
         </div>
     </div>
+
+
+ 
 }
 @section scripts{
     <script type="text/javascript">
         $(document)
             .ready(function () {
 
-                //$("#submit-to-axa")
-                //        .click(function () {
-                //            var grid = $("#gridDataView").data("kendoGrid");
-                //            grid.saveAsExcel();
-                //        });
+              
+                $("#back-to-hr").kendoButton({
+                    click: function (e) {
+                        window.top.location.href = $("#URL").val() + '/sitePages/hrInsuranceView.aspx';
+                    }
+                });
+                $("#submit-to-axa").kendoButton({
+                    click: function (e) {
+                       // window.top.location.href = $("#URL").val() + '/sitePages/hrInsuranceView.aspx';
+                    }
+                });
 
             }
             );
+
+      
+
     </script>
 }

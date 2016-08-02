@@ -2,14 +2,12 @@
 @model InsuranceClaimVM
 
 
-
 @using (Html.BeginForm("SubmitInsuranceClaim", "HRInsuranceClaim", FormMethod.Post,
-    new
-    {
-        @class = "form-horizontal",
-        enctype = "multipart/form-data"
-    }))
-
+                new
+                {
+                    @class = "form-horizontal",
+                    enctype = "multipart/form-data"
+                }))
 
 
 
@@ -23,6 +21,7 @@
         @Html.HiddenFor(m => m.UserPermission)
         @Html.HiddenFor(m => m.ClaimStatus)
         @Html.HiddenFor(m => m.VisibleTo)
+        @Html.HiddenFor(m => m.TotalAmount)
         <div class="col-sm-6">
 
             <div class="form-group">
@@ -97,9 +96,23 @@
 }
 @section scripts{
     <script type="text/javascript">
+     
+
+        function onSuccessFormEmbedClaim(e) {
+
+            //$('#modal-html-content').html('<div class="alert alert-success alert-block"><h4 class="alert-heading">Success!</h4>'
+            //    + (e.successMessage != null ? e.successMessage : "") + '</div>');
+
+            //setTimeout(function () {
+                parent.postMessage(e, e.urlToRedirect);
+            //}, 3000);
+        }
 
         $(document)
             .ready(function () {
+
+              
+
                 var dependent = $("#DependantName_Value").data("kendoDropDownList");
                 var professional = $("#ProfessionalName_Value").data("kendoDropDownList");
                 dependent.enable(false);
@@ -118,6 +131,7 @@
                             alert('Dependent Name field is required');
                         } else {
                             $("#ClaimStatus").val("Draft");
+                            $('form').prop('action', '/HRInsuranceClaim/SubmitInsuranceClaim');
                             $("form").submit();
 
                         }
@@ -134,6 +148,7 @@
                             alert('Dependent Name field is required');
                         } else {
                             $("#ClaimStatus").val("Need HR to Validate");
+                            $('form').prop('action', '/HRInsuranceClaim/SubmitInsuranceClaim');
                             $("form").submit();
                         }
 
@@ -142,6 +157,7 @@
 
             });
 
+       
 
 
         function OnSelectDependantName(e) {
@@ -159,11 +175,11 @@
 
         function OnSelectType(e) {
 
-            var dataItem = this.dataItem(e.item);
+            var dataItem = this.dataItem(e.item.index());
             var dependent = $("#DependantName_Value").data("kendoDropDownList");
             $('#IndividualInsuranceNumber').prop('value', '');
             $('#OrganizationInsuranceID').prop('value', '');
-            if (dataItem.Text === 'Professional') {
+            if (dataItem === 'Professional') {
                 dependent.enable(false);
             } else {
                 dependent.enable(true);

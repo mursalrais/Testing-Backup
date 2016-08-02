@@ -35,15 +35,24 @@
         </div>
         <legend>Compensatory list</legend>
         <div class="row">
-            @if (Model.Requestor == "HR")
+            @if (Model.Requestor == null)
             {
-                @Html.Partial("_CompensantoryDetailsHR", Model.CompensatoryDetails)
+                @Html.Partial("_CompensatoryDetailsHR", Model.CompensatoryDetails)
             }
             else
             {
-                @Html.Partial("_CompensantoryDetails", Model.CompensatoryDetails)
+                @Html.Partial("_CompensatoryDetails", Model.CompensatoryDetails)
 
             }
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <button id="print-button" class="btn btn-primary" type="button">
+                    <i class="fa fa-print"></i>
+                    Print
+                </button>
+            </div>
         </div>
 
     </fieldset>
@@ -58,6 +67,11 @@
             $("#com-title").prop('readonly', 'true');
             $("#com-title").prop("value", $("#cmpTitle").val());
 
+            $('#print-button').click(function (e) {
+                $("#ParentDiv").show();
+                var url = "/HRCompensatory/PrintCompensatoryRequest";
+                submitFormToPrint(url);
+            });
 
         });
     </script>

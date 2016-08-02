@@ -31,7 +31,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [UIHint("Date")]
         public DateTime? SubmissionDate { get; set; } = DateTime.Now;
 
-
+        public string URL { get; set; }
 
     }
 }

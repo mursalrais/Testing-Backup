@@ -5,13 +5,12 @@
     ViewBag.Title = "Form Edit Insurance Claim";
 }
 
-
-@using (Html.BeginForm("UpdateInsuranceClaim", "HRInsuranceClaim", FormMethod.Post,
-                                                                      new
-                                                                      {
-                                                                          @class = "form-horizontal",
-                                                                          enctype = "multipart/form-data"
-                                                                      }))
+@using (Html.BeginForm("EditInsuranceClaim", "HRInsuranceClaim", FormMethod.Post,
+                                                                                  new
+                                                                                  {
+                                                                                      @class = "form-horizontal",
+                                                                                      enctype = "multipart/form-data"
+                                                                                  }))
 
 
 
@@ -99,7 +98,6 @@
             <div class="col-sm-6">
                 <div class="form-group">
                     @Html.Label("Validated by HR/Submitted to AXA/Paid/Rejected")
-                   
                 </div>
             </div>
 
@@ -186,6 +184,7 @@
                             alert('Dependent Name field is required');
                         } else {
                             $("#ClaimStatus").val("Draft");
+                            $('form').prop('action', '/HRInsuranceClaim/UpdateInsuranceClaim');
                             $("form").submit();
                         }
 
@@ -203,6 +202,7 @@
                             alert('Dependent Name field is required');
                         } else {
                             $("#ClaimStatus").val("Need HR to Validate");
+                            $('form').prop('action', '/HRInsuranceClaim/UpdateInsuranceClaim');
                             $("form").submit();
                         }
 
@@ -220,6 +220,7 @@
                           alert('Dependent Name field is required');
                       } else {
                           $("#ClaimStatus").val("Draft");
+                          $('form').prop('action', '/HRInsuranceClaim/UpdateInsuranceClaim');
                           $("form").submit();
                       }
 
@@ -235,11 +236,12 @@
                            alert('Dependent Name field is required');
                            return;
                        }
-                       //else if (strClaim === "") {
-                       //    alert('Claim Status field is required');
-                       //    return;
-                      // }
+                       else if (strClaim === "") {
+                           alert('Claim Status field is required');
+                           return;
+                       }
                        else {
+                           $('form').prop('action', '/HRInsuranceClaim/UpdateInsuranceClaim');
                            $("form").submit();
                        }
 
@@ -262,11 +264,11 @@
 
         function OnSelectType(e) {
 
-            var dataItem = this.dataItem(e.item);
+            var dataItem = this.dataItem(e.item.index());
             var dependent = $("#DependantName_Value").data("kendoDropDownList");
             $('#IndividualInsuranceNumber').prop('value', '');
             $('#OrganizationInsuranceID').prop('value', '');
-            if (dataItem.Text === 'Professional') {
+            if (dataItem === 'Professional') {
                 dependent.enable(false);
             } else {
                 dependent.enable(true);
@@ -287,9 +289,9 @@
         }
 
         function OnSelectClaim(e) {
-            var dataItem = this.dataItem(e.item);
-            if (dataItem.Text !== '') {
-                $("#ClaimStatus").val(dataItem.Text);
+            var dataItem = this.dataItem(e.item.index());
+            if (dataItem !== '') {
+                $("#ClaimStatus").val(dataItem);
             }
         }
 
