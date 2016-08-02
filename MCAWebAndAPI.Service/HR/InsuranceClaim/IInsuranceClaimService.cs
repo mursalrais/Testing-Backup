@@ -19,7 +19,7 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
 
         InsuranceClaimVM GetPopulatedModel(string useremail = null);
 
-        InsuranceClaimAXAVM GetPopulatedModelAXA();
+        InsuranceClaimAXAVM GetPopulatedModelAXA(bool bdefault);
         int CreateHeader(InsuranceClaimVM header);
 
        void CreateClaimComponentDetails(int? headerId, IEnumerable<ClaimComponentDetailVM> claimComponentDetails);

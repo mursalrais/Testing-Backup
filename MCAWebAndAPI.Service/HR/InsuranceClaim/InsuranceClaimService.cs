@@ -670,7 +670,7 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
 
         }
 
-        public InsuranceClaimAXAVM GetPopulatedModelAXA()
+        public InsuranceClaimAXAVM GetPopulatedModelAXA(bool bdefault)
         {
 
             var dtAxa = new DataTable();
@@ -687,7 +687,7 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
 
             var viewModel = new InsuranceClaimAXAVM
             {
-                dtDetails = dtAxa,
+               
                 BatchNo = "",
                 Recepient = "",
                 Sender = "",
@@ -695,7 +695,48 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
                 SubmissionDate = DateTime.Now
             };
 
+            if (bdefault)
+            {
+                viewModel.dtDetails = dtAxa;
+            }
+            else
+            {
+                string caml = @"<View>  
+            <Query> 
+               <OrderBy><FieldRef Name='ID' Ascending='FALSE' /><FieldRef Name='ID' Ascending='FALSE' /></OrderBy> 
+            </Query> 
+             <RowLimit>1</RowLimit> 
+            </View>";
+                string strbatch = "", strRecepient="",strSender="";
 
+                foreach (var item in SPConnector.GetList("SubmitAXA", _siteUrl, caml))
+                {
+                    strbatch = Convert.ToString(item["BatchNo"]);
+                    strRecepient = Convert.ToString(item["Recepient"]);
+                    strSender = Convert.ToString(item["Title"]);
+                }
+
+                viewModel.Recepient = strRecepient;
+                viewModel.Sender = strSender;
+
+                caml = @"<View><Query><Where><And>
+                        <Eq><FieldRef Name='claimstatus' />
+                        <Value Type='Choice'>Submitted to AXA</Value></Eq>
+                        <Eq><FieldRef Name='BatchNo' /><Value Type='Text'>" + strbatch +
+                      "</Value></Eq></And></Where></Query>" +
+                       "<RowLimit>1</RowLimit> </View>";
+
+               
+
+                foreach (var item in SPConnector.GetList(SpHeaderListName, _siteUrl, caml))
+                {
+                  
+                    viewModel.Year = Convert.ToString(item["claimyear"]);
+                   
+                }
+
+                viewModel.dtDetails = getViewAXA();
+            }
 
             return viewModel;
 
