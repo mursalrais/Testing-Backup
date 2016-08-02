@@ -26,7 +26,14 @@ namespace MCAWebAndAPI.Service.HR.Payroll
                     payrollWorksheet.Add(new PayrollWorksheetDetailVM
                     {
                         PayrollDate = item,
-                        ProfessionalID = i
+                        ProfessionalID = i,
+                        Name = _names[i],
+                        MonthlyFeeMaster = 300000,
+                        TotalWorkingDays = 21,
+                        DaysRequestUnpaid = new Random().Next() % 17 == 0 ? 1 : 0,
+                        JoinDate = new DateTime(2016, 1, 1),
+                        LastWorkingDate = DateTime.Today.AddMonths(1),
+                        Last13thMonthDate = new DateTime(2016, 7, 7)
                     });
                 }
             }
@@ -82,13 +89,11 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             var professionals = await getProfessionalTask;
             var monthlyFees = await getMonthlyFeeTask;
 
-
             return payrollWorksheet;
         }
 
         private static List<PayrollWorksheetDetailVM> PopulateColumnsFromPSA(this List<PayrollWorksheetDetailVM> payrollWorksheet, IEnumerable<PSAManagementVM> psas)
         {
-
             return payrollWorksheet;
         }
 
