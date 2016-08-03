@@ -1259,6 +1259,11 @@
     <Content Include="Views\HRCompensatory\_CompensatoryRequestDetails_Print.cshtml" />
     <Content Include="Views\HRCompensatory\_InputCompensatoryDetailsUser.cshtml" />
     <Content Include="Views\HRCompensatory\_CompensantoryDetailsHR.cshtml" />
+    <Content Include="Views\HRExitProcedure\CreateExitProcedureHR.cshtml" />
+    <Content Include="Views\HRExitProcedure\EditExitProcedureHR.cshtml" />
+    <Content Include="Views\HRExitProcedure\_ExitProcedureChecklistForHR.cshtml" />
+    <Content Include="Views\HRExitProcedure\_EditExitProcedureChecklistForHR.cshtml" />
+    <Content Include="Views\HRExitProcedure\_EditExitProcedureDataHR.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
