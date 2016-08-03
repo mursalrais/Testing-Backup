@@ -592,6 +592,22 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             return viewModel;
         }
+
+        public string GetPosition(string username)
+        {
+            var caml = @"<View><Query><Where><Eq><FieldRef Name='officeemail' /><Value Type='Text'>" + username + @"</Value></Eq></Where></Query><ViewFields><FieldRef Name='Position' /></ViewFields><QueryOptions /></View>";
+            var listItem = SPConnector.GetList("Professional Master", _siteUrl, caml);
+            string position = "";
+            foreach (var item in listItem)
+            {
+                position = FormatUtil.ConvertLookupToValue(item, "Position");
+            }
+            if (position == null)
+            {
+                position = "";
+            }
+            return position;
+        }
     }
 }
 
