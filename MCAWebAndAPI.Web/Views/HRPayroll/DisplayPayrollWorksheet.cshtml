@@ -14,35 +14,9 @@
                 }, new { id = "form-update-period" }))
                 {
                     <div class="form-group">
-                        @Html.Bootstrap().LabelFor(m => m.From).Class("col-sm-4 control-label")
+                        @Html.Bootstrap().LabelFor(m => m.Period).Class("col-sm-4 control-label")
                         <div class="col-sm-8">
-                            @(Html.Kendo().DatePicker()
-                          .Name("From")
-                          .Value(Model.From)
-                          .Max(DateTime.Today)
-                          .Events(e => e.Change("startChange"))
-                          .HtmlAttributes(new { @class = "form-control", style = "width: 100%" })
-                            )
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        @Html.Bootstrap().LabelFor(m => m.To).Class("col-sm-4 control-label")
-                        <div class="col-sm-8">
-                            @(Html.Kendo().DatePicker()
-                          .Name("To")
-                          .Value(Model.To)
-                          .Min(Model.From)
-                          .Max((Model.From).GetLastPayrollDay())
-                          .Events(e => e.Change("endChange"))
-                          .HtmlAttributes(new { @class = "form-control", style = "width: 100%" })
-                            )
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        @Html.Bootstrap().LabelFor(m => m.ThirteenMonthDate).Class("col-sm-4 control-label")
-                        <div class="col-sm-8">
-                            @Html.EditorFor(m => m.ThirteenMonthDate)
+                           @Html.EditorFor(m => m.Period)
                         </div>
                     </div>
                     <button id="submit-button-update-period" class="btn btn-primary pull-right" type="submit">Set</button>
