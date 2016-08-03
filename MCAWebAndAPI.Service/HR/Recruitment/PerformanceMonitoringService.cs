@@ -175,7 +175,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             string color;
             foreach (var item in SPConnector.GetList(SP_DETAIL_LIST_NAME, _siteUrl, caml))
             {
-                if ((Convert.ToString(item["pppstatus"]) == "Approved"))
+                if ((Convert.ToString(item["pppstatus"]) == "Approved") || (Convert.ToString(item["pppstatus"]) == "Rejected"))
                 {
                     color = "green";
                 }
