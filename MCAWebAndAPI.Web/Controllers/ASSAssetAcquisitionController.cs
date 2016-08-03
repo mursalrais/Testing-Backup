@@ -24,7 +24,7 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult Create()
         {
             var viewModel = _assetAcquisitionService.GetPopulatedModel();
-
+            //var viewModelItem = _assetAcquisitionService.GetPopulatedModelItem();
             return View(viewModel);
         }
 

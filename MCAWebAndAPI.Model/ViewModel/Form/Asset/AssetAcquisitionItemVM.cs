@@ -12,7 +12,29 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 {
     public class AssetAcquisitionItemVM : Item
     {
-        public string AssetSubAsset { get; set; }
+        private ComboBoxVM _assetSubAsset;
+        [UIHint("ComboBox")]
+        public ComboBoxVM AssetSubAsset
+        {
+            get
+            {
+                if (_assetSubAsset == null)
+                {
+                    _assetSubAsset = new ComboBoxVM()
+                    {
+                        Choices = new string[]
+                        {
+                            ""
+                        }
+                    };
+                }
+                return _assetSubAsset;
+            }
 
+            set
+            {
+                _assetSubAsset = value;
+            }
+        }
     }
 }

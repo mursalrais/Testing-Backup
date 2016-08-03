@@ -414,7 +414,7 @@ namespace MCAWebAndAPI.Service.Utils
             }
         }
 
-        public static FieldUserValue GetUser(string useremail, string siteUrl)
+        public static FieldUserValue GetUser(string useremail, string siteUrl,string strwebname)
         {
           
             using (ClientContext clientContext = new ClientContext(siteUrl))
@@ -422,7 +422,7 @@ namespace MCAWebAndAPI.Service.Utils
                 SecureString secureString = new SecureString();
                 Password.ToList().ForEach(secureString.AppendChar);
                 clientContext.Credentials = new SharePointOnlineCredentials(UserName, secureString);
-                Web communitySite = clientContext.Site.OpenWeb("hr");
+                Web communitySite = clientContext.Site.OpenWeb(strwebname);
                 clientContext.Load(communitySite);
                 clientContext.ExecuteQuery();
 

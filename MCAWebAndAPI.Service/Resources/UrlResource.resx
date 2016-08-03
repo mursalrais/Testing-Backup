@@ -214,4 +214,7 @@
   <data name="Compensatory" xml:space="preserve">
     <value>/Lists/Compensatory%20Request</value>
   </data>
+  <data name="AssetMaster" xml:space="preserve">
+    <value>/Lists/Asset%20Master</value>
+  </data>
 </root>

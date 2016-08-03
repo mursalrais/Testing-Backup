@@ -29,19 +29,25 @@ namespace MCAWebAndAPI.Service.Asset
         {
             var model = new AssetAcquisitionHeaderVM();
             model.TransactionType = Convert.ToString("Asset Acquisition");
-            model.AccpMemo.Choices = GetChoicesFromList("ID","Title");
+            model.AccpMemo.Choices = GetChoicesFromList(SP_ACC_MEMO_LIST_NAME, "ID","Title");
 
             return model;
         }
 
-        private IEnumerable<string> GetChoicesFromList(string v1, string v2 = null)
+        private IEnumerable<string> GetChoicesFromList(string listname, string v1, string v2 = null)
         {
             List<string> _choices = new List<string>();
-            var listItems = SPConnector.GetList(SP_ACC_MEMO_LIST_NAME, _siteUrl);
+            var listItems = SPConnector.GetList(listname, _siteUrl);
             foreach (var item in listItems)
             {
-                _choices.Add(item[v1] + "-" + item[v2].ToString());
-                //_choices.Add(item[v1] + "-" + item[v2].ToString());
+                if(v2 != null)
+                {
+                    _choices.Add(item[v1] + "-" + item[v2].ToString());
+                }
+                else
+                {
+                    _choices.Add(item[v1].ToString());
+                }
             }
             return _choices.ToArray();
         }
@@ -97,6 +103,14 @@ namespace MCAWebAndAPI.Service.Asset
             viewModel.ID = Convert.ToInt32(item["ID"]);
             viewModel.AssetDesc = Convert.ToString(item["AssetDescription"]);
             return viewModel;
+        }
+
+        public AssetAcquisitionItemVM GetPopulatedModelItem(int? ID = default(int?))
+        {
+            var model = new AssetAcquisitionItemVM();
+            model.AssetSubAsset.Choices = GetChoicesFromList("Asset Master", "AssetID");
+
+            return model;
         }
     }
 }

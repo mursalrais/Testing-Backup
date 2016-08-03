@@ -198,7 +198,7 @@ function validatemail(domID) {
 
     var mail = $('#' + domID).val();
 
-    var emailArray = mail.split(/(\n|\s|,)/);
+    var emailArray = mail.split(/(\n|\s|,|;)/);
 
     for (i = 0; i < emailArray.length; i++) {
         var emailtxt = emailArray[i];

@@ -1,5 +1,5 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
-@using MCAWebAndAPI.Service.Utils
+@using MCAWebAndAPI.Model.Common
 
 @model PayrollRunVM
 
@@ -19,7 +19,6 @@
                             @(Html.Kendo().DatePicker()
                           .Name("From")
                           .Value(Model.From)
-                          .Min((Model.From.AddDays(-1)).GetFirstPayrollDay())
                           .Max(DateTime.Today)
                           .Events(e => e.Change("startChange"))
                           .HtmlAttributes(new { @class = "form-control", style = "width: 100%" })
@@ -32,7 +31,7 @@
                             @(Html.Kendo().DatePicker()
                           .Name("To")
                           .Value(Model.To)
-                          .Min((Model.From.AddDays(-1)).GetFirstPayrollDay())
+                          .Min(Model.From)
                           .Max((Model.From).GetLastPayrollDay())
                           .Events(e => e.Change("endChange"))
                           .HtmlAttributes(new { @class = "form-control", style = "width: 100%" })
@@ -57,19 +56,20 @@
             <div class="col-sm-12">
                 @(Html.Kendo().Grid<PayrollWorksheetDetailVM>()
                     .Name("PayrollWorksheetGrid")
+                    .ToolBar(tools => tools.Excel())
                     .Columns(columns =>
                     {
-                        columns.Bound(e => e.PayrollDate).Width(150).Locked(true).Lockable(false);
-                        columns.Bound(e => e.Last13thMonthDate).Width(150).Locked(true);
-                        columns.Bound(e => e.Name).Width(350).Locked(true);
+                        columns.Bound(e => e.PayrollDate).Format("{0:dddd, MMM d, yyyy}").Width(200).Locked(true).Lockable(false);
+                        columns.Bound(e => e.Last13thMonthDate).Format("{0:dddd, MMM d, yyyy}").Width(200).Locked(true);
+                        columns.Bound(e => e.Name).Width(300).Locked(true);
                         columns.Bound(e => e.ProjectUnit).Width(200);
                         columns.Bound(e => e.Position).Width(200);
-                        columns.Bound(e => e.JoinDate).Width(200);
-                        columns.Bound(e => e.DateOfNewPSA).Width(200);
-                        columns.Bound(e => e.LastWorkingDate).Width(200);
+                        columns.Bound(e => e.JoinDate).Format("{0:dddd, MMM d, yyyy}").Width(200);
+                        columns.Bound(e => e.DateOfNewPSA).Format("{0:dddd, MMM d, yyyy}").Width(200);
+                        columns.Bound(e => e.LastWorkingDate).Format("{0:dddd, MMM d, yyyy}").Width(200);
                         columns.Bound(e => e.PSANumber).Width(200);
-                        columns.Bound(e => e.DateOfNewFee).Width(200);
-                        columns.Bound(e => e.EndDate).Width(200);
+                        columns.Bound(e => e.DateOfNewFee).Format("{0:dddd, MMM d, yyyy}").Width(200);
+                        columns.Bound(e => e.EndDate).Format("{0:dddd, MMM d, yyyy}").Width(200);
                         columns.Bound(e => e.MonthlyFeeMaster).Width(200);
                         columns.Bound(e => e.TotalWorkingDays).Width(200);
                         columns.Bound(e => e.PropotionalMonthlyFee).Width(200);
@@ -98,14 +98,17 @@
                         columns.Bound(e => e.BankBranchOffice).Width(200);
                     })
                     .Excel(excel => excel
-                        .FileName("Kendo UI Grid Export.xlsx")
+                        .AllPages(true)
+                        .FileName("Payroll_Worksheet_" + DateTime.Today.ToLocalTime().ToShortDateString() + ".xlsx")
                         .Filterable(true)
                         .ProxyURL(Url.Action("GridWorksheet_ExportExcel", "HRPayroll"))
                     )
                     .DataSource(dataSource => dataSource
                         .Ajax()
                         .Read(read => read.Action("GridWorksheet_Read", "HRPayroll"))
+                        .PageSize(25)
                     )
+                    .Pageable(pager => pager.PageSizes(true))
                     .Scrollable(scrollable => scrollable.Height(600))
                     .Reorderable(reorderable => reorderable.Columns(true))
                     .Resizable(resizable => resizable.Columns(true))
@@ -122,18 +125,14 @@
 @section scripts{
 
     <script>
-        $(document).ready(function () {
-            $("#submit-button-update-period").click(function () {
-                $("#form-update-period").submit();
-            });
-
-        });
-
         function onCompleteUpdatePeriod(e) {
             $("#PayrollWorksheetGrid").data("kendoGrid").dataSource.read();
             $("#PayrollWorksheetGrid").data("kendoGrid").refresh();
         }
 
+        function GridWorksheet_OnError(e) {
+            showModalWindow("Grid Datasource Error");
+        }
 
         function startChange() {
             var endPicker = $("#To").data("kendoDatePicker"),

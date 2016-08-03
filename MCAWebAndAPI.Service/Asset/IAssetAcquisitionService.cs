@@ -14,6 +14,7 @@ namespace MCAWebAndAPI.Service.Asset
 
         //create empty form
         AssetAcquisitionHeaderVM GetPopulatedModel(int? ID = null);
+        AssetAcquisitionItemVM GetPopulatedModelItem(int? ID = null);
 
         bool CreateHeader(AssetAcquisitionHeaderVM viewmodel);
 
