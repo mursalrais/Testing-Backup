@@ -1,0 +1,150 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+
+@model ExitProcedureVM
+
+@{
+    ViewBag.Title = "Form Edit Exit Procedure";
+}
+
+@using (Html.BeginForm("CreateExitProcedure", "HRExitProcedure", FormMethod.Post,
+                                                                                                     new
+                                                                                                     {
+                                                                                                         @class = "form-horizontal",
+                                                                                                         enctype = "multipart/form-data"
+                                                                                                     }))
+{
+
+    <fieldset>
+        <legend>Exit Procedure Data</legend>
+        <div class="row">
+            @Html.Partial("_EditExitProcedureDataHR", Model)
+        </div>
+        <legend>Exit Procedure Checklist</legend>
+        @Html.Partial("_EditExitProcedureChecklistForHR", Model.ExitProcedureChecklist)
+        @*<div id="exit-procedure-checklist" class="row">
+
+        </div>*@        
+        @*<legend>Documents</legend>
+        <div class="row">
+            @Html.Partial("_DocumentsDetailsDisplay", Model)
+        </div>*@
+    </fieldset>
+
+}
+<div class="form-actions">
+    <div class="row">
+        <div class="col-md-12">
+            @*<button id="get-exit-checklist" class="btn btn-primary" type="button" onclick="getExitChecklist()">
+                <i class="fa fa-save"></i>
+                Get Exit Checklist
+            </button>*@
+            <button id="approved-by-hr" class="btn btn-primary" type="submit">
+                <i class="fa fa-save"></i>
+                Approve
+            </button>
+            <button id="save-by-hr" class="btn btn-primary" type="submit">
+                <i class="fa fa-save"></i>
+                Save
+            </button>
+
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+
+        //function getExitChecklist() {
+
+        //    var professionalMail = $('#RequestorMailAddress').val();
+        //    displayExitChecklist("exit-procedure-checklist", professionalMail);
+
+        //}
+
+        //function displayExitChecklist(domID, professionalMail)
+        //{
+        //    var url = "/HRExitProcedure/DisplayExitChecklistForHR/?professionalMail=" + professionalMail;
+        //    $('#' + domID).load(url);
+        //}
+
+        $(document).ready(function () {
+            $("#approved-by-hr").click(function () {
+                $("#StatusForm").val("Approved by HR")
+                $("form").submit();
+            });
+        });
+
+        $(document).ready(function () {
+            $("#save-by-hr").click(function () {
+                $("#StatusForm").val("Saved by HR")
+                $("form").submit();
+            });
+        });
+
+        function onSuccess(data)
+        {
+            window.location.href = data.urlToRedirect;
+        }
+
+        function onFailure(data)
+        {
+            window.location.href = data.urlToRedirect;
+        }
+
+        //function OnSelectAssetHolderFrom(e) {
+        //    var dataItem = this.dataItem(e.item);
+        //    var url = "/HRDataMaster/GetProfessional/" + dataItem.ID;
+
+
+        //    $.getJSON(url, function (result) {
+
+        //        $('#FullName').prop('value', result[0].Name);
+        //        $('#ProfessionalPersonalMail').prop('value', result[0].PersonalMail);
+        //        $('#ProjectUnit').prop('value', result[0].Project_Unit);
+        //        $('#Position').prop('value', result[0].Position);
+        //        $('#PSANumber').prop('value', result[0].PSANumber);
+        //        $('#JoinDate').prop('value', result[0].JoinDateTemp);
+        //        $('#ProfessionalJoinDate').prop('value', result[0].JoinDateTemp);
+        //        $('#RequestorMailAddress').prop('value', result[0].OfficeEmail);
+        //        $('#ProfessionalID').prop('value', result[0].ID);
+        //        $('#PositionID').prop('value', result[0].PositionId);
+
+
+        //    })
+
+        //}
+
+        function onSelectExitProcedure(e) {
+
+            $.each(e.files, function (index, value) {
+
+            });
+
+        }
+
+        //function getExitProcedureChecklists(dataItem) {
+        //    var data = $("#ExitProcedureChecklist").data("kendoGrid").dataSource.data();
+        //    return data.indexOf(dataItem);
+        //}
+
+        //function onDataBoundExitProcedureChecklists(e) {
+
+        //    var grid = $("#ExitProcedureChecklist").data("kendoGrid");
+        //    hideDeletedRowKendoDetail(grid);
+        //}
+
+        //function filterApproverPosition(e) {
+        //    return {
+        //        approverUnit: $("#ApproverUnit").data("kendoDropDownList").value()
+        //    };
+        //}
+
+        //function filterApproverName(e) {
+        //    return {
+        //        position: $("#ApproverPosition_Value").data("kendoDropDownList").value()
+        //    };
+        //}
+
+
+    </script>
+}

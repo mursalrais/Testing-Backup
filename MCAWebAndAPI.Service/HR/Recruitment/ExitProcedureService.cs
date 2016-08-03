@@ -56,12 +56,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             updatedValues.Add("exitreason", exitProcedure.ExitReason.Value);
             updatedValues.Add("reasondescription", exitProcedure.ReasonDesc);
             updatedValues.Add("psanumber", exitProcedure.PSANumber);
+            //updatedValues.Add("visibleto", exitProcedure.RequestorMailAddress);
 
-            if(exitProcedure.StatusForm == "Pending Approval")
+            if (exitProcedure.StatusForm == "Pending Approval")
             {
                 statusExitProcedure = "Pending Approval";
-                //var startDateApproval = exitProcedure.StartDateApproval.ToLocalTime().ToShortDateString();
-                //updatedValues.Add("startdateapproval", startDateApproval);
             }
             else if(exitProcedure.StatusForm == "Draft")
             {
@@ -121,8 +120,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 return viewModel;
             }
 
-            //var listItem = SPConnector.GetListItem(SP_EXP_LIST_NAME, ID, _siteUrl);
-            //viewModel = ConvertToExitProcedureVM(listItem);
+            var listItem = SPConnector.GetListItem(SP_EXP_LIST_NAME, ID, _siteUrl);
+            viewModel = ConvertToExitProcedureVM(listItem);
             //viewModel = GetExitProcedureDetails(viewModel);
 
             return viewModel;
@@ -433,7 +432,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         
         public void CreateExitProcedureChecklist(ExitProcedureVM exitProcedure, int? exitProcID, IEnumerable<ExitProcedureChecklistVM> ExitProcedureChecklist, string requestorposition, string requestorunit, int? positionID)
         {
-         
+
+            //int i = 1;
+
             foreach (var viewModel in ExitProcedureChecklist)
             {
                 if (Item.CheckIfSkipped(viewModel))
@@ -465,14 +466,90 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 updatedValue.Add("approverunit", viewModel.ApproverUnit.Text);
                 updatedValue.Add("isdefault", viewModel.IsDefault);
 
-                if((viewModel.ApprovalMail != null) || (viewModel.ApprovalMail == null))
-                {
-                    var item = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, viewModel.ApproverUserName.Value, _siteUrl);
+                var item = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, viewModel.ApproverUserName.Value, _siteUrl);
+                updatedValue.Add("approvalmail", Convert.ToString(item["officeemail"]));
 
-                    updatedValue.Add("approvalmail", Convert.ToString(item["officeemail"]));
-                }
+                //var updatedHeaderValue = new Dictionary<string, object>();
+                
+                //if (i == 1)
+                //{
+                //    updatedHeaderValue.Add("visibletoapprover1", Convert.ToString(item["officeemail"]));
 
-                if(exitProcedure.StatusForm == "Pending Approval")
+                //    try
+                //    {
+                //        SPConnector.UpdateListItem(SP_EXP_LIST_NAME, exitProcedure.ID, updatedHeaderValue, _siteUrl);
+                //    }
+                //    catch (Exception e)
+                //    {
+                //        logger.Error(e.Message);
+                //        throw new Exception(ErrorResource.SPInsertError);
+                //    }
+                //}
+                //if(i == 2)
+                //{
+                //    updatedHeaderValue.Add("visibletoapprover2", Convert.ToString(item["officeemail"]));
+
+                //    try
+                //    {
+                //        SPConnector.UpdateListItem(SP_EXP_LIST_NAME, exitProcedure.ID, updatedHeaderValue, _siteUrl);
+                //    }
+                //    catch (Exception e)
+                //    {
+                //        logger.Error(e.Message);
+                //        throw new Exception(ErrorResource.SPInsertError);
+                //    }
+                //}
+                //if(i == 3)
+                //{
+                //    updatedHeaderValue.Add("visibletoapprover3", Convert.ToString(item["officeemail"]));
+
+                //    try
+                //    {
+                //        SPConnector.UpdateListItem(SP_EXP_LIST_NAME, exitProcedure.ID, updatedHeaderValue, _siteUrl);
+                //    }
+                //    catch (Exception e)
+                //    {
+                //        logger.Error(e.Message);
+                //        throw new Exception(ErrorResource.SPInsertError);
+                //    }
+                //}
+                //if(i == 4)
+                //{
+                //    updatedHeaderValue.Add("visibletoapprover4", Convert.ToString(item["officeemail"]));
+
+                //    try
+                //    {
+                //        SPConnector.UpdateListItem(SP_EXP_LIST_NAME, exitProcedure.ID, updatedHeaderValue, _siteUrl);
+                //    }
+                //    catch (Exception e)
+                //    {
+                //        logger.Error(e.Message);
+                //        throw new Exception(ErrorResource.SPInsertError);
+                //    }
+                //}
+                //if(i == 5)
+                //{
+                //    updatedHeaderValue.Add("visibletoapprover5", Convert.ToString(item["officeemail"]));
+
+                //    try
+                //    {
+                //        SPConnector.UpdateListItem(SP_EXP_LIST_NAME, exitProcedure.ID, updatedHeaderValue, _siteUrl);
+                //    }
+                //    catch (Exception e)
+                //    {
+                //        logger.Error(e.Message);
+                //        throw new Exception(ErrorResource.SPInsertError);
+                //    }
+                //}
+
+                //if((viewModel.ApprovalMail != null) || (viewModel.ApprovalMail == null))
+                //{
+                //    var item = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, viewModel.ApproverUserName.Value, _siteUrl);
+
+                //    updatedValue.Add("approvalmail", Convert.ToString(item["officeemail"]));
+                //}
+
+                if (exitProcedure.StatusForm == "Pending Approval")
                 {
                     var startDateApproval = exitProcedure.StartDateApproval.ToLocalTime().ToShortDateString();
                     updatedValue.Add("startdateapproval", startDateApproval);
@@ -495,6 +572,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     logger.Error(e.Message);
                     throw new Exception(ErrorResource.SPInsertError);
                 }
+
+                //i++;
             }
         }
 
@@ -649,7 +728,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     ),
                 ApproverPosition = ExitProcedureChecklistVM.GetPositionDefaultValue(FormatUtil.ConvertToInGridAjaxComboBox(item, "approverposition")),
                 ApproverUserName = ExitProcedureChecklistVM.GetApproverUserNameDefaultValue(FormatUtil.ConvertToInGridAjaxComboBox(item, "approverusername")),
-                Level = Convert.ToString(item["approverlevel"]),
+                Level = Convert.ToString(item["approverlevel"])
                 
                 
             };

@@ -81,7 +81,7 @@ new
                    "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].Remarks' value='#= Remarks #' />"
                  );
 
-    columns.Bound(p => p.ApprovalIndicator).Template(@<div style="width: 25px; height: 25px; background: @item.ApprovalIndicator"></div>);
+    columns.Bound(p => p.ApprovalIndicator).Template(@<div style="width:25px;height: 25px;-webkit-border-radius: 25px;-moz-border-radius: 25px;border-radius: 25px;background-color: red;"></div>);
 
         columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
           "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ID' value='#= ID #' />"
@@ -114,6 +114,7 @@ new
     .Pageable()
     .Events(e =>
     {
+        //e.Change("onChange");
         e.Edit("onEditKendoDetail");
         e.DataBound("onDataBoundExitProcedureChecklists");
     })
@@ -133,6 +134,7 @@ new
                        model.Field(m => m.ProfessionalUnit).DefaultValue(ExitProcedureChecklistVM.GetProfessionalUnitDefaultValue());
                        model.Field(m => m.ProfessionalPosition).DefaultValue(ExitProcedureChecklistVM.GetProfessionalPositionDefaultValue());
                        
+
                    })
                    .ServerOperation(false)
                    .PageSize(10)
@@ -141,3 +143,27 @@ new
     )
 </div>
 
+<script>
+
+    function getExitProcedureChecklists(dataItem) {
+        var data = $("#ExitProcedureChecklist").data("kendoGrid").dataSource.data();
+        return data.indexOf(dataItem);
+    }
+
+    function onDataBoundExitProcedureChecklists(e) {
+        var grid = $("#ExitProcedureChecklist").data("kendoGrid");
+        hideDeletedRowKendoDetail(grid);
+    }
+
+    function filterApproverPosition(e) {
+        return {
+            approverUnit: $("#ApproverUnit").data("kendoDropDownList").value()
+        };
+    }
+
+    function filterApproverName(e) {
+        return {
+            position: $("#ApproverPosition_Value").data("kendoDropDownList").value()
+        };
+    }
+</script>
