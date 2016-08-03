@@ -16,7 +16,7 @@
     <RootNamespace>MCAWebAndAPI.Web</RootNamespace>
     <AssemblyName>MCAWebAndAPI.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -475,7 +475,9 @@
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="packages.config" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Site.Mobile.Master" />
     <Content Include="Views\Shared\Error.cshtml" />
@@ -718,6 +720,17 @@
     <Content Include="Views\HRCompensatory\_CompensantoryDetailsHR.cshtml" />
     <Content Include="Scripts\kendo\2016.2.714\kendo.all.min.js.map" />
     <Content Include="Scripts\kendo\2016.2.714\kendo.aspnetmvc.min.js.map" />
+    <Content Include="Views\FINRequisitionNote\CreateRequisitionNote.cshtml" />
+    <Content Include="Views\FINRequisitionNote\EditRequisitionNote.cshtml" />
+    <Content Include="Views\FINRequisitionNote\PrintRequisitionNote.cshtml" />
+    <Content Include="Views\FINRequisitionNote\_General.cshtml" />
+    <Content Include="Views\FINRequisitionNote\_ItemDetails.cshtml" />
+    <Content Include="Views\FINSCAVoucher\CreateSCAVoucher.cshtml" />
+    <Content Include="Views\FINSCAVoucher\_EventBudgetItems.cshtml" />
+    <Content Include="Views\FINSPHL\CreateSPHL.cshtml" />
+    <Content Include="Views\FINTaxExemptionData\Create.cshtml" />
+    <Content Include="Views\FINTaxExemptionData\Edit.cshtml" />
+    <Content Include="Views\FINTaxReimbursement\CreateTaxReimbursement.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -745,9 +758,16 @@
     <Compile Include="Controllers\ASSLocationMasterController.cs" />
     <Compile Include="Controllers\BIEmbedController.cs" />
     <Compile Include="Controllers\CalendarEventController.cs" />
+    <Compile Include="Controllers\ComboBoxController.cs" />
     <Compile Include="Controllers\CSVController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\FileController.cs" />
+    <Compile Include="Controllers\FINEventBudgetController.cs" />
+    <Compile Include="Controllers\FINRequisitionNoteController.cs" />
+    <Compile Include="Controllers\FINSCAVoucherController.cs" />
+    <Compile Include="Controllers\FINSPHLController.cs" />
+    <Compile Include="Controllers\FINTaxExemptionDataController.cs" />
+    <Compile Include="Controllers\FINTaxReimbursementController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HRApplicationController.cs" />
     <Compile Include="Controllers\HRCompensatoryController.cs" />
@@ -834,6 +854,7 @@
     <Folder Include="bin\Resources\" />
     <Folder Include="Views\File\" />
     <Folder Include="Views\FINEventBudget\" />
+    <Folder Include="Views\FINShared\" />
     <Folder Include="Views\HRDataMaster\" />
   </ItemGroup>
   <ItemGroup>

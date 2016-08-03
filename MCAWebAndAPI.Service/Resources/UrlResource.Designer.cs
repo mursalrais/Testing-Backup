@@ -304,6 +304,15 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0}/Requisition%20Note%20Documents/Forms/AllItems.aspx#InplviewHash5093bda1-84bf-4cad-8652-286653d6a83f=FilterField1%3Dpsa%255Fx003a%255FID-FilterValue1%3D{1}.
+        /// </summary>
+        public static string RequisitionNoteDocumentByID {
+            get {
+                return ResourceManager.GetString("RequisitionNoteDocumentByID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0}/Lists/Application/ShortlistREQ.aspx?POSID={1}.
         /// </summary>
         public static string ShortlistEmailLinkHR {
