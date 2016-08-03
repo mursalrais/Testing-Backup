@@ -111,6 +111,26 @@ namespace MCAWebAndAPI.Web.Controllers
 
         }
 
+        public ActionResult DisplayExitProcedureHR(int? ID, string siteUrl = null, string requestor = null)
+        {
+            exitProcedureService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            ViewBag.ListName = "Exit Procedure";
+
+            var listName = ViewBag.ListName;
+
+            ViewBag.RequestorUserLogin = requestor;
+
+            SessionManager.Set("RequestorUserLogin", requestor);
+
+            // Get blank ViewModel
+            var viewModel = exitProcedureService.GetExitProcedureHR(ID, siteUrl);
+
+            return View("EditExitProcedureHR", viewModel);
+
+        }
+
         public ActionResult ViewExitProcedureForApprover(int? ID, string siteUrl = null, string approver = null)
         {
             // MANDATORY: Set Site URL
@@ -189,12 +209,7 @@ namespace MCAWebAndAPI.Web.Controllers
             {
                 RedirectToAction("Index", "Error");
             }
-
-            //if(viewModel.CheckDocument == "Not Completed")
-            //{
-            //    ModelState.AddModelError("Model Invalid", );   
-            //}
-
+            
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             exitProcedureService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 

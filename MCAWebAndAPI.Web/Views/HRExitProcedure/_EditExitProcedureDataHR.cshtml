@@ -10,9 +10,9 @@
     </div>
 
     <div class="form-group">
-        @Html.Bootstrap().LabelFor(m => m.Professional).Class("col-md-4 control-label")
+        @Html.Bootstrap().LabelFor(m => m.FullName).Class("col-md-4 control-label")
         <div class="col-md-8">
-            @Html.EditorFor(m => m.Professional)
+            @Html.DisplayFor(m => m.FullName)
         </div>
     </div>
     <div class="form-group">
@@ -71,14 +71,15 @@
     </div>
 
     @Html.HiddenFor(m => m.PSANumber)
-    @Html.HiddenFor(m => m.FullName)
+    @Html.HiddenFor(m => m.Professional)
+    @*@Html.HiddenFor(m => m.FullName)*@
     @Html.HiddenFor(m => m.StatusForm)
     @Html.HiddenFor(m => m.ProfessionalID)
     @Html.HiddenFor(m => m.RequestorMailAddress)
     @Html.HiddenFor(m => m.RequestorPosition)
     @Html.HiddenFor(m => m.RequestorUnit)
     @Html.HiddenFor(m => m.ID)
-    
-
+    @Html.HiddenFor(m => m.JoinDate)
+    @Html.HiddenFor(m => m.PositionID)
 </div>
 

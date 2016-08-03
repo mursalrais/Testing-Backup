@@ -81,7 +81,7 @@
                        "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].Remarks' value='#= Remarks #' />"
                      );
 
-        columns.Bound(p => p.ApprovalIndicator).ClientTemplate(@"<div style='width:25px;height: 25px;-webkit-border-radius: 25px;-moz-border-radius: 25px;border-radius: 25px;background-color: " + "red" + @";'></div>");
+        columns.Bound(p => p.ApprovalIndicator).ClientTemplate(@"<div style=width:25px;height: 25px;-webkit-border-radius: 25px;-moz-border-radius: 25px;border-radius: 25px;background:" + "red" + ";></div>");
 
         columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
           "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ID' value='#= ID #' />"
@@ -138,6 +138,7 @@
                        model.Field(m => m.ProfessionalUnit).DefaultValue(ExitProcedureChecklistVM.GetProfessionalUnitDefaultValue());
                        model.Field(m => m.ProfessionalPosition).DefaultValue(ExitProcedureChecklistVM.GetProfessionalPositionDefaultValue());
                        model.Field(m => m.StartDateApproval).DefaultValue(DateTime.UtcNow);
+                       model.Field(m => m.ApprovalIndicator).Editable(false);
                    })
                    .ServerOperation(false)
                    .PageSize(10)
