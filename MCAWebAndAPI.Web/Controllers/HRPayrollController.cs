@@ -158,8 +158,10 @@ namespace MCAWebAndAPI.Web.Controllers
             // Convert to Kendo DataSource
             DataSourceResult result = items.ToDataSourceResult(request);
 
-            // Convert to Json
-            return Json(result);
+            // Convert to Json 
+            var json = Json(result, JsonRequestBehavior.AllowGet);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
         }
 
         [HttpPost]

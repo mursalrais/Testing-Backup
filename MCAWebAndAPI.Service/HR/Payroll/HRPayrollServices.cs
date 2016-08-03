@@ -183,6 +183,11 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="periodParam"></param>
+        /// <returns></returns>
         public IEnumerable<PayrollWorksheetDetailVM> GetPayrollWorksheetDetails(DateTime? periodParam)
         {
             var worksheet = new List<PayrollWorksheetDetailVM>();
@@ -194,10 +199,14 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             var startDate = period.GetFirstPayrollDay();
             var finishDate = period.GetLastPayrollDay();
             var dateRange = startDate.EachDay(finishDate);
-            var professionalIDs = worksheet.GetValidProfessionalIDs(startDate, _siteUrl);
+
+            // dummy
+            var professionalIDs = new int[] { 1, 2, 3, 4 } ;
 
             worksheet.PopulateRows(dateRange, professionalIDs);
-            worksheet.PopulateColumns_Dummy(dateRange, professionalIDs);
+           
+            // dummy
+            // worksheet.PopulateColumns_Dummy(dateRange, professionalIDs);
             return worksheet;
         }
         
