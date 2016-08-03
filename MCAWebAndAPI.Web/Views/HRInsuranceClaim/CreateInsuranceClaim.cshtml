@@ -164,11 +164,11 @@
             var dataItem = this.dataItem(e.item);
             var url = "/HRDataMaster/GetDependant/" + dataItem.ID;
             $('#IndividualInsuranceNumber').prop('value', '');
-            $('#OrganizationInsuranceID').prop('value', '');
+            
             $.getJSON(url,
                 function(result) {
                     $('#IndividualInsuranceNumber').prop('value', result[0].InsuranceNumber);
-                    $('#OrganizationInsuranceID').prop('value', result[0].OrganizationInsurance);
+                  //  $('#OrganizationInsuranceID').prop('value', result[0].OrganizationInsurance);
 
                 });
         }
@@ -178,7 +178,7 @@
             var dataItem = this.dataItem(e.item.index());
             var dependent = $("#DependantName_Value").data("kendoDropDownList");
             $('#IndividualInsuranceNumber').prop('value', '');
-            $('#OrganizationInsuranceID').prop('value', '');
+            //$('#OrganizationInsuranceID').prop('value', '');
             if (dataItem === 'Professional') {
                 dependent.enable(false);
             } else {
@@ -193,6 +193,7 @@
 
             $.getJSON(url,
                 function(result) {
+                    $('#OrganizationInsuranceID').prop('value', result[0].InsuranceAccountNumber);
                     $('#Position').prop('value', result[0].Position);
                     $('#ProfessionalTextName').prop('value', result[0].Name);
                     $('#ProfessionalID').prop('value', result[0].ID);

@@ -1,5 +1,4 @@
-﻿
-@*@{ Html.EnableClientValidation(); }*@
+﻿@*@{ Html.EnableClientValidation(); }*@
 
 <!DOCTYPE html>
 
@@ -9,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewBag.Title</title>
 
-    @Scripts.Render("~/bundles/modernizr") 
+    @Scripts.Render("~/bundles/modernizr")
 
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
 
@@ -19,30 +18,25 @@
 
     @Styles.Render("~/Content/theme")
     @Styles.Render("~/Content/kendo")
-    
+
     <script src="~/Scripts/libs/jquery.min.js"></script>
-
-
-    <script src="~/Scripts/libs/jszip.min.js"></script>
     @Scripts.Render("~/bundles/kendo")
-    
-    <script src="~/Scripts/WebForms/MSAjax/MicrosoftAjax.js"></script>
 
     <script type="text/javascript" src="~/Scripts/libs/iframeResizer.contentWindow.min.js" defer></script>
     <script>
-			var iFrameResizer = {
-					messageCallback: function(message){
-						alert(message,parentIFrame.getId());
-					}
-				}
-    </script>
-    
-    <!-- Basic JS Libraries -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js">
-        //<![CDATA[//]]>
+        var iFrameResizer = {
+            messageCallback: function (message) {
+                alert(message, parentIFrame.getId());
+            }
+        }
     </script>
 
-    <script src="@Url.Content("~/Scripts/kendo.modernizr.custom.js")"></script>
+    <!-- Basic JS Libraries -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/custom.js"></script>
 
 </head>
 <body class="smart-style-6">
@@ -51,33 +45,23 @@
         <div id="content">
             <div class="panel panel-default">
                 <div class="panel-body">
-               @RenderBody()
+                    @RenderBody()
                 </div>
             </div>
-        </div>    
+        </div>
     </div>
     <div class="modal-loading"></div>
     @Html.Partial("_Modal")
 
-    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
-    <script src="~/Scripts/jquery.validate.min.js"></script>
-    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
-
-    <script src="~/Scripts/custom.js"></script>
-
     @RenderSection("scripts", required: false)
+
     <script type="text/javascript">
-      $(document).ajaxError(function (e, jqxhr, settings, exception) {
-                       e.stopPropagation();
-                       if (jqxhr != null)
-                           console.log(jqxhr.responseText);
-      });
-
-      //$(document).on({
-      //    ajaxStart: function () { showLoading(); },
-      //    ajaxStop: function () { hideLoading(); }
-      //});
-
+        $(document).ajaxError(function (e, jqxhr, settings, exception) {
+            e.stopPropagation();
+            if (jqxhr != null)
+                console.log(jqxhr.responseText);
+        });
     </script>
+
 </body>
 </html>

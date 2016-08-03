@@ -26,5 +26,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         Task<CompensatoryVM> GetCompensatoryDetailGrid(int? idComp);
 
+        string GetPosition(string username = null);
+
     }
 }

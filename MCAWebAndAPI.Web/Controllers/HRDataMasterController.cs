@@ -90,7 +90,8 @@ namespace MCAWebAndAPI.Web.Controllers
                         e.JoinDate,
                         e.OfficeEmail, 
                         e.PersonalMail,
-                        e.JoinDateTemp
+                        e.JoinDateTemp,
+                        e.InsuranceAccountNumber
                     }
                 ), JsonRequestBehavior.AllowGet);
         }
