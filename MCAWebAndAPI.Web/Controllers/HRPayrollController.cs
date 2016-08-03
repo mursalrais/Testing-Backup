@@ -137,7 +137,7 @@ namespace MCAWebAndAPI.Web.Controllers
             IEnumerable<PayrollWorksheetDetailVM> viewModelPayroll = new List<PayrollWorksheetDetailVM>();
             try
             {
-                viewModelPayroll = _hRPayrollService.GetPayrollWorksheetDetails(viewModel.From);
+                viewModelPayroll = _hRPayrollService.GetPayrollWorksheetDetails(viewModel.Period);
             }
             catch (Exception e)
             {
