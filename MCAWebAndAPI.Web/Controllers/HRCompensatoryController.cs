@@ -176,6 +176,14 @@ namespace MCAWebAndAPI.Web.Controllers
                 _service.UpdateHeader(viewModel);
             }
 
+            if (viewModel.StatusForm == "Pending Approval 1 of 2")
+            {
+                // Send to Level 1 Approver
+                Task sendApprovalRequestTask = WorkflowHelper.SendApprovalRequestAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
+                   SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)cmpID, 1,
+                    string.Format(EmailResource.ManpowerApproval, siteUrl, cmpID));
+            }
+
             if (viewModel.StatusForm != "DraftInitiated")
             {
                 Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateTransactionWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
