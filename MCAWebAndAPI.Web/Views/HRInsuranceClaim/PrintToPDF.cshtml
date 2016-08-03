@@ -6,74 +6,65 @@
     Layout = "~/Views/Shared/_LayoutPDF.cshtml";
 }
 
+
+
 <div class="form-horizontal">
 
     <fieldset>
 
-        @Html.HiddenFor(m => m.URL)
-
         <div class="wrp">&nbsp;</div>
         <div class="wrp">
 
-            REKAP KLAIM ASURANSI KESEHATAN 2016
+            REKAP KLAIM ASURANSI KESEHATAN @Model.Year
 
         </div>
         <div class="wrp">&nbsp;</div>
         <div class="row">
-            <div class="col-sm-12">
-                @(Html.Kendo().Grid<dynamic>()
-                      .Name("gridDataView")
-                      .Columns(columns =>
-                      {
-                          foreach (System.Data.DataColumn column in Model.dtDetails.Columns)
-                          {
+            <div class="col-xs-12">
+                <table class="table table-striped ">
+                    <thead>
+                        <tr>
+                            <th rowspan="2">No</th>
+                            <th rowspan="2">Batch No</th>
+                            <th rowspan="2">Tanggal Kirim</th>
+                            <th rowspan="2">Nama Karyawan</th>
+                            <th rowspan="2">Nama Tertanggung</th>
+                            <th rowspan="2">Tanggal Kwitansi</th>
+                            <th colspan="4">Jumlah Klaim</th>
+                            <th rowspan="2">Remarks</th>
+                        </tr>
+                        <tr>
+                            <th rowspan="1">Medical Examination</th>
+                            <th rowspan="1">Prescription</th>
+                            <th rowspan="1">Others</th>
+                            <th rowspan="1">Total</th>
 
-                              if (column.DataType.FullName != "System.Double" && column.ColumnName != "Remarks")
-                              {
-                                  columns.Bound(column.ColumnName);
-                              }
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @for (int i = 0; i <= Model.dtDetails.Rows.Count - 1; i++)
+                    {
+                        <tr>
+                            <td>@Convert.ToString(Model.dtDetails.Rows[i]["No"])</td>
+                            <td>@Convert.ToString(Model.dtDetails.Rows[i]["BatchNo"])</td>
+                            <td>@Convert.ToString(Model.dtDetails.Rows[i]["SubmissionDate"])</td>
+                            <td>@Convert.ToString(Model.dtDetails.Rows[i]["ProfessionalName"])</td>
+                            <td>@Convert.ToString(Model.dtDetails.Rows[i]["DependentName"])</td>
+                            <td>@Convert.ToString(Model.dtDetails.Rows[i]["ReceiptDate"])</td>
+                            <td>@Convert.ToDouble(Model.dtDetails.Rows[i]["MedicalExamination"]).ToString("n0")</td>
+                            <td>@Convert.ToDouble(Model.dtDetails.Rows[i]["Prescription"]).ToString("n0")</td>
+                            <td>@Convert.ToDouble(Model.dtDetails.Rows[i]["Others"]).ToString("n0")</td>
+                            <td>@Convert.ToDouble(Model.dtDetails.Rows[i]["Total"]).ToString("n0")</td>
+                            <td>@Convert.ToString(Model.dtDetails.Rows[i]["Remarks"])</td>
+                        </tr>
+                    }
+                    </tbody>
+</table>
 
-                          }
-                          columns.Group(group => group
-                              .Title("Claim Component")
-                              .Columns(info =>
-                              {
-                                  foreach (System.Data.DataColumn column in Model.dtDetails.Columns)
-                                  {
-                                      if (column.DataType.FullName == "System.Double")
-                                      {
-                                          info.Bound(column.ColumnName).ClientTemplate("#= kendo.toString(" + column.ColumnName + ",'n0') #");
-
-                                      }
-                                  }
-
-
-                              })
-                              );
-                          columns.Bound("Remarks");
-
-                      })
-                      //.ToolBar(tools => tools.Excel())
-                      //.Excel(excel => excel
-                      //  .FileName("Products.xlsx")
-                      //)
-                      .DataSource(dataSource => dataSource
-                          .Ajax()
-                          .Model(model =>
-                          {
-
-                          })
-
-                          .Read(read => read.Action("ReadPrintToPDF", "HRInsuranceClaim"))
-
-                      )
-                )
-
-
-            </div>
+</div>
         </div>
 
-        <div class="col-sm-6">
+        <div class="col-xs-6">
             <div class="wrp">&nbsp;</div>
             <div class="wrp">&nbsp;</div>
             <div class="wrp">&nbsp;</div>
@@ -82,9 +73,9 @@
             <div class="wrp">&nbsp;</div>
             <div class="wrp">&nbsp;</div>
             <div class="wrp">&nbsp;</div>
-            <div class="wrpTTD">Junindar</div>
+            <div class="wrpTTD">@Model.Sender</div>
         </div>
-        <div class="col-sm-6">
+        <div class="col-xs-6">
             <div class="wrp">&nbsp;</div>
             <div class="wrp">&nbsp;</div>
             <div class="wrp">&nbsp;</div>
@@ -93,10 +84,12 @@
             <div class="wrp">&nbsp;</div>
             <div class="wrp">&nbsp;</div>
             <div class="wrp">&nbsp;</div>
-            <div class="wrpTTD">Randi</div>
+            <div class="wrpTTD">@Model.Recepient</div>
         </div>
     </fieldset>
 </div>
+
+
 
 <style type="text/css">
     .wrp {
@@ -115,6 +108,31 @@
         text-align: center;
         font-size: 20%;
     }
+
+    table {
+  border-collapse: collapse;
+}
+
+th {
+  border: 1px solid Black;
+  padding: 5px 15px;text-align: center;vertical-align: text-top;background-color: GrayText; ;vertical-align: top;
+}
+
+td {
+  border: 1px solid Black;
+  padding: 5px 15px;text-align: center;vertical-align: text-top;vertical-align: top;
+}
+
+/*thead > tr:nth-child(1) > th:nth-child(1) { background-color: GrayText; text-align: center; }
+thead > tr:nth-child(1) > th:nth-child(2) { background-color: GrayText; text-align: center; }
+thead > tr:nth-child(1) > th:nth-child(3) { background-color: GrayText;  text-align: center;}
+thead > tr:nth-child(1) > th:nth-child(4) { background-color: GrayText; text-align: center; }
+thead > tr:nth-child(1) > th:nth-child(5) { background-color: GrayText; text-align: center; }
+thead > tr:nth-child(1) > th:nth-child(6) { background-color: GrayText;  text-align: center;}
+thead > tr:nth-child(1) > th:nth-child(7) { background-color: GrayText;  text-align: center;}
+thead > tr:nth-child(1) > th:nth-child(8) { background-color: GrayText; text-align: center; }
+thead > tr:nth-child(2) > th              { background-color: GrayText; text-align: center; }*/
+
 </style>
 
 

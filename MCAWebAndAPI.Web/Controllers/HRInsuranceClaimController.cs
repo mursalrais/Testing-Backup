@@ -244,54 +244,47 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-            var viewModel = _service.GetPopulatedModelAXA();
+            var viewModel = _service.GetPopulatedModelAXA(true);
 
             return View(viewModel);
 
         }
 
-        //public ActionResult PrintToPDF2(string siteUrl = null)
+        //public ActionResult PrintToPDF(string siteUrl = null)
         //{
         //    _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
         //    SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-        //    var viewModel = _service.getViewAXADefault();
+        //    var viewModel = _service.GetPopulatedModelAXA(false);
+        //    viewModel.dtDetails = _service.getViewAXA();
 
         //    return View("PrintToPDF",viewModel);
         //}
 
-       // public ActionResult PrintToPDF(FormCollection form, InsuranceClaimAXAVM viewModel)
-            public ActionResult PrintToPDF()
+        public ActionResult PrintToPDF(InsuranceClaimAXAVM viewModel)
+            //public ActionResult PrintToPDF()
         {
-            //_service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-            //SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-            //var viewModel = _service.getViewAXADefault();
+         
 
-            //return View(viewModel);
-           
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-            //_service.CreateAxa(viewModel);
-
-            var viewModel = new InsuranceClaimAXAVM
-            {
-                dtDetails = _service.getComponentAXAdetails(),
-                BatchNo = "",
-                Recepient = "",
-                Sender = "",
-                URL = siteUrl,
-                SubmissionDate = DateTime.Now
-            };
-
+            _service.CreateAxa(viewModel);
+            viewModel = _service.GetPopulatedModelAXA(false);
 
             const string RelativePath = "~/Views/HRInsuranceClaim/PrintToPDF.cshtml";
             var view = ViewEngines.Engines.FindView(ControllerContext, RelativePath, null);
             var fileName = "_Application.pdf";
             byte[] pdfBuf = null;
             string content;
+           // ControllerContext context = new ControllerContext();
+            ControllerContext.Controller.ViewData.Model = viewModel;
+            ViewData = ControllerContext.Controller.ViewData;
+            TempData = ControllerContext.Controller.TempData;
+
             using (var writer = new StringWriter())
             {
-                var context = new ViewContext(ControllerContext, view.View, ViewData, TempData, writer);
-                view.View.Render(context, writer);
+                //var contextviewContext = new ViewContext(ControllerContext, view.View, ViewData, TempData, writer);
+                var contextviewContext = new ViewContext(ControllerContext, view.View, ViewData, TempData, writer);
+                view.View.Render(contextviewContext, writer);
                 writer.Flush();
                 content = writer.ToString();
 
