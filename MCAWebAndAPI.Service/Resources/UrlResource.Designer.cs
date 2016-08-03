@@ -97,6 +97,15 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to /Lists/Asset%20Master.
+        /// </summary>
+        public static string AssetMaster {
+            get {
+                return ResourceManager.GetString("AssetMaster", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to /Lists/Compensatory%20Request.
         /// </summary>
         public static string Compensatory {

@@ -16,6 +16,7 @@
             columns.Bound(p => p.AssetSubAsset).ClientTemplate("#= kendo.toString(AssetSubAsset) #" +
             "<input type='hidden' name='Details[#= getMonthlyFeeDetail(data)#].AssetSubAsset' value='#= AssetSubAsset #' />"
             );
+
             columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
             "<input type='hidden' name='Details[#= getMonthlyFeeDetail(data)#].ID' value='#= ID #' />"
             );
