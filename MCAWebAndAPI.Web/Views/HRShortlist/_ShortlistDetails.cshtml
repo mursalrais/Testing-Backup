@@ -24,8 +24,7 @@
                             ActionName = "GetStatusGrid"
                         });
 
-        columns.Bound(p => p.Remarks).ClientTemplate("#= Remarks #" +
-        "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].Remarks' value='#= Remarks #' />");
+        columns.Bound(p => p.Remarks).ClientTemplate("<textarea name='ShortlistDetails[#= GetDetailShortlist(data)#].Remarks' style='width: 300px; height: 50px; border: none; background-color: transparent' disable> #= Remarks #</textarea>");
 
         columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
           "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].ID' value='#= ID #' />"
@@ -38,7 +37,7 @@
         columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
            "<input type='hidden' name='ShortlistDetails[#= GetDetailShortlist(data)#].EditMode' value='#= EditMode #' />"
          );
-        
+
     })
     .Events(e =>
     {

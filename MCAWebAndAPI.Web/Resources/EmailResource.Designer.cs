@@ -87,7 +87,7 @@ namespace MCAWebAndAPI.Web.Resources {
         ///
         ///page in IMS (My Approval View). Thank you.    
         ///
-        ///Link : {0}/Lists/Manpower%20Requisition/ApprovalManpower.aspx?ID={1}.
+        ///Link : {0}/Lists/CompensatoryRequest/FormCompensatoryRequest.aspx?ID={1}.
         /// </summary>
         public static string EmailCompensatoryApproval {
             get {
