@@ -492,21 +492,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 logger.Error(e.Message);
                 throw e;
             }
-
-            char[] delimiterChars = { ' ', ',', ';' };
-
-            string[] words = viewModel.InterviewerPanel.Split(delimiterChars);
-
-            foreach (string mail in words)
-            {
-                if (mail != "")
-                {
-                    if (EmailUtil.IsValidEmailId(mail))
-                    {
-                        EmailUtil.Send(mail, "Interview Invitation", viewModel.InterviewSummary);
-                    }
-                }
-            }
         }
 
         public void SendEmailValidation(string emailTo, string emailMessages)
