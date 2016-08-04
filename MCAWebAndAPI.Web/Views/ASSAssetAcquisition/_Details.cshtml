@@ -17,7 +17,7 @@
         .Columns(columns =>
         {
             columns.Bound(p => p.AssetSubAsset).ClientTemplate("#= AssetSubAsset.Text #" +
-                          "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].AssetSubAsset.Value' value='#= AssetSubAsset.Text #' />"
+                          "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].AssetSubAsset.Value' value='#= AssetSubAsset.Value #' />"
                         ).EditorViewData(new
                         {
                             DataTextField = "Text",
@@ -56,7 +56,6 @@
     function getWorkingRelationshipDetails(dataItem) {
         var data = $("#Details").data("kendoGrid").dataSource.data();
         //data.set('AssetSubAsset', data.AssetSubAsset);
-        alert(dataItem.AssetSubAsset.Value);
         return data.indexOf(dataItem);
     }
 
