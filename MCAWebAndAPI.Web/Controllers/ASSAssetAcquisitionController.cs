@@ -9,6 +9,7 @@ using System.Net;
 using System.Web.Mvc;
 using System.Collections.Generic;
 using System.Linq;
+using MCAWebAndAPI.Service.Resources;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -28,27 +29,65 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewModel);
         }
 
+
+        public ActionResult Edit(int ID, string site)
+        {
+            var viewModel = _assetAcquisitionService.GetHeader(ID);
+
+            int? headerID = null;
+            headerID = viewModel.ID;
+
+            try
+            {
+                var viewdetails = _assetAcquisitionService.GetDetails(headerID);
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            return View(viewModel);
+        }
+
         [HttpPost]
         public ActionResult Submit(AssetAcquisitionHeaderVM _data, string site)
         {
             //return View(new AssetMasterVM());
-            _assetAcquisitionService.CreateHeader(_data);
-            return new JavaScriptResult
+            int? headerID = null;
+            try
             {
-                Script = string.Format("window.parent.location.href = '{0}'", "https://eceos2.sharepoint.com/sites/mca-dev/bo/Lists/AssetAcquisition/AllItems.aspx")
-            };
+                headerID = _assetAcquisitionService.CreateHeader(_data);
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            try
+            {
+                _assetAcquisitionService.CreateDetails(headerID, _data.Details);
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            return JsonHelper.GenerateJsonSuccessResponse(string.Format("{0}/{1}", "https://eceos2.sharepoint.com/sites/mca-dev/bo", UrlResource.AssetAcquisition));
         }
 
         public JsonResult GetAssetSubSAssetGrid()
         {
-            _assetAcquisitionService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            _assetAcquisitionService.SetSiteUrl("https://eceos2.sharepoint.com/sites/mca-dev/bo");
 
             var positions = GetFromPositionsExistingSession();
 
             return Json(positions.Select(e =>
                 new {
                     Value = Convert.ToString(e.ID),
-                    Text = e.AssetNoAssetDesc + " - " + e.AssetDesc
+                    Text = e.AssetNoAssetDesc.Value + " - " + e.AssetDesc
                 }),
                 JsonRequestBehavior.AllowGet);
         }
@@ -56,11 +95,11 @@ namespace MCAWebAndAPI.Web.Controllers
         private IEnumerable<AssetMasterVM> GetFromPositionsExistingSession()
         {
             //Get existing session variable
-            var sessionVariable = System.Web.HttpContext.Current.Session["AssetSubAsset"] as IEnumerable<AssetMasterVM>;
+            var sessionVariable = System.Web.HttpContext.Current.Session["AssetMaster"] as IEnumerable<AssetMasterVM>;
             var positions = sessionVariable ?? _assetAcquisitionService.GetAssetSubAsset();
 
             if (sessionVariable == null) // If no session variable is found
-                System.Web.HttpContext.Current.Session["AssetSubAsset"] = positions;
+                System.Web.HttpContext.Current.Session["AssetMaster"] = positions;
             return positions;
         }
     }
