@@ -57,6 +57,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// </summary>
         public int HidRenewalNumber { get; set; }
 
+        public string ProjectUnit { get; set; }
+
         /// <summary>
         /// ProjectOrUnit
         /// </summary>
@@ -128,6 +130,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             TextField = "Desc",
             OnSelectEventName = "OnSelectPosition"
         };
+
+        public int PositionID { get; set; }
         
         /// <summary>
         /// professional
