@@ -12,7 +12,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
     public class TimesheetVM : Item
     {
 
-        [UIHint("Date")]
+        [UIHint("Month")]
         public DateTime? Period { get; set; } = DateTime.Today;
 
         public string UserLogin { get; set; }

@@ -9,6 +9,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using MCAWebAndAPI.Model.Common;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -25,7 +26,7 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             SessionManager.Set("SiteUrl", siteUrl);
             _timesheetService.SetSiteUrl(siteUrl);
-            var viewModel = _timesheetService.GetTimesheet(userlogin, DateTime.Now);
+            var viewModel = _timesheetService.GetTimesheet(userlogin, DateTime.Now.AddMonths(1));
 
             SessionManager.Set("TimesheetDetails", viewModel.TimesheetDetails);
             return View(viewModel);
@@ -39,7 +40,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
             try
             {
-                viewModel = _timesheetService.GetTimesheet(viewModel.UserLogin, (DateTime)viewModel.Period);
+                viewModel = _timesheetService.GetTimesheet(viewModel.UserLogin, ((DateTime)(viewModel.Period))
+                    .AddMonths(1));
             }
             catch (Exception e)
             {

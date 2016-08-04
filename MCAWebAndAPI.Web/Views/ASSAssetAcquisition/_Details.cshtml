@@ -4,53 +4,76 @@
 
 @model IEnumerable<AssetAcquisitionItemVM>
 
-<div class="col-sm-12">
+@{
+    var index = 0;
+}
 
+<div class="col-md-12" style="margin-bottom: 20px">
     @(Html.Kendo().Grid(Model)
         .Name("Details")
-        .ToolBar(tools => tools.Create().Text("Add New Fee"))
+        .ToolBar(tools => tools.Create().Text("Add New"))
         .Editable(editable => editable.Mode(GridEditMode.InCell)
         .CreateAt(GridInsertRowPosition.Bottom))
         .Columns(columns =>
         {
-            columns.Bound(p => p.AssetSubAsset).ClientTemplate("#= kendo.toString(AssetSubAsset) #" +
-            "<input type='hidden' name='Details[#= getMonthlyFeeDetail(data)#].AssetSubAsset' value='#= AssetSubAsset #' />"
-            );
+            columns.Bound(p => p.AssetSubAsset).ClientTemplate("#= AssetSubAsset.Text #" +
+                          "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].AssetSubAsset.Value' value='#= AssetSubAsset.Text #' />"
+                        ).EditorViewData(new
+                        {
+                            DataTextField = "Text",
+                            DataValueField = "Value",
+                            ControllerName = "ASSAssetAcquisition",
+                            ActionName = "GetAssetSubSAssetGrid"
+                        });
+            
             columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
-            "<input type='hidden' name='Details[#= getMonthlyFeeDetail(data)#].ID' value='#= ID #' />"
-            );
+          "<input type='hidden' name=Details[#= getWorkingRelationshipDetails(data)#].ID value=#= ID # />"
 
-            columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
-            "<input type='hidden' name='Details[#= getMonthlyFeeDetail(data)#].EditMode' value='#= EditMode #' />"
-            );
 
+        );
+            columns.Bound(p => p.EditMode).Hidden()
+         .ClientTemplate("#= EditMode #<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].EditMode' value='#= EditMode #' />");
             columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
             .Click("onDeleteKendoDetail")).Width(100);
         })
         .Events(e =>
         {
-            e.Edit("onEditKendoDetail");
-            e.DataBound("onDataBoundMonthlyFeeDetails");
+            e.Edit("onCustomEditKendoDetail");
+            e.DataBound("onDataBoundWorkingRelationship");
         })
         .DataSource(dataSource => dataSource.Ajax()
-        .Model(model =>
-        {
-            model.Id(p => p.ID);
-            model.Field(m => m.AssetSubAsset);
-        })
-        .ServerOperation(false)
+                   .Model(model =>
+                   {
+                       model.Id(p => p.ID);
+                       model.Field(m => m.AssetSubAsset).DefaultValue(AssetAcquisitionItemVM.GetAssetSubAssetDefaultValue());
+                   })
+                   .ServerOperation(false)
         )
     )
 </div>
 
 <script>
-    function getMonthlyFeeDetail(dataItem) {
+    function getWorkingRelationshipDetails(dataItem) {
         var data = $("#Details").data("kendoGrid").dataSource.data();
-        dataItem.set('AssetSubAsset', dataItem.AssetSubAsset);
+        //data.set('AssetSubAsset', data.AssetSubAsset);
+        alert(dataItem.AssetSubAsset.Value);
         return data.indexOf(dataItem);
     }
 
-    function onDataBoundMonthlyFeeDetails(e) {
+    function onCustomEditKendoDetail(e) {
+        if (!e.model.isNew()) {
+            var container = e.container;
+            var tr = container.closest('tr');
+            var data = this.dataItem(tr); //get the row data so it can be referred later
+            // 1 is Item.Mode.UPDATED
+            data.set("EditMode", 1);
+        }
+        if (isCustomAdd && e.model.isNew()) {
+            isCustomAdd = false;
+            $(e.container).find("[name='Details']").val(customRowDataItem.Details).change();
+        }
+    }
+    function onDataBoundWorkingRelationship(e) {
         var grid = $("#Details").data("kendoGrid");
         hideDeletedRowKendoDetail(grid);
     }

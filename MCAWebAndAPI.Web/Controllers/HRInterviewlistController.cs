@@ -134,12 +134,13 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            return RedirectToAction("InputInterviewResult",
+            return RedirectToAction("InterviewlistData",
                "HRInterviewlist",
                new
                {
                    siteurl = siteUrl,
-                   ID = viewModel.ID
+                   position = viewModel.ManPos,
+                   useraccess = "REQ"
                });
         }
 
@@ -182,7 +183,7 @@ namespace MCAWebAndAPI.Web.Controllers
                });
         }
 
-        public ActionResult InputInterviewResult(string siteurl = null, int? ID = null)
+        public ActionResult InputInterviewResult(string siteurl = null, int? ID = null, int? posMan = null )
         {
             //mandatory: get site url
             _service.SetSiteUrl(siteurl);
@@ -190,6 +191,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             var viewmodel = _service.GetResultlistInterview(ID);
             viewmodel.SiteUrl = siteurl;
+            viewmodel.ManPos = posMan;
             //viewmodel.ID = id;
 
             return View(viewmodel);

@@ -164,6 +164,15 @@ namespace MCAWebAndAPI.Web.Resources {
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to Congratulations! Your tax exemption data has successfully been submitted..
+        /// </summary>
+        public static string SuccessCreateTaxExemptionData {
+            get {
+                return ResourceManager.GetString("SuccessCreateTaxExemptionData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Congratulation {0}! To download the printed version of your application. &lt;br/&gt;&lt;br/&gt;&lt;a href=&quot;{1}&quot; target=&quot;_blank&quot; class=&quot;btn btn-labeled btn-default&quot;&gt; &lt;span class=&quot;btn-label&quot;&gt;&lt;i class=&quot;fa fa-file&quot;&gt;&lt;/i&gt;&lt;/span&gt;Download File&lt;/a&gt;.
         /// </summary>
         public static string SuccessPrintApplicationData {
@@ -196,6 +205,15 @@ namespace MCAWebAndAPI.Web.Resources {
         public static string SuccessUpdatePSAManagementData {
             get {
                 return ResourceManager.GetString("SuccessUpdatePSAManagementData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Congratulations! Your tax exemption data has successfully been updated..
+        /// </summary>
+        public static string SuccessUpdateTaxExemptionData {
+            get {
+                return ResourceManager.GetString("SuccessUpdateTaxExemptionData", resourceCulture);
             }
         }
     }

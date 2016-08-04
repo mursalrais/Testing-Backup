@@ -14,35 +14,9 @@
                 }, new { id = "form-update-period" }))
                 {
                     <div class="form-group">
-                        @Html.Bootstrap().LabelFor(m => m.From).Class("col-sm-4 control-label")
+                        @Html.Bootstrap().LabelFor(m => m.Period).Class("col-sm-4 control-label")
                         <div class="col-sm-8">
-                            @(Html.Kendo().DatePicker()
-                          .Name("From")
-                          .Value(Model.From)
-                          .Max(DateTime.Today)
-                          .Events(e => e.Change("startChange"))
-                          .HtmlAttributes(new { @class = "form-control", style = "width: 100%" })
-                            )
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        @Html.Bootstrap().LabelFor(m => m.To).Class("col-sm-4 control-label")
-                        <div class="col-sm-8">
-                            @(Html.Kendo().DatePicker()
-                          .Name("To")
-                          .Value(Model.To)
-                          .Min(Model.From)
-                          .Max((Model.From).GetLastPayrollDay())
-                          .Events(e => e.Change("endChange"))
-                          .HtmlAttributes(new { @class = "form-control", style = "width: 100%" })
-                            )
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        @Html.Bootstrap().LabelFor(m => m.ThirteenMonthDate).Class("col-sm-4 control-label")
-                        <div class="col-sm-8">
-                            @Html.EditorFor(m => m.ThirteenMonthDate)
+                           @Html.EditorFor(m => m.Period)
                         </div>
                     </div>
                     <button id="submit-button-update-period" class="btn btn-primary pull-right" type="submit">Set</button>
@@ -56,6 +30,7 @@
             <div class="col-sm-12">
                 @(Html.Kendo().Grid<PayrollWorksheetDetailVM>()
                     .Name("PayrollWorksheetGrid")
+                    .ToolBar(tools => tools.Excel())
                     .Columns(columns =>
                     {
                         columns.Bound(e => e.PayrollDate).Format("{0:dddd, MMM d, yyyy}").Width(200).Locked(true).Lockable(false);
@@ -97,14 +72,15 @@
                         columns.Bound(e => e.BankBranchOffice).Width(200);
                     })
                     .Excel(excel => excel
-                        .FileName("Kendo UI Grid Export.xlsx")
+                        .AllPages(true)
+                        .FileName("Payroll_Worksheet_" + DateTime.Today.ToLocalTime().ToShortDateString() + ".xlsx")
                         .Filterable(true)
                         .ProxyURL(Url.Action("GridWorksheet_ExportExcel", "HRPayroll"))
                     )
                     .DataSource(dataSource => dataSource
                         .Ajax()
                         .Read(read => read.Action("GridWorksheet_Read", "HRPayroll"))
-                        .PageSize(50)
+                        .PageSize(25)
                     )
                     .Pageable(pager => pager.PageSizes(true))
                     .Scrollable(scrollable => scrollable.Height(600))

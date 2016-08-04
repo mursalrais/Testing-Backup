@@ -129,6 +129,17 @@ Regards,
 MCA Indonesia
 Recruitment Team</value>
   </data>
+  <data name="EmailCompensatoryApproval" xml:space="preserve">
+    <value>Dear Respective Approver,
+
+    This email is sent to you to notify that there is a request which required your action to approve.
+
+Kindly check the link as per below to go to direct page accordingly. You may check your personal
+
+page in IMS (My Approval View). Thank you.    
+
+Link : {0}/Lists/CompensatoryRequest/FormCompensatoryRequest.aspx?ID={1}</value>
+  </data>
   <data name="EmailInterviewToInterviewCandidate" xml:space="preserve">
     <value>Dear Interview Panel,
 

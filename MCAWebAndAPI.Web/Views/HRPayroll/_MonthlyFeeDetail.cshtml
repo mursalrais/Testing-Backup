@@ -3,7 +3,7 @@
 @model IEnumerable<MonthlyFeeDetailVM>
 
 <div class="col-sm-12">
-
+    
     @(Html.Kendo().Grid(Model)
         .Name("MonthlyFeeDetails")
         .ToolBar(tools => tools.Create().Text("Add New Fee"))
