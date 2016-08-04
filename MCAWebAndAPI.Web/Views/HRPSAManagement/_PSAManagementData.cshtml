@@ -26,10 +26,16 @@
             @Html.EditorFor(m => m.IsRenewal)
         </div>
     </div>
-    <div class="form-group">
+    @*<div class="form-group">
         @Html.Bootstrap().LabelFor(m => m.PSARenewalNumber).Class("col-md-4 control-label")
         <div class="col-md-8">
             @Html.EditorFor(m => m.PSARenewalNumber)
+        </div>
+    </div>*@
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.StrPSARenewal).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.DisplayFor(m => m.StrPSARenewal)
         </div>
     </div>
     <div class="form-group">
@@ -58,7 +64,13 @@
     <div class="form-group">
         @Html.Bootstrap().LabelFor(m => m.Tenure).Class("col-md-4 control-label")
         <div class="col-md-8">
-            @Html.EditorFor(m => m.Tenure)
+            @*@Html.EditorFor(m => m.Tenure)*@
+            @(Html.Kendo().NumericTextBoxFor(m => m.Tenure)
+                .HtmlAttributes(new { style = "width:100%" })
+                .Min(1)
+                .Max(100)
+            )
+            @Html.ValidationMessageFor(model => model)
         </div>
     </div>
     <div class="form-group">

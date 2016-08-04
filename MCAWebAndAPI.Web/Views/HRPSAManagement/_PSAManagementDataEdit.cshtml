@@ -3,9 +3,9 @@
 
 <div class="col-md-6">
     <div class="form-group">
-        @Html.Bootstrap().LabelFor(m => m.Professional).Class("col-md-4 control-label")
+        @Html.Bootstrap().LabelFor(m => m.ProfessionalFullName).Class("col-md-4 control-label")
         <div class="col-md-8">
-            @Html.DisplayFor(m => m.Professional)
+            @Html.DisplayFor(m => m.ProfessionalFullName)
         </div>
     </div>
     <div class="form-group">
@@ -27,9 +27,9 @@
         </div>
     </div>
     <div class="form-group">
-        @Html.Bootstrap().LabelFor(m => m.RenewalNumber).Class("col-md-4 control-label")
+        @Html.Bootstrap().LabelFor(m => m.StrPSARenewal).Class("col-md-4 control-label")
         <div class="col-md-8">
-            @Html.DisplayFor(m => m.RenewalNumber)
+            @Html.DisplayFor(m => m.StrPSARenewal)
         </div>
     </div>
     <div class="form-group">
@@ -63,5 +63,7 @@
         </div>
     </div>
     @Html.HiddenFor(m => m.ID)
-    @Html.DisplayFor(m => m.LastWorkingDate)
+    @Html.HiddenFor(m => m.RenewalNumber)
+    @Html.HiddenFor(m => m.Professional)
+    @Html.HiddenFor(m => m.LastWorkingDate)
 </div>

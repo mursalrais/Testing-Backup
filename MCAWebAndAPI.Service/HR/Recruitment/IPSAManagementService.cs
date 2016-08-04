@@ -33,5 +33,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         bool UpdateStatusPSA(PSAManagementVM psaManagement);
 
         void SendMailPerformancePlan(string professionalMail, string mailContent);
+
+        string GetProfessionalFullName(int? professionalID);
     }
 }

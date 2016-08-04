@@ -15,6 +15,9 @@
 {
     <fieldset>
         <legend>PSA Management Data</legend>
+
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary()
         <div class="row">
             @Html.Partial("_PSAManagementData", Model)
         </div>
@@ -39,58 +42,71 @@
         <script type="text/javascript">
           
             function checkOverlapping() {
-                var psaRenewalNumber = $("#PSARenewalNumber").val()
 
-                if (psaRenewalNumber != 0) {
+                var tenure = $("#Tenure").val()
 
-                    var dateOfNewPSA = $("#DateOfNewPSA").val();
-                    var dateofNewPSADate = new Date(dateOfNewPSA);
-                    var psaExpiryDate = $("#PSAExpiryDate").val();
-                    var psaExpiryDateDate = new Date(psaExpiryDate);
-                    var dateOfNewPSABefore = $("#DateOfNewPSABefore").val();
-                    var dateofNewPSABeforeDate = new Date(dateOfNewPSABefore);
-                    var psaExpiredDateBefore = $('#ExpireDateBefore').val();
-                    var psaExpiryDateBeforeDate = new Date(psaExpiredDateBefore);
-
-                    //Cek Overlapping Date of New PSA
-                    if ((dateofNewPSADate > dateofNewPSABeforeDate) && (dateofNewPSADate < psaExpiryDateBeforeDate)) {
-                        //Warning overlapping star tdate
-
-                        var confirmationValue = confirm("Date of New PSA for New Contract is less than PSA Expiry Date on last contract");
-                        if (confirmationValue == true) {
-                            $("form").submit();
-                        }
-                        if (confirmationValue == false) {
-
-                            return false;
-                        }
-                    }
-                        //Cek Overlapping PSA Expired Date
-                    else if ((dateofNewPSADate > dateofNewPSABeforeDate) && (dateofNewPSADate < psaExpiryDateBeforeDate) && (psaExpiryDateDate < psaExpiredDateBeforeDate)) {
-                        //Warning overlapping star date dan end date
-                        var confirmationValue = confirm("Range date of New Contract is between of last contract")
-                        if (confirmationValue == true) {
-
-                            alert("(dateOfNewPSA > dateOfNewPSABefore) && (dateOfNewPSA < psaExpiredDateBefore) && (psaExpiryDate < psaExpiredDateBefore) dan (confirmationValue == true)");
-
-                            $("form").submit();
-                        }
-                        if (confirmationValue == false) {
-
-                            alert("(dateOfNewPSA > dateOfNewPSABefore) && (dateOfNewPSA < psaExpiredDateBefore) && (psaExpiryDate < psaExpiredDateBefore) dan (confirmationValue == false)");
-                            return false;
-                        }
-                    }
-                    else
-                    {
-                        $("form").submit();
-                    }
+                if (($(".k-file").length == 0))
+                {
+                    alert("Must Upload The Document");
                 }
                 else
                 {
-                    $("form").submit();
+
+                    if (tenure == 0)
+                    {
+                        alert("Must Input Tenure Period");
+                    }
+                    else
+                    {
+                        var psaRenewalNumber = $("#PSARenewalNumber").val()
+                        var strPSARenewal = $("#StrPSARenewal").val()
+
+                        if (strPSARenewal != "0") {
+
+                            var dateOfNewPSA = $("#DateOfNewPSA").val();
+                            var dateofNewPSADate = new Date(dateOfNewPSA);
+                            var psaExpiryDate = $("#PSAExpiryDate").val();
+                            var psaExpiryDateDate = new Date(psaExpiryDate);
+                            var dateOfNewPSABefore = $("#DateOfNewPSABefore").val();
+                            var dateofNewPSABeforeDate = new Date(dateOfNewPSABefore);
+                            var psaExpiredDateBefore = $('#ExpireDateBefore').val();
+                            var psaExpiryDateBeforeDate = new Date(psaExpiredDateBefore);
+
+                            //Cek Overlapping Date of New PSA
+                            if ((dateofNewPSADate > dateofNewPSABeforeDate) && (dateofNewPSADate < psaExpiryDateBeforeDate)) {
+                                //Warning overlapping star tdate
+
+                                var confirmationValue = confirm("Date of New PSA for New Contract is less than PSA Expiry Date on last contract");
+                                if (confirmationValue == true) {
+                                    $("form").submit();
+                                }
+                                if (confirmationValue == false) {
+
+                                    return false;
+                                }
+
+                            }
+
+                        }
+                            //Cek Overlapping PSA Expired Date
+                        else if ((dateofNewPSADate > dateofNewPSABeforeDate) && (dateofNewPSADate < psaExpiryDateBeforeDate) && (psaExpiryDateDate < psaExpiredDateBeforeDate)) {
+                            //Warning overlapping star date dan end date
+                            var confirmationValue = confirm("Range date of New Contract is between of last contract")
+                            if (confirmationValue == true) {
+                                $("form").submit();
+                            }
+                            if (confirmationValue == false) {
+                                return false;
+                            }
+                        }
+                        else {
+                            $("form").submit();
+                        }
+                    }
+
+                  }
+                    
                 }
-            }
 
         function onSuccess(data) {
             
@@ -116,6 +132,7 @@
 
                         var psaID = result[0].PSAId;
                         var renewalnumber = result[0].PSARenewalNumber + 1;
+                        var strpsarenewal = parseInt(result[0].StrPSARenewal) + 1;
                         var dateofnewpsabefore = result[0].DateNewPSABefore;
                         var dateofnewpsa = new Date(dateofnewpsabefore);
                         var datenewpsa = dateofnewpsa.getDate();
@@ -142,8 +159,11 @@
                         $("#IsRenewal_Value").data("kendoDropDownList").select(0);
                         $("#IsRenewal_Value").data("kendoDropDownList").readonly();
 
-                        $("#PSARenewalNumber").prop("readonly", "false");
+                        $("#PSARenewalNumber").prop("readonly", "true");
                         $("#PSARenewalNumber").prop("value", renewalnumber);
+                        
+                        $("#StrPSARenewal").prop("readonly", "true");
+                        $("#StrPSARenewal").prop("value", strpsarenewal);
 
                         $("#DateOfNewPSA").data("kendoDatePicker").min(datepsa);
                         $("#DateOfNewPSA").prop('value', datepsa);
@@ -167,10 +187,13 @@
 
                         
                         $("#PSARenewalNumber").prop("value", 0);
+                        $("#StrPSARenewal").prop("value", "0");
 
                         var psarenewalnumber = $("#PSARenewalNumber").data("kendoNumericTextBox");
                         psarenewalnumber.readonly();
 
+                        var strpsarenewal = $("#StrPSARenewal").prop("readonly", "true");
+                        
                         $('#PSAId').prop('value', 0);
 
                         var joinDate = $("#JoinDate").val();
@@ -202,7 +225,7 @@
                     else
                     {
                         $('#KeyPosition').prop('value', "You must upload file with the file name format: PSA-MMDDYYYY");
-                        $('#DocumentType').prop('value', "MCC No Objection Letter");
+                        $('#DocumentType').prop('value', "PSA Document");
                         $('#KeyPositionValue').prop('value', "No");
                     }
                 })
@@ -233,6 +256,7 @@
                     var monthint = parseInt(monthpsa);
                     var datepsa = dateofnewpsa.getDate();
                     var tenure = $("#Tenure").val();
+
                     var tenureint = parseInt(tenure);
                     var addtenure = tenureint + monthint;
                     var setmonth = new Date(dateofnewpsa.setMonth(addtenure));
