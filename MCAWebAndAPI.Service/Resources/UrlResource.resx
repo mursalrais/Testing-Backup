@@ -213,6 +213,10 @@
   </data>
   <data name="Compensatory" xml:space="preserve">
     <value>/Lists/Compensatory%20Request</value>
+    </data>
+  <data name="RequisitionNoteDocumentByID" xml:space="preserve">
+    <value>{0}/Requisition%20Note%20Documents/Forms/AllItems.aspx#InplviewHash5093bda1-84bf-4cad-8652-286653d6a83f=FilterField1%3Dpsa%255Fx003a%255FID-FilterValue1%3D{1}</value>
+    <comment>Need to change in migration</comment>
   </data>
   <data name="AssetMaster" xml:space="preserve">
     <value>/Lists/Asset%20Master</value>

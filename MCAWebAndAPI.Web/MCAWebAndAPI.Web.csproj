@@ -711,12 +711,36 @@
     <Content Include="logs\logfile.txt" />
     <Content Include="Scripts\app.config.js" />
     <Content Include="Scripts\app.min.js" />
+    <Content Include="Scripts\apps\charts\KendoChartDonuts.js" />
+    <Content Include="Scripts\apps\charts\KendoChartProjectGantt.js" />
+    <Content Include="Scripts\apps\charts\KendoChartProjectPercentage.js" />
+    <Content Include="Scripts\apps\charts\KendoChartProjectStatusByActivity.js" />
+    <Content Include="Scripts\apps\charts\KendoChartProjectStatusByProject.js" />
+    <Content Include="Scripts\apps\charts\KendoChartRIA.js" />
+    <Content Include="Scripts\apps\charts\KendoChartRIAPriority.js" />
+    <Content Include="Scripts\apps\charts\KendoChartRIAResource.js" />
+    <Content Include="Scripts\apps\charts\KendoChartRIAStatus.js" />
+    <Content Include="Scripts\apps\charts\KendoChartScheduleSCurve.js" />
+    <Content Include="Scripts\apps\charts\KendoChartTaskResource.js" />
+    <Content Include="Scripts\apps\charts\KendoChartUtils.js" />
+    <Content Include="Scripts\apps\common\Commands.js" />
+    <Content Include="Scripts\apps\common\Utils.js" />
+    <Content Include="Scripts\apps\grids\KendoGridActivity.js" />
+    <Content Include="Scripts\apps\grids\KendoGridBudgetActualReport.js" />
+    <Content Include="Scripts\apps\grids\KendoGridFinancialReport.js" />
+    <Content Include="Scripts\apps\grids\KendoGridProject.js" />
+    <Content Include="Scripts\apps\grids\KendoGridScheduler.js" />
+    <Content Include="Scripts\apps\grids\KendoGridTasks.js" />
+    <Content Include="Scripts\apps\grids\KendoGridTaskWithSingleResource.js" />
+    <Content Include="Scripts\apps\grids\KendoGridUtils.js" />
+    <Content Include="Scripts\apps\grids\KendoGridWBS.js" />
+    <Content Include="Scripts\apps\sliders\jQuerySlider.js" />
     <Content Include="Scripts\bi-frame.js" />
     <Content Include="Scripts\custom.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
-    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -1264,6 +1288,17 @@
     <Content Include="Views\HRExitProcedure\_ExitProcedureChecklistForHR.cshtml" />
     <Content Include="Views\HRExitProcedure\_EditExitProcedureChecklistForHR.cshtml" />
     <Content Include="Views\HRExitProcedure\_EditExitProcedureDataHR.cshtml" />
+    <Content Include="Views\FINRequisitionNote\CreateRequisitionNote.cshtml" />
+    <Content Include="Views\FINRequisitionNote\EditRequisitionNote.cshtml" />
+    <Content Include="Views\FINRequisitionNote\PrintRequisitionNote.cshtml" />
+    <Content Include="Views\FINRequisitionNote\_General.cshtml" />
+    <Content Include="Views\FINRequisitionNote\_ItemDetails.cshtml" />
+    <Content Include="Views\FINSCAVoucher\CreateSCAVoucher.cshtml" />
+    <Content Include="Views\FINSCAVoucher\_EventBudgetItems.cshtml" />
+    <Content Include="Views\FINSPHL\CreateSPHL.cshtml" />
+    <Content Include="Views\FINTaxExemptionData\Create.cshtml" />
+    <Content Include="Views\FINTaxExemptionData\Edit.cshtml" />
+    <Content Include="Views\FINTaxReimbursement\CreateTaxReimbursement.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1295,6 +1330,11 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\FileController.cs" />
     <Compile Include="Controllers\FINEventBudgetController.cs" />
+    <Compile Include="Controllers\FINRequisitionNoteController.cs" />
+    <Compile Include="Controllers\FINSCAVoucherController.cs" />
+    <Compile Include="Controllers\FINSPHLController.cs" />
+    <Compile Include="Controllers\FINTaxExemptionDataController.cs" />
+    <Compile Include="Controllers\FINTaxReimbursementController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HRApplicationController.cs" />
     <Compile Include="Controllers\HRCompensatoryController.cs" />
@@ -1379,6 +1419,7 @@
   <ItemGroup>
     <Folder Include="App_Code\" />
     <Folder Include="bin\Resources\" />
+    <Folder Include="Scripts\apps\controlls\" />
     <Folder Include="Views\File\" />
     <Folder Include="Views\FINEventBudget\" />
     <Folder Include="Views\HRDataMaster\" />
