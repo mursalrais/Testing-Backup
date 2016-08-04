@@ -71,10 +71,6 @@
 
         <div class="form-actions">
             <div class="col-sm-12">
-                    <button id="submit-cancel" acti class="btn btn-primary" type="button" onClick="history.go(-1)">
-                        <i class="fa fa-back"></i>
-                        back
-                    </button>
                     <button id="submit-button" class="btn btn-primary" type="submit">
                         <i class="fa fa-save"></i>
                         save
@@ -118,11 +114,6 @@
 
 
         $(document).ready(function () {
-
-            $("#submit-button").click(function () {
-                alert("Data Successfully Updated & File already uploaded");
-            });
-
             
             $("#vac-position").prop('readonly', 'true');
             $("#val-candidate").prop('readonly', 'true');

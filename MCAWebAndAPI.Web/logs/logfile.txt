@@ -147,5 +147,15 @@ Parameter name: address
 2016-08-01 10:58:57.0159 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Item does not exist. It may have been deleted by another user.
 2016-08-01 11:09:18.5270 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Item does not exist. It may have been deleted by another user.
 2016-08-01 11:11:32.3030 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Item does not exist. It may have been deleted by another user.
-2016-08-02 08:39:10.6719 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Item does not exist. It may have been deleted by another user.
-2016-08-02 08:39:56.3489 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Item does not exist. It may have been deleted by another user.
+2016-08-02 02:26:06.4971 MCAWebAndAPI.Service.Asset.AssetAcquisitionService List 'Asset Acqusitiion' does not exist at site with URL 'https://eceos2.sharepoint.com/sites/mca-dev/BO'.
+2016-08-02 02:34:20.2283 MCAWebAndAPI.Service.Asset.AssetAcquisitionService List 'Asset Acqusitiion' does not exist at site with URL 'https://eceos2.sharepoint.com/sites/mca-dev/BO'.
+2016-08-02 02:37:44.6400 MCAWebAndAPI.Service.Asset.AssetAcquisitionService List 'Asset Acqusitiion' does not exist at site with URL 'https://eceos2.sharepoint.com/sites/mca-dev/BO'.
+2016-08-02 02:38:52.7249 MCAWebAndAPI.Service.Asset.AssetAcquisitionService List 'Asset Acqusitiion' does not exist at site with URL 'https://eceos2.sharepoint.com/sites/mca-dev/BO'.
+2016-08-02 02:40:54.1448 MCAWebAndAPI.Service.Asset.AssetAcquisitionService List 'Asset Acquisitiion' does not exist at site with URL 'https://eceos2.sharepoint.com/sites/mca-dev/BO'.
+2016-08-02 02:42:34.3896 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Column 'TransactionType' does not exist. It may have been deleted by another user.  /sites/mca-dev/BO/Lists/Asset Acquisition
+2016-08-02 02:44:48.0402 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Column 'AcceptanceMemoNo' does not exist. It may have been deleted by another user.  /sites/mca-dev/BO/Lists/Asset Acquisition
+2016-08-02 02:48:36.8723 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Invalid data has been used to update the list item. The field you are trying to update may be read only.
+2016-08-02 02:50:29.8328 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Invalid data has been used to update the list item. The field you are trying to update may be read only.
+2016-08-02 03:19:08.9701 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Invalid data has been used to update the list item. The field you are trying to update may be read only.
+2016-08-02 03:19:45.7042 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Invalid data has been used to update the list item. The field you are trying to update may be read only.
+2016-08-02 03:21:46.6501 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Invalid data has been used to update the list item. The field you are trying to update may be read only.

@@ -12,11 +12,13 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
     {
         string _siteUrl;
         static Logger logger = LogManager.GetCurrentClassLogger();
-        
+
         const string SP_LIST_NAME = "Performance Evaluation";
+        const string SP_LIST_PLAN = "Performance Plan";
         const string SP_DETAIL_LIST_NAME = "Professional Performance Evaluation";
         const string SP_DETAIL_LIST_PLAN = "Professional Performance Plan";
-        const string SP_PLAN_ = "";
+        const string SP_PPP_INDIVIDUAL_PLAN = "PPP Individual Goal";
+        const string SP_PROF_PERFM_EVAL = "Professional Performance Evaluation Output";
 
         public int CreatePerformanceEvaluation(PerformanceEvaluationVM PerformanceEvaluation)
         {
@@ -89,6 +91,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             var updatedValues = new Dictionary<string, object>();
             string emailTo;
             int IdDetail;
+            int IDHeaderPLan = SPConnector.GetLatestListItemID(SP_LIST_PLAN, _siteUrl);
             foreach (var item in listItem)
             {
                 updatedValues = new Dictionary<string, object>();
@@ -115,20 +118,44 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
                 //send email to professional
                 try
-                {                    
+                {
                     if (emailTo == "" || emailTo == null)
                     {
                         emailTo = "anugerahseptian@gmail.com";
                     }
 
-                    IdDetail =   SPConnector.GetLatestListItemID(SP_DETAIL_LIST_NAME, _siteUrl);
-                    EmailUtil.Send(emailTo, "Notify to initiate Performance Evaluation", string.Format(emailMessage, _siteUrl,IdDetail));
+                    IdDetail = SPConnector.GetLatestListItemID(SP_DETAIL_LIST_NAME, _siteUrl);
                     
+                    EmailUtil.Send(emailTo, "Notify to initiate Performance Evaluation", string.Format(emailMessage, _siteUrl, IdDetail));
+
                 }
                 catch (Exception e)
                 {
                     logger.Error(e);
                     throw e;
+                }
+
+                caml = @"<View><Query><Where><And><Eq><FieldRef Name='idperformanceplan' /><Value Type='Number'>" + IDHeaderPLan + "</Value></Eq><And><Eq><FieldRef Name='status' /><Value Type='Text'>Approved</Value></Eq><Eq><FieldRef Name='officeemail' /><Value Type='Text'>" + emailTo + "</Value></Eq></And></And></Where></Query><ViewFields><FieldRef Name='ID' /><FieldRef Name='Title' /><FieldRef Name='Edit' /><FieldRef Name='LinkTitleNoMenu' /><FieldRef Name='LinkTitle' /><FieldRef Name='DocIcon' /><FieldRef Name='AppAuthor' /><FieldRef Name='AppEditor' /><FieldRef Name='projectunitgoals' /><FieldRef Name='individualgoalcategory' /><FieldRef Name='individualgoalplan' /><FieldRef Name='individualgoalweight' /><FieldRef Name='individualgoalremarks' /><FieldRef Name='professionalperformanceplandetai' /><FieldRef Name='professionalperformanceplan' /></ViewFields><QueryOptions /></View>";
+                var placeItem = SPConnector.GetList(SP_PPP_INDIVIDUAL_PLAN, _siteUrl, caml);
+
+                foreach (var pppIndividual in placeItem)
+                {
+                    updatedValues = new Dictionary<string, object>();
+                    updatedValues.Add("individualgoalplan", Convert.ToString(item["individualgoalplan"]));
+                    updatedValues.Add("individualgoalcategory", Convert.ToString(item["individualgoalcategory"]));
+                    updatedValues.Add("individualgoalweight", Convert.ToString(item["individualgoalweight"]));
+                    updatedValues.Add("professionalperformanceevaluatio", new FieldLookupValue { LookupId = Convert.ToInt32(IdDetail) });
+
+                    try
+                    {
+                        SPConnector.AddListItem(SP_PROF_PERFM_EVAL, updatedValues, _siteUrl);
+                    }
+
+                    catch (Exception e)
+                    {
+                        logger.Error(e);
+                        throw e;
+                    }
                 }
             }
         }
@@ -177,13 +204,13 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 {
                     color = "green";
                 }
-                else if((Convert.ToString(item["ppestatus"]) == "Initiated") || (Convert.ToString(item["ppestatus"]) == "Draft"))
+                else if ((Convert.ToString(item["ppestatus"]) == "Initiated") || (Convert.ToString(item["ppestatus"]) == "Draft"))
                 {
-                    if (Now<=viewModel.LatestCreationDate)
+                    if (Now <= viewModel.LatestCreationDate)
                     {
                         color = "green";
                     }
-                    else if((Now>viewModel.LatestCreationDate) && (Now <= viewModel.LatestDateApproval1))
+                    else if ((Now > viewModel.LatestCreationDate) && (Now <= viewModel.LatestDateApproval1))
                     {
                         color = "yellow";
                     }
@@ -194,7 +221,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 }
                 else if ((Convert.ToString(item["ppestatus"]) == "Pending Approval 1 of 2"))
                 {
-                    if (Now<=viewModel.LatestDateApproval2)
+                    if (Now <= viewModel.LatestDateApproval2)
                     {
                         color = "green";
                     }
@@ -218,11 +245,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 {
                     color = "red";
                 }
-                
+
                 PerformancePlanEvaluationDetails.Add(new PerformanceEvaluationDetailVM
                 {
                     ID = Convert.ToInt32(item["ID"]),
-                    EmployeeName = Convert.ToString((item["professional"] as FieldLookupValue).LookupValue)+" "+ Convert.ToString((item["professional_x003a_Last_x0020_Na"] as FieldLookupValue).LookupValue),
+                    EmployeeName = Convert.ToString((item["professional"] as FieldLookupValue).LookupValue) + " " + Convert.ToString((item["professional_x003a_Last_x0020_Na"] as FieldLookupValue).LookupValue),
                     EvaluationStatus = Convert.ToString(item["ppestatus"]),
                     EvaluationIndicator = color
                 });

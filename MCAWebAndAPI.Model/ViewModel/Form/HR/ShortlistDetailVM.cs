@@ -73,6 +73,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
                 return model;
             }
         }
+
+        [UIHint("TextArea")]
         public string Remarks { get; set; }
     }
 }
