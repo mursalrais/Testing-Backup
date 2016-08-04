@@ -149,3 +149,31 @@ Parameter name: address
 2016-08-01 11:11:32.3030 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Item does not exist. It may have been deleted by another user.
 2016-08-02 08:39:10.6719 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Item does not exist. It may have been deleted by another user.
 2016-08-02 08:39:56.3489 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Item does not exist. It may have been deleted by another user.
+2016-08-03 17:48:38.7477 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Cannot complete this action.
+
+Please try again.
+2016-08-03 17:48:43.3869 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Microsoft.SharePoint.Client.ServerException: Column 'AssetSubAsset' does not exist. It may have been deleted by another user.  /sites/mca-dev/BO/Lists/Asset Acquisition Details
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in D:\iMa\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 195
+   at MCAWebAndAPI.Service.Asset.AssetAcquisitionService.CreateDetails(Nullable`1 headerID, IEnumerable`1 items) in D:\iMa\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetAcquisitionService.cs:line 141
+2016-08-03 17:49:04.7312 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Cannot complete this action.
+
+Please try again.
+2016-08-03 17:49:09.7594 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Microsoft.SharePoint.Client.ServerException: Column 'AssetSubAsset' does not exist. It may have been deleted by another user.  /sites/mca-dev/BO/Lists/Asset Acquisition Details
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in D:\iMa\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 195
+   at MCAWebAndAPI.Service.Asset.AssetAcquisitionService.CreateDetails(Nullable`1 headerID, IEnumerable`1 items) in D:\iMa\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetAcquisitionService.cs:line 141
+2016-08-03 17:51:46.2440 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Cannot complete this action.
+
+Please try again.
+2016-08-03 17:56:22.2778 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Microsoft.SharePoint.Client.ServerException: Column 'AssetSubAsset' does not exist. It may have been deleted by another user.  /sites/mca-dev/BO/Lists/Asset Acquisition Details
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in D:\iMa\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 195
+   at MCAWebAndAPI.Service.Asset.AssetAcquisitionService.CreateDetails(Nullable`1 headerID, IEnumerable`1 items) in D:\iMa\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetAcquisitionService.cs:line 141
+2016-08-03 18:01:27.7208 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Microsoft.SharePoint.Client.ServerException: Column 'AssetSubAsset' does not exist. It may have been deleted by another user.  /sites/mca-dev/BO/Lists/Asset Acquisition Details
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in D:\iMa\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 195
+   at MCAWebAndAPI.Service.Asset.AssetAcquisitionService.CreateDetails(Nullable`1 headerID, IEnumerable`1 items) in D:\iMa\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetAcquisitionService.cs:line 141
+2016-08-03 18:05:22.1295 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Microsoft.SharePoint.Client.ServerException: Column 'Asset_x0020d_Sub_x0020_Asset' does not exist. It may have been deleted by another user.  /sites/mca-dev/BO/Lists/Asset Acquisition Details
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in D:\iMa\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 195
+   at MCAWebAndAPI.Service.Asset.AssetAcquisitionService.CreateDetails(Nullable`1 headerID, IEnumerable`1 items) in D:\iMa\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetAcquisitionService.cs:line 141
+2016-08-04 09:38:14.8343 MCAWebAndAPI.Service.Asset.AssetAcquisitionService The underlying connection was closed: A connection that was expected to be kept alive was closed by the server.
+2016-08-04 09:57:18.9713 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Cannot complete this action.
+
+Please try again.

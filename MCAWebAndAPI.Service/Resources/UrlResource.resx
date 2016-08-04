@@ -217,4 +217,7 @@
   <data name="AssetMaster" xml:space="preserve">
     <value>/Lists/Asset%20Master</value>
   </data>
+  <data name="AssetAcquisition" xml:space="preserve">
+    <value>/Lists/Asset%20Acquisition/AllItems.aspx</value>
+  </data>
 </root>
