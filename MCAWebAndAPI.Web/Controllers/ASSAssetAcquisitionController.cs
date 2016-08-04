@@ -22,6 +22,13 @@ namespace MCAWebAndAPI.Web.Controllers
             _assetAcquisitionService = new AssetAcquisitionService();
         }
 
+        public ActionResult Index()
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _assetAcquisitionService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            return Redirect(string.Format("{0}/{1}", siteUrl ?? ConfigResource.DefaultBOSiteUrl, UrlResource.AssetAcquisition));
+        }
+
         public ActionResult Create()
         {
             var viewModel = _assetAcquisitionService.GetPopulatedModel();
@@ -40,6 +47,7 @@ namespace MCAWebAndAPI.Web.Controllers
             try
             {
                 var viewdetails = _assetAcquisitionService.GetDetails(headerID);
+                viewModel.Details = viewdetails;
             }
             catch (Exception e)
             {
@@ -53,6 +61,9 @@ namespace MCAWebAndAPI.Web.Controllers
         [HttpPost]
         public ActionResult Submit(AssetAcquisitionHeaderVM _data, string site)
         {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _assetAcquisitionService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
             //return View(new AssetMasterVM());
             int? headerID = null;
             try
@@ -75,7 +86,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(string.Format("{0}/{1}", "https://eceos2.sharepoint.com/sites/mca-dev/bo", UrlResource.AssetAcquisition));
+            return Redirect(string.Format("{0}/{1}", siteUrl ?? ConfigResource.DefaultBOSiteUrl, UrlResource.AssetAcquisition));
         }
 
         public JsonResult GetAssetSubSAssetGrid()

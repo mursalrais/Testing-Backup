@@ -14,6 +14,7 @@ using MCAWebAndAPI.Service.Converter;
 using MCAWebAndAPI.Service.Utils;
 using Kendo.Mvc.UI;
 using Kendo.Mvc.Extensions;
+using MCAWebAndAPI.Service.Resources;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -24,6 +25,12 @@ namespace MCAWebAndAPI.Web.Controllers
         public ASSAssetMasterController()
         {
             _assetMasterService = new AssetMasterService();
+        }
+
+        public ActionResult Index(string SiteUrl)
+        {
+            _assetMasterService.SetSiteUrl(SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            return Redirect(string.Format("{0}/{1}", SiteUrl ?? ConfigResource.DefaultBOSiteUrl, UrlResource.AssetAcquisition));
         }
 
         public JsonResult GetAssetMasters()
@@ -50,47 +57,52 @@ namespace MCAWebAndAPI.Web.Controllers
             })), JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Create(string site)
+        public ActionResult Create(string SiteUrl)
         {
+            _assetMasterService.SetSiteUrl(SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
             var viewModel = _assetMasterService.GetAssetMaster();
             return View(viewModel);
         }
 
-        public ActionResult Edit(int ID, string site)
+        public ActionResult Edit(int ID, string SiteUrl)
         {
+            _assetMasterService.SetSiteUrl(SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
             var viewModel = _assetMasterService.GetAssetMaster(ID);
             return View(viewModel);
         }
 
         [HttpPost]
-        public ActionResult Submit(AssetMasterVM _data, string site)
+        public ActionResult Submit(FormCollection form, AssetMasterVM _data)
         {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+
+            _assetMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
             //return View(new AssetMasterVM());
             _assetMasterService.CreateAssetMaster(_data);
-            return new JavaScriptResult
-            {
-                Script = string.Format("window.parent.location.href = '{0}'", "https://eceos2.sharepoint.com/sites/mca-dev/bo/Lists/AssetMaster/AllItems.aspx")
-            };
+            return JsonHelper.GenerateJsonSuccessResponse(string.Format("{0}/{1}", siteUrl, UrlResource.AssetMaster));
         }
 
-        public ActionResult Update(AssetMasterVM _data, string site)
+        public ActionResult Update(AssetMasterVM _data, string SiteUrl)
         {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _assetMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
             //return View(new AssetMasterVM());
             _assetMasterService.UpdateAssetMaster(_data);
-            return new JavaScriptResult
-            {
-                Script = string.Format("window.parent.location.href = '{0}'", "https://eceos2.sharepoint.com/sites/mca-dev/bo/Lists/AssetMaster/AllItems.aspx")
-            };
+            return JsonHelper.GenerateJsonSuccessResponse(string.Format("{0}/{1}", SiteUrl, UrlResource.AssetAcquisition));
         }
 
         [HttpGet]
-        public ActionResult Upload(string siteUrl = null, string listName = null)
+        public ActionResult Upload(string SiteUrl = null, string listName = null)
         {
-            if (siteUrl == null || listName == null)
+            _assetMasterService.SetSiteUrl(SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            if (SiteUrl == null || listName == null)
                 return RedirectToAction("Index", "Error", new { errorMessage = "Parameter cannot be null" });
 
 
-            SessionManager.Set("SiteUrl", siteUrl);
+            SessionManager.Set("SiteUrl", SiteUrl);
 
             var emptyTable = GenerateEmptyDataTable();
             SessionManager.Set("CSVDataTable", emptyTable);
@@ -271,7 +283,7 @@ namespace MCAWebAndAPI.Web.Controllers
             int x = 0;
             foreach (DataRow d in SessionManager.Get<DataTable>("CSVDataTable").Rows)
             {
-                if(createAssID.Rows[x].ItemArray[0].ToString() == "")
+                if (createAssID.Rows[x].ItemArray[0].ToString() == "")
                 {
                     res = _assetMasterService.GetAssetIDForMainAsset(createAssID.Rows[x].ItemArray[2].ToString(), createAssID.Rows[x].ItemArray[3].ToString(), createAssID.Rows[x].ItemArray[4].ToString());
                     if (assetIDs.Contains(res))
@@ -295,7 +307,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 {
                     //cek if assetID parent is exist
                     var assetIDss = _assetMasterService.GetAssetIDForSubAsset(createAssID.Rows[x].ItemArray[0].ToString());
-                    if(assetIDss == "")
+                    if (assetIDss == "")
                     {
                         return JsonHelper.GenerateJsonErrorResponse(assetIDss);
                     }

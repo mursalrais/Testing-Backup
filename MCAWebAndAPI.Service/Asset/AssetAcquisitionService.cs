@@ -179,12 +179,22 @@ namespace MCAWebAndAPI.Service.Asset
 
         private AssetAcquisitionItemVM ConvertToDetails(ListItem item)
         {
-            return new AssetAcquisitionItemVM
-            {
-                ID = Convert.ToInt32(item["ID"]),
-                //viewModel.AccpMemo.Text = (listItem["Acceptance_x0020_Memo_x0020_No"] as FieldLookupValue).LookupId.ToString()+"-"+(listItem["Acceptance_x0020_Memo_x0020_No"] as FieldLookupValue).LookupValue;
-                AssetSubAsset = AssetAcquisitionItemVM.GetAssetSubAssetDefaultValue(FormatUtil.ConvertToInGridAjaxComboBox(item, "Asset_x002d_Sub_x0020_Asset"))
-            };
+            var details = new AssetAcquisitionItemVM();
+            details.ID = Convert.ToInt32(item["ID"]);
+            //if (details.AssetSubAsset as FieldLookupValue != null)
+            //{
+            //    viewModel.AccpMemo.Value = (listItem["Acceptance_x0020_Memo_x0020_No"] as FieldLookupValue).LookupId.ToString();
+            //    viewModel.AccpMemo.Text = (listItem["Acceptance_x0020_Memo_x0020_No"] as FieldLookupValue).LookupId.ToString() + "-" + (listItem["Acceptance_x0020_Memo_x0020_No"] as FieldLookupValue).LookupValue;
+            //}
+            details.AssetSubAsset = AssetAcquisitionItemVM.GetAssetSubAssetDefaultValue(FormatUtil.ConvertToInGridAjaxComboBox(item, "Asset_x002d_Sub_x0020_Asset"));
+
+            return details;
+            //return new AssetAcquisitionItemVM
+            //{
+            //    ID = Convert.ToInt32(item["ID"]),
+            //    //viewModel.AccpMemo.Text = (listItem["Acceptance_x0020_Memo_x0020_No"] as FieldLookupValue).LookupId.ToString()+"-"+(listItem["Acceptance_x0020_Memo_x0020_No"] as FieldLookupValue).LookupValue;
+            //    AssetSubAsset = AssetAcquisitionItemVM.GetAssetSubAssetDefaultValue(FormatUtil.ConvertToInGridAjaxComboBox(item, "Asset_x002d_Sub_x0020_Asset"))
+            //};
         }
     }
 }

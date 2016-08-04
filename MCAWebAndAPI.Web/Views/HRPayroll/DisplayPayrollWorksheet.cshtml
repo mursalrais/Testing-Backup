@@ -30,7 +30,6 @@
             <div class="col-sm-12">
                 @(Html.Kendo().Grid<PayrollWorksheetDetailVM>()
                     .Name("PayrollWorksheetGrid")
-                    .ToolBar(tools => tools.Excel())
                     .Columns(columns =>
                     {
                         columns.Bound(e => e.PayrollDate).Format("{0:dddd, MMM d, yyyy}").Width(200).Locked(true).Lockable(false);
@@ -73,8 +72,8 @@
                     })
                     .Excel(excel => excel
                         .AllPages(true)
-                        .FileName("Payroll_Worksheet_" + DateTime.Today.ToLocalTime().ToShortDateString() + ".xlsx")
                         .Filterable(true)
+                        .ForceProxy(true)
                         .ProxyURL(Url.Action("GridWorksheet_ExportExcel", "HRPayroll"))
                     )
                     .DataSource(dataSource => dataSource
@@ -94,11 +93,50 @@
             </div>
         </div>
     </fieldset>
+
+    <div class="form-actions">
+        <div class="row">
+            <div class="col-sm-12">
+                <button id="display-previous-drafts-button" class="btn btn-primary">
+                    <i class="fa fa-cloud-download" aria-hidden="true"></i>
+                    Display Previous Drafts
+                </button>
+                <button id="save-as-draft-button" class="btn btn-primary">
+                    <i class="fa fa-save"></i>
+                    Save as Draft
+                </button>
+            </div>
+        </div>
+    </div>
+
 </div>
+
 
 @section scripts{
 
     <script>
+
+        $(document).ready(function () {
+
+            $("#save-as-draft-button").click(function (e) {
+                // Trigger Export to Excel
+                var grid = $("#PayrollWorksheetGrid").data("kendoGrid");
+                grid.saveAsExcel();
+
+                // Trigger Save as Draft
+                var url = "/HRPayroll/GridWorksheet_SaveAsDraft";
+                $.getJSON(url, function (data) {
+                    showModalWindow(data.message);
+                });
+            });
+
+            $("#display-previous-drafts-button").click(function (e) {
+                var url = "/HRPayroll/DisplayPayrollWorksheetDrafts";
+                window.location.href = url;
+            })
+
+        });
+
         function onCompleteUpdatePeriod(e) {
             $("#PayrollWorksheetGrid").data("kendoGrid").dataSource.read();
             $("#PayrollWorksheetGrid").data("kendoGrid").refresh();
