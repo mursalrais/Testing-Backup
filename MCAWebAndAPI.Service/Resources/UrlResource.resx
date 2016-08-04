@@ -176,7 +176,7 @@
     <value>{0}/Lists/Application/Interviewlistdata.aspx?POSID={1}</value>
   </data>
   <data name="InterviewInputResult" xml:space="preserve">
-    <value>{0}/Lists/Application/InputInterviewResult.aspx?ID={1}</value>
+    <value>{0}/Lists/Application/InputInterviewResult.aspx?ID={1}&amp;POS={2}</value>
   </data>
   <data name="ShortlistEmailLinkHR" xml:space="preserve">
     <value>{0}/Lists/Application/ShortlistREQ.aspx?POSID={1}</value>
@@ -213,7 +213,7 @@
   </data>
   <data name="Compensatory" xml:space="preserve">
     <value>/Lists/Compensatory%20Request</value>
-    </data>
+  </data>
   <data name="RequisitionNoteDocumentByID" xml:space="preserve">
     <value>{0}/Requisition%20Note%20Documents/Forms/AllItems.aspx#InplviewHash5093bda1-84bf-4cad-8652-286653d6a83f=FilterField1%3Dpsa%255Fx003a%255FID-FilterValue1%3D{1}</value>
     <comment>Need to change in migration</comment>
