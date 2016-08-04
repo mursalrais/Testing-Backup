@@ -170,7 +170,7 @@
     <value>/_layouts/15/WopiFrame.aspx?sourcedoc={2E1A7EB1-E5BD-4F38-A1DF-E43C7DEF0CF4}&amp;file=Exit%20Interview%20Form.docx&amp;action=default</value>
   </data>
   <data name="AddInterviewInvitation" xml:space="preserve">
-    <value>{0}/Lists/Application/InputInterviewResultDetail.aspx?ID={1}</value>
+    <value>{0}/Lists/Application/InputInterviewResultDetail.aspx?ID={1}&amp;manPos={2}</value>
   </data>
   <data name="InterviewDataList" xml:space="preserve">
     <value>{0}/Lists/Application/Interviewlistdata.aspx?POSID={1}</value>
