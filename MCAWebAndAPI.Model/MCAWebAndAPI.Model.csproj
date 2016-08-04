@@ -200,9 +200,7 @@
     <Compile Include="ViewModel\Form\Finance\RequisitionNoteItemVM.cs" />
     <Compile Include="ViewModel\Form\Finance\SCAVoucherItemsVM.cs" />
     <Compile Include="ViewModel\Form\Finance\SCAVoucherVM.cs" />
-    <Compile Include="ViewModel\Form\Finance\TaxExemptionDataVM.cs" />
     <Compile Include="ViewModel\Form\Finance\SPHLVM.cs" />
-    <Compile Include="ViewModel\Form\Finance\TaxReimbursementVM.cs" />
     <Compile Include="ViewModel\Form\Finance\RequisitionNoteVM.cs" />
     <Compile Include="ViewModel\Form\Finance\WBSMasterVM.cs" />
     <Compile Include="ViewModel\Form\HR\ApplicationDataVM.cs" />
