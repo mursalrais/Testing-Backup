@@ -77,6 +77,10 @@
     <script>
         $(document).ready(function () {
 
+            $("#submit-button").click(function () {
+                showLoading();
+            });
+
             $("#vacant-position").prop('readonly', 'true');
             $("#Candidate").prop('readonly', 'true');
             var positionID = $("#Position").val();

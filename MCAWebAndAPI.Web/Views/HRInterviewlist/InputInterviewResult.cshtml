@@ -114,6 +114,10 @@
 
 
         $(document).ready(function () {
+
+            $("#submit-button").click(function () {
+                showLoading();
+            });
             
             $("#vac-position").prop('readonly', 'true');
             $("#val-candidate").prop('readonly', 'true');
