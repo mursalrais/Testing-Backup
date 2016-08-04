@@ -46,12 +46,18 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [Required]
         public int PSARenewalNumber { get; set; }
 
+        [DisplayName("Renewal#")]
+        [Required]
+        public string StrPSARenewal { get; set; }
+
         public int PSAId { get; set; }
 
         /// <summary>
         /// to keep the next renewalnumber
         /// </summary>
         public int HidRenewalNumber { get; set; }
+
+        public string ProjectUnit { get; set; }
 
         /// <summary>
         /// ProjectOrUnit
@@ -124,6 +130,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             TextField = "Desc",
             OnSelectEventName = "OnSelectPosition"
         };
+
+        public int PositionID { get; set; }
         
         /// <summary>
         /// professional
@@ -146,6 +154,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [UIHint("Int32")]
         [DisplayName("Tenure")]
         [Required]
+        [Range(0, 5, ErrorMessage = "Only 0-5")]
         public int Tenure { get; set; }
 
         [DisplayName("Tenure")]
@@ -227,6 +236,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         };
 
         public string ProfessionalMail { get; set; }
+
+        public string ProfessionalFullName { get; set; }
 
     }
 }

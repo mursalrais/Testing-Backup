@@ -51,6 +51,10 @@ namespace MCAWebAndAPI.Web.Controllers
 
             var viewModel = psaManagementService.GetPSAManagement(ID);
 
+            string professionalFullName = psaManagementService.GetProfessionalFullName(viewModel.Professional.Value);
+
+            viewModel.ProfessionalFullName = Convert.ToString(professionalFullName);
+
             if(viewModel.PSAStatus.Text == "Active")
             {
                 return View("EditPSAManagement", viewModel);
@@ -369,7 +373,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             if (viewModel.PerformancePlan.Value == "Yes")
             {
-                psaManagementService.SendMailPerformancePlan(viewModel.ProfessionalMail, string.Format("Please kindly click this url to create Performance Plan:{0}{1}/NewForm_Custom.aspx", siteUrl, UrlResource.ProfessionalPerformancePlan));
+                psaManagementService.SendMailPerformancePlan(viewModel.ProfessionalMail, string.Format("Please kindly click this url to create Performance Plan:            {0}{1}/NewForm_Custom.aspx", siteUrl, UrlResource.ProfessionalPerformancePlan));
             }
 
             
@@ -469,7 +473,11 @@ namespace MCAWebAndAPI.Web.Controllers
                     e.DateOfNewPSABefore,
                     e.DateNewPSABefore,
                     e.JoinDate,
-                    e.ProfessionalMail
+                    e.ProfessionalMail,
+                    e.ProjectUnit,
+                    e.StrPSARenewal,
+                    //e.StrPosition,
+                    e.PositionID
                     }
             ), JsonRequestBehavior.AllowGet);
         }

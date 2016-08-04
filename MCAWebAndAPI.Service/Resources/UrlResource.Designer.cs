@@ -61,7 +61,7 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}/Lists/Application/InputInterviewResultDetail.aspx?ID={1}.
+        ///   Looks up a localized string similar to {0}/Lists/Application/InputInterviewResultDetail.aspx?ID={1}&amp;manPos={2}.
         /// </summary>
         public static string AddInterviewInvitation {
             get {
@@ -97,7 +97,16 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to /Lists/Asset%20Master.
+        ///   Looks up a localized string similar to Lists/Asset%20Acquisition/AllItems.aspx.
+        /// </summary>
+        public static string AssetAcquisition {
+            get {
+                return ResourceManager.GetString("AssetAcquisition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lists/Asset%20Master/AllItems.aspx.
         /// </summary>
         public static string AssetMaster {
             get {
@@ -115,7 +124,7 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}/Application%20Documents/Forms/AllItems.aspx#InplviewHash4adbc69d-4587-40ad-8645-58b419984117=FilterField1%3Dapplication%255Fx003a%255FID-FilterValue1%3D{1}.
+        ///   Looks up a localized string similar to {0}/Application%20Documents/Forms/AllItems.aspx#InplviewHash4adbc69d-4587-40ad-8645-58b419984117=FilterField1%3Dapplication%255Fx003a%255FID-FilterValue1%3D45#InplviewHashc67ecdef-ac05-4183-9a2d-c3752821814c=FilterField1%3Dapplication%255Fx003a%255FID-FilterValue1%3D{1}.
         /// </summary>
         public static string CVDocumentByID {
             get {
@@ -178,7 +187,7 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}/Lists/Application/InputInterviewResult.aspx?ID={1}.
+        ///   Looks up a localized string similar to {0}/Lists/Application/InputInterviewResult.aspx?ID={1}&amp;POS={2}.
         /// </summary>
         public static string InterviewInputResult {
             get {
@@ -309,6 +318,15 @@ namespace MCAWebAndAPI.Service.Resources {
         public static string PSAManagementDocumentByID {
             get {
                 return ResourceManager.GetString("PSAManagementDocumentByID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}/Requisition%20Note%20Documents/Forms/AllItems.aspx#InplviewHash5093bda1-84bf-4cad-8652-286653d6a83f=FilterField1%3Dpsa%255Fx003a%255FID-FilterValue1%3D{1}.
+        /// </summary>
+        public static string RequisitionNoteDocumentByID {
+            get {
+                return ResourceManager.GetString("RequisitionNoteDocumentByID", resourceCulture);
             }
         }
         

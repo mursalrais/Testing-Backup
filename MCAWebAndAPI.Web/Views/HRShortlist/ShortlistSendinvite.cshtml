@@ -76,7 +76,12 @@
 @section scripts{
 
 <script>
-        $(document).ready(function () {
+    $(document).ready(function () {
+
+        $("#submit-button").click(function () {
+            showLoading();
+        });
+
             $("#vacant-position").prop('readonly', 'true');
             $("#Candidate").prop('readonly', 'true');
             $('#SendTo').prop("readonly", 'true');

@@ -1,0 +1,116 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Finance
+@model RequisitionNoteVM
+
+<div class="col-sm-6">
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.Category).Class("col-sm-3 control-label")
+        <div class="col-sm-8">
+            @Html.EditorFor(m => m.Category)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.Date).Class("col-sm-3 control-label")
+        <div class="col-sm-8">
+            @Html.EditorFor(m => m.Date)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.EventBudgetNo).Class("col-sm-3 control-label")
+        <div class="col-sm-8">
+            @Html.EditorFor(m => m.EventBudgetNo)
+            <input type="hidden" id="hdnEvenBudgetId" value="-1" name="hdnEvenBudgetId" />
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.Project).Class("col-sm-3 control-label")
+        <div class="col-sm-8">
+            @Html.EditorFor(m => m.Project)
+        </div>
+    </div>
+</div>
+<div class="col-sm-6">
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.Fund).Class("col-sm-2 control-label")
+        <div class="col-sm-8">
+            @Html.EditorFor(m => m.Fund, new { HtmlAttributes = new { @class = "control-textbox-padding6px", @readonly = "readonly" } })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.Documents).Class("col-md-2 control-label")
+        <div class="col-md-7">
+            @Html.EditorFor(m => m.Documents)
+        </div>
+    </div>
+    @if (!string.IsNullOrWhiteSpace(Model.DocumentUrl))
+    {
+        <div class="form-group">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        <button id="application-document-button" class="btn btn-default" type="button">
+                            Click Here to go to Requisite Note Attachments
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <script>
+                $('#application-document-button').click(function () {
+                    parent.postMessage({
+                        result : "Success", urlToRedirect : "@Model.DocumentUrl" }, "@Model.DocumentUrl" );
+                });
+            </script>
+        </div>
+    }
+
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.Currency).Class("col-sm-2 control-label")
+        <div class="col-sm-7">
+            @Html.EditorFor(m => m.Currency)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.Total).Class("col-sm-2 control-label")
+        <div class="col-sm-8">
+          @Html.EditorFor(m => m.Total, new { HtmlAttributes = new { @class = "control-textbox-padding6px", @readonly = "readonly" } })
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var CATEGORY_NON_EVENT = "Non-event";
+
+    $(document).ready(function () {
+        var categoryDropDownList = $("#Category_Value").data("kendoDropDownList");
+        categoryDropDownList.bind("dataBound", function (e) {
+        });
+
+        $("#hdnEvenBudgetId").val("-1");
+    });
+
+
+    function toggleEventBudgetComboBox(category) {
+        var categoryDropDownList = $("#EventBudgetNo_Value").data("kendoDropDownList");
+
+        if (categoryDropDownList !== 'undefined' && category === CATEGORY_NON_EVENT)
+        {
+            categoryDropDownList.enable(false);
+        }
+        else
+        {
+            categoryDropDownList.enable(true);
+        }
+    }
+
+    function onSelectCategory() {
+        toggleEventBudgetComboBox(this.text());
+    }
+
+    function onSelectEventBudgetNo(e) {
+        var dataItem = this.dataItem(e.item);
+
+        $("#hdnEvenBudgetId").val(dataItem.ID);
+
+        $("#RequisitionDetails").data("kendoGrid").dataSource.read();
+    }
+</script>

@@ -170,13 +170,13 @@
     <value>/_layouts/15/WopiFrame.aspx?sourcedoc={2E1A7EB1-E5BD-4F38-A1DF-E43C7DEF0CF4}&amp;file=Exit%20Interview%20Form.docx&amp;action=default</value>
   </data>
   <data name="AddInterviewInvitation" xml:space="preserve">
-    <value>{0}/Lists/Application/InputInterviewResultDetail.aspx?ID={1}</value>
+    <value>{0}/Lists/Application/InputInterviewResultDetail.aspx?ID={1}&amp;manPos={2}</value>
   </data>
   <data name="InterviewDataList" xml:space="preserve">
     <value>{0}/Lists/Application/Interviewlistdata.aspx?POSID={1}</value>
   </data>
   <data name="InterviewInputResult" xml:space="preserve">
-    <value>{0}/Lists/Application/InputInterviewResult.aspx?ID={1}</value>
+    <value>{0}/Lists/Application/InputInterviewResult.aspx?ID={1}&amp;POS={2}</value>
   </data>
   <data name="ShortlistEmailLinkHR" xml:space="preserve">
     <value>{0}/Lists/Application/ShortlistREQ.aspx?POSID={1}</value>
@@ -188,7 +188,7 @@
     <value>{0}/Lists/Application/Interviewlistdata.aspx?POSID={1}</value>
   </data>
   <data name="CVDocumentByID" xml:space="preserve">
-    <value>{0}/Application%20Documents/Forms/AllItems.aspx#InplviewHash4adbc69d-4587-40ad-8645-58b419984117=FilterField1%3Dapplication%255Fx003a%255FID-FilterValue1%3D{1}</value>
+    <value>{0}/Application%20Documents/Forms/AllItems.aspx#InplviewHash4adbc69d-4587-40ad-8645-58b419984117=FilterField1%3Dapplication%255Fx003a%255FID-FilterValue1%3D45#InplviewHashc67ecdef-ac05-4183-9a2d-c3752821814c=FilterField1%3Dapplication%255Fx003a%255FID-FilterValue1%3D{1}</value>
   </data>
   <data name="InterviewPanelList" xml:space="preserve">
     <value>{0}/Lists/Application/InterviewPanellist.aspx?POSID={1}</value>
@@ -214,7 +214,14 @@
   <data name="Compensatory" xml:space="preserve">
     <value>/Lists/Compensatory%20Request</value>
   </data>
+  <data name="RequisitionNoteDocumentByID" xml:space="preserve">
+    <value>{0}/Requisition%20Note%20Documents/Forms/AllItems.aspx#InplviewHash5093bda1-84bf-4cad-8652-286653d6a83f=FilterField1%3Dpsa%255Fx003a%255FID-FilterValue1%3D{1}</value>
+    <comment>Need to change in migration</comment>
+  </data>
   <data name="AssetMaster" xml:space="preserve">
-    <value>/Lists/Asset%20Master</value>
+    <value>Lists/Asset%20Master/AllItems.aspx</value>
+  </data>
+  <data name="AssetAcquisition" xml:space="preserve">
+    <value>Lists/Asset%20Acquisition/AllItems.aspx</value>
   </data>
 </root>

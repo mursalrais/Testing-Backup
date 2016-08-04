@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using MCAWebAndAPI.Model.ViewModel.Form.Asset;
 using NLog;
 using MCAWebAndAPI.Service.Utils;
+using System.Text.RegularExpressions;
 
 namespace MCAWebAndAPI.Service.Asset
 {
@@ -48,7 +49,9 @@ namespace MCAWebAndAPI.Service.Asset
             viewModel.ProjectUnit.Value = Convert.ToString(listItem["ProjectUnit"]);
             viewModel.Remarks = Convert.ToString(listItem["Remarks"]);
             viewModel.SerialNo = Convert.ToString(listItem["SerialNo"]);
-            viewModel.Spesifications = Convert.ToString(listItem["Spesifications"]);
+
+           
+            viewModel.Spesifications = Regex.Replace(listItem["Spesifications"].ToString(), "<.*?>", string.Empty); 
             viewModel.WarrantyExpires = Convert.ToDateTime(listItem["WarranyExpires"]);
             viewModel.AssetCategory.Value = Convert.ToString(listItem["AssetCategory"]);
             viewModel.AssetDesc = Convert.ToString(listItem["Title"]);

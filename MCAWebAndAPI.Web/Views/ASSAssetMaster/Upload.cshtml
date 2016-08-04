@@ -69,11 +69,13 @@
             $.getJSON(url, function (data) {
                 showModalWindow(data);
             });
+          
         }
 
         function onCompleteUploadCSV() {
             $('#grid-placeholder').load('/ASSAssetMaster/DisplayGrid');
             $(".visible-after-uploaded").show();
+
         }
     </script>
 

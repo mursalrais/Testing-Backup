@@ -1265,6 +1265,19 @@
     <Content Include="Views\HRExitProcedure\_EditExitProcedureChecklistForHR.cshtml" />
     <Content Include="Views\HRExitProcedure\_EditExitProcedureDataHR.cshtml" />
     <Content Include="Views\HRPayroll\DisplayPayrollWorksheetDrafts.cshtml" />
+    <Content Include="Views\FINRequisitionNote\CreateRequisitionNote.cshtml" />
+    <Content Include="Views\FINRequisitionNote\EditRequisitionNote.cshtml" />
+    <Content Include="Views\FINRequisitionNote\PrintRequisitionNote.cshtml" />
+    <Content Include="Views\FINRequisitionNote\_General.cshtml" />
+    <Content Include="Views\FINRequisitionNote\_ItemDetails.cshtml" />
+    <Content Include="Views\FINSCAVoucher\CreateSCAVoucher.cshtml" />
+    <Content Include="Views\FINSCAVoucher\_EventBudgetItems.cshtml" />
+    <Content Include="Views\FINSPHL\CreateSPHL.cshtml" />
+    <Content Include="Views\FINTaxExemptionData\Create.cshtml" />
+    <Content Include="Views\FINTaxExemptionData\Edit.cshtml" />
+    <Content Include="Views\FINTaxReimbursement\CreateTaxReimbursement.cshtml" />
+    <Content Include="Views\FINEventBudget\Create.cshtml" />
+    <Content Include="Views\FINEventBudget\_ItemDetails.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1296,6 +1309,11 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\FileController.cs" />
     <Compile Include="Controllers\FINEventBudgetController.cs" />
+    <Compile Include="Controllers\FINRequisitionNoteController.cs" />
+    <Compile Include="Controllers\FINSCAVoucherController.cs" />
+    <Compile Include="Controllers\FINSPHLController.cs" />
+    <Compile Include="Controllers\FINTaxExemptionDataController.cs" />
+    <Compile Include="Controllers\FINTaxReimbursementController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HRApplicationController.cs" />
     <Compile Include="Controllers\HRCompensatoryController.cs" />
@@ -1381,7 +1399,6 @@
     <Folder Include="App_Code\" />
     <Folder Include="bin\Resources\" />
     <Folder Include="Views\File\" />
-    <Folder Include="Views\FINEventBudget\" />
     <Folder Include="Views\HRDataMaster\" />
   </ItemGroup>
   <ItemGroup>

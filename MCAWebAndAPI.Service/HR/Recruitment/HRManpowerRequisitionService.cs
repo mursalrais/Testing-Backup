@@ -21,6 +21,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         const string SP_MANPOW_LIST_NAME = "Manpower Requisition";
         const string SP_WORKRE_LIST_NAME = "Manpower Requisition Working Relationship";
         const string SP_MANDOC_LIST_NAME = "Manpower Requisition Documents";
+        const string SP_POSITION_MAST = "Position Master";
 
         public int CreateManpowerRequisition(ManpowerRequisitionVM viewModel)
         {
@@ -399,10 +400,14 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             var _relationshipArray = (string[])item["relationship"];
             string _relationship = string.Join(",", _relationshipArray);
 
+            var ListPosition = SPConnector.GetListItem(SP_POSITION_MAST, (item["position"] as FieldLookupValue).LookupId, _siteUrl);
+            AjaxComboBoxVM _positionWorking = new AjaxComboBoxVM();
+            _positionWorking.Value = (item["position"] as FieldLookupValue).LookupId;
+            _positionWorking.Text = Convert.ToString(ListPosition["projectunit"]) + " - "+ Convert.ToString(ListPosition["Title"]);
             return new WorkingRelationshipDetailVM
             {
                 ID = Convert.ToInt32(item["ID"]),
-                PositionWorking = WorkingRelationshipDetailVM.GetPositionDefaultValue(FormatUtil.ConvertToInGridAjaxComboBox(item, "position")),
+                PositionWorking = WorkingRelationshipDetailVM.GetPositionDefaultValue(_positionWorking),
                 Frequency = WorkingRelationshipDetailVM.GetFrequencyDefaultValue(new InGridMultiSelectVM { Text = _frequency }),
                 Relationship = WorkingRelationshipDetailVM.GetRelationshipDefaultValue(new InGridMultiSelectVM { Text = _relationship })
             };

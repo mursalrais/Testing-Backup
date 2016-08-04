@@ -4,55 +4,78 @@
 
 @model AssetAcquisitionHeaderVM
 
-<form class="form-horizontal" method="post" action="/ASSassetAcquisition/Submit" id="create-asset-acquisition-form">
-    <fieldset>
-        <legend>Form Asset Acquisition</legend>
-        <div class="col-md-6">
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.TransactionType).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.TransactionType)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.AccpMemo).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.AccpMemo)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Vendor).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.Vendor)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.PoNo).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.PoNo)
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.PurchaseDate).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.PurchaseDate)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.PurchaseDescription).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.PurchaseDescription)
-                </div>
-            </div>
-        </div>
-        <div>
-            @Html.Partial("_Details", Model.Details)
-        </div>
-        <center>
-            <input class="k-button k-button-icontext k-grid-add" type="submit" value="Submit" />
-        </center>
-    </fieldset>
+@using (Ajax.BeginForm("Submit", "ASSassetAcquisition",
+                                                                                       FormMethod.Post,
+                                                                                       new AjaxOptions
+                                                                                       {
+                                                                                           OnBegin = "onBeginForm",
+                                                                                           OnComplete = "onCompleteForm",
+                                                                                           OnSuccess = "onSuccessFormEmbed",
+                                                                                           OnFailure = "onFailureForm"
+                                                                                       }, new { @class = "form-horizontal" }))
 
-</form>
+{
+    <form class="form-horizontal" method="post" action="/ASSassetAcquisition/Submit" id="create-asset-acquisition-form">
+        <fieldset>
+            <legend>Form Asset Acquisition</legend>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.TransactionType).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.EditorFor(m => m.TransactionType)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.AccpMemo).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.EditorFor(m => m.AccpMemo)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Vendor).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.EditorFor(m => m.Vendor)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.PoNo).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.EditorFor(m => m.PoNo)
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.PurchaseDate).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.EditorFor(m => m.PurchaseDate)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.PurchaseDescription).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.EditorFor(m => m.PurchaseDescription)
+                    </div>
+                </div>
+            </div>
+            <div>
+                @Html.Partial("_Details", Model.Details)
+            </div>
+        </fieldset>
+
+        <div>
+            <center>
+                <input class="k-button k-button-icontext k-grid-add" type="submit" value="Save" />
+                <input class="k-button k-button-icontext k-grid-add" value="Cancel" onclick="return cancelButton()" />
+            </center>
+        </div>
+
+    </form>
+}
+
+
+<script>
+    function cancelButton() {
+        location.href = '@Url.Action("Index","ASSassetAcquisition")';
+    }
+</script>

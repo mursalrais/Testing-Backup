@@ -22,8 +22,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         const string SP_PSA_LIST_NAME = "PSA";
         const string SP_PSA_DOC_LIST_NAME = "PSA Documents";
+        const string SP_PROF_LIST_NAME = "Professional Master";
 
-        
 
         public IEnumerable<PSAManagementVM> GetRenewalNumber(int? professionalID)
         {
@@ -39,20 +39,38 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         private PSAManagementVM ConvertToRenewalPSANumber(ListItem item)
         {
-            return new PSAManagementVM
-            {
-                ID = item["professional_x003a_ID"] == null ? 0 : Convert.ToInt32((item["professional_x003a_ID"] as FieldLookupValue).LookupId),
-                Created = Convert.ToDateTime(item["Created"]),
-                PSARenewalNumber = Convert.ToInt32(item["renewalnumber"]),
-                ExpiryDateBefore = Convert.ToDateTime(item["psaexpirydate"]).ToLocalTime().ToShortDateString(),
-                ExpireDateBefore = Convert.ToDateTime(item["psaexpirydate"]).ToLocalTime(),
-                PSAId = Convert.ToInt32(item["ID"]),
-                DateOfNewPSABefore = Convert.ToDateTime(item["dateofnewpsa"]).ToLocalTime(),
-                DateNewPSABefore = Convert.ToDateTime(item["dateofnewpsa"]).ToLocalTime().ToShortDateString(),
-                //ProfessionalMail = Convert.ToString(item["Professional_x0020_Name_x003a_Of"])
-                ProfessionalMail = item["Professional_x0020_Name_x003a_Of"] == null? "" : Convert.ToString((item["Professional_x0020_Name_x003a_Of"] as FieldLookupValue).LookupValue)
+            var viewModel = new PSAManagementVM();
 
-            };
+            viewModel.ID = FormatUtil.ConvertLookupToID(item, "professional_x003a_ID");
+            viewModel.Created = Convert.ToDateTime(item["Created"]);
+            viewModel.PSARenewalNumber = Convert.ToInt32(item["renewalnumber"]);
+            viewModel.ExpiryDateBefore = Convert.ToDateTime(item["psaexpirydate"]).ToLocalTime().ToShortDateString();
+            viewModel.ExpireDateBefore = Convert.ToDateTime(item["psaexpirydate"]).ToLocalTime();
+            viewModel.PSAId = Convert.ToInt32(item["ID"]);
+            viewModel.DateOfNewPSABefore = Convert.ToDateTime(item["dateofnewpsa"]).ToLocalTime();
+            viewModel.DateNewPSABefore = Convert.ToDateTime(item["dateofnewpsa"]).ToLocalTime().ToShortDateString();
+            viewModel.ProfessionalMail = Convert.ToString((item["Professional_x0020_Name_x003a_Of"] as FieldLookupValue).LookupValue);
+            viewModel.StrPSARenewal = Convert.ToString(item["renewalnumber"]);
+            viewModel.ProjectUnit = Convert.ToString(item["ProjectOrUnit"]);
+            viewModel.PositionID = Convert.ToInt32((item["position"] as FieldLookupValue).LookupId);
+
+
+            //return new PSAManagementVM
+            //{
+            //    ID = item["professional_x003a_ID"] == null ? 0 : Convert.ToInt32((item["professional_x003a_ID"] as FieldLookupValue).LookupId),
+            //    Created = Convert.ToDateTime(item["Created"]),
+            //    PSARenewalNumber = Convert.ToInt32(item["renewalnumber"]),
+            //    ExpiryDateBefore = Convert.ToDateTime(item["psaexpirydate"]).ToLocalTime().ToShortDateString(),
+            //    ExpireDateBefore = Convert.ToDateTime(item["psaexpirydate"]).ToLocalTime(),
+            //    PSAId = Convert.ToInt32(item["ID"]),
+            //    DateOfNewPSABefore = Convert.ToDateTime(item["dateofnewpsa"]).ToLocalTime(),
+            //    DateNewPSABefore = Convert.ToDateTime(item["dateofnewpsa"]).ToLocalTime().ToShortDateString(),
+            //    ProfessionalMail = item["Professional_x0020_Name_x003a_Of"] == null ? "" : Convert.ToString((item["Professional_x0020_Name_x003a_Of"] as FieldLookupValue).LookupValue),
+            //    StrPSARenewal = item["renewalnumber"] == null ? "0" : Convert.ToString(item["renewalnumber"]),
+            //    ProjectOrUnit. = Convert.ToString(item["projectunit"])
+            //};
+
+            return viewModel;
         }
 
 
@@ -83,7 +101,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             var updatedValues = new Dictionary<string, object>();
 
             updatedValues.Add("isrenewal", psaManagement.IsRenewal.Value);
-            updatedValues.Add("renewalnumber", psaManagement.PSARenewalNumber);
+            //updatedValues.Add("renewalnumber", psaManagement.PSARenewalNumber);
+            updatedValues.Add("renewalnumber", psaManagement.StrPSARenewal);
             updatedValues.Add("ProjectOrUnit", psaManagement.ProjectOrUnit.Value);
             updatedValues.Add("position", new FieldLookupValue { LookupId =  (int)psaManagement.Position.Value});
             updatedValues.Add("professional", new FieldLookupValue { LookupId = (int)psaManagement.Professional.Value });
@@ -92,7 +111,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             updatedValues.Add("tenure", psaManagement.Tenure);
             updatedValues.Add("initiateperformanceplan", psaManagement.PerformancePlan.Value);
             updatedValues.Add("psastatus", psaManagement.PSAStatus.Value);
-            updatedValues.Add("hiddenexpirydate", psaManagement.HiddenExpiryDate);
+            //updatedValues.Add("hiddenexpirydate", psaManagement.HiddenExpiryDate);
+            //updatedValues.Add("lastworkingdate", psaManagement.HiddenExpiryDate);
+            
             updatedValues.Add("lastworkingdate", psaManagement.LastWorkingDate);
 
 
@@ -164,10 +185,12 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             viewModel.ID = Convert.ToInt32(listItem["ID"]);
             viewModel.IsRenewal.Text = Convert.ToString(listItem["isrenewal"]);
-            viewModel.RenewalNumber = Convert.ToInt32(listItem["renewalnumber"]);
+            //viewModel.RenewalNumber = Convert.ToInt32(listItem["renewalnumber"]);
+            viewModel.StrPSARenewal = Convert.ToString(listItem["renewalnumber"]);
             viewModel.ProjectOrUnit.Value = Convert.ToString(listItem["ProjectOrUnit"]);
             viewModel.Position.Value = FormatUtil.ConvertLookupToID(listItem, "position");
-            viewModel.Professional.Text = FormatUtil.ConvertLookupToValue(listItem, "professional");
+            //viewModel.Professional.Text = FormatUtil.ConvertLookupToValue(listItem, "professional");
+            viewModel.Professional.Value = FormatUtil.ConvertLookupToID(listItem, "professional");
             viewModel.JoinDate = Convert.ToDateTime(listItem["joindate"]).ToLocalTime();
             viewModel.DateOfNewPSA = Convert.ToDateTime(listItem["dateofnewpsa"]).ToLocalTime();
             viewModel.Tenure = Convert.ToInt32(listItem["tenure"]);
@@ -200,7 +223,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.ID = Convert.ToInt32(listItem["ID"]);
             viewModel.PSANumber = Convert.ToString(listItem["Title"]);
             viewModel.IsRenewal.Value = Convert.ToString(listItem["isrenewal"]);
-            viewModel.RenewalNumber = Convert.ToInt32(listItem["renewalnumber"]);
+            //viewModel.RenewalNumber = Convert.ToInt32(listItem["renewalnumber"]);
+            viewModel.StrPSARenewal = Convert.ToString(listItem["renewalnumber"]);
             viewModel.ProjectOrUnit.Value = Convert.ToString(listItem["ProjectOrUnit"]);
             viewModel.Professional.Text = FormatUtil.ConvertLookupToValue(listItem, "professional");
             viewModel.Position.Text = FormatUtil.ConvertLookupToValue(listItem, "position");
@@ -319,6 +343,15 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         public void SendMailPerformancePlan(string professionalMail, string mailContent)
         {
             EmailUtil.Send(professionalMail, "Create Performance Plan", mailContent);
+        }
+
+        public string GetProfessionalFullName(int? professionalID)
+        {
+            var item = SPConnector.GetListItem(SP_PROF_LIST_NAME, professionalID, _siteUrl);
+
+            string professionalFullName = Convert.ToString(item["Title"]) + " " + Convert.ToString(item["lastname"]);
+
+            return professionalFullName;
         }
     }
 }
