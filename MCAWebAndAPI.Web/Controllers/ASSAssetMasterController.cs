@@ -60,6 +60,7 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult Create(string SiteUrl)
         {
             _assetMasterService.SetSiteUrl(SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
             var viewModel = _assetMasterService.GetAssetMaster();
             return View(viewModel);
@@ -68,25 +69,29 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult Edit(int ID, string SiteUrl)
         {
             _assetMasterService.SetSiteUrl(SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
             var viewModel = _assetMasterService.GetAssetMaster(ID);
             return View(viewModel);
         }
 
         [HttpPost]
-        public ActionResult Submit(AssetMasterVM _data, string SiteUrl)
+        public ActionResult Submit(FormCollection form, AssetMasterVM _data)
         {
-            _assetMasterService.SetSiteUrl(SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+
+            _assetMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
             //return View(new AssetMasterVM());
             _assetMasterService.CreateAssetMaster(_data);
-            return JsonHelper.GenerateJsonSuccessResponse(string.Format("{0}/{1}", "https://eceos2.sharepoint.com/sites/mca-dev/bo", UrlResource.AssetMaster));
+            return JsonHelper.GenerateJsonSuccessResponse(string.Format("{0}/{1}", siteUrl, UrlResource.AssetMaster));
         }
 
         public ActionResult Update(AssetMasterVM _data, string SiteUrl)
         {
-            _assetMasterService.SetSiteUrl(SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _assetMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
             //return View(new AssetMasterVM());
             _assetMasterService.UpdateAssetMaster(_data);
-            return JsonHelper.GenerateJsonSuccessResponse(string.Format("{0}/{1}", "https://eceos2.sharepoint.com/sites/mca-dev/bo", UrlResource.AssetAcquisition));
+            return JsonHelper.GenerateJsonSuccessResponse(string.Format("{0}/{1}", SiteUrl, UrlResource.AssetAcquisition));
         }
 
         [HttpGet]
