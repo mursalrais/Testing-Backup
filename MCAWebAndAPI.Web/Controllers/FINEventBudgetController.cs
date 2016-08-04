@@ -1,28 +1,47 @@
-﻿//using MCAWebAndAPI.Service.Finance;
-//using System.Web.Mvc;
+﻿using MCAWebAndAPI.Service.Finance;
+using System.Web.Mvc;
+using MCAWebAndAPI.Web.Helpers;
+using MCAWebAndAPI.Web.Resources;
+using System.Linq;
+using System;
 
-//namespace MCAWebAndAPI.Web.Controllers
-//{
-//    public class FINEventBudgetController : Controller
-//    {
-//        IEventBudgetService _eventBudgetService;
+namespace MCAWebAndAPI.Web.Controllers
+{
+    public class FINEventBudgetController : Controller
+    {
+        private const string SESSION_SITE_URL = "SiteUrl";
+        IEventBudgetService service;
 
-//        public FINEventBudgetController()
-//        {
-//            _eventBudgetService = new EventBudgetService();
-//        }
+        public FINEventBudgetController()
+        {
+            service = new EventBudgetService();
+        }
 
-//        // GET: FINEventBudget
-//        public ActionResult Index()
-//        {
-//            return View();
-//        }
 
-//        public ActionResult Create()
-//        {
-//            var viewModel = _eventBudgetService.GetEventBudget_Dummy();
+        public ActionResult Create(string siteUrl = null, int? id = null)
+        {
+            siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
 
-//            return View(viewModel);
-//        }
-//    }
-//}
+            service.SetSiteUrl(siteUrl);
+            SessionManager.Set(SESSION_SITE_URL, siteUrl);
+
+            var viewModel = service.GetEventBudget(id);
+            return View(viewModel);
+        }
+
+        public JsonResult GetGLMaster()
+        {
+            var siteUrl = SessionManager.Get<string>(SESSION_SITE_URL);
+            service.SetSiteUrl(siteUrl);
+
+            var glMasters = Shared.GetGLMaster(siteUrl);
+
+            return Json(glMasters.Select(e => new
+            {
+                Value = e.ID.HasValue ? Convert.ToString(e.ID) : string.Empty,
+                Text = e.Title
+            }), JsonRequestBehavior.AllowGet);
+        }
+
+    }
+}
