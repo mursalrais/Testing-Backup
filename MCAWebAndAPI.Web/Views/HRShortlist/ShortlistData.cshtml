@@ -72,6 +72,14 @@
 
         $(document).ready(function () {
 
+            $("#submit-button").click(function () {
+                showLoading();
+            });
+
+            $("#submit-nextstep").click(function () {
+                showLoading();
+            });
+            
             var positionID = $("#Position").val();
             var User = $("#useraccess").val();
 

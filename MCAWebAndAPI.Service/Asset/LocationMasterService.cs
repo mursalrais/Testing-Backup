@@ -125,6 +125,12 @@ namespace MCAWebAndAPI.Service.Asset
         {
             var viewModel = new LocationMasterVM();
 
+            var caml = @"<View>  
+            <Query> 
+               <Where><Eq><FieldRef Name='Level' /><Value Type='Choice'>Province</Value></Eq></Where> 
+            </Query> 
+      </View>";
+
             var site = _siteUrl;
             var siteHR = site.Replace("/bo", "/hr");
 
@@ -139,12 +145,6 @@ namespace MCAWebAndAPI.Service.Asset
                 collectionProvince.Add(Convert.ToString(item["Province"]));
             }
 
-            foreach (var item in SPConnector.GetList(SP_LOCATIONMASTER_LISTNAME, siteHR))
-            {
-                collectionIDLocation.Add(Convert.ToInt32(item["ID"]));
-                collectionLocation.Add(Convert.ToString(item["Title"]));
-            }
-
             foreach (var model in viewModel.PlaceMasters)
             {
                 var updatedValue = new Dictionary<string, object>();
@@ -156,6 +156,34 @@ namespace MCAWebAndAPI.Service.Asset
                     try
                     {
                         SPConnector.AddListItem(SP_PROVINCE_LISTNAME, updatedValue, _siteUrl);
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error(e.Message);
+                        throw new Exception(ErrorResource.SPInsertError);
+                    }
+                }
+            }
+
+            foreach (var item in SPConnector.GetList(SP_LOCATIONMASTER_LISTNAME, siteHR, caml))
+            {
+                collectionIDLocation.Add(Convert.ToInt32(item["ID"]));
+                collectionLocation.Add(Convert.ToString(item["Title"]));
+            }
+
+            foreach (var item in SPConnector.GetList(SP_PROVINCE_LISTNAME, _siteUrl))
+            {
+                var updatedValue = new Dictionary<string, object>();
+
+                string province = null;
+                int id = 0;
+                province = Convert.ToString(item["Province"]);
+                id = Convert.ToInt32(item["ID"]);
+                if (!(collectionLocation.Any(e => e == province)))
+                {
+                    try
+                    {
+                        SPConnector.DeleteListItem(SP_PROVINCE_LISTNAME, id, _siteUrl);
                     }
                     catch (Exception e)
                     {

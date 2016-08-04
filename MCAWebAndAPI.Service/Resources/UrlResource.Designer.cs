@@ -61,7 +61,7 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}/Lists/Application/InputInterviewResultDetail.aspx?ID={1}.
+        ///   Looks up a localized string similar to {0}/Lists/Application/InputInterviewResultDetail.aspx?ID={1}&amp;manPos={2}.
         /// </summary>
         public static string AddInterviewInvitation {
             get {

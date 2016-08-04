@@ -186,7 +186,7 @@ namespace MCAWebAndAPI.Web.Controllers
             _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
 
             var positions = GetFromPositionsExistingSession();
-
+            positions = positions.OrderBy(e => e.ProjectUnit);
             return Json(positions.Select(e =>
                 new {
                     Value = Convert.ToString(e.ID),

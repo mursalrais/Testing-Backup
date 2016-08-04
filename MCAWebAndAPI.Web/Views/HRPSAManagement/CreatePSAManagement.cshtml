@@ -134,8 +134,9 @@
                         var renewalnumber = result[0].PSARenewalNumber + 1;
                         var strpsarenewal = parseInt(result[0].StrPSARenewal) + 1;
                         var dateofnewpsabefore = result[0].DateNewPSABefore;
-                        var projectUnit = result[0].ProjectOrUnit;
-                        var position = result[0].Position;
+                        var projectUnit = result[0].ProjectUnit;
+                        var positionID = result[0].PositionID;
+
                         var dateofnewpsa = new Date(dateofnewpsabefore);
                         var datenewpsa = dateofnewpsa.getDate();
                         var datenewpsaint = parseInt(datenewpsa);
@@ -178,8 +179,9 @@
                         $("#DateOfNewPSABefore").prop('value', dateofnewpsabefore);
 
                         $("#ProfessionalMail").prop('value', result[0].ProfessionalMail);
-                        $("#ProjectOrUnit").prop('value', result[0].ProjectOrUnit);
-                        $("#Position").prop('value', result[0].Position);
+                        $("#ProjectOrUnit_Value").data("kendoDropDownList").value(result[0].ProjectUnit);
+                        $("#Position_Value").data("kendoDropDownList").value(result[0].PositionID);
+                        
                         
                     }
 
