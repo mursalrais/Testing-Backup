@@ -34,7 +34,6 @@ namespace MCAWebAndAPI.Web.Controllers
             _assetAcquisitionService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
             var viewModel = _assetAcquisitionService.GetPopulatedModel();
-            //var viewModelItem = _assetAcquisitionService.GetPopulatedModelItem();
             return View(viewModel);
         }
 
@@ -167,11 +166,11 @@ namespace MCAWebAndAPI.Web.Controllers
         private IEnumerable<WBSMaterVM> GetFromWBSExistingSession()
         {
             //Get existing session variable
-            var sessionVariable = System.Web.HttpContext.Current.Session["AssetAcquisition"] as IEnumerable<WBSMaterVM>;
+            var sessionVariable = System.Web.HttpContext.Current.Session["WBSMaster"] as IEnumerable<WBSMaterVM>;
             var positions = sessionVariable ?? _assetAcquisitionService.GetWBS();
 
             if (sessionVariable == null) // If no session variable is found
-                System.Web.HttpContext.Current.Session["AssetAcquisition"] = positions;
+                System.Web.HttpContext.Current.Session["WBSMaster"] = positions;
             return positions;
         }
     }

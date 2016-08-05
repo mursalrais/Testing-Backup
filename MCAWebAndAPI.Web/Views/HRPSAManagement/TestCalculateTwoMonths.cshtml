@@ -1,0 +1,40 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+
+@model PSAManagementVM
+
+@{
+    ViewBag.Title = "Form Create PSA Management";
+}
+
+@using (Html.BeginForm("CreatePSAManagement", "HRPSAManagement", FormMethod.Post,
+                                                                             new
+                                                                             {
+                                                                                 @class = "form-horizontal",
+                                                                                 enctype = "multipart/form-data"
+                                                                             }))
+{
+    <fieldset>
+        <legend>PSA Management Data</legend>
+
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary()
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.TwoMonthBeforeExpiryDate).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.DisplayFor(m => m.TwoMonthBeforeExpiryDate)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.StrTwoMonthBeforeExpiryDate).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.DisplayFor(m => m.StrTwoMonthBeforeExpiryDate)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+    
+}
+

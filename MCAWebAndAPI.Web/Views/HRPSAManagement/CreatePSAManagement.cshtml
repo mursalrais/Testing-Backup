@@ -179,6 +179,9 @@
                         $("#DateOfNewPSABefore").prop('value', dateofnewpsabefore);
 
                         $("#ProfessionalMail").prop('value', result[0].ProfessionalMail);
+
+                        console.log(result[0].ProfessionalMail);
+
                         $("#ProjectOrUnit_Value").data("kendoDropDownList").value(result[0].ProjectUnit);
                         $("#Position_Value").data("kendoDropDownList").value(result[0].PositionID);
                         
@@ -195,7 +198,7 @@
                         $("#StrPSARenewal").prop("value", "0");
 
                         var psarenewalnumber = $("#PSARenewalNumber").data("kendoNumericTextBox");
-                        psarenewalnumber.readonly();
+                        $("#PSARenewalNumber").prop("readonly", "true");
 
                         var strpsarenewal = $("#StrPSARenewal").prop("readonly", "true");
                         
@@ -208,6 +211,7 @@
                         $("#Tenure").prop('value', 0);
                         $("#PSAExpiryDate").prop('value', joinDate);
                         $("#LastWorkingDate").prop('value', joinDate);
+
                     }
 
                 })             
