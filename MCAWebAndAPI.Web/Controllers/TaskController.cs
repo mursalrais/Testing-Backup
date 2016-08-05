@@ -35,15 +35,15 @@ namespace MCAWebAndAPI.Web.Controllers
             return RedirectToAction("Index", "Success");
         }
 
-        public ActionResult TaskByResource()
-        {
-            return View();
-        }
+        //public ActionResult TaskByResource()
+        //{
+        //    return view();
+        //}
 
-        public ActionResult TaskWithSingleResource()
-        {
-            return View();
-        }
+        //public ActionResult TaskWithSingleResource()
+        //{
+        //    return View();
+        //}
 
         //Task/GetTask
 

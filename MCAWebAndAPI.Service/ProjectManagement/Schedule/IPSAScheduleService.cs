@@ -12,5 +12,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
         bool CheckTwoMonthsBeforeExpireDate();
 
+        void changePSAstatus();
+
     }
 }

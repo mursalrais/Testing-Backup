@@ -188,6 +188,7 @@ namespace MCAWebAndAPI.Web.Controllers
             ViewBag.RequestorUserLogin = username;
 
             var viewModel = _service.GetManpowerRequisition(null);
+            viewModel.Username = username;
             return View(viewModel);
         }
 

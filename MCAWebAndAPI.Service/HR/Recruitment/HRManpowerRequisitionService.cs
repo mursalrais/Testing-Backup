@@ -36,6 +36,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 viewModel.Status.Value = "Draft";
             }
 
+            FieldUserValue visibleTo = SPConnector.GetUser(viewModel.Username,_siteUrl,"hr");
+
             updatedValue.Add("expectedjoindate", viewModel.ExpectedJoinDate);
             updatedValue.Add("requestdate", viewModel.DateRequested);
 
@@ -72,6 +74,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             updatedValue.Add("otherrequirements", viewModel.OtherRequirements);
             updatedValue.Add("remarks", viewModel.Remarks);
             updatedValue.Add("manpowerrequeststatus", viewModel.Status.Value);
+            updatedValue.Add("visibleto", visibleTo);
 
             try
             {
