@@ -16,7 +16,7 @@
     <RootNamespace>MCAWebAndAPI.Web</RootNamespace>
     <AssemblyName>MCAWebAndAPI.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -702,6 +702,7 @@
       <SubType>Designer</SubType>
     </None>
     <Content Include="JSLintNet.json" />
+    <None Include="Properties\PublishProfiles\Default Settings.pubxml" />
     <None Include="Properties\PublishProfiles\host.my-epmo.com.pubxml" />
     <None Include="Properties\PublishProfiles\mcaims-dev - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\mcaims-dev - Web Deploy.pubxml" />
@@ -719,7 +720,6 @@
     <Content Include="Scripts\custom.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
-    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
