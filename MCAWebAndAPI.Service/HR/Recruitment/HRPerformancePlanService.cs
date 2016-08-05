@@ -32,7 +32,14 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             columnValues.Add("professional", new FieldLookupValue { LookupId = (int)header.NameID });
             columnValues.Add("Position", new FieldLookupValue { LookupId = (int)header.PositionAndDepartementID });
             columnValues.Add("performanceplan", new FieldLookupValue { LookupId = (int)header.PerformancePeriodID });
-            columnValues.Add("pppstatus", "Pending Approval 1 of 2");
+            if (header.StatusForm == "DraftInitiated")
+            {
+                columnValues.Add("pppstatus", "Draft");
+            }
+            if (header.StatusForm == null)
+            {
+                columnValues.Add("pppstatus", "Pending Approval 1 of 2");
+            }
             try
             {
                 SPConnector.AddListItem(SP_PPP_LIST_NAME, columnValues, _siteUrl);
@@ -46,47 +53,72 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         }
 
-        public void CreatePerformancePlanDetails(int? headerID, IEnumerable<ProjectOrUnitGoalsDetailVM> PerformancePlanDetails)
+        public void CreatePerformancePlanDetails(int? headerID, int? performanceID, string email, string status, IEnumerable<ProjectOrUnitGoalsDetailVM> PerformancePlanDetails)
         {
             foreach (var viewModel in PerformancePlanDetails)
             {
-                if (Item.CheckIfSkipped(viewModel))
-                    continue;
-                if (Item.CheckIfDeleted(viewModel))
+                if (email != null)
                 {
+                    if (Item.CheckIfSkipped(viewModel))
+                        continue;
+                    if (Item.CheckIfDeleted(viewModel))
+                    {
+                        try
+                        {
+                            SPConnector.DeleteListItem(SP_PPPIG_LIST_NAME, viewModel.ID, _siteUrl);
+
+                        }
+                        catch (Exception e)
+                        {
+                            logger.Error(e);
+                            throw e;
+                        }
+                        continue;
+                    }
+                    var updatedValue = new Dictionary<string, object>();
+                    updatedValue.Add("projectunitgoals", viewModel.ProjectOrUnitGoals);
+                    updatedValue.Add("professionalperformanceplan", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
+                    updatedValue.Add("individualgoalcategory", viewModel.Category.Text);
+                    updatedValue.Add("individualgoalplan", viewModel.IndividualGoalAndPlan);
+                    updatedValue.Add("individualgoalweight", viewModel.Weight);
+
+                    if (viewModel.Remarks != null)
+                    {
+                        updatedValue.Add("individualgoalremarks", viewModel.Remarks);
+                    }
                     try
                     {
-                        SPConnector.DeleteListItem(SP_PPPIG_LIST_NAME, viewModel.ID, _siteUrl);
-
+                        if (Item.CheckIfUpdated(viewModel))
+                        {
+                            SPConnector.UpdateListItem(SP_PPPIG_LIST_NAME, viewModel.ID, updatedValue, _siteUrl);
+                        }
+                        else
+                        {
+                            updatedValue.Add("officeemail", email);
+                            updatedValue.Add("idperformanceplan", performanceID);
+                            SPConnector.AddListItem(SP_PPPIG_LIST_NAME, updatedValue, _siteUrl);
+                        }
                     }
                     catch (Exception e)
                     {
-                        logger.Error(e);
-                        throw e;
+                        logger.Error(e.Message);
+                        throw new Exception(ErrorResource.SPInsertError);
                     }
-                    continue;
                 }
-                var updatedValue = new Dictionary<string, object>();
-                updatedValue.Add("projectunitgoals", viewModel.ProjectOrUnitGoals);
-                updatedValue.Add("professionalperformanceplan", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
-                updatedValue.Add("individualgoalcategory", viewModel.Category.Text);
-                updatedValue.Add("individualgoalplan", viewModel.IndividualGoalAndPlan);
-                updatedValue.Add("individualgoalweight", viewModel.Weight);
-                if (viewModel.Remarks != null)
+
+                if (email == null && status == "Pending Approval 2 of 2" && PerformancePlanDetails.Count() != 0)
                 {
-                    updatedValue.Add("individualgoalremarks", viewModel.Remarks);
-                }
-                try
-                {
-                    if (Item.CheckIfUpdated(viewModel))
+                    var updatedValue = new Dictionary<string, object>();
+                    updatedValue.Add("status", "Approved");
+                    try
+                    {
                         SPConnector.UpdateListItem(SP_PPPIG_LIST_NAME, viewModel.ID, updatedValue, _siteUrl);
-                    else
-                        SPConnector.AddListItem(SP_PPPIG_LIST_NAME, updatedValue, _siteUrl);
-                }
-                catch (Exception e)
-                {
-                    logger.Error(e.Message);
-                    throw new Exception(ErrorResource.SPInsertError);
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error(e.Message);
+                        throw new Exception(ErrorResource.SPInsertError);
+                    }
                 }
             }
         }
@@ -109,6 +141,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.ProfessionalID = FormatUtil.ConvertLookupToID(listItem, "professional_x003a_ID");
             viewModel.PositionAndDepartement = FormatUtil.ConvertLookupToValue(listItem, "Position");
             viewModel.PerformancePeriod = FormatUtil.ConvertLookupToValue(listItem, "performanceplan");
+            viewModel.PerformancePeriodID = FormatUtil.ConvertLookupToID(listItem, "performanceplan");
             viewModel.StatusForm = Convert.ToString(listItem["pppstatus"]);
             viewModel.MajorStrength = Convert.ToString(listItem["majorstrength"]);
             viewModel.PerformanceArea = Convert.ToString(listItem["performancearea"]);
@@ -153,30 +186,43 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         public ProfessionalPerformancePlanVM GetPopulatedModel(string requestor = null)
         {
             var model = new ProfessionalPerformancePlanVM();
+            string period = null;
+            DateTime dateTemp = DateTime.UtcNow;
+            DateTime? createDate = null;
+            int idTemp = 0;
 
-            int dateTemp;
-            string emailTemp;
+            var caml = @"<View>  
+            <Query> 
+               <Where><Eq><FieldRef Name='officeemail' /><Value Type='Text'>" + requestor + @"</Value></Eq></Where> 
+            </Query> 
+      </View>";
+
             var models = new List<ProfessionalPerformancePlanVM>();
             foreach (var item in SPConnector.GetList(SP_PP_LIST_NAME, _siteUrl))
             {
-                dateTemp = Convert.ToInt32(item["Title"]);
-                if (model.DatetimeCaml == dateTemp)
+                dateTemp = Convert.ToDateTime(item["Created"]).ToLocalTime();
+
+                if (createDate == null)
                 {
-                    model.PerformancePeriod = Convert.ToString(item["Title"]);
-                    model.PerformancePeriodID = Convert.ToInt32(item["ID"]);
+                    createDate = Convert.ToDateTime(item["Created"]).ToLocalTime();
+                }
+                if (dateTemp >= createDate)
+                {
+                    createDate = dateTemp;
+                    period = Convert.ToString(item["Title"]);
+                    idTemp = Convert.ToInt32(item["ID"]);
                 }
             }
 
-            foreach (var item in SPConnector.GetList(SP_PM_LIST_NAME, _siteUrl))
+            model.PerformancePeriod = period;
+            model.PerformancePeriodID = idTemp;
+
+            foreach (var item in SPConnector.GetList(SP_PM_LIST_NAME, _siteUrl, caml))
             {
-                emailTemp = Convert.ToString(item["officeemail"]);
-                if (requestor == emailTemp)
-                {
-                    model.Name = Convert.ToString(item["Title"]);
-                    model.NameID = Convert.ToInt32(item["ID"]);
-                    model.PositionAndDepartement = FormatUtil.ConvertLookupToValue(item, "Position");
-                    model.PositionAndDepartementID = FormatUtil.ConvertLookupToID(item, "Position");
-                }
+                model.Name = Convert.ToString(item["Title"]);
+                model.NameID = Convert.ToInt32(item["ID"]);
+                model.PositionAndDepartement = FormatUtil.ConvertLookupToValue(item, "Position");
+                model.PositionAndDepartementID = FormatUtil.ConvertLookupToID(item, "Position");
             }
 
             return model;
@@ -234,9 +280,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
         }
 
-        public async Task CreatePerformancePlanDetailsAsync(int? headerID, IEnumerable<ProjectOrUnitGoalsDetailVM> performancePlanDetails)
+        public async Task CreatePerformancePlanDetailsAsync(int? headerID, int? performanceID, string email, string status, IEnumerable<ProjectOrUnitGoalsDetailVM> performancePlanDetails)
         {
-            CreatePerformancePlanDetails(headerID, performancePlanDetails);
+            CreatePerformancePlanDetails(headerID, performanceID, email, status, performancePlanDetails);
         }
 
         public void SendEmail(ProfessionalPerformancePlanVM header, string workflowTransactionListName, string transactionLookupColumnName, int headerID, int level, string messageForApprover, string messageForRequestor)
@@ -256,21 +302,29 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             </Query> 
             </View>";
 
-            var emails = new List<string>();
-            var professionalEmail = new List<string>();
-
+            string emails = null;
+            string professionalEmail = null;
+            var columnValues = new Dictionary<string, object>();
             if (header.Requestor != null)
             {
                 if (header.StatusForm == "Initiated" || header.StatusForm == "Pending Approval 1 of 2" || header.StatusForm == "Pending Approval 2 of 2" || header.StatusForm == null || header.StatusForm == "Draft")
                 {
                     foreach (var item in SPConnector.GetList(workflowTransactionListName, _siteUrl, caml))
                     {
-                        emails.Add(Convert.ToString(item["approver0"]));
-                    }
-                    foreach (var item in emails)
-                    {
-                        EmailUtil.Send(item, "Ask for Approval", messageForApprover);
+                        emails = Convert.ToString(item["approver0"]);
+
+                        EmailUtil.Send(emails, "Ask for Approval", messageForApprover);
                         //SPConnector.SendEmail(item, message, "Ask for Approval Level 2", _siteUrl);
+
+                        columnValues.Add("visibletoapprover1", SPConnector.GetUser(emails, _siteUrl, "hr"));
+                        try
+                        {
+                            SPConnector.UpdateListItem(SP_PPP_LIST_NAME, headerID, columnValues, _siteUrl);
+                        }
+                        catch (Exception e)
+                        {
+                            logger.Error(e.Message);
+                        }
                     }
                 }
             }
@@ -278,23 +332,28 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 foreach (var item in SPConnector.GetList(workflowTransactionListName, _siteUrl, caml))
                 {
-                    emails.Add(Convert.ToString(item["approver0"]));
-                }
-                foreach (var item in emails)
-                {
-                    EmailUtil.Send(item, "Ask for Approval", messageForApprover);
+                    emails = Convert.ToString(item["approver0"]);
+
+                    EmailUtil.Send(emails, "Ask for Approval", messageForApprover);
                     //SPConnector.SendEmail(item, message, "Ask for Approval Level 2", _siteUrl);
+
+                    columnValues.Add("visibletoapprover2", SPConnector.GetUser(emails, _siteUrl, "hr"));
+                    try
+                    {
+                        SPConnector.UpdateListItem(SP_PPP_LIST_NAME, headerID, columnValues, _siteUrl);
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error(e.Message);
+                    }
                 }
 
                 foreach (var item in SPConnector.GetList(SP_PPP_LIST_NAME, _siteUrl, camlprof))
                 {
-                    professionalEmail.Add(item["professional_x003a_Office_x0020_"] == null ? "" :
+                    professionalEmail = (item["professional_x003a_Office_x0020_"] == null ? "" :
                     Convert.ToString((item["professional_x003a_Office_x0020_"] as FieldLookupValue).LookupValue));
-                }
 
-                foreach (var item in professionalEmail)
-                {
-                    EmailUtil.Send(item, "Approved by Level 1", messageForRequestor);
+                    EmailUtil.Send(professionalEmail, "Approved by Level 1", messageForRequestor);
                     //SPConnector.SendEmail(item, "Approved by Level 1", _siteUrl);
                 }
             }
@@ -305,12 +364,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 {
                     foreach (var item in SPConnector.GetList(SP_PPP_LIST_NAME, _siteUrl, camlprof))
                     {
-                        professionalEmail.Add(item["professional_x003a_Office_x0020_"] == null ? "" :
+                        professionalEmail = (item["professional_x003a_Office_x0020_"] == null ? "" :
                        Convert.ToString((item["professional_x003a_Office_x0020_"] as FieldLookupValue).LookupValue));
-                    }
-                    foreach (var item in professionalEmail)
-                    {
-                        EmailUtil.Send(item, "Status", messageForRequestor);
+
+                        EmailUtil.Send(professionalEmail, "Status", messageForRequestor);
                         //SPConnector.SendEmail(item, message, "Ask for Approval", _siteUrl);
                     }
                 }

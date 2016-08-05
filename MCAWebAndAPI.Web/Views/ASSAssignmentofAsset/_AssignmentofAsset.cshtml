@@ -1,0 +1,56 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Asset
+@model IEnumerable<AssignmentofAssetDetailVM>
+
+<div class="col-sm-12">
+
+    @(Html.Kendo().Grid(Model)
+        .Name("Details")
+        .ToolBar(tools => tools.Create().Text("Add New Record"))
+        .Editable(editable => editable.Mode(GridEditMode.InCell)
+        .CreateAt(GridInsertRowPosition.Bottom))
+        .Columns(columns =>
+        {
+            columns.Bound(p => p.AssetSubAsset).ClientTemplate("#= AssetSubAsset #" +
+            "<input type='hidden' name='Details[#= getMonthlyFeeDetail(data)#].AssetSubAsset' value='#= AssetSubAsset #' />"
+            );
+
+            //columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
+            //"<input type='hidden' name='Details[#= getMonthlyFeeDetail(data)#].ID' value='#= ID #' />"
+            //);
+
+            //columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
+            //"<input type='hidden' name='Details[#= getMonthlyFeeDetail(data)#].EditMode' value='#= EditMode #' />"
+            //);
+
+            //columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
+            //.Click("onDeleteKendoDetail")).Width(100);
+        })
+        .Events(e =>
+        {
+            e.Edit("onEditKendoDetail");
+            e.DataBound("onDataBoundMonthlyFeeDetails");
+        })
+        .DataSource(dataSource => dataSource.Ajax()
+        .Model(model =>
+        {
+            model.Id(p => p.ID);
+            model.Field(m => m.AssetSubAsset);
+        })
+        .ServerOperation(false)
+        )
+    )
+</div>
+
+<script>
+    function getMonthlyFeeDetail(dataItem) {
+        var data = $("#Details").data("kendoGrid").dataSource.data();
+        dataItem.set('AssetSubAsset', dataItem.AssetSubAsset);
+        return data.indexOf(dataItem);
+    }
+
+    function onDataBoundMonthlyFeeDetails(e) {
+        var grid = $("#Details").data("kendoGrid");
+        hideDeletedRowKendoDetail(grid);
+    }
+</script>
+

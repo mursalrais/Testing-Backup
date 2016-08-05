@@ -1,60 +1,118 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.Asset
 
 @model AssignmentofAssetVM
- 
-<form class="form-horizontal" method="post" action="/ASSAssignmentofAsset/Create" id="create-assign-of-asset-form">
+
+@using (Ajax.BeginForm("SubmitMonthlyFee", "ASSAssignmentofAsset",
+                                                                                        FormMethod.Post,
+                                                                                        new AjaxOptions
+                                                                                        {
+                                                                                            OnBegin = "onBeginForm",
+                                                                                            OnComplete = "onCompleteForm",
+                                                                                            OnSuccess = "onSuccessFormEmbed",
+                                                                                            OnFailure = "onFailureForm"
+                                                                                        }, new { @class = "form-horizontal" }))
+{
     <fieldset>
-        <legend>Form Assign of Asset</legend>
+        <legend>Assignment of Asset</legend>
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary()
+
         <div class="col-md-6">
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.TransactionType).Class("col-md-4 control-label")
+                @Html.Bootstrap().LabelFor(m => m.TransactionType).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Html.DisplayFor(m => m.Header.TransactionType)
+                    @Html.DisplayFor(m => m.TransactionType)
                 </div>
             </div>
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.AssetHolder).Class("col-md-4 control-label")
+                @Html.Bootstrap().LabelFor(m => m.Date).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Html.EditorFor(m => m.Header.AssetHolder)
+                    @Html.EditorFor(m => m.Date)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.AssetHolder).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.AssetHolder)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Project).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.DisplayFor(m => m.Project)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.ContactNo).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.DisplayFor(m => m.ContactNo)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Attachment).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.Attachment)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.CompletionStatus).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.CompletionStatus)
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.Date).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.Header.Date)
-                </div>
-            </div>
-        </div>
+        <legend>Item Detail</legend>
         <div class="row">
-            <div class="col-md-12">
-                @(Html.Kendo().Grid(Model.Items)
-                    .Name("assignment-of-asset-items-grid")
-                    .Columns(columns =>
-                    {
-                        columns.Bound(p => p.NewAsset);
-                        columns.Bound(p => p.Item);
-                        columns.Bound(p => p.AssetNo);
-                        columns.Bound(p => p.SubAssetNo);
-                        columns.Bound(p => p.AssetDescription);
-                        columns.Bound(p => p.OfficeName);
-                        columns.Bound(p => p.FloorName);
-                        columns.Bound(p => p.RoomName);
-                        columns.Command(command => { command.Edit(); command.Destroy(); }).Width(250);
-                    })
-                    .ToolBar(toolbar => toolbar.Create())
-                    .Editable(editable => editable.Mode(GridEditMode.PopUp))
-                    .DataSource(dataSource => dataSource
-                        .Ajax()
-                        .Model(model => model.Id(p => p.Id))
-                        .Create(update => update.Action("EditingPopup_Create", "ASSAssignmentofAsset"))
-                        .Update(update => update.Action("EditingPopup_Update", "ASSAssignmentofAsset"))
-                        .Destroy(update => update.Action("EditingPopup_Destroy", "ASSAssignmentofAsset"))
-                        )
-                )
-            </div>
+      
+            @Html.Partial("_AssignmentofAsset", Model.AssignmentofAssets);
         </div>
     </fieldset>
 
-</form>
+<div class="form-actions">
+    <div class="row">
+        <div class="col-sm-12">
+            <button id="submit-button" class="btn btn-primary" type="submit">
+                <i class="fa fa-save"></i>
+            Submit
+            </button>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#submit-button").click(function () {
+                $("form").submit();
+            });
+        });
+
+        function OnSelectProfessionalName(e) {
+            var dataItem = this.dataItem(e.item);
+            var url = "/HRDataMaster/GetProfessional/" + dataItem.ID;
+            var urlPSA = "/HRPSAManagement/GetPSA/" + dataItem.ID;
+            $.getJSON(url, function (result) {
+                $('#ProfessionalID').prop('value', result[0].ID);
+                $('#Status').prop('value', result[0].Status);
+                $.getJSON(urlPSA, function (result) {
+                    if (result.length == 0) {
+                        $('#ProjectUnit').prop('value', "");
+                        $('#Position').prop('value', "");
+                        $('#JoinDate').prop('value', "");
+                        $('#DateOfNewPsa').prop('value', "");
+                        $('#EndOfContract').prop('value', "");
+                        alert("Professional Doesn't Have PSA");
+                    }
+                    else {
+                        $('#ProjectUnit').prop('value', result[0].ProjectOrUnit);
+                        $('#Position').prop('value', result[0].Position);
+                        $('#JoinDate').prop('value', result[0].JoinDate);
+                        $('#DateOfNewPsa').prop('value', result[0].DateOfNewPSA);
+                        $('#EndOfContract').prop('value', result[0].PsaExpiryDate);
+                    }
+                })
+            })
+        }
+    </script>
+
+}}

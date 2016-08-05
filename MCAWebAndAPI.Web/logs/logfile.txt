@@ -177,3 +177,43 @@ Please try again.
 2016-08-04 09:57:18.9713 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Cannot complete this action.
 
 Please try again.
+2016-08-04 15:38:14.1305 MCAWebAndAPI.Service.HR.Recruitment.HRInterviewService Value does not fall within the expected range.
+2016-08-05 05:03:36.9790 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Cannot complete this action.
+
+Please try again.
+2016-08-05 05:31:20.1701 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Item does not exist. It may have been deleted by another user.
+2016-08-05 05:32:09.0849 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Item does not exist. It may have been deleted by another user.
+2016-08-05 05:32:09.3719 MCAWebAndAPI.Service.Asset.AssetAcquisitionService System.ArgumentException: The 'sId' argument is invalid.
+   at Microsoft.SharePoint.Client.List.GetItemByStringId(String sId)
+   at MCAWebAndAPI.Service.Utils.SPConnector.UpdateListItem(String listName, Nullable`1 listItemID, Dictionary`2 updatedValues, String siteUrl) in D:\iMa\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 117
+   at MCAWebAndAPI.Service.Asset.AssetAcquisitionService.UpdateDetails(Nullable`1 headerID, IEnumerable`1 items) in D:\iMa\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetAcquisitionService.cs:line 246
+2016-08-05 05:44:15.9675 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Item does not exist. It may have been deleted by another user.
+2016-08-05 05:44:19.1447 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Microsoft.SharePoint.Client.ServerException: Value cannot be null.
+Parameter name: source
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in D:\iMa\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 195
+   at MCAWebAndAPI.Service.Asset.AssetAcquisitionService.UpdateDetails(Nullable`1 headerID, IEnumerable`1 items) in D:\iMa\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetAcquisitionService.cs:line 249
+2016-08-05 05:44:34.7646 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Item does not exist. It may have been deleted by another user.
+2016-08-05 05:46:33.7704 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Microsoft.SharePoint.Client.ServerException: Value cannot be null.
+Parameter name: source
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in D:\iMa\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 195
+   at MCAWebAndAPI.Service.Asset.AssetAcquisitionService.UpdateDetails(Nullable`1 headerID, IEnumerable`1 items) in D:\iMa\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetAcquisitionService.cs:line 249
+2016-08-05 05:55:27.0129 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Item does not exist. It may have been deleted by another user.
+2016-08-05 05:56:06.5691 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Microsoft.SharePoint.Client.ServerException: Value cannot be null.
+Parameter name: source
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in D:\iMa\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 195
+   at MCAWebAndAPI.Service.Asset.AssetAcquisitionService.UpdateDetails(Nullable`1 headerID, IEnumerable`1 items) in D:\iMa\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetAcquisitionService.cs:line 249
+2016-08-05 05:56:24.2922 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Item does not exist. It may have been deleted by another user.
+2016-08-05 05:59:40.6274 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Microsoft.SharePoint.Client.ServerException: Value cannot be null.
+Parameter name: source
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in D:\iMa\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 195
+   at MCAWebAndAPI.Service.Asset.AssetAcquisitionService.UpdateDetails(Nullable`1 headerID, IEnumerable`1 items) in D:\iMa\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetAcquisitionService.cs:line 249
+2016-08-05 05:59:53.8831 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Item does not exist. It may have been deleted by another user.
+2016-08-05 06:00:51.3414 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Microsoft.SharePoint.Client.ServerException: Value cannot be null.
+Parameter name: source
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in D:\iMa\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 195
+   at MCAWebAndAPI.Service.Asset.AssetAcquisitionService.UpdateDetails(Nullable`1 headerID, IEnumerable`1 items) in D:\iMa\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetAcquisitionService.cs:line 249
+2016-08-05 06:00:59.3459 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Item does not exist. It may have been deleted by another user.
+2016-08-05 06:05:02.7358 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Microsoft.SharePoint.Client.ServerException: Value cannot be null.
+Parameter name: source
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in D:\iMa\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 195
+   at MCAWebAndAPI.Service.Asset.AssetAcquisitionService.UpdateDetails(Nullable`1 headerID, IEnumerable`1 items) in D:\iMa\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetAcquisitionService.cs:line 249

@@ -22,16 +22,28 @@ namespace MCAWebAndAPI.Web.Controllers
             _assetAcquisitionService = new AssetAcquisitionService();
         }
 
-        public ActionResult Create()
+        public ActionResult Index()
         {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _assetAcquisitionService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            return Redirect(string.Format("{0}/{1}", siteUrl ?? ConfigResource.DefaultBOSiteUrl, UrlResource.AssetAcquisition));
+        }
+
+        public ActionResult Create(string siteUrl)
+        {
+            _assetAcquisitionService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
             var viewModel = _assetAcquisitionService.GetPopulatedModel();
             //var viewModelItem = _assetAcquisitionService.GetPopulatedModelItem();
             return View(viewModel);
         }
 
 
-        public ActionResult Edit(int ID, string site)
+        public ActionResult Edit(int ID, string siteUrl)
         {
+            _assetAcquisitionService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
             var viewModel = _assetAcquisitionService.GetHeader(ID);
 
             int? headerID = null;
@@ -40,6 +52,7 @@ namespace MCAWebAndAPI.Web.Controllers
             try
             {
                 var viewdetails = _assetAcquisitionService.GetDetails(headerID);
+                viewModel.Details = viewdetails;
             }
             catch (Exception e)
             {
@@ -51,8 +64,11 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult Submit(AssetAcquisitionHeaderVM _data, string site)
+        public ActionResult Submit(AssetAcquisitionHeaderVM _data, string siteUrl)
         {
+            siteUrl = SessionManager.Get<string>("SiteUrl");
+            _assetAcquisitionService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
             //return View(new AssetMasterVM());
             int? headerID = null;
             try
@@ -74,13 +90,43 @@ namespace MCAWebAndAPI.Web.Controllers
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl ?? ConfigResource.DefaultBOSiteUrl + UrlResource.AssetAcquisition);
+            //return Redirect(string.Format("{0}/{1}", siteUrl ?? ConfigResource.DefaultBOSiteUrl, UrlResource.AssetAcquisition));
+        }
 
-            return JsonHelper.GenerateJsonSuccessResponse(string.Format("{0}/{1}", "https://eceos2.sharepoint.com/sites/mca-dev/bo", UrlResource.AssetAcquisition));
+        public ActionResult Update(AssetAcquisitionHeaderVM _data, string SiteUrl)
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _assetAcquisitionService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            try
+            {
+                _assetAcquisitionService.UpdateHeader(_data);
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            try
+            {
+                //update items
+                _assetAcquisitionService.UpdateDetails(_data.ID, _data.Details);
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            return JsonHelper.GenerateJsonSuccessResponse(string.Format("{0}/{1}", SiteUrl, UrlResource.AssetAcquisition));
         }
 
         public JsonResult GetAssetSubSAssetGrid()
         {
-            _assetAcquisitionService.SetSiteUrl("https://eceos2.sharepoint.com/sites/mca-dev/bo");
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _assetAcquisitionService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
             var positions = GetFromPositionsExistingSession();
 
@@ -100,6 +146,32 @@ namespace MCAWebAndAPI.Web.Controllers
 
             if (sessionVariable == null) // If no session variable is found
                 System.Web.HttpContext.Current.Session["AssetMaster"] = positions;
+            return positions;
+        }
+
+        public JsonResult GetWBSGrid()
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _assetAcquisitionService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            var positions = GetFromWBSExistingSession();
+
+            return Json(positions.Select(e =>
+                new {
+                    Value = Convert.ToString(e.ID),
+                    Text = e.WBSID + " - " + e.WBDDesc
+                }),
+                JsonRequestBehavior.AllowGet);
+        }
+
+        private IEnumerable<WBSMaterVM> GetFromWBSExistingSession()
+        {
+            //Get existing session variable
+            var sessionVariable = System.Web.HttpContext.Current.Session["AssetAcquisition"] as IEnumerable<WBSMaterVM>;
+            var positions = sessionVariable ?? _assetAcquisitionService.GetWBS();
+
+            if (sessionVariable == null) // If no session variable is found
+                System.Web.HttpContext.Current.Session["AssetAcquisition"] = positions;
             return positions;
         }
     }

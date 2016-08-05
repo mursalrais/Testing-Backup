@@ -92,6 +92,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             string emailTo;
             int IdDetail;
             int IDHeaderPLan = SPConnector.GetLatestListItemID(SP_LIST_PLAN, _siteUrl);
+            FieldUserValue visibleTo;
             foreach (var item in listItem)
             {
                 updatedValues = new Dictionary<string, object>();
@@ -104,6 +105,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 }
                 updatedValues.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(item["ID"]) });
                 emailTo = Convert.ToString(item["officeemail"]);
+                visibleTo = SPConnector.GetUser(emailTo, _siteUrl, "hr");
+                updatedValues.Add("visibleto", visibleTo);
                 try
                 {
                     SPConnector.AddListItem(SP_DETAIL_LIST_NAME, updatedValues, _siteUrl);
@@ -135,15 +138,15 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     throw e;
                 }
 
-                caml = @"<View><Query><Where><And><Eq><FieldRef Name='idperformanceplan' /><Value Type='Number'>" + IDHeaderPLan + "</Value></Eq><And><Eq><FieldRef Name='status' /><Value Type='Text'>Approved</Value></Eq><Eq><FieldRef Name='officeemail' /><Value Type='Text'>" + emailTo + "</Value></Eq></And></And></Where></Query><ViewFields><FieldRef Name='ID' /><FieldRef Name='Title' /><FieldRef Name='Edit' /><FieldRef Name='LinkTitleNoMenu' /><FieldRef Name='LinkTitle' /><FieldRef Name='DocIcon' /><FieldRef Name='AppAuthor' /><FieldRef Name='AppEditor' /><FieldRef Name='projectunitgoals' /><FieldRef Name='individualgoalcategory' /><FieldRef Name='individualgoalplan' /><FieldRef Name='individualgoalweight' /><FieldRef Name='individualgoalremarks' /><FieldRef Name='professionalperformanceplandetai' /><FieldRef Name='professionalperformanceplan' /></ViewFields><QueryOptions /></View>";
+                caml = @"<View><Query><Where><And><Eq><FieldRef Name='idperformanceplan' /><Value Type='Number'>" + IDHeaderPLan.ToString() + "</Value></Eq><And><Eq><FieldRef Name='status' /><Value Type='Text'>Approved</Value></Eq><Eq><FieldRef Name='officeemail' /><Value Type='Text'>" + emailTo + "</Value></Eq></And></And></Where></Query><ViewFields><FieldRef Name='ID' /><FieldRef Name='Title' /><FieldRef Name='Edit' /><FieldRef Name='LinkTitleNoMenu' /><FieldRef Name='LinkTitle' /><FieldRef Name='DocIcon' /><FieldRef Name='AppAuthor' /><FieldRef Name='AppEditor' /><FieldRef Name='projectunitgoals' /><FieldRef Name='individualgoalcategory' /><FieldRef Name='individualgoalplan' /><FieldRef Name='individualgoalweight' /><FieldRef Name='individualgoalremarks' /><FieldRef Name='professionalperformanceplandetai' /><FieldRef Name='professionalperformanceplan' /></ViewFields><QueryOptions /></View>";
                 var placeItem = SPConnector.GetList(SP_PPP_INDIVIDUAL_PLAN, _siteUrl, caml);
 
                 foreach (var pppIndividual in placeItem)
                 {
                     updatedValues = new Dictionary<string, object>();
-                    updatedValues.Add("individualgoalplan", Convert.ToString(item["individualgoalplan"]));
-                    updatedValues.Add("individualgoalcategory", Convert.ToString(item["individualgoalcategory"]));
-                    updatedValues.Add("individualgoalweight", Convert.ToString(item["individualgoalweight"]));
+                    updatedValues.Add("individualgoalplan", Convert.ToString(pppIndividual["individualgoalplan"]));
+                    updatedValues.Add("individualgoalcategory", Convert.ToString(pppIndividual["individualgoalcategory"]));
+                    updatedValues.Add("individualgoalweight", Convert.ToString(pppIndividual["individualgoalweight"]));
                     updatedValues.Add("professionalperformanceevaluatio", new FieldLookupValue { LookupId = Convert.ToInt32(IdDetail) });
 
                     try

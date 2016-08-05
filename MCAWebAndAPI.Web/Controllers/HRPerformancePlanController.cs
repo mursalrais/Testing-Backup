@@ -55,17 +55,6 @@ namespace MCAWebAndAPI.Web.Controllers
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _hRPerformancePlanService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
-            int? headerID = null;
-            try
-            {
-                headerID = _hRPerformancePlanService.CreateHeader(viewModel);
-            }
-            catch (Exception e)
-            {
-                ErrorSignal.FromCurrentContext().Raise(e);
-                return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
-            }
-
             var Detail = viewModel.ProjectOrUnitGoalsDetails;
             var Count = Detail.Count();
             int sum = 0;
@@ -140,13 +129,24 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse("Weight must be total 100%");
             }
 
+            int? headerID = null;
+            try
+            {
+                headerID = _hRPerformancePlanService.CreateHeader(viewModel);
+            }
+            catch (Exception e)
+            {
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
+            }
+
             if (viewModel.StatusForm != "DraftInitiated")
             {
                 Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateTransactionWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)headerID);
             }
 
-            Task createPerformancePlanDetailsTask = _hRPerformancePlanService.CreatePerformancePlanDetailsAsync(headerID, viewModel.ProjectOrUnitGoalsDetails);
+            Task createPerformancePlanDetailsTask = _hRPerformancePlanService.CreatePerformancePlanDetailsAsync(headerID, viewModel.PerformancePeriodID, viewModel.Requestor, viewModel.StatusForm, viewModel.ProjectOrUnitGoalsDetails);
 
             Task allTasks = Task.WhenAll(createPerformancePlanDetailsTask);
 
@@ -285,21 +285,19 @@ namespace MCAWebAndAPI.Web.Controllers
                 Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateTransactionWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.ID);
             }
-            if (viewModel.Requestor != null)
+
+            Task createPerformancePlanDetailsTask = _hRPerformancePlanService.CreatePerformancePlanDetailsAsync(viewModel.ID, viewModel.PerformancePeriodID, viewModel.Requestor, viewModel.StatusForm, viewModel.ProjectOrUnitGoalsDetails);
+
+            Task allTasks = Task.WhenAll(createPerformancePlanDetailsTask);
+
+            try
             {
-                Task createPerformancePlanDetailsTask = _hRPerformancePlanService.CreatePerformancePlanDetailsAsync(viewModel.ID, viewModel.ProjectOrUnitGoalsDetails);
-
-                Task allTasks = Task.WhenAll(createPerformancePlanDetailsTask);
-
-                try
-                {
-                    await allTasks;
-                }
-                catch (Exception e)
-                {
-                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                    return JsonHelper.GenerateJsonErrorResponse(e);
-                }
+                await allTasks;
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
             try
