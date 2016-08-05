@@ -1,48 +1,112 @@
-﻿using System;
+﻿using MCAWebAndAPI.Model.Common;
+using MCAWebAndAPI.Model.ViewModel.Control;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 {
-    public class AssignmentofAssetVM
+    public class AssignmentofAssetVM : Item
     {
-        private AssignmentofAssetHeaderVM _header;
-        private IEnumerable<AssignmentofAssetItemVM> _items;
+        public IEnumerable<AssignmentofAssetDetailVM> AssignmentofAssets { get; set; } = new List<AssignmentofAssetDetailVM>();
 
-        public AssignmentofAssetHeaderVM Header
+        private DateTime _date;
+        private ComboBoxVM _assetHolder, _completionStatus, _acceptanceMemoNo;
+
+        public int Id { get; set; }
+
+        [Required(ErrorMessage = "Transaction Type Field Is Required")]
+        public string TransactionType { get; set; }
+
+        [Required]
+        public DateTime Date
         {
             get
             {
-                if (_header == null)
+                if (_date == null)
                 {
-                    _header = new AssignmentofAssetHeaderVM();
+                    _date = new DateTime();
                 }
-                return _header;
+                return _date;
             }
 
             set
             {
-                _header = value;
+                _date = value;
             }
         }
 
-        public IEnumerable<AssignmentofAssetItemVM> Items
+        [DisplayName("Asset Holder")]
+        [Required]
+        [UIHint("ComboBox")]
+        public ComboBoxVM AssetHolder
         {
             get
             {
-                if (_items == null)
+                if (_assetHolder == null)
                 {
-                    _items = new List<AssignmentofAssetItemVM>();
+                    _assetHolder = new ComboBoxVM()
+                    {
+                        Choices = new string[]
+                        {
+                            "Yunita-Manafer",
+                            "Agus - Developer"
+                        }
+                    };
+
                 }
-                return _items;
+                return _assetHolder;
             }
 
             set
             {
-                _items = value;
+                _acceptanceMemoNo = value;
             }
         }
+
+        public string Project { get; set; }
+
+        public string ContactNo { get; set; }
+
+        [UIHint("MultiFileUploader")]
+        public IEnumerable<HttpPostedFileBase> Attachment { get; set; } = new List<HttpPostedFileBase>();
+
+        public string DocumentUrl { get; set; }
+
+        [UIHint("ComboBox")]
+        public ComboBoxVM CompletionStatus
+        {
+            get
+            {
+                if (_completionStatus == null)
+                {
+                    _completionStatus = new ComboBoxVM()
+                    {
+                        Choices = new string[]
+                        {
+                            "In Progres",
+                            "Done"
+                        }
+                    };
+
+                }
+                return _completionStatus;
+            }
+
+            set
+            {
+                _completionStatus = value;
+            }
+        }
+
+
     }
-}
+
+    
+    }
+

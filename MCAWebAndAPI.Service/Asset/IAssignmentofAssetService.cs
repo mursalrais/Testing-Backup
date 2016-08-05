@@ -13,9 +13,19 @@ namespace MCAWebAndAPI.Service.Asset
 
         IEnumerable<AssignmentofAssetVM> GetAssignmentofAsset();
 
+        AssignmentofAssetVM GetPopulatedModel(int? id = null);
+
+        AssignmentofAssetVM GetHeader(int? ID);
+
+        int CreateHeader(AssignmentofAssetVM header);
+
+        bool UpdateHeader(AssignmentofAssetVM header);
+
         bool CreateAssignmentofAsset(AssignmentofAssetVM assignmentofAsset);
 
         bool UpdateAssignmentofAsset(AssignmentofAssetVM assignmentofAsset);
+
+        void CreateMonthlyFeeDetails(int? headerID, IEnumerable<AssignmentofAssetVM> monthlyFeeDetails);
 
         bool CreateAssignmentofAsset_Dummy(AssignmentofAssetItemVM assignmentofAsset);
 
