@@ -132,7 +132,7 @@ new
                        model.Field(m => m.DateOfApproval).DefaultValue(DateTime.UtcNow);
                        model.Field(m => m.ProfessionalUnit).DefaultValue(ExitProcedureChecklistVM.GetProfessionalUnitDefaultValue());
                        model.Field(m => m.ProfessionalPosition).DefaultValue(ExitProcedureChecklistVM.GetProfessionalPositionDefaultValue());
-
+                       
                    })
                    .ServerOperation(false)
                    .PageSize(10)
@@ -140,3 +140,4 @@ new
 
     )
 </div>
+

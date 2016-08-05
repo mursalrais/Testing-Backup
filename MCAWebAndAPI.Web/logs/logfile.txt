@@ -149,14 +149,3 @@ Parameter name: address
 2016-08-01 11:11:32.3030 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Item does not exist. It may have been deleted by another user.
 2016-08-02 08:39:10.6719 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Item does not exist. It may have been deleted by another user.
 2016-08-02 08:39:56.3489 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Item does not exist. It may have been deleted by another user.
-2016-08-04 03:08:28.1614 MCAWebAndAPI.Service.Asset.AssetMasterService Operation is not valid due to the current state of the object.
-2016-08-04 22:32:37.7755 MCAWebAndAPI.Service.Converter.CSVConverter System.IndexOutOfRangeException: Index was outside the bounds of the array.
-   at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64
-2016-08-04 22:32:54.7734 MCAWebAndAPI.Service.Converter.CSVConverter System.IndexOutOfRangeException: Index was outside the bounds of the array.
-   at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64
-2016-08-04 22:33:09.1943 MCAWebAndAPI.Service.Converter.CSVConverter System.IndexOutOfRangeException: Index was outside the bounds of the array.
-   at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64
-2016-08-04 22:39:40.4196 MCAWebAndAPI.Service.Converter.CSVConverter System.IndexOutOfRangeException: Index was outside the bounds of the array.
-   at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64
-2016-08-04 22:40:12.3744 MCAWebAndAPI.Service.Converter.CSVConverter System.IndexOutOfRangeException: Index was outside the bounds of the array.
-   at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64

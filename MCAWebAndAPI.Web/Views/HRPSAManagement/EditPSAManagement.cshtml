@@ -37,7 +37,7 @@
     <div class="row">
         <div class="col-md-12">
             
-            <button id="submit-button" class="btn btn-primary" type="submit">
+            <button id="submit-button" class="btn btn-primary" type="button" onclick="checkOverlapping()">
                 <i class="fa fa-save"></i>
                 Submit
             </button>
@@ -48,14 +48,51 @@
 @section scripts{
     <script type="text/javascript">
 
+        function checkOverlapping() {
 
-            $(document).ready(function () {
-                $("#submit-button").click(function () {
-                $("form").submit();
-            });
+            var psaRenewalNumber = $("#PSARenewalNumber").val()
+            var strPSARenewal = $("#StrPSARenewal").val()
 
-        });
+            if (strPSARenewal != "0") {
 
+                var dateOfNewPSA = $("#DateOfNewPSA").val();
+                var dateofNewPSADate = new Date(dateOfNewPSA);
+                var psaExpiryDate = $("#PSAExpiryDate").val();
+                var psaExpiryDateDate = new Date(psaExpiryDate);
+                var dateOfNewPSABefore = $("#DateOfNewPSABefore").val();
+                var dateofNewPSABeforeDate = new Date(dateOfNewPSABefore);
+                var psaExpiredDateBefore = $('#ExpireDateBefore').val();
+                var psaExpiryDateBeforeDate = new Date(psaExpiredDateBefore);
+
+                //Cek Overlapping Date of New PSA
+                if ((dateofNewPSADate > dateofNewPSABeforeDate) && (dateofNewPSADate < psaExpiryDateBeforeDate)) {
+                    //Warning overlapping star tdate
+
+                    var confirmationValue = confirm("Date of New PSA for New Contract is less than PSA Expiry Date on last contract");
+                    if (confirmationValue == true) {
+                        $("form").submit();
+                    }
+                    if (confirmationValue == false) {
+
+                        return false;
+                    }
+                }
+                    //Cek Overlapping PSA Expired Date
+                else if ((dateofNewPSADate > dateofNewPSABeforeDate) && (dateofNewPSADate < psaExpiryDateBeforeDate) && (psaExpiryDateDate < psaExpiredDateBeforeDate)) {
+                    //Warning overlapping star date dan end date
+                    var confirmationValue = confirm("Range date of New Contract is between of last contract")
+                    if (confirmationValue == true) {
+                        $("form").submit();
+                    }
+                    if (confirmationValue == false) {
+                        return false;
+                    }
+                }
+                else {
+                    $("form").submit();
+                }
+            }
+        }
 
         function onSuccess(data) {
             window.location.href = data.urlToRedirect;
@@ -121,28 +158,27 @@
                 })
             }
 
-            //function OnSelectPosition(e) {
-            //    var dataItem = this.dataItem(e.item);
-            //    var urlKeyPosition = "/HRDataMaster/GetKeyPosition/" + dataItem.ID;
+            function OnSelectPosition(e) {
+                var dataItem = this.dataItem(e.item);
+                var urlKeyPosition = "/HRDataMaster/GetKeyPosition/" + dataItem.ID;
 
-            //    $.getJSON(urlKeyPosition, function (result) {
+                $.getJSON(urlKeyPosition, function (result) {
 
-            //        if (result[0].isKeyPosition == "Yes")
-            //        {
-            //            $('#KeyPosition').prop('value', "You must upload file with format name: MCCNoObjectionLetter-XXXX" + "XXXX is a ordering number such as: 0001");
-            //            $('#DocumentType').prop('value', "MCC No Objection Letter");
-            //            $('#KeyPositionValue').prop('value', "Yes");
+                    if (result[0].isKeyPosition == "Yes")
+                    {
+                        $('#KeyPosition').prop('value', "You must upload file with format name: MCCNoObjectionLetter-XXXX" + "XXXX is a ordering number such as: 0001");
+                        $('#DocumentType').prop('value', "MCC No Objection Letter");
+                        $('#KeyPositionValue').prop('value', "Yes");
 
-            //        }
-            //        /*
-            //        else
-            //        {
-            //            $('#KeyPosition').prop('value', "You must upload file with format name: PSADocuments-MMDDYYYY");
-            //            $('#DocumentType').prop('value', "PSA Document");
-            //            $('#KeyPositionValue').prop('value', "No");
-            //        }
-            //        */
-            //    })
+                    }
+                    else
+                    {
+                        $('#KeyPosition').prop('value', "You must upload file with format name: PSADocuments-MMDDYYYY");
+                        $('#DocumentType').prop('value', "PSA Document");
+                        $('#KeyPositionValue').prop('value', "No");
+                    }
+                    
+                })
 
 
             }
@@ -223,6 +259,45 @@
                     
                  }
            }
+
+           $(document).ready(function () {
+               $("#Tenure").kendoNumericTextBox({
+                   change: onChange,
+                   spin: onSpin
+               });
+
+               function onChange() {
+                   sumCal();
+               }
+
+               function onSpin() {
+                   sumCal();
+               }
+
+               function sumCal() {
+
+                   var dateOfNewPSA = $("#DateOfNewPSA").val();
+                   var dateofnewpsa = new Date(dateOfNewPSA);
+                   var monthpsa = dateofnewpsa.getMonth();
+                   var monthint = parseInt(monthpsa);
+                   var datepsa = dateofnewpsa.getDate();
+                   var tenure = $("#Tenure").val();
+                   var tenureint = parseInt(tenure);
+                   var addtenure = tenureint + monthint;
+                   var setmonth = new Date(dateofnewpsa.setMonth(addtenure));
+                   var psaexpirydate = setmonth.getMonth() + 1 + '/' + setmonth.getDate() + '/' + setmonth.getFullYear();
+
+                   $("#PSAExpiryDate").val(psaexpirydate);
+                   $("#LastWorkingDate").val(psaexpirydate);
+
+                   var datepsa = $("#DateOfNewPSA").val();
+                   var dateofnewpsabefore = $("#DateOfNewPSABefore").val();
+                   var expirydate = $("#DateOfNewPSABefore").val();
+                   var expiredatebefore = $("#ExpireDateBefore").val();
+
+               }
+
+           });
 
            //function onSelectPSA(e) {
 

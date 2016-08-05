@@ -46,6 +46,10 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [Required]
         public int PSARenewalNumber { get; set; }
 
+        [DisplayName("Renewal#")]
+        [Required]
+        public string StrPSARenewal { get; set; }
+
         public int PSAId { get; set; }
 
         /// <summary>
@@ -146,6 +150,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [UIHint("Int32")]
         [DisplayName("Tenure")]
         [Required]
+        [Range(0, 5, ErrorMessage = "Only 0-5")]
         public int Tenure { get; set; }
 
         [DisplayName("Tenure")]
@@ -227,6 +232,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         };
 
         public string ProfessionalMail { get; set; }
+
+        public string ProfessionalFullName { get; set; }
 
     }
 }

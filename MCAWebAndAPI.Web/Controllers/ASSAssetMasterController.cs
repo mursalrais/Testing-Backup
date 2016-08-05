@@ -14,7 +14,6 @@ using MCAWebAndAPI.Service.Converter;
 using MCAWebAndAPI.Service.Utils;
 using Kendo.Mvc.UI;
 using Kendo.Mvc.Extensions;
-using MCAWebAndAPI.Service.Resources;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -66,30 +65,22 @@ namespace MCAWebAndAPI.Web.Controllers
         [HttpPost]
         public ActionResult Submit(AssetMasterVM _data, string site)
         {
-            var siteUrl = SessionManager.Get<string>("SiteUrl");
-            _assetMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
             //return View(new AssetMasterVM());
             _assetMasterService.CreateAssetMaster(_data);
-
-            return JsonHelper.GenerateJsonSuccessResponse(string.Format("{0}/{1}", "https://eceos2.sharepoint.com/sites/mca-dev/bo", UrlResource.Professional));
-            //return new JavaScriptResult
-            //{
-
-            //Script = string.Format("window.parent.location.href = '{0}'", "https://eceos2.sharepoint.com/sites/mca-dev/bo/Lists/AssetMaster/AllItems.aspx")
-            //};
+            return new JavaScriptResult
+            {
+                Script = string.Format("window.parent.location.href = '{0}'", "https://eceos2.sharepoint.com/sites/mca-dev/bo/Lists/AssetMaster/AllItems.aspx")
+            };
         }
 
         public ActionResult Update(AssetMasterVM _data, string site)
         {
-            var siteUrl = SessionManager.Get<string>("SiteUrl");
-            _assetMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
             //return View(new AssetMasterVM());
             _assetMasterService.UpdateAssetMaster(_data);
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl);
-            //return new JavaScriptResult
-            //{
-            //    Script = string.Format("window.parent.location.href = '{0}'", "https://eceos2.sharepoint.com/sites/mca-dev/bo/Lists/AssetMaster/AllItems.aspx")
-            //};
+            return new JavaScriptResult
+            {
+                Script = string.Format("window.parent.location.href = '{0}'", "https://eceos2.sharepoint.com/sites/mca-dev/bo/Lists/AssetMaster/AllItems.aspx")
+            };
         }
 
         [HttpGet]

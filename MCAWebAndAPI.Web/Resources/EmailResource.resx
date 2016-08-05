@@ -138,7 +138,7 @@ Kindly check the link as per below to go to direct page accordingly. You may che
 
 page in IMS (My Approval View). Thank you.    
 
-Link : {0}/Lists/Manpower%20Requisition/ApprovalManpower.aspx?ID={1}</value>
+Link : {0}/Lists/CompensatoryRequest/FormCompensatoryRequest.aspx?ID={1}</value>
   </data>
   <data name="EmailInterviewToInterviewCandidate" xml:space="preserve">
     <value>Dear Interview Panel,
