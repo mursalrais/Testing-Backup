@@ -26,8 +26,6 @@
 
         <input type="hidden" id="loadpage" value="0">
 
-        @if (Model.Requestor == null)
-        {
         <div class="row">
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.ddlProfessional).Class("col-xs-2 control-label")
@@ -36,19 +34,6 @@
                 </div>
             </div>
         </div>
-        }
-        else
-        {
-            <div class="row">
-                <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.cmpName).Class("col-xs-2 control-label")
-                    <div class="col-xs-4">
-                        <input id="ProfName" class="form-control" value="" />
-                    </div>
-                </div>
-            </div>
-        }
-
         <div class="row">
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.cmpProjUnit).Class("col-xs-2 control-label")
@@ -297,7 +282,7 @@
                             range = finish - start
                             data.set("CmpTotalHours", range);
                             data.CmpTotalHours = range;
-                            data.set("TotalDay", range / 12)
+                            data.set("TotalDay", range / 4)
                         }
                         data.set("EditMode", 1);
                     }

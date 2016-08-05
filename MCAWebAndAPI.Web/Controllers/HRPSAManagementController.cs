@@ -11,6 +11,7 @@ using MCAWebAndAPI.Model.HR.DataMaster;
 using MCAWebAndAPI.Service.HR.Recruitment;
 using Elmah;
 using System.Net;
+using MCAWebAndAPI.Service.JobSchedulers.Schedulers;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -42,6 +43,22 @@ namespace MCAWebAndAPI.Web.Controllers
             return View("CreatePSAManagement", viewModel);
         }
 
+        public ActionResult CheckTwoMonthBeforeExpiryDate(string siteUrl = null, int? ID = null)
+        {
+            psaManagementService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            var viewModel = psaManagementService.GetPSAManagement(ID);
+
+            DateTime CalculateTwoMonth = viewModel.PSAExpiryDate.Value.AddMonths(-2);
+            viewModel.TwoMonthBeforeExpiryDate = CalculateTwoMonth;
+
+            string StrCalculateTwoMonth = CalculateTwoMonth.ToLocalTime().ToShortDateString();
+            viewModel.StrTwoMonthBeforeExpiryDate = StrCalculateTwoMonth;
+
+            return View("TestCalculateTwoMonths", viewModel);
+        }
+
         
         public ActionResult DisplayPSAManagement(string siteUrl = null, int? ID = null)
         {
@@ -50,6 +67,10 @@ namespace MCAWebAndAPI.Web.Controllers
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             var viewModel = psaManagementService.GetPSAManagement(ID);
+
+            string professionalFullName = psaManagementService.GetProfessionalFullName(viewModel.Professional.Value);
+
+            viewModel.ProfessionalFullName = Convert.ToString(professionalFullName);
 
             if(viewModel.PSAStatus.Text == "Active")
             {
@@ -89,7 +110,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             try
             {
-                //viewModel.PSAStatus.Value = "Inactive";
+                viewModel.PSAStatus.Value = "Active";
                 //viewModel.HiddenExpiryDate = viewModel.PSAExpiryDate;
                 psaID = psaManagementService.CreatePSAManagement(viewModel);
                 //dayOffService.PopulateBalance(psaID.Value,viewModel,"Create");
@@ -109,6 +130,16 @@ namespace MCAWebAndAPI.Web.Controllers
                 ErrorSignal.FromCurrentContext().Raise(e);
                 return RedirectToAction("Index", "Error");
             }
+
+            int psaRenewalNumberMinusOne = Convert.ToInt32(viewModel.PSARenewalNumber) - 1;
+
+            string professionalName = psaManagementService.GetProfessionalName(viewModel.Professional.Value);
+
+            if(psaRenewalNumberMinusOne >= 0)
+            {
+                psaManagementService.UpdateStatusPSABefore(psaRenewalNumberMinusOne, professionalName);
+            }
+
 
             //if (viewModel.PSAId == 0)
             //{
@@ -366,10 +397,15 @@ namespace MCAWebAndAPI.Web.Controllers
             //        }
             //    }      
             //}
+            
+            psaManagementService.UpdateProfessionalFromPSA(viewModel, psaID);
+
 
             if (viewModel.PerformancePlan.Value == "Yes")
             {
-                psaManagementService.SendMailPerformancePlan(viewModel.ProfessionalMail, string.Format("Please kindly click this url to create Performance Plan:{0}{1}/NewForm_Custom.aspx", siteUrl, UrlResource.ProfessionalPerformancePlan));
+                DateTime today = DateTime.Now;
+
+                psaManagementService.SendMailPerformancePlan(viewModel.Professional.Value, siteUrl, today);
             }
 
             
@@ -469,7 +505,10 @@ namespace MCAWebAndAPI.Web.Controllers
                     e.DateOfNewPSABefore,
                     e.DateNewPSABefore,
                     e.JoinDate,
-                    e.ProfessionalMail
+                    e.ProfessionalMail,
+                    e.ProjectUnit,
+                    e.StrPSARenewal,
+                    e.PositionID
                     }
             ), JsonRequestBehavior.AllowGet);
         }
@@ -513,6 +552,36 @@ namespace MCAWebAndAPI.Web.Controllers
                 System.Web.HttpContext.Current.Session["PSAJoinDate"] = joindate;
             return joindate;
         }
+
+        public ActionResult PSAScheduler(string siteUrl = null)
+        {
+            int psaID = psaManagementService.GetPSALatestID(siteUrl);
+
+            try
+            {
+                PSAManagementScheduler.DoNow_OnceEveryDay(psaID, siteUrl);
+            }
+            catch (Exception e)
+            {
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return RedirectToAction("Index", "Error");
+            }
+            return RedirectToAction("Index", "Success");
+        }
+
+        //public ActionResult CalculateTask(string siteUrl = null)
+        //{
+        //    try
+        //    {
+        //        TaskCalculationScheduler.DoNow_OnceEveryDay(siteUrl);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        ErrorSignal.FromCurrentContext().Raise(e);
+        //        return RedirectToAction("Index", "Error");
+        //    }
+        //    return RedirectToAction("Index", "Success");
+        //}
 
     }
 

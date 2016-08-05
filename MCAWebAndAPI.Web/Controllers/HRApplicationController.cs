@@ -263,7 +263,7 @@ namespace MCAWebAndAPI.Web.Controllers
             // MANDATORY: Set Site URL
             _service.SetSiteUrl(siteUrl);
             SessionManager.Set("SiteUrl", siteUrl);
-
+            
             var viewModel = _service.GetApplication(null);
             viewModel.Position = position;
             viewModel.ManpowerRequisitionID = ID;

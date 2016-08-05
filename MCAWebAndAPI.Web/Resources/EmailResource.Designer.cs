@@ -79,6 +79,23 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dear Respective Approver,
+        ///
+        ///    This email is sent to you to notify that there is a request which required your action to approve.
+        ///
+        ///Kindly check the link as per below to go to direct page accordingly. You may check your personal
+        ///
+        ///page in IMS (My Approval View). Thank you.    
+        ///
+        ///Link : {0}/Lists/CompensatoryRequest/FormCompensatoryRequest.aspx?ID={1}.
+        /// </summary>
+        public static string EmailCompensatoryApproval {
+            get {
+                return ResourceManager.GetString("EmailCompensatoryApproval", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dear Interview Panel,
         ///
         ///{0}

@@ -7,6 +7,10 @@ using MCAWebAndAPI.Model.ViewModel.Form.Asset;
 using MCAWebAndAPI.Service.Asset;
 using Kendo.Mvc.UI;
 using Kendo.Mvc.Extensions;
+using MCAWebAndAPI.Web.Resources;
+using MCAWebAndAPI.Web.Helpers;
+using System.Net;
+using MCAWebAndAPI.Service.Resources;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -25,45 +29,87 @@ namespace MCAWebAndAPI.Web.Controllers
             return View();
         }
 
-        public ActionResult Create()
+        public ActionResult Create(string siteUrl = null)
         {
-            var viewModel = assignmentofAssetService.GetAssignmentofAssetItems_Dummy();
+            assignmentofAssetService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            var viewModel = assignmentofAssetService.GetPopulatedModel();
 
             return View(viewModel);
         }
 
-        public ActionResult Edit()
-        {
-            var viewModel = new AssignmentofAssetVM();
 
-            return View(viewModel);
-        }
-
-        [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult EditingPopup_Create([DataSourceRequest] DataSourceRequest request, AssignmentofAssetItemVM _AssignmentofAssetItemVM)
+        [HttpPost]
+        public ActionResult SubmitMonthlyFee(FormCollection form, AssignmentofAssetVM viewModel)
         {
-            if (_AssignmentofAssetItemVM != null && ModelState.IsValid)
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            assignmentofAssetService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            int? headerID = null;
+            try
             {
-                assignmentofAssetService.CreateAssignmentofAsset_Dummy(_AssignmentofAssetItemVM);
+                headerID = assignmentofAssetService.CreateHeader(viewModel);
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            return Json(new[] { _AssignmentofAssetItemVM }.ToDataSourceResult(request, ModelState));
+            try
+            {
+                viewModel.AssignmentofAssets = BindMonthlyFeeDetailDetails(form, viewModel.AssignmentofAssets);
+                //assignmentofAssetService.CreateMonthlyFeeDetails(headerID, viewModel.MonthlyFeeDetails);
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + Url);
         }
 
-        [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult EditingPopup_Update()
+        private IEnumerable<AssignmentofAssetDetailVM> BindMonthlyFeeDetailDetails(FormCollection form, IEnumerable<AssignmentofAssetDetailVM> assignmentofAssets)
         {
-            var viewModel = new AssetScrappingVM();
-
-            return View(viewModel);
-        }
-
-        [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult EditingPopup_Destroy()
-        {
-            var viewModel = new AssetScrappingVM();
-
-            return View(viewModel);
+            throw new NotImplementedException();
         }
     }
-}
+
+   
+
+    //public ActionResult Edit()
+    //    {
+    //        var viewModel = new AssignmentofAssetVM();
+
+    //        return View(viewModel);
+    //    }
+
+    //    [AcceptVerbs(HttpVerbs.Post)]
+    //    public ActionResult EditingPopup_Create([DataSourceRequest] DataSourceRequest request, AssignmentofAssetItemVM _AssignmentofAssetItemVM)
+    //    {
+    //        if (_AssignmentofAssetItemVM != null && ModelState.IsValid)
+    //        {
+    //            assignmentofAssetService.CreateAssignmentofAsset_Dummy(_AssignmentofAssetItemVM);
+    //        }
+
+    //        return Json(new[] { _AssignmentofAssetItemVM }.ToDataSourceResult(request, ModelState));
+    //    }
+
+    //    [AcceptVerbs(HttpVerbs.Post)]
+    //    public ActionResult EditingPopup_Update()
+    //    {
+    //        var viewModel = new AssetScrappingVM();
+
+    //        return View(viewModel);
+    //    }
+
+    //    [AcceptVerbs(HttpVerbs.Post)]
+    //    public ActionResult EditingPopup_Destroy()
+    //    {
+    //        var viewModel = new AssetScrappingVM();
+
+    //        return View(viewModel);
+    //    }
+    }

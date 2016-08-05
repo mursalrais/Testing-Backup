@@ -72,6 +72,10 @@
 
         $(document).ready(function () {
 
+            $("#sendmail-button").click(function () {
+                showLoading();
+            });
+
             var positionID = $("#Position").val();
             var url = "/HRDataMaster/GetPosition/" + positionID;
             $.getJSON(url, function (data) {

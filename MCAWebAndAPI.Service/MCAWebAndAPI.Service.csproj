@@ -42,6 +42,34 @@
       <HintPath>..\packages\CsvHelper.2.14.2\lib\net45\CsvHelper.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.CodeAnalysis, Version=1.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeAnalysis.Common.1.3.2\lib\net45\Microsoft.CodeAnalysis.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp, Version=1.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeAnalysis.CSharp.1.3.2\lib\net45\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp.Workspaces, Version=1.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeAnalysis.CSharp.Workspaces.1.3.2\lib\net45\Microsoft.CodeAnalysis.CSharp.Workspaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.VisualBasic, Version=1.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeAnalysis.VisualBasic.1.3.2\lib\net45\Microsoft.CodeAnalysis.VisualBasic.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.VisualBasic.Workspaces, Version=1.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeAnalysis.VisualBasic.Workspaces.1.3.2\lib\net45\Microsoft.CodeAnalysis.VisualBasic.Workspaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.Workspaces, Version=1.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeAnalysis.Workspaces.Common.1.3.2\lib\net45\Microsoft.CodeAnalysis.Workspaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.Workspaces.Desktop, Version=1.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeAnalysis.Workspaces.Common.1.3.2\lib\net45\Microsoft.CodeAnalysis.Workspaces.Desktop.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.SharePoint.Client, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.SharePoint.Client.Runtime, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL" />
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
@@ -53,10 +81,38 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable, Version=1.1.37.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Collections.Immutable.1.1.37\lib\dotnet\System.Collections.Immutable.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Composition.AttributedModel, Version=1.0.27.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Composition.1.0.27\lib\portable-net45+win8+wp8+wpa81\System.Composition.AttributedModel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Composition.Convention, Version=1.0.27.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Composition.1.0.27\lib\portable-net45+win8+wp8+wpa81\System.Composition.Convention.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Composition.Hosting, Version=1.0.27.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Composition.1.0.27\lib\portable-net45+win8+wp8+wpa81\System.Composition.Hosting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Composition.Runtime, Version=1.0.27.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Composition.1.0.27\lib\portable-net45+win8+wp8+wpa81\System.Composition.Runtime.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Composition.TypedParts, Version=1.0.27.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Composition.1.0.27\lib\portable-net45+win8+wp8+wpa81\System.Composition.TypedParts.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Reflection.Metadata, Version=1.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reflection.Metadata.1.2.0\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Transactions" />
@@ -106,12 +162,27 @@
     <Compile Include="Asset\IAssignmentofAssetService.cs" />
     <Compile Include="Asset\ILocationMasterService.cs" />
     <Compile Include="Asset\LocationMasterService.cs" />
+    <Compile Include="Common\ComboBoxService.cs" />
+    <Compile Include="Common\IComboBoxService.cs" />
     <Compile Include="Common\ILocationService.cs" />
     <Compile Include="Common\IWorkflowService.cs" />
     <Compile Include="Common\LocationService.cs" />
     <Compile Include="Common\WorkflowService.cs" />
     <Compile Include="Converter\CSVConverter.cs" />
     <Compile Include="Converter\PDFConverter.cs" />
+    <Compile Include="Finance\EventBudgetService.cs" />
+    <Compile Include="Finance\IEventBudgetService.cs" />
+    <Compile Include="Finance\IRequisitionNote.cs" />
+    <Compile Include="Finance\ISCAVoucherService.cs" />
+    <Compile Include="Finance\ISPHLService.cs" />
+    <Compile Include="Finance\ITaxExemptionDataService.cs" />
+    <Compile Include="Finance\ITaxReimbursementService.cs" />
+    <Compile Include="Finance\RequisitionNoteService.cs" />
+    <Compile Include="Finance\SCAVoucherService.cs" />
+    <Compile Include="Finance\Shared.cs" />
+    <Compile Include="Finance\SPHLService.cs" />
+    <Compile Include="Finance\TaxExemptionDataService.cs" />
+    <Compile Include="Finance\TaxReimbursementService.cs" />
     <Compile Include="HR\Compensatory\HRCompensatoryService.cs" />
     <Compile Include="HR\Compensatory\IHRCompensatoryService.cs" />
     <Compile Include="HR\InsuranceClaim\IInsuranceClaimService.cs" />
@@ -151,17 +222,18 @@
     <Compile Include="HR\Recruitment\PSAManagementService.cs" />
     <Compile Include="JobSchedulers\Jobs\EmailExternalJob.cs" />
     <Compile Include="JobSchedulers\Jobs\EmailJob.cs" />
+    <Compile Include="JobSchedulers\Jobs\PSAManagementJob.cs" />
     <Compile Include="JobSchedulers\Jobs\TaskCalculationJob.cs" />
     <Compile Include="JobSchedulers\Schedulers\EmailScheduler.cs" />
+    <Compile Include="JobSchedulers\Schedulers\PSAManagementScheduler.cs" />
     <Compile Include="JobSchedulers\Schedulers\TaskCalculationScheduler.cs" />
-    <Compile Include="obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
-    <Compile Include="obj\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
-    <Compile Include="obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
     <Compile Include="ProjectManagement\Common\IProjectHierarchyService.cs" />
     <Compile Include="ProjectManagement\Common\ProjectHierarchyService.cs" />
     <Compile Include="HR\Common\CalendarService.cs" />
     <Compile Include="HR\Common\ICalendarService.cs" />
+    <Compile Include="ProjectManagement\Schedule\IPSAScheduleService.cs" />
     <Compile Include="ProjectManagement\Schedule\IRIAService.cs" />
+    <Compile Include="ProjectManagement\Schedule\PSAScheduleService.cs" />
     <Compile Include="ProjectManagement\Schedule\RIAService.cs" />
     <Compile Include="Resources\ErrorResource.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -173,6 +245,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>UrlResource.resx</DependentUpon>
     </Compile>
+    <Compile Include="Utils\DocumentNumbering.cs" />
     <Compile Include="Utils\EmailUtil.cs" />
     <Compile Include="Utils\FormatUtil.cs" />
     <Compile Include="Utils\GraphicUtil.cs" />
@@ -185,14 +258,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ContractProcurement\" />
-    <Folder Include="Finance\" />
     <Folder Include="ProjectManagement\Finance\" />
     <Folder Include="ProjectManagement\Result\" />
     <Folder Include="ResourceAndContract\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="bin\Debug\MCAWebAndAPI.Service.dll" />
-    <Content Include="bin\Debug\MCAWebAndAPI.Service.pdb" />
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

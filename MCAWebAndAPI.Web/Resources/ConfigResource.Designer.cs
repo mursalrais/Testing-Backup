@@ -61,7 +61,7 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://eceos2.sharepoint.com/sites/ims/ho.
+        ///   Looks up a localized string similar to https://eceos2.sharepoint.com/sites/ims/bo.
         /// </summary>
         public static string DefaultBOSiteUrl {
             get {

@@ -134,12 +134,13 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            return RedirectToAction("InputInterviewResult",
+            return RedirectToAction("InterviewlistData",
                "HRInterviewlist",
                new
                {
                    siteurl = siteUrl,
-                   ID = viewModel.ID
+                   position = viewModel.ManPos,
+                   useraccess = "REQ"
                });
         }
 
@@ -182,14 +183,15 @@ namespace MCAWebAndAPI.Web.Controllers
                });
         }
 
-        public ActionResult InputInterviewResult(string siteurl = null, int? ID = null)
+        public ActionResult InputInterviewResult(string siteurl = null, int? ID = null, int? posMan = null )
         {
             //mandatory: get site url
             _service.SetSiteUrl(siteurl);
             SessionManager.Set("siteurl", siteurl);
 
-            var viewmodel = _service.GetResultlistInterview(ID);
+            var viewmodel = _service.GetResultlistInterview(ID, posMan);
             viewmodel.SiteUrl = siteurl;
+            viewmodel.ManPos = posMan;
             //viewmodel.ID = id;
 
             return View(viewmodel);
@@ -218,19 +220,20 @@ namespace MCAWebAndAPI.Web.Controllers
                new
                {
                    siteurl = siteUrl,
-                   ID = headerID
+                   ID = headerID,
+                   posMan = viewModel.ManPos
                });
         }
 
-        public ActionResult InputInterviewResultDetail(string siteurl = null, int? ID = null)
+        public ActionResult InputInterviewResultDetail(string siteurl = null, int? ID = null, int? manPos = null)
         {
 
             //mandatory: set site url
             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
 
-            var viewmodel = _service.GetResultlistInterview(ID); 
-            //viewmodel.SendTo = "";
+            var viewmodel = _service.GetResultlistInterview(ID, manPos); 
+            viewmodel.ManPos = manPos;
             //viewmodel.ID = id;
             return View(viewmodel);
         }

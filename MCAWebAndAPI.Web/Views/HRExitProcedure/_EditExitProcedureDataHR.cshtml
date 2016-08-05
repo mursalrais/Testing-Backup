@@ -1,0 +1,85 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model ExitProcedureVM
+
+<div class="col-md-6">
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.RequestDate).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.EditorFor(m => m.RequestDate)
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.FullName).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.DisplayFor(m => m.FullName)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.ProjectUnit).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.DisplayFor(m => m.ProjectUnit)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.Position).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.DisplayFor(m => m.Position)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.PhoneNumber).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.EditorFor(m => m.PhoneNumber)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.ProfessionalPersonalMail).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.EditorFor(m => m.ProfessionalPersonalMail)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.CurrentAddress).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.EditorFor(m => m.CurrentAddress)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.ProfessionalJoinDate).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.DisplayFor(m => m.ProfessionalJoinDate)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.LastWorkingDate).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.EditorFor(m => m.LastWorkingDate)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.ExitReason).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.EditorFor(m => m.ExitReason)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.ReasonDesc).Class("col-md-4 control-label")
+        <div class="col-md-8">
+            @Html.EditorFor(m => m.ReasonDesc)
+        </div>
+    </div>
+
+    @Html.HiddenFor(m => m.PSANumber)
+    @Html.HiddenFor(m => m.Professional)
+    @*@Html.HiddenFor(m => m.FullName)*@
+    @Html.HiddenFor(m => m.StatusForm)
+    @Html.HiddenFor(m => m.ProfessionalID)
+    @Html.HiddenFor(m => m.RequestorMailAddress)
+    @Html.HiddenFor(m => m.RequestorPosition)
+    @Html.HiddenFor(m => m.RequestorUnit)
+    @Html.HiddenFor(m => m.ID)
+    @Html.HiddenFor(m => m.JoinDate)
+    @Html.HiddenFor(m => m.PositionID)
+</div>
+

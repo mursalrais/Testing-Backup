@@ -143,6 +143,7 @@ namespace MCAWebAndAPI.Service.HR.Common
             viewModel.ID = Convert.ToInt32(item["ID"]);
             viewModel.PositionName = Convert.ToString(item["Title"]);
             viewModel.IsKeyPosition = Convert.ToString(item["iskeyposition"]);
+            viewModel.ProjectUnit = Convert.ToString(item["projectunit"]);
             return viewModel;
         }
 

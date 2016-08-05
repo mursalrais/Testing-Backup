@@ -5,6 +5,8 @@ namespace MCAWebAndAPI.Model.Common
 {
     public static class DateTimeExtensions
     {
+        static string[] months = new string[] { "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII" };
+
         public static DateTime GetFirstPayrollDay(this DateTime startDate)
         {
             var firstDate = startDate;
@@ -55,6 +57,10 @@ namespace MCAWebAndAPI.Model.Common
             }
 
             return false;
+        }
+        public static string GetMonthInRoman(DateTime date)
+        {
+            return months[date.Month - 1];
         }
     }
 }
