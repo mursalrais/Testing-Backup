@@ -88,9 +88,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             //Get All Active Professional
             var caml = @"<View><Query><Where><Eq><FieldRef Name='Professional_x0020_Status' /><Value Type='Choice'>Active</Value></Eq></Where></Query><ViewFields><FieldRef Name='ID' /><FieldRef Name='Title' /><FieldRef Name='officeemail' /><FieldRef Name='Position_x003a_ID' /></ViewFields><QueryOptions /></View>";
             var listItem = SPConnector.GetList("Professional Master", _siteUrl, caml);
-            var updatedValues = new Dictionary<string, object>();
+            var updatedValues = new Dictionary<string, object>();           
             string emailTo;
             int IdDetail;
+            FieldUserValue visibleTo;
             foreach (var item in listItem)
             {
                 updatedValues = new Dictionary<string, object>();
@@ -103,6 +104,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 }
                 updatedValues.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(item["ID"]) });
                 emailTo = Convert.ToString(item["officeemail"]);
+                visibleTo = SPConnector.GetUser(emailTo, _siteUrl, "hr");
+                updatedValues.Add("visibleto", visibleTo);
                 try
                 {
                     SPConnector.AddListItem(SP_DETAIL_LIST_NAME, updatedValues, _siteUrl);
