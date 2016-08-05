@@ -38,6 +38,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
             _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
         }
 
+
         public bool CheckTwoMonthsBeforeExpireDate()
         {
             var caml = "";
@@ -57,8 +58,9 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
                 string psaNumber = Convert.ToString(psaData["Title"]);
 
-                int professionalID = GetProfessionalID(psaNumber);
+                int? professionalID = FormatUtil.ConvertLookupToID(psaData, "professional");//GetProfessionalID(psaNumber);
 
+                if (professionalID==null)continue;
                 var professionalData = SPConnector.GetListItem(SP_PROFESSIONAL_LIST_NAME, professionalID, _siteUrl);
                 string professionalMail = Convert.ToString(professionalData["officeemail"]);
                 string professionalFullName = Convert.ToString(professionalData["Title"]) + " " + Convert.ToString(professionalData["lastname"]);
@@ -74,6 +76,30 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
             }
 
             return true;
+        }
+
+        public void changePSAstatus()
+        {
+            var caml = "";
+            foreach (var psaData in SPConnector.GetList(SP_PSA_LIST_NAME, _siteUrl, caml))
+            {
+                int id = Convert.ToInt32(psaData["ID"]);
+                DateTime expireDate = Convert.ToDateTime(psaData["psaexpirydate"]).ToLocalTime();
+                DateTime newpsadate = Convert.ToDateTime(psaData["dateofnewpsa"]).ToLocalTime();
+                DateTime dateToday = DateTime.Now.ToLocalTime();
+                var columnValues = new Dictionary<string, object>();
+                if (dateToday < newpsadate || dateToday > expireDate)
+                {
+                    columnValues.Add("psastatus", "InActive");
+                    SPConnector.UpdateListItemNoVersionConflict(SP_PSA_LIST_NAME, id, columnValues, _siteUrl);
+                }
+                else if (dateToday >= newpsadate && dateToday < expireDate)
+                {
+                    columnValues.Add("psastatus", "Active");
+                    SPConnector.UpdateListItemNoVersionConflict(SP_PSA_LIST_NAME, id, columnValues, _siteUrl);
+                }
+
+            }
         }
 
         public int GetProfessionalID(string psaNumber)
