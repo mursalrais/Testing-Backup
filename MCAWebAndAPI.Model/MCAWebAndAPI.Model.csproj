@@ -158,7 +158,7 @@
     <Compile Include="ViewModel\Form\Asset\AssetMasterVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetAcquisitionHeaderVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetAcquisitionItemVM.cs" />
-    <Compile Include="ViewModel\Form\Asset\AssetAcquisitionVM.cs" />
+    <Compile Include="ViewModel\Form\Asset\WBSMaterVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetCheckFormHeaderVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetCheckFormItemVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetCheckFormVM.cs" />

@@ -66,6 +66,7 @@
         <div>
             <center>
                 <input class="k-button k-button-icontext k-grid-add" type="submit" value="Save" />
+                <input class="k-button k-button-icontext k-grid-add" ControlMode="New" id="gobackbutton1" />
                 <input class="k-button k-button-icontext k-grid-add" value="Cancel" onclick="return cancelButton()" />
             </center>
         </div>
@@ -76,13 +77,6 @@
 
 <script>
     function cancelButton() {
-        var vars = {};
-        var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,
-        function (m, key, value) {
-            vars[key] = value;
-        });
-        return vars;
-
-        alert("test : " + vars["SiteUrl"]);
+        alert(_spPageContextInfo.siteAbsoluteUrl);
     }
 </script>
