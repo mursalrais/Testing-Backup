@@ -217,3 +217,4 @@ Parameter name: source
 Parameter name: source
    at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in D:\iMa\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 195
    at MCAWebAndAPI.Service.Asset.AssetAcquisitionService.UpdateDetails(Nullable`1 headerID, IEnumerable`1 items) in D:\iMa\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetAcquisitionService.cs:line 249
+2016-08-05 14:50:14.6700 MCAWebAndAPI.Service.HR.Recruitment.HRProfessionalPerformanceEvaluationService Column 'visibletoapprover1' does not exist. It may have been deleted by another user.  /sites/ims/hr/Lists/ProfessionalPerformanceEvaluation
