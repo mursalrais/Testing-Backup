@@ -162,6 +162,65 @@ namespace MCAWebAndAPI.Service.Utils
             }
         }
 
+        public static void UpdateListItemNoVersionConflict(string listName, int? listItemID, Dictionary<string, object> updatedValues, string siteUrl = null)
+        {
+            MapCredential(siteUrl);
+            using (ClientContext context = new ClientContext(siteUrl ?? CurUrl))
+            {
+                SecureString secureString = new SecureString();
+                Password.ToList().ForEach(secureString.AppendChar);
+                context.Credentials = new SharePointOnlineCredentials(UserName, secureString);
+
+                // Get one listitem
+                List SPList = context.Web.Lists.GetByTitle(listName);
+                ListItem SPListItem = SPList.GetItemById(listItemID + string.Empty);
+                context.Load(SPListItem);
+
+                try
+                {
+                    context.ExecuteQuery();
+                }
+                catch (Exception e)
+                {
+                    throw e;
+                }
+
+                // Get current editor
+                var currentEditor = SPListItem["Editor"];
+               
+                // Set listitem value to parsed listitem
+                foreach (var key in updatedValues.Keys)
+                {
+                    SPListItem[key] = updatedValues[key];
+                }
+                SPListItem["Editor"] = currentEditor;
+                // Update columns remotely
+                SPListItem.Update();
+
+                try
+                {
+                    context.ExecuteQuery();
+                }
+                catch (Exception e)
+                {
+                    throw e;
+                }
+
+                // Set editor not to be SP Service
+                //SPListItem["Editor"] = currentEditor;
+                //SPListItem.Update();
+
+                //try
+                //{
+                //    context.ExecuteQuery();
+                //}
+                //catch (Exception e)
+                //{
+                //    throw e;
+                //}
+            }
+        }
+
         /// <summary>
         /// 
         /// </summary>

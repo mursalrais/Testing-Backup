@@ -576,6 +576,21 @@ namespace MCAWebAndAPI.Web.Controllers
             return RedirectToAction("Index", "Success");
         }
 
+        public ActionResult PSASchedulerExpired(string siteUrl = null)
+        {
+           
+            try
+            {
+                PSAManagementScheduler.DoNowPSAExpired_OnceEveryDay(siteUrl);
+            }
+            catch (Exception e)
+            {
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return RedirectToAction("Index", "Error");
+            }
+            return RedirectToAction("Index", "Success");
+        }
+
         //public ActionResult CalculateTask(string siteUrl = null)
         //{
         //    try

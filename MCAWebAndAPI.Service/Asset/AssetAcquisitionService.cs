@@ -15,7 +15,7 @@ namespace MCAWebAndAPI.Service.Asset
 {
     public class AssetAcquisitionService : IAssetAcquisitionService
     {
-        string _siteUrl = "https://eceos2.sharepoint.com/sites/mca-dev/bo/";
+        string _siteUrl;
         static Logger logger = LogManager.GetCurrentClassLogger();
         const string SP_ASSACQ_LIST_NAME = "Asset Acquisition";
         const string SP_ASSACQDetails_LIST_NAME = "Asset Acquisition Details";
@@ -118,7 +118,7 @@ namespace MCAWebAndAPI.Service.Asset
         {
             var models = new List<WBSMaterVM>();
 
-            foreach (var item in SPConnector.GetList("WBSMaster", _siteUrl))
+            foreach (var item in SPConnector.GetList(SP_WBSMaster_LIST_NAME, _siteUrl))
             {
                 models.Add(ConvertToModelWBS(item));
             }
@@ -141,17 +141,9 @@ namespace MCAWebAndAPI.Service.Asset
             var viewModel = new WBSMaterVM();
 
             viewModel.ID = Convert.ToInt32(item["ID"]);
-            viewModel.WBSID = Convert.ToString(item["Title"]);
-            viewModel.WBDDesc = Convert.ToString(item["WBDDesc"]);
+            viewModel.WBSID.Value = Convert.ToString(item["Title"]);
+            viewModel.WBSDesc = Convert.ToString(item["WBSDesc"]);
             return viewModel;
-        }
-
-        public AssetAcquisitionItemVM GetPopulatedModelItem(int? ID = default(int?))
-        {
-            var model = new AssetAcquisitionItemVM();
-            //model.AssetSubAsset.Choices = GetChoicesFromList("Asset Master", "AssetID");
-
-            return model;
         }
 
         public void CreateDetails(int? headerID, IEnumerable<AssetAcquisitionItemVM> items)
@@ -177,6 +169,7 @@ namespace MCAWebAndAPI.Service.Asset
                 var updatedValues = new Dictionary<string, object>();
                 updatedValues.Add("Asset_x0020_Acquisition", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
                 updatedValues.Add("Asset_x002d_Sub_x0020_Asset", new FieldLookupValue { LookupId = Convert.ToInt32(item.AssetSubAsset.Value.Value) });
+                updatedValues.Add("WBS", new FieldLookupValue { LookupId = Convert.ToInt32(item.WBS.Value.Value) });
                 updatedValues.Add("PO_x0020_Line_x0020_Item", item.POLineItem);
                 updatedValues.Add("Cost_x0020_IDR", item.CostIDR);
                 updatedValues.Add("Cost_x0020_USD", item.CostUSD);
@@ -269,6 +262,7 @@ namespace MCAWebAndAPI.Service.Asset
                 var updatedValues = new Dictionary<string, object>();
                 updatedValues.Add("Asset_x0020_Acquisition", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
                 updatedValues.Add("Asset_x002d_Sub_x0020_Asset", new FieldLookupValue { LookupId = Convert.ToInt32(item.AssetSubAsset.Value.Value) });
+                updatedValues.Add("WBS", new FieldLookupValue { LookupId = Convert.ToInt32(item.WBS.Value.Value) });
                 updatedValues.Add("PO_x0020_Line_x0020_Item", item.POLineItem);
                 updatedValues.Add("Cost_x0020_IDR", item.CostIDR);
                 updatedValues.Add("Cost_x0020_USD", item.CostUSD);
@@ -287,6 +281,11 @@ namespace MCAWebAndAPI.Service.Asset
                     throw new Exception(ErrorResource.SPUpdateError);
                 }
             }
+        }
+
+        public AssetAcquisitionItemVM GetPopulatedModelItem(int? ID = default(int?))
+        {
+            throw new NotImplementedException();
         }
     }
 }

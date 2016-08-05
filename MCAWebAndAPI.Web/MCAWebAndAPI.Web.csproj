@@ -1226,6 +1226,10 @@
     <Content Include="Views\FINTaxExemptionData\Edit.cshtml" />
     <Content Include="Views\FINTaxReimbursement\CreateTaxReimbursement.cshtml" />
     <Content Include="Views\HRPSAManagement\TestCalculateTwoMonths.cshtml" />
+    <Content Include="Views\HRPayroll\DisplayPayrollWorksheetDrafts.cshtml" />
+    <Content Include="Views\ASSAssetAcquisition\Upload.cshtml" />
+    <Content Include="Views\ASSAssetAcquisition\Edit.cshtml" />
+    <Content Include="Views\ASSAssetAcquisition\_DisplayGrid.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
