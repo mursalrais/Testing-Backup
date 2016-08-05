@@ -219,9 +219,9 @@
     <comment>Need to change in migration</comment>
   </data>
   <data name="AssetMaster" xml:space="preserve">
-    <value>/Lists/Asset%20Master/AllItems.aspx</value>
+    <value>Lists/AssetMaster/AllItems.aspx</value>
   </data>
   <data name="AssetAcquisition" xml:space="preserve">
-    <value>/Lists/Asset%20Acquisition/AllItems.aspx</value>
+    <value>Lists/Asset%20Acquisition/AllItems.aspx</value>
   </data>
 </root>

@@ -20,6 +20,6 @@ namespace MCAWebAndAPI.Service.HR.Payroll
 
         IEnumerable<PayrollDetailVM> GetPayrollDetails(DateTime period);
 
-        IEnumerable<PayrollWorksheetDetailVM> GetPayrollWorksheetDetails(DateTime? period);
+        IEnumerable<PayrollWorksheetDetailVM> GetPayrollWorksheetDetails(DateTime? period, bool isSummary = false);
     }
 }
