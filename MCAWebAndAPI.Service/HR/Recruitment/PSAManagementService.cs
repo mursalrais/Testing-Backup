@@ -253,7 +253,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         public bool UpdateStatusPSA(PSAManagementVM psaManagement)
         {
             var columnValues = new Dictionary<string, object>();
-            int ID = psaManagement.PSAId ;
+            int ID = psaManagement.PSAId;
             string psaStatus = psaManagement.PSAStatus.Value;
             DateTime hiddenexpirydate = psaManagement.HiddenExpiryDate.Value;
 
@@ -311,15 +311,15 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             string psaNumber = Convert.ToString(psaData["Title"]);
 
             updateValues.Add("Join_x0020_Date", psaManagement.JoinDate.Value);
-            updateValues.Add("ProjectOrUnit", psaManagement.ProjectOrUnit.Value);
-            updateValues.Add("position", new FieldLookupValue { LookupId = Convert.ToInt32(psaManagement.Position.Value) });
+            updateValues.Add("Project_x002f_Unit", psaManagement.ProjectOrUnit.Value);
+            updateValues.Add("Position", new FieldLookupValue { LookupId = Convert.ToInt32(psaManagement.Position.Value) });
             updateValues.Add("PSAnumber", psaNumber);
             updateValues.Add("PSAstartdate", psaManagement.DateOfNewPSA.Value);
             updateValues.Add("PSAexpirydate", psaManagement.PSAExpiryDate.Value);
                         
             try
             {
-                SPConnector.UpdateListItem(SP_PROF_LIST_NAME, psaManagement.ID, updateValues, _siteUrl);
+                SPConnector.UpdateListItem(SP_PROF_LIST_NAME, psaManagement.Professional.Value, updateValues, _siteUrl);
             }
             catch (Exception e)
             {
