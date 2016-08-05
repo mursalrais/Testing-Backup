@@ -15,7 +15,7 @@ namespace MCAWebAndAPI.Service.Asset
 {
     public class AssetAcquisitionService : IAssetAcquisitionService
     {
-        string _siteUrl = "https://eceos2.sharepoint.com/sites/mca-dev/bo/";
+        string _siteUrl;
         static Logger logger = LogManager.GetCurrentClassLogger();
         const string SP_ASSACQ_LIST_NAME = "Asset Acquisition";
         const string SP_ASSACQDetails_LIST_NAME = "Asset Acquisition Details";
@@ -141,17 +141,9 @@ namespace MCAWebAndAPI.Service.Asset
             var viewModel = new WBSMaterVM();
 
             viewModel.ID = Convert.ToInt32(item["ID"]);
-            viewModel.WBSID = Convert.ToString(item["Title"]);
+            viewModel.WBSID.Value = Convert.ToString(item["Title"]);
             viewModel.WBDDesc = Convert.ToString(item["WBDDesc"]);
             return viewModel;
-        }
-
-        public AssetAcquisitionItemVM GetPopulatedModelItem(int? ID = default(int?))
-        {
-            var model = new AssetAcquisitionItemVM();
-            //model.AssetSubAsset.Choices = GetChoicesFromList("Asset Master", "AssetID");
-
-            return model;
         }
 
         public void CreateDetails(int? headerID, IEnumerable<AssetAcquisitionItemVM> items)
@@ -287,6 +279,11 @@ namespace MCAWebAndAPI.Service.Asset
                     throw new Exception(ErrorResource.SPUpdateError);
                 }
             }
+        }
+
+        public AssetAcquisitionItemVM GetPopulatedModelItem(int? ID = default(int?))
+        {
+            throw new NotImplementedException();
         }
     }
 }
