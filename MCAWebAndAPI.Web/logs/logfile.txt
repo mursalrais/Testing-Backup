@@ -177,3 +177,4 @@ Please try again.
 2016-08-04 09:57:18.9713 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Cannot complete this action.
 
 Please try again.
+2016-08-04 16:12:05.3569 MCAWebAndAPI.Service.HR.Recruitment.HRPerformancePlanService Invalid data has been used to update the list item. The field you are trying to update may be read only.
