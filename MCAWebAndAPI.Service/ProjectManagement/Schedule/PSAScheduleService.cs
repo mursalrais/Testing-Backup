@@ -90,7 +90,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
                 var columnValues = new Dictionary<string, object>();
                 if (dateToday < newpsadate || dateToday > expireDate)
                 {
-                    columnValues.Add("psastatus", "InActive");
+                    columnValues.Add("psastatus", "Non Active");
                     SPConnector.UpdateListItemNoVersionConflict(SP_PSA_LIST_NAME, id, columnValues, _siteUrl);
                 }
                 else if (dateToday >= newpsadate && dateToday < expireDate)
