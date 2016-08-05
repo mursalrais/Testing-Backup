@@ -118,7 +118,7 @@ namespace MCAWebAndAPI.Service.Asset
         {
             var models = new List<WBSMaterVM>();
 
-            foreach (var item in SPConnector.GetList("WBSMaster", _siteUrl))
+            foreach (var item in SPConnector.GetList(SP_WBSMaster_LIST_NAME, _siteUrl))
             {
                 models.Add(ConvertToModelWBS(item));
             }
@@ -142,7 +142,7 @@ namespace MCAWebAndAPI.Service.Asset
 
             viewModel.ID = Convert.ToInt32(item["ID"]);
             viewModel.WBSID.Value = Convert.ToString(item["Title"]);
-            viewModel.WBDDesc = Convert.ToString(item["WBDDesc"]);
+            viewModel.WBSDesc = Convert.ToString(item["WBSDesc"]);
             return viewModel;
         }
 
@@ -169,6 +169,7 @@ namespace MCAWebAndAPI.Service.Asset
                 var updatedValues = new Dictionary<string, object>();
                 updatedValues.Add("Asset_x0020_Acquisition", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
                 updatedValues.Add("Asset_x002d_Sub_x0020_Asset", new FieldLookupValue { LookupId = Convert.ToInt32(item.AssetSubAsset.Value.Value) });
+                updatedValues.Add("WBS", new FieldLookupValue { LookupId = Convert.ToInt32(item.WBS.Value.Value) });
                 updatedValues.Add("PO_x0020_Line_x0020_Item", item.POLineItem);
                 updatedValues.Add("Cost_x0020_IDR", item.CostIDR);
                 updatedValues.Add("Cost_x0020_USD", item.CostUSD);
@@ -261,6 +262,7 @@ namespace MCAWebAndAPI.Service.Asset
                 var updatedValues = new Dictionary<string, object>();
                 updatedValues.Add("Asset_x0020_Acquisition", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
                 updatedValues.Add("Asset_x002d_Sub_x0020_Asset", new FieldLookupValue { LookupId = Convert.ToInt32(item.AssetSubAsset.Value.Value) });
+                updatedValues.Add("WBS", new FieldLookupValue { LookupId = Convert.ToInt32(item.WBS.Value.Value) });
                 updatedValues.Add("PO_x0020_Line_x0020_Item", item.POLineItem);
                 updatedValues.Add("Cost_x0020_IDR", item.CostIDR);
                 updatedValues.Add("Cost_x0020_USD", item.CostUSD);
