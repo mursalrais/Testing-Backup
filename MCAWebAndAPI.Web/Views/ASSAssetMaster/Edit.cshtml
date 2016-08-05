@@ -4,8 +4,17 @@
 @using MCAWebAndAPI.Model.ViewModel.Form.Asset
 
 @model AssetMasterVM
+@using (Ajax.BeginForm("Update", "ASSAssetMaster",
+                                                                                        FormMethod.Post,
+                                                                                        new AjaxOptions
+                                                                                        {
+                                                                                            OnBegin = "onBeginForm",
+                                                                                            OnComplete = "onCompleteForm",
+                                                                                            OnSuccess = "onSuccessFormEmbed",
+                                                                                            OnFailure = "onFailureForm"
+                                                                                        }, new { @class = "form-horizontal" }))
+{
 
-<form class="form-horizontal" method="post" action="/ASSAssetMaster/Update" id="create-asset-master-form">
     <fieldset>
         <legend>Form Asset Master</legend>
 
@@ -44,13 +53,14 @@
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.AssetDesc).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Html.EditorFor(m => m.AssetDesc)
+                    @Html.TextAreaFor(m => m.AssetDesc, 2, 108, new { @title = "AssetDesc" })
+
                 </div>
             </div>
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.SerialNo).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Html.EditorFor(m => m.SerialNo)
+                    <input type="text" id="SerialNo" name="SerialNo" style="width: 100%;" value="@Model.SerialNo" />
                 </div>
             </div>
             <div class="form-group">
@@ -62,7 +72,9 @@
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.Spesifications).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Html.EditorFor(m => m.Spesifications)
+                    @Html.TextAreaFor(m => m.Spesifications, 3, 108, new { @title = "Spesifications" })
+
+
                 </div>
             </div>
             <div class="form-group">
@@ -74,17 +86,26 @@
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.Remarks).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Html.EditorFor(m => m.Remarks)
+                    @Html.TextAreaFor(m => m.Remarks, 5, 108, new { @title = "Remarks" })
                 </div>
             </div>
             @Html.HiddenFor(m => m.ID)
+
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-sm-9">
+                        <input class="k-button k-button-icontext k-grid-add" type="submit" value="Save" />
+                        <input type="button" class="k-button k-button-icontext k-grid-add" value="Cancel" onclick="Redirect();" />
+                    </div>
+                    <div class="col-sm-3">
+
+                    </div>
+                </div>
+            </div>
         </div>
-        <center>
-            <input class="k-button k-button-icontext k-grid-add" type="submit" value="Update"/>
-        </center>
     </fieldset>
 
-</form>
+}
 
 @section scripts{
     <script type="text/javascript">
@@ -101,6 +122,10 @@
             });
             alert(message);
         }
+    }
+
+    function Redirect() {
+        window.location = "https://eceos2.sharepoint.com/sites/mca-dev/BO/Lists/AssetMaster/AllItems.aspx";
     }
 
     function onAssetIDChange()

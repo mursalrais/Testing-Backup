@@ -10,7 +10,7 @@ namespace MCAWebAndAPI.Service.Asset
 {
     public class AssignmentofAssetService : IAssignmentofAssetService
     {
-        string _siteUrl = null;
+        string _siteUrl = "eceos2.sharepoint.com/sites/mca-dev/hr";
         static Logger logger = LogManager.GetCurrentClassLogger();
 
         public void SetSiteUrl(string siteUrl)

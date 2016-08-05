@@ -5,7 +5,16 @@
 
 @model AssetMasterVM
 
-<form class="form-horizontal" name="assMasterForm" method="post" action="/ASSAssetMaster/Submit" id="create-asset-master-form" onsubmit="return validateForm()">
+@using (Ajax.BeginForm("Submit", "ASSAssetMaster",
+                                                                            FormMethod.Post,
+                                                                            new AjaxOptions
+                                                                            {
+                                                                                OnBegin = "onBeginForm",
+                                                                                OnComplete = "onCompleteForm",
+                                                                                OnSuccess = "onSuccessFormEmbed",
+                                                                                OnFailure = "onFailureForm"
+                                                                            }, new { @class = "form-horizontal" }))
+{
     <fieldset>
         <legend>Form Asset Master</legend>
 
@@ -51,7 +60,7 @@
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.AssetDesc).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    <textarea id="AssetDesc" name="AssetDesc" style="width: 100%;" cols="10" rows="5"></textarea>
+                    @Html.TextAreaFor(m => m.AssetDesc, 2, 108, new { @title = "AssetDesc" })
                     @*<input class="k-textbox form-control" data-val="true" data-val-required="The AssetDesc field is required." id="AssetDesc" name="AssetDesc" style="width: 100%;">*@
                 </div>
             </div>
@@ -61,7 +70,7 @@
                 @Html.Bootstrap().LabelFor(m => m.SerialNo).Class("col-md-4 control-label")
                 <div class="col-md-8">
                     @*@Html.EditorFor(m => m.SerialNo)*@
-                    <input type="text" id="SerialNo" name="SerialNo" style="width: 100%;" /> 
+                    <input type="text" id="SerialNo" name="SerialNo" style="width: 100%;" />
                 </div>
             </div>
             <div class="form-group">
@@ -73,7 +82,7 @@
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.Spesifications).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Html.EditorFor(m => m.Spesifications)
+                    @Html.TextAreaFor(m => m.Spesifications, 3, 108, new { @title = "Spesifications" })
                 </div>
             </div>
             <div class="form-group">
@@ -85,17 +94,27 @@
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.Remarks).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Html.EditorFor(m => m.Remarks)
+                    @Html.TextAreaFor(m => m.Remarks, 5, 108, new { @title = "Remarks" })
                 </div>
             </div>
-        </div>
-        <center>
-            <input class="k-button k-button-icontext k-grid-add" type="submit" value="Submit" />
-        </center>
-    </fieldset>
 
-</form>
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-sm-9">
+                        <input class="k-button k-button-icontext k-grid-add" type="submit" value="Save" />
+                        <input type="button" class="k-button k-button-icontext k-grid-add" value="Cancel"  onclick="Redirect();" />
+                    </div>
+                    <div class="col-sm-3">
 
+                    </div>
+                </div>
+            </div>
+        </div  >
+</fieldset>
+
+    
+
+}
 @section scripts{
 
     <script>
@@ -123,6 +142,8 @@
                 alert(message);
             }
         }
+
+
 
         function onAssetIDChange() {
             var id = $("#AssetNoAssetDesc_Value").data("kendoDropDownList").value();
@@ -159,7 +180,11 @@
             $("#AssetType_Value").data("kendoDropDownList").enable(false);
         }
 
-        function onAssetLevelChange() {
+        function Redirect() {
+                
+        }
+
+        function onAssetLevelClick() {
             if ($("#AssetLevel_Value").data("kendoDropDownList").value() == "Main Asset") {
                 $("#AssetCategory_Value").data("kendoDropDownList").enable(true);
                 $("#AssetCategory_Value").data("kendoDropDownList").select(0);
@@ -170,12 +195,11 @@
                 $("#AssetType_Value").data("kendoDropDownList").enable(true);
                 $("#AssetType_Value").data("kendoDropDownList").select(0);
 
-
                 $("#AssetNoAssetDesc_Value").data("kendoDropDownList").enable(false);
                 $("#AssetNoAssetDesc_Value").data("kendoDropDownList").value("");
 
             }
-            else {
+            else if  ($("#AssetLevel_Value").data("kendoDropDownList").value() == "Sub Asset") {
                 $("#AssetCategory_Value").data("kendoDropDownList").enable(false);
                 $("#AssetCategory_Value").data("kendoDropDownList").value("");
 
@@ -187,29 +211,34 @@
 
                 $("#AssetNoAssetDesc_Value").data("kendoDropDownList").enable(true);
                 $("#AssetNoAssetDesc_Value").data("kendoDropDownList").select("");
+             
             }
+            
+         
         }
-        $(function () {
-            if ($("#AssetLevel_Value").data("kendoDropDownList").value() == "Main Asset") {
-                $("#AssetNoAssetDesc_Value").data("kendoDropDownList").enable(false);
-                $("#AssetNoAssetDesc_Value").data("kendoDropDownList").value("");
+            $(function () {
+                if ($("#AssetLevel_Value").data("kendoDropDownList").value() == "Main Asset") {
+              
+                    $("#AssetNoAssetDesc_Value").data("kendoDropDownList").enable(false);
+                    $("#AssetNoAssetDesc_Value").data("kendoDropDownList").value("");
 
-                $("#AssetCategory_Value").data("kendoDropDownList").enable(true);
-                $("#AssetCategory_Value").data("kendoDropDownList").select(0);
+                    $("#AssetCategory_Value").data("kendoDropDownList").enable(true);
+                    $("#AssetCategory_Value").data("kendoDropDownList").select(0);
 
-                $("#ProjectUnit_Value").data("kendoDropDownList").enable(true);
-                $("#ProjectUnit_Value").data("kendoDropDownList").select(0);
+                    $("#ProjectUnit_Value").data("kendoDropDownList").enable(true);
+                    $("#ProjectUnit_Value").data("kendoDropDownList").select(0);
 
-                $("#AssetType_Value").data("kendoDropDownList").enable(true);
-                $("#AssetType_Value").data("kendoDropDownList").select(0);
-            }
-            else {
-                $("#AssetNoAssetDesc_Value").data("kendoDropDownList").enable(true);
-                $("#AssetCategory_Value").data("kendoDropDownList").enable(false);
-                $("#ProjectUnit_Value").data("kendoDropDownList").enable(false);
-                $("#AssetType_Value").data("kendoDropDownList").enable(false);
-            }
-        });
+                    $("#AssetType_Value").data("kendoDropDownList").enable(true);
+                    $("#AssetType_Value").data("kendoDropDownList").select(0);
+                    
+                }
+                else {
+                    $("#AssetNoAssetDesc_Value").data("kendoDropDownList").enable(true);
+                    $("#AssetCategory_Value").data("kendoDropDownList").enable(false);
+                    $("#ProjectUnit_Value").data("kendoDropDownList").enable(false);
+                    $("#AssetType_Value").data("kendoDropDownList").enable(false);
+                }
+            });
 
     </script>
 }
