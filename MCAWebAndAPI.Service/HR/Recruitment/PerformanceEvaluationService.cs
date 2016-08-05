@@ -92,6 +92,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             string emailTo;
             int IdDetail;
             int IDHeaderPLan = SPConnector.GetLatestListItemID(SP_LIST_PLAN, _siteUrl);
+            FieldUserValue visibleTo;
             foreach (var item in listItem)
             {
                 updatedValues = new Dictionary<string, object>();
@@ -104,6 +105,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 }
                 updatedValues.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(item["ID"]) });
                 emailTo = Convert.ToString(item["officeemail"]);
+                visibleTo = SPConnector.GetUser(emailTo, _siteUrl, "hr");
+                updatedValues.Add("visibleto", visibleTo);
                 try
                 {
                     SPConnector.AddListItem(SP_DETAIL_LIST_NAME, updatedValues, _siteUrl);
