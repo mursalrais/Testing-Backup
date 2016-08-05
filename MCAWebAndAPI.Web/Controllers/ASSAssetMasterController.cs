@@ -27,11 +27,7 @@ namespace MCAWebAndAPI.Web.Controllers
             _assetMasterService = new AssetMasterService();
         }
 
-        public ActionResult Index(string SiteUrl)
-        {
-            _assetMasterService.SetSiteUrl(SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            return Redirect(string.Format("{0}/{1}", SiteUrl ?? ConfigResource.DefaultBOSiteUrl, UrlResource.AssetAcquisition));
-        }
+
 
         public JsonResult GetAssetMasters()
         {
@@ -57,47 +53,58 @@ namespace MCAWebAndAPI.Web.Controllers
             })), JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Create(string SiteUrl)
+        public ActionResult Create(string siteUrl=null)
         {
-            _assetMasterService.SetSiteUrl(SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            // MANDATORY: Set Site URL
+            _assetMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
             var viewModel = _assetMasterService.GetAssetMaster();
             return View(viewModel);
         }
 
-        public ActionResult Edit(int ID, string SiteUrl)
+        public ActionResult Edit(int ID, string siteUrl)
         {
-            _assetMasterService.SetSiteUrl(SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            _assetMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
             var viewModel = _assetMasterService.GetAssetMaster(ID);
             return View(viewModel);
         }
 
         [HttpPost]
-        public ActionResult Submit(AssetMasterVM _data, string SiteUrl)
+        public ActionResult Submit(FormCollection form, AssetMasterVM _data)
         {
-            _assetMasterService.SetSiteUrl(SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
             //return View(new AssetMasterVM());
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _assetMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
             _assetMasterService.CreateAssetMaster(_data);
-            return JsonHelper.GenerateJsonSuccessResponse(string.Format("{0}/{1}", "https://eceos2.sharepoint.com/sites/mca-dev/bo", UrlResource.AssetMaster));
+          
+            {
+                return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetMaster);
+            };
         }
 
-        public ActionResult Update(AssetMasterVM _data, string SiteUrl)
+        public ActionResult Update(FormCollection form,AssetMasterVM _data, string site)
         {
-            _assetMasterService.SetSiteUrl(SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _assetMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
             //return View(new AssetMasterVM());
             _assetMasterService.UpdateAssetMaster(_data);
-            return JsonHelper.GenerateJsonSuccessResponse(string.Format("{0}/{1}", "https://eceos2.sharepoint.com/sites/mca-dev/bo", UrlResource.AssetAcquisition));
+
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetMaster);
         }
 
         [HttpGet]
-        public ActionResult Upload(string SiteUrl = null, string listName = null)
+        public ActionResult Upload(string siteUrl = null, string listName = null)
         {
-            _assetMasterService.SetSiteUrl(SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            if (SiteUrl == null || listName == null)
+            if (siteUrl == null || listName == null)
                 return RedirectToAction("Index", "Error", new { errorMessage = "Parameter cannot be null" });
 
 
-            SessionManager.Set("SiteUrl", SiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl);
 
             var emptyTable = GenerateEmptyDataTable();
             SessionManager.Set("CSVDataTable", emptyTable);
@@ -278,7 +285,7 @@ namespace MCAWebAndAPI.Web.Controllers
             int x = 0;
             foreach (DataRow d in SessionManager.Get<DataTable>("CSVDataTable").Rows)
             {
-                if (createAssID.Rows[x].ItemArray[0].ToString() == "")
+                if(createAssID.Rows[x].ItemArray[0].ToString() == "")
                 {
                     res = _assetMasterService.GetAssetIDForMainAsset(createAssID.Rows[x].ItemArray[2].ToString(), createAssID.Rows[x].ItemArray[3].ToString(), createAssID.Rows[x].ItemArray[4].ToString());
                     if (assetIDs.Contains(res))
@@ -302,7 +309,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 {
                     //cek if assetID parent is exist
                     var assetIDss = _assetMasterService.GetAssetIDForSubAsset(createAssID.Rows[x].ItemArray[0].ToString());
-                    if (assetIDss == "")
+                    if(assetIDss == "")
                     {
                         return JsonHelper.GenerateJsonErrorResponse(assetIDss);
                     }

@@ -4,51 +4,21 @@ using System;
 using MCAWebAndAPI.Model.ViewModel.Control;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using MCAWebAndAPI.Model.Common;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 {
-    public class AssignmentofAssetHeaderVM
+    public class AssignmentofAssetHeaderVM : Item
     {
         private DateTime _date;
-        private ComboBoxVM _assetHolder, _assetSubAsset;
+        private ComboBoxVM _assetHolder, _completionStatus, _acceptanceMemoNo;
 
         public int Id { get; set; }
 
+        [Required(ErrorMessage = "Transaction Type Field Is Required")]
         public string TransactionType { get; set; }
 
-        public string Office { get; set; }
-
-        public string Floor { get; set; }
-
-        public string Room { get; set; }
-
-        [UIHint("ComboBox")]
-        public ComboBoxVM AssetHolder
-        {
-            get
-            {
-                if (_assetHolder == null)
-                {
-                    _assetHolder = new ComboBoxVM()
-                    {
-                        Choices = new string[]
-{
-    "Mca",
-    "Eceos",
-    "Servio"
-}
-                    };
-
-                }
-                return _assetHolder;
-            }
-
-            set
-            {
-                _assetHolder = value;
-            }
-        }
-
+        [Required]
         public DateTime Date
         {
             get
@@ -66,31 +36,69 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
             }
         }
 
-        [DisplayName("Asset-Sub Asset")]
+        [DisplayName("Asset Holder")]
+        [Required]
         [UIHint("ComboBox")]
-        public ComboBoxVM AssetSubAsset
+        public ComboBoxVM AssetHolder
         {
             get
             {
-                if (_assetSubAsset == null)
+                if (_assetHolder == null)
                 {
-                    _assetSubAsset = new ComboBoxVM()
+                    _assetHolder = new ComboBoxVM()
                     {
                         Choices = new string[]
                         {
-                            "Mca",
-                            "Eceos",
-                            "Servio"
+                            "Yunita-Manafer",
+                            "Agus - Developer"
                         }
                     };
+
                 }
-                return _assetSubAsset;
+                return _assetHolder;
             }
 
             set
             {
-                _assetSubAsset = value;
+                _acceptanceMemoNo = value;
             }
         }
+
+        public string Project { get; set; }
+
+        public string ContactNo { get; set; }
+
+        [UIHint("MultiFileUploader")]
+        public IEnumerable<HttpPostedFileBase> Attachment { get; set; } = new List<HttpPostedFileBase>();
+
+        public string DocumentUrl { get; set; }
+
+        [UIHint("ComboBox")]
+        public ComboBoxVM CompletionStatus
+        {
+            get
+            {
+                if (_completionStatus == null)
+                {
+                    _completionStatus = new ComboBoxVM()
+                    {
+                        Choices = new string[]
+                        {
+                            "In Progres",
+                            "Done"
+                        }
+                    };
+
+                }
+                return _completionStatus;
+            }
+
+            set
+            {
+                _completionStatus = value;
+            }
+        }
+
+
     }
 }

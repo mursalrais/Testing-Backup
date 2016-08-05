@@ -25,7 +25,29 @@
                             ControllerName = "ASSAssetAcquisition",
                             ActionName = "GetAssetSubSAssetGrid"
                         });
-            
+
+            columns.Bound(p => p.WBS).ClientTemplate("#= WBS.Text #" +
+                          "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].WBS.Value' value='#= WBS.Value #' />"
+                        ).EditorViewData(new
+                        {
+                            DataTextField = "Text",
+                            DataValueField = "Value",
+                            ControllerName = "ASSAssetAcquisition",
+                            ActionName = "GetWBSGrid"
+                        });
+
+            columns.Bound(p => p.CostIDR).ClientTemplate("#= CostIDR #" +
+            "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].CostIDR' value='#= CostIDR #' />"
+            );
+
+            columns.Bound(p => p.CostUSD).ClientTemplate("#= CostUSD #" +
+            "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].CostUSD' value='#= CostUSD #' />"
+            );
+
+            columns.Bound(p => p.Remarks).ClientTemplate("#= Remarks #" +
+            "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].Remarks' value='#= Remarks #' />"
+            );
+
             columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
           "<input type='hidden' name=Details[#= getWorkingRelationshipDetails(data)#].ID value=#= ID # />"
 

@@ -4,7 +4,7 @@
 
 @model AssetAcquisitionHeaderVM
 
-@using (Ajax.BeginForm("Edit", "ASSassetAcquisition",
+@using (Ajax.BeginForm("Update", "ASSassetAcquisition",
                                                                                        FormMethod.Post,
                                                                                        new AjaxOptions
                                                                                        {
@@ -15,7 +15,7 @@
                                                                                        }, new { @class = "form-horizontal" }))
 
 {
-<form class="form-horizontal" method="post" action="/ASSassetAcquisition/Edit" id="create-asset-acquisition-form">
+<form class="form-horizontal" method="post" action="/ASSassetAcquisition/Update" id="create-asset-acquisition-form">
     <fieldset>
         <legend>Form Asset Acquisition</legend>
         <div class="col-md-6">
@@ -63,6 +63,7 @@
         </div>
     </fieldset>
     <div>
+        @Html.HiddenFor(m => m.ID)
         <center>
             <input class="k-button k-button-icontext k-grid-add" type="submit" value="Save" />
             <input class="k-button k-button-icontext k-grid-add" value="Cancel" onclick="return cancelButton()" />
@@ -75,6 +76,6 @@
 
 <script>
     function cancelButton() {
-        location.href = '@Url.Action("Index","ASSassetAcquisition")';
+        alert(_spPageContextInfo.siteAbsoluteUrl);
     }
 </script>

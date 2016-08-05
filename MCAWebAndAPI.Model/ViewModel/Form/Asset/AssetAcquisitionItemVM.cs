@@ -12,6 +12,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 {
     public class AssetAcquisitionItemVM : Item
     {
+        public string POLineItem { get; set; }
+
         [UIHint("InGridAjaxComboBox")]
         public AjaxComboBoxVM AssetSubAsset { get; set; } = new AjaxComboBoxVM();
 
@@ -26,5 +28,26 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
                 return model;
             }
         }
+
+        [UIHint("InGridAjaxComboBox")]
+        public AjaxComboBoxVM WBS { get; set; } = new AjaxComboBoxVM();
+
+        public static AjaxComboBoxVM GetWBSDefaultValue(AjaxComboBoxVM model = null)
+        {
+            if (model == null)
+            {
+                return new AjaxComboBoxVM();
+            }
+            else
+            {
+                return model;
+            }
+        }
+
+        public int? CostIDR { get; set; }
+        public int? CostUSD { get; set; }
+        public string Remarks { get; set; }
+        public string Status { get; set; }
+
     }
 }
