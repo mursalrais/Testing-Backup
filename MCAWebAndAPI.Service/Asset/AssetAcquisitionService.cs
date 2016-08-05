@@ -20,6 +20,7 @@ namespace MCAWebAndAPI.Service.Asset
         const string SP_ASSACQ_LIST_NAME = "Asset Acquisition";
         const string SP_ASSACQDetails_LIST_NAME = "Asset Acquisition Details";
         const string SP_ACC_MEMO_LIST_NAME = "Acceptance Memo";
+        const string SP_WBSMaster_LIST_NAME = "WBS Master";
 
         public void SetSiteUrl(string siteUrl)
         {

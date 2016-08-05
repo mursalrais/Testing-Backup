@@ -1284,6 +1284,9 @@
     <Content Include="Views\FINEventBudget\Create.cshtml" />
     <Content Include="Views\FINEventBudget\_ItemDetails.cshtml" />
     <Content Include="Views\ASSAssetAcquisition\Edit.cshtml" />
+    <Content Include="Views\BIEmbed\WFP01HN.cshtml" />
+    <Content Include="Views\BIEmbed\WFP03HN.cshtml" />
+    <Content Include="Views\BIEmbed\WFP01GP.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
