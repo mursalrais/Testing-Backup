@@ -50,8 +50,14 @@ namespace MCAWebAndAPI.Service.Asset
             viewModel.Remarks = Convert.ToString(listItem["Remarks"]);
             viewModel.SerialNo = Convert.ToString(listItem["SerialNo"]);
 
-           
-            viewModel.Spesifications = Regex.Replace(listItem["Spesifications"].ToString(), "<.*?>", string.Empty); 
+            if(listItem["Spesifications"] != null)
+            {
+                viewModel.Spesifications = Regex.Replace(listItem["Spesifications"].ToString(), "<.*?>", string.Empty);
+            }
+            else
+            {
+                viewModel.Spesifications = "";
+            }
             viewModel.WarrantyExpires = Convert.ToDateTime(listItem["WarranyExpires"]);
             viewModel.AssetCategory.Value = Convert.ToString(listItem["AssetCategory"]);
             viewModel.AssetDesc = Convert.ToString(listItem["Title"]);
@@ -164,7 +170,14 @@ namespace MCAWebAndAPI.Service.Asset
             columnValues.Add("Remarks", assetMaster.Remarks);
             columnValues.Add("SerialNo", assetMaster.SerialNo);
             columnValues.Add("Spesifications", assetMaster.Spesifications);
-            columnValues.Add("WarranyExpires", assetMaster.WarrantyExpires.Value);
+            if (assetMaster.WarrantyExpires.HasValue)
+            {
+                columnValues.Add("WarranyExpires", assetMaster.WarrantyExpires.Value.Date);
+            }
+            else
+            {
+                columnValues.Add("WarranyExpires", null);
+            }
 
             try
             {

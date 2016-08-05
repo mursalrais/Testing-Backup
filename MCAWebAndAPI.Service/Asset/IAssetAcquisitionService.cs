@@ -2,6 +2,7 @@
 using NLog;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,5 +29,8 @@ namespace MCAWebAndAPI.Service.Asset
 
         IEnumerable<AssetMasterVM> GetAssetSubAsset();
         IEnumerable<WBSMaterVM> GetWBS();
+
+        int? MassUploadHeader(string ListName, DataTable CSVDataTable, string SiteUrl = null);
+        void MassUploadDetail(string ListName, int? headerID, DataTable CSVDataTable, string SiteUrl = null);
     }
 }

@@ -355,14 +355,69 @@ namespace MCAWebAndAPI.Web.Controllers
             var sessionVariables = SessionManager.Get<DataTable>("CSVDataTable") ?? new DataTable();
             var siteUrl = SessionManager.Get<string>("SiteUrl");
 
-            try
+            //cek apakah header / item
+            int x = 0;
+            int? latestIDHeader = 0;
+            foreach(DataRow d in SessionManager.Get<DataTable>("CSVDataTable").Rows)
             {
-                CSVConverter.Instance.MassUpload(listName, sessionVariables, siteUrl);
+                if (d.ItemArray[0].ToString() == "Asset Acquisition")
+                {
+                    try
+                    {
+                        var listNameHeader = "Asset Acquisition";
+                        var TableHeader = new DataTable();
+                        TableHeader.Columns.Add("TransType", typeof(string));
+                        TableHeader.Columns.Add("AccMemo", typeof(string));
+                        TableHeader.Columns.Add("Vendor", typeof(string));
+                        TableHeader.Columns.Add("PoNo", typeof(string));
+                        TableHeader.Columns.Add("PurDate", typeof(string));
+                        TableHeader.Columns.Add("PurDesc", typeof(string));
+                        for(int h = 0;h==6;h++)
+                        {
+                            TableHeader.Rows.Add(d.ItemArray[h].ToString());
+                        }
+                        latestIDHeader = _assetAcquisitionService.MassUploadHeader(listNameHeader, TableHeader, siteUrl);
+                    }
+                    catch(Exception e)
+                    {
+                        return JsonHelper.GenerateJsonErrorResponse(e);
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        var listNameDetail = "Asset Acquisition Details";
+                        var TableDetail = new DataTable();
+                        TableDetail.Columns.Add("POLineItem", typeof(string));
+                        TableDetail.Columns.Add("AssetSubAsset", typeof(int));
+                        TableDetail.Columns.Add("WBS", typeof(string));
+                        TableDetail.Columns.Add("CostIDR", typeof(string));
+                        TableDetail.Columns.Add("CostUSD", typeof(string));
+                        TableDetail.Columns.Add("Remarks", typeof(string));
+                        TableDetail.Columns.Add("Running", typeof(string));
+                        for (int de = 7; de == 13; de++)
+                        {
+                            TableDetail.Rows.Add(d.ItemArray[de].ToString());
+                        }
+                        _assetAcquisitionService.MassUploadDetail(listNameDetail, latestIDHeader,  TableDetail, siteUrl);
+                    }
+                    catch (Exception e)
+                    {
+                        return JsonHelper.GenerateJsonErrorResponse(e);
+                    }
+                }
+                x++;
             }
-            catch (Exception e)
-            {
-                return JsonHelper.GenerateJsonErrorResponse(e);
-            }
+
+            //try
+            //{
+            //    CSVConverter.Instance.MassUpload(listName, sessionVariables, siteUrl);
+            //}
+            //catch (Exception e)
+            //{
+            //    return JsonHelper.GenerateJsonErrorResponse(e);
+            //}
 
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl);
         }

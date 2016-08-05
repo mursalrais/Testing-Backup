@@ -10,6 +10,7 @@ using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Service.Resources;
 using Microsoft.SharePoint.Client;
 using MCAWebAndAPI.Model.ViewModel.Control;
+using System.Data;
 
 namespace MCAWebAndAPI.Service.Asset
 {
@@ -284,6 +285,82 @@ namespace MCAWebAndAPI.Service.Asset
         }
 
         public AssetAcquisitionItemVM GetPopulatedModelItem(int? ID = default(int?))
+        {
+            throw new NotImplementedException();
+        }
+
+        public int? MassUploadHeader(string ListName, DataTable CSVDataTable, string SiteUrl = null)
+        {
+            var rowTotal = CSVDataTable.Rows.Count;
+            var columnTotal = CSVDataTable.Columns.Count;
+            var columnTypes = new Type[columnTotal];
+            var columnTechnicalNames = new string[columnTotal];
+
+            // After Column Name, the first row should be Column Type
+            for (int i = 0; i < columnTotal; i++)
+            {
+                //format header MUST be technicalname:type or technicalname_lookup:type technicalname_skip:type
+                try
+                {
+                    columnTechnicalNames[i] = CSVDataTable.Columns[i].ColumnName;
+                    columnTypes[i] = CSVDataTable.Columns[i].DataType;
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e);
+                    throw e;
+                }
+            }
+
+            var updatedValues = new Dictionary<string, object>();
+            // Start from 1 since 0 is header 
+            for (int i = 0; i < rowTotal; i++)
+            {
+                for (int j = 0; j < columnTotal; j++)
+                {
+                    if (isLookup(columnTechnicalNames[j]))
+                    {
+                        FormatUtil.GenerateUpdatedValueFromGivenDataTable(ref updatedValues, columnTypes[j],
+                            columnTechnicalNames[j], CSVDataTable.Rows[i].ItemArray[j], lookup: true, skip: false);
+                    }
+                    else if (isSkipped(columnTechnicalNames[j]))
+                    {
+                        FormatUtil.GenerateUpdatedValueFromGivenDataTable(ref updatedValues, columnTypes[j],
+                           columnTechnicalNames[j], CSVDataTable.Rows[i].ItemArray[j], lookup: false, skip: true);
+                    }
+                    else
+                    {
+                        FormatUtil.GenerateUpdatedValueFromGivenDataTable(ref updatedValues, columnTypes[j],
+                          columnTechnicalNames[j], CSVDataTable.Rows[i].ItemArray[j], lookup: false, skip: false);
+                    }
+                }
+                try
+                {
+                    SPConnector.AddListItem(ListName, updatedValues, SiteUrl);
+                }
+                catch (Exception e)
+                {
+                    logger.Error(string.Format("{0} at ID: {1}", e.Message, i + 1));
+                    throw new Exception(string.Format("An error occured at ID: {0}. Therefore, data on ID: {0} and afterwards have not been submitted.", i + 1));
+                }
+                updatedValues = new Dictionary<string, object>();
+            }
+            return SPConnector.GetLatestListItemID(ListName, _siteUrl);
+        }
+
+        private bool isSkipped(string columnName)
+        {
+            return columnName.Contains("_")
+                && string.Compare(columnName.Split('_')[1], "skip", StringComparison.OrdinalIgnoreCase) == 0;
+        }
+
+        private bool isLookup(string columnName)
+        {
+            return columnName.Contains("_")
+               && string.Compare(columnName.Split('_')[1], "lookup", StringComparison.OrdinalIgnoreCase) == 0;
+        }
+
+        public void MassUploadDetail(string ListName, int? headerID, DataTable CSVDataTable, string SiteUrl = null)
         {
             throw new NotImplementedException();
         }
