@@ -12,7 +12,7 @@ namespace MCAWebAndAPI.Service.Asset
 {
     public class AssetMasterService : IAssetMasterService
     {
-        string _siteUrl = "https://eceos2.sharepoint.com/sites/mca-dev/bo/";
+        string _siteUrl;
         static Logger logger = LogManager.GetCurrentClassLogger();
         const string SP_ASSMAS_LIST_NAME = "Asset Master";
 
@@ -292,10 +292,10 @@ namespace MCAWebAndAPI.Service.Asset
 
         int GetAssetIDLastNumber(string assetID)
         {
-            if (_siteUrl != "https://eceos2.sharepoint.com/sites/mca-dev/bo")
-            {
-                _siteUrl = "https://eceos2.sharepoint.com/sites/mca-dev/bo";
-            }
+            //if (_siteUrl != "https://eceos2.sharepoint.com/sites/mca-dev/bo")
+            //{
+            //    _siteUrl = "https://eceos2.sharepoint.com/sites/mca-dev/bo";
+            //}
             var caml = @"<View>  
                 <Query> 
                     <Where><Contains><FieldRef Name='AssetID' /><Value Type='Text'>"
@@ -327,7 +327,7 @@ namespace MCAWebAndAPI.Service.Asset
                 {
                     var itemAssetID = Convert.ToString(item["AssetID"]);
 
-                    var itemNumber = Convert.ToInt32(itemAssetID.Split('-')[4]);
+                     var itemNumber = Convert.ToInt32(itemAssetID.Split('-')[4]);
                     numbers.Add(itemNumber);
                 }
             }

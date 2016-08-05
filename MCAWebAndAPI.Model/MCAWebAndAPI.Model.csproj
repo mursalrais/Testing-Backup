@@ -158,7 +158,7 @@
     <Compile Include="ViewModel\Form\Asset\AssetMasterVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetAcquisitionHeaderVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetAcquisitionItemVM.cs" />
-    <Compile Include="ViewModel\Form\Asset\AssetAcquisitionVM.cs" />
+    <Compile Include="ViewModel\Form\Asset\WBSMaterVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetCheckFormHeaderVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetCheckFormItemVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetCheckFormVM.cs" />
@@ -186,6 +186,7 @@
     <Compile Include="ViewModel\Form\Asset\AssetTransactionHeaderVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetTransactionItemVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetTransactionVM.cs" />
+    <Compile Include="ViewModel\Form\Asset\AssignmentofAssetDetailVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssignmentofAssetHeaderVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssignmentofAssetItemVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssignmentofAssetVM.cs" />
@@ -222,6 +223,7 @@
     <Compile Include="ViewModel\Form\HR\FeeSlipVM.cs" />
     <Compile Include="ViewModel\Form\HR\IndividualGoalDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\PayrollRunVM.cs" />
+    <Compile Include="ViewModel\Form\HR\PayrollWorksheetDraftVM.cs" />
     <Compile Include="ViewModel\Form\HR\ViewInsuranceProfessionalVM.cs" />
     <Compile Include="ViewModel\Form\HR\InsuranceClaimAXAVM.cs" />
     <Compile Include="ViewModel\Form\HR\InsuranceClaimVM.cs" />

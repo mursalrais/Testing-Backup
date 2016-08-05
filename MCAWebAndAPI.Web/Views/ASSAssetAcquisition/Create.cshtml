@@ -5,14 +5,14 @@
 @model AssetAcquisitionHeaderVM
 
 @using (Ajax.BeginForm("Submit", "ASSassetAcquisition",
-                                                                                       FormMethod.Post,
-                                                                                       new AjaxOptions
-                                                                                       {
-                                                                                           OnBegin = "onBeginForm",
-                                                                                           OnComplete = "onCompleteForm",
-                                                                                           OnSuccess = "onSuccessFormEmbed",
-                                                                                           OnFailure = "onFailureForm"
-                                                                                       }, new { @class = "form-horizontal" }))
+                                                                                                   FormMethod.Post,
+                                                                                                   new AjaxOptions
+                                                                                                   {
+                                                                                                       OnBegin = "onBeginForm",
+                                                                                                       OnComplete = "onCompleteForm",
+                                                                                                       OnSuccess = "onSuccessFormEmbed",
+                                                                                                       OnFailure = "onFailureForm"
+                                                                                                   }, new { @class = "form-horizontal" }))
 
 {
     <form class="form-horizontal" method="post" action="/ASSassetAcquisition/Submit" id="create-asset-acquisition-form">
@@ -66,6 +66,7 @@
         <div>
             <center>
                 <input class="k-button k-button-icontext k-grid-add" type="submit" value="Save" />
+                <input class="k-button k-button-icontext k-grid-add" ControlMode="New" id="gobackbutton1" />
                 <input class="k-button k-button-icontext k-grid-add" value="Cancel" onclick="return cancelButton()" />
             </center>
         </div>
@@ -76,6 +77,6 @@
 
 <script>
     function cancelButton() {
-        window.location = "https://eceos2.sharepoint.com/sites/mca-dev/BO/Lists/Asset%20Acquisition/AllItems.aspx";
+        alert(_spPageContextInfo.siteAbsoluteUrl);
     }
 </script>

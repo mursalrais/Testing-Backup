@@ -476,7 +476,7 @@ namespace MCAWebAndAPI.Web.Controllers
                     e.ProfessionalMail,
                     e.ProjectUnit,
                     e.StrPSARenewal,
-                    e.StrPosition,
+                    //e.StrPosition,
                     e.PositionID
                     }
             ), JsonRequestBehavior.AllowGet);

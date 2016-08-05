@@ -14,6 +14,7 @@ using MCAWebAndAPI.Service.Converter;
 using MCAWebAndAPI.Service.Utils;
 using Kendo.Mvc.UI;
 using Kendo.Mvc.Extensions;
+using MCAWebAndAPI.Service.Resources;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -25,6 +26,8 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             _assetMasterService = new AssetMasterService();
         }
+
+
 
         public JsonResult GetAssetMasters()
         {
@@ -50,37 +53,48 @@ namespace MCAWebAndAPI.Web.Controllers
             })), JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Create(string site)
+        public ActionResult Create(string siteUrl=null)
         {
+            // MANDATORY: Set Site URL
+            _assetMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
             var viewModel = _assetMasterService.GetAssetMaster();
             return View(viewModel);
         }
 
-        public ActionResult Edit(int ID, string site)
+        public ActionResult Edit(int ID, string siteUrl)
         {
+            _assetMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
             var viewModel = _assetMasterService.GetAssetMaster(ID);
             return View(viewModel);
         }
 
         [HttpPost]
-        public ActionResult Submit(AssetMasterVM _data, string site)
+        public ActionResult Submit(FormCollection form, AssetMasterVM _data)
         {
             //return View(new AssetMasterVM());
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _assetMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
             _assetMasterService.CreateAssetMaster(_data);
-            return new JavaScriptResult
+          
             {
-                Script = string.Format("window.parent.location.href = '{0}'", "https://eceos2.sharepoint.com/sites/mca-dev/bo/Lists/AssetMaster/AllItems.aspx")
+                return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetMaster);
             };
         }
 
-        public ActionResult Update(AssetMasterVM _data, string site)
+        public ActionResult Update(FormCollection form,AssetMasterVM _data, string site)
         {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _assetMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
             //return View(new AssetMasterVM());
             _assetMasterService.UpdateAssetMaster(_data);
-            return new JavaScriptResult
-            {
-                Script = string.Format("window.parent.location.href = '{0}'", "https://eceos2.sharepoint.com/sites/mca-dev/bo/Lists/AssetMaster/AllItems.aspx")
-            };
+
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetMaster);
         }
 
         [HttpGet]

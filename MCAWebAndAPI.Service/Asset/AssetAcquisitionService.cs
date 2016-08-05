@@ -9,6 +9,7 @@ using MCAWebAndAPI.Service.Utils;
 using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Service.Resources;
 using Microsoft.SharePoint.Client;
+using MCAWebAndAPI.Model.ViewModel.Control;
 
 namespace MCAWebAndAPI.Service.Asset
 {
@@ -106,19 +107,41 @@ namespace MCAWebAndAPI.Service.Asset
 
             foreach (var item in SPConnector.GetList("Asset Master", _siteUrl))
             {
-                models.Add(ConvertToModel(item));
+                models.Add(ConvertToModelAssetSubAsset(item));
             }
 
             return models;
         }
 
-        private AssetMasterVM ConvertToModel(ListItem item)
+        public IEnumerable<WBSMaterVM> GetWBS()
+        {
+            var models = new List<WBSMaterVM>();
+
+            foreach (var item in SPConnector.GetList("WBSMaster", _siteUrl))
+            {
+                models.Add(ConvertToModelWBS(item));
+            }
+
+            return models;
+        }
+
+        private AssetMasterVM ConvertToModelAssetSubAsset(ListItem item)
         {
             var viewModel = new AssetMasterVM();
 
             viewModel.ID = Convert.ToInt32(item["ID"]);
             viewModel.AssetNoAssetDesc.Value = Convert.ToString(item["AssetID"]);
             viewModel.AssetDesc = Convert.ToString(item["Title"]);
+            return viewModel;
+        }
+
+        private WBSMaterVM ConvertToModelWBS(ListItem item)
+        {
+            var viewModel = new WBSMaterVM();
+
+            viewModel.ID = Convert.ToInt32(item["ID"]);
+            viewModel.WBSID = Convert.ToString(item["Title"]);
+            viewModel.WBDDesc = Convert.ToString(item["WBDDesc"]);
             return viewModel;
         }
 
@@ -153,6 +176,11 @@ namespace MCAWebAndAPI.Service.Asset
                 var updatedValues = new Dictionary<string, object>();
                 updatedValues.Add("Asset_x0020_Acquisition", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
                 updatedValues.Add("Asset_x002d_Sub_x0020_Asset", new FieldLookupValue { LookupId = Convert.ToInt32(item.AssetSubAsset.Value.Value) });
+                updatedValues.Add("PO_x0020_Line_x0020_Item", item.POLineItem);
+                updatedValues.Add("Cost_x0020_IDR", item.CostIDR);
+                updatedValues.Add("Cost_x0020_USD", item.CostUSD);
+                updatedValues.Add("Remarks", item.Remarks);
+                updatedValues.Add("Status", "RUNNING");
                 try
                 {
                     SPConnector.AddListItem(SP_ASSACQDetails_LIST_NAME, updatedValues, _siteUrl);
@@ -179,12 +207,85 @@ namespace MCAWebAndAPI.Service.Asset
 
         private AssetAcquisitionItemVM ConvertToDetails(ListItem item)
         {
+            var ListAssetSubAsset = SPConnector.GetListItem("Asset Master", (item["Asset_x002d_Sub_x0020_Asset"] as FieldLookupValue).LookupId, _siteUrl);
+            AjaxComboBoxVM _assetSubAsset = new AjaxComboBoxVM();
+            _assetSubAsset.Value = (item["Asset_x002d_Sub_x0020_Asset"] as FieldLookupValue).LookupId;
+            _assetSubAsset.Text = Convert.ToString(ListAssetSubAsset["AssetID"]) + " - " + Convert.ToString(ListAssetSubAsset["Title"]);
             return new AssetAcquisitionItemVM
             {
                 ID = Convert.ToInt32(item["ID"]),
-                //viewModel.AccpMemo.Text = (listItem["Acceptance_x0020_Memo_x0020_No"] as FieldLookupValue).LookupId.ToString()+"-"+(listItem["Acceptance_x0020_Memo_x0020_No"] as FieldLookupValue).LookupValue;
-                AssetSubAsset = AssetAcquisitionItemVM.GetAssetSubAssetDefaultValue(FormatUtil.ConvertToInGridAjaxComboBox(item, "Asset_x002d_Sub_x0020_Asset"))
+                AssetSubAsset = AssetAcquisitionItemVM.GetAssetSubAssetDefaultValue(_assetSubAsset)
             };
+        }
+
+        public bool UpdateHeader(AssetAcquisitionHeaderVM viewmodel)
+        {
+            var columnValues = new Dictionary<string, object>();
+            var ID = Convert.ToInt32(viewmodel.ID);
+            //columnValues.add
+            columnValues.Add("Title", viewmodel.TransactionType);
+            string[] memo = viewmodel.AccpMemo.Value.Split('-');
+            //columnValues.Add("Acceptance_x0020_Memo_x0020_No", memo[1]);
+            columnValues.Add("Acceptance_x0020_Memo_x0020_No", new FieldLookupValue { LookupId = Convert.ToInt32(memo[0]) });
+            columnValues.Add("Vendor", viewmodel.Vendor);
+            columnValues.Add("PO_x0020_No", viewmodel.PoNo);
+            columnValues.Add("Purchase_x0020_Date", viewmodel.PurchaseDate);
+            columnValues.Add("Purchase_x0020_Description", viewmodel.PurchaseDescription);
+
+            try
+            {
+                SPConnector.UpdateListItem(SP_ASSACQ_LIST_NAME, ID, columnValues, _siteUrl);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.Message);
+            }
+            var entitiy = new AssetAcquisitionHeaderVM();
+            entitiy = viewmodel;
+            return true;
+        }
+
+        public void UpdateDetails(int? headerID, IEnumerable<AssetAcquisitionItemVM> items)
+        {
+            foreach (var item in items)
+            {
+                if (Item.CheckIfSkipped(item)) continue;
+
+                if (Item.CheckIfDeleted(item))
+                {
+                    try
+                    {
+                        SPConnector.DeleteListItem(SP_ASSACQDetails_LIST_NAME, item.ID, _siteUrl);
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error(e);
+                        throw e;
+                    }
+                    continue;
+                }
+
+                var updatedValues = new Dictionary<string, object>();
+                updatedValues.Add("Asset_x0020_Acquisition", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
+                updatedValues.Add("Asset_x002d_Sub_x0020_Asset", new FieldLookupValue { LookupId = Convert.ToInt32(item.AssetSubAsset.Value.Value) });
+                updatedValues.Add("PO_x0020_Line_x0020_Item", item.POLineItem);
+                updatedValues.Add("Cost_x0020_IDR", item.CostIDR);
+                updatedValues.Add("Cost_x0020_USD", item.CostUSD);
+                updatedValues.Add("Remarks", item.Remarks);
+                updatedValues.Add("Status", "RUNNING");
+                try
+                {
+                    if (Item.CheckIfUpdated(item))
+                        SPConnector.UpdateListItem(SP_ASSACQDetails_LIST_NAME, headerID, updatedValues, _siteUrl);
+                    else
+                        SPConnector.AddListItem(SP_ASSACQDetails_LIST_NAME, updatedValues, _siteUrl);
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e);
+                    throw new Exception(ErrorResource.SPUpdateError);
+                }
+            }
         }
     }
 }
