@@ -7,6 +7,7 @@ using MCAWebAndAPI.Model.ViewModel.Form.Asset;
 using NLog;
 using MCAWebAndAPI.Service.Utils;
 using System.Text.RegularExpressions;
+using MCAWebAndAPI.Service.Resources;
 
 namespace MCAWebAndAPI.Service.Asset
 {
@@ -30,6 +31,7 @@ namespace MCAWebAndAPI.Service.Asset
             viewModel.AssetType.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "AssetType", _siteUrl);
             viewModel.Condition.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "Condition", _siteUrl);
             viewModel.ProjectUnit.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "ProjectUnit", _siteUrl);
+            viewModel.InterviewerUrl = _siteUrl + UrlResource.AssetMaster;
 
             return viewModel;
         }
@@ -39,6 +41,7 @@ namespace MCAWebAndAPI.Service.Asset
             var listItem = SPConnector.GetListItem(SP_ASSMAS_LIST_NAME, ID, _siteUrl);
             var viewModel = new AssetMasterVM();
 
+            viewModel.InterviewerUrl = _siteUrl + UrlResource.AssetMaster;
             viewModel.AssetNoAssetDesc.Choices = GetChoiceFromList("AssetID");
             viewModel.AssetLevel.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "AssetLevel", _siteUrl);
             viewModel.AssetCategory.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "AssetCategory", _siteUrl);
@@ -72,6 +75,7 @@ namespace MCAWebAndAPI.Service.Asset
 
         public bool CreateAssetMaster(AssetMasterVM assetMaster)
         {
+            assetMaster.InterviewerUrl = _siteUrl + UrlResource.AssetMaster;
             var columnValues = new Dictionary<string, object>();
             string _assetID = GenerateAssetID(assetMaster);
 
@@ -114,7 +118,7 @@ namespace MCAWebAndAPI.Service.Asset
             }
             else
             {
-                columnValues.Add("WarranyExpires", null);
+                columnValues.Add("WarranyExpires", DateTime.Now.ToShortDateString());
             }
             
             try
@@ -133,6 +137,7 @@ namespace MCAWebAndAPI.Service.Asset
 
         public bool UpdateAssetMaster(AssetMasterVM assetMaster)
         {
+            assetMaster.InterviewerUrl = _siteUrl + UrlResource.AssetMaster;
             var columnValues = new Dictionary<string, object>();
             int ID = assetMaster.ID.Value;
             string _assetID = GenerateAssetID(assetMaster);
@@ -176,7 +181,7 @@ namespace MCAWebAndAPI.Service.Asset
             }
             else
             {
-                columnValues.Add("WarranyExpires", null);
+                columnValues.Add("WarranyExpires", DateTime.Now.ToShortDateString());
             }
 
             try

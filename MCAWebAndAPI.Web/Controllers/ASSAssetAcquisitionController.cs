@@ -366,16 +366,23 @@ namespace MCAWebAndAPI.Web.Controllers
                     {
                         var listNameHeader = "Asset Acquisition";
                         var TableHeader = new DataTable();
-                        TableHeader.Columns.Add("TransType", typeof(string));
-                        TableHeader.Columns.Add("AccMemo", typeof(string));
+                        TableHeader.Columns.Add("Title", typeof(string));
+                        TableHeader.Columns.Add("Acceptance_x0020_Memo_x0020_No", typeof(string));
                         TableHeader.Columns.Add("Vendor", typeof(string));
-                        TableHeader.Columns.Add("PoNo", typeof(string));
-                        TableHeader.Columns.Add("PurDate", typeof(string));
-                        TableHeader.Columns.Add("PurDesc", typeof(string));
-                        for(int h = 0;h==6;h++)
-                        {
-                            TableHeader.Rows.Add(d.ItemArray[h].ToString());
-                        }
+                        TableHeader.Columns.Add("PO_x0020_No", typeof(string));
+                        TableHeader.Columns.Add("Purchase_x0020_Date", typeof(string));
+                        TableHeader.Columns.Add("Purchase_x0020_Description", typeof(string));
+
+                        DataRow row = TableHeader.NewRow();
+
+
+                        row["Title"] = d.ItemArray[0].ToString();
+                        row["Acceptance_x0020_Memo_x0020_No"] = d.ItemArray[1].ToString();
+                        row["Vendor"] = d.ItemArray[2].ToString();
+                        row["PO_x0020_No"] = d.ItemArray[3].ToString();
+                        row["Purchase_x0020_Date"] = d.ItemArray[4].ToString();
+                        row["Purchase_x0020_Description"] = d.ItemArray[5].ToString();
+
                         latestIDHeader = _assetAcquisitionService.MassUploadHeader(listNameHeader, TableHeader, siteUrl);
                     }
                     catch(Exception e)
@@ -395,11 +402,18 @@ namespace MCAWebAndAPI.Web.Controllers
                         TableDetail.Columns.Add("CostIDR", typeof(string));
                         TableDetail.Columns.Add("CostUSD", typeof(string));
                         TableDetail.Columns.Add("Remarks", typeof(string));
-                        TableDetail.Columns.Add("Running", typeof(string));
-                        for (int de = 7; de == 13; de++)
-                        {
-                            TableDetail.Rows.Add(d.ItemArray[de].ToString());
-                        }
+                        TableDetail.Columns.Add("Status", typeof(string));
+
+                        DataRow row = TableDetail.NewRow();
+
+                        row["POLineItem"] = d.ItemArray[0].ToString();
+                        row["AssetSubAsset"] = d.ItemArray[1].ToString();
+                        row["WBS"] = d.ItemArray[2].ToString();
+                        row["CostIDR"] = Convert.ToInt32(d.ItemArray[3]);
+                        row["CostUSD"] = Convert.ToInt32(d.ItemArray[4].ToString());
+                        row["Remarks"] = d.ItemArray[5].ToString();
+                        row["Status"] = d.ItemArray[6].ToString();
+
                         _assetAcquisitionService.MassUploadDetail(listNameDetail, latestIDHeader,  TableDetail, siteUrl);
                     }
                     catch (Exception e)
