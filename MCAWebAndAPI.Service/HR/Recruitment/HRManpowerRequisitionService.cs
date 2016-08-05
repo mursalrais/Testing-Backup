@@ -22,6 +22,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         const string SP_WORKRE_LIST_NAME = "Manpower Requisition Working Relationship";
         const string SP_MANDOC_LIST_NAME = "Manpower Requisition Documents";
         const string SP_POSITION_MAST = "Position Master";
+        const string SP_MANPOW_WORKFLOW =  "Manpower Requisition Workflow";
 
         public int CreateManpowerRequisition(ManpowerRequisitionVM viewModel)
         {
@@ -311,8 +312,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             //var viewModel = new ManpowerRequisitionVM();
 
-            viewModel.ExpectedJoinDate = Convert.ToDateTime(listItem["expectedjoindate"]);
-            viewModel.DateRequested = Convert.ToDateTime(listItem["requestdate"]);
+            viewModel.ExpectedJoinDate = Convert.ToDateTime(listItem["expectedjoindate"]).ToLocalTime();
+            viewModel.DateRequested = Convert.ToDateTime(listItem["requestdate"]).ToLocalTime();
 
             viewModel.NoOfPerson = Convert.ToInt32(listItem["numberofperson"]);
             viewModel.Tenure = Convert.ToInt32(listItem["Tenure"]);
@@ -569,6 +570,17 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
 
             return "ad";
+        }
+
+        public string GetApprover(int level, int headerID)
+        {
+            string email = "anugerahseptian@gmail.com";
+            string caml = @"<View><Query><Where><And><Eq><FieldRef Name='manpowerrequisition' /><Value Type='Lookup'>"+headerID.ToString()+"</Value></Eq><Eq><FieldRef Name='approverlevel' /><Value Type='Choice'>"+level.ToString()+"</Value></Eq></And></Where></Query><ViewFields><FieldRef Name='approver0' /></ViewFields><QueryOptions /></View>";
+            foreach (var item in SPConnector.GetList(SP_WORKRE_LIST_NAME,_siteUrl,caml))
+            {
+                email = Convert.ToString(item["approver0"]);
+            }
+            return email;
         }
     }
 }

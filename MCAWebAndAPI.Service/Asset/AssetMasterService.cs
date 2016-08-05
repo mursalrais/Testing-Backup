@@ -12,7 +12,7 @@ namespace MCAWebAndAPI.Service.Asset
 {
     public class AssetMasterService : IAssetMasterService
     {
-        string _siteUrl = "https://eceos2.sharepoint.com/sites/mca-dev/bo/";
+        string _siteUrl;
         static Logger logger = LogManager.GetCurrentClassLogger();
         const string SP_ASSMAS_LIST_NAME = "Asset Master";
 
