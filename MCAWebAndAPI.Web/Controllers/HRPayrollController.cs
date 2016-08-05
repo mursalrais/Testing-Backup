@@ -130,6 +130,20 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewModel);
         }
 
+        public ActionResult DisplayPayrollWorksheetSummary(string siteUrl)
+        {
+            SessionManager.Set("SiteUrl", siteUrl);
+            _hRPayrollService.SetSiteUrl(siteUrl);
+
+            var viewModelPayroll = _hRPayrollService.GetPayrollWorksheetDetails(DateTime.Today);
+            SessionManager.Set("PayrollWorksheetDetailVM", viewModelPayroll);
+
+            var viewModel = new PayrollRunVM();
+            return View(viewModel);
+        }
+
+
+
         [HttpPost]
         public ActionResult UpdatePeriodWorksheet(PayrollRunVM viewModel)
         {

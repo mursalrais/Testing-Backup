@@ -240,7 +240,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.ID = Convert.ToInt32(listItem["ID"]);
             viewModel.FirstMiddleName = Convert.ToString(listItem["Title"]);
             viewModel.LastName = Convert.ToString(listItem["lastname"]);
-
             viewModel.PlaceOfBirth = Convert.ToString(listItem["placeofbirth"]);
             viewModel.DateOfBirth = Convert.ToDateTime(listItem["dateofbirth"]);
             viewModel.PermanentAddress =
@@ -276,7 +275,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.TrainingDetails = GetTrainingDetails(viewModel.ID);
             viewModel.WorkingExperienceDetails = GetWorkingExperienceDetails(viewModel.ID);
             viewModel.DocumentUrl = GetDocumentUrl(viewModel.ID);
-
             return viewModel;
         }
 
@@ -285,9 +283,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             Task<IEnumerable<EducationDetailVM>> getEducationTask = GetEducationDetailsAsync(viewModel.ID);
             Task<IEnumerable<TrainingDetailVM>> getTrainingTask = GetTrainingDetailsAsync(viewModel.ID);
             Task<IEnumerable<WorkingExperienceDetailVM>> getWorkingExperienceTask = GetWorkingExperienceDetailsAsync(viewModel.ID);
-
             Task allTasks = Task.WhenAll(getEducationTask, getTrainingTask, getWorkingExperienceTask);
             await allTasks;
+
             viewModel.EducationDetails = await getEducationTask;
             viewModel.TrainingDetails = await getTrainingTask;
             viewModel.WorkingExperienceDetails = await getWorkingExperienceTask;
@@ -296,6 +294,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return viewModel;
         }
 
+        
         private async Task<IEnumerable<WorkingExperienceDetailVM>> GetWorkingExperienceDetailsAsync(int? iD)
         {
             return GetWorkingExperienceDetails(iD);
@@ -306,6 +305,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return string.Format(UrlResource.ApplicationDocumentByID, _siteUrl, iD);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="iD"></param>
+        /// <returns></returns>
         private IEnumerable<HttpPostedFileBase> GetDocuments(int? iD)
         {
             var caml = @"<View>  
@@ -510,7 +514,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             var status = "Active";
             var caml = @"<View>  
                     <Query> 
-                       <Where><Eq><FieldRef Name='manpowerrequeststatus' /><Value Type='Text'>" 
+                       <Where><Eq><FieldRef Name='manpowerrequeststatus' /><Value Type='Text'>"
                     + status + @"</Value></Eq></Where><OrderBy><FieldRef Name='positionrequested_x003a_Position' /></OrderBy> 
                     </Query> 
                     <ViewFields><FieldRef Name='manpowerrequeststatus' /><FieldRef Name='ID' /><FieldRef Name='positionrequested' /><FieldRef Name='positionrequested_x003a_Position' /></ViewFields></View>";

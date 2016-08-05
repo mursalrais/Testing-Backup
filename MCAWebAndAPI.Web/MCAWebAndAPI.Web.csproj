@@ -35,6 +35,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PublishDatabases>true</PublishDatabases>
+    <ExcludeFilesFromDeployment>bin\TuesPechkin.Wkhtmltox.Win64.dll</ExcludeFilesFromDeployment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -715,8 +716,8 @@
     <Content Include="Scripts\custom.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
-    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -1278,6 +1279,8 @@
     <Content Include="Views\FINTaxReimbursement\CreateTaxReimbursement.cshtml" />
     <Content Include="Views\FINEventBudget\Create.cshtml" />
     <Content Include="Views\FINEventBudget\_ItemDetails.cshtml" />
+    <Content Include="Views\BIEmbed\WFP01HN.cshtml" />
+    <Content Include="Views\BIEmbed\WFP03HN.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
