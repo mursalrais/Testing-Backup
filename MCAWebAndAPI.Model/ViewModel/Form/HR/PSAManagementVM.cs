@@ -239,5 +239,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         public string ProfessionalFullName { get; set; }
 
+        public DateTime TwoMonthBeforeExpiryDate { get; set; } = DateTime.Now;
+        public string StrTwoMonthBeforeExpiryDate { get; set; }
+
     }
 }
