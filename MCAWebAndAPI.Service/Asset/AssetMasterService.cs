@@ -232,10 +232,6 @@ namespace MCAWebAndAPI.Service.Asset
 
         private object GetAssetIDLastNumberForSubAsset(string assetID, string from = null)
         {
-            if(_siteUrl != "https://eceos2.sharepoint.com/sites/mca-dev/bo")
-            {
-                _siteUrl = "https://eceos2.sharepoint.com/sites/mca-dev/bo";
-            }
             var caml = @"<View>  
                 <Query> 
                     <Where><Contains><FieldRef Name='AssetID' /><Value Type='Text'>"
@@ -292,10 +288,6 @@ namespace MCAWebAndAPI.Service.Asset
 
         int GetAssetIDLastNumber(string assetID)
         {
-            //if (_siteUrl != "https://eceos2.sharepoint.com/sites/mca-dev/bo")
-            //{
-            //    _siteUrl = "https://eceos2.sharepoint.com/sites/mca-dev/bo";
-            //}
             var caml = @"<View>  
                 <Query> 
                     <Where><Contains><FieldRef Name='AssetID' /><Value Type='Text'>"
