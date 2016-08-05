@@ -86,6 +86,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
                 int id = Convert.ToInt32(psaData["ID"]);
                 DateTime expireDate = Convert.ToDateTime(psaData["psaexpirydate"]).ToLocalTime();
                 DateTime newpsadate = Convert.ToDateTime(psaData["dateofnewpsa"]).ToLocalTime();
+                string strStatus = Convert.ToString(psaData["psastatus"]);
                 DateTime dateToday = DateTime.Now.ToLocalTime();
                 var columnValues = new Dictionary<string, object>();
                 if (dateToday < newpsadate || dateToday > expireDate)
@@ -95,8 +96,12 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
                 }
                 else if (dateToday >= newpsadate && dateToday < expireDate)
                 {
-                    columnValues.Add("psastatus", "Active");
-                    SPConnector.UpdateListItemNoVersionConflict(SP_PSA_LIST_NAME, id, columnValues, _siteUrl);
+                    if (strStatus != "Active")
+                    {
+                        columnValues.Add("psastatus", "Active");
+                        SPConnector.UpdateListItemNoVersionConflict(SP_PSA_LIST_NAME, id, columnValues, _siteUrl);
+                    }
+                   
                 }
 
             }
