@@ -140,6 +140,10 @@
             }
         }
 
+        $(document).ready(function () {
+            alert("level : " + $("#AssetNoAssetDesc_Value").data("kendoDropDownList").dataItem().DisplayText);
+        });
+
 
 
         function onAssetIDChange() {
