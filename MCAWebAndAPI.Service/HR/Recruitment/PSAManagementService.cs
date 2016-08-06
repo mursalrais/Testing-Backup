@@ -49,6 +49,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.PSAId = Convert.ToInt32(item["ID"]);
             viewModel.DateOfNewPSABefore = Convert.ToDateTime(item["dateofnewpsa"]).ToLocalTime();
             viewModel.DateNewPSABefore = Convert.ToDateTime(item["dateofnewpsa"]).ToLocalTime().ToShortDateString();
+            viewModel.JoinDate = Convert.ToDateTime(item["joindate"]).ToLocalTime();
+            viewModel.StrJoinDate = Convert.ToDateTime(item["joindate"]).ToLocalTime().ToShortDateString();
 
             var professionalData = SPConnector.GetListItem(SP_PROF_LIST_NAME, viewModel.ID, _siteUrl);
             viewModel.ProfessionalMail = Convert.ToString(professionalData["officeemail"]);

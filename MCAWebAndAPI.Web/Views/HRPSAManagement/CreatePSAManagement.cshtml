@@ -136,7 +136,14 @@
                         var dateofnewpsabefore = result[0].DateNewPSABefore;
                         var projectUnit = result[0].ProjectUnit;
                         var positionID = result[0].PositionID;
+                        var strjoinDate = result[0].StrJoinDate;
 
+                        var joinDate = new Date(strjoinDate);
+                        var dateJoinDate = joinDate.getDate();
+                        var monthJoinDate = joinDate.getMonth();
+                        var yearJoinDate = joinDate.getFullYear();
+                        var joinDateProfessional = (monthJoinDate  + 1) + '/' + dateJoinDate + '/' + yearJoinDate;
+                        
                         var dateofnewpsa = new Date(dateofnewpsabefore);
                         var datenewpsa = dateofnewpsa.getDate();
                         var datenewpsaint = parseInt(datenewpsa);
@@ -180,7 +187,8 @@
 
                         $("#ProfessionalMail").prop('value', result[0].ProfessionalMail);
 
-                        console.log(result[0].ProfessionalMail);
+                        $("#JoinDate").data("kendoDatePicker").readonly();
+                        $("#JoinDate").prop('value', joinDateProfessional);
 
                         $("#ProjectOrUnit_Value").data("kendoDropDownList").value(result[0].ProjectUnit);
                         $("#Position_Value").data("kendoDropDownList").value(result[0].PositionID);

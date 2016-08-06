@@ -41,8 +41,14 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
         public bool CheckTwoMonthsBeforeExpireDate()
         {
-            var caml = "";
-            
+            string status = "Active";
+
+            var caml = @"<View>  
+            <Query> 
+               <Where><Eq><FieldRef Name='psastatus' /><Value Type='Text'>" + status + @"</Value></Eq></Where> 
+            </Query> 
+      </View>";
+
             foreach (var psaData in SPConnector.GetList(SP_PSA_LIST_NAME, _siteUrl, caml))
             {
                 DateTime expireDate = Convert.ToDateTime(psaData["psaexpirydate"]).ToLocalTime();
