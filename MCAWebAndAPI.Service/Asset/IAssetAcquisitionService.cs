@@ -30,7 +30,10 @@ namespace MCAWebAndAPI.Service.Asset
         IEnumerable<AssetMasterVM> GetAssetSubAsset();
         IEnumerable<WBSMaterVM> GetWBS();
 
-        int? MassUploadHeader(string ListName, DataTable CSVDataTable, string SiteUrl = null);
-        void MassUploadDetail(string ListName, int? headerID, DataTable CSVDataTable, string SiteUrl = null);
+        int? MassUploadHeaderDetail(string ListName, DataTable CSVDataTable, string SiteUrl = null);
+
+        bool isValueOfColumnExist(string listname, string SiteUrl, string caml);
+
+        Dictionary<int, string> getListIDOfList(string listName, string key, string value,  string SiteUrl);
     }
 }

@@ -289,7 +289,7 @@ namespace MCAWebAndAPI.Service.Asset
             throw new NotImplementedException();
         }
 
-        public int? MassUploadHeader(string ListName, DataTable CSVDataTable, string SiteUrl = null)
+        public int? MassUploadHeaderDetail(string ListName, DataTable CSVDataTable, string SiteUrl = null)
         {
             var rowTotal = CSVDataTable.Rows.Count;
             var columnTotal = CSVDataTable.Columns.Count;
@@ -345,7 +345,7 @@ namespace MCAWebAndAPI.Service.Asset
                 }
                 updatedValues = new Dictionary<string, object>();
             }
-            return SPConnector.GetLatestListItemID(ListName, _siteUrl);
+            return SPConnector.GetLatestListItemID(ListName, SiteUrl);
         }
 
         private bool isSkipped(string columnName)
@@ -360,9 +360,39 @@ namespace MCAWebAndAPI.Service.Asset
                && string.Compare(columnName.Split('_')[1], "lookup", StringComparison.OrdinalIgnoreCase) == 0;
         }
 
-        public void MassUploadDetail(string ListName, int? headerID, DataTable CSVDataTable, string SiteUrl = null)
+        public bool isValueOfColumnExist(string listname, string SiteUrl, string caml)
         {
-            throw new NotImplementedException();
+            var getItem = SPConnector.GetList(listname, SiteUrl, caml);
+            if(getItem.Count != 0 || getItem != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        Dictionary<int, string> IAssetAcquisitionService.getListIDOfList(string listName, string key, string value, string SiteUrl)
+        {
+            var caml = @"<View><Query />
+                        <ViewFields>
+                           <FieldRef Name='"+ key + @"' />
+                           <FieldRef Name='"+ value + @"' />
+                        </ViewFields>
+                        <QueryOptions /></View>";
+
+            var list = SPConnector.GetList(listName, SiteUrl, caml);
+            Dictionary<int, string> ids = new Dictionary<int, string>();
+            if(list.Count > 0)
+            {
+                foreach(var l in list)
+                {
+                    ids.Add(Convert.ToInt32(l[key]), Convert.ToString(l[value]));
+                }
+            }
+
+            return ids;
         }
     }
 }

@@ -115,7 +115,7 @@
     <script>
         function validateForm() {
             var x = document.forms["assMasterForm"]["AssetDesc"].value;
-            alert("assetDesc : " + x);
+            //alert("assetDesc : " + x);
             if (x == null || x == "") {
                 alert("Must be filled out");
                 return false;
@@ -138,46 +138,37 @@
             }
         }
 
-        function InvalidMsg(textbox) {
 
-            if (textbox.value == '') {
-                textbox.setCustomValidity('Must Fill Out');
-            }
-            else {
-                textbox.setCustomValidity('');
-            }
-            return true;
-        }
 
         function onAssetIDChange() {
-            var id = $("#AssetNoAssetDesc_Value").data("kendoDropDownList").value();
-            var splitid = id.split("-");
+            //var id = $("#AssetNoAssetDesc_Value").data("kendoDropDownList").value();
+            //var splitid = id.split("-");
 
-            var cats = ["FXA", "SVA"];
-            var pos = ["GP", "HN", "PM", "ME", "PC"];
-            var types = ["LA", "BU", "CO", "CE", "CS", "OE", "FF", "VE", "OT"];
+            //var cats = ["FXA", "SVA"];
+            //var pos = ["GP", "HN", "PM", "ME", "PC"];
+            //var types = ["LA", "BU", "CO", "CE", "CS", "OE", "FF", "VE", "OT"];
 
-            for (var i = 0; i < cats.length; i++) {
-                if (splitid[0] == cats[i]) {
-                    $("#AssetCategory_Value").data("kendoDropDownList").select(i);
-                    break;
-                }
-            }
+            //for (var i = 0; i < cats.length; i++) {
+            //    if (splitid[0] == cats[i]) {
+            //        $("#AssetCategory_Value").data("kendoDropDownList").select(i);
+            //        break;
+            //    }
+            //}
 
-            for (var i = 0; i < pos.length; i++) {
-                if (splitid[1] == pos[i]) {
-                    $("#ProjectUnit_Value").data("kendoDropDownList").select(i);
-                    break;
-                }
-            }
+            //for (var i = 0; i < pos.length; i++) {
+            //    if (splitid[1] == pos[i]) {
+            //        $("#ProjectUnit_Value").data("kendoDropDownList").select(i);
+            //        break;
+            //    }
+            //}
 
-            for (var i = 0; i < types.length; i++) {
-                if (splitid[2] == types[i]) {
-                    //alert("satu : " + $("#AssetType_Value").data("kendoDropDownList").value());
-                    $("#AssetType_Value").data("kendoDropDownList").select(i);
-                    break;
-                }
-            }
+            //for (var i = 0; i < types.length; i++) {
+            //    if (splitid[2] == types[i]) {
+            //        //alert("satu : " + $("#AssetType_Value").data("kendoDropDownList").value());
+            //        $("#AssetType_Value").data("kendoDropDownList").select(i);
+            //        break;
+            //    }
+            //}
 
             $("#AssetCategory_Value").data("kendoDropDownList").enable(false);
             $("#ProjectUnit_Value").data("kendoDropDownList").enable(false);
@@ -208,41 +199,21 @@
                 $("#ProjectUnit_Value").data("kendoDropDownList").value("");
 
                 $("#AssetType_Value").data("kendoDropDownList").enable(false);
-                $("#AssetType_Value").data("kendoDropDownList").value("");
+                //$("#AssetType_Value").data("kendoDropDownList").value("");
 
                 $("#AssetNoAssetDesc_Value").data("kendoDropDownList").enable(true);
-                $("#AssetNoAssetDesc_Value").data("kendoDropDownList").select("");
+                $("#AssetNoAssetDesc_Value").data("kendoDropDownList").select(0);
 
             }
 
 
         }
         $(function () {
-            if (this.dataItem(e.item) == "Main Asset") {
 
-                $("#AssetNoAssetDesc_Value").data("kendoDropDownList").enable(false);
-                $("#AssetNoAssetDesc_Value").data("kendoDropDownList").value("");
-
-                $("#AssetCategory_Value").data("kendoDropDownList").enable(true);
-                $("#AssetCategory_Value").data("kendoDropDownList").select(0);
-
-                $("#ProjectUnit_Value").data("kendoDropDownList").enable(true);
-                $("#ProjectUnit_Value").data("kendoDropDownList").select(0);
-
-                $("#AssetType_Value").data("kendoDropDownList").enable(true);
-                $("#AssetType_Value").data("kendoDropDownList").select(0);
-
-            }
-            else {
-                $("#AssetNoAssetDesc_Value").data("kendoDropDownList").enable(true);
-                $("#AssetCategory_Value").data("kendoDropDownList").enable(false);
-                $("#ProjectUnit_Value").data("kendoDropDownList").enable(false);
-                $("#AssetType_Value").data("kendoDropDownList").enable(false);
-            }
+            $("#AssetNoAssetDesc_Value").data("kendoDropDownList").enable(false);
+            $("#AssetCategory_Value").data("kendoDropDownList").enable(false);
+            $("#ProjectUnit_Value").data("kendoDropDownList").enable(false);
+            $("#AssetType_Value").data("kendoDropDownList").enable(false);
         });
 
     </script>
-}
-
-
-
