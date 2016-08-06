@@ -105,14 +105,11 @@
                    
                 </div>
                 <div class="col-sm-8">
-                    <div class="col-sm-5">
-                       
-                    </div>
-                    <div class="col-sm-7">
+                    
                         <input class="k-button k-button-icontext k-grid-add" type="submit" value="Save"  />
                         <input type="button" class="k-button k-button-icontext k-grid-add" value="Cancel" onclick="Redirect();" />
-                    </div>
-            </div>
+                   
+                </div>
 
             
         </div  >
@@ -187,7 +184,7 @@
         }
 
         function Redirect() {
-            window.location.href = 'https://eceos2.sharepoint.com/sites/ims/bo/Lists/AssetMaster/AllItems.aspx';
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.MonthlyFee);
         }
 
         function onAssetLevelClick() {
