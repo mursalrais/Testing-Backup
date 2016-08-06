@@ -141,40 +141,27 @@
         }
 
         $(document).ready(function () {
-            alert("level : " + $("#AssetNoAssetDesc_Value").data("kendoDropDownList").dataItem().DisplayText);
+           // alert($("#AssetLevel_Value").data("kendoDropDownList").text());
+            if ($("#AssetLevel_Value").data("kendoDropDownList").text() == "Main Asset")
+            {
+                $("#AssetNoAssetDesc_Value").data("kendoDropDownList").enable(false);
+                $("#AssetCategory_Value").data("kendoDropDownList").enable(true);
+                $("#ProjectUnit_Value").data("kendoDropDownList").enable(true);
+                $("#AssetType_Value").data("kendoDropDownList").enable(true);
+            }
+            else
+            {
+                $("#AssetNoAssetDesc_Value").data("kendoDropDownList").enable(true);
+                $("#AssetCategory_Value").data("kendoDropDownList").enable(false);
+                $("#ProjectUnit_Value").data("kendoDropDownList").enable(false);
+                $("#AssetType_Value").data("kendoDropDownList").enable(false);
+            }
+            //alert("level : " + $("#AssetLevel").data("kendoDropDownList").text());
         });
 
 
 
         function onAssetIDChange() {
-            //var id = $("#AssetNoAssetDesc_Value").data("kendoDropDownList").value();
-            //var splitid = id.split("-");
-
-            //var cats = ["FXA", "SVA"];
-            //var pos = ["GP", "HN", "PM", "ME", "PC"];
-            //var types = ["LA", "BU", "CO", "CE", "CS", "OE", "FF", "VE", "OT"];
-
-            //for (var i = 0; i < cats.length; i++) {
-            //    if (splitid[0] == cats[i]) {
-            //        $("#AssetCategory_Value").data("kendoDropDownList").select(i);
-            //        break;
-            //    }
-            //}
-
-            //for (var i = 0; i < pos.length; i++) {
-            //    if (splitid[1] == pos[i]) {
-            //        $("#ProjectUnit_Value").data("kendoDropDownList").select(i);
-            //        break;
-            //    }
-            //}
-
-            //for (var i = 0; i < types.length; i++) {
-            //    if (splitid[2] == types[i]) {
-            //        //alert("satu : " + $("#AssetType_Value").data("kendoDropDownList").value());
-            //        $("#AssetType_Value").data("kendoDropDownList").select(i);
-            //        break;
-            //    }
-            //}
 
             $("#AssetCategory_Value").data("kendoDropDownList").enable(false);
             $("#ProjectUnit_Value").data("kendoDropDownList").enable(false);
@@ -205,7 +192,7 @@
                 $("#ProjectUnit_Value").data("kendoDropDownList").value("");
 
                 $("#AssetType_Value").data("kendoDropDownList").enable(false);
-                //$("#AssetType_Value").data("kendoDropDownList").value("");
+                $("#AssetType_Value").data("kendoDropDownList").value("");
 
                 $("#AssetNoAssetDesc_Value").data("kendoDropDownList").enable(true);
                 $("#AssetNoAssetDesc_Value").data("kendoDropDownList").select(0);
@@ -214,16 +201,14 @@
 
 
         }
-        $(function () {
-
-            $("#AssetNoAssetDesc_Value").data("kendoDropDownList").enable(false);
-            $("#AssetCategory_Value").data("kendoDropDownList").enable(false);
-            $("#ProjectUnit_Value").data("kendoDropDownList").enable(false);
-            $("#AssetType_Value").data("kendoDropDownList").enable(false);
-        });
 
     </script>
 }
+
+
+
+
+
 
 
 
