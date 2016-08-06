@@ -313,7 +313,7 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}/PSA%20Documents/Forms/AllItems.aspx#InplviewHashed38c4d9-060a-4b7a-8a65-b4a07d7972e6=FilterField1%3Dpsa%255Fx003a%255FID-FilterValue1%3D{1}.
+        ///   Looks up a localized string similar to {0}/PSA%20Documents/Forms/AllItems.aspx?FilterField1=psa_x003a_ID&amp;FilterValue1={1}.
         /// </summary>
         public static string PSAManagementDocumentByID {
             get {
