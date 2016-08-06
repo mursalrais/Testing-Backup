@@ -106,7 +106,7 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lists/Asset%20Master/AllItems.aspx.
+        ///   Looks up a localized string similar to Lists/AssetMaster/AllItems.aspx.
         /// </summary>
         public static string AssetMaster {
             get {
