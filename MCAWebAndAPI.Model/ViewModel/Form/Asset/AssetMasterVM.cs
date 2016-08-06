@@ -160,5 +160,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
                 _condition = value;
             }
         }
+
+        public string InterviewerUrl { get; set; }
     }
 }

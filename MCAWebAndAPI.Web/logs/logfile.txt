@@ -296,3 +296,15 @@ Parameter name: source
 2016-08-05 16:15:18.3647 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 10/4/2016 12:00:00 AM--twoMonthsBeforeExpired: 8/4/2016 12:00:00 AM--strExpireDate: 10/4/2016--strTwoMonthBeforeExpired: 8/4/2016
 2016-08-05 16:15:20.8151 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 10/5/2016 12:00:00 AM--twoMonthsBeforeExpired: 8/5/2016 12:00:00 AM--strExpireDate: 10/5/2016--strTwoMonthBeforeExpired: 8/5/2016
 2016-08-05 16:17:04.0178 MCAWebAndAPI.Service.JobSchedulers.Jobs.PSAManagementJob Task Calculation Job at https://eceos2.sharepoint.com/sites/ims/hr has been successfully performed
+2016-08-05 17:19:56.4867 MCAWebAndAPI.Service.Converter.CSVConverter Column 'Transaction Type' does not exist. It may have been deleted by another user.  /sites/mca-dev/BO/Lists/Asset Acquisition at ID: 1
+2016-08-05 18:44:16.8209 MCAWebAndAPI.Service.Asset.AssetMasterService Cannot complete this action.
+
+Please try again.
+2016-08-05 18:51:22.5465 MCAWebAndAPI.Service.Asset.AssetMasterService Cannot complete this action.
+
+Please try again.
+2016-08-05 18:56:01.8222 MCAWebAndAPI.Service.Asset.AssetMasterService Item does not exist. It may have been deleted by another user.
+2016-08-05 18:58:13.1009 MCAWebAndAPI.Service.Asset.AssetMasterService Item does not exist. It may have been deleted by another user.
+2016-08-06 01:55:22.0734 MCAWebAndAPI.Service.Asset.AssetMasterService Cannot complete this action.
+
+Please try again.

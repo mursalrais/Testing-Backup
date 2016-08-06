@@ -355,14 +355,83 @@ namespace MCAWebAndAPI.Web.Controllers
             var sessionVariables = SessionManager.Get<DataTable>("CSVDataTable") ?? new DataTable();
             var siteUrl = SessionManager.Get<string>("SiteUrl");
 
-            try
+            //cek apakah header / item
+            int x = 0;
+            int? latestIDHeader = 0;
+            foreach(DataRow d in SessionManager.Get<DataTable>("CSVDataTable").Rows)
             {
-                CSVConverter.Instance.MassUpload(listName, sessionVariables, siteUrl);
+                if (d.ItemArray[0].ToString() == "Asset Acquisition")
+                {
+                    try
+                    {
+                        var listNameHeader = "Asset Acquisition";
+                        var TableHeader = new DataTable();
+                        TableHeader.Columns.Add("Title", typeof(string));
+                        TableHeader.Columns.Add("Acceptance_x0020_Memo_x0020_No", typeof(string));
+                        TableHeader.Columns.Add("Vendor", typeof(string));
+                        TableHeader.Columns.Add("PO_x0020_No", typeof(string));
+                        TableHeader.Columns.Add("Purchase_x0020_Date", typeof(string));
+                        TableHeader.Columns.Add("Purchase_x0020_Description", typeof(string));
+
+                        DataRow row = TableHeader.NewRow();
+
+
+                        row["Title"] = d.ItemArray[0].ToString();
+                        row["Acceptance_x0020_Memo_x0020_No"] = d.ItemArray[1].ToString();
+                        row["Vendor"] = d.ItemArray[2].ToString();
+                        row["PO_x0020_No"] = d.ItemArray[3].ToString();
+                        row["Purchase_x0020_Date"] = d.ItemArray[4].ToString();
+                        row["Purchase_x0020_Description"] = d.ItemArray[5].ToString();
+
+                        latestIDHeader = _assetAcquisitionService.MassUploadHeader(listNameHeader, TableHeader, siteUrl);
+                    }
+                    catch(Exception e)
+                    {
+                        return JsonHelper.GenerateJsonErrorResponse(e);
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        var listNameDetail = "Asset Acquisition Details";
+                        var TableDetail = new DataTable();
+                        TableDetail.Columns.Add("POLineItem", typeof(string));
+                        TableDetail.Columns.Add("AssetSubAsset", typeof(int));
+                        TableDetail.Columns.Add("WBS", typeof(string));
+                        TableDetail.Columns.Add("CostIDR", typeof(string));
+                        TableDetail.Columns.Add("CostUSD", typeof(string));
+                        TableDetail.Columns.Add("Remarks", typeof(string));
+                        TableDetail.Columns.Add("Status", typeof(string));
+
+                        DataRow row = TableDetail.NewRow();
+
+                        row["POLineItem"] = d.ItemArray[0].ToString();
+                        row["AssetSubAsset"] = d.ItemArray[1].ToString();
+                        row["WBS"] = d.ItemArray[2].ToString();
+                        row["CostIDR"] = Convert.ToInt32(d.ItemArray[3]);
+                        row["CostUSD"] = Convert.ToInt32(d.ItemArray[4].ToString());
+                        row["Remarks"] = d.ItemArray[5].ToString();
+                        row["Status"] = d.ItemArray[6].ToString();
+
+                        _assetAcquisitionService.MassUploadDetail(listNameDetail, latestIDHeader,  TableDetail, siteUrl);
+                    }
+                    catch (Exception e)
+                    {
+                        return JsonHelper.GenerateJsonErrorResponse(e);
+                    }
+                }
+                x++;
             }
-            catch (Exception e)
-            {
-                return JsonHelper.GenerateJsonErrorResponse(e);
-            }
+
+            //try
+            //{
+            //    CSVConverter.Instance.MassUpload(listName, sessionVariables, siteUrl);
+            //}
+            //catch (Exception e)
+            //{
+            //    return JsonHelper.GenerateJsonErrorResponse(e);
+            //}
 
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl);
         }
