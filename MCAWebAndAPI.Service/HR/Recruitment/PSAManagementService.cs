@@ -51,8 +51,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.DateNewPSABefore = Convert.ToDateTime(item["dateofnewpsa"]).ToLocalTime().ToShortDateString();
             viewModel.ProfessionalMail = Convert.ToString((item["Professional_x0020_Name_x003a_Of"] as FieldLookupValue).LookupValue);
             viewModel.StrPSARenewal = Convert.ToString(item["renewalnumber"]);
-            viewModel.ProjectOrUnit.Value = FormatUtil.ConvertLookupToValue(item, "ProjectOrUnit");
-            viewModel.Position.Value = Convert.ToInt32((item["Professional_x0020_Name_x003a_Of"] as FieldLookupValue).LookupId);
+            viewModel.ProjectUnit = Convert.ToString(item["ProjectOrUnit"]);
+            viewModel.PositionID = Convert.ToInt32((item["position"] as FieldLookupValue).LookupId);
+
 
             //return new PSAManagementVM
             //{

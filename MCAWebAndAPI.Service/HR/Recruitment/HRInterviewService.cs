@@ -49,7 +49,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return useraccess;
         }
 
-        private ApplicationShortlistVM ConvertToResultInterviewDataVM(ListItem listItem)
+        private ApplicationShortlistVM ConvertToResultInterviewDataVM(ListItem listItem, int? posMan)
         {
             var viewModel = new ApplicationShortlistVM();
             viewModel.ID = Convert.ToInt32(listItem["ID"]);
@@ -57,7 +57,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.OtherPosition.Value = FormatUtil.ConvertLookupToID(listItem, "recommendedforposition");
             viewModel.Candidate = Convert.ToString(listItem["Title"]) + " " + Convert.ToString(listItem["lastname"]);
             viewModel.SendTo = Convert.ToString(listItem["personalemail"]);
-            viewModel.InterviewerUrl = string.Format(UrlResource.AddInterviewInvitation, _siteUrl, Convert.ToInt32(listItem["ID"]));
+            viewModel.InterviewerUrl = string.Format(UrlResource.AddInterviewInvitation, _siteUrl, Convert.ToInt32(listItem["ID"]), posMan);
             viewModel.Remarks = Convert.ToString(listItem["applicationremarks"]); 
             viewModel.NeedNextInterviewer.Value = Convert.ToString(listItem["neednextinterview"]);
             viewModel.RecommendedForPosition.Value = Convert.ToString(listItem["applicationstatus"]);
@@ -69,7 +69,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return viewModel;
         }
 
-        public ApplicationShortlistVM GetResultlistInterview(int? ID)
+        public ApplicationShortlistVM GetResultlistInterview(int? ID, int? posMan)
         {
             var viewModel = new ApplicationShortlistVM();
 
@@ -88,7 +88,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 throw e;
             }
 
-            viewModel = ConvertToResultInterviewDataVM(listItemdt);
+            viewModel = ConvertToResultInterviewDataVM(listItemdt, posMan);
 
             return viewModel;
 

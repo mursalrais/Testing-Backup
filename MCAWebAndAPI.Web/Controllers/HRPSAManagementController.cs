@@ -474,9 +474,10 @@ namespace MCAWebAndAPI.Web.Controllers
                     e.DateNewPSABefore,
                     e.JoinDate,
                     e.ProfessionalMail,
-                    e.ProjectOrUnit,
+                    e.ProjectUnit,
                     e.StrPSARenewal,
-                    e.Position
+                    //e.StrPosition,
+                    e.PositionID
                     }
             ), JsonRequestBehavior.AllowGet);
         }

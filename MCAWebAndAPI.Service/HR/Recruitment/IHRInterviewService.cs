@@ -14,7 +14,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         ApplicationShortlistVM GetInterviewlist(int? position, string username, string useraccess);
 
-        ApplicationShortlistVM GetResultlistInterview(int? ID);
+        ApplicationShortlistVM GetResultlistInterview(int? ID, int? posMan);
 
         void CreateInterviewDataDetail(int? headerID, ApplicationShortlistVM list);
 

@@ -189,7 +189,7 @@ namespace MCAWebAndAPI.Web.Controllers
             _service.SetSiteUrl(siteurl);
             SessionManager.Set("siteurl", siteurl);
 
-            var viewmodel = _service.GetResultlistInterview(ID);
+            var viewmodel = _service.GetResultlistInterview(ID, posMan);
             viewmodel.SiteUrl = siteurl;
             viewmodel.ManPos = posMan;
             //viewmodel.ID = id;
@@ -220,19 +220,20 @@ namespace MCAWebAndAPI.Web.Controllers
                new
                {
                    siteurl = siteUrl,
-                   ID = headerID
+                   ID = headerID,
+                   posMan = viewModel.ManPos
                });
         }
 
-        public ActionResult InputInterviewResultDetail(string siteurl = null, int? ID = null)
+        public ActionResult InputInterviewResultDetail(string siteurl = null, int? ID = null, int? manPos = null)
         {
 
             //mandatory: set site url
             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
 
-            var viewmodel = _service.GetResultlistInterview(ID); 
-            //viewmodel.SendTo = "";
+            var viewmodel = _service.GetResultlistInterview(ID, manPos); 
+            viewmodel.ManPos = manPos;
             //viewmodel.ID = id;
             return View(viewmodel);
         }

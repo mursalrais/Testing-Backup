@@ -12,28 +12,18 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 {
     public class AssetAcquisitionItemVM : Item
     {
-        private ComboBoxVM _assetSubAsset;
-        [UIHint("ComboBox")]
-        public ComboBoxVM AssetSubAsset
-        {
-            get
-            {
-                if (_assetSubAsset == null)
-                {
-                    _assetSubAsset = new ComboBoxVM()
-                    {
-                        Choices = new string[]
-                        {
-                            ""
-                        }
-                    };
-                }
-                return _assetSubAsset;
-            }
+        [UIHint("InGridAjaxComboBox")]
+        public AjaxComboBoxVM AssetSubAsset { get; set; } = new AjaxComboBoxVM();
 
-            set
+        public static AjaxComboBoxVM GetAssetSubAssetDefaultValue(AjaxComboBoxVM model = null)
+        {
+            if (model == null)
             {
-                _assetSubAsset = value;
+                return new AjaxComboBoxVM();
+            }
+            else
+            {
+                return model;
             }
         }
     }
