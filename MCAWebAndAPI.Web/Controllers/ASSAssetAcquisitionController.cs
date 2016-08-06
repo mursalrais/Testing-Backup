@@ -358,16 +358,20 @@ namespace MCAWebAndAPI.Web.Controllers
             //cek apakah header / item
             int x = 0;
             int? latestIDHeader = 0;
-            foreach(DataRow d in SessionManager.Get<DataTable>("CSVDataTable").Rows)
+            foreach (DataRow d in SessionManager.Get<DataTable>("CSVDataTable").Rows)
             {
                 if (d.ItemArray[0].ToString() == "Asset Acquisition")
                 {
                     try
                     {
                         var listNameHeader = "Asset Acquisition";
+                        var listNameHeaderMemo = "Acceptance Memo";
+                        var IDMemo = _assetAcquisitionService.getListIDOfList(listNameHeaderMemo, "ID" , "Title", siteUrl);
+                        var myKey = IDMemo.FirstOrDefault(v => v.Value == d.ItemArray[2].ToString()).Key;
+
                         var TableHeader = new DataTable();
                         TableHeader.Columns.Add("Title", typeof(string));
-                        TableHeader.Columns.Add("Acceptance_x0020_Memo_x0020_No", typeof(string));
+                        TableHeader.Columns.Add("Acceptance_x0020_Memo_x0020_No", typeof(int));
                         TableHeader.Columns.Add("Vendor", typeof(string));
                         TableHeader.Columns.Add("PO_x0020_No", typeof(string));
                         TableHeader.Columns.Add("Purchase_x0020_Date", typeof(string));
@@ -375,17 +379,18 @@ namespace MCAWebAndAPI.Web.Controllers
 
                         DataRow row = TableHeader.NewRow();
 
-
                         row["Title"] = d.ItemArray[0].ToString();
-                        row["Acceptance_x0020_Memo_x0020_No"] = d.ItemArray[1].ToString();
-                        row["Vendor"] = d.ItemArray[2].ToString();
-                        row["PO_x0020_No"] = d.ItemArray[3].ToString();
-                        row["Purchase_x0020_Date"] = d.ItemArray[4].ToString();
-                        row["Purchase_x0020_Description"] = d.ItemArray[5].ToString();
+                        row["Acceptance_x0020_Memo_x0020_No"] = myKey;
+                        row["Vendor"] = d.ItemArray[4].ToString();
+                        row["PO_x0020_No"] = d.ItemArray[5].ToString();
+                        row["Purchase_x0020_Date"] = d.ItemArray[6].ToString();
+                        row["Purchase_x0020_Description"] = d.ItemArray[7].ToString();
 
-                        latestIDHeader = _assetAcquisitionService.MassUploadHeader(listNameHeader, TableHeader, siteUrl);
+                        TableHeader.Rows.InsertAt(row, 0);
+
+                        latestIDHeader = _assetAcquisitionService.MassUploadHeaderDetail(listNameHeader, TableHeader, siteUrl);   
                     }
-                    catch(Exception e)
+                    catch (Exception e)
                     {
                         return JsonHelper.GenerateJsonErrorResponse(e);
                     }
@@ -395,26 +400,102 @@ namespace MCAWebAndAPI.Web.Controllers
                     try
                     {
                         var listNameDetail = "Asset Acquisition Details";
+                        var listAssetMaster = "Asset Master";
+                        var listWBSMaster = "WBS Master";
+
+                        //var IDAssetMaster = _assetAcquisitionService.getListIDOfList(listNameHeaderMemo, "ID", "Title", siteUrl);
+                        //var myKeyAssetMaster = IDMemo.FirstOrDefault(v => v.Value == d.ItemArray[2].ToString()).Key;
+
+                        //var IDWBSMaster = _assetAcquisitionService.getListIDOfList(listNameHeaderMemo, "ID", "Title", siteUrl);
+                        //var myKeyWBSMaster = IDMemo.FirstOrDefault(v => v.Value == d.ItemArray[2].ToString()).Key;
+
                         var TableDetail = new DataTable();
-                        TableDetail.Columns.Add("POLineItem", typeof(string));
-                        TableDetail.Columns.Add("AssetSubAsset", typeof(int));
+                        TableDetail.Columns.Add("Asset_x0020_Acquisition", typeof(string));
+                        TableDetail.Columns.Add("PO_x0020_Line_x0020_Item", typeof(string));
+                        TableDetail.Columns.Add("Asset_x002d_Sub_x0020_Asset", typeof(string));
                         TableDetail.Columns.Add("WBS", typeof(string));
-                        TableDetail.Columns.Add("CostIDR", typeof(string));
-                        TableDetail.Columns.Add("CostUSD", typeof(string));
+                        TableDetail.Columns.Add("Cost_x0020_IDR", typeof(string));
+                        TableDetail.Columns.Add("Cost_x0020_USD", typeof(string));
                         TableDetail.Columns.Add("Remarks", typeof(string));
                         TableDetail.Columns.Add("Status", typeof(string));
 
                         DataRow row = TableDetail.NewRow();
 
-                        row["POLineItem"] = d.ItemArray[0].ToString();
-                        row["AssetSubAsset"] = d.ItemArray[1].ToString();
-                        row["WBS"] = d.ItemArray[2].ToString();
-                        row["CostIDR"] = Convert.ToInt32(d.ItemArray[3]);
-                        row["CostUSD"] = Convert.ToInt32(d.ItemArray[4].ToString());
-                        row["Remarks"] = d.ItemArray[5].ToString();
-                        row["Status"] = d.ItemArray[6].ToString();
+                        row["Asset_x0020_Acquisition"] = latestIDHeader;
+                        row["PO_x0020_Line_x0020_Item"] = d.ItemArray[8].ToString();
+                        //cek if assetid ada pada table asset master
+                        //FXA-PC-OE-0001 - Laptop Lenovo
+                        var splitAssetID = d.ItemArray[9].ToString().Split('-');
+                        var resultAssetID="";
+                        var resultDesc="";
+                        if (splitAssetID.Length == 5)
+                        {
+                            resultAssetID = splitAssetID[0] + "-" + splitAssetID[1] + "-" + splitAssetID[2] + "-" + splitAssetID[3];
+                            resultDesc = splitAssetID[4];
+                        }
+                        else
+                        {
+                            resultAssetID = splitAssetID[0] + "-" + splitAssetID[1] + "-" + splitAssetID[2] + "-" + splitAssetID[3] + "-" + splitAssetID[4];
+                            resultDesc = splitAssetID[5];
+                        }
+                        var splitWBS = d.ItemArray[10].ToString().Split('-');
+                        var camlAssetID = @"<View><Query>
+                                    <Where>
+                                        <And>
+                                            <Eq>
+                                                <FieldRef Name='AssetID' />
+                                                <Value Type='Text'>"+ resultAssetID + @"</Value>
+                                            </Eq>
+                                            <And>
+                                            <Eq>
+                                                <FieldRef Name='Title' />
+                                                <Value Type='Text'>"+resultDesc+@"</Value>
+                                            </Eq>
+                                            </And>
+                                        </And>
+                                    </Where>
+                                    </Query></View>";
+                        var camlWBS = @"<View><Query>
+                                    <Where>
+                                        <And>
+                                            <Eq>
+                                                <FieldRef Name='Title' />
+                                                <Value Type='Text'>" + splitWBS[0] + @"</Value>
+                                            </Eq>
+                                            <And>
+                                            <Eq>
+                                                <FieldRef Name='WBSDesc' />
+                                                <Value Type='Text'>" + splitWBS[1] + @"</Value>
+                                            </Eq>
+                                            </And>
+                                        </And>
+                                    </Where>
+                                    </Query></View>";
 
-                        _assetAcquisitionService.MassUploadDetail(listNameDetail, latestIDHeader,  TableDetail, siteUrl);
+                        try
+                        {
+                            bool isAssetIDExist = _assetAcquisitionService.isValueOfColumnExist("Asset Master", siteUrl, camlAssetID);
+                            bool isWBSExist = _assetAcquisitionService.isValueOfColumnExist("WBS Master", siteUrl, camlWBS);
+                            if (isAssetIDExist == true && isWBSExist == true)
+                            {
+                                row["Asset_x002d_Sub_x0020_Asset"] = d.ItemArray[9].ToString();
+                                row["WBS"] = d.ItemArray[10].ToString();
+                            }
+
+                        }
+                        catch(Exception e)
+                        {
+                            return JsonHelper.GenerateJsonErrorResponse(e);
+                        }
+                        //cek if wbs id ada pada table wbs master
+                        row["Cost_x0020_IDR"] = Convert.ToInt32(d.ItemArray[11]);
+                        row["Cost_x0020_USD"] = Convert.ToInt32(d.ItemArray[12].ToString());
+                        row["Remarks"] = d.ItemArray[13].ToString();
+                        row["Status"] = d.ItemArray[14].ToString();
+
+                        TableDetail.Rows.InsertAt(row, 0);
+
+                        _assetAcquisitionService.MassUploadHeaderDetail(listNameDetail, TableDetail, siteUrl);
                     }
                     catch (Exception e)
                     {
@@ -423,16 +504,6 @@ namespace MCAWebAndAPI.Web.Controllers
                 }
                 x++;
             }
-
-            //try
-            //{
-            //    CSVConverter.Instance.MassUpload(listName, sessionVariables, siteUrl);
-            //}
-            //catch (Exception e)
-            //{
-            //    return JsonHelper.GenerateJsonErrorResponse(e);
-            //}
-
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl);
         }
 

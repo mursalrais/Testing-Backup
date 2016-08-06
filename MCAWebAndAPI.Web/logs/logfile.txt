@@ -308,3 +308,14 @@ Please try again.
 2016-08-06 01:55:22.0734 MCAWebAndAPI.Service.Asset.AssetMasterService Cannot complete this action.
 
 Please try again.
+2016-08-06 05:31:35.5173 MCAWebAndAPI.Service.Asset.AssetAcquisitionService String was not recognized as a valid DateTime. at ID: 1
+2016-08-06 07:25:35.5717 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Invalid data has been used to update the list item. The field you are trying to update may be read only. at ID: 1
+2016-08-06 07:27:06.0372 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Invalid data has been used to update the list item. The field you are trying to update may be read only. at ID: 1
+2016-08-06 08:18:11.9320 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Invalid data has been used to update the list item. The field you are trying to update may be read only. at ID: 1
+2016-08-06 08:25:32.0892 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Operation is not valid due to the current state of the object. at ID: 1
+2016-08-06 08:28:39.0283 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Invalid data has been used to update the list item. The field you are trying to update may be read only. at ID: 1
+2016-08-06 08:32:27.2241 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Invalid data has been used to update the list item. The field you are trying to update may be read only. at ID: 1
+2016-08-06 08:32:41.8950 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Invalid data has been used to update the list item. The field you are trying to update may be read only. at ID: 1
+2016-08-06 08:38:45.7344 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Invalid data has been used to update the list item. The field you are trying to update may be read only. at ID: 1
+2016-08-06 08:43:03.1759 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Invalid data has been used to update the list item. The field you are trying to update may be read only. at ID: 1
+2016-08-06 08:55:21.3847 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Invalid data has been used to update the list item. The field you are trying to update may be read only. at ID: 1
