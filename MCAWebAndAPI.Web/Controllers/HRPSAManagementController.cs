@@ -81,6 +81,10 @@ namespace MCAWebAndAPI.Web.Controllers
                 return RedirectToAction("Index",
                 "Error",
                 new { errorMessage = string.Format(MessageResource.ErrorEditInActivePSA) });
+
+                //return RedirectToAction("Index",
+                //"Error",
+                //new { errorMessage = string.Format("Unable to Edit Inactive PSA") });
             }
         }
 
@@ -197,9 +201,52 @@ namespace MCAWebAndAPI.Web.Controllers
                     //Input perpanjangan kontrak di tanggal sebelum kontrak dimulai
                     if (currentDate < viewModel.DateOfNewPSA)
                     {
+
+                        if ((currentDate < viewModel.DateOfNewPSABefore) && (currentDate < viewModel.ExpireDateBefore))
+                        {
+                            try
+                            {
+
+                                DateTime dateofnewpsa = DateTime.Now;
+
+                                dateofnewpsa = viewModel.DateOfNewPSA.Value;
+                                DateTime dateofnewpsaminoneday = dateofnewpsa.AddDays(-1);
+
+                                viewModel.HiddenExpiryDate = dateofnewpsaminoneday;
+                                viewModel.PSAStatus.Value = "Inactive";
+                                psaManagementService.UpdateStatusPSA(viewModel);
+                            }
+                            catch (Exception e)
+                            {
+                                ErrorSignal.FromCurrentContext().Raise(e);
+                                return RedirectToAction("Index", "Error");
+                            }
+
+                            try
+                            {
+                                viewModel.PSAStatus.Value = "Inactive";
+                                viewModel.HiddenExpiryDate = viewModel.PSAExpiryDate;
+                                psaID = psaManagementService.CreatePSAManagement(viewModel);
+                            }
+                            catch (Exception e)
+                            {
+                                ErrorSignal.FromCurrentContext().Raise(e);
+                                return RedirectToAction("Index", "Error");
+                            }
+
+                            try
+                            {
+                                psaManagementService.CreatePSAManagementDocuments(psaID, viewModel.Documents, viewModel);
+                            }
+                            catch (Exception e)
+                            {
+                                ErrorSignal.FromCurrentContext().Raise(e);
+                                return RedirectToAction("Index", "Error");
+                            }
+                        }
                         //Input perpanjangan kontrak di tengah-tengah kontrak sebelumnya
                         //Contoh kasus: profesional di promosikan ke posisi dan unit lain saat kontrak sebelumnya masih ada
-                        if ((currentDate >= viewModel.DateOfNewPSABefore) && (currentDate <= viewModel.ExpireDateBefore))
+                        else if ((currentDate >= viewModel.DateOfNewPSABefore) && (currentDate <= viewModel.ExpireDateBefore))
                         {
                             try
                             {
@@ -364,7 +411,7 @@ namespace MCAWebAndAPI.Web.Controllers
                         {
                             try
                             {
-                                viewModel.PSAStatus.Value = "Non Active";
+                                viewModel.PSAStatus.Value = "Inactive";
                                 viewModel.HiddenExpiryDate = viewModel.PSAExpiryDate;
                                 psaID = psaManagementService.CreatePSAManagement(viewModel);
                             }
@@ -512,6 +559,7 @@ namespace MCAWebAndAPI.Web.Controllers
                     e.DateOfNewPSABefore,
                     e.DateNewPSABefore,
                     e.JoinDate,
+                    e.StrJoinDate,
                     e.ProfessionalMail,
                     e.ProjectUnit,
                     e.StrPSARenewal,
