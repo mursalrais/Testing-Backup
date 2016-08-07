@@ -394,5 +394,10 @@ namespace MCAWebAndAPI.Service.Asset
 
             return ids;
         }
+
+        public void DeleteParentUpload(string listNameHeader, int? latestIDHeader, string siteUrl)
+        {
+            SPConnector.DeleteListItem(listNameHeader, latestIDHeader, siteUrl);
+        }
     }
 }
