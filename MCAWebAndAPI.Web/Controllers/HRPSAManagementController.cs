@@ -68,9 +68,9 @@ namespace MCAWebAndAPI.Web.Controllers
 
             var viewModel = psaManagementService.GetPSAManagement(ID);
 
-            string professionalFullName = psaManagementService.GetProfessionalFullName(viewModel.Professional.Value);
+            //string professionalFullName = psaManagementService.GetProfessionalFullName(viewModel.Professional.Value);
 
-            viewModel.ProfessionalFullName = Convert.ToString(professionalFullName);
+            //viewModel.ProfessionalFullName = Convert.ToString(professionalFullName);
 
             if(viewModel.PSAStatus.Text == "Active")
             {
@@ -452,9 +452,13 @@ namespace MCAWebAndAPI.Web.Controllers
                 return RedirectToAction("Index", "Error");
             }
 
-            psaManagementService.UpdateProfessionalFromPSA(viewModel, psaID);
+            var psaData = psaManagementService.GetPSAManagement(psaID);
 
-
+            if (Convert.ToString(psaData.PSAStatus.Text) == "Active")
+            {
+                psaManagementService.UpdateProfessionalFromPSA(viewModel, psaID);
+            }
+            
             if (viewModel.PerformancePlan.Value == "Yes")
             {
                 DateTime today = DateTime.Now;
@@ -482,6 +486,13 @@ namespace MCAWebAndAPI.Web.Controllers
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            var psaData = psaManagementService.GetPSAManagement(psaManagement.ID);
+
+            if (Convert.ToString(psaData.PSAStatus.Text) == "Active")
+            {
+                psaManagementService.UpdateProfessionalFromPSA(psaManagement, psaManagement.ID);
             }
 
             return RedirectToAction("Index",
@@ -563,7 +574,8 @@ namespace MCAWebAndAPI.Web.Controllers
                     e.ProfessionalMail,
                     e.ProjectUnit,
                     e.StrPSARenewal,
-                    e.PositionID
+                    e.PositionID,
+                    e.ProfessionalFullName
                     }
             ), JsonRequestBehavior.AllowGet);
         }
