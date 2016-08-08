@@ -205,7 +205,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             // Retrive required data to cut network round trip time
             var populateProfessionalTask = worksheet.PopulateAllProfessionals();
             var populateValidPSATask = worksheet.PopulateAllValidPSAs(startDate);
-            
+
             // Get professionals whose PSA are still valid
             var professionalIDs = worksheet.GetValidProfessionalIDs(startDate);
 

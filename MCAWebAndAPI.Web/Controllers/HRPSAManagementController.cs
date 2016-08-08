@@ -529,7 +529,7 @@ namespace MCAWebAndAPI.Web.Controllers
                     e =>
                     new
                     {
-                        e.PSAID,
+                        e.ID,
                         e.ProfessionalID,
                         e.JoinDateString,
                         e.DateOfNewPSAString,

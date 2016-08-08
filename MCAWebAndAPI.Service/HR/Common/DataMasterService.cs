@@ -273,7 +273,7 @@ namespace MCAWebAndAPI.Service.HR.Common
 
             foreach (var item in SPConnector.GetList(SP_MONFEE_LIST_NAME, _siteUrl, caml))
             {
-                var profID = FormatUtil.ConvertLookupToID(item, "Professional");
+                var profID = FormatUtil.ConvertLookupToID(item, "professional");
                 if (professionalIDs.Contains((int)profID))
                 {
                     profIDAndHeaderIDs.Add(new Tuple<int, int>((int)profID,Convert.ToInt32(item["ID"])));
