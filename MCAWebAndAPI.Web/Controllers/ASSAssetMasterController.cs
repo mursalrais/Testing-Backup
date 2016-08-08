@@ -86,6 +86,7 @@ namespace MCAWebAndAPI.Web.Controllers
             };
         }
 
+        [HttpPost]
         public ActionResult Update(FormCollection form,AssetMasterVM _data, string site)
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
@@ -100,11 +101,11 @@ namespace MCAWebAndAPI.Web.Controllers
         [HttpGet]
         public ActionResult Upload(string siteUrl = null, string listName = null)
         {
+            _assetMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
             if (siteUrl == null || listName == null)
                 return RedirectToAction("Index", "Error", new { errorMessage = "Parameter cannot be null" });
-
-
-            SessionManager.Set("SiteUrl", siteUrl);
 
             var emptyTable = GenerateEmptyDataTable();
             SessionManager.Set("CSVDataTable", emptyTable);
@@ -278,6 +279,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult Submit(string listName)
         {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _assetMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
             // Get existing session variable
             DataTable createAssID = SessionManager.Get<DataTable>("CSVDataTable");
             var res = "";
@@ -323,7 +326,6 @@ namespace MCAWebAndAPI.Web.Controllers
                 x++;
             }
             var sessionVariables = SessionManager.Get<DataTable>("CSVDataTable") ?? new DataTable();
-            var siteUrl = SessionManager.Get<string>("SiteUrl");
 
             try
             {

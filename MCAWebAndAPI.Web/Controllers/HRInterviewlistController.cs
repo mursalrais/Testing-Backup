@@ -21,12 +21,12 @@ namespace MCAWebAndAPI.Web.Controllers
     {
         IHRInterviewService _service;
 
-        IHRApplicationService _serviceApplication;
+        IApplicationService _serviceApplication;
 
         public HRInterviewlistController()
         {
             _service = new HRInterviewService();
-            _serviceApplication = new HRApplicationService();
+            _serviceApplication = new ApplicationService();
         }
 
         public ActionResult InterviewlistData(string siteurl = null, int? position = null, string username = null, string useraccess = null)

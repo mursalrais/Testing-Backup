@@ -72,7 +72,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             viewModel.ProfessionalFullName = Convert.ToString(professionalFullName);
 
-            if(viewModel.PSAStatus.Text == "Active")
+            if (viewModel.PSAStatus.Text == "Active")
             {
                 return View("EditPSAManagement", viewModel);
             }
@@ -81,6 +81,10 @@ namespace MCAWebAndAPI.Web.Controllers
                 return RedirectToAction("Index",
                 "Error",
                 new { errorMessage = string.Format(MessageResource.ErrorEditInActivePSA) });
+
+                //return RedirectToAction("Index",
+                //"Error",
+                //new { errorMessage = string.Format("Unable to Edit Inactive PSA") });
             }
         }
 
@@ -110,10 +114,327 @@ namespace MCAWebAndAPI.Web.Controllers
 
             try
             {
-                viewModel.PSAStatus.Value = "Active";
-                //viewModel.HiddenExpiryDate = viewModel.PSAExpiryDate;
-                psaID = psaManagementService.CreatePSAManagement(viewModel);
-                //dayOffService.PopulateBalance(psaID.Value,viewModel,"Create");
+                if (viewModel.PSAId == 0)
+                {
+                    var currentDate = DateTime.Now;
+
+
+                    //sudah dites dan ok
+                    if (currentDate < viewModel.DateOfNewPSA)
+                    {
+                        try
+                        {
+                            viewModel.PSAStatus.Value = "Inactive";
+                            viewModel.HiddenExpiryDate = viewModel.PSAExpiryDate;
+                            psaID = psaManagementService.CreatePSAManagement(viewModel);
+                        }
+                        catch (Exception e)
+                        {
+                            ErrorSignal.FromCurrentContext().Raise(e);
+                            return RedirectToAction("Index", "Error");
+                        }
+
+                        try
+                        {
+                            psaManagementService.CreatePSAManagementDocuments(psaID, viewModel.Documents, viewModel);
+                        }
+                        catch (Exception e)
+                        {
+                            ErrorSignal.FromCurrentContext().Raise(e);
+                            return RedirectToAction("Index", "Error");
+                        }
+                    }
+                    // sudah di tes dan ok
+                    else if ((currentDate <= viewModel.PSAExpiryDate) && (currentDate >= viewModel.DateOfNewPSA))
+                    {
+                        try
+                        {
+                            viewModel.PSAStatus.Value = "Active";
+                            viewModel.HiddenExpiryDate = viewModel.PSAExpiryDate;
+                            psaID = psaManagementService.CreatePSAManagement(viewModel);
+                        }
+                        catch (Exception e)
+                        {
+                            ErrorSignal.FromCurrentContext().Raise(e);
+                            return RedirectToAction("Index", "Error");
+                        }
+
+                        try
+                        {
+                            psaManagementService.CreatePSAManagementDocuments(psaID, viewModel.Documents, viewModel);
+                        }
+                        catch (Exception e)
+                        {
+                            ErrorSignal.FromCurrentContext().Raise(e);
+                            return RedirectToAction("Index", "Error");
+                        }
+                    }
+                    else if (currentDate > viewModel.PSAExpiryDate)
+                    {
+                        try
+                        {
+                            viewModel.PSAStatus.Value = "Inactive";
+                            viewModel.HiddenExpiryDate = viewModel.PSAExpiryDate;
+                            psaID = psaManagementService.CreatePSAManagement(viewModel);
+                        }
+                        catch (Exception e)
+                        {
+                            ErrorSignal.FromCurrentContext().Raise(e);
+                            return RedirectToAction("Index", "Error");
+                        }
+
+                        try
+                        {
+                            psaManagementService.CreatePSAManagementDocuments(psaID, viewModel.Documents, viewModel);
+                        }
+                        catch (Exception e)
+                        {
+                            ErrorSignal.FromCurrentContext().Raise(e);
+                            return RedirectToAction("Index", "Error");
+                        }
+                    }
+                }
+                else
+                {
+                    var currentDate = DateTime.Now;
+
+                    //Input perpanjangan kontrak di tanggal sebelum kontrak dimulai
+                    if (currentDate < viewModel.DateOfNewPSA)
+                    {
+
+                        if ((currentDate < viewModel.DateOfNewPSABefore) && (currentDate < viewModel.ExpireDateBefore))
+                        {
+                            try
+                            {
+
+                                DateTime dateofnewpsa = DateTime.Now;
+
+                                dateofnewpsa = viewModel.DateOfNewPSA.Value;
+                                DateTime dateofnewpsaminoneday = dateofnewpsa.AddDays(-1);
+
+                                viewModel.HiddenExpiryDate = dateofnewpsaminoneday;
+                                viewModel.PSAStatus.Value = "Inactive";
+                                psaManagementService.UpdateStatusPSA(viewModel);
+                            }
+                            catch (Exception e)
+                            {
+                                ErrorSignal.FromCurrentContext().Raise(e);
+                                return RedirectToAction("Index", "Error");
+                            }
+
+                            try
+                            {
+                                viewModel.PSAStatus.Value = "Inactive";
+                                viewModel.HiddenExpiryDate = viewModel.PSAExpiryDate;
+                                psaID = psaManagementService.CreatePSAManagement(viewModel);
+                            }
+                            catch (Exception e)
+                            {
+                                ErrorSignal.FromCurrentContext().Raise(e);
+                                return RedirectToAction("Index", "Error");
+                            }
+
+                            try
+                            {
+                                psaManagementService.CreatePSAManagementDocuments(psaID, viewModel.Documents, viewModel);
+                            }
+                            catch (Exception e)
+                            {
+                                ErrorSignal.FromCurrentContext().Raise(e);
+                                return RedirectToAction("Index", "Error");
+                            }
+                        }
+                        //Input perpanjangan kontrak di tengah-tengah kontrak sebelumnya
+                        //Contoh kasus: profesional di promosikan ke posisi dan unit lain saat kontrak sebelumnya masih ada
+                        else if ((currentDate >= viewModel.DateOfNewPSABefore) && (currentDate <= viewModel.ExpireDateBefore))
+                        {
+                            try
+                            {
+
+                                DateTime dateofnewpsa = DateTime.Now;
+
+                                dateofnewpsa = viewModel.DateOfNewPSA.Value;
+                                DateTime dateofnewpsaminoneday = dateofnewpsa.AddDays(-1);
+
+                                viewModel.HiddenExpiryDate = dateofnewpsaminoneday;
+                                viewModel.PSAStatus.Value = "Active";
+                                psaManagementService.UpdateStatusPSA(viewModel);
+                            }
+                            catch (Exception e)
+                            {
+                                ErrorSignal.FromCurrentContext().Raise(e);
+                                return RedirectToAction("Index", "Error");
+                            }
+
+                            try
+                            {
+                                viewModel.PSAStatus.Value = "Inactive";
+                                viewModel.HiddenExpiryDate = viewModel.PSAExpiryDate;
+                                psaID = psaManagementService.CreatePSAManagement(viewModel);
+                            }
+                            catch (Exception e)
+                            {
+                                ErrorSignal.FromCurrentContext().Raise(e);
+                                return RedirectToAction("Index", "Error");
+                            }
+
+                            try
+                            {
+                                psaManagementService.CreatePSAManagementDocuments(psaID, viewModel.Documents, viewModel);
+                            }
+                            catch (Exception e)
+                            {
+                                ErrorSignal.FromCurrentContext().Raise(e);
+                                return RedirectToAction("Index", "Error");
+                            }
+                        }
+                        else if ((currentDate > viewModel.DateOfNewPSABefore) && (currentDate > viewModel.ExpireDateBefore))
+                        {
+                            try
+                            {
+                                viewModel.PSAStatus.Value = "Inactive";
+                                viewModel.HiddenExpiryDate = viewModel.PSAExpiryDate;
+                                psaID = psaManagementService.CreatePSAManagement(viewModel);
+                            }
+                            catch (Exception e)
+                            {
+                                ErrorSignal.FromCurrentContext().Raise(e);
+                                return RedirectToAction("Index", "Error");
+                            }
+
+                            try
+                            {
+                                psaManagementService.CreatePSAManagementDocuments(psaID, viewModel.Documents, viewModel);
+                            }
+                            catch (Exception e)
+                            {
+                                ErrorSignal.FromCurrentContext().Raise(e);
+                                return RedirectToAction("Index", "Error");
+                            }
+                        }
+                    }
+                    else if ((currentDate >= viewModel.DateOfNewPSA) && (currentDate <= viewModel.PSAExpiryDate))
+                    {
+                        if ((currentDate >= viewModel.DateOfNewPSABefore) && (currentDate <= viewModel.ExpireDateBefore))
+                        {
+                            try
+                            {
+                                DateTime dateofnewpsa = DateTime.Now;
+
+                                dateofnewpsa = viewModel.DateOfNewPSA.Value;
+                                DateTime dateofnewpsaminoneday = dateofnewpsa.AddDays(-1);
+
+                                viewModel.ExpireDateBefore = dateofnewpsaminoneday;
+
+                                viewModel.HiddenExpiryDate = dateofnewpsaminoneday;
+                                viewModel.PSAStatus.Value = "Inactive";
+
+                                psaManagementService.UpdateStatusPSA(viewModel);
+                            }
+                            catch (Exception e)
+                            {
+                                ErrorSignal.FromCurrentContext().Raise(e);
+                                return RedirectToAction("Index", "Error");
+                            }
+
+                            try
+                            {
+                                viewModel.PSAStatus.Value = "Active";
+                                viewModel.HiddenExpiryDate = viewModel.PSAExpiryDate;
+                                psaID = psaManagementService.CreatePSAManagement(viewModel);
+                            }
+                            catch (Exception e)
+                            {
+                                ErrorSignal.FromCurrentContext().Raise(e);
+                                return RedirectToAction("Index", "Error");
+                            }
+
+                            try
+                            {
+                                psaManagementService.CreatePSAManagementDocuments(psaID, viewModel.Documents, viewModel);
+                            }
+                            catch (Exception e)
+                            {
+                                ErrorSignal.FromCurrentContext().Raise(e);
+                                return RedirectToAction("Index", "Error");
+                            }
+
+                        }
+                        else if ((currentDate > viewModel.DateOfNewPSABefore) && (currentDate > viewModel.ExpireDateBefore))
+                        {
+                            try
+                            {
+                                DateTime dateofnewpsa = DateTime.Now;
+
+                                dateofnewpsa = viewModel.DateOfNewPSA.Value;
+                                DateTime dateofnewpsaminoneday = dateofnewpsa.AddDays(-1);
+
+                                viewModel.ExpireDateBefore = dateofnewpsaminoneday;
+
+                                viewModel.HiddenExpiryDate = dateofnewpsaminoneday;
+                                viewModel.PSAStatus.Value = "Inactive";
+
+                                psaManagementService.UpdateStatusPSA(viewModel);
+                            }
+                            catch (Exception e)
+                            {
+                                ErrorSignal.FromCurrentContext().Raise(e);
+                                return RedirectToAction("Index", "Error");
+                            }
+
+                            try
+                            {
+                                viewModel.PSAStatus.Value = "Active";
+                                viewModel.HiddenExpiryDate = viewModel.PSAExpiryDate;
+                                psaID = psaManagementService.CreatePSAManagement(viewModel);
+                            }
+                            catch (Exception e)
+                            {
+                                ErrorSignal.FromCurrentContext().Raise(e);
+                                return RedirectToAction("Index", "Error");
+                            }
+
+                            try
+                            {
+                                psaManagementService.CreatePSAManagementDocuments(psaID, viewModel.Documents, viewModel);
+                            }
+                            catch (Exception e)
+                            {
+                                ErrorSignal.FromCurrentContext().Raise(e);
+                                return RedirectToAction("Index", "Error");
+                            }
+                        }
+                    }
+                    else if ((currentDate > viewModel.DateOfNewPSA) && (currentDate > viewModel.PSAExpiryDate))
+                    {
+                        if ((currentDate > viewModel.DateOfNewPSABefore) && (currentDate > viewModel.ExpireDateBefore))
+                        {
+                            try
+                            {
+                                viewModel.PSAStatus.Value = "Inactive";
+                                viewModel.HiddenExpiryDate = viewModel.PSAExpiryDate;
+                                psaID = psaManagementService.CreatePSAManagement(viewModel);
+                            }
+                            catch (Exception e)
+                            {
+                                ErrorSignal.FromCurrentContext().Raise(e);
+                                return RedirectToAction("Index", "Error");
+                            }
+
+                            try
+                            {
+                                psaManagementService.CreatePSAManagementDocuments(psaID, viewModel.Documents, viewModel);
+                            }
+                            catch (Exception e)
+                            {
+                                ErrorSignal.FromCurrentContext().Raise(e);
+                                return RedirectToAction("Index", "Error");
+                            }
+                        }
+                    }
+                }
+
+                
             }
             catch (Exception e)
             {
@@ -131,276 +452,13 @@ namespace MCAWebAndAPI.Web.Controllers
                 return RedirectToAction("Index", "Error");
             }
 
-            int psaRenewalNumberMinusOne = Convert.ToInt32(viewModel.PSARenewalNumber) - 1;
+            var psaData = psaManagementService.GetPSAManagement(psaID);
 
-            string professionalName = psaManagementService.GetProfessionalName(viewModel.Professional.Value);
-
-            if(psaRenewalNumberMinusOne >= 0)
+            if (Convert.ToString(psaData.PSAStatus.Text) == "Active")
             {
-                psaManagementService.UpdateStatusPSABefore(psaRenewalNumberMinusOne, professionalName);
+                psaManagementService.UpdateProfessionalFromPSA(viewModel, psaID);
             }
-
-
-            //if (viewModel.PSAId == 0)
-            //{
-            //    var currentDate = DateTime.Now;
-
-
-            //    //sudah dites dan ok
-            //    if(currentDate < viewModel.DateOfNewPSA)
-            //    {
-            //        try
-            //        {
-            //            viewModel.PSAStatus.Value = "Inactive";
-            //            viewModel.HiddenExpiryDate = viewModel.PSAExpiryDate;
-            //            psaID = psaManagementService.CreatePSAManagement(viewModel);
-            //        }
-            //        catch (Exception e)
-            //        {
-            //            ErrorSignal.FromCurrentContext().Raise(e);
-            //            return RedirectToAction("Index", "Error");
-            //        }
-
-            //        try
-            //        {
-            //            psaManagementService.CreatePSAManagementDocuments(psaID, viewModel.Documents, viewModel);
-            //        }
-            //        catch (Exception e)
-            //        {
-            //            ErrorSignal.FromCurrentContext().Raise(e);
-            //            return RedirectToAction("Index", "Error");
-            //        }
-            //    }
-            //    // sudah di tes dan ok
-            //    else if((currentDate <= viewModel.PSAExpiryDate) && (currentDate >= viewModel.DateOfNewPSA))
-            //    {
-            //        try
-            //        {
-            //            viewModel.PSAStatus.Value = "Active";
-            //            viewModel.HiddenExpiryDate = viewModel.PSAExpiryDate;
-            //            psaID = psaManagementService.CreatePSAManagement(viewModel);
-            //        }
-            //        catch (Exception e)
-            //        {
-            //            ErrorSignal.FromCurrentContext().Raise(e);
-            //            return RedirectToAction("Index", "Error");
-            //        }
-
-            //        try
-            //        {
-            //            psaManagementService.CreatePSAManagementDocuments(psaID, viewModel.Documents, viewModel);
-            //        }
-            //        catch (Exception e)
-            //        {
-            //            ErrorSignal.FromCurrentContext().Raise(e);
-            //            return RedirectToAction("Index", "Error");
-            //        }
-            //    }
-            //    else if(currentDate > viewModel.PSAExpiryDate)
-            //    {
-            //        try
-            //        {
-            //            viewModel.PSAStatus.Value = "Inactive";
-            //            viewModel.HiddenExpiryDate = viewModel.PSAExpiryDate;
-            //            psaID = psaManagementService.CreatePSAManagement(viewModel);
-            //        }
-            //        catch (Exception e)
-            //        {
-            //            ErrorSignal.FromCurrentContext().Raise(e);
-            //            return RedirectToAction("Index", "Error");
-            //        }
-
-            //        try
-            //        {
-            //            psaManagementService.CreatePSAManagementDocuments(psaID, viewModel.Documents, viewModel);
-            //        }
-            //        catch (Exception e)
-            //        {
-            //            ErrorSignal.FromCurrentContext().Raise(e);
-            //            return RedirectToAction("Index", "Error");
-            //        }
-            //    }
-            //}
-            //else
-            //{
-            //    var currentDate = DateTime.Now;
-
-            //    //Input perpanjangan kontrak di tanggal sebelum kontrak dimulai
-            //    if(currentDate < viewModel.DateOfNewPSA)
-            //    {
-            //        //Input perpanjangan kontrak di tengah-tengah kontrak sebelumnya
-            //        //Contoh kasus: profesional di promosikan ke posisi dan unit lain saat kontrak sebelumnya masih ada
-            //        if ((currentDate >= viewModel.DateOfNewPSABefore) && (currentDate <= viewModel.ExpireDateBefore))
-            //        {
-            //            try
-            //            {
-
-            //                DateTime dateofnewpsa = DateTime.Now;
-
-            //                dateofnewpsa = viewModel.DateOfNewPSA.Value;
-            //                DateTime dateofnewpsaminoneday = dateofnewpsa.AddDays(-1);
-
-            //                viewModel.HiddenExpiryDate = dateofnewpsaminoneday;
-            //                viewModel.PSAStatus.Value = "Active";
-            //                psaManagementService.UpdateStatusPSA(viewModel);
-            //            }
-            //            catch (Exception e)
-            //            {
-            //                ErrorSignal.FromCurrentContext().Raise(e);
-            //                return RedirectToAction("Index", "Error");
-            //            }
-
-            //            try
-            //            {
-            //                viewModel.PSAStatus.Value = "Non Active";
-            //                viewModel.HiddenExpiryDate = viewModel.PSAExpiryDate;
-            //                psaID = psaManagementService.CreatePSAManagement(viewModel);
-            //            }
-            //            catch (Exception e)
-            //            {
-            //                ErrorSignal.FromCurrentContext().Raise(e);
-            //                return RedirectToAction("Index", "Error");
-            //            }
-
-            //            try
-            //            {
-            //                psaManagementService.CreatePSAManagementDocuments(psaID, viewModel.Documents, viewModel);
-            //            }
-            //            catch (Exception e)
-            //            {
-            //                ErrorSignal.FromCurrentContext().Raise(e);
-            //                return RedirectToAction("Index", "Error");
-            //            }
-            //        }
-            //        else if((currentDate > viewModel.DateOfNewPSABefore) && (currentDate > viewModel.ExpireDateBefore))
-            //        {
-            //            try
-            //            {
-            //                viewModel.PSAStatus.Value = "Non Active";
-            //                viewModel.HiddenExpiryDate = viewModel.PSAExpiryDate;
-            //                psaID = psaManagementService.CreatePSAManagement(viewModel);
-            //            }
-            //            catch (Exception e)
-            //            {
-            //                ErrorSignal.FromCurrentContext().Raise(e);
-            //                return RedirectToAction("Index", "Error");
-            //            }
-
-            //            try
-            //            {
-            //                psaManagementService.CreatePSAManagementDocuments(psaID, viewModel.Documents, viewModel);
-            //            }
-            //            catch (Exception e)
-            //            {
-            //                ErrorSignal.FromCurrentContext().Raise(e);
-            //                return RedirectToAction("Index", "Error");
-            //            }
-            //        }
-            //    }
-            //    else if((currentDate >= viewModel.DateOfNewPSA) && (currentDate <= viewModel.PSAExpiryDate))
-            //    {
-            //        if((currentDate >= viewModel.DateOfNewPSABefore) && (currentDate <= viewModel.ExpireDateBefore))
-            //        {
-            //            try
-            //            {
-            //                DateTime dateofnewpsa = DateTime.Now;
-
-            //                dateofnewpsa = viewModel.DateOfNewPSA.Value;
-            //                DateTime dateofnewpsaminoneday = dateofnewpsa.AddDays(-1);
-
-            //                viewModel.ExpireDateBefore = dateofnewpsaminoneday;
-
-            //                viewModel.HiddenExpiryDate = dateofnewpsaminoneday;
-            //                viewModel.PSAStatus.Value = "Active";
-
-            //                psaManagementService.UpdateStatusPSA(viewModel);
-            //            }
-            //            catch (Exception e)
-            //            {
-            //                ErrorSignal.FromCurrentContext().Raise(e);
-            //                return RedirectToAction("Index", "Error");
-            //            }
-
-            //            try
-            //            {
-            //                viewModel.PSAStatus.Value = "Active";
-            //                viewModel.HiddenExpiryDate = viewModel.PSAExpiryDate;
-            //                psaID = psaManagementService.CreatePSAManagement(viewModel);
-            //            }
-            //            catch (Exception e)
-            //            {
-            //                ErrorSignal.FromCurrentContext().Raise(e);
-            //                return RedirectToAction("Index", "Error");
-            //            }
-
-            //            try
-            //            {
-            //                psaManagementService.CreatePSAManagementDocuments(psaID, viewModel.Documents, viewModel);
-            //            }
-            //            catch (Exception e)
-            //            {
-            //                ErrorSignal.FromCurrentContext().Raise(e);
-            //                return RedirectToAction("Index", "Error");
-            //            }
-
-            //        }
-            //        else if((currentDate > viewModel.DateOfNewPSABefore) && (currentDate > viewModel.ExpireDateBefore))
-            //        {
-            //            try
-            //            {
-            //                viewModel.PSAStatus.Value = "Active";
-            //                viewModel.HiddenExpiryDate = viewModel.PSAExpiryDate;
-            //                psaID = psaManagementService.CreatePSAManagement(viewModel);
-            //            }
-            //            catch (Exception e)
-            //            {
-            //                ErrorSignal.FromCurrentContext().Raise(e);
-            //                return RedirectToAction("Index", "Error");
-            //            }
-
-            //            try
-            //            {
-            //                psaManagementService.CreatePSAManagementDocuments(psaID, viewModel.Documents, viewModel);
-            //            }
-            //            catch (Exception e)
-            //            {
-            //                ErrorSignal.FromCurrentContext().Raise(e);
-            //                return RedirectToAction("Index", "Error");
-            //            }
-            //        }
-            //    }
-            //    else if((currentDate > viewModel.DateOfNewPSA) && (currentDate > viewModel.PSAExpiryDate))
-            //    {
-            //        if((currentDate > viewModel.DateOfNewPSABefore) && (currentDate > viewModel.ExpireDateBefore))
-            //        {
-            //            try
-            //            {
-            //                viewModel.PSAStatus.Value = "Non Active";
-            //                viewModel.HiddenExpiryDate = viewModel.PSAExpiryDate;
-            //                psaID = psaManagementService.CreatePSAManagement(viewModel);
-            //            }
-            //            catch (Exception e)
-            //            {
-            //                ErrorSignal.FromCurrentContext().Raise(e);
-            //                return RedirectToAction("Index", "Error");
-            //            }
-
-            //            try
-            //            {
-            //                psaManagementService.CreatePSAManagementDocuments(psaID, viewModel.Documents, viewModel);
-            //            }
-            //            catch (Exception e)
-            //            {
-            //                ErrorSignal.FromCurrentContext().Raise(e);
-            //                return RedirectToAction("Index", "Error");
-            //            }
-            //        }
-            //    }      
-            //}
             
-            psaManagementService.UpdateProfessionalFromPSA(viewModel, psaID);
-
-
             if (viewModel.PerformancePlan.Value == "Yes")
             {
                 DateTime today = DateTime.Now;
@@ -428,6 +486,13 @@ namespace MCAWebAndAPI.Web.Controllers
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            var psaData = psaManagementService.GetPSAManagement(psaManagement.ID);
+
+            if (Convert.ToString(psaData.PSAStatus.Text) == "Active")
+            {
+                psaManagementService.UpdateProfessionalFromPSA(psaManagement, psaManagement.ID);
             }
 
             return RedirectToAction("Index",
@@ -505,10 +570,12 @@ namespace MCAWebAndAPI.Web.Controllers
                     e.DateOfNewPSABefore,
                     e.DateNewPSABefore,
                     e.JoinDate,
+                    e.StrJoinDate,
                     e.ProfessionalMail,
                     e.ProjectUnit,
                     e.StrPSARenewal,
-                    e.PositionID
+                    e.PositionID,
+                    e.ProfessionalFullName
                     }
             ), JsonRequestBehavior.AllowGet);
         }
@@ -560,6 +627,21 @@ namespace MCAWebAndAPI.Web.Controllers
             try
             {
                 PSAManagementScheduler.DoNow_OnceEveryDay(psaID, siteUrl);
+            }
+            catch (Exception e)
+            {
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return RedirectToAction("Index", "Error");
+            }
+            return RedirectToAction("Index", "Success");
+        }
+
+        public ActionResult PSASchedulerExpired(string siteUrl = null)
+        {
+           
+            try
+            {
+                PSAManagementScheduler.DoNowPSAExpired_OnceEveryDay(siteUrl);
             }
             catch (Exception e)
             {

@@ -38,6 +38,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
             }
         }
 
-        public string WBDDesc { get; set; }
+        public string WBSDesc { get; set; }
     }
 }

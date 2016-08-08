@@ -22,11 +22,29 @@ namespace MCAWebAndAPI.Service.JobSchedulers.Jobs
 
             IPSAScheduleService _psaManagementService = new PSAScheduleService();
             _psaManagementService.SetSiteUrl(siteUrl);
+            _psaManagementService.changePSAstatus();
             _psaManagementService.CheckTwoMonthsBeforeExpireDate();
-            //_psaManagementService.UpdateStatusPSA();
+           
 
 
             logger.Info("Task Calculation Job at {0} has been successfully performed", siteUrl);
         }
+
+        //public void ExecutePSAExpired(IJobExecutionContext context)
+        //{
+        //    JobKey key = context.JobDetail.Key;
+        //    JobDataMap dataMap = context.MergedJobDataMap;
+
+        //    var siteUrl = dataMap.GetString("site-url");
+
+        //    IPSAScheduleService _psaManagementService = new PSAScheduleService();
+        //    _psaManagementService.SetSiteUrl(siteUrl);
+        //    _psaManagementService.changePSAstatus();
+
+
+
+        //    logger.Info("Task Calculation Job at {0} has been successfully performed", siteUrl);
+        //}
+
     }
 }

@@ -12,18 +12,19 @@ using System.Net;
 using System;
 using System.IO;
 using System.Web;
+using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
     public class HRPayrollController : Controller
     {
-        IHRPayrollServices _hRPayrollService;
-        private const string PAYROLL_WORKSHEET_FILENAME = "PayrollWorksheet-Period-{0}-RunOn-{1}.xlsx";
+        IPayrollService _hRPayrollService;
+        private const string PAYROLL_WORKSHEET_FILENAME = "PayrollWorksheet-Period-{0}-RunOn-{1}.{2}";
         private const string PAYROLL_WORKSHEET_DIRECTORY = "~/App_Data/PayrollWorksheet/";
 
         public HRPayrollController()
         {
-            _hRPayrollService = new HRPayrollServices();
+            _hRPayrollService = new PayrollService();
         }
 
         public ActionResult CreateMonthlyFee(string siteUrl = null)
@@ -118,24 +119,24 @@ namespace MCAWebAndAPI.Web.Controllers
             return array;
         }
 
-        public ActionResult DisplayPayrollWorksheet(string siteUrl)
+        public async Task<ActionResult> DisplayPayrollWorksheet(string siteUrl)
         {
             SessionManager.Set("SiteUrl", siteUrl);
             _hRPayrollService.SetSiteUrl(siteUrl);
 
-            var viewModelPayroll = _hRPayrollService.GetPayrollWorksheetDetails(DateTime.Today);
+            var viewModelPayroll = await _hRPayrollService.GetPayrollWorksheetDetailsAsync(DateTime.Today);
             SessionManager.Set("PayrollWorksheetDetailVM", viewModelPayroll);
 
             var viewModel = new PayrollRunVM();  
             return View(viewModel);
         }
 
-        public ActionResult DisplayPayrollWorksheetSummary(string siteUrl)
+        public async Task<ActionResult> DisplayPayrollWorksheetSummary(string siteUrl)
         {
             SessionManager.Set("SiteUrl", siteUrl);
             _hRPayrollService.SetSiteUrl(siteUrl);
 
-            var viewModelPayroll = _hRPayrollService.GetPayrollWorksheetDetails(DateTime.Today);
+            var viewModelPayroll = await _hRPayrollService.GetPayrollWorksheetDetailsAsync(DateTime.Today);
             SessionManager.Set("PayrollWorksheetDetailVM", viewModelPayroll);
 
             var viewModel = new PayrollRunVM();
@@ -143,27 +144,45 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
 
-
+        /// <summary>
+        /// Triggered after period is updated
+        /// </summary>
+        /// <param name="viewModel"></param>
+        /// <returns></returns>
         [HttpPost]
-        public ActionResult UpdatePeriodWorksheet(PayrollRunVM viewModel)
+        public async Task<ActionResult> UpdatePeriodWorksheet(PayrollRunVM viewModel)
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _hRPayrollService.SetSiteUrl(siteUrl);
 
-            IEnumerable<PayrollWorksheetDetailVM> viewModelPayroll = new List<PayrollWorksheetDetailVM>();
-            try
-            {
-                viewModelPayroll = _hRPayrollService.GetPayrollWorksheetDetails(viewModel.Period);
-            }
-            catch (Exception e)
-            {
-                return Json(new { message = e.Message }, JsonRequestBehavior.AllowGet);
-            }
-
-            SessionManager.Set("PayrollWorksheetDetailVM", viewModelPayroll);
-            SessionManager.Set("PayrollWorksheetPeriod", viewModel.Period.ToLocalTime().ToString("yyyy-MM"));
+            await PopulatePayrollWorksheet(viewModel.Period);
 
             return Json(new { message = "Period has been updated" }, JsonRequestBehavior.AllowGet);
+        }
+
+        public async Task<ActionResult> RunInBackgroundPeriodWorksheet(PayrollRunVM viewModel)
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _hRPayrollService.SetSiteUrl(siteUrl);
+
+           
+
+            return Json(new { message = "Period has been updated" }, JsonRequestBehavior.AllowGet);
+        }
+
+        private async Task RunPayrollWorksheet(DateTime period)
+        {
+            await PopulatePayrollWorksheet(period);
+
+        }
+
+        private async Task PopulatePayrollWorksheet(DateTime period)
+        {
+            IEnumerable<PayrollWorksheetDetailVM> viewModelPayroll = new List<PayrollWorksheetDetailVM>();
+            viewModelPayroll = await _hRPayrollService.GetPayrollWorksheetDetailsAsync(period);
+            
+            SessionManager.Set("PayrollWorksheetDetailVM", viewModelPayroll);
+            SessionManager.Set("PayrollWorksheetPeriod", period.ToLocalTime().ToString("yyyy-MM"));
         }
 
         [HttpPost]
@@ -195,7 +214,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             fileName = string.Format(PAYROLL_WORKSHEET_FILENAME, 
                 SessionManager.Get<string>("PayrollWorksheetPeriod"), 
-                DateTime.Today.ToLocalTime().ToString("yyyy-MM-dd"));
+                DateTime.Today.ToLocalTime().ToString("yyyy-MM-dd"), "xlsx");
 
             // Store the file on the session variable
             var fileContent = fileContents;
@@ -209,7 +228,7 @@ namespace MCAWebAndAPI.Web.Controllers
             var fileContents = SessionManager.Get<byte[]>("PayrollWorksheet_ExcelFile");
             var fileName = string.Format(PAYROLL_WORKSHEET_FILENAME,
                 SessionManager.Get<string>("PayrollWorksheetPeriod"),
-                DateTime.Today.ToLocalTime().ToString("yyyy-MM-dd"));
+                DateTime.Today.ToLocalTime().ToString("yyyy-MM-dd"), "xlsx");
 
             try
             {

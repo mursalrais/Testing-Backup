@@ -8,6 +8,7 @@ using NLog;
 using Microsoft.SharePoint.Client;
 using MCAWebAndAPI.Service.HR.Common;
 using MCAWebAndAPI.Service.Utils;
+using MCAWebAndAPI.Model.Common;
 
 namespace MCAWebAndAPI.Service.HR.Common
 {
@@ -16,6 +17,11 @@ namespace MCAWebAndAPI.Service.HR.Common
         string _siteUrl;
         static Logger logger = LogManager.GetCurrentClassLogger();
         const string SP_LIST_NAME = "Calendar Event";
+
+        const string TYPE_PUB_HOLIDAY = "Public Holiday";
+        const string TYPE_HOLIDAY = "Holiday";
+        const string TYPE_DAYOFF = "Day-Off";
+        const string TYPE_COMP_LEAVE = "Compensatory Leave";
 
         /*static Logger logger = LogManager.GetCurrentClassLogger();
         const string CALENDAR_SP_LIST_NAME = "Calendar";
@@ -95,5 +101,35 @@ namespace MCAWebAndAPI.Service.HR.Common
         }*/
 
 
+        
+        public IEnumerable<CalendarEventVM> GetHolidays(IEnumerable<DateTime> dateRange)
+        {
+            return dateRange.Where(e => e.DayOfWeek == DayOfWeek.Sunday || e.DayOfWeek == DayOfWeek.Saturday)
+                .Select(m => new CalendarEventVM
+                {
+                    CalendarEventDate = m.Date,
+                    
+                });
+        }
+
+        public IEnumerable<CalendarEventVM> GetPublicHolidays(IEnumerable<DateTime> dateRange)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<EventCalendar> GetEventCalendars(IEnumerable<DateTime> dateRange)
+        {
+            throw new NotImplementedException();
+        }
+
+        IEnumerable<EventCalendar> ICalendarService.GetHolidays(IEnumerable<DateTime> dateRange)
+        {
+            throw new NotImplementedException();
+        }
+
+        IEnumerable<EventCalendar> ICalendarService.GetPublicHolidays(IEnumerable<DateTime> dateRange)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
