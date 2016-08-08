@@ -19,6 +19,11 @@ namespace MCAWebAndAPI.Service.HR.Common
         /// <param name="ID"></param>
         /// <returns></returns>
         ProfessionalDataVM GetProfessionalData(int? ID);
+
+        string GetProfessionalPosition(string userLogin);
+
+        string GetProfessionalOfficeEmail(int professionalID);
+
         Task<ProfessionalDataVM> GetProfessionalDataAsync(int? ID);
 
         ProfessionalDataVM GetProfessionalData(string userLoginName = null);

@@ -907,7 +907,6 @@
     <Content Include="Views\Shared\_LayoutBI.cshtml" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Shared\_PartialHeader.cshtml" />
     <Content Include="Views\PMProjectHierarchy\ProjectStatusByProject.cshtml" />
     <Content Include="Views\PMProjectHierarchy\ProjectStatusByActivity.cshtml" />
     <Content Include="Views\PMTask\TaskByResource.cshtml" />
@@ -1355,6 +1354,7 @@
     </Compile>
     <Compile Include="Helpers\BindHelper.cs" />
     <Compile Include="Helpers\CsHtmlRazorViewEngine.cs" />
+    <Compile Include="Helpers\FileHelper.cs" />
     <Compile Include="Helpers\HtmlExtensions.cs" />
     <Compile Include="Helpers\JsonHelper.cs" />
     <Compile Include="Helpers\JsonpResult.cs" />

@@ -84,7 +84,7 @@ namespace MCAWebAndAPI.Web.Controllers
             await allTask;
             try
             {
-                // TODO: To change email address based on position
+                // TODO: To change email address based on position. The email must be the HR personnel's email.
                 switch (viewModel.ValidationAction)
                 {
                     case "ask-hr-to-validate-action":
@@ -94,6 +94,9 @@ namespace MCAWebAndAPI.Web.Controllers
                             string.Format(EmailResource.ProfessionalEmailValidation,
                             string.Format(UrlResource.ProfessionalDisplayByID, siteUrl, headerID)));
                         break;
+
+                    // Suppose mariani.yosefi is the applicant
+                    // TODO: Please update the email to be retrived from SP List
                     case "approve-action":
                         _service.SetValidationStatus(headerID, Workflow.ProfessionalValidationStatus.VALIDATED);
                         _service.SendEmailValidation(

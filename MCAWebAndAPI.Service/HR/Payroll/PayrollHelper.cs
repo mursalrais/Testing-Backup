@@ -1,4 +1,7 @@
-﻿using MCAWebAndAPI.Model.ViewModel.Form.HR;
+﻿using MCAWebAndAPI.Model.HR.DataMaster;
+using MCAWebAndAPI.Model.ViewModel.Form.HR;
+using MCAWebAndAPI.Service.HR.Common;
+using MCAWebAndAPI.Service.HR.Recruitment;
 using MCAWebAndAPI.Service.Utils;
 using System;
 using System.Collections.Generic;
@@ -39,31 +42,58 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             54000000d
         };
 
+
+        private static string _siteUrl;
+        const string SP_PSA_LIST_NAME = "PSA";
+        const string SP_PROF_LIST_NAME = "Professional Master";
+        const string SP_MON_FEE_DETAIL_LIST_NAME = "Monthly Fee Detail";
+
+        private static IEnumerable<ProfessionalMaster> _allProfessionals;
+        private static IEnumerable<PSAMaster> _allValidPSAs;
+
+        private static IPSAManagementService _psaService;
+        private static IHRDataMasterService _dataMasterService;
+        private static IHRPayrollServices _payrollService;
+
+        public static void SetSiteUrl(this List<PayrollWorksheetDetailVM> payrollWorksheet, string siteUrl)
+        {
+            _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
+
+            _psaService = new PSAManagementService();
+            _dataMasterService = new HRDataMasterService();
+            _payrollService = new HRPayrollServices();
+        }
+
+        /// <summary>
+        /// To produce correct number of rows for all professionals whose have valid PSA based on given period 
+        /// </summary>
+        /// <param name="payrollWorksheet"></param>
+        /// <param name="dateRange">Start date until next date of period</param>
+        /// <param name="professionalIDs">All professional IDs whose PSA is valid</param>
+        /// <returns></returns>
         public static List<PayrollWorksheetDetailVM> PopulateRows(this List<PayrollWorksheetDetailVM> payrollWorksheet, IEnumerable<DateTime> dateRange, IEnumerable<int> professionalIDs)
         {
-            for (int i = 0; i < _names.Length; i++)
+            foreach (var professionalID in professionalIDs)
             {
-                foreach (var item in dateRange)
+                foreach (var date in dateRange)
                 {
-                    payrollWorksheet.Add(new PayrollWorksheetDetailVM
-                    {
-                        PayrollDate = item,
-                        ProfessionalID = i,
-                        Name = _names[i],
-                        ProjectUnit = _units[i],
-                        Position = _positions[i],
-                        MonthlyFeeMaster = _monthlyFees[i],
-                        TotalWorkingDays = 21,
-                        DaysRequestUnpaid = new Random().Next() % 17 == 0 ? 1 : 0,
-                        JoinDate = new DateTime(2016, 1, 1),
-                        LastWorkingDate = DateTime.Today.AddMonths(1),
-                        Last13thMonthDate = new DateTime(2016, 7, 7)
-                    });
+                    payrollWorksheet.AddPayrollWorksheetDetailRow(date, professionalID);
                 }
             }
+            return payrollWorksheet;
+        }
+
+        private static List<PayrollWorksheetDetailVM> AddPayrollWorksheetDetailRow(this List<PayrollWorksheetDetailVM> payrollWorksheet, DateTime date, int indexProfessional)
+        {
+            payrollWorksheet.Add(new PayrollWorksheetDetailVM
+            {
+                PayrollDate = date,
+                ProfessionalID = indexProfessional
+            });
 
             return payrollWorksheet;
         }
+
 
         /// <summary>
         /// Please note that this is only a dummy logic
@@ -92,31 +122,68 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             return payrollWorksheet;
         }
 
-        public static async Task<List<PayrollWorksheetDetailVM>> PopulateColumns(this List<PayrollWorksheetDetailVM> payrollWorksheet, IEnumerable<int> ids, string siteURL)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="payrollWorksheet"></param>
+        /// <returns></returns>
+        public static List<PayrollWorksheetDetailVM> SummarizeData(this List<PayrollWorksheetDetailVM> payrollWorksheet)
+        {
+            var summarizedPayrollWorksheets = new List<PayrollWorksheetDetailVM>();
+            var professionalIDs = payrollWorksheet.Select(m => (int)m.ID).Distinct();
+
+            foreach (var professionalID in professionalIDs)
+            {
+                var payrollRow = payrollWorksheet.FirstOrDefault(e => e.ProfessionalID == professionalID);
+
+                summarizedPayrollWorksheets.Add(new PayrollWorksheetDetailVM
+                {
+                    ProfessionalID = payrollRow.ProfessionalID,
+                    PayrollDate = payrollRow.PayrollDate,
+                    
+                });
+            }
+
+            return payrollWorksheet;
+        }
+
+        public static async Task<List<PayrollWorksheetDetailVM>> PopulateColumns(this List<PayrollWorksheetDetailVM> payrollWorksheet)
         {
             var startDate = payrollWorksheet[0].PayrollDate;
 
-            //TODO: Get All PSA having Last Working Date >= Start Date
-            var caml = @"<View><Query><Where><Geq><FieldRef Name='lastworkingdate' /><Value IncludeTimeValue='TRUE' Type='DateTime'>"
-              + startDate.ToUniversalTime().ToString("o")
-              + @"</Value></Geq></Where></Query></View>";
+            //Get Valid Professional IDs
+            var ids = payrollWorksheet.Select(e => e.ProfessionalID);
 
+            //Retrive PSA based on given Professional IDs
             Task<IEnumerable<PSAManagementVM>> getPSATask = GetPSAs(ids);
-            Task<IEnumerable<ProfessionalDataVM>> getProfessionalTask = GetProfessionals(ids);
+
+            //Retrieve Professional based on given Professional IDs
+            Task<IEnumerable<ProfessionalMaster>> getProfessionalTask = GetProfessionals(ids);
+
+            //Retrieve MonthlyFeeDetail based on given Professional IDs
             Task<IEnumerable<MonthlyFeeDetailVM>> getMonthlyFeeTask = GetMonthlyFees(ids);
 
-            Task allTask = Task.WhenAll(getPSATask, getProfessionalTask, getMonthlyFeeTask);
-            await allTask;
-
+            // Populate columns
             payrollWorksheet.PopulateColumnsFromPSA(await getPSATask);
+            payrollWorksheet.PopulateColumnsFromProfessional(await getProfessionalTask);
+            payrollWorksheet.PopulateColumnsFromMonthlyFee(await getMonthlyFeeTask);
 
-            var professionals = await getProfessionalTask;
-            var monthlyFees = await getMonthlyFeeTask;
+            await Task.Delay(10000000);
 
             return payrollWorksheet;
         }
 
         private static List<PayrollWorksheetDetailVM> PopulateColumnsFromPSA(this List<PayrollWorksheetDetailVM> payrollWorksheet, IEnumerable<PSAManagementVM> psas)
+        {
+            return payrollWorksheet;
+        }
+
+        private static List<PayrollWorksheetDetailVM> PopulateColumnsFromProfessional(this List<PayrollWorksheetDetailVM> payrollWorksheet, IEnumerable<ProfessionalMaster> professionals)
+        {
+            return payrollWorksheet;
+        }
+
+        private static List<PayrollWorksheetDetailVM> PopulateColumnsFromMonthlyFee(this List<PayrollWorksheetDetailVM> payrollWorksheet, IEnumerable<MonthlyFeeDetailVM> monthlyFees)
         {
             return payrollWorksheet;
         }
@@ -127,7 +194,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             return results.OrderBy(e => e.ID);
         }
 
-        private static async Task<IEnumerable<ProfessionalDataVM>> GetProfessionals(IEnumerable<int> ids)
+        private static async Task<IEnumerable<ProfessionalMaster>> GetProfessionals(IEnumerable<int> ids)
         {
             var results = await Task.WhenAll(ids.Select(i => GetProfessional(i)));
             return results.OrderBy(e => e.ID);
@@ -140,29 +207,50 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             return results.OrderBy(e => e.ID);
         }
 
+        /// <summary>
+        /// Get latest PSA by professional ID
+        /// </summary>
+        /// <param name="id">Professional ID</param>
+        /// <returns></returns>
         private static async Task<PSAManagementVM> GetPSA(int id)
         {
-            return new PSAManagementVM();
+            var caml = "";
+            var psa = new PSAManagementVM();
+
+            foreach (var item in SPConnector.GetList(SP_PSA_LIST_NAME, _siteUrl, caml))
+            {
+                psa = new PSAManagementVM
+                {
+                    ID = id // Please note that 
+                };
+                break;
+            }
+
+            return psa;
         }
 
-        private static async Task<ProfessionalDataVM> GetProfessional(int id)
+        private static async Task<ProfessionalMaster> GetProfessional(int id)
         {
-            return new ProfessionalDataVM();
+            var professional = _allProfessionals.FirstOrDefault(m => m.ID == id);
+            return professional;
         }
 
+        //TODO: To create method in PayRoll to return professional monthly fee
         private static async Task<MonthlyFeeDetailVM> GetMonthlyFee(int id)
         {
+            //var monthlyFee = _payrollService.Ge
             return new MonthlyFeeDetailVM();
         }
 
-        public static IEnumerable<int> GetValidProfessionalIDs(this List<PayrollWorksheetDetailVM> payrollWorksheet, DateTime startTime, string siteURL)
+        public static IEnumerable<int> GetValidProfessionalIDs(this List<PayrollWorksheetDetailVM> payrollWorksheet, DateTime startTime)
         {
+            var startTimeUniversalString = startTime.ToUniversalTime().ToString("o");
             var caml = @"<View><Query><Where><Geq><FieldRef Name='lastworkingdate' /><Value IncludeTimeValue='TRUE' Type='DateTime'>"
-              + startTime.ToUniversalTime().ToString("o")
+              + startTimeUniversalString 
               + @"</Value></Geq></Where><OrderBy><FieldRef Name='renewalnumber' Ascending='False' /></OrderBy></Query><ViewFields><FieldRef Name='ID' /><FieldRef Name='professional' /></ViewFields> </View>";
 
             var ids = new List<int>();
-            foreach (var item in SPConnector.GetList("PSA", siteURL, caml))
+            foreach (var item in SPConnector.GetList("PSA", _siteUrl, caml))
             {
                 var id = (int)FormatUtil.ConvertLookupToID(item, "professional");
                 if (!ids.Contains(id))

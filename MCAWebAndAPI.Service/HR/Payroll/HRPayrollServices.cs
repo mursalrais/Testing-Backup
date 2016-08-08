@@ -7,8 +7,7 @@ using NLog;
 using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Service.HR.Common;
-using MCAWebAndAPI.Service.HR.Recruitment;
-using System.Linq;
+using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Service.HR.Payroll
 {
@@ -21,7 +20,6 @@ namespace MCAWebAndAPI.Service.HR.Payroll
         const string SP_PSA_LIST_NAME = "PSA";
 
         IHRDataMasterService _dataMasterService = new HRDataMasterService();
-        
 
         public int CreateHeader(MonthlyFeeVM header)
         {
@@ -120,7 +118,6 @@ namespace MCAWebAndAPI.Service.HR.Payroll
                     try
                     {
                         SPConnector.DeleteListItem(SP_MON_FEE_DETAIL_LIST_NAME, viewModel.ID, _siteUrl);
-
                     }
                     catch (Exception e)
                     {
@@ -183,7 +180,13 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             throw new NotImplementedException();
         }
 
-        public IEnumerable<PayrollWorksheetDetailVM> GetPayrollWorksheetDetails(DateTime? periodParam, bool isSummary = false)
+        /// <summary>
+        /// To produce 
+        /// </summary>
+        /// <param name="periodParam"></param>
+        /// <param name="isSummary"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<PayrollWorksheetDetailVM>> GetPayrollWorksheetDetailsAsync(DateTime? periodParam, bool isSummary = false)
         {
             var worksheet = new List<PayrollWorksheetDetailVM>();
 
@@ -195,14 +198,26 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             var finishDate = period.GetLastPayrollDay();
             var dateRange = startDate.EachDay(finishDate);
 
-            // dummy
-            var professionalIDs = new int[] { 1, 2, 3, 4 };
+            // Set Site URL
+            worksheet.SetSiteUrl(_siteUrl);
 
+            // Get professionals whose PSA are still valid
+            var professionalIDs = worksheet.GetValidProfessionalIDs(startDate);
+
+            // Populate number of rows
             worksheet.PopulateRows(dateRange, professionalIDs);
+            var populateColumnTask = worksheet.PopulateColumns();
 
-            // dummy
-            // worksheet.PopulateColumns_Dummy(dateRange, professionalIDs);
-            return worksheet;
+            // If summary mode / HR-15 mode is required, then the data should be agggregated
+            if (isSummary)
+            {
+                await populateColumnTask;
+                worksheet.SummarizeData();
+            }
+
+            return await populateColumnTask;
         }
+
+
     }
 }

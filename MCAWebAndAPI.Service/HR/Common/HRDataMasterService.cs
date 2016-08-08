@@ -93,6 +93,8 @@ namespace MCAWebAndAPI.Service.HR.Common
             };
         }
 
+
+
         /// <summary>
         /// Convert to light-weight version of professional model.
         /// This is only used to display professional combo box
@@ -755,14 +757,14 @@ namespace MCAWebAndAPI.Service.HR.Common
             }
         }
 
-        public ProfessionalDataVM GetProfessionalData(string userLoginName = null)
+        public ProfessionalDataVM GetProfessionalData(string userLogin = null)
         {
-            if (userLoginName == null)
+            if (userLogin == null)
                 return null;
 
             var caml = @"<View>  
                     <Query> 
-                       <Where><Eq><FieldRef Name='officeemail' /><Value Type='Text'>" + userLoginName + @"</Value></Eq></Where> 
+                       <Where><Eq><FieldRef Name='officeemail' /><Value Type='Text'>" + userLogin + @"</Value></Eq></Where> 
                     </Query> 
                      <ViewFields><FieldRef Name='officeemail' /><FieldRef Name='ID' /></ViewFields> 
                     </View>";
@@ -771,6 +773,7 @@ namespace MCAWebAndAPI.Service.HR.Common
             foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl, caml))
             {
                 professionalID = Convert.ToInt32(item["ID"]);
+
             }
             return GetProfessionalData(professionalID);
         }
@@ -828,6 +831,7 @@ namespace MCAWebAndAPI.Service.HR.Common
              
             return position;
         }
+
 
         public void SetValidationStatus(int? id, Workflow.ProfessionalValidationStatus validationStatus)
         {
@@ -920,6 +924,31 @@ namespace MCAWebAndAPI.Service.HR.Common
             }
 
             return models;
+        }
+        
+        public string GetProfessionalPosition(string userLogin)
+        {
+            var professional = GetProfessionals().FirstOrDefault(e => e.OfficeEmail == userLogin);
+            return professional.Position;
+        }
+
+        public string GetProfessionalOfficeEmail(int professionalID)
+        {
+            var caml = @"<View>  
+                    <Query> 
+                       <Where><Eq><FieldRef Name='ID' /><Value Type='Number'>" + professionalID + @"</Value></Eq></Where> 
+                    </Query> 
+                     <ViewFields><FieldRef Name='officeemail' /><FieldRef Name='ID' /></ViewFields> 
+                    </View>";
+
+            var professionalOfficeEmail = string.Empty;
+            foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl, caml))
+            {
+                professionalOfficeEmail = Convert.ToString(item["officeemail"]);
+                break;
+            }
+
+            return professionalOfficeEmail;
         }
     }
 }

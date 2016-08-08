@@ -147,7 +147,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 "Success",
                 new
                 {
-                    errorMessage =
+                    successMessage =
                 string.Format(MessageResource.SuccessCreateApplicationData, viewModel.FirstMiddleName)
                 });
         }

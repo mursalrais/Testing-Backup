@@ -1,6 +1,7 @@
 ﻿using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Service.HR.Payroll
 {
@@ -20,6 +21,6 @@ namespace MCAWebAndAPI.Service.HR.Payroll
 
         IEnumerable<PayrollDetailVM> GetPayrollDetails(DateTime period);
 
-        IEnumerable<PayrollWorksheetDetailVM> GetPayrollWorksheetDetails(DateTime? period, bool isSummary = false);
+        Task<IEnumerable<PayrollWorksheetDetailVM>> GetPayrollWorksheetDetailsAsync(DateTime? period, bool isSummary = false);
     }
 }
