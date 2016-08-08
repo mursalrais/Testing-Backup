@@ -52,7 +52,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
         private static IEnumerable<PSAMaster> _allValidPSAs;
 
         private static IPSAManagementService _psaService;
-        private static IHRDataMasterService _dataMasterService;
+        private static IDataMasterService _dataMasterService;
         private static IHRPayrollServices _payrollService;
 
         public static void SetSiteUrl(this List<PayrollWorksheetDetailVM> payrollWorksheet, string siteUrl)
@@ -60,12 +60,27 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
 
             _psaService = new PSAManagementService();
-            _dataMasterService = new HRDataMasterService();
+            _dataMasterService = new DataMasterService();
             _payrollService = new HRPayrollServices();
+
+            _psaService.SetSiteUrl(_siteUrl);
+            _dataMasterService.SetSiteUrl(_siteUrl);
+            _psaService.SetSiteUrl(_siteUrl);
         }
 
         /// <summary>
-        /// To produce correct number of rows for all professionals whose have valid PSA based on given period 
+        /// To retrived all required master data in order to minimise network round trip time
+        /// </summary>
+        /// <param name="startDatePeriod"></param>
+        /// <returns></returns>
+        public static async Task PopulateRequiredMasterData(this List<PayrollWorksheetDetailVM> payrollWorksheet, DateTime startDatePeriod)
+        {
+            _allProfessionals = _allProfessionals ?? _dataMasterService.GetProfessionals();
+            _allValidPSAs = _allValidPSAs ?? _psaService.GetPSAs(startDatePeriod);
+        }
+
+        /// <summary>
+        /// To produce rows for all professionals who have valid PSA based on given period listed per day
         /// </summary>
         /// <param name="payrollWorksheet"></param>
         /// <param name="dateRange">Start date until next date of period</param>
@@ -94,36 +109,8 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             return payrollWorksheet;
         }
 
-
         /// <summary>
-        /// Please note that this is only a dummy logic
-        /// </summary>
-        /// <param name="payrollWorksheet"></param>
-        /// <param name="dateRange"></param>
-        /// <param name="ids"></param>
-        /// <returns></returns>
-        public static List<PayrollWorksheetDetailVM> PopulateColumns_Dummy(this List<PayrollWorksheetDetailVM> payrollWorksheet, IEnumerable<DateTime> dateRange, IEnumerable<int> ids)
-        {
-            var index = 0;
-            for (int indexName = 0; indexName < _names.Length; indexName++)
-            {
-                var dateLength = dateRange.Count();
-                for (int indexDate = 0; indexDate < dateLength; indexDate++, index++)
-                {
-                    payrollWorksheet[index].Name = _names[indexName];
-                    payrollWorksheet[index].MonthlyFeeMaster = 3 * 100000;
-                    payrollWorksheet[index].TotalWorkingDays = 21;
-                    payrollWorksheet[index].DaysRequestUnpaid = (dateRange.ToArray()[indexDate].Day * (indexName + 1)) % 21 == 0 ? 1 : 0;
-                    payrollWorksheet[index].LastWorkingDate = DateTime.Today.AddDays((10 + indexName) % 30);
-                    payrollWorksheet[index].JoinDate = new DateTime(2016, 1, (indexName + 1) % 30);
-                    payrollWorksheet[index].Last13thMonthDate = new DateTime(2016, 7, 11);
-                }
-            }
-            return payrollWorksheet;
-        }
-
-        /// <summary>
-        /// 
+        /// Summarize Worksheet means to aggregate the columns grouped by Professional
         /// </summary>
         /// <param name="payrollWorksheet"></param>
         /// <returns></returns>
@@ -144,36 +131,36 @@ namespace MCAWebAndAPI.Service.HR.Payroll
                 });
             }
 
-            return payrollWorksheet;
+            // return the summarized version of the worksheet
+            return summarizedPayrollWorksheets;
         }
 
         public static async Task<List<PayrollWorksheetDetailVM>> PopulateColumns(this List<PayrollWorksheetDetailVM> payrollWorksheet)
         {
+            // get StartDate from the first row of the worksheet
             var startDate = payrollWorksheet[0].PayrollDate;
 
             //Get Valid Professional IDs
             var ids = payrollWorksheet.Select(e => e.ProfessionalID);
 
-            //Retrive PSA based on given Professional IDs
-            Task<IEnumerable<PSAManagementVM>> getPSATask = GetPSAs(ids);
-
             //Retrieve Professional based on given Professional IDs
             Task<IEnumerable<ProfessionalMaster>> getProfessionalTask = GetProfessionals(ids);
+
+            //Retrive PSA based on given Professional IDs
+            Task<IEnumerable<PSAMaster>> getPSATask = GetPSAs(ids);
 
             //Retrieve MonthlyFeeDetail based on given Professional IDs
             Task<IEnumerable<MonthlyFeeDetailVM>> getMonthlyFeeTask = GetMonthlyFees(ids);
 
-            // Populate columns
-            payrollWorksheet.PopulateColumnsFromPSA(await getPSATask);
+            //Populate columns
             payrollWorksheet.PopulateColumnsFromProfessional(await getProfessionalTask);
+            payrollWorksheet.PopulateColumnsFromPSA(await getPSATask);
             payrollWorksheet.PopulateColumnsFromMonthlyFee(await getMonthlyFeeTask);
-
-            await Task.Delay(10000000);
 
             return payrollWorksheet;
         }
 
-        private static List<PayrollWorksheetDetailVM> PopulateColumnsFromPSA(this List<PayrollWorksheetDetailVM> payrollWorksheet, IEnumerable<PSAManagementVM> psas)
+        private static List<PayrollWorksheetDetailVM> PopulateColumnsFromPSA(this List<PayrollWorksheetDetailVM> payrollWorksheet, IEnumerable<PSAMaster> psas)
         {
             return payrollWorksheet;
         }
@@ -188,7 +175,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             return payrollWorksheet;
         }
 
-        private static async Task<IEnumerable<PSAManagementVM>> GetPSAs(IEnumerable<int> ids)
+        private static async Task<IEnumerable<PSAMaster>> GetPSAs(IEnumerable<int> ids)
         {
             var results = await Task.WhenAll(ids.Select(i => GetPSA(i)));
             return results.OrderBy(e => e.ID);
@@ -212,19 +199,9 @@ namespace MCAWebAndAPI.Service.HR.Payroll
         /// </summary>
         /// <param name="id">Professional ID</param>
         /// <returns></returns>
-        private static async Task<PSAManagementVM> GetPSA(int id)
+        private static async Task<PSAMaster> GetPSA(int id)
         {
-            var caml = "";
-            var psa = new PSAManagementVM();
-
-            foreach (var item in SPConnector.GetList(SP_PSA_LIST_NAME, _siteUrl, caml))
-            {
-                psa = new PSAManagementVM
-                {
-                    ID = id // Please note that 
-                };
-                break;
-            }
+            var psa = _allValidPSAs.FirstOrDefault(e => e.ProfessionalID == id + string.Empty);
 
             return psa;
         }

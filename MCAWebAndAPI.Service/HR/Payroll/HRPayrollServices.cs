@@ -19,7 +19,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
         const string SP_MON_FEE_DETAIL_LIST_NAME = "Monthly Fee Detail";
         const string SP_PSA_LIST_NAME = "PSA";
 
-        IHRDataMasterService _dataMasterService = new HRDataMasterService();
+        IDataMasterService _dataMasterService = new DataMasterService();
 
         public int CreateHeader(MonthlyFeeVM header)
         {
@@ -201,11 +201,17 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             // Set Site URL
             worksheet.SetSiteUrl(_siteUrl);
 
+            // Retrive all required master data to cut network round trip time
+            var populateMasterDataTask = worksheet.PopulateRequiredMasterData(startDate);
+
             // Get professionals whose PSA are still valid
             var professionalIDs = worksheet.GetValidProfessionalIDs(startDate);
 
-            // Populate number of rows
+            // Populate rows
             worksheet.PopulateRows(dateRange, professionalIDs);
+
+            // Populate columns
+            await populateMasterDataTask;
             var populateColumnTask = worksheet.PopulateColumns();
 
             // If summary mode / HR-15 mode is required, then the data should be agggregated

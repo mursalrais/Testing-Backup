@@ -130,6 +130,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return SPConnector.GetLatestListItemID(SP_PSA_LIST_NAME, _siteUrl);
         }
 
+        /// <summary>
+        /// To return all PSAs
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<PSAMaster> GetPSAs()
         {
             var models = new List<PSAMaster>();
@@ -142,7 +146,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return models;
         }
 
-        //TODO: To put caml query 
+        /// <summary>
+        /// To return all PSAs having last working date more or equal than given period
+        /// </summary>
+        /// <param name="period"></param>
+        /// <returns></returns>
         public IEnumerable<PSAMaster> GetPSAs(DateTime period)
         {
             var startTimeUniversalString = period.ToUniversalTime().ToString("o");

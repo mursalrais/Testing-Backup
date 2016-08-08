@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Service.HR.Recruitment
 {
-    public class HRApplicationService : IHRApplicationService
+    public class ApplicationService : IApplicationService
     {
         string _siteUrl;
         static Logger logger = LogManager.GetCurrentClassLogger();

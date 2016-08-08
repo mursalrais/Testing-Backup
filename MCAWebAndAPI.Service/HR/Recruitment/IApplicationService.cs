@@ -6,7 +6,7 @@ using System.Web;
 
 namespace MCAWebAndAPI.Service.HR.Recruitment
 {
-    public interface IHRApplicationService
+    public interface IApplicationService
     {
         void SetSiteUrl(string siteUrl = null);
 

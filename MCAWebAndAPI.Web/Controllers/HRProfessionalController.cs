@@ -16,11 +16,11 @@ namespace MCAWebAndAPI.Web.Controllers
     [HandleError]
     public class HRProfessionalController : Controller
     {
-        IHRDataMasterService _service;
+        IDataMasterService _service;
 
         public HRProfessionalController()
         {
-            _service = new HRDataMasterService();
+            _service = new DataMasterService();
         }
 
         public async Task<ActionResult> EditProfessional(string siteUrl = null, int? ID = null)

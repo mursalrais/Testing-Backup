@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Service.HR.Common
 {
-    public interface IHRDataMasterService
+    public interface IDataMasterService
     {
         void SetSiteUrl(string siteUrl);
 

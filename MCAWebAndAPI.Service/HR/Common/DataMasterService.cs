@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Service.HR.Common
 {
-    public class HRDataMasterService : IHRDataMasterService
+    public class DataMasterService : IDataMasterService
     {
         string _siteUrl;
         const string SP_PROMAS_LIST_NAME = "Professional Master";
