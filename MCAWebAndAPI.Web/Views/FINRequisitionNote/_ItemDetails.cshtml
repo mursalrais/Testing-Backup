@@ -1,0 +1,99 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Finance
+@model IEnumerable<RequisitionNoteItemVM>
+
+<div class="col-xs-12">
+    @(Html.Kendo().Grid(Model)
+    .Name("ItemDetails")
+    .Editable(editable => editable.Mode(GridEditMode.InCell)
+    .CreateAt(GridInsertRowPosition.Bottom))
+    .ToolBar(tools => tools.Create().Text("Add New Item"))
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.Activity).ClientTemplate("#= Activity.Text #" +
+                         "<input type='hidden' name='ItemDetails[#= getRequisitionDataDetail(data)#].Activity.Value' value='#= Activity.Value #' />"
+                       )
+                       .EditorViewData(new
+                       {
+                           DataTextField = "Text",
+                           DataValueField = "Value",
+                           ControllerName = "FINRequisitionNote",
+                           ActionName = "GetActivity"
+
+                       });
+        columns.Bound(p => p.WBS).ClientTemplate("#= WBS.Text #" +
+                         "<input type='hidden' name='ItemDetails[#= getRequisitionDataDetail(data)#].WBS.Value' value='#= WBS.Value #' />"
+                       )
+                       .EditorViewData(new
+                       {
+                           DataTextField = "Text",
+                           DataValueField = "Value",
+                           ControllerName = "FINRequisitionNote",
+                           ActionName = "GetWBSMaster"
+                       });
+        columns.Bound(p => p.GL).ClientTemplate("#= GL.Text #" +
+                         "<input type='hidden' name='ItemDetails[#= getRequisitionDataDetail(data)#].GL.Value' value='#= GL.Value #' />"
+                       )
+                       .EditorViewData(new
+                       {
+                           DataTextField = "Text",
+                           DataValueField = "Value",
+                           ControllerName = "FINRequisitionNote",
+                           ActionName = "GetGLMaster"
+                       });
+        columns.Bound(p => p.Specification).ClientTemplate("#= Specification #" +
+         "<input type='hidden' name='ItemDetails[#= getRequisitionDataDetail(data)#].Specification' value='#= Specification #' />");
+
+        columns.Bound(p => p.Quantity).ClientTemplate("#= Quantity #" +
+            "<input type='hidden' name='ItemDetails[#= getRequisitionDataDetail(data)#].Quantity' value='#= Quantity #' />");
+
+        columns.Bound(p => p.Price).ClientTemplate("#= Price #" +
+           "<input type='hidden' name='ItemDetails[#= getRequisitionDataDetail(data)#].Price' value='#= Price #' />");
+
+        columns.Bound(p => p.Total).ClientTemplate("#= Total #" +
+          "<input type='hidden' name='ItemDetails[#= getRequisitionDataDetail(data)#].Total' value='#= Total #' />");
+
+        columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
+               "<input type='hidden' name='ItemDetails[#= getRequisitionDataDetail(data)#].ID' value='#= ID #' />"
+             );
+        columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
+                     "<input type='hidden' name='ItemDetails[#= getRequisitionDataDetail(data)#].EditMode' value='#= EditMode #' />"
+        );
+        columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
+            .Click("onDeleteKendoDetail")).Width(100);
+    })
+     .Events(e =>
+     {
+         e.Edit("onEditKendoDetail");
+         e.DataBound("onDataBoundEducationDetails");
+     })
+
+    .DataSource(dataSource => dataSource.Ajax()
+                   .Model(model =>
+                   {
+                       model.Id(p => p.ID);
+                       model.Field(m => m.Activity).DefaultValue(RequisitionNoteItemVM.GetActivityDefaultValue());
+                       model.Field(m => m.WBS).DefaultValue(RequisitionNoteItemVM.GetWBSDefaultValue());
+                       model.Field(m => m.GL).DefaultValue(RequisitionNoteItemVM.GetGLDefaultValue());
+                   })
+
+                   .ServerOperation(false)
+     )
+    )
+</div>
+
+<script>
+    function getRequisitionDataDetail(dataItem) {
+        var data = $("#ItemDetails").data("kendoGrid").dataSource.data();
+        return data.indexOf(dataItem);
+    }
+
+    function getMsgType() {
+        return { eventBudgetId: $("#hdnEvenBudgetId").val() };
+    }
+
+    function onDataBoundEducationDetails(e) {
+        var grid = $("#ItemDetails").data("kendoGrid");
+        hideDeletedRowKendoDetail(grid);
+    }
+
+</script>

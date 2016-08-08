@@ -5,19 +5,21 @@ using MCAWebAndAPI.Service.HR.Payroll;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using MCAWebAndAPI.Model.ViewModel.Control;
-using MCAWebAndAPI.Web.Filters;
 using MCAWebAndAPI.Web.Resources;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Service.Resources;
 using System.Net;
 using System;
+using System.IO;
+using System.Web;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
     public class HRPayrollController : Controller
     {
         IHRPayrollServices _hRPayrollService;
+        private const string PAYROLL_WORKSHEET_FILENAME = "PayrollWorksheet-Period-{0}-RunOn-{1}.xlsx";
+        private const string PAYROLL_WORKSHEET_DIRECTORY = "~/App_Data/PayrollWorksheet/";
 
         public HRPayrollController()
         {
@@ -128,6 +130,20 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewModel);
         }
 
+        public ActionResult DisplayPayrollWorksheetSummary(string siteUrl)
+        {
+            SessionManager.Set("SiteUrl", siteUrl);
+            _hRPayrollService.SetSiteUrl(siteUrl);
+
+            var viewModelPayroll = _hRPayrollService.GetPayrollWorksheetDetails(DateTime.Today);
+            SessionManager.Set("PayrollWorksheetDetailVM", viewModelPayroll);
+
+            var viewModel = new PayrollRunVM();
+            return View(viewModel);
+        }
+
+
+
         [HttpPost]
         public ActionResult UpdatePeriodWorksheet(PayrollRunVM viewModel)
         {
@@ -137,7 +153,7 @@ namespace MCAWebAndAPI.Web.Controllers
             IEnumerable<PayrollWorksheetDetailVM> viewModelPayroll = new List<PayrollWorksheetDetailVM>();
             try
             {
-                viewModelPayroll = _hRPayrollService.GetPayrollWorksheetDetails(viewModel.From);
+                viewModelPayroll = _hRPayrollService.GetPayrollWorksheetDetails(viewModel.Period);
             }
             catch (Exception e)
             {
@@ -145,6 +161,7 @@ namespace MCAWebAndAPI.Web.Controllers
             }
 
             SessionManager.Set("PayrollWorksheetDetailVM", viewModelPayroll);
+            SessionManager.Set("PayrollWorksheetPeriod", viewModel.Period.ToLocalTime().ToString("yyyy-MM"));
 
             return Json(new { message = "Period has been updated" }, JsonRequestBehavior.AllowGet);
         }
@@ -164,11 +181,113 @@ namespace MCAWebAndAPI.Web.Controllers
             return json;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="contentType">application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</param>
+        /// <param name="base64"></param>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult GridWorksheet_ExportExcel(string contentType, string base64, string fileName)
         {
             var fileContents = Convert.FromBase64String(base64);
+
+            fileName = string.Format(PAYROLL_WORKSHEET_FILENAME, 
+                SessionManager.Get<string>("PayrollWorksheetPeriod"), 
+                DateTime.Today.ToLocalTime().ToString("yyyy-MM-dd"));
+
+            // Store the file on the session variable
+            var fileContent = fileContents;
+            SessionManager.Set("PayrollWorksheet_ExcelFile", fileContents);
+
             return File(fileContents, contentType, fileName);
+        }
+
+        public ActionResult GridWorksheet_SaveAsDraft()
+        {
+            var fileContents = SessionManager.Get<byte[]>("PayrollWorksheet_ExcelFile");
+            var fileName = string.Format(PAYROLL_WORKSHEET_FILENAME,
+                SessionManager.Get<string>("PayrollWorksheetPeriod"),
+                DateTime.Today.ToLocalTime().ToString("yyyy-MM-dd"));
+
+            try
+            {
+                if (fileContents.Length > 0)
+                {
+                    var path = Path.Combine(Server.MapPath(PAYROLL_WORKSHEET_DIRECTORY), fileName);
+                    System.IO.File.WriteAllBytes(path, fileContents);
+                }
+                else
+                {
+                    throw new FileNotFoundException();
+                }
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json(new { message = e.Message }, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new { message = "Payroll Worksheet has been stored as a Draft" },
+                 JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult DisplayPayrollWorksheetDrafts()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult GridDraftWorksheet_Read([DataSourceRequest] DataSourceRequest request)
+        {
+            // List all files in Folder
+            var files = Directory.EnumerateFiles(Server.MapPath(PAYROLL_WORKSHEET_DIRECTORY));
+
+            IEnumerable<PayrollWorksheetDraftVM> items = files.Select(e =>
+                new PayrollWorksheetDraftVM {
+                    FileName = e,
+                    Period = GetPeriodFromWorksheetDraftFileName(e),
+                    RunOn = GetRunOnFromWorksheetDraftFileName(e),
+                    UrlToDownload = string.Format("/File/Download?fileName={0}",ConvertToRelativeUrl(e))
+                });
+
+            // Convert to Kendo DataSource
+            DataSourceResult result = items.ToDataSourceResult(request);
+
+            // Convert to Json 
+            var json = Json(result, JsonRequestBehavior.AllowGet);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+
+        private DateTime GetPeriodFromWorksheetDraftFileName(string worksheetDraftFileName)
+        {
+            var periodString = worksheetDraftFileName.Split(new string[] { "Period" }, StringSplitOptions.None);
+            periodString = periodString[1].Split('-');
+
+            var year = Convert.ToInt32(periodString[1]);
+            var month = Convert.ToInt32(periodString[2]);
+
+            return new DateTime(year, month, 1);
+        }
+
+        private DateTime GetRunOnFromWorksheetDraftFileName(string worksheetDraftFileName)
+        {
+            var periodString = worksheetDraftFileName.Split(new string[] { "RunOn" }, StringSplitOptions.None);
+            periodString = periodString[1].Split('-');
+
+            var year = Convert.ToInt32(periodString[1]);
+            var month = Convert.ToInt32(periodString[2]);
+            var day = Convert.ToInt32(periodString[3].Split('.')[0]);
+
+            return new DateTime(year, month, day);
+        }
+
+        private string ConvertToRelativeUrl(string absoluteUrl)
+        {
+            var splitUrl = absoluteUrl.Split(new string[] { "App_Data" }, StringSplitOptions.None);
+            return splitUrl[1].Replace(@"\", @"/");
         }
     }
 }

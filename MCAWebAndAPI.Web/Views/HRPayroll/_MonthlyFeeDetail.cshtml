@@ -3,7 +3,7 @@
 @model IEnumerable<MonthlyFeeDetailVM>
 
 <div class="col-sm-12">
-
+    
     @(Html.Kendo().Grid(Model)
         .Name("MonthlyFeeDetails")
         .ToolBar(tools => tools.Create().Text("Add New Fee"))
@@ -32,8 +32,8 @@
             );
 
             columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
-            "<input type='hidden' name='MonthlyFeeDetails[#= getMonthlyFeeDetail(data)#].EditMode' value='#= EditMode #' />"
-            );
+           "<input type='hidden' name='Details[#= getMonthlyFeeDetail(data)#].EditMode' value='#= EditMode #' />"
+           );
 
             columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
             .Click("onDeleteKendoDetail")).Width(100);

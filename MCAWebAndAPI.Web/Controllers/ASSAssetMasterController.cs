@@ -27,6 +27,8 @@ namespace MCAWebAndAPI.Web.Controllers
             _assetMasterService = new AssetMasterService();
         }
 
+
+
         public JsonResult GetAssetMasters()
         {
             _assetMasterService.SetSiteUrl(ConfigResource.DefaultBOSiteUrl);
@@ -51,55 +53,59 @@ namespace MCAWebAndAPI.Web.Controllers
             })), JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Create(string site)
+        public ActionResult Create(string siteUrl=null)
         {
+            // MANDATORY: Set Site URL
+            _assetMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
             var viewModel = _assetMasterService.GetAssetMaster();
             return View(viewModel);
         }
 
-        public ActionResult Edit(int ID, string site)
+        public ActionResult Edit(int ID, string siteUrl)
         {
+            _assetMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
             var viewModel = _assetMasterService.GetAssetMaster(ID);
             return View(viewModel);
         }
 
         [HttpPost]
-        public ActionResult Submit(AssetMasterVM _data, string site)
+        public ActionResult Submit(FormCollection form, AssetMasterVM _data)
         {
+            //return View(new AssetMasterVM());
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _assetMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            //return View(new AssetMasterVM());
+
             _assetMasterService.CreateAssetMaster(_data);
-
-            return JsonHelper.GenerateJsonSuccessResponse(string.Format("{0}/{1}", "https://eceos2.sharepoint.com/sites/mca-dev/bo", UrlResource.Professional));
-            //return new JavaScriptResult
-            //{
-
-            //Script = string.Format("window.parent.location.href = '{0}'", "https://eceos2.sharepoint.com/sites/mca-dev/bo/Lists/AssetMaster/AllItems.aspx")
-            //};
+          
+            {
+                return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetMaster);
+            };
         }
 
-        public ActionResult Update(AssetMasterVM _data, string site)
+        [HttpPost]
+        public ActionResult Update(FormCollection form,AssetMasterVM _data, string site)
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _assetMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
             //return View(new AssetMasterVM());
             _assetMasterService.UpdateAssetMaster(_data);
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl);
-            //return new JavaScriptResult
-            //{
-            //    Script = string.Format("window.parent.location.href = '{0}'", "https://eceos2.sharepoint.com/sites/mca-dev/bo/Lists/AssetMaster/AllItems.aspx")
-            //};
+
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetMaster);
         }
 
         [HttpGet]
         public ActionResult Upload(string siteUrl = null, string listName = null)
         {
+            _assetMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
             if (siteUrl == null || listName == null)
                 return RedirectToAction("Index", "Error", new { errorMessage = "Parameter cannot be null" });
-
-
-            SessionManager.Set("SiteUrl", siteUrl);
 
             var emptyTable = GenerateEmptyDataTable();
             SessionManager.Set("CSVDataTable", emptyTable);
@@ -273,6 +279,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult Submit(string listName)
         {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _assetMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
             // Get existing session variable
             DataTable createAssID = SessionManager.Get<DataTable>("CSVDataTable");
             var res = "";
@@ -318,7 +326,6 @@ namespace MCAWebAndAPI.Web.Controllers
                 x++;
             }
             var sessionVariables = SessionManager.Get<DataTable>("CSVDataTable") ?? new DataTable();
-            var siteUrl = SessionManager.Get<string>("SiteUrl");
 
             try
             {

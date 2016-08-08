@@ -1,0 +1,27 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+
+<div class="form-horizontal">
+    <fieldset>
+        <legend>List of Worksheet Draft</legend>
+    </fieldset>
+    <div class="row">
+        <div class="col-sm-12">
+            @(Html.Kendo().Grid<PayrollWorksheetDraftVM>()
+                .Name("payroll-worksheet-draft-grid")
+                .Columns(columns =>
+                {
+                    columns.Bound(m => m.Period).Format("{0:MMM, yyyy}");
+                    columns.Bound(m => m.RunOn).Format("{0:dddd, MMM d, yyyy}");
+                    columns.Bound(m => m.UrlToDownload).Groupable(false)
+                          .ClientTemplate("<a href='#= UrlToDownload #' class='btn btn-labeled btn-warning'><span class='btn-label'><i class='fa fa-cloud-download'></i></span>Download</a>");
+                })
+                .Groupable()
+                .DataSource(data => data.Ajax()
+                    .Read("GridDraftWorksheet_Read", "HRPayroll")
+                    .Sort(s => s.Add(m => m.Period).Descending())
+                    .Group(g => g.Add(m => m.Period))
+                )
+            )
+        </div>
+    </div>
+</div>

@@ -58,6 +58,9 @@ namespace MCAWebAndAPI.Web.Controllers
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.ID, 2,
                     string.Format(EmailResource.ManpowerApproval, siteUrl, viewModel.ID));
 
+                string EmailApprover = _service.GetApprover(2, viewModel.ID.Value);
+
+
 
 
                 // END Workflow Demo
@@ -97,8 +100,7 @@ namespace MCAWebAndAPI.Web.Controllers
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             var viewModel = await _service.GetManpowerRequisitionAsync(ID);
-
-
+            
             string position = _service.GetPosition(username, siteUrl);
             if (position.Contains("HR"))
             {
@@ -186,6 +188,7 @@ namespace MCAWebAndAPI.Web.Controllers
             ViewBag.RequestorUserLogin = username;
 
             var viewModel = _service.GetManpowerRequisition(null);
+            viewModel.Username = username;
             return View(viewModel);
         }
 
@@ -226,6 +229,11 @@ namespace MCAWebAndAPI.Web.Controllers
                 Task sendApprovalRequestTask = WorkflowHelper.SendApprovalRequestAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
                    SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)headerID, 1,
                     string.Format(EmailResource.ManpowerApproval, siteUrl, headerID));
+
+                string EmailApprover = _service.GetApprover(1,headerID.Value);
+
+                Task sendApprover1 = EmailUtil.SendAsync(EmailApprover, "Application Submission Confirmation",
+                  string.Format(EmailResource.ManpowerApproval, siteUrl, headerID));
 
                 //send to requestor
                 Task sendRequestor = EmailUtil.SendAsync(viewModel.Username, "Application Submission Confirmation",

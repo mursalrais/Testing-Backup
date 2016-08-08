@@ -173,3 +173,7 @@ body.loading .modal-loading {
     }
  	
 }
+
+span.k-filename {
+        max-width: 30.667em !important;
+}
