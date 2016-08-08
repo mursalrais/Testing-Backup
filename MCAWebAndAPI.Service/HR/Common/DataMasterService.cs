@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using MCAWebAndAPI.Model.HR.DataMaster;
-using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
 using System.Linq;
 using NLog;
-using MCAWebAndAPI.Model.Common;
-using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Service.HR.Common
 {
@@ -75,9 +72,9 @@ namespace MCAWebAndAPI.Service.HR.Common
         public IEnumerable<ProfessionalMaster> GetProfessionals()
         {
             var models = new List<ProfessionalMaster>();
-            foreach(var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl))
+            foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl))
             {
-                    models.Add(ConvertToProfessionalModel_Light(item));
+                models.Add(ConvertToProfessionalModel_Light(item));
             }
 
             return models;
@@ -149,15 +146,14 @@ namespace MCAWebAndAPI.Service.HR.Common
             return viewModel;
         }
 
-        
         private DependentMaster ConvertToDependentModel_Light(ListItem item)
         {
-          
+
             return new DependentMaster
             {
                 ID = Convert.ToInt32(item["ID"]),
                 InsuranceNumber = Convert.ToString(item["insurancenr"]),
-                OrganizationInsurance = Convert.ToString(item["insurancenr"]) ,
+                OrganizationInsurance = Convert.ToString(item["insurancenr"]),
                 Name = FormatUtil.ConvertLookupToValue(item, "professional")
             };
         }
@@ -175,9 +171,9 @@ namespace MCAWebAndAPI.Service.HR.Common
         public IEnumerable<PositionMaster> GetPositionsManpower(string Level)
         {
             var models = new List<PositionMaster>();
-            string caml = @"<View><Query><Where><Eq><FieldRef Name='projectunit' /><Value Type='Choice'>"+Level+"</Value></Eq></Where></Query><ViewFields><FieldRef Name='ID' /><FieldRef Name='ContentType' /><FieldRef Name='Title' /><FieldRef Name='Modified' /><FieldRef Name='Created' /><FieldRef Name='Author' /><FieldRef Name='Editor' /><FieldRef Name='_UIVersionString' /><FieldRef Name='Attachments' /><FieldRef Name='Edit' /><FieldRef Name='LinkTitleNoMenu' /><FieldRef Name='LinkTitle' /><FieldRef Name='DocIcon' /><FieldRef Name='ItemChildCount' /><FieldRef Name='FolderChildCount' /><FieldRef Name='AppAuthor' /><FieldRef Name='AppEditor' /><FieldRef Name='projectunit' /><FieldRef Name='iskeyposition' /><FieldRef Name='positionstatus' /><FieldRef Name='Remarks' /></ViewFields><QueryOptions /></View>";
+            string caml = @"<View><Query><Where><Eq><FieldRef Name='projectunit' /><Value Type='Choice'>" + Level + "</Value></Eq></Where></Query><ViewFields><FieldRef Name='ID' /><FieldRef Name='ContentType' /><FieldRef Name='Title' /><FieldRef Name='Modified' /><FieldRef Name='Created' /><FieldRef Name='Author' /><FieldRef Name='Editor' /><FieldRef Name='_UIVersionString' /><FieldRef Name='Attachments' /><FieldRef Name='Edit' /><FieldRef Name='LinkTitleNoMenu' /><FieldRef Name='LinkTitle' /><FieldRef Name='DocIcon' /><FieldRef Name='ItemChildCount' /><FieldRef Name='FolderChildCount' /><FieldRef Name='AppAuthor' /><FieldRef Name='AppEditor' /><FieldRef Name='projectunit' /><FieldRef Name='iskeyposition' /><FieldRef Name='positionstatus' /><FieldRef Name='Remarks' /></ViewFields><QueryOptions /></View>";
 
-            foreach (var item in SPConnector.GetList(SP_POSMAS_LIST_NAME, _siteUrl,caml))
+            foreach (var item in SPConnector.GetList(SP_POSMAS_LIST_NAME, _siteUrl, caml))
             {
                 models.Add(ConvertToPositionsModel(item));
             }
@@ -209,10 +205,10 @@ namespace MCAWebAndAPI.Service.HR.Common
         {
             var caml = @"<View>  
             <Query> 
-               <Where><Eq><FieldRef Name='ID' /><Value Type='Counter'>" + id + @"</Value></Eq></Where> 
-            </Query> 
-             <ViewFields><FieldRef Name='Title' /><FieldRef Name='ID' /></ViewFields> 
-      </View>";
+                   <Where><Eq><FieldRef Name='ID' /><Value Type='Counter'>" + id + @"</Value></Eq></Where> 
+                </Query> 
+                 <ViewFields><FieldRef Name='Title' /><FieldRef Name='ID' /></ViewFields> 
+            </View>";
 
             var position = new PositionMaster();
             foreach (var item in SPConnector.GetList(SP_POSMAS_LIST_NAME, _siteUrl, caml))
@@ -223,6 +219,31 @@ namespace MCAWebAndAPI.Service.HR.Common
             }
 
             return position;
+        }
+
+        public string GetProfessionalPosition(string userLogin)
+        {
+            var professional = GetProfessionals().FirstOrDefault(e => e.OfficeEmail == userLogin);
+            return professional.Position;
+        }
+
+        public string GetProfessionalOfficeEmail(int professionalID)
+        {
+            var caml = @"<View>  
+                    <Query> 
+                       <Where><Eq><FieldRef Name='ID' /><Value Type='Number'>" + professionalID + @"</Value></Eq></Where> 
+                    </Query> 
+                     <ViewFields><FieldRef Name='officeemail' /><FieldRef Name='ID' /></ViewFields> 
+                    </View>";
+
+            var professionalOfficeEmail = string.Empty;
+            foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl, caml))
+            {
+                professionalOfficeEmail = Convert.ToString(item["officeemail"]);
+                break;
+            }
+
+            return professionalOfficeEmail;
         }
     }
 }

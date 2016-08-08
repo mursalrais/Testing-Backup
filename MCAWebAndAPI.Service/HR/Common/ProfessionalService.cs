@@ -692,8 +692,6 @@ namespace MCAWebAndAPI.Service.HR.Common
             }
         }
 
-
-
         public void SetValidationStatus(int? id, Workflow.ProfessionalValidationStatus validationStatus)
         {
             var updatedValue = new Dictionary<string, object>();
@@ -708,9 +706,7 @@ namespace MCAWebAndAPI.Service.HR.Common
                 logger.Error(e);
                 throw e;
             }
-
         }
-
 
         public async Task CreateEducationDetailsAsync(int? headerID, IEnumerable<EducationDetailVM> educationDetails)
         {
@@ -732,28 +728,5 @@ namespace MCAWebAndAPI.Service.HR.Common
             CreateOrganizationalDetails(headerID, organizationalDetails);
         }
 
-        public string GetProfessionalPosition(string userLogin)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string GetProfessionalOfficeEmail(int professionalID)
-        {
-            var caml = @"<View>  
-                    <Query> 
-                       <Where><Eq><FieldRef Name='ID' /><Value Type='Number'>" + professionalID + @"</Value></Eq></Where> 
-                    </Query> 
-                     <ViewFields><FieldRef Name='officeemail' /><FieldRef Name='ID' /></ViewFields> 
-                    </View>";
-
-            var professionalOfficeEmail = string.Empty;
-            foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl, caml))
-            {
-                professionalOfficeEmail = Convert.ToString(item["officeemail"]);
-                break;
-            }
-
-            return professionalOfficeEmail;
-        }
     }
 }
