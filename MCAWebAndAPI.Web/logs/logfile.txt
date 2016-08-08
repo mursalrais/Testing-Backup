@@ -321,3 +321,128 @@ Please try again.
 2016-08-06 08:55:21.3847 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Invalid data has been used to update the list item. The field you are trying to update may be read only. at ID: 1
 2016-08-07 23:51:49.6687 MCAWebAndAPI.Service.Asset.AssetMasterService Operation is not valid due to the current state of the object.
 2016-08-08 01:45:00.9984 MCAWebAndAPI.Service.Asset.AssetMasterService The underlying connection was closed: A connection that was expected to be kept alive was closed by the server.
+2016-08-08 05:53:08.9031 MCAWebAndAPI.Service.Converter.CSVConverter System.IndexOutOfRangeException: Index was outside the bounds of the array.
+   at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in D:\iMa\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64
+2016-08-08 07:43:49.5546 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Invalid data has been used to update the list item. The field you are trying to update may be read only. at ID: 1
+2016-08-08 07:48:57.7291 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Invalid data has been used to update the list item. The field you are trying to update may be read only. at ID: 1
+2016-08-08 07:49:26.0617 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Invalid data has been used to update the list item. The field you are trying to update may be read only. at ID: 1
+2016-08-08 08:18:13.9455 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Invalid data has been used to update the list item. The field you are trying to update may be read only. at ID: 1
+2016-08-08 08:24:33.5700 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Invalid data has been used to update the list item. The field you are trying to update may be read only. at ID: 1
+2016-08-08 08:31:41.2969 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Invalid data has been used to update the list item. The field you are trying to update may be read only. at ID: 1
+2016-08-08 08:45:29.7716 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Invalid data has been used to update the list item. The field you are trying to update may be read only. at ID: 1
+2016-08-08 08:49:13.0844 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Invalid data has been used to update the list item. The field you are trying to update may be read only. at ID: 1
+2016-08-08 08:54:05.6187 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Invalid data has been used to update the list item. The field you are trying to update may be read only. at ID: 1
+2016-08-08 08:59:22.1492 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Operation is not valid due to the current state of the object. at ID: 1
+2016-08-08 21:23:13.2502 MCAWebAndAPI.Service.JobSchedulers.Schedulers.PayrollRunScheduler DefaultQuartzScheduler has been started at Monday, August 8, 2016 in site https://eceos2.sharepoint.com/sites/mca-dev/hr
+2016-08-08 21:30:36.5211 MCAWebAndAPI.Service.JobSchedulers.Schedulers.PayrollRunScheduler DefaultQuartzScheduler has been started at Monday, August 8, 2016 in site https://eceos2.sharepoint.com/sites/mca-dev/hr
+2016-08-08 21:33:24.2507 MCAWebAndAPI.Service.JobSchedulers.Schedulers.PayrollRunScheduler DefaultQuartzScheduler has been started at Monday, August 8, 2016 in site https://eceos2.sharepoint.com/sites/mca-dev/hr
+2016-08-08 21:36:58.6679 MCAWebAndAPI.Service.JobSchedulers.Schedulers.PayrollRunScheduler DefaultQuartzScheduler has been started at Monday, August 8, 2016 in site https://eceos2.sharepoint.com/sites/mca-dev/hr
+2016-08-08 21:39:21.0894 MCAWebAndAPI.Service.HR.Payroll.PayrollService Microsoft.SharePoint.Client.PropertyOrFieldNotInitializedException: The property or field has not been initialized. It has not been requested or the request has not been executed. It may need to be explicitly requested.
+   at Microsoft.SharePoint.Client.ListItem.GetFieldValue(String fieldName)
+   at MCAWebAndAPI.Service.HR.Recruitment.PSAManagementService.ConvertToPSAModel(ListItem item) in D:\Users\User\Source\Repos\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Recruitment\PSAManagementService.cs:line 175
+   at MCAWebAndAPI.Service.HR.Recruitment.PSAManagementService.GetPSAs(DateTime period) in D:\Users\User\Source\Repos\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Recruitment\PSAManagementService.cs:line 165
+   at MCAWebAndAPI.Service.HR.Payroll.PayrollHelper.<PopulateAllValidPSAs>d__14.MoveNext() in D:\Users\User\Source\Repos\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Payroll\PayrollHelper.cs:line 58
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at MCAWebAndAPI.Service.HR.Payroll.PayrollService.<GetPayrollWorksheetDetailsAsync>d__16.MoveNext() in D:\Users\User\Source\Repos\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Payroll\PayrollService.cs:line 221
+2016-08-08 21:40:31.9888 MCAWebAndAPI.Service.JobSchedulers.Schedulers.PayrollRunScheduler DefaultQuartzScheduler has been started at Monday, August 8, 2016 in site https://eceos2.sharepoint.com/sites/mca-dev/hr
+2016-08-08 21:41:08.0072 MCAWebAndAPI.Service.HR.Payroll.PayrollService Microsoft.SharePoint.Client.PropertyOrFieldNotInitializedException: The property or field has not been initialized. It has not been requested or the request has not been executed. It may need to be explicitly requested.
+   at Microsoft.SharePoint.Client.ListItem.GetFieldValue(String fieldName)
+   at MCAWebAndAPI.Service.HR.Recruitment.PSAManagementService.ConvertToPSAModel(ListItem item) in D:\Users\User\Source\Repos\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Recruitment\PSAManagementService.cs:line 175
+   at MCAWebAndAPI.Service.HR.Recruitment.PSAManagementService.GetPSAs(DateTime period) in D:\Users\User\Source\Repos\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Recruitment\PSAManagementService.cs:line 165
+   at MCAWebAndAPI.Service.HR.Payroll.PayrollHelper.<PopulateAllValidPSAs>d__14.MoveNext() in D:\Users\User\Source\Repos\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Payroll\PayrollHelper.cs:line 58
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at MCAWebAndAPI.Service.HR.Payroll.PayrollService.<GetPayrollWorksheetDetailsAsync>d__16.MoveNext() in D:\Users\User\Source\Repos\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Payroll\PayrollService.cs:line 221
+2016-08-08 21:41:39.2704 MCAWebAndAPI.Service.JobSchedulers.Schedulers.PayrollRunScheduler DefaultQuartzScheduler has been started at Monday, August 8, 2016 in site https://eceos2.sharepoint.com/sites/mca-dev/hr
+2016-08-08 21:43:47.7140 MCAWebAndAPI.Service.HR.Payroll.PayrollService Microsoft.SharePoint.Client.PropertyOrFieldNotInitializedException: The property or field has not been initialized. It has not been requested or the request has not been executed. It may need to be explicitly requested.
+   at Microsoft.SharePoint.Client.ListItem.GetFieldValue(String fieldName)
+   at MCAWebAndAPI.Service.HR.Recruitment.PSAManagementService.ConvertToPSAModel(ListItem item) in D:\Users\User\Source\Repos\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Recruitment\PSAManagementService.cs:line 175
+   at MCAWebAndAPI.Service.HR.Recruitment.PSAManagementService.GetPSAs(DateTime period) in D:\Users\User\Source\Repos\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Recruitment\PSAManagementService.cs:line 165
+   at MCAWebAndAPI.Service.HR.Payroll.PayrollHelper.<PopulateAllValidPSAs>d__14.MoveNext() in D:\Users\User\Source\Repos\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Payroll\PayrollHelper.cs:line 58
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at MCAWebAndAPI.Service.HR.Payroll.PayrollService.<GetPayrollWorksheetDetailsAsync>d__16.MoveNext() in D:\Users\User\Source\Repos\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Payroll\PayrollService.cs:line 221
+2016-08-08 22:03:36.0585 MCAWebAndAPI.Service.JobSchedulers.Schedulers.PayrollRunScheduler DefaultQuartzScheduler has been started at Monday, August 8, 2016 in site https://eceos2.sharepoint.com/sites/mca-dev/hr
+2016-08-08 22:04:01.9152 MCAWebAndAPI.Service.HR.Payroll.PayrollService Microsoft.SharePoint.Client.PropertyOrFieldNotInitializedException: The property or field has not been initialized. It has not been requested or the request has not been executed. It may need to be explicitly requested.
+   at Microsoft.SharePoint.Client.ListItem.GetFieldValue(String fieldName)
+   at MCAWebAndAPI.Service.HR.Recruitment.PSAManagementService.ConvertToPSAModel(ListItem item) in D:\Users\User\Source\Repos\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Recruitment\PSAManagementService.cs:line 175
+   at MCAWebAndAPI.Service.HR.Recruitment.PSAManagementService.GetPSAs(DateTime period) in D:\Users\User\Source\Repos\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Recruitment\PSAManagementService.cs:line 165
+   at MCAWebAndAPI.Service.HR.Payroll.PayrollHelper.<PopulateAllValidPSAs>d__14.MoveNext() in D:\Users\User\Source\Repos\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Payroll\PayrollHelper.cs:line 58
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at MCAWebAndAPI.Service.HR.Payroll.PayrollService.<GetPayrollWorksheetDetailsAsync>d__16.MoveNext() in D:\Users\User\Source\Repos\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Payroll\PayrollService.cs:line 221
+2016-08-08 22:06:06.5811 MCAWebAndAPI.Service.JobSchedulers.Schedulers.PayrollRunScheduler DefaultQuartzScheduler has been started at Monday, August 8, 2016 in site https://eceos2.sharepoint.com/sites/mca-dev/hr
+2016-08-08 22:06:40.1909 MCAWebAndAPI.Service.HR.Payroll.PayrollService Microsoft.SharePoint.Client.PropertyOrFieldNotInitializedException: The property or field has not been initialized. It has not been requested or the request has not been executed. It may need to be explicitly requested.
+   at Microsoft.SharePoint.Client.ListItem.GetFieldValue(String fieldName)
+   at MCAWebAndAPI.Service.HR.Recruitment.PSAManagementService.ConvertToPSAModel(ListItem item) in D:\Users\User\Source\Repos\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Recruitment\PSAManagementService.cs:line 177
+   at MCAWebAndAPI.Service.HR.Recruitment.PSAManagementService.GetPSAs(DateTime period) in D:\Users\User\Source\Repos\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Recruitment\PSAManagementService.cs:line 165
+   at MCAWebAndAPI.Service.HR.Payroll.PayrollHelper.<PopulateAllValidPSAs>d__14.MoveNext() in D:\Users\User\Source\Repos\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Payroll\PayrollHelper.cs:line 58
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at MCAWebAndAPI.Service.HR.Payroll.PayrollService.<GetPayrollWorksheetDetailsAsync>d__16.MoveNext() in D:\Users\User\Source\Repos\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Payroll\PayrollService.cs:line 221
+2016-08-08 22:14:57.6007 MCAWebAndAPI.Service.JobSchedulers.Schedulers.PayrollRunScheduler DefaultQuartzScheduler has been started at Monday, August 8, 2016 in site https://eceos2.sharepoint.com/sites/mca-dev/hr
+2016-08-08 22:15:27.4396 MCAWebAndAPI.Service.HR.Payroll.PayrollService Microsoft.SharePoint.Client.PropertyOrFieldNotInitializedException: The property or field has not been initialized. It has not been requested or the request has not been executed. It may need to be explicitly requested.
+   at Microsoft.SharePoint.Client.ListItem.GetFieldValue(String fieldName)
+   at MCAWebAndAPI.Service.HR.Recruitment.PSAManagementService.ConvertToPSAModel(ListItem item) in D:\Users\User\Source\Repos\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Recruitment\PSAManagementService.cs:line 176
+   at MCAWebAndAPI.Service.HR.Recruitment.PSAManagementService.GetPSAs(DateTime period) in D:\Users\User\Source\Repos\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Recruitment\PSAManagementService.cs:line 165
+   at MCAWebAndAPI.Service.HR.Payroll.PayrollHelper.<PopulateAllValidPSAs>d__14.MoveNext() in D:\Users\User\Source\Repos\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Payroll\PayrollHelper.cs:line 58
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at MCAWebAndAPI.Service.HR.Payroll.PayrollService.<GetPayrollWorksheetDetailsAsync>d__16.MoveNext() in D:\Users\User\Source\Repos\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Payroll\PayrollService.cs:line 221
+2016-08-08 22:18:56.8134 MCAWebAndAPI.Service.JobSchedulers.Schedulers.PayrollRunScheduler DefaultQuartzScheduler has been started at Monday, August 8, 2016 in site 
+2016-08-08 22:18:57.0285 MCAWebAndAPI.Service.HR.Payroll.PayrollService System.ArgumentException: Value does not fall within the expected range.
+   at Microsoft.SharePoint.Client.ClientRuntimeContext..ctor(String webFullUrl)
+   at MCAWebAndAPI.Service.Utils.SPConnector.GetList(String listName, String siteUrl, String caml) in D:\Users\User\Source\Repos\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 54
+   at MCAWebAndAPI.Service.HR.Recruitment.PSAManagementService.GetPSAs(DateTime period) in D:\Users\User\Source\Repos\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Recruitment\PSAManagementService.cs:line 163
+   at MCAWebAndAPI.Service.HR.Payroll.PayrollHelper.<PopulateAllValidPSAs>d__14.MoveNext() in D:\Users\User\Source\Repos\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Payroll\PayrollHelper.cs:line 58
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at MCAWebAndAPI.Service.HR.Payroll.PayrollService.<GetPayrollWorksheetDetailsAsync>d__16.MoveNext() in D:\Users\User\Source\Repos\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Payroll\PayrollService.cs:line 211
+2016-08-08 22:19:21.5416 MCAWebAndAPI.Service.JobSchedulers.Schedulers.PayrollRunScheduler DefaultQuartzScheduler has been started at Monday, August 8, 2016 in site https://eceos2.sharepoint.com/sites/mca-dev/hr
+2016-08-08 22:19:45.6975 MCAWebAndAPI.Service.HR.Payroll.PayrollService Microsoft.SharePoint.Client.PropertyOrFieldNotInitializedException: The property or field has not been initialized. It has not been requested or the request has not been executed. It may need to be explicitly requested.
+   at Microsoft.SharePoint.Client.ListItem.GetFieldValue(String fieldName)
+   at MCAWebAndAPI.Service.HR.Recruitment.PSAManagementService.ConvertToPSAModel(ListItem item) in D:\Users\User\Source\Repos\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Recruitment\PSAManagementService.cs:line 176
+   at MCAWebAndAPI.Service.HR.Recruitment.PSAManagementService.GetPSAs(DateTime period) in D:\Users\User\Source\Repos\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Recruitment\PSAManagementService.cs:line 165
+   at MCAWebAndAPI.Service.HR.Payroll.PayrollHelper.<PopulateAllValidPSAs>d__14.MoveNext() in D:\Users\User\Source\Repos\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Payroll\PayrollHelper.cs:line 58
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at MCAWebAndAPI.Service.HR.Payroll.PayrollService.<GetPayrollWorksheetDetailsAsync>d__16.MoveNext() in D:\Users\User\Source\Repos\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Payroll\PayrollService.cs:line 211
+2016-08-08 22:19:49.2382 MCAWebAndAPI.Service.HR.Payroll.PayrollService Microsoft.SharePoint.Client.PropertyOrFieldNotInitializedException: The property or field has not been initialized. It has not been requested or the request has not been executed. It may need to be explicitly requested.
+   at Microsoft.SharePoint.Client.ListItem.GetFieldValue(String fieldName)
+   at MCAWebAndAPI.Service.HR.Recruitment.PSAManagementService.ConvertToPSAModel(ListItem item) in D:\Users\User\Source\Repos\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Recruitment\PSAManagementService.cs:line 176
+   at MCAWebAndAPI.Service.HR.Recruitment.PSAManagementService.GetPSAs(DateTime period) in D:\Users\User\Source\Repos\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Recruitment\PSAManagementService.cs:line 165
+   at MCAWebAndAPI.Service.HR.Payroll.PayrollHelper.<PopulateAllValidPSAs>d__14.MoveNext() in D:\Users\User\Source\Repos\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Payroll\PayrollHelper.cs:line 58
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at MCAWebAndAPI.Service.HR.Payroll.PayrollService.<GetPayrollWorksheetDetailsAsync>d__16.MoveNext() in D:\Users\User\Source\Repos\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Payroll\PayrollService.cs:line 230
+2016-08-08 22:20:24.0139 MCAWebAndAPI.Service.JobSchedulers.Schedulers.PayrollRunScheduler DefaultQuartzScheduler has been started at Monday, August 8, 2016 in site https://eceos2.sharepoint.com/sites/mca-dev/hr
+2016-08-08 22:22:21.3370 MCAWebAndAPI.Service.HR.Payroll.PayrollService Microsoft.SharePoint.Client.PropertyOrFieldNotInitializedException: The property or field has not been initialized. It has not been requested or the request has not been executed. It may need to be explicitly requested.
+   at Microsoft.SharePoint.Client.ListItem.GetFieldValue(String fieldName)
+   at MCAWebAndAPI.Service.Utils.FormatUtil.ConvertLookupToID(ListItem item, String columnName) in D:\Users\User\Source\Repos\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\FormatUtil.cs:line 80
+   at MCAWebAndAPI.Service.HR.Common.DataMasterService.GetMonthlyFees(Int32[] professionalIDs) in D:\Users\User\Source\Repos\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Common\DataMasterService.cs:line 276
+   at MCAWebAndAPI.Service.HR.Payroll.PayrollHelper.<PopulateAllProfessionalMonthlyFee>d__15.MoveNext() in D:\Users\User\Source\Repos\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Payroll\PayrollHelper.cs:line 63
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at MCAWebAndAPI.Service.HR.Payroll.PayrollService.<GetPayrollWorksheetDetailsAsync>d__16.MoveNext() in D:\Users\User\Source\Repos\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Payroll\PayrollService.cs:line 230
+2016-08-08 22:23:13.1436 MCAWebAndAPI.Service.JobSchedulers.Schedulers.PayrollRunScheduler DefaultQuartzScheduler has been started at Monday, August 8, 2016 in site https://eceos2.sharepoint.com/sites/mca-dev/hr

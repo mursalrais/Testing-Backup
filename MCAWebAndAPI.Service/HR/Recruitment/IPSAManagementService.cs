@@ -15,6 +15,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         void SetSiteUrl(string siteUrl);
 
         IEnumerable<PSAMaster> GetPSAs();
+        IEnumerable<PSAMaster> GetPSAs(DateTime period);
 
         int CreatePSAManagement(PSAManagementVM psaManagement);
 

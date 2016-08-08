@@ -59,7 +59,7 @@
                        {
                            aggregates.Add(p => p.FullHalf).Sum();
                        })
-                       .Read("Grid_ReadHolidays", "HRTimesheet")
+                       .Read("GridHolidays_Read", "HRTimesheet")
                        .Group(group => group.Add(p => p.Type))
                     )
                 )
@@ -83,7 +83,7 @@
                     })
                     .DataSource(dataSource => dataSource
                        .Ajax()
-                       .Read("Grid_ReadWorkingDays", "HRTimesheet")
+                       .Read("GridWorkingDays_Read", "HRTimesheet")
                        .Sort(s => s.Add(p => p.Date).Ascending())
                        .Aggregates(aggregates =>
                        {

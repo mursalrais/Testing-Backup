@@ -8,7 +8,7 @@
         <legend>Period Payroll</legend>
         <div class="row">
             <div class="col-sm-6">
-                @using (Ajax.BeginForm("UpdatePeriodWorksheet", "HRPayroll", new AjaxOptions
+                @using (Ajax.BeginForm("DisplayInScreenPeriodWorksheet", "HRPayroll", new AjaxOptions
                 {
                     OnComplete = "onCompleteUpdatePeriod"
                 }, new { id = "form-update-period" }))
@@ -19,7 +19,8 @@
                            @Html.EditorFor(m => m.Period)
                         </div>
                     </div>
-                    <button id="submit-button-update-period" class="btn btn-primary pull-right" type="submit">Set</button>
+                    <button id="display-in-screen-button-update-period" class="btn btn-primary pull-right" type="submit">Display in Screen</button>
+                    <button id="run-in-background-button-update-period" class="btn btn-primary pull-right" type="button">Run in Background</button>
                 }
             </div>
             <div class="col-sm-6"></div>
@@ -117,6 +118,17 @@
     <script>
 
         $(document).ready(function () {
+
+            $("#run-in-background-button-update-period").click(function (e) {
+                var periodDatePicker = $("#Period").data("kendoDatePicker");
+                var periodValue = periodDatePicker.value();
+                var period = kendo.toString(periodValue, "dd-MM-yyyy");
+
+                var url = "/HRPayroll/RunInBackgroundPeriodWorksheet?periodString=" + period;
+                $.getJSON(url, function (data) {
+                    showModalWindow(data.message);
+                });
+            });
 
             $("#save-as-draft-button").click(function (e) {
                 // Trigger Export to Excel

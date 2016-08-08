@@ -12,18 +12,23 @@ using System.Net;
 using System;
 using System.IO;
 using System.Web;
+using System.Threading.Tasks;
+using MCAWebAndAPI.Model.Common;
+using Elmah;
+using MCAWebAndAPI.Service.JobSchedulers.Schedulers;
+using System.Globalization;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
     public class HRPayrollController : Controller
     {
-        IHRPayrollServices _hRPayrollService;
-        private const string PAYROLL_WORKSHEET_FILENAME = "PayrollWorksheet-Period-{0}-RunOn-{1}.xlsx";
+        IPayrollService _hRPayrollService;
+        private const string PAYROLL_WORKSHEET_FILENAME = "PayrollWorksheet-Period-{0}-RunOn-{1}.{2}";
         private const string PAYROLL_WORKSHEET_DIRECTORY = "~/App_Data/PayrollWorksheet/";
 
         public HRPayrollController()
         {
-            _hRPayrollService = new HRPayrollServices();
+            _hRPayrollService = new PayrollService();
         }
 
         public ActionResult CreateMonthlyFee(string siteUrl = null)
@@ -122,20 +127,17 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             SessionManager.Set("SiteUrl", siteUrl);
             _hRPayrollService.SetSiteUrl(siteUrl);
-
-            var viewModelPayroll = _hRPayrollService.GetPayrollWorksheetDetails(DateTime.Today);
-            SessionManager.Set("PayrollWorksheetDetailVM", viewModelPayroll);
-
+            
             var viewModel = new PayrollRunVM();  
             return View(viewModel);
         }
 
-        public ActionResult DisplayPayrollWorksheetSummary(string siteUrl)
+        public async Task<ActionResult> DisplayPayrollWorksheetSummary(string siteUrl)
         {
             SessionManager.Set("SiteUrl", siteUrl);
             _hRPayrollService.SetSiteUrl(siteUrl);
 
-            var viewModelPayroll = _hRPayrollService.GetPayrollWorksheetDetails(DateTime.Today);
+            var viewModelPayroll = await _hRPayrollService.GetPayrollWorksheetDetailsAsync(DateTime.Today);
             SessionManager.Set("PayrollWorksheetDetailVM", viewModelPayroll);
 
             var viewModel = new PayrollRunVM();
@@ -143,34 +145,58 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
 
-
+        /// <summary>
+        /// Triggered after period is updated
+        /// </summary>
+        /// <param name="viewModel"></param>
+        /// <returns></returns>
         [HttpPost]
-        public ActionResult UpdatePeriodWorksheet(PayrollRunVM viewModel)
+        public async Task<ActionResult> DisplayInScreenPeriodWorksheet(PayrollRunVM viewModel)
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _hRPayrollService.SetSiteUrl(siteUrl);
 
-            IEnumerable<PayrollWorksheetDetailVM> viewModelPayroll = new List<PayrollWorksheetDetailVM>();
-            try
-            {
-                viewModelPayroll = _hRPayrollService.GetPayrollWorksheetDetails(viewModel.Period);
-            }
-            catch (Exception e)
-            {
-                return Json(new { message = e.Message }, JsonRequestBehavior.AllowGet);
-            }
-
-            SessionManager.Set("PayrollWorksheetDetailVM", viewModelPayroll);
-            SessionManager.Set("PayrollWorksheetPeriod", viewModel.Period.ToLocalTime().ToString("yyyy-MM"));
+            await PopulatePayrollWorksheet(viewModel.Period);
 
             return Json(new { message = "Period has been updated" }, JsonRequestBehavior.AllowGet);
+        }
+        
+        public ActionResult RunInBackgroundPeriodWorksheet(string periodString)
+        {
+            var period = DateTime.ParseExact(periodString, "dd-MM-yyyy", CultureInfo.CurrentCulture);
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+
+            var fileName = string.Format(PAYROLL_WORKSHEET_FILENAME,
+                period.ToLocalTime().ToString("yyyy-MM"),
+                DateTime.Today.ToLocalTime().ToString("yyyy-MM-dd"), "draft");
+
+            var path = Path.Combine(Server.MapPath(PAYROLL_WORKSHEET_DIRECTORY), fileName);
+
+            PayrollRunScheduler.DoNow_Once(siteUrl, path, period.Day, period.Month, period.Year);
+            
+            return Json(new
+            {
+                message =
+                string.Format("Payroll from {0} to {1} has been run in background. You may download later",
+                period.GetFirstPayrollDay(), period.GetLastPayrollDay())
+            },JsonRequestBehavior.AllowGet);
+        }
+
+        private async Task PopulatePayrollWorksheet(DateTime period)
+        {
+            IEnumerable<PayrollWorksheetDetailVM> viewModelPayroll = new List<PayrollWorksheetDetailVM>();
+            viewModelPayroll = await _hRPayrollService.GetPayrollWorksheetDetailsAsync(period);
+            
+            SessionManager.Set("PayrollWorksheetDetailVM", viewModelPayroll);
+            SessionManager.Set("PayrollWorksheetPeriod", period.ToLocalTime().ToString("yyyy-MM"));
         }
 
         [HttpPost]
         public ActionResult GridWorksheet_Read([DataSourceRequest] DataSourceRequest request)
         {
             // Get from existing session variable or create new if doesn't exist
-            IEnumerable<PayrollWorksheetDetailVM> items = SessionManager.Get<IEnumerable<PayrollWorksheetDetailVM>>("PayrollWorksheetDetailVM");
+            IEnumerable<PayrollWorksheetDetailVM> items = SessionManager.Get<IEnumerable<PayrollWorksheetDetailVM>>("PayrollWorksheetDetailVM") ?? 
+                new List<PayrollWorksheetDetailVM>();
 
             // Convert to Kendo DataSource
             DataSourceResult result = items.ToDataSourceResult(request);
@@ -195,7 +221,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             fileName = string.Format(PAYROLL_WORKSHEET_FILENAME, 
                 SessionManager.Get<string>("PayrollWorksheetPeriod"), 
-                DateTime.Today.ToLocalTime().ToString("yyyy-MM-dd"));
+                DateTime.Today.ToLocalTime().ToString("yyyy-MM-dd"), "xlsx");
 
             // Store the file on the session variable
             var fileContent = fileContents;
@@ -209,7 +235,7 @@ namespace MCAWebAndAPI.Web.Controllers
             var fileContents = SessionManager.Get<byte[]>("PayrollWorksheet_ExcelFile");
             var fileName = string.Format(PAYROLL_WORKSHEET_FILENAME,
                 SessionManager.Get<string>("PayrollWorksheetPeriod"),
-                DateTime.Today.ToLocalTime().ToString("yyyy-MM-dd"));
+                DateTime.Today.ToLocalTime().ToString("yyyy-MM-dd"), "xlsx");
 
             try
             {
@@ -220,7 +246,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 }
                 else
                 {
-                    throw new FileNotFoundException();
+                    ErrorSignal.FromCurrentContext().Raise(new FileNotFoundException());
                 }
             }
             catch (Exception e)

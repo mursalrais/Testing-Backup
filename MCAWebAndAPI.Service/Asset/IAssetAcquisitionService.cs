@@ -32,10 +32,10 @@ namespace MCAWebAndAPI.Service.Asset
 
         int? MassUploadHeaderDetail(string ListName, DataTable CSVDataTable, string SiteUrl = null);
 
-        bool isValueOfColumnExist(string listname, string SiteUrl, string caml);
+        int? getIdOfColumn(string listname, string SiteUrl, string caml);
 
         Dictionary<int, string> getListIDOfList(string listName, string key, string value,  string SiteUrl);
 
-        void DeleteParentUpload(string listNameHeader, int? latestIDHeader, string siteUrl);
+        void RollbackParentChildrenUpload(string listNameHeader, int? latestIDHeader, string siteUrl);
     }
 }

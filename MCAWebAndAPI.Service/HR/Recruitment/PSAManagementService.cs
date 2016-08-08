@@ -125,11 +125,37 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return SPConnector.GetLatestListItemID(SP_PSA_LIST_NAME, _siteUrl);
         }
 
+        /// <summary>
+        /// To return all PSAs
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<PSAMaster> GetPSAs()
         {
             var models = new List<PSAMaster>();
 
-                foreach (var item in SPConnector.GetList(SP_PSA_LIST_NAME, _siteUrl))
+            foreach (var item in SPConnector.GetList(SP_PSA_LIST_NAME, _siteUrl))
+            {
+                models.Add(ConvertToPSAModel(item));
+            }
+
+            return models;
+        }
+
+        /// <summary>
+        /// To return all PSAs having last working date more or equal than given period
+        /// </summary>
+        /// <param name="period"></param>
+        /// <returns></returns>
+        public IEnumerable<PSAMaster> GetPSAs(DateTime period)
+        {
+            var startTimeUniversalString = period.ToUniversalTime().ToString("o");
+            var caml = @"<View><Query><Where><Geq><FieldRef Name='lastworkingdate' /><Value IncludeTimeValue='TRUE' Type='DateTime'>"
+              + startTimeUniversalString
+              + @"</Value></Geq></Where><OrderBy><FieldRef Name='renewalnumber' Ascending='False' /></OrderBy></Query></View>";
+
+            var models = new List<PSAMaster>();
+
+            foreach (var item in SPConnector.GetList(SP_PSA_LIST_NAME, _siteUrl, caml))
             {
                 models.Add(ConvertToPSAModel(item));
             }
@@ -139,20 +165,24 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         
         private PSAMaster ConvertToPSAModel(ListItem item)
         {
-            return new PSAMaster
-            {
-                ID = Convert.ToInt32(item["ID"]),
-                ProfessionalID = item["professional_x003a_ID"] == null ? string.Empty :
-               Convert.ToString((item["professional_x003a_ID"] as FieldLookupValue).LookupValue),
-                PSAID = Convert.ToString(item["Created"]),
-                PSANumber = Convert.ToString(item["Title"]),
-                JoinDate = Convert.ToDateTime(item["joindate"]).ToLocalTime().ToShortDateString(),
-                DateOfNewPSA = Convert.ToDateTime(item["dateofnewpsa"]).ToLocalTime().ToShortDateString(),
-                PsaExpiryDate = Convert.ToDateTime(item["psaexpirydate"]).ToLocalTime().ToShortDateString(),
-                ProjectOrUnit = Convert.ToString(item["ProjectOrUnit"]),
-                Position = item["position"] == null ? "" :
-               Convert.ToString((item["position"] as FieldLookupValue).LookupValue)
-            };
+            var psaMaster = new PSAMaster();
+            psaMaster.ID = Convert.ToInt32(item["ID"]);
+            psaMaster.ProfessionalID = FormatUtil.ConvertLookupToID(item, "professional") + string.Empty;
+            psaMaster.PSANumber = Convert.ToString(item["Title"]);
+            psaMaster.ProjectOrUnit = Convert.ToString(item["ProjectOrUnit"]);
+            psaMaster.Position = FormatUtil.ConvertLookupToValue(item, "position");
+
+
+            psaMaster.JoinDate = Convert.ToDateTime(item["joindate"]).ToLocalTime();
+            psaMaster.DateOfNewPSA = Convert.ToDateTime(item["dateofnewpsa"]).ToLocalTime();
+            psaMaster.PSAExpiryDate = Convert.ToDateTime(item["psaexpirydate"]).ToLocalTime();
+
+            psaMaster.JoinDateString = psaMaster.JoinDate.ToShortDateString();
+            psaMaster.DateOfNewPSAString = psaMaster.DateOfNewPSA.ToShortDateString();
+            psaMaster.PsaExpiryDateString = psaMaster.PSAExpiryDate.ToShortDateString();
+
+            return psaMaster;
+
         }
 
         public void SetSiteUrl(string siteUrl)

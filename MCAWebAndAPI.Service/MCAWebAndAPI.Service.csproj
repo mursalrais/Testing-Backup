@@ -183,6 +183,7 @@
     <Compile Include="Finance\SPHLService.cs" />
     <Compile Include="Finance\TaxExemptionDataService.cs" />
     <Compile Include="Finance\TaxReimbursementService.cs" />
+    <Compile Include="HR\Common\ProfessionalService.cs" />
     <Compile Include="HR\Compensatory\HRCompensatoryService.cs" />
     <Compile Include="HR\Compensatory\IHRCompensatoryService.cs" />
     <Compile Include="HR\InsuranceClaim\IInsuranceClaimService.cs" />
@@ -202,6 +203,7 @@
     <Compile Include="HR\Recruitment\IPerformanceEvaluationService.cs" />
     <Compile Include="HR\Recruitment\IPerformanceMonitoringService.cs" />
     <Compile Include="HR\Payroll\PayrollHelper.cs" />
+    <Compile Include="HR\Common\IProfessionalService.cs" />
     <Compile Include="HR\Recruitment\PerformanceEvaluationService.cs" />
     <Compile Include="HR\Recruitment\PerformanceMonitoringService.cs" />
     <Compile Include="HR\Timesheet\ITimesheetService.cs" />
@@ -209,22 +211,24 @@
     <Compile Include="HR\Travel\ITRPlaceMasterService.cs" />
     <Compile Include="HR\Travel\TRPlaceMasterService.cs" />
     <Compile Include="HR\Recruitment\HRManpowerRequisitionService.cs" />
-    <Compile Include="HR\Recruitment\HRApplicationService.cs" />
-    <Compile Include="HR\Common\HRDataMasterService.cs" />
+    <Compile Include="HR\Recruitment\ApplicationService.cs" />
+    <Compile Include="HR\Common\DataMasterService.cs" />
     <Compile Include="HR\Recruitment\HRShortlistService.cs" />
     <Compile Include="HR\Recruitment\IHRManpowerRequisitionService.cs" />
-    <Compile Include="HR\Recruitment\IHRApplicationService.cs" />
-    <Compile Include="HR\Common\IHRDataMasterService.cs" />
-    <Compile Include="HR\Payroll\HRPayrollServices.cs" />
-    <Compile Include="HR\Payroll\IHRPayrollServices.cs" />
+    <Compile Include="HR\Recruitment\IApplicationService.cs" />
+    <Compile Include="HR\Common\IDataMasterService.cs" />
+    <Compile Include="HR\Payroll\PayrollService.cs" />
+    <Compile Include="HR\Payroll\IPayrollService.cs" />
     <Compile Include="HR\Recruitment\IHRShortlistService.cs" />
     <Compile Include="HR\Recruitment\IPSAManagementService.cs" />
     <Compile Include="HR\Recruitment\PSAManagementService.cs" />
     <Compile Include="JobSchedulers\Jobs\EmailExternalJob.cs" />
     <Compile Include="JobSchedulers\Jobs\EmailJob.cs" />
+    <Compile Include="JobSchedulers\Jobs\PayrollRunJob.cs" />
     <Compile Include="JobSchedulers\Jobs\PSAManagementJob.cs" />
     <Compile Include="JobSchedulers\Jobs\TaskCalculationJob.cs" />
     <Compile Include="JobSchedulers\Schedulers\EmailScheduler.cs" />
+    <Compile Include="JobSchedulers\Schedulers\PayrollRunScheduler.cs" />
     <Compile Include="JobSchedulers\Schedulers\PSAManagementScheduler.cs" />
     <Compile Include="JobSchedulers\Schedulers\TaskCalculationScheduler.cs" />
     <Compile Include="ProjectManagement\Common\IProjectHierarchyService.cs" />
@@ -247,6 +251,7 @@
     </Compile>
     <Compile Include="Utils\DocumentNumbering.cs" />
     <Compile Include="Utils\EmailUtil.cs" />
+    <Compile Include="Utils\FileUtil.cs" />
     <Compile Include="Utils\FormatUtil.cs" />
     <Compile Include="Utils\GraphicUtil.cs" />
     <Compile Include="Utils\MathUtil.cs" />
@@ -266,6 +271,7 @@
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="app.config" />
     <None Include="job_scheduling_data_2_0.xsd">
       <SubType>Designer</SubType>
     </None>
