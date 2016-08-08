@@ -1231,6 +1231,7 @@
     <Content Include="Views\ASSAssetAcquisition\Upload.cshtml" />
     <Content Include="Views\ASSAssetAcquisition\Edit.cshtml" />
     <Content Include="Views\ASSAssetAcquisition\_DisplayGrid.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\AjaxCascadeComboBox.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
