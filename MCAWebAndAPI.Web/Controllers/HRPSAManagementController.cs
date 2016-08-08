@@ -68,11 +68,11 @@ namespace MCAWebAndAPI.Web.Controllers
 
             var viewModel = psaManagementService.GetPSAManagement(ID);
 
-            //string professionalFullName = psaManagementService.GetProfessionalFullName(viewModel.Professional.Value);
+            string professionalFullName = psaManagementService.GetProfessionalFullName(viewModel.Professional.Value);
 
-            //viewModel.ProfessionalFullName = Convert.ToString(professionalFullName);
+            viewModel.ProfessionalFullName = Convert.ToString(professionalFullName);
 
-            if(viewModel.PSAStatus.Text == "Active")
+            if (viewModel.PSAStatus.Text == "Active")
             {
                 return View("EditPSAManagement", viewModel);
             }
