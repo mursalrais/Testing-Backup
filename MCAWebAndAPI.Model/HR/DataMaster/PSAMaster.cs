@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MCAWebAndAPI.Model.ViewModel.Control;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using MCAWebAndAPI.Model.Common;
+﻿using MCAWebAndAPI.Model.Common;
+using System;
 
 namespace MCAWebAndAPI.Model.HR.DataMaster
 {
@@ -22,10 +15,18 @@ namespace MCAWebAndAPI.Model.HR.DataMaster
 
         public string ProjectOrUnit { get; set; }
 
-        public string PsaExpiryDate { get; set; }
+        public string PsaExpiryDateString { get; set; }
 
-        public string JoinDate { get; set; }
+        public DateTime PSAExpiryDate { get; set; }
 
-        public string DateOfNewPSA { get; set; }
+        public string JoinDateString { get; set; }
+
+        public DateTime JoinDate { get; set; }
+
+
+        public string DateOfNewPSAString { get; set; }
+
+        public DateTime DateOfNewPSA { get; set; }
+
     }
 }

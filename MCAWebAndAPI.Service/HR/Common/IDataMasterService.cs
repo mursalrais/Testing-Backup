@@ -28,6 +28,8 @@ namespace MCAWebAndAPI.Service.HR.Common
 
         IEnumerable<DependentMaster> GetDependentsForInsurance();
 
+        IEnumerable<MonthlyFeeMaster> GetMonthlyFees(int[] professionalIDs);
+
         string GetProfessionalPosition(string userLogin);
 
         string GetProfessionalOfficeEmail(int professionalID);

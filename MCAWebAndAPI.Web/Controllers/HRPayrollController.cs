@@ -13,6 +13,10 @@ using System;
 using System.IO;
 using System.Web;
 using System.Threading.Tasks;
+using MCAWebAndAPI.Model.Common;
+using Elmah;
+using MCAWebAndAPI.Service.JobSchedulers.Schedulers;
+using System.Globalization;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -119,14 +123,11 @@ namespace MCAWebAndAPI.Web.Controllers
             return array;
         }
 
-        public async Task<ActionResult> DisplayPayrollWorksheet(string siteUrl)
+        public ActionResult DisplayPayrollWorksheet(string siteUrl)
         {
             SessionManager.Set("SiteUrl", siteUrl);
             _hRPayrollService.SetSiteUrl(siteUrl);
-
-            var viewModelPayroll = await _hRPayrollService.GetPayrollWorksheetDetailsAsync(DateTime.Today);
-            SessionManager.Set("PayrollWorksheetDetailVM", viewModelPayroll);
-
+            
             var viewModel = new PayrollRunVM();  
             return View(viewModel);
         }
@@ -150,7 +151,7 @@ namespace MCAWebAndAPI.Web.Controllers
         /// <param name="viewModel"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult> UpdatePeriodWorksheet(PayrollRunVM viewModel)
+        public async Task<ActionResult> DisplayInScreenPeriodWorksheet(PayrollRunVM viewModel)
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _hRPayrollService.SetSiteUrl(siteUrl);
@@ -159,21 +160,26 @@ namespace MCAWebAndAPI.Web.Controllers
 
             return Json(new { message = "Period has been updated" }, JsonRequestBehavior.AllowGet);
         }
-
-        public async Task<ActionResult> RunInBackgroundPeriodWorksheet(PayrollRunVM viewModel)
+        
+        public ActionResult RunInBackgroundPeriodWorksheet(string periodString)
         {
+            var period = DateTime.ParseExact(periodString, "dd-MM-yyyy", CultureInfo.CurrentCulture);
             var siteUrl = SessionManager.Get<string>("SiteUrl");
-            _hRPayrollService.SetSiteUrl(siteUrl);
 
-           
+            var fileName = string.Format(PAYROLL_WORKSHEET_FILENAME,
+                period.ToLocalTime().ToString("yyyy-MM"),
+                DateTime.Today.ToLocalTime().ToString("yyyy-MM-dd"), "draft");
 
-            return Json(new { message = "Period has been updated" }, JsonRequestBehavior.AllowGet);
-        }
+            var path = Path.Combine(Server.MapPath(PAYROLL_WORKSHEET_DIRECTORY), fileName);
 
-        private async Task RunPayrollWorksheet(DateTime period)
-        {
-            await PopulatePayrollWorksheet(period);
-
+            PayrollRunScheduler.DoNow_Once(siteUrl, path, period.Day, period.Month, period.Year);
+            
+            return Json(new
+            {
+                message =
+                string.Format("Payroll from {0} to {1} has been run in background. You may download later",
+                period.GetFirstPayrollDay(), period.GetLastPayrollDay())
+            },JsonRequestBehavior.AllowGet);
         }
 
         private async Task PopulatePayrollWorksheet(DateTime period)
@@ -189,7 +195,8 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult GridWorksheet_Read([DataSourceRequest] DataSourceRequest request)
         {
             // Get from existing session variable or create new if doesn't exist
-            IEnumerable<PayrollWorksheetDetailVM> items = SessionManager.Get<IEnumerable<PayrollWorksheetDetailVM>>("PayrollWorksheetDetailVM");
+            IEnumerable<PayrollWorksheetDetailVM> items = SessionManager.Get<IEnumerable<PayrollWorksheetDetailVM>>("PayrollWorksheetDetailVM") ?? 
+                new List<PayrollWorksheetDetailVM>();
 
             // Convert to Kendo DataSource
             DataSourceResult result = items.ToDataSourceResult(request);
@@ -239,7 +246,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 }
                 else
                 {
-                    throw new FileNotFoundException();
+                    ErrorSignal.FromCurrentContext().Raise(new FileNotFoundException());
                 }
             }
             catch (Exception e)

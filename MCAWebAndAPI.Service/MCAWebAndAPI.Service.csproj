@@ -224,9 +224,11 @@
     <Compile Include="HR\Recruitment\PSAManagementService.cs" />
     <Compile Include="JobSchedulers\Jobs\EmailExternalJob.cs" />
     <Compile Include="JobSchedulers\Jobs\EmailJob.cs" />
+    <Compile Include="JobSchedulers\Jobs\PayrollRunJob.cs" />
     <Compile Include="JobSchedulers\Jobs\PSAManagementJob.cs" />
     <Compile Include="JobSchedulers\Jobs\TaskCalculationJob.cs" />
     <Compile Include="JobSchedulers\Schedulers\EmailScheduler.cs" />
+    <Compile Include="JobSchedulers\Schedulers\PayrollRunScheduler.cs" />
     <Compile Include="JobSchedulers\Schedulers\PSAManagementScheduler.cs" />
     <Compile Include="JobSchedulers\Schedulers\TaskCalculationScheduler.cs" />
     <Compile Include="ProjectManagement\Common\IProjectHierarchyService.cs" />
@@ -249,6 +251,7 @@
     </Compile>
     <Compile Include="Utils\DocumentNumbering.cs" />
     <Compile Include="Utils\EmailUtil.cs" />
+    <Compile Include="Utils\FileUtil.cs" />
     <Compile Include="Utils\FormatUtil.cs" />
     <Compile Include="Utils\GraphicUtil.cs" />
     <Compile Include="Utils\MathUtil.cs" />

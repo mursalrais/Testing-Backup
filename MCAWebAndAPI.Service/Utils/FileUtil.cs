@@ -1,11 +1,11 @@
 ﻿using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace MCAWebAndAPI.Web.Helpers
+namespace MCAWebAndAPI.Service.Utils
 {
-    public static class FileHelper
+    public static class FileUtil
     {
-        public static byte[] ObjectToByteArray(object obj)
+        public static byte[] ConvertObjectToByteArray(object obj)
         {
             if (obj == null)
                 return null;
@@ -18,7 +18,7 @@ namespace MCAWebAndAPI.Web.Helpers
         }
 
         // Convert a byte array to an Object
-        public static object ByteArrayToObject(byte[] arrBytes)
+        public static object ConvertByteArrayToObject(byte[] arrBytes)
         {
             MemoryStream memStream = new MemoryStream();
             BinaryFormatter binForm = new BinaryFormatter();
