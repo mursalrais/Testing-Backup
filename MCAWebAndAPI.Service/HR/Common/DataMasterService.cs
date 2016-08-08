@@ -17,6 +17,7 @@ namespace MCAWebAndAPI.Service.HR.Common
         const string SP_PROMAS_LIST_NAME = "Professional Master";
         const string SP_POSMAS_LIST_NAME = "Position Master";
         const string SP_MONFEE_LIST_NAME = "Monthly Fee";
+        const string SP_MONFEE_DETAIL_LIST_NAME = "Monthly Fee Detail";
         const string SP_PROEDU_LIST_NAME = "Professional Education";
         const string SP_PROTRAIN_LIST_NAME = "Professional Training";
         const string SP_PROORG_LIST_NAME = "Professional Organization Detail";
@@ -254,6 +255,55 @@ namespace MCAWebAndAPI.Service.HR.Common
             }
 
             return professionalOfficeEmail;
+        }
+
+        /// <summary>
+        /// Get monthly fee details for given professional IDs
+        /// </summary>
+        /// <param name="professionalIDs"></param>
+        /// <returns></returns>
+        public IEnumerable<MonthlyFeeMaster> GetMonthlyFees(int[] professionalIDs)
+        {
+            var caml = @"<View>  
+             <ViewFields><FieldRef Name='professional' /><FieldRef Name='ID' /></ViewFields> 
+            </View>";
+
+            //Item1 = ProfessionalID, Item2 = HeaderID
+            var profIDAndHeaderIDs = new List<Tuple<int, int>>();
+
+            foreach (var item in SPConnector.GetList(SP_MONFEE_LIST_NAME, _siteUrl, caml))
+            {
+                var profID = FormatUtil.ConvertLookupToID(item, "Professional");
+                if (professionalIDs.Contains((int)profID))
+                {
+                    profIDAndHeaderIDs.Add(new Tuple<int, int>((int)profID,Convert.ToInt32(item["ID"])));
+                }
+            }
+
+            var monthlyFees = new List<MonthlyFeeMaster>();
+            foreach (var header in profIDAndHeaderIDs)
+            {
+                caml = @"<View>  
+                <Query> 
+                <Where><Eq><FieldRef Name='monthlyfeeid' LookupId='True' /><Value Type='Lookup'>" + header.Item2 + 
+                @"</Value></Eq></Where> 
+                </Query> 
+                <ViewFields><FieldRef Name='dateofnewfee' /><FieldRef Name='enddate' /><FieldRef Name='monthlyfee' /><FieldRef Name='monthlyfeeid' /></ViewFields> 
+                </View>";
+
+                foreach (var item in SPConnector.GetList(SP_MONFEE_DETAIL_LIST_NAME, _siteUrl, caml))
+                {
+                    monthlyFees.Add(new MonthlyFeeMaster
+                    {
+                        ProfessionalID = header.Item1, 
+                        DateOfNewFee = Convert.ToDateTime(item["dateofnewfee"]),
+                        EndDate = Convert.ToDateTime(item["enddate"]),
+                        MonthlyFee = Convert.ToDouble(item["monthlyfee"])
+                    });
+                }
+            }
+
+            return monthlyFees;
         }
     }
 }

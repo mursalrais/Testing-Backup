@@ -21,6 +21,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
 
         private static IEnumerable<ProfessionalMaster> _allProfessionals;
         private static IEnumerable<PSAMaster> _allValidPSAs;
+        private static IEnumerable<MonthlyFeeMaster> _allProfessionalMonthlyFees;
 
         private static IPSAManagementService _psaService;
         private static IDataMasterService _dataMasterService;
@@ -47,10 +48,19 @@ namespace MCAWebAndAPI.Service.HR.Payroll
         /// </summary>
         /// <param name="startDatePeriod"></param>
         /// <returns></returns>
-        public static async Task PopulateRequiredMasterData(this List<PayrollWorksheetDetailVM> payrollWorksheet, DateTime startDatePeriod)
+        public static async Task PopulateAllProfessionals(this List<PayrollWorksheetDetailVM> payrollWorksheet)
         {
             _allProfessionals = _allProfessionals ?? _dataMasterService.GetProfessionals();
+        }
+
+        public static async Task PopulateAllValidPSAs(this List<PayrollWorksheetDetailVM> payrollWorksheet, DateTime startDatePeriod)
+        {
             _allValidPSAs = _psaService.GetPSAs(startDatePeriod);
+        }
+
+        public static async Task PopulateAllProfessionalMonthlyFee(this List<PayrollWorksheetDetailVM> payrollWorksheet, IEnumerable<int> professionalIDs)
+        {
+            _allProfessionalMonthlyFees = _dataMasterService.GetMonthlyFees(professionalIDs.ToArray());
         }
 
         /// <summary>
@@ -74,6 +84,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             _professionalIDs = payrollWorksheet.Select(e => e.ProfessionalID).ToArray();
             _dateRanges = dateRange.ToArray();
 
+            
             return payrollWorksheet;
         }
 
@@ -114,32 +125,20 @@ namespace MCAWebAndAPI.Service.HR.Payroll
 
         public static async Task<List<PayrollWorksheetDetailVM>> PopulateColumns(this List<PayrollWorksheetDetailVM> payrollWorksheet)
         {
-            // get StartDate from the first row of the worksheet
-            var startDate = _dateRanges[0];
-            
-            //Retrieve Professional based on given Professional IDs
-            var getProfessionalTask = GetProfessionals(_professionalIDs);
-
-            //Retrive PSA based on given Professional IDs
-            var getPSATask = GetPSAs(_professionalIDs);
-
-            //Retrieve MonthlyFeeDetail based on given Professional IDs
-            var getMonthlyFeeTask = GetMonthlyFees(_professionalIDs);
-
             //Populate columns
-            payrollWorksheet.PopulateColumnsFromProfessional(await getProfessionalTask);
-            payrollWorksheet.PopulateColumnsFromPSA(await getPSATask);
-            payrollWorksheet.PopulateColumnsFromMonthlyFee(await getMonthlyFeeTask);
+            payrollWorksheet.PopulateColumnsFromPSA();
+            payrollWorksheet.PopulateColumnsFromMonthlyFee();
+            payrollWorksheet.PopulateColumnsFromProfessional();
 
             return payrollWorksheet;
         }
 
 
-        private static List<PayrollWorksheetDetailVM> PopulateColumnsFromProfessional(this List<PayrollWorksheetDetailVM> payrollWorksheet, IEnumerable<ProfessionalMaster> professionals)
+        private static List<PayrollWorksheetDetailVM> PopulateColumnsFromProfessional(this List<PayrollWorksheetDetailVM> payrollWorksheet)
         {
             for (int indexProfessional = 0; indexProfessional < _professionalIDs.Length; indexProfessional++)
             {
-                var professionalData = professionals.FirstOrDefault(e => e.ID == indexProfessional);
+                var professionalData = _allProfessionals.FirstOrDefault(m => m.ID == indexProfessional);
                 for (int indexDate = 0; indexDate < _dateRanges.Length; indexDate++)
                 {
                     var rowIndex = indexProfessional * indexDate + indexDate;
@@ -154,11 +153,10 @@ namespace MCAWebAndAPI.Service.HR.Payroll
                 }
             }
 
-
             return payrollWorksheet;
         }
 
-        private static List<PayrollWorksheetDetailVM> PopulateColumnsFromPSA(this List<PayrollWorksheetDetailVM> payrollWorksheet, IEnumerable<PSAMaster> psas)
+        private static List<PayrollWorksheetDetailVM> PopulateColumnsFromPSA(this List<PayrollWorksheetDetailVM> payrollWorksheet)
         {
             for (int indexProfessional = 0; indexProfessional < _professionalIDs.Length; indexProfessional++)
             {
@@ -189,53 +187,34 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             return psaDateOfNewPSA <= date && date <= psaExpiryDate;
         }
 
-        private static List<PayrollWorksheetDetailVM> PopulateColumnsFromMonthlyFee(this List<PayrollWorksheetDetailVM> payrollWorksheet, IEnumerable<MonthlyFeeDetailVM> monthlyFees)
+        private static List<PayrollWorksheetDetailVM> PopulateColumnsFromMonthlyFee(this List<PayrollWorksheetDetailVM> payrollWorksheet)
         {
+            for (int indexProfessional = 0; indexProfessional < _professionalIDs.Length; indexProfessional++)
+            {
+                for (int indexDate = 0; indexDate < _dateRanges.Length; indexDate++)
+                {
+                    var monthlyFeeData = _allProfessionalMonthlyFees
+                        .FirstOrDefault(e => e.ProfessionalID == indexProfessional &&
+                        IsInScopeMonthlyFee(_dateRanges[indexDate], e));
+
+                    if (monthlyFeeData == null)
+                        continue;
+                    
+                    var rowIndex = indexProfessional * indexDate + indexDate;
+                    payrollWorksheet[rowIndex].DateOfNewFee = monthlyFeeData.DateOfNewFee;
+                    payrollWorksheet[rowIndex].EndDate = monthlyFeeData.EndDate;
+                    payrollWorksheet[rowIndex].MonthlyFeeMaster = monthlyFeeData.MonthlyFee;
+                }
+            }
+
             return payrollWorksheet;
         }
 
-        private static async Task<IEnumerable<PSAMaster>> GetPSAs(IEnumerable<int> ids)
+        private static bool IsInScopeMonthlyFee(DateTime date, MonthlyFeeMaster monthlyFees)
         {
-            var results = await Task.WhenAll(ids.Select(i => GetPSA(i)));
-            return results.OrderBy(e => e.ID);
+            return monthlyFees.DateOfNewFee <= date && date <= monthlyFees.EndDate;
         }
-
-        private static async Task<IEnumerable<ProfessionalMaster>> GetProfessionals(IEnumerable<int> ids)
-        {
-            var results = await Task.WhenAll(ids.Select(i => GetProfessional(i)));
-            return results.OrderBy(e => e.ID);
-        }
-
-        private static async Task<IEnumerable<MonthlyFeeDetailVM>> GetMonthlyFees(IEnumerable<int> ids)
-        {
-            var results = await Task.WhenAll(ids.Select(i => GetMonthlyFee(i)));
-            //ID refers to Professional ID
-            return results.OrderBy(e => e.ID);
-        }
-
-        /// <summary>
-        /// Get latest PSA by professional ID
-        /// </summary>
-        /// <param name="id">Professional ID</param>
-        /// <returns></returns>
-        private static async Task<PSAMaster> GetPSA(int id)
-        {
-            var psa = _allValidPSAs.FirstOrDefault(e => e.ProfessionalID == id + string.Empty);
-            return psa;
-        }
-
-        private static async Task<ProfessionalMaster> GetProfessional(int id)
-        {
-            var professional = _allProfessionals.FirstOrDefault(m => m.ID == id);
-            return professional;
-        }
-
-        //TODO: To create method in PayRoll to return professional monthly fee
-        private static async Task<MonthlyFeeDetailVM> GetMonthlyFee(int id)
-        {
-            //var monthlyFee = _payrollService.Ge
-            return new MonthlyFeeDetailVM();
-        }
+        
 
         public static IEnumerable<int> GetValidProfessionalIDs(this List<PayrollWorksheetDetailVM> payrollWorksheet, DateTime startTime)
         {

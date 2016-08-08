@@ -181,10 +181,10 @@ namespace MCAWebAndAPI.Service.HR.Payroll
         }
 
         /// <summary>
-        /// To produce 
+        /// To produce table of payroll run result
         /// </summary>
         /// <param name="periodParam"></param>
-        /// <param name="isSummary"></param>
+        /// <param name="isSummary">Identify whether to display date per row or professional per row </param>
         /// <returns></returns>
         public async Task<IEnumerable<PayrollWorksheetDetailVM>> GetPayrollWorksheetDetailsAsync(DateTime? periodParam, bool isSummary = false)
         {
@@ -201,29 +201,31 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             // Set Site URL
             worksheet.SetSiteUrl(_siteUrl);
 
-            // Retrive all required master data to cut network round trip time
-            var populateMasterDataTask = worksheet.PopulateRequiredMasterData(startDate);
-
+            // Retrive required data to cut network round trip time
+            var populateProfessionalTask = worksheet.PopulateAllProfessionals();
+            var populateValidPSATask = worksheet.PopulateAllValidPSAs(startDate);
+            
             // Get professionals whose PSA are still valid
             var professionalIDs = worksheet.GetValidProfessionalIDs(startDate);
+
+            // Retrive required data to cut network round trip time
+            var populateProfessionalMonthlyFeeTask = worksheet.PopulateAllProfessionalMonthlyFee(professionalIDs);
 
             // Populate rows
             worksheet.PopulateRows(dateRange, professionalIDs);
 
             // Populate columns
-            await populateMasterDataTask;
+            await Task.WhenAll(populateProfessionalTask, populateValidPSATask, populateProfessionalMonthlyFeeTask);
             var populateColumnTask = worksheet.PopulateColumns();
 
+            // If worksheet mode
+            if (!isSummary)
+                return await populateColumnTask;
+
             // If summary mode / HR-15 mode is required, then the data should be agggregated
-            if (isSummary)
-            {
-                await populateColumnTask;
-                worksheet.SummarizeData();
-            }
-
-            return await populateColumnTask;
+            await populateColumnTask;
+            worksheet.SummarizeData();
+            return worksheet;
         }
-
-
     }
 }
