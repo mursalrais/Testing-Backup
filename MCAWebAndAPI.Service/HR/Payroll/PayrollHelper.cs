@@ -53,7 +53,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
 
         private static IPSAManagementService _psaService;
         private static IDataMasterService _dataMasterService;
-        private static IHRPayrollServices _payrollService;
+        private static IPayrollService _payrollService;
 
         public static void SetSiteUrl(this List<PayrollWorksheetDetailVM> payrollWorksheet, string siteUrl)
         {
@@ -61,7 +61,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
 
             _psaService = new PSAManagementService();
             _dataMasterService = new DataMasterService();
-            _payrollService = new HRPayrollServices();
+            _payrollService = new PayrollService();
 
             _psaService.SetSiteUrl(_siteUrl);
             _dataMasterService.SetSiteUrl(_siteUrl);

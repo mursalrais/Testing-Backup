@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Service.HR.Payroll
 {
-    public interface IHRPayrollServices
+    public interface IPayrollService
     {
         void SetSiteUrl(string siteUrl);
 

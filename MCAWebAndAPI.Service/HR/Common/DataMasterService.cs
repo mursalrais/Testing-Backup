@@ -8,6 +8,9 @@ using NLog;
 
 namespace MCAWebAndAPI.Service.HR.Common
 {
+    /// <summary>
+    /// The implementation of all common service methods in HR modules.
+    /// </summary>
     public class DataMasterService : IDataMasterService
     {
         string _siteUrl;

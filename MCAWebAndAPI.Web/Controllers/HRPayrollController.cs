@@ -18,13 +18,13 @@ namespace MCAWebAndAPI.Web.Controllers
 {
     public class HRPayrollController : Controller
     {
-        IHRPayrollServices _hRPayrollService;
+        IPayrollService _hRPayrollService;
         private const string PAYROLL_WORKSHEET_FILENAME = "PayrollWorksheet-Period-{0}-RunOn-{1}.{2}";
         private const string PAYROLL_WORKSHEET_DIRECTORY = "~/App_Data/PayrollWorksheet/";
 
         public HRPayrollController()
         {
-            _hRPayrollService = new HRPayrollServices();
+            _hRPayrollService = new PayrollService();
         }
 
         public ActionResult CreateMonthlyFee(string siteUrl = null)

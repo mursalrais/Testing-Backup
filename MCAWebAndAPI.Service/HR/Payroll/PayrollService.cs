@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Service.HR.Payroll
 {
-    public class HRPayrollServices : IHRPayrollServices
+    public class PayrollService : IPayrollService
     {
         string _siteUrl;
         static Logger logger = LogManager.GetCurrentClassLogger();
