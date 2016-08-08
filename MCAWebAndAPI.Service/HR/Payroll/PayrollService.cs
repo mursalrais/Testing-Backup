@@ -8,6 +8,7 @@ using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Service.HR.Common;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace MCAWebAndAPI.Service.HR.Payroll
 {
@@ -215,7 +216,15 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             worksheet.PopulateRows(dateRange, professionalIDs);
 
             // Populate columns
-            await Task.WhenAll(populateProfessionalTask, populateValidPSATask, populateProfessionalMonthlyFeeTask);
+            try
+            {
+                await Task.WhenAll(populateProfessionalTask, populateValidPSATask, populateProfessionalMonthlyFeeTask);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e);
+            }
+
             var populateColumnTask = worksheet.PopulateColumns();
 
             // If worksheet mode
@@ -226,6 +235,31 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             await populateColumnTask;
             worksheet.SummarizeData();
             return worksheet;
+        }
+
+        public void SavePayrollWorksheetDetailInBackground(DateTime period, string filePath)
+        {
+            var viewModel = GetPayrollWorksheetDetailsAsync(period, false);
+            var fileContents = FileUtil.ConvertObjectToByteArray(viewModel);
+
+            try
+            {
+                if (fileContents.Length > 0)
+                {
+                    var path = filePath;
+                    System.IO.File.WriteAllBytes(path, fileContents);
+                }
+                else
+                {
+                    logger.Error(new FileNotFoundException());
+                }
+            }
+            catch (Exception e)
+            {
+                logger.Error(e);
+            }
+
+            logger.Info(string.Format("Payroll Worksheet draft has been stored at {0}", filePath));
         }
     }
 }
