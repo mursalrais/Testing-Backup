@@ -117,8 +117,15 @@ namespace MCAWebAndAPI.Service.HR.Common
                 PersonalMail = Convert.ToString(item["personalemail"]),
                 JoinDate = Convert.ToDateTime(item["Join_x0020_Date"]).ToLocalTime(),
                 JoinDateTemp = Convert.ToDateTime(item["Join_x0020_Date"]).ToLocalTime().ToShortDateString(),
-                InsuranceAccountNumber = Convert.ToString(item["hiaccountnr"])
-            };
+                InsuranceAccountNumber = Convert.ToString(item["hiaccountnr"]),
+
+                BankAccountName = Convert.ToString(item["payrollbankname"]),
+                BankAccountNumber = Convert.ToString(item["payrollaccountnr"]),
+                BankBranchOffice = Convert.ToString(item["payrollbranchoffice"]),
+                Currency = Convert.ToString(item["payrollcurrency"]),
+                BankName = Convert.ToString(item["payrollbankname"])
+
+        };
         }
 
         public IEnumerable<PositionMaster> GetPositions()

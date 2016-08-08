@@ -513,9 +513,9 @@ namespace MCAWebAndAPI.Web.Controllers
                     e.PSAID,
                     e.PSANumber,
                     e.ProfessionalID,
-                    e.JoinDate,
-                    e.DateOfNewPSA,
-                    e.PsaExpiryDate,
+                    e.JoinDateString,
+                    e.DateOfNewPSAString,
+                    e.PsaExpiryDateString,
                     e.ProjectOrUnit,
                     e.Position
                 }), JsonRequestBehavior.AllowGet);
@@ -531,9 +531,9 @@ namespace MCAWebAndAPI.Web.Controllers
                     {
                         e.PSAID,
                         e.ProfessionalID,
-                        e.JoinDate,
-                        e.DateOfNewPSA,
-                        e.PsaExpiryDate,
+                        e.JoinDateString,
+                        e.DateOfNewPSAString,
+                        e.PsaExpiryDateString,
                         e.ProjectOrUnit,
                         e.Position
                     }

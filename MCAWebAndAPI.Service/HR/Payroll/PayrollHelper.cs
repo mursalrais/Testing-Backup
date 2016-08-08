@@ -70,6 +70,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
                 }
             }
 
+            // Put the professional IDs and daterange in the static variables
             _professionalIDs = payrollWorksheet.Select(e => e.ProfessionalID).ToArray();
             _dateRanges = dateRange.ToArray();
 
@@ -104,6 +105,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
                 {
                     ProfessionalID = payrollRow.ProfessionalID,
                     PayrollDate = payrollRow.PayrollDate
+                    //TODO: To aggregate each columns
                 });
             }
             // return the summarized version of the worksheet
@@ -132,23 +134,59 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             return payrollWorksheet;
         }
 
-        private static List<PayrollWorksheetDetailVM> PopulateColumnsFromPSA(this List<PayrollWorksheetDetailVM> payrollWorksheet, IEnumerable<PSAMaster> psas)
-        {
-            return payrollWorksheet;
-        }
 
         private static List<PayrollWorksheetDetailVM> PopulateColumnsFromProfessional(this List<PayrollWorksheetDetailVM> payrollWorksheet, IEnumerable<ProfessionalMaster> professionals)
         {
             for (int indexProfessional = 0; indexProfessional < _professionalIDs.Length; indexProfessional++)
             {
+                var professionalData = professionals.FirstOrDefault(e => e.ID == indexProfessional);
                 for (int indexDate = 0; indexDate < _dateRanges.Length; indexDate++)
                 {
-
+                    var rowIndex = indexProfessional * indexDate + indexDate;
+                    payrollWorksheet[rowIndex].Name = professionalData.Name;
+                    payrollWorksheet[rowIndex].ProjectUnit = professionalData.Project_Unit;
+                    payrollWorksheet[rowIndex].Position = professionalData.Position;
+                    payrollWorksheet[rowIndex].BankAccountName = professionalData.BankAccountName;
+                    payrollWorksheet[rowIndex].BankAccountNumber = professionalData.BankAccountNumber;
+                    payrollWorksheet[rowIndex].Currency = professionalData.Currency;
+                    payrollWorksheet[rowIndex].BankName = professionalData.BankName;
+                    payrollWorksheet[rowIndex].BankBranchOffice = professionalData.BankBranchOffice;
                 }
             }
 
 
             return payrollWorksheet;
+        }
+
+        private static List<PayrollWorksheetDetailVM> PopulateColumnsFromPSA(this List<PayrollWorksheetDetailVM> payrollWorksheet, IEnumerable<PSAMaster> psas)
+        {
+            for (int indexProfessional = 0; indexProfessional < _professionalIDs.Length; indexProfessional++)
+            {
+                for (int indexDate = 0; indexDate < _dateRanges.Length; indexDate++)
+                {
+                    var psaData = _allValidPSAs.FirstOrDefault(e => 
+                        e.ProfessionalID == indexProfessional + string.Empty && 
+                        IsInScopePSA(_dateRanges[indexDate], e));
+                    
+                    if (psaData == null)
+                        continue;
+
+                    var rowIndex = indexProfessional * indexDate + indexDate;
+                    payrollWorksheet[rowIndex].JoinDate = psaData.JoinDate;
+                    payrollWorksheet[rowIndex].DateOfNewPSA = psaData.DateOfNewPSA;
+                    payrollWorksheet[rowIndex].PSANumber = psaData.PSANumber;
+                }
+            }
+
+            return payrollWorksheet;
+        }
+
+        private static bool IsInScopePSA(DateTime date, PSAMaster psaMaster)
+        {
+            var psaDateOfNewPSA = psaMaster.DateOfNewPSA;
+            var psaExpiryDate = psaMaster.PSAExpiryDate;
+
+            return psaDateOfNewPSA <= date && date <= psaExpiryDate;
         }
 
         private static List<PayrollWorksheetDetailVM> PopulateColumnsFromMonthlyFee(this List<PayrollWorksheetDetailVM> payrollWorksheet, IEnumerable<MonthlyFeeDetailVM> monthlyFees)

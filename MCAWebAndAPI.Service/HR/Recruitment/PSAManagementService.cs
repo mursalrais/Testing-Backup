@@ -176,15 +176,19 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 ID = Convert.ToInt32(item["ID"]),
                 ProfessionalID = item["professional_x003a_ID"] == null ? string.Empty :
-               Convert.ToString((item["professional_x003a_ID"] as FieldLookupValue).LookupValue),
+                    Convert.ToString((item["professional_x003a_ID"] as FieldLookupValue).LookupValue),
                 PSAID = Convert.ToString(item["Created"]),
                 PSANumber = Convert.ToString(item["Title"]),
-                JoinDate = Convert.ToDateTime(item["joindate"]).ToLocalTime().ToShortDateString(),
-                DateOfNewPSA = Convert.ToDateTime(item["dateofnewpsa"]).ToLocalTime().ToShortDateString(),
-                PsaExpiryDate = Convert.ToDateTime(item["psaexpirydate"]).ToLocalTime().ToShortDateString(),
+                JoinDateString = Convert.ToDateTime(item["joindate"]).ToLocalTime().ToShortDateString(),
+                DateOfNewPSAString = Convert.ToDateTime(item["dateofnewpsa"]).ToLocalTime().ToShortDateString(),
+                PsaExpiryDateString = Convert.ToDateTime(item["psaexpirydate"]).ToLocalTime().ToShortDateString(),
                 ProjectOrUnit = Convert.ToString(item["ProjectOrUnit"]),
                 Position = item["position"] == null ? "" :
-               Convert.ToString((item["position"] as FieldLookupValue).LookupValue)
+                    Convert.ToString((item["position"] as FieldLookupValue).LookupValue),
+
+                JoinDate = Convert.ToDateTime(item["joindate"]).ToLocalTime(),
+                DateOfNewPSA = Convert.ToDateTime(item["dateofnewpsa"]).ToLocalTime(),
+                PSAExpiryDate = Convert.ToDateTime(item["psaexpirydate"]).ToLocalTime()
             };
         }
 
