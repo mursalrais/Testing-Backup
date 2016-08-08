@@ -19,10 +19,10 @@ namespace MCAWebAndAPI.Web.Controllers
     [Filters.HandleError]
     public class HRApplicationController : Controller
     {
-        readonly IHRApplicationService _service;
+        readonly IApplicationService _service;
         public HRApplicationController()
         {
-            _service = new HRApplicationService();
+            _service = new ApplicationService();
         }
         public ActionResult GetIDCardType(string nationality)
         {
@@ -147,7 +147,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 "Success",
                 new
                 {
-                    errorMessage =
+                    successMessage =
                 string.Format(MessageResource.SuccessCreateApplicationData, viewModel.FirstMiddleName)
                 });
         }

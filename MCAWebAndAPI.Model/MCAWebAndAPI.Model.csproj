@@ -115,6 +115,7 @@
   <ItemGroup>
     <Compile Include="Common\DateTimeExtensions.cs" />
     <Compile Include="Common\DoubleExtentions.cs" />
+    <Compile Include="Common\EventCalendar.cs" />
     <Compile Include="Common\Item.cs" />
     <Compile Include="Common\Location.cs" />
     <Compile Include="Common\Workflow.cs" />

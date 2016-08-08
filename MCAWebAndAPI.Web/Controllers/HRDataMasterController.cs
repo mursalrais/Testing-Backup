@@ -12,11 +12,11 @@ namespace MCAWebAndAPI.Web.Controllers
     public class HRDataMasterController : Controller
     {
 
-        IHRDataMasterService _dataMasterService;
+        IDataMasterService _dataMasterService;
 
         public HRDataMasterController()
         {
-            _dataMasterService = new HRDataMasterService();
+            _dataMasterService = new DataMasterService();
         }
 
         public JsonResult GetProfessionalMonthlyFees()

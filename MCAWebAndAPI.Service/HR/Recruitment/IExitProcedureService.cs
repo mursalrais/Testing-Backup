@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using MCAWebAndAPI.Model.HR.DataMaster;
 using System.Web;
-using Microsoft.SharePoint.Client;
-
 
 namespace MCAWebAndAPI.Service.HR.Recruitment
 {
