@@ -16,6 +16,7 @@ using System.Web;
 using System.IO;
 using MCAWebAndAPI.Service.Converter;
 using MCAWebAndAPI.Service.Utils;
+using System.Text.RegularExpressions;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -357,23 +358,43 @@ namespace MCAWebAndAPI.Web.Controllers
 
             //cek apakah header / item
             int? latestIDHeader = 0;
+            int? latestIDDetail = 0;
+            List<int> idsHeader = new List<int>();
+            List<int> idsDetail = new List<int>();
             var TableHeader = new DataTable();
             var TableDetail = new DataTable();
+
+            var listNameHeader = "Asset Acquisition";
+            var listNameHeaderMemo = "Acceptance Memo";
+            var listNameDetail = "Asset Acquisition Details";
+            var listAssetMaster = "Asset Master";
+            var listWBSMaster = "WBS Master";
             foreach (DataRow d in SessionManager.Get<DataTable>("CSVDataTable").Rows)
             {
                 if (d.ItemArray[0].ToString() == "Asset Acquisition")
                 {
                     try
                     {
-                        var listNameHeader = "Asset Acquisition";
-                        var listNameHeaderMemo = "Acceptance Memo";
-                        var IDMemo = _assetAcquisitionService.getListIDOfList(listNameHeaderMemo, "ID" , "Title", siteUrl);
+
+                        var IDMemo = _assetAcquisitionService.getListIDOfList(listNameHeaderMemo, "ID", "Title", siteUrl);
                         int myKey = 0;
                         foreach (var id in IDMemo)
                         {
-                            if(id.Value == d.ItemArray[2].ToString())
+                            try
                             {
-                                myKey = id.Key;
+                                if (id.Value == d.ItemArray[2].ToString())
+                                {
+                                    myKey = id.Key;
+                                    break;
+                                }
+                                else
+                                {
+                                    return JsonHelper.GenerateJsonErrorResponse("No Lookup Value/s is Found!");
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                return JsonHelper.GenerateJsonErrorResponse(e);
                             }
                         }
 
@@ -396,118 +417,123 @@ namespace MCAWebAndAPI.Web.Controllers
 
                         TableHeader.Rows.InsertAt(row, 0);
 
-                        latestIDHeader = _assetAcquisitionService.MassUploadHeaderDetail(listNameHeader, TableHeader, siteUrl);   
+                        latestIDHeader = _assetAcquisitionService.MassUploadHeaderDetail(listNameHeader, TableHeader, siteUrl);
+                        idsHeader.Add(Convert.ToInt32(latestIDHeader));
                     }
                     catch (Exception e)
                     {
-                        return JsonHelper.GenerateJsonErrorResponse(e);
-                    }
-                }
-                else
-                {
-                    try
-                    {
-                        var listNameDetail = "Asset Acquisition Details";
-                        var listAssetMaster = "Asset Master";
-                        var listWBSMaster = "WBS Master";
-
-                        //var IDAssetMaster = _assetAcquisitionService.getListIDOfList(listNameHeaderMemo, "ID", "Title", siteUrl);
-                        //var myKeyAssetMaster = IDMemo.FirstOrDefault(v => v.Value == d.ItemArray[2].ToString()).Key;
-
-                        //var IDWBSMaster = _assetAcquisitionService.getListIDOfList(listNameHeaderMemo, "ID", "Title", siteUrl);
-                        //var myKeyWBSMaster = IDMemo.FirstOrDefault(v => v.Value == d.ItemArray[2].ToString()).Key;
-
-                        TableDetail = new DataTable();
-                        TableDetail.Columns.Add("Asset_x0020_Acquisition", typeof(string));
-                        TableDetail.Columns.Add("PO_x0020_Line_x0020_Item", typeof(string));
-                        TableDetail.Columns.Add("Asset_x002d_Sub_x0020_Asset", typeof(string));
-                        TableDetail.Columns.Add("WBS", typeof(string));
-                        TableDetail.Columns.Add("Cost_x0020_IDR", typeof(string));
-                        TableDetail.Columns.Add("Cost_x0020_USD", typeof(string));
-                        TableDetail.Columns.Add("Remarks", typeof(string));
-                        TableDetail.Columns.Add("Status", typeof(string));
-
-                        DataRow row = TableDetail.NewRow();
-
-                        row["Asset_x0020_Acquisition"] = latestIDHeader;
-                        row["PO_x0020_Line_x0020_Item"] = d.ItemArray[8].ToString();
-                        //cek if assetid ada pada table asset master
-                        //FXA-PC-OE-0001 - Laptop Lenovo
-                        var splitAssetID = d.ItemArray[9].ToString().Split('-');
-                        var resultAssetID="";
-                        var resultDesc="";
-                        if (splitAssetID.Length == 5)
+                        if (idsHeader.Count > 0)
                         {
-                            resultAssetID = splitAssetID[0] + "-" + splitAssetID[1] + "-" + splitAssetID[2] + "-" + splitAssetID[3];
-                            resultDesc = splitAssetID[4];
-                        }
-                        else
-                        {
-                            resultAssetID = splitAssetID[0] + "-" + splitAssetID[1] + "-" + splitAssetID[2] + "-" + splitAssetID[3] + "-" + splitAssetID[4];
-                            resultDesc = splitAssetID[5];
-                        }
-                        var splitWBS = d.ItemArray[10].ToString().Split('-');
-                        var camlAssetID = @"<View><Query>
-                                    <Where>
-                                        <And>
-                                            <Eq>
-                                                <FieldRef Name='AssetID' />
-                                                <Value Type='Text'>"+ resultAssetID + @"</Value>
-                                            </Eq>
-                                            <And>
-                                            <Eq>
-                                                <FieldRef Name='Title' />
-                                                <Value Type='Text'>"+resultDesc+@"</Value>
-                                            </Eq>
-                                            </And>
-                                        </And>
-                                    </Where>
-                                    </Query></View>";
-                        var camlWBS = @"<View><Query>
-                                    <Where>
-                                        <And>
-                                            <Eq>
-                                                <FieldRef Name='Title' />
-                                                <Value Type='Text'>" + splitWBS[0] + @"</Value>
-                                            </Eq>
-                                            <And>
-                                            <Eq>
-                                                <FieldRef Name='WBSDesc' />
-                                                <Value Type='Text'>" + splitWBS[1] + @"</Value>
-                                            </Eq>
-                                            </And>
-                                        </And>
-                                    </Where>
-                                    </Query></View>";
-                        try
-                        {
-                            bool isAssetIDExist = _assetAcquisitionService.isValueOfColumnExist("Asset Master", siteUrl, camlAssetID);
-                            bool isWBSExist = _assetAcquisitionService.isValueOfColumnExist("WBS Master", siteUrl, camlWBS);
-                            if (isAssetIDExist == true && isWBSExist == true)
+                            foreach (var id in idsHeader)
                             {
-                                row["Asset_x002d_Sub_x0020_Asset"] = d.ItemArray[9].ToString();
-                                row["WBS"] = d.ItemArray[10].ToString();
+                                //delete parent
+                                _assetAcquisitionService.RollbackParentChildrenUpload(listNameHeader, id, siteUrl);
+                            }
+                        }
+                        else if(idsDetail.Count > 0)
+                        {
+                            foreach(var id in idsDetail)
+                            {
+                                //delete parent
+                                _assetAcquisitionService.RollbackParentChildrenUpload(listNameDetail, id, siteUrl);
                             }
 
                         }
-                        catch(Exception e)
+                        return JsonHelper.GenerateJsonErrorResponse("Invalid data, rolling back!");
+                    }
+                }
+
+                if (d.ItemArray[9].ToString() != "" && latestIDHeader != null)
+                {
+                    TableDetail = new DataTable();
+                    TableDetail.Columns.Add("Asset_x0020_Acquisition", typeof(string));
+                    TableDetail.Columns.Add("PO_x0020_Line_x0020_Item", typeof(string));
+                    TableDetail.Columns.Add("Asset_x002d_Sub_x0020_Asset", typeof(string));
+                    TableDetail.Columns.Add("WBS", typeof(string));
+                    TableDetail.Columns.Add("Cost_x0020_IDR", typeof(string));
+                    TableDetail.Columns.Add("Cost_x0020_USD", typeof(string));
+                    TableDetail.Columns.Add("Remarks", typeof(string));
+                    TableDetail.Columns.Add("Status", typeof(string));
+
+                    DataRow row = TableDetail.NewRow();
+
+                    row["Asset_x0020_Acquisition"] = latestIDHeader;
+                    row["PO_x0020_Line_x0020_Item"] = d.ItemArray[8].ToString();
+                    //cek if assetid ada pada table asset master
+                    //FXA-PC-OE-0001 - Laptop Lenovo
+                    var splitAssetID = d.ItemArray[9].ToString().Split('-');
+                    var resultAssetID = "";
+                    var resultDesc = "";
+                    var WBSDesc = "";
+                    if (splitAssetID.Length == 5)
+                    {
+                        resultAssetID = splitAssetID[0] + "-" + splitAssetID[1] + "-" + splitAssetID[2] + "-" + splitAssetID[3];
+                        resultDesc = splitAssetID[4];
+                        resultDesc = Regex.Replace(resultDesc, @"\t|\n|\r", "");
+                    }
+                    else
+                    {
+                        resultAssetID = splitAssetID[0] + "-" + splitAssetID[1] + "-" + splitAssetID[2] + "-" + splitAssetID[3] + "-" + splitAssetID[4];
+                        resultDesc = splitAssetID[5];
+                        resultDesc = Regex.Replace(resultDesc, @"\t|\n|\r", "");
+                    }
+                    var splitWBS = d.ItemArray[10].ToString().Split('-');
+                    WBSDesc = splitWBS[1] + "-" + splitWBS[2];
+                    WBSDesc = Regex.Replace(WBSDesc, @"\t|\n|\r", "");
+                    var camlAssetID = @"<View><Query><Where>
+                                            <Eq><FieldRef Name='AssetID' /><Value Type='Text'>" + resultAssetID.Trim() + @"</Value></Eq>
+                                            <And>
+                                            <Eq><FieldRef Name='Title' /><Value Type='Text'>" + resultDesc.Trim() + @"</Value></Eq>
+                                            </And>
+                                    </Where></Query></View>";
+                    var camlWBS = @"<View><Query><Where>
+                                            <Eq><FieldRef Name='Title' /><Value Type='Text'>" + splitWBS[0].Trim() + @"</Value></Eq>
+                                            <And>
+                                            <Eq><FieldRef Name='WBSDesc' /><Value Type='Text'>" + WBSDesc.Trim()  + @"</Value></Eq>
+                                            </And>
+                                    </Where>
+                                    </Query></View>";
+                    try
+                    {
+                        bool isAssetIDExist = _assetAcquisitionService.isValueOfColumnExist("Asset Master", siteUrl, camlAssetID);
+                        bool isWBSExist = _assetAcquisitionService.isValueOfColumnExist("WBS Master", siteUrl, camlWBS);
+                        if (isAssetIDExist == true && isWBSExist == true)
                         {
-                            return JsonHelper.GenerateJsonErrorResponse(e);
+                            row["Asset_x002d_Sub_x0020_Asset"] = d.ItemArray[9].ToString();
+                            row["WBS"] = d.ItemArray[10].ToString();
                         }
-                        //cek if wbs id ada pada table wbs master
-                        row["Cost_x0020_IDR"] = Convert.ToInt32(d.ItemArray[11]);
-                        row["Cost_x0020_USD"] = Convert.ToInt32(d.ItemArray[12].ToString());
-                        row["Remarks"] = d.ItemArray[13].ToString();
-                        row["Status"] = d.ItemArray[14].ToString();
 
-                        TableDetail.Rows.InsertAt(row, 0);
-
-                        _assetAcquisitionService.MassUploadHeaderDetail(listNameDetail, TableDetail, siteUrl);
                     }
                     catch (Exception e)
                     {
-                        return JsonHelper.GenerateJsonErrorResponse(e);
+                        if (idsHeader.Count > 0)
+                        {
+                            foreach (var id in idsHeader)
+                            {
+                                //delete parent
+                                _assetAcquisitionService.RollbackParentChildrenUpload(listNameHeader, id, siteUrl);
+                            }
+                        }
+                        else if (idsDetail.Count > 0)
+                        {
+                            foreach (var id in idsDetail)
+                            {
+                                //delete parent
+                                _assetAcquisitionService.RollbackParentChildrenUpload(listNameDetail, id, siteUrl);
+                            }
+
+                        }
+                        return JsonHelper.GenerateJsonErrorResponse("Invalid data, rolling back!");
                     }
+                    //cek if wbs id ada pada table wbs master
+                    row["Cost_x0020_IDR"] = Convert.ToInt32(d.ItemArray[11]);
+                    row["Cost_x0020_USD"] = Convert.ToInt32(d.ItemArray[12].ToString());
+                    row["Remarks"] = d.ItemArray[13].ToString();
+                    row["Status"] = d.ItemArray[14].ToString();
+
+                    TableDetail.Rows.InsertAt(row, 0);
+
+                    latestIDDetail = _assetAcquisitionService.MassUploadHeaderDetail(listNameDetail, TableDetail, siteUrl);
                 }
             }
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl);
