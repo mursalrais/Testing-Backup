@@ -319,3 +319,5 @@ Please try again.
 2016-08-06 08:38:45.7344 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Invalid data has been used to update the list item. The field you are trying to update may be read only. at ID: 1
 2016-08-06 08:43:03.1759 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Invalid data has been used to update the list item. The field you are trying to update may be read only. at ID: 1
 2016-08-06 08:55:21.3847 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Invalid data has been used to update the list item. The field you are trying to update may be read only. at ID: 1
+2016-08-07 23:51:49.6687 MCAWebAndAPI.Service.Asset.AssetMasterService Operation is not valid due to the current state of the object.
+2016-08-08 01:45:00.9984 MCAWebAndAPI.Service.Asset.AssetMasterService The underlying connection was closed: A connection that was expected to be kept alive was closed by the server.

@@ -356,8 +356,9 @@ namespace MCAWebAndAPI.Web.Controllers
             var siteUrl = SessionManager.Get<string>("SiteUrl");
 
             //cek apakah header / item
-            int x = 0;
             int? latestIDHeader = 0;
+            var TableHeader = new DataTable();
+            var TableDetail = new DataTable();
             foreach (DataRow d in SessionManager.Get<DataTable>("CSVDataTable").Rows)
             {
                 if (d.ItemArray[0].ToString() == "Asset Acquisition")
@@ -367,9 +368,16 @@ namespace MCAWebAndAPI.Web.Controllers
                         var listNameHeader = "Asset Acquisition";
                         var listNameHeaderMemo = "Acceptance Memo";
                         var IDMemo = _assetAcquisitionService.getListIDOfList(listNameHeaderMemo, "ID" , "Title", siteUrl);
-                        var myKey = IDMemo.FirstOrDefault(v => v.Value == d.ItemArray[2].ToString()).Key;
+                        int myKey = 0;
+                        foreach (var id in IDMemo)
+                        {
+                            if(id.Value == d.ItemArray[2].ToString())
+                            {
+                                myKey = id.Key;
+                            }
+                        }
 
-                        var TableHeader = new DataTable();
+                        TableHeader = new DataTable();
                         TableHeader.Columns.Add("Title", typeof(string));
                         TableHeader.Columns.Add("Acceptance_x0020_Memo_x0020_No", typeof(int));
                         TableHeader.Columns.Add("Vendor", typeof(string));
@@ -409,7 +417,7 @@ namespace MCAWebAndAPI.Web.Controllers
                         //var IDWBSMaster = _assetAcquisitionService.getListIDOfList(listNameHeaderMemo, "ID", "Title", siteUrl);
                         //var myKeyWBSMaster = IDMemo.FirstOrDefault(v => v.Value == d.ItemArray[2].ToString()).Key;
 
-                        var TableDetail = new DataTable();
+                        TableDetail = new DataTable();
                         TableDetail.Columns.Add("Asset_x0020_Acquisition", typeof(string));
                         TableDetail.Columns.Add("PO_x0020_Line_x0020_Item", typeof(string));
                         TableDetail.Columns.Add("Asset_x002d_Sub_x0020_Asset", typeof(string));
@@ -471,7 +479,6 @@ namespace MCAWebAndAPI.Web.Controllers
                                         </And>
                                     </Where>
                                     </Query></View>";
-
                         try
                         {
                             bool isAssetIDExist = _assetAcquisitionService.isValueOfColumnExist("Asset Master", siteUrl, camlAssetID);
@@ -502,7 +509,6 @@ namespace MCAWebAndAPI.Web.Controllers
                         return JsonHelper.GenerateJsonErrorResponse(e);
                     }
                 }
-                x++;
             }
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl);
         }
