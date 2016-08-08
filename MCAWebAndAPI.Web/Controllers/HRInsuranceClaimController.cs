@@ -272,7 +272,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             const string RelativePath = "~/Views/HRInsuranceClaim/PrintToPDF.cshtml";
             var view = ViewEngines.Engines.FindView(ControllerContext, RelativePath, null);
-            var fileName = "_Application.pdf";
+            var fileName = "SubmissionAXA.pdf";
             byte[] pdfBuf = null;
             string content;
            // ControllerContext context = new ControllerContext();

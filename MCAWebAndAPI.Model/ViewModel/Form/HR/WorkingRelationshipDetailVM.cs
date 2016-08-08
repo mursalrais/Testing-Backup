@@ -8,6 +8,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
     public class WorkingRelationshipDetailVM : Item
     {
+        
         [UIHint("InGridAjaxComboBox")]
         public AjaxComboBoxVM PositionWorking { get; set; } = new AjaxComboBoxVM();
 
@@ -22,7 +23,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
                 return model;
             }
         }
-                
         [UIHint("InGridMultiSelect")]
         public InGridMultiSelectVM Frequency { get; set; } = new InGridMultiSelectVM();
 

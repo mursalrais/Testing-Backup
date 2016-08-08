@@ -4,17 +4,17 @@
 @using MCAWebAndAPI.Model.ViewModel.Form.Asset
 
 @model AssetMasterVM
-@using (Ajax.BeginForm("Update", "ASSAssetMaster",
-                                                                                        FormMethod.Post,
-                                                                                        new AjaxOptions
-                                                                                        {
-                                                                                            OnBegin = "onBeginForm",
-                                                                                            OnComplete = "onCompleteForm",
-                                                                                            OnSuccess = "onSuccessFormEmbed",
-                                                                                            OnFailure = "onFailureForm"
-                                                                                        }, new { @class = "form-horizontal" }))
-{
 
+@using (Ajax.BeginForm("Update", "ASSAssetMaster",
+                                                                                                                            FormMethod.Post,
+                                                                                                                            new AjaxOptions
+                                                                                                                            {
+                                                                                                                                OnBegin = "onBeginForm",
+                                                                                                                                OnComplete = "onCompleteForm",
+                                                                                                                                OnSuccess = "onSuccessFormEmbed",
+                                                                                                                                OnFailure = "onFailureForm"
+                                                                                                                            }, new { @class = "form-horizontal" }))
+{
     <fieldset>
         <legend>Form Asset Master</legend>
 
@@ -50,17 +50,18 @@
                     @Html.EditorFor(m => m.AssetNoAssetDesc)
                 </div>
             </div>
+
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.AssetDesc).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    <textarea name="AssetDesc" style="width:100%;height:57px"></textarea>
-
+                    <textarea name="AssetDesc" style="width:100%;height:57px" required oninvalid="InvalidMsg(this);">@Model.AssetDesc</textarea>
                 </div>
             </div>
+
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.SerialNo).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    <input type="text" id="SerialNo" name="SerialNo" style="width: 100%;" value="@Model.SerialNo" />
+                    <input type="text" id="SerialNo" name="SerialNo" style="width: 100%;" />
                 </div>
             </div>
             <div class="form-group">
@@ -73,7 +74,6 @@
                 @Html.Bootstrap().LabelFor(m => m.Spesifications).Class("col-md-4 control-label")
                 <div class="col-md-8">
                     <textarea name="Spesifications" style="width:100%;height:84px">@Model.Spesifications</textarea>
-
 
                 </div>
             </div>
@@ -90,138 +90,102 @@
                 </div>
             </div>
             @Html.HiddenFor(m => m.ID)
+            @Html.HiddenFor(m => m.InterviewerUrl)
+            @Html.HiddenFor(m => m.AssetCategory.Value)
+            @Html.HiddenFor(m => m.ProjectUnit.Value)
+            @Html.HiddenFor(m => m.AssetType.Value)
+            @Html.HiddenFor(m => m.AssetNoAssetDesc.Value)
+            <div class="form-group">
+                <div class="col-sm-4">
 
-            <div class="form-actions">
-                <div class="row">
-                    <div class="col-sm-9">
-                        <input class="k-button k-button-icontext k-grid-add" type="submit" value="Save" />
-                        <input type="button" class="k-button k-button-icontext k-grid-add" value="Cancel" onclick="Redirect();" />
-                    </div>
-                    <div class="col-sm-3">
+                </div>
+                <div class="col-sm-8">
 
-                    </div>
+                    <input class="k-button k-button-icontext k-grid-add" type="submit" value="Save" />
+                    <a href="@Model.InterviewerUrl" target='_parent'>
+                        <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
+                    </a>
                 </div>
             </div>
-        </div>
     </fieldset>
 
+
+
 }
-
 @section scripts{
+
+    <script>
+        function validateForm() {
+            var x = $("#AssetDesc_Value").data("kendoDropDownList");
+            //alert("assetDesc : " + x);
+            if (x == null || x == "") {
+                alert("Must be filled out");
+                return false;
+            }
+        }
+    </script>
     <script type="text/javascript">
-    $(document.readyState)
-    function error_handler(e) {
-        if (e.errors) {
-            var message = "Errors:\n";
-            $.each(e.errors, function (key, value) {
-                if ('errors' in value) {
-                    $.each(value.errors, function () {
-                        message += this + "\n";
-                    });
-                }
-            });
-            alert(message);
+
+        $(document).ready(function () {
+            alert($("#AssetLevel_Value").data("kendoDropDownList").text());
+            if ($("#AssetLevel_Value").data("kendoDropDownList").text() == "Main Asset") {
+                $("#AssetNoAssetDesc_Value").data("kendoDropDownList").enable(false);
+                $("#AssetNoAssetDesc_Value").data("kendoDropDownList").value("");
+                $("#AssetCategory_Value").data("kendoDropDownList").enable(true);
+                $("#ProjectUnit_Value").data("kendoDropDownList").enable(true);
+                $("#AssetType_Value").data("kendoDropDownList").enable(true);
+            }
+            else {
+                $("#AssetNoAssetDesc_Value").data("kendoDropDownList").enable(true);
+                $("#AssetCategory_Value").data("kendoDropDownList").enable(false);
+                $("#AssetCategory_Value").data("kendoDropDownList").value("");
+                $("#ProjectUnit_Value").data("kendoDropDownList").enable(false);
+                $("#ProjectUnit_Value").data("kendoDropDownList").value("");
+                $("#AssetType_Value").data("kendoDropDownList").enable(false);
+                $("#AssetType_Value").data("kendoDropDownList").value("");
+            }
+            alert("PO : " + $("#ProjectUnit_Value").data("kendoDropDownList").text());
+        });
+
+
+
+        function onAssetIDChange() {
+            //$("#AssetCategory_Value").data("kendoDropDownList").enable(false);
+            //$("#ProjectUnit_Value").data("kendoDropDownList").enable(false);
+            //$("#AssetType_Value").data("kendoDropDownList").enable(false);
         }
-    }
 
-    function Redirect() {
-        window.location = "https://eceos2.sharepoint.com/sites/mca-dev/BO/Lists/AssetMaster/AllItems.aspx";
-    }
+        function onAssetLevelClick(e) {
+            //alert("asset level : " + this.dataItem(e.item));
+            if (this.dataItem(e.item) == "Main Asset") {
+                $("#AssetCategory_Value").data("kendoDropDownList").enable(true);
+                $("#AssetCategory_Value").data("kendoDropDownList").value("");
 
-    function onAssetIDChange()
-    {
-        var id = $("#AssetNoAssetDesc_Value").data("kendoDropDownList").value();
-        var splitid = id.split("-");
+                $("#ProjectUnit_Value").data("kendoDropDownList").enable(true);
+                $("#ProjectUnit_Value").data("kendoDropDownList").value("");
 
-        var cats = ["FXA", "SVA"];
-        var pos = ["GP","HN","PM","ME","PC"];
-        var types = ["LA", "BU", "CO", "CE", "CS", "OE", "FF", "VE", "OT"];
+                $("#AssetType_Value").data("kendoDropDownList").enable(true);
+                $("#AssetType_Value").data("kendoDropDownList").value("");
 
-        for (var i = 0; i < cats.length; i++)
-        {
-            if (splitid[0] == cats[i]) {
-                $("#AssetCategory_Value").data("kendoDropDownList").select(i);
-                break;
+                $("#AssetNoAssetDesc_Value").data("kendoDropDownList").enable(false);
+                $("#AssetNoAssetDesc_Value").data("kendoDropDownList").value("");
+
+            }
+            else {
+                $("#AssetCategory_Value").data("kendoDropDownList").enable(false);
+                $("#AssetCategory_Value").data("kendoDropDownList").value("");
+
+                $("#ProjectUnit_Value").data("kendoDropDownList").enable(false);
+                $("#ProjectUnit_Value").data("kendoDropDownList").value("");
+
+                $("#AssetType_Value").data("kendoDropDownList").enable(false);
+                $("#AssetType_Value").data("kendoDropDownList").value("");
+
+                $("#AssetNoAssetDesc_Value").data("kendoDropDownList").enable(true);
+                $("#AssetNoAssetDesc_Value").data("kendoDropDownList").value("");
+
             }
         }
-
-        for (var i = 0; i < pos.length; i++) {
-            if (splitid[1] == pos[i]) {
-                $("#ProjectUnit_Value").data("kendoDropDownList").select(i);
-                break;
-            }
-        }
-
-        for (var i = 0; i < types.length; i++) {
-            if (splitid[2] == types[i]) {
-                //alert("satu : " + $("#AssetType_Value").data("kendoDropDownList").value());
-                $("#AssetType_Value").data("kendoDropDownList").select(i);
-                break;
-            }
-        }
-
-        $("#AssetCategory_Value").data("kendoDropDownList").enable(false);
-        $("#ProjectUnit_Value").data("kendoDropDownList").enable(false);
-        $("#AssetType_Value").data("kendoDropDownList").enable(false);
-    }
-
-    function onAssetLevelChange() {
-        if ($("#AssetLevel_Value").data("kendoDropDownList").value() == "Main Asset") {
-            $("#AssetCategory_Value").data("kendoDropDownList").enable(true);
-            $("#AssetCategory_Value").data("kendoDropDownList").select(0);
-
-            $("#ProjectUnit_Value").data("kendoDropDownList").enable(true);
-            $("#ProjectUnit_Value").data("kendoDropDownList").select(0);
-
-            $("#AssetType_Value").data("kendoDropDownList").enable(true);
-            $("#AssetType_Value").data("kendoDropDownList").select(0);
-
-
-            $("#AssetNoAssetDesc_Value").data("kendoDropDownList").enable(false);
-            $("#AssetNoAssetDesc_Value").data("kendoDropDownList").value("");
-
-        }
-        else
-        {
-            $("#AssetCategory_Value").data("kendoDropDownList").enable(false);
-            $("#AssetCategory_Value").data("kendoDropDownList").value("");
-
-            $("#ProjectUnit_Value").data("kendoDropDownList").enable(false);
-            $("#ProjectUnit_Value").data("kendoDropDownList").value("");
-
-            $("#AssetType_Value").data("kendoDropDownList").enable(false);
-            $("#AssetType_Value").data("kendoDropDownList").value("");
-
-            $("#AssetNoAssetDesc_Value").data("kendoDropDownList").enable(true);
-            $("#AssetNoAssetDesc_Value").data("kendoDropDownList").select(0);
-        }
-    }
-    $(function () {
-        if ($("#AssetLevel_Value").data("kendoDropDownList").value() == "Main Asset")
-        {
-            $("#AssetNoAssetDesc_Value").data("kendoDropDownList").enable(false);
-            $("#AssetNoAssetDesc_Value").data("kendoDropDownList").value("");
-
-            $("#AssetCategory_Value").data("kendoDropDownList").enable(true);
-            $("#AssetCategory_Value").data("kendoDropDownList").select(0);
-
-            $("#ProjectUnit_Value").data("kendoDropDownList").enable(true);
-            $("#ProjectUnit_Value").data("kendoDropDownList").select(0);
-
-            $("#AssetType_Value").data("kendoDropDownList").enable(true);
-            $("#AssetType_Value").data("kendoDropDownList").select(0);
-        }
-        else
-        {
-            $("#AssetNoAssetDesc_Value").data("kendoDropDownList").enable(true);
-            $("#AssetCategory_Value").data("kendoDropDownList").enable(false);
-            $("#ProjectUnit_Value").data("kendoDropDownList").enable(false);
-            $("#AssetType_Value").data("kendoDropDownList").enable(false);
-        }
-    });
 
     </script>
 }
-
-
-

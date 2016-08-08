@@ -16,7 +16,15 @@
         <legend>General</legend>
 
         <div class="row">
-            @Html.Partial("_General", Model)
+            @{if ((Model.Status.Value == "Approved") || (Model.Status.Value == "Rejected") || (Model.Status.Value == "Active"))
+                {
+                    @Html.Partial("_GeneralDisp", Model)
+                }
+                else
+                {
+                    @Html.Partial("_General", Model)
+                }
+            }
         </div>
         <legend>Supporting Document</legend>
         <div class="row">
@@ -48,19 +56,51 @@
         </div>
         <legend>Resources and Planning</legend>
         <div class="row">
-            @Html.Partial("_ResourcesAndPlanning", Model)
+            @{if ((Model.Status.Value == "Approved") || (Model.Status.Value == "Rejected") || (Model.Status.Value == "Active"))
+                {
+                    @Html.Partial("_ResourcesAndPlanningDisp", Model)
+                }
+                else
+                {
+                    @Html.Partial("_ResourcesAndPlanning", Model)
+                }
+            }
         </div>
         <legend>Background Requirement</legend>
         <div class="row">
-            @Html.Partial("_BackgroundRequirement", Model)
+            @{if ((Model.Status.Value == "Approved") || (Model.Status.Value == "Rejected") || (Model.Status.Value == "Active"))
+                {
+                    @Html.Partial("_BackgroundRequirementDisp", Model)
+                }
+                else
+                {
+                    @Html.Partial("_BackgroundRequirement", Model)
+                }
+            }
         </div>
         <legend>Specific Experience</legend>
         <div class="row">
-            @Html.Partial("_Specificexperience", Model)
+            @{if ((Model.Status.Value == "Approved") || (Model.Status.Value == "Rejected") || (Model.Status.Value == "Active"))
+                {
+                    @Html.Partial("_SpecificexperienceDisp", Model)
+                }
+                else
+                {
+                    @Html.Partial("_Specificexperience", Model)
+                }
+            }
         </div>
         <legend>Other Requirements</legend>
         <div class="row">
-            @Html.Partial("_OtherRequirements", Model)
+            @{if ((Model.Status.Value == "Approved") || (Model.Status.Value == "Rejected") || (Model.Status.Value == "Active"))
+                {
+                    @Html.Partial("_OtherRequirementsDisp", Model)
+                }
+                else
+                {
+                    @Html.Partial("_OtherRequirements", Model)
+                }
+            }
         </div>
         @if (ViewBag.IsHRView)
         {
@@ -148,6 +188,17 @@
                 }
 
             });
+            function checkGrid() {
+                var grid = $("#WorkingRelationshipDetails").data("kendoGrid").dataSource.data();
+                for (var i = 0; i < grid.length; i++) {
+                    if (grid[i].EditMode == 0) {
+                        if (!(grid[i].Frequency.length) || !(grid[i].Relationship.length) || (grid[i].PositionWorking.Text == null)) {
+                            alert("Please complete the field on Working Relationship Detail");
+                            return false;
+                        }
+                    }
+                }
+            }
             $("#submit-button").click(function () {
 
                 if (isHR == "True") {

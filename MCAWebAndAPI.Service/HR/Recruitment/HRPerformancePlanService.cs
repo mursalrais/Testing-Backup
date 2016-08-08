@@ -353,7 +353,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     professionalEmail = (item["professional_x003a_Office_x0020_"] == null ? "" :
                     Convert.ToString((item["professional_x003a_Office_x0020_"] as FieldLookupValue).LookupValue));
 
-                    EmailUtil.Send(professionalEmail, "Approved by Level 1", messageForRequestor);
+                    EmailUtil.Send(professionalEmail, "Plan Status", messageForRequestor);
                     //SPConnector.SendEmail(item, "Approved by Level 1", _siteUrl);
                 }
             }
@@ -367,7 +367,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                         professionalEmail = (item["professional_x003a_Office_x0020_"] == null ? "" :
                        Convert.ToString((item["professional_x003a_Office_x0020_"] as FieldLookupValue).LookupValue));
 
-                        EmailUtil.Send(professionalEmail, "Status", messageForRequestor);
+                        EmailUtil.Send(professionalEmail, "Plan Status", messageForRequestor);
                         //SPConnector.SendEmail(item, message, "Ask for Approval", _siteUrl);
                     }
                 }
