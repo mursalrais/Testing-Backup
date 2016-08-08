@@ -218,3 +218,11 @@ Parameter name: source
    at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in D:\iMa\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 195
    at MCAWebAndAPI.Service.Asset.AssetAcquisitionService.UpdateDetails(Nullable`1 headerID, IEnumerable`1 items) in D:\iMa\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetAcquisitionService.cs:line 249
 2016-08-05 14:50:14.6700 MCAWebAndAPI.Service.HR.Recruitment.HRProfessionalPerformanceEvaluationService Column 'visibletoapprover1' does not exist. It may have been deleted by another user.  /sites/ims/hr/Lists/ProfessionalPerformanceEvaluation
+2016-08-08 13:54:32.4897 MCAWebAndAPI.Service.HR.Recruitment.HRPerformancePlanService The 'sId' argument is invalid.
+2016-08-08 13:54:43.7532 MCAWebAndAPI.Service.HR.Recruitment.HRPerformancePlanService The 'sId' argument is invalid.
+2016-08-08 14:03:28.6986 MCAWebAndAPI.Service.HR.Recruitment.HRPerformancePlanService The 'sId' argument is invalid.
+2016-08-08 14:03:47.7435 MCAWebAndAPI.Service.HR.Recruitment.HRPerformancePlanService The 'sId' argument is invalid.
+2016-08-08 14:06:26.3519 MCAWebAndAPI.Service.HR.Recruitment.HRPerformancePlanService The 'sId' argument is invalid.
+2016-08-08 14:06:26.8482 MCAWebAndAPI.Service.HR.Recruitment.HRPerformancePlanService The 'sId' argument is invalid.
+2016-08-08 15:01:09.1944 MCAWebAndAPI.Service.HR.Recruitment.HRPerformancePlanService The 'sId' argument is invalid.
+2016-08-08 15:01:21.9230 MCAWebAndAPI.Service.HR.Recruitment.HRPerformancePlanService The 'sId' argument is invalid.

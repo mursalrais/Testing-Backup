@@ -108,12 +108,8 @@ namespace MCAWebAndAPI.Service.Common
             
             var viewModel = new WorkflowItemVM();
             viewModel.ApproverPosition = FormatUtil.ConvertToInGridAjaxComboBox(item, "approverposition");
-            viewModel.ApproverUnit = WorkflowItemVM.GetUnitDefaultValue(new InGridComboBoxVM
-            {
-                Text = Convert.ToString(item["approverunit"])
-            });
-            Task<IEnumerable<ProfessionalMaster>> getApproverNamesTask = 
-                GetApproverNamesAsync(viewModel.ApproverUnit.Text ,viewModel.ApproverPosition.Text);
+            Task<IEnumerable<ProfessionalMaster>> getApproverNamesTask =
+                GetApproverNamesAsync(viewModel.ApproverPosition.Text);
 
             viewModel.Level = Convert.ToString(item["approverlevel"]);
 
@@ -196,9 +192,9 @@ namespace MCAWebAndAPI.Service.Common
             _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
         }
 
-        private async Task<IEnumerable<ProfessionalMaster>> GetApproverNamesAsync(string unit, string position)
+        private async Task<IEnumerable<ProfessionalMaster>> GetApproverNamesAsync(string position)
         {
-            return GetApproverNames(unit, position);
+            return GetApproverNames(position);
         }
 
         private string GetApproverUserLogin(int userID)
@@ -218,14 +214,14 @@ namespace MCAWebAndAPI.Service.Common
             return null;
         }
 
-        public IEnumerable<ProfessionalMaster> GetApproverNames(string unit, string position)
+        public IEnumerable<ProfessionalMaster> GetApproverNames(string position)
         {
             var caml = @"<View>  
             <Query> 
-               <Where><And><Eq><FieldRef Name='Project_x002f_Unit' /><Value Type='Choice'>" + unit + @"</Value></Eq><Eq><FieldRef Name='Position' /><Value Type='Lookup'>" + position + @"</Value></Eq></And></Where> 
+               <Where><Eq><FieldRef Name='Position' /><Value Type='Lookup'>" + position + @"</Value></Eq></Where> 
             </Query> 
-             <ViewFields><FieldRef Name='ID' /><FieldRef Name='officeemail' /><FieldRef Name='Title' /></ViewFields> 
-      </View>";  
+             <ViewFields><FieldRef Name='ID' /><FieldRef Name='Title' /><FieldRef Name='officeemail' /></ViewFields> 
+            </View>";
 
             var viewModel = new List<ProfessionalMaster>();
             foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl, caml))
