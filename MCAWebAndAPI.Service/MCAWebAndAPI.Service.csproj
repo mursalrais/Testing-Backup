@@ -216,7 +216,7 @@
     <Compile Include="HR\Recruitment\HRShortlistService.cs" />
     <Compile Include="HR\Recruitment\IHRManpowerRequisitionService.cs" />
     <Compile Include="HR\Recruitment\IApplicationService.cs" />
-    <Compile Include="HR\Common\IHRDataMasterService.cs" />
+    <Compile Include="HR\Common\IDataMasterService.cs" />
     <Compile Include="HR\Payroll\HRPayrollServices.cs" />
     <Compile Include="HR\Payroll\IHRPayrollServices.cs" />
     <Compile Include="HR\Recruitment\IHRShortlistService.cs" />

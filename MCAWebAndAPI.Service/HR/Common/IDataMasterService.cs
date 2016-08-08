@@ -12,27 +12,8 @@ namespace MCAWebAndAPI.Service.HR.Common
     public interface IDataMasterService
     {
         void SetSiteUrl(string siteUrl);
+        PositionMaster GetPosition(int id);
 
-        /// <summary>
-        /// Used to get professional master form
-        /// </summary>
-        /// <param name="ID"></param>
-        /// <returns></returns>
-        ProfessionalDataVM GetProfessionalData(int? ID);
-
-        string GetProfessionalPosition(string userLogin);
-
-        string GetProfessionalOfficeEmail(int professionalID);
-
-        Task<ProfessionalDataVM> GetProfessionalDataAsync(int? ID);
-
-        ProfessionalDataVM GetProfessionalData(string userLoginName = null);
-        
-        /// <summary>
-        /// Used to get lightweight professional data, e.g., name, position.
-        /// Suitable for combobox
-        /// </summary>
-        /// <returns></returns>
         IEnumerable<ProfessionalMaster> GetProfessionals();
 
         IEnumerable<ProfessionalMaster> GetProfessionalMonthlyFees();
@@ -42,34 +23,11 @@ namespace MCAWebAndAPI.Service.HR.Common
         IEnumerable<PositionMaster> GetPositions();
 
         IEnumerable<PositionMaster> GetPositionsManpower(string Level);
-
-        int? EditProfessionalData(ProfessionalDataVM viewModel);
         
-        void CreateEducationDetails(int? headerID, IEnumerable<EducationDetailVM> educationDetails);
-
-        Task CreateEducationDetailsAsync(int? headerID, IEnumerable<EducationDetailVM> educationDetails);
-
-        void CreateTrainingDetails(int? headerID, IEnumerable<TrainingDetailVM> trainingDetails);
-
-        Task CreateTrainingDetailsAsync(int? headerID, IEnumerable<TrainingDetailVM> trainingDetails);
-
-        void CreateDependentDetails(int? headerID, IEnumerable<DependentDetailVM> documents);
-
-        Task CreateDependentDetailsAsync(int? headerID, IEnumerable<DependentDetailVM> documents);
-
-        void CreateOrganizationalDetails(int? headerID, IEnumerable<OrganizationalDetailVM> organizationalDetails);
-        Task CreateOrganizationalDetailsAsync(int? headerID, IEnumerable<OrganizationalDetailVM> organizationalDetails);
-
-        void UpdateValidation(int? ID, string status);
-        void SendEmailValidation(string emailTo, string emailMessages, bool isApproved);
-        void SendEmailValidation(string emailTo, string emailMessages);
-        PositionMaster GetPosition(int id);
-        void SetValidationStatus(int? id, Workflow.ProfessionalValidationStatus validationStatus);
-
-
         IEnumerable<DependentMaster> GetDependents();
 
         IEnumerable<DependentMaster> GetDependentsForInsurance();
+
 
     }
 }
