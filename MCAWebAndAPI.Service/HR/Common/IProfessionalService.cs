@@ -1,9 +1,6 @@
 ﻿using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Model.ViewModel.Form.HR;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Service.HR.Common
@@ -18,9 +15,7 @@ namespace MCAWebAndAPI.Service.HR.Common
         /// <param name="ID"></param>
         /// <returns></returns>
         ProfessionalDataVM GetProfessionalData(int? ID);
-
         Task<ProfessionalDataVM> GetProfessionalDataAsync(int? ID);
-
         ProfessionalDataVM GetProfessionalData(string userLoginName = null);
 
         /// <summary>
@@ -28,7 +23,6 @@ namespace MCAWebAndAPI.Service.HR.Common
         /// Suitable for combobox
         /// </summary>
         /// <returns></returns>
-
         int? EditProfessionalData(ProfessionalDataVM viewModel);
 
         void CreateEducationDetails(int? headerID, IEnumerable<EducationDetailVM> educationDetails);

@@ -13,35 +13,6 @@ namespace MCAWebAndAPI.Service.HR.Payroll
 {
     public static class PayrollHelper
     {
-        private static string[] _names = new string[] {
-                "Joko Widodo",
-                "Joko Santoso",
-                "Joko Taroeb",
-                "Joko Tingkir"
-            };
-
-        private static string[] _positions = new string[] {
-                "Walikota",
-                "Bupati",
-                "Adipati",
-                "Presiden"
-            };
-
-        private static string[] _units = new string[] {
-                "Solo",
-                "Magetan",
-                "Tegal",
-                "Zimbabwe"
-            };
-
-        private static double[] _monthlyFees = new double[]
-        {
-            12000000d,
-            32000000d,
-            25000000d,
-            54000000d
-        };
-
 
         private static string _siteUrl;
         const string SP_PSA_LIST_NAME = "PSA";
@@ -54,6 +25,9 @@ namespace MCAWebAndAPI.Service.HR.Payroll
         private static IPSAManagementService _psaService;
         private static IDataMasterService _dataMasterService;
         private static IPayrollService _payrollService;
+
+        private static int[] _professionalIDs;
+        private static DateTime[] _dateRanges;
 
         public static void SetSiteUrl(this List<PayrollWorksheetDetailVM> payrollWorksheet, string siteUrl)
         {
@@ -76,7 +50,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
         public static async Task PopulateRequiredMasterData(this List<PayrollWorksheetDetailVM> payrollWorksheet, DateTime startDatePeriod)
         {
             _allProfessionals = _allProfessionals ?? _dataMasterService.GetProfessionals();
-            _allValidPSAs = _allValidPSAs ?? _psaService.GetPSAs(startDatePeriod);
+            _allValidPSAs = _psaService.GetPSAs(startDatePeriod);
         }
 
         /// <summary>
@@ -95,6 +69,10 @@ namespace MCAWebAndAPI.Service.HR.Payroll
                     payrollWorksheet.AddPayrollWorksheetDetailRow(date, professionalID);
                 }
             }
+
+            _professionalIDs = payrollWorksheet.Select(e => e.ProfessionalID).ToArray();
+            _dateRanges = dateRange.ToArray();
+
             return payrollWorksheet;
         }
 
@@ -117,20 +95,17 @@ namespace MCAWebAndAPI.Service.HR.Payroll
         public static List<PayrollWorksheetDetailVM> SummarizeData(this List<PayrollWorksheetDetailVM> payrollWorksheet)
         {
             var summarizedPayrollWorksheets = new List<PayrollWorksheetDetailVM>();
-            var professionalIDs = payrollWorksheet.Select(m => (int)m.ID).Distinct();
-
-            foreach (var professionalID in professionalIDs)
+            
+            foreach (var professionalID in _professionalIDs)
             {
                 var payrollRow = payrollWorksheet.FirstOrDefault(e => e.ProfessionalID == professionalID);
 
                 summarizedPayrollWorksheets.Add(new PayrollWorksheetDetailVM
                 {
                     ProfessionalID = payrollRow.ProfessionalID,
-                    PayrollDate = payrollRow.PayrollDate,
-                    
+                    PayrollDate = payrollRow.PayrollDate
                 });
             }
-
             // return the summarized version of the worksheet
             return summarizedPayrollWorksheets;
         }
@@ -138,19 +113,16 @@ namespace MCAWebAndAPI.Service.HR.Payroll
         public static async Task<List<PayrollWorksheetDetailVM>> PopulateColumns(this List<PayrollWorksheetDetailVM> payrollWorksheet)
         {
             // get StartDate from the first row of the worksheet
-            var startDate = payrollWorksheet[0].PayrollDate;
-
-            //Get Valid Professional IDs
-            var ids = payrollWorksheet.Select(e => e.ProfessionalID);
-
+            var startDate = _dateRanges[0];
+            
             //Retrieve Professional based on given Professional IDs
-            Task<IEnumerable<ProfessionalMaster>> getProfessionalTask = GetProfessionals(ids);
+            var getProfessionalTask = GetProfessionals(_professionalIDs);
 
             //Retrive PSA based on given Professional IDs
-            Task<IEnumerable<PSAMaster>> getPSATask = GetPSAs(ids);
+            var getPSATask = GetPSAs(_professionalIDs);
 
             //Retrieve MonthlyFeeDetail based on given Professional IDs
-            Task<IEnumerable<MonthlyFeeDetailVM>> getMonthlyFeeTask = GetMonthlyFees(ids);
+            var getMonthlyFeeTask = GetMonthlyFees(_professionalIDs);
 
             //Populate columns
             payrollWorksheet.PopulateColumnsFromProfessional(await getProfessionalTask);
@@ -167,6 +139,15 @@ namespace MCAWebAndAPI.Service.HR.Payroll
 
         private static List<PayrollWorksheetDetailVM> PopulateColumnsFromProfessional(this List<PayrollWorksheetDetailVM> payrollWorksheet, IEnumerable<ProfessionalMaster> professionals)
         {
+            for (int indexProfessional = 0; indexProfessional < _professionalIDs.Length; indexProfessional++)
+            {
+                for (int indexDate = 0; indexDate < _dateRanges.Length; indexDate++)
+                {
+
+                }
+            }
+
+
             return payrollWorksheet;
         }
 
@@ -202,7 +183,6 @@ namespace MCAWebAndAPI.Service.HR.Payroll
         private static async Task<PSAMaster> GetPSA(int id)
         {
             var psa = _allValidPSAs.FirstOrDefault(e => e.ProfessionalID == id + string.Empty);
-
             return psa;
         }
 
