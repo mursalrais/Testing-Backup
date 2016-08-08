@@ -25,11 +25,16 @@ namespace MCAWebAndAPI.Web.Controllers
             _professionalService = new ProfessionalService();
         }
 
+        private void SetSiteUrl(string siteUrl)
+        {
+            _dataMasterService.SetSiteUrl(siteUrl);
+            _professionalService.SetSiteUrl(siteUrl);
+            SessionManager.Set("SiteUrl", siteUrl);
+        }
+
         public async Task<ActionResult> EditProfessional(string siteUrl = null, int? ID = null)
         {
-            // MANDATORY: Set Site URL
-            _dataMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SetSiteUrl(siteUrl);
             var viewModel = await _professionalService.GetProfessionalDataAsync(ID);
             ViewBag.IsHRView = true;
             return View(viewModel);
@@ -38,8 +43,7 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult EditCurrentProfessional(string siteUrl = null, string username = null)
         {
             // MANDATORY: Set Site URL
-            _dataMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SetSiteUrl(siteUrl);
 
             var viewModel = _professionalService.GetProfessionalData(username);
             if (viewModel == null)
@@ -61,7 +65,7 @@ namespace MCAWebAndAPI.Web.Controllers
             }
 
             var siteUrl = SessionManager.Get<string>("SiteUrl");
-            _dataMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SetSiteUrl(siteUrl);
 
             int? headerID = null;
             try
