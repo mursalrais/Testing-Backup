@@ -15,9 +15,9 @@
         </div>
     </div>
     <div class="form-group">
-        @Html.Bootstrap().LabelFor(m => m.Position).Class("col-md-4 control-label")
+        @Html.Bootstrap().LabelFor(m => m.PositionBasedProject).Class("col-md-4 control-label")
         <div class="col-md-8">
-            @Html.EditorFor(m => m.Position)
+            @Html.EditorFor(m => m.PositionBasedProject)
         </div>
     </div>
     <div class="form-group">
@@ -26,12 +26,6 @@
             @Html.EditorFor(m => m.IsRenewal)
         </div>
     </div>
-    @*<div class="form-group">
-        @Html.Bootstrap().LabelFor(m => m.PSARenewalNumber).Class("col-md-4 control-label")
-        <div class="col-md-8">
-            @Html.EditorFor(m => m.PSARenewalNumber)
-        </div>
-    </div>*@
     <div class="form-group">
         @Html.Bootstrap().LabelFor(m => m.StrPSARenewal).Class("col-md-4 control-label")
         <div class="col-md-8">
@@ -64,7 +58,6 @@
     <div class="form-group">
         @Html.Bootstrap().LabelFor(m => m.Tenure).Class("col-md-4 control-label")
         <div class="col-md-8">
-            @*@Html.EditorFor(m => m.Tenure)*@
             @(Html.Kendo().NumericTextBoxFor(m => m.Tenure)
                 .HtmlAttributes(new { style = "width:100%" })
                 .Min(1)
@@ -74,9 +67,9 @@
         </div>
     </div>
     <div class="form-group">
-        @Html.Bootstrap().LabelFor(m => m.PSAExpiryDate).Class("col-md-4 control-label")
+        @Html.Bootstrap().LabelFor(m => m.PSAExpiryDates).Class("col-md-4 control-label")
         <div class="col-md-8">
-            @Html.DisplayFor(m => m.PSAExpiryDate)
+            @Html.DisplayFor(m => m.PSAExpiryDates)
         </div>
     </div>
     <div class="form-group">
@@ -97,6 +90,8 @@
     @Html.HiddenFor(m => m.LastWorkingDate)
     @Html.HiddenFor(m => m.PSARenewalNumber)
     @Html.HiddenFor(m => m.ProfessionalFullName)
+    @Html.HiddenFor(m => m.PSAExpiryDate)
+    @Html.HiddenFor(m => m.Position)
     
 </div>
 

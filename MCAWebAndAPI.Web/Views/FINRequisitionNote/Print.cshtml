@@ -1,0 +1,239 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Finance
+@model RequisitionNoteVM
+
+@{
+    ViewBag.Title = "Print Requisition Note";
+    Layout = "~/Views/Shared/_LayoutPDF.cshtml";
+}
+
+<style media="screen" type="text/css">
+   #TblDetail table {
+   border: 1px solid black;
+}
+   #TblDetail td {
+   border: 1px solid black;
+   padding:20px;
+}
+   #TblDetail th{
+           background-color: silver;
+           text-align: center;
+           border: 1px solid black;
+            padding:4px;
+   }
+
+   #TblDetail .centerAlign{
+       text-align:center;
+   }
+
+    #TblDetail .rightAlign{
+       text-align:right;
+       padding:4px;
+   }
+
+     #TblDetail .footerBGColor{
+       background-color:silver;
+       padding:4px;
+   }
+
+       #TblNote td {
+   
+   padding:10px;
+}
+</style>
+
+<div class="form-horizontal">
+
+    <div class="row" style="text-align: center; margin-top: 20px;">
+        <div id="logo-group" class="row">
+            <img src="~/img/logo.png" alt="MCA Indonesia" width="150">
+        </div>
+
+        <div class="row" style="margin-top:5px;font-weight:bold;">
+            MCA Indonesia
+        </div>
+
+        <div class="row" style="margin-top:10px; font-weight:bold;">
+            Requisition Note
+        </div>
+    </div>
+
+    <div class="row" style="text-align: left; margin-top: 20px; padding:25px;">
+        <table width="100%">
+            <tbody>
+                <tr>
+                    <td width="150px">Date</td>
+                    <td width="2px">:</td>
+                    <td>@Model.Date</td>
+                    <td width="150px">RN No.</td>
+                    <td width="2px">:</td>
+                    <td>@Model.Title</td>
+                </tr>
+
+                <tr>
+                    <td width="150px">Fund</td>
+                    <td width="2px">:</td>
+                    <td>@Model.Fund</td>
+                    <td width="150px">Project</td>
+                    <td width="2px">:</td>
+                    <td>@Model.Project.Text </td>
+                </tr>
+
+                <tr>
+                    <td width="150px">Currency</td>
+                    <td width="2px">:</td>
+                    <td>@Model.Currency.Text</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+
+                <tr>
+                    <td width="150px">Requested By</td>
+                    <td width="2px">:</td>
+                    <td></td>
+                    <td width="150px">Signature & Date</td>
+                    <td width="2px">:</td>
+                    <td></td>
+                </tr>
+
+                <tr>
+                    <td width="150px">Approved by (Concerned Project Director)</td>
+                    <td width="2px">:</td>
+                    <td></td>
+                    <td width="150px">Signature & Date</tdwidth="150px">
+                    <td width="2px">:</td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="row" style="text-align: left; margin-top: 20px; padding:25px;" id="TblDetail">
+        <table width="100%">
+            <thead>
+                <tr>
+                    <th>Activity</th>
+                    <th>WBS</th>
+                    <th>GL</th>
+                    <th>Specification</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Total (per item)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.ItemDetails.Count() > 0)
+                {
+                    var listData = Model.ItemDetails.ToList();
+                    for (int i = 0; i < listData.Count; i++)
+                    {
+                        <tr>
+                            <td>
+                                @listData[i].Activity.Text
+                            </td>
+
+                            <td>
+                                @listData[i].WBS.Text
+                            </td>
+
+                            <td>
+                                @listData[i].GL.Text
+                            </td>
+
+                            <td>
+                                @listData[i].Specification
+                            </td>
+
+                            <td class="centerAlign">
+                                @listData[i].Quantity.ToString()
+                            </td>
+
+                            <td class="centerAlign">
+                                @listData[i].Price.ToString()
+                            </td>
+                            <td class="centerAlign">
+                                @listData[i].Total.ToString()
+                            </td>
+                        </tr>
+                    }
+                }
+
+                <tr>
+                    <td class="footerBGColor"></td>
+                    <td class="footerBGColor"></td>
+                    <td class="footerBGColor"></td>
+                    <td class="footerBGColor"></td>
+                    <td class="footerBGColor"></td>
+                    <td class="rightAlign">TOTAL</td>
+                    <td class="rightAlign">@Model.Total.ToString()</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="row" style="text-align: left; margin-top: 20px; padding:25px;">
+        <table width="100%" id="TblNote">
+            <tbody>
+                <tr>
+                    <td colspan="2">
+                        For Finance Group Use Only
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        This is to certify that the above request is:
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding-left:50px;">Budget included in Approved QDR* </td>
+                    <td>[       ] Yes</td>
+                    <td>[       ] No</td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="padding-left:50px;">
+                        *included in the activity line for (   ) which includes forecasted commitment of  $ (   ) and disbursement of $ (   )
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="row" style="text-align: left; margin-top: 60px; padding:25px;">
+        <table width="100%" >
+            <tbody>
+                 <tr>
+                      <td>Budget Allocation</td>
+                     <td width="60%"></td>
+                     <td>Budget Allocation</td>
+                 </tr>
+                  <tr>
+                      <td>Verified By:</td>
+                      <td width="60%"></td>
+                      <td>Approved By:</td>
+                  </tr>
+                   <tr>
+                      <td>(Signature & Date)</td>
+                       <td width="60%"></td>
+                       <td>(Signature & Date)</td>
+                    </tr>
+                      <tr>
+                        <td>
+                            <div style="height:100px; border-bottom:1px solid black; width:250px;"></div>
+                        </td>
+                          <td width="60%"></td>
+                        <td>
+                            <div style="height:100px; border-bottom:1px solid black; width:250px;"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                       <td>Finance Specialist</td>
+                        <td width="60%"></td>
+                        <td>DED For Operations Support/CFO</td>
+                   </tr>
+                </tbody>
+           </table>               
+                  
+    </div>
+
+
+</div>

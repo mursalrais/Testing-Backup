@@ -64,16 +64,19 @@ namespace MCAWebAndAPI.Service.Finance
             {
                 foreach (var doc in attachment)
                 {
-                    var updateValue = new Dictionary<string, object>();
-                    updateValue.Add(LIST_NAME, new FieldLookupValue { LookupId = Convert.ToInt32(ID) });
-                    try
+                    if (doc != null)
                     {
-                        SPConnector.UploadDocument(DOC_LIST_NAME, updateValue, doc.FileName, doc.InputStream, _siteUrl);
-                    }
-                    catch (Exception e)
-                    {
-                        logger.Error(e.Message);
-                        throw e;
+                        var updateValue = new Dictionary<string, object>();
+                        updateValue.Add(LIST_NAME, new FieldLookupValue { LookupId = Convert.ToInt32(ID) });
+                        try
+                        {
+                            SPConnector.UploadDocument(DOC_LIST_NAME, updateValue, doc.FileName, doc.InputStream, _siteUrl);
+                        }
+                        catch (Exception e)
+                        {
+                            logger.Error(e.Message);
+                            throw e;
+                        }
                     }
                 }
             }

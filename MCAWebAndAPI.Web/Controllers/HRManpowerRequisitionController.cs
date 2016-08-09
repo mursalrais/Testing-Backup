@@ -22,6 +22,7 @@ namespace MCAWebAndAPI.Web.Controllers
         readonly IHRManpowerRequisitionService _service;
         const string SP_TRANSACTION_WORKFLOW_LIST_NAME = "Manpower Requisition Workflow";
         const string SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME = "manpowerrequisition";
+        
 
         public HRManpowerRequisitionController()
         {
@@ -226,10 +227,6 @@ namespace MCAWebAndAPI.Web.Controllers
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)headerID);
 
                 // Send to Level 1 Approver
-                Task sendApprovalRequestTask = WorkflowHelper.SendApprovalRequestAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
-                   SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)headerID, 1,
-                    string.Format(EmailResource.ManpowerApproval, siteUrl, headerID));
-
                 string EmailApprover = _service.GetApprover(1,headerID.Value);
 
                 Task sendApprover1 = EmailUtil.SendAsync(EmailApprover, "Application Submission Confirmation",
