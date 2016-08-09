@@ -1,11 +1,20 @@
 ﻿@model MCAWebAndAPI.Model.ViewModel.Form.Finance.SPHL.SPHLVM
 
-@using (Html.BeginForm("CreateSPHL", "FINSPHL", FormMethod.Post,
-                                    new
-                                    {
-                                        @class = "form-horizontal",
-                                        enctype = "multipart/form-data"
-                                    }))
+@using (Ajax.BeginForm("CreateSPHL", "FINSPHL",
+    FormMethod.Post,
+    new AjaxOptions
+    {
+        OnBegin = "onBeginForm",
+        OnComplete = "onCompleteForm",
+        OnSuccess = "onSuccessFormEmbed",
+        OnFailure = "onFailureForm"
+    },
+    new
+    {
+        @class = "form-horizontal",
+        enctype = "multipart/form-data"
+    }))
+
 {
     <fieldset>
         <legend>SPHL Data</legend>

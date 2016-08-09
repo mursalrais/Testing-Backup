@@ -25,8 +25,10 @@ namespace MCAWebAndAPI.Web.Controllers
         
         public ActionResult CreateSPHL(string siteUrl = null)
         {
-            _sphlService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
+
+            _sphlService.SetSiteUrl(siteUrl);
+            SessionManager.Set("SiteUrl", siteUrl);
 
             var viewModel = new SPHLVM();
 
@@ -54,13 +56,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
             }
 
-            return RedirectToAction("Index",
-                "Success",
-                new
-                {
-                    successMessage =
-                string.Format(MessageResource.SuccessCreateFINSPHLData, viewModel.No)
-                });
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.FINSPHL);
         }
     }
 }

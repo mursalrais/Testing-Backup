@@ -19,10 +19,10 @@ namespace MCAWebAndAPI.Web.Controllers
     [Filters.HandleError]
     public class HRApplicationController : Controller
     {
-        readonly IHRApplicationService _service;
+        readonly IApplicationService _service;
         public HRApplicationController()
         {
-            _service = new HRApplicationService();
+            _service = new ApplicationService();
         }
         public ActionResult GetIDCardType(string nationality)
         {
@@ -147,7 +147,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 "Success",
                 new
                 {
-                    errorMessage =
+                    successMessage =
                 string.Format(MessageResource.SuccessCreateApplicationData, viewModel.FirstMiddleName)
                 });
         }
@@ -263,7 +263,7 @@ namespace MCAWebAndAPI.Web.Controllers
             // MANDATORY: Set Site URL
             _service.SetSiteUrl(siteUrl);
             SessionManager.Set("SiteUrl", siteUrl);
-
+            
             var viewModel = _service.GetApplication(null);
             viewModel.Position = position;
             viewModel.ManpowerRequisitionID = ID;

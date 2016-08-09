@@ -110,6 +110,7 @@
 
             });
             $("#StatusSubmit").click(function () {
+                checkGrid();
                 if ($('#WorkflowDetails').length) {
                     var approverLength = $('#WorkflowDetails').data("kendoGrid").tbody.find("tr").length;
                     if (approverLength == 2) {
@@ -129,12 +130,23 @@
                 
             });
             $("#StatusDraft").click(function () {
+                checkGrid();
                 $("#Status_Value").prop("value", "Draft");
                 $("form").submit();
             });
 
         });
 
-
+        function checkGrid() {
+            var grid = $("#WorkingRelationshipDetails").data("kendoGrid").dataSource.data();
+            for (var i = 0; i < grid.length; i++) {
+                if (grid[i].EditMode == 0) {
+                    if (!(grid[i].Frequency.length) || !(grid[i].Relationship.length) || (grid[i].PositionWorking.Text == null)) {
+                        alert("Please complete the field on Working Relationship Detail");
+                        return false;
+                    }
+                }
+            }
+        }
     </script>
 }

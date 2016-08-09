@@ -24,6 +24,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
         public string SerialNo { get; set; }
         public string Spesifications { get; set; }
         public string Remarks { get; set; }
+        public string Url { get; set; }
 
         [UIHint("Date")]
         public DateTime? WarrantyExpires { get; set; }
@@ -128,14 +129,13 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
                         {
                             ""
                         }
-                        ,
-                        OnSelectEventName = "onAssetIDChange"
+                        , OnSelectEventName = "onAssetIDChange"
                     };
                 return _assetNoAssetDesc;
             }
             set
             {
-                _assetType = value;
+                _assetNoAssetDesc = value;
             }
         }
 
@@ -159,5 +159,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
                 _condition = value;
             }
         }
+
+        public string InterviewerUrl { get; set; }
     }
 }

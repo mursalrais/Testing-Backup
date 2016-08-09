@@ -14,6 +14,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
     {
         public IEnumerable<SCAVoucherItemsVM> SCAVoucherItems { get; set; } = new List<SCAVoucherItemsVM>();
 
+        public IEnumerable<EventBudgetItemVM> EventBudgetItems { get; set; } = new List<EventBudgetItemVM>();
+
         public int ID { get; set; }
 
         [DisplayName("SCA No.")]
@@ -23,6 +25,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         [DisplayName("Date")]
         public DateTime SCAVoucherDate { get; set; } = DateTime.Now;
 
+        [Required]
         [UIHint("AjaxComboBox")]
         public AjaxComboBoxVM SDO { get; set; } = new AjaxComboBoxVM
         {
@@ -36,6 +39,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 
         public string Position { get; set; }
 
+        public int EventBudgetID { get; set; }
+
+        [Required]
         [UIHint("AjaxComboBox")]
         public AjaxComboBoxVM EventBudgetNo { get; set; } = new AjaxComboBoxVM
         {
@@ -45,26 +51,28 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
             TextField = "Text",
             OnSelectEventName = "OnSelectEventBudgetNo"
         };
-        
+
+        [Required]
         public string Currency { get; set; }
 
+        [Required]
         public decimal TotalAmount { get; set; }
 
+        [Required]
         public string TotalAmountInWord { get; set; }
 
+        [Required]
         public string Purpose { get; set; }
 
+        [Required]
         public string Project { get; set; }
 
-        [UIHint("AjaxComboBox")]
-        public AjaxComboBoxVM Activity { get; set; } = new AjaxComboBoxVM
-        {
-            ControllerName = "ComboBox",
-            ActionName = "GetProfessionals",
-            ValueField = "ID",
-            TextField = "Desc"
-        };
+        public int ActivityID { get; set; }
 
+        [Required]
+        public string ActivityName { get; set; }
+
+        [Required]
         [UIHint("AjaxCascadeComboBox")]
         public AjaxCascadeComboBoxVM SubActivity { get; set; } = new AjaxCascadeComboBoxVM
         {
@@ -76,6 +84,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
             Filter = "filterEventBudgetNo"
         };
 
+        public string SubActivityName { get; set; }
+
+        [Required]
         public decimal Fund { get; set; }
 
         public string RefferenceNo { get; set; }

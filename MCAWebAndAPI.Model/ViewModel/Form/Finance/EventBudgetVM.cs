@@ -13,8 +13,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 {
     public class EventBudgetVM : Item
     {
-        private DateTime _dateFrom, _dateTo;
-        private ComboBoxVM _project;
+        private const string FieldDefaultValue_Fund = "3000";
+
+        private ProjectComboBoxVM project;
         private ComboBoxVM activity;
 
         [Required]
@@ -28,11 +29,16 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         [UIHint("Currency")]
         public decimal Rate { get; set; }
 
-        public HttpPostedFileBase Attachment { get; set; }
+        [Required]
+        [DisplayName("Attachment")]
+        [UIHint("MultiFileUploader")]
+        public IEnumerable<HttpPostedFileBase> Documents { get; set; } = new List<HttpPostedFileBase>();
+
+        public string DocumentUrl { get; set; }
 
         [Required]
         [UIHint("Currency")]
-        public string Fund { get; set; }
+        public string Fund { get; set; } = FieldDefaultValue_Fund;
 
         [Required]
         [UIHint("Total Direct Payment (IDR)")]
@@ -51,60 +57,30 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         public decimal TotalUSD { get; set; }
 
         [Required]
+        [DataType(DataType.Date)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         [DisplayName("Date (from)")]
-        public DateTime DateFrom
-        {
-            get
-            {
-                if (_dateFrom == null)
-                    _dateFrom = new DateTime();
-                return _dateFrom;
-            }
-
-            set
-            {
-                _dateFrom = value;
-            }
-        }
+        public DateTime DateFrom { get; set; } = DateTime.Now;
 
         [Required]
         [DisplayName("Date (to)")]
-        public DateTime DateTo
-        {
-            get
-            {
-                if (_dateTo == null)
-                    _dateTo = new DateTime();
-                return _dateTo;
-            }
-
-            set
-            {
-                _dateTo = value;
-            }
-        }
+        public DateTime DateTo { get; set; } = DateTime.Now;
 
         [Required]
         [UIHint("ComboBox")]
-        public ComboBoxVM Project
+        public ProjectComboBoxVM Project
         {
             get
             {
-                if (_project == null)
-                    _project = new ComboBoxVM()
-                    {
-                        Choices = new string[]
-                        {
-                            "Green Prosperity",
-                            "Procurement Modernization",
-                            "Health and Nutrition"
-                        }
-                    };
-                return _project;
+                if (project == null)
+                    project = new ProjectComboBoxVM();
+                  
+                return project;
             }
+
             set
             {
-                _project = value;
+                project = value;
             }
         }
 
@@ -115,7 +91,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
             get
             {
                 if (this.activity == null)
-                    this.activity = new ComboBoxVM();
+                    this.activity = new ComboBoxVM() { Choices = new string[] { "1", "2", "3" } };
                 return this.activity;
             }
 
@@ -126,6 +102,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         }
 
         public IEnumerable<EventBudgetItemVM> ItemDetails = new List<EventBudgetItemVM>();
- 
+
+        public string No { get; set; }
+
     }
 }

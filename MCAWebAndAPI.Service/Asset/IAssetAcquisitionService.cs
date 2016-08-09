@@ -2,6 +2,7 @@
 using NLog;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,5 +29,13 @@ namespace MCAWebAndAPI.Service.Asset
 
         IEnumerable<AssetMasterVM> GetAssetSubAsset();
         IEnumerable<WBSMaterVM> GetWBS();
+
+        int? MassUploadHeaderDetail(string ListName, DataTable CSVDataTable, string SiteUrl = null);
+
+        int? getIdOfColumn(string listname, string SiteUrl, string caml);
+
+        Dictionary<int, string> getListIDOfList(string listName, string key, string value,  string SiteUrl);
+
+        void RollbackParentChildrenUpload(string listNameHeader, int? latestIDHeader, string siteUrl);
     }
 }

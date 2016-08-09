@@ -36,6 +36,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 viewModel.Status.Value = "Draft";
             }
 
+            FieldUserValue visibleTo = SPConnector.GetUser(viewModel.Username,_siteUrl,"hr");
+
             updatedValue.Add("expectedjoindate", viewModel.ExpectedJoinDate);
             updatedValue.Add("requestdate", viewModel.DateRequested);
 
@@ -72,6 +74,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             updatedValue.Add("otherrequirements", viewModel.OtherRequirements);
             updatedValue.Add("remarks", viewModel.Remarks);
             updatedValue.Add("manpowerrequeststatus", viewModel.Status.Value);
+            updatedValue.Add("visibleto", visibleTo);
 
             try
             {
@@ -576,7 +579,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             string email = "anugerahseptian@gmail.com";
             string caml = @"<View><Query><Where><And><Eq><FieldRef Name='manpowerrequisition' /><Value Type='Lookup'>"+headerID.ToString()+"</Value></Eq><Eq><FieldRef Name='approverlevel' /><Value Type='Choice'>"+level.ToString()+"</Value></Eq></And></Where></Query><ViewFields><FieldRef Name='approver0' /></ViewFields><QueryOptions /></View>";
-            foreach (var item in SPConnector.GetList(SP_WORKRE_LIST_NAME,_siteUrl,caml))
+            foreach (var item in SPConnector.GetList(SP_MANPOW_WORKFLOW,_siteUrl,caml))
             {
                 email = Convert.ToString(item["approver0"]);
             }

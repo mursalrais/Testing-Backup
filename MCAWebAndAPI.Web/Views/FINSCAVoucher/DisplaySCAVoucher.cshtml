@@ -1,0 +1,115 @@
+﻿@model MCAWebAndAPI.Model.ViewModel.Form.Finance.SCAVoucherVM
+
+@{
+    ViewBag.Title = "Print Application Data";
+    Layout = "~/Views/Shared/_LayoutPDF.cshtml";
+}
+
+<div class="form-horizontal">
+    <div style="border:1px solid;padding-top:20px;">
+        <div class="row">
+            @Html.Partial("_PartialHeaderWithLogo")
+        </div>
+
+        <div style="padding:0 20px 20px 20px;margin-bottom:30px; border-bottom:1px solid">
+            <div class="row" style="margin-top:30px;">
+                <div class="col-xs-5 text-right"><p>SCA No. :</p></div>
+                <div class="col-xs-2"><p>@Model.SCAVoucherNo</p></div>
+                <div class="col-xs-2 text-right"><p>Date :</p></div>
+                <div class="col-xs-2"><p>@Model.SCAVoucherDate.ToString("dd/MM/yyyy")</p></div>
+            </div>
+            <div class="row">
+                <div class="col-xs-5 text-right"><p>SDO Name :</p></div>
+                <div class="col-xs-7"><p>@Model.SDOName</p></div>
+            </div>
+            <div class="row">
+                <div class="col-xs-5 text-right"><p>Position :</p></div>
+                <div class="col-xs-7"><p>@Model.Position</p></div>
+            </div>
+            <div class="row">
+                <div class="col-xs-5 text-right"><p>Total amount in IDR :</p></div>
+                <div class="col-xs-7"><p>@Model.TotalAmount</p></div>
+            </div>
+            <div class="row">
+                <div class="col-xs-5 text-right"><p>Total amount in words :</p></div>
+                <div class="col-xs-7"><p>@Model.TotalAmountInWord</p></div>
+            </div>
+            <div class="row">
+                <div class="col-xs-5 text-right"><p>Purpose :</p></div>
+                <div class="col-xs-7"><p>@Model.Purpose</p></div>
+            </div>
+            <div class="row">
+                <div class="col-xs-5 text-right"><p>Description of Project, Activity, Sub-Activity :</p></div>
+                <div class="col-xs-7"><p>@Model.Project, @Model.ActivityName, @Model.SubActivityName</p></div>
+            </div>
+            <div class="row">
+                <div class="col-xs-5 text-right"><p>Fund :</p></div>
+                <div class="col-xs-7"><p>@Model.Fund</p></div>
+            </div>
+
+            <div class="row" style="margin: 50px 10px 50px 10px;">
+                <table width="100%">
+                    <thead>
+                        <tr style="background-color: #e4e1e1">
+                            <th width="40%">WBS</th>
+                            <th width="40%">GL</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.SCAVoucherItems.Count() > 0)
+                        {
+                            foreach (var item in Model.SCAVoucherItems)
+                            {
+                                <tr>
+                                    <td>@item.WBS</td>
+                                    <td>@item.GL</td>
+                                    <td>@item.Amount</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-4">Requestor</div>
+                <div class="col-xs-4">Approved by Project Director/DED</div>
+                <div class="col-xs-4">Approved by DED for ops/CFO or ED</div>
+            </div>
+            <div class="row" style="margin-top:75px">
+                <div class="col-xs-4"><hr />Name :</div>
+                <div class="col-xs-4"><hr />Name :</div>
+                <div class="col-xs-4"><hr />Name :</div>
+            </div>
+        </div>
+
+        <div style="padding:0 20px 20px 20px;">
+            <p><small> <strong>For FA Use Only:</strong></small></p>
+            <br />
+            <div class="row">
+                <div class="col-xs-8"><strong>Verified by:</strong> </div>
+                <div class="col-xs-4"><strong>Approved by:</strong></div>
+            </div>
+            <div class="row">
+                <div class="col-xs-8 text-muted">(Signature & Date)</div>
+                <div class="col-xs-4 text-muted">(Signature & Date)</div>
+            </div>
+            <div class="row" style="margin-top:75px">
+                <div class="col-xs-8"><hr />Name :</div>
+                <div class="col-xs-4"><hr />Name :</div>
+            </div>
+        </div>
+    </div>
+</div>
+<style media="screen">
+    hr {
+        margin: 0 0 5px 0;
+        border-top: 1px solid black;
+    }
+
+    td, th {
+        border: 1px solid;
+        padding: 5px;
+    }
+</style>

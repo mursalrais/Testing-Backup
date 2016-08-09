@@ -25,6 +25,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
         private const string FIELD_TITLE = "Title";
         private const string FIELD_GL_DESCRIPTION = "yyxi";
         private const string FIELD_WBS_DESCRIPTION = "WBSDesc";
+        
         private const string FIELD_FORMAT_DOC = "RN/{0}-{1}/";
         private const string FIELD_REQUISITION_CATEGORY = "Category";
         private const string FIELD_REQUISITION_DATE = "Date";
@@ -36,11 +37,17 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
         private const string FIELD_RN_HEADERID = "Requisition_x0020_Note_x0020_ID";
         private const string FIELD_RN_ACTIVITY = "Activity";
         private const string FIELD_RN_WBS = "WBS_x0020_ID";
+        private const string FIELD_RN_WBS_ID = "WBS_x0020_ID_x003a_WBS_x0020_ID_";
+        private const string FIELD_RN_WBS_DESC = "WBS_x0020_ID_x003a_WBS_x0020_Des";
         private const string FIELD_RN_GL = "GL_x0020_ID";
+        private const string FIELD_RN_GL_ID = "GL_x0020_ID_x003a_GL_x0020_No_x0";
+        private const string FIELD_RN_GL_DESC = "GL_x0020_ID_x003a_GL_x0020_Descr";
         private const string FIELD_RN_QUANTITY = "Quantity";
         private const string FIELD_RN_PRICE = "Price";
         private const string FIELD_RN_TOTAL = "Total_x0020_Per_x0020_Item";
         private const string FIELD_RN_DOCUMENTS_HEADERID = "_x0027_Requisition_x0020_Note_x0027_";
+        private const string ACTIVTY_PROJECT_NAME = "v0o0";
+
 
         string _siteUrl = null;
         static Logger logger = LogManager.GetCurrentClassLogger();
@@ -92,18 +99,20 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
             return wbsMasters;
         }
 
-        public IEnumerable<ActivityVM> GetActivity()
+        public IEnumerable<ActivityVM> GetActivity(string Project = null)
         {
             var activities = new List<ActivityVM>();
+            var caml = @"<View><Query><Where><Eq><FieldRef Name='" + ACTIVTY_PROJECT_NAME + "' /><Value Type='Lookup'>" + (Project == null ? string.Empty : Project.ToString()) + "</Value></Eq></Where></Query></View>";
 
             foreach (var item in SPConnector.GetList(ACTIVITY_SITE_LIST, _siteUrl, null))
             {
                 activities.Add(ConvertToActivityModel(item));
             }
 
-            
+
             return activities;
         }
+
 
         public int CreateRequisitionNote(RequisitionNoteVM viewModel)
         {
@@ -374,10 +383,10 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
             viewModel.Activity.Text = (listItem[FIELD_RN_ACTIVITY] as FieldLookupValue).LookupValue;
 
             viewModel.WBS.Value = (listItem[FIELD_RN_WBS] as FieldLookupValue).LookupId;
-            viewModel.WBS.Text = (listItem[FIELD_RN_WBS] as FieldLookupValue).LookupValue;
+            viewModel.WBS.Text = string.Format("{0}-{1}", (listItem[FIELD_RN_WBS_ID] as FieldLookupValue).LookupValue, (listItem[FIELD_RN_WBS_DESC] as FieldLookupValue).LookupValue);
 
             viewModel.GL.Value = (listItem[FIELD_RN_GL] as FieldLookupValue).LookupId;
-            viewModel.GL.Text = (listItem[FIELD_RN_GL] as FieldLookupValue).LookupValue;
+            viewModel.GL.Text = string.Format("{0}-{1}", (listItem[FIELD_RN_GL_ID] as FieldLookupValue).LookupValue, (listItem[FIELD_RN_GL_DESC] as FieldLookupValue).LookupValue);
 
             viewModel.Quantity = Convert.ToInt32(listItem[FIELD_RN_QUANTITY]);
             viewModel.Price = Convert.ToDecimal(listItem[FIELD_RN_PRICE]);

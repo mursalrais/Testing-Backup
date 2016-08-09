@@ -1,0 +1,74 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Finance
+@model RequisitionNoteVM
+
+@{
+    ViewBag.Title = "Edit Requisition Note";
+}
+
+@using (Html.BeginForm("EditRequisitionNote", "FINRequisitionNote", FormMethod.Post,
+                        new
+                        {
+                            @class = "form-horizontal",
+                            enctype = "multipart/form-data"
+                        }))
+{
+    <fieldset>
+        <legend>Requisition Note</legend>
+        <div class="row">
+            <div class="col-sm-6">
+                @Html.HiddenFor(m => m.ID)
+                @Html.HiddenFor(m => m.Title)
+            </div>
+        </div>
+        <div class="row">
+            @Html.Partial("_General", Model)
+        </div>
+
+        <legend>Item Details</legend>
+        <div class="row">
+            @Html.Partial("_ItemDetails", Model.ItemDetails)
+        </div>
+    </fieldset>
+    <div class="row">
+        <p style="margin: 50px 0px 0px 20px; font-style: italic;">
+            Instructions:
+            <br />
+            1. Requisition for Goods:  Indicate detailed specifications. Should be generic - no brand names. <br />
+            2. Requisition for Works/Services:  Attached copy of TOR. <br />
+        </p>
+    </div>
+    <div class="form-actions">
+        <div class="row">
+            <div class="col-sm-12">
+                <button id="print-button" class="btn btn-default" type="button">
+                    Print
+                </button>
+                <button id="submit-button" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    Submit
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $('#print-button').click(function (e) {
+                if (!$('form').valid()) {
+                    alert('Please make sure that all required fields are filled');
+                    return;
+                }
+
+                var actionUrl = $('form').attr("action");
+                var newActionUrl = actionUrl.replace("Edit", "Print");
+
+                $('form').prop('action', newActionUrl);
+                $('form').submit();
+
+            });
+
+        });
+    </script>
+}
