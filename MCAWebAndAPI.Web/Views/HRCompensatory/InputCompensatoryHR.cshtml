@@ -20,6 +20,7 @@
     <fieldset>
         @Html.HiddenFor(m => m.cmpID)
         @Html.HiddenFor(m => m.cmpName)
+        @Html.HiddenFor(m => m.cmpEmail)
         @Html.HiddenFor(m => m.cmpTitle)
         @Html.HiddenFor(m => m.cmpPosition)
         @Html.HiddenFor(m => m.cmpYearDate)
@@ -133,6 +134,14 @@
                         $("#ProfName").prop("value", nameProf);
                         $("#ProfName").prop('readonly', 'true');
 
+                        var eMail = $("#cmpEmail").val();
+
+                        showLoading();
+                        if (eMail != null) {
+                            displayWorkflowRouter("workflow-placeholder", "@ViewBag.ListName", eMail);
+                            hideLoading();
+                        }
+
                         $("#cancel-button").click(function () {
                             
                             showLoading();
@@ -218,7 +227,6 @@
                             });
 
                             $("#cmpID").prop("value", idComp);
-                        
                     };
 
                     function OnChangeProffesional(e) {

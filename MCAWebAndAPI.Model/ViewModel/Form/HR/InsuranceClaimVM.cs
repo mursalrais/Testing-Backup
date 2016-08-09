@@ -44,17 +44,29 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         public int? DependentID { get; set; }
 
-      
-        [UIHint("AjaxComboBox")]
-       public AjaxComboBoxVM DependantName { get; set; } = new AjaxComboBoxVM
+
+        // [UIHint("AjaxComboBox")]
+        //public AjaxComboBoxVM DependantName { get; set; } = new AjaxComboBoxVM
+        // {
+        //     ActionName = "GetDependantsForInsurance",
+        //     ControllerName = "HRDataMaster",
+        //     ValueField = "ID",
+        //     TextField = "Name",
+        //     OnSelectEventName = "OnSelectDependantName"
+        // };
+
+
+        [UIHint("AjaxCascadeComboBox")]
+        public AjaxCascadeComboBoxVM DependantName { get; set; } = new AjaxCascadeComboBoxVM
         {
             ActionName = "GetDependantsForInsurance",
             ControllerName = "HRDataMaster",
             ValueField = "ID",
             TextField = "Name",
+            Cascade = "ProfessionalName_Value",
+            Filter = "filterEventProfessionalID",
             OnSelectEventName = "OnSelectDependantName"
         };
-
 
         [UIHint("ComboBox")]
         public ComboBoxVM Type { get; set; } = new ComboBoxVM

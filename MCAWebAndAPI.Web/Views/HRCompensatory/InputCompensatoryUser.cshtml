@@ -18,6 +18,8 @@
         @Html.HiddenFor(m => m.cmpID)
         @Html.HiddenFor(m => m.cmpName)
         @Html.HiddenFor(m => m.cmpPosition)
+        @Html.HiddenFor(m => m.Requestor)
+        @Html.HiddenFor(m => m.StatusForm)
         <input type="hidden" id="loadpage" value="0">
         <div class="row">
             <div class="form-group">
@@ -35,18 +37,11 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.ddlUserCompensatoryID).Class("col-xs-2 control-label")
-                <div class="col-xs-3">  
-                    @Html.EditorFor(m => m.ddlUserCompensatoryID)
-                </div>
-            </div>
-        </div>
+       
         <div class="col-sm-12">
             <div class="form-group" id="ParentDiv">
                 <div class="col-sm-8">
-                    @Html.DisplayFor(m => m.StatusForm)
+                    <input id="Status" class="form-control" value="" />
                 </div>
             </div>
         </div>
@@ -56,7 +51,7 @@
     </fieldset>
 }
 
-@if (Model.StatusForm == "")
+@if (Model.StatusForm == "" || Model.StatusForm == "Draft")
 {
     <div class="row pull-right">
         <div class="col-sm-12">
@@ -64,19 +59,7 @@
                 <i class="fa fa-save"></i>
                 Submit For Approval
             </button>
-            <button id="submit-draft-initiate-button" class="btn btn-primary" type="submit">
-                <i class="fa fa-clipboard"></i>
-                Save As Draft
-            </button>
-        </div>
-    </div>
-}
-
-@if (Model.StatusForm == "Draft")
-{
-    <div class="row pull-right">
-        <div class="col-sm-12">
-            <button id="submit-draft-initiate-button" class="btn btn-primary" type="submit">
+            <button id="submit-draft-button" class="btn btn-primary" type="submit">
                 <i class="fa fa-clipboard"></i>
                 Save As Draft
             </button>
@@ -137,20 +120,26 @@
 
                     function OnChangeProffesional(e) {
                         var dataItem = this.dataItem(e.item);
-                        var eMail = dataItem.OfficeEmail
+
+                    };
+
+        $(document).ready(function () {
+
+                        var eMail = $("#Requestor").val();
 
                         showLoading();
                         if (eMail != null) {
                             displayWorkflowRouter("workflow-placeholder", "@ViewBag.ListName", eMail);
                             hideLoading();
                         }
-                    };
-
-        $(document).ready(function () {
 
                         var nameProf = $("#cmpName").val() + " - " + $("#cmpPosition").val()
                         $("#ProfName").prop("value", nameProf);
                         $("#ProfName").prop('readonly', 'true');
+
+                        var stat = $("#StatusForm").val();
+                        $("#Status").prop("value", stat);
+                        $("#Status").prop('readonly', 'true');
 
                         var cmpId = $("#cmpID").val();
 
@@ -174,11 +163,12 @@
                         });
 
                         $("#submitonly-button").click(function () {
-                            $("#StatusForm").val("submit")
+                            $("#StatusForm").prop("value", "submit");
                             $("form").submit();
                         });
 
                         $("#submit-button").click(function () {
+                            $("#StatusForm").prop("value", " ");
                             $("form").submit();
                         });
 
@@ -219,10 +209,7 @@
                         var container = e.container;
                         var tr = container.closest('tr');
                         var data = this.dataItem(tr);
-                        var start = data.StartTime.getHours();
-                        var finish = data.FinishTime.getHours();
-                        var finishsec = data.FinishTime.getHours();
-                        var range;
+
                         var rowgrid = $("#CompensatoryDetails").data("kendoGrid").tbody.find("tr");
                         var i = -1
                         var j = -1
@@ -242,16 +229,25 @@
                             });
                         });
                         debugger;
-                        if ((finish + finishsec) <= start) {
-                            alert("FinishTime can not be smaller than the starttime..!!")
+
+                        if (data.StartTime != null && data.FinishTime != null)
+                        {
+                            var start = data.StartTime.getHours();
+                            var finish = data.FinishTime.getHours();
+                            var finishsec = data.FinishTime.getSeconds();
+                            var range;
+                            if ((finish + finishsec) <= start) {
+                                alert("FinishTime can not be smaller than the starttime..!!")
+                            }
+
+                            if (start < finish) {
+                                range = finish - start
+                                data.set("CmpTotalHours", range);
+                                data.CmpTotalHours = range;
+                                data.set("TotalDay", range / 4)
+                            }
                         }
 
-                        if (start < finish) {
-                            range = finish - start
-                            data.set("CmpTotalHours", range);
-                            data.CmpTotalHours = range;
-                            data.set("TotalDay", range / 4)
-                        }
                         data.set("EditMode", 1);
                     }
 

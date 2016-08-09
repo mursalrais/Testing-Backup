@@ -16,7 +16,7 @@
     <RootNamespace>MCAWebAndAPI.Web</RootNamespace>
     <AssemblyName>MCAWebAndAPI.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -75,6 +75,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.SharePoint.Client, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL" />
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -883,6 +884,9 @@
     <Content Include="Views\HRExitProcedure\_ExitProcedureChecklistForHR.cshtml" />
     <Content Include="Views\HRExitProcedure\_EditExitProcedureChecklistForHR.cshtml" />
     <Content Include="Views\HRExitProcedure\_EditExitProcedureDataHR.cshtml" />
+    <Content Include="Views\FINRequisitionNote\CreateRequisitionNote.cshtml" />
+    <Content Include="Views\FINRequisitionNote\EditRequisitionNote.cshtml" />
+    <Content Include="Views\FINRequisitionNote\PrintRequisitionNote.cshtml" />
     <Content Include="Views\FINRequisitionNote\_General.cshtml" />
     <Content Include="Views\FINRequisitionNote\_ItemDetails.cshtml" />
     <Content Include="Views\FINSCAVoucher\CreateSCAVoucher.cshtml" />
@@ -896,25 +900,10 @@
     <Content Include="Views\ASSAssetAcquisition\Upload.cshtml" />
     <Content Include="Views\ASSAssetAcquisition\Edit.cshtml" />
     <Content Include="Views\ASSAssetAcquisition\_DisplayGrid.cshtml" />
-    <Content Include="Views\Shared\DisplayTemplates\AjaxCascadeComboBox.cshtml" />
-    <Content Include="Views\FINOutstandingAdvance\Create.cshtml" />
-    <Content Include="Views\FINPettyCashPaymentVoucher\Create.cshtml" />
-    <Content Include="Views\FINPettyCashPaymentVoucher\Edit.cshtml" />
-    <Content Include="Views\FINPettyCashPaymentVoucher\Print.cshtml" />
-    <Content Include="Views\FINPettyCashReimbursement\Create.cshtml" />
-    <Content Include="Views\FINSCAVoucher\DisplaySCAVoucher.cshtml" />
-    <Content Include="Views\FINSCAVoucher\_DisplayEventBudgetItems.cshtml" />
-    <Content Include="Views\FINSCAVoucher\_PartialHeaderWithLogo.cshtml" />
-    <Content Include="Views\FINTaxExemptionData\_Income.cshtml" />
-    <Content Include="Views\FINTaxExemptionData\_Others.cshtml" />
-    <Content Include="Views\FINTaxExemptionData\_VAT.cshtml" />
-    <Content Include="Views\FINRequisitionNote\Create.cshtml" />
-    <Content Include="Views\FINRequisitionNote\Edit.cshtml" />
-    <Content Include="Views\FINRequisitionNote\Print.cshtml" />
-    <Content Include="Views\FINEventBudget\Create.cshtml" />
-    <Content Include="Views\FINEventBudget\_ItemDetails.cshtml" />
-    <Content Include="Views\Shared\_PartialHeader.cshtml" />
-    <Content Include="Views\Shared\_PartialHeaderWithLogo.cshtml" />
+    <Content Include="Views\HRMedicalCheckUp\CreateMedical.cshtml" />
+    <Content Include="Views\HRMedicalCheckUp\Redirect.cshtml" />
+    <Content Include="Views\HRMedicalCheckUp\EditMedical.cshtml" />
+    <Content Include="Views\HRMedicalCheckUp\DisplayMedical.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -942,18 +931,12 @@
     <Compile Include="Controllers\ASSLocationMasterController.cs" />
     <Compile Include="Controllers\BIEmbedController.cs" />
     <Compile Include="Controllers\CalendarEventController.cs" />
-    <Compile Include="Controllers\ComboBoxController.cs" />
     <Compile Include="Controllers\CSVController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\FileController.cs" />
     <Compile Include="Controllers\FINEventBudgetController.cs" />
-    <Compile Include="Controllers\FINOutstandingAdvanceController.cs" />
-    <Compile Include="Controllers\FINPettyCashPaymentVoucherController.cs" />
-    <Compile Include="Controllers\FINPettyCashReimbursementController.cs" />
-    <Compile Include="Controllers\FINPettyCashSettlementController.cs" />
     <Compile Include="Controllers\FINRequisitionNoteController.cs" />
     <Compile Include="Controllers\FINSCAVoucherController.cs" />
-    <Compile Include="Controllers\FinSharedController.cs" />
     <Compile Include="Controllers\FINSPHLController.cs" />
     <Compile Include="Controllers\FINTaxExemptionDataController.cs" />
     <Compile Include="Controllers\FINTaxReimbursementController.cs" />
@@ -963,6 +946,7 @@
     <Compile Include="Controllers\HRDataMasterController.cs" />
     <Compile Include="Controllers\HRExitProcedureController.cs" />
     <Compile Include="Controllers\HRFeeSlipController.cs" />
+    <Compile Include="Controllers\HRMedicalCheckUpController.cs" />
     <Compile Include="Controllers\HRInsuranceClaimController.cs" />
     <Compile Include="Controllers\HRInterviewlistController.cs" />
     <Compile Include="Controllers\HRManpowerRequisitionController.cs" />
@@ -989,6 +973,7 @@
     </Compile>
     <Compile Include="Helpers\BindHelper.cs" />
     <Compile Include="Helpers\CsHtmlRazorViewEngine.cs" />
+    <Compile Include="Helpers\FileHelper.cs" />
     <Compile Include="Helpers\HtmlExtensions.cs" />
     <Compile Include="Helpers\JsonHelper.cs" />
     <Compile Include="Helpers\JsonpResult.cs" />
@@ -1043,6 +1028,7 @@
     <Folder Include="bin\Resources\" />
     <Folder Include="Scripts\apps\controlls\" />
     <Folder Include="Views\File\" />
+    <Folder Include="Views\FINEventBudget\" />
     <Folder Include="Views\HRDataMaster\" />
   </ItemGroup>
   <ItemGroup>

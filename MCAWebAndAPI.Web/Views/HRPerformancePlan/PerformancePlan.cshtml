@@ -89,7 +89,7 @@
                     </div>
                 </div>
             </div>
-            @if (Model.Requestor != null)
+            @if (Model.TypeForm == "Professional")
             {
                 <legend>Approval Path</legend>
                 <div id="workflow-placeholder" class="row" />
@@ -114,7 +114,7 @@
         </div>
     }
 
-    if (Model.Requestor != null && Model.StatusForm == "Initiated")
+    if (Model.TypeForm == "Professional" && Model.StatusForm == "Initiated")
     {
         <div class="form-actions">
             <div class="row">
@@ -131,7 +131,7 @@
             </div>
         </div>
     }
-    if (Model.Requestor != null)
+    if (Model.TypeForm == "Professional")
     {
         if (Model.StatusForm == "Draft" || Model.StatusForm == "Pending Approval 1 of 2" || Model.StatusForm == "Pending Approval 2 of 2")
         {
@@ -152,7 +152,7 @@
         }
     }
 
-    if (Model.Requestor == null && Model.StatusForm == "Pending Approval 1 of 2")
+    if (Model.TypeForm == "Approver1" && Model.StatusForm == "Pending Approval 1 of 2")
     {
         <div class="form-actions">
             <div class="row">
@@ -170,7 +170,7 @@
         </div>
     }
 
-    if (Model.Requestor == null && Model.StatusForm == "Pending Approval 2 of 2")
+    if (Model.TypeForm == "Approver2" && Model.StatusForm == "Pending Approval 2 of 2")
     {
         <div class="form-actions">
             <div class="row">
@@ -189,7 +189,7 @@
     }
 }
 
-@if (Model.Requestor != null & Model.StatusForm == "Approved")
+@if (Model.StatusForm == "Approved")
 {
     using (Html.BeginForm((string)ViewBag.Action, "HRPerformancePlan", FormMethod.Post,
                                                                                     new
@@ -271,7 +271,8 @@
                 </div>
             </div>
         </div>
-        @if (Model.Requestor != null)
+
+        @if (Model.TypeForm == "Professional")
         {
             <legend>Approval Path</legend>
                 <div id="workflow-placeholder" class="row" />
@@ -279,15 +280,18 @@
     </fieldset>
     }
 
-    <div class="form-actions">
-        <div class="row">
-            <div class="col-sm-12">
-                <button id="print-button" class="btn btn-primary" type="button">
-                    Print
-                </button>
+    if (Model.TypeForm == "Professional")
+    {
+        <div class="form-actions">
+            <div class="row">
+                <div class="col-sm-12">
+                    <button id="print-button" class="btn btn-primary" type="button">
+                        Print
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
+    }
 }
 
 @section scripts{
@@ -342,7 +346,8 @@
 
         $(document).ready(function () {
             var Requestor = "@ViewBag.Requestor";
-            if (Requestor != null) {
+            var typeForm = "@Model.TypeForm";
+            if (typeForm == "Professional") {
                 displayWorkflowRouter("workflow-placeholder", "@ViewBag.ListName", Requestor);
             }
         });
