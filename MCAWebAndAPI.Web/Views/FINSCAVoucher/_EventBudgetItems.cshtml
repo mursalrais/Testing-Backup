@@ -1,1 +1,62 @@
-﻿@model MCAWebAndAPI.Model.ViewModel.Form.Finance.SCAVoucherVM
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Finance
+@model SCAVoucherVM
+
+<div class="col-xs-12">
+    @(Html.Kendo().Grid(Model.SCAVoucherItems)
+    .Name("EventBudgetDetail")
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.WBS);
+        columns.Bound(p => p.GL);
+        columns.Bound(p => p.Amount);
+
+    })
+    .DataSource(dataSource => dataSource.Ajax()
+        .Model(model =>
+        {
+            model.Id(p => p.ID);
+        })
+        .Read(read => read.Action("GetEventBudgetItem", "FINSCAVoucher").Data("filterEventBudgetNo"))
+        )
+    )
+</div>
+
+<script>
+    function GetEventBudgetItem(dataItem) {
+        $("#EventBudgetDetail").data("kendoGrid").dataSource.read();
+    }
+
+    function OnSelectEventBudgetNo(e) {
+        var dataItem = this.dataItem(e.item);
+        var url = "/FINSCAVoucher/GetEventBudget/" + dataItem.Value;
+        ClearControl();
+        $("#hdnEventBudgetNoID").val(dataItem.Value);
+        $.getJSON(url, function (result) {
+            $('#Currency').prop('value', result[0].Currency);
+            $('#TotalAmount').prop('value', result[0].TotalAmount);
+            $('#TotalAmountInWord').prop('value', result[0].TotalAmountInWord);
+            $('#Purpose').prop('value', result[0].Purpose);
+            $('#Project').prop('value', result[0].Project);
+            $('#ActivityName').prop('value', result[0].ActivityName);
+            $('#ActivityID').prop('value', result[0].ActivityID);
+            $('#Fund').prop('value', result[0].Fund);
+        });
+
+        GetEventBudgetItem(e.item);
+    }
+
+    function filterEventBudgetNo() {
+        return {
+            eventBudgetId: $("#hdnEventBudgetNoID").val()
+        };
+    }
+    function ClearControl() {
+        $('#Currency').prop('value', '');
+        $('#TotalAmount').prop('value', '');
+        $('#TotalAmountInWord').prop('value', '');
+        $('#Purpose').prop('value', '');
+        $('#Project').prop('value', '');
+        $('#Activity').prop('value', '');
+        $('#Fund').prop('value', '');
+    }
+</script>

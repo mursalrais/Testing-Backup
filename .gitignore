@@ -226,3 +226,5 @@ MCAWebAndAPI.Web/Resources/EmailResource1.Designer.cs
 /MCAWebAndAPI.Model/ViewModel/Form/Finance/TaxExemptionDataVM.cs
 /MCAWebAndAPI.Web/Controllers/Finance/FINRequisitionNoteController.cs
 /MCAWebAndAPI.Model/Common/DateTimeExtensions.cs.bak
+/MCAWebAndAPI.Web/logs/logfile.txt
+/packages
