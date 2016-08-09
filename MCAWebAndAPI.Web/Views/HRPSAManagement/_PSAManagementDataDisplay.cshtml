@@ -21,9 +21,9 @@
         </div>
     </div>
     <div class="form-group">
-        @Html.Bootstrap().LabelFor(m => m.Professional).Class("col-md-4 control-label")
+        @Html.Bootstrap().LabelFor(m => m.ProfessionalFullName).Class("col-md-4 control-label")
         <div class="col-md-8">
-            @Html.DisplayFor(m => m.Professional)
+            @Html.DisplayFor(m => m.ProfessionalFullName)
         </div>
     </div>
     <div class="form-group">
@@ -73,4 +73,5 @@
 @Html.HiddenFor(m => m.RenewalNumber)
 @Html.HiddenFor(m => m.PSAExpiryDate)
 @Html.HiddenFor(m => m.Position)
+@Html.HiddenFor(m => m.Professional)
 
