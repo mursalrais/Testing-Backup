@@ -286,11 +286,47 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to /SitePages/Professional%20Performance%20Evaluation%20Approver.aspx.
+        /// </summary>
+        public static string ProfessionalPerformanceEvaluationApprover {
+            get {
+                return ResourceManager.GetString("ProfessionalPerformanceEvaluationApprover", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to /SitePages/Professional%20Performance%20Evaluation%20HR.aspx.
+        /// </summary>
+        public static string ProfessionalPerformanceEvaluationHR {
+            get {
+                return ResourceManager.GetString("ProfessionalPerformanceEvaluationHR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to /Lists/ProfessionalPerformancePlan.
         /// </summary>
         public static string ProfessionalPerformancePlan {
             get {
                 return ResourceManager.GetString("ProfessionalPerformancePlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to /SitePages/Professional%20Perfromance%20Plan%20Approver.aspx.
+        /// </summary>
+        public static string ProfessionalPerformancePlanApprover {
+            get {
+                return ResourceManager.GetString("ProfessionalPerformancePlanApprover", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to /SitePages/Professional%20Perfromance%20Plan%20HR.aspx.
+        /// </summary>
+        public static string ProfessionalPerformancePlanHR {
+            get {
+                return ResourceManager.GetString("ProfessionalPerformancePlanHR", resourceCulture);
             }
         }
         

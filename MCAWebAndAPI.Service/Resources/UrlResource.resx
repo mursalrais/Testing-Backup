@@ -224,4 +224,16 @@
   <data name="AssetAcquisition" xml:space="preserve">
     <value>/Lists/Asset%20Acquisition/AllItems.aspx</value>
   </data>
+  <data name="ProfessionalPerformanceEvaluationApprover" xml:space="preserve">
+    <value>/SitePages/Professional%20Performance%20Evaluation%20Approver.aspx</value>
+  </data>
+  <data name="ProfessionalPerformanceEvaluationHR" xml:space="preserve">
+    <value>/SitePages/Professional%20Performance%20Evaluation%20HR.aspx</value>
+  </data>
+  <data name="ProfessionalPerformancePlanApprover" xml:space="preserve">
+    <value>/SitePages/Professional%20Perfromance%20Plan%20Approver.aspx</value>
+  </data>
+  <data name="ProfessionalPerformancePlanHR" xml:space="preserve">
+    <value>/SitePages/Professional%20Perfromance%20Plan%20HR.aspx</value>
+  </data>
 </root>
