@@ -179,7 +179,7 @@ namespace MCAWebAndAPI.Web.Controllers
              
             if (viewModel.StatusForm != "Draft")
             {
-                if (viewModel.StatusForm == "")
+                if (viewModel.StatusForm == " ")
                 {
                     // BEGIN Workflow Demo 
                     Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateTransactionWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,

@@ -19,6 +19,7 @@
         @Html.HiddenFor(m => m.cmpName)
         @Html.HiddenFor(m => m.cmpPosition)
         @Html.HiddenFor(m => m.Requestor)
+        @Html.HiddenFor(m => m.StatusForm)
         <input type="hidden" id="loadpage" value="0">
         <div class="row">
             <div class="form-group">
@@ -40,7 +41,7 @@
         <div class="col-sm-12">
             <div class="form-group" id="ParentDiv">
                 <div class="col-sm-8">
-                    @Html.DisplayFor(m => m.StatusForm)
+                    <input id="Status" class="form-control" value="" />
                 </div>
             </div>
         </div>
@@ -119,7 +120,7 @@
 
                     function OnChangeProffesional(e) {
                         var dataItem = this.dataItem(e.item);
-                      
+
                     };
 
         $(document).ready(function () {
@@ -135,6 +136,10 @@
                         var nameProf = $("#cmpName").val() + " - " + $("#cmpPosition").val()
                         $("#ProfName").prop("value", nameProf);
                         $("#ProfName").prop('readonly', 'true');
+
+                        var stat = $("#StatusForm").val();
+                        $("#Status").prop("value", stat);
+                        $("#Status").prop('readonly', 'true');
 
                         var cmpId = $("#cmpID").val();
 
@@ -158,12 +163,12 @@
                         });
 
                         $("#submitonly-button").click(function () {
-                            $("#StatusForm").val("submit")
+                            $("#StatusForm").prop("value", "submit");
                             $("form").submit();
                         });
 
                         $("#submit-button").click(function () {
-                            $("#StatusForm").val("")
+                            $("#StatusForm").prop("value", " ");
                             $("form").submit();
                         });
 

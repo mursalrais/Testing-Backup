@@ -498,7 +498,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             int? ID = header.cmpID;
 
-            if (header.StatusForm == "")
+            if (header.StatusForm == " ")
             {
                 columnValues.Add("crstatus", "Pending Approval 1 of 2");
             }
