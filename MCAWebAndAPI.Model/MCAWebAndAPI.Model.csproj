@@ -223,6 +223,7 @@
     <Compile Include="ViewModel\Form\HR\FeeSlipDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\FeeSlipVM.cs" />
     <Compile Include="ViewModel\Form\HR\IndividualGoalDetailVM.cs" />
+    <Compile Include="ViewModel\Form\HR\MedicalCheckUpVM.cs" />
     <Compile Include="ViewModel\Form\HR\PayrollRunVM.cs" />
     <Compile Include="ViewModel\Form\HR\PayrollWorksheetDraftVM.cs" />
     <Compile Include="ViewModel\Form\HR\ViewInsuranceProfessionalVM.cs" />

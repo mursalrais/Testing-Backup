@@ -1,0 +1,20 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model MedicalCheckUpVM
+
+
+@Html.HiddenFor(m => m.URL)
+@section scripts{
+    <script type="text/javascript">
+
+
+        $(document)
+            .ready(function() {
+
+               window.top.location.href = $("#URL").val();
+
+
+            });
+
+
+    </script>
+}

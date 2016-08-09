@@ -1,0 +1,198 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model MedicalCheckUpVM
+
+
+@using (Html.BeginForm("", "HRMedicalCheckUp", FormMethod.Post,
+                            new
+                            {
+                                @class = "form-horizontal",
+                                enctype = "multipart/form-data"
+                            }))
+
+
+
+{
+    <fieldset>
+
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary()
+        @Html.HiddenFor(m => m.ProfessionalTextName)
+        @Html.HiddenFor(m => m.ProfessionalID)
+        @Html.HiddenFor(m => m.UserPermission)
+        @Html.HiddenFor(m => m.ClaimStatus)
+        @Html.HiddenFor(m => m.VisibleTo)
+        @Html.HiddenFor(m => m.OfficeEmail)
+        <div class="col-sm-6">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.ClaimDate).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.ClaimDate)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.ProfessionalName).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.ProfessionalName)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Unit).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.Unit)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Position).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.Position)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Description).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.Description)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.UnitQty).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.UnitQty)
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.WBS).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.WBS)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.GL).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.GL)
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Amount).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.Amount)
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Remarks).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.Remarks)
+                </div>
+            </div>
+
+        </div>
+
+
+
+
+    </fieldset>
+}
+   
+    <div class="form-actions">
+        <div class="row">
+            <div class="col-sm-12">
+                <button id="submit-button" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    Submit
+                </button>
+                <button id="save-button" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    Save
+                </button>
+            </div>
+        </div>
+    </div>
+
+@section scripts{
+    <script type="text/javascript">
+     
+
+        
+
+        $(document)
+            .ready(function () {
+
+                var professional = $("#ProfessionalName_Value").data("kendoDropDownList");
+                var strPermission = $("#UserPermission").val();
+                if (strPermission !== "HR") {
+                    professional.enable(false);
+                }
+
+                $("#save-button")
+                    .click(function() {
+
+                        // var defaultyear = kendo.toString($("#ClaimDate").data("kendoDatePicker").value(), 'yyyy');
+
+                        var url = "/HRMedicalCheckUp/GetMedicalYear/" + dataItem.ID;
+
+                        $.getJSON(url, function (result) {
+                            if (result.length == 0) {
+                                $('#ProjectUnit').prop('value', "");
+                                $('#Position').prop('value', "");
+                                $('#JoinDate').prop('value', "");
+                                $('#DateOfNewPsa').prop('value', "");
+                                $('#EndOfContract').prop('value', "");
+                                alert("Professional Doesn't Have PSA");
+                            }
+                            else {
+                                $('#ProjectUnit').prop('value', result[0].ProjectOrUnit);
+                                $('#Position').prop('value', result[0].Position);
+                                $('#JoinDate').prop('value', result[0].JoinDate);
+                                $('#DateOfNewPsa').prop('value', result[0].DateOfNewPSA);
+                                $('#EndOfContract').prop('value', result[0].PsaExpiryDate);
+                            }
+                        })
+
+
+                            $("#ClaimStatus").val("Draft");
+                            $('form').prop('action', '/HRMedicalCheckUp/SubmitMedical');
+                            $("form").submit();
+
+                    });
+
+                $("#submit-button")
+                    .click(function() {
+
+                            $("#ClaimStatus").val("Submitted");
+                            $('form').prop('action', '/HRMedicalCheckUp/SubmitMedical');
+                            $("form").submit();
+                        
+                    });
+
+
+            });
+
+       
+
+
+      
+
+        function OnSelectProfessionalName(e) {
+            var dataItem = this.dataItem(e.item);
+            var url = "/HRDataMaster/GetProfessional/" + dataItem.ID;
+
+            $.getJSON(url,
+                function (result) {
+                    
+                    $('#OfficeEmail').prop('value', result[0].OfficeEmail);
+                    $('#Unit').prop('value', result[0].Project_Unit);
+                    $('#Position').prop('value', result[0].Position);
+                    $('#ProfessionalTextName').prop('value', result[0].Name);
+                    $('#ProfessionalID').prop('value', result[0].ID);
+                });
+        }
+
+
+    </script>
+}
