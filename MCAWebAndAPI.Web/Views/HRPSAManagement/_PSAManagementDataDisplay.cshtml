@@ -33,9 +33,9 @@
         </div>
     </div>
     <div class="form-group">
-        @Html.Bootstrap().LabelFor(m => m.Position).Class("col-md-4 control-label")
+        @Html.Bootstrap().LabelFor(m => m.PositionBasedProject).Class("col-md-4 control-label")
         <div class="col-md-8">
-            @Html.DisplayFor(m => m.Position)
+            @Html.DisplayFor(m => m.PositionBasedProject)
         </div>
     </div>
     <div class="form-group">
@@ -57,9 +57,9 @@
         </div>
     </div>
     <div class="form-group">
-        @Html.Bootstrap().LabelFor(m => m.PSAExpiryDate).Class("col-md-4 control-label")
+        @Html.Bootstrap().LabelFor(m => m.PSAExpiryDates).Class("col-md-4 control-label")
         <div class="col-md-8">
-            @Html.DisplayFor(m => m.PSAExpiryDate)
+            @Html.DisplayFor(m => m.PSAExpiryDates)
         </div>
     </div>
     <div class="form-group">
@@ -71,10 +71,6 @@
 </div>
 
 @Html.HiddenFor(m => m.RenewalNumber)
+@Html.HiddenFor(m => m.PSAExpiryDate)
+@Html.HiddenFor(m => m.Position)
 
-@section scripts{
-    <script type="text/javascript">
-
-        
-    </script>
-}

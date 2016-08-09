@@ -1,0 +1,69 @@
+﻿@model MCAWebAndAPI.Model.ViewModel.Form.Finance.TaxExemptionDataVM
+
+<div class="form-group">
+    @Html.Bootstrap().LabelFor(m => m.TypeOfWithHoldingTax).Class("col-md-4 control-label")
+    <div class="col-md-8">
+        @Html.EditorFor(m => m.TypeOfWithHoldingTax)
+    </div>
+</div>
+<div class="form-group">
+    @Html.Bootstrap().LabelFor(m => m.TaxPeriod).Class("col-md-4 control-label")
+    <div class="col-md-8">
+        @Html.EditorFor(m => m.TaxPeriod)
+    </div>
+</div>
+<div class="form-group">
+    @Html.Bootstrap().LabelFor(m => m.TotalIncomeRecepients).Class("col-md-4 control-label")
+    <div class="col-md-8">
+        @Html.EditorFor(m => m.TotalIncomeRecepients)
+    </div>
+</div>
+<div class="form-group">
+    @Html.Bootstrap().LabelFor(m => m.GrossIncome).Class("col-md-4 control-label")
+    <div class="col-md-8">
+        @Html.EditorFor(m => m.GrossIncome)
+    </div>
+</div>
+<div class="form-group">
+    @Html.Bootstrap().LabelFor(m => m.TotalIncomeTaxBorneByGovernment).Class("col-md-4 control-label")
+    <div class="col-md-8">
+        @Html.EditorFor(m => m.TotalIncomeTaxBorneByGovernment)
+    </div>
+</div>
+<div class="form-group">
+    @Html.Bootstrap().LabelFor(m => m.Remarks).Class("col-md-4 control-label")
+    <div class="col-md-8">
+        @Html.EditorFor(m => m.Remarks)
+    </div>
+</div>
+<div class="form-group">
+    @Html.Bootstrap().LabelFor(m => m.Documents).Class("col-md-4 control-label")
+    <div class="col-md-8">
+        @Html.EditorFor(m => m.Documents)
+    </div>
+</div>
+
+@* Partially implemented, waiting for complete implementation in requisition note *@
+@if (!string.IsNullOrWhiteSpace(Model.DocumentUrl))
+            {
+    <div class="form-group">
+        <div class="col-sm-6">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    <button id="application-document-button" class="btn btn-default" type="button">
+                        Click Here to go to Tax Income Document Attachments
+                    </button>
+                </div>
+            </div>
+        </div>
+        <script>
+                $('#application-document-button').click(function () {
+                    this.postMessage({
+                        result : "Success", urlToRedirect : "@Model.DocumentUrl" }, "@Model.DocumentUrl" );
+                });
+        </script>
+    </div>
+}
+
+@Html.HiddenFor(m => m.ID)

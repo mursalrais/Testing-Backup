@@ -271,17 +271,25 @@
 
                     var dateOfNewPSA = $("#DateOfNewPSA").val();
                     var dateofnewpsa = new Date(dateOfNewPSA);
+
                     var monthpsa = dateofnewpsa.getMonth();
                     var monthint = parseInt(monthpsa);
                     var datepsa = dateofnewpsa.getDate();
                     var tenure = $("#Tenure").val();
+                    var tenureint = parseInt(tenure);
 
                     var tenureint = parseInt(tenure);
                     var addtenure = tenureint + monthint;
-                    var setmonth = new Date(dateofnewpsa.setMonth(addtenure));
-                    var psaexpirydate = setmonth.getMonth() + 1 + '/' + setmonth.getDate() + '/' + setmonth.getFullYear();
+                    
+                    var setmonth = new Date(dateofnewpsa.setMonth(dateofnewpsa.getMonth() + tenureint))
+                    var setdate = new Date(dateofnewpsa.setDate(setmonth.getDate() - 1));
+                    
+                    var psaexpirydates = (setdate.getMonth() + 1) + '/' + (setdate.getDate()) + '/' + setdate.getFullYear();
+                    var psaexpirydate = (setmonth.getMonth() + 1) + '/' + (setmonth.getDate()) + '/' + setmonth.getFullYear();
 
+                    
                     $("#PSAExpiryDate").val(psaexpirydate);
+                    $("#PSAExpiryDates").val(psaexpirydates);
                     $("#LastWorkingDate").val(psaexpirydate);
 
                     var datepsa = $("#DateOfNewPSA").val();
@@ -377,6 +385,11 @@
                 
            }
 
-                       
+           function filterProjectUnit() {
+               return {
+                   ProjectUnit: $("#ProjectOrUnit_Value").val()
+               };
+           }
+           
         </script>
     }

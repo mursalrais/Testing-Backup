@@ -92,8 +92,7 @@
                     $("form").submit();
                 }
             }
-            else
-            {
+            else            {
                 $("form").submit();
             }
         }
@@ -189,28 +188,50 @@
 
 
             $(document).ready(function () {
-
-                $("#Tenure").on('input', function () {
-                    sumCal();
+                $("#Tenure").kendoNumericTextBox({
+                    change: onChange,
+                    spin: onSpin
                 });
+
+                function onChange() {
+                    sumCal();
+                }
+
+                function onSpin() {
+                    sumCal();
+                }
 
                 function sumCal() {
 
                     var dateOfNewPSA = $("#DateOfNewPSA").val();
                     var dateofnewpsa = new Date(dateOfNewPSA);
+
                     var monthpsa = dateofnewpsa.getMonth();
                     var monthint = parseInt(monthpsa);
                     var datepsa = dateofnewpsa.getDate();
-
                     var tenure = $("#Tenure").val();
                     var tenureint = parseInt(tenure);
+
+                    var tenureint = parseInt(tenure);
                     var addtenure = tenureint + monthint;
+                    
+                    var setmonth = new Date(dateofnewpsa.setMonth(dateofnewpsa.getMonth() + tenureint))
+                    var setdate = new Date(dateofnewpsa.setDate(setmonth.getDate() - 1));
+                    console.log(setmonth);
+                    console.log(setdate);
 
-                    var setmonth = new Date(dateofnewpsa.setMonth(addtenure));
+                    var psaexpirydates = (setdate.getMonth() + 1) + '/' + (setdate.getDate()) + '/' + setdate.getFullYear();
+                    var psaexpirydate = (setmonth.getMonth() + 1) + '/' + (setmonth.getDate()) + '/' + setmonth.getFullYear();
 
-                    var psaexpirydate = setmonth.getMonth() + 1 + '/' + setmonth.getDate() + '/' + setmonth.getFullYear();
                     $("#PSAExpiryDate").val(psaexpirydate);
+                    $("#PSAExpiryDates").val(psaexpirydates);
                     $("#LastWorkingDate").val(psaexpirydate);
+
+                    var datepsa = $("#DateOfNewPSA").val();
+                    var dateofnewpsabefore = $("#DateOfNewPSABefore").val();
+                    var expirydate = $("#DateOfNewPSABefore").val();
+                    var expiredatebefore = $("#ExpireDateBefore").val();
+
                 }
 
             });
@@ -242,14 +263,7 @@
 
            function isrenewalChanged() {
 
-               /*
-               if ($("#IsRenewal_Value").val() == "No")
-                {
-
-                    $("#PSARenewalNumber").prop("readonly", "true");
-                    $("#PSARenewalNumber").prop("value", 0);
-                }
-                */
+               
                if ($("#IsRenewal_Value").val() == "Yes")
                 {
                     $("#PSARenewalNumber").prop("readonly", "true");
@@ -303,46 +317,12 @@
 
            });
 
-           //function onSelectPSA(e) {
 
-           //    $.each(e.files, function (index, value) {
-                   
-           //        if ($("#KeyPositionValue").val() == "Yes")
-           //        {
-           //            if ((index == 0))
-           //            {
-           //                if (value.name.indexOf("MCCNoObjectionLetter") < 0)
-           //                {
-           //                    alert("You Must Upload MCCNoObjectionLetter Document");
-           //                    e.preventDefault();
-           //                }
-           //                if (value.name.indexOf("MCCNoObjectionLetter") >= 0)
-           //                {
-           //                    //Hanya Untuk Testing
-           //                    alert("MCCNoObjectionLetter already exist");
-           //                    e.preventDefault();
-           //                }
-           //            }
-           //            if(index == 1)
-           //            {
-           //                if (value.name.indexOf("PSADocument") < 0)
-           //                {
-           //                    alert("You Must Upload PSADocument Document");
-           //                    e.preventDefault();
-           //                }
-           //                if (value.name.indexOf("PSADocument") >= 0)
-           //                {
-           //                    //Hanya Untuk Testing
-           //                    alert("PSADocument already exist");
-           //                    e.preventDefault();
-           //                }
-           //            }
-           //        }
-
-           //    });
-
-           //}
-
+           function filterProjectUnit() {
+               return {
+                   ProjectUnit: $("#ProjectOrUnit_Value").val()
+               };
+           }
 
     </script>
 }
