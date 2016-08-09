@@ -17,6 +17,7 @@ using MCAWebAndAPI.Service.Converter;
 using Elmah;
 using System.Threading.Tasks;
 using System.Web;
+using MCAWebAndAPI.Service.Utils;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -57,7 +58,7 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewmodel);
         }
          
-        public ActionResult InputCompensatoryHR(string siteurl = null, int? iD = null, string userAccess = null)
+        public ActionResult InputCompensatoryHR(string siteurl = null, int? iD = null, string userAccess = null, string accesstype = null)
         {
             var viewmodel = new CompensatoryVM();
 
@@ -84,7 +85,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             string position = _service.GetPosition(userAccess);
 
-            if (position.Contains("HR"))
+            if (position.Contains("HR") || accesstype == "app")
                 return View("InputCompensatoryHR", viewmodel);
 
 
@@ -175,19 +176,26 @@ namespace MCAWebAndAPI.Web.Controllers
             {
                 _service.UpdateHeader(viewModel);
             }
-
-            if (viewModel.StatusForm == "Pending Approval 1 of 2")
+             
+            if (viewModel.StatusForm != "Draft")
             {
-                // Send to Level 1 Approver
-                Task sendApprovalRequestTask = WorkflowHelper.SendApprovalRequestAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
-                   SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)cmpID, 1,
-                    string.Format(EmailResource.ManpowerApproval, siteUrl, cmpID));
-            }
+                if (viewModel.StatusForm == "")
+                {
+                    // BEGIN Workflow Demo 
+                    Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateTransactionWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
+                    SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)cmpID);
 
-            if (viewModel.StatusForm != "DraftInitiated")
-            {
-                Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateTransactionWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
-                    SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.cmpID);
+                    // Send to Level 1 & 2 Approver
+                    _service.SendEmail(SP_TRANSACTION_WORKFLOW_LIST_NAME, SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)cmpID, 1, string.Format(EmailResource.EmailCompensatoryApproval, siteUrl, cmpID));
+                }
+                else if (viewModel.StatusForm == "Pending Approval 1 of 2")
+                {
+                    EmailUtil.Send(viewModel.cmpEmail, "Ask for Approval", string.Format(EmailResource.EmailCompensatoryRequestor, siteUrl, cmpID));
+                }
+                else if (viewModel.StatusForm == "Pending Approval 2 of 2")
+                {
+                    EmailUtil.Send(viewModel.cmpEmail, "Ask for Approval", string.Format(EmailResource.EmailCompensatoryRequestor, siteUrl, cmpID));
+                }
             }
 
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.Compensatory);

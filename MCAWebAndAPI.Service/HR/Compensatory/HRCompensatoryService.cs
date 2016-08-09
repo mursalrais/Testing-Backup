@@ -92,23 +92,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 viewModel.cmpYearDate = Convert.ToString(item["Created"]);
             }
 
-            if (crstatus == "")
-            {
-                var updatedValue = new Dictionary<string, object>();
-
-                updatedValue.Add("crstatus", "Pending Approval 1 of 2");
-
-                try
-                {
-                    SPConnector.UpdateListItem(SP_COMREQ_LIST_NAME, iD, updatedValue, _siteUrl);
-                }
-                catch (Exception e)
-                {
-                    logger.Error(e.Message);
-                    throw e;
-                }
-            }
-
             return GetComplisted(iD, profID, crstatus, viewModel);
         }
 
@@ -298,12 +281,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             var shortlistDetails = new List<CompensatoryDetailVM>();
             foreach (var item in SPConnector.GetList(SP_COMDET_LIST_NAME, _siteUrl, caml))
             {
-                shortlistDetails.Add(ConvertToCompDetailVM(item));
-                shortlistDetails.Add(new CompensatoryDetailVM
-                {
-                    CmpProjUnit = viewModel.cmpProjUnit,
-                    CmpPos = viewModel.cmpPosition
-                });
+                 shortlistDetails.Add(ConvertToCompDetailVM(item));
 
             }
 
@@ -367,70 +345,73 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             foreach (var viewModel in viewModels.CompensatoryDetails)
             {
-                if (Item.CheckIfUpdated(viewModel))
+                if (viewModel.CmpActiv != null)
                 {
-                    if (viewModel.CmpID == null)
+                    if (Item.CheckIfUpdated(viewModel))
                     {
-                        var cratedValueDetail = new Dictionary<string, object>();
+                        if (viewModel.CmpID == null)
+                        {
+                            var cratedValueDetail = new Dictionary<string, object>();
 
-                        cratedValueDetail.Add("compensatoryrequest", cmpID);
-                        cratedValueDetail.Add("Title", viewModel.CmpActiv);
-                        cratedValueDetail.Add("compensatorydate", viewModel.CmpDate);
-                        cratedValueDetail.Add("compensatorystarttime", viewModel.StartTime);
-                        cratedValueDetail.Add("compensatoryendtime", viewModel.FinishTime);
-                        cratedValueDetail.Add("totalhours", viewModel.CmpTotalHours);
-                        cratedValueDetail.Add("totaldays", viewModel.TotalDay);
-                        cratedValueDetail.Add("remarks", viewModel.remarks);
+                            cratedValueDetail.Add("compensatoryrequest", cmpID);
+                            cratedValueDetail.Add("Title", viewModel.CmpActiv);
+                            cratedValueDetail.Add("compensatorydate", viewModel.CmpDate);
+                            cratedValueDetail.Add("compensatorystarttime", viewModel.StartTime);
+                            cratedValueDetail.Add("compensatoryendtime", viewModel.FinishTime);
+                            cratedValueDetail.Add("totalhours", viewModel.CmpTotalHours);
+                            cratedValueDetail.Add("totaldays", viewModel.TotalDay);
+                            cratedValueDetail.Add("remarks", viewModel.remarks);
 
+                            try
+                            {
+                                SPConnector.AddListItem(SP_COMDET_LIST_NAME, cratedValueDetail, _siteUrl);
+                            }
+                            catch (Exception e)
+                            {
+                                logger.Error(e.Message);
+                                throw e;
+                            }
+                        }
+                        else
+                        {
+                            var updatedValue = new Dictionary<string, object>();
+
+                            updatedValue.Add("Title", viewModel.CmpActiv);
+                            updatedValue.Add("compensatoryrequest", viewModel.CmpHID);
+                            updatedValue.Add("compensatorydate", viewModel.CmpDate);
+                            updatedValue.Add("compensatorystarttime", viewModel.StartTime);
+                            updatedValue.Add("compensatoryendtime", viewModel.FinishTime);
+                            updatedValue.Add("totalhours", viewModel.CmpTotalHours);
+                            updatedValue.Add("totaldays", viewModel.TotalDay);
+                            updatedValue.Add("remarks", viewModel.remarks);
+
+                            try
+                            {
+                                SPConnector.UpdateListItem(SP_COMDET_LIST_NAME, viewModel.CmpID, updatedValue, _siteUrl);
+
+                            }
+                            catch (Exception e)
+                            {
+                                logger.Error(e.Message);
+                                throw e;
+                            }
+                        }
+                        continue;
+                    }
+
+                    if (Item.CheckIfDeleted(viewModel))
+                    {
                         try
                         {
-                            SPConnector.AddListItem(SP_COMDET_LIST_NAME, cratedValueDetail, _siteUrl);
+                            SPConnector.DeleteListItem(SP_COMDET_LIST_NAME, viewModel.CmpID, _siteUrl);
                         }
                         catch (Exception e)
                         {
-                            logger.Error(e.Message);
+                            logger.Error(e);
                             throw e;
                         }
+                        continue;
                     }
-                    else
-                    {
-                        var updatedValue = new Dictionary<string, object>();
-
-                        updatedValue.Add("Title", viewModel.CmpActiv);
-                        updatedValue.Add("compensatoryrequest", viewModel.CmpHID);
-                        updatedValue.Add("compensatorydate", viewModel.CmpDate);
-                        updatedValue.Add("compensatorystarttime", viewModel.StartTime);
-                        updatedValue.Add("compensatoryendtime", viewModel.FinishTime);
-                        updatedValue.Add("totalhours", viewModel.CmpTotalHours);
-                        updatedValue.Add("totaldays", viewModel.TotalDay);
-                        updatedValue.Add("remarks", viewModel.remarks);
-
-                        try
-                        {
-                            SPConnector.UpdateListItem(SP_COMDET_LIST_NAME, viewModel.CmpID, updatedValue, _siteUrl);
-
-                        }
-                        catch (Exception e)
-                        {
-                            logger.Error(e.Message);
-                            throw e;
-                        }
-                    }
-                    continue;
-                }
-
-                if (Item.CheckIfDeleted(viewModel))
-                {
-                    try
-                    {
-                        SPConnector.DeleteListItem(SP_COMDET_LIST_NAME, viewModel.CmpID, _siteUrl);
-                    }
-                    catch (Exception e)
-                    {
-                        logger.Error(e);
-                        throw e;
-                    }
-                    continue;
                 }
             }
         }
@@ -516,6 +497,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             var columnValues = new Dictionary<string, object>();
 
             int? ID = header.cmpID;
+
+            if (header.StatusForm == "")
+            {
+                columnValues.Add("crstatus", "Pending Approval 1 of 2");
+            }
 
             if (header.StatusForm == "Draft")
             {
@@ -607,6 +593,28 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 position = "";
             }
             return position;
+        }
+
+        public void SendEmail(string workflowTransactionListName,
+            string transactionLookupColumnName, int headerID, int level, string message)
+        {
+            var caml = @"<View>  
+            <Query> 
+               <Where><And><Eq><FieldRef Name='" + transactionLookupColumnName + @"' />
+               <Value Type='Lookup'>" + headerID + @"</Value></Eq><Eq>
+               <FieldRef Name='approverlevel' /><Value Type='Choice'>" + level + @"</Value></Eq></And></Where> 
+            </Query> 
+            </View>";
+
+            var emails = new List<string>();
+            foreach (var item in SPConnector.GetList(workflowTransactionListName, _siteUrl, caml))
+            {
+                emails.Add(Convert.ToString(item["approver0"]));
+            }
+            foreach (var item in emails)
+            {
+                EmailUtil.Send(item, "Ask for Approval", message);
+            }
         }
     }
 }

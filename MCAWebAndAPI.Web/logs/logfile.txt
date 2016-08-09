@@ -217,3 +217,6 @@ Parameter name: source
 Parameter name: source
    at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in D:\iMa\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 195
    at MCAWebAndAPI.Service.Asset.AssetAcquisitionService.UpdateDetails(Nullable`1 headerID, IEnumerable`1 items) in D:\iMa\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetAcquisitionService.cs:line 249
+2016-08-05 09:46:26.8069 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Item does not exist. It may have been deleted by another user.
+2016-08-05 09:48:03.5587 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Item does not exist. It may have been deleted by another user.
+2016-08-05 09:54:13.0397 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Item does not exist. It may have been deleted by another user.
