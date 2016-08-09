@@ -215,7 +215,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             // Populate rows
             worksheet.PopulateRows(dateRange, professionalIDs);
 
-            // Populate columns
+            // Make sure all required data have been populated
             try
             {
                 await Task.WhenAll(populateProfessionalTask, populateValidPSATask, populateProfessionalMonthlyFeeTask);
@@ -225,6 +225,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
                 logger.Error(e);
             }
 
+            // Populate columns
             var populateColumnTask = worksheet.PopulateColumns();
 
             // If worksheet mode
@@ -237,6 +238,11 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             return worksheet;
         }
 
+        /// <summary>
+        /// Run payroll in Background for given period. The result is stored in the given filePath
+        /// </summary>
+        /// <param name="period"></param>
+        /// <param name="filePath"></param>
         public void SavePayrollWorksheetDetailInBackground(DateTime period, string filePath)
         {
             var viewModel = GetPayrollWorksheetDetailsAsync(period, false);

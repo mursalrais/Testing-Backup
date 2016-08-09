@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 using MCAWebAndAPI.Model.ViewModel.Control;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using MCAWebAndAPI.Model.Common;
 
 namespace MCAWebAndAPI.Model.HR.DataMaster
 {
-    public class ProfessionalMaster
+    public class ProfessionalMaster : Item
     {
-        public int ID { get; set; }
-
         public string Name { get; set; }
 
         public string FirstMiddleName { get; set; }
+        
 
         public string Position { get; set; }
 
