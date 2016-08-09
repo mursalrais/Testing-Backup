@@ -252,6 +252,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.StrPSARenewal = Convert.ToString(listItem["renewalnumber"]);
             viewModel.ProjectOrUnit.Value = Convert.ToString(listItem["ProjectOrUnit"]);
             viewModel.Professional.Text = FormatUtil.ConvertLookupToValue(listItem, "professional");
+            viewModel.ProfessionalFullName = Convert.ToString(listItem["professionalfullname"]);
             viewModel.PositionBasedProject.Text = FormatUtil.ConvertLookupToValue(listItem, "position");
             viewModel.JoinDate = Convert.ToDateTime(listItem["joindate"]).ToLocalTime();
             viewModel.DateOfNewPSA = Convert.ToDateTime(listItem["dateofnewpsa"]).ToLocalTime();
