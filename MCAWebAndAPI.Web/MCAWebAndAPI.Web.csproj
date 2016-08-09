@@ -16,7 +16,7 @@
     <RootNamespace>MCAWebAndAPI.Web</RootNamespace>
     <AssemblyName>MCAWebAndAPI.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -904,6 +904,17 @@
     <Content Include="Views\HRMedicalCheckUp\Redirect.cshtml" />
     <Content Include="Views\HRMedicalCheckUp\EditMedical.cshtml" />
     <Content Include="Views\HRMedicalCheckUp\DisplayMedical.cshtml" />
+    <Content Include="Views\FINOutstandingAdvance\Create.cshtml" />
+    <Content Include="Views\FINPettyCashPaymentVoucher\Create.cshtml" />
+    <Content Include="Views\FINPettyCashPaymentVoucher\Edit.cshtml" />
+    <Content Include="Views\FINPettyCashPaymentVoucher\Print.cshtml" />
+    <Content Include="Views\FINPettyCashReimbursement\Create.cshtml" />
+    <Content Include="Views\FINRequisitionNote\Create.cshtml" />
+    <Content Include="Views\FINRequisitionNote\Edit.cshtml" />
+    <Content Include="Views\FINRequisitionNote\Print.cshtml" />
+    <Content Include="Views\FINTaxExemptionData\_Income.cshtml" />
+    <Content Include="Views\FINTaxExemptionData\_Others.cshtml" />
+    <Content Include="Views\FINTaxExemptionData\_VAT.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -931,12 +942,18 @@
     <Compile Include="Controllers\ASSLocationMasterController.cs" />
     <Compile Include="Controllers\BIEmbedController.cs" />
     <Compile Include="Controllers\CalendarEventController.cs" />
+    <Compile Include="Controllers\ComboBoxController.cs" />
     <Compile Include="Controllers\CSVController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\FileController.cs" />
     <Compile Include="Controllers\FINEventBudgetController.cs" />
+    <Compile Include="Controllers\FINOutstandingAdvanceController.cs" />
+    <Compile Include="Controllers\FINPettyCashPaymentVoucherController.cs" />
+    <Compile Include="Controllers\FINPettyCashReimbursementController.cs" />
+    <Compile Include="Controllers\FINPettyCashSettlementController.cs" />
     <Compile Include="Controllers\FINRequisitionNoteController.cs" />
     <Compile Include="Controllers\FINSCAVoucherController.cs" />
+    <Compile Include="Controllers\FinSharedController.cs" />
     <Compile Include="Controllers\FINSPHLController.cs" />
     <Compile Include="Controllers\FINTaxExemptionDataController.cs" />
     <Compile Include="Controllers\FINTaxReimbursementController.cs" />
@@ -973,7 +990,6 @@
     </Compile>
     <Compile Include="Helpers\BindHelper.cs" />
     <Compile Include="Helpers\CsHtmlRazorViewEngine.cs" />
-    <Compile Include="Helpers\FileHelper.cs" />
     <Compile Include="Helpers\HtmlExtensions.cs" />
     <Compile Include="Helpers\JsonHelper.cs" />
     <Compile Include="Helpers\JsonpResult.cs" />
