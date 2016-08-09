@@ -22,6 +22,6 @@ namespace MCAWebAndAPI.Service.HR.MedicalCheckUp
 
         MedicalCheckUpVM GetMedical(int? ID, string useremail = null);
 
-       IEnumerable<MedicalCheckUpVM> GetMedicalByYear(string strYear, string useremail);
+       IEnumerable<MedicalCheckUpVM> GetMedicalByUser(int? ID);
     }
 }

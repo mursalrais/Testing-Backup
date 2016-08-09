@@ -123,7 +123,34 @@
     <script type="text/javascript">
      
 
-        
+        function save(status) {
+            var defaultyear = kendo.toString($("#ClaimDate").data("kendoDatePicker").value(), 'yyyy');
+
+            var strUserId = $("#ProfessionalID").val();
+            var url = "/HRMedicalCheckUp/GetMedicalYear/" + strUserId;
+
+            $.getJSON(url,
+                function (result) {
+                    if (result.length === 0) {
+                        $("#ClaimStatus").val(status);
+                        $('form').prop('action', '/HRMedicalCheckUp/SubmitMedical');
+                        $("form").submit();
+                    } else {
+                        for (var i = 0; i <= result.length - 1; i++) {
+                            if (defaultyear === result[i].Year) {
+                                alert('Sorry, Your Medical Check-Up for this period has been claimed. ' +
+                                    'Please process next claim in the next period. If there is any inconvenience process for this, ' +
+                                    'please contact HR Officer directly. Thank you');
+                                return;
+                            }
+                        }
+                        $("#ClaimStatus").val(status);
+                        $('form').prop('action', '/HRMedicalCheckUp/SubmitMedical');
+                        $("form").submit();
+                    }
+                });
+
+        }
 
         $(document)
             .ready(function () {
@@ -135,30 +162,29 @@
                 }
 
 
-                    if (strClaim !== "Draft") {
-                        $("#save-button").hide();
-                    }
-                    else if (strClaim === "Draft") {
-                        $("#print-button").hide();
-                    }
+                if (strClaim !== "Draft" && strPermission === "HR") {
+                    $("#save-button").hide();
+                }
+               else if (strClaim !== "Draft" && strPermission === "Professional") {
+                    $("#save-button").hide();
+                    $("#submit-button").hide();
+                }
+                else if (strClaim === "Draft") {
+                    $("#print-button").hide();
+                }
 
 
                 $("#save-button")
-                    .click(function() {
-
-                            $("#ClaimStatus").val("Draft");
-                            $('form').prop('action', '/HRMedicalCheckUp/UpdateMedical');
-                            $("form").submit();
+                    .click(function () {
+                        save('Draft');
 
                     });
 
                 $("#submit-button")
-                    .click(function() {
+                    .click(function () {
 
-                            $("#ClaimStatus").val("Submitted");
-                            $('form').prop('action', '/HRMedicalCheckUp/UpdateMedical');
-                            $("form").submit();
-                        
+                        save('Submitted');
+
                     });
 
 

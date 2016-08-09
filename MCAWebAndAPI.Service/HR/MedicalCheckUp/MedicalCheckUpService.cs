@@ -155,21 +155,18 @@ namespace MCAWebAndAPI.Service.HR.MedicalCheckUp
         
     }
 
-        public IEnumerable<MedicalCheckUpVM> GetMedicalByYear(string strYear, string useremail)
+        public IEnumerable<MedicalCheckUpVM> GetMedicalByUser(int? id)
         {
             var models = new List<MedicalCheckUpVM>();
 
           
-            var caml = @"<View><Query><Where><And>
-                        <Eq><FieldRef Name='officeemail' />
-                        <Value Type='Text'>" + useremail + "</Value></Eq>" +
-                        "<Eq><FieldRef Name='Year' /><Value Type='Text'>" + strYear +
-                       "</Value></Eq></And></Where></Query></View>";
+            var caml = @"<View><Query><Where><Eq><FieldRef Name='professional' />
+                        <Value Type='Lookup'>" + id +
+                       "</Value></Eq></Where></Query></View>";
 
             foreach (var item in SPConnector.GetList(SpMedicalListName, _siteUrl, caml))
             {
-                var detail = new MedicalCheckUpVM();
-                detail.ID = Convert.ToInt32(item["ID"]);
+                var detail = new MedicalCheckUpVM {ID = Convert.ToInt32(item["ID"]),Year = Convert.ToString(item["Year"]) };
                 models.Add(detail);
             }
 

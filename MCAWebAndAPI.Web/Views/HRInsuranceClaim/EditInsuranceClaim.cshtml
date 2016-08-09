@@ -5,7 +5,7 @@
     ViewBag.Title = "Form Edit Insurance Claim";
 }
 
-@using (Html.BeginForm("EditInsuranceClaim", "HRInsuranceClaim", FormMethod.Post,
+@using (Html.BeginForm("", "HRInsuranceClaim", FormMethod.Post,
                                                                                   new
                                                                                   {
                                                                                       @class = "form-horizontal",
@@ -149,6 +149,13 @@
 }
 @section scripts{
     <script type="text/javascript">
+        
+        function filterEventProfessionalID() {
+            return {
+                id: $("#ProfessionalName_Value").val()
+            };
+        }
+
         $(document)
             .ready(function () {
                 var strtype = $("#Type_Value").data("kendoDropDownList").text();
@@ -212,41 +219,41 @@
 
 
                 $("#save-button-byhr")
-                  .click(function () {
-                      var strtype = $("#Type_Value").data("kendoDropDownList").text();
-                      var strDependent = $("#DependantName_Value").data("kendoDropDownList").text();
+                    .click(function () {
+                        var strtype = $("#Type_Value").data("kendoDropDownList").text();
+                        var strDependent = $("#DependantName_Value").data("kendoDropDownList").text();
                      
 
-                      if (strtype === "Dependent" && strDependent === '') {
-                          alert('Dependent Name field is required');
-                      } else {
-                          $("#ClaimStatus").val("Draft");
-                          $('form').prop('action', '/HRInsuranceClaim/UpdateInsuranceClaim');
-                          $("form").submit();
-                      }
+                        if (strtype === "Dependent" && strDependent === '') {
+                            alert('Dependent Name field is required');
+                        } else {
+                            $("#ClaimStatus").val("Draft");
+                            $('form').prop('action', '/HRInsuranceClaim/UpdateInsuranceClaim');
+                            $("form").submit();
+                        }
 
-                  });
+                    });
 
                 $("#submit-by-byhr-button")
-                   .click(function () {
-                       var strtype = $("#Type_Value").data("kendoDropDownList").text();
-                       var strDependent = $("#DependantName_Value").data("kendoDropDownList").text();
-                       var strClaim = $("#ClaimStatusHR_Value").data("kendoDropDownList").text();
+                    .click(function () {
+                        var strtype = $("#Type_Value").data("kendoDropDownList").text();
+                        var strDependent = $("#DependantName_Value").data("kendoDropDownList").text();
+                        var strClaim = $("#ClaimStatusHR_Value").data("kendoDropDownList").text();
 
-                       if (strtype === "Dependent" && strDependent === '') {
-                           alert('Dependent Name field is required');
-                           return;
-                       }
-                       else if (strClaim === "") {
-                           alert('Claim Status field is required');
-                           return;
-                       }
-                       else {
-                           $('form').prop('action', '/HRInsuranceClaim/UpdateInsuranceClaim');
-                           $("form").submit();
-                       }
+                        if (strtype === "Dependent" && strDependent === '') {
+                            alert('Dependent Name field is required');
+                            return;
+                        }
+                        else if (strClaim === "") {
+                            alert('Claim Status field is required');
+                            return;
+                        }
+                        else {
+                            $('form').prop('action', '/HRInsuranceClaim/UpdateInsuranceClaim');
+                            $("form").submit();
+                        }
 
-                   });
+                    });
 
             });
 
@@ -254,11 +261,11 @@
             var dataItem = this.dataItem(e.item);
             var url = "/HRDataMaster/GetDependant/" + dataItem.ID;
             $('#IndividualInsuranceNumber').prop('value', '');
-           // $('#OrganizationInsuranceID').prop('value', '');
+            // $('#OrganizationInsuranceID').prop('value', '');
             $.getJSON(url,
                 function(result) {
                     $('#IndividualInsuranceNumber').prop('value', result[0].InsuranceNumber);
-                   // $('#OrganizationInsuranceID').prop('value', result[0].OrganizationInsurance);
+                    // $('#OrganizationInsuranceID').prop('value', result[0].OrganizationInsurance);
 
                 });
         }
@@ -268,7 +275,7 @@
             var dataItem = this.dataItem(e.item.index());
             var dependent = $("#DependantName_Value").data("kendoDropDownList");
             $('#IndividualInsuranceNumber').prop('value', '');
-           // $('#OrganizationInsuranceID').prop('value', '');
+            // $('#OrganizationInsuranceID').prop('value', '');
             if (dataItem === 'Professional') {
                 dependent.enable(false);
             } else {

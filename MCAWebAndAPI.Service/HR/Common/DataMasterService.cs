@@ -157,7 +157,8 @@ namespace MCAWebAndAPI.Service.HR.Common
                 ID = Convert.ToInt32(item["ID"]),
                 InsuranceNumber = Convert.ToString(item["insurancenr"]),
                 OrganizationInsurance = Convert.ToString(item["insurancenr"]),
-                Name = FormatUtil.ConvertLookupToValue(item, "professional")
+                Name = Convert.ToString(item["Title"])
+                //Name = FormatUtil.ConvertLookupToValue(item, "professional")
             };
         }
         public IEnumerable<DependentMaster> GetDependents()
@@ -184,7 +185,7 @@ namespace MCAWebAndAPI.Service.HR.Common
             return models;
         }
 
-        public IEnumerable<DependentMaster> GetDependentsForInsurance()
+        public IEnumerable<DependentMaster> GetDependentsForInsurance(int? id)
         {
             var models = new List<DependentMaster>();
 
@@ -196,7 +197,12 @@ namespace MCAWebAndAPI.Service.HR.Common
                 Name = ""
             };
             models.Add(_default);
-            foreach (var item in SPConnector.GetList(SP_PRODEP_LIST_NAME, _siteUrl))
+
+            var caml = @"<View><Query><Where><Eq><FieldRef Name='professional_x003a_ID' />
+                        <Value Type='Lookup'>" + id +
+                      "</Value></Eq></Where></Query></View>";
+
+            foreach (var item in SPConnector.GetList(SP_PRODEP_LIST_NAME, _siteUrl, caml))
             {
                 models.Add(ConvertToDependentModel_Light(item));
             }

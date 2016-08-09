@@ -109,29 +109,20 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
 
-        private IEnumerable<MedicalCheckUpVM> GetFromExistingSessionMedical(string strYear, string strEmail)
-        {
-            //Get existing session variable
-            var sessionVariable = System.Web.HttpContext.Current.Session["MedicalMaster"] as IEnumerable<MedicalCheckUpVM>;
-            var dependents = sessionVariable ?? _service.GetMedicalByYear(strYear, strEmail);
-
-            if (sessionVariable == null) // If no session variable is found
-                System.Web.HttpContext.Current.Session["MedicalMaster"] = dependents;
-            return dependents;
-        }
-
-
-        public JsonResult GetMedicalYear(string year)
+        public JsonResult GetMedicalYear(int? id)
         {
             _service.SetSiteUrl(System.Web.HttpContext.Current.Session["SiteUrl"] as string);
-            var medical = GetFromExistingSessionMedical(year.ToString(), "44");
+            var medical = _service.GetMedicalByUser(id);
             return Json(medical.Select(e =>
               new
               {
-                  e.ID
+                  e.ID,
+                   e.Year
 
               }),
               JsonRequestBehavior.AllowGet);
+
+
         }
 
     }

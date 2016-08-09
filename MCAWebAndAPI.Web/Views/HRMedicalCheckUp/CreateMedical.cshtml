@@ -118,7 +118,34 @@
     <script type="text/javascript">
      
 
-        
+        function save(status) {
+            var defaultyear = kendo.toString($("#ClaimDate").data("kendoDatePicker").value(), 'yyyy');
+
+            var strUserId = $("#ProfessionalID").val();
+            var url = "/HRMedicalCheckUp/GetMedicalYear/" + strUserId;
+
+            $.getJSON(url,
+                function (result) {
+                    if (result.length === 0) {
+                        $("#ClaimStatus").val(status);
+                        $('form').prop('action', '/HRMedicalCheckUp/SubmitMedical');
+                        $("form").submit();
+                    } else {
+                        for (var i = 0; i <= result.length - 1; i++) {
+                            if (defaultyear === result[i].Year) {
+                                alert('Sorry, Your Medical Check-Up for this period has been claimed. ' +
+                                    'Please process next claim in the next period. If there is any inconvenience process for this, ' +
+                                    'please contact HR Officer directly. Thank you');
+                                return;
+                            }
+                        }
+                        $("#ClaimStatus").val(status);
+                        $('form').prop('action', '/HRMedicalCheckUp/SubmitMedical');
+                        $("form").submit();
+                    }
+                });
+
+        }
 
         $(document)
             .ready(function () {
@@ -132,42 +159,14 @@
                 $("#save-button")
                     .click(function() {
 
-                        // var defaultyear = kendo.toString($("#ClaimDate").data("kendoDatePicker").value(), 'yyyy');
-
-                        var url = "/HRMedicalCheckUp/GetMedicalYear/" + dataItem.ID;
-
-                        $.getJSON(url, function (result) {
-                            if (result.length == 0) {
-                                $('#ProjectUnit').prop('value', "");
-                                $('#Position').prop('value', "");
-                                $('#JoinDate').prop('value', "");
-                                $('#DateOfNewPsa').prop('value', "");
-                                $('#EndOfContract').prop('value', "");
-                                alert("Professional Doesn't Have PSA");
-                            }
-                            else {
-                                $('#ProjectUnit').prop('value', result[0].ProjectOrUnit);
-                                $('#Position').prop('value', result[0].Position);
-                                $('#JoinDate').prop('value', result[0].JoinDate);
-                                $('#DateOfNewPsa').prop('value', result[0].DateOfNewPSA);
-                                $('#EndOfContract').prop('value', result[0].PsaExpiryDate);
-                            }
-                        })
-
-
-                            $("#ClaimStatus").val("Draft");
-                            $('form').prop('action', '/HRMedicalCheckUp/SubmitMedical');
-                            $("form").submit();
+                        save('Draft');
 
                     });
 
                 $("#submit-button")
                     .click(function() {
-
-                            $("#ClaimStatus").val("Submitted");
-                            $('form').prop('action', '/HRMedicalCheckUp/SubmitMedical');
-                            $("form").submit();
-                        
+                        save('Submitted');
+                       
                     });
 
 
