@@ -7,61 +7,18 @@
                                                     enctype = "multipart/form-data"
                                                 }))
 {
-    <fieldset>
-        <legend>Tax Exemption Data</legend>
-
-        <div class="col-md-6">
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.TypeOfTax).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.TypeOfTax)
-                </div>
+<fieldset>
+    <legend>Tax Exemption Data</legend>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Bootstrap().LabelFor(m => m.TypeOfTax).Class("col-md-4 control-label")
+            <div class="col-md-8">
+                @Html.EditorFor(m => m.TypeOfTax)
             </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.TypeOfWithHoldingTax).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.TypeOfWithHoldingTax)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.TaxPeriod).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.TaxPeriod)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.TotalIncomeRecepients).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.TotalIncomeRecepients)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.GrossIncome).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.GrossIncome)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.TotalIncomeTaxBorneByGovernment).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.TotalIncomeTaxBorneByGovernment)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Remarks).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.Remarks)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Documents).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.Documents)
-                </div>
-            </div>
-
         </div>
-
+        <div id="Result"></div>
+       @* @Html.Partial("_Income", Model)*@
+    </div>
 </fieldset>
     <div class="form-actions">
         <div class="row">
@@ -76,4 +33,11 @@
             </div>
         </div>
     </div>
+}
+@section scripts{
+    <script>
+        function onSelectTypeOfTax(e) {
+            $('#Result').load('@Url.Action("GetTaxIncome", "FINTaxExemptionData")');
+        }
+    </script>
 }

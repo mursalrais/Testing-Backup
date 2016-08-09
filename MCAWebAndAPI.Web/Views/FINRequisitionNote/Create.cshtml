@@ -3,14 +3,24 @@
 
 @{
     ViewBag.Title = "Create Requisition Note";
+    
 }
 
-@using (Html.BeginForm("CreateRequisitionNote", "FINRequisitionNote", FormMethod.Post,
-            new
-            {
-                @class = "form-horizontal",
-                enctype = "multipart/form-data"
-            }))
+@using (Ajax.BeginForm("CreateRequisitionNote", "FINRequisitionNote",
+        FormMethod.Post,
+        new AjaxOptions
+        {
+            OnBegin = "onBeginForm",
+            OnComplete = "onCompleteForm",
+            OnSuccess = "onSuccessFormEmbed",
+            OnFailure = "onFailureForm"
+        },
+        new
+        {
+            @class = "form-horizontal",
+            enctype = "multipart/form-data"
+        }))
+
 {
     <fieldset>
         <legend>Requisition Note</legend>
@@ -28,6 +38,14 @@
             @Html.Partial("_ItemDetails", Model.ItemDetails)
         </div>
     </fieldset>
+    <div class="row">
+        <p style="margin: 50px 0px 0px 20px; font-style: italic;">
+            Instructions:
+            <br />
+            1. Requisition for Goods:  Indicate detailed specifications. Should be generic - no brand names. <br />
+            2. Requisition for Works/Services:  Attached copy of TOR. <br />
+        </p>
+    </div>
     <div class="form-actions">
         <div class="row">
             <div class="col-sm-12">
@@ -45,11 +63,8 @@
     <script>
         $(document).ready(function () {
 
-
-            $("#Date").kendoDatePicker({
-                format: "mm/dd/yyyy"
-            });
-
         });
+
+        
     </script>
 }

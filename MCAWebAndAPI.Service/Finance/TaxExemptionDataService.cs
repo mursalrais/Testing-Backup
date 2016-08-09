@@ -1,4 +1,5 @@
 ﻿using MCAWebAndAPI.Model.ViewModel.Form.Finance;
+using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
 using NLog;
@@ -61,17 +62,21 @@ namespace MCAWebAndAPI.Service.Finance
             viewModel.GrossIncome = Convert.ToDecimal(listItem[SP_GROSS_INCOME_INTERNAL_COLUMN_NAME]);
             viewModel.TotalIncomeTaxBorneByGovernment = Convert.ToDecimal(listItem[SP_TOTAL_INCOME_TAX_BORNE_INTERNAL_COLUMN_NAME]);
             viewModel.Remarks = FormatUtil.ConvertMultipleLine(Convert.ToString(listItem[SP_REMARKS_COLUMN_NAME]));
-
+            viewModel.DocumentUrl = GetDocumentUrl(viewModel.ID);
             viewModel.ID = ID;
 
             return viewModel;
+        }
+
+        private string GetDocumentUrl(int? iD)
+        {
+            return string.Format(UrlResource.TaxExemptionIncomeDocumentByID, _siteUrl, iD);
         }
 
         public int? CreateTaxExemptionData(TaxExemptionDataVM taxExemptionData)
         {
             int? result = null;
             var columnValues = new Dictionary<string, object>();
-            //columnValues.Add("ID", taxExemptionData.ID);
             columnValues.Add(SP_TYPE_OF_TAX_COLUMN_NAME, taxExemptionData.TypeOfTax.Value);
             columnValues.Add(SP_TYPE_OF_WITHHOLDING_TAX_INTERNAL_COLUMN_NAME, taxExemptionData.TypeOfWithHoldingTax.Value);
             columnValues.Add(SP_PERIOD_COLUMN_NAME, taxExemptionData.TaxPeriod);

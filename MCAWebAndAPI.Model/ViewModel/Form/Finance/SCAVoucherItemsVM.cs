@@ -8,15 +8,15 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 {
     public class SCAVoucherItemsVM
     {
-        public int SCAVoucherID { get; set; }
+        public int ID { get; set; }
 
         public int WBSID { get; set; }
 
-        public string WBSName { get; set; }
+        public string WBS { get; set; }
 
         public int GLID { get; set; }
 
-        public string GLName { get; set; }
+        public string GL { get; set; }
 
         public decimal? Amount { get; set; }
     }
