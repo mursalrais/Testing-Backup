@@ -29,7 +29,7 @@ namespace MCAWebAndAPI.Service.JobSchedulers.Schedulers
                 .UsingJobData("site-url", siteUrl) // passing variable
                 .Build();
 
-            // Trigger the job to run now, and then every 1 hour
+            // Trigger the job to run now, and then every 24 hours
             ITrigger trigger = TriggerBuilder.Create()
               .WithIdentity("start-now-per-day-insite-" + siteUrl, "repetitive-triggers")
               .StartNow() // start when?

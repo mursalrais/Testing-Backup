@@ -19,12 +19,11 @@ namespace MCAWebAndAPI.Web.Controllers
     public class HRPSAManagementController : Controller
     {
         IPSAManagementService psaManagementService;
-        //IHRDayOffBalanceService dayOffService;
-
+        
         public HRPSAManagementController()
         {
             psaManagementService = new PSAManagementService();
-            //dayOffService = new HRDayOffBalanceService();
+            
         }
 
         /// <summary>
@@ -82,9 +81,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 "Error",
                 new { errorMessage = string.Format(MessageResource.ErrorEditInActivePSA) });
 
-                //return RedirectToAction("Index",
-                //"Error",
-                //new { errorMessage = string.Format("Unable to Edit Inactive PSA") });
+                
             }
         }
 
@@ -117,8 +114,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 if (viewModel.PSAId == 0)
                 {
                     var currentDate = DateTime.Now;
-
-
+                    
                     //sudah dites dan ok
                     if (currentDate < viewModel.DateOfNewPSA)
                     {
@@ -442,16 +438,6 @@ namespace MCAWebAndAPI.Web.Controllers
                 return RedirectToAction("Index", "Error");
             }
 
-            try
-            {
-                psaManagementService.CreatePSAManagementDocuments(psaID, viewModel.Documents, viewModel);
-            }
-            catch (Exception e)
-            {
-                ErrorSignal.FromCurrentContext().Raise(e);
-                return RedirectToAction("Index", "Error");
-            }
-
             var psaData = psaManagementService.GetPSAManagement(psaID);
 
             if (Convert.ToString(psaData.PSAStatus.Text) == "Active")
@@ -469,7 +455,7 @@ namespace MCAWebAndAPI.Web.Controllers
             
             return RedirectToAction("Index",
                 "Success",
-                new { errorMessage = string.Format(MessageResource.SuccessCreatePSAManagementData, viewModel.PSANumber) });
+                new { successMessage = string.Format(MessageResource.SuccessCreatePSAManagementData, viewModel.PSANumber) });
         }
 
         public ActionResult UpdatePSAManagement(PSAManagementVM psaManagement, string site)
@@ -497,7 +483,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             return RedirectToAction("Index",
                 "Success",
-                new { errorMessage = string.Format(MessageResource.SuccessUpdatePSAManagementData, psaManagement.PSANumber) });
+                new { successMessage = string.Format(MessageResource.SuccessUpdatePSAManagementData, psaManagement.PSANumber) });
             
         }
 
@@ -513,9 +499,9 @@ namespace MCAWebAndAPI.Web.Controllers
                     e.PSAID,
                     e.PSANumber,
                     e.ProfessionalID,
-                    e.JoinDate,
-                    e.DateOfNewPSA,
-                    e.PsaExpiryDate,
+                    e.JoinDateString,
+                    e.DateOfNewPSAString,
+                    e.PsaExpiryDateString,
                     e.ProjectOrUnit,
                     e.Position
                 }), JsonRequestBehavior.AllowGet);
@@ -529,11 +515,11 @@ namespace MCAWebAndAPI.Web.Controllers
                     e =>
                     new
                     {
-                        e.PSAID,
+                        e.ID,
                         e.ProfessionalID,
-                        e.JoinDate,
-                        e.DateOfNewPSA,
-                        e.PsaExpiryDate,
+                        e.JoinDateString,
+                        e.DateOfNewPSAString,
+                        e.PsaExpiryDateString,
                         e.ProjectOrUnit,
                         e.Position
                     }
@@ -651,19 +637,32 @@ namespace MCAWebAndAPI.Web.Controllers
             return RedirectToAction("Index", "Success");
         }
 
-        //public ActionResult CalculateTask(string siteUrl = null)
-        //{
-        //    try
-        //    {
-        //        TaskCalculationScheduler.DoNow_OnceEveryDay(siteUrl);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        ErrorSignal.FromCurrentContext().Raise(e);
-        //        return RedirectToAction("Index", "Error");
-        //    }
-        //    return RedirectToAction("Index", "Success");
-        //}
+        public JsonResult GetProjectUnit(string ProjectUnit)
+        {
+            psaManagementService.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));
+
+            if (ProjectUnit != null)
+            {
+                var position = psaManagementService.GetPosition(ProjectUnit);
+
+                return Json(position.Select(e => new
+                {
+                    e.ID,
+                    e.PositionName,
+                    e.IsKeyPosition
+                }), JsonRequestBehavior.AllowGet);
+            }
+            return new JsonResult
+            {
+                Data = new
+                {
+                    success = true,
+                    result = "Success",
+                    successMessage = MessageResource.SuccessCommon,
+                },
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
 
     }
 

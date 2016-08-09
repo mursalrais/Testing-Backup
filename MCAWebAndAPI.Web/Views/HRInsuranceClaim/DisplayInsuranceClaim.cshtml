@@ -1,16 +1,19 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
 @model InsuranceClaimVM
 
-@{
-    ViewBag.Title = "Display Insurance Claim";
-}
+@using (Html.BeginForm("", "HRInsuranceClaim", FormMethod.Post,
+                                        new
+                                        {
+                                            @class = "form-horizontal",
+                                            enctype = "multipart/form-data"
+                                        }))
 
 
 
 
 
 
-
+{
     <fieldset>
 
         @Html.AntiForgeryToken()
@@ -76,9 +79,12 @@
             @Html.Partial("_ClaimComponentDetailDisplay", Model)
         </div>
 
-     
 
-</fieldset>
+
+    </fieldset>
+}
+
+    
    
         <div class="form-actions">
             <div class="row">

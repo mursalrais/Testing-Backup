@@ -22,5 +22,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
         IEnumerable<PayrollDetailVM> GetPayrollDetails(DateTime period);
 
         Task<IEnumerable<PayrollWorksheetDetailVM>> GetPayrollWorksheetDetailsAsync(DateTime? period, bool isSummary = false);
+
+        void SavePayrollWorksheetDetailInBackground(DateTime period, string filePath);
     }
 }

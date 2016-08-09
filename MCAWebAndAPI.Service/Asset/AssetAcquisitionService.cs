@@ -361,17 +361,21 @@ namespace MCAWebAndAPI.Service.Asset
                && string.Compare(columnName.Split('_')[1], "lookup", StringComparison.OrdinalIgnoreCase) == 0;
         }
 
-        public bool isValueOfColumnExist(string listname, string SiteUrl, string caml)
+        public int? getIdOfColumn(string listname, string SiteUrl, string caml)
         {
             var getItem = SPConnector.GetList(listname, SiteUrl, caml);
             if(getItem.Count != 0 || getItem != null)
             {
-                return true;
+                foreach(var item in getItem)
+                {
+                    return Convert.ToInt32(item["ID"]);
+                }
             }
             else
             {
-                return false;
+                return 0;
             }
+            return 0;
         }
 
         Dictionary<int, string> IAssetAcquisitionService.getListIDOfList(string listName, string key, string value, string SiteUrl)

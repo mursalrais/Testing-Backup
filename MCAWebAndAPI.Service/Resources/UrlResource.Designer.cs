@@ -169,6 +169,15 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0}/Lists/SPHL%20Data/AllItems.aspx.
+        /// </summary>
+        public static string FINSPHL {
+            get {
+                return ResourceManager.GetString("FINSPHL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to /Lists/InsuranceClaim.
         /// </summary>
         public static string InsuranceClaim {
@@ -349,7 +358,7 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}/PSA%20Documents/Forms/AllItems.aspx?FilterField1=psa_x003a_ID&amp;FilterValue1={1}.
+        ///   Looks up a localized string similar to {0}/PSA%20Documents/Forms/AllItems.aspx#InplviewHash9cd97da9-0ef2-45cb-9beb-ff7f85a9fe1a=FilterField1%3Dpsa%255Fx003a%255FID-FilterValue1%3D{1}.
         /// </summary>
         public static string PSAManagementDocumentByID {
             get {
@@ -399,6 +408,24 @@ namespace MCAWebAndAPI.Service.Resources {
         public static string ShortlistInterviewPanel {
             get {
                 return ResourceManager.GetString("ShortlistInterviewPanel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to /Lists/TaxExemptionData.
+        /// </summary>
+        public static string TaxExemptionData {
+            get {
+                return ResourceManager.GetString("TaxExemptionData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}/Tax%20Exemption%20Income%20Documents/Forms/AllItems.aspx#InplviewHash5093bda1-84bf-4cad-8652-286653d6a83f=FilterField1%3Dpsa%255Fx003a%255FID-FilterValue1%3D{1}.
+        /// </summary>
+        public static string TaxExemptionIncomeDocumentByID {
+            get {
+                return ResourceManager.GetString("TaxExemptionIncomeDocumentByID", resourceCulture);
             }
         }
     }

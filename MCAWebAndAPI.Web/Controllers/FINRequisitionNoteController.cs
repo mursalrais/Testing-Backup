@@ -9,43 +9,52 @@ using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 using MCAWebAndAPI.Service.Converter;
+using FinService = MCAWebAndAPI.Service.Finance;
 using MCAWebAndAPI.Service.Finance;
 using MCAWebAndAPI.Service.Finance.RequisitionNote;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;
+using MCAWebAndAPI.Service.Resources;
 
 namespace MCAWebAndAPI.Web.Controllers.Finance
 {
     [Filters.HandleError]
-    public class FINRequisitionNoteController : Controller
+    public class FINRequisitionNoteController : Controller //FinSharedController
     {
-        readonly IRequisitionNote _service;
-
         private const string LIST_NAME = "requisitionnote";
         private const string SESSION_SITE_URL = "SiteUrl";
         private const string WORKFLOW_TITLE = "Requisition%20Note";
         private const string INDEX_PAGE = "Index";
         private const string ERROR = "Error";
         private const string DATA_NOT_EXISTS = "Data Does not exists!";
-        private const string PRINT_PAGE_URL = "~/Views/FINRequisitionNote/PrintRequisitionNote.cshtml";
+        private const string PRINT_PAGE_URL = "~/Views/FINRequisitionNote/Print.cshtml";
+        private const string CATEGORY_EVENT = "Event";
+        private const string CATEGORY_NON_EVENT = "Non-event";
 
+        readonly IRequisitionNote _service;
+        readonly IEventBudgetService _eventBudgetService;
+        
         public FINRequisitionNoteController()
         {
             _service = new RequisitionNoteService();
+            _eventBudgetService = new EventBudgetService();
         }
 
-        public ActionResult CreateRequisitionNote(string siteUrl = null)
+        public ActionResult Create(string siteUrl = null)
         {
+            siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
+
             _service.SetSiteUrl(siteUrl);
             SessionManager.Set(SESSION_SITE_URL, siteUrl);
 
             ViewBag.ListName = WORKFLOW_TITLE;
             
             var viewModel = _service.GetRequisitionNote(null);
+            SetAdditionalSettingToViewModel(ref viewModel, true);
             return View(viewModel);
         }
 
-        public ActionResult EditRequisitionNote(string siteUrl = null, int ID = 0)
+        public ActionResult Edit(string siteUrl = null, int ID = 0)
         {
             if (ID > 0)
             {
@@ -55,11 +64,13 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
                 ViewBag.ListName = WORKFLOW_TITLE;
 
                 var viewModel = _service.GetRequisitionNote(ID);
+                SetAdditionalSettingToViewModel(ref viewModel, false);
+
                 return View(viewModel);
             }
             else
             {
-                return RedirectToAction(INDEX_PAGE,ERROR, new { errorMessage = DATA_NOT_EXISTS });
+                return JsonHelper.GenerateJsonErrorResponse(DATA_NOT_EXISTS);
             }
         }
 
@@ -78,7 +89,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             catch (Exception e)
             {
                 ErrorSignal.FromCurrentContext().Raise(e);
-                return RedirectToAction(INDEX_PAGE, ERROR, new { errorMessage = e.Message });
+                return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
             Task CreateDetailsTask = _service.CreateRequisitionNoteItemsAsync(headerID, viewModel.ItemDetails);
@@ -93,16 +104,11 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             catch (Exception e)
             {
                 ErrorSignal.FromCurrentContext().Raise(e);
-                return RedirectToAction(INDEX_PAGE, ERROR, new { errorMessage = e.Message });
+                return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            return RedirectToAction(INDEX_PAGE,
-                "Success",
-                new
-                {
-                    errorMessage =
-                string.Format(MessageResource.SuccessCreateApplicationData, headerID)
-                });
+         
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.Compensatory);
         }
 
         [HttpPost]
@@ -118,7 +124,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             catch (Exception e)
             {
                 ErrorSignal.FromCurrentContext().Raise(e);
-                return RedirectToAction(INDEX_PAGE, ERROR, new { errorMessage = e.Message });
+                return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
             Task CreateDetailsTask = _service.EditRequisitionNoteItemsAsync(viewModel.ID, viewModel.ItemDetails);
@@ -133,38 +139,44 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             catch (Exception e)
             {
                 ErrorSignal.FromCurrentContext().Raise(e);
-                return RedirectToAction(INDEX_PAGE, ERROR, new { errorMessage = e.Message });
+                return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            return RedirectToAction(INDEX_PAGE,
-                "Success",
-                new
-                {
-                    errorMessage =
-                string.Format(MessageResource.SuccessCommon, viewModel.ID)
-                });
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.Compensatory);
         }
         [HttpPost]
         public JsonResult GetRequisitionNoteDetailsByEventBudgetId([DataSourceRequest] DataSourceRequest request, int? eventBudgetId)
         {
-            var details = new List<RequisitionNoteItemVM>();
+            var siteUrl = SessionManager.Get<string>(SESSION_SITE_URL);
+            _eventBudgetService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
+            var details = new List<RequisitionNoteItemVM>();
+            
             if (eventBudgetId.HasValue && eventBudgetId.Value > 0)
             {
-                //for (int i = 0; i < 5; i++)
-                //{
-                //    details.Add(new RequisitionNoteItemVM()
-                //    {
-                //        ID = i,
-                //        Title = "FF",
-                //        Activity = new Model.ViewModel.Control.AjaxComboBoxVM() { Value = i, Text = "2" },
-                //        Specification = "TEST"
+                var eventbudget =_eventBudgetService.Get(eventBudgetId.Value);
+                if(eventbudget != null)
+                {
+                    foreach (var item in eventbudget.ItemDetails)
+                    {
+                        var itemRNDetail = new RequisitionNoteItemVM();
 
-                //    });
-                //}
+                        itemRNDetail.ID = -1;
+                        itemRNDetail.Activity = new Model.ViewModel.Control.AjaxComboBoxVM() { Value = Convert.ToInt32(eventbudget.Activity.Value), Text = eventbudget.Activity.Text };
+                        itemRNDetail.WBS = new Model.ViewModel.Control.AjaxComboBoxVM() { Value = null, Text = "" };
+                        itemRNDetail.GL = new Model.ViewModel.Control.AjaxComboBoxVM() { Value = null, Text = "" };
+                        itemRNDetail.Specification = item.Title;
+                        itemRNDetail.Quantity = item.Quantity;
+                        itemRNDetail.Price = item.UnitPrice.HasValue ? item.UnitPrice.Value : 0;
+                        itemRNDetail.EditMode = (int)Model.Common.Item.Mode.CREATED;
+                        itemRNDetail.IsFromEventBudget = true;
+                        itemRNDetail.Frequency = item.Frequency;
+
+                        details.Add(itemRNDetail);
+                    }
+                }
             }
-            
-            
+                       
             // Convert to Kendo DataSource
             DataSourceResult result = details.ToDataSourceResult(request);
             // Convert to Json
@@ -173,17 +185,23 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             return json;
         }
 
+        //public JsonResult GetWBSMaster()
+        //{
+        //    // TODO: kok jelek ya
+
+        //    return this.GetWBSMaster(SessionManager.Get<string>(SESSION_SITE_URL));
+        //}
+
         public JsonResult GetGLMaster()
         {
             var siteUrl = SessionManager.Get<string>(SESSION_SITE_URL);
-            _service.SetSiteUrl(siteUrl);
-
-            var glMasters = Shared.GetGLMaster(siteUrl);
+           
+            var glMasters = FinService.Shared.GetGLMaster(siteUrl);
 
             return Json(glMasters.Select(e => new
             {
                 Value = e.ID.HasValue ? Convert.ToString(e.ID) : string.Empty,
-                Text = e.Title
+                Text = string.IsNullOrWhiteSpace(e.Title) ? string.Empty : (e.Title + "-" + e.GLDescription)
             }), JsonRequestBehavior.AllowGet);
         }
 
@@ -196,15 +214,15 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             return Json(wbsMasters.Select(e => new
             {
                 Value = e.ID.HasValue ? Convert.ToString(e.ID) : string.Empty,
-                Text = e.Title
+                Text = (e.Title + "-" + e.WBSDescription)
             }), JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetActivity()
+        public JsonResult GetActivity(string project=null)
         {
             _service.SetSiteUrl(SessionManager.Get<string>(SESSION_SITE_URL));
       
-            var activities = _service.GetActivity();
+            var activities = _service.GetActivity(project);
 
             return Json(activities.Select(e => new
             {
@@ -217,6 +235,10 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
         public ActionResult PrintRequisitionNote(FormCollection form, RequisitionNoteVM viewModel)
         {
             string RelativePath = PRINT_PAGE_URL;
+             
+            var siteUrl = SessionManager.Get<string>(SESSION_SITE_URL);
+            _service.SetSiteUrl(siteUrl);
+            viewModel = _service.GetRequisitionNote(viewModel.ID);
 
             ViewData.Model = viewModel;
             var view = ViewEngines.Engines.FindView(ControllerContext, RelativePath, null);
@@ -239,7 +261,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
                 catch (Exception e)
                 {
                     ErrorSignal.FromCurrentContext().Raise(e);
-                    RedirectToAction("Index", "Error");
+                    return JsonHelper.GenerateJsonErrorResponse(e);
                 }
             }
             if (pdfBuf == null)
@@ -247,5 +269,22 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             return File(pdfBuf, "application/pdf");
         }
 
+        private void SetAdditionalSettingToViewModel(ref RequisitionNoteVM viewModel, bool create)
+        {
+            viewModel.Category.Choices = new string[] { CATEGORY_EVENT, CATEGORY_NON_EVENT };
+            viewModel.Category.OnSelectEventName = "onSelectCategory";
+
+            viewModel.EventBudgetNo.ControllerName = "FINEventBudget";
+            viewModel.EventBudgetNo.ActionName = "GetEventBudgetList";
+            viewModel.EventBudgetNo.ValueField = "ID";
+            viewModel.EventBudgetNo.TextField = "Title";
+            viewModel.EventBudgetNo.OnSelectEventName = "onSelectEventBudgetNo";
+
+            if (create)
+            {
+                viewModel.Category.Value = CATEGORY_EVENT;
+            }
+
+        }
     }
 }

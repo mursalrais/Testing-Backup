@@ -55,6 +55,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// CompensatoryDate
         /// </summary>
         /// 
+        [Required]
         [DisplayName("Date")]
         [DataType(DataType.Date)]
         [UIHint("Date")]
@@ -64,14 +65,16 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// CompensatoryTimeStart
         /// </summary>
         /// 
+        [Required]
         [DataType(DataType.Time)]
         [DisplayFormat(DataFormatString = "{0:HH:mm}", ApplyFormatInEditMode = true), Display(Name = "Time (Start)")]
         public DateTime? StartTime { get; set; }
-        
+
         /// <summary>
         /// CompensatoryTimeFinish
         /// </summary>
         /// 
+        [Required]
         [DataType(DataType.Time)]
         [DisplayFormat(DataFormatString = "{0:HH:mm}", ApplyFormatInEditMode = true), Display(Name = "Time (Finish)")]
         public DateTime? FinishTime { get; set; }
@@ -80,6 +83,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// CompensatoryTimeStart
         /// </summary>
         /// 
+        [Required]
         [DisplayName("TotalHours")]
         public int? CmpTotalHours { get; set; }
 
@@ -87,6 +91,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// CompensatoryTotalDay
         /// </summary>
         /// 
+        [Required]
         [DisplayName("Total Day")]
         public decimal TotalDay { get; set; }
 
@@ -94,6 +99,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// CompensatoryRemarks
         /// </summary>
         /// 
+        [Required]
         [UIHint("TextArea")]
         public string remarks { get; set; }
 

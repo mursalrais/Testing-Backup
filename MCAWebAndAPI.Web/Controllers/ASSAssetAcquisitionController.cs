@@ -387,14 +387,10 @@ namespace MCAWebAndAPI.Web.Controllers
                                     myKey = id.Key;
                                     break;
                                 }
-                                else
-                                {
-                                    return JsonHelper.GenerateJsonErrorResponse("No Lookup Value/s is Found!");
-                                }
                             }
                             catch (Exception e)
                             {
-                                return JsonHelper.GenerateJsonErrorResponse(e);
+                                return JsonHelper.GenerateJsonErrorResponse("No Lookup Value/s is Found!");
                             }
                         }
 
@@ -495,12 +491,16 @@ namespace MCAWebAndAPI.Web.Controllers
                                     </Query></View>";
                     try
                     {
-                        bool isAssetIDExist = _assetAcquisitionService.isValueOfColumnExist("Asset Master", siteUrl, camlAssetID);
-                        bool isWBSExist = _assetAcquisitionService.isValueOfColumnExist("WBS Master", siteUrl, camlWBS);
-                        if (isAssetIDExist == true && isWBSExist == true)
+                        int? idAssetIDExist = _assetAcquisitionService.getIdOfColumn("Asset Master", siteUrl, camlAssetID);
+                        int? idWBSExist = _assetAcquisitionService.getIdOfColumn("WBS Master", siteUrl, camlWBS);
+                        if (idAssetIDExist != 0 && idAssetIDExist != 0)
                         {
-                            row["Asset_x002d_Sub_x0020_Asset"] = d.ItemArray[9].ToString();
-                            row["WBS"] = d.ItemArray[10].ToString();
+                            row["Asset_x002d_Sub_x0020_Asset"] = idAssetIDExist;
+                            row["WBS"] = idWBSExist;
+                        }
+                        else
+                        {
+                            return JsonHelper.GenerateJsonErrorResponse("Invalid data, rolling back!");
                         }
 
                     }

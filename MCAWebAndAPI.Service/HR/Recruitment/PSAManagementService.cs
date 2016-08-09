@@ -23,6 +23,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         const string SP_PSA_LIST_NAME = "PSA";
         const string SP_PSA_DOC_LIST_NAME = "PSA Documents";
         const string SP_PROF_LIST_NAME = "Professional Master";
+        const string SP_POSITION_LIST_NAME = "Position Master";
 
 
         public IEnumerable<PSAManagementVM> GetRenewalNumber(int? professionalID)
@@ -91,32 +92,26 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             var updatedValues = new Dictionary<string, object>();
 
             updatedValues.Add("isrenewal", psaManagement.IsRenewal.Value);
-            //updatedValues.Add("renewalnumber", psaManagement.PSARenewalNumber);
             updatedValues.Add("renewalnumber", psaManagement.StrPSARenewal);
             updatedValues.Add("ProjectOrUnit", psaManagement.ProjectOrUnit.Value);
-            updatedValues.Add("position", new FieldLookupValue { LookupId =  (int)psaManagement.Position.Value});
+            updatedValues.Add("position", new FieldLookupValue { LookupId = (int)psaManagement.PositionBasedProject.Value });
             updatedValues.Add("professional", new FieldLookupValue { LookupId = (int)psaManagement.Professional.Value });
             updatedValues.Add("joindate", psaManagement.JoinDate);
             updatedValues.Add("dateofnewpsa", psaManagement.DateOfNewPSA);
             updatedValues.Add("tenure", psaManagement.Tenure);
             updatedValues.Add("initiateperformanceplan", psaManagement.PerformancePlan.Value);
             updatedValues.Add("psastatus", psaManagement.PSAStatus.Value);
+            updatedValues.Add("psaexpirydates", psaManagement.PSAExpiryDates);
 
-            if(Convert.ToString(psaManagement.ProfessionalFullName) == null)
+            if (Convert.ToString(psaManagement.ProfessionalFullName) == null)
             {
                 var professionalData = SPConnector.GetListItem(SP_PROF_LIST_NAME, psaManagement.Professional.Value, _siteUrl);
                 psaManagement.ProfessionalFullName = Convert.ToString(professionalData["Title"]) + " " + Convert.ToString(professionalData["lastname"]);
             }
 
             updatedValues.Add("professionalfullname", psaManagement.ProfessionalFullName);
-            //updatedValues.Add("hiddenexpirydate", psaManagement.HiddenExpiryDate);
-            //updatedValues.Add("lastworkingdate", psaManagement.HiddenExpiryDate);
-
             updatedValues.Add("lastworkingdate", psaManagement.LastWorkingDate);
-
-
-
-
+            
             try
             {
                 SPConnector.AddListItem(SP_PSA_LIST_NAME, updatedValues, _siteUrl);
@@ -156,7 +151,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             var startTimeUniversalString = period.ToUniversalTime().ToString("o");
             var caml = @"<View><Query><Where><Geq><FieldRef Name='lastworkingdate' /><Value IncludeTimeValue='TRUE' Type='DateTime'>"
               + startTimeUniversalString
-              + @"</Value></Geq></Where><OrderBy><FieldRef Name='renewalnumber' Ascending='False' /></OrderBy></Query><ViewFields><FieldRef Name='ID' /><FieldRef Name='professional' /></ViewFields> </View>";
+              + @"</Value></Geq></Where><OrderBy><FieldRef Name='renewalnumber' Ascending='False' /></OrderBy></Query></View>";
 
             var models = new List<PSAMaster>();
 
@@ -167,25 +162,27 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             return models;
         }
-
-
         
         private PSAMaster ConvertToPSAModel(ListItem item)
         {
-            return new PSAMaster
-            {
-                ID = Convert.ToInt32(item["ID"]),
-                ProfessionalID = item["professional_x003a_ID"] == null ? string.Empty :
-               Convert.ToString((item["professional_x003a_ID"] as FieldLookupValue).LookupValue),
-                PSAID = Convert.ToString(item["Created"]),
-                PSANumber = Convert.ToString(item["Title"]),
-                JoinDate = Convert.ToDateTime(item["joindate"]).ToLocalTime().ToShortDateString(),
-                DateOfNewPSA = Convert.ToDateTime(item["dateofnewpsa"]).ToLocalTime().ToShortDateString(),
-                PsaExpiryDate = Convert.ToDateTime(item["psaexpirydate"]).ToLocalTime().ToShortDateString(),
-                ProjectOrUnit = Convert.ToString(item["ProjectOrUnit"]),
-                Position = item["position"] == null ? "" :
-               Convert.ToString((item["position"] as FieldLookupValue).LookupValue)
-            };
+            var psaMaster = new PSAMaster();
+            psaMaster.ID = Convert.ToInt32(item["ID"]);
+            psaMaster.ProfessionalID = FormatUtil.ConvertLookupToID(item, "professional") + string.Empty;
+            psaMaster.PSANumber = Convert.ToString(item["Title"]);
+            psaMaster.ProjectOrUnit = Convert.ToString(item["ProjectOrUnit"]);
+            psaMaster.Position = FormatUtil.ConvertLookupToValue(item, "position");
+
+
+            psaMaster.JoinDate = Convert.ToDateTime(item["joindate"]).ToLocalTime();
+            psaMaster.DateOfNewPSA = Convert.ToDateTime(item["dateofnewpsa"]).ToLocalTime();
+            psaMaster.PSAExpiryDate = Convert.ToDateTime(item["psaexpirydate"]).ToLocalTime();
+
+            psaMaster.JoinDateString = psaMaster.JoinDate.ToShortDateString();
+            psaMaster.DateOfNewPSAString = psaMaster.DateOfNewPSA.ToShortDateString();
+            psaMaster.PsaExpiryDateString = psaMaster.PSAExpiryDate.ToShortDateString();
+
+            return psaMaster;
+
         }
 
         public void SetSiteUrl(string siteUrl)
@@ -213,16 +210,16 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             viewModel.ID = Convert.ToInt32(listItem["ID"]);
             viewModel.IsRenewal.Text = Convert.ToString(listItem["isrenewal"]);
-            //viewModel.RenewalNumber = Convert.ToInt32(listItem["renewalnumber"]);
             viewModel.StrPSARenewal = Convert.ToString(listItem["renewalnumber"]);
             viewModel.ProjectOrUnit.Value = Convert.ToString(listItem["ProjectOrUnit"]);
-            viewModel.Position.Value = FormatUtil.ConvertLookupToID(listItem, "position");
+            viewModel.PositionBasedProject.Value = FormatUtil.ConvertLookupToID(listItem, "position");
             viewModel.Professional.Text = FormatUtil.ConvertLookupToValue(listItem, "professional");
             viewModel.Professional.Value = FormatUtil.ConvertLookupToID(listItem, "professional");
             viewModel.JoinDate = Convert.ToDateTime(listItem["joindate"]).ToLocalTime();
             viewModel.DateOfNewPSA = Convert.ToDateTime(listItem["dateofnewpsa"]).ToLocalTime();
             viewModel.Tenure = Convert.ToInt32(listItem["tenure"]);
             viewModel.PSAExpiryDate = Convert.ToDateTime(listItem["psaexpirydate"]).ToLocalTime();
+            viewModel.PSAExpiryDates = Convert.ToDateTime(listItem["psaexpirydates"]).ToLocalTime();
             viewModel.LastWorkingDate = Convert.ToDateTime(listItem["lastworkingdate"]).ToLocalTime();
             viewModel.PSAStatus.Text = Convert.ToString(listItem["psastatus"]);
             viewModel.ProfessionalFullName = Convert.ToString(listItem["professionalfullname"]);
@@ -252,17 +249,17 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.ID = Convert.ToInt32(listItem["ID"]);
             viewModel.PSANumber = Convert.ToString(listItem["Title"]);
             viewModel.IsRenewal.Value = Convert.ToString(listItem["isrenewal"]);
-            //viewModel.RenewalNumber = Convert.ToInt32(listItem["renewalnumber"]);
             viewModel.StrPSARenewal = Convert.ToString(listItem["renewalnumber"]);
             viewModel.ProjectOrUnit.Value = Convert.ToString(listItem["ProjectOrUnit"]);
             viewModel.Professional.Text = FormatUtil.ConvertLookupToValue(listItem, "professional");
-            viewModel.Position.Text = FormatUtil.ConvertLookupToValue(listItem, "position");
+            viewModel.ProfessionalFullName = Convert.ToString(listItem["professionalfullname"]);
+            viewModel.PositionBasedProject.Text = FormatUtil.ConvertLookupToValue(listItem, "position");
             viewModel.JoinDate = Convert.ToDateTime(listItem["joindate"]).ToLocalTime();
             viewModel.DateOfNewPSA = Convert.ToDateTime(listItem["dateofnewpsa"]).ToLocalTime();
             viewModel.TenureString = Convert.ToString(listItem["tenure"]);
             viewModel.PerformancePlan.Value = Convert.ToString(listItem["initiateperformanceplan"]);
-
             viewModel.PSAExpiryDate = Convert.ToDateTime(listItem["psaexpirydate"]).ToLocalTime();
+            viewModel.PSAExpiryDates = Convert.ToDateTime(listItem["psaexpirydates"]).ToLocalTime();
 
             viewModel.DocumentUrl = GetDocumentUrl(viewModel.ID);
 
@@ -306,12 +303,13 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             columnValues.Add("isrenewal", psaManagement.IsRenewal.Value);
             columnValues.Add("renewalnumber", psaManagement.RenewalNumber);
             columnValues.Add("ProjectOrUnit", psaManagement.ProjectOrUnit.Value);
-            columnValues.Add("position", new FieldLookupValue { LookupId = Convert.ToInt32(psaManagement.Position.Value) });
+            columnValues.Add("position", new FieldLookupValue { LookupId = Convert.ToInt32(psaManagement.PositionBasedProject.Value) });
             columnValues.Add("joindate", psaManagement.JoinDate.Value);
             columnValues.Add("dateofnewpsa", psaManagement.DateOfNewPSA.Value);
             columnValues.Add("tenure", psaManagement.Tenure);
             columnValues.Add("initiateperformanceplan", psaManagement.PerformancePlan.Value);
             columnValues.Add("professionalfullname", psaManagement.ProfessionalFullName);
+            columnValues.Add("psaexpirydates", psaManagement.PSAExpiryDates.Value);
 
             try
             {
@@ -338,10 +336,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             
             updateValues.Add("Join_x0020_Date", psaManagement.JoinDate.Value);
             updateValues.Add("Project_x002f_Unit", psaManagement.ProjectOrUnit.Value);
-            updateValues.Add("Position", new FieldLookupValue { LookupId = Convert.ToInt32(psaManagement.Position.Value) });
+            updateValues.Add("Position", new FieldLookupValue { LookupId = Convert.ToInt32(psaManagement.PositionBasedProject.Value) });
             updateValues.Add("PSAnumber", psaNumber);
             updateValues.Add("PSAstartdate", psaManagement.DateOfNewPSA.Value);
-            updateValues.Add("PSAexpirydate", psaManagement.PSAExpiryDate.Value);
+            updateValues.Add("PSAexpirydate", psaManagement.PSAExpiryDates.Value);
                         
             try
             {
@@ -403,9 +401,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         public void SendMailPerformancePlan(int? professionalID, string siteUrl, DateTime today)
         {
             var currentYear = today.Year;
-            //var calculateLastYear = today.AddYears(-1);
-            //var lastYear = calculateLastYear.Year;
-
+            
             var professionalData = SPConnector.GetListItem(SP_PROF_LIST_NAME, professionalID, _siteUrl);
             string professionalMail = Convert.ToString(professionalData["officeemail"]);
             string professionalFullName = Convert.ToString(professionalData["Title"]) + " " + Convert.ToString(professionalData["lastname"]);
@@ -467,6 +463,32 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             string professionalName = Convert.ToString(professionalData["Title"]);
 
             return professionalName;
+        }
+
+        public IEnumerable<PositionMaster> GetPosition(string ProjectUnit)
+        {
+            var caml = @"<View>  
+            <Query> 
+               <Where><Eq><FieldRef Name='projectunit' /><Value Type='Choice'>" + ProjectUnit + @"</Value></Eq></Where> 
+            </Query> 
+      </View>";
+
+            var positions = new List<PositionMaster>();
+            foreach (var item in SPConnector.GetList(SP_POSITION_LIST_NAME, _siteUrl, caml))
+            {
+                positions.Add(ConvertToLocationModel(item));
+            }
+            return positions;
+        }
+
+        PositionMaster ConvertToLocationModel(ListItem item)
+        {
+            return new PositionMaster
+            {
+                ID = Convert.ToInt32(item["ID"]),
+                PositionName = Convert.ToString(item["Title"]),
+                IsKeyPosition = Convert.ToString(item["iskeyposition"])
+        };
         }
     }
 }

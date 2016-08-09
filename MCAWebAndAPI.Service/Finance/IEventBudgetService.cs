@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace MCAWebAndAPI.Service.Finance
 {
@@ -12,10 +13,20 @@ namespace MCAWebAndAPI.Service.Finance
     {
         void SetSiteUrl(string siteUrl);
 
-        EventBudgetVM GetEventBudget(int? ID);
-        
-        bool CreateEventBudget(EventBudgetVM eventBudget);
+        EventBudgetVM Get(int? ID);
 
-        bool UpdateEventBudget(EventBudgetVM eventBudget);
+
+        int CreateEventBudget(EventBudgetVM eventBudget);
+
+        bool Update(EventBudgetVM eventBudget);
+
+        IEnumerable<EventBudgetVM> GetEventBudgetList();
+
+        Task CreateItemsAsync(int? headerID, IEnumerable<EventBudgetItemVM> noteItems);
+
+        Task CreateAttachmentsAsync(int? headerID, IEnumerable<HttpPostedFileBase> documents);
+
+        Task EditItemsAsync(int? headerID, IEnumerable<EventBudgetItemVM> noteItems);
+        Task EditAttachmentsSync(int? headerID, IEnumerable<HttpPostedFileBase> documents);
     }
 }
