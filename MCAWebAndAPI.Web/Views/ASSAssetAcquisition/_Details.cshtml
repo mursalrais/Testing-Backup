@@ -82,7 +82,7 @@
                        model.Field(p => p.CostIDR);
                        model.Field(p => p.CostUSD);
                        model.Field(p => p.Remarks);
-                       model.Field(p => p.Status);
+                       model.Field(p => p.Status).Editable(false);
 
                    })
                    .ServerOperation(false)

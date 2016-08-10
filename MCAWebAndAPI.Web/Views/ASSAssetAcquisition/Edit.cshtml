@@ -22,7 +22,8 @@
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.TransactionType).Class("col-md-4 control-label")
                     <div class="col-md-8">
-                        @Html.DisplayFor(m => m.TransactionType)
+                        @*@Html.DisplayFor(m => m.TransactionType)*@
+                        <input type="text" name="TransactionType" value="@Model.TransactionType" id="TransactionType" style="width: 100%;" />
                     </div>
                 </div>
                 <div class="form-group">
@@ -34,13 +35,15 @@
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.Vendor).Class("col-md-4 control-label")
                     <div class="col-md-8">
-                        @Html.DisplayFor(m => m.Vendor)
+                        @*@Html.DisplayFor(m => m.Vendor)*@
+                        <input type="text" name="Vendor" value="@Model.Vendor" id="Vendor" style="width: 100%;" />
                     </div>
                 </div>
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.PoNo).Class("col-md-4 control-label")
                     <div class="col-md-8">
-                        @Html.DisplayFor(m => m.PoNo)
+                        @*@Html.DisplayFor(m => m.PoNo)*@
+                        <input type="text" name="PoNo" value="@Model.PoNo" id="PoNo" style="width: 100%;" />
                     </div>
                 </div>
             </div>
@@ -54,7 +57,8 @@
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.PurchaseDescription).Class("col-md-4 control-label")
                     <div class="col-md-8">
-                        @Html.EditorFor(m => m.PurchaseDescription)
+                        @*@Html.EditorFor(m => m.PurchaseDescription)*@
+                        <input type="text" name="PurchaseDescription" value="@Model.PurchaseDescription" id="PurchaseDescription" style="width: 100%;" />
                     </div>
                 </div>
             </div>
@@ -63,10 +67,13 @@
             </div>
         </fieldset>
         @Html.HiddenFor(m => m.ID)
+        @Html.HiddenFor(m => m.CancelURL)
         <div>
             <center>
                 <input class="k-button k-button-icontext k-grid-add" type="submit" value="Save" />
-                <input class="k-button k-button-icontext k-grid-add" value="Cancel" onclick="return cancelButton()" />
+                <a href="@Model.CancelURL" target='_parent'>
+                    <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
+                </a>
             </center>
         </div>
 
@@ -90,7 +97,7 @@
 
     function onSelectedAcceptanceMemo(e) {
         var res = this.dataItem(e.item).split("-")
-        alert("Acceptance Memo ID : " + res[0]);s
+        //alert("Acceptance Memo ID : " + res[0]);s
         var url = "/ASSAssetAcquisition/GetAcceptanceMemoInfo?IDAcceptanceMemo=" + res[0];
         $.getJSON(url, function (data) {
             $('#Vendor').prop('value', data.VendorID + "-" + data.VendorName);

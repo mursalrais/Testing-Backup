@@ -35,6 +35,8 @@ namespace MCAWebAndAPI.Service.Asset
             model.TransactionType = Convert.ToString("Asset Acquisition");
             model.AccpMemo.Choices = GetChoicesFromList(SP_ACC_MEMO_LIST_NAME, "ID", "Title");
 
+            model.CancelURL = _siteUrl + UrlResource.AssetAcquisition;
+
             return model;
         }
 
@@ -58,6 +60,7 @@ namespace MCAWebAndAPI.Service.Asset
 
         public int? CreateHeader(AssetAcquisitionHeaderVM viewmodel)
         {
+            viewmodel.CancelURL = _siteUrl + UrlResource.AssetAcquisition;
             var columnValues = new Dictionary<string, object>();
             //columnValues.add
             columnValues.Add("Title", viewmodel.TransactionType);
@@ -122,6 +125,8 @@ namespace MCAWebAndAPI.Service.Asset
             //viewModel.Spesifications = Regex.Replace(listItem["Spesifications"].ToString(), "<.*?>", string.Empty);
             viewModel.PurchaseDescription = Regex.Replace(Convert.ToString(listItem["purchasedescription"]), "<.*?>", string.Empty);
             viewModel.ID = ID;
+
+            viewModel.CancelURL = _siteUrl + UrlResource.AssetAcquisition;
 
             return viewModel;
         }
@@ -250,6 +255,7 @@ namespace MCAWebAndAPI.Service.Asset
 
         public bool UpdateHeader(AssetAcquisitionHeaderVM viewmodel)
         {
+            viewmodel.CancelURL = _siteUrl + UrlResource.AssetAcquisition;
             var columnValues = new Dictionary<string, object>();
             var ID = Convert.ToInt32(viewmodel.ID);
             //columnValues.add
@@ -456,7 +462,7 @@ namespace MCAWebAndAPI.Service.Asset
             viewmodel.ID = Convert.ToInt32(ID);
             viewmodel.VendorID = Convert.ToString(list["vendorid"]);
             viewmodel.VendorName = Convert.ToString(list["vendorname"]);
-            viewmodel.PoNo = Convert.ToString(list["PoNo"]);
+            viewmodel.PoNo = Convert.ToString(list["pono"]);
 
             return viewmodel;
         }

@@ -10,6 +10,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 {
     public class AssetAcquisitionHeaderVM : Item
     {
+        public string CancelURL { get; set; }
+
         private ComboBoxVM _accmemo;
 
         public IEnumerable<AssetAcquisitionItemVM> Details { get; set; } = new List<AssetAcquisitionItemVM>();
