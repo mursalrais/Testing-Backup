@@ -15,7 +15,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         IEnumerable<ManpowerRequisitionVM> GetManpowerRequisitionAll();
 
-        string GetApprover(int level , int headerID);
+        string GetApprover(string Position);
 
         int CreateManpowerRequisition(ManpowerRequisitionVM viewModel);
 
