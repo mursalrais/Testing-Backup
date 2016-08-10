@@ -31,7 +31,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
                             "1",
                             "2",
                             "3"
-                        }
+                        },
+                        OnSelectEventName = "onSelectedAcceptanceMemo"
                     };
                 }
                 return _accmemo;
@@ -48,7 +49,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
         public string PoNo { get; set; }
 
         [UIHint("Date")]
-        public DateTime PurchaseDate { get; set; }
+        public DateTime? PurchaseDate { get; set; }
 
         public string PurchaseDescription { get; set; }
 

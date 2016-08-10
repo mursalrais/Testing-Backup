@@ -13,7 +13,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 
         public string AcceptanceMemo { get; set; }
 
-        public int? VendorID { get; set; }
+        public string VendorID { get; set; }
 
         public string VendorName { get; set; }
 

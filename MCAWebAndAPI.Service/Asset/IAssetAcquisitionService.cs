@@ -38,6 +38,6 @@ namespace MCAWebAndAPI.Service.Asset
 
         void RollbackParentChildrenUpload(string listNameHeader, int? latestIDHeader, string siteUrl);
 
-        IEnumerable<AcceptanceMemoVM> GetAcceptanceMemo();
+        AcceptanceMemoVM GetAcceptanceMemoInfo(int? ID, string SiteUrl);
     }
 }
