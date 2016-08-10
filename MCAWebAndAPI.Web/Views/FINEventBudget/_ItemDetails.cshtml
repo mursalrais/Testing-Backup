@@ -7,30 +7,29 @@
     .Editable(editable => editable.Mode(GridEditMode.InCell)
     .CreateAt(GridInsertRowPosition.Bottom))
     .ToolBar(tools => tools.Create().Text("Add New Item"))
+
     .Columns(columns =>
     {
-
-
-
         columns.Bound(p => p.TypeOfExpense).ClientTemplate("#= TypeOfExpense #" +
-            "<input type='hidden' name='ItemDetails[#= getEventBudgetDetail(data)#].TypeOfExpense' value='#= TypeOfExpense #' />");
+            "<input type='hidden' name='ItemDetails[#= getItem(data)#].TypeOfExpense' value='#= TypeOfExpense #' />").Width("17%");
 
         columns.Bound(p => p.Description).ClientTemplate("#= Description #" +
-            "<input type='hidden' name='ItemDetails[#= getEventBudgetDetail(data)#].Description' value='#= Description #' />");
+            "<input type='hidden' name='ItemDetails[#= getItem(data)#].Description' value='#= Description #' />").Width("17%");
+
 
         columns.Bound(p => p.WBS).ClientTemplate("#= WBS.Text #" +
-                         "<input type='hidden' name='ItemDetails[#= getEventBudgetDetail(data)#].WBS.Value' value='#= WBS.Value #' />"
-                       )
+            "<input type='hidden' name='ItemDetails[#= getItem(data)#].WBS.Value' value='#= WBS.Value #' />")
                        .EditorViewData(new
                        {
                            DataTextField = "Text",
                            DataValueField = "Value",
                            ControllerName = "FINRequisitionNote",
                            ActionName = "GetWBSMaster"
-                       });
+                       })
+                       .Width("15%");
 
         columns.Bound(p => p.GL).ClientTemplate("#= GL.Text #" +
-                         "<input type='hidden' name='ItemDetails[#= getEventBudgetDetail(data)#].GL.Value' value='#= GL.Value #' />"
+                         "<input type='hidden' name='ItemDetails[#= getItem(data)#].GL.Value' value='#= GL.Value #' />"
                        )
                        .EditorViewData(new
                        {
@@ -38,38 +37,48 @@
                            DataValueField = "Value",
                            ControllerName = "FINRequisitionNote",
                            ActionName = "GetGLMaster"
-                       });
+                       }).Width("15%");
+
 
         columns.Bound(p => p.Quantity).ClientTemplate("#= Quantity #" +
-         "<input type='hidden' name='ItemDetails[#= getEventBudgetDetail(data)#].Quantity' value='#= Quantity #' />");
+            "<input type='hidden' name='ItemDetails[#= getItem(data)#].Quantity' value='#= Quantity #' />").Width("17%");
 
         columns.Bound(p => p.UoMQty).ClientTemplate("#= UoMQty #" +
-            "<input type='hidden' name='ItemDetails[#= getEventBudgetDetail(data)#].UoMQty' value='#= UoMQty #' />");
+            "<input type='hidden' name='ItemDetails[#= getItem(data)#].UoMQty' value='#= UoMQty #' />").Width("17%");
 
         columns.Bound(p => p.Frequency).ClientTemplate("#= Frequency #" +
-           "<input type='hidden' name='ItemDetails[#= getEventBudgetDetail(data)#].Frequency' value='#= Frequency #' />");
+            "<input type='hidden' name='ItemDetails[#= getItem(data)#].Frequency' value='#= Frequency #' />").Width("17%");
 
         columns.Bound(p => p.UoMFreq).ClientTemplate("#= UoMFreq #" +
-          "<input type='hidden' name='ItemDetails[#= getEventBudgetDetail(data)#].UoMFreq' value='#= UoMFreq #' />");
+            "<input type='hidden' name='ItemDetails[#= getItem(data)#].UoMFreq' value='#= UoMFreq #' />").Width("17%");
 
         columns.Bound(p => p.UnitPrice).ClientTemplate("#= UnitPrice #" +
-            "<input type='hidden' name='ItemDetails[#= getEventBudgetDetail(data)#].UnitPrice' value='#= UnitPrice #' />");
+            "<input type='hidden' name='ItemDetails[#= getItem(data)#].UnitPrice' value='#= UnitPrice #' />").Width("17%");
 
         columns.Bound(p => p.AmountPerItem).ClientTemplate("#= AmountPerItem #" +
-            "<input type='hidden' name='ItemDetails[#= getEventBudgetDetail(data)#].AmountPerItem' value='#= AmountPerItem #' />");
+            "<input type='hidden' name='ItemDetails[#= getItem(data)#].AmountPerItem' value='#= AmountPerItem #' />").Width("17%");
 
         columns.Bound(p => p.DirectPayment).ClientTemplate("#= DirectPayment #" +
-            "<input type='hidden' name='ItemDetails[#= getEventBudgetDetail(data)#].DirectPayment' value='#= DirectPayment #' />");
+            "<input type='hidden' name='ItemDetails[#= getItem(data)#].DirectPayment' value='#= DirectPayment #' />").Width("17%");
 
         columns.Bound(p => p.SCA).ClientTemplate("#= SCA #" +
-            "<input type='hidden' name='ItemDetails[#= getEventBudgetDetail(data)#].SCA' value='#= SCA #' />");
+           "<input type='hidden' name='ItemDetails[#= getItem(data)#].SCA' value='#= SCA #' />").Width("17%");
 
         columns.Bound(p => p.Remarks).ClientTemplate("#= Remarks #" +
-            "<input type='hidden' name='ItemDetails[#= getEventBudgetDetail(data)#].Remarks' value='#= Remarks #' />");
+           "<input type='hidden' name='ItemDetails[#= getItem(data)#].Remarks' value='#= Remarks #' />").Width("17%");
 
+        
 
+        columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
+               "<input type='hidden' name='ItemDetails[#= getItem(data)#].ID' value='#= ID #' />"
+             );
 
-        // Button
+   
+
+        columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
+                     "<input type='hidden' name='ItemDetails[#= getItem(data)#].EditMode' value='#= EditMode #' />"
+        );
+
         columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
             .Click("onDeleteKendoDetail")).Width(100);
     })
@@ -77,6 +86,7 @@
      {
          e.Edit("onEditKendoDetail");
          e.DataBound("onDataBoundEducationDetails");
+         e.Edit("onedit");
      })
 
     .DataSource(dataSource => dataSource.Ajax()
@@ -85,26 +95,45 @@
                        model.Id(p => p.ID);
                        model.Field(m => m.WBS).DefaultValue(RequisitionNoteItemVM.GetWBSDefaultValue());
                        model.Field(m => m.GL).DefaultValue(RequisitionNoteItemVM.GetGLDefaultValue());
-                   })
 
+                   })
+                    .Read(read => read.Action("GetRequisitionNoteDetailsByEventBudgetId", "FINRequisitionNote").Data("SetEventBudgetID"))
                    .ServerOperation(false)
      )
     )
 </div>
 
 <script>
-    function getEventBudgetDetail(dataItem) {
+    function getItem(dataItem) {
         var data = $("#ItemDetails").data("kendoGrid").dataSource.data();
         return data.indexOf(dataItem);
     }
 
-    function getMsgType() {
+    function SetEventBudgetID() {
         return { eventBudgetId: $("#hdnEvenBudgetId").val() };
     }
 
     function onDataBoundEducationDetails(e) {
         var grid = $("#ItemDetails").data("kendoGrid");
         hideDeletedRowKendoDetail(grid);
+
+        var datasource = $("#ItemDetails").data("kendoGrid").dataSource.data();
+        var totalAll = 0;
+        for (var i = 0; i < datasource.length; i++) {
+            totalAll = totalAll + datasource[i].Total;
+        }
+
+        $("#Total").val(totalAll);
     }
 
+    function calculateField(data, idx) {
+        data.set("Total", data.Price * data.Quantity);
+
+        return data;
+    }
+
+    function onedit(e) {
+        onEditKendoDetail(e);
+        $(e.container).find('input[name="Total"]').attr("readonly", true);
+    }
 </script>

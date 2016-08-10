@@ -32,12 +32,6 @@ namespace MCAWebAndAPI.Web.Controllers
         [HttpPost]
         public ActionResult ApprovalManpowerRequisition(FormCollection form, ManpowerRequisitionVM viewModel)
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            //    var errorMessages = BindHelper.GetErrorMessages(ModelState.Values);
-            //    return JsonHelper.GenerateJsonErrorResponse(errorMessages);
-            //}
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
@@ -118,12 +112,7 @@ namespace MCAWebAndAPI.Web.Controllers
         [HttpPost]
         public ActionResult EditManpowerRequisition(FormCollection form, ManpowerRequisitionVM viewModel)
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            //    var errorMessages = BindHelper.GetErrorMessages(ModelState.Values);
-            //    return JsonHelper.GenerateJsonErrorResponse(errorMessages);
-            //}
+           
             _service.SetSiteUrl(System.Web.HttpContext.Current.Session["SiteUrl"] as string);
             try
             {
@@ -196,13 +185,7 @@ namespace MCAWebAndAPI.Web.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateManpowerRequisition(FormCollection form, ManpowerRequisitionVM viewModel)
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            //    var errorMessages = BindHelper.GetErrorMessages(ModelState.Values);
-            //    return JsonHelper.GenerateJsonErrorResponse(errorMessages);
-            //}
-
+           
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
@@ -288,8 +271,7 @@ namespace MCAWebAndAPI.Web.Controllers
             var array = workingRelationshipDetails.ToArray();
             for (int i = 0; i < array.Length; i++)
             {
-                // array[i]. = BindHelper.BindDateInGrid("WorkingRelationshipDetails",  i, "From", form);
-                //  array[i].To = BindHelper.BindDateInGrid("WorkingRelationshipDetails",i, "To", form);
+                
             }
 
             return array;

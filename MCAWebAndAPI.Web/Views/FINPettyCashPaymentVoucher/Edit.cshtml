@@ -1,0 +1,182 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Finance
+@model PettyCashPaymentVoucherVM
+
+@{
+    ViewBag.Title = "Create Petty Cash Payment Voucher";
+
+}
+
+@using (Ajax.BeginForm("Edit", "FINPettyCashPaymentVoucher",
+        FormMethod.Post,
+        new AjaxOptions
+        {
+            OnBegin = "onBeginForm",
+            OnComplete = "onCompleteForm",
+            OnSuccess = "onSuccessFormEmbed",
+            OnFailure = "onFailureForm"
+        },
+        new
+        {
+            @class = "form-horizontal",
+            enctype = "multipart/form-data"
+        }))
+
+{
+
+    <fieldset>
+        <legend>Petty Cash Payment Voucher</legend>
+        <div class="row">
+            <div class="col-sm-6">
+                @Html.HiddenFor(m => m.ID)
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Date).Class("col-sm-3 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.Date)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Status).Class("col-sm-3 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.Status)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.PaidTo).Class("col-sm-3 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.PaidTo)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Professional).Class("col-sm-3 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.Professional)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Vendor).Class("col-sm-3 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.Vendor)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Currency).Class("col-sm-3 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.Currency)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.AmountPaid).Class("col-sm-3 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.AmountPaid)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.AmountPaidInWord).Class("col-sm-3 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.AmountPaidInWord)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.ReasonOfPayment).Class("col-sm-3 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.ReasonOfPayment)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Fund).Class("col-sm-3 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.Fund)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.WBS).Class("col-sm-3 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.WBS)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.GL).Class("col-sm-3 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.GL)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Remarks).Class("col-sm-3 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.Remarks)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Documents).Class("col-md-2 control-label")
+                    <div class="col-md-7">
+                        @Html.EditorFor(m => m.Documents)
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </fieldset>
+
+
+    <div class="form-actions">
+        <div class="row">
+            <div class="col-sm-12">
+                <button id="print-button" class="btn btn-default" type="button">
+                    Print
+                </button>
+
+                <button id="submit-button" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    Submit
+                </button>
+
+                <button id="cancel-button" class="btn btn-primary" type="reset">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+}
+
+
+
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $('#print-button').click(function (e) {
+                if (!$('form').valid()) {
+                    alert('Please make sure that all required fields are filled');
+                    return;
+                }
+
+                var actionUrl = $('form').attr("action");
+                var newActionUrl = actionUrl.replace("Edit", "Print");
+
+                $('form').prop('action', newActionUrl);
+                $('form').submit();
+
+            });
+        });
+
+
+    </script>
+}
+
+

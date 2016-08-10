@@ -44,5 +44,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         bool UpdateStatusPSABefore(int? psaRenewalNumberMinusOne, string professionalName);
 
         string GetProfessionalName(int? professionalID);
+
+        IEnumerable<PositionMaster> GetPosition(string ProjectUnit);
     }
 }

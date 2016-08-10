@@ -138,7 +138,18 @@ Kindly check the link as per below to go to direct page accordingly. You may che
 
 page in IMS (My Approval View). Thank you.    
 
-Link : {0}/Lists/CompensatoryRequest/FormCompensatoryRequest.aspx?ID={1}</value>
+Link : {0}/Lists/CompensatoryRequest/CompensatoryApproval.aspx?ID={1}</value>
+  </data>
+  <data name="EmailCompensatoryRequestor" xml:space="preserve">
+    <value>Dear Respective Requestor,
+
+    This email is sent to you to notify that there is a request which required your request status.
+
+Kindly check the link as per below to go to direct page accordingly. You may check your personal
+
+page in IMS (My Compensatory View). Thank you.    
+
+Link : {0}/Lists/CompensatoryRequest/DispFormCompensatory.aspx?ID={1}</value>
   </data>
   <data name="EmailInterviewToInterviewCandidate" xml:space="preserve">
     <value>Dear Interview Panel,
@@ -257,14 +268,14 @@ This email is sent to you to notify that your approval request has been responde
 
 This email is sent to you to notify that there is a request which required your action to approve. Kindly check the link as per below to go to direct page accordingly. You may check your personal page in IMS (My Approval View). Thank you. 
 
-Link :   {0}{1}/EditFormApprover_Custom.aspx?ID={2}</value>
+Link :   {0}{1}/EditForm_Custom.aspx?ID={2}</value>
   </data>
   <data name="ProfessionalPerfromanceEvaluation" xml:space="preserve">
     <value>Dear Respective Approver,
 
 This email is sent to you to notify that there is a request which required your action to approve. Kindly check the link as per below to go to direct page accordingly. You may check your personal page in IMS (My Approval View). Thank you. 
 
-Link :  {0}{1}/EditFormApprover_Custom.aspx?ID={2}</value>
+Link :  {0}{1}/EditForm_Custom.aspx?ID={2}</value>
   </data>
   <data name="WorkflowAskForApproval" xml:space="preserve">
     <value>&lt;p&gt;

@@ -8,6 +8,7 @@ using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Service.HR.Common;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace MCAWebAndAPI.Service.HR.Payroll
 {
@@ -181,10 +182,10 @@ namespace MCAWebAndAPI.Service.HR.Payroll
         }
 
         /// <summary>
-        /// To produce 
+        /// To produce table of payroll run result
         /// </summary>
         /// <param name="periodParam"></param>
-        /// <param name="isSummary"></param>
+        /// <param name="isSummary">Identify whether to display date per row or professional per row </param>
         /// <returns></returns>
         public async Task<IEnumerable<PayrollWorksheetDetailVM>> GetPayrollWorksheetDetailsAsync(DateTime? periodParam, bool isSummary = false)
         {
@@ -201,29 +202,70 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             // Set Site URL
             worksheet.SetSiteUrl(_siteUrl);
 
-            // Retrive all required master data to cut network round trip time
-            var populateMasterDataTask = worksheet.PopulateRequiredMasterData(startDate);
+            // Retrive required data to cut network round trip time
+            var populateProfessionalTask = worksheet.PopulateAllProfessionals();
+            var populateValidPSATask = worksheet.PopulateAllValidPSAs(startDate);
 
             // Get professionals whose PSA are still valid
             var professionalIDs = worksheet.GetValidProfessionalIDs(startDate);
 
+            // Retrive required data to cut network round trip time
+            var populateProfessionalMonthlyFeeTask = worksheet.PopulateAllProfessionalMonthlyFee(professionalIDs);
+
             // Populate rows
             worksheet.PopulateRows(dateRange, professionalIDs);
 
-            // Populate columns
-            await populateMasterDataTask;
-            var populateColumnTask = worksheet.PopulateColumns();
-
-            // If summary mode / HR-15 mode is required, then the data should be agggregated
-            if (isSummary)
+            // Make sure all required data have been populated
+            try
             {
-                await populateColumnTask;
-                worksheet.SummarizeData();
+                await Task.WhenAll(populateProfessionalTask, populateValidPSATask, populateProfessionalMonthlyFeeTask);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e);
             }
 
-            return await populateColumnTask;
+            // Populate columns
+            var populateColumnTask = worksheet.PopulateColumns();
+
+            // If worksheet mode
+            if (!isSummary)
+                return await populateColumnTask;
+
+            // If summary mode / HR-15 mode is required, then the data should be agggregated
+            await populateColumnTask;
+            worksheet.SummarizeData();
+            return worksheet;
         }
 
+        /// <summary>
+        /// Run payroll in Background for given period. The result is stored in the given filePath
+        /// </summary>
+        /// <param name="period"></param>
+        /// <param name="filePath"></param>
+        public void SavePayrollWorksheetDetailInBackground(DateTime period, string filePath)
+        {
+            var viewModel = GetPayrollWorksheetDetailsAsync(period, false);
+            var fileContents = FileUtil.ConvertObjectToByteArray(viewModel);
 
+            try
+            {
+                if (fileContents.Length > 0)
+                {
+                    var path = filePath;
+                    System.IO.File.WriteAllBytes(path, fileContents);
+                }
+                else
+                {
+                    logger.Error(new FileNotFoundException());
+                }
+            }
+            catch (Exception e)
+            {
+                logger.Error(e);
+            }
+
+            logger.Info(string.Format("Payroll Worksheet draft has been stored at {0}", filePath));
+        }
     }
 }

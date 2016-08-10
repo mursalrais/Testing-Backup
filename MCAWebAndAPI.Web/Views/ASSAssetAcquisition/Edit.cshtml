@@ -22,7 +22,7 @@
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.TransactionType).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Html.EditorFor(m => m.TransactionType)
+                    @Html.DisplayFor(m => m.TransactionType)
                 </div>
             </div>
             <div class="form-group">
@@ -34,13 +34,13 @@
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.Vendor).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Html.EditorFor(m => m.Vendor)
+                    @Html.DisplayFor(m => m.Vendor)
                 </div>
             </div>
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.PoNo).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Html.EditorFor(m => m.PoNo)
+                    @Html.DisplayFor(m => m.PoNo)
                 </div>
             </div>
         </div>
@@ -75,7 +75,8 @@
 
 
 <script>
-    function cancelButton() {
-        alert(_spPageContextInfo.siteAbsoluteUrl);
-    }
+    $(document).ready(function () {
+        alert("ID : " + $("#ID_Value").text());
+        $("#AccpMemo_Value").data("kendoDropDownList").value("");
+    })
 </script>

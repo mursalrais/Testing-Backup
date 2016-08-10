@@ -17,6 +17,7 @@ namespace MCAWebAndAPI.Service.HR.Common
         const string SP_PROMAS_LIST_NAME = "Professional Master";
         const string SP_POSMAS_LIST_NAME = "Position Master";
         const string SP_MONFEE_LIST_NAME = "Monthly Fee";
+        const string SP_MONFEE_DETAIL_LIST_NAME = "Monthly Fee Detail";
         const string SP_PROEDU_LIST_NAME = "Professional Education";
         const string SP_PROTRAIN_LIST_NAME = "Professional Training";
         const string SP_PROORG_LIST_NAME = "Professional Organization Detail";
@@ -117,8 +118,15 @@ namespace MCAWebAndAPI.Service.HR.Common
                 PersonalMail = Convert.ToString(item["personalemail"]),
                 JoinDate = Convert.ToDateTime(item["Join_x0020_Date"]).ToLocalTime(),
                 JoinDateTemp = Convert.ToDateTime(item["Join_x0020_Date"]).ToLocalTime().ToShortDateString(),
-                InsuranceAccountNumber = Convert.ToString(item["hiaccountnr"])
-            };
+                InsuranceAccountNumber = Convert.ToString(item["hiaccountnr"]),
+
+                BankAccountName = Convert.ToString(item["payrollbankname"]),
+                BankAccountNumber = Convert.ToString(item["payrollaccountnr"]),
+                BankBranchOffice = Convert.ToString(item["payrollbranchoffice"]),
+                Currency = Convert.ToString(item["payrollcurrency"]),
+                BankName = Convert.ToString(item["payrollbankname"])
+
+        };
         }
 
         public IEnumerable<PositionMaster> GetPositions()
@@ -157,7 +165,8 @@ namespace MCAWebAndAPI.Service.HR.Common
                 ID = Convert.ToInt32(item["ID"]),
                 InsuranceNumber = Convert.ToString(item["insurancenr"]),
                 OrganizationInsurance = Convert.ToString(item["insurancenr"]),
-                Name = FormatUtil.ConvertLookupToValue(item, "professional")
+                Name = Convert.ToString(item["Title"])
+                //Name = FormatUtil.ConvertLookupToValue(item, "professional")
             };
         }
         public IEnumerable<DependentMaster> GetDependents()
@@ -184,7 +193,7 @@ namespace MCAWebAndAPI.Service.HR.Common
             return models;
         }
 
-        public IEnumerable<DependentMaster> GetDependentsForInsurance()
+        public IEnumerable<DependentMaster> GetDependentsForInsurance(int? id)
         {
             var models = new List<DependentMaster>();
 
@@ -196,7 +205,12 @@ namespace MCAWebAndAPI.Service.HR.Common
                 Name = ""
             };
             models.Add(_default);
-            foreach (var item in SPConnector.GetList(SP_PRODEP_LIST_NAME, _siteUrl))
+
+            var caml = @"<View><Query><Where><Eq><FieldRef Name='professional_x003a_ID' />
+                        <Value Type='Lookup'>" + id +
+                      "</Value></Eq></Where></Query></View>";
+
+            foreach (var item in SPConnector.GetList(SP_PRODEP_LIST_NAME, _siteUrl, caml))
             {
                 models.Add(ConvertToDependentModel_Light(item));
             }
@@ -247,6 +261,55 @@ namespace MCAWebAndAPI.Service.HR.Common
             }
 
             return professionalOfficeEmail;
+        }
+
+        /// <summary>
+        /// Get monthly fee details for given professional IDs
+        /// </summary>
+        /// <param name="professionalIDs"></param>
+        /// <returns></returns>
+        public IEnumerable<MonthlyFeeMaster> GetMonthlyFees(int[] professionalIDs)
+        {
+            var caml = @"<View>  
+             <ViewFields><FieldRef Name='professional' /><FieldRef Name='ID' /></ViewFields> 
+            </View>";
+
+            //Item1 = ProfessionalID, Item2 = HeaderID
+            var profIDAndHeaderIDs = new List<Tuple<int, int>>();
+
+            foreach (var item in SPConnector.GetList(SP_MONFEE_LIST_NAME, _siteUrl, caml))
+            {
+                var profID = FormatUtil.ConvertLookupToID(item, "professional");
+                if (professionalIDs.Contains((int)profID))
+                {
+                    profIDAndHeaderIDs.Add(new Tuple<int, int>((int)profID,Convert.ToInt32(item["ID"])));
+                }
+            }
+
+            var monthlyFees = new List<MonthlyFeeMaster>();
+            foreach (var header in profIDAndHeaderIDs)
+            {
+                caml = @"<View>  
+                <Query> 
+                <Where><Eq><FieldRef Name='monthlyfeeid' LookupId='True' /><Value Type='Lookup'>" + header.Item2 + 
+                @"</Value></Eq></Where> 
+                </Query> 
+                <ViewFields><FieldRef Name='dateofnewfee' /><FieldRef Name='enddate' /><FieldRef Name='monthlyfee' /><FieldRef Name='monthlyfeeid' /></ViewFields> 
+                </View>";
+
+                foreach (var item in SPConnector.GetList(SP_MONFEE_DETAIL_LIST_NAME, _siteUrl, caml))
+                {
+                    monthlyFees.Add(new MonthlyFeeMaster
+                    {
+                        ProfessionalID = header.Item1, 
+                        DateOfNewFee = Convert.ToDateTime(item["dateofnewfee"]),
+                        EndDate = Convert.ToDateTime(item["enddate"]),
+                        MonthlyFee = Convert.ToDouble(item["monthlyfee"])
+                    });
+                }
+            }
+
+            return monthlyFees;
         }
     }
 }

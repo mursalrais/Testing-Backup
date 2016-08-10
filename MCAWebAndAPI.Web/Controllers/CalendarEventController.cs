@@ -64,19 +64,7 @@ namespace MCAWebAndAPI.Web.Controllers
             // Return JSON
             return Json(new { success = true, urlToRedirect = "google.com" },
                 JsonRequestBehavior.AllowGet);
-            
-
-            //return View(viewModel);
         }
-
-        /*public ActionResult GetEvents(string siteUrl = null) {
-
-            calendarService.SetSiteUrl(siteUrl);
-            var data = calendarService.GetEvents();
-
-            return this.Jsonp(data);
-        }*/
-
 
     }
 }

@@ -333,3 +333,4 @@ Please try again.
 2016-08-08 08:49:13.0844 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Invalid data has been used to update the list item. The field you are trying to update may be read only. at ID: 1
 2016-08-08 08:54:05.6187 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Invalid data has been used to update the list item. The field you are trying to update may be read only. at ID: 1
 2016-08-08 08:59:22.1492 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Operation is not valid due to the current state of the object. at ID: 1
+2016-08-09 11:55:22.5343 MCAWebAndAPI.Service.HR.MedicalCheckUp.MedicalCheckUpService The 'sId' argument is invalid.

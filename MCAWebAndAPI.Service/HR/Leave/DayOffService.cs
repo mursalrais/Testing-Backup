@@ -9,13 +9,19 @@ using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Service.HR.Leave
 {
-    public class HRDayOffBalanceService : IHRDayOffBalanceService
+    public class DayOffService : IDayOffService
     {
         string _siteUrl;
         static Logger logger = LogManager.GetCurrentClassLogger();
 
         const string SP_BAL_LIST_NAME = "Day-Off Balance";
+        const string SP_DAYOFF_REQ_LIST_NAME = "Day-Off Request";
+        const string SP_DAYOFF_REQ_DETAIL_LIST_NAME = "Day-Off Request Detail";
         const string SP_PSA_LIST_NAME = "PSA Management";
+
+        const string TYPE_UNPAID_DAYOFF = "Unpaid Day-Off";
+
+
         public void SetSiteUrl(string siteUrl)
         {
             _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
@@ -121,9 +127,67 @@ namespace MCAWebAndAPI.Service.HR.Leave
                     throw e;
                 }
             }
+        }
 
+        private int? GetDayOffHeaderIDFromProfessional(int professionalID)
+        {
+            var caml = @"<View>  
+            <Query> 
+               <Where><Eq><FieldRef Name='professional' LookupId='True' /><Value Type='Lookup'>" + professionalID
+               + @"</Value></Eq></Where> 
+            </Query> 
+                <ViewFields><FieldRef Name='professional' /><FieldRef Name='ID' /></ViewFields> 
+            </View>";
 
+            int? headerID = null;
+            foreach (var item in SPConnector.GetList(SP_DAYOFF_REQ_LIST_NAME, _siteUrl, caml))
+            {
+                headerID = Convert.ToInt32(item["ID"]);
+                break;
+            }
 
+            return headerID;
+        }
+
+        public int GetUnpaidDayOffTotalDays(int professionalID, IEnumerable<DateTime> dateRange)
+        {
+            var headerID = GetDayOffHeaderIDFromProfessional(professionalID);
+
+            var caml = @"<View><Query><Where><And><Eq>
+                    <FieldRef Name='masterdayofftype' />
+                    <Value Type='Lookup'>Unpaid Day-Off</Value></Eq><Eq>
+                    <FieldRef Name='dayoffrequest' LookupId='True'/><Value Type='Lookup'>" +
+                    headerID + @"</Value></Eq></And></Where></Query></View>";
+
+            var totalUnpaidDayOff = 0;
+            foreach (var item in SPConnector.GetList(SP_DAYOFF_REQ_DETAIL_LIST_NAME, _siteUrl, caml))
+            {
+                totalUnpaidDayOff += Convert.ToInt32(item["totaldays"]);
+            }
+
+            return totalUnpaidDayOff;
+        }
+
+        public bool IsUnpaidDayOff(int professionalID, DateTime date, IEnumerable<DateTime> dateRange)
+        {
+            var headerID = GetDayOffHeaderIDFromProfessional(professionalID);
+
+            var caml = @"<View><Query><Where><And><Eq>
+                    <FieldRef Name='masterdayofftype' />
+                    <Value Type='Lookup'>Unpaid Day-Off</Value></Eq><Eq>
+                    <FieldRef Name='dayoffrequest' LookupId='True'/><Value Type='Lookup'>" +
+                    headerID + @"</Value></Eq></And></Where></Query></View>";
+
+            foreach (var item in SPConnector.GetList(SP_DAYOFF_REQ_DETAIL_LIST_NAME, _siteUrl, caml))
+            {
+                var startDate = Convert.ToDateTime(item["requeststartdate"]);
+                var endDate = Convert.ToDateTime(item["requestenddate"]);
+
+                if (startDate <= date && date <= endDate)
+                    return true;
+            }
+
+            return false;
         }
     }
 }

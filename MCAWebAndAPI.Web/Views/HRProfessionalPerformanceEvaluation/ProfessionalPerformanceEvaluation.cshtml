@@ -70,7 +70,7 @@
                 </div>
             </div>
         </div>
-        @if (Model.Requestor != null)
+        @if (Model.TypeForm == "Professional")
         {
             <legend>Approval Path</legend>
             <div id="workflow-placeholder" class="row" />
@@ -96,7 +96,7 @@ if (Model.ID == null)
     </div>
 }
 
-if (Model.Requestor != null && Model.StatusForm == "Initiated")
+if (Model.TypeForm == "Professional" && Model.StatusForm == "Initiated")
 {
     <div class="form-actions">
         <div class="row">
@@ -114,7 +114,7 @@ if (Model.Requestor != null && Model.StatusForm == "Initiated")
     </div>
 }
 
-if (Model.Requestor != null && Model.StatusForm == "Draft")
+if (Model.TypeForm == "Professional" && Model.StatusForm == "Draft")
 {
     <div class="form-actions">
         <div class="row">
@@ -132,7 +132,7 @@ if (Model.Requestor != null && Model.StatusForm == "Draft")
     </div>
 }
 
-if (Model.Requestor == null && Model.StatusForm == "Pending Approval 1 of 2")
+if (Model.TypeForm == "Approver1" && Model.StatusForm == "Pending Approval 1 of 2")
 {
     <div class="form-actions">
         <div class="row">
@@ -146,7 +146,7 @@ if (Model.Requestor == null && Model.StatusForm == "Pending Approval 1 of 2")
     </div>
 }
 
-if (Model.Requestor == null && Model.StatusForm == "Pending Approval 2 of 2")
+if (Model.TypeForm == "Approver2" && Model.StatusForm == "Pending Approval 2 of 2")
 {
     <div class="form-actions">
         <div class="row">
@@ -160,7 +160,7 @@ if (Model.Requestor == null && Model.StatusForm == "Pending Approval 2 of 2")
     </div>
 }
 }
-@if (Model.Requestor != null & Model.StatusForm == "Approved")
+@if (Model.StatusForm == "Approved")
 {
     using (Html.BeginForm((string)ViewBag.Action, "HRProfessionalPerformanceEvaluation", FormMethod.Post,
                                                                                     new
@@ -225,7 +225,7 @@ if (Model.Requestor == null && Model.StatusForm == "Pending Approval 2 of 2")
                 </div>
             </div>
         </div>
-        @if (Model.Requestor != null)
+        @if (Model.TypeForm == "Professional")
         {
             <legend>Approval Path</legend>
             <div id="workflow-placeholder" class="row" />
@@ -233,15 +233,18 @@ if (Model.Requestor == null && Model.StatusForm == "Pending Approval 2 of 2")
     </fieldset>
     }
 
-    <div class="form-actions">
-        <div class="row">
-            <div class="col-sm-12">
-                <button id="print-button" class="btn btn-primary" type="button">
-                    Print
-                </button>
+    if (Model.TypeForm == "Professional")
+    {
+        <div class="form-actions">
+            <div class="row">
+                <div class="col-sm-12">
+                    <button id="print-button" class="btn btn-primary" type="button">
+                        Print
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
+    }
 }
 
 @section scripts{
@@ -287,7 +290,8 @@ if (Model.Requestor == null && Model.StatusForm == "Pending Approval 2 of 2")
 
         $(document).ready(function () {
             var Requestor = "@ViewBag.Requestor";
-            if (Requestor != null) {
+            var typeForm = "@Model.TypeForm";
+            if (typeForm == "Professional") {
                 displayWorkflowRouter("workflow-placeholder", "@ViewBag.ListName", Requestor);
             }
         });

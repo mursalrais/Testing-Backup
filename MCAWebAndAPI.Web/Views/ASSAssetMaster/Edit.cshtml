@@ -61,7 +61,7 @@
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.SerialNo).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    <input type="text" id="SerialNo" name="SerialNo" style="width: 100%;" />
+                    <input type="text" id="SerialNo" name="SerialNo" style="width: 100%;" value="@Model.SerialNo"/>
                 </div>
             </div>
             <div class="form-group">
@@ -127,7 +127,7 @@
     <script type="text/javascript">
 
         $(document).ready(function () {
-            alert($("#AssetLevel_Value").data("kendoDropDownList").text());
+            //alert($("#AssetLevel_Value").data("kendoDropDownList").text());
             if ($("#AssetLevel_Value").data("kendoDropDownList").text() == "Main Asset") {
                 $("#AssetNoAssetDesc_Value").data("kendoDropDownList").enable(false);
                 $("#AssetNoAssetDesc_Value").data("kendoDropDownList").value("");
@@ -144,7 +144,7 @@
                 $("#AssetType_Value").data("kendoDropDownList").enable(false);
                 $("#AssetType_Value").data("kendoDropDownList").value("");
             }
-            alert("PO : " + $("#ProjectUnit_Value").data("kendoDropDownList").text());
+            //alert("PO : " + $("#ProjectUnit_Value").data("kendoDropDownList").text());
         });
 
 

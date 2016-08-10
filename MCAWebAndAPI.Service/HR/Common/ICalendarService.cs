@@ -21,5 +21,7 @@ namespace MCAWebAndAPI.Service.HR.Common
         IEnumerable<EventCalendar> GetHolidays(IEnumerable<DateTime> dateRange);
 
         IEnumerable<EventCalendar> GetPublicHolidays(IEnumerable<DateTime> dateRange);
+
+        int GetTotalWorkingDays(IEnumerable<DateTime> dateRange);
     }
 }
