@@ -67,7 +67,7 @@
                    .Model(model =>
                    {
                        model.Id(p => p.ID);
-                       model.Field(m => m.AssetSubAsset).DefaultValue(AssetAcquisitionItemVM.GetAssetSubAssetDefaultValue());
+                           model.Field(m => m.AssetSubAsset).DefaultValue(AssetAcquisitionItemVM.GetAssetSubAssetDefaultValue());
                    })
                    .ServerOperation(false)
         )

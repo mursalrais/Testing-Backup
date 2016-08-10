@@ -78,7 +78,7 @@
         </div>
     </div>
 </div>
-
+}
 @section scripts{
     <script type="text/javascript">
         $(document).ready(function () {
@@ -87,32 +87,7 @@
             });
         });
 
-        function OnSelectProfessionalName(e) {
-            var dataItem = this.dataItem(e.item);
-            var url = "/HRDataMaster/GetProfessional/" + dataItem.ID;
-            var urlPSA = "/HRPSAManagement/GetPSA/" + dataItem.ID;
-            $.getJSON(url, function (result) {
-                $('#ProfessionalID').prop('value', result[0].ID);
-                $('#Status').prop('value', result[0].Status);
-                $.getJSON(urlPSA, function (result) {
-                    if (result.length == 0) {
-                        $('#ProjectUnit').prop('value', "");
-                        $('#Position').prop('value', "");
-                        $('#JoinDate').prop('value', "");
-                        $('#DateOfNewPsa').prop('value', "");
-                        $('#EndOfContract').prop('value', "");
-                        alert("Professional Doesn't Have PSA");
-                    }
-                    else {
-                        $('#ProjectUnit').prop('value', result[0].ProjectOrUnit);
-                        $('#Position').prop('value', result[0].Position);
-                        $('#JoinDate').prop('value', result[0].JoinDate);
-                        $('#DateOfNewPsa').prop('value', result[0].DateOfNewPSA);
-                        $('#EndOfContract').prop('value', result[0].PsaExpiryDate);
-                    }
-                })
-            })
-        }
+       
     </script>
 
-}}
+}

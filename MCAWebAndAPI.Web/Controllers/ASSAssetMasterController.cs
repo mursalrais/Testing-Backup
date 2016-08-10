@@ -86,6 +86,7 @@ namespace MCAWebAndAPI.Web.Controllers
             };
         }
 
+        [HttpPost]
         public ActionResult Update(FormCollection form,AssetMasterVM _data, string site)
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");

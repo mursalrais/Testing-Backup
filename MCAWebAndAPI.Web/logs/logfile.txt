@@ -217,3 +217,33 @@ Parameter name: source
 Parameter name: source
    at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in D:\iMa\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 195
    at MCAWebAndAPI.Service.Asset.AssetAcquisitionService.UpdateDetails(Nullable`1 headerID, IEnumerable`1 items) in D:\iMa\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetAcquisitionService.cs:line 249
+2016-08-06 05:58:48.6131 MCAWebAndAPI.Service.Asset.AssetMasterService Cannot complete this action.
+
+Please try again.
+2016-08-06 06:03:26.2039 MCAWebAndAPI.Service.Asset.AssetMasterService Cannot complete this action.
+
+Please try again.
+2016-08-06 06:07:32.9885 MCAWebAndAPI.Service.Asset.AssetMasterService Cannot complete this action.
+
+Please try again.
+2016-08-06 06:08:28.0416 MCAWebAndAPI.Service.Asset.AssetMasterService Cannot complete this action.
+
+Please try again.
+2016-08-06 06:10:10.7393 MCAWebAndAPI.Service.Asset.AssetMasterService Cannot complete this action.
+
+Please try again.
+2016-08-06 06:25:15.5586 MCAWebAndAPI.Service.Asset.AssetMasterService Cannot complete this action.
+
+Please try again.
+2016-08-06 06:27:19.1417 MCAWebAndAPI.Service.Asset.AssetMasterService Cannot complete this action.
+
+Please try again.
+2016-08-06 06:29:29.9652 MCAWebAndAPI.Service.Asset.AssetMasterService Cannot complete this action.
+
+Please try again.
+2016-08-06 06:31:25.4925 MCAWebAndAPI.Service.Asset.AssetMasterService Cannot complete this action.
+
+Please try again.
+2016-08-06 06:34:33.5549 MCAWebAndAPI.Service.Asset.AssetMasterService Cannot complete this action.
+
+Please try again.

@@ -7,6 +7,7 @@ using MCAWebAndAPI.Model.ViewModel.Form.Asset;
 using NLog;
 using MCAWebAndAPI.Service.Utils;
 using System.Text.RegularExpressions;
+using MCAWebAndAPI.Service.Resources;
 
 namespace MCAWebAndAPI.Service.Asset
 {
@@ -30,6 +31,7 @@ namespace MCAWebAndAPI.Service.Asset
             viewModel.AssetType.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "AssetType", _siteUrl);
             viewModel.Condition.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "Condition", _siteUrl);
             viewModel.ProjectUnit.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "ProjectUnit", _siteUrl);
+            viewModel.Url = string.Format(UrlResource.AssetMaster, _siteUrl);
 
             return viewModel;
         }
@@ -50,8 +52,14 @@ namespace MCAWebAndAPI.Service.Asset
             viewModel.Remarks = Convert.ToString(listItem["Remarks"]);
             viewModel.SerialNo = Convert.ToString(listItem["SerialNo"]);
 
-           
-            viewModel.Spesifications = Regex.Replace(listItem["Spesifications"].ToString(), "<.*?>", string.Empty); 
+            if(listItem["Spesifications"] != null)
+            {
+                viewModel.Spesifications = Regex.Replace(listItem["Spesifications"].ToString(), "<.*?>", "");
+            } 
+            else
+            {
+                viewModel.Spesifications = "";
+            }
             viewModel.WarrantyExpires = Convert.ToDateTime(listItem["WarranyExpires"]);
             viewModel.AssetCategory.Value = Convert.ToString(listItem["AssetCategory"]);
             viewModel.AssetDesc = Convert.ToString(listItem["Title"]);
