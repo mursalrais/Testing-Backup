@@ -539,5 +539,21 @@ namespace MCAWebAndAPI.Web.Controllers
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl);
         }
 
+        public ActionResult GetAcceptanceMemoInfo(int IDAcceptanceMemo)
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            int? IDAccpMemo = IDAcceptanceMemo;
+            var accpMemoInfo = _assetAcquisitionService.GetAcceptanceMemoInfo(IDAccpMemo, siteUrl);
+
+            //var professionals = GetFromExistingSession();
+            return Json(
+                new
+                {
+                    accpMemoInfo.ID,
+                    accpMemoInfo.VendorID,
+                    accpMemoInfo.VendorName,
+                    accpMemoInfo.PoNo
+                }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

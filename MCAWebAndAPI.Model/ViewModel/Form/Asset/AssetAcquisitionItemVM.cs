@@ -12,6 +12,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 {
     public class AssetAcquisitionItemVM : Item
     {
+        public int? ID { get; set; }
         public string POLineItem { get; set; }
 
         [UIHint("InGridAjaxComboBox")]

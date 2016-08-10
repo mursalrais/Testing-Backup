@@ -5,14 +5,14 @@
 @model AssetAcquisitionHeaderVM
 
 @using (Ajax.BeginForm("Submit", "ASSassetAcquisition",
-                                                                                                   FormMethod.Post,
-                                                                                                   new AjaxOptions
-                                                                                                   {
-                                                                                                       OnBegin = "onBeginForm",
-                                                                                                       OnComplete = "onCompleteForm",
-                                                                                                       OnSuccess = "onSuccessFormEmbed",
-                                                                                                       OnFailure = "onFailureForm"
-                                                                                                   }, new { @class = "form-horizontal" }))
+                                                                                                                           FormMethod.Post,
+                                                                                                                           new AjaxOptions
+                                                                                                                           {
+                                                                                                                               OnBegin = "onBeginForm",
+                                                                                                                               OnComplete = "onCompleteForm",
+                                                                                                                               OnSuccess = "onSuccessFormEmbed",
+                                                                                                                               OnFailure = "onFailureForm"
+                                                                                                                           }, new { @class = "form-horizontal" }))
 
 {
     <form class="form-horizontal" method="post" action="/ASSassetAcquisition/Submit" id="create-asset-acquisition-form">
@@ -22,7 +22,7 @@
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.TransactionType).Class("col-md-4 control-label")
                     <div class="col-md-8">
-                        @Html.EditorFor(m => m.TransactionType)
+                        @Html.DisplayFor(m => m.TransactionType)
                     </div>
                 </div>
                 <div class="form-group">
@@ -34,13 +34,13 @@
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.Vendor).Class("col-md-4 control-label")
                     <div class="col-md-8">
-                        @Html.EditorFor(m => m.Vendor)
+                        @Html.DisplayFor(m => m.Vendor)
                     </div>
                 </div>
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.PoNo).Class("col-md-4 control-label")
                     <div class="col-md-8">
-                        @Html.EditorFor(m => m.PoNo)
+                        @Html.DisplayFor(m => m.PoNo)
                     </div>
                 </div>
             </div>
@@ -62,11 +62,10 @@
                 @Html.Partial("_Details", Model.Details)
             </div>
         </fieldset>
-
+        @Html.HiddenFor(m => m.ID)
         <div>
             <center>
                 <input class="k-button k-button-icontext k-grid-add" type="submit" value="Save" />
-                <input class="k-button k-button-icontext k-grid-add" ControlMode="New" id="gobackbutton1" />
                 <input class="k-button k-button-icontext k-grid-add" value="Cancel" onclick="return cancelButton()" />
             </center>
         </div>
@@ -76,7 +75,24 @@
 
 
 <script>
-    function cancelButton() {
-        alert(_spPageContextInfo.siteAbsoluteUrl);
+    $(document).ready(function () {
+        //alert("ID : " + $("#ID_Value").text());
+        
+        if ($("#ID").val() == null) {
+            $("#AccpMemo_Value").data("kendoDropDownList").value("");
+        }
+        else {
+            //$("#AccpMemo_Value").data("kendoDropDownList").value("");
+        }
+    })
+
+    function onSelectedAcceptanceMemo(e) {
+        var res = this.dataItem(e.item).split("-")
+        alert("Acceptance Memo ID : " + res[0]);
+        var url = "/ASSAssetAcquisition/GetAcceptanceMemoInfo?IDAcceptanceMemo=" + res[0];
+        $.getJSON(url, function (data) {
+            $('#Vendor').prop('value', data.VendorID + "-" + data.VendorName);
+            $('#PoNo').prop('value', data.PoNo);
+        });
     }
 </script>

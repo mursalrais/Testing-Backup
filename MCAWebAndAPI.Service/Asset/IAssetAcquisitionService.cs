@@ -37,5 +37,7 @@ namespace MCAWebAndAPI.Service.Asset
         Dictionary<int, string> getListIDOfList(string listName, string key, string value,  string SiteUrl);
 
         void RollbackParentChildrenUpload(string listNameHeader, int? latestIDHeader, string siteUrl);
+
+        AcceptanceMemoVM GetAcceptanceMemoInfo(int? ID, string SiteUrl);
     }
 }

@@ -69,5 +69,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         int GetPositionID(string requestorposition, string requestorunit, int positionID, int number);
 
         string GetExitProcedureStatus(int? exitProcID);
+
+        string GetProjectUnit(string requestor);
     }
 }

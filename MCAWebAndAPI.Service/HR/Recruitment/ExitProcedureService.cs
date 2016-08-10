@@ -60,6 +60,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             if (exitProcedure.StatusForm == "Pending Approval")
             {
                 statusExitProcedure = "Pending Approval";
+                exitProcedure.StartDateApproval = DateTime.Now;
+                updatedValues.Add("startdateapproval", exitProcedure.StartDateApproval.ToLocalTime());
             }
             else if(exitProcedure.StatusForm == "Draft")
             {
@@ -1226,6 +1228,25 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             string exitProcedureStatus = Convert.ToString(item["status"]);
 
             return exitProcedureStatus;
+        }
+
+        public string GetProjectUnit(string requestor)
+        {
+            var camlProjectUnit = @"<View>  
+            <Query> 
+               <Where><Eq><FieldRef Name='officeemail' /><Value Type='Text'>" + requestor + @"</Value></Eq></Where> 
+            </Query> 
+      </View>";
+
+            string projectUnit = "";
+
+            foreach (var projectunit in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl, camlProjectUnit))
+            {
+                projectUnit = Convert.ToString(projectunit["Project_x002f_Unit"]);
+                break;
+            }
+
+            return projectUnit;
         }
     }
 }
