@@ -28,5 +28,7 @@ namespace MCAWebAndAPI.Model.HR.DataMaster
 
         public DateTime DateOfNewPSA { get; set; }
 
+        public DateTime LastWorkingDate { get; set; }
+
     }
 }

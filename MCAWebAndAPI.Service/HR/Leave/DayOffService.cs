@@ -1,4 +1,5 @@
-﻿using MCAWebAndAPI.Model.ViewModel.Form.HR;
+﻿using MCAWebAndAPI.Model.HR.DataMaster;
+using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using MCAWebAndAPI.Service.Utils;
 using NLog;
 using System;
@@ -6,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.SharePoint.Client;
 
 namespace MCAWebAndAPI.Service.HR.Leave
 {
@@ -152,6 +154,8 @@ namespace MCAWebAndAPI.Service.HR.Leave
         public int GetUnpaidDayOffTotalDays(int professionalID, IEnumerable<DateTime> dateRange)
         {
             var headerID = GetDayOffHeaderIDFromProfessional(professionalID);
+            if (headerID == null)
+                return 0;
 
             var caml = @"<View><Query><Where><And><Eq>
                     <FieldRef Name='masterdayofftype' />
@@ -171,6 +175,8 @@ namespace MCAWebAndAPI.Service.HR.Leave
         public bool IsUnpaidDayOff(int professionalID, DateTime date, IEnumerable<DateTime> dateRange)
         {
             var headerID = GetDayOffHeaderIDFromProfessional(professionalID);
+            if (headerID == null)
+                return false;
 
             var caml = @"<View><Query><Where><And><Eq>
                     <FieldRef Name='masterdayofftype' />
@@ -188,6 +194,39 @@ namespace MCAWebAndAPI.Service.HR.Leave
             }
 
             return false;
+        }
+
+        public IEnumerable<DayOffRequest> GetDayOffRequests(IEnumerable<int> professionalIDs)
+        {
+            var dayOffRequests = new List<DayOffRequest>();
+            foreach (var professionalID in professionalIDs)
+            {
+                var headerID = GetDayOffHeaderIDFromProfessional(professionalID);
+
+                var caml = @"<View><Query><Where><Eq>
+                    <FieldRef Name='dayoffrequest' LookupId='True'/><Value Type='Lookup'>" +
+                        headerID + @"</Value></Eq></Where></Query></View>";
+
+                foreach (var item in SPConnector.GetList(SP_DAYOFF_REQ_DETAIL_LIST_NAME, _siteUrl, caml))
+                {
+                    dayOffRequests.Add(ConvertToDayOffRequest(item, professionalID));
+                }
+            }
+            return dayOffRequests;
+        }
+
+        private DayOffRequest ConvertToDayOffRequest(ListItem item, int professionalID)
+        {
+            return new DayOffRequest
+            {
+                ID = Convert.ToInt32(item["ID"]),
+                DayOffType = FormatUtil.ConvertLookupToValue(item, "masterdayofftype"),
+                StartDate = Convert.ToDateTime(item["requeststartdate"]),
+                EndDate = Convert.ToDateTime(item["requestenddate"]),
+                TotalDays = Convert.ToInt32(item["totaldays"]),
+                ApprovalStatus = Convert.ToString(item["approvalstatus"]),
+                ProfessionalID = professionalID
+            };
         }
     }
 }
