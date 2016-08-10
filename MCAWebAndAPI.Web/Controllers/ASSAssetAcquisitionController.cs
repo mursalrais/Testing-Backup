@@ -538,6 +538,5 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl);
         }
-
     }
 }

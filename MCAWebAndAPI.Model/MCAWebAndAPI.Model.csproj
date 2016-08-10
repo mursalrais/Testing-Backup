@@ -159,6 +159,7 @@
     <Compile Include="ViewModel\Control\ProjectComboBoxVM.cs" />
     <Compile Include="ViewModel\Control\ReligionComboBoxVM.cs" />
     <Compile Include="ViewModel\Control\TaxTypeComboBoxVM.cs" />
+    <Compile Include="ViewModel\Form\Asset\AcceptanceMemoVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetLocationVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetMasterVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetAcquisitionHeaderVM.cs" />

@@ -60,6 +60,10 @@ namespace MCAWebAndAPI.Service.Asset
             var columnValues = new Dictionary<string, object>();
             //columnValues.add
             columnValues.Add("Title", viewmodel.TransactionType);
+            if(viewmodel.AccpMemo.Value == null)
+            {
+                return 0;
+            }
             string[] memo = viewmodel.AccpMemo.Value.Split('-');
             //columnValues.Add("Acceptance_x0020_Memo_x0020_No", memo[1]);
             columnValues.Add("Acceptance_x0020_Memo_x0020_No", new FieldLookupValue { LookupId = Convert.ToInt32(memo[0]) });
@@ -403,6 +407,29 @@ namespace MCAWebAndAPI.Service.Asset
         public void RollbackParentChildrenUpload(string listNameHeader, int? latestIDHeader, string siteUrl)
         {
             SPConnector.DeleteListItem(listNameHeader, latestIDHeader, siteUrl);
+        }
+
+        public IEnumerable<AcceptanceMemoVM> GetAcceptanceMemo()
+        {
+            var models = new List<AcceptanceMemoVM>();
+            foreach (var item in SPConnector.GetList("Acceptance Memo", _siteUrl))
+            {
+                models.Add(ConvertToAcceptanceMemo(item));
+            }
+
+            return models;
+        }
+
+        private AcceptanceMemoVM ConvertToAcceptanceMemo(ListItem item)
+        {
+            return new AcceptanceMemoVM
+            {
+                ID = Convert.ToInt32(item["ID"]),
+                VendorName = Convert.ToString(item["Vendor"]),
+                VendorID = Convert.ToInt32(item["VendorID"]),
+                PoNo = Convert.ToString(item["PoNo"])
+
+            };
         }
     }
 }
