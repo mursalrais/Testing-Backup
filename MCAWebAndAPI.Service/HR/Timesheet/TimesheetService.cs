@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using MCAWebAndAPI.Service.Utils;
 using MCAWebAndAPI.Model.Common;
+using MCAWebAndAPI.Service.HR.Common;
 
 namespace MCAWebAndAPI.Service.HR.Timesheet
 {
@@ -16,6 +15,15 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
         const string TYPE_HOLIDAY = "Holiday";
         const string TYPE_DAYOFF = "Day-Off";
         const string TYPE_COMP_LEAVE = "Compensatory Leave";
+
+        private IDataMasterService _dataService;
+        private IProfessionalService _professionalService;
+
+        public TimesheetService()
+        {
+            _dataService = new DataMasterService();
+            _professionalService = new ProfessionalService();
+        }
 
         public TimesheetVM GetTimesheet(string userlogin, DateTime period)
         {
@@ -31,14 +39,14 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
 
         private string GetProjectUnitName(string userlogin)
         {
-            //TODO: To get from SP
-            return "Informaton Technology";
+            var professionalData = _dataService.GetProfessionals().FirstOrDefault(e => e.OfficeEmail == userlogin);
+            return professionalData.Project_Unit;
         }
 
         private string GetFullName(string userlogin)
         {
-            //TODO: To get from SP
-            return "Joko Prasetyo";
+            var professionalData = _dataService.GetProfessionals().FirstOrDefault(e => e.OfficeEmail == userlogin);
+            return professionalData.Name;
         }
 
         public IEnumerable<TimesheetDetailVM> GetTimesheetDetails(string userlogin, DateTime period)
@@ -51,7 +59,7 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
 
             foreach (var item in dateRange)
             {
-                if (IsPublicHoliday_Dummy(item))
+                if (IsPublicHoliday(item))
                 {
                     timesheetDetails.Add(new TimesheetDetailVM
                     {
@@ -69,7 +77,7 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                         Status = TYPE_HOLIDAY,
                         Type = TYPE_HOLIDAY
                     });
-                else if (IsDayOff_Dummy(item))
+                else if (IsDayOff(item))
                 {
                     timesheetDetails.Add(new TimesheetDetailVM
                     {
@@ -78,7 +86,7 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                         Status = TYPE_DAYOFF,
                         Type = TYPE_DAYOFF
                     });
-                }else if (IsCompLeave_Dummy(item))
+                }else if (IsCompLeave(item))
                 {
                     timesheetDetails.Add(new TimesheetDetailVM
                     {
@@ -93,27 +101,29 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
             return timesheetDetails;
         }
 
-        private bool IsCompLeave_Dummy(DateTime item)
+        private bool IsCompLeave(DateTime item)
         {
-            // random way to populate
+            //TODO: To get from SP list
             return (item.Day % 17 == 0);
         }
 
-        private bool IsDayOff_Dummy(DateTime item)
+        private bool IsDayOff(DateTime item)
         {
-            // random way to populate
+            //TODO: To get from SP list
             return (item.Day % 15 == 0);
         }
 
-        private bool IsPublicHoliday_Dummy(DateTime date)
+        private bool IsPublicHoliday(DateTime date)
         {
-            // random way to populate
+            //TODO: To get from SP list
             return (date.Day % 13 == 0);
         }
 
         public void SetSiteUrl(string siteUrl = null)
         {
             _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
+            _dataService.SetSiteUrl(_siteUrl);
+            _professionalService.SetSiteUrl(_siteUrl);
         }
 
         public IEnumerable<TimesheetDetailVM> AppendWorkingDays(IEnumerable<TimesheetDetailVM> currentDays, DateTime from, DateTime to, bool isFullDay, string location = null)
@@ -136,7 +146,6 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
             }
 
             return allDays;
-            
         }
     }
 }

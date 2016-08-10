@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using MCAWebAndAPI.Model.Common;
 
@@ -16,7 +15,6 @@ namespace MCAWebAndAPI.Web.Controllers
     public class HRTimesheetController : Controller
     {
         ITimesheetService _timesheetService;
-
         public HRTimesheetController()
         {
             _timesheetService = new TimesheetService();
@@ -26,7 +24,7 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             SessionManager.Set("SiteUrl", siteUrl);
             _timesheetService.SetSiteUrl(siteUrl);
-            var viewModel = _timesheetService.GetTimesheet(userlogin, DateTime.Now.AddMonths(1));
+            var viewModel = _timesheetService.GetTimesheet(userlogin, DateTime.Now.GetFirstPayrollDay());
 
             SessionManager.Set("TimesheetDetails", viewModel.TimesheetDetails);
             return View(viewModel);
@@ -40,8 +38,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             try
             {
-                viewModel = _timesheetService.GetTimesheet(viewModel.UserLogin, ((DateTime)(viewModel.Period))
-                    .AddMonths(1));
+                viewModel = _timesheetService.GetTimesheet(viewModel.UserLogin, ((DateTime)(viewModel.Period)));
             }
             catch (Exception e)
             {
@@ -81,7 +78,7 @@ namespace MCAWebAndAPI.Web.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
         
-        public JsonResult Grid_ReadHolidays([DataSourceRequest] DataSourceRequest request)
+        public JsonResult GridHolidays_Read([DataSourceRequest] DataSourceRequest request)
         {
             // Get from existing session variable or create new if doesn't exist
             var items = SessionManager.Get<IEnumerable<TimesheetDetailVM>>("TimesheetDetails").Where(e => e.Type != null);
@@ -95,7 +92,7 @@ namespace MCAWebAndAPI.Web.Controllers
             return json;
         }
 
-        public JsonResult Grid_ReadWorkingDays([DataSourceRequest] DataSourceRequest request)
+        public JsonResult GridWorkingDays_Read([DataSourceRequest] DataSourceRequest request)
         {
             // Get from existing session variable or create new if doesn't exist
             var items = SessionManager.Get<IEnumerable<TimesheetDetailVM>>("TimesheetDetails").Where(e => e.Type == null);

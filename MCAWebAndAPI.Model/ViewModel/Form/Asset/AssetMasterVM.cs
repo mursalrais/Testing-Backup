@@ -129,14 +129,13 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
                         {
                             ""
                         }
-                        ,
-                        OnSelectEventName = "onAssetIDChange"
+                        , OnSelectEventName = "onAssetIDChange"
                     };
                 return _assetNoAssetDesc;
             }
             set
             {
-                _assetType = value;
+                _assetNoAssetDesc = value;
             }
         }
 
@@ -160,5 +159,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
                 _condition = value;
             }
         }
+
+        public string InterviewerUrl { get; set; }
     }
 }

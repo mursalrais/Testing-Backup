@@ -95,6 +95,20 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             Value = "Ops-P"
         };
 
+        [UIHint("AjaxCascadeComboBox")]
+        [DisplayName("Position Title")]
+        [Required]
+        public AjaxCascadeComboBoxVM PositionBasedProject { get; set; } = new AjaxCascadeComboBoxVM
+        {
+            ActionName = "GetProjectUnit",
+            ControllerName = "HRPSAManagement",
+            ValueField = "ID",
+            TextField = "PositionName",
+            Cascade = "ProjectOrUnit_Value",
+            Filter = "filterProjectUnit",
+            OnSelectEventName = "OnSelectPosition"
+        };
+
         /// <summary>
         /// joindate
         /// </summary>
@@ -168,6 +182,10 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public DateTime? PSAExpiryDate { get; set; } = DateTime.Now;
 
         [UIHint("Date")]
+        [DisplayName("PSA Expiry Date")]
+        public DateTime? PSAExpiryDates { get; set; } = DateTime.Now;
+
+        [UIHint("Date")]
         public DateTime? LastWorkingDate { get; set; } = DateTime.Now;
 
         public DateTime? HiddenExpiryDate { get; set; } = DateTime.Now;
@@ -238,6 +256,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public string ProfessionalMail { get; set; }
 
         public string ProfessionalFullName { get; set; }
+
+        public DateTime TwoMonthBeforeExpiryDate { get; set; } = DateTime.Now;
+        public string StrTwoMonthBeforeExpiryDate { get; set; }
 
     }
 }

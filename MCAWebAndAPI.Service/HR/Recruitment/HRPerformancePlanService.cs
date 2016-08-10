@@ -32,11 +32,14 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             columnValues.Add("professional", new FieldLookupValue { LookupId = (int)header.NameID });
             columnValues.Add("Position", new FieldLookupValue { LookupId = (int)header.PositionAndDepartementID });
             columnValues.Add("performanceplan", new FieldLookupValue { LookupId = (int)header.PerformancePeriodID });
-            columnValues.Add("pppstatus", "Pending Approval 1 of 2");
-            //columnValues.Add("VisibleTo", new FieldUserValue[]);
-            //var assignedTo = (FieldUserValue. [])item["AssignedTo"];
-            //task.AssignedTo = assignedTo == null || assignedTo.Count() == 0 ?
-            //    "Unassigned" : FlattenAssignedTo(assignedTo);
+            if (header.StatusForm == "DraftInitiated")
+            {
+                columnValues.Add("pppstatus", "Draft");
+            }
+            if (header.StatusForm == null)
+            {
+                columnValues.Add("pppstatus", "Pending Approval 1 of 2");
+            }
             try
             {
                 SPConnector.AddListItem(SP_PPP_LIST_NAME, columnValues, _siteUrl);
@@ -203,7 +206,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 {
                     createDate = Convert.ToDateTime(item["Created"]).ToLocalTime();
                 }
-                if (dateTemp > createDate)
+                if (dateTemp >= createDate)
                 {
                     createDate = dateTemp;
                     period = Convert.ToString(item["Title"]);
@@ -216,10 +219,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             foreach (var item in SPConnector.GetList(SP_PM_LIST_NAME, _siteUrl, caml))
             {
-                    model.Name = Convert.ToString(item["Title"]);
-                    model.NameID = Convert.ToInt32(item["ID"]);
-                    model.PositionAndDepartement = FormatUtil.ConvertLookupToValue(item, "Position");
-                    model.PositionAndDepartementID = FormatUtil.ConvertLookupToID(item, "Position");
+                model.Name = Convert.ToString(item["Title"]);
+                model.NameID = Convert.ToInt32(item["ID"]);
+                model.PositionAndDepartement = FormatUtil.ConvertLookupToValue(item, "Position");
+                model.PositionAndDepartementID = FormatUtil.ConvertLookupToID(item, "Position");
             }
 
             return model;
@@ -299,21 +302,29 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             </Query> 
             </View>";
 
-            var emails = new List<string>();
-            var professionalEmail = new List<string>();
-
+            string emails = null;
+            string professionalEmail = null;
+            var columnValues = new Dictionary<string, object>();
             if (header.Requestor != null)
             {
                 if (header.StatusForm == "Initiated" || header.StatusForm == "Pending Approval 1 of 2" || header.StatusForm == "Pending Approval 2 of 2" || header.StatusForm == null || header.StatusForm == "Draft")
                 {
                     foreach (var item in SPConnector.GetList(workflowTransactionListName, _siteUrl, caml))
                     {
-                        emails.Add(Convert.ToString(item["approver0"]));
-                    }
-                    foreach (var item in emails)
-                    {
-                        EmailUtil.Send(item, "Ask for Approval", messageForApprover);
+                        emails = Convert.ToString(item["approver0"]);
+
+                        EmailUtil.Send(emails, "Ask for Approval", messageForApprover);
                         //SPConnector.SendEmail(item, message, "Ask for Approval Level 2", _siteUrl);
+
+                        columnValues.Add("visibletoapprover1", SPConnector.GetUser(emails, _siteUrl, "hr"));
+                        try
+                        {
+                            SPConnector.UpdateListItem(SP_PPP_LIST_NAME, headerID, columnValues, _siteUrl);
+                        }
+                        catch (Exception e)
+                        {
+                            logger.Error(e.Message);
+                        }
                     }
                 }
             }
@@ -321,23 +332,28 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 foreach (var item in SPConnector.GetList(workflowTransactionListName, _siteUrl, caml))
                 {
-                    emails.Add(Convert.ToString(item["approver0"]));
-                }
-                foreach (var item in emails)
-                {
-                    EmailUtil.Send(item, "Ask for Approval", messageForApprover);
+                    emails = Convert.ToString(item["approver0"]);
+
+                    EmailUtil.Send(emails, "Ask for Approval", messageForApprover);
                     //SPConnector.SendEmail(item, message, "Ask for Approval Level 2", _siteUrl);
+
+                    columnValues.Add("visibletoapprover2", SPConnector.GetUser(emails, _siteUrl, "hr"));
+                    try
+                    {
+                        SPConnector.UpdateListItem(SP_PPP_LIST_NAME, headerID, columnValues, _siteUrl);
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error(e.Message);
+                    }
                 }
 
                 foreach (var item in SPConnector.GetList(SP_PPP_LIST_NAME, _siteUrl, camlprof))
                 {
-                    professionalEmail.Add(item["professional_x003a_Office_x0020_"] == null ? "" :
+                    professionalEmail = (item["professional_x003a_Office_x0020_"] == null ? "" :
                     Convert.ToString((item["professional_x003a_Office_x0020_"] as FieldLookupValue).LookupValue));
-                }
 
-                foreach (var item in professionalEmail)
-                {
-                    EmailUtil.Send(item, "Approved by Level 1", messageForRequestor);
+                    EmailUtil.Send(professionalEmail, "Plan Status", messageForRequestor);
                     //SPConnector.SendEmail(item, "Approved by Level 1", _siteUrl);
                 }
             }
@@ -348,12 +364,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 {
                     foreach (var item in SPConnector.GetList(SP_PPP_LIST_NAME, _siteUrl, camlprof))
                     {
-                        professionalEmail.Add(item["professional_x003a_Office_x0020_"] == null ? "" :
+                        professionalEmail = (item["professional_x003a_Office_x0020_"] == null ? "" :
                        Convert.ToString((item["professional_x003a_Office_x0020_"] as FieldLookupValue).LookupValue));
-                    }
-                    foreach (var item in professionalEmail)
-                    {
-                        EmailUtil.Send(item, "Status", messageForRequestor);
+
+                        EmailUtil.Send(professionalEmail, "Plan Status", messageForRequestor);
                         //SPConnector.SendEmail(item, message, "Ask for Approval", _siteUrl);
                     }
                 }

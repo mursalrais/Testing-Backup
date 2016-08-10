@@ -16,19 +16,26 @@ namespace MCAWebAndAPI.Web.Controllers
     [HandleError]
     public class HRProfessionalController : Controller
     {
-        IHRDataMasterService _service;
+        IDataMasterService _dataMasterService;
+        IProfessionalService _professionalService;
 
         public HRProfessionalController()
         {
-            _service = new HRDataMasterService();
+            _dataMasterService = new DataMasterService();
+            _professionalService = new ProfessionalService();
+        }
+
+        private void SetSiteUrl(string siteUrl)
+        {
+            _dataMasterService.SetSiteUrl(siteUrl);
+            _professionalService.SetSiteUrl(siteUrl);
+            SessionManager.Set("SiteUrl", siteUrl);
         }
 
         public async Task<ActionResult> EditProfessional(string siteUrl = null, int? ID = null)
         {
-            // MANDATORY: Set Site URL
-            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-            var viewModel = await _service.GetProfessionalDataAsync(ID);
+            SetSiteUrl(siteUrl);
+            var viewModel = await _professionalService.GetProfessionalDataAsync(ID);
             ViewBag.IsHRView = true;
             return View(viewModel);
         }
@@ -36,10 +43,9 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult EditCurrentProfessional(string siteUrl = null, string username = null)
         {
             // MANDATORY: Set Site URL
-            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SetSiteUrl(siteUrl);
 
-            var viewModel = _service.GetProfessionalData(username);
+            var viewModel = _professionalService.GetProfessionalData(username);
             if (viewModel == null)
                 return RedirectToAction("Index", "Error", new { errorMessage = 
                     string.Format(MessageResource.ErrorProfessionalNotFound, username)});
@@ -59,12 +65,12 @@ namespace MCAWebAndAPI.Web.Controllers
             }
 
             var siteUrl = SessionManager.Get<string>("SiteUrl");
-            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SetSiteUrl(siteUrl);
 
             int? headerID = null;
             try
             {
-                headerID = _service.EditProfessionalData(viewModel);
+                headerID = _professionalService.EditProfessionalData(viewModel);
             }
             catch (Exception e)
             {
@@ -73,36 +79,39 @@ namespace MCAWebAndAPI.Web.Controllers
             }
 
             viewModel.OrganizationalDetails = BindOrganizationalDetails(form, viewModel.OrganizationalDetails);
-            Task createOrganizationalDetailsTask = _service.CreateOrganizationalDetailsAsync(headerID, viewModel.OrganizationalDetails);
+            Task createOrganizationalDetailsTask = _professionalService.CreateOrganizationalDetailsAsync(headerID, viewModel.OrganizationalDetails);
             viewModel.EducationDetails = BindEducationDetails(form, viewModel.EducationDetails);
-            Task createEducationDetailsTask = _service.CreateEducationDetailsAsync(headerID, viewModel.EducationDetails);
+            Task createEducationDetailsTask = _professionalService.CreateEducationDetailsAsync(headerID, viewModel.EducationDetails);
             viewModel.TrainingDetails = BindTrainingDetails(form, viewModel.TrainingDetails);
-            Task createTrainingDetailsTask = _service.CreateTrainingDetailsAsync(headerID, viewModel.TrainingDetails);
-            Task createDependentDetailsTask = _service.CreateDependentDetailsAsync(headerID, viewModel.DependentDetails);
+            Task createTrainingDetailsTask = _professionalService.CreateTrainingDetailsAsync(headerID, viewModel.TrainingDetails);
+            Task createDependentDetailsTask = _professionalService.CreateDependentDetailsAsync(headerID, viewModel.DependentDetails);
 
             Task allTask = Task.WhenAll(createOrganizationalDetailsTask, createEducationDetailsTask, createTrainingDetailsTask, createDependentDetailsTask);
             await allTask;
             try
             {
-                // TODO: To change email address based on position
+                // TODO: To change email address based on position. The email must be the HR personnel's email.
                 switch (viewModel.ValidationAction)
                 {
                     case "ask-hr-to-validate-action":
-                        _service.SetValidationStatus(headerID, Workflow.ProfessionalValidationStatus.NEED_VALIDATION);
-                        _service.SendEmailValidation(
+                        _professionalService.SetValidationStatus(headerID, Workflow.ProfessionalValidationStatus.NEED_VALIDATION);
+                        _professionalService.SendEmailValidation(
                             "randi.prayengki@eceos.com",
                             string.Format(EmailResource.ProfessionalEmailValidation,
                             string.Format(UrlResource.ProfessionalDisplayByID, siteUrl, headerID)));
                         break;
+
+                    // Suppose mariani.yosefi is the applicant
+                    // TODO: Please update the email to be retrived from SP List
                     case "approve-action":
-                        _service.SetValidationStatus(headerID, Workflow.ProfessionalValidationStatus.VALIDATED);
-                        _service.SendEmailValidation(
+                        _professionalService.SetValidationStatus(headerID, Workflow.ProfessionalValidationStatus.VALIDATED);
+                        _professionalService.SendEmailValidation(
                             "mariani.yosefi@eceos.com",
                             string.Format(EmailResource.ProfessionalEmailValidationResponse), isApproved: true);
                         break;
                     case "reject-action":
-                        _service.SetValidationStatus(headerID, Workflow.ProfessionalValidationStatus.REJECTED);
-                        _service.SendEmailValidation(
+                        _professionalService.SetValidationStatus(headerID, Workflow.ProfessionalValidationStatus.REJECTED);
+                        _professionalService.SendEmailValidation(
                             "mariani.yosefi@eceos.com",
                             string.Format(EmailResource.ProfessionalEmailValidationResponse), isApproved: false);
                         break;

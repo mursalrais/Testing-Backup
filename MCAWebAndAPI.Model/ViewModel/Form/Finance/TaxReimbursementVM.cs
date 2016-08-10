@@ -12,8 +12,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 {
     public class TaxReimbursementVM : Item
     {
-        //TODO: lengkapi DisplayName, UIHint
-
         ////public enum TaxType { Income = 1, VAT = 2, Others = 3 }
         public enum CategoryType { Vendor, MCAI }
 
@@ -24,7 +22,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         ////private Dictionary<TaxType, string> taxChoices = new Dictionary<TaxType, string>();
 
 
-        private ComboBoxVM _type;
+        private TaxTypeComboBoxVM type;
 
         ////public TaxReimbursementVM()
         ////{
@@ -36,25 +34,19 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         [Required]
         [DisplayName("Type of Tax")]
         [UIHint("ComboBox")]
-        public ComboBoxVM Type
+        public TaxTypeComboBoxVM Type
         {
             get
             {
-                if (_type == null)
-                    _type = new ComboBoxVM()
-                    {
-                        Choices = new string[]
-                        {
-                            TaxTypeIncomeTax,
-                            TaxTypeVAT,
-                            TaxTypeOthers
-                        }
-                    };
-                return _type;
+                if (type == null)
+                    type = new TaxTypeComboBoxVM();
+
+                return type;
             }
+
             set
             {
-                _type = value;
+                type = value;
             }
         }
 
