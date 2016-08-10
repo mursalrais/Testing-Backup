@@ -15,6 +15,7 @@ using Kendo.Mvc.UI;
 using System.Collections.Generic;
 using System.Data;
 using MCAWebAndAPI.Service.Resources;
+using MCAWebAndAPI.Service.JobSchedulers.Schedulers;
 
 
 namespace MCAWebAndAPI.Web.Controllers
@@ -51,8 +52,9 @@ namespace MCAWebAndAPI.Web.Controllers
 
             SessionManager.Set("RequestorUserLogin", requestor);
 
-            // Get blank ViewModel
-            var viewModel = exitProcedureService.GetExitProcedure(null, siteUrl, requestor, listName, user);
+            string projectUnit = exitProcedureService.GetProjectUnit(requestor);
+            
+                var viewModel = exitProcedureService.GetExitProcedure(null, siteUrl, requestor, listName, user);
 
                 SessionManager.Set("UserLogin", requestor);
                 SessionManager.Set("ExitProcedureChecklist", viewModel.ExitProcedureChecklist);
@@ -60,7 +62,27 @@ namespace MCAWebAndAPI.Web.Controllers
                 SessionManager.Set("WorkflowRouterRequestorUnit", viewModel.RequestorUnit);
                 SessionManager.Set("WorkflowRouterRequestorPosition", viewModel.RequestorPosition);
 
-            return View("CreateExitProcedure", viewModel);
+                return View("CreateExitProcedure", viewModel);
+        }
+
+        public ActionResult CreateExitProcedureHR(int? ID, string siteUrl = null, string requestor = null)
+        {
+            // MANDATORY: Set Site URL
+            exitProcedureService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            ViewBag.ListName = "Exit Procedure";
+
+            var listName = ViewBag.ListName;
+
+            ViewBag.RequestorUserLogin = requestor;
+
+            SessionManager.Set("RequestorUserLogin", requestor);
+
+            // Get blank ViewModel
+            var viewModel = exitProcedureService.GetExitProcedureHR(null, siteUrl);
+
+            return View("CreateExitProcedureHR", viewModel);
 
         }
 
@@ -90,25 +112,25 @@ namespace MCAWebAndAPI.Web.Controllers
 
         }
 
-        public ActionResult CreateExitProcedureHR(int? ID, string siteUrl = null, string requestor = null)
+        public ActionResult DisplayExitProcedure(string siteUrl = null, int? ID = null, string requestor = null)
         {
             // MANDATORY: Set Site URL
             exitProcedureService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
-            ViewBag.ListName = "Exit Procedure";
+            var viewModel = exitProcedureService.GetExitProcedure(ID);
 
-            var listName = ViewBag.ListName;
 
-            ViewBag.RequestorUserLogin = requestor;
-
-            SessionManager.Set("RequestorUserLogin", requestor);
-
-            // Get blank ViewModel
-            var viewModel = exitProcedureService.GetExitProcedureHR(null, siteUrl);
-
-            return View("CreateExitProcedureHR", viewModel);
-
+            if (viewModel.ID != null)
+            {
+                return View("EditExitProcedure", viewModel);
+            }
+            else
+            {
+                return RedirectToAction("Index",
+                "Error",
+                new { errorMessage = string.Format(MessageResource.ErrorEditExitProcedure) });
+            }
         }
 
         public ActionResult DisplayExitProcedureHR(int? ID, string siteUrl = null, string requestor = null)
@@ -279,26 +301,7 @@ namespace MCAWebAndAPI.Web.Controllers
             //    new { errorMessage = string.Format(MessageResource.SuccessCreateExitProcedureData, exitProcID) });
         }
 
-        public ActionResult DisplayExitProcedure(string siteUrl = null, int? ID = null)
-        {
-            // MANDATORY: Set Site URL
-            exitProcedureService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-
-            var viewModel = exitProcedureService.GetExitProcedure(ID);
-
-
-            if(viewModel.ID != null)
-            {
-                return View("EditExitProcedure", viewModel);
-            }
-            else
-            {
-                return RedirectToAction("Index",
-                "Error",
-                new { errorMessage = string.Format(MessageResource.ErrorEditExitProcedure) });
-            }
-        }
+        
 
         public ActionResult UpdateExitProcedure(ExitProcedureVM exitProcedure, FormCollection form)
         {
@@ -361,9 +364,7 @@ namespace MCAWebAndAPI.Web.Controllers
             var viewModel = exitProcedureService.ViewExitProcedure(ID);
             return View("DisplayExitProcedure", viewModel);
         }
-
         
-
         public JsonResult GetApproverPositions(int approverUnit)
         {
             exitProcedureService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
@@ -394,7 +395,6 @@ namespace MCAWebAndAPI.Web.Controllers
                 e.Name
             }), JsonRequestBehavior.AllowGet);
         }
-
         
         IEnumerable<ExitProcedureChecklistVM> BindExitProcedureChecklist(FormCollection form, IEnumerable<ExitProcedureChecklistVM> exitProcedureChecklist)
         {
@@ -408,6 +408,18 @@ namespace MCAWebAndAPI.Web.Controllers
             return array;
         }
 
-        
+        public ActionResult FiveDaysNotApproved(string siteUrl = null)
+        {
+            try
+            {
+                ExitProcedureManagementScheduler.DoNow_OnceEveryDay(siteUrl);
+            }
+            catch (Exception e)
+            {
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return RedirectToAction("Index", "Error");
+            }
+            return RedirectToAction("Index", "Success");
+        }
     }
 }
