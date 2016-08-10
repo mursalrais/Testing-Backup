@@ -115,7 +115,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         {
             get
             {
-                return ((LastWorkingDate.Subtract(JoinDate).Days) + 1) / (365 * MonthlyFeeMaster).ConvertInfinityOrNanToZero();
+                return (((LastWorkingDate.Subtract(JoinDate).Days) + 1) / 365 * MonthlyFeeMaster).ConvertInfinityOrNanToZero();
             }
         }
 
@@ -127,7 +127,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         {
             get
             {
-                return ((LastWorkingDate.Subtract(Last13thMonthDate).Days) + 1) / (365 * MonthlyFeeMaster).ConvertInfinityOrNanToZero();
+                return (((LastWorkingDate.Subtract(Last13thMonthDate).Days) + 1) / 365 * MonthlyFeeMaster).ConvertInfinityOrNanToZero();
             }
         }
 
