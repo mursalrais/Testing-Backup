@@ -89,7 +89,7 @@
 
     function onSelectedAcceptanceMemo(e) {
         var res = this.dataItem(e.item).split("-")
-        alert("Acceptance Memo ID : " + res[0]);
+        //alert("Acceptance Memo ID : " + res[0]);
         var url = "/ASSAssetAcquisition/GetAcceptanceMemoInfo?IDAcceptanceMemo=" + res[0];
         $.getJSON(url, function (data) {
             document.getElementById('Vendor').value = data.VendorID + "-" + data.VendorName;
