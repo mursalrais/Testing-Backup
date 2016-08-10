@@ -53,7 +53,7 @@ namespace MCAWebAndAPI.Web.Controllers
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.ID, 2,
                     string.Format(EmailResource.ManpowerApproval, siteUrl, viewModel.ID));
 
-                string EmailApprover = _service.GetApprover(2, viewModel.ID.Value);
+                //string EmailApprover = _service.GetApprover(2, viewModel.ID.Value);
 
 
 
@@ -203,18 +203,22 @@ namespace MCAWebAndAPI.Web.Controllers
             Task CreateWorkingRelationshipDetailsTask = _service.CreateWorkingRelationshipDetailsAsync(headerID, viewModel.WorkingRelationshipDetails);
             Task CreateManpowerRequisitionDocumentsTask = _service.CreateManpowerRequisitionDocumentsSync(headerID, viewModel.Documents);
 
-            if (viewModel.Status.Value == "Pending Approval 1 of 2")
+            if (viewModel.Status.Value == "Pending Approval")
             {
-                // BEGIN Workflow Demo 
-                Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateTransactionWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
-                    SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)headerID);
 
-                // Send to Level 1 Approver
-                string EmailApprover = _service.GetApprover(1,headerID.Value);
+                string EmailApprover;
 
-                Task sendApprover1 = EmailUtil.SendAsync(EmailApprover, "Application Submission Confirmation",
-                  string.Format(EmailResource.ManpowerApproval, siteUrl, headerID));
-
+                // Send to Approver
+                if (viewModel.IsKeyPosition)
+                {
+                    EmailApprover = _service.GetApprover("Executive Director");
+                }
+                else
+                {
+                    EmailApprover = _service.GetApprover("Deputy ED");
+                }
+                Task sendApprover = EmailUtil.SendAsync(EmailApprover, "Application Submission Confirmation", string.Format(EmailResource.ManpowerApproval, siteUrl, headerID));
+                                
                 //send to requestor
                 Task sendRequestor = EmailUtil.SendAsync(viewModel.Username, "Application Submission Confirmation",
                   string.Format(EmailResource.ManpowerApproval, siteUrl, headerID));
@@ -227,9 +231,6 @@ namespace MCAWebAndAPI.Web.Controllers
                         Task sendOnBehalf = EmailUtil.SendAsync(viewModel.EmailOnBehalf, "Application Submission Confirmation", string.Format(EmailResource.ManpowerApproval,siteUrl, headerID));
                     }
                 }
-
-
-
 
                 // END Workflow Demo
             }
