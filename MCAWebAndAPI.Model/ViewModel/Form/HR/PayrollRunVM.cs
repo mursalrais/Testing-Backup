@@ -6,7 +6,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
     public class PayrollRunVM : Item
     {
-        [UIHint("Month")]
+        [UIHint("Date")]
         public DateTime Period { get; set; } = DateTime.Now;
     }
 }

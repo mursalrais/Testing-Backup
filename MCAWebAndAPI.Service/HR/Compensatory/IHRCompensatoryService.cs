@@ -28,5 +28,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         string GetPosition(string username = null);
 
+        void SendEmail(string workflowTransactionListName, string transactionLookupColumnName,
+          int headerID, int level, string message);
+       
     }
 }

@@ -2,7 +2,7 @@
 @model InsuranceClaimVM
 
 
-@using (Html.BeginForm("SubmitInsuranceClaim", "HRInsuranceClaim", FormMethod.Post,
+@using (Html.BeginForm("", "HRInsuranceClaim", FormMethod.Post,
                 new
                 {
                     @class = "form-horizontal",
@@ -98,14 +98,12 @@
     <script type="text/javascript">
      
 
-        function onSuccessFormEmbedClaim(e) {
+      
 
-            //$('#modal-html-content').html('<div class="alert alert-success alert-block"><h4 class="alert-heading">Success!</h4>'
-            //    + (e.successMessage != null ? e.successMessage : "") + '</div>');
-
-            //setTimeout(function () {
-                parent.postMessage(e, e.urlToRedirect);
-            //}, 3000);
+        function filterEventProfessionalID() {
+            return {
+                id: $("#ProfessionalName_Value").val()
+            };
         }
 
         $(document)
@@ -129,6 +127,7 @@
 
                         if (strtype === "Dependent" && strDependent === '') {
                             alert('Dependent Name field is required');
+                            return;
                         } else {
                             $("#ClaimStatus").val("Draft");
                             $('form').prop('action', '/HRInsuranceClaim/SubmitInsuranceClaim');
@@ -146,6 +145,7 @@
 
                         if (strtype === "Dependent" && strDependent === '') {
                             alert('Dependent Name field is required');
+                            return;
                         } else {
                             $("#ClaimStatus").val("Need HR to Validate");
                             $('form').prop('action', '/HRInsuranceClaim/SubmitInsuranceClaim');

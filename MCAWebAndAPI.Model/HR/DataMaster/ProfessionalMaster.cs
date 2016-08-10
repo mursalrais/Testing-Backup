@@ -16,7 +16,6 @@ namespace MCAWebAndAPI.Model.HR.DataMaster
 
         public string FirstMiddleName { get; set; }
         
-
         public string Position { get; set; }
 
         public int PositionId { get; set; }

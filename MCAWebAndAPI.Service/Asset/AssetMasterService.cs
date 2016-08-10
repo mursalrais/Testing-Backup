@@ -25,7 +25,9 @@ namespace MCAWebAndAPI.Service.Asset
         public AssetMasterVM GetAssetMaster()
         {
             var viewModel = new AssetMasterVM();
-            viewModel.AssetNoAssetDesc.Choices = GetChoiceFromList("AssetID");
+            string col1 = "AssetID";
+            string col2 = "Title";
+            viewModel.AssetNoAssetDesc.Choices = GetChoiceFromList(col1, col2);
             viewModel.AssetLevel.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "AssetLevel", _siteUrl);
             viewModel.AssetCategory.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "AssetCategory", _siteUrl);
             viewModel.AssetType.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "AssetType", _siteUrl);
@@ -42,7 +44,9 @@ namespace MCAWebAndAPI.Service.Asset
             var viewModel = new AssetMasterVM();
 
             viewModel.InterviewerUrl = _siteUrl + UrlResource.AssetMaster;
-            viewModel.AssetNoAssetDesc.Choices = GetChoiceFromList("AssetID");
+            string col1 = "AssetID";
+            string col2 = "Title";
+            viewModel.AssetNoAssetDesc.Choices = GetChoiceFromList(col1, col2);
             viewModel.AssetLevel.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "AssetLevel", _siteUrl);
             viewModel.AssetCategory.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "AssetCategory", _siteUrl);
             viewModel.AssetType.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "AssetType", _siteUrl);
@@ -61,7 +65,19 @@ namespace MCAWebAndAPI.Service.Asset
             {
                 viewModel.Spesifications = "";
             }
-            viewModel.WarrantyExpires = Convert.ToDateTime(listItem["WarranyExpires"]);
+
+            DateTime? WE = new DateTime();
+            WE = Convert.ToDateTime(listItem["WarranyExpires"]);
+            if(WE.Value == DateTime.MinValue)
+            {
+                viewModel.WarrantyExpires = null;
+            }
+            else
+            {
+                viewModel.WarrantyExpires = Convert.ToDateTime(listItem["WarranyExpires"]);
+            }
+
+            
             viewModel.AssetCategory.Value = Convert.ToString(listItem["AssetCategory"]);
             viewModel.AssetDesc = Convert.ToString(listItem["Title"]);
             viewModel.AssetLevel.Value = Convert.ToString(listItem["AssetLevel"]);
@@ -115,7 +131,7 @@ namespace MCAWebAndAPI.Service.Asset
             }
             else
             {
-                columnValues.Add("WarranyExpires", DateTime.Now.ToShortDateString());
+                columnValues.Add("WarranyExpires", null);
             }
             
             try
@@ -166,7 +182,7 @@ namespace MCAWebAndAPI.Service.Asset
             }
             else
             {
-                columnValues.Add("WarranyExpires", DateTime.Now.ToShortDateString());
+                columnValues.Add("WarranyExpires", null);
             }
 
             try
@@ -202,8 +218,9 @@ namespace MCAWebAndAPI.Service.Asset
         public AssetMasterVM GetAssetMaster_Dummy()
         {
             var viewModel = new AssetMasterVM();
-            string listName = "AssetID";
-            viewModel.AssetNoAssetDesc.Choices = GetChoiceFromList(listName);
+            string col1 = "AssetID";
+            string col2 = "Title";
+            viewModel.AssetNoAssetDesc.Choices = GetChoiceFromList(col1, col2);
             viewModel.AssetLevel.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "AssetLevel");
             viewModel.AssetCategory.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "AssetCategory");
             viewModel.AssetType.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "AssetType");
@@ -359,15 +376,25 @@ namespace MCAWebAndAPI.Service.Asset
             return result += "-" + projectUnit + "-" + assetType;
         }
 
-        private string[] GetChoiceFromList(string listName)
+        private string[] GetChoiceFromList(string col1, string col2 = null)
         {
             List<string> _choices = new List<string>();
             var listItems = SPConnector.GetList(SP_ASSMAS_LIST_NAME, _siteUrl);
             foreach (var item in listItems)
             {
-                if (Convert.ToString(item[listName]).Length == 14)
+                if(col2 == null)
                 {
-                    _choices.Add(item[listName].ToString());
+                    if (Convert.ToString(item[col1]).Length == 14)
+                    {
+                        _choices.Add(item[col1].ToString());
+                    }
+                }
+                else
+                {
+                    if (Convert.ToString(item[col1]).Length == 14)
+                    {
+                        _choices.Add(item[col1].ToString() + "-" + item[col2].ToString());
+                    }
                 }
             }
             return _choices.ToArray();
