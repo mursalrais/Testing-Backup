@@ -12,7 +12,7 @@ namespace MCAWebAndAPI.Model.Common
         {
             HOLIDAY, 
             PUBLIC_HOLIDAY,
-            COMPANY_BIRTHDAY
+            SPECIAL_DAY
         }
 
         public static string GetType(Type eventType)
@@ -21,7 +21,7 @@ namespace MCAWebAndAPI.Model.Common
             {
                 case Type.HOLIDAY: return "Holiday";
                 case Type.PUBLIC_HOLIDAY: return "Public Holiday";
-                case Type.COMPANY_BIRTHDAY: return "Company Birthday";
+                case Type.SPECIAL_DAY: return "Special Day";
                 default: return "Other";
             }
         }

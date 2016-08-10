@@ -20,6 +20,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         const string SP_PPEO_LIST_NAME = "Professional Performance Evaluation Output";
         const string SP_PP_LIST_NAME = "Performance Evaluation";
         const string SP_PPE_LIST_NAME = "Professional Performance Evaluation";
+        const string SP_PPEW_LIST_NAME = "Professional Performance Evaluation Workflow";
 
         public int CreateHeader(ProfessionalPerformanceEvaluationVM header)
         {
@@ -90,18 +91,25 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             CreatePerformanceEvaluationDetails(headerID, performanceEvaluationDetails);
         }
 
-        public ProfessionalPerformanceEvaluationVM GetHeader(int? ID)
+        public ProfessionalPerformanceEvaluationVM GetHeader(int? ID, string requestor)
         {
             var listItem = SPConnector.GetListItem(SP_PPE_LIST_NAME, ID, _siteUrl);
-            return ConvertToProfessionalPerformancePlanModel(listItem);
+            return ConvertToProfessionalPerformancePlanModel(listItem, ID, requestor);
         }
 
-        private ProfessionalPerformanceEvaluationVM ConvertToProfessionalPerformancePlanModel(ListItem listItem)
+        private ProfessionalPerformanceEvaluationVM ConvertToProfessionalPerformancePlanModel(ListItem listItem, int? ID, string requestor)
         {
+            var caml = @"<View>  
+            <Query> 
+               <Where><And><Eq><FieldRef Name='professionalperformanceevaluatio' /><Value Type='Lookup'>" + ID + @"</Value></Eq><Eq><FieldRef Name='approver0' /><Value Type='Text'>" + requestor + @"</Value></Eq></And></Where> 
+            </Query> 
+      </View>";
+
             var viewModel = new ProfessionalPerformanceEvaluationVM();
             string firstName;
             string lastName;
-
+            int level = 0;
+            int count = SPConnector.GetList(SP_PPEW_LIST_NAME, _siteUrl, caml).Count();
             viewModel.ID = Convert.ToInt32(listItem["ID"]);
             firstName = FormatUtil.ConvertLookupToValue(listItem, "professional");
             lastName = FormatUtil.ConvertLookupToValue(listItem, "professional_x003a_Last_x0020_Na");
@@ -110,6 +118,27 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.PositionAndDepartement = FormatUtil.ConvertLookupToValue(listItem, "Position");
             viewModel.PerformancePeriod = FormatUtil.ConvertLookupToValue(listItem, "performanceevaluation");
             viewModel.StatusForm = Convert.ToString(listItem["ppestatus"]);
+            viewModel.TypeForm = "Professional";
+
+            foreach (var item in SPConnector.GetList(SP_PPEW_LIST_NAME, _siteUrl, caml))
+            {
+                if (count != 0)
+                {
+                    level = Convert.ToInt32(item["approverlevel"]);
+                    if (viewModel.StatusForm == "Pending Approval 1 of 2" && level == 1)
+                    {
+                        viewModel.TypeForm = "Approver1";
+                    }
+                    if (viewModel.StatusForm == "Pending Approval 2 of 2" && level == 2)
+                    {
+                        viewModel.TypeForm = "Approver2";
+                    }
+                    else
+                    {
+                        viewModel.TypeForm = "AcessDenied";
+                    }
+                }
+            }
 
             // Convert Details
             viewModel.ProfessionalPerformanceEvaluationDetails = GetProfessionalPerformanceDetails(viewModel.ID);
@@ -279,11 +308,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 columnValues.Add("ppestatus", "Pending Approval 1 of 2");
             }
-            if (header.Requestor == null && header.StatusForm == "Pending Approval 1 of 2")
+            if (header.TypeForm == "Approver1" && header.StatusForm == "Pending Approval 1 of 2")
             {
                 columnValues.Add("ppestatus", "Pending Approval 2 of 2");
             }
-            if (header.Requestor == null && header.StatusForm == "Pending Approval 2 of 2")
+            if (header.TypeForm == "Approver2" && header.StatusForm == "Pending Approval 2 of 2")
             {
                 columnValues.Add("ppestatus", "Approved");
             }

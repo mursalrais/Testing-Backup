@@ -1,6 +1,7 @@
 ﻿using MCAWebAndAPI.Model.HR.DataMaster;
 using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using MCAWebAndAPI.Service.HR.Common;
+using MCAWebAndAPI.Service.HR.Leave;
 using MCAWebAndAPI.Service.HR.Recruitment;
 using MCAWebAndAPI.Service.Utils;
 using System;
@@ -26,6 +27,8 @@ namespace MCAWebAndAPI.Service.HR.Payroll
         private static IPSAManagementService _psaService;
         private static IDataMasterService _dataMasterService;
         private static IPayrollService _payrollService;
+        private static ICalendarService _calendarService;
+        private static IDayOffService _dayOffService;
 
         private static int[] _professionalIDs;
         private static DateTime[] _dateRanges;
@@ -37,10 +40,14 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             _psaService = new PSAManagementService();
             _dataMasterService = new DataMasterService();
             _payrollService = new PayrollService();
+            _calendarService = new CalendarService();
+            _dayOffService = new DayOffService();
 
             _psaService.SetSiteUrl(_siteUrl);
             _dataMasterService.SetSiteUrl(_siteUrl);
             _psaService.SetSiteUrl(_siteUrl);
+            _calendarService.SetSiteUrl(_siteUrl);
+            _dayOffService.SetSiteUrl(_siteUrl);
         }
 
         /// <summary>
@@ -84,7 +91,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             _professionalIDs = payrollWorksheet.Select(e => e.ProfessionalID).ToArray();
             _dateRanges = dateRange.ToArray();
 
-            
+
             return payrollWorksheet;
         }
 
@@ -107,7 +114,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
         public static List<PayrollWorksheetDetailVM> SummarizeData(this List<PayrollWorksheetDetailVM> payrollWorksheet)
         {
             var summarizedPayrollWorksheets = new List<PayrollWorksheetDetailVM>();
-            
+
             foreach (var professionalID in _professionalIDs)
             {
                 var payrollRow = payrollWorksheet.FirstOrDefault(e => e.ProfessionalID == professionalID);
@@ -129,10 +136,24 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             payrollWorksheet.PopulateColumnsFromPSA();
             payrollWorksheet.PopulateColumnsFromMonthlyFee();
             payrollWorksheet.PopulateColumnsFromProfessional();
+            payrollWorksheet.PopulateColumnsFromEventCalendar();
+            payrollWorksheet.PopulateColumnsFromDayOff();
 
             return payrollWorksheet;
         }
 
+        private static List<PayrollWorksheetDetailVM> PopulateColumnsFromDayOff(this List<PayrollWorksheetDetailVM> payrollWorksheet)
+        {
+            var rowIndex = 0;
+            foreach (var professionalID in _professionalIDs)
+            {
+                foreach (var date in _dateRanges)
+                {
+                    payrollWorksheet[rowIndex++].DaysRequestUnpaid =
+                        _dayOffService.IsUnpaidDayOff(professionalID, date, _dateRanges) ? 1 : 0;
+                }
+            }return payrollWorksheet;
+        }
 
         private static List<PayrollWorksheetDetailVM> PopulateColumnsFromProfessional(this List<PayrollWorksheetDetailVM> payrollWorksheet)
         {
@@ -162,10 +183,10 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             {
                 for (int indexDate = 0; indexDate < _dateRanges.Length; indexDate++)
                 {
-                    var psaData = _allValidPSAs.FirstOrDefault(e => 
-                        e.ProfessionalID == indexProfessional + string.Empty && 
+                    var psaData = _allValidPSAs.FirstOrDefault(e =>
+                        e.ProfessionalID == indexProfessional + string.Empty &&
                         IsInScopePSA(_dateRanges[indexDate], e));
-                    
+
                     if (psaData == null)
                         continue;
 
@@ -199,11 +220,25 @@ namespace MCAWebAndAPI.Service.HR.Payroll
 
                     if (monthlyFeeData == null)
                         continue;
-                    
+
                     var rowIndex = indexProfessional * indexDate + indexDate;
                     payrollWorksheet[rowIndex].DateOfNewFee = monthlyFeeData.DateOfNewFee;
                     payrollWorksheet[rowIndex].EndDate = monthlyFeeData.EndDate;
                     payrollWorksheet[rowIndex].MonthlyFeeMaster = monthlyFeeData.MonthlyFee;
+                }
+            }
+
+            return payrollWorksheet;
+        }
+        private static List<PayrollWorksheetDetailVM> PopulateColumnsFromEventCalendar(this List<PayrollWorksheetDetailVM> payrollWorksheet)
+        {
+            var totalWorkingDays = _calendarService.GetTotalWorkingDays(_dateRanges);
+            for (int indexProfessional = 0; indexProfessional < _professionalIDs.Length; indexProfessional++)
+            {
+                for (int indexDate = 0; indexDate < _dateRanges.Length; indexDate++)
+                {
+                    var rowIndex = indexProfessional * indexDate + indexDate;
+                    payrollWorksheet[rowIndex].TotalWorkingDays = totalWorkingDays;
                 }
             }
 
@@ -214,13 +249,12 @@ namespace MCAWebAndAPI.Service.HR.Payroll
         {
             return monthlyFees.DateOfNewFee <= date && date <= monthlyFees.EndDate;
         }
-        
 
         public static IEnumerable<int> GetValidProfessionalIDs(this List<PayrollWorksheetDetailVM> payrollWorksheet, DateTime startTime)
         {
             var startTimeUniversalString = startTime.ToUniversalTime().ToString("o");
             var caml = @"<View><Query><Where><Geq><FieldRef Name='lastworkingdate' /><Value IncludeTimeValue='TRUE' Type='DateTime'>"
-              + startTimeUniversalString 
+              + startTimeUniversalString
               + @"</Value></Geq></Where><OrderBy><FieldRef Name='renewalnumber' Ascending='False' /></OrderBy></Query><ViewFields><FieldRef Name='ID' /><FieldRef Name='professional' /></ViewFields> </View>";
 
             var ids = new List<int>();
