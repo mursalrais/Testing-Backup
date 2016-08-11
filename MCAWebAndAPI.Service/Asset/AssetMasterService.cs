@@ -371,6 +371,7 @@ namespace MCAWebAndAPI.Service.Asset
 
         private string GetAssetIDCode(string assetCategory, string projectUnit, string assetType)
         {
+            //if(assetCategory == "Fi")
             var result = string.Compare(assetCategory, "Fixed Asset", StringComparison.OrdinalIgnoreCase) == 0 ?
                 "FXA" : "SVA";
             return result += "-" + projectUnit + "-" + assetType;
@@ -419,14 +420,14 @@ namespace MCAWebAndAPI.Service.Asset
 
         public string GetAssetIDForMainAsset(string category, string projectunit, string type)
         {
-            if (category == "Fixed Asset")
-            {
-                category = "FX";
-            }
-            else
-            {
-                category = "SVA";
-            }
+            //if (category == "Fixed Asset")
+            //{
+            //    category = "FXA";
+            //}
+            //else
+            //{
+            //    category = "SVA";
+            //}
             var assetID = GetAssetIDCode(category, projectunit, type);
             var lastNumber = GetAssetIDLastNumber(assetID);
             assetID += "-" + FormatUtil.ConvertToDigitNumber(lastNumber, 4);
@@ -436,14 +437,14 @@ namespace MCAWebAndAPI.Service.Asset
 
         public string GetAssetIDForSubAsset(string category, string projectunit, string type, int number)
         {
-            if (category == "Fixed Asset")
-            {
-                category = "FX";
-            }
-            else
-            {
-                category = "SVA";
-            }
+            //if (category == "Fixed Asset")
+            //{
+            //    category = "FX";
+            //}
+            //else
+            //{
+            //    category = "SVA";
+            //}
             var assetID = GetAssetIDCode(category, projectunit, type);
             var lastNumber = GetAssetIDLastNumber(assetID);
             assetID += "-" + FormatUtil.ConvertToDigitNumber(lastNumber, 4);
