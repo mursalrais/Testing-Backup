@@ -45,12 +45,12 @@
         columns.Bound(p => p.LastWorkingDay).ClientTemplate("#= kendo.toString(LastWorkingDay, 'd') #" +
                            "<input type='hidden' name='OrganizationalDetails[#= getOrganizationalDetail(data)#].LastWorkingDay' value='#= LastWorkingDay #' />"
                          );
-        columns.Bound(p => p.PSAStatus).ClientTemplate("#= PSAStatus.Text #" +
-                          "<input type='hidden' name='OrganizationalDetails[#= getOrganizationalDetail(data)#].PSAStatus' value='#= PSAStatus.Value #' />"
-                        ).EditorViewData(new { BindTo = OrganizationalDetailVM.GetPSAStatusOptions() });
-        columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
-          "<input type='hidden' name='OrganizationalDetails[#= getOrganizationalDetail(data)#].ID' value='#= ID #' />"
-        );
+        //columns.Bound(p => p.PSAStatus).ClientTemplate("#= PSAStatus.Text #" +
+        //                  "<input type='hidden' name='OrganizationalDetails[#= getOrganizationalDetail(data)#].PSAStatus' value='#= PSAStatus.Value #' />"
+        //                ).EditorViewData(new { BindTo = OrganizationalDetailVM.GetPSAStatusOptions() });
+        //columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
+        //  "<input type='hidden' name='OrganizationalDetails[#= getOrganizationalDetail(data)#].ID' value='#= ID #' />"
+        //);
 
         columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
             "<input type='hidden' name='OrganizationalDetails[#= getOrganizationalDetail(data)#].EditMode' value='#= EditMode #' />"
@@ -71,7 +71,7 @@
                        model.Field(m => m.Project).DefaultValue(OrganizationalDetailVM.GetProjectDefaultValue());
                        model.Field(m => m.Position).DefaultValue(AjaxComboBoxVM.GetDefaultValue());
                        model.Field(m => m.PSANumber).DefaultValue(AjaxComboBoxVM.GetDefaultValue());
-                       model.Field(m => m.PSAStatus).DefaultValue(OrganizationalDetailVM.GetPSAStatusDefaultValue());
+                       //model.Field(m => m.PSAStatus).DefaultValue(OrganizationalDetailVM.GetPSAStatusDefaultValue());
                        model.Field(m => m.StartDate).DefaultValue(DateTime.UtcNow);
                        model.Field(m => m.LastWorkingDay).DefaultValue(DateTime.UtcNow);
                    })
