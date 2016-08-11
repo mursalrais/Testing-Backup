@@ -522,6 +522,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             if (header.StatusForm == "Pending Approval 2 of 2" || header.StatusForm == "submithr")
             {
                 columnValues.Add("crstatus", "Approved");
+
+                IEnumerable<CompensatoryDetailVM> getbalance = header.CompensatoryDetails;
+
+                columnValues.Add("balance", getbalance.Count()); 
             }
 
             try
