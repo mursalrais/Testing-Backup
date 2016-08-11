@@ -114,7 +114,6 @@ namespace MCAWebAndAPI.Web.Controllers
         IEnumerable<MonthlyFeeDetailVM> BindMonthlyFeeDetailDetails(FormCollection form, IEnumerable<MonthlyFeeDetailVM> monthlyFeeDetails)
         {
             var array = monthlyFeeDetails.ToArray();
-
             for (int i = 0; i < array.Length; i++)
             {
                 array[i].DateOfNewFee = BindHelper.BindDateInGrid("MonthlyFeeDetails",
@@ -156,9 +155,7 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _hRPayrollService.SetSiteUrl(siteUrl);
-
             await PopulatePayrollWorksheet(viewModel.Period);
-
             return Json(new { message = "Period has been updated" }, JsonRequestBehavior.AllowGet);
         }
 
@@ -167,13 +164,11 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             var period = DateTime.ParseExact(periodString, "dd-MM-yyyy", CultureInfo.CurrentCulture);
             var siteUrl = SessionManager.Get<string>("SiteUrl");
-
             var fileName = string.Format(PAYROLL_WORKSHEET_FILENAME,
                 period.ToLocalTime().ToString("yyyy-MM"),
                 DateTime.Today.ToLocalTime().ToString("yyyy-MM-dd"), "draft");
 
             var path = Path.Combine(Server.MapPath(PAYROLL_WORKSHEET_DIRECTORY), fileName);
-
             PayrollRunScheduler.DoNow_Once(siteUrl, path, period.Day, period.Month, period.Year);
             
             return Json(new
@@ -181,7 +176,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 message =
                 string.Format("Payroll from {0} to {1} has been run in background. You may download later",
                 period.GetFirstPayrollDay(), period.GetLastPayrollDay())
-            },JsonRequestBehavior.AllowGet);
+            }, JsonRequestBehavior.AllowGet);
         }
 
         private async Task PopulatePayrollWorksheet(DateTime period)
