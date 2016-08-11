@@ -30,6 +30,7 @@ namespace MCAWebAndAPI.Service.Asset
         IEnumerable<AssetMasterVM> GetAssetSubAsset();
         IEnumerable<WBSMaterVM> GetWBS();
 
+        bool MassUploadBreakDown(string ListName, DataTable CSVDataTable, string SiteUrl = null);
         int? MassUploadHeaderDetail(string ListName, DataTable CSVDataTable, string SiteUrl = null);
 
         int? getIdOfColumn(string listname, string SiteUrl, string caml);
@@ -38,6 +39,6 @@ namespace MCAWebAndAPI.Service.Asset
 
         void RollbackParentChildrenUpload(string listNameHeader, int? latestIDHeader, string siteUrl);
 
-        IEnumerable<AcceptanceMemoVM> GetAcceptanceMemo();
+        AcceptanceMemoVM GetAcceptanceMemoInfo(int? ID, string SiteUrl);
     }
 }

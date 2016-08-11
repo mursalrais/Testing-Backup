@@ -11,6 +11,7 @@ using MCAWebAndAPI.Service.Resources;
 using Microsoft.SharePoint.Client;
 using MCAWebAndAPI.Model.ViewModel.Control;
 using System.Data;
+using System.Text.RegularExpressions;
 
 namespace MCAWebAndAPI.Service.Asset
 {
@@ -33,6 +34,8 @@ namespace MCAWebAndAPI.Service.Asset
             var model = new AssetAcquisitionHeaderVM();
             model.TransactionType = Convert.ToString("Asset Acquisition");
             model.AccpMemo.Choices = GetChoicesFromList(SP_ACC_MEMO_LIST_NAME, "ID", "Title");
+
+            model.CancelURL = _siteUrl + UrlResource.AssetAcquisition;
 
             return model;
         }
@@ -57,20 +60,31 @@ namespace MCAWebAndAPI.Service.Asset
 
         public int? CreateHeader(AssetAcquisitionHeaderVM viewmodel)
         {
+            viewmodel.CancelURL = _siteUrl + UrlResource.AssetAcquisition;
             var columnValues = new Dictionary<string, object>();
             //columnValues.add
             columnValues.Add("Title", viewmodel.TransactionType);
-            if(viewmodel.AccpMemo.Value == null)
+            if (viewmodel.AccpMemo.Value == null)
             {
                 return 0;
             }
             string[] memo = viewmodel.AccpMemo.Value.Split('-');
-            //columnValues.Add("Acceptance_x0020_Memo_x0020_No", memo[1]);
-            columnValues.Add("Acceptance_x0020_Memo_x0020_No", new FieldLookupValue { LookupId = Convert.ToInt32(memo[0]) });
-            columnValues.Add("Vendor", viewmodel.Vendor);
-            columnValues.Add("PO_x0020_No", viewmodel.PoNo);
-            columnValues.Add("Purchase_x0020_Date", viewmodel.PurchaseDate);
-            columnValues.Add("Purchase_x0020_Description", viewmodel.PurchaseDescription);
+            //columnValues.Add("acceptancememono", memo[1]);
+            columnValues.Add("acceptancememono", new FieldLookupValue { LookupId = Convert.ToInt32(memo[0]) });
+            var breakVendor = viewmodel.Vendor.Split('-');
+            columnValues.Add("vendorid", breakVendor[0]);
+            columnValues.Add("vendorname", breakVendor[1]);
+            columnValues.Add("pono", viewmodel.PoNo);
+            if(viewmodel.PurchaseDate.HasValue)
+            {
+                columnValues.Add("purchasedate", viewmodel.PurchaseDate);
+            }
+            else
+            {
+                columnValues.Add("purchasedate", null);
+            }
+            
+            columnValues.Add("purchasedescription", viewmodel.PurchaseDescription);
 
             try
             {
@@ -92,17 +106,27 @@ namespace MCAWebAndAPI.Service.Asset
 
             viewModel.TransactionType = Convert.ToString(listItem["Title"]);
             viewModel.AccpMemo.Choices = GetChoicesFromList(SP_ACC_MEMO_LIST_NAME, "ID", "Title");
-            if ((listItem["Acceptance_x0020_Memo_x0020_No"] as FieldLookupValue) != null)
+            if ((listItem["acceptancememono"] as FieldLookupValue) != null)
             {
-                viewModel.AccpMemo.Value = (listItem["Acceptance_x0020_Memo_x0020_No"] as FieldLookupValue).LookupId.ToString();
-                viewModel.AccpMemo.Text = (listItem["Acceptance_x0020_Memo_x0020_No"] as FieldLookupValue).LookupId.ToString()+"-"+(listItem["Acceptance_x0020_Memo_x0020_No"] as FieldLookupValue).LookupValue;
+                viewModel.AccpMemo.Value = (listItem["acceptancememono"] as FieldLookupValue).LookupId.ToString();
+                viewModel.AccpMemo.Text = (listItem["acceptancememono"] as FieldLookupValue).LookupId.ToString() + "-" + (listItem["acceptancememono"] as FieldLookupValue).LookupValue;
             }
-            //viewModel.AccpMemo.Value = Convert.ToString(listItem["Acceptance_x0020_Memo_x0020_No"]);
-            viewModel.PoNo = Convert.ToString(listItem["PO_x0020_No"]);
-            viewModel.Vendor = Convert.ToString(listItem["Vendor"]);
-            viewModel.PurchaseDate = Convert.ToDateTime(listItem["Purchase_x0020_Date"]);
-            viewModel.PurchaseDescription = Convert.ToString(listItem["Purchase_x0020_Description"]);
+            //viewModel.AccpMemo.Value = Convert.ToString(listItem["acceptancememono"]);
+            viewModel.PoNo = Convert.ToString(listItem["pono"]);
+            viewModel.Vendor = Convert.ToString(listItem["vendorid"])+"-"+Convert.ToString(listItem["vendorname"]);
+            if(Convert.ToDateTime(listItem["purchasedate"]) == DateTime.MinValue)
+            {
+                viewModel.PurchaseDate = null;
+            }
+            else
+            {
+                viewModel.PurchaseDate = Convert.ToDateTime(listItem["purchasedate"]);
+            }
+            //viewModel.Spesifications = Regex.Replace(listItem["Spesifications"].ToString(), "<.*?>", string.Empty);
+            viewModel.PurchaseDescription = Regex.Replace(Convert.ToString(listItem["purchasedescription"]), "<.*?>", string.Empty);
             viewModel.ID = ID;
+
+            viewModel.CancelURL = _siteUrl + UrlResource.AssetAcquisition;
 
             return viewModel;
         }
@@ -172,14 +196,14 @@ namespace MCAWebAndAPI.Service.Asset
                 }
 
                 var updatedValues = new Dictionary<string, object>();
-                updatedValues.Add("Asset_x0020_Acquisition", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
-                updatedValues.Add("Asset_x002d_Sub_x0020_Asset", new FieldLookupValue { LookupId = Convert.ToInt32(item.AssetSubAsset.Value.Value) });
-                updatedValues.Add("WBS", new FieldLookupValue { LookupId = Convert.ToInt32(item.WBS.Value.Value) });
-                updatedValues.Add("PO_x0020_Line_x0020_Item", item.POLineItem);
-                updatedValues.Add("Cost_x0020_IDR", item.CostIDR);
-                updatedValues.Add("Cost_x0020_USD", item.CostUSD);
-                updatedValues.Add("Remarks", item.Remarks);
-                updatedValues.Add("Status", "RUNNING");
+                updatedValues.Add("assetacquisition", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
+                updatedValues.Add("assetsubasset", new FieldLookupValue { LookupId = Convert.ToInt32(item.AssetSubAsset.Value.Value) });
+                updatedValues.Add("wbs", new FieldLookupValue { LookupId = Convert.ToInt32(item.WBS.Value.Value) });
+                updatedValues.Add("polineitem", item.POLineItem);
+                updatedValues.Add("costidr", item.CostIDR);
+                updatedValues.Add("costusd", item.CostUSD);
+                updatedValues.Add("remarks", item.Remarks);
+                updatedValues.Add("status", "RUNNING");
                 try
                 {
                     SPConnector.AddListItem(SP_ASSACQDetails_LIST_NAME, updatedValues, _siteUrl);
@@ -194,9 +218,9 @@ namespace MCAWebAndAPI.Service.Asset
 
         IEnumerable<AssetAcquisitionItemVM> IAssetAcquisitionService.GetDetails(int? headerID)
         {
-            var caml = @"<View><Query><Where><Eq><FieldRef Name='Asset_x0020_Acquisition' /><Value Type='Lookup'>"+headerID.ToString()+"</Value></Eq></Where></Query></View>";
+            var caml = @"<View><Query><Where><Eq><FieldRef Name='assetacquisition' /><Value Type='Lookup'>" + headerID.ToString() + "</Value></Eq></Where></Query></View>";
             var details = new List<AssetAcquisitionItemVM>();
-            foreach(var item in SPConnector.GetList(SP_ASSACQDetails_LIST_NAME, _siteUrl, caml))
+            foreach (var item in SPConnector.GetList(SP_ASSACQDetails_LIST_NAME, _siteUrl, caml))
             {
                 details.Add(ConvertToDetails(item));
             }
@@ -206,30 +230,52 @@ namespace MCAWebAndAPI.Service.Asset
 
         private AssetAcquisitionItemVM ConvertToDetails(ListItem item)
         {
-            var ListAssetSubAsset = SPConnector.GetListItem("Asset Master", (item["Asset_x002d_Sub_x0020_Asset"] as FieldLookupValue).LookupId, _siteUrl);
+            var ListAssetSubAsset = SPConnector.GetListItem("Asset Master", (item["assetsubasset"] as FieldLookupValue).LookupId, _siteUrl);
             AjaxComboBoxVM _assetSubAsset = new AjaxComboBoxVM();
-            _assetSubAsset.Value = (item["Asset_x002d_Sub_x0020_Asset"] as FieldLookupValue).LookupId;
+            _assetSubAsset.Value = (item["assetsubasset"] as FieldLookupValue).LookupId;
             _assetSubAsset.Text = Convert.ToString(ListAssetSubAsset["AssetID"]) + " - " + Convert.ToString(ListAssetSubAsset["Title"]);
+
+            var ListWBS = SPConnector.GetListItem("WBS Master", (item["wbs"] as FieldLookupValue).LookupId, _siteUrl);
+            AjaxComboBoxVM _wbs = new AjaxComboBoxVM();
+            _wbs.Value = (item["wbs"] as FieldLookupValue).LookupId;
+            _wbs.Text = Convert.ToString(ListWBS["Title"]) + " - " + Convert.ToString(ListWBS["WBSDesc"]);
+
             return new AssetAcquisitionItemVM
             {
                 ID = Convert.ToInt32(item["ID"]),
-                AssetSubAsset = AssetAcquisitionItemVM.GetAssetSubAssetDefaultValue(_assetSubAsset)
+                POLineItem = Convert.ToString(item["polineitem"]),
+                AssetSubAsset = AssetAcquisitionItemVM.GetAssetSubAssetDefaultValue(_assetSubAsset),
+                WBS = AssetAcquisitionItemVM.GetWBSDefaultValue(_wbs),
+                CostIDR = Convert.ToInt32(item["costidr"]),
+                CostUSD = Convert.ToInt32(item["costusd"]),
+                Remarks = Convert.ToString(item["remarks"]),
+                Status = Convert.ToString(item["status"])
             };
         }
 
         public bool UpdateHeader(AssetAcquisitionHeaderVM viewmodel)
         {
+            viewmodel.CancelURL = _siteUrl + UrlResource.AssetAcquisition;
             var columnValues = new Dictionary<string, object>();
             var ID = Convert.ToInt32(viewmodel.ID);
             //columnValues.add
             columnValues.Add("Title", viewmodel.TransactionType);
             string[] memo = viewmodel.AccpMemo.Value.Split('-');
-            //columnValues.Add("Acceptance_x0020_Memo_x0020_No", memo[1]);
-            columnValues.Add("Acceptance_x0020_Memo_x0020_No", new FieldLookupValue { LookupId = Convert.ToInt32(memo[0]) });
-            columnValues.Add("Vendor", viewmodel.Vendor);
-            columnValues.Add("PO_x0020_No", viewmodel.PoNo);
-            columnValues.Add("Purchase_x0020_Date", viewmodel.PurchaseDate);
-            columnValues.Add("Purchase_x0020_Description", viewmodel.PurchaseDescription);
+            //columnValues.Add("acceptancememono", memo[1]);
+            columnValues.Add("acceptancememono", new FieldLookupValue { LookupId = Convert.ToInt32(memo[0]) });
+            var breakVendor = viewmodel.Vendor.Split('-');
+            columnValues.Add("vendorid", breakVendor[0]);
+            columnValues.Add("vendorname", breakVendor[1]);
+            columnValues.Add("pono", viewmodel.PoNo);
+            if (viewmodel.PurchaseDate.HasValue)
+            {
+                columnValues.Add("purchasedate", viewmodel.PurchaseDate);
+            }
+            else
+            {
+                columnValues.Add("purchasedate", null);
+            }
+            columnValues.Add("purchasedescription", viewmodel.PurchaseDescription);
 
             try
             {
@@ -265,14 +311,14 @@ namespace MCAWebAndAPI.Service.Asset
                 }
 
                 var updatedValues = new Dictionary<string, object>();
-                updatedValues.Add("Asset_x0020_Acquisition", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
-                updatedValues.Add("Asset_x002d_Sub_x0020_Asset", new FieldLookupValue { LookupId = Convert.ToInt32(item.AssetSubAsset.Value.Value) });
-                updatedValues.Add("WBS", new FieldLookupValue { LookupId = Convert.ToInt32(item.WBS.Value.Value) });
-                updatedValues.Add("PO_x0020_Line_x0020_Item", item.POLineItem);
-                updatedValues.Add("Cost_x0020_IDR", item.CostIDR);
-                updatedValues.Add("Cost_x0020_USD", item.CostUSD);
-                updatedValues.Add("Remarks", item.Remarks);
-                updatedValues.Add("Status", "RUNNING");
+                updatedValues.Add("assetacquisition", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
+                updatedValues.Add("assetsubasset", new FieldLookupValue { LookupId = Convert.ToInt32(item.AssetSubAsset.Value.Value) });
+                updatedValues.Add("wbs", new FieldLookupValue { LookupId = Convert.ToInt32(item.WBS.Value.Value) });
+                updatedValues.Add("polineitem", item.POLineItem);
+                updatedValues.Add("costidr", item.CostIDR);
+                updatedValues.Add("costusd", item.CostUSD);
+                updatedValues.Add("remarks", item.Remarks);
+                updatedValues.Add("status", "RUNNING");
                 try
                 {
                     if (Item.CheckIfUpdated(item))
@@ -368,9 +414,9 @@ namespace MCAWebAndAPI.Service.Asset
         public int? getIdOfColumn(string listname, string SiteUrl, string caml)
         {
             var getItem = SPConnector.GetList(listname, SiteUrl, caml);
-            if(getItem.Count != 0 || getItem != null)
+            if (getItem.Count != 0 || getItem != null)
             {
-                foreach(var item in getItem)
+                foreach (var item in getItem)
                 {
                     return Convert.ToInt32(item["ID"]);
                 }
@@ -386,16 +432,16 @@ namespace MCAWebAndAPI.Service.Asset
         {
             var caml = @"<View><Query />
                         <ViewFields>
-                           <FieldRef Name='"+ key + @"' />
-                           <FieldRef Name='"+ value + @"' />
+                           <FieldRef Name='" + key + @"' />
+                           <FieldRef Name='" + value + @"' />
                         </ViewFields>
                         <QueryOptions /></View>";
 
             var list = SPConnector.GetList(listName, SiteUrl, caml);
             Dictionary<int, string> ids = new Dictionary<int, string>();
-            if(list.Count > 0)
+            if (list.Count > 0)
             {
-                foreach(var l in list)
+                foreach (var l in list)
                 {
                     ids.Add(Convert.ToInt32(l[key]), Convert.ToString(l[value]));
                 }
@@ -409,27 +455,21 @@ namespace MCAWebAndAPI.Service.Asset
             SPConnector.DeleteListItem(listNameHeader, latestIDHeader, siteUrl);
         }
 
-        public IEnumerable<AcceptanceMemoVM> GetAcceptanceMemo()
+        public AcceptanceMemoVM GetAcceptanceMemoInfo(int? ID, string SiteUrl)
         {
-            var models = new List<AcceptanceMemoVM>();
-            foreach (var item in SPConnector.GetList("Acceptance Memo", _siteUrl))
-            {
-                models.Add(ConvertToAcceptanceMemo(item));
-            }
+            var list = SPConnector.GetListItem(SP_ACC_MEMO_LIST_NAME, ID, SiteUrl);
+            var viewmodel = new AcceptanceMemoVM();
+            viewmodel.ID = Convert.ToInt32(ID);
+            viewmodel.VendorID = Convert.ToString(list["vendorid"]);
+            viewmodel.VendorName = Convert.ToString(list["vendorname"]);
+            viewmodel.PoNo = Convert.ToString(list["pono"]);
 
-            return models;
+            return viewmodel;
         }
 
-        private AcceptanceMemoVM ConvertToAcceptanceMemo(ListItem item)
+        public bool MassUploadBreakDown(string ListName, DataTable CSVDataTable, string SiteUrl = null)
         {
-            return new AcceptanceMemoVM
-            {
-                ID = Convert.ToInt32(item["ID"]),
-                VendorName = Convert.ToString(item["Vendor"]),
-                VendorID = Convert.ToInt32(item["VendorID"]),
-                PoNo = Convert.ToString(item["PoNo"])
-
-            };
+            throw new NotImplementedException();
         }
     }
 }
