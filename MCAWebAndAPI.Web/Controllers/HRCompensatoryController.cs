@@ -33,23 +33,6 @@ namespace MCAWebAndAPI.Web.Controllers
             _service = new HRCompensatoryService();
         }
 
-        //public ActionResult InputHeaderCompensatoryHR(string siteurl = null, string idProf = null)
-        //{
-        //    _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
-        //    SessionManager.Set("SiteUrl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
-
-        //    string position = _service.GetPosition(idProf);
-
-        //    if (!(position.Contains("HR")))
-        //    {
-        //        string position = _service.GetPosition(idProf);
-        //    }
-
-        //    var viewmodel = _service.GetHeaderComp(idProf);
-
-        //    return View(viewmodel);
-        //}
-
         public ActionResult InputCompensatoryUser(string siteurl = null, int? iD = null)
         {
             //mandatory: set site url

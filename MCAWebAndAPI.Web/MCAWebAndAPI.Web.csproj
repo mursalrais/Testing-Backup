@@ -921,7 +921,6 @@
     <Content Include="Views\FINEventBudget\_ItemDetails.cshtml" />
     <Content Include="Views\Shared\_PartialHeader.cshtml" />
     <Content Include="Views\Shared\_PartialHeaderWithLogo.cshtml" />
-    <Content Include="Views\HRCompensatory\InputHeaderCompensatoryHR.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
