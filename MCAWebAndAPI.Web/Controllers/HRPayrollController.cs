@@ -122,10 +122,12 @@ namespace MCAWebAndAPI.Web.Controllers
             return array;
         }
 
-        public ActionResult DisplayPayrollWorksheet(string siteUrl)
+        public ActionResult DisplayPayrollWorksheet(string siteUrl, string userLogin)
         {
             SessionManager.Set("SiteUrl", siteUrl);
             _hRPayrollService.SetSiteUrl(siteUrl);
+
+            SessionManager.Set("UserLogin", userLogin);
             
             var viewModel = new PayrollRunVM();  
             return View(viewModel);
@@ -167,14 +169,17 @@ namespace MCAWebAndAPI.Web.Controllers
             var fileName = string.Format(PAYROLL_WORKSHEET_FILENAME,
                 period.ToLocalTime().ToString("yyyy-MM"),
                 DateTime.Today.ToLocalTime().ToString("yyyy-MM-dd"), "draft");
+            var userLogin = SessionManager.Get<string>("UserLogin");
 
             var path = Path.Combine(Server.MapPath(PAYROLL_WORKSHEET_DIRECTORY), fileName);
-            PayrollRunScheduler.DoNow_Once(siteUrl, path, period.Day, period.Month, period.Year);
+            PayrollRunScheduler.DoNow_Once(siteUrl, path, userLogin, period.Day, period.Month, period.Year);
             
             return Json(new
             {
                 message =
-                string.Format("Payroll from {0} to {1} has been run in background. You may download later",
+                string.Format(@"Payroll from {0} to {1} has been run in background. 
+                    You may download 5-10 minutes later in <a href='/HRPayroll/DisplayPayrollWorksheetDrafts'>
+                    Page Display Previous Drafts</a>.",
                 period.GetFirstPayrollDay(), period.GetLastPayrollDay())
             }, JsonRequestBehavior.AllowGet);
         }
