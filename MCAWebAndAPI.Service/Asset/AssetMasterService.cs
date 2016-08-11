@@ -99,7 +99,7 @@ namespace MCAWebAndAPI.Service.Asset
             return viewModel;
         }
 
-        public int? CreateAssetMaster(AssetMasterVM assetMaster)
+        public int? CreateAssetMaster(AssetMasterVM assetMaster, string mode = null)
         {
             assetMaster.InterviewerUrl = _siteUrl + UrlResource.AssetMaster;
             var columnValues = new Dictionary<string, object>();
@@ -112,9 +112,12 @@ namespace MCAWebAndAPI.Service.Asset
             assetMaster.Condition.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "Condition", _siteUrl);
             assetMaster.ProjectUnit.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "ProjectUnit", _siteUrl);
 
-            if (!assetMaster.AssetLevel.Choices.Contains(assetMaster.AssetLevel.Value) || !assetMaster.ProjectUnit.Choices.Contains(assetMaster.ProjectUnit.Value) || !assetMaster.AssetCategory.Choices.Contains(assetMaster.AssetCategory.Value) || !assetMaster.AssetType.Choices.Contains(assetMaster.AssetType.Value))
+            if(mode == "upload")
             {
-                return 0;
+                if (!assetMaster.AssetLevel.Choices.Contains(assetMaster.AssetLevel.Value) || !assetMaster.ProjectUnit.Choices.Contains(assetMaster.ProjectUnit.Value.Trim()) || !assetMaster.AssetCategory.Choices.Contains(assetMaster.AssetCategory.Value.Trim()) || !assetMaster.AssetType.Choices.Contains(assetMaster.AssetType.Value.Trim()))
+                {
+                    return 0;
+                }
             }
 
             if (assetMaster.AssetLevel.Value == "Sub Asset")
@@ -527,7 +530,7 @@ namespace MCAWebAndAPI.Service.Asset
                 model.Condition.Value = Convert.ToString(d.ItemArray[9]);
                 model.Remarks = Convert.ToString(d.ItemArray[10]);
 
-                latestID = CreateAssetMaster(model);
+                latestID = CreateAssetMaster(model, "upload");
 
                 IDs.Add(Convert.ToInt32(latestID));
                 if(IDs.Contains(0))
