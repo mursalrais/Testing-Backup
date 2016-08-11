@@ -323,7 +323,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 }
                 if(Convert.ToString(d["WarranyExpires"]) == "")
                 {
-                    d["WarranyExpires"] = (DateTime?)null;
+                    d["WarranyExpires"] = DateTime.MinValue;
                 }
                 d["AssetID"] = res;
                 x++;
@@ -332,7 +332,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             try
             {
-                CSVConverter.Instance.MassUpload(listName, sessionVariables, siteUrl);
+                _assetMasterService.MassUpload(listName, sessionVariables, siteUrl);
             }
             catch (Exception e)
             {

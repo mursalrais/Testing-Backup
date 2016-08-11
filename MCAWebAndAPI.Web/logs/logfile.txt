@@ -446,3 +446,5 @@ Please try again.
    at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
    at MCAWebAndAPI.Service.HR.Payroll.PayrollService.<GetPayrollWorksheetDetailsAsync>d__16.MoveNext() in D:\Users\User\Source\Repos\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Payroll\PayrollService.cs:line 230
 2016-08-08 22:23:13.1436 MCAWebAndAPI.Service.JobSchedulers.Schedulers.PayrollRunScheduler DefaultQuartzScheduler has been started at Monday, August 8, 2016 in site https://eceos2.sharepoint.com/sites/mca-dev/hr
+2016-08-11 14:17:34.1034 MCAWebAndAPI.Service.Converter.CSVConverter String was not recognized as a valid DateTime. at ID: 1
+2016-08-11 15:12:52.0581 MCAWebAndAPI.Service.Converter.CSVConverter String was not recognized as a valid DateTime. at ID: 1

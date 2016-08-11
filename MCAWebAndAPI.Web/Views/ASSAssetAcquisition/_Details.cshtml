@@ -21,7 +21,7 @@
             "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].POLineItem' value='#= POLineItem #' />"
             );
 
-            columns.Bound(p => p.AssetSubAsset).ClientTemplate("#= AssetSubAsset.Text #" +
+            columns.Bound(p => p.AssetSubAsset).Width(500).ClientTemplate("#= AssetSubAsset.Text #" +
                           "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].AssetSubAsset.Value' value='#= AssetSubAsset.Value #' />"
                         ).EditorViewData(new
                         {
@@ -31,7 +31,7 @@
                             ActionName = "GetAssetSubSAssetGrid"
                         });
 
-            columns.Bound(p => p.WBS).ClientTemplate("#= WBS.Text #" +
+            columns.Bound(p => p.WBS).Width(500).ClientTemplate("#= WBS.Text #" +
                           "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].WBS.Value' value='#= WBS.Value #' />"
                         ).EditorViewData(new
                         {
