@@ -149,17 +149,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return GetComplisted(cmpID, iD, crstatus, viewModel);
         }
 
-        public CompensatoryVM GetHeaderComp(int? idPro)
-        {
-            var viewModel = new CompensatoryVM();
-
-            var listItem = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, idPro, _siteUrl);
-            viewModel.ddlProfessional.Value = Convert.ToInt32(idPro);
-            viewModel = ConvertCompInputTolistDataVM(listItem, viewModel);
-
-            return viewModel;
-        }
-
         private int GetCompID(int? ID)
         {
             var viewModel = new CompensatoryVM();
@@ -628,19 +617,17 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return position;
         }
 
-        public string GetProfid(string username)
+        public int? GetProfid(string username)
         {
-            var caml = @"<View><Query><Where><Eq><FieldRef Name='officeemail' /><Value Type='Text'>" + username + @"</Value></Eq></Where></Query><ViewFields><FieldRef Name='Position' /></ViewFields><QueryOptions /></View>";
+            var caml = @"<View><Query><Where><Eq><FieldRef Name='officeemail' /><Value Type='Text'>" + username + @"</Value></Eq></Where></Query><ViewFields><FieldRef Name='ID' /></ViewFields><QueryOptions /></View>";
             var listItem = SPConnector.GetList("Professional Master", _siteUrl, caml);
-            string position = "";
+            int? position = null;
+
             foreach (var item in listItem)
             {
-                position = FormatUtil.ConvertLookupToValue(item, "Position");
+                position = FormatUtil.ConvertLookupToID(item, "ID");
             }
-            if (position == null)
-            {
-                position = "";
-            }
+           
             return position;
         }
 
