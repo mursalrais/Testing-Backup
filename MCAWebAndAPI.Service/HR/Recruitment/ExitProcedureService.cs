@@ -55,11 +55,18 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             updatedValues.Add("exitreason", exitProcedure.ExitReason.Value);
             updatedValues.Add("reasondescription", exitProcedure.ReasonDesc);
             updatedValues.Add("psanumber", exitProcedure.PSANumber);
-            //updatedValues.Add("visibleto", exitProcedure.RequestorMailAddress);
+            
 
             if (exitProcedure.StatusForm == "Pending Approval")
             {
                 statusExitProcedure = "Pending Approval";
+                exitProcedure.StartDateApproval = DateTime.Now;
+                updatedValues.Add("startdateapproval", exitProcedure.StartDateApproval.ToLocalTime());
+
+                var professionalData = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, exitProcedure.ProfessionalID, _siteUrl);
+                string professionalOfficeMail = Convert.ToString(professionalData["officeemail"]);
+                
+                updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hr"));
             }
             else if(exitProcedure.StatusForm == "Draft")
             {
@@ -727,8 +734,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     ),
                 ApproverPosition = ExitProcedureChecklistVM.GetPositionDefaultValue(FormatUtil.ConvertToInGridAjaxComboBox(item, "approverposition")),
                 ApproverUserName = ExitProcedureChecklistVM.GetApproverUserNameDefaultValue(FormatUtil.ConvertToInGridAjaxComboBox(item, "approverusername")),
-                Level = Convert.ToString(item["approverlevel"])
-                
+                Level = Convert.ToString(item["approverlevel"]),
+                ApprovalIndicator = "red"
                 
             };
         }
@@ -1045,8 +1052,61 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 foreach (var item in emails)
                 {
                     EmailUtil.Send(item, "Ask for Approval", messageForApprover);
-                    
                 }
+            }
+
+            int countApprover = emails.Count;
+            var columnValues = new Dictionary<string, object>();
+            int i = 1;
+            foreach(var item in emails)
+            {
+                if(i == 1)
+                {
+                    columnValues.Add("visibletoapprover1", SPConnector.GetUser(item, _siteUrl, "hr"));
+                }
+                else if(i == 2)
+                {
+                    columnValues.Add("visibletoapprover2", SPConnector.GetUser(item, _siteUrl, "hr"));
+                }
+                else if(i == 3)
+                {
+                    columnValues.Add("visibletoapprover3", SPConnector.GetUser(item, _siteUrl, "hr"));
+                }
+                else if(i == 4)
+                {
+                    columnValues.Add("visibletoapprover4", SPConnector.GetUser(item, _siteUrl, "hr"));
+                }
+                else if (i == 5)
+                {
+                    columnValues.Add("visibletoapprover5", SPConnector.GetUser(item, _siteUrl, "hr"));
+                }
+                else if (i == 6)
+                {
+                    columnValues.Add("visibletoapprover6", SPConnector.GetUser(item, _siteUrl, "hr"));
+                }
+                else if (i == 7)
+                {
+                    columnValues.Add("visibletoapprover7", SPConnector.GetUser(item, _siteUrl, "hr"));
+                }
+                else if (i == 8)
+                {
+                    columnValues.Add("visibletoapprover8", SPConnector.GetUser(item, _siteUrl, "hr"));
+                }
+                else if (i == 9)
+                {
+                    columnValues.Add("visibletoapprover9", SPConnector.GetUser(item, _siteUrl, "hr"));
+                }
+
+                i++;
+            }
+
+            try
+            {
+                SPConnector.UpdateListItem(SP_EXP_LIST_NAME, exitProcID, columnValues, _siteUrl);
+            }
+            catch (Exception e)
+            {
+                logger.Debug(e.Message);
             }
         }
 
@@ -1226,6 +1286,25 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             string exitProcedureStatus = Convert.ToString(item["status"]);
 
             return exitProcedureStatus;
+        }
+
+        public string GetProjectUnit(string requestor)
+        {
+            var camlProjectUnit = @"<View>  
+            <Query> 
+               <Where><Eq><FieldRef Name='officeemail' /><Value Type='Text'>" + requestor + @"</Value></Eq></Where> 
+            </Query> 
+      </View>";
+
+            string projectUnit = "";
+
+            foreach (var projectunit in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl, camlProjectUnit))
+            {
+                projectUnit = Convert.ToString(projectunit["Project_x002f_Unit"]);
+                break;
+            }
+
+            return projectUnit;
         }
     }
 }

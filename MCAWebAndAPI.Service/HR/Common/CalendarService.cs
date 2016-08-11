@@ -13,7 +13,7 @@ namespace MCAWebAndAPI.Service.HR.Common
     {
         string _siteUrl;
         static Logger logger = LogManager.GetCurrentClassLogger();
-        const string SP_LIST_NAME = "Calendar Event";
+        const string SP_LIST_NAME = "Event Calendar";
         
         const string TYPE_DAYOFF = "Day-Off";
         const string TYPE_COMP_LEAVE = "Compensatory Leave";

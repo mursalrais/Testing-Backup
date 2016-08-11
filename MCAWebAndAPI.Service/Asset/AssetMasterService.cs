@@ -8,6 +8,7 @@ using NLog;
 using MCAWebAndAPI.Service.Utils;
 using System.Text.RegularExpressions;
 using MCAWebAndAPI.Service.Resources;
+using System.Data;
 
 namespace MCAWebAndAPI.Service.Asset
 {
@@ -245,6 +246,8 @@ namespace MCAWebAndAPI.Service.Asset
         private string GenerateAssetIDForSubAsset(AssetMasterVM assetMaster)
         {
             var assetID = assetMaster.AssetNoAssetDesc.Value;
+            var removeDesc = assetID.Split('-');
+            assetID = removeDesc[0] + "-" + removeDesc[1] + "-" + removeDesc[2] + "-" + removeDesc[3];
             var lastNumber = GetAssetIDLastNumberForSubAsset(assetID);
             assetID += "-" + FormatUtil.ConvertToDigitNumber(Convert.ToInt32(lastNumber), 3);
 
@@ -371,6 +374,7 @@ namespace MCAWebAndAPI.Service.Asset
 
         private string GetAssetIDCode(string assetCategory, string projectUnit, string assetType)
         {
+            //if(assetCategory == "Fi")
             var result = string.Compare(assetCategory, "Fixed Asset", StringComparison.OrdinalIgnoreCase) == 0 ?
                 "FXA" : "SVA";
             return result += "-" + projectUnit + "-" + assetType;
@@ -419,14 +423,14 @@ namespace MCAWebAndAPI.Service.Asset
 
         public string GetAssetIDForMainAsset(string category, string projectunit, string type)
         {
-            if (category == "Fixed Asset")
-            {
-                category = "FX";
-            }
-            else
-            {
-                category = "SVA";
-            }
+            //if (category == "Fixed Asset")
+            //{
+            //    category = "FXA";
+            //}
+            //else
+            //{
+            //    category = "SVA";
+            //}
             var assetID = GetAssetIDCode(category, projectunit, type);
             var lastNumber = GetAssetIDLastNumber(assetID);
             assetID += "-" + FormatUtil.ConvertToDigitNumber(lastNumber, 4);
@@ -436,14 +440,14 @@ namespace MCAWebAndAPI.Service.Asset
 
         public string GetAssetIDForSubAsset(string category, string projectunit, string type, int number)
         {
-            if (category == "Fixed Asset")
-            {
-                category = "FX";
-            }
-            else
-            {
-                category = "SVA";
-            }
+            //if (category == "Fixed Asset")
+            //{
+            //    category = "FX";
+            //}
+            //else
+            //{
+            //    category = "SVA";
+            //}
             var assetID = GetAssetIDCode(category, projectunit, type);
             var lastNumber = GetAssetIDLastNumber(assetID);
             assetID += "-" + FormatUtil.ConvertToDigitNumber(lastNumber, 4);
@@ -466,5 +470,50 @@ namespace MCAWebAndAPI.Service.Asset
 
             return assetID;
         }
+
+        public bool MassUpload(string ListName, DataTable CSVDataTable, string SiteUrl = null)
+        {
+            foreach (DataRow d in CSVDataTable.Rows)
+            {
+                var model = new AssetMasterVM();
+                model.AssetNoAssetDesc.Value = Convert.ToString(d.ItemArray[0]);
+                model.AssetLevel.Value = Convert.ToString(d.ItemArray[1]);
+                model.AssetCategory.Value = Convert.ToString(d.ItemArray[2]);
+                model.ProjectUnit.Value = Convert.ToString(d.ItemArray[3]);
+                model.AssetType.Value = Convert.ToString(d.ItemArray[4]);
+                model.AssetDesc = Convert.ToString(d.ItemArray[5]);
+                model.SerialNo = Convert.ToString(d.ItemArray[6]);
+
+                DateTime? WE = new DateTime();
+                WE = Convert.ToDateTime(d.ItemArray[7]);
+                if (WE.Value == DateTime.MinValue)
+                {
+                    model.WarrantyExpires = null;
+                }
+                else
+                {
+                    model.WarrantyExpires = WE;
+                }
+                model.Spesifications = Convert.ToString(d.ItemArray[8]);
+                model.Condition.Value = Convert.ToString(d.ItemArray[9]);
+                model.Remarks = Convert.ToString(d.ItemArray[10]);
+
+                CreateAssetMaster(model);
+            }
+                return true;
+        }
+
+        private bool isSkipped(string columnName)
+        {
+            return columnName.Contains("_")
+                && string.Compare(columnName.Split('_')[1], "skip", StringComparison.OrdinalIgnoreCase) == 0;
+        }
+
+        private bool isLookup(string columnName)
+        {
+            return columnName.Contains("_")
+               && string.Compare(columnName.Split('_')[1], "lookup", StringComparison.OrdinalIgnoreCase) == 0;
+        }
+
     }
 }

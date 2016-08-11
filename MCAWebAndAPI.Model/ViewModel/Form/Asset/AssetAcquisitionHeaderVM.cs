@@ -10,12 +10,15 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 {
     public class AssetAcquisitionHeaderVM : Item
     {
+        public string CancelURL { get; set; }
+
         private ComboBoxVM _accmemo;
 
         public IEnumerable<AssetAcquisitionItemVM> Details { get; set; } = new List<AssetAcquisitionItemVM>();
 
         public string TransactionType { get; set; }
 
+        [Required]
         [DisplayName("Aceptance Memo No")]
         [UIHint("ComboBox")]
         public ComboBoxVM AccpMemo
@@ -31,7 +34,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
                             "1",
                             "2",
                             "3"
-                        }
+                        },
+                        OnSelectEventName = "onSelectedAcceptanceMemo"
                     };
                 }
                 return _accmemo;
@@ -47,8 +51,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
         public string VendorID { get; set; }
         public string PoNo { get; set; }
 
+        [Required]
         [UIHint("Date")]
-        public DateTime PurchaseDate { get; set; }
+        public DateTime? PurchaseDate { get; set; }
 
         public string PurchaseDescription { get; set; }
 

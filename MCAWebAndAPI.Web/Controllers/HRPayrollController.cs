@@ -114,7 +114,6 @@ namespace MCAWebAndAPI.Web.Controllers
         IEnumerable<MonthlyFeeDetailVM> BindMonthlyFeeDetailDetails(FormCollection form, IEnumerable<MonthlyFeeDetailVM> monthlyFeeDetails)
         {
             var array = monthlyFeeDetails.ToArray();
-
             for (int i = 0; i < array.Length; i++)
             {
                 array[i].DateOfNewFee = BindHelper.BindDateInGrid("MonthlyFeeDetails",
@@ -123,15 +122,18 @@ namespace MCAWebAndAPI.Web.Controllers
             return array;
         }
 
-        public ActionResult DisplayPayrollWorksheet(string siteUrl)
+        public ActionResult DisplayPayrollWorksheet(string siteUrl, string userLogin)
         {
             SessionManager.Set("SiteUrl", siteUrl);
             _hRPayrollService.SetSiteUrl(siteUrl);
+
+            SessionManager.Set("UserLogin", userLogin);
             
             var viewModel = new PayrollRunVM();  
             return View(viewModel);
         }
 
+        [AsyncTimeout(1000000)]
         public async Task<ActionResult> DisplayPayrollWorksheetSummary(string siteUrl)
         {
             SessionManager.Set("SiteUrl", siteUrl);
@@ -144,42 +146,42 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewModel);
         }
 
-
         /// <summary>
         /// Triggered after period is updated
         /// </summary>
         /// <param name="viewModel"></param>
         /// <returns></returns>
+        [AsyncTimeout(1000000)]
         [HttpPost]
         public async Task<ActionResult> DisplayInScreenPeriodWorksheet(PayrollRunVM viewModel)
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _hRPayrollService.SetSiteUrl(siteUrl);
-
             await PopulatePayrollWorksheet(viewModel.Period);
-
             return Json(new { message = "Period has been updated" }, JsonRequestBehavior.AllowGet);
         }
-        
+
+        [AsyncTimeout(1000000)]
         public ActionResult RunInBackgroundPeriodWorksheet(string periodString)
         {
             var period = DateTime.ParseExact(periodString, "dd-MM-yyyy", CultureInfo.CurrentCulture);
             var siteUrl = SessionManager.Get<string>("SiteUrl");
-
             var fileName = string.Format(PAYROLL_WORKSHEET_FILENAME,
                 period.ToLocalTime().ToString("yyyy-MM"),
                 DateTime.Today.ToLocalTime().ToString("yyyy-MM-dd"), "draft");
+            var userLogin = SessionManager.Get<string>("UserLogin");
 
             var path = Path.Combine(Server.MapPath(PAYROLL_WORKSHEET_DIRECTORY), fileName);
-
-            PayrollRunScheduler.DoNow_Once(siteUrl, path, period.Day, period.Month, period.Year);
+            PayrollRunScheduler.DoNow_Once(siteUrl, path, userLogin, period.Day, period.Month, period.Year);
             
             return Json(new
             {
                 message =
-                string.Format("Payroll from {0} to {1} has been run in background. You may download later",
+                string.Format(@"Payroll from {0} to {1} has been run in background. 
+                    You may download 5-10 minutes later in <a href='/HRPayroll/DisplayPayrollWorksheetDrafts'>
+                    Page Display Previous Drafts</a>.",
                 period.GetFirstPayrollDay(), period.GetLastPayrollDay())
-            },JsonRequestBehavior.AllowGet);
+            }, JsonRequestBehavior.AllowGet);
         }
 
         private async Task PopulatePayrollWorksheet(DateTime period)

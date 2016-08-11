@@ -10,6 +10,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 {
     public class LocationMasterVM : PlaceMasterVM
     {
+        public string CancelUrl { get; set; }
+
         public IEnumerable<PlaceMasterVM> PlaceMasters { get; set; } = new List<PlaceMasterVM>();
 
         [UIHint("AjaxComboBox")]

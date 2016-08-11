@@ -2,6 +2,7 @@
 using NLog;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,6 +28,7 @@ namespace MCAWebAndAPI.Service.Asset
         string GetAssetIDForMainAsset(string category, string projectunit, string type);
 
         string GetAssetIDForSubAsset(string assetID);
-        
+
+        bool MassUpload(string ListName, DataTable CSVDataTable, string SiteUrl = null);
     }
 }
