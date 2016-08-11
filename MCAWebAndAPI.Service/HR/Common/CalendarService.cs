@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using NLog;
-using Microsoft.SharePoint.Client;
-using MCAWebAndAPI.Service.HR.Common;
 using MCAWebAndAPI.Service.Utils;
 using MCAWebAndAPI.Model.Common;
+using Microsoft.SharePoint.Client;
 
 namespace MCAWebAndAPI.Service.HR.Common
 {
@@ -16,17 +13,10 @@ namespace MCAWebAndAPI.Service.HR.Common
     {
         string _siteUrl;
         static Logger logger = LogManager.GetCurrentClassLogger();
-        const string SP_LIST_NAME = "Calendar Event";
-
-        const string TYPE_PUB_HOLIDAY = "Public Holiday";
-        const string TYPE_HOLIDAY = "Holiday";
+        const string SP_LIST_NAME = "Event Calendar";
+        
         const string TYPE_DAYOFF = "Day-Off";
         const string TYPE_COMP_LEAVE = "Compensatory Leave";
-
-        /*static Logger logger = LogManager.GetCurrentClassLogger();
-        const string CALENDAR_SP_LIST_NAME = "Calendar";
-        string _siteUrl = null;
-        */
 
         public void SetSiteUrl(string siteUrl)
         {
@@ -46,11 +36,6 @@ namespace MCAWebAndAPI.Service.HR.Common
             updatedValues.Add("Title", calendar.Title);
             updatedValues.Add("EventCategory", calendar.EventCategory.Value);
 
-            /*
-            updatedValues.Add("HolderID", new FieldLookupValue { LookupId = Convert.ToInt32(header.AssetHolderFrom.Value) });
-            updatedValues.Add("HolderIDTo", new FieldLookupValue { LookupId = Convert.ToInt32(header.AssetHolderTo.Value) });
-            */
-
             try
             {
                 SPConnector.AddListItem(SP_LIST_NAME, updatedValues, _siteUrl);
@@ -59,77 +44,76 @@ namespace MCAWebAndAPI.Service.HR.Common
             {
                 logger.Error(e.Message);
             }
-
-            /*
-            var enitity = new CalendarEventVM();
-            enitity = calendar;
-            return true;
-            */
-        }
-
-        /*public void SetSiteUrl(string siteUrl)
-        {
-            if (siteUrl != null)
-            {
-                _siteUrl = siteUrl;
-                _siteUrl = _siteUrl.Replace("\"", "");
-                _siteUrl = _siteUrl.Replace("\'", "");
-            }
-        }*/
-
-        /*Calendar ConvertToModel(ListItem item) {
-            return new Calendar(){
-                Id = Convert.ToInt32(item["ID"]),
-                Title = Convert.ToString(item["Title"]),
-                StartDate = Convert.ToDateTime(item["EventDate"]),
-                EndDate = Convert.ToDateTime(item["EndDate"]),
-                IsAllDayEvent = Convert.ToBoolean(item["fAllDayEvent"]),
-                IsRecurring = Convert.ToBoolean(item["fRecurrence"])
-            };
-        }*/
-
-        /*public IEnumerable<Calendar> GetEvents()
-        {
-            var result = new List<Calendar>();
-
-            foreach (var item in SPConnector.GetList(CALENDAR_SP_LIST_NAME, _siteUrl))
-            {
-                result.Add(ConvertToModel(item));
-            }
-
-            return result;
-        }*/
-
-
-        
-        public IEnumerable<CalendarEventVM> GetHolidays(IEnumerable<DateTime> dateRange)
-        {
-            return dateRange.Where(e => e.DayOfWeek == DayOfWeek.Sunday || e.DayOfWeek == DayOfWeek.Saturday)
-                .Select(m => new CalendarEventVM
-                {
-                    CalendarEventDate = m.Date,
-                    
-                });
-        }
-
-        public IEnumerable<CalendarEventVM> GetPublicHolidays(IEnumerable<DateTime> dateRange)
-        {
-            throw new NotImplementedException();
         }
 
         public IEnumerable<EventCalendar> GetEventCalendars(IEnumerable<DateTime> dateRange)
         {
-            throw new NotImplementedException();
+            var eventCalendars = new List<EventCalendar>();
+            foreach (var item in SPConnector.GetList(SP_LIST_NAME, _siteUrl))
+            {
+                eventCalendars.Add(ConvertToEventCalendar(item));
+            }
+
+            return eventCalendars;
         }
 
-        IEnumerable<EventCalendar> ICalendarService.GetHolidays(IEnumerable<DateTime> dateRange)
+        public IEnumerable<EventCalendar> GetHolidays(IEnumerable<DateTime> dateRange)
         {
-            throw new NotImplementedException();
+            return dateRange.Where(e => e.DayOfWeek == DayOfWeek.Saturday || e.DayOfWeek == DayOfWeek.Sunday)
+                .Select(e => new EventCalendar
+                {
+                    Date = e,
+                    EventCategory = EventCalendar.GetType(EventCalendar.Type.HOLIDAY)
+                });
         }
 
-        IEnumerable<EventCalendar> ICalendarService.GetPublicHolidays(IEnumerable<DateTime> dateRange)
+        public IEnumerable<EventCalendar> GetPublicHolidays(IEnumerable<DateTime> dateRange)
         {
-            throw new NotImplementedException();
+            var startDateUniversalTimeString = dateRange.ToArray()[0].ToUniversalTime().ToString("o");
+            var finishDateUniversalTimeString = dateRange.ToArray()[dateRange.ToArray().Length - 1]
+                .ToUniversalTime().ToString("o");
+            
+            var caml = @"<View>  
+            <Query> 
+               <Where><And><And><Eq><FieldRef Name='Category' /><Value Type='Choice'>" +  EventCalendar.GetType(EventCalendar.Type.PUBLIC_HOLIDAY) + 
+               @"</Value></Eq><Geq><FieldRef Name='EventDate0' /><Value Type='DateTime'>" + startDateUniversalTimeString + 
+               @"</Value></Geq></And><Leq><FieldRef Name='EventDate0' /><Value Type='DateTime'>" + finishDateUniversalTimeString +
+               @"</Value></Leq></And></Where> 
+            </Query> 
+            </View>";
+
+            var eventCalendars = new List<EventCalendar>();
+            foreach (var item in SPConnector.GetList(SP_LIST_NAME, _siteUrl, caml))
+            {
+                eventCalendars.Add(ConvertToEventCalendar(item));
+            }
+
+            return eventCalendars;
+        }
+
+        private EventCalendar ConvertToEventCalendar(ListItem item)
+        {
+            return new EventCalendar
+            {
+                ID = Convert.ToInt32(item["ID"]),
+                EventCategory = Convert.ToString(item["Category"]),
+                Date = Convert.ToDateTime(item["EventDate0"])
+            };
+        }
+
+
+        /// <summary>
+        /// Return all days subtracted by holidays and public holidays
+        /// </summary>
+        /// <param name="dateRange"></param>
+        /// <returns></returns>
+        public int GetTotalWorkingDays(IEnumerable<DateTime> dateRange)
+        {
+            var numberOfallDays = dateRange.Count();
+            var numberOfHolidays = GetHolidays(dateRange).Count();
+            var numberOfPublicHolidays = GetPublicHolidays(dateRange).Count();
+
+            return numberOfallDays - (numberOfHolidays + numberOfPublicHolidays);
         }
     }
 }

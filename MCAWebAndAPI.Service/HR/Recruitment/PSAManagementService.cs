@@ -176,6 +176,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             psaMaster.JoinDate = Convert.ToDateTime(item["joindate"]).ToLocalTime();
             psaMaster.DateOfNewPSA = Convert.ToDateTime(item["dateofnewpsa"]).ToLocalTime();
             psaMaster.PSAExpiryDate = Convert.ToDateTime(item["psaexpirydate"]).ToLocalTime();
+            psaMaster.LastWorkingDate = Convert.ToDateTime(item["lastworkingdate"]).ToLocalTime();
 
             psaMaster.JoinDateString = psaMaster.JoinDate.ToShortDateString();
             psaMaster.DateOfNewPSAString = psaMaster.DateOfNewPSA.ToShortDateString();

@@ -23,47 +23,49 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         const string SP_MANDOC_LIST_NAME = "Manpower Requisition Documents";
         const string SP_POSITION_MAST = "Position Master";
         const string SP_MANPOW_WORKFLOW =  "Manpower Requisition Workflow";
+        const string SP_PROFESSIONAL_MAST = "Professional Master";
 
         public int CreateManpowerRequisition(ManpowerRequisitionVM viewModel)
         {
             var updatedValue = new Dictionary<string, object>();
-            if((viewModel.Status.Value == "Pending Approval 1 of 2") || (viewModel.Status.Value == "Pending Approval 1 of 1"))
+            string emailApprover;
+            FieldUserValue visibleTo = SPConnector.GetUser(viewModel.Username, _siteUrl, "hr");
+            FieldUserValue Approver;
+            if ((viewModel.Status.Value == "Pending Approval"))
             {
-                //kirim email
+                if (viewModel.IsKeyPosition)
+                {
+                    emailApprover = GetApprover("Executive Director");
+                }
+                else
+                {
+                    emailApprover = GetApprover("Deputy ED");
+                }
+                Approver = SPConnector.GetUser(emailApprover, _siteUrl, "hr");
+                updatedValue.Add("currentapprover", Approver);
             }
             else
             {
                 viewModel.Status.Value = "Draft";
             }
-
-            FieldUserValue visibleTo = SPConnector.GetUser(viewModel.Username,_siteUrl,"hr");
-
             updatedValue.Add("expectedjoindate", viewModel.ExpectedJoinDate);
             updatedValue.Add("requestdate", viewModel.DateRequested);
-
             updatedValue.Add("numberofperson", viewModel.NoOfPerson);
             updatedValue.Add("Tenure", viewModel.Tenure);
             updatedValue.Add("personnelmgmt", viewModel.PersonnelManagement);
             updatedValue.Add("budgetmgmt", viewModel.BudgetManagement);
-
             updatedValue.Add("isonbehalfof", viewModel.IsOnBehalfOf);
             if (viewModel.IsOnBehalfOf)
             {
                 updatedValue.Add("onbehalfof", new FieldLookupValue { LookupId = (int)viewModel.OnBehalfOf.Value });
             }
-            
             updatedValue.Add("istravelrequired", viewModel.IsTravellingRequired);
             updatedValue.Add("iskeyposition", viewModel.IsKeyPosition);
-
-            
-
             updatedValue.Add("projectunit", viewModel.DivisionProjectUnit.Value);
-
             updatedValue.Add("positionrequested", new FieldLookupValue { LookupId = (int)viewModel.Position.Value });           
             updatedValue.Add("reportingto", new FieldLookupValue { LookupId = (int)viewModel.ReportingTo.Value });
             updatedValue.Add("joblocation", new FieldLookupValue { LookupId = (int)viewModel.JobLocation.Value });
             updatedValue.Add("secondaryreportingto", new FieldLookupValue { LookupId = (int)viewModel.SecondaryReportingTo.Value });
-
             updatedValue.Add("Objectives", viewModel.PositionObjectives);
             updatedValue.Add("totalyrsofexperience", viewModel.TotalYrsOfExperience);
             updatedValue.Add("minimumeducation", viewModel.MinimumEducation);
@@ -146,12 +148,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             updatedValue.Add("expectedjoindate", viewModel.ExpectedJoinDate);
             updatedValue.Add("requestdate", viewModel.DateRequested);
-
             updatedValue.Add("numberofperson", viewModel.NoOfPerson);
             updatedValue.Add("Tenure", viewModel.Tenure);
             updatedValue.Add("personnelmgmt", viewModel.PersonnelManagement);
             updatedValue.Add("budgetmgmt", viewModel.BudgetManagement);
-
             updatedValue.Add("isonbehalfof", viewModel.IsOnBehalfOf);
             updatedValue.Add("istravelrequired", viewModel.IsTravellingRequired);
             updatedValue.Add("iskeyposition", viewModel.IsKeyPosition);
@@ -169,14 +169,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 updatedValue.Add("manpowerrequeststatus", viewModel.Status.Value);
             }
             updatedValue.Add("projectunit", viewModel.DivisionProjectUnit.Value);
-         
-           
-
             updatedValue.Add("positionrequested", new FieldLookupValue { LookupId = (int)viewModel.Position.Value });
             updatedValue.Add("reportingto", new FieldLookupValue { LookupId = (int)viewModel.ReportingTo.Value });
             updatedValue.Add("joblocation", new FieldLookupValue { LookupId = (int)viewModel.JobLocation.Value });
             updatedValue.Add("secondaryreportingto", new FieldLookupValue { LookupId = (int)viewModel.SecondaryReportingTo.Value });
-
             updatedValue.Add("Objectives", viewModel.PositionObjectives);
             updatedValue.Add("totalyrsofexperience", viewModel.TotalYrsOfExperience);
             updatedValue.Add("minimumeducation", viewModel.MinimumEducation);
@@ -186,7 +182,21 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             updatedValue.Add("personalattributes", viewModel.PersonalAttributesCompetencies);
             updatedValue.Add("otherrequirements", viewModel.OtherRequirements);
             updatedValue.Add("remarks", viewModel.Remarks);
-
+            FieldUserValue Approver;
+            string emailApprover;
+            if ((viewModel.Status.Value == "Pending Approval"))
+            {
+                if (viewModel.IsKeyPosition)
+                {
+                    emailApprover = GetApprover("Executive Director");
+                }
+                else
+                {
+                    emailApprover = GetApprover("Deputy ED");
+                }
+                Approver = SPConnector.GetUser(emailApprover, _siteUrl, "hr");
+                updatedValue.Add("currentapprover", Approver);
+            }
 
             try
             {
@@ -575,13 +585,13 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return "ad";
         }
 
-        public string GetApprover(int level, int headerID)
+        public string GetApprover(string Position)
         {
             string email = "anugerahseptian@gmail.com";
-            string caml = @"<View><Query><Where><And><Eq><FieldRef Name='manpowerrequisition' /><Value Type='Lookup'>"+headerID.ToString()+"</Value></Eq><Eq><FieldRef Name='approverlevel' /><Value Type='Choice'>"+level.ToString()+"</Value></Eq></And></Where></Query><ViewFields><FieldRef Name='approver0' /></ViewFields><QueryOptions /></View>";
-            foreach (var item in SPConnector.GetList(SP_MANPOW_WORKFLOW,_siteUrl,caml))
+            string caml = @"<View><Query><Where><Eq><FieldRef Name='Position' /><Value Type='Lookup'>"+Position+"</Value></Eq></Where></Query><ViewFields><FieldRef Name='officeemail' /></ViewFields><QueryOptions /></View>";
+            foreach (var item in SPConnector.GetList(SP_PROFESSIONAL_MAST,_siteUrl,caml))
             {
-                email = Convert.ToString(item["approver0"]);
+                email = Convert.ToString(item["officeemail"]);
             }
             return email;
         }

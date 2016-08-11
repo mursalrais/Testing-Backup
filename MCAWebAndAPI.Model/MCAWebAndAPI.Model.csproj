@@ -119,6 +119,8 @@
     <Compile Include="Common\Item.cs" />
     <Compile Include="Common\Location.cs" />
     <Compile Include="Common\Workflow.cs" />
+    <Compile Include="HR\DataMaster\DayOffRequest.cs" />
+    <Compile Include="ViewModel\Form\HR\DayOffRequestVM.cs" />
     <Compile Include="HR\DataMaster\DependentMaster.cs" />
     <Compile Include="HR\DataMaster\MonthlyFeeMaster.cs" />
     <Compile Include="HR\DataMaster\PositionMaster.cs" />
@@ -159,6 +161,7 @@
     <Compile Include="ViewModel\Control\ProjectComboBoxVM.cs" />
     <Compile Include="ViewModel\Control\ReligionComboBoxVM.cs" />
     <Compile Include="ViewModel\Control\TaxTypeComboBoxVM.cs" />
+    <Compile Include="ViewModel\Form\Asset\AcceptanceMemoVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetLocationVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetMasterVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetAcquisitionHeaderVM.cs" />
@@ -232,6 +235,7 @@
     <Compile Include="ViewModel\Form\HR\FeeSlipDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\FeeSlipVM.cs" />
     <Compile Include="ViewModel\Form\HR\IndividualGoalDetailVM.cs" />
+    <Compile Include="ViewModel\Form\HR\MedicalCheckUpVM.cs" />
     <Compile Include="ViewModel\Form\HR\PayrollRunVM.cs" />
     <Compile Include="ViewModel\Form\HR\PayrollWorksheetDraftVM.cs" />
     <Compile Include="ViewModel\Form\HR\ViewInsuranceProfessionalVM.cs" />
@@ -252,7 +256,7 @@
     <Compile Include="ViewModel\Form\HR\PerformanceEvaluationVM.cs" />
     <Compile Include="ViewModel\Form\HR\PerformanceMonitoringVM.cs" />
     <Compile Include="ViewModel\Form\HR\PerformancePlanVM.cs" />
-    <Compile Include="ViewModel\Form\HR\DayOffBalance.cs" />
+    <Compile Include="ViewModel\Form\HR\DayOffBalanceVM.cs" />
     <Compile Include="ViewModel\Form\HR\PlaceMasterVM.cs" />
     <Compile Include="ViewModel\Form\HR\ProfessionalDataVM.cs" />
     <Compile Include="ViewModel\Form\HR\ProfessionalPerformanceEvaluationDetailVM.cs" />

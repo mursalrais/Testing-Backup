@@ -6,10 +6,17 @@ using System;
 
 namespace MCAWebAndAPI.Service.HR.Leave
 {
-    public interface IHRDayOffBalanceService
+    public interface IDayOffService
     {
         void SetSiteUrl(string siteUrl);
 
         void PopulateBalance(int idPSA,  PSAManagementVM viewModel, string action);
+
+        IEnumerable<DayOffRequest> GetDayOffRequests(IEnumerable<int> professionalIDs);
+
+        int GetUnpaidDayOffTotalDays(int professionalID, IEnumerable<DateTime> dateRange);
+
+        bool IsUnpaidDayOff(int professionalID, DateTime date, IEnumerable<DateTime> dateRange);
+
     }
 }

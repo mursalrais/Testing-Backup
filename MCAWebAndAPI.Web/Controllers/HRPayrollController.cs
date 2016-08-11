@@ -132,6 +132,7 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewModel);
         }
 
+        [AsyncTimeout(1000000)]
         public async Task<ActionResult> DisplayPayrollWorksheetSummary(string siteUrl)
         {
             SessionManager.Set("SiteUrl", siteUrl);
@@ -144,12 +145,12 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewModel);
         }
 
-
         /// <summary>
         /// Triggered after period is updated
         /// </summary>
         /// <param name="viewModel"></param>
         /// <returns></returns>
+        [AsyncTimeout(1000000)]
         [HttpPost]
         public async Task<ActionResult> DisplayInScreenPeriodWorksheet(PayrollRunVM viewModel)
         {
@@ -160,7 +161,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
             return Json(new { message = "Period has been updated" }, JsonRequestBehavior.AllowGet);
         }
-        
+
+        [AsyncTimeout(1000000)]
         public ActionResult RunInBackgroundPeriodWorksheet(string periodString)
         {
             var period = DateTime.ParseExact(periodString, "dd-MM-yyyy", CultureInfo.CurrentCulture);

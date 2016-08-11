@@ -1,6 +1,7 @@
 ﻿using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using MCAWebAndAPI.Model.ViewModel.Form.HR;
+using MCAWebAndAPI.Model.ViewModel.Form.Common;
 using MCAWebAndAPI.Service.HR.Recruitment;
 using System.Collections.Generic;
 using System.Linq;
@@ -182,7 +183,7 @@ namespace MCAWebAndAPI.Web.Controllers
             _hRPerformancePlanService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
-            var viewModel = _hRPerformancePlanService.GetHeader(ID);
+            var viewModel = _hRPerformancePlanService.GetHeader(ID, requestor);
             viewModel.Requestor = requestor;
             viewModel.ID = ID;
             ViewBag.Action = "EditPerformancePlan";
@@ -350,7 +351,17 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.ProfessionalPerformancePlan);
+            string url = null;
+            if (viewModel.TypeForm == "Professional")
+            {
+                url = UrlResource.ProfessionalPerformancePlan;
+            }
+            if (viewModel.TypeForm != "Professional")
+            {
+                url = UrlResource.ProfessionalPerformancePlanApprover;
+            }
+
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + url);
         }
 
         [HttpPost]
