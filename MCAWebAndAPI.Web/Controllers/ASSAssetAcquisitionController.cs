@@ -75,6 +75,12 @@ namespace MCAWebAndAPI.Web.Controllers
             siteUrl = SessionManager.Get<string>("SiteUrl");
             _assetAcquisitionService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
+            if(_data.Details.Count() == 0)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse("Details should not empty!");
+            }
+
             //return View(new AssetMasterVM());
             int? headerID = null;
             try
@@ -96,7 +102,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl ?? ConfigResource.DefaultBOSiteUrl + UrlResource.AssetAcquisition);
+            return Redirect(string.Format("{0}/{1}", siteUrl ?? ConfigResource.DefaultBOSiteUrl, UrlResource.AssetAcquisition));
         }
 
         public ActionResult Update(AssetAcquisitionHeaderVM _data, string SiteUrl)
@@ -125,7 +131,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(string.Format("{0}/{1}", SiteUrl, UrlResource.AssetAcquisition));
+            return Redirect(string.Format("{0}/{1}", siteUrl ?? ConfigResource.DefaultBOSiteUrl, UrlResource.AssetAcquisition));
         }
 
         public JsonResult GetAssetSubSAssetGrid()
@@ -545,7 +551,7 @@ namespace MCAWebAndAPI.Web.Controllers
                     latestIDDetail = _assetAcquisitionService.MassUploadHeaderDetail(listNameDetail, TableDetail, siteUrl);
                 }
             }
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl);
+            return Redirect(string.Format("{0}/{1}", siteUrl ?? ConfigResource.DefaultBOSiteUrl, UrlResource.AssetAcquisition));
         }
 
         public ActionResult GetAcceptanceMemoInfo(int IDAcceptanceMemo)

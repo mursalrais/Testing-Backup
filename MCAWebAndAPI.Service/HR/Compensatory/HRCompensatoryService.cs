@@ -237,6 +237,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.ddlProfessional.Value = Convert.ToInt32(idPro);
             viewModel = ConvertCompInputTolistDataVM(listItem, viewModel);
             viewModel.cmpID = ID;
+            viewModel.ddlCompensatoryID.Value = ID;
             viewModel.StatusForm = crstatus;
             viewModel.CompensatoryDetails = GetCompDetailist(ID, viewModel);
 
@@ -339,6 +340,23 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 CompID = Convert.ToInt32(item["ID"]);
             }
             return CompID;
+        }
+
+        public void CreateHeaderCompensatory(CompensatoryVM viewModels)
+        {
+            var cratedValueDetail = new Dictionary<string, object>();
+
+            cratedValueDetail.Add("professional_x003a_ID", viewModels.cmpName);
+
+            try
+            {
+                SPConnector.AddListItem(SP_COMDET_LIST_NAME, cratedValueDetail, _siteUrl);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.Message);
+                throw e;
+            }
         }
 
         public void CreateCompensatoryData(int? cmpID, CompensatoryVM viewModels)
@@ -503,7 +521,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 columnValues.Add("crstatus", "Pending Approval 1 of 2");
             }
 
-            if (header.StatusForm == "Draft")
+            if (header.StatusForm == "Draft" || header.StatusForm == "Unapprove")
             {
                 columnValues.Add("crstatus", "Draft");
             }
@@ -518,9 +536,13 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 columnValues.Add("crstatus", "Pending Approval 2 of 2");
             }
 
-            if (header.StatusForm == "Pending Approval 2 of 2")
+            if (header.StatusForm == "Pending Approval 2 of 2" || header.StatusForm == "submithr")
             {
                 columnValues.Add("crstatus", "Approved");
+
+                IEnumerable<CompensatoryDetailVM> getbalance = header.CompensatoryDetails;
+
+                columnValues.Add("balance", getbalance.Count()); 
             }
 
             try
@@ -592,6 +614,20 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 position = "";
             }
+            return position;
+        }
+
+        public int? GetProfid(string username)
+        {
+            var caml = @"<View><Query><Where><Eq><FieldRef Name='officeemail' /><Value Type='Text'>" + username + @"</Value></Eq></Where></Query><ViewFields><FieldRef Name='ID' /></ViewFields><QueryOptions /></View>";
+            var listItem = SPConnector.GetList("Professional Master", _siteUrl, caml);
+            int? position = null;
+
+            foreach (var item in listItem)
+            {
+                position = FormatUtil.ConvertLookupToID(item, "ID");
+            }
+           
             return position;
         }
 

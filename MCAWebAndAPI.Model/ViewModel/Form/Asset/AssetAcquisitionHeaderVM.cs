@@ -18,6 +18,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 
         public string TransactionType { get; set; }
 
+        [Required]
         [DisplayName("Aceptance Memo No")]
         [UIHint("ComboBox")]
         public ComboBoxVM AccpMemo
@@ -50,6 +51,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
         public string VendorID { get; set; }
         public string PoNo { get; set; }
 
+        [Required]
         [UIHint("Date")]
         public DateTime? PurchaseDate { get; set; }
 

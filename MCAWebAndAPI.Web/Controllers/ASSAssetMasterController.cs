@@ -290,7 +290,7 @@ namespace MCAWebAndAPI.Web.Controllers
             {
                 if(createAssID.Rows[x].ItemArray[0].ToString() == "")
                 {
-                    res = _assetMasterService.GetAssetIDForMainAsset(createAssID.Rows[x].ItemArray[2].ToString(), createAssID.Rows[x].ItemArray[3].ToString(), createAssID.Rows[x].ItemArray[4].ToString());
+                    res = _assetMasterService.GetAssetIDForMainAsset(createAssID.Rows[x].ItemArray[2].ToString().Trim(), createAssID.Rows[x].ItemArray[3].ToString().Trim(), createAssID.Rows[x].ItemArray[4].ToString().Trim());
                     if (assetIDs.Contains(res))
                     {
                         //split
@@ -301,7 +301,7 @@ namespace MCAWebAndAPI.Web.Controllers
                         breakk[3] = FormatUtil.ConvertToDigitNumber(num, 4);
                         res = breakk[0] + "-" + breakk[1] + "-" + breakk[2] + "-" + breakk[3];
                         //get the number + 1
-
+                        assetIDs.Add(res);
                     }
                     else
                     {
@@ -311,7 +311,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 else
                 {
                     //cek if assetID parent is exist
-                    var assetIDss = _assetMasterService.GetAssetIDForSubAsset(createAssID.Rows[x].ItemArray[0].ToString());
+                    var assetIDss = _assetMasterService.GetAssetIDForSubAsset(createAssID.Rows[x].ItemArray[0].ToString().Trim());
                     if(assetIDss == "")
                     {
                         return JsonHelper.GenerateJsonErrorResponse(assetIDss);
@@ -321,7 +321,10 @@ namespace MCAWebAndAPI.Web.Controllers
                         res = assetIDss;
                     }
                 }
-
+                if(Convert.ToString(d["WarranyExpires"]) == "")
+                {
+                    d["WarranyExpires"] = DateTime.MinValue;
+                }
                 d["AssetID"] = res;
                 x++;
             }
@@ -329,7 +332,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             try
             {
-                CSVConverter.Instance.MassUpload(listName, sessionVariables, siteUrl);
+                _assetMasterService.MassUpload(listName, sessionVariables, siteUrl);
             }
             catch (Exception e)
             {

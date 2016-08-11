@@ -243,7 +243,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="bin\NLog.config" />
     <Content Include="bin\roslyn\Microsoft.CSharp.Core.targets" />
     <Content Include="bin\roslyn\Microsoft.VisualBasic.Core.targets" />
     <Content Include="bin\roslyn\VBCSCompiler.exe.config" />
@@ -915,6 +914,13 @@
     <Content Include="Views\FINTaxExemptionData\_Income.cshtml" />
     <Content Include="Views\FINTaxExemptionData\_Others.cshtml" />
     <Content Include="Views\FINTaxExemptionData\_VAT.cshtml" />
+    <Content Include="Views\FINRequisitionNote\Create.cshtml" />
+    <Content Include="Views\FINRequisitionNote\Edit.cshtml" />
+    <Content Include="Views\FINRequisitionNote\Print.cshtml" />
+    <Content Include="Views\FINEventBudget\Create.cshtml" />
+    <Content Include="Views\FINEventBudget\_ItemDetails.cshtml" />
+    <Content Include="Views\Shared\_PartialHeader.cshtml" />
+    <Content Include="Views\Shared\_PartialHeaderWithLogo.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1044,7 +1050,6 @@
     <Folder Include="bin\Resources\" />
     <Folder Include="Scripts\apps\controlls\" />
     <Folder Include="Views\File\" />
-    <Folder Include="Views\FINEventBudget\" />
     <Folder Include="Views\HRDataMaster\" />
   </ItemGroup>
   <ItemGroup>
@@ -1084,7 +1089,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>15923</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
