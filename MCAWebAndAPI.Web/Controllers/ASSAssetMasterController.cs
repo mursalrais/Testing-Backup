@@ -336,7 +336,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl);
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetMaster);
         }
 
     }
