@@ -33,6 +33,23 @@ namespace MCAWebAndAPI.Web.Controllers
             _service = new HRCompensatoryService();
         }
 
+        //public ActionResult InputHeaderCompensatoryHR(string siteurl = null, string idProf = null)
+        //{
+        //    _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
+        //    SessionManager.Set("SiteUrl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
+
+        //    string position = _service.GetPosition(idProf);
+
+        //    if (!(position.Contains("HR")))
+        //    {
+        //        string position = _service.GetPosition(idProf);
+        //    }
+
+        //    var viewmodel = _service.GetHeaderComp(idProf);
+
+        //    return View(viewmodel);
+        //}
+
         public ActionResult InputCompensatoryUser(string siteurl = null, int? iD = null)
         {
             //mandatory: set site url
@@ -151,6 +168,25 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewmodel);
         }
 
+        [HttpPost]
+        public async Task<ActionResult> CreateHeaderCompensatory(FormCollection form, CompensatoryVM viewModel)
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            try
+            {
+                viewModel.CompensatoryDetails = BindCompensatorylistDateTime(form, viewModel.CompensatoryDetails);
+                //_service.CreateCompensatoryData(cmpID, viewModel);
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.Compensatory);
+        }
         [HttpPost]
         public async Task<ActionResult> CreateCompensatoryData(FormCollection form, CompensatoryVM viewModel)
         {
