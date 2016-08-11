@@ -237,6 +237,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.ddlProfessional.Value = Convert.ToInt32(idPro);
             viewModel = ConvertCompInputTolistDataVM(listItem, viewModel);
             viewModel.cmpID = ID;
+            viewModel.ddlCompensatoryID.Value = ID;
             viewModel.StatusForm = crstatus;
             viewModel.CompensatoryDetails = GetCompDetailist(ID, viewModel);
 
@@ -503,7 +504,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 columnValues.Add("crstatus", "Pending Approval 1 of 2");
             }
 
-            if (header.StatusForm == "Draft")
+            if (header.StatusForm == "Draft" || header.StatusForm == "Unapprove")
             {
                 columnValues.Add("crstatus", "Draft");
             }
@@ -518,7 +519,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 columnValues.Add("crstatus", "Pending Approval 2 of 2");
             }
 
-            if (header.StatusForm == "Pending Approval 2 of 2")
+            if (header.StatusForm == "Pending Approval 2 of 2" || header.StatusForm == "submithr")
             {
                 columnValues.Add("crstatus", "Approved");
             }

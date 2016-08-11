@@ -71,6 +71,18 @@
     </div>
 }
 
+@if (Model.StatusForm != "")
+{
+    <div class="row pull-right">
+        <div class="col-sm-12">
+            <button id="submitonly-button" class="btn btn-primary" type="submit">
+                <i class="fa fa-clipboard"></i>
+                Submit
+            </button>
+        </div>
+    </div>
+}
+
 <legend>Approval Workflow</legend>
 <div id="workflow-placeholder" class="row"></div>
 
@@ -130,7 +142,6 @@
                         showLoading();
                         if (eMail != null) {
                             displayWorkflowRouter("workflow-placeholder", "@ViewBag.ListName", eMail);
-                            hideLoading();
                         }
 
                         var nameProf = $("#cmpName").val() + " - " + $("#cmpPosition").val()
