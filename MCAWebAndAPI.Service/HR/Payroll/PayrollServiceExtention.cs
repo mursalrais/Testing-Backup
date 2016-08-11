@@ -331,22 +331,24 @@ namespace MCAWebAndAPI.Service.HR.Payroll
                 {
                     var rowIndex = indexProfessional * _dateRanges.Length + indexDate;
 
+                    // Skip for condition without valid PSA
+                    if (string.IsNullOrEmpty(payrollWorksheet[rowIndex].PSANumber))
+                    {
+                        payrollWorksheet[rowIndex].Remarks = "No PSA";
+                        continue;
+                    }
+
                     // Skip for public holidays, sunday, and saturday
-                    if (_allHolidaysAndPublicHolidays.FirstOrDefault(e => DateTime.Compare(e.Date
-                        , _dateRanges[indexDate]) == 0)
-                        == null)
+                    if (_allHolidaysAndPublicHolidays.FirstOrDefault(e => 
+                      e.Date.Day == _dateRanges[indexDate].Day &&
+                      e.Date.Month == _dateRanges[indexDate].Month &&
+                      e.Date.Year == _dateRanges[indexDate].Year) != null)
                     {
                         payrollWorksheet[rowIndex].Remarks = "Holiday";
                         continue;
                     }
 
-                    // Skip for condition without valid PSA
-                    if(string.IsNullOrEmpty(payrollWorksheet[rowIndex].PSANumber))
-                    {
-                        payrollWorksheet[rowIndex].Remarks = "No PSA";
-                        continue;
-                    }
-                        
+                    
                     var monthlyFeeData = _allProfessionalMonthlyFees
                         .FirstOrDefault(e => e.ProfessionalID == _professionalIDs[indexProfessional]
                         && IsInScopeMonthlyFee(_dateRanges[indexDate], e));
