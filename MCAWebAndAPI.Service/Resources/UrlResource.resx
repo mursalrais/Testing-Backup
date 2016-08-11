@@ -164,10 +164,10 @@
     <value>/Lists/Exit%20Procedure</value>
   </data>
   <data name="ExitProcedureNonDisclosureAgreement" xml:space="preserve">
-    <value>_layouts/15/WopiFrame.aspx?sourcedoc={EAF7FF46-D8E2-46F9-8FAE-699BCAE56896}&amp;file=Non%20Disclosure%20Agreement.docx&amp;action=default</value>
+    <value>{0}/ExitProcedureDocuments/Non%20Disclosure%20Agreement.docx</value>
   </data>
   <data name="ExitProcedureExitInterviewForm" xml:space="preserve">
-    <value>_layouts/15/WopiFrame.aspx?sourcedoc={D847C32C-7EB7-4F7A-B71C-212D01FC921E}&amp;file=Exit%20Interview%20Form.docx&amp;action=default</value>
+    <value>{0}/ExitProcedureDocuments/Exit%20Interview%20Form.docx</value>
   </data>
   <data name="AddInterviewInvitation" xml:space="preserve">
     <value>{0}/Lists/Application/InputInterviewResultDetail.aspx?ID={1}&amp;manPos={2}</value>

@@ -52,9 +52,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             SessionManager.Set("RequestorUserLogin", requestor);
 
-            string projectUnit = exitProcedureService.GetProjectUnit(requestor);
-            
-                var viewModel = exitProcedureService.GetExitProcedure(null, siteUrl, requestor, listName, user);
+            var viewModel = exitProcedureService.GetExitProcedure(null, siteUrl, requestor, listName, user);
 
                 SessionManager.Set("UserLogin", requestor);
                 SessionManager.Set("ExitProcedureChecklist", viewModel.ExitProcedureChecklist);
@@ -281,7 +279,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
                     exitProcedureService.SendEmail(viewModel, SP_EXP_CHECK_LIST,
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)exitProcID,
-                    string.Format("Dear Respective Approver : {0}{1}/ViewExitProcedureForApprover.aspx?ID={2}", siteUrl, UrlResource.ExitProcedure, viewModel.ID), string.Format("Message for Requestor"));
+                    string.Format("Dear Respective Approver : {0}{1}/EditExitProcedureForApprover.aspx?ID={2}", siteUrl, UrlResource.ExitProcedure, viewModel.ID), string.Format("Message for Requestor"));
                 }
             }
             catch (Exception e)
@@ -327,7 +325,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 {
                     exitProcedureService.SendEmail(exitProcedure, SP_TRANSACTION_WORKFLOW_LIST_NAME,
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)exitProcedure.ID,
-                    string.Format("Dear Respective Approver : {0}{1}/ViewExitProcedureForApprover.aspx?ID={2}", siteUrl, UrlResource.ExitProcedure, exitProcedure.ID), string.Format("Message for Requestor"));
+                    string.Format("Dear Respective Approver : {0}{1}/EditExitProcedureForApprover.aspx?ID={2}", siteUrl, UrlResource.ExitProcedure, exitProcedure.ID), string.Format("Message for Requestor"));
 
                 }
             }

@@ -277,7 +277,7 @@ namespace MCAWebAndAPI.Web.Controllers
             return PartialView("_DisplayGrid");
         }
 
-        public ActionResult Submit(string listName)
+        public ActionResult SubmitUpload(string listName)
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _assetMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
@@ -336,7 +336,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl);
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetMaster);
         }
 
     }

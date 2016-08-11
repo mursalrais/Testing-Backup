@@ -41,6 +41,12 @@
                     @Html.EditorFor(m => m.RoomName)
                 </div>
             </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Remarks).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.Remarks)
+                </div>
+            </div>
         </div>
     </fieldset>
 }
