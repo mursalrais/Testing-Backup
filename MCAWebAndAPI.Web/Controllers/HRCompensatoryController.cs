@@ -175,11 +175,14 @@ namespace MCAWebAndAPI.Web.Controllers
             if (viewModel.StatusForm != "submit")
             {
                 _service.UpdateHeader(viewModel);
+            } else
+            {
+                _service.SendEmail(SP_TRANSACTION_WORKFLOW_LIST_NAME, SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)cmpID, 1, string.Format(EmailResource.EmailCompensatoryApproval, siteUrl, cmpID));
             }
-             
+
             if (viewModel.StatusForm != "Draft")
             {
-                if (viewModel.StatusForm == " ")
+                if (viewModel.StatusForm == "")
                 {
                     // BEGIN Workflow Demo 
                     Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateTransactionWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,

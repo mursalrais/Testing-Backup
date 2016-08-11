@@ -10,6 +10,7 @@
             <div class="col-sm-6">
                 @using (Ajax.BeginForm("DisplayInScreenPeriodWorksheet", "HRPayroll", new AjaxOptions
                 {
+                    OnBegin = "onBeginUpdatePeriod",
                     OnComplete = "onCompleteUpdatePeriod"
                 }, new { id = "form-update-period" }))
                 {
@@ -80,16 +81,11 @@
                     .DataSource(dataSource => dataSource
                         .Ajax()
                         .Read(read => read.Action("GridWorksheet_Read", "HRPayroll"))
-                        .PageSize(25)
+                        .PageSize(100)
                     )
                     .Pageable(pager => pager.PageSizes(true))
                     .Scrollable(scrollable => scrollable.Height(600))
-                    .Reorderable(reorderable => reorderable.Columns(true))
                     .Resizable(resizable => resizable.Columns(true))
-                    .Filterable()
-                    .Sortable()
-                    .Groupable()
-                    .ColumnMenu()
                 )
             </div>
         </div>
@@ -145,13 +141,27 @@
             $("#display-previous-drafts-button").click(function (e) {
                 var url = "/HRPayroll/DisplayPayrollWorksheetDrafts";
                 window.location.href = url;
-            })
+            });
 
         });
+
+        function onBeginUpdatePeriod(e) {
+            // show loading animation
+            showLoading();
+
+            // disable button
+            $("#display-in-screen-button-update-period").addClass("disabled");
+        }
 
         function onCompleteUpdatePeriod(e) {
             $("#PayrollWorksheetGrid").data("kendoGrid").dataSource.read();
             $("#PayrollWorksheetGrid").data("kendoGrid").refresh();
+
+            // hide loading animation
+            hideLoading();
+
+            // enable button
+            $("#display-in-screen-button-update-period").removeClass("disabled");
         }
 
         function GridWorksheet_OnError(e) {
