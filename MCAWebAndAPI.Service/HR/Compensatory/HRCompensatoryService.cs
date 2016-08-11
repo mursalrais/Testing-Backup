@@ -149,6 +149,17 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return GetComplisted(cmpID, iD, crstatus, viewModel);
         }
 
+        public CompensatoryVM GetHeaderComp(int? idPro)
+        {
+            var viewModel = new CompensatoryVM();
+
+            var listItem = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, idPro, _siteUrl);
+            viewModel.ddlProfessional.Value = Convert.ToInt32(idPro);
+            viewModel = ConvertCompInputTolistDataVM(listItem, viewModel);
+
+            return viewModel;
+        }
+
         private int GetCompID(int? ID)
         {
             var viewModel = new CompensatoryVM();
@@ -340,6 +351,23 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 CompID = Convert.ToInt32(item["ID"]);
             }
             return CompID;
+        }
+
+        public void CreateHeaderCompensatory(CompensatoryVM viewModels)
+        {
+            var cratedValueDetail = new Dictionary<string, object>();
+
+            cratedValueDetail.Add("professional_x003a_ID", viewModels.cmpName);
+
+            try
+            {
+                SPConnector.AddListItem(SP_COMDET_LIST_NAME, cratedValueDetail, _siteUrl);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.Message);
+                throw e;
+            }
         }
 
         public void CreateCompensatoryData(int? cmpID, CompensatoryVM viewModels)
@@ -585,6 +613,22 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         }
 
         public string GetPosition(string username)
+        {
+            var caml = @"<View><Query><Where><Eq><FieldRef Name='officeemail' /><Value Type='Text'>" + username + @"</Value></Eq></Where></Query><ViewFields><FieldRef Name='Position' /></ViewFields><QueryOptions /></View>";
+            var listItem = SPConnector.GetList("Professional Master", _siteUrl, caml);
+            string position = "";
+            foreach (var item in listItem)
+            {
+                position = FormatUtil.ConvertLookupToValue(item, "Position");
+            }
+            if (position == null)
+            {
+                position = "";
+            }
+            return position;
+        }
+
+        public string GetProfid(string username)
         {
             var caml = @"<View><Query><Where><Eq><FieldRef Name='officeemail' /><Value Type='Text'>" + username + @"</Value></Eq></Where></Query><ViewFields><FieldRef Name='Position' /></ViewFields><QueryOptions /></View>";
             var listItem = SPConnector.GetList("Professional Master", _siteUrl, caml);

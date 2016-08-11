@@ -14,6 +14,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         CompensatoryVM GetComplistbyProfid(int? iD);
 
+        CompensatoryVM GetHeaderComp(int? idProf);
+
         CompensatoryVM GetComplistActive();
 
         bool UpdateHeader(CompensatoryVM header);
