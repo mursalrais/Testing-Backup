@@ -75,6 +75,12 @@ namespace MCAWebAndAPI.Web.Controllers
             siteUrl = SessionManager.Get<string>("SiteUrl");
             _assetAcquisitionService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
+            if(_data.Details.Count() == 0)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse("Details should not empty!");
+            }
+
             //return View(new AssetMasterVM());
             int? headerID = null;
             try
