@@ -151,7 +151,7 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _layouts/15/WopiFrame.aspx?sourcedoc={D847C32C-7EB7-4F7A-B71C-212D01FC921E}&amp;file=Exit%20Interview%20Form.docx&amp;action=default.
+        ///   Looks up a localized string similar to {0}/ExitProcedureDocuments/Exit%20Interview%20Form.docx.
         /// </summary>
         public static string ExitProcedureExitInterviewForm {
             get {
@@ -160,7 +160,7 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _layouts/15/WopiFrame.aspx?sourcedoc={EAF7FF46-D8E2-46F9-8FAE-699BCAE56896}&amp;file=Non%20Disclosure%20Agreement.docx&amp;action=default.
+        ///   Looks up a localized string similar to {0}/ExitProcedureDocuments/Non%20Disclosure%20Agreement.docx.
         /// </summary>
         public static string ExitProcedureNonDisclosureAgreement {
             get {

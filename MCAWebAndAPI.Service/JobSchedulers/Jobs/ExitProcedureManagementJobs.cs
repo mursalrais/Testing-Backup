@@ -21,6 +21,7 @@ namespace MCAWebAndAPI.Service.JobSchedulers.Jobs
             var siteUrl = dataMap.GetString("site-url");
 
             IExitProcedureScheduleService _exitProcedureManagementService = new ExitProcedureScheduleService();
+            _exitProcedureManagementService.SetSiteUrl(siteUrl);
             _exitProcedureManagementService.FiveDaysStillNotApproved();
 
             logger.Info("Task Calculation Job at {0} has been successfully performed", siteUrl);
