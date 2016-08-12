@@ -1,0 +1,70 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model IEnumerable<AdjustmentDetailsVM>
+
+<div class="col-xs-12">
+
+    @(Html.Kendo().Grid(Model)
+    .Name("AdjustmentDetails")
+    .ToolBar(tools => tools.Create().Text("Add New"))
+        .Editable(editable => editable.Mode(GridEditMode.InCell)
+        .CreateAt(GridInsertRowPosition.Top))
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.ddlProfessional).ClientTemplate("#= ddlProfessional.Text #" +
+                          "<input type='hidden' name='AdjustmentDetails[#= GetDetailShortlist(data)#].ddlProfessional.Text' value='#= ddlProfessional.Text #' />"
+                        )
+                        .EditorViewData(new
+                        {
+                            DataTextField = "Text",
+                            DataValueField = "Value",
+                            ControllerName = "HRShortlist",
+                            ActionName = "GetddlProfessionalGrid"
+                        });
+
+        columns.Bound(p => p.ajusmentType).ClientTemplate("#= ajusmentType.Text #" +
+                        "<input type='hidden' name='AdjustmentDetails[#= GetDetailShortlist(data)#].ddlProfessional.Text' value='#= ddlProfessional.Text #' />"
+                      )
+                      .EditorViewData(new
+                      {
+                          DataTextField = "Text",
+                          DataValueField = "Value",
+                          ControllerName = "HRShortlist",
+                          ActionName = "GetddlProfessionalGrid"
+                      });
+
+        //columns.Bound(p => p.CmpActiv).ClientTemplate("#= CmpActiv #" +
+        //"<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].CmpActiv' value='#= CmpActiv #' />");
+
+        //columns.Bound(p => p.remarks).ClientTemplate("#= remarks #" +
+        //"<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].remarks' value='#= remarks #' />");
+
+        columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
+           .Click("onDeleteKendoDetail")).Width(100);
+
+        //columns.Bound(p => p.CmpID).Hidden().ClientTemplate("#= CmpID #" +
+        //"<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].CmpID' value='#= CmpID #' />"
+        // );
+
+        columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
+           "<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].EditMode' value='#= EditMode #' />"
+         );
+
+    })
+    .Events(e =>
+    {
+        e.Edit("onChange");
+        e.DataBound("onDataBoundDependentDetails");
+    })
+    .DataSource(dataSource => dataSource.Ajax()
+
+    .Model(model =>
+    {
+        model.Id(p => p.ID);
+    })
+    .ServerOperation(false)
+    )
+    )
+</div>
+<script>
+</script>
+

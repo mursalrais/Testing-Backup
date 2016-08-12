@@ -200,7 +200,9 @@
     <Compile Include="HR\Leave\IDayOffService.cs" />
     <Compile Include="HR\MedicalCheckUp\IMedicalCheckUpService.cs" />
     <Compile Include="HR\MedicalCheckUp\MedicalCheckUpService.cs" />
+    <Compile Include="HR\Payroll\AdjustmentService.cs" />
     <Compile Include="HR\Payroll\FeeSlipService.cs" />
+    <Compile Include="HR\Payroll\IAdjustmentService.cs" />
     <Compile Include="HR\Payroll\IFeeSlipService.cs" />
     <Compile Include="HR\Recruitment\ExitProcedureService.cs" />
     <Compile Include="HR\Recruitment\HRInterviewService.cs" />

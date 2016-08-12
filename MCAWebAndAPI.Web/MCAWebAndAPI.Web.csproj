@@ -921,6 +921,8 @@
     <Content Include="Views\FINEventBudget\_ItemDetails.cshtml" />
     <Content Include="Views\Shared\_PartialHeader.cshtml" />
     <Content Include="Views\Shared\_PartialHeaderWithLogo.cshtml" />
+    <Content Include="Views\HRAdjustment\InputAjustmentData.cshtml" />
+    <Content Include="Views\HRAdjustment\_InputAdjustmentDetails.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -964,6 +966,7 @@
     <Compile Include="Controllers\FINTaxExemptionDataController.cs" />
     <Compile Include="Controllers\FINTaxReimbursementController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\HRAdjustmentController.cs" />
     <Compile Include="Controllers\HRApplicationController.cs" />
     <Compile Include="Controllers\HRCompensatoryController.cs" />
     <Compile Include="Controllers\HRDataMasterController.cs" />
