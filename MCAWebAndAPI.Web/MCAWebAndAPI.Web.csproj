@@ -925,6 +925,8 @@
     <Content Include="Views\ASSAssetDisposal\CreateAssetDisposal.cshtml" />
     <Content Include="Views\ASSAssetDisposal\_AssetDisposalDetail.cshtml" />
     <Content Include="Views\FINSPHL\EditSPHL.cshtml" />
+    <Content Include="Views\ASSAssetAcquisition\View.cshtml" />
+    <Content Include="Views\ASSAssetAcquisition\_DetailsView.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

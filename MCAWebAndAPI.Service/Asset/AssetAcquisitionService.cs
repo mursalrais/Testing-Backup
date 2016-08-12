@@ -63,7 +63,7 @@ namespace MCAWebAndAPI.Service.Asset
             viewmodel.CancelURL = _siteUrl + UrlResource.AssetAcquisition;
             var columnValues = new Dictionary<string, object>();
             //columnValues.add
-            columnValues.Add("Title", viewmodel.TransactionType);
+            columnValues.Add("Title", "Asset Acquisition");
             if (viewmodel.AccpMemo.Value == null)
             {
                 return 0;
@@ -259,7 +259,7 @@ namespace MCAWebAndAPI.Service.Asset
             var columnValues = new Dictionary<string, object>();
             var ID = Convert.ToInt32(viewmodel.ID);
             //columnValues.add
-            columnValues.Add("Title", viewmodel.TransactionType);
+            columnValues.Add("Title", "Asset Acquisition");
             string[] memo = viewmodel.AccpMemo.Value.Split('-');
             //columnValues.Add("acceptancememono", memo[1]);
             columnValues.Add("acceptancememono", new FieldLookupValue { LookupId = Convert.ToInt32(memo[0]) });
