@@ -9,6 +9,7 @@ using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Service.HR.Common;
 using System.Threading.Tasks;
 using System.IO;
+using MCAWebAndAPI.Model.HR.DataMaster;
 
 namespace MCAWebAndAPI.Service.HR.Leave
 {
