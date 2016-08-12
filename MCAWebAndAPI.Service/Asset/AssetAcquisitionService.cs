@@ -486,5 +486,37 @@ namespace MCAWebAndAPI.Service.Asset
         {
             throw new NotImplementedException();
         }
+
+        public List<string> GetSubAsst(string mainsubasset, string SiteUrl)
+        {
+            string caml = @"<View><Query>
+                       <Where>
+                          <Contains>
+                             <FieldRef Name='AssetID' />
+                             <Value Type='Text'>"+ mainsubasset + @"</Value>
+                          </Contains>
+                       </Where>
+                       <OrderBy>
+                          <FieldRef Name='ID' Ascending='True' />
+                       </OrderBy>
+                    </Query>
+                    <ViewFields>
+                       <FieldRef Name='AssetID' />
+                       <FieldRef Name='Title' />
+                    </ViewFields>
+                    <QueryOptions /></View>";
+            var list = SPConnector.GetList("Asset Master", SiteUrl, caml);
+
+            var viewmodel = new List<string>();
+            foreach(var l in list)
+            {
+                if(Convert.ToString(l["AssetID"]).Length >14 )
+                {
+                    viewmodel.Add(Convert.ToString(l["AssetID"]) +"-"+ Convert.ToString(l["Title"]));
+                }
+            }
+            
+            return viewmodel;
+        }
     }
 }

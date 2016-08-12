@@ -927,6 +927,7 @@
     <Content Include="Views\FINSPHL\EditSPHL.cshtml" />
     <Content Include="Views\ASSAssetAcquisition\View.cshtml" />
     <Content Include="Views\ASSAssetAcquisition\_DetailsView.cshtml" />
+    <Content Include="Views\ASSAssignmentofAsset\_Details.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

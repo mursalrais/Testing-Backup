@@ -596,5 +596,16 @@ namespace MCAWebAndAPI.Web.Controllers
                     accpMemoInfo.PoNo
                 }, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult GetSubAsset(string mainsubasset)
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            var MainAssetID = mainsubasset;
+            var subbasset = _assetAcquisitionService.GetSubAsst(MainAssetID, siteUrl);
+
+            //var professionals = GetFromExistingSession();
+            return Json( subbasset, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }
