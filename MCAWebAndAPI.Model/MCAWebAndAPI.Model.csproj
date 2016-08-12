@@ -159,10 +159,16 @@
     <Compile Include="ViewModel\Control\ProjectComboBoxVM.cs" />
     <Compile Include="ViewModel\Control\ReligionComboBoxVM.cs" />
     <Compile Include="ViewModel\Control\TaxTypeComboBoxVM.cs" />
+    <Compile Include="ViewModel\Form\Asset\AssetDisposalDetailVM.cs" />
+    <Compile Include="ViewModel\Form\Asset\AssetDisposalVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetLocationVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetMasterVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetAcquisitionHeaderVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetAcquisitionItemVM.cs" />
+    <Compile Include="ViewModel\Form\Asset\AssetTransferDetailVM.cs" />
+    <Compile Include="ViewModel\Form\Asset\AssetTransferHeaderVM.cs" />
+    <Compile Include="ViewModel\Form\Asset\AssetTransferItemVM.cs" />
+    <Compile Include="ViewModel\Form\Asset\AssetTransferVM.cs" />
     <Compile Include="ViewModel\Form\Asset\WBSMaterVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetCheckFormHeaderVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetCheckFormItemVM.cs" />
@@ -197,6 +203,7 @@
     <Compile Include="ViewModel\Form\Asset\AssignmentofAssetVM.cs" />
     <Compile Include="ViewModel\Form\Asset\LocationMasterVM.cs" />
     <Compile Include="ViewModel\Form\Common\PendingApprovalItemVM.cs" />
+    <Compile Include="ViewModel\Form\Common\ProfessionalVM.cs" />
     <Compile Include="ViewModel\Form\Common\WorkflowItemVM.cs" />
     <Compile Include="ViewModel\Form\Common\WorkflowRouterVM.cs" />
     <Compile Include="ViewModel\Form\Finance\ActivityVM.cs" />
