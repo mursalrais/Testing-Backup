@@ -118,6 +118,13 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [DisplayName("YearDate")]
         public string cmpYearDate { get; set; }
 
+        /// <head>
+        /// CompensatoryDay
+        /// </head>
+        /// 
+        [DisplayName("Profesional")]
+        public string profId { get; set; }
+
         /// <summary>
         /// crstatus
         /// </summary>

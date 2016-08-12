@@ -20,6 +20,7 @@
     <fieldset>
         @Html.HiddenFor(m => m.cmpID)
         @Html.HiddenFor(m => m.cmpName)
+        @Html.HiddenFor(m => m.cmpEmail)
         @Html.HiddenFor(m => m.cmpTitle)
         @Html.HiddenFor(m => m.cmpPosition)
         @Html.HiddenFor(m => m.cmpYearDate)
@@ -59,8 +60,8 @@
         </div>
         <legend>Compensatory list</legend>
         <div id="compensatorylist" class="row"></div>
-
-        <button id="submitonly-button" class="btn btn-primary" type="submit">
+       
+        <button id="submithr-button" class="btn btn-primary" type="submit">
             <i class="fa fa-save"></i>
             Submit
         </button>
@@ -68,24 +69,6 @@
     </fieldset>
 }
 
-@if (Model.StatusForm == "")
-{
-    <div class="row pull-right">
-        <div class="col-sm-12">
-            <button id="submit-button" class="btn btn-primary" type="submit">
-                <i class="fa fa-save"></i>
-                Submit For Approval
-            </button>
-            <button id="submit-draft-initiate-button" class="btn btn-primary" type="submit">
-                <i class="fa fa-clipboard"></i>
-                Save As Draft
-            </button>
-        </div>
-    </div>
-}
-
-@if (Model.StatusForm == "Draft")
-{
     <div class="row pull-right">
         <div class="col-sm-12">
             <button id="submit-draft-initiate-button" class="btn btn-primary" type="submit">
@@ -98,7 +81,6 @@
             </button>
             </div>
         </div>
-            }
 
             <legend>Approval Workflow</legend>
             <div id="workflow-placeholder" class="row"></div>
@@ -112,26 +94,70 @@
                     </div>
                 </div>
 
-                <div class="row pull-right">
-                    <div class="col-sm-12">
-                        <button id="approve-button" class="btn btn-success" type="submit">
-                            <i class="fa fa-thumbs-o-up"></i>
-                            Approve
-                        </button>
-                        <button id="reject-button" class="btn btn-danger" type="submit">
-                            <i class="fa fa-thumbs-o-down"></i>
-                            Reject
-                        </button>
-                    </div>
-                </div>
+    <div class="row pull-right">
+        <div class="col-sm-12">
+
+            <button id="approve-button" class="btn btn-success" type="submit">
+                <i class="fa fa-thumbs-o-up"></i>
+                Approve
+            </button>
+                      
+            <button id="reject-button" class="btn btn-danger" type="submit">
+                <i class="fa fa-thumbs-o-down"></i>
+                Reject
+            </button>
+
+            <button id="unapprove-button" class="btn btn-warning" type="submit">
+                <i class="fa fa-mail-reply"></i>
+                Unapprove
+            </button>
+        </div>
+    </div>
 
             @section scripts{
 
                 <script>
                     $(document).ready(function () {
+                        showLoading();
                         var nameProf = $("#cmpName").val() + " - " + $("#cmpPosition").val()
                         $("#ProfName").prop("value", nameProf);
                         $("#ProfName").prop('readonly', 'true');
+
+                        var eMail = $("#cmpEmail").val();
+
+                        if (eMail != null) {
+                            displayWorkflowRouter("workflow-placeholder", "@ViewBag.ListName", eMail);
+                        }
+
+                        var url = "/HRCompensatory/GetCompensatoryDetails?idComp=" + $("#cmpID").val();
+
+                        $('#compensatorylist').load(url, function (response, status, xhr) {
+                            if (status == "success") {
+                                hideLoading();
+                            }
+                        });
+
+                        var CompStatus = $("#StatusForm").val();
+
+                        if (CompStatus == 'Approved') {
+                            $('#submithr-button').addClass('hide');
+                            $('#print-button').removeClass('hide');
+                            $('#approve-button').addClass('hide');
+                            $('#reject-button').addClass('hide');
+                            $('#cancel-button').addClass('hide');
+                            $('#unapprove-button').removeClass('hide');
+                            $('#submit-draft-initiate-button').addClass('hide');
+                        }
+
+                        if (CompStatus == 'Pending Approval 1 of 2' || CompStatus == 'Pending Approval 2 of 2' || CompStatus == 'Draft') {
+                            $('#print-button').addClass('hide');
+                            $('#unapprove-button').addClass('hide');
+                            $('#approve-button').removeClass('hide')
+                            $('#reject-button').removeClass('hide')
+                            $('#submithr-button').removeClass('hide');
+                            $('#cancel-button').removeClass('hide');
+                            $('#submit-draft-initiate-button').removeClass('hide');
+                        }
 
                         $("#cancel-button").click(function () {
                             
@@ -144,13 +170,14 @@
                                 }
                             });
                         });
-
-                        $("#submitonly-button").click(function () {
-                            $("#StatusForm").val("submit")
+                         
+                        $("#submithr-button").click(function () {
+                            $("#StatusForm").val("submithr")
                             $("form").submit();
                         });
 
-                        $("#submit-button").click(function () {
+                        $("#submitonly-button").click(function () {
+                            $("#StatusForm").prop("value", "submit");
                             $("form").submit();
                         });
 
@@ -167,6 +194,13 @@
                             $("#StatusForm").val("Reject")
                             $("form").submit();
                         });
+
+                        $("#unapprove-button").click(function () {
+                            $("#StatusForm").val("Unapprove")
+                            $("form").submit();
+                        });
+
+                        hideLoading();
 
                         $('#print-button').click(function (e) {
                             $("#ParentDiv").show();
@@ -195,21 +229,33 @@
                             $("#StatusForm").prop("value", CompStatus);
                             
                             if (CompStatus == 'Approved') {
+                                $('#submithr-button').addClass('hide');
                                 $('#print-button').removeClass('hide');
                                 $('#approve-button').addClass('hide');
                                 $('#reject-button').addClass('hide');
                                 $('#cancel-button').addClass('hide');
+                                $('#unapprove-button').removeClass('hide');
                                 $('#submit-draft-initiate-button').addClass('hide');
                             }
 
-                            if (CompStatus == 'Pending Approval 1 of 2' || CompStatus == 'Pending Approval 2 of 2')
+                            if (CompStatus == 'Pending Approval 1 of 2' || CompStatus == 'Pending Approval 2 of 2' || CompStatus == 'Draft')
                             {
                                 $('#print-button').addClass('hide');
+                                $('#unapprove-button').addClass('hide');
                                 $('#approve-button').removeClass('hide')
                                 $('#reject-button').removeClass('hide')
+                                $('#submithr-button').removeClass('hide');
+                                $('#cancel-button').removeClass('hide');
+                                $('#submit-draft-initiate-button').removeClass('hide');
                             }
 
-                            var url = "/HRCompensatory/GetCompensatoryDetails?idComp=" + idComp;
+                            if (CompStatus == 'Draft') {
+                                $('#approve-button').addClass('hide');
+                                $('#reject-button').addClass('hide');
+                            }
+
+                            var url = "/HRCompensatory/GetCompensatoryDetails?idComp=" + $("#cmpID").val();
+
                             showLoading();
                             $('#compensatorylist').load(url, function (response, status, xhr) {
                                 if (status == "success") {
@@ -218,7 +264,6 @@
                             });
 
                             $("#cmpID").prop("value", idComp);
-                        
                     };
 
                     function OnChangeProffesional(e) {

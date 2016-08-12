@@ -15,6 +15,7 @@ using Kendo.Mvc.UI;
 using System.Collections.Generic;
 using System.Data;
 using MCAWebAndAPI.Service.Resources;
+using MCAWebAndAPI.Service.JobSchedulers.Schedulers;
 
 
 namespace MCAWebAndAPI.Web.Controllers
@@ -51,7 +52,6 @@ namespace MCAWebAndAPI.Web.Controllers
 
             SessionManager.Set("RequestorUserLogin", requestor);
 
-            // Get blank ViewModel
             var viewModel = exitProcedureService.GetExitProcedure(null, siteUrl, requestor, listName, user);
 
                 SessionManager.Set("UserLogin", requestor);
@@ -60,7 +60,27 @@ namespace MCAWebAndAPI.Web.Controllers
                 SessionManager.Set("WorkflowRouterRequestorUnit", viewModel.RequestorUnit);
                 SessionManager.Set("WorkflowRouterRequestorPosition", viewModel.RequestorPosition);
 
-            return View("CreateExitProcedure", viewModel);
+                return View("CreateExitProcedure", viewModel);
+        }
+
+        public ActionResult CreateExitProcedureHR(int? ID, string siteUrl = null, string requestor = null)
+        {
+            // MANDATORY: Set Site URL
+            exitProcedureService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            ViewBag.ListName = "Exit Procedure";
+
+            var listName = ViewBag.ListName;
+
+            ViewBag.RequestorUserLogin = requestor;
+
+            SessionManager.Set("RequestorUserLogin", requestor);
+
+            // Get blank ViewModel
+            var viewModel = exitProcedureService.GetExitProcedureHR(null, siteUrl);
+
+            return View("CreateExitProcedureHR", viewModel);
 
         }
 
@@ -90,25 +110,25 @@ namespace MCAWebAndAPI.Web.Controllers
 
         }
 
-        public ActionResult CreateExitProcedureHR(int? ID, string siteUrl = null, string requestor = null)
+        public ActionResult DisplayExitProcedure(string siteUrl = null, int? ID = null, string requestor = null)
         {
             // MANDATORY: Set Site URL
             exitProcedureService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
-            ViewBag.ListName = "Exit Procedure";
+            var viewModel = exitProcedureService.GetExitProcedure(ID);
 
-            var listName = ViewBag.ListName;
 
-            ViewBag.RequestorUserLogin = requestor;
-
-            SessionManager.Set("RequestorUserLogin", requestor);
-
-            // Get blank ViewModel
-            var viewModel = exitProcedureService.GetExitProcedureHR(null, siteUrl);
-
-            return View("CreateExitProcedureHR", viewModel);
-
+            if (viewModel.ID != null)
+            {
+                return View("EditExitProcedure", viewModel);
+            }
+            else
+            {
+                return RedirectToAction("Index",
+                "Error",
+                new { errorMessage = string.Format(MessageResource.ErrorEditExitProcedure) });
+            }
         }
 
         public ActionResult DisplayExitProcedureHR(int? ID, string siteUrl = null, string requestor = null)
@@ -194,10 +214,6 @@ namespace MCAWebAndAPI.Web.Controllers
             }
      
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.ExitProcedure);
-
-            //return RedirectToAction("Index",
-            //    "Success",
-            //    new { errorMessage = string.Format(MessageResource.SuccessCreateExitProcedureData, exitProcID) });
         }
 
         //Submit every data in Exit Procedure to List
@@ -263,7 +279,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
                     exitProcedureService.SendEmail(viewModel, SP_EXP_CHECK_LIST,
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)exitProcID,
-                    string.Format("Dear Respective Approver : {0}{1}/ViewExitProcedureForApprover.aspx?ID={2}", siteUrl, UrlResource.ExitProcedure, viewModel.ID), string.Format("Message for Requestor"));
+                    string.Format("Dear Respective Approver : {0}{1}/EditExitProcedureForApprover.aspx?ID={2}", siteUrl, UrlResource.ExitProcedure, viewModel.ID), string.Format("Message for Requestor"));
                 }
             }
             catch (Exception e)
@@ -273,32 +289,9 @@ namespace MCAWebAndAPI.Web.Controllers
             }
 
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.ExitProcedure);
-
-            //return RedirectToAction("Index",
-            //    "Success",
-            //    new { errorMessage = string.Format(MessageResource.SuccessCreateExitProcedureData, exitProcID) });
         }
 
-        public ActionResult DisplayExitProcedure(string siteUrl = null, int? ID = null)
-        {
-            // MANDATORY: Set Site URL
-            exitProcedureService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-
-            var viewModel = exitProcedureService.GetExitProcedure(ID);
-
-
-            if(viewModel.ID != null)
-            {
-                return View("EditExitProcedure", viewModel);
-            }
-            else
-            {
-                return RedirectToAction("Index",
-                "Error",
-                new { errorMessage = string.Format(MessageResource.ErrorEditExitProcedure) });
-            }
-        }
+        
 
         public ActionResult UpdateExitProcedure(ExitProcedureVM exitProcedure, FormCollection form)
         {
@@ -330,11 +323,9 @@ namespace MCAWebAndAPI.Web.Controllers
             {
                 if (exitProcedure.StatusForm == "Pending Approval")
                 {
-                    //exitProcedureService.SendMailDocument(exitProcedure.RequestorMailAddress, string.Format("Thank You For Your Request, Please kindly download Non Disclosure Document on this url: {0}{1} and Exit Interview Form on this url: {2}{3}", siteUrl, UrlResource.ExitProcedureNonDisclosureAgreement, siteUrl, UrlResource.ExitProcedureExitInterviewForm));
-
                     exitProcedureService.SendEmail(exitProcedure, SP_TRANSACTION_WORKFLOW_LIST_NAME,
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)exitProcedure.ID,
-                    string.Format("Dear Respective Approver : {0}{1}/ViewExitProcedureForApprover.aspx?ID={2}", siteUrl, UrlResource.ExitProcedure, exitProcedure.ID), string.Format("Message for Requestor"));
+                    string.Format("Dear Respective Approver : {0}{1}/EditExitProcedureForApprover.aspx?ID={2}", siteUrl, UrlResource.ExitProcedure, exitProcedure.ID), string.Format("Message for Requestor"));
 
                 }
             }
@@ -361,9 +352,7 @@ namespace MCAWebAndAPI.Web.Controllers
             var viewModel = exitProcedureService.ViewExitProcedure(ID);
             return View("DisplayExitProcedure", viewModel);
         }
-
         
-
         public JsonResult GetApproverPositions(int approverUnit)
         {
             exitProcedureService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
@@ -394,7 +383,6 @@ namespace MCAWebAndAPI.Web.Controllers
                 e.Name
             }), JsonRequestBehavior.AllowGet);
         }
-
         
         IEnumerable<ExitProcedureChecklistVM> BindExitProcedureChecklist(FormCollection form, IEnumerable<ExitProcedureChecklistVM> exitProcedureChecklist)
         {
@@ -408,6 +396,18 @@ namespace MCAWebAndAPI.Web.Controllers
             return array;
         }
 
-        
+        public ActionResult FiveDaysNotApproved(string siteUrl = null)
+        {
+            try
+            {
+                ExitProcedureManagementScheduler.DoNow_OnceEveryDay(siteUrl);
+            }
+            catch (Exception e)
+            {
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return RedirectToAction("Index", "Error");
+            }
+            return RedirectToAction("Index", "Success");
+        }
     }
 }

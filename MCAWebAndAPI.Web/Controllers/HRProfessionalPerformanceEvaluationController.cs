@@ -35,11 +35,10 @@ namespace MCAWebAndAPI.Web.Controllers
             _hRProfessionalPerformanceEvaluationService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
-            var viewModel = _hRProfessionalPerformanceEvaluationService.GetHeader(ID);
+            var viewModel = _hRProfessionalPerformanceEvaluationService.GetHeader(ID, requestor);
             viewModel.Requestor = requestor;
             viewModel.ID = ID;
             ViewBag.Action = "EditPerformanceEvaluation";
-
 
             // Used for Workflow Router
             ViewBag.ListName = "Professional%20Performance%20Evaluation";
@@ -155,7 +154,18 @@ namespace MCAWebAndAPI.Web.Controllers
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.ProfessionalPerfromanceEvaluation);
+
+            string url = null;
+            if (viewModel.TypeForm == "Professional")
+            {
+                url = UrlResource.ProfessionalPerfromanceEvaluation;
+            }
+            if (viewModel.TypeForm != "Professional")
+            {
+                url = UrlResource.ProfessionalPerformanceEvaluationApprover;
+            }
+
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + url);
         }
 
         [HttpPost]

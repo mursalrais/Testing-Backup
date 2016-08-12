@@ -1,5 +1,6 @@
 ﻿using MCAWebAndAPI.Service.HR.Payroll;
 using MCAWebAndAPI.Service.ProjectManagement.Schedule;
+using MCAWebAndAPI.Service.Utils;
 using NLog;
 using Quartz;
 using System;
@@ -27,10 +28,15 @@ namespace MCAWebAndAPI.Service.JobSchedulers.Jobs
                     dataMap.GetInt("period-month"),
                     dataMap.GetInt("period-day"));
 
+            var userLogin = dataMap.GetString("user-login");
 
             IPayrollService _payrollService = new PayrollService();
             _payrollService.SetSiteUrl(siteUrl);
             _payrollService.SavePayrollWorksheetDetailInBackground(period, filePath);
+
+            var emailMessage = @"Dear HR, <br/><br/>
+                The payroll run operation has been completed. You can go to Page Display Payroll Run Draft to get the file.";
+            EmailUtil.Send(userLogin, "Payroll Run is finished", emailMessage);
 
             logger.Info("Task Calculation Job at {0} has been successfully performed", siteUrl);
         }

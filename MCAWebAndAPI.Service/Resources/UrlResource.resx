@@ -164,10 +164,10 @@
     <value>/Lists/Exit%20Procedure</value>
   </data>
   <data name="ExitProcedureNonDisclosureAgreement" xml:space="preserve">
-    <value>/_layouts/15/WopiFrame.aspx?sourcedoc={3242C181-0557-4827-AD0E-F089CFE63AED}&amp;file=Non%20Disclosure%20Agreement.docx&amp;action=default</value>
+    <value>{0}/ExitProcedureDocuments/Non%20Disclosure%20Agreement.docx</value>
   </data>
   <data name="ExitProcedureExitInterviewForm" xml:space="preserve">
-    <value>/_layouts/15/WopiFrame.aspx?sourcedoc={2E1A7EB1-E5BD-4F38-A1DF-E43C7DEF0CF4}&amp;file=Exit%20Interview%20Form.docx&amp;action=default</value>
+    <value>{0}/ExitProcedureDocuments/Exit%20Interview%20Form.docx</value>
   </data>
   <data name="AddInterviewInvitation" xml:space="preserve">
     <value>{0}/Lists/Application/InputInterviewResultDetail.aspx?ID={1}&amp;manPos={2}</value>
@@ -233,5 +233,17 @@
   <data name="TaxExemptionIncomeDocumentByID" xml:space="preserve">
     <value>{0}/Tax%20Exemption%20Income%20Documents/Forms/AllItems.aspx#InplviewHash5093bda1-84bf-4cad-8652-286653d6a83f=FilterField1%3Dpsa%255Fx003a%255FID-FilterValue1%3D{1}</value>
     <comment>Need to change in migration</comment>
+  </data>
+  <data name="ProfessionalPerformanceEvaluationApprover" xml:space="preserve">
+    <value>/SitePages/Professional%20Performance%20Evaluation%20Approver.aspx</value>
+  </data>
+  <data name="ProfessionalPerformanceEvaluationHR" xml:space="preserve">
+    <value>/SitePages/Professional%20Performance%20Evaluation%20HR.aspx</value>
+  </data>
+  <data name="ProfessionalPerformancePlanApprover" xml:space="preserve">
+    <value>/SitePages/Professional%20Perfromance%20Plan%20Approver.aspx</value>
+  </data>
+  <data name="ProfessionalPerformancePlanHR" xml:space="preserve">
+    <value>/SitePages/Professional%20Perfromance%20Plan%20HR.aspx</value>
   </data>
 </root>

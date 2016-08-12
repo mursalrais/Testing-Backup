@@ -479,7 +479,7 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
             </View>";
             string  strbatch="", dateSubmission="";
 
-            foreach (var item in SPConnector.GetList("SubmitAXA", _siteUrl, caml))
+            foreach (var item in SPConnector.GetList("Submit AXA", _siteUrl, caml))
             {
                 strbatch = Convert.ToString(item["BatchNo"]);
                 dateSubmission = Convert.ToDateTime(item["SubmissionDate"]).ToString("dd/MMM/yyyy");
@@ -569,7 +569,7 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
                 SPConnector.UpdateListItem(SpHeaderListName, Convert.ToInt32(item["ID"]), columnValuesupdate, _siteUrl);
             }
 
-            SPConnector.AddListItem("SubmitAXA", columnValues, _siteUrl);
+            SPConnector.AddListItem("Submit AXA", columnValues, _siteUrl);
         }
 
         //public DataTable getViewProfessionalClaim(string useremail = null)
@@ -709,7 +709,7 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
             </View>";
                 string strbatch = "", strRecepient="",strSender="";
 
-                foreach (var item in SPConnector.GetList("SubmitAXA", _siteUrl, caml))
+                foreach (var item in SPConnector.GetList("Submit AXA", _siteUrl, caml))
                 {
                     strbatch = Convert.ToString(item["BatchNo"]);
                     strRecepient = Convert.ToString(item["Recepient"]);

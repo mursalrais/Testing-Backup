@@ -16,7 +16,12 @@
         .CreateAt(GridInsertRowPosition.Bottom))
         .Columns(columns =>
         {
-            columns.Bound(p => p.AssetSubAsset).ClientTemplate("#= AssetSubAsset.Text #" +
+
+            columns.Bound(p => p.POLineItem).ClientTemplate("#= POLineItem #" +
+            "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].POLineItem' value='#= POLineItem #' />"
+            );
+
+            columns.Bound(p => p.AssetSubAsset).Width(500).ClientTemplate("#= AssetSubAsset.Text #" +
                           "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].AssetSubAsset.Value' value='#= AssetSubAsset.Value #' />"
                         ).EditorViewData(new
                         {
@@ -26,7 +31,7 @@
                             ActionName = "GetAssetSubSAssetGrid"
                         });
 
-            columns.Bound(p => p.WBS).ClientTemplate("#= WBS.Text #" +
+            columns.Bound(p => p.WBS).Width(500).ClientTemplate("#= WBS.Text #" +
                           "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].WBS.Value' value='#= WBS.Value #' />"
                         ).EditorViewData(new
                         {
@@ -48,6 +53,10 @@
             "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].Remarks' value='#= Remarks #' />"
             );
 
+            columns.Bound(p => p.Status).ClientTemplate("#= Status #" +
+            "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].Status' value='#= Status #' />"
+            );
+
             columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
           "<input type='hidden' name=Details[#= getWorkingRelationshipDetails(data)#].ID value=#= ID # />"
 
@@ -67,15 +76,27 @@
                    .Model(model =>
                    {
                        model.Id(p => p.ID);
+                       model.Field(p => p.POLineItem);
                        model.Field(m => m.AssetSubAsset).DefaultValue(AssetAcquisitionItemVM.GetAssetSubAssetDefaultValue());
                        model.Field(m => m.WBS).DefaultValue(AssetAcquisitionItemVM.GetWBSDefaultValue());
+                       model.Field(p => p.CostIDR);
+                       model.Field(p => p.CostUSD);
+                       model.Field(p => p.Remarks);
+                       model.Field(p => p.Status).Editable(false);
+
                    })
                    .ServerOperation(false)
         )
     )
 </div>
-
+@*@Html.HiddenFor(m => m.ID)*@
 <script>
+    $(document).ready(function () {
+        if ($("#ID").val() != null) {
+            //alert("ID not null");
+        }
+    })
+
     function getWorkingRelationshipDetails(dataItem) {
         var data = $("#Details").data("kendoGrid").dataSource.data();
         //data.set('AssetSubAsset', data.AssetSubAsset);

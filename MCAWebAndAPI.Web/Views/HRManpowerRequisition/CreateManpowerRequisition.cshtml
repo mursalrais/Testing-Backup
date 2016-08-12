@@ -42,9 +42,7 @@
         <div class="row">
             @Html.Partial("_OtherRequirements", Model)
         </div>
-        <legend>Approval Workflow</legend>
-        <div id="workflow-placeholder" class="row" />
-        
+       
         
     </fieldset>
     <div class="form-actions">
@@ -91,10 +89,6 @@
 
         };
         $(document).ready(function () {
-            displayWorkflowRouter("workflow-placeholder", "@ViewBag.ListName", "@ViewBag.RequestorUserLogin");
-            
-           
-
             $("#IsKeyPosition").val(true);
             $("label[for='Yes']").show();
             $("label[for='No']").hide();
@@ -110,29 +104,21 @@
 
             });
             $("#StatusSubmit").click(function () {
-                checkGrid();
-                if ($('#WorkflowDetails').length) {
-                    var approverLength = $('#WorkflowDetails').data("kendoGrid").tbody.find("tr").length;
-                    if (approverLength == 2) {
-                        $("#Status_Value").prop("value", "Pending Approval 1 of 2");
-                    }
-                    else if (approverLength == 1) {
-                        $("#Status_Value").prop("value", "Pending Approval 1 of 1");
-                    }
-                    var projectUnit = $('#DivisionProjectUnit_Value').data("kendoDropDownList").dataItem($('#DivisionProjectUnit_Value').data("kendoDropDownList").select()).ProjectUnit;
-                    $('#ProjectUnitString').prop("value", projectUnit);
+                var isValid = checkGrid();
+                if (isValid) {
+                    $("#Status_Value").prop("value", "Pending Approval");
+                    //var projectUnit = $('#DivisionProjectUnit_Value').data("kendoDropDownList").dataItem($('#DivisionProjectUnit_Value').data("kendoDropDownList").select()).ProjectUnit;
+                    //$('#ProjectUnitString').prop("value", projectUnit);
                     $("form").submit();
-                } else {
-                    alert("Approval Workflow Have not loaded completely");
-                    return false;
-                }
-                
+                }               
                 
             });
             $("#StatusDraft").click(function () {
-                checkGrid();
-                $("#Status_Value").prop("value", "Draft");
-                $("form").submit();
+                var isValid = checkGrid();
+                if (isValid) {
+                    $("#Status_Value").prop("value", "Draft");
+                    $("form").submit();
+                }                
             });
 
         });
@@ -147,6 +133,7 @@
                     }
                 }
             }
+            return true;
         }
     </script>
 }

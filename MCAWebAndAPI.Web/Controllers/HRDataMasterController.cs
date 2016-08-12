@@ -288,11 +288,11 @@ namespace MCAWebAndAPI.Web.Controllers
             return dependents;
         }
 
-        private IEnumerable<DependentMaster> GetFromExistingSessionDependentForInsurance()
+        private IEnumerable<DependentMaster> GetFromExistingSessionDependentForInsurance(int id)
         {
             //Get existing session variable
             var sessionVariable = System.Web.HttpContext.Current.Session["DependentMaster"] as IEnumerable<DependentMaster>;
-            var dependents = sessionVariable ?? _dataMasterService.GetDependentsForInsurance();
+            var dependents = sessionVariable ?? _dataMasterService.GetDependentsForInsurance(id);
 
             if (sessionVariable == null) // If no session variable is found
                 System.Web.HttpContext.Current.Session["DependentMaster"] = dependents;
@@ -317,11 +317,11 @@ namespace MCAWebAndAPI.Web.Controllers
                 JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetDependantsForInsurance()
+        public JsonResult GetDependantsForInsurance(int id)
         {
             _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
 
-            var dependents = GetFromExistingSessionDependentForInsurance();
+            var dependents = _dataMasterService.GetDependentsForInsurance(id);//GetFromExistingSessionDependentForInsurance(id);
 
             return Json(dependents.Select(e =>
                 new
