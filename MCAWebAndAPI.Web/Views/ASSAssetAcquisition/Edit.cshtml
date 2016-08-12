@@ -23,7 +23,7 @@
                     @Html.Bootstrap().LabelFor(m => m.TransactionType).Class("col-md-4 control-label")
                     <div class="col-md-8">
                         @*@Html.DisplayFor(m => m.TransactionType)*@
-                        <input type="text" name="TransactionType" value="@Model.TransactionType" id="TransactionType" style="width: 100%;" />
+                        <input type="text" name="TransactionType" disabled value="@Model.TransactionType" id="TransactionType" style="width: 100%;" />
                     </div>
                 </div>
                 <div class="form-group">
