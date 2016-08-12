@@ -1,132 +1,4 @@
-﻿@*@using MCAWebAndAPI.Model.ViewModel.Form.Asset
-
-@model AssetTransferVM
-
-@using (Ajax.BeginForm("SubmitAssetTransfer", "ASSAssetTransfer",
-                                                                            FormMethod.Post,
-                                                                            new AjaxOptions
-                                                                            {
-                                                                                OnBegin = "onBeginForm",
-                                                                                OnComplete = "onCompleteForm",
-                                                                                OnSuccess = "onSuccessFormEmbed",
-                                                                                OnFailure = "onFailureForm"
-                                                                            }, new { @class = "form-horizontal" }))
-
-{
-<form class="form-horizontal" method="post" action="/ASSAssetTransfer/Create" id="create-asset-Transfer-form">
-    <fieldset>
-        <legend>Form Asset Transfer</legend>
-
-        <div class="col-md-6">
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.TransactionType).Class("col-md-4 control-label")
-                <div class="col-md-8">                    
-                    <input type="text" id="TransactionType" name="TransactionType" value="Asset Transfer" style="width: 100%" style="height: 100%" disabled/>
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.AssetHolderFrom).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.AssetHolderFrom)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.ContactNoFrom).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.ContactNoFrom)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.ProjectUnitFrom).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.ProjectUnitFrom)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Documents).Class("col-md-4 control-label")
-                <div class="col-md-4">
-                        @Html.EditorFor(m => m.Documents)
-                </div>
-             </div>    
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.CompletionStatus).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.CompletionStatus)
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Date).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.Date)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.AssetHolderTo).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.AssetHolderTo)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.ContactNoTo).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.ContactNoTo)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.ProjectUnitTo).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.ProjectUnitTo)
-                </div>
-            </div>
-        </div>
-        <legend>Asset Transer Detail</legend>
-        <div class="row">
-            @Html.Partial("_AssetTransferDetail", Model.Details)
-        </div>
-
-    </fieldset>
-</form>
-
-@section scripts{
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $("#submit-button").click(function () {
-                $("form").submit();
-            });
-        });
-
-        function OnSelectAssetHolderFrom(e) {
-            var dataItem = this.dataItem(e.item);
-            var url = "/HRDataMaster/GetProfessional/" + dataItem.ID;
-           // var urlPSA = "/HRPSAManagement/GetPSA/" + dataItem.ID;
-            $.getJSON(url, function (result) {
-                $('#ProfessionalID').prop('value', result[0].ID);
-                $('#Status').prop('value', result[0].Status);
-                $.getJSON(urlPSA, function (result) {
-                    if (result.length == 0) {
-                        $('#ContactNo').prop('value', "");
-                        $('#Position').prop('value', "");
-                        $('#JoinDate').prop('value', "");
-                        $('#DateOfNewPsa').prop('value', "");
-                        $('#EndOfContract').prop('value', "");
-                        alert("Professional Doesn't Have PSA");
-                    }
-                    else {
-                        $('#ContactNo').prop('value', result[0].ContactNo);
-                        $('#Position').prop('value', result[0].Position);
-                        $('#JoinDate').prop('value', result[0].JoinDate);
-                        $('#DateOfNewPsa').prop('value', result[0].DateOfNewPSA);
-                        $('#EndOfContract').prop('value', result[0].PsaExpiryDate);
-                    }
-                })
-            })
-        }
-    </script>
-    }
-}*@
-
+﻿
 @using MCAWebAndAPI.Model.ViewModel.Form.Asset
 
 @model AssetTransferVM
@@ -148,7 +20,8 @@
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.TransactionType).Class("col-sm-4 control-label")
                 <div class="col-sm-8">
-                    @Html.DisplayFor(m => m.TransactionType)
+                    @*@Html.DisplayFor(m => m.TransactionType)*@
+                    <input type="text" name="TransactionType" id="TransactionType" value="Asset Transfer" disabled />
                 </div>
             </div>           
             <div class="form-group">
@@ -160,13 +33,15 @@
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.ContactNoFrom).Class("col-sm-4 control-label")
                 <div class="col-sm-8">
-                    @Html.DisplayFor(m => m.ContactNoFrom)
+                    @*@Html.DisplayFor(m => m.ContactNoFrom)*@
+                    <input type="text" name="ContactNoFrom" id="ContactNoFrom" value="" disabled />
                 </div>
             </div>
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.ProjectUnitFrom).Class("col-sm-4 control-label")
                 <div class="col-sm-8">
-                    @Html.DisplayFor(m => m.ProjectUnitFrom)
+                    @*@Html.DisplayFor(m => m.ProjectUnitFrom)*@
+                    <input type="text" name="ProjectUnitFrom" id="ProjectUnitFrom" value="" disabled />
                 </div>
             </div>
             <div class="form-group">
@@ -239,8 +114,11 @@
             alert("Acceptance Memo ID : " + res[0]);
             var url = "/ASSAssetTransfer/GetAssetHolderFrom?IDAssetHolderFrom=" + res[0];
             $.getJSON(url, function (data) {
-                $('#ContactNoFrom').prop('value', data.ProjectName);
-                $('#ProjectUnitFrom').prop('value', data.ContactNo);
+                document.getElementById('ContactNoFrom').value = data.ProjectName;
+                document.getElementById('ProjectUnitFrom').value = data.ProjectName;
+
+                //$('#ContactNoFrom').prop('value', data.ProjectName);
+                //$('#ProjectUnitFrom').prop('value', data.ContactNo);
             });
         }
 
@@ -249,8 +127,11 @@
             alert("Acceptance Memo ID : " + res[0]);
             var url = "/ASSAssetTransfer/GetAssetHolderTo?IDAssetHolderTo=" + res[0];
             $.getJSON(url, function (data) {
-                $('#ContactNoTo').prop('value', data.ProjectName);
-                $('#ProjectUnitTo').prop('value', data.ContactNo);
+                document.getElementById('ContactNoTo').value = data.ProjectName;
+                document.getElementById('ProjectUnitTo').value = data.ContactNo;
+
+                //$('#ContactNoTo').prop('value', data.ProjectName);
+                //$('#ProjectUnitTo').prop('value', data.ContactNo);
             });
         }
     </script>

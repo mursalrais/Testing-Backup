@@ -559,7 +559,6 @@
     <Content Include="Views\ASSAssetScrapping\Create.cshtml" />
     <Content Include="Views\ASSAssetScrapping\Edit.cshtml" />
     <Content Include="Views\ASSAssetSmallValueAsset\Create.cshtml" />
-    <Content Include="Views\ASSAssetTransfer\Create.cshtml" />
     <Content Include="Views\Shared\_LayoutHome.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\BIEmbed\WFP03.cshtml" />

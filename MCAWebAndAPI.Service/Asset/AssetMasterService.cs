@@ -78,22 +78,42 @@ namespace MCAWebAndAPI.Service.Asset
                 viewModel.WarrantyExpires = Convert.ToDateTime(listItem["WarranyExpires"]);
             }
 
-            
-            viewModel.AssetCategory.Value = Convert.ToString(listItem["AssetCategory"]); 
-            viewModel.AssetDesc = Convert.ToString(listItem["Title"]);
-            viewModel.AssetLevel.Value = Convert.ToString(listItem["AssetLevel"]);
-            viewModel.AssetType.Value = Convert.ToString(listItem["AssetType"]);
-            viewModel.Condition.Value = Convert.ToString(listItem["Condition"]);
-            if(viewModel.AssetLevel.Value == "Sub Asset")
+            if(Convert.ToString(listItem["AssetLevel"]) == "Sub Asset")
             {
-                var breakdown = Convert.ToString(listItem["AssetID"]).Split('-');
-                viewModel.AssetNoAssetDesc.Value = breakdown[0] + "-" + breakdown[1] + "-" + breakdown[2] + "-" + breakdown[3];
+                //{[AssetID, FXA-PC-OE-0001-002]}
+                var Breakres = Convert.ToString(listItem["AssetID"]).Split('-');
+                var res = Breakres[0] + "-" + Breakres[1] + "-" + Breakres[2] + "-" + Breakres[3];
+                var caml = @"<View><Query>
+                            <Where>
+                            <Eq>
+                                <FieldRef Name='AssetID' />
+                                <Value Type='Text'>"+res+ @"</Value>
+                            </Eq>
+                            </Where>
+                            </Query>
+                            <ViewFields />
+                            <Query/><ViewFields>
+                               <FieldRef Name='Title' />
+                            </ViewFields>
+                            <QueryOptions /></View>";
+                var id = SPConnector.GetList(SP_ASSMAS_LIST_NAME, _siteUrl, caml);
+                int idParent = 0;
+                foreach(var d in id)
+                {
+                    idParent = Convert.ToInt32(d["ID"]);
+                }
+                var getDesc = SPConnector.GetListItem(SP_ASSMAS_LIST_NAME, idParent, _siteUrl);
+                viewModel.AssetNoAssetDesc.Value = res + "-" + Convert.ToString(getDesc["Title"]);
             }
             else
             {
                 viewModel.AssetNoAssetDesc.Value = Convert.ToString(listItem["AssetID"]);
             }
-            
+            viewModel.AssetCategory.Value = Convert.ToString(listItem["AssetCategory"]); 
+            viewModel.AssetDesc = Convert.ToString(listItem["Title"]);
+            viewModel.AssetLevel.Value = Convert.ToString(listItem["AssetLevel"]);
+            viewModel.AssetType.Value = Convert.ToString(listItem["AssetType"]);
+            viewModel.Condition.Value = Convert.ToString(listItem["Condition"]);
             viewModel.ID = ID;
 
             return viewModel;
