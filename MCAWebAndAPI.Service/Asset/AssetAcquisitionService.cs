@@ -134,8 +134,23 @@ namespace MCAWebAndAPI.Service.Asset
         public IEnumerable<AssetMasterVM> GetAssetSubAsset()
         {
             var models = new List<AssetMasterVM>();
-
-            foreach (var item in SPConnector.GetList("Asset Master", _siteUrl))
+            var caml = @"<View><Query>
+                       <Where>
+                          <Geq>
+                             <FieldRef Name='AssetID' />
+                             <Value Type='Text'>14</Value>
+                          </Geq>
+                       </Where>
+                       <OrderBy>
+                          <FieldRef Name='AssetID' Ascending='True' />
+                       </OrderBy>
+                    </Query>
+                    <ViewFields>
+                       <FieldRef Name='Title' />
+                       <FieldRef Name='AssetID' />
+                    </ViewFields>
+                    <QueryOptions /></View>";
+            foreach (var item in SPConnector.GetList("Asset Master", _siteUrl, caml))
             {
                 models.Add(ConvertToModelAssetSubAsset(item));
             }
