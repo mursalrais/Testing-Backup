@@ -21,7 +21,7 @@
                 @Html.Bootstrap().LabelFor(m => m.TransactionType).Class("col-sm-4 control-label")
                 <div class="col-sm-8">
                     @*@Html.DisplayFor(m => m.TransactionType)*@
-                    <input type="text" name="TransactionType" id="TransactionType" value="Asset Transfer" disabled />
+                    <input type="text" name="TransactionType" id="TransactionType" value="Asset Transfer" disabled style="width: 100%;"/>
                 </div>
             </div>           
             <div class="form-group">
@@ -34,14 +34,14 @@
                 @Html.Bootstrap().LabelFor(m => m.ContactNoFrom).Class("col-sm-4 control-label")
                 <div class="col-sm-8">
                     @*@Html.DisplayFor(m => m.ContactNoFrom)*@
-                    <input type="text" name="ContactNoFrom" id="ContactNoFrom" value="" disabled />
+                    <input type="text" name="ContactNoFrom" id="ContactNoFrom" value="" disabled style="width: 100%;"/>
                 </div>
             </div>
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.ProjectUnitFrom).Class("col-sm-4 control-label")
                 <div class="col-sm-8">
                     @*@Html.DisplayFor(m => m.ProjectUnitFrom)*@
-                    <input type="text" name="ProjectUnitFrom" id="ProjectUnitFrom" value="" disabled />
+                    <input type="text" name="ProjectUnitFrom" id="ProjectUnitFrom" value="" disabled style="width: 100%;"/>
                 </div>
             </div>
             <div class="form-group">
@@ -74,13 +74,15 @@
          <div class="form-group">
              @Html.Bootstrap().LabelFor(m => m.ContactNoTo).Class("col-sm-4 control-label")
              <div class="col-sm-8">
-                 @Html.DisplayFor(m => m.ContactNoTo)
+                 @*@Html.DisplayFor(m => m.ContactNoTo)*@
+                 <input type="text" name="ContactNoTo" id="ContactNoTo" value="" disabled style="width: 100%;" />
              </div>
          </div>
          <div class="form-group">
              @Html.Bootstrap().LabelFor(m => m.ProjectUnitTo).Class("col-sm-4 control-label")
              <div class="col-sm-8">
-                 @Html.DisplayFor(m => m.ProjectUnitTo)
+                 @*@Html.DisplayFor(m => m.ProjectUnitTo)*@
+                 <input type="text" name="ProjectUnitTo" id="ProjectUnitTo" value="" disabled style="width: 100%;" />
              </div>
          </div>
      </div>

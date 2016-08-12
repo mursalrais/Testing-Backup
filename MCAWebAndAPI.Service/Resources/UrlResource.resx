@@ -249,4 +249,7 @@
   <data name="SPHLDocumentByID" xml:space="preserve">
     <value>{0}/SPHL%20Documents/Forms/AllItems.aspx?groupBy=&amp;FilterField1=SPHL_x003a_ID&amp;FilterValue1={1}</value>
   </data>
+  <data name="AssetTransfer" xml:space="preserve">
+    <value>/Lists/Asset%20Transfer/AllItems.aspx</value>
+  </data>
 </root>

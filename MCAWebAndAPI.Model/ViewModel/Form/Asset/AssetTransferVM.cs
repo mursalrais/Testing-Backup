@@ -10,7 +10,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 {
     public class AssetTransferVM : Item
     {
-
+        public string CancelURL { get; set; }
         public DateTime? _date = DateTime.Now;        
         public ComboBoxVM _completionStatus, _assetHolderFrom, _assetHolderTo;
 

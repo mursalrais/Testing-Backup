@@ -71,9 +71,9 @@ namespace MCAWebAndAPI.Service.Asset
             string[] memo = viewmodel.AccpMemo.Value.Split('-');
             //columnValues.Add("acceptancememono", memo[1]);
             columnValues.Add("acceptancememono", new FieldLookupValue { LookupId = Convert.ToInt32(memo[0]) });
-            var breakVendor = viewmodel.Vendor.Split('-');
-            columnValues.Add("vendorid", breakVendor[0]);
-            columnValues.Add("vendorname", breakVendor[1]);
+            var memoinfo = SPConnector.GetListItem(SP_ACC_MEMO_LIST_NAME, Convert.ToInt32(memo[0]), _siteUrl);
+            columnValues.Add("vendorid", memoinfo["vendorid"]);
+            columnValues.Add("vendorname", memoinfo["vendorname"]);
             columnValues.Add("pono", viewmodel.PoNo);
             if(viewmodel.PurchaseDate.HasValue)
             {

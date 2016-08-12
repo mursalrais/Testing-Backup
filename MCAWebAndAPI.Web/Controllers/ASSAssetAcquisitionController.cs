@@ -102,7 +102,8 @@ namespace MCAWebAndAPI.Web.Controllers
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
-            return Redirect(string.Format("{0}/{1}", siteUrl ?? ConfigResource.DefaultBOSiteUrl, UrlResource.AssetAcquisition));
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAcquisition);
+            //return Redirect(string.Format("{0}/{1}", siteUrl ?? ConfigResource.DefaultBOSiteUrl, UrlResource.AssetAcquisition));
         }
 
         public ActionResult Update(AssetAcquisitionHeaderVM _data, string SiteUrl)
@@ -131,7 +132,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            return Redirect(string.Format("{0}/{1}", siteUrl ?? ConfigResource.DefaultBOSiteUrl, UrlResource.AssetAcquisition));
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAcquisition);
         }
 
         public JsonResult GetAssetSubSAssetGrid()
@@ -551,7 +552,7 @@ namespace MCAWebAndAPI.Web.Controllers
                     latestIDDetail = _assetAcquisitionService.MassUploadHeaderDetail(listNameDetail, TableDetail, siteUrl);
                 }
             }
-            return Redirect(string.Format("{0}/{1}", siteUrl ?? ConfigResource.DefaultBOSiteUrl, UrlResource.AssetAcquisition));
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAcquisition);
         }
 
         public ActionResult GetAcceptanceMemoInfo(int IDAcceptanceMemo)
