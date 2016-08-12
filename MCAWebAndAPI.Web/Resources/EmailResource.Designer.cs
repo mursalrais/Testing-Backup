@@ -261,14 +261,11 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;p&gt;
-        ///&lt;strong&gt;Dear HR Team,&lt;/strong&gt;
-        ///&lt;/p&gt;
-        ///&lt;p&gt;
-        ///This email is sent to you to notify that there is a request which required your action to validate the professional data. Kindly check the link as per below to go to direct page accordingly. You may check your personal page in IMS (My Approval View). Thank you. 
-        ///&lt;/p&gt;
+        ///   Looks up a localized string similar to Dear HR Team,
         ///
-        ///Link : &lt;a href=&quot;{0}&quot;&gt;Click Here&lt;/a&gt;.
+        ///This email is sent to you to notify that there is a request which required your action to validate the professional data. Kindly check the link as per below to go to direct page accordingly. You may check your personal page in IMS (My Approval View). Thank you. 
+        ///
+        ///Link : {0}.
         /// </summary>
         public static string ProfessionalEmailValidation {
             get {
@@ -277,12 +274,9 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;p&gt;
-        ///&lt;strong&gt;Dear Requestor,&lt;/strong&gt;
-        ///&lt;/p&gt;
-        ///&lt;p&gt;
-        ///This email is sent to you to notify that your approval request has been responded by the HR Team. Thank you. 
-        ///&lt;/p&gt;.
+        ///   Looks up a localized string similar to Dear Requestor,
+        ///
+        ///This email is sent to you to notify that your approval request has been responded by the HR Team. Thank you..
         /// </summary>
         public static string ProfessionalEmailValidationResponse {
             get {

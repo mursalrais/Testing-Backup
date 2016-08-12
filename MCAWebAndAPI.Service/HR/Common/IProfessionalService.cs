@@ -44,6 +44,6 @@ namespace MCAWebAndAPI.Service.HR.Common
         void SendEmailValidation(string emailTo, string emailMessages, bool isApproved);
         void SendEmailValidation(string emailTo, string emailMessages);
         void SetValidationStatus(int? id, Workflow.ProfessionalValidationStatus validationStatus);
-
+        List<string> GetEmailHR();
     }
 }
