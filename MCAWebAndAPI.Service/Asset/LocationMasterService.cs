@@ -15,8 +15,9 @@ namespace MCAWebAndAPI.Service.Asset
     {
         string _siteUrl;
         static Logger logger = LogManager.GetCurrentClassLogger();
-        const string SP_LOCATIONMASTER_LISTNAME = "Place Master";
+        const string SP_PLACE_MAS_LISTNAME = "Place Master";
         const string SP_PROVINCE_LISTNAME = "Province";
+        const string SP_LOCATION_MAS_LISTNAME = "Location Master";
 
         public int CreateHeader(LocationMasterVM header, string province, string office, int floor, string room)
         {
@@ -26,7 +27,7 @@ namespace MCAWebAndAPI.Service.Asset
             </Query> 
       </View>";
             int error = 0;
-            var locationTemp = SPConnector.GetList(SP_LOCATIONMASTER_LISTNAME, _siteUrl, caml).Count();
+            var locationTemp = SPConnector.GetList(SP_LOCATION_MAS_LISTNAME, _siteUrl, caml).Count();
             if (locationTemp != 0)
             {
                 return error;
@@ -39,14 +40,14 @@ namespace MCAWebAndAPI.Service.Asset
             columnValues.Add("Remarks", header.Remarks);
             try
             {
-                SPConnector.AddListItem(SP_LOCATIONMASTER_LISTNAME, columnValues, _siteUrl);
+                SPConnector.AddListItem(SP_LOCATION_MAS_LISTNAME, columnValues, _siteUrl);
             }
             catch (Exception e)
             {
                 logger.Error(e.Message);
             }
 
-            return SPConnector.GetLatestListItemID(SP_LOCATIONMASTER_LISTNAME, _siteUrl);
+            return SPConnector.GetLatestListItemID(SP_LOCATION_MAS_LISTNAME, _siteUrl);
         }
 
         public LocationMasterVM GetHeader(int? ID)
@@ -103,7 +104,7 @@ namespace MCAWebAndAPI.Service.Asset
             var site = _siteUrl;
             var siteHR = site.Replace("/bo", "/hr");
 
-            foreach (var item in SPConnector.GetList(SP_LOCATIONMASTER_LISTNAME, siteHR, caml))
+            foreach (var item in SPConnector.GetList(SP_PLACE_MAS_LISTNAME, siteHR, caml))
             {
 
                 LocationMaster.Add(ConvertToProvinceVM(item));
@@ -165,7 +166,7 @@ namespace MCAWebAndAPI.Service.Asset
                 }
             }
 
-            foreach (var item in SPConnector.GetList(SP_LOCATIONMASTER_LISTNAME, siteHR, caml))
+            foreach (var item in SPConnector.GetList(SP_PLACE_MAS_LISTNAME, siteHR, caml))
             {
                 collectionIDLocation.Add(Convert.ToInt32(item["ID"]));
                 collectionLocation.Add(Convert.ToString(item["Title"]));
