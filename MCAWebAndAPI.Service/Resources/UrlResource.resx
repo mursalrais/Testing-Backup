@@ -246,4 +246,7 @@
   <data name="ProfessionalPerformancePlanHR" xml:space="preserve">
     <value>/SitePages/Professional%20Perfromance%20Plan%20HR.aspx</value>
   </data>
+  <data name="SPHLDocumentByID" xml:space="preserve">
+    <value>{0}/SPHL%20Documents/Forms/AllItems.aspx?groupBy=&amp;FilterField1=SPHL_x003a_ID&amp;FilterValue1={1}</value>
+  </data>
 </root>

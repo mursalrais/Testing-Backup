@@ -412,6 +412,15 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0}/SPHL%20Documents/Forms/AllItems.aspx?groupBy=&amp;FilterField1=SPHL_x003a_ID&amp;FilterValue1={1}.
+        /// </summary>
+        public static string SPHLDocumentByID {
+            get {
+                return ResourceManager.GetString("SPHLDocumentByID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to /Lists/TaxExemptionData.
         /// </summary>
         public static string TaxExemptionData {
