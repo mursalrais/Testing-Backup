@@ -3,7 +3,7 @@
 
 @model CSVVM
 
-@using (Ajax.BeginForm("Update", "ASSassetAcquisition",
+@using (Ajax.BeginForm("SubmitUpload", "ASSassetAcquisition",
                                                                                                                                                    FormMethod.Post,
                                                                                                                                                    new AjaxOptions
                                                                                                                                                    {
@@ -77,7 +77,7 @@
         });
 
         function importCSV(e) {
-            var url = "/ASSAssetAcquisition/Submit?listName=" + "@Model.ListName";
+            var url = "/ASSAssetAcquisition/SubmitUpload?listName=" + "@Model.ListName";
             $.getJSON(url, function (data) {
                 showModalWindow(data);
             });
