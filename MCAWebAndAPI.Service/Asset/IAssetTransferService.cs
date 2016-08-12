@@ -1,4 +1,5 @@
 ﻿using MCAWebAndAPI.Model.ViewModel.Form.Asset;
+using MCAWebAndAPI.Model.ViewModel.Form.Shared;
 using NLog;
 using System;
 using System.Collections.Generic;
@@ -14,8 +15,14 @@ namespace MCAWebAndAPI.Service.Asset
 
         IEnumerable<AssetTransactionVM> GetAssetTransfers();
 
+        int CreateHeader(AssetTransferVM header);
+
         bool CreateAssetTransfer(AssetTransactionVM assetTransfer);
 
         bool UpdateAssetTransfer(AssetTransactionVM assetTransfer);
+
+        AssetTransferVM GetPopulatedModel(int? id = null);
+
+        ProfessionalVM GetAssetHolderFromInfo(int? ID, string siteUrl);
     }
 }

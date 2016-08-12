@@ -13,7 +13,7 @@ namespace MCAWebAndAPI.Service.HR.Common
     {
         string _siteUrl;
         static Logger logger = LogManager.GetCurrentClassLogger();
-        const string SP_LIST_NAME = "Calendar Event";
+        const string SP_LIST_NAME = "Event Calendar";
         
         const string TYPE_DAYOFF = "Day-Off";
         const string TYPE_COMP_LEAVE = "Compensatory Leave";
@@ -76,8 +76,8 @@ namespace MCAWebAndAPI.Service.HR.Common
             var caml = @"<View>  
             <Query> 
                <Where><And><And><Eq><FieldRef Name='Category' /><Value Type='Choice'>" +  EventCalendar.GetType(EventCalendar.Type.PUBLIC_HOLIDAY) + 
-               @"</Value></Eq><Geq><FieldRef Name='EventDate0' /><Value Type='DateTime'>" + startDateUniversalTimeString + 
-               @"</Value></Geq></And><Leq><FieldRef Name='EventDate0' /><Value Type='DateTime'>" + finishDateUniversalTimeString +
+               @"</Value></Eq><Geq><FieldRef Name='EventDate' /><Value Type='DateTime'>" + startDateUniversalTimeString + 
+               @"</Value></Geq></And><Leq><FieldRef Name='EventDate' /><Value Type='DateTime'>" + finishDateUniversalTimeString +
                @"</Value></Leq></And></Where> 
             </Query> 
             </View>";
@@ -97,7 +97,7 @@ namespace MCAWebAndAPI.Service.HR.Common
             {
                 ID = Convert.ToInt32(item["ID"]),
                 EventCategory = Convert.ToString(item["Category"]),
-                Date = Convert.ToDateTime(item["EventDate0"])
+                Date = Convert.ToDateTime(item["EventDate"]).ToLocalTime()
             };
         }
 

@@ -20,19 +20,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
         string _siteUrl = null;
 
-        public PSAScheduleService()
-        {
-            _updatedTaskCandidates = new Dictionary<int, TaskManager>();
-            _baseLineTotal = new Dictionary<DateTime, int>();
-            _planTotal = new Dictionary<DateTime, int>();
-            _actualTotal = new Dictionary<DateTime, int>();
-        }
-
-        Dictionary<int, TaskManager> _updatedTaskCandidates;
-        Dictionary<DateTime, int> _baseLineTotal;
-        Dictionary<DateTime, int> _planTotal;
-        Dictionary<DateTime, int> _actualTotal;
-
+        
         public void SetSiteUrl(string siteUrl)
         {
             _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
@@ -139,49 +127,5 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
         {
             EmailUtil.Send(professionalMail, mailSubject, mailContent);
         }
-
-        //public bool UpdateStatusPSA()
-        //{
-        //    int psaID = SPConnector.GetLatestListItemID(SP_PSA_LIST_NAME, _siteUrl);
-
-        //    UpdatePSAStatus(psaID);
-        //    GetPSAData(psaID);
-            
-
-        //    var psaData = SPConnector.GetListItem(SP_PSA_LIST_NAME, psaID, _siteUrl);
-        //    DateTime datePSAStart = Convert.ToDateTime(psaData["dateofnewpsa"]).ToLocalTime();
-        //    DateTime lastWorkingDate = Convert.ToDateTime(psaData["lastworkingdate"]).ToLocalTime();
-        //    DateTime today = DateTime.Now;
-
-            
-        //}
-
-        //public bool UpdatePSAStatus(int? psaID)
-        //{
-        //    var updateValues = new Dictionary<string, object>();
-
-        //    string psaStatus = "Active";
-
-        //    updateValues.Add("psastatus", psaStatus);
-            
-        //    try
-        //    {
-        //        SPConnector.UpdateListItem(SP_PSA_LIST_NAME, psaID, updateValues, _siteUrl);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        logger.Debug(e.Message);
-        //        return false;
-        //    }
-
-        //    return true;
-        //}
-
-        //public bool GetPSAData(int? psaID)
-        //{
-        //    var psaData = SPConnector.GetListItem(SP_PSA_LIST_NAME, psaID, _siteUrl);
-
-        //    string professionalName = Convert.ToString(psaData["Title"]);
-        //}
     }
 }

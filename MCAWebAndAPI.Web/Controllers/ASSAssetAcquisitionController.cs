@@ -75,6 +75,12 @@ namespace MCAWebAndAPI.Web.Controllers
             siteUrl = SessionManager.Get<string>("SiteUrl");
             _assetAcquisitionService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
+            if(_data.Details.Count() == 0)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse("Details should not empty!");
+            }
+
             //return View(new AssetMasterVM());
             int? headerID = null;
             try
@@ -96,8 +102,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl ?? ConfigResource.DefaultBOSiteUrl + UrlResource.AssetAcquisition);
-            //return Redirect(string.Format("{0}/{1}", siteUrl ?? ConfigResource.DefaultBOSiteUrl, UrlResource.AssetAcquisition));
+            return Redirect(string.Format("{0}/{1}", siteUrl ?? ConfigResource.DefaultBOSiteUrl, UrlResource.AssetAcquisition));
         }
 
         public ActionResult Update(AssetAcquisitionHeaderVM _data, string SiteUrl)
@@ -126,7 +131,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(string.Format("{0}/{1}", SiteUrl, UrlResource.AssetAcquisition));
+            return Redirect(string.Format("{0}/{1}", siteUrl ?? ConfigResource.DefaultBOSiteUrl, UrlResource.AssetAcquisition));
         }
 
         public JsonResult GetAssetSubSAssetGrid()
@@ -396,20 +401,30 @@ namespace MCAWebAndAPI.Web.Controllers
 
                         TableHeader = new DataTable();
                         TableHeader.Columns.Add("Title", typeof(string));
-                        TableHeader.Columns.Add("Acceptance_x0020_Memo_x0020_No", typeof(int));
-                        TableHeader.Columns.Add("Vendor", typeof(string));
-                        TableHeader.Columns.Add("PO_x0020_No", typeof(string));
-                        TableHeader.Columns.Add("Purchase_x0020_Date", typeof(string));
-                        TableHeader.Columns.Add("Purchase_x0020_Description", typeof(string));
+                        TableHeader.Columns.Add("acceptancememono", typeof(int));
+                        TableHeader.Columns.Add("vendorid", typeof(string));
+                        TableHeader.Columns.Add("vendorname", typeof(string));
+                        TableHeader.Columns.Add("pono", typeof(string));
+                        TableHeader.Columns.Add("purchasedate", typeof(string));
+                        TableHeader.Columns.Add("purchasedescription", typeof(string));
 
                         DataRow row = TableHeader.NewRow();
 
                         row["Title"] = d.ItemArray[0].ToString();
-                        row["Acceptance_x0020_Memo_x0020_No"] = myKey;
-                        row["Vendor"] = d.ItemArray[4].ToString();
-                        row["PO_x0020_No"] = d.ItemArray[5].ToString();
-                        row["Purchase_x0020_Date"] = d.ItemArray[6].ToString();
-                        row["Purchase_x0020_Description"] = d.ItemArray[7].ToString();
+                        row["acceptancememono"] = myKey;
+                        if(d.ItemArray[3].ToString() == "-1")
+                        {
+                            row["vendorid"] = null;
+                        }
+                        else
+                        {
+                            row["vendorid"] = d.ItemArray[3].ToString();
+                        }
+                        
+                        row["vendorname"] = d.ItemArray[4].ToString();
+                        row["pono"] = d.ItemArray[5].ToString();
+                        row["purchasedate"] = d.ItemArray[6].ToString();
+                        row["purchasedescription"] = d.ItemArray[7].ToString();
 
                         TableHeader.Rows.InsertAt(row, 0);
 
@@ -442,19 +457,19 @@ namespace MCAWebAndAPI.Web.Controllers
                 if (d.ItemArray[9].ToString() != "" && latestIDHeader != null)
                 {
                     TableDetail = new DataTable();
-                    TableDetail.Columns.Add("Asset_x0020_Acquisition", typeof(string));
-                    TableDetail.Columns.Add("PO_x0020_Line_x0020_Item", typeof(string));
-                    TableDetail.Columns.Add("Asset_x002d_Sub_x0020_Asset", typeof(string));
-                    TableDetail.Columns.Add("WBS", typeof(string));
-                    TableDetail.Columns.Add("Cost_x0020_IDR", typeof(string));
-                    TableDetail.Columns.Add("Cost_x0020_USD", typeof(string));
-                    TableDetail.Columns.Add("Remarks", typeof(string));
-                    TableDetail.Columns.Add("Status", typeof(string));
+                    TableDetail.Columns.Add("assetacquisition", typeof(string));
+                    TableDetail.Columns.Add("polineitem", typeof(string));
+                    TableDetail.Columns.Add("assetsubasset", typeof(string));
+                    TableDetail.Columns.Add("wbs", typeof(string));
+                    TableDetail.Columns.Add("costidr", typeof(string));
+                    TableDetail.Columns.Add("costusd", typeof(string));
+                    TableDetail.Columns.Add("remarks", typeof(string));
+                    TableDetail.Columns.Add("status", typeof(string));
 
                     DataRow row = TableDetail.NewRow();
 
-                    row["Asset_x0020_Acquisition"] = latestIDHeader;
-                    row["PO_x0020_Line_x0020_Item"] = d.ItemArray[8].ToString();
+                    row["assetacquisition"] = latestIDHeader;
+                    row["polineitem"] = d.ItemArray[8].ToString();
                     //cek if assetid ada pada table asset master
                     //FXA-PC-OE-0001 - Laptop Lenovo
                     var splitAssetID = d.ItemArray[9].ToString().Split('-');
@@ -495,8 +510,8 @@ namespace MCAWebAndAPI.Web.Controllers
                         int? idWBSExist = _assetAcquisitionService.getIdOfColumn("WBS Master", siteUrl, camlWBS);
                         if (idAssetIDExist != 0 && idAssetIDExist != 0)
                         {
-                            row["Asset_x002d_Sub_x0020_Asset"] = idAssetIDExist;
-                            row["WBS"] = idWBSExist;
+                            row["assetsubasset"] = idAssetIDExist;
+                            row["wbs"] = idWBSExist;
                         }
                         else
                         {
@@ -526,17 +541,34 @@ namespace MCAWebAndAPI.Web.Controllers
                         return JsonHelper.GenerateJsonErrorResponse("Invalid data, rolling back!");
                     }
                     //cek if wbs id ada pada table wbs master
-                    row["Cost_x0020_IDR"] = Convert.ToInt32(d.ItemArray[11]);
-                    row["Cost_x0020_USD"] = Convert.ToInt32(d.ItemArray[12].ToString());
-                    row["Remarks"] = d.ItemArray[13].ToString();
-                    row["Status"] = d.ItemArray[14].ToString();
+                    row["costidr"] = Convert.ToInt32(d.ItemArray[11]);
+                    row["costusd"] = Convert.ToInt32(d.ItemArray[12].ToString());
+                    row["remarks"] = d.ItemArray[13].ToString();
+                    row["status"] = d.ItemArray[14].ToString();
 
                     TableDetail.Rows.InsertAt(row, 0);
 
                     latestIDDetail = _assetAcquisitionService.MassUploadHeaderDetail(listNameDetail, TableDetail, siteUrl);
                 }
             }
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl);
+            return Redirect(string.Format("{0}/{1}", siteUrl ?? ConfigResource.DefaultBOSiteUrl, UrlResource.AssetAcquisition));
+        }
+
+        public ActionResult GetAcceptanceMemoInfo(int IDAcceptanceMemo)
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            int? IDAccpMemo = IDAcceptanceMemo;
+            var accpMemoInfo = _assetAcquisitionService.GetAcceptanceMemoInfo(IDAccpMemo, siteUrl);
+
+            //var professionals = GetFromExistingSession();
+            return Json(
+                new
+                {
+                    accpMemoInfo.ID,
+                    accpMemoInfo.VendorID,
+                    accpMemoInfo.VendorName,
+                    accpMemoInfo.PoNo
+                }, JsonRequestBehavior.AllowGet);
         }
     }
 }

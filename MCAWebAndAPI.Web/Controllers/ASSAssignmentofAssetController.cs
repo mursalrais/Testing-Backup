@@ -57,16 +57,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            try
-            {
-                viewModel.AssignmentofAssets = BindMonthlyFeeDetailDetails(form, viewModel.AssignmentofAssets);
-                //assignmentofAssetService.CreateMonthlyFeeDetails(headerID, viewModel.MonthlyFeeDetails);
-            }
-            catch (Exception e)
-            {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
-            }
+           
 
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl + Url);
         }
