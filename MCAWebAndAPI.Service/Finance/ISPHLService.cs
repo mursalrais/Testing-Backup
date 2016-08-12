@@ -14,6 +14,12 @@ namespace MCAWebAndAPI.Service.Finance
 
         int? CreateSPHL(SPHLVM sphl);
 
-        Task CreateSPHLAttachmentAsync(int? ID, IEnumerable<HttpPostedFileBase> attachment);
+        bool UpdateSPHL(SPHLVM viewMOdel);
+
+        bool CheckExistingSPHLNo(string no);
+
+        SPHLVM GetDataSPHL(int? ID);
+
+        Task CreateSPHLAttachmentAsync(int? ID, string sphlNo, IEnumerable<HttpPostedFileBase> attachment);
     }
 }

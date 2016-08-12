@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MCAWebAndAPI.Model.Common;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -9,8 +10,9 @@ using System.Web;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.Finance.SPHL
 {
-    public class SPHLVM
+    public class SPHLVM : Item
     {
+
         [Required]
         [DisplayName("SPHL No.")]
         public string No { get; set; }
