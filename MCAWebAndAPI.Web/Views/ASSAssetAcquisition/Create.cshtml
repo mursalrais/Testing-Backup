@@ -23,7 +23,7 @@
                     @Html.Bootstrap().LabelFor(m => m.TransactionType).Class("col-md-4 control-label")
                     <div class="col-md-8">
                         @*@Html.DisplayFor(m => m.TransactionType)*@
-                        <input type="text" name="TransactionType" readonly value="Asset Acquisition" id="TransactionType" style="width: 100%;" />
+                        <input type="text" name="TransactionType" disabled value="Asset Acquisition" id="TransactionType" style="width: 100%;" />
                     </div>
                 </div>
                 <div class="form-group">
@@ -36,14 +36,14 @@
                     @Html.Bootstrap().LabelFor(m => m.Vendor).Class("col-md-4 control-label")
                     <div class="col-md-8">
                         @*@Html.DisplayFor(m => m.Vendor)*@
-                        <input type="text" name="Vendor" readonly value="" id="Vendor" style="width: 100%;"/>
+                        <input type="text" name="Vendor" disabled value="" id="Vendor" style="width: 100%;"/>
                     </div>
                 </div>
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.PoNo).Class("col-md-4 control-label")
                     <div class="col-md-8">
                         @*@Html.DisplayFor(m => m.PoNo)*@
-                        <input type="text" name="PoNo" value="" readonly id="PoNo" style="width: 100%;" />
+                        <input type="text" name="PoNo" value="" disabled id="PoNo" style="width: 100%;" />
                     </div>
                 </div>
             </div>

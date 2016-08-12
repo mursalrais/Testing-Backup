@@ -99,18 +99,37 @@ namespace MCAWebAndAPI.Service.Asset
             return viewModel;
         }
 
-        public bool CreateAssetMaster(AssetMasterVM assetMaster)
+        public int? CreateAssetMaster(AssetMasterVM assetMaster)
         {
             assetMaster.InterviewerUrl = _siteUrl + UrlResource.AssetMaster;
             var columnValues = new Dictionary<string, object>();
             string _assetID = GenerateAssetID(assetMaster);
 
+            assetMaster.AssetNoAssetDesc.Choices = GetChoiceFromList("AssetID", "Title");
+            assetMaster.AssetLevel.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "AssetLevel", _siteUrl);
+            assetMaster.AssetCategory.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "AssetCategory", _siteUrl);
+            assetMaster.AssetType.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "AssetType", _siteUrl);
+            assetMaster.Condition.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "Condition", _siteUrl);
+            assetMaster.ProjectUnit.Choices = SPConnector.GetChoiceFieldValues(SP_ASSMAS_LIST_NAME, "ProjectUnit", _siteUrl);
+
+            if (!assetMaster.AssetLevel.Choices.Contains(assetMaster.AssetLevel.Value) || !assetMaster.ProjectUnit.Choices.Contains(assetMaster.ProjectUnit.Value) || !assetMaster.AssetCategory.Choices.Contains(assetMaster.AssetCategory.Value) || !assetMaster.AssetType.Choices.Contains(assetMaster.AssetType.Value))
+            {
+                return 0;
+            }
+
             if (assetMaster.AssetLevel.Value == "Sub Asset")
             {
                 var splitAssetID = _assetID.Split('-');
-                columnValues.Add("AssetCategory", Convert.ToString(splitAssetID[0]));
-                columnValues.Add("AssetType", Convert.ToString(splitAssetID[1]));
-                columnValues.Add("ProjectUnit", Convert.ToString(splitAssetID[2]));
+                if(splitAssetID[0] == "FXA")
+                {
+                    columnValues.Add("AssetCategory", "Fixed Asset");
+                }
+                else
+                {
+                    columnValues.Add("AssetCategory", "Small Value Asset");
+                }
+                columnValues.Add("AssetType", Convert.ToString(splitAssetID[2]));
+                columnValues.Add("ProjectUnit", Convert.ToString(splitAssetID[1]));
             }
             else
             {
@@ -142,11 +161,11 @@ namespace MCAWebAndAPI.Service.Asset
             catch (Exception e)
             {
                 logger.Error(e.Message);
-                return false;
+                return 0;
             }
             var entitiy = new AssetMasterVM();
             entitiy = assetMaster;
-            return true;
+            return SPConnector.GetLatestListItemID(SP_ASSMAS_LIST_NAME, _siteUrl);
         }
 
         public bool UpdateAssetMaster(AssetMasterVM assetMaster)
@@ -158,10 +177,18 @@ namespace MCAWebAndAPI.Service.Asset
 
             if (assetMaster.AssetLevel.Value == "Sub Asset")
             {
+                //Main Asset  Fixed Asset GP OE
                 var splitAssetID = _assetID.Split('-');
-                columnValues.Add("AssetCategory", Convert.ToString(splitAssetID[0]));
-                columnValues.Add("AssetType", Convert.ToString(splitAssetID[1]));
-                columnValues.Add("ProjectUnit", Convert.ToString(splitAssetID[2]));
+                if (splitAssetID[0] == "FXA")
+                {
+                    columnValues.Add("AssetCategory", "Fixed Asset");
+                }
+                else
+                {
+                    columnValues.Add("AssetCategory", "Small Value Asset");
+                }
+                columnValues.Add("AssetType", Convert.ToString(splitAssetID[2]));
+                columnValues.Add("ProjectUnit", Convert.ToString(splitAssetID[1]));
             }
             else
             {
@@ -316,7 +343,7 @@ namespace MCAWebAndAPI.Service.Asset
                 {
                     cat = "SVA";
                 }
-                if (bd[0] == cat && bd[1] == assetMaster.ProjectUnit.Value && bd[2] == assetMaster.AssetType.Value)
+                if (bd[0] == cat && bd[1] == assetMaster.ProjectUnit.Value.Trim() && bd[2] == assetMaster.AssetType.Value.Trim())
                 {
                     assetID = assetMaster.AssetNoAssetDesc.Value;
                 }
@@ -471,8 +498,10 @@ namespace MCAWebAndAPI.Service.Asset
             return assetID;
         }
 
-        public bool MassUpload(string ListName, DataTable CSVDataTable, string SiteUrl = null)
+        public int? MassUpload(string ListName, DataTable CSVDataTable, string SiteUrl = null)
         {
+            int? latestID = 0;
+            List<int> IDs = new List<int>();
             foreach (DataRow d in CSVDataTable.Rows)
             {
                 var model = new AssetMasterVM();
@@ -498,9 +527,22 @@ namespace MCAWebAndAPI.Service.Asset
                 model.Condition.Value = Convert.ToString(d.ItemArray[9]);
                 model.Remarks = Convert.ToString(d.ItemArray[10]);
 
-                CreateAssetMaster(model);
+                latestID = CreateAssetMaster(model);
+
+                IDs.Add(Convert.ToInt32(latestID));
+                if(IDs.Contains(0))
+                {
+                    foreach(var id in IDs)
+                    {
+                        if(id != 0)
+                        {
+                            SPConnector.DeleteListItem(SP_ASSMAS_LIST_NAME, id, SiteUrl);
+                        }
+                    }
+                    return 0;
+                }
             }
-                return true;
+                return 1;
         }
 
         private bool isSkipped(string columnName)

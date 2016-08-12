@@ -17,7 +17,7 @@ namespace MCAWebAndAPI.Service.Asset
 
         IEnumerable<AssetLocationVM> GetAssetLocations();
 
-        bool CreateAssetMaster(AssetMasterVM assetMaster);
+        int? CreateAssetMaster(AssetMasterVM assetMaster);
 
         bool UpdateAssetMaster(AssetMasterVM assetMaster);
 
@@ -29,6 +29,6 @@ namespace MCAWebAndAPI.Service.Asset
 
         string GetAssetIDForSubAsset(string assetID);
 
-        bool MassUpload(string ListName, DataTable CSVDataTable, string SiteUrl = null);
+        int? MassUpload(string ListName, DataTable CSVDataTable, string SiteUrl = null);
     }
 }
