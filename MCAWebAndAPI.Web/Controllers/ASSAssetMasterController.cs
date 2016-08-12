@@ -343,8 +343,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            //return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetMaster);
-            return Redirect(siteUrl + UrlResource.AssetMaster);
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetMaster);
         }
 
     }
