@@ -559,7 +559,6 @@
     <Content Include="Views\ASSAssetScrapping\Create.cshtml" />
     <Content Include="Views\ASSAssetScrapping\Edit.cshtml" />
     <Content Include="Views\ASSAssetSmallValueAsset\Create.cshtml" />
-    <Content Include="Views\ASSAssetTransfer\Create.cshtml" />
     <Content Include="Views\Shared\_LayoutHome.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\BIEmbed\WFP03.cshtml" />
@@ -921,6 +920,13 @@
     <Content Include="Views\FINEventBudget\_ItemDetails.cshtml" />
     <Content Include="Views\Shared\_PartialHeader.cshtml" />
     <Content Include="Views\Shared\_PartialHeaderWithLogo.cshtml" />
+    <Content Include="Views\ASSAssetTransfer\CreateAssetTransfer.cshtml" />
+    <Content Include="Views\ASSAssetTransfer\_AssetTransferDetail.cshtml" />
+    <Content Include="Views\ASSAssetDisposal\CreateAssetDisposal.cshtml" />
+    <Content Include="Views\ASSAssetDisposal\_AssetDisposalDetail.cshtml" />
+    <Content Include="Views\FINSPHL\EditSPHL.cshtml" />
+    <Content Include="Views\ASSAssetAcquisition\View.cshtml" />
+    <Content Include="Views\ASSAssetAcquisition\_DetailsView.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -932,6 +938,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\ASSAssetDisposalController.cs" />
     <Compile Include="Controllers\ASSAssetMasterController.cs" />
     <Compile Include="Controllers\ASSAssetAcquisitionController.cs" />
     <Compile Include="Controllers\ASSAssetCheckFormController.cs" />

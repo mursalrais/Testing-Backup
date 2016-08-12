@@ -115,6 +115,15 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to /Lists/Asset%20Transfer/AllItems.aspx.
+        /// </summary>
+        public static string AssetTransfer {
+            get {
+                return ResourceManager.GetString("AssetTransfer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to /Lists/Compensatory%20Request.
         /// </summary>
         public static string Compensatory {
@@ -408,6 +417,15 @@ namespace MCAWebAndAPI.Service.Resources {
         public static string ShortlistInterviewPanel {
             get {
                 return ResourceManager.GetString("ShortlistInterviewPanel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}/SPHL%20Documents/Forms/AllItems.aspx?groupBy=&amp;FilterField1=SPHL_x003a_ID&amp;FilterValue1={1}.
+        /// </summary>
+        public static string SPHLDocumentByID {
+            get {
+                return ResourceManager.GetString("SPHLDocumentByID", resourceCulture);
             }
         }
         

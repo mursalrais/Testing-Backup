@@ -63,15 +63,15 @@ namespace MCAWebAndAPI.Service.Asset
             var viewModel = new AssignmentofAssetVM();
 
             var list = new List<AssignmentofAssetDetailVM>();
-            list.Add(new AssignmentofAssetDetailVM()
-            {
-                NewAsset = "New",
-                Item = "Chair",
-                AssetDescription = "New Asset",
-                Id = 1
-            });
-            viewModel.TransactionType = "Cash";
-            viewModel.AssignmentofAssets = list;
+            //list.Add(new AssignmentofAssetDetailVM()
+            //{
+            //    NewAsset = "New",
+            //    Item = "Chair",
+            //    AssetDescription = "New Asset",
+            //    Id = 1
+            //});
+            //viewModel.TransactionType = "Cash";
+            //viewModel.AssignmentofAssets = list;
 
             return viewModel;
         }

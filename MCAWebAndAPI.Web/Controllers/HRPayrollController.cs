@@ -11,7 +11,6 @@ using MCAWebAndAPI.Service.Resources;
 using System.Net;
 using System;
 using System.IO;
-using System.Web;
 using System.Threading.Tasks;
 using MCAWebAndAPI.Model.Common;
 using Elmah;
@@ -20,6 +19,12 @@ using System.Globalization;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
+    /// <summary>
+    /// Unfinished tasks:
+    /// 1. Get .draft file from Filesystem. Convert to ViewModel. Convert to SessionVariable. Load into Grid.
+    /// 2. Split view in GridDraftWorksheet_Read between .draft and .xlsx
+    /// 3. Business Logic: Continue to produce pivot / summarized view. 
+    /// </summary>
     public class HRPayrollController : Controller
     {
         IPayrollService _hRPayrollService;

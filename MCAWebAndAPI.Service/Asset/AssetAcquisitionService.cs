@@ -63,7 +63,7 @@ namespace MCAWebAndAPI.Service.Asset
             viewmodel.CancelURL = _siteUrl + UrlResource.AssetAcquisition;
             var columnValues = new Dictionary<string, object>();
             //columnValues.add
-            columnValues.Add("Title", viewmodel.TransactionType);
+            columnValues.Add("Title", "Asset Acquisition");
             if (viewmodel.AccpMemo.Value == null)
             {
                 return 0;
@@ -71,9 +71,9 @@ namespace MCAWebAndAPI.Service.Asset
             string[] memo = viewmodel.AccpMemo.Value.Split('-');
             //columnValues.Add("acceptancememono", memo[1]);
             columnValues.Add("acceptancememono", new FieldLookupValue { LookupId = Convert.ToInt32(memo[0]) });
-            var breakVendor = viewmodel.Vendor.Split('-');
-            columnValues.Add("vendorid", breakVendor[0]);
-            columnValues.Add("vendorname", breakVendor[1]);
+            var memoinfo = SPConnector.GetListItem(SP_ACC_MEMO_LIST_NAME, Convert.ToInt32(memo[0]), _siteUrl);
+            columnValues.Add("vendorid", memoinfo["vendorid"]);
+            columnValues.Add("vendorname", memoinfo["vendorname"]);
             columnValues.Add("pono", viewmodel.PoNo);
             if(viewmodel.PurchaseDate.HasValue)
             {
@@ -134,8 +134,23 @@ namespace MCAWebAndAPI.Service.Asset
         public IEnumerable<AssetMasterVM> GetAssetSubAsset()
         {
             var models = new List<AssetMasterVM>();
-
-            foreach (var item in SPConnector.GetList("Asset Master", _siteUrl))
+            var caml = @"<View><Query>
+                       <Where>
+                          <Geq>
+                             <FieldRef Name='AssetID' />
+                             <Value Type='Text'>14</Value>
+                          </Geq>
+                       </Where>
+                       <OrderBy>
+                          <FieldRef Name='AssetID' Ascending='True' />
+                       </OrderBy>
+                    </Query>
+                    <ViewFields>
+                       <FieldRef Name='Title' />
+                       <FieldRef Name='AssetID' />
+                    </ViewFields>
+                    <QueryOptions /></View>";
+            foreach (var item in SPConnector.GetList("Asset Master", _siteUrl, caml))
             {
                 models.Add(ConvertToModelAssetSubAsset(item));
             }
@@ -259,7 +274,7 @@ namespace MCAWebAndAPI.Service.Asset
             var columnValues = new Dictionary<string, object>();
             var ID = Convert.ToInt32(viewmodel.ID);
             //columnValues.add
-            columnValues.Add("Title", viewmodel.TransactionType);
+            columnValues.Add("Title", "Asset Acquisition");
             string[] memo = viewmodel.AccpMemo.Value.Split('-');
             //columnValues.Add("acceptancememono", memo[1]);
             columnValues.Add("acceptancememono", new FieldLookupValue { LookupId = Convert.ToInt32(memo[0]) });

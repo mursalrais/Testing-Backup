@@ -5,25 +5,43 @@
 
     @(Html.Kendo().Grid(Model)
         .Name("Details")
-        .ToolBar(tools => tools.Create().Text("Add New Record"))
+        .ToolBar(tools => tools.Create().Text("Add New Recurd"))
         .Editable(editable => editable.Mode(GridEditMode.InCell)
         .CreateAt(GridInsertRowPosition.Bottom))
         .Columns(columns =>
         {
+
             columns.Bound(p => p.AssetSubAsset).ClientTemplate("#= AssetSubAsset #" +
-            "<input type='hidden' name='Details[#= getMonthlyFeeDetail(data)#].AssetSubAsset' value='#= AssetSubAsset #' />"
-            );
+           "<input type='hidden' name='Details[#= getMonthlyFeeDetail(data)#].AssetSubAsset' value='#= AssetSubAsset #' />"
+           );
 
-            //columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
-            //"<input type='hidden' name='Details[#= getMonthlyFeeDetail(data)#].ID' value='#= ID #' />"
+            //columns.Bound(p => p.Province).ClientTemplate("#= Province #" +
+            //"<input type='hidden' name='AssignmentofAssetItem[#= getAssignmentofAssetItem(data)#].Province' value='#= Province #' />"
             //);
 
-            //columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
-            //"<input type='hidden' name='Details[#= getMonthlyFeeDetail(data)#].EditMode' value='#= EditMode #' />"
+            //columns.Bound(p => p.Office).ClientTemplate("#= Office #" +
+            //"<input type='hidden' name='AssignmentofAssetItem[#= getAssignmentofAssetItem(data)#].Office' value='#= Office #' />"
             //);
 
-            //columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
-            //.Click("onDeleteKendoDetail")).Width(100);
+            //columns.Bound(p => p.Floor).ClientTemplate("#= Floor #" +
+            //"<input type='hidden' name='AssignmentofAssetItem[#= getAssignmentofAssetItem(data)#].Floor' value='#= Floor #' />"
+            //);
+
+            //columns.Bound(p => p.Room).ClientTemplate("#= Room #" +
+            //"<input type='hidden' name='AssignmentofAssetItem[#= getAssignmentofAssetItem(data)#].Room' value='#= Room #' />"
+            //);
+
+            //columns.Bound(p => p.Remarks).ClientTemplate("#= Remarks #" +
+            //"<input type='hidden' name='AssignmentofAssetItem[#= getAssignmentofAssetItem(data)#].Remarks' value='#= Remarks #' />"
+            //);
+
+            //columns.Bound(p => p.Status).ClientTemplate("#= Status #" +
+            //"<input type='hidden' name='AssignmentofAssetItem[#= getAssignmentofAssetItem(data)#].Status' value='#= Status #' />"
+            //);
+
+            //columns.Bound(p => p.Id).Hidden().ClientTemplate("#= Id #" +
+            //"<input type='hidden' name='AssignmentofAssetItem[#= getAssignmentofAssetItem(data)#].Id' value='#= Id #' />"
+            //);
         })
         .Events(e =>
         {
@@ -34,7 +52,9 @@
         .Model(model =>
         {
             model.Id(p => p.ID);
+           
             model.Field(m => m.AssetSubAsset);
+
         })
         .ServerOperation(false)
         )
@@ -44,7 +64,7 @@
 <script>
     function getMonthlyFeeDetail(dataItem) {
         var data = $("#Details").data("kendoGrid").dataSource.data();
-        dataItem.set('AssetSubAsset', dataItem.AssetSubAsset);
+       // dataItem.set('AssetSubAsset', dataItem.AssetSubAsset);
         return data.indexOf(dataItem);
     }
 

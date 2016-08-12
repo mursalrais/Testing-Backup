@@ -332,7 +332,11 @@ namespace MCAWebAndAPI.Web.Controllers
 
             try
             {
-                _assetMasterService.MassUpload(listName, sessionVariables, siteUrl);
+                int? mass = _assetMasterService.MassUpload(listName, sessionVariables, siteUrl);
+                if(mass == 0)
+                {
+                    return JsonHelper.GenerateJsonErrorResponse("Failed One of Your Data is Invalid, Rolling Back");
+                }
             }
             catch (Exception e)
             {
