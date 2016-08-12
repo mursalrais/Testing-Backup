@@ -337,3 +337,4 @@ Please try again.
 2016-08-10 13:28:05.5842 MCAWebAndAPI.Service.JobSchedulers.Schedulers.PayrollRunScheduler DefaultQuartzScheduler has been started at Wednesday, August 10, 2016 in site https://eceos2.sharepoint.com/sites/mca-dev/hr
 2016-08-12 05:46:53.9120 MCAWebAndAPI.Service.Converter.CSVConverter System.IndexOutOfRangeException: Index was outside the bounds of the array.
    at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64
+2016-08-12 09:48:08.5645 MCAWebAndAPI.Service.Asset.AssetMasterService The underlying connection was closed: A connection that was expected to be kept alive was closed by the server.

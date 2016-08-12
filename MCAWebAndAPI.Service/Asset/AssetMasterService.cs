@@ -79,7 +79,7 @@ namespace MCAWebAndAPI.Service.Asset
             }
 
             
-            viewModel.AssetCategory.Value = Convert.ToString(listItem["AssetCategory"]);
+            viewModel.AssetCategory.Value = Convert.ToString(listItem["AssetCategory"]); 
             viewModel.AssetDesc = Convert.ToString(listItem["Title"]);
             viewModel.AssetLevel.Value = Convert.ToString(listItem["AssetLevel"]);
             viewModel.AssetType.Value = Convert.ToString(listItem["AssetType"]);
@@ -114,9 +114,22 @@ namespace MCAWebAndAPI.Service.Asset
 
             if(mode == "upload")
             {
-                if (!assetMaster.AssetLevel.Choices.Contains(assetMaster.AssetLevel.Value) || !assetMaster.ProjectUnit.Choices.Contains(assetMaster.ProjectUnit.Value.Trim()) || !assetMaster.AssetCategory.Choices.Contains(assetMaster.AssetCategory.Value.Trim()) || !assetMaster.AssetType.Choices.Contains(assetMaster.AssetType.Value.Trim()))
+                if(assetMaster.AssetLevel.Value == "Main Asset")
                 {
-                    return 0;
+                    if (!assetMaster.AssetLevel.Choices.Contains(assetMaster.AssetLevel.Value) || !assetMaster.ProjectUnit.Choices.Contains(assetMaster.ProjectUnit.Value.Trim()) || !assetMaster.AssetCategory.Choices.Contains(assetMaster.AssetCategory.Value.Trim()) || !assetMaster.AssetType.Choices.Contains(assetMaster.AssetType.Value.Trim()))
+                    {
+                        return 0;
+                    }
+                }
+                else
+                {
+                    //"FXA-HN-OT-0001-002"
+                    var breaks = _assetID.Split('-');
+
+                    if (!assetMaster.AssetLevel.Choices.Contains(assetMaster.AssetLevel.Value) || !assetMaster.ProjectUnit.Choices.Contains(breaks[1].Trim()) || !assetMaster.AssetCategory.Choices.Contains(assetMaster.AssetCategory.Value.Trim()) || !assetMaster.AssetType.Choices.Contains(breaks[2].Trim()))
+                    {
+                        return 0;
+                    }
                 }
             }
 
