@@ -128,7 +128,6 @@
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
@@ -244,9 +243,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="bin\roslyn\Microsoft.CSharp.Core.targets" />
-    <Content Include="bin\roslyn\Microsoft.VisualBasic.Core.targets" />
-    <Content Include="bin\roslyn\VBCSCompiler.exe.config" />
     <Content Include="Content\kendo\2016.2.714\kendo.common-bootstrap.core.min.css.map" />
     <Content Include="Content\kendo\2016.2.714\kendo.common-bootstrap.min.css.map" />
     <Content Include="Content\kendo\2016.2.714\kendo.common-fiori.min.css.map" />
@@ -905,21 +901,8 @@
     <Content Include="Views\FINRequisitionNote\Create.cshtml" />
     <Content Include="Views\FINRequisitionNote\Edit.cshtml" />
     <Content Include="Views\FINRequisitionNote\Print.cshtml" />
-    <Content Include="Views\FINRequisitionNote\Create.cshtml" />
-    <Content Include="Views\FINRequisitionNote\Edit.cshtml" />
-    <Content Include="Views\FINRequisitionNote\Print.cshtml" />
-    <Content Include="Views\FINEventBudget\Create.cshtml" />
-    <Content Include="Views\FINEventBudget\_ItemDetails.cshtml" />
-    <Content Include="Views\Shared\_PartialHeader.cshtml" />
-    <Content Include="Views\Shared\_PartialHeaderWithLogo.cshtml" />
-    <Content Include="Views\ASSAssetTransfer\CreateAssetTransfer.cshtml" />
-    <Content Include="Views\ASSAssetTransfer\_AssetTransferDetail.cshtml" />
-    <Content Include="Views\ASSAssetDisposal\CreateAssetDisposal.cshtml" />
-    <Content Include="Views\ASSAssetDisposal\_AssetDisposalDetail.cshtml" />
-    <Content Include="Views\ASSAssetAcquisition\View.cshtml" />
-    <Content Include="Views\ASSAssetAcquisition\_DetailsView.cshtml" />
-    <Content Include="Views\ASSAssignmentofAsset\_Details.cshtml" />
-    <Content Include="Views\FINPettyCashSettlement\Create.cshtml" />
+    <Content Include="Views\HRAdjustmentDayOffBalance\CreateAdjustmentDayOffBalance.cshtml" />
+    <Content Include="Views\HRAdjustmentDayOffBalance\EditAdjustmentDayOffBalance.cshtml" />
     <Content Include="Views\FINTaxExemption\Create.cshtml" />
     <Content Include="Views\FINTaxExemption\EditIncomeTax.cshtml" />
     <Content Include="Views\FINTaxExemption\EditOtherTax.cshtml" />
@@ -927,7 +910,11 @@
     <Content Include="Views\FINTaxExemption\_Income.cshtml" />
     <Content Include="Views\FINTaxExemption\_Others.cshtml" />
     <Content Include="Views\FINTaxExemption\_VAT.cshtml" />
-    <Content Include="Views\FINPettyCashPaymentVoucher\_General.cshtml" />
+    <Content Include="Views\FINPettyCashSettlement\Create.cshtml" />
+    <Content Include="Views\ASSAssetDisposal\CreateAssetDisposal.cshtml" />
+    <Content Include="Views\ASSAssetDisposal\_AssetDisposalDetail.cshtml" />
+    <Content Include="Views\ASSAssetTransfer\CreateAssetTransfer.cshtml" />
+    <Content Include="Views\ASSAssetTransfer\_AssetTransferDetail.cshtml" />
     <Content Include="Views\FINSCAVoucher\Approve.cshtml" />
     <Content Include="Views\FINSCAVoucher\Create.cshtml" />
     <Content Include="Views\FINSCAVoucher\Edit.cshtml" />
@@ -936,8 +923,15 @@
     <Content Include="Views\FINSCAVoucher\_GeneralForm.cshtml" />
     <Content Include="Views\FINSCAVoucher\_GeneralFormDisplay.cshtml" />
     <Content Include="Views\FINSCAVoucher\_PartialHeaderWithLogo.cshtml" />
+    <Content Include="Views\FINPettyCashPaymentVoucher\_General.cshtml" />
+    <Content Include="Views\FINEventBudget\Create.cshtml" />
+    <Content Include="Views\FINEventBudget\_ItemDetails.cshtml" />
+    <Content Include="Views\FINTaxReimbursement\Item.cshtml" />
     <Content Include="Views\FINSPHL\Create.cshtml" />
     <Content Include="Views\FINSPHL\Edit.cshtml" />
+    <Content Include="Views\ASSAssetAcquisition\Index.cshtml" />
+    <Content Include="Views\ASSAssetAcquisition\View.cshtml" />
+    <Content Include="Views\ASSAssetAcquisition\_DetailsView.cshtml" />
     <Content Include="Views\FINTaxReimbursement\Item.cshtml" />
     <Content Include="Views\ASSLocationMaster\Edit.cshtml" />
     <Content Include="Views\ASSAssetAcquisition\Sync.cshtml" />
@@ -984,6 +978,7 @@
     <Compile Include="Controllers\FINTaxExemptionController.cs" />
     <Compile Include="Controllers\FINTaxReimbursementController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\HRAdjustmentDayOffBalanceController.cs" />
     <Compile Include="Controllers\HRApplicationController.cs" />
     <Compile Include="Controllers\HRCompensatoryController.cs" />
     <Compile Include="Controllers\HRDataMasterController.cs" />
@@ -1067,7 +1062,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Code\" />
-    <Folder Include="bin\Resources\" />
     <Folder Include="Scripts\apps\controlls\" />
     <Folder Include="Views\File\" />
     <Folder Include="Views\HRDataMaster\" />

@@ -137,6 +137,9 @@ Please complate the Applicant's data</value>
   <data name="SuccessCommon" xml:space="preserve">
     <value>Congratulation. It works!</value>
   </data>
+  <data name="SuccessCreateAdjustmentDayOffBalance" xml:space="preserve">
+    <value>Congratulation! Your Adjustment Day-Off Balance data has successfully been created.</value>
+  </data>
   <data name="SuccessCreateApplicationData" xml:space="preserve">
     <value>Congratulation {0}! Your application has successfully been submitted.</value>
   </data>

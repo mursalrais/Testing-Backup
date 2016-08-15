@@ -70,8 +70,12 @@
       <HintPath>..\packages\Microsoft.CodeAnalysis.Workspaces.Common.1.3.2\lib\net45\Microsoft.CodeAnalysis.Workspaces.Desktop.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.SharePoint.Client, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL" />
-    <Reference Include="Microsoft.SharePoint.Client.Runtime, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.SharePoint.Client, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Sharepoint.1.0.1\lib\net40\Microsoft.SharePoint.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SharePoint.Client.Runtime, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Sharepoint.1.0.1\lib\net40\Microsoft.SharePoint.Client.Runtime.dll</HintPath>
+    </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.4.4.0-beta5\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
@@ -193,6 +197,8 @@
     <Compile Include="Finance\SPHLService.cs" />
     <Compile Include="Finance\TaxExemptionDataService.cs" />
     <Compile Include="Finance\TaxReimbursementService.cs" />
+    <Compile Include="HR\AdjustmentDayOffBalance\AdjustmentDayOffBalanceService.cs" />
+    <Compile Include="HR\AdjustmentDayOffBalance\IAdjustmentDayOffBalanceService.cs" />
     <Compile Include="HR\Common\ProfessionalService.cs" />
     <Compile Include="HR\Compensatory\HRCompensatoryService.cs" />
     <Compile Include="HR\Compensatory\IHRCompensatoryService.cs" />
