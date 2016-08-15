@@ -14,14 +14,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 
         public IEnumerable<PlaceMasterVM> PlaceMasters { get; set; } = new List<PlaceMasterVM>();
 
-        [UIHint("AjaxComboBox")]
-        public AjaxComboBoxVM Province { get; set; } = new AjaxComboBoxVM
-        {
-            ActionName = "GetLocationMaster",
-            ControllerName = "ASSLocationMaster",
-            ValueField = "ID",
-            TextField = "Title",
-        };
+        [UIHint("ComboBox")]
+        public ComboBoxVM Province { get; set; } = new ComboBoxVM();
+  
 
         public string OfficeName { get; set; }
 

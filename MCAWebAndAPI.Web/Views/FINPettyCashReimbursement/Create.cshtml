@@ -1,19 +1,22 @@
 ﻿@model MCAWebAndAPI.Model.ViewModel.Form.Finance.PettyCashReimbursementVM
 
-@using (Ajax.BeginForm("Create", "FINPettyCashReimbursement",
-                FormMethod.Post,
-                new AjaxOptions
-                {
-                    OnBegin = "onBeginForm",
-                    OnComplete = "onCompleteForm",
-                    OnSuccess = "onSuccessFormEmbed",
-                    OnFailure = "onFailureForm"
-                },
-                new
-                {
-                    @class = "form-horizontal",
-                    enctype = "multipart/form-data"
-                }))
+@*
+    Wireframe FIN12: Petty Cash Reimbursement
+
+        Petty Cash Reimbursement is a transaction for the reimbursement of petty cash only when
+        user has not asked for any petty cash advance.
+
+        Through this feature, finance will create the reimbursement of petty cash which results in
+        user needs to receive the reimbursement.
+*@
+
+@using (Html.BeginForm("Create", "FINPettyCashReimbursement",
+    FormMethod.Post,
+    new
+    {
+        @class = "form-horizontal",
+        enctype = "multipart/form-data"
+    }))
 
 {
     <fieldset>

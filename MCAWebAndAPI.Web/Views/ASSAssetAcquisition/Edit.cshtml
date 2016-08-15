@@ -4,7 +4,7 @@
 
 @model AssetAcquisitionHeaderVM
 
-@using (Ajax.BeginForm("Update", "ASSassetAcquisition",
+@using (Ajax.BeginForm("Update", "ASSAssetAcquisition",
                                                                                                                                        FormMethod.Post,
                                                                                                                                        new AjaxOptions
                                                                                                                                        {
@@ -15,7 +15,7 @@
                                                                                                                                        }, new { @class = "form-horizontal" }))
 
 {
-    <form class="form-horizontal" method="post" action="/ASSassetAcquisition/Update" id="create-asset-acquisition-form">
+    <form class="form-horizontal" method="post" action="/ASSAssetAcquisition/Update" id="create-asset-acquisition-form">
         <fieldset>
             <legend>Form Asset Acquisition</legend>
             <div class="col-md-6">
@@ -23,7 +23,7 @@
                     @Html.Bootstrap().LabelFor(m => m.TransactionType).Class("col-md-4 control-label")
                     <div class="col-md-8">
                         @*@Html.DisplayFor(m => m.TransactionType)*@
-                        <input type="text" name="TransactionType" value="@Model.TransactionType" id="TransactionType" style="width: 100%;" />
+                        <input type="text" name="TransactionType" disabled value="Asset Acquisition" id="TransactionType" style="width: 100%;" />
                     </div>
                 </div>
                 <div class="form-group">
@@ -36,14 +36,14 @@
                     @Html.Bootstrap().LabelFor(m => m.Vendor).Class("col-md-4 control-label")
                     <div class="col-md-8">
                         @*@Html.DisplayFor(m => m.Vendor)*@
-                        <input type="text" name="Vendor" value="@Model.Vendor" id="Vendor" style="width: 100%;" />
+                        <input type="text" name="Vendor" disabled value="@Model.Vendor" id="Vendor" style="width: 100%;" />
                     </div>
                 </div>
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.PoNo).Class("col-md-4 control-label")
                     <div class="col-md-8">
                         @*@Html.DisplayFor(m => m.PoNo)*@
-                        <input type="text" name="PoNo" value="@Model.PoNo" id="PoNo" style="width: 100%;" />
+                        <input type="text" name="PoNo" disabled value="@Model.PoNo" id="PoNo" style="width: 100%;" />
                     </div>
                 </div>
             </div>
@@ -100,8 +100,13 @@
         //alert("Acceptance Memo ID : " + res[0]);s
         var url = "/ASSAssetAcquisition/GetAcceptanceMemoInfo?IDAcceptanceMemo=" + res[0];
         $.getJSON(url, function (data) {
-            $('#Vendor').prop('value', data.VendorID + "-" + data.VendorName);
-            $('#PoNo').prop('value', data.PoNo);
+            document.getElementById('Vendor').value = data.VendorID + "-" + data.VendorName;
+            //$('#Vendor').prop('value', data.VendorName);
+            document.getElementById('Vendor').disabled = true;
+
+            document.getElementById('PoNo').value = data.PoNo;
+            //$('#PoNo').prop('value', data.PoNo);
+            document.getElementById('PoNo').disabled = true;
         });
     }
 </script>

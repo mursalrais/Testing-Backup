@@ -11,10 +11,23 @@ namespace MCAWebAndAPI.Service.Finance
     public interface ITaxExemptionDataService
     {
         void SetSiteUrl(string siteUrl);
-        TaxExemptionDataVM GetTaxExemptionData();
-        TaxExemptionDataVM GetTaxExemptionData(int ID);
-        int? CreateTaxExemptionData(TaxExemptionDataVM taxExemptionData);
-        bool UpdateTaxExemptionData(TaxExemptionDataVM taxExemptionData);
-        Task CreateTaxExemptionDataAsync(int? ID, IEnumerable<HttpPostedFileBase> documents);
+
+        TaxExemptionIncomeVM GetTaxExemptionIncome();
+        TaxExemptionVATVM GetTaxExemptionVAT();
+        TaxExemptionOtherVM GetTaxExemptionOthers();
+
+        int? CreateTaxExemptionData(TaxExemptionIncomeVM taxExemptionData);
+        int? CreateTaxExemptionData(TaxExemptionVATVM taxExemptionData);
+        int? CreateTaxExemptionData(TaxExemptionOtherVM taxExemptionData);
+
+        Task CreateTaxExemptionDataAsync(int? ID, string taxType, IEnumerable<HttpPostedFileBase> documents);
+
+        TaxExemptionIncomeVM GetTaxExemptionIncome(int ID);
+        TaxExemptionVATVM GetTaxExemptionVAT(int ID);
+        TaxExemptionOtherVM GetTaxExemptionOthers(int ID);
+        bool UpdateTaxExemption(TaxExemptionIncomeVM taxExemptionData);
+        bool UpdateTaxExemption(TaxExemptionVATVM taxExemptionData);
+        bool UpdateTaxExemption(TaxExemptionOtherVM taxExemptionData);
+
     }
 }

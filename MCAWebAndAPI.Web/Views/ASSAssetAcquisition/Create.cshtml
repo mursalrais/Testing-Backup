@@ -4,7 +4,7 @@
 
 @model AssetAcquisitionHeaderVM
 
-@using (Ajax.BeginForm("Submit", "ASSassetAcquisition",
+@using (Ajax.BeginForm("Submit", "ASSAssetAcquisition",
                                                                                                                            FormMethod.Post,
                                                                                                                            new AjaxOptions
                                                                                                                            {
@@ -15,7 +15,7 @@
                                                                                                                            }, new { @class = "form-horizontal" }))
 
 {
-    <form class="form-horizontal" method="post" action="/ASSassetAcquisition/Submit" id="create-asset-acquisition-form">
+    <form class="form-horizontal" method="post" action="/ASSAssetAcquisition/Submit" id="create-asset-acquisition-form">
         <fieldset>
             <legend>Form Asset Acquisition</legend>
             <div class="col-md-6">
@@ -23,7 +23,7 @@
                     @Html.Bootstrap().LabelFor(m => m.TransactionType).Class("col-md-4 control-label")
                     <div class="col-md-8">
                         @*@Html.DisplayFor(m => m.TransactionType)*@
-                        <input type="text" name="TransactionType" readonly value="Asset Acquisition" id="TransactionType" style="width: 100%;" />
+                        <input type="text" name="TransactionType" disabled value="Asset Acquisition" id="TransactionType" style="width: 100%;" />
                     </div>
                 </div>
                 <div class="form-group">
@@ -36,14 +36,14 @@
                     @Html.Bootstrap().LabelFor(m => m.Vendor).Class("col-md-4 control-label")
                     <div class="col-md-8">
                         @*@Html.DisplayFor(m => m.Vendor)*@
-                        <input type="text" name="Vendor" readonly value="" id="Vendor" style="width: 100%;"/>
+                        <input type="text" name="Vendor" disabled value="@Model.Vendor" id="Vendor" style="width: 100%;"/>
                     </div>
                 </div>
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.PoNo).Class("col-md-4 control-label")
                     <div class="col-md-8">
                         @*@Html.DisplayFor(m => m.PoNo)*@
-                        <input type="text" name="PoNo" value="" readonly id="PoNo" style="width: 100%;" />
+                        <input type="text" name="PoNo" value="@Model.PoNo" disabled id="PoNo" style="width: 100%;" />
                     </div>
                 </div>
             </div>
@@ -68,9 +68,11 @@
         </fieldset>
         @Html.HiddenFor(m => m.ID)
         @Html.HiddenFor(m => m.CancelURL)
+        @Html.HiddenFor(m => m.Vendor)
+        @Html.HiddenFor(m => m.PoNo)
         <div>
             <center>
-                <input class="k-button k-button-icontext k-grid-add" type="submit" value="Save" />
+                <input class="k-button k-button-icontext k-grid-add" onclick="SimpenAsset()" type="submit" value="Save" />
                 <a href="@Model.CancelURL" target='_parent'>
                     <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
                 </a>
@@ -87,15 +89,28 @@
         $("#AccpMemo_Value").data("kendoDropDownList").value("");
     })
 
+    function SimpenAsset() {
+        if(@Model.AccpMemo.Value == null)
+        {
+            alert("Acceptane Memo is Required");
+        }
+        if(@Model.Details.Count() == 0)
+        {
+            alert("Details cannot Empty");
+        }
+    }
+
     function onSelectedAcceptanceMemo(e) {
         var res = this.dataItem(e.item).split("-")
         //alert("Acceptance Memo ID : " + res[0]);
         var url = "/ASSAssetAcquisition/GetAcceptanceMemoInfo?IDAcceptanceMemo=" + res[0];
         $.getJSON(url, function (data) {
             document.getElementById('Vendor').value = data.VendorID + "-" + data.VendorName;
+            $('#Vendor').prop('value', data.VendorName);
             document.getElementById('Vendor').readOnly = true;
 
             document.getElementById('PoNo').value = data.PoNo;
+            $('#PoNo').prop('value', data.PoNo);
             document.getElementById('PoNo').readOnly = true;
             //$('#Vendor').prop('value', data.VendorID + "-" + data.VendorName);
             //$('#PoNo').prop('value', data.PoNo);

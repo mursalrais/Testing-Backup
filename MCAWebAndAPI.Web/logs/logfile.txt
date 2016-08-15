@@ -335,3 +335,21 @@ Please try again.
 2016-08-08 08:59:22.1492 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Operation is not valid due to the current state of the object. at ID: 1
 2016-08-09 11:55:22.5343 MCAWebAndAPI.Service.HR.MedicalCheckUp.MedicalCheckUpService The 'sId' argument is invalid.
 2016-08-10 13:28:05.5842 MCAWebAndAPI.Service.JobSchedulers.Schedulers.PayrollRunScheduler DefaultQuartzScheduler has been started at Wednesday, August 10, 2016 in site https://eceos2.sharepoint.com/sites/mca-dev/hr
+2016-08-12 05:46:53.9120 MCAWebAndAPI.Service.Converter.CSVConverter System.IndexOutOfRangeException: Index was outside the bounds of the array.
+   at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64
+2016-08-12 09:48:08.5645 MCAWebAndAPI.Service.Asset.AssetMasterService The underlying connection was closed: A connection that was expected to be kept alive was closed by the server.
+2016-08-15 10:15:24.4573 MCAWebAndAPI.Service.Asset.LocationMasterService Invalid data has been used to update the list item. The field you are trying to update may be read only.
+2016-08-15 10:18:12.8443 MCAWebAndAPI.Service.Asset.LocationMasterService Invalid data has been used to update the list item. The field you are trying to update may be read only.
+2016-08-15 10:18:59.1261 MCAWebAndAPI.Service.Asset.LocationMasterService Invalid data has been used to update the list item. The field you are trying to update may be read only.
+2016-08-15 14:36:54.8295 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Microsoft.SharePoint.Client.ServerException: Item does not exist. It may have been deleted by another user.
+   at MCAWebAndAPI.Service.Utils.SPConnector.UpdateListItem(String listName, Nullable`1 listItemID, Dictionary`2 updatedValues, String siteUrl) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 126
+   at MCAWebAndAPI.Service.Asset.AssetAcquisitionService.UpdateDetails(Nullable`1 headerID, IEnumerable`1 items) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetAcquisitionService.cs:line 340
+2016-08-15 14:38:16.1510 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Microsoft.SharePoint.Client.ServerException: Item does not exist. It may have been deleted by another user.
+   at MCAWebAndAPI.Service.Utils.SPConnector.UpdateListItem(String listName, Nullable`1 listItemID, Dictionary`2 updatedValues, String siteUrl) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 126
+   at MCAWebAndAPI.Service.Asset.AssetAcquisitionService.UpdateDetails(Nullable`1 headerID, IEnumerable`1 items) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetAcquisitionService.cs:line 340
+2016-08-15 14:40:32.6802 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Microsoft.SharePoint.Client.ServerException: Item does not exist. It may have been deleted by another user.
+   at MCAWebAndAPI.Service.Utils.SPConnector.UpdateListItem(String listName, Nullable`1 listItemID, Dictionary`2 updatedValues, String siteUrl) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 126
+   at MCAWebAndAPI.Service.Asset.AssetAcquisitionService.UpdateDetails(Nullable`1 headerID, IEnumerable`1 items) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetAcquisitionService.cs:line 340
+2016-08-15 14:42:57.9681 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Microsoft.SharePoint.Client.ServerException: Item does not exist. It may have been deleted by another user.
+   at MCAWebAndAPI.Service.Utils.SPConnector.UpdateListItem(String listName, Nullable`1 listItemID, Dictionary`2 updatedValues, String siteUrl) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 126
+   at MCAWebAndAPI.Service.Asset.AssetAcquisitionService.UpdateDetails(Nullable`1 headerID, IEnumerable`1 items) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetAcquisitionService.cs:line 340

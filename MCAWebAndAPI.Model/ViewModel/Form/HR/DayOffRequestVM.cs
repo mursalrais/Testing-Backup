@@ -1,23 +1,24 @@
-﻿using MCAWebAndAPI.Model.Common;
+﻿using System;
 using MCAWebAndAPI.Model.ViewModel.Control;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Web;
+using MCAWebAndAPI.Model.Common;
+using System.Collections.Generic;
 
-namespace MCAWebAndAPI.Model
+namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
     public class DayOffRequestVM : Item
     {
+        public IEnumerable<DayOffRequestDetailVM> DayOffRequestDetails { get; set; } = new List<DayOffRequestDetailVM>();
+        public IEnumerable<DayOffBalanceVM> DayOffBalanceDetails { get; set; } = new List<DayOffBalanceVM>();
+
         public string Professional { get; set; }
+
+        public int? ProfessionalID { get; set; }
 
         public string ProjectUnit { get; set; }
 
-        public string Position { get; set; }
-
-        [UIHint("MultiFileUploader")]
-        [DisplayName("Medicial Certificate (Max. 2MB)")]
-        public IEnumerable<HttpPostedFileBase> Documents { get; set; } = new List<HttpPostedFileBase>();
+        [UIHint("Date")]
+        public DateTime? RequestDate { get; set; } = DateTime.UtcNow;
     }
 }

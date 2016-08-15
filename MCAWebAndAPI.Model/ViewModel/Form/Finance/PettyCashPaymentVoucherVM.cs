@@ -13,8 +13,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 {
     public class PettyCashPaymentVoucherVM : Item
     {
-        [Required]
+       
         [DataType(DataType.Date)]
+        [DisplayName("Advance Receive Date")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime Date { get; set; } = DateTime.Today;
 
@@ -24,7 +25,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 
         [Required]
         [UIHint("ComboBox")]
-        public PaidToComboboxVM PaidTo { get; set; }
+        [DisplayName("Paid To")]
+        public PaidToComboboxVM PaidTo { get; set; } = new PaidToComboboxVM();
 
         [UIHint("AjaxComboBox")]
         public AjaxComboBoxVM Professional { get; set; } = new AjaxComboBoxVM();
@@ -37,13 +39,18 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         [Required]
         public CurrencyComboBoxVM Currency { get; set; } = new CurrencyComboBoxVM();
 
+        [UIHint("Decimal")]
         [Required]
-        public decimal AmountPaid { get; set; }
+        [DisplayName("Amount paid")]
+        [DisplayFormat(DataFormatString = "{0:#}", ApplyFormatInEditMode = true)]
+        public decimal AmountPaid { get; set; } = 0;
 
         [Required]
+        [DisplayName("Amount paid in words")]
         public string AmountPaidInWord { get; set; }
 
         [Required]
+        [DisplayName("Reason of payment")]
         public string ReasonOfPayment { get; set; }
 
         [UIHint("Currency")]
@@ -59,12 +66,17 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         [Required]
         public AjaxComboBoxVM GL { get; set; } = new AjaxComboBoxVM();
 
+        [UIHint("TextArea")]
         public string Remarks { get; set; }
 
         [UIHint("MultiFileUploader")]
         [DisplayName("Attachment")]
         [Required]
         public IEnumerable<HttpPostedFileBase> Documents { get; set; } = new List<HttpPostedFileBase>();
+
+        public string DocumentUrl { get; set; }
+
+        public string VoucherNo { get; set; }
 
     }
 }

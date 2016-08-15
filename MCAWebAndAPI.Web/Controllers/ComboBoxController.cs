@@ -15,20 +15,19 @@ namespace MCAWebAndAPI.Web.Controllers
 {
     public class ComboBoxController : Controller
     {
-        private const string SITE_URL = "SiteUrl";
-        IComboBoxService _comboBoxService;
+        private const string SiteUrl = "SiteUrl";
+        IComboBoxService service;
 
         public ComboBoxController()
         {
-            _comboBoxService = new ComboBoxService();
+            service = new ComboBoxService();
         }
 
         public JsonResult GetProfessionals()
         {
-            _comboBoxService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
 
-            var result = _comboBoxService.GetProfessionals().ToList();
-            //result.Insert(0, new Model.HR.DataMaster.ProfessionalMaster() { ID = 0, Name = "",Position="" });
+            var result = service.GetProfessionals().ToList();
 
             return Json(result.Select(e =>
                 new {
@@ -44,11 +43,11 @@ namespace MCAWebAndAPI.Web.Controllers
                 JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetEventBudget()
+        public JsonResult GetEventBudgets()
         {
-            _comboBoxService.SetSiteUrl(ConfigResource.DefaultBOSiteUrl);
+            service.SetSiteUrl(ConfigResource.DefaultBOSiteUrl);
 
-            var result = _comboBoxService.GetEventBudget().ToList();
+            var result = service.GetEventBudget().ToList();
             result.Insert(0, new Model.ViewModel.Control.AjaxComboBoxVM() { Value = 0, Text = "" });
 
             return Json(result.Select(e =>
@@ -60,19 +59,33 @@ namespace MCAWebAndAPI.Web.Controllers
                 JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetSubActivityByEventBudgetID(int? eventBudgetId)
+        public JsonResult GetActivities()
+        {
+            var siteUrl = SessionManager.Get<string>(SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
+
+            var activities = Service.Shared.ActivityService.GetActivities(siteUrl);
+
+            return Json(activities.Select(e => new
+            {
+                e.ID,
+                e.Title,
+                Project = e.Project.Text
+            }), JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetSubActivitiesByEventBudgetID(int? eventBudgetId)
         {
             int activityID = 0;
             List<AjaxComboBoxVM> result = new List<AjaxComboBoxVM>();
 
             ISCAVoucherService _scaVoucherService = new SCAVoucherService();
             _scaVoucherService.SetSiteUrl(ConfigResource.DefaultBOSiteUrl);
-            _comboBoxService.SetSiteUrl(ConfigResource.DefaultBOSiteUrl);
+            service.SetSiteUrl(ConfigResource.DefaultBOSiteUrl);
 
             if (eventBudgetId.HasValue && eventBudgetId.Value > 0)
             {
                 activityID = _scaVoucherService.GetActivityIDByEventBudgetID(Convert.ToInt32(eventBudgetId));
-                result = _comboBoxService.GetSubActivity(activityID).ToList();
+                result = service.GetSubActivity(activityID).ToList();
             }
 
             return Json(result.Select(e =>
@@ -84,11 +97,11 @@ namespace MCAWebAndAPI.Web.Controllers
                 JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetVendor()
+        public JsonResult GetVendors()
         {
-            var siteUrl = SessionManager.Get<string>(SITE_URL) ?? ConfigResource.DefaultBOSiteUrl;
+            var siteUrl = SessionManager.Get<string>(SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
 
-            var vendors = FinService.Shared.GetVendorMaster(siteUrl);
+            var vendors = Service.Shared.VendorService.GetVendorMaster(siteUrl);
 
             return Json(vendors.Select(e => new
             {
@@ -96,23 +109,10 @@ namespace MCAWebAndAPI.Web.Controllers
                 e.Title
             }), JsonRequestBehavior.AllowGet);
         }
-
-        public JsonResult GetProfessional()
+        
+        public JsonResult GetGLMasters()
         {
-            var siteUrl = SessionManager.Get<string>(SITE_URL) ?? ConfigResource.DefaultBOSiteUrl;
-            
-            var vendors = FinService.Shared.GetProfessionalMaster(siteUrl);
-
-            return Json(vendors.Select(e => new
-            {
-                e.ID,
-                e.Title
-            }), JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult GetGLMaster()
-        {
-            var siteUrl = SessionManager.Get<string>(SITE_URL) ?? ConfigResource.DefaultBOSiteUrl;
+            var siteUrl = SessionManager.Get<string>(SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
 
             var glMasters = FinService.Shared.GetGLMaster(siteUrl);
 
@@ -123,9 +123,9 @@ namespace MCAWebAndAPI.Web.Controllers
             }), JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetWBSMaster()
+        public JsonResult GetWBSMasters()
         {
-            var siteUrl = SessionManager.Get<string>(SITE_URL) ?? ConfigResource.DefaultBOSiteUrl;
+            var siteUrl = SessionManager.Get<string>(SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
 
             var wbsMasters = FinService.Shared.GetWBSMaster(siteUrl);
 

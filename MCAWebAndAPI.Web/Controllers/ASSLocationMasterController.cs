@@ -27,23 +27,36 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult CreateLocationMaster(string siteUrl = null)
         {
             // MANDATORY: Set Site URL
-            _locationMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            _locationMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
             ViewBag.Action = "CreateLocationMaster";
 
             // Get blank ViewModel
-            var viewModel = _locationMasterService.GetPopulatedModel();
+            var viewModel = _locationMasterService.GetPopulatedModel(siteUrl);
 
             // Return to the name of the view and parse the model
             return View("Create", viewModel);
+        }
+
+        public ActionResult Edit(int ID, string siteUrl = null)
+        {
+            // MANDATORY: Set Site URL
+            _locationMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            ViewBag.Action = "Edit";
+
+            var viewModel = _locationMasterService.GetHeader(ID, siteUrl);
+
+            return View(viewModel);
         }
 
         [HttpPost]
         public ActionResult CreateLocationMaster(FormCollection form, LocationMasterVM viewModel)
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
-            _locationMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            _locationMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
             int? headerID = null;
             try
@@ -92,8 +105,8 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult UpdateProvince(string siteUrl = null)
         {
             // MANDATORY: Set Site URL
-            _locationMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            _locationMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
             ViewBag.Action = "UpdateProvince";
 
@@ -114,7 +127,7 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult UpdateProvince(FormCollection form, LocationMasterVM viewModel)
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
-            _locationMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            _locationMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
             try
             {

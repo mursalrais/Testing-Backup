@@ -1,4 +1,5 @@
-﻿using MCAWebAndAPI.Model.HR.DataMaster;
+﻿using MCAWebAndAPI.Model.Common;
+using MCAWebAndAPI.Model.HR.DataMaster;
 using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using MCAWebAndAPI.Service.HR.Common;
 using MCAWebAndAPI.Service.HR.Leave;
@@ -18,8 +19,6 @@ namespace MCAWebAndAPI.Service.HR.Payroll
     public static class PayrollServiceExtention
     {
         private static DateTime Last13MonthDate_HardCoded = new DateTime(2016, 7, 7);
-
-
         private static string _siteUrl;
 
         /// <summary>
@@ -29,6 +28,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
         private static IEnumerable<PSAMaster> _allValidPSAs;
         private static IEnumerable<MonthlyFeeMaster> _allProfessionalMonthlyFees;
         private static IEnumerable<DayOffRequest> _allProfessionalDayOffRequests;
+        private static IEnumerable<EventCalendar> _allHolidaysAndPublicHolidays;
 
         private static int[] _professionalIDs;
         private static DateTime[] _dateRanges;
@@ -100,6 +100,21 @@ namespace MCAWebAndAPI.Service.HR.Payroll
         public static async Task PopulateAllProfessionalDayOffRequests(this List<PayrollWorksheetDetailVM> payrollWorksheet, IEnumerable<int> professionalIDs)
         {
             _allProfessionalDayOffRequests = _dayOffService.GetDayOffRequests(professionalIDs.ToArray());
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="payrollWorksheet"></param>
+        /// <param name="professionalIDs"></param>
+        /// <returns></returns>
+        public static async Task PopulateAllHolidaysAndPublicHolidays(this List<PayrollWorksheetDetailVM> payrollWorksheet, IEnumerable<DateTime> dateRange)
+        {
+            var listHolidaysAndPublicHolidays = new List<EventCalendar>();
+            listHolidaysAndPublicHolidays.AddRange(_calendarService.GetHolidays(dateRange));
+            listHolidaysAndPublicHolidays.AddRange(_calendarService.GetPublicHolidays(dateRange));
+
+            _allHolidaysAndPublicHolidays = listHolidaysAndPublicHolidays;
         }
 
         /// <summary>
@@ -177,7 +192,9 @@ namespace MCAWebAndAPI.Service.HR.Payroll
         private static PayrollWorksheetDetailVM GeneratePayrollSummaryRow(this List<PayrollWorksheetDetailVM> payrollWorksheet, int indexProfessional)
         {
             var payrollWorksheetVM = new PayrollWorksheetDetailVM();
-
+            
+            //TODO: To aggregate column from detail view to pivot view
+            
             return payrollWorksheetVM;
         }
 
@@ -269,7 +286,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
                 for (int indexDate = 0; indexDate < _dateRanges.Length; indexDate++)
                 {
                     var psaData = _allValidPSAs.FirstOrDefault(e =>
-                        e.ProfessionalID == indexProfessional + string.Empty &&
+                        e.ProfessionalID == _professionalIDs[indexProfessional] + string.Empty &&
                         IsInScopePSA(_dateRanges[indexDate], e));
 
                     if (psaData == null)
@@ -280,7 +297,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
                     payrollWorksheet[rowIndex].JoinDate = psaData.JoinDate;
                     payrollWorksheet[rowIndex].DateOfNewPSA = psaData.DateOfNewPSA;
                     payrollWorksheet[rowIndex].PSANumber = psaData.PSANumber;
-                    payrollWorksheet[rowIndex].LastWorkingDate = psaData.PSAExpiryDate;
+                    payrollWorksheet[rowIndex].LastWorkingDate = psaData.LastWorkingDate;
                 }
             }
 
@@ -312,14 +329,33 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             {
                 for (int indexDate = 0; indexDate < _dateRanges.Length; indexDate++)
                 {
+                    var rowIndex = indexProfessional * _dateRanges.Length + indexDate;
+
+                    // Skip for condition without valid PSA
+                    if (string.IsNullOrEmpty(payrollWorksheet[rowIndex].PSANumber))
+                    {
+                        payrollWorksheet[rowIndex].Remarks = "No PSA";
+                        continue;
+                    }
+
+                    // Skip for public holidays, sunday, and saturday
+                    if (_allHolidaysAndPublicHolidays.FirstOrDefault(e => 
+                      e.Date.Day == _dateRanges[indexDate].Day &&
+                      e.Date.Month == _dateRanges[indexDate].Month &&
+                      e.Date.Year == _dateRanges[indexDate].Year) != null)
+                    {
+                        payrollWorksheet[rowIndex].Remarks = "Holiday";
+                        continue;
+                    }
+                     
+                    
                     var monthlyFeeData = _allProfessionalMonthlyFees
-                        .FirstOrDefault(e => e.ProfessionalID == indexProfessional &&
-                        IsInScopeMonthlyFee(_dateRanges[indexDate], e));
+                        .FirstOrDefault(e => e.ProfessionalID == _professionalIDs[indexProfessional]
+                        && IsInScopeMonthlyFee(_dateRanges[indexDate], e));
 
                     if (monthlyFeeData == null)
                         continue;
-
-                    var rowIndex = indexProfessional * _dateRanges.Length + indexDate;
+                    
                     payrollWorksheet[rowIndex].DateOfNewFee = monthlyFeeData.DateOfNewFee;
                     payrollWorksheet[rowIndex].EndDate = monthlyFeeData.EndDate;
                     payrollWorksheet[rowIndex].MonthlyFeeMaster = monthlyFeeData.MonthlyFee;

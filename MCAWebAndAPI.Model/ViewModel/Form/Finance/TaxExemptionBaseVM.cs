@@ -10,10 +10,9 @@ using System.Web;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 {
-    public class TaxExemptionDataVM
+    public class TaxExemptionBaseVM
     {
         private ComboBoxVM _typeOfTax;
-        private ComboBoxVM _typeOfWithHoldingTax;
         private DateTime _taxPeriod;
 
         public int? ID { get; set; }
@@ -36,24 +35,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
             }
         }
 
-        [DisplayName("Type Of Withholding Tax")]
-        [UIHint("ComboBox")]
-        public ComboBoxVM TypeOfWithHoldingTax
-        {
-            get
-            {
-                if (_typeOfWithHoldingTax == null)
-                {
-                    _typeOfWithHoldingTax = new ComboBoxVM();
-                }
-                return _typeOfWithHoldingTax;
-            }
-            set
-            {
-                _typeOfWithHoldingTax = value;
-            }
-        }
-
         [DataType(DataType.Date)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MMM-yyyy}")]
         [DisplayName("Tax Period")]
@@ -71,29 +52,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
             }
         }
 
-        [DisplayName("Total Income Recepients")]
-        public int TotalIncomeRecepients
-        {
-            get;
-            set;
-        }
-
-        [DisplayName("Gross Income (IDR)")]
-        public decimal GrossIncome
-        {
-            get;
-            set;
-        }
-
-
-        [DisplayName("Total Income Tax Borne by Government(IDR)")]
-        public decimal TotalIncomeTaxBorneByGovernment
-        {
-            get;
-            set;
-        }
-
-        [UIHint("TextArea")]
         public string Remarks
         {
             get;
@@ -102,8 +60,10 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 
         public string DocumentUrl { get; set; }
 
-        [UIHint("MultiFileUploader")]
-        [DisplayName("Attachment")]
         public IEnumerable<HttpPostedFileBase> Documents { get; set; } = new List<HttpPostedFileBase>();
+
+        protected TaxExemptionBaseVM()
+        {
+        }
     }
 }

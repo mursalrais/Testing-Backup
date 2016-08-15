@@ -11,9 +11,11 @@ namespace MCAWebAndAPI.Service.Asset
     {
         void SetSiteUrl(string siteUrl = null);
 
-        LocationMasterVM GetPopulatedModel();
+        LocationMasterVM GetPopulatedModel(string SiteUrl);
 
-        LocationMasterVM GetHeader(int? ID);
+        LocationMasterVM GetPopulatedModel(int ID, string SiteUrl);
+
+        LocationMasterVM GetHeader(int? ID, string SiteUrl);
 
         LocationMasterVM UpdateProvince();
 
@@ -21,6 +23,6 @@ namespace MCAWebAndAPI.Service.Asset
 
         int CreateHeader(LocationMasterVM header, string province, string office, int floor, string room);
 
-        bool UpdateHeader(LocationMasterVM header);
+        bool UpdateHeader(LocationMasterVM header, string province, string office, int floor, string room);
     }
 }

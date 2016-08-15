@@ -1,17 +1,30 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using MCAWebAndAPI.Model.ViewModel.Control;
+﻿using MCAWebAndAPI.Model.ViewModel.Control;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 using MCAWebAndAPI.Service.Finance;
 using MCAWebAndAPI.Service.Resources;
-using MCAWebAndAPI.Service.Utils;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;
-//using SPClient = Microsoft.SharePoint.Client;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
+    /// <summary>
+    /// Wireframe FIN11: Petty Cash Settlement
+    /// 
+    ///     Petty Cash Settlement is a transaction for settlement-reimbursement of petty cash where 
+    ///     user has already asked for petty cash advance previously. 
+    ///     
+    ///     Through this feature, user will create the settlement-reimbursement of 
+    ///     petty cash which results whether user needs to return the excess petty cash advance or 
+    ///     receive the reimbursement in the case where the actual expense for 
+    ///     petty cash exceeds the petty cash advance given. 
+    ///     
+    ///     It is created and maintained by finance. 																									
+    ///
+    /// </summary>
+
     public class FINPettyCashSettlementController : Controller
     {
         IPettyCashSettlement service;
