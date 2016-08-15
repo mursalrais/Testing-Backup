@@ -74,7 +74,7 @@ namespace MCAWebAndAPI.Service.Asset
             var memoinfo = SPConnector.GetListItem(SP_ACC_MEMO_LIST_NAME, Convert.ToInt32(memo[0]), _siteUrl);
             columnValues.Add("vendorid", memoinfo["vendorid"]);
             columnValues.Add("vendorname", memoinfo["vendorname"]);
-            columnValues.Add("pono", viewmodel.PoNo);
+            columnValues.Add("pono", memoinfo["pono"]);
             if(viewmodel.PurchaseDate.HasValue)
             {
                 columnValues.Add("purchasedate", viewmodel.PurchaseDate);
@@ -276,12 +276,12 @@ namespace MCAWebAndAPI.Service.Asset
             //columnValues.add
             columnValues.Add("Title", "Asset Acquisition");
             string[] memo = viewmodel.AccpMemo.Value.Split('-');
+            var memoinfo = SPConnector.GetListItem(SP_ACC_MEMO_LIST_NAME, Convert.ToInt32(memo[0]), _siteUrl);
             //columnValues.Add("acceptancememono", memo[1]);
             columnValues.Add("acceptancememono", new FieldLookupValue { LookupId = Convert.ToInt32(memo[0]) });
-            var breakVendor = viewmodel.Vendor.Split('-');
-            columnValues.Add("vendorid", breakVendor[0]);
-            columnValues.Add("vendorname", breakVendor[1]);
-            columnValues.Add("pono", viewmodel.PoNo);
+            columnValues.Add("vendorid", memoinfo["vendorid"]);
+            columnValues.Add("vendorname", memoinfo["vendorname"]);
+            columnValues.Add("pono", memoinfo["pono"]);
             if (viewmodel.PurchaseDate.HasValue)
             {
                 columnValues.Add("purchasedate", viewmodel.PurchaseDate);
@@ -337,7 +337,7 @@ namespace MCAWebAndAPI.Service.Asset
                 try
                 {
                     if (Item.CheckIfUpdated(item))
-                        SPConnector.UpdateListItem(SP_ASSACQDetails_LIST_NAME, headerID, updatedValues, _siteUrl);
+                        SPConnector.UpdateListItem(SP_ASSACQDetails_LIST_NAME, item.ID, updatedValues, _siteUrl);
                     else
                         SPConnector.AddListItem(SP_ASSACQDetails_LIST_NAME, updatedValues, _siteUrl);
                 }

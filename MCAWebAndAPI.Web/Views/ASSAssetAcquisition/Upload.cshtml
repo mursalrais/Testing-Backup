@@ -3,14 +3,15 @@
 
 @model CSVVM
 
-@using (Ajax.BeginForm("SubmitUpload", "ASSassetAcquisition",
-                                                                                                                                                   new AjaxOptions
-                                                                                                                                                   {
-                                                                                                                                                       OnBegin = "onBeginForm",
-                                                                                                                                                       OnComplete = "onCompleteForm",
-                                                                                                                                                       OnSuccess = "onSuccessFormEmbed",
-                                                                                                                                                       OnFailure = "onFailureForm"
-                                                                                                                                                   }, new { @class = "form-horizontal" }))
+@using (Ajax.BeginForm("SubmitUpload", "ASSAssetAcquisition",
+                 FormMethod.Post,
+                new AjaxOptions
+                {
+                    OnBegin = "onBeginForm",
+                    OnComplete = "onCompleteForm",
+                    OnSuccess = "onSuccessFormEmbed",
+                    OnFailure = "onFailureForm"
+                }, new { @class = "form-horizontal" }))
 
 {
 
