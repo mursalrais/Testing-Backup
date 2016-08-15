@@ -4,7 +4,7 @@
 
 @model AssetAcquisitionHeaderVM
 
-@using (Ajax.BeginForm("Update", "ASSassetAcquisition",
+@using (Ajax.BeginForm("Update", "ASSAssetAcquisition",
                                                                                                                                        FormMethod.Post,
                                                                                                                                        new AjaxOptions
                                                                                                                                        {
@@ -15,7 +15,7 @@
                                                                                                                                        }, new { @class = "form-horizontal" }))
 
 {
-    <form class="form-horizontal" method="post" action="/ASSassetAcquisition/Update" id="create-asset-acquisition-form">
+    <form class="form-horizontal" method="post" action="/ASSAssetAcquisition/Update" id="create-asset-acquisition-form">
         <fieldset>
             <legend>Form Asset Acquisition</legend>
             <div class="col-md-6">

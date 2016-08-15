@@ -103,7 +103,7 @@ namespace MCAWebAndAPI.Web.Controllers
             if(_data.Details.Count() == 0)
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse("Details should not empty!");
+                return JsonHelper.GenerateJsonErrorResponse("Details should not empty");
             }
 
             //return View(new AssetMasterVM());
@@ -381,7 +381,8 @@ namespace MCAWebAndAPI.Web.Controllers
             return PartialView("_DisplayGrid");
         }
 
-        public ActionResult Submit(string listName)
+        //[HttpPost]
+        public ActionResult SubmitUpload(string listName)
         {
             // Get existing session variable
             var sessionVariables = SessionManager.Get<DataTable>("CSVDataTable") ?? new DataTable();

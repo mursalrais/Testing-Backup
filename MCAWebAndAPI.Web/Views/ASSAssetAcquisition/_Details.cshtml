@@ -21,8 +21,7 @@
             "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].POLineItem' value='#= POLineItem #' />"
             );
 
-            //<a onclick=\"showOrderDetail('#= OrderName #')\" href='\\#'>#= OrderName #</a>
-            columns.Bound(p => p.AssetSubAsset).Width(500).ClientTemplate("<a onclick=\"showTest('#=AssetSubAsset.Text#')\" href='\\#'>#= AssetSubAsset.Text #</a>" +
+            columns.Bound(p => p.AssetSubAsset).Width(5000).ClientTemplate("#= AssetSubAsset.Text #" +
                           "<input type='hidden' id='asset' name='Details[#= getWorkingRelationshipDetails(data)#].AssetSubAsset.Value' value='#= AssetSubAsset.Value #' />"
                         ).EditorViewData(new
                         {
@@ -39,7 +38,7 @@
                             DataTextField = "Text",
                             DataValueField = "Value",
                             ControllerName = "ASSAssetAcquisition",
-                            ActionName = "GetWBSGrid"
+                            ActionName = "GetWBSGrid",
                         });
 
             columns.Bound(p => p.CostIDR).ClientTemplate("#= CostIDR #" +
