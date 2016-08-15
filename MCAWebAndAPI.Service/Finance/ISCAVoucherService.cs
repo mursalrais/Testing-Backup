@@ -18,6 +18,8 @@ namespace MCAWebAndAPI.Service.Finance
 
         Task CreateSCAVoucherDocumentAsync(int? ID, IEnumerable<HttpPostedFileBase> attachment);
 
+        Task UpdateSCAVoucherItem(int? scaVoucherID, IEnumerable<SCAVoucherItemsVM> viewModels);
+
         IEnumerable<SCAVoucherItemsVM> GetSCAVoucherItems(int scaVoucherID);
 
         IEnumerable<SCAVoucherItemsVM> GetEventBudgetItems(int eventBudgetID);
@@ -25,6 +27,10 @@ namespace MCAWebAndAPI.Service.Finance
         int? CreateSCAVoucher(SCAVoucherVM scaVoucher);
 
         int GetActivityIDByEventBudgetID(int eventBudgetID);
+
+        bool UpdateSCAVoucher(SCAVoucherVM scaVoucher);
+
+        bool UpdateStatusSCAVoucher(SCAVoucherVM scaVoucher);
 
         void SetSiteUrl(string siteUrl);
     }

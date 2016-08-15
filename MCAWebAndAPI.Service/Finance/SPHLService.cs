@@ -31,7 +31,7 @@ namespace MCAWebAndAPI.Service.Finance
             this._siteUrl = siteUrl;
         }
 
-        public int? CreateSPHL(SPHLVM viewMOdel)
+        public int? Create(SPHLVM viewMOdel)
         {
            int? result = null;
            var columnValues = new Dictionary<string, object>
@@ -119,13 +119,12 @@ namespace MCAWebAndAPI.Service.Finance
                 {
                     if (doc != null)
                     {
-                        var filename = sphlNo + "_" + doc.FileName;
                         var updateValue = new Dictionary<string, object>();
                         updateValue.Add(ListName, new FieldLookupValue { LookupId = Convert.ToInt32(ID) });
 
                         try
                         {
-                            SPConnector.UploadDocument(ListName_Document, updateValue, filename, doc.InputStream, _siteUrl);
+                            SPConnector.UploadDocument(ListName_Document, updateValue, doc.FileName, doc.InputStream, _siteUrl);
                         }
                         catch (Exception e)
                         {

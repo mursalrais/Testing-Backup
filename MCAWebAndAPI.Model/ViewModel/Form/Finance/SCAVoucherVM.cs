@@ -6,23 +6,29 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Model.ViewModel.Control;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 {
-    public class SCAVoucherVM
+    public class SCAVoucherVM:Item
     {
+        private const string locked = "Locked";
+        private const string unlocked = "Unlocked";
+
+        public enum ActionType { edit, approve };
+
         public IEnumerable<SCAVoucherItemsVM> SCAVoucherItems { get; set; } = new List<SCAVoucherItemsVM>();
 
         public IEnumerable<EventBudgetItemVM> EventBudgetItems { get; set; } = new List<EventBudgetItemVM>();
 
-        public int ID { get; set; }
-
         [DisplayName("SCA No.")]
         public string SCAVoucherNo { get; set; }
 
-        [UIHint("Date")]
+        [Required]
         [DisplayName("Date")]
+        [UIHint("Date")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime SCAVoucherDate { get; set; } = DateTime.Now;
 
         [Required]
@@ -35,15 +41,19 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
             TextField = "Desc"
         };
 
+        public int SDOID { get; set; }
+
         public string SDOName { get; set; }
 
         public string Position { get; set; }
 
         public int EventBudgetID { get; set; }
 
+        public string EventBudgetNo { get; set; }
+
         [Required]
         [UIHint("AjaxComboBox")]
-        public AjaxComboBoxVM EventBudgetNo { get; set; } = new AjaxComboBoxVM
+        public AjaxComboBoxVM EventBudget { get; set; } = new AjaxComboBoxVM
         {
             ControllerName = "ComboBox",
             ActionName = "GetEventBudget",
@@ -59,6 +69,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         public decimal TotalAmount { get; set; }
 
         [Required]
+        [UIHint("TextArea")]
         public string TotalAmountInWord { get; set; }
 
         [Required]
@@ -80,9 +91,11 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
             ControllerName = "ComboBox",
             ValueField = "Value",
             TextField = "Text",
-            Cascade = "EventBudgetNo_Value",
+            Cascade = "EventBudget_Value",
             Filter = "filterEventBudgetNo"
         };
+
+        public int SubActivityID { get; set; }
 
         public string SubActivityName { get; set; }
 
@@ -94,9 +107,23 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         [UIHint("TextArea")]
         public string Remarks { get; set; }
 
+        [Required]
+        [UIHint("ComboBox")]
+        public ComboBoxVM TransactionStatus { get; set; } = new ComboBoxVM
+        {
+            Choices = new string[]
+            {
+                unlocked,
+                locked
+            },
+            Value=unlocked
+        };
+
         [UIHint("MultiFileUploader")]
         public IEnumerable<HttpPostedFileBase> Documents { get; set; } = new List<HttpPostedFileBase>();
 
         public string DocumentUrl { get; set; }
+
+        public string Action { get; set; }
     }
 }

@@ -18,6 +18,11 @@ using MCAWebAndAPI.Service.Resources;
 
 namespace MCAWebAndAPI.Web.Controllers.Finance
 {
+    /// <summary>
+    /// Wireframe FIN05: Requisition Note
+    ///     i.e.: Purchase Requisition Note
+    /// </summary>
+
     [Filters.HandleError]
     public class FINRequisitionNoteController : Controller //FinSharedController
     {
@@ -70,6 +75,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             }
             else
             {
+                ErrorSignal.FromCurrentContext().Raise(new Exception(DATA_NOT_EXISTS));
                 return JsonHelper.GenerateJsonErrorResponse(DATA_NOT_EXISTS);
             }
         }
@@ -108,7 +114,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             }
 
          
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.Compensatory);
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.RequisitionNote);
         }
 
         [HttpPost]
@@ -142,7 +148,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.Compensatory);
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.RequisitionNote);
         }
         [HttpPost]
         public JsonResult GetRequisitionNoteDetailsByEventBudgetId([DataSourceRequest] DataSourceRequest request, int? eventBudgetId)
