@@ -128,6 +128,11 @@
     <Compile Include="ViewModel\Form\Asset\AssetTransferVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssignmentofAssetHeaderVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssignmentofAssetItemVM.cs" />
+    <Compile Include="ViewModel\Form\Finance\TaxExemptionBaseVM.cs" />
+    <Compile Include="ViewModel\Form\Finance\TaxExemptionIncomeVM.cs" />
+    <Compile Include="ViewModel\Form\Finance\TaxExemptionOtherVM.cs" />
+    <Compile Include="ViewModel\Form\Finance\TaxExemptionVATVM.cs" />
+    <Compile Include="ViewModel\Form\Finance\TaxExemptionVM.cs" />
     <Compile Include="ViewModel\Form\HR\DayOffRequestDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\DayOffRequestVM.cs" />
     <Compile Include="HR\DataMaster\DependentMaster.cs" />
@@ -223,7 +228,6 @@
     <Compile Include="ViewModel\Form\Finance\Shared.cs" />
     <Compile Include="ViewModel\Form\Finance\SPHLVM.cs" />
     <Compile Include="ViewModel\Form\Finance\RequisitionNoteVM.cs" />
-    <Compile Include="ViewModel\Form\Finance\TaxExemptionDataVM.cs" />
     <Compile Include="ViewModel\Form\Finance\TaxReimbursementVM.cs" />
     <Compile Include="ViewModel\Form\Finance\WBSMasterVM.cs" />
     <Compile Include="ViewModel\Form\HR\ApplicationDataVM.cs" />

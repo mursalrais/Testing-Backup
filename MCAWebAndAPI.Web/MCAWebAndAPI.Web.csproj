@@ -889,10 +889,6 @@
     <Content Include="Views\FINRequisitionNote\_ItemDetails.cshtml" />
     <Content Include="Views\FINSCAVoucher\CreateSCAVoucher.cshtml" />
     <Content Include="Views\FINSCAVoucher\_EventBudgetItems.cshtml" />
-    <Content Include="Views\FINSPHL\CreateSPHL.cshtml" />
-    <Content Include="Views\FINTaxExemptionData\Create.cshtml" />
-    <Content Include="Views\FINTaxExemptionData\Edit.cshtml" />
-    <Content Include="Views\FINTaxReimbursement\CreateTaxReimbursement.cshtml" />
     <Content Include="Views\HRPSAManagement\TestCalculateTwoMonths.cshtml" />
     <Content Include="Views\HRPayroll\DisplayPayrollWorksheetDrafts.cshtml" />
     <Content Include="Views\ASSAssetAcquisition\Upload.cshtml" />
@@ -910,9 +906,6 @@
     <Content Include="Views\FINRequisitionNote\Create.cshtml" />
     <Content Include="Views\FINRequisitionNote\Edit.cshtml" />
     <Content Include="Views\FINRequisitionNote\Print.cshtml" />
-    <Content Include="Views\FINTaxExemptionData\_Income.cshtml" />
-    <Content Include="Views\FINTaxExemptionData\_Others.cshtml" />
-    <Content Include="Views\FINTaxExemptionData\_VAT.cshtml" />
     <Content Include="Views\FINRequisitionNote\Create.cshtml" />
     <Content Include="Views\FINRequisitionNote\Edit.cshtml" />
     <Content Include="Views\FINRequisitionNote\Print.cshtml" />
@@ -924,10 +917,29 @@
     <Content Include="Views\ASSAssetTransfer\_AssetTransferDetail.cshtml" />
     <Content Include="Views\ASSAssetDisposal\CreateAssetDisposal.cshtml" />
     <Content Include="Views\ASSAssetDisposal\_AssetDisposalDetail.cshtml" />
-    <Content Include="Views\FINSPHL\EditSPHL.cshtml" />
     <Content Include="Views\ASSAssetAcquisition\View.cshtml" />
     <Content Include="Views\ASSAssetAcquisition\_DetailsView.cshtml" />
     <Content Include="Views\ASSAssignmentofAsset\_Details.cshtml" />
+    <Content Include="Views\FINPettyCashSettlement\Create.cshtml" />
+    <Content Include="Views\FINTaxExemption\Create.cshtml" />
+    <Content Include="Views\FINTaxExemption\EditIncomeTax.cshtml" />
+    <Content Include="Views\FINTaxExemption\EditOtherTax.cshtml" />
+    <Content Include="Views\FINTaxExemption\EditVATTax.cshtml" />
+    <Content Include="Views\FINTaxExemption\_Income.cshtml" />
+    <Content Include="Views\FINTaxExemption\_Others.cshtml" />
+    <Content Include="Views\FINTaxExemption\_VAT.cshtml" />
+    <Content Include="Views\FINPettyCashPaymentVoucher\_General.cshtml" />
+    <Content Include="Views\FINSCAVoucher\Approve.cshtml" />
+    <Content Include="Views\FINSCAVoucher\Create.cshtml" />
+    <Content Include="Views\FINSCAVoucher\Edit.cshtml" />
+    <Content Include="Views\FINSCAVoucher\Print.cshtml" />
+    <Content Include="Views\FINSCAVoucher\_DisplayEventBudgetItems.cshtml" />
+    <Content Include="Views\FINSCAVoucher\_GeneralForm.cshtml" />
+    <Content Include="Views\FINSCAVoucher\_GeneralFormDisplay.cshtml" />
+    <Content Include="Views\FINSCAVoucher\_PartialHeaderWithLogo.cshtml" />
+    <Content Include="Views\FINSPHL\Create.cshtml" />
+    <Content Include="Views\FINSPHL\Edit.cshtml" />
+    <Content Include="Views\FINTaxReimbursement\Item.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -967,9 +979,8 @@
     <Compile Include="Controllers\FINPettyCashSettlementController.cs" />
     <Compile Include="Controllers\FINRequisitionNoteController.cs" />
     <Compile Include="Controllers\FINSCAVoucherController.cs" />
-    <Compile Include="Controllers\FinSharedController.cs" />
     <Compile Include="Controllers\FINSPHLController.cs" />
-    <Compile Include="Controllers\FINTaxExemptionDataController.cs" />
+    <Compile Include="Controllers\FINTaxExemptionController.cs" />
     <Compile Include="Controllers\FINTaxReimbursementController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HRApplicationController.cs" />

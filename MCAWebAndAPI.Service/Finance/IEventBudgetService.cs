@@ -9,6 +9,10 @@ using System.Web;
 
 namespace MCAWebAndAPI.Service.Finance
 {
+    /// <summary>
+    /// Wireframe FIN04: Event Budget
+    /// </summary>
+    
     public interface IEventBudgetService
     {
         void SetSiteUrl(string siteUrl);
@@ -16,7 +20,7 @@ namespace MCAWebAndAPI.Service.Finance
         EventBudgetVM Get(int? ID);
 
 
-        int CreateEventBudget(EventBudgetVM eventBudget);
+        int Create(EventBudgetVM eventBudget);
 
         bool Update(EventBudgetVM eventBudget);
 

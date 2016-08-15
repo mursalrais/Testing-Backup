@@ -117,7 +117,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
         public int CreateRequisitionNote(RequisitionNoteVM viewModel)
         {
             var updatedValue = new Dictionary<string, object>();
-            string DocumentNo = string.Format(FIELD_FORMAT_DOC, DateTimeExtensions.GetMonthInRoman(DateTime.Now), DateTime.Now.ToString("yy")) + "{0}";
+            string documentNoFormat = string.Format(FIELD_FORMAT_DOC, DateTimeExtensions.GetMonthInRoman(DateTime.Now), DateTime.Now.ToString("yy")) + "{0}";
 
             updatedValue.Add(FIELD_REQUISITION_CATEGORY, viewModel.Category.Value);
             updatedValue.Add(FIELD_REQUISITION_DATE, viewModel.Date);
@@ -126,7 +126,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
             updatedValue.Add(FIELD_REQUISITION_FUND, viewModel.Fund);
             updatedValue.Add(FIELD_REQUISITION_CURRENCY, viewModel.Currency.Value);
             updatedValue.Add(FIELD_REQUISITION_TOTAL, viewModel.Total);
-            updatedValue.Add(FIELD_TITLE, DocumentNumbering.Create(_siteUrl, DocumentNo));
+            updatedValue.Add(FIELD_TITLE, DocumentNumbering.Create(_siteUrl, documentNoFormat, 5));
 
             try
             {

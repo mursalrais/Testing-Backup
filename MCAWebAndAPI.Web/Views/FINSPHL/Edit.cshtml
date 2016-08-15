@@ -1,11 +1,11 @@
 ﻿@model MCAWebAndAPI.Model.ViewModel.Form.Finance.SPHL.SPHLVM
 
-@using (Html.BeginForm("CreateSPHL", "FINSPHL", FormMethod.Post,
-    new
-    {
-        @class = "form-horizontal",
-        enctype = "multipart/form-data"
-    }))
+@using (Html.BeginForm("Edit", "FINSPHL", FormMethod.Post,
+                new
+                {
+                    @class = "form-horizontal",
+                    enctype = "multipart/form-data"
+                }))
 {
     <fieldset>
         <legend>SPHL Data</legend>
@@ -21,7 +21,7 @@
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.No).Class("col-sm-4 control-label")
                     <div class="col-sm-8">
-                        @Html.EditorFor(m => m.No)
+                        @Html.DisplayFor(m => m.No)
                     </div>
                 </div>
                 <div class="form-group">
@@ -43,7 +43,26 @@
                         @Html.EditorFor(m => m.Documents)
                     </div>
                 </div>
+                @if (!string.IsNullOrWhiteSpace(Model.DocumentUrl))
+                {
+                                <div class="form-group">
+                                    @Html.Bootstrap().LabelFor(m => m).Class("col-sm-4 control-label")
+                                    <div class="col-sm-8">
+                                        <button id="application-document-button" class="btn btn-default" type="button">
+                                            Click Here to go to SPHL Attachments
+                                        </button>
+                                    </div>
+                                </div>
+                            <script>
+                                $('#application-document-button').click(function () {
+                                    parent.postMessage({
+                                        result: "Success", urlToRedirect: "@Model.DocumentUrl"
+                                    }, "@Model.DocumentUrl");
+                                });
+                            </script>
+                }
             </div>
+            @Html.HiddenFor(m => m.ID)
         </div>
     </fieldset>
     <div class="form-actions">
@@ -60,27 +79,4 @@
             </div>
         </div>
     </div>
-}
-@section scripts{
-    <script>
-        $(document).ready(function (e) {
-            $("#No").addClass("text-uppercase");
-            $("#No").rules("add", {
-                onkeyup: false,
-                remote: {
-                    url: "/FINSPHL/CheckExistingSPHLNo/",
-                    type: "post",
-                    onkeyup: false,
-                    data: {
-                        no: function () {
-                            return $("#No").val();
-                        }
-                    }
-                },
-                messages: {
-                    remote : 'SPHL No already exist'
-                }
-            });
-        });
-    </script>
 }

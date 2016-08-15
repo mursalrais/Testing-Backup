@@ -265,6 +265,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>UrlResource.resx</DependentUpon>
     </Compile>
+    <Compile Include="Shared\ActivityService.cs" />
+    <Compile Include="Shared\IActivityService.cs" />
+    <Compile Include="Shared\IVendorService.cs" />
+    <Compile Include="Shared\PositionService.cs" />
+    <Compile Include="Shared\VendorService.cs" />
     <Compile Include="Utils\DocumentNumbering.cs" />
     <Compile Include="Utils\EmailUtil.cs" />
     <Compile Include="Utils\FileUtil.cs" />

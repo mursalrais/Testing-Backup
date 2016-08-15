@@ -1,25 +1,29 @@
-﻿using MCAWebAndAPI.Service.Finance;
+﻿using System;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 using System.Web.Mvc;
+using Elmah;
+using MCAWebAndAPI.Model.ViewModel.Form.Finance;
+using MCAWebAndAPI.Service.Finance;
+using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;
-using System.Linq;
-using System;
-using System.Threading.Tasks;
-using MCAWebAndAPI.Model.ViewModel.Form.Finance;
-using Elmah;
 using FinService = MCAWebAndAPI.Service.Finance;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
-    public class FINEventBudgetController : FinSharedController
+    /// <summary>
+    /// Wireframe FIN04: Event Budget
+    /// </summary>
+
+    public class FINEventBudgetController : Controller
     {
-        private const string IndexPage= "Index";
+        private const string IndexPage = "Index";
         private const string Error = "Error";
 
         private const string SESSION_SITE_URL = "SiteUrl";
         IEventBudgetService service;
-
-        
 
         public FINEventBudgetController()
         {
@@ -35,6 +39,9 @@ namespace MCAWebAndAPI.Web.Controllers
             SessionManager.Set(SESSION_SITE_URL, siteUrl);
 
             var viewModel = service.Get(id);
+
+            SetAdditionalSettingToViewModel(ref viewModel, true);
+
             return View(viewModel);
         }
 
@@ -64,49 +71,45 @@ namespace MCAWebAndAPI.Web.Controllers
             return Json(eventBudgets.Select(e => new
             {
                 ID = e.ID,
-                Title = (e.No +"-" + e.Title)
+                Title = (e.No + "-" + e.Title)
             }), JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateRequisitionNote(FormCollection form, EventBudgetVM viewModel)
+        public async Task<ActionResult> Create(FormCollection form, EventBudgetVM viewModel)
         {
-            var siteUrl = SessionManager.Get<string>(SESSION_SITE_URL);
-            service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            var siteUrl = SessionManager.Get<string>("SiteUrl") ?? ConfigResource.DefaultBOSiteUrl;
+            service.SetSiteUrl(siteUrl);
 
-            int? headerID = null;
-            try
-            {
-                headerID = service.CreateEventBudget(viewModel);
-            }
-            catch (Exception e)
-            {
-                ErrorSignal.FromCurrentContext().Raise(e);
-                return RedirectToAction(IndexPage, Error, new { errorMessage = e.Message });
-            }
-
-            Task CreateDetailsTask = service.CreateItemsAsync(headerID, viewModel.ItemDetails);
-            Task CreateDocumentsTask = service.CreateAttachmentsAsync(headerID, viewModel.Documents);
-
-            Task allTasks = Task.WhenAll(CreateDetailsTask, CreateDocumentsTask);
+            int? headerId = null;
 
             try
             {
+                headerId = service.Create(viewModel);
+
+                Task CreateDetailsTask = service.CreateItemsAsync(headerId, viewModel.ItemDetails);
+                Task CreateDocumentsTask = service.CreateAttachmentsAsync(headerId, viewModel.Documents);
+
+                Task allTasks = Task.WhenAll(CreateDetailsTask, CreateDocumentsTask);
+
                 await allTasks;
             }
             catch (Exception e)
             {
-                ErrorSignal.FromCurrentContext().Raise(e);
-                return RedirectToAction(IndexPage, Error, new { errorMessage = e.Message });
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            return RedirectToAction(IndexPage,
-                "Success",
-                new
-                {
-                    errorMessage =
-                string.Format(MessageResource.SuccessCreateApplicationData, headerID)
-                });
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.FINEventBudget);
+        }
+
+        private void SetAdditionalSettingToViewModel(ref EventBudgetVM viewModel, bool isCreate)
+        {
+            //viewModel.Activity.ControllerName = "Activity";
+            //viewModel.Activity.ActionName = "GetActivities";
+            //viewModel.Activity.ValueField = "Value";
+            //viewModel.Activity.TextField = "Text";
+            //viewModel.Activity.OnSelectEventName = "onSelectActivity";
         }
     }
 }
