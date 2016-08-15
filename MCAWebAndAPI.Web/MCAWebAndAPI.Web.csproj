@@ -889,7 +889,6 @@
     <Content Include="Views\HRPayroll\DisplayPayrollWorksheetDrafts.cshtml" />
     <Content Include="Views\ASSAssetAcquisition\Upload.cshtml" />
     <Content Include="Views\ASSAssetAcquisition\Edit.cshtml" />
-    <Content Include="Views\ASSAssetAcquisition\_DisplayGrid.cshtml" />
     <Content Include="Views\HRMedicalCheckUp\CreateMedical.cshtml" />
     <Content Include="Views\HRMedicalCheckUp\Redirect.cshtml" />
     <Content Include="Views\HRMedicalCheckUp\EditMedical.cshtml" />
