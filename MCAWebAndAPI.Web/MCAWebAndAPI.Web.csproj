@@ -917,6 +917,16 @@
     <Content Include="Views\FINTaxExemptionData\_VAT.cshtml" />
     <Content Include="Views\HRAdjustmentDayOffBalance\CreateAdjustmentDayOffBalance.cshtml" />
     <Content Include="Views\HRAdjustmentDayOffBalance\EditAdjustmentDayOffBalance.cshtml" />
+    <Content Include="Views\FINTaxExemption\Create.cshtml" />
+    <Content Include="Views\FINTaxExemption\EditIncomeTax.cshtml" />
+    <Content Include="Views\FINTaxExemption\EditOtherTax.cshtml" />
+    <Content Include="Views\FINTaxExemption\EditVATTax.cshtml" />
+    <Content Include="Views\FINTaxExemption\_Income.cshtml" />
+    <Content Include="Views\FINTaxExemption\_Others.cshtml" />
+    <Content Include="Views\FINTaxExemption\_VAT.cshtml" />
+    <Content Include="Views\FINPettyCashSettlement\Create.cshtml" />
+    <Content Include="Views\ASSAssetDisposal\CreateAssetDisposal.cshtml" />
+    <Content Include="Views\ASSAssetDisposal\_AssetDisposalDetail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -928,6 +938,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\ASSAssetDisposalController.cs" />
     <Compile Include="Controllers\ASSAssetMasterController.cs" />
     <Compile Include="Controllers\ASSAssetAcquisitionController.cs" />
     <Compile Include="Controllers\ASSAssetCheckFormController.cs" />
@@ -955,9 +966,8 @@
     <Compile Include="Controllers\FINPettyCashSettlementController.cs" />
     <Compile Include="Controllers\FINRequisitionNoteController.cs" />
     <Compile Include="Controllers\FINSCAVoucherController.cs" />
-    <Compile Include="Controllers\FinSharedController.cs" />
     <Compile Include="Controllers\FINSPHLController.cs" />
-    <Compile Include="Controllers\FINTaxExemptionDataController.cs" />
+    <Compile Include="Controllers\FINTaxExemptionController.cs" />
     <Compile Include="Controllers\FINTaxReimbursementController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HRAdjustmentDayOffBalanceController.cs" />
