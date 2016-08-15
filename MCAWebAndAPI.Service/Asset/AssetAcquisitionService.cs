@@ -120,7 +120,7 @@ namespace MCAWebAndAPI.Service.Asset
             }
             else
             {
-                viewModel.PurchaseDate = Convert.ToDateTime(listItem["purchasedate"]);
+                viewModel.PurchaseDate = Convert.ToDateTime(listItem["purchasedate"]).AddDays(1);
             }
             //viewModel.Spesifications = Regex.Replace(listItem["Spesifications"].ToString(), "<.*?>", string.Empty);
             viewModel.PurchaseDescription = Regex.Replace(Convert.ToString(listItem["purchasedescription"]), "<.*?>", string.Empty);
@@ -284,7 +284,7 @@ namespace MCAWebAndAPI.Service.Asset
             columnValues.Add("pono", memoinfo["pono"]);
             if (viewmodel.PurchaseDate.HasValue)
             {
-                columnValues.Add("purchasedate", viewmodel.PurchaseDate);
+                columnValues.Add("purchasedate", Convert.ToDateTime(viewmodel.PurchaseDate).AddDays(1));
             }
             else
             {

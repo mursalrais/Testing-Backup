@@ -15,7 +15,7 @@ namespace MCAWebAndAPI.Service.Asset
 
         LocationMasterVM GetPopulatedModel(int ID, string SiteUrl);
 
-        LocationMasterVM GetHeader(int? ID);
+        LocationMasterVM GetHeader(int? ID, string SiteUrl);
 
         LocationMasterVM UpdateProvince();
 

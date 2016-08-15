@@ -47,7 +47,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             ViewBag.Action = "Edit";
 
-            var viewModel = _locationMasterService.GetHeader(ID);
+            var viewModel = _locationMasterService.GetHeader(ID, siteUrl);
 
             return View(viewModel);
         }

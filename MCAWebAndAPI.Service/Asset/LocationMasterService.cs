@@ -65,9 +65,23 @@ namespace MCAWebAndAPI.Service.Asset
             return SPConnector.GetLatestListItemID(SP_LOCATION_MAS_LISTNAME, _siteUrl);
         }
 
-        public LocationMasterVM GetHeader(int? ID)
+        public LocationMasterVM GetHeader(int? ID, string SiteUrl)
         {
-            throw new NotImplementedException();
+            var listItem = SPConnector.GetListItem(SP_LOCATION_MAS_LISTNAME, ID, _siteUrl);
+            var viewModel = new LocationMasterVM();
+
+            //viewModel.InterviewerUrl = _siteUrl + UrlResource.AssetMaster;
+            var siteHr = SiteUrl.Replace("/bo", "/hr");
+            viewModel.Province.Choices = GetChoicesFromListHR("Place Master", "Title", siteHr);
+            var getFromProvince = SPConnector.GetListItem("Province", Convert.ToInt32(listItem["Province"]));
+            viewModel.Province.Value = Convert.ToString(listItem["Title"]);
+            viewModel.OfficeName = Convert.ToString(listItem["Title"]);
+            viewModel.FloorName = Convert.ToInt32(listItem["Floor"]);
+            viewModel.RoomName = Convert.ToString(listItem["Room"]);
+            viewModel.Remarks = Convert.ToString(listItem["Remarks"]);
+            viewModel.ID = ID;
+
+            return viewModel;
         }
 
         public LocationMasterVM GetPopulatedModel(string SiteUrl)
