@@ -888,7 +888,6 @@
     <Content Include="Views\HRExitProcedure\_EditExitProcedureDataHR.cshtml" />
     <Content Include="Views\FINRequisitionNote\_General.cshtml" />
     <Content Include="Views\FINRequisitionNote\_ItemDetails.cshtml" />
-    <Content Include="Views\FINSCAVoucher\CreateSCAVoucher.cshtml" />
     <Content Include="Views\FINSCAVoucher\_EventBudgetItems.cshtml" />
     <Content Include="Views\HRPSAManagement\TestCalculateTwoMonths.cshtml" />
     <Content Include="Views\HRPayroll\DisplayPayrollWorksheetDrafts.cshtml" />
