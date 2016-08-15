@@ -40,7 +40,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
                 "Stop Award",
                 "Retention Payment",
                 "Overtime",
-                "Adjustment "};
+                "Adjustment"};
 
             return options.Select(e =>
                 new InGridComboBoxVM
@@ -115,19 +115,20 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
                 });
         }
 
-        /// <summary>
-        /// ddlProfessional
-        /// </summary>
-        [DisplayName("Name")]
-        [UIHint("AjaxComboBox")]
-        public AjaxComboBoxVM ddlProfessional { get; set; } = new AjaxComboBoxVM
+        public static AjaxComboBoxVM getprofDefaultValue(AjaxComboBoxVM model = null)
         {
-            ControllerName = "HRDataMaster",
-            ActionName = "GetProfessionals",
-            OnSelectEventName = "OnChangeProffesional",
-            ValueField = "ID",
-            TextField = "Desc1"
-        };
+            if (model == null)
+            {
+                return new AjaxComboBoxVM();
+            }
+            else
+            {
+                return model;
+            }
+        }
+
+        [UIHint("InGridAjaxComboBox")]
+        public AjaxComboBoxVM ddlProfessional { get; set; } = new AjaxComboBoxVM();
 
         /// <head>
         /// CompensatoryID
@@ -171,6 +172,17 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// 
         [DisplayName("Remarks")]
         public string remark { get; set; }
+
+
+        /// <summary>
+        /// CompensatoryDate
+        /// </summary>
+        /// 
+        //[Required]
+        //[DisplayName("Period")]
+        //[DataType(DataType.Date)]
+        //[UIHint("Date")]
+        //public DateTime? period { get; set; } = DateTime.Now;
 
     }
 }

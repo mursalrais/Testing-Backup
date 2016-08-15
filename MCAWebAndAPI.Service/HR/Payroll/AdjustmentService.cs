@@ -18,7 +18,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
         string _siteUrl;
         static Logger logger = LogManager.GetCurrentClassLogger();
 
-        const string SP_AJUDATA_LIST_NAME = "Ajustment";
+        const string SP_AJUDATA_LIST_NAME = "Adjustment";
         const string SP_PROMAS_LIST_NAME = "Professional Master";
 
         public void SetSiteUrl(string siteUrl = null)
@@ -49,14 +49,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
         {
             var caml = @"<View>  
                               <Query> 
-                            <Where>
-                              <Eq>
-                                 <FieldRef Name='adjustmentperiod' />
-                                 <Value IncludeTimeValue='TRUE' Type='DateTime'>" + period + @"</Value>
-                              </Eq>
-                            </Where>
                                 </Query> 
-                               <Query />
                             <ViewFields>
                                 <FieldRef Name='ID' />
                                 <FieldRef Name='ContentType' />
@@ -74,10 +67,16 @@ namespace MCAWebAndAPI.Service.HR.Payroll
 
             var adjustmentDetails = new List<AdjustmentDetailsVM>();
 
-            foreach (var item in SPConnector.GetList(SP_AJUDATA_LIST_NAME, _siteUrl, caml))
+            foreach (var item in SPConnector.GetList(SP_AJUDATA_LIST_NAME, _siteUrl, null))
             {
                 adjustmentDetails.Add(ConvertToAdjusDetailVM(item));
             }
+
+            //var periodDate = Convert.ToDateTime(period);
+
+            //var adjustmentList = from a in adjustmentDetails where a.period == periodDate select a;
+
+            //adjustmentDetails = adjustmentList.ToList();
 
             return adjustmentDetails;
         }
@@ -104,12 +103,9 @@ namespace MCAWebAndAPI.Service.HR.Payroll
                         Text = Convert.ToString(item["debitorcredit"]),
                     }),
 
-                ddlProfessional = AdjustmentDetailsVM.getpayTypeDefaultValue(
-                    new Model.ViewModel.Control.AjaxComboBoxVM
-                    {
-                        ValueField = Convert.ToString(item["professional_x003a_ID"]),
-                    }),
+                ddlProfessional = AdjustmentDetailsVM.getprofDefaultValue(FormatUtil.ConvertToInGridAjaxComboBox(item, "professional")),
 
+                //period = Convert.ToDateTime(item["adjustmentperiod"]),
                 remark = Convert.ToString(item["remarks"]),
                 Title = Convert.ToString(item["Title"]),
                 ID = Convert.ToInt32(item["ID"]),
@@ -125,7 +121,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
                     var cratedValueDetail = new Dictionary<string, object>();
 
                     cratedValueDetail.Add("Title", viewModel.Title);
-                    cratedValueDetail.Add("adjustmentperiod", period);
+                    cratedValueDetail.Add("adjustmentperiod", Convert.ToDateTime(period));
                     cratedValueDetail.Add("professional_x003a_ID", viewModel.profId);
                     cratedValueDetail.Add("adjustmenttype", viewModel.ajusmentType);
                     cratedValueDetail.Add("adjustmentamount", viewModel.amount);

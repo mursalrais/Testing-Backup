@@ -1,14 +1,13 @@
-﻿
-@using MCAWebAndAPI.Model.ViewModel.Form.HR
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
 @using MCAWebAndAPI.Web.Helpers
 
 @model AdjustmentDataVM
 
 @{
-    ViewBag.Title = "Input Compensatory HR";
+    ViewBag.Title = "Input Adjustment HR";
 }
 
-@using (Html.BeginForm("CreateAdjustmentData", "HRCompensatory", FormMethod.Post, new AjaxOptions
+@using (Html.BeginForm("CreateAdjustmentData", "HRAdjustment", FormMethod.Post, new AjaxOptions
 {
     OnBegin = "onBeginForm",
     OnComplete = "onCompleteForm",
@@ -18,8 +17,6 @@
 }))
 {
     <fieldset>
-        <input type="hidden" id="loadpage" value="0">
-
         <div class="row">
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.periodDate).Class("col-xs-2 control-label")
@@ -29,15 +26,15 @@
             </div>
         </div>
         
-        <legend>Compensatory list</legend>
-        <div id="compensatorylist" class="row"></div>
+        <legend>Adjustment list</legend>
+        <div id="adjustmentlist" class="row"></div>
 
         <button id="submithr-button" class="btn btn-primary" type="submit">
             <i class="fa fa-save"></i>
             Save
         </button>
 
-        <button id="cancel-button" class="btn btn-dannger" type="submit">
+        <button id="cancel-button" class="btn btn-dannger">
             <i class="fa fa-save"></i>
             cancel
         </button>
@@ -50,11 +47,8 @@
     <script>
         $(document).ready(function () {
 
-            var url = "/HRAdjustment/GetAdjustmentDetails?idComp=" + $("#cmpID").val();
-
-            $('#compensatorylist').load(url, function (response, status, xhr) {
-                if (status == "success") {
-                }
+            $("#periodDate").kendoDatePicker({
+                change: onChange
             });
 
             function OnChangeProffesional(e) {
@@ -67,7 +61,48 @@
                     hideLoading();
                 }
             };
+
+          
         });
+
+
+        function onChange() {
+
+            var url = "/HRAdjustment/GetAdjustmentDetails?period=" + $("#periodDate").val();
+
+            $('#adjustmentlist').load(url, function (response, status, xhr) {
+                if (status == "success") {
+                }
+            });
+        }
+
+        function getProfId(prof) {
+            if (prof != null) {
+                return prof.Value;
+            };
+        }
+
+        function getProjUnit(prof) {
+            if (prof != null) {
+                return prof.Project_Unit;
+            };
+        }
+
+        function getPosition(prof) {
+            if (prof != null) {
+                return prof.Position;
+            };
+        }
+
+        function GetDetailAdjustment(dataItem) {
+            var data = $("#AdjustmentDetails").data("kendoGrid").dataSource.data();
+            return data.indexOf(dataItem);
+        }
+
+        function onDataBoundAdjustmentDetails(e) {
+            var grid = $("#AdjustmentDetails").data("kendoGrid");
+            hideDeletedRowKendoDetail(grid);
+        }
 
     </script>
 }

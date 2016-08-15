@@ -11,55 +11,95 @@
     .Columns(columns =>
     {
         columns.Bound(p => p.ddlProfessional).ClientTemplate("#= ddlProfessional.Text #" +
-                          "<input type='hidden' name='AdjustmentDetails[#= GetDetailShortlist(data)#].ddlProfessional.Text' value='#= ddlProfessional.Text #' />"
+                          "<input type='hidden' name='AdjustmentDetails[#= GetDetailAdjustment(data)#].ddlProfessional.Value' value='#= ddlProfessional.Value #' />"
                         )
                         .EditorViewData(new
                         {
                             DataTextField = "Text",
                             DataValueField = "Value",
-                            ControllerName = "HRShortlist",
-                            ActionName = "GetddlProfessionalGrid"
+                            ControllerName = "HRDataMaster",
+                            ActionName = "GetProfessionalsAll"
                         });
 
+        columns.Bound(p => p.ddlProfessional).ClientTemplate("#=getProfId(ddlProfessional)#"
+                       ).Width(150);
+
+        columns.Bound(p => p.ddlProfessional).ClientTemplate("#=getProjUnit(ddlProfessional)#"
+                       ).Width(150);
+
+        columns.Bound(p => p.ddlProfessional).ClientTemplate("#=getPosition(ddlProfessional)#"
+                     ).Width(150);
+
         columns.Bound(p => p.ajusmentType).ClientTemplate("#= ajusmentType.Text #" +
-                        "<input type='hidden' name='AdjustmentDetails[#= GetDetailShortlist(data)#].ddlProfessional.Text' value='#= ddlProfessional.Text #' />"
+                        "<input type='hidden' name='AdjustmentDetails[#= GetDetailAdjustment(data)#].ajusmentType.Text' value='#= ajusmentType.Text #' />"
                       )
                       .EditorViewData(new
                       {
                           DataTextField = "Text",
                           DataValueField = "Value",
-                          ControllerName = "HRShortlist",
-                          ActionName = "GetddlProfessionalGrid"
+                          ControllerName = "HRAdjustment",
+                          ActionName = "GetAdjusmentGrid"
                       });
 
-        //columns.Bound(p => p.CmpActiv).ClientTemplate("#= CmpActiv #" +
-        //"<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].CmpActiv' value='#= CmpActiv #' />");
+        columns.Bound(p => p.amount).ClientTemplate("#= amount #" +
+        "<input type='hidden' name='AdjustmentDetails[#= GetDetailAdjustment(data)#].amount' value='#= amount #' />");
 
-        //columns.Bound(p => p.remarks).ClientTemplate("#= remarks #" +
-        //"<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].remarks' value='#= remarks #' />");
+        columns.Bound(p => p.currency).ClientTemplate("#= currency.Text #" +
+                      "<input type='hidden' name='AdjustmentDetails[#= GetDetailAdjustment(data)#].currency.Text' value='#= currency.Text #' />"
+                    )
+                    .EditorViewData(new
+                    {
+                        DataTextField = "Text",
+                        DataValueField = "Value",
+                        ControllerName = "HRAdjustment",
+                        ActionName = "GetCurrencyGrid"
+                    });
+
+        columns.Bound(p => p.payType).ClientTemplate("#= payType.Text #" +
+                  "<input type='hidden' name='AdjustmentDetails[#= GetDetailAdjustment(data)#].payType.Text' value='#= payType.Text #' />"
+                )
+        .EditorViewData(new
+        {
+            DataTextField = "Text",
+            DataValueField = "Value",
+            ControllerName = "HRAdjustment",
+            ActionName = "GetPayMethodGrid"
+        });
+
+        columns.Bound(p => p.remark).ClientTemplate("#= remark #" +
+        "<input type='hidden' name='AdjustmentDetails[#= GetDetailAdjustment(data)#].remark' value='#= remark #' />");
 
         columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
            .Click("onDeleteKendoDetail")).Width(100);
 
-        //columns.Bound(p => p.CmpID).Hidden().ClientTemplate("#= CmpID #" +
-        //"<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].CmpID' value='#= CmpID #' />"
-        // );
+        columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
+        "<input type='hidden' name='AdjustmentDetails[#= GetDetailAdjustment(data)#].ID' value='#= ID #' />"
+         );
 
         columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
-           "<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].EditMode' value='#= EditMode #' />"
+           "<input type='hidden' name='AdjustmentDetails[#= GetDetailAdjustment(data)#].EditMode' value='#= EditMode #' />"
          );
 
     })
     .Events(e =>
     {
-        e.Edit("onChange");
-        e.DataBound("onDataBoundDependentDetails");
+        e.Edit("onEditKendoDetail");
+        e.DataBound("onDataBoundAdjustmentDetails");
     })
     .DataSource(dataSource => dataSource.Ajax()
 
     .Model(model =>
     {
         model.Id(p => p.ID);
+
+        model.Field(m => m.ajusmentType).DefaultValue(AdjustmentDetailsVM.getAjusmentDefaultValue());
+
+        model.Field(m => m.currency).DefaultValue(AdjustmentDetailsVM.getCurrencyDefaultValue());
+
+        model.Field(m => m.payType).DefaultValue(AdjustmentDetailsVM.getpayTypeDefaultValue());
+
+        model.Field(m => m.ddlProfessional).DefaultValue(AdjustmentDetailsVM.getprofDefaultValue());
+
     })
     .ServerOperation(false)
     )

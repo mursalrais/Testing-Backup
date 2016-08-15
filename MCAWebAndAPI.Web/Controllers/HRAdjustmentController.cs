@@ -36,8 +36,6 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult InputAjustmentData (string siteurl = null, string period = null)
         {
-            var viewmodel = new AdjustmentDataVM();
-
             //mandatory: set site url
             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
@@ -48,10 +46,10 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
 
-            viewmodel = _service.GetAjusmentData(period);
+            var viewmodel = _service.GetAjusmentData(period);
 
 
-            return View();
+            return View(viewmodel);
         }
 
         [HttpPost]
@@ -61,6 +59,8 @@ namespace MCAWebAndAPI.Web.Controllers
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             string period = viewModel.periodDate;
+
+            var datetime = Convert.ToDateTime(period);
 
             try
             {
@@ -81,15 +81,71 @@ namespace MCAWebAndAPI.Web.Controllers
             var viewmodel = new AdjustmentDataVM();
 
             if (period == null)
-                return PartialView("_InputCompensantoryDetails", viewmodel.ajustmentDetails);
+                return PartialView("_InputAdjustmentDetails", viewmodel.ajustmentDetails);
 
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             viewmodel = _service.GetAjusmentData(period);
 
-            return PartialView("_InputCompensantoryDetails", viewmodel.ajustmentDetails);
+            return PartialView("_InputAdjustmentDetails", viewmodel.ajustmentDetails);
         }
 
+        public JsonResult GetAdjusmentGrid()
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            var positions = AdjustmentDetailsVM.getAjusmentTypeOptions();
+
+            return Json(positions.Select(e =>
+                new {
+                    Value = Convert.ToString(e.Value),
+                    Text = e.Text
+                }),
+                JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetPayMethodGrid()
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            var positions = AdjustmentDetailsVM.getPayTypeOptions();
+
+            return Json(positions.Select(e =>
+                new {
+                    Value = Convert.ToString(e.Value),
+                    Text = e.Text
+                }),
+                JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetCurrencyGrid()
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            var positions = AdjustmentDetailsVM.getCurrencyOptions();
+
+            return Json(positions.Select(e =>
+                new {
+                    Value = Convert.ToString(e.Value),
+                    Text = e.Text
+                }),
+                JsonRequestBehavior.AllowGet);
+        }
+
+        //private IEnumerable<AdjustmentDetailsVM> BindAdjustmentlistDateTime(FormCollection form, IEnumerable<AdjustmentDetailsVM> adjustDetails)
+        //{
+        //    var array = adjustDetails.ToArray();
+        //    for (int i = 0; i < array.Length; i++)
+        //    {
+        //        array[i].period = BindHelper.BindDateInGrid("AdjustmentDetails",
+        //            i, "CmpDate", form);
+
+        //    }
+        //    return array;
+        //}
     }
 }
