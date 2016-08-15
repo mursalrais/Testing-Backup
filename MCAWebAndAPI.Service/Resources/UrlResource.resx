@@ -275,4 +275,7 @@
   <data name="SCAVoucherDocumentByID" xml:space="preserve">
     <value>{0}/SCA%20Voucher%20Documents/Forms/AllItems.aspx?FilterField1=SCA_x0020_Voucher_x003a_ID&amp;FilterValue1={1}</value>
   </data>
+  <data name="LocationMaster" xml:space="preserve">
+    <value>/Lists/Location%20Master/AllItems.aspx</value>
+  </data>
 </root>
