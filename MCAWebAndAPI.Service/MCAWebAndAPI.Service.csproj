@@ -191,6 +191,8 @@
     <Compile Include="Finance\SPHLService.cs" />
     <Compile Include="Finance\TaxExemptionDataService.cs" />
     <Compile Include="Finance\TaxReimbursementService.cs" />
+    <Compile Include="HR\AdjustmentDayOffBalance\AdjustmentDayOffBalanceService.cs" />
+    <Compile Include="HR\AdjustmentDayOffBalance\IAdjustmentDayOffBalanceService.cs" />
     <Compile Include="HR\Common\ProfessionalService.cs" />
     <Compile Include="HR\Compensatory\HRCompensatoryService.cs" />
     <Compile Include="HR\Compensatory\IHRCompensatoryService.cs" />

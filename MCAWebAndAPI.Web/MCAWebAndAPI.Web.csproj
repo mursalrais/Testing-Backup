@@ -915,6 +915,8 @@
     <Content Include="Views\FINTaxExemptionData\_Income.cshtml" />
     <Content Include="Views\FINTaxExemptionData\_Others.cshtml" />
     <Content Include="Views\FINTaxExemptionData\_VAT.cshtml" />
+    <Content Include="Views\HRAdjustmentDayOffBalance\CreateAdjustmentDayOffBalance.cshtml" />
+    <Content Include="Views\HRAdjustmentDayOffBalance\EditAdjustmentDayOffBalance.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -958,6 +960,7 @@
     <Compile Include="Controllers\FINTaxExemptionDataController.cs" />
     <Compile Include="Controllers\FINTaxReimbursementController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\HRAdjustmentDayOffBalanceController.cs" />
     <Compile Include="Controllers\HRApplicationController.cs" />
     <Compile Include="Controllers\HRCompensatoryController.cs" />
     <Compile Include="Controllers\HRDataMasterController.cs" />
@@ -1084,7 +1087,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>False</UseIIS>
+          <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>15923</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
