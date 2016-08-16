@@ -4,18 +4,18 @@
 
 @model AssignmentofAssetVM
 
-@using (Ajax.BeginForm("Submit", "ASSAssignmentofAsset",
-                                                                                                                           FormMethod.Post,
-                                                                                                                           new AjaxOptions
-                                                                                                                           {
-                                                                                                                               OnBegin = "onBeginForm",
-                                                                                                                               OnComplete = "onCompleteForm",
-                                                                                                                               OnSuccess = "onSuccessFormEmbed",
-                                                                                                                               OnFailure = "onFailureForm"
-                                                                                                                           }, new { @class = "form-horizontal" }))
+@using (Ajax.BeginForm("SubmitAsset", "ASSAssignmentofAsset",
+                                                                                                                                                                           FormMethod.Post,
+                                                                                                                                                                           new AjaxOptions
+                                                                                                                                                                           {
+                                                                                                                                                                               OnBegin = "onBeginForm",
+                                                                                                                                                                               OnComplete = "onCompleteForm",
+                                                                                                                                                                               OnSuccess = "onSuccessFormEmbed",
+                                                                                                                                                                               OnFailure = "onFailureForm"
+                                                                                                                                                                           }, new { @class = "form-horizontal" }))
 
 {
-    <form class="form-horizontal" method="post" action="/ASSAssignmentofAsset/Submit" id="create-asset-acquisition-form">
+    <form class="form-horizontal" method="post" action="/ASSAssignmentofAsset/SubmitAsset" id="create-asset-acquisition-form">
         <fieldset>
             <legend>Form Asset Acquisition</legend>
             <div class="col-md-6">
@@ -63,24 +63,22 @@
                 </div>
             </div>
             <div>
-                @Html.Partial("_Details", Model.Details)
+                @*@Html.Partial("_Details", Model.Details)*@
             </div>
         </fieldset>
-
+        @*@Html.HiddenFor(m => m.ID)
+        @Html.HiddenFor(m => m.CancelURL)
+        @Html.HiddenFor(m => m.Vendor)
+        @Html.HiddenFor(m => m.PoNo)*@
         <div>
             <center>
-                <input class="k-button k-button-icontext k-grid-add" type="submit" value="Save" />
-                <input class="k-button k-button-icontext k-grid-add" ControlMode="New" id="gobackbutton1" />
-                <input class="k-button k-button-icontext k-grid-add" value="Cancel" onclick="return cancelButton()" />
+                <input class="k-button k-button-icontext k-grid-add" onclick="SimpenAsset()" type="submit" value="Save" />
+                @*<a href="@Model.CancelURL" target='_parent'>
+                    <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
+                </a>*@
             </center>
         </div>
 
     </form>
 }
 
-
-<script>
-    function cancelButton() {
-        alert(_spPageContextInfo.siteAbsoluteUrl);
-    }
-</script>
