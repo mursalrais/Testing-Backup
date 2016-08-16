@@ -47,6 +47,22 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 
         public string Driver { get; set; }
 
+        [Required]
+        [DisplayName("Currency")]
+        [UIHint("ComboBox")]
+        public CurrencyComboBoxVM Currency { get; set; } = new CurrencyComboBoxVM();
+
+        [Required]
+        [DisplayName("Reason of Payment")]
+        public string Reason { get; set; }
+
+        public string Fund { get; } = Shared.Fund;
+
+        [Required]
+        [DisplayName("WBS")]
+        [UIHint("ComboBox")]
+        public ComboBoxVM WBS { get; set; } = new ComboBoxVM();
+
 
     }
 }

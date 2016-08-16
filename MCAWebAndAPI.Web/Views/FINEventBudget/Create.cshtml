@@ -176,14 +176,13 @@
 
 
     $(document).ready(function () {
-
+        $("#hiddenProjectValue").val($("#Project_Value").val());
         $("#hdnEvenBudgetId").val("-1");
     });
 
     function onSelectProject(e) {
         var dataItem = this.dataItem(e.item);
-        ClearControl();
-        $("#hiddenProjectValue").val(dataItem.Value);
+        $("#hiddenProjectValue").val(dataItem);
     }
 
     function toggleEventBudgetComboBox(category) {
@@ -213,8 +212,8 @@
 
     function onSelectEventBudgetNo(e) {
         var dataItem = this.dataItem(e.item);
-
-        $("#hdnEvenBudgetId").val(dataItem.ID);
+        
+        $("#hdnEvenBudgetId").val(dataItem.Value);
 
         refreshItemDetailGrid();
     }
@@ -224,6 +223,11 @@
         $("#ItemDetails").data("kendoGrid").dataSource.read();
     }
 
+    function filterProject() {
+        return {
+            projectValue: $("#hiddenProjectValue").val()
+        };
+    }
 </script>
 }
 

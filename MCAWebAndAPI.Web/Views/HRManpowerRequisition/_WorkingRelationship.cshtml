@@ -1,4 +1,5 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@using MCAWebAndAPI.Model.ViewModel.Control
 @model IEnumerable<WorkingRelationshipDetailVM>
 
 @{ 
@@ -58,7 +59,7 @@
                    .Model(model =>
                    {
                        model.Id(p => p.ID);
-                       model.Field(m => m.PositionWorking).DefaultValue(WorkingRelationshipDetailVM.GetPositionDefaultValue());
+                       model.Field(m => m.PositionWorking).DefaultValue(AjaxComboBoxVM.GetDefaultValue());
                        model.Field(m => m.Relationship).DefaultValue(WorkingRelationshipDetailVM.GetRelationshipDefaultValue());
                        model.Field(m => m.Frequency).DefaultValue(WorkingRelationshipDetailVM.GetFrequencyDefaultValue());
                    })

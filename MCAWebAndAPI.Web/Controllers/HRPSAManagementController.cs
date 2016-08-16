@@ -503,7 +503,9 @@ namespace MCAWebAndAPI.Web.Controllers
                     e.DateOfNewPSAString,
                     e.PsaExpiryDateString,
                     e.ProjectOrUnit,
-                    e.Position
+                    e.Position,
+                    Text = e.PSANumber,
+                    Value = e.ID
                 }), JsonRequestBehavior.AllowGet);
         }
 

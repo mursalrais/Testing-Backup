@@ -1,0 +1,57 @@
+﻿@model MCAWebAndAPI.Model.ViewModel.Control.AjaxComboBoxVM
+
+@if (Model.OnSelectEventName.IsEmpty())
+{
+    @(Html.Kendo().DropDownListFor(m => m)
+              .DataTextField((string)ViewData["DataTextField"])
+              .DataValueField((string)ViewData["DataValueField"])
+              .Filter("contains")
+              .DataSource(source =>
+              {
+                  source.Read(read =>
+                  {
+                      read.Action(
+                          (string)ViewData["ActionName"],
+                          (string)ViewData["ControllerName"])
+                          .Data((string)ViewData["Filter"]);
+                  })
+                  .ServerFiltering(true);
+              })
+              .Enable(false)
+              .CascadeFrom((string)ViewData["Cascade"])
+              .AutoBind(false)
+              .HtmlAttributes(new
+              {
+                  @class = "form-control",
+                  style = "width:100%;"
+              })
+    )
+}
+else
+{
+    @(Html.Kendo().DropDownListFor(m => m)
+              .DataTextField((string)ViewData["DataTextField"])
+              .DataValueField((string)ViewData["DataValueField"])
+              .Filter("contains")
+              .DataSource(source =>
+              {
+                  source.Read(read =>
+                  {
+                      read.Action(
+                          (string)ViewData["ActionName"],
+                          (string)ViewData["ControllerName"])
+                          .Data((string)ViewData["Filter"]);
+                  })
+                  .ServerFiltering(true);
+              })
+              .Enable(false)
+              .AutoBind(false)
+              .HtmlAttributes(new
+              {
+                  @class = "form-control",
+                  style = "width:100%;"
+              })
+              .Events(e => e.Change(Model.OnSelectEventName))
+    )
+}
+@Html.ValidationMessageFor(model => model)

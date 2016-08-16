@@ -3,7 +3,6 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using Elmah;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 using MCAWebAndAPI.Service.Finance;
 using MCAWebAndAPI.Service.Resources;
@@ -22,7 +21,7 @@ namespace MCAWebAndAPI.Web.Controllers
         private const string IndexPage = "Index";
         private const string Error = "Error";
 
-        private const string SESSION_SITE_URL = "SiteUrl";
+        private const string Session_SiteUrl = "SiteUrl";
         IEventBudgetService service;
 
         public FINEventBudgetController()
@@ -36,10 +35,9 @@ namespace MCAWebAndAPI.Web.Controllers
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
 
             service.SetSiteUrl(siteUrl);
-            SessionManager.Set(SESSION_SITE_URL, siteUrl);
+            SessionManager.Set(Session_SiteUrl, siteUrl);
 
             var viewModel = service.Get(id);
-
             SetAdditionalSettingToViewModel(ref viewModel, true);
 
             return View(viewModel);
@@ -47,7 +45,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetGLMaster()
         {
-            var siteUrl = SessionManager.Get<string>(SESSION_SITE_URL);
+            var siteUrl = SessionManager.Get<string>(Session_SiteUrl);
             service.SetSiteUrl(siteUrl);
 
             var glMasters = FinService.Shared.GetGLMaster(siteUrl);
@@ -61,12 +59,12 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetEventBudgetList()
         {
-            service.SetSiteUrl(SessionManager.Get<string>(SESSION_SITE_URL));
+            service.SetSiteUrl(SessionManager.Get<string>(Session_SiteUrl));
 
             var eventBudgets = service.GetEventBudgetList().ToList();
 
             //insert first empty data
-            eventBudgets.Insert(0, new Model.ViewModel.Form.Finance.EventBudgetVM() { ID = 0, Title = "" });
+            eventBudgets.Insert(0, new EventBudgetVM() { ID = 0, Title = "" });
 
             return Json(eventBudgets.Select(e => new
             {
@@ -105,11 +103,10 @@ namespace MCAWebAndAPI.Web.Controllers
 
         private void SetAdditionalSettingToViewModel(ref EventBudgetVM viewModel, bool isCreate)
         {
-            //viewModel.Activity.ControllerName = "Activity";
-            //viewModel.Activity.ActionName = "GetActivities";
-            //viewModel.Activity.ValueField = "Value";
-            //viewModel.Activity.TextField = "Text";
-            //viewModel.Activity.OnSelectEventName = "onSelectActivity";
+            if (viewModel.Project.Choices.Count() > 0)
+            {
+                viewModel.Project.Value = ((string[])viewModel.Project.Choices)[0];
+            }
         }
     }
 }

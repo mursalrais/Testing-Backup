@@ -6,13 +6,13 @@ using MCAWebAndAPI.Web.Resources;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
-    public class VendorController : Controller
+    public class ActivityController : Controller
     {
         private const string SessionSiteUrl = "SiteUrl";
 
-        public JsonResult GetVendor()
+        public JsonResult GetActivities(string siteUrl)
         {
-            var siteUrl = SessionManager.Get<string>("SiteUrl") ?? ConfigResource.DefaultBOSiteUrl;
+            siteUrl = siteUrl ?? SessionManager.Get<string>("SiteUrl") ?? ConfigResource.DefaultBOSiteUrl;
 
             SessionManager.Set(SessionSiteUrl, siteUrl);
 
@@ -24,6 +24,5 @@ namespace MCAWebAndAPI.Web.Controllers
                 Text = e.VendorId + " - " + e.Name
             }), JsonRequestBehavior.AllowGet);
         }
-
     }
 }
