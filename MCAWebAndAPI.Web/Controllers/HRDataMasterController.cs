@@ -71,6 +71,28 @@ namespace MCAWebAndAPI.Web.Controllers
                 JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetProfessionalsManpower()
+        {
+            _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+
+            var professionals = GetFromExistingSession().ToList();
+            professionals.Add(new ProfessionalMaster { ID = 0, Name = "", Position = "" ,FirstMiddleName="1"});
+            professionals = professionals.OrderBy(e => e.FirstMiddleName).ToList();
+            return Json(professionals.Select(e =>
+                new {
+                    e.ID,
+                    e.Name,
+                    e.FirstMiddleName,
+                    e.Position,
+                    e.Status,
+                    e.OfficeEmail,
+                    e.Project_Unit,
+                    Desc = string.Format("{0}", e.Name),
+                    Desc1 = string.Format("{0} - {1}", e.Name, e.Position)
+                }),
+                JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult GetProfessional(int id)
         {
             _dataMasterService.SetSiteUrl(System.Web.HttpContext.Current.Session["SiteUrl"] as string);
