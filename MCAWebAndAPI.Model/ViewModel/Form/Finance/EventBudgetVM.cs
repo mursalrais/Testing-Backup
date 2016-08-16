@@ -76,15 +76,15 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         };
 
         [Required]
-        [UIHint("AjaxComboBox")]
+        [UIHint("AjaxCascadeComboBox")]
         public AjaxCascadeComboBoxVM Activity { get; set; } = new AjaxCascadeComboBoxVM()
         {
             ControllerName = "ComboBox",
-            ActionName = "GetActivities",
-            ValueField = "Value",
-            TextField = "Project",
+            ActionName = "GetActivitiesByProject",
+            ValueField = "ID",
+            TextField = "Title",
             Cascade = "Project_Value",
-            Filter = "Project_Value"
+            Filter = "filterProject"
         };
 
    

@@ -196,15 +196,15 @@
 
         };
         function checkGrid() {
-            var grid = $("#WorkingRelationshipDetails").data("kendoGrid").dataSource.data();
-            for (var i = 0; i < grid.length; i++) {
-                if (grid[i].EditMode == 0) {
-                    if ((grid[i].PositionWorking.Text == null)) {
-                        alert("Please complete the field on Working Relationship Detail");
-                        return false;
-                    }
-                }
-            }
+            //var grid = $("#WorkingRelationshipDetails").data("kendoGrid").dataSource.data();
+            //for (var i = 0; i < grid.length; i++) {
+            //    if (grid[i].EditMode == 0) {
+            //        if ((grid[i].PositionWorking.Text == null)) {
+            //            alert("Please complete the field on Working Relationship Detail");
+            //            return false;
+            //        }
+            //    }
+            //}
             return true;
         }
         $(document).ready(function () {

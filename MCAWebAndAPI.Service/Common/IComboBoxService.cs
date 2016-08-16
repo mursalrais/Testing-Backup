@@ -15,8 +15,8 @@ namespace MCAWebAndAPI.Service.Common
 
         IEnumerable<ProfessionalMaster> GetProfessionals();
 
-        IEnumerable<AjaxComboBoxVM> GetEventBudget();
+        IEnumerable<AjaxComboBoxVM> GetEventBudgets();
 
-        IEnumerable<AjaxComboBoxVM> GetSubActivity(int activityID);
+        IEnumerable<AjaxComboBoxVM> GetSubActivities(int activityID);
     }
 }

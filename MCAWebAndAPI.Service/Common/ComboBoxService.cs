@@ -17,6 +17,11 @@ namespace MCAWebAndAPI.Service.Common
         private const string SP_PROMAS_LIST_NAME = "Professional Master";
         private const string SP_EBUDGET_LIST_NAME = "Event Budget";
         private const string SP_SUB_ACTIVITY_LIST_NAME = "Sub Activity";
+        private const string FIELD_NAME_ID = "ID";
+        private const string FIELD_NAME_NO = "No";
+        private const string FIELD_NAME_TITLE = "Title";
+        private const string FIELD_NAME_LASTNAME = "lastname";
+        private const string FIELD_NAME_POSITION = "Position";
 
         public IEnumerable<ProfessionalMaster> GetProfessionals()
         {
@@ -29,7 +34,7 @@ namespace MCAWebAndAPI.Service.Common
             return models;
         }
 
-        public IEnumerable<AjaxComboBoxVM> GetEventBudget()
+        public IEnumerable<AjaxComboBoxVM> GetEventBudgets()
         {
             var models = new List<AjaxComboBoxVM>();
             foreach (var item in SPConnector.GetList(SP_EBUDGET_LIST_NAME, _siteUrl))
@@ -37,8 +42,8 @@ namespace MCAWebAndAPI.Service.Common
                 models.Add(
                     new AjaxComboBoxVM
                     {
-                        Value = Convert.ToInt32(item["ID"]),
-                        Text = Convert.ToString(item["No"]) + " - " + Convert.ToString(item["Project"])
+                        Value = Convert.ToInt32(item[FIELD_NAME_ID]),
+                        Text = Convert.ToString(item[FIELD_NAME_NO]) + " - " + Convert.ToString(item[FIELD_NAME_TITLE])
                     }
                 );
             }
@@ -46,18 +51,18 @@ namespace MCAWebAndAPI.Service.Common
             return models;
         }
 
-        public IEnumerable<AjaxComboBoxVM> GetSubActivity(int activityID)
+        public IEnumerable<AjaxComboBoxVM> GetSubActivities(int activityID)
         {
             var models = new List<AjaxComboBoxVM>();
-            var caml = @"<View><Query><Where><Eq><FieldRef Name='Activity' /><Value Type='Lookup'>" + activityID.ToString() + "</Value></Eq></Where></Query></View>";
+            var caml = @"<View><Query><Where><Eq><FieldRef Name='Activity_x003a_ID' /><Value Type='Lookup'>" + activityID.ToString() + "</Value></Eq></Where></Query></View>";
 
             foreach (var item in SPConnector.GetList(SP_SUB_ACTIVITY_LIST_NAME, _siteUrl, caml))
             {
                 models.Add(
                     new AjaxComboBoxVM
                     {
-                        Value = Convert.ToInt32(item["ID"]),
-                        Text = Convert.ToString(item["Title"])
+                        Value = Convert.ToInt32(item[FIELD_NAME_ID]),
+                        Text = Convert.ToString(item[FIELD_NAME_TITLE])
                     }
                 );
             }
@@ -69,16 +74,9 @@ namespace MCAWebAndAPI.Service.Common
         {
             return new ProfessionalMaster
             {
-                ID = Convert.ToInt32(item["ID"]),
-                FirstMiddleName = Convert.ToString(item["Title"]),
-                Name = Convert.ToString(item["Title"]) + " " + Convert.ToString(item["lastname"]),
-                Status = Convert.ToString(item["maritalstatus"]),
-                Position = item["Position"] == null ? string.Empty :
-                        Convert.ToString((item["Position"] as FieldLookupValue).LookupValue),
-                Project_Unit = Convert.ToString(item["Project_x002f_Unit"]),
-                OfficeEmail = Convert.ToString(item["officeemail"]),
-                PSANumber = Convert.ToString(item["PSAnumber"]),
-                JoinDateTemp = Convert.ToDateTime(item["Join_x0020_Date"]).ToLocalTime().ToShortDateString()
+                ID = Convert.ToInt32(item[FIELD_NAME_ID]),
+                Name = Convert.ToString(item[FIELD_NAME_TITLE]),
+                Position = item[FIELD_NAME_POSITION] == null ? string.Empty : item[FIELD_NAME_POSITION].ToString()
             };
         }
 

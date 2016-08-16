@@ -20,6 +20,8 @@ namespace MCAWebAndAPI.Service.Asset
         int? CreateHeader(AssetAcquisitionHeaderVM viewmodel);
         bool UpdateHeader(AssetAcquisitionHeaderVM viewmodel);
 
+        bool Syncronize(string SiteUrl);
+
         void CreateDetails(int? headerID, IEnumerable<AssetAcquisitionItemVM> items);
         void UpdateDetails(int? headerID, IEnumerable<AssetAcquisitionItemVM> items);
 

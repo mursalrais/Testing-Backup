@@ -8,6 +8,7 @@ using NLog;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
 using MCAWebAndAPI.Service.Resources;
+using System.Data;
 
 namespace MCAWebAndAPI.Service.Asset
 {
@@ -37,18 +38,18 @@ namespace MCAWebAndAPI.Service.Asset
                                <Where>
                                   <Eq>
                                      <FieldRef Name='Province' />
-                                     <Value Type='Text'>"+header.Province.Value+@"</Value>
+                                     <Value Type='Text'>" + header.Province.Value + @"</Value>
                                   </Eq>
                                </Where>
                             </Query>
                             <ViewFields />
                             <QueryOptions /></View>";
             var ProvinceInfo = SPConnector.GetList("Province", _siteUrl, camlProvinceInfo);
-            foreach(var prop in ProvinceInfo)
+            foreach (var prop in ProvinceInfo)
             {
                 columnValues.Add("Province", Convert.ToInt32(prop["ID"]));
             }
-            
+
             columnValues.Add("Title", header.OfficeName);
             columnValues.Add("Floor", header.FloorName);
             columnValues.Add("Room", header.RoomName);
@@ -73,7 +74,11 @@ namespace MCAWebAndAPI.Service.Asset
             //viewModel.InterviewerUrl = _siteUrl + UrlResource.AssetMaster;
             var siteHr = SiteUrl.Replace("/bo", "/hr");
             viewModel.Province.Choices = GetChoicesFromListHR("Place Master", "Title", siteHr);
-            var getFromProvince = SPConnector.GetListItem("Province", Convert.ToInt32(listItem["Province"]));
+            if ((listItem["Province"] as FieldLookupValue) != null)
+            {
+                viewModel.Province.Value = (listItem["Province"] as FieldLookupValue).LookupId.ToString();
+                viewModel.Province.Text = (listItem["Province"] as FieldLookupValue).LookupValue;
+            }
             viewModel.Province.Value = Convert.ToString(listItem["Title"]);
             viewModel.OfficeName = Convert.ToString(listItem["Title"]);
             viewModel.FloorName = Convert.ToInt32(listItem["Floor"]);
@@ -296,6 +301,33 @@ namespace MCAWebAndAPI.Service.Asset
         public LocationMasterVM GetPopulatedModel(int ID, string SiteUrl)
         {
             throw new NotImplementedException();
+        }
+
+        public int? MassUpload(string ListName, DataTable CSVDataTable, string SiteUrl = null)
+        {
+            SetSiteUrl(SiteUrl);
+            List<int> ids = new List<int>();
+            foreach(DataRow d in CSVDataTable.Rows)
+            {
+                //d.ItemArray[0].ToString()
+                var model = new LocationMasterVM();
+
+                model.Province.Value = d.ItemArray[0].ToString();
+                model.OfficeName = d.ItemArray[1].ToString();
+                model.FloorName = Convert.ToInt32(d.ItemArray[2]);
+                model.RoomName = d.ItemArray[3].ToString();
+                model.Remarks = Convert.ToString(d.ItemArray[4]);
+                try
+                {
+                    var id = CreateHeader(model, model.Province.Value, model.OfficeName, model.FloorName, model.RoomName);
+                    ids.Add(id);
+                }
+                catch (Exception ex)
+                {
+                    ids.Add(0);
+                }
+            }
+            return 1;
         }
     }
 }

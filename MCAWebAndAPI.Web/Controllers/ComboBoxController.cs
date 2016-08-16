@@ -25,29 +25,14 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetProfessionals()
         {
-            service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
-
-            var result = service.GetProfessionals().ToList();
-
-            return Json(result.Select(e =>
-                new {
-                    e.ID,
-                    e.Name,
-                    e.FirstMiddleName,
-                    e.Position,
-                    e.Status,
-                    e.OfficeEmail,
-                    e.Project_Unit,
-                    Desc = string.Format("{0} - {1}", e.Name, e.Position)
-                }),
-                JsonRequestBehavior.AllowGet);
+            return new HRDataMasterController().GetProfessionals();
         }
 
         public JsonResult GetEventBudgets()
         {
             service.SetSiteUrl(ConfigResource.DefaultBOSiteUrl);
 
-            var result = service.GetEventBudget().ToList();
+            var result = service.GetEventBudgets().ToList();
             result.Insert(0, new Model.ViewModel.Control.AjaxComboBoxVM() { Value = 0, Text = "" });
 
             return Json(result.Select(e =>
@@ -73,6 +58,20 @@ namespace MCAWebAndAPI.Web.Controllers
             }), JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetActivitiesByProject(string projectValue)
+        {
+            var siteUrl = SessionManager.Get<string>(SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
+
+            var activities = Service.Shared.ActivityService.GetActivities(siteUrl,projectValue);
+
+            return Json(activities.Select(e => new
+            {
+                e.ID,
+                e.Title,
+                Project = e.Project
+            }), JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult GetSubActivitiesByEventBudgetID(int? eventBudgetId)
         {
             int activityID = 0;
@@ -85,7 +84,7 @@ namespace MCAWebAndAPI.Web.Controllers
             if (eventBudgetId.HasValue && eventBudgetId.Value > 0)
             {
                 activityID = _scaVoucherService.GetActivityIDByEventBudgetID(Convert.ToInt32(eventBudgetId));
-                result = service.GetSubActivity(activityID).ToList();
+                result = service.GetSubActivities(activityID).ToList();
             }
 
             return Json(result.Select(e =>
@@ -106,7 +105,8 @@ namespace MCAWebAndAPI.Web.Controllers
             return Json(vendors.Select(e => new
             {
                 e.ID,
-                e.Title
+                e.Title,
+                Desc = e.ID == -1 ? string.Empty : string.Format("{0} - {1}", e.ID, e.Name)
             }), JsonRequestBehavior.AllowGet);
         }
         

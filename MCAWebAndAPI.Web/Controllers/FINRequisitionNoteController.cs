@@ -169,15 +169,15 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
 
                         itemRNDetail.ID = -1;
                         itemRNDetail.Activity = new Model.ViewModel.Control.AjaxComboBoxVM() { Value = Convert.ToInt32(eventbudget.Activity.Value), Text = eventbudget.Activity.Text };
-                        itemRNDetail.WBS = new Model.ViewModel.Control.AjaxComboBoxVM() { Value = null, Text = "" };
-                        itemRNDetail.GL = new Model.ViewModel.Control.AjaxComboBoxVM() { Value = null, Text = "" };
+                        itemRNDetail.WBS = new Model.ViewModel.Control.AjaxComboBoxVM() { Value = item.WBS.Value, Text = item.WBS.Text };
+                        itemRNDetail.GL = new Model.ViewModel.Control.AjaxComboBoxVM() { Value = item.GL.Value, Text = item.GL.Text };
                         itemRNDetail.Specification = item.Title;
                         itemRNDetail.Quantity = item.Quantity;
                         itemRNDetail.Price = item.UnitPrice.HasValue ? item.UnitPrice.Value : 0;
                         itemRNDetail.EditMode = (int)Model.Common.Item.Mode.CREATED;
                         itemRNDetail.IsFromEventBudget = true;
                         itemRNDetail.Frequency = item.Frequency;
-
+                        itemRNDetail.Total = item.Frequency * itemRNDetail.Price * itemRNDetail.Quantity;
                         details.Add(itemRNDetail);
                     }
                 }
@@ -211,11 +211,11 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             }), JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetWBSMaster()
+        public JsonResult GetWBSMaster(string activity=null)
         {
             _service.SetSiteUrl(SessionManager.Get<string>(SESSION_SITE_URL));
 
-            var wbsMasters = _service.GetWBSMaster();
+            var wbsMasters = _service.GetWBSMaster(activity);
 
             return Json(wbsMasters.Select(e => new
             {

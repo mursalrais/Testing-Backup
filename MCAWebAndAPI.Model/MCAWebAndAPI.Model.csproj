@@ -107,10 +107,6 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="TuesPechkin.Wkhtmltox.Win32, Version=0.12.2.1, Culture=neutral, processorArchitecture=x86">
-      <HintPath>..\packages\TuesPechkin.Wkhtmltox.Win32.0.12.2.1\lib\net20\TuesPechkin.Wkhtmltox.Win32.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\DateTimeExtensions.cs" />
@@ -130,15 +126,13 @@
     <Compile Include="ViewModel\Form\HR\AdjustmentDetailsVM.cs" />
     <Compile Include="ViewModel\Form\HR\DayOffRequestDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\AdjustmentDayOffBalanceVM.cs" />
+    <Compile Include="ViewModel\Form\HR\DayOffRequestDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\DayOffRequestVM.cs" />
     <Compile Include="HR\DataMaster\DependentMaster.cs" />
     <Compile Include="HR\DataMaster\MonthlyFeeMaster.cs" />
     <Compile Include="HR\DataMaster\PositionMaster.cs" />
     <Compile Include="HR\DataMaster\ProfessionalMaster.cs" />
     <Compile Include="HR\DataMaster\PSAMaster.cs" />
-    <Compile Include="obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
-    <Compile Include="obj\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
-    <Compile Include="obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
     <Compile Include="ProjectManagement\Common\Activity.cs" />
     <Compile Include="ProjectManagement\Common\Project.cs" />
     <Compile Include="ProjectManagement\Common\SubActivity.cs" />
@@ -215,8 +209,8 @@
     <Compile Include="ViewModel\Form\Finance\ActivityVM.cs" />
     <Compile Include="ViewModel\Form\Finance\EventBudgetItemVM.cs" />
     <Compile Include="ViewModel\Form\Finance\EventBudgetVM.cs" />
-    <Compile Include="ViewModel\Form\Finance\GLMasterVM.cs" />
     <Compile Include="ViewModel\Form\Finance\OutstandingAdvanceVM.cs" />
+    <Compile Include="ViewModel\Form\Finance\GLMasterVM.cs" />
     <Compile Include="ViewModel\Form\Finance\PettyCashPaymentVoucherVM.cs" />
     <Compile Include="ViewModel\Form\Finance\PettyCashReimbursementVM.cs" />
     <Compile Include="ViewModel\Form\Finance\PettyCashSettlementVM.cs" />
@@ -224,10 +218,14 @@
     <Compile Include="ViewModel\Form\Finance\SCAVoucherItemsVM.cs" />
     <Compile Include="ViewModel\Form\Finance\SCAVoucherVM.cs" />
     <Compile Include="ViewModel\Form\Finance\Shared.cs" />
+    <Compile Include="ViewModel\Form\Finance\TaxExemptionBaseVM.cs" />
+    <Compile Include="ViewModel\Form\Finance\TaxExemptionIncomeVM.cs" />
+    <Compile Include="ViewModel\Form\Finance\TaxExemptionOtherVM.cs" />
+    <Compile Include="ViewModel\Form\Finance\TaxExemptionVATVM.cs" />
+    <Compile Include="ViewModel\Form\Finance\TaxExemptionVM.cs" />
     <Compile Include="ViewModel\Form\Finance\SPHLVM.cs" />
-    <Compile Include="ViewModel\Form\Finance\RequisitionNoteVM.cs" />
-    <Compile Include="ViewModel\Form\Finance\TaxExemptionDataVM.cs" />
     <Compile Include="ViewModel\Form\Finance\TaxReimbursementVM.cs" />
+    <Compile Include="ViewModel\Form\Finance\RequisitionNoteVM.cs" />
     <Compile Include="ViewModel\Form\Finance\WBSMasterVM.cs" />
     <Compile Include="ViewModel\Form\HR\ApplicationDataVM.cs" />
     <Compile Include="ViewModel\Form\HR\ApplicationShortlistVM.cs" />
@@ -291,8 +289,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="BackOffice\" />
-    <Folder Include="bin\Release\" />
-    <Folder Include="obj\Debug\TempPE\" />
     <Folder Include="ViewModel\Grid\" />
   </ItemGroup>
   <ItemGroup>

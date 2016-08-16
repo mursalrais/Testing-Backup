@@ -32,14 +32,16 @@ namespace MCAWebAndAPI.Web.Controllers
         private const string PAIDTO_PROFESIONAL = "Professional";
         private const string PAIDTO_SELECTEVENTCHANGE = "onSelectPaidTo";
         private const string COMBOBOX_CONTROLLER = "ComboBox";
-        private const string ACTIONNAME_PROFESSIONAL = "GetProfessional";
-        private const string ACTIONNAME_VENDOR = "GetVendor";
-        private const string ACTIONNAME_WBSMASTER = "GetWBSMaster";
-        private const string ACTIONNAME_GLMASTER = "GetGLMaster";
+        private const string ACTIONNAME_PROFESSIONAL = "GetProfessionals";
+        private const string ACTIONNAME_VENDORS = "GetVendors";
+        private const string ACTIONNAME_WBSMASTERS = "GetWBSMasters";
+        private const string ACTIONNAME_GLMASTERS = "GetGLMasters";
         private const string FIELD_ID = "ID";
         private const string FIELD_TITLE = "Title";
         private const string FIELD_VALUE = "Value";
         private const string FIELD_TEXT = "Text";
+        private const string Field_Desc = "Desc";
+
         private const string DATA_NOT_EXISTS = "Data Does not exists!";
 
         private const string PRINT_PAGE_URL = "~/Views/FINPettyCashPaymentVoucher/Print.cshtml";
@@ -190,17 +192,17 @@ namespace MCAWebAndAPI.Web.Controllers
             viewModel.Professional.TextField = FIELD_TITLE;
 
             viewModel.Vendor.ControllerName = COMBOBOX_CONTROLLER;
-            viewModel.Vendor.ActionName = ACTIONNAME_VENDOR;
+            viewModel.Vendor.ActionName = ACTIONNAME_VENDORS;
             viewModel.Vendor.ValueField = FIELD_ID;
-            viewModel.Vendor.TextField = FIELD_TITLE;
+            viewModel.Vendor.TextField = Field_Desc;
 
             viewModel.WBS.ControllerName = COMBOBOX_CONTROLLER;
-            viewModel.WBS.ActionName = ACTIONNAME_WBSMASTER;
+            viewModel.WBS.ActionName = ACTIONNAME_WBSMASTERS;
             viewModel.WBS.ValueField = FIELD_VALUE;
             viewModel.WBS.TextField = FIELD_TEXT;
 
             viewModel.GL.ControllerName = COMBOBOX_CONTROLLER;
-            viewModel.GL.ActionName = ACTIONNAME_GLMASTER;
+            viewModel.GL.ActionName = ACTIONNAME_GLMASTERS;
             viewModel.GL.ValueField = FIELD_VALUE;
             viewModel.GL.TextField = FIELD_TEXT;
             

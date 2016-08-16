@@ -44,6 +44,30 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewModel);
         }
 
+        public ActionResult Sync(string siteUrl)
+        {
+            _assetAcquisitionService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            var viewModel = _assetAcquisitionService.GetPopulatedModel();
+            return View(viewModel);
+        }
+
+        public ActionResult Syncronize(string siteUrl)
+        {
+            siteUrl = SessionManager.Get<string>("SiteUrl");
+            _assetAcquisitionService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            try
+            {
+                var viewModel = _assetAcquisitionService.Syncronize(siteUrl);
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAcquisition);
+        }
 
         public ActionResult Edit(int ID, string siteUrl)
         {

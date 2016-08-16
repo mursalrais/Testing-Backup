@@ -139,6 +139,8 @@ namespace MCAWebAndAPI.Web.Controllers
             {
                 array[i].LastWorkingDay = BindHelper.BindDateInGrid("OrganizationalDetails",
                     i, "LastWorkingDay", form);
+                array[i].StartDate = BindHelper.BindDateInGrid("OrganizationalDetails",
+                    i, "StartDate", form);
             }
             return array;
         }
