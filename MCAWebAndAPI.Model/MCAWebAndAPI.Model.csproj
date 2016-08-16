@@ -122,6 +122,9 @@
     <Compile Include="ViewModel\Form\Asset\AssetTransferHeaderVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetTransferItemVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetTransferVM.cs" />
+    <Compile Include="ViewModel\Form\HR\AdjustmentDataVM.cs" />
+    <Compile Include="ViewModel\Form\HR\AdjustmentDetailsVM.cs" />
+    <Compile Include="ViewModel\Form\HR\DayOffRequestDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\AdjustmentDayOffBalanceVM.cs" />
     <Compile Include="ViewModel\Form\HR\DayOffRequestDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\DayOffRequestVM.cs" />
