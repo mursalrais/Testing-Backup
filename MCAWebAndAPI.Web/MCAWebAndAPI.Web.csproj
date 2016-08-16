@@ -933,6 +933,10 @@
     <Content Include="Views\ASSAssetTransfer\_AssetTransferDetail.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DropDown.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\AjaxCascadeComboBox.cshtml" />
+    <Content Include="Views\ASSAssetAcquisition\Index.cshtml" />
+    <Content Include="Views\ASSAssetAcquisition\Sync.cshtml" />
+    <Content Include="Views\ASSAssetAcquisition\View.cshtml" />
+    <Content Include="Views\ASSAssetAcquisition\_DetailsView.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
