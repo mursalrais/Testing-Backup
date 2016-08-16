@@ -89,6 +89,7 @@ namespace MCAWebAndAPI.Web.Controllers
                     {
                         viewModel.StatusForm = "Draft";
                     }
+                    Response.TrySkipIisCustomErrors = true;
                     Response.StatusCode = (int)HttpStatusCode.BadRequest;
                     return JsonHelper.GenerateJsonErrorResponse("Weight must be total 100%");
                 }
@@ -103,6 +104,7 @@ namespace MCAWebAndAPI.Web.Controllers
                     {
                         viewModel.StatusForm = "Draft";
                     }
+                    Response.TrySkipIisCustomErrors = true;
                     Response.StatusCode = (int)HttpStatusCode.BadRequest;
                     return JsonHelper.GenerateJsonErrorResponse("Output is Required");
                 }
