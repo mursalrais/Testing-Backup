@@ -41,6 +41,7 @@ namespace MCAWebAndAPI.Web.Controllers
             var viewModel = _hRPerformancePlanService.GetPopulatedModel(requestor);
             viewModel.Requestor = requestor;
             viewModel.ID = ID;
+            viewModel.TypeForm = "Professional";
             ViewBag.Action = "CreatePerformancePlan";
 
             // Used for Workflow Router
