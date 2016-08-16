@@ -42,6 +42,10 @@
       <HintPath>..\packages\CsvHelper.2.14.2\lib\net45\CsvHelper.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="MCAWebAndAPI.Model, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\MCAWebAndAPI.Model\bin\Debug\MCAWebAndAPI.Model.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CodeAnalysis, Version=1.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeAnalysis.Common.1.3.2\lib\net45\Microsoft.CodeAnalysis.dll</HintPath>
       <Private>True</Private>
@@ -70,12 +74,8 @@
       <HintPath>..\packages\Microsoft.CodeAnalysis.Workspaces.Common.1.3.2\lib\net45\Microsoft.CodeAnalysis.Workspaces.Desktop.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.SharePoint.Client, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Sharepoint.1.0.1\lib\net40\Microsoft.SharePoint.Client.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.SharePoint.Client.Runtime, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Sharepoint.1.0.1\lib\net40\Microsoft.SharePoint.Client.Runtime.dll</HintPath>
-    </Reference>
+    <Reference Include="Microsoft.SharePoint.Client, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.SharePoint.Client.Runtime, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL" />
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.4.4.0-beta5\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
@@ -208,7 +208,9 @@
     <Compile Include="HR\Leave\IDayOffService.cs" />
     <Compile Include="HR\MedicalCheckUp\IMedicalCheckUpService.cs" />
     <Compile Include="HR\MedicalCheckUp\MedicalCheckUpService.cs" />
+    <Compile Include="HR\Payroll\AdjustmentService.cs" />
     <Compile Include="HR\Payroll\FeeSlipService.cs" />
+    <Compile Include="HR\Payroll\IAdjustmentService.cs" />
     <Compile Include="HR\Payroll\IFeeSlipService.cs" />
     <Compile Include="HR\Recruitment\ExitProcedureService.cs" />
     <Compile Include="HR\Recruitment\HRInterviewService.cs" />
@@ -319,12 +321,6 @@
       <CustomToolNamespace>MCAWebAndAPI.Service.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MCAWebAndAPI.Model\MCAWebAndAPI.Model.csproj">
-      <Project>{0b0761cd-8a08-4527-b895-a26c36224046}</Project>
-      <Name>MCAWebAndAPI.Model</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

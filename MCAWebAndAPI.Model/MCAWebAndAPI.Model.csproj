@@ -122,7 +122,11 @@
     <Compile Include="ViewModel\Form\Asset\AssetTransferHeaderVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetTransferItemVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetTransferVM.cs" />
+    <Compile Include="ViewModel\Form\Common\ProfessionalVM.cs" />
+    <Compile Include="ViewModel\Form\Finance\WBSMasterVM.cs" />
+    <Compile Include="ViewModel\Form\HR\AdjustmentDataVM.cs" />
     <Compile Include="ViewModel\Form\HR\AdjustmentDayOffBalanceVM.cs" />
+    <Compile Include="ViewModel\Form\HR\AdjustmentDetailsVM.cs" />
     <Compile Include="ViewModel\Form\HR\DayOffRequestDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\DayOffRequestVM.cs" />
     <Compile Include="HR\DataMaster\DependentMaster.cs" />
@@ -223,7 +227,6 @@
     <Compile Include="ViewModel\Form\Finance\SPHLVM.cs" />
     <Compile Include="ViewModel\Form\Finance\TaxReimbursementVM.cs" />
     <Compile Include="ViewModel\Form\Finance\RequisitionNoteVM.cs" />
-    <Compile Include="ViewModel\Form\Finance\WBSMasterVM.cs" />
     <Compile Include="ViewModel\Form\HR\ApplicationDataVM.cs" />
     <Compile Include="ViewModel\Form\HR\ApplicationShortlistVM.cs" />
     <Compile Include="ViewModel\Form\HR\CalendarEventVM.cs" />

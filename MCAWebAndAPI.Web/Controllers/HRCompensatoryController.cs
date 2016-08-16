@@ -170,6 +170,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.Compensatory);
         }
+
         [HttpPost]
         public async Task<ActionResult> CreateCompensatoryData(FormCollection form, CompensatoryVM viewModel)
         {

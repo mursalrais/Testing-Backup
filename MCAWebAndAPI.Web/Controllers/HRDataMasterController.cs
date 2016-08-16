@@ -373,5 +373,29 @@ namespace MCAWebAndAPI.Web.Controllers
                 ), JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetProfessionalsAll()
+        {
+            _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+
+            var professional = GetFromExistingSession();
+
+            return Json(professional.Select(e =>
+                new {
+                    Value = Convert.ToString(e.ID),
+                    Text = e.Name,
+                    FirstMiddleName =e.FirstMiddleName,
+                    Position = e.Position,
+                    Status = e.Status,
+                    Project_Unit = e.Project_Unit,
+                    PositionId = e.PositionId,
+                    PSANumber = e.PSANumber,
+                    JoinDate = e.JoinDate,
+                    OfficeEmail = e.OfficeEmail,
+                    PersonalMail = e.PersonalMail,
+                    JoinDateTemp = e.JoinDateTemp,
+                    InsuranceAccountNumber = e.InsuranceAccountNumber
+                }),
+                JsonRequestBehavior.AllowGet);
+        }
     }
 }
