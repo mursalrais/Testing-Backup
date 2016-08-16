@@ -13,28 +13,13 @@ Wireframe FIN10: Petty Cash Voucher
 
 }
 
-@*@using (Ajax.BeginForm("Create", "FINPettyCashPaymentVoucher",
-        FormMethod.Post,
-        new AjaxOptions
-        {
-            OnBegin = "onBeginForm",
-            OnComplete = "onCompleteForm",
-            OnSuccess = "onSuccessFormEmbed",
-            OnFailure = "onFailureForm"
-        },
-        new
-        {
-            @class = "form-horizontal",
-            enctype = "multipart/form-data"
-        }))
-
-{*@
-@using (Html.BeginForm("Create", "FINPettyCashPaymentVoucher", FormMethod.Post,
-                                                    new
-                                                    {
-                                                        @class = "form-horizontal",
-                                                        enctype = "multipart/form-data"
-                                                    }))
+@using (Html.BeginForm("Create", "FINPettyCashPaymentVoucher", 
+    FormMethod.Post,
+    new
+    {
+        @class = "form-horizontal",
+        enctype = "multipart/form-data"
+    }))
 {
 
     <fieldset>

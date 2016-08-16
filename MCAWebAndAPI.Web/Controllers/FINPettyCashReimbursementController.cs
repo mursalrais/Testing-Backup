@@ -39,11 +39,11 @@ namespace MCAWebAndAPI.Web.Controllers
             viewModel.PaidTo = new PaidToComboboxVM();
            
             viewModel.PaidTo.OnSelectEventName = "onSelectPaidTo";
-
+            
             viewModel.Vendor = new AjaxCascadeComboBoxVM
             {
-                ControllerName = "FINPettyCashReimbursement",
-                ActionName = "GetVendor",
+                ControllerName = "FINPettyCashReimbursement", 
+                ActionName = "GetVendors",
                 ValueField = "ID",
                 TextField = "Title"
             };

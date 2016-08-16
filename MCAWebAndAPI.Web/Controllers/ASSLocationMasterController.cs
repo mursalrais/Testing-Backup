@@ -45,7 +45,7 @@ namespace MCAWebAndAPI.Web.Controllers
             _locationMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
-            ViewBag.Action = "Edit";
+            ViewBag.Action = "Update";
 
             var viewModel = _locationMasterService.GetHeader(ID, siteUrl);
 
@@ -74,7 +74,30 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.MonthlyFee);
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.LocationMaster);
+        }
+
+        public ActionResult Update(FormCollection form, LocationMasterVM viewModel)
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _locationMasterService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            try
+            {
+                bool isExist = _locationMasterService.UpdateHeader(viewModel, viewModel.Province.Text, viewModel.OfficeName, viewModel.FloorName, viewModel.RoomName);
+                if (isExist == false)
+                {
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    return JsonHelper.GenerateJsonErrorResponse("This Location is Already Exist");
+                }
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.LocationMaster);
         }
 
         public JsonResult GetLocationMaster()
@@ -120,7 +143,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.MonthlyFee);
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.LocationMaster);
         }
 
         [HttpPost]
@@ -139,7 +162,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.MonthlyFee);
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.LocationMaster);
         }
     }
 }

@@ -13,6 +13,7 @@ namespace MCAWebAndAPI.Service.Shared
     {
         private const string ListName = "Activity";
 
+        private const string FieldName_ID = "ID";
         private const string FieldName_Name = "Title";
         private const string FieldName_Project = "Project";    
 
@@ -32,9 +33,25 @@ namespace MCAWebAndAPI.Service.Shared
             return activities;
         }
 
+        public static IEnumerable<ActivityVM> GetActivities(string siteUrl, string projectValue)
+        {
+            var activities = new List<ActivityVM>();
+
+            if (!string.IsNullOrWhiteSpace(projectValue))
+            {
+                var caml = @"<View><Query><Where><Eq><FieldRef Name='Project' /><Value Type='Choice'>" + projectValue + "</Value></Eq></Where></Query></View>";
+                foreach (var item in SPConnector.GetList(ListName, siteUrl, caml))
+                {
+                    activities.Add(ConvertToActivityModel(item));
+                }
+            }
+            return activities;
+        }
+
         private static ActivityVM ConvertToActivityModel(ListItem item)
         {
             ActivityVM toReturn = new ActivityVM();
+            toReturn.ID = Convert.ToInt32(item[FieldName_ID]);
             toReturn.Title = Convert.ToString(item[FieldName_Name]);
             toReturn.Project.Text = Convert.ToString(item[FieldName_Project]);
 

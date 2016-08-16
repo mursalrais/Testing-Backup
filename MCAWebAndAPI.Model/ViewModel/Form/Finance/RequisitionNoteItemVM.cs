@@ -11,7 +11,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 {
     public class RequisitionNoteItemVM: Item
     {
-        [UIHint("InGridAjaxComboBox")]
+        
+        [UIHint("InGridAjaxCascadeNoPrimitiveValue")]
         [Required]
         public AjaxComboBoxVM Activity { get; set; } = new AjaxComboBoxVM();
 

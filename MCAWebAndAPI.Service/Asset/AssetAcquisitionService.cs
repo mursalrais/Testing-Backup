@@ -284,7 +284,7 @@ namespace MCAWebAndAPI.Service.Asset
             columnValues.Add("pono", memoinfo["pono"]);
             if (viewmodel.PurchaseDate.HasValue)
             {
-                columnValues.Add("purchasedate", Convert.ToDateTime(viewmodel.PurchaseDate).AddDays(1));
+                columnValues.Add("purchasedate", Convert.ToDateTime(viewmodel.PurchaseDate));
             }
             else
             {
@@ -517,6 +517,36 @@ namespace MCAWebAndAPI.Service.Asset
             }
             
             return viewmodel;
+        }
+
+        public bool Syncronize(string SiteUrl)
+        {
+            var lists = SPConnector.GetList(SP_ACC_MEMO_LIST_NAME, SiteUrl);
+            foreach(var l in lists)
+            {
+                var caml = @"<View><Query>
+                            <Where>
+                                <Eq>
+                                    <FieldRef Name='acceptancememono' />
+                                    <Value Type='Lookup'>"+l["Title"] +@"</Value> 
+                                </Eq>
+                            </Where>
+                            </Query>
+                            <ViewFields />
+                            <QueryOptions /></View>";
+                var getAsset = SPConnector.GetList(SP_ASSACQ_LIST_NAME, SiteUrl, caml);
+                foreach(var ass in getAsset)
+                {
+                    var model = new Dictionary<string, object>();
+                    model.Add("vendorname", Convert.ToString(l["vendorname"]));
+                    model.Add("vendorid", Convert.ToString(l["vendorid"]));
+                    model.Add("pono", Convert.ToString(l["pono"]));
+
+                    SPConnector.UpdateListItem(SP_ASSACQ_LIST_NAME, Convert.ToInt32(ass["ID"]), model, SiteUrl);
+                }                
+            }
+
+            return true;
         }
     }
 }

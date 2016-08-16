@@ -5,14 +5,14 @@
 @model AssetAcquisitionHeaderVM
 
 @using (Ajax.BeginForm("Submit", "ASSAssetAcquisition",
-                                                                                                                           FormMethod.Post,
-                                                                                                                           new AjaxOptions
-                                                                                                                           {
-                                                                                                                               OnBegin = "onBeginForm",
-                                                                                                                               OnComplete = "onCompleteForm",
-                                                                                                                               OnSuccess = "onSuccessFormEmbed",
-                                                                                                                               OnFailure = "onFailureForm"
-                                                                                                                           }, new { @class = "form-horizontal" }))
+                                                                                                                                                               FormMethod.Post,
+                                                                                                                                                               new AjaxOptions
+                                                                                                                                                               {
+                                                                                                                                                                   OnBegin = "onBeginForm",
+                                                                                                                                                                   OnComplete = "onCompleteForm",
+                                                                                                                                                                   OnSuccess = "onSuccessFormEmbed",
+                                                                                                                                                                   OnFailure = "onFailureForm"
+                                                                                                                                                               }, new { @class = "form-horizontal" }))
 
 {
     <form class="form-horizontal" method="post" action="/ASSAssetAcquisition/Submit" id="create-asset-acquisition-form">
@@ -36,14 +36,14 @@
                     @Html.Bootstrap().LabelFor(m => m.Vendor).Class("col-md-4 control-label")
                     <div class="col-md-8">
                         @*@Html.DisplayFor(m => m.Vendor)*@
-                        <input type="text" name="Vendor" disabled value="@Model.Vendor" id="Vendor" style="width: 100%;"/>
+                        <input type="text" name="Vendor" disabled value="@Model.Vendor" id="Vendor" style="width: 100%;" />
                     </div>
                 </div>
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.PoNo).Class("col-md-4 control-label")
                     <div class="col-md-8">
                         @*@Html.DisplayFor(m => m.PoNo)*@
-                        <input type="text" name="PoNo" value="@Model.PoNo" disabled id="PoNo" style="width: 100%;" />
+                        <input type="text" name="PoNo" disabled value="@Model.PoNo" id="PoNo" style="width: 100%;" />
                     </div>
                 </div>
             </div>
@@ -58,7 +58,7 @@
                     @Html.Bootstrap().LabelFor(m => m.PurchaseDescription).Class("col-md-4 control-label")
                     <div class="col-md-8">
                         @*@Html.EditorFor(m => m.PurchaseDescription)*@
-                        <input type="text" name="PurchaseDescription" id="PurchaseDescription" style="width: 100%;" />
+                        <input type="text" name="PurchaseDescription" value="@Model.PurchaseDescription" id="PurchaseDescription" style="width: 100%;" />
                     </div>
                 </div>
             </div>
@@ -85,20 +85,15 @@
 
 <script>
     $(document).ready(function () {
-        //alert("ID : " + $("#ID_Value").text());
-        $("#AccpMemo_Value").data("kendoDropDownList").value("");
-    })
+        //alert("ID : " + $("#ID").val());
 
-    function SimpenAsset() {
-        if(@Model.AccpMemo.Value == null)
-        {
-            alert("Acceptane Memo is Required");
-        }
-        if(@Model.Details.Count() == 0)
-        {
-            alert("Details cannot Empty");
-        }
-    }
+        //if ($("#ID").val() == null) {
+        //    $("#AccpMemo_Value").data("kendoDropDownList").value("");
+        //}
+        //else {
+        //    //$("#AccpMemo_Value").data("kendoDropDownList").value("");
+        //}
+    })
 
     function onSelectedAcceptanceMemo(e) {
         var res = this.dataItem(e.item).split("-")

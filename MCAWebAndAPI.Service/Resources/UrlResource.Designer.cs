@@ -187,6 +187,15 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0}/Lists/OutstandingAdvance/AllItems.aspx.
+        /// </summary>
+        public static string FINOutstandingAdvance {
+            get {
+                return ResourceManager.GetString("FINOutstandingAdvance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0}/Lists/SPHL%20Data/AllItems.aspx.
         /// </summary>
         public static string FINSPHL {
@@ -250,6 +259,15 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to /Lists/Location%20Master/AllItems.aspx.
+        /// </summary>
+        public static string LocationMaster {
+            get {
+                return ResourceManager.GetString("LocationMaster", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0}/Manpower%20Requisition%20Documents/Forms/AllItems.aspx#InplviewHash1ad3b518-3da3-44cd-afac-6c686d40800e=FilterField1%3Dmanpowerrequestid-FilterValue1%3D{1}.
         /// </summary>
         public static string ManpowerDocumentByID {
@@ -300,15 +318,6 @@ namespace MCAWebAndAPI.Service.Resources {
         public static string PettyCashPaymentVoucher {
             get {
                 return ResourceManager.GetString("PettyCashPaymentVoucher", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Lists/Petty%20Cash%20Payment%20Voucher/AllItems.aspx.
-        /// </summary>
-        public static string PettyCashPaymentVoucher1 {
-            get {
-                return ResourceManager.GetString("PettyCashPaymentVoucher1", resourceCulture);
             }
         }
         

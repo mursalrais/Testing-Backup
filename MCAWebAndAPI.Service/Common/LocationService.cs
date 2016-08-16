@@ -23,7 +23,6 @@ namespace MCAWebAndAPI.Service.Common
             </View>";
 
             var locations = new List<Location>();
-            locations.Add(new Location { ID = 0, Title = "" });
             foreach (var item in SPConnector.GetList(SP_LOCATION_LIST_NAME, _siteUrl, caml))
             {
                 locations.Add(ConvertToLocationModel(item));

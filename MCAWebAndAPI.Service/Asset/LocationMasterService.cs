@@ -73,7 +73,11 @@ namespace MCAWebAndAPI.Service.Asset
             //viewModel.InterviewerUrl = _siteUrl + UrlResource.AssetMaster;
             var siteHr = SiteUrl.Replace("/bo", "/hr");
             viewModel.Province.Choices = GetChoicesFromListHR("Place Master", "Title", siteHr);
-            var getFromProvince = SPConnector.GetListItem("Province", Convert.ToInt32(listItem["Province"]));
+            if ((listItem["Province"] as FieldLookupValue) != null)
+            {
+                viewModel.Province.Value = (listItem["Province"] as FieldLookupValue).LookupId.ToString();
+                viewModel.Province.Text = (listItem["Province"] as FieldLookupValue).LookupValue;
+            }
             viewModel.Province.Value = Convert.ToString(listItem["Title"]);
             viewModel.OfficeName = Convert.ToString(listItem["Title"]);
             viewModel.FloorName = Convert.ToInt32(listItem["Floor"]);

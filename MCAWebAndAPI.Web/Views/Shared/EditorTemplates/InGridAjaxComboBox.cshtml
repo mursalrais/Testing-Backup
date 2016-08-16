@@ -6,7 +6,7 @@
     .DataTextField((string)ViewData["DataTextField"])
     .DataValueField((string)ViewData["DataValueField"])
     .DataSource(source => source.Read(read => read.Action((string)ViewData["ActionName"],
-    (string)ViewData["ControllerName"])))
+    (string)ViewData["ControllerName"]).Data((string)ViewData["Filter"])))
     .HtmlAttributes(new
     {
         @class = "form-control",
@@ -20,7 +20,7 @@ else
     .DataTextField((string)ViewData["DataTextField"])
     .DataValueField((string)ViewData["DataValueField"])
     .DataSource(source => source.Read(read => read.Action((string)ViewData["ActionName"],
-    (string)ViewData["ControllerName"])))
+    (string)ViewData["ControllerName"]).Data((string)ViewData["Filter"])))
     .Text(Model.Text)
     .Value(Model.Value + string.Empty)
     .HtmlAttributes(new

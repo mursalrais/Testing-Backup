@@ -20,9 +20,8 @@
                            DataValueField = "Value",
                            ControllerName = "FINRequisitionNote",
                            ActionName = "GetActivity",
-                           Filter = "filterProject"
-
-
+                           Filter = "filterProject",
+                           Cascade= "Project_Value"
                        })
                .Width("15%");
 
@@ -149,9 +148,11 @@
         return data;
     }
 
-    function filterWBS(dataitem) {
+   
+    function filterWBS() {
+        var activityId = $('#WBS').closest('td').prev('td')[0].childNodes[2].value;
         return {
-            activity: dataitem.activity.value
+            activity: activityId
         };
     }
 
