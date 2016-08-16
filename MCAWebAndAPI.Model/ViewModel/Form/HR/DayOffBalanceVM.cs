@@ -16,7 +16,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// Title
         /// </summary>
         [DisplayName("Day-Off Type")]
-        [UIHint("Combobox")]
+        [UIHint("InGridComboBox")]
         public InGridComboBoxVM DayOffType { get; set; } = new InGridComboBoxVM();
 
         public static IEnumerable<InGridComboBoxVM> GetDayOffTypeOptions()
@@ -66,7 +66,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// uom
         /// </summary>
-        [UIHint("Combobox")]
+        [UIHint("InGridComboBox")]
         public InGridComboBoxVM Unit { get; set; } = new InGridComboBoxVM();
 
         public static IEnumerable<InGridComboBoxVM> GetUnitOptions()
@@ -74,8 +74,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             var index = 0;
             var options = new string[]
             {
-                "Day",
-                "Month"
+                "Days",
+                "Months"
             };
 
             return options.Select(e =>
@@ -161,25 +161,25 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// dayoffbrought
         /// </summary>
-        [UIHint("Combobox")]
+        [UIHint("InGridComboBox")]
         public InGridComboBoxVM DayOffBroughtChoices { get; set; } = new InGridComboBoxVM();
 
         /// <summary>
         /// peryear
         /// </summary>
-        [UIHint("Combobox")]
+        [UIHint("InGridComboBox")]
         public InGridComboBoxVM PerYear { get; set; } = new InGridComboBoxVM();
 
         /// <summary>
         /// eligibledayoff
         /// </summary>
-        [UIHint("Combobox")]
+        [UIHint("InGridComboBox")]
         public InGridComboBoxVM EligibleDayOff { get; set; } = new InGridComboBoxVM();
 
         /// <summary>
         /// othercategory
         /// </summary>
-        [UIHint("Combobox")]
+        [UIHint("InGridComboBox")]
         public InGridComboBoxVM OtherCategory { get; set; } = new InGridComboBoxVM();
 
         public static IEnumerable<InGridComboBoxVM> GetAllOptions()

@@ -19,7 +19,7 @@ namespace MCAWebAndAPI.Service.HR.Leave
 
         DayOffRequestVM GetPopulatedModel(string requestor = null);
 
-        DayOffRequestVM GetHeader(int? ID);
+        DayOffRequestVM GetHeader(int? ID, string requestor);
 
         int CreateHeader(DayOffRequestVM header);
 
@@ -40,6 +40,8 @@ namespace MCAWebAndAPI.Service.HR.Leave
         int GetUnpaidDayOffTotalDays(int professionalID, IEnumerable<DateTime> dateRange);
 
         bool IsUnpaidDayOff(int professionalID, DateTime date, IEnumerable<DateTime> dateRange);
+
+        DayOffBalanceVM GetCalculateBalance(int? ID, string siteUrl, string requestor, string listName);
 
     }
 }

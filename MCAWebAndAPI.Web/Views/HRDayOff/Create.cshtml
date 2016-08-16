@@ -1,0 +1,105 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+
+@model DayOffRequestVM
+
+@using (Ajax.BeginForm((string)ViewBag.Action, "HRDayOff",
+                                                                            FormMethod.Post,
+                                                                            new AjaxOptions
+                                                                            {
+                                                                                OnBegin = "onBeginForm",
+                                                                                OnComplete = "onCompleteForm",
+                                                                                OnSuccess = "onSuccessFormEmbed",
+                                                                                OnFailure = "onFailureForm"
+                                                                            }, new { @class = "form-horizontal" }))
+{<fieldset>
+        <legend>Form Monthly Fee</legend>
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary()
+
+        <div class="col-sm-12">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Professional).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.Professional)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.ProjectUnit).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.ProjectUnit)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.RequestDate).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.RequestDate)
+                </div>
+            </div>
+        </div>
+        <legend>Day Off Balance</legend>
+        <div class="row">
+            @Html.Partial("_DayOffBalanceDetail", Model)
+        </div>
+     <legend>Day Off Request Detail</legend>
+     <div class="row">
+         @Html.Partial("_DayOffRequsetDetail", Model)
+     </div>
+     <button id="Apply" class="btn btn-primary" type="button" onclick="getDayOff()">
+         <i class="fa fa-save"></i>
+         Apply
+     </button>
+    </fieldset>
+}
+
+<div class="form-actions">
+    <div class="row">
+        <div class="col-sm-12">
+            <button id="submit-button" class="btn btn-primary" type="submit">
+                <i class="fa fa-save"></i>
+                Submit
+            </button>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#submit-button").click(function () {
+                $("form").submit();
+            });
+        });
+
+        function getDayOff() {
+            var url = "/HRDayOff/CalculateBalance?listName=" + listName + "&requestor=" + requestor;
+            $('#' + domID).load(url);
+        }
+
+        function OnSelectProfessionalName(e) {
+            var dataItem = this.dataItem(e.item);
+            var url = "/HRDataMaster/GetProfessional/" + dataItem.ID;
+            var urlPSA = "/HRPSAManagement/GetPSA/" + dataItem.ID;
+            $.getJSON(url, function (result) {
+                $('#ProfessionalID').prop('value', result[0].ID);
+                $('#Status').prop('value', result[0].Status);
+                $.getJSON(urlPSA, function (result) {
+                    if (result.length == 0) {
+                        $('#ProjectUnit').prop('value', "");
+                        $('#Position').prop('value', "");
+                        $('#JoinDate').prop('value', "");
+                        $('#DateOfNewPsa').prop('value', "");
+                        $('#EndOfContract').prop('value', "");
+                        alert("Professional Doesn't Have PSA");
+                    }
+                    else {
+                        $('#ProjectUnit').prop('value', result[0].ProjectOrUnit);
+                        $('#Position').prop('value', result[0].Position);
+                        $('#JoinDate').prop('value', result[0].JoinDate);
+                        $('#DateOfNewPsa').prop('value', result[0].DateOfNewPSA);
+                        $('#EndOfContract').prop('value', result[0].PsaExpiryDate);
+                    }
+                })
+            })
+        }
+    </script>
+}

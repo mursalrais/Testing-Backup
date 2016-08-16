@@ -16,7 +16,7 @@
     <RootNamespace>MCAWebAndAPI.Web</RootNamespace>
     <AssemblyName>MCAWebAndAPI.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -933,6 +933,9 @@
     <Content Include="Views\ASSAssetTransfer\_AssetTransferDetail.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DropDown.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\AjaxCascadeComboBox.cshtml" />
+    <Content Include="Views\HRDayOff\Create.cshtml" />
+    <Content Include="Views\HRDayOff\_DayOffBalanceDetail.cshtml" />
+    <Content Include="Views\HRDayOff\_DayOffRequsetDetail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -968,6 +971,7 @@
     <Compile Include="Controllers\FINPettyCashPaymentVoucherController.cs" />
     <Compile Include="Controllers\FINPettyCashSettlementController.cs" />
     <Compile Include="Controllers\FINSCAVoucherController.cs" />
+    <Compile Include="Controllers\HRDayOffController.cs" />
     <Compile Include="Controllers\SharedFinanceController.cs" />
     <Compile Include="Controllers\FINTaxExemptionController.cs" />
     <Compile Include="Controllers\FINSPHLController.cs" />
