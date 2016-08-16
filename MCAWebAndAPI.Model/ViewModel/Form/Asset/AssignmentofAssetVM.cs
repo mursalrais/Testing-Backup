@@ -13,10 +13,10 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 {
     public class AssignmentofAssetVM : Item
     {
-        public IEnumerable<AssignmentofAssetDetailVM> AssignmentofAssets { get; set; } = new List<AssignmentofAssetDetailVM>();
+        public IEnumerable<AssignmentofAssetDetailVM> Details { get; set; } = new List<AssignmentofAssetDetailVM>();
 
         private DateTime _date;
-        private ComboBoxVM _assetHolder, _completionStatus, _acceptanceMemoNo;
+        private ComboBoxVM _assetHolder, _completionStatus;
 
         public int Id { get; set; }
 
@@ -65,7 +65,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 
             set
             {
-                _acceptanceMemoNo = value;
+                _assetHolder = value;
             }
         }
 
@@ -107,6 +107,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 
     }
 
-    
-    }
+
+}
 

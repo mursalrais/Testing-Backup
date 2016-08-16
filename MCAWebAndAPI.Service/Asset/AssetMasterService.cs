@@ -75,7 +75,7 @@ namespace MCAWebAndAPI.Service.Asset
             }
             else
             {
-                viewModel.WarrantyExpires = Convert.ToDateTime(listItem["WarranyExpires"]);
+                viewModel.WarrantyExpires = WE.Value.AddDays(1);
             }
 
             if(Convert.ToString(listItem["AssetLevel"]) == "Sub Asset")

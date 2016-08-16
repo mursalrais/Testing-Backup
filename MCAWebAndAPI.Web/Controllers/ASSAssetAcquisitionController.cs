@@ -69,6 +69,31 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewModel);
         }
 
+        public ActionResult View(int ID, string siteUrl)
+        {
+            _assetAcquisitionService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            var viewModel = _assetAcquisitionService.GetHeader(ID);
+
+            int? headerID = null;
+            headerID = viewModel.ID;
+
+            try
+            {
+                var viewdetails = _assetAcquisitionService.GetDetails(headerID);
+                viewModel.Details = viewdetails;
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            return View(viewModel);
+        }
+
+
         [HttpPost]
         public ActionResult Submit(AssetAcquisitionHeaderVM _data, string siteUrl)
         {
@@ -78,7 +103,7 @@ namespace MCAWebAndAPI.Web.Controllers
             if(_data.Details.Count() == 0)
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse("Details should not empty!");
+                return JsonHelper.GenerateJsonErrorResponse("Details should not empty");
             }
 
             //return View(new AssetMasterVM());
@@ -102,7 +127,8 @@ namespace MCAWebAndAPI.Web.Controllers
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
-            return Redirect(string.Format("{0}/{1}", siteUrl ?? ConfigResource.DefaultBOSiteUrl, UrlResource.AssetAcquisition));
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAcquisition);
+            //return Redirect(string.Format("{0}/{1}", siteUrl ?? ConfigResource.DefaultBOSiteUrl, UrlResource.AssetAcquisition));
         }
 
         public ActionResult Update(AssetAcquisitionHeaderVM _data, string SiteUrl)
@@ -131,7 +157,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            return Redirect(string.Format("{0}/{1}", siteUrl ?? ConfigResource.DefaultBOSiteUrl, UrlResource.AssetAcquisition));
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAcquisition);
         }
 
         public JsonResult GetAssetSubSAssetGrid()
@@ -355,7 +381,8 @@ namespace MCAWebAndAPI.Web.Controllers
             return PartialView("_DisplayGrid");
         }
 
-        public ActionResult Submit(string listName)
+        //[HttpPost]
+        public ActionResult SubmitUpload(string listName)
         {
             // Get existing session variable
             var sessionVariables = SessionManager.Get<DataTable>("CSVDataTable") ?? new DataTable();
@@ -551,7 +578,8 @@ namespace MCAWebAndAPI.Web.Controllers
                     latestIDDetail = _assetAcquisitionService.MassUploadHeaderDetail(listNameDetail, TableDetail, siteUrl);
                 }
             }
-            return Redirect(string.Format("{0}/{1}", siteUrl ?? ConfigResource.DefaultBOSiteUrl, UrlResource.AssetAcquisition));
+            //return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAcquisition);
+            return View(siteUrl + UrlResource.AssetAcquisition);
         }
 
         public ActionResult GetAcceptanceMemoInfo(int IDAcceptanceMemo)
@@ -570,5 +598,16 @@ namespace MCAWebAndAPI.Web.Controllers
                     accpMemoInfo.PoNo
                 }, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult GetSubAsset(string mainsubasset)
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            var MainAssetID = mainsubasset;
+            var subbasset = _assetAcquisitionService.GetSubAsst(MainAssetID, siteUrl);
+
+            //var professionals = GetFromExistingSession();
+            return Json( subbasset, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }

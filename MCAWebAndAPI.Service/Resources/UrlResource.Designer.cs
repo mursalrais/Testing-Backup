@@ -115,6 +115,15 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to /Lists/Asset%20Transfer/AllItems.aspx.
+        /// </summary>
+        public static string AssetTransfer {
+            get {
+                return ResourceManager.GetString("AssetTransfer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to /Lists/Compensatory%20Request.
         /// </summary>
         public static string Compensatory {
@@ -171,9 +180,27 @@ namespace MCAWebAndAPI.Service.Resources {
         /// <summary>
         ///   Looks up a localized string similar to {0}/Lists/SPHL%20Data/AllItems.aspx.
         /// </summary>
+        public static string FINEventBudget {
+            get {
+                return ResourceManager.GetString("FINEventBudget", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}/Lists/SPHL%20Data/AllItems.aspx.
+        /// </summary>
         public static string FINSPHL {
             get {
                 return ResourceManager.GetString("FINSPHL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}/Lists/SPHL%20Data/AllItems.aspx.
+        /// </summary>
+        public static string FINTaxReimbursement {
+            get {
+                return ResourceManager.GetString("FINTaxReimbursement", resourceCulture);
             }
         }
         
@@ -264,6 +291,33 @@ namespace MCAWebAndAPI.Service.Resources {
         public static string PerformancePlan {
             get {
                 return ResourceManager.GetString("PerformancePlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lists/Petty%20Cash%20Payment%20Voucher/AllItems.aspx.
+        /// </summary>
+        public static string PettyCashPaymentVoucher {
+            get {
+                return ResourceManager.GetString("PettyCashPaymentVoucher", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lists/Petty%20Cash%20Payment%20Voucher/AllItems.aspx.
+        /// </summary>
+        public static string PettyCashPaymentVoucher1 {
+            get {
+                return ResourceManager.GetString("PettyCashPaymentVoucher1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}/Petty%20Cash%20Payment%20Voucher%20Documents/Forms/AllItems.aspx#InplviewHash5093bda1-84bf-4cad-8652-286653d6a83f=FilterField1%3Dpsa%255Fx003a%255FID-FilterValue1%3D{1}.
+        /// </summary>
+        public static string PettyCashPaymentVoucherDocumentByID {
+            get {
+                return ResourceManager.GetString("PettyCashPaymentVoucherDocumentByID", resourceCulture);
             }
         }
         
@@ -367,11 +421,29 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lists/Requisition%20Note/AllItems.aspx.
+        /// </summary>
+        public static string RequisitionNote {
+            get {
+                return ResourceManager.GetString("RequisitionNote", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0}/Requisition%20Note%20Documents/Forms/AllItems.aspx#InplviewHash5093bda1-84bf-4cad-8652-286653d6a83f=FilterField1%3Dpsa%255Fx003a%255FID-FilterValue1%3D{1}.
         /// </summary>
         public static string RequisitionNoteDocumentByID {
             get {
                 return ResourceManager.GetString("RequisitionNoteDocumentByID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}/SCA%20Voucher%20Documents/Forms/AllItems.aspx?FilterField1=SCA_x0020_Voucher_x003a_ID&amp;FilterValue1={1}.
+        /// </summary>
+        public static string SCAVoucherDocumentByID {
+            get {
+                return ResourceManager.GetString("SCAVoucherDocumentByID", resourceCulture);
             }
         }
         

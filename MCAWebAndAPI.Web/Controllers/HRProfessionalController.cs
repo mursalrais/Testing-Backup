@@ -94,11 +94,18 @@ namespace MCAWebAndAPI.Web.Controllers
                 switch (viewModel.ValidationAction)
                 {
                     case "ask-hr-to-validate-action":
+                        List<string> EmailsHR = _professionalService.GetEmailHR();
                         _professionalService.SetValidationStatus(headerID, Workflow.ProfessionalValidationStatus.NEED_VALIDATION);
-                        _professionalService.SendEmailValidation(
-                            "randi.prayengki@eceos.com",
+                        foreach (var item in EmailsHR)
+                        {
+                            if (!(string.IsNullOrEmpty(item)))
+                            {
+                                _professionalService.SendEmailValidation(item,
                             string.Format(EmailResource.ProfessionalEmailValidation,
                             string.Format(UrlResource.ProfessionalDisplayByID, siteUrl, headerID)));
+                            }
+                            
+                        }                        
                         break;
 
                     // Suppose mariani.yosefi is the applicant
@@ -106,13 +113,13 @@ namespace MCAWebAndAPI.Web.Controllers
                     case "approve-action":
                         _professionalService.SetValidationStatus(headerID, Workflow.ProfessionalValidationStatus.VALIDATED);
                         _professionalService.SendEmailValidation(
-                            "mariani.yosefi@eceos.com",
+                            viewModel.OfficeEmail,
                             string.Format(EmailResource.ProfessionalEmailValidationResponse), isApproved: true);
                         break;
                     case "reject-action":
                         _professionalService.SetValidationStatus(headerID, Workflow.ProfessionalValidationStatus.REJECTED);
                         _professionalService.SendEmailValidation(
-                            "mariani.yosefi@eceos.com",
+                            viewModel.OfficeEmail,
                             string.Format(EmailResource.ProfessionalEmailValidationResponse), isApproved: false);
                         break;
                 }

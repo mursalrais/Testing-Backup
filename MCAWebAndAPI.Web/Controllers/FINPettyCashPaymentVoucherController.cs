@@ -1,16 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Elmah;
 using MCAWebAndAPI.Model.ViewModel.Control;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
+using MCAWebAndAPI.Service.Converter;
 using MCAWebAndAPI.Service.Finance;
+using MCAWebAndAPI.Service.Resources;
+using MCAWebAndAPI.Service.Utils;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
+    /// <summary>
+    /// Wireframe FIN10: Petty Cash Voucher
+    ///     a.k.a.: Petty Cash Payment Voucher
+    ///     a.k.a.: Petty Cash Advance Voucher
+    /// </summary>
+    
     public class FINPettyCashPaymentVoucherController : Controller
     {
         private const string SESSION_SITE_URL = "SiteUrl";
@@ -18,6 +30,19 @@ namespace MCAWebAndAPI.Web.Controllers
         private const string STATUS_PAID = "Paid";
         private const string PAIDTO_DRIVER = "Driver";
         private const string PAIDTO_PROFESIONAL = "Professional";
+        private const string PAIDTO_SELECTEVENTCHANGE = "onSelectPaidTo";
+        private const string COMBOBOX_CONTROLLER = "ComboBox";
+        private const string ACTIONNAME_PROFESSIONAL = "GetProfessional";
+        private const string ACTIONNAME_VENDOR = "GetVendor";
+        private const string ACTIONNAME_WBSMASTER = "GetWBSMaster";
+        private const string ACTIONNAME_GLMASTER = "GetGLMaster";
+        private const string FIELD_ID = "ID";
+        private const string FIELD_TITLE = "Title";
+        private const string FIELD_VALUE = "Value";
+        private const string FIELD_TEXT = "Text";
+        private const string DATA_NOT_EXISTS = "Data Does not exists!";
+
+        private const string PRINT_PAGE_URL = "~/Views/FINPettyCashPaymentVoucher/Print.cshtml";
 
         readonly IPettyCashPaymentVoucherService _service;
         public FINPettyCashPaymentVoucherController()
@@ -37,56 +62,153 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewModel);
         }
 
+        public ActionResult Edit(string siteUrl=null, int? ID=0)
+        {
+            if (ID > 0)
+            {
+                siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
+                SessionManager.Set(SESSION_SITE_URL, siteUrl);
+
+                _service.SetSiteUrl(siteUrl);
+                
+
+                var viewModel = _service.GetPettyCashPaymentVoucher(ID.Value);
+                SetAdditionalSettingToViewModel(ref viewModel, false);
+                return View(viewModel);
+            }
+            else
+            {
+                ErrorSignal.FromCurrentContext().Raise(new Exception(DATA_NOT_EXISTS));
+                return JsonHelper.GenerateJsonErrorResponse(DATA_NOT_EXISTS);
+            }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Create(FormCollection form, PettyCashPaymentVoucherVM viewModel)
+        {
+            var siteUrl = SessionManager.Get<string>(SESSION_SITE_URL);
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            int? headerID = null;
+            try
+            {
+                headerID = _service.Create(viewModel);
+                _service.CreatePettyCashAttachments(headerID, viewModel.Documents);
+
+            }
+            catch (Exception e)
+            {
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.PettyCashPaymentVoucher);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Edit(FormCollection form, PettyCashPaymentVoucherVM viewModel)
+        {
+            var siteUrl = SessionManager.Get<string>(SESSION_SITE_URL);
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            try
+            {
+                _service.Update(viewModel);
+                _service.EditPettyCashAttachments(viewModel.ID, viewModel.Documents);
+            }
+            catch (Exception e)
+            {
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.PettyCashPaymentVoucher);
+        }
+
+        [HttpPost]
+        public ActionResult Print(FormCollection form, PettyCashPaymentVoucherVM viewModel)
+        {
+            string RelativePath = PRINT_PAGE_URL;
+
+            var siteUrl = SessionManager.Get<string>(SESSION_SITE_URL);
+            _service.SetSiteUrl(siteUrl);
+            viewModel = _service.GetPettyCashPaymentVoucher(viewModel.ID);
+
+            ViewData.Model = viewModel;
+            var view = ViewEngines.Engines.FindView(ControllerContext, RelativePath, null);
+            var fileName = viewModel.VoucherNo + "_Application.pdf";
+            byte[] pdfBuf = null;
+            string content;
+
+            using (var writer = new StringWriter())
+            {
+                var context = new ViewContext(ControllerContext, view.View, ViewData, TempData, writer);
+                view.View.Render(context, writer);
+                writer.Flush();
+                content = writer.ToString();
+
+                // Get PDF Bytes
+                try
+                {
+                    pdfBuf = PDFConverter.Instance.ConvertFromHTML(fileName, content);
+                }
+                catch (Exception e)
+                {
+                    ErrorSignal.FromCurrentContext().Raise(e);
+                    return JsonHelper.GenerateJsonErrorResponse(e);
+                }
+            }
+            if (pdfBuf == null)
+                return HttpNotFound();
+            return File(pdfBuf, "application/pdf");
+        }
+
+
+        public ActionResult GetAmountInWords(int data)
+        {
+            return Json(FormatUtil.ConvertToEnglishWords(data),
+               JsonRequestBehavior.AllowGet);
+        }
+
+
         private void SetAdditionalSettingToViewModel(ref PettyCashPaymentVoucherVM viewModel, bool isCreate)
         {
             viewModel.Status.Choices = new string[] { STATUS_INPROGRESS, STATUS_PAID };
 
-            viewModel.PaidTo = new Model.ViewModel.Control.PaidToComboboxVM();
             if(viewModel.PaidTo.Choices.Any())
             {
                 List<string> tempString = viewModel.PaidTo.Choices.ToList();
                 tempString.Remove(PAIDTO_DRIVER);
                 viewModel.PaidTo.Choices = tempString;
             }
-            viewModel.PaidTo.Value = PAIDTO_PROFESIONAL;
-            viewModel.PaidTo.OnSelectEventName = "onSelectPaidTo";
+            
+            viewModel.PaidTo.OnSelectEventName = PAIDTO_SELECTEVENTCHANGE;
 
-            viewModel.Professional = new AjaxComboBoxVM
-            {
-                ControllerName = "ComboBox",
-                ActionName = "GetProfessional",
-                ValueField = "ID",
-                TextField = "Title"
-            };
+            viewModel.Professional.ControllerName = COMBOBOX_CONTROLLER;
+            viewModel.Professional.ActionName = ACTIONNAME_PROFESSIONAL;
+            viewModel.Professional.ValueField = FIELD_ID;
+            viewModel.Professional.TextField = FIELD_TITLE;
 
-            viewModel.Vendor = new AjaxComboBoxVM
-            {
-                ControllerName = "ComboBox",
-                ActionName = "GetVendor",
-                ValueField = "ID",
-                TextField = "Title"
-            };
+            viewModel.Vendor.ControllerName = COMBOBOX_CONTROLLER;
+            viewModel.Vendor.ActionName = ACTIONNAME_VENDOR;
+            viewModel.Vendor.ValueField = FIELD_ID;
+            viewModel.Vendor.TextField = FIELD_TITLE;
 
-            viewModel.WBS = new AjaxComboBoxVM
-            {
-                ControllerName = "ComboBox",
-                ActionName = "GetWBSMaster",
-                ValueField = "Value",
-                TextField = "Text"
-            };
+            viewModel.WBS.ControllerName = COMBOBOX_CONTROLLER;
+            viewModel.WBS.ActionName = ACTIONNAME_WBSMASTER;
+            viewModel.WBS.ValueField = FIELD_VALUE;
+            viewModel.WBS.TextField = FIELD_TEXT;
 
-            viewModel.GL = new AjaxComboBoxVM
-            {
-                ControllerName = "ComboBox",
-                ActionName = "GetGLMaster",
-                ValueField = "Value",
-                TextField = "Text"
-            };
-
+            viewModel.GL.ControllerName = COMBOBOX_CONTROLLER;
+            viewModel.GL.ActionName = ACTIONNAME_GLMASTER;
+            viewModel.GL.ValueField = FIELD_VALUE;
+            viewModel.GL.TextField = FIELD_TEXT;
+            
             if (isCreate)
             {
                 //some default value
                 viewModel.Status.Value = STATUS_INPROGRESS;
+                viewModel.PaidTo.Value = PAIDTO_PROFESIONAL;
                 viewModel.Date = DateTime.Now;
             }
         }

@@ -178,7 +178,11 @@ namespace MCAWebAndAPI.Service.HR.Common
 
             viewModel.AccountNameForSP = Convert.ToString(listItem["spaccountname"]);
             viewModel.BankNameForSP = Convert.ToString(listItem["spbankname"]);
-            viewModel.EffectiveDateForSP = Convert.ToDateTime(listItem["speffectivedate"]);
+            viewModel.EffectiveDateForSP = Convert.ToDateTime(listItem["speffectivedate"]).ToLocalTime();
+            if (viewModel.EffectiveDateForSP.Value.Year == 1)
+            {
+                viewModel.EffectiveDateForSP = null;
+            }
             viewModel.AccountNumberForSP = Convert.ToString(listItem["spaccountnr"]);
             viewModel.BranchOfficeForSP = Convert.ToString(listItem["spbranchoffice"]);
             viewModel.EndDateForSP = Convert.ToDateTime(listItem["spenddate"]).ToLocalTime();
@@ -692,7 +696,8 @@ namespace MCAWebAndAPI.Service.HR.Common
         {
             try
             {
-                SPConnector.SendEmail(emailTo, emailMessages, "Professional Data Validation", _siteUrl);
+                //SPConnector.SendEmail(emailTo, emailMessages, "Professional Data Validation", _siteUrl);
+                EmailUtil.Send(emailTo, "Professional Data Validation", emailMessages);
             }
             catch (Exception e)
             {
@@ -758,5 +763,15 @@ namespace MCAWebAndAPI.Service.HR.Common
             CreateOrganizationalDetails(headerID, organizationalDetails);
         }
 
+        public List<string> GetEmailHR()
+        {
+            List<string> EmailHR = new List<string>();
+            string caml = @"<View><Query><Where><Contains><FieldRef Name='Position' /><Value Type='Lookup'>HR</Value></Contains></Where></Query><ViewFields><FieldRef Name='officeemail' /><FieldRef Name='Position' /></ViewFields><QueryOptions /></View>";
+            foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME,_siteUrl,caml))
+            {
+                EmailHR.Add(Convert.ToString(item["officeemail"]));
+            }
+            return EmailHR;
+        }
     }
 }

@@ -24,7 +24,7 @@ namespace MCAWebAndAPI.Web.Controllers
             service = new SPHLService();
         }
 
-        public ActionResult CreateSPHL(string siteUrl = null)
+        public ActionResult Create(string siteUrl = null)
         {
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
 
@@ -36,7 +36,7 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewModel);
         }
 
-        public ActionResult EditSPHL(string siteUrl = null, int? ID=null)
+        public ActionResult Edit(string siteUrl = null, int? ID=null)
         {
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);
@@ -52,7 +52,7 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateSPHL(FormCollection form, SPHLVM viewModel)
+        public async Task<ActionResult> Create(FormCollection form, SPHLVM viewModel)
         {
             var siteUrl = SessionManager.Get<string>(_siteUrl) ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);
@@ -64,7 +64,7 @@ namespace MCAWebAndAPI.Web.Controllers
                     return Json(false, JsonRequestBehavior.AllowGet);
                 }
 
-                int? ID = service.CreateSPHL(viewModel);
+                int? ID = service.Create(viewModel);
                 Task createApplicationDocumentTask = service.CreateSPHLAttachmentAsync(ID, viewModel.No, viewModel.Documents);
                 Task allTasks = Task.WhenAll(createApplicationDocumentTask);
 
@@ -80,7 +80,7 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> EditSPHL(FormCollection form, SPHLVM viewModel)
+        public async Task<ActionResult> Edit(FormCollection form, SPHLVM viewModel)
         {
             var siteUrl = SessionManager.Get<string>(_siteUrl) ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);

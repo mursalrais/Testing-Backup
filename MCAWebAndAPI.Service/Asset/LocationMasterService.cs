@@ -33,7 +33,22 @@ namespace MCAWebAndAPI.Service.Asset
                 return error;
             }
             var columnValues = new Dictionary<string, object>();
-            columnValues.Add("Province", header.Province.Value);
+            var camlProvinceInfo = @"<View><Query>
+                               <Where>
+                                  <Eq>
+                                     <FieldRef Name='Province' />
+                                     <Value Type='Text'>"+header.Province.Value+@"</Value>
+                                  </Eq>
+                               </Where>
+                            </Query>
+                            <ViewFields />
+                            <QueryOptions /></View>";
+            var ProvinceInfo = SPConnector.GetList("Province", _siteUrl, camlProvinceInfo);
+            foreach(var prop in ProvinceInfo)
+            {
+                columnValues.Add("Province", Convert.ToInt32(prop["ID"]));
+            }
+            
             columnValues.Add("Title", header.OfficeName);
             columnValues.Add("Floor", header.FloorName);
             columnValues.Add("Room", header.RoomName);
@@ -50,15 +65,55 @@ namespace MCAWebAndAPI.Service.Asset
             return SPConnector.GetLatestListItemID(SP_LOCATION_MAS_LISTNAME, _siteUrl);
         }
 
-        public LocationMasterVM GetHeader(int? ID)
+        public LocationMasterVM GetHeader(int? ID, string SiteUrl)
         {
-            throw new NotImplementedException();
+            var listItem = SPConnector.GetListItem(SP_LOCATION_MAS_LISTNAME, ID, _siteUrl);
+            var viewModel = new LocationMasterVM();
+
+            //viewModel.InterviewerUrl = _siteUrl + UrlResource.AssetMaster;
+            var siteHr = SiteUrl.Replace("/bo", "/hr");
+            viewModel.Province.Choices = GetChoicesFromListHR("Place Master", "Title", siteHr);
+            var getFromProvince = SPConnector.GetListItem("Province", Convert.ToInt32(listItem["Province"]));
+            viewModel.Province.Value = Convert.ToString(listItem["Title"]);
+            viewModel.OfficeName = Convert.ToString(listItem["Title"]);
+            viewModel.FloorName = Convert.ToInt32(listItem["Floor"]);
+            viewModel.RoomName = Convert.ToString(listItem["Room"]);
+            viewModel.Remarks = Convert.ToString(listItem["Remarks"]);
+            viewModel.ID = ID;
+
+            return viewModel;
         }
 
-        public LocationMasterVM GetPopulatedModel()
+        public LocationMasterVM GetPopulatedModel(string SiteUrl)
         {
             var model = new LocationMasterVM();
+            var siteHr = SiteUrl.Replace("/bo", "/hr");
+            model.Province.Choices = GetChoicesFromListHR("Place Master", "Title", siteHr);
             return model;
+        }
+
+        private IEnumerable<string> GetChoicesFromListHR(string listname, string field1, string siteHr, string field2 = null)
+        {
+            var caml = @"<View>  
+            <Query> 
+               <Where><Eq><FieldRef Name='Level' /><Value Type='Choice'>Province</Value></Eq></Where> 
+            </Query>
+      </View>";
+            List<string> _choices = new List<string>();
+            var listItems = SPConnector.GetList(listname, siteHr, caml);
+            foreach (var item in listItems)
+            {
+                if (field2 == null)
+                {
+
+                    _choices.Add(item[field1].ToString());
+                }
+                else
+                {
+                    _choices.Add(item[field1].ToString());
+                }
+            }
+            return _choices.ToArray();
         }
 
         public void SetSiteUrl(string siteUrl = null)
@@ -66,9 +121,50 @@ namespace MCAWebAndAPI.Service.Asset
             _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
         }
 
-        public bool UpdateHeader(LocationMasterVM header)
+        public bool UpdateHeader(LocationMasterVM header, string province, string office, int floor, string room)
         {
-            throw new NotImplementedException();
+            var caml = @"<View>  
+            <Query> 
+               <Where><And><And><And><Eq><FieldRef Name='Province' /><Value Type='Choice'>" + province + @"</Value></Eq><Eq><FieldRef Name='Title' /><Value Type='Text'>" + office + @"</Value></Eq></And><Eq><FieldRef Name='Floor' /><Value Type='Text'>" + floor + @"</Value></Eq></And><Eq><FieldRef Name='Room' /><Value Type='Text'>" + room + @"</Value></Eq></And></Where> 
+            </Query> 
+      </View>";
+            bool error = false;
+            var locationTemp = SPConnector.GetList(SP_LOCATION_MAS_LISTNAME, _siteUrl, caml).Count();
+            if (locationTemp != 0)
+            {
+                return error;
+            }
+            var ID = header.ID;
+            var columnValues = new Dictionary<string, object>();
+            var camlProvinceInfo = @"<View><Query>
+                               <Where>
+                                  <Eq>
+                                     <FieldRef Name='Province' />
+                                     <Value Type='Text'>" + header.Province.Value + @"</Value>
+                                  </Eq>
+                               </Where>
+                            </Query>
+                            <ViewFields />
+                            <QueryOptions /></View>";
+            var ProvinceInfo = SPConnector.GetList("Province", _siteUrl, camlProvinceInfo);
+            foreach (var prop in ProvinceInfo)
+            {
+                columnValues.Add("Province", Convert.ToInt32(prop["ID"]));
+            }
+            columnValues.Add("Title", header.OfficeName);
+            columnValues.Add("Floor", header.FloorName);
+            columnValues.Add("Room", header.RoomName);
+            columnValues.Add("Remarks", header.Remarks);
+            try
+            {
+                SPConnector.UpdateListItem(SP_LOCATION_MAS_LISTNAME, ID, columnValues, _siteUrl);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.Message);
+            }
+
+            return true;
         }
 
         public IEnumerable<LocationMasterVM> GetLocationMaster()
@@ -195,6 +291,11 @@ namespace MCAWebAndAPI.Service.Asset
             }
 
             return viewModel;
+        }
+
+        public LocationMasterVM GetPopulatedModel(int ID, string SiteUrl)
+        {
+            throw new NotImplementedException();
         }
     }
 }

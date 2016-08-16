@@ -1,99 +1,113 @@
-﻿@using MCAWebAndAPI.Model.ViewModel.Form.Finance
-@model TaxReimbursementVM
+﻿@* Wireframe FIN18: Tax Reimbursement *@
+@model MCAWebAndAPI.Model.ViewModel.Form.Finance.TaxReimbursementVM
 
 @{
     ViewBag.Title = "CreateTaxReimbursement";
 }
 
-@using (Html.BeginForm("CreateTaxReimbursement", "FINTaxReimbursementController", FormMethod.Post,
-            new
-            {
-                @class = "form-horizontal",
-                enctype = "multipart/form-data"
-            }))
+@using (Html.BeginForm("Item", "FINTaxReimbursement",
+    FormMethod.Post,
+    new
+    {
+        @class = "form-horizontal",
+        enctype = "multipart/form-data"
+    }))
 {
     <fieldset>
         <legend>Tax Reimbursement</legend>
       
           <div class="row">
            
-     
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.Type).Class("col-xs-4 control-label")
                 <div class="col-xs-8">
-                    @Html.DisplayFor(m => m.Type)
+                    @Html.EditorFor(m => m.Type)
                 </div>
             </div>
 
-
+        
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.LetterNo).Class("col-xs-4 control-label")
                 <div class="col-xs-8">
-                    @Html.DisplayFor(m => m.LetterNo)
+                    @Html.EditorFor(m => m.LetterNo)
                 </div>
             </div>
-
 
               <div class="form-group">
                   @Html.Bootstrap().LabelFor(m => m.LetterDate).Class("col-xs-4 control-label")
                   <div class="col-xs-8">
-                      @Html.DisplayFor(m => m.LetterDate)
+                      @Html.EditorFor(m => m.LetterDate)
                   </div>
               </div>
 
               <div class="form-group">
                   @Html.Bootstrap().LabelFor(m => m.Category).Class("col-xs-4 control-label")
                   <div class="col-xs-8">
-                      @Html.DisplayFor(m => m.Category)
+                      @Html.EditorFor(m => m.Category)
+                  </div>
+              </div>
+
+              <div id="vendorDiv" class="form-group">
+                  @Html.Bootstrap().LabelFor(m => m.Vendor).Class("col-xs-4 control-label")
+                  <div class="col-xs-8">
+                      @Html.EditorFor(m => m.Vendor)
+                      <input type="hidden" id="hiddenVendorId" value="-1" name="hiddenVendorId" />
                   </div>
               </div>
 
               <div class="form-group">
-                  @Html.Bootstrap().LabelFor(m => m.ContractorId).Class("col-xs-4 control-label")
+                  @Html.Bootstrap().LabelFor(m => m.Contractor).Class("col-xs-4 control-label")
                   <div class="col-xs-8">
-                      @Html.DisplayFor(m => m.ContractorId)
+                      @Html.EditorFor(m => m.Contractor)
                   </div>
               </div>
 
               <div class="form-group">
                   @Html.Bootstrap().LabelFor(m => m.Object).Class("col-xs-4 control-label")
                   <div class="col-xs-8">
-                      @Html.DisplayFor(m => m.Object)
+                      @Html.EditorFor(m => m.Object)
                   </div>
               </div>
 
               <div class="form-group">
                   @Html.Bootstrap().LabelFor(m => m.Period).Class("col-xs-4 control-label")
                   <div class="col-xs-8">
-                      @Html.DisplayFor(m => m.Period)
+                      @Html.EditorFor(m => m.Period)
                   </div>
               </div>
 
               <div class="form-group">
                   @Html.Bootstrap().LabelFor(m => m.AmountIDR).Class("col-xs-4 control-label")
                   <div class="col-xs-8">
-                      @Html.DisplayFor(m => m.AmountIDR)
+                      @Html.EditorFor(m => m.AmountIDR)
                   </div>
               </div>
 
               <div class="form-group">
                   @Html.Bootstrap().LabelFor(m => m.Remarks).Class("col-xs-4 control-label")
                   <div class="col-xs-8">
-                      @Html.DisplayFor(m => m.Remarks)
+                      @Html.EditorFor(m => m.Remarks)
                   </div>
               </div>
 
               <div class="form-group">
                   @Html.Bootstrap().LabelFor(m => m.PaymentReceivedDate).Class("col-xs-4 control-label")
                   <div class="col-xs-8">
-                      @Html.DisplayFor(m => m.PaymentReceivedDate)
+                      @Html.EditorFor(m => m.PaymentReceivedDate)
                   </div>
               </div>
 
               <div class="form-group">
                   @Html.Bootstrap().LabelFor(m => m.DocumentNo).Class("col-xs-4 control-label")
                   <div class="col-xs-8">
-                      @Html.DisplayFor(m => m.DocumentNo)
+                      @Html.EditorFor(m => m.DocumentNo)
+                  </div>
+              </div>
+
+              <div class="form-group">
+                  @Html.Bootstrap().LabelFor(m => m.Documents).Class("col-sm-4 control-label")
+                  <div class="col-sm-8">
+                      @Html.EditorFor(m => m.Documents)
                   </div>
               </div>
 
@@ -117,9 +131,50 @@
     </div>
 }
 @section scripts{
-    <script>
-        $(document).ready(function () {
+<script>
+    $(document).ready(function () {
+        SetEnablednessBasedOnCategory(CategoryVendor);
 
-        });
-    </script>
+        $('#Contractor').prop('readonly', true);
+    });
+
+    var CategoryVendor = "Vendor";
+    var CategoryMCAI = "MCA Indonesia";
+
+    function SetEnablednessBasedOnCategory(data) {
+        var vendorDropDownList = $("#Vendor_Value").data("kendoDropDownList");
+
+        switch (data) {
+            case CategoryVendor:
+                vendorDropDownList.enable(true);
+                $("#vendorDiv").show('slow');
+                $("#Contractor").val('');
+                break;
+
+            case CategoryMCAI:
+                vendorDropDownList.enable(false);
+                $("#vendorDiv").hide('slow');
+                $("#Contractor").val(CategoryMCAI);
+                break;
+
+            default:
+                vendorDropDownList.enable(false);
+                break;
+
+        }
+    }
+
+
+    function onSelectCategory(e) {
+        var data = this.dataItem(e.item);
+        SetEnablednessBasedOnCategory(data);
+    }
+
+    function onSelectVendor(e) {
+        var dataItem = this.dataItem(e.item);
+        $("#Contractor").val(dataItem.Text);
+        $("#hiddenVendorId").val(dataItem.Value);
+    }
+
+</script>
 }

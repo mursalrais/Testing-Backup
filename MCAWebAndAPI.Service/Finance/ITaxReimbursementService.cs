@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace MCAWebAndAPI.Service.Finance
 {
@@ -11,6 +12,12 @@ namespace MCAWebAndAPI.Service.Finance
     {
         void SetSiteUrl(string siteUrl);
 
-        TaxReimbursementVM GetTaxReimbursement(int? id = null);
+        TaxReimbursementVM Get(int? id = null);
+
+        int Create(TaxReimbursementVM viewModel);
+
+        bool Update(TaxReimbursementVM viewModel);
+
+        Task CreateAttachmentAsync(int? ID, IEnumerable<HttpPostedFileBase> attachment);
     }
 }

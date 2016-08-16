@@ -23,8 +23,9 @@ namespace MCAWebAndAPI.Service.Utils
         /// </summary>
         /// <param name="siteUrl"></param>
         /// <param name="mask"></param>
-        /// <returns></returns>
-        public static string Create(string siteUrl, string mask)
+        /// <param name="mask"></param>
+        /// <returns>A new document number</returns>
+        public static string Create(string siteUrl, string mask, int numberOfDigits)
         {
             var docNo = string.Empty;
             var id = 0;
@@ -59,7 +60,6 @@ namespace MCAWebAndAPI.Service.Utils
             }
 
             lastNumber++;
-            
 
             // Save back the last number 
             var updatedValue = new Dictionary<string, object>();
@@ -78,6 +78,7 @@ namespace MCAWebAndAPI.Service.Utils
 
             //TODO: handle failure
 
+            mask = string.Format(mask, string.Format("{{0:D{0}}}", numberOfDigits));
             docNo = string.Format(mask, lastNumber);
             
             return docNo;

@@ -249,4 +249,30 @@
   <data name="SPHLDocumentByID" xml:space="preserve">
     <value>{0}/SPHL%20Documents/Forms/AllItems.aspx?groupBy=&amp;FilterField1=SPHL_x003a_ID&amp;FilterValue1={1}</value>
   </data>
+  <data name="AssetTransfer" xml:space="preserve">
+    <value>/Lists/Asset%20Transfer/AllItems.aspx</value>
+  </data>
+  <data name="FINEventBudget" xml:space="preserve">
+    <value>{0}/Lists/SPHL%20Data/AllItems.aspx</value>
+    <comment>Need to change in migration</comment>
+  </data>
+  <data name="FINTaxReimbursement" xml:space="preserve">
+    <value>{0}/Lists/SPHL%20Data/AllItems.aspx</value>
+    <comment>Need to change in migration</comment>
+  </data>
+  <data name="PettyCashPaymentVoucher" xml:space="preserve">
+    <value>Lists/Petty%20Cash%20Payment%20Voucher/AllItems.aspx</value>
+  </data>
+  <data name="PettyCashPaymentVoucher1" xml:space="preserve">
+    <value>Lists/Petty%20Cash%20Payment%20Voucher/AllItems.aspx</value>
+  </data>
+  <data name="PettyCashPaymentVoucherDocumentByID" xml:space="preserve">
+    <value>{0}/Petty%20Cash%20Payment%20Voucher%20Documents/Forms/AllItems.aspx#InplviewHash5093bda1-84bf-4cad-8652-286653d6a83f=FilterField1%3Dpsa%255Fx003a%255FID-FilterValue1%3D{1}</value>
+  </data>
+  <data name="RequisitionNote" xml:space="preserve">
+    <value>Lists/Requisition%20Note/AllItems.aspx</value>
+  </data>
+  <data name="SCAVoucherDocumentByID" xml:space="preserve">
+    <value>{0}/SCA%20Voucher%20Documents/Forms/AllItems.aspx?FilterField1=SCA_x0020_Voucher_x003a_ID&amp;FilterValue1={1}</value>
+  </data>
 </root>

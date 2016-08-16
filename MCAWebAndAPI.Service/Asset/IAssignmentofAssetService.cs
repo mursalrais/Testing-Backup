@@ -3,36 +3,53 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using MCAWebAndAPI.Model.ViewModel.Form.Asset;
+using NLog;
+using System.Data;
+
+
 
 namespace MCAWebAndAPI.Service.Asset
 {
     public interface IAssignmentofAssetService
     {
+
         void SetSiteUrl(string siteUrl);
 
-        IEnumerable<AssignmentofAssetVM> GetAssignmentofAsset();
 
-        AssignmentofAssetVM GetPopulatedModel(int? id = null);
+        AssignmentofAssetVM GetPopulatedModel(int? ID = null);
+        AssignmentofAssetDetailVM GetPopulatedModelItem(int? ID = null);
+
+        int? CreateHeader(AssignmentofAssetVM viewmodel);
+        bool UpdateHeader(AssignmentofAssetVM viewmodel);
+
+        void CreateDetails(int? headerID, IEnumerable<AssignmentofAssetDetailVM> items);
+        void UpdateDetails(int? headerID, IEnumerable<AssignmentofAssetDetailVM> items);
 
         AssignmentofAssetVM GetHeader(int? ID);
 
-        int CreateHeader(AssignmentofAssetVM header);
+        IEnumerable<AssignmentofAssetDetailVM> GetDetails(int? headerID);
 
-        bool UpdateHeader(AssignmentofAssetVM header);
+        IEnumerable<AssetMasterVM> GetAssetSubAsset();
 
-        bool CreateAssignmentofAsset(AssignmentofAssetVM assignmentofAsset);
+        IEnumerable<LocationMasterVM> GetLocationMaster();
 
-        bool UpdateAssignmentofAsset(AssignmentofAssetVM assignmentofAsset);
 
-        void CreateMonthlyFeeDetails(int? headerID, IEnumerable<AssignmentofAssetVM> monthlyFeeDetails);
+        IEnumerable<LocationMasterVM> GetOffice();
 
-        bool CreateAssignmentofAsset_Dummy(AssignmentofAssetItemVM assignmentofAsset);
+        IEnumerable<LocationMasterVM> GetFloor();
 
-        bool UpdateAssignmentofAsset_Dummy(AssignmentofAssetItemVM assignmentofAsset);
+        IEnumerable<LocationMasterVM> GetRoom();
 
-        bool DestroyAssignmentofAsset_Dummy(AssignmentofAssetItemVM assignmentofAsset);
+        IEnumerable<LocationMasterVM> GetRemark();
 
-        AssignmentofAssetVM GetAssignmentofAssetItems_Dummy();
+        int? MassUploadHeaderDetail(string ListName, DataTable CSVDataTable, string SiteUrl = null);
+
+        int? getIdOfColumn(string listname, string SiteUrl, string caml);
+
+        Dictionary<int, string> getListIDOfList(string listName, string key, string value, string SiteUrl);
+
+        void RollbackParentChildrenUpload(string listNameHeader, int? latestIDHeader, string siteUrl);
     }
 }

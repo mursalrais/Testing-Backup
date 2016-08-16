@@ -243,6 +243,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="bin\NLog.config" />
     <Content Include="bin\roslyn\Microsoft.CSharp.Core.targets" />
     <Content Include="bin\roslyn\Microsoft.VisualBasic.Core.targets" />
     <Content Include="bin\roslyn\VBCSCompiler.exe.config" />
@@ -559,6 +560,7 @@
     <Content Include="Views\ASSAssetScrapping\Create.cshtml" />
     <Content Include="Views\ASSAssetScrapping\Edit.cshtml" />
     <Content Include="Views\ASSAssetSmallValueAsset\Create.cshtml" />
+    <Content Include="Views\ASSAssetTransfer\Create.cshtml" />
     <Content Include="Views\Shared\_LayoutHome.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\BIEmbed\WFP03.cshtml" />
@@ -938,7 +940,6 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Controllers\ASSAssetDisposalController.cs" />
     <Compile Include="Controllers\ASSAssetMasterController.cs" />
     <Compile Include="Controllers\ASSAssetAcquisitionController.cs" />
     <Compile Include="Controllers\ASSAssetCheckFormController.cs" />
@@ -972,6 +973,7 @@
     <Compile Include="Controllers\FINTaxReimbursementController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HRAdjustmentController.cs" />
+    <Compile Include="Controllers\HRAdjustmentDayOffBalanceController.cs" />
     <Compile Include="Controllers\HRApplicationController.cs" />
     <Compile Include="Controllers\HRCompensatoryController.cs" />
     <Compile Include="Controllers\HRDataMasterController.cs" />
@@ -1058,6 +1060,7 @@
     <Folder Include="bin\Resources\" />
     <Folder Include="Scripts\apps\controlls\" />
     <Folder Include="Views\File\" />
+    <Folder Include="Views\FINEventBudget\" />
     <Folder Include="Views\HRDataMaster\" />
   </ItemGroup>
   <ItemGroup>
