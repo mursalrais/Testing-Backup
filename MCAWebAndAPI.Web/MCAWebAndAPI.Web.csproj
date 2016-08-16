@@ -958,6 +958,9 @@
     <Content Include="Views\ASSAssetAcquisition\Sync.cshtml" />
     <Content Include="Views\ASSAssetAcquisition\View.cshtml" />
     <Content Include="Views\ASSAssetAcquisition\_DetailsView.cshtml" />
+    <Content Include="Views\ASSAssignmentofAsset\Detail.cshtml" />
+    <Content Include="Views\ASSAssignmentofAsset\_AssignmentofAsset.cshtml" />
+    <Content Include="Views\ASSAssignmentofAsset\_Details.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1091,8 +1094,6 @@
     <Folder Include="App_Code\" />
     <Folder Include="Scripts\apps\controlls\" />
     <Folder Include="Views\Activity\" />
-    <Folder Include="Views\FINPettyCashReimbursement\" />
-    <Folder Include="Views\FINTaxExemptionData\" />
     <Folder Include="Views\HRDataMaster\" />
   </ItemGroup>
   <ItemGroup>
