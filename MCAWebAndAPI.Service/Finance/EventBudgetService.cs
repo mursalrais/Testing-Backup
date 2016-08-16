@@ -17,28 +17,37 @@ namespace MCAWebAndAPI.Service.Finance
     
     public class EventBudgetService : IEventBudgetService
     {
-        const string ListName_EventBudget = "Event Budget";
-        const string ListName_EventBudgetItem = "Event Budget Item";
-        const string ListName_Activity = "Activity";
+        private const string ListName_EventBudget = "Event Budget";
+        private const string ListName_EventBudgetItem = "Event Budget Item";
+        private const string ListName_Attachment = "Event Budget Documents";
+        private const string ListName_Activity = "Activity";
 
-        const string EventBudgetFieldName_ID = "ID";
-        const string EventBudgetFieldName_No = "No";
-        const string EventBudgetFieldName_EventName = "Title";
-        const string EventBudgetFieldName_DateFrom = "Date_x0020_From";
-        const string EventBudgetFieldName_DateTo = "Date_x0020_To";
-        const string EventBudgetFieldName_Project = "Project";
-        const string EventBudgetFieldName_ActivityID = "Activity_x0020_ID0";
-        const string EventBudgetFieldName_Venue = "Venue";
-        const string EventBudgetFieldName_ExhangeRate = "Exchange_x0020_Rate";
-        const string EventBudgetFieldName_TotalDirectPaymentIDR = "Total Direct Payment (IDR)";
-        const string EventBudgetItemFieldName_EventBudgetID = "Event_x0020_Budget_x0020_ID";
-        const string EventBudgetFieldName_ActivityName = "Activity_x0020_ID_x003a_Name";
-        const string ActivityFieldName_Name = "Title";
+        private const string EventBudgetFieldName_ID = "ID";
+        private const string EventBudgetFieldName_No = "No";
+        private const string EventBudgetFieldName_EventName = "Title";
+        private const string EventBudgetFieldName_DateFrom = "Date_x0020_From";
+        private const string EventBudgetFieldName_DateTo = "Date_x0020_To";
+        private const string EventBudgetFieldName_Project = "Project";
+        private const string EventBudgetFieldName_ActivityID = "Activity_x0020_ID0";
+        private const string EventBudgetFieldName_ActivityName = "Activity_x0020_ID_x003a_Name";
+        private const string EventBudgetFieldName_Venue = "Venue";
+        private const string EventBudgetFieldName_ExhangeRate = "Exchange_x0020_Rate";
+        private const string EventBudgetFieldName_TotalDirectPaymentIDR = "Total Direct Payment (IDR)";
 
-        const string DocumentNoMask = "EB/{0}-{1}/";
+        private const string ActivityFieldName_Name = "Title";
 
-        string siteUrl = null;
-        static Logger logger = LogManager.GetCurrentClassLogger();
+        private const string EventBudgetItemFieldName_EventBudgetID = "Event_x0020_Budget_x0020_ID";
+        private const string EventBudgetItemFieldName_WBSId = "WBS_x0020_Master_x002e_ID";
+        private const string EventBudgetItemFieldName_WBSName = "WBS_x0020_Master_x002e_ID_x003a_";
+        private const string EventBudgetItemFieldName_GLID = "GL_x0020_Master_x002e_ID";
+        private const string EventBudgetItemFieldName_GLNo = "GL_x0020_Master_x002e_ID_x003a_G";
+        private const string EventBudgetItemFieldName_GLDescription = "GL_x0020_Master_x002e_ID_x003a_G0";
+
+
+        private const string DocumentNoMask = "EB/{0}-{1}/";
+
+        private string siteUrl = null;
+        private static Logger logger = LogManager.GetCurrentClassLogger();
 
         public void SetSiteUrl(string siteUrl)
         {
@@ -87,13 +96,22 @@ namespace MCAWebAndAPI.Service.Finance
 
         EventBudgetItemVM ConvertToItemVM(ListItem item)
         {
-            return new EventBudgetItemVM
-            {
-                ID = Convert.ToInt32(item["ID"]),
-                Title = Convert.ToString(item["Title"]),
-                Quantity = Convert.ToInt32(item["Quantity"]),
-                UoMQty = Convert.ToString(item["UoMQuantity"]),
-            };
+            EventBudgetItemVM detail = new EventBudgetItemVM();
+            detail.ID = Convert.ToInt32(item["ID"]);
+            detail.Title = Convert.ToString(item["Title"]);
+            detail.Quantity = Convert.ToInt32(item["Quantity"]);
+            detail.UoMQty = Convert.ToString(item["UoMQuantity"]);
+            detail.AmountPerItem = Convert.ToDecimal(item["AmountPerItem"]);
+            detail.Frequency = Convert.ToInt32(item["Frequency"]);
+            detail.UnitPrice = Convert.ToDecimal(item["UnitPrice"]);
+
+            detail.WBS.Value = (item[EventBudgetItemFieldName_WBSId] as FieldLookupValue).LookupId;
+            detail.WBS.Text = string.Format("{0}-{1}", (item[EventBudgetItemFieldName_WBSId] as FieldLookupValue).LookupValue, (item[EventBudgetItemFieldName_WBSName] as FieldLookupValue).LookupValue);
+
+            detail.GL.Value = (item[EventBudgetItemFieldName_GLID] as FieldLookupValue).LookupId;
+            detail.GL.Text = string.Format("{0}-{1}", (item[EventBudgetItemFieldName_GLNo] as FieldLookupValue).LookupValue, (item[EventBudgetItemFieldName_GLDescription] as FieldLookupValue).LookupValue);
+
+            return detail;
         }
 
         private EventBudgetVM CreateNewEventBudgetVM()
@@ -116,6 +134,9 @@ namespace MCAWebAndAPI.Service.Finance
             eventBudget.DateTo = Convert.ToDateTime(listItem[EventBudgetFieldName_DateTo]);
 
             eventBudget.Project.Text = Convert.ToString(listItem[EventBudgetFieldName_Project]);
+
+            eventBudget.Activity.Value = (listItem[EventBudgetFieldName_ActivityName] as FieldLookupValue).LookupId;
+            eventBudget.Activity.Text = (listItem[EventBudgetFieldName_ActivityName] as FieldLookupValue).LookupValue;
 
             return eventBudget;
         }
@@ -215,14 +236,9 @@ namespace MCAWebAndAPI.Service.Finance
 
         }
 
-        public Task CreateItemsAsync(int? headerID, IEnumerable<EventBudgetItemVM> noteItems)
+        public async Task CreateAttachmentsAsync(int? headerID, IEnumerable<HttpPostedFileBase> documents)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task CreateAttachmentsAsync(int? headerID, IEnumerable<HttpPostedFileBase> documents)
-        {
-            throw new NotImplementedException();
+            CreateRequisitionNoteAttachments(headerID, documents);
         }
 
         public Task EditItemsAsync(int? headerID, IEnumerable<EventBudgetItemVM> noteItems)
@@ -233,6 +249,50 @@ namespace MCAWebAndAPI.Service.Finance
         public Task EditAttachmentsSync(int? headerID, IEnumerable<HttpPostedFileBase> documents)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task CreateItemsAsync(int? headerID, IEnumerable<EventBudgetItemVM> viewModels)
+        {
+            foreach (var viewModel in viewModels)
+            {
+                if (Item.CheckIfSkipped(viewModel))
+                    continue;
+
+                var updatedValue = new Dictionary<string, object>();
+                updatedValue.Add(EventBudgetItemFieldName_EventBudgetID, headerID);
+                updatedValue.Add(EventBudgetItemFieldName_WBSId, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.WBS.Value) });
+                updatedValue.Add(EventBudgetItemFieldName_GLID, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.GL.Value) });
+
+                try
+                {
+                    SPConnector.AddListItem(ListName_EventBudgetItem, updatedValue, siteUrl);
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e.Message);
+                    throw e;
+                }
+            }
+        }
+
+        public void CreateRequisitionNoteAttachments(int? headerID, IEnumerable<HttpPostedFileBase> documents)
+        {
+            foreach (var doc in documents)
+            {
+                var updateValue = new Dictionary<string, object>();
+                var type = doc.FileName.Split('-')[0].Trim();
+
+                updateValue.Add(EventBudgetItemFieldName_EventBudgetID, new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
+                try
+                {
+                    SPConnector.UploadDocument(ListName_Attachment, updateValue, doc.FileName, doc.InputStream, siteUrl);
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e.Message);
+                    throw new Exception(ErrorResource.SPInsertError);
+                }
+            }
         }
     }
 }

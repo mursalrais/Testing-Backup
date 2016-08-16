@@ -164,8 +164,10 @@ namespace MCAWebAndAPI.Web.Resources {
         /// <summary>
         ///   Looks up a localized string similar to  {0}  has successfully been submitted..
         /// </summary>
-        public static string SuccessCreateSPHLData {
-            get {
+        public static string SuccessCreateFINSPHLData
+        {
+            get
+            {
                 return ResourceManager.GetString("SuccessCreateSPHLData", resourceCulture);
             }
         }

@@ -56,7 +56,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         public AjaxComboBoxVM EventBudget { get; set; } = new AjaxComboBoxVM
         {
             ControllerName = "ComboBox",
-            ActionName = "GetEventBudget",
+            ActionName = "GetEventBudgets",
             ValueField = "Value",
             TextField = "Text",
             OnSelectEventName = "OnSelectEventBudgetNo"
@@ -87,7 +87,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         [UIHint("AjaxCascadeComboBox")]
         public AjaxCascadeComboBoxVM SubActivity { get; set; } = new AjaxCascadeComboBoxVM
         {
-            ActionName = "GetSubActivityByEventBudgetID",
+            ActionName = "GetSubActivitiesByEventBudgetID",
             ControllerName = "ComboBox",
             ValueField = "Value",
             TextField = "Text",
