@@ -56,8 +56,8 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewModel);
         }
 
-        [HttpPost]
-        public ActionResult Submit(AssignmentofAssetVM _data, string siteUrl)
+        [HttpGet]
+        public ActionResult SubmitAsset(AssignmentofAssetVM _data, string siteUrl)
         {
             siteUrl = SessionManager.Get<string>("SiteUrl");
             _assignmentOfAssetService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);

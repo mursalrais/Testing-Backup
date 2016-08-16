@@ -320,7 +320,17 @@ namespace MCAWebAndAPI.Service.Asset
                 try
                 {
                     var id = CreateHeader(model, model.Province.Value, model.OfficeName, model.FloorName, model.RoomName);
-                    ids.Add(id);
+                    if(id == 0)
+                    {
+                        foreach(var i in ids)
+                        {
+                            SPConnector.DeleteListItem(SP_LOCATION_MAS_LISTNAME, i, SiteUrl);
+                        }
+                    }
+                    else
+                    {
+                        ids.Add(id);
+                    }
                 }
                 catch (Exception ex)
                 {
