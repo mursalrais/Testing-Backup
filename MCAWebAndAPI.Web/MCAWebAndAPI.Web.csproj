@@ -935,6 +935,7 @@
     <Content Include="Views\FINTaxReimbursement\Item.cshtml" />
     <Content Include="Views\ASSLocationMaster\Edit.cshtml" />
     <Content Include="Views\ASSAssetAcquisition\Sync.cshtml" />
+    <Content Include="Views\ASSLocationMaster\Upload.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
