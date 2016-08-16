@@ -24,6 +24,7 @@ namespace MCAWebAndAPI.Service.HR.Leave
         const string SP_DAYOFF_REQ_DETAIL_LIST_NAME = "Day-Off Request Detail";
         const string SP_MAS_DAYOFF_TYPE_LIST_NAME = "Master Day Off Type";
         const string SP_PSA_LIST_NAME = "PSA Management";
+        const string SP_PRO_MAS_LIST_NAME = "Professional Master";
 
         const string TYPE_UNPAID_DAYOFF = "Unpaid Day-Off";
 
@@ -244,11 +245,11 @@ namespace MCAWebAndAPI.Service.HR.Leave
 
             var model = new DayOffRequestVM();
 
-            foreach (var item in SPConnector.GetList(SP_DAYOFF_BAL_LIST_NAME, _siteUrl, caml))
+            foreach (var item in SPConnector.GetList(SP_PRO_MAS_LIST_NAME, _siteUrl, caml))
             {
-                model.Professional = FormatUtil.ConvertLookupToValue(item, "professional");
-                model.ProfessionalID = FormatUtil.ConvertLookupToID(item, "ID");
-                model.ProjectUnit = Convert.ToString(item["projectunit"]);
+                model.Professional = Convert.ToString(item["Title"]);
+                model.ProfessionalID = Convert.ToInt32(item ["ID"]);
+                model.ProjectUnit = Convert.ToString(item["Project_x002f_Unit"]);
             }
 
             model.DayOffBalanceDetails = GetDayOffBalanceDetails(model.ProfessionalID);
@@ -261,7 +262,7 @@ namespace MCAWebAndAPI.Service.HR.Leave
             var caml = @"<View><Query><Where><Eq><FieldRef Name='professionalperformanceplan' /><Value Type='Lookup'>" + ID.ToString() + "</Value></Eq></Where></Query></View>";
 
             var DayOffBalanceDetail = new List<DayOffBalanceVM>();
-            foreach (var item in SPConnector.GetList(SP_MAS_DAYOFF_TYPE_LIST_NAME, _siteUrl, caml))
+            foreach (var item in SPConnector.GetList(SP_MAS_DAYOFF_TYPE_LIST_NAME, _siteUrl))
             {
                 DayOffBalanceDetail.Add(ConvertToDayOffBalanceDetail(item));
             }
@@ -278,12 +279,18 @@ namespace MCAWebAndAPI.Service.HR.Leave
                     {
                         Text = Convert.ToString(item["Title"])
                     }),
-                Quantity = Convert.ToInt32(item["quantity"]),
+                Unit = DayOffBalanceVM.GetUnitDefaultValue(
+                    new InGridComboBoxVM
+                    {
+                        Text = Convert.ToString(item["uom"])
+                    }),
+                DayOffBrought = 0,
+                Balance = Convert.ToInt32(item["quantity"]),
 
             };
         }
 
-        public DayOffRequestVM GetHeader(int? ID)
+        public DayOffRequestVM GetHeader(int? ID, string requstor)
         {
             throw new NotImplementedException();
         }
@@ -387,6 +394,11 @@ namespace MCAWebAndAPI.Service.HR.Leave
         public async Task CreateDayOffBalanceDetailsAsync(int? headerID, IEnumerable<DayOffBalanceVM> dayOffBalanceDetails)
         {
             CreateDayOffBalanceDetails(headerID, dayOffBalanceDetails);
+        }
+
+        public DayOffBalanceVM GetCalculateBalance(int? ID, string siteUrl, string requestor, string listName)
+        {
+            throw new NotImplementedException();
         }
     }
 }

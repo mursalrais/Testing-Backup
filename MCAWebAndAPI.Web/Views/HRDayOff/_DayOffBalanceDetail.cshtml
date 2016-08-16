@@ -1,0 +1,71 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+
+@model DayOffRequestVM
+
+<div class="col-sm-12">
+
+    @(Html.Kendo().Grid(Model.DayOffBalanceDetails)
+        .Name("DayOffBalanceDetails")
+        .Editable(editable => editable.Mode(GridEditMode.InCell)
+        .CreateAt(GridInsertRowPosition.Bottom))
+        .Columns(columns =>
+        {
+            columns.Bound(p => p.DayOffType).ClientTemplate("#= DayOffType.Text #" +
+            "<input type='hidden' name='DayOffBalanceDetails[#= getDayOffBalanceDetail(data)#].DayOffType' value='#= DayOffType #' />"
+            )
+            .EditorViewData(new
+            {
+                BindTo = DayOffBalanceVM.GetDayOffTypeOptions()
+            });
+            columns.Bound(p => p.Balance).ClientTemplate("#= Balance #" +
+            "<input type='hidden' name='DayOffBalanceDetails[#= getDayOffBalanceDetail(data)#].Balance' value='#= Balance #' />"
+            );
+            columns.Bound(p => p.DayOffBrought).ClientTemplate("#= DayOffBrought #" +
+            "<input type='hidden' name='DayOffBalanceDetails[#= getDayOffBalanceDetail(data)#].DayOffBrought' value='#= DayOffBrought #' />"
+            );
+            columns.Bound(p => p.Unit).ClientTemplate("#= Unit.Text #" +
+            "<input type='hidden' name='DayOffBalanceDetails[#= getDayOffBalanceDetail(data)#].Unit.Text' value='#= Unit.Text #' />"
+            )
+            .EditorViewData(new
+            {
+                BindTo = DayOffBalanceVM.GetUnitOptions()
+            });
+            columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
+            "<input type='hidden' name='DayOffBalanceDetails[#= getDayOffBalanceDetail(data)#].ID' value='#= ID #' />"
+            );
+
+            columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
+           "<input type='hidden' name='Details[#= getDayOffBalanceDetail(data)#].EditMode' value='#= EditMode #' />"
+           );
+
+            columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
+            .Click("onDeleteKendoDetail")).Width(100);
+        })
+        .Events(e =>
+        {
+            e.Edit("onEditKendoDetail");
+            e.DataBound("onDataBoundDayOffBalanceDetails");
+        })
+        .DataSource(dataSource => dataSource.Ajax()
+        .Model(model =>
+        {
+            model.Id(p => p.ID);
+            model.Field(m => m.DayOffType).DefaultValue(DayOffBalanceVM.GetDayOffTypeDefaultValue());
+            model.Field(m => m.Unit).DefaultValue(DayOffBalanceVM.GetUnitDefaultValue());
+        })
+        .ServerOperation(false)
+        )
+    )
+</div>
+
+<script>
+    function getDayOffBalanceDetail(dataItem) {
+        var data = $("#DayOffBalanceDetails").data("kendoGrid").dataSource.data();
+        return data.indexOf(dataItem);
+    }
+
+    function onDataBoundDayOffBalanceDetails(e) {
+        var grid = $("#DayOffBalanceDetails").data("kendoGrid");
+        hideDeletedRowKendoDetail(grid);
+    }
+</script>

@@ -13,7 +13,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
     public class DayOffRequestDetailVM : DayOffBalanceVM
     {
-        [UIHint("Combobox")]
+        [UIHint("InGridComboBox")]
         public InGridComboBoxVM FullHalf { get; set; } = new InGridComboBoxVM();
 
         public static IEnumerable<InGridComboBoxVM> GetFullHalfOptions()
@@ -86,7 +86,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// approvalstatus
         /// </summary>
-        [UIHint("Combobox")]
+        [UIHint("InGridComboBox")]
         public InGridComboBoxVM ApprovalStatus { get; set; } = new InGridComboBoxVM();
 
         public static IEnumerable<InGridComboBoxVM> GetApprovalStatusOptions()

@@ -18,6 +18,12 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         public string ProjectUnit { get; set; }
 
+        public string Requestor { get; set; }
+
+        public string StatusForm { get; set; }
+
+        public string TypeForm { get; set; }
+
         [UIHint("Date")]
         public DateTime? RequestDate { get; set; } = DateTime.UtcNow;
     }
