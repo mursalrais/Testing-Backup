@@ -1,21 +1,17 @@
-﻿@using MCAWebAndAPI.Model.ViewModel.Form.Finance
-@model OutstandingAdvanceVM
+﻿@model MCAWebAndAPI.Model.ViewModel.Form.Finance.OutstandingAdvanceVM
+
+@*
+    Wireframe FIN09: Outstanding Advance
+*@
 
 @{
-    ViewBag.Title = "Create Outstanding Advance";
+    ViewBag.Title = "Outstanding Advance";
 
 }
 
 
-@using (Ajax.BeginForm("Create", "FINOutstandingAdvance",
+@using (Html.BeginForm("Save", "FINOutstandingAdvance",
     FormMethod.Post,
-    new AjaxOptions
-    {
-        OnBegin = "onBeginForm",
-        OnComplete = "onCompleteForm",
-        OnSuccess = "onSuccessFormEmbed",
-        OnFailure = "onFailureForm"
-    },
     new
     {
         @class = "form-horizontal",
@@ -38,9 +34,9 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.StaffID).Class("col-sm-3 control-label")
+                    @Html.Bootstrap().LabelFor(m => m.Staff).Class("col-sm-3 control-label")
                     <div class="col-sm-8">
-                        @Html.EditorFor(m => m.StaffID)
+                        @Html.EditorFor(m => m.Staff)
                     </div>
                 </div>
                 <div class="form-group">
@@ -78,9 +74,16 @@
                 </div>
 
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.Reference).Class("col-sm-3 control-label")
+                    @Html.Bootstrap().LabelFor(m => m.Remarks).Class("col-sm-3 control-label")
                     <div class="col-sm-8">
-                        @Html.EditorFor(m => m.Reference)
+                        @Html.EditorFor(m => m.Remarks)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Documents).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.Documents)
                     </div>
                 </div>
 

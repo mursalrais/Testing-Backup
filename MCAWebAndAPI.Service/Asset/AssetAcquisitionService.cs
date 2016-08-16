@@ -74,7 +74,7 @@ namespace MCAWebAndAPI.Service.Asset
             var memoinfo = SPConnector.GetListItem(SP_ACC_MEMO_LIST_NAME, Convert.ToInt32(memo[0]), _siteUrl);
             columnValues.Add("vendorid", memoinfo["vendorid"]);
             columnValues.Add("vendorname", memoinfo["vendorname"]);
-            columnValues.Add("pono", viewmodel.PoNo);
+            columnValues.Add("pono", memoinfo["pono"]);
             if(viewmodel.PurchaseDate.HasValue)
             {
                 columnValues.Add("purchasedate", viewmodel.PurchaseDate);
@@ -120,7 +120,7 @@ namespace MCAWebAndAPI.Service.Asset
             }
             else
             {
-                viewModel.PurchaseDate = Convert.ToDateTime(listItem["purchasedate"]);
+                viewModel.PurchaseDate = Convert.ToDateTime(listItem["purchasedate"]).AddDays(1);
             }
             //viewModel.Spesifications = Regex.Replace(listItem["Spesifications"].ToString(), "<.*?>", string.Empty);
             viewModel.PurchaseDescription = Regex.Replace(Convert.ToString(listItem["purchasedescription"]), "<.*?>", string.Empty);
@@ -276,15 +276,15 @@ namespace MCAWebAndAPI.Service.Asset
             //columnValues.add
             columnValues.Add("Title", "Asset Acquisition");
             string[] memo = viewmodel.AccpMemo.Value.Split('-');
+            var memoinfo = SPConnector.GetListItem(SP_ACC_MEMO_LIST_NAME, Convert.ToInt32(memo[0]), _siteUrl);
             //columnValues.Add("acceptancememono", memo[1]);
             columnValues.Add("acceptancememono", new FieldLookupValue { LookupId = Convert.ToInt32(memo[0]) });
-            var breakVendor = viewmodel.Vendor.Split('-');
-            columnValues.Add("vendorid", breakVendor[0]);
-            columnValues.Add("vendorname", breakVendor[1]);
-            columnValues.Add("pono", viewmodel.PoNo);
+            columnValues.Add("vendorid", memoinfo["vendorid"]);
+            columnValues.Add("vendorname", memoinfo["vendorname"]);
+            columnValues.Add("pono", memoinfo["pono"]);
             if (viewmodel.PurchaseDate.HasValue)
             {
-                columnValues.Add("purchasedate", viewmodel.PurchaseDate);
+                columnValues.Add("purchasedate", Convert.ToDateTime(viewmodel.PurchaseDate));
             }
             else
             {
@@ -337,7 +337,7 @@ namespace MCAWebAndAPI.Service.Asset
                 try
                 {
                     if (Item.CheckIfUpdated(item))
-                        SPConnector.UpdateListItem(SP_ASSACQDetails_LIST_NAME, headerID, updatedValues, _siteUrl);
+                        SPConnector.UpdateListItem(SP_ASSACQDetails_LIST_NAME, item.ID, updatedValues, _siteUrl);
                     else
                         SPConnector.AddListItem(SP_ASSACQDetails_LIST_NAME, updatedValues, _siteUrl);
                 }
@@ -485,6 +485,68 @@ namespace MCAWebAndAPI.Service.Asset
         public bool MassUploadBreakDown(string ListName, DataTable CSVDataTable, string SiteUrl = null)
         {
             throw new NotImplementedException();
+        }
+
+        public List<string> GetSubAsst(string mainsubasset, string SiteUrl)
+        {
+            string caml = @"<View><Query>
+                       <Where>
+                          <Contains>
+                             <FieldRef Name='AssetID' />
+                             <Value Type='Text'>"+ mainsubasset + @"</Value>
+                          </Contains>
+                       </Where>
+                       <OrderBy>
+                          <FieldRef Name='ID' Ascending='True' />
+                       </OrderBy>
+                    </Query>
+                    <ViewFields>
+                       <FieldRef Name='AssetID' />
+                       <FieldRef Name='Title' />
+                    </ViewFields>
+                    <QueryOptions /></View>";
+            var list = SPConnector.GetList("Asset Master", SiteUrl, caml);
+
+            var viewmodel = new List<string>();
+            foreach(var l in list)
+            {
+                if(Convert.ToString(l["AssetID"]).Length >14 )
+                {
+                    viewmodel.Add(Convert.ToString(l["AssetID"]) +"-"+ Convert.ToString(l["Title"]));
+                }
+            }
+            
+            return viewmodel;
+        }
+
+        public bool Syncronize(string SiteUrl)
+        {
+            var lists = SPConnector.GetList(SP_ACC_MEMO_LIST_NAME, SiteUrl);
+            foreach(var l in lists)
+            {
+                var caml = @"<View><Query>
+                            <Where>
+                                <Eq>
+                                    <FieldRef Name='acceptancememono' />
+                                    <Value Type='Lookup'>"+l["Title"] +@"</Value> 
+                                </Eq>
+                            </Where>
+                            </Query>
+                            <ViewFields />
+                            <QueryOptions /></View>";
+                var getAsset = SPConnector.GetList(SP_ASSACQ_LIST_NAME, SiteUrl, caml);
+                foreach(var ass in getAsset)
+                {
+                    var model = new Dictionary<string, object>();
+                    model.Add("vendorname", Convert.ToString(l["vendorname"]));
+                    model.Add("vendorid", Convert.ToString(l["vendorid"]));
+                    model.Add("pono", Convert.ToString(l["pono"]));
+
+                    SPConnector.UpdateListItem(SP_ASSACQ_LIST_NAME, Convert.ToInt32(ass["ID"]), model, SiteUrl);
+                }                
+            }
+
+            return true;
         }
     }
 }

@@ -20,6 +20,8 @@ namespace MCAWebAndAPI.Service.Asset
         int? CreateHeader(AssetAcquisitionHeaderVM viewmodel);
         bool UpdateHeader(AssetAcquisitionHeaderVM viewmodel);
 
+        bool Syncronize(string SiteUrl);
+
         void CreateDetails(int? headerID, IEnumerable<AssetAcquisitionItemVM> items);
         void UpdateDetails(int? headerID, IEnumerable<AssetAcquisitionItemVM> items);
 
@@ -40,5 +42,6 @@ namespace MCAWebAndAPI.Service.Asset
         void RollbackParentChildrenUpload(string listNameHeader, int? latestIDHeader, string siteUrl);
 
         AcceptanceMemoVM GetAcceptanceMemoInfo(int? ID, string SiteUrl);
+        List<string> GetSubAsst(string mainsubasset, string SiteUrl);
     }
 }

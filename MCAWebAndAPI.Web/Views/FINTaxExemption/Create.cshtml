@@ -1,0 +1,87 @@
+﻿@model MCAWebAndAPI.Model.ViewModel.Form.Finance.TaxExemptionVM
+
+@using (Html.BeginForm("Create", "FINTaxExemption", FormMethod.Post,
+                                                new
+                                                {
+                                                    @class = "form-horizontal",
+                                                    enctype = "multipart/form-data"
+                                                }))
+{
+<fieldset>
+    <legend>Tax Exemption Data</legend>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Bootstrap().LabelFor(m => m.TypeOfTax).Class("col-md-4 control-label")
+            <div class="col-md-8">
+                @Html.EditorFor(m => m.TypeOfTax)
+            </div>
+        </div>
+        <div id="Income" style="display: none;">
+            @Html.Partial("_Income", Model.TaxExemptionIncomeVM, new ViewDataDictionary { TemplateInfo = new TemplateInfo { HtmlFieldPrefix = "TaxExemptionIncomeVM" } })
+        </div>
+        <div id="VAT" style="display: none;">
+            @Html.Partial("_VAT", Model.TaxExemptionVATVM, new ViewDataDictionary { TemplateInfo = new TemplateInfo { HtmlFieldPrefix = "TaxExemptionVATVM" } })
+        </div>
+        <div id="Others" style="display: none;">
+            @Html.Partial("_Others", Model.TaxExemptionOtherVM, new ViewDataDictionary { TemplateInfo = new TemplateInfo { HtmlFieldPrefix = "TaxExemptionOtherVM" } })
+        </div> 
+        <div id="CommonStuff" style="display: none;">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Remarks).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.Remarks)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Documents).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.Documents)
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.HiddenFor(m => m.ID)
+</fieldset>
+    <div class="form-actions">
+        <div class="row">
+            <div class="col-sm-12">
+                <button id="submit-button" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    Submit
+                </button>
+                <button id="cancel-button" class="btn btn-default" type="button">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+}
+@section scripts{
+    <script>
+        $(document).ready(function () {
+
+        });
+        function onSelectTypeOfTax(e) {
+            //this maps to TaxTypeComboBoxVM
+            switch(e.item[0].innerHTML)
+            {
+                case "Income":
+                    $('#Income').show();
+                    $('#VAT').hide();
+                    $('#Others').hide();
+                    break;
+                case "VAT":
+                    $('#Income').hide();
+                    $('#VAT').show();
+                    $('#Others').hide();
+                    break;
+                case "Other":
+                    $('#Income').hide();
+                    $('#VAT').hide();
+                    $('#Others').show();
+                    break;
+            }
+            $('#CommonStuff').show();
+        }
+    </script>
+}

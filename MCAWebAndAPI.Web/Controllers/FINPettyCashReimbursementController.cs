@@ -1,21 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
-using Elmah;
+﻿using MCAWebAndAPI.Model.ViewModel.Control;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
-using FinService = MCAWebAndAPI.Service.Finance;
 using MCAWebAndAPI.Service.Finance;
 using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;
-using MCAWebAndAPI.Model.ViewModel.Control;
+using System.Linq;
+using System.Web.Mvc;
+using FinService = MCAWebAndAPI.Service.Finance;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
+    /// <summary>
+    ///     Wireframe FIN12: Petty Cash Reimbursement: Petty Cash Reimbursement
+    ///         Petty Cash Reimbursement is a transaction for the reimbursement of petty cash only when
+    ///         user has not asked for any petty cash advance.
+    ///
+    ///         Through this feature, finance will create the reimbursement of petty cash which results in 
+    ///         user needs to receive the reimbursement. 
+    /// </summary>
+
     public class FINPettyCashReimbursementController : Controller
     {
         IPettyCashReimbursement service;
@@ -36,11 +39,11 @@ namespace MCAWebAndAPI.Web.Controllers
             viewModel.PaidTo = new PaidToComboboxVM();
            
             viewModel.PaidTo.OnSelectEventName = "onSelectPaidTo";
-
+            
             viewModel.Vendor = new AjaxCascadeComboBoxVM
             {
-                ControllerName = "FINPettyCashReimbursement",
-                ActionName = "GetVendor",
+                ControllerName = "FINPettyCashReimbursement", 
+                ActionName = "GetVendors",
                 ValueField = "ID",
                 TextField = "Title"
             };
@@ -85,7 +88,7 @@ namespace MCAWebAndAPI.Web.Controllers
             var siteUrl = SessionManager.Get<string>("SiteUrl") ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);
 
-            var vendors = FinService.Shared.GetVendorMaster(siteUrl);
+            var vendors = Service.Shared.VendorService.GetVendorMaster(siteUrl);
 
             return Json(vendors.Select(e => new
             {

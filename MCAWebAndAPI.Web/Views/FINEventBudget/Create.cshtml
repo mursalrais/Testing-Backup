@@ -1,13 +1,16 @@
-﻿@using MCAWebAndAPI.Model.ViewModel.Form.Finance
+﻿@model MCAWebAndAPI.Model.ViewModel.Form.Finance.EventBudgetVM
 
-@model EventBudgetVM
+@*
+    Wireframe FIN04: Event Budget
+*@
 
-@using (Html.BeginForm("CreateRequisitionNote", "FINRequisitionNote", FormMethod.Post,
-                        new
-                        {
-                            @class = "form-horizontal",
-                            enctype = "multipart/form-data"
-                        }))
+@using (Html.BeginForm("Create", "FINEventBudget",
+    FormMethod.Post,
+    new
+    {
+        @class = "form-horizontal",
+        enctype = "multipart/form-data"
+    }))
 {
     <fieldset>
         <legend>Event Budget</legend>
@@ -42,8 +45,7 @@
                     @Html.Bootstrap().LabelFor(m => m.Project).Class("col-sm-3 control-label")
                     <div class="col-sm-8">
                         @Html.EditorFor(m => m.Project)
-                        <!-- TODO: sesuaikan hdnEvenBudgetId -->
-                        <input type="hidden" id="hdnEvenBudgetId" value="-1" name="hdnEvenBudgetId" />
+                        @Html.HiddenFor(m => m.Project.Value, new { @id = "hiddenProjectValue" })
                     </div>
                 </div>
 
@@ -64,9 +66,9 @@
                 </div>
 
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.Fund).Class("col-sm-2 control-label")
+                    @Html.Bootstrap().LabelFor(m => m.Fund).Class("col-sm-3 control-label")
                     <div class="col-sm-8">
-                        @Html.EditorFor(m => m.Fund, new { HtmlAttributes = new { @class = "control-textbox-padding6px", @readonly = "readonly" } })
+                        @Html.DisplayFor(m => m.Fund)
                     </div>
                 </div>
 
@@ -148,14 +150,6 @@
         </div>
     </fieldset>
 
-    <div class="row">
-        <p style="margin: 50px 0px 0px 20px; font-style: italic;">
-            Instructions:
-            <br />
-            1. Requisition for Goods:  Indicate detailed specifications. Should be generic - no brand names. <br />
-            2. Requisition for Works/Services:  Attached copy of TOR. <br />
-        </p>
-    </div>
     <div class="form-actions">
         <div class="row">
             <div class="col-sm-12">
@@ -180,16 +174,16 @@
 
         });
 
-    var CATEGORY_NON_EVENT = "Non-event";
 
     $(document).ready(function () {
-        var categoryDropDownList = $("#Category_Value").data("kendoDropDownList");
-        categoryDropDownList.bind("dataBound", function (e) {
-        });
-
+        $("#hiddenProjectValue").val($("#Project_Value").val());
         $("#hdnEvenBudgetId").val("-1");
     });
 
+    function onSelectProject(e) {
+        var dataItem = this.dataItem(e.item);
+        $("#hiddenProjectValue").val(dataItem);
+    }
 
     function toggleEventBudgetComboBox(category) {
         var categoryDropDownList = $("#EventBudgetNo_Value").data("kendoDropDownList");
@@ -218,8 +212,8 @@
 
     function onSelectEventBudgetNo(e) {
         var dataItem = this.dataItem(e.item);
-
-        $("#hdnEvenBudgetId").val(dataItem.ID);
+        
+        $("#hdnEvenBudgetId").val(dataItem.Value);
 
         refreshItemDetailGrid();
     }
@@ -229,5 +223,16 @@
         $("#ItemDetails").data("kendoGrid").dataSource.read();
     }
 
+    function filterProject() {
+        return {
+            projectValue: $("#hiddenProjectValue").val()
+        };
+    }
 </script>
 }
+
+<style media="screen">
+    #Fund {
+        background-color: #dedede;
+    }
+</style>

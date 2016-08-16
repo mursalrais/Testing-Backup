@@ -18,6 +18,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
         private const string GLMASTER_SITE_LIST = "GL Master";
         private const string WBSMASTER_SITE_LIST = "WBS Master";
         private const string ACTIVITY_SITE_LIST = "Activity";
+        private const string SUBACTIVITY_SITE_LIST = "Sub Activity";
         private const string REQUISITION_SITE_LIST = "Requisition Note";
         private const string REQUISITION_ITEM_SITE_LIST = "Requisition Note item";
         private const string REQUISITION_ATTACHMENTS_SITE_LIST = "Requisition Note Documents";
@@ -46,8 +47,9 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
         private const string FIELD_RN_PRICE = "Price";
         private const string FIELD_RN_TOTAL = "Total_x0020_Per_x0020_Item";
         private const string FIELD_RN_DOCUMENTS_HEADERID = "_x0027_Requisition_x0020_Note_x0027_";
-        private const string ACTIVTY_PROJECT_NAME = "v0o0";
-
+        private const string ACTIVTY_PROJECT_NAME = "Project";
+        private const string ACTIVITYID_SUBACTIVITY = "Activity_x003a_ID";
+        private const string WBS_SUBACTIVITY_ID = "Sub_x0020_Activity_x003a_ID";
 
         string _siteUrl = null;
         static Logger logger = LogManager.GetCurrentClassLogger();
@@ -87,11 +89,23 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
             return glMasters;
         }
 
-        public IEnumerable<WBSMasterVM> GetWBSMaster()
+        public IEnumerable<WBSMasterVM> GetWBSMaster(string activity)
         {
+            var camlGetSubactivity = @"<View><Query><Where><Eq><FieldRef Name='"+ ACTIVITYID_SUBACTIVITY + "' /><Value Type='Lookup'>" +
+                 (activity == null ? string.Empty : activity.ToString()) + "</Value></Eq></Where></Query></View>";
+
+            string valuesText = string.Empty;
+            foreach (var item in SPConnector.GetList(SUBACTIVITY_SITE_LIST, _siteUrl, camlGetSubactivity))
+            {
+                valuesText += "<Value Type='Lookup'>" + Convert.ToString(item[FIELD_ID]) + "</Value>";
+            }
+
+            var camlGetWbs = @"<View><Query><Where><In><FieldRef Name='"+ WBS_SUBACTIVITY_ID + "' /><Values>" +
+                valuesText + "</Values></In></Where></Query></View>";
+
             var wbsMasters = new List<WBSMasterVM>();
 
-            foreach (var item in SPConnector.GetList(WBSMASTER_SITE_LIST, _siteUrl, null))
+            foreach (var item in SPConnector.GetList(WBSMASTER_SITE_LIST, _siteUrl, camlGetWbs))
             {
                 wbsMasters.Add(ConvertToWBSMasterModel(item));
             }
@@ -104,7 +118,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
             var activities = new List<ActivityVM>();
             var caml = @"<View><Query><Where><Eq><FieldRef Name='" + ACTIVTY_PROJECT_NAME + "' /><Value Type='Lookup'>" + (Project == null ? string.Empty : Project.ToString()) + "</Value></Eq></Where></Query></View>";
 
-            foreach (var item in SPConnector.GetList(ACTIVITY_SITE_LIST, _siteUrl, null))
+            foreach (var item in SPConnector.GetList(ACTIVITY_SITE_LIST, _siteUrl, caml))
             {
                 activities.Add(ConvertToActivityModel(item));
             }
@@ -117,7 +131,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
         public int CreateRequisitionNote(RequisitionNoteVM viewModel)
         {
             var updatedValue = new Dictionary<string, object>();
-            string DocumentNo = string.Format(FIELD_FORMAT_DOC, DateTimeExtensions.GetMonthInRoman(DateTime.Now), DateTime.Now.ToString("yy")) + "{0}";
+            string documentNoFormat = string.Format(FIELD_FORMAT_DOC, DateTimeExtensions.GetMonthInRoman(DateTime.Now), DateTime.Now.ToString("yy")) + "{0}";
 
             updatedValue.Add(FIELD_REQUISITION_CATEGORY, viewModel.Category.Value);
             updatedValue.Add(FIELD_REQUISITION_DATE, viewModel.Date);
@@ -126,7 +140,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
             updatedValue.Add(FIELD_REQUISITION_FUND, viewModel.Fund);
             updatedValue.Add(FIELD_REQUISITION_CURRENCY, viewModel.Currency.Value);
             updatedValue.Add(FIELD_REQUISITION_TOTAL, viewModel.Total);
-            updatedValue.Add(FIELD_TITLE, DocumentNumbering.Create(_siteUrl, DocumentNo));
+            updatedValue.Add(FIELD_TITLE, DocumentNumbering.Create(_siteUrl, documentNoFormat, 5));
 
             try
             {

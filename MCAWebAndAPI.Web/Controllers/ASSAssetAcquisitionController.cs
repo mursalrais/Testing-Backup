@@ -44,6 +44,30 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewModel);
         }
 
+        public ActionResult Sync(string siteUrl)
+        {
+            _assetAcquisitionService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            var viewModel = _assetAcquisitionService.GetPopulatedModel();
+            return View(viewModel);
+        }
+
+        public ActionResult Syncronize(string siteUrl)
+        {
+            siteUrl = SessionManager.Get<string>("SiteUrl");
+            _assetAcquisitionService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            try
+            {
+                var viewModel = _assetAcquisitionService.Syncronize(siteUrl);
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAcquisition);
+        }
 
         public ActionResult Edit(int ID, string siteUrl)
         {
@@ -103,7 +127,7 @@ namespace MCAWebAndAPI.Web.Controllers
             if(_data.Details.Count() == 0)
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse("Details should not empty!");
+                return JsonHelper.GenerateJsonErrorResponse("Details should not empty");
             }
 
             //return View(new AssetMasterVM());
@@ -381,7 +405,8 @@ namespace MCAWebAndAPI.Web.Controllers
             return PartialView("_DisplayGrid");
         }
 
-        public ActionResult Submit(string listName)
+        //[HttpPost]
+        public ActionResult SubmitUpload(string listName)
         {
             // Get existing session variable
             var sessionVariables = SessionManager.Get<DataTable>("CSVDataTable") ?? new DataTable();
@@ -577,7 +602,8 @@ namespace MCAWebAndAPI.Web.Controllers
                     latestIDDetail = _assetAcquisitionService.MassUploadHeaderDetail(listNameDetail, TableDetail, siteUrl);
                 }
             }
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAcquisition);
+            //return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAcquisition);
+            return View(siteUrl + UrlResource.AssetAcquisition);
         }
 
         public ActionResult GetAcceptanceMemoInfo(int IDAcceptanceMemo)
@@ -596,5 +622,16 @@ namespace MCAWebAndAPI.Web.Controllers
                     accpMemoInfo.PoNo
                 }, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult GetSubAsset(string mainsubasset)
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            var MainAssetID = mainsubasset;
+            var subbasset = _assetAcquisitionService.GetSubAsst(MainAssetID, siteUrl);
+
+            //var professionals = GetFromExistingSession();
+            return Json( subbasset, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }

@@ -4,11 +4,15 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using MCAWebAndAPI.Service.Finance;
+using MCAWebAndAPI.Web.Helpers;
+using MCAWebAndAPI.Web.Resources;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
-    public class FinSharedController: Controller
+    public class SharedFinanceController: Controller
     {
+        private const string SESSION_SITE_URL = "SiteUrl";
+
         public JsonResult GetWBSMaster(string siteUrl)
         {
             var wbsMasters = Shared.GetWBSMaster(siteUrl);
@@ -30,5 +34,6 @@ namespace MCAWebAndAPI.Web.Controllers
                 Text = string.IsNullOrWhiteSpace(e.Title) ? string.Empty : e.Title
             }), JsonRequestBehavior.AllowGet);
         }
+
     }
 }

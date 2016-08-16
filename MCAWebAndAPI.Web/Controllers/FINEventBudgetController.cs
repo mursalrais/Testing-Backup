@@ -1,25 +1,28 @@
-﻿using MCAWebAndAPI.Service.Finance;
+﻿using System;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 using System.Web.Mvc;
+using MCAWebAndAPI.Model.ViewModel.Form.Finance;
+using MCAWebAndAPI.Service.Finance;
+using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;
-using System.Linq;
-using System;
-using System.Threading.Tasks;
-using MCAWebAndAPI.Model.ViewModel.Form.Finance;
-using Elmah;
 using FinService = MCAWebAndAPI.Service.Finance;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
-    public class FINEventBudgetController : FinSharedController
+    /// <summary>
+    /// Wireframe FIN04: Event Budget
+    /// </summary>
+
+    public class FINEventBudgetController : Controller
     {
-        private const string IndexPage= "Index";
+        private const string IndexPage = "Index";
         private const string Error = "Error";
 
-        private const string SESSION_SITE_URL = "SiteUrl";
+        private const string Session_SiteUrl = "SiteUrl";
         IEventBudgetService service;
-
-        
 
         public FINEventBudgetController()
         {
@@ -32,15 +35,17 @@ namespace MCAWebAndAPI.Web.Controllers
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
 
             service.SetSiteUrl(siteUrl);
-            SessionManager.Set(SESSION_SITE_URL, siteUrl);
+            SessionManager.Set(Session_SiteUrl, siteUrl);
 
             var viewModel = service.Get(id);
+            SetAdditionalSettingToViewModel(ref viewModel, true);
+
             return View(viewModel);
         }
 
         public JsonResult GetGLMaster()
         {
-            var siteUrl = SessionManager.Get<string>(SESSION_SITE_URL);
+            var siteUrl = SessionManager.Get<string>(Session_SiteUrl);
             service.SetSiteUrl(siteUrl);
 
             var glMasters = FinService.Shared.GetGLMaster(siteUrl);
@@ -54,59 +59,54 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetEventBudgetList()
         {
-            service.SetSiteUrl(SessionManager.Get<string>(SESSION_SITE_URL));
+            service.SetSiteUrl(SessionManager.Get<string>(Session_SiteUrl));
 
             var eventBudgets = service.GetEventBudgetList().ToList();
 
             //insert first empty data
-            eventBudgets.Insert(0, new Model.ViewModel.Form.Finance.EventBudgetVM() { ID = 0, Title = "" });
+            eventBudgets.Insert(0, new EventBudgetVM() { ID = 0, Title = "" });
 
             return Json(eventBudgets.Select(e => new
             {
                 ID = e.ID,
-                Title = (e.No +"-" + e.Title)
+                Title = (e.No + "-" + e.Title)
             }), JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateRequisitionNote(FormCollection form, EventBudgetVM viewModel)
+        public async Task<ActionResult> Create(FormCollection form, EventBudgetVM viewModel)
         {
-            var siteUrl = SessionManager.Get<string>(SESSION_SITE_URL);
-            service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            var siteUrl = SessionManager.Get<string>("SiteUrl") ?? ConfigResource.DefaultBOSiteUrl;
+            service.SetSiteUrl(siteUrl);
 
-            int? headerID = null;
-            try
-            {
-                headerID = service.CreateEventBudget(viewModel);
-            }
-            catch (Exception e)
-            {
-                ErrorSignal.FromCurrentContext().Raise(e);
-                return RedirectToAction(IndexPage, Error, new { errorMessage = e.Message });
-            }
-
-            Task CreateDetailsTask = service.CreateItemsAsync(headerID, viewModel.ItemDetails);
-            Task CreateDocumentsTask = service.CreateAttachmentsAsync(headerID, viewModel.Documents);
-
-            Task allTasks = Task.WhenAll(CreateDetailsTask, CreateDocumentsTask);
+            int? headerId = null;
 
             try
             {
+                headerId = service.Create(viewModel);
+
+                Task CreateDetailsTask = service.CreateItemsAsync(headerId, viewModel.ItemDetails);
+                Task CreateDocumentsTask = service.CreateAttachmentsAsync(headerId, viewModel.Documents);
+
+                Task allTasks = Task.WhenAll(CreateDetailsTask, CreateDocumentsTask);
+
                 await allTasks;
             }
             catch (Exception e)
             {
-                ErrorSignal.FromCurrentContext().Raise(e);
-                return RedirectToAction(IndexPage, Error, new { errorMessage = e.Message });
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            return RedirectToAction(IndexPage,
-                "Success",
-                new
-                {
-                    errorMessage =
-                string.Format(MessageResource.SuccessCreateApplicationData, headerID)
-                });
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.FINEventBudget);
+        }
+
+        private void SetAdditionalSettingToViewModel(ref EventBudgetVM viewModel, bool isCreate)
+        {
+            if (viewModel.Project.Choices.Count() > 0)
+            {
+                viewModel.Project.Value = ((string[])viewModel.Project.Choices)[0];
+            }
         }
     }
 }

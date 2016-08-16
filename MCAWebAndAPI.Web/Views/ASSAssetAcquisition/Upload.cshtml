@@ -3,6 +3,18 @@
 
 @model CSVVM
 
+@using (Ajax.BeginForm("SubmitUpload", "ASSAssetAcquisition",
+                 FormMethod.Post,
+                new AjaxOptions
+                {
+                    OnBegin = "onBeginForm",
+                    OnComplete = "onCompleteForm",
+                    OnSuccess = "onSuccessFormEmbed",
+                    OnFailure = "onFailureForm"
+                }, new { @class = "form-horizontal" }))
+
+{
+
 <div class="form-horizontal">
     <fieldset>
         <legend>CSV Uploader</legend>
@@ -19,16 +31,16 @@
                     @Html.Bootstrap().LabelFor(m => m.File).Class("col-sm-4 control-label")
                     <div class="col-sm-8">
                         @(Html.Kendo().Upload()
-                        .Name("CSVFile")
-                        .HtmlAttributes(new { @class = "form-control" })
-                        .Events(e =>
-                        {
-                            e.Complete("onCompleteUploadCSV");
-                        })
-                        .Async(a => a
-                            .Save("Save", "ASSAssetAcquisition")
-                            .AutoUpload(true)
-                        )
+        .Name("CSVFile")
+        .HtmlAttributes(new { @class = "form-control" })
+        .Events(e =>
+        {
+            e.Complete("onCompleteUploadCSV");
+        })
+        .Async(a => a
+            .Save("Save", "ASSAssetAcquisition")
+            .AutoUpload(true)
+        )
                         )
                     </div>
                 </div>
@@ -54,7 +66,7 @@
     </fieldset>
 
 </div>
-
+}
 @section scripts{
 
     <script>
@@ -65,7 +77,7 @@
         });
 
         function importCSV(e) {
-            var url = "/ASSAssetAcquisition/Submit?listName=" + "@Model.ListName";
+            var url = "/ASSAssetAcquisition/SubmitUpload?listName=" + "@Model.ListName";
             $.getJSON(url, function (data) {
                 showModalWindow(data);
             });

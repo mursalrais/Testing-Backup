@@ -63,45 +63,32 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         public DateTime DateFrom { get; set; } = DateTime.Now;
 
         [Required]
+        [DataType(DataType.Date)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         [DisplayName("Date (to)")]
         public DateTime DateTo { get; set; } = DateTime.Now;
 
         [Required]
         [UIHint("ComboBox")]
-        public ProjectComboBoxVM Project
+        public ProjectComboBoxVM Project { get; set; } = new ProjectComboBoxVM()
         {
-            get
-            {
-                if (project == null)
-                    project = new ProjectComboBoxVM();
-                  
-                return project;
-            }
-
-            set
-            {
-                project = value;
-            }
-        }
+            OnSelectEventName = "onSelectProject"
+        };
 
         [Required]
-        [UIHint("ComboBox")]
-        public ComboBoxVM Activity
+        [UIHint("AjaxCascadeComboBox")]
+        public AjaxCascadeComboBoxVM Activity { get; set; } = new AjaxCascadeComboBoxVM()
         {
-            get
-            {
-                if (this.activity == null)
-                    this.activity = new ComboBoxVM() { Choices = new string[] { "1", "2", "3" } };
-                return this.activity;
-            }
+            ControllerName = "ComboBox",
+            ActionName = "GetActivitiesByProject",
+            ValueField = "ID",
+            TextField = "Title",
+            Cascade = "Project_Value",
+            Filter = "filterProject"
+        };
 
-            set
-            {
-                this.activity = value;
-            }
-        }
-
-        public IEnumerable<EventBudgetItemVM> ItemDetails = new List<EventBudgetItemVM>();
+   
+    public IEnumerable<EventBudgetItemVM> ItemDetails = new List<EventBudgetItemVM>();
 
         public string No { get; set; }
 

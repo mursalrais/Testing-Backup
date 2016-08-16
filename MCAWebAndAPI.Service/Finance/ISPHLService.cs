@@ -12,7 +12,7 @@ namespace MCAWebAndAPI.Service.Finance
     {
         void SetSiteUrl(string siteUrl);
 
-        int? CreateSPHL(SPHLVM sphl);
+        int? Create(SPHLVM sphl);
 
         bool UpdateSPHL(SPHLVM viewMOdel);
 
