@@ -67,7 +67,29 @@ namespace MCAWebAndAPI.Web.Controllers
                     e.OfficeEmail,
                     e.Project_Unit,
                     Desc = string.Format("{0}", e.Name),
-                    Desc1 = string.Format("{0} - {1}", e.Name, e.Position) }),
+                    Desc1 = string.Format("{0} - {1}", e.Name, e.Position),
+                    Desc2 = string.Format("{0}", e.FirstMiddleName)}),JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetProfessionalsManpower()
+        {
+            _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+
+            var professionals = GetFromExistingSession().ToList();
+            professionals.Add(new ProfessionalMaster { ID = 0, Name = "", Position = "" ,FirstMiddleName="1"});
+            professionals = professionals.OrderBy(e => e.FirstMiddleName).ToList();
+            return Json(professionals.Select(e =>
+                new {
+                    e.ID,
+                    e.Name,
+                    e.FirstMiddleName,
+                    e.Position,
+                    e.Status,
+                    e.OfficeEmail,
+                    e.Project_Unit,
+                    Desc = string.Format("{0}", e.Name),
+                    Desc1 = string.Format("{0} - {1}", e.Name, e.Position)
+                }),
                 JsonRequestBehavior.AllowGet);
         }
 
@@ -351,5 +373,29 @@ namespace MCAWebAndAPI.Web.Controllers
                 ), JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetProfessionalsAll()
+        {
+            _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+
+            var professional = GetFromExistingSession();
+
+            return Json(professional.Select(e =>
+                new {
+                    Value = Convert.ToString(e.ID),
+                    Text = e.Name,
+                    FirstMiddleName =e.FirstMiddleName,
+                    Position = e.Position,
+                    Status = e.Status,
+                    Project_Unit = e.Project_Unit,
+                    PositionId = e.PositionId,
+                    PSANumber = e.PSANumber,
+                    JoinDate = e.JoinDate,
+                    OfficeEmail = e.OfficeEmail,
+                    PersonalMail = e.PersonalMail,
+                    JoinDateTemp = e.JoinDateTemp,
+                    InsuranceAccountNumber = e.InsuranceAccountNumber
+                }),
+                JsonRequestBehavior.AllowGet);
+        }
     }
 }

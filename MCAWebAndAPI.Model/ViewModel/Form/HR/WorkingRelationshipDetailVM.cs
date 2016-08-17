@@ -16,7 +16,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         {
             if (model == null)
             {
-                return new AjaxComboBoxVM();
+                var tes = new AjaxComboBoxVM { Text = "asd", Value = 0 };
+                return tes;
             }
             else
             {

@@ -57,7 +57,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             ControllerName = "HRDataMaster",
             ActionName = "GetProfessionals",
             ValueField = "ID",
-            TextField = "Desc"
+            TextField = "Desc1"
         };
 
         /// <summary>
@@ -103,6 +103,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         public string ProjectUnitString { get; set; }
 
+
         /// <summary>
         /// iskeyposition
         /// </summary>
@@ -145,9 +146,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public AjaxComboBoxVM SecondaryReportingTo { get; set; } = new AjaxComboBoxVM
         {
             ControllerName = "HRDataMaster",
-            ActionName = "GetProfessionals",
+            ActionName = "GetProfessionalsManpower",
             ValueField = "ID",
-            TextField = "Desc"
+            TextField = "Desc1"
         };
 
         /// <summary>

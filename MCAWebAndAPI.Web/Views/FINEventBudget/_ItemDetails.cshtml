@@ -1,87 +1,91 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.Finance
 @model IEnumerable<EventBudgetItemVM>
 
-<div class="col-xs-12">
+@*
+    Wireframe FIN04: Event Budget
+*@
+
+<div class="col-xs-12" >
     @(Html.Kendo().Grid(Model)
     .Name("ItemDetails")
     .Editable(editable => editable.Mode(GridEditMode.InCell)
     .CreateAt(GridInsertRowPosition.Bottom))
     .ToolBar(tools => tools.Create().Text("Add New Item"))
-
+    .Scrollable()
     .Columns(columns =>
-    {
-        columns.Bound(p => p.TypeOfExpense).ClientTemplate("#= TypeOfExpense #" +
-            "<input type='hidden' name='ItemDetails[#= getItem(data)#].TypeOfExpense' value='#= TypeOfExpense #' />").Width("17%");
+     {
+         columns.Bound(p => p.TypeOfExpense).ClientTemplate("#= TypeOfExpense #" +
+             "<input type='hidden' name='ItemDetails[#= getItem(data)#].TypeOfExpense' value='#= TypeOfExpense #' />").Width(150);
 
-        columns.Bound(p => p.Description).ClientTemplate("#= Description #" +
-            "<input type='hidden' name='ItemDetails[#= getItem(data)#].Description' value='#= Description #' />").Width("17%");
-
-
-        columns.Bound(p => p.WBS).ClientTemplate("#= WBS.Text #" +
-            "<input type='hidden' name='ItemDetails[#= getItem(data)#].WBS.Value' value='#= WBS.Value #' />")
-                       .EditorViewData(new
-                       {
-                           DataTextField = "Text",
-                           DataValueField = "Value",
-                           ControllerName = "FINRequisitionNote",
-                           ActionName = "GetWBSMaster"
-                       })
-                       .Width("15%");
-
-        columns.Bound(p => p.GL).ClientTemplate("#= GL.Text #" +
-                         "<input type='hidden' name='ItemDetails[#= getItem(data)#].GL.Value' value='#= GL.Value #' />"
-                       )
-                       .EditorViewData(new
-                       {
-                           DataTextField = "Text",
-                           DataValueField = "Value",
-                           ControllerName = "FINRequisitionNote",
-                           ActionName = "GetGLMaster"
-                       }).Width("15%");
+         columns.Bound(p => p.Description).ClientTemplate("#= Description #" +
+             "<input type='hidden' name='ItemDetails[#= getItem(data)#].Description' value='#= Description #' />").Width(150);
 
 
-        columns.Bound(p => p.Quantity).ClientTemplate("#= Quantity #" +
-            "<input type='hidden' name='ItemDetails[#= getItem(data)#].Quantity' value='#= Quantity #' />").Width("17%");
+         columns.Bound(p => p.WBS).ClientTemplate("#= WBS.Text #" +
+             "<input type='hidden' name='ItemDetails[#= getItem(data)#].WBS.Value' value='#= WBS.Value #' />")
+                        .EditorViewData(new
+                        {
+                            DataTextField = "Text",
+                            DataValueField = "Value",
+                            ControllerName = "ComboBox",
+                            ActionName = "GetWBSMasters"
+                        })
+                        .Width(150);
 
-        columns.Bound(p => p.UoMQty).ClientTemplate("#= UoMQty #" +
-            "<input type='hidden' name='ItemDetails[#= getItem(data)#].UoMQty' value='#= UoMQty #' />").Width("17%");
+         columns.Bound(p => p.GL).ClientTemplate("#= GL.Text #" +
+                          "<input type='hidden' name='ItemDetails[#= getItem(data)#].GL.Value' value='#= GL.Value #' />"
+                        )
+                        .EditorViewData(new
+                        {
+                            DataTextField = "Text",
+                            DataValueField = "Value",
+                            ControllerName = "ComboBox",
+                            ActionName = "GetGLMasters"
+                        }).Width(150);
 
-        columns.Bound(p => p.Frequency).ClientTemplate("#= Frequency #" +
-            "<input type='hidden' name='ItemDetails[#= getItem(data)#].Frequency' value='#= Frequency #' />").Width("17%");
 
-        columns.Bound(p => p.UoMFreq).ClientTemplate("#= UoMFreq #" +
-            "<input type='hidden' name='ItemDetails[#= getItem(data)#].UoMFreq' value='#= UoMFreq #' />").Width("17%");
+         columns.Bound(p => p.Quantity).ClientTemplate("#= Quantity #" +
+             "<input type='hidden' name='ItemDetails[#= getItem(data)#].Quantity' value='#= Quantity #' />").Width(170);
 
-        columns.Bound(p => p.UnitPrice).ClientTemplate("#= UnitPrice #" +
-            "<input type='hidden' name='ItemDetails[#= getItem(data)#].UnitPrice' value='#= UnitPrice #' />").Width("17%");
+         columns.Bound(p => p.UoMQty).ClientTemplate("#= UoMQty #" +
+             "<input type='hidden' name='ItemDetails[#= getItem(data)#].UoMQty' value='#= UoMQty #' />").Width(170);
 
-        columns.Bound(p => p.AmountPerItem).ClientTemplate("#= AmountPerItem #" +
-            "<input type='hidden' name='ItemDetails[#= getItem(data)#].AmountPerItem' value='#= AmountPerItem #' />").Width("17%");
+         columns.Bound(p => p.Frequency).ClientTemplate("#= Frequency #" +
+             "<input type='hidden' name='ItemDetails[#= getItem(data)#].Frequency' value='#= Frequency #' />").Width(170);
 
-        columns.Bound(p => p.DirectPayment).ClientTemplate("#= DirectPayment #" +
-            "<input type='hidden' name='ItemDetails[#= getItem(data)#].DirectPayment' value='#= DirectPayment #' />").Width("17%");
+         columns.Bound(p => p.UoMFreq).ClientTemplate("#= UoMFreq #" +
+             "<input type='hidden' name='ItemDetails[#= getItem(data)#].UoMFreq' value='#= UoMFreq #' />").Width(170);
 
-        columns.Bound(p => p.SCA).ClientTemplate("#= SCA #" +
-           "<input type='hidden' name='ItemDetails[#= getItem(data)#].SCA' value='#= SCA #' />").Width("17%");
+         columns.Bound(p => p.UnitPrice).ClientTemplate("#= UnitPrice #" +
+             "<input type='hidden' name='ItemDetails[#= getItem(data)#].UnitPrice' value='#= UnitPrice #' />").Width(170);
 
-        columns.Bound(p => p.Remarks).ClientTemplate("#= Remarks #" +
-           "<input type='hidden' name='ItemDetails[#= getItem(data)#].Remarks' value='#= Remarks #' />").Width("17%");
+         columns.Bound(p => p.AmountPerItem).ClientTemplate("#= AmountPerItem #" +
+             "<input type='hidden' name='ItemDetails[#= getItem(data)#].AmountPerItem' value='#= AmountPerItem #' />").Width(170);
 
-        
+         columns.Bound(p => p.DirectPayment).ClientTemplate("#= DirectPayment #" +
+             "<input type='hidden' name='ItemDetails[#= getItem(data)#].DirectPayment' value='#= DirectPayment #' />").Width(170);
 
-        columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
-               "<input type='hidden' name='ItemDetails[#= getItem(data)#].ID' value='#= ID #' />"
-             );
+         columns.Bound(p => p.SCA).ClientTemplate("#= SCA #" +
+            "<input type='hidden' name='ItemDetails[#= getItem(data)#].SCA' value='#= SCA #' />").Width(170);
 
-   
+         columns.Bound(p => p.Remarks).ClientTemplate("#= Remarks #" +
+            "<input type='hidden' name='ItemDetails[#= getItem(data)#].Remarks' value='#= Remarks #' />").Width(170);
 
-        columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
-                     "<input type='hidden' name='ItemDetails[#= getItem(data)#].EditMode' value='#= EditMode #' />"
-        );
 
-        columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
-            .Click("onDeleteKendoDetail")).Width(100);
-    })
+
+         columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
+                "<input type='hidden' name='ItemDetails[#= getItem(data)#].ID' value='#= ID #' />"
+              );
+
+
+
+         columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
+                      "<input type='hidden' name='ItemDetails[#= getItem(data)#].EditMode' value='#= EditMode #' />"
+         );
+
+         columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
+             .Click("onDeleteKendoDetail")).Width(100);
+     })
      .Events(e =>
      {
          e.Edit("onEditKendoDetail");

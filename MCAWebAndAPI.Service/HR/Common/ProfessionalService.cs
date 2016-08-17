@@ -120,9 +120,12 @@ namespace MCAWebAndAPI.Service.HR.Common
             viewModel.ID = Convert.ToInt32(listItem["ID"]);
             viewModel.FirstMiddleName = Convert.ToString(listItem["Title"]);
             viewModel.CurrentPosition.Value = FormatUtil.ConvertLookupToID(listItem, "Position");
-            viewModel.JoinDate = Convert.ToDateTime(listItem["Join_x0020_Date"]);
+            viewModel.JoinDate = Convert.ToDateTime(listItem["Join_x0020_Date"]).ToLocalTime();
+            if (viewModel.JoinDate.Value.Year == 1)
+            {
+                viewModel.JoinDate = null;
+            }
             viewModel.ProfessionalStatus.Value = Convert.ToString(listItem["Professional_x0020_Status"]);
-            viewModel.LastName = Convert.ToString(listItem["lastname"]);
             viewModel.PlaceOfBirth = Convert.ToString(listItem["placeofbirth"]);
             viewModel.DateOfBirth = Convert.ToDateTime(listItem["dateofbirth"]);
             viewModel.PermanentAddress =
@@ -130,7 +133,11 @@ namespace MCAWebAndAPI.Service.HR.Common
             viewModel.CurrentAddress =
                 FormatUtil.ConvertMultipleLine(Convert.ToString(listItem["currentaddress"]));
             viewModel.IDCardNumber = Convert.ToString(listItem["idcardnumber"]);
-            viewModel.IDCardExpiry = Convert.ToDateTime(listItem["idcardexpirydate"]);
+            viewModel.IDCardExpiry = Convert.ToDateTime(listItem["idcardexpirydate"]).ToLocalTime();
+            if (viewModel.IDCardExpiry.Value.Year == 1)
+            {
+                viewModel.IDCardExpiry = null;
+            }
             viewModel.Telephone = Convert.ToString(listItem["permanentlandlinephone"]);
             viewModel.CurrentTelephone = Convert.ToString(listItem["currentlandlinephone"]);
             viewModel.EmailAddresOne = Convert.ToString(listItem["personalemail"]);
@@ -140,7 +147,6 @@ namespace MCAWebAndAPI.Service.HR.Common
             viewModel.Religion.Value = Convert.ToString(listItem["religion"]);
             viewModel.Gender.Value = Convert.ToString(listItem["gender"]);
             viewModel.IDCardType.Text = Convert.ToString(listItem["idcardtype"]);
-            viewModel.IDCardExpiry = Convert.ToDateTime(listItem["idcardexpirydate"]);
             viewModel.Nationality.Value = FormatUtil.ConvertLookupToID(listItem, "nationality");
 
             // Fields not from Application Data
@@ -151,10 +157,18 @@ namespace MCAWebAndAPI.Service.HR.Common
 
             viewModel.AccountNameForHI = Convert.ToString(listItem["hiaccountname"]);
             viewModel.BankNameForHI = Convert.ToString(listItem["hibankname"]);
-            viewModel.EffectiveDateForHI = Convert.ToDateTime(listItem["hieffectivedate"]);
+            viewModel.EffectiveDateForHI = Convert.ToDateTime(listItem["hieffectivedate"]).ToLocalTime();
+            if (viewModel.EffectiveDateForHI.Value.Year == 1)
+            {
+                viewModel.EffectiveDateForHI = null;
+            }
             viewModel.AccountNumberForHI = Convert.ToString(listItem["hiaccountnr"]);
             viewModel.BranchOfficeForHI = Convert.ToString(listItem["hibankbranchoffice"]);
-            viewModel.EndDateForHI = Convert.ToDateTime(listItem["hienddate"]);
+            viewModel.EndDateForHI = Convert.ToDateTime(listItem["hienddate"]).ToLocalTime();
+            if (viewModel.EndDateForHI.Value.Year == 1)
+            {
+                viewModel.EndDateForHI = null;
+            }
             viewModel.CurrencyForHI.Value = Convert.ToString(listItem["hicurrency"]);
 
             viewModel.VendorAccountNumberRIForHI = Convert.ToString(listItem["hiriaccountnr"]);
@@ -164,10 +178,18 @@ namespace MCAWebAndAPI.Service.HR.Common
 
             viewModel.AccountNameForSP = Convert.ToString(listItem["spaccountname"]);
             viewModel.BankNameForSP = Convert.ToString(listItem["spbankname"]);
-            viewModel.EffectiveDateForSP = Convert.ToDateTime(listItem["speffectivedate"]);
+            viewModel.EffectiveDateForSP = Convert.ToDateTime(listItem["speffectivedate"]).ToLocalTime();
+            if (viewModel.EffectiveDateForSP.Value.Year == 1)
+            {
+                viewModel.EffectiveDateForSP = null;
+            }
             viewModel.AccountNumberForSP = Convert.ToString(listItem["spaccountnr"]);
             viewModel.BranchOfficeForSP = Convert.ToString(listItem["spbranchoffice"]);
-            viewModel.EndDateForSP = Convert.ToDateTime(listItem["spenddate"]);
+            viewModel.EndDateForSP = Convert.ToDateTime(listItem["spenddate"]).ToLocalTime();
+            if (viewModel.EndDateForSP.Value.Year == 1)
+            {
+                viewModel.EndDateForSP = null;
+            }
             viewModel.CurrencyForSP.Value = Convert.ToString(listItem["spcurrency"]);
 
             viewModel.AccountNameForPayroll = Convert.ToString(listItem["payrollaccountname"]);
@@ -177,6 +199,10 @@ namespace MCAWebAndAPI.Service.HR.Common
             viewModel.CurrencyForPayroll.Value = Convert.ToString(listItem["payrollcurrency"]);
             viewModel.BankSwiftCodeForPayroll = Convert.ToString(listItem["payrollbankswiftcode"]);
             viewModel.TaxStatusForPayroll.Value = Convert.ToString(listItem["payrolltaxstatus"]);
+
+            //added by yaya
+            viewModel.ValidationStatus = Convert.ToString(listItem["datavalidationstatus"]);
+            //added by yaya
 
             // Convert Details
 
@@ -213,19 +239,35 @@ namespace MCAWebAndAPI.Service.HR.Common
 
         OrganizationalDetailVM ConvertToOrganizationalDetailVM(ListItem item)
         {
-            return new OrganizationalDetailVM
-            {
-                ID = Convert.ToInt32(item["ID"]),
-                LastWorkingDay = Convert.ToDateTime(item["lastworkingday"]),
-                Level = Convert.ToString(item["Level"]),
-                Position = FormatUtil.ConvertToInGridAjaxComboBox(item, "Position"),
-                PSANumber = FormatUtil.ConvertToInGridAjaxComboBox(item, "psanr"),
-                StartDate = Convert.ToDateTime(item["startdate"]),
-                Project = OrganizationalDetailVM.GetProjectDefaultValue(
-                    FormatUtil.ConvertToInGridComboBox(item, "projectunit")),
-                PSAStatus = OrganizationalDetailVM.GetPSAStatusDefaultValue(
-                    FormatUtil.ConvertToInGridComboBox(item, "Status"))
-            };
+            var viewModel = new OrganizationalDetailVM();
+            viewModel.ID = Convert.ToInt32(item["ID"]);
+            viewModel.LastWorkingDay = Convert.ToDateTime(item["lastworkingday"]).ToLocalTime();
+            viewModel.Level = Convert.ToString(item["Level"]);
+
+            var ListPosition = SPConnector.GetListItem(SP_POSMAS_LIST_NAME, (item["Position"] as FieldLookupValue).LookupId, _siteUrl);
+            viewModel.Position.Value = (item["Position"] as FieldLookupValue).LookupId;
+            viewModel.Position.Text = Convert.ToString(ListPosition["projectunit"]) + " - " + Convert.ToString(ListPosition["Title"]);
+            viewModel.PSANumber.Value = (item["psanr"] as FieldLookupValue).LookupId;
+            viewModel.PSANumber.Text = (item["psanr"] as FieldLookupValue).LookupValue;
+            viewModel.StartDate = Convert.ToDateTime(item["startdate"]).ToLocalTime();            
+            viewModel.Project = OrganizationalDetailVM.GetProjectDefaultValue(
+                    new Model.ViewModel.Control.InGridComboBoxVM { Text = Convert.ToString(item["projectunit"])}
+                );
+            return viewModel;
+
+            //return new OrganizationalDetailVM
+            //{
+            //    ID = Convert.ToInt32(item["ID"]),
+            //    LastWorkingDay = Convert.ToDateTime(item["lastworkingday"]).ToLocalTime(),
+            //    Level = Convert.ToString(item["Level"]),
+            //    Position = FormatUtil.ConvertToInGridAjaxComboBox(item, "Position"),
+            //    PSANumber = FormatUtil.ConvertToInGridAjaxComboBox(item, "psanr"),
+            //    StartDate = Convert.ToDateTime(item["startdate"]).ToLocalTime(),
+            //    Project = OrganizationalDetailVM.GetProjectDefaultValue(
+            //        FormatUtil.ConvertToInGridComboBox(item, "projectunit")),
+            //    PSAStatus = OrganizationalDetailVM.GetPSAStatusDefaultValue(
+            //        FormatUtil.ConvertToInGridComboBox(item, "Status"))
+            //};
         }
 
         private IEnumerable<DependentDetailVM> GetDependentDetails(int? ID)
@@ -351,7 +393,6 @@ namespace MCAWebAndAPI.Service.HR.Common
             { LookupId = (int)viewModel.CurrentPosition.Value });
             updatedValue.Add("Professional_x0020_Status", viewModel.ProfessionalStatus.Value);
             updatedValue.Add("Join_x0020_Date", viewModel.JoinDate);
-            updatedValue.Add("lastname", viewModel.LastName);
             updatedValue.Add("placeofbirth", viewModel.PlaceOfBirth);
             updatedValue.Add("dateofbirth", viewModel.DateOfBirth);
             updatedValue.Add("idcardnumber", viewModel.IDCardNumber);
@@ -367,9 +408,18 @@ namespace MCAWebAndAPI.Service.HR.Common
             updatedValue.Add("gender", viewModel.Gender.Value);
             updatedValue.Add("idcardtype", viewModel.IDCardType.Value);
             updatedValue.Add("idcardexpirydate", viewModel.IDCardExpiry);
-            updatedValue.Add("nationality", new FieldLookupValue { LookupId = (int)viewModel.Nationality.Value });
 
-            // Fields not from Application Data
+            if (viewModel.Nationality.Value.Value != 0)
+            {
+                updatedValue.Add("nationality", new FieldLookupValue { LookupId = (int)viewModel.Nationality.Value });
+            }
+            else
+            {
+                updatedValue.Add("nationality", null);
+            }
+
+
+            //// Fields not from Application Data
             updatedValue.Add("emergencynumber", viewModel.EmergencyNumber);
             updatedValue.Add("officephone", viewModel.OfficePhone);
             updatedValue.Add("officeemail", viewModel.OfficeEmail);
@@ -408,9 +458,9 @@ namespace MCAWebAndAPI.Service.HR.Common
             try
             {
                 if (viewModel.ID == null)
-                    SPConnector.AddListItem(SP_PROMAS_LIST_NAME, updatedValue);
+                    SPConnector.AddListItem(SP_PROMAS_LIST_NAME, updatedValue, _siteUrl);
                 else
-                    SPConnector.UpdateListItem(SP_PROMAS_LIST_NAME, viewModel.ID, updatedValue);
+                    SPConnector.UpdateListItem(SP_PROMAS_LIST_NAME, viewModel.ID, updatedValue, _siteUrl);
             }
             catch (Exception e)
             {
@@ -592,7 +642,7 @@ namespace MCAWebAndAPI.Service.HR.Common
                 updatedValue.Add("Position", new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.Position.Value) });
                 updatedValue.Add("psanr", new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.PSANumber.Value) });
                 updatedValue.Add("Level", viewModel.Level);
-                updatedValue.Add("Status", viewModel.PSAStatus.Text);
+                //updatedValue.Add("Status", viewModel.PSAStatus.Text);
                 updatedValue.Add("projectunit", viewModel.Project.Text);
                 updatedValue.Add("startdate", viewModel.StartDate);
                 updatedValue.Add("lastworkingday", viewModel.LastWorkingDay);
@@ -662,7 +712,8 @@ namespace MCAWebAndAPI.Service.HR.Common
         {
             try
             {
-                SPConnector.SendEmail(emailTo, emailMessages, "Professional Data Validation", _siteUrl);
+                //SPConnector.SendEmail(emailTo, emailMessages, "Professional Data Validation", _siteUrl);
+                EmailUtil.Send(emailTo, "Professional Data Validation", emailMessages);
             }
             catch (Exception e)
             {
@@ -728,5 +779,15 @@ namespace MCAWebAndAPI.Service.HR.Common
             CreateOrganizationalDetails(headerID, organizationalDetails);
         }
 
+        public List<string> GetEmailHR()
+        {
+            List<string> EmailHR = new List<string>();
+            string caml = @"<View><Query><Where><Contains><FieldRef Name='Position' /><Value Type='Lookup'>HR</Value></Contains></Where></Query><ViewFields><FieldRef Name='officeemail' /><FieldRef Name='Position' /></ViewFields><QueryOptions /></View>";
+            foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl, caml))
+            {
+                EmailHR.Add(Convert.ToString(item["officeemail"]));
+            }
+            return EmailHR;
+        }
     }
 }

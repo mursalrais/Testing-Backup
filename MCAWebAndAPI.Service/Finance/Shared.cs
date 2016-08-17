@@ -14,7 +14,8 @@ namespace MCAWebAndAPI.Service.Finance
     {
         private const string GLMASTER_SITE_LIST = "GL Master";
         private const string WBSMASTER_SITE_LIST = "WBS Master";
-        private const string VENDOR_SITE_LIST = "Vendor";
+    
+        //TODO: this sounds fishy - check with HR
         private const string PROFESSIONAL_SITE_LIST = "Back Office Professional Master";
 
         private const string FIELD_ID = "ID";
@@ -47,20 +48,6 @@ namespace MCAWebAndAPI.Service.Finance
             return wbsMasters;
         }
 
-        public static IEnumerable<VendorVM> GetVendorMaster(string siteUrl)
-        {
-            var vendors = new List<VendorVM>();
-
-            vendors.Add(new VendorVM() {ID=-1, Title=string.Empty });
-
-            foreach (var item in SPConnector.GetList(VENDOR_SITE_LIST, siteUrl, null))
-            {
-                vendors.Add(ConvertToVendorModel(item));
-            }
-
-            return vendors;
-        }
-
         public static IEnumerable<ProfessionalVM> GetProfessionalMaster(string siteUrl)
         {
             var professionals = new List<ProfessionalVM>();
@@ -85,18 +72,6 @@ namespace MCAWebAndAPI.Service.Finance
 
             };
         }
-
-        private static VendorVM ConvertToVendorModel(ListItem item)
-        {
-            return new VendorVM
-            {
-                ID = Convert.ToInt32(item[FIELD_ID]),
-                Title = Convert.ToString(item[FIELD_TITLE]),
-
-                
-            };
-        }
-
 
         private static GLMasterVM ConvertToGLMasterModel(ListItem item)
         {

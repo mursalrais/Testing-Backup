@@ -1,0 +1,122 @@
+﻿@model MCAWebAndAPI.Model.ViewModel.Form.Finance.OutstandingAdvanceVM
+
+@*
+    Wireframe FIN09: Outstanding Advance
+*@
+
+@{
+    ViewBag.Title = "Outstanding Advance";
+
+}
+
+
+@using (Html.BeginForm("Save", "FINOutstandingAdvance",
+    FormMethod.Post,
+    new
+    {
+        @class = "form-horizontal",
+        enctype = "multipart/form-data"
+    }))
+{
+    <fieldset>
+        <legend>Outstanding Advance</legend>
+        <div class="row">
+            <div class="col-sm-6">
+                @Html.HiddenFor(m => m.ID)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.DateOfUpload).Class("col-sm-3 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.DateOfUpload)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Staff).Class("col-sm-3 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.Staff)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Reference).Class("col-sm-3 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.Reference)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.DueDate).Class("col-sm-3 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.DueDate)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Currency).Class("col-sm-3 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.Currency)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Amount).Class("col-sm-3 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.Amount)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Project).Class("col-sm-3 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.Project)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Remarks).Class("col-sm-3 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.Remarks)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Documents).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.Documents)
+                    </div>
+                </div>
+
+
+
+            </div>
+      
+
+        </div>
+        
+
+    </fieldset>
+
+    <div class="form-actions">
+        <div class="row">
+            <div class="col-sm-12">
+               
+                <button id="submit-button" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    Submit
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $("#DateOfUpload").kendoDatePicker({
+                format: "mm/dd/yyyy"
+            });
+
+        });
+    </script>
+}

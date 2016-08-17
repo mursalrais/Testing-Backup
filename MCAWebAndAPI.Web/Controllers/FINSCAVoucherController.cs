@@ -20,7 +20,12 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
     {
         ISCAVoucherService _scaService;
         IEventBudgetService _eventBudgetService;
-        private const string PRINT_PAGE_URL = "~/Views/FINSCAVoucher/DisplaySCAVoucher.cshtml";
+        private const string _siteUrl = "SiteUrl";
+        private const string _eventBudgetDetailSess = "EventBudgetDetail";
+        private const string _scaVoucherIDSess = "SESS_SCAVoucherID";
+        private const string _eventBudgetIDSess = "SESS_EventBudgetID";
+        private const string _subTitle = "Special Cash Advance Voucher";
+        private const string _printPageURL = "~/Views/FINSCAVoucher/Print.cshtml";
 
         public FINSCAVoucherController()
         {
@@ -28,58 +33,63 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             _eventBudgetService = new EventBudgetService();
         }
 
-        public ActionResult CreateSCAVoucher(string siteUrl = null)
+        public ActionResult Create(string siteUrl = null, string userAccess = null)
         {
             _scaService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            SessionManager.Remove("EventBudgetDetail");
+            SessionManager.Set(_siteUrl, siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Remove(_eventBudgetDetailSess);
 
             SCAVoucherVM model = new SCAVoucherVM();
 
             return View(model);
         }
 
-        [HttpPost]
-        public async Task<ActionResult> CreateSCAVoucher(FormCollection form, SCAVoucherVM viewModel)
+        public ActionResult Edit(string siteUrl = null, int? ID = null, string userAccess = null)
         {
-            var siteUrl = SessionManager.Get<string>("SiteUrl") ?? ConfigResource.DefaultBOSiteUrl;
             _scaService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set(_siteUrl, siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
-            int? ID = null;
-            ID = _scaService.CreateSCAVoucher(viewModel);
-            viewModel.SCAVoucherItems = SessionManager.Get<List<SCAVoucherItemsVM>>("EventBudgetDetail");
-
-            Task createSCAVoucherItemTask = _scaService.CreateSCAVoucherItem(ID, viewModel.SCAVoucherItems);
-            Task createSCAVoucherDocumentTask = _scaService.CreateSCAVoucherDocumentAsync(ID, viewModel.Documents);
-            Task allTasks = Task.WhenAll(createSCAVoucherItemTask);
-
-            try
+            SCAVoucherVM model = new SCAVoucherVM();
+            if (ID != null)
             {
-                await allTasks;
+                model = _scaService.GetSCAVoucherVMData(ID);
+                model.SDOName = string.Format("{0} - {1}", model.SDOName, model.Position);
+                model.Action = SCAVoucherVM.ActionType.edit.ToString();
+                model.Currency = "IDR";
+                SessionManager.Set(_scaVoucherIDSess, ID);
+                SessionManager.Set(_eventBudgetIDSess, model.EventBudgetID);
             }
-            catch (Exception e)
-            {
-                ErrorSignal.FromCurrentContext().Raise(e);
-                return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
-            }
-
-            return RedirectToAction("PrintSCAVoucher",
-                "FINSCAVoucher",
-                new
-                {
-                    ID = ID
-                });
+            
+            return View(model);
         }
 
-        public ActionResult DisplaySCAVoucher(int? ID = null)
+        public ActionResult Approve(string siteUrl = null, int? ID = null, string userAccess = null)
+        {
+            _scaService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set(_siteUrl, siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            SCAVoucherVM model = new SCAVoucherVM();
+            if (ID != null)
+            {
+                model = _scaService.GetSCAVoucherVMData(ID);
+                model.SDOName = string.Format("{0} - {1}", model.SDOName, model.Position);
+                model.Action = SCAVoucherVM.ActionType.approve.ToString();
+                model.Currency = "IDR";
+                SessionManager.Set(_scaVoucherIDSess, ID);
+            }
+
+            return View(model);
+        }
+
+        public ActionResult Display(int? ID = null, string userAccess = null)
         {
             SCAVoucherVM model = new SCAVoucherVM();
-            var siteUrl = SessionManager.Get<string>("SiteUrl") ?? ConfigResource.DefaultBOSiteUrl;
+            var siteUrl = SessionManager.Get<string>(_siteUrl) ?? ConfigResource.DefaultBOSiteUrl;
             _scaService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
             model = _scaService.GetSCAVoucherVMData(ID);
 
-            ViewBag.SubTitle = "Special Cash Advance Voucher";
+            ViewBag.SubTitle = _subTitle;
             return View(model);
         }
 
@@ -104,7 +114,6 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             totalInWord = FormatUtil.ConvertToEnglishWords(Convert.ToInt32(total));
             r.Add(result);
 
-            SessionManager.Set("EventBudgetDetail", detail);
             return Json(r.Select(m =>
                 new {
                     TotalAmount = total,
@@ -119,53 +128,11 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
                 JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetEventBudgetItem([DataSourceRequest] DataSourceRequest request, int? eventBudgetId)
+        public ActionResult Print(int? ID, string userAccess = null)
         {
-            var siteUrl = SessionManager.Get<string>("SiteUrl");
-            _scaService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            List<SCAVoucherItemsVM> details = new List<SCAVoucherItemsVM>();
-            var sessEventBudgetDetail = SessionManager.Get<List<SCAVoucherItemsVM>>("EventBudgetDetail");
+            ViewBag.SubTitle = _subTitle;
 
-            if (sessEventBudgetDetail != null)
-            {
-                details = sessEventBudgetDetail;
-            }
-            else if (eventBudgetId.HasValue && eventBudgetId.Value > 0)
-            {
-                details = _scaService.GetEventBudgetItems(eventBudgetId.Value).ToList();
-            }
-
-            DataSourceResult result = details.ToDataSourceResult(request);
-            var json = Json(result, JsonRequestBehavior.AllowGet);
-            json.MaxJsonLength = int.MaxValue;
-
-            return json;
-        }
-
-        public JsonResult GetDisplayEventBudgetItem([DataSourceRequest] DataSourceRequest request, int? scaVoucherID)
-        {
-            var siteUrl = SessionManager.Get<string>("SiteUrl");
-            _scaService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            List<SCAVoucherItemsVM> details = new List<SCAVoucherItemsVM>();
-
-            if (scaVoucherID.HasValue && scaVoucherID.Value > 0)
-            {
-                details = _scaService.GetSCAVoucherItems(scaVoucherID.Value).ToList();
-            }
-
-            DataSourceResult result = details.ToDataSourceResult(request);
-            var json = Json(result, JsonRequestBehavior.AllowGet);
-            json.MaxJsonLength = int.MaxValue;
-
-            return json;
-        }
-        
-        public ActionResult PrintSCAVoucher(int? ID)
-        {
-            ViewBag.SubTitle = "Special Cash Advance Voucher";
-            string RelativePath = PRINT_PAGE_URL;
-
-            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            var siteUrl = SessionManager.Get<string>(_siteUrl);
             _scaService.SetSiteUrl(siteUrl);
 
             var viewModel = new SCAVoucherVM();
@@ -173,7 +140,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             viewModel.SCAVoucherItems = _scaService.GetSCAVoucherItems(Convert.ToInt32(ID)).ToList();
 
             ViewData.Model = viewModel;
-            var view = ViewEngines.Engines.FindView(ControllerContext, RelativePath, null);
+            var view = ViewEngines.Engines.FindView(ControllerContext, _printPageURL, null);
             var fileName = viewModel.SCAVoucherNo + "_Application.pdf";
             byte[] pdfBuf = null;
             string content;
@@ -200,5 +167,118 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
                 return HttpNotFound();
             return File(pdfBuf, "application/pdf");
         }
+
+        [HttpPost]
+        public async Task<ActionResult> CreateSCAVoucher(FormCollection form, SCAVoucherVM viewModel, string userAccess = null)
+        {
+            var siteUrl = SessionManager.Get<string>(_siteUrl) ?? ConfigResource.DefaultBOSiteUrl;
+            _scaService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            int? ID = null;
+            ID = _scaService.CreateSCAVoucher(viewModel);
+            viewModel.SCAVoucherItems = SessionManager.Get<List<SCAVoucherItemsVM>>(_eventBudgetDetailSess);
+
+            Task createSCAVoucherItemTask = _scaService.CreateSCAVoucherItem(ID, viewModel.SCAVoucherItems);
+            Task createSCAVoucherDocumentTask = _scaService.CreateSCAVoucherDocumentAsync(ID, viewModel.Documents);
+            Task allTasks = Task.WhenAll(createSCAVoucherItemTask);
+
+            try
+            {
+                await allTasks;
+            }
+            catch (Exception e)
+            {
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
+            }
+
+            return RedirectToAction("PrintSCAVoucher",
+                "FINSCAVoucher",
+                new
+                {
+                    ID = ID
+                });
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> EditSCAVoucher(FormCollection form, SCAVoucherVM viewModel)
+        {
+            var siteUrl = SessionManager.Get<string>(_siteUrl) ?? ConfigResource.DefaultBOSiteUrl;
+            _scaService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            try
+            {
+                if (viewModel.Action == SCAVoucherVM.ActionType.approve.ToString())
+                {
+                    _scaService.UpdateStatusSCAVoucher(viewModel);
+                }
+                else
+                {
+                    if (_scaService.UpdateSCAVoucher(viewModel))
+                    {
+                        viewModel.SCAVoucherItems = SessionManager.Get<List<SCAVoucherItemsVM>>(_eventBudgetDetailSess);
+
+                        Task createSCAVoucherItemTask = _scaService.UpdateSCAVoucherItem(viewModel.ID, viewModel.SCAVoucherItems);
+                        Task createSCAVoucherDocumentTask = _scaService.CreateSCAVoucherDocumentAsync(viewModel.ID, viewModel.Documents);
+                        Task allTasks = Task.WhenAll(createSCAVoucherItemTask);
+
+                        await allTasks;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
+            }
+
+            return RedirectToAction("PrintSCAVoucher",
+                "FINSCAVoucher",
+                new
+                {
+                    ID = viewModel.ID
+                });
+        }
+
+        public JsonResult GetEventBudgetItem([DataSourceRequest] DataSourceRequest request, int? eventBudgetId)
+        {
+            var siteUrl = SessionManager.Get<string>(_siteUrl);
+            _scaService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            List<SCAVoucherItemsVM> details = new List<SCAVoucherItemsVM>();
+            details = _scaService.GetEventBudgetItems(eventBudgetId.Value).ToList();
+            SessionManager.Set(_eventBudgetDetailSess, details);
+            DataSourceResult result = details.ToDataSourceResult(request);
+            var json = Json(result, JsonRequestBehavior.AllowGet);
+            json.MaxJsonLength = int.MaxValue;
+
+            return json;
+        }
+
+        public JsonResult GetDisplayEventBudgetItem([DataSourceRequest] DataSourceRequest request, int? eventBudgetId)
+        {
+            var siteUrl = SessionManager.Get<string>(_siteUrl);
+            var sess_scaVoucherID = SessionManager.Get<int>(_scaVoucherIDSess);
+            var sess_eventBudgetId = SessionManager.Get<int>(_eventBudgetIDSess);
+
+            _scaService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            List<SCAVoucherItemsVM> details = new List<SCAVoucherItemsVM>();
+            if (eventBudgetId > 0 && eventBudgetId != sess_eventBudgetId)
+            {
+                details = _scaService.GetEventBudgetItems(Convert.ToInt32(eventBudgetId)).ToList();
+            }
+            else
+            {
+                details = _scaService.GetSCAVoucherItems(sess_scaVoucherID).ToList();
+            }
+            SessionManager.Set(_eventBudgetDetailSess, details);
+            DataSourceResult result = details.ToDataSourceResult(request);
+            var json = Json(result, JsonRequestBehavior.AllowGet);
+            json.MaxJsonLength = int.MaxValue;
+
+            return json;
+        }
+
     }
 }

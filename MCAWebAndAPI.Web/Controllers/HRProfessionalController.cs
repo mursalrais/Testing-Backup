@@ -57,12 +57,12 @@ namespace MCAWebAndAPI.Web.Controllers
         [HttpPost]
         public async Task<ActionResult> EditProfessional(FormCollection form, ProfessionalDataVM viewModel)
         {
-            if(!ModelState.IsValid)
-            {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                var errorMessages = BindHelper.GetErrorMessages(ModelState.Values);
-                return JsonHelper.GenerateJsonErrorResponse(errorMessages);
-            }
+            //if(!ModelState.IsValid)
+            //{
+            //    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            //    var errorMessages = BindHelper.GetErrorMessages(ModelState.Values);
+            //    return JsonHelper.GenerateJsonErrorResponse(errorMessages);
+            //}
 
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             SetSiteUrl(siteUrl);
@@ -94,11 +94,18 @@ namespace MCAWebAndAPI.Web.Controllers
                 switch (viewModel.ValidationAction)
                 {
                     case "ask-hr-to-validate-action":
+                        List<string> EmailsHR = _professionalService.GetEmailHR();
                         _professionalService.SetValidationStatus(headerID, Workflow.ProfessionalValidationStatus.NEED_VALIDATION);
-                        _professionalService.SendEmailValidation(
-                            "randi.prayengki@eceos.com",
+                        foreach (var item in EmailsHR)
+                        {
+                            if (!(string.IsNullOrEmpty(item)))
+                            {
+                                _professionalService.SendEmailValidation(item,
                             string.Format(EmailResource.ProfessionalEmailValidation,
                             string.Format(UrlResource.ProfessionalDisplayByID, siteUrl, headerID)));
+                            }
+                            
+                        }                        
                         break;
 
                     // Suppose mariani.yosefi is the applicant
@@ -106,13 +113,13 @@ namespace MCAWebAndAPI.Web.Controllers
                     case "approve-action":
                         _professionalService.SetValidationStatus(headerID, Workflow.ProfessionalValidationStatus.VALIDATED);
                         _professionalService.SendEmailValidation(
-                            "mariani.yosefi@eceos.com",
+                            viewModel.OfficeEmail,
                             string.Format(EmailResource.ProfessionalEmailValidationResponse), isApproved: true);
                         break;
                     case "reject-action":
                         _professionalService.SetValidationStatus(headerID, Workflow.ProfessionalValidationStatus.REJECTED);
                         _professionalService.SendEmailValidation(
-                            "mariani.yosefi@eceos.com",
+                            viewModel.OfficeEmail,
                             string.Format(EmailResource.ProfessionalEmailValidationResponse), isApproved: false);
                         break;
                 }
@@ -122,7 +129,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
-            return JsonHelper.GenerateJsonSuccessResponse(UrlResource.Professional);
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl+"/"+UrlResource.Professional);
         }
 
         IEnumerable<OrganizationalDetailVM> BindOrganizationalDetails(FormCollection form, IEnumerable<OrganizationalDetailVM> organizationalDetails)
@@ -132,6 +139,8 @@ namespace MCAWebAndAPI.Web.Controllers
             {
                 array[i].LastWorkingDay = BindHelper.BindDateInGrid("OrganizationalDetails",
                     i, "LastWorkingDay", form);
+                array[i].StartDate = BindHelper.BindDateInGrid("OrganizationalDetails",
+                    i, "StartDate", form);
             }
             return array;
         }

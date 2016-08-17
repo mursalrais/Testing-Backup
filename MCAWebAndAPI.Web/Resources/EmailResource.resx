@@ -246,36 +246,30 @@ Link :   {0}/Lists/ProfessionalPerformanceEvaluation/EditForm_Custom.aspx?ID={1}
 Link :   {0}/Lists/ProfessionalPerformancePlan/EditForm_Custom.aspx?ID={1}</value>
   </data>
   <data name="ProfessionalEmailValidation" xml:space="preserve">
-    <value>&lt;p&gt;
-&lt;strong&gt;Dear HR Team,&lt;/strong&gt;
-&lt;/p&gt;
-&lt;p&gt;
-This email is sent to you to notify that there is a request which required your action to validate the professional data. Kindly check the link as per below to go to direct page accordingly. You may check your personal page in IMS (My Approval View). Thank you. 
-&lt;/p&gt;
+    <value>Dear HR Team,
 
-Link : &lt;a href="{0}"&gt;Click Here&lt;/a&gt;</value>
+This email is sent to you to notify that there is a request which required your action to validate the professional data. Kindly check the link as per below to go to direct page accordingly. You may check your personal page in IMS (My Approval View). Thank you. 
+
+Link : {0}</value>
   </data>
   <data name="ProfessionalEmailValidationResponse" xml:space="preserve">
-    <value>&lt;p&gt;
-&lt;strong&gt;Dear Requestor,&lt;/strong&gt;
-&lt;/p&gt;
-&lt;p&gt;
-This email is sent to you to notify that your approval request has been responded by the HR Team. Thank you. 
-&lt;/p&gt;</value>
+    <value>Dear Requestor,
+
+This email is sent to you to notify that your approval request has been responded by the HR Team. Thank you.</value>
   </data>
   <data name="ProfessionalPerformancePlan" xml:space="preserve">
     <value>Dear Respective Approver,
 
 This email is sent to you to notify that there is a request which required your action to approve. Kindly check the link as per below to go to direct page accordingly. You may check your personal page in IMS (My Approval View). Thank you. 
 
-Link :   {0}{1}/EditFormApprover_Custom.aspx?ID={2}</value>
+Link :   {0}{1}/EditForm_Custom.aspx?ID={2}</value>
   </data>
   <data name="ProfessionalPerfromanceEvaluation" xml:space="preserve">
     <value>Dear Respective Approver,
 
 This email is sent to you to notify that there is a request which required your action to approve. Kindly check the link as per below to go to direct page accordingly. You may check your personal page in IMS (My Approval View). Thank you. 
 
-Link :  {0}{1}/EditFormApprover_Custom.aspx?ID={2}</value>
+Link :  {0}{1}/EditForm_Custom.aspx?ID={2}</value>
   </data>
   <data name="WorkflowAskForApproval" xml:space="preserve">
     <value>&lt;p&gt;

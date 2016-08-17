@@ -21,6 +21,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         const string SP_PPP_LIST_NAME = "Professional Performance Plan";
         const string SP_PP_LIST_NAME = "Performance Plan";
         const string SP_PM_LIST_NAME = "Professional Master";
+        const string SP_PPPW_LIST_NAME = "Professional Performance Plan Workflow";
         const string SP_PPE_LIST_NAME = "Professional Performance Evaluation";
 
         public int CreateHeader(ProfessionalPerformancePlanVM header)
@@ -123,17 +124,25 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             }
         }
 
-        public ProfessionalPerformancePlanVM GetHeader(int? ID)
+        public ProfessionalPerformancePlanVM GetHeader(int? ID, string requestor)
         {
             var listItem = SPConnector.GetListItem(SP_PPP_LIST_NAME, ID, _siteUrl);
-            return ConvertToProfessionalPerformancePlanModel(listItem);
+            return ConvertToProfessionalPerformancePlanModel(listItem, ID, requestor);
         }
 
-        private ProfessionalPerformancePlanVM ConvertToProfessionalPerformancePlanModel(ListItem listItem)
+        private ProfessionalPerformancePlanVM ConvertToProfessionalPerformancePlanModel(ListItem listItem, int? ID, string requestor)
         {
+            var caml = @"<View>  
+            <Query> 
+               <Where><And><Eq><FieldRef Name='professionalperformanceplan' /><Value Type='Lookup'>" + ID + @"</Value></Eq><Eq><FieldRef Name='approver0' /><Value Type='Text'>" + requestor + @"</Value></Eq></And></Where> 
+            </Query> 
+      </View>";
+
             var viewModel = new ProfessionalPerformancePlanVM();
             string firstName;
             string lastName;
+            int level = 0;
+            int count = SPConnector.GetList(SP_PPPW_LIST_NAME, _siteUrl, caml).Count();
             viewModel.ID = Convert.ToInt32(listItem["ID"]);
             firstName = FormatUtil.ConvertLookupToValue(listItem, "professional");
             lastName = FormatUtil.ConvertLookupToValue(listItem, "professional_x003a_Last_x0020_Na");
@@ -146,6 +155,27 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.MajorStrength = Convert.ToString(listItem["majorstrength"]);
             viewModel.PerformanceArea = Convert.ToString(listItem["performancearea"]);
             viewModel.RecommendedActivities = viewModel.PerformanceArea = Convert.ToString(listItem["recommendedactivities"]);
+            viewModel.TypeForm = "Professional";
+
+            foreach (var item in SPConnector.GetList(SP_PPPW_LIST_NAME, _siteUrl, caml))
+            {
+                if (count != 0)
+                {
+                    level = Convert.ToInt32(item["approverlevel"]);
+                    if (viewModel.StatusForm == "Pending Approval 1 of 2" && level == 1)
+                    {
+                        viewModel.TypeForm = "Approver1";
+                    }
+                    if (viewModel.StatusForm == "Pending Approval 2 of 2" && level == 2)
+                    {
+                        viewModel.TypeForm = "Approver2";
+                    }
+                    if (viewModel.TypeForm == "Professional")
+                    {
+                        viewModel.TypeForm = "AcessDenied";
+                    }
+                }
+            }
 
             // Convert Details
             viewModel.ProjectOrUnitGoalsDetails = GetPerformancePlanDetails(viewModel.ID);
@@ -241,11 +271,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 columnValues.Add("pppstatus", "Pending Approval 1 of 2");
             }
-            if (header.Requestor == null && header.StatusForm == "Pending Approval 1 of 2")
+            if (header.TypeForm == "Approver1" && header.StatusForm == "Pending Approval 1 of 2")
             {
                 columnValues.Add("pppstatus", "Pending Approval 2 of 2");
             }
-            if (header.Requestor == null && header.StatusForm == "Pending Approval 2 of 2")
+            if (header.TypeForm == "Approver2" && header.StatusForm == "Pending Approval 2 of 2")
             {
                 columnValues.Add("pppstatus", "Approved");
             }

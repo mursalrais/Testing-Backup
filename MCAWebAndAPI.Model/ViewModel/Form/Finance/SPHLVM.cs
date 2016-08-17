@@ -11,13 +11,16 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance.SPHL
 {
     public class SPHLVM
     {
+        public int ID { get; set; }
+
         [Required]
         [DisplayName("SPHL No.")]
         public string No { get; set; }
 
-        [UIHint("Date")]
         [Required]
         [DisplayName("SPHL Date")]
+        [UIHint("Date")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime Date { get; set; } = DateTime.Now;
 
         [UIHint("Currency")]

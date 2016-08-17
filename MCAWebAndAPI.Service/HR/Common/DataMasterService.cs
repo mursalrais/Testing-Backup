@@ -120,13 +120,13 @@ namespace MCAWebAndAPI.Service.HR.Common
                 JoinDateTemp = Convert.ToDateTime(item["Join_x0020_Date"]).ToLocalTime().ToShortDateString(),
                 InsuranceAccountNumber = Convert.ToString(item["hiaccountnr"]),
 
+                // The followings are used in Payroll Worksheet
                 BankAccountName = Convert.ToString(item["payrollbankname"]),
                 BankAccountNumber = Convert.ToString(item["payrollaccountnr"]),
                 BankBranchOffice = Convert.ToString(item["payrollbranchoffice"]),
                 Currency = Convert.ToString(item["payrollcurrency"]),
                 BankName = Convert.ToString(item["payrollbankname"])
-
-        };
+            };
         }
 
         public IEnumerable<PositionMaster> GetPositions()
@@ -232,7 +232,7 @@ namespace MCAWebAndAPI.Service.HR.Common
             {
                 position.ID = Convert.ToInt32(item["ID"]);
                 position.PositionName = Convert.ToString(item["Title"]);
-                //TODO: To add other neccessary property
+                //TODO: To add other neccessary properties
             }
 
             return position;
@@ -282,7 +282,7 @@ namespace MCAWebAndAPI.Service.HR.Common
                 var profID = FormatUtil.ConvertLookupToID(item, "professional");
                 if (professionalIDs.Contains((int)profID))
                 {
-                    profIDAndHeaderIDs.Add(new Tuple<int, int>((int)profID,Convert.ToInt32(item["ID"])));
+                    profIDAndHeaderIDs.Add(new Tuple<int, int>((int)profID, Convert.ToInt32(item["ID"])));
                 }
             }
 
@@ -291,7 +291,7 @@ namespace MCAWebAndAPI.Service.HR.Common
             {
                 caml = @"<View>  
                 <Query> 
-                <Where><Eq><FieldRef Name='monthlyfeeid' LookupId='True' /><Value Type='Lookup'>" + header.Item2 + 
+                <Where><Eq><FieldRef Name='monthlyfeeid' LookupId='True' /><Value Type='Lookup'>" + header.Item2 +
                 @"</Value></Eq></Where> 
                 </Query> 
                 <ViewFields><FieldRef Name='dateofnewfee' /><FieldRef Name='enddate' /><FieldRef Name='monthlyfee' /><FieldRef Name='monthlyfeeid' /></ViewFields> 
@@ -301,7 +301,7 @@ namespace MCAWebAndAPI.Service.HR.Common
                 {
                     monthlyFees.Add(new MonthlyFeeMaster
                     {
-                        ProfessionalID = header.Item1, 
+                        ProfessionalID = header.Item1,
                         DateOfNewFee = Convert.ToDateTime(item["dateofnewfee"]),
                         EndDate = Convert.ToDateTime(item["enddate"]),
                         MonthlyFee = Convert.ToDouble(item["monthlyfee"])

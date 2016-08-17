@@ -17,7 +17,8 @@ namespace MCAWebAndAPI.Service.JobSchedulers.Schedulers
     {
         static Logger logger = LogManager.GetCurrentClassLogger();
 
-        public static void DoNow_Once(string siteUrl, string filePath, int periodDay, int periodMonth, int periodYear)
+        public static void DoNow_Once(string siteUrl, string filePath, string userLogin, 
+            int periodDay, int periodMonth, int periodYear)
         {
             // construct a scheduler factory
             ISchedulerFactory scheduleFactory = new StdSchedulerFactory();

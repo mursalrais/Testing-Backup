@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance.SPHL;
+using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
 using NLog;
@@ -15,50 +16,102 @@ namespace MCAWebAndAPI.Service.Finance
     {
         static Logger logger = LogManager.GetCurrentClassLogger();
 
-        private const string LIST_NAME = "SPHL";
-        private const string DOC_LIST_NAME = "SPHL Documents";
-        private const string FIELD_NAME_NO = "Title";
-        private const string FIELD_NAME_DATE = "Date";
-        private const string FIELD_NAME_AMOUNT = "Amount";
-        private const string FIELD_NAME_REMARKS = "Remarks";
+        private const string ListName = "SPHL";
+        private const string ListName_Document = "SPHL Documents";
+        private const string ListName_ID = "ID";
+        private const string ListName_No = "Title";
+        private const string ListName_Date = "Date";
+        private const string ListName_Amount = "Amount";
+        private const string ListName_REmarks = "Remarks";
 
         private string _siteUrl = string.Empty;
 
         public void SetSiteUrl(string siteUrl)
         {
-            _siteUrl = siteUrl;
+            this._siteUrl = siteUrl;
         }
 
-        public int? CreateSPHL(SPHLVM sphl)
+        public int? Create(SPHLVM viewMOdel)
         {
            int? result = null;
            var columnValues = new Dictionary<string, object>
            {
-               {FIELD_NAME_NO, sphl.No},
-               {FIELD_NAME_DATE, sphl.Date},
-               {FIELD_NAME_AMOUNT, sphl.AmountIDR},
-               {FIELD_NAME_REMARKS, sphl.Remarks}
+               {ListName_No, viewMOdel.No},
+               {ListName_Date, viewMOdel.Date},
+               {ListName_Amount, viewMOdel.AmountIDR},
+               {ListName_REmarks, viewMOdel.Remarks}
             };
 
             try
             {
-                SPConnector.AddListItem(LIST_NAME, columnValues, _siteUrl);
-                result = SPConnector.GetLatestListItemID(LIST_NAME, _siteUrl);
+                SPConnector.AddListItem(ListName, columnValues, _siteUrl);
+                result = SPConnector.GetLatestListItemID(ListName, _siteUrl);
             }
             catch (Exception e)
             {
                 logger.Error(e.Message);
+
+                throw e;
             }
 
             return result;
         }
 
-        public async Task CreateSPHLAttachmentAsync(int? ID, IEnumerable<HttpPostedFileBase> documents)
+        public bool UpdateSPHL(SPHLVM viewMOdel)
         {
-            CreateSPHLAttachment(ID, documents);
+           bool result = false;
+           var columnValues = new Dictionary<string, object>
+           {
+               {ListName_No, viewMOdel.No},
+               {ListName_Date, viewMOdel.Date},
+               {ListName_Amount, viewMOdel.AmountIDR},
+               {ListName_REmarks, viewMOdel.Remarks}
+            };
+
+            try
+            {
+                SPConnector.UpdateListItem(ListName, viewMOdel.ID, columnValues, _siteUrl);
+                result = true;
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.Message);
+
+                throw e;
+            }
+
+            return result;
         }
 
-        private void CreateSPHLAttachment(int? ID, IEnumerable<HttpPostedFileBase> attachment)
+        public SPHLVM GetDataSPHL(int? ID=null)
+        {
+            SPHLVM viewModel = new SPHLVM();
+            if (ID != null)
+            {
+                var model = SPConnector.GetListItem(ListName, ID, _siteUrl);
+                viewModel = ConvertToSPHLVM(model);
+                viewModel.DocumentUrl = GetDocumentUrl(viewModel.ID);
+            }
+
+            return viewModel;
+        }
+
+        public bool CheckExistingSPHLNo(string no)
+        {
+            var caml = @"<View><Query> <Where><Eq><FieldRef Name='"+ ListName_No + "' /><Value Type='Text'>" + no.ToString() + "</Value></Eq></Where></Query></View>";
+            foreach (var item in SPConnector.GetList(ListName, _siteUrl, caml))
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public async Task CreateSPHLAttachmentAsync(int? ID, string sphlNo, IEnumerable<HttpPostedFileBase> documents)
+        {
+            CreateSPHLAttachment(ID,sphlNo, documents);
+        }
+
+        private void CreateSPHLAttachment(int? ID, string sphlNo, IEnumerable<HttpPostedFileBase> attachment)
         {
             if (ID != null)
             {
@@ -67,10 +120,11 @@ namespace MCAWebAndAPI.Service.Finance
                     if (doc != null)
                     {
                         var updateValue = new Dictionary<string, object>();
-                        updateValue.Add(LIST_NAME, new FieldLookupValue { LookupId = Convert.ToInt32(ID) });
+                        updateValue.Add(ListName, new FieldLookupValue { LookupId = Convert.ToInt32(ID) });
+
                         try
                         {
-                            SPConnector.UploadDocument(DOC_LIST_NAME, updateValue, doc.FileName, doc.InputStream, _siteUrl);
+                            SPConnector.UploadDocument(ListName_Document, updateValue, doc.FileName, doc.InputStream, _siteUrl);
                         }
                         catch (Exception e)
                         {
@@ -80,6 +134,23 @@ namespace MCAWebAndAPI.Service.Finance
                     }
                 }
             }
+        }
+
+        private SPHLVM ConvertToSPHLVM(ListItem listItem)
+        {
+            return new SPHLVM
+            {
+                ID = Convert.ToInt32(listItem[ListName_ID]),
+                No = listItem[ListName_No].ToString(),
+                Date = Convert.ToDateTime(listItem[ListName_Date].ToString()),
+                AmountIDR = Convert.ToDecimal(listItem[ListName_Amount]),
+                Remarks = listItem[ListName_REmarks] == null ? "" : listItem[ListName_REmarks].ToString()
+            };
+        }
+
+        private string GetDocumentUrl(int? ID)
+        {
+            return string.Format(UrlResource.SPHLDocumentByID, _siteUrl, ID);
         }
     }
 }

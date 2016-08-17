@@ -50,7 +50,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// Title
         /// </summary>
-        [DisplayName("First & Middle Name")]
+        [DisplayName("Full Name")]
         [Required]
         public string FirstMiddleName { get; set; }
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MCAWebAndAPI.Model.ViewModel.Form.Asset;
+using System.Data;
 
 namespace MCAWebAndAPI.Service.Asset
 {
@@ -11,9 +12,11 @@ namespace MCAWebAndAPI.Service.Asset
     {
         void SetSiteUrl(string siteUrl = null);
 
-        LocationMasterVM GetPopulatedModel();
+        LocationMasterVM GetPopulatedModel(string SiteUrl);
 
-        LocationMasterVM GetHeader(int? ID);
+        LocationMasterVM GetPopulatedModel(int ID, string SiteUrl);
+
+        LocationMasterVM GetHeader(int? ID, string SiteUrl);
 
         LocationMasterVM UpdateProvince();
 
@@ -21,6 +24,8 @@ namespace MCAWebAndAPI.Service.Asset
 
         int CreateHeader(LocationMasterVM header, string province, string office, int floor, string room);
 
-        bool UpdateHeader(LocationMasterVM header);
+        bool UpdateHeader(LocationMasterVM header, string province, string office, int floor, string room);
+
+        int? MassUpload(string ListName, DataTable CSVDataTable, string SiteUrl = null);
     }
 }

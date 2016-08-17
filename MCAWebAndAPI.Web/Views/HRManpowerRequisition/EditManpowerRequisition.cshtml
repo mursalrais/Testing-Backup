@@ -6,11 +6,11 @@
 }
 
 @using (Html.BeginForm("EditManpowerRequisition", "HRManpowerRequisition", FormMethod.Post,
-                                                                             new
-                                                                             {
-                                                                                 @class = "form-horizontal",
-                                                                                 enctype = "multipart/form-data"
-                                                                             }))
+                                                                                                                             new
+                                                                                                                             {
+                                                                                                                                 @class = "form-horizontal",
+                                                                                                                                 enctype = "multipart/form-data"
+                                                                                                                             }))
 {
     <fieldset>
         <legend>General</legend>
@@ -42,7 +42,8 @@
             <script>
                 $('#application-document-button').click(function () {
                     parent.postMessage({
-                        result : "Success", urlToRedirect : "@Model.DocumentUrl" }, "@Model.DocumentUrl" );
+                        result: "Success", urlToRedirect: "@Model.DocumentUrl"
+                    }, "@Model.DocumentUrl");
                 });
             </script>
 
@@ -110,7 +111,15 @@
                     <div class="form-group">
                         @Html.Bootstrap().LabelFor(m => m.Status).Class("col-md-4 control-label")
                         <div class="col-md-8">
-                            @Html.EditorFor(m => m.Status)
+                            @if (Model.Status.Value == "Rejected")
+                            {
+                                @Html.DisplayFor(m => m.Status)
+                            }
+                            else
+                            {
+                                @Html.EditorFor(m => m.Status)
+                            }
+
                         </div>
                     </div>
                 </div>
@@ -122,14 +131,37 @@
     <div class="form-actions">
         <div class="row">
             <div class="col-md-12">
-                <button id="submit-button" class="btn btn-primary" type="button">
-                    <i class="fa fa-save"></i>
-                    Save
-                </button>
+                @if (ViewBag.IsHRView)
+                {
+                    <button id="save-button" class="btn btn-primary" type="button">
+                        <i class="fa fa-save"></i>
+                        Save
+                    </button>
+                }
+                else
+                {
+                    if (Model.Status.Value == "Draft" || Model.Status.Value == "Pending Approval")
+                    {
+                        <button id="submit-button" class="btn btn-primary" type="button">
+                            <i class="fa fa-save"></i>
+                            Submit for Approval
+                        </button>
+                    }
+                    if (Model.Status.Value == "Draft")
+                    {
+                        <button id="draft-button" class="btn btn-primary" type="button">
+                            <i class="fa fa-save"></i>
+                            Save as Draft
+                        </button>
+                    }
+                }
+
+
+
             </div>
         </div>
     </div>
-}
+                }
 
 @section scripts{
 
@@ -150,7 +182,7 @@
         function onPositionChange(e) {
             var dataItem = $("#Position_Value").data("kendoDropDownList").dataItem(e.item);
             //var urlKeyPosition = "/HRDataMaster/GetKeyPosition/" + dataItem.ID;
-            if (dataItem.IsKeyPosition == "Yes") {                
+            if (dataItem.IsKeyPosition == "Yes") {
                 $("label[for='Yes']").show();
                 $("label[for='No']").hide();
                 $("#IsKeyPosition").val(true);
@@ -163,10 +195,22 @@
             }
 
         };
+        function checkGrid() {
+            //var grid = $("#WorkingRelationshipDetails").data("kendoGrid").dataSource.data();
+            //for (var i = 0; i < grid.length; i++) {
+            //    if (grid[i].EditMode == 0) {
+            //        if ((grid[i].PositionWorking.Text == null)) {
+            //            alert("Please complete the field on Working Relationship Detail");
+            //            return false;
+            //        }
+            //    }
+            //}
+            return true;
+        }
         $(document).ready(function () {
-            var id = $("#ID").val();            
+            var id = $("#ID").val();
             var isHR = '@(ViewBag.IsHRView)';
-            
+
             if (isHR == "True") {
                 var initialStatusValue = $("#Status_Value").attr("value");
                 var dropdownStatus = $("#Status_Value").data("kendoDropDownList");
@@ -188,41 +232,45 @@
                 }
 
             });
-            function checkGrid() {
-                var grid = $("#WorkingRelationshipDetails").data("kendoGrid").dataSource.data();
-                for (var i = 0; i < grid.length; i++) {
-                    if (grid[i].EditMode == 0) {
-                        if (!(grid[i].Frequency.length) || !(grid[i].Relationship.length) || (grid[i].PositionWorking.Text == null)) {
-                            alert("Please complete the field on Working Relationship Detail");
-                            return false;
-                        }
+
+            $("#save-button").click(function () {
+                var isValid = checkGrid();
+                if (isValid) {
+                    if (isHR == "True") {
+                        //var url = "/HRManpowerRequisitio/GetDocumentMCC/" +id;
                     }
-                }
-            }
-            $("#submit-button").click(function () {
-
-                if (isHR == "True") {
-                    //var url = "/HRManpowerRequisitio/GetDocumentMCC/" +id;                    
-
+                    $("form").submit();
                 }
 
-
-                $("form").submit();
-                });
-                var isKeyPosition = $("#IsKeyPosition").val();
-                if (isKeyPosition == "True") {
-                    //$('#KeyPositionValue').prop('value', "Yes");
-                    $("label[for='Yes']").show();
-                    $("label[for='No']").hide();
-                    //$("#IsKeyPosition").val(true);
-
-                }
-                else {
-                    $("label[for='No']").show();
-                    $("label[for='Yes']").hide();
-                    //$("#IsKeyPosition").val(false);
+            });
+            $("#draft-button").click(function () {
+                var isValid = checkGrid();
+                if (isValid) {
+                    $("#Status_Value").prop("value", "Draft");
+                    $("form").submit();
                 }
             });
+            $("#submit-button").click(function () {
+                var isValid = checkGrid();
+                if (isValid) {
+                    $("#Status_Value").prop("value", "Pending Approval");
+                    $("form").submit();
+                }
+            });
+            var isKeyPosition = $("#IsKeyPosition").val();
+            if (isKeyPosition == "True") {
+                //$('#KeyPositionValue').prop('value', "Yes");
+                $("label[for='Yes']").show();
+                $("label[for='No']").hide();
+                //$("#IsKeyPosition").val(true);
+
+            }
+            else {
+                $("label[for='No']").show();
+                $("label[for='Yes']").hide();
+                //$("#IsKeyPosition").val(false);
+            }
+        });
 
     </script>
 }

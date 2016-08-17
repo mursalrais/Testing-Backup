@@ -152,6 +152,26 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         [HttpPost]
+        public async Task<ActionResult> CreateHeaderCompensatory(FormCollection form, CompensatoryVM viewModel)
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            try
+            {
+                viewModel.CompensatoryDetails = BindCompensatorylistDateTime(form, viewModel.CompensatoryDetails);
+                //_service.CreateCompensatoryData(cmpID, viewModel);
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.Compensatory);
+        }
+
+        [HttpPost]
         public async Task<ActionResult> CreateCompensatoryData(FormCollection form, CompensatoryVM viewModel)
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
@@ -175,11 +195,14 @@ namespace MCAWebAndAPI.Web.Controllers
             if (viewModel.StatusForm != "submit")
             {
                 _service.UpdateHeader(viewModel);
+            } else
+            {
+                _service.SendEmail(SP_TRANSACTION_WORKFLOW_LIST_NAME, SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)cmpID, 1, string.Format(EmailResource.EmailCompensatoryApproval, siteUrl, cmpID));
             }
-             
+
             if (viewModel.StatusForm != "Draft")
             {
-                if (viewModel.StatusForm == " ")
+                if (viewModel.StatusForm == "")
                 {
                     // BEGIN Workflow Demo 
                     Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateTransactionWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,

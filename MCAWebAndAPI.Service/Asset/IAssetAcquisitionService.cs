@@ -20,6 +20,8 @@ namespace MCAWebAndAPI.Service.Asset
         int? CreateHeader(AssetAcquisitionHeaderVM viewmodel);
         bool UpdateHeader(AssetAcquisitionHeaderVM viewmodel);
 
+        bool Syncronize(string SiteUrl);
+
         void CreateDetails(int? headerID, IEnumerable<AssetAcquisitionItemVM> items);
         void UpdateDetails(int? headerID, IEnumerable<AssetAcquisitionItemVM> items);
 
@@ -30,6 +32,7 @@ namespace MCAWebAndAPI.Service.Asset
         IEnumerable<AssetMasterVM> GetAssetSubAsset();
         IEnumerable<WBSMaterVM> GetWBS();
 
+        bool MassUploadBreakDown(string ListName, DataTable CSVDataTable, string SiteUrl = null);
         int? MassUploadHeaderDetail(string ListName, DataTable CSVDataTable, string SiteUrl = null);
 
         int? getIdOfColumn(string listname, string SiteUrl, string caml);
@@ -37,5 +40,8 @@ namespace MCAWebAndAPI.Service.Asset
         Dictionary<int, string> getListIDOfList(string listName, string key, string value,  string SiteUrl);
 
         void RollbackParentChildrenUpload(string listNameHeader, int? latestIDHeader, string siteUrl);
+
+        AcceptanceMemoVM GetAcceptanceMemoInfo(int? ID, string SiteUrl);
+        List<string> GetSubAsst(string mainsubasset, string SiteUrl);
     }
 }

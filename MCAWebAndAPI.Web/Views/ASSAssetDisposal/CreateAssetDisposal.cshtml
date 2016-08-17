@@ -1,0 +1,65 @@
+﻿
+@using MCAWebAndAPI.Model.ViewModel.Form.Asset
+
+@model AssetDisposalVM
+
+@using (Ajax.BeginForm("SubmitAssetDisposal", "ASSAssetDisposal",
+                                                                                        FormMethod.Post,
+                                                                                        new AjaxOptions
+                                                                                        {
+                                                                                            OnBegin = "onBeginForm",
+                                                                                            OnComplete = "onCompleteForm",
+                                                                                            OnSuccess = "onSuccessFormEmbed",
+                                                                                            OnFailure = "onFailureForm"
+                                                                                        }, new { @class = "form-horizontal" }))
+{<fieldset>
+        <legend>Form Asset Disposal</legend>
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary()
+        <div class="col-sm-6">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.TransactionType).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.TransactionType)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Documents).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.Documents)
+                </div>
+            </div>
+            
+        </div>
+     <div class="col-sm-6">
+         <div class="form-group">
+             @Html.Bootstrap().LabelFor(m => m.Date).Class("col-sm-4 control-label")
+             <div class="col-sm-8">
+                 @Html.EditorFor(m => m.Date)
+             </div>
+         </div>
+
+         
+
+     </div>
+
+     <legend>Asset Disposal Detail</legend>
+     <div class="row">
+         @Html.Partial("_AssetDisposalDetail", Model.Details)
+     </div>
+
+    </fieldset>
+}
+<div class="form-actions">
+    <div class="row">
+        <div class="col-sm-12">
+            <button id="submit-button" class="btn btn-primary" type="submit">
+                <i class="fa fa-save"></i>
+                Submit
+            </button>
+        </div>
+    </div>
+</div>
+@section scripts{
+  
+}

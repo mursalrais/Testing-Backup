@@ -115,6 +115,15 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to /Lists/Asset%20Transfer/AllItems.aspx.
+        /// </summary>
+        public static string AssetTransfer {
+            get {
+                return ResourceManager.GetString("AssetTransfer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to /Lists/Compensatory%20Request.
         /// </summary>
         public static string Compensatory {
@@ -142,7 +151,7 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}/ExitProcedureDocuments/Forms/AllItems.aspx#InplviewHashf78f203c-f7a1-4179-9fbc-868e50a402cf=FilterField1%3Dexitprocedureid-FilterValue1%3D{1}.
+        ///   Looks up a localized string similar to {0}/ExitProcedureDocuments/Forms/AllItems.aspx#InplviewHashfaee000f-b1fb-42ff-a78e-995ce2c3b057=FilterField1%3Dexitprocedureid-FilterValue1%3D{1}.
         /// </summary>
         public static string ExitProcedureDocumentByID {
             get {
@@ -151,7 +160,7 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to /_layouts/15/WopiFrame.aspx?sourcedoc={2E1A7EB1-E5BD-4F38-A1DF-E43C7DEF0CF4}&amp;file=Exit%20Interview%20Form.docx&amp;action=default.
+        ///   Looks up a localized string similar to {0}/ExitProcedureDocuments/Exit%20Interview%20Form.docx.
         /// </summary>
         public static string ExitProcedureExitInterviewForm {
             get {
@@ -160,7 +169,7 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to /_layouts/15/WopiFrame.aspx?sourcedoc={3242C181-0557-4827-AD0E-F089CFE63AED}&amp;file=Non%20Disclosure%20Agreement.docx&amp;action=default.
+        ///   Looks up a localized string similar to {0}/ExitProcedureDocuments/Non%20Disclosure%20Agreement.docx.
         /// </summary>
         public static string ExitProcedureNonDisclosureAgreement {
             get {
@@ -171,9 +180,36 @@ namespace MCAWebAndAPI.Service.Resources {
         /// <summary>
         ///   Looks up a localized string similar to {0}/Lists/SPHL%20Data/AllItems.aspx.
         /// </summary>
+        public static string FINEventBudget {
+            get {
+                return ResourceManager.GetString("FINEventBudget", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}/Lists/OutstandingAdvance/AllItems.aspx.
+        /// </summary>
+        public static string FINOutstandingAdvance {
+            get {
+                return ResourceManager.GetString("FINOutstandingAdvance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}/Lists/SPHL%20Data/AllItems.aspx.
+        /// </summary>
         public static string FINSPHL {
             get {
                 return ResourceManager.GetString("FINSPHL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}/Lists/SPHL%20Data/AllItems.aspx.
+        /// </summary>
+        public static string FINTaxReimbursement {
+            get {
+                return ResourceManager.GetString("FINTaxReimbursement", resourceCulture);
             }
         }
         
@@ -223,6 +259,15 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to /Lists/Location%20Master/AllItems.aspx.
+        /// </summary>
+        public static string LocationMaster {
+            get {
+                return ResourceManager.GetString("LocationMaster", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0}/Manpower%20Requisition%20Documents/Forms/AllItems.aspx#InplviewHash1ad3b518-3da3-44cd-afac-6c686d40800e=FilterField1%3Dmanpowerrequestid-FilterValue1%3D{1}.
         /// </summary>
         public static string ManpowerDocumentByID {
@@ -268,6 +313,24 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lists/Petty%20Cash%20Payment%20Voucher/AllItems.aspx.
+        /// </summary>
+        public static string PettyCashPaymentVoucher {
+            get {
+                return ResourceManager.GetString("PettyCashPaymentVoucher", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}/Petty%20Cash%20Payment%20Voucher%20Documents/Forms/AllItems.aspx#InplviewHash5093bda1-84bf-4cad-8652-286653d6a83f=FilterField1%3Dpsa%255Fx003a%255FID-FilterValue1%3D{1}.
+        /// </summary>
+        public static string PettyCashPaymentVoucherDocumentByID {
+            get {
+                return ResourceManager.GetString("PettyCashPaymentVoucherDocumentByID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to /Lists/Location%20Master.
         /// </summary>
         public static string PlaceMaster {
@@ -295,11 +358,47 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to /SitePages/Professional%20Performance%20Evaluation%20Approver.aspx.
+        /// </summary>
+        public static string ProfessionalPerformanceEvaluationApprover {
+            get {
+                return ResourceManager.GetString("ProfessionalPerformanceEvaluationApprover", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to /SitePages/Professional%20Performance%20Evaluation%20HR.aspx.
+        /// </summary>
+        public static string ProfessionalPerformanceEvaluationHR {
+            get {
+                return ResourceManager.GetString("ProfessionalPerformanceEvaluationHR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to /Lists/ProfessionalPerformancePlan.
         /// </summary>
         public static string ProfessionalPerformancePlan {
             get {
                 return ResourceManager.GetString("ProfessionalPerformancePlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to /SitePages/Professional%20Perfromance%20Plan%20Approver.aspx.
+        /// </summary>
+        public static string ProfessionalPerformancePlanApprover {
+            get {
+                return ResourceManager.GetString("ProfessionalPerformancePlanApprover", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to /SitePages/Professional%20Perfromance%20Plan%20HR.aspx.
+        /// </summary>
+        public static string ProfessionalPerformancePlanHR {
+            get {
+                return ResourceManager.GetString("ProfessionalPerformancePlanHR", resourceCulture);
             }
         }
         
@@ -322,11 +421,20 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}/PSA%20Documents/Forms/AllItems.aspx#InplviewHash9cd97da9-0ef2-45cb-9beb-ff7f85a9fe1a=FilterField1%3Dpsa%255Fx003a%255FID-FilterValue1%3D{1}.
+        ///   Looks up a localized string similar to {0}/PSA%20Documents/Forms/AllItems.aspx#InplviewHashed38c4d9-060a-4b7a-8a65-b4a07d7972e6=FilterField1%3Dpsa%255Fx003a%255FID-FilterValue1%3D{1}.
         /// </summary>
         public static string PSAManagementDocumentByID {
             get {
                 return ResourceManager.GetString("PSAManagementDocumentByID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lists/Requisition%20Note/AllItems.aspx.
+        /// </summary>
+        public static string RequisitionNote {
+            get {
+                return ResourceManager.GetString("RequisitionNote", resourceCulture);
             }
         }
         
@@ -336,6 +444,15 @@ namespace MCAWebAndAPI.Service.Resources {
         public static string RequisitionNoteDocumentByID {
             get {
                 return ResourceManager.GetString("RequisitionNoteDocumentByID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}/SCA%20Voucher%20Documents/Forms/AllItems.aspx?FilterField1=SCA_x0020_Voucher_x003a_ID&amp;FilterValue1={1}.
+        /// </summary>
+        public static string SCAVoucherDocumentByID {
+            get {
+                return ResourceManager.GetString("SCAVoucherDocumentByID", resourceCulture);
             }
         }
         
@@ -372,6 +489,15 @@ namespace MCAWebAndAPI.Service.Resources {
         public static string ShortlistInterviewPanel {
             get {
                 return ResourceManager.GetString("ShortlistInterviewPanel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}/SPHL%20Documents/Forms/AllItems.aspx?groupBy=&amp;FilterField1=SPHL_x003a_ID&amp;FilterValue1={1}.
+        /// </summary>
+        public static string SPHLDocumentByID {
+            get {
+                return ResourceManager.GetString("SPHLDocumentByID", resourceCulture);
             }
         }
         
