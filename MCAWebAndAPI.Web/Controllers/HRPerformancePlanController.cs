@@ -41,6 +41,7 @@ namespace MCAWebAndAPI.Web.Controllers
             var viewModel = _hRPerformancePlanService.GetPopulatedModel(requestor);
             viewModel.Requestor = requestor;
             viewModel.ID = ID;
+            viewModel.TypeForm = "Professional";
             ViewBag.Action = "CreatePerformancePlan";
 
             // Used for Workflow Router
@@ -96,6 +97,7 @@ namespace MCAWebAndAPI.Web.Controllers
                     viewModel.StatusForm = "Draft";
                 }
 
+                Response.TrySkipIisCustomErrors = true;
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse("Project Or Unit Goals is Required");
             }
@@ -111,6 +113,7 @@ namespace MCAWebAndAPI.Web.Controllers
                     viewModel.StatusForm = "Draft";
                 }
 
+                Response.TrySkipIisCustomErrors = true;
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse("Individual Goal And Plan is Required");
             }
@@ -126,6 +129,7 @@ namespace MCAWebAndAPI.Web.Controllers
                     viewModel.StatusForm = "Draft";
                 }
 
+                Response.TrySkipIisCustomErrors = true;
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse("Weight must be total 100%");
             }
@@ -244,6 +248,7 @@ namespace MCAWebAndAPI.Web.Controllers
                         viewModel.StatusForm = "Draft";
                     }
 
+                    Response.TrySkipIisCustomErrors = true;
                     Response.StatusCode = (int)HttpStatusCode.BadRequest;
                     return JsonHelper.GenerateJsonErrorResponse("Project Or Unit Goals is Required");
                 }
@@ -259,6 +264,7 @@ namespace MCAWebAndAPI.Web.Controllers
                         viewModel.StatusForm = "Draft";
                     }
 
+                    Response.TrySkipIisCustomErrors = true;
                     Response.StatusCode = (int)HttpStatusCode.BadRequest;
                     return JsonHelper.GenerateJsonErrorResponse("Individual Goal And Plan is Required");
                 }
@@ -274,6 +280,7 @@ namespace MCAWebAndAPI.Web.Controllers
                         viewModel.StatusForm = "Draft";
                     }
 
+                    Response.TrySkipIisCustomErrors = true;
                     Response.StatusCode = (int)HttpStatusCode.BadRequest;
                     return JsonHelper.GenerateJsonErrorResponse("Weight must be total 100%");
                 }

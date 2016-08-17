@@ -568,7 +568,6 @@
     <Content Include="Scripts\libs\jquery.min.map" />
     <Content Include="Views\Shared\EditorTemplates\CurrencyUSD.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\InGridAjaxComboBox.cshtml" />
-    <Content Include="Views\ASSLocationMaster\Create.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\TextArea.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\PhoneNumber.cshtml" />
     <Content Include="Views\HRApplication\CreateApplicationData.cshtml" />
@@ -865,8 +864,6 @@
     <Content Include="Views\HRTimesheet\EditTimesheet.cshtml" />
     <Content Include="Views\HRCompensatory\PrintCompensatoryRequest.cshtml" />
     <Content Include="Views\HRCompensatory\_CompensatoryRequest_Print.cshtml" />
-    <Content Include="Views\ASSAssignmentofAsset\Create.cshtml" />
-    <Content Include="Views\ASSAssignmentofAsset\Edit.cshtml" />
     <Content Include="Views\HRInsuranceClaim\EditInsuranceClaim.cshtml" />
     <Content Include="Views\HRInsuranceClaim\ExportToExcel.cshtml" />
     <Content Include="Views\HRInsuranceClaim\SubmitAXA.cshtml" />
@@ -955,6 +952,9 @@
     <Content Include="Views\ASSAssetAcquisition\Sync.cshtml" />
     <Content Include="Views\ASSAssetAcquisition\View.cshtml" />
     <Content Include="Views\ASSAssetAcquisition\_DetailsView.cshtml" />
+    <Content Include="Views\HRDayOff\Create.cshtml" />
+    <Content Include="Views\HRDayOff\_DayOffBalanceDetail.cshtml" />
+    <Content Include="Views\HRDayOff\_DayOffRequsetDetail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -969,7 +969,6 @@
     <Compile Include="Controllers\ActivityController.cs" />
     <Compile Include="Controllers\ASSAssetDisposalController.cs" />
     <Compile Include="Controllers\ASSAssetMasterController.cs" />
-    <Compile Include="Controllers\ASSAssetAcquisitionController.cs" />
     <Compile Include="Controllers\ASSAssetCheckFormController.cs" />
     <Compile Include="Controllers\ASSAssetCheckResultApproveController.cs" />
     <Compile Include="Controllers\ASSAssetCheckResultController.cs" />

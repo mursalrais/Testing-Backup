@@ -199,10 +199,6 @@
     <Compile Include="ViewModel\Form\Asset\AssetTransactionHeaderVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetTransactionItemVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetTransactionVM.cs" />
-    <Compile Include="ViewModel\Form\Asset\AssignmentofAssetDetailVM.cs" />
-    <Compile Include="ViewModel\Form\Asset\AssignmentofAssetHeaderVM.cs" />
-    <Compile Include="ViewModel\Form\Asset\AssignmentofAssetItemVM.cs" />
-    <Compile Include="ViewModel\Form\Asset\AssignmentofAssetVM.cs" />
     <Compile Include="ViewModel\Form\Asset\LocationMasterVM.cs" />
     <Compile Include="ViewModel\Form\Common\PendingApprovalItemVM.cs" />
     <Compile Include="ViewModel\Form\Common\WorkflowItemVM.cs" />
