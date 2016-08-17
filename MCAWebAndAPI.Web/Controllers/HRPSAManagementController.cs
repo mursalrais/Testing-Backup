@@ -545,9 +545,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             var renewalNumber = GetRenewalNumberFromExistingSession(id);
 
-
-            return Json(renewalNumber.OrderByDescending(e => e.Created).Where(e => e.ID == id).Select(
-                e =>
+            return Json(renewalNumber.OrderByDescending(e => e.Created).Select(e =>
                 new
                 {
                     e.ID,
@@ -564,7 +562,7 @@ namespace MCAWebAndAPI.Web.Controllers
                     e.StrPSARenewal,
                     e.PositionID,
                     e.ProfessionalFullName
-                    }
+                }
             ), JsonRequestBehavior.AllowGet);
         }
 
