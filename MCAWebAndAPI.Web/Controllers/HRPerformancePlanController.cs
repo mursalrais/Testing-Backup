@@ -171,7 +171,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 if (viewModel.StatusForm != "DraftInitiated")
                     _hRPerformancePlanService.SendEmail(viewModel, SP_TRANSACTION_WORKFLOW_LIST_NAME,
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)headerID, 1,
-                    string.Format("Dear Respective Approver,This email is sent to you to notify that there is a request which required your action to approve.Kindly check the link as per below to go to direct page accordingly.You may check your personal page in IMS(My Approval View).Thank you.Link: {0}{1}/EditFormApprover_Custom.aspx?ID={2}", siteUrl, UrlResource.ProfessionalPerformancePlan, viewModel.ID), string.Format(""));
+                    string.Format(EmailResource.ProfessionalPerformancePlan, siteUrl, UrlResource.ProfessionalPerformancePlan, headerID), string.Format(""));
             }
             catch (Exception e)
             {
