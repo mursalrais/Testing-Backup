@@ -225,6 +225,7 @@ namespace MCAWebAndAPI.Service.HR.Common
                 <FieldRef Name='psanr' />
                 <FieldRef Name='startdate' />
                 <FieldRef Name='lastworkingday' />
+                <FieldRef Name='PSA_x0020_Number_x003a_PSA_x0020' />
                 <FieldRef Name='ID' />
              </ViewFields> 
             </View>";
@@ -249,10 +250,11 @@ namespace MCAWebAndAPI.Service.HR.Common
             viewModel.Position.Text = Convert.ToString(ListPosition["projectunit"]) + " - " + Convert.ToString(ListPosition["Title"]);
             viewModel.PSANumber.Value = (item["psanr"] as FieldLookupValue).LookupId;
             viewModel.PSANumber.Text = (item["psanr"] as FieldLookupValue).LookupValue;
-            viewModel.StartDate = Convert.ToDateTime(item["startdate"]).ToLocalTime();            
-            viewModel.Project = OrganizationalDetailVM.GetProjectDefaultValue(
-                    new Model.ViewModel.Control.InGridComboBoxVM { Text = Convert.ToString(item["projectunit"])}
-                );
+            viewModel.PSAStatus = (item["PSA_x0020_Number_x003a_PSA_x0020"] as FieldLookupValue).LookupValue;
+            viewModel.StartDate = Convert.ToDateTime(item["startdate"]).ToLocalTime();
+            //viewModel.Project = OrganizationalDetailVM.GetProjectDefaultValue(
+              //      new Model.ViewModel.Control.InGridComboBoxVM { Text = Convert.ToString(item["projectunit"]) }
+                //);
             return viewModel;
 
             //return new OrganizationalDetailVM
@@ -292,6 +294,7 @@ namespace MCAWebAndAPI.Service.HR.Common
             {
                 dependentDetail.Add(ConvertToDependentDetailVM(item));
             }
+            var tes = dependentDetail;
             return dependentDetail;
         }
 
@@ -301,11 +304,13 @@ namespace MCAWebAndAPI.Service.HR.Common
             {
                 ID = Convert.ToInt32(item["ID"]),
                 FullName = Convert.ToString(item["Title"]),
-                DateOfBirth = Convert.ToDateTime(item["dateofbirth"]),
+                DateOfBirthGrid = Convert.ToDateTime(item["dateofbirth"]).ToLocalTime(),
                 InsuranceNumber = Convert.ToString(item["insurancenr"]),
                 PlaceOfBirth = Convert.ToString(item["placeofbirth"]),
-                Remark = FormatUtil.ConvertMultipleLine(Convert.ToString(item["remark"])),
-                Relationship = FormatUtil.ConvertToInGridComboBox(item, "relationship")
+                Remark = FormatUtil.ConvertMultipleLine(Convert.ToString(item["remarks"])),
+                Relationship = DependentDetailVM.GetRelationshipDefaultValue(
+                    new Model.ViewModel.Control.InGridComboBoxVM { Text = Convert.ToString(item["relationship"]) }
+                )
             };
         }
 
@@ -590,9 +595,9 @@ namespace MCAWebAndAPI.Service.HR.Common
                 updatedValue.Add("Title", viewModel.FullName);
                 updatedValue.Add("relationship", viewModel.Relationship.Text);
                 updatedValue.Add("placeofbirth", viewModel.PlaceOfBirth);
-                updatedValue.Add("dateofbirth", viewModel.DateOfBirth);
+                updatedValue.Add("dateofbirth", viewModel.DateOfBirthGrid);
                 updatedValue.Add("insurancenr", viewModel.InsuranceNumber);
-                updatedValue.Add("remark", viewModel.Remark);
+                updatedValue.Add("remarks", viewModel.Remark);
                 updatedValue.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
 
                 try

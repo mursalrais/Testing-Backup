@@ -40,4 +40,10 @@
             @Html.EditorFor(m => m.BankSwiftCodeForPayroll)
         </div>
     </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.TaxStatusForPayroll).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.EditorFor(m => m.TaxStatusForPayroll)
+        </div>
+    </div>
 </div>
