@@ -62,47 +62,46 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
                 e.Value == model.Value || e.Text == model.Text);
         }
 
-        public static InGridComboBoxVM GetPSAStatusDefaultValue(InGridComboBoxVM model = null)
-        {
-            var options = GetPSAStatusOptions();
+        //public static InGridComboBoxVM GetPSAStatusDefaultValue(InGridComboBoxVM model = null)
+        //{
+        //    var options = GetPSAStatusOptions();
 
-            if (model == null || model.Value == null || string.IsNullOrEmpty(model.Text))
-                return options.FirstOrDefault();
+        //    if (model == null || model.Value == null || string.IsNullOrEmpty(model.Text))
+        //        return options.FirstOrDefault();
 
-            return options.FirstOrDefault(e => 
-                e.Value == model.Value || e.Text == model.Text);
-        }
+        //    return options.FirstOrDefault(e => 
+        //        e.Value == model.Value || e.Text == model.Text);
+        //}
 
-        /// <summary>
-        /// Active
-        /// Inactive
-        /// Resigned
-        /// </summary>
-        /// <returns></returns>
-        public static IEnumerable<InGridComboBoxVM> GetPSAStatusOptions()
-        {
-            var index = 0;
-            var options = new string[]
-            {
-                "Active",
-                "Inactive",
-                "Resigned"
-            };
+        ///// <summary>
+        ///// Active
+        ///// Inactive
+        ///// Resigned
+        ///// </summary>
+        ///// <returns></returns>
+        //public static IEnumerable<InGridComboBoxVM> GetPSAStatusOptions()
+        //{
+        //    var index = 0;
+        //    var options = new string[]
+        //    {
+        //        "Active",
+        //        "Inactive",
+        //        "Resigned"
+        //    };
 
-            return options.Select(e =>
-              new InGridComboBoxVM
-              {
-                  Value = ++index,
-                  Text = e
-              });
-        }
+        //    return options.Select(e =>
+        //      new InGridComboBoxVM
+        //      {
+        //          Value = ++index,
+        //          Text = e
+        //      });
+        //}
 
         /// <summary>
         /// Status
         /// </summary>
-        [UIHint("InGridComboBox")]
         [DisplayName("PSA Status")]
-        public InGridComboBoxVM PSAStatus { get; set; } = new InGridComboBoxVM();
+        public string PSAStatus { get; set; }
 
         /// <summary>
         /// Position
