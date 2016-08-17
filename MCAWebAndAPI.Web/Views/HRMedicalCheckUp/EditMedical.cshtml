@@ -165,7 +165,9 @@
                 if (strClaim !== "Draft" && strPermission === "HR") {
                     $("#save-button").hide();
                 }
-               else if (strClaim !== "Draft" && strPermission === "Professional") {
+                else if (strClaim !== "Draft" && strPermission === "Professional") {
+                    var defaultyear = kendo.toString($("#ClaimDate").data("kendoDatePicker"));
+                    defaultyear.enable(false);
                     $("#save-button").hide();
                     $("#submit-button").hide();
                 }

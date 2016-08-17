@@ -113,12 +113,12 @@
 
                 var dependent = $("#DependantName_Value").data("kendoDropDownList");
                 var professional = $("#ProfessionalName_Value").data("kendoDropDownList");
-                dependent.enable(false);
+              
                 var strPermission = $("#UserPermission").val();
                 if (strPermission !== "HR") {
                     professional.enable(false);
                 }
-
+                dependent.enable(false);
                 $("#save-button")
                     .click(function() {
                         var strtype = $("#Type_Value").data("kendoDropDownList").text();
