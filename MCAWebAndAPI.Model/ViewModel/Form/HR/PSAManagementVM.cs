@@ -63,7 +63,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// ProjectOrUnit
         /// </summary>
         [UIHint("ComboBox")]
-        [DisplayName("Div/Project/Unit")]
+        [DisplayName("Project/Unit")]
+        [Required]
         public ComboBoxVM ProjectOrUnit { get; set; } = new ComboBoxVM
         {
             Choices = new string[]
@@ -96,7 +97,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         };
 
         [UIHint("AjaxCascadeComboBox")]
-        [DisplayName("Position Title")]
+        [DisplayName("Position")]
         [Required]
         public AjaxCascadeComboBoxVM PositionBasedProject { get; set; } = new AjaxCascadeComboBoxVM
         {
