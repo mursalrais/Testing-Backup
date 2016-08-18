@@ -927,7 +927,7 @@
     <Content Include="Views\ASSAssetTransfer\_AssetTransferDetail.cshtml" />
     <Content Include="Views\ASSAssetDisposal\CreateAssetDisposal.cshtml" />
     <Content Include="Views\ASSAssetDisposal\_AssetDisposalDetail.cshtml" />
-    <Content Include="Views\HRAdjustment\InputAjustmentData.cshtml" />
+    <Content Include="Views\HRAdjustment\InputAdjustmentData.cshtml" />
     <Content Include="Views\HRAdjustment\_InputAdjustmentDetails.cshtml" />
     <Content Include="Views\FINSCAVoucher\Edit.cshtml" />
     <Content Include="Views\FINSPHL\Edit.cshtml" />
@@ -959,6 +959,7 @@
     <Content Include="Views\ASSLocationMaster\Create.cshtml" />
     <Content Include="Views\ASSLocationMaster\Edit.cshtml" />
     <Content Include="Views\ASSLocationMaster\Upload.cshtml" />
+    <Content Include="Views\HRCompensatory\AddCompensatoryHR.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

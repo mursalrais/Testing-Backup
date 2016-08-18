@@ -115,7 +115,10 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <head>
         /// CompensatoryYearDate
         /// <head>
-        [DisplayName("YearDate")]
+        [Required]
+        [DisplayName("Compensatory Date")]
+        [DataType(DataType.Date)]
+        [UIHint("Date")]
         public string cmpYearDate { get; set; }
 
         /// <head>

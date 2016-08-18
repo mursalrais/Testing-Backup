@@ -9,7 +9,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
     public class AdjustmentDataVM : Item
     {
-        public IEnumerable<AdjustmentDetailsVM> ajustmentDetails { get; set; } = new List<AdjustmentDetailsVM>();
+        public IEnumerable<AdjustmentDetailsVM> AdjustmentDetails { get; set; } = new List<AdjustmentDetailsVM>();
 
         /// <summary>
         /// InterviewerDate
