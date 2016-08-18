@@ -49,7 +49,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 renewalNumber.Add(ConvertToRenewalPSANumber(psaData));
             }
-
             return renewalNumber;
         }
 

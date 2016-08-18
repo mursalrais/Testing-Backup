@@ -29,8 +29,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         IEnumerable<PSAManagementVM> GetRenewalNumber(int? professionalID);
 
-        //PSAManagementVM GetRenewalNumber(int? professionalID);
-
         IEnumerable<PSAManagementVM> GetJoinDate(int? professionalID);
 
         bool UpdateStatusPSA(PSAManagementVM psaManagement);
