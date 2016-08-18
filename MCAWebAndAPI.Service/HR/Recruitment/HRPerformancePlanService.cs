@@ -24,7 +24,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         const string SP_PPPW_LIST_NAME = "Professional Performance Plan Workflow";
         const string SP_PPE_LIST_NAME = "Professional Performance Evaluation";
 
-        public int CreateHeader(ProfessionalPerformancePlanVM header)
+        public int CreateHeader(string requestor, ProfessionalPerformancePlanVM header)
         {
             var columnValues = new Dictionary<string, object>();
             columnValues.Add("majorstrength", header.MajorStrength);
@@ -33,6 +33,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             columnValues.Add("professional", new FieldLookupValue { LookupId = (int)header.NameID });
             columnValues.Add("Position", new FieldLookupValue { LookupId = (int)header.PositionAndDepartementID });
             columnValues.Add("performanceplan", new FieldLookupValue { LookupId = (int)header.PerformancePeriodID });
+            columnValues.Add("visibleto", SPConnector.GetUser(requestor, _siteUrl, "hr"));
             if (header.StatusForm == "DraftInitiated")
             {
                 columnValues.Add("pppstatus", "Draft");

@@ -88,6 +88,11 @@
                         @Html.HiddenFor(m => m.StatusForm)
                     </div>
                 </div>
+                <div class="form-group">
+                    <div class="col-sm-8">
+                        @Html.HiddenFor(m => m.TypeForm)
+                    </div>
+                </div>
             </div>
             @if (Model.TypeForm == "Professional")
             {
@@ -270,6 +275,11 @@
                     @Html.HiddenFor(m => m.StatusForm)
                 </div>
             </div>
+            <div class="form-group">
+                <div class="col-sm-8">
+                    @Html.HiddenFor(m => m.TypeForm)
+                </div>
+            </div>
         </div>
 
         @if (Model.TypeForm == "Professional")
@@ -348,9 +358,6 @@
             var Requestor = "@ViewBag.Requestor";
             var List = "@ViewBag.ListName";
             var typeForm = "@Model.TypeForm";
-            console.log(Requestor);
-            console.log(List);
-            console.log(typeForm);
             if (typeForm == "Professional") {
                 displayWorkflowRouter("workflow-placeholder", List, Requestor);
             }
