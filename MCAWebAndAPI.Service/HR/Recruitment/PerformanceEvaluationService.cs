@@ -188,9 +188,12 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             viewModel.ID = Convert.ToInt32(listItem["ID"]);
             viewModel.Period.Value = Convert.ToString(listItem["Title"]);
-            viewModel.LatestCreationDate = Convert.ToDateTime(listItem["latestdateforcreation"]).ToLocalTime();
-            viewModel.LatestDateApproval1 = Convert.ToDateTime(listItem["latestdateforapproval1"]).ToLocalTime();
-            viewModel.LatestDateApproval2 = Convert.ToDateTime(listItem["latestdateforapproval2"]).ToLocalTime();
+            DateTime _lastCreationDate = Convert.ToDateTime(listItem["latestdateforcreation"]).ToLocalTime();
+            viewModel.LatestCreationDate = new DateTime(_lastCreationDate.Year,_lastCreationDate.Month,_lastCreationDate.Day);
+            DateTime _lastDateApproval = Convert.ToDateTime(listItem["latestdateforapproval1"]).ToLocalTime();
+            viewModel.LatestDateApproval1 = new DateTime(_lastDateApproval.Year,_lastDateApproval.Month,_lastDateApproval.Day);
+            DateTime _lastDateApproval2 = Convert.ToDateTime(listItem["latestdateforapproval2"]).ToLocalTime();
+            viewModel.LatestDateApproval2 = new DateTime(_lastDateApproval2.Year,_lastDateApproval2.Month,_lastDateApproval2.Day);
             viewModel.Status = Convert.ToString(listItem["pestatus"]);
             viewModel.IntiationDate = Convert.ToDateTime(listItem["Created"]);
 
