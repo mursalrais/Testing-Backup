@@ -122,6 +122,8 @@
     <Compile Include="ViewModel\Form\Asset\AssetTransferHeaderVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetTransferItemVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetTransferVM.cs" />
+    <Compile Include="ViewModel\Form\Asset\AssignmentOfAssetDetailsVM.cs" />
+    <Compile Include="ViewModel\Form\Asset\AssignmentOfAssetVM.cs" />
     <Compile Include="ViewModel\Form\Common\ProfessionalVM.cs" />
     <Compile Include="ViewModel\Form\Finance\WBSMasterVM.cs" />
     <Compile Include="ViewModel\Form\HR\AdjustmentDataVM.cs" />
