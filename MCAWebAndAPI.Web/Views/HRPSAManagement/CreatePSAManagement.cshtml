@@ -172,7 +172,7 @@
 
                         $("#PSARenewalNumber").prop("readonly", "true");
                         $("#PSARenewalNumber").prop("value", renewalnumber);
-                        
+
                         $("#StrPSARenewal").prop("readonly", "true");
                         $("#StrPSARenewal").prop("value", strpsarenewal);
 
@@ -193,7 +193,9 @@
                         $("#JoinDate").prop('value', joinDateProfessional);
 
                         $("#ProjectOrUnit_Value").data("kendoDropDownList").value(result[0].ProjectUnit);
-                        $("#Position_Value").data("kendoDropDownList").value(result[0].PositionID);
+                        //$("#Position_Value").data("kendoDropDownList").value(result[0].PositionID);
+                        $("#PositionBasedProject_Value").data("kendoDropDownList").value(result[0].PositionID);
+                        
                         
                         
                     }

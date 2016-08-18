@@ -2,6 +2,7 @@
 using MCAWebAndAPI.Model.ViewModel.Control;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
@@ -41,7 +42,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         {
             var options = GetRelationshipOptions();
 
-            if (model == null || model.Value == null || string.IsNullOrEmpty(model.Text))
+            if (model == null ||string.IsNullOrEmpty(model.Text))
                 return options.FirstOrDefault();
 
             return options.FirstOrDefault(e =>
@@ -53,12 +54,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// </summary>
         public string PlaceOfBirth { get; set; }
 
-        /// <summary>
-        /// dateofbirth
-        /// </summary>
-        [UIHint("Date")]
-        public DateTime? DateOfBirth { get; set; } = DateTime.Now.AddYears(-10);
-
+       
         /// <summary>
         /// insurancenr
         /// </summary>
@@ -69,5 +65,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// </summary>
         [UIHint("TextArea")]
         public string Remark { get; set; }
+
+        [UIHint("Date")]
+        [DisplayName("Date of Birth")]
+        public DateTime? DateOfBirthGrid { get; set; } = DateTime.Now.AddYears(-10);
     }
 }
