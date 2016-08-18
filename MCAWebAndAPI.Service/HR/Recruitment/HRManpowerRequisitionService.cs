@@ -282,7 +282,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         }
         public async Task<ManpowerRequisitionVM> GetManpowerRequisitionAsync(int? ID)
-        {
+        {            
             var viewModel = new ManpowerRequisitionVM();
             var checkBoxItem = SPConnector.GetChoiceFieldValues(SP_MANPOW_LIST_NAME, "Workplan", _siteUrl);
             //viewModel.DivisionProjectUnit.Choices = SPConnector.GetChoiceFieldValues(SP_MANPOW_LIST_NAME, "projectunit", _siteUrl);
