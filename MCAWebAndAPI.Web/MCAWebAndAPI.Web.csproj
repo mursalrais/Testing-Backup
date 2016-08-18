@@ -979,7 +979,6 @@
     <Compile Include="Controllers\ASSAssetSmallValueAssetController.cs" />
     <Compile Include="Controllers\ASSAssetTransactionController.cs" />
     <Compile Include="Controllers\ASSAssetTransferController.cs" />
-    <Compile Include="Controllers\ASSAssignmentofAssetController.cs" />
     <Compile Include="Controllers\ASSLocationMasterController.cs" />
     <Compile Include="Controllers\BIEmbedController.cs" />
     <Compile Include="Controllers\CalendarEventController.cs" />
