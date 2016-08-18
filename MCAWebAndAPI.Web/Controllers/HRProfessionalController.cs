@@ -74,8 +74,9 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
+                Response.TrySkipIisCustomErrors = true;
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
+                return JsonHelper.GenerateJsonErrorResponse(e.Message);
             }
 
             viewModel.OrganizationalDetails = BindOrganizationalDetails(form, viewModel.OrganizationalDetails);
@@ -127,8 +128,9 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
+                Response.TrySkipIisCustomErrors = true;
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
+                return JsonHelper.GenerateJsonErrorResponse(e.Message);
             }
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl+"/"+UrlResource.Professional);
         }
