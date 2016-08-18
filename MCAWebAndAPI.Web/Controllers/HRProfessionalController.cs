@@ -140,7 +140,7 @@ namespace MCAWebAndAPI.Web.Controllers
             var array = dependentDetails.ToArray();
             for (int i = 0; i < array.Length; i++)
             {
-                array[i].DateOfBirthGrid = BindHelper.BindDateInGrid("DependentDetails",
+                array[i].DateOfBirthGrid = BindHelper.BindDateInGridProfessional("DependentDetails",
                     i, "DateOfBirthGrid", form);
             }
             return array;
@@ -151,9 +151,9 @@ namespace MCAWebAndAPI.Web.Controllers
             var array = organizationalDetails.ToArray();
             for (int i = 0; i < array.Length; i++)
             {
-                array[i].LastWorkingDay = BindHelper.BindDateInGrid("OrganizationalDetails",
+                array[i].LastWorkingDay = BindHelper.BindDateInGridProfessional("OrganizationalDetails",
                     i, "LastWorkingDay", form);
-                array[i].StartDate = BindHelper.BindDateInGrid("OrganizationalDetails",
+                array[i].StartDate = BindHelper.BindDateInGridProfessional("OrganizationalDetails",
                     i, "StartDate", form);
             }
             return array;
@@ -164,7 +164,7 @@ namespace MCAWebAndAPI.Web.Controllers
             var array = trainingDetails.ToArray();
             for (int i = 0; i < array.Length; i++)
             {
-                array[i].Year = BindHelper.BindDateInGrid("TrainingDetails",
+                array[i].Year = BindHelper.BindDateInGridProfessional("TrainingDetails",
                     i, "Year", form);
             }
             return array;
@@ -176,7 +176,7 @@ namespace MCAWebAndAPI.Web.Controllers
             var array = educationDetails.ToArray();
             for (int i = 0; i < array.Length; i++)
             {
-                array[i].YearOfGraduation = BindHelper.BindDateInGrid("EducationDetails",
+                array[i].YearOfGraduation = BindHelper.BindDateInGridProfessional("EducationDetails",
                     i, "YearOfGraduation", form);
             }
             return array;
