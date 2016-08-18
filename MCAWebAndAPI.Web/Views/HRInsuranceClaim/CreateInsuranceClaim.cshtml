@@ -2,7 +2,7 @@
 @model InsuranceClaimVM
 
 
-@using (Html.BeginForm("", "HRInsuranceClaim", FormMethod.Post,
+@using (Html.BeginForm("", "HRInsuranceClaim", FormMethod.Post, 
                 new
                 {
                     @class = "form-horizontal",
@@ -82,11 +82,11 @@
     <div class="form-actions">
         <div class="row">
             <div class="col-sm-12">
-                <button id="submit-to-hr-button" class="btn btn-primary" type="submit">
+                <button id="submit-to-hr-button" class="btn btn-primary" type="button">
                     <i class="fa fa-save"></i>
                     Validate to HR
                 </button>
-                <button id="save-button" class="btn btn-primary" type="submit">
+                <button id="save-button" class="btn btn-primary" type="button">
                     <i class="fa fa-save"></i>
                     Save As Draft
                 </button>
@@ -127,7 +127,7 @@
 
                         if (strtype === "Dependent" && strDependent === '') {
                             alert('Dependent Name field is required');
-                            return;
+                            return false;
                         } else {
                             $("#ClaimStatus").val("Draft");
                             $('form').prop('action', '/HRInsuranceClaim/SubmitInsuranceClaim');
@@ -145,7 +145,7 @@
 
                         if (strtype === "Dependent" && strDependent === '') {
                             alert('Dependent Name field is required');
-                            return;
+                            return false;
                         } else {
                             $("#ClaimStatus").val("Need HR to Validate");
                             $('form').prop('action', '/HRInsuranceClaim/SubmitInsuranceClaim');
