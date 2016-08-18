@@ -346,9 +346,13 @@
 
         $(document).ready(function () {
             var Requestor = "@ViewBag.Requestor";
+            var List = "@ViewBag.ListName";
             var typeForm = "@Model.TypeForm";
+            console.log(Requestor);
+            console.log(List);
+            console.log(typeForm);
             if (typeForm == "Professional") {
-                displayWorkflowRouter("workflow-placeholder", "@ViewBag.ListName", Requestor);
+                displayWorkflowRouter("workflow-placeholder", List, Requestor);
             }
         });
     </script>
