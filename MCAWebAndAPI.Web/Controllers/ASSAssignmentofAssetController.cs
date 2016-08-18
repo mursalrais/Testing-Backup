@@ -48,7 +48,7 @@ namespace MCAWebAndAPI.Web.Controllers
             try
             {
                 headerID = _service.CreateHeader(_data, siteUrl);
-                _service.CreateDocuments(headerID, _data.Attachment, siteUrl);
+                //_service.CreateDocuments(headerID, _data.Attachment, siteUrl);
             }
             catch (Exception e)
             {
@@ -58,7 +58,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             try
             {
-                //_service.CreateDetails(headerID, _data.Details);
+                _service.CreateDetails(headerID, _data.Details);
             }
             catch (Exception e)
             {

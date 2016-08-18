@@ -21,6 +21,8 @@ namespace MCAWebAndAPI.Service.Asset
         bool UpdateHeader(AssignmentOfAssetVM viewmodel, string SiteUrl);
         void CreateDocuments(int? headerID, IEnumerable<HttpPostedFileBase> documents, string SiteUrl);
 
+        void CreateDetails(int? headerID, IEnumerable<AssignmentOfAssetDetailsVM> items);
+
         ProfessionalDataVM GetProfMasterInfo(string fullname,  string SiteUrl);
 
         IEnumerable<AssetAcquisitionItemVM> GetAssetSubAsset();

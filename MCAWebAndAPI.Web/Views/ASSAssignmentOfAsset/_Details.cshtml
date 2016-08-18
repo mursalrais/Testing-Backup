@@ -41,6 +41,21 @@
             "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].OfficeName' value='#= OfficeName #' />"
             );
 
+                            columns.Bound(p => p.Floor).HtmlAttributes(new { @class = "floor" }).ClientTemplate("#= Floor #" +
+            "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].Floor' value='#= Floor #' />"
+            );
+
+                            columns.Bound(p => p.Room).HtmlAttributes(new { @class = "room" }).ClientTemplate("#= Room #" +
+            "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].Room' value='#= Room #' />"
+            );
+
+                            columns.Bound(p => p.Remarks).HtmlAttributes(new { @class = "remarks" }).ClientTemplate("#= Remarks #" +
+            "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].Remarks' value='#= Remarks #' />"
+            );
+
+                            columns.Bound(p => p.Status).HtmlAttributes(new { @class = "status" }).ClientTemplate("#= Status #" +
+            "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].Status' value='#= Status #' />"
+            );
 
                             columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
               "<input type='hidden' name=Details[#= getWorkingRelationshipDetails(data)#].ID value=#= ID # />"
@@ -64,6 +79,10 @@
                        model.Field(m => m.AssetSubAsset).DefaultValue(AssignmentOfAssetDetailsVM.GetAssetSubAssetDefaultValue());
                        model.Field(m => m.Province).DefaultValue(AssignmentOfAssetDetailsVM.GetProvinceDefaultValue());
                        model.Field(m => m.OfficeName).Editable(false);
+                       model.Field(m => m.Floor).Editable(false);
+                       model.Field(m => m.Room).Editable(false);
+                       model.Field(m => m.Remarks).Editable(false);
+                       model.Field(m => m.Status).Editable(false);
 
                    })
                    .ServerOperation(false)
@@ -117,9 +136,12 @@
             //alert(arrAssetID.join("-"));
             var url = "/ASSAssignmentOfAsset/GetProvinceInfo?province=" + Province;
             $.getJSON(url, function (data) {
-                alert("office : "+data.OfficeName);
+                //alert("office : "+data.OfficeName);
                 //do next
                 $(".office").text(data.OfficeName);
+                $(".floor").text(data.FloorName);
+                $(".room").text(data.RoomName);
+                $(".remarks").text(data.Remarks);
             })
         });
     }

@@ -6,6 +6,8 @@ using NLog;
 using Microsoft.SharePoint.Client;
 using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using System.Web;
+using MCAWebAndAPI.Model.Common;
+using MCAWebAndAPI.Service.Resources;
 
 namespace MCAWebAndAPI.Service.Asset
 {
@@ -377,6 +379,48 @@ namespace MCAWebAndAPI.Service.Asset
             }
 
             return viewmodel;
+        }
+
+        public void CreateDetails(int? headerID, IEnumerable<AssignmentOfAssetDetailsVM> items)
+        {
+            foreach (var item in items)
+            {
+                if (Item.CheckIfSkipped(item)) continue;
+
+                if (Item.CheckIfDeleted(item))
+                {
+                    try
+                    {
+                        SPConnector.DeleteListItem("Assignment Asset Detail", item.ID, _siteUrl);
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error(e);
+                        throw e;
+                    }
+                    continue;
+                }
+
+                var updatedValues = new Dictionary<string, object>();
+                updatedValues.Add("assetassignment", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
+                updatedValues.Add("assetsubasset", new FieldLookupValue { LookupId = Convert.ToInt32(item.AssetSubAsset.Value.Value) });
+                updatedValues.Add("province", new FieldLookupValue { LookupId = Convert.ToInt32(item.Province.Value.Value) });
+                var provinceinfo = SPConnector.GetListItem("Location Master", item.Province.Value.Value, _siteUrl);
+                updatedValues.Add("office", provinceinfo["Title"]);
+                updatedValues.Add("floor", provinceinfo["Floor"]);
+                updatedValues.Add("room", provinceinfo["Room"]);
+                updatedValues.Add("remarks", provinceinfo["Remarks"]);
+                updatedValues.Add("Status", "RUNNING");
+                try
+                {
+                    SPConnector.AddListItem("Asset Assignment Detail", updatedValues, _siteUrl);
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e);
+                    throw new Exception(ErrorResource.SPInsertError);
+                }
+            }
         }
     }
 }

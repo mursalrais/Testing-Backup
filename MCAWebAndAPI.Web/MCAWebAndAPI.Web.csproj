@@ -957,6 +957,9 @@
     <Content Include="Views\HRDayOff\_DayOffRequsetDetail.cshtml" />
     <Content Include="Views\ASSAssignmentOfAsset\Create.cshtml" />
     <Content Include="Views\ASSAssignmentOfAsset\_Details.cshtml" />
+    <Content Include="Views\ASSLocationMaster\Create.cshtml" />
+    <Content Include="Views\ASSLocationMaster\Edit.cshtml" />
+    <Content Include="Views\ASSLocationMaster\Upload.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
