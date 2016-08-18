@@ -147,6 +147,7 @@
     <Compile Include="Asset\AssetSmallValueAssetService.cs" />
     <Compile Include="Asset\AssetTransactionService.cs" />
     <Compile Include="Asset\AssetTransferService.cs" />
+    <Compile Include="Asset\AssignmentOfAssetService.cs" />
     <Compile Include="Asset\IAssetAcquisitionService.cs" />
     <Compile Include="Asset\IAssetCheckFormService.cs" />
     <Compile Include="Asset\IAssetCheckResultApproveService.cs" />
@@ -160,6 +161,7 @@
     <Compile Include="Asset\IAssetSmallValueAssetService.cs" />
     <Compile Include="Asset\IAssetTransactionService.cs" />
     <Compile Include="Asset\IAssetTransferService.cs" />
+    <Compile Include="Asset\IAssignmentOfAssetService.cs" />
     <Compile Include="Asset\ILocationMasterService.cs" />
     <Compile Include="Asset\LocationMasterService.cs" />
     <Compile Include="Common\ComboBoxService.cs" />

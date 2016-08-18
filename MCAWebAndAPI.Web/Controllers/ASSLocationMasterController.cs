@@ -354,9 +354,9 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
-                return JsonHelper.GenerateJsonErrorResponse(e+" Invalid data, rolling back!");
+                return JsonHelper.GenerateJsonErrorResponse(e + " Invalid data, rolling back!");
             }
-                        
+
             //return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAcquisition);
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAcquisition);
         }

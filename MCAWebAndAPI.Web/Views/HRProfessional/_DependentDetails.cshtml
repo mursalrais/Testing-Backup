@@ -15,17 +15,17 @@
         "<input type='hidden' name='DependentDetails[#= getDependentDetail(data)#].FullName' value='#= FullName #' />"
         );
         columns.Bound(p => p.Relationship).ClientTemplate("#= Relationship.Text #" +
-        "<input type='hidden' name='DependentDetails[#= getDependentDetail(data)#].Relationship' value='#= Relationship #' />"
-        ).EditorViewData(new { BindTo = DependentDetailVM.GetRelationshipOptions() });
-
+                           "<input type='hidden' name='DependentDetails[#= getDependentDetail(data)#].Relationship.Text' value='#= Relationship.Text #' />"
+                         ).EditorViewData(new
+                         {
+                             BindTo = DependentDetailVM.GetRelationshipOptions()
+                         });
         columns.Bound(p => p.PlaceOfBirth).ClientTemplate("#= PlaceOfBirth #" +
         "<input type='hidden' name='DependentDetails[#= getDependentDetail(data)#].PlaceOfBirth' value='#= PlaceOfBirth #' />"
         );
 
-        columns.Bound(p => p.DateOfBirth).ClientTemplate("#= kendo.toString(DateOfBirth, 'y') #" +
-        "<input type='hidden' name='DependentDetails[#= getDependentDetail(data)#].DateOfBirth' value='#= DateOfBirth #' />"
-        );
-
+        columns.Bound(p => p.DateOfBirthGrid).ClientTemplate("#=kendo.toString(DateOfBirthGrid, 'd')#" +
+        "<input type='hidden' name='DependentDetails[#= getDependentDetail(data)#].DateOfBirthGrid' value='#= DateOfBirthGrid#' />");
         columns.Bound(p => p.InsuranceNumber).ClientTemplate("#= InsuranceNumber #" +
         "<input type='hidden' name='DependentDetails[#= getDependentDetail(data)#].InsuranceNumber' value='#= InsuranceNumber #' />"
         );
@@ -55,7 +55,7 @@
     {
         model.Id(p => p.ID);
         model.Field(m => m.Relationship).DefaultValue(DependentDetailVM.GetRelationshipDefaultValue());
-        model.Field(m => m.DateOfBirth).DefaultValue(DateTime.Now.AddYears(-10));
+        model.Field(m => m.DateOfBirthGrid).DefaultValue(DateTime.Now.AddYears(-10));
     })
     .ServerOperation(false)
     )

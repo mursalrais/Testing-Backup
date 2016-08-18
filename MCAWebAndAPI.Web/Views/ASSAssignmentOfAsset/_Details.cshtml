@@ -1,0 +1,162 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Asset
+
+
+
+@model IEnumerable<AssignmentOfAssetDetailsVM>
+
+@{
+    var index = 0;
+}
+
+<div class="col-md-12" style="margin-bottom: 20px">
+    @(Html.Kendo().Grid(Model)
+                        .Name("Details")
+                        .ToolBar(tools => tools.Create().Text("Add New"))
+                        .Editable(editable => editable.Mode(GridEditMode.InCell)
+                        .CreateAt(GridInsertRowPosition.Bottom))
+                        .Columns(columns =>
+                        {
+
+                            columns.Bound(p => p.AssetSubAsset).HtmlAttributes(new { @class = "assetsubasset" }).ClientTemplate("#= AssetSubAsset.Text #" +
+                                  "<input type='hidden' id='asset' name='Details[#= getWorkingRelationshipDetails(data)#].AssetSubAsset.Value' value='#= AssetSubAsset.Value #' />"
+                                ).EditorViewData(new
+                                {
+                                    DataTextField = "Text",
+                                    DataValueField = "Value",
+                                    ControllerName = "ASSAssignmentOfAsset",
+                                    ActionName = "GetAssetSubSAssetGrid"
+                                }).Width(200);
+
+                            columns.Bound(p => p.Province).HtmlAttributes(new { @class = "province" }).ClientTemplate("#= Province.Text #" +
+                              "<input type='hidden' id='province' name='Details[#= getWorkingRelationshipDetails(data)#].Province.Value' value='#= Province.Value #' />"
+                            ).EditorViewData(new
+                            {
+                                DataTextField = "Text",
+                                DataValueField = "Value",
+                                ControllerName = "ASSAssignmentOfAsset",
+                                ActionName = "GetProvinceGrid"
+                            }).Width(200);
+
+                            columns.Bound(p => p.OfficeName).HtmlAttributes(new { @class = "office"}).ClientTemplate("#= OfficeName #" +
+            "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].OfficeName' value='#= OfficeName #' />"
+            );
+
+                            columns.Bound(p => p.Floor).HtmlAttributes(new { @class = "floor" }).ClientTemplate("#= Floor #" +
+            "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].Floor' value='#= Floor #' />"
+            );
+
+                            columns.Bound(p => p.Room).HtmlAttributes(new { @class = "room" }).ClientTemplate("#= Room #" +
+            "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].Room' value='#= Room #' />"
+            );
+
+                            columns.Bound(p => p.Remarks).HtmlAttributes(new { @class = "remarks" }).ClientTemplate("#= Remarks #" +
+            "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].Remarks' value='#= Remarks #' />"
+            );
+
+                            columns.Bound(p => p.Status).HtmlAttributes(new { @class = "status" }).ClientTemplate("#= Status #" +
+            "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].Status' value='#= Status #' />"
+            );
+
+                            columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
+              "<input type='hidden' name=Details[#= getWorkingRelationshipDetails(data)#].ID value=#= ID # />"
+
+
+            );
+                            columns.Bound(p => p.EditMode).Hidden()
+                                     .ClientTemplate("#= EditMode #<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].EditMode' value='#= EditMode #' />");
+                            columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
+                                        .Click("onDeleteKendoDetail")).Width(100);
+                        })
+        .Events(e =>
+        {
+            e.Edit("onCustomEditKendoDetail");
+            e.DataBound("onDataBoundWorkingRelationship");
+        })
+        .DataSource(dataSource => dataSource.Ajax()
+                   .Model(model =>
+                   {
+                       model.Id(p => p.ID);
+                       model.Field(m => m.AssetSubAsset).DefaultValue(AssignmentOfAssetDetailsVM.GetAssetSubAssetDefaultValue());
+                       model.Field(m => m.Province).DefaultValue(AssignmentOfAssetDetailsVM.GetProvinceDefaultValue());
+                       model.Field(m => m.OfficeName).Editable(false);
+                       model.Field(m => m.Floor).Editable(false);
+                       model.Field(m => m.Room).Editable(false);
+                       model.Field(m => m.Remarks).Editable(false);
+                       model.Field(m => m.Status).Editable(false);
+
+                   })
+                   .ServerOperation(false)
+        )
+    )
+</div>
+@*@Html.HiddenFor(m => m.ID)*@
+<script>
+    $(document).ready(function () {
+        //alert(document.getElementById('asset').value);
+        //alert($("#AssetSubAsset").data("kendoComboBox").text());
+    })
+
+    function onAssetChange(e) {
+        var res = this.dataItem(e.item).split("-")
+        alert("berubah jadiii " + this.dataItem(e.item));
+    }
+
+
+    function getWorkingRelationshipDetails(dataItem) {
+        var data = $("#Details").data("kendoGrid").dataSource.data();
+        //data.set('AssetSubAsset', data.AssetSubAsset);
+        return data.indexOf(dataItem);
+    }
+
+    function onCustomEditKendoDetail(e) {
+        if (!e.model.isNew()) {
+            var container = e.container;
+            var tr = container.closest('tr');
+            var data = this.dataItem(tr); //get the row data so it can be referred later
+            // 1 is Item.Mode.UPDATED
+            data.set("EditMode", 1);
+        }
+        if (isCustomAdd && e.model.isNew()) {
+            isCustomAdd = false;
+            $(e.container).find("[name='Details']").val(customRowDataItem.Details).change();
+        }
+    }
+    function onDataBoundWorkingRelationship(e) {
+        var grid = $("#Details").data("kendoGrid");
+        hideDeletedRowKendoDetail(grid);
+
+        $(".province").change(function (e) {
+            var Province = $("#Province").data("kendoDropDownList").text();
+            //var arrAssetID = [];
+            //for (var x = 0; x < (assetID.length - 1) ; x++) {
+            //    arrAssetID[x] = assetID[x];
+            //}
+
+            alert(Province);
+            //alert(arrAssetID.join("-"));
+            var url = "/ASSAssignmentOfAsset/GetProvinceInfo?province=" + Province;
+            $.getJSON(url, function (data) {
+                //alert("office : "+data.OfficeName);
+                //do next
+                $(".office").text(data.OfficeName);
+                $(".floor").text(data.FloorName);
+                $(".room").text(data.RoomName);
+                $(".remarks").text(data.Remarks);
+            })
+        });
+    }
+</script>
+
+<style>
+    .k-dropdown-wrap {
+        width: 200px;
+    }
+
+    .k-dirty-cell {
+        width: 200px;
+    }
+
+    .k-list-container .k-list .k-item {
+        white-space: nowrap;
+    }
+</style>

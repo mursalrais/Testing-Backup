@@ -17,9 +17,9 @@
         .Columns(columns =>
         {
 
-            columns.Bound(p => p.POLineItem).ClientTemplate("#= POLineItem #" +
-            "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].POLineItem' value='#= POLineItem #' />"
-            );
+            //columns.Bound(p => p.POLineItem).ClientTemplate("#= POLineItem #" +
+            //"<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].POLineItem' value='#= POLineItem #' />"
+            //);
 
             columns.Bound(p => p.AssetSubAsset).ClientTemplate("#= AssetSubAsset.Text #" +
                           "<input type='hidden' id='asset' name='Details[#= getWorkingRelationshipDetails(data)#].AssetSubAsset.Value' value='#= AssetSubAsset.Value #' />"

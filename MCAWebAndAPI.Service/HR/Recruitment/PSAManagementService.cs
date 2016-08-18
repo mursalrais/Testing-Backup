@@ -28,13 +28,27 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         public IEnumerable<PSAManagementVM> GetRenewalNumber(int? professionalID)
         {
+            var camlProfessional = @"<View>  
+            <Query> 
+               <Where><Eq><FieldRef Name='ID' /><Value Type='Counter'>" + professionalID + @"</Value></Eq></Where> 
+            </Query> 
+      </View>";
+
+            var professionalData = SPConnector.GetListItem(SP_PROF_LIST_NAME, professionalID, _siteUrl);
+            string professionalFullName = Convert.ToString(professionalData["Title"]) + " " + Convert.ToString(professionalData["lastname"]);
+
+            var camlPSA = @"<View>  
+            <Query> 
+               <Where><Eq><FieldRef Name='professionalfullname' /><Value Type='Text'>" + professionalFullName + @"</Value></Eq></Where> 
+            </Query> 
+      </View>";
+
             var renewalNumber = new List<PSAManagementVM>();
 
-            foreach (var item in SPConnector.GetList(SP_PSA_LIST_NAME, _siteUrl))
+            foreach (var psaData in SPConnector.GetList(SP_PSA_LIST_NAME, _siteUrl, camlPSA))
             {
-                renewalNumber.Add(ConvertToRenewalPSANumber(item));
+                renewalNumber.Add(ConvertToRenewalPSANumber(psaData));
             }
-
             return renewalNumber;
         }
 
