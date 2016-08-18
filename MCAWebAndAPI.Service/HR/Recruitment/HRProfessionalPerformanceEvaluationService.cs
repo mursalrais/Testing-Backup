@@ -172,6 +172,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                         Text = Convert.ToString(item["individualgoalcategory"])
                     }),
                 IndividualGoalAndPlan = Convert.ToString(item["individualgoalplan"]),
+                ProjectOrUnitGoals = Convert.ToString(item["projectunitgoals"]),
                 PlannedWeight = Convert.ToInt32(item["individualgoalweight"]),
                 ActualWeight = Convert.ToInt32(item["individualgoalplanactualweight"]),
                 Score = Convert.ToDecimal(item["individualgoalplanscore"]),

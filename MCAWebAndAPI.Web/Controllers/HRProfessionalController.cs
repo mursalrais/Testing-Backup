@@ -74,8 +74,9 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
+                Response.TrySkipIisCustomErrors = true;
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
+                return JsonHelper.GenerateJsonErrorResponse(e.Message);
             }
 
             viewModel.OrganizationalDetails = BindOrganizationalDetails(form, viewModel.OrganizationalDetails);
@@ -84,6 +85,7 @@ namespace MCAWebAndAPI.Web.Controllers
             Task createEducationDetailsTask = _professionalService.CreateEducationDetailsAsync(headerID, viewModel.EducationDetails);
             viewModel.TrainingDetails = BindTrainingDetails(form, viewModel.TrainingDetails);
             Task createTrainingDetailsTask = _professionalService.CreateTrainingDetailsAsync(headerID, viewModel.TrainingDetails);
+            viewModel.DependentDetails = BindDependentDetails(form,viewModel.DependentDetails);
             Task createDependentDetailsTask = _professionalService.CreateDependentDetailsAsync(headerID, viewModel.DependentDetails);
 
             Task allTask = Task.WhenAll(createOrganizationalDetailsTask, createEducationDetailsTask, createTrainingDetailsTask, createDependentDetailsTask);
@@ -126,10 +128,22 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
+                Response.TrySkipIisCustomErrors = true;
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
+                return JsonHelper.GenerateJsonErrorResponse(e.Message);
             }
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl+"/"+UrlResource.Professional);
+        }
+
+        private IEnumerable<DependentDetailVM> BindDependentDetails(FormCollection form, IEnumerable<DependentDetailVM> dependentDetails)
+        {
+            var array = dependentDetails.ToArray();
+            for (int i = 0; i < array.Length; i++)
+            {
+                array[i].DateOfBirthGrid = BindHelper.BindDateInGrid("DependentDetails",
+                    i, "DateOfBirthGrid", form);
+            }
+            return array;
         }
 
         IEnumerable<OrganizationalDetailVM> BindOrganizationalDetails(FormCollection form, IEnumerable<OrganizationalDetailVM> organizationalDetails)

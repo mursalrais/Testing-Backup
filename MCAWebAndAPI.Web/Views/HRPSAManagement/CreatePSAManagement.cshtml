@@ -132,6 +132,9 @@
 
                         var psaID = result[0].PSAId;
                         var renewalnumber = result[0].PSARenewalNumber + 1;
+
+                        console.log("Renewal Number: " + renewalnumber);
+
                         var strpsarenewal = parseInt(result[0].StrPSARenewal) + 1;
                         var dateofnewpsabefore = result[0].DateNewPSABefore;
                         var projectUnit = result[0].ProjectUnit;
@@ -172,7 +175,7 @@
 
                         $("#PSARenewalNumber").prop("readonly", "true");
                         $("#PSARenewalNumber").prop("value", renewalnumber);
-                        
+
                         $("#StrPSARenewal").prop("readonly", "true");
                         $("#StrPSARenewal").prop("value", strpsarenewal);
 
@@ -193,7 +196,9 @@
                         $("#JoinDate").prop('value', joinDateProfessional);
 
                         $("#ProjectOrUnit_Value").data("kendoDropDownList").value(result[0].ProjectUnit);
-                        $("#Position_Value").data("kendoDropDownList").value(result[0].PositionID);
+                        //$("#Position_Value").data("kendoDropDownList").value(result[0].PositionID);
+                        $("#PositionBasedProject_Value").data("kendoDropDownList").value(result[0].PositionID);
+                        
                         
                         
                     }

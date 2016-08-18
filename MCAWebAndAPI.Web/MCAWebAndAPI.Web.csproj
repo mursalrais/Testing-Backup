@@ -77,7 +77,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.SharePoint.Client, Version=16.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\MCAWebAndAPI.Service\bin\Debug\Microsoft.SharePoint.Client.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -568,7 +567,6 @@
     <Content Include="Scripts\libs\jquery.min.map" />
     <Content Include="Views\Shared\EditorTemplates\CurrencyUSD.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\InGridAjaxComboBox.cshtml" />
-    <Content Include="Views\ASSLocationMaster\Create.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\TextArea.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\PhoneNumber.cshtml" />
     <Content Include="Views\HRApplication\CreateApplicationData.cshtml" />
@@ -865,8 +863,6 @@
     <Content Include="Views\HRTimesheet\EditTimesheet.cshtml" />
     <Content Include="Views\HRCompensatory\PrintCompensatoryRequest.cshtml" />
     <Content Include="Views\HRCompensatory\_CompensatoryRequest_Print.cshtml" />
-    <Content Include="Views\ASSAssignmentofAsset\Create.cshtml" />
-    <Content Include="Views\ASSAssignmentofAsset\Edit.cshtml" />
     <Content Include="Views\HRInsuranceClaim\EditInsuranceClaim.cshtml" />
     <Content Include="Views\HRInsuranceClaim\ExportToExcel.cshtml" />
     <Content Include="Views\HRInsuranceClaim\SubmitAXA.cshtml" />
@@ -955,6 +951,14 @@
     <Content Include="Views\ASSAssetAcquisition\Sync.cshtml" />
     <Content Include="Views\ASSAssetAcquisition\View.cshtml" />
     <Content Include="Views\ASSAssetAcquisition\_DetailsView.cshtml" />
+    <Content Include="Views\HRDayOff\Create.cshtml" />
+    <Content Include="Views\HRDayOff\_DayOffBalanceDetail.cshtml" />
+    <Content Include="Views\HRDayOff\_DayOffRequsetDetail.cshtml" />
+    <Content Include="Views\ASSAssignmentOfAsset\Create.cshtml" />
+    <Content Include="Views\ASSAssignmentOfAsset\_Details.cshtml" />
+    <Content Include="Views\ASSLocationMaster\Create.cshtml" />
+    <Content Include="Views\ASSLocationMaster\Edit.cshtml" />
+    <Content Include="Views\ASSLocationMaster\Upload.cshtml" />
     <Content Include="Views\HRCompensatory\AddCompensatoryHR.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -968,9 +972,9 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\ActivityController.cs" />
+    <Compile Include="Controllers\ASSAssetAcquisitionController.cs" />
     <Compile Include="Controllers\ASSAssetDisposalController.cs" />
     <Compile Include="Controllers\ASSAssetMasterController.cs" />
-    <Compile Include="Controllers\ASSAssetAcquisitionController.cs" />
     <Compile Include="Controllers\ASSAssetCheckFormController.cs" />
     <Compile Include="Controllers\ASSAssetCheckResultApproveController.cs" />
     <Compile Include="Controllers\ASSAssetCheckResultController.cs" />
@@ -981,7 +985,7 @@
     <Compile Include="Controllers\ASSAssetSmallValueAssetController.cs" />
     <Compile Include="Controllers\ASSAssetTransactionController.cs" />
     <Compile Include="Controllers\ASSAssetTransferController.cs" />
-    <Compile Include="Controllers\ASSAssignmentofAssetController.cs" />
+    <Compile Include="Controllers\ASSAssignmentOfAssetController.cs" />
     <Compile Include="Controllers\ASSLocationMasterController.cs" />
     <Compile Include="Controllers\BIEmbedController.cs" />
     <Compile Include="Controllers\CalendarEventController.cs" />
@@ -992,6 +996,7 @@
     <Compile Include="Controllers\FINPettyCashPaymentVoucherController.cs" />
     <Compile Include="Controllers\FINPettyCashSettlementController.cs" />
     <Compile Include="Controllers\FINSCAVoucherController.cs" />
+    <Compile Include="Controllers\HRDayOffController.cs" />
     <Compile Include="Controllers\SharedFinanceController.cs" />
     <Compile Include="Controllers\FINTaxExemptionController.cs" />
     <Compile Include="Controllers\FINSPHLController.cs" />

@@ -3,14 +3,14 @@
 @model LocationMasterVM
 
 @using (Ajax.BeginForm((string)ViewBag.Action, "ASSLocationMaster",
-                                                                                        FormMethod.Post,
-                                                                                        new AjaxOptions
-                                                                                        {
-                                                                                            OnBegin = "onBeginForm",
-                                                                                            OnComplete = "onCompleteForm",
-                                                                                            OnSuccess = "onSuccessFormEmbed",
-                                                                                            OnFailure = "onFailureForm"
-                                                                                        }, new { @class = "form-horizontal" }))
+                                                                                                    FormMethod.Post,
+                                                                                                    new AjaxOptions
+                                                                                                    {
+                                                                                                        OnBegin = "onBeginForm",
+                                                                                                        OnComplete = "onCompleteForm",
+                                                                                                        OnSuccess = "onSuccessFormEmbed",
+                                                                                                        OnFailure = "onFailureForm"
+                                                                                                    }, new { @class = "form-horizontal" }))
 {<fieldset>
         <legend>Form Location Master</legend>
         @Html.AntiForgeryToken()

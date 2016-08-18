@@ -1,30 +1,255 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MCAWebAndAPI.Model.ViewModel.Form.Asset;
-using MCAWebAndAPI.Model.ViewModel.Form.HR;
+using MCAWebAndAPI.Service.Utils;
 using NLog;
 using Microsoft.SharePoint.Client;
-using MCAWebAndAPI.Service.Utils;
+using MCAWebAndAPI.Model.ViewModel.Form.HR;
+using System.Web;
+using MCAWebAndAPI.Model.Common;
+using MCAWebAndAPI.Service.Resources;
 
 namespace MCAWebAndAPI.Service.Asset
 {
-    public class AssignmentofAssetService : IAssignmentofAssetService
+    public class AssignmentOfAssetService : IAssignmentOfAssetService
     {
-
         string _siteUrl;
         static Logger logger = LogManager.GetCurrentClassLogger();
-        const string SP_ASSOASS_LIST_NAME = "Assignment of Asset";
-        const string SP_ASSOASSDetails_LIST_NAME = "Assignment of Asset Details";
 
-        public IEnumerable<AssetMasterVM> GetAssetSubAsset()
+        public void SetSiteUrl(string siteUrl)
         {
-            var models = new List<AssetMasterVM>();
+            _siteUrl = siteUrl;
+        }
 
-            foreach (var item in SPConnector.GetList("Asset Master", _siteUrl))
+
+        public AssignmentOfAssetVM GetPopulatedModel(string SiteUrl)
+        {
+            var model = new AssignmentOfAssetVM();
+            model.AssetHolder.Choices = GetFromListHR("Professional Master", "Title", "Position", SiteUrl);
+
+            return model;
+        }
+
+        public AssignmentOfAssetVM GetHeader(int? ID, string SiteUrl)
+        {
+            var listItem = SPConnector.GetListItem("Asset Assignment", ID, SiteUrl);
+            var viewModel = new AssignmentOfAssetVM();
+
+            viewModel.TransactionType = Convert.ToString(listItem["Title"]);
+            viewModel.AssetHolder.Choices = GetFromListHR("Professional Master", "Title", "Position", SiteUrl);
+            if ((listItem["assetholder"] as FieldLookupValue) != null)
+            {
+                viewModel.AssetHolder.Value = (listItem["assetholder"] as FieldLookupValue).LookupId.ToString();
+                viewModel.AssetHolder.Text = (listItem["assetholder"] as FieldLookupValue).LookupValue;
+            }
+            //viewModel.AccpMemo.Value = Convert.ToString(listItem["acceptancememono"]);
+            viewModel.ProjectUnit = Convert.ToString(listItem["pono"]);
+            viewModel.ContactNo = Convert.ToString(listItem["vendorid"]) + "-" + Convert.ToString(listItem["vendorname"]);
+            if (Convert.ToDateTime(listItem["trasnferdate"]) == DateTime.MinValue)
+            {
+                viewModel.Date = null;
+            }
+            else
+            {
+                viewModel.Date = Convert.ToDateTime(listItem["trasnferdate"]).AddDays(1);
+            }
+            //viewModel.PurchaseDescription = Regex.Replace(Convert.ToString(listItem["purchasedescription"]), "<.*?>", string.Empty);
+            viewModel.ID = ID;
+
+            //viewModel.CancelURL = _siteUrl + UrlResource.AssetAcquisition;
+
+            return viewModel;
+        }
+
+        private IEnumerable<string> GetFromListHR(string listname, string f1, string f2, string siteUrl)
+        {
+            var siteHr = siteUrl.Replace("/bo", "/hr");
+            List<string> _choices = new List<string>();
+            var listItems = SPConnector.GetList(listname, siteHr);
+            foreach (var item in listItems)
+            {
+                if (f2 != null)
+                {
+                    var position = "";
+                    if ((item["Position"] as FieldLookupValue) != null)
+                    {
+                        position =(item["Position"] as FieldLookupValue).LookupValue;
+                    }
+                    _choices.Add(item[f1] + "-" + position);
+                }
+                else
+                {
+                    _choices.Add(item[f1].ToString());
+                }
+                //var listProfMasBO = SPConnector.GetList(listname, siteUrl);
+                //foreach(var pmbo in listProfMasBO)
+                //{
+                    
+                //}
+            }
+            return _choices.ToArray();
+        }
+
+        public int? CreateHeader(AssignmentOfAssetVM viewmodel, string SiteUrl)
+        {
+            //viewmodel.CancelURL = _siteUrl + UrlResource.AssetAcquisition;
+            var columnValues = new Dictionary<string, object>();
+            //columnValues.add
+            columnValues.Add("Title", "Assignment Of Asset");
+            if (viewmodel.Date.HasValue)
+            {
+                columnValues.Add("transferdate", viewmodel.Date);
+            }
+            else
+            {
+                columnValues.Add("transferdate", null);
+            }
+
+            if (viewmodel.AssetHolder.Value == null)
+            {
+                return 0;
+            }
+            else
+            {
+                var breaks = viewmodel.AssetHolder.Value.Split('-');
+                var getInfo = GetProfMasterInfo(breaks[0], SiteUrl);
+                if(getInfo != null)
+                {
+                    columnValues.Add("assetholder", new FieldLookupValue { LookupId = Convert.ToInt32(getInfo.ID) });
+                    columnValues.Add("projectunit", getInfo.CurrentPosition.Text);
+                    columnValues.Add("contactnumber", getInfo.MobileNumberOne);
+                }
+            }
+
+            //attachment later
+            columnValues.Add("completionstatus", viewmodel.CompletionStatus.Value);
+            
+
+            try
+            {
+                SPConnector.AddListItem("Asset Assignment", columnValues, _siteUrl);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.Message);
+            }
+            var entitiy = new AssignmentOfAssetVM();
+            entitiy = viewmodel;
+            return SPConnector.GetLatestListItemID("Asset Assignment", _siteUrl);
+        }
+
+        public void CreateDocuments(int? headerID, IEnumerable<HttpPostedFileBase> documents, string SiteUrl)
+        {
+            foreach(var doc in documents)
+            {
+                var updateValues = new Dictionary<string, object>();
+                updateValues.Add("assetassignmentid", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
+                try
+                {
+                    SPConnector.UploadDocument("Asset Assignmment Documents", updateValues, doc.FileName, doc.InputStream, SiteUrl);
+                }
+                catch (Exception e)
+                {
+
+                }
+            }
+            throw new NotImplementedException();
+        }
+
+        public bool UpdateHeader(AssignmentOfAssetVM viewmodel, string SiteUrl)
+        {
+            //viewmodel.CancelURL = _siteUrl + UrlResource.AssetAcquisition;
+            var columnValues = new Dictionary<string, object>();
+            var ID = Convert.ToInt32(viewmodel.ID);
+            //columnValues.add
+            columnValues.Add("Title", "Assignment Of Asset");
+            if (viewmodel.Date.HasValue)
+            {
+                columnValues.Add("transferdate", viewmodel.Date);
+            }
+            else
+            {
+                columnValues.Add("transferdate", null);
+            }
+
+            if (viewmodel.AssetHolder.Value == null)
+            {
+                return false;
+            }
+            else
+            {
+                columnValues.Add("assetholder", new FieldLookupValue { LookupId = Convert.ToInt32(viewmodel.AssetHolder.Value) });
+                var breaks = viewmodel.AssetHolder.Value.Split('-');
+                var getInfo = GetProfMasterInfo(breaks[0], SiteUrl);
+                if (getInfo != null)
+                {
+                    columnValues.Add("projectunit", getInfo.CurrentPosition);
+                    columnValues.Add("contactnumber", getInfo.MobileNumberOne);
+                }
+            }
+
+            //attachment later
+            columnValues.Add("completionstatus", viewmodel.CompletionStatus.Value);
+
+            try
+            {
+                SPConnector.UpdateListItem("Asset Assignment", ID, columnValues, _siteUrl);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.Message);
+            }
+            var entitiy = new AssignmentOfAssetVM();
+            entitiy = viewmodel;
+            return true;
+        }
+
+        public ProfessionalDataVM GetProfMasterInfo(string fullname, string SiteUrl)
+        {
+            var caml = @"<View><Query>
+                       <Where>
+                          <Eq>
+                             <FieldRef Name='Title' />
+                             <Value Type='Text'>"+fullname+ @"</Value>
+                          </Eq>
+                       </Where>
+                    </Query>
+                    <ViewFields>
+                       <FieldRef Name='Title' />
+                        <FieldRef Name='ID' />   
+                       <FieldRef Name='Position' />
+                       <FieldRef Name='Project_x002f_Unit' />
+                       <FieldRef Name='mobilephonenr' />
+                    </ViewFields>
+                    <QueryOptions /></View>";
+            var siteHr = SiteUrl.Replace("/bo", "/hr");
+            var list = SPConnector.GetList("Professional Master", siteHr, caml);
+            var viewmodel = new ProfessionalDataVM();
+            foreach (var item in list)
+            {
+                viewmodel.ID = Convert.ToInt32(item["ID"]);
+                viewmodel.CurrentPosition.Text = Convert.ToString(item["Project_x002f_Unit"]);
+                viewmodel.MobileNumberOne = Convert.ToString(item["mobilephonenr"]);
+            }
+
+            return viewmodel;
+        }
+
+        public IEnumerable<AssetAcquisitionItemVM> GetAssetSubAsset()
+        {
+            var models = new List<AssetAcquisitionItemVM>();
+            var caml = @"<View><Query>
+                           <Where>
+                              <IsNotNull>
+                                 <FieldRef Name='assetsubasset' />
+                              </IsNotNull>
+                           </Where>
+                        </Query>
+                        <ViewFields>
+                           <FieldRef Name='assetsubasset' />
+                        </ViewFields>
+                        <QueryOptions /></View>";
+            foreach (var item in SPConnector.GetList("Asset Acquisition Details", _siteUrl, caml))
             {
                 models.Add(ConvertToModelAssetSubAsset(item));
             }
@@ -32,35 +257,90 @@ namespace MCAWebAndAPI.Service.Asset
             return models;
         }
 
-        private AssetMasterVM ConvertToModelAssetSubAsset(ListItem item)
+        private AssetAcquisitionItemVM ConvertToModelAssetSubAsset(ListItem item)
         {
-            var viewModel = new AssetMasterVM();
+            var viewModel = new AssetAcquisitionItemVM();
 
             viewModel.ID = Convert.ToInt32(item["ID"]);
-            viewModel.AssetNoAssetDesc.Value = Convert.ToString(item["AssetID"]);
-            viewModel.AssetDesc = Convert.ToString(item["Title"]);
+            var assetID = "";
+            //getInfo Asset Master
+            if ((item["assetsubasset"] as FieldLookupValue) != null)
+            {
+                assetID = (item["assetsubasset"] as FieldLookupValue).LookupValue;
+            }
+            var info = GetInfoAssetMaster("Asset Master", assetID, _siteUrl);
+            viewModel.AssetSubAsset.Text = Convert.ToString(info.AssetNoAssetDesc.Text) + "-" + Convert.ToString(info.AssetDesc);
             return viewModel;
         }
 
+        private AssetMasterVM GetInfoAssetMaster(string listname, string assetID, string _siteUrl)
+        {
+            var caml = @"<View>
+                        <Query>
+                           <Where>
+                              <Eq>
+                                 <FieldRef Name='AssetID' />
+                                 <Value Type='Text'>"+ assetID + @"</Value>
+                              </Eq>
+                           </Where>
+                        </Query>
+                        <ViewFields>
+                           <FieldRef Name='AssetID' />
+                           <FieldRef Name='ID' />
+                           <FieldRef Name='Title' />
+                        </ViewFields>
+                        <QueryOptions /></View>";
+            var list = SPConnector.GetList(listname, _siteUrl, caml);
+            var model = new AssetMasterVM();
+            foreach(var item in list)
+            {
+                model.ID = Convert.ToInt32(item["ID"]);
+                model.AssetNoAssetDesc.Text = Convert.ToString(item["AssetID"]);
+                model.AssetDesc = Convert.ToString(item["Title"]);
+            }
 
-        public IEnumerable<LocationMasterVM> GetLocationMaster()
+            return model;
+        }
+
+        public IEnumerable<LocationMasterVM> GetProvince()
         {
             var models = new List<LocationMasterVM>();
-
-            foreach (var item in SPConnector.GetList("Location Master", _siteUrl))
+            var caml = @"<View><Query>
+                           <Where>
+                              <IsNotNull>
+                                 <FieldRef Name='Province' />
+                              </IsNotNull>
+                           </Where>
+                        </Query>
+                        <ViewFields>
+                           <FieldRef Name='Province' />
+                           <FieldRef Name='Floor' />
+                           <FieldRef Name='Room' />
+                           <FieldRef Name='Remarks' />
+                           <FieldRef Name='Title' />
+                        </ViewFields>
+                        <QueryOptions /></View>";
+            foreach (var item in SPConnector.GetList("Location Master", _siteUrl, caml))
             {
-                models.Add(ConvertToLocationMasterModel_Light(item));
+                models.Add(ConvertToModelLocation(item));
             }
 
             return models;
         }
 
-        private LocationMasterVM ConvertToLocationMasterModel_Light(ListItem item)
+        private LocationMasterVM ConvertToModelLocation(ListItem item)
         {
-
             var viewModel = new LocationMasterVM();
 
-            viewModel.Province.Text = Convert.ToString(item["Province"]);
+            viewModel.ID = Convert.ToInt32(item["ID"]);
+            var province = "";
+            //getInfo Asset Master
+            if ((item["Province"] as FieldLookupValue) != null)
+            {
+                province = (item["Province"] as FieldLookupValue).LookupValue;
+            }
+            //var info = GetInfoProvince("Province", province, _siteUrl);
+            viewModel.Province.Text = province;
             viewModel.OfficeName = Convert.ToString(item["Title"]);
             viewModel.FloorName = Convert.ToInt32(item["Floor"]);
             viewModel.RoomName = Convert.ToString(item["Room"]);
@@ -68,254 +348,79 @@ namespace MCAWebAndAPI.Service.Asset
             return viewModel;
         }
 
-
-        public IEnumerable<LocationMasterVM> GetOffice()
+        public LocationMasterVM GetProvinceInfo(string province, string SiteUrl)
         {
-            var models = new List<LocationMasterVM>();
-
-            foreach (var item in SPConnector.GetList("Location Master", _siteUrl))
-            {
-                models.Add(ConvertToModelOffice(item));
-            }
-
-            return models;
-        }
-
-        private LocationMasterVM ConvertToModelOffice(ListItem item)
-        {
-            var viewModel = new LocationMasterVM();
-
-            viewModel.OfficeName = Convert.ToString(item["Title"]);
-            return viewModel;
-        }
-
-        public IEnumerable<LocationMasterVM> GetFloor()
-        {
-            var models = new List<LocationMasterVM>();
-
-            foreach (var item in SPConnector.GetList("Location Master2", _siteUrl))
-            {
-                models.Add(ConvertToModelFloor(item));
-            }
-
-            return models;
-        }
-
-        private LocationMasterVM ConvertToModelFloor(ListItem item)
-        {
-            var viewModel = new LocationMasterVM();
-
-            viewModel.FloorName = Convert.ToInt32(item["FloorName"]);
-            return viewModel;
-        }
-
-        public IEnumerable<LocationMasterVM> GetRoom()
-        {
-            var models = new List<LocationMasterVM>();
-
-            foreach (var item in SPConnector.GetList("Location Master2", _siteUrl))
-            {
-                models.Add(ConvertToModelRoom(item));
-            }
-
-            return models;
-        }
-
-        private LocationMasterVM ConvertToModelRoom(ListItem item)
-        {
-            var viewModel = new LocationMasterVM();
-
-            viewModel.RoomName = Convert.ToString(item["RoomName"]);
-            return viewModel;
-        }
-
-        public IEnumerable<LocationMasterVM> GetRemark()
-        {
-            var models = new List<LocationMasterVM>();
-
-            foreach (var item in SPConnector.GetList("Location Master2", _siteUrl))
-            {
-                models.Add(ConvertToModelRemark(item));
-            }
-
-            return models;
-        }
-
-        private LocationMasterVM ConvertToModelRemark(ListItem item)
-        {
-            var viewModel = new LocationMasterVM();
-
-            viewModel.Remarks = Convert.ToString(item["Remarks"]);
-            return viewModel;
-        }
-
-        public void CreateDetails(int? headerID, IEnumerable<AssignmentofAssetDetailVM> items)
-        {
-            throw new NotImplementedException();
-        }
-
-        public int? CreateHeader(AssignmentofAssetVM viewmodel)
-        {
-            var columnValues = new Dictionary<string, object>();
-            //columnValues.add
-            columnValues.Add("Title", viewmodel.TransactionType);
-            string[] memo = viewmodel.AssetHolder.Value.Split('-');
-            //columnValues.Add("Acceptance_x0020_Memo_x0020_No", memo[1]);
-            columnValues.Add("Date", viewmodel.Date);
-            columnValues.Add("AssetHolder", new FieldLookupValue { LookupId = Convert.ToInt32(memo[0]) });
-            columnValues.Add("Project", viewmodel.Project);
-            columnValues.Add("ContactNo", viewmodel.ContactNo);
-            columnValues.Add("Attachments", viewmodel.Attachment);
-            string status = viewmodel.CompletionStatus.Value;
-            columnValues.Add("CompletionStatus", new FieldLookupValue { LookupId = Convert.ToInt32(status) });
-
-            try
-            {
-                SPConnector.AddListItem(SP_ASSOASS_LIST_NAME, columnValues, _siteUrl);
-            }
-            catch (Exception e)
-            {
-                logger.Error(e.Message);
-            }
-            var entitiy = new AssignmentofAssetVM();
-            entitiy = viewmodel;
-            return SPConnector.GetLatestListItemID(SP_ASSOASS_LIST_NAME, _siteUrl);
-        }
-
-
-
-        public IEnumerable<AssignmentofAssetDetailVM> GetDetails(int? headerID)
-        {
-            throw new NotImplementedException();
-        }
-
-        public AssignmentofAssetVM GetHeader(int? ID)
-        {
-            var listItem = SPConnector.GetListItem(SP_ASSOASS_LIST_NAME, ID, _siteUrl);
-            var viewModel = new AssignmentofAssetVM();
-
-            viewModel.TransactionType = Convert.ToString(listItem["Title"]);
-            viewModel.Date = Convert.ToDateTime(listItem["Date"]);
-            if ((listItem["Asset Holder"] as FieldLookupValue) != null)
-            {
-                viewModel.AssetHolder.Value = (listItem["AssetHolder"] as FieldLookupValue).LookupId.ToString();
-                viewModel.AssetHolder.Text = (listItem["AssetHolder"] as FieldLookupValue).LookupId.ToString() + "-" + (listItem["AssetHolder"] as FieldLookupValue).LookupValue;
-            }
-            //viewModel.AccpMemo.Value = Convert.ToString(listItem["Acceptance_x0020_Memo_x0020_No"]);
-            viewModel.Project = Convert.ToString(listItem["Project"]);
-            viewModel.ContactNo = Convert.ToString(listItem["ContactNo"]);
-            //viewModel.Attachment = Convert.ToString(listItem["Attachments"]);
-            if ((listItem["CompletionStatus"] as FieldLookupValue) != null)
-            {
-                viewModel.CompletionStatus.Value = (listItem["CompletionStatus"] as FieldLookupValue).LookupId.ToString();
-                viewModel.CompletionStatus.Text = (listItem["CompletionStatus"] as FieldLookupValue).LookupId.ToString() + "-" + (listItem["CompletionStatus"] as FieldLookupValue).LookupValue;
-            }
-            viewModel.ID = ID;
-
-            return viewModel;
-        }
-
-        public int? getIdOfColumn(string listname, string SiteUrl, string caml)
-        {
-            var getItem = SPConnector.GetList(listname, SiteUrl, caml);
-            if (getItem.Count != 0 || getItem != null)
-            {
-                foreach (var item in getItem)
-                {
-                    return Convert.ToInt32(item["ID"]);
-                }
-            }
-            else
-            {
-                return 0;
-            }
-            return 0;
-        }
-
-        public Dictionary<int, string> getListIDOfList(string listName, string key, string value, string SiteUrl)
-        {
-            var caml = @"<View><Query />
+            var caml = @"<View>
+                        <Query>
+                           <Where>
+                              <Eq>
+                                 <FieldRef Name='Province' />
+                                 <Value Type='Lookup'>"+province+@"</Value>
+                              </Eq>
+                           </Where>
+                        </Query>
                         <ViewFields>
-                           <FieldRef Name='" + key + @"' />
-                           <FieldRef Name='" + value + @"' />
+                           <FieldRef Name='Province' />
+                           <FieldRef Name='Floor' />
+                           <FieldRef Name='Room' />
+                           <FieldRef Name='Remarks' />
+                           <FieldRef Name='Title' />
                         </ViewFields>
                         <QueryOptions /></View>";
-
-            var list = SPConnector.GetList(listName, SiteUrl, caml);
-            Dictionary<int, string> ids = new Dictionary<int, string>();
-            if (list.Count > 0)
+            var list = SPConnector.GetList("Location Master", SiteUrl, caml);
+            var viewmodel = new LocationMasterVM();
+            foreach(var item in list)
             {
-                foreach (var l in list)
+                viewmodel.ID = Convert.ToInt32(item["ID"]);
+                viewmodel.OfficeName = Convert.ToString(item["Title"]);
+                viewmodel.FloorName = Convert.ToInt32(item["Floor"]);
+                viewmodel.RoomName = Convert.ToString(item["Room"]);
+                viewmodel.Remarks = Convert.ToString(item["Remarks"]);
+            }
+
+            return viewmodel;
+        }
+
+        public void CreateDetails(int? headerID, IEnumerable<AssignmentOfAssetDetailsVM> items)
+        {
+            foreach (var item in items)
+            {
+                if (Item.CheckIfSkipped(item)) continue;
+
+                if (Item.CheckIfDeleted(item))
                 {
-                    ids.Add(Convert.ToInt32(l[key]), Convert.ToString(l[value]));
+                    try
+                    {
+                        SPConnector.DeleteListItem("Assignment Asset Detail", item.ID, _siteUrl);
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error(e);
+                        throw e;
+                    }
+                    continue;
+                }
+
+                var updatedValues = new Dictionary<string, object>();
+                updatedValues.Add("assetassignment", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
+                updatedValues.Add("assetsubasset", new FieldLookupValue { LookupId = Convert.ToInt32(item.AssetSubAsset.Value.Value) });
+                updatedValues.Add("province", new FieldLookupValue { LookupId = Convert.ToInt32(item.Province.Value.Value) });
+                var provinceinfo = SPConnector.GetListItem("Location Master", item.Province.Value.Value, _siteUrl);
+                updatedValues.Add("office", provinceinfo["Title"]);
+                updatedValues.Add("floor", provinceinfo["Floor"]);
+                updatedValues.Add("room", provinceinfo["Room"]);
+                updatedValues.Add("remarks", provinceinfo["Remarks"]);
+                updatedValues.Add("Status", "RUNNING");
+                try
+                {
+                    SPConnector.AddListItem("Asset Assignment Detail", updatedValues, _siteUrl);
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e);
+                    throw new Exception(ErrorResource.SPInsertError);
                 }
             }
-
-            return ids;
-        }
-
-        public AssignmentofAssetVM GetPopulatedModel(int? ID = default(int?))
-        {
-            var model = new AssignmentofAssetVM();
-            model.TransactionType = "Assignment of Asset";
-            model.Project = "GP";
-            model.ContactNo = "081xxxxxxxx";
-
-            return model;
-        }
-
-        public AssignmentofAssetDetailVM GetPopulatedModelItem(int? ID = default(int?))
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public int? MassUploadHeaderDetail(string ListName, DataTable CSVDataTable, string SiteUrl = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void RollbackParentChildrenUpload(string listNameHeader, int? latestIDHeader, string siteUrl)
-        {
-            SPConnector.DeleteListItem(listNameHeader, latestIDHeader, siteUrl);
-        }
-
-        public void SetSiteUrl(string siteUrl)
-        {
-            _siteUrl = siteUrl;
-        }
-
-        public void UpdateDetails(int? headerID, IEnumerable<AssignmentofAssetDetailVM> items)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool UpdateHeader(AssignmentofAssetVM viewmodel)
-        {
-            var columnValues = new Dictionary<string, object>();
-            var ID = Convert.ToInt32(viewmodel.ID);
-            //columnValues.add
-            columnValues.Add("Title", viewmodel.TransactionType);
-            string[] memo = viewmodel.AssetHolder.Value.Split('-');
-            //columnValues.Add("Acceptance_x0020_Memo_x0020_No", memo[1]);
-            columnValues.Add("Date", viewmodel.Date);
-            columnValues.Add("AssetHolder", new FieldLookupValue { LookupId = Convert.ToInt32(memo[0]) });
-            columnValues.Add("Project", viewmodel.Project);
-            columnValues.Add("ContactNo", viewmodel.ContactNo);
-            columnValues.Add("Attachments", viewmodel.Attachment);
-            columnValues.Add("CompletionStatus", new FieldLookupValue { LookupId = Convert.ToInt32(viewmodel.CompletionStatus.Value) });
-
-            try
-            {
-                SPConnector.UpdateListItem(SP_ASSOASS_LIST_NAME, ID, columnValues, _siteUrl);
-            }
-            catch (Exception e)
-            {
-                logger.Error(e.Message);
-            }
-            var entitiy = new AssignmentofAssetVM();
-            entitiy = viewmodel;
-            return true;
         }
     }
 }

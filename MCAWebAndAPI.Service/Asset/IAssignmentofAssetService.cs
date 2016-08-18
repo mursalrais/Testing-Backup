@@ -1,55 +1,32 @@
-﻿using System;
+﻿using MCAWebAndAPI.Model.ViewModel.Form.Asset;
+using MCAWebAndAPI.Model.ViewModel.Form.HR;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MCAWebAndAPI.Model.ViewModel.Form.HR;
-using MCAWebAndAPI.Model.ViewModel.Form.Asset;
-using NLog;
-using System.Data;
-
-
+using System.Web;
 
 namespace MCAWebAndAPI.Service.Asset
 {
-    public interface IAssignmentofAssetService
+    public interface IAssignmentOfAssetService
     {
-
         void SetSiteUrl(string siteUrl);
 
+        //create empty form
+        AssignmentOfAssetVM GetPopulatedModel(string SiteUrl);
+        AssignmentOfAssetVM GetHeader(int? ID, string SiteUrl);
 
-        AssignmentofAssetVM GetPopulatedModel(int? ID = null);
-        AssignmentofAssetDetailVM GetPopulatedModelItem(int? ID = null);
+        int? CreateHeader(AssignmentOfAssetVM viewmodel, string SiteUrl);
+        bool UpdateHeader(AssignmentOfAssetVM viewmodel, string SiteUrl);
+        void CreateDocuments(int? headerID, IEnumerable<HttpPostedFileBase> documents, string SiteUrl);
 
-        int? CreateHeader(AssignmentofAssetVM viewmodel);
-        bool UpdateHeader(AssignmentofAssetVM viewmodel);
+        void CreateDetails(int? headerID, IEnumerable<AssignmentOfAssetDetailsVM> items);
 
-        void CreateDetails(int? headerID, IEnumerable<AssignmentofAssetDetailVM> items);
-        void UpdateDetails(int? headerID, IEnumerable<AssignmentofAssetDetailVM> items);
+        ProfessionalDataVM GetProfMasterInfo(string fullname,  string SiteUrl);
 
-        AssignmentofAssetVM GetHeader(int? ID);
-
-        IEnumerable<AssignmentofAssetDetailVM> GetDetails(int? headerID);
-
-        IEnumerable<AssetMasterVM> GetAssetSubAsset();
-
-        IEnumerable<LocationMasterVM> GetLocationMaster();
-
-
-        IEnumerable<LocationMasterVM> GetOffice();
-
-        IEnumerable<LocationMasterVM> GetFloor();
-
-        IEnumerable<LocationMasterVM> GetRoom();
-
-        IEnumerable<LocationMasterVM> GetRemark();
-
-        int? MassUploadHeaderDetail(string ListName, DataTable CSVDataTable, string SiteUrl = null);
-
-        int? getIdOfColumn(string listname, string SiteUrl, string caml);
-
-        Dictionary<int, string> getListIDOfList(string listName, string key, string value, string SiteUrl);
-
-        void RollbackParentChildrenUpload(string listNameHeader, int? latestIDHeader, string siteUrl);
+        IEnumerable<AssetAcquisitionItemVM> GetAssetSubAsset();
+        IEnumerable<LocationMasterVM> GetProvince();
+        LocationMasterVM GetProvinceInfo(string province, string SiteUrl);
     }
 }

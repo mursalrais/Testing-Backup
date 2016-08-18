@@ -1,5 +1,4 @@
 ﻿using MCAWebAndAPI.Model.ViewModel.Form.Asset;
-using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using MCAWebAndAPI.Service.Asset;
 using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Web.Helpers;
@@ -11,62 +10,45 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
-
 namespace MCAWebAndAPI.Web.Controllers
 {
-    public class ASSAssignmentofAssetController : Controller
+    public class ASSAssignmentOfAssetController : Controller
     {
 
-        IAssignmentofAssetService _assignmentOfAssetService;
+        IAssignmentOfAssetService _service;
 
-        public ASSAssignmentofAssetController()
+        public ASSAssignmentOfAssetController()
         {
-            _assignmentOfAssetService = new AssignmentofAssetService();
+            _service = new AssignmentOfAssetService();
         }
 
-        public ActionResult Create(string siteUrl)
+        // GET: AssignmentOfAsset
+        public ActionResult Create(string SiteUrl)
         {
-            _assignmentOfAssetService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            var viewModel = _assignmentOfAssetService.GetPopulatedModel();
+            _service.SetSiteUrl(SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            var viewModel = _service.GetPopulatedModel(SiteUrl);
             return View(viewModel);
         }
 
-        public ActionResult Edit(int ID, string siteUrl)
-        {
-            _assignmentOfAssetService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-
-            var viewModel = _assignmentOfAssetService.GetHeader(ID);
-
-            int? headerID = null;
-            headerID = viewModel.ID;
-
-            try
-            {
-                var viewdetails = _assignmentOfAssetService.GetDetails(headerID);
-                viewModel.Details = viewdetails;
-            }
-            catch (Exception e)
-            {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
-            }
-
-            return View(viewModel);
-        }
-
-        [HttpGet]
-        public ActionResult SubmitAsset(AssignmentofAssetVM _data, string siteUrl)
+        [HttpPost]
+        public ActionResult Submit(AssignmentOfAssetVM _data, string siteUrl)
         {
             siteUrl = SessionManager.Get<string>("SiteUrl");
-            _assignmentOfAssetService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            //if (_data.Details.Count() == 0)
+            //{
+            //    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            //    return JsonHelper.GenerateJsonErrorResponse("Details should not empty");
+            //}
 
             //return View(new AssetMasterVM());
             int? headerID = null;
             try
             {
-                headerID = _assignmentOfAssetService.CreateHeader(_data);
+                headerID = _service.CreateHeader(_data, siteUrl);
+                //_service.CreateDocuments(headerID, _data.Attachment, siteUrl);
             }
             catch (Exception e)
             {
@@ -76,51 +58,35 @@ namespace MCAWebAndAPI.Web.Controllers
 
             try
             {
-                _assignmentOfAssetService.CreateDetails(headerID, _data.Details);
+                _service.CreateDetails(headerID, _data.Details);
             }
             catch (Exception e)
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
-            //return JsonHelper.GenerateJsonSuccessResponse(siteUrl ?? ConfigResource.DefaultBOSiteUrl + UrlResource.AssignmentofAsset);
-            return Redirect(string.Format("{0}/{1}", siteUrl ?? ConfigResource.DefaultBOSiteUrl, UrlResource.AssetAcquisition));
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAcquisition);
+            //return Redirect(string.Format("{0}/{1}", siteUrl ?? ConfigResource.DefaultBOSiteUrl, UrlResource.AssetAcquisition));
         }
 
-        public ActionResult Update(AssignmentofAssetVM _data, string SiteUrl)
+        public ActionResult GetProfMasterInfo(string fullname, string position)
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
-            _assignmentOfAssetService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            var profmasterinfo = _service.GetProfMasterInfo(fullname, siteUrl);
 
-            try
-            {
-                _assignmentOfAssetService.UpdateHeader(_data);
-            }
-            catch (Exception e)
-            {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
-            }
-
-            try
-            {
-                //update items
-                _assignmentOfAssetService.UpdateDetails(_data.ID, _data.Details);
-            }
-            catch (Exception e)
-            {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
-            }
-
-            //return JsonHelper.GenerateJsonSuccessResponse(string.Format("{0}/{1}", SiteUrl, UrlResource.AssignmentofAsset));
-            return Redirect(string.Format("{0}/{1}", siteUrl ?? ConfigResource.DefaultBOSiteUrl, UrlResource.AssetAcquisition));
+            //var professionals = GetFromExistingSession();
+            return Json(
+                new
+                {
+                    profmasterinfo.CurrentPosition,
+                    profmasterinfo.MobileNumberOne
+                }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetAssetSubSAssetGrid()
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
-            _assignmentOfAssetService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
             var positions = GetFromPositionsExistingSession();
 
@@ -128,168 +94,64 @@ namespace MCAWebAndAPI.Web.Controllers
                 new
                 {
                     Value = Convert.ToString(e.ID),
-                    Text = e.AssetNoAssetDesc.Value + " - " + e.AssetDesc
+                    Text = e.AssetSubAsset.Text
                 }),
                 JsonRequestBehavior.AllowGet);
         }
 
-        private IEnumerable<AssetMasterVM> GetFromPositionsExistingSession()
+        private IEnumerable<AssetAcquisitionItemVM> GetFromPositionsExistingSession()
         {
             //Get existing session variable
-            var sessionVariable = System.Web.HttpContext.Current.Session["AssetMaster"] as IEnumerable<AssetMasterVM>;
-            var positions = sessionVariable ?? _assignmentOfAssetService.GetAssetSubAsset();
+            var sessionVariable = System.Web.HttpContext.Current.Session["Asset%Asset%20Acquisition%20Details"] as IEnumerable<AssetAcquisitionItemVM>;
+            var positions = sessionVariable ?? _service.GetAssetSubAsset();
 
             if (sessionVariable == null) // If no session variable is found
-                System.Web.HttpContext.Current.Session["AssetMaster"] = positions;
+                System.Web.HttpContext.Current.Session["Asset%Asset%20Acquisition%20Details"] = positions;
             return positions;
         }
 
-
-        public JsonResult GetLocationMaster()
+        public JsonResult GetProvinceGrid()
         {
-            _assignmentOfAssetService.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
-            var professionalmonthlyfee = GetFromLocationMasterExistingSession();
-            return Json(professionalmonthlyfee.Select(e =>
+            var positions = GetProvinceExistingSession();
+
+            return Json(positions.Select(e =>
                 new
                 {
-
                     Value = Convert.ToString(e.ID),
                     Text = e.Province.Text
-
-
                 }),
                 JsonRequestBehavior.AllowGet);
         }
 
-        private IEnumerable<LocationMasterVM> GetFromLocationMasterExistingSession()
+        private IEnumerable<LocationMasterVM> GetProvinceExistingSession()
         {
             //Get existing session variable
             var sessionVariable = System.Web.HttpContext.Current.Session["Location%20Master"] as IEnumerable<LocationMasterVM>;
-            var locationMaster = sessionVariable ?? _assignmentOfAssetService.GetLocationMaster();
-
-            if (sessionVariable == null) // If no session variable is found
-                System.Web.HttpContext.Current.Session["Location%20Master"] = locationMaster;
-            return locationMaster;
-        }
-
-
-        public JsonResult GetOfficeGrid()
-        {
-            var siteUrl = SessionManager.Get<string>("SiteUrl");
-            _assignmentOfAssetService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-
-            var positions = GetFromOfficeExistingSession();
-
-            return Json(positions.Select(e =>
-                new
-                {
-                    Value = Convert.ToString(e.ID),
-                    Text = e.OfficeName
-                }),
-                JsonRequestBehavior.AllowGet);
-        }
-
-        private IEnumerable<LocationMasterVM> GetFromOfficeExistingSession()
-        {
-            //Get existing session variable
-            var sessionVariable = System.Web.HttpContext.Current.Session["Location%20Master"] as IEnumerable<LocationMasterVM>;
-            var positions = sessionVariable ?? _assignmentOfAssetService.GetLocationMaster();
+            var positions = sessionVariable ?? _service.GetProvince();
 
             if (sessionVariable == null) // If no session variable is found
                 System.Web.HttpContext.Current.Session["Location%20Master"] = positions;
             return positions;
         }
 
-        public JsonResult GetFloorGrid()
+        public ActionResult GetProvinceInfo(string province, string SiteUrl)
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
-            _assignmentOfAssetService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            var info = _service.GetProvinceInfo(province, siteUrl);
 
-            var positions = GetFromFloorExistingSession();
-
-            return Json(positions.Select(e =>
+            //var professionals = GetFromExistingSession();
+            return Json(
                 new
                 {
-                    Value = Convert.ToString(e.ID),
-                    Text = e.FloorName
-                }),
-                JsonRequestBehavior.AllowGet);
-        }
-
-        private IEnumerable<LocationMasterVM> GetFromFloorExistingSession()
-        {
-            //Get existing session variable
-            var sessionVariable = System.Web.HttpContext.Current.Session["Location%20Master"] as IEnumerable<LocationMasterVM>;
-            var positions = sessionVariable ?? _assignmentOfAssetService.GetLocationMaster();
-
-            if (sessionVariable == null) // If no session variable is found
-                System.Web.HttpContext.Current.Session["Location%20Master"] = positions;
-            return positions;
-        }
-
-        public JsonResult GetRoomGrid()
-        {
-            var siteUrl = SessionManager.Get<string>("SiteUrl");
-            _assignmentOfAssetService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-
-            var positions = GetFromRoomExistingSession();
-
-            return Json(positions.Select(e =>
-                new
-                {
-                    Value = Convert.ToString(e.ID),
-                    Text = e.RoomName
-                }),
-                JsonRequestBehavior.AllowGet);
-        }
-
-        private IEnumerable<LocationMasterVM> GetFromRoomExistingSession()
-        {
-            //Get existing session variable
-            var sessionVariable = System.Web.HttpContext.Current.Session["Location%20Master"] as IEnumerable<LocationMasterVM>;
-            var positions = sessionVariable ?? _assignmentOfAssetService.GetLocationMaster();
-
-            if (sessionVariable == null) // If no session variable is found
-                System.Web.HttpContext.Current.Session["Location%20Master"] = positions;
-            return positions;
-        }
-
-        public JsonResult GetRemarkGrid()
-        {
-            var siteUrl = SessionManager.Get<string>("SiteUrl");
-            _assignmentOfAssetService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-
-            var positions = GetFromRemarkExistingSession();
-
-            return Json(positions.Select(e =>
-                new
-                {
-                    Value = Convert.ToString(e.ID),
-                    Text = e.Remarks
-                }),
-                JsonRequestBehavior.AllowGet);
-        }
-
-        private IEnumerable<LocationMasterVM> GetFromRemarkExistingSession()
-        {
-            //Get existing session variable
-            var sessionVariable = System.Web.HttpContext.Current.Session["Location%20Master"] as IEnumerable<LocationMasterVM>;
-            var positions = sessionVariable ?? _assignmentOfAssetService.GetLocationMaster();
-
-            if (sessionVariable == null) // If no session variable is found
-                System.Web.HttpContext.Current.Session["Location%20Master"] = positions;
-            return positions;
-        }
-
-        // GET: ASSAsignmentofAsset
-        public ActionResult Index()
-        {
-            var siteUrl = SessionManager.Get<string>("SiteUrl");
-            _assignmentOfAssetService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            //return Redirect(string.Format("{0}/{1}", siteUrl ?? ConfigResource.DefaultBOSiteUrl, UrlResource.AssignmentofAsset));
-            return Redirect(string.Format("{0}/{1}", siteUrl ?? ConfigResource.DefaultBOSiteUrl, UrlResource.AssetAcquisition));
+                    info.ID,
+                    info.OfficeName,
+                    info.FloorName,
+                    info.RoomName,
+                    info.Remarks
+                }, JsonRequestBehavior.AllowGet);
         }
     }
-
 }

@@ -2,27 +2,27 @@
 
 
 
-@model AssignmentofAssetVM
+@model AssignmentOfAssetVM
 
-@using (Ajax.BeginForm("SubmitAsset", "ASSAssignmentofAsset",
-                                                                                                                                                                           FormMethod.Post,
-                                                                                                                                                                           new AjaxOptions
-                                                                                                                                                                           {
-                                                                                                                                                                               OnBegin = "onBeginForm",
-                                                                                                                                                                               OnComplete = "onCompleteForm",
-                                                                                                                                                                               OnSuccess = "onSuccessFormEmbed",
-                                                                                                                                                                               OnFailure = "onFailureForm"
-                                                                                                                                                                           }, new { @class = "form-horizontal" }))
+@using (Ajax.BeginForm("Submit", "ASSAssignmentOfAsset",
+                                                                                                                                       FormMethod.Post,
+                                                                                                                                       new AjaxOptions
+                                                                                                                                       {
+                                                                                                                                           OnBegin = "onBeginForm",
+                                                                                                                                           OnComplete = "onCompleteForm",
+                                                                                                                                           OnSuccess = "onSuccessFormEmbed",
+                                                                                                                                           OnFailure = "onFailureForm"
+                                                                                                                                       }, new { @class = "form-horizontal" }))
 
 {
-    <form class="form-horizontal" method="post" action="/ASSAssignmentofAsset/SubmitAsset" id="create-asset-acquisition-form">
+    <form class="form-horizontal" method="post" action="/ASSAssignmentOfAsset/Submit" id="create-asset-acquisition-form">
         <fieldset>
             <legend>Form Asset Acquisition</legend>
             <div class="col-md-6">
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.TransactionType).Class("col-md-4 control-label")
                     <div class="col-md-8">
-                        @Html.DisplayFor(m => m.TransactionType)
+                        <input type="text" disabled name="TransactionType" value="Assignment Of Asset" style="width : 100%"/>
                     </div>
                 </div>
                 <div class="form-group">
@@ -38,15 +38,15 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.Project).Class("col-md-4 control-label")
+                    @Html.Bootstrap().LabelFor(m => m.ProjectUnit).Class("col-md-4 control-label")
                     <div class="col-md-8">
-                        @Html.DisplayFor(m => m.Project)
+                        <input type="text" disabled name="ProjectUnit" id="ProjectUnit" value="" style="width : 100%"/>
                     </div>
                 </div>
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.ContactNo).Class("col-md-4 control-label")
                     <div class="col-md-8">
-                        @Html.DisplayFor(m => m.ContactNo)
+                        <input type="text" disabled name="ContactNo" id="ContactNo" value="" style="width : 100%"/>
                     </div>
                 </div>
                 <div class="form-group">
@@ -63,22 +63,34 @@
                 </div>
             </div>
             <div>
-                @*@Html.Partial("_Details", Model.Details)*@
+                @Html.Partial("_Details", Model.Details)
             </div>
         </fieldset>
-        @*@Html.HiddenFor(m => m.ID)
-        @Html.HiddenFor(m => m.CancelURL)
-        @Html.HiddenFor(m => m.Vendor)
-        @Html.HiddenFor(m => m.PoNo)*@
+
         <div>
             <center>
-                <input class="k-button k-button-icontext k-grid-add" onclick="SimpenAsset()" type="submit" value="Save" />
-                @*<a href="@Model.CancelURL" target='_parent'>
-                    <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
-                </a>*@
+                <input class="k-button k-button-icontext k-grid-add" type="submit" value="Save" />
             </center>
         </div>
 
     </form>
 }
 
+
+<script>
+    $(document).ready(function () {
+        $("#AssetHolder_Value").data("kendoDropDownList").value("");
+        })
+
+    function onAssetChange(e)
+    {
+        var res = this.dataItem(e.item).split("-")
+        //alert("berubah jadiii " + res[0]);
+        var url = "/ASSAssignmentOfAsset/GetProfMasterInfo?fullname=" + res[0] + "&position=" + res[1];
+        $.getJSON(url, function (data) {
+            //do next
+            document.getElementById('ProjectUnit').value = data.CurrentPosition.Text    ;
+            document.getElementById('ContactNo').value = data.MobileNumberOne;
+        })
+    }
+</script>

@@ -124,7 +124,7 @@ namespace MCAWebAndAPI.Web.Controllers
             siteUrl = SessionManager.Get<string>("SiteUrl");
             _assetAcquisitionService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
-            if(_data.Details.Count() == 0)
+            if (_data.Details.Count() == 0)
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse("Details should not empty");
@@ -463,7 +463,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
                         row["Title"] = d.ItemArray[0].ToString();
                         row["acceptancememono"] = myKey;
-                        if(d.ItemArray[3].ToString() == "-1")
+                        if (d.ItemArray[3].ToString() == "-1")
                         {
                             row["vendorid"] = null;
                         }
@@ -471,7 +471,7 @@ namespace MCAWebAndAPI.Web.Controllers
                         {
                             row["vendorid"] = d.ItemArray[3].ToString();
                         }
-                        
+
                         row["vendorname"] = d.ItemArray[4].ToString();
                         row["pono"] = d.ItemArray[5].ToString();
                         row["purchasedate"] = d.ItemArray[6].ToString();
@@ -492,9 +492,9 @@ namespace MCAWebAndAPI.Web.Controllers
                                 _assetAcquisitionService.RollbackParentChildrenUpload(listNameHeader, id, siteUrl);
                             }
                         }
-                        else if(idsDetail.Count > 0)
+                        else if (idsDetail.Count > 0)
                         {
-                            foreach(var id in idsDetail)
+                            foreach (var id in idsDetail)
                             {
                                 //delete parent
                                 _assetAcquisitionService.RollbackParentChildrenUpload(listNameDetail, id, siteUrl);
@@ -551,7 +551,7 @@ namespace MCAWebAndAPI.Web.Controllers
                     var camlWBS = @"<View><Query><Where>
                                             <Eq><FieldRef Name='Title' /><Value Type='Text'>" + splitWBS[0].Trim() + @"</Value></Eq>
                                             <And>
-                                            <Eq><FieldRef Name='WBSDesc' /><Value Type='Text'>" + WBSDesc.Trim()  + @"</Value></Eq>
+                                            <Eq><FieldRef Name='WBSDesc' /><Value Type='Text'>" + WBSDesc.Trim() + @"</Value></Eq>
                                             </And>
                                     </Where>
                                     </Query></View>";
@@ -630,7 +630,7 @@ namespace MCAWebAndAPI.Web.Controllers
             var subbasset = _assetAcquisitionService.GetSubAsst(MainAssetID, siteUrl);
 
             //var professionals = GetFromExistingSession();
-            return Json( subbasset, JsonRequestBehavior.AllowGet);
+            return Json(subbasset, JsonRequestBehavior.AllowGet);
         }
 
     }

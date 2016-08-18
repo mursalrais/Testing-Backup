@@ -41,6 +41,7 @@ namespace MCAWebAndAPI.Web.Controllers
             var viewModel = _hRPerformancePlanService.GetPopulatedModel(requestor);
             viewModel.Requestor = requestor;
             viewModel.ID = ID;
+            viewModel.TypeForm = "Professional";
             ViewBag.Action = "CreatePerformancePlan";
 
             // Used for Workflow Router
@@ -82,7 +83,7 @@ namespace MCAWebAndAPI.Web.Controllers
                         viewModelDetail.Remarks = "";
                     }
 
-                    sum = sum + viewModelDetail.Weight;
+                    sum = sum + viewModelDetail.Weight; 
                 }
             }
             if (project == "Empty")
@@ -96,6 +97,7 @@ namespace MCAWebAndAPI.Web.Controllers
                     viewModel.StatusForm = "Draft";
                 }
 
+                Response.TrySkipIisCustomErrors = true;
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse("Project Or Unit Goals is Required");
             }
@@ -111,6 +113,7 @@ namespace MCAWebAndAPI.Web.Controllers
                     viewModel.StatusForm = "Draft";
                 }
 
+                Response.TrySkipIisCustomErrors = true;
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse("Individual Goal And Plan is Required");
             }
@@ -126,6 +129,7 @@ namespace MCAWebAndAPI.Web.Controllers
                     viewModel.StatusForm = "Draft";
                 }
 
+                Response.TrySkipIisCustomErrors = true;
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse("Weight must be total 100%");
             }
@@ -167,7 +171,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 if (viewModel.StatusForm != "DraftInitiated")
                     _hRPerformancePlanService.SendEmail(viewModel, SP_TRANSACTION_WORKFLOW_LIST_NAME,
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)headerID, 1,
-                    string.Format("Dear Respective Approver,This email is sent to you to notify that there is a request which required your action to approve.Kindly check the link as per below to go to direct page accordingly.You may check your personal page in IMS(My Approval View).Thank you.Link: {0}{1}/EditFormApprover_Custom.aspx?ID={2}", siteUrl, UrlResource.ProfessionalPerformancePlan, viewModel.ID), string.Format(""));
+                    string.Format(EmailResource.ProfessionalPerformancePlan, siteUrl, UrlResource.ProfessionalPerformancePlan, headerID), string.Format(""));
             }
             catch (Exception e)
             {
@@ -244,6 +248,7 @@ namespace MCAWebAndAPI.Web.Controllers
                         viewModel.StatusForm = "Draft";
                     }
 
+                    Response.TrySkipIisCustomErrors = true;
                     Response.StatusCode = (int)HttpStatusCode.BadRequest;
                     return JsonHelper.GenerateJsonErrorResponse("Project Or Unit Goals is Required");
                 }
@@ -259,6 +264,7 @@ namespace MCAWebAndAPI.Web.Controllers
                         viewModel.StatusForm = "Draft";
                     }
 
+                    Response.TrySkipIisCustomErrors = true;
                     Response.StatusCode = (int)HttpStatusCode.BadRequest;
                     return JsonHelper.GenerateJsonErrorResponse("Individual Goal And Plan is Required");
                 }
@@ -274,6 +280,7 @@ namespace MCAWebAndAPI.Web.Controllers
                         viewModel.StatusForm = "Draft";
                     }
 
+                    Response.TrySkipIisCustomErrors = true;
                     Response.StatusCode = (int)HttpStatusCode.BadRequest;
                     return JsonHelper.GenerateJsonErrorResponse("Weight must be total 100%");
                 }
