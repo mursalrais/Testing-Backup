@@ -33,7 +33,7 @@ namespace MCAWebAndAPI.Web.Controllers
             _service = new HRCompensatoryService();
         }
 
-        public ActionResult AddCompensatoryHR(string siteurl = null, int? iD = null)
+        public ActionResult AddCompensatoryHR(string siteurl = null)
         {
             var viewmodel = new CompensatoryVM();
 
@@ -50,7 +50,6 @@ namespace MCAWebAndAPI.Web.Controllers
 
             ViewBag.ListName = "Compensatory%20Request";
 
-            viewmodel.cmpID = iD;
             if (viewmodel.cmpEmail != null)
                 SessionManager.Set("RequestorUserLogin", viewmodel.cmpEmail);
 
