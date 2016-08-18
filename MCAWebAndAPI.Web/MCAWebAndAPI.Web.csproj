@@ -77,7 +77,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.SharePoint.Client, Version=16.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\MCAWebAndAPI.Service\bin\Debug\Microsoft.SharePoint.Client.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -928,7 +927,7 @@
     <Content Include="Views\ASSAssetTransfer\_AssetTransferDetail.cshtml" />
     <Content Include="Views\ASSAssetDisposal\CreateAssetDisposal.cshtml" />
     <Content Include="Views\ASSAssetDisposal\_AssetDisposalDetail.cshtml" />
-    <Content Include="Views\HRAdjustment\InputAjustmentData.cshtml" />
+    <Content Include="Views\HRAdjustment\InputAdjustmentData.cshtml" />
     <Content Include="Views\HRAdjustment\_InputAdjustmentDetails.cshtml" />
     <Content Include="Views\FINSCAVoucher\Edit.cshtml" />
     <Content Include="Views\FINSPHL\Edit.cshtml" />
@@ -960,6 +959,7 @@
     <Content Include="Views\ASSLocationMaster\Create.cshtml" />
     <Content Include="Views\ASSLocationMaster\Edit.cshtml" />
     <Content Include="Views\ASSLocationMaster\Upload.cshtml" />
+    <Content Include="Views\HRCompensatory\AddCompensatoryHR.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

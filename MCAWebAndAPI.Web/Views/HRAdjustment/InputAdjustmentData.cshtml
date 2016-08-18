@@ -13,12 +13,13 @@
     OnComplete = "onCompleteForm",
     OnSuccess = "onSuccessFormEmbed",
     OnFailure = "onFailureForm"
-
 }))
 {
     <fieldset>
+        <input type="hidden" id="loadpage" value="0">
+
         <div class="row">
-            <div class="form-group">
+            <div class="form-group" id="ParentDiv">
                 @Html.Bootstrap().LabelFor(m => m.periodDate).Class("col-xs-2 control-label")
                 <div class="col-xs-4">
                     @Html.EditorFor(m => m.periodDate)
@@ -51,18 +52,6 @@
                 change: onChange
             });
 
-            function OnChangeProffesional(e) {
-                var dataItem = this.dataItem(e.item);
-                var eMail = dataItem.OfficeEmail
-
-                showLoading();
-                if (eMail != null) {
-                    displayWorkflowRouter("workflow-placeholder", "@ViewBag.ListName", eMail);
-                    hideLoading();
-                }
-            };
-
-          
         });
 
 
