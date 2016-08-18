@@ -15,7 +15,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         ProfessionalPerformancePlanVM GetHeader(int? ID, string requestor);
 
-        int CreateHeader(ProfessionalPerformancePlanVM header);
+        int CreateHeader(string requestor, ProfessionalPerformancePlanVM header);
 
         bool UpdateHeader(ProfessionalPerformancePlanVM header);
 
