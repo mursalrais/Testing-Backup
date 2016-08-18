@@ -19,22 +19,22 @@
         @Html.AntiForgeryToken()
         @Html.ValidationSummary()
 
-        <div class="col-sm-12">
+        <div class="col-xs-12">
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Name).Class("col-sm-4 control-label")
-                <div class="col-sm-8">
+                @Html.Bootstrap().LabelFor(m => m.Name).Class("col-xs-4 control-label")
+                <div class="col-xs-8">
                     @Html.DisplayFor(m => m.Name)
                 </div>
             </div>
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.PositionAndDepartement).Class("col-sm-4 control-label")
-                <div class="col-sm-8">
+                @Html.Bootstrap().LabelFor(m => m.PositionAndDepartement).Class("col-xs-4 control-label")
+                <div class="col-xs-8">
                     @Html.DisplayFor(m => m.PositionAndDepartement)
                 </div>
             </div>
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.PerformancePeriod).Class("col-sm-4 control-label")
-                <div class="col-sm-8">
+                @Html.Bootstrap().LabelFor(m => m.PerformancePeriod).Class("col-xs-4 control-label")
+                <div class="col-xs-8">
                     @Html.DisplayFor(m => m.PerformancePeriod)
                 </div>
             </div>
@@ -43,29 +43,29 @@
         <div class="row">
             @Html.Partial("_ProfessionalPerformanceEvaluationDetail", Model)
         </div>
-        <div class="col-sm-12">
+        <div class="col-xs-12">
             <div class="form-group">
-                <div class="col-sm-8">
+                <div class="col-xs-8">
                     @Html.HiddenFor(m => m.ID)
                 </div>
-                <div class="col-sm-8">
+                <div class="col-xs-8">
                     @Html.HiddenFor(m => m.ProfessionalID)
                 </div>
-                <div class="col-sm-8">
+                <div class="col-xs-8">
                     @Html.HiddenFor(m => m.Requestor)
                 </div>
-                <div class="col-sm-8">
+                <div class="col-xs-8">
                     @Html.HiddenFor(m => m.NameID)
                 </div>
-                <div class="col-sm-8">
+                <div class="col-xs-8">
                     @Html.HiddenFor(m => m.PositionAndDepartementID)
                 </div>
-                <div class="col-sm-8">
+                <div class="col-xs-8">
                     @Html.HiddenFor(m => m.PerformancePeriodID)
                 </div>
             </div>
             <div class="form-group">
-                <div class="col-sm-8">
+                <div class="col-xs-8">
                     @Html.HiddenFor(m => m.StatusForm)
                 </div>
             </div>
@@ -82,7 +82,7 @@ if (Model.ID == null)
 {
     <div class="form-actions">
         <div class="row">
-            <div class="col-sm-12">
+            <div class="col-xs-12">
                 <button id="submit-button" class="btn btn-primary" type="submit">
                     <i class="fa fa-save"></i>
                     Submit For Approval
@@ -100,7 +100,7 @@ if (Model.TypeForm == "Professional" && Model.StatusForm == "Initiated")
 {
     <div class="form-actions">
         <div class="row">
-            <div class="col-sm-12">
+            <div class="col-xs-12">
                 <button id="submit-button" class="btn btn-primary" type="submit">
                     <i class="fa fa-save"></i>
                     Submit For Approval
@@ -118,7 +118,7 @@ if (Model.TypeForm == "Professional" && Model.StatusForm == "Draft")
 {
     <div class="form-actions">
         <div class="row">
-            <div class="col-sm-12">
+            <div class="col-xs-12">
                 <button id="submit-button" class="btn btn-primary" type="submit">
                     <i class="fa fa-save"></i>
                     Submit For Approval
@@ -136,7 +136,7 @@ if (Model.TypeForm == "Approver1" && Model.StatusForm == "Pending Approval 1 of 
 {
     <div class="form-actions">
         <div class="row">
-            <div class="col-sm-12">
+            <div class="col-xs-12">
                 <button id="approver1-button" class="btn btn-primary" type="submit">
                     <i class="fa fa-save"></i>
                     Approve
@@ -150,7 +150,7 @@ if (Model.TypeForm == "Approver2" && Model.StatusForm == "Pending Approval 2 of 
 {
     <div class="form-actions">
         <div class="row">
-            <div class="col-sm-12">
+            <div class="col-xs-12">
                 <button id="approver2-button" class="btn btn-primary" type="submit">
                     <i class="fa fa-save"></i>
                     Approve
@@ -174,22 +174,22 @@ if (Model.TypeForm == "Approver2" && Model.StatusForm == "Pending Approval 2 of 
         @Html.AntiForgeryToken()
         @Html.ValidationSummary()
 
-        <div class="col-sm-12">
+        <div class="col-xs-12">
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Name).Class("col-sm-4 control-label")
-                <div class="col-sm-8">
+                @Html.Bootstrap().LabelFor(m => m.Name).Class("col-xs-4 control-label")
+                <div class="col-xs-8">
                     @Html.DisplayFor(m => m.Name)
                 </div>
             </div>
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.PositionAndDepartement).Class("col-sm-4 control-label")
-                <div class="col-sm-8">
+                @Html.Bootstrap().LabelFor(m => m.PositionAndDepartement).Class("col-xs-4 control-label")
+                <div class="col-xs-8">
                     @Html.DisplayFor(m => m.PositionAndDepartement)
                 </div>
             </div>
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.PerformancePeriod).Class("col-sm-4 control-label")
-                <div class="col-sm-8">
+                @Html.Bootstrap().LabelFor(m => m.PerformancePeriod).Class("col-xs-4 control-label")
+                <div class="col-xs-8">
                     @Html.DisplayFor(m => m.PerformancePeriod)
                 </div>
             </div>
@@ -198,29 +198,29 @@ if (Model.TypeForm == "Approver2" && Model.StatusForm == "Pending Approval 2 of 
         <div class="row">
             @Html.Partial("_ProfessionalPerformanceEvaluationDetail", Model)
         </div>
-        <div class="col-sm-12">
+        <div class="col-xs-12">
             <div class="form-group">
-                <div class="col-sm-8">
+                <div class="col-xs-8">
                     @Html.HiddenFor(m => m.ID)
                 </div>
-                <div class="col-sm-8">
+                <div class="col-xs-8">
                     @Html.HiddenFor(m => m.ProfessionalID)
                 </div>
-                <div class="col-sm-8">
+                <div class="col-xs-8">
                     @Html.HiddenFor(m => m.Requestor)
                 </div>
-                <div class="col-sm-8">
+                <div class="col-xs-8">
                     @Html.HiddenFor(m => m.NameID)
                 </div>
-                <div class="col-sm-8">
+                <div class="col-xs-8">
                     @Html.HiddenFor(m => m.PositionAndDepartementID)
                 </div>
-                <div class="col-sm-8">
+                <div class="col-xs-8">
                     @Html.HiddenFor(m => m.PerformancePeriodID)
                 </div>
             </div>
             <div class="form-group">
-                <div class="col-sm-8">
+                <div class="col-xs-8">
                     @Html.HiddenFor(m => m.StatusForm)
                 </div>
             </div>
@@ -237,7 +237,7 @@ if (Model.TypeForm == "Approver2" && Model.StatusForm == "Pending Approval 2 of 
     {
         <div class="form-actions">
             <div class="row">
-                <div class="col-sm-12">
+                <div class="col-xs-12">
                     <button id="print-button" class="btn btn-primary" type="button">
                         Print
                     </button>

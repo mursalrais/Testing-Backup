@@ -16,7 +16,7 @@
     <RootNamespace>MCAWebAndAPI.Web</RootNamespace>
     <AssemblyName>MCAWebAndAPI.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -979,7 +979,6 @@
     <Compile Include="Controllers\ASSAssetSmallValueAssetController.cs" />
     <Compile Include="Controllers\ASSAssetTransactionController.cs" />
     <Compile Include="Controllers\ASSAssetTransferController.cs" />
-    <Compile Include="Controllers\ASSAssignmentofAssetController.cs" />
     <Compile Include="Controllers\ASSLocationMasterController.cs" />
     <Compile Include="Controllers\BIEmbedController.cs" />
     <Compile Include="Controllers\CalendarEventController.cs" />
@@ -1114,6 +1113,9 @@
       <LastGenOutput>MessageResource.Designer.cs</LastGenOutput>
       <CustomToolNamespace>MCAWebAndAPI.Web.Resources</CustomToolNamespace>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
