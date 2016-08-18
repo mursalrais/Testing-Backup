@@ -355,6 +355,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             updateValues.Add("PSAnumber", psaNumber);
             updateValues.Add("PSAstartdate", psaManagement.DateOfNewPSA.Value);
             updateValues.Add("PSAexpirydate", psaManagement.PSAExpiryDates.Value);
+            updateValues.Add("lastworkingdate", psaManagement.PSAExpiryDates.Value);
                         
             try
             {
