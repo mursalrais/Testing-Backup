@@ -69,6 +69,11 @@
                     @Html.HiddenFor(m => m.StatusForm)
                 </div>
             </div>
+            <div class="form-group">
+                <div class="col-xs-8">
+                    @Html.HiddenFor(m => m.TypeForm)
+                </div>
+            </div>
         </div>
         @if (Model.TypeForm == "Professional")
         {
@@ -222,6 +227,11 @@ if (Model.TypeForm == "Approver2" && Model.StatusForm == "Pending Approval 2 of 
             <div class="form-group">
                 <div class="col-xs-8">
                     @Html.HiddenFor(m => m.StatusForm)
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-xs-8">
+                    @Html.HiddenFor(m => m.TypeForm)
                 </div>
             </div>
         </div>

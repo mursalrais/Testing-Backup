@@ -294,7 +294,7 @@ namespace MCAWebAndAPI.Web.Controllers
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.ID);
             }
 
-            Task createPerformancePlanDetailsTask = _hRPerformancePlanService.CreatePerformancePlanDetailsAsync(viewModel.ID, viewModel.PerformancePeriodID, viewModel.Requestor, viewModel.StatusForm, viewModel.ProjectOrUnitGoalsDetails);
+            Task createPerformancePlanDetailsTask = _hRPerformancePlanService.CreatePerformancePlanDetailsAsync(viewModel.ID, viewModel.PerformancePeriodID, viewModel.Requestor, viewModel.StatusForm,viewModel.TypeForm, viewModel.ProjectOrUnitGoalsDetails);
 
             Task allTasks = Task.WhenAll(createPerformancePlanDetailsTask);
 

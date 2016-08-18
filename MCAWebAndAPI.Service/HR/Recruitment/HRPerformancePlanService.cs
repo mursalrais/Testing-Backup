@@ -55,7 +55,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         }
 
-        public void CreatePerformancePlanDetails(int? headerID, int? performanceID, string email, string status, IEnumerable<ProjectOrUnitGoalsDetailVM> PerformancePlanDetails)
+        public void CreatePerformancePlanDetails(int? headerID, int? performanceID, string email, string status, string type, IEnumerable<ProjectOrUnitGoalsDetailVM> PerformancePlanDetails)
         {
             foreach (var viewModel in PerformancePlanDetails)
             {
@@ -108,18 +108,21 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     }
                 }
 
-                if (email == null && status == "Pending Approval 2 of 2" && PerformancePlanDetails.Count() != 0)
+                if (PerformancePlanDetails.Count() != 0)
                 {
-                    var updatedValue = new Dictionary<string, object>();
-                    updatedValue.Add("status", "Approved");
-                    try
+                    if (status == "Pending Approval 2 of 2" && type == "Approver2")
                     {
-                        SPConnector.UpdateListItem(SP_PPPIG_LIST_NAME, viewModel.ID, updatedValue, _siteUrl);
-                    }
-                    catch (Exception e)
-                    {
-                        logger.Error(e.Message);
-                        throw new Exception(ErrorResource.SPInsertError);
+                        var updatedValue = new Dictionary<string, object>();
+                        updatedValue.Add("status", "Approved");
+                        try
+                        {
+                            SPConnector.UpdateListItem(SP_PPPIG_LIST_NAME, viewModel.ID, updatedValue, _siteUrl);
+                        }
+                        catch (Exception e)
+                        {
+                            logger.Error(e.Message);
+                            throw new Exception(ErrorResource.SPInsertError);
+                        }
                     }
                 }
             }
@@ -311,9 +314,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
         }
 
-        public async Task CreatePerformancePlanDetailsAsync(int? headerID, int? performanceID, string email, string status, IEnumerable<ProjectOrUnitGoalsDetailVM> performancePlanDetails)
+        public async Task CreatePerformancePlanDetailsAsync(int? headerID, int? performanceID, string email, string status,string type, IEnumerable<ProjectOrUnitGoalsDetailVM> performancePlanDetails)
         {
-            CreatePerformancePlanDetails(headerID, performanceID, email, status, performancePlanDetails);
+            CreatePerformancePlanDetails(headerID, performanceID, email, status,type, performancePlanDetails);
         }
 
         public void SendEmail(ProfessionalPerformancePlanVM header, string workflowTransactionListName, string transactionLookupColumnName, int headerID, int level, string messageForApprover, string messageForRequestor)
