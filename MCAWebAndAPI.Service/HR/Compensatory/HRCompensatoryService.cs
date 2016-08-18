@@ -346,17 +346,23 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             var cratedValueDetail = new Dictionary<string, object>();
 
-            cratedValueDetail.Add("professional_x003a_ID", viewModels.cmpName);
-
+            
+            cratedValueDetail.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(viewModels.ddlProfessional.Value)});
+            cratedValueDetail.Add("Title", Convert.ToString(viewModels.cmpYearDate));
+            
             try
             {
-                SPConnector.AddListItem(SP_COMDET_LIST_NAME, cratedValueDetail, _siteUrl);
+                SPConnector.AddListItem(SP_COMREQ_LIST_NAME, cratedValueDetail, _siteUrl);
             }
             catch (Exception e)
             {
                 logger.Error(e.Message);
                 throw e;
             }
+
+           int idCmp = SPConnector.GetLatestListItemID(SP_COMREQ_LIST_NAME, _siteUrl);
+
+            CreateCompensatoryData(idCmp, viewModels);
         }
 
         public void CreateCompensatoryData(int? cmpID, CompensatoryVM viewModels)
@@ -416,8 +422,30 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                         }
                         continue;
                     }
+                        else if (Item.CheckIfCreated(viewModel))
+                    {
+                        var cratedValueDetail = new Dictionary<string, object>();
 
-                    if (Item.CheckIfDeleted(viewModel))
+                        cratedValueDetail.Add("compensatoryrequest", cmpID);
+                        cratedValueDetail.Add("Title", viewModel.CmpActiv);
+                        cratedValueDetail.Add("compensatorydate", viewModel.CmpDate);
+                        cratedValueDetail.Add("compensatorystarttime", viewModel.StartTime);
+                        cratedValueDetail.Add("compensatoryendtime", viewModel.FinishTime);
+                        cratedValueDetail.Add("totalhours", viewModel.CmpTotalHours);
+                        cratedValueDetail.Add("totaldays", viewModel.TotalDay);
+                        cratedValueDetail.Add("remarks", viewModel.remarks);
+
+                        try
+                        {
+                            SPConnector.AddListItem(SP_COMDET_LIST_NAME, cratedValueDetail, _siteUrl);
+                        }
+                        catch (Exception e)
+                        {
+                            logger.Error(e.Message);
+                            throw e;
+                        }
+                    }
+                        else if (Item.CheckIfDeleted(viewModel))
                     {
                         try
                         {
