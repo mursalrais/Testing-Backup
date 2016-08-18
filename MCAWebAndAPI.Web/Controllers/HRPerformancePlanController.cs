@@ -83,7 +83,7 @@ namespace MCAWebAndAPI.Web.Controllers
                         viewModelDetail.Remarks = "";
                     }
 
-                    sum = sum + viewModelDetail.Weight;
+                    sum = sum + viewModelDetail.Weight; 
                 }
             }
             if (project == "Empty")
