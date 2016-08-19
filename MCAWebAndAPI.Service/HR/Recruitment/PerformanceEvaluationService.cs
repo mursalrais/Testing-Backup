@@ -138,7 +138,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     throw e;
                 }
 
-                caml = @"<View><Query><Where><And><Eq><FieldRef Name='idperformanceplan' /><Value Type='Number'>" + IDHeaderPLan.ToString() + "</Value></Eq><And><Eq><FieldRef Name='status' /><Value Type='Text'>Approved</Value></Eq><Eq><FieldRef Name='officeemail' /><Value Type='Text'>" + emailTo + "</Value></Eq></And></And></Where></Query><ViewFields><FieldRef Name='ID' /><FieldRef Name='Title' /><FieldRef Name='Edit' /><FieldRef Name='LinkTitleNoMenu' /><FieldRef Name='LinkTitle' /><FieldRef Name='DocIcon' /><FieldRef Name='AppAuthor' /><FieldRef Name='AppEditor' /><FieldRef Name='projectunitgoals' /><FieldRef Name='individualgoalcategory' /><FieldRef Name='individualgoalplan' /><FieldRef Name='individualgoalweight' /><FieldRef Name='individualgoalremarks' /><FieldRef Name='professionalperformanceplandetai' /><FieldRef Name='professionalperformanceplan' /></ViewFields><QueryOptions /></View>";
+                caml = @"<View><Query><Where><And><Eq><FieldRef Name='idperformanceplan' /><Value Type='Number'>" + IDHeaderPLan.ToString() + "</Value></Eq><And><Eq><FieldRef Name='status' /><Value Type='Text'>Approved</Value></Eq><Eq><FieldRef Name='officeemail' /><Value Type='Text'>" + emailTo + "</Value></Eq></And></And></Where></Query><ViewFields><FieldRef Name='ID' /><FieldRef Name='Title' /><FieldRef Name='Edit' /><FieldRef Name='LinkTitleNoMenu' /><FieldRef Name='LinkTitle' /><FieldRef Name='DocIcon' /><FieldRef Name='AppAuthor' /><FieldRef Name='AppEditor' /><FieldRef Name='individualgoalcategory' /><FieldRef Name='individualgoalplan' /><FieldRef Name='individualgoalweight' /><FieldRef Name='individualgoalremarks' /><FieldRef Name='professionalperformanceplandetai' /><FieldRef Name='professionalperformanceplan' /><FieldRef Name='projectunitgoals' /></ViewFields><QueryOptions /></View>";
                 var placeItem = SPConnector.GetList(SP_PPP_INDIVIDUAL_PLAN, _siteUrl, caml);
 
                 foreach (var pppIndividual in placeItem)
@@ -148,6 +148,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     updatedValues.Add("individualgoalcategory", Convert.ToString(pppIndividual["individualgoalcategory"]));
                     updatedValues.Add("individualgoalweight", Convert.ToString(pppIndividual["individualgoalweight"]));
                     updatedValues.Add("professionalperformanceevaluatio", new FieldLookupValue { LookupId = Convert.ToInt32(IdDetail) });
+                    updatedValues.Add("projectunitgoals", Convert.ToString(pppIndividual["projectunitgoals"]));
 
                     try
                     {
