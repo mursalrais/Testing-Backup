@@ -387,3 +387,7 @@ Parameter name: source
 Parameter name: source
 2016-08-17 11:42:51.7023 MCAWebAndAPI.Service.HR.InsuranceClaim.InsuranceClaimService Value cannot be null.
 Parameter name: source
+2016-08-19 13:51:23.2094 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService The 'sId' argument is invalid.
+2016-08-19 14:47:08.0902 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService The 'sId' argument is invalid.
+2016-08-19 15:00:53.7869 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService The 'sId' argument is invalid.
+2016-08-19 15:02:41.5561 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService The 'sId' argument is invalid.
