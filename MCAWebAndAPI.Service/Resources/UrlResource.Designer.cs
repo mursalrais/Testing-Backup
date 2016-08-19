@@ -205,6 +205,15 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0}/Tax%20Exemption%20Income%20Documents/Forms/AllItems.aspx#InplviewHash5093bda1-84bf-4cad-8652-286653d6a83f=FilterField1%3Dpsa%255Fx003a%255FID-FilterValue1%3D{1}.
+        /// </summary>
+        public static string FINPettyCashReplenishment {
+            get {
+                return ResourceManager.GetString("FINPettyCashReplenishment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0}/Lists/SPHL%20Data/AllItems.aspx.
         /// </summary>
         public static string FINSPHL {
