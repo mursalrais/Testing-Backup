@@ -14,14 +14,17 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 
         public IEnumerable<PlaceMasterVM> PlaceMasters { get; set; } = new List<PlaceMasterVM>();
 
+        [Required]
         [UIHint("ComboBox")]
         public ComboBoxVM Province { get; set; } = new ComboBoxVM();
-  
 
+        [Required]
         public string OfficeName { get; set; }
 
+        [Required]
         public int FloorName { get; set; }
 
+        [Required]
         public string RoomName { get; set; }
 
         public string Remarks { get; set; }
