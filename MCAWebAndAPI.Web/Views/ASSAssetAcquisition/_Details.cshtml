@@ -41,11 +41,11 @@
                             ActionName = "GetWBSGrid",
                         }).Width(200);
 
-            columns.Bound(p => p.CostIDR).ClientTemplate("#= CostIDR #" +
+            columns.Bound(p => p.CostIDR).ClientTemplate("#= kendo.toString(CostIDR, 'n0') #" +
             "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].CostIDR' value='#= CostIDR #' />"
             );
 
-            columns.Bound(p => p.CostUSD).ClientTemplate("#= CostUSD #" +
+            columns.Bound(p => p.CostUSD).ClientTemplate("#= kendo.toString(CostUSD, 'n0') #" +
             "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].CostUSD' value='#= CostUSD #' />"
             );
 
