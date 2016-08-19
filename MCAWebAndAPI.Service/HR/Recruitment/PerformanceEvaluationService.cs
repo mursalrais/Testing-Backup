@@ -50,7 +50,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             var updatedValues = new Dictionary<string, object>();
 
             updatedValues.Add("pestatus", "Closed");
-            updatedValues.Add("closingdate", DateTime.UtcNow.ToLocalTime());
+            updatedValues.Add("closingdate", DateTime.UtcNow);
             try
             {
                 SPConnector.UpdateListItem(SP_LIST_NAME, PerformanceEvaluation.ID, updatedValues, _siteUrl);
@@ -188,13 +188,16 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             viewModel.ID = Convert.ToInt32(listItem["ID"]);
             viewModel.Period.Value = Convert.ToString(listItem["Title"]);
-            viewModel.LatestCreationDate = Convert.ToDateTime(listItem["latestdateforcreation"]).ToLocalTime();
-            viewModel.LatestDateApproval1 = Convert.ToDateTime(listItem["latestdateforapproval1"]).ToLocalTime();
-            viewModel.LatestDateApproval2 = Convert.ToDateTime(listItem["latestdateforapproval2"]).ToLocalTime();
+            DateTime _lastCreationDate = Convert.ToDateTime(listItem["latestdateforcreation"]).ToLocalTime();
+            viewModel.LatestCreationDate = new DateTime(_lastCreationDate.Year,_lastCreationDate.Month,_lastCreationDate.Day);
+            DateTime _lastDateApproval = Convert.ToDateTime(listItem["latestdateforapproval1"]).ToLocalTime();
+            viewModel.LatestDateApproval1 = new DateTime(_lastDateApproval.Year,_lastDateApproval.Month,_lastDateApproval.Day);
+            DateTime _lastDateApproval2 = Convert.ToDateTime(listItem["latestdateforapproval2"]).ToLocalTime();
+            viewModel.LatestDateApproval2 = new DateTime(_lastDateApproval2.Year,_lastDateApproval2.Month,_lastDateApproval2.Day);
             viewModel.Status = Convert.ToString(listItem["pestatus"]);
-            viewModel.IntiationDate = Convert.ToDateTime(listItem["Created"]).ToLocalTime();
+            viewModel.IntiationDate = Convert.ToDateTime(listItem["Created"]);
 
-            DateTime Now = DateTime.UtcNow.ToLocalTime();
+            DateTime Now = DateTime.UtcNow;
 
             //get Detail
             var caml = @"<View><Query><Where><Eq><FieldRef Name='performanceevaluation_x003a_ID' /><Value Type='Lookup'>" + viewModel.ID.Value.ToString() + "</Value></Eq></Where></Query><ViewFields><FieldRef Name='ID' /><FieldRef Name='professional' /><FieldRef Name='Name='performanceevaluation' /><FieldRef Name='ppestatus' /><FieldRef Name='professional_x003a_Last_x0020_Na' /></ViewFields><QueryOptions /></View>";

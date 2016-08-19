@@ -12,9 +12,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
     public class AdjustmentDetailsVM : Item
     {
 
-        [DisplayName("a")]
-        public string GetStat { get; set; }
-
         public static AjaxComboBoxVM getAjusmentDefaultValue(AjaxComboBoxVM model = null)
         {
             if (model == null)
@@ -139,6 +136,13 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
 
         /// <head>
+        /// CompensatoryID
+        /// </head>
+        /// 
+        public int? profName { get; set; }
+
+
+        /// <head>
         /// CompensatoryDay
         /// </head>
         /// 
@@ -178,11 +182,11 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// CompensatoryDate
         /// </summary>
         /// 
-        //[Required]
-        //[DisplayName("Period")]
-        //[DataType(DataType.Date)]
-        //[UIHint("Date")]
-        //public DateTime? period { get; set; } = DateTime.Now;
+        [Required]
+        [DisplayName("Period")]
+        [DataType(DataType.Date)]
+        [UIHint("Date")]
+        public DateTime? period { get; set; } = DateTime.Now;
 
     }
 }
