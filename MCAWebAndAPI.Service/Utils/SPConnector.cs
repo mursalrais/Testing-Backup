@@ -64,6 +64,7 @@ namespace MCAWebAndAPI.Service.Utils
                             ViewXml = caml
                         };
 
+                camlQuery.DatesInUtc = false; 
                 var SPListItems = SPList.GetItems(camlQuery);
                 context.Load(SPListItems);
                 try
