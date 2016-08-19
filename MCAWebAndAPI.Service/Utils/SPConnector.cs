@@ -63,7 +63,7 @@ namespace MCAWebAndAPI.Service.Utils
                         new CamlQuery {
                             ViewXml = caml
                         };
-
+               
                 var SPListItems = SPList.GetItems(camlQuery);
                 context.Load(SPListItems);
                 try
@@ -78,6 +78,7 @@ namespace MCAWebAndAPI.Service.Utils
             }
         }
 
+      
         public static ListItem GetListItem(string listName, int? listItemID, string siteUrl = null)
         {
             MapCredential(siteUrl);
@@ -102,6 +103,50 @@ namespace MCAWebAndAPI.Service.Utils
                 return SPListItem;
             }
         }
+
+        //public static ListItem GetListItemNonUtc(string listName, int? listItemID, string siteUrl = null, string caml = null)
+        //{
+        //    MapCredential(siteUrl);
+        //    using (ClientContext context = new ClientContext(siteUrl ?? CurUrl))
+        //    {
+        //        SecureString secureString = new SecureString();
+        //        Password.ToList().ForEach(secureString.AppendChar);
+        //        context.Credentials = new SharePointOnlineCredentials(UserName, secureString);
+
+        //        var spList = context.Web.Lists.GetByTitle(listName);
+
+        //        caml = @"<View><Query><Where>
+        //                <Eq><FieldRef Name='ID' />
+        //                <Value Type='Number'>" + listItemID + "</Value></Eq>" +
+        //                "</Where></Query>" +
+        //                "<RowLimit>1</RowLimit> </View>";
+
+               
+        //        var camlQuery = new CamlQuery
+        //        {
+        //            ViewXml = caml
+        //        };
+        //        camlQuery.DatesInUtc = false;
+        //        var spListItems = spList.GetItems(camlQuery);
+        //        context.Load(spListItems);
+        //        ListItem oListItem = null;
+        //        try
+        //        {
+        //            context.ExecuteQuery();
+        //            if (spListItems.Count > 0)
+        //            {
+        //                 oListItem = spListItems[0];
+                       
+        //            }
+        //        }
+        //        catch (Exception e)
+        //        {
+        //            throw e;
+        //        }
+        //        return oListItem;
+        //    }
+        //}
+
 
         public static void UpdateListItem(string listName, int? listItemID, Dictionary<string, object> updatedValues, string siteUrl = null)
         {

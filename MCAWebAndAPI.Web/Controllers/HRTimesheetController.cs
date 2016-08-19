@@ -4,11 +4,13 @@ using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using MCAWebAndAPI.Service.HR.Timesheet;
 using MCAWebAndAPI.Web.Helpers;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using MCAWebAndAPI.Model.Common;
+using MCAWebAndAPI.Service.Resources;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -57,12 +59,15 @@ namespace MCAWebAndAPI.Web.Controllers
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _timesheetService.SetSiteUrl(siteUrl);
 
-            var items = SessionManager.Get<IEnumerable<TimesheetDetailVM>>("TimesheetDetails");
+            var strLocation = viewModel.LocationName;
+            var intLocationID = viewModel.LocationID;
 
+            var items = SessionManager.Get<IEnumerable<TimesheetDetailVM>>("TimesheetDetails");
+           
             try
             {
-               items = _timesheetService.AppendWorkingDays(items, (DateTime)viewModel.From,
-                   (DateTime)viewModel.To, viewModel.IsFullDay, viewModel.Location);
+               items = _timesheetService.AppendWorkingDays(items, Convert.ToDateTime(viewModel.From).ToLocalTime(),
+                    Convert.ToDateTime(viewModel.To).ToLocalTime(), viewModel.IsFullDay, strLocation, intLocationID);
             }
             catch (Exception e)
             {
@@ -77,7 +82,42 @@ namespace MCAWebAndAPI.Web.Controllers
                 message = "Timesheet is updated"
             }, JsonRequestBehavior.AllowGet);
         }
-        
+
+        [HttpPost]
+        public ActionResult SubmitTimesheet(TimesheetVM viewModel)
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _timesheetService.SetSiteUrl(siteUrl);
+            int? headerId;
+            try
+            {
+                headerId= _timesheetService.CreateHeader(viewModel);
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json(new { message = e.Message }, JsonRequestBehavior.AllowGet);
+            }
+
+            var items = SessionManager.Get<IEnumerable<TimesheetDetailVM>>("TimesheetDetails");
+
+            try
+            {
+                viewModel.TimesheetDetails = items;
+                _timesheetService.CreateTimesheetDetails(headerId, viewModel.TimesheetDetails);
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            var strPages = viewModel.UserPermission == "HR" ? "/sitePages/hrInsuranceView.aspx" : "/sitePages/ProfessionalClaim.aspx";
+
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + strPages);
+
+        }
+
         public JsonResult GridHolidays_Read([DataSourceRequest] DataSourceRequest request)
         {
             // Get from existing session variable or create new if doesn't exist
