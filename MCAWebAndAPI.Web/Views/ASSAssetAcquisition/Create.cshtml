@@ -72,7 +72,7 @@
         @Html.HiddenFor(m => m.PoNo)
         <div>
             <center>
-                <input class="k-button k-button-icontext k-grid-add" onclick="SimpenAsset()" type="submit" value="Save" />
+                <input class="k-button k-button-icontext k-grid-add" onclick="return SimpenAsset()" type="submit" value="Save" />
                 <a href="@Model.CancelURL" target='_parent'>
                     <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
                 </a>
@@ -98,13 +98,17 @@
 
     function SimpenAsset()
     {
-        var gridElements = $("#MyGri").data("kendoGrid").dataSource;
+        var gridElements = $("#Details").data("kendoGrid").dataSource;
         var total = 0;
         gridElements.fetch(function ()
         {
             total = gridElements.total();
         })
         alert(total);
+        if (total == 0)
+        {
+            return false;
+        }
     }
 
     function onSelectedAcceptanceMemo(e) {
