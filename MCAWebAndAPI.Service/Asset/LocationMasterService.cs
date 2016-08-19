@@ -79,7 +79,6 @@ namespace MCAWebAndAPI.Service.Asset
                 viewModel.Province.Value = (listItem["Province"] as FieldLookupValue).LookupId.ToString();
                 viewModel.Province.Text = (listItem["Province"] as FieldLookupValue).LookupValue;
             }
-            viewModel.Province.Value = Convert.ToString(listItem["Title"]);
             viewModel.OfficeName = Convert.ToString(listItem["Title"]);
             viewModel.FloorName = Convert.ToInt32(listItem["Floor"]);
             viewModel.RoomName = Convert.ToString(listItem["Room"]);
@@ -300,7 +299,24 @@ namespace MCAWebAndAPI.Service.Asset
 
         public LocationMasterVM GetPopulatedModel(int ID, string SiteUrl)
         {
-            throw new NotImplementedException();
+            var siteHr = SiteUrl.Replace("/bo", "/hr");
+
+            var listitem = SPConnector.GetListItem("Location Master", ID, SiteUrl);
+            var model = new LocationMasterVM();
+            model.Province.Choices = GetChoicesFromListHR("Place Master", "Title", siteHr);
+
+            if ((listitem["Province"] as FieldLookupValue) != null)
+            {
+                model.Province.Value = (listitem["Province"] as FieldLookupValue).LookupId.ToString();
+                model.Province.Text = (listitem["Province"] as FieldLookupValue).LookupValue;
+            }
+
+            model.OfficeName = Convert.ToString(listitem["Title"]);
+            model.FloorName = Convert.ToInt32(listitem["Floor"]);
+            model.RoomName = Convert.ToString(listitem["Room"]);
+            model.Remarks = Convert.ToString(listitem["Remarks"]);
+            model.ID = ID;
+            return model;
         }
 
         public int? MassUpload(string ListName, DataTable CSVDataTable, string SiteUrl = null)
