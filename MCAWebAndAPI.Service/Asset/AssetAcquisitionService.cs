@@ -135,7 +135,7 @@ namespace MCAWebAndAPI.Service.Asset
             viewModel.PoNo = Convert.ToString(listItem["pono"]);
             viewModel.Vendor = Convert.ToString(listItem["vendorid"])+"-"+Convert.ToString(listItem["vendorname"]);
 
-            viewModel.PurchaseDate = Convert.ToDateTime(listItem["purchasedate"]).AddDays(1);
+            viewModel.PurchaseDate = Convert.ToDateTime(listItem["purchasedate"]);
             //viewModel.Spesifications = Regex.Replace(listItem["Spesifications"].ToString(), "<.*?>", string.Empty);
             viewModel.PurchaseDescription = Regex.Replace(Convert.ToString(listItem["purchasedescription"]), "<.*?>", string.Empty);
             viewModel.ID = ID;
