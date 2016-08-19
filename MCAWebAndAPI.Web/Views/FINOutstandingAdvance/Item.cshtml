@@ -1,4 +1,5 @@
-﻿@model MCAWebAndAPI.Model.ViewModel.Form.Finance.OutstandingAdvanceVM
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Finance
+@model MCAWebAndAPI.Model.ViewModel.Form.Finance.OutstandingAdvanceVM
 
 @*
     Wireframe FIN09: Outstanding Advance
@@ -6,9 +7,7 @@
 
 @{
     ViewBag.Title = "Outstanding Advance";
-
 }
-
 
 @using (Html.BeginForm("Save", "FINOutstandingAdvance",
     FormMethod.Post,
@@ -81,7 +80,7 @@
                 </div>
 
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.Documents).Class("col-sm-4 control-label")
+                    @Html.Bootstrap().LabelFor(m => m.Documents).Class("col-sm-3 control-label")
                     <div class="col-sm-8">
                         @Html.EditorFor(m => m.Documents)
                     </div>
@@ -97,17 +96,42 @@
 
     </fieldset>
 
-    <div class="form-actions">
-        <div class="row">
-            <div class="col-sm-12">
-               
-                <button id="submit-button" class="btn btn-primary" type="submit">
-                    <i class="fa fa-save"></i>
-                    Submit
-                </button>
+    switch (Model.Operation)
+    {
+        case Shared.Operations.Create:
+        case Shared.Operations.Edit:
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <button id="submit-button" class="btn btn-primary" type="submit">
+                            <i class="fa fa-save"></i>
+                            Submit
+                        </button>
+                        <button id="cancel-button" class="btn btn-default" type="button">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
+
+            break;
+
+
+        case Shared.Operations.View:
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <button id="cancel-button" class="btn btn-default" type="button">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            break;
+
+
+    }
 }
 
 @section scripts{

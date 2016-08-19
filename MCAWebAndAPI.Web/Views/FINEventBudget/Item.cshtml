@@ -4,7 +4,7 @@
     Wireframe FIN04: Event Budget
 *@
 
-@using (Html.BeginForm("Create", "FINEventBudget",
+@using (Html.BeginForm("Save", "FINEventBudget",
     FormMethod.Post,
     new
     {
@@ -25,6 +25,7 @@
                     @Html.Bootstrap().LabelFor(m => m.EventName).Class("col-sm-3 control-label")
                     <div class="col-sm-8">
                         @Html.EditorFor(m => m.EventName)
+                        <input type="hidden" id="hdnEvenBudgetId" value="-1" name="hdnEvenBudgetId" />
                     </div>
                 </div>
                 <div class="form-group">
@@ -52,9 +53,7 @@
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.Activity).Class("col-sm-3 control-label")
                     <div class="col-sm-8">
-                        @Html.EditorFor(m => m.Activity)
-                        <!-- TODO: implement activityIdHidden -->
-                        <input type="hidden" id="activityIdHidden" value="-1" name="activityIdHidden" />
+                        @Html.EditorFor(m => m.Activity)                       
                     </div>
                 </div>
 
@@ -78,7 +77,7 @@
             <div class="col-sm-6">
    
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.Documents).Class("col-md-2 control-label")
+                    @Html.Bootstrap().LabelFor(m => m.Documents).Class("col-sm-3 control-label")
                     <div class="col-md-7">
                         @Html.EditorFor(m => m.Documents)
                     </div>
@@ -106,37 +105,37 @@
                 }
 
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.Rate).Class("col-sm-2 control-label")
+                    @Html.Bootstrap().LabelFor(m => m.Rate).Class("col-sm-3 control-label")
                     <div class="col-sm-7">
                         @Html.EditorFor(m => m.Rate)
                     </div>
                 </div>
 
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.TotalDirectPayment).Class("col-sm-2 control-label")
+                    @Html.Bootstrap().LabelFor(m => m.TotalDirectPayment).Class("col-sm-3 control-label")
                     <div class="col-sm-8">
-                        @Html.EditorFor(m => m.TotalDirectPayment, new { HtmlAttributes = new { @class = "control-textbox-padding6px", @readonly = "readonly" } })
+                        @Html.EditorFor(m => m.TotalDirectPayment, new { HtmlAttributes = new { @class = "textbox-padding6px-readonly", @readonly = "readonly" } })
                     </div>
                 </div>
 
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.TotalSCA).Class("col-sm-2 control-label")
+                    @Html.Bootstrap().LabelFor(m => m.TotalSCA).Class("col-sm-3 control-label")
                     <div class="col-sm-8">
-                        @Html.EditorFor(m => m.TotalSCA, new { HtmlAttributes = new { @class = "control-textbox-padding6px", @readonly = "readonly" } })
+                        @Html.EditorFor(m => m.TotalSCA, new { HtmlAttributes = new { @class = "textbox-padding6px-readonly", @readonly = "readonly" } })
                     </div>
                 </div>
 
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.TotalIDR).Class("col-sm-2 control-label")
+                    @Html.Bootstrap().LabelFor(m => m.TotalIDR).Class("col-sm-3 control-label")
                     <div class="col-sm-8">
-                        @Html.EditorFor(m => m.TotalIDR, new { HtmlAttributes = new { @class = "control-textbox-padding6px", @readonly = "readonly" } })
+                        @Html.EditorFor(m => m.TotalIDR, new { HtmlAttributes = new { @class = "textbox-padding6px-readonly", @readonly = "readonly" } })
                     </div>
                 </div>
 
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.TotalUSD).Class("col-sm-2 control-label")
+                    @Html.Bootstrap().LabelFor(m => m.TotalUSD).Class("col-sm-3 control-label")
                     <div class="col-sm-8">
-                        @Html.EditorFor(m => m.TotalUSD, new { HtmlAttributes = new { @class = "control-textbox-padding6px", @readonly = "readonly" } })
+                        @Html.EditorFor(m => m.TotalUSD, new { HtmlAttributes = new { @class = "textbox-padding6px-readonly", @readonly = "readonly" } })
                     </div>
                 </div>
             </div>
@@ -166,66 +165,23 @@
 @section scripts{
 <script type="text/javascript">
         $(document).ready(function () {
-
-
-            $("#Date").kendoDatePicker({
-                format: "mm/dd/yyyy"
-            });
+            
 
         });
 
+        $("#Rate").change(function () {
 
-    $(document).ready(function () {
-        $("#hiddenProjectValue").val($("#Project_Value").val());
-        $("#hdnEvenBudgetId").val("-1");
-    });
-
-    function onSelectProject(e) {
-        var dataItem = this.dataItem(e.item);
-        $("#hiddenProjectValue").val(dataItem);
-    }
-
-    function toggleEventBudgetComboBox(category) {
-        var categoryDropDownList = $("#EventBudgetNo_Value").data("kendoDropDownList");
-
-        if (categoryDropDownList !== 'undefined' && category === CATEGORY_NON_EVENT)
-        {
-            categoryDropDownList.options.optionLabel = "";
-            categoryDropDownList.refresh();
-            categoryDropDownList.select(0);
-            categoryDropDownList.enable(false);
-
-            $("#hdnEvenBudgetId").val("-1");
-
-            refreshItemDetailGrid();
-        }
-        else
-        {
-            categoryDropDownList.enable(true);
-        }
-    }
-
-    function onSelectCategory(e) {
-        var data = this.dataItem(e.item);
-        toggleEventBudgetComboBox(data);
-    }
-
-    function onSelectEventBudgetNo(e) {
-        var dataItem = this.dataItem(e.item);
-        
-        $("#hdnEvenBudgetId").val(dataItem.Value);
-
-        refreshItemDetailGrid();
-    }
-
-    function refreshItemDetailGrid()
-    {
-        $("#ItemDetails").data("kendoGrid").dataSource.read();
-    }
+            var totalIDR = $("#TotalIDR").val();
+            var rate = $("#Rate").val();
+            if (rate > 0)
+                $("#TotalUSD").val(totalIDR / rate);
+            else
+                $("#TotalUSD").val(0);
+        });
 
     function filterProject() {
         return {
-            projectValue: $("#hiddenProjectValue").val()
+            projectValue: $("#Project_Value").val()
         };
     }
 </script>

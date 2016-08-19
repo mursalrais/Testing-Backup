@@ -1,11 +1,17 @@
 ﻿@model MCAWebAndAPI.Model.ViewModel.Form.Finance.SCAVoucherVM
 
-@using (Html.BeginForm("Edit", "FINSCAVoucher", FormMethod.Post,
-                                                new
-                                                {
-                                                    @class = "form-horizontal",
-                                                    enctype = "multipart/form-data"
-                                                }))
+@*
+    Wireframe FIN06: SCA Voucher
+    i.e.: Special Cash Advance Voucher
+*@
+
+@using (Html.BeginForm("Edit", "FINSCAVoucher",
+    FormMethod.Post,
+    new
+    {
+        @class = "form-horizontal",
+        enctype = "multipart/form-data"
+    }))
 {
     <fieldset>
         <legend>Special Cash Advance Voucher</legend>

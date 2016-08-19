@@ -916,7 +916,6 @@
     <Content Include="Views\FINRequisitionNote\Create.cshtml" />
     <Content Include="Views\FINRequisitionNote\Edit.cshtml" />
     <Content Include="Views\FINRequisitionNote\Print.cshtml" />
-    <Content Include="Views\FINTaxExemptionData\_Income.cshtml" />
     <Content Include="Views\FINRequisitionNote\Create.cshtml" />
     <Content Include="Views\FINRequisitionNote\Edit.cshtml" />
     <Content Include="Views\FINRequisitionNote\Print.cshtml" />
@@ -960,6 +959,7 @@
     <Content Include="Views\ASSLocationMaster\Create.cshtml" />
     <Content Include="Views\ASSLocationMaster\Edit.cshtml" />
     <Content Include="Views\ASSLocationMaster\Upload.cshtml" />
+    <Content Include="Views\FINPettyCashReplenishment\Item.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -994,6 +994,7 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\FileController.cs" />
     <Compile Include="Controllers\FINPettyCashPaymentVoucherController.cs" />
+    <Compile Include="Controllers\FINPettyCashReplenishmentController.cs" />
     <Compile Include="Controllers\FINPettyCashSettlementController.cs" />
     <Compile Include="Controllers\FINSCAVoucherController.cs" />
     <Compile Include="Controllers\HRDayOffController.cs" />
