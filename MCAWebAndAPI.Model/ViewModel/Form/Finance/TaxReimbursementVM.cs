@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using static MCAWebAndAPI.Model.ViewModel.Form.Finance.Shared;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 {
@@ -16,8 +17,10 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
     /// </summary>
     public class TaxReimbursementVM : Item
     {
+        
         ////public enum TaxType { Income = 1, VAT = 2, Others = 3 }
         public enum CategoryType { Vendor, MCAI }
+
 
         private const string TaxTypeIncomeTax = "Income Tax";
         private const string TaxTypeVAT = "VAT";
@@ -28,6 +31,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 
         private TaxTypeComboBoxVM type;
 
+        public Operations Operation { get; set; }
 
         [Required]
         [DisplayName("Type of Tax")]

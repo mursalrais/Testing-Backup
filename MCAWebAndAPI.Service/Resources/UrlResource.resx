@@ -278,4 +278,7 @@
   <data name="LocationMaster" xml:space="preserve">
     <value>/Lists/Location%20Master/AllItems.aspx</value>
   </data>
+  <data name="AdjustmentDayOffBalanceList" xml:space="preserve">
+    <value>/Lists/Adjustment%20DayOff%20Balance/AllItems.aspx</value>
+  </data>
 </root>

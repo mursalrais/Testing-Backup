@@ -117,11 +117,11 @@
         <div class="form-actions">
             <div class="row">
                 <div class="col-sm-12">
-                    <button id="submit-by-byhr-button" class="btn btn-primary" type="submit">
+                    <button id="submit-by-byhr-button" class="btn btn-primary" type="button">
                         <i class="fa fa-save"></i>
                         Validated by HR
                     </button>
-                    <button id="save-button-byhr" class="btn btn-primary" type="submit">
+                    <button id="save-button-byhr" class="btn btn-primary" type="button">
                         <i class="fa fa-save"></i>
                         Save As Draft
                     </button>
@@ -134,11 +134,11 @@
         <div class="form-actions">
             <div class="row">
                 <div class="col-sm-12">
-                    <button id="submit-to-hr-button" class="btn btn-primary" type="submit">
+                    <button id="submit-to-hr-button" class="btn btn-primary" type="button">
                         <i class="fa fa-save"></i>
                         Validate to HR
                     </button>
-                    <button id="save-button" class="btn btn-primary" type="submit">
+                    <button id="save-button" class="btn btn-primary" type="button">
                         <i class="fa fa-save"></i>
                         Save As Draft
                     </button>
@@ -190,6 +190,7 @@
 
                         if (strtype === "Dependent" && strDependent === '') {
                             alert('Dependent Name field is required');
+                            return false;
                         } else {
                             $("#ClaimStatus").val("Draft");
                             $('form').prop('action', '/HRInsuranceClaim/UpdateInsuranceClaim');
@@ -208,6 +209,7 @@
 
                         if (strtype === "Dependent" && strDependent === '') {
                             alert('Dependent Name field is required');
+                            return false;
                         } else {
                             $("#ClaimStatus").val("Need HR to Validate");
                             $('form').prop('action', '/HRInsuranceClaim/UpdateInsuranceClaim');
@@ -226,6 +228,7 @@
 
                         if (strtype === "Dependent" && strDependent === '') {
                             alert('Dependent Name field is required');
+                            return false;
                         } else {
                             $("#ClaimStatus").val("Draft");
                             $('form').prop('action', '/HRInsuranceClaim/UpdateInsuranceClaim');
@@ -242,11 +245,11 @@
 
                         if (strtype === "Dependent" && strDependent === '') {
                             alert('Dependent Name field is required');
-                            return;
+                            return false;
                         }
                         else if (strClaim === "") {
                             alert('Claim Status field is required');
-                            return;
+                            return false;
                         }
                         else {
                             $('form').prop('action', '/HRInsuranceClaim/UpdateInsuranceClaim');

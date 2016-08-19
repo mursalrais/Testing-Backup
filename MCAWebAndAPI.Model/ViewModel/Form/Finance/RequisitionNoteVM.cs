@@ -23,7 +23,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         public DateTime? Date { get; set; } = DateTime.Now;
 
         [UIHint("AjaxComboBox")]
-        public AjaxCascadeComboBoxVM EventBudgetNo { get; set; } = new AjaxCascadeComboBoxVM();
+        public AjaxComboBoxVM EventBudgetNo { get; set; } = new AjaxComboBoxVM();
 
         [UIHint("ComboBox")]
         [Required]

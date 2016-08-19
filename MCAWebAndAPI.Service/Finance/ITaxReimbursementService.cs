@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using static MCAWebAndAPI.Model.ViewModel.Form.Finance.Shared;
 
 namespace MCAWebAndAPI.Service.Finance
 {
@@ -12,7 +13,7 @@ namespace MCAWebAndAPI.Service.Finance
     {
         void SetSiteUrl(string siteUrl);
 
-        TaxReimbursementVM Get(int? id = null);
+        TaxReimbursementVM Get(Operations op, int? id = null);
 
         int Create(TaxReimbursementVM viewModel);
 

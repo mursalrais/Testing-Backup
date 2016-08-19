@@ -77,7 +77,7 @@ namespace MCAWebAndAPI.Service.HR.Common
             }
             catch (Exception e)
             {
-                logger.Error(e);
+                logger.Debug(e.Message);
                 throw e;
             }
             return viewModel;
@@ -469,7 +469,7 @@ namespace MCAWebAndAPI.Service.HR.Common
             }
             catch (Exception e)
             {
-                logger.Error(e);
+                logger.Debug(e.Message);
                 throw e;
             }
 
@@ -493,7 +493,7 @@ namespace MCAWebAndAPI.Service.HR.Common
                     }
                     catch (Exception e)
                     {
-                        logger.Error(e);
+                        logger.Debug(e.Message);
                         throw e;
                     }
                     continue;
@@ -515,7 +515,7 @@ namespace MCAWebAndAPI.Service.HR.Common
                 }
                 catch (Exception e)
                 {
-                    logger.Error(e.Message);
+                    logger.Debug(e.Message);                    
                     throw e;
                 }
             }
@@ -662,7 +662,7 @@ namespace MCAWebAndAPI.Service.HR.Common
                 }
                 catch (Exception e)
                 {
-                    logger.Error(e.Message);
+                    logger.Debug(e.Message);
                     throw e;
                 }
 
@@ -687,7 +687,7 @@ namespace MCAWebAndAPI.Service.HR.Common
             }
             catch (Exception e)
             {
-                logger.Error(e);
+                logger.Debug(e.Message);
                 throw e;
             }
         }
@@ -722,7 +722,7 @@ namespace MCAWebAndAPI.Service.HR.Common
             }
             catch (Exception e)
             {
-                logger.Error(e);
+                logger.Debug(e.Message);
                 throw e;
             }
         }
@@ -743,7 +743,7 @@ namespace MCAWebAndAPI.Service.HR.Common
             }
             catch (Exception e)
             {
-                logger.Error(e);
+                logger.Debug(e.Message);                
                 throw e;
             }
         }
@@ -759,7 +759,7 @@ namespace MCAWebAndAPI.Service.HR.Common
             }
             catch (Exception e)
             {
-                logger.Error(e);
+                logger.Debug(e.Message);
                 throw e;
             }
         }

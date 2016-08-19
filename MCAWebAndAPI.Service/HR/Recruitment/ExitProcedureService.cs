@@ -1306,5 +1306,24 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             return projectUnit;
         }
+
+        public bool UpdateLastWorkingDateOnProfessional(int? professionalID, DateTime lastWorkingDate)
+        {
+            var columnValues = new Dictionary<string, object>();
+
+            columnValues.Add("lastworkingdate", lastWorkingDate);
+
+            try
+            {
+                SPConnector.UpdateListItem(SP_PROMAS_LIST_NAME, professionalID, columnValues, _siteUrl);
+            }
+            catch (Exception e)
+            {
+                logger.Debug(e.Message);
+                return false;
+            }
+
+            return true;
+        }
     }
 }

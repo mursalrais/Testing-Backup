@@ -20,6 +20,8 @@
         @Html.HiddenFor(m => m.cmpPosition)
         @Html.HiddenFor(m => m.Requestor)
         @Html.HiddenFor(m => m.StatusForm)
+        @Html.HiddenFor(m => m.cmpEmail)
+
         <input type="hidden" id="loadpage" value="0">
         <div class="row">
             <div class="form-group">
@@ -48,6 +50,7 @@
         <legend>Compensatory list</legend>
         <div id="compensatorylist" class="row"></div>
 
+    
     </fieldset>
 }
 
@@ -125,20 +128,13 @@
                                     hideLoading();
                                 }
                             });
-
                             $("#cmpID").prop("value", idComp);
 
                     };
 
-                    function OnChangeProffesional(e) {
-                        var dataItem = this.dataItem(e.item);
-
-                    };
 
         $(document).ready(function () {
-
-                        var eMail = $("#Requestor").val();
-
+            var eMail = $("#cmpEmail").val();
                         showLoading();
                         if (eMail != null) {
                             displayWorkflowRouter("workflow-placeholder", "@ViewBag.ListName", eMail);
@@ -218,48 +214,54 @@
 
                     function onChange(e) {
                         var container = e.container;
-                        var tr = container.closest('tr');
-                        var data = this.dataItem(tr);
+                        if (e.action === "itemchange") {
+                            var model = e.items[0];
 
-                        var rowgrid = $("#CompensatoryDetails").data("kendoGrid").tbody.find("tr");
-                        var i = -1
-                        var j = -1
-                        var tr = container.closest('tr');
+                            if (model.StartTime != null && model.FinishTime != null) {
+                                var start = model.StartTime.getHours();
+                                var finish = model.FinishTime.getHours();
+                                var finishsec = model.FinishTime.getSeconds();
+                                var range;
+                                var rowgrid = $("#CompensatoryDetails").data("kendoGrid").tbody.find("tr");
+                                var i = -1
+                                var j = -1
+                                rowgrid.each(function (e) {
+                                    i++;
+                                    var xdate = $("#Dateid" + i).val();
+                                    rowgrid.each(function (e) {
+                                        j++;
+                                        var ydate = $("#Dateid" + j).val();
+                                        if (i !== j) {
+                                            if (xdate == ydate) {
+                                                alert("Date you have chosen already exists, please choose another date..!!")
+                                            }
+                                        }
+                                    });
+                                });
 
-                        rowgrid.each(function (e) {
-                            i++;
-                            var xdate = $("#Dateid" + i).val();
-                            rowgrid.each(function (e) {
-                                j++;
-                                var ydate = $("#Dateid" + j).val();
-                                if (i !== j) {
-                                    if (xdate == ydate) {
-                                        alert("Date you have chosen already exists, please choose another date..!!")
+                                if ((finish + finishsec) <= start) {
+                                    alert("FinishTime can not be smaller than the starttime..!!")
+                                }
+
+                                if (start < finish) {
+                                    range = finish - start
+
+                                    if (model.CmpTotalHours != range) {
+                                        model.set("CmpTotalHours", range);
+                                    }
+
+                                    if (range >= 4) {
+                                        totday = 1
+                                    } else {
+                                        totday = 0.5
+                                    }
+
+                                    if (model.TotalDay != totday) {
+                                        model.set("TotalDay", totday);
                                     }
                                 }
-                            });
-                        });
-                        debugger;
-
-                        if (data.StartTime != null && data.FinishTime != null)
-                        {
-                            var start = data.StartTime.getHours();
-                            var finish = data.FinishTime.getHours();
-                            var finishsec = data.FinishTime.getSeconds();
-                            var range;
-                            if ((finish + finishsec) <= start) {
-                                alert("FinishTime can not be smaller than the starttime..!!")
-                            }
-
-                            if (start < finish) {
-                                range = finish - start
-                                data.set("CmpTotalHours", range);
-                                data.CmpTotalHours = range;
-                                data.set("TotalDay", range / 4)
                             }
                         }
-
-                        data.set("EditMode", 1);
                     }
 
                     function onDataBoundDependentDetails(e) {

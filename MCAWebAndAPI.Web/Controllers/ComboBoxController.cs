@@ -123,11 +123,11 @@ namespace MCAWebAndAPI.Web.Controllers
             }), JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetWBSMasters()
+        public JsonResult GetWBSMasters(string activityValue=null)
         {
             var siteUrl = SessionManager.Get<string>(SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
 
-            var wbsMasters = FinService.Shared.GetWBSMaster(siteUrl);
+            var wbsMasters = FinService.Shared.GetWBSMaster(siteUrl, activityValue);
 
             return Json(wbsMasters.Select(e => new
             {

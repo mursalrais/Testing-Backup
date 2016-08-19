@@ -823,7 +823,7 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
                 columnValues.Add("professional", header.ProfessionalID);
             }
 
-            if (header.DependantName.Value != null)
+            if (header.DependantName.Value != null && header.DependantName.Value > 0)
             {
                 columnValues.Add("dependent", new FieldLookupValue { LookupId = Convert.ToInt32(header.DependantName.Value) });
             }
@@ -969,7 +969,7 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
 
             if (header.Type.Text == "Dependent")
             {
-                if (header.DependantName.Value != null)
+                if (header.DependantName.Value != null && header.DependantName.Value > 0)
                 {
                     columnValues.Add("dependent",
                         new FieldLookupValue { LookupId = Convert.ToInt32(header.DependantName.Value) });

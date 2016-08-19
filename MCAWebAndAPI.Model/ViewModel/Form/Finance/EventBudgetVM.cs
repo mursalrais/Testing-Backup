@@ -70,25 +70,14 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 
         [Required]
         [UIHint("ComboBox")]
-        public ProjectComboBoxVM Project { get; set; } = new ProjectComboBoxVM()
-        {
-            OnSelectEventName = "onSelectProject"
-        };
+        public ProjectComboBoxVM Project { get; set; } = new ProjectComboBoxVM();
 
         [Required]
         [UIHint("AjaxCascadeComboBox")]
-        public AjaxCascadeComboBoxVM Activity { get; set; } = new AjaxCascadeComboBoxVM()
-        {
-            ControllerName = "ComboBox",
-            ActionName = "GetActivitiesByProject",
-            ValueField = "ID",
-            TextField = "Title",
-            Cascade = "Project_Value",
-            Filter = "filterProject"
-        };
+        public AjaxCascadeComboBoxVM Activity { get; set; } = new AjaxCascadeComboBoxVM();
 
    
-    public IEnumerable<EventBudgetItemVM> ItemDetails = new List<EventBudgetItemVM>();
+         public IEnumerable<EventBudgetItemVM> ItemDetails = new List<EventBudgetItemVM>();
 
         public string No { get; set; }
 

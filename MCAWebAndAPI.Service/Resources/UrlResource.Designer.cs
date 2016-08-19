@@ -70,6 +70,15 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to /Lists/Adjustment%20DayOff%20Balance/AllItems.aspx.
+        /// </summary>
+        public static string AdjustmentDayOffBalanceList {
+            get {
+                return ResourceManager.GetString("AdjustmentDayOffBalanceList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lists/Application.
         /// </summary>
         public static string ApplicationData {

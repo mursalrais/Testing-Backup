@@ -13,6 +13,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 
 
         [UIHint("InGridAjaxComboBox")]
+        [Required]
         public AjaxComboBoxVM WBS { get; set; } = new AjaxComboBoxVM();
 
 
@@ -20,7 +21,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         {
             if (model == null)
             {
-                return new AjaxComboBoxVM();
+                return new AjaxComboBoxVM() { Text = string.Empty };
             }
             else
             {
@@ -30,6 +31,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 
 
         [UIHint("InGridAjaxComboBox")]
+        [Required]
         public AjaxComboBoxVM GL { get; set; } = new AjaxComboBoxVM();
 
 
@@ -37,7 +39,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         {
             if (model == null)
             {
-                return new AjaxComboBoxVM();
+                return new AjaxComboBoxVM() { Text = string.Empty };
             }
             else
             {
@@ -56,15 +58,15 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         [DisplayName("UoM (Freq)")]
         public string UoMFreq { get; set; }
 
-        public decimal? UnitPrice { get; set; }
+        public decimal UnitPrice { get; set; }
 
-        public decimal? DirectPayment { get; set; }
+        public decimal DirectPayment { get; set; }
 
         [DisplayName("SCA")]
-        public decimal? SCA { get; set; }
+        public decimal SCA { get; set; }
 
         [DisplayName("Amount (per item)")]
-        public decimal? AmountPerItem { get; set; }
+        public decimal AmountPerItem { get; set; }
 
         public string Remarks { get; set; }
     }

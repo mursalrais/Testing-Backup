@@ -26,6 +26,8 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
     [Filters.HandleError]
     public class FINRequisitionNoteController : Controller //FinSharedController
     {
+        private const string FIELD_ID = "ID";
+        private const string FIELD_TITLE = "Title";
         private const string LIST_NAME = "requisitionnote";
         private const string SESSION_SITE_URL = "SiteUrl";
         private const string WORKFLOW_TITLE = "Requisition%20Note";
@@ -35,6 +37,10 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
         private const string PRINT_PAGE_URL = "~/Views/FINRequisitionNote/Print.cshtml";
         private const string CATEGORY_EVENT = "Event";
         private const string CATEGORY_NON_EVENT = "Non-event";
+        private const string ONSELECTED_CATEGORYEVENT = "onSelectCategory";
+        private const string PICKER_EVENTBUDGET_CONTROLLER = "FINEventBudget";
+        private const string PICKER_EVENTBUDGET_ACTIONNAME = "GetEventBudgetList";
+        private const string PICKER_EVENTBUDGET_ONSELECTCHANGE = "onSelectEventBudgetNo";
 
         readonly IRequisitionNote _service;
         readonly IEventBudgetService _eventBudgetService;
@@ -48,7 +54,6 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
         public ActionResult Create(string siteUrl = null)
         {
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
-
             _service.SetSiteUrl(siteUrl);
             SessionManager.Set(SESSION_SITE_URL, siteUrl);
 
@@ -63,6 +68,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
         {
             if (ID > 0)
             {
+                siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
                 _service.SetSiteUrl(siteUrl);
                 SessionManager.Set(SESSION_SITE_URL, siteUrl);
 
@@ -86,6 +92,19 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
         {
             var siteUrl = SessionManager.Get<string>(SESSION_SITE_URL);
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            _eventBudgetService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            //set additional info for event budget no and project
+            if (viewModel.EventBudgetNo.Value.HasValue && viewModel.EventBudgetNo.Value > 0)
+            {
+                var eventBdgt = _eventBudgetService.Get(viewModel.EventBudgetNo.Value);
+                if (eventBdgt != null)
+                {
+                    viewModel.EventBudgetNo.Value = eventBdgt.ID;
+                    viewModel.EventBudgetNo.Text = eventBdgt.No;
+                    viewModel.Project.Value = eventBdgt.Project.Value;
+                }
+            }
 
             int? headerID = null;
             try
@@ -122,6 +141,19 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
         {
             var siteUrl = SessionManager.Get<string>(SESSION_SITE_URL);
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            _eventBudgetService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            //set additional info for event budget no and project
+            if (viewModel.EventBudgetNo.Value.HasValue && viewModel.EventBudgetNo.Value > 0)
+            {
+                var eventBdgt = _eventBudgetService.Get(viewModel.EventBudgetNo.Value);
+                if (eventBdgt != null)
+                {
+                    viewModel.EventBudgetNo.Value = eventBdgt.ID;
+                    viewModel.EventBudgetNo.Text = eventBdgt.No;
+                    viewModel.Project.Value = eventBdgt.Project.Value;
+                }
+            } 
 
             try
             {
@@ -150,6 +182,8 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
 
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.RequisitionNote);
         }
+
+
         [HttpPost]
         public JsonResult GetRequisitionNoteDetailsByEventBudgetId([DataSourceRequest] DataSourceRequest request, int? eventBudgetId)
         {
@@ -167,13 +201,13 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
                     {
                         var itemRNDetail = new RequisitionNoteItemVM();
 
-                        itemRNDetail.ID = -1;
+                        itemRNDetail.ID = null;
                         itemRNDetail.Activity = new Model.ViewModel.Control.AjaxComboBoxVM() { Value = Convert.ToInt32(eventbudget.Activity.Value), Text = eventbudget.Activity.Text };
                         itemRNDetail.WBS = new Model.ViewModel.Control.AjaxComboBoxVM() { Value = item.WBS.Value, Text = item.WBS.Text };
                         itemRNDetail.GL = new Model.ViewModel.Control.AjaxComboBoxVM() { Value = item.GL.Value, Text = item.GL.Text };
                         itemRNDetail.Specification = item.Title;
                         itemRNDetail.Quantity = item.Quantity;
-                        itemRNDetail.Price = item.UnitPrice.HasValue ? item.UnitPrice.Value : 0;
+                        itemRNDetail.Price = item.UnitPrice;
                         itemRNDetail.EditMode = (int)Model.Common.Item.Mode.CREATED;
                         itemRNDetail.IsFromEventBudget = true;
                         itemRNDetail.Frequency = item.Frequency;
@@ -224,19 +258,6 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             }), JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetActivity(string project=null)
-        {
-            _service.SetSiteUrl(SessionManager.Get<string>(SESSION_SITE_URL));
-      
-            var activities = _service.GetActivity(project);
-
-            return Json(activities.Select(e => new
-            {
-                Value = e.ID.HasValue ? Convert.ToString(e.ID) : string.Empty,
-                Text = e.Title
-            }), JsonRequestBehavior.AllowGet);
-        }
-
         [HttpPost]
         public ActionResult PrintRequisitionNote(FormCollection form, RequisitionNoteVM viewModel)
         {
@@ -278,13 +299,13 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
         private void SetAdditionalSettingToViewModel(ref RequisitionNoteVM viewModel, bool create)
         {
             viewModel.Category.Choices = new string[] { CATEGORY_EVENT, CATEGORY_NON_EVENT };
-            viewModel.Category.OnSelectEventName = "onSelectCategory";
+            viewModel.Category.OnSelectEventName = ONSELECTED_CATEGORYEVENT;
 
-            viewModel.EventBudgetNo.ControllerName = "FINEventBudget";
-            viewModel.EventBudgetNo.ActionName = "GetEventBudgetList";
-            viewModel.EventBudgetNo.ValueField = "ID";
-            viewModel.EventBudgetNo.TextField = "Title";
-            viewModel.EventBudgetNo.OnSelectEventName = "onSelectEventBudgetNo";
+            viewModel.EventBudgetNo.ControllerName = PICKER_EVENTBUDGET_CONTROLLER;
+            viewModel.EventBudgetNo.ActionName = PICKER_EVENTBUDGET_ACTIONNAME;
+            viewModel.EventBudgetNo.ValueField = FIELD_ID;
+            viewModel.EventBudgetNo.TextField = FIELD_TITLE;
+            viewModel.EventBudgetNo.OnSelectEventName = PICKER_EVENTBUDGET_ONSELECTCHANGE;
 
             if (create)
             {

@@ -21,6 +21,27 @@ namespace MCAWebAndAPI.Web.Helpers
                                        System.Globalization.CultureInfo.InvariantCulture);
             return result;
         }
+        public static DateTime? BindDateInGridProfessional(string prefix, int index, string postfix, FormCollection form)
+        {
+            var dateStrings = (form[string.Format("{0}[{1}].{2}", prefix, index, postfix)] + string.Empty).Split(' ');
+            String dateRaw;
+            if (dateStrings.Count() > 9)
+            {
+                dateRaw = string.Format("{0} {1} {2}", dateStrings[1], dateStrings[2], dateStrings[3]);
+            }
+            else
+            {
+                if (dateStrings[2].Count() == 1)
+                {
+                    dateStrings[2] = "0" + dateStrings[2];
+                }
+                dateRaw = string.Format("{0} {1} {2}", dateStrings[1], dateStrings[2], dateStrings[5]);
+            }
+
+            var result = DateTime.ParseExact(dateRaw, "MMM dd yyyy",
+                                       System.Globalization.CultureInfo.InvariantCulture);
+            return result;
+        }
 
         public static string BindStringInGrid(string prefix, int index, string postfix, FormCollection form)
         {

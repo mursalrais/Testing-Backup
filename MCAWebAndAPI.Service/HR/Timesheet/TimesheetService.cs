@@ -15,7 +15,12 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
         const string TYPE_HOLIDAY = "Holiday";
         const string TYPE_DAYOFF = "Day-Off";
         const string TYPE_COMP_LEAVE = "Compensatory Leave";
-
+        const string LIST_PUB_HOLIDAY = "Event Calendar";
+        const string LIST_DAY_OFF = "Day-Off Request";
+        const string LIST_DAY_OFF_DETAIL = "Day-Off Request Detail";
+        const string LIST_COMPEN = "Compensatory Request";
+        const string LIST_COMPEN_DETAIL = "Compensatory Request Detail";
+        //Compensatory Request
         private IDataMasterService _dataService;
         private IProfessionalService _professionalService;
 
@@ -49,17 +54,91 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
             return professionalData.Name;
         }
 
+        private static List<DateTime> getPublicHoliday(string strUrl)
+        {
+            var listItem = SPConnector.GetList(LIST_PUB_HOLIDAY, strUrl);
+            List<DateTime> lstpublicHoliday = new List<DateTime>();
+            foreach (var item in listItem)
+            {
+                lstpublicHoliday.Add(Convert.ToDateTime(item["EventDate"]).AddDays(1));
+            }
+
+            return lstpublicHoliday;
+ 
+        }
+
+        private static List<DateTime> getCompensatory(string strUrl, string strName)
+        {
+            List<DateTime> lstCompensatory = new List<DateTime>();
+            var caml = @"<View><Query><Where><And><Eq><FieldRef Name='professional' />
+                        <Value Type='Lookup'>" + strName +"</Value></Eq>" +
+                       "<Eq><FieldRef Name='crstatus' /><Value Type='Text'>Approved</Value></Eq>" +
+                       "</And></Where></Query></View>";
+            var listMaster = SPConnector.GetList(LIST_COMPEN, strUrl, caml);
+           
+            foreach (var item in listMaster)
+            {
+                caml = @"<View><Query><Where><Eq><FieldRef Name='compensatoryrequest' />
+                        <Value Type='Lookup'>" + Convert.ToString(item["ID"]) +
+                        "</Value></Eq></Where></Query></View>";
+                var listDetail = SPConnector.GetList(LIST_COMPEN_DETAIL, strUrl, caml);
+
+                foreach (var itemDetail in listDetail)
+                {
+                    var startdate = Convert.ToDateTime(itemDetail["compensatorystarttime"]).AddDays(0);
+                    var finishdate = Convert.ToDateTime(itemDetail["compensatoryendtime"]).AddDays(0);
+                    var title = Convert.ToString(itemDetail["Title"]);
+                    var dateRange = startdate.EachDay(finishdate);
+                    lstCompensatory.AddRange(dateRange);
+                }
+
+            }
+            return lstCompensatory;
+        }
+
+        private static List<DateTime> getUserDayOFF(string strUrl,string strName)
+        {
+            var caml = @"<View><Query><Where><Eq><FieldRef Name='professional' /><Value Type='Lookup'>" + strName +
+               "</Value></Eq></Where></Query></View>";
+            var listMaster = SPConnector.GetList(LIST_DAY_OFF, strUrl, caml);
+            List<DateTime> lstDayOff = new List<DateTime>();
+            foreach (var item in listMaster)
+            {
+                caml = @"<View><Query><Where><And><Eq><FieldRef Name='dayoffrequest' />
+                        <Value Type='Lookup'>" + Convert.ToString(item["ID"] ) +
+                        "</Value></Eq>" +
+                        "<Eq><FieldRef Name='approvalstatus' />" +
+                        "<Value Type='Text'>Approved</Value></Eq></And></Where></Query></View>";
+                var listDetail = SPConnector.GetList(LIST_DAY_OFF_DETAIL, strUrl, caml);
+
+                foreach (var itemDetail in listDetail)
+                {
+                    var startdate = Convert.ToDateTime(itemDetail["requeststartdate"]).AddDays(1);
+                    var finishdate = Convert.ToDateTime(itemDetail["requestenddate"]).AddDays(1);
+                    var dateRange = startdate.EachDay(finishdate);
+                    lstDayOff.AddRange(dateRange);
+                }
+             
+            }
+            return lstDayOff;
+        }
+
+
         public IEnumerable<TimesheetDetailVM> GetTimesheetDetails(string userlogin, DateTime period)
         {
-            var startDate = period.GetFirstPayrollDay();
+            var startDate = period;
             var finishDate = period.GetLastPayrollDay();
             var dateRange = startDate.EachDay(finishDate);
+
+            var listHoliday = getPublicHoliday( _siteUrl);
+            var listDayOff = getUserDayOFF(_siteUrl,GetFullName(userlogin));
+            var listCompen = getCompensatory(_siteUrl, GetFullName(userlogin));
 
             var timesheetDetails = new List<TimesheetDetailVM>();
 
             foreach (var item in dateRange)
             {
-                if (IsPublicHoliday(item))
+                if (IsDate(item, listHoliday))
                 {
                     timesheetDetails.Add(new TimesheetDetailVM
                     {
@@ -77,7 +156,7 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                         Status = TYPE_HOLIDAY,
                         Type = TYPE_HOLIDAY
                     });
-                else if (IsDayOff(item))
+                else if (IsDate(item, listDayOff))
                 {
                     timesheetDetails.Add(new TimesheetDetailVM
                     {
@@ -86,7 +165,7 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                         Status = TYPE_DAYOFF,
                         Type = TYPE_DAYOFF
                     });
-                }else if (IsCompLeave(item))
+                }else if (IsDate(item, listCompen))
                 {
                     timesheetDetails.Add(new TimesheetDetailVM
                     {
@@ -101,22 +180,40 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
             return timesheetDetails;
         }
 
-        private bool IsCompLeave(DateTime item)
-        {
-            //TODO: To get from SP list
-            return (item.Day % 17 == 0);
-        }
+        //private bool IsCompLeave(DateTime item)
+        //{
+        //    //TODO: To get from SP list
+        //    return (item.Day % 17 == 0);
+        //}
 
-        private bool IsDayOff(DateTime item)
-        {
-            //TODO: To get from SP list
-            return (item.Day % 15 == 0);
-        }
+        //private bool IsDayOff(DateTime date, List<DateTime> lstRange)
+        //{
+        //    var bcek = false;
+        //    if (lstRange == null) return false;
+        //    else
+        //    {
+        //        if (lstRange.Any(item => date.ToString("yy-MM-dd") == item.ToString("yy-MM-dd")))
+        //        {
+        //            return true;
+        //        }
+        //    }
 
-        private bool IsPublicHoliday(DateTime date)
+        //    return bcek;
+        //}
+
+        private bool IsDate(DateTime date,List<DateTime> lstRange )
         {
-            //TODO: To get from SP list
-            return (date.Day % 13 == 0);
+            var bcek = false;
+            if (lstRange == null) return false;
+            else
+            {
+                if (lstRange.Any(item => date.ToString("yy-MM-dd") == item.ToString("yy-MM-dd")))
+                {
+                    return true;
+                }
+            }
+
+            return bcek;
         }
 
         public void SetSiteUrl(string siteUrl = null)
@@ -147,5 +244,6 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
 
             return allDays;
         }
+
     }
 }

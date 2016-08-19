@@ -16,6 +16,11 @@ using MCAWebAndAPI.Web.Resources;
 
 namespace MCAWebAndAPI.Web.Controllers.Finance
 {
+    /// <summary>
+    /// Wireframe FIN06: SCA Voucher
+    ///     i.e.: Special Cash Advance Voucher
+    /// </summary>
+
     public class FINSCAVoucherController : Controller
     {
         ISCAVoucherService _scaService;
@@ -55,7 +60,6 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
                 model = _scaService.GetSCAVoucherVMData(ID);
                 model.SDOName = string.Format("{0} - {1}", model.SDOName, model.Position);
                 model.Action = SCAVoucherVM.ActionType.edit.ToString();
-                model.Currency = "IDR";
                 SessionManager.Set(_scaVoucherIDSess, ID);
                 SessionManager.Set(_eventBudgetIDSess, model.EventBudgetID);
             }
@@ -74,7 +78,6 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
                 model = _scaService.GetSCAVoucherVMData(ID);
                 model.SDOName = string.Format("{0} - {1}", model.SDOName, model.Position);
                 model.Action = SCAVoucherVM.ActionType.approve.ToString();
-                model.Currency = "IDR";
                 SessionManager.Set(_scaVoucherIDSess, ID);
             }
 
@@ -169,7 +172,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateSCAVoucher(FormCollection form, SCAVoucherVM viewModel, string userAccess = null)
+        public async Task<ActionResult> Create(FormCollection form, SCAVoucherVM viewModel, string userAccess = null)
         {
             var siteUrl = SessionManager.Get<string>(_siteUrl) ?? ConfigResource.DefaultBOSiteUrl;
             _scaService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
@@ -192,7 +195,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
                 return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
             }
 
-            return RedirectToAction("PrintSCAVoucher",
+            return RedirectToAction("Print",
                 "FINSCAVoucher",
                 new
                 {
@@ -201,7 +204,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
         }
 
         [HttpPost]
-        public async Task<ActionResult> EditSCAVoucher(FormCollection form, SCAVoucherVM viewModel)
+        public async Task<ActionResult> Edit(FormCollection form, SCAVoucherVM viewModel)
         {
             var siteUrl = SessionManager.Get<string>(_siteUrl) ?? ConfigResource.DefaultBOSiteUrl;
             _scaService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
@@ -232,7 +235,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
                 return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
             }
 
-            return RedirectToAction("PrintSCAVoucher",
+            return RedirectToAction("Print",
                 "FINSCAVoucher",
                 new
                 {
