@@ -452,29 +452,24 @@ namespace MCAWebAndAPI.Web.Controllers
 
                         TableHeader = new DataTable();
                         TableHeader.Columns.Add("Title", typeof(string));
-                        TableHeader.Columns.Add("acceptancememono", typeof(int));
+                        TableHeader.Columns.Add("acceptancememono", typeof(string));
                         TableHeader.Columns.Add("vendorid", typeof(string));
                         TableHeader.Columns.Add("vendorname", typeof(string));
                         TableHeader.Columns.Add("pono", typeof(string));
-                        TableHeader.Columns.Add("purchasedate", typeof(string));
+                        TableHeader.Columns.Add("purchasedate", typeof(DateTime));
                         TableHeader.Columns.Add("purchasedescription", typeof(string));
 
                         DataRow row = TableHeader.NewRow();
 
                         row["Title"] = d.ItemArray[0].ToString();
                         row["acceptancememono"] = myKey;
-                        if (d.ItemArray[3].ToString() == "-1")
-                        {
-                            row["vendorid"] = null;
-                        }
-                        else
-                        {
-                            row["vendorid"] = d.ItemArray[3].ToString();
-                        }
-
-                        row["vendorname"] = d.ItemArray[4].ToString();
-                        row["pono"] = d.ItemArray[5].ToString();
-                        row["purchasedate"] = d.ItemArray[6].ToString();
+                        var memoInfo = _assetAcquisitionService.GetAcceptanceMemoInfo(myKey, siteUrl);
+                        row["vendorid"] = memoInfo.VendorID;
+                        row["vendorname"] = memoInfo.VendorName;
+                        row["pono"] = memoInfo.PoNo;
+                        // model.PurchaseDate = DateTime.TryParse(d.ItemArray[6].ToString(), out date) ? date : (DateTime?)null;
+                        DateTime date;
+                        row["purchasedate"] = DateTime.TryParse(d.ItemArray[6].ToString(), out date) ? date : (DateTime?)null;
                         row["purchasedescription"] = d.ItemArray[7].ToString();
 
                         TableHeader.Rows.InsertAt(row, 0);
@@ -505,7 +500,7 @@ namespace MCAWebAndAPI.Web.Controllers
                     }
                 }
 
-                if (d.ItemArray[9].ToString() != "" && latestIDHeader != null)
+                if (d.ItemArray[8].ToString() != "" && latestIDHeader != null)
                 {
                     TableDetail = new DataTable();
                     TableDetail.Columns.Add("assetacquisition", typeof(string));
@@ -520,10 +515,10 @@ namespace MCAWebAndAPI.Web.Controllers
                     DataRow row = TableDetail.NewRow();
 
                     row["assetacquisition"] = latestIDHeader;
-                    row["polineitem"] = d.ItemArray[8].ToString();
+                    row["polineitem"] = d.ItemArray[5].ToString();
                     //cek if assetid ada pada table asset master
                     //FXA-PC-OE-0001 - Laptop Lenovo
-                    var splitAssetID = d.ItemArray[9].ToString().Split('-');
+                    var splitAssetID = d.ItemArray[8].ToString().Split('-');
                     var resultAssetID = "";
                     var resultDesc = "";
                     var WBSDesc = "";
@@ -539,7 +534,7 @@ namespace MCAWebAndAPI.Web.Controllers
                         resultDesc = splitAssetID[5];
                         resultDesc = Regex.Replace(resultDesc, @"\t|\n|\r", "");
                     }
-                    var splitWBS = d.ItemArray[10].ToString().Split('-');
+                    var splitWBS = d.ItemArray[9].ToString().Split('-');
                     WBSDesc = splitWBS[1] + "-" + splitWBS[2];
                     WBSDesc = Regex.Replace(WBSDesc, @"\t|\n|\r", "");
                     var camlAssetID = @"<View><Query><Where>
@@ -592,10 +587,10 @@ namespace MCAWebAndAPI.Web.Controllers
                         return JsonHelper.GenerateJsonErrorResponse("Invalid data, rolling back!");
                     }
                     //cek if wbs id ada pada table wbs master
-                    row["costidr"] = Convert.ToInt32(d.ItemArray[11]);
-                    row["costusd"] = Convert.ToInt32(d.ItemArray[12].ToString());
-                    row["remarks"] = d.ItemArray[13].ToString();
-                    row["status"] = d.ItemArray[14].ToString();
+                    row["costidr"] = Convert.ToInt32(d.ItemArray[10]);
+                    row["costusd"] = Convert.ToInt32(d.ItemArray[11].ToString());
+                    row["remarks"] = d.ItemArray[12].ToString();
+                    row["status"] = d.ItemArray[13].ToString();
 
                     TableDetail.Rows.InsertAt(row, 0);
 
@@ -603,7 +598,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 }
             }
             //return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAcquisition);
-            return View(siteUrl + UrlResource.AssetAcquisition);
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAcquisition);
         }
 
         public ActionResult GetAcceptanceMemoInfo(int IDAcceptanceMemo)

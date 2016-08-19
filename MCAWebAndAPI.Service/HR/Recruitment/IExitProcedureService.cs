@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using MCAWebAndAPI.Model.HR.DataMaster;
 using System.Web;
+using System;
 
 namespace MCAWebAndAPI.Service.HR.Recruitment
 {
@@ -71,5 +72,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         string GetExitProcedureStatus(int? exitProcID);
 
         string GetProjectUnit(string requestor);
+
+        bool UpdateLastWorkingDateOnProfessional(int? professionalID, System.DateTime lastWorkingDate);
     }
 }

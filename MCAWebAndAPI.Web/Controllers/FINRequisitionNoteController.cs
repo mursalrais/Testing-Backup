@@ -207,7 +207,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
                         itemRNDetail.GL = new Model.ViewModel.Control.AjaxComboBoxVM() { Value = item.GL.Value, Text = item.GL.Text };
                         itemRNDetail.Specification = item.Title;
                         itemRNDetail.Quantity = item.Quantity;
-                        itemRNDetail.Price = item.UnitPrice.HasValue ? item.UnitPrice.Value : 0;
+                        itemRNDetail.Price = item.UnitPrice;
                         itemRNDetail.EditMode = (int)Model.Common.Item.Mode.CREATED;
                         itemRNDetail.IsFromEventBudget = true;
                         itemRNDetail.Frequency = item.Frequency;
@@ -255,19 +255,6 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             {
                 Value = e.ID.HasValue ? Convert.ToString(e.ID) : string.Empty,
                 Text = (e.Title + "-" + e.WBSDescription)
-            }), JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult GetActivity(string project=null)
-        {
-            _service.SetSiteUrl(SessionManager.Get<string>(SESSION_SITE_URL));
-      
-            var activities = _service.GetActivity(project);
-
-            return Json(activities.Select(e => new
-            {
-                Value = e.ID.HasValue ? Convert.ToString(e.ID) : string.Empty,
-                Text = e.Title
             }), JsonRequestBehavior.AllowGet);
         }
 

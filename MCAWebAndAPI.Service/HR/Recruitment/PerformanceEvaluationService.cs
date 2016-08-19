@@ -138,7 +138,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     throw e;
                 }
 
-                caml = @"<View><Query><Where><And><Eq><FieldRef Name='idperformanceplan' /><Value Type='Number'>" + IDHeaderPLan.ToString() + "</Value></Eq><And><Eq><FieldRef Name='status' /><Value Type='Text'>Approved</Value></Eq><Eq><FieldRef Name='officeemail' /><Value Type='Text'>" + emailTo + "</Value></Eq></And></And></Where></Query><ViewFields><FieldRef Name='ID' /><FieldRef Name='Title' /><FieldRef Name='Edit' /><FieldRef Name='LinkTitleNoMenu' /><FieldRef Name='LinkTitle' /><FieldRef Name='DocIcon' /><FieldRef Name='AppAuthor' /><FieldRef Name='AppEditor' /><FieldRef Name='projectunitgoals' /><FieldRef Name='individualgoalcategory' /><FieldRef Name='individualgoalplan' /><FieldRef Name='individualgoalweight' /><FieldRef Name='individualgoalremarks' /><FieldRef Name='professionalperformanceplandetai' /><FieldRef Name='professionalperformanceplan' /></ViewFields><QueryOptions /></View>";
+                caml = @"<View><Query><Where><And><Eq><FieldRef Name='idperformanceplan' /><Value Type='Number'>" + IDHeaderPLan.ToString() + "</Value></Eq><And><Eq><FieldRef Name='status' /><Value Type='Text'>Approved</Value></Eq><Eq><FieldRef Name='officeemail' /><Value Type='Text'>" + emailTo + "</Value></Eq></And></And></Where></Query><ViewFields><FieldRef Name='ID' /><FieldRef Name='Title' /><FieldRef Name='Edit' /><FieldRef Name='LinkTitleNoMenu' /><FieldRef Name='LinkTitle' /><FieldRef Name='DocIcon' /><FieldRef Name='AppAuthor' /><FieldRef Name='AppEditor' /><FieldRef Name='individualgoalcategory' /><FieldRef Name='individualgoalplan' /><FieldRef Name='individualgoalweight' /><FieldRef Name='individualgoalremarks' /><FieldRef Name='professionalperformanceplandetai' /><FieldRef Name='professionalperformanceplan' /><FieldRef Name='projectunitgoals' /></ViewFields><QueryOptions /></View>";
                 var placeItem = SPConnector.GetList(SP_PPP_INDIVIDUAL_PLAN, _siteUrl, caml);
 
                 foreach (var pppIndividual in placeItem)
@@ -148,6 +148,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     updatedValues.Add("individualgoalcategory", Convert.ToString(pppIndividual["individualgoalcategory"]));
                     updatedValues.Add("individualgoalweight", Convert.ToString(pppIndividual["individualgoalweight"]));
                     updatedValues.Add("professionalperformanceevaluatio", new FieldLookupValue { LookupId = Convert.ToInt32(IdDetail) });
+                    updatedValues.Add("projectunitgoals", Convert.ToString(pppIndividual["projectunitgoals"]));
 
                     try
                     {
@@ -188,9 +189,12 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             viewModel.ID = Convert.ToInt32(listItem["ID"]);
             viewModel.Period.Value = Convert.ToString(listItem["Title"]);
-            viewModel.LatestCreationDate = Convert.ToDateTime(listItem["latestdateforcreation"]);
-            viewModel.LatestDateApproval1 = Convert.ToDateTime(listItem["latestdateforapproval1"]);
-            viewModel.LatestDateApproval2 = Convert.ToDateTime(listItem["latestdateforapproval2"]);
+            DateTime _lastCreationDate = Convert.ToDateTime(listItem["latestdateforcreation"]).ToLocalTime();
+            viewModel.LatestCreationDate = new DateTime(_lastCreationDate.Year,_lastCreationDate.Month,_lastCreationDate.Day);
+            DateTime _lastDateApproval = Convert.ToDateTime(listItem["latestdateforapproval1"]).ToLocalTime();
+            viewModel.LatestDateApproval1 = new DateTime(_lastDateApproval.Year,_lastDateApproval.Month,_lastDateApproval.Day);
+            DateTime _lastDateApproval2 = Convert.ToDateTime(listItem["latestdateforapproval2"]).ToLocalTime();
+            viewModel.LatestDateApproval2 = new DateTime(_lastDateApproval2.Year,_lastDateApproval2.Month,_lastDateApproval2.Day);
             viewModel.Status = Convert.ToString(listItem["pestatus"]);
             viewModel.IntiationDate = Convert.ToDateTime(listItem["Created"]);
 

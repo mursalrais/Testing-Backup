@@ -269,6 +269,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 string psaNumber = exitProcedureService.GetPSANumberOnExitProcedure(exitProcID);
                 int psaID = exitProcedureService.GetPSAId(psaNumber);
                 exitProcedureService.UpdateLastWorkingDateOnPSA(psaID, lastWorkingDate);
+                exitProcedureService.UpdateLastWorkingDateOnProfessional(viewModel.ProfessionalID, lastWorkingDate);
             }
 
             try

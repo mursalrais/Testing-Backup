@@ -164,9 +164,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             viewModel.ID = Convert.ToInt32(listItem["ID"]);
             viewModel.Period.Value = Convert.ToString(listItem["Title"]);
-            viewModel.LatestCreationDate = Convert.ToDateTime(listItem["latestdateforcreation"]);
-            viewModel.LatestDateApproval1 = Convert.ToDateTime(listItem["latestdateforapproval1"]);
-            viewModel.LatestDateApproval2 = Convert.ToDateTime(listItem["latestdateforapproval2"]);
+            viewModel.LatestCreationDate = Convert.ToDateTime(listItem["latestdateforcreation"]).ToLocalTime();
+            viewModel.LatestDateApproval1 = Convert.ToDateTime(listItem["latestdateforapproval1"]).ToLocalTime();
+            viewModel.LatestDateApproval2 = Convert.ToDateTime(listItem["latestdateforapproval2"]).ToLocalTime();
             viewModel.Status = Convert.ToString(listItem["ppstatus"]);
             viewModel.IntiationDate = Convert.ToDateTime(listItem["Created"]);
 

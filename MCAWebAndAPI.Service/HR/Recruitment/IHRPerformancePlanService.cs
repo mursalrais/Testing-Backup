@@ -15,13 +15,13 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         ProfessionalPerformancePlanVM GetHeader(int? ID, string requestor);
 
-        int CreateHeader(ProfessionalPerformancePlanVM header);
+        int CreateHeader(string requestor, ProfessionalPerformancePlanVM header);
 
         bool UpdateHeader(ProfessionalPerformancePlanVM header);
 
-        void CreatePerformancePlanDetails(int? headerID, int? performanceID, string email, string status, IEnumerable<ProjectOrUnitGoalsDetailVM> performancePlanDetails);
+        void CreatePerformancePlanDetails(int? headerID, int? performanceID, string email, string status, string type, IEnumerable<ProjectOrUnitGoalsDetailVM> performancePlanDetails);
 
-        Task CreatePerformancePlanDetailsAsync(int? headerID, int? performanceID, string email, string status, IEnumerable<ProjectOrUnitGoalsDetailVM> performancePlanDetails);
+        Task CreatePerformancePlanDetailsAsync(int? headerID, int? performanceID, string email, string status, string type, IEnumerable<ProjectOrUnitGoalsDetailVM> performancePlanDetails);
 
         void SendEmail(ProfessionalPerformancePlanVM header, string workflowTransactionListName, string transactionLookupColumnName,
             int headerID, int level, string messageForApprover, string messageForRequestor);

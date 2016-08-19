@@ -12,23 +12,23 @@
         {
             columns.Bound(p => p.ProjectOrUnitGoals).ClientTemplate("#= ProjectOrUnitGoals #" +
             "<input type='hidden' name='ProjectOrUnitGoalsDetails[#= getProfessionalPerformancePlanDetail(data)#].ProjectOrUnitGoals' value='#= ProjectOrUnitGoals #' />"
-            );
+            ).Width(200);
             columns.Bound(p => p.Category).ClientTemplate("#= Category.Text #" +
             "<input type='hidden' name='ProjectOrUnitGoalsDetails[#= getProfessionalPerformancePlanDetail(data)#].Category.Text' value='#= Category.Text #' />"
             )
             .EditorViewData(new
             {
                 BindTo = IndividualGoalDetailVM.GetCategoryOptions()
-            });
+            }).Width(200);
             columns.Bound(p => p.IndividualGoalAndPlan).ClientTemplate("#= IndividualGoalAndPlan #" +
             "<input type='hidden' name='ProjectOrUnitGoalsDetails[#= getProfessionalPerformancePlanDetail(data)#].IndividualGoalAndPlan' value='#= IndividualGoalAndPlan #' />"
-            );
+            ).Width(200);
             columns.Bound(p => p.Weight).ClientTemplate("#= Weight #%" +
             "<input type='hidden' name='ProjectOrUnitGoalsDetails[#= getProfessionalPerformancePlanDetail(data)#].Weight' value='#= Weight #' />"
-            );
+            ).Width(100);
             columns.Bound(p => p.Remarks).ClientTemplate("#= Remarks #" +
             "<input type='hidden' name='ProjectOrUnitGoalsDetails[#= getProfessionalPerformancePlanDetail(data)#].Remarks' value='#= Remarks #' />"
-            );
+            ).Width(200);
             columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
             "<input type='hidden' name='ProjectOrUnitGoalsDetails[#= getProfessionalPerformancePlanDetail(data)#].ID' value='#= ID #' />"
             );
@@ -39,6 +39,8 @@
             .Click("onDeleteKendoDetail")).Width(100);
             columns.Command(command => command.Custom("Add Same Project").Click("addNewCustomRow")).Width(180);
         })
+            .Scrollable(scrollable => scrollable.Height("auto"))
+            .Resizable(resizable => resizable.Columns(true))
         .Events(e =>
         {
             e.Edit("onCustomEditKendoDetail");

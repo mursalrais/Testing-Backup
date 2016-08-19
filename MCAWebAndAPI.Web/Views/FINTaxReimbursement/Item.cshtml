@@ -1,5 +1,7 @@
-﻿@* Wireframe FIN18: Tax Reimbursement *@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Finance
 @model MCAWebAndAPI.Model.ViewModel.Form.Finance.TaxReimbursementVM
+
+@* Wireframe FIN18: Tax Reimbursement *@
 
 @{
     ViewBag.Title = "CreateTaxReimbursement";
@@ -13,6 +15,8 @@
         enctype = "multipart/form-data"
     }))
 {
+    var op = Model.Operation; 
+
     <fieldset>
         <legend>Tax Reimbursement</legend>
       
@@ -116,19 +120,44 @@
 
     </fieldset>
 
-    <div class="form-actions">
-        <div class="row">
-            <div class="col-sm-12">
-                <button id="submit-button" class="btn btn-primary" type="submit">
-                    <i class="fa fa-save"></i>
-                    Submit
-                </button>
-                <button id="cancel-button" class="btn btn-default" type="button">
-                    Cancel
-                </button>
+    switch (Model.Operation)
+    {
+        case Shared.Operations.Create:
+        case Shared.Operations.Edit:
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <button id="submit-button" class="btn btn-primary" type="submit">
+                            <i class="fa fa-save"></i>
+                            Submit
+                        </button>
+                        <button id="cancel-button" class="btn btn-default" type="button">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
+
+            break;
+
+
+        case Shared.Operations.View:
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <button id="cancel-button" class="btn btn-default" type="button">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>   
+
+            break;
+
+
+    }
+
+
 }
 @section scripts{
 <script>
