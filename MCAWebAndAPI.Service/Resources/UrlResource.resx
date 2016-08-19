@@ -284,4 +284,7 @@
   <data name="FINPettyCashReplenishment" xml:space="preserve">
     <value>{0}/Tax%20Exemption%20Income%20Documents/Forms/AllItems.aspx#InplviewHash5093bda1-84bf-4cad-8652-286653d6a83f=FilterField1%3Dpsa%255Fx003a%255FID-FilterValue1%3D{1}</value>
   </data>
+  <data name="Compensatorylist" xml:space="preserve">
+    <value>/Lists/CompensatoryRequest/AllItems.aspx</value>
+  </data>
 </root>
