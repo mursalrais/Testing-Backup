@@ -26,7 +26,7 @@ namespace MCAWebAndAPI.Service.Asset
 
             var caml = @"<View>  
             <Query> 
-               <Where><And><And><And><Eq><FieldRef Name='Province' /><Value Type='Choice'>" + propCity[1] + @"</Value></Eq><Eq><FieldRef Name='Title' /><Value Type='Text'>" + office + @"</Value></Eq></And><Eq><FieldRef Name='Floor' /><Value Type='Text'>" + floor + @"</Value></Eq></And><Eq><FieldRef Name='Room' /><Value Type='Text'>" + room + @"</Value></Eq></And></Where> 
+               <Where><And><And><And><Eq><FieldRef Name='Province' /><Value Type='Choice'>" + propCity[1] + @"</Value></Eq><Eq><FieldRef Name='city' /><Value Type='Text'>" + propCity[0] + @"</Value></Eq><Eq><FieldRef Name='Title' /><Value Type='Text'>" + office + @"</Value></Eq></And><Eq><FieldRef Name='Floor' /><Value Type='Text'>" + floor + @"</Value></Eq></And><Eq><FieldRef Name='Room' /><Value Type='Text'>" + room + @"</Value></Eq></And></Where> 
             </Query> 
       </View>";
             int error = 0;
@@ -79,7 +79,7 @@ namespace MCAWebAndAPI.Service.Asset
             if ((listItem["Province"] as FieldLookupValue) != null)
             {
                 viewModel.Province.Value = (listItem["Province"] as FieldLookupValue).LookupId.ToString();
-                viewModel.Province.Text = (listItem["Province"] as FieldLookupValue).LookupValue;
+                viewModel.Province.Text = (listItem["Province"] as FieldLookupValue).LookupValue +"-"+ Convert.ToString(listItem["city"]);
             }
             viewModel.OfficeName = Convert.ToString(listItem["Title"]);
             viewModel.FloorName = Convert.ToInt32(listItem["Floor"]);
