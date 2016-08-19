@@ -21,7 +21,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         void CreatePerformancePlanDetails(int? headerID, int? performanceID, string email, string status, string type, IEnumerable<ProjectOrUnitGoalsDetailVM> performancePlanDetails);
 
-        Task CreatePerformancePlanDetailsAsync(int? headerID, int? performanceID, string email, string status, string type IEnumerable<ProjectOrUnitGoalsDetailVM> performancePlanDetails);
+        Task CreatePerformancePlanDetailsAsync(int? headerID, int? performanceID, string email, string status, string type, IEnumerable<ProjectOrUnitGoalsDetailVM> performancePlanDetails);
 
         void SendEmail(ProfessionalPerformancePlanVM header, string workflowTransactionListName, string transactionLookupColumnName,
             int headerID, int level, string messageForApprover, string messageForRequestor);
