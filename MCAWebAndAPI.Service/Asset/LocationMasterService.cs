@@ -22,9 +22,11 @@ namespace MCAWebAndAPI.Service.Asset
 
         public int CreateHeader(LocationMasterVM header, string province, string office, int floor, string room)
         {
+            var propCity = province.Split('-');
+
             var caml = @"<View>  
             <Query> 
-               <Where><And><And><And><Eq><FieldRef Name='Province' /><Value Type='Choice'>" + province + @"</Value></Eq><Eq><FieldRef Name='Title' /><Value Type='Text'>" + office + @"</Value></Eq></And><Eq><FieldRef Name='Floor' /><Value Type='Text'>" + floor + @"</Value></Eq></And><Eq><FieldRef Name='Room' /><Value Type='Text'>" + room + @"</Value></Eq></And></Where> 
+               <Where><And><And><And><Eq><FieldRef Name='Province' /><Value Type='Choice'>" + propCity[1] + @"</Value></Eq><Eq><FieldRef Name='Title' /><Value Type='Text'>" + office + @"</Value></Eq></And><Eq><FieldRef Name='Floor' /><Value Type='Text'>" + floor + @"</Value></Eq></And><Eq><FieldRef Name='Room' /><Value Type='Text'>" + room + @"</Value></Eq></And></Where> 
             </Query> 
       </View>";
             int error = 0;
@@ -79,7 +81,6 @@ namespace MCAWebAndAPI.Service.Asset
                 viewModel.Province.Value = (listItem["Province"] as FieldLookupValue).LookupId.ToString();
                 viewModel.Province.Text = (listItem["Province"] as FieldLookupValue).LookupValue;
             }
-            viewModel.Province.Value = Convert.ToString(listItem["Title"]);
             viewModel.OfficeName = Convert.ToString(listItem["Title"]);
             viewModel.FloorName = Convert.ToInt32(listItem["Floor"]);
             viewModel.RoomName = Convert.ToString(listItem["Room"]);
@@ -100,22 +101,46 @@ namespace MCAWebAndAPI.Service.Asset
         private IEnumerable<string> GetChoicesFromListHR(string listname, string field1, string siteHr, string field2 = null)
         {
             var caml = @"<View>  
-            <Query> 
-               <Where><Eq><FieldRef Name='Level' /><Value Type='Choice'>Province</Value></Eq></Where> 
-            </Query>
-      </View>";
+                        <Query>
+                       <Where>
+                          <Eq>
+                             <FieldRef Name='Level' />
+                             <Value Type='Choice'>City</Value>
+                          </Eq>
+                       </Where>
+                    </Query>
+                    <ViewFields>
+                       <FieldRef Name='Title' />
+                       <FieldRef Name='Level' />
+                       <FieldRef Name='parentlocation_x003a_ID' />
+                    </ViewFields>
+                    <QueryOptions />
+                        </View>";
             List<string> _choices = new List<string>();
             var listItems = SPConnector.GetList(listname, siteHr, caml);
             foreach (var item in listItems)
             {
-                if (field2 == null)
+                var idParent = 0;
+                if ((item["parentlocation_x003a_ID"] as FieldLookupValue) != null)
                 {
-
-                    _choices.Add(item[field1].ToString());
+                    idParent = (item["parentlocation_x003a_ID"] as FieldLookupValue).LookupId;
                 }
-                else
+                var camlParent = @"<View><Query>
+                               <Where>
+                                  <Eq>
+                                     <FieldRef Name='ID' />
+                                     <Value Type='Counter'>"+ idParent + @"</Value>
+                                  </Eq>
+                               </Where>
+                            </Query>
+                            <ViewFields>
+                               <FieldRef Name='Title' />
+                            </ViewFields>
+                            <QueryOptions /></View>";
+                var getParent = SPConnector.GetList(SP_PLACE_MAS_LISTNAME, siteHr, camlParent);
+                foreach(var p in getParent)
                 {
-                    _choices.Add(item[field1].ToString());
+                    _choices.Add(item[field1].ToString() + "-" + p["Title"].ToString());
                 }
             }
             return _choices.ToArray();
@@ -300,7 +325,24 @@ namespace MCAWebAndAPI.Service.Asset
 
         public LocationMasterVM GetPopulatedModel(int ID, string SiteUrl)
         {
-            throw new NotImplementedException();
+            var siteHr = SiteUrl.Replace("/bo", "/hr");
+
+            var listitem = SPConnector.GetListItem("Location Master", ID, SiteUrl);
+            var model = new LocationMasterVM();
+            model.Province.Choices = GetChoicesFromListHR("Place Master", "Title", siteHr);
+
+            if ((listitem["Province"] as FieldLookupValue) != null)
+            {
+                model.Province.Value = (listitem["Province"] as FieldLookupValue).LookupId.ToString();
+                model.Province.Text = (listitem["Province"] as FieldLookupValue).LookupValue;
+            }
+
+            model.OfficeName = Convert.ToString(listitem["Title"]);
+            model.FloorName = Convert.ToInt32(listitem["Floor"]);
+            model.RoomName = Convert.ToString(listitem["Room"]);
+            model.Remarks = Convert.ToString(listitem["Remarks"]);
+            model.ID = ID;
+            return model;
         }
 
         public int? MassUpload(string ListName, DataTable CSVDataTable, string SiteUrl = null)

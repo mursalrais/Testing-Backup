@@ -85,6 +85,7 @@
 
 <script>
     $(document).ready(function () {
+        $('#PurchaseDate').prop('value', "")
         //alert("ID : " + $("#ID").val());
 
         //if ($("#ID").val() == null) {
@@ -94,6 +95,17 @@
         //    //$("#AccpMemo_Value").data("kendoDropDownList").value("");
         //}
     })
+
+    function SimpenAsset()
+    {
+        var gridElements = $("#MyGri").data("kendoGrid").dataSource;
+        var total = 0;
+        gridElements.fetch(function ()
+        {
+            total = gridElements.total();
+        })
+        alert(total);
+    }
 
     function onSelectedAcceptanceMemo(e) {
         var res = this.dataItem(e.item).split("-")
