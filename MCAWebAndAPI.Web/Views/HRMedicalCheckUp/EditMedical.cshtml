@@ -127,28 +127,28 @@
             var defaultyear = kendo.toString($("#ClaimDate").data("kendoDatePicker").value(), 'yyyy');
 
             var strUserId = $("#ProfessionalID").val();
-            var url = "/HRMedicalCheckUp/GetMedicalYear/" + strUserId;
+           // var url = "/HRMedicalCheckUp/GetMedicalYear/" + strUserId;
 
-            $.getJSON(url,
-                function (result) {
-                    if (result.length === 0) {
+            //$.getJSON(url,
+            //    function (result) {
+            //        if (result.length === 0) {
+            //            $("#ClaimStatus").val(status);
+            //            $('form').prop('action', '/HRMedicalCheckUp/SubmitMedical');
+            //            $("form").submit();
+            //        } else {
+            //            for (var i = 0; i <= result.length - 1; i++) {
+            //                if (defaultyear === result[i].Year) {
+            //                    alert('Sorry, Your Medical Check-Up for this period has been claimed. ' +
+            //                        'Please process next claim in the next period. If there is any inconvenience process for this, ' +
+            //                        'please contact HR Officer directly. Thank you');
+            //                    return;
+            //                }
+            //            }
                         $("#ClaimStatus").val(status);
-                        $('form').prop('action', '/HRMedicalCheckUp/SubmitMedical');
+                        $('form').prop('action', '/HRMedicalCheckUp/UpdateMedical');
                         $("form").submit();
-                    } else {
-                        for (var i = 0; i <= result.length - 1; i++) {
-                            if (defaultyear === result[i].Year) {
-                                alert('Sorry, Your Medical Check-Up for this period has been claimed. ' +
-                                    'Please process next claim in the next period. If there is any inconvenience process for this, ' +
-                                    'please contact HR Officer directly. Thank you');
-                                return;
-                            }
-                        }
-                        $("#ClaimStatus").val(status);
-                        $('form').prop('action', '/HRMedicalCheckUp/SubmitMedical');
-                        $("form").submit();
-                    }
-                });
+            //        }
+            //    });
 
         }
 
@@ -197,20 +197,6 @@
 
       
 
-        function OnSelectProfessionalName(e) {
-            var dataItem = this.dataItem(e.item);
-            var url = "/HRDataMaster/GetProfessional/" + dataItem.ID;
-
-            $.getJSON(url,
-                function (result) {
-                    
-                    $('#OfficeEmail').prop('value', result[0].OfficeEmail);
-                    $('#Unit').prop('value', result[0].Project_Unit);
-                    $('#Position').prop('value', result[0].Position);
-                    $('#ProfessionalTextName').prop('value', result[0].Name);
-                    $('#ProfessionalID').prop('value', result[0].ID);
-                });
-        }
 
 
     </script>

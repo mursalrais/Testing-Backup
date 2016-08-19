@@ -28,9 +28,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [Range(0, 5, ErrorMessage = "Only 0-5")]
         public decimal TotalScore { get; set; }
 
-        [UIHint("Int32")]
+        [UIHint("Decimal")]
         [Range(0, 5, ErrorMessage = "Only 0-5")]
-        public int OverallTotalScore { get; set; }
+        public decimal OverallTotalScore { get; set; }
 
         [UIHint("TextArea")]
         public string Output { get; set; }

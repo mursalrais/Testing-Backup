@@ -11,9 +11,11 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         public double FullHalf { get; set; } = 1d;
 
-        public string Status { get; set; }
+        //public string Status { get; set; }
 
         public string Location { get; set; }
+
+        public int? LocationID { get; set; }
 
     }
 }

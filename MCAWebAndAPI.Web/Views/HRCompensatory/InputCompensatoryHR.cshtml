@@ -8,14 +8,16 @@
     ViewBag.Title = "Input Compensatory HR";
 }
 
-@using (Html.BeginForm("CreateCompensatoryData", "HRCompensatory", FormMethod.Post, new AjaxOptions
-{
-    OnBegin = "onBeginForm",
-    OnComplete = "onCompleteForm",
-    OnSuccess = "onSuccessFormEmbed",
-    OnFailure = "onFailureForm"
+@using (Ajax.BeginForm("CreateHeaderCompensatory", "HRCompensatory",
+                                                                                    FormMethod.Post,
+                                                                                    new AjaxOptions
+                                                                                    {
+                                                                                        OnBegin = "onBeginForm",
+                                                                                        OnComplete = "onCompleteForm",
+                                                                                        OnSuccess = "onSuccessFormEmbed",
+                                                                                        OnFailure = "onFailureForm"
+                                                                                    }, new { @class = "form-horizontal" }))
 
-}))
 {
     <fieldset>
         @Html.HiddenFor(m => m.cmpID)
@@ -24,6 +26,7 @@
         @Html.HiddenFor(m => m.cmpTitle)
         @Html.HiddenFor(m => m.cmpPosition)
         @Html.HiddenFor(m => m.cmpYearDate)
+        @Html.HiddenFor(m => m.Requestor)
 
         <input type="hidden" id="loadpage" value="0">
 
@@ -215,7 +218,7 @@
                         var CompStatus = null;
 
                         if (dataItem != null) {
-                            idComp = dataItem.ID;
+                            idComp = dataItem.CompensatoryID;
                             CompStatus = dataItem.CompensatoryStatus;
                         }
                             $("#StatusForm").prop("value", CompStatus);
@@ -246,7 +249,7 @@
                                 $('#reject-button').addClass('hide');
                             }
 
-                            var url = "/HRCompensatory/GetCompensatoryDetails?idComp=" + $("#cmpID").val();
+                            var url = "/HRCompensatory/GetCompensatoryDetails?idComp=" + idComp;
 
                             $('#compensatorylist').load(url, function (response, status, xhr) {
                                 if (status == "success") {
@@ -260,6 +263,7 @@
                     function OnChangeProffesional(e) {
                         var dataItem = this.dataItem(e.item);
                         var eMail = dataItem.OfficeEmail
+                        $("#cmpName").prop("value", dataItem.FirstMiddleName);
 
                         if (eMail != null) {
                             displayWorkflowRouter("workflow-placeholder", "@ViewBag.ListName", eMail);

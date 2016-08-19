@@ -6,20 +6,53 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MCAWebAndAPI.Model.ViewModel.Control;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
     public class TimesheetVM : Item
     {
+ 
 
         [UIHint("Date")]
         public DateTime? Period { get; set; } = DateTime.Today;
 
-        public string UserLogin { get; set; }
+
+        [UIHint("AjaxComboBox")]
+        public AjaxComboBoxVM ProfessionalName { get; set; } = new AjaxComboBoxVM
+        {
+            ActionName = "GetProfessionals",
+            ControllerName = "HRDataMaster",
+            ValueField = "ID",
+            TextField = "Name",
+            OnSelectEventName = "OnSelectProfessionalName"
+        };
+
+        [UIHint("Int32")]
+        [Required(ErrorMessage = "Professional ID Field Is Required")]
+        [DisplayName("Professional ID")]
+       
+
+       public string UserLogin { get; set; }
 
         public string Name { get; set; }
 
-        public string Location { get; set; }
+        public int? ProfessionalID { get; set; }
+
+        public int? LocationID { get; set; }
+
+        public string LocationName { get; set; }
+
+        [UIHint("AjaxComboBox")]
+        public AjaxComboBoxVM Location { get; set; } = new AjaxComboBoxVM
+        {
+            ControllerName = "Location",
+            ActionName = "GetProvinces",
+            ValueField = "ID",
+            TextField = "Title",
+            OnSelectEventName = "OnSelectLocationName"
+        };
+
 
         [UIHint("Date")]
         public DateTime? From { get; set; } = DateTime.Today;
@@ -32,6 +65,10 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public bool IsFullDay { get; set; }
 
         public string ProjectUnit { get; set; }
+
+        public string UserPermission { get; set; }
+
+        public string TimesheetStatus { get; set; }
 
         public IEnumerable<TimesheetDetailVM> TimesheetDetails { get; set; }
 

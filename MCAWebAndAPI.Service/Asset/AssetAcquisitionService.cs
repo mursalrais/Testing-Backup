@@ -34,7 +34,6 @@ namespace MCAWebAndAPI.Service.Asset
             var model = new AssetAcquisitionHeaderVM();
             model.TransactionType = Convert.ToString("Asset Acquisition");
             model.AccpMemo.Choices = GetChoicesFromList(SP_ACC_MEMO_LIST_NAME, "ID", "Title");
-            model.PurchaseDate.Date.ToString("");
             model.CancelURL = _siteUrl + UrlResource.AssetAcquisition;
 
             return model;
@@ -136,7 +135,7 @@ namespace MCAWebAndAPI.Service.Asset
             viewModel.PoNo = Convert.ToString(listItem["pono"]);
             viewModel.Vendor = Convert.ToString(listItem["vendorid"])+"-"+Convert.ToString(listItem["vendorname"]);
 
-            viewModel.PurchaseDate = Convert.ToDateTime(listItem["purchasedate"]).AddDays(1);
+            viewModel.PurchaseDate = Convert.ToDateTime(listItem["purchasedate"]);
             //viewModel.Spesifications = Regex.Replace(listItem["Spesifications"].ToString(), "<.*?>", string.Empty);
             viewModel.PurchaseDescription = Regex.Replace(Convert.ToString(listItem["purchasedescription"]), "<.*?>", string.Empty);
             viewModel.ID = ID;

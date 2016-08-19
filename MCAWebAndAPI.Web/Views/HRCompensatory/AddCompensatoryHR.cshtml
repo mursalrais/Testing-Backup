@@ -8,14 +8,15 @@
     ViewBag.Title = "Add Compensatory HR";
 }
 
-@using (Html.BeginForm("CreateHeaderCompensatory", "HRCompensatory", FormMethod.Post, new AjaxOptions
-{
-    OnBegin = "onBeginForm",
-    OnComplete = "onCompleteForm",
-    OnSuccess = "onSuccessFormEmbed",
-    OnFailure = "onFailureForm"
-
-}))
+@using (Ajax.BeginForm("CreateHeaderCompensatory", "HRCompensatory",
+                                                                        FormMethod.Post,
+                                                                        new AjaxOptions
+                                                                        {
+                                                                            OnBegin = "onBeginForm",
+                                                                            OnComplete = "onCompleteForm",
+                                                                            OnSuccess = "onSuccessFormEmbed",
+                                                                            OnFailure = "onFailureForm"
+                                                                        }, new { @class = "form-horizontal" }))
 {
     <fieldset>
         @Html.HiddenFor(m => m.cmpID)
@@ -136,27 +137,8 @@
                     $("form").submit();
                 });
 
-                $("#submitonly-button").click(function () {
-                    $("#StatusForm").prop("value", "submit");
-                    $("form").submit();
-                });
-
-                $("#approve-button").click(function () {
-                    $("form").submit();
-                });
-
                 $("#submit-draft-button").click(function () {
                     $("#StatusForm").val("Draft")
-                    $("form").submit();
-                });
-
-                $('#reject-button').click(function (e) {
-                    $("#StatusForm").val("Reject")
-                    $("form").submit();
-                });
-
-                $("#unapprove-button").click(function () {
-                    $("#StatusForm").val("Unapprove")
                     $("form").submit();
                 });
 
@@ -181,7 +163,8 @@
                 var eMail = dataItem.OfficeEmail
 
                 if (eMail != null) {
-                    displayWorkflowRouter("workflow-placeholder", "@ViewBag.ListName", eMail);
+                    var url = "/Workflow/DisplayWorkflowRouter?listName=" + "@ViewBag.ListName" + "&requestor=" + eMail;
+                    $('#workflow-placeholder').load(url);
                 }
 
                 $("#cmpProjUnit").prop("value", dataItem.Project_Unit);

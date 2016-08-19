@@ -70,7 +70,7 @@
         @Html.HiddenFor(m => m.CancelURL)
         <div>
             <center>
-                <input class="k-button k-button-icontext k-grid-add" type="submit" value="Save" />
+                <input class="k-button k-button-icontext k-grid-add" type="submit" onclick="return SimpenAsset()" value="Save" />
                 <a href="@Model.CancelURL" target='_parent'>
                     <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
                 </a>
@@ -94,6 +94,18 @@
             //$("#AccpMemo_Value").data("kendoDropDownList").value("");
         }
     })
+
+    function SimpenAsset() {
+        var gridElements = $("#Details").data("kendoGrid").dataSource;
+        var total = 0;
+        gridElements.fetch(function () {
+            total = gridElements.total();
+        })
+        if (total == 0) {
+            alert("Detail cannot Empty");
+            return false;
+        }
+    }
 
     function onSelectedAcceptanceMemo(e) {
         var res = this.dataItem(e.item).split("-")

@@ -131,17 +131,10 @@
 
         $(".province").change(function (e) {
             var Province = $("#Province").data("kendoDropDownList").text();
-            //var arrAssetID = [];
-            //for (var x = 0; x < (assetID.length - 1) ; x++) {
-            //    arrAssetID[x] = assetID[x];
-            //}
-
-            alert(Province);
+            //alert(Province);
             //alert(arrAssetID.join("-"));
             var url = "/ASSAssignmentOfAsset/GetProvinceInfo?province=" + Province;
             $.getJSON(url, function (data) {
-                //alert("office : "+data.OfficeName);
-                //do next
                 $(".office").text(data.OfficeName);
                 $(".floor").text(data.FloorName);
                 $(".room").text(data.RoomName);
