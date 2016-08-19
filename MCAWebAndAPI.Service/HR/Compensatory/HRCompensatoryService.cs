@@ -24,6 +24,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         const string SP_MANPOW_LIST_NAME = "Manpower Requisition";
         const string SP_COMDET_LIST_NAME = "Compensatory Request Detail";
         const string SP_COMREQ_LIST_NAME = "Compensatory Request";
+        const string SP_COMBAL_LIST_NAME = "Day-Off Balance";
 
         public string GetAccessData(string userLoginName = null)
         {
@@ -349,7 +350,16 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             
             cratedValueDetail.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(viewModels.ddlProfessional.Value)});
             cratedValueDetail.Add("Title", Convert.ToString(viewModels.cmpYearDate));
-            
+
+            if (viewModels.StatusForm != "Draft")
+            {
+                cratedValueDetail.Add("crstatus", "Pending Approval 1 of 2");
+            }
+            else
+            {
+                cratedValueDetail.Add("crstatus", "Draft");
+            }
+
             try
             {
                 SPConnector.AddListItem(SP_COMREQ_LIST_NAME, cratedValueDetail, _siteUrl);
@@ -362,7 +372,37 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
            int idCmp = SPConnector.GetLatestListItemID(SP_COMREQ_LIST_NAME, _siteUrl);
 
-            CreateCompensatoryData(idCmp, viewModels);
+            AddNewCompensatoryData(idCmp, viewModels);
+        }
+
+        public void AddNewCompensatoryData(int? cmpID, CompensatoryVM viewModels)
+        {
+            foreach (var viewModel in viewModels.CompensatoryDetails)
+            {
+                if (Item.CheckIfCreated(viewModel))
+                {
+                    var cratedValueDetail = new Dictionary<string, object>();
+
+                    cratedValueDetail.Add("compensatoryrequest", cmpID);
+                    cratedValueDetail.Add("Title", viewModel.CmpActiv);
+                    cratedValueDetail.Add("compensatorydate", viewModel.CmpDate);
+                    cratedValueDetail.Add("compensatorystarttime", viewModel.StartTime);
+                    cratedValueDetail.Add("compensatoryendtime", viewModel.FinishTime);
+                    cratedValueDetail.Add("totalhours", viewModel.CmpTotalHours);
+                    cratedValueDetail.Add("totaldays", viewModel.TotalDay);
+                    cratedValueDetail.Add("remarks", viewModel.remarks);
+
+                    try
+                    {
+                        SPConnector.AddListItem(SP_COMDET_LIST_NAME, cratedValueDetail, _siteUrl);
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error(e.Message);
+                        throw e;
+                    }
+                }
+            }
         }
 
         public void CreateCompensatoryData(int? cmpID, CompensatoryVM viewModels)
@@ -422,29 +462,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                         }
                         continue;
                     }
-                        else if (Item.CheckIfCreated(viewModel))
-                    {
-                        var cratedValueDetail = new Dictionary<string, object>();
-
-                        cratedValueDetail.Add("compensatoryrequest", cmpID);
-                        cratedValueDetail.Add("Title", viewModel.CmpActiv);
-                        cratedValueDetail.Add("compensatorydate", viewModel.CmpDate);
-                        cratedValueDetail.Add("compensatorystarttime", viewModel.StartTime);
-                        cratedValueDetail.Add("compensatoryendtime", viewModel.FinishTime);
-                        cratedValueDetail.Add("totalhours", viewModel.CmpTotalHours);
-                        cratedValueDetail.Add("totaldays", viewModel.TotalDay);
-                        cratedValueDetail.Add("remarks", viewModel.remarks);
-
-                        try
-                        {
-                            SPConnector.AddListItem(SP_COMDET_LIST_NAME, cratedValueDetail, _siteUrl);
-                        }
-                        catch (Exception e)
-                        {
-                            logger.Error(e.Message);
-                            throw e;
-                        }
-                    }
+                       
                         else if (Item.CheckIfDeleted(viewModel))
                     {
                         try
@@ -542,7 +560,24 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             var columnValues = new Dictionary<string, object>();
 
-            int? ID = header.cmpID;
+            var updateBalance = new Dictionary<string, object>();
+
+            string nameProf = header.cmpName;
+
+            int? idComp = header.cmpID;
+
+            int? idbal = null;
+
+            var caml = @"<View>  
+                        <Query> 
+                            <Where><And><Eq><FieldRef Name='dayoffname' /><Value Type='Choice'>Day-off due to Compensatory time</Value></Eq><Eq><FieldRef Name='professional' /><Value Type='Lookup'>" + nameProf + @"</Value></Eq></And></Where> 
+                        </Query> 
+                    </View>";
+
+            foreach (var item in SPConnector.GetList(SP_COMBAL_LIST_NAME, _siteUrl, caml))
+            {
+                idbal = Convert.ToInt32(item["ID"]);
+            }
 
             if (header.StatusForm == " ")
             {
@@ -570,25 +605,35 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
                 IEnumerable<CompensatoryDetailVM> getbalance = header.CompensatoryDetails;
 
-                columnValues.Add("balance", getbalance.Count()); 
+                updateBalance.Add("entitlement", getbalance.Count());
+
+                try
+                {
+                    SPConnector.UpdateListItem(SP_COMBAL_LIST_NAME, idbal, updateBalance, _siteUrl);
+                }
+                catch (Exception e)
+                {
+                    logger.Debug(e.Message);
+                    return false;
+                }
             }
 
             try
             {
-                SPConnector.UpdateListItem(SP_COMREQ_LIST_NAME, ID, columnValues, _siteUrl);
+                SPConnector.UpdateListItem(SP_COMREQ_LIST_NAME, idComp, columnValues, _siteUrl);
             }
             catch (Exception e)
             {
                 logger.Debug(e.Message);
                 return false;
             }
+            
             var entitiy = new CompensatoryVM();
             entitiy = header;
             return true;
         }
-
-
-       public async Task<CompensatoryVM> GetCompensatoryDetailGrid(int? idComp)
+        
+        public async Task<CompensatoryVM> GetCompensatoryDetailGrid(int? idComp)
         {
             var viewModel = new CompensatoryVM();
 

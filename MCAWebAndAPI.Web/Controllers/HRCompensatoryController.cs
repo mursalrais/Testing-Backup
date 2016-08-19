@@ -191,13 +191,8 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            return RedirectToAction("Index",
-               "Success",
-               new
-               {
-                   errorMessage =
-               string.Format(MessageResource.SuccessCreateApplicationData, viewModel.cmpID)
-               });
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.Compensatorylist);
+
         }
 
         [HttpPost]
@@ -247,13 +242,8 @@ namespace MCAWebAndAPI.Web.Controllers
                 }
             }
 
-            return RedirectToAction("Index",
-               "Success",
-               new
-               {
-                   errorMessage =
-               string.Format(MessageResource.SuccessCreateApplicationData, viewModel.cmpID)
-               });
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.Compensatorylist);
+
         }
 
         private IEnumerable<CompensatoryDetailVM> BindCompensatorylistDateTime(FormCollection form, IEnumerable<CompensatoryDetailVM> compDetails)

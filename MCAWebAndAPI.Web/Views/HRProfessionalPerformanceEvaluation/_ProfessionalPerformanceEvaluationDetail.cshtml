@@ -10,34 +10,34 @@
         .CreateAt(GridInsertRowPosition.Bottom))
         .Columns(columns =>
         {
-            columns.Bound(p => p.ProjectOrUnitGoals).ClientTemplate(" <textarea style=' width: 190; height: 70px; margin-top: 0px;margin-bottom: 0px; border: none; background-color: transparent' disable>#= ProjectOrUnitGoals #</textarea>" +
+            columns.Bound(p => p.ProjectOrUnitGoals).ClientTemplate(" #=ProjectOrUnitGoals #" +
             "<input type='hidden' name='ProfessionalPerformanceEvaluationDetails[#= getProfessionalPerformancePlanDetail(data)#].ProjectOrUnitGoals' value='#= ProjectOrUnitGoals #' />"
-            );
+            ).Width(200);
             columns.Bound(p => p.Category).ClientTemplate("#= Category.Text #" +
             "<input type='hidden' name='ProfessionalPerformanceEvaluationDetails[#= getProfessionalPerformancePlanDetail(data)#].Category.Text' value='#= Category.Text #' />"
             )
             .EditorViewData(new
             {
                 BindTo = IndividualGoalDetailVM.GetCategoryOptions()
-            });
-            columns.Bound(p => p.IndividualGoalAndPlan).ClientTemplate(" <textarea style=' width: 190; height: 70px; margin-top: 0px;margin-bottom: 0px; border: none; background-color: transparent' disable>#= IndividualGoalAndPlan #</textarea>" +
+            }).Width(200);
+            columns.Bound(p => p.IndividualGoalAndPlan).ClientTemplate(" #=IndividualGoalAndPlan #" +
             "<input type='hidden' name='ProfessionalPerformanceEvaluationDetails[#= getProfessionalPerformancePlanDetail(data)#].IndividualGoalAndPlan' value='#= IndividualGoalAndPlan #' />"
-            );
-            columns.Bound(p => p.Output).ClientTemplate(" <textarea style=' width: 190; height: 70px; margin-top: 0px;margin-bottom: 0px; border: none; background-color: transparent' disable>#= Output #</textarea>" +
+            ).Width(200);
+            columns.Bound(p => p.Output).ClientTemplate("#=Output #" +
             "<input type='hidden' name='ProfessionalPerformanceEvaluationDetails[#= getProfessionalPerformancePlanDetail(data)#].Output' value='#= Output #' />"
-            );
+            ).Width(200);
             columns.Bound(p => p.PlannedWeight).ClientTemplate("#= PlannedWeight #%" +
             "<input type='hidden' name='ProfessionalPerformanceEvaluationDetails[#= getProfessionalPerformancePlanDetail(data)#].PlannedWeight' value='#= PlannedWeight #' />"
-            );
+            ).Width(150);
             columns.Bound(p => p.ActualWeight).ClientTemplate("#= ActualWeight #%" +
             "<input type='hidden' name='ProfessionalPerformanceEvaluationDetails[#= getProfessionalPerformancePlanDetail(data)#].ActualWeight' value='#= ActualWeight #' />"
-            );
+            ).Width(150);
             columns.Bound(p => p.Score).ClientTemplate("#= Score #" +
             "<input type='hidden' name='ProfessionalPerformanceEvaluationDetails[#= getProfessionalPerformancePlanDetail(data)#].Score' value='#= Score #' />"
-            );
+            ).Width(100);
             columns.Bound(p => p.TotalScore).ClientTemplate("#= TotalScore #" +
             "<input type='hidden' name='ProfessionalPerformanceEvaluationDetails[#= getProfessionalPerformancePlanDetail(data)#].TotalScore' value='#= TotalScore #' />"
-            );
+            ).Width(100);
             columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
             "<input type='hidden' name='ProfessionalPerformanceEvaluationDetails[#= getProfessionalPerformancePlanDetail(data)#].ID' value='#= ID #' />"
             );
@@ -45,6 +45,8 @@
             "<input type='hidden' name='ProfessionalPerformanceEvaluationDetails[#= getProfessionalPerformancePlanDetail(data)#].EditMode' value='#= EditMode #' />"
             );
         })
+            .Scrollable(scrollable => scrollable.Height("auto"))
+            .Resizable(resizable => resizable.Columns(true))
         .Events(e =>
         {
             e.Edit("onEditKendoDetail");
