@@ -510,6 +510,7 @@
     <Content Include="Global.asax" />
     <Content Include="Site.Master" />
     <Content Include="ViewSwitcher.ascx" />
+    <Content Include="Views\FINEventBudget\_ItemDetails.cshtml" />
     <Content Include="Views\HRCompensatory\_CompensantoryDetails.cshtml" />
     <Content Include="Views\HRPayroll\DisplayPayrollWorksheet.cshtml" />
     <Content Include="Web.config">
@@ -540,7 +541,6 @@
     <Content Include="Views\Shared\EditorTemplates\String.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Time.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Url.cshtml" />
-    <Content Include="Views\FINEventBudget\Create.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\String.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\ComboBox.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\HttpPostedFileBase.cshtml" />
@@ -847,7 +847,6 @@
     <Content Include="Views\FINTaxReimbursement\Item.cshtml" />
     <Content Include="Views\FINTaxExemption\Create.cshtml" />
     <Content Include="Views\FINSPHL\Create.cshtml" />
-    <Content Include="Views\FINEventBudget\_ItemDetails.cshtml" />
     <Content Include="Views\FINSCAVoucher\Create.cshtml" />
     <Content Include="Views\FINSCAVoucher\_EventBudgetItems.cshtml" />
     <Content Include="Views\HRExitProcedure\ViewExitProcedureForApprover.cshtml" />
@@ -915,12 +914,9 @@
     <Content Include="Views\FINRequisitionNote\Create.cshtml" />
     <Content Include="Views\FINRequisitionNote\Edit.cshtml" />
     <Content Include="Views\FINRequisitionNote\Print.cshtml" />
-    <Content Include="Views\FINTaxExemptionData\_Income.cshtml" />
     <Content Include="Views\FINRequisitionNote\Create.cshtml" />
     <Content Include="Views\FINRequisitionNote\Edit.cshtml" />
     <Content Include="Views\FINRequisitionNote\Print.cshtml" />
-    <Content Include="Views\FINEventBudget\Create.cshtml" />
-    <Content Include="Views\FINEventBudget\_ItemDetails.cshtml" />
     <Content Include="Views\Shared\_PartialHeader.cshtml" />
     <Content Include="Views\Shared\_PartialHeaderWithLogo.cshtml" />
     <Content Include="Views\ASSAssetTransfer\CreateAssetTransfer.cshtml" />
@@ -951,15 +947,14 @@
     <Content Include="Views\ASSAssetAcquisition\Sync.cshtml" />
     <Content Include="Views\ASSAssetAcquisition\View.cshtml" />
     <Content Include="Views\ASSAssetAcquisition\_DetailsView.cshtml" />
-    <Content Include="Views\HRDayOff\Create.cshtml" />
-    <Content Include="Views\HRDayOff\_DayOffBalanceDetail.cshtml" />
-    <Content Include="Views\HRDayOff\_DayOffRequsetDetail.cshtml" />
     <Content Include="Views\ASSAssignmentOfAsset\Create.cshtml" />
     <Content Include="Views\ASSAssignmentOfAsset\_Details.cshtml" />
     <Content Include="Views\ASSLocationMaster\Create.cshtml" />
     <Content Include="Views\ASSLocationMaster\Edit.cshtml" />
     <Content Include="Views\ASSLocationMaster\Upload.cshtml" />
+    <Content Include="Views\FINPettyCashReplenishment\Item.cshtml" />
     <Content Include="Views\HRCompensatory\AddCompensatoryHR.cshtml" />
+    <Content Include="Views\FINEventBudget\Item.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -994,6 +989,7 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\FileController.cs" />
     <Compile Include="Controllers\FINPettyCashPaymentVoucherController.cs" />
+    <Compile Include="Controllers\FINPettyCashReplenishmentController.cs" />
     <Compile Include="Controllers\FINPettyCashSettlementController.cs" />
     <Compile Include="Controllers\FINSCAVoucherController.cs" />
     <Compile Include="Controllers\HRDayOffController.cs" />

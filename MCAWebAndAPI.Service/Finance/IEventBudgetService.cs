@@ -26,6 +26,8 @@ namespace MCAWebAndAPI.Service.Finance
 
         IEnumerable<EventBudgetVM> GetEventBudgetList();
 
+        IEnumerable<EventBudgetItemVM> GetItem(int eventBudgetID);
+
         Task CreateItemsAsync(int? headerID, IEnumerable<EventBudgetItemVM> items);
 
         Task CreateAttachmentsAsync(int? headerID, IEnumerable<HttpPostedFileBase> documents);

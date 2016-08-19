@@ -60,7 +60,7 @@ namespace MCAWebAndAPI.Service.Finance
 
             if (ID == null)
             {
-                eventBudget = CreateNewEventBudgetVM();
+                eventBudget = new EventBudgetVM();
             }
             else
             {
@@ -114,14 +114,6 @@ namespace MCAWebAndAPI.Service.Finance
             return detail;
         }
 
-        private EventBudgetVM CreateNewEventBudgetVM()
-        {
-            var eventBudget = new EventBudgetVM();
-            //eventBudget.Activity.Choices = GetActivities(ActivityFieldName_Name); 
-
-            return eventBudget;
-        }
-
 
         private EventBudgetVM ConvertToEventBudgetVM(ListItem listItem)
         {
@@ -129,11 +121,13 @@ namespace MCAWebAndAPI.Service.Finance
 
             eventBudget.ID = Convert.ToInt32(listItem[EventBudgetFieldName_ID]);
             eventBudget.EventName = Convert.ToString(listItem[ActivityFieldName_Name]);
+            eventBudget.No = Convert.ToString(listItem[EventBudgetFieldName_No]);
 
             eventBudget.DateFrom = Convert.ToDateTime(listItem[EventBudgetFieldName_DateFrom]);
             eventBudget.DateTo = Convert.ToDateTime(listItem[EventBudgetFieldName_DateTo]);
 
             eventBudget.Project.Text = Convert.ToString(listItem[EventBudgetFieldName_Project]);
+            eventBudget.Project.Value = Convert.ToString(listItem[EventBudgetFieldName_Project]);
 
             eventBudget.Activity.Value = (listItem[EventBudgetFieldName_ActivityName] as FieldLookupValue).LookupId;
             eventBudget.Activity.Text = (listItem[EventBudgetFieldName_ActivityName] as FieldLookupValue).LookupValue;
@@ -188,6 +182,8 @@ namespace MCAWebAndAPI.Service.Finance
             eventBudget.ID = Convert.ToInt32(listItem[EventBudgetFieldName_ID]);
             eventBudget.Title = Convert.ToString(listItem[ActivityFieldName_Name]);
             eventBudget.No = Convert.ToString(listItem[EventBudgetFieldName_No]);
+            eventBudget.Project.Text = Convert.ToString(listItem[EventBudgetFieldName_Project]);
+
             return eventBudget;
         }
 

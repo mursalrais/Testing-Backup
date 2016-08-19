@@ -205,6 +205,15 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0}/SPHL%20Documents/Forms/AllItems.aspx?groupBy=&amp;FilterField1=SPHL_x003a_ID&amp;FilterValue1={1}.
+        /// </summary>
+        public static string FINPettyCashReplenishment {
+            get {
+                return ResourceManager.GetString("FINPettyCashReplenishment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0}/Lists/SPHL%20Data/AllItems.aspx.
         /// </summary>
         public static string FINSPHL {
