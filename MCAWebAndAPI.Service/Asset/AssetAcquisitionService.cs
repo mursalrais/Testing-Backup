@@ -34,7 +34,6 @@ namespace MCAWebAndAPI.Service.Asset
             var model = new AssetAcquisitionHeaderVM();
             model.TransactionType = Convert.ToString("Asset Acquisition");
             model.AccpMemo.Choices = GetChoicesFromList(SP_ACC_MEMO_LIST_NAME, "ID", "Title");
-            model.PurchaseDate.Date.ToString("");
             model.CancelURL = _siteUrl + UrlResource.AssetAcquisition;
 
             return model;

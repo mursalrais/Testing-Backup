@@ -92,18 +92,10 @@
 @*@Html.HiddenFor(m => m.ID)*@
 <script>
     $(document).ready(function () {
-        //alert(document.getElementById('asset').value);
-        //alert($("#AssetSubAsset").data("kendoComboBox").text());
+
     })
 
-    function SimpenAsset()
-    {
-        if(@Model.ToList().Count() == 0)
-        {
-            alert("Cannot Let Details Empty");
-        }
-    }
-
+    
 
     function showTest(e)
     {
@@ -181,4 +173,10 @@
     {
         white-space : nowrap;
     }
+
+    input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
 </style>
