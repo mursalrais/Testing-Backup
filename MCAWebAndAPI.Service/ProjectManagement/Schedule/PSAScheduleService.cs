@@ -39,10 +39,10 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
             foreach (var psaData in SPConnector.GetList(SP_PSA_LIST_NAME, _siteUrl, caml))
             {
-                DateTime expireDate = Convert.ToDateTime(psaData["psaexpirydate"]).ToLocalTime();
+                DateTime expireDate = Convert.ToDateTime(psaData["psaexpirydates"]).ToLocalTime();
                 DateTime twoMonthsBeforeExpired = expireDate.AddMonths(-2);
 
-                string strExpireDate = Convert.ToDateTime(psaData["psaexpirydate"]).ToLocalTime().ToShortDateString();
+                string strExpireDate = Convert.ToDateTime(psaData["psaexpirydates"]).ToLocalTime().ToShortDateString();
                 string strTwoMonthBeforeExpired = twoMonthsBeforeExpired.ToLocalTime().ToShortDateString();
 
                 logger.Info("expireDate: " + expireDate + "--" + "twoMonthsBeforeExpired: " + twoMonthsBeforeExpired + "--" + "strExpireDate: " + strExpireDate + "--" + "strTwoMonthBeforeExpired: " + strTwoMonthBeforeExpired);
@@ -57,7 +57,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
                 if (professionalID==null)continue;
                 var professionalData = SPConnector.GetListItem(SP_PROFESSIONAL_LIST_NAME, professionalID, _siteUrl);
                 string professionalMail = Convert.ToString(professionalData["officeemail"]);
-                string professionalFullName = Convert.ToString(professionalData["Title"]) + " " + Convert.ToString(professionalData["lastname"]);
+                string professionalFullName = Convert.ToString(professionalData["Title"]);
 
                 if(strToday == strTwoMonthBeforeExpired)
                 {
