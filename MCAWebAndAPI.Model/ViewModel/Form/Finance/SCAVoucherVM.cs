@@ -11,6 +11,11 @@ using MCAWebAndAPI.Model.ViewModel.Control;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 {
+    /// <summary>
+    /// Wireframe FIN06: SCA Voucher
+    ///     i.e.: Special Cash Advance Voucher
+    /// </summary>
+
     public class SCAVoucherVM:Item
     {
         private const string locked = "Locked";
@@ -62,8 +67,12 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
             OnSelectEventName = "OnSelectEventBudgetNo"
         };
 
+        //[Required]
+        //public string Currency { get; set; }
         [Required]
-        public string Currency { get; set; }
+        [DisplayName("Currency")]
+        [UIHint("ComboBox")]
+        public CurrencyComboBoxVM Currency { get; set; } = new CurrencyComboBoxVM();
 
         [Required]
         public decimal TotalAmount { get; set; }

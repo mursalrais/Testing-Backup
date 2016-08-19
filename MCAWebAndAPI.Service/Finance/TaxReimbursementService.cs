@@ -10,6 +10,7 @@ using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
 using NLog;
+using static MCAWebAndAPI.Model.ViewModel.Form.Finance.Shared;
 
 namespace MCAWebAndAPI.Service.Finance
 {
@@ -44,16 +45,20 @@ namespace MCAWebAndAPI.Service.Finance
         }
 
 
-        public TaxReimbursementVM Get(int? id = default(int?))
+        public TaxReimbursementVM Get(Operations op, int? id = default(int?))
         {
+            if (op != Operations.Create && id == null)
+                throw new InvalidOperationException(ErrorDevInvalidState);
+
             var viewModel = new TaxReimbursementVM();
 
-            
             if (id != null)
             {
                 var listItem = SPConnector.GetListItem(ListName, id, siteUrl);
                 viewModel = ConvertToRequisitionNoteVM(listItem);
             }
+
+            viewModel.Operation = op;
 
             return viewModel;
         }

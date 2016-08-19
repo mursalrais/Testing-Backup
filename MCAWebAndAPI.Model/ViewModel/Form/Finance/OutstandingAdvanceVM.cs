@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Web;
 using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Model.ViewModel.Control;
+using static MCAWebAndAPI.Model.ViewModel.Form.Finance.Shared;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 {
@@ -13,7 +14,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
     /// </summary>
 
     public class OutstandingAdvanceVM : Item
-    {    
+    {
+        public Operations Operation { get; set; }
+
         [Required]
         [DisplayName("Date (Upload)")]
         [UIHint("Date")]

@@ -7,6 +7,7 @@ using MCAWebAndAPI.Service.Finance;
 using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;
+using static MCAWebAndAPI.Model.ViewModel.Form.Finance.Shared;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -16,19 +17,19 @@ namespace MCAWebAndAPI.Web.Controllers
     public class FINTaxReimbursementController : Controller
     {
         readonly ITaxReimbursementService service;
-
+        
         public FINTaxReimbursementController()
         {
             service = new TaxReimbursementService();
         }
 
-        public ActionResult Item(string siteUrl = null, int? id = null)
+        public ActionResult Item(string siteUrl = null, string op = null, int? id = null)
         {
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);
             SessionManager.Set("SiteUrl", siteUrl);
 
-            var viewModel = service.Get(id);
+            var viewModel = service.Get(GetOperation(op), id);
 
             SetAdditionalSettingToViewModel(ref viewModel, true);
 

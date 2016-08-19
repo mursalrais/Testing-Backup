@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 {
+    /// <summary>
+    /// Wireframe FIN06: SCA Voucher
+    ///     i.e.: Special Cash Advance Voucher
+    /// </summary>
+
     public class SCAVoucherItemsVM
     {
         public int ID { get; set; }
