@@ -369,3 +369,6 @@ Please try again.
    at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64
 2016-08-18 03:04:25.2325 MCAWebAndAPI.Service.Asset.AssignmentOfAssetService Value cannot be null.
 Parameter name: source
+2016-08-19 04:49:57.3369 MCAWebAndAPI.Service.Asset.AssetAcquisitionService String was not recognized as a valid DateTime. at ID: 1
+2016-08-19 05:25:56.8188 MCAWebAndAPI.Service.Asset.AssetAcquisitionService String was not recognized as a valid DateTime. at ID: 1
+2016-08-19 05:27:47.9691 MCAWebAndAPI.Service.Asset.AssetAcquisitionService String was not recognized as a valid DateTime. at ID: 1

@@ -91,6 +91,10 @@
 </div>
 @*@Html.HiddenFor(m => m.ID)*@
 <script>
+    $(".assetsubasset").kendoDropDownList({
+        filter: "contains",
+    });
+
     $(document).ready(function () {
         //alert(document.getElementById('asset').value);
         //alert($("#AssetSubAsset").data("kendoComboBox").text());
