@@ -70,7 +70,7 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}/Lists/Adjustment%20DayOff%20Balance/AllItems.aspx.
+        ///   Looks up a localized string similar to /Lists/Adjustment%20DayOff%20Balance/AllItems.aspx.
         /// </summary>
         public static string AdjustmentDayOffBalanceList {
             get {
@@ -201,15 +201,6 @@ namespace MCAWebAndAPI.Service.Resources {
         public static string FINOutstandingAdvance {
             get {
                 return ResourceManager.GetString("FINOutstandingAdvance", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {0}/SPHL%20Documents/Forms/AllItems.aspx?groupBy=&amp;FilterField1=SPHL_x003a_ID&amp;FilterValue1={1}.
-        /// </summary>
-        public static string FINPettyCashReplenishment {
-            get {
-                return ResourceManager.GetString("FINPettyCashReplenishment", resourceCulture);
             }
         }
         
