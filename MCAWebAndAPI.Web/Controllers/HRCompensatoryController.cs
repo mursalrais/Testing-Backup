@@ -33,6 +33,29 @@ namespace MCAWebAndAPI.Web.Controllers
             _service = new HRCompensatoryService();
         }
 
+        public ActionResult AddCompensatoryHR(string siteurl = null)
+        {
+            var viewmodel = new CompensatoryVM();
+
+            if (siteurl == "")
+            {
+                siteurl = SessionManager.Get<string>("SiteUrl");
+                _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
+            }
+            else
+            {
+                _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
+                SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
+            }
+
+            ViewBag.ListName = "Compensatory%20Request";
+
+            if (viewmodel.cmpEmail != null)
+                SessionManager.Set("RequestorUserLogin", viewmodel.cmpEmail);
+
+            return View(viewmodel);
+        }
+
         public ActionResult InputCompensatoryUser(string siteurl = null, int? iD = null)
         {
             //mandatory: set site url
@@ -160,7 +183,7 @@ namespace MCAWebAndAPI.Web.Controllers
             try
             {
                 viewModel.CompensatoryDetails = BindCompensatorylistDateTime(form, viewModel.CompensatoryDetails);
-                //_service.CreateCompensatoryData(cmpID, viewModel);
+                _service.CreateHeaderCompensatory(viewModel);
             }
             catch (Exception e)
             {
@@ -168,7 +191,8 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.Compensatory);
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.Compensatorylist);
+
         }
 
         [HttpPost]
@@ -183,6 +207,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             try
             {
+
                 viewModel.CompensatoryDetails = BindCompensatorylistDateTime(form, viewModel.CompensatoryDetails);
                 _service.CreateCompensatoryData(cmpID, viewModel);
             }
@@ -215,13 +240,10 @@ namespace MCAWebAndAPI.Web.Controllers
                 {
                     EmailUtil.Send(viewModel.cmpEmail, "Ask for Approval", string.Format(EmailResource.EmailCompensatoryRequestor, siteUrl, cmpID));
                 }
-                else if (viewModel.StatusForm == "Pending Approval 2 of 2")
-                {
-                    EmailUtil.Send(viewModel.cmpEmail, "Ask for Approval", string.Format(EmailResource.EmailCompensatoryRequestor, siteUrl, cmpID));
-                }
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.Compensatory);
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.Compensatorylist);
+
         }
 
         private IEnumerable<CompensatoryDetailVM> BindCompensatorylistDateTime(FormCollection form, IEnumerable<CompensatoryDetailVM> compDetails)

@@ -177,6 +177,7 @@
     <Compile Include="Finance\IOutstandingAdvanceService.cs" />
     <Compile Include="Finance\IPettyCashPaymentVoucherService.cs" />
     <Compile Include="Finance\IPettyCashReimbursement.cs" />
+    <Compile Include="Finance\IPettyCashReplenishmentService.cs" />
     <Compile Include="Finance\IPettyCashSettlement.cs" />
     <Compile Include="Finance\IRequisitionNote.cs" />
     <Compile Include="Finance\ISCAVoucherService.cs" />
@@ -186,6 +187,7 @@
     <Compile Include="Finance\OutstandingAdvanceService.cs" />
     <Compile Include="Finance\PettyCashPaymentVoucherService.cs" />
     <Compile Include="Finance\PettyCashReimbursement.cs" />
+    <Compile Include="Finance\PettyCashReplenishmentService.cs" />
     <Compile Include="Finance\PettyCashSettlement.cs" />
     <Compile Include="Finance\RequisitionNoteService.cs" />
     <Compile Include="Finance\SCAVoucherService.cs" />
@@ -274,6 +276,7 @@
     <Compile Include="Shared\IVendorService.cs" />
     <Compile Include="Shared\PositionService.cs" />
     <Compile Include="Shared\VendorService.cs" />
+    <Compile Include="Utils\CamlQueryUtil.cs" />
     <Compile Include="Utils\DocumentNumbering.cs" />
     <Compile Include="Utils\EmailUtil.cs" />
     <Compile Include="Utils\FileUtil.cs" />

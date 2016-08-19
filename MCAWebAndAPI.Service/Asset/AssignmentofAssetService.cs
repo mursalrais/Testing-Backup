@@ -403,9 +403,20 @@ namespace MCAWebAndAPI.Service.Asset
 
                 var updatedValues = new Dictionary<string, object>();
                 updatedValues.Add("assetassignment", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
-                updatedValues.Add("assetsubasset", new FieldLookupValue { LookupId = Convert.ToInt32(item.AssetSubAsset.Value.Value) });
-                updatedValues.Add("province", new FieldLookupValue { LookupId = Convert.ToInt32(item.Province.Value.Value) });
+                var getAssetID = SPConnector.GetListItem("Asset Acquisition Details", item.AssetSubAsset.Value.Value, _siteUrl);
+                var getProvince = SPConnector.GetListItem("Province", item.Province.Value.Value, _siteUrl);
                 var provinceinfo = SPConnector.GetListItem("Location Master", item.Province.Value.Value, _siteUrl);
+                if ((getAssetID["assetsubasset"] as FieldLookupValue) != null)
+                {
+                    updatedValues.Add("assetsubasset", (getAssetID["assetsubasset"] as FieldLookupValue).LookupId);
+                }
+
+                if ((getProvince["Province"] as FieldLookupValue) != null)
+                {
+                    updatedValues.Add("province", (getProvince["Province"] as FieldLookupValue).LookupId);
+                }
+                //updatedValues.Add("assetsubasset", getAssetID["AssetID"]);
+                //updatedValues.Add("province", getProvince["Title"]);
                 updatedValues.Add("office", provinceinfo["Title"]);
                 updatedValues.Add("floor", provinceinfo["Floor"]);
                 updatedValues.Add("room", provinceinfo["Room"]);

@@ -30,7 +30,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
         private const string FIELD_FORMAT_DOC = "RN/{0}-{1}/";
         private const string FIELD_REQUISITION_CATEGORY = "Category";
         private const string FIELD_REQUISITION_DATE = "Date";
-        private const string FIELD_REQUISITION_EVENTBUDGETNO = "Event_x0020_Budget_x0020_No"; 
+        private const string FIELD_REQUISITION_EVENTBUDGETNO = "Event_x0020_Budget"; 
         private const string FIELD_REQUISITION_PROJECT = "Project"; 
         private const string FIELD_REQUISITION_FUND = "Fund"; 
         private const string FIELD_REQUISITION_CURRENCY = "Currency";
@@ -69,7 +69,14 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
                 viewModel = ConvertToRequisitionNoteVM(listItem);
 
                 viewModel.ItemDetails = GetRequisitionNoteItemDetails(ID.Value);
-                
+
+                if (viewModel.EventBudgetNo.Value.HasValue)
+                {
+                    foreach (var item in viewModel.ItemDetails)
+                    {
+                        item.IsFromEventBudget = true;
+                    }
+                }
             }
            
 
@@ -113,20 +120,6 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
             return wbsMasters;
         }
 
-        public IEnumerable<ActivityVM> GetActivity(string Project = null)
-        {
-            var activities = new List<ActivityVM>();
-            var caml = @"<View><Query><Where><Eq><FieldRef Name='" + ACTIVTY_PROJECT_NAME + "' /><Value Type='Lookup'>" + (Project == null ? string.Empty : Project.ToString()) + "</Value></Eq></Where></Query></View>";
-
-            foreach (var item in SPConnector.GetList(ACTIVITY_SITE_LIST, _siteUrl, caml))
-            {
-                activities.Add(ConvertToActivityModel(item));
-            }
-
-
-            return activities;
-        }
-
 
         public int CreateRequisitionNote(RequisitionNoteVM viewModel)
         {
@@ -135,7 +128,10 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
 
             updatedValue.Add(FIELD_REQUISITION_CATEGORY, viewModel.Category.Value);
             updatedValue.Add(FIELD_REQUISITION_DATE, viewModel.Date);
-            updatedValue.Add(FIELD_REQUISITION_EVENTBUDGETNO, viewModel.EventBudgetNo.Text);
+            if (viewModel.EventBudgetNo.Value.HasValue)
+            {
+                updatedValue.Add(FIELD_REQUISITION_EVENTBUDGETNO, viewModel.EventBudgetNo.Value);
+            }
             updatedValue.Add(FIELD_REQUISITION_PROJECT, viewModel.Project.Value);
             updatedValue.Add(FIELD_REQUISITION_FUND, viewModel.Fund);
             updatedValue.Add(FIELD_REQUISITION_CURRENCY, viewModel.Currency.Value);
@@ -161,7 +157,11 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
 
             updatedValue.Add(FIELD_REQUISITION_CATEGORY, viewModel.Category.Value);
             updatedValue.Add(FIELD_REQUISITION_DATE, viewModel.Date);
-            updatedValue.Add(FIELD_REQUISITION_EVENTBUDGETNO, viewModel.EventBudgetNo.Text);
+            if (viewModel.EventBudgetNo.Value.HasValue)
+            {
+                updatedValue.Add(FIELD_REQUISITION_EVENTBUDGETNO, viewModel.EventBudgetNo.Value);
+            }
+            
             updatedValue.Add(FIELD_REQUISITION_PROJECT, viewModel.Project.Value);
             updatedValue.Add(FIELD_REQUISITION_FUND, viewModel.Fund);
             updatedValue.Add(FIELD_REQUISITION_CURRENCY, viewModel.Currency.Value);
@@ -264,7 +264,14 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
 
                 try
                 {
-                    SPConnector.UpdateListItem(REQUISITION_ITEM_SITE_LIST,viewModel.ID, updatedValue, _siteUrl);
+                    if (Item.CheckIfCreated(viewModel))
+                    {
+                        SPConnector.AddListItem(REQUISITION_ITEM_SITE_LIST, updatedValue, _siteUrl);
+                    }
+                    else
+                    {
+                        SPConnector.UpdateListItem(REQUISITION_ITEM_SITE_LIST, viewModel.ID, updatedValue, _siteUrl);
+                    }
                 }
                 catch (Exception e)
                 {
@@ -355,9 +362,15 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
             viewModel.Title = Convert.ToString(listItem[FIELD_TITLE]);
             viewModel.Category.Value = Convert.ToString(listItem[FIELD_REQUISITION_CATEGORY]);
             viewModel.Date = Convert.ToDateTime(listItem[FIELD_REQUISITION_DATE]);
-            
-            viewModel.EventBudgetNo.Text = Convert.ToString(listItem[FIELD_REQUISITION_EVENTBUDGETNO]);
+
+            if (listItem[FIELD_REQUISITION_EVENTBUDGETNO] != null)
+            {
+                viewModel.EventBudgetNo.Value = (listItem[FIELD_REQUISITION_EVENTBUDGETNO] as FieldLookupValue).LookupId;
+                viewModel.EventBudgetNo.Text = (listItem[FIELD_REQUISITION_EVENTBUDGETNO] as FieldLookupValue).LookupValue;
+            }
+
             viewModel.Project.Value = Convert.ToString(listItem[FIELD_REQUISITION_PROJECT]);
+            viewModel.Project.Text = Convert.ToString(listItem[FIELD_REQUISITION_PROJECT]);
             viewModel.Fund = Convert.ToDecimal(listItem[FIELD_REQUISITION_FUND]);
             viewModel.Currency.Value = Convert.ToString(listItem[FIELD_REQUISITION_CURRENCY]);
             viewModel.Total = Convert.ToDecimal(listItem[FIELD_REQUISITION_TOTAL]);

@@ -17,12 +17,13 @@ namespace MCAWebAndAPI.Service.Asset
         AssetAcquisitionHeaderVM GetPopulatedModel(int? ID = null);
         AssetAcquisitionItemVM GetPopulatedModelItem(int? ID = null);
 
-        int? CreateHeader(AssetAcquisitionHeaderVM viewmodel);
+        int? CreateHeader(AssetAcquisitionHeaderVM viewmodel, string mode = null, string SiteUrl = null);
         bool UpdateHeader(AssetAcquisitionHeaderVM viewmodel);
 
         bool Syncronize(string SiteUrl);
 
         void CreateDetails(int? headerID, IEnumerable<AssetAcquisitionItemVM> items);
+        int? CreateDetails(int? headerID, AssetAcquisitionItemVM item, string SitUrl = null);
         void UpdateDetails(int? headerID, IEnumerable<AssetAcquisitionItemVM> items);
 
         AssetAcquisitionHeaderVM GetHeader(int? ID);

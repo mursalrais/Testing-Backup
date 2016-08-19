@@ -8,14 +8,16 @@
     ViewBag.Title = "Input Compensatory HR";
 }
 
-@using (Html.BeginForm("CreateCompensatoryData", "HRCompensatory", FormMethod.Post, new AjaxOptions
-{
-    OnBegin = "onBeginForm",
-    OnComplete = "onCompleteForm",
-    OnSuccess = "onSuccessFormEmbed",
-    OnFailure = "onFailureForm"
+@using (Ajax.BeginForm("CreateHeaderCompensatory", "HRCompensatory",
+                                                                                    FormMethod.Post,
+                                                                                    new AjaxOptions
+                                                                                    {
+                                                                                        OnBegin = "onBeginForm",
+                                                                                        OnComplete = "onCompleteForm",
+                                                                                        OnSuccess = "onSuccessFormEmbed",
+                                                                                        OnFailure = "onFailureForm"
+                                                                                    }, new { @class = "form-horizontal" }))
 
-}))
 {
     <fieldset>
         @Html.HiddenFor(m => m.cmpID)
@@ -24,6 +26,7 @@
         @Html.HiddenFor(m => m.cmpTitle)
         @Html.HiddenFor(m => m.cmpPosition)
         @Html.HiddenFor(m => m.cmpYearDate)
+        @Html.HiddenFor(m => m.Requestor)
 
         <input type="hidden" id="loadpage" value="0">
 
@@ -82,7 +85,7 @@
             </div>
         </div>
 
-            <legend>Approval Workflow</legend>
+            <legend>Approval Path</legend>
             <div id="workflow-placeholder" class="row"></div>
 
                 <div class="row">
@@ -105,11 +108,6 @@
             <button id="reject-button" class="btn btn-danger" type="submit">
                 <i class="fa fa-thumbs-o-down"></i>
                 Reject
-            </button>
-
-            <button id="unapprove-button" class="btn btn-warning" type="submit">
-                <i class="fa fa-mail-reply"></i>
-                Unapprove
             </button>
         </div>
     </div>
@@ -200,8 +198,6 @@
                             $("form").submit();
                         });
 
-                        hideLoading();
-
                         $('#print-button').click(function (e) {
                             $("#ParentDiv").show();
                             var url = "/HRCompensatory/PrintCompensatoryRequest";
@@ -217,13 +213,12 @@
                     }
 
                     function OnChangeCompensatory(e) {
-                        
                         var dataItem = this.dataItem(e.item);
                         var idComp = null;
                         var CompStatus = null;
 
                         if (dataItem != null) {
-                            idComp = dataItem.ID;
+                            idComp = dataItem.CompensatoryID;
                             CompStatus = dataItem.CompensatoryStatus;
                         }
                             $("#StatusForm").prop("value", CompStatus);
@@ -254,26 +249,24 @@
                                 $('#reject-button').addClass('hide');
                             }
 
-                            var url = "/HRCompensatory/GetCompensatoryDetails?idComp=" + $("#cmpID").val();
+                            var url = "/HRCompensatory/GetCompensatoryDetails?idComp=" + idComp;
 
-                            showLoading();
                             $('#compensatorylist').load(url, function (response, status, xhr) {
                                 if (status == "success") {
-                                    hideLoading();
                                 }
                             });
 
                             $("#cmpID").prop("value", idComp);
+                            hideLoading();
                     };
 
                     function OnChangeProffesional(e) {
                         var dataItem = this.dataItem(e.item);
                         var eMail = dataItem.OfficeEmail
+                        $("#cmpName").prop("value", dataItem.FirstMiddleName);
 
-                        showLoading();
                         if (eMail != null) {
                             displayWorkflowRouter("workflow-placeholder", "@ViewBag.ListName", eMail);
-                            hideLoading();
                         }
                     };
 
@@ -289,47 +282,60 @@
 
                         if (date != null) {
                             return day[date.getDay()];
+
                         };
                     }
 
                     function onChange(e) {
                         var container = e.container;
-                        var tr = container.closest('tr');
-                        var data = this.dataItem(tr);
-                        var start = data.StartTime.getHours();
-                        var finish = data.FinishTime.getHours();
-                        var finishsec = data.FinishTime.getHours();
-                        var range;
-                        var rowgrid = $("#CompensatoryDetails").data("kendoGrid").tbody.find("tr");
-                        var i = -1
-                        var j = -1
-                        var tr = container.closest('tr');
+                        if (e.action === "itemchange") {
+                            var model = e.items[0];
 
-                        rowgrid.each(function (e) {
-                            i++;
-                            var xdate = $("#Dateid" + i).val();
-                            rowgrid.each(function (e) {
-                                j++;
-                                var ydate = $("#Dateid" + j).val();
-                                if (i !== j) {
-                                    if (xdate == ydate) {
-                                        alert("Date you have chosen already exists, please choose another date..!!")
+                            if (model.StartTime != null && model.FinishTime != null) {
+                                var start = model.StartTime.getHours();
+                                var finish = model.FinishTime.getHours();
+                                var finishsec = model.FinishTime.getSeconds();
+                                var range;
+                                var rowgrid = $("#CompensatoryDetails").data("kendoGrid").tbody.find("tr");
+                                var i = -1
+                                var j = -1
+                                rowgrid.each(function (e) {
+                                    i++;
+                                    var xdate = $("#Dateid" + i).val();
+                                    rowgrid.each(function (e) {
+                                        j++;
+                                        var ydate = $("#Dateid" + j).val();
+                                        if (i !== j) {
+                                            if (xdate == ydate) {
+                                                alert("Date you have chosen already exists, please choose another date..!!")
+                                            }
+                                        }
+                                    });
+                                });
+
+                                if ((finish + finishsec) <= start) {
+                                    alert("FinishTime can not be smaller than the starttime..!!")
+                                }
+
+                                if (start < finish) {
+                                    range = finish - start
+
+                                    if (model.CmpTotalHours != range) {
+                                        model.set("CmpTotalHours", range);
+                                    }
+
+                                    if (range >= 4) {
+                                        totday = 1
+                                    } else {
+                                        totday = 0.5
+                                    }
+
+                                    if (model.TotalDay != totday) {
+                                        model.set("TotalDay", totday);
                                     }
                                 }
-                            });
-                        });
-                        
-                        if ((finish + finishsec) <= start) {
-                            alert("FinishTime can not be smaller than the starttime..!!")
+                            }
                         }
-
-                        if (start < finish) {
-                            range = finish - start
-                            data.set("CmpTotalHours", range);
-                            data.CmpTotalHours = range;
-                            data.set("TotalDay", range / 4)
-                        }
-                        data.set("EditMode", 1);
                     }
 
                     function onDataBoundDependentDetails(e) {

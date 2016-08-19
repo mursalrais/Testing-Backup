@@ -27,40 +27,29 @@ namespace MCAWebAndAPI.Web.Controllers
     {
         IAdjustmentService _service;
 
-        const string SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME = "compensatoryrequest";
-
         public HRAdjustmentController()
         {
             _service = new AdjustmentService();
         }
 
-        public ActionResult InputAjustmentData (string siteurl = null, string period = null)
+        public ActionResult InputAdjustmentData (string siteurl = null, string period = null)
         {
+            var viewmodel = new AdjustmentDataVM();
+
             //mandatory: set site url
             _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
 
-            if (siteurl == "")
-            {
-                siteurl = SessionManager.Get<string>("SiteUrl");
-            }
-            _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
-
-            var viewmodel = _service.GetAjusmentData(period);
-
-
-            return View(viewmodel);
+            return View(viewmodel); 
         }
 
         [HttpPost]
         public async Task<ActionResult> CreateAdjustmentData(FormCollection form, AdjustmentDataVM viewModel)
-        {
+        { 
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             string period = viewModel.periodDate;
-
-            var datetime = Convert.ToDateTime(period);
 
             try
             {
@@ -81,14 +70,14 @@ namespace MCAWebAndAPI.Web.Controllers
             var viewmodel = new AdjustmentDataVM();
 
             if (period == null)
-                return PartialView("_InputAdjustmentDetails", viewmodel.ajustmentDetails);
+                return PartialView("_InputAdjustmentDetails", viewmodel.AdjustmentDetails);
 
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             viewmodel = _service.GetAjusmentData(period);
 
-            return PartialView("_InputAdjustmentDetails", viewmodel.ajustmentDetails);
+            return PartialView("_InputAdjustmentDetails", viewmodel.AdjustmentDetails);
         }
 
         public JsonResult GetAdjusmentGrid()

@@ -77,7 +77,7 @@ namespace MCAWebAndAPI.Web.Controllers
                     }
                 }
 
-                viewModel.OverallTotalScore = totalTotalScore / countData;
+                viewModel.OverallTotalScore = totalTotalScore;
 
                 if (sumPlanned != 100 || sumActual != 100)
                 {

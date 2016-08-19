@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Kendo.Mvc.UI;
+using Kendo.Mvc.Extensions;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 using MCAWebAndAPI.Service.Finance;
 using MCAWebAndAPI.Service.Resources;
@@ -30,18 +33,24 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
 
-        public ActionResult Create(string siteUrl = null, int? id = null)
+        public ActionResult Item(string siteUrl = null, int? id = null)
         {
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
 
             service.SetSiteUrl(siteUrl);
             SessionManager.Set(Session_SiteUrl, siteUrl);
 
-            var viewModel = service.Get(id);
-            SetAdditionalSettingToViewModel(ref viewModel, true);
+            var viewModel = new EventBudgetVM();
+            if (id.HasValue)
+            {
+                viewModel = service.Get(id);
+            }
+            
+            SetAdditionalSettingToViewModel(ref viewModel, (id.HasValue ? false : true));
 
             return View(viewModel);
         }
+
 
         public JsonResult GetGLMaster()
         {
@@ -69,14 +78,15 @@ namespace MCAWebAndAPI.Web.Controllers
             return Json(eventBudgets.Select(e => new
             {
                 ID = e.ID,
-                Title = (e.No + "-" + e.Title)
+                Title = (e.No + "-" + e.Title),
+                Project = e.Project.Text
             }), JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create(FormCollection form, EventBudgetVM viewModel)
+        public async Task<ActionResult> Save(FormCollection form, EventBudgetVM viewModel)
         {
-            var siteUrl = SessionManager.Get<string>("SiteUrl") ?? ConfigResource.DefaultBOSiteUrl;
+            var siteUrl = SessionManager.Get<string>(Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);
 
             int? headerId = null;
@@ -103,10 +113,13 @@ namespace MCAWebAndAPI.Web.Controllers
 
         private void SetAdditionalSettingToViewModel(ref EventBudgetVM viewModel, bool isCreate)
         {
-            if (viewModel.Project.Choices.Count() > 0)
-            {
-                viewModel.Project.Value = ((string[])viewModel.Project.Choices)[0];
-            }
+            viewModel.Activity.ControllerName = "ComboBox";
+            viewModel.Activity.ActionName = "GetActivitiesByProject";
+            viewModel.Activity.ValueField = "ID";
+            viewModel.Activity.TextField = "Title";
+            viewModel.Activity.Cascade = "Project_Value";
+            viewModel.Activity.Filter = "filterProject";
+
         }
     }
 }

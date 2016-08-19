@@ -33,7 +33,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             if (period == null)
                 return viewModel;
 
-            viewModel.ajustmentDetails = GetAjusmentDetails(period);
+            viewModel.AdjustmentDetails = GetAjusmentDetails(period);
 
             return viewModel;
         }
@@ -67,10 +67,10 @@ namespace MCAWebAndAPI.Service.HR.Payroll
 
             var adjustmentDetails = new List<AdjustmentDetailsVM>();
 
-            foreach (var item in SPConnector.GetList(SP_AJUDATA_LIST_NAME, _siteUrl, null))
-            {
-                adjustmentDetails.Add(ConvertToAdjusDetailVM(item));
-            }
+            //foreach (var item in SPConnector.GetList(SP_AJUDATA_LIST_NAME, _siteUrl, null))
+            //{
+            //    adjustmentDetails.Add(ConvertToAdjusDetailVM(item));
+            //}
 
             //var periodDate = Convert.ToDateTime(period);
 
@@ -114,19 +114,19 @@ namespace MCAWebAndAPI.Service.HR.Payroll
 
         public void CreateAdjustmentData(string period, AdjustmentDataVM viewModels)
         {
-            foreach (var viewModel in viewModels.ajustmentDetails)
+            var perioddate = Convert.ToDateTime(period);
+            foreach (var viewModel in viewModels.AdjustmentDetails)
             {
                 if (viewModel.ID == null)
                 {
                     var cratedValueDetail = new Dictionary<string, object>();
 
-                    cratedValueDetail.Add("Title", viewModel.Title);
-                    cratedValueDetail.Add("adjustmentperiod", Convert.ToDateTime(period));
-                    cratedValueDetail.Add("professional_x003a_ID", viewModel.profId);
-                    cratedValueDetail.Add("adjustmenttype", viewModel.ajusmentType);
+                    cratedValueDetail.Add("adjustmentperiod", perioddate);
+                    cratedValueDetail.Add("professional_x003a_ID", new FieldLookupValue { LookupId = (int)viewModel.ddlProfessional.Value });
+                    cratedValueDetail.Add("adjustmenttype", viewModel.ajusmentType.Text);
                     cratedValueDetail.Add("adjustmentamount", viewModel.amount);
-                    cratedValueDetail.Add("adjustmentcurrency", viewModel.currency);
-                    cratedValueDetail.Add("debitorcredit", viewModel.payType);
+                    cratedValueDetail.Add("adjustmentcurrency", viewModel.currency.Text);
+                    cratedValueDetail.Add("debitorcredit", viewModel.payType.Text);
                     cratedValueDetail.Add("remarks", viewModel.remark);
 
                     try

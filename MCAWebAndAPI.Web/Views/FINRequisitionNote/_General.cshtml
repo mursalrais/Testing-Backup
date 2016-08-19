@@ -83,10 +83,9 @@
 
     $(document).ready(function () {
         var categoryDropDownList = $("#Category_Value").data("kendoDropDownList");
-        categoryDropDownList.bind("dataBound", function (e) {
-        });
+        toggleEventBudgetComboBox(categoryDropDownList.value());
 
-        $("#hdnEvenBudgetId").val("-1");
+
     });
 
 
@@ -102,8 +101,6 @@
 
             $("#hdnEvenBudgetId").val("-1");
 
-            refreshItemDetailGrid();
-
             $('.k-state-disabled').css({ "background-color": GREY_COLOR });
         }
         else
@@ -116,19 +113,35 @@
     function onSelectCategory(e) {
         var data = this.dataItem(e.item);
         toggleEventBudgetComboBox(data);
-    }
-
-    function onSelectEventBudgetNo(e) {
-        var dataItem = this.dataItem(e.item);
-
-        $("#hdnEvenBudgetId").val(dataItem.ID);
-
         refreshItemDetailGrid();
     }
 
-    function refreshItemDetailGrid()
-    {
-        $("#ItemDetails").data("kendoGrid").dataSource.read();
+    function onSelectEventBudgetNo(e) {
+        var projectDropDownList = $("#Project_Value").data("kendoDropDownList");
+        var dataItem = this.dataItem(e.item);
+        
+        $("#hdnEvenBudgetId").val(dataItem.ID);
+
+        if (dataItem.ID > 0)
+        {
+            projectDropDownList.select(function (data) {
+                return data === dataItem.Project;
+            });
+
+            projectDropDownList.enable(false);
+            
+            
+            $('.k-state-disabled').css({ "background-color": GREY_COLOR });
+        }
+        else
+        {
+            projectDropDownList.enable(true);
+            $('.k-state-default').css({ "background-color": "white" });
+        }
+        
+        refreshItemDetailGrid();
     }
+
+   
 
 </script>
