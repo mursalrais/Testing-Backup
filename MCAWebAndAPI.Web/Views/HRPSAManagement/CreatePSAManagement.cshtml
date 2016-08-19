@@ -133,8 +133,6 @@
                         var psaID = result[0].PSAId;
                         var renewalnumber = result[0].PSARenewalNumber + 1;
 
-                        console.log("Renewal Number: " + renewalnumber);
-
                         var strpsarenewal = parseInt(result[0].StrPSARenewal) + 1;
                         var dateofnewpsabefore = result[0].DateNewPSABefore;
                         var projectUnit = result[0].ProjectUnit;
@@ -142,17 +140,12 @@
                         var strjoinDate = result[0].StrJoinDate;
                         var professionalFullName = result[0].ProfessionalFullName;
 
-                        console.log("String Join Date: " + strjoinDate);
-
                         var joinDate = new Date(strjoinDate);
                         var dateJoinDate = joinDate.getDate();
                         var monthJoinDate = joinDate.getMonth();
                         var yearJoinDate = joinDate.getFullYear();
                         var joinDateProfessional = (monthJoinDate + 1) + '/' + dateJoinDate + '/' + yearJoinDate;
 
-                        console.log("Join Date Professional: " + joinDateProfessional);
-                        console.log("Join Date: " + joinDate);
-                        
                         var dateofnewpsa = new Date(dateofnewpsabefore);
                         var datenewpsa = dateofnewpsa.getDate();
                         var datenewpsaint = parseInt(datenewpsa);
@@ -198,8 +191,8 @@
                         $("#ProfessionalFullName").prop('value', professionalFullName);
 
                         $("#JoinDate").data("kendoDatePicker").readonly();
-                        //$("#JoinDate").prop('value', joinDateProfessional);
-                        $("#JoinDate").prop('value', joinDate);
+                        $("#JoinDate").prop('value', joinDateProfessional);
+                        
 
                         $("#ProjectOrUnit_Value").data("kendoDropDownList").value(result[0].ProjectUnit);
                         //$("#Position_Value").data("kendoDropDownList").value(result[0].PositionID);
