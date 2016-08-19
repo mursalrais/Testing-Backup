@@ -8,6 +8,7 @@ using MCAWebAndAPI.Web.Resources;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using Elmah;
+using MCAWebAndAPI.Service.Resources;
 using System.Net;
 
 namespace MCAWebAndAPI.Web.Controllers
@@ -17,6 +18,7 @@ namespace MCAWebAndAPI.Web.Controllers
     public class HRAdjustmentDayOffBalanceController : Controller
     {
         IAdjustmentDayOffBalanceService adjustmentDayOffBalanceService;
+        string _siteUrl;
 
         public HRAdjustmentDayOffBalanceController()
         {
@@ -143,10 +145,13 @@ namespace MCAWebAndAPI.Web.Controllers
                     return RedirectToAction("Index", "Error");
                 }
             }
-            
-            return RedirectToAction("Index",
-                "Success",
-                new { successMessage = string.Format(MessageResource.SuccessCreateAdjustmentDayOffBalance) });
+
+            //return RedirectToAction("Index",
+            //    "Success",
+            //    new { successMessage = string.Format(MessageResource.SuccessCreateAdjustmentDayOffBalance) });
+
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AdjustmentDayOffBalanceList);
+
         }
 
         [HttpPost]
