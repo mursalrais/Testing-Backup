@@ -93,7 +93,16 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
                 if (dateToday < newpsadate || dateToday > expireDate)
                 {
                     columnValues.Add("psastatus", "Inactive");
-                    SPConnector.UpdateListItemNoVersionConflict(SP_PSA_LIST_NAME, id, columnValues, _siteUrl);
+
+                    try
+                    {
+                        SPConnector.UpdateListItem(SP_PSA_LIST_NAME, id, columnValues, _siteUrl);
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Debug(e.Message);
+                    }
+                    
 
                     int? professionalID = FormatUtil.ConvertLookupToID(psaData, "professional");//GetProfessionalID(psaNumber);
                     if (professionalID == null) continue;
@@ -143,10 +152,28 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
                         if(dateToday >= lastestPSANewPSA && dateToday <= latestPSAExpiryDate)
                         {
                             columnValues.Add("psastatus", "Inactive");
-                            SPConnector.UpdateListItemNoVersionConflict(SP_PSA_LIST_NAME, id, columnValues, _siteUrl);
+
+                            try
+                            {
+                                SPConnector.UpdateListItemNoVersionConflict(SP_PSA_LIST_NAME, id, columnValues, _siteUrl);
+                            }
+                            catch (Exception e)
+                            {
+                                logger.Debug(e.Message);
+                            }
+                            
 
                             columnValues.Add("psastatus", "Active");
-                            SPConnector.UpdateListItemNoVersionConflict(SP_PSA_LIST_NAME, professionalPSA, columnValues, _siteUrl);
+
+                            try
+                            {
+                                SPConnector.UpdateListItemNoVersionConflict(SP_PSA_LIST_NAME, professionalPSA, columnValues, _siteUrl);
+                            }
+                            catch (Exception e)
+                            {
+                                logger.Debug(e.Message);
+                            }
+                            
 
                             int? profID = FormatUtil.ConvertLookupToID(latestProfessionalPSA, "professional");//GetProfessionalID(psaNumber);
                             string psaNumber = Convert.ToString(latestProfessionalPSA["Title"]);
@@ -161,7 +188,16 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
                         else
                         {
                             columnValues.Add("psastatus", "Active");
-                            SPConnector.UpdateListItemNoVersionConflict(SP_PSA_LIST_NAME, id, columnValues, _siteUrl);
+
+                            try
+                            {
+                                SPConnector.UpdateListItemNoVersionConflict(SP_PSA_LIST_NAME, id, columnValues, _siteUrl);
+                            }
+                            catch (Exception e)
+                            {
+                                logger.Debug(e.Message);
+                            }
+                            
 
                             columnValues.Add("psastatus", "Inactive");
                             SPConnector.UpdateListItemNoVersionConflict(SP_PSA_LIST_NAME, professionalPSA, columnValues, _siteUrl);
@@ -251,8 +287,15 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
             columnValues.Add("lastworkingdate", professionalLastDate);
             columnValues.Add("psastatus", psaStatus);
 
-            SPConnector.UpdateListItemNoVersionConflict(SP_PSA_LIST_NAME, professionalID, columnValues, _siteUrl);
-
+            try
+            {
+                SPConnector.UpdateListItemNoVersionConflict(SP_PSA_LIST_NAME, professionalID, columnValues, _siteUrl);
+            }
+            catch (Exception e)
+            {
+                logger.Debug(e.Message);
+            }
+            
             return true;
         }
 
