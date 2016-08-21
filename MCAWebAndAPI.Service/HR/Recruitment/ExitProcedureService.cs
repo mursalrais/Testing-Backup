@@ -403,6 +403,32 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 viewModel.ItemExitProcedure = "Travel Statement";
                 viewModel.Remarks = "Rp 2.000.000";
             }
+            else if (viewModel.Level == "10")
+            {
+                viewModel.ItemExitProcedure = "Resignation/Separation Letter";
+                viewModel.Remarks = "";
+            }
+            else if (viewModel.Level == "11")
+            {
+                viewModel.ItemExitProcedure = "Timesheet/Leave Form";
+                viewModel.Remarks = "";
+            }
+            else if (viewModel.Level == "12")
+            {
+                viewModel.ItemExitProcedure = "Exit Interview/NDA";
+                viewModel.Remarks = "";
+            }
+            else if (viewModel.Level == "13")
+            {
+                viewModel.ItemExitProcedure = "Insurance Card";
+                viewModel.Remarks = "";
+            }
+            else if (viewModel.Level == "14")
+            {
+                viewModel.ItemExitProcedure = "ID Card & Access Card";
+                viewModel.Remarks = "";
+            }
+
 
             viewModel.CheckListItemApproval =
                 ExitProcedureChecklistVM.GetCheckListItemApprovalDefaultValue();
