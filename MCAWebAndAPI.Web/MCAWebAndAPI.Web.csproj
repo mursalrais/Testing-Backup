@@ -273,12 +273,6 @@
     <Content Include="bin\Microsoft.AspNet.FriendlyUrls.dll" />
     <Content Include="bin\Microsoft.AspNet.FriendlyUrls.xml" />
     <Content Include="bin\Microsoft.AspNet.Web.Optimization.WebForms.dll" />
-    <Content Include="bin\Microsoft.CodeAnalysis.CSharp.dll" />
-    <Content Include="bin\Microsoft.CodeAnalysis.CSharp.Workspaces.dll" />
-    <Content Include="bin\Microsoft.CodeAnalysis.dll" />
-    <Content Include="bin\Microsoft.CodeAnalysis.VisualBasic.dll" />
-    <Content Include="bin\Microsoft.CodeAnalysis.VisualBasic.Workspaces.dll" />
-    <Content Include="bin\Microsoft.CodeAnalysis.Workspaces.dll" />
     <Content Include="bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll" />
     <Content Include="bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml" />
     <Content Include="bin\Microsoft.ScriptManager.MSAjax.dll" />
