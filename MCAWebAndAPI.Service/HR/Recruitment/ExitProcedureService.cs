@@ -80,10 +80,20 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             else if (exitProcedure.StatusForm == "Saved by HR")
             {
                 statusExitProcedure = "Draft";
+
+                var professionalData = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, exitProcedure.ProfessionalID, _siteUrl);
+                string professionalOfficeMail = Convert.ToString(professionalData["officeemail"]);
+
+                updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hr"));
             }
             else if (exitProcedure.StatusForm == "Approved by HR")
             {
                 statusExitProcedure = "Approved";
+
+                var professionalData = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, exitProcedure.ProfessionalID, _siteUrl);
+                string professionalOfficeMail = Convert.ToString(professionalData["officeemail"]);
+
+                updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hr"));
             }
 
             updatedValues.Add("status", statusExitProcedure);
