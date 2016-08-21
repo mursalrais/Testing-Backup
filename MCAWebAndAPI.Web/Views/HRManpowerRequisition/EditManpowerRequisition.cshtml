@@ -210,6 +210,7 @@
         $(document).ready(function () {
             var id = $("#ID").val();
             var isHR = '@(ViewBag.IsHRView)';
+            var onBehalf = '@(Model.IsOnBehalfOf)';
 
             if (isHR == "True") {
                 var initialStatusValue = $("#Status_Value").attr("value");
@@ -222,7 +223,14 @@
                 }
             }
 
-            $("#OnBehalfOf_Value").data("kendoDropDownList").enable(false);
+            if (onBehalf == "True") {
+                $("#OnBehalfOf_Value").data("kendoDropDownList").enable(true);
+            }
+            else {
+                $("#OnBehalfOf_Value").data("kendoDropDownList").enable(false);
+
+            }
+            
             $("#IsOnBehalfOf").click(function () {
                 if (!$(this).is(":checked")) {
                     $("#OnBehalfOf_Value").data("kendoDropDownList").enable(false);
