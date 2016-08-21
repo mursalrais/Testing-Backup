@@ -1,85 +1,85 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
 @model ManpowerRequisitionVM
 
-<div class="col-md-12">
+<div class="col-xs-12">
     <div class="form-group">
-        @Html.Bootstrap().LabelFor(m => m.DateRequested).Class("col-md-2 control-label")
-        <div class="col-md-4">
+        @Html.Bootstrap().LabelFor(m => m.DateRequested).Class("col-xs-2 control-label")
+        <div class="col-xs-4">
             @Html.EditorFor(m => m.DateRequested)
         </div>
     </div>
 </div>
-<div class="col-md-6">
+<div class="col-xs-6">
     
     <div class="form-group">
         @Html.Bootstrap().LabelFor(m => m.IsOnBehalfOf).Class("col-xs-4 control-label")
-        <div class="col-md-8">
+        <div class="col-xs-8">
             @Html.EditorFor(m => m.IsOnBehalfOf)
         </div>
     </div>
     <div class="form-group">
         @Html.Bootstrap().LabelFor(m => m.DivisionProjectUnit).Class("col-xs-4 control-label")
-        <div class="col-md-8">
+        <div class="col-xs-8">
             @Html.EditorFor(m => m.DivisionProjectUnit)
         </div>
     </div>
     <div class="form-group">
         @Html.Bootstrap().LabelFor(m => m.ReportingTo).Class("col-xs-4 control-label")
-        <div class="col-md-8">
+        <div class="col-xs-8">
             @Html.EditorFor(m => m.ReportingTo)
         </div>
     </div>
     <div class="form-group">
         @Html.Bootstrap().LabelFor(m => m.NoOfPerson).Class("col-xs-4 control-label")
-        <div class="col-md-8">
+        <div class="col-xs-8">
             @Html.EditorFor(m => m.NoOfPerson)
         </div>
     </div>
     <div class="form-group">
         @Html.Bootstrap().LabelFor(m => m.Tenure).Class("col-xs-4 control-label")
-        <div class="col-md-8">
+        <div class="col-xs-8">
             @Html.EditorFor(m => m.Tenure)
         </div>
     </div>
     <div class="form-group">
         @Html.Bootstrap().LabelFor(m => m.JobLocation).Class("col-xs-4 control-label")
-        <div class="col-md-8">
+        <div class="col-xs-8">
             @Html.EditorFor(m => m.JobLocation)
         </div>
     </div>
 </div>
-<div class="col-md-6">    
+<div class="col-xs-6">    
     <div class="form-group">
         @Html.Bootstrap().LabelFor(m => m.OnBehalfOf).Class("col-xs-4 control-label")
-        <div class="col-md-8">
+        <div class="col-xs-8">
             @Html.EditorFor(m => m.OnBehalfOf)
         </div>
     </div>
     <div class="form-group">
         @Html.Bootstrap().LabelFor(m => m.Position).Class("col-xs-4 control-label")
-        <div class="col-md-8">
+        <div class="col-xs-8">
             @Html.EditorFor(m => m.Position)
         </div>
     </div>
     <div class="form-group">
         @Html.Bootstrap().LabelFor(m => m.SecondaryReportingTo).Class("col-xs-4 control-label")
-        <div class="col-md-8">
+        <div class="col-xs-8">
             @Html.EditorFor(m => m.SecondaryReportingTo)
         </div>
     </div>
     <div class="form-group">
-        <div class="col-md-8">
+        <div class="col-xs-8">
         </div>
     </div>
     <div class="form-group">
         @Html.Bootstrap().LabelFor(m => m.ExpectedJoinDate).Class("col-xs-4 control-label")
-        <div class="col-md-8">
+        <div class="col-xs-8">
             @Html.EditorFor(m => m.ExpectedJoinDate)
         </div>
     </div>
     <div class="form-group">
         @Html.Bootstrap().LabelFor(m => m.IsTravellingRequired).Class("col-xs-4 control-label")
-        <div class="col-md-8">
+        <div class="col-xs-8">
             @Html.EditorFor(m => m.IsTravellingRequired)
         </div>
     </div>
@@ -88,16 +88,16 @@
         <br>
     </div>
 </div>
-<div class="col-md-6">
+<div class="col-xs-6">
     <div class="form-group">
         @Html.Bootstrap().LabelFor(m => m.PositionObjectives).Class("col-xs-4 control-label")
-        <div class="col-md-8">
+        <div class="col-xs-8">
             @Html.EditorFor(m => m.PositionObjectives)
         </div>
     </div>
     <div class="form-group">
         @Html.Bootstrap().LabelFor(m => m.IsKeyPosition).Class("col-xs-4 control-label")
-        <div class="col-md-8">
+        <div class="col-xs-8">
             @Html.Kendo().CheckBox().Checked(true).Enable(false).Name("Yes")
             @Html.Kendo().CheckBox().Checked(false).Enable(false).Name("No")
             @Html.HiddenFor(m=>m.IsKeyPosition)
