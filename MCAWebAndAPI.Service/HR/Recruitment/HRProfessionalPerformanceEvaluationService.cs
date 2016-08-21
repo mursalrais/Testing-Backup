@@ -134,7 +134,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     {
                         viewModel.TypeForm = "Approver2";
                     }
-                    else
+                    if (viewModel.TypeForm == "Professional")
                     {
                         viewModel.TypeForm = "AcessDenied";
                     }
