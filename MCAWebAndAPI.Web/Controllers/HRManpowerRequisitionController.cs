@@ -88,8 +88,6 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public async Task<ActionResult> EditManpowerRequisition(string siteUrl = null, int? ID = null, string username = null)
         {
-
-
             // MANDATORY: Set Site URL
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
@@ -112,8 +110,9 @@ namespace MCAWebAndAPI.Web.Controllers
         [HttpPost]
         public ActionResult EditManpowerRequisition(FormCollection form, ManpowerRequisitionVM viewModel)
         {
-           
-            _service.SetSiteUrl(System.Web.HttpContext.Current.Session["SiteUrl"] as string);
+                       
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             try
             {
                 _service.CreateManpowerRequisitionDocuments(viewModel.ID, viewModel.Documents);
@@ -147,6 +146,27 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
+            if (viewModel.Status.Value == "Pending Approval")
+            {
+
+                string EmailApprover;
+
+                // Send to Approver
+                if (viewModel.IsKeyPosition)
+                {
+                    EmailApprover = _service.GetApprover("Executive Director");
+                }
+                else
+                {
+                    EmailApprover = _service.GetApprover("Deputy ED");
+                }
+                Task sendApprover = EmailUtil.SendAsync(EmailApprover, "Application Submission Confirmation", string.Format(EmailResource.ManpowerApproval, siteUrl, viewModel.ID.Value));
+
+                
+                
+
+                // END Workflow Demo
+            }
 
 
             return RedirectToAction("Index",
