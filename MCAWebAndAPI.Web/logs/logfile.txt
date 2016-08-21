@@ -387,6 +387,7 @@ Parameter name: source
 Parameter name: source
 2016-08-17 11:42:51.7023 MCAWebAndAPI.Service.HR.InsuranceClaim.InsuranceClaimService Value cannot be null.
 Parameter name: source
-2016-08-19 04:49:57.3369 MCAWebAndAPI.Service.Asset.AssetAcquisitionService String was not recognized as a valid DateTime. at ID: 1
-2016-08-19 05:25:56.8188 MCAWebAndAPI.Service.Asset.AssetAcquisitionService String was not recognized as a valid DateTime. at ID: 1
-2016-08-19 05:27:47.9691 MCAWebAndAPI.Service.Asset.AssetAcquisitionService String was not recognized as a valid DateTime. at ID: 1
+2016-08-19 16:54:42.3395 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Invalid data has been used to update the list item. The field you are trying to update may be read only.
+2016-08-19 17:24:18.0246 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Invalid data has been used to update the list item. The field you are trying to update may be read only.
+2016-08-19 17:41:51.8487 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Invalid data has been used to update the list item. The field you are trying to update may be read only.
+2016-08-19 17:49:49.5999 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Operation is not valid due to the current state of the object.

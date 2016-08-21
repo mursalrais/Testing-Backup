@@ -119,6 +119,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.PerformancePeriod = FormatUtil.ConvertLookupToValue(listItem, "performanceevaluation");
             viewModel.StatusForm = Convert.ToString(listItem["ppestatus"]);
             viewModel.TypeForm = "Professional";
+            viewModel.OverallTotalScore = Convert.ToDecimal(listItem["overalltotalscore"]); 
 
             foreach (var item in SPConnector.GetList(SP_PPEW_LIST_NAME, _siteUrl, caml))
             {
