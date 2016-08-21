@@ -140,13 +140,13 @@ namespace MCAWebAndAPI.Web.Controllers
                     string.Format(EmailResource.ProfessionalPerfromanceEvaluation, siteUrl, UrlResource.ProfessionalPerfromanceEvaluation, viewModel.ID), string.Format(""));
 
                 // Send to Level 2 Approver and Requestor
-                if (viewModel.StatusForm == "Pending Approval 1 of 2")
+                if (viewModel.TypeForm == "Approver1" && viewModel.StatusForm == "Pending Approval 1 of 2")
                     _hRProfessionalPerformanceEvaluationService.SendEmail(viewModel, SP_TRANSACTION_WORKFLOW_LIST_NAME,
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.ID, 2,
                     string.Format(EmailResource.ProfessionalPerfromanceEvaluation, siteUrl, UrlResource.ProfessionalPerfromanceEvaluation, viewModel.ID), string.Format("Approved By Level 1"));
 
                 // Send to Requestor
-                if (viewModel.StatusForm == "Pending Approval 2 of 2")
+                if (viewModel.TypeForm == "Approver2" && viewModel.StatusForm == "Pending Approval 2 of 2")
                     _hRProfessionalPerformanceEvaluationService.SendEmail(viewModel, SP_TRANSACTION_WORKFLOW_LIST_NAME,
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.ID, 2,
                     string.Format(""), string.Format("Approved by Level 2"));

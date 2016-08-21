@@ -17,9 +17,15 @@ namespace MCAWebAndAPI.Service.Common
 
         IEnumerable<ProfessionalMaster> GetApproverNames(string position);
 
+        IEnumerable<ProfessionalMaster> GetApproverUserNames(string position);
+
+        IEnumerable<ProfessionalMaster> GetApproverUser();
+
         Task<IEnumerable<PendingApprovalItemVM>> GetPendingApprovalItemsAsync(string userLogin);
 
         Task<WorkflowRouterVM> GetWorkflowRouter(string listName, string requestor);
+
+        Task<WorkflowRouterVM> GetApprovalPath(string listName, string requestor);
 
         void CreateTransactionWorkflow(string workflowTransactionListName, string transactionLookupColumnName, 
             int headerID, IEnumerable<WorkflowItemVM> workflowItems, string requestor = null);
