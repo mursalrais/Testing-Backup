@@ -745,30 +745,38 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         private ExitProcedureChecklistVM ConvertToExitProcedureChecklist(ListItem item)
         {
-            return new ExitProcedureChecklistVM
-            {
-                ID = Convert.ToInt32(item["ID"]),
-                ItemExitProcedure = Convert.ToString(item["Title"]),
-                Remarks = Convert.ToString(item["remarks"]),
-                ApproverUnit = ExitProcedureChecklistVM.GetUnitDefaultValue(
+            var viewModel = new ExitProcedureChecklistVM();
+
+            viewModel.ID = Convert.ToInt32(item["ID"]);
+            viewModel.ItemExitProcedure = Convert.ToString(item["Title"]);
+            viewModel.Remarks = Convert.ToString(item["remarks"]);
+            viewModel.ApproverUnit = ExitProcedureChecklistVM.GetUnitDefaultValue(
                     new Model.ViewModel.Control.InGridComboBoxVM
                     {
                         Text = Convert.ToString(item["approverunit"])
                     }
-                    ),
-                DateOfApproval = Convert.ToDateTime(item["dateofapproval"]).ToLocalTime(),
-                CheckListItemApproval = ExitProcedureChecklistVM.GetCheckListItemApprovalDefaultValue(
+                );
+            viewModel.DateOfApproval = Convert.ToDateTime(item["dateofapproval"]).ToLocalTime();
+            viewModel.CheckListItemApproval = ExitProcedureChecklistVM.GetCheckListItemApprovalDefaultValue(
                     new Model.ViewModel.Control.InGridComboBoxVM
                     {
                         Text = Convert.ToString(item["checklistitemapproval"])
                     }
-                    ),
-                ApproverPosition = ExitProcedureChecklistVM.GetPositionDefaultValue(FormatUtil.ConvertToInGridAjaxComboBox(item, "approverposition")),
-                ApproverUserName = ExitProcedureChecklistVM.GetApproverUserNameDefaultValue(FormatUtil.ConvertToInGridAjaxComboBox(item, "approverusername")),
-                Level = Convert.ToString(item["approverlevel"]),
-                ApprovalIndicator = "red"
-                
-            };
+                );
+            viewModel.ApproverPosition = ExitProcedureChecklistVM.GetPositionDefaultValue(FormatUtil.ConvertToInGridAjaxComboBox(item, "approverposition"));
+            viewModel.ApproverUserName = ExitProcedureChecklistVM.GetApproverUserNameDefaultValue(FormatUtil.ConvertToInGridAjaxComboBox(item, "approverusername"));
+            viewModel.Level = Convert.ToString(item["approverlevel"]);
+            
+            if(viewModel.CheckListItemApproval.Text == "Pending Approval")
+            {
+                viewModel.ApprovalIndicator = "red";
+            }
+            else
+            {
+                viewModel.ApprovalIndicator = "green";
+            }
+
+            return viewModel;
         }
 
         private string GetDocumentUrl(int? iD)
