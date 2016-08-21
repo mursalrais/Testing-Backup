@@ -43,8 +43,11 @@ function onFailureForm(e) {
     if (e.success)
         onSuccessFormEmbed(e);
 
-    $('#modal-html-content').html('<div class="alert alert-danger fade in">'
-        + e.responseJSON.errorMessage + '</div>');
+    if (e.responseJSON != undefined)
+    {
+        $('#modal-html-content').html('<div class="alert alert-danger fade in">'
+            + e.responseJSON.errorMessage + '</div>');
+    }
 }
 
 // Do not use this if embedded in SharePoint
