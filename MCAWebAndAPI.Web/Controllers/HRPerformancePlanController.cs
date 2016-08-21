@@ -380,10 +380,16 @@ namespace MCAWebAndAPI.Web.Controllers
             byte[] pdfBuf = null;
             string content;
 
+            // ControllerContext context = new ControllerContext();
+            ControllerContext.Controller.ViewData.Model = viewModel;
+            ViewData = ControllerContext.Controller.ViewData;
+            TempData = ControllerContext.Controller.TempData;
+
             using (var writer = new StringWriter())
             {
-                var context = new ViewContext(ControllerContext, view.View, ViewData, TempData, writer);
-                view.View.Render(context, writer);
+                //var contextviewContext = new ViewContext(ControllerContext, view.View, ViewData, TempData, writer);
+                var contextviewContext = new ViewContext(ControllerContext, view.View, ViewData, TempData, writer);
+                view.View.Render(contextviewContext, writer);
                 writer.Flush();
                 content = writer.ToString();
 
