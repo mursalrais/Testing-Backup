@@ -171,18 +171,25 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult PrintProfessionalPerformanceEvaluation(FormCollection form, ProfessionalPerformancePlanVM viewModel)
+        public ActionResult PrintProfessionalPerformanceEvaluation(FormCollection form, ProfessionalPerformanceEvaluationVM viewModel)
         {
+
             const string RelativePath = "~/Views/HRProfessionalPerformanceEvaluation/PrintProfessionalPerformanceEvaluation.cshtml";
             var view = ViewEngines.Engines.FindView(ControllerContext, RelativePath, null);
             var fileName = viewModel.Name + "_ProfessionalPerformanceEvaluation.pdf";
             byte[] pdfBuf = null;
             string content;
 
+            // ControllerContext context = new ControllerContext();
+            ControllerContext.Controller.ViewData.Model = viewModel;
+            ViewData = ControllerContext.Controller.ViewData;
+            TempData = ControllerContext.Controller.TempData;
+
             using (var writer = new StringWriter())
             {
-                var context = new ViewContext(ControllerContext, view.View, ViewData, TempData, writer);
-                view.View.Render(context, writer);
+                //var contextviewContext = new ViewContext(ControllerContext, view.View, ViewData, TempData, writer);
+                var contextviewContext = new ViewContext(ControllerContext, view.View, ViewData, TempData, writer);
+                view.View.Render(contextviewContext, writer);
                 writer.Flush();
                 content = writer.ToString();
 

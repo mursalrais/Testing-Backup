@@ -13,9 +13,15 @@
         <div class="row">
             @Html.Partial("_ProfessionalPerformanceEvaluation_Print", Model)
         </div>
-        @*<legend>Professional Performance Evaluation Details</legend>
+        <legend>Professional Performance Evaluation Details</legend>
         <div class="row">
             @Html.Partial("_ProfessionalPerformanceEvaluationDetail_Print", Model)
-        </div>*@
+        </div>
+        <div class="form-group">
+            @Html.Bootstrap().LabelFor(m => m.OverallTotalScore).Class("col-sm-4 control-label")
+            <div class="col-sm-8">
+                @Html.DisplayFor(m => m.OverallTotalScore)
+            </div>
+        </div>
     </fieldset>
 </div>
