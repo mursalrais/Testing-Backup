@@ -4,19 +4,19 @@
 
 <div class="col-md-6">
     <div class="form-group">
-        @Html.Bootstrap().LabelFor(m => m.PersonnelManagement).Class("col-md-4 control-label")
+        @Html.Bootstrap().LabelFor(m => m.PersonnelManagement).Class("col-xs-4 control-label")
         <div class="col-md-8">
             @Html.DisplayFor(m => m.PersonnelManagement)
         </div>
     </div>
     <div class="form-group">
-        @Html.Bootstrap().LabelFor(m => m.BudgetManagement).Class("col-md-4 control-label")
+        @Html.Bootstrap().LabelFor(m => m.BudgetManagement).Class("col-xs-4 control-label")
         <div class="col-md-8">
             @Html.DisplayFor(m => m.BudgetManagement)
         </div>
     </div>
     <div class="form-group">
-        @Html.Bootstrap().LabelFor(m => m.Workplan).Class("col-md-4 control-label")
+        @Html.Bootstrap().LabelFor(m => m.Workplan).Class("col-xs-4 control-label")
         <div class="col-md-8">     
             @{
                 var arr = Model.Workplan.ToArray();
