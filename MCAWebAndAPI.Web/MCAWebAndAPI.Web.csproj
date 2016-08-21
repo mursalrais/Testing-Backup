@@ -450,9 +450,6 @@
     <Content Include="Content\kendo\2016.2.714\fonts\glyphs\KendoUIGlyphs.woff" />
     <Content Include="Content\kendo\2016.2.714\images\kendoui.ttf" />
     <Content Include="Content\kendo\2016.2.714\images\kendoui.woff" />
-    <Content Include="App_Browsers\BrowserFile.browser" />
-    <Content Include="App_Browsers\ie.browser" />
-    <Content Include="App_Browsers\ie11.browser" />
     <None Include="bin\MCAWebAndAPI.Web.dll.config" />
     <Content Include="bin\NLog.config" />
     <Content Include="bin\roslyn\Microsoft.CSharp.Core.targets" />
@@ -1256,7 +1253,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Browsers\" />
     <Folder Include="App_Code\" />
     <Folder Include="Scripts\apps\controlls\" />
     <Folder Include="Views\Activity\" />
@@ -1292,6 +1288,9 @@
   <ItemGroup>
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
