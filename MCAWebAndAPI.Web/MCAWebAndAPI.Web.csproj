@@ -644,9 +644,13 @@
     <Content Include="Global.asax" />
     <Content Include="Site.Master" />
     <Content Include="ViewSwitcher.ascx" />
+    <Content Include="Views\ASSAssetAcquisition\Index.cshtml" />
+    <Content Include="Views\Error\Index.cshtml" />
     <Content Include="Views\FINEventBudget\_ItemDetails.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\HRCompensatory\_CompensantoryDetails.cshtml" />
     <Content Include="Views\HRPayroll\DisplayPayrollWorksheet.cshtml" />
+    <Content Include="Views\Success\Index.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -693,7 +697,6 @@
     <Content Include="Views\ASSAssetScrapping\Edit.cshtml" />
     <Content Include="Views\ASSAssetSmallValueAsset\Create.cshtml" />
     <Content Include="Views\Shared\_LayoutHome.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\BIEmbed\WFP03.cshtml" />
     <Content Include="Views\ASSAssetMaster\Create.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\AjaxComboBox.cshtml" />
@@ -746,11 +749,9 @@
     <Content Include="Views\Shared\_Modal.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\GridTable.cshtml" />
     <Content Include="Views\ASSAssetMaster\Edit.cshtml" />
-    <Content Include="Views\Error\Index.cshtml" />
     <Content Include="Views\HRPSAManagement\_PSAManagementData.cshtml" />
     <Content Include="Views\HRApplication\_DocumentDetails_Display.cshtml" />
     <Content Include="Views\HRApplication\DisplayApplicationData.cshtml" />
-    <Content Include="Views\Success\Index.cshtml" />
     <Content Include="Views\HRProfessional\EditProfessional.cshtml" />
     <Content Include="Views\HRProfessional\_ContactInformationDetails.cshtml" />
     <Content Include="Views\Shared\_EducationDetails.cshtml" />
@@ -1077,7 +1078,6 @@
     <Content Include="Views\ASSAssetTransfer\_AssetTransferDetail.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DropDown.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\AjaxCascadeComboBox.cshtml" />
-    <Content Include="Views\ASSAssetAcquisition\Index.cshtml" />
     <Content Include="Views\ASSAssetAcquisition\Sync.cshtml" />
     <Content Include="Views\ASSAssetAcquisition\View.cshtml" />
     <Content Include="Views\ASSAssetAcquisition\_DetailsView.cshtml" />
