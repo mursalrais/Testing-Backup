@@ -47,7 +47,7 @@
     </fieldset>
     <div class="form-actions">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-xs-12">
                 <input type="button" class="btn btn-default" id="StatusSubmit" name="StatusSubmit" value="Submit for Approval">        
                 <input type="button" class="btn btn-default" id="StatusDraft" name="StatusDraft" value="Save as Draft">             
             </div>
@@ -61,6 +61,7 @@
     <script>
 
         function filterLevel() {
+            console.log("filterlever works");
             return {
                 Level: $('#DivisionProjectUnit_Value').data("kendoDropDownList").dataItem($('#DivisionProjectUnit_Value').data("kendoDropDownList").select())
             };
@@ -70,6 +71,7 @@
         function OnBehalfOfChange(e) {
             var dataItem = this.dataItem(e.item);
             $("#EmailOnBehalf").prop("value", dataItem.OfficeEmail);
+
         }
         function onPositionChange(e) {
             var dataItem = this.dataItem(e.item);

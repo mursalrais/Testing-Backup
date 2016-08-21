@@ -379,7 +379,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             if ((listItem["secondaryreportingto"] as FieldLookupValue) != null)
             {
                 viewModel.SecondaryReportingTo.Value = (listItem["secondaryreportingto"] as FieldLookupValue).LookupId;
-                viewModel.SecondaryReportingTo.Text = GetFullNameandPosition((listItem["reportingto"] as FieldLookupValue).LookupId);
+                viewModel.SecondaryReportingTo.Text = GetFullNameandPosition((listItem["secondaryreportingto"] as FieldLookupValue).LookupId);
 
             }
 

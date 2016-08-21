@@ -45,7 +45,7 @@
                             <i class="fa fa-save"></i>
                             Initiate Evaluation Process
                         </button>
-                        if (Model.PerformanceEvaluationDetails.All(x => x.EvaluationStatus == "green") && (Model.Status == "Open") && (Model.PerformanceEvaluationDetails.All(x => x.EvaluationStatus == "Approved")))
+                        if ((Model.Status == "Open") && (Model.PerformanceEvaluationDetails.All(x => x.EvaluationStatus == "Approved")))
                         {
                             <button id="close" class="btn btn-primary" type="submit">
                                 <i class="fa fa-save"></i>

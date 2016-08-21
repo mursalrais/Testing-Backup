@@ -41,6 +41,8 @@
          );
 
     })
+    .Scrollable(scrollable => scrollable.Height("auto"))
+     .Resizable(resizable => resizable.Columns(true))
     .Events(e =>
     {
         e.Edit("onEditKendoDetail");

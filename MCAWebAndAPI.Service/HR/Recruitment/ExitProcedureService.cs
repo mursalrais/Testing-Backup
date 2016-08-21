@@ -71,6 +71,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             else if(exitProcedure.StatusForm == "Draft")
             {
                 statusExitProcedure = "Draft";
+                
+                var professionalData = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, exitProcedure.ProfessionalID, _siteUrl);
+                string professionalOfficeMail = Convert.ToString(professionalData["officeemail"]);
+
+                updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hr"));
             }
             else if (exitProcedure.StatusForm == "Saved by HR")
             {
@@ -403,6 +408,32 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 viewModel.ItemExitProcedure = "Travel Statement";
                 viewModel.Remarks = "Rp 2.000.000";
             }
+            else if (viewModel.Level == "10")
+            {
+                viewModel.ItemExitProcedure = "Resignation/Separation Letter";
+                viewModel.Remarks = "";
+            }
+            else if (viewModel.Level == "11")
+            {
+                viewModel.ItemExitProcedure = "Timesheet/Leave Form";
+                viewModel.Remarks = "";
+            }
+            else if (viewModel.Level == "12")
+            {
+                viewModel.ItemExitProcedure = "Exit Interview/NDA";
+                viewModel.Remarks = "";
+            }
+            else if (viewModel.Level == "13")
+            {
+                viewModel.ItemExitProcedure = "Insurance Card";
+                viewModel.Remarks = "";
+            }
+            else if (viewModel.Level == "14")
+            {
+                viewModel.ItemExitProcedure = "ID Card & Access Card";
+                viewModel.Remarks = "";
+            }
+
 
             viewModel.CheckListItemApproval =
                 ExitProcedureChecklistVM.GetCheckListItemApprovalDefaultValue();
@@ -770,6 +801,13 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             }
             else
             {
+                exitProcedure.StartDateApproval = DateTime.Now;
+                
+                var professionalData = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, exitProcedure.ProfessionalID, _siteUrl);
+                string professionalOfficeMail = Convert.ToString(professionalData["officeemail"]);
+
+                columnValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hr"));
+                columnValues.Add("startdateapproval", exitProcedure.StartDateApproval.ToLocalTime());
                 columnValues.Add("status", exitProcedure.StatusForm);
             }
 
@@ -1095,6 +1133,26 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 else if (i == 9)
                 {
                     columnValues.Add("visibletoapprover9", SPConnector.GetUser(item, _siteUrl, "hr"));
+                }
+                else if (i == 10)
+                {
+                    columnValues.Add("visibletoapprover10", SPConnector.GetUser(item, _siteUrl, "hr"));
+                }
+                else if (i == 11)
+                {
+                    columnValues.Add("visibletoapprover11", SPConnector.GetUser(item, _siteUrl, "hr"));
+                }
+                else if (i == 12)
+                {
+                    columnValues.Add("visibletoapprover12", SPConnector.GetUser(item, _siteUrl, "hr"));
+                }
+                else if (i == 13)
+                {
+                    columnValues.Add("visibletoapprover13", SPConnector.GetUser(item, _siteUrl, "hr"));
+                }
+                else if (i == 14)
+                {
+                    columnValues.Add("visibletoapprover14", SPConnector.GetUser(item, _siteUrl, "hr"));
                 }
 
                 i++;
