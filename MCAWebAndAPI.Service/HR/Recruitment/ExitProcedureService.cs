@@ -801,6 +801,13 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             }
             else
             {
+                exitProcedure.StartDateApproval = DateTime.Now;
+                
+                var professionalData = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, exitProcedure.ProfessionalID, _siteUrl);
+                string professionalOfficeMail = Convert.ToString(professionalData["officeemail"]);
+
+                columnValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hr"));
+                columnValues.Add("startdateapproval", exitProcedure.StartDateApproval.ToLocalTime());
                 columnValues.Add("status", exitProcedure.StatusForm);
             }
 
