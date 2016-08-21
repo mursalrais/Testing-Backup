@@ -1122,6 +1122,26 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 {
                     columnValues.Add("visibletoapprover9", SPConnector.GetUser(item, _siteUrl, "hr"));
                 }
+                else if (i == 10)
+                {
+                    columnValues.Add("visibletoapprover10", SPConnector.GetUser(item, _siteUrl, "hr"));
+                }
+                else if (i == 11)
+                {
+                    columnValues.Add("visibletoapprover11", SPConnector.GetUser(item, _siteUrl, "hr"));
+                }
+                else if (i == 12)
+                {
+                    columnValues.Add("visibletoapprover12", SPConnector.GetUser(item, _siteUrl, "hr"));
+                }
+                else if (i == 13)
+                {
+                    columnValues.Add("visibletoapprover13", SPConnector.GetUser(item, _siteUrl, "hr"));
+                }
+                else if (i == 14)
+                {
+                    columnValues.Add("visibletoapprover14", SPConnector.GetUser(item, _siteUrl, "hr"));
+                }
 
                 i++;
             }
