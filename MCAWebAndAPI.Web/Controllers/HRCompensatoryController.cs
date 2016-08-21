@@ -175,7 +175,7 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateHeaderCompensatory(FormCollection form, CompensatoryVM viewModel)
+        public ActionResult CreateHeaderCompensatory(FormCollection form, CompensatoryVM viewModel)
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
@@ -187,8 +187,8 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return RedirectToAction("Index", "Error");
             }
 
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.Compensatorylist);
