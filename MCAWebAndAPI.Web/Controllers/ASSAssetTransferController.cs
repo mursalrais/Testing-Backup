@@ -41,9 +41,9 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult SubmitAssetTransfer(FormCollection form, AssetTransferVM viewModel)
+        public ActionResult SubmitAssetTransfer(FormCollection form, AssetTransferVM viewModel, string siteUrl)
         {
-            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            siteUrl = SessionManager.Get<string>("SiteUrl");
             assetTransferService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
             int? headerID = null;

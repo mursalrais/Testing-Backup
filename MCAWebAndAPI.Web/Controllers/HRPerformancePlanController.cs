@@ -41,6 +41,7 @@ namespace MCAWebAndAPI.Web.Controllers
             var viewModel = _hRPerformancePlanService.GetPopulatedModel(requestor);
             viewModel.Requestor = requestor;
             viewModel.ID = ID;
+            viewModel.TypeForm = "Professional";
             ViewBag.Action = "CreatePerformancePlan";
 
             // Used for Workflow Router
@@ -82,7 +83,7 @@ namespace MCAWebAndAPI.Web.Controllers
                         viewModelDetail.Remarks = "";
                     }
 
-                    sum = sum + viewModelDetail.Weight;
+                    sum = sum + viewModelDetail.Weight; 
                 }
             }
             if (project == "Empty")
@@ -96,6 +97,7 @@ namespace MCAWebAndAPI.Web.Controllers
                     viewModel.StatusForm = "Draft";
                 }
 
+                Response.TrySkipIisCustomErrors = true;
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse("Project Or Unit Goals is Required");
             }
@@ -111,6 +113,7 @@ namespace MCAWebAndAPI.Web.Controllers
                     viewModel.StatusForm = "Draft";
                 }
 
+                Response.TrySkipIisCustomErrors = true;
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse("Individual Goal And Plan is Required");
             }
@@ -126,6 +129,7 @@ namespace MCAWebAndAPI.Web.Controllers
                     viewModel.StatusForm = "Draft";
                 }
 
+                Response.TrySkipIisCustomErrors = true;
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse("Weight must be total 100%");
             }
@@ -133,7 +137,7 @@ namespace MCAWebAndAPI.Web.Controllers
             int? headerID = null;
             try
             {
-                headerID = _hRPerformancePlanService.CreateHeader(viewModel);
+                headerID = _hRPerformancePlanService.CreateHeader(viewModel.Requestor, viewModel);
             }
             catch (Exception e)
             {
@@ -147,7 +151,7 @@ namespace MCAWebAndAPI.Web.Controllers
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)headerID);
             }
 
-            Task createPerformancePlanDetailsTask = _hRPerformancePlanService.CreatePerformancePlanDetailsAsync(headerID, viewModel.PerformancePeriodID, viewModel.Requestor, viewModel.StatusForm, viewModel.ProjectOrUnitGoalsDetails);
+            Task createPerformancePlanDetailsTask = _hRPerformancePlanService.CreatePerformancePlanDetailsAsync(headerID, viewModel.PerformancePeriodID, viewModel.Requestor, viewModel.StatusForm, viewModel.TypeForm, viewModel.ProjectOrUnitGoalsDetails);
 
             Task allTasks = Task.WhenAll(createPerformancePlanDetailsTask);
 
@@ -167,7 +171,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 if (viewModel.StatusForm != "DraftInitiated")
                     _hRPerformancePlanService.SendEmail(viewModel, SP_TRANSACTION_WORKFLOW_LIST_NAME,
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)headerID, 1,
-                    string.Format("Dear Respective Approver,This email is sent to you to notify that there is a request which required your action to approve.Kindly check the link as per below to go to direct page accordingly.You may check your personal page in IMS(My Approval View).Thank you.Link: {0}{1}/EditFormApprover_Custom.aspx?ID={2}", siteUrl, UrlResource.ProfessionalPerformancePlan, viewModel.ID), string.Format(""));
+                    string.Format(EmailResource.ProfessionalPerformancePlan, siteUrl, UrlResource.ProfessionalPerformancePlan, headerID), string.Format(""));
             }
             catch (Exception e)
             {
@@ -244,6 +248,7 @@ namespace MCAWebAndAPI.Web.Controllers
                         viewModel.StatusForm = "Draft";
                     }
 
+                    Response.TrySkipIisCustomErrors = true;
                     Response.StatusCode = (int)HttpStatusCode.BadRequest;
                     return JsonHelper.GenerateJsonErrorResponse("Project Or Unit Goals is Required");
                 }
@@ -259,6 +264,7 @@ namespace MCAWebAndAPI.Web.Controllers
                         viewModel.StatusForm = "Draft";
                     }
 
+                    Response.TrySkipIisCustomErrors = true;
                     Response.StatusCode = (int)HttpStatusCode.BadRequest;
                     return JsonHelper.GenerateJsonErrorResponse("Individual Goal And Plan is Required");
                 }
@@ -274,6 +280,7 @@ namespace MCAWebAndAPI.Web.Controllers
                         viewModel.StatusForm = "Draft";
                     }
 
+                    Response.TrySkipIisCustomErrors = true;
                     Response.StatusCode = (int)HttpStatusCode.BadRequest;
                     return JsonHelper.GenerateJsonErrorResponse("Weight must be total 100%");
                 }
@@ -287,7 +294,7 @@ namespace MCAWebAndAPI.Web.Controllers
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.ID);
             }
 
-            Task createPerformancePlanDetailsTask = _hRPerformancePlanService.CreatePerformancePlanDetailsAsync(viewModel.ID, viewModel.PerformancePeriodID, viewModel.Requestor, viewModel.StatusForm, viewModel.ProjectOrUnitGoalsDetails);
+            Task createPerformancePlanDetailsTask = _hRPerformancePlanService.CreatePerformancePlanDetailsAsync(viewModel.ID, viewModel.PerformancePeriodID, viewModel.Requestor, viewModel.StatusForm,viewModel.TypeForm, viewModel.ProjectOrUnitGoalsDetails);
 
             Task allTasks = Task.WhenAll(createPerformancePlanDetailsTask);
 
@@ -310,25 +317,25 @@ namespace MCAWebAndAPI.Web.Controllers
                     string.Format(EmailResource.ProfessionalPerformancePlan, siteUrl, UrlResource.ProfessionalPerformancePlan, viewModel.ID), string.Format(""));
 
                 // Send to Level 2 Approver and Requestor
-                if (viewModel.Requestor == null && viewModel.StatusForm == "Pending Approval 1 of 2")
+                if (viewModel.TypeForm == "Approver1" && viewModel.StatusForm == "Pending Approval 1 of 2")
                     _hRPerformancePlanService.SendEmail(viewModel, SP_TRANSACTION_WORKFLOW_LIST_NAME,
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.ID, 2,
                     string.Format(EmailResource.ProfessionalPerformancePlan, siteUrl, UrlResource.ProfessionalPerformancePlan, viewModel.ID), string.Format("Approved By Level 1"));
 
                 // Send to Level 1 Approver
-                if (viewModel.Requestor != null && viewModel.StatusForm == "Pending Approval 1 of 2")
+                if (viewModel.TypeForm == "Professional" && viewModel.StatusForm == "Pending Approval 1 of 2")
                     _hRPerformancePlanService.SendEmail(viewModel, SP_TRANSACTION_WORKFLOW_LIST_NAME,
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.ID, 1,
                     string.Format(EmailResource.ProfessionalPerformancePlan, siteUrl, UrlResource.ProfessionalPerformancePlan, viewModel.ID), string.Format(""));
 
                 // Send to Level 2 Approver
-                if (viewModel.Requestor != null && viewModel.StatusForm == "Pending Approval 2 of 2")
+                if (viewModel.TypeForm == "Professional" && viewModel.StatusForm == "Pending Approval 2 of 2")
                     _hRPerformancePlanService.SendEmail(viewModel, SP_TRANSACTION_WORKFLOW_LIST_NAME,
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.ID, 2,
                     string.Format(EmailResource.ProfessionalPerformancePlan, siteUrl, UrlResource.ProfessionalPerformancePlan, viewModel.ID), string.Format(""));
 
                 // Send to Requestor
-                if (viewModel.Requestor == null && viewModel.StatusForm == "Pending Approval 2 of 2")
+                if (viewModel.TypeForm == "Approver2" && viewModel.StatusForm == "Pending Approval 2 of 2")
                     _hRPerformancePlanService.SendEmail(viewModel, SP_TRANSACTION_WORKFLOW_LIST_NAME,
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.ID, 2,
                     string.Format(""), string.Format("Approved by Level 2"));
@@ -373,10 +380,16 @@ namespace MCAWebAndAPI.Web.Controllers
             byte[] pdfBuf = null;
             string content;
 
+            // ControllerContext context = new ControllerContext();
+            ControllerContext.Controller.ViewData.Model = viewModel;
+            ViewData = ControllerContext.Controller.ViewData;
+            TempData = ControllerContext.Controller.TempData;
+
             using (var writer = new StringWriter())
             {
-                var context = new ViewContext(ControllerContext, view.View, ViewData, TempData, writer);
-                view.View.Render(context, writer);
+                //var contextviewContext = new ViewContext(ControllerContext, view.View, ViewData, TempData, writer);
+                var contextviewContext = new ViewContext(ControllerContext, view.View, ViewData, TempData, writer);
+                view.View.Render(contextviewContext, writer);
                 writer.Flush();
                 content = writer.ToString();
 

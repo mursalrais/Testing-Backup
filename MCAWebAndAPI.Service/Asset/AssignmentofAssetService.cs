@@ -1,153 +1,437 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MCAWebAndAPI.Model.ViewModel.Form.Asset;
-using NLog;
 using MCAWebAndAPI.Service.Utils;
+using NLog;
+using Microsoft.SharePoint.Client;
+using MCAWebAndAPI.Model.ViewModel.Form.HR;
+using System.Web;
+using MCAWebAndAPI.Model.Common;
+using MCAWebAndAPI.Service.Resources;
 
 namespace MCAWebAndAPI.Service.Asset
 {
-    public class AssignmentofAssetService : IAssignmentofAssetService
+    public class AssignmentOfAssetService : IAssignmentOfAssetService
     {
         string _siteUrl;
         static Logger logger = LogManager.GetCurrentClassLogger();
-        const string SP_MON_FEE_LIST_NAME = "Monthly Fee";
-        const string SP_MON_FEE_DETAIL_LIST_NAME = "Monthly Fee Detail";
-        const string SP_PSA_LIST_NAME = "PSA";
-
-       
-
-        public AssignmentofAssetVM GetAssignmentofAsset()
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool CreateAssignmentofAsset(AssignmentofAssetDetailVM assignmentofAsset)
-        {
-            throw new NotImplementedException();
-        }
 
         public void SetSiteUrl(string siteUrl)
         {
-            _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
+            _siteUrl = siteUrl;
         }
 
-        public bool UpdateAssignmentofAsset(AssignmentofAssetDetailVM assignmentofAsset)
+
+        public AssignmentOfAssetVM GetPopulatedModel(string SiteUrl)
         {
-            throw new NotImplementedException();
+            var model = new AssignmentOfAssetVM();
+            model.AssetHolder.Choices = GetFromListHR("Professional Master", "Title", "Position", SiteUrl);
+
+            return model;
         }
 
-        
-
-        public bool CreateAssignmentofAsset_Dummy(AssignmentofAssetDetailVM assignmentofAsset)
+        public AssignmentOfAssetVM GetHeader(int? ID, string SiteUrl)
         {
-            var entity = new AssignmentofAssetDetailVM();
-            entity = assignmentofAsset;
-            return true;
-        }
+            var listItem = SPConnector.GetListItem("Asset Assignment", ID, SiteUrl);
+            var viewModel = new AssignmentOfAssetVM();
 
-        public bool UpdateAssignmentofAsset_Dummy(AssignmentofAssetDetailVM assignmentofAsset)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool DestroyAssignmentofAsset_Dummy(AssignmentofAssetDetailVM assignmentofAsset)
-        {
-            throw new NotImplementedException();
-        }
-
-        public AssignmentofAssetVM GetAssignmentofAssetItems_Dummy()
-        {
-            var viewModel = new AssignmentofAssetVM();
-
-            var list = new List<AssignmentofAssetDetailVM>();
-            list.Add(new AssignmentofAssetDetailVM()
+            viewModel.TransactionType = Convert.ToString(listItem["Title"]);
+            viewModel.AssetHolder.Choices = GetFromListHR("Professional Master", "Title", "Position", SiteUrl);
+            if ((listItem["assetholder"] as FieldLookupValue) != null)
             {
-                NewAsset = "New",
-                Item = "Chair",
-                AssetDescription = "New Asset",
-                Id = 1
-            });
-            viewModel.TransactionType = "Cash";
-            viewModel.AssignmentofAssets = list;
+                viewModel.AssetHolder.Value = (listItem["assetholder"] as FieldLookupValue).LookupId.ToString();
+                viewModel.AssetHolder.Text = (listItem["assetholder"] as FieldLookupValue).LookupValue;
+            }
+            //viewModel.AccpMemo.Value = Convert.ToString(listItem["acceptancememono"]);
+            viewModel.ProjectUnit = Convert.ToString(listItem["pono"]);
+            viewModel.ContactNo = Convert.ToString(listItem["vendorid"]) + "-" + Convert.ToString(listItem["vendorname"]);
+            if (Convert.ToDateTime(listItem["trasnferdate"]) == DateTime.MinValue)
+            {
+                viewModel.Date = null;
+            }
+            else
+            {
+                viewModel.Date = Convert.ToDateTime(listItem["trasnferdate"]).AddDays(1);
+            }
+            //viewModel.PurchaseDescription = Regex.Replace(Convert.ToString(listItem["purchasedescription"]), "<.*?>", string.Empty);
+            viewModel.ID = ID;
+
+            //viewModel.CancelURL = _siteUrl + UrlResource.AssetAcquisition;
 
             return viewModel;
         }
 
-        public AssignmentofAssetVM GetPopulatedModel(int? id = null)
+        private IEnumerable<string> GetFromListHR(string listname, string f1, string f2, string siteUrl)
         {
-            var model = new AssignmentofAssetVM();
+            var siteHr = siteUrl.Replace("/bo", "/hr");
+            List<string> _choices = new List<string>();
+            var listItems = SPConnector.GetList(listname, siteHr);
+            foreach (var item in listItems)
+            {
+                if (f2 != null)
+                {
+                    var position = "";
+                    if ((item["Position"] as FieldLookupValue) != null)
+                    {
+                        position =(item["Position"] as FieldLookupValue).LookupValue;
+                    }
+                    _choices.Add(item[f1] + "-" + position);
+                }
+                else
+                {
+                    _choices.Add(item[f1].ToString());
+                }
+                //var listProfMasBO = SPConnector.GetList(listname, siteUrl);
+                //foreach(var pmbo in listProfMasBO)
+                //{
+                    
+                //}
+            }
+            return _choices.ToArray();
+        }
+
+        public int? CreateHeader(AssignmentOfAssetVM viewmodel, string SiteUrl)
+        {
+            //viewmodel.CancelURL = _siteUrl + UrlResource.AssetAcquisition;
+            var columnValues = new Dictionary<string, object>();
+            //columnValues.add
+            columnValues.Add("Title", "Assignment Of Asset");
+            if (viewmodel.Date.HasValue)
+            {
+                columnValues.Add("transferdate", viewmodel.Date);
+            }
+            else
+            {
+                columnValues.Add("transferdate", null);
+            }
+
+            if (viewmodel.AssetHolder.Value == null)
+            {
+                return 0;
+            }
+            else
+            {
+                var breaks = viewmodel.AssetHolder.Value.Split('-');
+                var getInfo = GetProfMasterInfo(breaks[0], SiteUrl);
+                if(getInfo != null)
+                {
+                    columnValues.Add("assetholder", new FieldLookupValue { LookupId = Convert.ToInt32(getInfo.ID) });
+                    columnValues.Add("projectunit", getInfo.CurrentPosition.Text);
+                    columnValues.Add("contactnumber", getInfo.MobileNumberOne);
+                }
+            }
+
+            //attachment later
+            columnValues.Add("completionstatus", viewmodel.CompletionStatus.Value);
+            
+
+            try
+            {
+                SPConnector.AddListItem("Asset Assignment", columnValues, _siteUrl);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.Message);
+            }
+            var entitiy = new AssignmentOfAssetVM();
+            entitiy = viewmodel;
+            return SPConnector.GetLatestListItemID("Asset Assignment", _siteUrl);
+        }
+
+        public void CreateDocuments(int? headerID, IEnumerable<HttpPostedFileBase> documents, string SiteUrl)
+        {
+            foreach(var doc in documents)
+            {
+                var updateValues = new Dictionary<string, object>();
+                updateValues.Add("assetassignmentid", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
+                try
+                {
+                    SPConnector.UploadDocument("Asset Assignmment Documents", updateValues, doc.FileName, doc.InputStream, SiteUrl);
+                }
+                catch (Exception e)
+                {
+
+                }
+            }
+            throw new NotImplementedException();
+        }
+
+        public bool UpdateHeader(AssignmentOfAssetVM viewmodel, string SiteUrl)
+        {
+            //viewmodel.CancelURL = _siteUrl + UrlResource.AssetAcquisition;
+            var columnValues = new Dictionary<string, object>();
+            var ID = Convert.ToInt32(viewmodel.ID);
+            //columnValues.add
+            columnValues.Add("Title", "Assignment Of Asset");
+            if (viewmodel.Date.HasValue)
+            {
+                columnValues.Add("transferdate", viewmodel.Date);
+            }
+            else
+            {
+                columnValues.Add("transferdate", null);
+            }
+
+            if (viewmodel.AssetHolder.Value == null)
+            {
+                return false;
+            }
+            else
+            {
+                columnValues.Add("assetholder", new FieldLookupValue { LookupId = Convert.ToInt32(viewmodel.AssetHolder.Value) });
+                var breaks = viewmodel.AssetHolder.Value.Split('-');
+                var getInfo = GetProfMasterInfo(breaks[0], SiteUrl);
+                if (getInfo != null)
+                {
+                    columnValues.Add("projectunit", getInfo.CurrentPosition);
+                    columnValues.Add("contactnumber", getInfo.MobileNumberOne);
+                }
+            }
+
+            //attachment later
+            columnValues.Add("completionstatus", viewmodel.CompletionStatus.Value);
+
+            try
+            {
+                SPConnector.UpdateListItem("Asset Assignment", ID, columnValues, _siteUrl);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.Message);
+            }
+            var entitiy = new AssignmentOfAssetVM();
+            entitiy = viewmodel;
+            return true;
+        }
+
+        public ProfessionalDataVM GetProfMasterInfo(string fullname, string SiteUrl)
+        {
+            var caml = @"<View><Query>
+                       <Where>
+                          <Eq>
+                             <FieldRef Name='Title' />
+                             <Value Type='Text'>"+fullname+ @"</Value>
+                          </Eq>
+                       </Where>
+                    </Query>
+                    <ViewFields>
+                       <FieldRef Name='Title' />
+                        <FieldRef Name='ID' />   
+                       <FieldRef Name='Position' />
+                       <FieldRef Name='Project_x002f_Unit' />
+                       <FieldRef Name='mobilephonenr' />
+                    </ViewFields>
+                    <QueryOptions /></View>";
+            var siteHr = SiteUrl.Replace("/bo", "/hr");
+            var list = SPConnector.GetList("Professional Master", siteHr, caml);
+            var viewmodel = new ProfessionalDataVM();
+            foreach (var item in list)
+            {
+                viewmodel.ID = Convert.ToInt32(item["ID"]);
+                viewmodel.CurrentPosition.Text = Convert.ToString(item["Project_x002f_Unit"]);
+                viewmodel.MobileNumberOne = Convert.ToString(item["mobilephonenr"]);
+            }
+
+            return viewmodel;
+        }
+
+        public IEnumerable<AssetAcquisitionItemVM> GetAssetSubAsset()
+        {
+            var models = new List<AssetAcquisitionItemVM>();
+            var caml = @"<View><Query>
+                           <Where>
+                              <IsNotNull>
+                                 <FieldRef Name='assetsubasset' />
+                              </IsNotNull>
+                           </Where>
+                        </Query>
+                        <ViewFields>
+                           <FieldRef Name='assetsubasset' />
+                        </ViewFields>
+                        <QueryOptions /></View>";
+            foreach (var item in SPConnector.GetList("Asset Acquisition Details", _siteUrl, caml))
+            {
+                models.Add(ConvertToModelAssetSubAsset(item));
+            }
+
+            return models;
+        }
+
+        private AssetAcquisitionItemVM ConvertToModelAssetSubAsset(ListItem item)
+        {
+            var viewModel = new AssetAcquisitionItemVM();
+
+            viewModel.ID = Convert.ToInt32(item["ID"]);
+            var assetID = "";
+            //getInfo Asset Master
+            if ((item["assetsubasset"] as FieldLookupValue) != null)
+            {
+                assetID = (item["assetsubasset"] as FieldLookupValue).LookupValue;
+            }
+            var info = GetInfoAssetMaster("Asset Master", assetID, _siteUrl);
+            viewModel.AssetSubAsset.Text = Convert.ToString(info.AssetNoAssetDesc.Text) + "-" + Convert.ToString(info.AssetDesc);
+            return viewModel;
+        }
+
+        private AssetMasterVM GetInfoAssetMaster(string listname, string assetID, string _siteUrl)
+        {
+            var caml = @"<View>
+                        <Query>
+                           <Where>
+                              <Eq>
+                                 <FieldRef Name='AssetID' />
+                                 <Value Type='Text'>"+ assetID + @"</Value>
+                              </Eq>
+                           </Where>
+                        </Query>
+                        <ViewFields>
+                           <FieldRef Name='AssetID' />
+                           <FieldRef Name='ID' />
+                           <FieldRef Name='Title' />
+                        </ViewFields>
+                        <QueryOptions /></View>";
+            var list = SPConnector.GetList(listname, _siteUrl, caml);
+            var model = new AssetMasterVM();
+            foreach(var item in list)
+            {
+                model.ID = Convert.ToInt32(item["ID"]);
+                model.AssetNoAssetDesc.Text = Convert.ToString(item["AssetID"]);
+                model.AssetDesc = Convert.ToString(item["Title"]);
+            }
+
             return model;
         }
 
-        public AssignmentofAssetVM GetHeader(int? ID)
+        public IEnumerable<LocationMasterVM> GetProvince()
         {
-            throw new NotImplementedException();
+            var models = new List<LocationMasterVM>();
+            var caml = @"<View><Query>
+                           <Where>
+                              <IsNotNull>
+                                 <FieldRef Name='Province' />
+                              </IsNotNull>
+                           </Where>
+                        </Query>
+                        <ViewFields>
+                           <FieldRef Name='Province' />
+                           <FieldRef Name='Floor' />
+                           <FieldRef Name='Room' />
+                           <FieldRef Name='Remarks' />
+                           <FieldRef Name='Title' />
+                        </ViewFields>
+                        <QueryOptions /></View>";
+            foreach (var item in SPConnector.GetList("Location Master", _siteUrl, caml))
+            {
+                models.Add(ConvertToModelLocation(item));
+            }
+
+            return models;
         }
 
-        public int CreateHeader(AssignmentofAssetVM header)
+        private LocationMasterVM ConvertToModelLocation(ListItem item)
         {
-            //var columnValues = new Dictionary<string, object>();
-            //columnValues.Add("professional", new aFieldLookupValue { LookupId = Convert.ToInt32(header.ProfessionalName.Value) });
-            //columnValues.Add("ProjectOrUnit", header.ProjectUnit);
-            //columnValues.Add("position", header.Position);
-            //columnValues.Add("maritalstatus", header.Status);
-            //columnValues.Add("joindate", header.JoinDate);
-            //columnValues.Add("dateofnewpsa", header.DateOfNewPsa);
-            //columnValues.Add("psaexpirydate", header.EndOfContract);
-            //try
-            //{
-            //    SPConnector.AddListItem(SP_MON_FEE_LIST_NAME, columnValues, _siteUrl);
-            //}
-            //catch (Exception e)
-            //{
-            //    logger.Error(e.Message);
-            //}
+            var viewModel = new LocationMasterVM();
 
-            //return SPConnector.GetLatestListItemID(SP_MON_FEE_LIST_NAME, _siteUrl);
-            throw new NotImplementedException();
+            viewModel.ID = Convert.ToInt32(item["ID"]);
+            var province = "";
+            //getInfo Asset Master
+            if ((item["Province"] as FieldLookupValue) != null)
+            {
+                province = (item["Province"] as FieldLookupValue).LookupValue;
+            }
+            //var info = GetInfoProvince("Province", province, _siteUrl);
+            viewModel.Province.Text = province;
+            viewModel.OfficeName = Convert.ToString(item["Title"]);
+            viewModel.FloorName = Convert.ToInt32(item["Floor"]);
+            viewModel.RoomName = Convert.ToString(item["Room"]);
+            viewModel.Remarks = Convert.ToString(item["Remarks"]);
+            return viewModel;
         }
 
-        public bool UpdateHeader(AssignmentofAssetVM header)
+        public LocationMasterVM GetProvinceInfo(string province, string SiteUrl)
         {
-            throw new NotImplementedException();
+            var caml = @"<View>
+                        <Query>
+                           <Where>
+                              <Eq>
+                                 <FieldRef Name='Province' />
+                                 <Value Type='Lookup'>"+province+@"</Value>
+                              </Eq>
+                           </Where>
+                        </Query>
+                        <ViewFields>
+                           <FieldRef Name='Province' />
+                           <FieldRef Name='Floor' />
+                           <FieldRef Name='Room' />
+                           <FieldRef Name='Remarks' />
+                           <FieldRef Name='Title' />
+                        </ViewFields>
+                        <QueryOptions /></View>";
+            var list = SPConnector.GetList("Location Master", SiteUrl, caml);
+            var viewmodel = new LocationMasterVM();
+            foreach(var item in list)
+            {
+                viewmodel.ID = Convert.ToInt32(item["ID"]);
+                viewmodel.OfficeName = Convert.ToString(item["Title"]);
+                viewmodel.FloorName = Convert.ToInt32(item["Floor"]);
+                viewmodel.RoomName = Convert.ToString(item["Room"]);
+                viewmodel.Remarks = Convert.ToString(item["Remarks"]);
+            }
+
+            return viewmodel;
         }
 
-        public void CreateMonthlyFeeDetails(int? headerID, IEnumerable<AssignmentofAssetVM> monthlyFeeDetails)
+        public void CreateDetails(int? headerID, IEnumerable<AssignmentOfAssetDetailsVM> items)
         {
-            throw new NotImplementedException();
-        }
+            foreach (var item in items)
+            {
+                if (Item.CheckIfSkipped(item)) continue;
 
-        IEnumerable<AssignmentofAssetVM> IAssignmentofAssetService.GetAssignmentofAsset()
-        {
-            throw new NotImplementedException();
-        }
+                if (Item.CheckIfDeleted(item))
+                {
+                    try
+                    {
+                        SPConnector.DeleteListItem("Assignment Asset Detail", item.ID, _siteUrl);
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error(e);
+                        throw e;
+                    }
+                    continue;
+                }
 
-        public bool CreateAssignmentofAsset(AssignmentofAssetVM assignmentofAsset)
-        {
-            throw new NotImplementedException();
-        }
+                var updatedValues = new Dictionary<string, object>();
+                updatedValues.Add("assetassignment", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
+                var getAssetID = SPConnector.GetListItem("Asset Acquisition Details", item.AssetSubAsset.Value.Value, _siteUrl);
+                var getProvince = SPConnector.GetListItem("Province", item.Province.Value.Value, _siteUrl);
+                var provinceinfo = SPConnector.GetListItem("Location Master", item.Province.Value.Value, _siteUrl);
+                if ((getAssetID["assetsubasset"] as FieldLookupValue) != null)
+                {
+                    updatedValues.Add("assetsubasset", (getAssetID["assetsubasset"] as FieldLookupValue).LookupId);
+                }
 
-        public bool UpdateAssignmentofAsset(AssignmentofAssetVM assignmentofAsset)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool CreateAssignmentofAsset_Dummy(AssignmentofAssetItemVM assignmentofAsset)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool UpdateAssignmentofAsset_Dummy(AssignmentofAssetItemVM assignmentofAsset)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool DestroyAssignmentofAsset_Dummy(AssignmentofAssetItemVM assignmentofAsset)
-        {
-            throw new NotImplementedException();
+                if ((getProvince["Province"] as FieldLookupValue) != null)
+                {
+                    updatedValues.Add("province", (getProvince["Province"] as FieldLookupValue).LookupId);
+                }
+                //updatedValues.Add("assetsubasset", getAssetID["AssetID"]);
+                //updatedValues.Add("province", getProvince["Title"]);
+                updatedValues.Add("office", provinceinfo["Title"]);
+                updatedValues.Add("floor", provinceinfo["Floor"]);
+                updatedValues.Add("room", provinceinfo["Room"]);
+                updatedValues.Add("remarks", provinceinfo["Remarks"]);
+                updatedValues.Add("Status", "RUNNING");
+                try
+                {
+                    SPConnector.AddListItem("Asset Assignment Detail", updatedValues, _siteUrl);
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e);
+                    throw new Exception(ErrorResource.SPInsertError);
+                }
+            }
         }
     }
 }

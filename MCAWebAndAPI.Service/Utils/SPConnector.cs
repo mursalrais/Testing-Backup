@@ -64,6 +64,7 @@ namespace MCAWebAndAPI.Service.Utils
                             ViewXml = caml
                         };
 
+                camlQuery.DatesInUtc = false; 
                 var SPListItems = SPList.GetItems(camlQuery);
                 context.Load(SPListItems);
                 try
@@ -80,27 +81,35 @@ namespace MCAWebAndAPI.Service.Utils
 
         public static ListItem GetListItem(string listName, int? listItemID, string siteUrl = null)
         {
-            MapCredential(siteUrl);
-            using (ClientContext context = new ClientContext(siteUrl ?? CurUrl))
-            {
-                SecureString secureString = new SecureString();
-                Password.ToList().ForEach(secureString.AppendChar);
-                context.Credentials = new SharePointOnlineCredentials(UserName, secureString);
-                
-                // Get one listitem
-                var SPListItem = context.Web.Lists.GetByTitle(listName).GetItemById((int)listItemID);
-                context.Load(SPListItem);
+            string caml = @"<View><Query><Where>
+                        <Eq><FieldRef Name='ID' />
+                        <Value Type='Number'>" + listItemID + "</Value></Eq>" +
+                        "</Where></Query>" +
+                        "<RowLimit>1</RowLimit> </View>"; 
+            //MapCredential(siteUrl);
+            //using (ClientContext context = new ClientContext(siteUrl ?? CurUrl))
+            //{
+            //    SecureString secureString = new SecureString();
+            //    Password.ToList().ForEach(secureString.AppendChar);
+            //    context.Credentials = new SharePointOnlineCredentials(UserName, secureString);
 
-                try
-                {
-                    context.ExecuteQuery();
-                }
-                catch (Exception e)
-                {
-                    throw e;
-                }
-                return SPListItem;
-            }
+            //    // Get one listitem
+            //    var SPListItem = context.Web.Lists.GetByTitle(listName).GetItemById((int)listItemID);
+            //    context.Load(SPListItem);
+
+            //    try
+            //    {
+            //        context.ExecuteQuery();
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        throw e;
+            //    }
+            //    return SPListItem;
+            //}
+
+            var SPListItem = GetList(listName, siteUrl, caml).FirstOrDefault();
+            return SPListItem;
         }
 
         public static void UpdateListItem(string listName, int? listItemID, Dictionary<string, object> updatedValues, string siteUrl = null)
@@ -193,7 +202,7 @@ namespace MCAWebAndAPI.Service.Utils
                 {
                     SPListItem[key] = updatedValues[key];
                 }
-                SPListItem["Editor"] = currentEditor;
+                //SPListItem["Editor"] = currentEditor;
                 // Update columns remotely
                 SPListItem.Update();
 
@@ -221,6 +230,7 @@ namespace MCAWebAndAPI.Service.Utils
             }
         }
 
+        
         /// <summary>
         /// 
         /// </summary>

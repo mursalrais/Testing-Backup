@@ -6,13 +6,14 @@
         .Name("ProfessionalPerformanceEvaluationDetails")
         .Columns(columns =>
         {
-            columns.Bound(p => p.Category.Text);
-            columns.Bound(p => p.IndividualGoalAndPlan);
-            columns.Bound(p => p.PlannedWeight);
-            columns.Bound(p => p.ActualWeight);
-            columns.Bound(p => p.Score);
-            columns.Bound(p => p.TotalScore);
-            columns.Bound(p => p.Output);
+            columns.Bound(p => p.ProjectOrUnitGoals).Width(250);
+            columns.Bound(p => p.Category).ClientTemplate("#= Category.Text #").Width(400);
+            columns.Bound(p => p.IndividualGoalAndPlan).Width(250);
+            columns.Bound(p => p.PlannedWeight).ClientTemplate("#= PlannedWeight #%").Width(100);
+            columns.Bound(p => p.ActualWeight).ClientTemplate("#= ActualWeight #%").Width(100);
+            columns.Bound(p => p.Score).Width(100);
+            columns.Bound(p => p.TotalScore).Width(100);
+            columns.Bound(p => p.Output).Width(250);
         })
         .DataSource(dataSource => dataSource.Ajax()
                    .Model(model =>

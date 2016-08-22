@@ -12,17 +12,16 @@
 
     .Columns(columns =>
     {
-        columns.Bound(p => p.Activity).ClientTemplate("#= Activity.Text #" +
-              "<input type='hidden' name='ItemDetails[#= getRequisitionDataDetail(data)#].Activity.Value' value='#= Activity.Value #' />")
+        columns.Bound(p => p.Activity).ClientTemplate("#= Activity.Title #" +
+              "<input type='hidden' name='ItemDetails[#= getRequisitionDataDetail(data)#].Activity.Value' value='#= Activity.ID #' />")
                        .EditorViewData(new
                        {
-                           DataTextField = "Text",
-                           DataValueField = "Value",
-                           ControllerName = "FINRequisitionNote",
-                           ActionName = "GetActivity",
-                           Filter = "filterProject"
-
-
+                           DataTextField = "Title",
+                           DataValueField = "ID",
+                           ControllerName = "ComboBox",
+                           ActionName = "GetActivitiesByProject",
+                           Filter = "filterProject",
+                           Cascade= "Project_Value"
                        })
                .Width("15%");
 
@@ -79,13 +78,13 @@
         columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
                      "<input type='hidden' name='ItemDetails[#= getRequisitionDataDetail(data)#].EditMode' value='#= EditMode #' />"
         );
-        columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
+        columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger deleteRow" })
             .Click("onDeleteKendoDetail")).Width(100);
     })
      .Events(e =>
      {
          e.Edit("onEditKendoDetail");
-         e.DataBound("onDataBoundEducationDetails");
+         e.DataBound("onDataBoundItemDetails");
          e.Edit("onedit");
      })
 
@@ -114,7 +113,7 @@
         return { eventBudgetId: $("#hdnEvenBudgetId").val() };
     }
 
-    function onDataBoundEducationDetails(e) {
+    function onDataBoundItemDetails(e) {
         var grid = $("#ItemDetails").data("kendoGrid");
         hideDeletedRowKendoDetail(grid);
 
@@ -130,13 +129,13 @@
         var category = $("#Category_Value").data("kendoDropDownList").value();
 
         if (category === CATEGORY_NON_EVENT) {
-            grid.showColumn(11);
+            $(".deleteRow").css("display", "block");
             $(".k-grid-toolbar").css("display", "block");
             
         }
         else
         {
-            grid.hideColumn(11);
+            $(".deleteRow").css("display", "none");
             $(".k-grid-toolbar").css("display", "none");
         }
 
@@ -144,14 +143,17 @@
     }
 
     function calculateField(data) {
-        data.set("Total",  data.Price * data.Quantity);
-
+        if (data.IsFromEventBudget === false) {
+            data.set("Total", data.Price * data.Quantity);
+        }
         return data;
     }
 
-    function filterWBS(dataitem) {
+   
+    function filterWBS() {
+        var activityId = $('#WBS').closest('td').prev('td')[0].childNodes[2].value;
         return {
-            activity: dataitem.activity.value
+            activity: activityId
         };
     }
 
@@ -172,7 +174,11 @@
 
     function filterProject() {
         return {
-            Project: $("#Project_Value").val()
+            projectValue: $("#Project_Value").val()
         };
+    }
+
+    function refreshItemDetailGrid() {
+        $("#ItemDetails").data("kendoGrid").dataSource.read();
     }
 </script>

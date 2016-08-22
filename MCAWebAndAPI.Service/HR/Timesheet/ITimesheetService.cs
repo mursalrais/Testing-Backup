@@ -15,7 +15,13 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
 
         IEnumerable<TimesheetDetailVM> GetTimesheetDetails(string userlogin, DateTime period);
 
-        IEnumerable<TimesheetDetailVM> AppendWorkingDays(IEnumerable<TimesheetDetailVM> currentDays, DateTime from, DateTime to, bool isFullDay, string location = null);
-        
+        IEnumerable<TimesheetDetailVM> AppendWorkingDays(IEnumerable<TimesheetDetailVM> currentDays, 
+            DateTime from, DateTime to, bool isFullDay, string location = null, int? locationid = null);
+
+        int CreateHeader(TimesheetVM header);
+
+        void CreateTimesheetDetails(int? headerId, IEnumerable<TimesheetDetailVM> timesheetDetails);
+
+
     }
 }

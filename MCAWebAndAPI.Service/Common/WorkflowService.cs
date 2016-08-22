@@ -197,6 +197,11 @@ namespace MCAWebAndAPI.Service.Common
             return GetApproverNames(position);
         }
 
+        private async Task<IEnumerable<ProfessionalMaster>> GetApproverUserNamesAsync(string position)
+        {
+            return GetApproverUserNames(position);
+        }
+
         private string GetApproverUserLogin(int userID)
         {
             var caml = @"<View>  
@@ -375,6 +380,173 @@ namespace MCAWebAndAPI.Service.Common
                 LookupID = (int)FormatUtil.ConvertLookupToID(item, lookupColumnName),
                 TransactionName = listName
             };
+        }
+
+        public async Task<WorkflowRouterVM> GetApprovalPath(string listName, string requestor)
+        {
+            var viewModel = new WorkflowRouterVM();
+            viewModel.ListName = listName;
+
+            // Get Position in Professional Master
+            var caml = @"<View><Query><Where><Eq>
+                <FieldRef Name='officeemail' /><Value Type='Text'>" + requestor +
+                @"</Value></Eq></Where></Query><ViewFields><FieldRef Name='Position' /><FieldRef Name='Project_x002f_Unit' /></ViewFields><QueryOptions /></View>";
+
+            int? positionID = 0;
+            foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl, caml))
+            {
+                viewModel.RequestorPosition = FormatUtil.ConvertLookupToValue(item, "Position");
+                positionID = FormatUtil.ConvertLookupToID(item, "Position");
+
+                break;
+            }
+
+            // Get Unit in Position Master
+            var position = SPConnector.GetListItem(SP_POSMAS_LIST_NAME, positionID, _siteUrl);
+            viewModel.RequestorUnit = Convert.ToString(position["projectunit"]);
+
+            // Get List of Workflow Items based on List name, Requestor Position, and Requestor Unit
+            caml = @"<View>  
+            <Query> 
+               <Where><And><And><Eq><FieldRef Name='requestorposition' /><Value Type='Lookup'>" + viewModel.RequestorPosition +
+               @"</Value></Eq><Eq><FieldRef Name='requestorunit' /><Value Type='Choice'>" + viewModel.RequestorUnit + @"</Value></Eq></And><Eq>
+               <FieldRef Name='transactiontype' /><Value Type='Choice'>" + listName + @"</Value></Eq></And></Where> 
+            <OrderBy><FieldRef Name='approverlevel' /></OrderBy>
+            </Query> 
+            </View>";
+
+            var workflowItems = new List<WorkflowItemVM>();
+            foreach (var item in SPConnector.GetList(SP_WORKFLOW_LISTNAME, _siteUrl, caml))
+            {
+                if (string.Compare(Convert.ToString(item["isdefault"]), "No",
+                    StringComparison.OrdinalIgnoreCase) == 0
+                    &&
+                    string.Compare(Convert.ToString(item["workflowtype"]), "Sequential",
+                    StringComparison.OrdinalIgnoreCase) == 0)
+                    continue;
+
+                var vm = await ConvertToApprovalItemVM(item);
+                workflowItems.Add(vm);
+            }
+
+            viewModel.WorkflowItems = workflowItems;
+
+            return viewModel;
+        }
+
+        private async Task<WorkflowItemVM> ConvertToApprovalItemVM(ListItem item)
+        {
+            var viewModel = new WorkflowItemVM();
+            viewModel.ApproverPositionText = FormatUtil.ConvertLookupToValue(item, "approverposition");
+            Task<IEnumerable<ProfessionalMaster>> getApproverNamesTask =
+                GetApproverUserNamesAsync(viewModel.ApproverPositionText);
+
+            viewModel.Level = Convert.ToString(item["approverlevel"]);
+
+            if (viewModel.Level == "1")
+            {
+                viewModel.ItemExitProcedure = "Close-Out/Handover Report";
+            }
+            else if (viewModel.Level == "2")
+            {
+                viewModel.ItemExitProcedure = "MCA Indonesia Propietary Information";
+            }
+            else if (viewModel.Level == "3")
+            {
+                viewModel.ItemExitProcedure = "Laptop/Desktop";
+            }
+            else if (viewModel.Level == "4")
+            {
+                viewModel.ItemExitProcedure = "SAP Password, Computer Password";
+            }
+            else if (viewModel.Level == "5")
+            {
+                viewModel.ItemExitProcedure = "IT Tools";
+            }
+            else if (viewModel.Level == "6")
+            {
+                viewModel.ItemExitProcedure = "Keys (Drawers,desk,etc)";
+            }
+            else if (viewModel.Level == "7")
+            {
+                viewModel.ItemExitProcedure = "Car";
+            }
+            else if (viewModel.Level == "8")
+            {
+                viewModel.ItemExitProcedure = "Advance Statement";
+            }
+            else if (viewModel.Level == "9")
+            {
+                viewModel.ItemExitProcedure = "Travel Statement";
+            }
+            else if (viewModel.Level == "10")
+            {
+                viewModel.ItemExitProcedure = "Resignation/Separation Letter";
+            }
+            else if (viewModel.Level == "11")
+            {
+                viewModel.ItemExitProcedure = "Timesheet/Leave Form";
+            }
+            else if (viewModel.Level == "12")
+            {
+                viewModel.ItemExitProcedure = "Exit Interview/NDA";
+            }
+            else if (viewModel.Level == "13")
+            {
+                viewModel.ItemExitProcedure = "Insurance Card";
+            }
+            else if (viewModel.Level == "14")
+            {
+                viewModel.ItemExitProcedure = "ID Card & Access Card";
+            }
+
+            viewModel.ApproverUnitText = Convert.ToString(item["approverunit"]);
+
+            var userNames = await getApproverNamesTask;
+            var userName = userNames.FirstOrDefault();
+            viewModel.ApproverUserName = AjaxComboBoxVM.GetDefaultValue(new AjaxComboBoxVM
+            {
+                Text = userName.Name,
+                Value = userName.ID
+            });
+
+            return viewModel;
+        }
+
+        public IEnumerable<ProfessionalMaster> GetApproverUserNames(string position)
+        {
+            var caml = @"<View>  
+            <Query> 
+             <Where><And><Eq><FieldRef Name='Professional_x0020_Status' /><Value Type='Choice'>Active</Value></Eq><Eq><FieldRef Name='Position' /><Value Type='Lookup'>" + position + @"</Value></Eq></And></Where> 
+            </Query> 
+             <ViewFields><FieldRef Name='Title' /><FieldRef Name='officeemail' /></ViewFields> 
+      </View>";  
+
+            var viewModel = new List<ProfessionalMaster>();
+            foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl, caml))
+            {
+                viewModel.Add(ConvertToProfessionalMasterVM(item));
+            }
+
+            return viewModel;
+        }
+
+        public IEnumerable<ProfessionalMaster> GetApproverUser()
+        {
+            var caml = @"<View>  
+            <Query> 
+               <Where><Eq><FieldRef Name='Professional_x0020_Status' /><Value Type='Choice'>Active</Value></Eq></Where>
+            </Query> 
+             <ViewFields><FieldRef Name='Title' /><FieldRef Name='officeemail' /></ViewFields> 
+      </View>";
+
+            var viewModel = new List<ProfessionalMaster>();
+            foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl, caml))
+            {
+                viewModel.Add(ConvertToProfessionalMasterVM(item));
+            }
+
+            return viewModel;
         }
     }
 }

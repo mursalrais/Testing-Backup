@@ -5,28 +5,33 @@ using System.ComponentModel.DataAnnotations;
 using System.Web;
 using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Model.ViewModel.Control;
+using static MCAWebAndAPI.Model.ViewModel.Form.Finance.Shared;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 {
+    /// <summary>
+    /// Wireframe FIN09: Outstanding Advance
+    /// </summary>
+
     public class OutstandingAdvanceVM : Item
-    {    
+    {
+        public Operations Operation { get; set; }
+
         [Required]
         [DisplayName("Date (Upload)")]
         [UIHint("Date")]
-        public DateTime? DateOfUpload { get; set; } = DateTime.Now;
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
+        public DateTime DateOfUpload { get; set; } = DateTime.Now;
 
         [Required]
         [DisplayName("Staff")]
         [UIHint("AjaxComboBox")]
-        public AjaxCascadeComboBoxVM StaffID { get; set; } = new AjaxCascadeComboBoxVM
+        public AjaxCascadeComboBoxVM Staff { get; set; } = new AjaxCascadeComboBoxVM
         {
-            //TODO: ganti dengan yang bener ya...
-            ControllerName = "FINEventBudget",
-            ActionName = "GetEventBudgetList",
-            ValueField = "ID",
-            TextField = "Title",
-            OnSelectEventName = "onSelectEventBudgetNo"
-
+            ControllerName = "Vendor",
+            ActionName = "GetVendor",
+            ValueField = "Value",
+            TextField = "Text"
         };
 
         /// <summary>
@@ -39,7 +44,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         [Required]
         [DisplayName("Due Date")]
         [UIHint("Date")]
-        public DateTime? DueDate { get; set; } = DateTime.Now;
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
+        public DateTime DueDate { get; set; } = DateTime.Now;
 
         [Required]
         [DisplayName("Currency")]
@@ -60,10 +66,11 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         [UIHint("TextArea")]
         public string Remarks { get; set; }
 
-        [Required]
-        [DisplayName("Attachment")]
         [UIHint("MultiFileUploader")]
-        public IEnumerable<HttpPostedFileBase> Attachment { get; set; } = new List<HttpPostedFileBase>();
+        [DisplayName("Attachment")]
+        public IEnumerable<HttpPostedFileBase> Documents { get; set; } = new List<HttpPostedFileBase>();
+
+        public string DocumentUrl { get; set; }
 
     }
 }

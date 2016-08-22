@@ -117,6 +117,15 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Congratulation! Your Adjustment Day-Off Balance data has successfully been created..
+        /// </summary>
+        public static string SuccessCreateAdjustmentDayOffBalance {
+            get {
+                return ResourceManager.GetString("SuccessCreateAdjustmentDayOffBalance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Congratulation {0}! Your application has successfully been submitted..
         /// </summary>
         public static string SuccessCreateApplicationData {
@@ -151,7 +160,7 @@ namespace MCAWebAndAPI.Web.Resources {
                 return ResourceManager.GetString("SuccessCreatePSAManagementData", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to  {0}  has successfully been submitted..
         /// </summary>
@@ -162,7 +171,7 @@ namespace MCAWebAndAPI.Web.Resources {
                 return ResourceManager.GetString("SuccessCreateSPHLData", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Congratulations! Your tax exemption data has successfully been submitted..
         /// </summary>

@@ -74,8 +74,9 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
+                Response.TrySkipIisCustomErrors = true;
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
+                return JsonHelper.GenerateJsonErrorResponse(e.Message);
             }
 
             viewModel.OrganizationalDetails = BindOrganizationalDetails(form, viewModel.OrganizationalDetails);
@@ -84,6 +85,7 @@ namespace MCAWebAndAPI.Web.Controllers
             Task createEducationDetailsTask = _professionalService.CreateEducationDetailsAsync(headerID, viewModel.EducationDetails);
             viewModel.TrainingDetails = BindTrainingDetails(form, viewModel.TrainingDetails);
             Task createTrainingDetailsTask = _professionalService.CreateTrainingDetailsAsync(headerID, viewModel.TrainingDetails);
+            viewModel.DependentDetails = BindDependentDetails(form,viewModel.DependentDetails);
             Task createDependentDetailsTask = _professionalService.CreateDependentDetailsAsync(headerID, viewModel.DependentDetails);
 
             Task allTask = Task.WhenAll(createOrganizationalDetailsTask, createEducationDetailsTask, createTrainingDetailsTask, createDependentDetailsTask);
@@ -94,11 +96,18 @@ namespace MCAWebAndAPI.Web.Controllers
                 switch (viewModel.ValidationAction)
                 {
                     case "ask-hr-to-validate-action":
+                        List<string> EmailsHR = _professionalService.GetEmailHR();
                         _professionalService.SetValidationStatus(headerID, Workflow.ProfessionalValidationStatus.NEED_VALIDATION);
-                        _professionalService.SendEmailValidation(
-                            "randi.prayengki@eceos.com",
+                        foreach (var item in EmailsHR)
+                        {
+                            if (!(string.IsNullOrEmpty(item)))
+                            {
+                                _professionalService.SendEmailValidation(item,
                             string.Format(EmailResource.ProfessionalEmailValidation,
                             string.Format(UrlResource.ProfessionalDisplayByID, siteUrl, headerID)));
+                            }
+                            
+                        }                        
                         break;
 
                     // Suppose mariani.yosefi is the applicant
@@ -106,23 +115,35 @@ namespace MCAWebAndAPI.Web.Controllers
                     case "approve-action":
                         _professionalService.SetValidationStatus(headerID, Workflow.ProfessionalValidationStatus.VALIDATED);
                         _professionalService.SendEmailValidation(
-                            "mariani.yosefi@eceos.com",
-                            string.Format(EmailResource.ProfessionalEmailValidationResponse), isApproved: true);
+                            viewModel.OfficeEmail,
+                            string.Format(EmailResource.ProfessionalEmailValidationResponse));
                         break;
                     case "reject-action":
                         _professionalService.SetValidationStatus(headerID, Workflow.ProfessionalValidationStatus.REJECTED);
                         _professionalService.SendEmailValidation(
-                            "mariani.yosefi@eceos.com",
-                            string.Format(EmailResource.ProfessionalEmailValidationResponse), isApproved: false);
+                            viewModel.OfficeEmail,
+                            string.Format(EmailResource.ProfessionalEmailValidationResponse));
                         break;
                 }
             }
             catch (Exception e)
             {
+                Response.TrySkipIisCustomErrors = true;
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
+                return JsonHelper.GenerateJsonErrorResponse(e.Message);
             }
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl+"/"+UrlResource.Professional);
+        }
+
+        private IEnumerable<DependentDetailVM> BindDependentDetails(FormCollection form, IEnumerable<DependentDetailVM> dependentDetails)
+        {
+            var array = dependentDetails.ToArray();
+            for (int i = 0; i < array.Length; i++)
+            {
+                array[i].DateOfBirthGrid = BindHelper.BindDateInGridProfessional("DependentDetails",
+                    i, "DateOfBirthGrid", form);
+            }
+            return array;
         }
 
         IEnumerable<OrganizationalDetailVM> BindOrganizationalDetails(FormCollection form, IEnumerable<OrganizationalDetailVM> organizationalDetails)
@@ -130,8 +151,10 @@ namespace MCAWebAndAPI.Web.Controllers
             var array = organizationalDetails.ToArray();
             for (int i = 0; i < array.Length; i++)
             {
-                array[i].LastWorkingDay = BindHelper.BindDateInGrid("OrganizationalDetails",
+                array[i].LastWorkingDay = BindHelper.BindDateInGridProfessional("OrganizationalDetails",
                     i, "LastWorkingDay", form);
+                array[i].StartDate = BindHelper.BindDateInGridProfessional("OrganizationalDetails",
+                    i, "StartDate", form);
             }
             return array;
         }
@@ -141,7 +164,7 @@ namespace MCAWebAndAPI.Web.Controllers
             var array = trainingDetails.ToArray();
             for (int i = 0; i < array.Length; i++)
             {
-                array[i].Year = BindHelper.BindDateInGrid("TrainingDetails",
+                array[i].Year = BindHelper.BindDateInGridProfessional("TrainingDetails",
                     i, "Year", form);
             }
             return array;
@@ -153,7 +176,7 @@ namespace MCAWebAndAPI.Web.Controllers
             var array = educationDetails.ToArray();
             for (int i = 0; i < array.Length; i++)
             {
-                array[i].YearOfGraduation = BindHelper.BindDateInGrid("EducationDetails",
+                array[i].YearOfGraduation = BindHelper.BindDateInGridProfessional("EducationDetails",
                     i, "YearOfGraduation", form);
             }
             return array;

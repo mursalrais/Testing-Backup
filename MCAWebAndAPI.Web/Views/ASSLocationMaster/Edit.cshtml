@@ -1,0 +1,78 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Asset
+
+@model LocationMasterVM
+
+@using (Ajax.BeginForm((string)ViewBag.Action, "ASSLocationMaster",
+                                                                                                    FormMethod.Post,
+                                                                                                    new AjaxOptions
+                                                                                                    {
+                                                                                                        OnBegin = "onBeginForm",
+                                                                                                        OnComplete = "onCompleteForm",
+                                                                                                        OnSuccess = "onSuccessFormEmbed",
+                                                                                                        OnFailure = "onFailureForm"
+                                                                                                    }, new { @class = "form-horizontal" }))
+{<fieldset>
+        <legend>Form Location Master</legend>
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary()
+
+        <div class="col-sm-12">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Province).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.Province)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.OfficeName).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @*@Html.EditorFor(m => m.OfficeName)*@
+                    <input tye="text" name="OfficeName" id="OfficeName" value="@Model.OfficeName" style="width:100%" />
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.FloorName).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.FloorName)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.RoomName).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @*@Html.EditorFor(m => m.RoomName)*@
+                    <input tye="text" name="RoomName" id="RoomName" value="@Model.RoomName" style="width:100%" />
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Remarks).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @*@Html.EditorFor(m => m.Remarks)*@
+                    <textarea id="Remarks" name="Remarks" style="width:100%" rows="6">@Model.Remarks</textarea>
+                </div>
+            </div>
+        </div>
+        @Html.HiddenFor(m => m.ID)
+        @*@Html.HiddenFor(m => m.CancelURL)*@
+    </fieldset>
+}
+
+<div class="form-actions">
+    <div class="row">
+        <div class="col-sm-12">
+            <button id="submit-button" class="btn btn-primary" type="submit">
+                <i class="fa fa-save"></i>
+                Submit
+            </button>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#submit-button").click(function () {
+                $("form").submit();
+            });
+        });
+    </script>
+}

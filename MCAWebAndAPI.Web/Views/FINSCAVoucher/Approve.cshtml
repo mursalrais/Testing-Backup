@@ -1,0 +1,74 @@
+﻿@model MCAWebAndAPI.Model.ViewModel.Form.Finance.SCAVoucherVM
+
+@*
+    Wireframe FIN06: SCA Voucher
+    i.e.: Special Cash Advance Voucher
+*@
+
+@using (Html.BeginForm("Edit", "FINSCAVoucher",
+    FormMethod.Post,
+    new
+    {
+        @class = "form-horizontal",
+        enctype = "multipart/form-data"
+    }))
+{
+    <fieldset>
+        <legend>Special Cash Advance Voucher</legend>
+        <div class="row">
+            @Html.Partial("_GeneralFormDisplay", Model)
+
+            <div class="col-sm-5">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.TransactionStatus).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.TransactionStatus)
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <legend>Item Detail</legend>
+        <div class="row">
+            @Html.Partial("_DisplayEventBudgetItems", Model)
+        </div>
+        @Html.HiddenFor(m => m.ID, new { @id = "hdnSCAVoucherID" })
+        @Html.HiddenFor(m => m.Action)
+    </fieldset>
+
+    <div class="form-actions">
+        <div class="row">
+            <div class="col-sm-12">
+                <button id="submit-button" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    Save
+                </button>
+                <button id="submit-cancel" acti class="btn btn-primary" type="button">
+                    <i class="fa fa-back"></i>
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+}
+@section scripts{
+    <script>
+        function GetDisplayEventBudgetItem(dataItem) {
+            $("#EventBudgetDetail").data("kendoGrid").dataSource.read();
+        }
+
+        function filterEventBudgetNo() {
+            return {
+                eventBudgetId: $("#hdnEventBudgetNoID").val()
+            };
+        }
+    </script>
+}
+<style media="screen">
+    #Fund {
+        background-color: #dedede;
+    }
+    textarea{
+        padding-left:10px!important;
+    }
+</style>

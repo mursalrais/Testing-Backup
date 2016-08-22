@@ -1,0 +1,188 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+
+@model AdjustmentDayOffBalanceVM
+
+@{
+    ViewBag.Title = "Form Create Adjustment Day-Off Balance";
+}
+
+@using (Ajax.BeginForm("CreateAdjustmentDayOffBalance", "HRAdjustmentDayOffBalance",
+                                                                                        FormMethod.Post,
+                                                                                        new AjaxOptions
+                                                                                        {
+                                                                                            OnBegin = "onBeginForm",
+                                                                                            OnComplete = "onCompleteForm",
+                                                                                            OnSuccess = "onSuccessFormEmbed",
+                                                                                            OnFailure = "onFailureForm"
+                                                                                        }, new { @class = "form-horizontal" }))
+
+{<fieldset>
+        <legend>Form Adjustment Day-Off Balance</legend>
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary()
+
+        <div class="col-sm-12">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Professional).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.Professional)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.ProjectUnit).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.ProjectUnit)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Position).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.Position)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.AdjustmentDate).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.AdjustmentDate)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.DayOffType).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.DayOffType)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.LastBalance).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @(Html.Kendo().IntegerTextBoxFor(m => m.LastBalance)
+                .HtmlAttributes(new { style = "width:100%" })
+                    )
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Adjustment).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @(Html.Kendo().IntegerTextBoxFor(m => m.Adjustment)
+                .HtmlAttributes(new { style = "width:100%" })
+                .Min(1)
+                .Max(20)
+                    )
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.DebitCredit).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.DebitCredit)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.NewBalance).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.NewBalance)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Remarks).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.Remarks)
+                </div>
+            </div>
+        </div>
+    </fieldset>
+
+    <div class="form-actions">
+        <div class="row">
+            <div class="col-md-12">
+                <button id="submit-button" class="btn btn-primary" type="button" onclick="checkAdjustment()">
+                    <i class="fa fa-save"></i>
+                    Save
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+    function checkAdjustment()
+    {
+        if($("#Adjustment").val() == null)
+        {
+            alert("You Must Input The Adjustment Amount");
+        }
+        else
+        {
+            $("form").submit();
+        }
+    }
+
+    function OnProfessional(e) {
+        var dataItem = this.dataItem(e.item);
+
+        var url = "/HRDataMaster/GetProfessional/" + dataItem.ID;
+
+        $.getJSON(url, function (result) {
+
+            var projectunit = result[0].Project_Unit;
+            var position = result[0].Position;
+
+            $("#ProjectUnit").prop("value", projectunit);
+            $("#Position").prop("value", position);
+        })
+    }
+
+    function OnCalCulateNewBalance(e)
+    {
+        var dataItem = this.dataItem(e.item);
+
+        var adjustment = $("#Adjustment").data("kendoNumericTextBox").value();
+        
+        if ($("#Adjustment").data("kendoNumericTextBox").value() == null)
+        {
+            alert("You Must Input The Adjustment Amount");
+        }
+        else
+        {
+            if(dataItem == "Debit")
+            {
+                var calculateNewBalance = $("#LastBalance").data("kendoNumericTextBox").value() - $("#Adjustment").data("kendoNumericTextBox").value();
+                $("#NewBalance").prop("value", calculateNewBalance);
+            }
+            if(dataItem == "Credit")
+            {
+                var calculateNewBalance = $("#LastBalance").data("kendoNumericTextBox").value() + $("#Adjustment").data("kendoNumericTextBox").value();
+                $("#NewBalance").prop("value", calculateNewBalance);
+            }
+        }
+    }
+
+    function GetLastBalance(e)
+    {
+        var dataItem = this.dataItem(e.item);
+
+        if (dataItem == "Annual Day-Off")
+        {
+            var url = "/HRAdjustmentDayOffBalance/GetLastBalanceAnnualDayOff?ID=" + $("#Professional_Value").val() + "&DayOffType=" + dataItem;
+        }
+        else if (dataItem == "Special Day-Off")
+        {
+            var url = "/HRAdjustmentDayOffBalance/GetLastBalanceSpecialDayOff?ID=" + $("#Professional_Value").val() + "&DayOffType=" + dataItem;
+        }
+        else if (dataItem == "Paternity")
+        {
+            var url = "/HRAdjustmentDayOffBalance/GetLastBalancePaternity?ID=" + $("#Professional_Value").val() + "&DayOffType=" + dataItem;
+        }
+        else if (dataItem == "Day-off due to Compensatory time")
+        {
+            var url = "/HRAdjustmentDayOffBalance/GetLastBalanceCompensatory?ID=" + $("#Professional_Value").val() + "&DayOffType=" + dataItem;
+        }
+
+        $.getJSON(url, function (result) {
+
+            $("#LastBalance").data("kendoNumericTextBox").readonly();
+            $("#LastBalance").data("kendoNumericTextBox").value(result);
+
+            console.log("Result: " + result);
+        })
+    }
+</script>

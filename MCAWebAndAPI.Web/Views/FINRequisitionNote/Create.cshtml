@@ -6,22 +6,14 @@
     
 }
 
-@using (Ajax.BeginForm("CreateRequisitionNote", "FINRequisitionNote",
-        FormMethod.Post,
-        new AjaxOptions
-        {
-            OnBegin = "onBeginForm",
-            OnComplete = "onCompleteForm",
-            OnSuccess = "onSuccessFormEmbed",
-            OnFailure = "onFailureForm"
-        },
-        new
-        {
-            @class = "form-horizontal",
-            enctype = "multipart/form-data"
-        }))
-
-{
+@using (Html.BeginForm("CreateRequisitionNote", "FINRequisitionNote",
+                FormMethod.Post,
+                new
+                {
+                    @class = "form-horizontal",
+                    enctype = "multipart/form-data"
+                }))
+    {
     <fieldset>
         <legend>Requisition Note</legend>
         <div class="row">
@@ -62,6 +54,11 @@
 @section scripts{
     <script>
         $(document).ready(function () {
+            var categoryDropDownList = $("#Category_Value").data("kendoDropDownList");
+            categoryDropDownList.bind("dataBound", function (e) {
+            });
+
+            $("#hdnEvenBudgetId").val("-1");
 
         });
 

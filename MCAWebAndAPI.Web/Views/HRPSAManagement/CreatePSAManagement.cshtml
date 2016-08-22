@@ -132,6 +132,7 @@
 
                         var psaID = result[0].PSAId;
                         var renewalnumber = result[0].PSARenewalNumber + 1;
+
                         var strpsarenewal = parseInt(result[0].StrPSARenewal) + 1;
                         var dateofnewpsabefore = result[0].DateNewPSABefore;
                         var projectUnit = result[0].ProjectUnit;
@@ -143,8 +144,8 @@
                         var dateJoinDate = joinDate.getDate();
                         var monthJoinDate = joinDate.getMonth();
                         var yearJoinDate = joinDate.getFullYear();
-                        var joinDateProfessional = (monthJoinDate  + 1) + '/' + dateJoinDate + '/' + yearJoinDate;
-                        
+                        var joinDateProfessional = (monthJoinDate + 1) + '/' + dateJoinDate + '/' + yearJoinDate;
+
                         var dateofnewpsa = new Date(dateofnewpsabefore);
                         var datenewpsa = dateofnewpsa.getDate();
                         var datenewpsaint = parseInt(datenewpsa);
@@ -172,7 +173,7 @@
 
                         $("#PSARenewalNumber").prop("readonly", "true");
                         $("#PSARenewalNumber").prop("value", renewalnumber);
-                        
+
                         $("#StrPSARenewal").prop("readonly", "true");
                         $("#StrPSARenewal").prop("value", strpsarenewal);
 
@@ -191,9 +192,12 @@
 
                         $("#JoinDate").data("kendoDatePicker").readonly();
                         $("#JoinDate").prop('value', joinDateProfessional);
+                        
 
                         $("#ProjectOrUnit_Value").data("kendoDropDownList").value(result[0].ProjectUnit);
-                        $("#Position_Value").data("kendoDropDownList").value(result[0].PositionID);
+                        //$("#Position_Value").data("kendoDropDownList").value(result[0].PositionID);
+                        $("#PositionBasedProject_Value").data("kendoDropDownList").value(result[0].PositionID);
+                        
                         
                         
                     }

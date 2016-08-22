@@ -71,14 +71,29 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             else if(exitProcedure.StatusForm == "Draft")
             {
                 statusExitProcedure = "Draft";
+                
+                var professionalData = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, exitProcedure.ProfessionalID, _siteUrl);
+                string professionalOfficeMail = Convert.ToString(professionalData["officeemail"]);
+
+                updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hr"));
             }
             else if (exitProcedure.StatusForm == "Saved by HR")
             {
                 statusExitProcedure = "Draft";
+
+                var professionalData = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, exitProcedure.ProfessionalID, _siteUrl);
+                string professionalOfficeMail = Convert.ToString(professionalData["officeemail"]);
+
+                updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hr"));
             }
             else if (exitProcedure.StatusForm == "Approved by HR")
             {
                 statusExitProcedure = "Approved";
+
+                var professionalData = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, exitProcedure.ProfessionalID, _siteUrl);
+                string professionalOfficeMail = Convert.ToString(professionalData["officeemail"]);
+
+                updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hr"));
             }
 
             updatedValues.Add("status", statusExitProcedure);
@@ -403,6 +418,32 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 viewModel.ItemExitProcedure = "Travel Statement";
                 viewModel.Remarks = "Rp 2.000.000";
             }
+            else if (viewModel.Level == "10")
+            {
+                viewModel.ItemExitProcedure = "Resignation/Separation Letter";
+                viewModel.Remarks = "";
+            }
+            else if (viewModel.Level == "11")
+            {
+                viewModel.ItemExitProcedure = "Timesheet/Leave Form";
+                viewModel.Remarks = "";
+            }
+            else if (viewModel.Level == "12")
+            {
+                viewModel.ItemExitProcedure = "Exit Interview/NDA";
+                viewModel.Remarks = "";
+            }
+            else if (viewModel.Level == "13")
+            {
+                viewModel.ItemExitProcedure = "Insurance Card";
+                viewModel.Remarks = "";
+            }
+            else if (viewModel.Level == "14")
+            {
+                viewModel.ItemExitProcedure = "ID Card & Access Card";
+                viewModel.Remarks = "";
+            }
+
 
             viewModel.CheckListItemApproval =
                 ExitProcedureChecklistVM.GetCheckListItemApprovalDefaultValue();
@@ -714,30 +755,38 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         private ExitProcedureChecklistVM ConvertToExitProcedureChecklist(ListItem item)
         {
-            return new ExitProcedureChecklistVM
-            {
-                ID = Convert.ToInt32(item["ID"]),
-                ItemExitProcedure = Convert.ToString(item["Title"]),
-                Remarks = Convert.ToString(item["remarks"]),
-                ApproverUnit = ExitProcedureChecklistVM.GetUnitDefaultValue(
+            var viewModel = new ExitProcedureChecklistVM();
+
+            viewModel.ID = Convert.ToInt32(item["ID"]);
+            viewModel.ItemExitProcedure = Convert.ToString(item["Title"]);
+            viewModel.Remarks = Convert.ToString(item["remarks"]);
+            viewModel.ApproverUnit = ExitProcedureChecklistVM.GetUnitDefaultValue(
                     new Model.ViewModel.Control.InGridComboBoxVM
                     {
                         Text = Convert.ToString(item["approverunit"])
                     }
-                    ),
-                DateOfApproval = Convert.ToDateTime(item["dateofapproval"]).ToLocalTime(),
-                CheckListItemApproval = ExitProcedureChecklistVM.GetCheckListItemApprovalDefaultValue(
+                );
+            viewModel.DateOfApproval = Convert.ToDateTime(item["dateofapproval"]).ToLocalTime();
+            viewModel.CheckListItemApproval = ExitProcedureChecklistVM.GetCheckListItemApprovalDefaultValue(
                     new Model.ViewModel.Control.InGridComboBoxVM
                     {
                         Text = Convert.ToString(item["checklistitemapproval"])
                     }
-                    ),
-                ApproverPosition = ExitProcedureChecklistVM.GetPositionDefaultValue(FormatUtil.ConvertToInGridAjaxComboBox(item, "approverposition")),
-                ApproverUserName = ExitProcedureChecklistVM.GetApproverUserNameDefaultValue(FormatUtil.ConvertToInGridAjaxComboBox(item, "approverusername")),
-                Level = Convert.ToString(item["approverlevel"]),
-                ApprovalIndicator = "red"
-                
-            };
+                );
+            viewModel.ApproverPosition = ExitProcedureChecklistVM.GetPositionDefaultValue(FormatUtil.ConvertToInGridAjaxComboBox(item, "approverposition"));
+            viewModel.ApproverUserName = ExitProcedureChecklistVM.GetApproverUserNameDefaultValue(FormatUtil.ConvertToInGridAjaxComboBox(item, "approverusername"));
+            viewModel.Level = Convert.ToString(item["approverlevel"]);
+            
+            if(viewModel.CheckListItemApproval.Text == "Pending Approval")
+            {
+                viewModel.ApprovalIndicator = "red";
+            }
+            else
+            {
+                viewModel.ApprovalIndicator = "green";
+            }
+
+            return viewModel;
         }
 
         private string GetDocumentUrl(int? iD)
@@ -770,6 +819,13 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             }
             else
             {
+                exitProcedure.StartDateApproval = DateTime.Now;
+                
+                var professionalData = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, exitProcedure.ProfessionalID, _siteUrl);
+                string professionalOfficeMail = Convert.ToString(professionalData["officeemail"]);
+
+                columnValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hr"));
+                columnValues.Add("startdateapproval", exitProcedure.StartDateApproval.ToLocalTime());
                 columnValues.Add("status", exitProcedure.StatusForm);
             }
 
@@ -1096,6 +1152,26 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 {
                     columnValues.Add("visibletoapprover9", SPConnector.GetUser(item, _siteUrl, "hr"));
                 }
+                else if (i == 10)
+                {
+                    columnValues.Add("visibletoapprover10", SPConnector.GetUser(item, _siteUrl, "hr"));
+                }
+                else if (i == 11)
+                {
+                    columnValues.Add("visibletoapprover11", SPConnector.GetUser(item, _siteUrl, "hr"));
+                }
+                else if (i == 12)
+                {
+                    columnValues.Add("visibletoapprover12", SPConnector.GetUser(item, _siteUrl, "hr"));
+                }
+                else if (i == 13)
+                {
+                    columnValues.Add("visibletoapprover13", SPConnector.GetUser(item, _siteUrl, "hr"));
+                }
+                else if (i == 14)
+                {
+                    columnValues.Add("visibletoapprover14", SPConnector.GetUser(item, _siteUrl, "hr"));
+                }
 
                 i++;
             }
@@ -1305,6 +1381,25 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             }
 
             return projectUnit;
+        }
+
+        public bool UpdateLastWorkingDateOnProfessional(int? professionalID, DateTime lastWorkingDate)
+        {
+            var columnValues = new Dictionary<string, object>();
+
+            columnValues.Add("lastworkingdate", lastWorkingDate);
+
+            try
+            {
+                SPConnector.UpdateListItem(SP_PROMAS_LIST_NAME, professionalID, columnValues, _siteUrl);
+            }
+            catch (Exception e)
+            {
+                logger.Debug(e.Message);
+                return false;
+            }
+
+            return true;
         }
     }
 }

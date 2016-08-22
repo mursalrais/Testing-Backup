@@ -1,133 +1,31 @@
-﻿@using MCAWebAndAPI.Model.ViewModel.Form.Finance
-@model PettyCashPaymentVoucherVM
+﻿@*
+
+Wireframe FIN10: Petty Cash Voucher
+    a.k.a.: Petty Cash Payment Voucher
+    a.k.a.: Petty Cash Advance Voucher
+
+*@
+
+@model MCAWebAndAPI.Model.ViewModel.Form.Finance.PettyCashPaymentVoucherVM
 
 @{
     ViewBag.Title = "Create Petty Cash Payment Voucher";
 
 }
 
-@using (Ajax.BeginForm("Create", "FINPettyCashPaymentVoucher",
-        FormMethod.Post,
-        new AjaxOptions
-        {
-            OnBegin = "onBeginForm",
-            OnComplete = "onCompleteForm",
-            OnSuccess = "onSuccessFormEmbed",
-            OnFailure = "onFailureForm"
-        },
-        new
-        {
-            @class = "form-horizontal",
-            enctype = "multipart/form-data"
-        }))
-
+@using (Html.BeginForm("Create", "FINPettyCashPaymentVoucher", 
+    FormMethod.Post,
+    new
+    {
+        @class = "form-horizontal",
+        enctype = "multipart/form-data"
+    }))
 {
 
     <fieldset>
         <legend>Petty Cash Payment Voucher</legend>
         <div class="row">
-            <div class="col-sm-6">
-                @Html.HiddenFor(m => m.ID)
-            </div>
-        </div>
-        <div class="row">
-
-            <div class="col-sm-6">
-                <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.Date).Class("col-sm-3 control-label")
-                    <div class="col-sm-8">
-                        @Html.EditorFor(m => m.Date)
-                    </div>
-                </div>
-                <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.Status).Class("col-sm-3 control-label")
-                    <div class="col-sm-8">
-                        @Html.EditorFor(m => m.Status)
-                    </div>
-                </div>
-                <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.PaidTo).Class("col-sm-3 control-label")
-                    <div class="col-sm-8">
-                        @Html.EditorFor(m => m.PaidTo)
-                    </div>
-                </div>
-                <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.Professional).Class("col-sm-3 control-label")
-                    <div class="col-sm-8">
-                        @Html.EditorFor(m => m.Professional)
-                    </div>
-                </div>
-                <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.Vendor).Class("col-sm-3 control-label")
-                    <div class="col-sm-8">
-                        @Html.EditorFor(m => m.Vendor)
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.Currency).Class("col-sm-3 control-label")
-                    <div class="col-sm-8">
-                        @Html.EditorFor(m => m.Currency)
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.AmountPaid).Class("col-sm-3 control-label")
-                    <div class="col-sm-8">
-                        @Html.EditorFor(m => m.AmountPaid)
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.AmountPaidInWord).Class("col-sm-3 control-label")
-                    <div class="col-sm-8">
-                        @Html.EditorFor(m => m.AmountPaidInWord)
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.ReasonOfPayment).Class("col-sm-3 control-label")
-                    <div class="col-sm-8">
-                        @Html.EditorFor(m => m.ReasonOfPayment)
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.Fund).Class("col-sm-3 control-label")
-                    <div class="col-sm-8">
-                        @Html.EditorFor(m => m.Fund)
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.WBS).Class("col-sm-3 control-label")
-                    <div class="col-sm-8">
-                        @Html.EditorFor(m => m.WBS)
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.GL).Class("col-sm-3 control-label")
-                    <div class="col-sm-8">
-                        @Html.EditorFor(m => m.GL)
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.Remarks).Class("col-sm-3 control-label")
-                    <div class="col-sm-8">
-                        @Html.EditorFor(m => m.Remarks)
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.Documents).Class("col-md-2 control-label")
-                    <div class="col-md-7">
-                        @Html.EditorFor(m => m.Documents)
-                    </div>
-                </div>
-
-            </div>
+            @Html.Partial("_General", Model)
         </div>
 
     </fieldset>
@@ -153,10 +51,39 @@
 
 
 
-
 @section scripts{
     <script>
+        var GREY_COLOR = "#E5E4E2";
+
+       
+
+
         $(document).ready(function () {
+            SetBaseOnPaidTo($("#PaidTo_Value").data("kendoDropDownList").value());
+
+            $('#AmountPaidInWord').css({ "background-color": GREY_COLOR });
+            $('#AmountPaidInWord').attr("readonly", "readonly");
+
+            $('#Fund').css({ "background-color": GREY_COLOR });
+
+            $('#AmountPaid').change(function () {
+                var url = '@Url.Action("GetAmountInWords", "FINPettyCashPaymentVoucher")';
+                var amount = $('#AmountPaid').val(); // The option selected
+
+                $.ajax({
+                    url: url,
+                    type: "GET",
+                    data: { data: amount },
+                    success: function (response) {
+                        $('#AmountPaidInWord').val(response);
+                    },
+                    error: function (response) {
+                        $('#AmountPaidInWord').val('Error');
+                    }
+                });
+            });
+
+
 
         });
 
@@ -165,17 +92,32 @@
 
         function onSelectPaidTo(e) {
             var data = this.dataItem(e.item);
+
+            SetBaseOnPaidTo(data);
+
+
+        }
+
+        function SetBaseOnPaidTo(data) {
             var professionalDropDownList = $("#Professional_Value").data("kendoDropDownList");
             var vendorDropDownList = $("#Vendor_Value").data("kendoDropDownList");
 
             switch (data) {
                 case PAIDTO_PROFESSIONAL:
                     professionalDropDownList.enable(true);
+
+                    vendorDropDownList.options.optionLabel = "";
+                    vendorDropDownList.refresh();
+                    vendorDropDownList.select(0);
                     vendorDropDownList.enable(false);
                     break;
 
                 case PAIDTO_VENDOR:
+                    professionalDropDownList.options.optionLabel = "";
+                    professionalDropDownList.refresh();
+                    professionalDropDownList.select(0);
                     professionalDropDownList.enable(false);
+
                     vendorDropDownList.enable(true);
                     break;
 
@@ -183,8 +125,10 @@
                     professionalDropDownList.enable(false);
                     vendorDropDownList.enable(false);
                     break;
-
             }
+
+            $('.k-state-disabled').css({ "background-color": GREY_COLOR });
+            $('.k-state-default').css({ "background-color": "white" });
         }
     </script>
 }

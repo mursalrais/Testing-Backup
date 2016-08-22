@@ -1,93 +1,96 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.Asset
 
-@model AssignmentofAssetVM
 
-@using (Ajax.BeginForm("SubmitMonthlyFee", "ASSAssignmentofAsset",
-                                                                                        FormMethod.Post,
-                                                                                        new AjaxOptions
-                                                                                        {
-                                                                                            OnBegin = "onBeginForm",
-                                                                                            OnComplete = "onCompleteForm",
-                                                                                            OnSuccess = "onSuccessFormEmbed",
-                                                                                            OnFailure = "onFailureForm"
-                                                                                        }, new { @class = "form-horizontal" }))
+
+@model AssignmentOfAssetVM
+
+@using (Ajax.BeginForm("Submit", "ASSAssignmentOfAsset",
+                                                                                                                                       FormMethod.Post,
+                                                                                                                                       new AjaxOptions
+                                                                                                                                       {
+                                                                                                                                           OnBegin = "onBeginForm",
+                                                                                                                                           OnComplete = "onCompleteForm",
+                                                                                                                                           OnSuccess = "onSuccessFormEmbed",
+                                                                                                                                           OnFailure = "onFailureForm"
+                                                                                                                                       }, new { @class = "form-horizontal" }))
+
 {
-    <fieldset>
-        <legend>Assignment of Asset</legend>
-        @Html.AntiForgeryToken()
-        @Html.ValidationSummary()
+    <form class="form-horizontal" method="post" action="/ASSAssignmentOfAsset/Submit" id="create-asset-acquisition-form">
+        <fieldset>
+            <legend>Form Asset Acquisition</legend>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.TransactionType).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        <input type="text" disabled name="TransactionType" value="Assignment Of Asset" style="width : 100%"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Date).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.EditorFor(m => m.Date)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.AssetHolder).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.EditorFor(m => m.AssetHolder)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.ProjectUnit).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        <input type="text" disabled name="ProjectUnit" id="ProjectUnit" value="" style="width : 100%"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.ContactNo).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        <input type="text" disabled name="ContactNo" id="ContactNo" value="" style="width : 100%"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Attachment).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.EditorFor(m => m.Attachment)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.CompletionStatus).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.EditorFor(m => m.CompletionStatus)
+                    </div>
+                </div>
+            </div>
+            <div>
+                @Html.Partial("_Details", Model.Details)
+            </div>
+        </fieldset>
 
-        <div class="col-md-6">
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.TransactionType).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.TransactionType)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Date).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.Date)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.AssetHolder).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.AssetHolder)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Project).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.DisplayFor(m => m.Project)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.ContactNo).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.DisplayFor(m => m.ContactNo)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Attachment).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.Attachment)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.CompletionStatus).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.CompletionStatus)
-                </div>
-            </div>
+        <div>
+            <center>
+                <input class="k-button k-button-icontext k-grid-add" type="submit" value="Save" />
+            </center>
         </div>
-        <legend>Item Detail</legend>
-        <div class="row">
-      
-            @Html.Partial("_AssignmentofAsset", Model.AssignmentofAssets);
-        </div>
-    </fieldset>
 
-<div class="form-actions">
-    <div class="row">
-        <div class="col-sm-12">
-            <button id="submit-button" class="btn btn-primary" type="submit">
-                <i class="fa fa-save"></i>
-            Submit
-            </button>
-        </div>
-    </div>
-</div>
+    </form>
 }
-@section scripts{
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $("#submit-button").click(function () {
-                $("form").submit();
-            });
-        });
 
-       
-    </script>
 
-}
+<script>
+    $(document).ready(function () {
+        $("#AssetHolder_Value").data("kendoDropDownList").value("");
+        })
+
+    function onAssetChange(e)
+    {
+        var res = this.dataItem(e.item).split("-")
+        //alert("berubah jadiii " + res[0]);
+        var url = "/ASSAssignmentOfAsset/GetProfMasterInfo?fullname=" + res[0] + "&position=" + res[1];
+        $.getJSON(url, function (data) {
+            //do next
+            document.getElementById('ProjectUnit').value = data.CurrentPosition.Text    ;
+            document.getElementById('ContactNo').value = data.MobileNumberOne;
+        })
+    }
+</script>

@@ -3,14 +3,14 @@
 @model LocationMasterVM
 
 @using (Ajax.BeginForm((string)ViewBag.Action, "ASSLocationMaster",
-                                                                                        FormMethod.Post,
-                                                                                        new AjaxOptions
-                                                                                        {
-                                                                                            OnBegin = "onBeginForm",
-                                                                                            OnComplete = "onCompleteForm",
-                                                                                            OnSuccess = "onSuccessFormEmbed",
-                                                                                            OnFailure = "onFailureForm"
-                                                                                        }, new { @class = "form-horizontal" }))
+                                                                                                    FormMethod.Post,
+                                                                                                    new AjaxOptions
+                                                                                                    {
+                                                                                                        OnBegin = "onBeginForm",
+                                                                                                        OnComplete = "onCompleteForm",
+                                                                                                        OnSuccess = "onSuccessFormEmbed",
+                                                                                                        OnFailure = "onFailureForm"
+                                                                                                    }, new { @class = "form-horizontal" }))
 {<fieldset>
         <legend>Form Location Master</legend>
         @Html.AntiForgeryToken()
@@ -26,7 +26,8 @@
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.OfficeName).Class("col-sm-4 control-label")
                 <div class="col-sm-8">
-                    @Html.EditorFor(m => m.OfficeName)
+                    @*@Html.EditorFor(m => m.OfficeName)*@
+                    <input tye="text" name="OfficeName" id="OfficeName" style="width:100%"/>
                 </div>
             </div>
             <div class="form-group">
@@ -38,13 +39,15 @@
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.RoomName).Class("col-sm-4 control-label")
                 <div class="col-sm-8">
-                    @Html.EditorFor(m => m.RoomName)
+                    @*@Html.EditorFor(m => m.RoomName)*@
+                    <input tye="text" name="RoomName" id="RoomName" style="width:100%" />
                 </div>
             </div>
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.Remarks).Class("col-sm-4 control-label")
                 <div class="col-sm-8">
-                    @Html.EditorFor(m => m.Remarks)
+                    @*@Html.EditorFor(m => m.Remarks)*@
+                    <textarea id="Remarks" name="Remarks" style="width:100%" rows="6"></textarea>
                 </div>
             </div>
         </div>

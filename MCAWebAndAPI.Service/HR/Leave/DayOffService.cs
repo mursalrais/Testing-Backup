@@ -8,6 +8,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.SharePoint.Client;
+using MCAWebAndAPI.Model.ViewModel.Control;
+using MCAWebAndAPI.Model.Common;
+using MCAWebAndAPI.Service.Resources;
 
 namespace MCAWebAndAPI.Service.HR.Leave
 {
@@ -16,10 +19,12 @@ namespace MCAWebAndAPI.Service.HR.Leave
         string _siteUrl;
         static Logger logger = LogManager.GetCurrentClassLogger();
 
-        const string SP_BAL_LIST_NAME = "Day-Off Balance";
         const string SP_DAYOFF_REQ_LIST_NAME = "Day-Off Request";
+        const string SP_DAYOFF_BAL_LIST_NAME = "Day-Off Balance";
         const string SP_DAYOFF_REQ_DETAIL_LIST_NAME = "Day-Off Request Detail";
+        const string SP_MAS_DAYOFF_TYPE_LIST_NAME = "Master Day Off Type";
         const string SP_PSA_LIST_NAME = "PSA Management";
+        const string SP_PRO_MAS_LIST_NAME = "Professional Master";
 
         const string TYPE_UNPAID_DAYOFF = "Unpaid Day-Off";
 
@@ -61,7 +66,7 @@ namespace MCAWebAndAPI.Service.HR.Leave
             else 
             {                   
                 string caml = @"<View><Query><Where><And><Eq><FieldRef Name='professional' /><Value Type='Lookup'>"+viewModel.Professional.Value.Value.ToString()+"</Value></Eq><Eq><FieldRef Name='PSA_x003a_Renewal_x0020__x0023_' /><Value Type='Lookup'>"+viewModel.RenewalNumber--.ToString()+"</Value></Eq></And></Where></Query><ViewFields><FieldRef Name='ID' /><FieldRef Name='ContentType' /><FieldRef Name='Title' /><FieldRef Name='Modified' /><FieldRef Name='Created' /><FieldRef Name='Author' /><FieldRef Name='Editor' /><FieldRef Name='_UIVersionString' /><FieldRef Name='Attachments' /><FieldRef Name='Edit' /><FieldRef Name='LinkTitleNoMenu' /><FieldRef Name='LinkTitle' /><FieldRef Name='DocIcon' /><FieldRef Name='ItemChildCount' /><FieldRef Name='FolderChildCount' /><FieldRef Name='AppAuthor' /><FieldRef Name='AppEditor' /><FieldRef Name='entitlement' /><FieldRef Name='dayoffbrought' /><FieldRef Name='deduction' /><FieldRef Name='statusdraft' /><FieldRef Name='statuspendingapproval' /><FieldRef Name='statusapproved' /><FieldRef Name='statusrejected' /><FieldRef Name='entitlementtotal' /><FieldRef Name='balance' /><FieldRef Name='PSA' /><FieldRef Name='PSA_x003a_Renewal_x0020__x0023_' /><FieldRef Name='professional' /><FieldRef Name='dateofnewpsa' /><FieldRef Name='endofcontract' /><FieldRef Name='lastworkingdate' /></ViewFields><QueryOptions />";
-                foreach (var item in SPConnector.GetList(SP_BAL_LIST_NAME, _siteUrl, caml))
+                foreach (var item in SPConnector.GetList(SP_DAYOFF_BAL_LIST_NAME, _siteUrl, caml))
                 {
                     balanceBefore = Convert.ToInt32(item["balance"]);
                     dateofnewpsaBefore = Convert.ToDateTime(item["dateofnewpsa"]).ToLocalTime();
@@ -121,7 +126,7 @@ namespace MCAWebAndAPI.Service.HR.Leave
             {
                 try
                 {
-                    SPConnector.AddListItem(SP_BAL_LIST_NAME, updatedValues, _siteUrl);
+                    SPConnector.AddListItem(SP_DAYOFF_BAL_LIST_NAME, updatedValues, _siteUrl);
                 }
                 catch (Exception e)
                 {
@@ -227,6 +232,173 @@ namespace MCAWebAndAPI.Service.HR.Leave
                 ApprovalStatus = Convert.ToString(item["approvalstatus"]),
                 ProfessionalID = professionalID
             };
+        }
+
+        public DayOffRequestVM GetPopulatedModel(string requestor = null)
+        {
+            string status = null;
+            var caml = @"<View>  
+            <Query> 
+               <Where><Eq><FieldRef Name='officeemail' /><Value Type='Text'>" + requestor + @"</Value></Eq></Where> 
+            </Query> 
+      </View>";
+
+            var model = new DayOffRequestVM();
+
+            foreach (var item in SPConnector.GetList(SP_PRO_MAS_LIST_NAME, _siteUrl, caml))
+            {
+                model.Professional = Convert.ToString(item["Title"]);
+                model.ProfessionalID = Convert.ToInt32(item ["ID"]);
+                model.ProjectUnit = Convert.ToString(item["Project_x002f_Unit"]);
+            }
+
+            model.DayOffBalanceDetails = GetDayOffBalanceDetails(model.ProfessionalID);
+
+            return model;
+        }
+
+        private IEnumerable<DayOffBalanceVM> GetDayOffBalanceDetails(int? ID)
+        {
+            var caml = @"<View><Query><Where><Eq><FieldRef Name='professionalperformanceplan' /><Value Type='Lookup'>" + ID.ToString() + "</Value></Eq></Where></Query></View>";
+
+            var DayOffBalanceDetail = new List<DayOffBalanceVM>();
+            foreach (var item in SPConnector.GetList(SP_MAS_DAYOFF_TYPE_LIST_NAME, _siteUrl))
+            {
+                DayOffBalanceDetail.Add(ConvertToDayOffBalanceDetail(item));
+            }
+
+            return DayOffBalanceDetail;
+        }
+
+        private DayOffBalanceVM ConvertToDayOffBalanceDetail(ListItem item)
+        {
+            return new DayOffBalanceVM
+            {
+                DayOffType = DayOffBalanceVM.GetDayOffTypeDefaultValue(
+                    new InGridComboBoxVM
+                    {
+                        Text = Convert.ToString(item["Title"])
+                    }),
+                Unit = DayOffBalanceVM.GetUnitDefaultValue(
+                    new InGridComboBoxVM
+                    {
+                        Text = Convert.ToString(item["uom"])
+                    }),
+                DayOffBrought = 0,
+                Balance = Convert.ToInt32(item["quantity"]),
+
+            };
+        }
+
+        public DayOffRequestVM GetHeader(int? ID, string requstor)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int CreateHeader(DayOffRequestVM header)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool UpdateHeader(DayOffRequestVM header)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CreateDayOffDetails(int? headerID, IEnumerable<DayOffRequestDetailVM> dayOffDetails)
+        {
+            foreach (var viewModel in dayOffDetails)
+            {
+                if (Item.CheckIfSkipped(viewModel))
+                    continue;
+                if (Item.CheckIfDeleted(viewModel))
+                {
+                    try
+                    {
+                        SPConnector.DeleteListItem(SP_DAYOFF_REQ_DETAIL_LIST_NAME, viewModel.ID, _siteUrl);
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error(e);
+                        throw e;
+                    }
+                    continue;
+                }
+                var updatedValue = new Dictionary<string, object>();
+                updatedValue.Add("monthlyfeeid", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
+                updatedValue.Add("dateofnewfee", viewModel.DayOffType.Text);
+                updatedValue.Add("monthlyfee", viewModel.FullHalf.Text);
+                updatedValue.Add("annualfee", viewModel.RequestStartDate);
+                updatedValue.Add("currency", viewModel.RequestEndDate);
+                updatedValue.Add("currency", viewModel.Remarks);
+                try
+                {
+                    if (Item.CheckIfUpdated(viewModel))
+                        SPConnector.UpdateListItem(SP_DAYOFF_REQ_DETAIL_LIST_NAME, viewModel.ID, updatedValue, _siteUrl);
+                    else
+                        SPConnector.AddListItem(SP_DAYOFF_REQ_DETAIL_LIST_NAME, updatedValue, _siteUrl);
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e.Message);
+                    throw new Exception(ErrorResource.SPInsertError);
+                }
+            }
+        }
+
+        public async Task CreateDayOffDetailsAsync(int? headerID, IEnumerable<DayOffRequestDetailVM> dayOffDetails)
+        {
+            CreateDayOffDetails(headerID, dayOffDetails);
+        }
+
+        public void CreateDayOffBalanceDetails(int? headerID, IEnumerable<DayOffBalanceVM> dayOffBalanceDetails)
+        {
+            foreach (var viewModel in dayOffBalanceDetails)
+            {
+                if (Item.CheckIfSkipped(viewModel))
+                    continue;
+                if (Item.CheckIfDeleted(viewModel))
+                {
+                    try
+                    {
+                        SPConnector.DeleteListItem(SP_DAYOFF_BAL_LIST_NAME, viewModel.ID, _siteUrl);
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error(e);
+                        throw e;
+                    }
+                    continue;
+                }
+                var updatedValue = new Dictionary<string, object>();
+                updatedValue.Add("monthlyfeeid", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
+                updatedValue.Add("Title", viewModel.DayOffType.Text);
+                updatedValue.Add("quantity", viewModel.Balance);
+                updatedValue.Add("annualfee", viewModel.DayOffBrought);
+                updatedValue.Add("currency", viewModel.Unit.Text);
+                try
+                {
+                    if (Item.CheckIfUpdated(viewModel))
+                        SPConnector.UpdateListItem(SP_DAYOFF_BAL_LIST_NAME, viewModel.ID, updatedValue, _siteUrl);
+                    else
+                        SPConnector.AddListItem(SP_DAYOFF_BAL_LIST_NAME, updatedValue, _siteUrl);
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e.Message);
+                    throw new Exception(ErrorResource.SPInsertError);
+                }
+            }
+        }
+
+        public async Task CreateDayOffBalanceDetailsAsync(int? headerID, IEnumerable<DayOffBalanceVM> dayOffBalanceDetails)
+        {
+            CreateDayOffBalanceDetails(headerID, dayOffBalanceDetails);
+        }
+
+        public DayOffBalanceVM GetCalculateBalance(int? ID, string siteUrl, string requestor, string listName)
+        {
+            throw new NotImplementedException();
         }
     }
 }

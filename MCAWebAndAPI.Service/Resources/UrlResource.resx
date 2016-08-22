@@ -128,7 +128,7 @@
     <value>Lists/Professional Master</value>
   </data>
   <data name="PSAManagementDocumentByID" xml:space="preserve">
-    <value>{0}/PSA%20Documents/Forms/AllItems.aspx#InplviewHash9cd97da9-0ef2-45cb-9beb-ff7f85a9fe1a=FilterField1%3Dpsa%255Fx003a%255FID-FilterValue1%3D{1}</value>
+    <value>{0}/PSA%20Documents/Forms/AllItems.aspx#InplviewHash093fad79-4ce0-43c1-8824-1b429d747e81=FilterField1%3Dpsa%255Fx003a%255FID-FilterValue1%3D{1}</value>
     <comment>Need to change in migration</comment>
   </data>
   <data name="ApplicationData" xml:space="preserve">
@@ -154,7 +154,7 @@
     <value>Lists/Manpower%20Requisition</value>
   </data>
   <data name="ExitProcedureDocumentByID" xml:space="preserve">
-    <value>{0}/ExitProcedureDocuments/Forms/AllItems.aspx#InplviewHashf78f203c-f7a1-4179-9fbc-868e50a402cf=FilterField1%3Dexitprocedureid-FilterValue1%3D{1}</value>
+    <value>{0}/ExitProcedureDocuments/Forms/AllItems.aspx#InplviewHash8089e8d5-b941-4a0c-9d8a-9be53d040f76=FilterField1%3Dexitprocedureid-FilterValue1%3D{1}</value>
     <comment>Need to change in migration</comment>
   </data>
   <data name="ProfessionalPerfromanceEvaluation" xml:space="preserve">
@@ -164,10 +164,10 @@
     <value>/Lists/Exit%20Procedure</value>
   </data>
   <data name="ExitProcedureNonDisclosureAgreement" xml:space="preserve">
-    <value>{0}/ExitProcedureDocuments/Non%20Disclosure%20Agreement.docx</value>
+    <value>/ExitProcedureDocuments/Forms/AllItems.aspx#InplviewHash8089e8d5-b941-4a0c-9d8a-9be53d040f76=FilterField1%3DID-FilterValue1%3D24</value>
   </data>
   <data name="ExitProcedureExitInterviewForm" xml:space="preserve">
-    <value>{0}/ExitProcedureDocuments/Exit%20Interview%20Form.docx</value>
+    <value>/ExitProcedureDocuments/Forms/AllItems.aspx#InplviewHash8089e8d5-b941-4a0c-9d8a-9be53d040f76=FilterField1%3DID-FilterValue1%3D25</value>
   </data>
   <data name="AddInterviewInvitation" xml:space="preserve">
     <value>{0}/Lists/Application/InputInterviewResultDetail.aspx?ID={1}&amp;manPos={2}</value>
@@ -245,5 +245,46 @@
   </data>
   <data name="ProfessionalPerformancePlanHR" xml:space="preserve">
     <value>/SitePages/Professional%20Perfromance%20Plan%20HR.aspx</value>
+  </data>
+  <data name="AssetTransfer" xml:space="preserve">
+    <value>/Lists/Asset%20Transfer/AllItems.aspx</value>
+  </data>
+  <data name="RequisitionNote" xml:space="preserve">
+    <value>Lists/Requisition%20Note/AllItems.aspx</value>
+  </data>
+  <data name="FINTaxReimbursement" xml:space="preserve">
+    <value>{0}/Lists/SPHL%20Data/AllItems.aspx</value>
+    <comment>Need to change in migration</comment>
+  </data>
+  <data name="FINEventBudget" xml:space="preserve">
+    <value>{0}/Lists/SPHL%20Data/AllItems.aspx</value>
+    <comment>Need to change in migration</comment>
+  </data>
+  <data name="PettyCashPaymentVoucher" xml:space="preserve">
+    <value>Lists/Petty%20Cash%20Payment%20Voucher/AllItems.aspx</value>
+  </data>
+  <data name="PettyCashPaymentVoucherDocumentByID" xml:space="preserve">
+    <value>{0}/Petty%20Cash%20Payment%20Voucher%20Documents/Forms/AllItems.aspx#InplviewHash5093bda1-84bf-4cad-8652-286653d6a83f=FilterField1%3Dpsa%255Fx003a%255FID-FilterValue1%3D{1}</value>
+  </data>
+  <data name="SPHLDocumentByID" xml:space="preserve">
+    <value>{0}/SPHL%20Documents/Forms/AllItems.aspx?groupBy=&amp;FilterField1=SPHL_x003a_ID&amp;FilterValue1={1}</value>
+  </data>
+  <data name="SCAVoucherDocumentByID" xml:space="preserve">
+    <value>{0}/SCA%20Voucher%20Documents/Forms/AllItems.aspx?FilterField1=SCA_x0020_Voucher_x003a_ID&amp;FilterValue1={1}</value>
+  </data>
+  <data name="FINOutstandingAdvance" xml:space="preserve">
+    <value>{0}/Lists/OutstandingAdvance/AllItems.aspx</value>
+  </data>
+  <data name="LocationMaster" xml:space="preserve">
+    <value>/Lists/Location%20Master/AllItems.aspx</value>
+  </data>
+  <data name="AdjustmentDayOffBalanceList" xml:space="preserve">
+    <value>/Lists/Adjustment%20DayOff%20Balance/AllItems.aspx</value>
+  </data>
+  <data name="FINPettyCashReplenishment" xml:space="preserve">
+    <value>{0}/Tax%20Exemption%20Income%20Documents/Forms/AllItems.aspx#InplviewHash5093bda1-84bf-4cad-8652-286653d6a83f=FilterField1%3Dpsa%255Fx003a%255FID-FilterValue1%3D{1}</value>
+  </data>
+  <data name="Compensatorylist" xml:space="preserve">
+    <value>/Lists/CompensatoryRequest/AllItems.aspx</value>
   </data>
 </root>

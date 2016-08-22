@@ -16,47 +16,111 @@ namespace MCAWebAndAPI.Web.Controllers
 {
     public class FINSPHLController : Controller
     {
-        ISPHLService _sphlService;
+        ISPHLService service;
+        private const string _siteUrl = "SiteUrl";
 
         public FINSPHLController()
         {
-            _sphlService = new SPHLService();
+            service = new SPHLService();
         }
-        
-        public ActionResult CreateSPHL(string siteUrl = null)
+
+        public ActionResult Create(string siteUrl = null)
         {
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
 
-            _sphlService.SetSiteUrl(siteUrl);
-            SessionManager.Set("SiteUrl", siteUrl);
+            service.SetSiteUrl(siteUrl);
+            SessionManager.Set(_siteUrl, siteUrl);
 
             var viewModel = new SPHLVM();
 
             return View(viewModel);
         }
 
-        [HttpPost]
-        public async Task<ActionResult> CreateSPHL(FormCollection form, SPHLVM viewModel)
+        public ActionResult Edit(string siteUrl = null, int? ID=null)
         {
-            var siteUrl = SessionManager.Get<string>("SiteUrl") ?? ConfigResource.DefaultBOSiteUrl;
-            _sphlService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
+            service.SetSiteUrl(siteUrl);
+            SessionManager.Set(_siteUrl, siteUrl);
+            
+            var viewModel = new SPHLVM();
+            if (ID != null)
+            {
+                viewModel = service.GetDataSPHL(ID);
+            }
+            
+            return View(viewModel);
+        }
 
-            int? ID = null;
-            ID = _sphlService.CreateSPHL(viewModel);
-            Task createApplicationDocumentTask = _sphlService.CreateSPHLAttachmentAsync(ID, viewModel.Documents);
-            Task allTasks = Task.WhenAll(createApplicationDocumentTask);
+        [HttpPost]
+        public async Task<ActionResult> Create(FormCollection form, SPHLVM viewModel)
+        {
+            var siteUrl = SessionManager.Get<string>(_siteUrl) ?? ConfigResource.DefaultBOSiteUrl;
+            service.SetSiteUrl(siteUrl);
 
             try
             {
+                if (!service.CheckExistingSPHLNo(viewModel.No))
+                {
+                    return Json(false, JsonRequestBehavior.AllowGet);
+                }
+
+                int? ID = service.Create(viewModel);
+                Task createApplicationDocumentTask = service.CreateSPHLAttachmentAsync(ID, viewModel.No, viewModel.Documents);
+                Task allTasks = Task.WhenAll(createApplicationDocumentTask);
+
                 await allTasks;
             }
             catch (Exception e)
             {
-                ErrorSignal.FromCurrentContext().Raise(e);
-                return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.FINSPHL);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Edit(FormCollection form, SPHLVM viewModel)
+        {
+            var siteUrl = SessionManager.Get<string>(_siteUrl) ?? ConfigResource.DefaultBOSiteUrl;
+            service.SetSiteUrl(siteUrl);
+
+            try
+            {
+                if (service.UpdateSPHL(viewModel))
+                {
+                    Task createApplicationDocumentTask = service.CreateSPHLAttachmentAsync(viewModel.ID, viewModel.No, viewModel.Documents);
+                    Task allTasks = Task.WhenAll(createApplicationDocumentTask);
+
+                    await allTasks;
+                }
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.FINSPHL);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult CheckExistingSPHLNo(string no)
+        {
+            var siteUrl = SessionManager.Get<string>(_siteUrl) ?? ConfigResource.DefaultBOSiteUrl;
+            service.SetSiteUrl(siteUrl);
+
+            bool ifEmailExist = false;
+            try
+            {
+                ifEmailExist = service.CheckExistingSPHLNo(no);
+                return Json(ifEmailExist, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
         }
     }
 }

@@ -127,6 +127,7 @@
             var defaultyear = kendo.toString($("#ClaimDate").data("kendoDatePicker").value(), 'yyyy');
 
             var strUserId = $("#ProfessionalID").val();
+            var strUserPermission = $("#UserPermission").val();
             var url = "/HRMedicalCheckUp/GetMedicalYear/" + strUserId;
 
             $.getJSON(url,
@@ -137,7 +138,7 @@
                         $("form").submit();
                     } else {
                         for (var i = 0; i <= result.length - 1; i++) {
-                            if (defaultyear === result[i].Year) {
+                            if (defaultyear === result[i].Year && result[i].ClaimStatus === 'Submitted' && strUserPermission!=='HR') {
                                 alert('Sorry, Your Medical Check-Up for this period has been claimed. ' +
                                     'Please process next claim in the next period. If there is any inconvenience process for this, ' +
                                     'please contact HR Officer directly. Thank you');
@@ -145,7 +146,7 @@
                             }
                         }
                         $("#ClaimStatus").val(status);
-                        $('form').prop('action', '/HRMedicalCheckUp/SubmitMedical');
+                        $('form').prop('action', '/HRMedicalCheckUp/UpdateMedical');
                         $("form").submit();
                     }
                 });
@@ -165,7 +166,9 @@
                 if (strClaim !== "Draft" && strPermission === "HR") {
                     $("#save-button").hide();
                 }
-               else if (strClaim !== "Draft" && strPermission === "Professional") {
+                else if (strClaim !== "Draft" && strPermission === "Professional") {
+                    var defaultyear = kendo.toString($("#ClaimDate").data("kendoDatePicker"));
+                    defaultyear.enable(false);
                     $("#save-button").hide();
                     $("#submit-button").hide();
                 }
@@ -195,20 +198,6 @@
 
       
 
-        function OnSelectProfessionalName(e) {
-            var dataItem = this.dataItem(e.item);
-            var url = "/HRDataMaster/GetProfessional/" + dataItem.ID;
-
-            $.getJSON(url,
-                function (result) {
-                    
-                    $('#OfficeEmail').prop('value', result[0].OfficeEmail);
-                    $('#Unit').prop('value', result[0].Project_Unit);
-                    $('#Position').prop('value', result[0].Position);
-                    $('#ProfessionalTextName').prop('value', result[0].Name);
-                    $('#ProfessionalID').prop('value', result[0].ID);
-                });
-        }
 
 
     </script>

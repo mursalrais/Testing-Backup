@@ -33,6 +33,29 @@ namespace MCAWebAndAPI.Web.Controllers
             _service = new HRCompensatoryService();
         }
 
+        public ActionResult AddCompensatoryHR(string siteurl = null)
+        {
+            var viewmodel = new CompensatoryVM();
+
+            if (siteurl == "")
+            {
+                siteurl = SessionManager.Get<string>("SiteUrl");
+                _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
+            }
+            else
+            {
+                _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
+                SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
+            }
+
+            ViewBag.ListName = "Compensatory%20Request";
+
+            if (viewmodel.cmpEmail != null)
+                SessionManager.Set("RequestorUserLogin", viewmodel.cmpEmail);
+
+            return View(viewmodel);
+        }
+
         public ActionResult InputCompensatoryUser(string siteurl = null, int? iD = null)
         {
             //mandatory: set site url
@@ -152,7 +175,7 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateHeaderCompensatory(FormCollection form, CompensatoryVM viewModel)
+        public ActionResult CreateHeaderCompensatory(FormCollection form, CompensatoryVM viewModel)
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
@@ -160,18 +183,22 @@ namespace MCAWebAndAPI.Web.Controllers
             try
             {
                 viewModel.CompensatoryDetails = BindCompensatorylistDateTime(form, viewModel.CompensatoryDetails);
-                //_service.CreateCompensatoryData(cmpID, viewModel);
+                _service.CreateHeaderCompensatory(viewModel);
             }
             catch (Exception e)
             {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return RedirectToAction("Index", "Error");
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.Compensatory);
+            return RedirectToAction("Index",
+               "Success",
+               new { successMessage = string.Format(MessageResource.SuccessCreateCompensatoryData, viewModel.cmpID) });
+
         }
+
         [HttpPost]
-        public async Task<ActionResult> CreateCompensatoryData(FormCollection form, CompensatoryVM viewModel)
+        public ActionResult CreateCompensatoryData(FormCollection form, CompensatoryVM viewModel)
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
@@ -182,13 +209,14 @@ namespace MCAWebAndAPI.Web.Controllers
 
             try
             {
+
                 viewModel.CompensatoryDetails = BindCompensatorylistDateTime(form, viewModel.CompensatoryDetails);
                 _service.CreateCompensatoryData(cmpID, viewModel);
             }
             catch (Exception e)
             {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return RedirectToAction("Index", "Error");
             }
 
             if (viewModel.StatusForm != "submit")
@@ -214,13 +242,12 @@ namespace MCAWebAndAPI.Web.Controllers
                 {
                     EmailUtil.Send(viewModel.cmpEmail, "Ask for Approval", string.Format(EmailResource.EmailCompensatoryRequestor, siteUrl, cmpID));
                 }
-                else if (viewModel.StatusForm == "Pending Approval 2 of 2")
-                {
-                    EmailUtil.Send(viewModel.cmpEmail, "Ask for Approval", string.Format(EmailResource.EmailCompensatoryRequestor, siteUrl, cmpID));
-                }
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.Compensatory);
+            return RedirectToAction("Index",
+                          "Success",
+                          new { successMessage = string.Format(MessageResource.SuccessCreateCompensatoryData, viewModel.cmpID) });
+
         }
 
         private IEnumerable<CompensatoryDetailVM> BindCompensatorylistDateTime(FormCollection form, IEnumerable<CompensatoryDetailVM> compDetails)

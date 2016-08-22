@@ -147,7 +147,7 @@
     <Compile Include="Asset\AssetSmallValueAssetService.cs" />
     <Compile Include="Asset\AssetTransactionService.cs" />
     <Compile Include="Asset\AssetTransferService.cs" />
-    <Compile Include="Asset\AssignmentofAssetService.cs" />
+    <Compile Include="Asset\AssignmentOfAssetService.cs" />
     <Compile Include="Asset\IAssetAcquisitionService.cs" />
     <Compile Include="Asset\IAssetCheckFormService.cs" />
     <Compile Include="Asset\IAssetCheckResultApproveService.cs" />
@@ -161,7 +161,7 @@
     <Compile Include="Asset\IAssetSmallValueAssetService.cs" />
     <Compile Include="Asset\IAssetTransactionService.cs" />
     <Compile Include="Asset\IAssetTransferService.cs" />
-    <Compile Include="Asset\IAssignmentofAssetService.cs" />
+    <Compile Include="Asset\IAssignmentOfAssetService.cs" />
     <Compile Include="Asset\ILocationMasterService.cs" />
     <Compile Include="Asset\LocationMasterService.cs" />
     <Compile Include="Common\ComboBoxService.cs" />
@@ -177,6 +177,7 @@
     <Compile Include="Finance\IOutstandingAdvanceService.cs" />
     <Compile Include="Finance\IPettyCashPaymentVoucherService.cs" />
     <Compile Include="Finance\IPettyCashReimbursement.cs" />
+    <Compile Include="Finance\IPettyCashReplenishmentService.cs" />
     <Compile Include="Finance\IPettyCashSettlement.cs" />
     <Compile Include="Finance\IRequisitionNote.cs" />
     <Compile Include="Finance\ISCAVoucherService.cs" />
@@ -186,6 +187,7 @@
     <Compile Include="Finance\OutstandingAdvanceService.cs" />
     <Compile Include="Finance\PettyCashPaymentVoucherService.cs" />
     <Compile Include="Finance\PettyCashReimbursement.cs" />
+    <Compile Include="Finance\PettyCashReplenishmentService.cs" />
     <Compile Include="Finance\PettyCashSettlement.cs" />
     <Compile Include="Finance\RequisitionNoteService.cs" />
     <Compile Include="Finance\SCAVoucherService.cs" />
@@ -193,6 +195,8 @@
     <Compile Include="Finance\SPHLService.cs" />
     <Compile Include="Finance\TaxExemptionDataService.cs" />
     <Compile Include="Finance\TaxReimbursementService.cs" />
+    <Compile Include="HR\AdjustmentDayOffBalance\AdjustmentDayOffBalanceService.cs" />
+    <Compile Include="HR\AdjustmentDayOffBalance\IAdjustmentDayOffBalanceService.cs" />
     <Compile Include="HR\Common\ProfessionalService.cs" />
     <Compile Include="HR\Compensatory\HRCompensatoryService.cs" />
     <Compile Include="HR\Compensatory\IHRCompensatoryService.cs" />
@@ -202,7 +206,9 @@
     <Compile Include="HR\Leave\IDayOffService.cs" />
     <Compile Include="HR\MedicalCheckUp\IMedicalCheckUpService.cs" />
     <Compile Include="HR\MedicalCheckUp\MedicalCheckUpService.cs" />
+    <Compile Include="HR\Payroll\AdjustmentService.cs" />
     <Compile Include="HR\Payroll\FeeSlipService.cs" />
+    <Compile Include="HR\Payroll\IAdjustmentService.cs" />
     <Compile Include="HR\Payroll\IFeeSlipService.cs" />
     <Compile Include="HR\Recruitment\ExitProcedureService.cs" />
     <Compile Include="HR\Recruitment\HRInterviewService.cs" />
@@ -265,6 +271,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>UrlResource.resx</DependentUpon>
     </Compile>
+    <Compile Include="Shared\ActivityService.cs" />
+    <Compile Include="Shared\IActivityService.cs" />
+    <Compile Include="Shared\IVendorService.cs" />
+    <Compile Include="Shared\PositionService.cs" />
+    <Compile Include="Shared\VendorService.cs" />
+    <Compile Include="Utils\CamlQueryUtil.cs" />
     <Compile Include="Utils\DocumentNumbering.cs" />
     <Compile Include="Utils\EmailUtil.cs" />
     <Compile Include="Utils\FileUtil.cs" />

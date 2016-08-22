@@ -65,11 +65,10 @@
         <div class="row">
             <div class="col-sm-12">
                 @*Professional View*@
-                @if (!ViewBag.IsHRView && Model.ValidationStatus !=
-                        Workflow.GetProfessionalValidationStatus(Workflow.ProfessionalValidationStatus.NEED_VALIDATION))
+                @if (!ViewBag.IsHRView )
                 {
                     <button id="ask-hr-to-validate-action" class="btn btn-submit" type="button">
-                        Ask HR to Validate
+                        Validate to HR
                     </button>
                 }
                 //HR View
@@ -78,7 +77,7 @@
                 else if (ViewBag.IsHRView)
                 {
                     <button id="approve-action" class="btn btn-submit" type="button">
-                        Approve
+                        Validated by HR
                     </button>
                     <button id="reject-action" class="btn btn-submit" type="button">
                         Reject

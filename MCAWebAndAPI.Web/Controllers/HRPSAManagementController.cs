@@ -503,7 +503,9 @@ namespace MCAWebAndAPI.Web.Controllers
                     e.DateOfNewPSAString,
                     e.PsaExpiryDateString,
                     e.ProjectOrUnit,
-                    e.Position
+                    e.Position,
+                    Text = e.PSANumber,
+                    Value = e.ID
                 }), JsonRequestBehavior.AllowGet);
         }
 
@@ -543,9 +545,9 @@ namespace MCAWebAndAPI.Web.Controllers
 
             var renewalNumber = GetRenewalNumberFromExistingSession(id);
 
+            renewalNumber = from a in renewalNumber orderby a.PSAId descending select a;
 
-            return Json(renewalNumber.OrderByDescending(e => e.Created).Where(e => e.ID == id).Select(
-                e =>
+            return Json(renewalNumber.Select(e =>
                 new
                 {
                     e.ID,
@@ -562,8 +564,10 @@ namespace MCAWebAndAPI.Web.Controllers
                     e.StrPSARenewal,
                     e.PositionID,
                     e.ProfessionalFullName
-                    }
+                }
             ), JsonRequestBehavior.AllowGet);
+            
+            
         }
 
         public JsonResult GetJoinDate(int id)
@@ -586,12 +590,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
         private IEnumerable<PSAManagementVM> GetRenewalNumberFromExistingSession(int? id)
         {
-            //Get existing session variable
-            var sessionVariable = System.Web.HttpContext.Current.Session["PSARenewalNumber"] as IEnumerable<PSAManagementVM>;
-            var renewalNumber = sessionVariable ?? psaManagementService.GetRenewalNumber(id);
-
-            if (sessionVariable == null) // If no session variable is found
-                System.Web.HttpContext.Current.Session["PSARenewalNumber"] = renewalNumber;
+            var renewalNumber = psaManagementService.GetRenewalNumber(id);
+            
             return renewalNumber;
         }
 

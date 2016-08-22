@@ -77,7 +77,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.SharePoint.Client, Version=16.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\MCAWebAndAPI.Service\bin\Debug\Microsoft.SharePoint.Client.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -88,12 +87,41 @@
       <HintPath>..\packages\Portable.Licensing.1.1.0\lib\portable-net40+sl4+wp7+win8\Portable.Licensing.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Collections.Immutable, Version=1.1.37.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Collections.Immutable.1.1.37\lib\dotnet\System.Collections.Immutable.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System" />
+    <Reference Include="System.Composition.AttributedModel">
+      <HintPath>..\packages\Microsoft.Composition.1.0.27\lib\portable-net45+win8+wp8+wpa81\System.Composition.AttributedModel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Composition.Convention">
+      <HintPath>..\packages\Microsoft.Composition.1.0.27\lib\portable-net45+win8+wp8+wpa81\System.Composition.Convention.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Composition.Hosting">
+      <HintPath>..\packages\Microsoft.Composition.1.0.27\lib\portable-net45+win8+wp8+wpa81\System.Composition.Hosting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Composition.Runtime">
+      <HintPath>..\packages\Microsoft.Composition.1.0.27\lib\portable-net45+win8+wp8+wpa81\System.Composition.Runtime.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Composition.TypedParts">
+      <HintPath>..\packages\Microsoft.Composition.1.0.27\lib\portable-net45+win8+wp8+wpa81\System.Composition.TypedParts.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Reflection.Metadata, Version=1.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\System.Reflection.Metadata.1.2.0\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Web.Cors, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Cors.5.2.3\lib\net45\System.Web.Cors.dll</HintPath>
       <Private>True</Private>
@@ -180,6 +208,106 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="bin\Antlr3.Runtime.dll" />
+    <Content Include="bin\Antlr3.Runtime.pdb" />
+    <Content Include="bin\AspNet.ScriptManager.bootstrap.dll" />
+    <Content Include="bin\AspNet.ScriptManager.jQuery.dll" />
+    <Content Include="bin\bg-BG\Kendo.Mvc.resources.dll" />
+    <Content Include="bin\Common.Logging.Core.dll" />
+    <Content Include="bin\Common.Logging.Core.pdb" />
+    <Content Include="bin\Common.Logging.Core.xml" />
+    <Content Include="bin\Common.Logging.dll" />
+    <Content Include="bin\Common.Logging.pdb" />
+    <Content Include="bin\Common.Logging.xml" />
+    <Content Include="bin\cs-CZ\Kendo.Mvc.resources.dll" />
+    <Content Include="bin\CsvHelper.dll" />
+    <Content Include="bin\CsvHelper.xml" />
+    <Content Include="bin\da-DK\Kendo.Mvc.resources.dll" />
+    <Content Include="bin\de-DE\Kendo.Mvc.resources.dll" />
+    <Content Include="bin\Elmah.dll" />
+    <Content Include="bin\Elmah.Mvc.dll" />
+    <Content Include="bin\es-ES\Kendo.Mvc.resources.dll" />
+    <Content Include="bin\fr-CA\Kendo.Mvc.resources.dll" />
+    <Content Include="bin\fr-FR\Kendo.Mvc.resources.dll" />
+    <Content Include="bin\it-IT\Kendo.Mvc.resources.dll" />
+    <Content Include="bin\Kendo.Mvc.dll" />
+    <Content Include="bin\Kendo.Mvc.xml" />
+    <Content Include="bin\MCAWebAndAPI.Model.dll" />
+    <Content Include="bin\MCAWebAndAPI.Model.pdb" />
+    <Content Include="bin\MCAWebAndAPI.Service.dll" />
+    <Content Include="bin\MCAWebAndAPI.Service.pdb" />
+    <Content Include="bin\MCAWebAndAPI.Web.dll" />
+    <Content Include="bin\MCAWebAndAPI.Web.pdb" />
+    <Content Include="bin\Microsoft.AspNet.FriendlyUrls.dll" />
+    <Content Include="bin\Microsoft.AspNet.FriendlyUrls.xml" />
+    <Content Include="bin\Microsoft.AspNet.Web.Optimization.WebForms.dll" />
+    <Content Include="bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll" />
+    <Content Include="bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml" />
+    <Content Include="bin\Microsoft.ScriptManager.MSAjax.dll" />
+    <Content Include="bin\Microsoft.ScriptManager.WebForms.dll" />
+    <Content Include="bin\Microsoft.SharePoint.Client.dll" />
+    <Content Include="bin\Microsoft.SharePoint.Client.Runtime.dll" />
+    <Content Include="bin\Microsoft.Web.Infrastructure.dll" />
+    <Content Include="bin\Newtonsoft.Json.dll" />
+    <Content Include="bin\Newtonsoft.Json.xml" />
+    <Content Include="bin\nl-NL\Kendo.Mvc.resources.dll" />
+    <Content Include="bin\NLog.dll" />
+    <Content Include="bin\NLog.xml" />
+    <Content Include="bin\pl-PL\Kendo.Mvc.resources.dll" />
+    <Content Include="bin\Portable.Licensing.dll" />
+    <Content Include="bin\Portable.Licensing.xml" />
+    <Content Include="bin\pt-BR\Kendo.Mvc.resources.dll" />
+    <Content Include="bin\pt-PT\Kendo.Mvc.resources.dll" />
+    <Content Include="bin\Quartz.dll" />
+    <Content Include="bin\Quartz.pdb" />
+    <Content Include="bin\Quartz.xml" />
+    <Content Include="bin\ro-RO\Kendo.Mvc.resources.dll" />
+    <Content Include="bin\roslyn\csc.exe" />
+    <Content Include="bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll" />
+    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll" />
+    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.dll" />
+    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll" />
+    <Content Include="bin\roslyn\System.Collections.Immutable.dll" />
+    <Content Include="bin\roslyn\System.Reflection.Metadata.dll" />
+    <Content Include="bin\roslyn\vbc.exe" />
+    <Content Include="bin\roslyn\VBCSCompiler.exe" />
+    <Content Include="bin\ru-RU\Kendo.Mvc.resources.dll" />
+    <Content Include="bin\sk-SK\Kendo.Mvc.resources.dll" />
+    <Content Include="bin\sv-SE\Kendo.Mvc.resources.dll" />
+    <Content Include="bin\System.Collections.Immutable.dll" />
+    <Content Include="bin\System.Composition.AttributedModel.dll" />
+    <Content Include="bin\System.Composition.Convention.dll" />
+    <Content Include="bin\System.Composition.Hosting.dll" />
+    <Content Include="bin\System.Composition.Runtime.dll" />
+    <Content Include="bin\System.Composition.TypedParts.dll" />
+    <Content Include="bin\System.Net.Http.Formatting.dll" />
+    <Content Include="bin\System.Net.Http.Formatting.xml" />
+    <Content Include="bin\System.Reflection.Metadata.dll" />
+    <Content Include="bin\System.Web.Cors.dll" />
+    <Content Include="bin\System.Web.Helpers.dll" />
+    <Content Include="bin\System.Web.Helpers.xml" />
+    <Content Include="bin\System.Web.Http.dll" />
+    <Content Include="bin\System.Web.Http.xml" />
+    <Content Include="bin\System.Web.Mvc.dll" />
+    <Content Include="bin\System.Web.Mvc.xml" />
+    <Content Include="bin\System.Web.Optimization.dll" />
+    <Content Include="bin\System.Web.Optimization.xml" />
+    <Content Include="bin\System.Web.Razor.dll" />
+    <Content Include="bin\System.Web.Razor.xml" />
+    <Content Include="bin\System.Web.WebPages.Deployment.dll" />
+    <Content Include="bin\System.Web.WebPages.Deployment.xml" />
+    <Content Include="bin\System.Web.WebPages.dll" />
+    <Content Include="bin\System.Web.WebPages.Razor.dll" />
+    <Content Include="bin\System.Web.WebPages.Razor.xml" />
+    <Content Include="bin\System.Web.WebPages.xml" />
+    <Content Include="bin\T4MVCExtensions.dll" />
+    <Content Include="bin\tr-TR\Kendo.Mvc.resources.dll" />
+    <Content Include="bin\TuesPechkin.dll" />
+    <Content Include="bin\TuesPechkin.Wkhtmltox.Win64.dll" />
+    <Content Include="bin\TwitterBootstrapMVC5.dll" />
+    <Content Include="bin\uk-UA\Kendo.Mvc.resources.dll" />
+    <Content Include="bin\WebGrease.dll" />
+    <Content Include="bin\zh-CN\Kendo.Mvc.resources.dll" />
     <Content Include="Content\bi.css" />
     <Content Include="Content\custom.css" />
     <Content Include="Content\home.css" />
@@ -243,9 +371,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="bin\roslyn\Microsoft.CSharp.Core.targets" />
-    <Content Include="bin\roslyn\Microsoft.VisualBasic.Core.targets" />
-    <Content Include="bin\roslyn\VBCSCompiler.exe.config" />
     <Content Include="Content\kendo\2016.2.714\kendo.common-bootstrap.core.min.css.map" />
     <Content Include="Content\kendo\2016.2.714\kendo.common-bootstrap.min.css.map" />
     <Content Include="Content\kendo\2016.2.714\kendo.common-fiori.min.css.map" />
@@ -293,6 +418,11 @@
     <Content Include="Content\kendo\2016.2.714\fonts\glyphs\KendoUIGlyphs.woff" />
     <Content Include="Content\kendo\2016.2.714\images\kendoui.ttf" />
     <Content Include="Content\kendo\2016.2.714\images\kendoui.woff" />
+    <None Include="bin\MCAWebAndAPI.Web.dll.config" />
+    <Content Include="bin\NLog.config" />
+    <Content Include="bin\roslyn\Microsoft.CSharp.Core.targets" />
+    <Content Include="bin\roslyn\Microsoft.VisualBasic.Core.targets" />
+    <Content Include="bin\roslyn\VBCSCompiler.exe.config" />
     <None Include="job_scheduling_data_2_0.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -514,7 +644,13 @@
     <Content Include="Global.asax" />
     <Content Include="Site.Master" />
     <Content Include="ViewSwitcher.ascx" />
+    <Content Include="Views\ASSAssetAcquisition\Index.cshtml" />
+    <Content Include="Views\Error\Index.cshtml" />
+    <Content Include="Views\FINEventBudget\_ItemDetails.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\HRCompensatory\_CompensantoryDetails.cshtml" />
+    <Content Include="Views\HRPayroll\DisplayPayrollWorksheet.cshtml" />
+    <Content Include="Views\Success\Index.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -525,6 +661,7 @@
     <Content Include="Views\Shared\_LayoutBI.cshtml" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\_PartialHeader.cshtml" />
     <Content Include="Views\PMProjectHierarchy\ProjectStatusByProject.cshtml" />
     <Content Include="Views\PMProjectHierarchy\ProjectStatusByActivity.cshtml" />
     <Content Include="Views\PMTask\TaskByResource.cshtml" />
@@ -553,14 +690,13 @@
     <Content Include="Views\ASSAssetCheckResultApprove\Create.cshtml" />
     <Content Include="Views\ASSAssetCheckResult\Create.cshtml" />
     <Content Include="Views\ASSAssetFixedAsset\Create.cshtml" />
+    <Content Include="Views\ASSAssetLoanAndReturn\Create.cshtml" />
     <Content Include="Views\ASSAssetReplacement\Create.cshtml" />
     <Content Include="Views\ASSAssetReplacement\Edit.cshtml" />
     <Content Include="Views\ASSAssetScrapping\Create.cshtml" />
     <Content Include="Views\ASSAssetScrapping\Edit.cshtml" />
     <Content Include="Views\ASSAssetSmallValueAsset\Create.cshtml" />
-    <Content Include="Views\ASSAssetTransfer\Create.cshtml" />
     <Content Include="Views\Shared\_LayoutHome.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\BIEmbed\WFP03.cshtml" />
     <Content Include="Views\ASSAssetMaster\Create.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\AjaxComboBox.cshtml" />
@@ -568,7 +704,6 @@
     <Content Include="Scripts\libs\jquery.min.map" />
     <Content Include="Views\Shared\EditorTemplates\CurrencyUSD.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\InGridAjaxComboBox.cshtml" />
-    <Content Include="Views\ASSLocationMaster\Create.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\TextArea.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\PhoneNumber.cshtml" />
     <Content Include="Views\HRApplication\CreateApplicationData.cshtml" />
@@ -614,11 +749,9 @@
     <Content Include="Views\Shared\_Modal.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\GridTable.cshtml" />
     <Content Include="Views\ASSAssetMaster\Edit.cshtml" />
-    <Content Include="Views\Error\Index.cshtml" />
     <Content Include="Views\HRPSAManagement\_PSAManagementData.cshtml" />
     <Content Include="Views\HRApplication\_DocumentDetails_Display.cshtml" />
     <Content Include="Views\HRApplication\DisplayApplicationData.cshtml" />
-    <Content Include="Views\Success\Index.cshtml" />
     <Content Include="Views\HRProfessional\EditProfessional.cshtml" />
     <Content Include="Views\HRProfessional\_ContactInformationDetails.cshtml" />
     <Content Include="Views\Shared\_EducationDetails.cshtml" />
@@ -844,6 +977,13 @@
     <Content Include="Views\HRCompensatory\ListCompensatoryDetails.cshtml" />
     <Content Include="Views\HRInsuranceClaim\_ClaimComponentDetail.cshtml" />
     <Content Include="Views\HRExitProcedure\_ExitProcedureDataHR.cshtml" />
+    <Content Include="Views\FINRequisitionNote\_General.cshtml" />
+    <Content Include="Views\FINRequisitionNote\_ItemDetails.cshtml" />
+    <Content Include="Views\FINTaxReimbursement\Item.cshtml" />
+    <Content Include="Views\FINTaxExemption\Create.cshtml" />
+    <Content Include="Views\FINSPHL\Create.cshtml" />
+    <Content Include="Views\FINSCAVoucher\Create.cshtml" />
+    <Content Include="Views\FINSCAVoucher\_EventBudgetItems.cshtml" />
     <Content Include="Views\HRExitProcedure\ViewExitProcedureForApprover.cshtml" />
     <Content Include="Views\HRExitProcedure\_ExitProcedureChecklistForApprover.cshtml" />
     <Content Include="Views\HRExitProcedure\_ExitProcedureDataForApprover.cshtml" />
@@ -857,8 +997,6 @@
     <Content Include="Views\HRTimesheet\EditTimesheet.cshtml" />
     <Content Include="Views\HRCompensatory\PrintCompensatoryRequest.cshtml" />
     <Content Include="Views\HRCompensatory\_CompensatoryRequest_Print.cshtml" />
-    <Content Include="Views\ASSAssignmentofAsset\Create.cshtml" />
-    <Content Include="Views\ASSAssignmentofAsset\Edit.cshtml" />
     <Content Include="Views\HRInsuranceClaim\EditInsuranceClaim.cshtml" />
     <Content Include="Views\HRInsuranceClaim\ExportToExcel.cshtml" />
     <Content Include="Views\HRInsuranceClaim\SubmitAXA.cshtml" />
@@ -880,29 +1018,30 @@
     <Content Include="Views\HRCompensatory\_CompensatoryRequestDetails_Print.cshtml" />
     <Content Include="Views\HRCompensatory\_InputCompensatoryDetailsUser.cshtml" />
     <Content Include="Views\HRCompensatory\_CompensantoryDetailsHR.cshtml" />
+    <Content Include="Views\FINSCAVoucher\Print.cshtml" />
+    <Content Include="Views\Shared\_PartialHeaderWithLogo.cshtml" />
+    <Content Include="Views\FINOutstandingAdvance\Item.cshtml" />
+    <Content Include="Views\FINTaxExemption\_Income.cshtml" />
+    <Content Include="Views\FINTaxExemption\_VAT.cshtml" />
+    <Content Include="Views\FINTaxExemption\_Others.cshtml" />
+    <Content Include="Views\FINPettyCashSettlement\Create.cshtml" />
+    <Content Include="Views\FINSCAVoucher\_DisplayEventBudgetItems.cshtml" />
+    <Content Include="Views\FINRequisitionNote\Create.cshtml" />
+    <Content Include="Views\FINRequisitionNote\Edit.cshtml" />
+    <Content Include="Views\FINRequisitionNote\Print.cshtml" />
     <Content Include="Views\HRExitProcedure\CreateExitProcedureHR.cshtml" />
     <Content Include="Views\HRExitProcedure\EditExitProcedureHR.cshtml" />
     <Content Include="Views\HRExitProcedure\_ExitProcedureChecklistForHR.cshtml" />
     <Content Include="Views\HRExitProcedure\_EditExitProcedureChecklistForHR.cshtml" />
     <Content Include="Views\HRExitProcedure\_EditExitProcedureDataHR.cshtml" />
-    <Content Include="Views\FINRequisitionNote\_General.cshtml" />
-    <Content Include="Views\FINRequisitionNote\_ItemDetails.cshtml" />
-    <Content Include="Views\FINSCAVoucher\CreateSCAVoucher.cshtml" />
-    <Content Include="Views\FINSCAVoucher\_EventBudgetItems.cshtml" />
-    <Content Include="Views\FINSPHL\CreateSPHL.cshtml" />
-    <Content Include="Views\FINTaxExemptionData\Create.cshtml" />
-    <Content Include="Views\FINTaxExemptionData\Edit.cshtml" />
-    <Content Include="Views\FINTaxReimbursement\CreateTaxReimbursement.cshtml" />
     <Content Include="Views\HRPSAManagement\TestCalculateTwoMonths.cshtml" />
     <Content Include="Views\HRPayroll\DisplayPayrollWorksheetDrafts.cshtml" />
     <Content Include="Views\ASSAssetAcquisition\Upload.cshtml" />
     <Content Include="Views\ASSAssetAcquisition\Edit.cshtml" />
-    <Content Include="Views\ASSAssetAcquisition\_DisplayGrid.cshtml" />
     <Content Include="Views\HRMedicalCheckUp\CreateMedical.cshtml" />
     <Content Include="Views\HRMedicalCheckUp\Redirect.cshtml" />
     <Content Include="Views\HRMedicalCheckUp\EditMedical.cshtml" />
     <Content Include="Views\HRMedicalCheckUp\DisplayMedical.cshtml" />
-    <Content Include="Views\FINOutstandingAdvance\Create.cshtml" />
     <Content Include="Views\FINPettyCashPaymentVoucher\Create.cshtml" />
     <Content Include="Views\FINPettyCashPaymentVoucher\Edit.cshtml" />
     <Content Include="Views\FINPettyCashPaymentVoucher\Print.cshtml" />
@@ -910,22 +1049,47 @@
     <Content Include="Views\FINRequisitionNote\Create.cshtml" />
     <Content Include="Views\FINRequisitionNote\Edit.cshtml" />
     <Content Include="Views\FINRequisitionNote\Print.cshtml" />
-    <Content Include="Views\FINTaxExemptionData\_Income.cshtml" />
-    <Content Include="Views\FINTaxExemptionData\_Others.cshtml" />
-    <Content Include="Views\FINTaxExemptionData\_VAT.cshtml" />
     <Content Include="Views\FINRequisitionNote\Create.cshtml" />
     <Content Include="Views\FINRequisitionNote\Edit.cshtml" />
     <Content Include="Views\FINRequisitionNote\Print.cshtml" />
-    <Content Include="Views\FINEventBudget\Create.cshtml" />
-    <Content Include="Views\FINEventBudget\_ItemDetails.cshtml" />
     <Content Include="Views\Shared\_PartialHeader.cshtml" />
     <Content Include="Views\Shared\_PartialHeaderWithLogo.cshtml" />
     <Content Include="Views\ASSAssetTransfer\CreateAssetTransfer.cshtml" />
     <Content Include="Views\ASSAssetTransfer\_AssetTransferDetail.cshtml" />
     <Content Include="Views\ASSAssetDisposal\CreateAssetDisposal.cshtml" />
     <Content Include="Views\ASSAssetDisposal\_AssetDisposalDetail.cshtml" />
-    <Content Include="Views\ASSAssetLoanAndReturn\Create.cshtml" />
-    <Content Include="Views\ASSAssetLoanAndReturn\_AssetLoanAndReturnItem.cshtml" />
+    <Content Include="Views\HRAdjustment\InputAdjustmentData.cshtml" />
+    <Content Include="Views\HRAdjustment\_InputAdjustmentDetails.cshtml" />
+    <Content Include="Views\FINSCAVoucher\Edit.cshtml" />
+    <Content Include="Views\FINSPHL\Edit.cshtml" />
+    <Content Include="Views\FINPettyCashPaymentVoucher\_General.cshtml" />
+    <Content Include="Views\FINTaxExemption\EditIncomeTax.cshtml" />
+    <Content Include="Views\FINSCAVoucher\_GeneralForm.cshtml" />
+    <Content Include="Views\FINSCAVoucher\Approve.cshtml" />
+    <Content Include="Views\FINTaxExemption\EditVATTax.cshtml" />
+    <Content Include="Views\FINTaxExemption\EditOtherTax.cshtml" />
+    <Content Include="Views\FINSCAVoucher\_GeneralFormDisplay.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\InGridAjaxCascadeNoPrimitiveValue.cshtml" />
+    <Content Include="Views\HRAdjustmentDayOffBalance\CreateAdjustmentDayOffBalance.cshtml" />
+    <Content Include="Views\HRAdjustmentDayOffBalance\EditAdjustmentDayOffBalance.cshtml" />
+    <Content Include="Views\ASSAssetDisposal\CreateAssetDisposal.cshtml" />
+    <Content Include="Views\ASSAssetDisposal\_AssetDisposalDetail.cshtml" />
+    <Content Include="Views\ASSAssetTransfer\CreateAssetTransfer.cshtml" />
+    <Content Include="Views\ASSAssetTransfer\_AssetTransferDetail.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\DropDown.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\AjaxCascadeComboBox.cshtml" />
+    <Content Include="Views\ASSAssetAcquisition\Sync.cshtml" />
+    <Content Include="Views\ASSAssetAcquisition\View.cshtml" />
+    <Content Include="Views\ASSAssetAcquisition\_DetailsView.cshtml" />
+    <Content Include="Views\ASSAssignmentOfAsset\Create.cshtml" />
+    <Content Include="Views\ASSAssignmentOfAsset\_Details.cshtml" />
+    <Content Include="Views\ASSLocationMaster\Create.cshtml" />
+    <Content Include="Views\ASSLocationMaster\Edit.cshtml" />
+    <Content Include="Views\ASSLocationMaster\Upload.cshtml" />
+    <Content Include="Views\FINPettyCashReplenishment\Item.cshtml" />
+    <Content Include="Views\HRCompensatory\AddCompensatoryHR.cshtml" />
+    <Content Include="Views\FINEventBudget\Item.cshtml" />
+    <Content Include="Views\Shared\_WorkflowPathDetails.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -937,9 +1101,10 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\ActivityController.cs" />
+    <Compile Include="Controllers\ASSAssetAcquisitionController.cs" />
     <Compile Include="Controllers\ASSAssetDisposalController.cs" />
     <Compile Include="Controllers\ASSAssetMasterController.cs" />
-    <Compile Include="Controllers\ASSAssetAcquisitionController.cs" />
     <Compile Include="Controllers\ASSAssetCheckFormController.cs" />
     <Compile Include="Controllers\ASSAssetCheckResultApproveController.cs" />
     <Compile Include="Controllers\ASSAssetCheckResultController.cs" />
@@ -950,7 +1115,7 @@
     <Compile Include="Controllers\ASSAssetSmallValueAssetController.cs" />
     <Compile Include="Controllers\ASSAssetTransactionController.cs" />
     <Compile Include="Controllers\ASSAssetTransferController.cs" />
-    <Compile Include="Controllers\ASSAssignmentofAssetController.cs" />
+    <Compile Include="Controllers\ASSAssignmentOfAssetController.cs" />
     <Compile Include="Controllers\ASSLocationMasterController.cs" />
     <Compile Include="Controllers\BIEmbedController.cs" />
     <Compile Include="Controllers\CalendarEventController.cs" />
@@ -958,18 +1123,20 @@
     <Compile Include="Controllers\CSVController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\FileController.cs" />
-    <Compile Include="Controllers\FINEventBudgetController.cs" />
-    <Compile Include="Controllers\FINOutstandingAdvanceController.cs" />
     <Compile Include="Controllers\FINPettyCashPaymentVoucherController.cs" />
-    <Compile Include="Controllers\FINPettyCashReimbursementController.cs" />
+    <Compile Include="Controllers\FINPettyCashReplenishmentController.cs" />
     <Compile Include="Controllers\FINPettyCashSettlementController.cs" />
-    <Compile Include="Controllers\FINRequisitionNoteController.cs" />
     <Compile Include="Controllers\FINSCAVoucherController.cs" />
-    <Compile Include="Controllers\FinSharedController.cs" />
+    <Compile Include="Controllers\HRDayOffController.cs" />
+    <Compile Include="Controllers\SharedFinanceController.cs" />
+    <Compile Include="Controllers\FINTaxExemptionController.cs" />
     <Compile Include="Controllers\FINSPHLController.cs" />
-    <Compile Include="Controllers\FINTaxExemptionDataController.cs" />
     <Compile Include="Controllers\FINTaxReimbursementController.cs" />
+    <Compile Include="Controllers\FINEventBudgetController.cs" />
+    <Compile Include="Controllers\FINRequisitionNoteController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\HRAdjustmentController.cs" />
+    <Compile Include="Controllers\HRAdjustmentDayOffBalanceController.cs" />
     <Compile Include="Controllers\HRApplicationController.cs" />
     <Compile Include="Controllers\HRCompensatoryController.cs" />
     <Compile Include="Controllers\HRDataMasterController.cs" />
@@ -989,12 +1156,15 @@
     <Compile Include="Controllers\HRShortlistController.cs" />
     <Compile Include="Controllers\HRTimesheetController.cs" />
     <Compile Include="Controllers\LocationController.cs" />
+    <Compile Include="Controllers\FINOutstandingAdvanceController.cs" />
+    <Compile Include="Controllers\FINPettyCashReimbursementController.cs" />
     <Compile Include="Controllers\ProjectHierarchyController.cs" />
     <Compile Include="Controllers\RIAController.cs" />
     <Compile Include="Controllers\SuccessController.cs" />
     <Compile Include="Controllers\TaskController.cs" />
     <Compile Include="Controllers\TRPlaceMasterController.cs" />
     <Compile Include="Controllers\UpdateManualController.cs" />
+    <Compile Include="Controllers\VendorController.cs" />
     <Compile Include="Controllers\WorkflowController.cs" />
     <Compile Include="Filters\HandleErrorAttribute.cs" />
     <Compile Include="Global.asax.cs">
@@ -1053,9 +1223,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Code\" />
-    <Folder Include="bin\Resources\" />
     <Folder Include="Scripts\apps\controlls\" />
-    <Folder Include="Views\File\" />
+    <Folder Include="Views\Activity\" />
     <Folder Include="Views\HRDataMaster\" />
   </ItemGroup>
   <ItemGroup>
@@ -1082,6 +1251,7 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>MessageResource.Designer.cs</LastGenOutput>
       <CustomToolNamespace>MCAWebAndAPI.Web.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

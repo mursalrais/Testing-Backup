@@ -34,7 +34,6 @@ namespace MCAWebAndAPI.Service.Asset
             var model = new AssetAcquisitionHeaderVM();
             model.TransactionType = Convert.ToString("Asset Acquisition");
             model.AccpMemo.Choices = GetChoicesFromList(SP_ACC_MEMO_LIST_NAME, "ID", "Title");
-
             model.CancelURL = _siteUrl + UrlResource.AssetAcquisition;
 
             return model;
@@ -58,37 +57,50 @@ namespace MCAWebAndAPI.Service.Asset
             return _choices.ToArray();
         }
 
-        public int? CreateHeader(AssetAcquisitionHeaderVM viewmodel)
+        public int? CreateHeader(AssetAcquisitionHeaderVM viewmodel, string mode = null, string SiteUrl = null)
         {
             viewmodel.CancelURL = _siteUrl + UrlResource.AssetAcquisition;
             var columnValues = new Dictionary<string, object>();
             //columnValues.add
-            columnValues.Add("Title", viewmodel.TransactionType);
+            columnValues.Add("Title", "Asset Acquisition");
             if (viewmodel.AccpMemo.Value == null)
             {
                 return 0;
             }
-            string[] memo = viewmodel.AccpMemo.Value.Split('-');
-            //columnValues.Add("acceptancememono", memo[1]);
-            columnValues.Add("acceptancememono", new FieldLookupValue { LookupId = Convert.ToInt32(memo[0]) });
-            var breakVendor = viewmodel.Vendor.Split('-');
-            columnValues.Add("vendorid", breakVendor[0]);
-            columnValues.Add("vendorname", breakVendor[1]);
-            columnValues.Add("pono", viewmodel.PoNo);
-            if(viewmodel.PurchaseDate.HasValue)
+            if(mode == null)
             {
-                columnValues.Add("purchasedate", viewmodel.PurchaseDate);
+                string[] memo = viewmodel.AccpMemo.Value.Split('-');
+                //columnValues.Add("acceptancememono", memo[1]);
+                columnValues.Add("acceptancememono", new FieldLookupValue { LookupId = Convert.ToInt32(memo[0]) });
+                var memoinfo = SPConnector.GetListItem(SP_ACC_MEMO_LIST_NAME, Convert.ToInt32(memo[0]), _siteUrl);
+                columnValues.Add("vendorid", memoinfo["vendorid"]);
+                columnValues.Add("vendorname", memoinfo["vendorname"]);
+                columnValues.Add("pono", memoinfo["pono"]);
             }
             else
             {
-                columnValues.Add("purchasedate", null);
+                columnValues.Add("acceptancememono", new FieldLookupValue { LookupId = Convert.ToInt32(viewmodel.AccpMemo.Value)});
+                var memoinfo = GetAcceptanceMemoInfo(Convert.ToInt32(viewmodel.AccpMemo.Value), SiteUrl);
+                columnValues.Add("vendorid", memoinfo.VendorID);
+                columnValues.Add("vendorname", memoinfo.VendorName);
+                columnValues.Add("pono", memoinfo.PoNo);
             }
+            
+            columnValues.Add("purchasedate", viewmodel.PurchaseDate);
             
             columnValues.Add("purchasedescription", viewmodel.PurchaseDescription);
 
             try
             {
-                SPConnector.AddListItem(SP_ASSACQ_LIST_NAME, columnValues, _siteUrl);
+                if(mode == null)
+                {
+                    SPConnector.AddListItem(SP_ASSACQ_LIST_NAME, columnValues, _siteUrl);
+                }
+                else
+                {
+                    SPConnector.AddListItem(SP_ASSACQ_LIST_NAME, columnValues, SiteUrl);
+                }
+                
             }
             catch (Exception e)
             {
@@ -96,7 +108,15 @@ namespace MCAWebAndAPI.Service.Asset
             }
             var entitiy = new AssetAcquisitionHeaderVM();
             entitiy = viewmodel;
-            return SPConnector.GetLatestListItemID(SP_ASSACQ_LIST_NAME, _siteUrl);
+            if(mode == null)
+            {
+                return SPConnector.GetLatestListItemID(SP_ASSACQ_LIST_NAME, _siteUrl);
+            }
+            else
+            {
+                return SPConnector.GetLatestListItemID(SP_ASSACQ_LIST_NAME, SiteUrl);
+            }
+            
         }
 
         public AssetAcquisitionHeaderVM GetHeader(int? ID)
@@ -114,14 +134,8 @@ namespace MCAWebAndAPI.Service.Asset
             //viewModel.AccpMemo.Value = Convert.ToString(listItem["acceptancememono"]);
             viewModel.PoNo = Convert.ToString(listItem["pono"]);
             viewModel.Vendor = Convert.ToString(listItem["vendorid"])+"-"+Convert.ToString(listItem["vendorname"]);
-            if(Convert.ToDateTime(listItem["purchasedate"]) == DateTime.MinValue)
-            {
-                viewModel.PurchaseDate = null;
-            }
-            else
-            {
-                viewModel.PurchaseDate = Convert.ToDateTime(listItem["purchasedate"]);
-            }
+
+            viewModel.PurchaseDate = Convert.ToDateTime(listItem["purchasedate"]);
             //viewModel.Spesifications = Regex.Replace(listItem["Spesifications"].ToString(), "<.*?>", string.Empty);
             viewModel.PurchaseDescription = Regex.Replace(Convert.ToString(listItem["purchasedescription"]), "<.*?>", string.Empty);
             viewModel.ID = ID;
@@ -134,8 +148,23 @@ namespace MCAWebAndAPI.Service.Asset
         public IEnumerable<AssetMasterVM> GetAssetSubAsset()
         {
             var models = new List<AssetMasterVM>();
-
-            foreach (var item in SPConnector.GetList("Asset Master", _siteUrl))
+            var caml = @"<View><Query>
+                       <Where>
+                          <Geq>
+                             <FieldRef Name='AssetID' />
+                             <Value Type='Text'>14</Value>
+                          </Geq>
+                       </Where>
+                       <OrderBy>
+                          <FieldRef Name='AssetID' Ascending='True' />
+                       </OrderBy>
+                    </Query>
+                    <ViewFields>
+                       <FieldRef Name='Title' />
+                       <FieldRef Name='AssetID' />
+                    </ViewFields>
+                    <QueryOptions /></View>";
+            foreach (var item in SPConnector.GetList("Asset Master", _siteUrl, caml))
             {
                 models.Add(ConvertToModelAssetSubAsset(item));
             }
@@ -259,22 +288,15 @@ namespace MCAWebAndAPI.Service.Asset
             var columnValues = new Dictionary<string, object>();
             var ID = Convert.ToInt32(viewmodel.ID);
             //columnValues.add
-            columnValues.Add("Title", viewmodel.TransactionType);
+            columnValues.Add("Title", "Asset Acquisition");
             string[] memo = viewmodel.AccpMemo.Value.Split('-');
+            var memoinfo = SPConnector.GetListItem(SP_ACC_MEMO_LIST_NAME, Convert.ToInt32(memo[0]), _siteUrl);
             //columnValues.Add("acceptancememono", memo[1]);
             columnValues.Add("acceptancememono", new FieldLookupValue { LookupId = Convert.ToInt32(memo[0]) });
-            var breakVendor = viewmodel.Vendor.Split('-');
-            columnValues.Add("vendorid", breakVendor[0]);
-            columnValues.Add("vendorname", breakVendor[1]);
-            columnValues.Add("pono", viewmodel.PoNo);
-            if (viewmodel.PurchaseDate.HasValue)
-            {
-                columnValues.Add("purchasedate", viewmodel.PurchaseDate);
-            }
-            else
-            {
-                columnValues.Add("purchasedate", null);
-            }
+            columnValues.Add("vendorid", memoinfo["vendorid"]);
+            columnValues.Add("vendorname", memoinfo["vendorname"]);
+            columnValues.Add("pono", memoinfo["pono"]);
+            columnValues.Add("purchasedate", Convert.ToDateTime(viewmodel.PurchaseDate));
             columnValues.Add("purchasedescription", viewmodel.PurchaseDescription);
 
             try
@@ -322,7 +344,7 @@ namespace MCAWebAndAPI.Service.Asset
                 try
                 {
                     if (Item.CheckIfUpdated(item))
-                        SPConnector.UpdateListItem(SP_ASSACQDetails_LIST_NAME, headerID, updatedValues, _siteUrl);
+                        SPConnector.UpdateListItem(SP_ASSACQDetails_LIST_NAME, item.ID, updatedValues, _siteUrl);
                     else
                         SPConnector.AddListItem(SP_ASSACQDetails_LIST_NAME, updatedValues, _siteUrl);
                 }
@@ -341,76 +363,45 @@ namespace MCAWebAndAPI.Service.Asset
 
         public int? MassUploadHeaderDetail(string ListName, DataTable CSVDataTable, string SiteUrl = null)
         {
-            var rowTotal = CSVDataTable.Rows.Count;
-            var columnTotal = CSVDataTable.Columns.Count;
-            var columnTypes = new Type[columnTotal];
-            var columnTechnicalNames = new string[columnTotal];
-
-            // After Column Name, the first row should be Column Type
-            for (int i = 0; i < columnTotal; i++)
+            int? latestHeaderID = 0;
+            int latestDetailID = 0;
+            if (ListName == SP_ASSACQ_LIST_NAME)
             {
-                //format header MUST be technicalname:type or technicalname_lookup:type technicalname_skip:type
-                try
+                foreach(DataRow d in CSVDataTable.Rows)
                 {
-                    columnTechnicalNames[i] = CSVDataTable.Columns[i].ColumnName;
-                    columnTypes[i] = CSVDataTable.Columns[i].DataType;
-                }
-                catch (Exception e)
-                {
-                    logger.Error(e);
-                    throw e;
+                    var model = new AssetAcquisitionHeaderVM();
+                    model.TransactionType = d.ItemArray[0].ToString();
+                    model.AccpMemo.Value = d.ItemArray[1].ToString();
+                    model.VendorID = d.ItemArray[2].ToString();
+                    model.Vendor = d.ItemArray[3].ToString();
+                    model.PoNo = d.ItemArray[4].ToString();
+                    model.PurchaseDate = Convert.ToDateTime(d.ItemArray[5]);
+                    model.PurchaseDescription = d.ItemArray[6].ToString();
+
+                    latestHeaderID =  CreateHeader(model, "upload", SiteUrl);
                 }
             }
 
-            var updatedValues = new Dictionary<string, object>();
-            // Start from 1 since 0 is header 
-            for (int i = 0; i < rowTotal; i++)
+            if (ListName == SP_ASSACQDetails_LIST_NAME)
             {
-                for (int j = 0; j < columnTotal; j++)
+                foreach (DataRow d in CSVDataTable.Rows)
                 {
-                    if (isLookup(columnTechnicalNames[j]))
-                    {
-                        FormatUtil.GenerateUpdatedValueFromGivenDataTable(ref updatedValues, columnTypes[j],
-                            columnTechnicalNames[j], CSVDataTable.Rows[i].ItemArray[j], lookup: true, skip: false);
-                    }
-                    else if (isSkipped(columnTechnicalNames[j]))
-                    {
-                        FormatUtil.GenerateUpdatedValueFromGivenDataTable(ref updatedValues, columnTypes[j],
-                           columnTechnicalNames[j], CSVDataTable.Rows[i].ItemArray[j], lookup: false, skip: true);
-                    }
-                    else
-                    {
-                        FormatUtil.GenerateUpdatedValueFromGivenDataTable(ref updatedValues, columnTypes[j],
-                          columnTechnicalNames[j], CSVDataTable.Rows[i].ItemArray[j], lookup: false, skip: false);
-                    }
-                }
-                try
-                {
-                    SPConnector.AddListItem(ListName, updatedValues, SiteUrl);
-                }
-                catch (Exception e)
-                {
-                    logger.Error(string.Format("{0} at ID: {1}", e.Message, i + 1));
-                    throw new Exception(string.Format("An error occured at ID: {0}. Therefore, data on ID: {0} and afterwards have not been submitted.", i + 1));
+                    var model = new AssetAcquisitionItemVM();
+                    model.POLineItem = Convert.ToString(d.ItemArray[1]);
+                    model.AssetSubAsset.Value = Convert.ToInt32(d.ItemArray[2]);
+                    model.WBS.Value = Convert.ToInt32(d.ItemArray[3]);
+                    model.CostIDR = Convert.ToInt32(d.ItemArray[4]);
+                    model.CostUSD = Convert.ToInt32(d.ItemArray[5]);
+                    model.Remarks = Convert.ToString(d.ItemArray[6]);
+                    model.Status = Convert.ToString(d.ItemArray[7]);
 
+                    CreateDetails(Convert.ToInt32(d.ItemArray[0]), model, SiteUrl);
                 }
-                updatedValues = new Dictionary<string, object>();
             }
+
             return SPConnector.GetLatestListItemID(ListName, SiteUrl);
         }
-
-        private bool isSkipped(string columnName)
-        {
-            return columnName.Contains("_")
-                && string.Compare(columnName.Split('_')[1], "skip", StringComparison.OrdinalIgnoreCase) == 0;
-        }
-
-        private bool isLookup(string columnName)
-        {
-            return columnName.Contains("_")
-               && string.Compare(columnName.Split('_')[1], "lookup", StringComparison.OrdinalIgnoreCase) == 0;
-        }
-
+        
         public int? getIdOfColumn(string listname, string SiteUrl, string caml)
         {
             var getItem = SPConnector.GetList(listname, SiteUrl, caml);
@@ -470,6 +461,92 @@ namespace MCAWebAndAPI.Service.Asset
         public bool MassUploadBreakDown(string ListName, DataTable CSVDataTable, string SiteUrl = null)
         {
             throw new NotImplementedException();
+        }
+
+        public List<string> GetSubAsst(string mainsubasset, string SiteUrl)
+        {
+            string caml = @"<View><Query>
+                       <Where>
+                          <Contains>
+                             <FieldRef Name='AssetID' />
+                             <Value Type='Text'>"+ mainsubasset + @"</Value>
+                          </Contains>
+                       </Where>
+                       <OrderBy>
+                          <FieldRef Name='ID' Ascending='True' />
+                       </OrderBy>
+                    </Query>
+                    <ViewFields>
+                       <FieldRef Name='AssetID' />
+                       <FieldRef Name='Title' />
+                    </ViewFields>
+                    <QueryOptions /></View>";
+            var list = SPConnector.GetList("Asset Master", SiteUrl, caml);
+
+            var viewmodel = new List<string>();
+            foreach(var l in list)
+            {
+                if(Convert.ToString(l["AssetID"]).Length >14 )
+                {
+                    viewmodel.Add(Convert.ToString(l["AssetID"]) +"-"+ Convert.ToString(l["Title"]));
+                }
+            }
+            
+            return viewmodel;
+        }
+
+        public bool Syncronize(string SiteUrl)
+        {
+            var lists = SPConnector.GetList(SP_ACC_MEMO_LIST_NAME, SiteUrl);
+            foreach(var l in lists)
+            {
+                var caml = @"<View><Query>
+                            <Where>
+                                <Eq>
+                                    <FieldRef Name='acceptancememono' />
+                                    <Value Type='Lookup'>"+l["Title"] +@"</Value> 
+                                </Eq>
+                            </Where>
+                            </Query>
+                            <ViewFields />
+                            <QueryOptions /></View>";
+                var getAsset = SPConnector.GetList(SP_ASSACQ_LIST_NAME, SiteUrl, caml);
+                foreach(var ass in getAsset)
+                {
+                    var model = new Dictionary<string, object>();
+                    model.Add("vendorname", Convert.ToString(l["vendorname"]));
+                    model.Add("vendorid", Convert.ToString(l["vendorid"]));
+                    model.Add("pono", Convert.ToString(l["pono"]));
+
+                    SPConnector.UpdateListItem(SP_ASSACQ_LIST_NAME, Convert.ToInt32(ass["ID"]), model, SiteUrl);
+                }                
+            }
+
+            return true;
+        }
+
+        public int? CreateDetails(int? headerID, AssetAcquisitionItemVM item, string SiteUrl = null)
+        {
+            var updatedValues = new Dictionary<string, object>();
+            updatedValues.Add("assetacquisition", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
+            updatedValues.Add("assetsubasset", new FieldLookupValue { LookupId = Convert.ToInt32(item.AssetSubAsset.Value.Value) });
+            updatedValues.Add("wbs", new FieldLookupValue { LookupId = Convert.ToInt32(item.WBS.Value.Value) });
+            updatedValues.Add("polineitem", item.POLineItem);
+            updatedValues.Add("costidr", item.CostIDR);
+            updatedValues.Add("costusd", item.CostUSD);
+            updatedValues.Add("remarks", item.Remarks);
+            updatedValues.Add("status", "RUNNING");
+            try
+            {
+                SPConnector.AddListItem(SP_ASSACQDetails_LIST_NAME, updatedValues, SiteUrl);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e);
+                throw new Exception(ErrorResource.SPInsertError);
+            }
+
+            return SPConnector.GetLatestListItemID(SP_ASSACQDetails_LIST_NAME, SiteUrl);
         }
     }
 }

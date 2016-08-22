@@ -14,7 +14,9 @@ namespace MCAWebAndAPI.Service.Finance
     {
         private const string GLMASTER_SITE_LIST = "GL Master";
         private const string WBSMASTER_SITE_LIST = "WBS Master";
-        private const string VENDOR_SITE_LIST = "Vendor";
+        private const string SUBACTIVITY_SITE_LIST = "Sub Activity";
+
+        //TODO: this sounds fishy - check with HR
         private const string PROFESSIONAL_SITE_LIST = "Back Office Professional Master";
 
         private const string FIELD_ID = "ID";
@@ -22,6 +24,9 @@ namespace MCAWebAndAPI.Service.Finance
 
         private const string FIELD_GL_DESCRIPTION = "yyxi";
         private const string FIELD_WBS_DESCRIPTION = "WBSDesc";
+
+        private const string ACTIVITYID_SUBACTIVITY = "Activity_x003a_ID";
+        private const string WBS_SUBACTIVITY_ID = "Sub_x0020_Activity_x003a_ID";
 
         public static IEnumerable<GLMasterVM> GetGLMaster(string siteUrl)
         {
@@ -35,31 +40,35 @@ namespace MCAWebAndAPI.Service.Finance
             return glMasters;
         }
 
-        public static IEnumerable<WBSMasterVM> GetWBSMaster(string siteUrl)
+        public static IEnumerable<WBSMasterVM> GetWBSMaster(string siteUrl, string activityValue=null)
         {
+            string caml = null;
+            if (!string.IsNullOrWhiteSpace(activityValue))
+            {
+                var camlGetSubactivity = @"<View><Query><Where><Eq><FieldRef Name='" + ACTIVITYID_SUBACTIVITY + "' /><Value Type='Lookup'>" +
+                    activityValue + "</Value></Eq></Where></Query></View>";
+
+                string valuesText = string.Empty;
+                foreach (var item in SPConnector.GetList(SUBACTIVITY_SITE_LIST, siteUrl, camlGetSubactivity))
+                {
+                    valuesText += "<Value Type='Lookup'>" + Convert.ToString(item[FIELD_ID]) + "</Value>";
+                }
+
+                var camlGetWbs = @"<View><Query><Where><In><FieldRef Name='" + WBS_SUBACTIVITY_ID + "' /><Values>" +
+                    valuesText + "</Values></In></Where></Query></View>";
+            }
+
+
             var wbsMasters = new List<WBSMasterVM>();
 
-            foreach (var item in SPConnector.GetList(WBSMASTER_SITE_LIST, siteUrl, null))
+            foreach (var item in SPConnector.GetList(WBSMASTER_SITE_LIST, siteUrl, caml))
             {
                 wbsMasters.Add(ConvertToWBSMasterModel(item));
             }
 
             return wbsMasters;
         }
-
-        public static IEnumerable<VendorVM> GetVendorMaster(string siteUrl)
-        {
-            var vendors = new List<VendorVM>();
-
-            vendors.Add(new VendorVM() {ID=-1, Title=string.Empty });
-
-            foreach (var item in SPConnector.GetList(VENDOR_SITE_LIST, siteUrl, null))
-            {
-                vendors.Add(ConvertToVendorModel(item));
-            }
-
-            return vendors;
-        }
+   
 
         public static IEnumerable<ProfessionalVM> GetProfessionalMaster(string siteUrl)
         {
@@ -85,18 +94,6 @@ namespace MCAWebAndAPI.Service.Finance
 
             };
         }
-
-        private static VendorVM ConvertToVendorModel(ListItem item)
-        {
-            return new VendorVM
-            {
-                ID = Convert.ToInt32(item[FIELD_ID]),
-                Title = Convert.ToString(item[FIELD_TITLE]),
-
-                
-            };
-        }
-
 
         private static GLMasterVM ConvertToGLMasterModel(ListItem item)
         {

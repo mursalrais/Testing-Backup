@@ -1,0 +1,96 @@
+﻿@model MCAWebAndAPI.Model.ViewModel.Form.Finance.SCAVoucherVM
+
+@*
+    Wireframe FIN06: SCA Voucher
+    i.e.: Special Cash Advance Voucher
+*@
+
+@using (Html.BeginForm("Create", "FINSCAVoucher", FormMethod.Post,
+                                    new
+                                    {
+                                        @class = "form-horizontal",
+                                        enctype = "multipart/form-data"
+                                    }))
+{
+    <fieldset>
+        <legend>Special Cash Advance Voucher</legend>
+        <div class="row">
+            @Html.Partial("_GeneralForm", Model)
+        </div>
+
+        <legend>Item Detail</legend>
+        <div class="row">
+            @Html.Partial("_EventBudgetItems", Model)
+        </div>
+    </fieldset>
+
+    <div class="form-actions">
+        <div class="row">
+            <div class="col-sm-12">
+                <button id="submit-button" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    Save
+                </button>
+                <button id="submit-cancel" acti class="btn btn-primary" type="button">
+                    <i class="fa fa-back"></i>
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+@section scripts{
+    <script>
+        function GetEventBudgetItem(dataItem) {
+            $("#EventBudgetDetail").data("kendoGrid").dataSource.read();
+        }
+
+        function OnSelectEventBudgetNo(e) {
+            $("#submit-button").attr('disabled', 'disabled');
+
+            var dataItem = this.dataItem(e.item);
+            var url = "/FINSCAVoucher/GetEventBudget/" + dataItem.Value;
+            ClearControl();
+            $("#hdnEventBudgetNoID").val(dataItem.Value);
+            $.getJSON(url, function (result) {
+                $('#Currency').prop('value', result[0].Currency);
+                $('#TotalAmount').prop('value', result[0].TotalAmount);
+                $('#TotalAmountInWord').prop('value', result[0].TotalAmountInWord);
+                $('#Purpose').prop('value', result[0].Purpose);
+                $('#Project').prop('value', result[0].Project);
+                $('#ActivityName').prop('value', result[0].ActivityName);
+                $('#ActivityID').prop('value', result[0].ActivityID);
+                $('#Fund').prop('value', result[0].Fund);
+
+                $("#submit-button").removeAttr('disabled', 'disabled');
+            });
+
+            GetEventBudgetItem(e.item);
+        }
+
+        function filterEventBudgetNo() {
+            return {
+                eventBudgetId: $("#hdnEventBudgetNoID").val()
+            };
+        }
+        function ClearControl() {
+            $('#Currency').prop('value', '');
+            $('#TotalAmount').prop('value', '');
+            $('#TotalAmountInWord').prop('value', '');
+            $('#Purpose').prop('value', '');
+            $('#Project').prop('value', '');
+            $('#Activity').prop('value', '');
+            $('#Fund').prop('value', '');
+        }
+    </script>
+}
+
+<style media="screen">
+    #Fund {
+        background-color: #dedede;
+    }
+    textarea{
+        padding-left:10px!important;
+    }
+</style>

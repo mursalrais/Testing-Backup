@@ -269,6 +269,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 string psaNumber = exitProcedureService.GetPSANumberOnExitProcedure(exitProcID);
                 int psaID = exitProcedureService.GetPSAId(psaNumber);
                 exitProcedureService.UpdateLastWorkingDateOnPSA(psaID, lastWorkingDate);
+                exitProcedureService.UpdateLastWorkingDateOnProfessional(viewModel.ProfessionalID, lastWorkingDate);
             }
 
             try
@@ -279,7 +280,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
                     exitProcedureService.SendEmail(viewModel, SP_EXP_CHECK_LIST,
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)exitProcID,
-                    string.Format("Dear Respective Approver : {0}{1}/EditExitProcedureForApprover.aspx?ID={2}", siteUrl, UrlResource.ExitProcedure, viewModel.ID), string.Format("Message for Requestor"));
+                    string.Format("Dear Respective Approver : {0}{1}/EditExitProcedureForApprover.aspx?ID={2}", siteUrl, UrlResource.ExitProcedure, exitProcID), string.Format("Message for Requestor"));
                 }
             }
             catch (Exception e)
@@ -323,7 +324,9 @@ namespace MCAWebAndAPI.Web.Controllers
             {
                 if (exitProcedure.StatusForm == "Pending Approval")
                 {
-                    exitProcedureService.SendEmail(exitProcedure, SP_TRANSACTION_WORKFLOW_LIST_NAME,
+                    exitProcedureService.SendMailDocument(exitProcedure.RequestorMailAddress, string.Format("Thank You For Your Request, Please kindly download Non Disclosure Document on this url: {0}{1} and Exit Interview Form on this url: {2}{3}", siteUrl, UrlResource.ExitProcedureNonDisclosureAgreement, siteUrl, UrlResource.ExitProcedureExitInterviewForm));
+
+                    exitProcedureService.SendEmail(exitProcedure, SP_EXP_CHECK_LIST,
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)exitProcedure.ID,
                     string.Format("Dear Respective Approver : {0}{1}/EditExitProcedureForApprover.aspx?ID={2}", siteUrl, UrlResource.ExitProcedure, exitProcedure.ID), string.Format("Message for Requestor"));
 

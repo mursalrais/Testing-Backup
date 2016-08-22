@@ -228,7 +228,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         {
             Choices = new string[]
             {
-                "K/0","K/1", "K/2", "K/3", "TK/0", "TK/1"
+                "TK0","TK1","TK2","TK3","K0","K1","K2","K3"
             }
         };
 

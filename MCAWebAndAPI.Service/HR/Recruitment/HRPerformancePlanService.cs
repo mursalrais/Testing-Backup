@@ -24,7 +24,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         const string SP_PPPW_LIST_NAME = "Professional Performance Plan Workflow";
         const string SP_PPE_LIST_NAME = "Professional Performance Evaluation";
 
-        public int CreateHeader(ProfessionalPerformancePlanVM header)
+        public int CreateHeader(string requestor, ProfessionalPerformancePlanVM header)
         {
             var columnValues = new Dictionary<string, object>();
             columnValues.Add("majorstrength", header.MajorStrength);
@@ -33,6 +33,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             columnValues.Add("professional", new FieldLookupValue { LookupId = (int)header.NameID });
             columnValues.Add("Position", new FieldLookupValue { LookupId = (int)header.PositionAndDepartementID });
             columnValues.Add("performanceplan", new FieldLookupValue { LookupId = (int)header.PerformancePeriodID });
+            columnValues.Add("visibleto", SPConnector.GetUser(requestor, _siteUrl, "hr"));
             if (header.StatusForm == "DraftInitiated")
             {
                 columnValues.Add("pppstatus", "Draft");
@@ -54,7 +55,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         }
 
-        public void CreatePerformancePlanDetails(int? headerID, int? performanceID, string email, string status, IEnumerable<ProjectOrUnitGoalsDetailVM> PerformancePlanDetails)
+        public void CreatePerformancePlanDetails(int? headerID, int? performanceID, string email, string status, string type, IEnumerable<ProjectOrUnitGoalsDetailVM> PerformancePlanDetails)
         {
             foreach (var viewModel in PerformancePlanDetails)
             {
@@ -107,18 +108,21 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     }
                 }
 
-                if (email == null && status == "Pending Approval 2 of 2" && PerformancePlanDetails.Count() != 0)
+                if (PerformancePlanDetails.Count() != 0)
                 {
-                    var updatedValue = new Dictionary<string, object>();
-                    updatedValue.Add("status", "Approved");
-                    try
+                    if (status == "Pending Approval 2 of 2" && type == "Approver2")
                     {
-                        SPConnector.UpdateListItem(SP_PPPIG_LIST_NAME, viewModel.ID, updatedValue, _siteUrl);
-                    }
-                    catch (Exception e)
-                    {
-                        logger.Error(e.Message);
-                        throw new Exception(ErrorResource.SPInsertError);
+                        var updatedValue = new Dictionary<string, object>();
+                        updatedValue.Add("status", "Approved");
+                        try
+                        {
+                            SPConnector.UpdateListItem(SP_PPPIG_LIST_NAME, viewModel.ID, updatedValue, _siteUrl);
+                        }
+                        catch (Exception e)
+                        {
+                            logger.Error(e.Message);
+                            throw new Exception(ErrorResource.SPInsertError);
+                        }
                     }
                 }
             }
@@ -310,9 +314,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
         }
 
-        public async Task CreatePerformancePlanDetailsAsync(int? headerID, int? performanceID, string email, string status, IEnumerable<ProjectOrUnitGoalsDetailVM> performancePlanDetails)
+        public async Task CreatePerformancePlanDetailsAsync(int? headerID, int? performanceID, string email, string status,string type, IEnumerable<ProjectOrUnitGoalsDetailVM> performancePlanDetails)
         {
-            CreatePerformancePlanDetails(headerID, performanceID, email, status, performancePlanDetails);
+            CreatePerformancePlanDetails(headerID, performanceID, email, status,type, performancePlanDetails);
         }
 
         public void SendEmail(ProfessionalPerformancePlanVM header, string workflowTransactionListName, string transactionLookupColumnName, int headerID, int level, string messageForApprover, string messageForRequestor)
@@ -335,7 +339,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             string emails = null;
             string professionalEmail = null;
             var columnValues = new Dictionary<string, object>();
-            if (header.Requestor != null)
+            if (header.TypeForm == "Professional")
             {
                 if (header.StatusForm == "Initiated" || header.StatusForm == "Pending Approval 1 of 2" || header.StatusForm == "Pending Approval 2 of 2" || header.StatusForm == null || header.StatusForm == "Draft")
                 {
@@ -358,7 +362,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     }
                 }
             }
-            if (header.Requestor == null && header.StatusForm == "Pending Approval 1 of 2")
+            if (header.TypeForm == "Approver1" && header.StatusForm == "Pending Approval 1 of 2")
             {
                 foreach (var item in SPConnector.GetList(workflowTransactionListName, _siteUrl, caml))
                 {
@@ -388,7 +392,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 }
             }
 
-            if (header.Requestor == null)
+            if (header.TypeForm == "Approver2")
             {
                 if (header.StatusForm == "Pending Approval 2 of 2" || header.StatusForm == "Reject1" || header.StatusForm == "Reject2")
                 {

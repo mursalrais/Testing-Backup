@@ -1,6 +1,12 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.Finance
 @model SCAVoucherVM
 
+@*
+    Wireframe FIN06: SCA Voucher
+    i.e.: Special Cash Advance Voucher
+*@
+
+
 <div class="col-xs-12">
     @(Html.Kendo().Grid(Model.SCAVoucherItems)
     .Name("EventBudgetDetail")
@@ -20,11 +26,3 @@
         )
     )
 </div>
-
-<script>
-    function filterEventBudgetNo() {
-        return {
-            eventBudgetId: $("#hdnEventBudgetNoID").val()
-        };
-    }
-</script>

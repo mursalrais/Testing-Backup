@@ -17,19 +17,19 @@
         .Columns(columns =>
         {
 
-            columns.Bound(p => p.POLineItem).ClientTemplate("#= POLineItem #" +
-            "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].POLineItem' value='#= POLineItem #' />"
-            );
+            //columns.Bound(p => p.POLineItem).ClientTemplate("#= POLineItem #" +
+            //"<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].POLineItem' value='#= POLineItem #' />"
+            //);
 
-            columns.Bound(p => p.AssetSubAsset).Width(500).ClientTemplate("#= AssetSubAsset.Text #" +
-                          "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].AssetSubAsset.Value' value='#= AssetSubAsset.Value #' />"
+            columns.Bound(p => p.AssetSubAsset).ClientTemplate("#= AssetSubAsset.Text #" +
+                          "<input type='hidden' id='asset' name='Details[#= getWorkingRelationshipDetails(data)#].AssetSubAsset.Value' value='#= AssetSubAsset.Value #' />"
                         ).EditorViewData(new
                         {
                             DataTextField = "Text",
                             DataValueField = "Value",
                             ControllerName = "ASSAssetAcquisition",
                             ActionName = "GetAssetSubSAssetGrid"
-                        });
+                        }).Width(200);
 
             columns.Bound(p => p.WBS).Width(500).ClientTemplate("#= WBS.Text #" +
                           "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].WBS.Value' value='#= WBS.Value #' />"
@@ -38,14 +38,14 @@
                             DataTextField = "Text",
                             DataValueField = "Value",
                             ControllerName = "ASSAssetAcquisition",
-                            ActionName = "GetWBSGrid"
-                        });
+                            ActionName = "GetWBSGrid",
+                        }).Width(200);
 
-            columns.Bound(p => p.CostIDR).ClientTemplate("#= CostIDR #" +
+            columns.Bound(p => p.CostIDR).ClientTemplate("#= kendo.toString(CostIDR, 'n0') #" +
             "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].CostIDR' value='#= CostIDR #' />"
             );
 
-            columns.Bound(p => p.CostUSD).ClientTemplate("#= CostUSD #" +
+            columns.Bound(p => p.CostUSD).ClientTemplate("#= kendo.toString(CostUSD, 'n0') #" +
             "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].CostUSD' value='#= CostUSD #' />"
             );
 
@@ -92,10 +92,46 @@
 @*@Html.HiddenFor(m => m.ID)*@
 <script>
     $(document).ready(function () {
-        if ($("#ID").val() != null) {
-            //alert("ID not null");
-        }
+
     })
+
+    
+
+    function showTest(e)
+    {
+        var breaks = e.split('-');
+        var grid = $("#Details").data("kendoGrid");
+        var url = "/ASSAssetAcquisition/GetSubAsset?mainsubasset=" + breaks[0] + '-' + breaks[1] + '-' + breaks[2] + '-' + breaks[3];
+        var details = [];
+        $.getJSON(url, function (data) {
+            //alert("enter controller...:"+data.length);
+            var arrayLength = data.length;
+            for (var i = 0; i < arrayLength; i++) {
+                details.push(
+                    { POLineItem: "", AssetSubAsset: data[i], WBS: "", CostIDR: 0, CostUSD: 0, Remarks: "", Status: "" }
+                );
+                //grid.dataSource.add({ AssetSubAsset: "" });
+                grid.addRow();
+            }
+
+            //$.each(details, function (index, value) {
+            //    //alert(value.AssetSubAsset);
+            //    grid.dataSource.add({ AssetSubAsset: value.AssetSubAsset });
+            //});
+        })
+    }
+
+    $(function () {
+        $("#AssetSubAsset").kendoComboBox({
+            change: function (e) {
+                // I want to alert the select value and element's parent below
+
+                alert("Value: " + this.value() + "  Element's parent: ");
+            }
+        });
+
+    });
+
 
     function getWorkingRelationshipDetails(dataItem) {
         var data = $("#Details").data("kendoGrid").dataSource.data();
@@ -121,3 +157,26 @@
         hideDeletedRowKendoDetail(grid);
     }
 </script>
+
+<style>
+    .k-dropdown-wrap
+    {
+        width:200px;
+    }
+
+    .k-dirty-cell
+    {
+        width:200px;
+    }
+
+    .k-list-container .k-list .k-item
+    {
+        white-space : nowrap;
+    }
+
+    input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+</style>

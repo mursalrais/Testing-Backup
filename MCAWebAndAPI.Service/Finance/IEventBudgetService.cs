@@ -9,6 +9,10 @@ using System.Web;
 
 namespace MCAWebAndAPI.Service.Finance
 {
+    /// <summary>
+    /// Wireframe FIN04: Event Budget
+    /// </summary>
+    
     public interface IEventBudgetService
     {
         void SetSiteUrl(string siteUrl);
@@ -16,17 +20,19 @@ namespace MCAWebAndAPI.Service.Finance
         EventBudgetVM Get(int? ID);
 
 
-        int CreateEventBudget(EventBudgetVM eventBudget);
+        int Create(EventBudgetVM eventBudget);
 
         bool Update(EventBudgetVM eventBudget);
 
         IEnumerable<EventBudgetVM> GetEventBudgetList();
 
-        Task CreateItemsAsync(int? headerID, IEnumerable<EventBudgetItemVM> noteItems);
+        IEnumerable<EventBudgetItemVM> GetItem(int eventBudgetID);
+
+        Task CreateItemsAsync(int? headerID, IEnumerable<EventBudgetItemVM> items);
 
         Task CreateAttachmentsAsync(int? headerID, IEnumerable<HttpPostedFileBase> documents);
 
-        Task EditItemsAsync(int? headerID, IEnumerable<EventBudgetItemVM> noteItems);
+        Task EditItemsAsync(int? headerID, IEnumerable<EventBudgetItemVM> items);
         Task EditAttachmentsSync(int? headerID, IEnumerable<HttpPostedFileBase> documents);
     }
 }

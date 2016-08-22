@@ -1,0 +1,194 @@
+﻿@model MCAWebAndAPI.Model.ViewModel.Form.Finance.EventBudgetVM
+
+@*
+    Wireframe FIN04: Event Budget
+*@
+
+@using (Html.BeginForm("Save", "FINEventBudget",
+    FormMethod.Post,
+    new
+    {
+        @class = "form-horizontal",
+        enctype = "multipart/form-data"
+    }))
+{
+    <fieldset>
+        <legend>Event Budget</legend>
+        <div class="row">
+            <div class="col-sm-6">
+                @Html.HiddenFor(m => m.ID)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.EventName).Class("col-sm-3 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.EventName)
+                        <input type="hidden" id="hdnEvenBudgetId" value="-1" name="hdnEvenBudgetId" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.DateFrom).Class("col-sm-3 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.DateFrom)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.DateTo).Class("col-sm-3 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.DateTo)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Project).Class("col-sm-3 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.Project)
+                        @Html.HiddenFor(m => m.Project.Value, new { @id = "hiddenProjectValue" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Activity).Class("col-sm-3 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.Activity)                       
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Venue).Class("col-sm-3 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.Venue)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Fund).Class("col-sm-3 control-label")
+                    <div class="col-sm-8">
+                        @Html.DisplayFor(m => m.Fund)
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Right Column -->
+            <div class="col-sm-6">
+   
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Documents).Class("col-sm-3 control-label")
+                    <div class="col-md-7">
+                        @Html.EditorFor(m => m.Documents)
+                    </div>
+                </div>
+                @if (!string.IsNullOrWhiteSpace(Model.DocumentUrl))
+                {
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                @Html.Bootstrap().LabelFor(m => m).Class("col-sm-4 control-label")
+                                <div class="col-sm-8">
+                                    <button id="application-document-button" class="btn btn-default" type="button">
+                                        Click Here to go to Requisite Note Attachments
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <script>
+                $('#application-document-button').click(function () {
+                    parent.postMessage({
+                        result : "Success", urlToRedirect : "@Model.DocumentUrl" }, "@Model.DocumentUrl" );
+                });
+                        </script>
+                    </div>
+                }
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Rate).Class("col-sm-3 control-label")
+                    <div class="col-sm-7">
+                        @Html.EditorFor(m => m.Rate)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.TotalDirectPayment).Class("col-sm-3 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.TotalDirectPayment, new { HtmlAttributes = new { @class = "textbox-padding6px-readonly", @readonly = "readonly" } })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.TotalSCA).Class("col-sm-3 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.TotalSCA, new { HtmlAttributes = new { @class = "textbox-padding6px-readonly", @readonly = "readonly" } })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.TotalIDR).Class("col-sm-3 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.TotalIDR, new { HtmlAttributes = new { @class = "textbox-padding6px-readonly", @readonly = "readonly" } })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.TotalUSD).Class("col-sm-3 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.TotalUSD, new { HtmlAttributes = new { @class = "textbox-padding6px-readonly", @readonly = "readonly" } })
+                    </div>
+                </div>
+            </div>
+
+         
+        </div>
+
+        <legend>Item Details</legend>
+        <div class="row">
+            @Html.Partial("_ItemDetails", Model.ItemDetails)
+        </div>
+    </fieldset>
+
+    <div class="form-actions">
+        <div class="row">
+            <div class="col-sm-12">
+
+                <button id="submit-button" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    Submit
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+@section scripts{
+<script type="text/javascript">
+        $(document).ready(function () {
+            
+
+        });
+
+        $("#Rate").change(function () {
+
+            var totalIDR = $("#TotalIDR").val();
+            var rate = $("#Rate").val();
+            if (rate > 0)
+                $("#TotalUSD").val(totalIDR / rate);
+            else
+                $("#TotalUSD").val(0);
+        });
+
+    function filterProject() {
+        return {
+            projectValue: $("#Project_Value").val()
+        };
+    }
+</script>
+}
+
+<style media="screen">
+    #Fund {
+        background-color: #dedede;
+    }
+</style>

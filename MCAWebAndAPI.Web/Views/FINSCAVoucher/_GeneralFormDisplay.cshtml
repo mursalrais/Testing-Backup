@@ -1,0 +1,109 @@
+﻿@model MCAWebAndAPI.Model.ViewModel.Form.Finance.SCAVoucherVM
+
+@*
+    Wireframe FIN06: SCA Voucher
+    i.e.: Special Cash Advance Voucher
+*@
+
+
+<div class="col-sm-5">
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.SCAVoucherDate).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.DisplayFor(m => m.SCAVoucherDate)
+
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.SDO).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.DisplayFor(m => m.SDOName)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.EventBudget).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.DisplayFor(m => m.EventBudgetNo)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.Currency).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.DisplayFor(m => m.Currency)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.TotalAmount).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.DisplayFor(m => m.TotalAmount)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.TotalAmountInWord).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.DisplayFor(m => m.TotalAmountInWord)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.Purpose).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.DisplayFor(m => m.Purpose)
+        </div>
+    </div>
+</div>
+<div class="col-sm-5">
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.Project).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.DisplayFor(m => m.Project)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.ActivityName).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.DisplayFor(m => m.ActivityName)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.SubActivity).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.DisplayFor(m => m.SubActivityName)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.Fund).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.DisplayFor(m => m.Fund)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.RefferenceNo).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.DisplayFor(m => m.RefferenceNo)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.Remarks).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.DisplayFor(m => m.Remarks)
+        </div>
+    </div>
+    @if (!string.IsNullOrWhiteSpace(Model.DocumentUrl))
+    {
+        <div class="form-group">
+            @Html.Bootstrap().LabelFor(m => m.Documents).Class("col-sm-4 control-label")
+            <div class="col-sm-8">
+                <button id="application-document-button" class="btn btn-default" type="button">
+                    Click Here to go to SCA Voucher Attachments
+                </button>
+            </div>
+        </div>
+                    <script>
+                        $('#application-document-button').click(function () {
+                            parent.postMessage({
+                                result: "Success", urlToRedirect: "@Model.DocumentUrl"
+                            }, "@Model.DocumentUrl");
+                        });
+                    </script>
+    }
+</div>

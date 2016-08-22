@@ -1,11 +1,12 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@using MCAWebAndAPI.Model.ViewModel.Control
 @model IEnumerable<WorkingRelationshipDetailVM>
 
 @{ 
     var index = 0;
 }
 
-<div class="col-md-12" style="margin-bottom: 20px">
+<div class="col-xs-12" style="margin-bottom: 20px">
     @(Html.Kendo().Grid(Model)
         .Name("WorkingRelationshipDetails")
         .ToolBar(tools => tools.Create().Text("Add New"))
@@ -40,7 +41,7 @@
 
                              });
             columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
-          "<input type='hidden' name=WorkingRelationshipDetails[#= getWorkingRelationshipDetails(data)#].ID value=#= ID # />"
+          "<input type='hidden' name=WorkingRelationshipDetails[#= getWorkingRelationshipDetails(data)#].ID value='#= ID #' />"
 
 
         );
@@ -58,7 +59,7 @@
                    .Model(model =>
                    {
                        model.Id(p => p.ID);
-                       model.Field(m => m.PositionWorking).DefaultValue(WorkingRelationshipDetailVM.GetPositionDefaultValue());
+                       model.Field(m => m.PositionWorking).DefaultValue(AjaxComboBoxVM.GetDefaultValue());
                        model.Field(m => m.Relationship).DefaultValue(WorkingRelationshipDetailVM.GetRelationshipDefaultValue());
                        model.Field(m => m.Frequency).DefaultValue(WorkingRelationshipDetailVM.GetFrequencyDefaultValue());
                    })

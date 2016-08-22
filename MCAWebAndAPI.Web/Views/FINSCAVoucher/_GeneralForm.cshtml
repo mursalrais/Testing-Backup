@@ -1,0 +1,127 @@
+﻿@model MCAWebAndAPI.Model.ViewModel.Form.Finance.SCAVoucherVM
+
+@*
+    Wireframe FIN06: SCA Voucher
+    i.e.: Special Cash Advance Voucher
+*@
+
+
+<div class="col-sm-5">
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.SCAVoucherDate).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.EditorFor(m => m.SCAVoucherDate)
+
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.SDO).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.EditorFor(m => m.SDO)
+            @Html.ValidationMessageFor(m => m.SDO)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.EventBudget).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.EditorFor(m => m.EventBudget)
+            @Html.ValidationMessageFor(m => m.EventBudget)
+            @Html.HiddenFor(m => m.EventBudgetID, new { @id = "hdnEventBudgetNoID" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.Currency).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.EditorFor(m => m.Currency)
+            @Html.ValidationMessageFor(m => m.Currency)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.TotalAmount).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.DisplayFor(m => m.TotalAmount)
+            @Html.ValidationMessageFor(m => m.TotalAmount)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.TotalAmountInWord).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.DisplayFor(m => m.TotalAmountInWord)
+            @Html.ValidationMessageFor(m => m.TotalAmountInWord)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.Purpose).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.DisplayFor(m => m.Purpose)
+            @Html.ValidationMessageFor(m => m.Purpose)
+        </div>
+    </div>
+</div>
+<div class="col-sm-5">
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.Project).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.DisplayFor(m => m.Project)
+            @Html.ValidationMessageFor(m => m.Project)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.ActivityName).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.DisplayFor(m => m.ActivityName)
+            @Html.ValidationMessageFor(m => m.ActivityName)
+            @Html.HiddenFor(m => m.ActivityID)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.SubActivity).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.EditorFor(m => m.SubActivity)
+            @Html.ValidationMessageFor(m => m.SubActivity)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.Fund).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.DisplayFor(m => m.Fund)
+            @Html.ValidationMessageFor(m => m.Fund)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.RefferenceNo).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.EditorFor(m => m.RefferenceNo)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.Remarks).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.EditorFor(m => m.Remarks)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.Documents).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.EditorFor(m => m.Documents)
+        </div>
+    </div>
+    @if (!string.IsNullOrWhiteSpace(Model.DocumentUrl))
+    {
+        <div class="form-group">
+            @Html.Bootstrap().LabelFor(m => m).Class("col-sm-4 control-label")
+            <div class="col-sm-8">
+                <button id="application-document-button" class="btn btn-default" type="button">
+                    Click Here to go to SCA Voucher Attachments
+                </button>
+            </div>
+        </div>
+                <script>
+                    $('#application-document-button').click(function () {
+                        parent.postMessage({
+                            result: "Success", urlToRedirect: "@Model.DocumentUrl"
+                        }, "@Model.DocumentUrl");
+                    });
+                </script>
+    }
+</div>

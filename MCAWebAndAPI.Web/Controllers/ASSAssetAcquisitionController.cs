@@ -44,6 +44,30 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewModel);
         }
 
+        public ActionResult Sync(string siteUrl)
+        {
+            _assetAcquisitionService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            var viewModel = _assetAcquisitionService.GetPopulatedModel();
+            return View(viewModel);
+        }
+
+        public ActionResult Syncronize(string siteUrl)
+        {
+            siteUrl = SessionManager.Get<string>("SiteUrl");
+            _assetAcquisitionService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            try
+            {
+                var viewModel = _assetAcquisitionService.Syncronize(siteUrl);
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAcquisition);
+        }
 
         public ActionResult Edit(int ID, string siteUrl)
         {
@@ -69,16 +93,41 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewModel);
         }
 
+        public ActionResult View(int ID, string siteUrl)
+        {
+            _assetAcquisitionService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            var viewModel = _assetAcquisitionService.GetHeader(ID);
+
+            int? headerID = null;
+            headerID = viewModel.ID;
+
+            try
+            {
+                var viewdetails = _assetAcquisitionService.GetDetails(headerID);
+                viewModel.Details = viewdetails;
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            return View(viewModel);
+        }
+
+
         [HttpPost]
         public ActionResult Submit(AssetAcquisitionHeaderVM _data, string siteUrl)
         {
             siteUrl = SessionManager.Get<string>("SiteUrl");
             _assetAcquisitionService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
-            if(_data.Details.Count() == 0)
+            if (_data.Details.Count() == 0)
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse("Details should not empty!");
+                return JsonHelper.GenerateJsonErrorResponse("Details should not empty");
             }
 
             //return View(new AssetMasterVM());
@@ -102,7 +151,8 @@ namespace MCAWebAndAPI.Web.Controllers
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
-            return Redirect(string.Format("{0}/{1}", siteUrl ?? ConfigResource.DefaultBOSiteUrl, UrlResource.AssetAcquisition));
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAcquisition);
+            //return Redirect(string.Format("{0}/{1}", siteUrl ?? ConfigResource.DefaultBOSiteUrl, UrlResource.AssetAcquisition));
         }
 
         public ActionResult Update(AssetAcquisitionHeaderVM _data, string SiteUrl)
@@ -131,7 +181,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            return Redirect(string.Format("{0}/{1}", siteUrl ?? ConfigResource.DefaultBOSiteUrl, UrlResource.AssetAcquisition));
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAcquisition);
         }
 
         public JsonResult GetAssetSubSAssetGrid()
@@ -355,7 +405,8 @@ namespace MCAWebAndAPI.Web.Controllers
             return PartialView("_DisplayGrid");
         }
 
-        public ActionResult Submit(string listName)
+        //[HttpPost]
+        public ActionResult SubmitUpload(string listName)
         {
             // Get existing session variable
             var sessionVariables = SessionManager.Get<DataTable>("CSVDataTable") ?? new DataTable();
@@ -401,29 +452,24 @@ namespace MCAWebAndAPI.Web.Controllers
 
                         TableHeader = new DataTable();
                         TableHeader.Columns.Add("Title", typeof(string));
-                        TableHeader.Columns.Add("acceptancememono", typeof(int));
+                        TableHeader.Columns.Add("acceptancememono", typeof(string));
                         TableHeader.Columns.Add("vendorid", typeof(string));
                         TableHeader.Columns.Add("vendorname", typeof(string));
                         TableHeader.Columns.Add("pono", typeof(string));
-                        TableHeader.Columns.Add("purchasedate", typeof(string));
+                        TableHeader.Columns.Add("purchasedate", typeof(DateTime));
                         TableHeader.Columns.Add("purchasedescription", typeof(string));
 
                         DataRow row = TableHeader.NewRow();
 
                         row["Title"] = d.ItemArray[0].ToString();
                         row["acceptancememono"] = myKey;
-                        if(d.ItemArray[3].ToString() == "-1")
-                        {
-                            row["vendorid"] = null;
-                        }
-                        else
-                        {
-                            row["vendorid"] = d.ItemArray[3].ToString();
-                        }
-                        
-                        row["vendorname"] = d.ItemArray[4].ToString();
-                        row["pono"] = d.ItemArray[5].ToString();
-                        row["purchasedate"] = d.ItemArray[6].ToString();
+                        var memoInfo = _assetAcquisitionService.GetAcceptanceMemoInfo(myKey, siteUrl);
+                        row["vendorid"] = memoInfo.VendorID;
+                        row["vendorname"] = memoInfo.VendorName;
+                        row["pono"] = memoInfo.PoNo;
+                        // model.PurchaseDate = DateTime.TryParse(d.ItemArray[6].ToString(), out date) ? date : (DateTime?)null;
+                        DateTime date;
+                        row["purchasedate"] = DateTime.TryParse(d.ItemArray[6].ToString(), out date) ? date : (DateTime?)null;
                         row["purchasedescription"] = d.ItemArray[7].ToString();
 
                         TableHeader.Rows.InsertAt(row, 0);
@@ -441,9 +487,9 @@ namespace MCAWebAndAPI.Web.Controllers
                                 _assetAcquisitionService.RollbackParentChildrenUpload(listNameHeader, id, siteUrl);
                             }
                         }
-                        else if(idsDetail.Count > 0)
+                        else if (idsDetail.Count > 0)
                         {
-                            foreach(var id in idsDetail)
+                            foreach (var id in idsDetail)
                             {
                                 //delete parent
                                 _assetAcquisitionService.RollbackParentChildrenUpload(listNameDetail, id, siteUrl);
@@ -454,7 +500,7 @@ namespace MCAWebAndAPI.Web.Controllers
                     }
                 }
 
-                if (d.ItemArray[9].ToString() != "" && latestIDHeader != null)
+                if (d.ItemArray[8].ToString() != "" && latestIDHeader != null)
                 {
                     TableDetail = new DataTable();
                     TableDetail.Columns.Add("assetacquisition", typeof(string));
@@ -469,10 +515,10 @@ namespace MCAWebAndAPI.Web.Controllers
                     DataRow row = TableDetail.NewRow();
 
                     row["assetacquisition"] = latestIDHeader;
-                    row["polineitem"] = d.ItemArray[8].ToString();
+                    row["polineitem"] = d.ItemArray[5].ToString();
                     //cek if assetid ada pada table asset master
                     //FXA-PC-OE-0001 - Laptop Lenovo
-                    var splitAssetID = d.ItemArray[9].ToString().Split('-');
+                    var splitAssetID = d.ItemArray[8].ToString().Split('-');
                     var resultAssetID = "";
                     var resultDesc = "";
                     var WBSDesc = "";
@@ -488,7 +534,7 @@ namespace MCAWebAndAPI.Web.Controllers
                         resultDesc = splitAssetID[5];
                         resultDesc = Regex.Replace(resultDesc, @"\t|\n|\r", "");
                     }
-                    var splitWBS = d.ItemArray[10].ToString().Split('-');
+                    var splitWBS = d.ItemArray[9].ToString().Split('-');
                     WBSDesc = splitWBS[1] + "-" + splitWBS[2];
                     WBSDesc = Regex.Replace(WBSDesc, @"\t|\n|\r", "");
                     var camlAssetID = @"<View><Query><Where>
@@ -500,7 +546,7 @@ namespace MCAWebAndAPI.Web.Controllers
                     var camlWBS = @"<View><Query><Where>
                                             <Eq><FieldRef Name='Title' /><Value Type='Text'>" + splitWBS[0].Trim() + @"</Value></Eq>
                                             <And>
-                                            <Eq><FieldRef Name='WBSDesc' /><Value Type='Text'>" + WBSDesc.Trim()  + @"</Value></Eq>
+                                            <Eq><FieldRef Name='WBSDesc' /><Value Type='Text'>" + WBSDesc.Trim() + @"</Value></Eq>
                                             </And>
                                     </Where>
                                     </Query></View>";
@@ -541,17 +587,18 @@ namespace MCAWebAndAPI.Web.Controllers
                         return JsonHelper.GenerateJsonErrorResponse("Invalid data, rolling back!");
                     }
                     //cek if wbs id ada pada table wbs master
-                    row["costidr"] = Convert.ToInt32(d.ItemArray[11]);
-                    row["costusd"] = Convert.ToInt32(d.ItemArray[12].ToString());
-                    row["remarks"] = d.ItemArray[13].ToString();
-                    row["status"] = d.ItemArray[14].ToString();
+                    row["costidr"] = Convert.ToInt32(d.ItemArray[10]);
+                    row["costusd"] = Convert.ToInt32(d.ItemArray[11].ToString());
+                    row["remarks"] = d.ItemArray[12].ToString();
+                    row["status"] = d.ItemArray[13].ToString();
 
                     TableDetail.Rows.InsertAt(row, 0);
 
                     latestIDDetail = _assetAcquisitionService.MassUploadHeaderDetail(listNameDetail, TableDetail, siteUrl);
                 }
             }
-            return Redirect(string.Format("{0}/{1}", siteUrl ?? ConfigResource.DefaultBOSiteUrl, UrlResource.AssetAcquisition));
+            //return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAcquisition);
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAcquisition);
         }
 
         public ActionResult GetAcceptanceMemoInfo(int IDAcceptanceMemo)
@@ -570,5 +617,16 @@ namespace MCAWebAndAPI.Web.Controllers
                     accpMemoInfo.PoNo
                 }, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult GetSubAsset(string mainsubasset)
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            var MainAssetID = mainsubasset;
+            var subbasset = _assetAcquisitionService.GetSubAsst(MainAssetID, siteUrl);
+
+            //var professionals = GetFromExistingSession();
+            return Json(subbasset, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }
