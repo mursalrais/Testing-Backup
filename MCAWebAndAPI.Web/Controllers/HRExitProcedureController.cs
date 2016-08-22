@@ -305,10 +305,9 @@ namespace MCAWebAndAPI.Web.Controllers
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             exitProcedureService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
-            int? exitProcID = null;
             try
             {
-                //exitProcedureService.UpdateExitProcedureHR(viewModel);
+                exitProcedureService.UpdateExitProcedureHR(viewModel);
             }
             catch (Exception e)
             {
@@ -324,46 +323,19 @@ namespace MCAWebAndAPI.Web.Controllers
             int? positionID = exitProcedureService.GetPositionID(requestorposition, requestorunit, 0, 0);
 
             viewModel.ExitProcedureChecklist = BindExitProcedureChecklist(form, viewModel.ExitProcedureChecklist);
-            Task createExitProcedureChecklist = exitProcedureService.CreateExitProcedureChecklistAsync(viewModel, exitProcID, viewModel.ExitProcedureChecklist, requestorposition, requestorunit, positionID);
-
-            try
-            {
-                exitProcedureService.CreateExitProcedureDocuments(exitProcID, viewModel.Documents, viewModel);
-            }
-            catch (Exception e)
-            {
-                ErrorSignal.FromCurrentContext().Raise(e);
-                return RedirectToAction("Index", "Error");
-            }
+            Task createExitProcedureChecklist = exitProcedureService.CreateExitProcedureChecklistAsync(viewModel, viewModel.ID, viewModel.ExitProcedureChecklist, requestorposition, requestorunit, positionID);
 
             //Cek Status Record
-            string exitProcedureStatus = exitProcedureService.GetExitProcedureStatus(exitProcID);
+            string exitProcedureStatus = exitProcedureService.GetExitProcedureStatus(viewModel.ID);
 
             if (exitProcedureStatus == "Approved")
             {
-                DateTime lastWorkingDate = exitProcedureService.GetLastWorkingDate(exitProcID);
-                string psaNumber = exitProcedureService.GetPSANumberOnExitProcedure(exitProcID);
+                DateTime lastWorkingDate = exitProcedureService.GetLastWorkingDate(viewModel.ID);
+                string psaNumber = exitProcedureService.GetPSANumberOnExitProcedure(viewModel.ID);
                 int psaID = exitProcedureService.GetPSAId(psaNumber);
                 exitProcedureService.UpdateLastWorkingDateOnPSA(psaID, lastWorkingDate);
                 exitProcedureService.UpdateLastWorkingDateOnProfessional(viewModel.ProfessionalID, lastWorkingDate);
             }
-
-            //try
-            //{
-            //    if (viewModel.StatusForm == "Pending Approval")
-            //    {
-            //        exitProcedureService.SendMailDocument(viewModel.RequestorMailAddress, string.Format("Thank You For Your Request, Please kindly download Non Disclosure Document on this url: {0}{1} and Exit Interview Form on this url: {2}{3}", siteUrl, UrlResource.ExitProcedureNonDisclosureAgreement, siteUrl, UrlResource.ExitProcedureExitInterviewForm));
-
-            //        exitProcedureService.SendEmail(viewModel, SP_EXP_CHECK_LIST,
-            //        SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)exitProcID,
-            //        string.Format("Dear Respective Approver : {0}{1}/EditExitProcedureForApprover.aspx?ID={2}", siteUrl, UrlResource.ExitProcedure, exitProcID), string.Format("Message for Requestor"));
-            //    }
-            //}
-            //catch (Exception e)
-            //{
-            //    Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            //    return JsonHelper.GenerateJsonErrorResponse(e);
-            //}
 
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.ExitProcedure);
         }

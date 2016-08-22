@@ -117,7 +117,8 @@ namespace MCAWebAndAPI.Web.Controllers
               new
               {
                   e.ID,
-                   e.Year
+                   e.Year,
+                   e.ClaimStatus
 
               }),
               JsonRequestBehavior.AllowGet);

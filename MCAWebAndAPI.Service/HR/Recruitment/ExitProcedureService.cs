@@ -844,6 +844,60 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return true;
         }
 
+        public bool UpdateExitProcedureHR(ExitProcedureVM exitProcedure)
+        {
+            var columnValues = new Dictionary<string, object>();
+            int ID = exitProcedure.ID.Value;
+
+            columnValues.Add("requestdate", exitProcedure.RequestDate.Value);
+            //columnValues.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(exitProcedure.Professional.Value) });
+            columnValues.Add("Title", exitProcedure.FullName);
+            columnValues.Add("projectunit", exitProcedure.ProjectUnit);
+            columnValues.Add("position", exitProcedure.Position);
+            columnValues.Add("mobilenumber", exitProcedure.PhoneNumber);
+            columnValues.Add("officeemail", exitProcedure.ProfessionalPersonalMail);
+            columnValues.Add("currentaddress", exitProcedure.CurrentAddress);
+            columnValues.Add("joindate", exitProcedure.JoinDate.Value);
+            columnValues.Add("lastworkingdate", exitProcedure.LastWorkingDate.Value);
+            columnValues.Add("exitreason", exitProcedure.ExitReason.Value);
+            columnValues.Add("reasondescription", exitProcedure.ReasonDesc);
+            columnValues.Add("psanumber", exitProcedure.PSANumber);
+
+            if (exitProcedure.StatusForm == "Saved by HR")
+            {
+                string statusDraft = "Draft";
+
+                columnValues.Add("status", statusDraft);
+            }
+            if (exitProcedure.StatusForm == "Approved by HR")
+            {
+                exitProcedure.StartDateApproval = DateTime.Now;
+
+                string statusApproved = "Approved";
+
+                var professionalData = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, exitProcedure.ProfessionalID, _siteUrl);
+                string professionalOfficeMail = Convert.ToString(professionalData["officeemail"]);
+
+                columnValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hr"));
+                columnValues.Add("startdateapproval", exitProcedure.StartDateApproval.ToLocalTime());
+                columnValues.Add("status", statusApproved);
+            }
+
+            try
+            {
+                SPConnector.UpdateListItem(SP_EXP_LIST_NAME, ID, columnValues, _siteUrl);
+            }
+            catch (Exception e)
+            {
+                logger.Debug(e.Message);
+                return false;
+            }
+
+            var entitiy = new ExitProcedureVM();
+            entitiy = exitProcedure;
+            return true;
+        }
+
         public bool UpdateExitChecklist(ExitProcedureVM exitProcedure, IEnumerable<ExitProcedureChecklistVM> ExitProcedureChecklist)
         {
             foreach (var viewModel in ExitProcedureChecklist)

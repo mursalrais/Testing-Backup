@@ -25,7 +25,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         int CreateExitProcedure(ExitProcedureVM exitProcedure);
 
-        //bool UpdateExitProcedureHR(ExitProcedureVM exitProcedure);
+        bool UpdateExitProcedureHR(ExitProcedureVM exitProcedure);
 
         bool UpdateExitProcedure(ExitProcedureVM exitProcedure);
 
