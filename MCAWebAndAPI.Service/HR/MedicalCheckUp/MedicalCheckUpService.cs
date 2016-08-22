@@ -166,7 +166,11 @@ namespace MCAWebAndAPI.Service.HR.MedicalCheckUp
 
             foreach (var item in SPConnector.GetList(SpMedicalListName, _siteUrl, caml))
             {
-                var detail = new MedicalCheckUpVM {ID = Convert.ToInt32(item["ID"]),Year = Convert.ToString(item["Year"]) };
+                var detail = new MedicalCheckUpVM
+                {
+                    ID = Convert.ToInt32(item["ID"]),Year = Convert.ToString(item["Year"]),
+                    ClaimStatus = Convert.ToString(item["status"])
+                };
                 models.Add(detail);
             }
 
@@ -190,6 +194,7 @@ namespace MCAWebAndAPI.Service.HR.MedicalCheckUp
                 ProfessionalID = FormatUtil.ConvertLookupToID(listItem, "professional"),
                 Position = Convert.ToString(listItem["position"]),
                 Unit = Convert.ToString(listItem["unit"]),
+
                 ClaimDate = Convert.ToDateTime(listItem["claimdate"]).ToLocalTime(),
 
                 Amount = Convert.ToDouble(listItem["claimamount"]),
@@ -205,8 +210,8 @@ namespace MCAWebAndAPI.Service.HR.MedicalCheckUp
                 URL = _siteUrl
             };
 
-   
-        
+
+            viewModel.UserPermission = viewModel.Unit == "Human Resources Unit" ? "HR" : "Professional";
 
             return viewModel;
         }
