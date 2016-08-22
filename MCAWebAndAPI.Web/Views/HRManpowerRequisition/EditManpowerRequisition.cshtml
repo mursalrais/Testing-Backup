@@ -125,6 +125,10 @@
                 </div>
             </div>
         }
+        else
+        {
+                @Html.HiddenFor(m => m.Status.Value)
+        }
 
         @Html.HiddenFor(m => m.ID);
     </fieldset>
