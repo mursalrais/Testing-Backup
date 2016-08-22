@@ -1,6 +1,7 @@
 ﻿using Elmah;
 using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using MCAWebAndAPI.Service.Converter;
+using MCAWebAndAPI.Service.HR.Common;
 using MCAWebAndAPI.Service.HR.Recruitment;
 using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Service.Utils;
@@ -20,6 +21,7 @@ namespace MCAWebAndAPI.Web.Controllers
     public class HRManpowerRequisitionController : Controller
     {
         readonly IHRManpowerRequisitionService _service;
+        readonly IProfessionalService _professionalService;
         const string SP_TRANSACTION_WORKFLOW_LIST_NAME = "Manpower Requisition Workflow";
         const string SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME = "manpowerrequisition";
         
@@ -27,6 +29,7 @@ namespace MCAWebAndAPI.Web.Controllers
         public HRManpowerRequisitionController()
         {
             _service = new HRManpowerRequisitionService();
+            _professionalService = new ProfessionalService();
         }
 
         [HttpPost]
@@ -41,24 +44,33 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
-                ErrorSignal.FromCurrentContext().Raise(e);
-                return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
+                Response.TrySkipIisCustomErrors = true;
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e.Message);
+            }
+            //send to requestor how to get requestor email from approval
+            Task sendRequestor = EmailUtil.SendAsync(viewModel.Username, "Application Submission Confirmation",
+              string.Format(EmailResource.ManpowerDisplay, siteUrl, viewModel.ID.Value, "Requestor"));
+
+            //send to onBehalf
+            if ((viewModel.IsOnBehalfOf == true))
+            {
+                if (viewModel.EmailOnBehalf != null || viewModel.EmailOnBehalf != "")
+                {
+                    Task sendOnBehalf = EmailUtil.SendAsync(viewModel.EmailOnBehalf, "Application Submission Confirmation", string.Format(EmailResource.ManpowerDisplay, siteUrl, viewModel.ID.Value, viewModel.OnBehalfOf.Text));
+                }
             }
 
-            if (viewModel.Status.Value == "Pending Approval 2 of 2")
+            //send to HR
+            List<string> EmailsHR = _professionalService.GetEmailHR();
+            foreach (var item in EmailsHR)
             {
+                if (!(string.IsNullOrEmpty(item)))
+                {
+                    EmailUtil.Send(item, "Application Submission Confirmation",
+             string.Format(EmailResource.ManpowerDisplay, siteUrl, viewModel.ID.Value, "HR"));
+                }
 
-                // Send to Level 2 Approver
-                Task sendApprovalRequestTask = WorkflowHelper.SendApprovalRequestAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
-                    SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.ID, 2,
-                    string.Format(EmailResource.ManpowerApproval, siteUrl, viewModel.ID));
-
-                //string EmailApprover = _service.GetApprover(2, viewModel.ID.Value);
-
-
-
-
-                // END Workflow Demo
             }
 
             return RedirectToAction("Index",
@@ -119,8 +131,9 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
-                ErrorSignal.FromCurrentContext().Raise(e);
-                return RedirectToAction("Index", "Error");
+                Response.TrySkipIisCustomErrors = true;
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e.Message);
             }
 
 
@@ -130,6 +143,8 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
+                Response.TrySkipIisCustomErrors = true;
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse(e.Message);
             }
 
@@ -142,8 +157,9 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
+                Response.TrySkipIisCustomErrors = true;
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
+                return JsonHelper.GenerateJsonErrorResponse(e.Message);
             }
 
             if (viewModel.Status.Value == "Pending Approval")
@@ -162,8 +178,31 @@ namespace MCAWebAndAPI.Web.Controllers
                 }
                 Task sendApprover = EmailUtil.SendAsync(EmailApprover, "Application Submission Confirmation", string.Format(EmailResource.ManpowerApproval, siteUrl, viewModel.ID.Value));
 
-                
-                
+                //send to requestor
+                Task sendRequestor = EmailUtil.SendAsync(viewModel.Username, "Application Submission Confirmation",
+                  string.Format(EmailResource.ManpowerDisplay, siteUrl, viewModel.ID.Value, "Requestor"));
+
+                //send to onBehalf
+                if ((viewModel.IsOnBehalfOf == true))
+                {
+                    if (viewModel.EmailOnBehalf != null || viewModel.EmailOnBehalf != "")
+                    {
+                        Task sendOnBehalf = EmailUtil.SendAsync(viewModel.EmailOnBehalf, "Application Submission Confirmation", string.Format(EmailResource.ManpowerDisplay, siteUrl, viewModel.ID.Value, viewModel.OnBehalfOf.Text));
+                    }
+                }
+
+                //send to HR
+                List<string> EmailsHR = _professionalService.GetEmailHR();
+                foreach (var item in EmailsHR)
+                {
+                    if (!(string.IsNullOrEmpty(item)))
+                    {
+                        EmailUtil.Send(item, "Application Submission Confirmation",
+                 string.Format(EmailResource.ManpowerDisplay, siteUrl, viewModel.ID.Value, "HR"));
+                    }
+
+                }
+
 
                 // END Workflow Demo
             }
@@ -216,8 +255,9 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
-                ErrorSignal.FromCurrentContext().Raise(e);
-                return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
+                Response.TrySkipIisCustomErrors = true;
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e.Message);
             }
 
             Task CreateWorkingRelationshipDetailsTask = _service.CreateWorkingRelationshipDetailsAsync(headerID, viewModel.WorkingRelationshipDetails);
@@ -241,17 +281,28 @@ namespace MCAWebAndAPI.Web.Controllers
                                 
                 //send to requestor
                 Task sendRequestor = EmailUtil.SendAsync(viewModel.Username, "Application Submission Confirmation",
-                  string.Format(EmailResource.ManpowerApproval, siteUrl, headerID));
+                  string.Format(EmailResource.ManpowerDisplay, siteUrl, headerID,"Requestor"));
 
                 //send to onBehalf
                 if ((viewModel.IsOnBehalfOf == true))
                 {
                     if (viewModel.EmailOnBehalf != null || viewModel.EmailOnBehalf != "")
                     {
-                        Task sendOnBehalf = EmailUtil.SendAsync(viewModel.EmailOnBehalf, "Application Submission Confirmation", string.Format(EmailResource.ManpowerApproval,siteUrl, headerID));
+                        Task sendOnBehalf = EmailUtil.SendAsync(viewModel.EmailOnBehalf, "Application Submission Confirmation", string.Format(EmailResource.ManpowerDisplay,siteUrl, headerID,viewModel.OnBehalfOf.Text));
                     }
                 }
 
+                //send to HR
+                List<string> EmailsHR = _professionalService.GetEmailHR();
+                foreach (var item in EmailsHR)
+                {
+                    if (!(string.IsNullOrEmpty(item)))
+                    {
+                         EmailUtil.Send(item, "Application Submission Confirmation",
+                  string.Format(EmailResource.ManpowerDisplay, siteUrl, headerID, "HR"));
+                    }
+
+                }
                 // END Workflow Demo
             }
 
@@ -266,8 +317,9 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
-                ErrorSignal.FromCurrentContext().Raise(e);
-                return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
+                Response.TrySkipIisCustomErrors = true;
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e.Message);
             }
 
             return RedirectToAction("Index",

@@ -125,6 +125,10 @@
                 </div>
             </div>
         }
+        else
+        {
+                @Html.HiddenFor(m => m.Status.Value)
+        }
 
         @Html.HiddenFor(m => m.ID);
     </fieldset>
@@ -137,6 +141,14 @@
                         <i class="fa fa-save"></i>
                         Save
                     </button>
+
+                    if (Model.Status.Value == "Pending Approval")
+                    {
+                        <button id="reroute-button" class="btn btn-primary" type="button">
+                            <i class="fa fa-save"></i>
+                            Re-Route Workflow
+                        </button>
+                    }
                 }
                 else
                 {
@@ -155,6 +167,8 @@
                         </button>
                     }
                 }
+                    
+                
 
 
 

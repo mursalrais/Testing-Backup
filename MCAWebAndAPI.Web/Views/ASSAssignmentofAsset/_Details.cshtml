@@ -37,9 +37,19 @@
                                 ActionName = "GetProvinceGrid"
                             }).Width(200);
 
-                            columns.Bound(p => p.OfficeName).HtmlAttributes(new { @class = "office"}).ClientTemplate("#= OfficeName #" +
-            "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].OfficeName' value='#= OfficeName #' />"
-            );
+                            columns.Bound(p => p.OfficeName).ClientTemplate("#= OfficeName.Text #" +
+                              "<input type='hidden' id='office' name='Details[#= getWorkingRelationshipDetails(data)#].OfficeName.Value' value='#= OfficeName.Value #' />"
+                            ).EditorViewData(new
+                            {
+                                DataTextField = "Text",
+                                DataValueField = "Value",
+                                ControllerName = "ASSAssignmentOfAsset",
+                                ActionName = "GetOfficeNameLists"
+                            }).Width(200);
+
+                            //                columns.Bound(p => p.OfficeName).HtmlAttributes(new { @class = "office"}).ClientTemplate("#= OfficeName #" +
+                            //"<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].OfficeName' value='#= OfficeName #' />"
+                            //);
 
                             columns.Bound(p => p.Floor).HtmlAttributes(new { @class = "floor" }).ClientTemplate("#= Floor #" +
             "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].Floor' value='#= Floor #' />"
@@ -78,10 +88,10 @@
                        model.Id(p => p.ID);
                        model.Field(m => m.AssetSubAsset).DefaultValue(AssignmentOfAssetDetailsVM.GetAssetSubAssetDefaultValue());
                        model.Field(m => m.Province).DefaultValue(AssignmentOfAssetDetailsVM.GetProvinceDefaultValue());
-                       model.Field(m => m.OfficeName).Editable(false);
-                       model.Field(m => m.Floor).Editable(false);
-                       model.Field(m => m.Room).Editable(false);
-                       model.Field(m => m.Remarks).Editable(false);
+                       model.Field(m => m.OfficeName);
+                       model.Field(m => m.Floor);
+                       model.Field(m => m.Room);
+                       model.Field(m => m.Remarks);
                        model.Field(m => m.Status).Editable(false);
 
                    })
@@ -91,13 +101,29 @@
 </div>
 @*@Html.HiddenFor(m => m.ID)*@
 <script>
-    $(".assetsubasset").kendoDropDownList({
-        filter: "contains",
-    });
+    function OnOfficeChange() {
+
+    }
+
+    function filterProvince() {
+        return
+        {
+            province = $("#Province").data("kendoDropDownList").text();
+        }
+    }
 
     $(document).ready(function () {
-        //alert(document.getElementById('asset').value);
-        //alert($("#AssetSubAsset").data("kendoComboBox").text());
+        var grid = $("#Details").data("kendoGrid");
+        $(grid.tbody).on("change", "td", function (e) {
+            var row = $(this).closest("tr");
+            var rowIdx = $("tr", grid.tbody).index(row);
+            var colIdx = $("td", row).index(this);
+            if (colIdx == 1) {
+                var Province = $("#Province").data("kendoDropDownList").text();
+                //alert(rowIdx + '-' + colIdx + " dan data : " + Province);
+                row.find("td:eq(2)").text(Province);
+            }
+        });
     })
 
     function onAssetChange(e) {
@@ -105,11 +131,17 @@
         alert("berubah jadiii " + this.dataItem(e.item));
     }
 
-
     function getWorkingRelationshipDetails(dataItem) {
         var data = $("#Details").data("kendoGrid").dataSource.data();
         //data.set('AssetSubAsset', data.AssetSubAsset);
         return data.indexOf(dataItem);
+
+        var gridRows = this.tbody.find("tr");
+        gridRows.each(function (e) {
+            //var duedate = $(this).find(".duedate");
+            alert("baris ke : " + e);
+        });
+
     }
 
     function onCustomEditKendoDetail(e) {
@@ -128,19 +160,6 @@
     function onDataBoundWorkingRelationship(e) {
         var grid = $("#Details").data("kendoGrid");
         hideDeletedRowKendoDetail(grid);
-
-        $(".province").change(function (e) {
-            var Province = $("#Province").data("kendoDropDownList").text();
-            //alert(Province);
-            //alert(arrAssetID.join("-"));
-            var url = "/ASSAssignmentOfAsset/GetProvinceInfo?province=" + Province;
-            $.getJSON(url, function (data) {
-                $(".office").text(data.OfficeName);
-                $(".floor").text(data.FloorName);
-                $(".room").text(data.RoomName);
-                $(".remarks").text(data.Remarks);
-            })
-        });
     }
 </script>
 

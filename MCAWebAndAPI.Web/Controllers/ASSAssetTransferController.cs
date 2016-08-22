@@ -108,31 +108,47 @@ namespace MCAWebAndAPI.Web.Controllers
                 }, JsonRequestBehavior.AllowGet);
         }
 
-        //public JsonResult GetProvinceGrid()
-        //{
-        //    var siteUrl = SessionManager.Get<string>("SiteUrl");
-        //    assetTransferService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+        public JsonResult GetProvinceGrid()
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            assetTransferService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
-        //    var positions = GetFromPositionsExistingSession();
+            var positions = GetFromPositionsExistingSession();
 
-        //    return Json(positions.Select(e =>
-        //        new
-        //        {
-        //            Value = Convert.ToString(e.ID),
-        //            Text = e.AssetNoAssetDesc.Value + " - " + e.AssetDesc
-        //        }),
-        //        JsonRequestBehavior.AllowGet);
-        //}
+            return Json(positions.Select(e =>
+                new
+                {
+                    Value = Convert.ToString(e.ID),
+                    Text = e.RoomName
+                }),
+                JsonRequestBehavior.AllowGet);
+        }
 
-        //private IEnumerable<AssetMasterVM> GetFromPositionsExistingSession()
-        //{
-        //    //Get existing session variable
-        //    var sessionVariable = System.Web.HttpContext.Current.Session["Location%20Master"] as IEnumerable<AssetMasterVM>;
-        //    var positions = sessionVariable ?? assetTransferService.GetProvince();
+        public JsonResult GetLocationGrid()
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            assetTransferService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
-        //    if (sessionVariable == null) // If no session variable is found
-        //        System.Web.HttpContext.Current.Session["Location%20Master"] = positions;
-        //    return positions;
-        //}
+            var positions = GetFromPositionsExistingSession();
+
+            return Json(positions.Select(e =>
+                new
+                {
+                    Value = Convert.ToString(e.ID),
+                    Text = e.RoomName
+                }),
+                JsonRequestBehavior.AllowGet);
+        }
+
+        private IEnumerable<LocationMasterVM> GetFromPositionsExistingSession()
+        {
+            //Get existing session variable
+            var sessionVariable = System.Web.HttpContext.Current.Session["Location%20Master"] as IEnumerable<LocationMasterVM>;
+            var positions = sessionVariable ?? assetTransferService.GetProvince();
+
+            if (sessionVariable == null) // If no session variable is found
+                System.Web.HttpContext.Current.Session["Location%20Master"] = positions;
+            return positions;
+        }
     }
 }

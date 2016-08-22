@@ -433,5 +433,43 @@ namespace MCAWebAndAPI.Service.Asset
                 }
             }
         }
+
+        public IEnumerable<LocationMasterVM> GetOfficeName(string province, string SiteUrl)
+        {
+            var model = new List<LocationMasterVM>();
+            string caml = @"<View><Query>
+                           <Where>
+                              <Eq>
+                                 <FieldRef Name='Province' />
+                                 <Value Type='Lookup'>Jakarta</Value>
+                              </Eq>
+                           </Where>
+                        </Query>
+                        <ViewFields>
+                           <FieldRef Name='Title' />
+                           <FieldRef Name='Floor' />
+                           <FieldRef Name='Room' />
+                           <FieldRef Name='Remarks' />
+                        </ViewFields>
+                        <QueryOptions /></View>";
+
+            foreach(var item in SPConnector.GetList("Location Master", SiteUrl, caml))
+            {
+                model.Add(ConvertToOfficeName(item));
+            }
+
+            return model;
+        }
+
+        private LocationMasterVM ConvertToOfficeName(ListItem item)
+        {
+            var viewmodel = new LocationMasterVM();
+
+            viewmodel.ID = Convert.ToInt32(item["ID"]);
+            viewmodel.Province.Text = Convert.ToString(item["Province"]);
+
+            return viewmodel;
+
+        }
     }
 }

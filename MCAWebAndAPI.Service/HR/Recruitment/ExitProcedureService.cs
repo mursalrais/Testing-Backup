@@ -55,29 +55,26 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             updatedValues.Add("exitreason", exitProcedure.ExitReason.Value);
             updatedValues.Add("reasondescription", exitProcedure.ReasonDesc);
             updatedValues.Add("psanumber", exitProcedure.PSANumber);
-            
 
+            if (exitProcedure.StatusForm == "Draft")
+            {
+                statusExitProcedure = "Draft";
+
+                var professionalData = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, exitProcedure.ProfessionalID, _siteUrl);
+                string professionalOfficeMail = Convert.ToString(professionalData["officeemail"]);
+
+                updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hr"));
+            }
             if (exitProcedure.StatusForm == "Pending Approval")
             {
                 statusExitProcedure = "Pending Approval";
-                exitProcedure.StartDateApproval = DateTime.Now;
-                updatedValues.Add("startdateapproval", exitProcedure.StartDateApproval.ToLocalTime());
 
-                var professionalData = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, exitProcedure.ProfessionalID, _siteUrl);
-                string professionalOfficeMail = Convert.ToString(professionalData["officeemail"]);
-                
-                updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hr"));
-            }
-            else if(exitProcedure.StatusForm == "Draft")
-            {
-                statusExitProcedure = "Draft";
-                
                 var professionalData = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, exitProcedure.ProfessionalID, _siteUrl);
                 string professionalOfficeMail = Convert.ToString(professionalData["officeemail"]);
 
                 updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hr"));
             }
-            else if (exitProcedure.StatusForm == "Saved by HR")
+            if (exitProcedure.StatusForm == "Saved by HR")
             {
                 statusExitProcedure = "Draft";
 
@@ -86,7 +83,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
                 updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hr"));
             }
-            else if (exitProcedure.StatusForm == "Approved by HR")
+            if (exitProcedure.StatusForm == "Approved by HR")
             {
                 statusExitProcedure = "Approved";
 
@@ -100,7 +97,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             
             try
             {
-                SPConnector.AddListItem(SP_EXP_LIST_NAME, updatedValues, _siteUrl);
+                SPConnector.UpdateListItem(SP_EXP_LIST_NAME, exitProcedure.ID, updatedValues, _siteUrl);
             }
             catch (Exception e)
             {
@@ -643,6 +640,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.RequestDate = Convert.ToDateTime(listItem["requestdate"]).ToLocalTime();
             viewModel.FullName = Convert.ToString(listItem["Title"]);
             viewModel.Professional.Value = FormatUtil.ConvertLookupToID(listItem, "professional");
+            viewModel.ProfessionalID = Convert.ToInt32(viewModel.Professional.Value);
             viewModel.ProjectUnit = Convert.ToString(listItem["projectunit"]);
             viewModel.RequestorUnit = Convert.ToString(listItem["projectunit"]);
             //viewModel.Position = FormatUtil.ConvertLookupToValue(listItem, "position");
@@ -817,16 +815,72 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 columnValues.Add("status", exitProcedure.StatusForm);
             }
-            else
+            if(exitProcedure.StatusForm == "Pending Approval")
             {
                 exitProcedure.StartDateApproval = DateTime.Now;
-                
+
+                //foreach(var professionalRecord in SPConnector.GetList())
+
                 var professionalData = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, exitProcedure.ProfessionalID, _siteUrl);
                 string professionalOfficeMail = Convert.ToString(professionalData["officeemail"]);
 
                 columnValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hr"));
                 columnValues.Add("startdateapproval", exitProcedure.StartDateApproval.ToLocalTime());
                 columnValues.Add("status", exitProcedure.StatusForm);
+            }
+
+            try
+            {
+                SPConnector.UpdateListItem(SP_EXP_LIST_NAME, ID, columnValues, _siteUrl);
+            }
+            catch (Exception e)
+            {
+                logger.Debug(e.Message);
+                return false;
+            }
+
+            var entitiy = new ExitProcedureVM();
+            entitiy = exitProcedure;
+            return true;
+        }
+
+        public bool UpdateExitProcedureHR(ExitProcedureVM exitProcedure)
+        {
+            var columnValues = new Dictionary<string, object>();
+            int ID = exitProcedure.ID.Value;
+
+            columnValues.Add("requestdate", exitProcedure.RequestDate.Value);
+            //columnValues.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(exitProcedure.Professional.Value) });
+            columnValues.Add("Title", exitProcedure.FullName);
+            columnValues.Add("projectunit", exitProcedure.ProjectUnit);
+            columnValues.Add("position", exitProcedure.Position);
+            columnValues.Add("mobilenumber", exitProcedure.PhoneNumber);
+            columnValues.Add("officeemail", exitProcedure.ProfessionalPersonalMail);
+            columnValues.Add("currentaddress", exitProcedure.CurrentAddress);
+            columnValues.Add("joindate", exitProcedure.JoinDate.Value);
+            columnValues.Add("lastworkingdate", exitProcedure.LastWorkingDate.Value);
+            columnValues.Add("exitreason", exitProcedure.ExitReason.Value);
+            columnValues.Add("reasondescription", exitProcedure.ReasonDesc);
+            columnValues.Add("psanumber", exitProcedure.PSANumber);
+
+            if (exitProcedure.StatusForm == "Saved by HR")
+            {
+                string statusDraft = "Draft";
+
+                columnValues.Add("status", statusDraft);
+            }
+            if (exitProcedure.StatusForm == "Approved by HR")
+            {
+                exitProcedure.StartDateApproval = DateTime.Now;
+
+                string statusApproved = "Approved";
+
+                var professionalData = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, exitProcedure.ProfessionalID, _siteUrl);
+                string professionalOfficeMail = Convert.ToString(professionalData["officeemail"]);
+
+                columnValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hr"));
+                columnValues.Add("startdateapproval", exitProcedure.StartDateApproval.ToLocalTime());
+                columnValues.Add("status", statusApproved);
             }
 
             try
@@ -1400,6 +1454,14 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             }
 
             return true;
+        }
+
+        public string GetProfessionalData(int? professionalID)
+        {
+            var professionalData = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, professionalID, _siteUrl);
+            string professionalMail = Convert.ToString(professionalData["officeemail"]);
+
+            return professionalMail;
         }
     }
 }

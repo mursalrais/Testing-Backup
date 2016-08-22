@@ -7,16 +7,16 @@ using MCAWebAndAPI.Model.ViewModel.Form.Asset;
 using NLog;
 using MCAWebAndAPI.Service.Utils;
 using MCAWebAndAPI.Model.ViewModel.Form.Shared;
-using MCAWebAndAPI.Service.Resources;
+using Microsoft.SharePoint.Client;
 
 namespace MCAWebAndAPI.Service.Asset
 {
     public class AssetTransferService : IAssetTransferService
     {
-        string _siteUrl = "";
+        string _siteUrl = "https://eceos2.sharepoint.com/sites/mca-dev/bo";
         static Logger logger = LogManager.GetCurrentClassLogger();       
-        const string SP_TF_HEADER = "Asset Transfer";
-        const string SP_TF_DETAIL = "Asset Transfer Detail";
+        const string SP_ASSACQ_LIST_NAME = "Asset Acquisition";
+        const string SP_ASSACQDetails_LIST_NAME = "Asset Acquisition Details";
         const string SP_ASSET_HOLDER_FROM_LIST_NAME = "Professional Master";
      
 
@@ -47,29 +47,15 @@ namespace MCAWebAndAPI.Service.Asset
 
         public int CreateHeader(AssetTransferVM header)
         {
-            header.CancelURL = _siteUrl + UrlResource.AssetTransfer;
-            var columnValues = new Dictionary<string, object>();
-            //columnValues.add
-            columnValues.Add("assetholderfrom", header.AssetHolderFrom.Value);
-            columnValues.Add("assetholderfrommobilephonenr", header.ContactNoFrom);
-            columnValues.Add("assetholderfromprojectunit", header.ProjectUnitFrom);
-            columnValues.Add("transferdate", header.Date);
-            columnValues.Add("assetholderto", header.AssetHolderTo.Value);
-            columnValues.Add("assetholdermobilephonenr", header.ContactNoTo);
-            columnValues.Add("assetholdertoprojectunit", header.ProjectUnitTo);
-            columnValues.Add("completionstatus", header.CompletionStatus.Value);
-
-            var entitiy = new AssetTransferVM();
-            entitiy = header;
-            return SPConnector.GetLatestListItemID(SP_TF_HEADER, _siteUrl);
+            throw new NotImplementedException();
         }
 
         public AssetTransferVM GetPopulatedModel(int? id = default(int?))
         {
             var model = new AssetTransferVM();
             model.TransactionType = Convert.ToString("Asset Transfer");
-            model.AssetHolderFrom.Choices = GetChoicesFromList(SP_ASSET_HOLDER_FROM_LIST_NAME, "Title","Position");
-            model.AssetHolderTo.Choices = GetChoicesFromList(SP_ASSET_HOLDER_FROM_LIST_NAME, "Title","Position");
+            model.AssetHolderFrom.Choices = GetChoicesFromList(SP_ASSET_HOLDER_FROM_LIST_NAME, "ID", "Title","Position");
+            model.AssetHolderTo.Choices = GetChoicesFromList(SP_ASSET_HOLDER_FROM_LIST_NAME, "ID", "Title","Position");
             return model;
         }
 
@@ -121,6 +107,27 @@ namespace MCAWebAndAPI.Service.Asset
             return viewmodel;
         }
 
-        
+        public IEnumerable<LocationMasterVM> GetProvince()
+        {
+            var models = new List<LocationMasterVM>();
+
+            foreach (var item in SPConnector.GetList("Location Master", _siteUrl))
+            {
+                models.Add(ConvertToModelProvince(item));
+            }
+
+            return models;
+        }
+
+        private LocationMasterVM ConvertToModelProvince(ListItem item)
+        {
+            var viewModel = new LocationMasterVM();
+
+            viewModel.ID = Convert.ToInt32(item["ID"]);
+          //  viewModel.AssetNoAssetDesc.Value = Convert.ToString(item["AssetID"]);
+            viewModel.LocationName = Convert.ToString(item["Title"]);
+            viewModel.RoomName = Convert.ToString(item["Floor"]);
+            return viewModel;
+        }
     }
 }

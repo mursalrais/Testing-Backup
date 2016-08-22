@@ -25,6 +25,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         int CreateExitProcedure(ExitProcedureVM exitProcedure);
 
+        bool UpdateExitProcedureHR(ExitProcedureVM exitProcedure);
+
         bool UpdateExitProcedure(ExitProcedureVM exitProcedure);
 
         bool UpdateExitChecklist(ExitProcedureVM exitProcedure, IEnumerable<ExitProcedureChecklistVM> ExitProcedureChecklist);
@@ -74,5 +76,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         string GetProjectUnit(string requestor);
 
         bool UpdateLastWorkingDateOnProfessional(int? professionalID, System.DateTime lastWorkingDate);
+
+        string GetProfessionalData(int? professionalID);
     }
 }

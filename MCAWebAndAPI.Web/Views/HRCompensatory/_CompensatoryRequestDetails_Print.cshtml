@@ -1,11 +1,11 @@
 ﻿
 @using MCAWebAndAPI.Model.ViewModel.Form.HR
-@model CompensatoryVM
+@model IEnumerable<CompensatoryDetailVM>
 
 <div class="col-xs-12">
 
-    @(Html.Kendo().Grid(Model.CompensatoryDetails)
-    .Name("_CompensatoryRequestDetails_Print")
+    @(Html.Kendo().Grid(Model)
+    .Name("CompensatoryDetails")
     .Columns(columns =>
     {
         columns.Bound(p => p.CmpActiv);
