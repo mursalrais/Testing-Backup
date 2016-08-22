@@ -4,7 +4,7 @@
 
 @model AssignmentOfAssetVM
 
-@using (Ajax.BeginForm("Submit", "ASSAssignmentOfAsset",
+@using (Ajax.BeginForm("Update", "ASSAssignmentOfAsset",
                                                                                                                                        FormMethod.Post,
                                                                                                                                        new AjaxOptions
                                                                                                                                        {
@@ -15,7 +15,7 @@
                                                                                                                                        }, new { @class = "form-horizontal" }))
 
 {
-    <form class="form-horizontal" method="post" action="/ASSAssignmentOfAsset/Submit" id="create-asset-acquisition-form">
+    <form class="form-horizontal" method="post" action="/ASSAssignmentOfAsset/Update" id="create-asset-acquisition-form">
         <fieldset>
             <legend>Form Asset Acquisition</legend>
             <div class="col-md-6">
@@ -66,7 +66,8 @@
                 @Html.Partial("_Details", Model.Details)
             </div>
         </fieldset>
-
+        @Html.HiddenFor(m => m.ID)
+        @*@Html.HiddenFor(m => m.CancelURL)*@
         <div>
             <center>
                 <input class="k-button k-button-icontext k-grid-add" type="submit" value="Save" />
@@ -79,9 +80,7 @@
 
 <script>
     $(document).ready(function () {
-        $("#AssetHolder_Value").data("kendoDropDownList").value("");
-        //alert($("#Province").data("kendoDropDownList").text());
-
+        //$("#AssetHolder_Value").data("kendoDropDownList").value("");
         })
 
     function onAssetChange(e)

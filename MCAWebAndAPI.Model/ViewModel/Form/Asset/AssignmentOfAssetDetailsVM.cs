@@ -40,18 +40,20 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 
         //public string OfficeName { get; set; }
 
-        [UIHint("AjaxCascadeComboBox")]
-        public AjaxCascadeComboBoxVM OfficeName { get; set; } = new AjaxCascadeComboBoxVM
-        {
-            ControllerName = "ASSAssignmentOfAsset",
-            ActionName = "GetOfficeNameLists",
-            ValueField = "Province",
-            TextField = "Province",
-            //OnSelectEventName = "OnOfficeChange",
-            Filter = "filterProvince",
-            Cascade = "Province"
+        [UIHint("InGridAjaxComboBox")]
+        public AjaxComboBoxVM OfficeName { get; set; } = new AjaxComboBoxVM();
 
-        };
+        public static AjaxComboBoxVM GetOfficeNameDefautValue(AjaxComboBoxVM model = null)
+        {
+            if (model == null)
+            {
+                return new AjaxComboBoxVM();
+            }
+            else
+            {
+                return model;
+            }
+        }
 
         public string Floor { get; set; }
 
