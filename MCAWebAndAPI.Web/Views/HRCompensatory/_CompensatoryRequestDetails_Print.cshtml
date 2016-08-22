@@ -1,23 +1,22 @@
 ﻿
 @using MCAWebAndAPI.Model.ViewModel.Form.HR
-@model IEnumerable<CompensatoryDetailVM>
+@model CompensatoryVM
 
 <div class="col-xs-12">
 
-    @(Html.Kendo().Grid(Model)
+    @(Html.Kendo().Grid(Model.CompensatoryDetails)
     .Name("CompensatoryDetails")
     .Columns(columns =>
     {
-        columns.Bound(p => p.CmpActiv);
+        columns.Bound(p => p.CmpActiv).Width(200);
 
-        //columns.Bound(p => p.CmpDate).ClientTemplate("#= kendo.toString(CmpDate, \"MM/dd/yyyy \") #");
+        columns.Bound(p => p.GetDateStr).ClientTemplate("#= GetDateStr.Text #").Width(200);
 
-        ////columns.Bound(p => p.CmpDate).ClientTemplate("#=getDayName(CmpDate)#"
-        ////                   ).Width(150);
+        columns.Bound(p => p.GetDayStr).ClientTemplate("#= GetDayStr.Text #").Width(200);
 
-        //columns.Bound(p => p.StartTime).ClientTemplate("#= kendo.toString(StartTime, \"hh:mm tt\") #");
+        columns.Bound(p => p.GetStartStr).ClientTemplate("#= GetStartStr.Text #").Width(200);
 
-        //columns.Bound(p => p.FinishTime).ClientTemplate("#= kendo.toString(FinishTime, \"hh:mm tt\") #");
+        columns.Bound(p => p.GetFinishStr).ClientTemplate("#= GetFinishStr.Text #").Width(200);
     })
     .DataSource(dataSource => dataSource.Ajax()
     .Model(model =>

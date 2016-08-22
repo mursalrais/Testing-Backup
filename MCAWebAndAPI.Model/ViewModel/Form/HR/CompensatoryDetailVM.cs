@@ -56,7 +56,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// </summary>
         /// 
         [Required]
-        [DisplayName("Date/Day")]
+        [DisplayName("Date")]
         [DataType(DataType.Date)]
         [UIHint("Date")]
         public DateTime? CmpDate { get; set; } = DateTime.Now;
@@ -111,6 +111,19 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public string AppStatus { get; set; }
 
         public string GetIndex { get; set; }
+
+        [DisplayName("Date")]
+        public string GetDateStr { get; set; }
+
+        [DisplayName("Day")]
+        [Editable(false)]
+        public string GetDayStr { get; set; }
+
+        [DisplayName("Star")]
+        public string GetStartStr { get; set; }
+
+        [DisplayName("Finish")]
+        public string GetFinishStr { get; set; }
 
     }
 }
