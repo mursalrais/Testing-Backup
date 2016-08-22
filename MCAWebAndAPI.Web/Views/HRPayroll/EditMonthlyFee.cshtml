@@ -100,7 +100,6 @@
         function OnSelectProfessionalName(e) {
             var dataItem = this.dataItem(e.item);
             var url = "/HRDataMaster/GetProfessional/" + dataItem.ID;
-            console.log(dataItem.ID);
             var urlPSA = "/HRPSAManagement/GetPSA/" + dataItem.ID;
             $.getJSON(url, function (result) {
                 $('#ProfessionalID').prop('value', result[0].ID);

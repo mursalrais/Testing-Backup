@@ -1089,6 +1089,7 @@
     <Content Include="Views\FINPettyCashReplenishment\Item.cshtml" />
     <Content Include="Views\HRCompensatory\AddCompensatoryHR.cshtml" />
     <Content Include="Views\FINEventBudget\Item.cshtml" />
+    <Content Include="Views\Shared\_WorkflowPathDetails.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

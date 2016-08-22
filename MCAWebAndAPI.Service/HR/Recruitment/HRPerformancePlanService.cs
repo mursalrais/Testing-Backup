@@ -339,7 +339,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             string emails = null;
             string professionalEmail = null;
             var columnValues = new Dictionary<string, object>();
-            if (header.Requestor != null)
+            if (header.TypeForm == "Professional")
             {
                 if (header.StatusForm == "Initiated" || header.StatusForm == "Pending Approval 1 of 2" || header.StatusForm == "Pending Approval 2 of 2" || header.StatusForm == null || header.StatusForm == "Draft")
                 {
@@ -362,7 +362,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     }
                 }
             }
-            if (header.Requestor == null && header.StatusForm == "Pending Approval 1 of 2")
+            if (header.TypeForm == "Approver1" && header.StatusForm == "Pending Approval 1 of 2")
             {
                 foreach (var item in SPConnector.GetList(workflowTransactionListName, _siteUrl, caml))
                 {
@@ -392,7 +392,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 }
             }
 
-            if (header.Requestor == null)
+            if (header.TypeForm == "Approver2")
             {
                 if (header.StatusForm == "Pending Approval 2 of 2" || header.StatusForm == "Reject1" || header.StatusForm == "Reject2")
                 {

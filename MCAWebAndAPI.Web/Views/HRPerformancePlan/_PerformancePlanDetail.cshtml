@@ -40,7 +40,6 @@
             columns.Command(command => command.Custom("Add Same Project").Click("addNewCustomRow")).Width(180);
         })
             .Scrollable(scrollable => scrollable.Height("auto"))
-            .Resizable(resizable => resizable.Columns(true))
         .Events(e =>
         {
             e.Edit("onCustomEditKendoDetail");

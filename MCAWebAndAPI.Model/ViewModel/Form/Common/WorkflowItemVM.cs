@@ -22,6 +22,13 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Common
 
         public string RequestorPosition { get; set; }
 
+        public string ApproverUnitText { get; set; }
+
+        [UIHint("InGridAjaxComboBox")]
+        public AjaxComboBoxVM ApproverName { get; set; } = new AjaxComboBoxVM();
+
+        public string ApproverPositionText { get; set; }
+
         [UIHint("InGridComboBox")]
         public InGridComboBoxVM ApproverUnit { get; set; } = new InGridComboBoxVM();
 

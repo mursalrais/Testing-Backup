@@ -6,8 +6,8 @@
     @(Html.Kendo().Grid(Model)
     .Name("CompensatoryDetails")
     .ToolBar(tools => tools.Create().Text("Add New"))
-        .Editable(editable => editable.Mode(GridEditMode.InCell)
-        .CreateAt(GridInsertRowPosition.Top))
+    .Editable(editable => editable.Mode(GridEditMode.InCell)
+    .CreateAt(GridInsertRowPosition.Top))
     .Columns(columns =>
     {
         columns.Bound(p => p.CmpActiv).ClientTemplate("#= CmpActiv #" +
@@ -47,10 +47,8 @@
         columns.Bound(p => p.GetIndex).Hidden().ClientTemplate("#= GetDetailComplist(data)#" +
        "<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].GetIndex' value='#= GetDetailComplist(data)#' />");
 
-
     })
-     .Scrollable(scrollable => scrollable.Height("auto"))
-     .Resizable(resizable => resizable.Columns(true))
+     .Scrollable().HtmlAttributes(new { @class = "cursorLink", @style = "height:auto;" })
     .Events(e =>
     {
         e.Edit("onEditKendoDetail");

@@ -63,6 +63,21 @@ namespace MCAWebAndAPI.Web.Controllers
             }), JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetApproverUserNames(int position)
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            var viewModel = SessionManager.Get<IEnumerable<ProfessionalMaster>>("WorkflowApprovers")
+                ?? _service.GetApproverUser();
+            SessionManager.Set("WorkflowApprovers", viewModel);
+
+            return Json(viewModel.Select(e => new
+            {
+                e.ID,
+                e.Name
+            }), JsonRequestBehavior.AllowGet);
+        }
+
         public async Task<ActionResult> DisplayWorkflowRouter(string listName, string requestor, bool isPartial = true)
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
@@ -77,7 +92,22 @@ namespace MCAWebAndAPI.Web.Controllers
                 return PartialView("_WorkflowDetails", viewModel);
             return View("_WorkflowDetails", viewModel);
         }
-        
+
+        public async Task<ActionResult> DisplayApprovalPath(string listName, string requestor, bool isPartial = true)
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            var viewModel = await _service.GetApprovalPath(listName, requestor);
+            SessionManager.Set("WorkflowItems", viewModel.WorkflowItems);
+            SessionManager.Set("WorkflowRouterListName", viewModel.ListName);
+            SessionManager.Set("WorkflowRouterRequestorUnit", viewModel.RequestorUnit);
+            SessionManager.Set("WorkflowRouterRequestorPosition", viewModel.RequestorPosition);
+
+            if (isPartial)
+                return PartialView("_WorkflowPathDetails", viewModel);
+            return View("_WorkflowPathDetails", viewModel);
+        }
+
         [HttpPost]
         public JsonResult Grid_Read([DataSourceRequest] DataSourceRequest request)
         {

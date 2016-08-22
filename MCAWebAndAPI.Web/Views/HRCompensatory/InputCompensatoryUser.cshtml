@@ -8,15 +8,12 @@
     ViewBag.Title = "Input Compensatory User";
 }
 
-@using (Ajax.BeginForm("CreateHeaderCompensatory", "HRCompensatory",
-                                                                                    FormMethod.Post,
-                                                                                    new AjaxOptions
-                                                                                    {
-                                                                                        OnBegin = "onBeginForm",
-                                                                                        OnComplete = "onCompleteForm",
-                                                                                        OnSuccess = "onSuccessFormEmbed",
-                                                                                        OnFailure = "onFailureForm"
-                                                                                    }, new { @class = "form-horizontal" }))
+@using (Html.BeginForm("CreateCompensatoryData", "HRCompensatory", FormMethod.Post,
+                                                                                                                 new
+                                                                                                                 {
+                                                                                                                     @class = "form-horizontal",
+                                                                                                                     enctype = "multipart/form-data"
+                                                                                                                 }))
 {
     <fieldset>
         @Html.HiddenFor(m => m.cmpID)
@@ -43,7 +40,7 @@
                 </div>
             </div>
         </div>
-       
+
         <div class="col-sm-12">
             <div class="form-group" id="ParentDiv">
                 <div class="col-sm-8">
@@ -54,7 +51,7 @@
         <legend>Compensatory list</legend>
         <div id="compensatorylist" class="row"></div>
 
-    
+
     </fieldset>
 }
 
@@ -73,18 +70,6 @@
             <button id="cancel-button" class="btn btn-primary">
                 <i class="fa fa-ban"></i>
                 Cancel
-            </button>
-        </div>
-    </div>
-}
-
-@if (Model.StatusForm != "")
-{
-    <div class="row pull-right">
-        <div class="col-sm-12">
-            <button id="submitonly-button" class="btn btn-primary" type="submit">
-                <i class="fa fa-clipboard"></i>
-                Submit
             </button>
         </div>
     </div>
@@ -278,7 +263,17 @@
                         return data.indexOf(dataItem);
                     }
 
-</script>
+                    function onSuccess(data) {
+
+                        window.location.href = data.urlToRedirect;
+                    }
+
+                    function onFailure(data) {
+
+                        window.location.href = data.urlToRedirect;
+                    }
+
+    </script>
 }
 
 
