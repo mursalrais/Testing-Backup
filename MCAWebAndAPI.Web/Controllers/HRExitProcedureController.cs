@@ -27,6 +27,7 @@ namespace MCAWebAndAPI.Web.Controllers
         const string SP_TRANSACTION_WORKFLOW_LIST_NAME = "Exit Procedure Workflow";
         const string SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME = "exitprocedure";
         const string SP_EXP_CHECK_LIST = "Exit Procedure Checklist";
+        const string SP_PROFESSIONAL_MASTER_LIST = "Professional Master";
 
         public HRExitProcedureController()
         {
@@ -292,8 +293,81 @@ namespace MCAWebAndAPI.Web.Controllers
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.ExitProcedure);
         }
 
-        
+        [HttpPost]
+        public ActionResult UpdateExitProcedureHR(FormCollection form, ExitProcedureVM viewModel)
+        {
+            // Check whether error is found
+            if (!ModelState.IsValid)
+            {
+                RedirectToAction("Index", "Error");
+            }
 
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            exitProcedureService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            int? exitProcID = null;
+            try
+            {
+                //exitProcedureService.UpdateExitProcedureHR(viewModel);
+            }
+            catch (Exception e)
+            {
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
+            }
+
+            var exitProcedureChecklist = viewModel.ExitProcedureChecklist;
+
+            string requestorposition = Convert.ToString(viewModel.Position);
+            string requestorunit = Convert.ToString(viewModel.ProjectUnit);
+
+            int? positionID = exitProcedureService.GetPositionID(requestorposition, requestorunit, 0, 0);
+
+            viewModel.ExitProcedureChecklist = BindExitProcedureChecklist(form, viewModel.ExitProcedureChecklist);
+            Task createExitProcedureChecklist = exitProcedureService.CreateExitProcedureChecklistAsync(viewModel, exitProcID, viewModel.ExitProcedureChecklist, requestorposition, requestorunit, positionID);
+
+            try
+            {
+                exitProcedureService.CreateExitProcedureDocuments(exitProcID, viewModel.Documents, viewModel);
+            }
+            catch (Exception e)
+            {
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return RedirectToAction("Index", "Error");
+            }
+
+            //Cek Status Record
+            string exitProcedureStatus = exitProcedureService.GetExitProcedureStatus(exitProcID);
+
+            if (exitProcedureStatus == "Approved")
+            {
+                DateTime lastWorkingDate = exitProcedureService.GetLastWorkingDate(exitProcID);
+                string psaNumber = exitProcedureService.GetPSANumberOnExitProcedure(exitProcID);
+                int psaID = exitProcedureService.GetPSAId(psaNumber);
+                exitProcedureService.UpdateLastWorkingDateOnPSA(psaID, lastWorkingDate);
+                exitProcedureService.UpdateLastWorkingDateOnProfessional(viewModel.ProfessionalID, lastWorkingDate);
+            }
+
+            //try
+            //{
+            //    if (viewModel.StatusForm == "Pending Approval")
+            //    {
+            //        exitProcedureService.SendMailDocument(viewModel.RequestorMailAddress, string.Format("Thank You For Your Request, Please kindly download Non Disclosure Document on this url: {0}{1} and Exit Interview Form on this url: {2}{3}", siteUrl, UrlResource.ExitProcedureNonDisclosureAgreement, siteUrl, UrlResource.ExitProcedureExitInterviewForm));
+
+            //        exitProcedureService.SendEmail(viewModel, SP_EXP_CHECK_LIST,
+            //        SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)exitProcID,
+            //        string.Format("Dear Respective Approver : {0}{1}/EditExitProcedureForApprover.aspx?ID={2}", siteUrl, UrlResource.ExitProcedure, exitProcID), string.Format("Message for Requestor"));
+            //    }
+            //}
+            //catch (Exception e)
+            //{
+            //    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            //    return JsonHelper.GenerateJsonErrorResponse(e);
+            //}
+
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.ExitProcedure);
+        }
+        
         public ActionResult UpdateExitProcedure(ExitProcedureVM exitProcedure, FormCollection form)
         {
 
@@ -324,7 +398,9 @@ namespace MCAWebAndAPI.Web.Controllers
             {
                 if (exitProcedure.StatusForm == "Pending Approval")
                 {
-                    exitProcedureService.SendMailDocument(exitProcedure.RequestorMailAddress, string.Format("Thank You For Your Request, Please kindly download Non Disclosure Document on this url: {0}{1} and Exit Interview Form on this url: {2}{3}", siteUrl, UrlResource.ExitProcedureNonDisclosureAgreement, siteUrl, UrlResource.ExitProcedureExitInterviewForm));
+                    string professionalMail = exitProcedureService.GetProfessionalData(exitProcedure.ProfessionalID);
+
+                    exitProcedureService.SendMailDocument(professionalMail, string.Format("Thank You For Your Request, Please kindly download Non Disclosure Document on this url: {0}{1} and Exit Interview Form on this url: {2}{3}", siteUrl, UrlResource.ExitProcedureNonDisclosureAgreement, siteUrl, UrlResource.ExitProcedureExitInterviewForm));
 
                     exitProcedureService.SendEmail(exitProcedure, SP_EXP_CHECK_LIST,
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)exitProcedure.ID,
