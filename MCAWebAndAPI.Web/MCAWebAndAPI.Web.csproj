@@ -241,12 +241,6 @@
     <Content Include="bin\Microsoft.AspNet.FriendlyUrls.dll" />
     <Content Include="bin\Microsoft.AspNet.FriendlyUrls.xml" />
     <Content Include="bin\Microsoft.AspNet.Web.Optimization.WebForms.dll" />
-    <Content Include="bin\Microsoft.CodeAnalysis.CSharp.dll" />
-    <Content Include="bin\Microsoft.CodeAnalysis.CSharp.Workspaces.dll" />
-    <Content Include="bin\Microsoft.CodeAnalysis.dll" />
-    <Content Include="bin\Microsoft.CodeAnalysis.VisualBasic.dll" />
-    <Content Include="bin\Microsoft.CodeAnalysis.VisualBasic.Workspaces.dll" />
-    <Content Include="bin\Microsoft.CodeAnalysis.Workspaces.dll" />
     <Content Include="bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll" />
     <Content Include="bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml" />
     <Content Include="bin\Microsoft.ScriptManager.MSAjax.dll" />
@@ -650,9 +644,13 @@
     <Content Include="Global.asax" />
     <Content Include="Site.Master" />
     <Content Include="ViewSwitcher.ascx" />
+    <Content Include="Views\ASSAssetAcquisition\Index.cshtml" />
+    <Content Include="Views\Error\Index.cshtml" />
     <Content Include="Views\FINEventBudget\_ItemDetails.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\HRCompensatory\_CompensantoryDetails.cshtml" />
     <Content Include="Views\HRPayroll\DisplayPayrollWorksheet.cshtml" />
+    <Content Include="Views\Success\Index.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -699,7 +697,6 @@
     <Content Include="Views\ASSAssetScrapping\Edit.cshtml" />
     <Content Include="Views\ASSAssetSmallValueAsset\Create.cshtml" />
     <Content Include="Views\Shared\_LayoutHome.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\BIEmbed\WFP03.cshtml" />
     <Content Include="Views\ASSAssetMaster\Create.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\AjaxComboBox.cshtml" />
@@ -752,11 +749,9 @@
     <Content Include="Views\Shared\_Modal.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\GridTable.cshtml" />
     <Content Include="Views\ASSAssetMaster\Edit.cshtml" />
-    <Content Include="Views\Error\Index.cshtml" />
     <Content Include="Views\HRPSAManagement\_PSAManagementData.cshtml" />
     <Content Include="Views\HRApplication\_DocumentDetails_Display.cshtml" />
     <Content Include="Views\HRApplication\DisplayApplicationData.cshtml" />
-    <Content Include="Views\Success\Index.cshtml" />
     <Content Include="Views\HRProfessional\EditProfessional.cshtml" />
     <Content Include="Views\HRProfessional\_ContactInformationDetails.cshtml" />
     <Content Include="Views\Shared\_EducationDetails.cshtml" />
@@ -1083,7 +1078,6 @@
     <Content Include="Views\ASSAssetTransfer\_AssetTransferDetail.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DropDown.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\AjaxCascadeComboBox.cshtml" />
-    <Content Include="Views\ASSAssetAcquisition\Index.cshtml" />
     <Content Include="Views\ASSAssetAcquisition\Sync.cshtml" />
     <Content Include="Views\ASSAssetAcquisition\View.cshtml" />
     <Content Include="Views\ASSAssetAcquisition\_DetailsView.cshtml" />
@@ -1095,6 +1089,7 @@
     <Content Include="Views\FINPettyCashReplenishment\Item.cshtml" />
     <Content Include="Views\HRCompensatory\AddCompensatoryHR.cshtml" />
     <Content Include="Views\FINEventBudget\Item.cshtml" />
+    <Content Include="Views\Shared\_WorkflowPathDetails.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

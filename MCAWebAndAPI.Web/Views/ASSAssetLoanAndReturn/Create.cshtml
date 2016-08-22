@@ -1,38 +1,102 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.Asset
 
-@model AssetLoanAndReturnVM
+@model AssetLoanAndReturnHeaderVM
 
-<form class="form-horizontal" method="post" action="/ASSAssetLoanAndReturn/Create" id="create-asset-LoanAndReturn-form">
-    <fieldset>
-        <legend>Form Asset Loan & Return</legend>
+@using (Ajax.BeginForm("Submit", "ASSAssetLoanAndReturn",
+                                                                                                    FormMethod.Post,
+                                                                                                    new AjaxOptions
+                                                                                                    {
+                                                                                                        OnBegin = "onBeginForm",
+                                                                                                        OnComplete = "onCompleteForm",
+                                                                                                        OnSuccess = "onSuccessFormEmbed",
+                                                                                                        OnFailure = "onFailureForm"
+                                                                                                    }, new { @class = "form-horizontal" }))
 
-        <div class="col-md-6">
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.TransactionType).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.DisplayFor(m => m.Header.TransactionType)
+
+{
+        <fieldset>
+            <legend>Form Asset Loan & Return</legend>
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary()
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.TransactionType).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.DisplayFor(m => m.TransactionType)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Professional).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.EditorFor(m => m.Professional)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Project).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.DisplayFor(m => m.Project)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.ContactNo).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.DisplayFor(m => m.ContactNo)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.LoanDate).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.EditorFor(m => m.LoanDate)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Purpose).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.EditorFor(m => m.Purpose)
+                    </div>
                 </div>
             </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.Professional).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.Header.Professional)
-                </div>
+
+            <legend>Asset Loan and Return Detail</legend>
+            <div class="row">
+                @Html.Partial("_AssetLoanAndReturnItem", Model.AssetLoanAndReturnItem)
             </div>
+
+        </fieldset>
+
+        @Html.HiddenFor(m => m.ID)
+        @*@Html.HiddenFor(m => m.CancelURL)*@
+        <div>
+            <center>
+                <input class="k-button k-button-icontext k-grid-add" type="submit" value="Save" />
+                @*<a href="@Model.CancelURL" target='_parent'>
+                    <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
+                </a>*@
+            </center>
         </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.LoanDate).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.Header.LoanDate)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.Purpose).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.Header.Purpose)
-                </div>
-            </div>
-        </div>
-    </fieldset>
-</form>
+
+ 
+
+}
+
+@section scripts{
+        <script  type="text/javascript">
+            
+            function OnSelectProfessionalName(e) {
+                //var res = this.dataItem(e.item).split("-")
+                //alert("Acceptance Memo ID : " + res[0]);
+                var dataItem = this.dataItem(e.item);
+                var url = "/HRDataMaster/GetProfessional/" + dataItem.ID;
+                $.getJSON(url, function (result) {
+                    //alert("test");
+                    console.log(result);
+                    $('#Project').prop('value', result[0].Project_Unit);
+                    debugger
+                    $('#ContactNo').prop('value', result[0].MobileNumber);
+                    debugger
+                });
+              
+            }
+        </script>
+}

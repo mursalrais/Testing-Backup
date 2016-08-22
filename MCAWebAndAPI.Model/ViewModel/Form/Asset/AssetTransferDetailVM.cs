@@ -17,8 +17,15 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
         [UIHint("InGridAjaxComboBox")]
         public AjaxComboBoxVM AssetSubAsset { get; set; } = new AjaxComboBoxVM();
 
+        
         [UIHint("InGridAjaxComboBox")]
         public AjaxComboBoxVM ProvinceFrom { get; set; } = new AjaxComboBoxVM();
+
+        [UIHint("InGridAjaxComboBox")]
+        public AjaxComboBoxVM Floore { get; set; } = new AjaxComboBoxVM();
+
+        [UIHint("InGridAjaxComboBox")]
+        public AjaxComboBoxVM LocationFrom { get; set; } = new AjaxComboBoxVM();
 
         public static AjaxComboBoxVM GetAssetSubAssetDefaultValue(AjaxComboBoxVM model = null)
         {
@@ -44,9 +51,21 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
             }
         }
 
+        public static AjaxComboBoxVM GetLocationDefaultValue(AjaxComboBoxVM model = null)
+        {
+            if (model == null)
+            {
+                return new AjaxComboBoxVM();
+            }
+            else
+            {
+                return model;
+            }
+        }
+
         InGridComboBoxVM _floorFrom = new InGridComboBoxVM();
         InGridComboBoxVM _floorTo = new InGridComboBoxVM();
-        InGridComboBoxVM _locationFrom = new InGridComboBoxVM();
+      
         InGridComboBoxVM _locationTo = new InGridComboBoxVM();
         AjaxCascadeComboBoxVM _provinceFrom = new AjaxCascadeComboBoxVM();
         InGridComboBoxVM _provinceTo = new InGridComboBoxVM();
@@ -98,33 +117,33 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
             }
         }
 
-        [UIHint("InGridComboBox_Floor")]
-        public InGridComboBoxVM FloorTo
-        {
-            get
-            {
-                return _floorTo;
-            }
+        //[UIHint("InGridComboBox_Floor")]
+        //public InGridComboBoxVM FloorTo
+        //{
+        //    get
+        //    {
+        //        return _floorTo;
+        //    }
 
-            set
-            {
-                _floorTo = value;
-            }
-        }
+        //    set
+        //    {
+        //        _floorTo = value;
+        //    }
+        //}
 
-        [UIHint("InGridComboBox_Location")]
-        public InGridComboBoxVM LocationFrom
-        {
-            get
-            {
-                return _locationFrom;
-            }
+        //[UIHint("InGridComboBox_Location")]
+        //public InGridComboBoxVM LocationFrom
+        //{
+        //    get
+        //    {
+        //        return _locationFrom;
+        //    }
 
-            set
-            {
-                _locationFrom = value;
-            }
-        }
+        //    set
+        //    {
+        //        _locationFrom = value;
+        //    }
+        //}
 
         [UIHint("InGridComboBox_Location")]
         public InGridComboBoxVM LocationTo

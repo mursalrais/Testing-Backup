@@ -8,16 +8,12 @@
     ViewBag.Title = "Input Compensatory HR";
 }
 
-@using (Ajax.BeginForm("CreateHeaderCompensatory", "HRCompensatory",
-                                                                                    FormMethod.Post,
-                                                                                    new AjaxOptions
-                                                                                    {
-                                                                                        OnBegin = "onBeginForm",
-                                                                                        OnComplete = "onCompleteForm",
-                                                                                        OnSuccess = "onSuccessFormEmbed",
-                                                                                        OnFailure = "onFailureForm"
-                                                                                    }, new { @class = "form-horizontal" }))
-
+@using (Html.BeginForm("CreateCompensatoryData", "HRCompensatory", FormMethod.Post,
+                                                                                                     new
+                                                                                                     {
+                                                                                                         @class = "form-horizontal",
+                                                                                                         enctype = "multipart/form-data"
+                                                                                                     }))
 {
     <fieldset>
         @Html.HiddenFor(m => m.cmpID)
@@ -63,7 +59,7 @@
         </div>
         <legend>Compensatory list</legend>
         <div id="compensatorylist" class="row"></div>
-       
+
         <button id="submithr-button" class="btn btn-primary" type="submit">
             <i class="fa fa-save"></i>
             Submit
@@ -72,49 +68,49 @@
     </fieldset>
 }
 
-    <div class="row pull-right">
-        <div class="col-sm-12">
-            <button id="submit-draft-initiate-button" class="btn btn-primary" type="submit">
-                <i class="fa fa-clipboard"></i>
-                Save As Draft
-            </button>
-            <button id="cancel-button" class="btn btn-primary">
-                <i class="fa fa-ban"></i>
-                Cancel
-            </button>
-            </div>
-        </div>
-
-            <legend>Approval Path</legend>
-            <div id="workflow-placeholder" class="row"></div>
-
-                <div class="row">
-                    <div class="col-sm-12">
-                        <button id="print-button" class="btn btn-primary" type="button">
-                            <i class="fa fa-print"></i>
-                            Print
-                        </button>
-                    </div>
-                </div>
-
-    <div class="row pull-right">
-        <div class="col-sm-12">
-
-            <button id="approve-button" class="btn btn-success" type="submit">
-                <i class="fa fa-thumbs-o-up"></i>
-                Approve
-            </button>
-                      
-            <button id="reject-button" class="btn btn-danger" type="submit">
-                <i class="fa fa-thumbs-o-down"></i>
-                Reject
-            </button>
-        </div>
+<div class="row pull-right">
+    <div class="col-sm-12">
+        <button id="submit-draft-initiate-button" class="btn btn-primary" type="submit">
+            <i class="fa fa-clipboard"></i>
+            Save As Draft
+        </button>
+        <button id="cancel-button" class="btn btn-primary">
+            <i class="fa fa-ban"></i>
+            Cancel
+        </button>
     </div>
+</div>
 
-            @section scripts{
+<legend>Approval Path</legend>
+<div id="workflow-placeholder" class="row"></div>
 
-                <script>
+<div class="row">
+    <div class="col-sm-12">
+        <button id="print-button" class="btn btn-primary" type="button">
+            <i class="fa fa-print"></i>
+            Print
+        </button>
+    </div>
+</div>
+
+<div class="row pull-right">
+    <div class="col-sm-12">
+
+        <button id="approve-button" class="btn btn-success" type="submit">
+            <i class="fa fa-thumbs-o-up"></i>
+            Approve
+        </button>
+
+        <button id="reject-button" class="btn btn-danger" type="submit">
+            <i class="fa fa-thumbs-o-down"></i>
+            Reject
+        </button>
+    </div>
+</div>
+
+@section scripts{
+
+    <script>
                     $(document).ready(function () {
                         showLoading();
                         var nameProf = $("#cmpName").val() + " - " + $("#cmpPosition").val()
@@ -158,7 +154,7 @@
                         }
 
                         $("#cancel-button").click(function () {
-                            
+
                             showLoading();
                             var url = "/HRCompensatory/GetCompensatoryDetails?idComp=" + $("#cmpID").val();
 
@@ -168,7 +164,7 @@
                                 }
                             });
                         });
-                         
+
                         $("#submithr-button").click(function () {
                             $("#StatusForm").val("submithr")
                             $("form").submit();
@@ -222,7 +218,7 @@
                             CompStatus = dataItem.CompensatoryStatus;
                         }
                             $("#StatusForm").prop("value", CompStatus);
-                            
+
                             if (CompStatus == 'Approved') {
                                 $('#submithr-button').addClass('hide');
                                 $('#print-button').removeClass('hide');
@@ -348,8 +344,18 @@
                         return data.indexOf(dataItem);
                     }
 
-                </script>
-            }
+                    function onSuccess(data) {
+
+                        window.location.href = data.urlToRedirect;
+                    }
+
+                    function onFailure(data) {
+
+                        window.location.href = data.urlToRedirect;
+                    }
+
+    </script>
+}
 
 
 

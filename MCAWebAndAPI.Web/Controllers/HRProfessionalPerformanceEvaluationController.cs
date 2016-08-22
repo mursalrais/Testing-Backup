@@ -140,13 +140,13 @@ namespace MCAWebAndAPI.Web.Controllers
                     string.Format(EmailResource.ProfessionalPerfromanceEvaluation, siteUrl, UrlResource.ProfessionalPerfromanceEvaluation, viewModel.ID), string.Format(""));
 
                 // Send to Level 2 Approver and Requestor
-                if (viewModel.StatusForm == "Pending Approval 1 of 2")
+                if (viewModel.TypeForm == "Approver1" && viewModel.StatusForm == "Pending Approval 1 of 2")
                     _hRProfessionalPerformanceEvaluationService.SendEmail(viewModel, SP_TRANSACTION_WORKFLOW_LIST_NAME,
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.ID, 2,
                     string.Format(EmailResource.ProfessionalPerfromanceEvaluation, siteUrl, UrlResource.ProfessionalPerfromanceEvaluation, viewModel.ID), string.Format("Approved By Level 1"));
 
                 // Send to Requestor
-                if (viewModel.StatusForm == "Pending Approval 2 of 2")
+                if (viewModel.TypeForm == "Approver2" && viewModel.StatusForm == "Pending Approval 2 of 2")
                     _hRProfessionalPerformanceEvaluationService.SendEmail(viewModel, SP_TRANSACTION_WORKFLOW_LIST_NAME,
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.ID, 2,
                     string.Format(""), string.Format("Approved by Level 2"));
@@ -171,18 +171,25 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult PrintProfessionalPerformanceEvaluation(FormCollection form, ProfessionalPerformancePlanVM viewModel)
+        public ActionResult PrintProfessionalPerformanceEvaluation(FormCollection form, ProfessionalPerformanceEvaluationVM viewModel)
         {
+
             const string RelativePath = "~/Views/HRProfessionalPerformanceEvaluation/PrintProfessionalPerformanceEvaluation.cshtml";
             var view = ViewEngines.Engines.FindView(ControllerContext, RelativePath, null);
             var fileName = viewModel.Name + "_ProfessionalPerformanceEvaluation.pdf";
             byte[] pdfBuf = null;
             string content;
 
+            // ControllerContext context = new ControllerContext();
+            ControllerContext.Controller.ViewData.Model = viewModel;
+            ViewData = ControllerContext.Controller.ViewData;
+            TempData = ControllerContext.Controller.TempData;
+
             using (var writer = new StringWriter())
             {
-                var context = new ViewContext(ControllerContext, view.View, ViewData, TempData, writer);
-                view.View.Render(context, writer);
+                //var contextviewContext = new ViewContext(ControllerContext, view.View, ViewData, TempData, writer);
+                var contextviewContext = new ViewContext(ControllerContext, view.View, ViewData, TempData, writer);
+                view.View.Render(contextviewContext, writer);
                 writer.Flush();
                 content = writer.ToString();
 

@@ -43,8 +43,11 @@ function onFailureForm(e) {
     if (e.success)
         onSuccessFormEmbed(e);
 
-    $('#modal-html-content').html('<div class="alert alert-danger fade in">'
-        + e.responseJSON.errorMessage + '</div>');
+    if (e.responseJSON != undefined)
+    {
+        $('#modal-html-content').html('<div class="alert alert-danger fade in">'
+            + e.responseJSON.errorMessage + '</div>');
+    }
 }
 
 // Do not use this if embedded in SharePoint
@@ -183,6 +186,10 @@ function displayWorkflowRouter(domID, listName, requestor) {
     $('#' + domID).load(url);
 }
 
+function displayApprovalPath(domID, listName, requestor) {
+    var url = "/Workflow/DisplayApprovalPath?listName=" + listName + "&requestor=" + requestor;
+    $('#' + domID).load(url);
+}
 
 function displayWorkflowRouterExitProcedure(domID, listName, requestor) {
     var url = "/HRExitProcedure/DisplayWorkflowRouterExitProcedure?listName=" + listName + "&requestor=" + requestor;

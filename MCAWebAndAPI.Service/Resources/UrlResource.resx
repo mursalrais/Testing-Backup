@@ -154,7 +154,7 @@
     <value>Lists/Manpower%20Requisition</value>
   </data>
   <data name="ExitProcedureDocumentByID" xml:space="preserve">
-    <value>{0}/ExitProcedureDocuments/Forms/AllItems.aspx#InplviewHashfaee000f-b1fb-42ff-a78e-995ce2c3b057=FilterField1%3Dexitprocedureid-FilterValue1%3D{1}</value>
+    <value>{0}/ExitProcedureDocuments/Forms/AllItems.aspx#InplviewHash8089e8d5-b941-4a0c-9d8a-9be53d040f76=FilterField1%3Dexitprocedureid-FilterValue1%3D{1}</value>
     <comment>Need to change in migration</comment>
   </data>
   <data name="ProfessionalPerfromanceEvaluation" xml:space="preserve">
@@ -164,10 +164,10 @@
     <value>/Lists/Exit%20Procedure</value>
   </data>
   <data name="ExitProcedureNonDisclosureAgreement" xml:space="preserve">
-    <value>{0}/ExitProcedureDocuments/Non%20Disclosure%20Agreement.docx</value>
+    <value>/ExitProcedureDocuments/Forms/AllItems.aspx#InplviewHash8089e8d5-b941-4a0c-9d8a-9be53d040f76=FilterField1%3DID-FilterValue1%3D24</value>
   </data>
   <data name="ExitProcedureExitInterviewForm" xml:space="preserve">
-    <value>{0}/ExitProcedureDocuments/Exit%20Interview%20Form.docx</value>
+    <value>/ExitProcedureDocuments/Forms/AllItems.aspx#InplviewHash8089e8d5-b941-4a0c-9d8a-9be53d040f76=FilterField1%3DID-FilterValue1%3D25</value>
   </data>
   <data name="AddInterviewInvitation" xml:space="preserve">
     <value>{0}/Lists/Application/InputInterviewResultDetail.aspx?ID={1}&amp;manPos={2}</value>
