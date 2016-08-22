@@ -31,17 +31,35 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewModel);
         }
 
+        public ActionResult Edit(int ID, string siteUrl)
+        {
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            var viewModel = _service.GetHeader(ID);
+
+            int? headerID = null;
+            headerID = viewModel.ID;
+
+            try
+            {
+                var viewdetails = _service.GetDetails(headerID);
+                viewModel.Details = viewdetails;
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            return View(viewModel);
+        }
+
         [HttpPost]
         public ActionResult Submit(AssignmentOfAssetVM _data, string siteUrl)
         {
             siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-
-            //if (_data.Details.Count() == 0)
-            //{
-            //    Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            //    return JsonHelper.GenerateJsonErrorResponse("Details should not empty");
-            //}
 
             //return View(new AssetMasterVM());
             int? headerID = null;
@@ -67,6 +85,36 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAcquisition);
             //return Redirect(string.Format("{0}/{1}", siteUrl ?? ConfigResource.DefaultBOSiteUrl, UrlResource.AssetAcquisition));
+        }
+
+        [HttpPost]
+        public ActionResult Update(AssignmentOfAssetVM _data, string SiteUrl)
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            try
+            {
+                //_service.UpdateHeader(_data);
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            try
+            {
+                //update items
+                //_service.UpdateDetails(_data.ID, _data.Details);
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAcquisition);
         }
 
         public ActionResult GetProfMasterInfo(string fullname, string position)
@@ -167,5 +215,24 @@ namespace MCAWebAndAPI.Web.Controllers
                     e.ID
                 }), JsonRequestBehavior.AllowGet);
         }
+
+        public JsonResult GetOfficeGrid(string province = null)
+        {
+            SessionManager.Set("Province", province);
+            var pro = SessionManager.Get<string>("Province");
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            var positions = _service.GetOfficeName(siteUrl, province);
+
+            return Json(positions.Select(e =>
+                new
+                {
+                    Value = Convert.ToString(e.ID),
+                    Text = e.OfficeName
+                }),
+                JsonRequestBehavior.AllowGet);
+        }
+
     }
 }

@@ -7,12 +7,15 @@
     .Name("ComplistDetails")
     .Columns(columns =>
     {
-       
+
         columns.Bound(p => p.CmpHID).ClientTemplate("#= CmpHID #" +
         "<input type='hidden' name='ComplistDetails[#= GetDetailComplist(data)#].CmpHID' value='#= CmpHID #' />");
 
         columns.Bound(p => p.CmpDate).ClientTemplate("#= kendo.toString(CmpDate, \"MM/dd/yyyy \") #" +
         "<input type='hidden' id='Dateid#= GetDetailComplist(data)#' name='CompensatoryDetails[#= GetDetailComplist(data)#].CmpDate' value='#= CmpDate #' />");
+
+        columns.Bound(p => p.GetDayStr).ClientTemplate("#= GetDayStr #" +
+        "<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].GetDayStr' value='#= GetDayStr #' />");
 
         columns.Bound(p => p.StartTime).ClientTemplate("#= kendo.toString(StartTime, \"hh:mm tt\") #" +
        "<input id='start' type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].StartTime' value='#= StartTime #' />");
@@ -35,6 +38,18 @@
         columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
            "<input type='hidden' name='ComplistDetails[#= GetDetailComplist(data)#].EditMode' value='#= EditMode #' />"
          );
+        
+        columns.Bound(p => p.GetDateStr).Hidden().ClientTemplate("#= GetDateStr #" +
+        "<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].GetDateStr' value='#= GetDateStr #' />");
+
+        columns.Bound(p => p.GetStartStr).Hidden().ClientTemplate("#= GetStartStr #" +
+        "<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].GetStartStr' value='#= GetStartStr #' />");
+
+        columns.Bound(p => p.GetFinishStr).Hidden().ClientTemplate("#= GetFinishStr #" +
+        "<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].GetFinishStr' value='#= GetFinishStr #' />");
+
+        columns.Bound(p => p.GetDayStr).Hidden().ClientTemplate("#= GetDayStr #" +
+       "<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].GetDayStr' value='#= GetDayStr #' />");
 
     })
     .Scrollable(scrollable => scrollable.Height("auto"))

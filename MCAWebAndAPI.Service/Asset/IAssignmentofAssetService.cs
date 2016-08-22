@@ -17,6 +17,8 @@ namespace MCAWebAndAPI.Service.Asset
         AssignmentOfAssetVM GetPopulatedModel(string SiteUrl);
         AssignmentOfAssetVM GetHeader(int? ID = null, string SiteUrl = null);
 
+        IEnumerable<AssignmentOfAssetDetailsVM> GetDetails(int? headerID);
+
         int? CreateHeader(AssignmentOfAssetVM viewmodel, string SiteUrl);
         bool UpdateHeader(AssignmentOfAssetVM viewmodel, string SiteUrl);
         void CreateDocuments(int? headerID, IEnumerable<HttpPostedFileBase> documents, string SiteUrl);
@@ -28,6 +30,6 @@ namespace MCAWebAndAPI.Service.Asset
         IEnumerable<AssetAcquisitionItemVM> GetAssetSubAsset();
         IEnumerable<LocationMasterVM> GetProvince();
         LocationMasterVM GetProvinceInfo(string province, string SiteUrl);
-        IEnumerable<LocationMasterVM> GetOfficeName(string province, string SiteUrl);
+        IEnumerable<LocationMasterVM> GetOfficeName(string SiteUrl, string province = null);
     }
 }
