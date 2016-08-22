@@ -191,7 +191,9 @@ namespace MCAWebAndAPI.Web.Controllers
                 return RedirectToAction("Index", "Error");
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.Compensatorylist);
+            return RedirectToAction("Index",
+               "Success",
+               new { successMessage = string.Format(MessageResource.SuccessCreateCompensatoryData, viewModel.cmpID) });
 
         }
 
@@ -213,8 +215,8 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return RedirectToAction("Index", "Error");
             }
 
             if (viewModel.StatusForm != "submit")
@@ -242,7 +244,9 @@ namespace MCAWebAndAPI.Web.Controllers
                 }
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.Compensatorylist);
+            return RedirectToAction("Index",
+                          "Success",
+                          new { successMessage = string.Format(MessageResource.SuccessCreateCompensatoryData, viewModel.cmpID) });
 
         }
 

@@ -8,15 +8,12 @@
     ViewBag.Title = "Input Compensatory User";
 }
 
-@using (Ajax.BeginForm("CreateHeaderCompensatory", "HRCompensatory",
-                                                                                    FormMethod.Post,
-                                                                                    new AjaxOptions
-                                                                                    {
-                                                                                        OnBegin = "onBeginForm",
-                                                                                        OnComplete = "onCompleteForm",
-                                                                                        OnSuccess = "onSuccessFormEmbed",
-                                                                                        OnFailure = "onFailureForm"
-                                                                                    }, new { @class = "form-horizontal" }))
+@using (Html.BeginForm("CreateCompensatoryData", "HRCompensatory", FormMethod.Post,
+                                                                                                                 new
+                                                                                                                 {
+                                                                                                                     @class = "form-horizontal",
+                                                                                                                     enctype = "multipart/form-data"
+                                                                                                                 }))
 {
     <fieldset>
         @Html.HiddenFor(m => m.cmpID)
@@ -43,7 +40,7 @@
                 </div>
             </div>
         </div>
-       
+
         <div class="col-sm-12">
             <div class="form-group" id="ParentDiv">
                 <div class="col-sm-8">
@@ -54,7 +51,7 @@
         <legend>Compensatory list</legend>
         <div id="compensatorylist" class="row"></div>
 
-    
+
     </fieldset>
 }
 
@@ -203,13 +200,13 @@
 
                     function getDayName(date) {
                         var day = new Array();
-                        day[0] = "Sunday";
-                        day[1] = "Monday";
-                        day[2] = "Tuesday";
-                        day[3] = "Wednesday";
-                        day[4] = "Thursday";
-                        day[5] = "Friday";
-                        day[6] = "Saturday";
+                        day[0] = "Monday";
+                        day[1] = "Tuesday";
+                        day[2] = "Wednesday";
+                        day[3] = "Thursday";
+                        day[4] = "Friday";
+                        day[5] = "Saturday";
+                        day[6] = "Sunday";
 
                         if (date != null) {
                             return day[date.getDay()];
@@ -278,7 +275,17 @@
                         return data.indexOf(dataItem);
                     }
 
-</script>
+                    function onSuccess(data) {
+
+                        window.location.href = data.urlToRedirect;
+                    }
+
+                    function onFailure(data) {
+
+                        window.location.href = data.urlToRedirect;
+                    }
+
+    </script>
 }
 
 

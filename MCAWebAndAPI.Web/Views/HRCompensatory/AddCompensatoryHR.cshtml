@@ -8,15 +8,12 @@
     ViewBag.Title = "Add Compensatory HR";
 }
 
-@using (Ajax.BeginForm("CreateHeaderCompensatory", "HRCompensatory",
-                                                                        FormMethod.Post,
-                                                                        new AjaxOptions
-                                                                        {
-                                                                            OnBegin = "onBeginForm",
-                                                                            OnComplete = "onCompleteForm",
-                                                                            OnSuccess = "onSuccessFormEmbed",
-                                                                            OnFailure = "onFailureForm"
-                                                                        }, new { @class = "form-horizontal" }))
+@using (Html.BeginForm("CreatePSAManagement", "HRPSAManagement", FormMethod.Post,
+                                                                             new
+                                                                             {
+                                                                                 @class = "form-horizontal",
+                                                                                 enctype = "multipart/form-data"
+                                                                             }))
 {
     <fieldset>
         @Html.HiddenFor(m => m.cmpID)
@@ -249,6 +246,15 @@
                 return data.indexOf(dataItem);
             }
 
+            function onSuccess(data) {
+
+                window.location.href = data.urlToRedirect;
+            }
+
+            function onFailure(data) {
+
+                window.location.href = data.urlToRedirect;
+            }
         </script>
     }
 
