@@ -28,5 +28,6 @@ namespace MCAWebAndAPI.Service.Asset
         IEnumerable<AssetAcquisitionItemVM> GetAssetSubAsset();
         IEnumerable<LocationMasterVM> GetProvince();
         LocationMasterVM GetProvinceInfo(string province, string SiteUrl);
+        IEnumerable<LocationMasterVM> GetOfficeName(string province, string SiteUrl);
     }
 }

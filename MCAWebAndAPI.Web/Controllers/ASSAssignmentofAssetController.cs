@@ -153,5 +153,19 @@ namespace MCAWebAndAPI.Web.Controllers
                     info.Remarks
                 }, JsonRequestBehavior.AllowGet);
         }
+
+        public JsonResult GetOfficeNameLists(string province, string SiteUrl)
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+
+            var officeName = _service.GetOfficeName(province, siteUrl);
+            officeName = officeName.OrderBy(e => e.Province);
+
+            return Json(officeName.Select(e =>
+                new
+                {
+                    e.ID
+                }), JsonRequestBehavior.AllowGet);
+        }
     }
 }
