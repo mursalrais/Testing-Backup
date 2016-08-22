@@ -337,3 +337,19 @@ Please try again.
 2016-08-10 13:28:05.5842 MCAWebAndAPI.Service.JobSchedulers.Schedulers.PayrollRunScheduler DefaultQuartzScheduler has been started at Wednesday, August 10, 2016 in site https://eceos2.sharepoint.com/sites/mca-dev/hr
 2016-08-12 05:46:53.9120 MCAWebAndAPI.Service.Converter.CSVConverter System.IndexOutOfRangeException: Index was outside the bounds of the array.
    at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64
+2016-08-15 16:21:27.0942 MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService The underlying connection was closed: A connection that was expected to be kept alive was closed by the server.
+2016-08-15 16:44:12.1111 MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService Invalid data has been used to update the list item. The field you are trying to update may be read only.
+2016-08-15 16:50:24.3535 MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService Invalid data has been used to update the list item. The field you are trying to update may be read only.
+2016-08-15 16:58:18.4935 MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService Invalid data has been used to update the list item. The field you are trying to update may be read only.
+2016-08-15 17:03:18.6587 MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService Invalid data has been used to update the list item. The field you are trying to update may be read only.
+2016-08-15 17:06:21.9759 MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService Out of present range. (Exception from HRESULT: 0x8002000A (DISP_E_OVERFLOW))
+2016-08-15 17:24:48.4142 MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService Invalid data has been used to update the list item. The field you are trying to update may be read only.
+2016-08-15 18:51:46.3806 MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService Invalid data has been used to update the list item. The field you are trying to update may be read only.
+2016-08-15 18:55:27.4515 MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService Invalid data has been used to update the list item. The field you are trying to update may be read only.
+2016-08-15 17:36:22.3624 MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService Column 'project_x002f_unit' does not exist. It may have been deleted by another user.  /sites/mca-dev/bo/Lists/Asset Loan Return
+2016-08-15 17:38:24.3488 MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService Column 'contact_x0020_no' does not exist. It may have been deleted by another user.  /sites/mca-dev/bo/Lists/Asset Loan Return
+2016-08-15 17:43:14.5821 MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService Invalid data has been used to update the list item. The field you are trying to update may be read only.
+2016-08-18 03:47:00.7541 MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService Column 'professional' does not exist. It may have been deleted by another user.  /sites/mca-dev/bo/Lists/Asset Loan Return
+2016-08-18 09:03:07.1150 MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService Invalid data has been used to update the list item. The field you are trying to update may be read only.
+2016-08-18 09:05:00.5140 MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService Invalid data has been used to update the list item. The field you are trying to update may be read only.
+2016-08-18 09:16:21.6304 MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService Column 'professional' does not exist. It may have been deleted by another user.  /sites/mca-dev/bo/Lists/Asset Loan Return

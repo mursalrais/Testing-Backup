@@ -7,6 +7,7 @@ using MCAWebAndAPI.Model.ViewModel.Form.Asset;
 using NLog;
 using MCAWebAndAPI.Service.Utils;
 using MCAWebAndAPI.Model.ViewModel.Form.Shared;
+using Microsoft.SharePoint.Client;
 
 namespace MCAWebAndAPI.Service.Asset
 {
@@ -106,6 +107,27 @@ namespace MCAWebAndAPI.Service.Asset
             return viewmodel;
         }
 
-        
+        public IEnumerable<LocationMasterVM> GetProvince()
+        {
+            var models = new List<LocationMasterVM>();
+
+            foreach (var item in SPConnector.GetList("Location Master", _siteUrl))
+            {
+                models.Add(ConvertToModelProvince(item));
+            }
+
+            return models;
+        }
+
+        private LocationMasterVM ConvertToModelProvince(ListItem item)
+        {
+            var viewModel = new LocationMasterVM();
+
+            viewModel.ID = Convert.ToInt32(item["ID"]);
+          //  viewModel.AssetNoAssetDesc.Value = Convert.ToString(item["AssetID"]);
+            viewModel.LocationName = Convert.ToString(item["Title"]);
+            viewModel.RoomName = Convert.ToString(item["Floor"]);
+            return viewModel;
+        }
     }
 }

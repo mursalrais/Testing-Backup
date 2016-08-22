@@ -24,5 +24,7 @@ namespace MCAWebAndAPI.Service.Asset
         AssetTransferVM GetPopulatedModel(int? id = null);
 
         ProfessionalVM GetAssetHolderFromInfo(int? ID, string siteUrl);
+
+        IEnumerable<LocationMasterVM> GetProvince();
     }
 }

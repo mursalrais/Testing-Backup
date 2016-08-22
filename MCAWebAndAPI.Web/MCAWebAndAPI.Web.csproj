@@ -553,7 +553,6 @@
     <Content Include="Views\ASSAssetCheckResultApprove\Create.cshtml" />
     <Content Include="Views\ASSAssetCheckResult\Create.cshtml" />
     <Content Include="Views\ASSAssetFixedAsset\Create.cshtml" />
-    <Content Include="Views\ASSAssetLoanAndReturn\Create.cshtml" />
     <Content Include="Views\ASSAssetReplacement\Create.cshtml" />
     <Content Include="Views\ASSAssetReplacement\Edit.cshtml" />
     <Content Include="Views\ASSAssetScrapping\Create.cshtml" />
@@ -925,6 +924,8 @@
     <Content Include="Views\ASSAssetTransfer\_AssetTransferDetail.cshtml" />
     <Content Include="Views\ASSAssetDisposal\CreateAssetDisposal.cshtml" />
     <Content Include="Views\ASSAssetDisposal\_AssetDisposalDetail.cshtml" />
+    <Content Include="Views\ASSAssetLoanAndReturn\Create.cshtml" />
+    <Content Include="Views\ASSAssetLoanAndReturn\_AssetLoanAndReturnItem.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
