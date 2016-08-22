@@ -161,18 +161,11 @@ namespace MCAWebAndAPI.Web.Controllers
             // return JsonHelper.GenerateJsonSuccessResponse(siteUrl + strPages);
         }
 
-        public ActionResult Read([DataSourceRequest] DataSourceRequest request)
-        {
-            _service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
-            SessionManager.Set("SiteUrl",  ConfigResource.DefaultHRSiteUrl);
-            DataTable data = _service.getComponentAXAdetails();
-            return Json(data.ToDataSourceResult(request));
-        }
+     
 
 
       
   
-
         public ActionResult ViewClaim(string siteUrl = null, string useremail = null)
         {
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
@@ -239,6 +232,13 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
 
+        public ActionResult Read([DataSourceRequest] DataSourceRequest request)
+        {
+            _service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", ConfigResource.DefaultHRSiteUrl);
+            DataTable data = _service.getComponentAXAdetails();
+            return Json(data.ToDataSourceResult(request));
+        }
 
         public ActionResult SubmitAxa(string siteUrl = null)
         {
@@ -250,20 +250,41 @@ namespace MCAWebAndAPI.Web.Controllers
 
         }
 
-        //public ActionResult PrintToPDF(string siteUrl = null)
-        //{
-        //    _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-        //    SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-        //    var viewModel = _service.GetPopulatedModelAXA(false);
-        //    viewModel.dtDetails = _service.getViewAXA();
+        public ActionResult ReadExportExcel([DataSourceRequest] DataSourceRequest request)
+        {
+            _service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", ConfigResource.DefaultHRSiteUrl);
+            DataTable data = _service.getViewAXA();
+            return Json(data.ToDataSourceResult(request));
+        }
 
-        //    return View("PrintToPDF",viewModel);
-        //}
+
+        public ActionResult ExportToExcel(InsuranceClaimAXAVM viewModel)
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            _service.CreateAxa(viewModel);
+            viewModel = _service.GetPopulatedModelAXA(false);
+            return View(viewModel);
+        }
+
+    
+
+
+        public ActionResult PrintToPDF(string siteUrl = null)
+        {
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            var viewModel = _service.GetPopulatedModelAXA(false);
+            viewModel.dtDetails = _service.getViewAXA();
+
+            return View("PrintToPDF", viewModel);
+        }
 
         public ActionResult PrintToPDF(InsuranceClaimAXAVM viewModel)
-            //public ActionResult PrintToPDF()
+        //public ActionResult PrintToPDF()
         {
-         
+
 
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
@@ -275,7 +296,7 @@ namespace MCAWebAndAPI.Web.Controllers
             var fileName = "SubmissionAXA.pdf";
             byte[] pdfBuf = null;
             string content;
-           // ControllerContext context = new ControllerContext();
+            // ControllerContext context = new ControllerContext();
             ControllerContext.Controller.ViewData.Model = viewModel;
             ViewData = ControllerContext.Controller.ViewData;
             TempData = ControllerContext.Controller.TempData;
@@ -352,6 +373,7 @@ namespace MCAWebAndAPI.Web.Controllers
             return Json(data.ToDataSourceResult(request));
         }
 
+     
 
         //[HttpPost]
         //public ActionResult PrintApplicationData(FormCollection form, ApplicationDataVM viewModel)

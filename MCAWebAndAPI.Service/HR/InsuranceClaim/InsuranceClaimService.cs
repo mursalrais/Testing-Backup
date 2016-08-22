@@ -320,7 +320,7 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
                     dTotal += Convert.ToDouble(itemdetail["claimcomponentamount"]);
                     if (iDetail == 0)
                     {
-                        row["ReceiptDate"] = Convert.ToDateTime(itemdetail["claimcomponentreceiptdate"]).AddDays(1).ToString("dd/MMM/yyyy");
+                        row["ReceiptDate"] = Convert.ToDateTime(itemdetail["claimcomponentreceiptdate"]).AddDays(0).ToString("dd/MMM/yyyy");
                         row["Remarks"] = Convert.ToString(itemdetail["claimcomponentremarks"]);
                     }
                   
@@ -522,7 +522,7 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
                     dTotal += Convert.ToDouble(itemdetail["claimcomponentamount"]);
                     if (iDetail == 0)
                     {
-                        row["ReceiptDate"] = Convert.ToDateTime(itemdetail["claimcomponentreceiptdate"]).AddDays(1).ToString("dd/MMM/yyyy");
+                        row["ReceiptDate"] = Convert.ToDateTime(itemdetail["claimcomponentreceiptdate"]).AddDays(0).ToString("dd/MMM/yyyy");
                         row["Remarks"] = Convert.ToString(itemdetail["claimcomponentremarks"]);
                     }
                     iDetail++;
