@@ -8,7 +8,7 @@
     ViewBag.Title = "Add Compensatory HR";
 }
 
-@using (Html.BeginForm("CreatePSAManagement", "HRPSAManagement", FormMethod.Post,
+@using (Html.BeginForm("CreateHeaderCompensatory", "HRCompensatory", FormMethod.Post,
                                                                              new
                                                                              {
                                                                                  @class = "form-horizontal",
@@ -47,6 +47,7 @@
                 </div>
             </div>
         </div>
+     
         <div class="col-sm-12">
             <div class="form-group" id="ParentDiv">
                 <div class="col-sm-8">
@@ -89,7 +90,7 @@
                 var nameProf = $("#cmpName").val() + " - " + $("#cmpPosition").val()
                 $("#ProfName").prop("value", nameProf);
                 $("#ProfName").prop('readonly', 'true');
-
+                
                 var eMail = $("#cmpEmail").val();
 
                 if (eMail != null) {
