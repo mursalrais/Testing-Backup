@@ -196,7 +196,21 @@
        
 
 
-      
+        function OnSelectProfessionalName(e) {
+            var dataItem = this.dataItem(e.item);
+            var url = "/HRDataMaster/GetProfessional/" + dataItem.ID;
+
+            $.getJSON(url,
+                function (result) {
+
+                    $('#OfficeEmail').prop('value', result[0].OfficeEmail);
+                    $('#Unit').prop('value', result[0].Project_Unit);
+                    $('#Position').prop('value', result[0].Position);
+                    $('#ProfessionalTextName').prop('value', result[0].Name);
+                    $('#ProfessionalID').prop('value', result[0].ID);
+                });
+        }
+
 
 
 
