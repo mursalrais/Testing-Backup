@@ -1,24 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MCAWebAndAPI.Model.ViewModel.Control;
-using System.Web;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
-using MCAWebAndAPI.Model.Form.Finance;
+using System.ComponentModel.DataAnnotations;
+using MCAWebAndAPI.Model.ViewModel.Control;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 {
-        /// <summary>
-        ///     Wireframe FIN12: Petty Cash Reimbursement
-        ///         Petty Cash Reimbursement is a transaction for the reimbursement of petty cash only when
-        ///         user has not asked for any petty cash advance.
-        ///
-        ///         Through this feature, finance will create the reimbursement of petty cash which results in 
-        ///         user needs to receive the reimbursement. 
-        /// </summary>
+    /// <summary>
+    ///     Wireframe FIN12: Petty Cash Reimbursement
+    ///         Petty Cash Reimbursement is a transaction for the reimbursement of petty cash only when
+    ///         user has not asked for any petty cash advance.
+    ///
+    ///         Through this feature, finance will create the reimbursement of petty cash which results in 
+    ///         user needs to receive the reimbursement. 
+    /// </summary>
 
     [MetadataType(typeof(PettyCashReimbursementVMMetadata))]
     public  class PettyCashReimbursementVM : PettyCashTransactionItem

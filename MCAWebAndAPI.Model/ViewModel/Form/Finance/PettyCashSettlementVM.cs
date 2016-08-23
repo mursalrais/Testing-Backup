@@ -1,5 +1,4 @@
-﻿using MCAWebAndAPI.Model.Form.Finance;
-using MCAWebAndAPI.Model.ViewModel.Control;
+﻿using MCAWebAndAPI.Model.ViewModel.Control;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

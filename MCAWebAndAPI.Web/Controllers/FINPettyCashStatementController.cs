@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
-using MCAWebAndAPI.Model.Form.Finance;
+using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 using MCAWebAndAPI.Service.Finance;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;

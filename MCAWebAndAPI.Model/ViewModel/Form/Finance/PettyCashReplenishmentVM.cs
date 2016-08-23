@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web;
-using MCAWebAndAPI.Model.Form.Finance;
-using MCAWebAndAPI.Model.ViewModel.Control;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 {

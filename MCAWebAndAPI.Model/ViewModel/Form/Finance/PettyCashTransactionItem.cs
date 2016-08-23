@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Model.ViewModel.Control;
 
-namespace MCAWebAndAPI.Model.Form.Finance
+namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 {
     public class PettyCashTransactionItem : Item
     {

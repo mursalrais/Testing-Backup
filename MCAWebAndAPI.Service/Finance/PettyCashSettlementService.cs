@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using System.Web;
 using static MCAWebAndAPI.Model.ViewModel.Form.Finance.Shared;
 using Microsoft.SharePoint.Client;
-using MCAWebAndAPI.Model.Form.Finance;
 
 namespace MCAWebAndAPI.Service.Finance
 {

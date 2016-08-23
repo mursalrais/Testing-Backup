@@ -77,7 +77,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
                 var viewModel = _service.GetRequisitionNote(id);
 
                 #region Check User
-                
+
                 var siteUrlHR = siteUrl.Replace("/bo", "/hr");
                 var position = Service.Finance.SharedService.GetPosition(user, siteUrlHR);
 

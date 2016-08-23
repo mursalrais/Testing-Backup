@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using MCAWebAndAPI.Model.Form.Finance;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 {

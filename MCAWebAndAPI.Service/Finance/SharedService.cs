@@ -7,7 +7,6 @@ using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
 using MCAWebAndAPI.Model.ViewModel.Form.Shared;
-using MCAWebAndAPI.Model.Form.Finance;
 
 namespace MCAWebAndAPI.Service.Finance
 {

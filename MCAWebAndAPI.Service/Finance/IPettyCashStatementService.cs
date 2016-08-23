@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MCAWebAndAPI.Model.Form.Finance;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 
 namespace MCAWebAndAPI.Service.Finance

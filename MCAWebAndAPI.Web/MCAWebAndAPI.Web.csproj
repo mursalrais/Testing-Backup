@@ -74,7 +74,7 @@
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
       <Private>True</Private>
     </Reference>
-<Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.SharePoint.Client, Version=16.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
@@ -921,7 +921,6 @@
     <Content Include="Views\FINTaxExemption\_Income.cshtml" />
     <Content Include="Views\FINTaxExemption\_VAT.cshtml" />
     <Content Include="Views\FINTaxExemption\_Others.cshtml" />
-    <Content Include="Views\FINPettyCashSettlement\Create.cshtml" />
     <Content Include="Views\FINSCAVoucher\_DisplayEventBudgetItems.cshtml" />
     <Content Include="Views\FINRequisitionNote\Create.cshtml" />
     <Content Include="Views\FINRequisitionNote\Edit.cshtml" />
