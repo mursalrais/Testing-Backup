@@ -1,10 +1,8 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
 @using MCAWebAndAPI.Web.Helpers
-
 @model AdjustmentDataVM
-
 @{
-    ViewBag.Title = "Input Adjustment HR";
+    ViewBag.Title = "Edit Adjustment HR";
 }
 
 @using (Ajax.BeginForm("CreateAdjustmentData", "HRAdjustment", FormMethod.Post, new AjaxOptions
@@ -20,7 +18,6 @@
 {
     <fieldset>
         <input type="hidden" id="loadpage" value="0">
-
         <div class="row">
             <div class="form-group" id="ParentDiv">
                 @Html.Bootstrap().LabelFor(m => m.periodDate).Class("col-xs-2 control-label")
@@ -29,30 +26,38 @@
                 </div>
             </div>
         </div>
-        
-        <legend>Adjustment list</legend>
-        <div class="row">
-            @Html.Partial("_InputAdjustmentDetails", Model.AdjustmentDetails)
-        </div>
 
+        <legend>Adjustment list</legend>
+        <div id="adjustmentlist" class="row"></div>
         <button id="submithr-button" class="btn btn-primary" type="submit">
             <i class="fa fa-save"></i>
             Save
         </button>
-
         <button id="cancel-button" class="btn btn-dannger">
             <i class="fa fa-save"></i>
             cancel
         </button>
-
     </fieldset>
 }
-
 @section scripts{
-
     <script>
         $(document).ready(function () {
+
+            $("#periodDate").kendoDatePicker({
+                change: onChange
+            });
+
         });
+
+
+        function onChange() {
+            var url = "/HRAdjustment/GetAdjustmentDetails?period=" + $("#periodDate").val();
+
+            $('#adjustmentlist').load(url, function (response, status, xhr) {
+                if (status == "success") {
+                }
+            });
+        }
 
         function getProfId(prof) {
             if (prof != null) {
@@ -84,8 +89,5 @@
 
     </script>
 }
-
-
-
 
 

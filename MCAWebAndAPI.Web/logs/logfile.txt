@@ -394,3 +394,6 @@ Parameter name: source
 2016-08-22 07:06:48.7177 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService The 'sId' argument is invalid.
 2016-08-22 07:07:00.1696 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService The 'sId' argument is invalid.
 2016-08-22 11:06:36.3626 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService The 'sId' argument is invalid.
+2016-08-23 15:16:44.6792 MCAWebAndAPI.Service.HR.Payroll.AdjustmentService Invalid data has been used to update the list item. The field you are trying to update may be read only.
+2016-08-23 15:19:32.5584 MCAWebAndAPI.Service.HR.Payroll.AdjustmentService Invalid data has been used to update the list item. The field you are trying to update may be read only.
+2016-08-23 16:16:58.7652 MCAWebAndAPI.Service.HR.Payroll.AdjustmentService Invalid data has been used to update the list item. The field you are trying to update may be read only.

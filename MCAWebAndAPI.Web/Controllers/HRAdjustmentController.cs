@@ -43,6 +43,17 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewmodel); 
         }
 
+        public ActionResult EditAdjustmentData(string siteurl = null, string period = null)
+        {
+            var viewmodel = new AdjustmentDataVM();
+
+            //mandatory: set site url
+            _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
+
+            return View(viewmodel);
+        }
+
         [HttpPost]
         public async Task<ActionResult> CreateAdjustmentData(FormCollection form, AdjustmentDataVM viewModel)
         { 
@@ -61,7 +72,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.Compensatory);
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AdjustmentList);
 
         }
 
