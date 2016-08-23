@@ -1,0 +1,10 @@
+﻿@model MCAWebAndAPI.Model.ViewModel.Control.MultiSelectVM
+
+@(Html.Kendo().MultiSelectFor(m => m.Values)
+          .AutoClose(false)
+          .Placeholder("Select Item")
+          .BindTo(Model.Choices)
+          .Value(Model.Values)
+          .Enable(false)
+
+)

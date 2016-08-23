@@ -137,5 +137,16 @@
             }
             return true;
         }
+
+        function onSuccess(data) {
+
+            window.location.href = data.urlToRedirect;
+        }
+
+        function onFailure(data) {
+
+            window.location.href = data.urlToRedirect;
+        }
+
     </script>
 }
