@@ -96,12 +96,22 @@
     })
 
     function SimpenAsset() {
+        //name="Details
+        var deleteRow = 0;
+        var matches = document.querySelectorAll("[name^='Details[']");
+        //alert(matches.length);
+        for (var i = 0; i < matches.length; i++) {
+            if (matches[i].value == -1) {
+                deleteRow++;
+                //alert("row ke delete : "+deleteRow);
+            }
+        }
         var gridElements = $("#Details").data("kendoGrid").dataSource;
         var total = 0;
         gridElements.fetch(function () {
             total = gridElements.total();
         })
-        if (total == 0) {
+        if (total == 0 || total == deleteRow) {
             alert("Detail cannot Empty");
             return false;
         }

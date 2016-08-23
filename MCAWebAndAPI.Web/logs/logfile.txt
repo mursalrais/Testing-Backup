@@ -394,3 +394,23 @@ Parameter name: source
 2016-08-22 07:06:48.7177 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService The 'sId' argument is invalid.
 2016-08-22 07:07:00.1696 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService The 'sId' argument is invalid.
 2016-08-22 11:06:36.3626 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService The 'sId' argument is invalid.
+2016-08-22 17:05:41.6539 MCAWebAndAPI.Service.Asset.AssignmentOfAssetService Column 'assetholder' does not exist. It may have been deleted by another user.  /sites/mca-dev/bo/Lists/Asset Assignment
+2016-08-22 17:07:42.2447 MCAWebAndAPI.Service.Asset.AssignmentOfAssetService Column 'assetholder' does not exist. It may have been deleted by another user.  /sites/mca-dev/bo/Lists/Asset Assignment
+2016-08-22 17:08:38.9974 MCAWebAndAPI.Service.Asset.AssignmentOfAssetService Column 'assetholder' does not exist. It may have been deleted by another user.  /sites/mca-dev/bo/Lists/Asset Assignment
+2016-08-22 17:23:51.2041 MCAWebAndAPI.Service.Asset.AssignmentOfAssetService Microsoft.SharePoint.Client.ServerException: Value cannot be null.
+Parameter name: source
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 264
+   at MCAWebAndAPI.Service.Asset.AssignmentOfAssetService.CreateDetails(Nullable`1 headerID, IEnumerable`1 items) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssignmentOfAssetService.cs:line 447
+2016-08-22 17:24:34.6704 MCAWebAndAPI.Service.Asset.AssignmentOfAssetService Microsoft.SharePoint.Client.ServerException: Value cannot be null.
+Parameter name: source
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 264
+   at MCAWebAndAPI.Service.Asset.AssignmentOfAssetService.CreateDetails(Nullable`1 headerID, IEnumerable`1 items) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssignmentOfAssetService.cs:line 447
+2016-08-22 17:24:43.3000 MCAWebAndAPI.Service.Asset.AssignmentOfAssetService Microsoft.SharePoint.Client.ServerException: Value cannot be null.
+Parameter name: source
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 264
+   at MCAWebAndAPI.Service.Asset.AssignmentOfAssetService.CreateDetails(Nullable`1 headerID, IEnumerable`1 items) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssignmentOfAssetService.cs:line 447
+2016-08-22 17:25:55.6156 MCAWebAndAPI.Service.Asset.AssignmentOfAssetService Column 'assetholder' does not exist. It may have been deleted by another user.  /sites/mca-dev/bo/Lists/Asset Assignment
+2016-08-22 17:27:55.6576 MCAWebAndAPI.Service.Asset.AssignmentOfAssetService Column 'assetholder' does not exist. It may have been deleted by another user.  /sites/mca-dev/bo/Lists/Asset Assignment
+2016-08-22 17:34:06.3204 MCAWebAndAPI.Service.Asset.AssignmentOfAssetService Column 'assetholder' does not exist. It may have been deleted by another user.  /sites/mca-dev/bo/Lists/Asset Assignment
+2016-08-23 15:33:34.8489 MCAWebAndAPI.Service.Converter.CSVConverter System.IndexOutOfRangeException: Index was outside the bounds of the array.
+   at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64
