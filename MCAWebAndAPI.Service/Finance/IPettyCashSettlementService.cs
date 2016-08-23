@@ -5,14 +5,17 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
+using static MCAWebAndAPI.Model.ViewModel.Form.Finance.Shared;
 
 namespace MCAWebAndAPI.Service.Finance
 {
-    public interface IPettyCashSettlement
+    public interface IPettyCashSettlementService
     {
         void SetSiteUrl(string siteUrl);
 
-        int? Create(PettyCashSettlementVM sphl);
+        PettyCashSettlementVM Get(Operations op, int? id = default(int?));
+
+        int? Save(PettyCashSettlementVM sphl);
 
         Task CreateAttachmentAsync(int? ID, IEnumerable<HttpPostedFileBase> attachment);
     }

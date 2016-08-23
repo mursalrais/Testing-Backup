@@ -7,10 +7,11 @@ using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
 using MCAWebAndAPI.Model.ViewModel.Form.Shared;
+using MCAWebAndAPI.Model.Form.Finance;
 
 namespace MCAWebAndAPI.Service.Finance
 {
-    public static class Shared
+    public static class SharedService
     {
         private const string GLMASTER_SITE_LIST = "GL Master";
         private const string WBSMASTER_SITE_LIST = "WBS Master";
@@ -116,9 +117,65 @@ namespace MCAWebAndAPI.Service.Finance
             };
         }
 
+        public static string GetPosition(string username, string siteUrl)
+        {
+            if (string.IsNullOrEmpty(siteUrl))
+            {
+                throw new InvalidOperationException("Missing parameter: siteUrl.");
+            }
 
-        
+            var caml = @"<View><Query><Where><Eq><FieldRef Name='officeemail' /><Value Type='Text'>" + username + @"</Value></Eq></Where></Query><ViewFields><FieldRef Name='Position' /></ViewFields><QueryOptions /></View>";
+            var listItem = SPConnector.GetList("Professional Master", siteUrl, caml);
+            string position = "";
+            foreach (var item in listItem)
+            {
+                position = FormatUtil.ConvertLookupToValue(item, "Position");
+            }
+            if (position == null)
+            {
+                position = "";
+            }
+            return position;
+        }
 
+        public static IEnumerable<PettyCashTransactionItem> GetPettyCashTransaction(
+            string siteUrl, DateTime dateFrom, DateTime dateTo, string listName, string dateFieldName, ConvertToVMFunction f)
+        {
+            var pettyCashTransactions = new List<PettyCashTransactionItem>();
+            var viewModel = new PettyCashPaymentVoucherVM();
+
+            string caml = @"<Query>
+  <Where>
+    <And>
+      <Geq>
+        <FieldRef Name='{0}' />
+          <Value IncludeTimeValue='TRUE' Type='DateTime'>{1}</Value>
+      </Geq>
+      <Leq>
+        <FieldRef Name='{0}' />
+        <Value IncludeTimeValue='TRUE' Type='DateTime'>{2}</Value>
+      </Leq>
+    </And>
+  </Where>
+</Query>";
+
+            caml = string.Format(caml, dateFieldName, dateFrom, dateTo);
+
+            var listItems = SPConnector.GetList(listName, siteUrl, caml);
+
+            foreach (var item in listItems)
+            {
+                pettyCashTransactions.Add(ConvertToVM(siteUrl, item, f));
+            }
+
+            return pettyCashTransactions;
+        }
+
+        public delegate PettyCashTransactionItem ConvertToVMFunction(string siteUrl, ListItem listItem);
+        public static PettyCashTransactionItem ConvertToVM(string siteUrl, ListItem listItem, ConvertToVMFunction f)
+        {
+            return f(siteUrl, listItem);
+        }
 
     }
 }

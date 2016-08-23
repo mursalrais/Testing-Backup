@@ -12,12 +12,12 @@
 
     .Columns(columns =>
     {
-        columns.Bound(p => p.Activity).ClientTemplate("#= Activity.Title #" +
-              "<input type='hidden' name='ItemDetails[#= getRequisitionDataDetail(data)#].Activity.Value' value='#= Activity.ID #' />")
+        columns.Bound(p => p.Activity).ClientTemplate("#= Activity.Text #" +
+              "<input type='hidden' name='ItemDetails[#= getRequisitionDataDetail(data)#].Activity.Value' value='#= Activity.Value #' />")
                        .EditorViewData(new
                        {
-                           DataTextField = "Title",
-                           DataValueField = "ID",
+                           DataTextField = "Text",
+                           DataValueField = "Value",
                            ControllerName = "ComboBox",
                            ActionName = "GetActivitiesByProject",
                            Filter = "filterProject",
@@ -120,7 +120,9 @@
         var datasource = $("#ItemDetails").data("kendoGrid").dataSource.data();
         var totalAll = 0;
         for (var i = 0; i < datasource.length; i++) {
+            if (datasource[i].EditMode >= 0) {
             totalAll = totalAll + datasource[i].Total;
+            }
         }
 
         $("#Total").val(totalAll);

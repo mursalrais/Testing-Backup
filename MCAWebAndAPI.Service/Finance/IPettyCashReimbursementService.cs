@@ -5,7 +5,7 @@ using System.Web;
 
 namespace MCAWebAndAPI.Service.Finance
 {
-    public interface IPettyCashReimbursement
+    public interface IPettyCashReimbursementService
     {
         /// <summary>
         ///     Wireframe FIN12: Petty Cash Reimbursement

@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using MCAWebAndAPI.Model.HR.DataMaster;
 using MCAWebAndAPI.Model.ViewModel.Control;
 using MCAWebAndAPI.Service.Common;
 using MCAWebAndAPI.Service.Finance;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;
 using FinService = MCAWebAndAPI.Service.Finance;
+using MCAWebAndAPI.Model.Common;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -33,7 +32,7 @@ namespace MCAWebAndAPI.Web.Controllers
             service.SetSiteUrl(ConfigResource.DefaultBOSiteUrl);
 
             var result = service.GetEventBudgets().ToList();
-            result.Insert(0, new Model.ViewModel.Control.AjaxComboBoxVM() { Value = 0, Text = "" });
+            result.Insert(0, new AjaxComboBoxVM() { Value = 0, Text = "" });
 
             return Json(result.Select(e =>
                 new
@@ -66,8 +65,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
             return Json(activities.Select(e => new
             {
-                e.ID,
-                e.Title,
+                Value = e.ID,
+                Text = e.Title,
                 Project = e.Project
             }), JsonRequestBehavior.AllowGet);
         }
@@ -114,7 +113,7 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             var siteUrl = SessionManager.Get<string>(SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
 
-            var glMasters = FinService.Shared.GetGLMaster(siteUrl);
+            var glMasters = FinService.SharedService.GetGLMaster(siteUrl);
 
             return Json(glMasters.Select(e => new
             {
@@ -127,7 +126,7 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             var siteUrl = SessionManager.Get<string>(SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
 
-            var wbsMasters = FinService.Shared.GetWBSMaster(siteUrl, activityValue);
+            var wbsMasters = FinService.SharedService.GetWBSMaster(siteUrl, activityValue);
 
             return Json(wbsMasters.Select(e => new
             {

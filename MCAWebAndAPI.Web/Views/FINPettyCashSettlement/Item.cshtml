@@ -14,20 +14,13 @@
         It is created and maintained by finance.
 *@
 
-@using (Ajax.BeginForm("Create", "FINPettyCashSettlement",
-                            FormMethod.Post,
-                            new AjaxOptions
-                            {
-                                OnBegin = "onBeginForm",
-                                OnComplete = "onCompleteForm",
-                                OnSuccess = "onSuccessFormEmbed",
-                                OnFailure = "onFailureForm"
-                            },
-                            new
-                            {
-                                @class = "form-horizontal",
-                                enctype = "multipart/form-data"
-                            }))
+@using (Html.BeginForm("Save", "FINPettyCashSettlement",
+    FormMethod.Post,
+    new
+    {
+        @class = "form-horizontal",
+        enctype = "multipart/form-data"
+    }))
 
 {
     <fieldset>
@@ -43,9 +36,9 @@
                 </div>
 
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.PettyCasVoucher).Class("col-sm-4 control-label")
+                    @Html.Bootstrap().LabelFor(m => m.PettyCashVoucher).Class("col-sm-4 control-label")
                     <div class="col-sm-8">
-                        @Html.EditorFor(m => m.PettyCasVoucher)
+                        @Html.EditorFor(m => m.PettyCashVoucher)
                     </div>
                 </div>
 
