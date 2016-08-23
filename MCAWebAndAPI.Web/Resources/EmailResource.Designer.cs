@@ -218,6 +218,31 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;p&gt;Dear Mr/Ms. {0},&lt;/p&gt;
+        ///&lt;p&gt;For your information, the name below under your supervision have an outstanding advance.&lt;/p&gt;
+        ///&lt;table style=&apos;height: 51px;border: 1px solid;border-collapse: collapse;min-width:667&apos; &gt;
+        ///&lt;tbody&gt;
+        ///&lt;tr style=&quot;border: 1px solid;background-color: #b3b1b1;&quot;&gt;
+        ///&lt;td width=&apos;150&apos;&gt;Name&lt;/td&gt;
+        ///&lt;td width=&apos;128&apos;&gt;Reference&lt;/td&gt;
+        ///&lt;td width=&apos;77&apos;&gt;Due Date&lt;/td&gt;
+        ///&lt;td width=&apos;64&apos;&gt;Currency&lt;/td&gt;
+        ///&lt;td width=&apos;64&apos;&gt;Amount&lt;/td&gt;
+        ///&lt;td width=&apos;128&apos;&gt;Remarks&lt;/td&gt;
+        ///&lt;/tr&gt;
+        ///&lt;tr&gt;
+        ///&lt;td&gt;{1}&lt;/td&gt;
+        ///&lt;td&gt;{2}&lt;/td&gt;
+        ///&lt;td&gt;{3}&lt;/td&gt;
+        ///&lt; [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string GranteesEmailOutstandingAdvance {
+            get {
+                return ResourceManager.GetString("GranteesEmailOutstandingAdvance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dear Respective Approver,
         ///
         ///    This email is sent to you to notify that there is a request which required your action to approve.
@@ -274,6 +299,35 @@ namespace MCAWebAndAPI.Web.Resources {
         public static string PerformancePlan {
             get {
                 return ResourceManager.GetString("PerformancePlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;p&gt;Dear Mr/Ms. {0},&lt;/p&gt;
+        ///&lt;p&gt;This is a reminder that you have an outstanding advance.&lt;/p&gt;
+        ///&lt;table style=&apos;height: 51px;border: 1px solid;border-collapse: collapse;min-width:517&apos;&gt;
+        ///&lt;tbody&gt;
+        ///&lt;tr style=&quot;border: 1px solid;background-color: #b3b1b1;&quot;&gt;
+        ///&lt;td width=&apos;128&apos;&gt;Reference&lt;/td&gt;
+        ///&lt;td width=&apos;77&apos;&gt;Due Date&lt;/td&gt;
+        ///&lt;td width=&apos;64&apos;&gt;Currency&lt;/td&gt;
+        ///&lt;td width=&apos;64&apos;&gt;Amount&lt;/td&gt;
+        ///&lt;td width=&apos;128&apos;&gt;Remarks&lt;/td&gt;
+        ///&lt;/tr&gt;
+        ///&lt;tr&gt;
+        ///&lt;td&gt;{2}&lt;/td&gt;
+        ///&lt;td&gt;{3}&lt;/td&gt;
+        ///&lt;td&gt;{4}&lt;/td&gt;
+        ///&lt;td&gt;{5}&lt;/td&gt;
+        ///&lt;td&gt;{6}&lt;/td&gt;
+        ///&lt;/tr&gt;
+        ///&lt;/tbody&gt;
+        ///&lt;/table&gt;
+        ///&lt;p&gt;&amp;nb [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string ProfessionalEmailOutstandingAdvance {
+            get {
+                return ResourceManager.GetString("ProfessionalEmailOutstandingAdvance", resourceCulture);
             }
         }
         

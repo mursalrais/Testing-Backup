@@ -735,6 +735,23 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 EmailUtil.Send(item, "Ask for Approval", message);
             }
         }
+
+        public CompensatoryVM GetProfessional(string username)
+        {
+            var viewModel = new CompensatoryVM();
+
+            var caml = @"<View><Query><Where><Eq><FieldRef Name='officeemail' /><Value Type='Text'>" + username + @"</Value></Eq></Where></Query><QueryOptions /></View>";
+            var listItem = SPConnector.GetList("Professional Master", _siteUrl, caml);
+
+            foreach (var item in listItem)
+            {
+                viewModel.cmpName = Convert.ToString(item["Title"]) + Convert.ToString(item["lastname"]);
+                viewModel.cmpProjUnit = Convert.ToString(item["Project_x002f_Unit"]);
+                viewModel.cmpPosition = FormatUtil.ConvertLookupToValue(item, "Position");
+            }
+
+            return viewModel;
+        }
     }
 }
 

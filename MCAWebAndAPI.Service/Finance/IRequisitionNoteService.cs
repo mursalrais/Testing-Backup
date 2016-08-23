@@ -11,7 +11,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
         void SetSiteUrl(string siteUrl);
         RequisitionNoteVM GetRequisitionNote(int? ID);
 
-        IEnumerable<GLMasterVM> GetGLMaster();
+        IEnumerable<GLMasterVM> GetGLMasters();
         
         IEnumerable<WBSMasterVM> GetWBSMaster(string activiy);
        

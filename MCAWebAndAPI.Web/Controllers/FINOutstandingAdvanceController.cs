@@ -46,7 +46,6 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewModel);
         }
 
-
         [HttpPost]
         public async Task<ActionResult> Save(FormCollection form, OutstandingAdvanceVM viewModel)
         {
@@ -55,9 +54,12 @@ namespace MCAWebAndAPI.Web.Controllers
 
             try
             {
+                var listVendor = service.Get();
                 int? id = service.Save(viewModel);
                 Task createApplicationDocumentTask = service.SaveAttachmentAsync(id, viewModel.Reference, viewModel.Documents);
-                Task allTasks = Task.WhenAll(createApplicationDocumentTask);
+                Task sendEmailToProfessional = service.SendEmailToProfessional(EmailResource.ProfessionalEmailOutstandingAdvance, viewModel, listVendor);
+                Task sendEmailToGrantees = service.SendEmailToGrantees(EmailResource.GranteesEmailOutstandingAdvance, viewModel, listVendor);
+                Task allTasks = Task.WhenAll(createApplicationDocumentTask,sendEmailToProfessional,sendEmailToGrantees);
 
                 await allTasks;
             }

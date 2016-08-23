@@ -1,20 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MCAWebAndAPI.Model.ViewModel.Control;
-using System.Web;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Web;
 using MCAWebAndAPI.Model.Common;
+using MCAWebAndAPI.Model.ViewModel.Control;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 {
     public class EventBudgetVM : Item
     {
-        private const string FieldDefaultValue_Fund = "3000";
-
         private ProjectComboBoxVM project;
         private ComboBoxVM activity;
 
@@ -37,8 +32,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         public string DocumentUrl { get; set; }
 
         [Required]
-        [UIHint("Currency")]
-        public string Fund { get; set; } = FieldDefaultValue_Fund;
+        public string Fund { get; set; } = Shared.Fund;
 
         [Required]
         [UIHint("Total Direct Payment (IDR)")]
@@ -75,11 +69,12 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         [Required]
         [UIHint("AjaxCascadeComboBox")]
         public AjaxCascadeComboBoxVM Activity { get; set; } = new AjaxCascadeComboBoxVM();
-
    
-         public IEnumerable<EventBudgetItemVM> ItemDetails = new List<EventBudgetItemVM>();
+         public IEnumerable<EventBudgetItemVM> ItemDetails { get; set; } = new List<EventBudgetItemVM>();
 
         public string No { get; set; }
 
+        public decimal TotalDirectPaymentUSD { get; set; }
+        public decimal TotalSCAUSD { get; set; }
     }
 }

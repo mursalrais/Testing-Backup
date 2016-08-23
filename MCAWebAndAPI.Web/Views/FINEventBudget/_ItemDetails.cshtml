@@ -1,4 +1,6 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.Finance
+@using MCAWebAndAPI.Model.ViewModel.Control
+
     @model IEnumerable<EventBudgetItemVM>
 
     @*
@@ -68,8 +70,8 @@
              .Title("Funding Mechanism")
              .Columns(x=>
              {
-                 x.Bound(p => p.DirectPayment).ClientTemplate("#= DirectPayment #" + "<input type='hidden' name='ItemDetails[#= getItem(data)#].DirectPayment' value='#= DirectPayment #' />").Width(170);
-                 x.Bound(p => p.SCA).ClientTemplate("#= SCA #" + "<input type='hidden' name='ItemDetails[#= getItem(data)#].SCA' value='#= SCA #' />").Width(170);
+                 x.Bound(p => p.DirectPayment).ClientTemplate("#= DirectPayment #" + "<input type='hidden' name='ItemDetails[#= getItem(data)#].DirectPayment' value='#= calculateSCADirect(data).DirectPayment #' />").Width(170);
+                 x.Bound(p => p.SCA).ClientTemplate("#= SCA #" + "<input type='hidden' name='ItemDetails[#= getItem(data)#].SCA' value='#= calculateSCADirect(data).SCA #' />").Width(170);
              })
            );
 
@@ -109,6 +111,7 @@
     </div>
 
     <script>
+
         function getItem(dataItem) {
             var data = $("#ItemDetails").data("kendoGrid").dataSource.data();
             return data.indexOf(dataItem);
@@ -117,16 +120,22 @@
         function onDataBoundItemDetails(e) {
             var grid = $("#ItemDetails").data("kendoGrid");
             hideDeletedRowKendoDetail(grid);
+            calculateTotal();
+        }
 
+        function calculateTotal()
+        {
             var datasource = $("#ItemDetails").data("kendoGrid").dataSource.data();
             var totalAll = 0;
             var totalAllDP = 0;
             var totalAllSCA = 0;
 
             for (var i = 0; i < datasource.length; i++) {
-                totalAll = totalAll + datasource[i].AmountPerItem;
-                totalAllDP = totalAllDP + datasource[i].DirectPayment;
-                totalAllSCA = totalAllSCA + datasource[i].SCA;
+                if (datasource[i].EditMode >= 0) {
+                    totalAll = totalAll + datasource[i].AmountPerItem;
+                    totalAllDP = totalAllDP + datasource[i].DirectPayment;
+                    totalAllSCA = totalAllSCA + datasource[i].SCA;
+                }
             }
 
             $("#TotalDirectPayment").val(totalAllDP);
@@ -137,7 +146,6 @@
             if (rate > 0) {
                 $("#TotalUSD").val(totalAll / rate);
             }
-            
         }
 
         function calculateField(data) {
@@ -146,15 +154,23 @@
             return data;
         }
 
+        function calculateSCADirect(data) {
+            calculateTotal();
+            return data;
+        }
+
         function onedit(e) {
             onEditKendoDetail(e);
             $(e.container).find('input[name="AmountPerItem"]').attr("readonly", true);
         }
-
 
         function filterWBS() {
             return {
                 activityValue: $("#Activity_Value").val()
             };
         }
+
+        $(".k-grid-Delete").click(function (e) {
+            calculateTotal();
+        });
     </script>
