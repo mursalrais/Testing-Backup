@@ -41,7 +41,7 @@
 
                              });
             columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
-          "<input type='hidden' name=WorkingRelationshipDetails[#= getWorkingRelationshipDetails(data)#].ID value=#= ID # />"
+          "<input type='hidden' name=WorkingRelationshipDetails[#= getWorkingRelationshipDetails(data)#].ID value='#= ID #' />"
 
 
         );

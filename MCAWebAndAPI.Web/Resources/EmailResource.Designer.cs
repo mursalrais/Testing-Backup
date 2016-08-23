@@ -260,6 +260,23 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dear Respective {2},
+        ///
+        ///    This email is sent to you to notify that there is a request which required your action to approve.
+        ///
+        ///Kindly check the link as per below to go to direct page accordingly. 
+        ///
+        ///Thank you.    
+        ///
+        ///Link : {0}/Lists/Manpower%20Requisition/DispManpower.aspx?ID={1}.
+        /// </summary>
+        public static string ManpowerDisplay {
+            get {
+                return ResourceManager.GetString("ManpowerDisplay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dear Respective Professional
         ///
         ///    This email is sent to you to notify that you are required to create Performance Evaluation. Creating and approval plan process will take maximum 5 working days. Therefore, do prepare your plan accordingly. Kindly check the link as per below to go to direct page accordingly. Thank you.

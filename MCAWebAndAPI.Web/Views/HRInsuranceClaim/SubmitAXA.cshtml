@@ -6,7 +6,7 @@
 }
 
 
-@using (Html.BeginForm("PrintToPDF", "HRInsuranceClaim", FormMethod.Post,
+@using (Html.BeginForm("ExportToExcel", "HRInsuranceClaim", FormMethod.Post,
                                                                       new
                                                                       {
                                                                           @class = "form-horizontal",
@@ -71,7 +71,7 @@
                     Back
                 </button>
                 <button id="submit-to-axa" class="btn btn-primary" type="submit">
-                    Print to PDF
+                    Submit to AXA
                 </button>
             </div>
         </div>

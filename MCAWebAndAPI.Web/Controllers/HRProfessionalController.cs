@@ -116,13 +116,13 @@ namespace MCAWebAndAPI.Web.Controllers
                         _professionalService.SetValidationStatus(headerID, Workflow.ProfessionalValidationStatus.VALIDATED);
                         _professionalService.SendEmailValidation(
                             viewModel.OfficeEmail,
-                            string.Format(EmailResource.ProfessionalEmailValidationResponse), isApproved: true);
+                            string.Format(EmailResource.ProfessionalEmailValidationResponse));
                         break;
                     case "reject-action":
                         _professionalService.SetValidationStatus(headerID, Workflow.ProfessionalValidationStatus.REJECTED);
                         _professionalService.SendEmailValidation(
                             viewModel.OfficeEmail,
-                            string.Format(EmailResource.ProfessionalEmailValidationResponse), isApproved: false);
+                            string.Format(EmailResource.ProfessionalEmailValidationResponse));
                         break;
                 }
             }

@@ -18,23 +18,9 @@
           <p style="margin-top: 40px; margin-bottom: 40px; margin-left: 15px;margin-right: 15px;"> @string.Format(MessageResource.CompensatoryPrintText)</p>
         </div>
         <div class="row">
-            @*@Html.Partial("_CompensatoryRequestDetails_Print", Model)*@
+            @Html.Partial("_CompensatoryRequestDetails_Print", Model)
         </div>
     </fieldset>
 </div>
 <script>
-    function getDayName(date) {
-        var day = new Array();
-        day[0] = "Monday";
-        day[1] = "Tuesday";
-        day[2] = "Wednesday";
-        day[3] = "Thursday";
-        day[4] = "Friday";
-        day[5] = "Saturday";
-        day[6] = "Sunday";
-
-        if (date != null) {
-            return day[date.getDay()];
-        };
-    }
 </script>
