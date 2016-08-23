@@ -1,26 +1,37 @@
-﻿@model MCAWebAndAPI.Model.ViewModel.Form.Finance.PettyCashReimbursementVM
+﻿@model MCAWebAndAPI.Model.ViewModel.Form.Finance.PettyCashSettlementVM
 
 @*
-    Wireframe FIN12: Petty Cash Reimbursement
+    Wireframe FIN11: Petty Cash Settlement
 
-        Petty Cash Reimbursement is a transaction for the reimbursement of petty cash only when
-        user has not asked for any petty cash advance.
+        Petty Cash Settlement is a transaction for settlement-reimbursement of petty cash where
+        user has already asked for petty cash advance previously.
 
-        Through this feature, finance will create the reimbursement of petty cash which results in
-        user needs to receive the reimbursement.
+        Through this feature, user will create the settlement-reimbursement of
+        petty cash which results whether user needs to return the excess petty cash advance or
+        receive the reimbursement in the case where the actual expense for
+        petty cash exceeds the petty cash advance given.
+
+        It is created and maintained by finance.
 *@
 
-@using (Html.BeginForm("Create", "FINPettyCashReimbursement",
-    FormMethod.Post,
-    new
-    {
-        @class = "form-horizontal",
-        enctype = "multipart/form-data"
-    }))
+@using (Ajax.BeginForm("Create", "FINPettyCashSettlement",
+                            FormMethod.Post,
+                            new AjaxOptions
+                            {
+                                OnBegin = "onBeginForm",
+                                OnComplete = "onCompleteForm",
+                                OnSuccess = "onSuccessFormEmbed",
+                                OnFailure = "onFailureForm"
+                            },
+                            new
+                            {
+                                @class = "form-horizontal",
+                                enctype = "multipart/form-data"
+                            }))
 
 {
     <fieldset>
-        <legend>Petty Cash Reimbursement</legend>
+        <legend>Petty Cash Settlement</legend>
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
@@ -32,34 +43,32 @@
                 </div>
 
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.PaidTo).Class("col-sm-4 control-label")
+                    @Html.Bootstrap().LabelFor(m => m.PettyCasVoucher).Class("col-sm-4 control-label")
                     <div class="col-sm-8">
-                        @Html.EditorFor(m => m.PaidTo)
+                        @Html.EditorFor(m => m.PettyCasVoucher)
                     </div>
                 </div>
 
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.Professional).Class("col-sm-4 control-label")
+                    @Html.Bootstrap().LabelFor(m => m.AmountLiquidated).Class("col-sm-4 control-label")
                     <div class="col-sm-8">
-                        @Html.EditorFor(m => m.Professional)
+                        @Html.EditorFor(m => m.AmountLiquidated)
                     </div>
                 </div>
 
                 <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Vendor).Class("col-sm-4 control-label")
-                <div class="col-sm-8">
-                    @Html.EditorFor(m => m.Vendor)
-                </div>
-            </div>
-
-                <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.Driver).Class("col-sm-4 control-label")
+                    @Html.Bootstrap().LabelFor(m => m.AmountReimbursedOrReturned).Class("col-sm-4 control-label")
                     <div class="col-sm-8">
-                        @Html.EditorFor(m => m.Driver)
+                        @Html.EditorFor(m => m.AmountReimbursedOrReturned)
                     </div>
                 </div>
 
-
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Remarks).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.Remarks)
+                    </div>
+                </div>
 
 
             </div>
@@ -97,7 +106,7 @@
             var driverTextbox = $("#Driver");
 
 
-             switch(data) 
+             switch(data)
             {
                  case PAIDTO_PROFESSIONAL:
                      professionalDropDownList.enable(true);
@@ -107,10 +116,10 @@
 
                  case PAIDTO_VENDOR:
                      professionalDropDownList.enable(false);
-                     vendorDropDownList.enable(true); 
+                     vendorDropDownList.enable(true);
                      driverTextbox.prop('readonly', true);
                      break;
-                
+
                  case PAIDTO_DRIVER :
                      professionalDropDownList.enable(false);
                      vendorDropDownList.enable(false);

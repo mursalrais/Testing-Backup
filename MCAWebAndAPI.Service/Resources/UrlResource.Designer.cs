@@ -196,7 +196,7 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}/Lists/Event%20Budget/AllItems.aspx.
+        ///   Looks up a localized string similar to {0}/Lists/SPHL%20Data/AllItems.aspx.
         /// </summary>
         public static string FINEventBudget {
             get {

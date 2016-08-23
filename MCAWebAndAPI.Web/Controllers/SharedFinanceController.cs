@@ -11,11 +11,11 @@ namespace MCAWebAndAPI.Web.Controllers
 {
     public class SharedFinanceController: Controller
     {
-        public const string Session_SiteUrl = "SiteUrl";
+        private const string SESSION_SITE_URL = "SiteUrl";
 
         public JsonResult GetWBSMaster(string siteUrl)
         {
-            var wbsMasters = SharedService.GetWBSMaster(siteUrl);
+            var wbsMasters = Shared.GetWBSMaster(siteUrl);
 
             return Json(wbsMasters.Select(e => new
             {
@@ -26,7 +26,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetGLMaster(string siteUrl)
         {
-            var glMasters = SharedService.GetGLMaster(siteUrl);
+            var glMasters = Shared.GetGLMaster(siteUrl);
 
             return Json(glMasters.Select(e => new
             {

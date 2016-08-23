@@ -7,10 +7,12 @@ using MCAWebAndAPI.Model.ViewModel.Control;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
-using MCAWebAndAPI.Model.Form.Finance;
+using MCAWebAndAPI.Model.Common;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 {
+  public  class PettyCashReimbursementVM
+    {
         /// <summary>
         ///     Wireframe FIN12: Petty Cash Reimbursement
         ///         Petty Cash Reimbursement is a transaction for the reimbursement of petty cash only when
@@ -20,15 +22,10 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         ///         user needs to receive the reimbursement. 
         /// </summary>
 
-    [MetadataType(typeof(PettyCashReimbursementVMMetadata))]
-    public  class PettyCashReimbursementVM : PettyCashTransactionItem
-    {
-        public PettyCashReimbursementVM()
-        {
-            this.TransactionType = Shared.PettyCashTranscationType_PettyCashReimbursement;
-        }
-
-        public string DocNo { get; set; }
+        [Required]
+        [DataType(DataType.Date)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
+        public DateTime Date { get; set; }
 
         [Required]
         [UIHint("ComboBox")]
@@ -68,14 +65,4 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 
 
     }
-
-    internal class PettyCashReimbursementVMMetadata
-    {
-        [DisplayName("Reimbursement Date")]
-        public DateTime Date { get; set; }
-
-        [DisplayName("Amount liquidated")]
-        public decimal Amount { get; set; } = 0;
-    }
-
 }

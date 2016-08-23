@@ -344,7 +344,7 @@ namespace MCAWebAndAPI.Service.Finance
             model.ActivityName = (ListItem[FIELD_NAME_ACTIVITY_NAME] as FieldLookupValue).LookupValue.ToString();
             model.SubActivityID = Convert.ToInt32((ListItem[FIELD_NAME_SUB_ACTIVITY_NAME] as FieldLookupValue).LookupId.ToString());
             model.SubActivityName = (ListItem[FIELD_NAME_SUB_ACTIVITY_NAME] as FieldLookupValue).LookupValue.ToString();
-            model.Fund = Convert.ToString(ListItem[FIELD_NAME_FUND]);
+            model.Fund = Convert.ToDecimal(ListItem[FIELD_NAME_FUND]);
             model.RefferenceNo = ListItem[FIELD_NAME_REFFERENCE_NO] == null? "" : ListItem[FIELD_NAME_REFFERENCE_NO].ToString();
             model.Remarks = ListItem[FIELD_NAME_REMARKS] == null ?"": ListItem[FIELD_NAME_REMARKS].ToString();
             model.TransactionStatus.Value = ListItem[FIELD_NAME_TRANSTATUS].ToString();

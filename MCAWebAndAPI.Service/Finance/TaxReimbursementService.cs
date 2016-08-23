@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
-using MCAWebAndAPI.Model.Form.Finance;
+using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Service.Utils;
@@ -47,7 +47,7 @@ namespace MCAWebAndAPI.Service.Finance
 
         public TaxReimbursementVM Get(Operations op, int? id = default(int?))
         {
-            if (op != Operations.c && id == null)
+            if (op != Operations.Create && id == null)
                 throw new InvalidOperationException(ErrorDevInvalidState);
 
             var viewModel = new TaxReimbursementVM();

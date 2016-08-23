@@ -32,6 +32,7 @@ namespace MCAWebAndAPI.Service.Finance
 
         Task CreateAttachmentsAsync(int? headerID, IEnumerable<HttpPostedFileBase> documents);
 
-       
+        Task EditItemsAsync(int? headerID, IEnumerable<EventBudgetItemVM> items);
+        Task EditAttachmentsSync(int? headerID, IEnumerable<HttpPostedFileBase> documents);
     }
 }

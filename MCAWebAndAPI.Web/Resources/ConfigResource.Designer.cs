@@ -61,7 +61,7 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://eceos2.sharepoint.com/sites/mca-dev/bo.
+        ///   Looks up a localized string similar to https://eceos2.sharepoint.com/sites/ims/bo.
         /// </summary>
         public static string DefaultBOSiteUrl {
             get {
@@ -70,7 +70,7 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://eceos2.sharepoint.com/sites/mca-dev/hr.
+        ///   Looks up a localized string similar to https://eceos2.sharepoint.com/sites/ims/hr.
         /// </summary>
         public static string DefaultHRSiteUrl {
             get {
@@ -79,20 +79,11 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://eceos2.sharepoint.com/sites/mca-dev.
+        ///   Looks up a localized string similar to https://eceos2.sharepoint.com/sites/ims.
         /// </summary>
         public static string DefaultProgramSiteUrl {
             get {
                 return ResourceManager.GetString("DefaultProgramSiteUrl", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to MCA Developer.
-        /// </summary>
-        public static string DefaultUser {
-            get {
-                return ResourceManager.GetString("DefaultUser", resourceCulture);
             }
         }
         

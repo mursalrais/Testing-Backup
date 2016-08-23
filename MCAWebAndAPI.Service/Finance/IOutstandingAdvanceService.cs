@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
-using MCAWebAndAPI.Model.ViewModel.Form.Shared;
 using static MCAWebAndAPI.Model.ViewModel.Form.Finance.Shared;
 
 namespace MCAWebAndAPI.Service.Finance
@@ -18,20 +17,14 @@ namespace MCAWebAndAPI.Service.Finance
     {
         void SetSiteUrl(string siteUrl);
 
-        void SendEmail(string emailTo, string message);
+        OutstandingAdvanceVM Get(Operations op, int? id = default(int?));
 
         int Save(OutstandingAdvanceVM viewModel);
 
-        OutstandingAdvanceVM Get(Operations op, int? id = default(int?));
+        Task SaveAttachmentAsync(int? ID, string sphlNo, IEnumerable<HttpPostedFileBase> documents);
 
         OutstandingAdvanceVM Get(int? ID);
 
-        List<VendorVM> Get();
-
-        Task SaveAttachmentAsync(int? ID, string sphlNo, IEnumerable<HttpPostedFileBase> documents);
-
-        Task SendEmailToProfessional(string message, OutstandingAdvanceVM viewModel, List<VendorVM> listVendor);
-
-        Task SendEmailToGrantees(string message, OutstandingAdvanceVM viewModel, List<VendorVM> listVendor);
+        void SendEmail(string emailTo, string message);
     }
 }

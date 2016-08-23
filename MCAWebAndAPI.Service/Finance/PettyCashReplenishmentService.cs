@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web;
-using MCAWebAndAPI.Model.Form.Finance;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Service.Utils;
@@ -23,7 +22,7 @@ namespace MCAWebAndAPI.Service.Finance
         private const string FieldName_Date = "Date";
         private const string FieldName_Currency = "Currency";
         private const string FieldName_Amount = "Amount";
-        private const string FieldName_DocNo = "Title";
+        private const string FieldName_Remarks = "Remarks";
 
         string siteUrl = null;
         static Logger logger = LogManager.GetCurrentClassLogger();
@@ -36,7 +35,7 @@ namespace MCAWebAndAPI.Service.Finance
             updatedValue.Add(FieldName_Date, viewModel.Date);
             updatedValue.Add(FieldName_Currency, viewModel.Currency.Value);
             updatedValue.Add(FieldName_Amount, viewModel.Amount);
-            updatedValue.Add(FieldName_DocNo, viewModel.TransactionNo);
+            updatedValue.Add(FieldName_Remarks, viewModel.Remarks);
            
             try
             {
@@ -114,30 +113,26 @@ namespace MCAWebAndAPI.Service.Finance
             if (ID != null)
             {
                 var listItem = SPConnector.GetListItem(ListName, ID, siteUrl);
-                viewModel = ConvertToVM(siteUrl, listItem);
+                viewModel = ConvertToVM(listItem);
             }
 
             return viewModel;
 
         }
 
-        public delegate PettyCashTransactionItem ConvertToVMDelegate(string siteUrl, ListItem listItem);
 
-        private static PettyCashReplenishmentVM ConvertToVM(string siteUrl, ListItem listItem)
+        private PettyCashReplenishmentVM ConvertToVM(ListItem listItem)
         {
             PettyCashReplenishmentVM viewModel = new PettyCashReplenishmentVM();
 
             viewModel.Date= Convert.ToDateTime(listItem[FieldName_Date]);
             viewModel.Currency.Value = Convert.ToString(listItem[FieldName_Currency]);
             viewModel.Amount = Convert.ToDecimal(listItem[FieldName_Amount]);
-            viewModel.TransactionNo = Convert.ToString(listItem[FieldName_DocNo]);
+            viewModel.Remarks = Convert.ToString(listItem[FieldName_Remarks]);
             
             return viewModel;
         }
 
-        public static IEnumerable<PettyCashTransactionItem> GetPettyCashTransaction(string siteUrl, DateTime dateFrom, DateTime dateTo)
-        {
-            return SharedService.GetPettyCashTransaction(siteUrl, dateFrom, dateTo, ListName, FieldName_Date, ConvertToVM);
-        }
+
     }
 }

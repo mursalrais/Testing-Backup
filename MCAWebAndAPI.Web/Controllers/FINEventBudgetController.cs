@@ -12,9 +12,6 @@ using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;
 using FinService = MCAWebAndAPI.Service.Finance;
-using System.IO;
-using MCAWebAndAPI.Service.Converter;
-using Elmah;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -28,9 +25,6 @@ namespace MCAWebAndAPI.Web.Controllers
         private const string Error = "Error";
 
         private const string Session_SiteUrl = "SiteUrl";
-
-        private const string PRINT_PAGE_URL = "~/Views/FINEventBudget/Print.cshtml";
-
         IEventBudgetService service;
 
         public FINEventBudgetController()
@@ -63,7 +57,7 @@ namespace MCAWebAndAPI.Web.Controllers
             var siteUrl = SessionManager.Get<string>(Session_SiteUrl);
             service.SetSiteUrl(siteUrl);
 
-            var glMasters = FinService.SharedService.GetGLMaster(siteUrl);
+            var glMasters = FinService.Shared.GetGLMaster(siteUrl);
 
             return Json(glMasters.Select(e => new
             {
@@ -99,15 +93,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             try
             {
-                if (viewModel.ID.HasValue && viewModel.ID.Value > 0)
-                {
-                    service.Update(viewModel);
-                    headerId = viewModel.ID.Value;
-                }
-                else
-                {
-                    headerId = service.Create(viewModel);
-                }
+                headerId = service.Create(viewModel);
 
                 Task CreateDetailsTask = service.CreateItemsAsync(headerId, viewModel.ItemDetails);
                 Task CreateDocumentsTask = service.CreateAttachmentsAsync(headerId, viewModel.Documents);
@@ -129,50 +115,11 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             viewModel.Activity.ControllerName = "ComboBox";
             viewModel.Activity.ActionName = "GetActivitiesByProject";
-            viewModel.Activity.ValueField = "Value";
-            viewModel.Activity.TextField = "Text";
+            viewModel.Activity.ValueField = "ID";
+            viewModel.Activity.TextField = "Title";
             viewModel.Activity.Cascade = "Project_Value";
             viewModel.Activity.Filter = "filterProject";
 
         }
-
-        [HttpPost]
-        public ActionResult Print(FormCollection form, EventBudgetVM viewModel)
-        {
-            string RelativePath = PRINT_PAGE_URL;
-
-            var siteUrl = SessionManager.Get<string>(Session_SiteUrl);
-            service.SetSiteUrl(siteUrl);
-            viewModel = service.Get(viewModel.ID);
-
-            ViewData.Model = viewModel;
-            var view = ViewEngines.Engines.FindView(ControllerContext, RelativePath, null);
-            var fileName = viewModel.No + "_Application.pdf";
-            byte[] pdfBuf = null;
-            string content;
-
-            using (var writer = new StringWriter())
-            {
-                var context = new ViewContext(ControllerContext, view.View, ViewData, TempData, writer);
-                view.View.Render(context, writer);
-                writer.Flush();
-                content = writer.ToString();
-
-                // Get PDF Bytes
-                try
-                {
-                    pdfBuf = PDFConverter.Instance.ConvertFromHTML(fileName, content);
-    }
-                catch (Exception e)
-                {
-                    ErrorSignal.FromCurrentContext().Raise(e);
-                    return JsonHelper.GenerateJsonErrorResponse(e);
-                }
-            }
-            if (pdfBuf == null)
-                return HttpNotFound();
-            return File(pdfBuf, "application/pdf");
-        }
-
     }
 }

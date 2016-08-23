@@ -7,12 +7,12 @@ using MCAWebAndAPI.Web.Resources;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using static MCAWebAndAPI.Model.ViewModel.Form.Finance.Shared;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
     /// <summary>
     /// Wireframe FIN11: Petty Cash Settlement
+    /// 
     ///     Petty Cash Settlement is a transaction for settlement-reimbursement of petty cash where 
     ///     user has already asked for petty cash advance previously. 
     ///     
@@ -27,38 +27,41 @@ namespace MCAWebAndAPI.Web.Controllers
 
     public class FINPettyCashSettlementController : Controller
     {
-        //TODO:
-        //1. Tangkap DateFrom dan DateTo dari Index
-        //2. Pakai values tersebut di Display
-
-        IPettyCashSettlementService service;
+        IPettyCashSettlement service;
 
         public FINPettyCashSettlementController()
         {
-            service = new PettyCashSettlementService();
+            service = new PettyCashSettlement();
         }
 
-        public ActionResult Item(string siteUrl = null, string op = null, int? id = null)
+        public ActionResult Create(string siteUrl = null)
         {
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
+
             service.SetSiteUrl(siteUrl);
             SessionManager.Set("SiteUrl", siteUrl);
 
-            var viewModel = service.Get(GetOperation(op), id);
+            var viewModel = new PettyCashSettlementVM();
 
-            SetAdditionalSettingToViewModel(ref viewModel, true);
+            viewModel.PettyCasVoucher = new AjaxCascadeComboBoxVM
+            {
+                ControllerName = "FINPettyCashSettlement",
+                ActionName = "GetPettyCashVoucher",
+                ValueField = "ID",
+                TextField = "Title"
+            };
 
             return View(viewModel);
         }
 
         [HttpPost]
-        public ActionResult Save(FormCollection form, PettyCashSettlementVM viewModel)
+        public ActionResult Create(FormCollection form, PettyCashSettlementVM viewModel)
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl") ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
             int? ID = null;
-            ID = service.Save(viewModel);
+            ID = service.Create(viewModel);
             // Task createApplicationDocumentTask = service.CreateAttachmentAsync(ID, viewModel.Documents);
             // Task allTasks = Task.WhenAll(createApplicationDocumentTask);
 
@@ -110,24 +113,6 @@ namespace MCAWebAndAPI.Web.Controllers
 
         //    };
         //}
-
-        private void SetAdditionalSettingToViewModel(ref PettyCashSettlementVM viewModel, bool isCreate)
-        {
-            viewModel.PettyCashVoucher = new AjaxCascadeComboBoxVM
-            {
-                ControllerName = "FINPettyCashSettlement",
-                ActionName = "GetPettyCashVoucher",
-                ValueField = "ID",
-                TextField = "Title"
-            };
-            //viewModel.Category.OnSelectEventName = "onSelectCategory";
-
-            //viewModel.Vendor.ControllerName = "Vendor";
-            //viewModel.Vendor.ActionName = "GetVendor";
-            //viewModel.Vendor.ValueField = "Value";
-            //viewModel.Vendor.TextField = "Text";
-            //viewModel.Vendor.OnSelectEventName = "onSelectVendor";
-        }
 
     }
 }

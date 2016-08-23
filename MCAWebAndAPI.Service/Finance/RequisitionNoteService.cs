@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using MCAWebAndAPI.Model.Common;
@@ -45,7 +47,6 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
         private const string FIELD_RN_PRICE = "Price";
         private const string FIELD_RN_TOTAL = "Total_x0020_Per_x0020_Item";
         private const string FIELD_RN_DOCUMENTS_HEADERID = "_x0027_Requisition_x0020_Note_x0027_";
-        private const string FIELD_RN_EDITOR = "Editor";
         private const string ACTIVTY_PROJECT_NAME = "Project";
         private const string ACTIVITYID_SUBACTIVITY = "Activity_x003a_ID";
         private const string WBS_SUBACTIVITY_ID = "Sub_x0020_Activity_x003a_ID";
@@ -61,7 +62,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
         public RequisitionNoteVM GetRequisitionNote(int? ID)
         {
             var viewModel = new RequisitionNoteVM();
-
+            
             if (ID != null)
             {
                 var listItem = SPConnector.GetListItem(REQUISITION_SITE_LIST, ID, _siteUrl);
@@ -77,11 +78,13 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
                     }
                 }
             }
+           
 
             return viewModel;
+
         }
 
-        public IEnumerable<GLMasterVM> GetGLMasters()
+        public IEnumerable<GLMasterVM> GetGLMaster()
         {
             var glMasters = new List<GLMasterVM>();
 
@@ -368,12 +371,10 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
 
             viewModel.Project.Value = Convert.ToString(listItem[FIELD_REQUISITION_PROJECT]);
             viewModel.Project.Text = Convert.ToString(listItem[FIELD_REQUISITION_PROJECT]);
-            viewModel.Fund = Convert.ToString(listItem[FIELD_REQUISITION_FUND]);
+            viewModel.Fund = Convert.ToDecimal(listItem[FIELD_REQUISITION_FUND]);
             viewModel.Currency.Value = Convert.ToString(listItem[FIELD_REQUISITION_CURRENCY]);
             viewModel.Total = Convert.ToDecimal(listItem[FIELD_REQUISITION_TOTAL]);
             viewModel.EditMode = (int)Item.Mode.UPDATED;
-
-            viewModel.Editor = Convert.ToString((listItem[FIELD_RN_EDITOR] as FieldUserValue).LookupValue);
 
             viewModel.DocumentUrl = GetDocumentUrl(viewModel.ID);
             return viewModel;
@@ -405,7 +406,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
             viewModel.ID = Convert.ToInt32(listItem[FIELD_ID]);
             viewModel.Specification = Convert.ToString(listItem[FIELD_TITLE]);
 
-            viewModel.Activity.Value = (listItem[FIELD_RN_ACTIVITY] as FieldLookupValue).LookupId;           
+            viewModel.Activity.Value = (listItem[FIELD_RN_ACTIVITY] as FieldLookupValue).LookupId;
             viewModel.Activity.Text = (listItem[FIELD_RN_ACTIVITY] as FieldLookupValue).LookupValue;
 
             viewModel.WBS.Value = (listItem[FIELD_RN_WBS] as FieldLookupValue).LookupId;

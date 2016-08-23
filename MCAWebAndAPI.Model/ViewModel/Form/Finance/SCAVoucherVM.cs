@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Web;
 using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Model.ViewModel.Control;
@@ -13,7 +16,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
     ///     i.e.: Special Cash Advance Voucher
     /// </summary>
 
-    public class SCAVoucherVM : Item
+    public class SCAVoucherVM:Item
     {
         private const string locked = "Locked";
         private const string unlocked = "Unlocked";
@@ -106,7 +109,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         public string SubActivityName { get; set; }
 
         [Required]
-        public string Fund { get; set; } = Shared.Fund;
+        public decimal Fund { get; set; }
 
         public string RefferenceNo { get; set; }
 
@@ -122,7 +125,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
                 unlocked,
                 locked
             },
-            Value = unlocked
+            Value=unlocked
         };
 
         [UIHint("MultiFileUploader")]

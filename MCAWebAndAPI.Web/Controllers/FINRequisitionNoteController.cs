@@ -7,15 +7,14 @@ using System.Web.Mvc;
 using Elmah;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
-using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 using MCAWebAndAPI.Service.Converter;
+using FinService = MCAWebAndAPI.Service.Finance;
 using MCAWebAndAPI.Service.Finance;
 using MCAWebAndAPI.Service.Finance.RequisitionNote;
-using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;
-using FinService = MCAWebAndAPI.Service.Finance;
+using MCAWebAndAPI.Service.Resources;
 
 namespace MCAWebAndAPI.Web.Controllers.Finance
 {
@@ -25,11 +24,12 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
     /// </summary>
 
     [Filters.HandleError]
-    public class FINRequisitionNoteController : Controller 
+    public class FINRequisitionNoteController : Controller //FinSharedController
     {
         private const string FIELD_ID = "ID";
         private const string FIELD_TITLE = "Title";
         private const string LIST_NAME = "requisitionnote";
+        private const string SESSION_SITE_URL = "SiteUrl";
         private const string WORKFLOW_TITLE = "Requisition%20Note";
         private const string INDEX_PAGE = "Index";
         private const string ERROR = "Error";
@@ -55,7 +55,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
         {
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
             _service.SetSiteUrl(siteUrl);
-            SessionManager.Set(SharedFinanceController.Session_SiteUrl, siteUrl);
+            SessionManager.Set(SESSION_SITE_URL, siteUrl);
 
             ViewBag.ListName = WORKFLOW_TITLE;
             
@@ -64,34 +64,17 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             return View(viewModel);
         }
 
-        public ActionResult Edit(string siteUrl = null, int id = 0, string user = null)
+        public ActionResult Edit(string siteUrl = null, int ID = 0)
         {
-            if (id > 0)
+            if (ID > 0)
             {
                 siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
                 _service.SetSiteUrl(siteUrl);
-                SessionManager.Set(SharedFinanceController.Session_SiteUrl, siteUrl);
+                SessionManager.Set(SESSION_SITE_URL, siteUrl);
 
                 ViewBag.ListName = WORKFLOW_TITLE;
 
-                var viewModel = _service.GetRequisitionNote(id);
-
-                #region Check User
-
-                user = user ?? ConfigResource.DefaultUser;
-
-                var siteUrlHR = siteUrl.Replace("/bo", "/hr");
-                var position = Service.Finance.SharedService.GetPosition(user, siteUrlHR);
-
-
-                if (viewModel.Editor != user)
-                {
-
-                }
-
-                #endregion Check User
-
-
+                var viewModel = _service.GetRequisitionNote(ID);
                 SetAdditionalSettingToViewModel(ref viewModel, false);
 
                 return View(viewModel);
@@ -107,7 +90,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
         [HttpPost]
         public async Task<ActionResult> CreateRequisitionNote(FormCollection form, RequisitionNoteVM viewModel)
         {
-            var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl);
+            var siteUrl = SessionManager.Get<string>(SESSION_SITE_URL);
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
             _eventBudgetService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
@@ -156,7 +139,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
         [HttpPost]
         public async Task<ActionResult> EditRequisitionNote(FormCollection form, RequisitionNoteVM viewModel)
         {
-            var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl);
+            var siteUrl = SessionManager.Get<string>(SESSION_SITE_URL);
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
             _eventBudgetService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
@@ -204,7 +187,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
         [HttpPost]
         public JsonResult GetRequisitionNoteDetailsByEventBudgetId([DataSourceRequest] DataSourceRequest request, int? eventBudgetId)
         {
-            var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl);
+            var siteUrl = SessionManager.Get<string>(SESSION_SITE_URL);
             _eventBudgetService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
             var details = new List<RequisitionNoteItemVM>();
@@ -225,7 +208,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
                         itemRNDetail.Specification = item.Title;
                         itemRNDetail.Quantity = item.Quantity;
                         itemRNDetail.Price = item.UnitPrice;
-                        itemRNDetail.EditMode = (int)Item.Mode.CREATED;
+                        itemRNDetail.EditMode = (int)Model.Common.Item.Mode.CREATED;
                         itemRNDetail.IsFromEventBudget = true;
                         itemRNDetail.Frequency = item.Frequency;
                         itemRNDetail.Total = item.Frequency * itemRNDetail.Price * itemRNDetail.Quantity;
@@ -242,12 +225,18 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             return json;
         }
 
+        //public JsonResult GetWBSMaster()
+        //{
+        //    // TODO: kok jelek ya
+
+        //    return this.GetWBSMaster(SessionManager.Get<string>(SESSION_SITE_URL));
+        //}
 
         public JsonResult GetGLMaster()
         {
-            var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl);
+            var siteUrl = SessionManager.Get<string>(SESSION_SITE_URL);
            
-            var glMasters = FinService.SharedService.GetGLMaster(siteUrl);
+            var glMasters = FinService.Shared.GetGLMaster(siteUrl);
 
             return Json(glMasters.Select(e => new
             {
@@ -258,7 +247,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
 
         public JsonResult GetWBSMaster(string activity=null)
         {
-            _service.SetSiteUrl(SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl));
+            _service.SetSiteUrl(SessionManager.Get<string>(SESSION_SITE_URL));
 
             var wbsMasters = _service.GetWBSMaster(activity);
 
@@ -274,7 +263,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
         {
             string RelativePath = PRINT_PAGE_URL;
              
-            var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl);
+            var siteUrl = SessionManager.Get<string>(SESSION_SITE_URL);
             _service.SetSiteUrl(siteUrl);
             viewModel = _service.GetRequisitionNote(viewModel.ID);
 
@@ -322,7 +311,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             {
                 viewModel.Category.Value = CATEGORY_EVENT;
             }
-            
+
         }
     }
 }

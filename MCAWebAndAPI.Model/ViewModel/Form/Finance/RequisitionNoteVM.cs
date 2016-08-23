@@ -20,7 +20,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         [UIHint("Date")]
         [Required]
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime Date { get; set; } = DateTime.Now;
+        public DateTime? Date { get; set; } = DateTime.Now;
 
         [UIHint("AjaxComboBox")]
         public AjaxComboBoxVM EventBudgetNo { get; set; } = new AjaxComboBoxVM();
@@ -30,7 +30,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         public ProjectComboBoxVM Project { get; set; } = new ProjectComboBoxVM();
        
 
-        public string Fund { get; set; } = Shared.Fund;
+        [UIHint("Currency")]
+        [DisplayFormat(DataFormatString = "{0:#}", ApplyFormatInEditMode = true)]
+        public decimal Fund { get; set; } = 3000;
 
         [UIHint("ComboBox")]
         [DisplayName("Currency")]
@@ -47,7 +49,5 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         public string DocumentUrl { get; set; }
 
         public IEnumerable<RequisitionNoteItemVM> ItemDetails { get; set; } = new List<RequisitionNoteItemVM>();
-
-        public string Editor { get; set; }
     }
 }

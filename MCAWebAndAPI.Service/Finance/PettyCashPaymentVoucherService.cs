@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Web;
 using MCAWebAndAPI.Model.Common;
-using MCAWebAndAPI.Model.Form.Finance;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Service.Utils;
@@ -16,8 +18,8 @@ namespace MCAWebAndAPI.Service.Finance
     ///     a.k.a.: Petty Cash Payment Voucher
     ///     a.k.a.: Petty Cash Advance Voucher
     /// </summary>
-
-    public class PettyCashPaymentVoucherService : IPettyCashPaymentVoucherService
+    
+    public class PettyCashPaymentVoucherService:IPettyCashPaymentVoucherService
     {
         private const string LISTNAME = "Petty Cash Payment Voucher";
         private const string LISTNAME_DOCUMENTS = "Petty Cash Payment Voucher Documents";
@@ -28,8 +30,8 @@ namespace MCAWebAndAPI.Service.Finance
         private const string FIELD_DATE = "Advance_x0020_Received_x0020_Dat";
         private const string FIELD_STATUS = "Status";
         private const string FIELD_PAIDTO = "Paid_x0020_To";
-        private const string FIELD_PROFESSIONALID = "ProfessionalID";
-        private const string FIELD_PROFESSIONAL_NAME = "ProfessionalID_x003a_Full_x0020_";
+        private const string FIELD_PROFESSIONALID = "Professional_x0020_ID";
+        private const string FIELD_PROFESSIONAL_POSITION = "Professional_x0020_ID_x003a_Posi";
         private const string FIELD_VENDORID = "Vendor_x0020_ID";
         private const string FIELD_CURRENCY = "NewColumn1";
         private const string FIELD_AMOUNT = "Amount_x0020_Paid";
@@ -47,12 +49,12 @@ namespace MCAWebAndAPI.Service.Finance
         private const string FIELD_ID = "ID";
         private const string FIELD_PCID_DOCUMENTS = "Petty_x0020_Cash_x0020_Payment_x0020_Voucher";
 
-        private string siteUrl = string.Empty;
+        private string _siteUrl = string.Empty;
         static Logger logger = LogManager.GetCurrentClassLogger();
 
         public void SetSiteUrl(string siteUrl)
         {
-            this.siteUrl = siteUrl;
+            _siteUrl = siteUrl;
         }
 
         public PettyCashPaymentVoucherVM GetPettyCashPaymentVoucher(int? ID)
@@ -61,19 +63,20 @@ namespace MCAWebAndAPI.Service.Finance
 
             if (ID != null)
             {
-                var listItem = SPConnector.GetListItem(LISTNAME, ID, siteUrl);
-                viewModel = ConvertToVM(siteUrl, listItem);
+                var listItem = SPConnector.GetListItem(LISTNAME, ID, _siteUrl);
+                viewModel = ConvertToPettyCashPaymentVoucherVM(listItem);
             }
 
             return viewModel;
-            ;
+
         }
 
+       
         public int Create(PettyCashPaymentVoucherVM viewModel)
         {
             var newItem = new Dictionary<string, object>();
             string documentNoFormat = string.Format(FIELD_FORMAT_DOC, DateTimeExtensions.GetMonthInRoman(DateTime.Now), DateTime.Now.ToString("yy")) + "{0}";
-
+            
             newItem.Add(FIELD_DATE, viewModel.Date);
             newItem.Add(FIELD_STATUS, viewModel.Status.Value);
             newItem.Add(FIELD_PAIDTO, viewModel.PaidTo.Text);
@@ -82,25 +85,25 @@ namespace MCAWebAndAPI.Service.Finance
             {
                 newItem.Add(FIELD_PROFESSIONALID, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.Professional.Value) });
             }
-
+           
             if (viewModel.Vendor.Value.HasValue)
             {
                 newItem.Add(FIELD_VENDORID, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.Vendor.Value) });
             }
-
+           
             newItem.Add(FIELD_CURRENCY, viewModel.Currency.Value);
-            newItem.Add(FIELD_AMOUNT, viewModel.Amount);
+            newItem.Add(FIELD_AMOUNT, viewModel.AmountPaid);
             newItem.Add(FIELD_AMOUNTPAID_WORD, viewModel.AmountPaidInWord);
             newItem.Add(FIELD_REASON, viewModel.ReasonOfPayment);
             newItem.Add(FIELD_FUND, viewModel.Fund);
             newItem.Add(FIELD_WBS_ID, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.WBS.Value) });
             newItem.Add(FIELD_GL_ID, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.GL.Value) });
             newItem.Add(FIELD_REMARKS, viewModel.Remarks);
-            newItem.Add(FIELD_VOUCHERNO, DocumentNumbering.Create(siteUrl, documentNoFormat, DIGIT_DOCUMENTNO));
+            newItem.Add(FIELD_VOUCHERNO, DocumentNumbering.Create(_siteUrl, documentNoFormat, DIGIT_DOCUMENTNO));
 
             try
             {
-                SPConnector.AddListItem(LISTNAME, newItem, siteUrl);
+                SPConnector.AddListItem(LISTNAME, newItem, _siteUrl);
             }
             catch (Exception e)
             {
@@ -108,7 +111,7 @@ namespace MCAWebAndAPI.Service.Finance
                 throw new Exception(ErrorResource.SPInsertError);
             }
 
-            return SPConnector.GetLatestListItemID(LISTNAME, siteUrl);
+            return SPConnector.GetLatestListItemID(LISTNAME, _siteUrl);
         }
 
         public bool Update(PettyCashPaymentVoucherVM viewModel)
@@ -128,19 +131,19 @@ namespace MCAWebAndAPI.Service.Finance
             {
                 updatedValue.Add(FIELD_VENDORID, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.Vendor.Value) });
             }
-
+            
             updatedValue.Add(FIELD_CURRENCY, viewModel.Currency.Value);
-            updatedValue.Add(FIELD_AMOUNT, viewModel.Amount);
+            updatedValue.Add(FIELD_AMOUNT, viewModel.AmountPaid);
             updatedValue.Add(FIELD_AMOUNTPAID_WORD, viewModel.AmountPaidInWord);
             updatedValue.Add(FIELD_REASON, viewModel.ReasonOfPayment);
             updatedValue.Add(FIELD_FUND, viewModel.Fund);
             updatedValue.Add(FIELD_WBS_ID, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.WBS.Value) });
             updatedValue.Add(FIELD_GL_ID, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.GL.Value) });
             updatedValue.Add(FIELD_REMARKS, viewModel.Remarks);
-
+            
             try
             {
-                SPConnector.UpdateListItem(LISTNAME, viewModel.ID, updatedValue, siteUrl);
+                SPConnector.UpdateListItem(LISTNAME, viewModel.ID, updatedValue, _siteUrl);
             }
             catch (Exception e)
             {
@@ -161,7 +164,7 @@ namespace MCAWebAndAPI.Service.Finance
                 updateValue.Add(FIELD_PCID_DOCUMENTS, new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
                 try
                 {
-                    SPConnector.UploadDocument(LISTNAME_DOCUMENTS, updateValue, doc.FileName, doc.InputStream, siteUrl);
+                    SPConnector.UploadDocument(LISTNAME_DOCUMENTS, updateValue, doc.FileName, doc.InputStream, _siteUrl);
                 }
                 catch (Exception e)
                 {
@@ -181,7 +184,7 @@ namespace MCAWebAndAPI.Service.Finance
                 updateValue.Add(FIELD_PCID_DOCUMENTS, new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
                 try
                 {
-                    SPConnector.UploadDocument(LISTNAME_DOCUMENTS, updateValue, doc.FileName, doc.InputStream, siteUrl);
+                    SPConnector.UploadDocument(LISTNAME_DOCUMENTS, updateValue, doc.FileName, doc.InputStream, _siteUrl);
                 }
                 catch (Exception e)
                 {
@@ -191,8 +194,8 @@ namespace MCAWebAndAPI.Service.Finance
             }
         }
 
-        public delegate PettyCashTransactionItem ConvertToVMDelegate(string siteUrl, ListItem listItem);
-        private static PettyCashPaymentVoucherVM ConvertToVM(string siteUrl, ListItem listItem)
+
+        private PettyCashPaymentVoucherVM ConvertToPettyCashPaymentVoucherVM(ListItem listItem)
         {
 
             PettyCashPaymentVoucherVM viewModel = new PettyCashPaymentVoucherVM();
@@ -202,15 +205,13 @@ namespace MCAWebAndAPI.Service.Finance
             viewModel.Status.Value = Convert.ToString(listItem[FIELD_STATUS]);
             viewModel.PaidTo.Value = Convert.ToString(listItem[FIELD_PAIDTO]);
 
-            if (viewModel.Professional != null)
+            if (listItem[FIELD_PROFESSIONALID] != null)
             {
                 viewModel.Professional.Value = (listItem[FIELD_PROFESSIONALID] as FieldLookupValue).LookupId;
-
-                //TODO: the following line causes error
-                //viewModel.Professional.Text = (listItem[FIELD_PROFESSIONAL_NAME] as FieldLookupValue).LookupValue;
+                viewModel.Professional.Text = (listItem[FIELD_PROFESSIONAL_POSITION] as FieldLookupValue).LookupValue;
             }
 
-            if (viewModel.Vendor != null && listItem[FIELD_VENDORID] != null)
+            if (listItem[FIELD_VENDORID] != null)
             {
                 viewModel.Vendor.Value = (listItem[FIELD_VENDORID] as FieldLookupValue).LookupId;
                 viewModel.Vendor.Text = (listItem[FIELD_VENDORID] as FieldLookupValue).LookupValue;
@@ -218,10 +219,10 @@ namespace MCAWebAndAPI.Service.Finance
 
             viewModel.Currency.Value = Convert.ToString(listItem[FIELD_CURRENCY]);
 
-            viewModel.Amount = Convert.ToDecimal(listItem[FIELD_AMOUNT]);
+            viewModel.AmountPaid = Convert.ToDecimal(listItem[FIELD_AMOUNT]);
             viewModel.AmountPaidInWord = Convert.ToString(listItem[FIELD_AMOUNTPAID_WORD]);
             viewModel.ReasonOfPayment = Convert.ToString(listItem[FIELD_REASON]);
-            viewModel.Fund = Convert.ToString(listItem[FIELD_FUND]);
+            viewModel.Fund = Convert.ToDecimal(listItem[FIELD_FUND]);
 
             viewModel.WBS.Value = (listItem[FIELD_WBS_ID] as FieldLookupValue).LookupId;
             viewModel.WBS.Text = string.Format("{0}-{1}", (listItem[FIELD_WBS_GLNO] as FieldLookupValue).LookupValue, (listItem[FIELD_WBS_DESC] as FieldLookupValue).LookupValue);
@@ -230,21 +231,15 @@ namespace MCAWebAndAPI.Service.Finance
             viewModel.GL.Text = string.Format("{0}-{1}", (listItem[FIELD_GL_NO] as FieldLookupValue).LookupValue, (listItem[FIELD_GL_DESC] as FieldLookupValue).LookupValue);
 
             viewModel.Remarks = Convert.ToString(listItem[FIELD_REMARKS]);
-            viewModel.TransactionNo = Convert.ToString(listItem[FIELD_VOUCHERNO]);
-            viewModel.DocumentUrl = GetDocumentUrl(siteUrl, viewModel.ID);
+            viewModel.VoucherNo = Convert.ToString(listItem[FIELD_VOUCHERNO]);
+            viewModel.DocumentUrl = GetDocumentUrl(viewModel.ID);
 
             return viewModel;
         }
 
-        private static string GetDocumentUrl(string siteUrl, int? iD)
+        private string GetDocumentUrl(int? iD)
         {
-            return string.Format(UrlResource.PettyCashPaymentVoucherDocumentByID, siteUrl, iD);
-        }
-
-        public static IEnumerable<PettyCashTransactionItem> GetPettyCashTransaction(string siteUrl, DateTime dateFrom, DateTime dateTo)
-        {
-            return SharedService.GetPettyCashTransaction(siteUrl, dateFrom, dateTo, LISTNAME, FIELD_DATE,
-                ConvertToVM);
+            return string.Format(UrlResource.PettyCashPaymentVoucherDocumentByID, _siteUrl, iD);
         }
 
     }
