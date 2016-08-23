@@ -11,12 +11,12 @@
 *@
 
 @using (Html.BeginForm("Create", "FINPettyCashReimbursement",
-    FormMethod.Post,
-    new
-    {
-        @class = "form-horizontal",
-        enctype = "multipart/form-data"
-    }))
+                FormMethod.Post,
+                new
+                {
+                    @class = "form-horizontal",
+                    enctype = "multipart/form-data"
+                }))
 
 {
     <fieldset>
@@ -46,11 +46,11 @@
                 </div>
 
                 <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Vendor).Class("col-sm-4 control-label")
-                <div class="col-sm-8">
-                    @Html.EditorFor(m => m.Vendor)
+                    @Html.Bootstrap().LabelFor(m => m.Vendor).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.Vendor)
+                    </div>
                 </div>
-            </div>
 
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.Driver).Class("col-sm-4 control-label")
@@ -59,7 +59,12 @@
                     </div>
                 </div>
 
-
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Amount).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.Amount)
+                    </div>
+                </div>
 
 
             </div>

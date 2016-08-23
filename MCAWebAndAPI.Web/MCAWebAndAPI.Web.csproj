@@ -992,12 +992,9 @@
     <Content Include="Views\HRCompensatory\AddCompensatoryHR.cshtml" />
     <Content Include="Views\FINEventBudget\Item.cshtml" />
     <Content Include="Views\Shared\_WorkflowPathDetails.cshtml" />
-<<<<<<< HEAD
-=======
     <Content Include="Views\FINPettyCashStatement\Display.cshtml" />
     <Content Include="Views\FINPettyCashStatement\Index.cshtml" />
     <Content Include="Views\FINPettyCashSettlement\Item.cshtml" />
->>>>>>> origin/master
     <Content Include="Views\ASSAssignmentOfAsset\Edit.cshtml" />
     <Content Include="Views\HRCompensatory\AddCompensatoryUser.cshtml" />
     <None Include="Web.Debug.config">
@@ -1036,6 +1033,7 @@
     <Compile Include="Controllers\FINPettyCashPaymentVoucherController.cs" />
     <Compile Include="Controllers\FINPettyCashReplenishmentController.cs" />
     <Compile Include="Controllers\FINPettyCashSettlementController.cs" />
+    <Compile Include="Controllers\FINPettyCashStatementController.cs" />
     <Compile Include="Controllers\FINSCAVoucherController.cs" />
     <Compile Include="Controllers\HRDayOffController.cs" />
     <Compile Include="Controllers\SharedFinanceController.cs" />
