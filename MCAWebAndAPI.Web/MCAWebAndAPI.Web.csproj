@@ -991,7 +991,6 @@
     <Content Include="Views\FINPettyCashSettlement\Item.cshtml" />
     <Content Include="Views\ASSAssignmentOfAsset\Edit.cshtml" />
     <Content Include="Views\ASSAssignmentOfAsset\Upload.cshtml" />
-    <Content Include="Views\ASSAssetAcquisition\_DetailsEdit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
