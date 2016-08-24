@@ -66,9 +66,9 @@ Wireframe FIN10: Petty Cash Voucher
 
             $('#Fund').css({ "background-color": GREY_COLOR });
 
-            $('#AmountPaid').change(function () {
+            $('#Amount').change(function () {
                 var url = '@Url.Action("GetAmountInWords", "FINPettyCashPaymentVoucher")';
-                var amount = $('#AmountPaid').val(); // The option selected
+                var amount = $('#Amount').val(); // The option selected
 
                 $.ajax({
                     url: url,

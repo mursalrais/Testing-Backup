@@ -238,6 +238,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.ddlProfessional.Value = Convert.ToInt32(idPro);
             viewModel = ConvertCompInputTolistDataVM(listItem, viewModel);
             viewModel.cmpID = ID;
+            viewModel.ID = ID;
             viewModel.ddlCompensatoryID.Value = ID;
             viewModel.StatusForm = crstatus;
             viewModel.CompensatoryDetails = GetCompDetailist(ID, viewModel);
@@ -295,7 +296,12 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         private CompensatoryDetailVM ConvertToCompDetailVM(ListItem item)
         {
-            return new CompensatoryDetailVM
+            var DateStr = Convert.ToDateTime(item["compensatorydate"]);
+            var StartStr = Convert.ToDateTime(item["compensatorystarttime"]);
+            var FinishStr = Convert.ToDateTime(item["compensatoryendtime"]);
+            var DayStr = DateStr.DayOfWeek;
+
+                return new CompensatoryDetailVM
             {
                 CmpActiv = Convert.ToString(item["Title"]),
                 CmpID = Convert.ToInt32(item["ID"]),
@@ -307,6 +313,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 TotalDay = Convert.ToInt32(item["totaldays"]),
                 remarks = Convert.ToString(item["remarks"]),
                 AppStatus = Convert.ToString(item["compensatorystatus"]),
+                GetDateStr = DateStr.ToString("MM/dd/yyyy"),
+                GetDayStr = Convert.ToString(DayStr),
+                GetStartStr = StartStr.ToString("HH:mm"),
+                GetFinishStr = FinishStr.ToString("HH:mm")
             };
         }
 
@@ -724,6 +734,23 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 EmailUtil.Send(item, "Ask for Approval", message);
             }
+        }
+
+        public CompensatoryVM GetProfessional(string username)
+        {
+            var viewModel = new CompensatoryVM();
+
+            var caml = @"<View><Query><Where><Eq><FieldRef Name='officeemail' /><Value Type='Text'>" + username + @"</Value></Eq></Where></Query><QueryOptions /></View>";
+            var listItem = SPConnector.GetList("Professional Master", _siteUrl, caml);
+
+            foreach (var item in listItem)
+            {
+                viewModel.cmpName = Convert.ToString(item["Title"]) + Convert.ToString(item["lastname"]);
+                viewModel.cmpProjUnit = Convert.ToString(item["Project_x002f_Unit"]);
+                viewModel.cmpPosition = FormatUtil.ConvertLookupToValue(item, "Position");
+            }
+
+            return viewModel;
         }
     }
 }

@@ -38,7 +38,22 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
             }
         }
 
-        public string OfficeName { get; set; }
+        //public string OfficeName { get; set; }
+
+        [UIHint("InGridAjaxComboBox")]
+        public AjaxComboBoxVM OfficeName { get; set; } = new AjaxComboBoxVM();
+
+        public static AjaxComboBoxVM GetOfficeNameDefautValue(AjaxComboBoxVM model = null)
+        {
+            if (model == null)
+            {
+                return new AjaxComboBoxVM();
+            }
+            else
+            {
+                return model;
+            }
+        }
 
         public string Floor { get; set; }
 

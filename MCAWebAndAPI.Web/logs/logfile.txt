@@ -393,12 +393,7 @@ Parameter name: source
 2016-08-19 17:49:49.5999 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Operation is not valid due to the current state of the object.
 2016-08-22 07:06:48.7177 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService The 'sId' argument is invalid.
 2016-08-22 07:07:00.1696 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService The 'sId' argument is invalid.
-2016-08-21 21:42:00.8689 MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService Column 'professional' does not exist. It may have been deleted by another user.  /sites/ims/bo/Lists/Asset Loan Return
-2016-08-23 02:34:48.8693 MCAWebAndAPI.Service.Asset.AssetDisposalService List 'Asset Disposal' does not exist at site with URL 'https://eceos2.sharepoint.com/sites/ims/bo'.
-2016-08-23 02:49:36.1187 MCAWebAndAPI.Service.Asset.AssetDisposalService This field cannot be updated.
-2016-08-23 02:51:52.6800 MCAWebAndAPI.Service.Asset.AssetDisposalService This field cannot be updated.
-2016-08-23 03:54:59.5234 MCAWebAndAPI.Service.Asset.AssetDisposalService List 'Asset Disposal' does not exist at site with URL 'https://eceos2.sharepoint.com/sites/ims/bo'.
-2016-08-23 07:14:49.9432 MCAWebAndAPI.Service.Asset.AssetDisposalService List 'Asset Disposal' does not exist at site with URL 'https://eceos2.sharepoint.com/sites/ims/bo'.
-2016-08-23 07:14:50.2012 MCAWebAndAPI.Service.Asset.AssetDisposalService List 'Asset Disposal' does not exist at site with URL 'https://eceos2.sharepoint.com/sites/ims/bo'.
-2016-08-23 07:19:05.5411 MCAWebAndAPI.Service.Asset.AssetDisposalService This field cannot be updated.
-2016-08-23 07:24:44.0499 MCAWebAndAPI.Service.Asset.AssetAcquisitionService The underlying connection was closed: A connection that was expected to be kept alive was closed by the server.
+2016-08-22 11:06:36.3626 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService The 'sId' argument is invalid.
+2016-08-23 15:16:44.6792 MCAWebAndAPI.Service.HR.Payroll.AdjustmentService Invalid data has been used to update the list item. The field you are trying to update may be read only.
+2016-08-23 15:19:32.5584 MCAWebAndAPI.Service.HR.Payroll.AdjustmentService Invalid data has been used to update the list item. The field you are trying to update may be read only.
+2016-08-23 16:16:58.7652 MCAWebAndAPI.Service.HR.Payroll.AdjustmentService Invalid data has been used to update the list item. The field you are trying to update may be read only.

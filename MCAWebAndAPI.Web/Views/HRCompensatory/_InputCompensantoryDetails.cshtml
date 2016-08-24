@@ -47,6 +47,18 @@
         columns.Bound(p => p.GetIndex).Hidden().ClientTemplate("#= GetDetailComplist(data)#" +
        "<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].GetIndex' value='#= GetDetailComplist(data)#' />");
 
+        columns.Bound(p => p.GetDateStr).Hidden().ClientTemplate("#= GetDateStr #" +
+        "<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].GetDateStr' value='#= GetDateStr #' />");
+
+        columns.Bound(p => p.GetStartStr).Hidden().ClientTemplate("#= GetStartStr #" +
+        "<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].GetStartStr' value='#= GetStartStr #' />");
+
+        columns.Bound(p => p.GetFinishStr).Hidden().ClientTemplate("#= GetFinishStr #" +
+        "<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].GetFinishStr' value='#= GetFinishStr #' />");
+
+        columns.Bound(p => p.GetDayStr).Hidden().ClientTemplate("#= GetDayStr #" +
+       "<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].GetDayStr' value='#= GetDayStr #' />");
+
     })
      .Scrollable().HtmlAttributes(new { @class = "cursorLink", @style = "height:auto;" })
     .Events(e =>

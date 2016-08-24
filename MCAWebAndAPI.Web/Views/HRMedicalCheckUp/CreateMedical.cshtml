@@ -132,6 +132,7 @@
                         $("form").submit();
                     } else {
                         for (var i = 0; i <= result.length - 1; i++) {
+                            //alert(result[i].ClaimStatus);
                             if (defaultyear === result[i].Year && result[i].ClaimStatus==='Submitted') {
                                 alert('Sorry, Your Medical Check-Up for this period has been claimed. ' +
                                     'Please process next claim in the next period. If there is any inconvenience process for this, ' +

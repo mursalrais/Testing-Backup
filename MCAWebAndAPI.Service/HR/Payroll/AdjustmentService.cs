@@ -67,16 +67,16 @@ namespace MCAWebAndAPI.Service.HR.Payroll
 
             var adjustmentDetails = new List<AdjustmentDetailsVM>();
 
-            //foreach (var item in SPConnector.GetList(SP_AJUDATA_LIST_NAME, _siteUrl, null))
-            //{
-            //    adjustmentDetails.Add(ConvertToAdjusDetailVM(item));
-            //}
+            foreach (var item in SPConnector.GetList(SP_AJUDATA_LIST_NAME, _siteUrl, null))
+            {
+                adjustmentDetails.Add(ConvertToAdjusDetailVM(item));
+            }
 
-            //var periodDate = Convert.ToDateTime(period);
+            var periodDate = Convert.ToDateTime(period);
 
-            //var adjustmentList = from a in adjustmentDetails where a.period == periodDate select a;
+            var adjustmentList = from a in adjustmentDetails where a.period == periodDate select a;
 
-            //adjustmentDetails = adjustmentList.ToList();
+            adjustmentDetails = adjustmentList.ToList();
 
             return adjustmentDetails;
         }
@@ -104,8 +104,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
                     }),
 
                 ddlProfessional = AdjustmentDetailsVM.getprofDefaultValue(FormatUtil.ConvertToInGridAjaxComboBox(item, "professional")),
-
-                //period = Convert.ToDateTime(item["adjustmentperiod"]),
+                period = Convert.ToDateTime(item["adjustmentperiod"]),
                 remark = Convert.ToString(item["remarks"]),
                 Title = Convert.ToString(item["Title"]),
                 ID = Convert.ToInt32(item["ID"]),
@@ -121,8 +120,9 @@ namespace MCAWebAndAPI.Service.HR.Payroll
                 {
                     var cratedValueDetail = new Dictionary<string, object>();
 
+                    cratedValueDetail.Add("Title", period);
                     cratedValueDetail.Add("adjustmentperiod", perioddate);
-                    cratedValueDetail.Add("professional_x003a_ID", new FieldLookupValue { LookupId = (int)viewModel.ddlProfessional.Value });
+                    cratedValueDetail.Add("professional", new FieldLookupValue { LookupId = (int)viewModel.ddlProfessional.Value });
                     cratedValueDetail.Add("adjustmenttype", viewModel.ajusmentType.Text);
                     cratedValueDetail.Add("adjustmentamount", viewModel.amount);
                     cratedValueDetail.Add("adjustmentcurrency", viewModel.currency.Text);
@@ -143,13 +143,13 @@ namespace MCAWebAndAPI.Service.HR.Payroll
                 {
                     var updatedValue = new Dictionary<string, object>();
 
-                    updatedValue.Add("Title", viewModel.Title);
-                    updatedValue.Add("adjustmentperiod", period);
-                    updatedValue.Add("professional_x003a_ID", viewModel.profId);
-                    updatedValue.Add("adjustmenttype", viewModel.ajusmentType);
+                    updatedValue.Add("Title", period);
+                    updatedValue.Add("adjustmentperiod", perioddate);
+                    updatedValue.Add("professional", new FieldLookupValue { LookupId = (int)viewModel.ddlProfessional.Value });
+                    updatedValue.Add("adjustmenttype", viewModel.ajusmentType.Text);
                     updatedValue.Add("adjustmentamount", viewModel.amount);
-                    updatedValue.Add("adjustmentcurrency", viewModel.currency);
-                    updatedValue.Add("debitorcredit", viewModel.payType);
+                    updatedValue.Add("adjustmentcurrency", viewModel.currency.Text);
+                    updatedValue.Add("debitorcredit", viewModel.payType.Text);
                     updatedValue.Add("remarks", viewModel.remark);
 
                     try
