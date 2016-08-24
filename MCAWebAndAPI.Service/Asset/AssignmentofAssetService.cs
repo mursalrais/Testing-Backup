@@ -458,7 +458,7 @@ namespace MCAWebAndAPI.Service.Asset
 
                 var updatedValues = new Dictionary<string, object>();
                 updatedValues.Add("assetassignment", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
-                var getAssetID = SPConnector.GetListItem("Asset Master", item.AssetSubAsset.Value.Value, _siteUrl);
+                var getAssetID = SPConnector.GetListItem("Asset Acquisition Details", item.AssetSubAsset.Value.Value, _siteUrl);
                 var provinceinfo = SPConnector.GetListItem("Location Master", item.Province.Value.Value, _siteUrl);
                 if ((getAssetID["assetsubasset"] as FieldLookupValue) != null)
                 {
@@ -568,56 +568,10 @@ namespace MCAWebAndAPI.Service.Asset
 
             var province = (item["province"] as FieldLookupValue).LookupValue;
 
-            var caml = @"<View><Query>
-                       <Where>
-                          <And>
-                             <Eq>
-                                <FieldRef Name='Province' />
-                                <Value Type='Lookup'>" + province + @"</Value>
-                             </Eq>
-                             <And>
-                                <Eq>
-                                   <FieldRef Name='Title' />
-                                   <Value Type='Text'>" + item["office"] + @"</Value>
-                                </Eq>
-                                <And>
-                                   <Eq>
-                                      <FieldRef Name='Room' />
-                                      <Value Type='Text'>" + item["room"] + @"</Value>
-                                   </Eq>
-                                   <Eq>
-                                      <FieldRef Name='Floor' />
-                                      <Value Type='Text'>" + item["floor"] + @"</Value>
-                                   </Eq>
-                                </And>
-                             </And>
-                          </And>
-                       </Where>
-                    </Query>
-                    <ViewFields>
-                       <FieldRef Name='Province' />
-                       <FieldRef Name='Title' />
-                       <FieldRef Name='Room' />
-                       <FieldRef Name='Floor' />
-                       <FieldRef Name='Remarks' />
-                    </ViewFields>
-                    <QueryOptions /></View>";
-            var ListProvince = SPConnector.GetList("Location Master", _siteUrl, caml);
+            var ListProvince = SPConnector.GetListItem("Location Master", (item["province"] as FieldLookupValue).LookupId, _siteUrl);
             AjaxComboBoxVM _province = new AjaxComboBoxVM();
-            var _office = "";
-            var _floor = "";
-            var _room = "";
-            var _remarks = "";
-            foreach (var itemInfo in ListProvince)
-            {
-                _province.Value = (itemInfo["Province"] as FieldLookupValue).LookupId;
-                _province.Text = (itemInfo["Province"] as FieldLookupValue).LookupValue;
-                _office = Convert.ToString(itemInfo["Title"]);
-                _floor = Convert.ToString(itemInfo["Floor"]);
-                _room = Convert.ToString(itemInfo["Room"]);
-
-                _remarks = Convert.ToString(itemInfo["Remarks"]);
-            }
+            _province.Value = (item["province"] as FieldLookupValue).LookupId;
+            _province.Text = (ListProvince["Province"] as FieldLookupValue).LookupValue +"-"+ ListProvince["Title"] + "-" +ListProvince["Floor"] + "-" +ListProvince["Room"] + "-" +ListProvince["Remarks"];
 
 
             return new AssignmentOfAssetDetailsVM
@@ -625,10 +579,6 @@ namespace MCAWebAndAPI.Service.Asset
                 ID = Convert.ToInt32(item["ID"]),
                 AssetSubAsset = AssignmentOfAssetDetailsVM.GetAssetSubAssetDefaultValue(_assetSubAsset),
                 Province = AssignmentOfAssetDetailsVM.GetProvinceDefaultValue(_province),
-                OfficeName = _office,
-                Floor = _floor,
-                Room = _room,
-                Remarks = _remarks,
                 Status = Convert.ToString(item["Status"])
             };
         }
@@ -655,19 +605,10 @@ namespace MCAWebAndAPI.Service.Asset
 
                 var updatedValues = new Dictionary<string, object>();
                 updatedValues.Add("assetassignment", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
-                var getAssetID = SPConnector.GetListItem("Asset Master", item.AssetSubAsset.Value.Value, _siteUrl);
                 var provinceinfo = SPConnector.GetListItem("Location Master", item.Province.Value.Value, _siteUrl);
-                if ((getAssetID["AssetID"] as FieldLookupValue) != null)
-                {
-                    updatedValues.Add("assetsubasset", (getAssetID["AssetID"] as FieldLookupValue).LookupId);
-                }
 
-                if ((provinceinfo["Province"] as FieldLookupValue) != null)
-                {
-                    updatedValues.Add("province", (provinceinfo["Province"] as FieldLookupValue).LookupId);
-                }
-                //updatedValues.Add("assetsubasset", getAssetID["AssetID"]);
-                //updatedValues.Add("province", getProvince["Title"]);
+                updatedValues.Add("assetsubasset", item.AssetSubAsset.Value.Value);
+                updatedValues.Add("province", item.Province.Value.Value);
                 updatedValues.Add("office", provinceinfo["Title"]);
                 updatedValues.Add("floor", provinceinfo["Floor"]);
                 updatedValues.Add("room", provinceinfo["Room"]);
