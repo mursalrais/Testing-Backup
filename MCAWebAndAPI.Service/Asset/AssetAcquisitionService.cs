@@ -226,7 +226,7 @@ namespace MCAWebAndAPI.Service.Asset
 
                 if (item.AssetSubAsset.Value == null || item.WBS.Value == null || item.CostIDR == null || item.CostUSD == null)
                 {
-                    throw new Exception(ErrorResource.SPInsertError);
+                    //throw new Exception(ErrorResource.SPInsertError);
                 }
 
                 var updatedValues = new Dictionary<string, object>();

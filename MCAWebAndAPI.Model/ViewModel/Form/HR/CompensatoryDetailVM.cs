@@ -56,7 +56,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// </summary>
         /// 
         [Required]
-        [DisplayName("Date")]
+        [DisplayName("Date/Day")]
         [DataType(DataType.Date)]
         [UIHint("Date")]
         public DateTime? CmpDate { get; set; } = DateTime.Now;

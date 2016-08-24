@@ -430,7 +430,7 @@ namespace MCAWebAndAPI.Web.Controllers
             var listWBSMaster = "WBS Master";
             foreach (DataRow d in SessionManager.Get<DataTable>("CSVDataTable").Rows)
             {
-                if (d.ItemArray[0].ToString() == "Assignment of Asset")
+                if (d.ItemArray[0].ToString().Contains("Assignment of Asset"))
                 {
                     try
                     {
@@ -458,7 +458,7 @@ namespace MCAWebAndAPI.Web.Controllers
                                     <FieldRef Name='Project_x002f_Unit' />
                                 </ViewFields>
                                 <QueryOptions /></View>";
-                        var isAssetHolderExist = _service.isExist("Professional Master", d.ItemArray[1].ToString(), caml, siteUrl);
+                        var isAssetHolderExist = _service.isExist("Professional Master", caml, siteUrl);
                         if(isAssetHolderExist == true)
                         {
                             DataRow row = TableHeader.NewRow();

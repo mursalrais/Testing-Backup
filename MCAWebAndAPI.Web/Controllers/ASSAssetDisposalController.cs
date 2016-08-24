@@ -91,7 +91,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.Professional);
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetDisposal);
             //try
             //{
             //    viewModel.AssetTransferDetail = BindMonthlyFeeDetailDetails(form, viewModel.MonthlyFeeDetails);
