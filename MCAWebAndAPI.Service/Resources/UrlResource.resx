@@ -287,4 +287,7 @@
   <data name="Compensatorylist" xml:space="preserve">
     <value>/Lists/CompensatoryRequest/AllItems.aspx</value>
   </data>
+  <data name="AssetDisposal" xml:space="preserve">
+    <value>/Lists/Asset%20Disposal/AllItems.aspx</value>
+  </data>
 </root>

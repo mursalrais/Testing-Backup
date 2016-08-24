@@ -1090,6 +1090,7 @@
     <Content Include="Views\HRCompensatory\AddCompensatoryHR.cshtml" />
     <Content Include="Views\FINEventBudget\Item.cshtml" />
     <Content Include="Views\Shared\_WorkflowPathDetails.cshtml" />
+    <Content Include="Views\ASSAssetDisposal\Edit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

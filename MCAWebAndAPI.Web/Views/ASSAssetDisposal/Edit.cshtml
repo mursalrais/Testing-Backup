@@ -1,0 +1,76 @@
+﻿
+@using MCAWebAndAPI.Model.ViewModel.Form.Asset
+
+@model AssetDisposalVM
+
+@using (Ajax.BeginForm("Update", "ASSAssetDisposal",
+                                                                                        FormMethod.Post,
+                                                                                        new AjaxOptions
+                                                                                        {
+                                                                                            OnBegin = "onBeginForm",
+                                                                                            OnComplete = "onCompleteForm",
+                                                                                            OnSuccess = "onSuccessFormEmbed",
+                                                                                            OnFailure = "onFailureForm"
+                                                                                        }, new { @class = "form-horizontal" }))
+{<fieldset>
+        <legend>Form Asset Disposal</legend>
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary()
+        <div class="col-sm-6">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.TransactionType).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.TransactionType)
+                  
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Date).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.Date)
+                </div>
+            </div>
+
+        </div>
+        <div class="col-sm-6">
+
+
+
+
+        </div>
+
+        <legend>Asset Disposal Detail</legend>
+        <div class="row">
+            @Html.Partial("_AssetDisposalDetail", Model.Details)
+        </div>
+
+    </fieldset>
+    @Html.HiddenFor(m => m.ID)
+    @Html.HiddenFor(m => m.CancelURL)
+}
+<div class="form-actions">
+    <div>
+        <center>
+
+            <input id="submit-button" class="k-button k-button-icontext k-grid-add" size="4" type="submit" value="Save" />
+
+            <a href="@Model.CancelURL" target='_parent'>
+                <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
+            </a>
+        </center>
+    </div>
+
+
+
+</div>
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#submit-button").click(function () {
+                $("form").submit();
+            });
+        });
+
+    </script>
+}
