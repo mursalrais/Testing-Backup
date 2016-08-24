@@ -117,8 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CompensatoryPrintText" xml:space="preserve">
+  <data name="CompensatoryPrintText1" xml:space="preserve">
     <value>Compensatory time requested by Professional: (please complete the form, have it verified by the HR Unit before have it signed/approved by the Manager)</value>
+  </data>
+  <data name="CompensatoryPrintText2" xml:space="preserve">
+    <value>Note:
+* Compensatory time: applicable to Professionals, who are not qualified to be paid for overtime, may be granted compensatory time in recognition of unusual work and/or travel time demands and required by the unit/project. Compensatory time is meant to provide a Professional with day(s)-off for work and/or travel done on Saturday, Sunday and Official Holiday, and should be approved by the immediate supervisor and/or Director. For excessive overtime during work week when unusual needs arise, the immediate supervisor and/or Director may propose compensatory time, which will be reviewed by the DED, Operations Support and the Human Resources Director.</value>
   </data>
   <data name="ErrorEditExitProcedure" xml:space="preserve">
     <value>Failed to Edit Exit Procedure</value>

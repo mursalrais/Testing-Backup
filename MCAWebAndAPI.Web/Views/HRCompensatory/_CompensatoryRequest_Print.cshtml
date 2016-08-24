@@ -17,12 +17,17 @@
 </div>
 <div class="col-xs-6">
     <div class="form-group">
+        <label class="col-sm-4">Job Title</label>
+        <div class="col-sm-8">
+            @Html.DisplayFor(m => m.cmpPosition)
+        </div>
+    </div>
+    <div class="form-group">
         @Html.Bootstrap().LabelFor(m => m.cmpTitle).Class("col-xs-4 control-label")
         <div class="col-sm-8">
             @Html.DisplayFor(m => m.cmpTitle)
         </div>
     </div>
-
 </div>
 
 

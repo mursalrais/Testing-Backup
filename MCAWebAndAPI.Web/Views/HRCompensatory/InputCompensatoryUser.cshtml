@@ -51,8 +51,6 @@
         </div>
         <legend>Compensatory list</legend>
         <div id="compensatorylist" class="row"></div>
-
-
     </fieldset>
 }
 
@@ -79,17 +77,6 @@
 <legend>Approval Workflow</legend>
 <div id="workflow-placeholder" class="row"></div>
 
-@if (Model.StatusForm == "Approved")
-            {
-    <div class="row pull-right">
-        <div class="col-sm-12">
-            <button id="print-button" class="btn btn-primary" type="button">
-                <i class="fa fa-print"></i>
-                Print
-            </button>
-        </div>
-    </div>
-}
 @section scripts{
 
     <script>
