@@ -359,11 +359,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             cratedValueDetail.Add("Title", Convert.ToString(viewModels.cmpYearDate));
 
-            if (viewModels.StatusForm != "Draft")
+            if (viewModels.StatusForm == "Pending Approval 1 of 2")
             {
                 cratedValueDetail.Add("crstatus", "Pending Approval 1 of 2");
             }
-            else
+            else if (viewModels.StatusForm == "Draft")
             {
                 cratedValueDetail.Add("crstatus", "Draft");
             }
