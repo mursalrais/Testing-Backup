@@ -22,7 +22,7 @@
             //);
 
             columns.Bound(p => p.AssetSubAsset).ClientTemplate("#= AssetSubAsset.Text #" +
-                          "<input type='hidden' id='asset' name='Details[#= getWorkingRelationshipDetails(data)#].AssetSubAsset.Value' value='#= AssetSubAsset.Value #' />"
+                          "<input type='hidden' class='assetsubasset' name='Details[#= getWorkingRelationshipDetails(data)#].AssetSubAsset.Value' value='#= AssetSubAsset.Value #' />"
                         ).EditorViewData(new
                         {
                             DataTextField = "Text",
@@ -32,7 +32,7 @@
                         }).Width(200);
 
             columns.Bound(p => p.WBS).Width(500).ClientTemplate("#= WBS.Text #" +
-                          "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].WBS.Value' value='#= WBS.Value #' />"
+                          "<input type='hidden' class='wbs' name='Details[#= getWorkingRelationshipDetails(data)#].WBS.Value' value='#= WBS.Value #' />"
                         ).EditorViewData(new
                         {
                             DataTextField = "Text",
@@ -42,11 +42,11 @@
                         }).Width(200);
 
             columns.Bound(p => p.CostIDR).ClientTemplate("#= kendo.toString(CostIDR, 'n2') #" +
-            "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].CostIDR' value='#= CostIDR #' />"
+            "<input type='hidden' class='costidr' name='Details[#= getWorkingRelationshipDetails(data)#].CostIDR' value='#= CostIDR #' />"
             );
 
             columns.Bound(p => p.CostUSD).ClientTemplate("#= kendo.toString(CostUSD, 'n2') #" +
-            "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].CostUSD' value='#= CostUSD #' />"
+            "<input type='hidden' class='costusd' name='Details[#= getWorkingRelationshipDetails(data)#].CostUSD' value='#= CostUSD #' />"
             );
 
             columns.Bound(p => p.Remarks).ClientTemplate("#= Remarks #" +

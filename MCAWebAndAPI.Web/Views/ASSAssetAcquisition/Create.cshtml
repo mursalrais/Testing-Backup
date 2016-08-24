@@ -91,20 +91,11 @@
 
     function SimpenAsset()
     {
-        var idasset = document.getElementById("asset");
-        for (var j = 0; j < idasset.length; j++)
-        {
-            if(idasset[j].value == null)
-            {
-                alert("cannot be null");
-            }
-        }
+        var assetsubasset = document.getElementsByClassName("assetsubasset");
+        alert(assetsubasset.length);
 
-        //name="Details
         var deleteRow = 0;
         var matches = document.querySelectorAll("[name^='Details[']");
-        var nulfil = document.querySelectorAll("[name^='Details[']^'.AssetSubAsset'");
-        alert(nulfil.length);
         //alert(matches.length);
         for (var i = 0; i < matches.length; i++) {
             if (matches[i].value == -1)
