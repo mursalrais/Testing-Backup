@@ -16,7 +16,6 @@ namespace MCAWebAndAPI.Service.Finance
         PettyCashSettlementVM Get(Operations op, int? id = default(int?));
 
         int? Save(PettyCashSettlementVM sphl);
-
-        Task CreateAttachmentAsync(int? ID, IEnumerable<HttpPostedFileBase> attachment);
+        void SavePettyCashAttachments(int? headerID, IEnumerable<HttpPostedFileBase> documents);
     }
 }

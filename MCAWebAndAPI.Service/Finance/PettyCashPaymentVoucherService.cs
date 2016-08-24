@@ -65,7 +65,7 @@ namespace MCAWebAndAPI.Service.Finance
             }
 
             return viewModel;
-            ;
+
         }
 
         public int Create(PettyCashPaymentVoucherVM viewModel)
@@ -190,6 +190,22 @@ namespace MCAWebAndAPI.Service.Finance
             }
         }
 
+
+        public static IEnumerable<PettyCashPaymentVoucherVM> GetPettyCashPaymentVouchers(string siteUrl)
+        {
+            var vendors = new List<PettyCashPaymentVoucherVM>();
+
+            vendors.Add(new PettyCashPaymentVoucherVM() { ID = -1, Title = string.Empty });
+
+            foreach (var item in SPConnector.GetList(LISTNAME, siteUrl, null))
+            {
+                vendors.Add(ConvertToVM(siteUrl, item));
+            }
+
+            return vendors;
+        }
+
+
         public delegate PettyCashTransactionItem ConvertToVMDelegate(string siteUrl, ListItem listItem);
         private static PettyCashPaymentVoucherVM ConvertToVM(string siteUrl, ListItem listItem)
         {
@@ -201,7 +217,8 @@ namespace MCAWebAndAPI.Service.Finance
             viewModel.Status.Value = Convert.ToString(listItem[FIELD_STATUS]);
             viewModel.PaidTo.Value = Convert.ToString(listItem[FIELD_PAIDTO]);
 
-            if (viewModel.Professional != null)
+            //TODO: the following line is troublesome please check if we need to check both values for != null
+            if (viewModel.Professional != null && listItem[FIELD_PROFESSIONALID] != null)
             {
                 viewModel.Professional.Value = (listItem[FIELD_PROFESSIONALID] as FieldLookupValue).LookupId;
 

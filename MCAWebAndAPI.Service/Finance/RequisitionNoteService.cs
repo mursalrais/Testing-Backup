@@ -99,14 +99,24 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
                  (activity == null ? string.Empty : activity.ToString()) + "</Value></Eq></Where></Query></View>";
 
             string valuesText = string.Empty;
-            foreach (var item in SPConnector.GetList(SUBACTIVITY_SITE_LIST, _siteUrl, camlGetSubactivity))
+            ListItemCollection subActivityLits = SPConnector.GetList(SUBACTIVITY_SITE_LIST, _siteUrl, camlGetSubactivity);
+            string camlGetWbs = string.Empty;
+
+            if (subActivityLits.Count > 0)
             {
-                valuesText += "<Value Type='Lookup'>" + Convert.ToString(item[FIELD_ID]) + "</Value>";
+                foreach (var item in subActivityLits)
+                {
+                    valuesText += "<Value Type='Lookup'>" + Convert.ToString(item[FIELD_ID]) + "</Value>";
+                }
+            }
+            else
+            {
+                //if isempty
+                valuesText += "<Value Type='Lookup'>-1</Value>";
             }
 
-            var camlGetWbs = @"<View><Query><Where><In><FieldRef Name='"+ WBS_SUBACTIVITY_ID + "' /><Values>" +
-                valuesText + "</Values></In></Where></Query></View>";
-
+            camlGetWbs = @"<View><Query><Where><In><FieldRef Name='" + WBS_SUBACTIVITY_ID + "' /><Values>" +
+                                valuesText + "</Values></In></Where></Query></View>";
             var wbsMasters = new List<WBSMasterVM>();
 
             foreach (var item in SPConnector.GetList(WBSMASTER_SITE_LIST, _siteUrl, camlGetWbs))

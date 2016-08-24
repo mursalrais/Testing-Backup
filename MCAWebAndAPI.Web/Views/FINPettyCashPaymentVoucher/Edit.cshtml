@@ -15,7 +15,7 @@
 {
 
     <fieldset>
-        <legend>Petty Cash Payment Voucher @Model.VoucherNo </legend>
+        <legend>Petty Cash Payment Voucher @Model.TransactionNo </legend>
         <div class="row">
             @Html.Partial("_General", Model)
         </div>
@@ -72,7 +72,7 @@
 
             $('#Fund').css({ "background-color": GREY_COLOR });
 
-            $('#AmountPaid').change(function () {
+            $('#Amount').change(function () {
                 var url = '@Url.Action("GetAmountInWords", "FINPettyCashPaymentVoucher")';
                 var amount = $('#Amount').val(); // The option selected
 

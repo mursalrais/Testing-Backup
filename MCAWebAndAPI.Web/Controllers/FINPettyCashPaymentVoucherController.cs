@@ -40,6 +40,7 @@ namespace MCAWebAndAPI.Web.Controllers
         private const string FIELD_VALUE = "Value";
         private const string FIELD_TEXT = "Text";
         private const string Field_Desc = "Desc";
+        private const string FIELD_DESC1 = "Desc1";
 
         private const string DATA_NOT_EXISTS = "Data Does not exists!";
 
@@ -54,7 +55,6 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult Create(string siteUrl = null)
         {
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
-
             _service.SetSiteUrl(siteUrl);
             SessionManager.Set(SharedFinanceController.Session_SiteUrl, siteUrl);
 
@@ -171,6 +171,19 @@ namespace MCAWebAndAPI.Web.Controllers
                JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetPettyCashPaymentVouchers()
+        {
+            var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl);
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            var vendors = PettyCashPaymentVoucherService.GetPettyCashPaymentVouchers(siteUrl);
+
+            return Json(vendors.Select(e => new
+            {
+                Value = e.ID.HasValue ? Convert.ToString(e.ID) : string.Empty,
+                Text = e.TransactionNo + " - " + e.PaidTo
+            }), JsonRequestBehavior.AllowGet);
+        }
 
         private void SetAdditionalSettingToViewModel(ref PettyCashPaymentVoucherVM viewModel, bool isCreate)
         {
@@ -188,7 +201,7 @@ namespace MCAWebAndAPI.Web.Controllers
             viewModel.Professional.ControllerName = COMBOBOX_CONTROLLER;
             viewModel.Professional.ActionName = ACTIONNAME_PROFESSIONAL;
             viewModel.Professional.ValueField = FIELD_ID;
-            viewModel.Professional.TextField = FIELD_TITLE;
+            viewModel.Professional.TextField = FIELD_DESC1;
 
             viewModel.Vendor.ControllerName = COMBOBOX_CONTROLLER;
             viewModel.Vendor.ActionName = ACTIONNAME_VENDORS;

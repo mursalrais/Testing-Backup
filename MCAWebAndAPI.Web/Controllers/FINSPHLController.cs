@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using Elmah;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance.SPHL;
@@ -14,11 +11,17 @@ using MCAWebAndAPI.Web.Resources;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
+    /// <summary>
+    /// Wireframe FIN16: SPHL
+    ///     i.e.: Surat Pengesahan Hibah Langsung
+    /// </summary>
+
     public class FINSPHLController : Controller
     {
         ISPHLService service;
-        private const string _siteUrl = "SiteUrl";
-
+        private const string SiteUrl = "SiteUrl";
+        private const string SuccessMsgFormat = "SPHL Np. {0} has been successfully created.";
+        private const string FirstPage = "{0}/Lists/SPHL%20Data/AllItems.aspx";
         public FINSPHLController()
         {
             service = new SPHLService();
@@ -29,32 +32,32 @@ namespace MCAWebAndAPI.Web.Controllers
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
 
             service.SetSiteUrl(siteUrl);
-            SessionManager.Set(_siteUrl, siteUrl);
+            SessionManager.Set(SiteUrl, siteUrl);
 
             var viewModel = new SPHLVM();
 
             return View(viewModel);
         }
 
-        public ActionResult Edit(string siteUrl = null, int? ID=null)
+        public ActionResult Edit(string siteUrl = null, int? ID = null)
         {
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);
-            SessionManager.Set(_siteUrl, siteUrl);
-            
+            SessionManager.Set(SiteUrl, siteUrl);
+
             var viewModel = new SPHLVM();
             if (ID != null)
             {
                 viewModel = service.GetDataSPHL(ID);
             }
-            
+
             return View(viewModel);
         }
 
         [HttpPost]
         public async Task<ActionResult> Create(FormCollection form, SPHLVM viewModel)
         {
-            var siteUrl = SessionManager.Get<string>(_siteUrl) ?? ConfigResource.DefaultBOSiteUrl;
+            var siteUrl = SessionManager.Get<string>(SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);
 
             try
@@ -72,17 +75,22 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.FINSPHL);
+            return RedirectToAction("Index", "Success",
+                new
+                {
+                    successMessage = string.Format(SuccessMsgFormat, viewModel.No),
+                    previousUrl = string.Format(FirstPage, siteUrl)
+                });
         }
 
         [HttpPost]
         public async Task<ActionResult> Edit(FormCollection form, SPHLVM viewModel)
         {
-            var siteUrl = SessionManager.Get<string>(_siteUrl) ?? ConfigResource.DefaultBOSiteUrl;
+            var siteUrl = SessionManager.Get<string>(SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);
 
             try
@@ -108,7 +116,7 @@ namespace MCAWebAndAPI.Web.Controllers
         [AllowAnonymous]
         public ActionResult CheckExistingSPHLNo(string no)
         {
-            var siteUrl = SessionManager.Get<string>(_siteUrl) ?? ConfigResource.DefaultBOSiteUrl;
+            var siteUrl = SessionManager.Get<string>(SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);
 
             bool ifEmailExist = false;
