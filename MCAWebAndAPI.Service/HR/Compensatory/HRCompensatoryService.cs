@@ -361,15 +361,18 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             if (viewModels.StatusForm != "Draft")
             {
-                cratedValueDetail.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(viewModels.ddlProfessional.Value) });
-
                 cratedValueDetail.Add("crstatus", "Pending Approval 1 of 2");
             }
             else
             {
-                cratedValueDetail.Add("professional", viewModels.profId);
-
                 cratedValueDetail.Add("crstatus", "Draft");
+            }
+
+            if (viewModels.ddlProfessional.Value != null)
+            {
+                cratedValueDetail.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(viewModels.ddlProfessional.Value) });
+            } else {
+                cratedValueDetail.Add("professional", viewModels.profId);
             }
 
             try

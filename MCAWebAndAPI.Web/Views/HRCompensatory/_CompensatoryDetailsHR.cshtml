@@ -39,10 +39,13 @@
         columns.Bound(p => p.AppStatus).ClientTemplate("#= AppStatus #" +
        "<input type='hidden' name='ComplistDetails[#= GetDetailComplist(data)#].AppStatus' value='#= AppStatus #' />");
 
+        columns.Bound(p => p.CmpActiv).Hidden().ClientTemplate("#= CmpActiv #" +
+        "<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].CmpActiv' value='#= CmpActiv #' />");
+
         columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
            "<input type='hidden' name='ComplistDetails[#= GetDetailComplist(data)#].EditMode' value='#= EditMode #' />"
          );
-        
+
         columns.Bound(p => p.GetDateStr).Hidden().ClientTemplate("#= GetDateStr #" +
         "<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].GetDateStr' value='#= GetDateStr #' />");
 
