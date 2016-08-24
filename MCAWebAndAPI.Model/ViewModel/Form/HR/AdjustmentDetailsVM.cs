@@ -174,6 +174,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// CompensatoryDay
         /// </head>
         /// 
+        [Required]
         [DisplayName("Remarks")]
         public string remark { get; set; }
 
