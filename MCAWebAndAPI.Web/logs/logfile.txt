@@ -397,3 +397,13 @@ Parameter name: source
 2016-08-23 15:16:44.6792 MCAWebAndAPI.Service.HR.Payroll.AdjustmentService Invalid data has been used to update the list item. The field you are trying to update may be read only.
 2016-08-23 15:19:32.5584 MCAWebAndAPI.Service.HR.Payroll.AdjustmentService Invalid data has been used to update the list item. The field you are trying to update may be read only.
 2016-08-23 16:16:58.7652 MCAWebAndAPI.Service.HR.Payroll.AdjustmentService Invalid data has been used to update the list item. The field you are trying to update may be read only.
+<<<<<<< HEAD
+2016-08-24 11:05:50.1237 MCAWebAndAPI.Service.HR.AdjustmentDayOffBalance.AdjustmentDayOffBalanceService Item does not exist. It may have been deleted by another user.
+=======
+2016-08-24 10:23:27.3324 MCAWebAndAPI.Service.Asset.AssetAcquisitionService Microsoft.SharePoint.Client.ServerException: Value cannot be null.
+Parameter name: source
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 264
+   at MCAWebAndAPI.Service.Asset.AssetAcquisitionService.CreateDetails(Nullable`1 headerID, IEnumerable`1 items) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetAcquisitionService.cs:line 243
+>>>>>>> origin/master
+2016-08-24 11:50:30.6780 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Value cannot be null.
+Parameter name: source

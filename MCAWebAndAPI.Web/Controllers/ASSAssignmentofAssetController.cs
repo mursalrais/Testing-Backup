@@ -430,7 +430,7 @@ namespace MCAWebAndAPI.Web.Controllers
             var listWBSMaster = "WBS Master";
             foreach (DataRow d in SessionManager.Get<DataTable>("CSVDataTable").Rows)
             {
-                if (d.ItemArray[0].ToString() == "Assignment of Asset")
+                if (d.ItemArray[0].ToString().Contains("Assignment of Asset"))
                 {
                     try
                     {

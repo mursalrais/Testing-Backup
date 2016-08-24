@@ -10,13 +10,14 @@
 @using (Ajax.BeginForm("CreateAdjustmentData", "HRAdjustment", FormMethod.Post, new AjaxOptions
 {
     OnBegin = "onBeginForm",
-    OnFailure = "onFailureForm",
-    OnSuccess = "onSuccessForm",
-    OnComplete = "onCompleteForm"
+    OnComplete = "onCompleteForm",
+    OnSuccess = "onSuccessFormEmbed",
+    OnFailure = "onFailureForm"
 }, new
 {
     @class = "form-horizontal"
 }))
+
 {
     <fieldset>
         <input type="hidden" id="loadpage" value="0">
@@ -35,12 +36,12 @@
             @Html.Partial("_InputAdjustmentDetails", Model.AdjustmentDetails)
         </div>
 
-        <button id="submithr-button" class="btn btn-primary" type="submit">
+        <button id="submit-button" class="btn btn-primary">
             <i class="fa fa-save"></i>
             Save
         </button>
 
-        <button id="cancel-button" class="btn btn-dannger">
+        <button id="cancel-button" class="btn btn-danger">
             <i class="fa fa-save"></i>
             cancel
         </button>
@@ -52,6 +53,9 @@
 
     <script>
         $(document).ready(function () {
+            $(".submit-button").click(function (e) {
+                $('form').submit();
+            });
         });
 
         function getProfId(prof) {
