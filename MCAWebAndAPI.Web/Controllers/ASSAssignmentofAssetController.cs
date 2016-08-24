@@ -175,7 +175,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 new
                 {
                     Value = Convert.ToString(e.ID),
-                    Text = e.Province.Text
+                    Text = e.Province.Text+"-"+e.OfficeName+"-"+e.FloorName+"-"+e.RoomName+"-"+e.Remarks
                 }),
                 JsonRequestBehavior.AllowGet);
         }
@@ -234,8 +234,44 @@ namespace MCAWebAndAPI.Web.Controllers
             return Json(positions.Select(e =>
                 new
                 {
-                    Value = Convert.ToString(e.ID),
+                    Value = Convert.ToString(e.OfficeName),
                     Text = e.OfficeName
+                }),
+                JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetFloorGrid(string province = null)
+        {
+            SessionManager.Set("Province", province);
+            var pro = SessionManager.Get<string>("Province");
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            var positions = _service.GetFloorList(siteUrl, province);
+
+            return Json(positions.Select(e =>
+                new
+                {
+                    Value = Convert.ToString(e.FloorName),
+                    Text = e.FloorName
+                }),
+                JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetRoomGrid(string province = null)
+        {
+            SessionManager.Set("Province", province);
+            var pro = SessionManager.Get<string>("Province");
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            var positions = _service.GetRoomList(siteUrl, province);
+
+            return Json(positions.Select(e =>
+                new
+                {
+                    Value = Convert.ToString(e.RoomName),
+                    Text = e.RoomName
                 }),
                 JsonRequestBehavior.AllowGet);
         }
@@ -430,10 +466,13 @@ namespace MCAWebAndAPI.Web.Controllers
             var listWBSMaster = "WBS Master";
             foreach (DataRow d in SessionManager.Get<DataTable>("CSVDataTable").Rows)
             {
-                if (d.ItemArray[0].ToString().Contains("Assignment of Asset"))
+                var type = "assignment of asset";
+                if (d.ItemArray[0].ToString().ToLower() == type)
                 {
                     try
                     {
+                        type = "Assignment Of Asset";
+
                         TableHeader = new DataTable();
                         TableHeader.Columns.Add("Title", typeof(string));
                         TableHeader.Columns.Add("transferdate", typeof(DateTime));
@@ -447,7 +486,7 @@ namespace MCAWebAndAPI.Web.Controllers
                                    <Where>
                                       <Eq>
                                          <FieldRef Name='Title' />
-                                         <Value Type='Text'>"+ d.ItemArray[1].ToString() + @"</Value>
+                                         <Value Type='Text'>"+ d.ItemArray[2].ToString() + @"</Value>
                                       </Eq>
                                    </Where>
                                 </Query>
@@ -458,11 +497,17 @@ namespace MCAWebAndAPI.Web.Controllers
                                     <FieldRef Name='Project_x002f_Unit' />
                                 </ViewFields>
                                 <QueryOptions /></View>";
-                        var isAssetHolderExist = _service.isExist("Professional Master", caml, siteUrl);
+                        var sitehr = siteUrl.Replace("/bo", "/hr");
+                        var isAssetHolderExist = _service.isExist("Professional Master", caml, sitehr);
                         if(isAssetHolderExist == true)
                         {
                             DataRow row = TableHeader.NewRow();
-                            row["Title"] = d.ItemArray[0].ToString();
+                            row["Title"] = type;
+                            row["transferdate"] = Convert.ToDateTime(d.ItemArray[1]);
+                            row["assetholder"] = Convert.ToString(d.ItemArray[2]);
+                            row["position"] = "";
+                            row["projectunit"] = "";
+                            row["contactnumber"] = "";
 
                             TableHeader.Rows.InsertAt(row, 0);
 
@@ -497,102 +542,72 @@ namespace MCAWebAndAPI.Web.Controllers
                     }
                 }
 
-                //if (d.ItemArray[8].ToString() != "" && latestIDHeader != null)
-                //{
-                //    TableDetail = new DataTable();
-                //    TableDetail.Columns.Add("assetacquisition", typeof(string));
-                //    TableDetail.Columns.Add("polineitem", typeof(string));
-                //    TableDetail.Columns.Add("assetsubasset", typeof(string));
-                //    TableDetail.Columns.Add("wbs", typeof(string));
-                //    TableDetail.Columns.Add("costidr", typeof(string));
-                //    TableDetail.Columns.Add("costusd", typeof(string));
-                //    TableDetail.Columns.Add("remarks", typeof(string));
-                //    TableDetail.Columns.Add("status", typeof(string));
+                if (d.ItemArray[6].ToString() != "" && latestIDHeader != null)
+                {
+                    //TableDetail = new DataTable();
+                    //TableDetail.Columns.Add("assignmentofasset", typeof(string));
+                    //TableDetail.Columns.Add("assetsubasset", typeof(string));
+                    //TableDetail.Columns.Add("province", typeof(string));
+                    //TableDetail.Columns.Add("office", typeof(string));
+                    //TableDetail.Columns.Add("floor", typeof(string));
+                    //TableDetail.Columns.Add("room", typeof(string));
+                    //TableDetail.Columns.Add("remarks", typeof(string));
 
-                //    DataRow row = TableDetail.NewRow();
+                    //DataRow row = TableDetail.NewRow();
 
-                //    row["assetacquisition"] = latestIDHeader;
-                //    row["polineitem"] = d.ItemArray[5].ToString();
-                //    //cek if assetid ada pada table asset master
-                //    //FXA-PC-OE-0001 - Laptop Lenovo
-                //    var splitAssetID = d.ItemArray[8].ToString().Split('-');
-                //    var resultAssetID = "";
-                //    var resultDesc = "";
-                //    var WBSDesc = "";
-                //    if (splitAssetID.Length == 5)
-                //    {
-                //        resultAssetID = splitAssetID[0] + "-" + splitAssetID[1] + "-" + splitAssetID[2] + "-" + splitAssetID[3];
-                //        resultDesc = splitAssetID[4];
-                //        resultDesc = Regex.Replace(resultDesc, @"\t|\n|\r", "");
-                //    }
-                //    else
-                //    {
-                //        resultAssetID = splitAssetID[0] + "-" + splitAssetID[1] + "-" + splitAssetID[2] + "-" + splitAssetID[3] + "-" + splitAssetID[4];
-                //        resultDesc = splitAssetID[5];
-                //        resultDesc = Regex.Replace(resultDesc, @"\t|\n|\r", "");
-                //    }
-                //    var splitWBS = d.ItemArray[9].ToString().Split('-');
-                //    WBSDesc = splitWBS[1] + "-" + splitWBS[2];
-                //    WBSDesc = Regex.Replace(WBSDesc, @"\t|\n|\r", "");
-                //    var camlAssetID = @"<View><Query><Where>
-                //                            <Eq><FieldRef Name='AssetID' /><Value Type='Text'>" + resultAssetID.Trim() + @"</Value></Eq>
-                //                            <And>
-                //                            <Eq><FieldRef Name='Title' /><Value Type='Text'>" + resultDesc.Trim() + @"</Value></Eq>
-                //                            </And>
-                //                    </Where></Query></View>";
-                //    var camlWBS = @"<View><Query><Where>
-                //                            <Eq><FieldRef Name='Title' /><Value Type='Text'>" + splitWBS[0].Trim() + @"</Value></Eq>
-                //                            <And>
-                //                            <Eq><FieldRef Name='WBSDesc' /><Value Type='Text'>" + WBSDesc.Trim() + @"</Value></Eq>
-                //                            </And>
-                //                    </Where>
-                //                    </Query></View>";
-                //    try
-                //    {
-                //        int? idAssetIDExist = _assetAcquisitionService.getIdOfColumn("Asset Master", siteUrl, camlAssetID);
-                //        int? idWBSExist = _assetAcquisitionService.getIdOfColumn("WBS Master", siteUrl, camlWBS);
-                //        if (idAssetIDExist != 0 && idAssetIDExist != 0)
-                //        {
-                //            row["assetsubasset"] = idAssetIDExist;
-                //            row["wbs"] = idWBSExist;
-                //        }
-                //        else
-                //        {
-                //            return JsonHelper.GenerateJsonErrorResponse("Invalid data, rolling back!");
-                //        }
+                    ////check assetsubasset
+                    //var camlasset = @"<View></View>";
+                    ////check province
+                    //var camlprovince = @"<View></View>";
+                    //var isAssetExist = _service.isExist("Asset Acquisition Details", camlasset, siteUrl);
+                    //var isProvinceExist = _service.isExist("Location Master", camlprovince, siteUrl);
 
-                //    }
-                //    catch (Exception e)
-                //    {
-                //        if (idsHeader.Count > 0)
-                //        {
-                //            foreach (var id in idsHeader)
-                //            {
-                //                //delete parent
-                //                _assetAcquisitionService.RollbackParentChildrenUpload(listNameHeader, id, siteUrl);
-                //            }
-                //        }
-                //        else if (idsDetail.Count > 0)
-                //        {
-                //            foreach (var id in idsDetail)
-                //            {
-                //                //delete parent
-                //                _assetAcquisitionService.RollbackParentChildrenUpload(listNameDetail, id, siteUrl);
-                //            }
+                    //try
+                    //{
+                    //    int? idAssetIDExist = _assetAcquisitionService.getIdOfColumn("Asset Master", siteUrl, camlAssetID);
+                    //    int? idWBSExist = _assetAcquisitionService.getIdOfColumn("WBS Master", siteUrl, camlWBS);
+                    //    if (idAssetIDExist != 0 && idAssetIDExist != 0)
+                    //    {
+                    //        row["assetsubasset"] = idAssetIDExist;
+                    //        row["wbs"] = idWBSExist;
+                    //    }
+                    //    else
+                    //    {
+                    //        return JsonHelper.GenerateJsonErrorResponse("Invalid data, rolling back!");
+                    //    }
 
-                //        }
-                //        return JsonHelper.GenerateJsonErrorResponse("Invalid data, rolling back!");
-                //    }
-                //    //cek if wbs id ada pada table wbs master
-                //    row["costidr"] = Convert.ToInt32(d.ItemArray[10]);
-                //    row["costusd"] = Convert.ToInt32(d.ItemArray[11].ToString());
-                //    row["remarks"] = d.ItemArray[12].ToString();
-                //    row["status"] = d.ItemArray[13].ToString();
+                    //}
+                    //catch (Exception e)
+                    //{
+                    //    if (idsHeader.Count > 0)
+                    //    {
+                    //        foreach (var id in idsHeader)
+                    //        {
+                    //            //delete parent
+                    //            _assetAcquisitionService.RollbackParentChildrenUpload(listNameHeader, id, siteUrl);
+                    //        }
+                    //    }
+                    //    else if (idsDetail.Count > 0)
+                    //    {
+                    //        foreach (var id in idsDetail)
+                    //        {
+                    //            //delete parent
+                    //            _assetAcquisitionService.RollbackParentChildrenUpload(listNameDetail, id, siteUrl);
+                    //        }
 
-                //    TableDetail.Rows.InsertAt(row, 0);
+                    //    }
+                    //    return JsonHelper.GenerateJsonErrorResponse("Invalid data, rolling back!");
+                    //}
+                    ////cek if wbs id ada pada table wbs master
+                    //row["costidr"] = Convert.ToInt32(d.ItemArray[10]);
+                    //row["costusd"] = Convert.ToInt32(d.ItemArray[11].ToString());
+                    //row["remarks"] = d.ItemArray[12].ToString();
+                    //row["status"] = d.ItemArray[13].ToString();
 
-                //    latestIDDetail = _assetAcquisitionService.MassUploadHeaderDetail(listNameDetail, TableDetail, siteUrl);
-                //}
+                    //TableDetail.Rows.InsertAt(row, 0);
+
+                    //latestIDDetail = _assetAcquisitionService.MassUploadHeaderDetail(listNameDetail, TableDetail, siteUrl);
+                }
             }
             //return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAcquisition);
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAcquisition);
