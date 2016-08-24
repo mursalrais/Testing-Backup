@@ -54,7 +54,7 @@
         <div>
             <center>
                
-                    <input id="submit-button"  class="k-button k-button-icontext k-grid-add" size="4" type="submit" value="Save" />
+                    <input id="submit-button" onclick="return saveDisposal()" class="k-button k-button-icontext k-grid-add" size="4" type="submit" value="Save" />
                  
                 <a href="@Model.CancelURL" target='_parent'>
                     <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
@@ -67,25 +67,34 @@
 </div>
 @section scripts{
   <script type="text/javascript">
-      //function saveDisposal()
-      //{
-      //    alert("saving...");
-      //    var idattach = document.querySelectorAll("[id^='attachRow']");
-      //    alert(idattach.length);
-      //}
+      function saveDisposal()
+      {
+         // alert("saving...");
+          var idattach = document.querySelectorAll("[id^='attachRow']");
+        //  alert(idattach.length);
 
-      var idattach = document.querySelectorAll("[id^='attachRow']");
-      $(document).ready(function () {
-              $("#submit-button").click(function () {
-                  if (idattach.length == 0) {
-                      alert("have to attach a file!");
-                  }else{
+          if (idattach.length == 0) {
+              alert("have to attach a file!");
+          } else {
 
-                      $("form").submit();
-                  }
-              });
+              $("form").submit();
           }
-        );
+
+
+      }
+
+      //var idattach = document.querySelectorAll("[id^='attachRow']");
+      //$(document).ready(function () {
+      //        $("#submit-button").click(function () {
+      //            if (idattach.length == 0) {
+      //                alert("have to attach a file!");
+      //            }else{
+
+      //                $("form").submit();
+      //            }
+      //        });
+      //    }
+      //  );
 
     </script>
 }
