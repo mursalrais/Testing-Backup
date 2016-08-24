@@ -20,7 +20,7 @@ namespace MCAWebAndAPI.Service.Asset
 
         IEnumerable<AssignmentOfAssetDetailsVM> GetDetails(int? headerID);
 
-        int? CreateHeader(AssignmentOfAssetVM viewmodel, string SiteUrl);
+        int? CreateHeader(AssignmentOfAssetVM viewmodel, string SiteUrl, string mode = null);
         bool UpdateHeader(AssignmentOfAssetVM viewmodel, string SiteUrl);
         void CreateDocuments(int? headerID, IEnumerable<HttpPostedFileBase> documents, string SiteUrl);
 
@@ -33,6 +33,8 @@ namespace MCAWebAndAPI.Service.Asset
         IEnumerable<LocationMasterVM> GetProvince();
         LocationMasterVM GetProvinceInfo(string province, string SiteUrl);
         IEnumerable<LocationMasterVM> GetOfficeName(string SiteUrl, string province = null);
+        IEnumerable<LocationMasterVM> GetFloorList(string SiteUrl, string office = null);
+        IEnumerable<LocationMasterVM> GetRoomList(string SiteUrl, string floor = null);
 
         int? MassUploadHeaderDetail(string ListName, DataTable CSVDataTable, string SiteUrl = null);
         void RollbackParentChildrenUpload(string listNameHeader, int? latestIDHeader, string siteUrl);
