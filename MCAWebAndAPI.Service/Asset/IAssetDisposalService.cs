@@ -21,6 +21,8 @@ namespace MCAWebAndAPI.Service.Asset
 
         void UpdateDetails(int? headerID, IEnumerable<AssetDisposalDetailVM> items);
 
+        IEnumerable<AssetAcquisitionItemVM> GetAssetSubAsset();
+
         AssetDisposalVM GetHeader(int? ID);
 
         IEnumerable<AssetDisposalDetailVM> GetDetails(int? headerID);

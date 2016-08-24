@@ -143,5 +143,32 @@ namespace MCAWebAndAPI.Web.Controllers
         //    }
         //    return array;
         //}
+
+        public JsonResult GetAssetSubSAssetGrid()
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            assetDisposalService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            var positions = GetFromPositionsExistingSession();
+
+            return Json(positions.Select(e =>
+                new
+                {
+                    Value = Convert.ToString(e.ID),
+                    Text = e.AssetSubAsset.Text
+                }),
+                JsonRequestBehavior.AllowGet);
+        }
+
+        private IEnumerable<AssetAcquisitionItemVM> GetFromPositionsExistingSession()
+        {
+            //Get existing session variable
+            var sessionVariable = System.Web.HttpContext.Current.Session["Asset%Asset%20Acquisition%20Details"] as IEnumerable<AssetAcquisitionItemVM>;
+            var positions = sessionVariable ?? assetDisposalService.GetAssetSubAsset();
+
+            if (sessionVariable == null) // If no session variable is found
+                System.Web.HttpContext.Current.Session["Asset%Asset%20Acquisition%20Details"] = positions;
+            return positions;
+        }
     }
 }

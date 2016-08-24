@@ -233,5 +233,72 @@ namespace MCAWebAndAPI.Service.Asset
                 }
             }
         }
+
+        public IEnumerable<AssetAcquisitionItemVM> GetAssetSubAsset()
+        {
+            var models = new List<AssetAcquisitionItemVM>();
+            var caml = @"<View><Query>
+                           <Where>
+                              <IsNotNull>
+                                 <FieldRef Name='assetsubasset' />
+                              </IsNotNull>
+                           </Where>
+                        </Query>
+                        <ViewFields>
+                           <FieldRef Name='assetsubasset' />
+                        </ViewFields>
+                        <QueryOptions /></View>";
+            foreach (var item in SPConnector.GetList("Asset Acquisition Details", _siteUrl, caml))
+            {
+                models.Add(ConvertToModelAssetSubAsset(item));
+            }
+
+            return models;
+        }
+
+        private AssetAcquisitionItemVM ConvertToModelAssetSubAsset(ListItem item)
+        {
+            var viewModel = new AssetAcquisitionItemVM();
+
+            viewModel.ID = Convert.ToInt32(item["ID"]);
+            var assetID = "";
+            //getInfo Asset Master
+            if ((item["assetsubasset"] as FieldLookupValue) != null)
+            {
+                assetID = (item["assetsubasset"] as FieldLookupValue).LookupValue;
+            }
+            var info = GetInfoAssetMaster("Asset Master", assetID, _siteUrl);
+            viewModel.AssetSubAsset.Text = Convert.ToString(info.AssetNoAssetDesc.Text) + "-" + Convert.ToString(info.AssetDesc);
+            return viewModel;
+        }
+
+        private AssetMasterVM GetInfoAssetMaster(string listname, string assetID, string _siteUrl)
+        {
+            var caml = @"<View>
+                        <Query>
+                           <Where>
+                              <Eq>
+                                 <FieldRef Name='AssetID' />
+                                 <Value Type='Text'>" + assetID + @"</Value>
+                              </Eq>
+                           </Where>
+                        </Query>
+                        <ViewFields>
+                           <FieldRef Name='AssetID' />
+                           <FieldRef Name='ID' />
+                           <FieldRef Name='Title' />
+                        </ViewFields>
+                        <QueryOptions /></View>";
+            var list = SPConnector.GetList(listname, _siteUrl, caml);
+            var model = new AssetMasterVM();
+            foreach (var item in list)
+            {
+                model.ID = Convert.ToInt32(item["ID"]);
+                model.AssetNoAssetDesc.Text = Convert.ToString(item["AssetID"]);
+                model.AssetDesc = Convert.ToString(item["Title"]);
+            }
+
+            return model;
+        }
     }
     }

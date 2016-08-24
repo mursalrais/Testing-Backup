@@ -17,7 +17,7 @@ namespace MCAWebAndAPI.Service.Asset
 {
     public class AssetLoanAndReturnService : IAssetLoanAndReturnService
     {
-        string _siteUrl = "https://eceos2.sharepoint.com/sites/mca-dev/bo";
+        string _siteUrl;
         static Logger logger = LogManager.GetCurrentClassLogger();
         const string SP_ASSLNR_LIST_NAME = "Asset Loan Return";
         const string SP_ASSLNRDetails_LIST_NAME = "Asset Loan Return Detail";
@@ -257,9 +257,68 @@ namespace MCAWebAndAPI.Service.Asset
             throw new NotImplementedException();
         }
 
-        public int CreateHeader(AssetLoanAndReturnItemVM header)
+        public int? CreateHeader(AssetLoanAndReturnHeaderVM viewmodel, string mode = null, string SiteUrl = null)
         {
+            //// viewmodel.CancelURL = _siteUrl + UrlResource.AssetLoanAndReturn;
+            // var columnValues = new Dictionary<string, object>();
+            // //columnValues.add
+            // columnValues.Add("Title", "Asset o");
+            // if (viewmodel.Professional.Value == null)
+            // {
+            //     return 0;
+            // }
+            // if (mode == null)
+            // {
+            //     string[] memo = viewmodel.AccpMemo.Value.Split('-');
+            //     //columnValues.Add("acceptancememono", memo[1]);
+            //     columnValues.Add("acceptancememono", new FieldLookupValue { LookupId = Convert.ToInt32(memo[0]) });
+            //     var memoinfo = SPConnector.GetListItem(SP_ACC_MEMO_LIST_NAME, Convert.ToInt32(memo[0]), _siteUrl);
+            //     columnValues.Add("vendorid", memoinfo["vendorid"]);
+            //     columnValues.Add("vendorname", memoinfo["vendorname"]);
+            //     columnValues.Add("pono", memoinfo["pono"]);
+            // }
+            // else
+            // {
+            //     columnValues.Add("acceptancememono", new FieldLookupValue { LookupId = Convert.ToInt32(viewmodel.AccpMemo.Value) });
+            //     var memoinfo = GetAcceptanceMemoInfo(Convert.ToInt32(viewmodel.AccpMemo.Value), SiteUrl);
+            //     columnValues.Add("vendorid", memoinfo.VendorID);
+            //     columnValues.Add("vendorname", memoinfo.VendorName);
+            //     columnValues.Add("pono", memoinfo.PoNo);
+            // }
+
+            // columnValues.Add("purchasedate", viewmodel.PurchaseDate);
+
+            // columnValues.Add("purchasedescription", viewmodel.PurchaseDescription);
+
+            // try
+            // {
+            //     if (mode == null)
+            //     {
+            //         SPConnector.AddListItem(SP_ASSACQ_LIST_NAME, columnValues, _siteUrl);
+            //     }
+            //     else
+            //     {
+            //         SPConnector.AddListItem(SP_ASSACQ_LIST_NAME, columnValues, SiteUrl);
+            //     }
+
+            // }
+            // catch (Exception e)
+            // {
+            //     logger.Error(e.Message);
+            // }
+            // var entitiy = new AssetAcquisitionHeaderVM();
+            // entitiy = viewmodel;
+            // if (mode == null)
+            // {
+            //     return SPConnector.GetLatestListItemID(SP_ASSACQ_LIST_NAME, _siteUrl);
+            // }
+            // else
+            // {
+            //     return SPConnector.GetLatestListItemID(SP_ASSACQ_LIST_NAME, SiteUrl);
+            // }
+
             throw new NotImplementedException();
+
         }
 
         public bool CreateAssetTransfer(AssetLoanAndReturnItemVM assetTransfer)
