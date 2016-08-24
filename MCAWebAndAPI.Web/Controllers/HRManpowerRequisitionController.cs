@@ -32,7 +32,8 @@ namespace MCAWebAndAPI.Web.Controllers
             _professionalService = new ProfessionalService();
         }
 
-        [HttpPost]
+        
+[HttpPost]
         public ActionResult ApprovalManpowerRequisition(FormCollection form, ManpowerRequisitionVM viewModel)
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
@@ -62,7 +63,7 @@ namespace MCAWebAndAPI.Web.Controllers
             }
 
             //send to HR
-            List<string> EmailsHR = _professionalService.GetEmailHR();
+            List<string> EmailsHR = _service.GetEmailHR();
             foreach (var item in EmailsHR)
             {
                 if (!(string.IsNullOrEmpty(item)))
@@ -192,7 +193,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 }
 
                 //send to HR
-                List<string> EmailsHR = _professionalService.GetEmailHR();
+                List<string> EmailsHR = _service.GetEmailHR();
                 foreach (var item in EmailsHR)
                 {
                     if (!(string.IsNullOrEmpty(item)))
@@ -293,7 +294,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 }
 
                 //send to HR
-                List<string> EmailsHR = _professionalService.GetEmailHR();
+                List<string> EmailsHR = _service.GetEmailHR();
                 foreach (var item in EmailsHR)
                 {
                     if (!(string.IsNullOrEmpty(item)))
@@ -326,7 +327,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 "Success",
                 new
                 {
-                    errorMessage =
+                    successMessage =
                 string.Format(MessageResource.SuccessCreateApplicationData, viewModel.Position.Value)
                 });
         }

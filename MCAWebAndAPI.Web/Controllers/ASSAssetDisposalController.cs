@@ -10,6 +10,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
+
 namespace MCAWebAndAPI.Web.Controllers
 {
     public class ASSAssetDisposalController : Controller
@@ -39,6 +40,30 @@ namespace MCAWebAndAPI.Web.Controllers
             return View("CreateAssetDisposal", viewModel);
         }
 
+        public ActionResult Edit(int ID, string siteUrl)
+        {
+            assetDisposalService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            var viewModel = assetDisposalService.GetHeader(ID);
+
+            int? headerID = null;
+            headerID = viewModel.ID;
+
+            try
+            {
+                var viewdetails = assetDisposalService.GetDetails(headerID);
+                viewModel.Details = viewdetails;
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            return View(viewModel);
+        }
+
         [HttpPost]
         public ActionResult SubmitAssetDisposal(FormCollection form, AssetDisposalVM viewModel)
         {
@@ -49,6 +74,16 @@ namespace MCAWebAndAPI.Web.Controllers
             try
             {
                 headerID = assetDisposalService.CreateHeader(viewModel);
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            try
+            {
+                assetDisposalService.CreateDetails(headerID, viewModel.Details);
             }
             catch (Exception e)
             {
@@ -68,5 +103,45 @@ namespace MCAWebAndAPI.Web.Controllers
             //    return JsonHelper.GenerateJsonErrorResponse(e);
             //}            
         }
+
+        public ActionResult Update(AssetDisposalVM _data, string SiteUrl)
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            assetDisposalService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            try
+            {
+                assetDisposalService.UpdateHeader(_data);
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            try
+            {
+                //update items
+                assetDisposalService.UpdateDetails(_data.ID, _data.Details);
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetDisposal);
+        }
+
+        //IEnumerable<AssetDisposalDetailVM> BindMonthlyFeeDetailDetails(FormCollection form, IEnumerable<AssetDisposalDetailVM> monthlyFeeDetails)
+        //{
+        //    var array = monthlyFeeDetails.ToArray();
+        //    for (int i = 0; i < array.Length; i++)
+        //    {
+        //        array[i].AssetSubAsset= BindHelper.BindDateInGrid("Details",
+        //            i, "AssetSubAsset", form);
+        //    }
+        //    return array;
+        //}
     }
 }

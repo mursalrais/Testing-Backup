@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using System.Web;
 using static MCAWebAndAPI.Model.ViewModel.Form.Finance.Shared;
 using Microsoft.SharePoint.Client;
+using MCAWebAndAPI.Service.Resources;
+using MCAWebAndAPI.Model.Common;
 
 namespace MCAWebAndAPI.Service.Finance
 {
@@ -28,6 +30,10 @@ namespace MCAWebAndAPI.Service.Finance
     public class PettyCashSettlementService : IPettyCashSettlementService
     {
         public const string ListName = "Petty Cash Settlement";
+        private const string LISTNAME_DOCUMENTS = "Petty Cash Settlement Documents";
+
+        private const string FIELD_FORMAT_DOC = "SPC/{0}-{1}/";
+        private const int DIGIT_DOCUMENTNO = 5;
 
         private const string FieldName_ID = "ID";
         private const string FieldName_Date = "Settlement_x0020_Date";
@@ -37,6 +43,10 @@ namespace MCAWebAndAPI.Service.Finance
         private const string FieldName_AmountLiquidated = "Amount_x0020_Liquidated";
         private const string FieldName_AmountReimbursedOrReturned = "Amount_x0020_Reimbursed_x002f_Re";
         private const string FieldName_Remarks = "Remarks";
+        private const string FieldName_DocumentNo = "Title";
+
+
+        private const string FIELD_PCID_DOCUMENTS = "Petty_x0020_Cash_x0020_Settlement";
 
         private string siteUrl = string.Empty;
         static Logger logger = LogManager.GetCurrentClassLogger();
@@ -44,31 +54,42 @@ namespace MCAWebAndAPI.Service.Finance
         public int? Save(PettyCashSettlementVM viewModel)
         {
             int? result = null;
-            var columnValues = new Dictionary<string, object>
-           {
-                {FieldName_Date, viewModel.Date},
-                {FieldName_PettyCashVoucherNo, viewModel.PettyCashVoucher},
-                {FieldName_AmountLiquidated, viewModel.AmountLiquidated},
-                {FieldName_AmountReimbursedOrReturned, viewModel.Amount},
-                { FieldName_Remarks, viewModel.Remarks}
-            };
+            var columnValues = new Dictionary<string, object>();
+
+            string documentNoFormat = string.Format(FIELD_FORMAT_DOC, DateTimeExtensions.GetMonthInRoman(DateTime.Now), DateTime.Now.ToString("yy")) + "{0}";
+
+            columnValues.Add(FieldName_Date, viewModel.Date);
+
+            //{
+            //     {FieldName_Date, viewModel.Date},
+            //     {FieldName_PettyCashVoucherNo, viewModel.PettyCashVoucher},
+            //     {FieldName_AmountLiquidated, viewModel.AmountLiquidated},
+            //     {FieldName_AmountReimbursedOrReturned, viewModel.Amount},
+            //     { FieldName_Remarks, viewModel.Remarks}
+            // };
 
             try
             {
-                SPConnector.AddListItem(ListName, columnValues, siteUrl);
+                if (viewModel.Operation == Operations.c)
+                {
+                    columnValues.Add(FieldName_DocumentNo, DocumentNumbering.Create(siteUrl, documentNoFormat, DIGIT_DOCUMENTNO));
+
+                    SPConnector.AddListItem(ListName, columnValues, siteUrl);
+                }
+                else if (viewModel.Operation == Operations.e)
+                {
+                    SPConnector.UpdateListItem(ListName,viewModel.ID, columnValues, siteUrl);
+                }
+
                 result = SPConnector.GetLatestListItemID(ListName, siteUrl);
             }
             catch (Exception e)
             {
                 logger.Error(e.Message);
+                throw e;
             }
 
             return result;
-        }
-
-        public Task CreateAttachmentAsync(int? ID, IEnumerable<HttpPostedFileBase> attachment)
-        {
-            throw new NotImplementedException();
         }
 
         public void SetSiteUrl(string siteUrl)
@@ -96,6 +117,26 @@ namespace MCAWebAndAPI.Service.Finance
 
         public delegate PettyCashTransactionItem ConvertToVMDelegate(string siteUrl, ListItem listItem);
 
+        public void SavePettyCashAttachments(int? headerID, IEnumerable<HttpPostedFileBase> documents)
+        {
+            foreach (var doc in documents)
+            {
+                var updateValue = new Dictionary<string, object>();
+                var type = doc.FileName.Split('-')[0].Trim();
+
+                updateValue.Add(FIELD_PCID_DOCUMENTS, new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
+                try
+                {
+                    SPConnector.UploadDocument(LISTNAME_DOCUMENTS, updateValue, doc.FileName, doc.InputStream, siteUrl);
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e.Message);
+                    throw new Exception(ErrorResource.SPInsertError);
+                }
+            }
+        }
+
         private static PettyCashSettlementVM ConvertToVM(string siteUrl, ListItem listItem)
         {
             PettyCashSettlementVM viewModel = new PettyCashSettlementVM();
@@ -122,5 +163,7 @@ namespace MCAWebAndAPI.Service.Finance
             return SharedService.GetPettyCashTransaction(siteUrl, dateFrom, dateTo, ListName, FieldName_Date,
                 ConvertToVM);
         }
+
+       
     }
 }

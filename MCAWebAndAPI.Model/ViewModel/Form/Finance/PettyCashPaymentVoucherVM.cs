@@ -59,7 +59,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 
         [UIHint("MultiFileUploader")]
         [DisplayName("Attachment")]
-        [Required]
         public IEnumerable<HttpPostedFileBase> Documents { get; set; } = new List<HttpPostedFileBase>();
 
         public string DocumentUrl { get; set; }

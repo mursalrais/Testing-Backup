@@ -14,9 +14,10 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// InterviewerDate
         /// </summary>
+        [DataType(DataType.Date)]
         [UIHint("Date")]
         [DisplayName("Period")]
-        public string periodDate { get; set; }
+        public DateTime? periodDate { get; set; }
 
     }
 }

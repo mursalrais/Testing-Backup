@@ -12,15 +12,25 @@ namespace MCAWebAndAPI.Service.Asset
         void SetSiteUrl(string siteUrl);
 
         IEnumerable<AssetDisposalVM> GetAssetTransfers();
+        int? CreateHeader(AssetDisposalVM viewmodel, string SiteUrl = null);
 
-        int CreateHeader(AssetDisposalVM header);
+       // int CreateHeader(AssetDisposalVM header);
 
         bool CreateAssetTransfer(AssetDisposalVM assetTransfer);
+        bool UpdateHeader(AssetDisposalVM viewmodel);
+
+        void UpdateDetails(int? headerID, IEnumerable<AssetDisposalDetailVM> items);
+
+        AssetDisposalVM GetHeader(int? ID);
+
+        IEnumerable<AssetDisposalDetailVM> GetDetails(int? headerID);
 
         bool UpdateAssetTransfer(AssetDisposalVM assetTransfer);
 
         AssetDisposalVM GetPopulatedModel(int? id = null);
 
         AssetDisposalVM GetAssetHolderFromInfo(int? ID, string siteUrl);
+
+        void CreateDetails(int? headerID, IEnumerable<AssetDisposalDetailVM> items);
     }
 }

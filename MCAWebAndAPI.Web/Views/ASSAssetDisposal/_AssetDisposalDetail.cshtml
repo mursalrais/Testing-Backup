@@ -71,6 +71,8 @@
                        model.Id(p => p.ID);
                        model.Field(m => m.AssetSubAsset).DefaultValue(AssetDisposalDetailVM.GetAssetSubAssetDefaultValue());
                        model.Field(m => m.ProvinceFrom);
+                       model.Field(p => p.Status).Editable(false);
+                       model.Field(p => p.Remarks);
                        //model.Field(m => m.WBS).DefaultValue(AssetAcquisitionItemVM.GetWBSDefaultValue());
                    })
                    .ServerOperation(false)

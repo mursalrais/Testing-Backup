@@ -19,6 +19,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         public const string PettyCashTranscationType_PettyCashReimbursement = "Petty Cash Reimbursement";
         public const string PettyCashTranscationType_PettyCashReplenishment = "Petty Cash Replenishment";
 
+        public const string DateFormat = "MM/dd/yyyy";
+
         public static Operations GetOperation(string op)
         {
             return string.IsNullOrEmpty(op) ? Operations.v : (Operations)Enum.Parse(typeof(Operations), op);

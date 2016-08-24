@@ -26,54 +26,61 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
     [MetadataType(typeof(PettyCashSettlementMetadata))]
     public class PettyCashSettlementVM : PettyCashTransactionItem
     {
+        //TODO: beware there are 2 different dates: Settlement Date and Adcance Receive Date
+        //  this can create confusion in relation to inheritance to  PettyCashTransactionItem
+
         public PettyCashSettlementVM()
         {
             this.TransactionType = Shared.PettyCashTranscationType_PettyCashSettlementr;
         }
-        [Required]
-        [DisplayName("Settlement Date")]
-        [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
-        public DateTime Date { get; set; } = DateTime.Today;
 
         [Required]
         [DisplayName("Petty Cash Voucher No.")]
         [UIHint("AjaxComboBox")]
         public AjaxComboBoxVM PettyCashVoucher { get; set; }
 
-        [Required]
+        [ReadOnly(true)]
         [DisplayName("Advance Received Date")]
         [DataType(DataType.Date)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         public string AdvanceReceivedDate { get; }
 
+        [ReadOnly(true)]
         public string Status { get; }
 
+        [ReadOnly(true)]
         [DisplayName("Paid to")]
         public string PaidTo { get; }
 
-        public string Currency { get; }
-
+        [ReadOnly(true)]
         [DisplayName("Amount paid")]
         public string AmountPaid { get; }
 
+        [ReadOnly(true)]
         [DisplayName("Amount paid in words")]
         public string AmountPaidInWords { get; }
 
+        [ReadOnly(true)]
         [DisplayName("Reason of payment")]
         public string ReasonOfPayment { get; }
 
+        [ReadOnly(true)]
         public string Fund { get; } = Shared.Fund;
 
+        [ReadOnly(true)]
         public string WBS { get; }
 
+        [ReadOnly(true)]
         public string GL { get; }
 
         [Required]
         [DisplayName("Amount Liquidated")]
         [UIHint("Currency")]
+        [DisplayFormat(DataFormatString = "{0:#}", ApplyFormatInEditMode = true)]
         public decimal AmountLiquidated { get; set; } = 0;
 
+        
+        [UIHint("TextArea")]
         [Required]
         public string Remarks { get; set; }
 
@@ -88,10 +95,13 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 
     internal class PettyCashSettlementMetadata
     {
-        [DisplayName("Advance Receive Date")]
+        [DisplayName("Settlement Date")]
         public DateTime Date { get; set; }
 
         [DisplayName("Amount Reimbursed/Returned")]
         public decimal Amount { get; set; }
+
+        [ReadOnly(true)]
+        public string Currency { get; }
     }
 }

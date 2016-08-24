@@ -79,6 +79,15 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to /Lists/Adjustment/AllItems.aspx.
+        /// </summary>
+        public static string AdjustmentList {
+            get {
+                return ResourceManager.GetString("AdjustmentList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lists/Application.
         /// </summary>
         public static string ApplicationData {
@@ -111,6 +120,15 @@ namespace MCAWebAndAPI.Service.Resources {
         public static string AssetAcquisition {
             get {
                 return ResourceManager.GetString("AssetAcquisition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to /Lists/Asset%20Disposal/AllItems.aspx.
+        /// </summary>
+        public static string AssetDisposal {
+            get {
+                return ResourceManager.GetString("AssetDisposal", resourceCulture);
             }
         }
         
