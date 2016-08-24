@@ -357,16 +357,18 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             var cratedValueDetail = new Dictionary<string, object>();
 
-            
-            cratedValueDetail.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(viewModels.ddlProfessional.Value)});
             cratedValueDetail.Add("Title", Convert.ToString(viewModels.cmpYearDate));
 
             if (viewModels.StatusForm != "Draft")
             {
+                cratedValueDetail.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(viewModels.ddlProfessional.Value) });
+
                 cratedValueDetail.Add("crstatus", "Pending Approval 1 of 2");
             }
             else
             {
+                cratedValueDetail.Add("professional", viewModels.profId);
+
                 cratedValueDetail.Add("crstatus", "Draft");
             }
 
@@ -748,6 +750,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 viewModel.cmpName = Convert.ToString(item["Title"]) + Convert.ToString(item["lastname"]);
                 viewModel.cmpProjUnit = Convert.ToString(item["Project_x002f_Unit"]);
                 viewModel.cmpPosition = FormatUtil.ConvertLookupToValue(item, "Position");
+                viewModel.profId = Convert.ToInt32(item["ID"]);
             }
 
             return viewModel;

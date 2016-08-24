@@ -126,7 +126,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// </head>
         /// 
         [DisplayName("Profesional")]
-        public string profId { get; set; }
+        public int? profId { get; set; }
 
         /// <summary>
         /// crstatus
