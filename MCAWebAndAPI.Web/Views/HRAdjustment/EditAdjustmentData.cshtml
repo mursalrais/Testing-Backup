@@ -43,6 +43,13 @@
     <script>
         $(document).ready(function () {
 
+            var url = "/HRAdjustment/GetAdjustmentDetails?period=" + $("#periodDate").val();
+
+            $('#adjustmentlist').load(url, function (response, status, xhr) {
+                if (status == "success") {
+                }
+            });
+
             $("#periodDate").kendoDatePicker({
                 change: onChange
             });

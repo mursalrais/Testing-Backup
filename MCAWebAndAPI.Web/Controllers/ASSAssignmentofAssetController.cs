@@ -458,7 +458,7 @@ namespace MCAWebAndAPI.Web.Controllers
                                     <FieldRef Name='Project_x002f_Unit' />
                                 </ViewFields>
                                 <QueryOptions /></View>";
-                        var isAssetHolderExist = _service.isExist("Professional Master", d.ItemArray[1].ToString(), caml, siteUrl);
+                        var isAssetHolderExist = _service.isExist("Professional Master", caml, siteUrl);
                         if(isAssetHolderExist == true)
                         {
                             DataRow row = TableHeader.NewRow();

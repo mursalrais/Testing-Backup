@@ -115,7 +115,9 @@ Wireframe FIN10: Petty Cash Voucher
                 case PAIDTO_VENDOR:
                     professionalDropDownList.options.optionLabel = "";
                     professionalDropDownList.refresh();
-                    professionalDropDownList.select(0);
+                    professionalDropDownList.select(-1);
+                    professionalDropDownList.text("");
+                   
                     professionalDropDownList.enable(false);
 
                     vendorDropDownList.enable(true);

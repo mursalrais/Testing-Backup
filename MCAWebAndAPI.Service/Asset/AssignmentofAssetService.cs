@@ -674,9 +674,13 @@ namespace MCAWebAndAPI.Service.Asset
             throw new NotImplementedException();
         }
 
-        public bool isExist(string listname, string fieldfilter, string caml, string SiteUrl)
+        public bool isExist(string listname, string caml, string SiteUrl)
         {
-            var list = SPConnector.GetList(listname);
+            var list = SPConnector.GetList(listname, SiteUrl, caml);
+            foreach(var l in list)
+            {
+
+            }
 
             return true;
         }

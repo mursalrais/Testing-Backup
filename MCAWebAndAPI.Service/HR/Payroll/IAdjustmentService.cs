@@ -12,6 +12,8 @@ namespace MCAWebAndAPI.Service.HR.Payroll
 
         AdjustmentDataVM GetAjusmentData(string period);
 
+        AdjustmentDataVM GetPeriod(int? id);
+
         void CreateAdjustmentData(string period, AdjustmentDataVM CompensatoryList);
         
     }

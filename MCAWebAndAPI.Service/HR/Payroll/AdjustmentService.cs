@@ -26,6 +26,44 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
         }
 
+        public AdjustmentDataVM GetPeriod(int? id)
+        {
+            var viewModel = new AdjustmentDataVM();
+
+            if (id == null)
+                return viewModel;
+
+            var caml = @"<View>  
+                            <Query>
+                               <Where>
+                                  <Eq>
+                                     <FieldRef Name='ID' />
+                                     <Value Type='Lookup'>" + id + @"</Value>
+                                  </Eq>
+                               </Where>
+                            </Query>
+                            <ViewFields>
+                               <FieldRef Name='ID' />
+                               <FieldRef Name='ContentType' />
+                               <FieldRef Name='adjustmentperiod' />
+                               <FieldRef Name='professional' />
+                               <FieldRef Name='adjustmenttype' />
+                               <FieldRef Name='adjustmentamount' />
+                               <FieldRef Name='adjustmentcurrency' />
+                               <FieldRef Name='debitorcredit' />
+                               <FieldRef Name='remarks' />
+                            </ViewFields>
+                            <QueryOptions />
+                           </View>";
+
+            foreach (var item in SPConnector.GetList(SP_AJUDATA_LIST_NAME, _siteUrl, caml))
+            {
+                viewModel.periodDate = Convert.ToDateTime(item["adjustmentperiod"]);
+            }
+
+            return viewModel;
+        }
+
         public AdjustmentDataVM GetAjusmentData(string period)
         {
             var viewModel = new AdjustmentDataVM();
