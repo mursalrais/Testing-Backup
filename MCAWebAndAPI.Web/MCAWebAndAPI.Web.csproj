@@ -996,6 +996,8 @@
     <Content Include="Views\Shared\DisplayTemplates\MultiSelect.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\MultiSelect.cshtml" />
     <Content Include="Views\ASSAssetDisposal\Edit.cshtml" />
+    <Content Include="Views\ASSAssetLoanAndReturn\_AssetLoanAndReturnItem.cshtml" />
+    <Content Include="Views\ASSAssetCheckForm\_Details.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

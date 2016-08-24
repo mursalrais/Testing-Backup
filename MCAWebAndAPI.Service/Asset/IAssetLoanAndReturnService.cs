@@ -16,6 +16,8 @@ namespace MCAWebAndAPI.Service.Asset
 
         int CreateHeader(AssetLoanAndReturnHeaderVM header);
 
+        int? CreateHeader(AssetLoanAndReturnHeaderVM viewmodel, string mode = null, string SiteUrl = null);
+
         bool CreateAssetTransfer(AssetLoanAndReturnItemVM assetTransfer);
 
         bool UpdateAssetTransfer(AssetLoanAndReturnItemVM assetTransfer);
