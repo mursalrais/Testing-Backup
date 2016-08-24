@@ -67,11 +67,18 @@
 </div>
 @section scripts{
     <script type="text/javascript">
+        var idattach = document.querySelectorAll("[id^='attachRow']");
         $(document).ready(function () {
             $("#submit-button").click(function () {
-                $("form").submit();
+                if (idattach.length == 0) {
+                    alert("have to attach a file!");
+                } else {
+
+                    $("form").submit();
+                }
             });
-        });
+        }
+          );
 
     </script>
 }
