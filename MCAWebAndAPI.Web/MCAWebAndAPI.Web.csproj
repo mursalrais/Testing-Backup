@@ -995,6 +995,7 @@
     <Content Include="Views\ASSAssignmentOfAsset\Upload.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\MultiSelect.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\MultiSelect.cshtml" />
+    <Content Include="Views\ASSAssetDisposal\Edit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
