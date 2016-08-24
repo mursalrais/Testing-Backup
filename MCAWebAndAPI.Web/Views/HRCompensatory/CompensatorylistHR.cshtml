@@ -37,6 +37,14 @@
             @Html.Partial("_CompensatoryDetails", Model.CompensatoryDetails)
         </div>
 
+        <div class="row">
+            <div class="col-sm-12">
+                <button id="print-button" class="btn btn-primary" type="button">
+                    <i class="fa fa-print"></i>
+                    Print
+                </button>
+            </div>
+        </div>
     </fieldset>
 }
 
@@ -62,6 +70,12 @@
 
             var dropdownlist = $("#ActivePosition_Value").data("kendoDropDownList");
             dropdownlist.select(positionID);
+
+            $('#print-button').click(function (e) {
+                $("#ParentDiv").show();
+                var url = "/HRCompensatory/PrintCompensatoryRequest";
+                submitFormToPrint(url);
+            });
 
         });
     </script>

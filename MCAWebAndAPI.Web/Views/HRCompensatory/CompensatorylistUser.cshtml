@@ -63,6 +63,12 @@
                 $("#ParentDiv").show();
                 var url = "/HRCompensatory/PrintCompensatoryRequest";
                 submitFormToPrint(url);
+
+                $('#print-button').click(function (e) {
+                    $("#ParentDiv").show();
+                    var url = "/HRCompensatory/PrintCompensatoryRequest";
+                    submitFormToPrint(url);
+                });
             });
 
         });

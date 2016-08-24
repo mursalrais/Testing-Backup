@@ -37,6 +37,7 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             var viewmodel = new CompensatoryVM();
 
+
             if (siteurl == "")
             {
                 siteurl = SessionManager.Get<string>("SiteUrl");
