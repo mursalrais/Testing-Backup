@@ -67,21 +67,55 @@
 </div>
 @section scripts{
   <script type="text/javascript">
-      function saveDisposal()
-      {
-         // alert("saving...");
-          var idattach = document.querySelectorAll("[id^='attachRow']");
-        //  alert(idattach.length);
+      //function saveDisposal()
+      //{
+      //   // alert("saving...");
+      //    var idattach = document.querySelectorAll("[id^='attachRow']");
+      //  //  alert(idattach.length);
 
-          if (idattach.length == 0) {
-              alert("Please Attach the memo for disposal");
-          } else {
+      //    if (idattach.length == 0) {
+      //        alert("Please Attach the memo for disposal");
+      //    } else {
 
-              $("form").submit();
-          }
+      //        $("form").submit();
+      //    }
 
 
-      }
+      //}
+
+      $(document).ready(function () {
+
+          $("#submit-button").click(function (e) {
+
+              // untuk postpone default Submit Form operation
+
+              e.preventDefault();
+
+
+
+              // cek DOM di upload control apakah contains filename
+
+              // cek perbedaan DOM sebelum dan sesudah upload file
+
+              // di sini: http://demos.telerik.com/aspnet-mvc/upload/index
+
+              var isFileExist = $('.k-upload').find('ul.k-upload-files').length == 1;
+
+
+
+              if (isFileExist)
+
+                  $('form').submit();
+
+              else
+
+                  alert('Please Attach the memo for disposal');
+
+          });
+
+
+
+      });
 
       //var idattach = document.querySelectorAll("[id^='attachRow']");
       //$(document).ready(function () {
