@@ -16,7 +16,7 @@
     <RootNamespace>MCAWebAndAPI.Web</RootNamespace>
     <AssemblyName>MCAWebAndAPI.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -428,9 +428,8 @@
     </None>
     <Content Include="JSLintNet.json" />
     <None Include="Properties\PublishProfiles\host.my-epmo.com.pubxml" />
-    <None Include="Properties\PublishProfiles\mca-ims-dev - FTP.pubxml" />
-    <None Include="Properties\PublishProfiles\mca-ims-dev - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\mcaims-dev - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\mcaims-dev - Web Deploy.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -1025,6 +1024,7 @@
     <Content Include="Views\FINTaxExemption\_Income.cshtml" />
     <Content Include="Views\FINTaxExemption\_VAT.cshtml" />
     <Content Include="Views\FINTaxExemption\_Others.cshtml" />
+    <Content Include="Views\FINPettyCashSettlement\Create.cshtml" />
     <Content Include="Views\FINSCAVoucher\_DisplayEventBudgetItems.cshtml" />
     <Content Include="Views\FINRequisitionNote\Create.cshtml" />
     <Content Include="Views\FINRequisitionNote\Edit.cshtml" />
@@ -1090,15 +1090,8 @@
     <Content Include="Views\HRCompensatory\AddCompensatoryHR.cshtml" />
     <Content Include="Views\FINEventBudget\Item.cshtml" />
     <Content Include="Views\Shared\_WorkflowPathDetails.cshtml" />
-    <Content Include="Views\ASSAssignmentOfAsset\Edit.cshtml" />
-    <Content Include="Views\HRDayOff\CreateDayOffRequest.cshtml" />
-    <Content Include="Views\HRDayOff\_DayOffRequestHeaderData.cshtml" />
-    <Content Include="Views\HRDayOff\_DayOffCurrentBalance.cshtml" />
-    <Content Include="Views\HRDayOff\_RequestForDayOff.cshtml" />
-    <Content Include="Views\FINPettyCashStatement\Display.cshtml" />
-    <Content Include="Views\FINPettyCashStatement\Index.cshtml" />
-    <Content Include="Views\FINSCAVoucher\_PartialHeaderWithLogo.cshtml" />
-    <Content Include="Views\FINPettyCashSettlement\Item.cshtml" />
+    <Content Include="Views\HRTimesheet\CreateTimesheet.cshtml" />
+    <Content Include="Views\HRTimesheet\FormType.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1135,7 +1128,6 @@
     <Compile Include="Controllers\FINPettyCashPaymentVoucherController.cs" />
     <Compile Include="Controllers\FINPettyCashReplenishmentController.cs" />
     <Compile Include="Controllers\FINPettyCashSettlementController.cs" />
-    <Compile Include="Controllers\FINPettyCashStatementController.cs" />
     <Compile Include="Controllers\FINSCAVoucherController.cs" />
     <Compile Include="Controllers\HRDayOffController.cs" />
     <Compile Include="Controllers\SharedFinanceController.cs" />
