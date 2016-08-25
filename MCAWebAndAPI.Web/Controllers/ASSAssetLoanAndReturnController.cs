@@ -94,22 +94,22 @@ namespace MCAWebAndAPI.Web.Controllers
         //    return professionalmonthlyfees;
         //}
 
-        //public ActionResult GetProfessionalInfo(int IDProfessional)
-        //{
-        //    var siteUrl = SessionManager.Get<string>("SiteUrl");
-        //    int? IDProf = IDProfessional;
-        //    var professionalInfo = assetLoanAndReturnService.GetProfessionalInfo(IDProf, siteUrl);
+        public ActionResult GetProfessionalInfo(int IDProfessional)
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            int? IDProf = IDProfessional;
+            var professionalInfo = assetLoanAndReturnService.GetProfessionalInfo(IDProf, siteUrl);
 
-        //    var professionals = GetFromExistingSession();
-        //    return Json(
-        //        new
-        //        {
-        //            professionalInfo.ID,
-        //            professionalInfo.ProjectName,
-        //            professionalInfo.ContactNo
+            //var professionals = GetFromExistingSession();
+            return Json(
+                new
+                {
+                    professionalInfo.ID,
+                    professionalInfo.ProjectName,
+                    professionalInfo.ContactNo
 
-        //        }, JsonRequestBehavior.AllowGet);
-        //}
+                }, JsonRequestBehavior.AllowGet);
+        }
 
         [HttpPost]
         public ActionResult Submit(AssetLoanAndReturnHeaderVM _data, string siteUrl)
