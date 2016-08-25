@@ -1094,6 +1094,8 @@
     <Content Include="Views\FINPettyCashStatement\Display.cshtml" />
     <Content Include="Views\FINPettyCashStatement\Index.cshtml" />
     <Content Include="Views\FINPettyCashSettlement\Item.cshtml" />
+    <Content Include="Views\HRAdjustment\EditAdjustmentData.cshtml" />
+    <Content Include="Views\HRCompensatory\AddCompensatoryUser.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
