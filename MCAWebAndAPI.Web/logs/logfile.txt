@@ -407,3 +407,8 @@ Parameter name: source
 >>>>>>> origin/master
 2016-08-24 11:50:30.6780 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Value cannot be null.
 Parameter name: source
+2016-08-25 10:22:34.7759 MCAWebAndAPI.Service.Asset.AssignmentOfAssetService Object reference not set to an instance of an object.
+2016-08-25 10:23:03.8464 MCAWebAndAPI.Service.Asset.AssignmentOfAssetService Object reference not set to an instance of an object.
+2016-08-25 10:23:42.2810 MCAWebAndAPI.Service.Asset.AssignmentOfAssetService Object reference not set to an instance of an object.
+2016-08-25 10:28:37.6796 MCAWebAndAPI.Service.Asset.AssignmentOfAssetService Object reference not set to an instance of an object.
+2016-08-25 10:29:38.8675 MCAWebAndAPI.Service.Asset.AssignmentOfAssetService Object reference not set to an instance of an object.
