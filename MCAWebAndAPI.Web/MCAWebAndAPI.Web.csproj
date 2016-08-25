@@ -1096,6 +1096,9 @@
     <Content Include="Views\HRDayOff\_DayOffRequestHeaderData.cshtml" />
     <Content Include="Views\HRDayOff\_DayOffCurrentBalance.cshtml" />
     <Content Include="Views\HRDayOff\_RequestForDayOff.cshtml" />
+    <Content Include="Views\FINPettyCashStatement\Display.cshtml" />
+    <Content Include="Views\FINPettyCashStatement\Index.cshtml" />
+    <Content Include="Views\FINSCAVoucher\_PartialHeaderWithLogo.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1132,6 +1135,7 @@
     <Compile Include="Controllers\FINPettyCashPaymentVoucherController.cs" />
     <Compile Include="Controllers\FINPettyCashReplenishmentController.cs" />
     <Compile Include="Controllers\FINPettyCashSettlementController.cs" />
+    <Compile Include="Controllers\FINPettyCashStatementController.cs" />
     <Compile Include="Controllers\FINSCAVoucherController.cs" />
     <Compile Include="Controllers\HRDayOffController.cs" />
     <Compile Include="Controllers\SharedFinanceController.cs" />

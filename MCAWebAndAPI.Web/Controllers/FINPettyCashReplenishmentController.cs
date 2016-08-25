@@ -1,18 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Elmah;
-using Kendo.Mvc.Extensions;
-using Kendo.Mvc.UI;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
-using MCAWebAndAPI.Service.Converter;
 using MCAWebAndAPI.Service.Finance;
-using MCAWebAndAPI.Service.Finance.RequisitionNote;
-using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;
 
@@ -26,6 +17,8 @@ namespace MCAWebAndAPI.Web.Controllers
     public class FINPettyCashReplenishmentController : Controller
     {
         private const string SessionSiteUrl = "SiteUrl";
+        private const string SuccessMsgFormatUpdated = "Outstanding advance for {0} has been successfully updated.";
+        private const string FirstPageUrl = "{0}/Lists/Petty%20Cash%20Replenishment/AllItems.aspx";
 
         readonly IPettyCashReplenishmentService service;
 
@@ -62,11 +55,16 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.FINPettyCashReplenishment);
+            return RedirectToAction("Index", "Success",
+                new
+                {
+                    successMessage = string.Format(SuccessMsgFormatUpdated, viewModel.Date.ToShortDateString()),
+                    previousUrl = string.Format(FirstPageUrl, siteUrl)
+                });
         }
 
     }

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Web;
 
@@ -14,6 +16,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         {
             this.TransactionType = Shared.PettyCashTranscationType_PettyCashReplenishment;
         }
+
         [Required]
         public string Remarks { get; set; }
 
