@@ -97,7 +97,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             
             try
             {
-                SPConnector.UpdateListItem(SP_EXP_LIST_NAME, exitProcedure.ID, updatedValues, _siteUrl);
+                SPConnector.AddListItem(SP_EXP_LIST_NAME, updatedValues, _siteUrl);
             }
             catch (Exception e)
             {

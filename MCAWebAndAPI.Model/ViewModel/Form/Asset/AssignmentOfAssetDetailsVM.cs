@@ -1,5 +1,6 @@
 ﻿using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Model.ViewModel.Control;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
@@ -23,6 +24,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
             }
         }
 
+        [DisplayName("Province-Office-Floor-Room-Remarks")]
         [UIHint("InGridAjaxComboBox")]
         public AjaxComboBoxVM Province { get; set; } = new AjaxComboBoxVM();
 
@@ -38,25 +40,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
             }
         }
 
-        //public string OfficeName { get; set; }
-
-        [UIHint("AjaxCascadeComboBox")]
-        public AjaxCascadeComboBoxVM OfficeName { get; set; } = new AjaxCascadeComboBoxVM
-        {
-            ControllerName = "ASSAssignmentOfAsset",
-            ActionName = "GetOfficeNameLists",
-            ValueField = "Province",
-            TextField = "Province",
-            //OnSelectEventName = "OnOfficeChange",
-            Filter = "filterProvince",
-            Cascade = "Province"
-
-        };
-
+        public string OfficeName { get; set; }
         public string Floor { get; set; }
-
         public string Room { get; set; }
-
         public string Remarks { get; set; }
 
         public string Status { get; set; }

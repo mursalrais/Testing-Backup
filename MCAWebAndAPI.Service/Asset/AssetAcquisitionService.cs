@@ -224,6 +224,11 @@ namespace MCAWebAndAPI.Service.Asset
                     continue;
                 }
 
+                if (item.AssetSubAsset.Value == null || item.WBS.Value == null || item.CostIDR == null || item.CostUSD == null)
+                {
+                    //throw new Exception(ErrorResource.SPInsertError);
+                }
+
                 var updatedValues = new Dictionary<string, object>();
                 updatedValues.Add("assetacquisition", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
                 updatedValues.Add("assetsubasset", new FieldLookupValue { LookupId = Convert.ToInt32(item.AssetSubAsset.Value.Value) });
@@ -330,6 +335,11 @@ namespace MCAWebAndAPI.Service.Asset
                         throw e;
                     }
                     continue;
+                }
+
+                if (item.AssetSubAsset.Value == null || item.WBS.Value == null || item.CostIDR == null || item.CostUSD == null)
+                {
+                    throw new Exception(ErrorResource.SPInsertError);
                 }
 
                 var updatedValues = new Dictionary<string, object>();

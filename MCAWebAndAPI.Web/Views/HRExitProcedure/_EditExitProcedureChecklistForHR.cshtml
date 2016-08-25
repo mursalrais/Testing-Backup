@@ -9,11 +9,11 @@
     .CreateAt(GridInsertRowPosition.Bottom))
     .Columns(columns =>
     {
-        columns.Bound(p => p.ItemExitProcedure).Width(100).ClientTemplate("#= ItemExitProcedure #" +
+        columns.Bound(p => p.ItemExitProcedure).Width(80).ClientTemplate("#= ItemExitProcedure #" +
                            "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ItemExitProcedure' value='#= ItemExitProcedure #' />"
                          );
 
-        columns.Bound(p => p.ApproverUnit).Width(100).ClientTemplate("#= ApproverUnit.Text #" +
+        columns.Bound(p => p.ApproverUnit).Width(80).ClientTemplate("#= ApproverUnit.Text #" +
             "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ApproverUnit.Text' value='#= ApproverUnit.Text #' />"
             )
             .EditorViewData(new
@@ -29,7 +29,7 @@
             BindTo = ExitProcedureChecklistVM.GetProfessionalUnitOptions()
         });
 
-        columns.Bound(p => p.ApproverPosition).Width(100).ClientTemplate("#= ApproverPosition.Text #" +
+        columns.Bound(p => p.ApproverPosition).Width(80).ClientTemplate("#= ApproverPosition.Text #" +
           "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ApproverPosition.Value' value='#= ApproverPosition.Value #' />")
     .EditorViewData(
     new
@@ -53,7 +53,7 @@
 
             });
 
-        columns.Bound(p => p.ApproverUserName).Width(100).ClientTemplate("#= ApproverUserName.Text #" +
+        columns.Bound(p => p.ApproverUserName).Width(80).ClientTemplate("#= ApproverUserName.Text #" +
     "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ApproverUserName.Value' value='#= ApproverUserName.Value #' />")
     .EditorViewData(
     new
@@ -65,11 +65,11 @@
 
     });
 
-        columns.Bound(p => p.DateOfApproval).Width(100).ClientTemplate("#= kendo.toString(DateOfApproval, 'MM/dd/yyyy') #" +
+        columns.Bound(p => p.DateOfApproval).Width(80).ClientTemplate("#= kendo.toString(DateOfApproval, 'MM/dd/yyyy') #" +
         "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].DateOfApproval' value='#= DateOfApproval #' />"
         );
 
-        columns.Bound(p => p.CheckListItemApproval).Width(100).ClientTemplate("#= CheckListItemApproval.Text #" +
+        columns.Bound(p => p.CheckListItemApproval).Width(80).ClientTemplate("#= CheckListItemApproval.Text #" +
             "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].CheckListItemApproval.Text' value='#= CheckListItemApproval.Text #' />"
             )
             .EditorViewData(new
@@ -77,11 +77,11 @@
                 BindTo = ExitProcedureChecklistVM.GetCheckListItemApproval()
             });
 
-        columns.Bound(p => p.Remarks).Width(100).ClientTemplate("#= Remarks #" +
+        columns.Bound(p => p.Remarks).Width(80).ClientTemplate("#= Remarks #" +
                        "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].Remarks' value='#= Remarks #' />"
                      );
 
-        columns.Bound(p => p.ApprovalIndicator).Width(100).ClientTemplate(@"<div style='width:25px;height:25px;-webkit-border-radius:25px;-moz-border-radius:25px;border-radius:25px;background:#= ApprovalIndicator#;'</div>");
+        columns.Bound(p => p.ApprovalIndicator).Width(80).ClientTemplate(@"<div style='width:25px;height:25px;-webkit-border-radius:25px;-moz-border-radius:25px;border-radius:25px;background:#= ApprovalIndicator#;'</div>");
 
         columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
           "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ID' value='#= ID #' />"
@@ -109,7 +109,7 @@
 
 
         columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
-            .Click("onDeleteKendoDetail")).Width(100);
+            .Click("onDeleteKendoDetail")).Width(80);
     })
     .Pageable()
     .Events(e =>

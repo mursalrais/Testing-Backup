@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance.SPHL;
@@ -12,6 +10,11 @@ using NLog;
 
 namespace MCAWebAndAPI.Service.Finance
 {
+    /// <summary>
+    /// Wireframe FIN16: SPHL
+    ///     i.e.: Surat Pengesahan Hibah Langsung
+    /// </summary>
+
     public class SPHLService : ISPHLService
     {
         static Logger logger = LogManager.GetCurrentClassLogger();

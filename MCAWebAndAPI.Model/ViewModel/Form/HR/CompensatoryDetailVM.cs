@@ -112,5 +112,18 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         public string GetIndex { get; set; }
 
+        [DisplayName("Date")]
+        public string GetDateStr { get; set; }
+
+        [DisplayName("Day")]
+        [Editable(false)]
+        public string GetDayStr { get; set; }
+
+        [DisplayName("Star")]
+        public string GetStartStr { get; set; }
+
+        [DisplayName("Finish")]
+        public string GetFinishStr { get; set; }
+
     }
 }

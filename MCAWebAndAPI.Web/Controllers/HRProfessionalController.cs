@@ -57,13 +57,7 @@ namespace MCAWebAndAPI.Web.Controllers
         [HttpPost]
         public async Task<ActionResult> EditProfessional(FormCollection form, ProfessionalDataVM viewModel)
         {
-            //if(!ModelState.IsValid)
-            //{
-            //    Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            //    var errorMessages = BindHelper.GetErrorMessages(ModelState.Values);
-            //    return JsonHelper.GenerateJsonErrorResponse(errorMessages);
-            //}
-
+            
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             SetSiteUrl(siteUrl);
 

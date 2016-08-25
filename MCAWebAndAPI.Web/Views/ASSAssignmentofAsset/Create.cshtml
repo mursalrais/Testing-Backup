@@ -50,12 +50,6 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.Attachment).Class("col-md-4 control-label")
-                    <div class="col-md-8">
-                        @Html.EditorFor(m => m.Attachment)
-                    </div>
-                </div>
-                <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.CompletionStatus).Class("col-md-4 control-label")
                     <div class="col-md-8">
                         @Html.EditorFor(m => m.CompletionStatus)
@@ -80,6 +74,8 @@
 <script>
     $(document).ready(function () {
         $("#AssetHolder_Value").data("kendoDropDownList").value("");
+        //alert($("#Province").data("kendoDropDownList").text());
+
         })
 
     function onAssetChange(e)
@@ -93,18 +89,4 @@
             document.getElementById('ContactNo').value = data.MobileNumberOne;
         })
     }
-
-    function OnOfficeChange()
-    {
-        
-    }
-
-    function filterProvince()
-    {
-        return
-        {
-            province = $("#Province").data("kendoDropDownList").text();
-        }
-    }
-
 </script>

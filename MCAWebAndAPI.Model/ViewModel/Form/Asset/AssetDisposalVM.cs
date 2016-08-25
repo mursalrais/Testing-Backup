@@ -16,6 +16,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 
         public IEnumerable<AssetDisposalDetailVM> Details { get; set; } = new List<AssetDisposalDetailVM>();
 
+      
+        public string CancelURL { get; set; }
 
         public DateTime? _date = DateTime.Now;
 

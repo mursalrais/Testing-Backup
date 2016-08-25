@@ -2,22 +2,23 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web;
-using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Model.ViewModel.Control;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 {
-    public class PettyCashPaymentVoucherVM : Item
+    [MetadataType(typeof(PettyCashPaymentVoucherVMMetadata))]
+    public class PettyCashPaymentVoucherVM : PettyCashTransactionItem
     {
+        public PettyCashPaymentVoucherVM()
+        {
+            this.TransactionType = Shared.PettyCashTranscationType_PettyCashVoucher;
+        }
        
-        [DataType(DataType.Date)]
-        [DisplayName("Advance Receive Date")]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
-        public DateTime Date { get; set; } = DateTime.Today;
+        //[DataType(DataType.Date)]
+        //[DisplayName("Advance Receive Date")]
+        //[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
+        //public DateTime Date { get; set; } = DateTime.Today;
 
         [UIHint("ComboBox")]
         [Required]
@@ -34,17 +35,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         [UIHint("AjaxComboBox")]
         public AjaxComboBoxVM Vendor { get; set; } = new AjaxComboBoxVM();
 
-        [UIHint("ComboBox")]
-        [DisplayName("Currency")]
-        [Required]
-        public CurrencyComboBoxVM Currency { get; set; } = new CurrencyComboBoxVM();
-
-        [UIHint("Decimal")]
-        [Required]
-        [DisplayName("Amount paid")]
-        [DisplayFormat(DataFormatString = "{0:#}", ApplyFormatInEditMode = true)]
-        public decimal AmountPaid { get; set; } = 0;
-
         [Required]
         [DisplayName("Amount paid in words")]
         public string AmountPaidInWord { get; set; }
@@ -53,10 +43,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         [DisplayName("Reason of payment")]
         public string ReasonOfPayment { get; set; }
 
-        [UIHint("Currency")]
         [Required]
-        [DisplayFormat(DataFormatString = "{0:#}", ApplyFormatInEditMode = true)]
-        public decimal Fund { get; set; } = 3000;
+        public string Fund { get; set; } = Shared.Fund;
 
         [UIHint("AjaxComboBox")]
         [Required]
@@ -71,12 +59,25 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 
         [UIHint("MultiFileUploader")]
         [DisplayName("Attachment")]
-        [Required]
         public IEnumerable<HttpPostedFileBase> Documents { get; set; } = new List<HttpPostedFileBase>();
 
         public string DocumentUrl { get; set; }
 
-        public string VoucherNo { get; set; }
+        //public string DocNo { get; set; }
 
+    }
+
+    internal class PettyCashPaymentVoucherVMMetadata
+    {
+        [DataType(DataType.Date)]
+        [DisplayName("Advance Receive Date")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
+        public DateTime Date { get; set; } = DateTime.Today;
+
+        [UIHint("Decimal")]
+        [Required]
+        [DisplayName("Amount paid")]
+        [DisplayFormat(DataFormatString = "{0:#}", ApplyFormatInEditMode = true)]
+        public decimal Amount { get; set; } = 0;
     }
 }

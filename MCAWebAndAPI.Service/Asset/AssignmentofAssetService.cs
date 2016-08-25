@@ -8,6 +8,8 @@ using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using System.Web;
 using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Service.Resources;
+using MCAWebAndAPI.Model.ViewModel.Control;
+using System.Data;
 
 namespace MCAWebAndAPI.Service.Asset
 {
@@ -37,21 +39,36 @@ namespace MCAWebAndAPI.Service.Asset
 
             viewModel.TransactionType = Convert.ToString(listItem["Title"]);
             viewModel.AssetHolder.Choices = GetFromListHR("Professional Master", "Title", "Position", SiteUrl);
-            if ((listItem["assetholder"] as FieldLookupValue) != null)
+            var caml = @"<View><Query>
+                       <Where>
+                          <Eq>
+                            <FieldRef Name='ID' />
+                             <Value Type='Counter'>" + (listItem["assetholder"] as FieldLookupValue).LookupId + @"</Value>
+                          </Eq>
+                       </Where>
+                    </Query>
+                    <ViewFields>
+                       <FieldRef Name='Title' />
+                       <FieldRef Name='Position' />
+                    </ViewFields>
+                    <QueryOptions /></View>";
+            var sitehr = SiteUrl.Replace("/bo", "/hr");
+            var infoAssetHolder = SPConnector.GetList("Professional Master", sitehr, caml);
+            foreach (var info in infoAssetHolder)
             {
                 viewModel.AssetHolder.Value = (listItem["assetholder"] as FieldLookupValue).LookupId.ToString();
-                viewModel.AssetHolder.Text = (listItem["assetholder"] as FieldLookupValue).LookupValue;
+                viewModel.AssetHolder.Text = info["Title"] + "-" + (info["Position"] as FieldLookupValue).LookupValue;
             }
             //viewModel.AccpMemo.Value = Convert.ToString(listItem["acceptancememono"]);
-            viewModel.ProjectUnit = Convert.ToString(listItem["pono"]);
-            viewModel.ContactNo = Convert.ToString(listItem["vendorid"]) + "-" + Convert.ToString(listItem["vendorname"]);
-            if (Convert.ToDateTime(listItem["trasnferdate"]) == DateTime.MinValue)
+            viewModel.ProjectUnit = Convert.ToString(listItem["projectunit"]);
+            viewModel.ContactNo = Convert.ToString(listItem["contactnumber"]);
+            if (Convert.ToDateTime(listItem["transferdate"]) == DateTime.MinValue)
             {
                 viewModel.Date = null;
             }
             else
             {
-                viewModel.Date = Convert.ToDateTime(listItem["trasnferdate"]).AddDays(1);
+                viewModel.Date = Convert.ToDateTime(listItem["transferdate"]);
             }
             //viewModel.PurchaseDescription = Regex.Replace(Convert.ToString(listItem["purchasedescription"]), "<.*?>", string.Empty);
             viewModel.ID = ID;
@@ -73,7 +90,7 @@ namespace MCAWebAndAPI.Service.Asset
                     var position = "";
                     if ((item["Position"] as FieldLookupValue) != null)
                     {
-                        position =(item["Position"] as FieldLookupValue).LookupValue;
+                        position = (item["Position"] as FieldLookupValue).LookupValue;
                     }
                     _choices.Add(item[f1] + "-" + position);
                 }
@@ -84,13 +101,13 @@ namespace MCAWebAndAPI.Service.Asset
                 //var listProfMasBO = SPConnector.GetList(listname, siteUrl);
                 //foreach(var pmbo in listProfMasBO)
                 //{
-                    
+
                 //}
             }
             return _choices.ToArray();
         }
 
-        public int? CreateHeader(AssignmentOfAssetVM viewmodel, string SiteUrl)
+        public int? CreateHeader(AssignmentOfAssetVM viewmodel, string SiteUrl, string mode = null)
         {
             //viewmodel.CancelURL = _siteUrl + UrlResource.AssetAcquisition;
             var columnValues = new Dictionary<string, object>();
@@ -111,19 +128,32 @@ namespace MCAWebAndAPI.Service.Asset
             }
             else
             {
-                var breaks = viewmodel.AssetHolder.Value.Split('-');
-                var getInfo = GetProfMasterInfo(breaks[0], SiteUrl);
-                if(getInfo != null)
+                if (mode == null)
                 {
-                    columnValues.Add("assetholder", new FieldLookupValue { LookupId = Convert.ToInt32(getInfo.ID) });
-                    columnValues.Add("projectunit", getInfo.CurrentPosition.Text);
-                    columnValues.Add("contactnumber", getInfo.MobileNumberOne);
+                    var breaks = viewmodel.AssetHolder.Value.Split('-');
+                    var getInfo = GetProfMasterInfo(breaks[0], SiteUrl);
+                    if (getInfo != null)
+                    {
+                        columnValues.Add("assetholder", new FieldLookupValue { LookupId = Convert.ToInt32(getInfo.ID) });
+                        columnValues.Add("position", breaks[1]);
+                        columnValues.Add("projectunit", getInfo.CurrentPosition.Text);
+                        columnValues.Add("contactnumber", getInfo.MobileNumberOne);
+                    }
                 }
-            }
+                else
+                {
+                    var getInfo = GetProfMasterInfo(viewmodel.AssetHolder.Value, SiteUrl);
+                    if (getInfo != null)
+                    {
+                        columnValues.Add("assetholder", new FieldLookupValue { LookupId = Convert.ToInt32(getInfo.ID) });
+                        columnValues.Add("position", getInfo.Title);
+                        columnValues.Add("projectunit", getInfo.CurrentPosition.Text);
+                        columnValues.Add("contactnumber", getInfo.MobileNumberOne);
+                    }
+                }
 
-            //attachment later
+            }
             columnValues.Add("completionstatus", viewmodel.CompletionStatus.Value);
-            
 
             try
             {
@@ -140,7 +170,7 @@ namespace MCAWebAndAPI.Service.Asset
 
         public void CreateDocuments(int? headerID, IEnumerable<HttpPostedFileBase> documents, string SiteUrl)
         {
-            foreach(var doc in documents)
+            foreach (var doc in documents)
             {
                 var updateValues = new Dictionary<string, object>();
                 updateValues.Add("assetassignmentid", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
@@ -178,17 +208,17 @@ namespace MCAWebAndAPI.Service.Asset
             }
             else
             {
-                columnValues.Add("assetholder", new FieldLookupValue { LookupId = Convert.ToInt32(viewmodel.AssetHolder.Value) });
                 var breaks = viewmodel.AssetHolder.Value.Split('-');
                 var getInfo = GetProfMasterInfo(breaks[0], SiteUrl);
                 if (getInfo != null)
                 {
-                    columnValues.Add("projectunit", getInfo.CurrentPosition);
+                    columnValues.Add("assetholder", new FieldLookupValue { LookupId = Convert.ToInt32(getInfo.ID) });
+                    columnValues.Add("position", breaks[1]);
+                    columnValues.Add("projectunit", getInfo.CurrentPosition.Text);
                     columnValues.Add("contactnumber", getInfo.MobileNumberOne);
                 }
             }
 
-            //attachment later
             columnValues.Add("completionstatus", viewmodel.CompletionStatus.Value);
 
             try
@@ -210,7 +240,7 @@ namespace MCAWebAndAPI.Service.Asset
                        <Where>
                           <Eq>
                              <FieldRef Name='Title' />
-                             <Value Type='Text'>"+fullname+ @"</Value>
+                             <Value Type='Text'>" + fullname + @"</Value>
                           </Eq>
                        </Where>
                     </Query>
@@ -280,7 +310,7 @@ namespace MCAWebAndAPI.Service.Asset
                            <Where>
                               <Eq>
                                  <FieldRef Name='AssetID' />
-                                 <Value Type='Text'>"+ assetID + @"</Value>
+                                 <Value Type='Text'>" + assetID + @"</Value>
                               </Eq>
                            </Where>
                         </Query>
@@ -292,7 +322,7 @@ namespace MCAWebAndAPI.Service.Asset
                         <QueryOptions /></View>";
             var list = SPConnector.GetList(listname, _siteUrl, caml);
             var model = new AssetMasterVM();
-            foreach(var item in list)
+            foreach (var item in list)
             {
                 model.ID = Convert.ToInt32(item["ID"]);
                 model.AssetNoAssetDesc.Text = Convert.ToString(item["AssetID"]);
@@ -306,40 +336,65 @@ namespace MCAWebAndAPI.Service.Asset
         {
             var models = new List<LocationMasterVM>();
             var caml = @"<View><Query>
-                           <Where>
-                              <IsNotNull>
-                                 <FieldRef Name='Province' />
-                              </IsNotNull>
-                           </Where>
-                        </Query>
-                        <ViewFields>
-                           <FieldRef Name='Province' />
-                           <FieldRef Name='Floor' />
-                           <FieldRef Name='Room' />
-                           <FieldRef Name='Remarks' />
-                           <FieldRef Name='Title' />
-                        </ViewFields>
-                        <QueryOptions /></View>";
+                       <Where>
+                          <IsNotNull>
+                             <FieldRef Name='Province' />
+                          </IsNotNull>
+                       </Where>
+                       <OrderBy>
+                          <FieldRef Name='Province' Ascending='True' />
+                       </OrderBy>
+                    </Query>
+                    <ViewFields>
+                       <FieldRef Name='Title' />
+                        <FieldRef Name='Province' />
+                        <FieldRef Name='Floor' />
+                        <FieldRef Name='Room' />
+                        <FieldRef Name='Remarks' />
+                    </ViewFields>
+                    <QueryOptions /></View>";
+            List<string> listProvince = new List<string>();
             foreach (var item in SPConnector.GetList("Location Master", _siteUrl, caml))
             {
-                models.Add(ConvertToModelLocation(item));
+                models.Add(ConvertToProvince(item));
+                //var province = "";
+                //if ((item["Province"] as FieldLookupValue) != null)
+                //{
+                //    province = (item["Province"] as FieldLookupValue).LookupValue;
+                //}
+
+                //if (listProvince.Count == 0)
+                //{
+                //    listProvince.Add(province);
+                //    models.Add(ConvertToProvince(item));
+                //}
+                //else
+                //{
+                //    if (listProvince.Contains(province))
+                //    {
+                //        continue;
+                //    }
+                //    else
+                //    {
+                //        listProvince.Add(province);
+                //        models.Add(ConvertToProvince(item));
+                //    }
+                //}
             }
 
             return models;
         }
 
-        private LocationMasterVM ConvertToModelLocation(ListItem item)
+        private LocationMasterVM ConvertToProvince(ListItem item)
         {
             var viewModel = new LocationMasterVM();
 
             viewModel.ID = Convert.ToInt32(item["ID"]);
             var province = "";
-            //getInfo Asset Master
             if ((item["Province"] as FieldLookupValue) != null)
             {
                 province = (item["Province"] as FieldLookupValue).LookupValue;
             }
-            //var info = GetInfoProvince("Province", province, _siteUrl);
             viewModel.Province.Text = province;
             viewModel.OfficeName = Convert.ToString(item["Title"]);
             viewModel.FloorName = Convert.ToInt32(item["Floor"]);
@@ -355,7 +410,7 @@ namespace MCAWebAndAPI.Service.Asset
                            <Where>
                               <Eq>
                                  <FieldRef Name='Province' />
-                                 <Value Type='Lookup'>"+province+@"</Value>
+                                 <Value Type='Lookup'>" + province + @"</Value>
                               </Eq>
                            </Where>
                         </Query>
@@ -369,7 +424,7 @@ namespace MCAWebAndAPI.Service.Asset
                         <QueryOptions /></View>";
             var list = SPConnector.GetList("Location Master", SiteUrl, caml);
             var viewmodel = new LocationMasterVM();
-            foreach(var item in list)
+            foreach (var item in list)
             {
                 viewmodel.ID = Convert.ToInt32(item["ID"]);
                 viewmodel.OfficeName = Convert.ToString(item["Title"]);
@@ -404,16 +459,15 @@ namespace MCAWebAndAPI.Service.Asset
                 var updatedValues = new Dictionary<string, object>();
                 updatedValues.Add("assetassignment", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
                 var getAssetID = SPConnector.GetListItem("Asset Acquisition Details", item.AssetSubAsset.Value.Value, _siteUrl);
-                var getProvince = SPConnector.GetListItem("Province", item.Province.Value.Value, _siteUrl);
                 var provinceinfo = SPConnector.GetListItem("Location Master", item.Province.Value.Value, _siteUrl);
                 if ((getAssetID["assetsubasset"] as FieldLookupValue) != null)
                 {
                     updatedValues.Add("assetsubasset", (getAssetID["assetsubasset"] as FieldLookupValue).LookupId);
                 }
 
-                if ((getProvince["Province"] as FieldLookupValue) != null)
+                if ((provinceinfo["Province"] as FieldLookupValue) != null)
                 {
-                    updatedValues.Add("province", (getProvince["Province"] as FieldLookupValue).LookupId);
+                    updatedValues.Add("province", (provinceinfo["Province"] as FieldLookupValue).LookupId);
                 }
                 //updatedValues.Add("assetsubasset", getAssetID["AssetID"]);
                 //updatedValues.Add("province", getProvince["Title"]);
@@ -434,26 +488,47 @@ namespace MCAWebAndAPI.Service.Asset
             }
         }
 
-        public IEnumerable<LocationMasterVM> GetOfficeName(string province, string SiteUrl)
+        public IEnumerable<LocationMasterVM> GetOfficeName(string SiteUrl, string province)
         {
             var model = new List<LocationMasterVM>();
-            string caml = @"<View><Query>
-                           <Where>
-                              <Eq>
-                                 <FieldRef Name='Province' />
-                                 <Value Type='Lookup'>Jakarta</Value>
-                              </Eq>
-                           </Where>
-                        </Query>
-                        <ViewFields>
-                           <FieldRef Name='Title' />
-                           <FieldRef Name='Floor' />
-                           <FieldRef Name='Room' />
-                           <FieldRef Name='Remarks' />
-                        </ViewFields>
-                        <QueryOptions /></View>";
+            string caml = "";
+            if (province == null)
+            {
+                caml = @"<View><Query>
+                       <Where>
+                          <IsNotNull>
+                             <FieldRef Name='Province' />
+                          </IsNotNull>
+                       </Where>
+                       <OrderBy>
+                          <FieldRef Name='Province' Ascending='True' />
+                       </OrderBy>
+                    </Query>
+                    <ViewFields>
+                       <FieldRef Name='Title' />
+                    </ViewFields>
+                    <QueryOptions /></View>";
+            }
+            else
+            {
+                caml = @"<View><Query>
+                       <Where>
+                          <Eq>
+                             <FieldRef Name='Province' />
+                             <Value Type='Lookup'>" + province + @"</Value>
+                          </Eq>
+                       </Where>
+                       <OrderBy>
+                          <FieldRef Name='Province' Ascending='True' />
+                       </OrderBy>
+                    </Query>
+                    <ViewFields>
+                       <FieldRef Name='Title' />
+                    </ViewFields>
+                    <QueryOptions /></View>";
+            }
 
-            foreach(var item in SPConnector.GetList("Location Master", SiteUrl, caml))
+            foreach (var item in SPConnector.GetList("Location Master", SiteUrl, caml))
             {
                 model.Add(ConvertToOfficeName(item));
             }
@@ -466,7 +541,254 @@ namespace MCAWebAndAPI.Service.Asset
             var viewmodel = new LocationMasterVM();
 
             viewmodel.ID = Convert.ToInt32(item["ID"]);
-            viewmodel.Province.Text = Convert.ToString(item["Province"]);
+            viewmodel.OfficeName = Convert.ToString(item["Title"]);
+
+            return viewmodel;
+
+        }
+
+        IEnumerable<AssignmentOfAssetDetailsVM> IAssignmentOfAssetService.GetDetails(int? headerID)
+        {
+            var caml = @"<View><Query><Where><Eq><FieldRef Name='assetassignment' /><Value Type='Lookup'>" + headerID.ToString() + "</Value></Eq></Where></Query></View>";
+            var details = new List<AssignmentOfAssetDetailsVM>();
+            foreach (var item in SPConnector.GetList("Asset Assignment Detail", _siteUrl, caml))
+            {
+                details.Add(ConvertToDetails(item));
+            }
+
+            return details;
+        }
+
+        private AssignmentOfAssetDetailsVM ConvertToDetails(ListItem item)
+        {
+            var ListAssetSubAsset = SPConnector.GetListItem("Asset Master", (item["assetsubasset"] as FieldLookupValue).LookupId, _siteUrl);
+            AjaxComboBoxVM _assetSubAsset = new AjaxComboBoxVM();
+            _assetSubAsset.Value = (item["assetsubasset"] as FieldLookupValue).LookupId;
+            _assetSubAsset.Text = Convert.ToString(ListAssetSubAsset["AssetID"]) + " - " + Convert.ToString(ListAssetSubAsset["Title"]);
+
+            var province = (item["province"] as FieldLookupValue).LookupValue;
+
+            var ListProvince = SPConnector.GetListItem("Location Master", (item["province"] as FieldLookupValue).LookupId, _siteUrl);
+            AjaxComboBoxVM _province = new AjaxComboBoxVM();
+            _province.Value = (item["province"] as FieldLookupValue).LookupId;
+            _province.Text = (ListProvince["Province"] as FieldLookupValue).LookupValue +"-"+ ListProvince["Title"] + "-" +ListProvince["Floor"] + "-" +ListProvince["Room"] + "-" +ListProvince["Remarks"];
+
+
+            return new AssignmentOfAssetDetailsVM
+            {
+                ID = Convert.ToInt32(item["ID"]),
+                AssetSubAsset = AssignmentOfAssetDetailsVM.GetAssetSubAssetDefaultValue(_assetSubAsset),
+                Province = AssignmentOfAssetDetailsVM.GetProvinceDefaultValue(_province),
+                Status = Convert.ToString(item["Status"])
+            };
+        }
+
+        public void UpdateDetails(int? headerID, IEnumerable<AssignmentOfAssetDetailsVM> items)
+        {
+            foreach (var item in items)
+            {
+                if (Item.CheckIfSkipped(item)) continue;
+
+                if (Item.CheckIfDeleted(item))
+                {
+                    try
+                    {
+                        SPConnector.DeleteListItem("Assignment Asset Detail", item.ID, _siteUrl);
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error(e);
+                        throw e;
+                    }
+                    continue;
+                }
+
+                var updatedValues = new Dictionary<string, object>();
+                updatedValues.Add("assetassignment", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
+                var provinceinfo = SPConnector.GetListItem("Location Master", item.Province.Value.Value, _siteUrl);
+
+                updatedValues.Add("assetsubasset", item.AssetSubAsset.Value.Value);
+                updatedValues.Add("province", item.Province.Value.Value);
+                updatedValues.Add("office", provinceinfo["Title"]);
+                updatedValues.Add("floor", provinceinfo["Floor"]);
+                updatedValues.Add("room", provinceinfo["Room"]);
+                updatedValues.Add("remarks", provinceinfo["Remarks"]);
+                updatedValues.Add("Status", "RUNNING");
+                try
+                {
+                    if (Item.CheckIfUpdated(item))
+                        SPConnector.UpdateListItem("Asset Assignment Detail", item.ID, updatedValues, _siteUrl);
+                    else
+                        SPConnector.AddListItem("Asset Assignment Detail", updatedValues, _siteUrl);
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e);
+                    throw new Exception(ErrorResource.SPInsertError);
+                }
+            }
+        }
+
+        public int? MassUploadHeaderDetail(string ListName, DataTable CSVDataTable, string SiteUrl = null)
+        {
+            if (CSVDataTable.Columns.Count == 6)
+            {
+                //header
+                var model = new AssignmentOfAssetVM();
+            }
+            else
+            {
+                //detail
+                var model = new AssignmentOfAssetDetailsVM();
+
+            }
+            throw new NotImplementedException();
+        }
+
+        public void RollbackParentChildrenUpload(string listNameHeader, int? latestIDHeader, string siteUrl)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool isExist(string listname, string caml, string site)
+        {
+            var list = SPConnector.GetList(listname, site, caml);
+            if (list.Count == 0)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public IEnumerable<LocationMasterVM> GetFloorList(string SiteUrl, string office = null)
+        {
+            var model = new List<LocationMasterVM>();
+            string caml = "";
+            if (office == null)
+            {
+                caml = @"<View><Query>
+                       <Where>
+                          <IsNotNull>
+                             <FieldRef Name='Floor' />
+                          </IsNotNull>
+                       </Where>
+                       <OrderBy>
+                          <FieldRef Name='Floor' Ascending='True' />
+                       </OrderBy>
+                    </Query>
+                    <ViewFields>
+                       <FieldRef Name='Floor' />
+                    </ViewFields>
+                    <QueryOptions /></View>";
+            }
+            else
+            {
+                caml = @"<View></View>";
+            }
+
+            List<int> listFloor= new List<int>();
+            foreach (var item in SPConnector.GetList("Location Master", _siteUrl, caml))
+            {
+                var floorelement = 0;
+                if (Convert.ToString(item["Floor"]) != null)
+                {
+                    floorelement = Convert.ToInt32(item["Floor"]);
+                }
+
+                if (listFloor.Count == 0)
+                {
+                    listFloor.Add(floorelement);
+                    model.Add(ConvertToFloorList(item));
+                }
+                else
+                {
+                    if (listFloor.Contains(floorelement))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        listFloor.Add(floorelement);
+                        model.Add(ConvertToFloorList(item));
+                    }
+                }
+            }
+
+            return model;
+        }
+
+        private LocationMasterVM ConvertToFloorList(ListItem item)
+        {
+            var viewmodel = new LocationMasterVM();
+            viewmodel.OfficeName = Convert.ToString(item["Floor"]);
+
+            return viewmodel;
+
+        }
+
+        public IEnumerable<LocationMasterVM> GetRoomList(string SiteUrl, string floor = null)
+        {
+            var model = new List<LocationMasterVM>();
+            string caml = "";
+            if (floor == null)
+            {
+                caml = @"<View><Query>
+                       <Where>
+                          <IsNotNull>
+                             <FieldRef Name='Room' />
+                          </IsNotNull>
+                       </Where>
+                       <OrderBy>
+                            <FieldRef Name='Room' Ascending='True' />
+                        </OrderBy>
+                    </Query>
+                    <ViewFields>
+                       <FieldRef Name='Room' />
+                    </ViewFields>
+                    <QueryOptions /></View>";
+            }
+            else
+            {
+                caml = @"<View></View>";
+            }
+            List<string> listRoom = new List<string>();
+            foreach (var item in SPConnector.GetList("Location Master", _siteUrl, caml))
+            {
+                var roomname = "";
+                if (Convert.ToString(item["Room"])  != null)
+                {
+                    roomname = Convert.ToString(item["Room"]);
+                }
+
+                if (listRoom.Count == 0)
+                {
+                    listRoom.Add(roomname);
+                    model.Add(ConvertToRoomList(item));
+                }
+                else
+                {
+                    if (listRoom.Contains(roomname))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        listRoom.Add(roomname);
+                        model.Add(ConvertToRoomList(item));
+                    }
+                }
+            }
+
+            return model;
+        }
+
+        private LocationMasterVM ConvertToRoomList(ListItem item)
+        {
+            var viewmodel = new LocationMasterVM();
+
+            //viewmodel.ID = Convert.ToInt32(item["ID"]);
+            viewmodel.RoomName = Convert.ToString(item["Room"]);
 
             return viewmodel;
 

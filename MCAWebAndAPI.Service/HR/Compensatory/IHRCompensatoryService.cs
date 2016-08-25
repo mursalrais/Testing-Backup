@@ -16,6 +16,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         CompensatoryVM GetComplistActive();
 
+        CompensatoryVM GetProfessional(string userAccess);
+        
         bool UpdateHeader(CompensatoryVM header);
 
         void CreateCompensatoryData(int? headerID, CompensatoryVM CompensatoryList);

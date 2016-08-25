@@ -18,14 +18,7 @@
     <div class="form-group">
         @Html.Bootstrap().LabelFor(m => m.Workplan).Class("col-xs-4 control-label")
         <div class="col-xs-8">     
-            @{
-                var arr = Model.Workplan.ToArray();
-                foreach (var item in Model.Workplan)
-                {
-                    @Html.Kendo().CheckBox().Label(item.Text).Name(item.Text).Checked(item.Value);
-                    <br>
-                }
-            }    
+            @Html.DisplayFor(m => m.Workplan)  
         </div>
     </div>    
 </div>

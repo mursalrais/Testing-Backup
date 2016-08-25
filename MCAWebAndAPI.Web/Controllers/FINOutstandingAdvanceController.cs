@@ -1,18 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Elmah;
-using Kendo.Mvc.Extensions;
-using Kendo.Mvc.UI;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
-using MCAWebAndAPI.Service.Converter;
 using MCAWebAndAPI.Service.Finance;
-using MCAWebAndAPI.Service.Finance.RequisitionNote;
-using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;
 using static MCAWebAndAPI.Model.ViewModel.Form.Finance.Shared;
@@ -27,6 +18,8 @@ namespace MCAWebAndAPI.Web.Controllers
     public class FINOutstandingAdvanceController : Controller
     {
         private const string SessionSiteUrl = "SiteUrl";
+        private const string SuccessMsgFormatUpdated = "Outstanding advance for {0} has been successfully updated.";
+        private const string FirstPageUrl = "{0}/Lists/FINOutstandingAdvance/AllItems.aspx";
 
         readonly IOutstandingAdvanceService service;
 
@@ -46,7 +39,6 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewModel);
         }
 
-
         [HttpPost]
         public async Task<ActionResult> Save(FormCollection form, OutstandingAdvanceVM viewModel)
         {
@@ -55,19 +47,27 @@ namespace MCAWebAndAPI.Web.Controllers
 
             try
             {
+                var listVendor = service.Get();
                 int? id = service.Save(viewModel);
                 Task createApplicationDocumentTask = service.SaveAttachmentAsync(id, viewModel.Reference, viewModel.Documents);
-                Task allTasks = Task.WhenAll(createApplicationDocumentTask);
+                Task sendEmailToProfessional = service.SendEmailToProfessional(EmailResource.ProfessionalEmailOutstandingAdvance, viewModel, listVendor);
+                Task sendEmailToGrantees = service.SendEmailToGrantees(EmailResource.GranteesEmailOutstandingAdvance, viewModel, listVendor);
+                Task allTasks = Task.WhenAll(createApplicationDocumentTask,sendEmailToProfessional,sendEmailToGrantees);
 
                 await allTasks;
             }
             catch (Exception e)
             {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.FINOutstandingAdvance);
+            return RedirectToAction("Index", "Success",
+                new
+                {
+                    successMessage = string.Format(SuccessMsgFormatUpdated, viewModel.Staff.Text),
+                    previousUrl = string.Format(FirstPageUrl, siteUrl)
+                });
         }
 
     }

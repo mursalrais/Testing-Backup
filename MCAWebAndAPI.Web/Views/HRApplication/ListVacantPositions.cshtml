@@ -19,8 +19,11 @@
             columns.Bound(p => p.PositionName);
             columns.Bound(p => p.ID).Hidden();
             columns.Bound(p => p.EditMode).Width(100)
+            //.ClientTemplate("<a href='/HRApplication/CreateApplicationData?siteUrl="
+            //+ MCAWebAndAPI.Web.Resources.ConfigResource.DefaultHRSiteUrl +
+            //"&ID=#= ID #&position=#= PositionName #' class='btn btn-labeled btn-warning'><span class='btn-label'><i class='glyphicon glyphicon-bookmark'></i></span>Apply</a>");
             .ClientTemplate("<a href='/HRApplication/CreateApplicationData?siteUrl="
-            + MCAWebAndAPI.Web.Resources.ConfigResource.DefaultHRSiteUrl +
+            + ViewBag.siteUrl +
             "&ID=#= ID #&position=#= PositionName #' class='btn btn-labeled btn-warning'><span class='btn-label'><i class='glyphicon glyphicon-bookmark'></i></span>Apply</a>");
         })
         .DataSource(dataSource => dataSource.Ajax()

@@ -45,10 +45,10 @@
             </div>
         </div>
         <div class="form-group">
-            @Html.Bootstrap().LabelFor(m => m.AmountPaid).Class("col-sm-3 control-label")
+            @Html.Bootstrap().LabelFor(m => m.Amount).Class("col-sm-3 control-label")
             <div class="col-sm-8">
-                @Html.EditorFor(m => m.AmountPaid, new { HtmlAttributes = new { @class = "textbox-padding6px" } })
-                @Html.ValidationMessageFor(m => m.AmountPaid)
+                @Html.EditorFor(m => m.Amount, new { HtmlAttributes = new { @class = "textbox-padding6px" } })
+                @Html.ValidationMessageFor(m => m.Amount)
             </div>
         </div>
         <div class="form-group">
@@ -66,7 +66,7 @@
         <div class="form-group">
             @Html.Bootstrap().LabelFor(m => m.Fund).Class("col-sm-3 control-label")
             <div class="col-sm-8">
-                @Html.EditorFor(m => m.Fund, new { HtmlAttributes = new { @class = "textbox-padding6px-readonly", @readonly = "readonly" } })
+                @Html.DisplayFor(m => m.Fund)
             </div>
         </div>
         <div class="form-group">
