@@ -16,7 +16,7 @@
         <legend>Form Asset Disposal</legend>
         @Html.AntiForgeryToken()
         @Html.ValidationSummary()
-        <div class="col-sm-6">
+        <div class="col-sm-6">  
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.TransactionType).Class("col-sm-4 control-label")
                 <div class="col-sm-8">
@@ -54,7 +54,7 @@
     <div>
         <center>
 
-            <input id="submit-button" onclick="return saveDisposal()" class="k-button k-button-icontext k-grid-add" size="4" type="submit" value="Save" />
+            <input id="submit-button" onclick="return PreSaveAction()" class="k-button k-button-icontext k-grid-add" size="4" type="submit" value="Save" />
 
             <a href="@Model.CancelURL" target='_parent'>
                 <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
@@ -70,48 +70,48 @@
 
         //function saveDisposal() {
         //    // alert("saving...");
-        //    var idattach = document.querySelectorAll("[id^='attachRow']");
-        //    //  alert(idattach.length);
+        //    //var idattach = document.querySelectorAll("[id^='attachRow']");
+        //    ////  alert(idattach.length);
 
-        //    if (idattach.length == 0) {
-        //        alert("Please Attach the memo for disposal");
-        //    } else {
+        //    //if (idattach.length == 0) {
+        //    //    alert("Please Attach the memo for disposal");
+        //    //} else {
 
         //        $("form").submit();
-        //    }
+        //   // }
 
 
         //}
 
-        $(document).ready(function () {
+        //$(document).ready(function () {
 
-            $("#submit-button").click(function (e) {
+        //    $("#submit-button").click(function (e) {
 
-                // untuk postpone default Submit Form operation
+        //        // untuk postpone default Submit Form operation
 
-                e.preventDefault();
-
-
-
-                // cek DOM di upload control apakah contains filename
-
-                // cek perbedaan DOM sebelum dan sesudah upload file
-
-                // di sini: http://demos.telerik.com/aspnet-mvc/upload/index
-
-                var isFileExist = $('.k-upload').find('ul.k-upload-files').length == 1;
+        //        e.preventDefault();
 
 
 
-                if (isFileExist)
+        //        // cek DOM di upload control apakah contains filename
 
-                    $('form').submit();
+        //        // cek perbedaan DOM sebelum dan sesudah upload file
 
-                else
+        //        // di sini: http://demos.telerik.com/aspnet-mvc/upload/index
 
-                    alert('Please Attach the memo for disposal');
+        //        var isFileExist = $('.k-upload').find('ul.k-upload-files').length == 1;
 
-            });
+
+
+        //        if (isFileExist)
+
+        //            $('form').submit();
+
+        //        else
+
+        //            alert('Please Attach the memo for disposal');
+
+        //    });
 
 
 
@@ -130,6 +130,35 @@
         //    });
         //}
         //  );
+
+        function PreSaveAction() {
+         
+            var elm = document.getElementById("idAttachmentsTable");
+          
+            if (elm == null || elm.rows.length == 0) {
+
+                // document.getElementById("idAttachmentsRow").style.display = 'none';
+                alert("Please attach the memo for disposal");
+                return false;
+            }
+            else {
+
+                $("form").submit();
+            }
+        }
+
+        //function PreSaveAction() {
+        //    var elm = document.getElementById("idAttachmentsTable");
+        //    if (elm == null || elm.rows.length == 0) {
+        //        document.getElementById("idAttachmentsRow").style.display = 'none';
+        //        alert("Please attach the memo for disposal");
+        //        return false;
+        //    }
+        //    else {
+
+        //        $("form").submit();
+        //    }
+        //}
 
     </script>
 }

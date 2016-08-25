@@ -54,19 +54,32 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
                 int? professionalID = FormatUtil.ConvertLookupToID(psaData, "professional");//GetProfessionalID(psaNumber);
 
-                if (professionalID==null)continue;
-                var professionalData = SPConnector.GetListItem(SP_PROFESSIONAL_LIST_NAME, professionalID, _siteUrl);
-                string professionalMail = Convert.ToString(professionalData["officeemail"]);
-                string professionalFullName = Convert.ToString(professionalData["Title"]);
-
-                if(strToday == strTwoMonthBeforeExpired)
+                if (professionalID != Convert.ToInt32(null))
                 {
-                    string mailSubject = "Notification of PSA Expired";
-                    string mailContent = string.Format("Dear Mr./Mrs. {0}. This email is sent to you to notify that your PSA will be expired in the next two months. Please kindly communicate to HR dept. for any further action.", professionalFullName);
+                    var professionalData = SPConnector.GetListItem(SP_PROFESSIONAL_LIST_NAME, professionalID, _siteUrl);
 
-                    SendMailTwoMonthBeforeExpired(professionalMail, mailSubject, mailContent);
+                    if(professionalData != null)
+                    {
+                        string professionalMail = Convert.ToString(professionalData["officeemail"]);
+                        string professionalFullName = Convert.ToString(professionalData["Title"]);
+
+                        if (strToday == strTwoMonthBeforeExpired)
+                        {
+                            string mailSubject = "Notification of PSA Expired";
+                            string mailContent = string.Format("Dear Mr./Mrs. {0}. This email is sent to you to notify that your PSA will be expired in the next two months. Please kindly communicate to HR dept. for any further action.", professionalFullName);
+
+                            SendMailTwoMonthBeforeExpired(professionalMail, mailSubject, mailContent);
+                        }
+                    }
+                    else
+                    {
+                        continue;
+                    }
                 }
-                
+                else
+                {
+                    continue;
+                }
             }
 
             return true;
@@ -82,6 +95,8 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
             //      </Query> 
             //</View>";
 
+            var columnValues = new Dictionary<string, object>();
+
             foreach (var psaData in SPConnector.GetList(SP_PSA_LIST_NAME, _siteUrl, camlPSAInactive))
             {
                 int id = Convert.ToInt32(psaData["ID"]);
@@ -89,14 +104,14 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
                 DateTime newpsadate = Convert.ToDateTime(psaData["dateofnewpsa"]).ToLocalTime();
                 string strStatus = Convert.ToString(psaData["psastatus"]);
                 DateTime dateToday = DateTime.Now.ToLocalTime();
-                var columnValues = new Dictionary<string, object>();
+                
                 if (dateToday < newpsadate || dateToday > expireDate)
                 {
                     columnValues.Add("psastatus", "Inactive");
 
                     try
                     {
-                        SPConnector.UpdateListItem(SP_PSA_LIST_NAME, id, columnValues, _siteUrl);
+                        SPConnector.UpdateListItemNoVersionConflict(SP_PSA_LIST_NAME, id, columnValues, _siteUrl);
                     }
                     catch (Exception e)
                     {
@@ -105,155 +120,225 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
                     
 
                     int? professionalID = FormatUtil.ConvertLookupToID(psaData, "professional");//GetProfessionalID(psaNumber);
-                    if (professionalID == null) continue;
-                    var professionalData = SPConnector.GetListItem(SP_PROFESSIONAL_LIST_NAME, professionalID, _siteUrl);
-                    string professionalFullName = Convert.ToString(professionalData["Title"]);
-                    
-                    int professionalPSA;
 
-                    professionalPSA = checkProfessionalPSA(professionalFullName);
-
-                    if(id == professionalPSA)
+                    if(professionalID != null)
                     {
-                        var latestProfessionalPSA = SPConnector.GetListItem(SP_PSA_LIST_NAME, professionalPSA, _siteUrl);
+                        var professionalData = SPConnector.GetListItem(SP_PROFESSIONAL_LIST_NAME, professionalID, _siteUrl);
 
-                        int? profID = FormatUtil.ConvertLookupToID(latestProfessionalPSA, "professional");//GetProfessionalID(psaNumber);
-                        string psaNumber = Convert.ToString(latestProfessionalPSA["Title"]);
-                        DateTime professionalJoinDate = Convert.ToDateTime(latestProfessionalPSA["joindate"]);
-                        DateTime professionalStartPSA = Convert.ToDateTime(latestProfessionalPSA["dateofnewpsa"]);
-                        DateTime professionalEndPSA = Convert.ToDateTime(latestProfessionalPSA["psaexpirydates"]);
-                        DateTime professionalLastDate = Convert.ToDateTime(latestProfessionalPSA["lastworkingdate"]);
-                        string psaStatus = Convert.ToString(latestProfessionalPSA["psastatus"]);
+                        if(professionalData != null)
+                        {
+                            string professionalFullName = Convert.ToString(professionalData["Title"]);
 
-                        UpdateProfessionalData(profID, psaNumber, professionalJoinDate, professionalStartPSA, professionalEndPSA, professionalLastDate, psaStatus);
+                            int professionalPSA = checkProfessionalPSA(professionalFullName);
+
+                            if (id == professionalPSA)
+                            {
+                                var latestProfessionalPSA = SPConnector.GetListItem(SP_PSA_LIST_NAME, professionalPSA, _siteUrl);
+
+                                int? profID = FormatUtil.ConvertLookupToID(latestProfessionalPSA, "professional");//GetProfessionalID(psaNumber);
+                                string psaNumber = Convert.ToString(latestProfessionalPSA["Title"]);
+                                DateTime professionalJoinDate = Convert.ToDateTime(latestProfessionalPSA["joindate"]);
+                                DateTime professionalStartPSA = Convert.ToDateTime(latestProfessionalPSA["dateofnewpsa"]);
+                                DateTime professionalEndPSA = Convert.ToDateTime(latestProfessionalPSA["psaexpirydates"]);
+                                DateTime professionalLastDate = Convert.ToDateTime(latestProfessionalPSA["lastworkingdate"]);
+                                string psaStatus = Convert.ToString(latestProfessionalPSA["psastatus"]);
+
+                                UpdateProfessionalData(profID, psaNumber, professionalJoinDate, professionalStartPSA, professionalEndPSA, professionalLastDate, psaStatus);
+                            }
+                            else if(id < professionalPSA)
+                            {
+                                var currentProfessionalPSA = SPConnector.GetListItem(SP_PSA_LIST_NAME, id, _siteUrl);
+                                var latestProfessionalPSA = SPConnector.GetListItem(SP_PSA_LIST_NAME, professionalPSA, _siteUrl);
+
+                                DateTime latestDateOfNewPSA = Convert.ToDateTime(latestProfessionalPSA["dateofnewpsa"]).ToLocalTime();
+                                DateTime latestExpiryDate = Convert.ToDateTime(latestProfessionalPSA["lastworkingdate"]).ToLocalTime();
+
+                                if ((dateToday <= latestDateOfNewPSA) && (dateToday >= latestExpiryDate))
+                                {
+                                    columnValues.Add("psastatus", "Active");
+
+                                    try
+                                    {
+                                        SPConnector.UpdateListItemNoVersionConflict(SP_PSA_LIST_NAME, professionalPSA, columnValues, _siteUrl);
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        logger.Debug(e.Message);
+                                    }
+
+                                    int? profID = FormatUtil.ConvertLookupToID(latestProfessionalPSA, "professional");//GetProfessionalID(psaNumber);
+                                    string psaNumber = Convert.ToString(latestProfessionalPSA["Title"]);
+                                    DateTime professionalJoinDate = Convert.ToDateTime(latestProfessionalPSA["joindate"]);
+                                    DateTime professionalStartPSA = Convert.ToDateTime(latestProfessionalPSA["dateofnewpsa"]);
+                                    DateTime professionalEndPSA = Convert.ToDateTime(latestProfessionalPSA["psaexpirydates"]);
+                                    DateTime professionalLastDate = Convert.ToDateTime(latestProfessionalPSA["lastworkingdate"]);
+                                    string psaStatus = Convert.ToString(latestProfessionalPSA["psastatus"]);
+
+                                    UpdateProfessionalData(profID, psaNumber, professionalJoinDate, professionalStartPSA, professionalEndPSA, professionalLastDate, psaStatus);
+                                }
+                                if((dateToday < latestDateOfNewPSA) && (dateToday > latestExpiryDate))
+                                {
+                                    columnValues.Add("psastatus", "Inactive");
+
+                                    try
+                                    {
+                                        SPConnector.UpdateListItemNoVersionConflict(SP_PSA_LIST_NAME, professionalPSA, columnValues, _siteUrl);
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        logger.Debug(e.Message);
+                                    }
+
+                                    int? profID = FormatUtil.ConvertLookupToID(latestProfessionalPSA, "professional");//GetProfessionalID(psaNumber);
+                                    string psaNumber = Convert.ToString(latestProfessionalPSA["Title"]);
+                                    DateTime professionalJoinDate = Convert.ToDateTime(latestProfessionalPSA["joindate"]);
+                                    DateTime professionalStartPSA = Convert.ToDateTime(latestProfessionalPSA["dateofnewpsa"]);
+                                    DateTime professionalEndPSA = Convert.ToDateTime(latestProfessionalPSA["psaexpirydates"]);
+                                    DateTime professionalLastDate = Convert.ToDateTime(latestProfessionalPSA["lastworkingdate"]);
+                                    string psaStatus = Convert.ToString(latestProfessionalPSA["psastatus"]);
+
+                                    UpdateProfessionalData(profID, psaNumber, professionalJoinDate, professionalStartPSA, professionalEndPSA, professionalLastDate, psaStatus);
+
+                                }
+                            }
+                        }
+                        else
+                        {
+                            continue;
+                        }
                     }
-
-                    
+                    else
+                    {
+                        continue;
+                    }
                 }
                 else if (dateToday >= newpsadate && dateToday <= expireDate)
                 {
                     int? professionalID = FormatUtil.ConvertLookupToID(psaData, "professional");//GetProfessionalID(psaNumber);
-                    if (professionalID == null) continue;
-                    var professionalData = SPConnector.GetListItem(SP_PROFESSIONAL_LIST_NAME, professionalID, _siteUrl);
-                    string professionalFullName = Convert.ToString(professionalData["Title"]);
 
-                    int professionalPSA;
-
-                    professionalPSA = checkProfessionalPSA(professionalFullName);
-
-                    if(id < professionalPSA)
+                    if(professionalID != null)
                     {
-                        var latestProfessionalPSA = SPConnector.GetListItem(SP_PSA_LIST_NAME, professionalPSA, _siteUrl);
-                        var currentProfessionalPSA = SPConnector.GetListItem(SP_PSA_LIST_NAME, id, _siteUrl);
+                        var professionalData = SPConnector.GetListItem(SP_PROFESSIONAL_LIST_NAME, professionalID, _siteUrl);
 
-                        DateTime latestPSAExpiryDate = Convert.ToDateTime(psaData["lastworkingdate"]).ToLocalTime();
-                        DateTime lastestPSANewPSA = Convert.ToDateTime(psaData["dateofnewpsa"]).ToLocalTime();
-
-                        if(dateToday >= lastestPSANewPSA && dateToday <= latestPSAExpiryDate)
+                        if(professionalData != null)
                         {
-                            columnValues.Add("psastatus", "Inactive");
+                            string professionalFullName = Convert.ToString(professionalData["Title"]);
+                            int professionalPSA = checkProfessionalPSA(professionalFullName);
 
-                            try
+                            if (id < professionalPSA)
                             {
-                                SPConnector.UpdateListItemNoVersionConflict(SP_PSA_LIST_NAME, id, columnValues, _siteUrl);
+                                var latestProfessionalPSA = SPConnector.GetListItem(SP_PSA_LIST_NAME, professionalPSA, _siteUrl);
+                                var currentProfessionalPSA = SPConnector.GetListItem(SP_PSA_LIST_NAME, id, _siteUrl);
+
+                                DateTime latestPSAExpiryDate = Convert.ToDateTime(latestProfessionalPSA["lastworkingdate"]).ToLocalTime();
+                                DateTime lastestPSANewPSA = Convert.ToDateTime(latestProfessionalPSA["dateofnewpsa"]).ToLocalTime();
+
+                                if (dateToday >= lastestPSANewPSA && dateToday <= latestPSAExpiryDate)
+                                {
+                                    columnValues.Add("psastatus", "Inactive");
+
+                                    try
+                                    {
+                                        SPConnector.UpdateListItemNoVersionConflict(SP_PSA_LIST_NAME, id, columnValues, _siteUrl);
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        logger.Debug(e.Message);
+                                    }
+
+
+                                    columnValues.Add("psastatus", "Active");
+
+                                    try
+                                    {
+                                        SPConnector.UpdateListItemNoVersionConflict(SP_PSA_LIST_NAME, professionalPSA, columnValues, _siteUrl);
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        logger.Debug(e.Message);
+                                    }
+
+
+                                    int? profID = FormatUtil.ConvertLookupToID(latestProfessionalPSA, "professional");//GetProfessionalID(psaNumber);
+                                    string psaNumber = Convert.ToString(latestProfessionalPSA["Title"]);
+                                    DateTime professionalJoinDate = Convert.ToDateTime(latestProfessionalPSA["joindate"]);
+                                    DateTime professionalStartPSA = Convert.ToDateTime(latestProfessionalPSA["dateofnewpsa"]);
+                                    DateTime professionalEndPSA = Convert.ToDateTime(latestProfessionalPSA["psaexpirydates"]);
+                                    DateTime professionalLastDate = Convert.ToDateTime(latestProfessionalPSA["lastworkingdate"]);
+                                    string psaStatus = Convert.ToString(latestProfessionalPSA["psastatus"]);
+
+                                    UpdateProfessionalData(profID, psaNumber, professionalJoinDate, professionalStartPSA, professionalEndPSA, professionalLastDate, psaStatus);
+                                }
+                                else
+                                {
+                                    columnValues.Add("psastatus", "Active");
+
+                                    try
+                                    {
+                                        SPConnector.UpdateListItemNoVersionConflict(SP_PSA_LIST_NAME, id, columnValues, _siteUrl);
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        logger.Debug(e.Message);
+                                    }
+
+
+                                    columnValues.Add("psastatus", "Inactive");
+                                    SPConnector.UpdateListItemNoVersionConflict(SP_PSA_LIST_NAME, professionalPSA, columnValues, _siteUrl);
+
+                                    int? profID = FormatUtil.ConvertLookupToID(currentProfessionalPSA, "professional");//GetProfessionalID(psaNumber);
+                                    string psaNumber = Convert.ToString(currentProfessionalPSA["Title"]);
+                                    DateTime professionalJoinDate = Convert.ToDateTime(currentProfessionalPSA["joindate"]);
+                                    DateTime professionalStartPSA = Convert.ToDateTime(currentProfessionalPSA["dateofnewpsa"]);
+                                    DateTime professionalEndPSA = Convert.ToDateTime(currentProfessionalPSA["psaexpirydates"]);
+                                    DateTime professionalLastDate = Convert.ToDateTime(currentProfessionalPSA["lastworkingdate"]);
+                                    string psaStatus = Convert.ToString(currentProfessionalPSA["psastatus"]);
+
+                                    UpdateProfessionalData(profID, psaNumber, professionalJoinDate, professionalStartPSA, professionalEndPSA, professionalLastDate, psaStatus);
+                                }
                             }
-                            catch (Exception e)
+                            if (id == professionalPSA)
                             {
-                                logger.Debug(e.Message);
+                                var latestProfessionalPSA = SPConnector.GetListItem(SP_PSA_LIST_NAME, professionalPSA, _siteUrl);
+
+                                DateTime latestPSAExpiryDate = Convert.ToDateTime(psaData["lastworkingdate"]).ToLocalTime();
+                                DateTime lastestPSANewPSA = Convert.ToDateTime(psaData["dateofnewpsa"]).ToLocalTime();
+
+                                if (dateToday >= lastestPSANewPSA && dateToday <= latestPSAExpiryDate)
+                                {
+                                    columnValues.Add("psastatus", "Active");
+                                    SPConnector.UpdateListItemNoVersionConflict(SP_PSA_LIST_NAME, professionalPSA, columnValues, _siteUrl);
+
+                                    int? profID = FormatUtil.ConvertLookupToID(latestProfessionalPSA, "professional");//GetProfessionalID(psaNumber);
+                                    string psaNumber = Convert.ToString(latestProfessionalPSA["Title"]);
+                                    DateTime professionalJoinDate = Convert.ToDateTime(latestProfessionalPSA["joindate"]);
+                                    DateTime professionalStartPSA = Convert.ToDateTime(latestProfessionalPSA["dateofnewpsa"]);
+                                    DateTime professionalEndPSA = Convert.ToDateTime(latestProfessionalPSA["psaexpirydates"]);
+                                    DateTime professionalLastDate = Convert.ToDateTime(latestProfessionalPSA["lastworkingdate"]);
+                                    string psaStatus = Convert.ToString(latestProfessionalPSA["psastatus"]);
+
+                                    UpdateProfessionalData(profID, psaNumber, professionalJoinDate, professionalStartPSA, professionalEndPSA, professionalLastDate, psaStatus);
+                                }
+                                else
+                                {
+                                    columnValues.Add("psastatus", "Inactive");
+                                    SPConnector.UpdateListItemNoVersionConflict(SP_PSA_LIST_NAME, professionalPSA, columnValues, _siteUrl);
+
+                                    int? profID = FormatUtil.ConvertLookupToID(latestProfessionalPSA, "professional");//GetProfessionalID(psaNumber);
+                                    string psaNumber = Convert.ToString(latestProfessionalPSA["Title"]);
+                                    DateTime professionalJoinDate = Convert.ToDateTime(latestProfessionalPSA["joindate"]);
+                                    DateTime professionalStartPSA = Convert.ToDateTime(latestProfessionalPSA["dateofnewpsa"]);
+                                    DateTime professionalEndPSA = Convert.ToDateTime(latestProfessionalPSA["psaexpirydates"]);
+                                    DateTime professionalLastDate = Convert.ToDateTime(latestProfessionalPSA["lastworkingdate"]);
+                                    string psaStatus = Convert.ToString(latestProfessionalPSA["psastatus"]);
+
+                                    UpdateProfessionalData(profID, psaNumber, professionalJoinDate, professionalStartPSA, professionalEndPSA, professionalLastDate, psaStatus);
+
+                                }
                             }
-                            
-
-                            columnValues.Add("psastatus", "Active");
-
-                            try
-                            {
-                                SPConnector.UpdateListItemNoVersionConflict(SP_PSA_LIST_NAME, professionalPSA, columnValues, _siteUrl);
-                            }
-                            catch (Exception e)
-                            {
-                                logger.Debug(e.Message);
-                            }
-                            
-
-                            int? profID = FormatUtil.ConvertLookupToID(latestProfessionalPSA, "professional");//GetProfessionalID(psaNumber);
-                            string psaNumber = Convert.ToString(latestProfessionalPSA["Title"]);
-                            DateTime professionalJoinDate = Convert.ToDateTime(latestProfessionalPSA["joindate"]);
-                            DateTime professionalStartPSA = Convert.ToDateTime(latestProfessionalPSA["dateofnewpsa"]);
-                            DateTime professionalEndPSA = Convert.ToDateTime(latestProfessionalPSA["psaexpirydates"]);
-                            DateTime professionalLastDate = Convert.ToDateTime(latestProfessionalPSA["lastworkingdate"]);
-                            string psaStatus = Convert.ToString(latestProfessionalPSA["psastatus"]);
-
-                            UpdateProfessionalData(profID, psaNumber, professionalJoinDate, professionalStartPSA, professionalEndPSA, professionalLastDate, psaStatus);
-                        }
-                        else
-                        {
-                            columnValues.Add("psastatus", "Active");
-
-                            try
-                            {
-                                SPConnector.UpdateListItemNoVersionConflict(SP_PSA_LIST_NAME, id, columnValues, _siteUrl);
-                            }
-                            catch (Exception e)
-                            {
-                                logger.Debug(e.Message);
-                            }
-                            
-
-                            columnValues.Add("psastatus", "Inactive");
-                            SPConnector.UpdateListItemNoVersionConflict(SP_PSA_LIST_NAME, professionalPSA, columnValues, _siteUrl);
-
-                            int? profID = FormatUtil.ConvertLookupToID(currentProfessionalPSA, "professional");//GetProfessionalID(psaNumber);
-                            string psaNumber = Convert.ToString(currentProfessionalPSA["Title"]);
-                            DateTime professionalJoinDate = Convert.ToDateTime(currentProfessionalPSA["joindate"]);
-                            DateTime professionalStartPSA = Convert.ToDateTime(currentProfessionalPSA["dateofnewpsa"]);
-                            DateTime professionalEndPSA = Convert.ToDateTime(currentProfessionalPSA["psaexpirydates"]);
-                            DateTime professionalLastDate = Convert.ToDateTime(currentProfessionalPSA["lastworkingdate"]);
-                            string psaStatus = Convert.ToString(currentProfessionalPSA["psastatus"]);
-
-                            UpdateProfessionalData(profID, psaNumber, professionalJoinDate, professionalStartPSA, professionalEndPSA, professionalLastDate, psaStatus);
-                        }
-                    }
-                    if (id == professionalPSA)
-                    {
-                        var latestProfessionalPSA = SPConnector.GetListItem(SP_PSA_LIST_NAME, professionalPSA, _siteUrl);
-
-                        DateTime latestPSAExpiryDate = Convert.ToDateTime(psaData["lastworkingdate"]).ToLocalTime();
-                        DateTime lastestPSANewPSA = Convert.ToDateTime(psaData["dateofnewpsa"]).ToLocalTime();
-
-                        if (dateToday >= lastestPSANewPSA && dateToday <= latestPSAExpiryDate)
-                        {
-                            columnValues.Add("psastatus", "Active");
-                            SPConnector.UpdateListItemNoVersionConflict(SP_PSA_LIST_NAME, professionalPSA, columnValues, _siteUrl);
-
-                            int? profID = FormatUtil.ConvertLookupToID(latestProfessionalPSA, "professional");//GetProfessionalID(psaNumber);
-                            string psaNumber = Convert.ToString(latestProfessionalPSA["Title"]);
-                            DateTime professionalJoinDate = Convert.ToDateTime(latestProfessionalPSA["joindate"]);
-                            DateTime professionalStartPSA = Convert.ToDateTime(latestProfessionalPSA["dateofnewpsa"]);
-                            DateTime professionalEndPSA = Convert.ToDateTime(latestProfessionalPSA["psaexpirydates"]);
-                            DateTime professionalLastDate = Convert.ToDateTime(latestProfessionalPSA["lastworkingdate"]);
-                            string psaStatus = Convert.ToString(latestProfessionalPSA["psastatus"]);
-
-                            UpdateProfessionalData(profID, psaNumber, professionalJoinDate, professionalStartPSA, professionalEndPSA, professionalLastDate, psaStatus);
-                        }
-                        else
-                        {
-                            columnValues.Add("psastatus", "Inactive");
-                            SPConnector.UpdateListItemNoVersionConflict(SP_PSA_LIST_NAME, professionalPSA, columnValues, _siteUrl);
-
-                            int? profID = FormatUtil.ConvertLookupToID(latestProfessionalPSA, "professional");//GetProfessionalID(psaNumber);
-                            string psaNumber = Convert.ToString(latestProfessionalPSA["Title"]);
-                            DateTime professionalJoinDate = Convert.ToDateTime(latestProfessionalPSA["joindate"]);
-                            DateTime professionalStartPSA = Convert.ToDateTime(latestProfessionalPSA["dateofnewpsa"]);
-                            DateTime professionalEndPSA = Convert.ToDateTime(latestProfessionalPSA["psaexpirydates"]);
-                            DateTime professionalLastDate = Convert.ToDateTime(latestProfessionalPSA["lastworkingdate"]);
-                            string psaStatus = Convert.ToString(latestProfessionalPSA["psastatus"]);
-
-                            UpdateProfessionalData(profID, psaNumber, professionalJoinDate, professionalStartPSA, professionalEndPSA, professionalLastDate, psaStatus);
-                            
                         }
                     }
                 }
-
             }
         }
 

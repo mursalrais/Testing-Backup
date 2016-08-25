@@ -3,14 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using Elmah;
-using MCAWebAndAPI.Model.ViewModel.Control;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 using MCAWebAndAPI.Service.Converter;
 using MCAWebAndAPI.Service.Finance;
-using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Service.Utils;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;
@@ -22,7 +19,7 @@ namespace MCAWebAndAPI.Web.Controllers
     ///     a.k.a.: Petty Cash Payment Voucher
     ///     a.k.a.: Petty Cash Advance Voucher
     /// </summary>
-    
+
     public class FINPettyCashPaymentVoucherController : Controller
     {
         private const string STATUS_INPROGRESS = "In Progress";
@@ -44,7 +41,10 @@ namespace MCAWebAndAPI.Web.Controllers
 
         private const string DATA_NOT_EXISTS = "Data Does not exists!";
 
-        private const string PRINT_PAGE_URL = "~/Views/FINPettyCashPaymentVoucher/Print.cshtml";
+        private const string SuccessMsgFormatCreated = "PC Voucher No. {0} has been successfully created.";
+        private const string SuccessMsgFormatUpdated = "PC Voucher No. {0} has been successfully updated.";
+        private const string FirstPageUrl = "{0}/Lists/SPHL%20Data/AllItems.aspx";
+        private const string PrintPageUrl = "~/Views/FINPettyCashPaymentVoucher/Print.cshtml";
 
         readonly IPettyCashPaymentVoucherService _service;
         public FINPettyCashPaymentVoucherController()
@@ -100,10 +100,15 @@ namespace MCAWebAndAPI.Web.Controllers
             catch (Exception e)
             {
                 ErrorSignal.FromCurrentContext().Raise(e);
-                return JsonHelper.GenerateJsonErrorResponse(e);
+                return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.PettyCashPaymentVoucher);
+            return RedirectToAction("Index", "Success",
+                new
+                {
+                    successMessage = string.Format(SuccessMsgFormatCreated, viewModel.TransactionNo),
+                    previousUrl = string.Format(FirstPageUrl, siteUrl)
+                });
         }
 
         [HttpPost]
@@ -120,16 +125,21 @@ namespace MCAWebAndAPI.Web.Controllers
             catch (Exception e)
             {
                 ErrorSignal.FromCurrentContext().Raise(e);
-                return JsonHelper.GenerateJsonErrorResponse(e);
+                return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.PettyCashPaymentVoucher);
+            return RedirectToAction("Index", "Success",
+                new
+                {
+                    successMessage = string.Format(SuccessMsgFormatUpdated, viewModel.TransactionNo),
+                    previousUrl = string.Format(FirstPageUrl, siteUrl)
+                });
         }
 
         [HttpPost]
         public ActionResult Print(FormCollection form, PettyCashPaymentVoucherVM viewModel)
         {
-            string RelativePath = PRINT_PAGE_URL;
+            string RelativePath = PrintPageUrl;
 
             var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl);
             _service.SetSiteUrl(siteUrl);

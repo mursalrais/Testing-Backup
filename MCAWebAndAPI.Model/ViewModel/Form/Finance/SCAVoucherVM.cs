@@ -35,19 +35,11 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 
         [Required]
         [UIHint("AjaxComboBox")]
-        public AjaxComboBoxVM SDO { get; set; } = new AjaxComboBoxVM
-        {
-            ControllerName = "ComboBox",
-            ActionName = "GetProfessionals",
-            ValueField = "ID",
-            TextField = "Desc"
-        };
-
-        public int SDOID { get; set; }
+        public AjaxComboBoxVM SDO { get; set; } = new AjaxComboBoxVM();
 
         public string SDOName { get; set; }
 
-        public string Position { get; set; }
+        public string SDOPosition { get; set; }
 
         public int EventBudgetID { get; set; }
 
@@ -55,17 +47,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 
         [Required]
         [UIHint("AjaxComboBox")]
-        public AjaxComboBoxVM EventBudget { get; set; } = new AjaxComboBoxVM
-        {
-            ControllerName = "ComboBox",
-            ActionName = "GetEventBudgets",
-            ValueField = "Value",
-            TextField = "Text",
-            OnSelectEventName = "OnSelectEventBudgetNo"
-        };
+        public AjaxComboBoxVM EventBudget { get; set; } = new AjaxComboBoxVM();
 
-        //[Required]
-        //public string Currency { get; set; }
         [Required]
         [DisplayName("Currency")]
         [UIHint("ComboBox")]
@@ -91,15 +74,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 
         [Required]
         [UIHint("AjaxCascadeComboBox")]
-        public AjaxCascadeComboBoxVM SubActivity { get; set; } = new AjaxCascadeComboBoxVM
-        {
-            ActionName = "GetSubActivitiesByEventBudgetID",
-            ControllerName = "ComboBox",
-            ValueField = "Value",
-            TextField = "Text",
-            Cascade = "EventBudget_Value",
-            Filter = "filterEventBudgetNo"
-        };
+        public AjaxCascadeComboBoxVM SubActivity { get; set; } = new AjaxCascadeComboBoxVM();
 
         public int SubActivityID { get; set; }
 

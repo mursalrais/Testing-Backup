@@ -13,6 +13,8 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
 
         TimesheetVM GetTimesheet(string userlogin, DateTime period);
 
+        TimesheetVM GetTimesheetLoadUpdate(int? id, string userlogin);
+
         IEnumerable<TimesheetDetailVM> GetTimesheetDetails(string userlogin, DateTime period);
 
         IEnumerable<TimesheetDetailVM> AppendWorkingDays(IEnumerable<TimesheetDetailVM> currentDays, 
@@ -20,8 +22,13 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
 
         int CreateHeader(TimesheetVM header);
 
+        Task CreateTimesheetDetailsAsync(int? headerId, IEnumerable<TimesheetDetailVM> timesheetDetails);
         void CreateTimesheetDetails(int? headerId, IEnumerable<TimesheetDetailVM> timesheetDetails);
 
+        Task CreateWorkflowTimesheetAsync(int? headerId, TimesheetVM header);
+        void CreateWorkflowTimesheet(int? headerId, TimesheetVM header);
+
+        void UpdateApproval(TimesheetVM header);
 
     }
 }

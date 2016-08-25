@@ -8,6 +8,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using static MCAWebAndAPI.Model.ViewModel.Form.Finance.Shared;
+using System.IO;
+using MCAWebAndAPI.Service.Converter;
+using System;
+using Elmah;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -30,11 +34,15 @@ namespace MCAWebAndAPI.Web.Controllers
         //TODO:
         //1. Tangkap DateFrom dan DateTo dari Index
         //2. Pakai values tersebut di Display
-        private const string PAYMENTVOUCHER_PICKER_CONTROLLER = "FINPettyCashSettlement";
-        private const string PAYMENTVOUCHER_PICKER_ACTIONNAME = "GetPettyCashVouchers";
-        private const string PAYMENTVOUCHER_PICKER_VALUE_PROPERTY = "ID";
-        private const string PAYMENTVOUCHER_PICKER_TEXT_PROPERTY = "Desc";
-        private const string PAYMENTVOUCHER_PICKER_SELECTEDEVENT = "onSelectPaymentVoucher";
+        private const string PaymentVoucherPicker_ControllerName = "FINPettyCashSettlement";
+        private const string PaymentVoucherPicker_ActionName = "GetPettyCashVouchers";
+        private const string PaymentVoucherPicker_ValueProperty = "ID";
+        private const string PaymentVoucherPicker_TextProperty = "Desc";
+        private const string PaymentVoucherPicker_SelectEventName = "onSelectPaymentVoucher";
+
+        private const string SuccessMsgFormatUpdated = "PC settlement for {0} has been successfully updated.";
+        private const string FirstPageUrl = "{0}/Lists/Petty%20Cash%20Settlement/AllItems.aspx";
+        private const string PrintPageUrl = "~/Views/FINPettyCashSettlement/Print.cshtml";
 
         IPettyCashSettlementService service;
         IPettyCashPaymentVoucherService pettyCashPaymentVoucherService;
@@ -52,7 +60,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             var viewModel = service.Get(GetOperation(op), id);
 
-            SetAdditionalSettingToViewModel(ref viewModel, true);
+            SetAdditionalSettingToViewModel(ref viewModel);
 
             return View(viewModel);
         }
@@ -63,22 +71,63 @@ namespace MCAWebAndAPI.Web.Controllers
             var siteUrl = SessionManager.Get<string>("SiteUrl") ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
-            int? ID = null;
-            ID = service.Save(viewModel);
-            // Task createApplicationDocumentTask = service.CreateAttachmentAsync(ID, viewModel.Documents);
-            // Task allTasks = Task.WhenAll(createApplicationDocumentTask);
+            try
+            {
+                int? ID = null;
+                ID = service.Save(viewModel);
+                service.SavePettyCashAttachments(ID, viewModel.Documents);
+            }
+            catch (Exception e)
+            {
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
+            }
 
-            //try
-            //{
-            //    await allTasks;
-            //}
-            //catch (Exception e)
-            //{
-            //    ErrorSignal.FromCurrentContext().Raise(e);
-            //    return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
-            //}
+            return RedirectToAction("Index", "Success",
+               new
+               {
+                   successMessage = string.Format(SuccessMsgFormatUpdated, viewModel.Date.ToShortDateString()),
+                   previousUrl = string.Format(FirstPageUrl, siteUrl)
+               });
+        }
 
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.FINSPHL);
+
+        [HttpPost]
+        public ActionResult Print(FormCollection form, PettyCashSettlementVM viewModel)
+        {
+            string RelativePath = PrintPageUrl;
+
+            var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl);
+            service.SetSiteUrl(siteUrl);
+            viewModel = service.Get(Operations.e, viewModel.ID);
+
+            ViewData.Model = viewModel;
+            var view = ViewEngines.Engines.FindView(ControllerContext, RelativePath, null);
+            var fileName = viewModel.TransactionNo + "_Application.pdf";
+            byte[] pdfBuf = null;
+            string content;
+
+            using (var writer = new StringWriter())
+            {
+                var context = new ViewContext(ControllerContext, view.View, ViewData, TempData, writer);
+                view.View.Render(context, writer);
+                writer.Flush();
+                content = writer.ToString();
+
+                // Get PDF Bytes
+                try
+                {
+                    pdfBuf = PDFConverter.Instance.ConvertFromHTML(fileName, content);
+                }
+                catch (Exception e)
+                {
+                    ErrorSignal.FromCurrentContext().Raise(e);
+                    return JsonHelper.GenerateJsonErrorResponse(e);
+                }
+            }
+            if (pdfBuf == null)
+                return HttpNotFound();
+            return File(pdfBuf, "application/pdf");
         }
 
         public JsonResult GetPettyCashVouchers(int? id, string title)
@@ -116,23 +165,24 @@ namespace MCAWebAndAPI.Web.Controllers
                 Reason = paymentVoucher.ReasonOfPayment,
                 WBS = paymentVoucher.WBS.Text,
                 GL = paymentVoucher.GL.Text,
-
-
             },
             JsonRequestBehavior.AllowGet);
         }
 
 
-        private void SetAdditionalSettingToViewModel(ref PettyCashSettlementVM viewModel, bool isCreate)
+        private void SetAdditionalSettingToViewModel(ref PettyCashSettlementVM viewModel)
         {
             viewModel.PettyCashVoucher = new AjaxComboBoxVM
             {
-                ControllerName = PAYMENTVOUCHER_PICKER_CONTROLLER,
-                ActionName = PAYMENTVOUCHER_PICKER_ACTIONNAME,
-                ValueField = PAYMENTVOUCHER_PICKER_VALUE_PROPERTY,
-                TextField = PAYMENTVOUCHER_PICKER_TEXT_PROPERTY,
-                OnSelectEventName = PAYMENTVOUCHER_PICKER_SELECTEDEVENT
+                ControllerName = PaymentVoucherPicker_ControllerName,
+                ActionName = PaymentVoucherPicker_ActionName,
+                ValueField = PaymentVoucherPicker_ValueProperty,
+                TextField = PaymentVoucherPicker_TextProperty,
+                OnSelectEventName = PaymentVoucherPicker_SelectEventName,
+                Text = viewModel.PettyCashVoucher != null ? viewModel.PettyCashVoucher.Text : string.Empty,
+                Value = viewModel.PettyCashVoucher != null ? viewModel.PettyCashVoucher.Value : 0
             };
+
         }
 
     }
