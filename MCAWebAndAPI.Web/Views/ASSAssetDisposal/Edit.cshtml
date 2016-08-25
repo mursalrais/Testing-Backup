@@ -16,7 +16,7 @@
         <legend>Form Asset Disposal</legend>
         @Html.AntiForgeryToken()
         @Html.ValidationSummary()
-        <div class="col-sm-6">
+        <div class="col-sm-6">  
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.TransactionType).Class("col-sm-4 control-label")
                 <div class="col-sm-8">
@@ -68,50 +68,50 @@
 @section scripts{
     <script type="text/javascript">
 
-        //function saveDisposal() {
-        //    // alert("saving...");
-        //    var idattach = document.querySelectorAll("[id^='attachRow']");
-        //    //  alert(idattach.length);
+        function saveDisposal() {
+            // alert("saving...");
+            //var idattach = document.querySelectorAll("[id^='attachRow']");
+            ////  alert(idattach.length);
 
-        //    if (idattach.length == 0) {
-        //        alert("Please Attach the memo for disposal");
-        //    } else {
+            //if (idattach.length == 0) {
+            //    alert("Please Attach the memo for disposal");
+            //} else {
 
-        //        $("form").submit();
-        //    }
-
-
-        //}
-
-        $(document).ready(function () {
-
-            $("#submit-button").click(function (e) {
-
-                // untuk postpone default Submit Form operation
-
-                e.preventDefault();
+                $("form").submit();
+           // }
 
 
+        }
 
-                // cek DOM di upload control apakah contains filename
+        //$(document).ready(function () {
 
-                // cek perbedaan DOM sebelum dan sesudah upload file
+        //    $("#submit-button").click(function (e) {
 
-                // di sini: http://demos.telerik.com/aspnet-mvc/upload/index
+        //        // untuk postpone default Submit Form operation
 
-                var isFileExist = $('.k-upload').find('ul.k-upload-files').length == 1;
+        //        e.preventDefault();
 
 
 
-                if (isFileExist)
+        //        // cek DOM di upload control apakah contains filename
 
-                    $('form').submit();
+        //        // cek perbedaan DOM sebelum dan sesudah upload file
 
-                else
+        //        // di sini: http://demos.telerik.com/aspnet-mvc/upload/index
 
-                    alert('Please Attach the memo for disposal');
+        //        var isFileExist = $('.k-upload').find('ul.k-upload-files').length == 1;
 
-            });
+
+
+        //        if (isFileExist)
+
+        //            $('form').submit();
+
+        //        else
+
+        //            alert('Please Attach the memo for disposal');
+
+        //    });
 
 
 

@@ -32,10 +32,28 @@ namespace MCAWebAndAPI.Service.Asset
         public AssetLoanAndReturnHeaderVM GetPopulatedModel(int? id = null)
         {
             var model = new AssetLoanAndReturnHeaderVM();
+            model.Professional.Choices = GetChoicesFromList(SP_PROFMASTER_LIST_NAME, "ID", "Title");
             model.TransactionType = Convert.ToString("Asset Loan And Return");
             return model;
         }
 
+        private IEnumerable<string> GetChoicesFromList(string listname, string v1, string v2 = null)
+        {
+            List<string> _choices = new List<string>();
+            var listItems = SPConnector.GetList(listname, _siteUrl);
+            foreach (var item in listItems)
+            {
+                if (v2 != null)
+                {
+                    _choices.Add(item[v1] + "-" + item[v2].ToString());
+                }
+                else
+                {
+                    _choices.Add(item[v1].ToString());
+                }
+            }
+            return _choices.ToArray();
+        }
 
 
         public AssetLoanAndReturnItemVM GetPopulatedModelItem(int? ID = default(int?))
@@ -104,6 +122,8 @@ namespace MCAWebAndAPI.Service.Asset
 
             return models;
         }
+
+        
 
         private AssetMasterVM ConvertToModelAssetSubAsset(ListItem item)
         {
@@ -331,6 +351,36 @@ namespace MCAWebAndAPI.Service.Asset
             throw new NotImplementedException();
         }
 
+        public int CreateHeader(AssetLoanAndReturnHeaderVM header)
+        {
+
+            var columnValues = new Dictionary<string, object>();
+
+            string[] profesional = header.Professional.Value.Split('-');
+            //columnValues.Add("acceptancememono", memo[1]);
+            
+
+            columnValues.Add("Title", header.TransactionType);
+            columnValues.Add("Professional", new FieldLookupValue { LookupId = Convert.ToInt32(Convert.ToInt32(profesional[0])) });
+            //columnValues.Add("professionalposition", new FieldLookupValue { LookupId = Convert.ToInt32(Convert.ToInt32(profesional[1])) });
+
+            columnValues.Add("projectunit", header.Project);
+            // columnValues.Add("Professional", new FieldLookupValue { LookupId = Convert.ToInt32(viewmodel.Project) });
+            columnValues.Add("professionalmobilephonenr", header.ContactNo);
+            columnValues.Add("Loan_x0020_Date", header.LoanDate);
+            columnValues.Add("Purpose", header.Purpose);
+            try
+            {
+                SPConnector.AddListItem(SP_ASSLNR_LIST_NAME, columnValues, _siteUrl);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.Message);
+            }
+
+            return SPConnector.GetLatestListItemID(SP_ASSLNR_LIST_NAME, _siteUrl);
+        }
+
         //AssetLoanAndReturnHeaderVM IAssetLoanAndReturnService.GetPopulatedModel(int? id)
         //{
         //    var model = new AssetLoanAndReturnHeaderVM();
@@ -361,43 +411,43 @@ namespace MCAWebAndAPI.Service.Asset
 
         //}
 
-        int IAssetLoanAndReturnService.CreateHeader(AssetLoanAndReturnHeaderVM viewmodel)
-        {
-            var columnValues = new Dictionary<string, object>();
-            //columnValues.add
-            columnValues.Add("Title", viewmodel.TransactionType);
-            //string[] propesionalName = viewmodel.Professional.Value.Split('-');
-            //columnValues.Add("Acceptance_x0020_Memo_x0020_No", memo[1]);
+        //int IAssetLoanAndReturnService.CreateHeader(AssetLoanAndReturnHeaderVM viewmodel)
+        //{
+        //    var columnValues = new Dictionary<string, object>();
+        //    //columnValues.add
+        //    columnValues.Add("Title", viewmodel.TransactionType);
+        //    string[] propesionalName = viewmodel.Professional.Value.Split;
+        //    //columnValues.Add("Acceptance_x0020_Memo_x0020_No", memo[1]);
 
-            // columnValues.Add("Professional", new FieldLookupValue { LookupId = Convert.ToInt32(propesionalName[0]) });
+        //    // columnValues.Add("Professional", new FieldLookupValue { LookupId = Convert.ToInt32(propesionalName[0]) });
 
-            // var siteHr = _siteUrl.Replace("/bo", "/hr");
-            //var memoinfo = SPConnector.GetListItem(SP_ASSLNR_LIST_NAME, Convert.ToInt32(propesionalName[0]), siteHr);
-            //columnValues.Add("Project_x002f_Unit", memoinfo["Project_x002f_Unit"]);
-            //columnValues.Add("Contact_x0020_No", memoinfo["mobilephonenr"]);
-            columnValues.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(viewmodel.Professional.Value) });
-            columnValues.Add("professionalprojectunit", viewmodel.Project);
-           // columnValues.Add("Professional", new FieldLookupValue { LookupId = Convert.ToInt32(viewmodel.Project) });
-            columnValues.Add("professionalmobilephonenr", viewmodel.ContactNo);
-            columnValues.Add("Loan_x0020_Date", viewmodel.LoanDate);
-            columnValues.Add("Purpose", viewmodel.Purpose);
+        // var siteHr = _siteUrl.Replace("/bo", "/hr");
+        //var memoinfo = SPConnector.GetListItem(SP_ASSLNR_LIST_NAME, Convert.ToInt32(propesionalName[0]), siteHr);
+        //columnValues.Add("Project_x002f_Unit", memoinfo["Project_x002f_Unit"]);
+        //columnValues.Add("Contact_x0020_No", memoinfo["mobilephonenr"]);
+        //columnValues.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(viewmodel.Professional.Value) });
+        //    columnValues.Add("professionalprojectunit", viewmodel.Project);
+        //   // columnValues.Add("Professional", new FieldLookupValue { LookupId = Convert.ToInt32(viewmodel.Project) });
+        //    columnValues.Add("professionalmobilephonenr", viewmodel.ContactNo);
+        //    columnValues.Add("Loan_x0020_Date", viewmodel.LoanDate);
+        //    columnValues.Add("Purpose", viewmodel.Purpose);
 
-            try
-            {
-                SPConnector.AddListItem(SP_ASSLNR_LIST_NAME, columnValues, _siteUrl);
-            }
-            catch (Exception e)
-            {
-                logger.Error(e.Message);
-            }
-            var entitiy = new AssetLoanAndReturnHeaderVM();
-            entitiy = viewmodel;
-            return SPConnector.GetLatestListItemID(SP_ASSLNR_LIST_NAME, _siteUrl);
-        }
+        //    try
+        //    {
+        //        SPConnector.AddListItem(SP_ASSLNR_LIST_NAME, columnValues, _siteUrl);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        logger.Error(e.Message);
+        //    }
+        //    var entitiy = new AssetLoanAndReturnHeaderVM();
+        //    entitiy = viewmodel;
+        //    return SPConnector.GetLatestListItemID(SP_ASSLNR_LIST_NAME, _siteUrl);
+        //}
 
         //public int? CreateHeader(AssetLoanAndReturnHeaderVM viewmodel)
         //{
-           
+
         //}
     }
 }
