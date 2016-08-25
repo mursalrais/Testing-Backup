@@ -1094,6 +1094,8 @@
     <Content Include="Views\FINPettyCashStatement\Display.cshtml" />
     <Content Include="Views\FINPettyCashStatement\Index.cshtml" />
     <Content Include="Views\FINPettyCashSettlement\Item.cshtml" />
+    <Content Include="Views\HRAdjustment\EditAdjustmentData.cshtml" />
+    <Content Include="Views\HRCompensatory\AddCompensatoryUser.cshtml" />
     <Content Include="Views\ASSAssignmentOfAsset\Edit.cshtml" />
     <Content Include="Views\ASSAssignmentOfAsset\Upload.cshtml" />
     <None Include="Web.Debug.config">

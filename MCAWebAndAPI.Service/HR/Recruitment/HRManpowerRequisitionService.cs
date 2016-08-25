@@ -150,7 +150,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         public bool UpdateManpowerRequisition(ManpowerRequisitionVM viewModel)
         {
             // check if status changed to active and checked if mcc aproval document already uploaded
-            if ((viewModel.Status.Value == "Active") && (viewModel.IsKeyPosition))
+            if ((viewModel.Status.Value == "Active") && (viewModel.isKeyValuationValue))
             {
                 string caml = @"<View><Query><Where><And><Eq><FieldRef Name='documenttype' /><Value Type='Choice'>MCC Approval Letter</Value></Eq><Eq><FieldRef Name='manpowerrequestid' /><Value Type='Lookup'>" + viewModel.ID + @"</Value></Eq></And></Where></Query><ViewFields /><QueryOptions /></View>";
                 var document = SPConnector.GetList(SP_MANDOC_LIST_NAME, _siteUrl, caml);
@@ -162,58 +162,62 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             }
             var updatedValue = new Dictionary<string, object>();
             int ID = viewModel.ID.Value;
-
-            updatedValue.Add("expectedjoindate", viewModel.ExpectedJoinDate);
-            updatedValue.Add("requestdate", viewModel.DateRequested);
-            updatedValue.Add("numberofperson", viewModel.NoOfPerson);
-            updatedValue.Add("Tenure", viewModel.Tenure);
-            updatedValue.Add("personnelmgmt", viewModel.PersonnelManagement);
-            updatedValue.Add("budgetmgmt", viewModel.BudgetManagement);
-            updatedValue.Add("isonbehalfof", viewModel.IsOnBehalfOf);
-            updatedValue.Add("istravelrequired", viewModel.IsTravellingRequired);
-            updatedValue.Add("iskeyposition", viewModel.IsKeyPosition);
-            if (viewModel.IsOnBehalfOf)
-            {
-                updatedValue.Add("onbehalfof", new FieldLookupValue { LookupId = (int)viewModel.OnBehalfOf.Value });
-            }
-            else
-            {
-                updatedValue.Add("onbehalfof", "");
-            }
-
             if (!(string.IsNullOrEmpty(viewModel.Status.Value)))
             {
                 updatedValue.Add("manpowerrequeststatus", viewModel.Status.Value);
             }
-            updatedValue.Add("projectunit", viewModel.DivisionProjectUnit.Value);
-            updatedValue.Add("positionrequested", new FieldLookupValue { LookupId = (int)viewModel.Position.Value });
-            updatedValue.Add("reportingto", new FieldLookupValue { LookupId = (int)viewModel.ReportingTo.Value });
-            updatedValue.Add("joblocation", new FieldLookupValue { LookupId = (int)viewModel.JobLocation.Value });
-            if (viewModel.SecondaryReportingTo.Value.Value == 0)
+            if (viewModel.Status.Value == "Pending Approval" || viewModel.Status.Value == "Draft")
             {
-                updatedValue.Add("secondaryreportingto", null);
+                updatedValue.Add("expectedjoindate", viewModel.ExpectedJoinDate);
+                updatedValue.Add("requestdate", viewModel.DateRequested);
+                updatedValue.Add("numberofperson", viewModel.NoOfPerson);
+                updatedValue.Add("Tenure", viewModel.Tenure);
+                updatedValue.Add("personnelmgmt", viewModel.PersonnelManagement);
+                updatedValue.Add("budgetmgmt", viewModel.BudgetManagement);
+                updatedValue.Add("isonbehalfof", viewModel.IsOnBehalfOf);
+                updatedValue.Add("istravelrequired", viewModel.IsTravellingRequired);
+                updatedValue.Add("iskeyposition", viewModel.IsKeyPosition);
+                if (viewModel.IsOnBehalfOf)
+                {
+                    updatedValue.Add("onbehalfof", new FieldLookupValue { LookupId = (int)viewModel.OnBehalfOf.Value });
+                }
+                else
+                {
+                    updatedValue.Add("onbehalfof", "");
+                }
+
+                
+                updatedValue.Add("projectunit", viewModel.DivisionProjectUnit.Value);
+                updatedValue.Add("positionrequested", new FieldLookupValue { LookupId = (int)viewModel.Position.Value });
+                updatedValue.Add("reportingto", new FieldLookupValue { LookupId = (int)viewModel.ReportingTo.Value });
+                updatedValue.Add("joblocation", new FieldLookupValue { LookupId = (int)viewModel.JobLocation.Value });
+                if (viewModel.SecondaryReportingTo.Value.Value == 0)
+                {
+                    updatedValue.Add("secondaryreportingto", null);
+                }
+                else
+                {
+                    updatedValue.Add("secondaryreportingto", new FieldLookupValue { LookupId = (int)viewModel.SecondaryReportingTo.Value });
+                }
+                updatedValue.Add("Objectives", viewModel.PositionObjectives);
+                updatedValue.Add("totalyrsofexperience", viewModel.TotalYrsOfExperience);
+                updatedValue.Add("minimumeducation", viewModel.MinimumEducation);
+                updatedValue.Add("Industry", viewModel.Industry);
+                updatedValue.Add("minimumyrsofrelatedexperience", viewModel.MinimumYrsOfExperienceInRelatedField);
+                updatedValue.Add("specifictechnicalskill", viewModel.SpecificTechnicalSkillQualification);
+                updatedValue.Add("personalattributes", viewModel.PersonalAttributesCompetencies);
+                updatedValue.Add("otherrequirements", viewModel.OtherRequirements);
+                if (viewModel.Workplan.Values.Length > 0)
+                {
+                    updatedValue.Add("Workplan", viewModel.Workplan.Values);
+                }
+                else
+                {
+                    updatedValue.Add("Workplan", null);
+                }
+                updatedValue.Add("remarks", viewModel.Remarks);
             }
-            else
-            {
-                updatedValue.Add("secondaryreportingto", new FieldLookupValue { LookupId = (int)viewModel.SecondaryReportingTo.Value });
-            }
-            updatedValue.Add("Objectives", viewModel.PositionObjectives);
-            updatedValue.Add("totalyrsofexperience", viewModel.TotalYrsOfExperience);
-            updatedValue.Add("minimumeducation", viewModel.MinimumEducation);
-            updatedValue.Add("Industry", viewModel.Industry);
-            updatedValue.Add("minimumyrsofrelatedexperience", viewModel.MinimumYrsOfExperienceInRelatedField);
-            updatedValue.Add("specifictechnicalskill", viewModel.SpecificTechnicalSkillQualification);
-            updatedValue.Add("personalattributes", viewModel.PersonalAttributesCompetencies);
-            updatedValue.Add("otherrequirements", viewModel.OtherRequirements);
-            if (viewModel.Workplan.Values.Length > 0)
-            {
-                updatedValue.Add("Workplan", viewModel.Workplan.Values);
-            }
-            else
-            {
-                updatedValue.Add("Workplan", null);
-            }
-            updatedValue.Add("remarks", viewModel.Remarks);
+            
             FieldUserValue Approver;
             string emailApprover;
             if ((viewModel.Status.Value == "Pending Approval"))
@@ -533,8 +537,12 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 updatedValue.Add("frequency", _frequency);
                 updatedValue.Add("relationship", _relationship);
                 try
-                {
-                    SPConnector.AddListItem(SP_WORKRE_LIST_NAME, updatedValue, _siteUrl);
+                {                    
+                    if (viewModel.ID == null)
+                        SPConnector.AddListItem(SP_WORKRE_LIST_NAME, updatedValue, _siteUrl);
+                    else
+                        SPConnector.UpdateListItem(SP_WORKRE_LIST_NAME, viewModel.ID, updatedValue, _siteUrl);
+
                 }
                 catch (Exception e)
                 {
