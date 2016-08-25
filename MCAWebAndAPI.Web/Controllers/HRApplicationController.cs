@@ -90,6 +90,8 @@ namespace MCAWebAndAPI.Web.Controllers
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
+            ViewBag.siteUrl = siteUrl ?? ConfigResource.DefaultHRSiteUrl;
+
             var viewModel = _service.GetVacantPositions();
             return View(viewModel);
         }

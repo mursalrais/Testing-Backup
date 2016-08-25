@@ -1,0 +1,101 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+
+@model DayOffRequestVM
+
+@{
+    ViewBag.Title = "Form Create Day-Off Request";
+}
+
+@using (Ajax.BeginForm("CreateDayOffRequestData", "HRDayOff",
+                                                                                                    FormMethod.Post,
+                                                                                                    new AjaxOptions
+                                                                                                    {
+                                                                                                        OnBegin = "onBeginForm",
+                                                                                                        OnComplete = "onCompleteForm",
+                                                                                                        OnSuccess = "onSuccessFormEmbed",
+                                                                                                        OnFailure = "onFailureForm"
+                                                                                                    }, new { @class = "form-horizontal" }))
+{
+    <fieldset>
+        <legend>Day-Off Request Header Data</legend>
+        <div class="row">
+            @Html.Partial("_DayOffRequestHeaderData", Model)
+        </div>
+
+        <legend>Current Day-Off Balance</legend>
+    <div class="row">
+        @Html.Partial("_DayOffCurrentBalance", Model.DayOffBalanceDetails)
+    </div>
+
+        <legend>Request for Day-Off</legend>
+        <div class="row">
+            @Html.Partial("_RequestForDayOff", Model.DayOffRequestDetails)
+        </div>
+    </fieldset>
+
+}
+
+<div class="form-actions">
+    <div class="row">
+        <div class="col-md-12">
+            <button id="submit-for-approval" class="btn btn-primary" type="button">
+                <i class="fa fa-save"></i>
+                Submit for Approval
+            </button>
+            <button id="submit-draft-button" class="btn btn-primary" type="button">
+                <i class="fa fa-save"></i>
+                Save as Draft
+            </button>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#submit-for-approval").click(function () {
+                $("#StatusForm").val("Pending Approval");
+                $("form").submit();
+            });
+        });
+
+        $(document).ready(function () {
+            $("#submit-draft-button").click(function () {
+                $("#StatusForm").val("Draft");
+                $("form").submit();
+            });
+        });
+
+        function onSuccess(data)
+        {
+            window.location.href = data.urlToRedirect;
+        }
+
+        function onFailure(data)
+        {
+            window.location.href = data.urlToRedirect;
+        }
+
+        //function OnSelectAssetHolderFrom(e) {
+        //    var dataItem = this.dataItem(e.item);
+        //    var url = "/HRDataMaster/GetProfessional/" + dataItem.ID;
+
+
+        //    $.getJSON(url, function (result) {
+
+        //        $('#FullName').prop('value', result[0].Name);
+        //        $('#ProjectUnit').prop('value', result[0].Project_Unit);
+        //        $('#Position').prop('value', result[0].Position);
+        //        $('#PSANumber').prop('value', result[0].PSANumber);
+        //        $('#JoinDate').prop('value', result[0].JoinDate);
+        //        $('#JoinDate').prop('value', result[0].JoinDateTemp);
+        //        $('#RequestorMailAddress').prop('value', result[0].OfficeEmail);
+        //        $('#ProfessionalID').prop('value', result[0].ID);
+
+        //    })
+
+        //}
+
+
+    </script>
+}

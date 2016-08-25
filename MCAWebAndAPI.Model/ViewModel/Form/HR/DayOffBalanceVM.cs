@@ -28,7 +28,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
                 "Sick Day-Off",
                 "Special Day-Off",
                 "Unpaid Day-Off",
-                "Day-Off due to Compensatory Time",
+                "Compensatory Time",
                 "Maternity",
                 "Miscarriage",
                 "Paternity",

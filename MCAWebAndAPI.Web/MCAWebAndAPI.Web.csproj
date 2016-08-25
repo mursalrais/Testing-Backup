@@ -428,8 +428,9 @@
     </None>
     <Content Include="JSLintNet.json" />
     <None Include="Properties\PublishProfiles\host.my-epmo.com.pubxml" />
+    <None Include="Properties\PublishProfiles\mca-ims-dev - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\mca-ims-dev - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\mcaims-dev - FTP.pubxml" />
-    <None Include="Properties\PublishProfiles\mcaims-dev - Web Deploy.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -1091,6 +1092,10 @@
     <Content Include="Views\FINEventBudget\Item.cshtml" />
     <Content Include="Views\Shared\_WorkflowPathDetails.cshtml" />
     <Content Include="Views\ASSAssignmentOfAsset\Edit.cshtml" />
+    <Content Include="Views\HRDayOff\CreateDayOffRequest.cshtml" />
+    <Content Include="Views\HRDayOff\_DayOffRequestHeaderData.cshtml" />
+    <Content Include="Views\HRDayOff\_DayOffCurrentBalance.cshtml" />
+    <Content Include="Views\HRDayOff\_RequestForDayOff.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
