@@ -26,8 +26,8 @@
                             ActionName = "GetAssetSubSAssetGrid"
                         });
 
-            columns.Bound(p => p.ProvinceFrom).ClientTemplate("#= ProvinceFrom.Text #" +
-                          "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].ProvinceFrom.Value' value='#= ProvinceFrom.Value #' />"
+            columns.Bound(p => p.Floore).ClientTemplate("#= Floore.Text #" +
+                          "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].Floore.Value' value='#= Floore.Value #' />"
                         ).EditorViewData(new
                         {
                             DataTextField = "Text",
@@ -35,6 +35,26 @@
                             ControllerName = "ASSAssetTransfer",
                             ActionName = "GetProvinceGrid"
                         });
+
+            //columns.Bound(p => p.FloorTo).ClientTemplate("#= FloorTo.Text #" +
+            //             "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].FloorTo.Value' value='#= FloorTo.Value #' />"
+            //           ).EditorViewData(new
+            //           {
+            //               DataTextField = "Text",
+            //               DataValueField = "Value",
+            //               ControllerName = "ASSAssetTransfer",
+            //               ActionName = "GetProvinceGrid"
+            //           });
+
+            //columns.Bound(p => p.LocationFrom).ClientTemplate("#= LocationFrom.Text #" +
+            //              "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].LocationFrom.Value' value='#= LocationFrom.Value #' />"
+            //            ).EditorViewData(new
+            //            {
+            //                DataTextField = "Text",
+            //                DataValueField = "Value",
+            //                ControllerName = "ASSAssetTransfer",
+            //                ActionName = "GetProvinceGrid"
+            //            });
 
             //columns.Bound(p => p.ProvinceFrom).ClientTemplate("#= ProvinceFrom.Text #" +
             //              "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].ProvinceFrom.Value' value='#= ProvinceFrom.value #' />"
@@ -81,6 +101,7 @@
                        model.Id(p => p.ID);
                        model.Field(m => m.AssetSubAsset).DefaultValue(AssetTransferDetailVM.GetAssetSubAssetDefaultValue());
                        model.Field(m => m.ProvinceFrom).DefaultValue(AssetTransferDetailVM.GetProvinceDefaultValue());
+                       //model.Field(m => m.Floore).DefaultValue(AssetTransferDetailVM.GetProvinceDefaultValue());
                        //model.Field(m => m.WBS).DefaultValue(AssetAcquisitionItemVM.GetWBSDefaultValue());
                    })
                    .ServerOperation(false)

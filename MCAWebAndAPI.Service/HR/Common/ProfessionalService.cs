@@ -787,7 +787,9 @@ namespace MCAWebAndAPI.Service.HR.Common
         public List<string> GetEmailHR()
         {
             List<string> EmailHR = new List<string>();
-            string caml = @"<View><Query><Where><Contains><FieldRef Name='Position' /><Value Type='Lookup'>HR</Value></Contains></Where></Query><ViewFields><FieldRef Name='officeemail' /><FieldRef Name='Position' /></ViewFields><QueryOptions /></View>";
+            string caml = @"<View><Query><Where><Contains><FieldRef Name='Position' />
+            <Value Type='Lookup'>HR</Value></Contains></Where></Query><ViewFields><FieldRef Name='officeemail' />
+            <FieldRef Name='Position' /></ViewFields><QueryOptions /></View>";
             foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl, caml))
             {
                 EmailHR.Add(Convert.ToString(item["officeemail"]));

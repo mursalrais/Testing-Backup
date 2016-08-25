@@ -21,11 +21,11 @@ namespace MCAWebAndAPI.Web.Controllers
 
     public class FINPettyCashReimbursementController : Controller
     {
-        IPettyCashReimbursement service;
+        IPettyCashReimbursementService service;
 
         public FINPettyCashReimbursementController()
         {
-            service = new PettyCashReimbursement();
+            service = new PettyCashReimbursementService();
         }
 
         public ActionResult Create(string siteUrl = null)
@@ -103,7 +103,7 @@ namespace MCAWebAndAPI.Web.Controllers
             var siteUrl = SessionManager.Get<string>("SiteUrl") ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);
 
-            var vendors = FinService.Shared.GetProfessionalMaster(siteUrl);
+            var vendors = FinService.SharedService.GetProfessionalMaster(siteUrl);
 
             return Json(vendors.Select(e => new
             {

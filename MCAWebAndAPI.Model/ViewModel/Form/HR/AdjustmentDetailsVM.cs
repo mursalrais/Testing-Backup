@@ -28,6 +28,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// statusaplication
         /// </summary>
         [UIHint("InGridAjaxComboBox")]
+        [DisplayName("Adjustment Type")]
         public AjaxComboBoxVM ajusmentType { get; set; } = new AjaxComboBoxVM();
 
         public static IEnumerable<InGridComboBoxVM> getAjusmentTypeOptions()
@@ -62,6 +63,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// statusaplication
         /// </summary>
         [UIHint("InGridAjaxComboBox")]
+        [DisplayName("Currency")]
         public AjaxComboBoxVM currency { get; set; } = new AjaxComboBoxVM();
 
         public static IEnumerable<InGridComboBoxVM> getCurrencyOptions()
@@ -95,6 +97,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// statusaplication
         /// </summary>
         [UIHint("InGridAjaxComboBox")]
+        [DisplayName("PayType")]
         public AjaxComboBoxVM payType { get; set; } = new AjaxComboBoxVM();
 
         public static IEnumerable<InGridComboBoxVM> getPayTypeOptions()
@@ -125,6 +128,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         }
 
         [UIHint("InGridAjaxComboBox")]
+        [DisplayName("Professional")]
         public AjaxComboBoxVM ddlProfessional { get; set; } = new AjaxComboBoxVM();
 
         /// <head>
@@ -174,6 +178,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// CompensatoryDay
         /// </head>
         /// 
+        [Required]
         [DisplayName("Remarks")]
         public string remark { get; set; }
 
@@ -186,7 +191,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [DisplayName("Period")]
         [DataType(DataType.Date)]
         [UIHint("Date")]
-        public DateTime? period { get; set; } = DateTime.Now;
+        public DateTime? period { get; set; }
 
     }
 }

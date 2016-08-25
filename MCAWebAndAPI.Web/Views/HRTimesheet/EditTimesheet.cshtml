@@ -7,22 +7,25 @@
     <div class="form-horizontal">
 
         <fieldset>
+        
             <legend>Timesheet</legend>
             <div class="row">
                 <div class="col-sm-6">
                     @using (Ajax.BeginForm("UpdatePeriod", "HRTimesheet", new AjaxOptions
                     {
                         OnComplete = "onCompleteUpdatePeriod",
-                          OnBegin = "onBeginForm",
-                       OnSuccess = "onSuccessFormEmbed",
+                        OnBegin = "onBeginForm",
+                        OnSuccess = "onSuccessFormEmbed",
                         OnFailure = "onFailureForm"
                     }, new { id = "FormUpdatePeriod" }))
                     {
+                        @Html.HiddenFor(m => m.ID)
                         @Html.HiddenFor(m => m.UserLogin)
                         @Html.HiddenFor(m => m.ProfessionalID)
-                        @Html.HiddenFor(m => m.UserPermission)
+                        @Html.DisplayFor(m => m.UserPermission)
                         @Html.HiddenFor(m => m.Name)
                         @Html.HiddenFor(m => m.TimesheetStatus)
+                        @Html.HiddenFor(m => m.ApprovalLevel)
                         <div class="form-group">
                             @Html.Bootstrap().LabelFor(m => m.Period).Class("col-sm-4 control-label")
                             <div class="col-sm-8">
@@ -48,72 +51,73 @@
 
                 </div>
             </div>
-            <br />
+            <br/>
             <legend>Holidays and Day-Off</legend>
             <div class="row">
                 <div class="col-sm-12">
                     @(Html.Kendo()
-                      .Grid<TimesheetDetailVM>()
-                      .Name("TimesheetDetails_Holidays")
-                      .Columns(columns =>
-                      {
-                          columns.Bound(p => p.Date).Format("{0:dddd, MMM d, yyyy}");
-                          columns.Bound(p => p.Type);
-                          columns.Bound(p => p.FullHalf)
-                              .ClientFooterTemplate("Total Day: #=sum#")
-                              .ClientGroupFooterTemplate("Subtotal Day: #=sum#");
-                      })
-                      .DataSource(dataSource => dataSource
-                          .Ajax()
-                          .Aggregates(aggregates =>
+                          .Grid<TimesheetDetailVM>()
+                          .Name("TimesheetDetails_Holidays")
+                          .Columns(columns =>
                           {
-                              aggregates.Add(p => p.FullHalf).Sum();
+                              columns.Bound(p => p.Date).Format("{0:dddd, MMM d, yyyy}");
+                              columns.Bound(p => p.Type);
+                              columns.Bound(p => p.FullHalf)
+                                  .ClientFooterTemplate("Total Day: #=sum#")
+                                  .ClientGroupFooterTemplate("Subtotal Day: #=sum#");
                           })
-                          .Read("GridHolidays_Read", "HRTimesheet")
-                          .Group(group => group.Add(p => p.Type))
-                      )
-                    )
+                          .DataSource(dataSource => dataSource
+                              .Ajax()
+                              .Aggregates(aggregates =>
+                              {
+                                  aggregates.Add(p => p.FullHalf).Sum();
+                              })
+                              .Read("GridHolidays_Read", "HRTimesheet")
+                              .Group(group => group.Add(p => p.Type))
+                          )
+                          )
                 </div>
             </div>
-            <br />
+            <br/>
             <legend>Working Days</legend>
             <div class="row">
                 <div class="col-sm-12">
                     @(Html.Kendo()
-                      .Grid<TimesheetDetailVM>()
-                      .Name("TimesheetDetails_WorkingDays")
-                      .Columns(columns =>
-                      {
-                          columns.Bound(p => p.Date).Format("{0:dddd, MMM d, yyyy}");
-                          columns.Bound(p => p.Location);
-                          columns.Bound(p => p.LocationID);
-                          columns.Bound(p => p.FullHalf)
-                              .ClientFooterTemplate("Total Day: #=sum#");
-                          columns.Bound(p => p.Type).Hidden()
-                              .ClientGroupHeaderTemplate("Working Days");
-                      })
-                      .DataSource(dataSource => dataSource
-                          .Ajax()
-                          .Read("GridWorkingDays_Read", "HRTimesheet")
-                          .Sort(s => s.Add(p => p.Date).Ascending())
-                          .Aggregates(aggregates =>
+                          .Grid<TimesheetDetailVM>()
+                          .Name("TimesheetDetails_WorkingDays")
+                          .Columns(columns =>
                           {
-                              aggregates.Add(p => p.FullHalf).Sum();
+                              columns.Bound(p => p.Date).Format("{0:dddd, MMM d, yyyy}");
+                              columns.Bound(p => p.Location);
+                              columns.Bound(p => p.LocationID).Hidden();
+                              columns.Bound(p => p.FullHalf)
+                                  .ClientFooterTemplate("Total Day: #=sum#");
+                              columns.Bound(p => p.Type).Hidden()
+                                  .ClientGroupHeaderTemplate("Working Days");
                           })
-                          .Group(group => group.Add(p => p.Type))
-                      )
-                    )
+                          .DataSource(dataSource => dataSource
+                              .Ajax()
+                              .Read("GridWorkingDays_Read", "HRTimesheet")
+                              .Sort(s => s.Add(p => p.Date).Ascending())
+                              .Aggregates(aggregates =>
+                              {
+                                  aggregates.Add(p => p.FullHalf).Sum();
+                              })
+                              .Group(group => group.Add(p => p.Type))
+                          )
+                          )
                 </div>
             </div>
-            <br />
-            <br />
+            <br/>
+            <br/>
+
             <legend>Add Working Day</legend>
             <div class="row">
                 <div class="col-sm-6">
                     @using (Ajax.BeginForm("AddTimesheet", "HRTimesheet", new AjaxOptions
                     {
                         OnComplete = "onCompleteAddTimesheet"
-                    }, new { id = "FormAddTimesheet" }))
+                    }, new {id = "FormAddTimesheet"}))
                     {
                         <div class="form-group">
                             @Html.HiddenFor(m => m.LocationID)
@@ -121,25 +125,25 @@
                             @Html.Bootstrap().LabelFor(m => m.From).Class("col-sm-4 control-label")
                             <div class="col-sm-8">
                                 @(Html.Kendo().DatePicker()
-                                  .Name("From")
-                                  .Value(DateTime.Today.AddDays(-7))
-                                  .Max(DateTime.Today)
-                                  .Events(e => e.Change("startChange"))
-                                  .HtmlAttributes(new { @class = "form-control", style = "width: 100%" })
-                                )
+                                      .Name("From")
+                                      .Value(DateTime.Today.AddDays(-7))
+                                      .Max(DateTime.Today)
+                                      .Events(e => e.Change("startChange"))
+                                      .HtmlAttributes(new {@class = "form-control", style = "width: 100%"})
+                                      )
                             </div>
                         </div>
                         <div class="form-group">
                             @Html.Bootstrap().LabelFor(m => m.To).Class("col-sm-4 control-label")
                             <div class="col-sm-8">
                                 @(Html.Kendo().DatePicker()
-                                  .Name("To")
-                                  .Value(DateTime.Today)
-                                  .Min(DateTime.Today.AddDays(-31))
-                                  .Max(DateTime.Today)
-                                  .Events(e => e.Change("endChange"))
-                                  .HtmlAttributes(new { @class = "form-control", style = "width: 100%" })
-                                )
+                                      .Name("To")
+                                      .Value(DateTime.Today)
+                                      .Min(DateTime.Today.AddDays(-31))
+                                      .Max(DateTime.Today)
+                                      .Events(e => e.Change("endChange"))
+                                      .HtmlAttributes(new {@class = "form-control", style = "width: 100%"})
+                                      )
                             </div>
                         </div>
                         <div class="form-group">
@@ -159,20 +163,12 @@
                 </div>
                 <div class="col-sm-6"></div>
             </div>
+
+
         </fieldset>
 
         <div class="form-actions">
-            @using (Ajax.BeginForm("", "HRTimesheet",
-                                                                                        FormMethod.Post,
-                                                                                        new AjaxOptions
-                                                                                        {
-                                                                                            OnBegin = "onBeginForm",
-                                                                                            OnComplete = "onCompleteForm",
-                                                                                            OnSuccess = "onSuccessFormEmbed",
-                                                                                            OnFailure = "onFailureForm"
-                                                                                        }, new { @class = "form-horizontal" }))
-
-            {
+        
                 <div class="row">
                     <div class="col-sm-12">
                         <button id="submit-button" class="btn btn-success" type="button">
@@ -182,9 +178,19 @@
                             <i class="fa fa-save"></i>
                             Save as Draft
                         </button>
+
+                        <button id="approve-button" class="btn btn-success" type="button">
+                           Approve
+                        </button>
+
+                        <button id="reject-button" class="btn btn-primary" type="button">
+                            <i class="fa fa-save"></i>
+                            Reject
+                        </button>
+
                     </div>
                 </div>
-            }
+           
         </div>
 
     </div> 
@@ -194,20 +200,57 @@
 @section scripts{
 
     <script>
-        function save(status) {
-            //alert('ok');
+        function save(status,level) {
             $("#TimesheetStatus").val(status);
-            $('form').prop('action', '/HRTimesheet/SubmitTimesheet');
+            $("#ApprovalLevel").val(level);
+            $('form').prop('action', '/HRTimesheet/UpdateTimesheet');
             $("form").submit();
         }
 
         $(document)
-            .ready(function() {
+            .ready(function () {
+
+                var strPermission = $("#UserPermission").val();
+                var strStatus = $("#TimesheetStatus").val();
+                var period = $("#Period").data("kendoDatePicker");
+                var dateto = $("#To").data("kendoDatePicker");
+                var datefrom = $("#From").data("kendoDatePicker");
+                var location = $("#Location_Value").data("kendoDropDownList");
+                if (strStatus !== "Draft") {
+                    
+                    if (strPermission === "Approver") {
+                        $("#submit-button-update-period").prop("disabled", true);
+                        $("#submit-button-add-timesheet").prop("disabled", true);
+                        $("#IsFullDay").prop("disabled", true);
+                        $("#submit-button-update-period").prop("disabled", true);
+                        $("#draft-button").hide();
+                        $("#submit-button").hide();
+                        period.enable(false);
+                        dateto.enable(false);
+                        datefrom.enable(false);
+                        location.enable(false);
+                    }
+                    else if (strPermission === "Professional") {
+                        $("#submit-button-update-period").prop("disabled", true);
+                        $("#submit-button-add-timesheet").prop("disabled", true);
+                        $("#IsFullDay").prop("disabled", true);
+                        $("#submit-button-update-period").prop("disabled", true);
+                        $("#draft-button").hide();
+                        $("#submit-button").hide();
+                        $("#approve-button").hide();
+                        $("#reject-button").hide();
+                        period.enable(false);
+                        dateto.enable(false);
+                        datefrom.enable(false);
+                        location.enable(false);
+                    }
+                }
+
                 $("#Location_Value").data("kendoDropDownList").value("xxx");
 
                 var professional = $("#ProfessionalName_Value").data("kendoDropDownList");
 
-                var strPermission = $("#UserPermission").val();
+              
                 if (strPermission !== "HR") {
                     professional.enable(false);
                 }
@@ -215,16 +258,45 @@
                 $("#draft-button")
                  .click(function () {
 
-                     save('Draft');
+                     save('Draft','');
 
                  });
 
                 $("#submit-button")
                     .click(function () {
-                        save('Pending Approval');
+                        save('Pending Approval','1');
 
                     });
 
+                $("#approve-button")
+                   .click(function () {
+                       var strLevel = $("#ApprovalLevel").val();
+                        var nextLevel = "";
+                       if (strLevel === "1") {
+                           nextLevel = '1';
+                       }
+                       else if (strLevel === "2") {
+                           nextLevel = '2';
+                       }
+                       else if (strLevel === "3") {
+                           nextLevel = '3';
+                       }
+                       $("#TimesheetStatus").val("Approved");
+                       $("#ApprovalLevel").val(nextLevel);
+                       $('form').prop('action', '/HRTimesheet/UpdateApproval');
+                       $("form").submit();
+
+                   });
+
+                $("#reject-button")
+                 .click(function () {
+                     var strLevel = $("#ApprovalLevel").val();
+                     $("#TimesheetStatus").val("Rejected");
+                     $("#ApprovalLevel").val(strLevel);
+                     $('form').prop('action', '/HRTimesheet/UpdateApproval');
+                     $("form").submit();
+
+                 });
 
             });
 

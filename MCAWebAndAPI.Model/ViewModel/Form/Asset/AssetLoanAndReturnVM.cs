@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MCAWebAndAPI.Model.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
     {
         private AssetLoanAndReturnHeaderVM _header;
         private IEnumerable<AssetLoanAndReturnItemVM> _items;
+        
 
         public AssetLoanAndReturnHeaderVM Header
         {
@@ -17,6 +19,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
             {
                 if (_header == null)
                 {
+
                     _header = new AssetLoanAndReturnHeaderVM();
                 }
                 return _header;

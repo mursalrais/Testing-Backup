@@ -88,7 +88,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// CompensatoryDay
         /// </head>
         /// 
-        [DisplayName("Job Title")]
+        [DisplayName("Year")]
         public string cmpTitle { get; set; }
 
         /// <head>
@@ -126,7 +126,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// </head>
         /// 
         [DisplayName("Profesional")]
-        public string profId { get; set; }
+        public int? profId { get; set; }
 
         /// <summary>
         /// crstatus

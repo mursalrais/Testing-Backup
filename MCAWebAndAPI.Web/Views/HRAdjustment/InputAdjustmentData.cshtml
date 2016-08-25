@@ -7,13 +7,17 @@
     ViewBag.Title = "Input Adjustment HR";
 }
 
-@using (Html.BeginForm("CreateAdjustmentData", "HRAdjustment", FormMethod.Post, new AjaxOptions
+@using (Ajax.BeginForm("CreateAdjustmentData", "HRAdjustment", FormMethod.Post, new AjaxOptions
 {
     OnBegin = "onBeginForm",
     OnComplete = "onCompleteForm",
     OnSuccess = "onSuccessFormEmbed",
     OnFailure = "onFailureForm"
+}, new
+{
+    @class = "form-horizontal"
 }))
+
 {
     <fieldset>
         <input type="hidden" id="loadpage" value="0">
@@ -27,15 +31,17 @@
             </div>
         </div>
         
-        <legend>Adjustment list</legend>
-        <div id="adjustmentlist" class="row"></div>
+        <legend>Adjustment & OT</legend>
+        <div class="row">
+            @Html.Partial("_InputAdjustmentDetails", Model.AdjustmentDetails)
+        </div>
 
-        <button id="submithr-button" class="btn btn-primary" type="submit">
+        <button id="submit-button" class="btn btn-primary">
             <i class="fa fa-save"></i>
             Save
         </button>
 
-        <button id="cancel-button" class="btn btn-dannger">
+        <button id="cancel-button" class="btn btn-danger">
             <i class="fa fa-save"></i>
             cancel
         </button>
@@ -47,23 +53,10 @@
 
     <script>
         $(document).ready(function () {
-
-            $("#periodDate").kendoDatePicker({
-                change: onChange
+            $(".submit-button").click(function (e) {
+                $('form').submit();
             });
-
         });
-
-
-        function onChange() {
-
-            var url = "/HRAdjustment/GetAdjustmentDetails?period=" + $("#periodDate").val();
-
-            $('#adjustmentlist').load(url, function (response, status, xhr) {
-                if (status == "success") {
-                }
-            });
-        }
 
         function getProfId(prof) {
             if (prof != null) {

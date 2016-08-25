@@ -13,6 +13,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 {
     public class AssignmentOfAssetVM : Item
     {
+        public string CancelURL { get; set; }
+
         public IEnumerable<AssignmentOfAssetDetailsVM> Details { get; set; } = new List<AssignmentOfAssetDetailsVM>();
 
         private ComboBoxVM _assetHolder;
@@ -22,9 +24,11 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 
         public string TransactionType { get; set; }
 
+        [Required]
         [UIHint("Date")]
         public DateTime? Date { get; set; }
 
+        [Required]
         [UIHint("ComboBox")]
         public ComboBoxVM AssetHolder
         {
@@ -55,12 +59,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
         public string ProjectUnit { get; set; }
 
         public string ContactNo { get; set; }
-
-        [DisplayName("Attachment")]
-        [UIHint("MultiFileUploader")]
-        public IEnumerable<HttpPostedFileBase> Attachment { get; set; } = new List<HttpPostedFileBase>();
-
-        public string AttachmentUrl { get; set; }
 
         [UIHint("ComboBox")]
         public ComboBoxVM CompletionStatus

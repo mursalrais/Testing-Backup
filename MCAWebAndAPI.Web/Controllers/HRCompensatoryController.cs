@@ -33,9 +33,10 @@ namespace MCAWebAndAPI.Web.Controllers
             _service = new HRCompensatoryService();
         }
 
-        public ActionResult AddCompensatoryHR(string siteurl = null)
+        public ActionResult AddCompensatoryHR(string siteurl = null, string userAccess = null)
         {
             var viewmodel = new CompensatoryVM();
+
 
             if (siteurl == "")
             {
@@ -53,7 +54,17 @@ namespace MCAWebAndAPI.Web.Controllers
             if (viewmodel.cmpEmail != null)
                 SessionManager.Set("RequestorUserLogin", viewmodel.cmpEmail);
 
-            return View(viewmodel);
+            string position = _service.GetPosition(userAccess);
+
+            if (position.Contains("HR"))
+            {
+                return View("AddCompensatoryHR", viewmodel);
+            }
+            else
+            {
+                viewmodel = _service.GetProfessional(userAccess);
+                return View("AddCompensatoryUser", viewmodel);
+            }
         }
 
         public ActionResult InputCompensatoryUser(string siteurl = null, int? iD = null)
@@ -191,7 +202,9 @@ namespace MCAWebAndAPI.Web.Controllers
                 return RedirectToAction("Index", "Error");
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.Compensatorylist);
+            return RedirectToAction("Index",
+               "Success",
+               new { successMessage = string.Format(MessageResource.SuccessCreateCompensatoryData, viewModel.cmpID) });
 
         }
 
@@ -213,8 +226,8 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return RedirectToAction("Index", "Error");
             }
 
             if (viewModel.StatusForm != "submit")
@@ -242,7 +255,9 @@ namespace MCAWebAndAPI.Web.Controllers
                 }
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.Compensatorylist);
+            return RedirectToAction("Index",
+                          "Success",
+                          new { successMessage = string.Format(MessageResource.SuccessCreateCompensatoryData, viewModel.cmpID) });
 
         }
 
@@ -356,6 +371,12 @@ namespace MCAWebAndAPI.Web.Controllers
             var fileName = viewModel.cmpName + viewModel.cmpYearDate + "_CompensatoryRequest.pdf";
             byte[] pdfBuf = null;
             string content;
+
+
+            // ControllerContext context = new ControllerContext();
+            ControllerContext.Controller.ViewData.Model = viewModel;
+            ViewData = ControllerContext.Controller.ViewData;
+            TempData = ControllerContext.Controller.TempData;
 
             using (var writer = new StringWriter())
             {

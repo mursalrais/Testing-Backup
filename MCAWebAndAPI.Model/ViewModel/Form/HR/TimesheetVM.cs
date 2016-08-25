@@ -68,7 +68,13 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         public string UserPermission { get; set; }
 
+        public string Approver { get; set; }
+
+        public string ApprovalLevel { get; set; }
+
         public string TimesheetStatus { get; set; }
+
+        public string ApproverPosition { get; set; }
 
         public IEnumerable<TimesheetDetailVM> TimesheetDetails { get; set; }
 

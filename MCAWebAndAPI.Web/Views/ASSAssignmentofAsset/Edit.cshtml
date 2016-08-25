@@ -1,0 +1,129 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Asset
+
+
+
+@model AssignmentOfAssetVM
+
+@using (Ajax.BeginForm("Update", "ASSAssignmentOfAsset",
+                                                                                                                                       FormMethod.Post,
+                                                                                                                                       new AjaxOptions
+                                                                                                                                       {
+                                                                                                                                           OnBegin = "onBeginForm",
+                                                                                                                                           OnComplete = "onCompleteForm",
+                                                                                                                                           OnSuccess = "onSuccessFormEmbed",
+                                                                                                                                           OnFailure = "onFailureForm"
+                                                                                                                                       }, new { @class = "form-horizontal" }))
+
+{
+    <form class="form-horizontal" method="post" action="/ASSAssignmentOfAsset/Update" id="create-asset-acquisition-form">
+        <fieldset>
+            <legend>Form Asset Acquisition</legend>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.TransactionType).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        <input type="text" disabled name="TransactionType" value="Assignment Of Asset" style="width : 100%"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Date).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.EditorFor(m => m.Date)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.AssetHolder).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.EditorFor(m => m.AssetHolder)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.ProjectUnit).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        <input type="text" disabled name="ProjectUnit" id="ProjectUnit" value="@Model.ProjectUnit" style="width : 100%"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.ContactNo).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        <input type="text" disabled name="ContactNo" id="ContactNo" value="@Model.ContactNo" style="width : 100%"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.CompletionStatus).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.EditorFor(m => m.CompletionStatus)
+                    </div>
+                </div>
+            </div>
+            <div>
+                @Html.Partial("_Details", Model.Details)
+            </div>
+        </fieldset>
+        @Html.HiddenFor(m => m.ID)
+        @Html.HiddenFor(m => m.CancelURL)
+        <div>
+            <center>
+                <input class="k-button k-button-icontext k-grid-add" type="submit" onclick="return saveAssignment()" value="Save" />
+                <a href="@Model.CancelURL" target='_parent'>
+                    <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
+                </a>
+            </center>
+        </div>
+
+    </form>
+}
+
+
+<script>
+    $(document).ready(function () {
+        //$("#AssetHolder_Value").data("kendoDropDownList").value("");
+        })
+
+    function saveAssignment()
+    {
+        if ($('#AssetHolder_Value').val() == "") {
+            alert("Asset Holder Cannot be Empty");
+            return false;
+        }
+
+        var asset = document.getElementsByClassName("asset");
+        var province = document.getElementsByClassName("province");
+        for (var j = 0; j < asset.length; j++) {
+            if (asset[j].value == "null" || province[j].value == "null")
+            {
+                alert("Asset Sub Asset / Province cannot be null!");
+                return false;
+            }
+        }
+
+        var deleteRow = 0;
+        var matches = document.querySelectorAll("[name^='Details[']");
+        for (var i = 0; i < matches.length; i++) {
+            if (matches[i].value == -1) {
+                deleteRow++;
+            }
+        }
+        var gridElements = $("#Details").data("kendoGrid").dataSource;
+        var total = 0;
+        gridElements.fetch(function () {
+            total = gridElements.total();
+        })
+        if (total == 0 || total == deleteRow) {
+            alert("Detail cannot Empty");
+            return false;
+        }
+    }
+
+    function onAssetChange(e)
+    {
+        var res = this.dataItem(e.item).split("-")
+        //alert("berubah jadiii " + res[0]);
+        var url = "/ASSAssignmentOfAsset/GetProfMasterInfo?fullname=" + res[0] + "&position=" + res[1];
+        $.getJSON(url, function (data) {
+            //do next
+            document.getElementById('ProjectUnit').value = data.CurrentPosition.Text    ;
+            document.getElementById('ContactNo').value = data.MobileNumberOne;
+        })
+    }
+</script>

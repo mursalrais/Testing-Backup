@@ -1,7 +1,23 @@
-﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+﻿@*@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model IEnumerable<ExitProcedureChecklistVM>*@
+
+@using MCAWebAndAPI.Model.ViewModel.Form.HR
 @model IEnumerable<ExitProcedureChecklistVM>
 
+
 <div class="col-sm-12">
+    @*@(Html.Kendo().Grid(Model)
+        .Name("ExitProcedureChecklist")
+        .ToolBar(tools => tools.Create().Text("Add New ExitProcedureChecklist"))
+        .Editable(editable => editable.Mode(GridEditMode.InCell)
+        .CreateAt(GridInsertRowPosition.Bottom))
+        .Columns(columns =>
+        {
+        columns.Bound(p => p.ItemExitProcedure).Width(100).ClientTemplate("#= ItemExitProcedure #" +
+                           "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ItemExitProcedure' value='#= ItemExitProcedure #' />"
+                         );*@
+
+
     @(Html.Kendo().Grid(Model)
     .Name("ExitProcedureChecklist")
     .ToolBar(tools => tools.Create().Text("Add New ExitProcedureChecklist"))
@@ -9,11 +25,27 @@
     .CreateAt(GridInsertRowPosition.Bottom))
     .Columns(columns =>
     {
-    columns.Bound(p => p.ItemExitProcedure).ClientTemplate("#= ItemExitProcedure #" +
-                       "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ItemExitProcedure' value='#= ItemExitProcedure #' />"
-                     );
+        columns.Bound(p => p.ItemExitProcedure).Width(80).ClientTemplate("#= ItemExitProcedure #" +
+                           "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ItemExitProcedure' value='#= ItemExitProcedure #' />"
+                         );
 
-    columns.Bound(p => p.ApproverUnit).ClientTemplate("#= ApproverUnit.Text #" +
+        //columns.Bound(p => p.ApproverUnit).Width(100).ClientTemplate("#= ApproverUnit.Text #" +
+        //    "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ApproverUnit.Text' value='#= ApproverUnit.Text #' />"
+        //    )
+        //    .EditorViewData(new
+        //    {
+        //        BindTo = ExitProcedureChecklistVM.GetUnitOptions()
+        //    });
+
+        //columns.Bound(p => p.ProfessionalUnit).Hidden().ClientTemplate("#= ProfessionalUnit.Text #" +
+        //"<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ProfessionalUnit.Text' value='#= ProfessionalUnit.Text #' />"
+        //)
+        //.EditorViewData(new
+        //{
+        //    BindTo = ExitProcedureChecklistVM.GetProfessionalUnitOptions()
+        //});
+
+        columns.Bound(p => p.ApproverUnit).Width(80).ClientTemplate("#= ApproverUnit.Text #" +
         "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ApproverUnit.Text' value='#= ApproverUnit.Text #' />"
         )
         .EditorViewData(new
@@ -21,55 +53,107 @@
             BindTo = ExitProcedureChecklistVM.GetUnitOptions()
         });
 
-    columns.Bound(p => p.ProfessionalUnit).Hidden().ClientTemplate("#= ProfessionalUnit.Text #" +
-    "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ProfessionalUnit.Text' value='#= ProfessionalUnit.Text #' />"
-    )
-    .EditorViewData(new
-    {
-        BindTo = ExitProcedureChecklistVM.GetProfessionalUnitOptions()
-    });
-
-    columns.Bound(p => p.ApproverPosition).ClientTemplate("#= ApproverPosition.Text #" +
-      "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ApproverPosition.Value' value='#= ApproverPosition.Value #' />")
-.EditorViewData(
-new
-{
-    DataTextField = "Text",
-    DataValueField = "Value",
-    ControllerName = "HRDataMaster",
-    ActionName = "GetPositionsGrid"
-
-});
-
-    columns.Bound(p => p.ProfessionalPosition).Hidden().ClientTemplate("#= ProfessionalPosition.Text #" +
-                  "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ProfessionalPosition.Value' value='#= ProfessionalPosition.Value #' />")
-        .EditorViewData(
-        new
+        columns.Bound(p => p.ProfessionalUnit).Hidden().ClientTemplate("#= ProfessionalUnit.Text #" +
+        "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ProfessionalUnit.Text' value='#= ProfessionalUnit.Text #' />"
+        )
+        .EditorViewData(new
         {
-            DataTextField = "Text",
-            DataValueField = "Value",
-            ControllerName = "HRDataMaster",
-            ActionName = "GetPositionsGrid"
-
+            BindTo = ExitProcedureChecklistVM.GetProfessionalUnitOptions()
         });
 
-    columns.Bound(p => p.ApproverUserName).ClientTemplate("#= ApproverUserName.Text #" +
-"<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ApproverUserName.Value' value='#= ApproverUserName.Value #' />")
-.EditorViewData(
-new
-{
-    DataTextField = "Text",
-    DataValueField = "Value",
-    ControllerName = "HRDataMaster",
-    ActionName = "GetProfessionalsGrid"
+        //    columns.Bound(p => p.ApproverPosition).Width(100).ClientTemplate("#= ApproverPosition.Text #" +
+        //      "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ApproverPosition.Value' value='#= ApproverPosition.Value #' />")
+        //.EditorViewData(
+        //new
+        //{
+        //    DataTextField = "Text",
+        //    DataValueField = "Value",
+        //    ControllerName = "HRDataMaster",
+        //    ActionName = "GetPositionsGrid"
 
-});
+        //});
 
-    columns.Bound(p => p.DateOfApproval).ClientTemplate("#= kendo.toString(DateOfApproval, 'MM/dd/yyyy') #" +
-    "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].DateOfApproval' value='#= DateOfApproval #' />"
-    );
+        //    columns.Bound(p => p.ProfessionalPosition).Hidden().ClientTemplate("#= ProfessionalPosition.Text #" +
+        //                  "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ProfessionalPosition.Value' value='#= ProfessionalPosition.Value #' />")
+        //        .EditorViewData(
+        //        new
+        //        {
+        //            DataTextField = "Text",
+        //            DataValueField = "Value",
+        //            ControllerName = "HRDataMaster",
+        //            ActionName = "GetPositionsGrid"
 
-    columns.Bound(p => p.CheckListItemApproval).ClientTemplate("#= CheckListItemApproval.Text #" +
+        //        });
+
+        columns.Bound(p => p.ApproverPosition).Width(80).ClientTemplate("#= ApproverPosition.Text #" +
+      "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ApproverPosition.Value' value='#= ApproverPosition.Value #' />")
+    .EditorViewData(
+    new
+    {
+        DataTextField = "Text",
+        DataValueField = "Value",
+        ControllerName = "HRDataMaster",
+        ActionName = "GetPositionsGrid"
+
+    });
+
+        columns.Bound(p => p.ProfessionalPosition).Hidden().ClientTemplate("#= ProfessionalPosition.Text #" +
+                      "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ProfessionalPosition.Value' value='#= ProfessionalPosition.Value #' />")
+            .EditorViewData(
+            new
+            {
+                DataTextField = "Text",
+                DataValueField = "Value",
+                ControllerName = "HRDataMaster",
+                ActionName = "GetPositionsGrid"
+
+            });
+
+        //    columns.Bound(p => p.ApproverUserName).Width(100).ClientTemplate("#= ApproverUserName.Text #" +
+        //"<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ApproverUserName.Value' value='#= ApproverUserName.Value #' />")
+        //.EditorViewData(
+        //new
+        //{
+        //    DataTextField = "Text",
+        //    DataValueField = "Value",
+        //    ControllerName = "HRDataMaster",
+        //    ActionName = "GetProfessionalsGrid"
+
+        //});
+
+        //    columns.Bound(p => p.DateOfApproval).Width(100).ClientTemplate("#= kendo.toString(DateOfApproval, 'MM/dd/yyyy') #" +
+        //    "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].DateOfApproval' value='#= DateOfApproval #' />"
+        //    );
+
+        columns.Bound(p => p.ApproverUserName).Width(80).ClientTemplate("#= ApproverUserName.Text #" +
+    "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ApproverUserName.Value' value='#= ApproverUserName.Value #' />")
+    .EditorViewData(
+    new
+    {
+        DataTextField = "Text",
+        DataValueField = "Value",
+        ControllerName = "HRDataMaster",
+        ActionName = "GetProfessionalsGrid"
+
+    });
+
+        columns.Bound(p => p.DateOfApproval).Width(80).ClientTemplate("#= kendo.toString(DateOfApproval, 'MM/dd/yyyy') #" +
+        "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].DateOfApproval' value='#= DateOfApproval #' />"
+        );
+
+        //columns.Bound(p => p.CheckListItemApproval).Width(100).ClientTemplate("#= CheckListItemApproval.Text #" +
+        //    "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].CheckListItemApproval.Text' value='#= CheckListItemApproval.Text #' />"
+        //    )
+        //    .EditorViewData(new
+        //    {
+        //        BindTo = ExitProcedureChecklistVM.GetCheckListItemApproval()
+        //    });
+
+        //columns.Bound(p => p.Remarks).Width(100).ClientTemplate("#= Remarks #" +
+        //               "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].Remarks' value='#= Remarks #' />"
+        //             );
+
+        columns.Bound(p => p.CheckListItemApproval).Width(80).ClientTemplate("#= CheckListItemApproval.Text #" +
         "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].CheckListItemApproval.Text' value='#= CheckListItemApproval.Text #' />"
         )
         .EditorViewData(new
@@ -77,67 +161,159 @@ new
             BindTo = ExitProcedureChecklistVM.GetCheckListItemApproval()
         });
 
-    columns.Bound(p => p.Remarks).ClientTemplate("#= Remarks #" +
-                   "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].Remarks' value='#= Remarks #' />"
-                 );
+        columns.Bound(p => p.Remarks).Width(80).ClientTemplate("#= Remarks #" +
+                       "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].Remarks' value='#= Remarks #' />"
+                     );
 
-    columns.Bound(p => p.ApprovalIndicator).ClientTemplate(@"<div style='width:25px;height:25px;-webkit-border-radius:25px;-moz-border-radius:25px;border-radius:25px;background:#= ApprovalIndicator#;'</div>");
+        //columns.Bound(p => p.ApprovalIndicator).Width(100).ClientTemplate(@"<div style='width:25px;height:25px;-webkit-border-radius:25px;-moz-border-radius:25px;border-radius:25px;background:#= ApprovalIndicator#;'</div>");
 
-        columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
-          "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ID' value='#= ID #' />"
-        );
+        //columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
+        //  "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ID' value='#= ID #' />"
+        //);
+
+        //columns.Bound(p => p.ApprovalMail).Hidden().ClientTemplate("#= ApprovalMail #" +
+        //  "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ApprovalMail' value='#= ApprovalMail #' />"
+        //);
+
+        //columns.Bound(p => p.ApprovalIndicator).Width(100).ClientTemplate("<div style=width:25px;height:25px;-webkit-border-radius:25px;-moz-border-radius:25px;border-radius:25px;background:red</div>");
+        columns.Bound(p =>
+       p.ID).Hidden().ClientTemplate("#= ID #" +
+       "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ID' value='#= ID #' />"
+       );
 
         columns.Bound(p => p.ApprovalMail).Hidden().ClientTemplate("#= ApprovalMail #" +
-          "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ApprovalMail' value='#= ApprovalMail #' />"
+        "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ApprovalMail' value='#= ApprovalMail #' />"
         );
+
+        //columns.Bound(p => p.WorkflowType).Hidden().ClientTemplate("#= WorkflowType #" +
+        //  "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].WorkflowType' value='#= WorkflowType #' />"
+        //);
+
+        //columns.Bound(p => p.IsDefault).Hidden().ClientTemplate("#= IsDefault #" +
+        //  "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].IsDefault' value='#= IsDefault #' />"
+        //);
+
+        //columns.Bound(p => p.Level).Hidden().ClientTemplate("#= Level #" +
+        //  "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].Level' value='#= Level #' />"
+        //);
 
         columns.Bound(p => p.WorkflowType).Hidden().ClientTemplate("#= WorkflowType #" +
-          "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].WorkflowType' value='#= WorkflowType #' />"
-        );
+    "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].WorkflowType' value='#= WorkflowType #' />"
+    );
 
         columns.Bound(p => p.IsDefault).Hidden().ClientTemplate("#= IsDefault #" +
-          "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].IsDefault' value='#= IsDefault #' />"
+        "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].IsDefault' value='#= IsDefault #' />"
         );
 
         columns.Bound(p => p.Level).Hidden().ClientTemplate("#= Level #" +
-          "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].Level' value='#= Level #' />"
+        "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].Level' value='#= Level #' />"
         );
 
-        columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
-          "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].EditMode' value='#= EditMode #' />"
+        columns.Bound(p => p.StartDateApproval).Hidden().ClientTemplate("#= StartDateApproval #" +
+        "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].StartDateApproval' value='#= StartDateApproval #' />"
         );
+
+        //    columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
+        //      "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].EditMode' value='#= EditMode #' />"
+        //    );
+
+
+        //    columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
+        //        .Click("onDeleteKendoDetail")).Width(100);
+        //})
+
+        //.Events(e =>
+        //{
+        //    e.Edit("onEditKendoDetail");
+        //    e.DataBound("onDataBoundExitProcedureChecklists");
+        //})
+        //.DataSource(dataSource => dataSource.Ajax()
+
+        columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
+    "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].EditMode' value='#= EditMode #' />"
+    );
 
 
         columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
-            .Click("onDeleteKendoDetail")).Width(100);
+        .Click("onDeleteKendoDetail")).Width(80);
     })
-    .Pageable()
     .Events(e =>
     {
+        //e.Change("onChange");
         e.Edit("onEditKendoDetail");
         e.DataBound("onDataBoundExitProcedureChecklists");
     })
     .DataSource(dataSource => dataSource.Ajax()
-                   .Model(model =>
-                   {
-                       model.Id(p => p.ID);
-                       model.Field(p => p.ApprovalMail);
-                       model.Field(p => p.WorkflowType).DefaultValue("Parallel");
-                       model.Field(p => p.IsDefault).DefaultValue("Yes");
-                       model.Field(p => p.Level).DefaultValue("1");
-                       model.Field(m => m.CheckListItemApproval).DefaultValue(ExitProcedureChecklistVM.GetCheckListItemApprovalDefaultValue());
-                       model.Field(m => m.ApproverUnit).DefaultValue(ExitProcedureChecklistVM.GetUnitDefaultValue());
-                       model.Field(m => m.ApproverPosition).DefaultValue(ExitProcedureChecklistVM.GetPositionDefaultValue());
-                       model.Field(m => m.ApproverUserName).DefaultValue(ExitProcedureChecklistVM.GetApproverUserNameDefaultValue());
-                       model.Field(m => m.DateOfApproval).DefaultValue(DateTime.UtcNow);
-                       model.Field(m => m.ProfessionalUnit).DefaultValue(ExitProcedureChecklistVM.GetProfessionalUnitDefaultValue());
-                       model.Field(m => m.ProfessionalPosition).DefaultValue(ExitProcedureChecklistVM.GetProfessionalPositionDefaultValue());
-                       model.Field(m => m.ApprovalIndicator).DefaultValue("red").Editable(false);
-                   })
-                   .ServerOperation(false)
-                   .PageSize(10)
-     )
+    @*.Model(model =>
+                           {
+                               model.Id(p => p.ID);
+                               model.Field(p => p.ApprovalMail);
+                               model.Field(p => p.WorkflowType).DefaultValue("Parallel");
+                               model.Field(p => p.IsDefault).DefaultValue("Yes");
+                               model.Field(p => p.Level).DefaultValue("1");
+                               model.Field(m => m.CheckListItemApproval).DefaultValue(ExitProcedureChecklistVM.GetCheckListItemApprovalDefaultValue());
+                               model.Field(m => m.ApproverUnit).DefaultValue(ExitProcedureChecklistVM.GetUnitDefaultValue());
+                               model.Field(m => m.ApproverPosition).DefaultValue(ExitProcedureChecklistVM.GetPositionDefaultValue());
+                               model.Field(m => m.ApproverUserName).DefaultValue(ExitProcedureChecklistVM.GetApproverUserNameDefaultValue());
+                               model.Field(m => m.DateOfApproval).DefaultValue(DateTime.UtcNow);
+                               model.Field(m => m.ProfessionalUnit).DefaultValue(ExitProcedureChecklistVM.GetProfessionalUnitDefaultValue());
+                               model.Field(m => m.ProfessionalPosition).DefaultValue(ExitProcedureChecklistVM.GetProfessionalPositionDefaultValue());
+                               model.Field(m => m.ApprovalIndicator).DefaultValue("red").Editable(false);
+                           })
+                           .ServerOperation(false)
+
+             )
+
+        )
+        </div>*@
+
+.Model(model =>
+{
+    model.Id(p => p.ID);
+    model.Field(p => p.ApprovalMail);
+    model.Field(p => p.WorkflowType).DefaultValue("Parallel");
+    model.Field(p => p.IsDefault).DefaultValue("Yes");
+    model.Field(p => p.Level).DefaultValue("1");
+    model.Field(m => m.CheckListItemApproval).DefaultValue(ExitProcedureChecklistVM.GetCheckListItemApprovalDefaultValue());
+    model.Field(m => m.ApproverUnit).DefaultValue(ExitProcedureChecklistVM.GetUnitDefaultValue());
+    model.Field(m => m.ApproverPosition).DefaultValue(ExitProcedureChecklistVM.GetPositionDefaultValue());
+    model.Field(m => m.ApproverUserName).DefaultValue(ExitProcedureChecklistVM.GetApproverUserNameDefaultValue());
+    model.Field(m => m.DateOfApproval).DefaultValue(DateTime.UtcNow);
+    model.Field(m => m.ProfessionalUnit).DefaultValue(ExitProcedureChecklistVM.GetProfessionalUnitDefaultValue());
+    model.Field(m => m.ProfessionalPosition).DefaultValue(ExitProcedureChecklistVM.GetProfessionalPositionDefaultValue());
+    model.Field(m => m.StartDateApproval).DefaultValue(DateTime.UtcNow);
+    model.Field(m => m.ApprovalIndicator).DefaultValue("red").Editable(false);
+})
+    .ServerOperation(false)
+    )
 
     )
 </div>
+
+
+
+<script>
+
+    function getExitProcedureChecklists(dataItem) {
+        var data = $("#ExitProcedureChecklist").data("kendoGrid").dataSource.data();
+        return data.indexOf(dataItem);
+    }
+
+    function onDataBoundExitProcedureChecklists(e) {
+        var grid = $("#ExitProcedureChecklist").data("kendoGrid");
+        hideDeletedRowKendoDetail(grid);
+    }
+
+    function filterApproverPosition(e) {
+        return {
+            approverUnit: $("#ApproverUnit").data("kendoDropDownList").value()
+        };
+    }
+
+    function filterApproverName(e) {
+        return {
+            position: $("#ApproverPosition_Value").data("kendoDropDownList").value()
+        };
+    }
+</script>
 

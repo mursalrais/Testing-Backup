@@ -56,14 +56,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
         [HttpPost]
         public async Task<ActionResult> EditProfessional(FormCollection form, ProfessionalDataVM viewModel)
-        {
-            //if(!ModelState.IsValid)
-            //{
-            //    Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            //    var errorMessages = BindHelper.GetErrorMessages(ModelState.Values);
-            //    return JsonHelper.GenerateJsonErrorResponse(errorMessages);
-            //}
-
+        {            
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             SetSiteUrl(siteUrl);
 
@@ -116,13 +109,13 @@ namespace MCAWebAndAPI.Web.Controllers
                         _professionalService.SetValidationStatus(headerID, Workflow.ProfessionalValidationStatus.VALIDATED);
                         _professionalService.SendEmailValidation(
                             viewModel.OfficeEmail,
-                            string.Format(EmailResource.ProfessionalEmailValidationResponse), isApproved: true);
+                            string.Format(EmailResource.ProfessionalEmailValidationResponse));
                         break;
                     case "reject-action":
                         _professionalService.SetValidationStatus(headerID, Workflow.ProfessionalValidationStatus.REJECTED);
                         _professionalService.SendEmailValidation(
                             viewModel.OfficeEmail,
-                            string.Format(EmailResource.ProfessionalEmailValidationResponse), isApproved: false);
+                            string.Format(EmailResource.ProfessionalEmailValidationResponse));
                         break;
                 }
             }
@@ -132,7 +125,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse(e.Message);
             }
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl+"/"+UrlResource.Professional);
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl+"/"+UrlResource.ProfessionalData);
         }
 
         private IEnumerable<DependentDetailVM> BindDependentDetails(FormCollection form, IEnumerable<DependentDetailVM> dependentDetails)

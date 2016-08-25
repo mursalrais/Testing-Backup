@@ -5,10 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web;
+using Microsoft.SharePoint.Client;
 
 namespace MCAWebAndAPI.Service.Finance
 {
-    public class PettyCashReimbursement : IPettyCashReimbursement
+    public class PettyCashReimbursementService : IPettyCashReimbursementService
     {
         /// <summary>
         ///     Wireframe FIN12: Petty Cash Reimbursement
@@ -21,12 +22,17 @@ namespace MCAWebAndAPI.Service.Finance
 
         private const string ListName = "Petty Cash Reimbursement";
 
-        private const string FieldName_Date = "Date";
-        private const string FieldName_PaidTo = "Paid To";
-        private const string FieldName_Professional = "Professional";
-        private const string FieldName_Vendor = "Vendor";
+        private const string FieldName_Id = "ID";
+        private const string FieldName_DocNo = "Title";
+        private const string FieldName_Date = "Reimbursement_x0020_Date";
+        private const string FieldName_PaidTo = "Paid_x0020_To";
+        private const string FieldName_Professional = "NewColumn1";
+        private const string FieldName_Vendor = "Vendor_x0020_ID";
         private const string FieldName_Driver = "Driver";
 
+        private const string FieldName_Currency = "Currency";
+        private const string FieldName_AmountLiquidated = "Amount_x0020_Liquidated";
+        
         private string siteUrl = string.Empty;
         static Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -65,6 +71,24 @@ namespace MCAWebAndAPI.Service.Finance
             this.siteUrl = siteUrl;
         }
 
+        public delegate PettyCashTransactionItem ConvertToVMDelegate(string siteUrl, ListItem listItem);
 
+        private static PettyCashReimbursementVM ConvertToVM(string siteUrl, ListItem listItem)
+        {
+            PettyCashReimbursementVM viewModel = new PettyCashReimbursementVM();
+
+            viewModel.ID = Convert.ToInt32(listItem[FieldName_Id]);
+            viewModel.DocNo = Convert.ToString(listItem[FieldName_DocNo]);
+            viewModel.Date = Convert.ToDateTime(listItem[FieldName_Date]);
+            viewModel.Currency.Value = Convert.ToString(listItem[FieldName_Currency]);
+            viewModel.Amount = Convert.ToDecimal(listItem[FieldName_AmountLiquidated]);
+
+            return viewModel;
+        }
+
+        public static IEnumerable<PettyCashTransactionItem> GetPettyCashTransaction(string siteUrl, DateTime dateFrom, DateTime dateTo)
+        {
+            return SharedService.GetPettyCashTransaction(siteUrl, dateFrom, dateTo, ListName, FieldName_Date, ConvertToVM);
+        }
     }
 }

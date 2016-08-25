@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.Finance.SPHL
 {
+    /// <summary>
+    /// Wireframe FIN16: SPHL
+    ///     i.e.: Surat Pengesahan Hibah Langsung
+    /// </summary>
+
     public class SPHLVM
     {
         public int ID { get; set; }

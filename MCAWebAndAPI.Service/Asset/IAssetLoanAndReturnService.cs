@@ -12,10 +12,20 @@ namespace MCAWebAndAPI.Service.Asset
     {
         void SetSiteUrl(string siteUrl);
 
-        IEnumerable<AssetLoanAndReturnVM> GetAssetLoanAndReturns();
+        IEnumerable<AssetLoanAndReturnItemVM> GetAssetTransfers();
 
-        bool CreateAssetLoanAndReturn(AssetLoanAndReturnVM assetLoanAndReturn);
+        int CreateHeader(AssetLoanAndReturnHeaderVM header);
 
-        bool UpdateAssetLoanAndReturn(AssetLoanAndReturnVM assetLoanAndReturn);
+        int? CreateHeader(AssetLoanAndReturnHeaderVM viewmodel, string mode = null, string SiteUrl = null);
+
+        bool CreateAssetTransfer(AssetLoanAndReturnItemVM assetTransfer);
+
+        bool UpdateAssetTransfer(AssetLoanAndReturnItemVM assetTransfer);
+
+        AssetLoanAndReturnHeaderVM GetPopulatedModel(int? id = null);
+
+        ProfessionalsVM GetProfessionalInfo(int? ID, string SiteUrl);
+
+        IEnumerable<AssetMasterVM> GetAssetSubAsset();
     }
 }

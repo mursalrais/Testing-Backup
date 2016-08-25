@@ -1,9 +1,9 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
-@model ViewInsuranceProfessionalVM
+@model InsuranceClaimAXAVM
 
 <fieldset>
     @Html.HiddenFor(m => m.URL)
-    @Html.HiddenFor(m => m.Email)
+   @*// @Html.HiddenFor(m => m.Email)*@
     <div class="row">
         <div class="col-sm-12">
             @(Html.Kendo().Grid<dynamic>()
@@ -40,7 +40,7 @@
           })
           .ToolBar(tools => tools.Excel())
           .Excel(excel => excel
-            .FileName("Products.xlsx")
+            .FileName("SubmitAXA.xlsx")
         )
           .DataSource(dataSource => dataSource
               .Ajax()
@@ -63,7 +63,7 @@
     <div class="form-actions">
         <div class="row">
             <div class="col-sm-12">
-                <button id="submit-to-axa" class="btn btn-primary">
+                <button id="back-to-hr" class="btn btn-primary">
                     @*<i class="fa fa-save"></i>*@
                     Back
                 </button>
@@ -73,18 +73,22 @@
     <script type="text/javascript">
 
 
-        function functionExport() {
-            var dfrd = $.Deferred();
-            setTimeout(function () {
-                // doing async stuff
-                var grid = $("#gridDataView").data("kendoGrid");
-                grid.saveAsExcel();
-                dfrd.resolve();
-            }, 1000);
-            return dfrd.promise();
-        }
+        //function functionExport() {
+        //    var dfrd = $.Deferred();
+        //    setTimeout(function () {
+        //        // doing async stuff
+        //        var grid = $("#gridDataView").data("kendoGrid");
+        //        grid.saveAsExcel();
+        //        dfrd.resolve();
+        //    }, 1000);
+        //    return dfrd.promise();
+        //}
 
-
+        $("#back-to-hr").kendoButton({
+            click: function (e) {
+                window.top.location.href = $("#URL").val() + '/sitePages/hrInsuranceView.aspx';
+            }
+        });
 
         $(document)
             .ready(function () {

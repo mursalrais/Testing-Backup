@@ -63,9 +63,19 @@ namespace MCAWebAndAPI.Web.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Compensatory time requested by Professional: (please complete the form, have it verified by the HR Unit before have it signed/approved by the Manager).
         /// </summary>
-        public static string CompensatoryPrintText {
+        public static string CompensatoryPrintText1 {
             get {
-                return ResourceManager.GetString("CompensatoryPrintText", resourceCulture);
+                return ResourceManager.GetString("CompensatoryPrintText1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Note:
+        ///* Compensatory time: applicable to Professionals, who are not qualified to be paid for overtime, may be granted compensatory time in recognition of unusual work and/or travel time demands and required by the unit/project. Compensatory time is meant to provide a Professional with day(s)-off for work and/or travel done on Saturday, Sunday and Official Holiday, and should be approved by the immediate supervisor and/or Director. For excessive overtime during work week when unusual needs arise, the immedi [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string CompensatoryPrintText2 {
+            get {
+                return ResourceManager.GetString("CompensatoryPrintText2", resourceCulture);
             }
         }
         
@@ -164,10 +174,8 @@ namespace MCAWebAndAPI.Web.Resources {
         /// <summary>
         ///   Looks up a localized string similar to  {0}  has successfully been submitted..
         /// </summary>
-        public static string SuccessCreateFINSPHLData
-        {
-            get
-            {
+        public static string SuccessCreateSPHLData {
+            get {
                 return ResourceManager.GetString("SuccessCreateSPHLData", resourceCulture);
             }
         }

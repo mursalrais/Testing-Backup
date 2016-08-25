@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web;
 using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Model.ViewModel.Control;
@@ -16,7 +13,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
     ///     i.e.: Special Cash Advance Voucher
     /// </summary>
 
-    public class SCAVoucherVM:Item
+    public class SCAVoucherVM : Item
     {
         private const string locked = "Locked";
         private const string unlocked = "Unlocked";
@@ -38,19 +35,11 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 
         [Required]
         [UIHint("AjaxComboBox")]
-        public AjaxComboBoxVM SDO { get; set; } = new AjaxComboBoxVM
-        {
-            ControllerName = "ComboBox",
-            ActionName = "GetProfessionals",
-            ValueField = "ID",
-            TextField = "Desc"
-        };
-
-        public int SDOID { get; set; }
+        public AjaxComboBoxVM SDO { get; set; } = new AjaxComboBoxVM();
 
         public string SDOName { get; set; }
 
-        public string Position { get; set; }
+        public string SDOPosition { get; set; }
 
         public int EventBudgetID { get; set; }
 
@@ -58,17 +47,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 
         [Required]
         [UIHint("AjaxComboBox")]
-        public AjaxComboBoxVM EventBudget { get; set; } = new AjaxComboBoxVM
-        {
-            ControllerName = "ComboBox",
-            ActionName = "GetEventBudgets",
-            ValueField = "Value",
-            TextField = "Text",
-            OnSelectEventName = "OnSelectEventBudgetNo"
-        };
+        public AjaxComboBoxVM EventBudget { get; set; } = new AjaxComboBoxVM();
 
-        //[Required]
-        //public string Currency { get; set; }
         [Required]
         [DisplayName("Currency")]
         [UIHint("ComboBox")]
@@ -94,22 +74,14 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 
         [Required]
         [UIHint("AjaxCascadeComboBox")]
-        public AjaxCascadeComboBoxVM SubActivity { get; set; } = new AjaxCascadeComboBoxVM
-        {
-            ActionName = "GetSubActivitiesByEventBudgetID",
-            ControllerName = "ComboBox",
-            ValueField = "Value",
-            TextField = "Text",
-            Cascade = "EventBudget_Value",
-            Filter = "filterEventBudgetNo"
-        };
+        public AjaxCascadeComboBoxVM SubActivity { get; set; } = new AjaxCascadeComboBoxVM();
 
         public int SubActivityID { get; set; }
 
         public string SubActivityName { get; set; }
 
         [Required]
-        public decimal Fund { get; set; }
+        public string Fund { get; set; } = Shared.Fund;
 
         public string RefferenceNo { get; set; }
 
@@ -125,7 +97,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
                 unlocked,
                 locked
             },
-            Value=unlocked
+            Value = unlocked
         };
 
         [UIHint("MultiFileUploader")]

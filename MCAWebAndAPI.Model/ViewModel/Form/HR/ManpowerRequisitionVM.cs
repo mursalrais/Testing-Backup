@@ -103,6 +103,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         public string ProjectUnitString { get; set; }
 
+        public bool isKeyValuationValue { get; set; } = false;
+
 
         /// <summary>
         /// iskeyposition
@@ -187,15 +189,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [Required]
         [DisplayName("Budget Management (USD)")]
         public int BudgetManagement { get; set; }
-        [UIHint("CheckBoxItem")]
-        [Required]
-        public IEnumerable<CheckBoxItemVM> Workplan { get; set; } = new List<CheckBoxItemVM>();
-
-        /// <summary>
-        /// Workplan
-        /// </summary>
-        [UIHint("CheckBoxItem")]
-        public CheckBoxItemVM workplanItem = new CheckBoxItemVM();
+        
+        
 
         /// <summary>
         /// totalyrsofexperience
@@ -265,6 +260,17 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
                 "Active",
                 "Filled",
                 "Cancelled"
+            }
+        };
+
+        [Required]
+        [UIHint("MultiSelect")]
+        public MultiSelectVM Workplan { get; set; } = new MultiSelectVM()
+        {
+            Choices = new string[]{
+                "Daily",
+                "Quarterly",
+                "Annually"
             }
         };
 
