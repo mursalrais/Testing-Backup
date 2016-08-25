@@ -27,6 +27,7 @@ namespace MCAWebAndAPI.Service.Asset
         public AssignmentOfAssetVM GetPopulatedModel(string SiteUrl)
         {
             var model = new AssignmentOfAssetVM();
+            model.CancelURL = _siteUrl + UrlResource.AssetAssignment;
             model.AssetHolder.Choices = GetFromListHR("Professional Master", "Title", "Position", SiteUrl);
 
             return model;
@@ -70,10 +71,9 @@ namespace MCAWebAndAPI.Service.Asset
             {
                 viewModel.Date = Convert.ToDateTime(listItem["transferdate"]);
             }
-            //viewModel.PurchaseDescription = Regex.Replace(Convert.ToString(listItem["purchasedescription"]), "<.*?>", string.Empty);
             viewModel.ID = ID;
 
-            //viewModel.CancelURL = _siteUrl + UrlResource.AssetAcquisition;
+            viewModel.CancelURL = _siteUrl + UrlResource.AssetAssignment;
 
             return viewModel;
         }
@@ -109,7 +109,7 @@ namespace MCAWebAndAPI.Service.Asset
 
         public int? CreateHeader(AssignmentOfAssetVM viewmodel, string SiteUrl, string mode = null)
         {
-            //viewmodel.CancelURL = _siteUrl + UrlResource.AssetAcquisition;
+            viewmodel.CancelURL = _siteUrl + UrlResource.AssetAssignment;
             var columnValues = new Dictionary<string, object>();
             //columnValues.add
             columnValues.Add("Title", "Assignment Of Asset");
@@ -200,7 +200,7 @@ namespace MCAWebAndAPI.Service.Asset
 
         public bool UpdateHeader(AssignmentOfAssetVM viewmodel, string SiteUrl)
         {
-            //viewmodel.CancelURL = _siteUrl + UrlResource.AssetAcquisition;
+            viewmodel.CancelURL = _siteUrl + UrlResource.AssetAssignment;
             var columnValues = new Dictionary<string, object>();
             var ID = Convert.ToInt32(viewmodel.ID);
             var oldData = SPConnector.GetListItem("Asset Assignment", ID, SiteUrl);

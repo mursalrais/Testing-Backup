@@ -13,6 +13,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 {
     public class AssignmentOfAssetVM : Item
     {
+        public string CancelURL { get; set; }
+
         public IEnumerable<AssignmentOfAssetDetailsVM> Details { get; set; } = new List<AssignmentOfAssetDetailsVM>();
 
         private ComboBoxVM _assetHolder;
