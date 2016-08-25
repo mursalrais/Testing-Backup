@@ -255,8 +255,8 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
 
         public JsonResult GetEventBudgetItem([DataSourceRequest] DataSourceRequest request, int? eventBudgetId)
         {
-            var siteUrl = SessionManager.Get<string>(SiteUrl);
-
+            var siteUrl = SessionManager.Get<string>(SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
+            service.SetSiteUrl(siteUrl);
             SessionManager.Set(SharedFinanceController.Session_SiteUrl, siteUrl);
 
             List<SCAVoucherItemsVM> details = new List<SCAVoucherItemsVM>();
