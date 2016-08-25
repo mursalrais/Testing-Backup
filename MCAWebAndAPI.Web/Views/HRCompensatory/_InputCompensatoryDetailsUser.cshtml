@@ -6,15 +6,15 @@
     @(Html.Kendo().Grid(Model)
     .Name("CompensatoryDetails")
     .ToolBar(tools => tools.Create().Text("Add New"))
-        .Editable(editable => editable.Mode(GridEditMode.InCell)
-        .CreateAt(GridInsertRowPosition.Top))
+    .Editable(editable => editable.Mode(GridEditMode.InCell)
+    .CreateAt(GridInsertRowPosition.Top))
     .Columns(columns =>
     {
         columns.Bound(p => p.CmpActiv).ClientTemplate("#= CmpActiv #" +
         "<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].CmpActiv' value='#= CmpActiv #' />");
 
         columns.Bound(p => p.CmpDate).ClientTemplate("#= kendo.toString(CmpDate, \"MM/dd/yyyy \") #" +
-        "<input type='hidden' id='Dateid#= GetDetailComplist(data)#' name='CompensatoryDetails[#= GetDetailComplist(data)#].CmpDate' value='#= CmpDate #' />");
+        "<input type='hidden' id='Dateid#= GetDetailComplist(data)#' name='CompensatoryDetails[#= GetDetailComplist(data)#].CmpDate' value='#= CmpDate #' />").HtmlAttributes(new { @disable = "disable" });
 
         columns.Bound(p => p.CmpDate).ClientTemplate("#=getDayName(CmpDate)#"
                            ).Width(150);
@@ -25,24 +25,27 @@
         columns.Bound(p => p.FinishTime).ClientTemplate("#= kendo.toString(FinishTime, \"hh:mm tt\") #" +
        "<input id='end' type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].FinishTime' value='#= FinishTime #' />");
 
-        columns.Bound(p => p.CmpTotalHours).ClientTemplate("<input name='CompensatoryDetails[#= GetDetailComplist(data)#].CmpTotalHours' value='#= CmpTotalHours #' style='width: 15px; border: none; background-color: transparent' />");
+        columns.Bound(p => p.CmpTotalHours).ClientTemplate("<input id='CompensatoryDetails[#= GetDetailComplist(data)#].CmpTotalHours' name='CompensatoryDetails[#= GetDetailComplist(data)#].CmpTotalHours' value='#= CmpTotalHours #' style='width: 15px; border: none; background-color: transparent' />");
 
         columns.Bound(p => p.TotalDay).ClientTemplate("<input name='CompensatoryDetails[#= GetDetailComplist(data)#].TotalDay' value='#= TotalDay #' style='width: 20px; border: none; background-color: transparent' />");
 
         columns.Bound(p => p.remarks).ClientTemplate("#= remarks #" +
         "<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].remarks' value='#= remarks #' />");
 
+        columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
+           .Click("onDeleteKendoDetail")).Width(100);
+
         columns.Bound(p => p.CmpHID).Hidden().ClientTemplate("#= CmpHID #" +
-       "<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].CmpHID' value='#= CmpHID #' />"
-        );
+       "<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].CmpHID' value='#= CmpHID #' />");
 
         columns.Bound(p => p.CmpID).Hidden().ClientTemplate("#= CmpID #" +
-        "<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].CmpID' value='#= CmpID #' />"
-         );
+        "<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].CmpID' value='#= CmpID #' />");
 
         columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
-           "<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].EditMode' value='#= EditMode #' />"
-         );
+           "<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].EditMode' value='#= EditMode #' />");
+
+        columns.Bound(p => p.GetIndex).Hidden().ClientTemplate("#= GetDetailComplist(data)#" +
+       "<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].GetIndex' value='#= GetDetailComplist(data)#' />");
 
         columns.Bound(p => p.GetDateStr).Hidden().ClientTemplate("#= GetDateStr #" +
         "<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].GetDateStr' value='#= GetDateStr #' />");
@@ -57,14 +60,16 @@
        "<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].GetDayStr' value='#= GetDayStr #' />");
 
     })
-    .Scrollable(scrollable => scrollable.Height("auto"))
-     .Resizable(resizable => resizable.Columns(true))
+     .Scrollable().HtmlAttributes(new { @class = "cursorLink", @style = "height:auto;" })
     .Events(e =>
     {
-        e.Edit("onChange");
+        e.Edit("onEditKendoDetail");
+        e.DataBound("onDataBoundDependentDetails");
     })
-    .DataSource(dataSource => dataSource.Ajax()
-
+    .DataSource(dataSource => dataSource.Ajax().Events(events =>
+    {
+        events.Change("onChange");
+    })
     .Model(model =>
     {
         model.Id(p => p.ID);
