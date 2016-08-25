@@ -620,8 +620,12 @@ namespace MCAWebAndAPI.Web.Controllers
                             DataRow row = TableDetail.NewRow();
 
                             row["assignmentofasset"] = latestIDHeader;
-                            row["assetsubasset"] = d.ItemArray[6].ToString();
+                            row["assetsubasset"] = assetID;
                             row["province"] = d.ItemArray[7].ToString();
+                            row["office"] = d.ItemArray[8].ToString();
+                            row["floor"] = d.ItemArray[9].ToString();
+                            row["room"] = d.ItemArray[10].ToString();
+                            row["remarks"] = d.ItemArray[11].ToString();
 
                             TableDetail.Rows.InsertAt(row, 0);
 

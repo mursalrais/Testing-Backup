@@ -25,6 +25,7 @@ namespace MCAWebAndAPI.Service.Asset
         void CreateDocuments(int? headerID, IEnumerable<HttpPostedFileBase> documents, string SiteUrl);
 
         void CreateDetails(int? headerID, IEnumerable<AssignmentOfAssetDetailsVM> items);
+        void CreateDetails(int? headerID, AssignmentOfAssetDetailsVM item, string SiteUrl);
         void UpdateDetails(int? headerID, IEnumerable<AssignmentOfAssetDetailsVM> items);
 
         ProfessionalDataVM GetProfMasterInfo(string fullname,  string SiteUrl);
