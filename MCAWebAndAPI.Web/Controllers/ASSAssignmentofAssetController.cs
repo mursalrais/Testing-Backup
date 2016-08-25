@@ -72,6 +72,11 @@ namespace MCAWebAndAPI.Web.Controllers
             try
             {
                 headerID = _service.CreateHeader(_data, siteUrl);
+                if(headerID == 0)
+                {
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    return JsonHelper.GenerateJsonErrorResponse("Have To Attach File to Change Completion Status into Complete");
+                }
                 //_service.CreateDocuments(headerID, _data.Attachment, siteUrl);
             }
             catch (Exception e)
@@ -86,6 +91,8 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
+                //rollback parent
+                _service.RollbackParentChildrenUpload("Asset Assignment", headerID, siteUrl);
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
@@ -100,7 +107,12 @@ namespace MCAWebAndAPI.Web.Controllers
 
             try
             {
-                _service.UpdateHeader(_data, siteUrl);
+                var update = _service.UpdateHeader(_data, siteUrl);
+                if (update == false)
+                {
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    return JsonHelper.GenerateJsonErrorResponse("Have To Attach File to Change Completion Status into Complete");
+                }
             }
             catch (Exception e)
             {

@@ -17,8 +17,8 @@
                         .Columns(columns =>
                         {
 
-                            columns.Bound(p => p.AssetSubAsset).HtmlAttributes(new { @class = "assetsubasset" }).ClientTemplate("#= AssetSubAsset.Text #" +
-                                  "<input type='hidden' id='asset' name='Details[#= getWorkingRelationshipDetails(data)#].AssetSubAsset.Value' value='#= AssetSubAsset.Value #' />"
+                            columns.Bound(p => p.AssetSubAsset).ClientTemplate("#= AssetSubAsset.Text #" +
+                                  "<input type='hidden' class='asset' name='Details[#= getWorkingRelationshipDetails(data)#].AssetSubAsset.Value' value='#= AssetSubAsset.Value #' />"
                                 ).EditorViewData(new
                                 {
                                     DataTextField = "Text",
@@ -27,8 +27,8 @@
                                     ActionName = "GetAssetSubSAssetGrid"
                                 }).Width(200);
 
-                            columns.Bound(p => p.Province).HtmlAttributes(new { @class = "province" }).ClientTemplate("#= Province.Text #" +
-                              "<input type='hidden' id='province' name='Details[#= getWorkingRelationshipDetails(data)#].Province.Value' value='#= Province.Value #' />"
+                            columns.Bound(p => p.Province).ClientTemplate("#= Province.Text #" +
+                              "<input type='hidden' class='province' name='Details[#= getWorkingRelationshipDetails(data)#].Province.Value' value='#= Province.Value #' />"
                             ).EditorViewData(new
                             {
                                 DataTextField = "Text",
