@@ -54,7 +54,8 @@
         <div>
             <center>
                
-                    <input id="submit-button" onclick="return saveDisposal()" class="k-button k-button-icontext k-grid-add" size="4" type="submit" value="Save" />
+                    <input id="submit-button" 
+                            class="k-button k-button-icontext k-grid-add" onclick="return PreSaveAction()" size="4" type="submit" value="Save" />
                  
                 <a href="@Model.CancelURL" target='_parent'>
                     <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
@@ -67,21 +68,21 @@
 </div>
 @section scripts{
   <script type="text/javascript">
-      function savedisposal()
-      {
-        // // alert("saving...");
-        //  var idattach = document.queryselectorall("[id^='attachrow']");
-        ////  alert(idattach.length);
+      //function savedisposal()
+      //{
+      //  // // alert("saving...");
+      //  //  var idattach = document.queryselectorall("[id^='attachrow']");
+      //  ////  alert(idattach.length);
 
-        //  if (idattach.length == 0) {
-        //      alert("please attach the memo for disposal");
-        //  } else {
+      //  //  if (idattach.length == 0) {
+      //  //      alert("please attach the memo for disposal");
+      //  //  } else {
 
-              $("form").submit();
-         // }
+      //        $("form").submit();
+      //   // }
 
 
-      }
+      //}
 
       //$(document).ready(function () {
 
@@ -117,18 +118,28 @@
 
       //});
 
-      //var idattach = document.querySelectorAll("[id^='attachRow']");
       //$(document).ready(function () {
-      //        $("#submit-button").click(function () {
-      //            if (idattach.length == 0) {
-      //                alert("have to attach a file!");
-      //            }else{
+      //    $("#submit-button").click(function () {
+      //        PreSaveAction();
+      //        $("form").submit();
+      //    });
+      //});
 
-      //                $("form").submit();
-      //            }
-      //        });
-      //    }
-      //  );
+      function PreSaveAction() {
+         
+          var elm = document.getElementById("idAttachmentsTable");
+          
+          if (elm == null || elm.rows.length == 0) {
+
+             // document.getElementById("idAttachmentsRow").style.display = 'none';
+              alert("Please attach the memo for disposal");
+              return false;
+          }
+          else {
+
+              $("form").submit();
+          }
+      }
 
     </script>
 }
