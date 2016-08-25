@@ -15,6 +15,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
         public DateTime _loanDate;
         public ComboBoxVM _professional;
 
+        public string CancelURL { get; set; }
+
         [Required(ErrorMessage = "Transaction Type Field Is Required")]
         [DisplayName("Transaction Type")]
         public string TransactionType { get; set; }

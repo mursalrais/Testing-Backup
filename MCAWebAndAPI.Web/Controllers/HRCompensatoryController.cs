@@ -33,9 +33,10 @@ namespace MCAWebAndAPI.Web.Controllers
             _service = new HRCompensatoryService();
         }
 
-        public ActionResult AddCompensatoryHR(string siteurl = null)
+        public ActionResult AddCompensatoryHR(string siteurl = null, string userAccess = null)
         {
             var viewmodel = new CompensatoryVM();
+
 
             if (siteurl == "")
             {
@@ -53,7 +54,17 @@ namespace MCAWebAndAPI.Web.Controllers
             if (viewmodel.cmpEmail != null)
                 SessionManager.Set("RequestorUserLogin", viewmodel.cmpEmail);
 
-            return View(viewmodel);
+            string position = _service.GetPosition(userAccess);
+
+            if (position.Contains("HR"))
+            {
+                return View("AddCompensatoryHR", viewmodel);
+            }
+            else
+            {
+                viewmodel = _service.GetProfessional(userAccess);
+                return View("AddCompensatoryUser", viewmodel);
+            }
         }
 
         public ActionResult InputCompensatoryUser(string siteurl = null, int? iD = null)

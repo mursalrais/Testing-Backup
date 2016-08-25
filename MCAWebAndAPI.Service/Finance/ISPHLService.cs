@@ -8,6 +8,11 @@ using MCAWebAndAPI.Model.ViewModel.Form.Finance.SPHL;
 
 namespace MCAWebAndAPI.Service.Finance
 {
+    /// <summary>
+    /// Wireframe FIN16: SPHL
+    ///     i.e.: Surat Pengesahan Hibah Langsung
+    /// </summary>
+
     public interface ISPHLService
     {
         void SetSiteUrl(string siteUrl);

@@ -15,7 +15,13 @@
     <fieldset>
         @Html.HiddenFor(m => m.cmpID)
         @Html.HiddenFor(m => m.cmpName)
+        @Html.HiddenFor(m => m.cmpEmail)
+        @Html.HiddenFor(m => m.cmpTitle)
         @Html.HiddenFor(m => m.cmpPosition)
+        @Html.HiddenFor(m => m.cmpYearDate)
+        @Html.HiddenFor(m => m.Requestor)
+        @Html.HiddenFor(m => m.cmpProjUnit)
+
         <div class="row">
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.ddlProfessional).Class("col-md-2 control-label")
@@ -37,6 +43,14 @@
             @Html.Partial("_CompensatoryDetails", Model.CompensatoryDetails)
         </div>
 
+        <div class="row">
+            <div class="col-sm-12">
+                <button id="print-button" class="btn btn-primary" type="button">
+                    <i class="fa fa-print"></i>
+                    Print
+                </button>
+            </div>
+        </div>
     </fieldset>
 }
 
@@ -51,6 +65,21 @@
             }
         };
 
+        function getDayName(date) {
+            var day = new Array();
+            day[0] = "Monday";
+            day[1] = "Tuesday";
+            day[2] = "Wednesday";
+            day[3] = "Thursday";
+            day[4] = "Friday";
+            day[5] = "Saturday";
+            day[6] = "Sunday";
+
+            if (date != null) {
+                return day[date.getDay()];
+
+            };
+        }
         $(document).ready(function () {
             $("#vac-position").prop('readonly', 'true');
             var positionID = $("#Position").val();
@@ -62,6 +91,12 @@
 
             var dropdownlist = $("#ActivePosition_Value").data("kendoDropDownList");
             dropdownlist.select(positionID);
+
+            $('#print-button').click(function (e) {
+                $("#ParentDiv").show();
+                var url = "/HRCompensatory/PrintCompensatoryRequest";
+                submitFormToPrint(url);
+            });
 
         });
     </script>

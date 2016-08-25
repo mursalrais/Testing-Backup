@@ -32,7 +32,7 @@ namespace MCAWebAndAPI.Web.Controllers
             _service = new AdjustmentService();
         }
 
-        public ActionResult InputAdjustmentData (string siteurl = null, string period = null)
+        public ActionResult InputAdjustmentData (string siteurl = null)
         {
             var viewmodel = new AdjustmentDataVM();
 
@@ -43,13 +43,26 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewmodel); 
         }
 
+        public ActionResult EditAdjustmentData(string siteurl = null, int? ID = null)
+        {
+            var viewmodel = new AdjustmentDataVM();
+
+            //mandatory: set site url
+            _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
+
+            viewmodel = _service.GetPeriod(ID);
+
+            return View(viewmodel);
+        }
+
         [HttpPost]
-        public async Task<ActionResult> CreateAdjustmentData(FormCollection form, AdjustmentDataVM viewModel)
+        public ActionResult CreateAdjustmentData(FormCollection form, AdjustmentDataVM viewModel)
         { 
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
-            string period = viewModel.periodDate;
+            string period = Convert.ToString(viewModel.periodDate) ;
 
             try
             {
@@ -61,7 +74,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.Compensatory);
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AdjustmentList);
 
         }
 

@@ -35,33 +35,41 @@
                                 DataValueField = "Value",
                                 ControllerName = "ASSAssignmentOfAsset",
                                 ActionName = "GetProvinceGrid"
-                            }).Width(200);
+                            }).Width(600);
 
-                            //                columns.Bound(p => p.OfficeName).HtmlAttributes(new { @class = "office" }).ClientTemplate("#= OfficeName #" +
-                            //"<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].OfficeName' value='#= OfficeName #' />"
+                            //                columns.Bound(p => p.OfficeName).HtmlAttributes(new { @class = "office" }).ClientTemplate("#= OfficeName.Text #" +
+                            //                  "<input type='hidden' id='office' name='Details[#= getWorkingRelationshipDetails(data)#].OfficeName.Value' value='#= OfficeName.Value #' />"
+                            //                ).EditorViewData(new
+                            //                {
+                            //                    DataTextField = "Text",
+                            //                    DataValueField = "Value",
+                            //                    ControllerName = "ASSAssignmentOfAsset",
+                            //                    ActionName = "GetOfficeGrid"
+                            //                }).Width(200);
+
+                            //                columns.Bound(p => p.Floor).HtmlAttributes(new { @class = "floor" }).ClientTemplate("#= Floor.Text #" +
+                            //                  "<input type='hidden' id='floor' name='Details[#= getWorkingRelationshipDetails(data)#].Floor.Value' value='#= Floor.Value #' />"
+                            //                ).EditorViewData(new
+                            //                {
+                            //                    DataTextField = "Text",
+                            //                    DataValueField = "Value",
+                            //                    ControllerName = "ASSAssignmentOfAsset",
+                            //                    ActionName = "GetFloorGrid"
+                            //                }).Width(200);
+
+                            //                columns.Bound(p => p.Room).HtmlAttributes(new { @class = "room" }).ClientTemplate("#= Room.Text #" +
+                            //                  "<input type='hidden' id='room' name='Details[#= getWorkingRelationshipDetails(data)#].Room.Value' value='#= Room.Value #' />"
+                            //                ).EditorViewData(new
+                            //                {
+                            //                    DataTextField = "Text",
+                            //                    DataValueField = "Value",
+                            //                    ControllerName = "ASSAssignmentOfAsset",
+                            //                    ActionName = "GetRoomGrid"
+                            //                }).Width(200);
+
+                            //                columns.Bound(p => p.Remarks).HtmlAttributes(new { @class = "remarks" }).ClientTemplate("#= Remarks #" +
+                            //"<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].Remarks' value='#= Remarks #' />"
                             //);
-
-                            columns.Bound(p => p.OfficeName).HtmlAttributes(new { @class = "office" }).ClientTemplate("#= OfficeName.Text #" +
-                              "<input type='hidden' id='office' name='Details[#= getWorkingRelationshipDetails(data)#].OfficeName.Value' value='#= OfficeName.Value #' />"
-                            ).EditorViewData(new
-                            {
-                                DataTextField = "Text",
-                                DataValueField = "Value",
-                                ControllerName = "ASSAssignmentOfAsset",
-                                ActionName = "GetOfficeGrid"
-                            }).Width(200);
-
-                            columns.Bound(p => p.Floor).HtmlAttributes(new { @class = "floor" }).ClientTemplate("#= Floor #" +
-            "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].Floor' value='#= Floor #' />"
-            );
-
-                            columns.Bound(p => p.Room).HtmlAttributes(new { @class = "room" }).ClientTemplate("#= Room #" +
-            "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].Room' value='#= Room #' />"
-            );
-
-                            columns.Bound(p => p.Remarks).HtmlAttributes(new { @class = "remarks" }).ClientTemplate("#= Remarks #" +
-            "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].Remarks' value='#= Remarks #' />"
-            );
 
                             columns.Bound(p => p.Status).HtmlAttributes(new { @class = "status" }).ClientTemplate("#= Status #" +
             "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].Status' value='#= Status #' />"
@@ -88,10 +96,10 @@
                        model.Id(p => p.ID);
                        model.Field(m => m.AssetSubAsset).DefaultValue(AssignmentOfAssetDetailsVM.GetAssetSubAssetDefaultValue());
                        model.Field(m => m.Province).DefaultValue(AssignmentOfAssetDetailsVM.GetProvinceDefaultValue());
-                       model.Field(m => m.OfficeName).DefaultValue(AssignmentOfAssetDetailsVM.GetOfficeNameDefautValue());
-                       model.Field(m => m.Floor);
-                       model.Field(m => m.Room);
-                       model.Field(m => m.Remarks);
+                       //model.Field(m => m.OfficeName).DefaultValue(AssignmentOfAssetDetailsVM.GetOfficeNameDefautValue());
+                       //model.Field(m => m.Floor).DefaultValue(AssignmentOfAssetDetailsVM.GetFloorDefautValue());
+                       //model.Field(m => m.Room).DefaultValue(AssignmentOfAssetDetailsVM.GetRoomDefautValue());
+                       //model.Field(m => m.Remarks);
                        model.Field(m => m.Status).Editable(false);
 
                    })
@@ -157,9 +165,9 @@
 </script>
 
 <style>
-    .k-dropdown-wrap {
-        width: 200px;
-    }
+    /*.k-dropdown-wrap {
+        width: 600px;
+    }*/
 
     .k-dirty-cell {
         width: 200px;

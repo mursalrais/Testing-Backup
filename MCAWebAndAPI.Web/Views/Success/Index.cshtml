@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="text-center error-box">
-                    <h2 class="font-xl"><strong>Congratulation</strong></h2>
+                    <h2 class="font-xl"><strong>Congratulations</strong></h2>
                     <br>
                     <p class="lead semi-bold">
                         @ViewBag.SuccessMessage
@@ -13,6 +13,20 @@
         </div>
     </div>
 </div>
+
+@if(!string.IsNullOrEmpty(@ViewBag.PreviousUrl))
+{
+<div class="form-actions">
+    <div class="row">
+        <div class="col-sm-12">
+            <button id="back-button" class="btn btn-primary" type="submit">
+                <i class="fa fa-save"></i>
+                OK
+            </button>
+        </div>
+    </div>
+</div>
+}
 
 @section scripts{
 

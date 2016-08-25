@@ -55,6 +55,15 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             updatedValue.Add("personnelmgmt", viewModel.PersonnelManagement);
             updatedValue.Add("budgetmgmt", viewModel.BudgetManagement);
             updatedValue.Add("isonbehalfof", viewModel.IsOnBehalfOf);
+            if (viewModel.Workplan.Values != null)
+            {
+                updatedValue.Add("Workplan", viewModel.Workplan.Values);
+            }
+            else
+            {
+                updatedValue.Add("Workplan", null);
+            }
+            
             if (viewModel.IsOnBehalfOf)
             {
                 updatedValue.Add("onbehalfof", new FieldLookupValue { LookupId = (int)viewModel.OnBehalfOf.Value });
@@ -196,6 +205,14 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             updatedValue.Add("specifictechnicalskill", viewModel.SpecificTechnicalSkillQualification);
             updatedValue.Add("personalattributes", viewModel.PersonalAttributesCompetencies);
             updatedValue.Add("otherrequirements", viewModel.OtherRequirements);
+            if (viewModel.Workplan.Values.Length > 0)
+            {
+                updatedValue.Add("Workplan", viewModel.Workplan.Values);
+            }
+            else
+            {
+                updatedValue.Add("Workplan", null);
+            }
             updatedValue.Add("remarks", viewModel.Remarks);
             FieldUserValue Approver;
             string emailApprover;
@@ -254,21 +271,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         public ManpowerRequisitionVM GetManpowerRequisition(int? ID)
         {
             var viewModel = new ManpowerRequisitionVM();
-            var checkBoxItem = SPConnector.GetChoiceFieldValues(SP_MANPOW_LIST_NAME, "Workplan", _siteUrl);
             //viewModel.DivisionProjectUnit.Choices = SPConnector.GetChoiceFieldValues(SP_MANPOW_LIST_NAME, "projectunit", _siteUrl);
 
-
-            var tempList = new List<CheckBoxItemVM>();
-            foreach (var item in checkBoxItem)
-            {
-                tempList.Add(new CheckBoxItemVM
-                {
-                    Text = item,
-                    Value = false
-                });
-            }
-
-            viewModel.Workplan = tempList;
+                        
+            
             viewModel.ID = ID;
             if (ID == null)
                 return viewModel;
@@ -284,19 +290,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         public async Task<ManpowerRequisitionVM> GetManpowerRequisitionAsync(int? ID)
         {            
             var viewModel = new ManpowerRequisitionVM();
-            var checkBoxItem = SPConnector.GetChoiceFieldValues(SP_MANPOW_LIST_NAME, "Workplan", _siteUrl);
+           
             //viewModel.DivisionProjectUnit.Choices = SPConnector.GetChoiceFieldValues(SP_MANPOW_LIST_NAME, "projectunit", _siteUrl);
-            var tempList = new List<CheckBoxItemVM>();
-            foreach (var item in checkBoxItem)
-            {
-                tempList.Add(new CheckBoxItemVM
-                {
-                    Text = item,
-                    Value = false
-                });
-            }
-
-            viewModel.Workplan = tempList;
+           
+                        
             viewModel.ID = ID;
             if (ID == null)
             {
@@ -362,7 +359,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             }
 
             viewModel.Status.Value = Convert.ToString(listItem["manpowerrequeststatus"]);
-            //viewModel.workplanItem.Value;
 
 
             //viewModel.DivisionProjectUnit.Text = Convert.ToString(listItem["projectunit"]);
@@ -393,7 +389,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.PersonalAttributesCompetencies = FormatUtil.ConvertMultipleLine(Convert.ToString(listItem["personalattributes"]));
             viewModel.OtherRequirements = FormatUtil.ConvertMultipleLine(Convert.ToString(listItem["otherrequirements"]));
             viewModel.Remarks = FormatUtil.ConvertMultipleLine(Convert.ToString(listItem["remarks"]));
-
+            viewModel.Workplan.Values = (string[])listItem["Workplan"];
 
             return viewModel;
 
@@ -623,5 +619,17 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             }
             return email;
         }
+
+        public List<string> GetEmailHR()
+        {
+            List<string> EmailHR = new List<string>();
+            string caml = @"<View><Query><Where><Contains><FieldRef Name='Position' /><Value Type='Lookup'>HR</Value></Contains></Where></Query><ViewFields><FieldRef Name='officeemail' /><FieldRef Name='Position' /></ViewFields><QueryOptions /></View>";
+            foreach (var item in SPConnector.GetList(SP_PROFESSIONAL_MAST, _siteUrl, caml))
+            {
+                EmailHR.Add(Convert.ToString(item["officeemail"]));
+            }
+            return EmailHR;
+        }
+        
     }
 }

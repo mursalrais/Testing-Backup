@@ -15,11 +15,61 @@
             @Html.Partial("_CompensatoryRequest_Print", Model)
         </div>
         <div class="row">
-          <p style="margin-top: 40px; margin-bottom: 40px; margin-left: 15px;margin-right: 15px;"> @string.Format(MessageResource.CompensatoryPrintText)</p>
+          <p style="margin-top: 40px; margin-bottom: 40px; margin-left: 15px;margin-right: 15px;"> @string.Format(MessageResource.CompensatoryPrintText1)</p>
         </div>
         <div class="row">
             @Html.Partial("_CompensatoryRequestDetails_Print", Model)
         </div>
+        <div class="row">
+            <p style="margin-top: 40px; margin-bottom: 40px; margin-left: 15px;margin-right: 15px;"> @string.Format(MessageResource.CompensatoryPrintText2)</p>
+        </div>
+        <div class="col-xs-6">
+            <div class="form-group">
+                <label class="col-sm-4">Name and Signature :</label>
+            </div>
+        </div>
+        <div class="col-xs-6">
+            <div class="form-group">
+                <label class="col-sm-4 control-label">Date :</label>
+            </div>
+        </div>
+        <div class="row">
+            <h3 style="margin-top: 40px; margin-bottom: 40px; margin-left: 15px;margin-right: 15px;"> Authorization - by Manager</h3>
+            <div class="form-group">
+                <label class="col-xs-4" style=" margin-left: 15px;">Comments (if any) :</label>
+            </div>
+            <div class="form-group">
+                <label class="col-xs-4" style=" margin-left: 15px;">Signature :</label>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4" style=" margin-left: 15px;">Name :</label>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4" style=" margin-left: 15px;">Title :</label>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label" style=" margin-left: 15px;">Date :</label>
+            </div>
+            
+            <h3 style="margin-top: 40px; margin-bottom: 40px; margin-left: 15px;margin-right: 15px;"> Leave Verification - by Human Resources</h3>
+            <div class="form-group">
+                <label class="col-xs-4" style=" margin-left: 15px;">Compensatory time earned :</label>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4" style=" margin-left: 15px;">Comments (if any) :</label>
+            </div>
+            <div class="col-xs-6">
+                <div class="form-group">
+                    <label class="col-sm-4">Name and Signature :</label>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">Date :</label>
+                </div>
+            </div>
+            </div>
+        
     </fieldset>
 </div>
 <script>

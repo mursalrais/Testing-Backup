@@ -96,12 +96,34 @@
     })
 
     function SimpenAsset() {
+        if ($('#AccpMemo_Value').val() == "") {
+            alert("Acceptance Memo Cannot be Empty");
+            return false;
+        }
+        var assetsubasset = document.getElementsByClassName("assetsubasset");
+        var wbs = document.getElementsByClassName("wbs");
+        var costidr = document.getElementsByClassName("costidr");
+        var costusd = document.getElementsByClassName("costusd");
+        for (var j = 0; j < assetsubasset.length; j++) {
+            if (assetsubasset[j].value == "null" || wbs[j].value == "null" || costidr[j].value == "null" || costusd[j].value == "null") {
+                alert("Asset Sub Asset / WBS / CostIDR / CostUSD cannot be null!");
+                return false;
+            }
+        }
+
+        var deleteRow = 0;
+        var matches = document.querySelectorAll("[name^='Details[']");
+        for (var i = 0; i < matches.length; i++) {
+            if (matches[i].value == -1) {
+                deleteRow++;
+            }
+        }
         var gridElements = $("#Details").data("kendoGrid").dataSource;
         var total = 0;
         gridElements.fetch(function () {
             total = gridElements.total();
         })
-        if (total == 0) {
+        if (total == 0 || total == deleteRow) {
             alert("Detail cannot Empty");
             return false;
         }

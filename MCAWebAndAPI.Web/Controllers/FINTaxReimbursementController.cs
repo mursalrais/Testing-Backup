@@ -2,6 +2,7 @@
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Elmah;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 using MCAWebAndAPI.Service.Finance;
 using MCAWebAndAPI.Service.Resources;
@@ -54,11 +55,11 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.FINTaxReimbursement);
+            return Redirect(string.Format("{0}/{1}", siteUrl ?? ConfigResource.DefaultBOSiteUrl, UrlResource.FINTaxReimbursement));
         }
 
         private void SetAdditionalSettingToViewModel(ref TaxReimbursementVM viewModel, bool isCreate)

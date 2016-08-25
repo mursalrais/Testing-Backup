@@ -357,17 +357,22 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             var cratedValueDetail = new Dictionary<string, object>();
 
-            
-            cratedValueDetail.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(viewModels.ddlProfessional.Value)});
             cratedValueDetail.Add("Title", Convert.ToString(viewModels.cmpYearDate));
 
-            if (viewModels.StatusForm != "Draft")
+            if (viewModels.StatusForm == "Pending Approval 1 of 2")
             {
                 cratedValueDetail.Add("crstatus", "Pending Approval 1 of 2");
             }
-            else
+            else if (viewModels.StatusForm == "Draft")
             {
                 cratedValueDetail.Add("crstatus", "Draft");
+            }
+
+            if (viewModels.ddlProfessional.Value != null)
+            {
+                cratedValueDetail.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(viewModels.ddlProfessional.Value) });
+            } else {
+                cratedValueDetail.Add("professional", viewModels.profId);
             }
 
             try
@@ -734,6 +739,24 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 EmailUtil.Send(item, "Ask for Approval", message);
             }
+        }
+
+        public CompensatoryVM GetProfessional(string username)
+        {
+            var viewModel = new CompensatoryVM();
+
+            var caml = @"<View><Query><Where><Eq><FieldRef Name='officeemail' /><Value Type='Text'>" + username + @"</Value></Eq></Where></Query><QueryOptions /></View>";
+            var listItem = SPConnector.GetList("Professional Master", _siteUrl, caml);
+
+            foreach (var item in listItem)
+            {
+                viewModel.cmpName = Convert.ToString(item["Title"]) + Convert.ToString(item["lastname"]);
+                viewModel.cmpProjUnit = Convert.ToString(item["Project_x002f_Unit"]);
+                viewModel.cmpPosition = FormatUtil.ConvertLookupToValue(item, "Position");
+                viewModel.profId = Convert.ToInt32(item["ID"]);
+            }
+
+            return viewModel;
         }
     }
 }

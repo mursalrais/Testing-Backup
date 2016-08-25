@@ -1,0 +1,219 @@
+﻿@model MCAWebAndAPI.Model.ViewModel.Form.Finance.PettyCashSettlementVM
+
+@*
+    Wireframe FIN11: Petty Cash Settlement
+
+        Petty Cash Settlement is a transaction for settlement-reimbursement of petty cash where
+        user has already asked for petty cash advance previously.
+
+        Through this feature, user will create the settlement-reimbursement of
+        petty cash which results whether user needs to return the excess petty cash advance or
+        receive the reimbursement in the case where the actual expense for
+        petty cash exceeds the petty cash advance given.
+
+        It is created and maintained by finance.
+*@
+
+@using (Html.BeginForm("Save", "FINPettyCashSettlement",
+    FormMethod.Post,
+    new
+    {
+        @class = "form-horizontal",
+        enctype = "multipart/form-data"
+    }))
+
+{
+    <fieldset>
+        <legend>Petty Cash Settlement</legend>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Date).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.Date)
+                        @Html.ValidationMessageFor(m => m.Date)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.PettyCashVoucher).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.PettyCashVoucher)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.AdvanceReceivedDate).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.DisplayFor(m => m.AdvanceReceivedDate)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Status).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.DisplayFor(m => m.Status)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.PaidTo).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.DisplayFor(m => m.PaidTo)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Currency).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.DisplayFor(m => m.Currency)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.AmountPaid).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.DisplayFor(m => m.AmountPaid)
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.AmountPaidInWords).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.DisplayFor(m => m.AmountPaidInWords)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.ReasonOfPayment).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.DisplayFor(m => m.ReasonOfPayment)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Fund).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.DisplayFor(m => m.Fund)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.WBS).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.DisplayFor(m => m.WBS)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.GL).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.DisplayFor(m => m.GL)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.AmountLiquidated).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.AmountLiquidated)
+                        @Html.ValidationMessageFor(m => m.AmountLiquidated)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Amount).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.Amount)
+                        @Html.ValidationMessageFor(m => m.Amount)
+                    </div>
+                </div>
+                
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Remarks).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.Remarks)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Documents).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.EditorFor(m => m.Documents)
+                    </div>
+                </div>
+
+                @if (!string.IsNullOrWhiteSpace(Model.DocumentUrl))
+                {
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                @Html.Bootstrap().LabelFor(m => m).Class("col-sm-4 control-label")
+                                <div class="col-sm-8">
+                                    <button id="application-document-button" class="btn btn-default" type="button">
+                                        Click Here to go to Petty Cash Settlement
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <script>
+                $('#application-document-button').click(function () {
+                    parent.postMessage({
+                        result : "Success", urlToRedirect : "@Model.DocumentUrl" }, "@Model.DocumentUrl" );
+                });
+                        </script>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </fieldset>
+
+
+    <div class="form-actions">
+        <div class="row">
+            <div class="col-sm-12">
+                <button id="submit-button" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    Submit
+                </button>
+                <button id="submit-cancel" acti class="btn btn-primary" type="button">
+                    <i class="fa fa-back"></i>
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+
+@section scripts{
+    <script>
+        function onSelectPaymentVoucher(e) {
+            var data = this.dataItem(e.item);
+
+            var url = '@Url.Action("GetPaymentVoucherById", "FINPettyCashSettlement")';
+
+            $.ajax({
+                url: url,
+                type: "GET",
+                data: { paymentVoucherID: data.ID },
+                success: function (response) {
+                    $('#AdvanceReceivedDate').val(response.AdvDate);
+                    $('#Status').val(response.Status);
+                    $('#PaidTo').val(response.PaidTo);
+                    $('#Currency').val(response.Currency);
+                    $('#AmountPaid').val(response.Amount);
+                    $('#AmountPaidInWords').val(response.AmountInWords);
+                    $('#ReasonOfPayment').val(response.Reason);
+                    $('#WBS').val(response.WBS);
+                    $('#GL').val(response.GL);
+                    
+                },
+                error: function (response) {
+                   
+                }
+            });
+        }
+    </script>
+}

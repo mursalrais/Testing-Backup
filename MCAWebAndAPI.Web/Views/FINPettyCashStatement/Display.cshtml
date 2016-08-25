@@ -1,0 +1,52 @@
+﻿@using MCAWebAndAPI.Model.Form.Finance
+@model IEnumerable<PettyCashTransactionItem>
+
+@*
+    FIN15: Petty Cash Statement
+*@
+
+@{
+    ViewBag.Title = "Petty Cash Statement";
+}
+
+@using (Html.BeginForm("Index", "FINPettyCashStatement",
+                                FormMethod.Post,
+                                new
+                                {
+                                    @class = "form-horizontal",
+                                    enctype = "multipart/form-data"
+                                }))
+{
+    <fieldset>
+        <legend>@ViewBag.Title</legend>
+        <div class="row">
+            <div class="col-xs-12">
+                @(Html.Kendo().Grid(Model)
+        .Name("PettyCashStatement")
+        .Columns(columns =>
+        {
+            columns.Bound(p => p.Date);
+            columns.Bound(p => p.TransactionType);
+            columns.Bound(p => p.TransactionNo);
+            columns.Bound(p => p.Currency);
+            columns.Bound(p => p.Amount);
+        })
+        .DataSource(dataSource => dataSource.Ajax()
+                   .Model(model =>
+                   {
+                       model.Id(p => p.ID);
+                   })
+        )
+                )
+            </div>
+
+        </div>
+    </fieldset>
+}
+
+<script>
+    function onDataBoundItemDetails(e) {
+        //TODO: do something   
+    }
+
+</script>

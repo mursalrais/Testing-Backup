@@ -22,7 +22,7 @@
             //);
 
             columns.Bound(p => p.AssetSubAsset).ClientTemplate("#= AssetSubAsset.Text #" +
-                          "<input type='hidden' id='asset' name='Details[#= getWorkingRelationshipDetails(data)#].AssetSubAsset.Value' value='#= AssetSubAsset.Value #' />"
+                          "<input type='hidden' class='assetsubasset' name='Details[#= getWorkingRelationshipDetails(data)#].AssetSubAsset.Value' value='#= AssetSubAsset.Value #' />"
                         ).EditorViewData(new
                         {
                             DataTextField = "Text",
@@ -32,7 +32,7 @@
                         }).Width(200);
 
             columns.Bound(p => p.WBS).Width(500).ClientTemplate("#= WBS.Text #" +
-                          "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].WBS.Value' value='#= WBS.Value #' />"
+                          "<input type='hidden' class='wbs' name='Details[#= getWorkingRelationshipDetails(data)#].WBS.Value' value='#= WBS.Value #' />"
                         ).EditorViewData(new
                         {
                             DataTextField = "Text",
@@ -41,12 +41,12 @@
                             ActionName = "GetWBSGrid",
                         }).Width(200);
 
-            columns.Bound(p => p.CostIDR).ClientTemplate("#= kendo.toString(CostIDR, 'n0') #" +
-            "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].CostIDR' value='#= CostIDR #' />"
+            columns.Bound(p => p.CostIDR).ClientTemplate("#= kendo.toString(CostIDR, 'n2') #" +
+            "<input type='hidden' class='costidr' name='Details[#= getWorkingRelationshipDetails(data)#].CostIDR' value='#= CostIDR #' />"
             );
 
-            columns.Bound(p => p.CostUSD).ClientTemplate("#= kendo.toString(CostUSD, 'n0') #" +
-            "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].CostUSD' value='#= CostUSD #' />"
+            columns.Bound(p => p.CostUSD).ClientTemplate("#= kendo.toString(CostUSD, 'n2') #" +
+            "<input type='hidden' class='costusd' name='Details[#= getWorkingRelationshipDetails(data)#].CostUSD' value='#= CostUSD #' />"
             );
 
             columns.Bound(p => p.Remarks).ClientTemplate("#= Remarks #" +
@@ -91,48 +91,6 @@
 </div>
 @*@Html.HiddenFor(m => m.ID)*@
 <script>
-    $(document).ready(function () {
-
-    })
-
-    
-
-    function showTest(e)
-    {
-        var breaks = e.split('-');
-        var grid = $("#Details").data("kendoGrid");
-        var url = "/ASSAssetAcquisition/GetSubAsset?mainsubasset=" + breaks[0] + '-' + breaks[1] + '-' + breaks[2] + '-' + breaks[3];
-        var details = [];
-        $.getJSON(url, function (data) {
-            //alert("enter controller...:"+data.length);
-            var arrayLength = data.length;
-            for (var i = 0; i < arrayLength; i++) {
-                details.push(
-                    { POLineItem: "", AssetSubAsset: data[i], WBS: "", CostIDR: 0, CostUSD: 0, Remarks: "", Status: "" }
-                );
-                //grid.dataSource.add({ AssetSubAsset: "" });
-                grid.addRow();
-            }
-
-            //$.each(details, function (index, value) {
-            //    //alert(value.AssetSubAsset);
-            //    grid.dataSource.add({ AssetSubAsset: value.AssetSubAsset });
-            //});
-        })
-    }
-
-    $(function () {
-        $("#AssetSubAsset").kendoComboBox({
-            change: function (e) {
-                // I want to alert the select value and element's parent below
-
-                alert("Value: " + this.value() + "  Element's parent: ");
-            }
-        });
-
-    });
-
-
     function getWorkingRelationshipDetails(dataItem) {
         var data = $("#Details").data("kendoGrid").dataSource.data();
         //data.set('AssetSubAsset', data.AssetSubAsset);

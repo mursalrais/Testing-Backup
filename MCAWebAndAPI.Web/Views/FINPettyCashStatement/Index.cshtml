@@ -1,0 +1,49 @@
+﻿@model MCAWebAndAPI.Model.ViewModel.Form.Finance.PettyCashStatementVM
+
+@*
+    FIN15: Petty Cash Statement
+*@
+
+@{
+    ViewBag.Title = "Petty Cash Statement";
+}
+
+@using (Html.BeginForm("Display", "FINPettyCashStatement",
+    FormMethod.Post,
+    new
+    {
+        @class = "form-horizontal",
+        enctype = "multipart/form-data"
+    }))
+{
+    <fieldset>
+        <legend>@ViewBag.Title</legend>
+        <div class="row">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.DateFrom).Class("col-sm-3 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.DateFrom)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.DateTo).Class("col-sm-3 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.DateTo)
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <div class="row">
+                <div class="col-sm-12">
+
+                    <button id="submit-button" class="btn btn-primary" type="submit">
+                        <i class="fa fa-save"></i>
+                        Submit
+                    </button>
+                </div>
+            </div>
+        </div>
+</fieldset>
+
+}

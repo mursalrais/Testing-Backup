@@ -174,6 +174,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// CompensatoryDay
         /// </head>
         /// 
+        [Required]
         [DisplayName("Remarks")]
         public string remark { get; set; }
 
@@ -186,7 +187,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [DisplayName("Period")]
         [DataType(DataType.Date)]
         [UIHint("Date")]
-        public DateTime? period { get; set; } = DateTime.Now;
+        public DateTime? period { get; set; }
 
     }
 }

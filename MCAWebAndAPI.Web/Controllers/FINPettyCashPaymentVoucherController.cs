@@ -25,7 +25,6 @@ namespace MCAWebAndAPI.Web.Controllers
     
     public class FINPettyCashPaymentVoucherController : Controller
     {
-        private const string SESSION_SITE_URL = "SiteUrl";
         private const string STATUS_INPROGRESS = "In Progress";
         private const string STATUS_PAID = "Paid";
         private const string PAIDTO_DRIVER = "Driver";
@@ -41,6 +40,7 @@ namespace MCAWebAndAPI.Web.Controllers
         private const string FIELD_VALUE = "Value";
         private const string FIELD_TEXT = "Text";
         private const string Field_Desc = "Desc";
+        private const string FIELD_DESC1 = "Desc1";
 
         private const string DATA_NOT_EXISTS = "Data Does not exists!";
 
@@ -55,9 +55,8 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult Create(string siteUrl = null)
         {
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
-
             _service.SetSiteUrl(siteUrl);
-            SessionManager.Set(SESSION_SITE_URL, siteUrl);
+            SessionManager.Set(SharedFinanceController.Session_SiteUrl, siteUrl);
 
             var viewModel = _service.GetPettyCashPaymentVoucher(null);
             SetAdditionalSettingToViewModel(ref viewModel, true);
@@ -69,7 +68,7 @@ namespace MCAWebAndAPI.Web.Controllers
             if (ID > 0)
             {
                 siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
-                SessionManager.Set(SESSION_SITE_URL, siteUrl);
+                SessionManager.Set(SharedFinanceController.Session_SiteUrl, siteUrl);
 
                 _service.SetSiteUrl(siteUrl);
                 
@@ -88,7 +87,7 @@ namespace MCAWebAndAPI.Web.Controllers
         [HttpPost]
         public async Task<ActionResult> Create(FormCollection form, PettyCashPaymentVoucherVM viewModel)
         {
-            var siteUrl = SessionManager.Get<string>(SESSION_SITE_URL);
+            var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl);
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
             int? headerID = null;
@@ -110,7 +109,7 @@ namespace MCAWebAndAPI.Web.Controllers
         [HttpPost]
         public async Task<ActionResult> Edit(FormCollection form, PettyCashPaymentVoucherVM viewModel)
         {
-            var siteUrl = SessionManager.Get<string>(SESSION_SITE_URL);
+            var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl);
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
             try
@@ -132,13 +131,13 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             string RelativePath = PRINT_PAGE_URL;
 
-            var siteUrl = SessionManager.Get<string>(SESSION_SITE_URL);
+            var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl);
             _service.SetSiteUrl(siteUrl);
             viewModel = _service.GetPettyCashPaymentVoucher(viewModel.ID);
 
             ViewData.Model = viewModel;
             var view = ViewEngines.Engines.FindView(ControllerContext, RelativePath, null);
-            var fileName = viewModel.VoucherNo + "_Application.pdf";
+            var fileName = viewModel.TransactionNo + "_Application.pdf";
             byte[] pdfBuf = null;
             string content;
 
@@ -172,6 +171,19 @@ namespace MCAWebAndAPI.Web.Controllers
                JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetPettyCashPaymentVouchers()
+        {
+            var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl);
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            var vendors = PettyCashPaymentVoucherService.GetPettyCashPaymentVouchers(siteUrl);
+
+            return Json(vendors.Select(e => new
+            {
+                Value = e.ID.HasValue ? Convert.ToString(e.ID) : string.Empty,
+                Text = e.TransactionNo + " - " + e.PaidTo
+            }), JsonRequestBehavior.AllowGet);
+        }
 
         private void SetAdditionalSettingToViewModel(ref PettyCashPaymentVoucherVM viewModel, bool isCreate)
         {
@@ -189,7 +201,7 @@ namespace MCAWebAndAPI.Web.Controllers
             viewModel.Professional.ControllerName = COMBOBOX_CONTROLLER;
             viewModel.Professional.ActionName = ACTIONNAME_PROFESSIONAL;
             viewModel.Professional.ValueField = FIELD_ID;
-            viewModel.Professional.TextField = FIELD_TITLE;
+            viewModel.Professional.TextField = FIELD_DESC1;
 
             viewModel.Vendor.ControllerName = COMBOBOX_CONTROLLER;
             viewModel.Vendor.ActionName = ACTIONNAME_VENDORS;

@@ -66,9 +66,9 @@ Wireframe FIN10: Petty Cash Voucher
 
             $('#Fund').css({ "background-color": GREY_COLOR });
 
-            $('#AmountPaid').change(function () {
+            $('#Amount').change(function () {
                 var url = '@Url.Action("GetAmountInWords", "FINPettyCashPaymentVoucher")';
-                var amount = $('#AmountPaid').val(); // The option selected
+                var amount = $('#Amount').val(); // The option selected
 
                 $.ajax({
                     url: url,
@@ -115,7 +115,9 @@ Wireframe FIN10: Petty Cash Voucher
                 case PAIDTO_VENDOR:
                     professionalDropDownList.options.optionLabel = "";
                     professionalDropDownList.refresh();
-                    professionalDropDownList.select(0);
+                    professionalDropDownList.select(-1);
+                    professionalDropDownList.text("");
+                   
                     professionalDropDownList.enable(false);
 
                     vendorDropDownList.enable(true);

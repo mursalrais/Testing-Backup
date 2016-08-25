@@ -32,7 +32,7 @@
     <div class="form-group">
         @Html.Bootstrap().LabelFor(m => m.Fund).Class("col-sm-2 control-label")
         <div class="col-sm-8">
-            @Html.EditorFor(m => m.Fund, new { HtmlAttributes = new { @class = "textbox-padding6px-readonly", @readonly = "readonly" } })
+            @Html.DisplayFor(m => m.Fund)
         </div>
     </div>
     <div class="form-group">
@@ -57,7 +57,8 @@
             <script>
                 $('#application-document-button').click(function () {
                     parent.postMessage({
-                        result : "Success", urlToRedirect : "@Model.DocumentUrl" }, "@Model.DocumentUrl" );
+                        result: "Success", urlToRedirect: "@Model.DocumentUrl"
+                    }, "@Model.DocumentUrl");
                 });
             </script>
         </div>
@@ -92,8 +93,7 @@
     function toggleEventBudgetComboBox(category) {
         var categoryDropDownList = $("#EventBudgetNo_Value").data("kendoDropDownList");
 
-        if (categoryDropDownList !== 'undefined' && category === CATEGORY_NON_EVENT)
-        {
+        if (categoryDropDownList !== 'undefined' && category === CATEGORY_NON_EVENT) {
             categoryDropDownList.options.optionLabel = "";
             categoryDropDownList.refresh();
             categoryDropDownList.select(0);
@@ -103,8 +103,7 @@
 
             $('.k-state-disabled').css({ "background-color": GREY_COLOR });
         }
-        else
-        {
+        else {
             categoryDropDownList.enable(true);
             $('.k-state-default').css({ "background-color": "white" });
         }
@@ -119,29 +118,27 @@
     function onSelectEventBudgetNo(e) {
         var projectDropDownList = $("#Project_Value").data("kendoDropDownList");
         var dataItem = this.dataItem(e.item);
-        
+
         $("#hdnEvenBudgetId").val(dataItem.ID);
 
-        if (dataItem.ID > 0)
-        {
+        if (dataItem.ID > 0) {
             projectDropDownList.select(function (data) {
                 return data === dataItem.Project;
             });
 
             projectDropDownList.enable(false);
-            
-            
+
+
             $('.k-state-disabled').css({ "background-color": GREY_COLOR });
         }
-        else
-        {
+        else {
             projectDropDownList.enable(true);
             $('.k-state-default').css({ "background-color": "white" });
         }
-        
+
         refreshItemDetailGrid();
     }
 
-   
+
 
 </script>
