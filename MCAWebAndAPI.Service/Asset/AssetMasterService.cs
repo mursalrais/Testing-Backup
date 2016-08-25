@@ -544,18 +544,8 @@ namespace MCAWebAndAPI.Service.Asset
                 model.AssetNoAssetDesc.Value = Convert.ToString(d.ItemArray[0]);
                 model.AssetLevel.Value = Convert.ToString(d.ItemArray[1]);
                 model.AssetCategory.Value = Convert.ToString(d.ItemArray[2]);
-                if(d.ItemArray[3].ToString() == "" || d.ItemArray[4].ToString() == "")
-                {
-                    var breaks = Convert.ToString(d.ItemArray[0]).Split('-');
-                    model.ProjectUnit.Value = breaks[1];
-                    model.AssetType.Value = breaks[2];
-                }
-                else
-                {
-                    model.ProjectUnit.Value = Convert.ToString(d.ItemArray[3]);
-                    model.AssetType.Value = Convert.ToString(d.ItemArray[4]);
-                }
-                
+                model.ProjectUnit.Value = Convert.ToString(d.ItemArray[3]);
+                model.AssetType.Value = Convert.ToString(d.ItemArray[4]);
                 model.AssetDesc = Convert.ToString(d.ItemArray[5]);
                 model.SerialNo = Convert.ToString(d.ItemArray[6]);
 

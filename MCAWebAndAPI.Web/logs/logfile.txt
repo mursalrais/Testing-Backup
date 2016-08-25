@@ -407,3 +407,7 @@ Parameter name: source
 >>>>>>> origin/master
 2016-08-24 11:50:30.6780 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Value cannot be null.
 Parameter name: source
+2016-08-24 16:57:30.8260 MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService Column 'professional' does not exist. It may have been deleted by another user.  /sites/mca-dev/bo/Lists/Asset Loan Return
+2016-08-24 17:01:56.6899 MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService Column 'professional0' does not exist. It may have been deleted by another user.  /sites/mca-dev/bo/Lists/Asset Loan Return
+2016-08-24 20:03:47.2154 MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService Column 'projectunit' does not exist. It may have been deleted by another user.  /sites/ims/bo/Lists/Asset Loan Return
+2016-08-24 20:06:56.5100 MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService Column 'projectunit' does not exist. It may have been deleted by another user.  /sites/ims/bo/Lists/Asset Loan Return
