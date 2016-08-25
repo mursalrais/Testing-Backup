@@ -36,5 +36,18 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [UIHint("Date")]
         [DisplayName("Day-Off Request Date")]
         public DateTime? RequestDate { get; set; } = DateTime.UtcNow;
+
+        [UIHint("ComboBox")]
+        public ComboBoxVM DayOffRequestStatus { get; set; } = new ComboBoxVM
+        {
+            Choices = new string[]
+            {
+                "Draft",
+                "Pending Approval",
+                "Approved",
+                "Rejected"
+            },
+            Value = "Draft"
+        };
     }
 }
