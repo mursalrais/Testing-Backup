@@ -112,6 +112,8 @@ namespace MCAWebAndAPI.Service.HR.Common
                 Status = Convert.ToString(item["maritalstatus"]),
                 Position = item["Position"] == null ? string.Empty :
                         Convert.ToString((item["Position"] as FieldLookupValue).LookupValue),
+                PositionId = item["Position"] == null ? 0 :
+                        Convert.ToInt32((item["Position"] as FieldLookupValue).LookupId),
                 Project_Unit = Convert.ToString(item["Project_x002f_Unit"]),
                 OfficeEmail = Convert.ToString(item["officeemail"]),
                 PSANumber = Convert.ToString(item["PSAnumber"]),

@@ -13,7 +13,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         ProfessionalPerformanceEvaluationVM GetPopulatedModel(string requestor = null);
 
-        ProfessionalPerformanceEvaluationVM GetHeader(int? ID, string requestor);
+        Task<ProfessionalPerformanceEvaluationVM> GetHeader(int? ID, string requestor, string listName, string listNameWorkflow, string columnName);
 
         int CreateHeader(ProfessionalPerformanceEvaluationVM header);
 
