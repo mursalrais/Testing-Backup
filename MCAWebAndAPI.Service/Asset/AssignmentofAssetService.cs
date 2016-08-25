@@ -27,6 +27,7 @@ namespace MCAWebAndAPI.Service.Asset
         public AssignmentOfAssetVM GetPopulatedModel(string SiteUrl)
         {
             var model = new AssignmentOfAssetVM();
+            model.CancelURL = _siteUrl + UrlResource.AssetAssignment;
             model.AssetHolder.Choices = GetFromListHR("Professional Master", "Title", "Position", SiteUrl);
 
             return model;
@@ -70,10 +71,9 @@ namespace MCAWebAndAPI.Service.Asset
             {
                 viewModel.Date = Convert.ToDateTime(listItem["transferdate"]);
             }
-            //viewModel.PurchaseDescription = Regex.Replace(Convert.ToString(listItem["purchasedescription"]), "<.*?>", string.Empty);
             viewModel.ID = ID;
 
-            //viewModel.CancelURL = _siteUrl + UrlResource.AssetAcquisition;
+            viewModel.CancelURL = _siteUrl + UrlResource.AssetAssignment;
 
             return viewModel;
         }
@@ -109,7 +109,7 @@ namespace MCAWebAndAPI.Service.Asset
 
         public int? CreateHeader(AssignmentOfAssetVM viewmodel, string SiteUrl, string mode = null)
         {
-            //viewmodel.CancelURL = _siteUrl + UrlResource.AssetAcquisition;
+            viewmodel.CancelURL = _siteUrl + UrlResource.AssetAssignment;
             var columnValues = new Dictionary<string, object>();
             //columnValues.add
             columnValues.Add("Title", "Assignment Of Asset");
@@ -160,6 +160,16 @@ namespace MCAWebAndAPI.Service.Asset
             try
             {
                 SPConnector.AddListItem("Asset Assignment", columnValues, _siteUrl);
+                if (viewmodel.CompletionStatus.Value == "Complete")
+                {
+                    var id = SPConnector.GetLatestListItemID("Asset Assignment", _siteUrl);
+                    var info = SPConnector.GetListItem("Asset Assignment", id, _siteUrl);
+                    if (Convert.ToBoolean(info["Attachments"]) == false)
+                    {
+                        SPConnector.DeleteListItem("Asset Assignment", id, _siteUrl);
+                        return 0;
+                    }
+                }
             }
             catch (Exception e)
             {
@@ -190,9 +200,10 @@ namespace MCAWebAndAPI.Service.Asset
 
         public bool UpdateHeader(AssignmentOfAssetVM viewmodel, string SiteUrl)
         {
-            //viewmodel.CancelURL = _siteUrl + UrlResource.AssetAcquisition;
+            viewmodel.CancelURL = _siteUrl + UrlResource.AssetAssignment;
             var columnValues = new Dictionary<string, object>();
             var ID = Convert.ToInt32(viewmodel.ID);
+            var oldData = SPConnector.GetListItem("Asset Assignment", ID, SiteUrl);
             //columnValues.add
             columnValues.Add("Title", "Assignment Of Asset");
             if (viewmodel.Date.HasValue)
@@ -226,6 +237,24 @@ namespace MCAWebAndAPI.Service.Asset
             try
             {
                 SPConnector.UpdateListItem("Asset Assignment", ID, columnValues, _siteUrl);
+                if (viewmodel.CompletionStatus.Value == "Complete")
+                {
+                    var newData = SPConnector.GetListItem("Asset Assignment", ID, _siteUrl);
+                    if (Convert.ToBoolean(newData["Attachments"]) == false)
+                    {
+                        var oldcolumnValues = new Dictionary<string, object>();
+                        oldcolumnValues.Add("Title", oldData["Title"]);
+                        oldcolumnValues.Add("transferdate", oldData["transferdate"]);
+                        oldcolumnValues.Add("assetholder",oldData["assetholder"]);
+                        oldcolumnValues.Add("position", oldData["position"]);
+                        oldcolumnValues.Add("projectunit", oldData["projectunit"]);
+                        oldcolumnValues.Add("contactnumber", oldData["contactnumber"]);
+                        oldcolumnValues.Add("completionstatus", oldData["completionstatus"]);
+
+                        SPConnector.UpdateListItem("Asset Assignment", ID, oldcolumnValues, _siteUrl);
+                        return false;
+                    }
+                }
             }
             catch (Exception e)
             {
@@ -573,12 +602,32 @@ namespace MCAWebAndAPI.Service.Asset
             _assetSubAsset.Text = Convert.ToString(ListAssetSubAsset["AssetID"]) + " - " + Convert.ToString(ListAssetSubAsset["Title"]);
 
             var province = (item["province"] as FieldLookupValue).LookupValue;
-
-            var ListProvince = SPConnector.GetListItem("Location Master", (item["province"] as FieldLookupValue).LookupId, _siteUrl);
+            var caml = @"<View><Query>
+                       <Where>
+                          <Eq>
+                             <FieldRef Name='Province' />
+                             <Value Type='Lookup'>"+ province + @"</Value>
+                          </Eq>
+                       </Where>
+                    </Query>
+                    <ViewFields>
+                       <FieldRef Name='Province' />
+                       <FieldRef Name='Title' />
+                       <FieldRef Name='Floor' />
+                       <FieldRef Name='Room' />
+                       <FieldRef Name='Remarks' />
+                    </ViewFields>
+                    <QueryOptions /></View>";
+            var ListProvince = SPConnector.GetList("Location Master", _siteUrl, caml);
             AjaxComboBoxVM _province = new AjaxComboBoxVM();
-            _province.Value = (item["province"] as FieldLookupValue).LookupId;
-            _province.Text = (ListProvince["Province"] as FieldLookupValue).LookupValue +"-"+ ListProvince["Title"] + "-" +ListProvince["Floor"] + "-" +ListProvince["Room"] + "-" +ListProvince["Remarks"];
-
+            foreach (var x in ListProvince)
+            {
+                if(Convert.ToString(x["Title"]) == Convert.ToString(item["office"]) && Convert.ToString(x["Floor"]) == Convert.ToString(item["floor"]) && Convert.ToString(x["Room"]) == Convert.ToString(item["room"]))
+                {
+                    _province.Value = (item["province"] as FieldLookupValue).LookupId;
+                    _province.Text = (x["Province"] as FieldLookupValue).LookupValue + "-" + x["Title"] + "-" + x["Floor"] + "-" + x["Room"] + "-" + x["Remarks"];
+                }
+            }
 
             return new AssignmentOfAssetDetailsVM
             {

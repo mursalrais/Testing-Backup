@@ -60,8 +60,8 @@
                    .Model(model =>
                    {
                        model.Id(p => p.ID);
-                       model.Field(m => m.AssetSubAsset).DefaultValue(AssignmentOfAssetDetailsVM.GetAssetSubAssetDefaultValue());
-                       model.Field(m => m.Province).DefaultValue(AssignmentOfAssetDetailsVM.GetProvinceDefaultValue());
+                       model.Field(m => m.AssetSubAsset).Editable(false).DefaultValue(AssignmentOfAssetDetailsVM.GetAssetSubAssetDefaultValue());
+                       model.Field(m => m.Province).Editable(false).DefaultValue(AssignmentOfAssetDetailsVM.GetProvinceDefaultValue());
                        //model.Field(m => m.OfficeName).DefaultValue(AssignmentOfAssetDetailsVM.GetOfficeNameDefautValue());
                        //model.Field(m => m.Floor).DefaultValue(AssignmentOfAssetDetailsVM.GetFloorDefautValue());
                        //model.Field(m => m.Room).DefaultValue(AssignmentOfAssetDetailsVM.GetRoomDefautValue());
