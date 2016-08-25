@@ -1025,7 +1025,6 @@
     <Content Include="Views\FINTaxExemption\_Income.cshtml" />
     <Content Include="Views\FINTaxExemption\_VAT.cshtml" />
     <Content Include="Views\FINTaxExemption\_Others.cshtml" />
-    <Content Include="Views\FINPettyCashSettlement\Create.cshtml" />
     <Content Include="Views\FINSCAVoucher\_DisplayEventBudgetItems.cshtml" />
     <Content Include="Views\FINRequisitionNote\Create.cshtml" />
     <Content Include="Views\FINRequisitionNote\Edit.cshtml" />
@@ -1099,6 +1098,7 @@
     <Content Include="Views\FINPettyCashStatement\Display.cshtml" />
     <Content Include="Views\FINPettyCashStatement\Index.cshtml" />
     <Content Include="Views\FINSCAVoucher\_PartialHeaderWithLogo.cshtml" />
+    <Content Include="Views\FINPettyCashSettlement\Item.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
