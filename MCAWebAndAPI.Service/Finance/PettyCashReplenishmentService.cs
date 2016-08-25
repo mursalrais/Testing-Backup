@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web;
+using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Service.Utils;
@@ -31,6 +32,9 @@ namespace MCAWebAndAPI.Service.Finance
         {
             var willCreate = viewModel.ID == null;
             var updatedValue = new Dictionary<string, object>();
+            DateTime today = DateTime.Now;
+
+            viewModel.TransactionNo = DocumentNumbering.Create(siteUrl, string.Format("RPPC/{0}-{1}/", DateTimeExtensions.GetMonthInRoman(today), today.ToString("yy")) + "{0}", 5);
 
             updatedValue.Add(FieldName_Date, viewModel.Date);
             updatedValue.Add(FieldName_Currency, viewModel.Currency.Value);

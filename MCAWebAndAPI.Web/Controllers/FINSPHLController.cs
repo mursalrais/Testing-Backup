@@ -20,7 +20,8 @@ namespace MCAWebAndAPI.Web.Controllers
     {
         ISPHLService service;
         private const string SiteUrl = "SiteUrl";
-        private const string SuccessMsgFormat = "SPHL Np. {0} has been successfully created.";
+        private const string SuccessMsgFormatCreated = "SPHL No. {0} has been successfully created.";
+        private const string SuccessMsgFormatUpdated = "SPHL No. {0} has been successfully updated.";
         private const string FirstPage = "{0}/Lists/SPHL%20Data/AllItems.aspx";
         public FINSPHLController()
         {
@@ -82,7 +83,7 @@ namespace MCAWebAndAPI.Web.Controllers
             return RedirectToAction("Index", "Success",
                 new
                 {
-                    successMessage = string.Format(SuccessMsgFormat, viewModel.No),
+                    successMessage = string.Format(SuccessMsgFormatCreated, viewModel.No),
                     previousUrl = string.Format(FirstPage, siteUrl)
                 });
         }
@@ -105,11 +106,16 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.FINSPHL);
+            return RedirectToAction("Index", "Success",
+                new
+                {
+                    successMessage = string.Format(SuccessMsgFormatUpdated, viewModel.No),
+                    previousUrl = string.Format(FirstPage, siteUrl)
+                });
         }
 
         [HttpPost]

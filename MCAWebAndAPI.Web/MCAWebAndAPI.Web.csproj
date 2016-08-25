@@ -208,6 +208,106 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="bin\Antlr3.Runtime.dll" />
+    <Content Include="bin\Antlr3.Runtime.pdb" />
+    <Content Include="bin\AspNet.ScriptManager.bootstrap.dll" />
+    <Content Include="bin\AspNet.ScriptManager.jQuery.dll" />
+    <Content Include="bin\bg-BG\Kendo.Mvc.resources.dll" />
+    <Content Include="bin\Common.Logging.Core.dll" />
+    <Content Include="bin\Common.Logging.Core.pdb" />
+    <Content Include="bin\Common.Logging.Core.xml" />
+    <Content Include="bin\Common.Logging.dll" />
+    <Content Include="bin\Common.Logging.pdb" />
+    <Content Include="bin\Common.Logging.xml" />
+    <Content Include="bin\cs-CZ\Kendo.Mvc.resources.dll" />
+    <Content Include="bin\CsvHelper.dll" />
+    <Content Include="bin\CsvHelper.xml" />
+    <Content Include="bin\da-DK\Kendo.Mvc.resources.dll" />
+    <Content Include="bin\de-DE\Kendo.Mvc.resources.dll" />
+    <Content Include="bin\Elmah.dll" />
+    <Content Include="bin\Elmah.Mvc.dll" />
+    <Content Include="bin\es-ES\Kendo.Mvc.resources.dll" />
+    <Content Include="bin\fr-CA\Kendo.Mvc.resources.dll" />
+    <Content Include="bin\fr-FR\Kendo.Mvc.resources.dll" />
+    <Content Include="bin\it-IT\Kendo.Mvc.resources.dll" />
+    <Content Include="bin\Kendo.Mvc.dll" />
+    <Content Include="bin\Kendo.Mvc.xml" />
+    <Content Include="bin\MCAWebAndAPI.Model.dll" />
+    <Content Include="bin\MCAWebAndAPI.Model.pdb" />
+    <Content Include="bin\MCAWebAndAPI.Service.dll" />
+    <Content Include="bin\MCAWebAndAPI.Service.pdb" />
+    <Content Include="bin\MCAWebAndAPI.Web.dll" />
+    <Content Include="bin\MCAWebAndAPI.Web.pdb" />
+    <Content Include="bin\Microsoft.AspNet.FriendlyUrls.dll" />
+    <Content Include="bin\Microsoft.AspNet.FriendlyUrls.xml" />
+    <Content Include="bin\Microsoft.AspNet.Web.Optimization.WebForms.dll" />
+    <Content Include="bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll" />
+    <Content Include="bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml" />
+    <Content Include="bin\Microsoft.ScriptManager.MSAjax.dll" />
+    <Content Include="bin\Microsoft.ScriptManager.WebForms.dll" />
+    <Content Include="bin\Microsoft.SharePoint.Client.dll" />
+    <Content Include="bin\Microsoft.SharePoint.Client.Runtime.dll" />
+    <Content Include="bin\Microsoft.Web.Infrastructure.dll" />
+    <Content Include="bin\Newtonsoft.Json.dll" />
+    <Content Include="bin\Newtonsoft.Json.xml" />
+    <Content Include="bin\nl-NL\Kendo.Mvc.resources.dll" />
+    <Content Include="bin\NLog.dll" />
+    <Content Include="bin\NLog.xml" />
+    <Content Include="bin\pl-PL\Kendo.Mvc.resources.dll" />
+    <Content Include="bin\Portable.Licensing.dll" />
+    <Content Include="bin\Portable.Licensing.xml" />
+    <Content Include="bin\pt-BR\Kendo.Mvc.resources.dll" />
+    <Content Include="bin\pt-PT\Kendo.Mvc.resources.dll" />
+    <Content Include="bin\Quartz.dll" />
+    <Content Include="bin\Quartz.pdb" />
+    <Content Include="bin\Quartz.xml" />
+    <Content Include="bin\ro-RO\Kendo.Mvc.resources.dll" />
+    <Content Include="bin\roslyn\csc.exe" />
+    <Content Include="bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll" />
+    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll" />
+    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.dll" />
+    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll" />
+    <Content Include="bin\roslyn\System.Collections.Immutable.dll" />
+    <Content Include="bin\roslyn\System.Reflection.Metadata.dll" />
+    <Content Include="bin\roslyn\vbc.exe" />
+    <Content Include="bin\roslyn\VBCSCompiler.exe" />
+    <Content Include="bin\ru-RU\Kendo.Mvc.resources.dll" />
+    <Content Include="bin\sk-SK\Kendo.Mvc.resources.dll" />
+    <Content Include="bin\sv-SE\Kendo.Mvc.resources.dll" />
+    <Content Include="bin\System.Collections.Immutable.dll" />
+    <Content Include="bin\System.Composition.AttributedModel.dll" />
+    <Content Include="bin\System.Composition.Convention.dll" />
+    <Content Include="bin\System.Composition.Hosting.dll" />
+    <Content Include="bin\System.Composition.Runtime.dll" />
+    <Content Include="bin\System.Composition.TypedParts.dll" />
+    <Content Include="bin\System.Net.Http.Formatting.dll" />
+    <Content Include="bin\System.Net.Http.Formatting.xml" />
+    <Content Include="bin\System.Reflection.Metadata.dll" />
+    <Content Include="bin\System.Web.Cors.dll" />
+    <Content Include="bin\System.Web.Helpers.dll" />
+    <Content Include="bin\System.Web.Helpers.xml" />
+    <Content Include="bin\System.Web.Http.dll" />
+    <Content Include="bin\System.Web.Http.xml" />
+    <Content Include="bin\System.Web.Mvc.dll" />
+    <Content Include="bin\System.Web.Mvc.xml" />
+    <Content Include="bin\System.Web.Optimization.dll" />
+    <Content Include="bin\System.Web.Optimization.xml" />
+    <Content Include="bin\System.Web.Razor.dll" />
+    <Content Include="bin\System.Web.Razor.xml" />
+    <Content Include="bin\System.Web.WebPages.Deployment.dll" />
+    <Content Include="bin\System.Web.WebPages.Deployment.xml" />
+    <Content Include="bin\System.Web.WebPages.dll" />
+    <Content Include="bin\System.Web.WebPages.Razor.dll" />
+    <Content Include="bin\System.Web.WebPages.Razor.xml" />
+    <Content Include="bin\System.Web.WebPages.xml" />
+    <Content Include="bin\T4MVCExtensions.dll" />
+    <Content Include="bin\tr-TR\Kendo.Mvc.resources.dll" />
+    <Content Include="bin\TuesPechkin.dll" />
+    <Content Include="bin\TuesPechkin.Wkhtmltox.Win64.dll" />
+    <Content Include="bin\TwitterBootstrapMVC5.dll" />
+    <Content Include="bin\uk-UA\Kendo.Mvc.resources.dll" />
+    <Content Include="bin\WebGrease.dll" />
+    <Content Include="bin\zh-CN\Kendo.Mvc.resources.dll" />
     <Content Include="Content\bi.css" />
     <Content Include="Content\custom.css" />
     <Content Include="Content\home.css" />
@@ -318,6 +418,11 @@
     <Content Include="Content\kendo\2016.2.714\fonts\glyphs\KendoUIGlyphs.woff" />
     <Content Include="Content\kendo\2016.2.714\images\kendoui.ttf" />
     <Content Include="Content\kendo\2016.2.714\images\kendoui.woff" />
+    <None Include="bin\MCAWebAndAPI.Web.dll.config" />
+    <Content Include="bin\NLog.config" />
+    <Content Include="bin\roslyn\Microsoft.CSharp.Core.targets" />
+    <Content Include="bin\roslyn\Microsoft.VisualBasic.Core.targets" />
+    <Content Include="bin\roslyn\VBCSCompiler.exe.config" />
     <None Include="job_scheduling_data_2_0.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -549,9 +654,7 @@
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="packages.config">
-      <SubType>Designer</SubType>
-    </Content>
+    <Content Include="packages.config" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Site.Mobile.Master" />
     <Content Include="Views\Shared\Error.cshtml" />
@@ -986,18 +1089,11 @@
     <Content Include="Views\HRCompensatory\AddCompensatoryHR.cshtml" />
     <Content Include="Views\FINEventBudget\Item.cshtml" />
     <Content Include="Views\Shared\_WorkflowPathDetails.cshtml" />
+    <Content Include="Views\HRTimesheet\CreateTimesheet.cshtml" />
+    <Content Include="Views\HRTimesheet\FormType.cshtml" />
     <Content Include="Views\FINPettyCashStatement\Display.cshtml" />
     <Content Include="Views\FINPettyCashStatement\Index.cshtml" />
     <Content Include="Views\FINPettyCashSettlement\Item.cshtml" />
-    <Content Include="Views\ASSAssignmentOfAsset\Edit.cshtml" />
-    <Content Include="Views\HRCompensatory\AddCompensatoryUser.cshtml" />
-    <Content Include="Views\HRAdjustment\EditAdjustmentData.cshtml" />
-    <Content Include="Views\ASSAssignmentOfAsset\Upload.cshtml" />
-    <Content Include="Views\Shared\DisplayTemplates\MultiSelect.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\MultiSelect.cshtml" />
-    <Content Include="Views\ASSAssetDisposal\Edit.cshtml" />
-    <Content Include="Views\ASSAssetLoanAndReturn\_AssetLoanAndReturnItem.cshtml" />
-    <Content Include="Views\ASSAssetCheckForm\_Details.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -1,6 +1,7 @@
 ﻿using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using MCAWebAndAPI.Model.ViewModel.Form.HR;
+using MCAWebAndAPI.Model.HR.DataMaster;
 using MCAWebAndAPI.Model.ViewModel.Form.Common;
 using MCAWebAndAPI.Service.HR.Leave;
 using System.Collections.Generic;
@@ -38,17 +39,133 @@ namespace MCAWebAndAPI.Web.Controllers
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             // Get blank ViewModel
-            var viewModel = _hRDayOffService.GetPopulatedModel(requestor);
+            var viewModel = _hRDayOffService.GetPopulatedModel(ID, requestor);
             viewModel.Requestor = requestor;
             viewModel.ID = ID;
             ViewBag.Action = "CreateDayOff";
 
             // Used for Workflow Router
-            ViewBag.ListName = "Professional%20Performance%20Plan";
+            ViewBag.ListName = "Day-Off Request";
             ViewBag.Requestor = requestor;
 
-            return View("Create", viewModel);
+            return View("CreateDayOffRequest", viewModel);
         }
+
+        [HttpPost]
+        public ActionResult CreateDayOffRequestData(FormCollection form, DayOffRequestVM viewModel)
+        {
+            // Check whether error is found
+            if (!ModelState.IsValid)
+            {
+                RedirectToAction("Index", "Error");
+            }
+
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _hRDayOffService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            int? dayOffRequestHeaderID = null;
+            try
+            {
+                dayOffRequestHeaderID = _hRDayOffService.CreateDayOffRequestHeader(viewModel);
+            }
+            catch (Exception e)
+            {
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
+            }
+
+            var dayOffRequestDetail = viewModel.DayOffRequestDetails;
+
+            string requestorposition = Convert.ToString(viewModel.PositionName);
+            string requestorunit = Convert.ToString(viewModel.ProjectUnit);
+
+            int? positionID = _hRDayOffService.GetPositionID(requestorposition, requestorunit, 0, 0);
+
+            viewModel.DayOffRequestDetails = BindRequestStartDate(form, viewModel.DayOffRequestDetails);
+            viewModel.DayOffRequestDetails = BindRequestEndDate(form, viewModel.DayOffRequestDetails);
+            Task createExitProcedureChecklist = _hRDayOffService.CreateDayOffRequestDetailAsync(viewModel, dayOffRequestHeaderID, dayOffRequestDetail, requestorposition, requestorunit, positionID);
+
+            //try
+            //{
+            //    if (viewModel.StatusForm == "Pending Approval")
+            //    {
+            //        exitProcedureService.SendMailDocument(viewModel.RequestorMailAddress, string.Format("Thank You For Your Request, Please kindly download Non Disclosure Document on this url: {0}{1} and Exit Interview Form on this url: {2}{3}", siteUrl, UrlResource.ExitProcedureNonDisclosureAgreement, siteUrl, UrlResource.ExitProcedureExitInterviewForm));
+
+            //        exitProcedureService.SendEmail(viewModel, SP_EXP_CHECK_LIST,
+            //        SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)exitProcID,
+            //        string.Format("Dear Respective Approver : {0}{1}/EditExitProcedureForApprover.aspx?ID={2}", siteUrl, UrlResource.ExitProcedure, exitProcID), string.Format("Message for Requestor"));
+            //    }
+            //}
+            //catch (Exception e)
+            //{
+            //    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            //    return JsonHelper.GenerateJsonErrorResponse(e);
+            //}
+
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.ExitProcedure);
+
+        }
+
+        IEnumerable<DayOffRequestDetailVM> BindRequestStartDate(FormCollection form, IEnumerable<DayOffRequestDetailVM> dayOffRequestDetail)
+        {
+            var array = dayOffRequestDetail.ToArray();
+
+            for (int i = 0; i < array.Length; i++)
+            {
+                array[i].RequestStartDate = BindHelper.BindDateInGrid("DayOffRequestDetails",
+                    i, "RequestStartDate", form);
+            }
+            return array;
+        }
+
+        IEnumerable<DayOffRequestDetailVM> BindRequestEndDate(FormCollection form, IEnumerable<DayOffRequestDetailVM> dayOffRequestDetail)
+        {
+            var array = dayOffRequestDetail.ToArray();
+
+            for (int i = 0; i < array.Length; i++)
+            {
+                array[i].RequestEndDate = BindHelper.BindDateInGrid("DayOffRequestDetails",
+                    i, "RequestEndDate", form);
+            }
+            return array;
+        }
+
+        //    var siteUrl = SessionManager.Get<string>("SiteUrl");
+        //    _hRDayOffService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+        //    int? headerID = null;
+        //    try
+        //    {
+        //        headerID = _hRDayOffService.CreateHeader(viewModel);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        ErrorSignal.FromCurrentContext().Raise(e);
+        //        return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
+        //    }
+
+        //    if (viewModel.StatusForm != "DraftInitiated")
+        //    {
+        //        Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateTransactionWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
+        //            SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)headerID);
+        //    }
+
+        //    Task createDayOffDetailsTask = _hRDayOffService.CreateDayOffBalanceDetailsAsync(headerID, viewModel.DayOffBalanceDetails);
+
+        //    Task allTasks = Task.WhenAll(createDayOffDetailsTask);
+
+        //    try
+        //    {
+        //        await allTasks;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Response.StatusCode = (int)HttpStatusCode.BadRequest;
+        //        return JsonHelper.GenerateJsonErrorResponse(e);
+        //    }
+
+        //    return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.Professional);
+        //}
 
         [HttpPost]
         public async Task<ActionResult> CreateDayOff(FormCollection form, DayOffRequestVM viewModel)
@@ -388,6 +505,23 @@ namespace MCAWebAndAPI.Web.Controllers
                 return PartialView("_ExitProcedureChecklistForHR", viewModel.ExitProcedureChecklist);
             return View("_ExitProcedureChecklistForHR", viewModel.ExitProcedureChecklist);
 
+        }
+
+        public JsonResult GetMasterDayOffType()
+        {
+            _hRDayOffService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+
+            var dayOffTypeMaster = _hRDayOffService.GetDayOffType();
+
+            //var positions = _hRDayOffService.GetDayOffType();
+            dayOffTypeMaster = dayOffTypeMaster.OrderBy(e => e.DayOffTypeID);
+            return Json(dayOffTypeMaster.Select(e =>
+                new
+                {
+                    Value = Convert.ToInt32(e.DayOffTypeID),
+                    Text = Convert.ToString(e.DayOffTypeName)
+                }),
+                JsonRequestBehavior.AllowGet);
         }
 
     }

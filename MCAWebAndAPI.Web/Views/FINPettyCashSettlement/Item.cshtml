@@ -32,6 +32,8 @@
                     <div class="col-sm-8">
                         @Html.EditorFor(m => m.Date)
                         @Html.ValidationMessageFor(m => m.Date)
+                        @Html.HiddenFor(m => m.ID)
+                        @Html.HiddenFor(m => m.Operation)
                     </div>
                 </div>
 
@@ -202,7 +204,7 @@
                     $('#AdvanceReceivedDate').val(response.AdvDate);
                     $('#Status').val(response.Status);
                     $('#PaidTo').val(response.PaidTo);
-                    $('#Currency').val(response.Currency);
+                    $('#Currency_Value').val(response.Currency);
                     $('#AmountPaid').val(response.Amount);
                     $('#AmountPaidInWords').val(response.AmountInWords);
                     $('#ReasonOfPayment').val(response.Reason);

@@ -1,14 +1,13 @@
-﻿using MCAWebAndAPI.Model.ViewModel.Form.Finance;
-using MCAWebAndAPI.Service.Utils;
-using NLog;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Web;
-using static MCAWebAndAPI.Model.ViewModel.Form.Finance.Shared;
-using Microsoft.SharePoint.Client;
-using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Model.Common;
+using MCAWebAndAPI.Model.ViewModel.Form.Finance;
+using MCAWebAndAPI.Service.Resources;
+using MCAWebAndAPI.Service.Utils;
+using Microsoft.SharePoint.Client;
+using NLog;
+using static MCAWebAndAPI.Model.ViewModel.Form.Finance.Shared;
 
 namespace MCAWebAndAPI.Service.Finance
 {
@@ -30,6 +29,7 @@ namespace MCAWebAndAPI.Service.Finance
     public class PettyCashSettlementService : IPettyCashSettlementService
     {
         public const string ListName = "Petty Cash Settlement";
+
         private const string LISTNAME_DOCUMENTS = "Petty Cash Settlement Documents";
 
         private const string FIELD_FORMAT_DOC = "SPC/{0}-{1}/";
@@ -44,9 +44,18 @@ namespace MCAWebAndAPI.Service.Finance
         private const string FieldName_AmountReimbursedOrReturned = "Amount_x0020_Reimbursed_x002f_Re";
         private const string FieldName_Remarks = "Remarks";
         private const string FieldName_DocumentNo = "Title";
-
+        private const string FieldName_Status = "Status";
+        private const string FieldName_PaidTo = "Paid_x0020_To";
+        private const string FieldName_Currency = "Currency";
+        private const string FieldName_AmountPAid = "Amount_x0020_Paid";
+        private const string FieldName_AmountPaidInWord = "Amount_x0020_Paid_x0020_in_x0020";
+        private const string FieldName_Reason = "Reason_x0020_of_x0020_Payment";
+        private const string FieldName_Fund = "Fund";
+        private const string FieldName_WBS = "WBS";
+        private const string FieldName_GL = "GL";
 
         private const string FIELD_PCID_DOCUMENTS = "Petty_x0020_Cash_x0020_Settlement";
+        private const string FINPettyCashSettlementDocumentByID = "{0}/Petty%20Cash%20Settlement%20Documents/Forms/AllItems.aspx#InplviewHash5093bda1-84bf-4cad-8652-286653d6a83f=FilterField1%3Dpsa%255Fx003a%255FID-FilterValue1%3D{1}";
 
         private string siteUrl = string.Empty;
         static Logger logger = LogManager.GetCurrentClassLogger();
@@ -59,14 +68,19 @@ namespace MCAWebAndAPI.Service.Finance
             string documentNoFormat = string.Format(FIELD_FORMAT_DOC, DateTimeExtensions.GetMonthInRoman(DateTime.Now), DateTime.Now.ToString("yy")) + "{0}";
 
             columnValues.Add(FieldName_Date, viewModel.Date);
-
-            //{
-            //     {FieldName_Date, viewModel.Date},
-            //     {FieldName_PettyCashVoucherNo, viewModel.PettyCashVoucher},
-            //     {FieldName_AmountLiquidated, viewModel.AmountLiquidated},
-            //     {FieldName_AmountReimbursedOrReturned, viewModel.Amount},
-            //     { FieldName_Remarks, viewModel.Remarks}
-            // };
+            columnValues.Add(FieldName_PettyCashVoucherId, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.PettyCashVoucher.Value) });
+            columnValues.Add(FieldName_Status, viewModel.Status);
+            columnValues.Add(FieldName_PaidTo, viewModel.PaidTo);
+            columnValues.Add(FieldName_AmountPAid, viewModel.AmountPaid);
+            columnValues.Add(FieldName_Currency, viewModel.Currency.Value);
+            columnValues.Add(FieldName_AmountPaidInWord, viewModel.AmountPaidInWords);
+            columnValues.Add(FieldName_Reason, viewModel.ReasonOfPayment);
+            columnValues.Add(FieldName_Fund, viewModel.Fund);
+            columnValues.Add(FieldName_WBS, viewModel.WBS);
+            columnValues.Add(FieldName_GL, viewModel.GL);
+            columnValues.Add(FieldName_AmountLiquidated, viewModel.AmountLiquidated);
+            columnValues.Add(FieldName_AmountReimbursedOrReturned, viewModel.Amount);
+            columnValues.Add(FieldName_Remarks, viewModel.Remarks);
 
             try
             {
@@ -78,7 +92,7 @@ namespace MCAWebAndAPI.Service.Finance
                 }
                 else if (viewModel.Operation == Operations.e)
                 {
-                    SPConnector.UpdateListItem(ListName,viewModel.ID, columnValues, siteUrl);
+                    SPConnector.UpdateListItem(ListName, viewModel.ID, columnValues, siteUrl);
                 }
 
                 result = SPConnector.GetLatestListItemID(ListName, siteUrl);
@@ -137,33 +151,50 @@ namespace MCAWebAndAPI.Service.Finance
             }
         }
 
-        private static PettyCashSettlementVM ConvertToVM(string siteUrl, ListItem listItem)
-        {
-            PettyCashSettlementVM viewModel = new PettyCashSettlementVM();
-
-            viewModel.ID = Convert.ToInt32(listItem[FieldName_ID]);
-            viewModel.Date = Convert.ToDateTime(listItem[FieldName_Date]);
-
-            if (viewModel.PettyCashVoucher != null)
-            {
-                viewModel.PettyCashVoucher.Value = (listItem[FieldName_PettyCashVoucherNo] as FieldLookupValue).LookupId;
-                viewModel.PettyCashVoucher.Text = (listItem[FieldName_PettyCashVoucherNo] as FieldLookupValue).LookupValue;
-            }
-
-            viewModel.AmountLiquidated = Convert.ToDecimal(listItem[FieldName_AmountLiquidated]);
-            viewModel.Amount= Convert.ToDecimal(listItem[FieldName_AmountReimbursedOrReturned]);
-
-            viewModel.Remarks = Convert.ToString(listItem[FieldName_Remarks]);
-
-            return viewModel;
-        }
-
         public static IEnumerable<PettyCashTransactionItem> GetPettyCashTransaction(string siteUrl, DateTime dateFrom, DateTime dateTo)
         {
             return SharedService.GetPettyCashTransaction(siteUrl, dateFrom, dateTo, ListName, FieldName_Date,
                 ConvertToVM);
         }
 
-       
+        private static PettyCashSettlementVM ConvertToVM(string siteUrl, ListItem listItem)
+        {
+            PettyCashSettlementVM viewModel = new PettyCashSettlementVM();
+            viewModel.PettyCashVoucher = new Model.ViewModel.Control.AjaxComboBoxVM();
+
+            viewModel.ID = Convert.ToInt32(listItem[FieldName_ID]);
+            viewModel.Date = Convert.ToDateTime(listItem[FieldName_Date]);
+
+            viewModel.PettyCashVoucher.Value = (listItem[FieldName_PettyCashVoucherNo] as FieldLookupValue).LookupId;
+            viewModel.PettyCashVoucher.Text = (listItem[FieldName_PettyCashVoucherNo] as FieldLookupValue).LookupValue;
+            viewModel.AdvanceReceivedDate = Convert.ToDateTime((listItem[FieldName_PettyCashVoucherAdvanceReceivedDate] as FieldLookupValue).LookupValue);
+            viewModel.TransactionNo = Convert.ToString(listItem[FieldName_DocumentNo]);
+            viewModel.Status = Convert.ToString(listItem[FieldName_Status]);
+            viewModel.PaidTo = Convert.ToString(listItem[FieldName_PaidTo]);
+            viewModel.AmountPaid = Convert.ToString(listItem[FieldName_AmountPAid]);
+            viewModel.Currency.Value = Convert.ToString(listItem[FieldName_Currency]);
+            viewModel.AmountPaidInWords = Convert.ToString(listItem[FieldName_AmountPaidInWord]);
+            viewModel.ReasonOfPayment = Convert.ToString(listItem[FieldName_Reason]);
+            viewModel.Fund = Convert.ToString(listItem[FieldName_Fund]);
+            viewModel.WBS = Convert.ToString(listItem[FieldName_WBS]);
+            viewModel.GL = Convert.ToString(listItem[FieldName_GL]);
+            viewModel.AmountLiquidated = Convert.ToDecimal(listItem[FieldName_AmountLiquidated]);
+            viewModel.Amount = Convert.ToDecimal(listItem[FieldName_AmountReimbursedOrReturned]);
+            viewModel.Remarks = Convert.ToString(listItem[FieldName_GL]);
+
+            viewModel.AmountLiquidated = Convert.ToDecimal(listItem[FieldName_AmountLiquidated]);
+            viewModel.Amount = Convert.ToDecimal(listItem[FieldName_AmountReimbursedOrReturned]);
+
+            viewModel.Remarks = Convert.ToString(listItem[FieldName_Remarks]);
+
+            viewModel.DocumentUrl = GetDocumentUrl(siteUrl, viewModel.ID);
+            return viewModel;
+        }
+
+
+        private static string GetDocumentUrl(string siteUrl, int? iD)
+        {
+            return string.Format(FINPettyCashSettlementDocumentByID, siteUrl, iD);
+        }
     }
 }

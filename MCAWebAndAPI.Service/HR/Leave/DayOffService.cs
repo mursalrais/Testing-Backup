@@ -25,6 +25,7 @@ namespace MCAWebAndAPI.Service.HR.Leave
         const string SP_MAS_DAYOFF_TYPE_LIST_NAME = "Master Day Off Type";
         const string SP_PSA_LIST_NAME = "PSA Management";
         const string SP_PRO_MAS_LIST_NAME = "Professional Master";
+        const string SP_POSITION_MAS_LIST_NAME = "Position Master";
 
         const string TYPE_UNPAID_DAYOFF = "Unpaid Day-Off";
 
@@ -234,10 +235,11 @@ namespace MCAWebAndAPI.Service.HR.Leave
             };
         }
 
-        public DayOffRequestVM GetPopulatedModel(string requestor = null)
+        //Digunakan
+        public DayOffRequestVM GetPopulatedModel(int? ID, string requestor = null)
         {
             string status = null;
-            var caml = @"<View>  
+            var camlProfessionalData = @"<View>  
             <Query> 
                <Where><Eq><FieldRef Name='officeemail' /><Value Type='Text'>" + requestor + @"</Value></Eq></Where> 
             </Query> 
@@ -245,49 +247,257 @@ namespace MCAWebAndAPI.Service.HR.Leave
 
             var model = new DayOffRequestVM();
 
-            foreach (var item in SPConnector.GetList(SP_PRO_MAS_LIST_NAME, _siteUrl, caml))
+            foreach (var item in SPConnector.GetList(SP_PRO_MAS_LIST_NAME, _siteUrl, camlProfessionalData))
             {
                 model.Professional = Convert.ToString(item["Title"]);
                 model.ProfessionalID = Convert.ToInt32(item ["ID"]);
                 model.ProjectUnit = Convert.ToString(item["Project_x002f_Unit"]);
+                model.PositionID = FormatUtil.ConvertLookupToID(item, "Position").Value;
+                
+                break;
             }
 
-            model.DayOffBalanceDetails = GetDayOffBalanceDetails(model.ProfessionalID);
+            var positionData = SPConnector.GetListItem(SP_POSITION_MAS_LIST_NAME, model.PositionID, _siteUrl);
+            model.PositionName = Convert.ToString(positionData["Title"]);
 
+            model.ProfessionalFullName = model.Professional + " - " + model.PositionName;
+
+            model.DayOffBalanceDetails = GetDayOffBalanceDetails(model.Professional);
+
+            if(ID != null)
+            {
+                model.DayOffRequestDetails = GetDayOffRequestsDetails(ID, model.Professional);
+            }
+            
             return model;
         }
 
-        private IEnumerable<DayOffBalanceVM> GetDayOffBalanceDetails(int? ID)
+        //Digunakan
+        private IEnumerable<DayOffBalanceVM> GetDayOffBalanceDetails(string professionalName)
         {
-            var caml = @"<View><Query><Where><Eq><FieldRef Name='professionalperformanceplan' /><Value Type='Lookup'>" + ID.ToString() + "</Value></Eq></Where></Query></View>";
-
             var DayOffBalanceDetail = new List<DayOffBalanceVM>();
-            foreach (var item in SPConnector.GetList(SP_MAS_DAYOFF_TYPE_LIST_NAME, _siteUrl))
+
+            foreach (var item in SPConnector.GetList(SP_MAS_DAYOFF_TYPE_LIST_NAME, _siteUrl, null))
             {
-                DayOffBalanceDetail.Add(ConvertToDayOffBalanceDetail(item));
+                DayOffBalanceDetail.Add(ConvertToDayOffBalanceDetail(item, professionalName));
             }
 
             return DayOffBalanceDetail;
         }
 
-        private DayOffBalanceVM ConvertToDayOffBalanceDetail(ListItem item)
+        //Digunakan
+        private DayOffBalanceVM ConvertToDayOffBalanceDetail(ListItem item, string professionalName)
         {
-            return new DayOffBalanceVM
+            var dayOffBalanceDetail = new DayOffBalanceVM();
+
+
+            if (Convert.ToString(item["Title"]) == "Annual Day-Off")
             {
-                DayOffType = DayOffBalanceVM.GetDayOffTypeDefaultValue(
+                dayOffBalanceDetail = GetDayOffBalanceAnnualDayOff(Convert.ToString(item["Title"]), "Active", professionalName);
+            }
+            else if (Convert.ToString(item["Title"]) == "Special Day-Off")
+            {
+                dayOffBalanceDetail = GetDayOffBalanceSpecialDayOff(Convert.ToString(item["Title"]), professionalName);
+            }
+            else if (Convert.ToString(item["Title"]) == "Compensatory Time")
+            {
+                dayOffBalanceDetail = GetDayOffBalanceCompensatoryTime(Convert.ToString(item["Title"]), professionalName);
+            }
+            else if (Convert.ToString(item["Title"]) == "Paternity")
+            {
+                dayOffBalanceDetail = GetDayOffBalancePaternity(Convert.ToString(item["Title"]), professionalName);
+            }
+            else
+            {
+                dayOffBalanceDetail.DayOffType = DayOffBalanceVM.GetDayOffTypeDefaultValue(
                     new InGridComboBoxVM
                     {
                         Text = Convert.ToString(item["Title"])
-                    }),
-                Unit = DayOffBalanceVM.GetUnitDefaultValue(
+                    });
+
+                dayOffBalanceDetail.DayOffBrought = Convert.ToInt32(0);
+                dayOffBalanceDetail.Unit = DayOffBalanceVM.GetUnitDefaultValue(
+                        new InGridComboBoxVM
+                        {
+                            Text = Convert.ToString(item["uom"])
+                        });
+                dayOffBalanceDetail.Balance = Convert.ToInt32(2);
+            }
+
+            return dayOffBalanceDetail;
+        }
+
+        //Digunakan
+        private DayOffBalanceVM GetDayOffBalanceAnnualDayOff(string dayOffName, string psaStatus, string professionalName)
+        {
+            var dayOffBalanceData = new DayOffBalanceVM();
+
+            var camlDayOffBalanceData = @"<View>  
+            <Query> 
+               <Where><And><And><Eq><FieldRef Name='dayoffname' /><Value Type='Choice'>" + dayOffName + @"</Value></Eq><Eq><FieldRef Name='professional' /><Value Type='Lookup'>" + professionalName + @"</Value></Eq></And><Eq><FieldRef Name='psastatus' /><Value Type='Choice'>" + psaStatus + @"</Value></Eq></And></Where> 
+            </Query> 
+      </View>";
+
+            foreach (var dayOffBalanceRecord in SPConnector.GetList(SP_DAYOFF_BAL_LIST_NAME, _siteUrl, camlDayOffBalanceData))
+            {
+                dayOffBalanceData.DayOffType = DayOffBalanceVM.GetDayOffTypeDefaultValue(
                     new InGridComboBoxVM
                     {
-                        Text = Convert.ToString(item["uom"])
-                    }),
-                DayOffBrought = 0,
-                Balance = Convert.ToInt32(item["quantity"]),
+                        Text = Convert.ToString(dayOffBalanceRecord["dayoffname"])
+                    });
 
-            };
+                dayOffBalanceData.DayOffBrought = Convert.ToInt32(dayOffBalanceRecord["dayoffbrought"]);
+                dayOffBalanceData.Unit = DayOffBalanceVM.GetUnitDefaultValue(
+                        new InGridComboBoxVM
+                        {
+                            Text = Convert.ToString("Days")
+                        });
+                dayOffBalanceData.Balance = Convert.ToInt32(dayOffBalanceRecord["finalbalance"]);
+            }
+
+            return dayOffBalanceData;
+        }
+
+        //Digunakan
+        private DayOffBalanceVM GetDayOffBalanceSpecialDayOff(string dayOffName, string professionalName)
+        {
+            var dayOffBalanceData = new DayOffBalanceVM();
+
+            var camlDayOffBalanceData = @"<View>  
+            <Query> 
+               <Where><And><Eq><FieldRef Name='dayoffname' /><Value Type='Choice'>" + dayOffName + @"</Value></Eq><Eq><FieldRef Name='professional' /><Value Type='Lookup'>" + professionalName + @"</Value></Eq></And></Where> 
+            </Query> 
+      </View>";
+
+            foreach (var dayOffBalanceRecord in SPConnector.GetList(SP_DAYOFF_BAL_LIST_NAME, _siteUrl, camlDayOffBalanceData))
+            {
+                dayOffBalanceData.DayOffType = DayOffBalanceVM.GetDayOffTypeDefaultValue(
+                    new InGridComboBoxVM
+                    {
+                        Text = Convert.ToString(dayOffBalanceRecord["dayoffname"])
+                    });
+
+                dayOffBalanceData.DayOffBrought = Convert.ToInt32(dayOffBalanceRecord["dayoffbrought"]);
+                dayOffBalanceData.Unit = DayOffBalanceVM.GetUnitDefaultValue(
+                        new InGridComboBoxVM
+                        {
+                            Text = Convert.ToString("Days")
+                        });
+                dayOffBalanceData.Balance = Convert.ToInt32(dayOffBalanceRecord["finalbalance"]);
+            }
+
+            return dayOffBalanceData;
+        }
+
+        //Digunakan
+        private DayOffBalanceVM GetDayOffBalanceCompensatoryTime(string dayOffName, string professionalName)
+        {
+            var dayOffBalanceData = new DayOffBalanceVM();
+
+            var camlDayOffBalanceData = @"<View>  
+            <Query> 
+               <Where><And><Eq><FieldRef Name='dayoffname' /><Value Type='Choice'>" + dayOffName + @"</Value></Eq><Eq><FieldRef Name='professional' /><Value Type='Lookup'>" + professionalName + @"</Value></Eq></And></Where> 
+            </Query> 
+      </View>";
+
+            foreach (var dayOffBalanceRecord in SPConnector.GetList(SP_DAYOFF_BAL_LIST_NAME, _siteUrl, camlDayOffBalanceData))
+            {
+                dayOffBalanceData.DayOffType = DayOffBalanceVM.GetDayOffTypeDefaultValue(
+                    new InGridComboBoxVM
+                    {
+                        Text = Convert.ToString(dayOffBalanceRecord["dayoffname"])
+                    });
+
+                dayOffBalanceData.DayOffBrought = Convert.ToInt32(dayOffBalanceRecord["dayoffbrought"]);
+                dayOffBalanceData.Unit = DayOffBalanceVM.GetUnitDefaultValue(
+                        new InGridComboBoxVM
+                        {
+                            Text = Convert.ToString("Days")
+                        });
+                dayOffBalanceData.Balance = Convert.ToInt32(dayOffBalanceRecord["finalbalance"]);
+            }
+
+            return dayOffBalanceData;
+        }
+
+        //Digunakan
+        private DayOffBalanceVM GetDayOffBalancePaternity(string dayOffName, string professionalName)
+        {
+            var dayOffBalanceData = new DayOffBalanceVM();
+
+            var camlDayOffBalanceData = @"<View>  
+            <Query> 
+               <Where><And><Eq><FieldRef Name='dayoffname' /><Value Type='Choice'>" + dayOffName + @"</Value></Eq><Eq><FieldRef Name='professional' /><Value Type='Lookup'>" + professionalName + @"</Value></Eq></And></Where> 
+            </Query> 
+      </View>";
+
+            var paternityRecord = new List<int>();
+            int paternityID;
+
+            foreach(var paternityData in SPConnector.GetList(SP_DAYOFF_BAL_LIST_NAME, _siteUrl, camlDayOffBalanceData))
+            {
+                paternityID = Convert.ToInt32(paternityData["ID"]);
+
+                paternityRecord.Add(paternityID);
+            }
+
+            int latestPaternityID = paternityRecord.LastOrDefault();
+
+            var paternityBalanceValid = SPConnector.GetListItem(SP_DAYOFF_BAL_LIST_NAME, latestPaternityID, _siteUrl);
+
+            dayOffBalanceData.DayOffType = DayOffBalanceVM.GetDayOffTypeDefaultValue(
+                    new InGridComboBoxVM
+                    {
+                        Text = Convert.ToString(paternityBalanceValid["dayoffname"])
+                    });
+
+            dayOffBalanceData.DayOffBrought = Convert.ToInt32(paternityBalanceValid["dayoffbrought"]);
+            dayOffBalanceData.Unit = DayOffBalanceVM.GetUnitDefaultValue(
+                    new InGridComboBoxVM
+                    {
+                        Text = Convert.ToString("Days")
+                    });
+            dayOffBalanceData.Balance = Convert.ToInt32(paternityBalanceValid["finalbalance"]);
+
+            return dayOffBalanceData;
+        }
+
+        //Digunakan
+        private IEnumerable<DayOffRequestDetailVM> GetDayOffRequestsDetails(int? dayOffRequestHeaderID, string professionalName)
+        {
+            var DayOffRequestDetail = new List<DayOffRequestDetailVM>();
+
+            if (dayOffRequestHeaderID != null)
+            {
+                var camlDayOffRequestDetail = @"<View>  
+            <Query> 
+               <Where><Eq><FieldRef Name='dayoffrequest' /><Value Type='Lookup'>" + dayOffRequestHeaderID + @"</Value></Eq></Where> 
+            </Query></View>";
+                
+                foreach (var requestDetail in SPConnector.GetList(SP_DAYOFF_REQ_DETAIL_LIST_NAME, _siteUrl, camlDayOffRequestDetail))
+                {
+                    DayOffRequestDetail.Add(ConvertToDayOffRequestDetail(requestDetail));
+                }
+            }
+
+            return DayOffRequestDetail;
+        }
+
+        //Digunakan
+        private DayOffRequestDetailVM ConvertToDayOffRequestDetail(ListItem item)
+        {
+            var dayOffRequestDetail = new DayOffRequestDetailVM();
+            
+            dayOffRequestDetail.MasterDayOffType = FormatUtil.ConvertToInGridAjaxComboBox(item, "masterdayofftype");
+            dayOffRequestDetail.FullHalf = DayOffRequestDetailVM.GetFullHalfDefaultValue(
+                    new InGridComboBoxVM
+                    {
+                        Text = Convert.ToString(item["fullhalfday"])
+                    });
+            dayOffRequestDetail.RequestStartDate = Convert.ToDateTime(item["requeststartdate"]);
+            dayOffRequestDetail.RequestEndDate = Convert.ToDateTime(item["requestenddate"]);
+            dayOffRequestDetail.Remarks = Convert.ToString(item["remarks"]);
+            return dayOffRequestDetail;
         }
 
         public DayOffRequestVM GetHeader(int? ID, string requstor)
@@ -400,6 +610,493 @@ namespace MCAWebAndAPI.Service.HR.Leave
         {
             throw new NotImplementedException();
         }
+
+        public IEnumerable<DayOffTypeMaster> GetDayOffType()
+        {
+            var dayOffTypeMaster = new List<DayOffTypeMaster>();
+            
+            foreach(var dayOffTypeMasterData in SPConnector.GetList(SP_MAS_DAYOFF_TYPE_LIST_NAME, _siteUrl, null))
+            {
+                dayOffTypeMaster.Add(ConvertToDayOffTypeMaster(dayOffTypeMasterData));
+            }
+
+            return dayOffTypeMaster;
+        }
+
+        public DayOffTypeMaster ConvertToDayOffTypeMaster(ListItem item)
+        {
+            var dayOffTypeMaster = new DayOffTypeMaster();
+
+            dayOffTypeMaster.DayOffTypeID = Convert.ToInt32(item["ID"]);
+            dayOffTypeMaster.DayOffTypeName = Convert.ToString(item["Title"]);
+
+            return dayOffTypeMaster;
+        }
+
+        public int CreateDayOffRequestHeader(DayOffRequestVM dayOffRequest)
+        {
+            var updatedValues = new Dictionary<string, object>();
+            var statusExitProcedure = "Pending Approval";
+
+            updatedValues.Add("professional", new FieldLookupValue { LookupId = (int)dayOffRequest.ProfessionalID});
+            updatedValues.Add("projectunit", dayOffRequest.ProjectUnit);
+            updatedValues.Add("requestdate", dayOffRequest.RequestDate);
+
+            //if (dayOffRequest.StatusForm == "Draft")
+            //{
+            //    statusExitProcedure = "Draft";
+
+            //    var professionalData = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, exitProcedure.ProfessionalID, _siteUrl);
+            //    string professionalOfficeMail = Convert.ToString(professionalData["officeemail"]);
+
+            //    updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hr"));
+            //}
+            //if (.StatusForm == "Pending Approval")
+            //{
+            //    statusExitProcedure = "Pending Approval";
+
+            //    var professionalData = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, exitProcedure.ProfessionalID, _siteUrl);
+            //    string professionalOfficeMail = Convert.ToString(professionalData["officeemail"]);
+
+            //    updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hr"));
+            //}
+            //if (exitProcedure.StatusForm == "Saved by HR")
+            //{
+            //    statusExitProcedure = "Draft";
+
+            //    var professionalData = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, exitProcedure.ProfessionalID, _siteUrl);
+            //    string professionalOfficeMail = Convert.ToString(professionalData["officeemail"]);
+
+            //    updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hr"));
+            //}
+            //if (exitProcedure.StatusForm == "Approved by HR")
+            //{
+            //    statusExitProcedure = "Approved";
+
+            //    var professionalData = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, exitProcedure.ProfessionalID, _siteUrl);
+            //    string professionalOfficeMail = Convert.ToString(professionalData["officeemail"]);
+
+            //    updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hr"));
+            //}
+
+            //updatedValues.Add("status", statusExitProcedure);
+
+            try
+            {
+                SPConnector.AddListItem(SP_DAYOFF_REQ_LIST_NAME, updatedValues, _siteUrl);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.Message);
+                throw e;
+            }
+
+            return SPConnector.GetLatestListItemID(SP_DAYOFF_REQ_LIST_NAME, _siteUrl);
+        }
+
+        public int GetPositionID(string requestorposition, string requestorunit, int positionID, int number)
+        {
+            var caml = @"<View>  
+            <Query> 
+               <Where><And><Eq><FieldRef Name='Title' /><Value Type='Text'>" + requestorposition + @"</Value></Eq><Eq><FieldRef Name='projectunit' /><Value Type='Choice'>" + requestorunit + @"</Value></Eq></And></Where> 
+            </Query> 
+      </View>";
+
+            //int positionID = 0;
+            //int number = 0;
+
+            foreach (var item in SPConnector.GetList(SP_POSITION_MAS_LIST_NAME, _siteUrl, caml))
+            {
+                if (item["ID"] != null)
+                {
+                    positionID = Convert.ToInt32(item["ID"]);
+                    number = 1;
+                    break;
+                }
+                else
+                {
+                    number = 0;
+                }
+            }
+
+            if (number == 1)
+            {
+                return positionID;
+            }
+            else
+            {
+                return 0;
+            }
+
+        }
+
+        public async Task CreateDayOffRequestDetailAsync(DayOffRequestVM dayOffRequest, int? dayOffRequestHeaderID, IEnumerable<DayOffRequestDetailVM> dayOffRequestDetail, string requestorposition, string requestorunit, int? positionID)
+        {
+            CreateDayOffRequestDetail(dayOffRequest, dayOffRequestHeaderID, dayOffRequestDetail, requestorposition, requestorunit, positionID);
+        }
+
+        public void CreateDayOffRequestDetail(DayOffRequestVM dayOffRequest, int? dayOffRequestHeaderID, IEnumerable<DayOffRequestDetailVM> dayOffRequestDetail, string requestorposition, string requestorunit, int? positionID)
+        {
+            double totalDays;
+            DateTime returnToWork;
+
+            foreach (var viewModel in dayOffRequestDetail)
+            {
+                if (Item.CheckIfSkipped(viewModel))
+                    continue;
+                if (Item.CheckIfDeleted(viewModel))
+                {
+                    try
+                    {
+                        SPConnector.DeleteListItem(SP_DAYOFF_REQ_DETAIL_LIST_NAME, viewModel.ID, _siteUrl);
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error(e);
+                        throw e;
+                    }
+                    continue;
+                }
+                var updatedValue = new Dictionary<string, object>();
+
+                updatedValue.Add("masterdayofftype", new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.MasterDayOffType.Value) });
+                updatedValue.Add("requeststartdate", viewModel.RequestStartDate);
+                updatedValue.Add("requestenddate", viewModel.RequestEndDate);
+                updatedValue.Add("fullhalfday", viewModel.FullHalf.Text);
+                updatedValue.Add("remarks", viewModel.Remarks);
+                updatedValue.Add("dayoffrequest", new FieldLookupValue { LookupId = Convert.ToInt32(dayOffRequestHeaderID) });
+
+                totalDays = CalculcateTotalDays(Convert.ToDateTime(viewModel.RequestStartDate), Convert.ToDateTime(viewModel.RequestEndDate), Convert.ToString(viewModel.FullHalf.Text));
+
+                updatedValue.Add("totaldays", Convert.ToDouble(totalDays));
+
+                returnToWork = GetDateReturnToWork(Convert.ToDateTime(viewModel.RequestStartDate), Convert.ToDateTime(viewModel.RequestEndDate), totalDays);
+
+                updatedValue.Add("returntowork", returnToWork);
+
+                //updatedValue.Add("Title", viewModel.ItemExitProcedure);
+                //updatedValue.Add("approverposition", new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.ApproverPosition.Value) });
+                //updatedValue.Add("approverusername", new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.ApproverUserName.Value) });
+                //updatedValue.Add("checklistitemapproval", viewModel.CheckListItemApproval.Text);
+                //updatedValue.Add("dateofapproval", viewModel.DateOfApproval);
+                //updatedValue.Add("remarks", viewModel.Remarks);
+                //updatedValue.Add("requestorunit", requestorunit);
+                //updatedValue.Add("requestorposition", new FieldLookupValue { LookupId = Convert.ToInt32(positionID) });
+                //updatedValue.Add("approverlevel", viewModel.Level);
+                //updatedValue.Add("approverunit", viewModel.ApproverUnit.Text);
+                //updatedValue.Add("isdefault", viewModel.IsDefault);
+
+                //var item = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, viewModel.ApproverUserName.Value, _siteUrl);
+                //updatedValue.Add("approvalmail", Convert.ToString(item["officeemail"]));
+
+                //if (exitProcedure.StatusForm == "Pending Approval")
+                //{
+                //    var startDateApproval = exitProcedure.StartDateApproval.ToLocalTime().ToShortDateString();
+                //    updatedValue.Add("startdateapproval", startDateApproval);
+                //}
+
+                //updatedValue.Add("exitprocedure", new FieldLookupValue { LookupId = Convert.ToInt32(exitProcID) });
+
+                try
+                {
+                    if (Item.CheckIfUpdated(viewModel))
+                        SPConnector.UpdateListItem(SP_DAYOFF_REQ_DETAIL_LIST_NAME, viewModel.ID, updatedValue, _siteUrl);
+                    else
+                    {
+                        SPConnector.AddListItem(SP_DAYOFF_REQ_DETAIL_LIST_NAME, updatedValue, _siteUrl);
+                    }
+
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e.Message);
+                    throw new Exception(ErrorResource.SPInsertError);
+                }
+
+                ////i++;
+            }
+        }
+
+        private double CalculcateTotalDays(DateTime requestStartDate, DateTime requestEndDate, string fullHalfDay)
+        {
+            double numberDays = 0;
+
+            string strRequestStartDate = requestStartDate.ToShortDateString();
+            string strRequestEndDate = requestEndDate.ToShortDateString();
+
+            if(strRequestEndDate == strRequestStartDate)
+            {
+                if (fullHalfDay == "Full Day")
+                {
+                    numberDays = Convert.ToInt32((requestEndDate - requestStartDate).TotalDays) + 1;
+                }
+                else
+                {
+                    numberDays = 0.5;
+                }
+            }
+            else
+            {
+                if(requestStartDate < requestEndDate)
+                {
+                    TimeSpan span = requestEndDate - requestStartDate;
+
+                    numberDays = (span.Days) + 1;
+                }
+            }
+            
+            return numberDays;
+        }
+
+        private DateTime GetDateReturnToWork(DateTime requestStartDate, DateTime requestEndDate, double totalDays)
+        {
+            DateTime returnToWork = DateTime.Now;
+            bool publicHoliday = true;
+
+            if (totalDays == 0.5)
+            {
+                returnToWork = requestEndDate.ToLocalTime();
+            }
+            else
+            {
+                returnToWork = requestEndDate.AddDays(1);
+
+                if (returnToWork.DayOfWeek == DayOfWeek.Saturday)
+                {
+                    returnToWork = returnToWork.AddDays(2);
+
+                    if ((returnToWork.DayOfWeek == DayOfWeek.Monday)|| (returnToWork.DayOfWeek == DayOfWeek.Tuesday) || (returnToWork.DayOfWeek == DayOfWeek.Wednesday) || (returnToWork.DayOfWeek == DayOfWeek.Thursday) || (returnToWork.DayOfWeek == DayOfWeek.Friday))
+                    {
+                        publicHoliday = checkPublicHoliday(returnToWork);
+
+                        if(publicHoliday == false)
+                        {
+                            return returnToWork;
+                        }
+                        else
+                        {
+                            returnToWork = returnToWork.AddDays(1);
+                            return returnToWork;
+                        }
+                    }
+                }
+                else if(returnToWork.DayOfWeek == DayOfWeek.Sunday)
+                {
+                    returnToWork = returnToWork.AddDays(1);
+
+                    if ((returnToWork.DayOfWeek == DayOfWeek.Monday) || (returnToWork.DayOfWeek == DayOfWeek.Tuesday) || (returnToWork.DayOfWeek == DayOfWeek.Wednesday) || (returnToWork.DayOfWeek == DayOfWeek.Thursday) || (returnToWork.DayOfWeek == DayOfWeek.Friday))
+                    {
+                        publicHoliday = checkPublicHoliday(returnToWork);
+
+                        if (publicHoliday == false)
+                        {
+                            return returnToWork;
+                        }
+                        else
+                        {
+                            returnToWork = returnToWork.AddDays(1);
+                            return returnToWork;
+                        }
+                    }
+                }
+                else
+                {
+                    publicHoliday = checkPublicHoliday(returnToWork);
+
+                    if(publicHoliday == true)
+                    {
+                        returnToWork = returnToWork.AddDays(1);
+                        return returnToWork;
+                    }
+                    else
+                    {
+                        return returnToWork;
+                    }
+                }
+            }
+
+            return returnToWork;
+        }
+
+        private bool checkPublicHoliday(DateTime returnToWork)
+        {
+            int year = 2016;
+            string strReturnToWork = returnToWork.ToShortDateString();
+
+            DateTime tahunBaru = new DateTime(year, 1, 1);
+            string strTahunBaru = tahunBaru.ToShortDateString();
+
+            DateTime imlek = new DateTime(year, 2, 8);
+            string strImlek = imlek.ToShortDateString();
+
+            DateTime nyepi = new DateTime(year, 3, 9);
+            string strNyepi = nyepi.ToShortDateString();
+
+            DateTime wafatIsaAlMasih = new DateTime(year, 3, 25);
+            string strWafatIsaAlmasih = wafatIsaAlMasih.ToShortDateString();
+
+            DateTime hariBuruh = new DateTime(year, 5, 1);
+            string strHariBuruh = hariBuruh.ToShortDateString();
+
+            DateTime kenaikanYesus = new DateTime(year, 5, 5);
+            string strKenaikanYesus = kenaikanYesus.ToShortDateString();
+
+            DateTime israMiraj = new DateTime(year, 5, 6);
+            string strIsraMiraj = israMiraj.ToShortDateString();
+
+            DateTime waisak = new DateTime(year, 5, 22);
+            string strWaisak = waisak.ToShortDateString();
+
+            DateTime idulfitri = new DateTime(year, 7, 7);
+            string strIdulFitri = idulfitri.ToShortDateString();
+
+            DateTime hutRI = new DateTime(year, 8, 17);
+            string strHutRI = hutRI.ToShortDateString();
+
+            DateTime idulAdha = new DateTime(year, 9, 12);
+            string strIdulAdha = idulAdha.ToShortDateString();
+
+            DateTime tahunBaruIslam = new DateTime(year, 10, 2);
+            string strTahunBaruIslam = tahunBaruIslam.ToShortDateString();
+
+            DateTime maulidNabi = new DateTime(year, 12, 12);
+            string strMaulidNabi = maulidNabi.ToShortDateString();
+
+            DateTime natal = new DateTime(year, 12, 25);
+            string strNatal = natal.ToShortDateString();
+
+            if(strReturnToWork == strTahunBaru)
+            {
+                return true;
+            }
+            else if(strReturnToWork == strImlek)
+            {
+                return true;
+            }
+            else if(strReturnToWork == strNyepi)
+            {
+                return true;
+            }
+            else if(strReturnToWork == strWafatIsaAlmasih)
+            {
+                return true;
+            }
+            else if(strReturnToWork == strHariBuruh)
+            {
+                return true;
+            }
+            else if(strReturnToWork == strKenaikanYesus)
+            {
+                return true;
+            }
+            else if(strReturnToWork == strIsraMiraj)
+            {
+                return true;
+            }
+            else if(strReturnToWork == strWaisak)
+            {
+                return true;
+            }
+            else if(strReturnToWork == strIdulFitri)
+            {
+                return true;
+            }
+            else if(strReturnToWork == strHutRI)
+            {
+                return true;
+            }
+            else if(strReturnToWork == strIdulAdha)
+            {
+                return true;
+            }
+            else if(strReturnToWork == strTahunBaruIslam)
+            {
+                return true;
+            }
+            else if(strReturnToWork == strMaulidNabi)
+            {
+                return true;
+            }
+            else if(strReturnToWork == strNatal)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        //public int CreateExitProcedure(ExitProcedureVM exitProcedure)
+        //{
+        //    var updatedValues = new Dictionary<string, object>();
+        //    var statusExitProcedure = "Pending Approval";
+
+        //    updatedValues.Add("Title", exitProcedure.FullName);
+        //    updatedValues.Add("requestdate", exitProcedure.RequestDate);
+        //    updatedValues.Add("professional", new FieldLookupValue { LookupId = (int)exitProcedure.ProfessionalID });
+        //    updatedValues.Add("projectunit", exitProcedure.ProjectUnit);
+        //    updatedValues.Add("position", exitProcedure.Position);
+        //    updatedValues.Add("joindate", exitProcedure.ProfessionalJoinDate);
+        //    updatedValues.Add("mobilenumber", exitProcedure.PhoneNumber);
+        //    updatedValues.Add("officeemail", exitProcedure.ProfessionalPersonalMail);
+        //    updatedValues.Add("currentaddress", exitProcedure.CurrentAddress);
+        //    updatedValues.Add("lastworkingdate", exitProcedure.LastWorkingDate);
+        //    updatedValues.Add("exitreason", exitProcedure.ExitReason.Value);
+        //    updatedValues.Add("reasondescription", exitProcedure.ReasonDesc);
+        //    updatedValues.Add("psanumber", exitProcedure.PSANumber);
+
+        //    if (exitProcedure.StatusForm == "Draft")
+        //    {
+        //        statusExitProcedure = "Draft";
+
+        //        var professionalData = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, exitProcedure.ProfessionalID, _siteUrl);
+        //        string professionalOfficeMail = Convert.ToString(professionalData["officeemail"]);
+
+        //        updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hr"));
+        //    }
+        //    if (exitProcedure.StatusForm == "Pending Approval")
+        //    {
+        //        statusExitProcedure = "Pending Approval";
+
+        //        var professionalData = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, exitProcedure.ProfessionalID, _siteUrl);
+        //        string professionalOfficeMail = Convert.ToString(professionalData["officeemail"]);
+
+        //        updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hr"));
+        //    }
+        //    if (exitProcedure.StatusForm == "Saved by HR")
+        //    {
+        //        statusExitProcedure = "Draft";
+
+        //        var professionalData = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, exitProcedure.ProfessionalID, _siteUrl);
+        //        string professionalOfficeMail = Convert.ToString(professionalData["officeemail"]);
+
+        //        updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hr"));
+        //    }
+        //    if (exitProcedure.StatusForm == "Approved by HR")
+        //    {
+        //        statusExitProcedure = "Approved";
+
+        //        var professionalData = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, exitProcedure.ProfessionalID, _siteUrl);
+        //        string professionalOfficeMail = Convert.ToString(professionalData["officeemail"]);
+
+        //        updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hr"));
+        //    }
+
+        //    updatedValues.Add("status", statusExitProcedure);
+
+        //    try
+        //    {
+        //        SPConnector.AddListItem(SP_EXP_LIST_NAME, updatedValues, _siteUrl);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        logger.Error(e.Message);
+        //        throw e;
+        //    }
+
+        //    return SPConnector.GetLatestListItemID(SP_EXP_LIST_NAME, _siteUrl);
+        //}
     }
 }
 

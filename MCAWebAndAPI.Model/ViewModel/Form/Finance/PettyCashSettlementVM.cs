@@ -39,39 +39,30 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         [UIHint("AjaxComboBox")]
         public AjaxComboBoxVM PettyCashVoucher { get; set; }
 
-        [ReadOnly(true)]
         [DisplayName("Advance Received Date")]
         [DataType(DataType.Date)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
-        public string AdvanceReceivedDate { get; }
+        public DateTime? AdvanceReceivedDate { get; set; }
 
-        [ReadOnly(true)]
-        public string Status { get; }
+        public string Status { get; set; }
 
-        [ReadOnly(true)]
         [DisplayName("Paid to")]
-        public string PaidTo { get; }
+        public string PaidTo { get; set; }
 
-        [ReadOnly(true)]
         [DisplayName("Amount paid")]
-        public string AmountPaid { get; }
+        public string AmountPaid { get; set; }
 
-        [ReadOnly(true)]
         [DisplayName("Amount paid in words")]
-        public string AmountPaidInWords { get; }
+        public string AmountPaidInWords { get; set; }
 
-        [ReadOnly(true)]
         [DisplayName("Reason of payment")]
-        public string ReasonOfPayment { get; }
+        public string ReasonOfPayment { get; set; }
 
-        [ReadOnly(true)]
-        public string Fund { get; } = Shared.Fund;
+        public string Fund { get; set; } = Shared.Fund;
 
-        [ReadOnly(true)]
-        public string WBS { get; }
+        public string WBS { get; set; }
 
-        [ReadOnly(true)]
-        public string GL { get; }
+        public string GL { get; set; }
 
         [Required]
         [DisplayName("Amount Liquidated")]

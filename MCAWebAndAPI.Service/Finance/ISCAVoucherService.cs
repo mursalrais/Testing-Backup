@@ -14,9 +14,9 @@ namespace MCAWebAndAPI.Service.Finance
 
         SCAVoucherVM GetEventBudget(int? ID);
 
-        Task CreateSCAVoucherItem(int? scaVoucherID, IEnumerable<SCAVoucherItemsVM> viewModels);
+        Task CreateSCAVoucherItemAsync(int? scaVoucherID, IEnumerable<SCAVoucherItemsVM> viewModels);
 
-        Task CreateSCAVoucherDocumentAsync(int? ID, IEnumerable<HttpPostedFileBase> attachment);
+        Task CreateSCAVoucherAttachmentAsync(int? ID, IEnumerable<HttpPostedFileBase> attachment);
 
         Task UpdateSCAVoucherItem(int? scaVoucherID, IEnumerable<SCAVoucherItemsVM> viewModels);
 
