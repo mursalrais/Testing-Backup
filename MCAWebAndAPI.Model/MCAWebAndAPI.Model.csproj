@@ -117,6 +117,7 @@
     <Compile Include="Common\Workflow.cs" />
     <Compile Include="HR\DataMaster\DayOffRequest.cs" />
     <Compile Include="HR\DataMaster\DayOffTypeMaster.cs" />
+    <Compile Include="ViewModel\Control\MultiSelectVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetDisposalDetailVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetDisposalVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetTransferDetailVM.cs" />
@@ -128,6 +129,8 @@
     <Compile Include="ViewModel\Form\Asset\ProfessionalsVM.cs" />
     <Compile Include="ViewModel\Form\Common\ProfessionalVM.cs" />
     <Compile Include="ViewModel\Form\Finance\PettyCashReplenishmentVM.cs" />
+    <Compile Include="ViewModel\Form\Finance\PettyCashStatementVM.cs" />
+    <Compile Include="ViewModel\Form\Finance\PettyCashTransactionItem.cs" />
     <Compile Include="ViewModel\Form\Finance\WBSMasterVM.cs" />
     <Compile Include="ViewModel\Form\HR\AdjustmentDataVM.cs" />
     <Compile Include="ViewModel\Form\HR\AdjustmentDayOffBalanceVM.cs" />
