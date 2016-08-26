@@ -16,13 +16,13 @@
         <legend>General</legend>
 
         <div class="row">
-            @{if ((Model.Status.Value == "Approved") || (Model.Status.Value == "Rejected") || (Model.Status.Value == "Active"))
+            @{if ((Model.Status.Value == "Pending Approval") || (Model.Status.Value == "Draft"))
                 {
-                    @Html.Partial("_GeneralDisp", Model)
+                    @Html.Partial("_General", Model)
                 }
                 else
                 {
-                    @Html.Partial("_General", Model)
+                    @Html.Partial("_GeneralDisp", Model)
                 }
             }
         </div>
@@ -57,49 +57,49 @@
         </div>
         <legend>Resources and Planning</legend>
         <div class="row">
-            @{if ((Model.Status.Value == "Approved") || (Model.Status.Value == "Rejected") || (Model.Status.Value == "Active"))
+            @{if ((Model.Status.Value == "Pending Approval") || (Model.Status.Value == "Draft"))
                 {
-                    @Html.Partial("_ResourcesAndPlanningDisp", Model)
+                    @Html.Partial("_ResourcesAndPlanning", Model)
                 }
                 else
                 {
-                    @Html.Partial("_ResourcesAndPlanning", Model)
+                    @Html.Partial("_ResourcesAndPlanningDisp", Model)
                 }
             }
         </div>
         <legend>Background Requirement</legend>
         <div class="row">
-            @{if ((Model.Status.Value == "Approved") || (Model.Status.Value == "Rejected") || (Model.Status.Value == "Active"))
+            @{if ((Model.Status.Value == "Pending Approval") || (Model.Status.Value == "Draft"))
                 {
-                    @Html.Partial("_BackgroundRequirementDisp", Model)
+                    @Html.Partial("_BackgroundRequirement", Model)
                 }
                 else
                 {
-                    @Html.Partial("_BackgroundRequirement", Model)
+                    @Html.Partial("_BackgroundRequirementDisp", Model)
                 }
             }
         </div>
         <legend>Specific Experience</legend>
         <div class="row">
-            @{if ((Model.Status.Value == "Approved") || (Model.Status.Value == "Rejected") || (Model.Status.Value == "Active"))
+            @{if ((Model.Status.Value == "Pending Approval") || (Model.Status.Value == "Draft"))
                 {
-                    @Html.Partial("_SpecificexperienceDisp", Model)
+                    @Html.Partial("_Specificexperience", Model)
                 }
                 else
                 {
-                    @Html.Partial("_Specificexperience", Model)
+                    @Html.Partial("_SpecificexperienceDisp", Model)
                 }
             }
         </div>
         <legend>Other Requirements</legend>
         <div class="row">
-            @{if ((Model.Status.Value == "Approved") || (Model.Status.Value == "Rejected") || (Model.Status.Value == "Active"))
+            @{if ((Model.Status.Value == "Pending Approval") || (Model.Status.Value == "Draft"))
                 {
-                    @Html.Partial("_OtherRequirementsDisp", Model)
+                    @Html.Partial("_OtherRequirements", Model)
                 }
                 else
                 {
-                    @Html.Partial("_OtherRequirements", Model)
+                    @Html.Partial("_OtherRequirementsDisp", Model)
                 }
             }
         </div>
@@ -131,6 +131,7 @@
         }
 
         @Html.HiddenFor(m => m.ID);
+        @Html.HiddenFor(m => m.isKeyValuationValue);
     </fieldset>
     <div class="form-actions">
         <div class="row">
@@ -225,6 +226,7 @@
             var id = $("#ID").val();
             var isHR = '@(ViewBag.IsHRView)';
             var onBehalf = '@(Model.IsOnBehalfOf)';
+            var status = '@(Model.Status.Value)';
 
             if (isHR == "True") {
                 var initialStatusValue = $("#Status_Value").attr("value");
@@ -236,15 +238,9 @@
                     dropdownStatus.select(0);
                 }
             }
+                
 
-            if (onBehalf == "True") {
-                $("#OnBehalfOf_Value").data("kendoDropDownList").enable(true);
-            }
-            else {
-                $("#OnBehalfOf_Value").data("kendoDropDownList").enable(false);
-
-            }
-            
+                        
             $("#IsOnBehalfOf").click(function () {
                 if (!$(this).is(":checked")) {
                     $("#OnBehalfOf_Value").data("kendoDropDownList").enable(false);
@@ -255,12 +251,9 @@
 
             });
 
-            $("#save-button").click(function () {
+            $("#save-button").click(function () {                
                 var isValid = checkGrid();
                 if (isValid) {
-                    if (isHR == "True") {
-                        //var url = "/HRManpowerRequisitio/GetDocumentMCC/" +id;
-                    }
                     $("form").submit();
                 }
 
@@ -280,18 +273,31 @@
                 }
             });
             var isKeyPosition = $("#IsKeyPosition").val();
-            if (isKeyPosition == "True") {
+            if (isKeyPosition) {
                 //$('#KeyPositionValue').prop('value', "Yes");
                 $("label[for='Yes']").show();
                 $("label[for='No']").hide();
-                //$("#IsKeyPosition").val(true);
+                $("#isKeyValuationValue").val(true);
+                console.log(isKeyPosition+" asdijsoi ");
 
             }
             else {
                 $("label[for='No']").show();
                 $("label[for='Yes']").hide();
-                //$("#IsKeyPosition").val(false);
+                $("#isKeyValuationValue").val(false);
+                console.log(isKeyPosition);
             }
+            if (((status == "Pending Approval") || (status == "Draft"))) {
+       
+                if (onBehalf == "True") {
+                    $("#OnBehalfOf_Value").data("kendoDropDownList").enable(true);
+                }
+                else {
+                    $("#OnBehalfOf_Value").data("kendoDropDownList").enable(false);
+
+                }
+            }
+            
         });
 
     </script>

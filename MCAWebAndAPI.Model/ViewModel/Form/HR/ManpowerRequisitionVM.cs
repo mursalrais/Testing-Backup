@@ -103,6 +103,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         public string ProjectUnitString { get; set; }
 
+        public bool isKeyValuationValue { get; set; } = false;
+
 
         /// <summary>
         /// iskeyposition

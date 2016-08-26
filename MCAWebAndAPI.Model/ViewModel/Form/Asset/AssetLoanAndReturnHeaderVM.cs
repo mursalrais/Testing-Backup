@@ -12,6 +12,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
     {
 
         public IEnumerable<AssetLoanAndReturnItemVM> AssetLoanAndReturnItem { get; set; } = new List<AssetLoanAndReturnItemVM>();
+
+
         public DateTime _loanDate;
         public ComboBoxVM _professional;
 

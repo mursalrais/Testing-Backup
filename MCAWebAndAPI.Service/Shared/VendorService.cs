@@ -45,6 +45,16 @@ namespace MCAWebAndAPI.Service.Shared
             return vendors;
         }
 
+        public VendorVM GetVendor(int ID)
+        {
+            var vendor = new VendorVM();
+
+            var listItem = SPConnector.GetListItem(VENDOR_SITE_LIST, ID, siteUrl);
+            vendor = ConvertToVendorModel(listItem);
+
+            return vendor;
+        }
+
         private static VendorVM ConvertToVendorModel(ListItem item)
         {
             return new VendorVM

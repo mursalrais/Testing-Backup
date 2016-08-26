@@ -34,6 +34,7 @@ namespace MCAWebAndAPI.Service.Asset
             var model = new AssetLoanAndReturnHeaderVM();
             model.Professional.Choices = GetChoicesFromList(SP_PROFMASTER_LIST_NAME, "ID", "Title");
             model.TransactionType = Convert.ToString("Asset Loan And Return");
+            model.CancelURL = _siteUrl + UrlResource.AssetLoanAndReturn;
             return model;
         }
 
@@ -72,17 +73,117 @@ namespace MCAWebAndAPI.Service.Asset
 
         public void CreateDetails(int? headerID, IEnumerable<AssetLoanAndReturnItemVM> items)
         {
-            throw new NotImplementedException();
+            foreach (var item in items)
+            {
+                if (Item.CheckIfSkipped(item)) continue;
+
+                if (Item.CheckIfDeleted(item))
+                {
+                    try
+                    {
+                        SPConnector.DeleteListItem(SP_ASSLNRDetails_LIST_NAME, item.ID, _siteUrl);
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error(e);
+                        throw e;
+                    }
+                    continue;
+                }
+
+
+
+                var updatedValues = new Dictionary<string, object>();
+                updatedValues.Add("assetloanandreturn", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
+                updatedValues.Add("assetsubasset", new FieldLookupValue { LookupId = Convert.ToInt32(item.AssetSubAsset.Value.Value) });
+                updatedValues.Add("estreturndate", item.EstReturnDate);
+                updatedValues.Add("returndate", item.ReturnDate);
+                updatedValues.Add("status", "LOAN");
+                try
+                {
+                    SPConnector.AddListItem(SP_ASSLNRDetails_LIST_NAME, updatedValues, _siteUrl);
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e);
+                    throw new Exception(ErrorResource.SPInsertError);
+                }
+
+            }
         }
+        //    public void CreateDetails(int? headerID, IEnumerable<AssetLoanAndReturnItemVM> items)
+        //{
+        //     var updatedValues = new Dictionary<string, object>();
+        //    updatedValues.Add("assetloanandreturn", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
+        //    updatedValues.Add("assetsubasset", new FieldLookupValue { LookupId = Convert.ToInt32(item.AssetSubAsset.Value.Value) });
+        //    updatedValues.Add("estreturndate", item.EstReturnDate);
+        //    updatedValues.Add("returndate", item.ReturnDate);
+        //    updatedValues.Add("status", "LOAN");
+        //    try
+        //    {
+        //        SPConnector.AddListItem(SP_ASSLNRDetails_LIST_NAME, updatedValues, SiteUrl);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        logger.Error(e);
+        //        throw new Exception(ErrorResource.SPInsertError);
+        //    }
+
+        //    return SPConnector.GetLatestListItemID(SP_ASSLNRDetails_LIST_NAME, SiteUrl);
+        //}
+        //}
+
+        //public void CreateDetails(int? headerID, IEnumerable<AssetLoanAndReturnItemVM> items)
+        //{
+        //     var updatedValues = new Dictionary<string, object>();
+        //    updatedValues.Add("assetloanandreturn", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
+        //    updatedValues.Add("assetsubasset", new FieldLookupValue { LookupId = Convert.ToInt32(item.AssetSubAsset.Value.Value) });
+        //    updatedValues.Add("estreturndate", item.EstReturnDate);
+        //    updatedValues.Add("returndate", item.ReturnDate);
+        //    updatedValues.Add("status", "LOAN");
+        //    try
+        //    {
+        //        SPConnector.AddListItem(SP_ASSLNRDetails_LIST_NAME, updatedValues, SiteUrl);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        logger.Error(e);
+        //        throw new Exception(ErrorResource.SPInsertError);
+        //    }
+
+        //    return SPConnector.GetLatestListItemID(SP_ASSLNRDetails_LIST_NAME, SiteUrl);
+        //}
 
         public void UpdateDetails(int? headerID, IEnumerable<AssetLoanAndReturnItemVM> items)
         {
             throw new NotImplementedException();
         }
 
+
         public AssetLoanAndReturnHeaderVM GetHeader(int? ID)
         {
-            throw new NotImplementedException();
+            var listItem = SPConnector.GetListItem(SP_ASSLNR_LIST_NAME, ID, _siteUrl);
+            var viewModel = new AssetLoanAndReturnHeaderVM();
+
+            viewModel.TransactionType = Convert.ToString(listItem["Title"]);
+            viewModel.Professional.Choices = GetChoicesFromList(SP_PROFMASTER_LIST_NAME, "ID", "Title");
+            if ((listItem["Professional0"] as FieldLookupValue) != null)
+            {
+                viewModel.Professional.Value = (listItem["Professional0"] as FieldLookupValue).LookupId.ToString();
+                viewModel.Professional.Text = (listItem["Professional0"] as FieldLookupValue).LookupId.ToString() + "-" + (listItem["Professional0"] as FieldLookupValue).LookupValue;
+            }
+            //viewModel.AccpMemo.Value = Convert.ToString(listItem["acceptancememono"]);
+            viewModel.ContactNo = Convert.ToString(listItem["professionalmobilephonenr"]);
+            viewModel.Project = Convert.ToString(listItem["projectunit"]);
+
+            viewModel.LoanDate = Convert.ToDateTime(listItem["loandate"]);
+            //viewModel.Spesifications = Regex.Replace(listItem["Spesifications"].ToString(), "<.*?>", string.Empty);
+            viewModel.Purpose = Convert.ToString(listItem["Purpose"]);
+            viewModel.ID = ID;
+
+            viewModel.CancelURL = _siteUrl + UrlResource.AssetLoanAndReturn;
+
+            return viewModel;
         }
 
         public IEnumerable<AssetLoanAndReturnItemVM> GetDetails(int? headerID)
@@ -360,14 +461,14 @@ namespace MCAWebAndAPI.Service.Asset
             //columnValues.Add("acceptancememono", memo[1]);
             
 
-            columnValues.Add("Title", header.TransactionType);
-            columnValues.Add("Professional", new FieldLookupValue { LookupId = Convert.ToInt32(Convert.ToInt32(profesional[0])) });
+            columnValues.Add("transactiontype", header.TransactionType);
+            columnValues.Add("professionalname", new FieldLookupValue { LookupId = Convert.ToInt32(Convert.ToInt32(profesional[0])) });
             //columnValues.Add("professionalposition", new FieldLookupValue { LookupId = Convert.ToInt32(Convert.ToInt32(profesional[1])) });
 
             columnValues.Add("projectunit", header.Project);
             // columnValues.Add("Professional", new FieldLookupValue { LookupId = Convert.ToInt32(viewmodel.Project) });
             columnValues.Add("professionalmobilephonenr", header.ContactNo);
-            columnValues.Add("Loan_x0020_Date", header.LoanDate);
+            columnValues.Add("loandate", header.LoanDate);
             columnValues.Add("Purpose", header.Purpose);
             try
             {
@@ -380,6 +481,48 @@ namespace MCAWebAndAPI.Service.Asset
 
             return SPConnector.GetLatestListItemID(SP_ASSLNR_LIST_NAME, _siteUrl);
         }
+
+        public int? CreateDetails(int? headerID, AssetLoanAndReturnItemVM item, string SiteUrl = null)
+        {
+            var updatedValues = new Dictionary<string, object>();
+            updatedValues.Add("assetloanandreturn", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
+            updatedValues.Add("assetsubasset", new FieldLookupValue { LookupId = Convert.ToInt32(item.AssetSubAsset.Value.Value) });
+            updatedValues.Add("estreturndate", item.EstReturnDate);
+            updatedValues.Add("returndate", item.ReturnDate);
+            updatedValues.Add("status", "LOAN");
+            try
+            {
+                SPConnector.AddListItem(SP_ASSLNRDetails_LIST_NAME, updatedValues, SiteUrl);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e);
+                throw new Exception(ErrorResource.SPInsertError);
+            }
+
+            return SPConnector.GetLatestListItemID(SP_ASSLNRDetails_LIST_NAME, SiteUrl);
+        }
+
+        //public int? CreateDetails(int? headerID, AssetLoanAndReturnItemVM item, string SiteUrl = null)
+        //{
+        //    var updatedValues = new Dictionary<string, object>();
+        //    updatedValues.Add("assetloanandreturn", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
+        //    updatedValues.Add("assetsubasset", new FieldLookupValue { LookupId = Convert.ToInt32(item.AssetSubAsset.Value.Value) });
+        //    updatedValues.Add("estreturndate", item.EstReturnDate);
+        //    updatedValues.Add("returndate", item.ReturnDate);
+        //    updatedValues.Add("status", "LOAN");
+        //    try
+        //    {
+        //        SPConnector.AddListItem(SP_ASSLNRDetails_LIST_NAME, updatedValues, SiteUrl);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        logger.Error(e);
+        //        throw new Exception(ErrorResource.SPInsertError);
+        //    }
+
+        //    return SPConnector.GetLatestListItemID(SP_ASSLNRDetails_LIST_NAME, SiteUrl);
+        //}
 
         //AssetLoanAndReturnHeaderVM IAssetLoanAndReturnService.GetPopulatedModel(int? id)
         //{

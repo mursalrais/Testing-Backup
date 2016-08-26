@@ -455,25 +455,11 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
         public void CreateTimesheetDetails(int? headerId, 
             IEnumerable<TimesheetDetailVM> timesheetDetails)
         {
+            var mastervalue = new Dictionary<string, Dictionary<string, object>>();
+            var i = 1;
             foreach (var viewModel in timesheetDetails)
             {
                 if (viewModel.Type != "Working Days") continue;
-                if (Item.CheckIfSkipped(viewModel))
-                    continue;
-                if (Item.CheckIfDeleted(viewModel))
-                {
-                    try
-                    {
-                        SPConnector.DeleteListItem(LIST_TIME_DETAIL, viewModel.ID, _siteUrl);
-
-                    }
-                    catch (Exception e)
-                    {
-                        logger.Error(e);
-                        throw e;
-                    }
-                    continue;
-                }
                 var updatedValue = new Dictionary<string, object>
                 {
                     {"timesheet", new FieldLookupValue {LookupId = Convert.ToInt32(headerId)}},
@@ -491,22 +477,21 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                     updatedValue.Add("Title", viewModel.Type);
                 }
 
-                try
-                {
-                    if (Item.CheckIfUpdated(viewModel))
-                        SPConnector.UpdateListItem(LIST_TIME_DETAIL, viewModel.ID, updatedValue, _siteUrl);
-                    else
-                        SPConnector.AddListItem(LIST_TIME_DETAIL, updatedValue, _siteUrl);
+               
+                    mastervalue.Add(i+";Add", updatedValue);
+                    i++;
+               
+            }
 
-
-
-                }
-                catch (Exception e)
-                {
-                    logger.Error(e.Message);
-                    //throw new Exception(ErrorResource.SPInsertError);
-                    throw new Exception(e.Message);
-                }
+            try
+            {
+                SPConnector.AddListItemAsync(LIST_TIME_DETAIL, mastervalue, _siteUrl);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.Message);
+                //throw new Exception(ErrorResource.SPInsertError);
+                throw new Exception(e.Message);
             }
         }
 

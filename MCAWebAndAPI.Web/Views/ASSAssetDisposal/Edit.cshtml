@@ -54,7 +54,7 @@
     <div>
         <center>
 
-            <input id="submit-button" onclick="return saveDisposal()" class="k-button k-button-icontext k-grid-add" size="4" type="submit" value="Save" />
+            <input id="submit-button" onclick="return PreSaveAction()" class="k-button k-button-icontext k-grid-add" size="4" type="submit" value="Save" />
 
             <a href="@Model.CancelURL" target='_parent'>
                 <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
@@ -68,20 +68,20 @@
 @section scripts{
     <script type="text/javascript">
 
-        function saveDisposal() {
-            // alert("saving...");
-            //var idattach = document.querySelectorAll("[id^='attachRow']");
-            ////  alert(idattach.length);
+        //function saveDisposal() {
+        //    // alert("saving...");
+        //    //var idattach = document.querySelectorAll("[id^='attachRow']");
+        //    ////  alert(idattach.length);
 
-            //if (idattach.length == 0) {
-            //    alert("Please Attach the memo for disposal");
-            //} else {
+        //    //if (idattach.length == 0) {
+        //    //    alert("Please Attach the memo for disposal");
+        //    //} else {
 
-                $("form").submit();
-           // }
+        //        $("form").submit();
+        //   // }
 
 
-        }
+        //}
 
         //$(document).ready(function () {
 
@@ -130,6 +130,35 @@
         //    });
         //}
         //  );
+
+        function PreSaveAction() {
+         
+            var elm = document.getElementById("idAttachmentsTable");
+          
+            if (elm == null || elm.rows.length == 0) {
+
+                // document.getElementById("idAttachmentsRow").style.display = 'none';
+                alert("Please attach the memo for disposal");
+                return false;
+            }
+            else {
+
+                $("form").submit();
+            }
+        }
+
+        //function PreSaveAction() {
+        //    var elm = document.getElementById("idAttachmentsTable");
+        //    if (elm == null || elm.rows.length == 0) {
+        //        document.getElementById("idAttachmentsRow").style.display = 'none';
+        //        alert("Please attach the memo for disposal");
+        //        return false;
+        //    }
+        //    else {
+
+        //        $("form").submit();
+        //    }
+        //}
 
     </script>
 }

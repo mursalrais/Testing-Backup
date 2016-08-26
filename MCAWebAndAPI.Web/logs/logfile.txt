@@ -411,3 +411,6 @@ Parameter name: source
 2016-08-24 17:01:56.6899 MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService Column 'professional0' does not exist. It may have been deleted by another user.  /sites/mca-dev/bo/Lists/Asset Loan Return
 2016-08-24 20:03:47.2154 MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService Column 'projectunit' does not exist. It may have been deleted by another user.  /sites/ims/bo/Lists/Asset Loan Return
 2016-08-24 20:06:56.5100 MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService Column 'projectunit' does not exist. It may have been deleted by another user.  /sites/ims/bo/Lists/Asset Loan Return
+2016-08-26 10:31:14.7399 MCAWebAndAPI.Service.HR.Payroll.AdjustmentService Invalid number value.
+
+A number field contains invalid data. Please check the value and try again.

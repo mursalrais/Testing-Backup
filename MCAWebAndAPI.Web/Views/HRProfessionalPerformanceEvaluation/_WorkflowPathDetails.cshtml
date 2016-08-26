@@ -1,0 +1,109 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@using MCAWebAndAPI.Model.ViewModel.Form.Common
+@using MCAWebAndAPI.Model.ViewModel.Control
+
+@model ProfessionalPerformanceEvaluationVM
+
+<div class="col-sm-12">
+
+    @(Html.Kendo().Grid(Model.WorkflowItems)
+        .Name("WorkflowItems")
+        .Editable(editable => editable.Mode(GridEditMode.InCell))
+        .Columns(columns =>
+        {
+            columns.Bound(p => p.Level).ClientTemplate("#= Level #" +
+            "<input type='hidden' name='WorkflowItems[#= getWorkflowItemDetail(data)#].Level' value='#= Level #' />"
+            );
+            columns.Bound(p => p.ApproverUnitText).ClientTemplate("#= ApproverUnitText #" +
+            "<input type='hidden' name='WorkflowItems[#= getWorkflowItemDetail(data)#].ApproverUnitText' value='#= ApproverUnitText #' />"
+            );
+            columns.Bound(p => p.ApproverPositionText).ClientTemplate("#= ApproverPositionText #" +
+            "<input type='hidden' name='WorkflowItems[#= getWorkflowItemDetail(data)#].ApproverPositionText' value='#= ApproverPositionText #' />"
+            );
+            columns.Bound(p => p.ApproverName).ClientTemplate("#= ApproverName.Text #" +
+            "<input type='hidden' name='WorkflowItems[#= getWorkflowItemDetail(data)#].ApproverName.Value' value='#= ApproverName.Value #' />"
+            )
+            .EditorViewData(
+            new
+            {
+                DataTextField = "Text",
+                DataValueField = "Value",
+                ActionName = "GetApproverUserNames",
+                ControllerName = "Workflow"
+            });
+            columns.Bound(p => p.ApproverPositionId).Hidden().ClientTemplate("#= ApproverPositionId #" +
+            "<input type='hidden' name='WorkflowItems[#= getWorkflowItemDetail(data)#].ApproverPositionId' value='#= ApproverPositionId #' />"
+            );
+            columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
+            "<input type='hidden' name='WorkflowItems[#= getWorkflowItemDetail(data)#].ID' value='#= ID #' />"
+            );
+            columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
+            "<input type='hidden' name='WorkflowItems[#= getWorkflowItemDetail(data)#].EditMode' value='#= EditMode #' />"
+            );
+        })
+            .Scrollable(scrollable => scrollable.Height("auto"))
+        .Events(e =>
+        {
+            e.Edit("onCustomEditKendoDetail");
+            e.DataBound("onDataBoundWorkflowItems");
+        })
+        .DataSource(dataSource => dataSource.Ajax().Events(events =>
+        {
+            events.Change("onChange");
+        })
+        .Model(model =>
+        {
+            model.Id(p => p.ID);
+            model.Field(m => m.ApproverName).DefaultValue(AjaxComboBoxVM.GetDefaultValue());
+            model.Field(p => p.Level).Editable(false);
+        })
+        .ServerOperation(false)
+        )
+    )
+</div>
+
+<script>
+    var unit
+    var position
+    function onChange(e) {
+        var overallTotalScore = 0;
+        var recordsOnCurrentView = 0;
+        if (e.action === "itemchange") {
+            if (e.field === "ApproverName") {
+                var model = e.items[0];
+                var url = "/HRDataMaster/GetProfessional/" + model.ApproverName.Value;
+                $.getJSON(url, function (result) {
+                    model.set('ApproverUnitText', (result[0].Project_Unit));
+                    model.set('ApproverPositionText', (result[0].Position));
+                    model.set('ApproverPositionId', (result[0].PositionId));
+                });
+            }
+        }
+    }
+
+    function onCustomEditKendoDetail(e) {
+        if (!e.model.isNew()) {
+            var container = e.container;
+            var tr = container.closest('tr');
+            var data = this.dataItem(tr); //get the row data so it can be referred later
+            // 1 is Item.Mode.UPDATED
+            data.set("EditMode", 1);
+        }
+        if (e.model.isNew()) {
+            // make sure the UserName id selector is correct in your code
+            // (it should be, for a regular text input)
+            $('#ApproverUnitText').attr('readonly', 'readonly');
+            $('#ApproverPositionText').attr('readonly', 'readonly');
+        }
+    }
+
+    function getWorkflowItemDetail(dataItem) {
+        var data = $("#WorkflowItems").data("kendoGrid").dataSource.data();
+        return data.indexOf(dataItem);
+    }
+
+    function onDataBoundWorkflowItems(e) {
+        var grid = $("#WorkflowItems").data("kendoGrid");
+        hideDeletedRowKendoDetail(grid);
+    }
+</script>

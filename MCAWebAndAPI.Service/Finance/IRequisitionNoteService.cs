@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -6,10 +7,17 @@ using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 
 namespace MCAWebAndAPI.Service.Finance.RequisitionNote
 {
-    public interface IRequisitionNote
+    /// <summary>
+    /// Wireframe FIN05: Requisition Note
+    ///     i.e.: Purchase Requisition Note
+    /// </summary>
+
+    public interface IRequisitionNoteService
     {
         void SetSiteUrl(string siteUrl);
-        RequisitionNoteVM GetRequisitionNote(int? ID);
+        RequisitionNoteVM Get(int? ID);
+
+        Task<RequisitionNoteVM> GetAsync(int? ID);
 
         IEnumerable<GLMasterVM> GetGLMasters();
         
@@ -18,12 +26,18 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
         int CreateRequisitionNote(RequisitionNoteVM viewModel);
         bool UpdateRequisitionNote(RequisitionNoteVM viewModel);
 
+        void CreateRequisitionNoteItems(int? headerID, IEnumerable<RequisitionNoteItemVM> noteItems);
+
         Task CreateRequisitionNoteItemsAsync(int? headerID, IEnumerable<RequisitionNoteItemVM> noteItems);
 
         Task CreateRequisitionNoteAttachmentsSync(int? headerID, IEnumerable<HttpPostedFileBase> documents);
 
         Task EditRequisitionNoteItemsAsync(int? headerID, IEnumerable<RequisitionNoteItemVM> noteItems);
         Task EditRequisitionNoteAttachmentsSync(int? headerID, IEnumerable<HttpPostedFileBase> documents);
+        
+        void DeleteDetail(int id);
+
+        Tuple<int, string> GetRequisitioNoteIdAndNoByEventBudgetID(int eventBudgetId);
 
     }
 }

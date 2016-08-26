@@ -25,13 +25,13 @@
         <div class="row">
             <div class="form-group" id="ParentDiv">
                 @Html.Bootstrap().LabelFor(m => m.periodDate).Class("col-xs-2 control-label")
-                <div class="col-xs-4">
+                <div class="col-xs-2">
                     @Html.EditorFor(m => m.periodDate)
                 </div>
             </div>
         </div>
         
-        <legend>Adjustment list</legend>
+        <legend>Adjustment & OT</legend>
         <div class="row">
             @Html.Partial("_InputAdjustmentDetails", Model.AdjustmentDetails)
         </div>
@@ -66,13 +66,25 @@
 
         function getProjUnit(prof) {
             if (prof != null) {
-                return prof.Project_Unit;
+                var proj_unit;
+                if (prof.Project_Unit == undefined) {
+                    proj_unit = "";
+                } else {
+                    proj_unit = prof.Project_Unit;
+                }
+                return proj_unit;
             };
         }
 
         function getPosition(prof) {
             if (prof != null) {
-                return prof.Position;
+                var postion;
+                if (prof.Position == undefined) {
+                    postion = "";
+                } else {
+                    postion = prof.Position;
+                }
+                return postion;
             };
         }
 

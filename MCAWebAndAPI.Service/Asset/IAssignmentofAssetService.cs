@@ -14,17 +14,21 @@ namespace MCAWebAndAPI.Service.Asset
     {
         void SetSiteUrl(string siteUrl);
 
+        bool Syncronize(string SiteUrl);
+
         //create empty form
         AssignmentOfAssetVM GetPopulatedModel(string SiteUrl);
         AssignmentOfAssetVM GetHeader(int? ID = null, string SiteUrl = null);
 
         IEnumerable<AssignmentOfAssetDetailsVM> GetDetails(int? headerID);
+        IEnumerable<AssignmentOfAssetDetailsVM> GetDetailsPrint(int? headerID);
 
         int? CreateHeader(AssignmentOfAssetVM viewmodel, string SiteUrl, string mode = null);
         bool UpdateHeader(AssignmentOfAssetVM viewmodel, string SiteUrl);
         void CreateDocuments(int? headerID, IEnumerable<HttpPostedFileBase> documents, string SiteUrl);
 
         void CreateDetails(int? headerID, IEnumerable<AssignmentOfAssetDetailsVM> items);
+        void CreateDetails(int? headerID, AssignmentOfAssetDetailsVM item, string SiteUrl);
         void UpdateDetails(int? headerID, IEnumerable<AssignmentOfAssetDetailsVM> items);
 
         ProfessionalDataVM GetProfMasterInfo(string fullname,  string SiteUrl);

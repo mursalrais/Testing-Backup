@@ -16,7 +16,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         {
             if (model == null)
             {
-                return new AjaxComboBoxVM();
+                model = new AjaxComboBoxVM { Text = "", Value = 0 };
+                return model;
             } 
             else
             {
@@ -28,6 +29,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// statusaplication
         /// </summary>
         [UIHint("InGridAjaxComboBox")]
+        [DisplayName("Adjustment Type")]
         public AjaxComboBoxVM ajusmentType { get; set; } = new AjaxComboBoxVM();
 
         public static IEnumerable<InGridComboBoxVM> getAjusmentTypeOptions()
@@ -51,7 +53,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         {
             if (model == null)
             {
-                return new AjaxComboBoxVM();
+                model = new AjaxComboBoxVM { Text = "", Value = 0 };
+                return model;
             }
             else
             {
@@ -62,6 +65,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// statusaplication
         /// </summary>
         [UIHint("InGridAjaxComboBox")]
+        [DisplayName("Currency")]
         public AjaxComboBoxVM currency { get; set; } = new AjaxComboBoxVM();
 
         public static IEnumerable<InGridComboBoxVM> getCurrencyOptions()
@@ -83,7 +87,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         {
             if (model == null)
             {
-                return new AjaxComboBoxVM();
+                model = new AjaxComboBoxVM { Text = "", Value = 0 };
+                return model;
             }
             else
             {
@@ -95,6 +100,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// statusaplication
         /// </summary>
         [UIHint("InGridAjaxComboBox")]
+        [DisplayName("PayType")]
         public AjaxComboBoxVM payType { get; set; } = new AjaxComboBoxVM();
 
         public static IEnumerable<InGridComboBoxVM> getPayTypeOptions()
@@ -116,7 +122,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         {
             if (model == null)
             {
-                return new AjaxComboBoxVM();
+                model = new AjaxComboBoxVM { Text = "", Value = 0 };
+                return model;
             }
             else
             {
@@ -125,13 +132,20 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         }
 
         [UIHint("InGridAjaxComboBox")]
-        public AjaxComboBoxVM ddlProfessional { get; set; } = new AjaxComboBoxVM();
+        [DisplayName("Professional")]
+        public AjaxComboBoxVM ddlProfessional { get; set; } = new AjaxComboBoxVM
+          {
+            ActionName = "GetProfessionals",
+            ValueField = "ID",
+            ControllerName = "HRDataMaster",
+            TextField = "Project_Unit"
+        };
 
-        /// <head>
-        /// CompensatoryID
-        /// </head>
-        /// 
-        [DisplayName("Professional ID")]
+    /// <head>
+    /// CompensatoryID
+    /// </head>
+    /// 
+    [DisplayName("Professional ID")]
         public int? profId { get; set; }
 
 

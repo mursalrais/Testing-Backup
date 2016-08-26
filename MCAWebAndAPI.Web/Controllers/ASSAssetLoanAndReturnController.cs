@@ -112,7 +112,7 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult Submit(AssetLoanAndReturnHeaderVM _data, string siteUrl)
+        public ActionResult Submit(FormCollection form,AssetLoanAndReturnHeaderVM _data, string siteUrl)
         {
             // Get existing session variable
             //var sessionVariables = SessionManager.Get<DataTable>("CSVDataTable") ?? new DataTable();
@@ -132,117 +132,168 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-        //    //cek apakah header / item
-        //    int? latestIDHeader = 0;
-        //    int? latestIDDetail = 0;
-        //    List<int> idsHeader = new List<int>();
-        //    List<int> idsDetail = new List<int>();
-        //    var TableHeader = new DataTable();
-        //    var TableDetail = new DataTable();
+            try
+            {
+                // assetLoanAndReturnService.CreateDetails(headerID, _data.AssetLoanAndReturnItem);
+                _data.AssetLoanAndReturnItem =  BindMonthlyFeeDetailDetails(form,  _data.AssetLoanAndReturnItem); 
+                assetLoanAndReturnService.CreateDetails(headerID, _data.AssetLoanAndReturnItem);
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+            
+            //    //cek apakah header / item
+            //    int? latestIDHeader = 0;
+            //    int? latestIDDetail = 0;
+            //    List<int> idsHeader = new List<int>();
+            //    List<int> idsDetail = new List<int>();
+            //    var TableHeader = new DataTable();
+            //    var TableDetail = new DataTable();
 
-        //    var listNameHeader = "Asset Loan And Return";
-        //    var listNameDetail = "Asset Loan And Return Detail";
-        //    var listAssetMaster = "Asset Master";
-        //    var listProfessionalMAster = "Professional Master";
+            //    var listNameHeader = "Asset Loan And Return";
+            //    var listNameDetail = "Asset Loan And Return Detail";
+            //    var listAssetMaster = "Asset Master";
+            //    var listProfessionalMAster = "Professional Master";
 
-        //    foreach (DataRow d in SessionManager.Get<DataTable>("CSVDataTable").Rows)
-        //    {
-        //        if (d.ItemArray[0].ToString() == "Asset Loan And Return")
-        //        {
-        //            //try
-        //            //{
-        //            //    var IDProf = assetLoanAndReturnService.getListIDOfList(listProfessionalMAster, "ID", "Title", siteUrl);
-        //            //    int myKey = 0;
+            //    foreach (DataRow d in SessionManager.Get<DataTable>("CSVDataTable").Rows)
+            //    {
+            //        if (d.ItemArray[0].ToString() == "Asset Loan And Return")
+            //        {
+            //            //try
+            //            //{
+            //            //    var IDProf = assetLoanAndReturnService.getListIDOfList(listProfessionalMAster, "ID", "Title", siteUrl);
+            //            //    int myKey = 0;
 
-        //            //    foreach (var id in IDProf)
-        //            //    {
-        //            //        try
-        //            //        {
-        //            //            if (id.Value == d.ItemArray[2].ToString())
-        //            //            {
-        //            //                myKey = id.Key;
-        //            //                break;
-        //            //            }
-        //            //        }
-        //            //        catch (Exception e)
-        //            //        {
-        //            //            return JsonHelper.GenerateJsonErrorResponse("No Lookup Value/s is Found!");
-        //            //        }
-        //            //    }
+            //            //    foreach (var id in IDProf)
+            //            //    {
+            //            //        try
+            //            //        {
+            //            //            if (id.Value == d.ItemArray[2].ToString())
+            //            //            {
+            //            //                myKey = id.Key;
+            //            //                break;
+            //            //            }
+            //            //        }
+            //            //        catch (Exception e)
+            //            //        {
+            //            //            return JsonHelper.GenerateJsonErrorResponse("No Lookup Value/s is Found!");
+            //            //        }
+            //            //    }
 
-        //            TableHeader = new DataTable();
-        //            TableHeader.Columns.Add("Title", typeof(string));
-        //            TableHeader.Columns.Add("Professional", typeof(int));
-        //            TableHeader.Columns.Add("Project_x002f_Unit", typeof(string));
-        //            TableHeader.Columns.Add("Contact_x0020_No", typeof(string));
-        //            TableHeader.Columns.Add("Loan_x0020_Date", typeof(string));
-        //            TableHeader.Columns.Add("Purpose", typeof(string));
+            //            TableHeader = new DataTable();
+            //            TableHeader.Columns.Add("Title", typeof(string));
+            //            TableHeader.Columns.Add("Professional", typeof(int));
+            //            TableHeader.Columns.Add("Project_x002f_Unit", typeof(string));
+            //            TableHeader.Columns.Add("Contact_x0020_No", typeof(string));
+            //            TableHeader.Columns.Add("Loan_x0020_Date", typeof(string));
+            //            TableHeader.Columns.Add("Purpose", typeof(string));
 
-        //            DataRow row = TableHeader.NewRow();
+            //            DataRow row = TableHeader.NewRow();
 
-        //            row["Title"] = d.ItemArray[0].ToString();
-        //            row["Professional"] = myKey;
-        //            if (d.ItemArray[3].ToString() == "-1")
-        //            {
-        //                row["Project_x002f_Unit"] = null;
-        //            }
-        //            else
-        //            {
-        //                row["Project_x002f_Unit"] = d.ItemArray[3].ToString();
-        //            }
+            //            row["Title"] = d.ItemArray[0].ToString();
+            //            row["Professional"] = myKey;
+            //            if (d.ItemArray[3].ToString() == "-1")
+            //            {
+            //                row["Project_x002f_Unit"] = null;
+            //            }
+            //            else
+            //            {
+            //                row["Project_x002f_Unit"] = d.ItemArray[3].ToString();
+            //            }
 
-        //            row["Contact_x0020_No"] = d.ItemArray[4].ToString();
-        //            row["Loan_x0020_Date"] = d.ItemArray[5].ToString();
-        //            row["Purpose"] = d.ItemArray[6].ToString();
+            //            row["Contact_x0020_No"] = d.ItemArray[4].ToString();
+            //            row["Loan_x0020_Date"] = d.ItemArray[5].ToString();
+            //            row["Purpose"] = d.ItemArray[6].ToString();
 
-        //            TableHeader.Rows.InsertAt(row, 0);
+            //            TableHeader.Rows.InsertAt(row, 0);
 
-        //            latestIDHeader = assetLoanAndReturnService.MassUploadHeaderDetail(listNameHeader, TableHeader, siteUrl);
-        //            idsHeader.Add(Convert.ToInt32(latestIDHeader));
+            //            latestIDHeader = assetLoanAndReturnService.MassUploadHeaderDetail(listNameHeader, TableHeader, siteUrl);
+            //            idsHeader.Add(Convert.ToInt32(latestIDHeader));
 
-        //        }
+            //        }
 
-        //            catch (Exception e)
-        //        {
-        //            if (idsHeader.Count > 0)
-        //            {
-        //                foreach (var id in idsHeader)
-        //                {
-        //                    //delete parent
-        //                    assetLoanAndReturnService.RollbackParentChildrenUpload(listNameHeader, id, siteUrl);
-        //                }
-        //            }
-        //            else if (idsDetail.Count > 0)
-        //            {
-        //                foreach (var id in idsDetail)
-        //                {
-        //                    //delete parent
-        //                    assetLoanAndReturnService.RollbackParentChildrenUpload(listNameDetail, id, siteUrl);
-        //                }
+            //            catch (Exception e)
+            //        {
+            //            if (idsHeader.Count > 0)
+            //            {
+            //                foreach (var id in idsHeader)
+            //                {
+            //                    //delete parent
+            //                    assetLoanAndReturnService.RollbackParentChildrenUpload(listNameHeader, id, siteUrl);
+            //                }
+            //            }
+            //            else if (idsDetail.Count > 0)
+            //            {
+            //                foreach (var id in idsDetail)
+            //                {
+            //                    //delete parent
+            //                    assetLoanAndReturnService.RollbackParentChildrenUpload(listNameDetail, id, siteUrl);
+            //                }
 
-        //            }
-        //            return JsonHelper.GenerateJsonErrorResponse("Invalid data, rolling back!");
-        //        }
+            //            }
+            //            return JsonHelper.GenerateJsonErrorResponse("Invalid data, rolling back!");
+            //        }
 
-        //        //if (d.ItemArray[8].ToString() != "" && latestIDHeader != null)
-        //        //{
-        //        //    TableDetail = new DataTable();
-        //        //    TableDetail.Columns.Add("Asset_x0020_Loan_x0020_Return_x0", typeof(string));
-        //        //    TableDetail.Columns.Add("Asset_x002d_Sub_x0020_Asset", typeof(string));
-        //        //    TableDetail.Columns.Add("Est_x0020_Return_x0020_Date", typeof(string));
-        //        //    TableDetail.Columns.Add("Return_x0020_Date", typeof(string));
-        //        //    TableDetail.Columns.Add("Status", typeof(string));
+            //        //if (d.ItemArray[8].ToString() != "" && latestIDHeader != null)
+            //        //{
+            //        //    TableDetail = new DataTable();
+            //        //    TableDetail.Columns.Add("Asset_x0020_Loan_x0020_Return_x0", typeof(string));
+            //        //    TableDetail.Columns.Add("Asset_x002d_Sub_x0020_Asset", typeof(string));
+            //        //    TableDetail.Columns.Add("Est_x0020_Return_x0020_Date", typeof(string));
+            //        //    TableDetail.Columns.Add("Return_x0020_Date", typeof(string));
+            //        //    TableDetail.Columns.Add("Status", typeof(string));
 
-        //        //    DataRow row = TableDetail.NewRow();
-        //        //    row["Asset_x0020_Loan_x0020_Return_x0"] = latestIDHeader;
-        //        //    row["Asset_x002d_Sub_x0020_Asset"] = d.ItemArray[8].ToString();
-        //        //}
+            //        //    DataRow row = TableDetail.NewRow();
+            //        //    row["Asset_x0020_Loan_x0020_Return_x0"] = latestIDHeader;
+            //        //    row["Asset_x002d_Sub_x0020_Asset"] = d.ItemArray[8].ToString();
+            //        //}
 
-        //    }
+            //    }
 
-        //}
+            //}
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl);
         }
 
-}
+        private IEnumerable<AssetLoanAndReturnItemVM> BindMonthlyFeeDetailDetails(FormCollection form, IEnumerable<AssetLoanAndReturnItemVM> monthlyFeeDetails)
+        {
+            var array = monthlyFeeDetails.ToArray();
+            for (int i = 0; i < array.Length; i++)
+            {
+                array[i].EstReturnDate = BindHelper.BindDateInGrid("AssetLoanAndReturnItem",
+                    i, "EstReturnDate", form);
+
+                array[i].ReturnDate = BindHelper.BindDateInGrid("AssetLoanAndReturnItem",
+                    i, "ReturnDate", form);
+            }
+            return array;
+        }
+
+        public ActionResult Edit(int ID, string siteUrl)
+        {
+            assetLoanAndReturnService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            var viewModel = assetLoanAndReturnService.GetHeader(ID);
+
+            int? headerID = null;
+            headerID = viewModel.ID;
+
+            //try
+            //{
+            //    var viewdetails = assetLoanAndReturnService.GetDetails(headerID);
+            //    viewModel. = viewdetails;
+            //}
+            //catch (Exception e)
+            //{
+            //    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            //    return JsonHelper.GenerateJsonErrorResponse(e);
+            //}
+
+            return View(viewModel);
+        }
+
+
+    }
 }

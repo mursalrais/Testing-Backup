@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System;
 using Microsoft.SharePoint.Client.Utilities;
 using System.IO;
-
+using System.Threading.Tasks;
 namespace MCAWebAndAPI.Service.Utils
 {
     public class SPConnector
@@ -13,6 +13,14 @@ namespace MCAWebAndAPI.Service.Utils
         static string CurUrl = "";
         static string UserName =  "";
         static string Password = "";
+
+        public static Task ExecuteQueryAsync( ClientContext clientContext)
+        {
+            return Task.Factory.StartNew(() =>
+            {
+                clientContext.ExecuteQuery();
+            });
+        }
 
         private static void MapCredential(string url)
         {
@@ -195,7 +203,7 @@ namespace MCAWebAndAPI.Service.Utils
                 }
 
                 // Get current editor
-                var currentEditor = SPListItem["Editor"];
+                //var currentEditor = SPListItem["Editor"];
                
                 // Set listitem value to parsed listitem
                 foreach (var key in updatedValues.Keys)
@@ -263,6 +271,49 @@ namespace MCAWebAndAPI.Service.Utils
                 {
                     throw e;
                 }
+            }
+        }
+
+        public static void AddListItemAsync(string listName, Dictionary<string, 
+            Dictionary<string, object>> columnValues, string siteUrl = null)
+        {
+            MapCredential(siteUrl);
+            using (ClientContext context = new ClientContext(siteUrl ?? CurUrl))
+            {
+                SecureString secureString = new SecureString();
+                Password.ToList().ForEach(secureString.AppendChar);
+                context.Credentials = new SharePointOnlineCredentials(UserName, secureString);
+
+                List spList = context.Web.Lists.GetByTitle(listName);
+                ListItemCreationInformation itemCreateInfo = new ListItemCreationInformation();
+
+
+                foreach (var key in columnValues.Keys)
+                {
+                    if (key.IndexOf(";Add", StringComparison.Ordinal) <= 0) continue;
+                    ListItem newItem = spList.AddItem(itemCreateInfo);
+                    var detailvalue = columnValues[key];
+
+                    foreach (var keyvalue in detailvalue.Keys)
+                    {
+                        newItem[keyvalue] = detailvalue[keyvalue];
+                    }
+
+                    try
+                    {
+                        newItem.Update();
+                        ExecuteQueryAsync(context);
+                    }
+                    catch (Exception e)
+                    {
+                        throw e;
+                    }
+
+                   
+
+                }
+
+              
             }
         }
 
