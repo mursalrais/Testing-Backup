@@ -10,8 +10,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 {
     public class EventBudgetVM : Item
     {
-        private ProjectComboBoxVM project;
-        private ComboBoxVM activity;
+        public enum CurrentUserGroupTypes { User, Finance }
 
         [Required]
         [DisplayName("Event Name")]
@@ -75,6 +74,19 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         public string No { get; set; }
 
         public decimal TotalDirectPaymentUSD { get; set; }
+
         public decimal TotalSCAUSD { get; set; }
+
+        public CurrentUserGroupTypes CurrentUserGroup { get; set; }
+
+        [UIHint("ComboBox")]
+        public TransactionStatusComboBoxVM TransactionStatus { get; set; } = new TransactionStatusComboBoxVM();
+
+        public int RequisitionNoteId { get; set; }
+
+        public string RequisitionNoteNo { get; set; }
+
+        public string SCAVoucherNo { get; set; }
+
     }
 }

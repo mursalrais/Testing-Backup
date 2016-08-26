@@ -1111,6 +1111,9 @@
     <Content Include="Views\ASSAssetTransfer\Sync.cshtml" />
     <Content Include="Views\ASSAssetTransfer\Upload.cshtml" />
     <Content Include="Views\ASSAssetTransfer\View.cshtml" />
+    <Content Include="Views\FINSCAVoucher\_PartialHeaderWithLogo.cshtml" />
+    <Content Include="Views\FINPettyCashSettlement\Print.cshtml" />
+    <Content Include="Views\FINLandingPage\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1144,6 +1147,7 @@
     <Compile Include="Controllers\CSVController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\FileController.cs" />
+    <Compile Include="Controllers\FINLandingPageController.cs" />
     <Compile Include="Controllers\FINPettyCashPaymentVoucherController.cs" />
     <Compile Include="Controllers\FINPettyCashReplenishmentController.cs" />
     <Compile Include="Controllers\FINPettyCashSettlementController.cs" />

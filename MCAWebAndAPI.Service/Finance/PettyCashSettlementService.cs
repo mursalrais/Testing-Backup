@@ -86,8 +86,9 @@ namespace MCAWebAndAPI.Service.Finance
             {
                 if (viewModel.Operation == Operations.c)
                 {
-                    columnValues.Add(FieldName_DocumentNo, DocumentNumbering.Create(siteUrl, documentNoFormat, DIGIT_DOCUMENTNO));
-
+                    viewModel.TransactionNo = DocumentNumbering.Create(siteUrl, documentNoFormat, DIGIT_DOCUMENTNO);
+                    columnValues.Add(FieldName_DocumentNo, viewModel.TransactionNo);
+                    
                     SPConnector.AddListItem(ListName, columnValues, siteUrl);
                 }
                 else if (viewModel.Operation == Operations.e)
