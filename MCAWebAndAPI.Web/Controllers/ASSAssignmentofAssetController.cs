@@ -744,5 +744,30 @@ namespace MCAWebAndAPI.Web.Controllers
             return File(pdfBuf, "application/pdf");
         }
 
+        public ActionResult Sync(string siteUrl)
+        {
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            var viewModel = _service.GetPopulatedModel(siteUrl);
+            return View(viewModel);
+        }
+
+        public ActionResult Syncronize(string siteUrl)
+        {
+            siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            try
+            {
+                var viewModel = _service.Syncronize(siteUrl);
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAssignment);
+        }
+
     }
 }

@@ -14,6 +14,8 @@ namespace MCAWebAndAPI.Service.Asset
     {
         void SetSiteUrl(string siteUrl);
 
+        bool Syncronize(string SiteUrl);
+
         //create empty form
         AssignmentOfAssetVM GetPopulatedModel(string SiteUrl);
         AssignmentOfAssetVM GetHeader(int? ID = null, string SiteUrl = null);

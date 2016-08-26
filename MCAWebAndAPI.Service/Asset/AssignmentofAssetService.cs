@@ -1046,5 +1046,41 @@ namespace MCAWebAndAPI.Service.Asset
                 throw new Exception(ErrorResource.SPInsertError);
             }
         }
+
+        public bool Syncronize(string SiteUrl)
+        {
+            var sitehr = SiteUrl.Replace("/bo", "/hr");
+            var lists = SPConnector.GetList("Asset Assignment", SiteUrl);
+            foreach (var l in lists)
+            {
+                var caml = @"<View><Query>
+                           <Where>
+                              <Eq>
+                                 <FieldRef Name='ID' />
+                                 <Value Type='Lookup'>"+ (l["assetholder"] as FieldLookupValue).LookupId + @"</Value>
+                              </Eq>
+                           </Where>
+                        </Query>
+                        <ViewFields>
+                        <FieldRef Name='Title' />
+                        <FieldRef Name='Project_x002f_Unit' />
+                        <FieldRef Name='mobilephonenr' />
+                        <FieldRef Name='Position' />
+                        </ViewFields>
+                        <QueryOptions /></View>";
+                var getFromProfMas = SPConnector.GetList("Professional Master", sitehr, caml);
+                foreach (var profMas in getFromProfMas)
+                {
+                    var model = new Dictionary<string, object>();
+                    model.Add("projectunit", Convert.ToString(profMas["Project_x002f_Unit"]));
+                    model.Add("contactnumber", Convert.ToString(profMas["mobilephonenr"]));
+                    model.Add("position", (profMas["Position"] as FieldLookupValue).LookupValue);
+
+                    SPConnector.UpdateListItem("Asset Assignment", Convert.ToInt32(l["ID"]), model, SiteUrl);
+                }
+            }
+
+            return true;
+        }
     }
 }
