@@ -16,7 +16,7 @@
     <RootNamespace>MCAWebAndAPI.Web</RootNamespace>
     <AssemblyName>MCAWebAndAPI.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -1099,8 +1099,12 @@
     <Content Include="Views\ASSAssignmentOfAsset\Upload.cshtml" />
     <Content Include="Views\ASSAssignmentOfAsset\View.cshtml" />
     <Content Include="Views\ASSAssignmentOfAsset\_DetailsView.cshtml" />
+    <Content Include="Views\ASSAssignmentOfAsset\_print.cshtml" />
+    <Content Include="Views\ASSAssignmentOfAsset\Print.cshtml" />
+    <Content Include="Views\ASSAssignmentOfAsset\_DetailsPrint.cshtml" />
     <Content Include="Views\HRProfessionalPerformanceEvaluation\_WorkflowPathDetails.cshtml" />
     <Content Include="Views\HRPerformancePlan\_WorkflowPathDetails.cshtml" />
+    <Content Include="Views\ASSAssignmentOfAsset\Sync.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

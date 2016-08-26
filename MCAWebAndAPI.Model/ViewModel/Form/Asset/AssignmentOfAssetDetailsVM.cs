@@ -7,6 +7,15 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 {
     public class AssignmentOfAssetDetailsVM : Item
     {
+        [DisplayName("Asset Sub Asset")]
+        public string textasset { get; set; }
+
+        [DisplayName("Description")]
+        public string description { get; set; }
+
+        [DisplayName("Quantity")]
+        public int quantity { get; set; }
+
         private ComboBoxVM _assetsubasset;
 
         [UIHint("InGridAjaxComboBox")]
