@@ -701,14 +701,17 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult Print(FormCollection form, AssignmentOfAssetVM viewModel)
+        public ActionResult Print(FormCollection form, AssignmentOfAssetVM viewModel, string SiteUrl)
         {
+            SiteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
             const string RelativePath = "~/Views/ASSAssignmentOfAsset/Print.cshtml";
             var view = ViewEngines.Engines.FindView(ControllerContext, RelativePath, null);
             var nm = viewModel.AssetHolder.Value.Split('-');
             viewModel.nameOnly = nm[0];
             viewModel.position = nm[1];
+            viewModel.Details = _service.GetDetailsPrint(viewModel.ID);
             var fileName = nm[0] + "_AssignmentOfAsset.pdf";
             byte[] pdfBuf = null;
             string content;

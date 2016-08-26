@@ -19,6 +19,7 @@ namespace MCAWebAndAPI.Service.Asset
         AssignmentOfAssetVM GetHeader(int? ID = null, string SiteUrl = null);
 
         IEnumerable<AssignmentOfAssetDetailsVM> GetDetails(int? headerID);
+        IEnumerable<AssignmentOfAssetDetailsVM> GetDetailsPrint(int? headerID);
 
         int? CreateHeader(AssignmentOfAssetVM viewmodel, string SiteUrl, string mode = null);
         bool UpdateHeader(AssignmentOfAssetVM viewmodel, string SiteUrl);

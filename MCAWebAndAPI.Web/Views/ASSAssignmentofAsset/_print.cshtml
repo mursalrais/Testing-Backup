@@ -60,14 +60,30 @@
     </div>
 
     <div class="col-md-6">
-        Professional Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <br />
-        Contact No &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
+        Professional Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:@Model.nameOnly <br />
+        Contact No &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: @Model.ContactNo
         <br /><br /><br />
         Hereby to declare that the Professional has received the items by these description.
-        <br />
+        <br /><br /><br />
     </div>
     @Html.Partial("_DetailsPrint", Model.Details)
+    <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
 
+    <div class="col-md-6">
+        Done in Jakarta, .................................................. <br /><br />
+        By
+        <br /><br /><br /><br /><br /><br /><br /><br />
+        <table border="0" width="100%">
+            <tr>
+                <td><hr style="border:1px solid;width:200px"></td>
+                <td><hr style="border:1px solid;width:200px"></td>
+            </tr>
+            <tr>
+                <td align="center">(Name)</td>
+                <td align="center">(Name)</td>
+            </tr>
+        </table>
+    </div>
 </fieldset>
 @Html.HiddenFor(m => m.ID)
 @Html.HiddenFor(m => m.AssetIDs)

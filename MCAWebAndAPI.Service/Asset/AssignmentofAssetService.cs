@@ -96,7 +96,10 @@ namespace MCAWebAndAPI.Service.Asset
                 }
                 else
                 {
-                    combine = combine + ", " + (det["assetsubasset"] as FieldLookupValue).LookupValue + ", ";
+                    if(!combine.Contains((det["assetsubasset"] as FieldLookupValue).LookupValue))
+                    {
+                        combine = combine + ", " + (det["assetsubasset"] as FieldLookupValue).LookupValue;
+                    }
                 }
             }
             viewModel.AssetIDs = combine;
@@ -613,6 +616,7 @@ namespace MCAWebAndAPI.Service.Asset
         {
             var caml = @"<View><Query><Where><Eq><FieldRef Name='assetassignment' /><Value Type='Lookup'>" + headerID.ToString() + "</Value></Eq></Where></Query></View>";
             var details = new List<AssignmentOfAssetDetailsVM>();
+
             foreach (var item in SPConnector.GetList("Asset Assignment Detail", _siteUrl, caml))
             {
                 details.Add(ConvertToDetails(item));
@@ -621,9 +625,46 @@ namespace MCAWebAndAPI.Service.Asset
             return details;
         }
 
+        IEnumerable<AssignmentOfAssetDetailsVM> IAssignmentOfAssetService.GetDetailsPrint(int? headerID)
+        {
+            var caml = @"<View><Query><Where><Eq><FieldRef Name='assetassignment' /><Value Type='Lookup'>" + headerID.ToString() + "</Value></Eq></Where></Query></View>";
+            var details = new List<AssignmentOfAssetDetailsVM>();
+            List<string> listAssetID = new List<string>();
+
+            foreach (var item in SPConnector.GetList("Asset Assignment Detail", _siteUrl, caml))
+            {
+                if(listAssetID.Count != 0 && listAssetID.Contains((item["assetsubasset"] as FieldLookupValue).LookupValue))
+                {
+                    listAssetID.Add((item["assetsubasset"] as FieldLookupValue).LookupValue);
+                    continue;
+                }
+                else
+                {
+                    listAssetID.Add((item["assetsubasset"] as FieldLookupValue).LookupValue);
+                    details.Add(ConvertToDetails(item));
+                }
+            }
+
+            foreach(var d in details)
+            {
+                var quantityPerItem = 0;
+                foreach(var l in listAssetID)
+                {
+                    if (d.textasset == l)
+                    {
+                        quantityPerItem++;
+                    }
+                }
+                d.quantity = quantityPerItem;
+            }
+
+            return details;
+        }
+
         private AssignmentOfAssetDetailsVM ConvertToDetails(ListItem item)
         {
             var ListAssetSubAsset = SPConnector.GetListItem("Asset Master", (item["assetsubasset"] as FieldLookupValue).LookupId, _siteUrl);
+
             AjaxComboBoxVM _assetSubAsset = new AjaxComboBoxVM();
             _assetSubAsset.Value = (item["assetsubasset"] as FieldLookupValue).LookupId;
             _assetSubAsset.Text = Convert.ToString(ListAssetSubAsset["AssetID"]) + " - " + Convert.ToString(ListAssetSubAsset["Title"]);
@@ -659,6 +700,9 @@ namespace MCAWebAndAPI.Service.Asset
             return new AssignmentOfAssetDetailsVM
             {
                 ID = Convert.ToInt32(item["ID"]),
+                textasset = Convert.ToString(ListAssetSubAsset["AssetID"]),
+                description = Convert.ToString(ListAssetSubAsset["Title"]),
+                quantity = 1,
                 AssetSubAsset = AssignmentOfAssetDetailsVM.GetAssetSubAssetDefaultValue(_assetSubAsset),
                 Province = AssignmentOfAssetDetailsVM.GetProvinceDefaultValue(_province),
                 Status = Convert.ToString(item["Status"])
