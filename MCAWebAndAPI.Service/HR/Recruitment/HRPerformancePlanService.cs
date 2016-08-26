@@ -10,6 +10,9 @@ using NLog;
 using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Model.ViewModel.Control;
+using MCAWebAndAPI.Model.ViewModel.Form.Common;
+using MCAWebAndAPI.Model.HR.DataMaster;
+using MCAWebAndAPI.Service.Common;
 
 namespace MCAWebAndAPI.Service.HR.Recruitment
 {
@@ -23,6 +26,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         const string SP_PM_LIST_NAME = "Professional Master";
         const string SP_PPPW_LIST_NAME = "Professional Performance Plan Workflow";
         const string SP_PPE_LIST_NAME = "Professional Performance Evaluation";
+        const string SP_WORKFLOW_LISTNAME = "Workflow Mapping Master";
+        const string SP_PROMAS_LIST_NAME = "Professional Master";
+        const string SP_POSMAS_LIST_NAME = "Position Master";
 
         public int CreateHeader(string requestor, ProfessionalPerformancePlanVM header)
         {
@@ -128,13 +134,13 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             }
         }
 
-        public ProfessionalPerformancePlanVM GetHeader(int? ID, string requestor)
+        public async Task<ProfessionalPerformancePlanVM> GetHeader(int? ID, string requestor, string listName, string listNameWorkflow, string columnName)
         {
             var listItem = SPConnector.GetListItem(SP_PPP_LIST_NAME, ID, _siteUrl);
-            return ConvertToProfessionalPerformancePlanModel(listItem, ID, requestor);
+            return await ConvertToProfessionalPerformancePlanModel(listItem, ID, requestor, listName, listNameWorkflow, columnName);
         }
 
-        private ProfessionalPerformancePlanVM ConvertToProfessionalPerformancePlanModel(ListItem listItem, int? ID, string requestor)
+        private async Task<ProfessionalPerformancePlanVM> ConvertToProfessionalPerformancePlanModel(ListItem listItem, int? ID, string requestor, string listName, string listNameWorkflow, string columnName)
         {
             var caml = @"<View>  
             <Query> 
@@ -184,6 +190,19 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             // Convert Details
             viewModel.ProjectOrUnitGoalsDetails = GetPerformancePlanDetails(viewModel.ID);
 
+            var _workflow = new WorkflowService();
+            _workflow.SetSiteUrl(_siteUrl);
+            var intID = Convert.ToInt32(ID);
+            var Check = await _workflow.CheckWorkflow(intID, listNameWorkflow, columnName);
+            if (Check.Count() != 0)
+            {
+                viewModel.WorkflowItems = Check;
+            }
+            if (Check.Count() == 0)
+            {
+                viewModel.WorkflowItems = await _workflow.GetWorkflowDetails(requestor, listName);
+            }
+
             return viewModel;
         }
 
@@ -217,7 +236,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             };
         }
 
-        public ProfessionalPerformancePlanVM GetPopulatedModel(string requestor = null)
+        public async Task<ProfessionalPerformancePlanVM> GetPopulatedModel(string requestor, string listName)
         {
             var model = new ProfessionalPerformancePlanVM();
             string period = null;
@@ -258,6 +277,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 model.PositionAndDepartement = FormatUtil.ConvertLookupToValue(item, "Position");
                 model.PositionAndDepartementID = FormatUtil.ConvertLookupToID(item, "Position");
             }
+
+            //Get Workflow From Mapping Master
+            var _workflow = new WorkflowService();
+            _workflow.SetSiteUrl(_siteUrl);
+            model.WorkflowItems = await _workflow.GetWorkflowDetails(requestor, listName);
 
             return model;
 

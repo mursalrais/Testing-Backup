@@ -411,14 +411,8 @@ Parameter name: source
 2016-08-24 17:01:56.6899 MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService Column 'professional0' does not exist. It may have been deleted by another user.  /sites/mca-dev/bo/Lists/Asset Loan Return
 2016-08-24 20:03:47.2154 MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService Column 'projectunit' does not exist. It may have been deleted by another user.  /sites/ims/bo/Lists/Asset Loan Return
 2016-08-24 20:06:56.5100 MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService Column 'projectunit' does not exist. It may have been deleted by another user.  /sites/ims/bo/Lists/Asset Loan Return
-2016-08-25 00:37:34.0070 MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService Microsoft.SharePoint.Client.ServerException: Column 'assetsubasset' does not exist. It may have been deleted by another user.  /sites/mca-dev/bo/Lists/Asset Loan Return Detail
-   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl)
-   at MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService.CreateDetails(Nullable`1 headerID, IEnumerable`1 items)
-2016-08-25 00:45:35.6592 MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService Microsoft.SharePoint.Client.ServerException: Column 'assetsubasset' does not exist. It may have been deleted by another user.  /sites/mca-dev/bo/Lists/Asset Loan Return Detail
-   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl)
-   at MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService.CreateDetails(Nullable`1 headerID, IEnumerable`1 items)
-2016-08-25 00:55:10.5508 MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService Microsoft.SharePoint.Client.ServerException: Column 'assetsubasset' does not exist. It may have been deleted by another user.  /sites/mca-dev/bo/Lists/Asset Loan Return Detail
-   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl)
-   at MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService.CreateDetails(Nullable`1 headerID, IEnumerable`1 items)
-2016-08-25 17:59:08.7675 MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService The list item could not be inserted or updated because invalid lookup values were found for the following field(s) in the list: [professionalposition].
-2016-08-25 18:00:04.4671 MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService The list item could not be inserted or updated because invalid lookup values were found for the following field(s) in the list: [professionalposition].
+2016-08-25 13:22:43.6835 MCAWebAndAPI.Service.Asset.AssignmentOfAssetService Microsoft.SharePoint.Client.ServerException: Value cannot be null.
+Parameter name: source
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 264
+   at MCAWebAndAPI.Service.Asset.AssignmentOfAssetService.CreateDetails(Nullable`1 headerID, IEnumerable`1 items) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssignmentOfAssetService.cs:line 496
+2016-08-25 13:58:35.8848 MCAWebAndAPI.Service.Asset.AssignmentOfAssetService The property or field has not been initialized. It has not been requested or the request has not been executed. It may need to be explicitly requested.

@@ -28,6 +28,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// statusaplication
         /// </summary>
         [UIHint("InGridAjaxComboBox")]
+        [DisplayName("Adjustment Type")]
         public AjaxComboBoxVM ajusmentType { get; set; } = new AjaxComboBoxVM();
 
         public static IEnumerable<InGridComboBoxVM> getAjusmentTypeOptions()
@@ -62,6 +63,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// statusaplication
         /// </summary>
         [UIHint("InGridAjaxComboBox")]
+        [DisplayName("Currency")]
         public AjaxComboBoxVM currency { get; set; } = new AjaxComboBoxVM();
 
         public static IEnumerable<InGridComboBoxVM> getCurrencyOptions()
@@ -95,6 +97,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// statusaplication
         /// </summary>
         [UIHint("InGridAjaxComboBox")]
+        [DisplayName("PayType")]
         public AjaxComboBoxVM payType { get; set; } = new AjaxComboBoxVM();
 
         public static IEnumerable<InGridComboBoxVM> getPayTypeOptions()
@@ -125,6 +128,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         }
 
         [UIHint("InGridAjaxComboBox")]
+        [DisplayName("Professional")]
         public AjaxComboBoxVM ddlProfessional { get; set; } = new AjaxComboBoxVM();
 
         /// <head>
