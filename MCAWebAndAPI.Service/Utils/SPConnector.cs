@@ -290,6 +290,7 @@ namespace MCAWebAndAPI.Service.Utils
 
                 foreach (var key in columnValues.Keys)
                 {
+                    if (key.IndexOf(";Add", StringComparison.Ordinal) <= 0) continue;
                     ListItem newItem = spList.AddItem(itemCreateInfo);
                     var detailvalue = columnValues[key];
 

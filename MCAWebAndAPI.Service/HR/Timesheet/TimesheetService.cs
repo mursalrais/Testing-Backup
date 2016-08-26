@@ -478,7 +478,7 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                 }
 
                
-                    mastervalue.Add(i.ToString(), updatedValue);
+                    mastervalue.Add(i+";Add", updatedValue);
                     i++;
                
             }
