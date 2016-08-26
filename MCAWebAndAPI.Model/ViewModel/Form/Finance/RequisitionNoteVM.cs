@@ -26,11 +26,10 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         public AjaxComboBoxVM EventBudgetNo { get; set; } = new AjaxComboBoxVM();
 
         [UIHint("ComboBox")]
-        [Required]
-        public ProjectComboBoxVM Project { get; set; } = new ProjectComboBoxVM();
+        public ProjectComboBoxVM Project { get;} = new ProjectComboBoxVM();
        
 
-        public string Fund { get; set; } = Shared.Fund;
+        public string Fund { get; } = Shared.Fund;
 
         [UIHint("ComboBox")]
         [DisplayName("Currency")]

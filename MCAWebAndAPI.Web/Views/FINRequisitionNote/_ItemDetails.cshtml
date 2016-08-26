@@ -3,6 +3,11 @@
 
 @model IEnumerable<RequisitionNoteItemVM>
 
+@*
+    Wireframe FIN05: Requisition Note
+        i.e.: Purchase Requisition Note
+*@
+
 <div class="col-xs-12">
     @(Html.Kendo().Grid(Model)
     .Name("ItemDetails")
@@ -21,7 +26,7 @@
                            ControllerName = "ComboBox",
                            ActionName = "GetActivitiesByProject",
                            Filter = "filterProject",
-                           Cascade= "Project_Value"
+                           Cascade = "Project_Value"
                        })
                .Width("15%");
 
@@ -56,12 +61,17 @@
 
             .Width("10%");
 
+        columns.Bound(p => p.Frequency).ClientTemplate("#= Frequency #" +
+            "<input type='hidden' name='ItemDetails[#= getRequisitionDataDetail(data)#].Frequency' value='#= calculateField(data).Frequency #' />")
+
+      .Width("10%");
+
         columns.Bound(p => p.Price).ClientTemplate("#= Price #" +
            "<input type='hidden' name='ItemDetails[#= getRequisitionDataDetail(data)#].Price' value='#= calculateField(data).Price #' />")
 
            .Width("10%");
 
-        columns.Bound(p => p.Total).ClientTemplate("#= Total #"+
+        columns.Bound(p => p.Total).ClientTemplate("#= Total #" +
             "<input type='hidden' name='ItemDetails[#= getRequisitionDataDetail(data)#].Total' value='#= Total #' />")
           .HtmlAttributes(new { @class = "totalItemRN" })
           .Width("10%");
@@ -133,15 +143,14 @@
         if (category === CATEGORY_NON_EVENT) {
             $(".deleteRow").css("display", "block");
             $(".k-grid-toolbar").css("display", "block");
-            
+
         }
-        else
-        {
+        else {
             $(".deleteRow").css("display", "none");
             $(".k-grid-toolbar").css("display", "none");
         }
 
-        
+
     }
 
     function calculateField(data) {
@@ -151,7 +160,7 @@
         return data;
     }
 
-   
+
     function filterWBS() {
         var activityId = $('#WBS').closest('td').prev('td')[0].childNodes[2].value;
         return {
@@ -159,8 +168,7 @@
         };
     }
 
-    function onedit(e)
-    {
+    function onedit(e) {
         var category = $("#Category_Value").data("kendoDropDownList").value();
 
         if (category !== CATEGORY_NON_EVENT) {

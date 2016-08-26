@@ -62,7 +62,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             SCAVoucherVM model = new SCAVoucherVM();
             if (ID != null)
             {
-                model = service.GetSCAVoucherVMData(ID);
+                model = service.Get(ID);
                 model.Action = SCAVoucherVM.ActionType.edit.ToString();
                 SessionManager.Set(SCAVoucherIDSess, ID);
                 SessionManager.Set(EventBudgetIDSess, model.EventBudgetID);
@@ -80,7 +80,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             SCAVoucherVM model = new SCAVoucherVM();
             if (ID != null)
             {
-                model = service.GetSCAVoucherVMData(ID);
+                model = service.Get(ID);
                 model.Action = SCAVoucherVM.ActionType.approve.ToString();
                 SessionManager.Set(SCAVoucherIDSess, ID);
             }
@@ -96,7 +96,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
 
             SCAVoucherVM model = new SCAVoucherVM();
 
-            model = service.GetSCAVoucherVMData(ID);
+            model = service.Get(ID);
 
             ViewBag.SubTitle = SubTitle;
             return View(model);
@@ -147,7 +147,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             SessionManager.Set(SharedFinanceController.Session_SiteUrl, siteUrl);
 
             var viewModel = new SCAVoucherVM();
-            viewModel = service.GetSCAVoucherVMData(ID);
+            viewModel = service.Get(ID);
             viewModel.SCAVoucherItems = service.GetSCAVoucherItems(Convert.ToInt32(ID)).ToList();
 
             ViewData.Model = viewModel;
@@ -299,7 +299,8 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             viewModel.SDO.ControllerName = "ComboBox";
             viewModel.SDO.ActionName = "GetProfessionals";
             viewModel.SDO.ValueField = "ID";
-            viewModel.SDO.TextField = "Desc";
+            viewModel.SDO.TextField = "Desc1";
+            viewModel.SDO.OnSelectEventName = "OnSelectProfessional";
 
             viewModel.EventBudget.ControllerName = "ComboBox";
             viewModel.EventBudget.ActionName = "GetEventBudgets";

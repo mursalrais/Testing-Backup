@@ -1053,8 +1053,6 @@
     <Content Include="Views\FINRequisitionNote\Print.cshtml" />
     <Content Include="Views\Shared\_PartialHeader.cshtml" />
     <Content Include="Views\Shared\_PartialHeaderWithLogo.cshtml" />
-    <Content Include="Views\ASSAssetTransfer\CreateAssetTransfer.cshtml" />
-    <Content Include="Views\ASSAssetTransfer\_AssetTransferDetail.cshtml" />
     <Content Include="Views\ASSAssetDisposal\CreateAssetDisposal.cshtml" />
     <Content Include="Views\ASSAssetDisposal\_AssetDisposalDetail.cshtml" />
     <Content Include="Views\HRAdjustment\InputAdjustmentData.cshtml" />
@@ -1073,8 +1071,6 @@
     <Content Include="Views\HRAdjustmentDayOffBalance\EditAdjustmentDayOffBalance.cshtml" />
     <Content Include="Views\ASSAssetDisposal\CreateAssetDisposal.cshtml" />
     <Content Include="Views\ASSAssetDisposal\_AssetDisposalDetail.cshtml" />
-    <Content Include="Views\ASSAssetTransfer\CreateAssetTransfer.cshtml" />
-    <Content Include="Views\ASSAssetTransfer\_AssetTransferDetail.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DropDown.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\AjaxCascadeComboBox.cshtml" />
     <Content Include="Views\ASSAssetAcquisition\Sync.cshtml" />
@@ -1105,6 +1101,20 @@
     <Content Include="Views\HRProfessionalPerformanceEvaluation\_WorkflowPathDetails.cshtml" />
     <Content Include="Views\HRPerformancePlan\_WorkflowPathDetails.cshtml" />
     <Content Include="Views\ASSAssignmentOfAsset\Sync.cshtml" />
+    <Content Include="Views\ASSAssetTransfer\_Details.cshtml" />
+    <Content Include="Views\ASSAssetTransfer\_DetailsPrint.cshtml" />
+    <Content Include="Views\ASSAssetTransfer\_DetailsView.cshtml" />
+    <Content Include="Views\ASSAssetTransfer\_print.cshtml" />
+    <Content Include="Views\ASSAssetTransfer\Create.cshtml" />
+    <Content Include="Views\ASSAssetTransfer\Edit.cshtml" />
+    <Content Include="Views\ASSAssetTransfer\Print.cshtml" />
+    <Content Include="Views\ASSAssetTransfer\Sync.cshtml" />
+    <Content Include="Views\ASSAssetTransfer\Upload.cshtml" />
+    <Content Include="Views\ASSAssetTransfer\View.cshtml" />
+    <Content Include="Views\FINSCAVoucher\_PartialHeaderWithLogo.cshtml" />
+    <Content Include="Views\FINPettyCashSettlement\Print.cshtml" />
+    <Content Include="Views\FINLandingPage\Index.cshtml" />
+    <Content Include="Views\FINEventBudget\Print.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1138,6 +1148,7 @@
     <Compile Include="Controllers\CSVController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\FileController.cs" />
+    <Compile Include="Controllers\FINLandingPageController.cs" />
     <Compile Include="Controllers\FINPettyCashPaymentVoucherController.cs" />
     <Compile Include="Controllers\FINPettyCashReplenishmentController.cs" />
     <Compile Include="Controllers\FINPettyCashSettlementController.cs" />

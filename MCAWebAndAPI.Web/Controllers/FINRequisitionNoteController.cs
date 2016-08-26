@@ -8,11 +8,11 @@ using Elmah;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using MCAWebAndAPI.Model.Common;
+using MCAWebAndAPI.Model.ViewModel.Control;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 using MCAWebAndAPI.Service.Converter;
 using MCAWebAndAPI.Service.Finance;
 using MCAWebAndAPI.Service.Finance.RequisitionNote;
-using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;
 using FinService = MCAWebAndAPI.Service.Finance;
@@ -27,6 +27,8 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
     [Filters.HandleError]
     public class FINRequisitionNoteController : Controller 
     {
+        public const string Action_UpdateFromEBChanged = "ufebc";
+
         private const string FIELD_ID = "ID";
         private const string FIELD_TITLE = "Title";
         private const string LIST_NAME = "requisitionnote";
@@ -42,24 +44,27 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
         private const string PICKER_EVENTBUDGET_ACTIONNAME = "GetEventBudgetList";
         private const string PICKER_EVENTBUDGET_ONSELECTCHANGE = "onSelectEventBudgetNo";
 
-        readonly IRequisitionNote _service;
-        readonly IEventBudgetService _eventBudgetService;
+        private const string SuccessMsgFormatUpdated = "Requisition Note number {0} has been successfully updated.";
+        private const string FirstPageUrl = "{0}/Lists/Requisition%20Note/AllItems.aspx";
+
+        readonly IRequisitionNoteService reqNoteService;
+        readonly IEventBudgetService eventBudgetService;
         
         public FINRequisitionNoteController()
         {
-            _service = new RequisitionNoteService();
-            _eventBudgetService = new EventBudgetService();
+            reqNoteService = new RequisitionNoteService();
+            eventBudgetService = new EventBudgetService();
         }
 
         public ActionResult Create(string siteUrl = null)
         {
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
-            _service.SetSiteUrl(siteUrl);
+            reqNoteService.SetSiteUrl(siteUrl);
             SessionManager.Set(SharedFinanceController.Session_SiteUrl, siteUrl);
 
             ViewBag.ListName = WORKFLOW_TITLE;
             
-            var viewModel = _service.GetRequisitionNote(null);
+            var viewModel = reqNoteService.Get(null);
             SetAdditionalSettingToViewModel(ref viewModel, true);
             return View(viewModel);
         }
@@ -69,17 +74,17 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             if (id > 0)
             {
                 siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
-                _service.SetSiteUrl(siteUrl);
+                reqNoteService.SetSiteUrl(siteUrl);
                 SessionManager.Set(SharedFinanceController.Session_SiteUrl, siteUrl);
 
                 ViewBag.ListName = WORKFLOW_TITLE;
 
-                var viewModel = _service.GetRequisitionNote(id);
+                var viewModel = reqNoteService.Get(id);
 
                 #region Check User
 
                 var siteUrlHR = siteUrl.Replace("/bo", "/hr");
-                var position = Service.Finance.SharedService.GetPosition(user, siteUrlHR);
+                var position = FinService.SharedService.GetPosition(user, siteUrlHR);
 
 
                 if (viewModel.Editor != user)
@@ -106,13 +111,13 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
         public async Task<ActionResult> CreateRequisitionNote(FormCollection form, RequisitionNoteVM viewModel)
         {
             var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl);
-            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            _eventBudgetService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            reqNoteService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            eventBudgetService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
             //set additional info for event budget no and project
             if (viewModel.EventBudgetNo.Value.HasValue && viewModel.EventBudgetNo.Value > 0)
             {
-                var eventBdgt = _eventBudgetService.Get(viewModel.EventBudgetNo.Value);
+                var eventBdgt = eventBudgetService.Get(viewModel.EventBudgetNo.Value);
                 if (eventBdgt != null)
                 {
                     viewModel.EventBudgetNo.Value = eventBdgt.ID;
@@ -124,7 +129,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             int? headerID = null;
             try
             {
-                headerID = _service.CreateRequisitionNote(viewModel);
+                headerID = reqNoteService.CreateRequisitionNote(viewModel);
             }
             catch (Exception e)
             {
@@ -132,8 +137,8 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            Task CreateDetailsTask = _service.CreateRequisitionNoteItemsAsync(headerID, viewModel.ItemDetails);
-            Task CreateDocumentsTask = _service.CreateRequisitionNoteAttachmentsSync(headerID, viewModel.Documents);
+            Task CreateDetailsTask = reqNoteService.CreateRequisitionNoteItemsAsync(headerID, viewModel.ItemDetails);
+            Task CreateDocumentsTask = reqNoteService.CreateRequisitionNoteAttachmentsSync(headerID, viewModel.Documents);
 
             Task allTasks = Task.WhenAll(CreateDetailsTask, CreateDocumentsTask);
 
@@ -144,24 +149,28 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             catch (Exception e)
             {
                 ErrorSignal.FromCurrentContext().Raise(e);
-                return JsonHelper.GenerateJsonErrorResponse(e);
+                return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
             }
 
-         
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.RequisitionNote);
+            return RedirectToAction("Index", "Success",
+                new
+                {
+                    successMessage = string.Format(SuccessMsgFormatUpdated, viewModel.Title),
+                    previousUrl = string.Format(FirstPageUrl, siteUrl)
+                });
         }
 
         [HttpPost]
         public async Task<ActionResult> EditRequisitionNote(FormCollection form, RequisitionNoteVM viewModel)
         {
             var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl);
-            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            _eventBudgetService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            reqNoteService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            eventBudgetService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
             //set additional info for event budget no and project
             if (viewModel.EventBudgetNo.Value.HasValue && viewModel.EventBudgetNo.Value > 0)
             {
-                var eventBdgt = _eventBudgetService.Get(viewModel.EventBudgetNo.Value);
+                var eventBdgt = eventBudgetService.Get(viewModel.EventBudgetNo.Value);
                 if (eventBdgt != null)
                 {
                     viewModel.EventBudgetNo.Value = eventBdgt.ID;
@@ -172,7 +181,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
 
             try
             {
-                _service.UpdateRequisitionNote(viewModel);
+                reqNoteService.UpdateRequisitionNote(viewModel);
             }
             catch (Exception e)
             {
@@ -180,8 +189,8 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            Task CreateDetailsTask = _service.EditRequisitionNoteItemsAsync(viewModel.ID, viewModel.ItemDetails);
-            Task CreateDocumentsTask = _service.EditRequisitionNoteAttachmentsSync(viewModel.ID, viewModel.Documents);
+            Task CreateDetailsTask = reqNoteService.EditRequisitionNoteItemsAsync(viewModel.ID, viewModel.ItemDetails);
+            Task CreateDocumentsTask = reqNoteService.EditRequisitionNoteAttachmentsSync(viewModel.ID, viewModel.Documents);
 
             Task allTasks = Task.WhenAll(CreateDetailsTask, CreateDocumentsTask);
 
@@ -192,10 +201,15 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             catch (Exception e)
             {
                 ErrorSignal.FromCurrentContext().Raise(e);
-                return JsonHelper.GenerateJsonErrorResponse(e);
+                return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.RequisitionNote);
+            return RedirectToAction("Index", "Success",
+                new
+                {
+                    successMessage = string.Format(SuccessMsgFormatUpdated, viewModel.Title),
+                    previousUrl = string.Format(FirstPageUrl, siteUrl)
+                });
         }
 
 
@@ -203,13 +217,13 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
         public JsonResult GetRequisitionNoteDetailsByEventBudgetId([DataSourceRequest] DataSourceRequest request, int? eventBudgetId)
         {
             var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl);
-            _eventBudgetService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            eventBudgetService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
             var details = new List<RequisitionNoteItemVM>();
             
             if (eventBudgetId.HasValue && eventBudgetId.Value > 0)
             {
-                var eventbudget =_eventBudgetService.Get(eventBudgetId.Value);
+                var eventbudget =eventBudgetService.Get(eventBudgetId.Value);
                 if(eventbudget != null)
                 {
                     foreach (var item in eventbudget.ItemDetails)
@@ -217,9 +231,9 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
                         var itemRNDetail = new RequisitionNoteItemVM();
 
                         itemRNDetail.ID = null;
-                        itemRNDetail.Activity = new Model.ViewModel.Control.AjaxComboBoxVM() { Value = Convert.ToInt32(eventbudget.Activity.Value), Text = eventbudget.Activity.Text };
-                        itemRNDetail.WBS = new Model.ViewModel.Control.AjaxComboBoxVM() { Value = item.WBS.Value, Text = item.WBS.Text };
-                        itemRNDetail.GL = new Model.ViewModel.Control.AjaxComboBoxVM() { Value = item.GL.Value, Text = item.GL.Text };
+                        itemRNDetail.Activity = new AjaxComboBoxVM() { Value = Convert.ToInt32(eventbudget.Activity.Value), Text = eventbudget.Activity.Text };
+                        itemRNDetail.WBS = new AjaxComboBoxVM() { Value = item.WBS.Value, Text = item.WBS.Text };
+                        itemRNDetail.GL = new AjaxComboBoxVM() { Value = item.GL.Value, Text = item.GL.Text };
                         itemRNDetail.Specification = item.Title;
                         itemRNDetail.Quantity = item.Quantity;
                         itemRNDetail.Price = item.UnitPrice;
@@ -256,9 +270,9 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
 
         public JsonResult GetWBSMaster(string activity=null)
         {
-            _service.SetSiteUrl(SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl));
+            reqNoteService.SetSiteUrl(SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl));
 
-            var wbsMasters = _service.GetWBSMaster(activity);
+            var wbsMasters = reqNoteService.GetWBSMaster(activity);
 
             return Json(wbsMasters.Select(e => new
             {
@@ -273,8 +287,8 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             string RelativePath = PRINT_PAGE_URL;
              
             var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl);
-            _service.SetSiteUrl(siteUrl);
-            viewModel = _service.GetRequisitionNote(viewModel.ID);
+            reqNoteService.SetSiteUrl(siteUrl);
+            viewModel = reqNoteService.Get(viewModel.ID);
 
             ViewData.Model = viewModel;
             var view = ViewEngines.Engines.FindView(ControllerContext, RelativePath, null);
@@ -304,6 +318,62 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
                 return HttpNotFound();
             return File(pdfBuf, "application/pdf");
         }
+
+        //public ActionResult UpdateFromEBChanged(string siteUrl = null, int id = 0, string user = null, string a = null)
+        //{
+        //    siteUrl = siteUrl ?? SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl);
+        //    siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
+
+        //    if (id == 0 || a != Action_UpdateFromEBChanged)
+        //    {
+        //        throw new Exception("Invalid parameters.");
+        //    }
+
+        //    reqNoteService.SetSiteUrl(siteUrl);
+        //    eventBudgetService.SetSiteUrl(siteUrl);
+
+        //    RequisitionNoteVM rnHeader = reqNoteService.Get(id);
+        //    EventBudgetVM  ebHeader = eventBudgetService.Get(rnHeader.EventBudgetNo.Value);
+
+        //    if (ebHeader.TransactionStatus.Value == TransactionStatusComboBoxVM.Locked)
+        //        throw new Exception("Cannot update Requisition Note for a Locked Event Budget");
+
+        //    // copy EB updated values to RN
+        //    rnHeader.Project.Value = ebHeader.Project.Value;
+        //    rnHeader.Total = ebHeader.TotalIDR;
+
+        //    // delete all existing details in RN
+        //    foreach (var rnDetail in rnHeader.ItemDetails)
+        //    {
+        //        reqNoteService.DeleteDetail((int)rnDetail.ID);
+        //    }
+
+        //    //copy all new details from EB
+        //    List<RequisitionNoteItemVM> d = new List<RequisitionNoteItemVM>();
+        //    foreach (var ebDetail in ebHeader.ItemDetails)
+        //    {
+        //        d.Add(new RequisitionNoteItemVM()
+        //        {
+        //            Activity = new AjaxComboBoxVM() { Value = Convert.ToInt32(ebHeader.Activity.Value), Text = ebHeader.Activity.Text },
+        //            WBS = new AjaxComboBoxVM() { Value = ebDetail.WBS.Value, Text = ebDetail.WBS.Text },
+        //            GL = new AjaxComboBoxVM() { Value = ebDetail.GL.Value, Text = ebDetail.GL.Text },
+        //            Specification = ebDetail.Title,
+        //            Quantity = ebDetail.Quantity,
+        //            Frequency = ebDetail.Frequency,
+        //            Price = ebDetail.UnitPrice,
+        //            EditMode = (int)Item.Mode.CREATED,
+        //            IsFromEventBudget = true,
+        //            Total = ebDetail.Frequency * ebDetail.UnitPrice * ebDetail.Quantity
+        //        });
+        //    }
+
+        //    reqNoteService.CreateRequisitionNoteItems(rnHeader.ID, d);
+
+        //    // attachment?
+
+        //    return RedirectToAction("Edit", "FINRequisitionNote",
+        //        new { siteUrl = siteUrl, id = id, user = user });
+        //}
 
         private void SetAdditionalSettingToViewModel(ref RequisitionNoteVM viewModel, bool create)
         {

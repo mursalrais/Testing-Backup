@@ -511,7 +511,7 @@ namespace MCAWebAndAPI.Service.Asset
                 {
                     try
                     {
-                        SPConnector.DeleteListItem("Assignment Asset Detail", item.ID, _siteUrl);
+                        SPConnector.DeleteListItem("Asset Assignment Detail", item.ID, _siteUrl);
                     }
                     catch (Exception e)
                     {
@@ -539,7 +539,8 @@ namespace MCAWebAndAPI.Service.Asset
                 updatedValues.Add("office", provinceinfo["Title"]);
                 updatedValues.Add("floor", provinceinfo["Floor"]);
                 updatedValues.Add("room", provinceinfo["Room"]);
-                updatedValues.Add("remarks", provinceinfo["Remarks"]);
+                //updatedValues.Add("remarks", provinceinfo["Remarks"]);
+                updatedValues.Add("remarks", item.Remarks);
                 updatedValues.Add("Status", "RUNNING");
                 try
                 {
@@ -705,6 +706,7 @@ namespace MCAWebAndAPI.Service.Asset
                 quantity = 1,
                 AssetSubAsset = AssignmentOfAssetDetailsVM.GetAssetSubAssetDefaultValue(_assetSubAsset),
                 Province = AssignmentOfAssetDetailsVM.GetProvinceDefaultValue(_province),
+                Remarks = Convert.ToString(item["remarks"]),
                 Status = Convert.ToString(item["Status"])
             };
         }
@@ -719,7 +721,7 @@ namespace MCAWebAndAPI.Service.Asset
                 {
                     try
                     {
-                        SPConnector.DeleteListItem("Assignment Asset Detail", item.ID, _siteUrl);
+                        SPConnector.DeleteListItem("Asset Assignment Detail", item.ID, _siteUrl);
                     }
                     catch (Exception e)
                     {
@@ -731,25 +733,94 @@ namespace MCAWebAndAPI.Service.Asset
 
                 var updatedValues = new Dictionary<string, object>();
                 updatedValues.Add("assetassignment", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
+                var caml = @"<View><Query>
+                           <Where>
+                              <Eq>
+                                 <FieldRef Name='Asset_x0020_Sub_x0020_Asset_x003' />
+                                 <Value Type='Lookup'>"+item.AssetSubAsset.Value.Value+ @"</Value>
+                              </Eq>
+                           </Where>
+                        </Query>
+                        <ViewFields>
+                           <FieldRef Name='assetsubasset' />
+                        </ViewFields>
+                        <QueryOptions /></View>";
 
-                var getAssetID = SPConnector.GetListItem("Asset Acquisition Details", item.AssetSubAsset.Value.Value, _siteUrl);
-                var provinceinfo = SPConnector.GetListItem("Location Master", item.Province.Value.Value, _siteUrl);
-                if ((getAssetID["assetsubasset"] as FieldLookupValue) != null)
+                var getAssetID = SPConnector.GetList("Asset Acquisition Details",  _siteUrl, caml);
+                //getInformation From  Asset Assignment Detail
+                var camld = @"<View><Query>
+                           <Where>
+                              <Eq>
+                                 <FieldRef Name='ID' />
+                                 <Value Type='Counter'>"+item.ID+@"</Value>
+                              </Eq>
+                           </Where>
+                        </Query>
+                        <ViewFields>
+                           <FieldRef Name='room' />
+                           <FieldRef Name='floor' />
+                           <FieldRef Name='office' />
+                        </ViewFields>
+                        <QueryOptions /></View>";
+                var getInfoProvinceFromDetails = SPConnector.GetList("Asset Assignment Detail", _siteUrl, camld);
+                foreach(var d in getInfoProvinceFromDetails)
                 {
-                    updatedValues.Add("assetsubasset", (getAssetID["assetsubasset"] as FieldLookupValue).LookupId);
+                    var camlx = @"<View><Query>
+                                   <Where>
+                                      <And>
+                                         <Eq>
+                                            <FieldRef Name='Province_x003a_ID' />
+                                            <Value Type='Lookup'>"+item.Province.Value.Value+@"</Value>
+                                         </Eq>
+                                         <And>
+                                            <Eq>
+                                               <FieldRef Name='Title' />
+                                               <Value Type='Text'>"+d["office"]+@"</Value>
+                                            </Eq>
+                                            <And>
+                                               <Eq>
+                                                  <FieldRef Name='Floor' />
+                                                  <Value Type='Text'>"+d["floor"]+@"</Value>
+                                               </Eq>
+                                               <Eq>
+                                                  <FieldRef Name='Room' />
+                                                  <Value Type='Text'>"+d["room"]+ @"</Value>
+                                               </Eq>
+                                            </And>
+                                         </And>
+                                      </And>
+                                   </Where>
+                                </Query>
+                                <ViewFields>
+                                <FieldRef Name='Title' />
+                                <FieldRef Name='Province' />
+                                <FieldRef Name='Floor' />
+                                <FieldRef Name='Room' />
+                                </ViewFields>
+                                <QueryOptions /></View>";
+                    var provinceinfo = SPConnector.GetList("Location Master", _siteUrl, camlx);
+                    foreach(var pro in provinceinfo)
+                    {
+                        if ((pro["Province"] as FieldLookupValue) != null)
+                        {
+                            updatedValues.Add("province", (pro["Province"] as FieldLookupValue).LookupId);
+                        }
+                        updatedValues.Add("office", pro["Title"]);
+                        updatedValues.Add("floor", pro["Floor"]);
+                        updatedValues.Add("room", pro["Room"]);
+                    }
                 }
-
-                //var provinceinfo = SPConnector.GetListItem("Location Master", item.Province.Value.Value, _siteUrl);
-
-                //updatedValues.Add("assetsubasset", item.AssetSubAsset.Value.Value);
-                if ((provinceinfo["Province"] as FieldLookupValue) != null)
+                
+                foreach(var info in getAssetID)
                 {
-                    updatedValues.Add("province", (provinceinfo["Province"] as FieldLookupValue).LookupId);
+                    if ((info["assetsubasset"] as FieldLookupValue) != null)
+                    {
+                        updatedValues.Add("assetsubasset", (info["assetsubasset"] as FieldLookupValue).LookupId);
+                    }
                 }
-                updatedValues.Add("office", provinceinfo["Title"]);
-                updatedValues.Add("floor", provinceinfo["Floor"]);
-                updatedValues.Add("room", provinceinfo["Room"]);
-                updatedValues.Add("remarks", provinceinfo["Remarks"]);
+                
+                //updatedValues.Add("remarks", provinceinfo["Remarks"]);
+                updatedValues.Add("remarks", item.Remarks);
                 updatedValues.Add("Status", "RUNNING");
                 try
                 {
