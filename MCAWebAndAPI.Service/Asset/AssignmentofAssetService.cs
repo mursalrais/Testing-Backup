@@ -37,7 +37,8 @@ namespace MCAWebAndAPI.Service.Asset
         {
             var listItem = SPConnector.GetListItem("Asset Assignment", ID, SiteUrl);
             var viewModel = new AssignmentOfAssetVM();
-
+            viewModel.position = listItem["position"].ToString();
+            viewModel.nameOnly = listItem["assetholder"].ToString();
             viewModel.TransactionType = Convert.ToString(listItem["Title"]);
             viewModel.AssetHolder.Choices = GetFromListHR("Professional Master", "Title", "Position", SiteUrl);
             var caml = @"<View><Query>
@@ -71,8 +72,34 @@ namespace MCAWebAndAPI.Service.Asset
             {
                 viewModel.Date = Convert.ToDateTime(listItem["transferdate"]);
             }
+            viewModel.CompletionStatus.Value = Convert.ToString(listItem["completionstatus"]);
             viewModel.ID = ID;
-
+            var caml1 = @"<View><Query>
+                       <Where>
+                          <Eq>
+                             <FieldRef Name='assetassignment' />
+                             <Value Type='Lookup'>"+ID+@"</Value>
+                          </Eq>
+                       </Where>
+                    </Query>
+                    <ViewFields>
+                       <FieldRef Name='assetsubasset' />
+                    </ViewFields>
+                    <QueryOptions /></View>";
+            var getDetails = SPConnector.GetList("Asset Assignment Detail", _siteUrl, caml1);
+            var combine = "";
+            foreach (var det in getDetails)
+            {
+                if(combine == "")
+                {
+                    combine = (det["assetsubasset"] as FieldLookupValue).LookupValue;
+                }
+                else
+                {
+                    combine = combine + ", " + (det["assetsubasset"] as FieldLookupValue).LookupValue + ", ";
+                }
+            }
+            viewModel.AssetIDs = combine;
             viewModel.CancelURL = _siteUrl + UrlResource.AssetAssignment;
 
             return viewModel;

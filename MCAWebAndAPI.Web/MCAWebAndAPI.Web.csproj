@@ -1100,6 +1100,9 @@
     <Content Include="Views\ASSAssignmentOfAsset\Upload.cshtml" />
     <Content Include="Views\ASSAssignmentOfAsset\View.cshtml" />
     <Content Include="Views\ASSAssignmentOfAsset\_DetailsView.cshtml" />
+    <Content Include="Views\ASSAssignmentOfAsset\_print.cshtml" />
+    <Content Include="Views\ASSAssignmentOfAsset\Print.cshtml" />
+    <Content Include="Views\ASSAssignmentOfAsset\_DetailsPrint.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

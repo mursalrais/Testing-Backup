@@ -1,4 +1,5 @@
-﻿using Kendo.Mvc.Extensions;
+﻿using Elmah;
+using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using MCAWebAndAPI.Model.ViewModel.Control;
 using MCAWebAndAPI.Model.ViewModel.Form.Asset;
@@ -38,6 +39,30 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         public ActionResult Edit(int ID, string SiteUrl)
+        {
+            _service.SetSiteUrl(SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            var viewModel = _service.GetHeader(ID, SiteUrl);
+
+            int? headerID = null;
+            headerID = viewModel.ID;
+
+            try
+            {
+                var viewdetails = _service.GetDetails(headerID);
+                viewModel.Details = viewdetails;
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            return View(viewModel);
+        }
+
+        public ActionResult View(int ID, string SiteUrl)
         {
             _service.SetSiteUrl(SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
             SessionManager.Set("SiteUrl", SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
@@ -673,6 +698,47 @@ namespace MCAWebAndAPI.Web.Controllers
                 }
             }
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAssignment);
+        }
+
+        [HttpPost]
+        public ActionResult Print(FormCollection form, AssignmentOfAssetVM viewModel)
+        {
+
+            const string RelativePath = "~/Views/ASSAssignmentOfAsset/Print.cshtml";
+            var view = ViewEngines.Engines.FindView(ControllerContext, RelativePath, null);
+            var nm = viewModel.AssetHolder.Value.Split('-');
+            viewModel.nameOnly = nm[0];
+            viewModel.position = nm[1];
+            var fileName = nm[0] + "_AssignmentOfAsset.pdf";
+            byte[] pdfBuf = null;
+            string content;
+
+            // ControllerContext context = new ControllerContext();
+            ControllerContext.Controller.ViewData.Model = viewModel;
+            ViewData = ControllerContext.Controller.ViewData;
+            TempData = ControllerContext.Controller.TempData;
+
+            using (var writer = new StringWriter())
+            {
+                var contextviewContext = new ViewContext(ControllerContext, view.View, ViewData, TempData, writer);
+                view.View.Render(contextviewContext, writer);
+                writer.Flush();
+                content = writer.ToString();
+
+                // Get PDF Bytes
+                try
+                {
+                    pdfBuf = PDFConverter.Instance.ConvertFromHTML(fileName, content);
+                }
+                catch (Exception e)
+                {
+                    ErrorSignal.FromCurrentContext().Raise(e);
+                    RedirectToAction("Index", "Error");
+                }
+            }
+            if (pdfBuf == null)
+                return HttpNotFound();
+            return File(pdfBuf, "application/pdf");
         }
 
     }
