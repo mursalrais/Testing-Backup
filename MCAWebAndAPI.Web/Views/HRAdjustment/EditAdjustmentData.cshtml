@@ -17,11 +17,13 @@
 }))
 {
     <fieldset>
+        @Html.HiddenFor(m => m.periodval)
+
         <input type="hidden" id="loadpage" value="0">
         <div class="row">
             <div class="form-group" id="ParentDiv">
                 @Html.Bootstrap().LabelFor(m => m.periodDate).Class("col-xs-2 control-label")
-                <div class="col-xs-4">
+                <div class="col-xs-2">
                     @Html.EditorFor(m => m.periodDate)
                 </div>
             </div>
@@ -43,8 +45,9 @@
 @section scripts{
     <script>
         $(document).ready(function () {
-
-            var url = "/HRAdjustment/GetAdjustmentDetails?period=" + $("#periodDate").val();
+            var period = $("#periodDate").val();
+            var getperiod = period.replace(" ", "-");
+            var url = "/HRAdjustment/GetAdjustmentDetails?period=" + getperiod + "";
 
             $('#adjustmentlist').load(url, function (response, status, xhr) {
                 if (status == "success") {
@@ -52,6 +55,14 @@
             });
 
             $("#periodDate").kendoDatePicker({
+                // defines the start view
+                start: "year",
+
+                // defines when the calendar should return date
+                depth: "year",
+
+                // display month and year in the input
+                format: "MMMM yyyy",
                 change: onChange
             });
 
@@ -62,12 +73,17 @@
 
 
         function onChange() {
-            var url = "/HRAdjustment/GetAdjustmentDetails?period=" + $("#periodDate").val();
+            showLoading();
+            var period = $("#periodDate").val();
+            var getperiod = period.replace(" ", "-");
+
+            var url = "/HRAdjustment/GetAdjustmentDetails?period=" + getperiod + "";
 
             $('#adjustmentlist').load(url, function (response, status, xhr) {
                 if (status == "success") {
                 }
             });
+            hideLoading();
         }
 
         function getProfId(prof) {
@@ -78,13 +94,43 @@
 
         function getProjUnit(prof) {
             if (prof != null) {
-                return prof.Project_Unit;
+                var proj_unit;
+                if (prof.Project_Unit == undefined)
+                {
+                    proj_unit = "";
+                } else {
+                    proj_unit = prof.Project_Unit;
+                }
+                return proj_unit;
             };
+        }
+
+        function getprojUnitajax(proj) {
+            var proj_unit;
+
+            $.ajax({
+                type: "POST",
+                url: "/HRDataMaster/GetProfessional", // the URL of the controller action method
+                contentType: 'application/json;',
+                data: JSON.stringify({ id: proj }),
+                success: function (result) {
+                    if (result[0].Project_Unit != undefined) {
+                        proj_unit = result[0].Project_Unit;
+                    }
+                }
+            });
+            return proj_unit;
         }
 
         function getPosition(prof) {
             if (prof != null) {
-                return prof.Position;
+                var postion;
+                if (prof.Position == undefined) {
+                    postion = "";
+                } else {
+                    postion = prof.Position;
+                }
+                return postion;
             };
         }
 

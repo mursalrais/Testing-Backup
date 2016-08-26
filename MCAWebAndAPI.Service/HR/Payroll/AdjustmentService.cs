@@ -58,7 +58,12 @@ namespace MCAWebAndAPI.Service.HR.Payroll
 
             foreach (var item in SPConnector.GetList(SP_AJUDATA_LIST_NAME, _siteUrl, caml))
             {
-                viewModel.periodDate = Convert.ToDateTime(item["adjustmentperiod"]);
+                var getperiod = Convert.ToDateTime(item["adjustmentperiod"]);
+                var perioddate = FormatUtil.ConvertToDateString(getperiod);
+                getperiod = Convert.ToDateTime(perioddate);
+
+                viewModel.periodDate = getperiod;
+                viewModel.periodval = Convert.ToDateTime(item["adjustmentperiod"]);
             }
 
             return viewModel;
@@ -85,34 +90,18 @@ namespace MCAWebAndAPI.Service.HR.Payroll
         //</ ViewFields >
         private IEnumerable<AdjustmentDetailsVM> GetAjusmentDetails(string period)
         {
-            var caml = @"<View>  
-                              <Query> 
-                                </Query> 
-                            <ViewFields>
-                                <FieldRef Name='ID' />
-                                <FieldRef Name='ContentType' />
-                                <FieldRef Name='Title' />
-                                <FieldRef Name='adjustmentperiod' />
-                                <FieldRef Name='professional' />
-                                <FieldRef Name='professional_x003a_ID' />
-                                <FieldRef Name='adjustmenttype' />
-                                <FieldRef Name='adjustmentamount' />
-                                <FieldRef Name='adjustmentcurrency' />
-                                <FieldRef Name='debitorcredit' />
-                                <FieldRef Name='remarks' />
-                            </ViewFields>
-                           </View>";
-
             var adjustmentDetails = new List<AdjustmentDetailsVM>();
 
-            foreach (var item in SPConnector.GetList(SP_AJUDATA_LIST_NAME, _siteUrl, null))
+            foreach (var item in SPConnector.GetList(SP_AJUDATA_LIST_NAME, _siteUrl, ""))
             {
                 adjustmentDetails.Add(ConvertToAdjusDetailVM(item));
             }
 
-            var periodDate = Convert.ToDateTime(period);
+            var getperiod = Convert.ToDateTime(period);
+            var perioddate = FormatUtil.ConvertToDateString(getperiod);
+            getperiod = Convert.ToDateTime(perioddate);
 
-            var adjustmentList = from a in adjustmentDetails where a.period == periodDate select a;
+            var adjustmentList = from a in adjustmentDetails where a.period == getperiod select a;
 
             adjustmentDetails = adjustmentList.ToList();
 
@@ -143,6 +132,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
 
                 ddlProfessional = AdjustmentDetailsVM.getprofDefaultValue(FormatUtil.ConvertToInGridAjaxComboBox(item, "professional")),
                 period = Convert.ToDateTime(item["adjustmentperiod"]),
+                amount = Convert.ToString(item["adjustmentamount"]),
                 remark = Convert.ToString(item["remarks"]),
                 Title = Convert.ToString(item["Title"]),
                 ID = Convert.ToInt32(item["ID"]),
@@ -151,15 +141,18 @@ namespace MCAWebAndAPI.Service.HR.Payroll
 
         public void CreateAdjustmentData(string period, AdjustmentDataVM viewModels)
         {
-            var perioddate = Convert.ToDateTime(period);
+            var getperiod = Convert.ToDateTime(period);
+            var perioddate = FormatUtil.ConvertToDateString(getperiod);
+            getperiod = Convert.ToDateTime(perioddate);
+
             foreach (var viewModel in viewModels.AdjustmentDetails)
             {
                 if (viewModel.ID == null)
                 {
                     var cratedValueDetail = new Dictionary<string, object>();
 
-                    cratedValueDetail.Add("Title", period);
-                    cratedValueDetail.Add("adjustmentperiod", perioddate);
+                    cratedValueDetail.Add("Title", Convert.ToString(getperiod));
+                    cratedValueDetail.Add("adjustmentperiod", getperiod);
                     cratedValueDetail.Add("professional", new FieldLookupValue { LookupId = (int)viewModel.ddlProfessional.Value });
                     cratedValueDetail.Add("adjustmenttype", viewModel.ajusmentType.Text);
                     cratedValueDetail.Add("adjustmentamount", viewModel.amount);
@@ -179,26 +172,29 @@ namespace MCAWebAndAPI.Service.HR.Payroll
                 }
                 else
                 {
-                    var updatedValue = new Dictionary<string, object>();
-
-                    updatedValue.Add("Title", period);
-                    updatedValue.Add("adjustmentperiod", perioddate);
-                    updatedValue.Add("professional", new FieldLookupValue { LookupId = (int)viewModel.ddlProfessional.Value });
-                    updatedValue.Add("adjustmenttype", viewModel.ajusmentType.Text);
-                    updatedValue.Add("adjustmentamount", viewModel.amount);
-                    updatedValue.Add("adjustmentcurrency", viewModel.currency.Text);
-                    updatedValue.Add("debitorcredit", viewModel.payType.Text);
-                    updatedValue.Add("remarks", viewModel.remark);
-
-                    try
+                    if (Item.CheckIfUpdated(viewModel))
                     {
-                        SPConnector.UpdateListItem(SP_AJUDATA_LIST_NAME, viewModel.ID, updatedValue, _siteUrl);
+                        var updatedValue = new Dictionary<string, object>();
 
-                    }
-                    catch (Exception e)
-                    {
-                        logger.Error(e.Message);
-                        throw e;
+                        updatedValue.Add("Title", Convert.ToString(getperiod));
+                        updatedValue.Add("adjustmentperiod", getperiod);
+                        updatedValue.Add("professional", new FieldLookupValue { LookupId = (int)viewModel.ddlProfessional.Value });
+                        updatedValue.Add("adjustmenttype", viewModel.ajusmentType.Text);
+                        updatedValue.Add("adjustmentamount", viewModel.amount);
+                        updatedValue.Add("adjustmentcurrency", viewModel.currency.Text);
+                        updatedValue.Add("debitorcredit", viewModel.payType.Text);
+                        updatedValue.Add("remarks", viewModel.remark);
+
+                        try
+                        {
+                            SPConnector.UpdateListItem(SP_AJUDATA_LIST_NAME, viewModel.ID, updatedValue, _siteUrl);
+
+                        }
+                        catch (Exception e)
+                        {
+                            logger.Error(e.Message);
+                            throw e;
+                        }
                     }
                 }
                 if (Item.CheckIfDeleted(viewModel))
