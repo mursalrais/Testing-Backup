@@ -2,16 +2,16 @@
 
 
 
-@model AssignmentOfAssetVM
+@model AssetTransferVM
 
-@using (Html.BeginForm("Print", "ASSAssignmentOfAsset", FormMethod.Post,
+@using (Html.BeginForm("Print", "ASSAssetTransfer", FormMethod.Post,
                                                                                                             new
                                                                                                             {
                                                                                                                 @class = "form-horizontal",
                                                                                                                 enctype = "multipart/form-data"
                                                                                                             }))
 {
-    <form class="form-horizontal" method="post" action="/ASSAssignmentOfAsset/Print" id="create-asset-acquisition-form">
+    <form class="form-horizontal" method="post" action="/ASSAssetTransfer/Update" id="create-asset-acquisition-form">
         <fieldset>
             <legend>Form Asset Acquisition</legend>
             <div class="col-md-6">
@@ -78,7 +78,7 @@
     $(document).ready(function () {
         //$("#AssetHolder_Value").data("kendoDropDownList").value("");
         $('#print-button').click(function (e) {
-            var url = "/ASSAssignmentOfAsset/Print";
+            var url = "/ASSAssetTransfer/Print";
             submitFormToPrint(url);
         });
     })
@@ -119,7 +119,7 @@
     function onAssetChange(e) {
         var res = this.dataItem(e.item).split("-")
         //alert("berubah jadiii " + res[0]);
-        var url = "/ASSAssignmentOfAsset/GetProfMasterInfo?fullname=" + res[0] + "&position=" + res[1];
+        var url = "/ASSAssetTransfer/GetProfMasterInfo?fullname=" + res[0] + "&position=" + res[1];
         $.getJSON(url, function (data) {
             //do next
             document.getElementById('ProjectUnit').value = data.CurrentPosition.Text;

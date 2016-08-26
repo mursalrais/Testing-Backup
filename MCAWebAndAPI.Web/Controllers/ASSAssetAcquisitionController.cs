@@ -62,8 +62,7 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
+                return JsonHelper.GenerateJsonErrorResponse("Failed To Syncronize..");
             }
 
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAcquisition);
@@ -86,8 +85,7 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
+                return JsonHelper.GenerateJsonErrorResponse("Failed To Show Data For Update");
             }
 
             return View(viewModel);
@@ -110,8 +108,7 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
+                return JsonHelper.GenerateJsonErrorResponse("Failed To Get Data...s");
             }
 
             return View(viewModel);
@@ -126,7 +123,6 @@ namespace MCAWebAndAPI.Web.Controllers
 
             if (_data.Details.Count() == 0)
             {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse("Details should not empty");
             }
 
@@ -138,8 +134,7 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
+                return JsonHelper.GenerateJsonErrorResponse("Failed To Save Header..");
             }
 
             try
@@ -148,8 +143,7 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
+                return JsonHelper.GenerateJsonErrorResponse("Failed To Save Detail..");
             }
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAcquisition);
             //return Redirect(string.Format("{0}/{1}", siteUrl ?? ConfigResource.DefaultBOSiteUrl, UrlResource.AssetAcquisition));
@@ -166,8 +160,7 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
+                return JsonHelper.GenerateJsonErrorResponse("Failed To Update Header");
             }
 
             try
@@ -177,8 +170,7 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
+                return JsonHelper.GenerateJsonErrorResponse("Failed To Update Detail");
             }
 
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAcquisition);
