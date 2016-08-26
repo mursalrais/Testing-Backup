@@ -31,13 +31,18 @@ namespace MCAWebAndAPI.Web.Controllers
             _service = new HRManpowerRequisitionService();
             _professionalService = new ProfessionalService();
         }
+        private void SetSiteUrl(string siteUrl)
+        {
+            _service.SetSiteUrl(siteUrl);
+            SessionManager.Set("SiteUrl", siteUrl);
+        }
 
-        
-[HttpPost]
+
+        [HttpPost]
         public ActionResult ApprovalManpowerRequisition(FormCollection form, ManpowerRequisitionVM viewModel)
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
-            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SetSiteUrl(siteUrl);
 
             try
             {
@@ -45,9 +50,9 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
-                Response.TrySkipIisCustomErrors = true;
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e.Message);
+                return RedirectToAction("ErrorMessage",
+               "Success",
+               new { eMessage = e.Message, previousUrl = siteUrl + "/SitePages/ManpowerRequisiteApproval.aspx" });
             }
             //send to requestor how to get requestor email from approval
             Task sendRequestor = EmailUtil.SendAsync(viewModel.Username, "Application Submission Confirmation",
@@ -82,9 +87,8 @@ namespace MCAWebAndAPI.Web.Controllers
         public async Task<ActionResult> ApprovalManpowerRequisition(string siteUrl = null, int? ID = null)
         {
             // MANDATORY: Set Site URL
-            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-
+            SetSiteUrl(siteUrl);
+            
             var viewModel = await _service.GetManpowerRequisitionAsync(ID);
             if (viewModel.Status.Value == "Pending Approval 1 of 2")
             {
@@ -101,9 +105,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public async Task<ActionResult> EditManpowerRequisition(string siteUrl = null, int? ID = null, string username = null)
         {
-            // MANDATORY: Set Site URL
-            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SetSiteUrl(siteUrl);
 
             var viewModel = await _service.GetManpowerRequisitionAsync(ID);
             
@@ -123,9 +125,9 @@ namespace MCAWebAndAPI.Web.Controllers
         [HttpPost]
         public ActionResult EditManpowerRequisition(FormCollection form, ManpowerRequisitionVM viewModel)
         {
-                       
+
             var siteUrl = SessionManager.Get<string>("SiteUrl");
-            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SetSiteUrl(siteUrl);
             try
             {
                 _service.CreateManpowerRequisitionDocuments(viewModel.ID, viewModel.Documents);
@@ -144,9 +146,13 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
-                Response.TrySkipIisCustomErrors = true;
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e.Message);
+                //Response.TrySkipIisCustomErrors = true;
+                //Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                //return JsonHelper.GenerateJsonErrorResponse(e.Message);
+
+                return RedirectToAction("ErrorMessage",
+               "Success",
+               new { eMessage = e.Message, previousUrl= siteUrl+UrlResource.ManpowerRequisition });
             }
 
 
@@ -158,9 +164,9 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
-                Response.TrySkipIisCustomErrors = true;
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e.Message);
+                return RedirectToAction("ErrorMessage",
+               "Success",
+               new { eMessage = e.Message, previousUrl = siteUrl + UrlResource.ManpowerRequisition });
             }
 
             if (viewModel.Status.Value == "Pending Approval")
@@ -211,14 +217,17 @@ namespace MCAWebAndAPI.Web.Controllers
 
             return RedirectToAction("Index",
                 "Success",
-                new { errorMessage = string.Format(MessageResource.SuccessCommon, viewModel.ID) });
+                new
+                {
+                    successMessage =
+                string.Format(MessageResource.SuccessCreateApplicationData, string.Empty)
+                });
         }
 
         public async Task<ActionResult> DisplayManpowerRequisition(string siteUrl = null, int? ID = null)
         {
             // MANDATORY: Set Site URL
-            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SetSiteUrl(siteUrl);
 
             var viewModel = await _service.GetManpowerRequisitionAsync(ID);
 
@@ -227,9 +236,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult CreateManpowerRequisition(string siteUrl = null, string username = null)
         {
-            // MANDATORY: Set Site URL
-            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SetSiteUrl(siteUrl);
 
             // Used for Workflow Router
             ViewBag.ListName = "Manpower%20Requisition";
@@ -245,9 +252,9 @@ namespace MCAWebAndAPI.Web.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateManpowerRequisition(FormCollection form, ManpowerRequisitionVM viewModel)
         {
-           
+
             var siteUrl = SessionManager.Get<string>("SiteUrl");
-            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SetSiteUrl(siteUrl);
 
             int? headerID = null;
             try
@@ -256,9 +263,9 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
-                Response.TrySkipIisCustomErrors = true;
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e.Message);
+                return RedirectToAction("ErrorMessage",
+               "Success",
+               new { eMessage = e.Message, previousUrl = siteUrl + UrlResource.ManpowerRequisition });
             }
 
             Task CreateWorkingRelationshipDetailsTask = _service.CreateWorkingRelationshipDetailsAsync(headerID, viewModel.WorkingRelationshipDetails);
@@ -318,9 +325,9 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
-                Response.TrySkipIisCustomErrors = true;
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e.Message);
+                return RedirectToAction("ErrorMessage",
+               "Success",
+               new { eMessage = e.Message, previousUrl = siteUrl + UrlResource.ManpowerRequisition });
             }
 
             return RedirectToAction("Index",
@@ -328,7 +335,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 new
                 {
                     successMessage =
-                string.Format(MessageResource.SuccessCreateApplicationData, viewModel.Position.Value)
+                string.Format(MessageResource.SuccessCreateApplicationData,string.Empty)
                 });
         }
 

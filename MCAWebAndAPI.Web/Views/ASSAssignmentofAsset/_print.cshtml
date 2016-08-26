@@ -1,0 +1,91 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Asset
+
+
+
+@model AssignmentOfAssetVM
+{
+<fieldset>
+    <center>
+        <br /><br /><br /><br /><br />
+        <h2>MEMO FOR  ASSIGNMENT OF ASSET</h2>
+        <h4>@Model.AssetIDs</h4>
+    </center>
+    <br /><br />
+    <div class="col-md-6">
+        <justify>
+            <p>
+                To support the implementation of the Compact program, @Model.nameOnly , MCA-Indonesia @Model.position
+                have been assigned Assets (listed below), accordingly, she/he is temporarily assuming responsiblity of the item(s).
+
+                The asset custodian should take reasonable precautions to protect the asset and comply with any applicable policy
+                regarding the use of the asset. The asset custodian should not use the asset for non-work related tasks, or allow
+                non-employees to use the assets.
+
+                Safety in the workplace is considered as important issue in the MCA-Indonesia, thereore, if The Asset Custodian
+                are unsure of the proper and safe way to use any piece of the equipment, she/he must contact her/his supervisor immediately.
+                She/he should never use any piece of equipment in a way that she/he know or suspect may be unsafe. Likewise, she/he
+                should immediately report any problems or damage to, or resulting from, MCA-Indonesia's asset as well as any theft of the asset.
+
+                The Asset Custodian may be charged for any loss or damage to the asset that is attributable to their negligenc
+                or unauthorized use of asset.
+
+                The asset shall only be used in furtherance of the Compact objectives and shall not be made available for the personal
+                benefit of the asset custodian.
+
+            </p>
+        </justify>
+    </div>
+    <br /><br /><br /><br /><br /> <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /> <br /><br /><br /><br /><br />
+    <div class="col-md-6">
+        I, @Model.nameOnly acknowledge the foregoing terms of the assignment of asset and agree to abide by its term.
+        <br /><br /><br /><br /><br /> <br /><br /><br /><br /><br /><br /><br />
+        <table border="0" width="100%">
+            <tr>
+                <td><hr style="border:1px solid;width:200px"></td>
+                <td><hr style="border:1px solid;width:200px"></td>
+            </tr>
+            <tr>
+                <td align="center">Date</td>
+                <td align="center">Asset Custodian Signature</td>
+            </tr>
+        </table>
+    </div>
+
+    <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+    <div class="col-md-6">
+        <center>
+            <h2>HANDOVER NOTES FOR GOODS & ITEMS</h2>
+            <br /><br />
+        </center>
+    </div>
+
+    <div class="col-md-6">
+        Professional Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:@Model.nameOnly <br />
+        Contact No &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: @Model.ContactNo
+        <br /><br /><br />
+        Hereby to declare that the Professional has received the items by these description.
+        <br /><br /><br />
+    </div>
+    @Html.Partial("_DetailsPrint", Model.Details)
+    <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+
+    <div class="col-md-6">
+        Done in Jakarta, .................................................. <br /><br />
+        By
+        <br /><br /><br /><br /><br /><br /><br /><br />
+        <table border="0" width="100%">
+            <tr>
+                <td><hr style="border:1px solid;width:200px"></td>
+                <td><hr style="border:1px solid;width:200px"></td>
+            </tr>
+            <tr>
+                <td align="center">(Name)</td>
+                <td align="center">(Name)</td>
+            </tr>
+        </table>
+    </div>
+</fieldset>
+@Html.HiddenFor(m => m.ID)
+@Html.HiddenFor(m => m.AssetIDs)
+@Html.HiddenFor(m => m.nameOnly)
+    }

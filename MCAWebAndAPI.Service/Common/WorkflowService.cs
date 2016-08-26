@@ -19,13 +19,13 @@ namespace MCAWebAndAPI.Service.Common
         const string SP_POSMAS_LIST_NAME = "Position Master";
         const string SP_EXIT_CHECKLIST_LIST_NAME = "Exit Procedure Checklist";
 
-        public IEnumerable<PositionMaster> GetPositionsInWorkflow(string listName, 
+        public IEnumerable<PositionMaster> GetPositionsInWorkflow(string listName,
             string approverUnit, string requestorUnit, string requestorPosition)
         {
             var caml = @"<View>  
             <Query> 
                <Where><And><And><And><Eq>
-                <FieldRef Name='approverunit' /><Value Type='Choice'>" 
+                <FieldRef Name='approverunit' /><Value Type='Choice'>"
                     + approverUnit + @"</Value></Eq><Eq>
                 <FieldRef Name='requestorposition' /><Value Type='Lookup'>"
                     + requestorPosition + @"</Value></Eq></And><Eq>
@@ -42,14 +42,14 @@ namespace MCAWebAndAPI.Service.Common
             {
                 positions.Add(new PositionMaster
                 {
-                    ID = FormatUtil.ConvertLookupToID(item, "approverposition"), 
+                    ID = FormatUtil.ConvertLookupToID(item, "approverposition"),
                     PositionName = FormatUtil.ConvertLookupToValue(item, "approverposition")
                 });
             }
 
             return positions;
         }
-       
+
 
         public async Task<WorkflowRouterVM> GetWorkflowRouter(string listName, string requestor)
         {
@@ -73,12 +73,12 @@ namespace MCAWebAndAPI.Service.Common
             // Get Unit in Position Master
             var position = SPConnector.GetListItem(SP_POSMAS_LIST_NAME, positionID, _siteUrl);
             viewModel.RequestorUnit = Convert.ToString(position["projectunit"]);
-            
+
             // Get List of Workflow Items based on List name, Requestor Position, and Requestor Unit
             caml = @"<View>  
             <Query> 
-               <Where><And><And><Eq><FieldRef Name='requestorposition' /><Value Type='Lookup'>" + viewModel.RequestorPosition + 
-               @"</Value></Eq><Eq><FieldRef Name='requestorunit' /><Value Type='Choice'>" + viewModel.RequestorUnit +  @"</Value></Eq></And><Eq>
+               <Where><And><And><Eq><FieldRef Name='requestorposition' /><Value Type='Lookup'>" + viewModel.RequestorPosition +
+               @"</Value></Eq><Eq><FieldRef Name='requestorunit' /><Value Type='Choice'>" + viewModel.RequestorUnit + @"</Value></Eq></And><Eq>
                <FieldRef Name='transactiontype' /><Value Type='Choice'>" + listName + @"</Value></Eq></And></Where> 
             <OrderBy><FieldRef Name='approverlevel' /></OrderBy>
             </Query> 
@@ -87,12 +87,12 @@ namespace MCAWebAndAPI.Service.Common
             var workflowItems = new List<WorkflowItemVM>();
             foreach (var item in SPConnector.GetList(SP_WORKFLOW_LISTNAME, _siteUrl, caml))
             {
-                if ( string.Compare(Convert.ToString(item["isdefault"]), "No",
+                if (string.Compare(Convert.ToString(item["isdefault"]), "No",
                     StringComparison.OrdinalIgnoreCase) == 0
-                    && 
-                    string.Compare(Convert.ToString(item["workflowtype"]), "Sequential", 
+                    &&
+                    string.Compare(Convert.ToString(item["workflowtype"]), "Sequential",
                     StringComparison.OrdinalIgnoreCase) == 0)
-                continue;
+                    continue;
 
                 var vm = await ConvertToWorkflowItemVM(item);
                 workflowItems.Add(vm);
@@ -105,7 +105,7 @@ namespace MCAWebAndAPI.Service.Common
 
         private async Task<WorkflowItemVM> ConvertToWorkflowItemVM(ListItem item)
         {
-            
+
             var viewModel = new WorkflowItemVM();
             viewModel.ApproverPosition = FormatUtil.ConvertToInGridAjaxComboBox(item, "approverposition");
             Task<IEnumerable<ProfessionalMaster>> getApproverNamesTask =
@@ -113,11 +113,11 @@ namespace MCAWebAndAPI.Service.Common
 
             viewModel.Level = Convert.ToString(item["approverlevel"]);
 
-            if(viewModel.Level == "1")
+            if (viewModel.Level == "1")
             {
                 viewModel.ItemExitProcedure = "Close-Out/Handover Report";
             }
-            else if(viewModel.Level == "2")
+            else if (viewModel.Level == "2")
             {
                 viewModel.ItemExitProcedure = "MCA Indonesia Propietary Information";
             }
@@ -197,16 +197,11 @@ namespace MCAWebAndAPI.Service.Common
             return GetApproverNames(position);
         }
 
-        private async Task<IEnumerable<ProfessionalMaster>> GetApproverUserNamesAsync(string position)
-        {
-            return GetApproverUserNames(position);
-        }
-
         private string GetApproverUserLogin(int userID)
         {
             var caml = @"<View>  
             <Query> 
-               <Where><Eq><FieldRef Name='ID' /><Value Type='Counter'>" 
+               <Where><Eq><FieldRef Name='ID' /><Value Type='Counter'>"
                 + userID + @"</Value></Eq></Where> 
             </Query>
              <ViewFields><FieldRef Name='officeemail' /></ViewFields> 
@@ -263,7 +258,7 @@ namespace MCAWebAndAPI.Service.Common
             }
         }
 
-        public void SendApprovalRequest(string workflowTransactionListName, 
+        public void SendApprovalRequest(string workflowTransactionListName,
             string transactionLookupColumnName, int headerID, int level, string message)
         {
             var caml = @"<View>  
@@ -290,8 +285,11 @@ namespace MCAWebAndAPI.Service.Common
             var updatedValue = new Dictionary<string, object>();
             updatedValue.Add(transactionLookupColumnName, new FieldLookupValue { LookupId = headerID });
             updatedValue.Add("approverlevel", workflowItem.Level);
-            updatedValue.Add("approver0", GetApproverUserLogin((int)workflowItem.ApproverUserName.Value));
+            updatedValue.Add("approver0", GetApproverUserLogin((int)workflowItem.ApproverName.Value));
             updatedValue.Add("requestor0", requestor);
+            updatedValue.Add("position", workflowItem.ApproverPositionId);
+            updatedValue.Add("projectunit", workflowItem.ApproverUnitText);
+            updatedValue.Add("approvername", workflowItem.ApproverName.Value);
             SPConnector.AddListItem(workflowTransactionListName, updatedValue, _siteUrl);
         }
 
@@ -331,9 +329,9 @@ namespace MCAWebAndAPI.Service.Common
             var getTimesheetWorkflow = GetPendingApprovalItemsAsync(userLogin, "Timesheet", "timesheet");
 
             var allTask = Task.WhenAll(
-                getManpowerRequisitionWorkflow, 
-                getCompensatoryRequestWorkflow, 
-                getDayOffRequestWorkflow, 
+                getManpowerRequisitionWorkflow,
+                getCompensatoryRequestWorkflow,
+                getDayOffRequestWorkflow,
                 getExitProcedureWorkflow,
                 getPayrollRunWorkflow,
                 getProfessionalPerformanceEvaluationWorkflow,
@@ -382,9 +380,10 @@ namespace MCAWebAndAPI.Service.Common
             };
         }
 
-        public async Task<WorkflowRouterVM> GetApprovalPath(string listName, string requestor)
+        public async Task<IEnumerable<WorkflowItemVM>> GetWorkflowDetails(string requestor, string listName)
         {
             var viewModel = new WorkflowRouterVM();
+
             viewModel.ListName = listName;
 
             // Get Position in Professional Master
@@ -418,109 +417,49 @@ namespace MCAWebAndAPI.Service.Common
             var workflowItems = new List<WorkflowItemVM>();
             foreach (var item in SPConnector.GetList(SP_WORKFLOW_LISTNAME, _siteUrl, caml))
             {
-                if (string.Compare(Convert.ToString(item["isdefault"]), "No",
-                    StringComparison.OrdinalIgnoreCase) == 0
-                    &&
-                    string.Compare(Convert.ToString(item["workflowtype"]), "Sequential",
-                    StringComparison.OrdinalIgnoreCase) == 0)
-                    continue;
-
-                var vm = await ConvertToApprovalItemVM(item);
+                var vm = await ConvertToWorkflowDetail(item);
                 workflowItems.Add(vm);
             }
 
-            viewModel.WorkflowItems = workflowItems;
-
-            return viewModel;
+            return workflowItems;
         }
 
-        private async Task<WorkflowItemVM> ConvertToApprovalItemVM(ListItem item)
+        private async Task<WorkflowItemVM> ConvertToWorkflowDetail(ListItem item)
         {
             var viewModel = new WorkflowItemVM();
             viewModel.ApproverPositionText = FormatUtil.ConvertLookupToValue(item, "approverposition");
+            viewModel.ApproverPositionId = FormatUtil.ConvertLookupToID(item, "approverposition");
             Task<IEnumerable<ProfessionalMaster>> getApproverNamesTask =
-                GetApproverUserNamesAsync(viewModel.ApproverPositionText);
+                GetApproverUserNames(viewModel.ApproverPositionText);
 
             viewModel.Level = Convert.ToString(item["approverlevel"]);
-
-            if (viewModel.Level == "1")
-            {
-                viewModel.ItemExitProcedure = "Close-Out/Handover Report";
-            }
-            else if (viewModel.Level == "2")
-            {
-                viewModel.ItemExitProcedure = "MCA Indonesia Propietary Information";
-            }
-            else if (viewModel.Level == "3")
-            {
-                viewModel.ItemExitProcedure = "Laptop/Desktop";
-            }
-            else if (viewModel.Level == "4")
-            {
-                viewModel.ItemExitProcedure = "SAP Password, Computer Password";
-            }
-            else if (viewModel.Level == "5")
-            {
-                viewModel.ItemExitProcedure = "IT Tools";
-            }
-            else if (viewModel.Level == "6")
-            {
-                viewModel.ItemExitProcedure = "Keys (Drawers,desk,etc)";
-            }
-            else if (viewModel.Level == "7")
-            {
-                viewModel.ItemExitProcedure = "Car";
-            }
-            else if (viewModel.Level == "8")
-            {
-                viewModel.ItemExitProcedure = "Advance Statement";
-            }
-            else if (viewModel.Level == "9")
-            {
-                viewModel.ItemExitProcedure = "Travel Statement";
-            }
-            else if (viewModel.Level == "10")
-            {
-                viewModel.ItemExitProcedure = "Resignation/Separation Letter";
-            }
-            else if (viewModel.Level == "11")
-            {
-                viewModel.ItemExitProcedure = "Timesheet/Leave Form";
-            }
-            else if (viewModel.Level == "12")
-            {
-                viewModel.ItemExitProcedure = "Exit Interview/NDA";
-            }
-            else if (viewModel.Level == "13")
-            {
-                viewModel.ItemExitProcedure = "Insurance Card";
-            }
-            else if (viewModel.Level == "14")
-            {
-                viewModel.ItemExitProcedure = "ID Card & Access Card";
-            }
 
             viewModel.ApproverUnitText = Convert.ToString(item["approverunit"]);
 
             var userNames = await getApproverNamesTask;
             var userName = userNames.FirstOrDefault();
-            viewModel.ApproverUserName = AjaxComboBoxVM.GetDefaultValue(new AjaxComboBoxVM
+            viewModel.ApproverName = AjaxComboBoxVM.GetDefaultValue(new AjaxComboBoxVM
             {
                 Text = userName.Name,
-                Value = userName.ID
+                Value = userName.ID,
             });
 
             return viewModel;
         }
 
-        public IEnumerable<ProfessionalMaster> GetApproverUserNames(string position)
+        private async Task<IEnumerable<ProfessionalMaster>> GetApproverUserNamesAsync(string position)
+        {
+            return await GetApproverUserNames(position);
+        }
+
+        public async Task<IEnumerable<ProfessionalMaster>> GetApproverUserNames(string position)
         {
             var caml = @"<View>  
             <Query> 
              <Where><And><Eq><FieldRef Name='Professional_x0020_Status' /><Value Type='Choice'>Active</Value></Eq><Eq><FieldRef Name='Position' /><Value Type='Lookup'>" + position + @"</Value></Eq></And></Where> 
             </Query> 
              <ViewFields><FieldRef Name='Title' /><FieldRef Name='officeemail' /></ViewFields> 
-      </View>";  
+      </View>";
 
             var viewModel = new List<ProfessionalMaster>();
             foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl, caml))
@@ -547,6 +486,40 @@ namespace MCAWebAndAPI.Service.Common
             }
 
             return viewModel;
+        }
+
+        public async Task<IEnumerable<WorkflowItemVM>> CheckWorkflow(int headerID, string workflowTransactionListName, string transactionLookupColumnName)
+        {
+            var caml = @"<View>  
+            <Query> 
+               <Where><Eq><FieldRef Name='" + transactionLookupColumnName + @"' /><Value Type='Lookup'>" + headerID + @"</Value></Eq></Where> 
+            </Query> 
+      </View>";
+
+            var count = SPConnector.GetList(workflowTransactionListName, _siteUrl, caml).Count();
+            var WorkflowItems = new List<WorkflowItemVM>();
+            var viewModel = new WorkflowItemVM();
+            foreach (var item in SPConnector.GetList(workflowTransactionListName, _siteUrl, caml))
+            {
+                WorkflowItems.Add(ConvertToWorkflowItem(item));
+            }
+            return WorkflowItems;
+        }
+
+        private WorkflowItemVM ConvertToWorkflowItem(ListItem item)
+        {
+            return new WorkflowItemVM
+            {
+                Level = Convert.ToString(item["approverlevel"]),
+                ApproverUnitText = Convert.ToString(item["projectunit"]),
+                ApproverPositionText = FormatUtil.ConvertLookupToValue(item, "position"),
+                ApproverPositionId = FormatUtil.ConvertLookupToID(item, "position"),
+                ApproverName = AjaxComboBoxVM.GetDefaultValue(new AjaxComboBoxVM
+                {
+                    Text = FormatUtil.ConvertLookupToValue(item, "approvername"),
+                    Value = FormatUtil.ConvertLookupToID(item, "approvername_x003a_ID"),
+                })
+            };
         }
     }
 }

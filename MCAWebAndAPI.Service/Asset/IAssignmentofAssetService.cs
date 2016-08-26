@@ -14,11 +14,14 @@ namespace MCAWebAndAPI.Service.Asset
     {
         void SetSiteUrl(string siteUrl);
 
+        bool Syncronize(string SiteUrl);
+
         //create empty form
         AssignmentOfAssetVM GetPopulatedModel(string SiteUrl);
         AssignmentOfAssetVM GetHeader(int? ID = null, string SiteUrl = null);
 
         IEnumerable<AssignmentOfAssetDetailsVM> GetDetails(int? headerID);
+        IEnumerable<AssignmentOfAssetDetailsVM> GetDetailsPrint(int? headerID);
 
         int? CreateHeader(AssignmentOfAssetVM viewmodel, string SiteUrl, string mode = null);
         bool UpdateHeader(AssignmentOfAssetVM viewmodel, string SiteUrl);

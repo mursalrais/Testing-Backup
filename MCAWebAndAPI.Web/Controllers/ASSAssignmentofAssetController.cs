@@ -1,4 +1,5 @@
-﻿using Kendo.Mvc.Extensions;
+﻿using Elmah;
+using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using MCAWebAndAPI.Model.ViewModel.Control;
 using MCAWebAndAPI.Model.ViewModel.Form.Asset;
@@ -61,6 +62,30 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewModel);
         }
 
+        public ActionResult View(int ID, string SiteUrl)
+        {
+            _service.SetSiteUrl(SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            var viewModel = _service.GetHeader(ID, SiteUrl);
+
+            int? headerID = null;
+            headerID = viewModel.ID;
+
+            try
+            {
+                var viewdetails = _service.GetDetails(headerID);
+                viewModel.Details = viewdetails;
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            return View(viewModel);
+        }
+
         [HttpPost]
         public ActionResult Submit(AssignmentOfAssetVM _data, string siteUrl)
         {
@@ -72,6 +97,11 @@ namespace MCAWebAndAPI.Web.Controllers
             try
             {
                 headerID = _service.CreateHeader(_data, siteUrl);
+                if(headerID == 0)
+                {
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    return JsonHelper.GenerateJsonErrorResponse("Have To Attach File to Change Completion Status into Complete");
+                }
                 //_service.CreateDocuments(headerID, _data.Attachment, siteUrl);
             }
             catch (Exception e)
@@ -86,6 +116,8 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
+                //rollback parent
+                _service.RollbackParentChildrenUpload("Asset Assignment", headerID, siteUrl);
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
@@ -100,7 +132,12 @@ namespace MCAWebAndAPI.Web.Controllers
 
             try
             {
-                _service.UpdateHeader(_data, siteUrl);
+                var update = _service.UpdateHeader(_data, siteUrl);
+                if (update == false)
+                {
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    return JsonHelper.GenerateJsonErrorResponse("Have To Attach File to Change Completion Status into Complete");
+                }
             }
             catch (Exception e)
             {
@@ -660,6 +697,75 @@ namespace MCAWebAndAPI.Web.Controllers
                     }
                 }
             }
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAssignment);
+        }
+
+        [HttpPost]
+        public ActionResult Print(FormCollection form, AssignmentOfAssetVM viewModel, string SiteUrl)
+        {
+            SiteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            const string RelativePath = "~/Views/ASSAssignmentOfAsset/Print.cshtml";
+            var view = ViewEngines.Engines.FindView(ControllerContext, RelativePath, null);
+            var nm = viewModel.AssetHolder.Value.Split('-');
+            viewModel.nameOnly = nm[0];
+            viewModel.position = nm[1];
+            viewModel.Details = _service.GetDetailsPrint(viewModel.ID);
+            var fileName = nm[0] + "_AssignmentOfAsset.pdf";
+            byte[] pdfBuf = null;
+            string content;
+
+            // ControllerContext context = new ControllerContext();
+            ControllerContext.Controller.ViewData.Model = viewModel;
+            ViewData = ControllerContext.Controller.ViewData;
+            TempData = ControllerContext.Controller.TempData;
+
+            using (var writer = new StringWriter())
+            {
+                var contextviewContext = new ViewContext(ControllerContext, view.View, ViewData, TempData, writer);
+                view.View.Render(contextviewContext, writer);
+                writer.Flush();
+                content = writer.ToString();
+
+                // Get PDF Bytes
+                try
+                {
+                    pdfBuf = PDFConverter.Instance.ConvertFromHTML(fileName, content);
+                }
+                catch (Exception e)
+                {
+                    ErrorSignal.FromCurrentContext().Raise(e);
+                    RedirectToAction("Index", "Error");
+                }
+            }
+            if (pdfBuf == null)
+                return HttpNotFound();
+            return File(pdfBuf, "application/pdf");
+        }
+
+        public ActionResult Sync(string siteUrl)
+        {
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            var viewModel = _service.GetPopulatedModel(siteUrl);
+            return View(viewModel);
+        }
+
+        public ActionResult Syncronize(string siteUrl)
+        {
+            siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            try
+            {
+                var viewModel = _service.Syncronize(siteUrl);
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAssignment);
         }
 

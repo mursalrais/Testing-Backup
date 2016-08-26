@@ -195,7 +195,7 @@ namespace MCAWebAndAPI.Service.Utils
                 }
 
                 // Get current editor
-                var currentEditor = SPListItem["Editor"];
+                //var currentEditor = SPListItem["Editor"];
                
                 // Set listitem value to parsed listitem
                 foreach (var key in updatedValues.Keys)
