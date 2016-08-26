@@ -253,7 +253,18 @@ namespace MCAWebAndAPI.Service.HR.Leave
                 model.ProfessionalID = Convert.ToInt32(item ["ID"]);
                 model.ProjectUnit = Convert.ToString(item["Project_x002f_Unit"]);
                 model.PositionID = FormatUtil.ConvertLookupToID(item, "Position").Value;
-                
+                model.LastWorkingDate = Convert.ToDateTime(item["lastworkingdate"]).ToLocalTime();
+                model.PSAExpiryDate = Convert.ToDateTime(item["PSAexpirydate"]).ToLocalTime();
+                model.ProfessionalStatus = Convert.ToString(item["Professional_x0020_Status"]);
+
+                string strLastWorkingDate = Convert.ToDateTime(item["lastworkingdate"]).ToLocalTime().ToShortDateString();
+                string strPSAExpiryDate = Convert.ToDateTime(item["PSAexpirydate"]).ToLocalTime().ToShortDateString();
+
+                if(strLastWorkingDate == "1/1/0001")
+                {
+                    model.LastWorkingDate = Convert.ToDateTime(item["PSAexpirydate"]).ToLocalTime();
+                }
+
                 break;
             }
 
@@ -641,7 +652,7 @@ namespace MCAWebAndAPI.Service.HR.Leave
             updatedValues.Add("professional", new FieldLookupValue { LookupId = (int)dayOffRequest.ProfessionalID});
             updatedValues.Add("projectunit", dayOffRequest.ProjectUnit);
             updatedValues.Add("requestdate", dayOffRequest.RequestDate);
-            updatedValues.Add("dayoffrequeststatus", dayOffRequest.DayOffRequestStatus);
+            updatedValues.Add("dayoffrequeststatus", dayOffRequest.StatusForm);
 
             if (dayOffRequest.StatusForm == "Draft")
             {
@@ -652,15 +663,15 @@ namespace MCAWebAndAPI.Service.HR.Leave
 
                 updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hr"));
             }
-            //if (.StatusForm == "Pending Approval")
-            //{
-            //    statusExitProcedure = "Pending Approval";
+            if (dayOffRequest.StatusForm == "Pending Approval")
+            {
+                statusExitProcedure = "Pending Approval";
 
-            //    var professionalData = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, exitProcedure.ProfessionalID, _siteUrl);
-            //    string professionalOfficeMail = Convert.ToString(professionalData["officeemail"]);
+                var professionalData = SPConnector.GetListItem(SP_PRO_MAS_LIST_NAME, dayOffRequest.ProfessionalID, _siteUrl);
+                string professionalOfficeMail = Convert.ToString(professionalData["officeemail"]);
 
-            //    updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hr"));
-            //}
+                updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hr"));
+            }
             //if (exitProcedure.StatusForm == "Saved by HR")
             //{
             //    statusExitProcedure = "Draft";
