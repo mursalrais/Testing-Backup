@@ -5,11 +5,11 @@
 @model AssignmentOfAssetVM
 
 @using (Html.BeginForm("Print", "HRProfessionalPerformanceEvaluation", FormMethod.Post,
-                                                                                                new
-                                                                                                {
-                                                                                                    @class = "form-horizontal",
-                                                                                                    enctype = "multipart/form-data"
-                                                                                                }))
+                                                                                                            new
+                                                                                                            {
+                                                                                                                @class = "form-horizontal",
+                                                                                                                enctype = "multipart/form-data"
+                                                                                                            }))
 {
     <form class="form-horizontal" method="post" action="/ASSAssignmentOfAsset/Update" id="create-asset-acquisition-form">
         <fieldset>
@@ -66,9 +66,7 @@
                     <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
                 </a>
 
-                <button id="print-button"  type="button">
-                    Print
-                </button>
+                <input id="print-button" class="k-button k-button-icontext k-grid-add" size="4" value="Print" />
             </center>
         </div>
 
