@@ -1114,6 +1114,7 @@
     <Content Include="Views\FINSCAVoucher\_PartialHeaderWithLogo.cshtml" />
     <Content Include="Views\FINPettyCashSettlement\Print.cshtml" />
     <Content Include="Views\FINLandingPage\Index.cshtml" />
+    <Content Include="Views\FINEventBudget\Print.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
