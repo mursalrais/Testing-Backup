@@ -56,8 +56,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
         [HttpPost]
         public async Task<ActionResult> EditProfessional(FormCollection form, ProfessionalDataVM viewModel)
-        {
-            
+        {            
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             SetSiteUrl(siteUrl);
 
@@ -126,7 +125,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse(e.Message);
             }
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl+"/"+UrlResource.Professional);
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl+"/"+UrlResource.ProfessionalData);
         }
 
         private IEnumerable<DependentDetailVM> BindDependentDetails(FormCollection form, IEnumerable<DependentDetailVM> dependentDetails)

@@ -12,6 +12,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
     {
 
         public IEnumerable<AssetLoanAndReturnItemVM> AssetLoanAndReturnItem { get; set; } = new List<AssetLoanAndReturnItemVM>();
+
+
         public DateTime _loanDate;
         public ComboBoxVM _professional;
 
@@ -21,38 +23,38 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
         [DisplayName("Transaction Type")]
         public string TransactionType { get; set; }
 
-        //[Required(ErrorMessage = "Professional Field Is Required")]
-        //[UIHint("ComboBox")]
-        //public ComboBoxVM Professional
-        //{
-        //    get
-        //    {
-        //        if (_professional == null)
-        //            _professional = new ComboBoxVM()
-        //            {
-        //                Choices = new string[]
-        //                {
-        //                    ""
-        //                },
-        //                OnSelectEventName = "onSelectedProfessional"
-        //            };
-        //        return _professional;
-        //    }
-        //    set
-        //    {
-        //        _professional = value;
-        //    }
-        //}
-
-        [UIHint("AjaxComboBox")]
-        public AjaxComboBoxVM Professional { get; set; } = new AjaxComboBoxVM
+        [Required(ErrorMessage = "Professional Field Is Required")]
+        [UIHint("ComboBox")]
+        public ComboBoxVM Professional
         {
-            ActionName = "GetProfessionals",
-            ControllerName = "HRDataMaster",
-            ValueField = "ID",
-            TextField = "Desc1",
-            OnSelectEventName = "OnSelectProfessionalName"
-        };
+            get
+            {
+                if (_professional == null)
+                    _professional = new ComboBoxVM()
+                    {
+                        Choices = new string[]
+                        {
+                            "1","2"
+                        },
+                        OnSelectEventName = "OnSelectProfessionalName"
+                    };
+                return _professional;
+            }
+            set
+            {
+                _professional = value;
+            }
+        }
+
+        //[UIHint("AjaxComboBox")]
+        //public AjaxComboBoxVM Professional { get; set; } = new AjaxComboBoxVM
+        //{
+        //    ActionName = "GetProfessionals",
+        //    ControllerName = "HRDataMaster",
+        //    ValueField = "ID",
+        //    TextField = "Desc1",
+        //    OnSelectEventName = "OnSelectProfessionalName"
+        //};
 
         [DisplayName("Project/Unit")]
         public string Project { get; set; }

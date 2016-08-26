@@ -293,4 +293,13 @@
   <data name="AssetDisposal" xml:space="preserve">
     <value>/Lists/Asset%20Disposal/AllItems.aspx</value>
   </data>
+  <data name="AssetAssignment" xml:space="preserve">
+    <value>/Lists/Asset%20Assignment/AllItems.aspx</value>
+  </data>
+  <data name="AssetLoanAndReturn" xml:space="preserve">
+    <value>/Lists/Asset%20Loan%20Return/AllItems.aspx</value>
+  </data>
+  <data name="ProfessionalData" xml:space="preserve">
+    <value>/SitePages/Professional%20Data.aspx</value>
+  </data>
 </root>

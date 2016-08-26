@@ -11,7 +11,6 @@
 <div class="col-md-12" style="margin-bottom: 20px">
     @(Html.Kendo().Grid(Model)
                         .Name("Details")
-                        .ToolBar(tools => tools.Create().Text("Add New"))
                         .Editable(editable => editable.Mode(GridEditMode.InCell)
                         .CreateAt(GridInsertRowPosition.Bottom))
                         .Columns(columns =>
@@ -48,8 +47,6 @@
             );
                             columns.Bound(p => p.EditMode).Hidden()
                                      .ClientTemplate("#= EditMode #<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].EditMode' value='#= EditMode #' />");
-                            columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
-                                        .Click("onDeleteKendoDetail")).Width(100);
                         })
         .Events(e =>
         {
@@ -60,8 +57,8 @@
                    .Model(model =>
                    {
                        model.Id(p => p.ID);
-                       model.Field(m => m.AssetSubAsset).DefaultValue(AssignmentOfAssetDetailsVM.GetAssetSubAssetDefaultValue());
-                       model.Field(m => m.Province).DefaultValue(AssignmentOfAssetDetailsVM.GetProvinceDefaultValue());
+                       model.Field(m => m.AssetSubAsset).Editable(false).DefaultValue(AssignmentOfAssetDetailsVM.GetAssetSubAssetDefaultValue());
+                       model.Field(m => m.Province).Editable(false).DefaultValue(AssignmentOfAssetDetailsVM.GetProvinceDefaultValue());
                        //model.Field(m => m.OfficeName).DefaultValue(AssignmentOfAssetDetailsVM.GetOfficeNameDefautValue());
                        //model.Field(m => m.Floor).DefaultValue(AssignmentOfAssetDetailsVM.GetFloorDefautValue());
                        //model.Field(m => m.Room).DefaultValue(AssignmentOfAssetDetailsVM.GetRoomDefautValue());
@@ -73,7 +70,6 @@
         )
     )
 </div>
-@*@Html.HiddenFor(m => m.ID)*@
 <script>
     $(document).ready(function () {
         var grid = $("#Details").data("kendoGrid");

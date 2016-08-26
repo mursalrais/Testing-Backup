@@ -641,16 +641,17 @@ namespace MCAWebAndAPI.Service.HR.Leave
             updatedValues.Add("professional", new FieldLookupValue { LookupId = (int)dayOffRequest.ProfessionalID});
             updatedValues.Add("projectunit", dayOffRequest.ProjectUnit);
             updatedValues.Add("requestdate", dayOffRequest.RequestDate);
+            updatedValues.Add("dayoffrequeststatus", dayOffRequest.DayOffRequestStatus);
 
-            //if (dayOffRequest.StatusForm == "Draft")
-            //{
-            //    statusExitProcedure = "Draft";
+            if (dayOffRequest.StatusForm == "Draft")
+            {
+                statusExitProcedure = "Draft";
 
-            //    var professionalData = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, exitProcedure.ProfessionalID, _siteUrl);
-            //    string professionalOfficeMail = Convert.ToString(professionalData["officeemail"]);
+                var professionalData = SPConnector.GetListItem(SP_PRO_MAS_LIST_NAME, dayOffRequest.ProfessionalID, _siteUrl);
+                string professionalOfficeMail = Convert.ToString(professionalData["officeemail"]);
 
-            //    updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hr"));
-            //}
+                updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hr"));
+            }
             //if (.StatusForm == "Pending Approval")
             //{
             //    statusExitProcedure = "Pending Approval";

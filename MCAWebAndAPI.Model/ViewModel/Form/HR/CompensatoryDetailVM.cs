@@ -119,10 +119,10 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [Editable(false)]
         public string GetDayStr { get; set; }
 
-        [DisplayName("Star")]
+        [DisplayName("Time (start)")]
         public string GetStartStr { get; set; }
 
-        [DisplayName("Finish")]
+        [DisplayName("Time (finish)")]
         public string GetFinishStr { get; set; }
 
     }

@@ -1,4 +1,5 @@
-﻿using Kendo.Mvc.Extensions;
+﻿using Elmah;
+using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using MCAWebAndAPI.Model.ViewModel.Control;
 using MCAWebAndAPI.Model.ViewModel.Form.Asset;
@@ -61,6 +62,30 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewModel);
         }
 
+        public ActionResult View(int ID, string SiteUrl)
+        {
+            _service.SetSiteUrl(SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            var viewModel = _service.GetHeader(ID, SiteUrl);
+
+            int? headerID = null;
+            headerID = viewModel.ID;
+
+            try
+            {
+                var viewdetails = _service.GetDetails(headerID);
+                viewModel.Details = viewdetails;
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            return View(viewModel);
+        }
+
         [HttpPost]
         public ActionResult Submit(AssignmentOfAssetVM _data, string siteUrl)
         {
@@ -72,6 +97,11 @@ namespace MCAWebAndAPI.Web.Controllers
             try
             {
                 headerID = _service.CreateHeader(_data, siteUrl);
+                if(headerID == 0)
+                {
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    return JsonHelper.GenerateJsonErrorResponse("Have To Attach File to Change Completion Status into Complete");
+                }
                 //_service.CreateDocuments(headerID, _data.Attachment, siteUrl);
             }
             catch (Exception e)
@@ -86,11 +116,12 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
+                //rollback parent
+                _service.RollbackParentChildrenUpload("Asset Assignment", headerID, siteUrl);
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAcquisition);
-            //return Redirect(string.Format("{0}/{1}", siteUrl ?? ConfigResource.DefaultBOSiteUrl, UrlResource.AssetAcquisition));
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAssignment);
         }
 
         [HttpPost]
@@ -101,7 +132,12 @@ namespace MCAWebAndAPI.Web.Controllers
 
             try
             {
-                _service.UpdateHeader(_data, siteUrl);
+                var update = _service.UpdateHeader(_data, siteUrl);
+                if (update == false)
+                {
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    return JsonHelper.GenerateJsonErrorResponse("Have To Attach File to Change Completion Status into Complete");
+                }
             }
             catch (Exception e)
             {
@@ -120,7 +156,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAcquisition);
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAssignment);
         }
 
         public ActionResult GetProfMasterInfo(string fullname, string position)
@@ -459,11 +495,8 @@ namespace MCAWebAndAPI.Web.Controllers
             var TableHeader = new DataTable();
             var TableDetail = new DataTable();
 
-            var listNameHeader = "Asset Acquisition";
-            var listNameHeaderMemo = "Acceptance Memo";
-            var listNameDetail = "Asset Acquisition Details";
-            var listAssetMaster = "Asset Master";
-            var listWBSMaster = "WBS Master";
+            var listNameHeader = "Assignment Asset";
+            var listNameDetail = "Assignment Asset Detail";
             foreach (DataRow d in SessionManager.Get<DataTable>("CSVDataTable").Rows)
             {
                 var type = "assignment of asset";
@@ -475,7 +508,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
                         TableHeader = new DataTable();
                         TableHeader.Columns.Add("Title", typeof(string));
-                        TableHeader.Columns.Add("transferdate", typeof(DateTime));
+                        TableHeader.Columns.Add("transferdate", typeof(string));
                         TableHeader.Columns.Add("assetholder", typeof(string));
                         TableHeader.Columns.Add("position", typeof(string));
                         TableHeader.Columns.Add("projectunit", typeof(string));
@@ -503,7 +536,7 @@ namespace MCAWebAndAPI.Web.Controllers
                         {
                             DataRow row = TableHeader.NewRow();
                             row["Title"] = type;
-                            row["transferdate"] = Convert.ToDateTime(d.ItemArray[1]);
+                            row["transferdate"] = Convert.ToString(d.ItemArray[1]);
                             row["assetholder"] = Convert.ToString(d.ItemArray[2]);
                             row["position"] = "";
                             row["projectunit"] = "";
@@ -544,73 +577,196 @@ namespace MCAWebAndAPI.Web.Controllers
 
                 if (d.ItemArray[6].ToString() != "" && latestIDHeader != null)
                 {
-                    //TableDetail = new DataTable();
-                    //TableDetail.Columns.Add("assignmentofasset", typeof(string));
-                    //TableDetail.Columns.Add("assetsubasset", typeof(string));
-                    //TableDetail.Columns.Add("province", typeof(string));
-                    //TableDetail.Columns.Add("office", typeof(string));
-                    //TableDetail.Columns.Add("floor", typeof(string));
-                    //TableDetail.Columns.Add("room", typeof(string));
-                    //TableDetail.Columns.Add("remarks", typeof(string));
+                    try
+                    {
+                        TableDetail = new DataTable();
+                        TableDetail.Columns.Add("assignmentofasset", typeof(int));
+                        TableDetail.Columns.Add("assetsubasset", typeof(string));
+                        TableDetail.Columns.Add("province", typeof(string));
+                        TableDetail.Columns.Add("office", typeof(string));
+                        TableDetail.Columns.Add("floor", typeof(string));
+                        TableDetail.Columns.Add("room", typeof(string));
+                        TableDetail.Columns.Add("remarks", typeof(string));
 
-                    //DataRow row = TableDetail.NewRow();
+                        //check assetsubasset
+                        //check province -office - floor - room
+                        //FXA-GP-FF-0001-GPS
+                        var breakAsset = d.ItemArray[6].ToString().Split('-');
+                        var assetID = breakAsset[0] + "-" + breakAsset[1] + "-" + breakAsset[2] + "-" + breakAsset[3];
+                        if(breakAsset.Length > 5)
+                        {
+                            //if breakAsset.Length > 5 (Sub Asset)
+                            assetID = breakAsset[0] + "-" + breakAsset[1] + "-" + breakAsset[2] + "-" + breakAsset[3] + "-" + breakAsset[4];
+                        }
+                        var camlasset = @"<View>
+                        <Query>
+                           <Where>
+                              <Eq>
+                                 <FieldRef Name='assetsubasset' />
+                                 <Value Type='Lookup'>" + assetID + @"</Value>
+                              </Eq>
+                           </Where>
+                           <OrderBy>
+                              <FieldRef Name='assetsubasset' Ascending='True' />
+                           </OrderBy>
+                        </Query>
+                        <ViewFields>
+                           <FieldRef Name='assetsubasset' />
+                        </ViewFields>
+                        <QueryOptions /></View>";
+                        //check province
+                        var camlprovince = @"<View><Query>
+                            <Where>
+                                <And>
+                                    <Eq>
+                                    <FieldRef Name='Province' />
+                                    <Value Type='Lookup'>"+d.ItemArray[7].ToString()+@"</Value>
+                                    </Eq>
+                                    <And>
+                                    <Eq>
+                                        <FieldRef Name='Title' />
+                                        <Value Type='Text'>"+d.ItemArray[8].ToString()+@"</Value>
+                                    </Eq>
+                                    <And>
+                                        <Eq>
+                                            <FieldRef Name='Floor' />
+                                            <Value Type='Text'>"+d.ItemArray[9].ToString()+@"</Value>
+                                        </Eq>
+                                        <Eq>
+                                            <FieldRef Name='Room' />
+                                            <Value Type='Text'>"+d.ItemArray[10].ToString()+@"</Value>
+                                        </Eq>
+                                    </And>
+                                    </And>
+                                </And>
+                            </Where>
+                        </Query>
+                        <ViewFields>
+                            <FieldRef Name='Province' />
+                            <FieldRef Name='Title' />
+                            <FieldRef Name='Floor' />
+                            <FieldRef Name='Room' />
+                            <FieldRef Name='Remarks' />
+                        </ViewFields>
+                        <QueryOptions /></View>";
+                        var isAssetExist = _service.isExist("Asset Acquisition Details", camlasset, siteUrl);
+                        var isProvinceExist = _service.isExist("Location Master", camlprovince, siteUrl);
 
-                    ////check assetsubasset
-                    //var camlasset = @"<View></View>";
-                    ////check province
-                    //var camlprovince = @"<View></View>";
-                    //var isAssetExist = _service.isExist("Asset Acquisition Details", camlasset, siteUrl);
-                    //var isProvinceExist = _service.isExist("Location Master", camlprovince, siteUrl);
+                        if (isAssetExist == true && isProvinceExist == true)
+                        {
+                            DataRow row = TableDetail.NewRow();
 
-                    //try
-                    //{
-                    //    int? idAssetIDExist = _assetAcquisitionService.getIdOfColumn("Asset Master", siteUrl, camlAssetID);
-                    //    int? idWBSExist = _assetAcquisitionService.getIdOfColumn("WBS Master", siteUrl, camlWBS);
-                    //    if (idAssetIDExist != 0 && idAssetIDExist != 0)
-                    //    {
-                    //        row["assetsubasset"] = idAssetIDExist;
-                    //        row["wbs"] = idWBSExist;
-                    //    }
-                    //    else
-                    //    {
-                    //        return JsonHelper.GenerateJsonErrorResponse("Invalid data, rolling back!");
-                    //    }
+                            row["assignmentofasset"] = latestIDHeader;
+                            row["assetsubasset"] = assetID;
+                            row["province"] = d.ItemArray[7].ToString();
+                            row["office"] = d.ItemArray[8].ToString();
+                            row["floor"] = d.ItemArray[9].ToString();
+                            row["room"] = d.ItemArray[10].ToString();
+                            row["remarks"] = d.ItemArray[11].ToString();
 
-                    //}
-                    //catch (Exception e)
-                    //{
-                    //    if (idsHeader.Count > 0)
-                    //    {
-                    //        foreach (var id in idsHeader)
-                    //        {
-                    //            //delete parent
-                    //            _assetAcquisitionService.RollbackParentChildrenUpload(listNameHeader, id, siteUrl);
-                    //        }
-                    //    }
-                    //    else if (idsDetail.Count > 0)
-                    //    {
-                    //        foreach (var id in idsDetail)
-                    //        {
-                    //            //delete parent
-                    //            _assetAcquisitionService.RollbackParentChildrenUpload(listNameDetail, id, siteUrl);
-                    //        }
+                            TableDetail.Rows.InsertAt(row, 0);
 
-                    //    }
-                    //    return JsonHelper.GenerateJsonErrorResponse("Invalid data, rolling back!");
-                    //}
-                    ////cek if wbs id ada pada table wbs master
-                    //row["costidr"] = Convert.ToInt32(d.ItemArray[10]);
-                    //row["costusd"] = Convert.ToInt32(d.ItemArray[11].ToString());
-                    //row["remarks"] = d.ItemArray[12].ToString();
-                    //row["status"] = d.ItemArray[13].ToString();
+                            latestIDDetail = _service.MassUploadHeaderDetail(listNameDetail, TableDetail, siteUrl);
+                            idsDetail.Add(Convert.ToInt32(latestIDDetail));
+                        }
+                        else
+                        {
+                            return JsonHelper.GenerateJsonErrorResponse("No Lookup Value/s is Found For Asset ID / Province!");
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        if (idsHeader.Count > 0)
+                        {
+                            foreach (var id in idsHeader)
+                            {
+                                //delete parent
+                                _service.RollbackParentChildrenUpload(listNameHeader, id, siteUrl);
+                            }
+                        }
+                        else if (idsDetail.Count > 0)
+                        {
+                            foreach (var id in idsDetail)
+                            {
+                                //delete parent
+                                _service.RollbackParentChildrenUpload(listNameDetail, id, siteUrl);
+                            }
 
-                    //TableDetail.Rows.InsertAt(row, 0);
-
-                    //latestIDDetail = _assetAcquisitionService.MassUploadHeaderDetail(listNameDetail, TableDetail, siteUrl);
+                        }
+                        return JsonHelper.GenerateJsonErrorResponse("Invalid data, rolling back!");
+                    }
                 }
             }
-            //return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAcquisition);
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAcquisition);
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAssignment);
+        }
+
+        [HttpPost]
+        public ActionResult Print(FormCollection form, AssignmentOfAssetVM viewModel, string SiteUrl)
+        {
+            SiteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            const string RelativePath = "~/Views/ASSAssignmentOfAsset/Print.cshtml";
+            var view = ViewEngines.Engines.FindView(ControllerContext, RelativePath, null);
+            var nm = viewModel.AssetHolder.Value.Split('-');
+            viewModel.nameOnly = nm[0];
+            viewModel.position = nm[1];
+            viewModel.Details = _service.GetDetailsPrint(viewModel.ID);
+            var fileName = nm[0] + "_AssignmentOfAsset.pdf";
+            byte[] pdfBuf = null;
+            string content;
+
+            // ControllerContext context = new ControllerContext();
+            ControllerContext.Controller.ViewData.Model = viewModel;
+            ViewData = ControllerContext.Controller.ViewData;
+            TempData = ControllerContext.Controller.TempData;
+
+            using (var writer = new StringWriter())
+            {
+                var contextviewContext = new ViewContext(ControllerContext, view.View, ViewData, TempData, writer);
+                view.View.Render(contextviewContext, writer);
+                writer.Flush();
+                content = writer.ToString();
+
+                // Get PDF Bytes
+                try
+                {
+                    pdfBuf = PDFConverter.Instance.ConvertFromHTML(fileName, content);
+                }
+                catch (Exception e)
+                {
+                    ErrorSignal.FromCurrentContext().Raise(e);
+                    RedirectToAction("Index", "Error");
+                }
+            }
+            if (pdfBuf == null)
+                return HttpNotFound();
+            return File(pdfBuf, "application/pdf");
+        }
+
+        public ActionResult Sync(string siteUrl)
+        {
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            var viewModel = _service.GetPopulatedModel(siteUrl);
+            return View(viewModel);
+        }
+
+        public ActionResult Syncronize(string siteUrl)
+        {
+            siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            try
+            {
+                var viewModel = _service.Syncronize(siteUrl);
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAssignment);
         }
 
     }

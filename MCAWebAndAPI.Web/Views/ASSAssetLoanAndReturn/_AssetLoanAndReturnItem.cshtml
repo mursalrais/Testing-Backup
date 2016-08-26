@@ -32,8 +32,8 @@
             "<input type='hidden' name='AssetLoanAndReturnItem[#= getWorkingRelationshipDetails(data)#].ReturnDate' value='#= ReturnDate #' />"
             );
 
-            columns.Bound(p => p.Status).ClientTemplate("#= Status.Text #" +
-                          "<input type='hidden' name='AssetLoanAndReturnItem[#= getWorkingRelationshipDetails(data)#].Status.Value' value='#= Status.Value #' />"
+            columns.Bound(p => p.Status).ClientTemplate("#= Status #" +
+                          "<input type='hidden' name='AssetLoanAndReturnItem[#= getWorkingRelationshipDetails(data)#].Status.Value' value='#= Status #' />"
                         );
             columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
           "<input type='hidden' name=AssetLoanAndReturnItem[#= getWorkingRelationshipDetails(data)#].ID value=#= ID # />"
@@ -55,6 +55,9 @@
                    {
                        model.Id(p => p.ID);
                        model.Field(m => m.AssetSubAsset).DefaultValue(AssetLoanAndReturnItemVM.GetAssetSubAssetDefaultValue());
+                       model.Field(p => p.EstReturnDate).DefaultValue(DateTime.UtcNow); ;
+                       model.Field(p => p.ReturnDate).DefaultValue(DateTime.UtcNow); ;
+                       model.Field(p => p.Status).Editable(false);
                        //model.Field(m => m.Status).DefaultValue(AssetLoanAndReturnItemVM.GetAssetSubAssetDefaultValue());
                    })
                    .ServerOperation(false)

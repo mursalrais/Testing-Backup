@@ -30,12 +30,12 @@ namespace MCAWebAndAPI.Web.Controllers
             _hRProfessionalPerformanceEvaluationService = new HRProfessionalPerformanceEvaluationService();
         }
 
-        public ActionResult EditPerformanceEvaluation(string siteUrl = null, int? ID = null, string requestor = null)
+        public async Task<ActionResult> EditPerformanceEvaluation(string siteUrl = null, int? ID = null, string requestor = null)
         {
             _hRProfessionalPerformanceEvaluationService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
-            var viewModel = _hRProfessionalPerformanceEvaluationService.GetHeader(ID, requestor);
+            var viewModel = await _hRProfessionalPerformanceEvaluationService.GetHeader(ID, requestor, "Professional Performance Evaluation", SP_TRANSACTION_WORKFLOW_LIST_NAME, SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME);
             viewModel.Requestor = requestor;
             viewModel.ID = ID;
             ViewBag.Action = "EditPerformanceEvaluation";
@@ -52,6 +52,7 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _hRProfessionalPerformanceEvaluationService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("WorkflowItems", viewModel.WorkflowItems);
 
             var Detail = viewModel.ProfessionalPerformanceEvaluationDetails;
             int sumPlanned = 0;
