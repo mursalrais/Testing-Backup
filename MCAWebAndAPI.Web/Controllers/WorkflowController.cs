@@ -5,7 +5,7 @@ using MCAWebAndAPI.Model.ViewModel.Form.Common;
 using MCAWebAndAPI.Service.Common;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;
-
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -63,7 +63,7 @@ namespace MCAWebAndAPI.Web.Controllers
             }), JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetApproverUserNames(int position)
+        public JsonResult GetApproverUserNames()
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
@@ -73,8 +73,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
             return Json(viewModel.Select(e => new
             {
-                e.ID,
-                e.Name
+                Value = Convert.ToString(e.ID),
+                Text = e.Name
             }), JsonRequestBehavior.AllowGet);
         }
 
@@ -91,21 +91,6 @@ namespace MCAWebAndAPI.Web.Controllers
             if (isPartial)
                 return PartialView("_WorkflowDetails", viewModel);
             return View("_WorkflowDetails", viewModel);
-        }
-
-        public async Task<ActionResult> DisplayApprovalPath(string listName, string requestor, bool isPartial = true)
-        {
-            var siteUrl = SessionManager.Get<string>("SiteUrl");
-            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-            var viewModel = await _service.GetApprovalPath(listName, requestor);
-            SessionManager.Set("WorkflowItems", viewModel.WorkflowItems);
-            SessionManager.Set("WorkflowRouterListName", viewModel.ListName);
-            SessionManager.Set("WorkflowRouterRequestorUnit", viewModel.RequestorUnit);
-            SessionManager.Set("WorkflowRouterRequestorPosition", viewModel.RequestorPosition);
-
-            if (isPartial)
-                return PartialView("_WorkflowPathDetails", viewModel);
-            return View("_WorkflowPathDetails", viewModel);
         }
 
         [HttpPost]

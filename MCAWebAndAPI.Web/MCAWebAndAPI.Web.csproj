@@ -16,7 +16,7 @@
     <RootNamespace>MCAWebAndAPI.Web</RootNamespace>
     <AssemblyName>MCAWebAndAPI.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -1088,7 +1088,6 @@
     <Content Include="Views\FINPettyCashReplenishment\Item.cshtml" />
     <Content Include="Views\HRCompensatory\AddCompensatoryHR.cshtml" />
     <Content Include="Views\FINEventBudget\Item.cshtml" />
-    <Content Include="Views\Shared\_WorkflowPathDetails.cshtml" />
     <Content Include="Views\HRTimesheet\CreateTimesheet.cshtml" />
     <Content Include="Views\HRTimesheet\FormType.cshtml" />
     <Content Include="Views\FINPettyCashStatement\Display.cshtml" />
@@ -1103,6 +1102,8 @@
     <Content Include="Views\ASSAssignmentOfAsset\_print.cshtml" />
     <Content Include="Views\ASSAssignmentOfAsset\Print.cshtml" />
     <Content Include="Views\ASSAssignmentOfAsset\_DetailsPrint.cshtml" />
+    <Content Include="Views\HRProfessionalPerformanceEvaluation\_WorkflowPathDetails.cshtml" />
+    <Content Include="Views\HRPerformancePlan\_WorkflowPathDetails.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

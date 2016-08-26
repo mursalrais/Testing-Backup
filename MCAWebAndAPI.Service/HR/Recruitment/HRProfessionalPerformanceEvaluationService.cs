@@ -10,6 +10,7 @@ using NLog;
 using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Model.ViewModel.Control;
+using MCAWebAndAPI.Service.Common;
 
 namespace MCAWebAndAPI.Service.HR.Recruitment
 {
@@ -91,13 +92,13 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             CreatePerformanceEvaluationDetails(headerID, performanceEvaluationDetails);
         }
 
-        public ProfessionalPerformanceEvaluationVM GetHeader(int? ID, string requestor)
+        public async Task<ProfessionalPerformanceEvaluationVM> GetHeader(int? ID, string requestor, string listName, string listNameWorkflow, string columnName)
         {
             var listItem = SPConnector.GetListItem(SP_PPE_LIST_NAME, ID, _siteUrl);
-            return ConvertToProfessionalPerformancePlanModel(listItem, ID, requestor);
+            return await ConvertToProfessionalPerformancePlanModel(listItem, ID, requestor, listName, listNameWorkflow, columnName);
         }
 
-        private ProfessionalPerformanceEvaluationVM ConvertToProfessionalPerformancePlanModel(ListItem listItem, int? ID, string requestor)
+        private async Task<ProfessionalPerformanceEvaluationVM> ConvertToProfessionalPerformancePlanModel(ListItem listItem, int? ID, string requestor, string listName, string listNameWorkflow, string columnName)
         {
             var caml = @"<View>  
             <Query> 
@@ -143,6 +144,19 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             // Convert Details
             viewModel.ProfessionalPerformanceEvaluationDetails = GetProfessionalPerformanceDetails(viewModel.ID);
+
+            var _workflow = new WorkflowService();
+            _workflow.SetSiteUrl(_siteUrl);
+            var intID = Convert.ToInt32(ID);
+            var Check = await _workflow.CheckWorkflow(intID, listNameWorkflow, columnName);
+            if (Check.Count() != 0)
+            {
+                viewModel.WorkflowItems = Check;
+            }
+            if (Check.Count() == 0)
+            {
+                viewModel.WorkflowItems = await _workflow.GetWorkflowDetails(requestor, listName);
+            }
 
             return viewModel;
         }

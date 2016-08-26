@@ -1,6 +1,7 @@
 ﻿using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Model.ViewModel.Control;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
@@ -22,11 +23,15 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Common
 
         public string RequestorPosition { get; set; }
 
+        public int? ApproverPositionId { get; set; }
+
+        [DisplayName("Approver Unit")]
         public string ApproverUnitText { get; set; }
 
         [UIHint("InGridAjaxComboBox")]
         public AjaxComboBoxVM ApproverName { get; set; } = new AjaxComboBoxVM();
 
+        [DisplayName("Approver Position")]
         public string ApproverPositionText { get; set; }
 
         [UIHint("InGridComboBox")]
