@@ -49,7 +49,6 @@ namespace MCAWebAndAPI.Service.HR.Payroll
                                <FieldRef Name='professional' />
                                <FieldRef Name='adjustmenttype' />
                                <FieldRef Name='adjustmentamount' />
-                               <FieldRef Name='adjustmentcurrency' />
                                <FieldRef Name='debitorcredit' />
                                <FieldRef Name='remarks' />
                             </ViewFields>
@@ -118,12 +117,6 @@ namespace MCAWebAndAPI.Service.HR.Payroll
                         Text = Convert.ToString(item["adjustmenttype"]),
                     }),
 
-                currency = AdjustmentDetailsVM.getCurrencyDefaultValue(
-                    new Model.ViewModel.Control.AjaxComboBoxVM
-                    {
-                        Text = Convert.ToString(item["adjustmentcurrency"]),
-                    }),
-
                 payType = AdjustmentDetailsVM.getpayTypeDefaultValue(
                     new Model.ViewModel.Control.AjaxComboBoxVM
                     {
@@ -139,6 +132,35 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             };
         }
 
+        private int CheckAdjustment (int? profID)
+        {
+            var caml = @"<View>  
+                            <Query>
+                               <Where>
+                                  <Eq>
+                                     <FieldRef Name='professional_x003a_ID' />
+                                     <Value Type='Lookup'>" + profID + @"</Value>
+                                  </Eq>
+                               </Where>
+                            </Query>
+                            <ViewFields>
+                               <FieldRef Name='ID' />
+                               <FieldRef Name='ContentType' />
+                               <FieldRef Name='adjustmentperiod' />
+                               <FieldRef Name='professional' />
+                               <FieldRef Name='adjustmenttype' />
+                               <FieldRef Name='adjustmentamount' />
+                               <FieldRef Name='debitorcredit' />
+                               <FieldRef Name='remarks' />
+                            </ViewFields>
+                            <QueryOptions />
+                           </View>";
+
+            var count = SPConnector.GetList(SP_AJUDATA_LIST_NAME, _siteUrl, caml).Count();
+     
+            return count;
+        }
+
         public void CreateAdjustmentData(string period, AdjustmentDataVM viewModels)
         {
             var getperiod = Convert.ToDateTime(period);
@@ -149,25 +171,27 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             {
                 if (viewModel.ID == null)
                 {
-                    var cratedValueDetail = new Dictionary<string, object>();
-
-                    cratedValueDetail.Add("Title", Convert.ToString(getperiod));
-                    cratedValueDetail.Add("adjustmentperiod", getperiod);
-                    cratedValueDetail.Add("professional", new FieldLookupValue { LookupId = (int)viewModel.ddlProfessional.Value });
-                    cratedValueDetail.Add("adjustmenttype", viewModel.ajusmentType.Text);
-                    cratedValueDetail.Add("adjustmentamount", viewModel.amount);
-                    cratedValueDetail.Add("adjustmentcurrency", viewModel.currency.Text);
-                    cratedValueDetail.Add("debitorcredit", viewModel.payType.Text);
-                    cratedValueDetail.Add("remarks", viewModel.remark);
-
-                    try
+                    var checkdata = CheckAdjustment(viewModel.ddlProfessional.Value);
+                    if (checkdata == 0)
                     {
-                        SPConnector.AddListItem(SP_AJUDATA_LIST_NAME, cratedValueDetail, _siteUrl);
-                    }
-                    catch (Exception e)
-                    {
-                        logger.Error(e.Message);
-                        throw e;
+                        var cratedValueDetail = new Dictionary<string, object>();
+                        cratedValueDetail.Add("Title", Convert.ToString(getperiod));
+                        cratedValueDetail.Add("adjustmentperiod", getperiod);
+                        cratedValueDetail.Add("professional", new FieldLookupValue { LookupId = (int)viewModel.ddlProfessional.Value });
+                        cratedValueDetail.Add("adjustmenttype", viewModel.ajusmentType.Text);
+                        cratedValueDetail.Add("adjustmentamount", viewModel.amount);
+                        cratedValueDetail.Add("debitorcredit", viewModel.payType.Text);
+                        cratedValueDetail.Add("remarks", viewModel.remark);
+
+                        try
+                        {
+                            SPConnector.AddListItem(SP_AJUDATA_LIST_NAME, cratedValueDetail, _siteUrl);
+                        }
+                        catch (Exception e)
+                        {
+                            logger.Error(e.Message);
+                            throw e;
+                        }
                     }
                 }
                 else
@@ -181,7 +205,6 @@ namespace MCAWebAndAPI.Service.HR.Payroll
                         updatedValue.Add("professional", new FieldLookupValue { LookupId = (int)viewModel.ddlProfessional.Value });
                         updatedValue.Add("adjustmenttype", viewModel.ajusmentType.Text);
                         updatedValue.Add("adjustmentamount", viewModel.amount);
-                        updatedValue.Add("adjustmentcurrency", viewModel.currency.Text);
                         updatedValue.Add("debitorcredit", viewModel.payType.Text);
                         updatedValue.Add("remarks", viewModel.remark);
 
