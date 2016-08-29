@@ -82,7 +82,9 @@
 </div>
 
 <legend>Approval Path</legend>
-<div id="workflow-placeholder" class="row"></div>
+<div class="row">
+    @Html.Partial("_WorkflowPathDetails", Model)
+</div>
 
 <div class="row pull-right">
     <div class="col-sm-12">

@@ -1053,8 +1053,6 @@
     <Content Include="Views\FINRequisitionNote\Print.cshtml" />
     <Content Include="Views\Shared\_PartialHeader.cshtml" />
     <Content Include="Views\Shared\_PartialHeaderWithLogo.cshtml" />
-    <Content Include="Views\ASSAssetTransfer\CreateAssetTransfer.cshtml" />
-    <Content Include="Views\ASSAssetTransfer\_AssetTransferDetail.cshtml" />
     <Content Include="Views\ASSAssetDisposal\CreateAssetDisposal.cshtml" />
     <Content Include="Views\ASSAssetDisposal\_AssetDisposalDetail.cshtml" />
     <Content Include="Views\HRAdjustment\InputAdjustmentData.cshtml" />
@@ -1073,8 +1071,6 @@
     <Content Include="Views\HRAdjustmentDayOffBalance\EditAdjustmentDayOffBalance.cshtml" />
     <Content Include="Views\ASSAssetDisposal\CreateAssetDisposal.cshtml" />
     <Content Include="Views\ASSAssetDisposal\_AssetDisposalDetail.cshtml" />
-    <Content Include="Views\ASSAssetTransfer\CreateAssetTransfer.cshtml" />
-    <Content Include="Views\ASSAssetTransfer\_AssetTransferDetail.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DropDown.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\AjaxCascadeComboBox.cshtml" />
     <Content Include="Views\ASSAssetAcquisition\Sync.cshtml" />
@@ -1088,11 +1084,23 @@
     <Content Include="Views\FINPettyCashReplenishment\Item.cshtml" />
     <Content Include="Views\HRCompensatory\AddCompensatoryHR.cshtml" />
     <Content Include="Views\FINEventBudget\Item.cshtml" />
-    <Content Include="Views\Shared\_WorkflowPathDetails.cshtml" />
     <Content Include="Views\HRTimesheet\CreateTimesheet.cshtml" />
     <Content Include="Views\FINPettyCashStatement\Display.cshtml" />
     <Content Include="Views\FINPettyCashStatement\Index.cshtml" />
     <Content Include="Views\FINPettyCashSettlement\Item.cshtml" />
+    <Content Include="Views\HRAdjustment\EditAdjustmentData.cshtml" />
+    <Content Include="Views\HRCompensatory\AddCompensatoryUser.cshtml" />
+    <Content Include="Views\ASSAssignmentOfAsset\Edit.cshtml" />
+    <Content Include="Views\ASSAssignmentOfAsset\Upload.cshtml" />
+    <Content Include="Views\ASSAssignmentOfAsset\View.cshtml" />
+    <Content Include="Views\ASSAssignmentOfAsset\_DetailsView.cshtml" />
+    <Content Include="Views\ASSAssignmentOfAsset\_print.cshtml" />
+    <Content Include="Views\ASSAssignmentOfAsset\Print.cshtml" />
+    <Content Include="Views\ASSAssignmentOfAsset\_DetailsPrint.cshtml" />
+    <Content Include="Views\HRProfessionalPerformanceEvaluation\_WorkflowPathDetails.cshtml" />
+    <Content Include="Views\HRPerformancePlan\_WorkflowPathDetails.cshtml" />
+    <Content Include="Views\ASSAssignmentOfAsset\Sync.cshtml" />
+    <Content Include="Views\HRCompensatory\_WorkflowPathDetails.cshtml" />
     <Content Include="Views\HRDayOff\CreateDayOffRequest.cshtml" />
     <Content Include="Views\HRDayOff\_DayOffCurrentBalance.cshtml" />
     <Content Include="Views\HRDayOff\_DayOffRequestHeaderData.cshtml" />
@@ -1101,6 +1109,17 @@
     <Content Include="Views\FINPettyCashSettlement\Print.cshtml" />
     <Content Include="Views\FINEventBudget\Print.cshtml" />
     <Content Include="Views\FINLandingPage\Index.cshtml" />
+    <Content Include="Views\ASSAssetTransfer\Create.cshtml" />
+    <Content Include="Views\ASSAssetTransfer\_Details.cshtml" />
+    <Content Include="Views\ASSAssetTransfer\_DetailsPrint.cshtml" />
+    <Content Include="Views\ASSAssetTransfer\_DetailsView.cshtml" />
+    <Content Include="Views\ASSAssetTransfer\_print.cshtml" />
+    <Content Include="Views\ASSAssetTransfer\Edit.cshtml" />
+    <Content Include="Views\ASSAssetTransfer\Print.cshtml" />
+    <Content Include="Views\ASSAssetTransfer\Sync.cshtml" />
+    <Content Include="Views\ASSAssetTransfer\Upload.cshtml" />
+    <Content Include="Views\ASSAssetTransfer\View.cshtml" />
+    <Content Include="Views\ASSAssetCheckForm\_Details.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
