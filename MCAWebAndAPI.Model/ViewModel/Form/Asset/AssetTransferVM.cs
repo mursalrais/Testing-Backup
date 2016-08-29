@@ -11,8 +11,10 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
         public string CancelURL { get; set; }
 
         public string AssetIDs { get; set; }
-        public string nameOnly { get; set; }
-        public string position { get; set; }
+        public string nameOnlyFrom { get; set; }
+        public string positionFrom { get; set; }
+        public string nameOnlyTo { get; set; }
+        public string positionTo { get; set; }
 
         public IEnumerable<AssetTransferDetailVM> Details { get; set; } = new List<AssetTransferDetailVM>();
 

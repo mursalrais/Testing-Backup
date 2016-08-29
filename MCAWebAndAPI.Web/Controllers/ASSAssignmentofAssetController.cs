@@ -203,7 +203,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 new
                 {
                     Value = Convert.ToString(e.ID),
-                    Text = e.Province.Text+"-"+e.OfficeName+"-"+e.FloorName+"-"+e.RoomName+"-"+e.Remarks
+                    Text = e.Province.Text+"-"+e.OfficeName+"-"+e.FloorName+"-"+e.RoomName
                 }),
                 JsonRequestBehavior.AllowGet);
         }

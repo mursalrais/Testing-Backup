@@ -16,8 +16,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
         [DisplayName("Quantity")]
         public int quantity { get; set; }
 
-        private ComboBoxVM _assetsubasset;
-
         [UIHint("InGridAjaxComboBox")]
         public AjaxComboBoxVM AssetSubAsset { get; set; } = new AjaxComboBoxVM();
 
@@ -33,7 +31,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
             }
         }
 
-        [DisplayName("Province-Location-Floor-Room From")]
+        [DisplayName("Province - Location - Floor - Room From")]
         [UIHint("InGridAjaxComboBox")]
         public AjaxComboBoxVM Province { get; set; } = new AjaxComboBoxVM();
 
@@ -54,7 +52,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
         public string Room { get; set; }
         public string Remarks { get; set; }
 
-        [DisplayName("Province-Location-Floor-Room To")]
+        [DisplayName("Province - Location - Floor - Room To")]
         [UIHint("InGridAjaxComboBox")]
         public AjaxComboBoxVM ProvinceTo { get; set; } = new AjaxComboBoxVM();
 
@@ -73,7 +71,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
         public string OfficeNameTo { get; set; }
         public string FloorTo { get; set; }
         public string RoomTo { get; set; }
-        public string RemarksTo { get; set; }
 
         public string Status { get; set; }
     }

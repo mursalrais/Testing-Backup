@@ -79,9 +79,6 @@
         </div>
     </div>
 
-    <legend>Approval Path</legend>
-    <div id="workflow-placeholder" class="row"></div>
-
     @section scripts{
 
         <script>
@@ -159,13 +156,6 @@
 
             function OnChangeProffesional(e) {
                 var dataItem = this.dataItem(e.item);
-                var eMail = dataItem.OfficeEmail
-
-                if (eMail != null) {
-                    var url = "/Workflow/DisplayWorkflowRouter?listName=" + "@ViewBag.ListName" + "&requestor=" + eMail;
-                    $('#workflow-placeholder').load(url);
-                }
-
                 $("#cmpProjUnit").prop("value", dataItem.Project_Unit);
                 $("#cmpProjUnit").prop("value", dataItem.Project_Unit);
             };

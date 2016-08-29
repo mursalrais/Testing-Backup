@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Service.Asset
 {
-    public interface IAssetCheckFormService
-    {
-        void SetSiteUrl(string siteUrl);
+    //public interface IAssetCheckFormService
+    //{
+    //    void SetSiteUrl(string siteUrl);
 
-        IEnumerable<AssetCheckFormVM> GetAssetCheckForms();
+    //    IEnumerable<AssetCheckFormVM> GetAssetCheckForms();
 
-        bool CreateAssetCheckForm(AssetCheckFormVM assetCheckForm);
+    //    bool CreateAssetCheckForm(AssetCheckFormVM assetCheckForm);
 
-        bool UpdateAssetCheckForm(AssetCheckFormVM assetCheckForm);
-    }
+    //    bool UpdateAssetCheckForm(AssetCheckFormVM assetCheckForm);
+    //}
 }
