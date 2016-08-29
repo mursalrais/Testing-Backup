@@ -55,8 +55,7 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
+                return JsonHelper.GenerateJsonErrorResponse("Failed To Get Data");
             }
 
             return View(viewModel);
@@ -79,8 +78,7 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
+                return JsonHelper.GenerateJsonErrorResponse("Failed To Get Data");
             }
 
             return View(viewModel);
@@ -99,15 +97,13 @@ namespace MCAWebAndAPI.Web.Controllers
                 headerID = _service.CreateHeader(_data, siteUrl);
                 if(headerID == 0)
                 {
-                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
                     return JsonHelper.GenerateJsonErrorResponse("Have To Attach File to Change Completion Status into Complete");
                 }
                 //_service.CreateDocuments(headerID, _data.Attachment, siteUrl);
             }
             catch (Exception e)
             {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
+                return JsonHelper.GenerateJsonErrorResponse("Failed To Save Header");
             }
 
             try
@@ -118,8 +114,7 @@ namespace MCAWebAndAPI.Web.Controllers
             {
                 //rollback parent
                 _service.RollbackParentChildrenUpload("Asset Assignment", headerID, siteUrl);
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
+                return JsonHelper.GenerateJsonErrorResponse("Failed To Save Detail");
             }
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAssignment);
         }
@@ -135,14 +130,12 @@ namespace MCAWebAndAPI.Web.Controllers
                 var update = _service.UpdateHeader(_data, siteUrl);
                 if (update == false)
                 {
-                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
                     return JsonHelper.GenerateJsonErrorResponse("Have To Attach File to Change Completion Status into Complete");
                 }
             }
             catch (Exception e)
             {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
+                return JsonHelper.GenerateJsonErrorResponse("Failed To Update Header");
             }
 
             try
@@ -152,8 +145,7 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
+                return JsonHelper.GenerateJsonErrorResponse("Failed To Update Detail");
             }
 
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAssignment);
@@ -495,8 +487,8 @@ namespace MCAWebAndAPI.Web.Controllers
             var TableHeader = new DataTable();
             var TableDetail = new DataTable();
 
-            var listNameHeader = "Assignment Asset";
-            var listNameDetail = "Assignment Asset Detail";
+            var listNameHeader = "Asset Assignment";
+            var listNameDetail = "Asset Assignment Detail";
             foreach (DataRow d in SessionManager.Get<DataTable>("CSVDataTable").Rows)
             {
                 var type = "assignment of asset";
@@ -762,8 +754,7 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
+                return JsonHelper.GenerateJsonErrorResponse("Failed To Syncronize");
             }
 
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAssignment);

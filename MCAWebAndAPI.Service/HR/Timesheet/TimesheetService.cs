@@ -35,8 +35,7 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
 
         const string LIST_PROFESSIONAL= "Professional Master";
 
-
-        //Compensatory Request
+  
         private IDataMasterService _dataService;
         private IProfessionalService _professionalService;
         static Logger logger = LogManager.GetCurrentClassLogger();
@@ -44,22 +43,6 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
         {
             _dataService = new DataMasterService();
             _professionalService = new ProfessionalService();
-        }
-
-        //public async Task GetTimesheetLoadUpdateAsync(int? id, string userlogin)
-        //{
-        //    GetTimesheetLoadUpdate(id, userlogin);
-        //}
-
-        public TimesheetVM GetFormType(int? id, string userlogin)
-        {
-            var viewModel = new TimesheetVM();
-            var listItem = SPConnector.GetListItem(LIST_TIME, id, _siteUrl);
-            viewModel.ProfessionalID = FormatUtil.ConvertLookupToID(listItem, "professional");
-            viewModel.UserLogin = userlogin;
-            viewModel.ProjectUnit = GetProjectUnitName(userlogin);
-
-            return viewModel;
         }
 
         public TimesheetVM GetTimesheetLoadUpdate(int? id,string userlogin)
@@ -111,11 +94,7 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
 
             return viewModel;
         }
-
-        //public async Task GetTimesheetDetailsLoadUpdateAsync(string userlogin, DateTime period)
-        //{
-        //    GetTimesheetDetailsLoadUpdate(userlogin, period);
-        //}
+        
         public IEnumerable<TimesheetDetailVM> GetTimesheetDetailsLoadUpdate(int? id, DateTime period, string userlogin)
         {
 
@@ -131,6 +110,7 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
             {
                 timesheetDetails.Add(new TimesheetDetailVM
                 {
+                    ID = Convert.ToInt32(item["ID"]),
                     Date = Convert.ToDateTime(item["timesheetdetaildate"]),
                     FullHalf = Convert.ToDouble(item["FullHalf"]),
                     Location = FormatUtil.ConvertLookupToValue(item, "location"),
@@ -211,8 +191,7 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
 
             return viewModel;
         }
-
-
+        
         private ProfessionalMaster GetProfessionalDataByEmail(string userlogin)
         {
             var professionalData = _dataService.GetProfessionals().FirstOrDefault(e => e.OfficeEmail == userlogin);
@@ -314,8 +293,7 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
             }
             return lstDayOff;
         }
-
-
+        
         public IEnumerable<TimesheetDetailVM> GetTimesheetDetails(string userlogin, DateTime period)
         {
             var startDate = period;
@@ -371,9 +349,7 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
 
             return timesheetDetails;
         }
-
-       
-
+        
         //private bool IsCompLeave(DateTime item)
         //{
         //    //TODO: To get from SP list
@@ -455,25 +431,11 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
         public void CreateTimesheetDetails(int? headerId, 
             IEnumerable<TimesheetDetailVM> timesheetDetails)
         {
+            var mastervalue = new Dictionary<string, Dictionary<string, object>>();
+            var i = 1;
             foreach (var viewModel in timesheetDetails)
             {
                 if (viewModel.Type != "Working Days") continue;
-                if (Item.CheckIfSkipped(viewModel))
-                    continue;
-                if (Item.CheckIfDeleted(viewModel))
-                {
-                    try
-                    {
-                        SPConnector.DeleteListItem(LIST_TIME_DETAIL, viewModel.ID, _siteUrl);
-
-                    }
-                    catch (Exception e)
-                    {
-                        logger.Error(e);
-                        throw e;
-                    }
-                    continue;
-                }
                 var updatedValue = new Dictionary<string, object>
                 {
                     {"timesheet", new FieldLookupValue {LookupId = Convert.ToInt32(headerId)}},
@@ -491,36 +453,30 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                     updatedValue.Add("Title", viewModel.Type);
                 }
 
-                try
-                {
-                    if (Item.CheckIfUpdated(viewModel))
-                        SPConnector.UpdateListItem(LIST_TIME_DETAIL, viewModel.ID, updatedValue, _siteUrl);
-                    else
-                        SPConnector.AddListItem(LIST_TIME_DETAIL, updatedValue, _siteUrl);
+               
+                    mastervalue.Add(i+";Add", updatedValue);
+                    i++;
+               
+            }
 
-
-
-                }
-                catch (Exception e)
-                {
-                    logger.Error(e.Message);
-                    //throw new Exception(ErrorResource.SPInsertError);
-                    throw new Exception(e.Message);
-                }
+            try
+            {
+                SPConnector.AddListItemAsync(LIST_TIME_DETAIL, mastervalue, _siteUrl);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.Message);
+                //throw new Exception(ErrorResource.SPInsertError);
+                throw new Exception(e.Message);
             }
         }
-
-        public async Task CreateWorkflowTimesheetAsync(int? headerId, TimesheetVM header)
-        {
-            if (header.TimesheetStatus == "Draft") return;
-            CreateWorkflowTimesheet(headerId, header);
-        }
-
+        
         private DataTable Getworkflowmapping(string strProjectUnit)
         {
-          
+
 
             var dtView = new DataTable();
+           
             dtView.Columns.Add("ApproverUnit", typeof(string));
             dtView.Columns.Add("ApproverPosition", typeof(string));
             dtView.Columns.Add("Level", typeof(int));
@@ -570,13 +526,22 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                     {"approvallevel", strLevel},
                      {"approver", strEmail},
                 };
-            SPConnector.UpdateListItem(LIST_TIME, headerId, columnValues, _siteUrl);
+            SPConnector.UpdateSingleListItemAsync(LIST_TIME, headerId, columnValues, _siteUrl);
         }
-        public void CreateWorkflowTimesheet(int? headerId, TimesheetVM header)
+
+        public async Task CreateWorkflowTimesheetAsync(int? headerId, TimesheetVM header)
         {
-            var dtView = Getworkflowmapping( header.ProjectUnit);
-            var iCount = dtView.DefaultView.Count ;
-            var profMasterPosition = _dataService.GetProfessionals();
+            if (header.TimesheetStatus == "Draft") return;
+            CreateWorkflowTimesheet(headerId, header);
+        }
+        public  void CreateWorkflowTimesheet(int? headerId, TimesheetVM header)
+        {
+            var dtView = Getworkflowmapping(header.ProjectUnit);
+            var iCount = dtView.DefaultView.Count;
+            IEnumerable<ProfessionalMaster> profMasterPosition = _dataService.GetProfessionals();
+
+     
+            var mastervalue = new Dictionary<string, Dictionary<string, object>>();
             for (int i = 1; i <= iCount; i++)
             {
                 var strApproverPosition = "";
@@ -637,19 +602,11 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                         break;
                 }
 
-               if (!string.IsNullOrEmpty(strApproverPosition)) SPConnector.AddListItem(LIST_WF, columnValues, _siteUrl);
+               if (!string.IsNullOrEmpty(strApproverPosition)) mastervalue.Add(i + ";Add", columnValues); 
             }
+            SPConnector.AddListItemAsync(LIST_WF, mastervalue, _siteUrl);
         }
-
-
-        //private string getLevelNext(string level)
-        //{
-        //    var str = "";
-
-        //    if 
-
-        //    return str;
-        //}
+        
         public void UpdateApproval( TimesheetVM header)
         {
            var caml = string.Format(@"<View><Query>
@@ -695,7 +652,7 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
 
             }
 
-            SPConnector.UpdateListItem(LIST_TIME, header.ID, columnValues, _siteUrl);
+            SPConnector.UpdateSingleListItemAsync(LIST_TIME, header.ID, columnValues, _siteUrl);
 
 
             if (listitemNext == null) return;
@@ -709,16 +666,15 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
             if (header.ApprovalLevel=="3") columnWfValues.Add("status", header.TimesheetStatus);
 
 
-            SPConnector.UpdateListItem(LIST_WF, idNext, columnWfValues, _siteUrl);
+            SPConnector.UpdateSingleListItemAsync(LIST_WF, idNext, columnWfValues, _siteUrl);
 
             columnWfValues = new Dictionary<string, object>();
             columnWfValues.Add("currentstate", "No");
             if (header.ApprovalLevel != "3") columnWfValues.Add("status", header.TimesheetStatus);
-            SPConnector.UpdateListItem(LIST_WF, (idNext - 1), columnWfValues, _siteUrl);
+            SPConnector.UpdateSingleListItemAsync(LIST_WF, (idNext - 1), columnWfValues, _siteUrl);
 
         }
-
-
+        
         public int CreateHeader(TimesheetVM header)
         {
             var dtView = Getworkflowmapping(header.ProjectUnit);
@@ -726,9 +682,12 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
             if (dtView == null || dtView.Rows.Count == 0) throw new Exception("Please check Workflow Mapping Master");
 
             int ID = 0;
+
+            var strGuid = Guid.NewGuid().ToString();
             var columnValues = new Dictionary<string, object>
            {
-               {"timesheetstatus", header.TimesheetStatus}
+               {"timesheetstatus", header.TimesheetStatus},
+                {"TimesheetGUID", strGuid}
            };
 
             var strPeriod = Convert.ToDateTime(header.Period).ToString("MM") + "-" + Convert.ToDateTime(header.Period).ToString("yyyy");
@@ -752,7 +711,7 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
             try
             {
                 SPConnector.AddListItem(LIST_TIME, columnValues, _siteUrl);
-                ID = SPConnector.GetLatestListItemID(LIST_TIME, _siteUrl);
+                ID = SPConnector.GetLatestListItemIdbyGuid(LIST_TIME, _siteUrl,strGuid);
               
 
             }

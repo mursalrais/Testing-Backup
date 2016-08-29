@@ -31,6 +31,7 @@ namespace MCAWebAndAPI.Service.Finance
         private const string FIELD_NAME_DATE = "rmxv";
         private const string FIELD_NAME_SDOID = "SDOID";
         private const string FIELD_NAME_SDO_NAME = "SDOID_x003a_Full_x0020_Name";
+        private const string FIELD_NAME_SDO_POSITION = "SDO_x0020_Position";
         private const string FIELD_NAME_EBUDGET_ID = "Event_x0020_Budget_x0020_ID";
         private const string FIELD_NAME_EBUDGET_NO = "Event_x0020_Budget_x0020_ID_x0031";
         private const string FIELD_NAME_EBUDGET_NAME = "Event_x0020_Budget_x0020_ID_x0030";
@@ -101,7 +102,7 @@ namespace MCAWebAndAPI.Service.Finance
                 {FIELD_NAME_SCA_NO,scaNo },
                 {FIELD_NAME_DATE,scaVoucher.SCAVoucherDate},
                 {FIELD_NAME_SDOID,scaVoucher.SDO.Value},
-                //{FIELD_NAME_SDO_NAME, new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.SDO.Value) }},
+                {FIELD_NAME_SDO_POSITION, scaVoucher.SDOPosition },
                 {FIELD_NAME_EBUDGET_ID, new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.EventBudget.Value) }},
                 {FIELD_NAME_CURRENCY,scaVoucher.Currency.Value},
                 {FIELD_NAME_TOTAL_AMOUNT,scaVoucher.TotalAmount},
@@ -111,7 +112,7 @@ namespace MCAWebAndAPI.Service.Finance
                 {FIELD_NAME_ACTIVITY_ID, new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.ActivityID) } },
                 {FIELD_NAME_SUB_ACTIVITY_ID,new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.SubActivity.Value) }},
                 {FIELD_NAME_FUND,scaVoucher.Fund},
-                {FIELD_NAME_REFFERENCE_NO,scaVoucher.RefferenceNo},
+                {FIELD_NAME_REFFERENCE_NO,scaVoucher.ReferenceNo},
                 {FIELD_NAME_REMARKS,scaVoucher.Remarks}
             };
 
@@ -140,6 +141,7 @@ namespace MCAWebAndAPI.Service.Finance
             {
                 {FIELD_NAME_DATE,scaVoucher.SCAVoucherDate},
                 {FIELD_NAME_SDOID,new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.SDO.Value) }},
+                {FIELD_NAME_SDO_POSITION, scaVoucher.SDOPosition },
                 {FIELD_NAME_EBUDGET_ID, new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.EventBudget.Value) }},
                 {FIELD_NAME_CURRENCY,scaVoucher.Currency},
                 {FIELD_NAME_TOTAL_AMOUNT,scaVoucher.TotalAmount},
@@ -149,7 +151,7 @@ namespace MCAWebAndAPI.Service.Finance
                 {FIELD_NAME_ACTIVITY_ID, new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.ActivityID) } },
                 {FIELD_NAME_SUB_ACTIVITY_ID,new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.SubActivity.Value) }},
                 {FIELD_NAME_FUND,scaVoucher.Fund},
-                {FIELD_NAME_REFFERENCE_NO,scaVoucher.RefferenceNo},
+                {FIELD_NAME_REFFERENCE_NO,scaVoucher.ReferenceNo},
                 {FIELD_NAME_REMARKS,scaVoucher.Remarks}
             };
 
@@ -196,7 +198,7 @@ namespace MCAWebAndAPI.Service.Finance
 
         public async Task CreateSCAVoucherItemAsync(int? scaVoucherID, IEnumerable<SCAVoucherItemsVM> viewModels)
         {
-            CreateSCAVoucherItem(_siteUrl, scaVoucherID, viewModels);
+            CreateSCAVoucherItems(_siteUrl, scaVoucherID, viewModels);
         }
 
         public async Task CreateSCAVoucherAttachmentAsync(int? ID, IEnumerable<HttpPostedFileBase> documents)
@@ -226,17 +228,17 @@ namespace MCAWebAndAPI.Service.Finance
             }
         }
 
-        public SCAVoucherVM GetSCAVoucherVMData(int? ID)
+        public SCAVoucherVM Get(int? id)
         {
             var viewModel = new SCAVoucherVM();
             var viewModels = new List<SCAVoucherItemsVM>();
-            var caml = CamlQueryUtil.Generate(FIELD_NAME_SCAVOUCHER, "Lookup", ID.ToString());
+            var caml = CamlQueryUtil.Generate(FIELD_NAME_SCAVOUCHER, "Lookup", id.ToString());
 
-            if (ID != null)
+            if (id != null)
             {
-                var list = SPConnector.GetListItem(LIST_NAME_SCAVOUCHER, ID, _siteUrl);
+                var list = SPConnector.GetListItem(LIST_NAME_SCAVOUCHER, id, _siteUrl);
                 viewModel = ConvertToVM(list);
-                viewModel.DocumentUrl = GetDocumentUrl(ID);
+                viewModel.DocumentUrl = GetDocumentUrl(id);
 
             }
 
@@ -273,19 +275,31 @@ namespace MCAWebAndAPI.Service.Finance
             //var caml = @"<View><Query><Where><Eq><FieldRef Name='Event_x0020_Budget_x0020_ID' /><Value Type='Lookup'>" + eventBudgetID.ToString() + "</Value></Eq></Where></Query></View>";
             var caml = CamlQueryUtil.Generate(FIELD_NAME_EBUDGET_ID, "Lookup", eventBudgetID.ToString());
 
-            foreach (var item in SPConnector.GetList(LIST_NAME_EVENT_BUDGET_ITEM, _siteUrl, caml))
+            foreach (var listItem in SPConnector.GetList(EventBudgetService.ListName_EventBudgetItem, _siteUrl, caml))
             {
-                scaVoucherItemsVM.Add(
-                    new SCAVoucherItemsVM
-                    {
-                        ID = Convert.ToInt32(item[FIELD_NAME_ID]),
-                        WBSID = Convert.ToInt32((item[EVENT_BUDGET_FIELD_WBS_ID] as FieldLookupValue).LookupId),
-                        WBS = string.Format("{0} - {1}", (item[EVENT_BUDGET_FIELD_WBS_ID] as FieldLookupValue).LookupValue.ToString(), (item[EVENT_BUDGET_FIELD_WBS_VALUE] as FieldLookupValue).LookupValue.ToString()),
-                        GLID = Convert.ToInt32((item[EVENT_BUDGET_FIELD_GL_ID] as FieldLookupValue).LookupId),
-                        GL = string.Format("{0} - {1}", (item[EVENT_BUDGET_FIELD_GL_ID] as FieldLookupValue).LookupValue.ToString(), (item[EVENT_BUDGET_FIELD_GL_VALUE] as FieldLookupValue).LookupValue.ToString()),
-                        Amount = Convert.ToDecimal(item[EVENT_BUDGET_FIELD_QUANTITY]) * Convert.ToDecimal(item[EVENT_BUDGET_FIELD_UOMQUANTITY]),
-                    }
-                );
+                var item = new SCAVoucherItemsVM();
+
+                try
+                {
+                    item.ID = Convert.ToInt32(listItem[FIELD_NAME_ID]);
+                    item.WBSID = Convert.ToInt32((listItem[EVENT_BUDGET_FIELD_WBS_ID] as FieldLookupValue).LookupId);
+                    item.WBS = string.Format("{0} - {1}", (listItem[EventBudgetService.EventBudgetItemFieldName_WBSId] as FieldLookupValue).LookupValue.ToString(), (listItem[EVENT_BUDGET_FIELD_WBS_VALUE] as FieldLookupValue).LookupValue.ToString());
+                    item.GLID = Convert.ToInt32((listItem[EventBudgetService.EventBudgetItemFieldName_GLID] as FieldLookupValue).LookupId);
+                    item.GL = string.Format("{0} - {1}", (listItem[EventBudgetService.EventBudgetItemFieldName_GLID] as FieldLookupValue).LookupValue.ToString(), (listItem[EVENT_BUDGET_FIELD_GL_VALUE] as FieldLookupValue).LookupValue.ToString());
+                    item.Amount = Convert.ToDecimal(listItem[EventBudgetService.EventBudgetItemFieldName_Quantity]) * Convert.ToDecimal(listItem[EventBudgetService.EventBudgetItemFieldName_Frequency]) * Convert.ToDecimal(listItem[EventBudgetService.EventBudgetItemFieldName_UnitPrice]);
+
+                    scaVoucherItemsVM.Add(item);
+                }
+                catch (ServerException e)
+                {
+
+                    throw e;
+                }
+                catch (Exception e)
+                {
+
+                    throw e;
+                }
             }
 
             return scaVoucherItemsVM;
@@ -327,11 +341,19 @@ namespace MCAWebAndAPI.Service.Finance
             model.SubActivityID = Convert.ToInt32((ListItem[FIELD_NAME_SUB_ACTIVITY_NAME] as FieldLookupValue).LookupId.ToString());
             model.SubActivityName = (ListItem[FIELD_NAME_SUB_ACTIVITY_NAME] as FieldLookupValue).LookupValue.ToString();
             model.Fund = Convert.ToString(ListItem[FIELD_NAME_FUND]);
-            model.RefferenceNo = ListItem[FIELD_NAME_REFFERENCE_NO] == null ? "" : ListItem[FIELD_NAME_REFFERENCE_NO].ToString();
+            model.ReferenceNo = ListItem[FIELD_NAME_REFFERENCE_NO] == null ? "" : ListItem[FIELD_NAME_REFFERENCE_NO].ToString();
             model.Remarks = ListItem[FIELD_NAME_REMARKS] == null ? "" : ListItem[FIELD_NAME_REMARKS].ToString();
             model.TransactionStatus.Value = ListItem[FIELD_NAME_TRANSTATUS].ToString();
             model.EventBudget.Value = Convert.ToInt32((ListItem[FIELD_NAME_EBUDGET_ID] as FieldLookupValue).LookupId.ToString());
-            model.SDO.Value = Convert.ToInt32((ListItem[FIELD_NAME_SDOID] as FieldLookupValue).LookupId.ToString());
+
+            if (ListItem[FIELD_NAME_SDOID] != null)
+            {
+                model.SDO.Value = Convert.ToInt32((ListItem[FIELD_NAME_SDOID] as FieldLookupValue).LookupId.ToString());
+                model.SDOPosition = Convert.ToString(ListItem[FIELD_NAME_SDO_POSITION]);
+                model.SDO.Text = string.Format("{0} - {1}", (ListItem[FIELD_NAME_SDO_NAME] as FieldLookupValue).LookupValue, model.SDOPosition);
+                model.SDOName = model.SDO.Text;
+            }
+            model.SDOPosition = Convert.ToString(ListItem[FIELD_NAME_SDO_POSITION]);
             model.SubActivity.Value = Convert.ToInt32((ListItem[FIELD_NAME_SUB_ACTIVITY_NAME] as FieldLookupValue).LookupId.ToString());
             model.Currency.Value = ListItem[FIELD_NAME_CURRENCY] == null ? "" : ListItem[FIELD_NAME_CURRENCY].ToString();
 
@@ -350,6 +372,10 @@ namespace MCAWebAndAPI.Service.Finance
             return model;
         }
 
+        public void DeleteDetail(int id)
+        {
+            SPConnector.DeleteListItem(LIST_NAME_SCAVOUCHER, id, _siteUrl);
+        }
         private static void CreateSCAVoucherAttachment(string siteUrl, int? ID, IEnumerable<HttpPostedFileBase> attachment)
         {
             if (ID != null)
@@ -374,7 +400,7 @@ namespace MCAWebAndAPI.Service.Finance
             }
         }
 
-        private static void CreateSCAVoucherItem(string siteUrl, int? scaVoucherID, IEnumerable<SCAVoucherItemsVM> viewModels)
+        public void CreateSCAVoucherItems(string siteUrl, int? scaVoucherID, IEnumerable<SCAVoucherItemsVM> viewModels)
         {
             if (viewModels != null)
             {

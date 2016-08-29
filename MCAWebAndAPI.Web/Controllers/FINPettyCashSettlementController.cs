@@ -1,10 +1,8 @@
 ﻿using MCAWebAndAPI.Model.ViewModel.Control;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 using MCAWebAndAPI.Service.Finance;
-using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using static MCAWebAndAPI.Model.ViewModel.Form.Finance.Shared;
@@ -12,6 +10,10 @@ using System.IO;
 using MCAWebAndAPI.Service.Converter;
 using System;
 using Elmah;
+using MCAWebAndAPI.Service.Shared;
+using System.Collections.Generic;
+using MCAWebAndAPI.Model.HR.DataMaster;
+using MCAWebAndAPI.Service.HR.Common;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -43,6 +45,8 @@ namespace MCAWebAndAPI.Web.Controllers
         private const string SuccessMsgFormatUpdated = "PC settlement for {0} has been successfully updated.";
         private const string FirstPageUrl = "{0}/Lists/Petty%20Cash%20Settlement/AllItems.aspx";
         private const string PrintPageUrl = "~/Views/FINPettyCashSettlement/Print.cshtml";
+        private const string PaidToProfessional = "Professional";
+        private const string PaidToVendor = "Vendor";
 
         IPettyCashSettlementService service;
         IPettyCashPaymentVoucherService pettyCashPaymentVoucherService;
@@ -86,7 +90,7 @@ namespace MCAWebAndAPI.Web.Controllers
             return RedirectToAction("Index", "Success",
                new
                {
-                   successMessage = string.Format(SuccessMsgFormatUpdated, viewModel.Date.ToShortDateString()),
+                   successMessage = string.Format(SuccessMsgFormatUpdated, viewModel.TransactionNo),
                    previousUrl = string.Format(FirstPageUrl, siteUrl)
                });
         }
@@ -153,6 +157,37 @@ namespace MCAWebAndAPI.Web.Controllers
             pettyCashPaymentVoucherService.SetSiteUrl(siteUrl);
 
             var paymentVoucher = pettyCashPaymentVoucherService.GetPettyCashPaymentVoucher(paymentVoucherID);
+
+            if (paymentVoucher.PaidTo.Text.Equals(PaidToProfessional))
+            {
+                try
+                {
+                    IDataMasterService _dataMasterService = new DataMasterService();
+                    _dataMasterService.SetSiteUrl(siteUrl);
+
+                    var sessionVariable = System.Web.HttpContext.Current.Session["ProfessionalMaster"] as IEnumerable<ProfessionalMaster>;
+                    var professionals = sessionVariable ?? _dataMasterService.GetProfessionals();
+
+
+                    ProfessionalMaster data = professionals.FirstOrDefault(p => p.ID.Value == paymentVoucher.Professional.Value.Value);
+
+                    if (data != null)
+                    {
+                        paymentVoucher.PaidTo.Text = string.Format("{0} - {1}", data.Name, data.Position);
+                    }
+                }
+                catch
+                {
+                    throw;
+                }
+            }
+            else if (paymentVoucher.PaidTo.Text.Equals(PaidToVendor))
+            {
+                VendorService vendorSvc = new VendorService();
+                vendorSvc.SetSiteUrl(siteUrl);
+                var vendor = vendorSvc.GetVendor(paymentVoucher.Vendor.Value.Value);
+                paymentVoucher.PaidTo.Text = vendor.Name;
+            }
 
             return Json(new
             {

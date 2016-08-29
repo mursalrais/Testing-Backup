@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web;
 using MCAWebAndAPI.Model.Common;
+using MCAWebAndAPI.Model.ViewModel.Control;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
+using MCAWebAndAPI.Service.Finance.RequisitionNote;
 using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
@@ -18,7 +20,7 @@ namespace MCAWebAndAPI.Service.Finance
     public class EventBudgetService : IEventBudgetService
     {
         private const string ListName_EventBudget = "Event Budget";
-        private const string ListName_EventBudgetItem = "Event Budget Item";
+        public const string ListName_EventBudgetItem = "Event Budget Item";
         private const string ListName_Attachment = "Event Budget Documents";
         private const string ListName_Activity = "Activity";
 
@@ -36,21 +38,22 @@ namespace MCAWebAndAPI.Service.Finance
         private const string EventBudgetFieldName_TotalSCAIDR = "Total_x0020_SCA_x0020__x0028_IDR";
         private const string EventBudgetFieldName_TotalIDR = "Total_x0020__x0028_IDR_x0029_";
         private const string EventBudgetFieldName_TotalUSD = "Total_x0020__x0028_USD_x0029_";
+        private const string EventBudgetFieldName_TransactionStatus = "TransactionStatus";
 
         private const string ActivityFieldName_Name = "Title";
 
         private const string EventBudgetItemFieldName_ID = "ID";
         private const string EventBudgetItemFieldName_EventBudgetID = "Event_x0020_Budget_x0020_ID";
-        private const string EventBudgetItemFieldName_WBSId = "WBS_x0020_Master_x002e_ID";
+        public const string EventBudgetItemFieldName_WBSId = "WBS_x0020_Master_x002e_ID";
         private const string EventBudgetItemFieldName_WBSName = "WBS_x0020_Master_x002e_ID_x003a_";
-        private const string EventBudgetItemFieldName_GLID = "GL_x0020_Master_x002e_ID";
+        public const string EventBudgetItemFieldName_GLID = "GL_x0020_Master_x002e_ID";
         private const string EventBudgetItemFieldName_GLNo = "GL_x0020_Master_x002e_ID_x003a_G";
         private const string EventBudgetItemFieldName_GLDescription = "GL_x0020_Master_x002e_ID_x003a_G0";
-        private const string EventBudgetItemFieldName_Quantity = "Quantity";
+        public const string EventBudgetItemFieldName_Quantity = "Quantity";
         private const string EventBudgetItemFieldName_UoMQuantity = "UoMQuantity";
         private const string EventBudgetItemFieldName_UoMFrequency = "UoMFrequency";
-        private const string EventBudgetItemFieldName_Frequency = "Frequency";
-        private const string EventBudgetItemFieldName_UnitPrice = "UnitPrice";
+        public const string EventBudgetItemFieldName_Frequency = "Frequency";
+        public const string EventBudgetItemFieldName_UnitPrice = "UnitPrice";
         private const string EventBudgetItemFieldName_TypeOfExpense = "Type_x0020_of_x0020_Expense";
         private const string EventBudgetItemFieldName_AmountPerItem = "AmountPerItem";
         private const string EventBudgetItemFieldName_DirectPayment = "DirectPayment";
@@ -70,6 +73,11 @@ namespace MCAWebAndAPI.Service.Finance
         {
             this.siteUrl = siteUrl;
         }
+        
+        public async Task<EventBudgetVM> GetASync(int? ID)
+        {
+            return Get(ID);
+        }
 
         public EventBudgetVM Get(int? ID)
         {
@@ -84,7 +92,7 @@ namespace MCAWebAndAPI.Service.Finance
                 var listItem = SPConnector.GetListItem(ListName_EventBudget, ID, siteUrl);
 
                 eventBudget = ConvertToEventBudgetVM(listItem);
-                eventBudget.ItemDetails = GetItem(ID.Value);
+                eventBudget.ItemDetails = GetItems(ID.Value);
             }
 
             return eventBudget;
@@ -105,6 +113,7 @@ namespace MCAWebAndAPI.Service.Finance
             updatedValue.Add(EventBudgetFieldName_TotalSCAIDR, eventBudget.TotalSCA);
             updatedValue.Add(EventBudgetFieldName_TotalIDR, eventBudget.TotalIDR);
             updatedValue.Add(EventBudgetFieldName_TotalUSD, eventBudget.TotalUSD);
+            updatedValue.Add(EventBudgetFieldName_TransactionStatus, eventBudget.TransactionStatus.Value);
 
             try
             {
@@ -119,7 +128,7 @@ namespace MCAWebAndAPI.Service.Finance
             return true;
         }
 
-        public IEnumerable<EventBudgetItemVM> GetItem(int eventBudgetID)
+        public IEnumerable<EventBudgetItemVM> GetItems(int eventBudgetID)
         {
             var eventBudgets = new List<EventBudgetItemVM>();
             var caml = @"<View><Query><Where><Eq><FieldRef Name='" + EventBudgetItemFieldName_EventBudgetID + "' /><Value Type='Lookup'>" + eventBudgetID.ToString() + "</Value></Eq></Where></Query></View>";
@@ -191,8 +200,10 @@ namespace MCAWebAndAPI.Service.Finance
             newObject.Add(EventBudgetFieldName_TotalSCAIDR, eventBudget.TotalSCA);
             newObject.Add(EventBudgetFieldName_TotalIDR, eventBudget.TotalIDR);
             newObject.Add(EventBudgetFieldName_TotalUSD, eventBudget.TotalUSD);
+            newObject.Add(EventBudgetFieldName_TransactionStatus, eventBudget.TransactionStatus.Value);
 
-            newObject.Add(EventBudgetFieldName_No, DocumentNumbering.Create(siteUrl, DocumentNo, 5));
+            eventBudget.No = DocumentNumbering.Create(siteUrl, DocumentNo, 5);
+            newObject.Add(EventBudgetFieldName_No, eventBudget.No);
 
             try
             {
@@ -340,7 +351,9 @@ namespace MCAWebAndAPI.Service.Finance
                 eventBudget.TotalSCAUSD = eventBudget.TotalSCA / eventBudget.Rate;
             }
 
+            eventBudget.TransactionStatus.Value = Convert.ToString(listItem[EventBudgetFieldName_TransactionStatus]);
             eventBudget.DocumentUrl =  GetDocumentUrl(siteUrl, eventBudget.ID);
+
             return eventBudget;
         }
 
@@ -386,6 +399,114 @@ namespace MCAWebAndAPI.Service.Finance
         private string GetDocumentUrl(string siteUrl, int? iD)
         {
             return string.Format(UrlResource.PettyCashPaymentVoucherDocumentByID, siteUrl, iD);
+        }
+
+        public async Task UpdateRequisitionNoteAsync(string siteUrl = null, int id = 0)
+        {
+            UpdateRequisitionNote(siteUrl, id);
+        }
+
+        /// <summary>
+        /// Automatically updates existing Requsition Note based based on a change in an event budget
+        /// </summary>
+        /// <param name="siteUrl"></param>
+        /// <param name="id">Request Note Id</param>
+        public void UpdateRequisitionNote(string siteUrl = null, int id = 0)
+        {
+            if (id == 0)
+            {
+                throw new Exception("Invalid parameters.");
+            }
+
+            IRequisitionNoteService reqNoteService = new RequisitionNoteService();
+
+            reqNoteService.SetSiteUrl(siteUrl);
+            SetSiteUrl(siteUrl);
+
+            RequisitionNoteVM rnHeader = reqNoteService.Get(id);
+            EventBudgetVM ebHeader = Get(rnHeader.EventBudgetNo.Value);
+
+            if (ebHeader.TransactionStatus.Value == TransactionStatusComboBoxVM.Locked)
+                throw new Exception("Cannot update Requisition Note for a Locked Event Budget");
+
+            // copy EB updated values to RN
+            rnHeader.Project.Value = ebHeader.Project.Value;
+            rnHeader.Total = ebHeader.TotalIDR;
+
+            // delete all existing details in RN
+            foreach (var rnDetail in rnHeader.ItemDetails)
+            {
+                reqNoteService.DeleteDetail((int)rnDetail.ID);
+            }
+
+            //copy all new details from EB
+            List<RequisitionNoteItemVM> d = new List<RequisitionNoteItemVM>();
+            foreach (var ebDetail in ebHeader.ItemDetails)
+            {
+                d.Add(new RequisitionNoteItemVM()
+                {
+                    Activity = new AjaxComboBoxVM() { Value = Convert.ToInt32(ebHeader.Activity.Value), Text = ebHeader.Activity.Text },
+                    WBS = new AjaxComboBoxVM() { Value = ebDetail.WBS.Value, Text = ebDetail.WBS.Text },
+                    GL = new AjaxComboBoxVM() { Value = ebDetail.GL.Value, Text = ebDetail.GL.Text },
+                    Specification = ebDetail.Title,
+                    Quantity = ebDetail.Quantity,
+                    Frequency = ebDetail.Frequency,
+                    Price = ebDetail.UnitPrice,
+                    EditMode = (int)Item.Mode.CREATED,
+                    IsFromEventBudget = true,
+                    Total = ebDetail.Frequency * ebDetail.UnitPrice * ebDetail.Quantity
+                });
+            }
+
+            reqNoteService.CreateRequisitionNoteItems(rnHeader.ID, d);
+
+            // attachment?
+        }
+
+
+        public void UpdateSCAVoucher(string siteUrl = null, int id = 0)
+        {
+            if (id == 0)
+            {
+                throw new Exception("Invalid parameters.");
+            }
+
+            ISCAVoucherService scaVoucherService = new SCAVoucherService();
+
+            scaVoucherService.SetSiteUrl(siteUrl);
+            SetSiteUrl(siteUrl);
+
+            SCAVoucherVM scaVoucherHeader = scaVoucherService.Get(id);
+            EventBudgetVM ebHeader = Get(scaVoucherHeader.EventBudgetID);
+
+            if (ebHeader.TransactionStatus.Value == TransactionStatusComboBoxVM.Locked)
+                throw new Exception("Cannot update Requisition Note for a Locked Event Budget");
+
+            // copy EB updated values to RN
+            scaVoucherHeader.Project = ebHeader.Project.Value;
+            scaVoucherHeader.TotalAmount = ebHeader.TotalIDR;
+
+            // delete all existing details in RN
+            foreach (var rnDetail in scaVoucherHeader.EventBudgetItems)
+            {
+                scaVoucherService.DeleteDetail((int)rnDetail.ID);
+            }
+
+            //copy all new details from EB
+            List<SCAVoucherItemsVM> d = new List<SCAVoucherItemsVM>();
+            foreach (var ebDetail in ebHeader.ItemDetails)
+            {
+                d.Add(new SCAVoucherItemsVM()
+                {
+                    WBS =  ebDetail.WBS.Text,
+                    GL =  ebDetail.GL.Text,
+                    Amount = ebDetail.Frequency * ebDetail.UnitPrice * ebDetail.Quantity
+                });
+            }
+
+            scaVoucherService.CreateSCAVoucherItems(siteUrl, scaVoucherHeader.ID, d);
+
+            // attachment?
         }
     }
 }
