@@ -158,7 +158,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             var paymentVoucher = pettyCashPaymentVoucherService.GetPettyCashPaymentVoucher(paymentVoucherID);
 
-            if(paymentVoucher.PaidTo.Text.Equals(PaidToProfessional))
+            if (paymentVoucher.PaidTo.Text.Equals(PaidToProfessional))
             {
                 try
                 {
@@ -176,11 +176,12 @@ namespace MCAWebAndAPI.Web.Controllers
                         paymentVoucher.PaidTo.Text = string.Format("{0} - {1}", data.Name, data.Position);
                     }
                 }
-                catch {
-                    //empty
+                catch
+                {
+                    throw;
                 }
             }
-            else if(paymentVoucher.PaidTo.Text.Equals(PaidToVendor))
+            else if (paymentVoucher.PaidTo.Text.Equals(PaidToVendor))
             {
                 VendorService vendorSvc = new VendorService();
                 vendorSvc.SetSiteUrl(siteUrl);
