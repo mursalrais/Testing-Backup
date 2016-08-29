@@ -14,6 +14,10 @@ namespace MCAWebAndAPI.Service.Asset
 
         AssetCheckFormHeaderVM GetPopulatedModel(int? ID = null, string office = null, string floor = null, string room = null);
 
+        AssetCheckFormHeaderVM GetPopulatedModelPrint(int? ID = null);
+
+        AssetCheckFormHeaderVM GetPopulatedModelPrintDate(DateTime? createDate = null);
+
         IEnumerable<AssetCheckFormVM> GetAssetCheckForms();
 
         bool CreateAssetCheckForm(AssetCheckFormVM assetCheckForm);

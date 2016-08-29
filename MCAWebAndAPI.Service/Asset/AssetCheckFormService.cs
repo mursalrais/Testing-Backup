@@ -142,7 +142,7 @@ namespace MCAWebAndAPI.Service.Asset
                 var dataAssetDisposalDetail = SPConnector.GetList("Asset Disposal Detail", _siteUrl, caml);
 
                 caml = @"<View><Query><Where><Eq><FieldRef Name='assetmaster' /><Value Type='Lookup'>"+dataAssetMaster["ID"].ToString()+"</Value></Eq></Where></Query></View>";
-                var dataAssetReplacement = SPConnector.GetList("Asset Disposal Detail", _siteUrl, caml);
+                var dataAssetReplacement = SPConnector.GetList("Asset Replacement Detail", _siteUrl, caml);
 
                 i++;
                 var itemsss = item;
@@ -159,6 +159,117 @@ namespace MCAWebAndAPI.Service.Asset
                 modelDetailItem.status = (item["Status"] == null ? "" : item["Status"].ToString());
 
                 modelDetailItem.systemQty = dataAssetAcquisitionDetail.Count()  + dataAssetReplacement.Count() - dataAssetDisposalDetail.Count();
+
+                modelDetail.Add(modelDetailItem);
+            }
+            model.Details = modelDetail;
+
+            return model;
+        }
+
+        public AssetCheckFormHeaderVM GetPopulatedModelPrint(int? ID = default(int?))
+        {
+            var model = new AssetCheckFormHeaderVM();
+
+            var caml = @"<View><Query><Where><Eq><FieldRef Name='assetcheckformid' /><Value Type='Number'>"+ID+"</Value></Eq></Where></Query></View>";
+            foreach (var item in SPConnector.GetList("Asset Check", _siteUrl, caml))
+            {
+                if (item["assetcheckcountdate"] != null)
+                {
+                    model.CreateDate = Convert.ToDateTime(item["assetcheckcountdate"].ToString());
+                }
+                if (item["Created"] != null)
+                {
+                    model.hTanggalCreate = Convert.ToDateTime(item["Created"].ToString());
+                }
+                if (item["assetcheckformid"] != null)
+                {
+                    model.hFormId = Convert.ToInt32(item["assetcheckformid"].ToString());
+                }
+            }
+
+            var modelDetail = new List<AssetCheckFormItemVM>();            
+
+            caml = @"<View><Query><Where><Eq><FieldRef Name='assetcheckformid' /><Value Type='Number'>"+ID+"</Value></Eq></Where></Query></View>";
+            int i = 0;
+            foreach (var item in SPConnector.GetList("Asset Check Detail", _siteUrl, caml))
+            {
+                var dataAssetMaster = SPConnector.GetListItem("Asset Master", (item["assetmaster"] as FieldLookupValue).LookupId, _siteUrl);
+                
+                i++;
+                var itemsss = item;
+                var modelDetailItem = new AssetCheckFormItemVM();
+                modelDetailItem.AssetID = (item["assetmaster"] as FieldLookupValue).LookupId;
+                modelDetailItem.item = i;
+                modelDetailItem.assetSubAsset = (dataAssetMaster["AssetID"] == null ? "" : dataAssetMaster["AssetID"].ToString()) + "-" + (dataAssetMaster["Title"] == null ? "" : dataAssetMaster["Title"].ToString());
+                modelDetailItem.serialNo = (dataAssetMaster["SerialNo"] == null ? "" : dataAssetMaster["SerialNo"].ToString());
+                modelDetailItem.province = (item["assetprovince"] == null ? "" : item["assetprovince"].ToString());
+                modelDetailItem.location = (item["assetlocation"] == null ? "" : item["assetlocation"].ToString());
+                modelDetailItem.status = (item["assetstatus"] == null ? "" : item["assetstatus"].ToString());
+                modelDetailItem.systemQty = Convert.ToInt32(item["systemquantity"].ToString());
+
+                modelDetailItem.existense = (item["existence"] == null ? "" : item["existence"].ToString());
+                modelDetailItem.condition = (item["condition"] == null ? "" : item["condition"].ToString());
+                modelDetailItem.specification = (item["specification"] == null ? "" : item["specification"].ToString());
+                modelDetailItem.physicalQty = Convert.ToInt32(item["physicalquantity"].ToString());
+
+                modelDetail.Add(modelDetailItem);
+            }
+            model.Details = modelDetail;
+
+            return model;
+        }
+
+        public AssetCheckFormHeaderVM GetPopulatedModelPrintDate(DateTime? createDate = default(DateTime?))
+        {
+            var model = new AssetCheckFormHeaderVM();
+
+            var caml = @"<View><Query><Where><And><Geq><FieldRef Name='assetcheckcountdate' /><Value IncludeTimeValue='TRUE' Type='DateTime'>" + createDate.Value.Year.ToString() + "-" + createDate.Value.Month.ToString() + "-" + createDate.Value.Day.ToString() + "T00:00:00Z</Value></Geq><Leq><FieldRef Name='assetcheckcountdate' /><Value IncludeTimeValue='TRUE' Type='DateTime'>" + createDate.Value.Year.ToString()+ "-" + createDate.Value.Month.ToString() + "-" + createDate.Value.Day.ToString() + "T23:59:59Z</Value></Leq></And></Where></Query></View>";
+            int assetCheckFormId = 0;
+            foreach (var item in SPConnector.GetList("Asset Check", _siteUrl, caml))
+            {
+                if (item["assetcheckcountdate"] != null)
+                {
+                    model.CreateDate = Convert.ToDateTime(item["assetcheckcountdate"].ToString());
+                }
+                if (item["assetcheckformid"] != null)
+                {
+                    assetCheckFormId = Convert.ToInt32(item["assetcheckformid"].ToString());
+                }
+                if (item["Created"] != null)
+                {
+                    model.hTanggalCreate = Convert.ToDateTime(item["Created"].ToString());
+                }
+                if (item["assetcheckformid"] != null)
+                {
+                    model.hFormId = Convert.ToInt32(item["assetcheckformid"].ToString());
+                }
+            }
+
+            var modelDetail = new List<AssetCheckFormItemVM>();
+
+            caml = @"<View><Query><Where><Eq><FieldRef Name='assetcheckformid' /><Value Type='Number'>" + assetCheckFormId + "</Value></Eq></Where></Query></View>";
+            int i = 0;
+            foreach (var item in SPConnector.GetList("Asset Check Detail", _siteUrl, caml))
+            {
+                var dataAssetMaster = SPConnector.GetListItem("Asset Master", (item["assetmaster"] as FieldLookupValue).LookupId, _siteUrl);
+
+                i++;
+                var itemsss = item;
+                var modelDetailItem = new AssetCheckFormItemVM();
+                modelDetailItem.AssetID = (item["assetmaster"] as FieldLookupValue).LookupId;
+                modelDetailItem.item = i;
+                modelDetailItem.assetSubAsset = (dataAssetMaster["AssetID"] == null ? "" : dataAssetMaster["AssetID"].ToString()) + "-" + (dataAssetMaster["Title"] == null ? "" : dataAssetMaster["Title"].ToString());
+                modelDetailItem.serialNo = (dataAssetMaster["SerialNo"] == null ? "" : dataAssetMaster["SerialNo"].ToString());
+                modelDetailItem.province = (item["assetprovince"] == null ? "" : item["assetprovince"].ToString());
+                modelDetailItem.location = (item["assetlocation"] == null ? "" : item["assetlocation"].ToString());
+                modelDetailItem.status = (item["assetstatus"] == null ? "" : item["assetstatus"].ToString());
+                modelDetailItem.systemQty = Convert.ToInt32(item["systemquantity"].ToString());
+
+                modelDetailItem.existense = (item["existence"] == null ? "" : item["existence"].ToString());
+                modelDetailItem.condition = (item["condition"] == null ? "" : item["condition"].ToString());
+                modelDetailItem.specification = (item["specification"] == null ? "" : item["specification"].ToString());
+                modelDetailItem.physicalQty = Convert.ToInt32(item["physicalquantity"].ToString());
 
                 modelDetail.Add(modelDetailItem);
             }

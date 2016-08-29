@@ -1,0 +1,87 @@
+﻿
+@using MCAWebAndAPI.Model.ViewModel.Form.Asset
+@model AssetCheckFormHeaderVM
+
+@{
+    Layout = "~/Views/Shared/_LayoutPDF.cshtml";
+}
+
+<div class="form-horizontal">
+    <fieldset>
+        <div class="row">
+            <div class="col-sm-12">
+                <img src="~/Content/icon-mca.png" /><br /><br />
+                <p style="font-size:larger; text-align: center;">Asset Check Form</p>
+                <table style="border: 0px; width:25%;">
+                    <tr>
+                        <td style="border:0px; padding: 5px;">Form ID</td>
+                        <td style="border:0px; padding: 5px;">:</td>
+                        <td style="border:0px; padding: 5px;">@Model.hFormId</td>
+                    </tr>
+                    <tr>
+                        <td style="border:0px; padding: 5px;">Created Date</td>
+                        <td style="border:0px; padding: 5px;">:</td>
+                        <td style="border:0px; padding: 5px;">@Model.hTanggalCreate</td>
+                    </tr>
+                    <tr>
+                        <td style="border:0px; padding: 5px;">Count Date</td>
+                        <td style="border:0px; padding: 5px;">:</td>
+                        <td style="border:0px; padding: 5px;">@Model.hTanggalCounted</td>
+                    </tr>
+                    <tr>
+                        <td style="border:0px; padding: 5px;">Counted by  (1)</td>
+                        <td style="border:0px; padding: 5px;">:</td>
+                        <td style="border:0px; padding: 5px;"></td>
+                    </tr>
+                    <tr>
+                        <td style="border:0px; padding: 5px;">Counted by  (2)</td>
+                        <td style="border:0px; padding: 5px;">:</td>
+                        <td style="border:0px; padding: 5px;"></td>
+                    </tr>
+                    <tr>
+                        <td style="border:0px; padding: 5px;">Counted by  (3)</td>
+                        <td style="border:0px; padding: 5px;">:</td>
+                        <td style="border:0px; padding: 5px;"></td>
+                    </tr>
+                </table>
+                <br /><br />
+                <table>
+                    <tr>
+                        <td>Item</td>
+                        <td>Asset-Sub Asset</td>
+                        <td>Serial No</td>
+                        <td>Province</td>
+                        <td>Location</td>
+                        <td>Status</td>
+                        <td>Existense</td>
+                        <td>Condition</td>
+                        <td>Specification</td>
+                        <td>System Qty</td>
+                        <td>Physical Qty</td>
+                    </tr>
+                    @{int i = 0;}
+                    @foreach (var item in Model.Details)
+                    {
+                        i++;
+
+                        <tr>
+                            <td>@i</td>
+                            <td>@item.assetSubAsset</td>
+                            <td>@item.serialNo</td>
+                            <td>@item.province</td>
+                            <td>@item.location</td>
+                            <td>@item.status</td>
+                            <td>@item.existense</td>
+                            <td>@item.condition</td>
+                            <td>@item.specification</td>
+                            <td>@item.systemQty</td>
+                            <td>@item.physicalQty</td>
+                        </tr>
+                    }
+                </table>
+                <br /><br />
+                <p>Counted By :</p>
+            </div>
+        </div>
+    </fieldset>
+</div>
