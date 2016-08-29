@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MCAWebAndAPI.Model.ViewModel.Form.Common;
 
 namespace MCAWebAndAPI.Service.HR.Recruitment
 {
@@ -11,9 +12,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
     {
         void SetSiteUrl(string siteUrl = null);
 
-        ProfessionalPerformancePlanVM GetPopulatedModel(string requestor = null);
+        Task<ProfessionalPerformancePlanVM> GetPopulatedModel(string requestor, string listName);
 
-        ProfessionalPerformancePlanVM GetHeader(int? ID, string requestor);
+        Task<ProfessionalPerformancePlanVM> GetHeader(int? ID, string requestor, string listName, string listNameWorkflow, string columnName);
 
         int CreateHeader(string requestor, ProfessionalPerformancePlanVM header);
 

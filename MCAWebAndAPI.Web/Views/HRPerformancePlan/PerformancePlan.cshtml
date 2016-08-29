@@ -97,7 +97,9 @@
             @if (Model.TypeForm == "Professional")
             {
                 <legend>Approval Path</legend>
-                <div id="workflow-placeholder" class="row" />
+                <div class="row">
+                    @Html.Partial("_WorkflowPathDetails", Model)
+                </div>
             }
         </fieldset>
     }
@@ -269,13 +271,9 @@
                 <div class="col-sm-8">
                     @Html.HiddenFor(m => m.PerformancePeriodID)
                 </div>
-            </div>
-            <div class="form-group">
                 <div class="col-sm-8">
                     @Html.HiddenFor(m => m.StatusForm)
                 </div>
-            </div>
-            <div class="form-group">
                 <div class="col-sm-8">
                     @Html.HiddenFor(m => m.TypeForm)
                 </div>
@@ -285,7 +283,9 @@
         @if (Model.TypeForm == "Professional")
         {
             <legend>Approval Path</legend>
-                <div id="workflow-placeholder" class="row" />
+                <div class="row">
+                    @Html.Partial("_WorkflowPathDetails", Model)
+                </div>
         }
     </fieldset>
     }
@@ -359,7 +359,7 @@
             var List = "@ViewBag.ListName";
             var typeForm = "@Model.TypeForm";
             if (typeForm == "Professional") {
-                displayApprovalPath("workflow-placeholder", List, Requestor);
+                displayWorkflowRouter("workflow-placeholder", List, Requestor);
             }
         });
     </script>

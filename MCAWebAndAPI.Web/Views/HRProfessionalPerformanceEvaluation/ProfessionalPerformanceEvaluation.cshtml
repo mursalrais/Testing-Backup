@@ -78,7 +78,9 @@
         @if (Model.TypeForm == "Professional")
         {
             <legend>Approval Path</legend>
-            <div id="workflow-placeholder" class="row" />
+                <div class="row">
+                    @Html.Partial("_WorkflowPathDetails", Model)
+                </div>
         }
     </fieldset>
     }
@@ -238,7 +240,9 @@ if (Model.TypeForm == "Approver2" && Model.StatusForm == "Pending Approval 2 of 
         @if (Model.TypeForm == "Professional")
         {
             <legend>Approval Path</legend>
-            <div id="workflow-placeholder" class="row" />
+                <div class="row">
+                    @Html.Partial("_WorkflowPathDetails", Model)
+                </div>
         }
     </fieldset>
     }

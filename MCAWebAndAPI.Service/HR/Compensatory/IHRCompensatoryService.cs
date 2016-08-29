@@ -10,7 +10,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
     {
         void SetSiteUrl(string siteUrl = null);
 
-        CompensatoryVM GetComplistbyCmpid(int? iD);
+        Task<CompensatoryVM> GetComplistbyCmpid(int? ID, string requestor, string listName, string listNameWorkflow, string columnName);
+
+        CompensatoryVM GetViewlistbyCmpid(int? iD);
+
+        Task<CompensatoryVM> GetWorkflow(string requestor, string listName);
 
         CompensatoryVM GetComplistbyProfid(int? iD);
 

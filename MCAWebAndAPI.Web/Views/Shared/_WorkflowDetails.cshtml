@@ -43,16 +43,19 @@
         })
         .DataSource(
             dataSource =>
-            dataSource.Ajax().Model(model =>
+            dataSource.Ajax()
+            .Batch(true)
+            .Model(model =>
             {
                 model.Id(p => p.ID);
+                model.Field(p => p.ID).DefaultValue(999);
                 model.Field(p => p.ApproverUnit).DefaultValue(WorkflowItemVM.GetUnitDefaultValue());
                 model.Field(m => m.ApproverPosition).DefaultValue(AjaxComboBoxVM.GetDefaultValue());
                 model.Field(m => m.ApproverUserName).DefaultValue(AjaxComboBoxVM.GetDefaultValue());
                 model.Field(p => p.Level).Editable(false);
             })
-        .Read(read => read.Action("Grid_Read", "Workflow").Type(HttpVerbs.Post))
-        .Update(update => update.Action("Grid_Update", "Workflow").Type(HttpVerbs.Post))
+        .Read(read => read.Action("Grid_Read", "Workflow"))
+        .Update(update => update.Action("Grid_Update", "Workflow"))
         )
     )
 </div>

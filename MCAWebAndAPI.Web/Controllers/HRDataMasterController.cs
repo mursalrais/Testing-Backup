@@ -99,6 +99,7 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             _dataMasterService.SetSiteUrl(System.Web.HttpContext.Current.Session["SiteUrl"] as string);
             var professionals = GetFromExistingSession();
+            professionals = from a in professionals where a.ID == id select a;
             return Json(professionals.Where(e => e.ID == id).Select(
                     e =>
                     new

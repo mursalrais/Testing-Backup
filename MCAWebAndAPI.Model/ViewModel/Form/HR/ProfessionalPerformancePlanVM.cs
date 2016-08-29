@@ -1,4 +1,5 @@
 ﻿using MCAWebAndAPI.Model.Common;
+using MCAWebAndAPI.Model.ViewModel.Form.Common;
 using MCAWebAndAPI.Model.ViewModel.Control;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
     public class ProfessionalPerformancePlanVM : PerformancePlanVM
     {
         public IEnumerable<ProjectOrUnitGoalsDetailVM> ProjectOrUnitGoalsDetails { get; set; } = new List<ProjectOrUnitGoalsDetailVM>();
+        public IEnumerable<WorkflowItemVM> WorkflowItems { get; set; } = new List<WorkflowItemVM>();
 
         /// <summary>
         /// majorstrength

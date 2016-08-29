@@ -44,16 +44,7 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewModel);
         }
 
-        public ActionResult FormType(string siteUrl, int? id, string userlogin)
-        {
-            SessionManager.Set("SiteUrl", siteUrl);
-            _timesheetService.SetSiteUrl(siteUrl);
-            var viewModel = _timesheetService.GetTimesheetLoadUpdate(id, userlogin);
-
-           // SessionManager.Set("TimesheetDetails", viewModel.TimesheetDetails);
-            return View(viewModel);
-        }
-
+     
         [HttpPost]
         public ActionResult UpdatePeriod(TimesheetVM viewModel)
         {
@@ -113,39 +104,22 @@ namespace MCAWebAndAPI.Web.Controllers
                 var siteUrl = SessionManager.Get<string>("SiteUrl");
                 _timesheetService.SetSiteUrl(siteUrl);
                 int? headerId;
-                //try
-                //{
-                //    // headerId = 0;
+           
                 if (string.IsNullOrEmpty(viewModel.UserLogin)) throw new Exception("Userlogin empty");
 
                 headerId = _timesheetService.CreateHeader(viewModel);
-                //}
-                //catch (Exception e)
-                //{
-                //    // Response.TrySkipIisCustomErrors = true;
-                //    Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                //    return JsonHelper.GenerateJsonErrorResponse(e.Message);
-                //}
-
+             
                 var items = SessionManager.Get<IEnumerable<TimesheetDetailVM>>("TimesheetDetails");
 
-                //try
-                //{
+               
                 viewModel.TimesheetDetails = items;
                 Task createTimesheetDetailsTask = _timesheetService.CreateTimesheetDetailsAsync(headerId, viewModel.TimesheetDetails);
                 Task createTimesheetWorkflowTask = _timesheetService.CreateWorkflowTimesheetAsync(headerId, viewModel);
 
                 Task allTask = Task.WhenAll(createTimesheetDetailsTask, createTimesheetWorkflowTask);
-                //Task allTask = Task.WhenAll(createTimesheetWorkflowTask);
+            
                 await allTask;
-                //}
-                //catch (Exception e)
-                //{
-                //    //Response.TrySkipIisCustomErrors = true;
-                //    Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                //    return JsonHelper.GenerateJsonErrorResponse(e.Message);
-                //}
-
+            
                 var strPages = viewModel.UserPermission == "HR" ? "/sitePages/hrInsuranceView.aspx" : "/sitePages/ProfessionalClaim.aspx";
 
                 return JsonHelper.GenerateJsonSuccessResponse(siteUrl + strPages);
