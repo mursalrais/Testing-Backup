@@ -5,12 +5,17 @@ using System.Text;
 using System.Threading.Tasks;
 using MCAWebAndAPI.Model.ViewModel.Form.Asset;
 using NLog;
+using MCAWebAndAPI.Service.Utils;
+using Microsoft.SharePoint.Client;
 
 namespace MCAWebAndAPI.Service.Asset
 {
     public class AssetCheckFormService : IAssetCheckFormService
     {
-        string _siteUrl = null;
+        string _siteUrl;
+        const string SP_LOCATIONMASTER_LIST_NAME = "Location Master";
+        
+
         static Logger logger = LogManager.GetCurrentClassLogger();
 
         public void SetSiteUrl(string siteUrl)
@@ -36,6 +41,169 @@ namespace MCAWebAndAPI.Service.Asset
         IEnumerable<AssetCheckFormVM> IAssetCheckFormService.GetAssetCheckForms()
         {
             throw new NotImplementedException();
+        }
+
+        public int? save(AssetCheckFormHeaderVM data)
+        {
+            var columnValues = new Dictionary<string, object>();
+            columnValues.Add("Title", "Asset Check Form");
+            columnValues.Add("assetcheckcountdate", data.CreateDate);
+
+            var caml = @"<View><Query><OrderBy><FieldRef Name='assetcheckid' Ascending='False' /></OrderBy></Query></View>";
+            int assetcheckformid = 0;
+            foreach (var item in SPConnector.GetList("Asset Check", _siteUrl, caml))
+            {
+                assetcheckformid = Convert.ToInt32(item["assetcheckformid"].ToString());
+            }
+            assetcheckformid++;
+            columnValues.Add("assetcheckformid", assetcheckformid);
+
+            SPConnector.AddListItem("Asset Check", columnValues, _siteUrl);
+
+            var detailData = data.Details;
+
+            foreach (var item in detailData)
+            {
+                columnValues = new Dictionary<string, object>();
+                columnValues.Add("Title", "Asset Check Form");
+                columnValues.Add("assetcheckformid", assetcheckformid);
+                columnValues.Add("assetstatus", "In Progress");
+                columnValues.Add("assetmaster", item.AssetID);
+                columnValues.Add("assetmaster_x003a_serialno", item.AssetID);
+                columnValues.Add("assetprovince", item.province);
+                columnValues.Add("assetlocation", item.location);
+                columnValues.Add("existence", item.existense);
+                columnValues.Add("condition", item.condition);
+                columnValues.Add("specification", item.specification);
+                columnValues.Add("systemquantity", item.systemQty);
+                columnValues.Add("physicalquantity", item.physicalQty);
+
+                SPConnector.AddListItem("Asset Check Detail", columnValues, _siteUrl);
+            }
+
+            return assetcheckformid;
+        }
+
+        public AssetCheckFormHeaderVM GetPopulatedModel(int? ID = default(int?), string office = null, string floor = null, string room = null)
+        {
+            var model = new AssetCheckFormHeaderVM();
+
+            if (model.CreateDate == null)
+            {
+                model.CreateDate = DateTime.Today;
+            }
+
+            model.Office.Choices = GetChoicesFromListOffice(SP_LOCATIONMASTER_LIST_NAME, "ID", "Title");
+            model.Floor.Choices = GetChoicesFromListFloor(SP_LOCATIONMASTER_LIST_NAME, "ID", "Floor");
+            model.Room.Choices = GetChoicesFromListRoom(SP_LOCATIONMASTER_LIST_NAME, "ID", "Room");
+
+            var modelDetail = new List<AssetCheckFormItemVM>();
+
+            string camlOfiice = "";
+            if (office == null || office == "All")
+            {
+                camlOfiice = @"<Neq><FieldRef Name='office' /><Value Type='Text'>All</Value></Neq>";
+            }
+            else
+            {
+                camlOfiice = @"<Eq><FieldRef Name='office' /><Value Type='Text'>" + office + "</Value></Eq>";
+            }
+            string camlFloor = "";
+            if (floor == null || floor == "All")
+            {
+                camlFloor = @"<Neq><FieldRef Name='floor' /><Value Type='Text'>All</Value></Neq>";
+            }
+            else
+            {
+                camlFloor = @"<Eq><FieldRef Name='floor' /><Value Type='Text'>" + floor + "</Value></Eq>";
+            }
+            string camlRoom = "";
+            if (room == null || room == "All")
+            {
+                camlRoom = @"<Neq><FieldRef Name='room' /><Value Type='Text'>All</Value></Neq>";
+            }
+            else
+            {
+                camlRoom = @"<Eq><FieldRef Name='room' /><Value Type='Text'>" + room + "</Value></Eq>";
+            }
+
+
+            var caml = @"<View><Query><Where><And>"+camlOfiice+@"<And>"+camlFloor+camlRoom+@"</And></And></Where></Query></View>";
+            int i = 0;
+            foreach (var item in SPConnector.GetList("Asset Assignment Detail", _siteUrl,caml))
+            {
+                var dataAssetMaster = SPConnector.GetListItem("Asset Master", (item["assetsubasset"] as FieldLookupValue).LookupId, _siteUrl);
+                var dataLocationMaster = SPConnector.GetListItem("Location Master", (item["province"] as FieldLookupValue).LookupId, _siteUrl);
+
+                caml = @"<View><Query><Where><Eq><FieldRef Name='Asset_x0020_Sub_x0020_Asset_x003' /><Value Type='Lookup'>"+ (item["assetsubasset"] as FieldLookupValue).LookupId.ToString() + "</Value></Eq></Where></Query></View>";
+                var dataAssetAcquisitionDetail = SPConnector.GetList("Asset Acquisition Details", _siteUrl,caml);
+
+                caml = @"<View><Query><Where><Eq><FieldRef Name='assetsubasset' /><Value Type='Lookup'>" + dataAssetMaster["Title"].ToString() + "</Value></Eq></Where></Query></View>";
+                var dataAssetDisposalDetail = SPConnector.GetList("Asset Disposal Detail", _siteUrl, caml);
+
+                caml = @"<View><Query><Where><Eq><FieldRef Name='assetmaster' /><Value Type='Lookup'>"+dataAssetMaster["ID"].ToString()+"</Value></Eq></Where></Query></View>";
+                var dataAssetReplacement = SPConnector.GetList("Asset Disposal Detail", _siteUrl, caml);
+
+                i++;
+                var itemsss = item;
+                var modelDetailItem = new AssetCheckFormItemVM();
+                modelDetailItem.AssetID = (item["assetsubasset"] as FieldLookupValue).LookupId;
+                modelDetailItem.item = i;
+                modelDetailItem.assetSubAsset = (dataAssetMaster["AssetID"] == null ? "" : dataAssetMaster["AssetID"].ToString()) + "-" + (dataAssetMaster["Title"] == null ? "" : dataAssetMaster["Title"].ToString()); 
+                modelDetailItem.serialNo = (dataAssetMaster["SerialNo"] == null ? "" : dataAssetMaster["SerialNo"].ToString());
+                modelDetailItem.province = ((item["province"] as FieldLookupValue).LookupValue == null ? "" : (item["province"] as FieldLookupValue).LookupValue);
+                modelDetailItem.location = 
+                    (item["office"] == null ? "" : item["office"].ToString())
+                    + "/" + (item["floor"] == null ? "" : item["floor"].ToString())
+                    + "/" + (item["room"] == null ? "" : item["room"].ToString());
+                modelDetailItem.status = (item["Status"] == null ? "" : item["Status"].ToString());
+
+                modelDetailItem.systemQty = dataAssetAcquisitionDetail.Count()  + dataAssetReplacement.Count() - dataAssetDisposalDetail.Count();
+
+                modelDetail.Add(modelDetailItem);
+            }
+            model.Details = modelDetail;
+
+            return model;
+        }
+
+        private IEnumerable<string> GetChoicesFromListOffice(string listname, string v1, string v2 = null)
+        {
+            List<string> _choices = new List<string>();
+            var listItems = SPConnector.GetList(listname, _siteUrl);
+            _choices.Add("All");
+            foreach (var item in listItems)
+            {
+                _choices.Add(item[v2].ToString());
+            }
+            return _choices.ToArray();
+        }
+
+        private IEnumerable<string> GetChoicesFromListFloor(string listname, string v1, string v2 = null)
+        {
+            List<string> _choices = new List<string>();
+            var listItems = SPConnector.GetList(listname, _siteUrl);
+            _choices.Add("All");
+            foreach (var item in listItems)
+            {
+                _choices.Add(item[v2].ToString());
+            }
+            return _choices.ToArray();
+        }
+
+        private IEnumerable<string> GetChoicesFromListRoom(string listname, string v1, string v2 = null)
+        {
+            List<string> _choices = new List<string>();
+            var listItems = SPConnector.GetList(listname, _siteUrl);
+            _choices.Add("All");
+            foreach (var item in listItems)
+            {
+                if (item[v2] != null)
+                {
+                    _choices.Add(item[v2].ToString());
+                }                
+            }
+            return _choices.ToArray();
         }
     }
 }
