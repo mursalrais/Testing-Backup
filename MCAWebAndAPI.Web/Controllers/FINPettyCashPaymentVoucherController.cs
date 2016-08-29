@@ -177,7 +177,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult GetAmountInWords(int data)
         {
-            return Json(FormatUtil.ConvertToEnglishWords(data),
+            return Json(FormatUtil.UppercaseFirst(FormatUtil.ConvertToEnglishWords(data)),
                JsonRequestBehavior.AllowGet);
         }
 
