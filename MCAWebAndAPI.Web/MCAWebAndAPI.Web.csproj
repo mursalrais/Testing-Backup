@@ -1111,6 +1111,7 @@
     <Content Include="Views\ASSAssetTransfer\Sync.cshtml" />
     <Content Include="Views\ASSAssetTransfer\Upload.cshtml" />
     <Content Include="Views\ASSAssetTransfer\View.cshtml" />
+    <Content Include="Views\ASSLocationMaster\Sync.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -414,3 +414,13 @@ Parameter name: source
 2016-08-26 10:31:14.7399 MCAWebAndAPI.Service.HR.Payroll.AdjustmentService Invalid number value.
 
 A number field contains invalid data. Please check the value and try again.
+2016-08-28 06:59:42.1407 MCAWebAndAPI.Service.Asset.AssetTransferService Column 'assetholder' does not exist. It may have been deleted by another user.  /sites/mca-dev/bo/Lists/Asset Transfer
+2016-08-28 08:52:36.3791 MCAWebAndAPI.Service.Asset.AssetTransferService Microsoft.SharePoint.Client.ServerException: Column 'remarks' does not exist. It may have been deleted by another user.  /sites/mca-dev/bo/Lists/Asset Transfer Detail
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 264
+   at MCAWebAndAPI.Service.Asset.AssetTransferService.CreateDetails(Nullable`1 headerID, IEnumerable`1 items) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetTransferService.cs:line 593
+2016-08-29 18:02:08.6904 MCAWebAndAPI.Service.Converter.CSVConverter System.IndexOutOfRangeException: Index was outside the bounds of the array.
+   at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64
+2016-08-29 18:04:59.7311 MCAWebAndAPI.Service.Converter.CSVConverter System.IndexOutOfRangeException: Index was outside the bounds of the array.
+   at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64
+2016-08-29 18:07:40.8537 MCAWebAndAPI.Service.Converter.CSVConverter System.IndexOutOfRangeException: Index was outside the bounds of the array.
+   at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64

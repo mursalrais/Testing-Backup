@@ -17,18 +17,12 @@
 {
     <form class="form-horizontal" method="post" action="/ASSAssetTransfer/Update" id="create-asset-acquisition-form">
         <fieldset>
-            <legend>Form Asset Acquisition</legend>
+            <legend>Form Asset Transfer</legend>
             <div class="col-md-6">
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.TransactionType).Class("col-md-4 control-label")
                     <div class="col-md-8">
                         <input type="text" disabled name="TransactionType" value="Assignment Of Asset" style="width : 100%"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.Date).Class("col-md-4 control-label")
-                    <div class="col-md-8">
-                        @Html.EditorFor(m => m.Date)
                     </div>
                 </div>
                 <div class="form-group">
@@ -53,6 +47,32 @@
                     @Html.Bootstrap().LabelFor(m => m.CompletionStatus).Class("col-md-4 control-label")
                     <div class="col-md-8">
                         @Html.EditorFor(m => m.CompletionStatus)
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Date).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.EditorFor(m => m.Date)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.AssetHolderTo).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.EditorFor(m => m.AssetHolderTo)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.ProjectUnitTo).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        <input type="text" disabled name="ProjectUnitTo" id="ProjectUnitTo" value="@Model.ProjectUnitTo" style="width : 100%" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.ContactNoTo).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        <input type="text" disabled name="ContactNoTo" id="ContactNoTo" value="@Model.ContactNoTo" style="width : 100%" />
                     </div>
                 </div>
             </div>
@@ -126,4 +146,16 @@
             document.getElementById('ContactNo').value = data.MobileNumberOne;
         })
     }
+
+    function onAssetToChange(e) {
+        var res = this.dataItem(e.item).split("-")
+        //alert("berubah jadiii " + res[0]);
+        var url = "/ASSAssetTransfer/GetProfMasterInfo?fullname=" + res[0] + "&position=" + res[1];
+        $.getJSON(url, function (data) {
+            //do next
+            document.getElementById('ProjectUnitTo').value = data.CurrentPosition.Text;
+            document.getElementById('ContactNoTo').value = data.MobileNumberOne;
+        })
+    }
+
 </script>
