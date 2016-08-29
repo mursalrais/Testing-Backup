@@ -23,7 +23,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         const string SP_APPDATA_LIST_NAME = "Application";
         const string SP_PROMAS_LIST_NAME = "Professional Master";
         const string SP_POSMAS_LIST_NAME = "Position Master";
-        const string SP_MANPOW_LIST_NAME = "Manpower Requisition";
+        const string SP_MANPOW_LIST_NAME = "Manpower Requisition"; 
         const string SP_COMDET_LIST_NAME = "Compensatory Request Detail";
         const string SP_COMREQ_LIST_NAME = "Compensatory Request";
         const string SP_COMBAL_LIST_NAME = "Day-Off Balance";
@@ -110,6 +110,26 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return viewModel;
         }
 
+        public async Task<CompensatoryVM> GetCheckWorkflow(int? iD, string requestor, string listName, string listNameWorkflow, string columnName)
+        {
+            var viewModel = new CompensatoryVM();
+
+            //Get Workflow From Mapping Master
+            var _workflow = new WorkflowService();
+            _workflow.SetSiteUrl(_siteUrl);
+            var intID = Convert.ToInt32(iD);
+            var Check = await _workflow.CheckWorkflow(intID, listNameWorkflow, columnName);
+            if (Check.Count() != 0)
+            {
+                viewModel.WorkflowItems = Check;
+            }
+            if (Check.Count() == 0)
+            {
+                viewModel.WorkflowItems = await _workflow.GetWorkflowDetails(requestor, listName);
+            }
+
+            return viewModel;
+        }
 
         public async Task<CompensatoryVM> GetComplistbyCmpid(int? iD, string requestor, string listName, string listNameWorkflow, string columnName)
         {

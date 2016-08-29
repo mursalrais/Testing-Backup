@@ -67,6 +67,7 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
             viewModel.ApprovalLevel = Convert.ToString(listItem["approvallevel"]);
             viewModel.ApproverPosition = Convert.ToString(listItem["approverposition"]);
             viewModel.Approver = Convert.ToString(listItem["approver"]);
+            viewModel.TimesheetStatus = Convert.ToString(listItem["timesheetstatus"]);
 
             if (professionalDataEmail.Project_Unit == "Human Resources Unit")
             {
@@ -393,7 +394,7 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
             _professionalService.SetSiteUrl(_siteUrl);
         }
 
-        public IEnumerable<TimesheetDetailVM> AppendWorkingDays(IEnumerable<TimesheetDetailVM> currentDays, DateTime from,
+        public IEnumerable<TimesheetDetailVM> AppendWorkingDays(int? id,IEnumerable<TimesheetDetailVM> currentDays, DateTime from,
             DateTime to, bool isFullDay, string location = null, int? locationid = null)
         {
             var dateRange = from.EachDay(to);
@@ -417,11 +418,22 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                     }
 
                 }
+                else
+                {
+                    var query = allDays.FirstOrDefault(d => d.Date == workingDay);
+                    if (query.Type != "Working Days") continue;
+                    query.FullHalf = isFullDay ? 1.0d : 0.5d;
+                    query.Location = location ?? string.Empty;
+                    query.LocationID = locationid ?? null;
+                    query.Type = "Working Days";
+                    if (id != null) query.EditMode = 1;
+                }
             }
 
             return allDays;
         }
 
+       
 
         public async Task CreateTimesheetDetailsAsync(int? headerID, IEnumerable<TimesheetDetailVM> timesheetDetails)
         {
@@ -431,11 +443,20 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
         public void CreateTimesheetDetails(int? headerId, 
             IEnumerable<TimesheetDetailVM> timesheetDetails)
         {
-            var mastervalue = new Dictionary<string, Dictionary<string, object>>();
+            var mastervalueInsert = new Dictionary<string, Dictionary<string, object>>();
+            var mastervalueUpdate= new Dictionary<string, Dictionary<string, object>>();
+            var itemsDelete = new List<string>();
             var i = 1;
             foreach (var viewModel in timesheetDetails)
             {
-                if (viewModel.Type != "Working Days") continue;
+                if (Item.CheckIfSkipped(viewModel)) continue;
+                if (Item.CheckIfDeleted(viewModel))
+                {
+                    itemsDelete.Add(viewModel.ID.ToString());
+                    continue;
+                }
+
+                    if (viewModel.Type != "Working Days") continue;
                 var updatedValue = new Dictionary<string, object>
                 {
                     {"timesheet", new FieldLookupValue {LookupId = Convert.ToInt32(headerId)}},
@@ -453,15 +474,19 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                     updatedValue.Add("Title", viewModel.Type);
                 }
 
-               
-                    mastervalue.Add(i+";Add", updatedValue);
-                    i++;
+                if (Item.CheckIfUpdated(viewModel)) mastervalueUpdate.Add(viewModel.ID + ";Edit", updatedValue);
+                else mastervalueInsert.Add(i + ";Add", updatedValue);
+
+
+                i++;
                
             }
 
             try
             {
-                SPConnector.AddListItemAsync(LIST_TIME_DETAIL, mastervalue, _siteUrl);
+                if (itemsDelete.Count>0) SPConnector.DeleteMultipleListItemAsync(LIST_TIME_DETAIL,itemsDelete,_siteUrl);
+                if (mastervalueInsert.Count > 0) SPConnector.AddListItemAsync(LIST_TIME_DETAIL, mastervalueInsert, _siteUrl);
+                if (mastervalueUpdate.Count > 0) SPConnector.UpdateMultipleListItemAsync(LIST_TIME_DETAIL, mastervalueUpdate, _siteUrl);
             }
             catch (Exception e)
             {
@@ -536,6 +561,18 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
         }
         public  void CreateWorkflowTimesheet(int? headerId, TimesheetVM header)
         {
+
+            var caml = string.Format(@"<View><Query>
+                        <Where>
+                        <Eq>
+                            <FieldRef Name='timesheet' />
+                            <Value Type='Lookup'>{0}</Value>
+                        </Eq>
+                        </Where></Query></View>", headerId);
+
+            var listWF = SPConnector.GetList(LIST_WF, _siteUrl, caml);
+            if (listWF.Count > 0) return;
+
             var dtView = Getworkflowmapping(header.ProjectUnit);
             var iCount = dtView.DefaultView.Count;
             IEnumerable<ProfessionalMaster> profMasterPosition = _dataService.GetProfessionals();
@@ -674,7 +711,32 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
             SPConnector.UpdateSingleListItemAsync(LIST_WF, (idNext - 1), columnWfValues, _siteUrl);
 
         }
-        
+
+        public IEnumerable<TimesheetDetailVM> DeleteSelectedWorkingDays(int? headerId,IEnumerable<TimesheetDetailVM> currentDays, 
+            DateTime from, DateTime to)
+        {
+            var dateRange = from.EachDay(to);
+            var existingDays = currentDays.Select(e => (DateTime)e.Date).ToList();
+            var allDays = currentDays.ToList();
+
+            foreach (var workingDay in dateRange)
+            {
+                if (!existingDays.ContainsSameDay(workingDay)) continue;
+                var query = allDays.FirstOrDefault(d => d.Date == workingDay);
+                if (query.Type != "Working Days") continue;
+                if (headerId == null)
+                {
+                    allDays.Remove(query);
+                }
+                else
+                {
+                    query.EditMode = -1;
+                }
+            }
+
+            return allDays;
+        }
+
         public int CreateHeader(TimesheetVM header)
         {
             var dtView = Getworkflowmapping(header.ProjectUnit);
@@ -723,6 +785,23 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
             return ID;
         }
 
+        public void UpdateHeader(TimesheetVM header)
+        {
+            var columnValues = new Dictionary<string, object>
+           {
+               {"timesheetstatus", header.TimesheetStatus}
+           };
 
+
+            try
+            {
+                SPConnector.UpdateSingleListItemAsync(LIST_TIME, header.ID, columnValues, _siteUrl);
+              
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.Message);
+            }
+        }
     }
 }

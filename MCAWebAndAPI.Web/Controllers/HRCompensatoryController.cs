@@ -98,7 +98,6 @@ namespace MCAWebAndAPI.Web.Controllers
                 SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
             }
 
-
             viewmodel.cmpEmail = userAccess;
 
             ViewBag.ListName = "Compensatory%20Request";
@@ -328,11 +327,11 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             var viewmodel = new CompensatoryVM();
 
-            if (idComp == null)
-                return PartialView("_InputCompensantoryDetails", viewmodel.CompensatoryDetails);
-
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            if (idComp == null)
+                return PartialView("_InputCompensantoryDetails", viewmodel.CompensatoryDetails);
 
             viewmodel = _service.GetViewlistbyCmpid(idComp);
 
@@ -343,11 +342,11 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             var viewmodel = new CompensatoryVM();
 
-            if (idComp == null)
-                return PartialView("_InputCompensantoryDetails", viewmodel.CompensatoryDetails);
-
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            if (idComp == null)
+                return PartialView("_InputCompensantoryDetails", viewmodel.CompensatoryDetails);
 
             viewmodel = _service.GetViewlistbyCmpid(idComp);
 
@@ -390,6 +389,19 @@ namespace MCAWebAndAPI.Web.Controllers
             if (pdfBuf == null)
                 return HttpNotFound();
             return File(pdfBuf, "application/pdf");
+        }
+
+        public async Task<ActionResult> GetWorkflowCompensatory(string idCmp, string listname, string cmpemail)
+        {
+            var viewmodel = new CompensatoryVM();
+
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            if (cmpemail != null)
+                    viewmodel = await _service.GetCheckWorkflow(Convert.ToInt32(idCmp), cmpemail, listname, SP_TRANSACTION_WORKFLOW_LIST_NAME, SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME);
+
+            return PartialView("_WorkflowPathDetails", viewmodel);
         }
 
     }
