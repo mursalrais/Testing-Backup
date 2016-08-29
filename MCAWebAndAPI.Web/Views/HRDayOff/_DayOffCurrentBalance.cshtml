@@ -11,7 +11,7 @@
     .Columns(columns =>
     {
         columns.Bound(p => p.DayOffType).Width(100).ClientTemplate("#= DayOffType.Text #" +
-                           "<input type='hidden' name='DayOffBalanceDetails[#= getDayOffBalanceDetails(data)#].DayOffType.Text' value='#= DayOffType.Text #' />"
+                           "<input type='hidden' id='DayOffBalanceDetails[#= getDayOffBalanceDetails(data)#].DayOffType.Text' name='DayOffBalanceDetails[#= getDayOffBalanceDetails(data)#].DayOffType.Text' value='#= DayOffType.Text #' />"
                          ).EditorViewData(new
                          {
                              BindTo = DayOffBalanceVM.GetDayOffTypeOptions()

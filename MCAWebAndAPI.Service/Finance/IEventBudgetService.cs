@@ -19,6 +19,7 @@ namespace MCAWebAndAPI.Service.Finance
 
         EventBudgetVM Get(int? ID);
 
+        Task<EventBudgetVM> GetASync(int? ID);
 
         int Create(EventBudgetVM eventBudget);
 
@@ -26,12 +27,12 @@ namespace MCAWebAndAPI.Service.Finance
 
         IEnumerable<EventBudgetVM> GetEventBudgetList();
 
-        IEnumerable<EventBudgetItemVM> GetItem(int eventBudgetID);
+        IEnumerable<EventBudgetItemVM> GetItems(int eventBudgetID);
 
         Task CreateItemsAsync(int? headerID, IEnumerable<EventBudgetItemVM> items);
 
         Task CreateAttachmentsAsync(int? headerID, IEnumerable<HttpPostedFileBase> documents);
 
-       
+        Task UpdateRequisitionNoteAsync(string siteUrl = null, int id = 0);
     }
 }

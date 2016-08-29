@@ -16,7 +16,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         {
             if (model == null)
             {
-                return new AjaxComboBoxVM();
+                model = new AjaxComboBoxVM { Text = "", Value = 0 };
+                return model;
             } 
             else
             {
@@ -52,7 +53,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         {
             if (model == null)
             {
-                return new AjaxComboBoxVM();
+                model = new AjaxComboBoxVM { Text = "", Value = 0 };
+                return model;
             }
             else
             {
@@ -85,7 +87,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         {
             if (model == null)
             {
-                return new AjaxComboBoxVM();
+                model = new AjaxComboBoxVM { Text = "", Value = 0 };
+                return model;
             }
             else
             {
@@ -119,7 +122,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         {
             if (model == null)
             {
-                return new AjaxComboBoxVM();
+                model = new AjaxComboBoxVM { Text = "", Value = 0 };
+                return model;
             }
             else
             {
@@ -129,13 +133,19 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         [UIHint("InGridAjaxComboBox")]
         [DisplayName("Professional")]
-        public AjaxComboBoxVM ddlProfessional { get; set; } = new AjaxComboBoxVM();
+        public AjaxComboBoxVM ddlProfessional { get; set; } = new AjaxComboBoxVM
+          {
+            ActionName = "GetProfessionals",
+            ValueField = "ID",
+            ControllerName = "HRDataMaster",
+            TextField = "Project_Unit"
+        };
 
-        /// <head>
-        /// CompensatoryID
-        /// </head>
-        /// 
-        [DisplayName("Professional ID")]
+    /// <head>
+    /// CompensatoryID
+    /// </head>
+    /// 
+    [DisplayName("Professional ID")]
         public int? profId { get; set; }
 
 

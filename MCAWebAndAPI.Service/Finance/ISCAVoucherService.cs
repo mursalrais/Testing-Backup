@@ -10,9 +10,11 @@ namespace MCAWebAndAPI.Service.Finance
 {
     public interface ISCAVoucherService
     {
-        SCAVoucherVM GetSCAVoucherVMData(int? ID);
+        SCAVoucherVM Get(int? ID);
 
         SCAVoucherVM GetEventBudget(int? ID);
+
+        void CreateSCAVoucherItems(string siteUrl, int? scaVoucherID, IEnumerable<SCAVoucherItemsVM> viewModels);
 
         Task CreateSCAVoucherItemAsync(int? scaVoucherID, IEnumerable<SCAVoucherItemsVM> viewModels);
 
@@ -33,5 +35,7 @@ namespace MCAWebAndAPI.Service.Finance
         bool UpdateStatusSCAVoucher(SCAVoucherVM scaVoucher);
 
         void SetSiteUrl(string siteUrl);
+
+        void DeleteDetail(int id);
     }
 }

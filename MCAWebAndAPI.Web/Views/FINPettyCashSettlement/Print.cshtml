@@ -1,0 +1,170 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Finance
+@model PettyCashSettlementVM
+
+@{
+    ViewBag.Title = "Print Petty Cash Settlement";
+    Layout = "~/Views/Shared/_LayoutPDF.cshtml";
+}
+
+
+<div class="form-horizontal">
+    <div class="col-sm-12" style="border: 1px double black;">
+        <div class="row" style="text-align: center; margin-top: 20px;">
+            <div id="logo-group" class="row">
+                <img src="~/img/logo.png" alt="MCA Indonesia" width="150">
+            </div>
+            <div class="row" style="margin-top:5px;font-weight:bold;">
+
+            </div>
+            <div class="row" style="margin-top:10px; font-weight:bold;">
+                Petty Cash Settlement
+            </div>
+        </div>
+        <div class="row" style="text-align: left; margin-top: 20px; padding:25px;">
+            <div class="form-group">
+                <div class="col-sm-12">
+                    I. PETTY CASH ADVANCE
+                </div>
+            </div>
+
+            <div class="form-group">
+                <table width="100%" style="margin-left:20px;">
+                    <tr>
+                        <td width="160px">Voucher No</td>
+                        <td>:</td>
+                        <td width="100px">@Model.PettyCashVoucher.Text </td>
+                        <td width="50px">Date </td>
+                        <td>@Model.Date.ToString("MM/dd/yyyy")</td>
+                    </tr>
+
+                    <tr>
+                        <td width="160px">Paid To</td>
+                        <td>:</td>
+                        <td colspan="3">@Model.PaidTo</td>
+                    </tr>
+
+                    <tr>
+                        <td width="160px">Amount paid</td>
+                        <td>:</td>
+                        <td colspan="3">@Model.AmountPaid</td>
+                    </tr>
+
+                    <tr>
+                        <td width="160px">Amount in words</td>
+                        <td>:</td>
+                        <td colspan="3">@Model.AmountPaidInWords</td>
+                    </tr>
+
+                    <tr>
+                        <td width="160px">Reason of payment</td>
+                        <td>:</td>
+                        <td colspan="3">@Model.ReasonOfPayment</td>
+                </tr>
+
+                <tr>
+                    <td width="160px">Fund</td>
+                    <td>:</td>
+                    <td colspan="3">@Model.Fund</td>
+                </tr>
+
+                <tr>
+                    <td width="160px">WBS</td>
+                    <td>:</td>
+                    <td colspan="3">@Model.WBS</td>
+                </tr>
+
+                <tr>
+                    <td width="160px">GL</td>
+                    <td>:</td>
+                    <td colspan="3">@Model.GL</td>
+                </tr>
+            </table>
+        </div>
+
+         </div>
+    </div>
+
+
+    <div class="col-sm-12" style="border: 1px double black; margin-top:5px;">
+
+        <div class="row" style="text-align: left; margin-top: 20px; padding:25px;">
+            <div class="form-group">
+                <div class="col-sm-12">
+                    II. PETTY CASH SETTLEMENT/REIMBURSEMENT
+                </div>
+            </div>
+
+            <div class="form-group">
+                <table width="100%" style="margin-left:20px;">
+                    <tr>
+                        <td width="200px">Petty Cash Settlement No</td>
+                        <td width="5px">:</td>
+                        <td>@Model.TransactionNo </td>
+                    </tr>
+
+                    <tr>
+                        <td width="200px">Amount Liquidated</td>
+                        <td width="5px">:</td>
+                        <td>@Model.AmountLiquidated </td>
+                    </tr>
+
+                    <tr>
+                        <td width="200px">Amount Reimbursed/Returned</td>
+                        <td width="5px">:</td>
+                        <td>@Model.Amount </td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="3">
+                        I, the authorized MCA project signatory, approve payment of this invoice and certify that the goods, works or services represented on this invoice 
+                            <br />
+                            have been accepted by and received by MCA-I. Meet all the requirements of the contract with the vendor, and their procurement meets all the
+                            <br/>
+                            requirements of the Compact, the Program, Procurement Gudielines and all other relevant supplemental agreement requirements.
+                        </td>
+                    </tr>
+
+                    
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row" style="text-align: left; margin-top: 60px; padding:25px;">
+        <table width="100%">
+            <tbody>
+               
+                <tr>
+                    <td width="34%">Prepared By</td>
+                    <td width="34%">Approved By</td>
+                    <td >Recipient</td>
+                </tr>
+                <tr>
+                    <td width="34%">(custodian)</td>
+                    <td width="34%" >(Concerned Project Director/Budget Holder)</tdwidth="30%">
+                    <td>(Name)</td>
+                </tr>
+                <tr>
+                    <td width="34%">
+                        <div style="height:100px; border-bottom:1px solid black; width:120px;"></div>
+                    </td>
+                    <td width="34%">
+                        <div style="height:100px; border-bottom:1px solid black; width:120px;"></div>
+                    </td>
+                    <td>
+                        <div style="height:100px; border-bottom:1px solid black; width:120px;"></div>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td width="34%">Date :</td>
+                    <td width="34%">Date :</td>
+                    <td>Date :</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+</div>

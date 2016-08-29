@@ -38,11 +38,23 @@ namespace MCAWebAndAPI.Service.Asset
             try
             {
                 SPConnector.AddListItem(SP_MON_FEE_LIST_NAME, columnValues, _siteUrl);
+            
+                var id = SPConnector.GetLatestListItemID("Asset Disposal", _siteUrl);
+                var info = SPConnector.GetListItem("Asset Disposal", id, _siteUrl);
+
+                if (Convert.ToBoolean(info["Attachments"]) == false)
+                    {
+                        SPConnector.DeleteListItem("Asset Disposal", id, _siteUrl);
+                        return 0;
+                    }  
+
             }
             catch (Exception e)
             {
                 logger.Error(e.Message);
             }
+
+
 
             return SPConnector.GetLatestListItemID(SP_MON_FEE_LIST_NAME, _siteUrl);
 
@@ -179,12 +191,25 @@ namespace MCAWebAndAPI.Service.Asset
             columnValues.Add("Title", "Asset Disposal");
             
             columnValues.Add("date", Convert.ToDateTime(viewmodel.Date));
-          
 
             try
             {
-                SPConnector.UpdateListItem(SP_MON_FEE_LIST_NAME, ID, columnValues, _siteUrl);
+                SPConnector.UpdateListItem("Asset Disposal", ID, columnValues, _siteUrl);
+              
+                    var newData = SPConnector.GetListItem("Asset Assignment", ID, _siteUrl);
+                    if (Convert.ToBoolean(newData["Attachments"]) == false)
+                    {
+                        var oldcolumnValues = new Dictionary<string, object>();
+                        oldcolumnValues.Add("Title", "Asset Disposal");
+                        oldcolumnValues.Add("date", Convert.ToDateTime(viewmodel.Date));
+                     
+
+                        SPConnector.UpdateListItem("Asset Disposal", ID, oldcolumnValues, _siteUrl);
+                        return false;
+                    }
+            
             }
+
             catch (Exception e)
             {
                 logger.Error(e.Message);

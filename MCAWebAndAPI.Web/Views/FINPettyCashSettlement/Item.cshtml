@@ -24,7 +24,7 @@
 
 {
     <fieldset>
-        <legend>Petty Cash Settlement</legend>
+        <legend>Petty Cash Settlement &nbsp; @Model.TransactionNo</legend>
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
@@ -34,6 +34,7 @@
                         @Html.ValidationMessageFor(m => m.Date)
                         @Html.HiddenFor(m => m.ID)
                         @Html.HiddenFor(m => m.Operation)
+                        @Html.HiddenFor(m => m.TransactionNo)
                     </div>
                 </div>
 
@@ -175,6 +176,14 @@
     <div class="form-actions">
         <div class="row">
             <div class="col-sm-12">
+                @if (Model.ID > 0)
+                {
+                    <button id="print-button" class="btn btn-default" type="button">
+                        Print
+                    </button>
+                }
+                &nbsp;
+
                 <button id="submit-button" class="btn btn-primary" type="submit">
                     <i class="fa fa-save"></i>
                     Submit
@@ -217,5 +226,24 @@
                 }
             });
         }
+
+        $(document).ready(function () {
+
+            $('#print-button').click(function (e) {
+                if (!$('form').valid()) {
+                    alert('Please make sure that all required fields are filled');
+                    return;
+                }
+
+                var actionUrl = $('form').attr("action");
+                var newActionUrl = actionUrl.replace("Save", "Print");
+
+                $('form').prop('action', newActionUrl);
+                $('form').submit();
+
+            });
+
+        });
+
     </script>
 }

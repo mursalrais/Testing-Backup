@@ -4,25 +4,21 @@
 
 @model AssignmentOfAssetVM
 
-@using (Ajax.BeginForm("Update", "ASSAssignmentOfAsset",
-                                                                                                                                       FormMethod.Post,
-                                                                                                                                       new AjaxOptions
-                                                                                                                                       {
-                                                                                                                                           OnBegin = "onBeginForm",
-                                                                                                                                           OnComplete = "onCompleteForm",
-                                                                                                                                           OnSuccess = "onSuccessFormEmbed",
-                                                                                                                                           OnFailure = "onFailureForm"
-                                                                                                                                       }, new { @class = "form-horizontal" }))
-
+@using (Html.BeginForm("Print", "ASSAssignmentOfAsset", FormMethod.Post,
+                                                                                                            new
+                                                                                                            {
+                                                                                                                @class = "form-horizontal",
+                                                                                                                enctype = "multipart/form-data"
+                                                                                                            }))
 {
-    <form class="form-horizontal" method="post" action="/ASSAssignmentOfAsset/Update" id="create-asset-acquisition-form">
+    <form class="form-horizontal" method="post" action="/ASSAssignmentOfAsset/Print" id="create-asset-acquisition-form">
         <fieldset>
             <legend>Form Asset Acquisition</legend>
             <div class="col-md-6">
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.TransactionType).Class("col-md-4 control-label")
+                    @Html.Bootstrap().LabelFor(m => m.AssetHolder).Class("col-md-4 control-label")
                     <div class="col-md-8">
-                        <input type="text" readonly name="TransactionType" value="Assignment Of Asset" style="width : 100%"/>
+                        <input type="text" readonly name="TransactionType" value="Assignment Of Asset" style="width : 100%" />
                     </div>
                 </div>
                 <div class="form-group">
@@ -40,13 +36,13 @@
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.ProjectUnit).Class("col-md-4 control-label")
                     <div class="col-md-8">
-                        <input type="text" readonly name="ProjectUnit" id="ProjectUnit" value="@Model.ProjectUnit" style="width : 100%"/>
+                        <input type="text" readonly name="ProjectUnit" id="ProjectUnit" value="@Model.ProjectUnit" style="width : 100%" />
                     </div>
                 </div>
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.ContactNo).Class("col-md-4 control-label")
                     <div class="col-md-8">
-                        <input type="text" readonly name="ContactNo" id="ContactNo" value="@Model.ContactNo" style="width : 100%"/>
+                        <input type="text" readonly name="ContactNo" id="ContactNo" value="@Model.ContactNo" style="width : 100%" />
                     </div>
                 </div>
                 <div class="form-group">
@@ -62,11 +58,15 @@
         </fieldset>
         @Html.HiddenFor(m => m.ID)
         @Html.HiddenFor(m => m.CancelURL)
+        @Html.HiddenFor(m => m.AssetIDs)
+        @Html.HiddenFor(m => m.nameOnly)
         <div>
             <center>
                 <a href="@Model.CancelURL" target='_parent'>
                     <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
                 </a>
+
+                <input id="print-button" class="k-button k-button-icontext k-grid-add" size="4" value="Print" />
             </center>
         </div>
 
@@ -77,10 +77,13 @@
 <script>
     $(document).ready(function () {
         //$("#AssetHolder_Value").data("kendoDropDownList").value("");
-        })
+        $('#print-button').click(function (e) {
+            var url = "/ASSAssignmentOfAsset/Print";
+            submitFormToPrint(url);
+        });
+    })
 
-    function saveAssignment()
-    {
+    function saveAssignment() {
         if ($('#AssetHolder_Value').val() == "") {
             alert("Asset Holder Cannot be Empty");
             return false;
@@ -89,8 +92,7 @@
         var asset = document.getElementsByClassName("asset");
         var province = document.getElementsByClassName("province");
         for (var j = 0; j < asset.length; j++) {
-            if (asset[j].value == "null" || province[j].value == "null")
-            {
+            if (asset[j].value == "null" || province[j].value == "null") {
                 alert("Asset Sub Asset / Province cannot be null!");
                 return false;
             }
@@ -114,14 +116,13 @@
         }
     }
 
-    function onAssetChange(e)
-    {
+    function onAssetChange(e) {
         var res = this.dataItem(e.item).split("-")
         //alert("berubah jadiii " + res[0]);
         var url = "/ASSAssignmentOfAsset/GetProfMasterInfo?fullname=" + res[0] + "&position=" + res[1];
         $.getJSON(url, function (data) {
             //do next
-            document.getElementById('ProjectUnit').value = data.CurrentPosition.Text    ;
+            document.getElementById('ProjectUnit').value = data.CurrentPosition.Text;
             document.getElementById('ContactNo').value = data.MobileNumberOne;
         })
     }

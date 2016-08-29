@@ -37,7 +37,8 @@ namespace MCAWebAndAPI.Service.Asset
         {
             var listItem = SPConnector.GetListItem("Asset Assignment", ID, SiteUrl);
             var viewModel = new AssignmentOfAssetVM();
-
+            viewModel.position = listItem["position"].ToString();
+            viewModel.nameOnly = listItem["assetholder"].ToString();
             viewModel.TransactionType = Convert.ToString(listItem["Title"]);
             viewModel.AssetHolder.Choices = GetFromListHR("Professional Master", "Title", "Position", SiteUrl);
             var caml = @"<View><Query>
@@ -71,8 +72,37 @@ namespace MCAWebAndAPI.Service.Asset
             {
                 viewModel.Date = Convert.ToDateTime(listItem["transferdate"]);
             }
+            viewModel.CompletionStatus.Value = Convert.ToString(listItem["completionstatus"]);
             viewModel.ID = ID;
-
+            var caml1 = @"<View><Query>
+                       <Where>
+                          <Eq>
+                             <FieldRef Name='assetassignment' />
+                             <Value Type='Lookup'>"+ID+@"</Value>
+                          </Eq>
+                       </Where>
+                    </Query>
+                    <ViewFields>
+                       <FieldRef Name='assetsubasset' />
+                    </ViewFields>
+                    <QueryOptions /></View>";
+            var getDetails = SPConnector.GetList("Asset Assignment Detail", _siteUrl, caml1);
+            var combine = "";
+            foreach (var det in getDetails)
+            {
+                if(combine == "")
+                {
+                    combine = (det["assetsubasset"] as FieldLookupValue).LookupValue;
+                }
+                else
+                {
+                    if(!combine.Contains((det["assetsubasset"] as FieldLookupValue).LookupValue))
+                    {
+                        combine = combine + ", " + (det["assetsubasset"] as FieldLookupValue).LookupValue;
+                    }
+                }
+            }
+            viewModel.AssetIDs = combine;
             viewModel.CancelURL = _siteUrl + UrlResource.AssetAssignment;
 
             return viewModel;
@@ -481,7 +511,7 @@ namespace MCAWebAndAPI.Service.Asset
                 {
                     try
                     {
-                        SPConnector.DeleteListItem("Assignment Asset Detail", item.ID, _siteUrl);
+                        SPConnector.DeleteListItem("Asset Assignment Detail", item.ID, _siteUrl);
                     }
                     catch (Exception e)
                     {
@@ -509,7 +539,8 @@ namespace MCAWebAndAPI.Service.Asset
                 updatedValues.Add("office", provinceinfo["Title"]);
                 updatedValues.Add("floor", provinceinfo["Floor"]);
                 updatedValues.Add("room", provinceinfo["Room"]);
-                updatedValues.Add("remarks", provinceinfo["Remarks"]);
+                //updatedValues.Add("remarks", provinceinfo["Remarks"]);
+                updatedValues.Add("remarks", item.Remarks);
                 updatedValues.Add("Status", "RUNNING");
                 try
                 {
@@ -586,6 +617,7 @@ namespace MCAWebAndAPI.Service.Asset
         {
             var caml = @"<View><Query><Where><Eq><FieldRef Name='assetassignment' /><Value Type='Lookup'>" + headerID.ToString() + "</Value></Eq></Where></Query></View>";
             var details = new List<AssignmentOfAssetDetailsVM>();
+
             foreach (var item in SPConnector.GetList("Asset Assignment Detail", _siteUrl, caml))
             {
                 details.Add(ConvertToDetails(item));
@@ -594,9 +626,46 @@ namespace MCAWebAndAPI.Service.Asset
             return details;
         }
 
+        IEnumerable<AssignmentOfAssetDetailsVM> IAssignmentOfAssetService.GetDetailsPrint(int? headerID)
+        {
+            var caml = @"<View><Query><Where><Eq><FieldRef Name='assetassignment' /><Value Type='Lookup'>" + headerID.ToString() + "</Value></Eq></Where></Query></View>";
+            var details = new List<AssignmentOfAssetDetailsVM>();
+            List<string> listAssetID = new List<string>();
+
+            foreach (var item in SPConnector.GetList("Asset Assignment Detail", _siteUrl, caml))
+            {
+                if(listAssetID.Count != 0 && listAssetID.Contains((item["assetsubasset"] as FieldLookupValue).LookupValue))
+                {
+                    listAssetID.Add((item["assetsubasset"] as FieldLookupValue).LookupValue);
+                    continue;
+                }
+                else
+                {
+                    listAssetID.Add((item["assetsubasset"] as FieldLookupValue).LookupValue);
+                    details.Add(ConvertToDetails(item));
+                }
+            }
+
+            foreach(var d in details)
+            {
+                var quantityPerItem = 0;
+                foreach(var l in listAssetID)
+                {
+                    if (d.textasset == l)
+                    {
+                        quantityPerItem++;
+                    }
+                }
+                d.quantity = quantityPerItem;
+            }
+
+            return details;
+        }
+
         private AssignmentOfAssetDetailsVM ConvertToDetails(ListItem item)
         {
             var ListAssetSubAsset = SPConnector.GetListItem("Asset Master", (item["assetsubasset"] as FieldLookupValue).LookupId, _siteUrl);
+
             AjaxComboBoxVM _assetSubAsset = new AjaxComboBoxVM();
             _assetSubAsset.Value = (item["assetsubasset"] as FieldLookupValue).LookupId;
             _assetSubAsset.Text = Convert.ToString(ListAssetSubAsset["AssetID"]) + " - " + Convert.ToString(ListAssetSubAsset["Title"]);
@@ -632,8 +701,12 @@ namespace MCAWebAndAPI.Service.Asset
             return new AssignmentOfAssetDetailsVM
             {
                 ID = Convert.ToInt32(item["ID"]),
+                textasset = Convert.ToString(ListAssetSubAsset["AssetID"]),
+                description = Convert.ToString(ListAssetSubAsset["Title"]),
+                quantity = 1,
                 AssetSubAsset = AssignmentOfAssetDetailsVM.GetAssetSubAssetDefaultValue(_assetSubAsset),
                 Province = AssignmentOfAssetDetailsVM.GetProvinceDefaultValue(_province),
+                Remarks = Convert.ToString(item["remarks"]),
                 Status = Convert.ToString(item["Status"])
             };
         }
@@ -648,7 +721,7 @@ namespace MCAWebAndAPI.Service.Asset
                 {
                     try
                     {
-                        SPConnector.DeleteListItem("Assignment Asset Detail", item.ID, _siteUrl);
+                        SPConnector.DeleteListItem("Asset Assignment Detail", item.ID, _siteUrl);
                     }
                     catch (Exception e)
                     {
@@ -660,25 +733,94 @@ namespace MCAWebAndAPI.Service.Asset
 
                 var updatedValues = new Dictionary<string, object>();
                 updatedValues.Add("assetassignment", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
+                var caml = @"<View><Query>
+                           <Where>
+                              <Eq>
+                                 <FieldRef Name='Asset_x0020_Sub_x0020_Asset_x003' />
+                                 <Value Type='Lookup'>"+item.AssetSubAsset.Value.Value+ @"</Value>
+                              </Eq>
+                           </Where>
+                        </Query>
+                        <ViewFields>
+                           <FieldRef Name='assetsubasset' />
+                        </ViewFields>
+                        <QueryOptions /></View>";
 
-                var getAssetID = SPConnector.GetListItem("Asset Acquisition Details", item.AssetSubAsset.Value.Value, _siteUrl);
-                var provinceinfo = SPConnector.GetListItem("Location Master", item.Province.Value.Value, _siteUrl);
-                if ((getAssetID["assetsubasset"] as FieldLookupValue) != null)
+                var getAssetID = SPConnector.GetList("Asset Acquisition Details",  _siteUrl, caml);
+                //getInformation From  Asset Assignment Detail
+                var camld = @"<View><Query>
+                           <Where>
+                              <Eq>
+                                 <FieldRef Name='ID' />
+                                 <Value Type='Counter'>"+item.ID+@"</Value>
+                              </Eq>
+                           </Where>
+                        </Query>
+                        <ViewFields>
+                           <FieldRef Name='room' />
+                           <FieldRef Name='floor' />
+                           <FieldRef Name='office' />
+                        </ViewFields>
+                        <QueryOptions /></View>";
+                var getInfoProvinceFromDetails = SPConnector.GetList("Asset Assignment Detail", _siteUrl, camld);
+                foreach(var d in getInfoProvinceFromDetails)
                 {
-                    updatedValues.Add("assetsubasset", (getAssetID["assetsubasset"] as FieldLookupValue).LookupId);
+                    var camlx = @"<View><Query>
+                                   <Where>
+                                      <And>
+                                         <Eq>
+                                            <FieldRef Name='Province_x003a_ID' />
+                                            <Value Type='Lookup'>"+item.Province.Value.Value+@"</Value>
+                                         </Eq>
+                                         <And>
+                                            <Eq>
+                                               <FieldRef Name='Title' />
+                                               <Value Type='Text'>"+d["office"]+@"</Value>
+                                            </Eq>
+                                            <And>
+                                               <Eq>
+                                                  <FieldRef Name='Floor' />
+                                                  <Value Type='Text'>"+d["floor"]+@"</Value>
+                                               </Eq>
+                                               <Eq>
+                                                  <FieldRef Name='Room' />
+                                                  <Value Type='Text'>"+d["room"]+ @"</Value>
+                                               </Eq>
+                                            </And>
+                                         </And>
+                                      </And>
+                                   </Where>
+                                </Query>
+                                <ViewFields>
+                                <FieldRef Name='Title' />
+                                <FieldRef Name='Province' />
+                                <FieldRef Name='Floor' />
+                                <FieldRef Name='Room' />
+                                </ViewFields>
+                                <QueryOptions /></View>";
+                    var provinceinfo = SPConnector.GetList("Location Master", _siteUrl, camlx);
+                    foreach(var pro in provinceinfo)
+                    {
+                        if ((pro["Province"] as FieldLookupValue) != null)
+                        {
+                            updatedValues.Add("province", (pro["Province"] as FieldLookupValue).LookupId);
+                        }
+                        updatedValues.Add("office", pro["Title"]);
+                        updatedValues.Add("floor", pro["Floor"]);
+                        updatedValues.Add("room", pro["Room"]);
+                    }
                 }
-
-                //var provinceinfo = SPConnector.GetListItem("Location Master", item.Province.Value.Value, _siteUrl);
-
-                //updatedValues.Add("assetsubasset", item.AssetSubAsset.Value.Value);
-                if ((provinceinfo["Province"] as FieldLookupValue) != null)
+                
+                foreach(var info in getAssetID)
                 {
-                    updatedValues.Add("province", (provinceinfo["Province"] as FieldLookupValue).LookupId);
+                    if ((info["assetsubasset"] as FieldLookupValue) != null)
+                    {
+                        updatedValues.Add("assetsubasset", (info["assetsubasset"] as FieldLookupValue).LookupId);
+                    }
                 }
-                updatedValues.Add("office", provinceinfo["Title"]);
-                updatedValues.Add("floor", provinceinfo["Floor"]);
-                updatedValues.Add("room", provinceinfo["Room"]);
-                updatedValues.Add("remarks", provinceinfo["Remarks"]);
+                
+                //updatedValues.Add("remarks", provinceinfo["Remarks"]);
+                updatedValues.Add("remarks", item.Remarks);
                 updatedValues.Add("Status", "RUNNING");
                 try
                 {
@@ -974,6 +1116,42 @@ namespace MCAWebAndAPI.Service.Asset
                 logger.Error(e);
                 throw new Exception(ErrorResource.SPInsertError);
             }
+        }
+
+        public bool Syncronize(string SiteUrl)
+        {
+            var sitehr = SiteUrl.Replace("/bo", "/hr");
+            var lists = SPConnector.GetList("Asset Assignment", SiteUrl);
+            foreach (var l in lists)
+            {
+                var caml = @"<View><Query>
+                           <Where>
+                              <Eq>
+                                 <FieldRef Name='ID' />
+                                 <Value Type='Lookup'>"+ (l["assetholder"] as FieldLookupValue).LookupId + @"</Value>
+                              </Eq>
+                           </Where>
+                        </Query>
+                        <ViewFields>
+                        <FieldRef Name='Title' />
+                        <FieldRef Name='Project_x002f_Unit' />
+                        <FieldRef Name='mobilephonenr' />
+                        <FieldRef Name='Position' />
+                        </ViewFields>
+                        <QueryOptions /></View>";
+                var getFromProfMas = SPConnector.GetList("Professional Master", sitehr, caml);
+                foreach (var profMas in getFromProfMas)
+                {
+                    var model = new Dictionary<string, object>();
+                    model.Add("projectunit", Convert.ToString(profMas["Project_x002f_Unit"]));
+                    model.Add("contactnumber", Convert.ToString(profMas["mobilephonenr"]));
+                    model.Add("position", (profMas["Position"] as FieldLookupValue).LookupValue);
+
+                    SPConnector.UpdateListItem("Asset Assignment", Convert.ToInt32(l["ID"]), model, SiteUrl);
+                }
+            }
+
+            return true;
         }
     }
 }

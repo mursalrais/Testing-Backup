@@ -1,0 +1,289 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Finance
+@model EventBudgetVM
+
+@{
+    ViewBag.Title = "Print Event Budget";
+    Layout = "~/Views/Shared/_LayoutPDF.cshtml";
+}
+
+
+
+<style media="screen" type="text/css">
+    #TblDetail table {
+        border: 1px solid black;
+    }
+
+    #TblDetail td {
+        border: 1px solid black;
+        padding: 20px;
+    }
+
+    #TblDetail th {
+        background-color: silver;
+        text-align: center;
+        border: 1px solid black;
+        padding: 4px;
+    }
+
+    #TblDetail .centerAlign {
+        text-align: center;
+    }
+
+    #TblDetail .rightAlign {
+        text-align: right;
+        padding: 4px;
+    }
+
+    #TblDetail .footerBGColor {
+        background-color: silver;
+        padding: 4px;
+        font-weight:bold;
+    }
+
+     #TblDetail .headerBGColor {
+        background-color: silver;
+        text-align:center;
+    }
+
+    #TblNote td {
+        padding: 10px;
+    }
+</style>
+
+
+<div class="form-horizontal">
+    <div class="row" style="text-align: center; margin-top: 20px;">
+        <div id="logo-group" class="row">
+            <img src="~/img/logo.png" alt="MCA Indonesia" width="150">
+        </div>
+        <div class="row" style="margin-top:5px;font-weight:bold;">
+            
+        </div>
+        <div class="row" style="margin-top:10px; font-weight:bold;">
+            Event Budget
+        </div>
+    </div>
+    <div class="row" style="text-align: left; margin-top: 20px; padding:25px;">
+        <table width="100%">
+            <tbody>
+                <tr>
+                    <td width="150px">Event Budget No</td>
+                    <td width="2px">:</td>
+                    <td>@Model.No</td>
+                    <td width="150px"></td>
+                    <td width="2px"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td width="150px">Event Name</td>
+                    <td width="2px">:</td>
+                    <td>@Model.EventName</td>
+                    <td width="150px">Fund</td>
+                    <td width="2px">:</td>
+                    <td>@Model.Fund</td>
+                   
+                </tr>
+                <tr>
+                    <td width="150px">Period</td>
+                    <td width="2px">:</td>
+                    <td>@string.Format("{0} - {1}", Model.DateFrom.ToString("MM/dd/yyyy"), Model.DateTo.ToString("MM/dd/yyyy"))</td>
+                    <td width="150px">Project</td>
+                    <td width="2px">:</td>
+                    <td>@Model.Project.Text </td>
+                </tr>
+                <tr>
+                    <td width="150px">Venue</td>
+                    <td width="2px">:</td>
+                    <td>@Model.Venue</td>
+                    <td width="150px">Activity</td>
+                    <td width="2px">:</td>
+                    <td>@Model.Activity.Text</td>
+                </tr>
+                
+            </tbody>
+        </table>
+    </div>
+    <div class="row" style="text-align: left; margin-top: 20px; padding:25px;" id="TblDetail">
+        <table width="100%">
+            <tr>
+                <td class="headerBGColor" rowspan="2">Type Of Expense</td>
+                <td class="headerBGColor" rowspan="2">Description</td>
+                <td class="headerBGColor" rowspan="2">WBS</td>
+                <td class="headerBGColor" rowspan="2">GL</td>
+                <td class="headerBGColor" rowspan="2">Quantity</td>
+                <td class="headerBGColor" rowspan="2">UoM(Qty)</td>
+                <td class="headerBGColor" rowspan="2">Frequency</td>
+                <td class="headerBGColor" rowspan="2">UoM(Freq)</td>
+                <td class="headerBGColor" rowspan="2">Unit Price (IDR)</td>
+                <td class="headerBGColor" rowspan="2">Total per Item (IDR)</td>
+                <td class="headerBGColor" colspan="2">Funding Mechanism</td>
+                <td class="headerBGColor" rowspan="2">Remarks</td>
+
+            </tr>
+            <tr>
+                <td class="headerBGColor">Direct Payment (IDR)</td>
+                <td class="headerBGColor">SCA (IDR)</td>
+            </tr>
+           
+            <tbody>
+            @if (Model.ItemDetails.Count() > 0)
+            {
+                var listData = Model.ItemDetails.ToList();
+                for (int i = 0; i < listData.Count; i++)
+                {
+                    <tr>
+                        <td>
+                            @listData[i].TypeOfExpense
+                        </td>
+                        <td>
+                            @listData[i].Description
+                        </td>
+                        <td>
+                            @listData[i].WBS.Text
+                        </td>
+                        <td>
+                            @listData[i].GL.Text
+                        </td>
+                        <td class="centerAlign">
+                            @listData[i].Quantity.ToString()
+                        </td>
+                        <td>
+                            @listData[i].UoMQty
+                        </td>
+                        <td>
+                            @listData[i].Frequency.ToString()
+                        </td>
+                        <td>
+                            @listData[i].UoMFreq
+                        </td>
+                        <td>
+                            @listData[i].UnitPrice.ToString()
+                        </td>
+                        <td>
+                            @listData[i].AmountPerItem
+                        </td>
+                        <td>@listData[i].DirectPayment.ToString()</td>
+                        <td>@listData[i].SCA.ToString()</td>
+                        <td>
+                            @listData[i].Remarks
+                        </td>
+                    </tr>
+                }
+
+
+            }
+            <tr>
+                <td class="footerBGColor"></td>
+                <td class="footerBGColor"></td>
+                <td class="footerBGColor"></td>
+                <td class="footerBGColor"></td>
+                <td class="footerBGColor"></td>
+                <td class="footerBGColor"></td>
+                <td class="footerBGColor"></td>
+                <td class="footerBGColor" colspan="2">Grand in Total (IDR)</td>
+                <td class="rightAlign footerBGColor">@Model.TotalIDR.ToString()</td>
+                <td class="footerBGColor">@Model.TotalDirectPayment.ToString()</td>
+                <td class="footerBGColor">@Model.TotalSCA.ToString()</td>
+                <td class="footerBGColor"></td>
+
+            </tr>
+            <tr>
+                <td class="footerBGColor"></td>
+                <td class="footerBGColor"></td>
+                <td class="footerBGColor"></td>
+                <td class="footerBGColor"></td>
+                <td class="footerBGColor"></td>
+                <td class="footerBGColor"></td>
+                <td class="footerBGColor"></td>
+                <td class="footerBGColor" colspan="2">Grand in Total (USD)</td>
+                <td class="rightAlign footerBGColor">@Model.TotalUSD.ToString()</td>
+                <td class="footerBGColor">@Model.TotalDirectPaymentUSD.ToString()</td>
+                <td class="footerBGColor">@Model.TotalSCAUSD.ToString()</td>
+                <td class="footerBGColor"></td>
+
+            </tr>
+
+        </tbody>
+        </table>
+    </div>
+
+    <div class="row" style="text-align: left; margin-top: 20px; padding:25px;">
+        <table width="100%" id="TblNote">
+            <tbody>
+                <tr>
+                    <td colspan="2" style="font-weight:bold; text-decoration:underline;">
+                        Important Notes :
+                    </tdc>
+                </tr>
+                <tr>
+                    <td style="padding-left:120px; font-style:italic; vertical-align:top;">1 </td>
+                    <td style="padding-left:10px; font-style:italic">
+                        Use of rented space for events is only to be requested if MCA-Indonesia or Government of Indonesia space, at no cost or at costs established through an Implementing Entity Agreement, 
+                        has determined to be unavailable. Actual venue will be determined on the basis of lowest cost for basic operational requirements (e.g. - size and location)
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding-left:120px; font-style:italic; vertical-align:top;">2 </td>
+                    <td style="padding-left:10px; font-style:italic">
+                        As per approved FAP - Total Approved SCA should not exceed USD 20,000
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="row" style="text-align: left; margin-top: 60px; padding:25px;">
+        <table width="100%">
+            <tbody>
+                <tr>
+                    <td style="font-weight:bold;">PROJECT AUTHORIZATION</td>
+                    <td></td>
+                    <td></td>
+                    <td style="font-weight:bold;">FINANCE AUTHORZATION</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Prepared By:</td>
+                    <td>Reviewed By:</td>
+                    <td>Approved By:</td>
+                    <td>Reviewed By:</td>
+                    <td>Approved By:</td>
+                </tr>
+                <tr>
+                    <td>Date :</td>
+                    <td>Date :</td>
+                    <td>Date :</td>
+                    <td>Date :</td>
+                    <td>Date :</td>
+                </tr>
+                <tr>
+                    <td>
+                        <div style="height:100px; border-bottom:1px solid black; width:120px;"></div>
+                    </td>
+                    <td>
+                        <div style="height:100px; border-bottom:1px solid black; width:120px;"></div>
+                    </td>
+                    <td>
+                        <div style="height:100px; border-bottom:1px solid black; width:120px;"></div>
+                    </td>
+                    <td>
+                        <div style="height:100px; border-bottom:1px solid black; width:130px;"></div>
+                    </td>
+                    <td>
+                        <div style="height:100px; border-bottom:1px solid black; width:120px;"></div>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>Name/Title</td>
+                    <td>Name/Title</td>
+                    <td>Project Director</td>
+                    <td>Finance Specialist</td>
+                    <td>DED Operation</td>
+
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+</div>

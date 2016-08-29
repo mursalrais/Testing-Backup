@@ -11,26 +11,32 @@ using NLog;
 
 namespace MCAWebAndAPI.Service.Finance.RequisitionNote
 {
-    public class RequisitionNoteService : IRequisitionNote
+    /// <summary>
+    /// Wireframe FIN05: Requisition Note
+    ///     i.e.: Purchase Requisition Note
+    /// </summary>
+
+    public class RequisitionNoteService : IRequisitionNoteService
     {
-        private const string GLMASTER_SITE_LIST = "GL Master";
-        private const string WBSMASTER_SITE_LIST = "WBS Master";
-        private const string ACTIVITY_SITE_LIST = "Activity";
-        private const string SUBACTIVITY_SITE_LIST = "Sub Activity";
-        private const string REQUISITION_SITE_LIST = "Requisition Note";
-        private const string REQUISITION_ITEM_SITE_LIST = "Requisition Note item";
-        private const string REQUISITION_ATTACHMENTS_SITE_LIST = "Requisition Note Documents";
+        private const string ListName_GLMaster = "GL Master";
+        private const string ListName_WBSMaster = "WBS Master";
+        private const string ListName_Activity = "Activity";
+        private const string ListName_SubActivity = "Sub Activity";
+        private const string ListName_RequisitionNote = "Requisition Note";
+        private const string ListName_RequisitionNoteItem = "Requisition Note item";
+        private const string ListName_Attachment = "Requisition Note Documents";
+
         private const string FIELD_ID = "ID";
         private const string FIELD_TITLE = "Title";
         private const string FIELD_GL_DESCRIPTION = "yyxi";
         private const string FIELD_WBS_DESCRIPTION = "WBSDesc";
-        
+
         private const string FIELD_FORMAT_DOC = "RN/{0}-{1}/";
         private const string FIELD_REQUISITION_CATEGORY = "Category";
         private const string FIELD_REQUISITION_DATE = "Date";
-        private const string FIELD_REQUISITION_EVENTBUDGETNO = "Event_x0020_Budget"; 
-        private const string FIELD_REQUISITION_PROJECT = "Project"; 
-        private const string FIELD_REQUISITION_FUND = "Fund"; 
+        private const string FIELD_REQUISITION_EVENTBUDGETNO = "Event_x0020_Budget";
+        private const string FIELD_REQUISITION_PROJECT = "Project";
+        private const string FIELD_REQUISITION_FUND = "Fund";
         private const string FIELD_REQUISITION_CURRENCY = "Currency";
         private const string FIELD_REQUISITION_TOTAL = "Total";
         private const string FIELD_RN_HEADERID = "Requisition_x0020_Note_x0020_ID";
@@ -42,6 +48,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
         private const string FIELD_RN_GL_ID = "GL_x0020_ID_x003a_GL_x0020_No_x0";
         private const string FIELD_RN_GL_DESC = "GL_x0020_ID_x003a_GL_x0020_Descr";
         private const string FIELD_RN_QUANTITY = "Quantity";
+        private const string FIELD_RN_FREQUENCY = "Frequency";
         private const string FIELD_RN_PRICE = "Price";
         private const string FIELD_RN_TOTAL = "Total_x0020_Per_x0020_Item";
         private const string FIELD_RN_DOCUMENTS_HEADERID = "_x0027_Requisition_x0020_Note_x0027_";
@@ -55,16 +62,21 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
 
         public void SetSiteUrl(string siteUrl)
         {
-            _siteUrl = siteUrl;  
+            _siteUrl = siteUrl;
         }
 
-        public RequisitionNoteVM GetRequisitionNote(int? ID)
+        public async Task<RequisitionNoteVM> GetAsync(int? ID)
+        {
+            return Get(ID);
+        }
+
+        public RequisitionNoteVM Get(int? ID)
         {
             var viewModel = new RequisitionNoteVM();
 
             if (ID != null)
             {
-                var listItem = SPConnector.GetListItem(REQUISITION_SITE_LIST, ID, _siteUrl);
+                var listItem = SPConnector.GetListItem(ListName_RequisitionNote, ID, _siteUrl);
                 viewModel = ConvertToRequisitionNoteVM(listItem);
 
                 viewModel.ItemDetails = GetRequisitionNoteItemDetails(ID.Value);
@@ -85,7 +97,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
         {
             var glMasters = new List<GLMasterVM>();
 
-            foreach (var item in SPConnector.GetList(GLMASTER_SITE_LIST, _siteUrl, null))
+            foreach (var item in SPConnector.GetList(ListName_GLMaster, _siteUrl, null))
             {
                 glMasters.Add(ConvertToGLMasterModel(item));
             }
@@ -95,11 +107,11 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
 
         public IEnumerable<WBSMasterVM> GetWBSMaster(string activity)
         {
-            var camlGetSubactivity = @"<View><Query><Where><Eq><FieldRef Name='"+ ACTIVITYID_SUBACTIVITY + "' /><Value Type='Lookup'>" +
+            var camlGetSubactivity = @"<View><Query><Where><Eq><FieldRef Name='" + ACTIVITYID_SUBACTIVITY + "' /><Value Type='Lookup'>" +
                  (activity == null ? string.Empty : activity.ToString()) + "</Value></Eq></Where></Query></View>";
 
             string valuesText = string.Empty;
-            ListItemCollection subActivityLits = SPConnector.GetList(SUBACTIVITY_SITE_LIST, _siteUrl, camlGetSubactivity);
+            ListItemCollection subActivityLits = SPConnector.GetList(ListName_SubActivity, _siteUrl, camlGetSubactivity);
             string camlGetWbs = string.Empty;
 
             if (subActivityLits.Count > 0)
@@ -119,7 +131,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
                                 valuesText + "</Values></In></Where></Query></View>";
             var wbsMasters = new List<WBSMasterVM>();
 
-            foreach (var item in SPConnector.GetList(WBSMASTER_SITE_LIST, _siteUrl, camlGetWbs))
+            foreach (var item in SPConnector.GetList(ListName_WBSMaster, _siteUrl, camlGetWbs))
             {
                 wbsMasters.Add(ConvertToWBSMasterModel(item));
             }
@@ -147,7 +159,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
 
             try
             {
-                SPConnector.AddListItem(REQUISITION_SITE_LIST, updatedValue, _siteUrl);
+                SPConnector.AddListItem(ListName_RequisitionNote, updatedValue, _siteUrl);
             }
             catch (Exception e)
             {
@@ -155,7 +167,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
                 throw new Exception(ErrorResource.SPInsertError);
             }
 
-            return SPConnector.GetLatestListItemID(REQUISITION_SITE_LIST, _siteUrl);
+            return SPConnector.GetLatestListItemID(ListName_RequisitionNote, _siteUrl);
         }
 
         public bool UpdateRequisitionNote(RequisitionNoteVM viewModel)
@@ -168,7 +180,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
             {
                 updatedValue.Add(FIELD_REQUISITION_EVENTBUDGETNO, viewModel.EventBudgetNo.Value);
             }
-            
+
             updatedValue.Add(FIELD_REQUISITION_PROJECT, viewModel.Project.Value);
             updatedValue.Add(FIELD_REQUISITION_FUND, viewModel.Fund);
             updatedValue.Add(FIELD_REQUISITION_CURRENCY, viewModel.Currency.Value);
@@ -176,7 +188,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
 
             try
             {
-                SPConnector.UpdateListItem(REQUISITION_SITE_LIST, viewModel.ID, updatedValue, _siteUrl);
+                SPConnector.UpdateListItem(ListName_RequisitionNote, viewModel.ID, updatedValue, _siteUrl);
             }
             catch (Exception e)
             {
@@ -201,12 +213,13 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
                 updatedValue.Add(FIELD_RN_WBS, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.WBS.Value) });
                 updatedValue.Add(FIELD_RN_GL, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.GL.Value) });
                 updatedValue.Add(FIELD_RN_QUANTITY, viewModel.Quantity);
+                updatedValue.Add(FIELD_RN_FREQUENCY, viewModel.Frequency);
                 updatedValue.Add(FIELD_RN_PRICE, viewModel.Price);
                 updatedValue.Add(FIELD_RN_TOTAL, viewModel.Total);
-             
+
                 try
                 {
-                    SPConnector.AddListItem(REQUISITION_ITEM_SITE_LIST, updatedValue, _siteUrl);
+                    SPConnector.AddListItem(ListName_RequisitionNoteItem, updatedValue, _siteUrl);
                 }
                 catch (Exception e)
                 {
@@ -222,11 +235,11 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
             {
                 var updateValue = new Dictionary<string, object>();
                 var type = doc.FileName.Split('-')[0].Trim();
-               
+
                 updateValue.Add(FIELD_RN_DOCUMENTS_HEADERID, new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
                 try
                 {
-                    SPConnector.UploadDocument(REQUISITION_ATTACHMENTS_SITE_LIST, updateValue, doc.FileName, doc.InputStream, _siteUrl);
+                    SPConnector.UploadDocument(ListName_Attachment, updateValue, doc.FileName, doc.InputStream, _siteUrl);
                 }
                 catch (Exception e)
                 {
@@ -247,7 +260,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
                 {
                     try
                     {
-                        SPConnector.DeleteListItem(REQUISITION_ITEM_SITE_LIST, viewModel.ID, _siteUrl);
+                        SPConnector.DeleteListItem(ListName_RequisitionNoteItem, viewModel.ID, _siteUrl);
 
                     }
                     catch (Exception e)
@@ -266,6 +279,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
                 updatedValue.Add(FIELD_RN_WBS, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.WBS.Value) });
                 updatedValue.Add(FIELD_RN_GL, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.GL.Value) });
                 updatedValue.Add(FIELD_RN_QUANTITY, viewModel.Quantity);
+                updatedValue.Add(FIELD_RN_FREQUENCY, viewModel.Frequency);
                 updatedValue.Add(FIELD_RN_PRICE, viewModel.Price);
                 updatedValue.Add(FIELD_RN_TOTAL, viewModel.Total);
 
@@ -273,11 +287,11 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
                 {
                     if (Item.CheckIfCreated(viewModel))
                     {
-                        SPConnector.AddListItem(REQUISITION_ITEM_SITE_LIST, updatedValue, _siteUrl);
+                        SPConnector.AddListItem(ListName_RequisitionNoteItem, updatedValue, _siteUrl);
                     }
                     else
                     {
-                        SPConnector.UpdateListItem(REQUISITION_ITEM_SITE_LIST, viewModel.ID, updatedValue, _siteUrl);
+                        SPConnector.UpdateListItem(ListName_RequisitionNoteItem, viewModel.ID, updatedValue, _siteUrl);
                     }
                 }
                 catch (Exception e)
@@ -298,7 +312,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
                 updateValue.Add(FIELD_RN_DOCUMENTS_HEADERID, new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
                 try
                 {
-                    SPConnector.UploadDocument(REQUISITION_ATTACHMENTS_SITE_LIST, updateValue, doc.FileName, doc.InputStream, _siteUrl);
+                    SPConnector.UploadDocument(ListName_Attachment, updateValue, doc.FileName, doc.InputStream, _siteUrl);
                 }
                 catch (Exception e)
                 {
@@ -329,6 +343,25 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
             EditRequisitionNoteAttachments(headerID, documents);
         }
 
+        public void DeleteDetail(int id)
+        {
+            SPConnector.DeleteListItem(ListName_RequisitionNoteItem, id, _siteUrl);
+        }
+
+        public Tuple<int, string> GetRequisitioNoteIdAndNoByEventBudgetID(int eventBudgetId)
+        {
+            var caml = @"<View><Query><Where><Eq><FieldRef Name='" + FIELD_REQUISITION_EVENTBUDGETNO + "' /><Value Type='Lookup'>" + eventBudgetId.ToString() + "</Value></Eq></Where></Query> <RowLimit>1</RowLimit> </View>";
+            string number = string.Empty;
+            int id = 0;
+
+            foreach (var item in SPConnector.GetList(ListName_RequisitionNote, _siteUrl, caml))
+            {
+                number = Convert.ToString(item[FIELD_TITLE]);
+                id = Convert.ToInt32(item[FIELD_ID]);
+            }
+
+            return new Tuple<int, string>(id, number);
+        }
 
         private ActivityVM ConvertToActivityModel(ListItem item)
         {
@@ -378,7 +411,6 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
 
             viewModel.Project.Value = Convert.ToString(listItem[FIELD_REQUISITION_PROJECT]);
             viewModel.Project.Text = Convert.ToString(listItem[FIELD_REQUISITION_PROJECT]);
-            viewModel.Fund = Convert.ToString(listItem[FIELD_REQUISITION_FUND]);
             viewModel.Currency.Value = Convert.ToString(listItem[FIELD_REQUISITION_CURRENCY]);
             viewModel.Total = Convert.ToDecimal(listItem[FIELD_REQUISITION_TOTAL]);
             viewModel.EditMode = (int)Item.Mode.UPDATED;
@@ -399,7 +431,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
 
                 details = new List<RequisitionNoteItemVM>();
 
-                foreach (var item in SPConnector.GetList(REQUISITION_ITEM_SITE_LIST, _siteUrl, caml))
+                foreach (var item in SPConnector.GetList(ListName_RequisitionNoteItem, _siteUrl, caml))
                 {
                     details.Add(ConvertToRequisitionNoteItemVM(item));
             }
@@ -425,6 +457,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
             viewModel.GL.Text = string.Format("{0}-{1}", (listItem[FIELD_RN_GL_ID] as FieldLookupValue).LookupValue, (listItem[FIELD_RN_GL_DESC] as FieldLookupValue).LookupValue);
 
             viewModel.Quantity = Convert.ToInt32(listItem[FIELD_RN_QUANTITY]);
+            viewModel.Frequency = Convert.ToInt32(listItem[FIELD_RN_FREQUENCY]);
             viewModel.Price = Convert.ToDecimal(listItem[FIELD_RN_PRICE]);
             viewModel.Total = Convert.ToDecimal(listItem[FIELD_RN_TOTAL]);
             viewModel.EditMode = (int)Item.Mode.UPDATED;
@@ -435,5 +468,6 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
         {
             return string.Format(UrlResource.RequisitionNoteDocumentByID, _siteUrl, iD);
         }
+
     }
 }
