@@ -25,7 +25,9 @@
             @Html.Partial("_ViewDetails", Model.Details)
         </div>
     </fieldset>
-
+            @Html.HiddenFor(m => m.hFormId)
+            @Html.HiddenFor(m => m.hTanggalCounted)
+            @Html.HiddenFor(m => m.hTanggalCreate)
     <div>
         <center>
             <input class="btn btn-primary" type="submit" name="print" value="Print" />
