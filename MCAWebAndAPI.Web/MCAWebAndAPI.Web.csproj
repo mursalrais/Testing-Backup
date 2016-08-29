@@ -1105,6 +1105,7 @@
     <Content Include="Views\HRProfessionalPerformanceEvaluation\_WorkflowPathDetails.cshtml" />
     <Content Include="Views\HRPerformancePlan\_WorkflowPathDetails.cshtml" />
     <Content Include="Views\ASSAssignmentOfAsset\Sync.cshtml" />
+    <Content Include="Views\HRCompensatory\_WorkflowPathDetails.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

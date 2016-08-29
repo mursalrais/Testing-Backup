@@ -80,7 +80,10 @@
     </div>
 
     <legend>Approval Path</legend>
-    <div id="workflow-placeholder" class="row"></div>
+    <div class="row">
+        @Html.Partial("_WorkflowPathDetails", Model)
+    </div>
+
 
     @section scripts{
 
