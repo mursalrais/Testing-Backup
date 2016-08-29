@@ -64,6 +64,11 @@
     </fieldset>
 }
 
+<legend>Approval Path</legend>
+<div class="row">
+    @Html.Partial("_WorkflowPathDetails", Model)
+</div>
+
 <div class="row pull-right">
     <div class="col-sm-12">
         <button id="submit-button" class="btn btn-primary" type="submit">
@@ -81,8 +86,6 @@
     </div>
 </div>
 
-<legend>Approval Path</legend>
-<div id="workflow-placeholder" class="row"></div>
 
 @section scripts{
 

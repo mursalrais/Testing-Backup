@@ -110,6 +110,26 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return viewModel;
         }
 
+        public async Task<CompensatoryVM> GetCheckWorkflow(int? iD, string requestor, string listName, string listNameWorkflow, string columnName)
+        {
+            var viewModel = new CompensatoryVM();
+
+            //Get Workflow From Mapping Master
+            var _workflow = new WorkflowService();
+            _workflow.SetSiteUrl(_siteUrl);
+            var intID = Convert.ToInt32(iD);
+            var Check = await _workflow.CheckWorkflow(intID, listNameWorkflow, columnName);
+            if (Check.Count() != 0)
+            {
+                viewModel.WorkflowItems = Check;
+            }
+            if (Check.Count() == 0)
+            {
+                viewModel.WorkflowItems = await _workflow.GetWorkflowDetails(requestor, listName);
+            }
+
+            return viewModel;
+        }
 
         public async Task<CompensatoryVM> GetComplistbyCmpid(int? iD, string requestor, string listName, string listNameWorkflow, string columnName)
         {
