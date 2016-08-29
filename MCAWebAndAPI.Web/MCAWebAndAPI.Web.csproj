@@ -1085,7 +1085,6 @@
     <Content Include="Views\HRCompensatory\AddCompensatoryHR.cshtml" />
     <Content Include="Views\FINEventBudget\Item.cshtml" />
     <Content Include="Views\HRTimesheet\CreateTimesheet.cshtml" />
-    <Content Include="Views\HRTimesheet\FormType.cshtml" />
     <Content Include="Views\FINPettyCashStatement\Display.cshtml" />
     <Content Include="Views\FINPettyCashStatement\Index.cshtml" />
     <Content Include="Views\FINPettyCashSettlement\Item.cshtml" />
@@ -1101,16 +1100,26 @@
     <Content Include="Views\HRProfessionalPerformanceEvaluation\_WorkflowPathDetails.cshtml" />
     <Content Include="Views\HRPerformancePlan\_WorkflowPathDetails.cshtml" />
     <Content Include="Views\ASSAssignmentOfAsset\Sync.cshtml" />
+    <Content Include="Views\HRCompensatory\_WorkflowPathDetails.cshtml" />
+    <Content Include="Views\HRDayOff\CreateDayOffRequest.cshtml" />
+    <Content Include="Views\HRDayOff\_DayOffCurrentBalance.cshtml" />
+    <Content Include="Views\HRDayOff\_DayOffRequestHeaderData.cshtml" />
+    <Content Include="Views\HRDayOff\_RequestForDayOff.cshtml" />
+    <Content Include="Views\FINSCAVoucher\_PartialHeaderWithLogo.cshtml" />
+    <Content Include="Views\FINPettyCashSettlement\Print.cshtml" />
+    <Content Include="Views\FINEventBudget\Print.cshtml" />
+    <Content Include="Views\FINLandingPage\Index.cshtml" />
+    <Content Include="Views\ASSAssetTransfer\Create.cshtml" />
     <Content Include="Views\ASSAssetTransfer\_Details.cshtml" />
     <Content Include="Views\ASSAssetTransfer\_DetailsPrint.cshtml" />
     <Content Include="Views\ASSAssetTransfer\_DetailsView.cshtml" />
     <Content Include="Views\ASSAssetTransfer\_print.cshtml" />
-    <Content Include="Views\ASSAssetTransfer\Create.cshtml" />
     <Content Include="Views\ASSAssetTransfer\Edit.cshtml" />
     <Content Include="Views\ASSAssetTransfer\Print.cshtml" />
     <Content Include="Views\ASSAssetTransfer\Sync.cshtml" />
     <Content Include="Views\ASSAssetTransfer\Upload.cshtml" />
     <Content Include="Views\ASSAssetTransfer\View.cshtml" />
+    <Content Include="Views\ASSAssetCheckForm\_Details.cshtml" />
     <Content Include="Views\ASSLocationMaster\Sync.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -1145,6 +1154,7 @@
     <Compile Include="Controllers\CSVController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\FileController.cs" />
+    <Compile Include="Controllers\FINLandingPageController.cs" />
     <Compile Include="Controllers\FINPettyCashPaymentVoucherController.cs" />
     <Compile Include="Controllers\FINPettyCashReplenishmentController.cs" />
     <Compile Include="Controllers\FINPettyCashSettlementController.cs" />

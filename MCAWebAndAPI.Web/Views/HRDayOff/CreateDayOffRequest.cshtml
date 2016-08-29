@@ -31,6 +31,13 @@
         <div class="row">
             @Html.Partial("_RequestForDayOff", Model.DayOffRequestDetails)
         </div>
+
+        <div class="col-md-12">
+            <button id="apply-button" class="btn btn-primary" type="button" onclick="validateDayOffRequest()">
+                <i class="fa fa-save"></i>
+                Apply
+            </button>
+        </div>
     </fieldset>
 
 }
@@ -65,6 +72,400 @@
                 $("form").submit();
             });
         });
+
+        function validateDayOffRequest()
+        {
+            var lastWorkingDate = $("#LastWorkingDate").val();
+            var dateTimeLastWorkingDate = new Date(lastWorkingDate);
+            var balanceAnnualDayOff;
+            var balanceSpecialDayOff;
+            var balancePaternity;
+            var balanceMarriageOfProfessional;
+            var balanceMarriageOfProfessionalChildren;
+            var balanceCircumcisionOfProfessionalSon;
+
+            var rowgridBalanceDetail = $("#DayOffBalanceDetails").data("kendoGrid").tbody.find("tr");
+            var j = 0;
+
+            rowgridBalanceDetail.each(function (e) {
+                var dayOffType = $("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].DayOffType.Text;
+
+                if ($("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].DayOffType.Text == "Annual Day-Off")
+                {
+                    balanceAnnualDayOff = $("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].Balance;
+                }
+                if ($("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].DayOffType.Text == "Special Day-Off")
+                {
+                    balanceSpecialDayOff = $("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].Balance;
+                }
+                if ($("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].DayOffType.Text == "Paternity")
+                {
+                    balancePaternity = $("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].Balance;
+                }
+                if ($("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].DayOffType.Text == "Marriage of the Professional")
+                {
+                    balanceMarriageOfProfessional = $("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].Balance;
+                }
+                if ($("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].DayOffType.Text == "Circumcision of the Professional's Sons")
+                {
+                    balanceCircumcisionOfProfessionalSon = $("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].Balance;
+                }
+                if ($("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].DayOffType.Text == "Marriage of The Professional's Children")
+                {
+                    balanceMarriageOfProfessionalChildren = $("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].Balance;
+                }
+                
+                j++;
+            });
+
+            var rowgrid = $("#DayOffRequestDetails").data("kendoGrid").tbody.find("tr");
+            var i = 0;
+            var totalRequestAnnualDayOff = 0;
+            var totalRequestSpecialDayOff = 0;
+            var totalRequestPaternity = 0;
+            var totalRequestMarriageOfProfessional = 0;
+            var totalRequestCircumcisionOfProfessionalSon = 0;
+            var totalRequestMarriageOfTheProfessionalChildren = 0;
+
+            rowgrid.each(function (e) {
+                var startRequestDate = $("#DayOffRequestDetails").data("kendoGrid").dataSource.data()[i].RequestStartDate;
+                var endRequestDate = $("#DayOffRequestDetails").data("kendoGrid").dataSource.data()[i].RequestEndDate;
+
+                var masterDayOffTypeValue = $("#DayOffRequestDetails").data("kendoGrid").dataSource.data()[i].MasterDayOffType.Value;
+                var fullHalfDay = $("#DayOffRequestDetails").data("kendoGrid").dataSource.data()[i].FullHalf.Text;
+
+                var dateStartRequestDate = new Date(startRequestDate);
+                var dateDateStartRequestDate = dateStartRequestDate.getDate();
+                var monthDateStartRequestDate = dateStartRequestDate.getMonth();
+                var yearDateStartRequestDate = dateStartRequestDate.getFullYear();
+                var stringDateStartRequestDate = dateDateStartRequestDate + '/' + monthDateStartRequestDate + '/' + yearDateStartRequestDate;
+
+                var dateEndRequestDate = new Date(endRequestDate);
+                var dateDateEndRequestDate = dateEndRequestDate.getDate();
+                var monthDateEndRequestDate = dateEndRequestDate.getMonth();
+                var yearDateEndRequestDate = dateEndRequestDate.getFullYear();
+                var stringDateEndRequestDate = dateDateEndRequestDate + '/' + monthDateEndRequestDate + '/' + yearDateEndRequestDate;
+
+                if (dateStartRequestDate > dateEndRequestDate)
+                {
+                    alert("End Date must be more than Start Date");
+                }
+                if (masterDayOffTypeValue == "9")
+                {
+                    if(fullHalfDay == "Half Day")
+                    {
+                        alert("Must Input Full Day for Maternity");
+                    }
+                }
+                if (masterDayOffTypeValue == "11")
+                {
+                    if (fullHalfDay == "Half Day")
+                    {
+                        alert("Must Input Full Day for Miscarriage");
+                    }
+                }
+                if (fullHalfDay == "Half Day")
+                {
+                    if (stringDateStartRequestDate != stringDateEndRequestDate)
+                    {
+                        alert("For Half Day, Start Date Must Be Same With End Date");
+                    }
+                    if (stringDateStartRequestDate == stringDateEndRequestDate)
+                    {
+                        alert("Start Date same with End Date");
+                    }
+                }
+                if ((dateStartRequestDate > dateTimeLastWorkingDate) || (dateEndRequestDate > dateTimeLastWorkingDate))
+                {
+                    alert("Your Start Request Date or End Request Date More Than Last Working Date");
+                }
+                if (masterDayOffTypeValue == "1")
+                {
+                    var requestAnnualDayOff = calcBusinessDays(dateStartRequestDate, dateEndRequestDate);
+                    var numberHolidays = checkPublicHolidays(dateStartRequestDate, dateEndRequestDate);
+                    var finalRequestAnnualDayOff = parseInt(requestAnnualDayOff) - parseInt(numberHolidays);
+
+                    totalRequestAnnualDayOff = parseInt(totalRequestAnnualDayOff) + parseInt(finalRequestAnnualDayOff);
+
+                    var intBalanceAnnualDayOff = parseInt(balanceAnnualDayOff);
+
+                    if(totalRequestAnnualDayOff > intBalanceAnnualDayOff)
+                    {
+                        alert("Total Days Request is more than Total Annual Day-Off Current Balance");
+                    }
+                }
+                if (masterDayOffTypeValue == "7")
+                {
+                    var requestSpecialDayOff = calcBusinessDays(dateStartRequestDate, dateEndRequestDate);
+                    var numberHolidays = checkPublicHolidays(dateStartRequestDate, dateEndRequestDate);
+                    var finalRequestSpecialDayOff = parseInt(requestSpecialDayOff) - parseInt(numberHolidays);
+
+                    totalRequestSpecialDayOff = parseInt(totalRequestSpecialDayOff) + parseInt(finalRequestSpecialDayOff);
+
+                    var intBalanceSpecialDayOff = parseInt(balanceSpecialDayOff);
+
+                    if (totalRequestSpecialDayOff > intBalanceSpecialDayOff)
+                    {
+                        alert("Total Days Request is more than Total Special Day-Off Current Balance");
+                    }
+                }
+                if (masterDayOffTypeValue == "10")
+                {
+                    var requestPaternity = calcBusinessDays(dateStartRequestDate, dateEndRequestDate);
+                    var numberHolidays = checkPublicHolidays(dateStartRequestDate, dateEndRequestDate);
+                    var finalRequestPaternity = parseInt(requestPaternity) - parseInt(numberHolidays);
+
+                    totalRequestPaternity = parseInt(totalRequestPaternity) + parseInt(finalRequestPaternity);
+
+                    var intBalancePaternity = parseInt(balancePaternity);
+
+                    if (totalRequestPaternity > intBalancePaternity)
+                    {
+                        alert("Total Days Request is more than Total Paternity Current Balance");
+                    }
+                }
+                if (masterDayOffTypeValue == "12")
+                {
+                    var requestMarriageOfProfessional = calcBusinessDays(dateStartRequestDate, dateEndRequestDate);
+                    var numberHolidays = checkPublicHolidays(dateStartRequestDate, dateEndRequestDate);
+                    var finalRequestMarriageOfProfessional = parseInt(requestMarriageOfProfessional) - parseInt(numberHolidays);
+
+                    totalRequestMarriageOfProfessional = parseInt(totalRequestMarriageOfProfessional) + parseInt(finalRequestMarriageOfProfessional);
+
+                    var intBalanceMarriageOfProfessional = parseInt(balanceMarriageOfProfessional);
+
+                    if (totalRequestMarriageOfProfessional > intBalanceMarriageOfProfessional) {
+                        alert("Total Days Request is more than Total Marriage of The Professional Current Balance");
+                    }
+                }
+                if (masterDayOffTypeValue == "13") {
+                    var requestMarriageOfProfessionalChildren = calcBusinessDays(dateStartRequestDate, dateEndRequestDate);
+                    var numberHolidays = checkPublicHolidays(dateStartRequestDate, dateEndRequestDate);
+                    var finalRequestMarriageOfProfessionalChildren = parseInt(requestMarriageOfProfessionalChildren) - parseInt(numberHolidays);
+
+                    totalRequestMarriageOfTheProfessionalChildren = parseInt(totalRequestMarriageOfTheProfessionalChildren) + parseInt(finalRequestMarriageOfProfessionalChildren);
+
+                    var intBalanceMarriageOfProfessionalChildren = parseInt(balanceMarriageOfProfessionalChildren);
+
+                    if (totalRequestMarriageOfTheProfessionalChildren > intBalanceMarriageOfProfessionalChildren) {
+                        alert("Total Days Request is more than Total Marriage of The Professional's Children Current Balance");
+                    }
+                }
+                if (masterDayOffTypeValue == "14")
+                {
+                    var requestCircumcisionOfProfessionalSon = calcBusinessDays(dateStartRequestDate, dateEndRequestDate);
+                    var numberHolidays = checkPublicHolidays(dateStartRequestDate, dateEndRequestDate);
+                    var finalRequestCircumcisionOfProfessionalSon = parseInt(requestCircumcisionOfProfessionalSon) - parseInt(numberHolidays);
+
+                    totalRequestCircumcisionOfProfessionalSon = parseInt(totalRequestCircumcisionOfProfessionalSon) + parseInt(finalRequestCircumcisionOfProfessionalSon);
+
+                    var intBalanceCircumcisionOfProfessionalSon = parseInt(balanceCircumcisionOfProfessionalSon);
+
+                    if (totalRequestCircumcisionOfProfessionalSon > intBalanceCircumcisionOfProfessionalSon) {
+                        alert("Total Days Request is more than Total Circumcision of Professional's Son Current Balance");
+                    }
+                }
+
+                i++;
+            });
+
+        }
+
+        function checkPublicHolidays(dateStartRequestDate, dateEndRequestDate)
+        {
+            var numberPublicHolidays = 0;
+            var year2016 = "2016";
+            var year2017 = "2017";
+            var year2018 = "2018";
+
+            for (var d = dateStartRequestDate; d <= dateEndRequestDate; d.setDate(d.getDate() + 1))
+            {
+                var checkDate = new Date(d);
+                var dateCheckDate = checkDate.getDate();
+                var monthCheckDate = checkDate.getMonth() + 1;
+                var yearCheckDate = checkDate.getFullYear();
+                var strCheckDate = dateCheckDate + '/' + monthCheckDate + '/' + yearCheckDate;
+
+                var tahunBaru = new Date("01/01/2016");
+                var dateTahunBaru = tahunBaru.getDate();
+                var monthTahunBaru = tahunBaru.getMonth() + 1;
+                var yearTahunBaru = tahunBaru.getFullYear();
+                var strTahunBaru = dateTahunBaru + '/' + monthTahunBaru + '/' + yearTahunBaru;
+
+                var imlek = new Date("02/08/2016");
+                var dateImlek = imlek.getDate();
+                var monthImlek = imlek.getMonth() + 1;
+                var yearImlek = imlek.getFullYear();
+                var strImlek = dateImlek + '/' + monthImlek + '/' + yearImlek;
+
+                var idulAdha = new Date("09/12/2016");
+                var dateIdulAdha = idulAdha.getDate();
+                var monthIdulAdha = idulAdha.getMonth() + 1;
+                var yearIdulAdha = idulAdha.getFullYear();
+                var strIdulAdha = dateIdulAdha + '/' + monthIdulAdha + '/' + yearIdulAdha;
+
+                var nyepi = new Date("03/09/2016");
+                var dateNyepi = nyepi.getDate();
+                var monthNyepi = nyepi.getMonth() + 1;
+                var yearNyepi = nyepi.getFullYear();
+                var strNyepi = dateNyepi + '/' + monthNyepi + '/' + yearNyepi;
+
+                var wafatIsaAlMasih = new Date("03/25/2016");
+                var dateWafatIsaAlMasih = wafatIsaAlMasih.getDate();
+                var monthWafatIsaAlMasih = wafatIsaAlMasih.getMonth() + 1;
+                var yearWafatIsaAlMasih = wafatIsaAlMasih.getFullYear();
+                var strWafatIsaAlMasih = dateWafatIsaAlMasih + '/' + monthWafatIsaAlMasih + '/' + yearWafatIsaAlMasih;
+
+                var hariBuruh = new Date("05/01/2016");
+                var dateHariBuruh = hariBuruh.getDate();
+                var monthHariBuruh = hariBuruh.getMonth() + 1;
+                var yearHariBuruh = hariBuruh.getFullYear();
+                var strHariBuruh = dateHariBuruh + '/' + monthHariBuruh + '/' + yearHariBuruh;
+
+                var kenaikanYesus = new Date("05/05/2016");
+                var dateKenaikanYesus = kenaikanYesus.getDate();
+                var monthKenaikanYesus = kenaikanYesus.getMonth() + 1;
+                var yearKenaikanYesus = kenaikanYesus.getFullYear();
+                var strKenaikanYesus = dateKenaikanYesus + '/' + monthKenaikanYesus + '/' + yearKenaikanYesus;
+
+                var israMiraj = new Date("05/06/2016");
+                var dateIsraMiraj = israMiraj.getDate();
+                var monthIsraMiraj = israMiraj.getMonth() + 1;
+                var yearIsraMiraj = israMiraj.getFullYear();
+                var strIsraMiraj = dateIsraMiraj + '/' + monthIsraMiraj + '/' + yearIsraMiraj;
+
+                var waisak = new Date("05/22/2016");
+                var dateWaisak = waisak.getDate();
+                var monthWaisak = waisak.getMonth() + 1;
+                var yearWaisak = waisak.getFullYear();
+                var strWaisak = dateWaisak + '/' + monthWaisak + '/' + yearWaisak;
+
+                var idulFitri1 = new Date("07/06/2016");
+                var dateIdulFitri1 = idulFitri1.getDate();
+                var monthIdulFitri1 = idulFitri1.getMonth() + 1;
+                var yearIdulFitri1 = idulFitri1.getFullYear();
+                var strIdulFitri1 = dateIdulFitri1 + '/' + monthIdulFitri1 + '/' + yearIdulFitri1;
+
+                var idulFitri2 = new Date("07/07/2016");
+                var dateIdulFitri2 = idulFitri1.getDate();
+                var monthIdulFitri2 = idulFitri1.getMonth() + 1;
+                var yearIdulFitri2 = idulFitri1.getFullYear();
+                var strIdulFitri2 = dateIdulFitri2 + '/' + monthIdulFitri2 + '/' + yearIdulFitri2;
+
+                var hutRI = new Date("08/17/2016");
+                var dateHUTRI = hutRI.getDate();
+                var monthHUTRI = hutRI.getMonth() + 1;
+                var yearHUTRI = hutRI.getFullYear();
+                var strHUTRI = dateHUTRI + '/' + monthHUTRI + '/' + yearHUTRI;
+
+                var tahunBaruIslam = new Date("10/02/2016");
+                var dateTahunBaruIslam = tahunBaruIslam.getDate();
+                var monthTahunBaruIslam = tahunBaruIslam.getMonth() + 1;
+                var yearTahunBaruIslam = tahunBaruIslam.getFullYear();
+                var strTahunBaruIslam = dateTahunBaruIslam + '/' + monthTahunBaruIslam + '/' + yearTahunBaruIslam;
+
+                var maulidNabi = new Date("12/12/2016");
+                var dateMaulidNabi = maulidNabi.getDate();
+                var monthMaulidNabi = maulidNabi.getMonth() + 1;
+                var yearMaulidNabi = maulidNabi.getFullYear();
+                var strMaulidNabi = dateMaulidNabi + '/' + monthMaulidNabi + '/' + yearMaulidNabi;
+
+                var natal = new Date("12/25/2016");
+                var dateNatal = natal.getDate();
+                var monthNatal = natal.getMonth() + 1;
+                var yearNatal = natal.getFullYear();
+                var strNatal = dateNatal + '/' + monthNatal + '/' + yearNatal;
+                
+                if (strCheckDate == strTahunBaru)
+                {
+                    numberPublicHolidays = numberPublicHolidays + 1;
+                }
+                if (strCheckDate == strIdulAdha)
+                {
+                    numberPublicHolidays = numberPublicHolidays + 1;
+                }
+                if (strCheckDate == strImlek)
+                {
+                    numberPublicHolidays = numberPublicHolidays + 1;
+                }
+                if (strCheckDate == strNyepi)
+                {
+                    numberPublicHolidays = numberPublicHolidays + 1;
+                }
+                if (strCheckDate == strWafatIsaAlMasih)
+                {
+                    numberPublicHolidays = numberPublicHolidays + 1;
+                }
+                if (strCheckDate == strHariBuruh)
+                {
+                    numberPublicHolidays = numberPublicHolidays + 1;
+                }
+                if (strCheckDate == strKenaikanYesus)
+                {
+                    numberPublicHolidays = numberPublicHolidays + 1;
+                }
+                if (strCheckDate == strIsraMiraj)
+                {
+                    numberPublicHolidays = numberPublicHolidays + 1;
+                }
+                if (strCheckDate == strWaisak)
+                {
+                    numberPublicHolidays = numberPublicHolidays + 1;
+                }
+                if (strCheckDate == strIdulFitri1)
+                {
+                    numberPublicHolidays = numberPublicHolidays + 1;
+                }
+                if (strCheckDate == strIdulFitri2)
+                {
+                    numberPublicHolidays = numberPublicHolidays + 1;
+                }
+                if (strCheckDate == strHUTRI)
+                {
+                    numberPublicHolidays = numberPublicHolidays + 1;
+                }
+                if (strCheckDate == strTahunBaruIslam)
+                {
+                    numberPublicHolidays = numberPublicHolidays + 1;
+                }
+                if (strCheckDate == strMaulidNabi)
+                {
+                    numberPublicHolidays = numberPublicHolidays + 1;
+                }
+                if (strCheckDate == strNatal)
+                {
+                    numberPublicHolidays = numberPublicHolidays + 1;
+                }
+
+            }
+
+            return numberPublicHolidays;
+        }
+
+        function calcBusinessDays(dDate1, dDate2) { // input given as Date objects
+            var iWeeks, iDateDiff, iAdjust = 0;
+            if (dDate2 < dDate1) return -1; // error code if dates transposed
+            var iWeekday1 = dDate1.getDay(); // day of week
+            var iWeekday2 = dDate2.getDay();
+            iWeekday1 = (iWeekday1 == 0) ? 7 : iWeekday1; // change Sunday from 0 to 7
+            iWeekday2 = (iWeekday2 == 0) ? 7 : iWeekday2;
+            if ((iWeekday1 > 5) && (iWeekday2 > 5)) iAdjust = 1; // adjustment if both days on weekend
+            iWeekday1 = (iWeekday1 > 5) ? 5 : iWeekday1; // only count weekdays
+            iWeekday2 = (iWeekday2 > 5) ? 5 : iWeekday2;
+
+            // calculate differnece in weeks (1000mS * 60sec * 60min * 24hrs * 7 days = 604800000)
+            iWeeks = Math.floor((dDate2.getTime() - dDate1.getTime()) / 604800000)
+
+            if (iWeekday1 <= iWeekday2) {
+                iDateDiff = (iWeeks * 5) + (iWeekday2 - iWeekday1)
+            } else {
+                iDateDiff = ((iWeeks + 1) * 5) - (iWeekday1 - iWeekday2)
+            }
+
+            iDateDiff -= iAdjust // take into account both days on weekend
+
+            return (iDateDiff + 1); // add 1 because dates are inclusive
+        }
 
         function onSuccess(data)
         {

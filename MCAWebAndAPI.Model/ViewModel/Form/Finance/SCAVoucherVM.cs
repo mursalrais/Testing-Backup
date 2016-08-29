@@ -83,7 +83,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         [Required]
         public string Fund { get; set; } = Shared.Fund;
 
-        public string RefferenceNo { get; set; }
+        public string ReferenceNo { get; set; }
 
         [UIHint("TextArea")]
         public string Remarks { get; set; }

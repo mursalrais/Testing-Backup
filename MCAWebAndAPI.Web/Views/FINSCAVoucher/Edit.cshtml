@@ -103,6 +103,12 @@
             $('#Fund').prop('value', '');
         }
 
+        function OnSelectProfessional(e) {
+            var data = this.dataItem(e.item);
+
+            $('#SDOPosition').val(data.Position);
+        }
+
     </script>
 }
 <style media="screen">

@@ -39,7 +39,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
                 "Stop Award",
                 "Retention Payment",
                 "Overtime",
-                "Adjustment"};
+                "Adjustment",
+                "Deduction"};
 
             return options.Select(e =>
                 new InGridComboBoxVM
