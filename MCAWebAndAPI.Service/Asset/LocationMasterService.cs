@@ -22,6 +22,7 @@ namespace MCAWebAndAPI.Service.Asset
 
         public int CreateHeader(LocationMasterVM header, string province, string office, int floor, string room)
         {
+            header.CancelUrl = _siteUrl + UrlResource.LocationMaster;
             var propCity = province.Split('-');
 
             var caml = @"<View>  
@@ -108,10 +109,11 @@ namespace MCAWebAndAPI.Service.Asset
 
         public LocationMasterVM GetHeader(int? ID, string SiteUrl)
         {
+
             var listItem = SPConnector.GetListItem(SP_LOCATION_MAS_LISTNAME, ID, _siteUrl);
             var viewModel = new LocationMasterVM();
 
-            //viewModel.InterviewerUrl = _siteUrl + UrlResource.AssetMaster;
+            viewModel.CancelUrl = _siteUrl + UrlResource.LocationMaster;
             var siteHr = SiteUrl.Replace("/bo", "/hr");
             viewModel.Province.Choices = GetChoicesFromList("Province", "Title", SiteUrl, "Province");
             if ((listItem["Province"] as FieldLookupValue) != null)
@@ -131,6 +133,7 @@ namespace MCAWebAndAPI.Service.Asset
         public LocationMasterVM GetPopulatedModel(string SiteUrl)
         {
             var model = new LocationMasterVM();
+            model.CancelUrl = _siteUrl + UrlResource.LocationMaster;
             model.Province.Choices = GetChoicesFromList("Province", "Title", SiteUrl, "Province");
             return model;
         }
@@ -167,6 +170,7 @@ namespace MCAWebAndAPI.Service.Asset
 
         public bool UpdateHeader(LocationMasterVM header, string province, string office, int floor, string room)
         {
+            header.CancelUrl = _siteUrl + UrlResource.LocationMaster;
             var ID = header.ID;
             var propCity = province.Split('-');
 
