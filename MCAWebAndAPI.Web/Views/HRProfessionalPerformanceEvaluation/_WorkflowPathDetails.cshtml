@@ -41,15 +41,14 @@
             "<input type='hidden' name='WorkflowItems[#= getWorkflowItemDetail(data)#].EditMode' value='#= EditMode #' />"
             );
         })
-            .Scrollable(scrollable => scrollable.Height("auto"))
         .Events(e =>
         {
-            e.Edit("onCustomEditKendoDetail");
+            e.Edit("onWorkflowEditKendoDetail");
             e.DataBound("onDataBoundWorkflowItems");
         })
         .DataSource(dataSource => dataSource.Ajax().Events(events =>
         {
-            events.Change("onChange");
+            events.Change("onWorkflowChange");
         })
         .Model(model =>
         {
@@ -65,7 +64,7 @@
 <script>
     var unit
     var position
-    function onChange(e) {
+    function onWorkflowChange(e) {
         var overallTotalScore = 0;
         var recordsOnCurrentView = 0;
         if (e.action === "itemchange") {
@@ -81,7 +80,7 @@
         }
     }
 
-    function onCustomEditKendoDetail(e) {
+    function onWorkflowEditKendoDetail(e) {
         if (!e.model.isNew()) {
             var container = e.container;
             var tr = container.closest('tr');
