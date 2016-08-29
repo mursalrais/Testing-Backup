@@ -414,3 +414,21 @@ Parameter name: source
 2016-08-26 10:31:14.7399 MCAWebAndAPI.Service.HR.Payroll.AdjustmentService Invalid number value.
 
 A number field contains invalid data. Please check the value and try again.
+2016-08-29 09:02:16.3649 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Cannot complete this action.
+
+Please try again.
+2016-08-29 09:05:17.1580 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Cannot complete this action.
+
+Please try again.
+2016-08-29 09:10:15.8095 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Cannot complete this action.
+
+Please try again.
+2016-08-29 09:12:07.2277 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Cannot complete this action.
+
+Please try again.
+2016-08-29 09:18:05.9190 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Cannot complete this action.
+
+Please try again.
+2016-08-29 09:21:47.7846 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Cannot complete this action.
+
+Please try again.
