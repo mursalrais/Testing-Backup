@@ -11,7 +11,7 @@
     .Columns(columns =>
     {
         columns.Bound(p => p.MasterDayOffType).Width(80).ClientTemplate("#= MasterDayOffType.Text #" +
-      "<input type='hidden' name='DayOffRequestDetails[#= getDayOffRequestDetails(data)#].MasterDayOffType.Value' value='#= MasterDayOffType.Value #' />")
+      "<input type='hidden' id='DayOffRequestDetails[#= getDayOffRequestDetails(data)#].MasterDayOffType.Value' name='DayOffRequestDetails[#= getDayOffRequestDetails(data)#].MasterDayOffType.Value' value='#= MasterDayOffType.Value #' />")
 .EditorViewData(
 new
 {
@@ -23,22 +23,22 @@ new
 });
 
         columns.Bound(p => p.FullHalf).Width(100).ClientTemplate("#= FullHalf.Text #" +
-                           "<input type='hidden' name='DayOffRequestDetails[#= getDayOffRequestDetails(data)#].FullHalf.Text' value='#= FullHalf.Text #' />"
+                           "<input type='hidden' id='DayOffRequestDetails[#= getDayOffRequestDetails(data)#].FullHalf.Text' name='DayOffRequestDetails[#= getDayOffRequestDetails(data)#].FullHalf.Text' value='#= FullHalf.Text #' />"
                          ).EditorViewData(new
                          {
                              BindTo = DayOffRequestDetailVM.GetFullHalfOptions()
                          });
 
         columns.Bound(p => p.RequestStartDate).Width(80).ClientTemplate("#= kendo.toString(RequestStartDate, 'MM/dd/yyyy') #" +
-    "<input type='hidden' name='DayOffRequestDetails[#= getDayOffRequestDetails(data)#].RequestStartDate' value='#= RequestStartDate #' />"
+    "<input type='hidden' id='DayOffRequestDetails[#= getDayOffRequestDetails(data)#].RequestStartDate' name='DayOffRequestDetails[#= getDayOffRequestDetails(data)#].RequestStartDate' value='#= RequestStartDate #' />"
     );
 
         columns.Bound(p => p.RequestEndDate).Width(80).ClientTemplate("#= kendo.toString(RequestEndDate, 'MM/dd/yyyy') #" +
-    "<input type='hidden' name='DayOffRequestDetails[#= getDayOffRequestDetails(data)#].RequestEndDate' value='#= RequestEndDate #' />"
+    "<input type='hidden' id='DayOffRequestDetails[#= getDayOffRequestDetails(data)#].RequestEndDate' name='DayOffRequestDetails[#= getDayOffRequestDetails(data)#].RequestEndDate' value='#= RequestEndDate #' />"
     );
 
         columns.Bound(p => p.Remarks).Width(80).ClientTemplate("#= Remarks #" +
-                   "<input type='hidden' name='DayOffRequestDetails[#= getDayOffRequestDetails(data)#].Remarks' value='#= Remarks #' />"
+                   "<input type='hidden' id='DayOffRequestDetails[#= getDayOffRequestDetails(data)#].Remarks' name='DayOffRequestDetails[#= getDayOffRequestDetails(data)#].Remarks' value='#= Remarks #' />"
                  );
 
         columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
@@ -65,6 +65,10 @@ new
         model.Field(m => m.RequestEndDate).DefaultValue(DateTime.UtcNow);
     })
     .ServerOperation(false)
+    @*.Events(events =>
+    {
+        events.Change("onChange");
+    })*@
     )
 
     )

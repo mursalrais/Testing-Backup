@@ -414,7 +414,21 @@ Parameter name: source
 2016-08-26 10:31:14.7399 MCAWebAndAPI.Service.HR.Payroll.AdjustmentService Invalid number value.
 
 A number field contains invalid data. Please check the value and try again.
-2016-08-29 00:17:24.6739 MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService Column 'loandate' does not exist. It may have been deleted by another user.  /sites/mca-dev/bo/Lists/Asset Loan Return Detail
-2016-08-29 00:21:16.8982 MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService Column 'loandate' does not exist. It may have been deleted by another user.  /sites/mca-dev/bo/Lists/Asset Loan Return Detail
-2016-08-29 00:41:42.4773 MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService Column 'professional' does not exist. It may have been deleted by another user.  /sites/mca-dev/bo/Lists/Asset Loan Return
-2016-08-29 01:04:13.5352 MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService Invalid data has been used to update the list item. The field you are trying to update may be read only.
+2016-08-29 09:02:16.3649 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Cannot complete this action.
+
+Please try again.
+2016-08-29 09:05:17.1580 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Cannot complete this action.
+
+Please try again.
+2016-08-29 09:10:15.8095 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Cannot complete this action.
+
+Please try again.
+2016-08-29 09:12:07.2277 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Cannot complete this action.
+
+Please try again.
+2016-08-29 09:18:05.9190 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Cannot complete this action.
+
+Please try again.
+2016-08-29 09:21:47.7846 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Cannot complete this action.
+
+Please try again.

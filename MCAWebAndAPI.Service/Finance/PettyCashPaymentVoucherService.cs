@@ -4,6 +4,7 @@ using System.Web;
 using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 using MCAWebAndAPI.Service.Resources;
+using MCAWebAndAPI.Service.Shared;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
 using NLog;
@@ -42,7 +43,8 @@ namespace MCAWebAndAPI.Service.Finance
         private const string FIELD_GL_NO = "GL_x0020_ID_x003a_GL_x0020_No";
         private const string FIELD_GL_DESC = "GL_x0020_ID_x003a_GL_x0020_Descr";
         private const string FIELD_REMARKS = "Remarks";
-        private const string FIELD_VOUCHERNO = "Voucher_x0020_NO";
+        //private const string FIELD_VOUCHERNO = "Voucher_x0020_NO";
+        private const string FIELD_VOUCHERNO = "Title";
         private const string FIELD_ID = "ID";
         private const string FIELD_PCID_DOCUMENTS = "Petty_x0020_Cash_x0020_Payment_x0020_Voucher";
 
@@ -193,16 +195,16 @@ namespace MCAWebAndAPI.Service.Finance
 
         public static IEnumerable<PettyCashPaymentVoucherVM> GetPettyCashPaymentVouchers(string siteUrl)
         {
-            var vendors = new List<PettyCashPaymentVoucherVM>();
+            var paymentVouchers = new List<PettyCashPaymentVoucherVM>();
 
-            vendors.Add(new PettyCashPaymentVoucherVM() { ID = -1, Title = string.Empty });
+            paymentVouchers.Add(new PettyCashPaymentVoucherVM() { ID = -1, Title = string.Empty });
 
             foreach (var item in SPConnector.GetList(LISTNAME, siteUrl, null))
             {
-                vendors.Add(ConvertToVM(siteUrl, item));
+                paymentVouchers.Add(ConvertToVM(siteUrl, item));
             }
 
-            return vendors;
+            return paymentVouchers;
         }
 
 
@@ -224,12 +226,12 @@ namespace MCAWebAndAPI.Service.Finance
 
                 //TODO: the following line causes error
                 //viewModel.Professional.Text = (listItem[FIELD_PROFESSIONAL_NAME] as FieldLookupValue).LookupValue;
+                
             }
 
             if (viewModel.Vendor != null && listItem[FIELD_VENDORID] != null)
             {
                 viewModel.Vendor.Value = (listItem[FIELD_VENDORID] as FieldLookupValue).LookupId;
-                viewModel.Vendor.Text = (listItem[FIELD_VENDORID] as FieldLookupValue).LookupValue;
             }
 
             viewModel.Currency.Value = Convert.ToString(listItem[FIELD_CURRENCY]);

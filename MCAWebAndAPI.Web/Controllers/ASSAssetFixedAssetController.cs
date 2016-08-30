@@ -10,24 +10,24 @@ namespace MCAWebAndAPI.Web.Controllers
 {
     public class ASSAssetFixedAssetController : Controller
     {
-        IAssetFixedAssetService assetFixedAssetService;
+        //IAssetFixedAssetService assetFixedAssetService;
 
-        public ASSAssetFixedAssetController()
-        {
-            assetFixedAssetService = new AssetFixedAssetService();
-        }
+        //public ASSAssetFixedAssetController()
+        //{
+        //    assetFixedAssetService = new AssetFixedAssetService();
+        //}
 
-        // GET: ASSAssetFixedAsset
-        public ActionResult Index()
-        {
-            return View();
-        }
+        //// GET: ASSAssetFixedAsset
+        //public ActionResult Index()
+        //{
+        //    return View();
+        //}
 
-        public ActionResult Create()
-        {
-            var viewModel = new AssetFixedAssetVM();
+        //public ActionResult Create()
+        //{
+        //    var viewModel = new AssetFixedAssetVM();
 
-            return View(viewModel);
-        }
+        //    return View(viewModel);
+        //}
     }
 }

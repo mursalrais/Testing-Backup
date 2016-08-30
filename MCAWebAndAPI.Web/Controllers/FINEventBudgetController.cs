@@ -1,20 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using Kendo.Mvc.UI;
+using Elmah;
 using Kendo.Mvc.Extensions;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
+using MCAWebAndAPI.Service.Converter;
 using MCAWebAndAPI.Service.Finance;
-using MCAWebAndAPI.Service.Resources;
+using MCAWebAndAPI.Service.Finance.RequisitionNote;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;
 using FinService = MCAWebAndAPI.Service.Finance;
-using System.IO;
-using MCAWebAndAPI.Service.Converter;
-using Elmah;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -27,15 +24,18 @@ namespace MCAWebAndAPI.Web.Controllers
         private const string IndexPage = "Index";
         private const string Error = "Error";
 
-        private const string Session_SiteUrl = "SiteUrl";
-
-        private const string PRINT_PAGE_URL = "~/Views/FINEventBudget/Print.cshtml";
+        //private const string Session_SiteUrl = "SiteUrl";
+        private const string SuccessMsgFormatUpdated = "Event Budget number {0} has been successfully updated.";
+        private const string FirstPageUrl = "{0}/Lists/Event%20Budget/AllItems.aspx";
+        private const string PrintPageUrl = "~/Views/FINEventBudget/Print.cshtml";
 
         IEventBudgetService service;
+        IRequisitionNoteService requisitionNoteService;
 
         public FINEventBudgetController()
         {
             service = new EventBudgetService();
+            requisitionNoteService = new RequisitionNoteService();
         }
 
 
@@ -44,14 +44,20 @@ namespace MCAWebAndAPI.Web.Controllers
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
 
             service.SetSiteUrl(siteUrl);
-            SessionManager.Set(Session_SiteUrl, siteUrl);
+            requisitionNoteService.SetSiteUrl(siteUrl);
+            SessionManager.Set(SharedFinanceController.Session_SiteUrl, siteUrl);
 
             var viewModel = new EventBudgetVM();
             if (id.HasValue)
             {
                 viewModel = service.Get(id);
+
+                Tuple<int,string> idNumber = requisitionNoteService.GetRequisitioNoteIdAndNoByEventBudgetID(viewModel.ID.Value);
+
+                viewModel.RequisitionNoteId = idNumber.Item1;
+                viewModel.RequisitionNoteNo = idNumber.Item2;
             }
-            
+
             SetAdditionalSettingToViewModel(ref viewModel, (id.HasValue ? false : true));
 
             return View(viewModel);
@@ -60,7 +66,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetGLMaster()
         {
-            var siteUrl = SessionManager.Get<string>(Session_SiteUrl);
+            var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl);
             service.SetSiteUrl(siteUrl);
 
             var glMasters = FinService.SharedService.GetGLMaster(siteUrl);
@@ -74,7 +80,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetEventBudgetList()
         {
-            service.SetSiteUrl(SessionManager.Get<string>(Session_SiteUrl));
+            service.SetSiteUrl(SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl));
 
             var eventBudgets = service.GetEventBudgetList().ToList();
 
@@ -92,7 +98,7 @@ namespace MCAWebAndAPI.Web.Controllers
         [HttpPost]
         public async Task<ActionResult> Save(FormCollection form, EventBudgetVM viewModel)
         {
-            var siteUrl = SessionManager.Get<string>(Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
+            var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);
 
             int? headerId = null;
@@ -118,11 +124,25 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.FINEventBudget);
+
+
+            // Update related Requisition Note & SCA Voucher
+            Task UpdateRequsitionNote = service.UpdateRequisitionNoteAsync(siteUrl,  viewModel.RequisitionNoteId);
+
+            Task allTasks2 = Task.WhenAll(UpdateRequsitionNote);
+
+            await allTasks2;
+
+            return RedirectToAction("Index", "Success",
+                new
+                {
+                    successMessage = string.Format(SuccessMsgFormatUpdated, viewModel.No),
+                    previousUrl = string.Format(FirstPageUrl, siteUrl)
+                });
         }
 
         private void SetAdditionalSettingToViewModel(ref EventBudgetVM viewModel, bool isCreate)
@@ -139,9 +159,9 @@ namespace MCAWebAndAPI.Web.Controllers
         [HttpPost]
         public ActionResult Print(FormCollection form, EventBudgetVM viewModel)
         {
-            string RelativePath = PRINT_PAGE_URL;
+            string RelativePath = PrintPageUrl;
 
-            var siteUrl = SessionManager.Get<string>(Session_SiteUrl);
+            var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl);
             service.SetSiteUrl(siteUrl);
             viewModel = service.Get(viewModel.ID);
 
@@ -162,13 +182,14 @@ namespace MCAWebAndAPI.Web.Controllers
                 try
                 {
                     pdfBuf = PDFConverter.Instance.ConvertFromHTML(fileName, content);
-    }
+                }
                 catch (Exception e)
                 {
                     ErrorSignal.FromCurrentContext().Raise(e);
                     return JsonHelper.GenerateJsonErrorResponse(e);
                 }
             }
+
             if (pdfBuf == null)
                 return HttpNotFound();
             return File(pdfBuf, "application/pdf");

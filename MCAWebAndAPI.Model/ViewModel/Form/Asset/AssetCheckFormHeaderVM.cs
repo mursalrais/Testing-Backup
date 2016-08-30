@@ -4,28 +4,87 @@ using System;
 using MCAWebAndAPI.Model.ViewModel.Control;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using MCAWebAndAPI.Model.Common;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 {
-    public class AssetCheckFormHeaderVM
+    public class AssetCheckFormHeaderVM : Item
     {
-        private DateTime _createDate;
-             
-        public DateTime CreateDate
+        public IEnumerable<AssetCheckFormItemVM> Details { get; set; } = new List<AssetCheckFormItemVM>();
+        private ComboBoxVM _office, _floor, _room;
+
+        public int? hFormId;
+        public DateTime? hTanggalCounted, hTanggalCreate;
+
+        [DisplayName("Create Dates")]
+        [UIHint("Date")]
+        public DateTime? CreateDate { get; set; }
+
+
+        [UIHint("ComboBox")]
+        public ComboBoxVM Office
         {
             get
             {
-                if (_createDate == null)
-                    _createDate = new DateTime();
-                return _createDate;
+                if (_office == null)
+                    _office = new ComboBoxVM()
+                    {
+                        Choices = new string[]
+                    {
+                        ""
+                    },
+                        OnSelectEventName = "onSelectedLocation"
+                    };
+                return _office;
             }
-
             set
             {
-                _createDate = value;
+                _office = value;
             }
         }
 
+        [UIHint("ComboBox")]
+        public ComboBoxVM Floor
+        {
+            get
+            {
+                if (_floor == null)
+                    _floor = new ComboBoxVM()
+                    {
+                        Choices = new string[]
+                    {
+                        ""
+                    },
+                        OnSelectEventName = "onSelectedLocation"
+                    };
+                return _floor;
+            }
+            set
+            {
+                _floor = value;
+            }
+        }
 
+        [UIHint("ComboBox")]
+        public ComboBoxVM Room
+        {
+            get
+            {
+                if (_room == null)
+                    _room = new ComboBoxVM()
+                    {
+                        Choices = new string[]
+                    {
+                        ""
+                    },
+                        OnSelectEventName = "onSelectedLocation"
+                    };
+                return _room;
+            }
+            set
+            {
+                _room = value;
+            }
+        }
     }
 }

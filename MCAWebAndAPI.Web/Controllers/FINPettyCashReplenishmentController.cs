@@ -17,7 +17,7 @@ namespace MCAWebAndAPI.Web.Controllers
     public class FINPettyCashReplenishmentController : Controller
     {
         private const string SessionSiteUrl = "SiteUrl";
-        private const string SuccessMsgFormatUpdated = "Outstanding advance for {0} has been successfully updated.";
+        private const string SuccessMsgFormatUpdated = "Petty cash replenishment number {0} has been successfully updated.";
         private const string FirstPageUrl = "{0}/Lists/Petty%20Cash%20Replenishment/AllItems.aspx";
 
         readonly IPettyCashReplenishmentService service;
@@ -62,7 +62,7 @@ namespace MCAWebAndAPI.Web.Controllers
             return RedirectToAction("Index", "Success",
                 new
                 {
-                    successMessage = string.Format(SuccessMsgFormatUpdated, viewModel.Date.ToShortDateString()),
+                    successMessage = string.Format(SuccessMsgFormatUpdated, viewModel.TransactionNo),
                     previousUrl = string.Format(FirstPageUrl, siteUrl)
                 });
         }

@@ -65,8 +65,6 @@ namespace MCAWebAndAPI.Service.Finance
             int? result = null;
             var columnValues = new Dictionary<string, object>();
 
-            string documentNoFormat = string.Format(FIELD_FORMAT_DOC, DateTimeExtensions.GetMonthInRoman(DateTime.Now), DateTime.Now.ToString("yy")) + "{0}";
-
             columnValues.Add(FieldName_Date, viewModel.Date);
             columnValues.Add(FieldName_PettyCashVoucherId, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.PettyCashVoucher.Value) });
             columnValues.Add(FieldName_Status, viewModel.Status);
@@ -86,8 +84,11 @@ namespace MCAWebAndAPI.Service.Finance
             {
                 if (viewModel.Operation == Operations.c)
                 {
-                    columnValues.Add(FieldName_DocumentNo, DocumentNumbering.Create(siteUrl, documentNoFormat, DIGIT_DOCUMENTNO));
+                    var documentNoFormat = string.Format(FIELD_FORMAT_DOC, DateTimeExtensions.GetMonthInRoman(DateTime.Now), DateTime.Now.ToString("yy")) + "{0}";
 
+                    viewModel.TransactionNo = DocumentNumbering.Create(siteUrl, documentNoFormat, DIGIT_DOCUMENTNO);
+                    columnValues.Add(FieldName_DocumentNo, viewModel.TransactionNo);
+                    
                     SPConnector.AddListItem(ListName, columnValues, siteUrl);
                 }
                 else if (viewModel.Operation == Operations.e)
@@ -122,6 +123,8 @@ namespace MCAWebAndAPI.Service.Finance
             {
                 var listItem = SPConnector.GetListItem(ListName, id, siteUrl);
                 viewModel = ConvertToVM(siteUrl, listItem);
+
+                viewModel.Amount = viewModel.AmountLiquidated - viewModel.AmountPaid;
             }
 
             viewModel.Operation = op;
@@ -171,7 +174,7 @@ namespace MCAWebAndAPI.Service.Finance
             viewModel.TransactionNo = Convert.ToString(listItem[FieldName_DocumentNo]);
             viewModel.Status = Convert.ToString(listItem[FieldName_Status]);
             viewModel.PaidTo = Convert.ToString(listItem[FieldName_PaidTo]);
-            viewModel.AmountPaid = Convert.ToString(listItem[FieldName_AmountPAid]);
+            viewModel.AmountPaid = Convert.ToDecimal(listItem[FieldName_AmountPAid]);
             viewModel.Currency.Value = Convert.ToString(listItem[FieldName_Currency]);
             viewModel.AmountPaidInWords = Convert.ToString(listItem[FieldName_AmountPaidInWord]);
             viewModel.ReasonOfPayment = Convert.ToString(listItem[FieldName_Reason]);

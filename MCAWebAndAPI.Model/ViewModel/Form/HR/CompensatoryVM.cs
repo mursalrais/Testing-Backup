@@ -1,4 +1,5 @@
 ﻿using MCAWebAndAPI.Model.Common;
+using MCAWebAndAPI.Model.ViewModel.Form.Common;
 using MCAWebAndAPI.Model.ViewModel.Control;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
     public class CompensatoryVM : Item
     {
         public IEnumerable<CompensatoryDetailVM> CompensatoryDetails { get; set; } = new List<CompensatoryDetailVM>();
+        public IEnumerable<WorkflowItemVM> WorkflowItems { get; set; } = new List<WorkflowItemVM>();
 
         [UIHint("ComboBox")]
         [DisplayName("Application Status")]

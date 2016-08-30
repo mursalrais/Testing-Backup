@@ -4,16 +4,16 @@
 
 @model AssignmentOfAssetVM
 
-@using (Html.BeginForm("Print", "HRProfessionalPerformanceEvaluation", FormMethod.Post,
+@using (Html.BeginForm("Print", "ASSAssignmentOfAsset", FormMethod.Post,
                                                                                                             new
                                                                                                             {
                                                                                                                 @class = "form-horizontal",
                                                                                                                 enctype = "multipart/form-data"
                                                                                                             }))
 {
-    <form class="form-horizontal" method="post" action="/ASSAssignmentOfAsset/Update" id="create-asset-acquisition-form">
+    <form class="form-horizontal" method="post" action="/ASSAssignmentOfAsset/Print" id="create-asset-acquisition-form">
         <fieldset>
-            <legend>Form Asset Acquisition</legend>
+            <legend>Form Asset Assignment</legend>
             <div class="col-md-6">
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.AssetHolder).Class("col-md-4 control-label")

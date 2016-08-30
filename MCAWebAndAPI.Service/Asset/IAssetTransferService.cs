@@ -1,11 +1,14 @@
 ﻿using MCAWebAndAPI.Model.ViewModel.Form.Asset;
+using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using MCAWebAndAPI.Model.ViewModel.Form.Shared;
 using NLog;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace MCAWebAndAPI.Service.Asset
 {
@@ -13,18 +16,35 @@ namespace MCAWebAndAPI.Service.Asset
     {
         void SetSiteUrl(string siteUrl);
 
-        IEnumerable<AssetTransactionVM> GetAssetTransfers();
+        bool Syncronize(string SiteUrl);
 
-        int CreateHeader(AssetTransferVM header);
+        //create empty form
+        AssetTransferVM GetPopulatedModel(string SiteUrl);
+        AssetTransferVM GetHeader(int? ID = null, string SiteUrl = null);
 
-        bool CreateAssetTransfer(AssetTransactionVM assetTransfer);
+        IEnumerable<AssetTransferDetailVM> GetDetails(int? headerID);
+        IEnumerable<AssetTransferDetailVM> GetDetailsPrint(int? headerID);
 
-        bool UpdateAssetTransfer(AssetTransactionVM assetTransfer);
+        int? CreateHeader(AssetTransferVM viewmodel, string SiteUrl, string mode = null);
+        bool UpdateHeader(AssetTransferVM viewmodel, string SiteUrl);
+        void CreateDocuments(int? headerID, IEnumerable<HttpPostedFileBase> documents, string SiteUrl);
 
-        AssetTransferVM GetPopulatedModel(int? id = null);
+        void CreateDetails(int? headerID, IEnumerable<AssetTransferDetailVM> items);
+        void CreateDetails(int? headerID, AssetTransferDetailVM item, string SiteUrl);
+        void UpdateDetails(int? headerID, IEnumerable<AssetTransferDetailVM> items);
 
-        ProfessionalVM GetAssetHolderFromInfo(int? ID, string siteUrl);
+        ProfessionalDataVM GetProfMasterInfo(string fullname, string SiteUrl);
 
+        IEnumerable<AssignmentOfAssetDetailsVM> GetAssetSubAsset();
         IEnumerable<LocationMasterVM> GetProvince();
+        LocationMasterVM GetProvinceInfo(string province, string SiteUrl);
+        IEnumerable<LocationMasterVM> GetOfficeName(string SiteUrl, string province = null);
+        IEnumerable<LocationMasterVM> GetFloorList(string SiteUrl, string office = null);
+        IEnumerable<LocationMasterVM> GetRoomList(string SiteUrl, string floor = null);
+
+        int? MassUploadHeaderDetail(string ListName, DataTable CSVDataTable, string SiteUrl = null);
+        void RollbackParentChildrenUpload(string listNameHeader, int? latestIDHeader, string siteUrl);
+
+        bool isExist(string listname, string caml, string SiteUrl);
     }
 }

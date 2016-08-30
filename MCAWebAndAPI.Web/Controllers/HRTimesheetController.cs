@@ -40,18 +40,17 @@ namespace MCAWebAndAPI.Web.Controllers
             _timesheetService.SetSiteUrl(siteUrl);
             var viewModel = _timesheetService.GetTimesheetLoadUpdate(id,userlogin);
 
+            if (viewModel.UserPermission== "Not Authorized") return RedirectToAction("NotAuthorized", "HRTimesheet");
+
             SessionManager.Set("TimesheetDetails", viewModel.TimesheetDetails);
             return View(viewModel);
         }
 
-        public ActionResult FormType(string siteUrl, int? id, string userlogin)
+        public ActionResult NotAuthorized(string siteUrl = null)
         {
-            SessionManager.Set("SiteUrl", siteUrl);
-            _timesheetService.SetSiteUrl(siteUrl);
-            var viewModel = _timesheetService.GetTimesheetLoadUpdate(id, userlogin);
 
-           // SessionManager.Set("TimesheetDetails", viewModel.TimesheetDetails);
-            return View(viewModel);
+            return View("NotAuthorized", null);
+
         }
 
         [HttpPost]
@@ -76,7 +75,7 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddTimesheet(TimesheetVM viewModel)
+        public ActionResult AddTimesheet(int? id,TimesheetVM viewModel)
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _timesheetService.SetSiteUrl(siteUrl);
@@ -88,7 +87,7 @@ namespace MCAWebAndAPI.Web.Controllers
            
             try
             {
-               items = _timesheetService.AppendWorkingDays(items, Convert.ToDateTime(viewModel.From).ToLocalTime(),
+               items = _timesheetService.AppendWorkingDays(id,items, Convert.ToDateTime(viewModel.From).ToLocalTime(),
                     Convert.ToDateTime(viewModel.To).ToLocalTime(), viewModel.IsFullDay, strLocation, intLocationID);
             }
             catch (Exception e)
@@ -106,6 +105,73 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         [HttpPost]
+        public ActionResult DeleteAllTimesheet(int? id)
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _timesheetService.SetSiteUrl(siteUrl);
+
+
+            var items = SessionManager.Get<IEnumerable<TimesheetDetailVM>>("TimesheetDetails");
+            var listItems = items.ToList();
+            try
+            {
+                if (id == null)
+                {
+                    listItems.RemoveAll(d => d.Type == "Working Days");
+                }
+                else
+                {
+                    (from u in listItems where u.Type == "Working Days" select u).ToList()
+                    .ForEach(u => u.EditMode=-1);
+
+                }
+
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json(new { message = e.Message }, JsonRequestBehavior.AllowGet);
+            }
+
+            SessionManager.Set("TimesheetDetails", listItems);
+
+            return Json(new
+            {
+                message = "Timesheet is updated"
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult DeleteSelectedTimesheet(int? id,TimesheetVM viewModel)
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _timesheetService.SetSiteUrl(siteUrl);
+
+
+
+            var items = SessionManager.Get<IEnumerable<TimesheetDetailVM>>("TimesheetDetails");
+
+            try
+            {
+                items = _timesheetService.DeleteSelectedWorkingDays(id,items, Convert.ToDateTime(viewModel.From).ToLocalTime(),
+                    Convert.ToDateTime(viewModel.To).ToLocalTime());
+
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json(new { message = e.Message }, JsonRequestBehavior.AllowGet);
+            }
+
+            SessionManager.Set("TimesheetDetails", items);
+
+            return Json(new
+            {
+                message = "Timesheet is updated"
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
         public async Task<ActionResult> SubmitTimesheet(TimesheetVM viewModel)
         {
             try
@@ -113,40 +179,90 @@ namespace MCAWebAndAPI.Web.Controllers
                 var siteUrl = SessionManager.Get<string>("SiteUrl");
                 _timesheetService.SetSiteUrl(siteUrl);
                 int? headerId;
-                //try
-                //{
-                //    // headerId = 0;
+           
                 if (string.IsNullOrEmpty(viewModel.UserLogin)) throw new Exception("Userlogin empty");
 
                 headerId = _timesheetService.CreateHeader(viewModel);
-                //}
-                //catch (Exception e)
-                //{
-                //    // Response.TrySkipIisCustomErrors = true;
-                //    Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                //    return JsonHelper.GenerateJsonErrorResponse(e.Message);
-                //}
-
+             
                 var items = SessionManager.Get<IEnumerable<TimesheetDetailVM>>("TimesheetDetails");
 
-                //try
-                //{
+               
                 viewModel.TimesheetDetails = items;
                 Task createTimesheetDetailsTask = _timesheetService.CreateTimesheetDetailsAsync(headerId, viewModel.TimesheetDetails);
                 Task createTimesheetWorkflowTask = _timesheetService.CreateWorkflowTimesheetAsync(headerId, viewModel);
 
                 Task allTask = Task.WhenAll(createTimesheetDetailsTask, createTimesheetWorkflowTask);
-                //Task allTask = Task.WhenAll(createTimesheetWorkflowTask);
+            
                 await allTask;
-                //}
-                //catch (Exception e)
-                //{
-                //    //Response.TrySkipIisCustomErrors = true;
-                //    Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                //    return JsonHelper.GenerateJsonErrorResponse(e.Message);
-                //}
 
-                var strPages = viewModel.UserPermission == "HR" ? "/sitePages/hrInsuranceView.aspx" : "/sitePages/ProfessionalClaim.aspx";
+                var strPages = "";
+
+                if (viewModel.UserPermission == "HR")
+                {
+                    strPages = "/sitePages/HRTimesheetView.aspx";
+                }
+                else if (viewModel.UserPermission == "Professional")
+                {
+                    strPages = "/sitePages/ProfessionalTimesheetView.aspx";
+                }
+                else if (viewModel.UserPermission == "Approver")
+                {
+                    strPages = "";
+
+                }
+
+                return JsonHelper.GenerateJsonSuccessResponse(siteUrl + strPages);
+            }
+            catch (Exception e)
+            {
+
+                //Response.TrySkipIisCustomErrors = true;
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e.Message);
+            }
+
+
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> UpdateTimesheet(TimesheetVM viewModel)
+        {
+            try
+            {
+                var siteUrl = SessionManager.Get<string>("SiteUrl");
+                _timesheetService.SetSiteUrl(siteUrl);
+              
+                if (string.IsNullOrEmpty(viewModel.UserLogin)) throw new Exception("Userlogin empty");
+
+                _timesheetService.UpdateHeader(viewModel);
+
+            
+                var items = SessionManager.Get<IEnumerable<TimesheetDetailVM>>("TimesheetDetails");
+
+
+                viewModel.TimesheetDetails = items;
+                Task createTimesheetDetailsTask = _timesheetService.CreateTimesheetDetailsAsync(viewModel.ID, viewModel.TimesheetDetails);
+                Task createTimesheetWorkflowTask = _timesheetService.CreateWorkflowTimesheetAsync(viewModel.ID, viewModel);
+
+                Task allTask = Task.WhenAll(createTimesheetDetailsTask, createTimesheetWorkflowTask);
+
+                await allTask;
+
+                var strPages = "";
+
+                if (viewModel.UserPermission == "HR")
+                {
+                    strPages = "/sitePages/HRTimesheetView.aspx";
+                }
+                else if (viewModel.UserPermission == "Professional")
+                {
+                    strPages = "/sitePages/ProfessionalTimesheetView.aspx";
+                }
+                else if (viewModel.UserPermission == "Approver")
+                {
+                    strPages = "";
+
+                }
 
                 return JsonHelper.GenerateJsonSuccessResponse(siteUrl + strPages);
             }
@@ -167,8 +283,6 @@ namespace MCAWebAndAPI.Web.Controllers
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _timesheetService.SetSiteUrl(siteUrl);
 
-          
-
             try
             {
                 _timesheetService.UpdateApproval(viewModel);
@@ -179,9 +293,23 @@ namespace MCAWebAndAPI.Web.Controllers
                 return Json(new { message = e.Message }, JsonRequestBehavior.AllowGet);
             }
 
-           
 
-            var strPages = viewModel.UserPermission == "HR" ? "/sitePages/hrInsuranceView.aspx" : "/sitePages/ProfessionalClaim.aspx";
+
+            var strPages = "";
+
+            if (viewModel.UserPermission == "HR")
+            {
+                strPages = "/sitePages/HRTimesheetView.aspx";
+            }
+            else if (viewModel.UserPermission == "Professional")
+            {
+                strPages = "/sitePages/ProfessionalTimesheetView.aspx";
+            }
+            else if (viewModel.UserPermission == "Approver")
+            {
+                strPages = "";
+
+            }
 
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl + strPages);
         }
@@ -206,7 +334,7 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             // Get from existing session variable or create new if doesn't exist
             if (SessionManager.Get<IEnumerable<TimesheetDetailVM>>("TimesheetDetails") == null) return null;
-            var items = SessionManager.Get<IEnumerable<TimesheetDetailVM>>("TimesheetDetails").Where(e => e.Type != null && e.Type == "Working Days");
+            var items = SessionManager.Get<IEnumerable<TimesheetDetailVM>>("TimesheetDetails").Where(e => e.Type != null && e.Type == "Working Days" && e.EditMode != -1);
 
             // Convert to Kendo DataSource
             DataSourceResult result = items.ToDataSourceResult(request);
@@ -231,7 +359,8 @@ namespace MCAWebAndAPI.Web.Controllers
             json.MaxJsonLength = int.MaxValue;
             return json;
         }
-        
+
+      
 
     }
 }
