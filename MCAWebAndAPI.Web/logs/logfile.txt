@@ -432,3 +432,4 @@ Please try again.
 2016-08-29 09:21:47.7846 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Cannot complete this action.
 
 Please try again.
+2016-08-29 13:37:21.5705 MCAWebAndAPI.Service.JobSchedulers.Schedulers.PayrollRunScheduler DefaultQuartzScheduler has been started at Monday, August 29, 2016 in site https://eceos2.sharepoint.com/sites/ims/hr
