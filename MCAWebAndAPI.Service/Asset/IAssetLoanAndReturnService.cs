@@ -1,4 +1,5 @@
 ﻿using MCAWebAndAPI.Model.ViewModel.Form.Asset;
+using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using NLog;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace MCAWebAndAPI.Service.Asset
 
         IEnumerable<AssetLoanAndReturnItemVM> GetAssetTransfers();
 
-        int CreateHeader(AssetLoanAndReturnHeaderVM header);
+       // int CreateHeader(AssetLoanAndReturnHeaderVM header);
 
        int? CreateHeader(AssetLoanAndReturnHeaderVM viewmodel, string mode = null, string SiteUrl = null);
 
@@ -26,7 +27,11 @@ namespace MCAWebAndAPI.Service.Asset
 
         void UpdateDetails(int? headerID, IEnumerable<AssetLoanAndReturnItemVM> items);
 
-        AssetLoanAndReturnHeaderVM GetHeader(int? ID);
+        //AssetLoanAndReturnHeaderVM GetHeader(int? ID);
+
+        AssetLoanAndReturnHeaderVM GetHeader(int? ID = null, string SiteUrl = null);
+
+        ProfessionalDataVM GetProfMasterInfo(string fullname, string SiteUrl);
 
         IEnumerable<AssetLoanAndReturnItemVM> GetDetails(int? headerID);
 
@@ -34,7 +39,9 @@ namespace MCAWebAndAPI.Service.Asset
 
         bool UpdateAssetTransfer(AssetLoanAndReturnItemVM assetTransfer);
 
-        AssetLoanAndReturnHeaderVM GetPopulatedModel(int? id = null);
+        //AssetLoanAndReturnHeaderVM GetPopulatedModel(int? id = null);
+
+        AssetLoanAndReturnHeaderVM GetPopulatedModel(string SiteUrl);
 
         ProfessionalsVM GetProfessionalInfo(int? ID, string SiteUrl);
 

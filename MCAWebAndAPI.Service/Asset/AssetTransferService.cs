@@ -339,10 +339,10 @@ namespace MCAWebAndAPI.Service.Asset
         {
             var caml = @"<View><Query>
                        <Where>
-                          <Eq>
+                          <Contains>
                              <FieldRef Name='Title' />
                              <Value Type='Text'>" + fullname + @"</Value>
-                          </Eq>
+                          </Contains>
                        </Where>
                     </Query>
                     <ViewFields>
@@ -453,6 +453,7 @@ namespace MCAWebAndAPI.Service.Asset
                     <ViewFields>
                        <FieldRef Name='Title' />
                         <FieldRef Name='Province' />
+                        <FieldRef Name='city' />
                         <FieldRef Name='Floor' />
                         <FieldRef Name='Room' />
                         <FieldRef Name='Remarks' />
@@ -475,7 +476,7 @@ namespace MCAWebAndAPI.Service.Asset
             var province = "";
             if ((item["Province"] as FieldLookupValue) != null)
             {
-                province = (item["Province"] as FieldLookupValue).LookupValue;
+                province = Convert.ToString(item["city"])+","+(item["Province"] as FieldLookupValue).LookupValue;
             }
             viewModel.Province.Text = province;
             viewModel.OfficeName = Convert.ToString(item["Title"]);
@@ -550,18 +551,15 @@ namespace MCAWebAndAPI.Service.Asset
 
                 if ((provinceinfo["Province"] as FieldLookupValue) != null && (provinceinfo1["Province"] as FieldLookupValue) != null)
                 {
-                    //updatedValues.Add("provincefrom", (provinceinfo["Province"] as FieldLookupValue).LookupId);
-                    //updatedValues.Add("provinceto", (provinceinfo1["Province"] as FieldLookupValue).LookupId);
-
-                    updatedValues.Add("provincefrom", item.Province.Value.Value);
-                    updatedValues.Add("provinceto", item.ProvinceTo.Value.Value);
+                    updatedValues.Add("provincefrom", (provinceinfo["Province"] as FieldLookupValue).LookupId);
+                    updatedValues.Add("provinceto", (provinceinfo1["Province"] as FieldLookupValue).LookupId);
                 }
-                //updatedValues.Add("assetsubasset", getAssetID["AssetID"]);
-                //updatedValues.Add("province", getProvince["Title"]);
+                updatedValues.Add("cityfrom", provinceinfo["city"]);
                 updatedValues.Add("officefrom", provinceinfo["Title"]);
                 updatedValues.Add("floorfrom", provinceinfo["Floor"]);
                 updatedValues.Add("roomfrom", provinceinfo["Room"]);
 
+                updatedValues.Add("cityto", provinceinfo1["city"]);
                 updatedValues.Add("officeto", provinceinfo1["Title"]);
                 updatedValues.Add("floorto", provinceinfo1["Floor"]);
                 updatedValues.Add("roomto", provinceinfo1["Room"]);
@@ -706,100 +704,112 @@ namespace MCAWebAndAPI.Service.Asset
             var _roomto = "";
 
 
-            var provincefrom = "";
-            var provinceto = "";
-            if ((item["provincefrom"] as FieldLookupValue).LookupValue == null || (item["provinceto"] as FieldLookupValue).LookupValue == null)
+            var provincefrom = (item["provincefrom"] as FieldLookupValue).LookupId;
+            var provinceto = (item["provinceto"] as FieldLookupValue).LookupId;
+            var infoitem = SPConnector.GetListItem("Asset Transfer Detail", Convert.ToInt32(item["ID"]), _siteUrl);
+            var camlfrom = @"<View><Query>
+                               <Where>
+                                  <And>
+                                     <Eq>
+                                        <FieldRef Name='Province_x003a_ID' />
+                                        <Value Type='Lookup'>" + provincefrom + @"</Value>
+                                     </Eq>
+                                     <And>
+                                        <Eq>
+                                           <FieldRef Name='city' />
+                                           <Value Type='Text'>" + infoitem["cityfrom"] + @"</Value>
+                                        </Eq>
+                                        <And>
+                                           <Eq>
+                                              <FieldRef Name='Title' />
+                                              <Value Type='Text'>" + infoitem["officefrom"] + @"</Value>
+                                           </Eq>
+                                           <And>
+                                              <Eq>
+                                                 <FieldRef Name='Floor' />
+                                                 <Value Type='Text'>" + infoitem["floorfrom"] + @"</Value>
+                                              </Eq>
+                                              <Eq>
+                                                 <FieldRef Name='Room' />
+                                                 <Value Type='Text'>" + infoitem["roomfrom"] + @"</Value>
+                                              </Eq>
+                                           </And>
+                                        </And>
+                                     </And>
+                                  </And>
+                               </Where>
+                            </Query>
+                            <ViewFields>
+                               <FieldRef Name='Province' />
+                               <FieldRef Name='Title' />
+                               <FieldRef Name='Floor' />
+                               <FieldRef Name='Room' />
+                               <FieldRef Name='city' />
+                            </ViewFields>
+                            <QueryOptions /></View>";
+            var camlto = @"<View><Query>
+                           <Where>
+                              <And>
+                                 <Eq>
+                                    <FieldRef Name='Province_x003a_ID' />
+                                    <Value Type='Lookup'>" + provinceto + @"</Value>
+                                 </Eq>
+                                 <And>
+                                    <Eq>
+                                       <FieldRef Name='city' />
+                                       <Value Type='Text'>" + infoitem["cityto"] + @"</Value>
+                                    </Eq>
+                                    <And>
+                                       <Eq>
+                                          <FieldRef Name='Title' />
+                                          <Value Type='Text'>" + infoitem["officeto"] + @"</Value>
+                                       </Eq>
+                                       <And>
+                                          <Eq>
+                                             <FieldRef Name='Floor' />
+                                             <Value Type='Text'>" + infoitem["floorto"] + @"</Value>
+                                          </Eq>
+                                          <Eq>
+                                             <FieldRef Name='Room' />
+                                             <Value Type='Text'>" + infoitem["roomto"] + @"</Value>
+                                          </Eq>
+                                       </And>
+                                    </And>
+                                 </And>
+                              </And>
+                           </Where>
+                        </Query>
+                        <ViewFields>
+                           <FieldRef Name='Province' />
+                           <FieldRef Name='Title' />
+                           <FieldRef Name='Floor' />
+                           <FieldRef Name='Room' />
+                           <FieldRef Name='city' />
+                        </ViewFields>
+                        <QueryOptions /></View>";
+            var ListProvince = SPConnector.GetList("Location Master", _siteUrl, camlfrom);
+            var ListProvince1 = SPConnector.GetList("Location Master", _siteUrl, camlto);
+            AjaxComboBoxVM _province = new AjaxComboBoxVM();
+            for(int j = 0; j <ListProvince.Count;j++)
             {
-                //because only got ID
-                var lookfrom = @"<View></View>";
-                var lookto = @"<View></View>";
+                if (Convert.ToString(ListProvince[j]["Title"]) == Convert.ToString(item["officefrom"]) && Convert.ToString(ListProvince[j]["Floor"]) == Convert.ToString(item["floorfrom"]) && Convert.ToString(ListProvince[j]["Room"]) == Convert.ToString(item["roomfrom"]))
+                {
+                    _provincefrom.Value = (item["provincefrom"] as FieldLookupValue).LookupId;
+                    _provincefrom.Text = Convert.ToString(ListProvince[j]["city"]) + "," + (ListProvince[j]["Province"] as FieldLookupValue).LookupValue + "-" + ListProvince[j]["Title"] + "-" + ListProvince[j]["Floor"] + "-" + ListProvince[j]["Room"];
+                    _officefrom = Convert.ToString(ListProvince[j]["Title"]);
+                    _floorfrom = Convert.ToString(ListProvince[j]["Floor"]);
+                    _roomfrom = Convert.ToString(ListProvince[j]["Room"]);
+                }
+
+                if (Convert.ToString(ListProvince1[j]["Title"]) == Convert.ToString(item["officeto"]) && Convert.ToString(ListProvince1[j]["Floor"]) == Convert.ToString(item["floorto"]) && Convert.ToString(ListProvince1[j]["Room"]) == Convert.ToString(item["roomto"]))
+                {
+                    _provinceto.Value = (item["provinceto"] as FieldLookupValue).LookupId;
+                    _provinceto.Text = Convert.ToString(ListProvince1[j]["city"]) + "," + (ListProvince1[j]["Province"] as FieldLookupValue).LookupValue + "-" + ListProvince1[j]["Title"] + "-" + ListProvince1[j]["Floor"] + "-" + ListProvince1[j]["Room"];
+                    _officeto = Convert.ToString(ListProvince1[j]["Title"]);
+                    _floorto = Convert.ToString(ListProvince1[j]["Floor"]);
+                    _roomto = Convert.ToString(ListProvince1[j]["Room"]);
+                }
             }
-            else
-            {
-                provincefrom = (item["provincefrom"] as FieldLookupValue).LookupValue;
-                provinceto = (item["provincefrom"] as FieldLookupValue).LookupValue;
-                var caml = @"<View><Query>
-                       <Where>
-                          <Eq>
-                             <FieldRef Name='Province' />
-                             <Value Type='Lookup'>" + provincefrom + @"</Value>
-                          </Eq>
-                       </Where>
-                    </Query>
-                    <ViewFields>
-                       <FieldRef Name='Province' />
-                       <FieldRef Name='Title' />
-                       <FieldRef Name='Floor' />
-                       <FieldRef Name='Room' />
-                       <FieldRef Name='Remarks' />
-                    </ViewFields>
-                    <QueryOptions /></View>";
-                var camlto = @"<View><Query>
-                       <Where>
-                          <Eq>
-                             <FieldRef Name='Province' />
-                             <Value Type='Lookup'>" + provinceto + @"</Value>
-                          </Eq>
-                       </Where>
-                    </Query>
-                    <ViewFields>
-                       <FieldRef Name='Province' />
-                       <FieldRef Name='Title' />
-                       <FieldRef Name='Floor' />
-                       <FieldRef Name='Room' />
-                       <FieldRef Name='Remarks' />
-                    </ViewFields>
-                    <QueryOptions /></View>";
-                var ListProvince = SPConnector.GetList("Location Master", _siteUrl, caml);
-                var ListProvince1 = SPConnector.GetList("Location Master", _siteUrl, camlto);
-
-                if (ListProvince.Count >= ListProvince1.Count)
-                {
-                    for (var i = 0; i < ListProvince.Count; i++)
-                    {
-                        if (Convert.ToString(ListProvince[i]["Title"]) == Convert.ToString(item["officefrom"]) && Convert.ToString(ListProvince[i]["Floor"]) == Convert.ToString(item["floorfrom"]) && Convert.ToString(ListProvince[i]["Room"]) == Convert.ToString(item["roomfrom"]))
-                        {
-                            _provincefrom.Value = (item["provincefrom"] as FieldLookupValue).LookupId;
-                            _provincefrom.Text = (ListProvince[i]["Province"] as FieldLookupValue).LookupValue + "-" + ListProvince[i]["Title"] + "-" + ListProvince[i]["Floor"] + "-" + ListProvince[i]["Room"];
-                            _officefrom = Convert.ToString(ListProvince[i]["Title"]);
-                            _floorfrom = Convert.ToString(ListProvince[i]["Floor"]);
-                            _roomfrom = Convert.ToString(ListProvince[i]["Room"]);
-                        }
-
-                        if (Convert.ToString(ListProvince1[i]["Title"]) == Convert.ToString(item["officeto"]) && Convert.ToString(ListProvince1[i]["Floor"]) == Convert.ToString(item["floorto"]) && Convert.ToString(ListProvince1[i]["Room"]) == Convert.ToString(item["roomto"]))
-                        {
-                            _provinceto.Value = (item["provinceto"] as FieldLookupValue).LookupId;
-                            _provinceto.Text = (ListProvince1[i]["Province"] as FieldLookupValue).LookupValue + "-" + ListProvince1[i]["Title"] + "-" + ListProvince1[i]["Floor"] + "-" + ListProvince1[i]["Room"];
-                            _officeto = Convert.ToString(ListProvince1[i]["Title"]);
-                            _floorto = Convert.ToString(ListProvince1[i]["Floor"]);
-                            _roomto = Convert.ToString(ListProvince1[i]["Room"]);
-                        }
-                    }
-                }
-                else
-                {
-                    for (var i = 0; i < ListProvince1.Count; i++)
-                    {
-                        if (Convert.ToString(ListProvince1[i]["Title"]) == Convert.ToString(item["officeto"]) && Convert.ToString(ListProvince1[i]["Floor"]) == Convert.ToString(item["floorto"]) && Convert.ToString(ListProvince1[i]["Room"]) == Convert.ToString(item["roomto"]))
-                        {
-                            _provinceto.Value = (item["provinceto"] as FieldLookupValue).LookupId;
-                            _provinceto.Text = (ListProvince1[i]["Province"] as FieldLookupValue).LookupValue + "-" + ListProvince1[i]["Title"] + "-" + ListProvince1[i]["Floor"] + "-" + ListProvince1[i]["Room"];
-                            _officeto = Convert.ToString(ListProvince1[i]["Title"]);
-                            _floorto = Convert.ToString(ListProvince1[i]["Floor"]);
-                            _roomto = Convert.ToString(ListProvince1[i]["Room"]);
-                        }
-
-                        if (Convert.ToString(ListProvince[i]["Title"]) == Convert.ToString(item["officefrom"]) && Convert.ToString(ListProvince[i]["Floor"]) == Convert.ToString(item["floorfrom"]) && Convert.ToString(ListProvince[i]["Room"]) == Convert.ToString(item["roomfrom"]))
-                        {
-                            _provincefrom.Value = (item["provincefrom"] as FieldLookupValue).LookupId;
-                            _provincefrom.Text = (ListProvince[i]["Province"] as FieldLookupValue).LookupValue + "-" + ListProvince[i]["Title"] + "-" + ListProvince[i]["Floor"] + "-" + ListProvince[i]["Room"];
-                            _officefrom = Convert.ToString(ListProvince[i]["Title"]);
-                            _floorfrom = Convert.ToString(ListProvince[i]["Floor"]);
-                            _roomfrom = Convert.ToString(ListProvince[i]["Room"]);
-                        }
-                    }
-                }
-            }         
 
             return new AssetTransferDetailVM
             {
@@ -843,29 +853,151 @@ namespace MCAWebAndAPI.Service.Asset
 
                 var updatedValues = new Dictionary<string, object>();
                 updatedValues.Add("assettransfer", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
-                var getAssetID = SPConnector.GetListItem("Asset Assignment Detail", item.AssetSubAsset.Value.Value, _siteUrl);
-                var provinceinfo = SPConnector.GetListItem("Location Master", item.Province.Value.Value, _siteUrl);
-                var provinceinfo1 = SPConnector.GetListItem("Location Master", item.ProvinceTo.Value.Value, _siteUrl);
-                if ((getAssetID["assetsubasset"] as FieldLookupValue) != null)
+                var infoitem = SPConnector.GetListItem("Asset Transfer Detail", Convert.ToInt32(item.ID), _siteUrl);
+                var camlfrom = @"<View><Query>
+                               <Where>
+                                  <And>
+                                     <Eq>
+                                        <FieldRef Name='Province_x003a_ID' />
+                                        <Value Type='Lookup'>"+item.Province.Value.Value+@"</Value>
+                                     </Eq>
+                                     <And>
+                                        <Eq>
+                                           <FieldRef Name='city' />
+                                           <Value Type='Text'>"+infoitem["cityfrom"]+@"</Value>
+                                        </Eq>
+                                        <And>
+                                           <Eq>
+                                              <FieldRef Name='Title' />
+                                              <Value Type='Text'>"+infoitem["officefrom"]+@"</Value>
+                                           </Eq>
+                                           <And>
+                                              <Eq>
+                                                 <FieldRef Name='Floor' />
+                                                 <Value Type='Text'>"+infoitem["floorfrom"]+@"</Value>
+                                              </Eq>
+                                              <Eq>
+                                                 <FieldRef Name='Room' />
+                                                 <Value Type='Text'>"+infoitem["roomfrom"]+@"</Value>
+                                              </Eq>
+                                           </And>
+                                        </And>
+                                     </And>
+                                  </And>
+                               </Where>
+                            </Query>
+                            <ViewFields>
+                               <FieldRef Name='Province' />
+                               <FieldRef Name='Title' />
+                               <FieldRef Name='Floor' />
+                               <FieldRef Name='Room' />
+                               <FieldRef Name='city' />
+                            </ViewFields>
+                            <QueryOptions /></View>";
+                var camlto = @"<View><Query>
+                           <Where>
+                              <And>
+                                 <Eq>
+                                    <FieldRef Name='Province_x003a_ID' />
+                                    <Value Type='Lookup'>"+item.ProvinceTo.Value.Value+@"</Value>
+                                 </Eq>
+                                 <And>
+                                    <Eq>
+                                       <FieldRef Name='city' />
+                                       <Value Type='Text'>"+infoitem["cityto"]+@"</Value>
+                                    </Eq>
+                                    <And>
+                                       <Eq>
+                                          <FieldRef Name='Title' />
+                                          <Value Type='Text'>"+infoitem["officeto"]+@"</Value>
+                                       </Eq>
+                                       <And>
+                                          <Eq>
+                                             <FieldRef Name='Floor' />
+                                             <Value Type='Text'>"+infoitem["floorto"] +@"</Value>
+                                          </Eq>
+                                          <Eq>
+                                             <FieldRef Name='Room' />
+                                             <Value Type='Text'>"+infoitem["roomto"]+@"</Value>
+                                          </Eq>
+                                       </And>
+                                    </And>
+                                 </And>
+                              </And>
+                           </Where>
+                        </Query>
+                        <ViewFields>
+                           <FieldRef Name='Province' />
+                           <FieldRef Name='Title' />
+                           <FieldRef Name='Floor' />
+                           <FieldRef Name='Room' />
+                           <FieldRef Name='city' />
+                        </ViewFields>
+                        <QueryOptions /></View>";
+                //var getAssetID = SPConnector.GetListItem("Asset Assignment Detail", item.AssetSubAsset.Value.Value, _siteUrl);
+                var provinceinfo = SPConnector.GetList("Location Master", _siteUrl, camlfrom);
+                var provinceinfo1 = SPConnector.GetList("Location Master",_siteUrl, camlto);
+
+                //if provinceinfo or provinceinfo1 null, means there is changes in province which Province / ProvinceTo ID is from Location Master
+                if(provinceinfo.Count == 0)
                 {
-                    updatedValues.Add("assetsubasset", (getAssetID["assetsubasset"] as FieldLookupValue).LookupId);
+                    camlfrom = @"<View><Query>
+                       <Where>
+                          <Eq>
+                            <FieldRef Name='ID' />
+                             <Value Type='Counter'>" + item.Province.Value.Value + @"</Value>
+                          </Eq>
+                       </Where>
+                    </Query>
+                    <ViewFields>
+                       <FieldRef Name='Province' />
+                       <FieldRef Name='Title' />
+                       <FieldRef Name='Floor' />
+                       <FieldRef Name='Room' />
+                       <FieldRef Name='city' />
+                    </ViewFields>
+                    <QueryOptions /></View>";
+
+                    provinceinfo = SPConnector.GetList("Location Master", _siteUrl, camlfrom);
+                    
                 }
 
-                if ((provinceinfo["Province"] as FieldLookupValue) != null && (provinceinfo1["Province"] as FieldLookupValue) != null)
+                if(provinceinfo1.Count == 0)
                 {
-                    //updatedValues.Add("provincefrom", (provinceinfo["Province"] as FieldLookupValue).LookupId);
-                    //updatedValues.Add("provinceto", (provinceinfo1["Province"] as FieldLookupValue).LookupId);
-
-                    updatedValues.Add("provincefrom", item.Province.Value.Value);
-                    updatedValues.Add("provinceto", item.ProvinceTo.Value.Value);
+                    camlto = @"<View><Query>
+                       <Where>
+                          <Eq>
+                                <FieldRef Name='ID' />
+                             <Value Type='Counter'>" + item.ProvinceTo.Value.Value + @"</Value>
+                          </Eq>
+                       </Where>
+                    </Query>
+                    <ViewFields>
+                       <FieldRef Name='Province' />
+                       <FieldRef Name='Title' />
+                       <FieldRef Name='Floor' />
+                       <FieldRef Name='Room' />
+                       <FieldRef Name='city' />
+                    </ViewFields>
+                    <QueryOptions /></View>";
+                    provinceinfo1 = SPConnector.GetList("Location Master", _siteUrl, camlto);
                 }
-                updatedValues.Add("officefrom", provinceinfo["Title"]);
-                updatedValues.Add("floorfrom", provinceinfo["Floor"]);
-                updatedValues.Add("roomfrom", provinceinfo["Room"]);
 
-                updatedValues.Add("officeto", provinceinfo1["Title"]);
-                updatedValues.Add("floorto", provinceinfo1["Floor"]);
-                updatedValues.Add("roomto", provinceinfo1["Room"]);
+                updatedValues.Add("assetsubasset", item.AssetSubAsset.Value.Value);
+                for(int i=0;i<provinceinfo1.Count;i++)
+                {
+                    updatedValues.Add("provincefrom", (provinceinfo[i]["Province"] as FieldLookupValue).LookupId);
+                    updatedValues.Add("cityfrom", provinceinfo[i]["city"]);
+                    updatedValues.Add("officefrom", provinceinfo[i]["Title"]);
+                    updatedValues.Add("floorfrom", provinceinfo[i]["Floor"]);
+                    updatedValues.Add("roomfrom", provinceinfo[i]["Room"]);
+
+                    updatedValues.Add("provinceto", (provinceinfo1[i]["Province"] as FieldLookupValue).LookupId);
+                    updatedValues.Add("cityto", provinceinfo1[i]["city"]);
+                    updatedValues.Add("officeto", provinceinfo1[i]["Title"]);
+                    updatedValues.Add("floorto", provinceinfo1[i]["Floor"]);
+                    updatedValues.Add("roomto", provinceinfo1[i]["Room"]);
+                }
 
                 updatedValues.Add("Title", item.Remarks);
                 updatedValues.Add("status", "RUNNING");
@@ -887,18 +1019,18 @@ namespace MCAWebAndAPI.Service.Asset
         public int? MassUploadHeaderDetail(string ListName, DataTable CSVDataTable, string SiteUrl = null)
         {
             int? latest = null;
-            if (CSVDataTable.Columns.Count == 6)
+            if (CSVDataTable.Columns.Count == 4)
             {
                 foreach (DataRow d in CSVDataTable.Rows)
                 {
                     //header
                     var model = new AssetTransferVM();
                     model.AssetHolder.Text = Convert.ToString(d.ItemArray[2]);
+                    model.AssetHolderTo.Text = Convert.ToString(d.ItemArray[3]);
                     var additionalDateTime = d.ItemArray[1] + " 00:00:00";
                     DateTime date;
-                    //model.Date = DateTime.TryParse(d.ItemArray[6].ToString(), out date) ? date : (DateTime?)null;
                     model.Date = DateTime.TryParse(d.ItemArray[1].ToString(), out date) ? date : (DateTime?)null;
-
+                        
                     latest = CreateHeader(model, SiteUrl, "upload");
                 }
 
@@ -909,70 +1041,19 @@ namespace MCAWebAndAPI.Service.Asset
                 {
                     //detail
                     var model = new AssetTransferDetailVM();
-                    //find id for assetsubasset from acquisition details ad province from location master
-                    var camlasset = @"<View>
-                        <Query>
-                           <Where>
-                              <Eq>
-                                 <FieldRef Name='assetsubasset' />
-                                 <Value Type='Text'>" + d.ItemArray[1] + @"</Value>
-                              </Eq>
-                           </Where>
-                        </Query>
-                        <ViewFields>
-                           <FieldRef Name='assetsubasset' />
-                        </ViewFields>
-                        <QueryOptions /></View>";
-                    //check province
-                    var camlprovince = @"<View><Query>
-                            <Where>
-                                <And>
-                                    <Eq>
-                                    <FieldRef Name='Province' />
-                                    <Value Type='Lookup'>" + d.ItemArray[2].ToString() + @"</Value>
-                                    </Eq>
-                                    <And>
-                                    <Eq>
-                                        <FieldRef Name='Title' />
-                                        <Value Type='Text'>" + d.ItemArray[3].ToString() + @"</Value>
-                                    </Eq>
-                                    <And>
-                                        <Eq>
-                                            <FieldRef Name='Floor' />
-                                            <Value Type='Text'>" + d.ItemArray[4].ToString() + @"</Value>
-                                        </Eq>
-                                        <Eq>
-                                            <FieldRef Name='Room' />
-                                            <Value Type='Text'>" + d.ItemArray[5].ToString() + @"</Value>
-                                        </Eq>
-                                    </And>
-                                    </And>
-                                </And>
-                            </Where>
-                        </Query>
-                        <ViewFields>
-                            <FieldRef Name='Province' />
-                            <FieldRef Name='Title' />
-                            <FieldRef Name='Floor' />
-                            <FieldRef Name='Room' />
-                            <FieldRef Name='Remarks' />
-                        </ViewFields>
-                        <QueryOptions /></View>";
-                    var inforAsset = SPConnector.GetList("Asset Assignment Detail", SiteUrl, camlasset);
-                    var infoLocationMaster = SPConnector.GetList("Location Master", SiteUrl, camlprovince);
-                    foreach (var asset in inforAsset)
-                    {
-                        model.AssetSubAsset.Value = Convert.ToInt32(asset["ID"]);
-                    }
 
-                    foreach (var location in infoLocationMaster)
-                    {
-                        model.Province.Value = Convert.ToInt32(location["ID"]);
-                        model.OfficeName = Convert.ToString(location["Title"]);
-                        model.Floor = Convert.ToString(location["Floor"]);
-                        model.Room = Convert.ToString(location["Room"]);
-                        model.Remarks = Convert.ToString(location["Remarks"]);
-                    }
+                    model.AssetSubAsset.Text = Convert.ToString(d.ItemArray[1]);
+                    model.Province.Text = Convert.ToString(d.ItemArray[2]);
+                    model.OfficeName = Convert.ToString(d.ItemArray[3]);
+                    model.Floor = Convert.ToString(d.ItemArray[4]);
+                    model.Room = Convert.ToString(d.ItemArray[5]);
+
+                    model.ProvinceTo.Text = Convert.ToString(d.ItemArray[6]);
+                    model.OfficeNameTo = Convert.ToString(d.ItemArray[7]);
+                    model.FloorTo = Convert.ToString(d.ItemArray[8]);
+                    model.RoomTo = Convert.ToString(d.ItemArray[9]);
+
+                    model.Remarks = Convert.ToString(d.ItemArray[10]);
 
                     CreateDetails(Convert.ToInt32(d.ItemArray[0]), model, SiteUrl);
                     latest = SPConnector.GetLatestListItemID("Asset Transfer Detail", SiteUrl);
@@ -1136,31 +1217,124 @@ namespace MCAWebAndAPI.Service.Asset
         {
             var updatedValues = new Dictionary<string, object>();
             updatedValues.Add("assettransfer", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
-            var getAssetID = SPConnector.GetListItem("Asset Assignment Detail", item.AssetSubAsset.Value.Value, _siteUrl);
-            var provinceinfo = SPConnector.GetListItem("Location Master", item.Province.Value.Value, _siteUrl);
-            var provinceinfo1 = SPConnector.GetListItem("Location Master", item.ProvinceTo.Value.Value, _siteUrl);
-            if ((getAssetID["assetsubasset"] as FieldLookupValue) != null)
+            var asset = @"<View>
+                        <Query>
+                           <Where>
+                              <Eq>
+                                 <FieldRef Name='assetsubasset' />
+                                 <Value Type='Lookup'>"+item.AssetSubAsset.Text+ @"</Value>
+                              </Eq>
+                           </Where>
+                        </Query>
+                        <ViewFields>
+                           <FieldRef Name='assetsubasset' />
+                           <FieldRef Name='assetsubasset_x003a_ID' />
+                        </ViewFields>
+                        <QueryOptions /></View>";
+            var breakfrom = item.Province.Text.Split('-');
+            var breakto = item.ProvinceTo.Text.Split('-');
+            var provinceFrom = @"<View><Query>
+                               <Where>
+                                  <And>
+                                     <Eq>
+                                        <FieldRef Name='Province' />
+                                        <Value Type='Lookup'>" + breakfrom[1] + @"</Value>
+                                     </Eq>
+                                     <And>
+                                        <Eq>
+                                           <FieldRef Name='city' />
+                                           <Value Type='Text'>" + breakfrom[0] + @"</Value>
+                                        </Eq>
+                                        <And>
+                                           <Eq>
+                                              <FieldRef Name='Title' />
+                                              <Value Type='Text'>" + item.OfficeName + @"</Value>
+                                           </Eq>
+                                           <And>
+                                              <Eq>
+                                                 <FieldRef Name='Floor' />
+                                                 <Value Type='Text'>" + item.Floor + @"</Value>
+                                              </Eq>
+                                              <Eq>
+                                                 <FieldRef Name='Room' />
+                                                 <Value Type='Text'>" + item.Room + @"</Value>
+                                              </Eq>
+                                           </And>
+                                        </And>
+                                     </And>
+                                  </And>
+                               </Where>
+                            </Query>
+                            <ViewFields>
+                               <FieldRef Name='Province' />
+                               <FieldRef Name='Title' />
+                               <FieldRef Name='Floor' />
+                               <FieldRef Name='Room' />
+                               <FieldRef Name='city' />
+                            </ViewFields>
+                            <QueryOptions /></View>";
+            var provinceTo = @"<View><Query>
+                               <Where>
+                                  <And>
+                                     <Eq>
+                                        <FieldRef Name='Province' />
+                                        <Value Type='Lookup'>" + breakto[1] + @"</Value>
+                                     </Eq>
+                                     <And>
+                                        <Eq>
+                                           <FieldRef Name='city' />
+                                           <Value Type='Text'>" + breakto[0] + @"</Value>
+                                        </Eq>
+                                        <And>
+                                           <Eq>
+                                              <FieldRef Name='Title' />
+                                              <Value Type='Text'>" + item.OfficeNameTo + @"</Value>
+                                           </Eq>
+                                           <And>
+                                              <Eq>
+                                                 <FieldRef Name='Floor' />
+                                                 <Value Type='Text'>" + item.FloorTo + @"</Value>
+                                              </Eq>
+                                              <Eq>
+                                                 <FieldRef Name='Room' />
+                                                 <Value Type='Text'>" + item.RoomTo + @"</Value>
+                                              </Eq>
+                                           </And>
+                                        </And>
+                                     </And>
+                                  </And>
+                               </Where>
+                            </Query>
+                            <ViewFields>
+                               <FieldRef Name='Province' />
+                               <FieldRef Name='Title' />
+                               <FieldRef Name='Floor' />
+                               <FieldRef Name='Room' />
+                               <FieldRef Name='city' />
+                            </ViewFields>
+                            <QueryOptions /></View>";
+            var getAssetID = SPConnector.GetList("Asset Assignment Detail", _siteUrl, asset);
+            var provinceinfo = SPConnector.GetList("Location Master", _siteUrl, provinceFrom);
+            var provinceinfo1 = SPConnector.GetList("Location Master", _siteUrl, provinceFrom);
+            for(int i=0;i<getAssetID.Count;i++)
             {
-                updatedValues.Add("assetsubasset", (getAssetID["assetsubasset"] as FieldLookupValue).LookupId);
+                updatedValues.Add("assetsubasset", (getAssetID[i]["assetsubasset"] as FieldLookupValue).LookupId);
+
+                updatedValues.Add("provincefrom", (provinceinfo[i]["Province"] as FieldLookupValue).LookupId);
+                updatedValues.Add("provinceto", (provinceinfo1[i]["Province"] as FieldLookupValue).LookupId);
+
+                updatedValues.Add("cityfrom", provinceinfo[i]["city"]);
+                updatedValues.Add("officefrom", provinceinfo[i]["Title"]);
+                updatedValues.Add("floorfrom", provinceinfo[i]["Floor"]);
+                updatedValues.Add("roomfrom", provinceinfo[i]["Room"]);
+
+                updatedValues.Add("cityto", provinceinfo1[i]["city"]);
+                updatedValues.Add("officeto", provinceinfo1[i]["Title"]);
+                updatedValues.Add("floorto", provinceinfo1[i]["Floor"]);
+                updatedValues.Add("roomto", provinceinfo1[i]["Room"]);
             }
-
-            if ((provinceinfo["Province"] as FieldLookupValue) != null && (provinceinfo1["Province"] as FieldLookupValue) != null)
-            {
-                updatedValues.Add("provincefrom", (provinceinfo["Province"] as FieldLookupValue).LookupId);
-                updatedValues.Add("provinceto", (provinceinfo1["Province"] as FieldLookupValue).LookupId);
-            }
-            //updatedValues.Add("assetsubasset", getAssetID["AssetID"]);
-            //updatedValues.Add("province", getProvince["Title"]);
-            updatedValues.Add("officefrom", provinceinfo["Title"]);
-            updatedValues.Add("floorfrom", provinceinfo["Floor"]);
-            updatedValues.Add("roomfrom", provinceinfo["Room"]);
-
-            updatedValues.Add("officeto", provinceinfo1["Title"]);
-            updatedValues.Add("floorto", provinceinfo1["Floor"]);
-            updatedValues.Add("roomto", provinceinfo1["Room"]);
-
             updatedValues.Add("Title", item.Remarks);
-            updatedValues.Add("Status", "RUNNING");
+            updatedValues.Add("status", "RUNNING");
             try
             {
                 SPConnector.AddListItem("Asset Transfer Detail", updatedValues, _siteUrl);

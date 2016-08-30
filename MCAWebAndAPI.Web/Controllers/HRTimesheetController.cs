@@ -194,8 +194,22 @@ namespace MCAWebAndAPI.Web.Controllers
                 Task allTask = Task.WhenAll(createTimesheetDetailsTask, createTimesheetWorkflowTask);
             
                 await allTask;
-            
-                var strPages = viewModel.UserPermission == "HR" ? "/sitePages/hrInsuranceView.aspx" : "/sitePages/ProfessionalClaim.aspx";
+
+                var strPages = "";
+
+                if (viewModel.UserPermission == "HR")
+                {
+                    strPages = "/sitePages/HRTimesheetView.aspx";
+                }
+                else if (viewModel.UserPermission == "Professional")
+                {
+                    strPages = "/sitePages/ProfessionalTimesheetView.aspx";
+                }
+                else if (viewModel.UserPermission == "Approver")
+                {
+                    strPages = "";
+
+                }
 
                 return JsonHelper.GenerateJsonSuccessResponse(siteUrl + strPages);
             }
@@ -234,7 +248,21 @@ namespace MCAWebAndAPI.Web.Controllers
 
                 await allTask;
 
-                var strPages = viewModel.UserPermission == "HR" ? "/sitePages/hrInsuranceView.aspx" : "/sitePages/ProfessionalClaim.aspx";
+                var strPages = "";
+
+                if (viewModel.UserPermission == "HR")
+                {
+                    strPages = "/sitePages/HRTimesheetView.aspx";
+                }
+                else if (viewModel.UserPermission == "Professional")
+                {
+                    strPages = "/sitePages/ProfessionalTimesheetView.aspx";
+                }
+                else if (viewModel.UserPermission == "Approver")
+                {
+                    strPages = "";
+
+                }
 
                 return JsonHelper.GenerateJsonSuccessResponse(siteUrl + strPages);
             }
@@ -255,8 +283,6 @@ namespace MCAWebAndAPI.Web.Controllers
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _timesheetService.SetSiteUrl(siteUrl);
 
-          
-
             try
             {
                 _timesheetService.UpdateApproval(viewModel);
@@ -267,9 +293,23 @@ namespace MCAWebAndAPI.Web.Controllers
                 return Json(new { message = e.Message }, JsonRequestBehavior.AllowGet);
             }
 
-           
 
-            var strPages = viewModel.UserPermission == "HR" ? "/sitePages/hrInsuranceView.aspx" : "/sitePages/ProfessionalClaim.aspx";
+
+            var strPages = "";
+
+            if (viewModel.UserPermission == "HR")
+            {
+                strPages = "/sitePages/HRTimesheetView.aspx";
+            }
+            else if (viewModel.UserPermission == "Professional")
+            {
+                strPages = "/sitePages/ProfessionalTimesheetView.aspx";
+            }
+            else if (viewModel.UserPermission == "Approver")
+            {
+                strPages = "";
+
+            }
 
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl + strPages);
         }
@@ -294,7 +334,7 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             // Get from existing session variable or create new if doesn't exist
             if (SessionManager.Get<IEnumerable<TimesheetDetailVM>>("TimesheetDetails") == null) return null;
-            var items = SessionManager.Get<IEnumerable<TimesheetDetailVM>>("TimesheetDetails").Where(e => e.Type != null && e.Type == "Working Days");
+            var items = SessionManager.Get<IEnumerable<TimesheetDetailVM>>("TimesheetDetails").Where(e => e.Type != null && e.Type == "Working Days" && e.EditMode != -1);
 
             // Convert to Kendo DataSource
             DataSourceResult result = items.ToDataSourceResult(request);
