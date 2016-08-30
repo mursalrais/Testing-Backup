@@ -48,16 +48,16 @@ namespace MCAWebAndAPI.Web.Controllers
             int? headerID = null;
             headerID = viewModel.ID;
 
-            try
-            {
-                var viewdetails = _service.GetDetails(headerID);
-                viewModel.Details = viewdetails;
-            }
-            catch (Exception e)
-            {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
-            }
+            //try
+            //{
+            //    var viewdetails = _service.GetDetails(headerID);
+            //    viewModel.Details = viewdetails;
+            //}
+            //catch (Exception e)
+            //{
+            //    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            //    return JsonHelper.GenerateJsonErrorResponse(e);
+            //}
 
             return View(viewModel);
         }
