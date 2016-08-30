@@ -39,14 +39,14 @@ namespace MCAWebAndAPI.Service.Asset
             {
                 SPConnector.AddListItem(SP_MON_FEE_LIST_NAME, columnValues, _siteUrl);
             
-                var id = SPConnector.GetLatestListItemID("Asset Disposal", _siteUrl);
-                var info = SPConnector.GetListItem("Asset Disposal", id, _siteUrl);
+                //var id = SPConnector.GetLatestListItemID("Asset Disposal", _siteUrl);
+                //var info = SPConnector.GetListItem("Asset Disposal", id, _siteUrl);
 
-                if (Convert.ToBoolean(info["Attachments"]) == false)
-                    {
-                        SPConnector.DeleteListItem("Asset Disposal", id, _siteUrl);
-                        return 0;
-                    }  
+                //if (Convert.ToBoolean(info["Attachments"]) == false)
+                //    {
+                //        SPConnector.DeleteListItem("Asset Disposal", id, _siteUrl);
+                //        return 0;
+                //    }  
 
             }
             catch (Exception e)

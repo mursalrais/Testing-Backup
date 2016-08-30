@@ -1,0 +1,36 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Asset
+
+@model AssetCheckFormHeaderVM
+
+<form class="form-horizontal" method="post" action="/ASSAssetCheckForm/View" id="create-asset-CheckForm-form">
+    <fieldset>
+        <legend>Form Asset Check Form</legend>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.CreateDate).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.CreateDate)
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <div class="col-md-4">
+                    <input class="btn btn-primary" type="submit" name="calculate" value="Calculate" />
+                </div>
+            </div>
+        </div>
+        <div>
+            @Html.Partial("_ViewDetails", Model.Details)
+        </div>
+    </fieldset>
+            @Html.HiddenFor(m => m.hFormId)
+            @Html.HiddenFor(m => m.hTanggalCounted)
+            @Html.HiddenFor(m => m.hTanggalCreate)
+    <div>
+        <center>
+            <input class="btn btn-primary" type="submit" name="print" value="Print" />
+        </center>
+    </div>
+</form>

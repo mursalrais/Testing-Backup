@@ -4,9 +4,12 @@ using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Elmah;
+using MCAWebAndAPI.Service.Converter;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -46,7 +49,7 @@ namespace MCAWebAndAPI.Web.Controllers
             if (!string.IsNullOrEmpty(save))
             {
                 int? formid = assetCheckFormService.save(data);
-                return RedirectToAction("Create", "ASSAssetCheckForm", new { });
+                return RedirectToAction("View", "ASSAssetCheckForm", new { ID = formid});
             }
 
             if(!string.IsNullOrEmpty(cancel))
@@ -65,5 +68,62 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewModel);
         }
 
+        public ActionResult View(
+            string siteUrl,
+            AssetCheckFormHeaderVM data,
+            int? ID,
+            string print,
+            string calculate)
+        {
+            assetCheckFormService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            
+
+            if (!string.IsNullOrEmpty(print))
+            {
+                const string RelativePath = "~/Views/ASSAssetCheckForm/Print.cshtml";
+                var view = ViewEngines.Engines.FindView(ControllerContext, RelativePath, null);
+
+                var fileName = "_AssetCheckForm.pdf";
+                byte[] pdfBuf = null;
+                string content;
+                
+                ControllerContext.Controller.ViewData.Model = data;
+                ViewData = ControllerContext.Controller.ViewData;
+                TempData = ControllerContext.Controller.TempData;
+
+                using (var writer = new StringWriter())
+                {
+                    var contextviewContext = new ViewContext(ControllerContext, view.View, ViewData, TempData, writer);
+                    view.View.Render(contextviewContext, writer);
+                    writer.Flush();
+                    content = writer.ToString();
+
+                    // Get PDF Bytes
+                    try
+                    {
+                        pdfBuf = PDFConverter.Instance.ConvertFromHTML(fileName, content);
+                    }
+                    catch (Exception e)
+                    {
+                        ErrorSignal.FromCurrentContext().Raise(e);
+                        RedirectToAction("Index", "Error");
+                    }
+                }
+                if (pdfBuf == null)
+                    return HttpNotFound();
+                return File(pdfBuf, "application/pdf");
+            }
+            if (!string.IsNullOrEmpty(calculate))
+            {
+                var viewModelDate = assetCheckFormService.GetPopulatedModelPrintDate(data.CreateDate);
+
+                return View(viewModelDate);
+            }
+
+            var viewModel = assetCheckFormService.GetPopulatedModelPrint(ID);
+
+            return View(viewModel);
+        }
     }
 }

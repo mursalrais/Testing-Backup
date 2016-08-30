@@ -25,7 +25,7 @@
 
 
             columns.Bound(p => p.EstReturnDate).ClientTemplate("#= kendo.toString(EstReturnDate, 'MM-dd-yyyy') #" +
-            "<input type='hidden' name='AssetLoanAndReturnItem[#= getWorkingRelationshipDetails(data)#].EstReturnDate' value='#= EstReturnDate #' />"
+            "<input type='hidden' name='AssetLoanAndReturnItem[#= getWorkingRelationshipDetails(data)#].EstReturnDate'  value='#= EstReturnDate #' />"
             );
 
             columns.Bound(p => p.ReturnDate).ClientTemplate("#= kendo.toString(ReturnDate, 'MM-dd-yyyy') #" +
@@ -88,5 +88,22 @@
     function onDataBoundWorkingRelationship(e) {
         var grid = $("#AssetLoanAndReturnItem").data("kendoGrid");
         hideDeletedRowKendoDetail(grid);
+    }
+
+    function val() {
+       
+
+    }
+
+    function CompareDate() {
+        //            new Date(Year, Month, Date, Hr, Min, Sec);
+        var est = document.getElementById("estreturndate");
+        var loan = document.getElementById("loandate");
+        //Note: 04 is month i.e. May
+        if (est > loan) {
+            alert("Date est bis greather then loan.");
+        } else {
+            alert("Date loan is greather then Date est.");
+        }
     }
 </script>

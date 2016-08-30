@@ -1,0 +1,74 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Finance
+
+@model IEnumerable<SCASettlementItemVM>
+
+<div class="col-xs-12">
+    @(Html.Kendo().Grid(Model)
+    .Name("ItemDetails")
+    .Editable(editable => editable.Mode(GridEditMode.InCell)
+    .CreateAt(GridInsertRowPosition.Top))
+    .ToolBar(tools => tools.Create().Text("Add New Item"))
+    .Scrollable()
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.ReceiptDate);
+        columns.Bound(p => p.ReceiptNo);
+        columns.Bound(p => p.Payee);
+
+        columns.Bound(p => p.DescriptionOfExpense);
+
+        columns.Bound(p => p.WBS).ClientTemplate("#= WBS.Text #" +
+            "<input type='hidden' name='ItemDetails[#= getItem(data)#].WBS.Value' value='#= WBS.Value #' />")
+                       .EditorViewData(new
+                       {
+                           DataTextField = "Text",
+                           DataValueField = "Value",
+                           ControllerName = "ComboBox",
+                           ActionName = "GetWBSMasters",
+                           Filter = "filterWBS"
+                       });
+
+        columns.Bound(p => p.GL).ClientTemplate("#= GL.Text #" +
+                         "<input type='hidden' name='ItemDetails[#= getItem(data)#].GL.Value' value='#= GL.Value #' />"
+                       )
+                       .EditorViewData(new
+                       {
+                           DataTextField = "Text",
+                           DataValueField = "Value",
+                           ControllerName = "ComboBox",
+                           ActionName = "GetGLMasters",
+
+                       });
+
+        columns.Bound(p => p.Amount);
+        columns.Bound(p => p.Documents);
+    })
+     .Events(e =>
+     {
+         e.DataBound("onDataBoundItemDetails");
+         e.Edit("onedit");
+     })
+
+    .DataSource(dataSource => dataSource.Ajax()
+                   .Model(model =>
+                   {
+                       model.Id(p => p.ID);
+                       model.Field(m => m.WBS).DefaultValue(EventBudgetItemVM.GetWBSDefaultValue());
+                       model.Field(m => m.GL).DefaultValue(EventBudgetItemVM.GetGLDefaultValue());
+
+                   })
+                   .ServerOperation(false)
+     )
+    )
+</div>
+
+
+<script>
+
+        function onDataBoundItemDetails(e) {
+            var grid = $("#ItemDetails").data("kendoGrid");
+            hideDeletedRowKendoDetail(grid);
+      
+        }
+
+</script>

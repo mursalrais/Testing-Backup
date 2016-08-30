@@ -1,0 +1,110 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Asset
+
+@model IEnumerable<AssetCheckFormItemVM>
+
+<div class="col-sm-12">
+
+    @(Html.Kendo().Grid(Model)
+        .Name("Details")
+        .Editable(editable => editable.Mode(GridEditMode.InCell))
+        .Columns(columns =>
+        {
+            columns.Bound(p => p.item);
+
+            columns.Bound(p => p.assetSubAsset).ClientTemplate("#= assetSubAsset #" +
+                "<input type='hidden' name='Details[#= index(data)#].assetSubAsset' value='#= assetSubAsset #' />"
+            );
+
+            columns.Bound(p => p.serialNo).ClientTemplate("#= serialNo #" +
+                "<input type='hidden' name='Details[#= index(data)#].serialNo' value='#= serialNo #' />"
+            );
+
+            columns.Bound(p => p.province).ClientTemplate("#= province #" +
+                "<input type='hidden' name='Details[#= index(data)#].province' value='#= province #' />"
+            );
+
+            columns.Bound(p => p.location).ClientTemplate("#= location #" +
+                "<input type='hidden' name='Details[#= index(data)#].location' value='#= location #' />"
+            );
+
+            columns.Bound(p => p.status).ClientTemplate("#= status #" +
+                "<input type='hidden' name='Details[#= index(data)#].status' value='#= status #' />"
+            );
+
+            columns.Bound(p => p.existense).ClientTemplate("#= existense #" +
+                "<input type='hidden' name='Details[#= index(data)#].existense' value='#= existense #' />"
+            );
+
+            columns.Bound(p => p.condition).ClientTemplate("#= condition #" +
+                "<input type='hidden' name='Details[#= index(data)#].condition' value='#= condition #' />"
+            );
+
+            columns.Bound(p => p.specification).ClientTemplate("#= specification #" +
+                "<input type='hidden' name='Details[#= index(data)#].specification' value='#= specification #' />"
+            );
+
+            columns.Bound(p => p.systemQty).ClientTemplate("#= systemQty #" +
+                "<input type='hidden' name='Details[#= index(data)#].systemQty' value='#= systemQty #' />"
+            );
+
+            columns.Bound(p => p.physicalQty).ClientTemplate("#= physicalQty #" +
+                "<input type='hidden' name='Details[#= index(data)#].physicalQty' value='#= physicalQty #' />"
+            ); 
+
+            columns.Bound(p => p.AssetID).Hidden().ClientTemplate("#= AssetID #" +
+                "<input type='hidden' name='Details[#= index(data)#].AssetID' value='#= AssetID #' />"
+            );
+
+
+        })
+        .DataSource(dataSource => dataSource.Ajax()
+        .Model(model =>
+        {
+            model.Id(p => p.ID);
+            model.Field(p => p.assetSubAsset).Editable(false);
+            model.Field(p => p.serialNo).Editable(false);
+            model.Field(p => p.province).Editable(false);
+            model.Field(p => p.location).Editable(false);
+            model.Field(p => p.status).Editable(false);
+            model.Field(p => p.systemQty).Editable(false);
+            model.Field(p => p.existense).Editable(false);
+            model.Field(p => p.condition).Editable(false);
+            model.Field(p => p.physicalQty).Editable(false);
+        })
+        .ServerOperation(false)
+        )
+    )
+</div>
+
+<script>
+    function index(dataItem) {
+        var data = $("#Details").data("kendoGrid").dataSource.data();
+
+        return data.indexOf(dataItem);
+    }
+</script>
+<style>
+    
+.k-grid  .k-grid-header  .k-header  .k-link {
+    height: auto;
+}
+  
+.k-grid  .k-grid-header  .k-header {
+    white-space: normal;
+}
+.k-virtual-scrollable-wrap tr
+{
+    height: 3em;
+}
+
+.k-grid td
+{
+  padding: 5px;
+}
+     
+.k-grid img
+{
+  vertical-align: top;
+}
+
+</style>
