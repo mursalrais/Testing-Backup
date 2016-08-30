@@ -15,7 +15,11 @@ namespace MCAWebAndAPI.Web.Controllers
     public class FINTaxExemptionController : Controller
     {
         private ITaxExemptionDataService _taxExemptionDataService;
-        private const string SITE_URL = "SiteUrl";
+        private const string SITE_URL = SharedFinanceController.Session_SiteUrl;
+
+        private const string SuccessMsgFormatCreated = "Tax Exemption No. {0} has been successfully created.";
+        private const string SuccessMsgFormatUpdated = "Tax Exemption No. {0} has been successfully updated.";
+        private const string FirstPage = "{0}/Lists/Tax%20Exemption%20Income%20Documents/AllItems.aspx";
 
         public FINTaxExemptionController()
         {
@@ -144,7 +148,12 @@ namespace MCAWebAndAPI.Web.Controllers
                 return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.TaxExemptionData);
+            return RedirectToAction("Index", "Success",
+                new
+                {
+                    successMessage = string.Format(SuccessMsgFormatCreated, ID),
+                    previousUrl = string.Format(FirstPage, siteUrl)
+                });
         }
 
         public ActionResult GetTaxIncome() 
@@ -188,11 +197,16 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.TaxExemptionData);
+            return RedirectToAction("Index", "Success",
+                 new
+                 {
+                     successMessage = string.Format(SuccessMsgFormatUpdated, _data.ID),
+                     previousUrl = string.Format(FirstPage, siteUrl)
+                 });
         }
 
         [HttpPost]
@@ -218,11 +232,16 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.TaxExemptionData);
+            return RedirectToAction("Index", "Success",
+                 new
+                 {
+                     successMessage = string.Format(SuccessMsgFormatUpdated, _data.ID),
+                     previousUrl = string.Format(FirstPage, siteUrl)
+                 });
         }
 
         [HttpPost]
@@ -248,11 +267,16 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.TaxExemptionData);
+            return RedirectToAction("Index", "Success",
+                 new
+                 {
+                     successMessage = string.Format(SuccessMsgFormatUpdated, _data.ID),
+                     previousUrl = string.Format(FirstPage, siteUrl)
+                 });
         }
     }
 }
