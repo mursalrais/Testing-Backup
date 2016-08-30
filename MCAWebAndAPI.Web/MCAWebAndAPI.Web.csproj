@@ -16,7 +16,7 @@
     <RootNamespace>MCAWebAndAPI.Web</RootNamespace>
     <AssemblyName>MCAWebAndAPI.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -1117,6 +1117,9 @@
     <Content Include="Views\ASSAssetCheckForm\_ViewDetails.cshtml" />
     <Content Include="Views\ASSAssetCheckForm\Print.cshtml" />
     <Content Include="Views\ASSAssetCheckForm\_print.cshtml" />
+    <Content Include="Views\FINSCASettlement\Item.cshtml" />
+    <Content Include="Views\FINSCASettlement\Print.cshtml" />
+    <Content Include="Views\FINSCASettlement\_ItemDetails.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1150,10 +1153,12 @@
     <Compile Include="Controllers\CSVController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\FileController.cs" />
+    <Compile Include="Controllers\FINLandingPageController.cs" />
     <Compile Include="Controllers\FINPettyCashPaymentVoucherController.cs" />
     <Compile Include="Controllers\FINPettyCashReplenishmentController.cs" />
     <Compile Include="Controllers\FINPettyCashSettlementController.cs" />
     <Compile Include="Controllers\FINPettyCashStatementController.cs" />
+    <Compile Include="Controllers\FINSCASettlementController.cs" />
     <Compile Include="Controllers\FINSCAVoucherController.cs" />
     <Compile Include="Controllers\HRDayOffController.cs" />
     <Compile Include="Controllers\SharedFinanceController.cs" />
