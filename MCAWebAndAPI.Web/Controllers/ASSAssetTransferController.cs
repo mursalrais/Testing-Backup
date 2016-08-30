@@ -786,7 +786,7 @@ namespace MCAWebAndAPI.Web.Controllers
             SiteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
-            const string RelativePath = "~/Views/ASSTransfer/Print.cshtml";
+            const string RelativePath = "~/Views/ASSAssetTransfer/Print.cshtml";
             var view = ViewEngines.Engines.FindView(ControllerContext, RelativePath, null);
             var nm = viewModel.AssetHolder.Value.Split('-');
             var nm1 = viewModel.AssetHolderTo.Value.Split('-');
