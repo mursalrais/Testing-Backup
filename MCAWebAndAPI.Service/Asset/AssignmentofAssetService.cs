@@ -694,7 +694,7 @@ namespace MCAWebAndAPI.Service.Asset
                 if(Convert.ToString(x["Title"]) == Convert.ToString(item["office"]) && Convert.ToString(x["Floor"]) == Convert.ToString(item["floor"]) && Convert.ToString(x["Room"]) == Convert.ToString(item["room"]))
                 {
                     _province.Value = (item["province"] as FieldLookupValue).LookupId;
-                    _province.Text = (x["Province"] as FieldLookupValue).LookupValue + "-" + x["Title"] + "-" + x["Floor"] + "-" + x["Room"] + "-" + x["Remarks"];
+                    _province.Text = (x["Province"] as FieldLookupValue).LookupValue + "-" + x["Title"] + "-" + x["Floor"] + "-" + x["Room"];
                 }
             }
 
@@ -938,7 +938,7 @@ namespace MCAWebAndAPI.Service.Asset
 
         public void RollbackParentChildrenUpload(string listNameHeader, int? latestIDHeader, string siteUrl)
         {
-            throw new NotImplementedException();
+            SPConnector.DeleteListItem(listNameHeader, latestIDHeader, siteUrl);
         }
 
         public bool isExist(string listname, string caml, string site)

@@ -13,6 +13,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
         public IEnumerable<AssetCheckFormItemVM> Details { get; set; } = new List<AssetCheckFormItemVM>();
         private ComboBoxVM _office, _floor, _room;
 
+        public int? hFormId;
+        public DateTime? hTanggalCounted, hTanggalCreate;
+
         [DisplayName("Create Dates")]
         [UIHint("Date")]
         public DateTime? CreateDate { get; set; }

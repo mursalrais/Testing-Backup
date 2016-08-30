@@ -16,7 +16,7 @@
     <RootNamespace>MCAWebAndAPI.Web</RootNamespace>
     <AssemblyName>MCAWebAndAPI.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -311,6 +311,7 @@
     <Content Include="Content\bi.css" />
     <Content Include="Content\custom.css" />
     <Content Include="Content\home.css" />
+    <Content Include="Content\icon-mca.png" />
     <Content Include="Content\kendo\2016.2.714\Fiori\editor.png" />
     <Content Include="Content\kendo\2016.2.714\Fiori\imagebrowser.png" />
     <Content Include="Content\kendo\2016.2.714\Fiori\indeterminate.gif" />
@@ -1053,6 +1054,8 @@
     <Content Include="Views\FINRequisitionNote\Print.cshtml" />
     <Content Include="Views\Shared\_PartialHeader.cshtml" />
     <Content Include="Views\Shared\_PartialHeaderWithLogo.cshtml" />
+    <Content Include="Views\ASSAssetTransfer\CreateAssetTransfer.cshtml" />
+    <Content Include="Views\ASSAssetTransfer\_AssetTransferDetail.cshtml" />
     <Content Include="Views\ASSAssetDisposal\CreateAssetDisposal.cshtml" />
     <Content Include="Views\ASSAssetDisposal\_AssetDisposalDetail.cshtml" />
     <Content Include="Views\HRAdjustment\InputAdjustmentData.cshtml" />
@@ -1071,6 +1074,8 @@
     <Content Include="Views\HRAdjustmentDayOffBalance\EditAdjustmentDayOffBalance.cshtml" />
     <Content Include="Views\ASSAssetDisposal\CreateAssetDisposal.cshtml" />
     <Content Include="Views\ASSAssetDisposal\_AssetDisposalDetail.cshtml" />
+    <Content Include="Views\ASSAssetTransfer\CreateAssetTransfer.cshtml" />
+    <Content Include="Views\ASSAssetTransfer\_AssetTransferDetail.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DropDown.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\AjaxCascadeComboBox.cshtml" />
     <Content Include="Views\ASSAssetAcquisition\Sync.cshtml" />
@@ -1084,23 +1089,11 @@
     <Content Include="Views\FINPettyCashReplenishment\Item.cshtml" />
     <Content Include="Views\HRCompensatory\AddCompensatoryHR.cshtml" />
     <Content Include="Views\FINEventBudget\Item.cshtml" />
+    <Content Include="Views\Shared\_WorkflowPathDetails.cshtml" />
     <Content Include="Views\HRTimesheet\CreateTimesheet.cshtml" />
     <Content Include="Views\FINPettyCashStatement\Display.cshtml" />
     <Content Include="Views\FINPettyCashStatement\Index.cshtml" />
     <Content Include="Views\FINPettyCashSettlement\Item.cshtml" />
-    <Content Include="Views\HRAdjustment\EditAdjustmentData.cshtml" />
-    <Content Include="Views\HRCompensatory\AddCompensatoryUser.cshtml" />
-    <Content Include="Views\ASSAssignmentOfAsset\Edit.cshtml" />
-    <Content Include="Views\ASSAssignmentOfAsset\Upload.cshtml" />
-    <Content Include="Views\ASSAssignmentOfAsset\View.cshtml" />
-    <Content Include="Views\ASSAssignmentOfAsset\_DetailsView.cshtml" />
-    <Content Include="Views\ASSAssignmentOfAsset\_print.cshtml" />
-    <Content Include="Views\ASSAssignmentOfAsset\Print.cshtml" />
-    <Content Include="Views\ASSAssignmentOfAsset\_DetailsPrint.cshtml" />
-    <Content Include="Views\HRProfessionalPerformanceEvaluation\_WorkflowPathDetails.cshtml" />
-    <Content Include="Views\HRPerformancePlan\_WorkflowPathDetails.cshtml" />
-    <Content Include="Views\ASSAssignmentOfAsset\Sync.cshtml" />
-    <Content Include="Views\HRCompensatory\_WorkflowPathDetails.cshtml" />
     <Content Include="Views\HRDayOff\CreateDayOffRequest.cshtml" />
     <Content Include="Views\HRDayOff\_DayOffCurrentBalance.cshtml" />
     <Content Include="Views\HRDayOff\_DayOffRequestHeaderData.cshtml" />
@@ -1120,6 +1113,10 @@
     <Content Include="Views\ASSAssetTransfer\Upload.cshtml" />
     <Content Include="Views\ASSAssetTransfer\View.cshtml" />
     <Content Include="Views\ASSAssetCheckForm\_Details.cshtml" />
+    <Content Include="Views\ASSAssetCheckForm\View.cshtml" />
+    <Content Include="Views\ASSAssetCheckForm\_ViewDetails.cshtml" />
+    <Content Include="Views\ASSAssetCheckForm\Print.cshtml" />
+    <Content Include="Views\ASSAssetCheckForm\_print.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1153,7 +1150,6 @@
     <Compile Include="Controllers\CSVController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\FileController.cs" />
-    <Compile Include="Controllers\FINLandingPageController.cs" />
     <Compile Include="Controllers\FINPettyCashPaymentVoucherController.cs" />
     <Compile Include="Controllers\FINPettyCashReplenishmentController.cs" />
     <Compile Include="Controllers\FINPettyCashSettlementController.cs" />

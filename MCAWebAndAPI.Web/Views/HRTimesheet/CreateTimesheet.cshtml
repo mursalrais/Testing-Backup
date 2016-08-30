@@ -94,7 +94,12 @@
                               .ClientFooterTemplate("Total Day: #=sum#");
                           columns.Bound(p => p.Type).Hidden()
                               .ClientGroupHeaderTemplate("Working Days");
+                        
                       })
+                        .Events(e =>
+                        {
+
+                        })
                       .DataSource(dataSource => dataSource
                           .Ajax()
                           .Read("GridWorkingDays_Read", "HRTimesheet")
@@ -113,7 +118,7 @@
             <legend>Add Working Day</legend>
             <div class="row">
                 <div class="col-sm-6">
-                    @using (Ajax.BeginForm("AddTimesheet", "HRTimesheet", new AjaxOptions
+                    @using (Ajax.BeginForm("", "HRTimesheet", new AjaxOptions
                     {
                         OnComplete = "onCompleteAddTimesheet"
                     }, new { id = "FormAddTimesheet" }))
@@ -157,9 +162,14 @@
                                 @Html.EditorFor(m => m.IsFullDay)
                             </div>
                         </div>
-                        <button id="submit-button-add-timesheet" class="btn btn-primary pull-right" type="submit">Add Working Day</button>
-                    }
-                </div>
+                        <div class="col-sm-12">
+                            &nbsp;<button id="submit-button-add-timesheet" class="btn btn-primary pull-right" type="submit">Add Working Day</button>
+                            &nbsp;<button id="delete-button-all" class="btn btn-primary pull-right" type="submit">Delete All Working Day</button>
+                            <button id="delete-button-selected" class="btn btn-primary pull-right" type="submit">Delete Selected Working Day</button>
+                        </div>
+                          
+                            }
+                        </div>
                 <div class="col-sm-6"></div>
             </div>
         </fieldset>
@@ -220,8 +230,28 @@
                     });
 
 
+                $("#delete-button-all")
+                   .click(function () {
+                      
+                       $('form').prop('action', '/HRTimesheet/DeleteAllTimesheet');
+                   });
+
+                $("#delete-button-selected")
+                .click(function () {
+
+                    $('form').prop('action', '/HRTimesheet/DeleteSelectedTimesheet');
+                });
+
+                $("#submit-button-add-timesheet")
+              .click(function () {
+
+                  $('form').prop('action', '/HRTimesheet/AddTimesheet');
+              });
+
             });
 
+
+        
 
         function OnSelectProfessionalName(e) {
             var dataItem = this.dataItem(e.item);

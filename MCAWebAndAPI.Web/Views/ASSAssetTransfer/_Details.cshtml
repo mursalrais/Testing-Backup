@@ -37,6 +37,20 @@
                                 ActionName = "GetProvinceGrid"
                             }).Width(600);
 
+                            columns.Bound(p => p.ProvinceTo).ClientTemplate("#= ProvinceTo.Text #" +
+                              "<input type='hidden' class='provinceto' name='Details[#= getWorkingRelationshipDetails(data)#].ProvinceTo.Value' value='#= ProvinceTo.Value #' />"
+                            ).EditorViewData(new
+                            {
+                                DataTextField = "Text",
+                                DataValueField = "Value",
+                                ControllerName = "ASSAssetTransfer",
+                                ActionName = "GetProvinceToGrid"
+                            }).Width(600);
+
+                            columns.Bound(p => p.Remarks).HtmlAttributes(new { @class = "remarks" }).ClientTemplate("#= Remarks #" +
+            "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].Remarks' value='#= Remarks #' />"
+            );
+
                             columns.Bound(p => p.Status).HtmlAttributes(new { @class = "status" }).ClientTemplate("#= Status #" +
             "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].Status' value='#= Status #' />"
             );
@@ -60,12 +74,10 @@
                    .Model(model =>
                    {
                        model.Id(p => p.ID);
-                       model.Field(m => m.AssetSubAsset).DefaultValue(AssignmentOfAssetDetailsVM.GetAssetSubAssetDefaultValue());
-                       model.Field(m => m.Province).DefaultValue(AssignmentOfAssetDetailsVM.GetProvinceDefaultValue());
-                       //model.Field(m => m.OfficeName).DefaultValue(AssignmentOfAssetDetailsVM.GetOfficeNameDefautValue());
-                       //model.Field(m => m.Floor).DefaultValue(AssignmentOfAssetDetailsVM.GetFloorDefautValue());
-                       //model.Field(m => m.Room).DefaultValue(AssignmentOfAssetDetailsVM.GetRoomDefautValue());
-                       //model.Field(m => m.Remarks);
+                       model.Field(m => m.AssetSubAsset).DefaultValue(AssetTransferDetailVM.GetAssetSubAssetDefaultValue());
+                       model.Field(m => m.Province).DefaultValue(AssetTransferDetailVM.GetProvinceDefaultValue());
+                       model.Field(m => m.ProvinceTo).DefaultValue(AssetTransferDetailVM.GetProvinceToDefaultValue());
+                       model.Field(m => m.Remarks);
                        model.Field(m => m.Status).Editable(false);
 
                    })
@@ -73,7 +85,6 @@
         )
     )
 </div>
-@*@Html.HiddenFor(m => m.ID)*@
 <script>
     $(document).ready(function () {
         var grid = $("#Details").data("kendoGrid");
@@ -83,7 +94,7 @@
             var colIdx = $("td", row).index(this);
             //alert(colIdx);
             if (colIdx == 2) {
-                alert(colIdx);
+                //alert(colIdx);
                 //row.find("td:eq(2)").text(Province);
                 //var url = "/ASSAssignmentOfAsset/GetOfficeGrid?province=" + Province;
                 //$.getJSON(url, function (data) {
@@ -95,7 +106,7 @@
 
     function onAssetChange(e) {
         var res = this.dataItem(e.item).split("-")
-        alert("berubah jadiii " + this.dataItem(e.item));
+        //alert("berubah jadiii " + this.dataItem(e.item));
     }
 
     function getWorkingRelationshipDetails(dataItem) {
@@ -106,7 +117,7 @@
         var gridRows = this.tbody.find("tr");
         gridRows.each(function (e) {
             //var duedate = $(this).find(".duedate");
-            alert("baris ke : " + e);
+            //alert("baris ke : " + e);
         });
 
     }

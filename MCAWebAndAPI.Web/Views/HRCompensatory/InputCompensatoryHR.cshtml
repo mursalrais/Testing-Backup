@@ -81,11 +81,6 @@
     </div>
 </div>
 
-<legend>Approval Path</legend>
-<div class="row">
-    @Html.Partial("_WorkflowPathDetails", Model)
-</div>
-
 <div class="row pull-right">
     <div class="col-sm-12">
 
@@ -104,17 +99,13 @@
 @section scripts{
 
     <script>
+                     var eMail = null;
+
                     $(document).ready(function () {
                         showLoading();
                         var nameProf = $("#cmpName").val() + " - " + $("#cmpPosition").val()
                         $("#ProfName").prop("value", nameProf);
                         $("#ProfName").prop('readonly', 'true');
-
-                        var eMail = $("#cmpEmail").val();
-
-                        if (eMail != null) {
-                            displayWorkflowRouter("workflow-placeholder", "@ViewBag.ListName", eMail);
-                        }
 
                         var url = "/HRCompensatory/GetCompensatoryDetails?idComp=" + $("#cmpID").val();
 
@@ -132,6 +123,7 @@
                             $('#approve-button').addClass('hide');
                             $('#reject-button').addClass('hide');
                             $('#cancel-button').addClass('hide');
+                            $('#submit-draft-button').addClass('hide');
                             $('#unapprove-button').removeClass('hide');
                             $('#submit-draft-initiate-button').addClass('hide');
                         }
@@ -143,6 +135,7 @@
                             $('#reject-button').removeClass('hide')
                             $('#submithr-button').removeClass('hide');
                             $('#cancel-button').removeClass('hide');
+                            $('#submit-draft-button').removeClass('hide');
                             $('#submit-draft-initiate-button').removeClass('hide');
                         }
 
@@ -246,17 +239,15 @@
                             });
 
                             $("#cmpID").prop("value", idComp);
+
                             hideLoading();
                     };
 
                     function OnChangeProffesional(e) {
                         var dataItem = this.dataItem(e.item);
-                        var eMail = dataItem.OfficeEmail
+                        eMail = dataItem.OfficeEmail;
                         $("#cmpName").prop("value", dataItem.FirstMiddleName);
 
-                        if (eMail != null) {
-                            displayWorkflowRouter("workflow-placeholder", "@ViewBag.ListName", eMail);
-                        }
                     };
 
                     function getDayName(date) {

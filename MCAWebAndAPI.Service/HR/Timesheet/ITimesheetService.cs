@@ -17,10 +17,12 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
 
         IEnumerable<TimesheetDetailVM> GetTimesheetDetails(string userlogin, DateTime period);
 
-        IEnumerable<TimesheetDetailVM> AppendWorkingDays(IEnumerable<TimesheetDetailVM> currentDays, 
+        IEnumerable<TimesheetDetailVM> AppendWorkingDays(int? id,IEnumerable<TimesheetDetailVM> currentDays, 
             DateTime from, DateTime to, bool isFullDay, string location = null, int? locationid = null);
 
         int CreateHeader(TimesheetVM header);
+
+        void UpdateHeader(TimesheetVM header);
 
         Task CreateTimesheetDetailsAsync(int? headerId, IEnumerable<TimesheetDetailVM> timesheetDetails);
         void CreateTimesheetDetails(int? headerId, IEnumerable<TimesheetDetailVM> timesheetDetails);
@@ -29,6 +31,10 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
         void CreateWorkflowTimesheet(int? headerId, TimesheetVM header);
 
         void UpdateApproval(TimesheetVM header);
+
+        IEnumerable<TimesheetDetailVM> DeleteSelectedWorkingDays(int? headerId,IEnumerable<TimesheetDetailVM> currentDays , 
+            DateTime from, DateTime to);
+
 
     }
 }

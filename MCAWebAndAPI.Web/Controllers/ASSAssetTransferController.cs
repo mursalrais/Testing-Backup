@@ -179,14 +179,14 @@ namespace MCAWebAndAPI.Web.Controllers
                 JsonRequestBehavior.AllowGet);
         }
 
-        private IEnumerable<AssetAcquisitionItemVM> GetFromPositionsExistingSession()
+        private IEnumerable<AssignmentOfAssetDetailsVM> GetFromPositionsExistingSession()
         {
             //Get existing session variable
-            var sessionVariable = System.Web.HttpContext.Current.Session["Asset%Asset%20Acquisition%20Details"] as IEnumerable<AssetAcquisitionItemVM>;
+            var sessionVariable = System.Web.HttpContext.Current.Session["Asset%20Assignment%20Detail"] as IEnumerable<AssignmentOfAssetDetailsVM>;
             var positions = sessionVariable ?? _service.GetAssetSubAsset();
 
             if (sessionVariable == null) // If no session variable is found
-                System.Web.HttpContext.Current.Session["Asset%Asset%20Acquisition%20Details"] = positions;
+                System.Web.HttpContext.Current.Session["Asset%20Assignment%20Detail"] = positions;
             return positions;
         }
 
@@ -201,7 +201,23 @@ namespace MCAWebAndAPI.Web.Controllers
                 new
                 {
                     Value = Convert.ToString(e.ID),
-                    Text = e.Province.Text + "-" + e.OfficeName + "-" + e.FloorName + "-" + e.RoomName + "-" + e.Remarks
+                    Text = e.Province.Text + "-" + e.OfficeName + "-" + e.FloorName + "-" + e.RoomName
+                }),
+                JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetProvinceToGrid()
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            var positions = GetProvinceExistingSession();
+
+            return Json(positions.Select(e =>
+                new
+                {
+                    Value = Convert.ToString(e.ID),
+                    Text = e.Province.Text + "-" + e.OfficeName + "-" + e.FloorName + "-" + e.RoomName
                 }),
                 JsonRequestBehavior.AllowGet);
         }
@@ -499,13 +515,17 @@ namespace MCAWebAndAPI.Web.Controllers
                         TableHeader = new DataTable();
                         TableHeader.Columns.Add("Title", typeof(string));
                         TableHeader.Columns.Add("transferdate", typeof(string));
-                        TableHeader.Columns.Add("assetholder", typeof(string));
-                        TableHeader.Columns.Add("position", typeof(string));
-                        TableHeader.Columns.Add("projectunit", typeof(string));
-                        TableHeader.Columns.Add("contactnumber", typeof(string));
+                        TableHeader.Columns.Add("assetholderfrom", typeof(string));
+                        TableHeader.Columns.Add("positionfrom", typeof(string));
+                        TableHeader.Columns.Add("projectunitfrom", typeof(string));
+                        TableHeader.Columns.Add("contactnumberfrom", typeof(string));
+                        TableHeader.Columns.Add("assetholderto", typeof(string));
+                        TableHeader.Columns.Add("positionto", typeof(string));
+                        TableHeader.Columns.Add("projectunitto", typeof(string));
+                        TableHeader.Columns.Add("contactnumberto", typeof(string));
 
                         //check assetholder in Professional Master HR
-                        var caml = @"<View><Query>
+                        var camlfrom = @"<View><Query>
                                    <Where>
                                       <Eq>
                                          <FieldRef Name='Title' />
@@ -520,17 +540,38 @@ namespace MCAWebAndAPI.Web.Controllers
                                     <FieldRef Name='Project_x002f_Unit' />
                                 </ViewFields>
                                 <QueryOptions /></View>";
+                        var camlto = @"<View><Query>
+                                   <Where>
+                                      <Eq>
+                                         <FieldRef Name='Title' />
+                                         <Value Type='Text'>" + d.ItemArray[6].ToString() + @"</Value>
+                                      </Eq>
+                                   </Where>
+                                </Query>
+                                <ViewFields>
+                                     <FieldRef Name='Position' />
+                                    <FieldRef Name='Title' />
+                                    <FieldRef Name='mobilephonenr' />
+                                    <FieldRef Name='Project_x002f_Unit' />
+                                </ViewFields>
+                                <QueryOptions /></View>";
                         var sitehr = siteUrl.Replace("/bo", "/hr");
-                        var isAssetHolderExist = _service.isExist("Professional Master", caml, sitehr);
-                        if (isAssetHolderExist == true)
+                        var isAssetHolderFromExist = _service.isExist("Professional Master", camlfrom, sitehr);
+                        var isAssetHolderToExist = _service.isExist("Professional Master", camlto, sitehr);
+                        if (isAssetHolderFromExist == true && isAssetHolderToExist == true)
                         {
                             DataRow row = TableHeader.NewRow();
                             row["Title"] = type;
                             row["transferdate"] = Convert.ToString(d.ItemArray[1]);
-                            row["assetholder"] = Convert.ToString(d.ItemArray[2]);
-                            row["position"] = "";
-                            row["projectunit"] = "";
-                            row["contactnumber"] = "";
+                            row["assetholderfrom"] = Convert.ToString(d.ItemArray[2]);
+                            row["positionfrom"] = "";
+                            row["projectunitfrom"] = "";
+                            row["contactnumberfrom"] = "";
+
+                            row["assetholderto"] = Convert.ToString(d.ItemArray[6]);
+                            row["positionto"] = "";
+                            row["projectunitto"] = "";
+                            row["contactnumberto"] = "";
 
                             TableHeader.Rows.InsertAt(row, 0);
 
@@ -565,23 +606,29 @@ namespace MCAWebAndAPI.Web.Controllers
                     }
                 }
 
-                if (d.ItemArray[6].ToString() != "" && latestIDHeader != null)
+                if (d.ItemArray[10].ToString() != "" && latestIDHeader != null)
                 {
                     try
                     {
                         TableDetail = new DataTable();
                         TableDetail.Columns.Add("assignmentofasset", typeof(int));
                         TableDetail.Columns.Add("assetsubasset", typeof(string));
-                        TableDetail.Columns.Add("province", typeof(string));
-                        TableDetail.Columns.Add("office", typeof(string));
-                        TableDetail.Columns.Add("floor", typeof(string));
-                        TableDetail.Columns.Add("room", typeof(string));
+                        TableDetail.Columns.Add("provincefrom", typeof(string));
+                        TableDetail.Columns.Add("officefrom", typeof(string));
+                        TableDetail.Columns.Add("floorfrom", typeof(string));
+                        TableDetail.Columns.Add("roomfrom", typeof(string));
+
+                        TableDetail.Columns.Add("provinceto", typeof(string));
+                        TableDetail.Columns.Add("officeto", typeof(string));
+                        TableDetail.Columns.Add("floorto", typeof(string));
+                        TableDetail.Columns.Add("roomto", typeof(string));
+
                         TableDetail.Columns.Add("remarks", typeof(string));
 
                         //check assetsubasset
                         //check province -office - floor - room
                         //FXA-GP-FF-0001-GPS
-                        var breakAsset = d.ItemArray[6].ToString().Split('-');
+                        var breakAsset = d.ItemArray[10].ToString().Split('-');
                         var assetID = breakAsset[0] + "-" + breakAsset[1] + "-" + breakAsset[2] + "-" + breakAsset[3];
                         if (breakAsset.Length > 5)
                         {
@@ -605,26 +652,61 @@ namespace MCAWebAndAPI.Web.Controllers
                         </ViewFields>
                         <QueryOptions /></View>";
                         //check province
-                        var camlprovince = @"<View><Query>
+                        var camlprovincefrom = @"<View><Query>
                             <Where>
                                 <And>
                                     <Eq>
                                     <FieldRef Name='Province' />
-                                    <Value Type='Lookup'>" + d.ItemArray[7].ToString() + @"</Value>
+                                    <Value Type='Lookup'>" + d.ItemArray[11].ToString() + @"</Value>
                                     </Eq>
                                     <And>
                                     <Eq>
                                         <FieldRef Name='Title' />
-                                        <Value Type='Text'>" + d.ItemArray[8].ToString() + @"</Value>
+                                        <Value Type='Text'>" + d.ItemArray[12].ToString() + @"</Value>
                                     </Eq>
                                     <And>
                                         <Eq>
                                             <FieldRef Name='Floor' />
-                                            <Value Type='Text'>" + d.ItemArray[9].ToString() + @"</Value>
+                                            <Value Type='Text'>" + d.ItemArray[13].ToString() + @"</Value>
                                         </Eq>
                                         <Eq>
                                             <FieldRef Name='Room' />
-                                            <Value Type='Text'>" + d.ItemArray[10].ToString() + @"</Value>
+                                            <Value Type='Text'>" + d.ItemArray[14].ToString() + @"</Value>
+                                        </Eq>
+                                    </And>
+                                    </And>
+                                </And>
+                            </Where>
+                        </Query>
+                        <ViewFields>
+                            <FieldRef Name='Province' />
+                            <FieldRef Name='Title' />
+                            <FieldRef Name='Floor' />
+                            <FieldRef Name='Room' />
+                            <FieldRef Name='Remarks' />
+                        </ViewFields>
+                        <QueryOptions /></View>";
+
+                        var camlprovinceto = @"<View><Query>
+                            <Where>
+                                <And>
+                                    <Eq>
+                                    <FieldRef Name='Province' />
+                                    <Value Type='Lookup'>" + d.ItemArray[15].ToString() + @"</Value>
+                                    </Eq>
+                                    <And>
+                                    <Eq>
+                                        <FieldRef Name='Title' />
+                                        <Value Type='Text'>" + d.ItemArray[16].ToString() + @"</Value>
+                                    </Eq>
+                                    <And>
+                                        <Eq>
+                                            <FieldRef Name='Floor' />
+                                            <Value Type='Text'>" + d.ItemArray[17].ToString() + @"</Value>
+                                        </Eq>
+                                        <Eq>
+                                            <FieldRef Name='Room' />
+                                            <Value Type='Text'>" + d.ItemArray[18].ToString() + @"</Value>
                                         </Eq>
                                     </And>
                                     </And>
@@ -640,18 +722,25 @@ namespace MCAWebAndAPI.Web.Controllers
                         </ViewFields>
                         <QueryOptions /></View>";
                         var isAssetExist = _service.isExist("Asset Acquisition Details", camlasset, siteUrl);
-                        var isProvinceExist = _service.isExist("Location Master", camlprovince, siteUrl);
+                        var isProvinceFromExist = _service.isExist("Location Master", camlprovincefrom, siteUrl);
+                        var isProvinceToExist = _service.isExist("Location Master", camlprovinceto, siteUrl);
 
-                        if (isAssetExist == true && isProvinceExist == true)
+                        if (isAssetExist == true && isProvinceFromExist == true && isProvinceToExist == true)
                         {
                             DataRow row = TableDetail.NewRow();
 
                             row["assignmentofasset"] = latestIDHeader;
                             row["assetsubasset"] = assetID;
-                            row["province"] = d.ItemArray[7].ToString();
-                            row["office"] = d.ItemArray[8].ToString();
-                            row["floor"] = d.ItemArray[9].ToString();
-                            row["room"] = d.ItemArray[10].ToString();
+                            row["provincefrom"] = d.ItemArray[11].ToString();
+                            row["officefrom"] = d.ItemArray[12].ToString();
+                            row["floorfrom"] = d.ItemArray[13].ToString();
+                            row["roomfrom"] = d.ItemArray[14].ToString();
+
+                            row["provinceto"] = d.ItemArray[15].ToString();
+                            row["officeto"] = d.ItemArray[16].ToString();
+                            row["floorto"] = d.ItemArray[17].ToString();
+                            row["roomto"] = d.ItemArray[18].ToString();
+
                             row["remarks"] = d.ItemArray[11].ToString();
 
                             TableDetail.Rows.InsertAt(row, 0);
@@ -699,8 +788,11 @@ namespace MCAWebAndAPI.Web.Controllers
             const string RelativePath = "~/Views/ASSTransfer/Print.cshtml";
             var view = ViewEngines.Engines.FindView(ControllerContext, RelativePath, null);
             var nm = viewModel.AssetHolder.Value.Split('-');
-            viewModel.nameOnly = nm[0];
-            viewModel.position = nm[1];
+            var nm1 = viewModel.AssetHolderTo.Value.Split('-');
+            viewModel.nameOnlyFrom = nm[0];
+            viewModel.positionFrom = nm[1];
+            viewModel.nameOnlyTo = nm1[0];
+            viewModel.positionTo = nm1[1];
             viewModel.Details = _service.GetDetailsPrint(viewModel.ID);
             var fileName = nm[0] + "_AssetTransfer.pdf";
             byte[] pdfBuf = null;

@@ -33,7 +33,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
             }
         }
 
-        [DisplayName("Province-Office-Floor-Room")]
+        [DisplayName("Province - Office - Floor - Room")]
         [UIHint("InGridAjaxComboBox")]
         public AjaxComboBoxVM Province { get; set; } = new AjaxComboBoxVM();
 

@@ -16,6 +16,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         Task<CompensatoryVM> GetWorkflow(string requestor, string listName);
 
+        Task<CompensatoryVM> GetCheckWorkflow(int? ID, string requestor, string listName, string listNameWorkflow, string columnName);
+
         CompensatoryVM GetComplistbyProfid(int? iD);
 
         CompensatoryVM GetComplistActive();
