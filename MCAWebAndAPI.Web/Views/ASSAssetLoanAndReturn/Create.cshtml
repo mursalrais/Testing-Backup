@@ -35,21 +35,22 @@
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.Project).Class("col-md-4 control-label")
                     <div class="col-md-8">
-                        @Html.DisplayFor(m => m.Project)
-                        @*<input type="text" name="Project" disabled value="@Model.Project" id="Project" style="width: 100%;" />*@
+                        @*@Html.DisplayFor(m => m.Project)*@
+                        <input type="text" disabled name="ProjectUnit" id="ProjectUnit" value="" style="width : 100%" />
                     </div>
                 </div>
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.ContactNo).Class("col-md-4 control-label")
                     <div class="col-md-8">
-                        @Html.DisplayFor(m => m.ContactNo)
-                        @*<input type="text" name="contactno" disabled value="@model.contactno" id="contactno" style="width: 100%;" />*@
+                        @*@Html.DisplayFor(m => m.ContactNo)*@
+                        <input type="text" disabled name="ContactNo"  id="ContactNo" style="width: 100%;" />
+                        @*<input type="text" disabled name="ContactNo" id="ContactNo" value="" style="width : 100%" />*@
                     </div>
                 </div>
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.LoanDate).Class("col-md-4 control-label")
                     <div class="col-md-8">
-                        @Html.EditorFor(m => m.LoanDate)
+                        @Html.EditorFor(m => m.LoanDate, new { id = "loandate" })
                     </div>
                 </div>
                 <div class="form-group">
@@ -102,24 +103,39 @@
                 });
             }
             
+            //function OnSelectProfessionalName(e) {
+            //    var res = this.dataItem(e.item).split("-")
+            //    //var res = this.dataItem(e.item).split("-")
+            //    //alert("Acceptance Memo ID : " + res[0]);
+            //    var dataItem = this.dataItem(e.item);
+            //    var url = "/ASSAssetLoanAndReturn/GetProfessionalInfo?IDProfessional=" + res[0];
+            //    $.getJSON(url, function (data) {
+            //        document.getElementById('Project').value =  data.ProjectName;
+            //        $('#Project').prop('value', data.ProjectName);
+            //        document.getElementById('Project').readOnly = true;
+
+            //        document.getElementById('ContactNo').value = data.ContactNo;
+            //        $('#ContactNo').prop('ContactNo', data.ContactNo);
+            //        document.getElementById('ContactNo').readOnly = true;
+            //        //$('#Vendor').prop('value', data.VendorID + "-" + data.VendorName);
+            //        //$('#PoNo').prop('value', data.PoNo);
+            //    });
+              
+            //}
+
+
             function OnSelectProfessionalName(e) {
                 var res = this.dataItem(e.item).split("-")
-                //var res = this.dataItem(e.item).split("-")
-                //alert("Acceptance Memo ID : " + res[0]);
-                var dataItem = this.dataItem(e.item);
-                var url = "/ASSAssetLoanAndReturn/GetProfessionalInfo?IDProfessional=" + res[0];
+                //alert("berubah jadiii " + res[0]);
+                var url = "/ASSAssetLoanAndReturn/GetProfMasterInfo?fullname=" + res[0] + "&position=" + res[1];
                 $.getJSON(url, function (data) {
-                    document.getElementById('Project').value =  data.ProjectName;
-                    $('#Project').prop('value', data.ProjectName);
-                    document.getElementById('Project').readOnly = true;
+                    //do next
+                    document.getElementById('ProjectUnit').value = data.CurrentPosition.Text;
+                    //$('#Project').prop('value', data.CurrentPosition.Text);
+                    //document.getElementById('Project').readOnly = true;
 
-                    document.getElementById('ContactNo').value = data.ContactNo;
-                    $('#ContactNo').prop('ContactNo', data.ContactNo);
-                    document.getElementById('ContactNo').readOnly = true;
-                    //$('#Vendor').prop('value', data.VendorID + "-" + data.VendorName);
-                    //$('#PoNo').prop('value', data.PoNo);
-                });
-              
+                    document.getElementById('ContactNo').value = data.MobileNumberOne;
+                })
             }
         </script>
 }
