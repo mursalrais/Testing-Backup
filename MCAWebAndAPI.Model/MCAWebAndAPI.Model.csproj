@@ -130,6 +130,8 @@
     <Compile Include="ViewModel\Form\Finance\PettyCashReplenishmentVM.cs" />
     <Compile Include="ViewModel\Form\Finance\PettyCashStatementVM.cs" />
     <Compile Include="ViewModel\Form\Finance\PettyCashTransactionItem.cs" />
+    <Compile Include="ViewModel\Form\Finance\SCASettlementItemVM.cs" />
+    <Compile Include="ViewModel\Form\Finance\SCASettlementVM.cs" />
     <Compile Include="ViewModel\Form\Finance\WBSMasterVM.cs" />
     <Compile Include="ViewModel\Form\HR\AdjustmentDataVM.cs" />
     <Compile Include="ViewModel\Form\HR\AdjustmentDayOffBalanceVM.cs" />

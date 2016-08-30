@@ -16,7 +16,7 @@
     <RootNamespace>MCAWebAndAPI.Web</RootNamespace>
     <AssemblyName>MCAWebAndAPI.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -311,6 +311,7 @@
     <Content Include="Content\bi.css" />
     <Content Include="Content\custom.css" />
     <Content Include="Content\home.css" />
+    <Content Include="Content\icon-mca.png" />
     <Content Include="Content\kendo\2016.2.714\Fiori\editor.png" />
     <Content Include="Content\kendo\2016.2.714\Fiori\imagebrowser.png" />
     <Content Include="Content\kendo\2016.2.714\Fiori\indeterminate.gif" />
@@ -1097,7 +1098,28 @@
     <Content Include="Views\HRDayOff\_DayOffCurrentBalance.cshtml" />
     <Content Include="Views\HRDayOff\_DayOffRequestHeaderData.cshtml" />
     <Content Include="Views\HRDayOff\_RequestForDayOff.cshtml" />
-    <Content Include="Views\HRTimesheet\NotAuthorized.cshtml" />
+    <Content Include="Views\FINSCAVoucher\_PartialHeaderWithLogo.cshtml" />
+    <Content Include="Views\FINPettyCashSettlement\Print.cshtml" />
+    <Content Include="Views\FINEventBudget\Print.cshtml" />
+    <Content Include="Views\FINLandingPage\Index.cshtml" />
+    <Content Include="Views\ASSAssetTransfer\Create.cshtml" />
+    <Content Include="Views\ASSAssetTransfer\_Details.cshtml" />
+    <Content Include="Views\ASSAssetTransfer\_DetailsPrint.cshtml" />
+    <Content Include="Views\ASSAssetTransfer\_DetailsView.cshtml" />
+    <Content Include="Views\ASSAssetTransfer\_print.cshtml" />
+    <Content Include="Views\ASSAssetTransfer\Edit.cshtml" />
+    <Content Include="Views\ASSAssetTransfer\Print.cshtml" />
+    <Content Include="Views\ASSAssetTransfer\Sync.cshtml" />
+    <Content Include="Views\ASSAssetTransfer\Upload.cshtml" />
+    <Content Include="Views\ASSAssetTransfer\View.cshtml" />
+    <Content Include="Views\ASSAssetCheckForm\_Details.cshtml" />
+    <Content Include="Views\ASSAssetCheckForm\View.cshtml" />
+    <Content Include="Views\ASSAssetCheckForm\_ViewDetails.cshtml" />
+    <Content Include="Views\ASSAssetCheckForm\Print.cshtml" />
+    <Content Include="Views\ASSAssetCheckForm\_print.cshtml" />
+    <Content Include="Views\FINSCASettlement\Item.cshtml" />
+    <Content Include="Views\FINSCASettlement\Print.cshtml" />
+    <Content Include="Views\FINSCASettlement\_ItemDetails.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1131,10 +1153,12 @@
     <Compile Include="Controllers\CSVController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\FileController.cs" />
+    <Compile Include="Controllers\FINLandingPageController.cs" />
     <Compile Include="Controllers\FINPettyCashPaymentVoucherController.cs" />
     <Compile Include="Controllers\FINPettyCashReplenishmentController.cs" />
     <Compile Include="Controllers\FINPettyCashSettlementController.cs" />
     <Compile Include="Controllers\FINPettyCashStatementController.cs" />
+    <Compile Include="Controllers\FINSCASettlementController.cs" />
     <Compile Include="Controllers\FINSCAVoucherController.cs" />
     <Compile Include="Controllers\HRDayOffController.cs" />
     <Compile Include="Controllers\SharedFinanceController.cs" />

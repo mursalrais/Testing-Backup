@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Elmah;
+using MCAWebAndAPI.Model.ViewModel.Control;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 using MCAWebAndAPI.Service.Converter;
 using MCAWebAndAPI.Service.Finance;
@@ -43,7 +44,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
         private const string SuccessMsgFormatCreated = "PC Voucher No. {0} has been successfully created.";
         private const string SuccessMsgFormatUpdated = "PC Voucher No. {0} has been successfully updated.";
-        private const string FirstPageUrl = "{0}/Lists/SPHL%20Data/AllItems.aspx";
+        private const string FirstPageUrl = "{0}/Lists/Petty%20Cash%20Payment%20Voucher/AllItems.aspx";
         private const string PrintPageUrl = "~/Views/FINPettyCashPaymentVoucher/Print.cshtml";
 
         readonly IPettyCashPaymentVoucherService _service;
@@ -175,9 +176,9 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
 
-        public ActionResult GetAmountInWords(int data)
+        public ActionResult GetAmountInWords(int data, CurrencyComboBoxVM currency)
         {
-            return Json(FormatUtil.UppercaseFirst(FormatUtil.ConvertToEnglishWords(data)),
+            return Json(FormatUtil.UppercaseFirst(FormatUtil.ConvertToEnglishWords(data, currency)),
                JsonRequestBehavior.AllowGet);
         }
 

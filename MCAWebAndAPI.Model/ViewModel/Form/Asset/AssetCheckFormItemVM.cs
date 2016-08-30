@@ -46,6 +46,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
         public int systemQty { get; set; }
 
         [DisplayName("Physical Qty")]
-        public string physicalQty{ get; set; }
+        public int physicalQty{ get; set; }
     }
 }

@@ -43,7 +43,8 @@ namespace MCAWebAndAPI.Service.Finance
         private const string FIELD_GL_NO = "GL_x0020_ID_x003a_GL_x0020_No";
         private const string FIELD_GL_DESC = "GL_x0020_ID_x003a_GL_x0020_Descr";
         private const string FIELD_REMARKS = "Remarks";
-        private const string FIELD_VOUCHERNO = "Voucher_x0020_NO";
+        //private const string FIELD_VOUCHERNO = "Voucher_x0020_NO";
+        private const string FIELD_VOUCHERNO = "Title";
         private const string FIELD_ID = "ID";
         private const string FIELD_PCID_DOCUMENTS = "Petty_x0020_Cash_x0020_Payment_x0020_Voucher";
 

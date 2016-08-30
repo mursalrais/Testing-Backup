@@ -120,7 +120,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
                 total += item.Amount;
             }
 
-            totalInWord = FormatUtil.ConvertToEnglishWords(Convert.ToInt32(total));
+            totalInWord = FormatUtil.ConvertToEnglishWords(Convert.ToInt32(total), result.Currency);
             r.Add(result);
 
             return Json(r.Select(m =>

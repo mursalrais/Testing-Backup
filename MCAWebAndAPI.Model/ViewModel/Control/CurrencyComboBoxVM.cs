@@ -1,22 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MCAWebAndAPI.Model.ViewModel.Control
+﻿namespace MCAWebAndAPI.Model.ViewModel.Control
 {
     public class CurrencyComboBoxVM : ComboBoxVM
     {
+
+        public const  string CurrencyUSD = "USD";
+        public const string CurrencyIDR = "IDR";
+
         public CurrencyComboBoxVM() : base()
         {
             this.Choices = new string[]
             {
-                "USD",
-                "IDR"
+                CurrencyUSD,
+                CurrencyIDR
             };
 
-            this.Value = "IDR";
+            this.Value = CurrencyIDR;
         }
     }
 }
