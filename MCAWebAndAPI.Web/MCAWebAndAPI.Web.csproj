@@ -1125,6 +1125,8 @@
     <Content Include="Views\ASSAssignmentOfAsset\View.cshtml" />
     <Content Include="Views\ASSLocationMaster\Sync.cshtml" />
     <Content Include="Views\HRTimesheet\NotAuthorized.cshtml" />
+    <Content Include="Views\ASSAssetCheckResult\_approval_Path.cshtml" />
+    <Content Include="Views\ASSAssetCheckResult\_Details.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
