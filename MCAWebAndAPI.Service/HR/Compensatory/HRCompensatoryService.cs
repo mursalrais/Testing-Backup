@@ -7,9 +7,11 @@ using NLog;
 using Microsoft.SharePoint.Client;
 using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Model.Common;
+using MCAWebAndAPI.Model.ViewModel.Form.Common;
 using MCAWebAndAPI.Model.HR.DataMaster;
 using System.Threading.Tasks;
 using System.Linq;
+using MCAWebAndAPI.Service.Common;
 
 namespace MCAWebAndAPI.Service.HR.Recruitment
 {
@@ -21,7 +23,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         const string SP_APPDATA_LIST_NAME = "Application";
         const string SP_PROMAS_LIST_NAME = "Professional Master";
         const string SP_POSMAS_LIST_NAME = "Position Master";
-        const string SP_MANPOW_LIST_NAME = "Manpower Requisition";
+        const string SP_MANPOW_LIST_NAME = "Manpower Requisition"; 
         const string SP_COMDET_LIST_NAME = "Compensatory Request Detail";
         const string SP_COMREQ_LIST_NAME = "Compensatory Request";
         const string SP_COMBAL_LIST_NAME = "Day-Off Balance";
@@ -59,7 +61,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return viewModel;
         }
 
-        public CompensatoryVM GetComplistbyCmpid(int? iD)
+        public CompensatoryVM GetViewlistbyCmpid(int? iD)
         {
             var viewModel = new CompensatoryVM();
             string crstatus = "";
@@ -91,6 +93,89 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 crstatus = Convert.ToString(item["crstatus"]);
                 viewModel.cmpTitle = Convert.ToString(item["Title"]);
                 viewModel.cmpYearDate = Convert.ToString(item["Created"]);
+            }
+
+            return GetComplisted(iD, profID, crstatus, viewModel);
+        }
+
+        public async Task<CompensatoryVM> GetWorkflow(string requestor, string listName)
+        {
+            var viewModel = new CompensatoryVM();
+
+            //Get Workflow From Mapping Master
+            var _workflow = new WorkflowService();
+            _workflow.SetSiteUrl(_siteUrl);
+            viewModel.WorkflowItems = await _workflow.GetWorkflowDetails(requestor, listName);
+
+            return viewModel;
+        }
+
+        public async Task<CompensatoryVM> GetCheckWorkflow(int? iD, string requestor, string listName, string listNameWorkflow, string columnName)
+        {
+            var viewModel = new CompensatoryVM();
+
+            //Get Workflow From Mapping Master
+            var _workflow = new WorkflowService();
+            _workflow.SetSiteUrl(_siteUrl);
+            var intID = Convert.ToInt32(iD);
+            var Check = await _workflow.CheckWorkflow(intID, listNameWorkflow, columnName);
+            if (Check.Count() != 0)
+            {
+                viewModel.WorkflowItems = Check;
+            }
+            if (Check.Count() == 0)
+            {
+                viewModel.WorkflowItems = await _workflow.GetWorkflowDetails(requestor, listName);
+            }
+
+            return viewModel;
+        }
+
+        public async Task<CompensatoryVM> GetComplistbyCmpid(int? iD, string requestor, string listName, string listNameWorkflow, string columnName)
+        {
+            var viewModel = new CompensatoryVM();
+            string crstatus = "";
+
+            if (iD == null)
+                return viewModel;
+
+            var caml = @"<View>  
+                    <Query> 
+                       <Where>
+                             <Eq>
+                                <FieldRef Name='ID' />
+                                <Value Type='Lookup'>" + iD + @"</Value>
+                             </Eq>
+                       </Where>
+                    </Query> 
+                     <ViewFields> 
+                          <FieldRef Name='Title' />
+                          <FieldRef Name='professional_x003a_ID' />
+                          <FieldRef Name='crstatus' />
+                          <FieldRef Name='Created' />
+                     </ViewFields> 
+                    </View>";
+
+            var profID = 0;
+            foreach (var item in SPConnector.GetList(SP_COMREQ_LIST_NAME, _siteUrl, caml))
+            {
+                profID = Convert.ToInt32(FormatUtil.ConvertLookupToID(item, "professional_x003a_ID") + string.Empty);
+                crstatus = Convert.ToString(item["crstatus"]);
+                viewModel.cmpTitle = Convert.ToString(item["Title"]);
+                viewModel.cmpYearDate = Convert.ToString(item["Created"]);
+            }
+
+            var _workflow = new WorkflowService();
+            _workflow.SetSiteUrl(_siteUrl);
+            var intID = Convert.ToInt32(iD);
+            var Check = await _workflow.CheckWorkflow(intID, listNameWorkflow, columnName);
+            if (Check.Count() != 0)
+            {
+                viewModel.WorkflowItems = Check;
+            }
+            if (Check.Count() == 0)
+            {
+                viewModel.WorkflowItems = await _workflow.GetWorkflowDetails(requestor, listName);
             }
 
             return GetComplisted(iD, profID, crstatus, viewModel);
@@ -385,7 +470,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 throw e;
             }
 
-           int idCmp = SPConnector.GetLatestListItemID(SP_COMREQ_LIST_NAME, _siteUrl);
+            int idCmp = SPConnector.GetLatestListItemID(SP_COMREQ_LIST_NAME, _siteUrl);
 
             AddNewCompensatoryData(idCmp, viewModels);
         }

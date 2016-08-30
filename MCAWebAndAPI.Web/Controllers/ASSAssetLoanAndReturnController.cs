@@ -36,7 +36,7 @@ namespace MCAWebAndAPI.Web.Controllers
             assetLoanAndReturnService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
-            var viewModel = assetLoanAndReturnService.GetPopulatedModel();
+            var viewModel = assetLoanAndReturnService.GetPopulatedModel(siteUrl);
 
             return View("Create", viewModel);
         }
@@ -124,7 +124,7 @@ namespace MCAWebAndAPI.Web.Controllers
             int? headerID = null;
             try
             {
-                headerID = assetLoanAndReturnService.CreateHeader(_data);
+                headerID = assetLoanAndReturnService.CreateHeader(_data,siteUrl);
             }
             catch (Exception e)
             {
@@ -135,7 +135,7 @@ namespace MCAWebAndAPI.Web.Controllers
             try
             {
                 // assetLoanAndReturnService.CreateDetails(headerID, _data.AssetLoanAndReturnItem);
-                _data.AssetLoanAndReturnItem =  BindMonthlyFeeDetailDetails(form,  _data.AssetLoanAndReturnItem); 
+                _data.AssetLoanAndReturnItem = BindMonthlyFeeDetailDetails(form, _data.AssetLoanAndReturnItem);
                 assetLoanAndReturnService.CreateDetails(headerID, _data.AssetLoanAndReturnItem);
             }
             catch (Exception e)
@@ -143,7 +143,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
-            
+
             //    //cek apakah header / item
             //    int? latestIDHeader = 0;
             //    int? latestIDDetail = 0;
@@ -275,23 +275,37 @@ namespace MCAWebAndAPI.Web.Controllers
             assetLoanAndReturnService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
-            var viewModel = assetLoanAndReturnService.GetHeader(ID);
+            var viewModel = assetLoanAndReturnService.GetHeader(ID , siteUrl);
 
             int? headerID = null;
             headerID = viewModel.ID;
 
-            //try
-            //{
-            //    var viewdetails = assetLoanAndReturnService.GetDetails(headerID);
-            //    viewModel. = viewdetails;
-            //}
-            //catch (Exception e)
-            //{
-            //    Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            //    return JsonHelper.GenerateJsonErrorResponse(e);
-            //}
+            try
+            {
+                var viewdetails = assetLoanAndReturnService.GetDetails(headerID);
+                viewModel.AssetLoanAndReturnItem= viewdetails;
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
 
             return View(viewModel);
+        }
+
+        public ActionResult GetProfMasterInfo(string fullname, string position)
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            var profmasterinfo = assetLoanAndReturnService.GetProfMasterInfo(fullname, siteUrl);
+
+            //var professionals = GetFromExistingSession();
+            return Json(
+                new
+                {
+                    profmasterinfo.CurrentPosition,
+                    profmasterinfo.MobileNumberOne
+                }, JsonRequestBehavior.AllowGet);
         }
 
 

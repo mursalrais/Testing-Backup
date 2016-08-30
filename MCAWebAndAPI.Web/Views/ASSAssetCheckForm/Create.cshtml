@@ -1,6 +1,6 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.Asset
 
-@model AssetCheckFormVM
+@model AssetCheckFormHeaderVM
 
 <form class="form-horizontal" method="post" action="/ASSAssetCheckForm/Create" id="create-asset-CheckForm-form">
     <fieldset>
@@ -8,18 +8,68 @@
 
         <div class="col-md-6">
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.CreateDate).Class("col-md-4 control-label")
+                @Html.Bootstrap().LabelFor(m => m.CreateDate).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Html.EditorFor(m => m.Header.CreateDate)
+                    @Html.EditorFor(m => m.CreateDate)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Office).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.Office)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Floor).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.Floor)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Room).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.Room)
                 </div>
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
                 <div class="col-md-4">
-                    <a href="javascript:void(0);" class="btn btn-primary">Check Out</a>
+                    <input class="btn btn-primary" type="submit" name="calculate" value="Calculate" />
                 </div>
             </div>
         </div>
+        <div>
+            @Html.Partial("_Details", Model.Details)
+        </div>
     </fieldset>
+
+    <div>
+        <center>
+            <input class="k-button k-button-icontext k-grid-add" type="submit" name="save" value="Save" />
+            <input class="k-button k-button-icontext k-grid-add" type="submit" name="cancel" value="Cancel" />
+        </center>
+    </div>
 </form>
+
+<script language="javascript">
+    var res;
+    function onSelectedLocation(e) {
+        res = this.dataItem(e.item).split("-")
+        //alert("Location ID : " + res[0]);
+    }
+
+    $(document).ready(function () {
+        window.hello = function () {
+            alert("Location ID : " + res[0] + "\nNama Location :" + res[1]);
+
+        }
+    });
+
+    function calculate() {
+        //alert("Halo");
+        $.post('/Branch/Details/' + id, function (result) {
+            
+        });
+    }
+</script>

@@ -22,12 +22,38 @@ namespace MCAWebAndAPI.Service.Asset
 
         public int CreateHeader(LocationMasterVM header, string province, string office, int floor, string room)
         {
+            header.CancelUrl = _siteUrl + UrlResource.LocationMaster;
             var propCity = province.Split('-');
 
             var caml = @"<View>  
-            <Query> 
-               <Where><And><And><And><Eq><FieldRef Name='Province' /><Value Type='Choice'>" + propCity[1] + @"</Value></Eq><Eq><FieldRef Name='city' /><Value Type='Text'>" + propCity[0] + @"</Value></Eq><Eq><FieldRef Name='Title' /><Value Type='Text'>" + office + @"</Value></Eq></And><Eq><FieldRef Name='Floor' /><Value Type='Text'>" + floor + @"</Value></Eq></And><Eq><FieldRef Name='Room' /><Value Type='Text'>" + room + @"</Value></Eq></And></Where> 
-            </Query> 
+            <Query>
+               <Where>
+                  <And>
+                     <Eq>
+                        <FieldRef Name='Province' />
+                        <Value Type='Lookup'>"+propCity[1]+ @"</Value>
+                     </Eq>
+                     <And>
+                        <Eq>
+                           <FieldRef Name='city' />
+                           <Value Type='Text'>" + propCity[0] + @"</Value>
+                        </Eq>
+                        <And>
+                           <Eq>
+                              <FieldRef Name='Title' />
+                              <Value Type='Text'>" + office + @"</Value>
+                           </Eq>
+                           <Eq>
+                              <FieldRef Name='Room' />
+                              <Value Type='Text'>" + room + @"</Value>
+                           </Eq>
+                        </And>
+                     </And>
+                  </And>
+               </Where>
+            </Query>
+            <ViewFields />
+            <QueryOptions /> 
       </View>";
             int error = 0;
             var locationTemp = SPConnector.GetList(SP_LOCATION_MAS_LISTNAME, _siteUrl, caml).Count();
@@ -37,21 +63,34 @@ namespace MCAWebAndAPI.Service.Asset
             }
             var columnValues = new Dictionary<string, object>();
             var camlProvinceInfo = @"<View><Query>
-                               <Where>
-                                  <Eq>
-                                     <FieldRef Name='Province' />
-                                     <Value Type='Text'>" + header.Province.Value + @"</Value>
-                                  </Eq>
-                               </Where>
-                            </Query>
-                            <ViewFields />
-                            <QueryOptions /></View>";
+                           <Where>
+                              <And>
+                                 <Eq>
+                                    <FieldRef Name='Province' />
+                                    <Value Type='Text'>"+propCity[1]+@"</Value>
+                                 </Eq>
+                                 <Eq>
+                                    <FieldRef Name='Title' />
+                                    <Value Type='Text'>"+propCity[0]+@"</Value>
+                                 </Eq>
+                              </And>
+                           </Where>
+                        </Query>
+                        <ViewFields>
+                           <FieldRef Name='Title' />
+                           <FieldRef Name='Province' />
+                        </ViewFields>
+                        <QueryOptions /></View>";
             var ProvinceInfo = SPConnector.GetList("Province", _siteUrl, camlProvinceInfo);
             foreach (var prop in ProvinceInfo)
             {
                 columnValues.Add("Province", Convert.ToInt32(prop["ID"]));
+                columnValues.Add("city", Convert.ToString(prop["Title"]));
+                if (ProvinceInfo.Count > 1)
+                {
+                    break;
+                }
             }
-
             columnValues.Add("Title", header.OfficeName);
             columnValues.Add("Floor", header.FloorName);
             columnValues.Add("Room", header.RoomName);
@@ -70,16 +109,17 @@ namespace MCAWebAndAPI.Service.Asset
 
         public LocationMasterVM GetHeader(int? ID, string SiteUrl)
         {
+
             var listItem = SPConnector.GetListItem(SP_LOCATION_MAS_LISTNAME, ID, _siteUrl);
             var viewModel = new LocationMasterVM();
 
-            //viewModel.InterviewerUrl = _siteUrl + UrlResource.AssetMaster;
+            viewModel.CancelUrl = _siteUrl + UrlResource.LocationMaster;
             var siteHr = SiteUrl.Replace("/bo", "/hr");
-            viewModel.Province.Choices = GetChoicesFromListHR("Place Master", "Title", siteHr);
+            viewModel.Province.Choices = GetChoicesFromList("Province", "Title", SiteUrl, "Province");
             if ((listItem["Province"] as FieldLookupValue) != null)
             {
                 viewModel.Province.Value = (listItem["Province"] as FieldLookupValue).LookupId.ToString();
-                viewModel.Province.Text = (listItem["Province"] as FieldLookupValue).LookupValue +"-"+ Convert.ToString(listItem["city"]);
+                viewModel.Province.Text = Convert.ToString(listItem["city"]) + "-" + (listItem["Province"] as FieldLookupValue).LookupValue;
             }
             viewModel.OfficeName = Convert.ToString(listItem["Title"]);
             viewModel.FloorName = Convert.ToInt32(listItem["Floor"]);
@@ -93,55 +133,32 @@ namespace MCAWebAndAPI.Service.Asset
         public LocationMasterVM GetPopulatedModel(string SiteUrl)
         {
             var model = new LocationMasterVM();
-            var siteHr = SiteUrl.Replace("/bo", "/hr");
-            model.Province.Choices = GetChoicesFromListHR("Place Master", "Title", siteHr);
+            model.CancelUrl = _siteUrl + UrlResource.LocationMaster;
+            model.Province.Choices = GetChoicesFromList("Province", "Title", SiteUrl, "Province");
             return model;
         }
 
-        private IEnumerable<string> GetChoicesFromListHR(string listname, string field1, string siteHr, string field2 = null)
+        private IEnumerable<string> GetChoicesFromList(string listname, string field1, string SiteUrl, string field2 = null)
         {
             var caml = @"<View>  
                         <Query>
-                       <Where>
-                          <Eq>
-                             <FieldRef Name='Level' />
-                             <Value Type='Choice'>City</Value>
-                          </Eq>
-                       </Where>
-                    </Query>
-                    <ViewFields>
-                       <FieldRef Name='Title' />
-                       <FieldRef Name='Level' />
-                       <FieldRef Name='parentlocation_x003a_ID' />
-                    </ViewFields>
-                    <QueryOptions />
+                           <Where>
+                              <IsNotNull>
+                                 <FieldRef Name='ID' />
+                              </IsNotNull>
+                           </Where>
+                        </Query>
+                        <ViewFields>
+                           <FieldRef Name='Title' />
+                           <FieldRef Name='Province' />
+                        </ViewFields>
+                        <QueryOptions />
                         </View>";
             List<string> _choices = new List<string>();
-            var listItems = SPConnector.GetList(listname, siteHr, caml);
+            var listItems = SPConnector.GetList(listname, SiteUrl, caml);
             foreach (var item in listItems)
             {
-                var idParent = 0;
-                if ((item["parentlocation_x003a_ID"] as FieldLookupValue) != null)
-                {
-                    idParent = (item["parentlocation_x003a_ID"] as FieldLookupValue).LookupId;
-                }
-                var camlParent = @"<View><Query>
-                               <Where>
-                                  <Eq>
-                                     <FieldRef Name='ID' />
-                                     <Value Type='Counter'>"+ idParent + @"</Value>
-                                  </Eq>
-                               </Where>
-                            </Query>
-                            <ViewFields>
-                               <FieldRef Name='Title' />
-                            </ViewFields>
-                            <QueryOptions /></View>";
-                var getParent = SPConnector.GetList(SP_PLACE_MAS_LISTNAME, siteHr, camlParent);
-                foreach(var p in getParent)
-                {
-                    _choices.Add(item[field1].ToString() + "-" + p["Title"].ToString());
-                }
+                _choices.Add(item[field1].ToString() + "-" + item[field2].ToString());
             }
             return _choices.ToArray();
         }
@@ -153,10 +170,39 @@ namespace MCAWebAndAPI.Service.Asset
 
         public bool UpdateHeader(LocationMasterVM header, string province, string office, int floor, string room)
         {
+            header.CancelUrl = _siteUrl + UrlResource.LocationMaster;
+            var ID = header.ID;
+            var propCity = province.Split('-');
+
             var caml = @"<View>  
-            <Query> 
-               <Where><And><And><And><Eq><FieldRef Name='Province' /><Value Type='Choice'>" + province + @"</Value></Eq><Eq><FieldRef Name='Title' /><Value Type='Text'>" + office + @"</Value></Eq></And><Eq><FieldRef Name='Floor' /><Value Type='Text'>" + floor + @"</Value></Eq></And><Eq><FieldRef Name='Room' /><Value Type='Text'>" + room + @"</Value></Eq></And></Where> 
-            </Query> 
+            <Query>
+               <Where>
+                  <And>
+                     <Eq>
+                        <FieldRef Name='Province' />
+                        <Value Type='Lookup'>" + propCity[1] + @"</Value>
+                     </Eq>
+                     <And>
+                        <Eq>
+                           <FieldRef Name='city' />
+                           <Value Type='Text'>" + propCity[0] + @"</Value>
+                        </Eq>
+                        <And>
+                           <Eq>
+                              <FieldRef Name='Title' />
+                              <Value Type='Text'>" + office + @"</Value>
+                           </Eq>
+                           <Eq>
+                              <FieldRef Name='Room' />
+                              <Value Type='Text'>" + room + @"</Value>
+                           </Eq>
+                        </And>
+                     </And>
+                  </And>
+               </Where>
+            </Query>
+            <ViewFields />
+            <QueryOptions /> 
       </View>";
             bool error = false;
             var locationTemp = SPConnector.GetList(SP_LOCATION_MAS_LISTNAME, _siteUrl, caml).Count();
@@ -164,23 +210,37 @@ namespace MCAWebAndAPI.Service.Asset
             {
                 return error;
             }
-            var ID = header.ID;
             var columnValues = new Dictionary<string, object>();
             var camlProvinceInfo = @"<View><Query>
-                               <Where>
-                                  <Eq>
-                                     <FieldRef Name='Province' />
-                                     <Value Type='Text'>" + header.Province.Value + @"</Value>
-                                  </Eq>
-                               </Where>
-                            </Query>
-                            <ViewFields />
-                            <QueryOptions /></View>";
+                           <Where>
+                              <And>
+                                 <Eq>
+                                    <FieldRef Name='Province' />
+                                    <Value Type='Text'>" + propCity[1] + @"</Value>
+                                 </Eq>
+                                 <Eq>
+                                    <FieldRef Name='Title' />
+                                    <Value Type='Text'>" + propCity[0] + @"</Value>
+                                 </Eq>
+                              </And>
+                           </Where>
+                        </Query>
+                        <ViewFields>
+                           <FieldRef Name='Title' />
+                           <FieldRef Name='Province' />
+                        </ViewFields>
+                        <QueryOptions /></View>";
             var ProvinceInfo = SPConnector.GetList("Province", _siteUrl, camlProvinceInfo);
             foreach (var prop in ProvinceInfo)
             {
                 columnValues.Add("Province", Convert.ToInt32(prop["ID"]));
+                columnValues.Add("city", Convert.ToString(prop["Title"]));
+                if (ProvinceInfo.Count > 1)
+                {
+                    break;
+                }
             }
+
             columnValues.Add("Title", header.OfficeName);
             columnValues.Add("Floor", header.FloorName);
             columnValues.Add("Room", header.RoomName);
@@ -221,10 +281,21 @@ namespace MCAWebAndAPI.Service.Asset
         private IEnumerable<LocationMasterVM> GetPlaceMasters()
         {
             var caml = @"<View>  
-            <Query> 
-               <Where><Eq><FieldRef Name='Level' /><Value Type='Choice'>Province</Value></Eq></Where> 
-            </Query> 
-      </View>";
+                        <Query>
+                       <Where>
+                          <Eq>
+                             <FieldRef Name='Level' />
+                             <Value Type='Choice'>City</Value>
+                          </Eq>
+                       </Where>
+                    </Query>
+                    <ViewFields>
+                       <FieldRef Name='Title' />
+                       <FieldRef Name='Level' />
+                       <FieldRef Name='parentlocation_x003a_ID' />
+                    </ViewFields>
+                    <QueryOptions />
+                        </View>";
 
             var LocationMaster = new List<LocationMasterVM>();
             var site = _siteUrl;
@@ -241,11 +312,40 @@ namespace MCAWebAndAPI.Service.Asset
 
         private LocationMasterVM ConvertToProvinceVM(ListItem item)
         {
-            return new LocationMasterVM
+            var idParent = 0;
+            if ((item["parentlocation_x003a_ID"] as FieldLookupValue) != null)
             {
-                ID = Convert.ToInt32(item["ID"]),
-                LocationName = Convert.ToString(item["Title"])
-            };
+                idParent = (item["parentlocation_x003a_ID"] as FieldLookupValue).LookupId;
+            }
+            var site = _siteUrl;
+            var siteHR = site.Replace("/bo", "/hr");
+            var camlParent = @"<View><Query>
+                               <Where>
+                                  <Eq>
+                                     <FieldRef Name='ID' />
+                                     <Value Type='Counter'>" + idParent + @"</Value>
+                                  </Eq>
+                               </Where>
+                            </Query>
+                            <ViewFields>
+                               <FieldRef Name='Title' />
+                            </ViewFields>
+                            <QueryOptions /></View>";
+            var getParent = SPConnector.GetList(SP_PLACE_MAS_LISTNAME, siteHR, camlParent);
+            LocationMasterVM model = new LocationMasterVM();
+            foreach (var p in getParent)
+            {
+                //_choices.Add(item[field1].ToString() + "-" + p["Title"].ToString());
+                model.ID = Convert.ToInt32(item["ID"]);
+                model.LocationName = Convert.ToString(item["Title"] +"-"+Convert.ToString(p["Title"]));
+            }
+
+            return model;
+            //return new LocationMasterVM
+            //{
+            //    ID = Convert.ToInt32(item["ID"]),
+            //    LocationName = Convert.ToString(item["Title"])
+            //};
         }
 
         public LocationMasterVM UpdateProvince()
@@ -253,10 +353,21 @@ namespace MCAWebAndAPI.Service.Asset
             var viewModel = new LocationMasterVM();
 
             var caml = @"<View>  
-            <Query> 
-               <Where><Eq><FieldRef Name='Level' /><Value Type='Choice'>Province</Value></Eq></Where> 
-            </Query> 
-      </View>";
+                        <Query>
+                       <Where>
+                          <Eq>
+                             <FieldRef Name='Level' />
+                             <Value Type='Choice'>City</Value>
+                          </Eq>
+                       </Where>
+                    </Query>
+                    <ViewFields>
+                       <FieldRef Name='Title' />
+                       <FieldRef Name='Level' />
+                       <FieldRef Name='parentlocation_x003a_ID' />
+                    </ViewFields>
+                    <QueryOptions />
+                        </View>";
 
             var site = _siteUrl;
             var siteHR = site.Replace("/bo", "/hr");
@@ -278,7 +389,9 @@ namespace MCAWebAndAPI.Service.Asset
 
                 if (!(collectionProvince.Any(e => e == model.LocationName)))
                 {
-                    updatedValue.Add("Province", model.LocationName);
+                    var breaks = model.LocationName.Split('-');
+                    updatedValue.Add("Title", breaks[0]);
+                    updatedValue.Add("Province", breaks[1]);
 
                     try
                     {
@@ -294,19 +407,41 @@ namespace MCAWebAndAPI.Service.Asset
 
             foreach (var item in SPConnector.GetList(SP_PLACE_MAS_LISTNAME, siteHR, caml))
             {
-                collectionIDLocation.Add(Convert.ToInt32(item["ID"]));
-                collectionLocation.Add(Convert.ToString(item["Title"]));
+                var idParent = 0;
+                if ((item["parentlocation_x003a_ID"] as FieldLookupValue) != null)
+                {
+                    idParent = (item["parentlocation_x003a_ID"] as FieldLookupValue).LookupId;
+                }
+                var camlParent = @"<View><Query>
+                               <Where>
+                                  <Eq>
+                                     <FieldRef Name='ID' />
+                                     <Value Type='Counter'>" + idParent + @"</Value>
+                                  </Eq>
+                               </Where>
+                            </Query>
+                            <ViewFields>
+                               <FieldRef Name='Title' />
+                            </ViewFields>
+                            <QueryOptions /></View>";
+                var getParent = SPConnector.GetList(SP_PLACE_MAS_LISTNAME, siteHR, camlParent);
+                foreach (var p in getParent)
+                {
+                    //_choices.Add(item[field1].ToString() + "-" + p["Title"].ToString());
+                    collectionIDLocation.Add(Convert.ToInt32(item["ID"]));
+                    collectionLocation.Add(Convert.ToString(item["Title"]) + "-" + p["Title"].ToString());
+                }
             }
 
             foreach (var item in SPConnector.GetList(SP_PROVINCE_LISTNAME, _siteUrl))
             {
                 var updatedValue = new Dictionary<string, object>();
 
-                string province = null;
+                string cityprovince = null;
                 int id = 0;
-                province = Convert.ToString(item["Province"]);
+                cityprovince = Convert.ToString(item["Title"])+"-"+Convert.ToString(item["Province"]);
                 id = Convert.ToInt32(item["ID"]);
-                if (!(collectionLocation.Any(e => e == province)))
+                if (!(collectionLocation.Any(e => e == cityprovince)))
                 {
                     try
                     {
@@ -329,7 +464,7 @@ namespace MCAWebAndAPI.Service.Asset
 
             var listitem = SPConnector.GetListItem("Location Master", ID, SiteUrl);
             var model = new LocationMasterVM();
-            model.Province.Choices = GetChoicesFromListHR("Place Master", "Title", siteHr);
+            model.Province.Choices = GetChoicesFromList("Province", "Title", SiteUrl, "Province");
 
             if ((listitem["Province"] as FieldLookupValue) != null)
             {

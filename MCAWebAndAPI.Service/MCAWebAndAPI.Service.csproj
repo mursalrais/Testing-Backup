@@ -182,6 +182,7 @@
     <Compile Include="Finance\IPettyCashSettlementService.cs" />
     <Compile Include="Finance\IPettyCashStatementService.cs" />
     <Compile Include="Finance\IRequisitionNoteService.cs" />
+    <Compile Include="Finance\ISCASettlementService.cs" />
     <Compile Include="Finance\ISCAVoucherService.cs" />
     <Compile Include="Finance\ISPHLService.cs" />
     <Compile Include="Finance\ITaxExemptionDataService.cs" />
@@ -193,6 +194,7 @@
     <Compile Include="Finance\PettyCashSettlementService.cs" />
     <Compile Include="Finance\PettyCashStatementService.cs" />
     <Compile Include="Finance\RequisitionNoteService.cs" />
+    <Compile Include="Finance\SCASettlementService.cs" />
     <Compile Include="Finance\SCAVoucherService.cs" />
     <Compile Include="Finance\SharedService.cs" />
     <Compile Include="Finance\SPHLService.cs" />

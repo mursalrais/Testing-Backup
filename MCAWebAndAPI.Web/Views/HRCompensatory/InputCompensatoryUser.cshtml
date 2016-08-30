@@ -74,8 +74,11 @@
     </div>
 }
 
-<legend>Approval Workflow</legend>
-<div id="workflow-placeholder" class="row"></div>
+
+<legend>Approval Path</legend>
+<div class="row">
+    @Html.Partial("_WorkflowPathDetails", Model)
+</div>
 
 @section scripts{
 
@@ -111,11 +114,6 @@
 
 
         $(document).ready(function () {
-            var eMail = $("#cmpEmail").val();
-                        showLoading();
-                        if (eMail != null) {
-                            displayWorkflowRouter("workflow-placeholder", "@ViewBag.ListName", eMail);
-                        }
 
                         var nameProf = $("#cmpName").val() + " - " + $("#cmpPosition").val()
                         $("#ProfName").prop("value", nameProf);
