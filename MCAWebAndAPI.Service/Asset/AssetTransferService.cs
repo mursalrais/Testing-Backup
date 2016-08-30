@@ -1217,8 +1217,59 @@ namespace MCAWebAndAPI.Service.Asset
         {
             var updatedValues = new Dictionary<string, object>();
             updatedValues.Add("assettransfer", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
-            var asset = @"<View></View>";
-            var provinceFrom = @"<View></View>";
+            var asset = @"<View>
+                        <Query>
+                           <Where>
+                              <Eq>
+                                 <FieldRef Name='assetsubasset' />
+                                 <Value Type='Lookup'>"+item.AssetSubAsset.Text+@"</Value>
+                              </Eq>
+                           </Where>
+                        </Query>
+                        <ViewFields />
+                        <QueryOptions /></View>";
+            var breakfrom = item.Province.Text.Split('-');
+            var breakto = item.ProvinceTo.Text.Split('-');
+            var provinceFrom = @"<View><Query>
+                               <Where>
+                                  <And>
+                                     <Eq>
+                                        <FieldRef Name='Province' />
+                                        <Value Type='Lookup'>" + breakfrom[1] + @"</Value>
+                                     </Eq>
+                                     <And>
+                                        <Eq>
+                                           <FieldRef Name='city' />
+                                           <Value Type='Text'>" + breakfrom[0] + @"</Value>
+                                        </Eq>
+                                        <And>
+                                           <Eq>
+                                              <FieldRef Name='Title' />
+                                              <Value Type='Text'>" + Convert.ToString(d.ItemArray[6]) + @"</Value>
+                                           </Eq>
+                                           <And>
+                                              <Eq>
+                                                 <FieldRef Name='Floor' />
+                                                 <Value Type='Text'>" + Convert.ToString(d.ItemArray[7]) + @"</Value>
+                                              </Eq>
+                                              <Eq>
+                                                 <FieldRef Name='Room' />
+                                                 <Value Type='Text'>" + Convert.ToString(d.ItemArray[8]) + @"</Value>
+                                              </Eq>
+                                           </And>
+                                        </And>
+                                     </And>
+                                  </And>
+                               </Where>
+                            </Query>
+                            <ViewFields>
+                               <FieldRef Name='Province' />
+                               <FieldRef Name='Title' />
+                               <FieldRef Name='Floor' />
+                               <FieldRef Name='Room' />
+                               <FieldRef Name='city' />
+                            </ViewFields>
+                            <QueryOptions /></View>";
             var provinceTo = @"<View></View>";
             var getAssetID = SPConnector.GetListItem("Asset Assignment Detail", item.AssetSubAsset.Value.Value, _siteUrl);
             var provinceinfo = SPConnector.GetListItem("Location Master", item.Province.Value.Value, _siteUrl);
