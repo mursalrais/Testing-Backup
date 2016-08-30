@@ -28,7 +28,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         void CreateCompensatoryData(int? headerID, CompensatoryVM CompensatoryList);
 
-        void CreateHeaderCompensatory(CompensatoryVM CompensatoryList);
+        int CreateHeaderCompensatory(CompensatoryVM CompensatoryList);
 
         IEnumerable<CompensatoryMasterVM> GetCompensatoryId(int? idComp);
 

@@ -7,6 +7,12 @@ using MCAWebAndAPI.Web.Resources;
 using System.Linq;
 using System.Web.Mvc;
 using FinService = MCAWebAndAPI.Service.Finance;
+using MCAWebAndAPI.Service.Converter;
+using System;
+using Elmah;
+using System.IO;
+using static MCAWebAndAPI.Model.ViewModel.Form.Finance.Shared;
+using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -21,6 +27,16 @@ namespace MCAWebAndAPI.Web.Controllers
 
     public class FINPettyCashReimbursementController : Controller
     {
+        private const string PettyCashReimbursement_ControllerName = "FINPettyCashReimbursement";
+        private const string Vendor_ActionName = "GetVendor";
+        private const string Professional_ActionName = "GetProfessional";
+        private const string WBS_ActionName = "GetWBS";
+        private const string GL_ActionName = "GetGL";
+        private const string PaidTo_EventName = "onSelectPaidTo";
+        private const string ValueField = "ID";
+        private const string TextField = "Title";
+
+        private const string PrintPageUrl = "~/Views/FINPettyCashReimbursement/Print.cshtml";
         IPettyCashReimbursementService service;
 
         public FINPettyCashReimbursementController()
@@ -28,59 +44,84 @@ namespace MCAWebAndAPI.Web.Controllers
             service = new PettyCashReimbursementService();
         }
 
-        public ActionResult Create(string siteUrl = null)
+        public ActionResult Item(string siteUrl = null, string op = null, int? id = null)
         {
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
-
             service.SetSiteUrl(siteUrl);
             SessionManager.Set("SiteUrl", siteUrl);
 
-            var viewModel = new PettyCashReimbursementVM();
-            viewModel.PaidTo = new PaidToComboboxVM();
-           
-            viewModel.PaidTo.OnSelectEventName = "onSelectPaidTo";
+            var viewModel = service.Get(GetOperation(op), id);
+            SetAdditionalSettingToViewModel(ref viewModel);
             
-            viewModel.Vendor = new AjaxCascadeComboBoxVM
-            {
-                ControllerName = "FINPettyCashReimbursement", 
-                ActionName = "GetVendors",
-                ValueField = "ID",
-                TextField = "Title"
-            };
-
-            viewModel.Professional = new AjaxCascadeComboBoxVM
-            {
-                ControllerName = "FINPettyCashReimbursement",
-                ActionName = "GetProfessional",
-                ValueField = "ID",
-                TextField = "Title"
-            };
-
             return View(viewModel);
         }
 
+        public ActionResult Print(int? ID=null)
+        {
+            ID = 1;
+            string RelativePath = PrintPageUrl;
+
+            var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl)?? ConfigResource.DefaultBOSiteUrl;
+            service.SetSiteUrl(siteUrl);
+
+            var viewModel = service.GetPettyCashReimbursement(ID);
+
+            ViewData.Model = viewModel;
+            var view = ViewEngines.Engines.FindView(ControllerContext, RelativePath, null);
+            var fileName = viewModel.DocNo + "_Application.pdf";
+            byte[] pdfBuf = null;
+            string content;
+
+            using (var writer = new StringWriter())
+            {
+                var context = new ViewContext(ControllerContext, view.View, ViewData, TempData, writer);
+                view.View.Render(context, writer);
+                writer.Flush();
+                content = writer.ToString();
+
+                // Get PDF Bytes
+                try
+                {
+                    pdfBuf = PDFConverter.Instance.ConvertFromHTML(fileName, content);
+                }
+                catch (Exception e)
+                {
+                    ErrorSignal.FromCurrentContext().Raise(e);
+                    return JsonHelper.GenerateJsonErrorResponse(e);
+                }
+            }
+            if (pdfBuf == null)
+                return HttpNotFound();
+            return File(pdfBuf, "application/pdf");
+        }
+
         [HttpPost]
-        public ActionResult Create(FormCollection form, PettyCashReimbursementVM viewModel)
+        public async Task<ActionResult> Save(FormCollection form, PettyCashReimbursementVM viewModel)
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl") ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
             int? ID = null;
             ID = service.Create(viewModel);
-           // Task createApplicationDocumentTask = service.CreateAttachmentAsync(ID, viewModel.Documents);
-           // Task allTasks = Task.WhenAll(createApplicationDocumentTask);
+            Task createApplicationDocumentTask = service.CreateAttachmentAsync(ID, viewModel.Documents);
+            Task allTasks = Task.WhenAll(createApplicationDocumentTask);
 
-            //try
-            //{
-            //    await allTasks;
-            //}
-            //catch (Exception e)
-            //{
-            //    ErrorSignal.FromCurrentContext().Raise(e);
-            //    return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
-            //}
+            try
+            {
+                await allTasks;
+            }
+            catch (Exception e)
+            {
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
+            }
 
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.FINSPHL);
+            return RedirectToAction("Print",
+                "FINPettyCashReimbursement",
+                new
+                {
+                    ID = ID
+                });
         }
 
         public JsonResult GetVendor()
@@ -97,7 +138,6 @@ namespace MCAWebAndAPI.Web.Controllers
             }), JsonRequestBehavior.AllowGet);
         }
 
-
         public JsonResult GetProfessional()
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl") ?? ConfigResource.DefaultBOSiteUrl;
@@ -110,6 +150,73 @@ namespace MCAWebAndAPI.Web.Controllers
                 e.ID,
                 e.Title
             }), JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetWBS()
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl") ?? ConfigResource.DefaultBOSiteUrl;
+            service.SetSiteUrl(siteUrl);
+
+            var wbs = FinService.SharedService.GetWBSMaster(siteUrl);
+
+            return Json(wbs.Select(e => new
+            {
+                e.ID,
+                Title = e.Title + " - " + e.WBSDescription
+            }), JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetGL()
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl") ?? ConfigResource.DefaultBOSiteUrl;
+            service.SetSiteUrl(siteUrl);
+
+            var gls = FinService.SharedService.GetGLMaster(siteUrl);
+
+            return Json(gls.Select(e => new
+            {
+                e.ID,
+                Title = e.Title + " - " + e.GLDescription
+            }), JsonRequestBehavior.AllowGet);
+        }
+
+        private void SetAdditionalSettingToViewModel(ref PettyCashReimbursementVM viewModel)
+        {
+            viewModel.PaidTo = new PaidToComboboxVM();
+            viewModel.PaidTo.OnSelectEventName = PaidTo_EventName;
+
+            viewModel.Vendor = new AjaxCascadeComboBoxVM
+            {
+                ControllerName = PettyCashReimbursement_ControllerName,
+                ActionName = Vendor_ActionName,
+                ValueField = ValueField,
+                TextField = TextField
+            };
+
+            viewModel.Professional = new AjaxComboBoxVM
+            {
+                ControllerName = PettyCashReimbursement_ControllerName,
+                ActionName = Professional_ActionName,
+                ValueField = ValueField,
+                TextField = TextField
+            };
+
+            viewModel.WBS = new AjaxComboBoxVM
+            {
+                ControllerName = PettyCashReimbursement_ControllerName,
+                ActionName = WBS_ActionName,
+                ValueField = ValueField,
+                TextField = TextField
+            };
+
+            viewModel.GL = new AjaxCascadeComboBoxVM
+            {
+                ControllerName = PettyCashReimbursement_ControllerName,
+                ActionName = GL_ActionName,
+                ValueField = ValueField,
+                TextField = TextField
+            };
+
         }
     }
 }
