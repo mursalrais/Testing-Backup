@@ -1385,7 +1385,7 @@ namespace MCAWebAndAPI.Service.Asset
                         <QueryOptions /></View>";
 
                 var getFromProfMas = SPConnector.GetList("Professional Master", sitehr, camlfrom);
-                var getFromProfMas1s = SPConnector.GetList("Professional Master", sitehr, camlto);
+                var getFromProfMas1 = SPConnector.GetList("Professional Master", sitehr, camlto);
                 for(int i=0;i< getFromProfMas.Count;i++)
                 {
                     var model = new Dictionary<string, object>();
@@ -1393,9 +1393,9 @@ namespace MCAWebAndAPI.Service.Asset
                     model.Add("contactnumberfrom", Convert.ToString(getFromProfMas[i]["mobilephonenr"]));
                     model.Add("positionfrom", (getFromProfMas[i]["Position"] as FieldLookupValue).LookupValue);
 
-                    model.Add("projectunitto", Convert.ToString(getFromProfMas1s[i]["Project_x002f_Unit"]));
-                    model.Add("contactnumberto", Convert.ToString(getFromProfMas1s[i]["mobilephonenr"]));
-                    model.Add("positionto", (getFromProfMas1s[i]["Position"] as FieldLookupValue).LookupValue);
+                    model.Add("projectunitto", Convert.ToString(getFromProfMas1[i]["Project_x002f_Unit"]));
+                    model.Add("contactnumberto", Convert.ToString(getFromProfMas1[i]["mobilephonenr"]));
+                    model.Add("positionto", (getFromProfMas1[i]["Position"] as FieldLookupValue).LookupValue);
 
                 }
             }

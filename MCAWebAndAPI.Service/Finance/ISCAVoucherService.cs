@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web;
+using MCAWebAndAPI.Model.ViewModel.Control;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 
 namespace MCAWebAndAPI.Service.Finance
@@ -11,6 +9,10 @@ namespace MCAWebAndAPI.Service.Finance
     public interface ISCAVoucherService
     {
         SCAVoucherVM Get(int? ID);
+
+        IEnumerable<SCAVoucherVM> GetAll();
+
+        IEnumerable<AjaxComboBoxVM> GetAllAjaxComboBoxVM();
 
         SCAVoucherVM GetEventBudget(int? ID);
 

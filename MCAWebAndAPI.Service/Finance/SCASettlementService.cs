@@ -11,6 +11,10 @@ namespace MCAWebAndAPI.Service.Finance
 {
     public class SCASettlementService : ISCASettlementService
     {
+        /// <summary>
+        /// Wirefram FIN07: SCA Settlement
+        /// </summary>
+
         private string siteUrl = string.Empty;
         static Logger logger = LogManager.GetCurrentClassLogger();
 
