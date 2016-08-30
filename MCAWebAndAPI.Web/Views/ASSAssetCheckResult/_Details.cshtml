@@ -1,0 +1,82 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Asset
+
+@model IEnumerable<AssetCheckResultItemVM>
+
+<div class="col-sm-12"> 
+
+    @(Html.Kendo().Grid(Model)
+        .Name("Details")
+        .Editable(editable => editable.Mode(GridEditMode.InCell))
+        .Columns(columns =>
+        {
+            columns.Bound(p => p.Item);
+
+            columns.Bound(p => p.SerialNo);
+
+            columns.Bound(p => p.Province);
+
+            columns.Bound(p => p.LocationName);
+
+            columns.Bound(p => p.Status);
+
+            columns.Bound(p => p.Existense);
+
+            columns.Bound(p => p.Condition);
+
+            columns.Bound(p => p.Specification);
+
+            columns.Bound(p => p.SystemQty);
+
+            columns.Bound(p => p.PhysicalQty);
+
+            columns.Bound(p => p.DifferentQty);
+
+            columns.Bound(p => p.Dispose);
+
+            columns.Bound(p => p.Remarks);
+
+            columns.Bound(p => p.AssetID);
+        })
+        .DataSource(dataSource => dataSource.Ajax()
+        .Model(model =>
+        {
+            model.Id(p => p.ID);
+            model.Field(p => p.AssetSubAsset).Editable(false);
+            model.Field(p => p.SerialNo).Editable(false);
+            model.Field(p => p.Province).Editable(false);
+            model.Field(p => p.LocationName).Editable(false);
+            model.Field(p => p.Status).Editable(false);
+            model.Field(p => p.SystemQty).Editable(false);
+        })
+        .ServerOperation(false)
+        )
+    )
+</div>
+<script>
+    function index(dataItem) {
+        var data = $("#Details").data("kendoGrid").dataSource.data();
+
+        return data.indexOf(dataItem);
+    }
+</script>
+<style>
+    .k-grid .k-grid-header .k-header .k-link {
+        height: auto;
+    }
+
+    .k-grid .k-grid-header .k-header {
+        white-space: normal;
+    }
+
+    .k-virtual-scrollable-wrap tr {
+        height: 3em;
+    }
+
+    .k-grid td {
+        padding: 5px;
+    }
+
+    .k-grid img {
+        vertical-align: top;
+    }
+</style>

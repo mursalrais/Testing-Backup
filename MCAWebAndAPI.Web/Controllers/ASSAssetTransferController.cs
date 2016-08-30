@@ -516,21 +516,15 @@ namespace MCAWebAndAPI.Web.Controllers
                         TableHeader.Columns.Add("Title", typeof(string));
                         TableHeader.Columns.Add("transferdate", typeof(string));
                         TableHeader.Columns.Add("assetholderfrom", typeof(string));
-                        TableHeader.Columns.Add("positionfrom", typeof(string));
-                        TableHeader.Columns.Add("projectunitfrom", typeof(string));
-                        TableHeader.Columns.Add("contactnumberfrom", typeof(string));
                         TableHeader.Columns.Add("assetholderto", typeof(string));
-                        TableHeader.Columns.Add("positionto", typeof(string));
-                        TableHeader.Columns.Add("projectunitto", typeof(string));
-                        TableHeader.Columns.Add("contactnumberto", typeof(string));
 
                         //check assetholder in Professional Master HR
                         var camlfrom = @"<View><Query>
                                    <Where>
-                                      <Eq>
+                                      <Contains>
                                          <FieldRef Name='Title' />
                                          <Value Type='Text'>" + d.ItemArray[2].ToString() + @"</Value>
-                                      </Eq>
+                                      </Contains>
                                    </Where>
                                 </Query>
                                 <ViewFields>
@@ -542,10 +536,10 @@ namespace MCAWebAndAPI.Web.Controllers
                                 <QueryOptions /></View>";
                         var camlto = @"<View><Query>
                                    <Where>
-                                      <Eq>
+                                      <Contains>
                                          <FieldRef Name='Title' />
-                                         <Value Type='Text'>" + d.ItemArray[6].ToString() + @"</Value>
-                                      </Eq>
+                                         <Value Type='Text'>" + d.ItemArray[3].ToString() + @"</Value>
+                                      </Contains>
                                    </Where>
                                 </Query>
                                 <ViewFields>
@@ -562,16 +556,9 @@ namespace MCAWebAndAPI.Web.Controllers
                         {
                             DataRow row = TableHeader.NewRow();
                             row["Title"] = type;
-                            row["transferdate"] = Convert.ToString(d.ItemArray[1]);
+                            row["transferdate"] = Convert.ToDateTime(d.ItemArray[1]);
                             row["assetholderfrom"] = Convert.ToString(d.ItemArray[2]);
-                            row["positionfrom"] = "";
-                            row["projectunitfrom"] = "";
-                            row["contactnumberfrom"] = "";
-
-                            row["assetholderto"] = Convert.ToString(d.ItemArray[6]);
-                            row["positionto"] = "";
-                            row["projectunitto"] = "";
-                            row["contactnumberto"] = "";
+                            row["assetholderto"] = Convert.ToString(d.ItemArray[3]);
 
                             TableHeader.Rows.InsertAt(row, 0);
 
@@ -606,7 +593,7 @@ namespace MCAWebAndAPI.Web.Controllers
                     }
                 }
 
-                if (d.ItemArray[10].ToString() != "" && latestIDHeader != null)
+                if (d.ItemArray[4].ToString() != "" && latestIDHeader != null)
                 {
                     try
                     {
@@ -628,7 +615,7 @@ namespace MCAWebAndAPI.Web.Controllers
                         //check assetsubasset
                         //check province -office - floor - room
                         //FXA-GP-FF-0001-GPS
-                        var breakAsset = d.ItemArray[10].ToString().Split('-');
+                        var breakAsset = d.ItemArray[4].ToString().Split('-');
                         var assetID = breakAsset[0] + "-" + breakAsset[1] + "-" + breakAsset[2] + "-" + breakAsset[3];
                         if (breakAsset.Length > 5)
                         {
@@ -652,75 +639,89 @@ namespace MCAWebAndAPI.Web.Controllers
                         </ViewFields>
                         <QueryOptions /></View>";
                         //check province
+                        var breakfrom = d.ItemArray[5].ToString().Split('-');
+                        var breakto = d.ItemArray[9].ToString().Split('-');
                         var camlprovincefrom = @"<View><Query>
-                            <Where>
-                                <And>
-                                    <Eq>
-                                    <FieldRef Name='Province' />
-                                    <Value Type='Lookup'>" + d.ItemArray[11].ToString() + @"</Value>
-                                    </Eq>
-                                    <And>
-                                    <Eq>
-                                        <FieldRef Name='Title' />
-                                        <Value Type='Text'>" + d.ItemArray[12].ToString() + @"</Value>
-                                    </Eq>
-                                    <And>
+                               <Where>
+                                  <And>
+                                     <Eq>
+                                        <FieldRef Name='Province' />
+                                        <Value Type='Lookup'>" + breakfrom[1] + @"</Value>
+                                     </Eq>
+                                     <And>
                                         <Eq>
-                                            <FieldRef Name='Floor' />
-                                            <Value Type='Text'>" + d.ItemArray[13].ToString() + @"</Value>
+                                           <FieldRef Name='city' />
+                                           <Value Type='Text'>" + breakfrom[0] + @"</Value>
                                         </Eq>
-                                        <Eq>
-                                            <FieldRef Name='Room' />
-                                            <Value Type='Text'>" + d.ItemArray[14].ToString() + @"</Value>
-                                        </Eq>
-                                    </And>
-                                    </And>
-                                </And>
-                            </Where>
-                        </Query>
-                        <ViewFields>
-                            <FieldRef Name='Province' />
-                            <FieldRef Name='Title' />
-                            <FieldRef Name='Floor' />
-                            <FieldRef Name='Room' />
-                            <FieldRef Name='Remarks' />
-                        </ViewFields>
-                        <QueryOptions /></View>";
+                                        <And>
+                                           <Eq>
+                                              <FieldRef Name='Title' />
+                                              <Value Type='Text'>" + Convert.ToString(d.ItemArray[6]) + @"</Value>
+                                           </Eq>
+                                           <And>
+                                              <Eq>
+                                                 <FieldRef Name='Floor' />
+                                                 <Value Type='Text'>" + Convert.ToString(d.ItemArray[7]) + @"</Value>
+                                              </Eq>
+                                              <Eq>
+                                                 <FieldRef Name='Room' />
+                                                 <Value Type='Text'>" + Convert.ToString(d.ItemArray[8]) + @"</Value>
+                                              </Eq>
+                                           </And>
+                                        </And>
+                                     </And>
+                                  </And>
+                               </Where>
+                            </Query>
+                            <ViewFields>
+                               <FieldRef Name='Province' />
+                               <FieldRef Name='Title' />
+                               <FieldRef Name='Floor' />
+                               <FieldRef Name='Room' />
+                               <FieldRef Name='city' />
+                            </ViewFields>
+                            <QueryOptions /></View>";
 
                         var camlprovinceto = @"<View><Query>
-                            <Where>
-                                <And>
-                                    <Eq>
-                                    <FieldRef Name='Province' />
-                                    <Value Type='Lookup'>" + d.ItemArray[15].ToString() + @"</Value>
-                                    </Eq>
-                                    <And>
-                                    <Eq>
-                                        <FieldRef Name='Title' />
-                                        <Value Type='Text'>" + d.ItemArray[16].ToString() + @"</Value>
-                                    </Eq>
-                                    <And>
+                               <Where>
+                                  <And>
+                                     <Eq>
+                                        <FieldRef Name='Province' />
+                                        <Value Type='Lookup'>" + breakto[1] + @"</Value>
+                                     </Eq>
+                                     <And>
                                         <Eq>
-                                            <FieldRef Name='Floor' />
-                                            <Value Type='Text'>" + d.ItemArray[17].ToString() + @"</Value>
+                                           <FieldRef Name='city' />
+                                           <Value Type='Text'>" + breakto[0] + @"</Value>
                                         </Eq>
-                                        <Eq>
-                                            <FieldRef Name='Room' />
-                                            <Value Type='Text'>" + d.ItemArray[18].ToString() + @"</Value>
-                                        </Eq>
-                                    </And>
-                                    </And>
-                                </And>
-                            </Where>
-                        </Query>
-                        <ViewFields>
-                            <FieldRef Name='Province' />
-                            <FieldRef Name='Title' />
-                            <FieldRef Name='Floor' />
-                            <FieldRef Name='Room' />
-                            <FieldRef Name='Remarks' />
-                        </ViewFields>
-                        <QueryOptions /></View>";
+                                        <And>
+                                           <Eq>
+                                              <FieldRef Name='Title' />
+                                              <Value Type='Text'>" + Convert.ToString(d.ItemArray[10]) + @"</Value>
+                                           </Eq>
+                                           <And>
+                                              <Eq>
+                                                 <FieldRef Name='Floor' />
+                                                 <Value Type='Text'>" + Convert.ToString(d.ItemArray[11]) + @"</Value>
+                                              </Eq>
+                                              <Eq>
+                                                 <FieldRef Name='Room' />
+                                                 <Value Type='Text'>" + Convert.ToString(d.ItemArray[12]) + @"</Value>
+                                              </Eq>
+                                           </And>
+                                        </And>
+                                     </And>
+                                  </And>
+                               </Where>
+                            </Query>
+                            <ViewFields>
+                               <FieldRef Name='Province' />
+                               <FieldRef Name='Title' />
+                               <FieldRef Name='Floor' />
+                               <FieldRef Name='Room' />
+                               <FieldRef Name='city' />
+                            </ViewFields>
+                            <QueryOptions /></View>";
                         var isAssetExist = _service.isExist("Asset Acquisition Details", camlasset, siteUrl);
                         var isProvinceFromExist = _service.isExist("Location Master", camlprovincefrom, siteUrl);
                         var isProvinceToExist = _service.isExist("Location Master", camlprovinceto, siteUrl);
@@ -731,17 +732,17 @@ namespace MCAWebAndAPI.Web.Controllers
 
                             row["assignmentofasset"] = latestIDHeader;
                             row["assetsubasset"] = assetID;
-                            row["provincefrom"] = d.ItemArray[11].ToString();
-                            row["officefrom"] = d.ItemArray[12].ToString();
-                            row["floorfrom"] = d.ItemArray[13].ToString();
-                            row["roomfrom"] = d.ItemArray[14].ToString();
+                            row["provincefrom"] = d.ItemArray[5].ToString();
+                            row["officefrom"] = d.ItemArray[6].ToString();
+                            row["floorfrom"] = d.ItemArray[7].ToString();
+                            row["roomfrom"] = d.ItemArray[8].ToString();
 
-                            row["provinceto"] = d.ItemArray[15].ToString();
-                            row["officeto"] = d.ItemArray[16].ToString();
-                            row["floorto"] = d.ItemArray[17].ToString();
-                            row["roomto"] = d.ItemArray[18].ToString();
+                            row["provinceto"] = d.ItemArray[9].ToString();
+                            row["officeto"] = d.ItemArray[10].ToString();
+                            row["floorto"] = d.ItemArray[11].ToString();
+                            row["roomto"] = d.ItemArray[12].ToString();
 
-                            row["remarks"] = d.ItemArray[11].ToString();
+                            row["remarks"] = d.ItemArray[13].ToString();
 
                             TableDetail.Rows.InsertAt(row, 0);
 
@@ -785,7 +786,7 @@ namespace MCAWebAndAPI.Web.Controllers
             SiteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
-            const string RelativePath = "~/Views/ASSTransfer/Print.cshtml";
+            const string RelativePath = "~/Views/ASSAssetTransfer/Print.cshtml";
             var view = ViewEngines.Engines.FindView(ControllerContext, RelativePath, null);
             var nm = viewModel.AssetHolder.Value.Split('-');
             var nm1 = viewModel.AssetHolderTo.Value.Split('-');

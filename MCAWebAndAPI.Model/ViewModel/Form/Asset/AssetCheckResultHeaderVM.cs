@@ -6,37 +6,117 @@ using System.Threading.Tasks;
 using MCAWebAndAPI.Model.ViewModel.Control;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using System.Web;
+using MCAWebAndAPI.Model.Common;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 {
-    public class AssetCheckResultHeaderVM
+    public class AssetCheckResultHeaderVM : Item
     {
-        private DateTime _date;
+        public IEnumerable<AssetCheckResultItemVM> Details { get; set; } = new List<AssetCheckResultItemVM>();
 
-        public int Id { get; set; }
-
-        public string CountedBy1 { get; set; }
-
-        public string CountedBy2 { get; set; }
-
-        public DateTime Date
+        private ComboBoxVM _formID;        
+        [DisplayName("Form ID")]
+        [UIHint("ComboBox")]
+        public ComboBoxVM FormID
         {
             get
             {
-                if (_date == null)
-                {
-                    _date = new DateTime();
-                }
-                return _date;
+                if (_formID == null)
+                    _formID = new ComboBoxVM()
+                    {
+                        Choices = new string[]
+                        {
+                            ""
+                        },
+                        OnSelectEventName = "onSelectedId"
+                    };
+                return _formID;
             }
-
             set
             {
-                _date = value;
+                _formID = value;
             }
         }
+        
+        public DateTime? CountDate { get; set; }
 
-        public int FormId { get; set; }
+        [DisplayName("Counted By (1)")]
+        [UIHint("AjaxComboBox")]
+        public AjaxComboBoxVM CountedBy1 { get; set; } = new AjaxComboBoxVM
+        {
+            ControllerName = "HRDataMaster",
+            ActionName = "GetProfessionals",
+            ValueField = "ID",
+            TextField = "Desc1"
+        };
+        
+        [DisplayName("Counted By (2)")]
+        [UIHint("AjaxComboBox")]
+        public AjaxComboBoxVM CountedBy2 { get; set; } = new AjaxComboBoxVM
+        {
+            ControllerName = "HRDataMaster",
+            ActionName = "GetProfessionals",
+            ValueField = "ID",
+            TextField = "Desc1"
+        };
+        
+        [DisplayName("Counted By (3)")]
+        [UIHint("AjaxComboBox")]
+        public AjaxComboBoxVM CountedBy3 { get; set; } = new AjaxComboBoxVM
+        {
+            ControllerName = "HRDataMaster",
+            ActionName = "GetProfessionals",
+            ValueField = "ID",
+            TextField = "Desc1"
+        };
 
+        [UIHint("MultiFileUploader")]
+        [DisplayName("Attachment")]
+        public IEnumerable<HttpPostedFileBase> Attachment { get; set; } = new List<HttpPostedFileBase>();
+        public string AttachmentUrl { get; set; }
+
+        /*private ComboBoxVM _completionStatus;
+        [UIHint("ComboBox")]
+        public ComboBoxVM CompletionStatus
+        {
+            get
+            {
+                if (_completionStatus == null)
+                    _completionStatus = new ComboBoxVM()
+                    {
+                        Choices = new string[]
+                    {
+                        ""
+                    },
+                        OnSelectEventName = "onSelectedLocation"
+                    };
+                return _completionStatus;
+            }
+            set
+            {
+                _completionStatus = value;
+            }
+        }*/
+
+        public string CompletionStatus;
+
+        [UIHint("AjaxComboBox")]
+        public AjaxComboBoxVM Posision { get; set; } = new AjaxComboBoxVM
+        {
+            ControllerName = "HRDataMaster",
+            ActionName = "GetPositions",
+            ValueField = "ID",
+            TextField = "Desc"
+        };
+
+        [UIHint("AjaxComboBox")]
+        public AjaxComboBoxVM Name { get; set; } = new AjaxComboBoxVM
+        {
+            ControllerName = "HRDataMaster",
+            ActionName = "GetProfessionals",
+            ValueField = "ID",
+            TextField = "Desc"
+        };
     }
 }

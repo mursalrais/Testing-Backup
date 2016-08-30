@@ -220,7 +220,7 @@ namespace MCAWebAndAPI.Service.Common
             <Query> 
                <Where><Eq><FieldRef Name='Position' /><Value Type='Lookup'>" + position + @"</Value></Eq></Where> 
             </Query> 
-             <ViewFields><FieldRef Name='ID' /><FieldRef Name='Title' /><FieldRef Name='officeemail' /></ViewFields> 
+             <ViewFields><FieldRef Name='ID' /><FieldRef Name='Title' /><FieldRef Name='Title' /><FieldRef Name='officeemail' /></ViewFields> 
             </View>";
 
             var viewModel = new List<ProfessionalMaster>();
@@ -238,7 +238,8 @@ namespace MCAWebAndAPI.Service.Common
             {
                 ID = Convert.ToInt32(item["ID"]),
                 Name = Convert.ToString(item["Title"]),
-                UserLogin = Convert.ToString(item["officeemail"])
+                UserLogin = Convert.ToString(item["officeemail"]),
+                Desc = string.Format("{0} - {1} ({2})", Convert.ToString(item["Title"]), Convert.ToString(item["Project_x002f_Unit"]), FormatUtil.ConvertLookupToValue(item, "Position"))
             };
         }
 
@@ -458,7 +459,7 @@ namespace MCAWebAndAPI.Service.Common
             <Query> 
              <Where><And><Eq><FieldRef Name='Professional_x0020_Status' /><Value Type='Choice'>Active</Value></Eq><Eq><FieldRef Name='Position' /><Value Type='Lookup'>" + position + @"</Value></Eq></And></Where> 
             </Query> 
-             <ViewFields><FieldRef Name='Title' /><FieldRef Name='officeemail' /></ViewFields> 
+             <ViewFields><FieldRef Name='ID' /><FieldRef Name='Title' /><FieldRef Name='Position' /><FieldRef Name='Project_x002f_Unit' /><FieldRef Name='officeemail' /></ViewFields>
       </View>";
 
             var viewModel = new List<ProfessionalMaster>();
@@ -476,7 +477,7 @@ namespace MCAWebAndAPI.Service.Common
             <Query> 
                <Where><Eq><FieldRef Name='Professional_x0020_Status' /><Value Type='Choice'>Active</Value></Eq></Where>
             </Query> 
-             <ViewFields><FieldRef Name='Title' /><FieldRef Name='officeemail' /></ViewFields> 
+             <ViewFields><FieldRef Name='ID' /><FieldRef Name='Title' /><FieldRef Name='Position' /><FieldRef Name='Project_x002f_Unit' /><FieldRef Name='officeemail' /></ViewFields>
       </View>";
 
             var viewModel = new List<ProfessionalMaster>();

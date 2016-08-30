@@ -285,7 +285,10 @@ namespace MCAWebAndAPI.Service.Asset
             _choices.Add("All");
             foreach (var item in listItems)
             {
-                _choices.Add(item[v2].ToString());
+                if (item[v2] != null)
+                {
+                    _choices.Add(item[v2].ToString());
+                }
             }
             return _choices.ToArray();
         }
@@ -297,7 +300,10 @@ namespace MCAWebAndAPI.Service.Asset
             _choices.Add("All");
             foreach (var item in listItems)
             {
-                _choices.Add(item[v2].ToString());
+                if (item[v2] != null)
+                {
+                    _choices.Add(item[v2].ToString());
+                }
             }
             return _choices.ToArray();
         }
