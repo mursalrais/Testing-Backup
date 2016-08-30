@@ -543,7 +543,7 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
             return dtView.DefaultView.ToTable();
         }
 
-        private void UpdateHeaderApprover(int? headerId,string strLevel,string strPosition, string strEmail)
+        private void UpdateHeaderApprover(int? headerId,string strLevel,string strPosition, string strEmail,string strPermission=null)
         {
             var columnValues = new Dictionary<string, object>
                 {
@@ -551,6 +551,9 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                     {"approvallevel", strLevel},
                      {"approver", strEmail},
                 };
+
+            if (strPermission != null) columnValues.Add("timesheetstatus", "Approved");
+
             SPConnector.UpdateSingleListItemAsync(LIST_TIME, headerId, columnValues, _siteUrl);
         }
 
@@ -587,9 +590,11 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                 {
                     {"Title", header.UserLogin},
                     {"timesheet", new FieldLookupValue {LookupId = Convert.ToInt32(headerId)}},
-                    {"status", "Pending Approval"},
                     {"approverlevel", i.ToString()}
                 };
+
+                columnValues.Add("status", header.UserPermission == "HR" ? "Approved" : "Pending Approval");
+
 
                 switch (i)
                 {
@@ -604,8 +609,12 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                         {
                             goto case 2;
                         }
-                        UpdateHeaderApprover(headerId, "1", strApproverPosition, strApproverEmail);
-                        columnValues.Add("currentstate", "Yes");
+                        if (header.UserPermission != "HR")
+                        {
+                            UpdateHeaderApprover(headerId, "1", strApproverPosition, strApproverEmail);
+                        }
+                        else UpdateHeaderApprover(headerId, "1", strApproverPosition, strApproverEmail, "HR");
+                        columnValues.Add("currentstate", header.UserPermission == "HR" ? "No" : "Yes");
                         columnValues.Add("approverposition", strApproverPosition);
                         columnValues.Add("approver0", strApproverEmail);
                         break;
@@ -620,8 +629,20 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                         {
                             goto case 3;
                         }
-                        if (i==1) UpdateHeaderApprover(headerId, "1", strApproverPosition, strApproverEmail);
-                        columnValues.Add("currentstate", i == 2 ? "No" : "Yes");
+                        if (i == 1)
+                        {
+                            if (header.UserPermission != "HR")
+                            {
+                                UpdateHeaderApprover(headerId, "1", strApproverPosition, strApproverEmail);
+                            }
+                            else UpdateHeaderApprover(headerId, "1", strApproverPosition, strApproverEmail,"HR");
+                            columnValues.Add("currentstate", "Yes");
+                        }
+                        else if (i == 2)
+                        {
+                            columnValues.Add("currentstate", "No" );
+                        }
+                           
                         columnValues.Add("approverposition", strApproverPosition);
                         columnValues.Add("approver0", strApproverEmail);
                         break;
@@ -631,8 +652,30 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                         {
                             strApproverPosition = Convert.ToString(dtView.DefaultView[0]["ApproverPosition"]);
                             strApproverEmail = profMasterPosition.FirstOrDefault(e => e.Position == strApproverPosition).OfficeEmail;
-                            if (i == 1) UpdateHeaderApprover(headerId, "1", strApproverPosition, strApproverEmail);
-                            columnValues.Add("currentstate", i == 3 ? "No" : "Yes");
+
+                            if (i == 1)
+                            {
+                                if (header.UserPermission != "HR")
+                                {
+                                    UpdateHeaderApprover(headerId, "1", strApproverPosition, strApproverEmail);
+                                }
+                                else
+                                {
+                                    UpdateHeaderApprover(headerId, "1", strApproverPosition, strApproverEmail,"HR");
+                                }
+                                columnValues.Add("currentstate", "Yes");
+                            }
+                            else if (i == 2)
+                            {
+                                columnValues.Add("currentstate", "No");
+                                if (header.UserPermission == "HR") UpdateHeaderApprover(headerId, "2", strApproverPosition, strApproverEmail,"HR");
+                            }
+                            else if (i == 3)
+                            {
+                                if (header.UserPermission == "HR") UpdateHeaderApprover(headerId, "3", strApproverPosition, strApproverEmail,"HR");
+                                columnValues.Add("currentstate", header.UserPermission != "HR" ? "No" : "Yes");
+                            }
+
                             columnValues.Add("approverposition", strApproverPosition);
                             columnValues.Add("approver0", strApproverEmail);
                         }
@@ -642,6 +685,7 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                if (!string.IsNullOrEmpty(strApproverPosition)) mastervalue.Add(i + ";Add", columnValues); 
             }
             SPConnector.AddListItemAsync(LIST_WF, mastervalue, _siteUrl);
+          
         }
         
         public void UpdateApproval( TimesheetVM header)

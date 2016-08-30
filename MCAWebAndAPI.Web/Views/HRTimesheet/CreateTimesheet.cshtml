@@ -88,8 +88,8 @@
                           columns.Bound(p => p.Date).Format("{0:dddd, MMM d, yyyy}");
                           columns.Bound(p => p.Location);
                           columns.Bound(p => p.LocationID).Hidden();
-                          columns.Bound(p => p.ID);
-                          columns.Bound(p => p.EditMode);
+                          columns.Bound(p => p.ID).Hidden();
+                          columns.Bound(p => p.EditMode).Hidden();
                           columns.Bound(p => p.FullHalf)
                               .ClientFooterTemplate("Total Day: #=sum#");
                           columns.Bound(p => p.Type).Hidden()
