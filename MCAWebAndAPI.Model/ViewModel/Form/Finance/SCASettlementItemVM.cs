@@ -12,7 +12,10 @@ using MCAWebAndAPI.Model.ViewModel.Control;
 namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 {
     public class SCASettlementItemVM : Item
-    {
+    {    /// <summary>
+         /// Wirefram FIN07: SCA Settlement
+         /// </summary>
+
         [UIHint("Date")]
         [Required]
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]

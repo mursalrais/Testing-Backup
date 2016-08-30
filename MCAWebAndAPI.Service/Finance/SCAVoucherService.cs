@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web;
 using MCAWebAndAPI.Model.Common;
+using MCAWebAndAPI.Model.ViewModel.Control;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Service.Utils;
@@ -18,13 +19,16 @@ namespace MCAWebAndAPI.Service.Finance
 
     public class SCAVoucherService : ISCAVoucherService
     {
+        #region List Definition
         private const string LIST_NAME_SCAVOUCHER = "SCA Voucher";
         private const string LIST_NAME_SCAVOUCHER_ITEM = "SCA Voucher Item";
         private const string LIST_NAME_EVENT_BUDGET = "Event Budget";
         private const string LIST_NAME_EVENT_BUDGET_ITEM = "Event Budget Item";
         private const string LIST_NAME_SCA_DOCUMENT = "SCA Voucher Documents";
         private const string LIST_NAME_SCAVOUCHER_DOC = "SCA_x0020_Voucher";
+        #endregion
 
+        #region Lilst Field Definition
         private const string FIELD_NAME_ID = "ID";
         private const string FIELD_NAME_SCAVOUCHER = "SCAVoucher";
         private const string FIELD_NAME_SCA_NO = "Title";
@@ -69,6 +73,7 @@ namespace MCAWebAndAPI.Service.Finance
         private const string EVENT_BUDGET_FIELD_GL_VALUE = "GL_x0020_Master_x002e_ID_x003a_G0";
         private const string EVENT_BUDGET_FIELD_QUANTITY = "Quantity";
         private const string EVENT_BUDGET_FIELD_UOMQUANTITY = "UoMQuantity";
+        #endregion
 
         private string _siteUrl = string.Empty;
         static Logger logger = LogManager.GetCurrentClassLogger();
@@ -226,6 +231,18 @@ namespace MCAWebAndAPI.Service.Finance
                     throw e;
                 }
             }
+        }
+
+        public IEnumerable<SCAVoucherVM> GetAll()
+        {
+            var result = new List<SCAVoucherVM>();
+
+            foreach (var item in SPConnector.GetList(LIST_NAME_SCAVOUCHER, _siteUrl))
+            {
+                result.Add(ConvertToVM(item));
+            }
+
+            return result;
         }
 
         public SCAVoucherVM Get(int? id)
@@ -425,6 +442,25 @@ namespace MCAWebAndAPI.Service.Finance
                     }
                 }
             }
+        }
+
+        public IEnumerable<AjaxComboBoxVM> GetAllAjaxComboBoxVM()
+        {
+            var result = new List<AjaxComboBoxVM>();
+            var vms = GetAll();
+
+            foreach (var item in vms)
+            {
+                result.Add(
+                    new AjaxComboBoxVM
+                    {
+                        Value = item.ID,
+                        Text = item.SCAVoucherNo + " - " + item.Purpose
+                    }
+                );
+            }
+
+            return result;
         }
     }
 }

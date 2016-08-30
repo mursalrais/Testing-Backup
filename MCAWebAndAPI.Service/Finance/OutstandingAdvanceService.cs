@@ -20,7 +20,7 @@ namespace MCAWebAndAPI.Service.Finance
     public class OutstandingAdvanceService : IOutstandingAdvanceService
     {
         private const string ListName = "Outstanding Advance";
-        private const string ListName_Document = "Outstanding Advance Document";
+        private const string ListName_Document = "Outstanding Advance Documents";
         private const string ListName_Vendor = "Vendor";
 
         private const string FieldName_DateOfUpload = "Date_x0020_of_x0020_Upload";
