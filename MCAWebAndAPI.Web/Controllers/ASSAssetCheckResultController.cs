@@ -47,9 +47,10 @@ namespace MCAWebAndAPI.Web.Controllers
                 return View(viewModelGetData);
             }
 
-            if (!string.IsNullOrEmpty(SaveAsDraft))
+            if (!string.IsNullOrEmpty(Calculate))
             {
-                
+                var viewModelCalculate = assetCheckResultService.GetPopulatedModelCalculate(data);
+                return View(viewModelCalculate);
             }
 
             var viewModel = assetCheckResultService.GetPopulatedModel(null, data.FormID.Value);

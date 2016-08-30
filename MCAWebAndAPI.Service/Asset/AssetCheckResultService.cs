@@ -13,14 +13,8 @@ namespace MCAWebAndAPI.Service.Asset
     public class AssetCheckResultService : IAssetCheckResultService
     {
 
-        string _siteUrl = "https://eceos2.sharepoint.com/sites/mca-dev/bo";
+        string _siteUrl;
         static Logger logger = LogManager.GetCurrentClassLogger();
-        const string SP_ASSCR_LIST_NAME = "Asset Loan Return";
-        const string SP_ASSCRDetails_LIST_NAME = "Asset Loan Return Detail";
-        const string SP_PROFMASTER_LIST_NAME = "Professional Master";
-        const string SP_ASSCHECK_LIST_NAME = "Asset Check";
-        const string SP_ASSCHECK_DETAIL_LIST_NAME = "Asset Check Detail";
-        const string SP_ASSSUBASS_LIST_NAME = "Asset Master";
 
         public void SetSiteUrl(string siteUrl)
         {
@@ -31,7 +25,7 @@ namespace MCAWebAndAPI.Service.Asset
         {
             var model = new AssetCheckResultHeaderVM();
 
-            model.FormID.Choices = GetChoicesFromList(SP_ASSCHECK_LIST_NAME, "assetcheckformid");
+            model.FormID.Choices = GetChoicesFromList("Asset Check", "assetcheckformid");
 
             var modelDetail = new List<AssetCheckResultItemVM>();
             
@@ -41,15 +35,25 @@ namespace MCAWebAndAPI.Service.Asset
         public AssetCheckResultHeaderVM GetPopulatedModelGetData(int? FormID = null)
         {
             var model = new AssetCheckResultHeaderVM();
-            model.FormID.Choices = GetChoicesFromList(SP_ASSCHECK_LIST_NAME, "assetcheckformid");
+            model.FormID.Choices = GetChoicesFromList("Asset Check", "assetcheckformid");
+            model.CompletionStatus = "In Progress";
 
             var modelDetail = new List<AssetCheckResultItemVM>();
-            
+                        
             var caml = @"<View><Query><Where><Eq><FieldRef Name='assetcheckformid' /><Value Type='Number'>"+FormID+"</Value></Eq></Where></Query></View>";
             int i = 0;
             foreach (var item in SPConnector.GetList("Asset Check Detail", _siteUrl, caml))
             {
                 var dataAssetMaster = SPConnector.GetListItem("Asset Master", (item["assetmaster"] as FieldLookupValue).LookupId, _siteUrl);
+
+                caml = @"<View><Query><Where><Eq><FieldRef Name='assetsubasset_x003a_ID' /><Value Type='Lookup'>"+ (item["assetmaster"] as FieldLookupValue).LookupId + "</Value></Eq></Where></Query></View>";
+                var dataLoan = SPConnector.GetList("Asset Loan Return Detail", _siteUrl, caml);
+
+                string status = "";
+                foreach (var itemLoan in dataLoan)
+                {
+                    status = itemLoan["status"].ToString();
+                }
 
                 i++;
                 var modelDetailItem = new AssetCheckResultItemVM();
@@ -62,17 +66,100 @@ namespace MCAWebAndAPI.Service.Asset
                 modelDetailItem.SerialNo = (dataAssetMaster["SerialNo"] == null ? "" : dataAssetMaster["SerialNo"].ToString());
                 modelDetailItem.Province = (item["assetprovince"] == null ? "" : item["assetprovince"].ToString());
                 modelDetailItem.LocationName = (item["assetlocation"] == null ? "" : item["assetlocation"].ToString());
-                modelDetailItem.Status = (item["assetstatus"] == null ? "" : item["assetstatus"].ToString());
+
+                modelDetailItem.PhysicalQty = Convert.ToInt32(item["physicalquantity"].ToString());
                 modelDetailItem.SystemQty = Convert.ToInt32(item["systemquantity"].ToString());
+
+                modelDetailItem.DifferentQty = modelDetailItem.PhysicalQty - modelDetailItem.SystemQty;
+
+                if (status != "")
+                {
+                    modelDetailItem.Status = status;
+                    if (status.ToUpper() == "RUNNING" && modelDetailItem.DifferentQty < 0)
+                    {
+                        modelDetailItem.Dispose = "Yes";
+                    }
+                    if (status.ToUpper() == "LOAN" && modelDetailItem.DifferentQty < 0)
+                    {
+                        modelDetailItem.Dispose = "No";
+                    }
+
+                }
+                else
+                {
+                    if (modelDetailItem.DifferentQty >= 0)
+                    {
+                        modelDetailItem.Dispose = "No";
+                    }
+                    modelDetailItem.Status = (item["assetstatus"] == null ? "" : item["assetstatus"].ToString());
+                }
+                
 
                 modelDetailItem.Existense = (item["existence"] == null ? "" : item["existence"].ToString());
                 modelDetailItem.Condition = (item["condition"] == null ? "" : item["condition"].ToString());
                 modelDetailItem.Specification = (item["specification"] == null ? "" : item["specification"].ToString());
-                modelDetailItem.PhysicalQty = Convert.ToInt32(item["physicalquantity"].ToString());
+                
+
+                
+
                 modelDetail.Add(modelDetailItem);
             }
 
             model.Details = modelDetail;
+            return model;
+        }
+
+
+        public AssetCheckResultHeaderVM GetPopulatedModelCalculate(AssetCheckResultHeaderVM data)
+        {
+            var model = data;
+            model.FormID.Choices = GetChoicesFromList("Asset Check", "assetcheckformid");
+            model.CompletionStatus = "In Progress";
+            
+            int i = 0;
+            foreach (var item in model.Details)
+            {
+                
+                var caml = @"<View><Query><Where><Eq><FieldRef Name='assetsubasset_x003a_ID' /><Value Type='Lookup'>" + item.AssetID + "</Value></Eq></Where></Query></View>";
+                var dataLoan = SPConnector.GetList("Asset Loan Return Detail", _siteUrl, caml);
+
+                string status = "";
+                foreach (var itemLoan in dataLoan)
+                {
+                    status = itemLoan["status"].ToString();
+                }
+
+                i++;
+                
+                item.Item = i;
+                
+                item.DifferentQty = item.PhysicalQty - item.SystemQty;
+
+                if (status != "")
+                {
+                    item.Status = status;
+                    if (status.ToUpper() == "RUNNING" && item.DifferentQty < 0)
+                    {
+                        item.Dispose = "Yes";
+                    }
+                    if (status.ToUpper() == "LOAN" && item.DifferentQty < 0)
+                    {
+                        item.Dispose = "No";
+                    }
+
+                }
+                else
+                {
+                    if (item.DifferentQty < 0)
+                    {
+                        item.Dispose = "Yes";
+                    }
+                    if (item.DifferentQty >= 0)
+                    {
+                        item.Dispose = "No";
+                    }
+                }
+            }
             return model;
         }
 
@@ -90,7 +177,7 @@ namespace MCAWebAndAPI.Service.Asset
 
         public ProfessionalsVM GetProfessionalInfo(int? ID, string SiteUrl)
         {
-            var list = SPConnector.GetListItem(SP_PROFMASTER_LIST_NAME, ID, SiteUrl);
+            var list = SPConnector.GetListItem("Professional Master", ID, SiteUrl);
             var viewmodel = new ProfessionalsVM();
             viewmodel.ID = Convert.ToInt32(ID);
             viewmodel.ProfessionalName = Convert.ToString(list["Title"]);
@@ -102,7 +189,7 @@ namespace MCAWebAndAPI.Service.Asset
 
         public AssetCheckResultHeaderVM GetCheckInfo(int? ID, string SiteUrl)
         {
-            var list = SPConnector.GetListItem(SP_ASSCHECK_DETAIL_LIST_NAME, ID, SiteUrl);
+            var list = SPConnector.GetListItem("Asset Check Detail", ID, SiteUrl);
             var viewmodel = new AssetCheckResultHeaderVM();
             viewmodel.ID = Convert.ToInt32(ID);
             viewmodel.CompletionStatus = Convert.ToString(list["assetstatus"]);
