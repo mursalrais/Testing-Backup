@@ -11,18 +11,24 @@ namespace MCAWebAndAPI.Service.Asset
     {
         void SetSiteUrl(string siteUrl);
 
-        IEnumerable<AssetReplacementVM> GetAssetReplacement();
+        //create empty form
+        AssetReplacementHeaderVM GetPopulatedModel(int? ID = null);
 
-        bool CreateAssetReplacement(AssetReplacementVM assetReplacement);
+        int? CreateHeader(AssetReplacementHeaderVM viewmodel, string mode = null, string SiteUrl = null);
+        bool UpdateHeader(AssetReplacementHeaderVM viewmodel);
 
-        bool UpdateAssetReplacement(AssetReplacementVM assetReplacement);
+        bool Syncronize(string SiteUrl);
 
-        bool CreateAssetReplacement_Dummy(AssetReplacementItemVM assetReplacement);
+        void CreateDetails(int? headerID, IEnumerable<AssetReplacementItemVM> items);
+        void UpdateDetails(int? headerID, IEnumerable<AssetReplacementItemVM> items);
 
-        bool UpdateAssetReplacement_Dummy(AssetReplacementItemVM assetReplacement);
+        AssetReplacementHeaderVM GetHeader(int? ID);
+        IEnumerable<AssetReplacementItemVM> GetDetails(int? headerID);
 
-        bool DestroyAssetReplacement_Dummy(AssetReplacementItemVM assetReplacement);
+        AssetAcquisitionHeaderVM GetInfoFromAcquisitin(int? ID, string SiteUrl);
+        IEnumerable<AssetAcquisitionItemVM> GetInfoFromAcquisitinDetail(int? ID, string SiteUrl);
+        IEnumerable<AssetMasterVM> GetAssetSubAsset();
 
-        AssetReplacementVM GetAssetReplacementItems_Dummy();
+        void RollbackParentChildrenUpload(string listNameHeader, int? latestIDHeader, string siteUrl);
     }
 }

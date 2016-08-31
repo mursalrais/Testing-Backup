@@ -1,68 +1,152 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.Asset
 
-@model AssetReplacementVM
 
-<form class="form-horizontal" method="post" action="/ASSassetReplacement/Create" id="create-asset-replacement-form">
-    <fieldset>
-        <legend>Form Asset Replacement</legend>
-        <div class="col-md-6">
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.TransactionType).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.DisplayFor(m => m.Header.TransactionType)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.OldTransactionId).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.Header.OldTransactionId)
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.PurchaseDate).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.Header.PurchaseDate)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.PurchaseDesc).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.Header.PurchaseDesc)
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                @(Html.Kendo().Grid(Model.Items)
-                    .Name("asset-replacement-items-grid")
-                    .Columns(columns =>
-                    {
-                        columns.Bound(p => p.NewAsset);
-                        columns.Bound(p => p.Item);
-                        columns.Bound(p => p.PoLineItem);
-                        columns.Bound(p => p.AssetNo);
-                        columns.Bound(p => p.AssetSubNo);
-                        columns.Bound(p => p.AssetDescription);
-                        columns.Bound(p => p.WbsId);
-                        columns.Bound(p => p.WbsDescription);
-                        columns.Bound(p => p.CostIdr);
-                        columns.Bound(p => p.CostUsd);
-                        columns.Command(command => { command.Edit(); command.Destroy(); }).Width(250);
-                    })
-                    .ToolBar(toolbar => toolbar.Create())
-                    .Editable(editable => editable.Mode(GridEditMode.PopUp))
-                    .DataSource(dataSource => dataSource
-                        .Ajax()
-                        .Model(model => model.Id(p => p.Id))
-                        .Create(update => update.Action("EditingPopup_Create", "ASSAssetReplacement"))
-                        .Update(update => update.Action("EditingPopup_Update", "ASSAssetReplacement"))
-                        .Destroy(update => update.Action("EditingPopup_Destroy", "ASSAssetReplacement"))
-                )
-                )
-            </div>
-        </div>
-    </fieldset>
 
-</form>
+@model AssetReplacementHeaderVM
+
+@using (Ajax.BeginForm("Submit", "ASSAssetReplacement",
+                                                                                                                                                                           FormMethod.Post,
+                                                                                                                                                                           new AjaxOptions
+                                                                                                                                                                           {
+                                                                                                                                                                               OnBegin = "onBeginForm",
+                                                                                                                                                                               OnComplete = "onCompleteForm",
+                                                                                                                                                                               OnSuccess = "onSuccessFormEmbed",
+                                                                                                                                                                               OnFailure = "onFailureForm"
+                                                                                                                                                                           }, new { @class = "form-horizontal" }))
+
+{
+    <form class="form-horizontal" method="post" action="/ASSAssetReplacement/Submit" id="create-asset-acquisition-form">
+        <fieldset>
+            <legend>Form Asset Acquisition</legend>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.TransactionType).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @*@Html.DisplayFor(m => m.TransactionType)*@
+                        <input type="text" name="TransactionType" disabled value="Asset Acquisition" id="TransactionType" style="width: 100%;" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.OldTransactionId).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.EditorFor(m => m.OldTransactionId)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Vendor).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @*@Html.DisplayFor(m => m.Vendor)*@
+                        <input type="text" name="Vendor" disabled value="@Model.Vendor" id="Vendor" style="width: 100%;" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Pono).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @*@Html.DisplayFor(m => m.PoNo)*@
+                        <input type="text" name="PoNo" disabled value="@Model.Pono" id="PoNo" style="width: 100%;" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.PurchaseDate).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @*@Html.DisplayFor(m => m.PurchaseDate)*@
+                        <input type="text" name="PurchaseDate" disabled  id="PurchaseDate" style="width: 100%;" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.purchaseDescription).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @*@Html.EditorFor(m => m.PurchaseDescription)*@
+                        <input type="text" disabled name="PurchaseDescription" id="PurchaseDescription" style="width: 100%;" />
+                    </div>
+                </div>
+            </div>
+            <div>
+                @Html.Partial("_Details", Model.Details)
+            </div>
+        </fieldset>
+        @Html.HiddenFor(m => m.Id)
+        @Html.HiddenFor(m => m.CancelURL)
+        @Html.HiddenFor(m => m.Vendor)
+        @Html.HiddenFor(m => m.Pono)
+        <div>
+            <center>
+                <input class="k-button k-button-icontext k-grid-add" onclick="return SimpenAsset()" type="submit" value="Save" />
+                <a href="@Model.CancelURL" target='_parent'>
+                    <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
+                </a>
+            </center>
+        </div>
+
+    </form>
+}
+
+
+<script>
+    $(document).ready(function () {
+        $('#PurchaseDate').prop('value', "")
+        $("#AccpMemo_Value").data("kendoDropDownList").value("");
+    })
+
+    function SimpenAsset()
+    {
+        if ($('#AccpMemo_Value').val() == "")
+        {
+            alert("Acceptance Memo Cannot be Empty");
+            return false;
+        }
+        var assetsubasset = document.getElementsByClassName("assetsubasset");
+        var wbs = document.getElementsByClassName("wbs");
+        var costidr = document.getElementsByClassName("costidr");
+        var costusd = document.getElementsByClassName("costusd");
+        for (var j = 0; j < assetsubasset.length; j++)
+        {
+            if(assetsubasset[j].value == "null" || wbs[j].value == "null" || costidr[j].value == "null" || costusd[j].value == "null")
+            {
+                alert("Asset Sub Asset / WBS / CostIDR / CostUSD cannot be null!");
+                return false;
+            }
+        }
+
+        var deleteRow = 0;
+        var matches = document.querySelectorAll("[name^='Details[']");
+        for (var i = 0; i < matches.length; i++) {
+            if (matches[i].value == -1)
+            {
+                deleteRow++;
+            }
+        }
+        var gridElements = $("#Details").data("kendoGrid").dataSource;
+        var total = 0;
+        gridElements.fetch(function ()
+        {
+            total = gridElements.total();
+        })
+        if (total == 0 || total == deleteRow)
+        {
+            alert("Detail cannot Empty");
+            return false;
+        }
+    }
+
+    function onIdChange(e) {
+        var res = this.dataItem(e.item);
+        //alert("Acceptance Memo ID : " + res[0]);
+        var url = "/ASSAssetReplacement/GetInfoFromAcquisitin?ID=" + res;
+        $.getJSON(url, function (data) {
+            //alert(data.purchasedatetext);   
+            document.getElementById('Vendor').value = data.Vendor;
+            document.getElementById('PoNo').value = data.PoNo;
+            document.getElementById('PurchaseDate').value = data.purchasedatetext;
+            $('#PurchaseDescription').prop('value', data.PurchaseDescription);
+
+            var url = "/ASSAssetReplacement/GetInfoFromAcquisitinDetail?ID=" + res;
+            $.getJSON(url, function (data) {
+                alert(data.length);
+
+            });
+        });
+    }
+</script>

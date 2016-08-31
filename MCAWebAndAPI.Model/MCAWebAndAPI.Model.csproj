@@ -198,7 +198,6 @@
     <Compile Include="ViewModel\Form\Asset\AssetLoanAndReturnVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetReplacementHeaderVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetReplacementItemVM.cs" />
-    <Compile Include="ViewModel\Form\Asset\AssetReplacementVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetScrappingHeaderVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetScrappingItemVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetScrappingVM.cs" />
