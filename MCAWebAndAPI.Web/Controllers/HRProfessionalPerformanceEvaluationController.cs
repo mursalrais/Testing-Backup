@@ -115,7 +115,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             if (viewModel.StatusForm == "Initiated" || viewModel.StatusForm == "DraftInitiated")
             {
-                Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateTransactionWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
+                Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.ID);
             }
             Task createPerformancePlanDetailsTask = _hRProfessionalPerformanceEvaluationService.CreatePerformanceEvaluationDetailsAsync(viewModel.ID, viewModel.ProfessionalPerformanceEvaluationDetails);
