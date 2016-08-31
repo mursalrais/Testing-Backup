@@ -194,6 +194,13 @@ namespace MCAWebAndAPI.Web.Controllers
                 return RedirectToAction("Index", "Error");
             }
 
+            viewModel.cmpID = cmpID;
+
+            if (viewModel.StatusForm == "submithr")
+            {
+                _service.UpdateHeader(viewModel);
+            }
+
             // BEGIN Workflow Demo 
             Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateTransactionWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME, SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)cmpID);
 

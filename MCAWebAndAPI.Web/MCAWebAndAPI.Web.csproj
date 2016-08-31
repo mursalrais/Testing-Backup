@@ -1130,6 +1130,7 @@
     <Content Include="Views\FINPettyCashReimbursement\Print.cshtml" />
     <Content Include="Views\ASSAssetCheckResult\_approval_Path.cshtml" />
     <Content Include="Views\ASSAssetCheckResult\_Details.cshtml" />
+    <Content Include="Views\HRAdjustment\EditAdjustmentData.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
