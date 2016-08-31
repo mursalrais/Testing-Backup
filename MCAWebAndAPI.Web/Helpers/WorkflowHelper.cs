@@ -48,10 +48,9 @@ namespace MCAWebAndAPI.Web.Helpers
         {
             var workflowItems = SessionManager.Get<IEnumerable<WorkflowItemVM>>("WorkflowItems");
             var siteUrl = SessionManager.Get<string>("SiteUrl");
-            var userLogin = SessionManager.Get<string>("UserLogin");
 
             _service.SetSiteUrl(siteUrl);
-            _service.CreateWorkflow(workflowTransactionListName, transactionLookupColumnName, headerID, workflowItems, userLogin);
+            _service.CreateWorkflow(workflowTransactionListName, transactionLookupColumnName, headerID, workflowItems);
         }
 
         public static void CreateExitProcedureWorkflow(string workflowTransactionListName, string transactionLookupColumnName,

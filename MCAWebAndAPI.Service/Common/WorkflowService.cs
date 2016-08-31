@@ -251,11 +251,11 @@ namespace MCAWebAndAPI.Service.Common
             }
         }
 
-        public void CreateWorkflow(string workflowTransactionListName, string transactionLookupColumnName, int headerID, IEnumerable<WorkflowItemVM> workflowItems, string requestor = null)
+        public void CreateWorkflow(string workflowTransactionListName, string transactionLookupColumnName, int headerID, IEnumerable<WorkflowItemVM> workflowItems)
         {
             foreach (var item in workflowItems)
             {
-                CreateWorkflow(workflowTransactionListName, transactionLookupColumnName, headerID, item, requestor);
+                CreateWorkflow(workflowTransactionListName, transactionLookupColumnName, headerID, item);
             }
         }
 
@@ -299,7 +299,7 @@ namespace MCAWebAndAPI.Service.Common
             SPConnector.AddListItem(workflowTransactionListName, updatedValue, _siteUrl);
         }
 
-        private void CreateWorkflow(string workflowTransactionListName, string transactionLookupColumnName, int headerID, WorkflowItemVM workflowItem, string requestor = null)
+        private void CreateWorkflow(string workflowTransactionListName, string transactionLookupColumnName, int headerID, WorkflowItemVM workflowItem)
         {
             var updatedValue = new Dictionary<string, object>();
             updatedValue.Add(transactionLookupColumnName, new FieldLookupValue { LookupId = headerID });
