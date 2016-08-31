@@ -62,6 +62,9 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
+                Response.TrySkipIisCustomErrors = true;
+                Response.TrySkipIisCustomErrors = true;
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse("Failed To Syncronize..");
             }
 
@@ -85,6 +88,9 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
+                Response.TrySkipIisCustomErrors = true;
+                Response.TrySkipIisCustomErrors = true;
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse("Failed To Show Data For Update");
             }
 
@@ -108,6 +114,9 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
+                Response.TrySkipIisCustomErrors = true;
+                Response.TrySkipIisCustomErrors = true;
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse("Failed To Get Data...s");
             }
 
@@ -123,6 +132,9 @@ namespace MCAWebAndAPI.Web.Controllers
 
             if (_data.Details.Count() == 0)
             {
+                Response.TrySkipIisCustomErrors = true;
+                Response.TrySkipIisCustomErrors = true;
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse("Details should not empty");
             }
 
@@ -134,6 +146,9 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
+                Response.TrySkipIisCustomErrors = true;
+                Response.TrySkipIisCustomErrors = true;
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse("Failed To Save Header..");
             }
 
@@ -143,6 +158,9 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
+                Response.TrySkipIisCustomErrors = true;
+                Response.TrySkipIisCustomErrors = true;
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse("Failed To Save Detail..");
             }
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAcquisition);
@@ -160,6 +178,9 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
+                Response.TrySkipIisCustomErrors = true;
+                Response.TrySkipIisCustomErrors = true;
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse("Failed To Update Header");
             }
 
@@ -438,6 +459,9 @@ namespace MCAWebAndAPI.Web.Controllers
                             }
                             catch (Exception e)
                             {
+                                Response.TrySkipIisCustomErrors = true;
+                                Response.TrySkipIisCustomErrors = true;
+                                Response.StatusCode = (int)HttpStatusCode.BadRequest;
                                 return JsonHelper.GenerateJsonErrorResponse("No Lookup Value/s is Found!");
                             }
                         }
@@ -488,6 +512,9 @@ namespace MCAWebAndAPI.Web.Controllers
                             }
 
                         }
+                        Response.TrySkipIisCustomErrors = true;
+                        Response.TrySkipIisCustomErrors = true;
+                        Response.StatusCode = (int)HttpStatusCode.BadRequest;
                         return JsonHelper.GenerateJsonErrorResponse("Invalid data, rolling back!");
                     }
                 }
@@ -553,6 +580,9 @@ namespace MCAWebAndAPI.Web.Controllers
                         }
                         else
                         {
+                            Response.TrySkipIisCustomErrors = true;
+                            Response.TrySkipIisCustomErrors = true;
+                            Response.StatusCode = (int)HttpStatusCode.BadRequest;
                             return JsonHelper.GenerateJsonErrorResponse("Invalid data, rolling back!");
                         }
 
@@ -576,6 +606,9 @@ namespace MCAWebAndAPI.Web.Controllers
                             }
 
                         }
+                        Response.TrySkipIisCustomErrors = true;
+                        Response.TrySkipIisCustomErrors = true;
+                        Response.StatusCode = (int)HttpStatusCode.BadRequest;
                         return JsonHelper.GenerateJsonErrorResponse("Invalid data, rolling back!");
                     }
                     //cek if wbs id ada pada table wbs master

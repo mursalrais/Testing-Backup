@@ -178,6 +178,15 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to /Lists/Asset%20Replacement/AllItems.aspx.
+        /// </summary>
+        public static string AssetReplacement {
+            get {
+                return ResourceManager.GetString("AssetReplacement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to /Lists/Asset%20Transfer/AllItems.aspx.
         /// </summary>
         public static string AssetTransfer {

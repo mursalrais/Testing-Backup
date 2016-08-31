@@ -15,6 +15,7 @@ using MCAWebAndAPI.Service.Utils;
 using Kendo.Mvc.UI;
 using Kendo.Mvc.Extensions;
 using MCAWebAndAPI.Service.Resources;
+using System.Net;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -314,7 +315,10 @@ namespace MCAWebAndAPI.Web.Controllers
                     var assetIDss = _assetMasterService.GetAssetIDForSubAsset(createAssID.Rows[x].ItemArray[0].ToString().Trim());
                     if(assetIDss == "")
                     {
-                        return JsonHelper.GenerateJsonErrorResponse(assetIDss);
+                        Response.TrySkipIisCustomErrors = true;
+                        Response.TrySkipIisCustomErrors = true;
+                        Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                        return JsonHelper.GenerateJsonErrorResponse("Cannot Create AssetID");
                     }
                     else
                     {
@@ -335,11 +339,17 @@ namespace MCAWebAndAPI.Web.Controllers
                 int? mass = _assetMasterService.MassUpload(listName, sessionVariables, siteUrl);
                 if(mass == 0)
                 {
+                    Response.TrySkipIisCustomErrors = true;
+                    Response.TrySkipIisCustomErrors = true;
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
                     return JsonHelper.GenerateJsonErrorResponse("Failed One of Your Data is Invalid, Rolling Back");
                 }
             }
             catch (Exception e)
             {
+                Response.TrySkipIisCustomErrors = true;
+                Response.TrySkipIisCustomErrors = true;
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 

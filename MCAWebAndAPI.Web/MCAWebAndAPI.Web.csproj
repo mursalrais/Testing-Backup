@@ -311,7 +311,6 @@
     <Content Include="Content\bi.css" />
     <Content Include="Content\custom.css" />
     <Content Include="Content\home.css" />
-    <Content Include="Content\icon-mca.png" />
     <Content Include="Content\kendo\2016.2.714\Fiori\editor.png" />
     <Content Include="Content\kendo\2016.2.714\Fiori\imagebrowser.png" />
     <Content Include="Content\kendo\2016.2.714\Fiori\indeterminate.gif" />
@@ -1088,6 +1087,8 @@
     <Content Include="Views\FINPettyCashStatement\Display.cshtml" />
     <Content Include="Views\FINPettyCashStatement\Index.cshtml" />
     <Content Include="Views\FINPettyCashSettlement\Item.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\Double.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Double.cshtml" />
     <Content Include="Views\HRDayOff\CreateDayOffRequest.cshtml" />
     <Content Include="Views\HRDayOff\_DayOffCurrentBalance.cshtml" />
     <Content Include="Views\HRDayOff\_DayOffRequestHeaderData.cshtml" />
@@ -1124,10 +1125,19 @@
     <Content Include="Views\ASSAssignmentOfAsset\View.cshtml" />
     <Content Include="Views\ASSLocationMaster\Sync.cshtml" />
     <Content Include="Views\HRTimesheet\NotAuthorized.cshtml" />
+    <Content Include="Views\HRCompensatory\_WorkflowPathDetails.cshtml" />
+    <Content Include="Views\HRCompensatory\AddCompensatoryUser.cshtml" />
     <Content Include="Views\FINPettyCashReimbursement\Item.cshtml" />
     <Content Include="Views\FINPettyCashReimbursement\Print.cshtml" />
     <Content Include="Views\ASSAssetCheckResult\_approval_Path.cshtml" />
     <Content Include="Views\ASSAssetCheckResult\_Details.cshtml" />
+    <Content Include="Views\HRAdjustment\EditAdjustmentData.cshtml" />
+    <Content Include="Views\HRProfessionalPerformanceEvaluation\_WorkflowPathDetails.cshtml" />
+    <Content Include="Views\HRDayOff\_DayOffNextBalance.cshtml" />
+    <Content Include="Views\HRDayOff\_DisplayRequestDetail.cshtml" />
+    <Content Include="Views\ASSAssetLoanAndReturn\_AssetLoanAndReturnItem.cshtml" />
+    <Content Include="Views\ASSAssetLoanAndReturn\Edit.cshtml" />
+    <Content Include="Views\ASSAssetDisposal\Edit.cshtml" />
     <Content Include="Views\ASSAssetCheckResult\Edit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -1167,7 +1177,6 @@
     <Compile Include="Controllers\FINPettyCashReplenishmentController.cs" />
     <Compile Include="Controllers\FINPettyCashSettlementController.cs" />
     <Compile Include="Controllers\FINPettyCashStatementController.cs" />
-    <Compile Include="Controllers\FINSCASettlementController.cs" />
     <Compile Include="Controllers\FINSCAVoucherController.cs" />
     <Compile Include="Controllers\HRDayOffController.cs" />
     <Compile Include="Controllers\SharedFinanceController.cs" />
@@ -1267,6 +1276,7 @@
     <Folder Include="App_Code\" />
     <Folder Include="Scripts\apps\controlls\" />
     <Folder Include="Views\Activity\" />
+    <Folder Include="Views\File\" />
     <Folder Include="Views\HRDataMaster\" />
   </ItemGroup>
   <ItemGroup>
@@ -1307,18 +1317,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
-          <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>15923</DevelopmentServerPort>
-          <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:15923/</IISUrl>
-          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
-          <IISAppRootUrl>http://localhost:15923/</IISAppRootUrl>
-          <NTLMAuthentication>False</NTLMAuthentication>
-          <UseCustomServer>False</UseCustomServer>
-          <CustomServerUrl>
-          </CustomServerUrl>
-          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+          <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
       <UserProperties UseCdnSupport="False" />

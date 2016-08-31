@@ -1,0 +1,132 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Asset
+
+
+
+@model IEnumerable<AssetReplacementItemVM>
+
+@{
+    var index = 0;
+}
+
+<div class="col-md-12" style="margin-bottom: 20px">
+    @(Html.Kendo().Grid(Model)
+        .Name("Details")
+        .Editable(editable => editable.Mode(GridEditMode.InCell)
+        .CreateAt(GridInsertRowPosition.Bottom))
+        .Columns(columns =>
+        {
+
+            columns.Bound(p => p.AssetSubAsset).ClientTemplate("#= AssetSubAsset.Text #" +
+                          "<input type='hidden' class='assetsubasset' name='Details[#= getWorkingRelationshipDetails(data)#].AssetSubAsset.Value' value='#= AssetSubAsset.Value #' />"
+                        ).EditorViewData(new
+                        {
+                            DataTextField = "Text",
+                            DataValueField = "Value",
+                            ControllerName = "ASSAssetReplacement",
+                            ActionName = "GetAssetSubSAssetGrid"
+                        }).Width(200);
+
+            columns.Bound(p => p.Wbs).ClientTemplate("#= Wbs #" +
+            "<input type='hidden' class='Wbs' name='Details[#= getWorkingRelationshipDetails(data)#].Wbs' value='#= Wbs #' />"
+            );
+
+            columns.Bound(p => p.CostIdr).ClientTemplate("#= kendo.toString(CostIDR, 'n2') #" +
+            "<input type='hidden' class='costidr' name='Details[#= getWorkingRelationshipDetails(data)#].CostIDR' value='#= CostIdr #' />"
+            );
+
+            columns.Bound(p => p.CostUsd).ClientTemplate("#= kendo.toString(CostUSD, 'n2') #" +
+            "<input type='hidden' class='costusd' name='Details[#= getWorkingRelationshipDetails(data)#].CostUSD' value='#= CostUsd #' />"
+            );
+
+            columns.Bound(p => p.remarks).ClientTemplate("#= Remarks #" +
+            "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].Remarks' value='#= remarks #' />"
+            );
+
+            columns.Bound(p => p.status).ClientTemplate("#= Status #" +
+            "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].Status' value='#= status #' />"
+            );
+
+            columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
+          "<input type='hidden' name=Details[#= getWorkingRelationshipDetails(data)#].ID value=#= ID # />"
+
+
+        );
+        })
+        .Events(e =>
+        {
+            e.Edit("onCustomEditKendoDetail");
+            e.DataBound("onDataBoundWorkingRelationship");
+        })
+        .DataSource(dataSource => dataSource.Ajax()
+                   .Model(model =>
+                   {
+                       model.Id(p => p.ID);
+                       model.Field(m => m.AssetSubAsset).DefaultValue(AssetAcquisitionItemVM.GetAssetSubAssetDefaultValue());
+                       model.Field(m => m.Wbs).Editable(false);
+                       model.Field(p => p.CostIdr).Editable(false);
+                       model.Field(p => p.CostUsd).Editable(false);
+                       model.Field(p => p.remarks).Editable(false);
+                       model.Field(p => p.status).Editable(false);
+
+                   })
+                   .ServerOperation(false)
+        )
+    )
+</div>
+@*@Html.HiddenFor(m => m.ID)*@
+<script>
+    function getWorkingRelationshipDetails(dataItem) {
+        var data = $("#Details").data("kendoGrid").dataSource.data();
+        //data.set('AssetSubAsset', data.AssetSubAsset);
+        return data.indexOf(dataItem);
+    }
+
+    function onCustomEditKendoDetail(e) {
+        if (!e.model.isNew()) {
+            var container = e.container;
+            var tr = container.closest('tr');
+            var data = this.dataItem(tr); //get the row data so it can be referred later
+            // 1 is Item.Mode.UPDATED
+            data.set("EditMode", 1);
+        }
+        if (isCustomAdd && e.model.isNew()) {
+            isCustomAdd = false;
+            $(e.container).find("[name='Details']").val(customRowDataItem.Details).change();
+        }
+    }
+    function onDataBoundWorkingRelationship(e) {
+        var grid = $("#Details").data("kendoGrid");
+        hideDeletedRowKendoDetail(grid);
+    }
+</script>
+
+<style>
+    .k-dropdown-wrap {
+        width: 200px;
+    }
+
+    .k-dirty-cell {
+        width: 200px;
+    }
+
+    .k-list-container .k-list .k-item {
+        white-space: nowrap;
+    }
+
+    .k-numeric-wrap .k-select {
+        display: none;
+        margin: 0;
+    }
+
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+        input [type=number];
+
+    {
+        -moz-appearance: textfield;
+    }
+
+    }
+</style>
