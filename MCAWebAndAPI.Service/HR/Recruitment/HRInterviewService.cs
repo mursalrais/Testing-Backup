@@ -292,34 +292,40 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                         <View>
                            <Query>
                            <Where>
-                              <And>
-                                 <Eq>
+                                <And>
+                                    <Eq>
                                     <FieldRef Name='manpowerrequisition' />
                                     <Value Type='Lookup'>" + Position + @"</Value>
-                                 </Eq>
-                                 <And>
+                                    </Eq>
+                                    <And>
                                     <Eq>
-                                       <FieldRef Name='manpowerrequisition_x003a_Manpow' />
-                                       <Value Type='Lookup'>Active</Value>
+                                        <FieldRef Name='manpowerrequisition_x003a_Manpow' />
+                                        <Value Type='Lookup'>Active</Value>
                                     </Eq>
                                     <Or>
-                                       <Eq>
-                                          <FieldRef Name='applicationstatus' />
-                                          <Value Type='Text'>Shortlisted</Value>
-                                       </Eq>
-                                       <Or>
-                                          <Eq>
-                                             <FieldRef Name='applicationstatus' />
-                                             <Value Type='Text'>Recommended</Value>
-                                          </Eq>
-                                          <Eq>
-                                             <FieldRef Name='applicationstatus' />
-                                             <Value Type='Text'>Not Recommended</Value>
-                                          </Eq>
-                                       </Or>
+                                        <Eq>
+                                            <FieldRef Name='applicationstatus' />
+                                            <Value Type='Text'>Shortlisted</Value>
+                                        </Eq>
+                                        <Or>
+                                            <Eq>
+                                                <FieldRef Name='applicationstatus' />
+                                                <Value Type='Text'>Recommended</Value>
+                                            </Eq>
+                                            <Or>
+                                                <Eq>
+                                                <FieldRef Name='applicationstatus' />
+                                                <Value Type='Text'>Not Recommended</Value>
+                                                </Eq>
+                                                <Eq>
+                                                <FieldRef Name='applicationstatus' />
+                                                <Value Type='Text'>Pending MCC Approval</Value>
+                                                </Eq>
+                                            </Or>
+                                        </Or>
                                     </Or>
-                                 </And>
-                              </And>
+                                    </And>
+                                </And>
                            </Where>
                         </Query>
                         <ViewFields>
@@ -340,34 +346,40 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                         <View>
                         <Query>
                            <Where>
-                              <And>
-                                 <Eq>
+                                <And>
+                                    <Eq>
                                     <FieldRef Name='manpowerrequisition' />
                                     <Value Type='Lookup'>" + Position + @"</Value>
-                                 </Eq>
-                                 <And>
-                                    <Eq>
-                                       <FieldRef Name='manpowerrequisition_x003a_Manpow' />
-                                       <Value Type='Lookup'>Active</Value>
                                     </Eq>
                                     <And>
-                                       <Eq>
-                                          <FieldRef Name='neednextinterview' />
-                                          <Value Type='Choice'>Yes</Value>
-                                       </Eq>
-                                       <Or>
-                                          <Eq>
-                                             <FieldRef Name='applicationstatus' />
-                                             <Value Type='Text'>For Other Position</Value>
-                                          </Eq>
-                                          <Eq>
-                                             <FieldRef Name='applicationstatus' />
-                                             <Value Type='Text'>Recommended</Value>
-                                          </Eq>
-                                       </Or>
+                                    <Eq>
+                                        <FieldRef Name='manpowerrequisition_x003a_Manpow' />
+                                        <Value Type='Lookup'>Active</Value>
+                                    </Eq>
+                                    <And>
+                                        <Eq>
+                                            <FieldRef Name='neednextinterview' />
+                                            <Value Type='Choice'>Yes</Value>
+                                        </Eq>
+                                        <Or>
+                                            <Eq>
+                                                <FieldRef Name='applicationstatus' />
+                                                <Value Type='Text'>For Other Position</Value>
+                                            </Eq>
+                                            <Or>
+                                                <Eq>
+                                                <FieldRef Name='applicationstatus' />
+                                                <Value Type='Text'>Recommended</Value>
+                                                </Eq>
+                                                <Eq>
+                                                <FieldRef Name='applicationstatus' />
+                                                <Value Type='Text'>Pending MCC Approval</Value>
+                                                </Eq>
+                                            </Or>
+                                        </Or>
                                     </And>
-                                 </And>
-                              </And>
+                                    </And>
+                                </And>
                            </Where>
                         </Query>
                         <ViewFields>

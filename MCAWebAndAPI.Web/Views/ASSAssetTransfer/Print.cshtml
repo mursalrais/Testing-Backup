@@ -1,17 +1,15 @@
 ﻿
 @using MCAWebAndAPI.Model.ViewModel.Form.Asset
 @model AssetTransferVM
-
 @{
     Layout = "~/Views/Shared/_LayoutPDF.cshtml";
 }
-
 <div class="form-horizontal">
     <fieldset>
         <div class="row">
             @Html.Partial("_print", Model)
         </div>
     </fieldset>
-    @Html.HiddenFor(m => m.nameOnly)
     @Html.HiddenFor(m => m.AssetIDs)
+    @Html.HiddenFor(m => m.ContactNoTo)
 </div>

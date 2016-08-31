@@ -35,7 +35,7 @@
         $(document).ready(function () {
             $('#back-button').click(function () {
                 var url = "@ViewBag.PreviousUrl";
-                window.location = url;
+                window.top.location = url;
             });
         });
 

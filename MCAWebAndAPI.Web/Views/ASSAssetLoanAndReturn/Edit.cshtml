@@ -49,7 +49,7 @@
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.LoanDate).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Html.EditorFor(m => m.LoanDate)
+                    @Html.EditorFor(m => m.LoanDate,new { id = "loandate" })
                 </div>
             </div>
             <div class="form-group">
@@ -71,7 +71,7 @@
         @Html.HiddenFor(m => m.CancelURL)
         <div>
             <center>
-                <input class="k-button k-button-icontext k-grid-add" type="submit" value="Save" />
+                <input class="k-button k-button-icontext k-grid-add" onclick="return saveAssignment()" type="submit" value="Save" />
                 <a href="@Model.CancelURL" target='_parent'>
                     <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
                 </a>
@@ -100,6 +100,41 @@
                     //$('#Vendor').prop('value', data.VendorID + "-" + data.VendorName);
                     //$('#PoNo').prop('value', data.PoNo);
                 });
+            }
+
+            function saveAssignment() {
+
+                var asset = document.getElementsByClassName("asset");
+                var estdate = document.getElementsByClassName("estdate");
+                var loandate = new Date($('#LoanDate').val());
+                var grid = $('#AssetLoanAndReturnItem').data("kendoGrid").dataSource.data();
+
+                for (var j = 0; j < grid.length; j++) {
+                    if (grid[j].EstReturnDate < loandate) {
+                        var data = { errorMessage: "Est Return Date cannot be less than Loan Date", success: false };
+                        showModalWindow(data);
+                        return false;
+                    }
+                }
+
+                console.log(loandate);
+                //for (var j = 0; j < asset.length; j++) {
+                //    if (asset[j].value == "null") {
+                //        alert("Asset Sub Asset / Province cannot be null!");
+                //        return false;
+                //    }
+                //}
+
+                //var dateOne = new Date(2010, 00, 15); //Year, Month, Date
+                //var dateTwo = new Date(2011, 00, 15); //Year, Month, Date
+                //if (dateOne > dateTwo) {
+                //    alert("Date One is greather then Date Two.");
+                //} else {
+                //    alert("Date Two is greather then Date One.");
+                //}
+
+
+
             }
 
             function OnSelectProfessionalName(e) {

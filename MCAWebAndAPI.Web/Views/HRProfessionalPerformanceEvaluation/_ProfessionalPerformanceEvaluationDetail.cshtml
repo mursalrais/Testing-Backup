@@ -10,7 +10,7 @@
         .CreateAt(GridInsertRowPosition.Bottom))
         .Columns(columns =>
         {
-            columns.Bound(p => p.ProjectOrUnitGoals).ClientTemplate(" <textarea style=' width: 190; height: 70px; margin-top: 0px;margin-bottom: 0px; border: none; background-color: transparent' disable>#= ProjectOrUnitGoals #</textarea>" +
+            columns.Bound(p => p.ProjectOrUnitGoals).ClientTemplate(" #=ProjectOrUnitGoals #" +
             "<input type='hidden' name='ProfessionalPerformanceEvaluationDetails[#= getProfessionalPerformancePlanDetail(data)#].ProjectOrUnitGoals' value='#= ProjectOrUnitGoals #' />"
             ).Width(200);
             columns.Bound(p => p.Category).ClientTemplate("#= Category.Text #" +

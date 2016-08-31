@@ -8,14 +8,23 @@ using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Service.Asset
 {
-    public interface IAssetFixedAssetService
+    public interface IAssetCheckFormService
     {
         void SetSiteUrl(string siteUrl);
 
-        IEnumerable<AssetFixedAssetVM> GetAssetFixedAssets();
+        AssetCheckFormHeaderVM GetPopulatedModel(int? ID = null, string office = null, string floor = null, string room = null);
 
-        bool CreateAssetFixedAsset(AssetFixedAssetVM assetFixedAsset);
+        AssetCheckFormHeaderVM GetPopulatedModelPrint(int? ID = null);
 
-        bool UpdateAssetFixedAsset(AssetFixedAssetVM assetFixedAsset);
+        AssetCheckFormHeaderVM GetPopulatedModelPrintDate(DateTime? createDate = null);
+
+        IEnumerable<AssetCheckFormVM> GetAssetCheckForms();
+
+        bool CreateAssetCheckForm(AssetCheckFormVM assetCheckForm);
+
+        bool UpdateAssetCheckForm(AssetCheckFormVM assetCheckForm);
+
+        int? save(AssetCheckFormHeaderVM data);
+
     }
 }

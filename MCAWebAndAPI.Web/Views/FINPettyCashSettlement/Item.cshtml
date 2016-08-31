@@ -18,6 +18,7 @@
     FormMethod.Post,
     new
     {
+        @id= "formSPC",
         @class = "form-horizontal",
         enctype = "multipart/form-data"
     }))
@@ -26,10 +27,10 @@
     <fieldset>
         <legend>Petty Cash Settlement &nbsp; @Model.TransactionNo</legend>
         <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-12">
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.Date).Class("col-sm-4 control-label")
-                    <div class="col-sm-8">
+                    @Html.Bootstrap().LabelFor(m => m.Date).Class("col-sm-3 control-label")
+                    <div class="col-sm-7">
                         @Html.EditorFor(m => m.Date)
                         @Html.ValidationMessageFor(m => m.Date)
                         @Html.HiddenFor(m => m.ID)
@@ -39,109 +40,110 @@
                 </div>
 
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.PettyCashVoucher).Class("col-sm-4 control-label")
-                    <div class="col-sm-8">
+                    @Html.Bootstrap().LabelFor(m => m.PettyCashVoucher).Class("col-sm-3 control-label")
+                    <div class="col-sm-7">
                         @Html.EditorFor(m => m.PettyCashVoucher)
                     </div>
                 </div>
 
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.AdvanceReceivedDate).Class("col-sm-4 control-label")
-                    <div class="col-sm-8">
+                    @Html.Bootstrap().LabelFor(m => m.AdvanceReceivedDate).Class("col-sm-3 control-label")
+                    <div class="col-sm-7">
                         @Html.DisplayFor(m => m.AdvanceReceivedDate)
                     </div>
                 </div>
 
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.Status).Class("col-sm-4 control-label")
-                    <div class="col-sm-8">
-                        @Html.DisplayFor(m => m.Status)
+                    @Html.Bootstrap().LabelFor(m => m.Status).Class("col-sm-3 control-label")
+                    <div class="col-sm-7">
+                        @Html.DisplayFor(model => model.Status)    
+                        <span id="txtRole" style="color:#b94a48; font-size:85%; display:block;" ></span>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.PaidTo).Class("col-sm-4 control-label")
-                    <div class="col-sm-8">
+                    @Html.Bootstrap().LabelFor(m => m.PaidTo).Class("col-sm-3 control-label")
+                    <div class="col-sm-7">
                         @Html.DisplayFor(m => m.PaidTo)
                     </div>
                 </div>
 
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.Currency).Class("col-sm-4 control-label")
-                    <div class="col-sm-8">
+                    @Html.Bootstrap().LabelFor(m => m.Currency).Class("col-sm-3 control-label")
+                    <div class="col-sm-7">
                         @Html.DisplayFor(m => m.Currency)
                     </div>
                 </div>
 
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.AmountPaid).Class("col-sm-4 control-label")
-                    <div class="col-sm-8">
+                    @Html.Bootstrap().LabelFor(m => m.AmountPaid).Class("col-sm-3 control-label")
+                    <div class="col-sm-7">
                         @Html.DisplayFor(m => m.AmountPaid)
                     </div>
                 </div>
                 
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.AmountPaidInWords).Class("col-sm-4 control-label")
-                    <div class="col-sm-8">
+                    @Html.Bootstrap().LabelFor(m => m.AmountPaidInWords).Class("col-sm-3 control-label")
+                    <div class="col-sm-7">
                         @Html.DisplayFor(m => m.AmountPaidInWords)
                     </div>
                 </div>
 
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.ReasonOfPayment).Class("col-sm-4 control-label")
-                    <div class="col-sm-8">
+                    @Html.Bootstrap().LabelFor(m => m.ReasonOfPayment).Class("col-sm-3 control-label")
+                    <div class="col-sm-7">
                         @Html.DisplayFor(m => m.ReasonOfPayment)
                     </div>
                 </div>
 
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.Fund).Class("col-sm-4 control-label")
-                    <div class="col-sm-8">
+                    @Html.Bootstrap().LabelFor(m => m.Fund).Class("col-sm-3 control-label")
+                    <div class="col-sm-7">
                         @Html.DisplayFor(m => m.Fund)
                     </div>
                 </div>
 
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.WBS).Class("col-sm-4 control-label")
-                    <div class="col-sm-8">
+                    @Html.Bootstrap().LabelFor(m => m.WBS).Class("col-sm-3 control-label")
+                    <div class="col-sm-7">
                         @Html.DisplayFor(m => m.WBS)
                     </div>
                 </div>
 
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.GL).Class("col-sm-4 control-label")
-                    <div class="col-sm-8">
+                    @Html.Bootstrap().LabelFor(m => m.GL).Class("col-sm-3 control-label")
+                    <div class="col-sm-7">
                         @Html.DisplayFor(m => m.GL)
                     </div>
                 </div>
 
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.AmountLiquidated).Class("col-sm-4 control-label")
-                    <div class="col-sm-8">
+                    @Html.Bootstrap().LabelFor(m => m.AmountLiquidated).Class("col-sm-3 control-label")
+                    <div class="col-sm-7">
                         @Html.EditorFor(m => m.AmountLiquidated)
                         @Html.ValidationMessageFor(m => m.AmountLiquidated)
                     </div>
                 </div>
 
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.Amount).Class("col-sm-4 control-label")
-                    <div class="col-sm-8">
-                        @Html.EditorFor(m => m.Amount)
+                    @Html.Bootstrap().LabelFor(m => m.Amount).Class("col-sm-3 control-label")
+                    <div class="col-sm-7">
+                        @Html.EditorFor(m => m.Amount, new { HtmlAttributes = new { @class = "textbox-padding6px-readonly", @readonly = "readonly" } })
                         @Html.ValidationMessageFor(m => m.Amount)
                     </div>
                 </div>
                 
 
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.Remarks).Class("col-sm-4 control-label")
-                    <div class="col-sm-8">
+                    @Html.Bootstrap().LabelFor(m => m.Remarks).Class("col-sm-3 control-label")
+                    <div class="col-sm-7">
                         @Html.EditorFor(m => m.Remarks)
                     </div>
                 </div>
 
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.Documents).Class("col-md-4 control-label")
-                    <div class="col-md-8">
+                    @Html.Bootstrap().LabelFor(m => m.Documents).Class("col-md-3 control-label")
+                    <div class="col-md-7">
                         @Html.EditorFor(m => m.Documents)
                     </div>
                 </div>
@@ -151,8 +153,8 @@
                     <div class="form-group">
                         <div class="col-sm-12">
                             <div class="form-group">
-                                @Html.Bootstrap().LabelFor(m => m).Class("col-sm-4 control-label")
-                                <div class="col-sm-8">
+                                @Html.Bootstrap().LabelFor(m => m).Class("col-sm-3 control-label")
+                                <div class="col-sm-7">
                                     <button id="application-document-button" class="btn btn-default" type="button">
                                         Click Here to go to Petty Cash Settlement
                                     </button>
@@ -200,6 +202,8 @@
 
 @section scripts{
     <script>
+        var statusPaid = "Paid";
+
         function onSelectPaymentVoucher(e) {
             var data = this.dataItem(e.item);
 
@@ -220,6 +224,14 @@
                     $('#WBS').val(response.WBS);
                     $('#GL').val(response.GL);
                     
+                    if(statusPaid !== $('#Status').val())
+                    {
+                        $('#txtRole').text('The status of the petty cash voucher is still in progress. The settlement cannot be made');
+                    }
+                    else
+                    {
+                        $('#txtRole').text('');
+                    }
                 },
                 error: function (response) {
                    
@@ -242,7 +254,25 @@
                 $('form').submit();
 
             });
+        });
 
+        $("#formSPC").on('submit', function() {
+            // do validation here
+            var status = $('#Status').val();
+            if (status !== statusPaid)
+                return false;
+            else
+                return true;
+        });
+
+
+        $('#AmountLiquidated').change(function () {
+            var amoutPaid = $('#AmountPaid').val();
+            var amoutLiquidated = $('#AmountLiquidated').val();
+
+            var amout = amoutLiquidated - amoutPaid;
+
+            $('#Amount').val(amout);
         });
 
     </script>

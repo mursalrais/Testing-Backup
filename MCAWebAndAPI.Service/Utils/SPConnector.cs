@@ -16,10 +16,19 @@ namespace MCAWebAndAPI.Service.Utils
 
         public static Task ExecuteQueryAsync( ClientContext clientContext)
         {
-            return Task.Factory.StartNew(() =>
+            try
             {
-                clientContext.ExecuteQuery();
-            });
+                return Task.Factory.StartNew(() =>
+                {
+                    clientContext.ExecuteQuery();
+                });
+            }
+            catch (Exception ex)
+            {
+                
+                throw new Exception(ex.Message);
+            }
+          
         }
 
         private static void MapCredential(string url)
@@ -55,6 +64,34 @@ namespace MCAWebAndAPI.Service.Utils
 
             return result;
         }
+
+        internal static int GetLatestListItemIdbyGuid(string listName, string siteUrl = null,string strGuid=null, string caml = null)
+        {
+            string camlViewXml = string.Format("<Query>" +
+                                               "<Where>" +
+                                               "<Eq><FieldRef Name ='TimesheetGUID'/>" +
+                                               "<Value Type ='Text'>{0}</Value>" +
+                                               "</Eq>" +
+                                               "</Where>" +
+                                               "<OrderBy>" +
+                                               "<FieldRef Name ='ID' Ascending ='False'/>" +
+                                               "</OrderBy>" +
+                                               "</Query>" +
+                                               "<ViewFields>" +
+                                               "<FieldRef Name ='ID'/>" +
+                                               "</ViewFields><RowLimit>1</RowLimit>", strGuid);
+            
+
+            var result = 1;
+            var list = GetList(listName, siteUrl, camlViewXml);
+            foreach (var item in list)
+            {
+                result = Convert.ToInt32(item["ID"]);
+            }
+
+            return result;
+        }
+
 
         public static ListItemCollection GetList(string listName, string siteUrl = null, string caml = null)
         {
@@ -178,6 +215,112 @@ namespace MCAWebAndAPI.Service.Utils
                 }
             }
         }
+
+        public static void UpdateSingleListItemAsync(string listName, int? listItemID, Dictionary<string, object> updatedValues, string siteUrl = null)
+        {
+            MapCredential(siteUrl);
+            using (ClientContext context = new ClientContext(siteUrl ?? CurUrl))
+            {
+                SecureString secureString = new SecureString();
+                Password.ToList().ForEach(secureString.AppendChar);
+                context.Credentials = new SharePointOnlineCredentials(UserName, secureString);
+
+                // Get one listitem
+                List SPList = context.Web.Lists.GetByTitle(listName);
+                ListItem SPListItem = SPList.GetItemById(listItemID + string.Empty);
+                context.Load(SPListItem);
+
+                try
+                {
+                    context.ExecuteQuery();
+                }
+                catch (Exception e)
+                {
+                    throw e;
+                }
+
+
+                // Set listitem value to parsed listitem
+                foreach (var key in updatedValues.Keys)
+                {
+                    SPListItem[key] = updatedValues[key];
+                }
+
+                SPListItem.Update();
+
+                try
+                {
+                    ExecuteQueryAsync(context);
+                }
+                catch (Exception e)
+                {
+                    throw e;
+                }
+
+             
+            }
+        }
+
+        public static void UpdateMultipleListItemAsync(string listName, Dictionary<string,
+            Dictionary<string, object>> updatedValues, string siteUrl = null)
+        {
+            MapCredential(siteUrl);
+            using (ClientContext context = new ClientContext(siteUrl ?? CurUrl))
+            {
+                SecureString secureString = new SecureString();
+                Password.ToList().ForEach(secureString.AppendChar);
+                context.Credentials = new SharePointOnlineCredentials(UserName, secureString);
+
+                // Get one listitem
+                List SPList = context.Web.Lists.GetByTitle(listName);
+
+
+                foreach (var key in updatedValues.Keys)
+                {
+                    if (key.IndexOf(";Edit", StringComparison.Ordinal) <= 0) continue;
+                    var id = key.Split(Convert.ToChar(";"))[0];
+                    ListItem SPListItem = SPList.GetItemById(id + string.Empty);
+                    context.Load(SPListItem);
+
+                    try
+                    {
+                        context.ExecuteQuery();
+                    }
+                    catch (Exception e)
+                    {
+                        throw e;
+                    }
+
+                    var detailvalue = updatedValues[key];
+                    foreach (var keyvalue in detailvalue.Keys)
+                    {
+                        SPListItem[keyvalue] = detailvalue[keyvalue];
+                    }
+
+                    SPListItem.Update();
+
+                    try
+                    {
+                        ExecuteQueryAsync(context);
+                    }
+                    catch (Exception e)
+                    {
+                        throw e;
+                    }
+
+
+                }
+
+
+               
+
+
+               
+
+
+            }
+        }
+
 
         public static void UpdateListItemNoVersionConflict(string listName, int? listItemID, Dictionary<string, object> updatedValues, string siteUrl = null)
         {
@@ -308,8 +451,6 @@ namespace MCAWebAndAPI.Service.Utils
                     {
                         throw e;
                     }
-
-                   
 
                 }
 
@@ -451,7 +592,6 @@ namespace MCAWebAndAPI.Service.Utils
             }
         }
         
-
         public static bool SendEmail( string email, string content, string subject, string siteUrl= null)
         {
             MapCredential(siteUrl);
@@ -533,6 +673,66 @@ namespace MCAWebAndAPI.Service.Utils
                 }
             }
         }
+
+        public static void DeleteSingleListItemAsync(string listName, int? listItemID, string siteUrl)
+        {
+            MapCredential(siteUrl);
+            using (ClientContext context = new ClientContext(siteUrl ?? CurUrl))
+            {
+                SecureString secureString = new SecureString();
+                Password.ToList().ForEach(secureString.AppendChar);
+                context.Credentials = new SharePointOnlineCredentials(UserName, secureString);
+
+                // Get one listitem
+                List SPList = context.Web.Lists.GetByTitle(listName);
+                ListItem SPListItem = SPList.GetItemById(listItemID + string.Empty);
+
+                SPListItem.DeleteObject();
+
+                try
+                {
+                    // context.ExecuteQuery();
+                    ExecuteQueryAsync(context);
+                }
+                catch (Exception e)
+                {
+                    throw e;
+                }
+            }
+        }
+
+        public static void DeleteMultipleListItemAsync(string listName, List<string> itemsDelete, string siteUrl)
+        {
+            MapCredential(siteUrl);
+            using (ClientContext context = new ClientContext(siteUrl ?? CurUrl))
+            {
+                SecureString secureString = new SecureString();
+                Password.ToList().ForEach(secureString.AppendChar);
+                context.Credentials = new SharePointOnlineCredentials(UserName, secureString);
+
+                // Get one listitem
+                List SPList = context.Web.Lists.GetByTitle(listName);
+
+                foreach (var item in itemsDelete)
+                {
+                    ListItem SPListItem = SPList.GetItemById(item);
+
+                    SPListItem.DeleteObject();
+
+                    try
+                    {
+                        ExecuteQueryAsync(context);
+                    }
+                    catch (Exception e)
+                    {
+                        throw e;
+                    }
+                }
+
+               
+            }
+        }
+
 
         public static FieldUserValue GetUser(string useremail, string siteUrl,string strwebname)
         {

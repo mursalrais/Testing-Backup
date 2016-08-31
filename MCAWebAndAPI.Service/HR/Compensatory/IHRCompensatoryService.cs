@@ -10,7 +10,13 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
     {
         void SetSiteUrl(string siteUrl = null);
 
-        CompensatoryVM GetComplistbyCmpid(int? iD);
+        Task<CompensatoryVM> GetComplistbyCmpid(int? ID, string requestor, string listName, string listNameWorkflow, string columnName);
+
+        CompensatoryVM GetViewlistbyCmpid(int? iD);
+
+        Task<CompensatoryVM> GetWorkflow(string requestor, string listName);
+
+        Task<CompensatoryVM> GetCheckWorkflow(int? ID, string requestor, string listName, string listNameWorkflow, string columnName);
 
         CompensatoryVM GetComplistbyProfid(int? iD);
 
@@ -22,7 +28,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         void CreateCompensatoryData(int? headerID, CompensatoryVM CompensatoryList);
 
-        void CreateHeaderCompensatory(CompensatoryVM CompensatoryList);
+        int CreateHeaderCompensatory(CompensatoryVM CompensatoryList);
 
         IEnumerable<CompensatoryMasterVM> GetCompensatoryId(int? idComp);
 

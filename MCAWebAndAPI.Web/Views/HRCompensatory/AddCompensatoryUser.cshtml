@@ -29,7 +29,7 @@
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.cmpName).Class("col-xs-2 control-label")
                 <div class="col-xs-4">
-                    @Html.EditorFor(m => m.cmpName)
+                    <input id="ProfName" class="form-control" value="" />
                 </div>
             </div>
         </div>
@@ -64,6 +64,11 @@
     </fieldset>
 }
 
+<legend>Approval Path</legend>
+<div class="row">
+    @Html.Partial("_WorkflowPathDetails", Model)
+</div>
+
 <div class="row pull-right">
     <div class="col-sm-12">
         <button id="submit-button" class="btn btn-primary" type="submit">
@@ -81,15 +86,13 @@
     </div>
 </div>
 
-<legend>Approval Path</legend>
-<div id="workflow-placeholder" class="row"></div>
 
 @section scripts{
 
     <script>
             $(document).ready(function () {
                 showLoading();
-                var nameProf = $("#cmpName").val() + " - " + $("#cmpPosition").val()
+                var nameProf = $("#cmpName").val() + " - " + $("#cmpPosition").val();
                 $("#ProfName").prop("value", nameProf);
                 $("#ProfName").prop('readonly', 'true');
 

@@ -302,4 +302,7 @@
   <data name="ProfessionalData" xml:space="preserve">
     <value>/SitePages/Professional%20Data.aspx</value>
   </data>
+  <data name="AssetReplacement" xml:space="preserve">
+    <value>/Lists/Asset%20Replacement/AllItems.aspx</value>
+  </data>
 </root>

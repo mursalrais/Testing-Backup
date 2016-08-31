@@ -54,6 +54,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
         [Required]
         [UIHint("Date")]
         public DateTime PurchaseDate { get; set; }
+        public string purchasedatetext { get; set; }
 
         public string PurchaseDescription { get; set; }
 

@@ -44,17 +44,6 @@
         columns.Bound(p => p.amount).ClientTemplate("#= amount #" +
         "<input type='hidden' name='AdjustmentDetails[#= GetDetailAdjustment(data)#].amount' value='#= amount #' />");
 
-        columns.Bound(p => p.currency).ClientTemplate("#= currency.Text #" +
-                      "<input type='hidden' name='AdjustmentDetails[#= GetDetailAdjustment(data)#].currency.Text' value='#= currency.Text #' />"
-                    )
-                    .EditorViewData(new
-                    {
-                        DataTextField = "Text",
-                        DataValueField = "Value",
-                        ControllerName = "HRAdjustment",
-                        ActionName = "GetCurrencyGrid"
-                    });
-
         columns.Bound(p => p.payType).ClientTemplate("#= payType.Text #" +
                   "<input type='hidden' name='AdjustmentDetails[#= GetDetailAdjustment(data)#].payType.Text' value='#= payType.Text #' />"
                 )

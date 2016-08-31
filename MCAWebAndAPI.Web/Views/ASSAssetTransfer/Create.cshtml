@@ -17,7 +17,7 @@
 {
     <form class="form-horizontal" method="post" action="/ASSAssetTransfer/Submit" id="create-asset-acquisition-form">
         <fieldset>
-            <legend>Form Asset Acquisition</legend>
+            <legend>Form Asset Transfer</legend>
             <div class="col-md-6">
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.TransactionType).Class("col-md-4 control-label")
@@ -97,13 +97,14 @@
 <script>
     $(document).ready(function () {
         $("#AssetHolder_Value").data("kendoDropDownList").value("");
+        $("#AssetHolderTo_Value").data("kendoDropDownList").value("");
         //alert($("#Province").data("kendoDropDownList").text());
 
     })
 
     function saveAssignment() {
         if ($('#AssetHolder_Value').val() == "" || $('#AssetHolderTo_Value').val() == "") {
-            alert("Asset Holder Cannot be Empty");
+            alert("Asset Holder From / Asset Holder To Cannot be Empty");
             return false;
         }
 
