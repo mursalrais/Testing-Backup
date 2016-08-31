@@ -647,7 +647,6 @@
     <Content Include="Views\ASSAssetAcquisition\Index.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
     <Content Include="Views\FINEventBudget\_ItemDetails.cshtml" />
-    <Content Include="Views\FINPettyCashReimbursement\Create.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\HRCompensatory\_CompensantoryDetails.cshtml" />
     <Content Include="Views\HRPayroll\DisplayPayrollWorksheet.cshtml" />
@@ -1085,7 +1084,6 @@
     <Content Include="Views\HRCompensatory\AddCompensatoryHR.cshtml" />
     <Content Include="Views\FINEventBudget\Item.cshtml" />
     <Content Include="Views\HRTimesheet\CreateTimesheet.cshtml" />
-    <Content Include="Views\HRTimesheet\FormType.cshtml" />
     <Content Include="Views\FINPettyCashStatement\Display.cshtml" />
     <Content Include="Views\FINPettyCashStatement\Index.cshtml" />
     <Content Include="Views\FINPettyCashSettlement\Item.cshtml" />
