@@ -436,23 +436,11 @@ Please try again.
    at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64
 2016-08-30 08:20:52.1149 MCAWebAndAPI.Service.Asset.AssetTransferService Value cannot be null.
 Parameter name: source
-2016-08-31 14:43:21.3157 MCAWebAndAPI.Service.HR.Payroll.PayrollService System.Net.WebException: The underlying connection was closed: An unexpected error occurred on a receive. ---> System.IO.IOException: Unable to read data from the transport connection: An existing connection was forcibly closed by the remote host. ---> System.Net.Sockets.SocketException: An existing connection was forcibly closed by the remote host
-   at System.Net.Sockets.Socket.Receive(Byte[] buffer, Int32 offset, Int32 size, SocketFlags socketFlags)
-   at System.Net.Sockets.NetworkStream.Read(Byte[] buffer, Int32 offset, Int32 size)
-   --- End of inner exception stack trace ---
-   at System.Net.Sockets.NetworkStream.Read(Byte[] buffer, Int32 offset, Int32 size)
-   at System.Net.FixedSizeReader.ReadPacket(Byte[] buffer, Int32 offset, Int32 count)
-   at System.Net.Security._SslStream.StartFrameHeader(Byte[] buffer, Int32 offset, Int32 count, AsyncProtocolRequest asyncRequest)
-   at System.Net.Security._SslStream.StartReading(Byte[] buffer, Int32 offset, Int32 count, AsyncProtocolRequest asyncRequest)
-   at System.Net.Security._SslStream.ProcessRead(Byte[] buffer, Int32 offset, Int32 count, AsyncProtocolRequest asyncRequest)
-   at System.Net.TlsStream.Read(Byte[] buffer, Int32 offset, Int32 size)
-   at System.Net.Connection.SyncRead(HttpWebRequest request, Boolean userRetrievedStream, Boolean probeRead)
-   --- End of inner exception stack trace ---
-   at MCAWebAndAPI.Service.Utils.SPConnector.GetList(String listName, String siteUrl, String caml) in D:\Reza F. Fikri\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 121
-   at MCAWebAndAPI.Service.HR.Common.DataMasterService.GetMonthlyFees(Int32[] professionalIDs) in D:\Reza F. Fikri\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Common\DataMasterService.cs:line 303
-   at MCAWebAndAPI.Service.HR.Payroll.PayrollServiceExtention.<PopulateAllProfessionalMonthlyFee>d__17.MoveNext() in D:\Reza F. Fikri\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Payroll\PayrollServiceExtention.cs:line 91
---- End of stack trace from previous location where exception was thrown ---
-   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
-   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
-   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
-   at MCAWebAndAPI.Service.HR.Payroll.PayrollService.<GetPayrollWorksheetDetailsAsync>d__16.MoveNext() in D:\Reza F. Fikri\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Payroll\PayrollService.cs:line 225
+2016-08-31 10:37:02.6816 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService The 'sId' argument is invalid.
+2016-08-31 13:48:34.9335 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Column 'dayofbrought' does not exist. It may have been deleted by another user.  /sites/mca-dev/hr/Lists/DayOffBalance
+2016-08-31 13:54:12.2175 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Column 'type' does not exist. It may have been deleted by another user.  /sites/mca-dev/hr/Lists/DayOffBalance
+2016-08-31 13:55:37.6602 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Invalid data has been used to update the list item. The field you are trying to update may be read only.
+2016-08-31 14:16:35.3259 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Column 'psatitle' does not exist. It may have been deleted by another user.  /sites/mca-dev/hr/Lists/DayOffBalance
+2016-08-31 14:21:35.8922 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Invalid data has been used to update the list item. The field you are trying to update may be read only.
+2016-08-31 14:29:45.7340 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Invalid data has been used to update the list item. The field you are trying to update may be read only.
+2016-08-31 14:45:46.2882 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService The 'sId' argument is invalid.

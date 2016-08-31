@@ -307,7 +307,15 @@ namespace MCAWebAndAPI.Service.Common
             updatedValue.Add("position", workflowItem.ApproverPositionId);
             updatedValue.Add("projectunit", workflowItem.ApproverUnitText);
             updatedValue.Add("approvername", workflowItem.ApproverName.Value);
-            SPConnector.AddListItem(workflowTransactionListName, updatedValue, _siteUrl);
+
+            try
+            { 
+                SPConnector.AddListItem(workflowTransactionListName, updatedValue, _siteUrl);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         private void CreateExitProcedureWorkflowItem(string workflowTransactionListName, string transactionLookupColumnName, int exitProcID, ExitProcedureChecklistVM exiProcedureChecklist, string requestor = null)

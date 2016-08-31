@@ -135,6 +135,8 @@ namespace MCAWebAndAPI.Web.Controllers
             Task allTasks = Task.WhenAll(createEducationDetailsTask, createTrainingDetailsTask,
                 createWorkingExperienceDetailsTask, createApplicationDocumentTask);
 
+            _service.SendMail(viewModel.EmailAddresOne, string.Format("{0} at MCA-Indonesia", viewModel.Position), string.Format(EmailResource.ApplicationData, viewModel.FirstMiddleName, viewModel.Position));
+            
             try
             {
                 await allTasks;
@@ -181,6 +183,12 @@ namespace MCAWebAndAPI.Web.Controllers
         [HttpPost]
         public ActionResult PrintApplicationData(FormCollection form, ApplicationDataVM viewModel)
         {
+            var siteUrl = SessionManager.Get<string>("SiteUrl") ?? ConfigResource.DefaultHRSiteUrl;
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            string nationalityName = _service.GetNationality(Convert.ToInt32(viewModel.Nationality.Value));
+            viewModel.NationalityName = nationalityName;
+
             viewModel.EducationDetails = BindEducationDetails(form, viewModel.EducationDetails);
             viewModel.TrainingDetails = BindTrainingDetails(form, viewModel.TrainingDetails);
             viewModel.WorkingExperienceDetails = BindWorkingExperienceDetails(form, viewModel.WorkingExperienceDetails);
@@ -188,7 +196,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             const string RelativePath = "~/Views/HRApplication/PrintApplicationData.cshtml";
             var view = ViewEngines.Engines.FindView(ControllerContext, RelativePath, null);
-            var fileName = viewModel.FirstMiddleName + "_Application.pdf";
+            var fileName = viewModel.FirstMiddleName + "-" + viewModel.Position + "-" + "MCA-Indonesia.pdf";
             byte[] pdfBuf = null;
             string content;
 

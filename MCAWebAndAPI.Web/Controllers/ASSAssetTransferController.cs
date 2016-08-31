@@ -53,6 +53,9 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
+                Response.TrySkipIisCustomErrors = true;
+                Response.TrySkipIisCustomErrors = true;
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse("Failed To Get Data");
             }
 
@@ -76,6 +79,9 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
+                Response.TrySkipIisCustomErrors = true;
+                Response.TrySkipIisCustomErrors = true;
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse("Failed To Get Data");
             }
 
@@ -95,12 +101,25 @@ namespace MCAWebAndAPI.Web.Controllers
                 headerID = _service.CreateHeader(_data, siteUrl);
                 if (headerID == 0)
                 {
+                    Response.TrySkipIisCustomErrors = true;
+                    Response.TrySkipIisCustomErrors = true;
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
                     return JsonHelper.GenerateJsonErrorResponse("Have To Attach File to Change Completion Status into Complete");
+                }
+                if (headerID == -1)
+                {
+                    Response.TrySkipIisCustomErrors = true;
+                    Response.TrySkipIisCustomErrors = true;
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    return JsonHelper.GenerateJsonErrorResponse("Have To Change Completion Status into Complete!");
                 }
                 //_service.CreateDocuments(headerID, _data.Attachment, siteUrl);
             }
             catch (Exception e)
             {
+                Response.TrySkipIisCustomErrors = true;
+                Response.TrySkipIisCustomErrors = true;
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse("Failed To Save Header");
             }
 
@@ -112,6 +131,9 @@ namespace MCAWebAndAPI.Web.Controllers
             {
                 //rollback parent
                 _service.RollbackParentChildrenUpload("Asset Transfer", headerID, siteUrl);
+                Response.TrySkipIisCustomErrors = true;
+                Response.TrySkipIisCustomErrors = true;
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse("Failed To Save Detail");
             }
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAssignment);
@@ -128,11 +150,17 @@ namespace MCAWebAndAPI.Web.Controllers
                 var update = _service.UpdateHeader(_data, siteUrl);
                 if (update == false)
                 {
+                    Response.TrySkipIisCustomErrors = true;
+                    Response.TrySkipIisCustomErrors = true;
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
                     return JsonHelper.GenerateJsonErrorResponse("Have To Attach File to Change Completion Status into Complete");
                 }
             }
             catch (Exception e)
             {
+                Response.TrySkipIisCustomErrors = true;
+                Response.TrySkipIisCustomErrors = true;
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse("Failed To Update Header");
             }
 
@@ -143,6 +171,9 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
+                Response.TrySkipIisCustomErrors = true;
+                Response.TrySkipIisCustomErrors = true;
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse("Failed To Update Detail");
             }
 
@@ -567,6 +598,9 @@ namespace MCAWebAndAPI.Web.Controllers
                         }
                         else
                         {
+                            Response.TrySkipIisCustomErrors = true;
+                            Response.TrySkipIisCustomErrors = true;
+                            Response.StatusCode = (int)HttpStatusCode.BadRequest;
                             return JsonHelper.GenerateJsonErrorResponse("No Lookup Value/s is Found For Asset Holder!");
                         }
                     }
@@ -589,6 +623,9 @@ namespace MCAWebAndAPI.Web.Controllers
                             }
 
                         }
+                        Response.TrySkipIisCustomErrors = true;
+                        Response.TrySkipIisCustomErrors = true;
+                        Response.StatusCode = (int)HttpStatusCode.BadRequest;
                         return JsonHelper.GenerateJsonErrorResponse("Invalid data, rolling back!");
                     }
                 }
@@ -751,6 +788,9 @@ namespace MCAWebAndAPI.Web.Controllers
                         }
                         else
                         {
+                            Response.TrySkipIisCustomErrors = true;
+                            Response.TrySkipIisCustomErrors = true;
+                            Response.StatusCode = (int)HttpStatusCode.BadRequest;
                             return JsonHelper.GenerateJsonErrorResponse("No Lookup Value/s is Found For Asset ID / Province!");
                         }
                     }
@@ -773,6 +813,9 @@ namespace MCAWebAndAPI.Web.Controllers
                             }
 
                         }
+                        Response.TrySkipIisCustomErrors = true;
+                        Response.TrySkipIisCustomErrors = true;
+                        Response.StatusCode = (int)HttpStatusCode.BadRequest;
                         return JsonHelper.GenerateJsonErrorResponse("Invalid data, rolling back!");
                     }
                 }
@@ -845,6 +888,9 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
+                Response.TrySkipIisCustomErrors = true;
+                Response.TrySkipIisCustomErrors = true;
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse("Failed To Syncronize");
             }
 

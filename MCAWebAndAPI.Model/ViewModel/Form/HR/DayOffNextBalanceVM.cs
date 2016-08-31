@@ -10,7 +10,7 @@ using System.Web;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
-    public class DayOffBalanceVM : Item
+    public class DayOffNextBalanceVM : Item
     {
         /// <summary>
         /// Title

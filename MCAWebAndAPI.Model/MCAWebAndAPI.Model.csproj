@@ -136,6 +136,8 @@
     <Compile Include="ViewModel\Form\HR\AdjustmentDataVM.cs" />
     <Compile Include="ViewModel\Form\HR\AdjustmentDayOffBalanceVM.cs" />
     <Compile Include="ViewModel\Form\HR\AdjustmentDetailsVM.cs" />
+    <Compile Include="ViewModel\Form\HR\DayOffNextBalanceVM.cs" />
+    <Compile Include="ViewModel\Form\HR\DayOffRequestDetailDisplayVM.cs" />
     <Compile Include="ViewModel\Form\HR\DayOffRequestDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\DayOffRequestVM.cs" />
     <Compile Include="HR\DataMaster\DependentMaster.cs" />
@@ -198,7 +200,6 @@
     <Compile Include="ViewModel\Form\Asset\AssetLoanAndReturnVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetReplacementHeaderVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetReplacementItemVM.cs" />
-    <Compile Include="ViewModel\Form\Asset\AssetReplacementVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetScrappingHeaderVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetScrappingItemVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetScrappingVM.cs" />
