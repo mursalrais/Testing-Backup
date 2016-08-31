@@ -93,7 +93,7 @@
                     <i class="fa fa-save"></i>
                     Approve
                 </button>
-                <button id="reject1-button" class="btn btn-danger" type="submit">
+                <button id="reject-button" class="btn btn-danger" type="submit">
                     <i class="fa fa-save"></i>
                     Reject
                 </button>
@@ -192,6 +192,11 @@
                         });
 
                         $("#approve-button").click(function () {
+                            $("form").submit();
+                        });
+
+                        $('#reject-button').click(function (e) {
+                            $("#StatusForm").val("Reject")
                             $("form").submit();
                         });
 
