@@ -361,11 +361,17 @@ namespace MCAWebAndAPI.Web.Controllers
                 int? upload = _locationMasterService.MassUpload("Location Master", sessionVariables, siteUrl);
                 if (upload == 0)
                 {
+                    Response.TrySkipIisCustomErrors = true;
+                    Response.TrySkipIisCustomErrors = true;
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
                     return JsonHelper.GenerateJsonErrorResponse("Failed One of Your Data is Invalid, Rolling Back");
                 }
             }
             catch (Exception e)
             {
+                Response.TrySkipIisCustomErrors = true;
+                Response.TrySkipIisCustomErrors = true;
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse(e + " Invalid data, rolling back!");
             }
 
