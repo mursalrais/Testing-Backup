@@ -235,6 +235,41 @@ namespace MCAWebAndAPI.Service.HR.Leave
             };
         }
 
+        public DayOffRequestVM GetRequestData(List<string> dayOffType, List<DateTime> startDate, List<DateTime> endDate, List<string> fullHalfDay)
+        {
+            var model = new DayOffRequestVM();
+
+            model.DayOffRequestDetailsDisplay = GetDayOffRequestsDetailsDisplay(dayOffType, startDate, endDate, fullHalfDay);
+
+            return model;
+        }
+
+        private IEnumerable<DayOffRequestDetailDisplayVM> GetDayOffRequestsDetailsDisplay(List<string> dayOffType, List<DateTime> startDate, List<DateTime> endDate, List<string> fullHalfDay)
+        {
+            var dayOffRequestDetailDisplayData = new List<DayOffRequestDetailDisplayVM>();
+
+            int dataCount = dayOffRequestDetailDisplayData.Count;
+
+            for (int i = 1; i < dataCount; i++)
+            {
+                dayOffRequestDetailDisplayData.Add(ConvertToDayOffRequestDetailsDisplay(dayOffType[i], startDate[i], endDate[i], fullHalfDay[i]));
+            }
+
+            return dayOffRequestDetailDisplayData;
+        }
+
+        private DayOffRequestDetailDisplayVM ConvertToDayOffRequestDetailsDisplay(string dayOffType, DateTime startDate, DateTime endDate, string fullHalfDay)
+        {
+            var dayOffRequestDetailDisplay = new DayOffRequestDetailDisplayVM();
+            
+            dayOffRequestDetailDisplay.DayOffType = Convert.ToString(dayOffType);
+            dayOffRequestDetailDisplay.RequestStartDate = Convert.ToDateTime(startDate);
+            dayOffRequestDetailDisplay.RequestEndDate = Convert.ToDateTime(endDate);
+            dayOffRequestDetailDisplay.FullHalf = Convert.ToString(fullHalfDay);
+
+            return dayOffRequestDetailDisplay;
+        }
+
         //Digunakan
         public DayOffRequestVM GetPopulatedModel(int? ID, string requestor = null)
         {
@@ -275,11 +310,14 @@ namespace MCAWebAndAPI.Service.HR.Leave
 
             model.DayOffBalanceDetails = GetDayOffBalanceDetails(model.Professional);
 
-            if(ID != null)
+            if(ID == null)
             {
                 model.DayOffRequestDetails = GetDayOffRequestsDetails(ID, model.Professional);
+                model.DayOffNextBalance = GetDayOffNextBalance(model.Professional);
             }
-            
+
+            //model.DayOffNextBalance = GetDayOffNextBalance(model.Professional);
+
             return model;
         }
 
@@ -332,10 +370,63 @@ namespace MCAWebAndAPI.Service.HR.Leave
                         {
                             Text = Convert.ToString(item["uom"])
                         });
-                dayOffBalanceDetail.Balance = Convert.ToInt32(2);
+                dayOffBalanceDetail.Balance = Convert.ToDouble(item["quantity"]);
             }
 
             return dayOffBalanceDetail;
+        }
+
+        private IEnumerable<DayOffNextBalanceVM> GetDayOffNextBalance(string professionalName)
+        {
+            var DayOffNextBalance = new List<DayOffNextBalanceVM>();
+
+            foreach (var item in SPConnector.GetList(SP_MAS_DAYOFF_TYPE_LIST_NAME, _siteUrl, null))
+            {
+                DayOffNextBalance.Add(ConvertToDayOffNextBalance(item, professionalName));
+            }
+
+            return DayOffNextBalance;
+        }
+
+        private DayOffNextBalanceVM ConvertToDayOffNextBalance(ListItem item, string professionalName)
+        {
+            var dayOffNextBalance = new DayOffNextBalanceVM();
+
+
+            if (Convert.ToString(item["Title"]) == "Annual Day-Off")
+            {
+                dayOffNextBalance = GetDayOffNextBalanceAnnualDayOff(Convert.ToString(item["Title"]), "Active", professionalName);
+            }
+            else if (Convert.ToString(item["Title"]) == "Special Day-Off")
+            {
+                dayOffNextBalance = GetDayOffNextBalanceSpecialDayOff(Convert.ToString(item["Title"]), professionalName);
+            }
+            else if (Convert.ToString(item["Title"]) == "Compensatory Time")
+            {
+                dayOffNextBalance = GetDayOffNextBalanceCompensatoryTime(Convert.ToString(item["Title"]), professionalName);
+            }
+            else if (Convert.ToString(item["Title"]) == "Paternity")
+            {
+                dayOffNextBalance = GetDayOffNextBalancePaternity(Convert.ToString(item["Title"]), professionalName);
+            }
+            else
+            {
+                dayOffNextBalance.DayOffType = DayOffBalanceVM.GetDayOffTypeDefaultValue(
+                    new InGridComboBoxVM
+                    {
+                        Text = Convert.ToString(item["Title"])
+                    });
+
+                dayOffNextBalance.DayOffBrought = Convert.ToInt32(0);
+                dayOffNextBalance.Unit = DayOffBalanceVM.GetUnitDefaultValue(
+                        new InGridComboBoxVM
+                        {
+                            Text = Convert.ToString(item["uom"])
+                        });
+                dayOffNextBalance.Balance = Convert.ToDouble(item["quantity"]);
+            }
+
+            return dayOffNextBalance;
         }
 
         //Digunakan
@@ -359,6 +450,36 @@ namespace MCAWebAndAPI.Service.HR.Leave
 
                 dayOffBalanceData.DayOffBrought = Convert.ToInt32(dayOffBalanceRecord["dayoffbrought"]);
                 dayOffBalanceData.Unit = DayOffBalanceVM.GetUnitDefaultValue(
+                        new InGridComboBoxVM
+                        {
+                            Text = Convert.ToString("Days")
+                        });
+                dayOffBalanceData.Balance = Convert.ToInt32(dayOffBalanceRecord["finalbalance"]);
+            }
+
+            return dayOffBalanceData;
+        }
+
+        private DayOffNextBalanceVM GetDayOffNextBalanceAnnualDayOff(string dayOffName, string psaStatus, string professionalName)
+        {
+            var dayOffBalanceData = new DayOffNextBalanceVM();
+
+            var camlDayOffBalanceData = @"<View>  
+            <Query> 
+               <Where><And><And><Eq><FieldRef Name='dayoffname' /><Value Type='Choice'>" + dayOffName + @"</Value></Eq><Eq><FieldRef Name='professional' /><Value Type='Lookup'>" + professionalName + @"</Value></Eq></And><Eq><FieldRef Name='psastatus' /><Value Type='Choice'>" + psaStatus + @"</Value></Eq></And></Where> 
+            </Query> 
+      </View>";
+
+            foreach (var dayOffBalanceRecord in SPConnector.GetList(SP_DAYOFF_BAL_LIST_NAME, _siteUrl, camlDayOffBalanceData))
+            {
+                dayOffBalanceData.DayOffType = DayOffNextBalanceVM.GetDayOffTypeDefaultValue(
+                    new InGridComboBoxVM
+                    {
+                        Text = Convert.ToString(dayOffBalanceRecord["dayoffname"])
+                    });
+
+                dayOffBalanceData.DayOffBrought = Convert.ToInt32(dayOffBalanceRecord["dayoffbrought"]);
+                dayOffBalanceData.Unit = DayOffNextBalanceVM.GetUnitDefaultValue(
                         new InGridComboBoxVM
                         {
                             Text = Convert.ToString("Days")
@@ -400,6 +521,36 @@ namespace MCAWebAndAPI.Service.HR.Leave
             return dayOffBalanceData;
         }
 
+        private DayOffNextBalanceVM GetDayOffNextBalanceSpecialDayOff(string dayOffName, string professionalName)
+        {
+            var dayOffBalanceData = new DayOffNextBalanceVM();
+
+            var camlDayOffBalanceData = @"<View>  
+            <Query> 
+               <Where><And><Eq><FieldRef Name='dayoffname' /><Value Type='Choice'>" + dayOffName + @"</Value></Eq><Eq><FieldRef Name='professional' /><Value Type='Lookup'>" + professionalName + @"</Value></Eq></And></Where> 
+            </Query> 
+      </View>";
+
+            foreach (var dayOffBalanceRecord in SPConnector.GetList(SP_DAYOFF_BAL_LIST_NAME, _siteUrl, camlDayOffBalanceData))
+            {
+                dayOffBalanceData.DayOffType = DayOffNextBalanceVM.GetDayOffTypeDefaultValue(
+                    new InGridComboBoxVM
+                    {
+                        Text = Convert.ToString(dayOffBalanceRecord["dayoffname"])
+                    });
+
+                dayOffBalanceData.DayOffBrought = Convert.ToInt32(dayOffBalanceRecord["dayoffbrought"]);
+                dayOffBalanceData.Unit = DayOffNextBalanceVM.GetUnitDefaultValue(
+                        new InGridComboBoxVM
+                        {
+                            Text = Convert.ToString("Days")
+                        });
+                dayOffBalanceData.Balance = Convert.ToInt32(dayOffBalanceRecord["finalbalance"]);
+            }
+
+            return dayOffBalanceData;
+        }
+
         //Digunakan
         private DayOffBalanceVM GetDayOffBalanceCompensatoryTime(string dayOffName, string professionalName)
         {
@@ -421,6 +572,36 @@ namespace MCAWebAndAPI.Service.HR.Leave
 
                 dayOffBalanceData.DayOffBrought = Convert.ToInt32(dayOffBalanceRecord["dayoffbrought"]);
                 dayOffBalanceData.Unit = DayOffBalanceVM.GetUnitDefaultValue(
+                        new InGridComboBoxVM
+                        {
+                            Text = Convert.ToString("Days")
+                        });
+                dayOffBalanceData.Balance = Convert.ToInt32(dayOffBalanceRecord["finalbalance"]);
+            }
+
+            return dayOffBalanceData;
+        }
+
+        private DayOffNextBalanceVM GetDayOffNextBalanceCompensatoryTime(string dayOffName, string professionalName)
+        {
+            var dayOffBalanceData = new DayOffNextBalanceVM();
+
+            var camlDayOffBalanceData = @"<View>  
+            <Query> 
+               <Where><And><Eq><FieldRef Name='dayoffname' /><Value Type='Choice'>" + dayOffName + @"</Value></Eq><Eq><FieldRef Name='professional' /><Value Type='Lookup'>" + professionalName + @"</Value></Eq></And></Where> 
+            </Query> 
+      </View>";
+
+            foreach (var dayOffBalanceRecord in SPConnector.GetList(SP_DAYOFF_BAL_LIST_NAME, _siteUrl, camlDayOffBalanceData))
+            {
+                dayOffBalanceData.DayOffType = DayOffNextBalanceVM.GetDayOffTypeDefaultValue(
+                    new InGridComboBoxVM
+                    {
+                        Text = Convert.ToString(dayOffBalanceRecord["dayoffname"])
+                    });
+
+                dayOffBalanceData.DayOffBrought = Convert.ToInt32(dayOffBalanceRecord["dayoffbrought"]);
+                dayOffBalanceData.Unit = DayOffNextBalanceVM.GetUnitDefaultValue(
                         new InGridComboBoxVM
                         {
                             Text = Convert.ToString("Days")
@@ -464,6 +645,47 @@ namespace MCAWebAndAPI.Service.HR.Leave
 
             dayOffBalanceData.DayOffBrought = Convert.ToInt32(paternityBalanceValid["dayoffbrought"]);
             dayOffBalanceData.Unit = DayOffBalanceVM.GetUnitDefaultValue(
+                    new InGridComboBoxVM
+                    {
+                        Text = Convert.ToString("Days")
+                    });
+            dayOffBalanceData.Balance = Convert.ToInt32(paternityBalanceValid["finalbalance"]);
+
+            return dayOffBalanceData;
+        }
+
+        private DayOffNextBalanceVM GetDayOffNextBalancePaternity(string dayOffName, string professionalName)
+        {
+            var dayOffBalanceData = new DayOffNextBalanceVM();
+
+            var camlDayOffBalanceData = @"<View>  
+            <Query> 
+               <Where><And><Eq><FieldRef Name='dayoffname' /><Value Type='Choice'>" + dayOffName + @"</Value></Eq><Eq><FieldRef Name='professional' /><Value Type='Lookup'>" + professionalName + @"</Value></Eq></And></Where> 
+            </Query> 
+      </View>";
+
+            var paternityRecord = new List<int>();
+            int paternityID;
+
+            foreach (var paternityData in SPConnector.GetList(SP_DAYOFF_BAL_LIST_NAME, _siteUrl, camlDayOffBalanceData))
+            {
+                paternityID = Convert.ToInt32(paternityData["ID"]);
+
+                paternityRecord.Add(paternityID);
+            }
+
+            int latestPaternityID = paternityRecord.LastOrDefault();
+
+            var paternityBalanceValid = SPConnector.GetListItem(SP_DAYOFF_BAL_LIST_NAME, latestPaternityID, _siteUrl);
+
+            dayOffBalanceData.DayOffType = DayOffNextBalanceVM.GetDayOffTypeDefaultValue(
+                    new InGridComboBoxVM
+                    {
+                        Text = Convert.ToString(paternityBalanceValid["dayoffname"])
+                    });
+
+            dayOffBalanceData.DayOffBrought = Convert.ToInt32(paternityBalanceValid["dayoffbrought"]);
+            dayOffBalanceData.Unit = DayOffNextBalanceVM.GetUnitDefaultValue(
                     new InGridComboBoxVM
                     {
                         Text = Convert.ToString("Days")
@@ -785,30 +1007,7 @@ namespace MCAWebAndAPI.Service.HR.Leave
                 returnToWork = GetDateReturnToWork(Convert.ToDateTime(viewModel.RequestStartDate), Convert.ToDateTime(viewModel.RequestEndDate), totalDays);
 
                 updatedValue.Add("returntowork", returnToWork);
-
-                //updatedValue.Add("Title", viewModel.ItemExitProcedure);
-                //updatedValue.Add("approverposition", new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.ApproverPosition.Value) });
-                //updatedValue.Add("approverusername", new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.ApproverUserName.Value) });
-                //updatedValue.Add("checklistitemapproval", viewModel.CheckListItemApproval.Text);
-                //updatedValue.Add("dateofapproval", viewModel.DateOfApproval);
-                //updatedValue.Add("remarks", viewModel.Remarks);
-                //updatedValue.Add("requestorunit", requestorunit);
-                //updatedValue.Add("requestorposition", new FieldLookupValue { LookupId = Convert.ToInt32(positionID) });
-                //updatedValue.Add("approverlevel", viewModel.Level);
-                //updatedValue.Add("approverunit", viewModel.ApproverUnit.Text);
-                //updatedValue.Add("isdefault", viewModel.IsDefault);
-
-                //var item = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, viewModel.ApproverUserName.Value, _siteUrl);
-                //updatedValue.Add("approvalmail", Convert.ToString(item["officeemail"]));
-
-                //if (exitProcedure.StatusForm == "Pending Approval")
-                //{
-                //    var startDateApproval = exitProcedure.StartDateApproval.ToLocalTime().ToShortDateString();
-                //    updatedValue.Add("startdateapproval", startDateApproval);
-                //}
-
-                //updatedValue.Add("exitprocedure", new FieldLookupValue { LookupId = Convert.ToInt32(exitProcID) });
-
+                
                 try
                 {
                     if (Item.CheckIfUpdated(viewModel))

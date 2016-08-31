@@ -1,0 +1,76 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model IEnumerable<DayOffRequestDetailDisplayVM>
+
+<div class="col-sm-12">
+    @(Html.Kendo().Grid(Model)
+    .Name("DayOffRequestDetailsDisplay")
+    //.ToolBar(tools => tools.Create().Text("Add New Request for Day-Off"))
+    .Editable(editable => editable.Mode(GridEditMode.InCell)
+    //.CreateAt(GridInsertRowPosition.Bottom)
+    )
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.DayOffType).Width(100).ClientTemplate("#= DayOffType #" +
+      "<input type='hidden' id='DayOffRequestDetailsDisplay[#= getDayOffRequestDetailsDisplay(data)#].DayOffType' name='DayOffRequestDetailsDisplay[#= getDayOffRequestDetailsDisplay(data)#].DayOffType' value='#= DayOffType #' />");
+
+        columns.Bound(p => p.FullHalf).Width(100).ClientTemplate("#= FullHalf #" +
+                           "<input type='hidden' id='DayOffRequestDetailsDisplay[#= getDayOffRequestDetailsDisplay(data)#].FullHalf' name='DayOffRequestDetailsDisplay[#= getDayOffRequestDetailsDisplay(data)#].FullHalf' value='#= FullHalf #' />"
+                         );
+
+        columns.Bound(p => p.RequestStartDate).Width(100).ClientTemplate("#= kendo.toString(RequestStartDate, 'MM/dd/yyyy') #" +
+    "<input type='hidden' id='DayOffRequestDetailsDisplay[#= getDayOffRequestDetailsDisplay(data)#].RequestStartDate' name='DayOffRequestDetailsDisplay[#= getDayOffRequestDetailsDisplay(data)#].RequestStartDate' value='#= RequestStartDate #' />"
+    );
+
+        columns.Bound(p => p.RequestEndDate).Width(80).ClientTemplate("#= kendo.toString(RequestEndDate, 'MM/dd/yyyy') #" +
+    "<input type='hidden' id='DayOffRequestDetailsDisplay[#= getDayOffRequestDetailsDisplay(data)#].RequestEndDate' name='DayOffRequestDetailsDisplay[#= getDayOffRequestDetailsDisplay(data)#].RequestEndDate' value='#= RequestEndDate #' />"
+    );
+
+        //columns.Bound(p => p.Remarks).Width(80).ClientTemplate("#= Remarks #" +
+        //           "<input type='hidden' id='DayOffRequestDetails[#= getDayOffRequestDetails(data)#].Remarks' name='DayOffRequestDetails[#= getDayOffRequestDetails(data)#].Remarks' value='#= Remarks #' />"
+        //         );
+
+        columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
+        "<input type='hidden' name='DayOffRequestDetailsDisplay[#= getDayOffRequestDetailsDisplay(data)#].EditMode' value='#= EditMode #' />"
+        );
+
+
+        columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
+        .Click("onDeleteKendoDetail")).Width(80);
+    })
+    .Events(e =>
+    {
+        //e.Change("onChange");
+        e.Edit("onEditKendoDetail");
+        e.DataBound("onDataBoundDayOffRequestDetailsDisplay");
+    })
+    .DataSource(dataSource => dataSource.Ajax()
+    .Model(model =>
+    {
+        model.Id(p => p.ID);
+        model.Field(m => m.DayOffType).Editable(false);
+        model.Field(m => m.FullHalf).Editable(false);
+        model.Field(m => m.RequestStartDate).Editable(false);
+        model.Field(m => m.RequestEndDate).Editable(false);
+    })
+    .ServerOperation(false)
+    @*.Events(events =>
+        {
+            events.Change("onChange");
+        })*@
+    )
+
+    )
+</div>
+
+<script>
+
+    function getDayOffRequestDetails(dataItem) {
+        var data = $("#DayOffRequestDetailsDisplay").data("kendoGrid").dataSource.data();
+        return data.indexOf(dataItem);
+    }
+
+    function onDataBoundDayOffRequestDetailsDisplay(e) {
+        var grid = $("#DayOffRequestDetailsDisplay").data("kendoGrid");
+        hideDeletedRowKendoDetail(grid);
+    }
+</script>

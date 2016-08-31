@@ -12,7 +12,10 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public IEnumerable<DayOffRequestDetailVM> DayOffRequestDetails { get; set; } = new List<DayOffRequestDetailVM>();
         public IEnumerable<DayOffBalanceVM> DayOffBalanceDetails { get; set; } = new List<DayOffBalanceVM>();
 
-        
+        public IEnumerable<DayOffRequestDetailDisplayVM> DayOffRequestDetailsDisplay { get; set; } = new List<DayOffRequestDetailDisplayVM>();
+
+        public IEnumerable<DayOffNextBalanceVM> DayOffNextBalance { get; set; } = new List<DayOffNextBalanceVM>();
+
         public string Professional { get; set; }
 
         [DisplayName("Name")]
@@ -35,6 +38,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         [UIHint("Date")]
         [DisplayName("Day-Off Request Date")]
+        [Required]
         public DateTime? RequestDate { get; set; } = DateTime.UtcNow;
 
         [UIHint("Date")]

@@ -4,9 +4,7 @@
 <div class="col-sm-12">
     @(Html.Kendo().Grid(Model)
     .Name("DayOffBalanceDetails")
-    //.ToolBar(tools => tools.Create().Text("Add New ExitProcedureChecklist"))
     .Editable(editable => editable.Mode(GridEditMode.InCell)
-    //.CreateAt(GridInsertRowPosition.Bottom)
     )
     .Columns(columns =>
     {
@@ -35,14 +33,10 @@
         columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
         "<input type='hidden' name='DayOffBalanceDetails[#= getDayOffBalanceDetails(data)#].EditMode' value='#= EditMode #' />"
         );
-
-
-        //columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
-        //.Click("onDeleteKendoDetail")).Width(80);
+        
     })
     .Events(e =>
     {
-        //e.Change("onChange");
         e.Edit("onEditKendoDetail");
         e.DataBound("onDataBoundDayOffBalanceDetails");
     })

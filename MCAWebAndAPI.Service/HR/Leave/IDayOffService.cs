@@ -64,5 +64,7 @@ namespace MCAWebAndAPI.Service.HR.Leave
 
         Task CreateDayOffRequestDetailAsync(DayOffRequestVM dayOffRequest, int? dayOffRequestHeaderID, IEnumerable<DayOffRequestDetailVM> dayOffRequestDetail, string requestorposition, string requestorunit, int? positionID);
 
+        DayOffRequestVM GetRequestData(List<string> dayOffType, List<DateTime> startDate, List<DateTime> endDate, List<string> fullHalfDay);
+
     }
 }
