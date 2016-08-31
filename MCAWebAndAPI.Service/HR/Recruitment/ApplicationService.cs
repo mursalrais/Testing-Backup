@@ -26,6 +26,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         const string SP_PROMAS_LIST_NAME = "Professional Master";
         const string SP_POSMAS_LIST_NAME = "Position Master";
         const string SP_MANPOW_LIST_NAME = "Manpower Requisition";
+        const string SP_PLACE_MASTER = "Place Master";
 
         //TODO: To change by using correct domain email
         const string COMPANY_DOMAIN_EMAIL = "eceos.com";
@@ -89,6 +90,20 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             }
 
             return ID;
+        }
+
+        public void SendMail(string emailApplicant, string emailSubject, string emailContent)
+        {
+            EmailUtil.Send(emailApplicant, emailSubject, emailContent);
+        }
+
+        public string GetNationality(int nationalityID)
+        {
+            var nationalityData = SPConnector.GetListItem(SP_PLACE_MASTER, nationalityID, _siteUrl);
+
+            string nationalityName = Convert.ToString(nationalityData["Title"]);
+
+            return nationalityName;
         }
 
         private PositionMaster GetVacantPosition(string position)

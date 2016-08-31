@@ -68,12 +68,16 @@ namespace MCAWebAndAPI.Web.Controllers
                 headerID = _locationMasterService.CreateHeader(viewModel, viewModel.Province.Text, viewModel.OfficeName, viewModel.FloorName, viewModel.RoomName);
                 if (headerID == 0)
                 {
+                    Response.TrySkipIisCustomErrors = true;
+                    Response.TrySkipIisCustomErrors = true;
                     Response.StatusCode = (int)HttpStatusCode.BadRequest;
                     return JsonHelper.GenerateJsonErrorResponse("This Location is Already Exist");
                 }
             }
             catch (Exception e)
             {
+                Response.TrySkipIisCustomErrors = true;
+                Response.TrySkipIisCustomErrors = true;
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
@@ -91,12 +95,16 @@ namespace MCAWebAndAPI.Web.Controllers
                 bool isExist = _locationMasterService.UpdateHeader(viewModel, viewModel.Province.Text, viewModel.OfficeName, viewModel.FloorName, viewModel.RoomName);
                 if (isExist == false)
                 {
+                    Response.TrySkipIisCustomErrors = true;
+                    Response.TrySkipIisCustomErrors = true;
                     Response.StatusCode = (int)HttpStatusCode.BadRequest;
                     return JsonHelper.GenerateJsonErrorResponse("This Location is Already Exist");
                 }
             }
             catch (Exception e)
             {
+                Response.TrySkipIisCustomErrors = true;
+                Response.TrySkipIisCustomErrors = true;
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
@@ -143,6 +151,8 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
+                Response.TrySkipIisCustomErrors = true;
+                Response.TrySkipIisCustomErrors = true;
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
@@ -162,6 +172,8 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
+                Response.TrySkipIisCustomErrors = true;
+                Response.TrySkipIisCustomErrors = true;
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
@@ -349,11 +361,17 @@ namespace MCAWebAndAPI.Web.Controllers
                 int? upload = _locationMasterService.MassUpload("Location Master", sessionVariables, siteUrl);
                 if (upload == 0)
                 {
+                    Response.TrySkipIisCustomErrors = true;
+                    Response.TrySkipIisCustomErrors = true;
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
                     return JsonHelper.GenerateJsonErrorResponse("Failed One of Your Data is Invalid, Rolling Back");
                 }
             }
             catch (Exception e)
             {
+                Response.TrySkipIisCustomErrors = true;
+                Response.TrySkipIisCustomErrors = true;
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse(e + " Invalid data, rolling back!");
             }
 

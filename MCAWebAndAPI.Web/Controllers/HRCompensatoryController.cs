@@ -61,7 +61,7 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             else
             {
-                viewmodel = _service.GetProfessional(userAccess);
+                viewmodel = _service.GetProfessional(userAccess, viewmodel);
                 return View("AddCompensatoryUser", viewmodel);
             }
         }
@@ -192,6 +192,13 @@ namespace MCAWebAndAPI.Web.Controllers
             {
                 ErrorSignal.FromCurrentContext().Raise(e);
                 return RedirectToAction("Index", "Error");
+            }
+
+            viewModel.cmpID = cmpID;
+
+            if (viewModel.StatusForm == "submithr")
+            {
+                _service.UpdateHeader(viewModel);
             }
 
             // BEGIN Workflow Demo 

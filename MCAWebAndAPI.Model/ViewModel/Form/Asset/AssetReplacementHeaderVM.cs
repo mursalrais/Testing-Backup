@@ -9,41 +9,14 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 {
     public class AssetReplacementHeaderVM
     {
-        private DateTime _purchaseDate;
-        private ComboBoxVM _oldTransactionId, _purchaseDesc, _assetSubAsset, _wbs;
-
+        public string CancelURL { get; set; }
         public int Id { get; set; }
+
+        public IEnumerable<AssetReplacementItemVM> Details { get; set; } = new List<AssetReplacementItemVM>();
 
         public string TransactionType { get; set; }
 
-        [DisplayName("PO Line Item")]
-        public string PoLineItem { get; set; }
-
-        [UIHint("Currency")]
-        [DisplayName("Cost (IDR)")]
-        public decimal CostIdr { get; set; }
-
-        [UIHint("Currency")]
-        [DisplayName("Cost (USD)")]
-        public decimal CostUsd { get; set; }
-
-        public DateTime PurchaseDate
-        {
-            get
-            {
-                if (_purchaseDate == null)
-                {
-                    _purchaseDate = new DateTime();
-                }
-                return _purchaseDate;
-            }
-
-            set
-            {
-                _purchaseDate = value;
-            }
-        }
-
+        private ComboBoxVM _oldTransactionId;
         [DisplayName("Old Transaction ID")]
         [UIHint("ComboBox")]
         public ComboBoxVM OldTransactionId
@@ -60,6 +33,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
                             "2",
                             "3"
                         }
+                        ,OnSelectEventName = "onIdChange"
                     };
                 }
                 return _oldTransactionId;
@@ -71,84 +45,13 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
             }
         }
 
-        [DisplayName("Purchase Description")]
-        [UIHint("ComboBox")]
-        public ComboBoxVM PurchaseDesc
-        {
-            get
-            {
-                if (_purchaseDesc == null)
-                {
-                    _purchaseDesc = new ComboBoxVM()
-                    {
-                        Choices = new string[]
-                        {
-                            "Cash",
-                            "AP",
-                            "Warranty"
-                        }
-                    };
-                }
-                return _purchaseDesc;
-            }
+        public string AccMemoNo { get; set; }
+        public string Vendor { get; set; }
+        public string Pono { get; set; }
+        public string purchaseDescription { get; set; }
 
-            set
-            {
-                _purchaseDesc = value;
-            }
-        }
-
-        [DisplayName("Asset-Sub Asset")]
-        [UIHint("ComboBox")]
-        public ComboBoxVM AssetSubAsset
-        {
-            get
-            {
-                if (_assetSubAsset == null)
-                {
-                    _assetSubAsset = new ComboBoxVM()
-                    {
-                        Choices = new string[]
-                        {
-                            "Procurement",
-                            "Green",
-                            "Health"
-                        }
-                    };
-                }
-                return _assetSubAsset;
-            }
-
-            set
-            {
-                _assetSubAsset = value;
-            }
-        }
-
-        [UIHint("ComboBox")]
-        public ComboBoxVM Wbs
-        {
-            get
-            {
-                if (_wbs == null)
-                {
-                    _wbs = new ComboBoxVM()
-                    {
-                        Choices = new string[]
-                        {
-                            "1",
-                            "2",
-                            "3"
-                        }
-                    };
-                }
-                return _wbs;
-            }
-
-            set
-            {
-                _wbs = value;
-            }
-        }
+        [UIHint("Date")]
+        public DateTime? PurchaseDate { get; set; }
+        public string purchasedatetext { get; set; }
     }
 }

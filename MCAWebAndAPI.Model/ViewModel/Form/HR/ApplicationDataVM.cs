@@ -103,6 +103,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             TextField = "Title"
         };
 
+        [DisplayName("Nationality")]
+        public string NationalityName { get; set; }
+
         /// <summary>
         /// maritalstatus
         /// </summary>
