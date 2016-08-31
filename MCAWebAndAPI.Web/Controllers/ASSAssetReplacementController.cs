@@ -47,18 +47,16 @@ namespace MCAWebAndAPI.Web.Controllers
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             int IDacquisition = ID;
             var acquisition = _service.GetInfoFromAcquisitin(IDacquisition, siteUrl);
-            var details = _service.GetInfoFromAcquisitinDetail(IDacquisition, siteUrl);
+            //var details = _service.GetInfoFromAcquisitinDetail(IDacquisition, siteUrl);
 
             //var professionals = GetFromExistingSession();
             return Json(
                 new
                 {
-                    acquisition.ID,
                     acquisition.Vendor,
-                    acquisition.VendorID,
-                    acquisition.PoNo,
+                    acquisition.Pono,
                     acquisition.purchasedatetext,
-                    acquisition.PurchaseDescription
+                    acquisition.purchaseDescription
 
                 }, JsonRequestBehavior.AllowGet);
         }
@@ -72,10 +70,10 @@ namespace MCAWebAndAPI.Web.Controllers
                 new
                 {
                     e.AssetSubAsset,
-                    e.WBS,
-                    e.CostIDR,
-                    e.CostUSD,
-                    e.Remarks
+                    e.Wbs,
+                    e.CostIdr,
+                    e.CostUsd,
+                    e.remarks
                 }),
                 JsonRequestBehavior.AllowGet);
         }
