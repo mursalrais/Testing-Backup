@@ -72,7 +72,7 @@
         @*@Html.HiddenFor(m => m.CancelURL)*@
         <div>
             <center>
-                <input class="k-button k-button-icontext k-grid-add" type="submit" onclick="return saveAssetLoan()" value="Save" id="submit" />
+                <input class="k-button k-button-icontext k-grid-add" type="submit" onclick="return saveAssignment()" value="Save" id="submit" />
                 <a href="@Model.CancelURL" target='_parent'>
                     <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
                 </a>
@@ -85,18 +85,27 @@
 
 @section scripts{
         <script  type="text/javascript">
-            $(document).ready(function () {
-                $("#submit").click(function () {
-                    //datasource grid lu
+         
 
+            function saveAssignment() {     
+                var asset = document.getElementsByClassName("asset");
+                var estdate = document.getElementsByClassName("estdate");
+                var loandate = new Date($('#LoanDate').val());
+                var grid = $('#AssetLoanAndReturnItem').data("kendoGrid").dataSource.data();
+                
+                for (var j = 0;j< grid.length;j++){
+                    if (grid[j].EstReturnDate < loandate) {
+                        var data = { errorMessage: "Est Return Date cannot be less than Loan Date", success: false };
+                        showModalWindow(data);
+                        return false;
+                    }
+                }
 
-                });
-
-            })
-
-            function saveAssetLoan() {
-                var      = document.getElementsByClassName("asset");
+                console.log(loandate);
+             
             }
+
+           
 
             function onSelectedAcceptanceMemo(e) {
                 var res = this.dataItem(e.item).split("-")

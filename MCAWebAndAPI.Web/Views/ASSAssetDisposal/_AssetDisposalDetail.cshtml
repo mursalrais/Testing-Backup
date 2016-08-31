@@ -17,7 +17,7 @@
         .Columns(columns =>
         {
             columns.Bound(p => p.AssetSubAsset).ClientTemplate("#= AssetSubAsset.Text #" +
-                          "<input type='hidden' class='assetsubasset' name='Details[#= getWorkingRelationshipDetails(data)#].AssetSubAsset.Value' value='#= AssetSubAsset.Value #' />"
+                          "<input type='hidden' class='asset' name='Details[#= getWorkingRelationshipDetails(data)#].AssetSubAsset.Value' value='#= AssetSubAsset.Value #' />"
                         ).EditorViewData(new
                         {
                             DataTextField = "Text",
