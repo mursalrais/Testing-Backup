@@ -180,6 +180,7 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("WorkflowItems", viewModel.WorkflowItems);
 
             int? cmpID = null;
 
@@ -208,7 +209,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             return RedirectToAction("Index",
                "Success",
-               new { successMessage = string.Format(MessageResource.SuccessCreateCompensatoryData, viewModel.cmpID) });
+               new { successMessage = string.Format(MessageResource.SuccessCreateCompensatoryData, viewModel.cmpName) });
 
         }
 
@@ -217,6 +218,7 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("WorkflowItems", viewModel.WorkflowItems);
 
             var testget = form[""];
 
@@ -261,7 +263,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             return RedirectToAction("Index",
                           "Success",
-                          new { successMessage = string.Format(MessageResource.SuccessCreateCompensatoryData, viewModel.cmpID) });
+                          new { successMessage = string.Format(MessageResource.SuccessCreateCompensatoryData, viewModel.cmpName) });
 
         }
 
