@@ -1126,6 +1126,8 @@
     <Content Include="Views\HRTimesheet\NotAuthorized.cshtml" />
     <Content Include="Views\FINPettyCashReimbursement\Item.cshtml" />
     <Content Include="Views\FINPettyCashReimbursement\Print.cshtml" />
+    <Content Include="Views\ASSAssetCheckResult\_approval_Path.cshtml" />
+    <Content Include="Views\ASSAssetCheckResult\_Details.cshtml" />
     <Content Include="Views\ASSAssetReplacement\_Details.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
