@@ -203,7 +203,7 @@ namespace MCAWebAndAPI.Web.Controllers
             }
 
             // BEGIN Workflow Demo 
-            Task createTransactionWorkflowItemsTask = WorkflowHelper.(SP_TRANSACTION_WORKFLOW_LIST_NAME, SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)cmpID);
+            Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateTransactionWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME, SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)cmpID);
 
             _service.SendEmail(SP_TRANSACTION_WORKFLOW_LIST_NAME, SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)cmpID, 1, string.Format(EmailResource.EmailCompensatoryApproval, siteUrl, cmpID));
 
