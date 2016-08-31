@@ -1125,6 +1125,8 @@
     <Content Include="Views\ASSAssignmentOfAsset\View.cshtml" />
     <Content Include="Views\ASSLocationMaster\Sync.cshtml" />
     <Content Include="Views\HRTimesheet\NotAuthorized.cshtml" />
+    <Content Include="Views\HRCompensatory\_WorkflowPathDetails.cshtml" />
+    <Content Include="Views\HRCompensatory\AddCompensatoryUser.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

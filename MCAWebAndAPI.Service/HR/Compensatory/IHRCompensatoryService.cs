@@ -22,7 +22,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         CompensatoryVM GetComplistActive();
 
-        CompensatoryVM GetProfessional(string userAccess);
+        CompensatoryVM GetProfessional(string userAccess, CompensatoryVM CompensatoryList);
         
         bool UpdateHeader(CompensatoryVM header);
 

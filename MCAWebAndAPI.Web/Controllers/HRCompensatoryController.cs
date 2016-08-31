@@ -61,7 +61,7 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             else
             {
-                viewmodel = _service.GetProfessional(userAccess);
+                viewmodel = _service.GetProfessional(userAccess, viewmodel);
                 return View("AddCompensatoryUser", viewmodel);
             }
         }

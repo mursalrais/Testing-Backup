@@ -829,10 +829,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             }
         }
 
-        public CompensatoryVM GetProfessional(string username)
+        public CompensatoryVM GetProfessional(string username, CompensatoryVM viewModel)
         {
-            var viewModel = new CompensatoryVM();
-
             var caml = @"<View><Query><Where><Eq><FieldRef Name='officeemail' /><Value Type='Text'>" + username + @"</Value></Eq></Where></Query><QueryOptions /></View>";
             var listItem = SPConnector.GetList("Professional Master", _siteUrl, caml);
 
