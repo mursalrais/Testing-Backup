@@ -200,6 +200,16 @@ namespace MCAWebAndAPI.Service.Asset
                         return 0;
                     }
                 }
+                else
+                {
+                    var id = SPConnector.GetLatestListItemID("Asset Assignment", _siteUrl);
+                    var info = SPConnector.GetListItem("Asset Assignment", id, _siteUrl);
+                    if (Convert.ToBoolean(info["Attachments"]) == true)
+                    {
+                        SPConnector.DeleteListItem("Asset Assignment", id, _siteUrl);
+                        return -1;
+                    }
+                }
             }
             catch (Exception e)
             {
@@ -276,6 +286,24 @@ namespace MCAWebAndAPI.Service.Asset
                         oldcolumnValues.Add("Title", oldData["Title"]);
                         oldcolumnValues.Add("transferdate", oldData["transferdate"]);
                         oldcolumnValues.Add("assetholder",oldData["assetholder"]);
+                        oldcolumnValues.Add("position", oldData["position"]);
+                        oldcolumnValues.Add("projectunit", oldData["projectunit"]);
+                        oldcolumnValues.Add("contactnumber", oldData["contactnumber"]);
+                        oldcolumnValues.Add("completionstatus", oldData["completionstatus"]);
+
+                        SPConnector.UpdateListItem("Asset Assignment", ID, oldcolumnValues, _siteUrl);
+                        return false;
+                    }
+                }
+                else
+                {
+                    var newData = SPConnector.GetListItem("Asset Assignment", ID, _siteUrl);
+                    if (Convert.ToBoolean(newData["Attachments"]) == true)
+                    {
+                        var oldcolumnValues = new Dictionary<string, object>();
+                        oldcolumnValues.Add("Title", oldData["Title"]);
+                        oldcolumnValues.Add("transferdate", oldData["transferdate"]);
+                        oldcolumnValues.Add("assetholder", oldData["assetholder"]);
                         oldcolumnValues.Add("position", oldData["position"]);
                         oldcolumnValues.Add("projectunit", oldData["projectunit"]);
                         oldcolumnValues.Add("contactnumber", oldData["contactnumber"]);
