@@ -254,7 +254,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 foreach (var item in SPConnector.GetList(workflowTransactionListName, _siteUrl, caml))
                 {
-                    emails = Convert.ToString(item["approver0"]);
+                    emails = FormatUtil.ConvertLookupToValue(item, "approvername_x003a_Office_x0020_");
 
                     EmailUtil.Send(emails, "Ask for Approval", messageForApprover);
 
@@ -276,7 +276,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 foreach (var item in SPConnector.GetList(workflowTransactionListName, _siteUrl, caml))
                 {
-                    emails = Convert.ToString(item["approver0"]);
+                    emails = FormatUtil.ConvertLookupToValue(item, "approvername_x003a_Office_x0020_");
 
                     EmailUtil.Send(emails, "Ask for Approval", messageForApprover);
                     //SPConnector.SendEmail(item, message, "Ask for Approval Level 2", _siteUrl);

@@ -20,6 +20,12 @@ namespace MCAWebAndAPI.Web.Helpers
             CreateTransactionWorkflow(workflowTransactionListName, transactionLookupColumnName, headerID);
         }
 
+        public async static Task CreateWorkflowAsync(string workflowTransactionListName, string transactionLookupColumnName,
+        int headerID)
+        {
+            CreateWorkflow(workflowTransactionListName, transactionLookupColumnName, headerID);
+        }
+
         public async static Task CreateExitProcedureWorkflowAsync(string workflowTransactionListName, string transactionLookupColumnName,
             int exitProcID)
         {
@@ -35,6 +41,17 @@ namespace MCAWebAndAPI.Web.Helpers
 
             _service.SetSiteUrl(siteUrl);
             _service.CreateTransactionWorkflow(workflowTransactionListName, transactionLookupColumnName, headerID, workflowItems, userLogin);
+        }
+
+        public static void CreateWorkflow(string workflowTransactionListName, string transactionLookupColumnName,
+    int headerID)
+        {
+            var workflowItems = SessionManager.Get<IEnumerable<WorkflowItemVM>>("WorkflowItems");
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            var userLogin = SessionManager.Get<string>("UserLogin");
+
+            _service.SetSiteUrl(siteUrl);
+            _service.CreateWorkflow(workflowTransactionListName, transactionLookupColumnName, headerID, workflowItems, userLogin);
         }
 
         public static void CreateExitProcedureWorkflow(string workflowTransactionListName, string transactionLookupColumnName,
