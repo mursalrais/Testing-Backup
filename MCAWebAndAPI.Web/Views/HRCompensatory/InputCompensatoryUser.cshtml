@@ -80,6 +80,24 @@
     @Html.Partial("_WorkflowPathDetails", Model)
 </div>
 
+    @if (Model.StatusForm == "Pending Approval 1 of 2" || Model.StatusForm == "Pending Approval 2 of 2")
+    {
+        <div class="form-actions">
+            <div class="row">
+                <div class="col-sm-12">
+                    <button id="approve-button" class="btn btn-primary" type="submit">
+                        <i class="fa fa-save"></i>
+                        Approve
+                    </button>
+                    <button id="reject1-button" class="btn btn-primary" type="submit">
+                        <i class="fa fa-save"></i>
+                        Reject
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+
 @section scripts{
 
     <script>
@@ -142,6 +160,11 @@
                                     hideLoading();
                                 }
                             });
+                        });
+                        
+
+                        $("#approve-button").click(function () {
+                            $("form").submit();
                         });
 
                         $("#submitonly-button").click(function () {

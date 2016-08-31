@@ -848,7 +848,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             var emails = new List<string>();
             foreach (var item in SPConnector.GetList(workflowTransactionListName, _siteUrl, caml))
             {
-                emails.Add(Convert.ToString(item["approver0"]));
+                emails.Add(FormatUtil.ConvertLookupToValue(item, "approvername_x003a_Office_x0020_"));
             }
             foreach (var item in emails)
             {
