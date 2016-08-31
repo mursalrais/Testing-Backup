@@ -190,14 +190,22 @@ namespace MCAWebAndAPI.Service.Asset
             try
             {
                 SPConnector.AddListItem("Asset Assignment", columnValues, _siteUrl);
+                var id = SPConnector.GetLatestListItemID("Asset Assignment", _siteUrl);
+                var info = SPConnector.GetListItem("Asset Assignment", id, _siteUrl);
                 if (viewmodel.CompletionStatus.Value == "Complete")
                 {
-                    var id = SPConnector.GetLatestListItemID("Asset Assignment", _siteUrl);
-                    var info = SPConnector.GetListItem("Asset Assignment", id, _siteUrl);
                     if (Convert.ToBoolean(info["Attachments"]) == false)
                     {
                         SPConnector.DeleteListItem("Asset Assignment", id, _siteUrl);
                         return 0;
+                    }
+                }
+                else
+                {
+                    if (Convert.ToBoolean(info["Attachments"]) == true)
+                    {
+                        SPConnector.DeleteListItem("Asset Assignment", id, _siteUrl);
+                        return -1;
                     }
                 }
             }
@@ -267,15 +275,32 @@ namespace MCAWebAndAPI.Service.Asset
             try
             {
                 SPConnector.UpdateListItem("Asset Assignment", ID, columnValues, _siteUrl);
+                var newData = SPConnector.GetListItem("Asset Assignment", ID, _siteUrl);
                 if (viewmodel.CompletionStatus.Value == "Complete")
                 {
-                    var newData = SPConnector.GetListItem("Asset Assignment", ID, _siteUrl);
                     if (Convert.ToBoolean(newData["Attachments"]) == false)
                     {
                         var oldcolumnValues = new Dictionary<string, object>();
                         oldcolumnValues.Add("Title", oldData["Title"]);
                         oldcolumnValues.Add("transferdate", oldData["transferdate"]);
                         oldcolumnValues.Add("assetholder",oldData["assetholder"]);
+                        oldcolumnValues.Add("position", oldData["position"]);
+                        oldcolumnValues.Add("projectunit", oldData["projectunit"]);
+                        oldcolumnValues.Add("contactnumber", oldData["contactnumber"]);
+                        oldcolumnValues.Add("completionstatus", oldData["completionstatus"]);
+
+                        SPConnector.UpdateListItem("Asset Assignment", ID, oldcolumnValues, _siteUrl);
+                        return false;
+                    }
+                }
+                else
+                {
+                    if (Convert.ToBoolean(newData["Attachments"]) == true)
+                    {
+                        var oldcolumnValues = new Dictionary<string, object>();
+                        oldcolumnValues.Add("Title", oldData["Title"]);
+                        oldcolumnValues.Add("transferdate", oldData["transferdate"]);
+                        oldcolumnValues.Add("assetholder", oldData["assetholder"]);
                         oldcolumnValues.Add("position", oldData["position"]);
                         oldcolumnValues.Add("projectunit", oldData["projectunit"]);
                         oldcolumnValues.Add("contactnumber", oldData["contactnumber"]);

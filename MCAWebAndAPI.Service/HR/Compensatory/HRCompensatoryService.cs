@@ -667,13 +667,15 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             string nameProf = header.cmpName;
 
+            int? idProf = header.ddlProfessional.Value;
+
             int? idComp = header.cmpID;
 
             int? idbal = null;
 
             var caml = @"<View>  
                         <Query> 
-                            <Where><And><Eq><FieldRef Name='dayoffname' /><Value Type='Choice'>Day-off due to Compensatory time</Value></Eq><Eq><FieldRef Name='professional' /><Value Type='Lookup'>" + nameProf + @"</Value></Eq></And></Where> 
+                            <Where><And><Eq><FieldRef Name='dayoffname' /><Value Type='Choice'>Compensatory time</Value></Eq><Eq><FieldRef Name='professional' /><Value Type='Lookup'>" + nameProf + @"</Value></Eq></And></Where> 
                         </Query> 
                     </View>";
 
@@ -710,14 +712,39 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
                 updateBalance.Add("entitlement", getbalance.Count());
 
-                try
+                if (idbal != null)
                 {
-                    SPConnector.UpdateListItem(SP_COMBAL_LIST_NAME, idbal, updateBalance, _siteUrl);
-                }
-                catch (Exception e)
+                    try
+                    {
+                        SPConnector.UpdateListItem(SP_COMBAL_LIST_NAME, idbal, updateBalance, _siteUrl);
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Debug(e.Message);
+                        return false;
+                    }
+                } else
                 {
-                    logger.Debug(e.Message);
-                    return false;
+                    double finalbalance = 0;
+                    int? entitlement = getbalance.Count();
+                    var addValues = new Dictionary<string, object>();
+
+                    addValues.Add("entitlement", entitlement);
+                    addValues.Add("Title", "Compensatory time");
+                    addValues.Add("finalbalance", finalbalance);
+                    addValues.Add("dayoffname", "Compensatory time");
+                    addValues.Add("professional", new FieldLookupValue { LookupId = (int)idProf });
+
+
+                    try
+                    {
+                         SPConnector.AddListItem(SP_COMBAL_LIST_NAME, addValues, _siteUrl);
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Debug(e.Message);
+                        return false;
+                    }
                 }
             }
 
@@ -821,7 +848,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             var emails = new List<string>();
             foreach (var item in SPConnector.GetList(workflowTransactionListName, _siteUrl, caml))
             {
-                emails.Add(Convert.ToString(item["approver0"]));
+                emails.Add(FormatUtil.ConvertLookupToValue(item, "approvername_x003a_Office_x0020_"));
             }
             foreach (var item in emails)
             {
@@ -829,10 +856,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             }
         }
 
-        public CompensatoryVM GetProfessional(string username)
+        public CompensatoryVM GetProfessional(string username, CompensatoryVM viewModel)
         {
-            var viewModel = new CompensatoryVM();
-
             var caml = @"<View><Query><Where><Eq><FieldRef Name='officeemail' /><Value Type='Text'>" + username + @"</Value></Eq></Where></Query><QueryOptions /></View>";
             var listItem = SPConnector.GetList("Professional Master", _siteUrl, caml);
 

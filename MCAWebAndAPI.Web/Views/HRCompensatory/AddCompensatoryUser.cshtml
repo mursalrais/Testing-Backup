@@ -61,13 +61,12 @@
         <div class="row">
             @Html.Partial("_InputCompensantoryDetails", Model.CompensatoryDetails)
         </div>
+        <legend>Approval Path</legend>
+        <div class="row">
+            @Html.Partial("_WorkflowPathDetails", Model)
+        </div>
     </fieldset>
 }
-
-<legend>Approval Path</legend>
-<div class="row">
-    @Html.Partial("_WorkflowPathDetails", Model)
-</div>
 
 <div class="row pull-right">
     <div class="col-sm-12">
@@ -137,13 +136,61 @@
                 });
 
                 $("#submit-button").click(function () {
-                    $("#StatusForm").val("Pending Approval 1 of 2")
-                    $("form").submit();
+                    var rowgrid = $("#CompensatoryDetails").data("kendoGrid").tbody.find("tr");
+                    var valdate = true;
+                    var i = -1;
+                    var j = -1;
+                    rowgrid.each(function (e) {
+                        i++;
+                        var xdate = $("#Dateid" + i).val();
+                        rowgrid.each(function (e) {
+                            j++;
+                            var ydate = $("#Dateid" + j).val();
+                            if (i !== j) {
+                                if (xdate != "undifined" && ydate != "undifined") {
+                                    if (xdate == ydate) {
+                                        valdate = false;
+                                    }
+                                }
+                            }
+                        });
+                    });
+
+                    if (valdate == false) {
+                        alert("Date you have chosen already exists, please choose another date..!!");
+                    } else {
+                        $("#StatusForm").val("Pending Approval 1 of 2")
+                        $("form").submit();
+                    }
                 });
 
                 $("#submit-draft-button").click(function () {
-                    $("#StatusForm").val("Draft")
-                    $("form").submit();
+                    var rowgrid = $("#CompensatoryDetails").data("kendoGrid").tbody.find("tr");
+                    var valdate = true;
+                    var i = -1;
+                    var j = -1;
+                    rowgrid.each(function (e) {
+                        i++;
+                        var xdate = $("#Dateid" + i).val();
+                        rowgrid.each(function (e) {
+                            j++;
+                            var ydate = $("#Dateid" + j).val();
+                            if (i !== j) {
+                                if (xdate != "undifined" && ydate != "undifined") {
+                                    if (xdate == ydate) {
+                                        valdate = false;
+                                    }
+                                }
+                            }
+                        });
+                    });
+
+                    if (valdate == false) {
+                        alert("Date you have chosen already exists, please choose another date..!!");
+                    } else {
+                        $("#StatusForm").val("Draft")
+                        $("form").submit();
+                    }
                 });
 
                 hideLoading();
@@ -191,7 +238,7 @@
                 };
             }
 
-            function onChange(e) {
+            function onChangecomp(e) {
                 var container = e.container;
                 if (e.action === "itemchange") {
                     var model = e.items[0];
@@ -201,22 +248,6 @@
                         var finish = model.FinishTime.getHours();
                         var finishsec = model.FinishTime.getSeconds();
                         var range;
-                        var rowgrid = $("#CompensatoryDetails").data("kendoGrid").tbody.find("tr");
-                        var i = -1
-                        var j = -1
-                        rowgrid.each(function (e) {
-                            i++;
-                            var xdate = $("#Dateid" + i).val();
-                            rowgrid.each(function (e) {
-                                j++;
-                                var ydate = $("#Dateid" + j).val();
-                                if (i !== j) {
-                                    if (xdate == ydate) {
-                                        alert("Date you have chosen already exists, please choose another date..!!")
-                                    }
-                                }
-                            });
-                        });
 
                         if ((finish + finishsec) <= start) {
                             alert("FinishTime can not be smaller than the starttime..!!")

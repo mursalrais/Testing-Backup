@@ -25,8 +25,8 @@ namespace MCAWebAndAPI.Service.Asset
         AssetReplacementHeaderVM GetHeader(int? ID);
         IEnumerable<AssetReplacementItemVM> GetDetails(int? headerID);
 
-        AssetAcquisitionHeaderVM GetInfoFromAcquisitin(int? ID, string SiteUrl);
-        IEnumerable<AssetAcquisitionItemVM> GetInfoFromAcquisitinDetail(int? ID, string SiteUrl);
+        AssetReplacementHeaderVM GetInfoFromAcquisitin(int? ID, string SiteUrl);
+        IEnumerable<AssetReplacementItemVM> GetInfoFromAcquisitinDetail(int? ID, string SiteUrl);
         IEnumerable<AssetMasterVM> GetAssetSubAsset();
 
         void RollbackParentChildrenUpload(string listNameHeader, int? latestIDHeader, string siteUrl);

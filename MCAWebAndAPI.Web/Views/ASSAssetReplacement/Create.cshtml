@@ -87,7 +87,7 @@
 <script>
     $(document).ready(function () {
         $('#PurchaseDate').prop('value', "")
-        $("#AccpMemo_Value").data("kendoDropDownList").value("");
+        $("#OldTransactionId_Value").data("kendoDropDownList").value("");
     })
 
     function SimpenAsset()
@@ -134,19 +134,23 @@
     function onIdChange(e) {
         var res = this.dataItem(e.item);
         //alert("Acceptance Memo ID : " + res[0]);
+        var grid = $("#Details").data("kendoGrid");
         var url = "/ASSAssetReplacement/GetInfoFromAcquisitin?ID=" + res;
         $.getJSON(url, function (data) {
             //alert(data.purchasedatetext);   
             document.getElementById('Vendor').value = data.Vendor;
-            document.getElementById('PoNo').value = data.PoNo;
+            document.getElementById('PoNo').value = data.Pono;
             document.getElementById('PurchaseDate').value = data.purchasedatetext;
-            $('#PurchaseDescription').prop('value', data.PurchaseDescription);
+            $('#PurchaseDescription').prop('value', data.purchaseDescription);
 
             var url = "/ASSAssetReplacement/GetInfoFromAcquisitinDetail?ID=" + res;
-            $.getJSON(url, function (data) {
-                alert(data.length);
+            //$.getJSON(url, function (data) {
+            //    for (var i = 0, len = data.length; i < len; i++) {
+            //        //grid.addRow();
+            //        alert(data[i].CostIdr);
+            //    }
 
-            });
+            //});
         });
     }
 </script>

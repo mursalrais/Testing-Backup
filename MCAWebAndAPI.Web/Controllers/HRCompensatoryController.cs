@@ -61,7 +61,7 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             else
             {
-                viewmodel = _service.GetProfessional(userAccess);
+                viewmodel = _service.GetProfessional(userAccess, viewmodel);
                 return View("AddCompensatoryUser", viewmodel);
             }
         }
@@ -180,6 +180,7 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("WorkflowItems", viewModel.WorkflowItems);
 
             int? cmpID = null;
 
@@ -194,14 +195,21 @@ namespace MCAWebAndAPI.Web.Controllers
                 return RedirectToAction("Index", "Error");
             }
 
+            viewModel.cmpID = cmpID;
+
+            if (viewModel.StatusForm == "submithr")
+            {
+                _service.UpdateHeader(viewModel);
+            }
+
             // BEGIN Workflow Demo 
-            Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateTransactionWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME, SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)cmpID);
+            Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME, SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)cmpID);
 
             _service.SendEmail(SP_TRANSACTION_WORKFLOW_LIST_NAME, SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)cmpID, 1, string.Format(EmailResource.EmailCompensatoryApproval, siteUrl, cmpID));
 
             return RedirectToAction("Index",
                "Success",
-               new { successMessage = string.Format(MessageResource.SuccessCreateCompensatoryData, viewModel.cmpID) });
+               new { successMessage = string.Format(MessageResource.SuccessCreateCompensatoryData, viewModel.cmpName) });
 
         }
 
@@ -210,6 +218,7 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("WorkflowItems", viewModel.WorkflowItems);
 
             var testget = form[""];
 
@@ -217,7 +226,6 @@ namespace MCAWebAndAPI.Web.Controllers
 
             try
             {
-
                 viewModel.CompensatoryDetails = BindCompensatorylistDateTime(form, viewModel.CompensatoryDetails);
                 _service.CreateCompensatoryData(cmpID, viewModel);
             }
@@ -240,8 +248,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 if (viewModel.StatusForm == "")
                 {
                     // BEGIN Workflow Demo 
-                    Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateTransactionWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
-                    SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)cmpID);
+                    Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME, SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)cmpID);
 
                     // Send to Level 1 & 2 Approver
                     _service.SendEmail(SP_TRANSACTION_WORKFLOW_LIST_NAME, SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)cmpID, 1, string.Format(EmailResource.EmailCompensatoryApproval, siteUrl, cmpID));
@@ -254,7 +261,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             return RedirectToAction("Index",
                           "Success",
-                          new { successMessage = string.Format(MessageResource.SuccessCreateCompensatoryData, viewModel.cmpID) });
+                          new { successMessage = string.Format(MessageResource.SuccessCreateCompensatoryData, viewModel.cmpName) });
 
         }
 

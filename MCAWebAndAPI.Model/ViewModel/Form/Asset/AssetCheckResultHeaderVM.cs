@@ -13,6 +13,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 {
     public class AssetCheckResultHeaderVM : Item
     {
+        public int? ID;
+
         public IEnumerable<AssetCheckResultItemVM> Details { get; set; } = new List<AssetCheckResultItemVM>();
 
         private ComboBoxVM _formID;        
@@ -29,7 +31,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
                         {
                             ""
                         },
-                        OnSelectEventName = "onSelectedId"
+                        //OnSelectEventName = "onSelectedId"
                     };
                 return _formID;
             }
@@ -38,7 +40,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
                 _formID = value;
             }
         }
-        
+
+        public int? AssetCheckResultID;
+
         public DateTime? CountDate { get; set; }
 
         [DisplayName("Counted By (1)")]

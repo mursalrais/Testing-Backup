@@ -60,6 +60,10 @@
                 "<input type='hidden' name='Details[#= index(data)#].AssetID' value='#= AssetID #' />"
             );
 
+            columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
+                "<input type='hidden' name='Details[#= index(data)#].ID' value='#= ID #' />"
+            );
+
             columns.Bound(p => p.Dispose).ClientTemplate("#= Dispose #" +
                 "<input type='hidden' name='Details[#= index(data)#].Dispose' value='#= Dispose #' />"
             );
