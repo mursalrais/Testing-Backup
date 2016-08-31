@@ -1044,7 +1044,6 @@
     <Content Include="Views\FINPettyCashPaymentVoucher\Create.cshtml" />
     <Content Include="Views\FINPettyCashPaymentVoucher\Edit.cshtml" />
     <Content Include="Views\FINPettyCashPaymentVoucher\Print.cshtml" />
-    <Content Include="Views\FINPettyCashReimbursement\Create.cshtml" />
     <Content Include="Views\FINRequisitionNote\Create.cshtml" />
     <Content Include="Views\FINRequisitionNote\Edit.cshtml" />
     <Content Include="Views\FINRequisitionNote\Print.cshtml" />
@@ -1098,6 +1097,8 @@
     <Content Include="Views\HRProfessionalPerformanceEvaluation\_WorkflowPathDetails.cshtml" />
     <Content Include="Views\HRDayOff\_DayOffNextBalance.cshtml" />
     <Content Include="Views\HRDayOff\_DisplayRequestDetail.cshtml" />
+    <Content Include="Views\FINPettyCashReimbursement\Item.cshtml" />
+    <Content Include="Views\FINPettyCashReimbursement\Print.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
