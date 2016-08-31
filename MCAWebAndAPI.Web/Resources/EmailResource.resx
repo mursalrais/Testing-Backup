@@ -117,6 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ApplicationData" xml:space="preserve">
+    <value>Dear {0},
+
+Thank you for your interest in MCA-Indonesia! Your application for the {1} has been received.
+
+We will review your application and if there is interest in pursuing your candidacy, you will be contacted immediately. We regret that due to the high volume of CV’s we receive, we may not be able to respond to all applications individually. Only shortlisted candidate that will be contacted by MCA-Indonesia. 
+
+Should you not be selected to interview, we invite you to apply to other current or future opportunities at MCA-Indonesia which interest you.
+
+While waiting, why not have a deeper look at our website? http://mca-indonesia.go.id/ 
+
+Thank you again for your interest in our company. We do appreciate the time you invested in this application.
+
+Regards,
+Recruitment MCA-Indonesia</value>
+  </data>
   <data name="ApplicationSubmissionNotification" xml:space="preserve">
     <value>&lt;p&gt;
 &lt;strong&gt;Dear Applicant,&lt;/strong&gt;
