@@ -1045,7 +1045,6 @@
     <Content Include="Views\FINPettyCashPaymentVoucher\Create.cshtml" />
     <Content Include="Views\FINPettyCashPaymentVoucher\Edit.cshtml" />
     <Content Include="Views\FINPettyCashPaymentVoucher\Print.cshtml" />
-    <Content Include="Views\FINPettyCashReimbursement\Create.cshtml" />
     <Content Include="Views\FINRequisitionNote\Create.cshtml" />
     <Content Include="Views\FINRequisitionNote\Edit.cshtml" />
     <Content Include="Views\FINRequisitionNote\Print.cshtml" />
@@ -1127,6 +1126,10 @@
     <Content Include="Views\HRTimesheet\NotAuthorized.cshtml" />
     <Content Include="Views\HRCompensatory\_WorkflowPathDetails.cshtml" />
     <Content Include="Views\HRCompensatory\AddCompensatoryUser.cshtml" />
+    <Content Include="Views\FINPettyCashReimbursement\Item.cshtml" />
+    <Content Include="Views\FINPettyCashReimbursement\Print.cshtml" />
+    <Content Include="Views\ASSAssetCheckResult\_approval_Path.cshtml" />
+    <Content Include="Views\ASSAssetCheckResult\_Details.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

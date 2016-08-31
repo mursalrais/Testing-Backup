@@ -8,6 +8,10 @@ using static MCAWebAndAPI.Model.ViewModel.Form.Finance.Shared;
 
 namespace MCAWebAndAPI.Service.Finance
 {
+    /// <summary>
+    /// Wirefram FIN07: SCA Settlement
+    /// </summary>
+
     public interface ISCASettlementService
     {
         void SetSiteUrl(string siteUrl);
