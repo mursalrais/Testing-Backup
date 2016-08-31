@@ -52,7 +52,7 @@ enctype = "multipart/form-data" }))
 <div class="form-actions">
     <div class="row">
         <div class="col-sm-12">
-            <button id="print-button" class="btn btn-default" type="button">
+            <button id="print-button" class="btn btn-primary" type="button">
                 Print
             </button>
             <button id="submit-button" class="btn btn-primary" type="submit">
@@ -66,8 +66,18 @@ enctype = "multipart/form-data" }))
 
 @section scripts{
     <script>
-        $(document).ready(function () {
+        function printApplication()
+        {
+            var url = "/HRApplication/PrintApplicationData";
+            submitFormToPrint(url);
+        }
 
-        });
+        //$(document).ready(function () {
+        //    $('#print-button').click(function (e)
+        //    {
+                
+        //    });
+
+        //});
     </script>
 }
