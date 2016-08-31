@@ -128,25 +128,23 @@ namespace MCAWebAndAPI.Service.Asset
             throw new NotImplementedException();
         }
 
-        public AssetAcquisitionHeaderVM GetInfoFromAcquisitin(int? ID, string SiteUrl)
+        public AssetReplacementHeaderVM GetInfoFromAcquisitin(int? ID, string SiteUrl)
         {
             var list = SPConnector.GetListItem("Asset Acquisition", ID, SiteUrl);
-            var viewmodel = new AssetAcquisitionHeaderVM();
-            viewmodel.ID = Convert.ToInt32(ID);
-            viewmodel.VendorID = Convert.ToString(list["vendorid"]);
+            var viewmodel = new AssetReplacementHeaderVM();
             viewmodel.Vendor = Convert.ToString(list["vendorname"]);
-            viewmodel.PoNo = Convert.ToString(list["pono"]);
-            viewmodel.PurchaseDate = Convert.ToDateTime(list["purchasedate"]);
-            viewmodel.purchasedatetext = viewmodel.PurchaseDate.ToShortDateString();
-            viewmodel.PurchaseDescription = Regex.Replace(Convert.ToString(list["purchasedescription"]), "<.*?>", string.Empty);
+            viewmodel.Pono = Convert.ToString(list["pono"]);
+            viewmodel.purchasedatetext = Convert.ToDateTime(list["purchasedate"]).ToShortDateString();
+            viewmodel.purchaseDescription = Regex.Replace(Convert.ToString(list["purchasedescription"]), "<.*?>", string.Empty);
+
             return viewmodel;
         }
 
-        public IEnumerable<AssetAcquisitionItemVM> GetInfoFromAcquisitinDetail(int? ID, string SiteUrl)
+        public IEnumerable<AssetReplacementItemVM> GetInfoFromAcquisitinDetail(int? ID, string SiteUrl)
         {
             _siteUrl = SiteUrl;
             var caml = @"<View><Query><Where><Eq><FieldRef Name='assetacquisition' /><Value Type='Lookup'>" + ID.ToString() + "</Value></Eq></Where></Query></View>";
-            var details = new List<AssetAcquisitionItemVM>();
+            var details = new List<AssetReplacementItemVM>();
             foreach (var item in SPConnector.GetList("Asset Acquisition Details", SiteUrl, caml))
             {
                 details.Add(ConvertToDetails(item));
@@ -155,7 +153,7 @@ namespace MCAWebAndAPI.Service.Asset
             return details;
         }
 
-        private AssetAcquisitionItemVM ConvertToDetails(ListItem item)
+        private AssetReplacementItemVM ConvertToDetails(ListItem item)
         {
             var ListAssetSubAsset = SPConnector.GetListItem("Asset Master", (item["assetsubasset"] as FieldLookupValue).LookupId, _siteUrl);
             AjaxComboBoxVM _assetSubAsset = new AjaxComboBoxVM();
@@ -167,15 +165,14 @@ namespace MCAWebAndAPI.Service.Asset
             _wbs.Value = (item["wbs"] as FieldLookupValue).LookupId;
             _wbs.Text = Convert.ToString(ListWBS["Title"]) + " - " + Convert.ToString(ListWBS["WBSDesc"]);
 
-            return new AssetAcquisitionItemVM
+            return new AssetReplacementItemVM
             {
-                ID = Convert.ToInt32(item["ID"]),
                 AssetSubAsset = AssetAcquisitionItemVM.GetAssetSubAssetDefaultValue(_assetSubAsset),
-                WBS = AssetAcquisitionItemVM.GetWBSDefaultValue(_wbs),
-                CostIDR = Convert.ToInt32(item["costidr"]),
-                CostUSD = Convert.ToInt32(item["costusd"]),
-                Remarks = Convert.ToString(item["remarks"]),
-                Status = Convert.ToString(item["status"])
+                Wbs = _wbs.Text,
+                CostIdr = Convert.ToInt32(item["costidr"]),
+                CostUsd = Convert.ToInt32(item["costusd"]),
+                remarks = Convert.ToString(item["remarks"]),
+                status = Convert.ToString(item["status"])
             };
         }
     }
