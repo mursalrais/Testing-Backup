@@ -15,6 +15,8 @@ namespace MCAWebAndAPI.Service.Asset
 
         AssetCheckResultHeaderVM GetPopulatedModelGetData(int? FormID = null);
 
+        AssetCheckResultHeaderVM GetPopulatedModelCalculate(AssetCheckResultHeaderVM data);
+
         ProfessionalsVM GetProfessionalInfo(int? iDProf, string siteUrl);
 
         AssetCheckResultHeaderVM GetCheckInfo(int? iDCheck, string siteUrl);
