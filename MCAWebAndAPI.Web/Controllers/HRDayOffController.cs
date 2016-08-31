@@ -130,17 +130,17 @@ namespace MCAWebAndAPI.Web.Controllers
             return array;
         }
 
-        public ActionResult DisplayRequestDetail(List<string> dayOffRequestDayOffType, List<DateTime> dayOffRequestStarDate, List<DateTime> dayOffRequestEndDate, List<string> dayOffRequestFullOrHalf, string siteUrl)
+        public ActionResult DisplayRequestDetail(List<string> dayOffRequestDayOffType, List<string> dayOffRequestStarDate, List<string> dayOffRequestEndDate, List<string> dayOffRequestFullOrHalf, List<string> dayOffRequestRemarks, string siteUrl = null)
         {
             _hRDayOffService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
-            var viewModel = _hRDayOffService.GetRequestData(dayOffRequestDayOffType, dayOffRequestStarDate, dayOffRequestEndDate, dayOffRequestFullOrHalf);
+            var viewModel = _hRDayOffService.GetRequestData(dayOffRequestDayOffType, dayOffRequestStarDate, dayOffRequestEndDate, dayOffRequestFullOrHalf, dayOffRequestRemarks);
 
             return View("_DisplayRequestDetail", viewModel.DayOffRequestDetailsDisplay);
         }
 
-        public ActionResult TestAction(string dayOffType, string siteUrl)
+        public ActionResult TestAction(int masterDayOffTypeValue, string siteUrl)
         {
             _hRDayOffService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);

@@ -235,37 +235,38 @@ namespace MCAWebAndAPI.Service.HR.Leave
             };
         }
 
-        public DayOffRequestVM GetRequestData(List<string> dayOffType, List<DateTime> startDate, List<DateTime> endDate, List<string> fullHalfDay)
+        public DayOffRequestVM GetRequestData(List<string> dayOffType, List<string> startDate, List<string> endDate, List<string> fullHalfDay, List<string> remarks)
         {
             var model = new DayOffRequestVM();
 
-            model.DayOffRequestDetailsDisplay = GetDayOffRequestsDetailsDisplay(dayOffType, startDate, endDate, fullHalfDay);
+            model.DayOffRequestDetailsDisplay = GetDayOffRequestsDetailsDisplay(dayOffType, startDate, endDate, fullHalfDay, remarks);
 
             return model;
         }
 
-        private IEnumerable<DayOffRequestDetailDisplayVM> GetDayOffRequestsDetailsDisplay(List<string> dayOffType, List<DateTime> startDate, List<DateTime> endDate, List<string> fullHalfDay)
+        private IEnumerable<DayOffRequestDetailDisplayVM> GetDayOffRequestsDetailsDisplay(List<string> dayOffType, List<string> startDate, List<string> endDate, List<string> fullHalfDay, List<string> remarks)
         {
             var dayOffRequestDetailDisplayData = new List<DayOffRequestDetailDisplayVM>();
 
-            int dataCount = dayOffRequestDetailDisplayData.Count;
+            int dataCount = dayOffType.Count;
 
-            for (int i = 1; i < dataCount; i++)
+            for (int i = 1; i <= dataCount; i++)
             {
-                dayOffRequestDetailDisplayData.Add(ConvertToDayOffRequestDetailsDisplay(dayOffType[i], startDate[i], endDate[i], fullHalfDay[i]));
+                dayOffRequestDetailDisplayData.Add(ConvertToDayOffRequestDetailsDisplay(dayOffType[i-1], startDate[i-1], endDate[i-1], fullHalfDay[i-1], remarks[i-1]));
             }
 
             return dayOffRequestDetailDisplayData;
         }
 
-        private DayOffRequestDetailDisplayVM ConvertToDayOffRequestDetailsDisplay(string dayOffType, DateTime startDate, DateTime endDate, string fullHalfDay)
+        private DayOffRequestDetailDisplayVM ConvertToDayOffRequestDetailsDisplay(string dayOffType, string startDate, string endDate, string fullHalfDay, string remarks)
         {
             var dayOffRequestDetailDisplay = new DayOffRequestDetailDisplayVM();
             
             dayOffRequestDetailDisplay.DayOffType = Convert.ToString(dayOffType);
-            dayOffRequestDetailDisplay.RequestStartDate = Convert.ToDateTime(startDate);
-            dayOffRequestDetailDisplay.RequestEndDate = Convert.ToDateTime(endDate);
+            dayOffRequestDetailDisplay.RequestStartDate = Convert.ToString(startDate);
+            dayOffRequestDetailDisplay.RequestEndDate = Convert.ToString(endDate);
             dayOffRequestDetailDisplay.FullHalf = Convert.ToString(fullHalfDay);
+            dayOffRequestDetailDisplay.Remarks = Convert.ToString(remarks);
 
             return dayOffRequestDetailDisplay;
         }

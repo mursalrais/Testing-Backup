@@ -1044,7 +1044,6 @@
     <Content Include="Views\FINPettyCashPaymentVoucher\Create.cshtml" />
     <Content Include="Views\FINPettyCashPaymentVoucher\Edit.cshtml" />
     <Content Include="Views\FINPettyCashPaymentVoucher\Print.cshtml" />
-    <Content Include="Views\FINPettyCashReimbursement\Create.cshtml" />
     <Content Include="Views\FINRequisitionNote\Create.cshtml" />
     <Content Include="Views\FINRequisitionNote\Edit.cshtml" />
     <Content Include="Views\FINRequisitionNote\Print.cshtml" />
@@ -1085,7 +1084,6 @@
     <Content Include="Views\HRCompensatory\AddCompensatoryHR.cshtml" />
     <Content Include="Views\FINEventBudget\Item.cshtml" />
     <Content Include="Views\HRTimesheet\CreateTimesheet.cshtml" />
-    <Content Include="Views\HRTimesheet\FormType.cshtml" />
     <Content Include="Views\FINPettyCashStatement\Display.cshtml" />
     <Content Include="Views\FINPettyCashStatement\Index.cshtml" />
     <Content Include="Views\FINPettyCashSettlement\Item.cshtml" />
@@ -1235,6 +1233,7 @@
     <Folder Include="App_Code\" />
     <Folder Include="Scripts\apps\controlls\" />
     <Folder Include="Views\Activity\" />
+    <Folder Include="Views\FINPettyCashReimbursement\" />
     <Folder Include="Views\HRDataMaster\" />
   </ItemGroup>
   <ItemGroup>

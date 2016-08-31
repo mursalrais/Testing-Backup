@@ -104,6 +104,7 @@
             var dayOffRequestStarDate = [];
             var dayOffRequestEndDate = [];
             var dayOffRequestFullOrHalf = [];
+            var dayOffRequestRemarks = [];
 
             var rowgridBalanceDetail = $("#DayOffBalanceDetails").data("kendoGrid").tbody.find("tr");
             var j = 0;
@@ -180,10 +181,23 @@
             rowgrid.each(function (e) {
 
                 var startRequestDate = $("#DayOffRequestDetails").data("kendoGrid").dataSource.data()[i].RequestStartDate;
+                var dateStartRequestDate = startRequestDate.getDate();
+                var monthStartRequestDate = startRequestDate.getMonth() + 1;
+                var yearStartRequestDate = startRequestDate.getFullYear();
+                var strStartRequestDate = dateStartRequestDate + '/' + monthStartRequestDate + '/' + yearStartRequestDate;
+
                 var endRequestDate = $("#DayOffRequestDetails").data("kendoGrid").dataSource.data()[i].RequestEndDate;
+                var dateEndRequestDate = endRequestDate.getDate();
+                var monthEndRequestDate = endRequestDate.getMonth() + 1;
+                var yearEndRequestDate = endRequestDate.getFullYear();
+                var strEndRequestDate = dateEndRequestDate + '/' + monthEndRequestDate + '/' + yearEndRequestDate;
 
                 var masterDayOffTypeValue = $("#DayOffRequestDetails").data("kendoGrid").dataSource.data()[i].MasterDayOffType.Value;
                 var fullHalfDay = $("#DayOffRequestDetails").data("kendoGrid").dataSource.data()[i].FullHalf.Text;
+
+                var remarks = $("#DayOffRequestDetails").data("kendoGrid").dataSource.data()[i].Remarks;
+
+                console.log("Remarks1: " + remarks);
 
                 var dateStartRequestDate = new Date(startRequestDate);
                 var dateDateStartRequestDate = dateStartRequestDate.getDate();
@@ -261,18 +275,13 @@
                         else
                         {
                             dayOffRequestDayOffType.push(masterDayOffTypeValue);
-                            dayOffRequestStarDate.push(startRequestDate);
-                            dayOffRequestEndDate.push(endRequestDate);
+                            dayOffRequestStarDate.push(strStartRequestDate);
+                            dayOffRequestEndDate.push(strEndRequestDate);
                             dayOffRequestFullOrHalf.push(fullHalfDay);
+                            dayOffRequestRemarks.push(remarks);
 
-                            console.log("Day-Off Type: " + dayOffRequestDayOffType);
-                            console.log("Request Start: " + dayOffRequestStarDate);
-                            console.log("Request End: " + dayOffRequestEndDate);
-                            console.log("Full Or Half: " + dayOffRequestFullOrHalf);
+                            console.log("Remarks 2: " + remarks);
 
-                            //dayOffRequestData.push({ dayOffType: masterDayOffTypeValue, startDate: stringDateStartRequestDate, endDate: stringDateEndRequestDate, fullOrHalf: fullHalfDay });
-
-                            //console.log(dayOffRequestData);
                         }
                     }
                     else if (masterDayOffTypeValue == "7")
@@ -627,35 +636,29 @@
                 i++;
             });
 
-            if ((dayOffRequestDayOffType != null) && (dayOffRequestStarDate != null) && (dayOffRequestEndDate != null) && (dayOffRequestFullOrHalf != null))
+            if ((dayOffRequestDayOffType != null) && (dayOffRequestStarDate != null) && (dayOffRequestEndDate != null) && (dayOffRequestFullOrHalf != null) && (dayOffRequestRemarks != null))
             {
-                displayRequestDetail("request - detail - display", dayOffRequestDayOffType, dayOffRequestStarDate, dayOffRequestEndDate, dayOffRequestFullOrHalf)
+                console.log("Remarks 2: " + dayOffRequestRemarks);
+
+                displayRequestDetail("request-detail-display", dayOffRequestDayOffType, dayOffRequestStarDate, dayOffRequestEndDate, dayOffRequestFullOrHalf, dayOffRequestRemarks)
             }
         
         }
 
-        function displayRequestDetail(domID, dayOffRequestDayOffType, dayOffRequestStarDate, dayOffRequestEndDate, dayOffRequestFullOrHalf)
+        function displayRequestDetail(domID, dayOffRequestDayOffType, dayOffRequestStarDate, dayOffRequestEndDate, dayOffRequestFullOrHalf, dayOffRequestRemarks)
         {
-            //dayOffRequestData.forEach(displayRequest);
+            console.log("Remarks 3: " + dayOffRequestRemarks);
 
-            //console.log("Day-Off Type: " + dayOffType);
-
-            //checkArrayMember(dayOffType.length);
-
-            console.log("dayOffRequestDayOffType: " + dayOffRequestDayOffType);
-            console.log("dayOffRequestStarDate: " + dayOffRequestStarDate);
-            console.log("dayOffRequestEndDate: " + dayOffRequestEndDate);
-            console.log("dayOffRequestFullOrHalf: " + dayOffRequestFullOrHalf);
-
-            var url = "/HRDayOff/DisplayRequestDetail/?dayOffRequestDayOffType=" + dayOffRequestDayOffType + "&dayOffRequestStarDate=" + dayOffRequestStarDate + "&dayOffRequestEndDate=" + dayOffRequestEndDate + "&dayOffRequestFullOrHalf=" + dayOffRequestFullOrHalf;
-            
+            var url = "/HRDayOff/DisplayRequestDetail/?dayOffRequestDayOffType=" + dayOffRequestDayOffType + "&dayOffRequestStarDate=" + dayOffRequestStarDate + "&dayOffRequestEndDate=" + dayOffRequestEndDate + "&dayOffRequestFullOrHalf=" + dayOffRequestFullOrHalf + "&dayOffRequestRemarks=" + dayOffRequestRemarks;
             $('#' + domID).load(url);
+
+            console.log(url)
         }
 
-        function testfungsi(masterDayOffTypeValue)
+        function testfungsi(domID, masterDayOffTypeValue)
         {
-            var url = "/HRDayOff/TestAction/?dayOffType=" + masterDayOffTypeValue;
-            //$('#' + domID).load(url);
+            var url = "/HRDayOff/TestAction/?masterDayOffTypeValue=" + masterDayOffTypeValue;
+            $('#' + domID).load(url);
         }
 
         //function displayRequest(requestData)
