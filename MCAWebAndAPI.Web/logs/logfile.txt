@@ -436,3 +436,6 @@ Please try again.
    at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64
 2016-08-30 08:20:52.1149 MCAWebAndAPI.Service.Asset.AssetTransferService Value cannot be null.
 Parameter name: source
+2016-08-30 23:07:50.9423 MCAWebAndAPI.Service.Asset.AssetDisposalService Cannot complete this action.
+
+Please try again.

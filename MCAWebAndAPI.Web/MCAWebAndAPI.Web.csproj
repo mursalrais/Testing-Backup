@@ -1128,6 +1128,9 @@
     <Content Include="Views\FINPettyCashReimbursement\Print.cshtml" />
     <Content Include="Views\ASSAssetCheckResult\_approval_Path.cshtml" />
     <Content Include="Views\ASSAssetCheckResult\_Details.cshtml" />
+    <Content Include="Views\ASSAssetLoanAndReturn\_AssetLoanAndReturnItem.cshtml" />
+    <Content Include="Views\ASSAssetLoanAndReturn\Edit.cshtml" />
+    <Content Include="Views\ASSAssetDisposal\Edit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
