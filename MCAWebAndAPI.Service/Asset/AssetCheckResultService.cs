@@ -24,11 +24,99 @@ namespace MCAWebAndAPI.Service.Asset
         public AssetCheckResultHeaderVM GetPopulatedModel(int? ID = default(int?), string FormID = null)
         {
             var model = new AssetCheckResultHeaderVM();
-
             model.FormID.Choices = GetChoicesFromList("Asset Check", "assetcheckformid");
 
-            var modelDetail = new List<AssetCheckResultItemVM>();
-            
+            if (ID != null)
+            {
+                var cekResult = SPConnector.GetListItem("Asset Check Result", ID, _siteUrl);
+
+                model.ID = ID;
+                model.FormID.Value = cekResult["assetcheckformid"].ToString();
+                if(cekResult["assetcheckcountdate"] != null)
+                {
+                    model.CountDate = Convert.ToDateTime(cekResult["assetcheckcountdate"].ToString());
+                }
+                model.CountedBy1.Value = Convert.ToInt32(cekResult["assetcheckcountedby1"].ToString());
+                model.CountedBy2.Value = Convert.ToInt32(cekResult["assetcheckcountedby2"].ToString());
+                model.CountedBy3.Value = Convert.ToInt32(cekResult["assetcheckcountedby3"].ToString());
+
+                model.CompletionStatus = cekResult["completionstatus"].ToString();
+
+                if (cekResult["approvalname"] != null)
+                {
+                    model.Name.Value = Convert.ToInt32(cekResult["approvalname"].ToString());
+                }
+                if (cekResult["approvalposision"] != null)
+                {
+                    model.Posision.Value = Convert.ToInt32(cekResult["approvalposision"].ToString());
+                }
+
+                var modelDetail = new List<AssetCheckResultItemVM>();
+
+                var caml = @"<View><Query><Where><Eq><FieldRef Name='assetcheckformid' /><Value Type='Number'>" + model.FormID.Value + "</Value></Eq></Where></Query></View>";
+                int i = 0;
+                foreach (var item in SPConnector.GetList("Asset Check Result", _siteUrl, caml))
+                {
+                    var dataAssetMaster = SPConnector.GetListItem("Asset Master", (item["assetmaster"] as FieldLookupValue).LookupId, _siteUrl);
+
+                    caml = @"<View><Query><Where><Eq><FieldRef Name='assetsubasset_x003a_ID' /><Value Type='Lookup'>" + (item["assetmaster"] as FieldLookupValue).LookupId + "</Value></Eq></Where></Query></View>";
+                    var dataLoan = SPConnector.GetList("Asset Loan Return Detail", _siteUrl, caml);
+
+                    string status = "";
+                    foreach (var itemLoan in dataLoan)
+                    {
+                        status = itemLoan["status"].ToString();
+                    }
+
+                    i++;
+                    var modelDetailItem = new AssetCheckResultItemVM();
+                    if (item["assetmaster"] != null)
+                    {
+                        modelDetailItem.AssetID = (item["assetmaster"] as FieldLookupValue).LookupId;
+                    }
+                    modelDetailItem.Item = i;
+                    modelDetailItem.AssetSubAsset = (dataAssetMaster["AssetID"] == null ? "" : dataAssetMaster["AssetID"].ToString()) + "-" + (dataAssetMaster["Title"] == null ? "" : dataAssetMaster["Title"].ToString());
+                    modelDetailItem.SerialNo = (dataAssetMaster["SerialNo"] == null ? "" : dataAssetMaster["SerialNo"].ToString());
+                    modelDetailItem.Province = (item["assetprovince"] == null ? "" : item["assetprovince"].ToString());
+                    modelDetailItem.LocationName = (item["assetlocation"] == null ? "" : item["assetlocation"].ToString());
+
+                    modelDetailItem.PhysicalQty = Convert.ToInt32(item["physicalquantity"].ToString());
+                    modelDetailItem.SystemQty = Convert.ToInt32(item["systemquantity"].ToString());
+
+                    modelDetailItem.DifferentQty = modelDetailItem.PhysicalQty - modelDetailItem.SystemQty;
+
+                    if (status != "")
+                    {
+                        modelDetailItem.Status = status;
+                        if (status.ToUpper() == "RUNNING" && modelDetailItem.DifferentQty < 0)
+                        {
+                            modelDetailItem.Dispose = "Yes";
+                        }
+                        if (status.ToUpper() == "LOAN" && modelDetailItem.DifferentQty < 0)
+                        {
+                            modelDetailItem.Dispose = "No";
+                        }
+
+                    }
+                    else
+                    {
+                        if (modelDetailItem.DifferentQty >= 0)
+                        {
+                            modelDetailItem.Dispose = "No";
+                        }
+                        modelDetailItem.Status = (item["assetstatus"] == null ? "" : item["assetstatus"].ToString());
+                    }
+
+
+                    modelDetailItem.Existense = (item["existence"] == null ? "" : item["existence"].ToString());
+                    modelDetailItem.Condition = (item["condition"] == null ? "" : item["condition"].ToString());
+                    modelDetailItem.Specification = (item["specification"] == null ? "" : item["specification"].ToString());
+                    
+                    modelDetail.Add(modelDetailItem);
+                }
+
+                model.Details = modelDetail;
+            }
             return model;
         }
 
@@ -163,6 +251,115 @@ namespace MCAWebAndAPI.Service.Asset
             return model;
         }
 
+        public AssetCheckResultHeaderVM GetPopulatedModelSave(AssetCheckResultHeaderVM data, Boolean isApproval = false)
+        {
+            var model = data;
+            model.FormID.Choices = GetChoicesFromList("Asset Check", "assetcheckformid");
+            model.CompletionStatus = "In Progress";
+
+            var caml = @"";
+            int i = 0;
+            foreach (var item in model.Details)
+            {
+
+                caml = @"<View><Query><Where><Eq><FieldRef Name='assetsubasset_x003a_ID' /><Value Type='Lookup'>" + item.AssetID + "</Value></Eq></Where></Query></View>";
+                var dataLoan = SPConnector.GetList("Asset Loan Return Detail", _siteUrl, caml);
+
+                string status = "";
+                foreach (var itemLoan in dataLoan)
+                {
+                    status = itemLoan["status"].ToString();
+                }
+
+                i++;
+
+                item.Item = i;
+
+                item.DifferentQty = item.PhysicalQty - item.SystemQty;
+
+                if (status != "")
+                {
+                    item.Status = status;
+                    if (status.ToUpper() == "RUNNING" && item.DifferentQty < 0)
+                    {
+                        item.Dispose = "Yes";
+                    }
+                    if (status.ToUpper() == "LOAN" && item.DifferentQty < 0)
+                    {
+                        item.Dispose = "No";
+                    }
+
+                }
+                else
+                {
+                    if (item.DifferentQty < 0)
+                    {
+                        item.Dispose = "Yes";
+                    }
+                    if (item.DifferentQty >= 0)
+                    {
+                        item.Dispose = "No";
+                    }
+                }
+            }
+
+            var columnValues = new Dictionary<string, object>();
+            int? assetcheckformid = Convert.ToInt32(model.FormID.Value);
+
+            columnValues.Add("Title", "Asset Check Result");
+            columnValues.Add("assetcheckformid", assetcheckformid);
+
+            caml = @"<View><Query><OrderBy><FieldRef Name='assetcheckresultid' Ascending='False' /></OrderBy></Query><RowLimit Paged='TRUE'>1</RowLimit></View>";
+            int assetcheckresultid = 0;
+            foreach (var item in SPConnector.GetList("Asset Check Result", _siteUrl, caml))
+            {
+                assetcheckresultid = Convert.ToInt32(item["assetcheckresultid"].ToString());
+            }
+            assetcheckresultid++;
+            columnValues.Add("assetcheckresultid", assetcheckresultid);
+
+            columnValues.Add("assetcheckcountdate", data.CountDate);
+            columnValues.Add("assetcheckcountedby1", data.CountedBy1.Value);
+            columnValues.Add("assetcheckcountedby2", data.CountedBy2.Value);
+            columnValues.Add("assetcheckcountedby3", data.CountedBy3.Value);
+            columnValues.Add("completionstatus", data.CompletionStatus);
+
+            if (isApproval)
+            {
+                columnValues.Add("approvalname", data.Name.Value);
+                columnValues.Add("approvalposision", data.Posision.Value);
+            }
+
+            SPConnector.AddListItem("Asset Check Result", columnValues, _siteUrl);
+
+            foreach (var item in model.Details)
+            {
+                columnValues = new Dictionary<string, object>();
+                columnValues.Add("Title", "Asset Check Result");
+                columnValues.Add("assetcheckformid", assetcheckformid);
+                columnValues.Add("assetcheckresultid", assetcheckresultid);
+                columnValues.Add("assetmaster", item.AssetID);
+                columnValues.Add("assetprovince", item.Province);
+                columnValues.Add("assetlocation", item.LocationName);
+                columnValues.Add("assetstatus", item.Status);
+                columnValues.Add("existence", item.Existense);
+                columnValues.Add("condition", item.Condition);
+                columnValues.Add("specification", item.Specification);
+                columnValues.Add("systemquantity", item.SystemQty);
+                columnValues.Add("physicalquantity", item.PhysicalQty);
+                columnValues.Add("differenceqty", item.DifferentQty);
+                columnValues.Add("isdisposed", item.Dispose);
+                columnValues.Add("assetmaster_x003a_serialno", item.AssetID);
+                columnValues.Add("assetcheckstatus", item.Status);
+                columnValues.Add("completionstatus", model.CompletionStatus);
+                columnValues.Add("remarks", item.Remarks);
+
+                SPConnector.AddListItem("Asset Check Result Detail", columnValues, _siteUrl);
+            }
+
+            return model;
+        }
+        
         private IEnumerable<string> GetChoicesFromList(string listname, string v1)
         {
             List<string> _choices = new List<string>();
@@ -192,7 +389,10 @@ namespace MCAWebAndAPI.Service.Asset
             var list = SPConnector.GetListItem("Asset Check Detail", ID, SiteUrl);
             var viewmodel = new AssetCheckResultHeaderVM();
             viewmodel.ID = Convert.ToInt32(ID);
-            viewmodel.CompletionStatus = Convert.ToString(list["assetstatus"]);
+            if(list["assetstatus"] != null)
+            {
+                viewmodel.CompletionStatus = Convert.ToString(list["assetstatus"]);
+            }
 
             return viewmodel;
         }

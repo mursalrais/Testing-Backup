@@ -302,4 +302,10 @@
   <data name="ProfessionalData" xml:space="preserve">
     <value>/SitePages/Professional%20Data.aspx</value>
   </data>
+  <data name="AssetCheckForm" xml:space="preserve">
+    <value>/Lists/Asset%20Check/AllItems.aspx</value>
+  </data>
+  <data name="AssetCheckResult" xml:space="preserve">
+    <value>/Lists/Asset%20Check%20Result/AllItems.aspx</value>
+  </data>
 </root>
