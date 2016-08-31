@@ -16,6 +16,7 @@ using MCAWebAndAPI.Service.Common;
 namespace MCAWebAndAPI.Service.HR.Recruitment
 {
     public class HRCompensatoryService : IHRCompensatoryService
+                
     {
         string _siteUrl;
         static Logger logger = LogManager.GetCurrentClassLogger();
@@ -438,7 +439,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return CompID;
         }
 
-        public void CreateHeaderCompensatory(CompensatoryVM viewModels)
+        public int CreateHeaderCompensatory(CompensatoryVM viewModels)
         {
             var cratedValueDetail = new Dictionary<string, object>();
 
@@ -473,6 +474,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             int idCmp = SPConnector.GetLatestListItemID(SP_COMREQ_LIST_NAME, _siteUrl);
 
             AddNewCompensatoryData(idCmp, viewModels);
+
+            return idCmp;
         }
 
         public void AddNewCompensatoryData(int? cmpID, CompensatoryVM viewModels)

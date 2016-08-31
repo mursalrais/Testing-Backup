@@ -1,37 +1,53 @@
-﻿using System;
+﻿using MCAWebAndAPI.Model.Common;
+using MCAWebAndAPI.Model.ViewModel.Control;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 {
-    public class AssetCheckResultItemVM
+    public class AssetCheckResultItemVM : Item
     {
-        public int Id { get; set; }
+        public int Item { get; set; }
 
-        public string Item { get; set; }
+        [DisplayName("Asset-Sub Asset")]
+        public string AssetSubAsset { get; set; }
 
-        public int AssetNo { get; set; }
+        [DisplayName("Serial No")]
+        public string SerialNo { get; set; }
 
-        public int SubAssetNo { get; set; }
-
-        public string AssetDescription { get; set; }
-
-        public int SerialNo { get; set; }
-
+        [DisplayName("Province")]
+        public string Province { get; set; }
+        
+        [DisplayName("Location Name")]
         public string LocationName { get; set; }
 
         public string Status { get; set; }
 
+        public string Existense { get; set; }
+
+        public string Condition { get; set; }
+
+        public string Specification { get; set; }
+
+        [DisplayName("System Qty")]
         public int SystemQty { get; set; }
 
+        [DisplayName("Physical Qty")]
         public int PhysicalQty { get; set; }
 
+        [DisplayName("Different Qty")]
         public int DifferentQty { get; set; }
 
-        public string Scrap { get; set; }
+        public string Dispose { get; set; }
 
         public string Remarks { get; set; }
+        
+        [DisplayName("Asset ID")]
+        public int AssetID { get; set; }
     }
 }
