@@ -26,6 +26,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         
         bool UpdateHeader(CompensatoryVM header);
 
+        bool CheckRequest(CompensatoryVM header);
+
         void CreateCompensatoryData(int? headerID, CompensatoryVM CompensatoryList);
 
         int CreateHeaderCompensatory(CompensatoryVM CompensatoryList);

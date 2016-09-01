@@ -183,10 +183,16 @@ namespace MCAWebAndAPI.Web.Controllers
             SessionManager.Set("WorkflowItems", viewModel.WorkflowItems);
 
             int? cmpID = null;
+            bool checkdate;
+
+            viewModel.CompensatoryDetails = BindCompensatorylistDateTime(form, viewModel.CompensatoryDetails);
+            checkdate = _service.CheckRequest(viewModel);
+
+            if(checkdate == true)
+                return JsonHelper.GenerateJsonErrorResponse("date is already used at the previous transactions");
 
             try
             {
-                viewModel.CompensatoryDetails = BindCompensatorylistDateTime(form, viewModel.CompensatoryDetails);
                 cmpID = _service.CreateHeaderCompensatory(viewModel);
             }
             catch (Exception e)
@@ -223,6 +229,7 @@ namespace MCAWebAndAPI.Web.Controllers
             var testget = form[""];
 
             int? cmpID = viewModel.cmpID;
+
 
             try
             {
