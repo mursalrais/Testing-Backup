@@ -72,10 +72,6 @@
                 <i class="fa fa-clipboard"></i>
                 Save As Draft
             </button>
-            <button id="cancel-button" class="btn btn-primary">
-                <i class="fa fa-ban"></i>
-                Cancel
-            </button>
         </div>
     </div>
 
@@ -123,13 +119,19 @@
                     rowgrid.each(function (e) {
                         i++;
                         var xdate = $("#Dateid" + i).val();
+                        var xEdit = $("#Editid" + i).val();
                         rowgrid.each(function (e) {
                             j++;
                             var ydate = $("#Dateid" + j).val();
+                            var yEdit = $("#Editid" + j).val();
                             if (i !== j) {
                                 if (xdate != "undifined" && ydate != "undifined") {
-                                    if (xdate == ydate) {
-                                        valdate = false;
+                                    if (xEdit != -1) {
+                                        if (yEdit != -1) {
+                                            if (xdate == ydate) {
+                                                valdate = false;
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -154,13 +156,19 @@
                     rowgrid.each(function (e) {
                         i++;
                         var xdate = $("#Dateid" + i).val();
+                        var xEdit = $("#Editid" + i).val();
                         rowgrid.each(function (e) {
                             j++;
                             var ydate = $("#Dateid" + j).val();
+                            var yEdit = $("#Editid" + j).val();
                             if (i !== j) {
                                 if (xdate != "undifined" && ydate != "undifined") {
-                                    if (xdate == ydate) {
-                                        valdate = false;
+                                    if (xEdit != -1) {
+                                        if (yEdit != -1) {
+                                            if (xdate == ydate) {
+                                                valdate = false;
+                                            }
+                                        }
                                     }
                                 }
                             }

@@ -171,7 +171,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 ViewBag.IsHRView = false;
             }
 
-            //viewmodel.ID = id;
+            //viewmodel.ID = id; c
             return View(viewmodel);
         }
 
@@ -230,7 +230,6 @@ namespace MCAWebAndAPI.Web.Controllers
 
             int? cmpID = viewModel.cmpID;
 
-
             try
             {
                 viewModel.CompensatoryDetails = BindCompensatorylistDateTime(form, viewModel.CompensatoryDetails);
@@ -242,14 +241,8 @@ namespace MCAWebAndAPI.Web.Controllers
                 return RedirectToAction("Index", "Error");
             }
 
-            if (viewModel.StatusForm != "submit")
-            {
-                _service.UpdateHeader(viewModel);
-            } else
-            {
-                _service.SendEmail(SP_TRANSACTION_WORKFLOW_LIST_NAME, SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)cmpID, 1, string.Format(EmailResource.EmailCompensatoryApproval, siteUrl, cmpID));
-            }
-
+            _service.UpdateHeader(viewModel);
+          
             if (viewModel.StatusForm != "Draft")
             {
                 if (viewModel.StatusForm == "")

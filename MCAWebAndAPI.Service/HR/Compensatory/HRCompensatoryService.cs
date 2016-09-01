@@ -594,18 +594,21 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                         continue;
                     }
                        
-                        else if (Item.CheckIfDeleted(viewModel))
+                    else if (Item.CheckIfDeleted(viewModel))
                     {
-                        try
+                        if (viewModel.CmpID != null)
                         {
-                            SPConnector.DeleteListItem(SP_COMDET_LIST_NAME, viewModel.CmpID, _siteUrl);
+                            try
+                            {
+                                SPConnector.DeleteListItem(SP_COMDET_LIST_NAME, viewModel.CmpID, _siteUrl);
+                            }
+                            catch (Exception e)
+                            {
+                                logger.Error(e);
+                                throw e;
+                            }
+                            continue;
                         }
-                        catch (Exception e)
-                        {
-                            logger.Error(e);
-                            throw e;
-                        }
-                        continue;
                     }
                 }
             }
