@@ -176,6 +176,8 @@
     <Compile Include="Finance\EventBudgetService.cs" />
     <Compile Include="Finance\IEventBudgetService.cs" />
     <Compile Include="Finance\IOutstandingAdvanceService.cs" />
+    <Compile Include="Finance\IPettyCashJournalItemService.cs" />
+    <Compile Include="Finance\IPettyCashJournalService.cs" />
     <Compile Include="Finance\IPettyCashPaymentVoucherService.cs" />
     <Compile Include="Finance\IPettyCashReimbursementService.cs" />
     <Compile Include="Finance\IPettyCashReplenishmentService.cs" />
@@ -188,6 +190,8 @@
     <Compile Include="Finance\ITaxExemptionDataService.cs" />
     <Compile Include="Finance\ITaxReimbursementService.cs" />
     <Compile Include="Finance\OutstandingAdvanceService.cs" />
+    <Compile Include="Finance\PettyCashJournalItemService.cs" />
+    <Compile Include="Finance\PettyCashJournalService.cs" />
     <Compile Include="Finance\PettyCashPaymentVoucherService.cs" />
     <Compile Include="Finance\PettyCashReimbursementService.cs" />
     <Compile Include="Finance\PettyCashReplenishmentService.cs" />

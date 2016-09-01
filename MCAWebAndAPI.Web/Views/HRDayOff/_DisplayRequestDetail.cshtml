@@ -17,17 +17,17 @@
                            "<input type='hidden' id='DayOffRequestDetailsDisplay[#= getDayOffRequestDetailsDisplay(data)#].FullHalf' name='DayOffRequestDetailsDisplay[#= getDayOffRequestDetailsDisplay(data)#].FullHalf' value='#= FullHalf #' />"
                          );
 
-        columns.Bound(p => p.RequestStartDate).Width(100).ClientTemplate("#= kendo.toString(RequestStartDate, 'MM/dd/yyyy') #" +
+        columns.Bound(p => p.RequestStartDate).Width(100).ClientTemplate("#= RequestStartDate #" +
     "<input type='hidden' id='DayOffRequestDetailsDisplay[#= getDayOffRequestDetailsDisplay(data)#].RequestStartDate' name='DayOffRequestDetailsDisplay[#= getDayOffRequestDetailsDisplay(data)#].RequestStartDate' value='#= RequestStartDate #' />"
     );
 
-        columns.Bound(p => p.RequestEndDate).Width(80).ClientTemplate("#= kendo.toString(RequestEndDate, 'MM/dd/yyyy') #" +
+        columns.Bound(p => p.RequestEndDate).Width(80).ClientTemplate("#= RequestEndDate #" +
     "<input type='hidden' id='DayOffRequestDetailsDisplay[#= getDayOffRequestDetailsDisplay(data)#].RequestEndDate' name='DayOffRequestDetailsDisplay[#= getDayOffRequestDetailsDisplay(data)#].RequestEndDate' value='#= RequestEndDate #' />"
     );
 
-        //columns.Bound(p => p.Remarks).Width(80).ClientTemplate("#= Remarks #" +
-        //           "<input type='hidden' id='DayOffRequestDetails[#= getDayOffRequestDetails(data)#].Remarks' name='DayOffRequestDetails[#= getDayOffRequestDetails(data)#].Remarks' value='#= Remarks #' />"
-        //         );
+        columns.Bound(p => p.Remarks).Width(80).ClientTemplate("#= Remarks #" +
+    "<input type='hidden' id='DayOffRequestDetailsDisplay[#= getDayOffRequestDetailsDisplay(data)#].Remarks' name='DayOffRequestDetailsDisplay[#= getDayOffRequestDetailsDisplay(data)#].Remarks' value='#= Remarks #' />"
+    );
 
         columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
         "<input type='hidden' name='DayOffRequestDetailsDisplay[#= getDayOffRequestDetailsDisplay(data)#].EditMode' value='#= EditMode #' />"
@@ -51,6 +51,7 @@
         model.Field(m => m.FullHalf).Editable(false);
         model.Field(m => m.RequestStartDate).Editable(false);
         model.Field(m => m.RequestEndDate).Editable(false);
+        model.Field(m => m.Remarks).Editable(false);
     })
     .ServerOperation(false)
     @*.Events(events =>

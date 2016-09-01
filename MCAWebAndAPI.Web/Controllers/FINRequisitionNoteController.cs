@@ -234,7 +234,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
                         itemRNDetail.Activity = new AjaxComboBoxVM() { Value = Convert.ToInt32(eventbudget.Activity.Value), Text = eventbudget.Activity.Text };
                         itemRNDetail.WBS = new AjaxComboBoxVM() { Value = item.WBS.Value, Text = item.WBS.Text };
                         itemRNDetail.GL = new AjaxComboBoxVM() { Value = item.GL.Value, Text = item.GL.Text };
-                        itemRNDetail.Specification = item.Title;
+                        itemRNDetail.Specification = item.Description;
                         itemRNDetail.Quantity = item.Quantity;
                         itemRNDetail.Price = item.UnitPrice;
                         itemRNDetail.EditMode = (int)Item.Mode.CREATED;
@@ -285,7 +285,8 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
         public ActionResult PrintRequisitionNote(FormCollection form, RequisitionNoteVM viewModel)
         {
             string RelativePath = PRINT_PAGE_URL;
-             
+            string domain = "http://" + Request.Url.Authority + "/img/logo.png";
+
             var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl);
             reqNoteService.SetSiteUrl(siteUrl);
             viewModel = reqNoteService.Get(viewModel.ID);
@@ -302,7 +303,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
                 view.View.Render(context, writer);
                 writer.Flush();
                 content = writer.ToString();
-
+                content = content.Replace("{XIMGPATHX}", domain);
                 // Get PDF Bytes
                 try
                 {

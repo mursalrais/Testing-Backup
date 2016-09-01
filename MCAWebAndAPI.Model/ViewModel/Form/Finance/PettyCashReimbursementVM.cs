@@ -33,18 +33,10 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         public PaidToComboboxVM  PaidTo { get; set; } = new PaidToComboboxVM();
 
         [UIHint("AjaxComboBox")]
-        public AjaxComboBoxVM Professional { get; set; }
+        public AjaxComboBoxVM Professional { get; set; } = new AjaxComboBoxVM();
 
         [UIHint("AjaxComboBox")]
-        public AjaxComboBoxVM Vendor { get; set; }
-        //    = new AjaxCascadeComboBoxVM
-        //{
-        //    ControllerName = "xxxx",
-        //    ActionName = "xxxxx",
-        //    ValueField = "ID",
-        //    TextField = "Title",
-        //    OnSelectEventName = "onSelectEventBudgetNo"
-        //};
+        public AjaxComboBoxVM Vendor { get; set; } = new AjaxComboBoxVM();
 
         public string Driver { get; set; }
 
@@ -62,12 +54,16 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         [Required]
         [DisplayName("WBS")]
         [UIHint("AjaxComboBox")]
-        public AjaxComboBoxVM WBS { get; set; } 
+        public AjaxComboBoxVM WBS { get; set; } = new AjaxComboBoxVM();
+
+        public string WBSDescription { get; set; }
 
         [Required]
         [DisplayName("GL")]
         [UIHint("AjaxComboBox")]
-        public AjaxComboBoxVM GL { get; set; } 
+        public AjaxComboBoxVM GL { get; set; } = new AjaxComboBoxVM();
+
+        public string GLDescription { get; set; }
 
         [DisplayName("Amount Reimbursed")]
         public decimal AmountReimbursed { get; set; } = 0;

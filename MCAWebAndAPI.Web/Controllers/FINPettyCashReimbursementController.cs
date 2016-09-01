@@ -58,7 +58,6 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult Print(int? ID=null)
         {
-            ID = 1;
             string RelativePath = PrintPageUrl;
 
             var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl)?? ConfigResource.DefaultBOSiteUrl;
@@ -182,15 +181,16 @@ namespace MCAWebAndAPI.Web.Controllers
 
         private void SetAdditionalSettingToViewModel(ref PettyCashReimbursementVM viewModel)
         {
-            viewModel.PaidTo = new PaidToComboboxVM();
             viewModel.PaidTo.OnSelectEventName = PaidTo_EventName;
+            viewModel.PaidTo.Value = viewModel.PaidTo.Value;
 
             viewModel.Vendor = new AjaxCascadeComboBoxVM
             {
                 ControllerName = PettyCashReimbursement_ControllerName,
                 ActionName = Vendor_ActionName,
                 ValueField = ValueField,
-                TextField = TextField
+                TextField = TextField,
+                Value = viewModel.Vendor.Value
             };
 
             viewModel.Professional = new AjaxComboBoxVM
@@ -198,7 +198,8 @@ namespace MCAWebAndAPI.Web.Controllers
                 ControllerName = PettyCashReimbursement_ControllerName,
                 ActionName = Professional_ActionName,
                 ValueField = ValueField,
-                TextField = TextField
+                TextField = TextField,
+                Value = viewModel.Professional.Value
             };
 
             viewModel.WBS = new AjaxComboBoxVM
@@ -206,7 +207,8 @@ namespace MCAWebAndAPI.Web.Controllers
                 ControllerName = PettyCashReimbursement_ControllerName,
                 ActionName = WBS_ActionName,
                 ValueField = ValueField,
-                TextField = TextField
+                TextField = TextField,
+                Value = viewModel.WBS.Value
             };
 
             viewModel.GL = new AjaxCascadeComboBoxVM
@@ -214,7 +216,8 @@ namespace MCAWebAndAPI.Web.Controllers
                 ControllerName = PettyCashReimbursement_ControllerName,
                 ActionName = GL_ActionName,
                 ValueField = ValueField,
-                TextField = TextField
+                TextField = TextField,
+                Value = viewModel.GL.Value
             };
 
         }

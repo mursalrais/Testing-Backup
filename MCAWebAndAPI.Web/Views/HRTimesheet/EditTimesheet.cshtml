@@ -115,61 +115,66 @@
 
             <legend>Add Working Day</legend>
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-sm-12">
                     @using (Ajax.BeginForm("", "HRTimesheet", new AjaxOptions
                     {
                         OnComplete = "onCompleteAddTimesheet"
-                    }, new {id = "FormAddTimesheet"}))
+                    }, new { id = "FormAddTimesheet" }))
                     {
-                        <div class="form-group">
-                            @Html.HiddenFor(m => m.LocationID)
-                            @Html.HiddenFor(m => m.LocationName)
-                            @Html.Bootstrap().LabelFor(m => m.From).Class("col-sm-4 control-label")
-                            <div class="col-sm-8">
-                                @(Html.Kendo().DatePicker()
-                                      .Name("From")
-                                      .Value(DateTime.Today.AddDays(-7))
-                                      .Max(DateTime.Today)
-                                      .Events(e => e.Change("startChange"))
-                                      .HtmlAttributes(new {@class = "form-control", style = "width: 100%"})
-                                      )
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                @Html.HiddenFor(m => m.LocationID)
+                                @Html.HiddenFor(m => m.LocationName)
+                                @Html.Bootstrap().LabelFor(m => m.From).Class("col-sm-4 control-label")
+                                <div class="col-sm-8">
+                                    @(Html.Kendo().DatePicker()
+                                          .Name("From")
+                                          .Value(DateTime.Today.AddDays(-7))
+                                          .Max(DateTime.Today)
+                                          .Events(e => e.Change("startChange"))
+                                          .HtmlAttributes(new {@class = "form-control", style = "width: 100%"})
+                                          )
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.Bootstrap().LabelFor(m => m.To).Class("col-sm-4 control-label")
+                                <div class="col-sm-8">
+                                    @(Html.Kendo().DatePicker()
+                                          .Name("To")
+                                          .Value(DateTime.Today)
+                                          .Min(DateTime.Today.AddDays(-31))
+                                          .Max(DateTime.Today)
+                                          .Events(e => e.Change("endChange"))
+                                          .HtmlAttributes(new {@class = "form-control", style = "width: 100%"})
+                                          )
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.Bootstrap().LabelFor(m => m.Location).Class("col-sm-4 control-label")
+                                <div class="col-sm-8">
+                                    @Html.EditorFor(m => m.Location)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.Bootstrap().LabelFor(m => m.IsFullDay).Class("col-sm-4 control-label")
+                                <div class="col-sm-8">
+                                    @Html.EditorFor(m => m.IsFullDay)
+                                </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            @Html.Bootstrap().LabelFor(m => m.To).Class("col-sm-4 control-label")
-                            <div class="col-sm-8">
-                                @(Html.Kendo().DatePicker()
-                                      .Name("To")
-                                      .Value(DateTime.Today)
-                                      .Min(DateTime.Today.AddDays(-31))
-                                      .Max(DateTime.Today)
-                                      .Events(e => e.Change("endChange"))
-                                      .HtmlAttributes(new {@class = "form-control", style = "width: 100%"})
-                                      )
-                            </div>
+                        <div class="col-sm-6">&nbsp;</div>
+                        <div  class="col-sm-12">
+                        <div class="wrpTime" align="center">
+                            &nbsp;<button id="submit-button-add-timesheet" class="btn btn-primary pull-right" type="submit">Add Working Day</button>&nbsp;
+                            &nbsp;<button id="delete-button-all" class="btn btn-primary pull-right" type="submit">Delete All Working Day</button>&nbsp;
+                            &nbsp; <button id="delete-button-selected" class="btn btn-primary pull-right" type="submit">Delete Selected Working Day</button>&nbsp;
                         </div>
-                        <div class="form-group">
-                            @Html.Bootstrap().LabelFor(m => m.Location).Class("col-sm-4 control-label")
-                            <div class="col-sm-8">
-                                @Html.EditorFor(m => m.Location)
-                            </div>
+                           
                         </div>
-                        <div class="form-group">
-                            @Html.Bootstrap().LabelFor(m => m.IsFullDay).Class("col-sm-4 control-label")
-                            <div class="col-sm-8">
-                                @Html.EditorFor(m => m.IsFullDay)
-                            </div>
-                        </div>
-                     
-                            <div class="row">
-                                &nbsp;<button id="submit-button-add-timesheet" class="btn btn-primary pull-right" type="submit">Add Working Day</button>&nbsp;
-                                &nbsp;<button id="delete-button-all" class="btn btn-primary pull-right" type="submit">Delete All Working Day</button>&nbsp;
-                                &nbsp; <button id="delete-button-selected" class="btn btn-primary pull-right" type="submit">Delete Selected Working Day</button>&nbsp;
-                            </div>
                        
                     }
                         </div>
-                <div class="col-sm-6"></div>
+               
             </div>
 
 
@@ -203,6 +208,13 @@
 
     </div> 
 
+<style type="text/css">
+        .wrpTime {
+        width: 100%;
+        align-content: center;
+
+    }
+</style>
 
 
 @section scripts{

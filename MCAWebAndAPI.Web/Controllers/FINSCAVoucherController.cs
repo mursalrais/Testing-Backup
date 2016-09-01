@@ -142,6 +142,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
         public ActionResult Print(int? ID, string userAccess = null)
         {
             ViewBag.SubTitle = SubTitle;
+            string domain = "http://" + Request.Url.Authority + "/img/logo.png";
 
             var siteUrl = SessionManager.Get<string>(SiteUrl);
             service.SetSiteUrl(siteUrl);
@@ -163,7 +164,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
                 view.View.Render(context, writer);
                 writer.Flush();
                 content = writer.ToString();
-
+                content = content.Replace("{XIMGPATHX}", domain);
                 // Get PDF Bytes
                 try
                 {

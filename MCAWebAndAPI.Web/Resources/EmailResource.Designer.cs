@@ -397,6 +397,17 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dear Mr./Mrs. HR Officer,
+        ///
+        ///There is a PSA with number {0} that already active start from today. Here is the URL that you can click to make redirect to edit page for change PSA Status from inactive to active.
+        /// </summary>
+        public static string PSAChangeStatus {
+            get {
+                return ResourceManager.GetString("PSAChangeStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;p&gt;
         ///    &lt;strong&gt;Dear Approver&lt;/strong&gt;
         ///&lt;/p&gt;

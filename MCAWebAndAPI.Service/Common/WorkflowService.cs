@@ -294,8 +294,9 @@ namespace MCAWebAndAPI.Service.Common
             var updatedValue = new Dictionary<string, object>();
             updatedValue.Add(transactionLookupColumnName, new FieldLookupValue { LookupId = headerID });
             updatedValue.Add("approverlevel", workflowItem.Level);
-            updatedValue.Add("approver0", GetApproverUserLogin((int)workflowItem.ApproverUserName.Value));
-            updatedValue.Add("requestor0", requestor);
+            updatedValue.Add("position", workflowItem.ApproverPositionId);
+            updatedValue.Add("projectunit", workflowItem.ApproverUnitText);
+            updatedValue.Add("approvername", workflowItem.ApproverName.Value);
             SPConnector.AddListItem(workflowTransactionListName, updatedValue, _siteUrl);
         }
 

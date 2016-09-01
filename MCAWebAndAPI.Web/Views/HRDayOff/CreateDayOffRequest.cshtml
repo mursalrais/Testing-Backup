@@ -104,6 +104,7 @@
             var dayOffRequestStarDate = [];
             var dayOffRequestEndDate = [];
             var dayOffRequestFullOrHalf = [];
+            var dayOffRequestRemarks = [];
 
             var rowgridBalanceDetail = $("#DayOffBalanceDetails").data("kendoGrid").tbody.find("tr");
             var j = 0;
@@ -180,10 +181,136 @@
             rowgrid.each(function (e) {
 
                 var startRequestDate = $("#DayOffRequestDetails").data("kendoGrid").dataSource.data()[i].RequestStartDate;
+                var dateStartRequestDate = startRequestDate.getDate();
+                var monthStartRequestDate = startRequestDate.getMonth() + 1;
+                var yearStartRequestDate = startRequestDate.getFullYear();
+                var strStartRequestDate = monthStartRequestDate + '/' + dateStartRequestDate + '/' + yearStartRequestDate;
+
                 var endRequestDate = $("#DayOffRequestDetails").data("kendoGrid").dataSource.data()[i].RequestEndDate;
+                var dateEndRequestDate = endRequestDate.getDate();
+                var monthEndRequestDate = endRequestDate.getMonth() + 1;
+                var yearEndRequestDate = endRequestDate.getFullYear();
+                var strEndRequestDate = monthEndRequestDate + '/' + dateEndRequestDate + '/' + yearEndRequestDate;
 
                 var masterDayOffTypeValue = $("#DayOffRequestDetails").data("kendoGrid").dataSource.data()[i].MasterDayOffType.Value;
+
+                if (masterDayOffTypeValue == "1")
+                {
+                    var textMasterDayOffTypeValue = "Annual Day-Off";
+                    var woStrMasterDayOffType = textMasterDayOffTypeValue.replace(/\s/g, '');
+                }
+                else if (masterDayOffTypeValue == "3")
+                {
+                    var textMasterDayOffTypeValue = "Sick Day-Off";
+                    var woStrMasterDayOffType = textMasterDayOffTypeValue.replace(/\s/g, '');
+                }
+                else if (masterDayOffTypeValue == "7")
+                {
+                    var textMasterDayOffTypeValue = "Special Day-Off";
+                    var woStrMasterDayOffType = textMasterDayOffTypeValue.replace(/\s/g, '');
+                }
+                else if (masterDayOffTypeValue == "24")
+                {
+                    var textMasterDayOffTypeValue = "Unpaid Day-Off";
+                    var woStrMasterDayOffType = textMasterDayOffTypeValue.replace(/\s/g, '');
+                }
+                else if (masterDayOffTypeValue == "24")
+                {
+                    var textMasterDayOffTypeValue = "Unpaid Day-Off";
+                    var woStrMasterDayOffType = textMasterDayOffTypeValue.replace(/\s/g, '');
+                }
+                else if (masterDayOffTypeValue == "8")
+                {
+                    var textMasterDayOffTypeValue = "Compensatory Time";
+                    var woStrMasterDayOffType = textMasterDayOffTypeValue.replace(/\s/g, '');
+                }
+                else if (masterDayOffTypeValue == "8")
+                {
+                    var textMasterDayOffTypeValue = "Compensatory Time";
+                    var woStrMasterDayOffType = textMasterDayOffTypeValue.replace(/\s/g, '');
+                }
+                else if (masterDayOffTypeValue == "9")
+                {
+                    var textMasterDayOffTypeValue = "Maternity";
+                    var woStrMasterDayOffType = textMasterDayOffTypeValue.replace(/\s/g, '');
+                }
+                else if (masterDayOffTypeValue == "11")
+                {
+                    var textMasterDayOffTypeValue = "Miscarriage";
+                    var woStrMasterDayOffType = textMasterDayOffTypeValue.replace(/\s/g, '');
+                }
+                else if (masterDayOffTypeValue == "10")
+                {
+                    var textMasterDayOffTypeValue = "Paternity";
+                    var woStrMasterDayOffType = textMasterDayOffTypeValue.replace(/\s/g, '');
+                }
+                else if (masterDayOffTypeValue == "10")
+                {
+                    var textMasterDayOffTypeValue = "Paternity";
+                    var woStrMasterDayOffType = textMasterDayOffTypeValue.replace(/\s/g, '');
+                }
+                else if (masterDayOffTypeValue == "12")
+                {
+                    var textMasterDayOffTypeValue = "Marriage of the Professional";
+                    var woStrMasterDayOffType = textMasterDayOffTypeValue.replace(/\s/g, '');
+                }
+                else if (masterDayOffTypeValue == "13")
+                {
+                    var textMasterDayOffTypeValue = "Marriage of the Professional's Children";
+                    var woStrMasterDayOffType = textMasterDayOffTypeValue.replace(/\s/g, '');
+                }
+                else if (masterDayOffTypeValue == "14")
+                {
+                    var textMasterDayOffTypeValue = "Circumcision of the Professional's Sons";
+                    var woStrMasterDayOffType = textMasterDayOffTypeValue.replace(/\s/g, '');
+                }
+                else if (masterDayOffTypeValue == "15")
+                {
+                    var textMasterDayOffTypeValue = "Baptism of the Professional's Children";
+                    var woStrMasterDayOffType = textMasterDayOffTypeValue.replace(/\s/g, '');
+                }
+                else if (masterDayOffTypeValue == "16")
+                {
+                    var textMasterDayOffTypeValue = "Death of the Professional’s dependent (i.e. spouse or children) or parent or parent in-laws";
+                    var woStrMasterDayOffType = textMasterDayOffTypeValue.replace(/\s/g, '');
+                }
+                else if (masterDayOffTypeValue == "17")
+                {
+                    var textMasterDayOffTypeValue = "Death of a member of the Professional’s household other than the Professional’s dependent or parent";
+                    var woStrMasterDayOffType = textMasterDayOffTypeValue.replace(/\s/g, '');
+                }
+                else if (masterDayOffTypeValue == "18")
+                {
+                    var textMasterDayOffTypeValue = "Professional’s separation date is on or after 19 of the month";
+                    var woStrMasterDayOffType = textMasterDayOffTypeValue.replace(/\s/g, '');
+                }
+                else if (masterDayOffTypeValue == "19")
+                {
+                    var textMasterDayOffTypeValue = "Unscheduled closing of MCA-Indonesia office(s)";
+                    var woStrMasterDayOffType = textMasterDayOffTypeValue.replace(/\s/g, '');
+                }
+                else if (masterDayOffTypeValue == "20")
+                {
+                    var textMasterDayOffTypeValue = "Voting Day";
+                    var woStrMasterDayOffType = textMasterDayOffTypeValue.replace(/\s/g, '');
+                }
+                else if (masterDayOffTypeValue == "21")
+                {
+                    var textMasterDayOffTypeValue = "Service as  a court witness";
+                    var woStrMasterDayOffType = textMasterDayOffTypeValue.replace(/\s/g, '');
+                }
+                else if (masterDayOffTypeValue == "22")
+                {
+                    var textMasterDayOffTypeValue = "Other";
+                    var woStrMasterDayOffType = textMasterDayOffTypeValue.replace(/\s/g, '');
+                }
+
+
                 var fullHalfDay = $("#DayOffRequestDetails").data("kendoGrid").dataSource.data()[i].FullHalf.Text;
+                var woStrFullHalfDay = fullHalfDay.replace(/\s/g, '');
+
+                var remarks = $("#DayOffRequestDetails").data("kendoGrid").dataSource.data()[i].Remarks;
+                var woStrRemarks = remarks.replace(/\s/g, '');
 
                 var dateStartRequestDate = new Date(startRequestDate);
                 var dateDateStartRequestDate = dateStartRequestDate.getDate();
@@ -260,19 +387,12 @@
                         }
                         else
                         {
-                            dayOffRequestDayOffType.push(masterDayOffTypeValue);
-                            dayOffRequestStarDate.push(startRequestDate);
-                            dayOffRequestEndDate.push(endRequestDate);
-                            dayOffRequestFullOrHalf.push(fullHalfDay);
+                            dayOffRequestDayOffType.push(woStrMasterDayOffType);
+                            dayOffRequestStarDate.push(strStartRequestDate);
+                            dayOffRequestEndDate.push(strEndRequestDate);
+                            dayOffRequestFullOrHalf.push(woStrFullHalfDay);
+                            dayOffRequestRemarks.push(woStrRemarks);
 
-                            console.log("Day-Off Type: " + dayOffRequestDayOffType);
-                            console.log("Request Start: " + dayOffRequestStarDate);
-                            console.log("Request End: " + dayOffRequestEndDate);
-                            console.log("Full Or Half: " + dayOffRequestFullOrHalf);
-
-                            //dayOffRequestData.push({ dayOffType: masterDayOffTypeValue, startDate: stringDateStartRequestDate, endDate: stringDateEndRequestDate, fullOrHalf: fullHalfDay });
-
-                            //console.log(dayOffRequestData);
                         }
                     }
                     else if (masterDayOffTypeValue == "7")
@@ -627,44 +747,26 @@
                 i++;
             });
 
-            if ((dayOffRequestDayOffType != null) && (dayOffRequestStarDate != null) && (dayOffRequestEndDate != null) && (dayOffRequestFullOrHalf != null))
+            if ((dayOffRequestDayOffType != null) && (dayOffRequestStarDate != null) && (dayOffRequestEndDate != null) && (dayOffRequestFullOrHalf != null) && (dayOffRequestRemarks != null))
             {
-                displayRequestDetail("request - detail - display", dayOffRequestDayOffType, dayOffRequestStarDate, dayOffRequestEndDate, dayOffRequestFullOrHalf)
+                displayRequestDetail("request-detail-display", dayOffRequestDayOffType, dayOffRequestStarDate, dayOffRequestEndDate, dayOffRequestFullOrHalf, dayOffRequestRemarks)
             }
         
         }
 
-        function displayRequestDetail(domID, dayOffRequestDayOffType, dayOffRequestStarDate, dayOffRequestEndDate, dayOffRequestFullOrHalf)
+        function displayRequestDetail(domID, dayOffRequestDayOffType, dayOffRequestStarDate, dayOffRequestEndDate, dayOffRequestFullOrHalf, dayOffRequestRemarks)
         {
-            //dayOffRequestData.forEach(displayRequest);
+            var url = "/HRDayOff/DisplayRequestDetail/?dayOffRequestDayOffType=" + dayOffRequestDayOffType + "&dayOffRequestStarDate=" + dayOffRequestStarDate + "&dayOffRequestEndDate=" + dayOffRequestEndDate + "&dayOffRequestFullOrHalf=" + dayOffRequestFullOrHalf + "&dayOffRequestRemarks=" + dayOffRequestRemarks;
+            $('#' + domID).load(url);
 
-            //console.log("Day-Off Type: " + dayOffType);
+            console.log(url)
+        }
 
-            //checkArrayMember(dayOffType.length);
-
-            console.log("dayOffRequestDayOffType: " + dayOffRequestDayOffType);
-            console.log("dayOffRequestStarDate: " + dayOffRequestStarDate);
-            console.log("dayOffRequestEndDate: " + dayOffRequestEndDate);
-            console.log("dayOffRequestFullOrHalf: " + dayOffRequestFullOrHalf);
-
-            var url = "/HRDayOff/DisplayRequestDetail/?dayOffRequestDayOffType=" + dayOffRequestDayOffType + "&dayOffRequestStarDate=" + dayOffRequestStarDate + "&dayOffRequestEndDate=" + dayOffRequestEndDate + "&dayOffRequestFullOrHalf=" + dayOffRequestFullOrHalf;
-            
+        function testfungsi(domID, masterDayOffTypeValue)
+        {
+            var url = "/HRDayOff/TestAction/?masterDayOffTypeValue=" + masterDayOffTypeValue;
             $('#' + domID).load(url);
         }
-
-        function testfungsi(masterDayOffTypeValue)
-        {
-            var url = "/HRDayOff/TestAction/?dayOffType=" + masterDayOffTypeValue;
-            //$('#' + domID).load(url);
-        }
-
-        //function displayRequest(requestData)
-        //{
-        //    dayOffType.push = requestData.dayOffType;
-        //    startDate.push = requestData.startDate;
-        //    endDate.push = requestData.endDate;
-        //    fullOrHalf.push = requestData.fullOrHalf;
-        //}
 
         function checkThreeMonth(dateRequestStartDate, dateRequestEndDate)
         {
