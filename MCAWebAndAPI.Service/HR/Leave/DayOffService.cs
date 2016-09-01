@@ -262,6 +262,9 @@ namespace MCAWebAndAPI.Service.HR.Leave
         {
             var dayOffRequestDetailDisplay = new DayOffRequestDetailDisplayVM();
 
+            dayOffType.IndexOf(",");
+
+
             dayOffRequestDetailDisplay.DayOffType = Convert.ToString(dayOffType);
             dayOffRequestDetailDisplay.RequestStartDate = Convert.ToString(startDate);
             dayOffRequestDetailDisplay.RequestEndDate = Convert.ToString(endDate);
