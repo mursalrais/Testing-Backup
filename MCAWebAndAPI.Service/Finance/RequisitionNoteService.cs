@@ -155,7 +155,9 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
             updatedValue.Add(FIELD_REQUISITION_FUND, viewModel.Fund);
             updatedValue.Add(FIELD_REQUISITION_CURRENCY, viewModel.Currency.Value);
             updatedValue.Add(FIELD_REQUISITION_TOTAL, viewModel.Total);
-            updatedValue.Add(FIELD_TITLE, DocumentNumbering.Create(_siteUrl, documentNoFormat, 5));
+            string docNO = DocumentNumbering.Create(_siteUrl, documentNoFormat, 5);
+            updatedValue.Add(FIELD_TITLE, docNO);
+            viewModel.Title = docNO;
 
             try
             {

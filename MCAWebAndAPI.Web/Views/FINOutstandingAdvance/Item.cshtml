@@ -13,6 +13,7 @@
     FormMethod.Post,
     new
     {
+        @id= "formOA",
         @class = "form-horizontal",
         enctype = "multipart/form-data"
     }))
@@ -22,6 +23,7 @@
         <div class="row">
             <div class="col-sm-6">
                 @Html.HiddenFor(m => m.ID)
+                @Html.HiddenFor(m => m.Operation)
             </div>
         </div>
         <div class="row">
@@ -36,6 +38,8 @@
                     @Html.Bootstrap().LabelFor(m => m.Staff).Class("col-sm-3 control-label")
                     <div class="col-sm-8">
                         @Html.EditorFor(m => m.Staff)
+                        @Html.Hidden("StaffDescription")
+                        <span id="txtStaffRole" class="custom-validation"></span>
                     </div>
                 </div>
                 <div class="form-group">
@@ -85,6 +89,26 @@
                         @Html.EditorFor(m => m.Documents)
                     </div>
                 </div>
+
+                @if (!string.IsNullOrWhiteSpace(Model.DocumentUrl))
+                {
+                    <div class="form-group">
+                        <div class="form-group">
+                            @Html.Bootstrap().LabelFor(m => m).Class("col-sm-3 control-label")
+                            <div class="col-sm-8">
+                                <button id="application-document-button" class="btn btn-default" type="button">
+                                    Click Here to go to Outstanding Advance Documents
+                                </button>
+                            </div>
+                        </div>
+                        <script>
+                            $('#application-document-button').click(function () {
+                                parent.postMessage({
+                                    result : "Success", urlToRedirect : "@Model.DocumentUrl" }, "@Model.DocumentUrl" );
+                            });
+                        </script>
+                    </div>
+                }
             </div>
         </div>
     </fieldset>
@@ -133,7 +157,37 @@
             $("#DateOfUpload").kendoDatePicker({
                 format: "mm/dd/yyyy"
             });
-
+            $("#formOA").on('submit', function () {
+                if ($("#Staff_Value").val() == -1) {
+                    $("#txtStaffRole").html("The Staff field is required.");
+                    return false;
+                } else {
+                    var firstIDStaff = $("#StaffDescription").val().charAt(0);
+                    var currency = $("#Currency_Value").val();
+                    var idr = "IDR";
+                    var usd = "USD";
+                    if ((firstIDStaff == 1 || firstIDStaff == 5) && currency != idr) {
+                        alert("The currency for Professional & IC must be in IDR.");
+                        return false;
+                    } else if (firstIDStaff == 4 && currency != usd) {
+                        alert("The currency for Grantee must be in USD.");
+                        return false;
+                    }
+                }
+                return true;
+            });
         });
+
+        function OnSelectStaff(e) {
+            var data = this.dataItem(e.item);
+            $("#StaffDescription").val(data.Text)
+            $("#txtStaffRole").html("");
+        }
     </script>
 }
+
+<style>
+    .custom-validation{
+        color:#b94a48; font-size:85%; display:block;margin-top: 6px;
+    }
+</style>

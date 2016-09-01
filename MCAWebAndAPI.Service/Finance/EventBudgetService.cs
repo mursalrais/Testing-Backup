@@ -62,6 +62,7 @@ namespace MCAWebAndAPI.Service.Finance
         private const string EventBudgetItemFieldName_Description = "Title";
 
         private const string EventBudgetDocuments_EventBudgetId = "Event_x0020_Budget";
+        private const string FINEventBudgetDocumentByID = "{0}/Event%20Budget%20Documents/Forms/AllItems.aspx#InplviewHash5093bda1-84bf-4cad-8652-286653d6a83f=FilterField1%3Dpsa%255Fx003a%255FID-FilterValue1%3D{1}";
 
         //</ViewFields>
         private const string DocumentNoMask = "EB/{0}-{1}/";
@@ -347,7 +348,7 @@ namespace MCAWebAndAPI.Service.Finance
 
             if (eventBudget.Rate > 0)
             {
-                eventBudget.TotalDirectPayment = eventBudget.TotalDirectPayment / eventBudget.Rate;
+                eventBudget.TotalDirectPaymentUSD = eventBudget.TotalDirectPayment / eventBudget.Rate;
                 eventBudget.TotalSCAUSD = eventBudget.TotalSCA / eventBudget.Rate;
             }
 
@@ -398,7 +399,7 @@ namespace MCAWebAndAPI.Service.Finance
 
         private string GetDocumentUrl(string siteUrl, int? iD)
         {
-            return string.Format(UrlResource.PettyCashPaymentVoucherDocumentByID, siteUrl, iD);
+            return string.Format(FINEventBudgetDocumentByID, siteUrl, iD);
         }
 
         public async Task UpdateRequisitionNoteAsync(string siteUrl = null, int id = 0)

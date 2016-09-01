@@ -30,12 +30,13 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult Item(string siteUrl = null, string op = null, int? id = null)
         {
+
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);
             SessionManager.Set(SessionSiteUrl, siteUrl);
 
             var viewModel = service.Get(GetOperation(op), id);
-
+            
             return View(viewModel);
         }
 
@@ -47,11 +48,10 @@ namespace MCAWebAndAPI.Web.Controllers
 
             try
             {
-                var listVendor = service.Get();
                 int? id = service.Save(viewModel);
                 Task createApplicationDocumentTask = service.SaveAttachmentAsync(id, viewModel.Reference, viewModel.Documents);
-                Task sendEmailToProfessional = service.SendEmailToProfessional(EmailResource.ProfessionalEmailOutstandingAdvance, viewModel, listVendor);
-                Task sendEmailToGrantees = service.SendEmailToGrantees(EmailResource.GranteesEmailOutstandingAdvance, viewModel, listVendor);
+                Task sendEmailToProfessional = service.SendEmailToProfessional(EmailResource.ProfessionalEmailOutstandingAdvance, viewModel);
+                Task sendEmailToGrantees = service.SendEmailToGrantees(EmailResource.GranteesEmailOutstandingAdvance, viewModel);
                 Task allTasks = Task.WhenAll(createApplicationDocumentTask,sendEmailToProfessional,sendEmailToGrantees);
 
                 await allTasks;
