@@ -1121,6 +1121,7 @@
     <Content Include="Views\FINSCASettlement\Print.cshtml" />
     <Content Include="Views\FINSCASettlement\_ItemDetails.cshtml" />
     <Content Include="Views\HRTimesheet\NotAuthorized.cshtml" />
+    <Content Include="Views\HRTimesheet\ViewProfessional.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
