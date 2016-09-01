@@ -4,18 +4,18 @@
 
 @model AssetReplacementHeaderVM
 
-@using (Ajax.BeginForm("Update", "ASSAssetReplacement",
-                                                                                                                                                                                       FormMethod.Post,
-                                                                                                                                                                                       new AjaxOptions
-                                                                                                                                                                                       {
-                                                                                                                                                                                           OnBegin = "onBeginForm",
-                                                                                                                                                                                           OnComplete = "onCompleteForm",
-                                                                                                                                                                                           OnSuccess = "onSuccessFormEmbed",
-                                                                                                                                                                                           OnFailure = "onFailureForm"
-                                                                                                                                                                                       }, new { @class = "form-horizontal" }))
+@using (Ajax.BeginForm("Submit", "ASSAssetReplacement",
+                                                                                                                                                                           FormMethod.Post,
+                                                                                                                                                                           new AjaxOptions
+                                                                                                                                                                           {
+                                                                                                                                                                               OnBegin = "onBeginForm",
+                                                                                                                                                                               OnComplete = "onCompleteForm",
+                                                                                                                                                                               OnSuccess = "onSuccessFormEmbed",
+                                                                                                                                                                               OnFailure = "onFailureForm"
+                                                                                                                                                                           }, new { @class = "form-horizontal" }))
 
 {
-    <form class="form-horizontal" method="post" action="/ASSAssetReplacement/Update" id="create-asset-acquisition-form">
+    <form class="form-horizontal" method="post" action="/ASSAssetReplacement/Submit" id="create-asset-acquisition-form">
         <fieldset>
             <legend>Form Asset Replacement</legend>
             <div class="col-md-6">
@@ -29,7 +29,7 @@
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.OldTransactionId).Class("col-md-4 control-label")
                     <div class="col-md-8">
-                        @Html.DisplayFor(m => m.OldTransactionId)
+                        @Html.EditorFor(m => m.OldTransactionId)
                     </div>
                 </div>
                 <div class="form-group">
@@ -69,6 +69,12 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-6" id="myProgress">
+                <div class="form-group" id="myBar">
+                    <div id="label">10%...</div>
+                </div>
+            </div>
+            <br />
             <div>
                 @Html.Partial("_Details", Model.Details)
             </div>
@@ -92,18 +98,66 @@
     </form>
 }
 
+<style>
+    #myProgress {
+        position: relative;
+        width: 100%;
+        height: 30px;
+        background-color: #ddd;
+    }
+
+    #myBar {
+        position: absolute;
+        width: 10%;
+        height: 100%;
+        background-color: #4CAF50;
+    }
+
+    #label {
+        text-align: center;
+        line-height: 30px;
+        color: white;
+    }
+</style>
 
 <script>
     $(document).ready(function () {
+        $("#myProgress").hide();
+        $('#PurchaseDate').prop('value', "")
+        $('#status').prop('value', "")
+        //var status = document.getElementsByClassName("status");
+        //$("#OldTransactionId_Value").data("kendoDropDownList").value("");
     })
 
     function onIdChange(e) {
         var res = this.dataItem(e.item);
-        alert("Changin..." + res);
+        alert("Changing..." + res);
         var link = $("#CancelURL").val().split('/');
         link = link[0] + "//" + link[2] + "/" + link[3] + "/" + link[4] + "/" + link[5];
         //alert(link);
         var url = "/ASSAssetReplacement/Create?SiteUrl=" + link + "&id=" + res;
+        move();
         window.location = url;
+    }
+
+    function move() {
+        var elem = document.getElementById("myBar");
+        var width = 20;
+        var id = setInterval(frame, 2);
+        function frame() {
+            if (width >= 100) {
+                clearInterval(id);
+            } else {
+                width++;
+                elem.style.width = width + '%';
+                if (width < 100) {
+                    document.getElementById("label").innerHTML = width * 1 + '%...';
+                }
+                else {
+                    document.getElementById("label").innerHTML = width * 1 + '%';
+                }
+
+            }
+        }
     }
 </script>

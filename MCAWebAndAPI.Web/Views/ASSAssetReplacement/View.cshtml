@@ -70,7 +70,7 @@
                 </div>
             </div>
             <div>
-                @Html.Partial("_Details", Model.Details)
+                @Html.Partial("_DetailsView", Model.Details)
             </div>
         </fieldset>
         @Html.HiddenFor(m => m.Id)
@@ -82,7 +82,6 @@
         @Html.HiddenFor(m => m.OldTransactionId.Value)
         <div>
             <center>
-                <input class="k-button k-button-icontext k-grid-add" onclick="return SimpenAsset()" type="submit" value="Save" />
                 <a href="@Model.CancelURL" target='_parent'>
                     <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
                 </a>

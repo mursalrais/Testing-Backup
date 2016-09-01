@@ -1138,6 +1138,11 @@
     <Content Include="Views\ASSAssetLoanAndReturn\_AssetLoanAndReturnItem.cshtml" />
     <Content Include="Views\ASSAssetLoanAndReturn\Edit.cshtml" />
     <Content Include="Views\ASSAssetDisposal\Edit.cshtml" />
+    <Content Include="Views\ASSAssetReplacement\_Details.cshtml" />
+    <Content Include="Views\ASSAssetReplacement\GetAll.cshtml" />
+    <Content Include="Views\ASSAssetReplacement\Sync.cshtml" />
+    <Content Include="Views\ASSAssetReplacement\View.cshtml" />
+    <Content Include="Views\ASSAssetReplacement\_DetailsView.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -17,19 +17,26 @@
 {
     <form class="form-horizontal" method="post" action="/ASSAssetReplacement/Submit" id="create-asset-acquisition-form">
         <fieldset>
-            <legend>Form Asset Acquisition</legend>
+            <legend>Form Asset Replacement</legend>
             <div class="col-md-6">
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.TransactionType).Class("col-md-4 control-label")
                     <div class="col-md-8">
                         @*@Html.DisplayFor(m => m.TransactionType)*@
-                        <input type="text" name="TransactionType" disabled value="Asset Acquisition" id="TransactionType" style="width: 100%;" />
+                        <input type="text" name="TransactionType" disabled value="Asset Replacement" id="TransactionType" style="width: 100%;" />
                     </div>
                 </div>
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.OldTransactionId).Class("col-md-4 control-label")
                     <div class="col-md-8">
                         @Html.EditorFor(m => m.OldTransactionId)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.AccMemoNo).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @*@Html.DisplayFor(m => m.TransactionType)*@
+                        <input type="text" name="AccMemoNo" disabled id="AccMemoNo" style="width: 100%;" />
                     </div>
                 </div>
                 <div class="form-group">
@@ -52,28 +59,33 @@
                     @Html.Bootstrap().LabelFor(m => m.PurchaseDate).Class("col-md-4 control-label")
                     <div class="col-md-8">
                         @*@Html.DisplayFor(m => m.PurchaseDate)*@
-                        <input type="text" name="PurchaseDate" disabled  id="PurchaseDate" style="width: 100%;" />
+                        <input type="text" name="PurchaseDate" disabled value="@Model.PurchaseDate" id="PurchaseDate" style="width: 100%;" />
                     </div>
                 </div>
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.purchaseDescription).Class("col-md-4 control-label")
                     <div class="col-md-8">
                         @*@Html.EditorFor(m => m.PurchaseDescription)*@
-                        <input type="text" disabled name="PurchaseDescription" id="PurchaseDescription" style="width: 100%;" />
+                        <input type="text" disabled name="PurchaseDescription" value="@Model.purchaseDescription" id="PurchaseDescription" style="width: 100%;" />
                     </div>
                 </div>
             </div>
-            <div>
-                @Html.Partial("_Details", Model.Details)
+            <div class="col-md-6" id="myProgress">
+                <div class="form-group" id="myBar">
+                    <div id="label">10%...</div>
+                </div>
             </div>
+            <br />
         </fieldset>
         @Html.HiddenFor(m => m.Id)
         @Html.HiddenFor(m => m.CancelURL)
         @Html.HiddenFor(m => m.Vendor)
+        @Html.HiddenFor(m => m.AccMemoNo)
         @Html.HiddenFor(m => m.Pono)
+        @Html.HiddenFor(m => m.purchaseDescription)
+        @Html.HiddenFor(m => m.OldTransactionId.Value)
         <div>
             <center>
-                <input class="k-button k-button-icontext k-grid-add" onclick="return SimpenAsset()" type="submit" value="Save" />
                 <a href="@Model.CancelURL" target='_parent'>
                     <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
                 </a>
@@ -83,74 +95,104 @@
     </form>
 }
 
+<style>
+    #myProgress {
+        position: relative;
+        width: 100%;
+        height: 30px;
+        background-color: #ddd;
+    }
+
+    #myBar {
+        position: absolute;
+        width: 10%;
+        height: 100%;
+        background-color: #4CAF50;
+    }
+
+    #label {
+        text-align: center;
+        line-height: 30px;
+        color: white;
+    }
+</style>
 
 <script>
     $(document).ready(function () {
+        $("#myProgress").hide();
         $('#PurchaseDate').prop('value', "")
         $("#OldTransactionId_Value").data("kendoDropDownList").value("");
+        var query = window.location.search.substring(1);
+        //var vars = query.split("&");
+        var varsID = query.split('=');
+        //alert(varsID[2]);
+        if (varsID.length > 2)
+        {
+            $("#myProgress").show();
+            $("#OldTransactionId_Value").data("kendoDropDownList").value(varsID[2]);
+            var url = "/ASSAssetReplacement/GetInfoFromAcquisitin?ID=" + varsID[2];
+            $.getJSON(url, function (data) {
+                //alert(data.purchasedatetext);
+                document.getElementById('Vendor').value = data.Vendor;
+                document.getElementById('PoNo').value = data.Pono;
+                document.getElementById('PurchaseDate').value = data.purchasedatetext;
+                $('#PurchaseDescription').prop('value', data.purchaseDescription);
+
+                var url = "/ASSAssetReplacement/GetAll?ID=" + varsID[2];
+                var link = $("#CancelURL").val().split('/');
+                link = link[0] + "//" + link[2] + "/" + link[3] + "/" + link[4] + "/" + link[5];
+                //alert(link);
+                window.location = url + "&SiteUrl=" + link;
+            });
+        }
+
     })
 
-    function SimpenAsset()
-    {
-        if ($('#AccpMemo_Value').val() == "")
-        {
-            alert("Acceptance Memo Cannot be Empty");
-            return false;
-        }
-        var assetsubasset = document.getElementsByClassName("assetsubasset");
-        var wbs = document.getElementsByClassName("wbs");
-        var costidr = document.getElementsByClassName("costidr");
-        var costusd = document.getElementsByClassName("costusd");
-        for (var j = 0; j < assetsubasset.length; j++)
-        {
-            if(assetsubasset[j].value == "null" || wbs[j].value == "null" || costidr[j].value == "null" || costusd[j].value == "null")
-            {
-                alert("Asset Sub Asset / WBS / CostIDR / CostUSD cannot be null!");
-                return false;
-            }
-        }
-
-        var deleteRow = 0;
-        var matches = document.querySelectorAll("[name^='Details[']");
-        for (var i = 0; i < matches.length; i++) {
-            if (matches[i].value == -1)
-            {
-                deleteRow++;
-            }
-        }
-        var gridElements = $("#Details").data("kendoGrid").dataSource;
-        var total = 0;
-        gridElements.fetch(function ()
-        {
-            total = gridElements.total();
-        })
-        if (total == 0 || total == deleteRow)
-        {
-            alert("Detail cannot Empty");
-            return false;
-        }
-    }
-
+    
     function onIdChange(e) {
         var res = this.dataItem(e.item);
         //alert("Acceptance Memo ID : " + res[0]);
-        var grid = $("#Details").data("kendoGrid");
-        var url = "/ASSAssetReplacement/GetInfoFromAcquisitin?ID=" + res;
+
+        var url = "/ASSAssetReplacement/GetInfoFromAcquisitin?id=" + res;
+        $("#myProgress").show();
         $.getJSON(url, function (data) {
-            //alert(data.purchasedatetext);   
+            //alert(data.purchasedatetext);
+            $("#myProgress").show();
             document.getElementById('Vendor').value = data.Vendor;
             document.getElementById('PoNo').value = data.Pono;
             document.getElementById('PurchaseDate').value = data.purchasedatetext;
             $('#PurchaseDescription').prop('value', data.purchaseDescription);
 
-            var url = "/ASSAssetReplacement/GetInfoFromAcquisitinDetail?ID=" + res;
-            //$.getJSON(url, function (data) {
-            //    for (var i = 0, len = data.length; i < len; i++) {
-            //        //grid.addRow();
-            //        alert(data[i].CostIdr);
-            //    }
+            move();
 
-            //});
+            var url = "/ASSAssetReplacement/GetAll?id=" + res;
+            var link = $("#CancelURL").val().split('/');
+            link = link[0] + "//" + link[2] + "/" + link[3] + "/" + link[4] + "/" + link[5];
+            //alert(link);
+            window.location = url+"&SiteUrl="+link;
         });
+    }
+
+    function move() {
+        var elem = document.getElementById("myBar");
+        var width = 20;
+        var id = setInterval(frame, 2);
+        function frame() {
+            if (width >= 100) {
+                clearInterval(id);
+            } else {
+                width++;
+                elem.style.width = width + '%';
+                if (width < 100)
+                {
+                    document.getElementById("label").innerHTML = width * 1 + '%...';
+                }
+                else
+                {
+                    document.getElementById("label").innerHTML = width * 1 + '%';
+                }
+                
+            }
+        }
     }
 </script>

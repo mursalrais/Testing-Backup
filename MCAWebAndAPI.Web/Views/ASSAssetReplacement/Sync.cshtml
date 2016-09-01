@@ -1,0 +1,37 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Asset
+
+
+
+@model AssetReplacementHeaderVM
+
+@using (Ajax.BeginForm("Syncronize", "ASSAssetReplacement",
+                                                                                                                                                               FormMethod.Get,
+                                                                                                                                                               new AjaxOptions
+                                                                                                                                                               {
+                                                                                                                                                                   OnBegin = "onBeginForm",
+                                                                                                                                                                   OnComplete = "onCompleteForm",
+                                                                                                                                                                   OnSuccess = "onSuccessFormEmbed",
+                                                                                                                                                                   OnFailure = "onFailureForm"
+                                                                                                                                                               }, new { @class = "form-horizontal" }))
+
+{
+    <form class="form-horizontal" method="get" action="/ASSAssetReplacement/Syncronize" id="create-asset-acquisition-form">
+        
+        @Html.HiddenFor(m => m.CancelURL)
+            <center>
+                <input class="k-button k-button-icontext k-grid-add" type="submit" value="Syncronize" />
+                <a href="@Model.CancelURL" target='_parent'>
+                    <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
+                </a>
+            </center>
+
+    </form>
+}
+
+
+<script>
+    $(document).ready(function () {
+
+    })
+
+</script>
