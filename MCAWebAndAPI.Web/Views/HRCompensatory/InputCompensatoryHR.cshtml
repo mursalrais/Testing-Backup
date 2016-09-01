@@ -60,16 +60,18 @@
         <legend>Compensatory list</legend>
         <div id="compensatorylist" class="row"></div>
 
-        <button id="submithr-button" class="btn btn-primary" type="button">
-            <i class="fa fa-save"></i>
-            Submit
-        </button>
 
     </fieldset>
 }
 
+@if (Model.StatusForm == "" || Model.StatusForm == "Draft")
+{
 <div class="row pull-right">
     <div class="col-sm-12">
+        <button id="submithr-button" class="btn btn-primary" type="button">
+            <i class="fa fa-save"></i>
+            Submit
+        </button>
         <button id="submit-draft-button" class="btn btn-primary" type="button">
             <i class="fa fa-clipboard"></i>
             Save As Draft
@@ -80,7 +82,25 @@
         </button>
     </div>
 </div>
+}
 
+@if (Model.StatusForm == "Pending Approval 1 of 2" || Model.StatusForm == "Pending Approval 2 of 2")
+{
+    <div class="form-actions">
+        <div class="row">
+            <div class="col-sm-12">
+                <button id="approve-button" class="btn btn-success" type="submit">
+                    <i class="fa fa-save"></i>
+                    Approve
+                </button>
+                <button id="reject-button" class="btn btn-danger" type="submit">
+                    <i class="fa fa-save"></i>
+                    Reject
+                </button>
+            </div>
+        </div>
+    </div>
+}
 @section scripts{
 
     <script>
@@ -175,6 +195,11 @@
                             $("form").submit();
                         });
 
+                        $('#reject-button').click(function (e) {
+                            $("#StatusForm").val("Reject")
+                            $("form").submit();
+                        });
+
                         $("#submit-draft-button").click(function () {
                             var rowgrid = $("#CompensatoryDetails").data("kendoGrid").tbody.find("tr");
                             var valdate = true;
@@ -208,6 +233,10 @@
                             $("#ParentDiv").show();
                             var url = "/HRCompensatory/PrintCompensatoryRequest";
                             submitFormToPrint(url);
+                        });
+
+                        $("#submit-button").click(function () {
+                            $("form").submit();
                         });
 
                     });

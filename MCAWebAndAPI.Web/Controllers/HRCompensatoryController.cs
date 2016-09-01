@@ -203,7 +203,7 @@ namespace MCAWebAndAPI.Web.Controllers
             }
 
             // BEGIN Workflow Demo 
-            Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateTransactionWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME, SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)cmpID);
+            Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME, SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)cmpID);
 
             _service.SendEmail(SP_TRANSACTION_WORKFLOW_LIST_NAME, SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)cmpID, 1, string.Format(EmailResource.EmailCompensatoryApproval, siteUrl, cmpID));
 
@@ -226,7 +226,6 @@ namespace MCAWebAndAPI.Web.Controllers
 
             try
             {
-
                 viewModel.CompensatoryDetails = BindCompensatorylistDateTime(form, viewModel.CompensatoryDetails);
                 _service.CreateCompensatoryData(cmpID, viewModel);
             }
@@ -249,8 +248,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 if (viewModel.StatusForm == "")
                 {
                     // BEGIN Workflow Demo 
-                    Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateTransactionWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
-                    SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)cmpID);
+                    Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME, SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)cmpID);
 
                     // Send to Level 1 & 2 Approver
                     _service.SendEmail(SP_TRANSACTION_WORKFLOW_LIST_NAME, SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)cmpID, 1, string.Format(EmailResource.EmailCompensatoryApproval, siteUrl, cmpID));

@@ -231,10 +231,10 @@ namespace MCAWebAndAPI.Service.Asset
             try
             {
                 SPConnector.AddListItem("Asset Transfer", columnValues, _siteUrl);
+                var id = SPConnector.GetLatestListItemID("Asset Transfer", _siteUrl);
+                var info = SPConnector.GetListItem("Asset Transfer", id, _siteUrl);
                 if (viewmodel.CompletionStatus.Value == "Complete")
                 {
-                    var id = SPConnector.GetLatestListItemID("Asset Transfer", _siteUrl);
-                    var info = SPConnector.GetListItem("Asset Transfer", id, _siteUrl);
                     if (Convert.ToBoolean(info["Attachments"]) == false)
                     {
                         SPConnector.DeleteListItem("Asset Transfer", id, _siteUrl);
@@ -243,8 +243,6 @@ namespace MCAWebAndAPI.Service.Asset
                 }
                 else
                 {
-                    var id = SPConnector.GetLatestListItemID("Asset Transfer", _siteUrl);
-                    var info = SPConnector.GetListItem("Asset Transfer", id, _siteUrl);
                     if (Convert.ToBoolean(info["Attachments"]) == true)
                     {
                         SPConnector.DeleteListItem("Asset Transfer", id, _siteUrl);
@@ -312,9 +310,9 @@ namespace MCAWebAndAPI.Service.Asset
             try
             {
                 SPConnector.UpdateListItem("Asset Transfer", ID, columnValues, _siteUrl);
+                var newData = SPConnector.GetListItem("Asset Transfer", ID, _siteUrl);
                 if (viewmodel.CompletionStatus.Value == "Complete")
                 {
-                    var newData = SPConnector.GetListItem("Asset Transfer", ID, _siteUrl);
                     if (Convert.ToBoolean(newData["Attachments"]) == false)
                     {
                         var oldcolumnValues = new Dictionary<string, object>();
@@ -337,7 +335,6 @@ namespace MCAWebAndAPI.Service.Asset
                 }
                 else
                 {
-                    var newData = SPConnector.GetListItem("Asset Transfer", ID, _siteUrl);
                     if (Convert.ToBoolean(newData["Attachments"]) == false)
                     {
                         var oldcolumnValues = new Dictionary<string, object>();

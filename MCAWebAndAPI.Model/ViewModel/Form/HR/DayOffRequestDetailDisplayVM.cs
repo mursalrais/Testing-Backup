@@ -22,14 +22,14 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [UIHint("Date")]
         [DisplayName("Start Date")]
         [Required]
-        public DateTime? RequestStartDate { get; set; }
+        public string RequestStartDate { get; set; }
 
         /// <summary>
         /// requestenddate
         /// </summary>
         [UIHint("Date")]
         [DisplayName("End Date")]
-        public DateTime? RequestEndDate { get; set; }
+        public string RequestEndDate { get; set; }
 
         /// <summary>
         /// totaldays
