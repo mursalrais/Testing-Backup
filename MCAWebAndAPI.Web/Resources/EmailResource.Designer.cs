@@ -61,6 +61,21 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dear {0},
+        ///
+        ///Thank you for your interest in MCA-Indonesia! Your application for the {1} has been received.
+        ///
+        ///We will review your application and if there is interest in pursuing your candidacy, you will be contacted immediately. We regret that due to the high volume of CV’s we receive, we may not be able to respond to all applications individually. Only shortlisted candidate that will be contacted by MCA-Indonesia. 
+        ///
+        ///Should you not be selected to interview, we invite you to apply to other current or futu [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string ApplicationData {
+            get {
+                return ResourceManager.GetString("ApplicationData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;p&gt;
         ///&lt;strong&gt;Dear Applicant,&lt;/strong&gt;
         ///&lt;/p&gt;
@@ -378,6 +393,17 @@ namespace MCAWebAndAPI.Web.Resources {
         public static string ProfessionalPerfromanceEvaluation {
             get {
                 return ResourceManager.GetString("ProfessionalPerfromanceEvaluation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dear Mr./Mrs. HR Officer,
+        ///
+        ///There is a PSA with number {0} that already active start from today. Here is the URL that you can click to make redirect to edit page for change PSA Status from inactive to active.
+        /// </summary>
+        public static string PSAChangeStatus {
+            get {
+                return ResourceManager.GetString("PSAChangeStatus", resourceCulture);
             }
         }
         

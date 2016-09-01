@@ -11,6 +11,18 @@ namespace MCAWebAndAPI.Service.Asset
     {
         void SetSiteUrl(string siteUrl);
 
+        AssetCheckResultHeaderVM GetPopulatedModel(int? ID = null, string FormID = null, AssetCheckResultHeaderVM data = null);
+
+        AssetCheckResultHeaderVM GetPopulatedModelGetData(int? FormID = null);
+
+        AssetCheckResultHeaderVM GetPopulatedModelCalculate(AssetCheckResultHeaderVM data, int? ID = null);
+
+        AssetCheckResultHeaderVM GetPopulatedModelSave(AssetCheckResultHeaderVM data, Boolean isApproval = false, int? ID = null);
+
+        ProfessionalsVM GetProfessionalInfo(int? iDProf, string siteUrl);
+
+        AssetCheckResultHeaderVM GetCheckInfo(int? iDCheck, string siteUrl);
+
         IEnumerable<AssetCheckResultVM> GetAssetCheckResult();
 
         bool CreateAssetCheckResult(AssetCheckResultVM assetCheckResult);
@@ -23,6 +35,5 @@ namespace MCAWebAndAPI.Service.Asset
 
         bool DestroyAssetCheckResult_Dummy(AssetCheckResultItemVM assetCheckResult);
 
-        AssetCheckResultVM GetAssetCheckResultItems_Dummy();
     }
 }

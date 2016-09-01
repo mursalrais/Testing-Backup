@@ -26,6 +26,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         const string SP_PROMAS_LIST_NAME = "Professional Master";
         const string SP_POSMAS_LIST_NAME = "Position Master";
         const string SP_MANPOW_LIST_NAME = "Manpower Requisition";
+        const string SP_PLACE_MASTER = "Place Master";
 
         //TODO: To change by using correct domain email
         const string COMPANY_DOMAIN_EMAIL = "eceos.com";
@@ -89,6 +90,20 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             }
 
             return ID;
+        }
+
+        public void SendMail(string emailApplicant, string emailSubject, string emailContent)
+        {
+            EmailUtil.Send(emailApplicant, emailSubject, emailContent);
+        }
+
+        public string GetNationality(int nationalityID)
+        {
+            var nationalityData = SPConnector.GetListItem(SP_PLACE_MASTER, nationalityID, _siteUrl);
+
+            string nationalityName = Convert.ToString(nationalityData["Title"]);
+
+            return nationalityName;
         }
 
         private PositionMaster GetVacantPosition(string position)
@@ -235,7 +250,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             var viewModel = new ApplicationDataVM();
 
-            viewModel.Position = FormatUtil.ConvertLookupToID(listItem, "vacantposition") + string.Empty;
+            viewModel.PositionID = (int)FormatUtil.ConvertLookupToID(listItem, "vacantposition");
+            viewModel.Position = GetPositionName(Convert.ToInt32(viewModel.PositionID));
 
             viewModel.ID = Convert.ToInt32(listItem["ID"]);
             viewModel.FirstMiddleName = Convert.ToString(listItem["Title"]);
@@ -605,6 +621,17 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         public async Task CreateApplicationDocumentAsync(int? headerID, IEnumerable<HttpPostedFileBase> documents)
         {
             CreateApplicationDocument(headerID, documents);
+        }
+
+        public string GetPositionName(int positionID)
+        {
+            string positionName = "";
+
+            var positionData = SPConnector.GetListItem(SP_POSMAS_LIST_NAME, positionID, _siteUrl);
+
+            positionName = Convert.ToString(positionData["Title"]);
+
+            return positionName;
         }
     }
 }

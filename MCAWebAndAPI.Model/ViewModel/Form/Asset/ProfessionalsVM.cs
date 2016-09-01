@@ -18,5 +18,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
         public string ProjectName { get; set; }
 
         public string ContactNo { get; set; }
+
+        public string Posision { get; set; }
+        
     }
 }

@@ -3,28 +3,21 @@
 
 
 @model AssetTransferVM
-
 @using (Html.BeginForm("Print", "ASSAssetTransfer", FormMethod.Post,
-                                                                                                            new
-                                                                                                            {
-                                                                                                                @class = "form-horizontal",
-                                                                                                                enctype = "multipart/form-data"
-                                                                                                            }))
+                                                                                                                        new
+                                                                                                                        {
+                                                                                                                            @class = "form-horizontal",
+                                                                                                                            enctype = "multipart/form-data"
+                                                                                                                        }))
 {
     <form class="form-horizontal" method="post" action="/ASSAssetTransfer/Update" id="create-asset-acquisition-form">
         <fieldset>
-            <legend>Form Asset Acquisition</legend>
+            <legend>Form Asset Transfer</legend>
             <div class="col-md-6">
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.AssetHolder).Class("col-md-4 control-label")
+                    @Html.Bootstrap().LabelFor(m => m.TransactionType).Class("col-md-4 control-label")
                     <div class="col-md-8">
-                        <input type="text" readonly name="TransactionType" value="Assignment Of Asset" style="width : 100%" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.Date).Class("col-md-4 control-label")
-                    <div class="col-md-8">
-                        @Html.DisplayFor(m => m.Date)
+                        <input type="text" disabled name="TransactionType" value="Assignment Of Asset" style="width : 100%" />
                     </div>
                 </div>
                 <div class="form-group">
@@ -36,19 +29,45 @@
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.ProjectUnit).Class("col-md-4 control-label")
                     <div class="col-md-8">
-                        <input type="text" readonly name="ProjectUnit" id="ProjectUnit" value="@Model.ProjectUnit" style="width : 100%" />
+                        <input type="text" disabled name="ProjectUnit" id="ProjectUnit" value="@Model.ProjectUnit" style="width : 100%" />
                     </div>
                 </div>
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.ContactNo).Class("col-md-4 control-label")
                     <div class="col-md-8">
-                        <input type="text" readonly name="ContactNo" id="ContactNo" value="@Model.ContactNo" style="width : 100%" />
+                        <input type="text" disabled name="ContactNo" id="ContactNo" value="@Model.ContactNo" style="width : 100%" />
                     </div>
                 </div>
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.CompletionStatus).Class("col-md-4 control-label")
                     <div class="col-md-8">
                         @Html.DisplayFor(m => m.CompletionStatus)
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Date).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.DisplayFor(m => m.Date)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.AssetHolderTo).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.DisplayFor(m => m.AssetHolderTo)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.ProjectUnitTo).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        <input type="text" disabled name="ProjectUnitTo" id="ProjectUnitTo" value="@Model.ProjectUnitTo" style="width : 100%" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.ContactNoTo).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        <input type="text" disabled name="ContactNoTo" id="ContactNoTo" value="@Model.ContactNoTo" style="width : 100%" />
                     </div>
                 </div>
             </div>
@@ -59,7 +78,7 @@
         @Html.HiddenFor(m => m.ID)
         @Html.HiddenFor(m => m.CancelURL)
         @Html.HiddenFor(m => m.AssetIDs)
-        @Html.HiddenFor(m => m.nameOnly)
+        @Html.HiddenFor(m => m.ContactNoTo)
         <div>
             <center>
                 <a href="@Model.CancelURL" target='_parent'>
@@ -83,47 +102,4 @@
         });
     })
 
-    function saveAssignment() {
-        if ($('#AssetHolder_Value').val() == "") {
-            alert("Asset Holder Cannot be Empty");
-            return false;
-        }
-
-        var asset = document.getElementsByClassName("asset");
-        var province = document.getElementsByClassName("province");
-        for (var j = 0; j < asset.length; j++) {
-            if (asset[j].value == "null" || province[j].value == "null") {
-                alert("Asset Sub Asset / Province cannot be null!");
-                return false;
-            }
-        }
-
-        var deleteRow = 0;
-        var matches = document.querySelectorAll("[name^='Details[']");
-        for (var i = 0; i < matches.length; i++) {
-            if (matches[i].value == -1) {
-                deleteRow++;
-            }
-        }
-        var gridElements = $("#Details").data("kendoGrid").dataSource;
-        var total = 0;
-        gridElements.fetch(function () {
-            total = gridElements.total();
-        })
-        if (total == 0 || total == deleteRow) {
-            alert("Detail cannot Empty");
-            return false;
-        }
-    }
-
-    function onAssetChange(e) {
-        var res = this.dataItem(e.item).split("-")
-        //alert("berubah jadiii " + res[0]);
-        var url = "/ASSAssetTransfer/GetProfMasterInfo?fullname=" + res[0] + "&position=" + res[1];
-        $.getJSON(url, function (data) {
-            //do next
-            document.getElementById('ProjectUnit').value = data.CurrentPosition.Text;
-            document.getElementById('ContactNo').value = data.MobileNumberOne;
-        })
-    }
 </script>

@@ -432,3 +432,19 @@ Please try again.
 2016-08-29 09:21:47.7846 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Cannot complete this action.
 
 Please try again.
+2016-08-30 07:48:17.1906 MCAWebAndAPI.Service.Converter.CSVConverter System.IndexOutOfRangeException: Index was outside the bounds of the array.
+   at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64
+2016-08-30 08:20:52.1149 MCAWebAndAPI.Service.Asset.AssetTransferService Value cannot be null.
+Parameter name: source
+2016-08-31 10:37:02.6816 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService The 'sId' argument is invalid.
+2016-08-31 13:48:34.9335 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Column 'dayofbrought' does not exist. It may have been deleted by another user.  /sites/mca-dev/hr/Lists/DayOffBalance
+2016-08-31 13:54:12.2175 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Column 'type' does not exist. It may have been deleted by another user.  /sites/mca-dev/hr/Lists/DayOffBalance
+2016-08-31 13:55:37.6602 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Invalid data has been used to update the list item. The field you are trying to update may be read only.
+2016-08-31 14:16:35.3259 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Column 'psatitle' does not exist. It may have been deleted by another user.  /sites/mca-dev/hr/Lists/DayOffBalance
+2016-08-31 14:21:35.8922 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Invalid data has been used to update the list item. The field you are trying to update may be read only.
+2016-08-31 14:29:45.7340 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Invalid data has been used to update the list item. The field you are trying to update may be read only.
+2016-08-31 14:45:46.2882 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService The 'sId' argument is invalid.
+2016-09-01 15:53:02.9301 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService System.ArgumentException: The 'sId' argument is invalid.
+   at Microsoft.SharePoint.Client.List.GetItemByStringId(String sId)
+   at MCAWebAndAPI.Service.Utils.SPConnector.DeleteListItem(String listName, Nullable`1 listItemID, String siteUrl) in C:\Users\sobari\Documents\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 662
+   at MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService.CreateCompensatoryData(Nullable`1 cmpID, CompensatoryVM viewModels) in C:\Users\sobari\Documents\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Compensatory\HRCompensatoryService.cs:line 601

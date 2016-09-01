@@ -7,6 +7,9 @@ namespace MCAWebAndAPI.Service.Utils
 {
     public class FormatUtil
     {
+        private const string SuffixCurrencyIDR = " rupiahs";
+        private const string SuffixCurrencyUSD = " dollars";
+
         /// <summary>
         /// Generate digit format string from given value
         /// </summary>
@@ -39,7 +42,7 @@ namespace MCAWebAndAPI.Service.Utils
             {
                 value = multipleLineValue.Split('>')[1].Split('<')[0];
             }
-             
+
             return value;
         }
 
@@ -74,7 +77,7 @@ namespace MCAWebAndAPI.Service.Utils
             var result = phoneNumber.Replace("_", string.Empty);
             return result;
         }
-        
+
         public static int? ConvertLookupToID(ListItem item, string columnName)
         {
             if (item[columnName] == null)
@@ -110,9 +113,9 @@ namespace MCAWebAndAPI.Service.Utils
 
             // format: dd/mm/yyyy
             var dateElements = Convert.ToString(item[columnName]).Split('/');
-            return new DateTime(year: Convert.ToInt32(dateElements[2]), 
-                month: Convert.ToInt32(dateElements[1]), 
-                day: Convert.ToInt32(dateElements[0]));    
+            return new DateTime(year: Convert.ToInt32(dateElements[2]),
+                month: Convert.ToInt32(dateElements[1]),
+                day: Convert.ToInt32(dateElements[0]));
         }
 
         public static AjaxComboBoxVM ConvertToInGridAjaxComboBox(ListItem item, string columnName)
@@ -134,11 +137,11 @@ namespace MCAWebAndAPI.Service.Utils
         /// <param name="lookup">Indicate if the column is a lookup column</param>
         /// <param name="skip">Indicate if the column must not be inserted to SharePoint</param>
         public static void GenerateUpdatedValueFromGivenDataTable(
-            ref Dictionary<string, object> updatedValue, 
-            Type columnType, 
+            ref Dictionary<string, object> updatedValue,
+            Type columnType,
             string columnTechnicalName,
             object columnValue,
-            bool lookup = false, 
+            bool lookup = false,
             bool skip = false)
         {
             if (skip || string.Compare(columnTechnicalName, "ID", StringComparison.OrdinalIgnoreCase) == 0)
@@ -245,6 +248,27 @@ namespace MCAWebAndAPI.Service.Utils
                     if ((number % 10) > 0)
                         words += "-" + unitsMap[number % 10];
                 }
+            }
+
+            return words;
+        }
+
+        public static string ConvertToEnglishWords(int number, CurrencyComboBoxVM currency)
+        {
+            var words = ConvertToEnglishWords(number);
+
+            switch (currency.Value)
+            {    
+                case CurrencyComboBoxVM.CurrencyUSD:
+                    words += SuffixCurrencyUSD;
+                    break;
+
+                case CurrencyComboBoxVM.CurrencyIDR:
+                    words += SuffixCurrencyIDR;
+                    break;
+
+                default:
+                    throw new InvalidOperationException("DevErr: Invalid currency " + currency.Value);
             }
 
             return words;

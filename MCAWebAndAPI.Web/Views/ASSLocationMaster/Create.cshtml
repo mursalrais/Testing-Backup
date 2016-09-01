@@ -57,10 +57,16 @@
 <div class="form-actions">
     <div class="row">
         <div class="col-sm-12">
-            <button id="submit-button" class="btn btn-primary" type="submit">
-                <i class="fa fa-save"></i>
-                Submit
-            </button>
+            <center>
+                <button class="k-button k-button-icontext k-grid-add" id="submit-button" type="submit">
+                    @*<i class="fa fa-save"></i>*@
+                    Submit
+                </button>
+                <a href="@Model.CancelUrl" target='_parent'>
+                    <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
+                </a>
+            </center>
+            
         </div>
     </div>
 </div>
@@ -68,6 +74,10 @@
 @section scripts{
     <script type="text/javascript">
         $(document).ready(function () {
+
+            $('span.k-select').hide();
+
+
             $("#submit-button").click(function () {
                 $("form").submit();
             });

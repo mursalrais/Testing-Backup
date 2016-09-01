@@ -15,6 +15,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
     {
         [UIHint("InGridComboBox")]
         [DisplayName("Full/Half?")]
+        [Required]
         public InGridComboBoxVM FullHalf { get; set; } = new InGridComboBoxVM();
 
 
@@ -50,6 +51,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// </summary>
         [UIHint("InGridAjaxComboBox")]
         [DisplayName("Day-Off Type")]
+        [Required]
         public AjaxComboBoxVM MasterDayOffType { get; set; } = new AjaxComboBoxVM();
 
         public static AjaxComboBoxVM GetMasterDayOffTypeDefaultValue(AjaxComboBoxVM model = null)
@@ -69,6 +71,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// </summary>
         [UIHint("Date")]
         [DisplayName("Start Date")]
+        [Required]
         public DateTime? RequestStartDate { get; set; }
 
         /// <summary>
@@ -92,6 +95,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// remarks
         /// </summary>
         [DisplayName("Remarks")]
+        [Required]
         public string Remarks { get; set; }
 
         /// <summary>
@@ -142,6 +146,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// </summary>
         [DisplayName("Day-Off Type")]
         [UIHint("InGridComboBox")]
+        [Required]
         public InGridComboBoxVM DayOffType { get; set; } = new InGridComboBoxVM();
 
         public static IEnumerable<InGridComboBoxVM> GetDayOffTypeOptions()

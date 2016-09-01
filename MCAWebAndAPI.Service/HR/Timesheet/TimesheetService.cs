@@ -20,7 +20,7 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
         const string TYPE_PUB_HOLIDAY = "Public Holiday";
         const string TYPE_HOLIDAY = "Holiday";
         const string TYPE_DAYOFF = "Day-Off";
-        const string TYPE_COMP_LEAVE = "Compensatory Leave";
+        const string TYPE_COMP_LEAVE = "Compensatory Time";
         const string LIST_PUB_HOLIDAY = "Event Calendar";
         const string LIST_DAY_OFF = "Day-Off Request";
         const string LIST_DAY_OFF_DETAIL = "Day-Off Request Detail";
@@ -50,29 +50,31 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
 
             var viewModel = new TimesheetVM();
 
-            var professionalDataEmail = GetProfessionalDataByEmail(userlogin);
+            var professionalDataEmail = GetListItemProfessionalMaster(userlogin);//GetProfessionalDataByEmail(userlogin);
 
             var listItem = SPConnector.GetListItem(LIST_TIME, id, _siteUrl);
-            var professionalDataId = GetProfessionalDataById(FormatUtil.ConvertLookupToID(listItem, "professional"));
+            var professionalDataId = GetListItemProfessionalMaster(null,FormatUtil.ConvertLookupToID(listItem, "professional"));//GetProfessionalDataById(FormatUtil.ConvertLookupToID(listItem, "professional"));
 
             //FieldUserValue userValue =(FieldUserValue)listItem["visibleto"];
             viewModel.ID = id;
             viewModel.ProfessionalID = FormatUtil.ConvertLookupToID(listItem, "professional");
-            viewModel.UserLogin = professionalDataId.OfficeEmail;
+            viewModel.UserLogin = Convert.ToString(professionalDataId["officeemail"]);//professionalDataId.OfficeEmail;
             viewModel.Name= FormatUtil.ConvertLookupToValue(listItem, "professional");
             viewModel.Period = Convert.ToDateTime(listItem["DatePeriod"]);
-            viewModel.ProjectUnit = professionalDataId.Project_Unit;
+            viewModel.ProjectUnit = Convert.ToString(professionalDataId["Project_x002f_Unit"]); //professionalDataId.Project_Unit;
             viewModel.ProfessionalName.Value = viewModel.ProfessionalID;
             viewModel.ProfessionalName.Text = viewModel.Name;
             viewModel.ApprovalLevel = Convert.ToString(listItem["approvallevel"]);
             viewModel.ApproverPosition = Convert.ToString(listItem["approverposition"]);
             viewModel.Approver = Convert.ToString(listItem["approver"]);
+            viewModel.TimesheetStatus = Convert.ToString(listItem["timesheetstatus"]);
 
-            if (professionalDataEmail.Project_Unit == "Human Resources Unit")
+            //if (professionalDataEmail.Project_Unit == "Human Resources Unit")
+            if (Convert.ToString(professionalDataEmail["Project_x002f_Unit"]) == "Human Resources Unit")
             {
                 viewModel.UserPermission = "HR";
             }
-            else if (professionalDataEmail.OfficeEmail == viewModel.Approver)
+            else if (Convert.ToString(professionalDataEmail["officeemail"]) == viewModel.Approver)
             {
                 viewModel.UserPermission = "Approver";
             }
@@ -87,7 +89,8 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
 
             if (viewModel.UserPermission != "Not Authorized")
             {
-                viewModel.TimesheetDetails = GetTimesheetDetailsLoadUpdate(id, Convert.ToDateTime(viewModel.Period), userlogin);
+                viewModel.TimesheetDetails = GetTimesheetDetailsLoadUpdate(id, 
+                    Convert.ToDateTime(viewModel.Period), viewModel.UserLogin, viewModel.Name);
             }
 
            
@@ -95,7 +98,8 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
             return viewModel;
         }
         
-        public IEnumerable<TimesheetDetailVM> GetTimesheetDetailsLoadUpdate(int? id, DateTime period, string userlogin)
+        public IEnumerable<TimesheetDetailVM> GetTimesheetDetailsLoadUpdate(int? id, DateTime period, 
+            string userlogin,string strName)
         {
 
             var timesheetDetails = new List<TimesheetDetailVM>();
@@ -118,14 +122,14 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                     Type = Convert.ToString(item["Title"])
                 });
             }
-
-             var startDate = period;
+           // var strName = GetFullName(userlogin);
+            var startDate = period;
             var finishDate = period.GetLastPayrollDay();
             var dateRange = startDate.EachDay(finishDate);
 
-            var listHoliday = getPublicHoliday( _siteUrl);
-            var listDayOff = getUserDayOFF(_siteUrl,GetFullName(userlogin));
-            var listCompen = getCompensatory(_siteUrl, GetFullName(userlogin));
+            var listHoliday = getPublicHoliday(_siteUrl);
+            var listDayOff = getUserDayOFF(_siteUrl, strName);
+            var listCompen = getCompensatory(_siteUrl, strName);
 
             foreach (var item in dateRange)
             {
@@ -135,7 +139,6 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                     {
                         Date = item,
                         FullHalf = 1,
-                        //Status = TYPE_PUB_HOLIDAY,
                         Type = TYPE_PUB_HOLIDAY
                     });
                 }
@@ -144,26 +147,30 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                     {
                         Date = item,
                         FullHalf = 1,
-                        //Status = TYPE_HOLIDAY,
                         Type = TYPE_HOLIDAY
                     });
-                else if (IsDate(item, listDayOff))
+                else if (IsDayOff(item, listDayOff))
                 {
-                    timesheetDetails.Add(new TimesheetDetailVM
+                    var arrKey = listDayOff[item].Split(Convert.ToChar(";"));
+                    var typeDayoff = arrKey[0];
+                    var fullhalf = arrKey[1];
+                    var otherCat = arrKey[2];
+                    var timesheetDetail = new TimesheetDetailVM
                     {
                         Date = item,
-                        FullHalf = 1,
-                        //Status = TYPE_DAYOFF,
-                        Type = TYPE_DAYOFF
-                    });
+                        Type = TYPE_DAYOFF,
+                        FullHalf = fullhalf == "Full Day" ? 1 : 0.5,
+                        SubType = otherCat == "False" ? typeDayoff : "Others"
+                    };
+                    timesheetDetails.Add(timesheetDetail);
+
                 }
-                else if (IsDate(item, listCompen))
+                else if (IsCompenTime(item, listCompen))
                 {
                     timesheetDetails.Add(new TimesheetDetailVM
                     {
                         Date = item,
-                        FullHalf = 1,
-                        //Status = TYPE_COMP_LEAVE,
+                        FullHalf = listCompen[item],
                         Type = TYPE_COMP_LEAVE
                     });
                 }
@@ -176,15 +183,20 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
         public TimesheetVM GetTimesheet(string userlogin, DateTime period)
         {
 
+            var professionalData = GetListItemProfessionalMaster(userlogin);
+             var startPeriod = period.GetFirstPayrollDay();
             var viewModel = new TimesheetVM
             {
-                ProfessionalID= GetProfessionalID(userlogin),
+                ProfessionalID= Convert.ToInt32(professionalData["ID"]),
                 UserLogin = userlogin,
-                Name = GetFullName(userlogin),
+                Name = Convert.ToString(professionalData["Title"]),
                 Period = period,
-                ProjectUnit = GetProjectUnitName(userlogin),
-                TimesheetDetails = GetTimesheetDetails(userlogin, period)
+                ProjectUnit = Convert.ToString(professionalData["Project_x002f_Unit"])
+
             };
+            viewModel.StartPeriod = startPeriod;
+            viewModel.EndPeriod = period.GetLastPayrollDay();
+            viewModel.TimesheetDetails = GetTimesheetDetails(userlogin, startPeriod, viewModel.Name);
             viewModel.ProfessionalName.Value = viewModel.ProfessionalID;
             viewModel.ProfessionalName.Text = viewModel.Name;
             viewModel.UserPermission  = viewModel.ProjectUnit == "Human Resources Unit" ? "HR" : "Professional";
@@ -192,35 +204,45 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
             return viewModel;
         }
         
-        private ProfessionalMaster GetProfessionalDataByEmail(string userlogin)
+        //private ProfessionalMaster GetProfessionalDataByEmail(string userlogin)
+        //{
+        //    var professionalData = _dataService.GetProfessionals().FirstOrDefault(e => e.OfficeEmail == userlogin);
+
+
+        //    return professionalData;
+        //}
+
+        //private ProfessionalMaster GetProfessionalDataById(int? id)
+        //{
+        //    var professionalData = _dataService.GetProfessionals().FirstOrDefault(e => e.ID == id);
+
+
+        //    return professionalData;
+        //}
+
+        private ListItem GetListItemProfessionalMaster(string userlogin = null, int? id = null)
         {
-            var professionalData = _dataService.GetProfessionals().FirstOrDefault(e => e.OfficeEmail == userlogin);
+            string caml = @"<View><Query><Where>
+                          <Eq><FieldRef Name='officeemail' />
+                          <Value Type='Text'>" + userlogin + "</Value></Eq>" +
+                          "</Where></Query>" +
+                         "</View>";
+            if (id != null)
+            {
+                caml = @"<View><Query><Where>
+                          <Eq><FieldRef Name='ID' />
+                          <Value Type='Number'>" + id + "</Value></Eq>" +
+                          "</Where></Query>" +
+                         "</View>";
+            }
 
+            var item = SPConnector.GetList(LIST_PROFESSIONAL, _siteUrl, caml);
 
-            return professionalData;
+            return item.FirstOrDefault();
+
         }
 
-        private ProfessionalMaster GetProfessionalDataById(int? id)
-        {
-            var professionalData = _dataService.GetProfessionals().FirstOrDefault(e => e.ID == id);
-
-
-            return professionalData;
-        }
-
-        private string GetProjectUnitName(string userlogin)
-        {
-            var professionalData = _dataService.GetProfessionals().FirstOrDefault(e => e.OfficeEmail == userlogin);
-            return professionalData.Project_Unit;
-        }
-
-        private int? GetProfessionalID(string userlogin)
-        {
-            var professionalData = _dataService.GetProfessionals().FirstOrDefault(e => e.OfficeEmail == userlogin);
-            return professionalData.ID;
-        }
-
-        private string GetFullName(string userlogin)
+        private string GetFullNamez(string userlogin)
         {
             var professionalData = _dataService.GetProfessionals().FirstOrDefault(e => e.OfficeEmail == userlogin);
             return professionalData.Name;
@@ -239,9 +261,9 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
  
         }
 
-        private static List<DateTime> getCompensatory(string strUrl, string strName)
+        private static Dictionary<DateTime, double> getCompensatory(string strUrl, string strName)
         {
-            List<DateTime> lstCompensatory = new List<DateTime>();
+            Dictionary<DateTime, double> lstCompensatory = new Dictionary<DateTime, double>();
             var caml = @"<View><Query><Where><And><Eq><FieldRef Name='professional' />
                         <Value Type='Lookup'>" + strName +"</Value></Eq>" +
                        "<Eq><FieldRef Name='crstatus' /><Value Type='Text'>Approved</Value></Eq>" +
@@ -259,20 +281,31 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                 {
                     var startdate = Convert.ToDateTime(itemDetail["compensatorystarttime"]).ToLocalTime();
                     var finishdate = Convert.ToDateTime(itemDetail["compensatoryendtime"]).ToLocalTime();
+                    var totaldays = Convert.ToDouble(itemDetail["totaldays"]);
                     var dateRange = startdate.EachDay(finishdate);
-                    lstCompensatory.AddRange(dateRange);
+                   
+                    foreach (var itm in dateRange)
+                    {
+                        lstCompensatory.Add(itm, totaldays);
+                    }
                 }
 
             }
             return lstCompensatory;
         }
 
-        private static List<DateTime> getUserDayOFF(string strUrl,string strName)
+        private static Dictionary<DateTime,string> getUserDayOFF(string strUrl,string strName)
         {
-            var caml = @"<View><Query><Where><Eq><FieldRef Name='professional' /><Value Type='Lookup'>" + strName +
-               "</Value></Eq></Where></Query></View>";
+            var caml = string.Format(@"<View><Query><Where>
+            <Eq><FieldRef Name='professional'/><Value Type='Lookup'>{0}</Value></Eq></Where></Query></View>", strName);
             var listMaster = SPConnector.GetList(LIST_DAY_OFF, strUrl, caml);
-            List<DateTime> lstDayOff = new List<DateTime>();
+
+            caml = string.Format(@"<View><Query><Where>
+            <Gt><FieldRef Name='ID'/><Value Type='Number'>{0}</Value></Gt></Where></Query></View>", 0);
+
+            var listMasterDayOff = SPConnector.GetList("Master Day Off Type", strUrl, caml);
+
+            Dictionary<DateTime, string> lstDayOff = new Dictionary<DateTime, string>();
             foreach (var item in listMaster)
             {
                 caml = @"<View><Query><Where><And><Eq><FieldRef Name='dayoffrequest' />
@@ -286,35 +319,44 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                 {
                     var startdate = Convert.ToDateTime(itemDetail["requeststartdate"]).ToLocalTime();
                     var finishdate = Convert.ToDateTime(itemDetail["requestenddate"]).ToLocalTime();
+                    var typeDayoff = FormatUtil.ConvertLookupToValue(itemDetail, "masterdayofftype");
+                    var idTypeDayoff = FormatUtil.ConvertLookupToID(itemDetail, "masterdayofftype");
+                    var fullhalf = Convert.ToString(itemDetail["fullhalfday"]);
+                    var query=  listMasterDayOff.FirstOrDefault(t => Convert.ToString(t.Id) == Convert.ToString(idTypeDayoff));
+                    var otherCat = query["othercategory"].ToString();
                     var dateRange = startdate.EachDay(finishdate);
-                    lstDayOff.AddRange(dateRange);
+                    foreach (var itm in dateRange)
+                    {
+                        lstDayOff.Add(itm,typeDayoff+";" + fullhalf+";" + otherCat);
+                    }
+
                 }
-             
+
             }
             return lstDayOff;
         }
         
-        public IEnumerable<TimesheetDetailVM> GetTimesheetDetails(string userlogin, DateTime period)
+        public IEnumerable<TimesheetDetailVM> GetTimesheetDetails(string userlogin, DateTime period,string strName)
         {
             var startDate = period;
             var finishDate = period.GetLastPayrollDay();
             var dateRange = startDate.EachDay(finishDate);
 
             var listHoliday = getPublicHoliday( _siteUrl);
-            var listDayOff = getUserDayOFF(_siteUrl,GetFullName(userlogin));
-            var listCompen = getCompensatory(_siteUrl, GetFullName(userlogin));
+            var listDayOff = getUserDayOFF(_siteUrl, strName);
+            var listCompen = getCompensatory(_siteUrl, strName);
 
             var timesheetDetails = new List<TimesheetDetailVM>();
 
             foreach (var item in dateRange)
             {
+             
                 if (IsDate(item, listHoliday))
                 {
                     timesheetDetails.Add(new TimesheetDetailVM
                     {
                         Date = item,
                         FullHalf = 1,
-                        //Status = TYPE_PUB_HOLIDAY,
                         Type = TYPE_PUB_HOLIDAY
                     });
                 }
@@ -323,25 +365,30 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                     {
                         Date = item,
                         FullHalf = 1,
-                        //Status = TYPE_HOLIDAY,
                         Type = TYPE_HOLIDAY
                     });
-                else if (IsDate(item, listDayOff))
+                else if (IsDayOff(item, listDayOff))
+                {
+                    var arrKey= listDayOff[item].Split(Convert.ToChar(";"));
+                    var typeDayoff = arrKey[0];
+                    var fullhalf = arrKey[1];
+                    var otherCat = arrKey[2];
+                    var timesheetDetail = new TimesheetDetailVM
+                    {
+                        Date = item,
+                        Type = TYPE_DAYOFF,
+                        FullHalf = fullhalf == "Full Day" ? 1 : 0.5,
+                        SubType = otherCat == "False" ? typeDayoff : "Others"
+                    };
+                    timesheetDetails.Add(timesheetDetail);
+
+                }
+                else if (IsCompenTime(item, listCompen))
                 {
                     timesheetDetails.Add(new TimesheetDetailVM
                     {
                         Date = item,
-                        FullHalf = 1,
-                        //Status = TYPE_DAYOFF,
-                        Type = TYPE_DAYOFF
-                    });
-                }else if (IsDate(item, listCompen))
-                {
-                    timesheetDetails.Add(new TimesheetDetailVM
-                    {
-                        Date = item,
-                        FullHalf = 1,
-                        //Status = TYPE_COMP_LEAVE,
+                        FullHalf = listCompen[item],
                         Type = TYPE_COMP_LEAVE
                     });
                 }
@@ -349,27 +396,36 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
 
             return timesheetDetails;
         }
-        
-        //private bool IsCompLeave(DateTime item)
-        //{
-        //    //TODO: To get from SP list
-        //    return (item.Day % 17 == 0);
-        //}
 
-        //private bool IsDayOff(DateTime date, List<DateTime> lstRange)
-        //{
-        //    var bcek = false;
-        //    if (lstRange == null) return false;
-        //    else
-        //    {
-        //        if (lstRange.Any(item => date.ToString("yy-MM-dd") == item.ToString("yy-MM-dd")))
-        //        {
-        //            return true;
-        //        }
-        //    }
+        private bool IsCompenTime(DateTime date, Dictionary<DateTime, double> lstRange)
+        {
+            var bcek = false;
+            if (lstRange == null) return false;
+            else
+            {
+                if (lstRange.Any(item => date.ToString("yy-MM-dd") == item.Key.ToString("yy-MM-dd")))
+                {
+                    return true;
+                }
+            }
 
-        //    return bcek;
-        //}
+            return bcek;
+        }
+
+        private bool IsDayOff(DateTime date, Dictionary<DateTime, string> lstRange)
+        {
+            var bcek = false;
+            if (lstRange == null) return false;
+            else
+            {
+                if (lstRange.Any(item => date.ToString("yy-MM-dd") == item.Key.ToString("yy-MM-dd")))
+                {
+                    return true;
+                }
+            }
+
+            return bcek;
+        }
 
         private bool IsDate(DateTime date,List<DateTime> lstRange )
         {
@@ -393,7 +449,7 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
             _professionalService.SetSiteUrl(_siteUrl);
         }
 
-        public IEnumerable<TimesheetDetailVM> AppendWorkingDays(IEnumerable<TimesheetDetailVM> currentDays, DateTime from,
+        public IEnumerable<TimesheetDetailVM> AppendWorkingDays(int? id,IEnumerable<TimesheetDetailVM> currentDays, DateTime from,
             DateTime to, bool isFullDay, string location = null, int? locationid = null)
         {
             var dateRange = from.EachDay(to);
@@ -417,11 +473,22 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                     }
 
                 }
+                else
+                {
+                    var query = allDays.FirstOrDefault(d => d.Date == workingDay);
+                    if (query.Type != "Working Days") continue;
+                    query.FullHalf = isFullDay ? 1.0d : 0.5d;
+                    query.Location = location ?? string.Empty;
+                    query.LocationID = locationid ?? null;
+                    query.Type = "Working Days";
+                    if (id != null) query.EditMode = 1;
+                }
             }
 
             return allDays;
         }
 
+       
 
         public async Task CreateTimesheetDetailsAsync(int? headerID, IEnumerable<TimesheetDetailVM> timesheetDetails)
         {
@@ -431,11 +498,20 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
         public void CreateTimesheetDetails(int? headerId, 
             IEnumerable<TimesheetDetailVM> timesheetDetails)
         {
-            var mastervalue = new Dictionary<string, Dictionary<string, object>>();
+            var mastervalueInsert = new Dictionary<string, Dictionary<string, object>>();
+            var mastervalueUpdate= new Dictionary<string, Dictionary<string, object>>();
+            var itemsDelete = new List<string>();
             var i = 1;
             foreach (var viewModel in timesheetDetails)
             {
-                if (viewModel.Type != "Working Days") continue;
+                if (Item.CheckIfSkipped(viewModel)) continue;
+                if (Item.CheckIfDeleted(viewModel))
+                {
+                    itemsDelete.Add(viewModel.ID.ToString());
+                    continue;
+                }
+
+                    if (viewModel.Type != "Working Days") continue;
                 var updatedValue = new Dictionary<string, object>
                 {
                     {"timesheet", new FieldLookupValue {LookupId = Convert.ToInt32(headerId)}},
@@ -453,15 +529,19 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                     updatedValue.Add("Title", viewModel.Type);
                 }
 
-               
-                    mastervalue.Add(i+";Add", updatedValue);
-                    i++;
+                if (Item.CheckIfUpdated(viewModel)) mastervalueUpdate.Add(viewModel.ID + ";Edit", updatedValue);
+                else mastervalueInsert.Add(i + ";Add", updatedValue);
+
+
+                i++;
                
             }
 
             try
             {
-                SPConnector.AddListItemAsync(LIST_TIME_DETAIL, mastervalue, _siteUrl);
+                if (itemsDelete.Count>0) SPConnector.DeleteMultipleListItemAsync(LIST_TIME_DETAIL,itemsDelete,_siteUrl);
+                if (mastervalueInsert.Count > 0) SPConnector.AddListItemAsync(LIST_TIME_DETAIL, mastervalueInsert, _siteUrl);
+                if (mastervalueUpdate.Count > 0) SPConnector.UpdateMultipleListItemAsync(LIST_TIME_DETAIL, mastervalueUpdate, _siteUrl);
             }
             catch (Exception e)
             {
@@ -518,7 +598,7 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
             return dtView.DefaultView.ToTable();
         }
 
-        private void UpdateHeaderApprover(int? headerId,string strLevel,string strPosition, string strEmail)
+        private void UpdateHeaderApprover(int? headerId,string strLevel,string strPosition, string strEmail,string strPermission=null)
         {
             var columnValues = new Dictionary<string, object>
                 {
@@ -526,6 +606,9 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                     {"approvallevel", strLevel},
                      {"approver", strEmail},
                 };
+
+            if (strPermission != null) columnValues.Add("timesheetstatus", "Approved");
+
             SPConnector.UpdateSingleListItemAsync(LIST_TIME, headerId, columnValues, _siteUrl);
         }
 
@@ -536,6 +619,18 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
         }
         public  void CreateWorkflowTimesheet(int? headerId, TimesheetVM header)
         {
+
+            var caml = string.Format(@"<View><Query>
+                        <Where>
+                        <Eq>
+                            <FieldRef Name='timesheet' />
+                            <Value Type='Lookup'>{0}</Value>
+                        </Eq>
+                        </Where></Query></View>", headerId);
+
+            var listWF = SPConnector.GetList(LIST_WF, _siteUrl, caml);
+            if (listWF.Count > 0) return;
+
             var dtView = Getworkflowmapping(header.ProjectUnit);
             var iCount = dtView.DefaultView.Count;
             IEnumerable<ProfessionalMaster> profMasterPosition = _dataService.GetProfessionals();
@@ -550,9 +645,11 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                 {
                     {"Title", header.UserLogin},
                     {"timesheet", new FieldLookupValue {LookupId = Convert.ToInt32(headerId)}},
-                    {"status", "Pending Approval"},
                     {"approverlevel", i.ToString()}
                 };
+
+                columnValues.Add("status", header.UserPermission == "HR" ? "Approved" : "Pending Approval");
+
 
                 switch (i)
                 {
@@ -567,8 +664,12 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                         {
                             goto case 2;
                         }
-                        UpdateHeaderApprover(headerId, "1", strApproverPosition, strApproverEmail);
-                        columnValues.Add("currentstate", "Yes");
+                        if (header.UserPermission != "HR")
+                        {
+                            UpdateHeaderApprover(headerId, "1", strApproverPosition, strApproverEmail);
+                        }
+                        else UpdateHeaderApprover(headerId, "1", strApproverPosition, strApproverEmail, "HR");
+                        columnValues.Add("currentstate", header.UserPermission == "HR" ? "No" : "Yes");
                         columnValues.Add("approverposition", strApproverPosition);
                         columnValues.Add("approver0", strApproverEmail);
                         break;
@@ -583,8 +684,20 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                         {
                             goto case 3;
                         }
-                        if (i==1) UpdateHeaderApprover(headerId, "1", strApproverPosition, strApproverEmail);
-                        columnValues.Add("currentstate", i == 2 ? "No" : "Yes");
+                        if (i == 1)
+                        {
+                            if (header.UserPermission != "HR")
+                            {
+                                UpdateHeaderApprover(headerId, "1", strApproverPosition, strApproverEmail);
+                            }
+                            else UpdateHeaderApprover(headerId, "1", strApproverPosition, strApproverEmail,"HR");
+                            columnValues.Add("currentstate", "Yes");
+                        }
+                        else if (i == 2)
+                        {
+                            columnValues.Add("currentstate", "No" );
+                        }
+                           
                         columnValues.Add("approverposition", strApproverPosition);
                         columnValues.Add("approver0", strApproverEmail);
                         break;
@@ -594,8 +707,30 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                         {
                             strApproverPosition = Convert.ToString(dtView.DefaultView[0]["ApproverPosition"]);
                             strApproverEmail = profMasterPosition.FirstOrDefault(e => e.Position == strApproverPosition).OfficeEmail;
-                            if (i == 1) UpdateHeaderApprover(headerId, "1", strApproverPosition, strApproverEmail);
-                            columnValues.Add("currentstate", i == 3 ? "No" : "Yes");
+
+                            if (i == 1)
+                            {
+                                if (header.UserPermission != "HR")
+                                {
+                                    UpdateHeaderApprover(headerId, "1", strApproverPosition, strApproverEmail);
+                                }
+                                else
+                                {
+                                    UpdateHeaderApprover(headerId, "1", strApproverPosition, strApproverEmail,"HR");
+                                }
+                                columnValues.Add("currentstate", "Yes");
+                            }
+                            else if (i == 2)
+                            {
+                                columnValues.Add("currentstate", "No");
+                                if (header.UserPermission == "HR") UpdateHeaderApprover(headerId, "2", strApproverPosition, strApproverEmail,"HR");
+                            }
+                            else if (i == 3)
+                            {
+                                if (header.UserPermission == "HR") UpdateHeaderApprover(headerId, "3", strApproverPosition, strApproverEmail,"HR");
+                                columnValues.Add("currentstate", header.UserPermission != "HR" ? "No" : "Yes");
+                            }
+
                             columnValues.Add("approverposition", strApproverPosition);
                             columnValues.Add("approver0", strApproverEmail);
                         }
@@ -605,6 +740,7 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                if (!string.IsNullOrEmpty(strApproverPosition)) mastervalue.Add(i + ";Add", columnValues); 
             }
             SPConnector.AddListItemAsync(LIST_WF, mastervalue, _siteUrl);
+          
         }
         
         public void UpdateApproval( TimesheetVM header)
@@ -674,7 +810,67 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
             SPConnector.UpdateSingleListItemAsync(LIST_WF, (idNext - 1), columnWfValues, _siteUrl);
 
         }
-        
+
+        public IEnumerable<TimesheetDetailVM> DeleteSelectedWorkingDays(int? headerId,IEnumerable<TimesheetDetailVM> currentDays, 
+            DateTime from, DateTime to)
+        {
+            var dateRange = from.EachDay(to);
+            var existingDays = currentDays.Select(e => (DateTime)e.Date).ToList();
+            var allDays = currentDays.ToList();
+
+            foreach (var workingDay in dateRange)
+            {
+                if (!existingDays.ContainsSameDay(workingDay)) continue;
+                var query = allDays.FirstOrDefault(d => d.Date == workingDay);
+                if (query.Type != "Working Days") continue;
+                if (headerId == null)
+                {
+                    allDays.Remove(query);
+                }
+                else
+                {
+                    query.EditMode = -1;
+                }
+            }
+
+            return allDays;
+        }
+
+        public DataTable GetTimesheetProfessionalDataTable()
+        {
+            var dtDetail = new DataTable();
+
+            dtDetail.Columns.Add("Date", typeof(string));
+            dtDetail.Columns.Add("Location 1:", typeof(string));
+            dtDetail.Columns.Add("Location 2:", typeof(string));
+            dtDetail.Columns.Add("Location 3:", typeof(string));
+            dtDetail.Columns.Add("Location 4:", typeof(string));
+            dtDetail.Columns.Add("Location 5:", typeof(string));
+            dtDetail.Columns.Add("Location 6:", typeof(string));
+            dtDetail.Columns.Add("Sick Leave", typeof(string));
+            dtDetail.Columns.Add("Eligible Day-Off", typeof(string));
+            dtDetail.Columns.Add("Others*", typeof(string));
+            dtDetail.Columns.Add("Unpaid Day-Off", typeof(string));
+            dtDetail.Columns.Add("Compensatory Day-Off", typeof(string));
+            dtDetail.Columns.Add("Total", typeof(string));
+            dtDetail.Columns.Add("Public Holiday", typeof(string));
+            dtDetail.Columns.Add("Compensatory Time", typeof(string));
+            dtDetail.Columns.Add("Approval Status", typeof(string));
+
+            return dtDetail;
+        }
+
+        public TimesheetVM GetTimesheetProfessional(string userlogin)
+        {
+            var viewModel = new TimesheetVM
+            {
+                URL = _siteUrl,
+                UserLogin = userlogin,
+                dtDetails = GetTimesheetProfessionalDataTable()
+            };
+            return viewModel;
+        }
+
         public int CreateHeader(TimesheetVM header)
         {
             var dtView = Getworkflowmapping(header.ProjectUnit);
@@ -723,6 +919,23 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
             return ID;
         }
 
+        public void UpdateHeader(TimesheetVM header)
+        {
+            var columnValues = new Dictionary<string, object>
+           {
+               {"timesheetstatus", header.TimesheetStatus}
+           };
 
+
+            try
+            {
+                SPConnector.UpdateSingleListItemAsync(LIST_TIME, header.ID, columnValues, _siteUrl);
+              
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.Message);
+            }
+        }
     }
 }

@@ -147,8 +147,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// balance
         /// </summary>
-        [UIHint("Int32")]
-        public int Balance { get; set; }
+        [UIHint("Double")]
+        public double Balance { get; set; }
 
         [UIHint("Date")]
         public DateTime? FirstDate { get; set; }

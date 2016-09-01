@@ -216,6 +216,9 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             var populateProfessionalMonthlyFeeTask = worksheet.PopulateAllProfessionalMonthlyFee(professionalIDs);
 
             // Retrive required data to cut network round trip time
+            var populateAdjustmentTask = worksheet.PopulateALLAdjustment(professionalIDs);
+
+            // Retrive required data to cut network round trip time
             var populateProfessionalDayOffRequestTask = worksheet.PopulateAllProfessionalDayOffRequests(professionalIDs);
 
             // Populate rows

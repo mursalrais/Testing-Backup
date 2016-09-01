@@ -5,9 +5,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Elmah;
+using MCAWebAndAPI.Model.HR.DataMaster;
+using MCAWebAndAPI.Model.ViewModel.Control;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 using MCAWebAndAPI.Service.Converter;
 using MCAWebAndAPI.Service.Finance;
+using MCAWebAndAPI.Service.HR.Common;
+using MCAWebAndAPI.Service.Shared;
 using MCAWebAndAPI.Service.Utils;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;
@@ -32,6 +36,7 @@ namespace MCAWebAndAPI.Web.Controllers
         private const string ACTIONNAME_VENDORS = "GetVendors";
         private const string ACTIONNAME_WBSMASTERS = "GetWBSMasters";
         private const string ACTIONNAME_GLMASTERS = "GetGLMasters";
+        private const string CURRENCY_SELECTEVENTCHANGE = "onSelectCurrency";
         private const string FIELD_ID = "ID";
         private const string FIELD_TITLE = "Title";
         private const string FIELD_VALUE = "Value";
@@ -43,8 +48,11 @@ namespace MCAWebAndAPI.Web.Controllers
 
         private const string SuccessMsgFormatCreated = "PC Voucher No. {0} has been successfully created.";
         private const string SuccessMsgFormatUpdated = "PC Voucher No. {0} has been successfully updated.";
-        private const string FirstPageUrl = "{0}/Lists/SPHL%20Data/AllItems.aspx";
+        private const string FirstPageUrl = "{0}/Lists/Petty%20Cash%20Payment%20Voucher/AllItems.aspx";
         private const string PrintPageUrl = "~/Views/FINPettyCashPaymentVoucher/Print.cshtml";
+
+        private const string PaidToProfessional = "Professional";
+        private const string PaidToVendor = "Vendor";
 
         readonly IPettyCashPaymentVoucherService _service;
         public FINPettyCashPaymentVoucherController()
@@ -140,10 +148,42 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult Print(FormCollection form, PettyCashPaymentVoucherVM viewModel)
         {
             string RelativePath = PrintPageUrl;
+            string domain = "http://" + Request.Url.Authority + "/img/logo.png";
 
             var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl);
             _service.SetSiteUrl(siteUrl);
             viewModel = _service.GetPettyCashPaymentVoucher(viewModel.ID);
+
+            if (viewModel.PaidTo.Text.Equals(PaidToProfessional))
+            {
+                try
+                {
+                    IDataMasterService _dataMasterService = new DataMasterService();
+                    _dataMasterService.SetSiteUrl(siteUrl);
+
+                    var sessionVariable = System.Web.HttpContext.Current.Session["ProfessionalMaster"] as IEnumerable<ProfessionalMaster>;
+                    var professionals = sessionVariable ?? _dataMasterService.GetProfessionals();
+
+
+                    ProfessionalMaster data = professionals.FirstOrDefault(p => p.ID.Value == viewModel.Professional.Value.Value);
+
+                    if (data != null)
+                    {
+                        viewModel.PaidTo.Text = string.Format("{0} - {1}", data.Name, data.Position);
+                    }
+                }
+                catch
+                {
+                    throw;
+                }
+            }
+            else if (viewModel.PaidTo.Text.Equals(PaidToVendor))
+            {
+                VendorService vendorSvc = new VendorService();
+                vendorSvc.SetSiteUrl(siteUrl);
+                var vendor = vendorSvc.GetVendor(viewModel.Vendor.Value.Value);
+                viewModel.PaidTo.Text = string.Format("{0} - {1}", vendor.ID, vendor.Name); 
+            }
 
             ViewData.Model = viewModel;
             var view = ViewEngines.Engines.FindView(ControllerContext, RelativePath, null);
@@ -157,7 +197,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 view.View.Render(context, writer);
                 writer.Flush();
                 content = writer.ToString();
-
+                content = content.Replace("{XIMGPATHX}", domain);
                 // Get PDF Bytes
                 try
                 {
@@ -175,9 +215,11 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
 
-        public ActionResult GetAmountInWords(int data)
+        public ActionResult GetAmountInWords(int data, string currency)
         {
-            return Json(FormatUtil.UppercaseFirst(FormatUtil.ConvertToEnglishWords(data)),
+            var currencyCombobox = new CurrencyComboBoxVM() { Text = currency, Value = currency };
+
+            return Json(FormatUtil.UppercaseFirst(FormatUtil.ConvertToEnglishWords(data, currencyCombobox)),
                JsonRequestBehavior.AllowGet);
         }
 
@@ -227,7 +269,8 @@ namespace MCAWebAndAPI.Web.Controllers
             viewModel.GL.ActionName = ACTIONNAME_GLMASTERS;
             viewModel.GL.ValueField = FIELD_VALUE;
             viewModel.GL.TextField = FIELD_TEXT;
-            
+
+            viewModel.Currency.OnSelectEventName = CURRENCY_SELECTEVENTCHANGE;
             if (isCreate)
             {
                 //some default value

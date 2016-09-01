@@ -1,0 +1,248 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Finance
+@model MCAWebAndAPI.Model.ViewModel.Form.Finance.PettyCashReimbursementVM
+
+@*
+    Wireframe FIN12: Petty Cash Reimbursement
+
+        Petty Cash Reimbursement is a transaction for the reimbursement of petty cash only when
+        user has not asked for any petty cash advance.
+
+        Through this feature, finance will create the reimbursement of petty cash which results in
+        user needs to receive the reimbursement.
+*@
+
+@using (Html.BeginForm("Save", "FINPettyCashReimbursement",
+                FormMethod.Post,
+                new
+                {
+                    @class = "form-horizontal",
+                    enctype = "multipart/form-data"
+                }))
+
+{
+    <fieldset>
+        <legend>Petty Cash Reimbursement</legend>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Date).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.Date)
+                        @Html.ValidationMessageFor(m => m.Date)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.PaidTo).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.PaidTo)
+                        @Html.ValidationMessageFor(m => m.PaidTo)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Professional).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.Professional)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Vendor).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.Vendor)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Driver).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.Driver)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Currency).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.Currency)
+                        @Html.ValidationMessageFor(m => m.Currency)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Reason).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.Reason)
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Fund).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.Fund)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.WBS).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.WBS)
+                        @Html.ValidationMessageFor(m => m.WBS)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.GL).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.GL)
+                        @Html.ValidationMessageFor(m => m.GL)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Amount).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.Amount)
+                        @Html.ValidationMessageFor(m => m.Amount)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.AmountReimbursed).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.AmountReimbursed)
+                        @Html.ValidationMessageFor(m => m.AmountReimbursed)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Remarks).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.Remarks)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Documents).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.Documents)
+                    </div>
+                </div>
+
+                @if (!string.IsNullOrWhiteSpace(Model.DocumentUrl))
+                {
+                    <div class="form-group">
+                        <div class="form-group">
+                            @Html.Bootstrap().LabelFor(m => m).Class("col-sm-4 control-label")
+                            <div class="col-sm-8">
+                                <button id="application-document-button" class="btn btn-default" type="button">
+                                    Click Here to go to Petty Cash Reimbursement
+                                </button>
+                            </div>
+                        </div>
+                        <script>
+                            $('#application-document-button').click(function () {
+                                parent.postMessage({
+                                    result : "Success", urlToRedirect : "@Model.DocumentUrl" }, "@Model.DocumentUrl" );
+                            });
+                        </script>
+                    </div>
+                }
+                @Html.HiddenFor(m => m.ID)
+                @Html.HiddenFor(m => m.Operation)
+            </div>
+        </div>
+    </fieldset>
+
+
+    switch (Model.Operation)
+    {
+        case Shared.Operations.c:
+        case Shared.Operations.e:
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <button id="submit-button" class="btn btn-primary" type="submit">
+                            <i class="fa fa-save"></i>
+                            Submit
+                        </button>
+                        <button id="cancel-button" class="btn btn-default" type="button">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            break;
+
+
+        case Shared.Operations.v:
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <button id="cancel-button" class="btn btn-default" type="button">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            break;
+
+    }
+}
+
+
+@section scripts{
+    <script>
+        var PAIDTO_PROFESSIONAL = "Professional";
+        var PAIDTO_VENDOR = "Vendor";
+        var PAIDTO_DRIVER = "Driver";
+
+        $(document).ready(function () {
+            $("#Amount").change(function(){
+                $("#AmountReimbursed").val($("#Amount").val());
+            });
+            var data = $("#PaidTo_Value").val();
+            setComboboxControl(data);
+        });
+
+        function onSelectPaidTo(e) {
+            var data = this.dataItem(e.item);
+            setComboboxControl(data);
+        }
+    
+        function setComboboxControl(data) {
+            var professionalDropDownList = $("#Professional_Value").data("kendoDropDownList");
+            var vendorDropDownList = $("#Vendor_Value").data("kendoDropDownList");
+            var driverTextbox = $("#Driver");
+
+            switch (data) {
+                case PAIDTO_PROFESSIONAL:
+                    professionalDropDownList.enable(true);
+                    vendorDropDownList.enable(false);
+                    driverTextbox.prop('readonly', true);
+                    break;
+
+                case PAIDTO_VENDOR:
+                    professionalDropDownList.enable(false);
+                    vendorDropDownList.enable(true);
+                    driverTextbox.prop('readonly', true);
+                    break;
+
+                case PAIDTO_DRIVER:
+                    professionalDropDownList.enable(false);
+                    vendorDropDownList.enable(false);
+                    driverTextbox.prop('readonly', false);
+                    break;
+
+                default:
+                    professionalDropDownList.enable(false);
+                    vendorDropDownList.enable(false);
+                    driverTextbox.prop('readonly', true);
+                    break;
+
+            }
+        }
+    </script>
+}

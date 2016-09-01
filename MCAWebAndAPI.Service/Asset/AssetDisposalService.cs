@@ -39,14 +39,14 @@ namespace MCAWebAndAPI.Service.Asset
             {
                 SPConnector.AddListItem(SP_MON_FEE_LIST_NAME, columnValues, _siteUrl);
             
-                var id = SPConnector.GetLatestListItemID("Asset Disposal", _siteUrl);
-                var info = SPConnector.GetListItem("Asset Disposal", id, _siteUrl);
+                //var id = SPConnector.GetLatestListItemID("Asset Disposal", _siteUrl);
+                //var info = SPConnector.GetListItem("Asset Disposal", id, _siteUrl);
 
-                if (Convert.ToBoolean(info["Attachments"]) == false)
-                    {
-                        SPConnector.DeleteListItem("Asset Disposal", id, _siteUrl);
-                        return 0;
-                    }  
+                //if (Convert.ToBoolean(info["Attachments"]) == false)
+                //    {
+                //        SPConnector.DeleteListItem("Asset Disposal", id, _siteUrl);
+                //        return 0;
+                //    }  
 
             }
             catch (Exception e)
@@ -111,7 +111,29 @@ namespace MCAWebAndAPI.Service.Asset
 
                 var updatedValues = new Dictionary<string, object>();
                 updatedValues.Add("assetdisposal", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
-                updatedValues.Add("assetsubasset", new FieldLookupValue { LookupId = Convert.ToInt32(item.AssetSubAsset.Value.Value) });
+                var caml = @"<View><Query>
+                           <Where>
+                              <Eq>
+                                 <FieldRef Name='ID' />
+                                 <Value Type='Counter'>"+item.AssetSubAsset.Value.Value+@"</Value>
+                              </Eq>
+                           </Where>
+                        </Query>
+                        <ViewFields>
+                           <FieldRef Name='assetsubasset' />
+                           <FieldRef Name='Asset_x0020_Sub_x0020_Asset_x003' />
+                        </ViewFields>
+                        <QueryOptions /></View>";
+                var infoAcquisition = SPConnector.GetList("Asset Acquisition Details", _siteUrl, caml);
+                var assetID = 0;
+                foreach(var i in infoAcquisition)
+                {
+                    if (i["assetsubasset"] as FieldLookupValue != null)
+                    {
+                        assetID = (i["assetsubasset"] as FieldLookupValue).LookupId;
+                    }
+                }
+                updatedValues.Add("assetsubasset", new FieldLookupValue { LookupId = assetID });
               
                 updatedValues.Add("remarks", item.Remarks);
                 updatedValues.Add("status", "Retired");
@@ -241,6 +263,10 @@ namespace MCAWebAndAPI.Service.Asset
 
                 var updatedValues = new Dictionary<string, object>();
                 updatedValues.Add("assetdisposal", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
+
+
+
+
                 updatedValues.Add("assetsubasset", new FieldLookupValue { LookupId = Convert.ToInt32(item.AssetSubAsset.Value.Value) });
                 updatedValues.Add("remarks", item.Remarks);
                 updatedValues.Add("status", "RETIRED");
@@ -263,17 +289,16 @@ namespace MCAWebAndAPI.Service.Asset
         {
             var models = new List<AssetAcquisitionItemVM>();
             var caml = @"<View><Query>
-                           <Where>
-                              <IsNotNull>
-                                 <FieldRef Name='assetsubasset' />
-                              </IsNotNull>
-                           </Where>
-                        </Query>
-                        <ViewFields>
-                           <FieldRef Name='assetsubasset' />
-                        </ViewFields>
-                        <QueryOptions /></View>";
-            foreach (var item in SPConnector.GetList("Asset Acquisition Details", _siteUrl, caml))
+                        <Where>
+                            <Eq>
+                                <FieldRef Name='assetsubasset' />
+                           </Eq>
+                        </Where></Query>
+                    <ViewFields> 
+                        <FieldRef Name='Title' />
+                        <FieldRef Name='AssetID' />
+                    </ViewFields><QueryOptions /></View>";
+            foreach (var item in SPConnector.GetList("Asset Acquisition Details", _siteUrl))
             {
                 models.Add(ConvertToModelAssetSubAsset(item));
             }

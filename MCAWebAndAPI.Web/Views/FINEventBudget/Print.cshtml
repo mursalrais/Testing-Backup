@@ -11,11 +11,12 @@
 <style media="screen" type="text/css">
     #TblDetail table {
         border: 1px solid black;
+        font-size:12px;
     }
 
     #TblDetail td {
         border: 1px solid black;
-        padding: 20px;
+        padding: 10px;
     }
 
     #TblDetail th {
@@ -51,10 +52,10 @@
 </style>
 
 
-<div class="form-horizontal">
+<div class="form-horizontal" style="margin-left:20px; width:95%; text-align:center;">
     <div class="row" style="text-align: center; margin-top: 20px;">
         <div id="logo-group" class="row">
-            <img src="~/img/logo.png" alt="MCA Indonesia" width="150">
+            <img src="{XIMGPATHX}" alt="MCA Indonesia" width="100">
         </div>
         <div class="row" style="margin-top:5px;font-weight:bold;">
             
@@ -63,7 +64,7 @@
             Event Budget
         </div>
     </div>
-    <div class="row" style="text-align: left; margin-top: 20px; padding:25px;">
+    <div class="row" style="text-align: left; margin-top: 20px; ">
         <table width="100%">
             <tbody>
                 <tr>
@@ -103,7 +104,7 @@
             </tbody>
         </table>
     </div>
-    <div class="row" style="text-align: left; margin-top: 20px; padding:25px;" id="TblDetail">
+    <div class="row" style="text-align: left; margin-top: 20px; " id="TblDetail">
         <table width="100%">
             <tr>
                 <td class="headerBGColor" rowspan="2">Type Of Expense</td>
@@ -157,13 +158,13 @@
                             @listData[i].UoMFreq
                         </td>
                         <td>
-                            @listData[i].UnitPrice.ToString()
+                            @listData[i].UnitPrice.ToString("0.00")
                         </td>
                         <td>
-                            @listData[i].AmountPerItem
+                            @listData[i].AmountPerItem.ToString("0.00")
                         </td>
-                        <td>@listData[i].DirectPayment.ToString()</td>
-                        <td>@listData[i].SCA.ToString()</td>
+                        <td>@listData[i].DirectPayment.ToString("0.00")</td>
+                        <td>@listData[i].SCA.ToString("0.00")</td>
                         <td>
                             @listData[i].Remarks
                         </td>
@@ -181,9 +182,9 @@
                 <td class="footerBGColor"></td>
                 <td class="footerBGColor"></td>
                 <td class="footerBGColor" colspan="2">Grand in Total (IDR)</td>
-                <td class="rightAlign footerBGColor">@Model.TotalIDR.ToString()</td>
-                <td class="footerBGColor">@Model.TotalDirectPayment.ToString()</td>
-                <td class="footerBGColor">@Model.TotalSCA.ToString()</td>
+                <td class="rightAlign footerBGColor">@Model.TotalIDR.ToString("0.00")</td>
+                <td class="footerBGColor">@Model.TotalDirectPayment.ToString("0.00")</td>
+                <td class="footerBGColor">@Model.TotalSCA.ToString("0.00")</td>
                 <td class="footerBGColor"></td>
 
             </tr>
@@ -196,9 +197,9 @@
                 <td class="footerBGColor"></td>
                 <td class="footerBGColor"></td>
                 <td class="footerBGColor" colspan="2">Grand in Total (USD)</td>
-                <td class="rightAlign footerBGColor">@Model.TotalUSD.ToString()</td>
-                <td class="footerBGColor">@Model.TotalDirectPaymentUSD.ToString()</td>
-                <td class="footerBGColor">@Model.TotalSCAUSD.ToString()</td>
+                <td class="rightAlign footerBGColor">@Model.TotalUSD.ToString("0.00")</td>
+                <td class="footerBGColor">@Model.TotalDirectPaymentUSD.ToString("0.00")</td>
+                <td class="footerBGColor">@Model.TotalSCAUSD.ToString("0.00")</td>
                 <td class="footerBGColor"></td>
 
             </tr>
@@ -207,7 +208,7 @@
         </table>
     </div>
 
-    <div class="row" style="text-align: left; margin-top: 20px; padding:25px;">
+    <div class="row" style="text-align: left; margin-top: 20px; ">
         <table width="100%" id="TblNote">
             <tbody>
                 <tr>
@@ -231,7 +232,7 @@
             </tbody>
         </table>
     </div>
-    <div class="row" style="text-align: left; margin-top: 60px; padding:25px;">
+    <div class="row" style="text-align: left; margin-top: 60px; ">
         <table width="100%">
             <tbody>
                 <tr>

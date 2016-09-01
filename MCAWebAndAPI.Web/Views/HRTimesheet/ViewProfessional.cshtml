@@ -1,0 +1,126 @@
+﻿
+@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model TimesheetVM
+<div class="row">
+    @Html.HiddenFor(m => m.URL)
+
+    @(Html.Kendo().Grid<dynamic>()
+          .Name("gridProfessional")
+          .Scrollable()
+          .Columns(columns =>
+          {
+              foreach (System.Data.DataColumn column in Model.dtDetails.Columns)
+              {
+
+                  var c = columns.Bound(column.ColumnName);
+                  //if (column.DataType.FullName == "System.Double")
+                  //{
+                  //    c.ClientTemplate("#= kendo.toString(" + column.ColumnName + ",'n0') # ");
+                  //    c.Title("Claim Amount");
+                  //}
+                  //else
+                  //{
+                  c.ClientTemplate("#=" + column.ColumnName + " # ").HeaderHtmlAttributes(new { style = "overflow: visible; white-space: normal" });
+                  c.Width(100);
+                  //}
+                  //if (column.ColumnName == "ClaimDate")
+                  //{
+                  //    c.Title("Claim Date");
+                  //}
+                  //if (column.ColumnName == "ID" || column.ColumnName == "Year" || column.ColumnName == "URL")
+                  //{
+                  //    c.Hidden();
+                  //}
+
+              }
+
+              columns.Command(command => command.Custom("Edit").Click("editRedirect"));
+              columns.Command(command => command.Custom("Delete").Click("deleteRedirect"));
+          })
+          .ToolBar(toolbar =>
+          {
+              toolbar.Custom().Text("New Item").HtmlAttributes(new {id = "newRedirect"});
+          })
+          .DataSource(dataSource => dataSource
+              .Ajax()
+              .PageSize(20)
+              .Model(model =>
+              {
+                  var id = "ID";
+                  model.Id(id);
+              })
+
+              .Read(read => read.Action("ReadProfessional", "HRTimesheet"))
+          )
+          )
+
+
+
+</div>
+
+<style type="text/css">
+    
+    .grid-scroll-container {
+    overflow: auto;}
+
+   /*.k-grid-content
+{
+    max-height: 300px;
+}*/
+    /*.k-grid table {
+        table-layout: fixed;
+    }
+
+    .k-grid tbody tr {
+        height: 38px;
+    }
+
+        .k-grid tbody tr td {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }*/
+     
+</style>
+
+<script>
+    function editRedirect(e) {
+        e.preventDefault();
+
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+
+        window.top.location.href = dataItem.URL + '/Lists/Timesheet/EditForm.aspx?ID=' + dataItem.ID;
+
+    }
+
+    function deleteRedirect(e) {
+        var result = confirm("Are you sure you want to delete this item?");
+        if (!result) return;
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        $.ajax({
+            url: '/HRTimesheet/DeleteTimesheetId/' + dataItem.ID,
+            type: "POST",
+            success: function () {
+                window.top.location.href = dataItem.URL + '/SitePages/ProfessionalTimesheetView.aspx';
+            },
+            error: function (err) {
+                alert("Error while deleting item: " + JSON.stringify(err));
+            }
+
+        });
+
+
+
+    }
+
+
+    $("#newRedirect").click(function (e) {
+        e.preventDefault();
+        window.top.location.href = $("#URL").val() + '/Lists/Timesheet/NewForm.aspx';
+    });
+
+
+
+</script>
+

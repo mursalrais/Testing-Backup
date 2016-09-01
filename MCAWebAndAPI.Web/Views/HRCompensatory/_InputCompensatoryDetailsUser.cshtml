@@ -42,7 +42,7 @@
         "<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].CmpID' value='#= CmpID #' />");
 
         columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
-           "<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].EditMode' value='#= EditMode #' />");
+            "<input type='hidden' id='Editid#= GetDetailComplist(data)#' name='CompensatoryDetails[#= GetDetailComplist(data)#].EditMode' value='#= EditMode #' />");
 
         columns.Bound(p => p.GetIndex).Hidden().ClientTemplate("#= GetDetailComplist(data)#" +
        "<input type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].GetIndex' value='#= GetDetailComplist(data)#' />");
@@ -68,7 +68,7 @@
     })
     .DataSource(dataSource => dataSource.Ajax().Events(events =>
     {
-        events.Change("onChange");
+        events.Change("onChangecomp");
     })
     .Model(model =>
     {

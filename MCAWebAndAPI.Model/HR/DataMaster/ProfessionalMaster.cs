@@ -30,6 +30,8 @@ namespace MCAWebAndAPI.Model.HR.DataMaster
 
         public string PSANumber { get; set; }
 
+        public string Desc { get; set; }
+
         [UIHint("Date")]
         public DateTime JoinDate { get; set; } = DateTime.Now;
 

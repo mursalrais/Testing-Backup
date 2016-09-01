@@ -35,7 +35,7 @@ namespace MCAWebAndAPI.Service.Asset
 
         ProfessionalDataVM GetProfMasterInfo(string fullname, string SiteUrl);
 
-        IEnumerable<AssetAcquisitionItemVM> GetAssetSubAsset();
+        IEnumerable<AssignmentOfAssetDetailsVM> GetAssetSubAsset();
         IEnumerable<LocationMasterVM> GetProvince();
         LocationMasterVM GetProvinceInfo(string province, string SiteUrl);
         IEnumerable<LocationMasterVM> GetOfficeName(string SiteUrl, string province = null);

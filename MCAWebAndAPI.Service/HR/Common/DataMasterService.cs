@@ -22,6 +22,7 @@ namespace MCAWebAndAPI.Service.HR.Common
         const string SP_PROTRAIN_LIST_NAME = "Professional Training";
         const string SP_PROORG_LIST_NAME = "Professional Organization Detail";
         const string SP_PRODEP_LIST_NAME = "Dependent";
+        const string SP_ADJUSTMENT_LIST_NAME = "Adjustment";
 
         static Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -314,6 +315,62 @@ namespace MCAWebAndAPI.Service.HR.Common
             }
 
             return monthlyFees;
+        }
+
+        public IEnumerable<AdjustmentMaster> GetAdjustemnt(IEnumerable<int> professionalIDs)
+        {
+
+            var models = new List<AdjustmentMaster>();
+
+            foreach (var professionalID in professionalIDs)
+            {
+                var headerID = GetAdjustmentIDFromProfessional(professionalID);
+
+                var caml = @"<View>  
+                    <Query> 
+                       <Where><Eq><FieldRef Name='professional' LookupId='True' /><Value Type='Lookup'>" + headerID +@"</Value></Eq></Where> 
+                    </Query> 
+              </View>";
+
+                foreach (var item in SPConnector.GetList(SP_ADJUSTMENT_LIST_NAME, _siteUrl))
+                {
+                    models.Add(ConvertToAdjustment_Light(item, professionalID));
+                }
+            }
+            return models;
+        }
+
+        private AdjustmentMaster ConvertToAdjustment_Light(ListItem item, int professionalID)
+        {
+            return new AdjustmentMaster
+            {
+
+                AdjustmentPeriod = Convert.ToDateTime(item["adjustmentperiod"]),
+                ProfessionalID = professionalID,
+                AdjustmentType = Convert.ToString(item["adjustmenttype"]),
+                AdjustmentAmount = Convert.ToDouble(item["adjustmenttype"]),
+                DebitOrCredit = Convert.ToString(item["debitorcredit"])
+            };
+        }
+
+        private int? GetAdjustmentIDFromProfessional(int professionalID)
+        {
+            var caml = @"<View>  
+            <Query> 
+               <Where><Eq><FieldRef Name='professional' LookupId='True' /><Value Type='Lookup'>" + professionalID
+               + @"</Value></Eq></Where> 
+            </Query> 
+                <ViewFields><FieldRef Name='professional' /><FieldRef Name='ID' /></ViewFields> 
+            </View>";
+
+            int? headerID = null;
+            foreach (var item in SPConnector.GetList(SP_ADJUSTMENT_LIST_NAME, _siteUrl, caml))
+            {
+                headerID = Convert.ToInt32(item["ID"]);
+                break;
+            }
+
+            return headerID;
         }
     }
 }

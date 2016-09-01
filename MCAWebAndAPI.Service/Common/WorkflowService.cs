@@ -220,7 +220,7 @@ namespace MCAWebAndAPI.Service.Common
             <Query> 
                <Where><Eq><FieldRef Name='Position' /><Value Type='Lookup'>" + position + @"</Value></Eq></Where> 
             </Query> 
-             <ViewFields><FieldRef Name='ID' /><FieldRef Name='Title' /><FieldRef Name='officeemail' /></ViewFields> 
+             <ViewFields><FieldRef Name='ID' /><FieldRef Name='Title' /><FieldRef Name='Title' /><FieldRef Name='officeemail' /></ViewFields> 
             </View>";
 
             var viewModel = new List<ProfessionalMaster>();
@@ -238,7 +238,8 @@ namespace MCAWebAndAPI.Service.Common
             {
                 ID = Convert.ToInt32(item["ID"]),
                 Name = Convert.ToString(item["Title"]),
-                UserLogin = Convert.ToString(item["officeemail"])
+                UserLogin = Convert.ToString(item["officeemail"]),
+                Desc = string.Format("{0} - {1} ({2})", Convert.ToString(item["Title"]), Convert.ToString(item["Project_x002f_Unit"]), FormatUtil.ConvertLookupToValue(item, "Position"))
             };
         }
 
@@ -247,6 +248,14 @@ namespace MCAWebAndAPI.Service.Common
             foreach (var item in workflowItems)
             {
                 CreateTransactionWorkflowItem(workflowTransactionListName, transactionLookupColumnName, headerID, item, requestor);
+            }
+        }
+
+        public void CreateWorkflow(string workflowTransactionListName, string transactionLookupColumnName, int headerID, IEnumerable<WorkflowItemVM> workflowItems)
+        {
+            foreach (var item in workflowItems)
+            {
+                CreateWorkflow(workflowTransactionListName, transactionLookupColumnName, headerID, item);
             }
         }
 
@@ -285,12 +294,29 @@ namespace MCAWebAndAPI.Service.Common
             var updatedValue = new Dictionary<string, object>();
             updatedValue.Add(transactionLookupColumnName, new FieldLookupValue { LookupId = headerID });
             updatedValue.Add("approverlevel", workflowItem.Level);
-            updatedValue.Add("approver0", GetApproverUserLogin((int)workflowItem.ApproverName.Value));
-            updatedValue.Add("requestor0", requestor);
             updatedValue.Add("position", workflowItem.ApproverPositionId);
             updatedValue.Add("projectunit", workflowItem.ApproverUnitText);
             updatedValue.Add("approvername", workflowItem.ApproverName.Value);
             SPConnector.AddListItem(workflowTransactionListName, updatedValue, _siteUrl);
+        }
+
+        private void CreateWorkflow(string workflowTransactionListName, string transactionLookupColumnName, int headerID, WorkflowItemVM workflowItem)
+        {
+            var updatedValue = new Dictionary<string, object>();
+            updatedValue.Add(transactionLookupColumnName, new FieldLookupValue { LookupId = headerID });
+            updatedValue.Add("approverlevel", workflowItem.Level);
+            updatedValue.Add("position", workflowItem.ApproverPositionId);
+            updatedValue.Add("projectunit", workflowItem.ApproverUnitText);
+            updatedValue.Add("approvername", workflowItem.ApproverName.Value);
+
+            try
+            { 
+                SPConnector.AddListItem(workflowTransactionListName, updatedValue, _siteUrl);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         private void CreateExitProcedureWorkflowItem(string workflowTransactionListName, string transactionLookupColumnName, int exitProcID, ExitProcedureChecklistVM exiProcedureChecklist, string requestor = null)
@@ -458,7 +484,7 @@ namespace MCAWebAndAPI.Service.Common
             <Query> 
              <Where><And><Eq><FieldRef Name='Professional_x0020_Status' /><Value Type='Choice'>Active</Value></Eq><Eq><FieldRef Name='Position' /><Value Type='Lookup'>" + position + @"</Value></Eq></And></Where> 
             </Query> 
-             <ViewFields><FieldRef Name='Title' /><FieldRef Name='officeemail' /></ViewFields> 
+             <ViewFields><FieldRef Name='ID' /><FieldRef Name='Title' /><FieldRef Name='Position' /><FieldRef Name='Project_x002f_Unit' /><FieldRef Name='officeemail' /></ViewFields>
       </View>";
 
             var viewModel = new List<ProfessionalMaster>();
@@ -476,7 +502,7 @@ namespace MCAWebAndAPI.Service.Common
             <Query> 
                <Where><Eq><FieldRef Name='Professional_x0020_Status' /><Value Type='Choice'>Active</Value></Eq></Where>
             </Query> 
-             <ViewFields><FieldRef Name='Title' /><FieldRef Name='officeemail' /></ViewFields> 
+             <ViewFields><FieldRef Name='ID' /><FieldRef Name='Title' /><FieldRef Name='Position' /><FieldRef Name='Project_x002f_Unit' /><FieldRef Name='officeemail' /></ViewFields>
       </View>";
 
             var viewModel = new List<ProfessionalMaster>();

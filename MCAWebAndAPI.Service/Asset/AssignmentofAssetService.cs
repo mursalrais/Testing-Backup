@@ -190,14 +190,22 @@ namespace MCAWebAndAPI.Service.Asset
             try
             {
                 SPConnector.AddListItem("Asset Assignment", columnValues, _siteUrl);
+                var id = SPConnector.GetLatestListItemID("Asset Assignment", _siteUrl);
+                var info = SPConnector.GetListItem("Asset Assignment", id, _siteUrl);
                 if (viewmodel.CompletionStatus.Value == "Complete")
                 {
-                    var id = SPConnector.GetLatestListItemID("Asset Assignment", _siteUrl);
-                    var info = SPConnector.GetListItem("Asset Assignment", id, _siteUrl);
                     if (Convert.ToBoolean(info["Attachments"]) == false)
                     {
                         SPConnector.DeleteListItem("Asset Assignment", id, _siteUrl);
                         return 0;
+                    }
+                }
+                else
+                {
+                    if (Convert.ToBoolean(info["Attachments"]) == true)
+                    {
+                        SPConnector.DeleteListItem("Asset Assignment", id, _siteUrl);
+                        return -1;
                     }
                 }
             }
@@ -267,15 +275,32 @@ namespace MCAWebAndAPI.Service.Asset
             try
             {
                 SPConnector.UpdateListItem("Asset Assignment", ID, columnValues, _siteUrl);
+                var newData = SPConnector.GetListItem("Asset Assignment", ID, _siteUrl);
                 if (viewmodel.CompletionStatus.Value == "Complete")
                 {
-                    var newData = SPConnector.GetListItem("Asset Assignment", ID, _siteUrl);
                     if (Convert.ToBoolean(newData["Attachments"]) == false)
                     {
                         var oldcolumnValues = new Dictionary<string, object>();
                         oldcolumnValues.Add("Title", oldData["Title"]);
                         oldcolumnValues.Add("transferdate", oldData["transferdate"]);
                         oldcolumnValues.Add("assetholder",oldData["assetholder"]);
+                        oldcolumnValues.Add("position", oldData["position"]);
+                        oldcolumnValues.Add("projectunit", oldData["projectunit"]);
+                        oldcolumnValues.Add("contactnumber", oldData["contactnumber"]);
+                        oldcolumnValues.Add("completionstatus", oldData["completionstatus"]);
+
+                        SPConnector.UpdateListItem("Asset Assignment", ID, oldcolumnValues, _siteUrl);
+                        return false;
+                    }
+                }
+                else
+                {
+                    if (Convert.ToBoolean(newData["Attachments"]) == true)
+                    {
+                        var oldcolumnValues = new Dictionary<string, object>();
+                        oldcolumnValues.Add("Title", oldData["Title"]);
+                        oldcolumnValues.Add("transferdate", oldData["transferdate"]);
+                        oldcolumnValues.Add("assetholder", oldData["assetholder"]);
                         oldcolumnValues.Add("position", oldData["position"]);
                         oldcolumnValues.Add("projectunit", oldData["projectunit"]);
                         oldcolumnValues.Add("contactnumber", oldData["contactnumber"]);
@@ -416,35 +441,13 @@ namespace MCAWebAndAPI.Service.Asset
                         <FieldRef Name='Floor' />
                         <FieldRef Name='Room' />
                         <FieldRef Name='Remarks' />
+                        <FieldRef Name='city' />
                     </ViewFields>
                     <QueryOptions /></View>";
             List<string> listProvince = new List<string>();
             foreach (var item in SPConnector.GetList("Location Master", _siteUrl, caml))
             {
                 models.Add(ConvertToProvince(item));
-                //var province = "";
-                //if ((item["Province"] as FieldLookupValue) != null)
-                //{
-                //    province = (item["Province"] as FieldLookupValue).LookupValue;
-                //}
-
-                //if (listProvince.Count == 0)
-                //{
-                //    listProvince.Add(province);
-                //    models.Add(ConvertToProvince(item));
-                //}
-                //else
-                //{
-                //    if (listProvince.Contains(province))
-                //    {
-                //        continue;
-                //    }
-                //    else
-                //    {
-                //        listProvince.Add(province);
-                //        models.Add(ConvertToProvince(item));
-                //    }
-                //}
             }
 
             return models;
@@ -458,7 +461,7 @@ namespace MCAWebAndAPI.Service.Asset
             var province = "";
             if ((item["Province"] as FieldLookupValue) != null)
             {
-                province = (item["Province"] as FieldLookupValue).LookupValue;
+                province = Convert.ToString(item["city"]) +","+(item["Province"] as FieldLookupValue).LookupValue;
             }
             viewModel.Province.Text = province;
             viewModel.OfficeName = Convert.ToString(item["Title"]);
@@ -534,12 +537,10 @@ namespace MCAWebAndAPI.Service.Asset
                 {
                     updatedValues.Add("province", (provinceinfo["Province"] as FieldLookupValue).LookupId);
                 }
-                //updatedValues.Add("assetsubasset", getAssetID["AssetID"]);
-                //updatedValues.Add("province", getProvince["Title"]);
+                updatedValues.Add("city", provinceinfo["city"]);
                 updatedValues.Add("office", provinceinfo["Title"]);
                 updatedValues.Add("floor", provinceinfo["Floor"]);
                 updatedValues.Add("room", provinceinfo["Room"]);
-                //updatedValues.Add("remarks", provinceinfo["Remarks"]);
                 updatedValues.Add("remarks", item.Remarks);
                 updatedValues.Add("Status", "RUNNING");
                 try
@@ -682,6 +683,7 @@ namespace MCAWebAndAPI.Service.Asset
                     <ViewFields>
                        <FieldRef Name='Province' />
                        <FieldRef Name='Title' />
+                        <FieldRef Name='city' />
                        <FieldRef Name='Floor' />
                        <FieldRef Name='Room' />
                        <FieldRef Name='Remarks' />
@@ -694,7 +696,7 @@ namespace MCAWebAndAPI.Service.Asset
                 if(Convert.ToString(x["Title"]) == Convert.ToString(item["office"]) && Convert.ToString(x["Floor"]) == Convert.ToString(item["floor"]) && Convert.ToString(x["Room"]) == Convert.ToString(item["room"]))
                 {
                     _province.Value = (item["province"] as FieldLookupValue).LookupId;
-                    _province.Text = (x["Province"] as FieldLookupValue).LookupValue + "-" + x["Title"] + "-" + x["Floor"] + "-" + x["Room"] + "-" + x["Remarks"];
+                    _province.Text = Convert.ToString(x["city"])+","+(x["Province"] as FieldLookupValue).LookupValue + "-" + x["Title"] + "-" + x["Floor"] + "-" + x["Room"];
                 }
             }
 
@@ -752,12 +754,13 @@ namespace MCAWebAndAPI.Service.Asset
                            <Where>
                               <Eq>
                                  <FieldRef Name='ID' />
-                                 <Value Type='Counter'>"+item.ID+@"</Value>
+                                 <Value Type='Counter'>"+item.ID+ @"</Value>
                               </Eq>
                            </Where>
                         </Query>
                         <ViewFields>
                            <FieldRef Name='room' />
+                            <FieldRef Name='city' />
                            <FieldRef Name='floor' />
                            <FieldRef Name='office' />
                         </ViewFields>
@@ -794,6 +797,7 @@ namespace MCAWebAndAPI.Service.Asset
                                 <ViewFields>
                                 <FieldRef Name='Title' />
                                 <FieldRef Name='Province' />
+                                <FieldRef Name='city' />
                                 <FieldRef Name='Floor' />
                                 <FieldRef Name='Room' />
                                 </ViewFields>
@@ -805,6 +809,7 @@ namespace MCAWebAndAPI.Service.Asset
                         {
                             updatedValues.Add("province", (pro["Province"] as FieldLookupValue).LookupId);
                         }
+                        updatedValues.Add("city", pro["city"]);
                         updatedValues.Add("office", pro["Title"]);
                         updatedValues.Add("floor", pro["Floor"]);
                         updatedValues.Add("room", pro["Room"]);
@@ -816,6 +821,10 @@ namespace MCAWebAndAPI.Service.Asset
                     if ((info["assetsubasset"] as FieldLookupValue) != null)
                     {
                         updatedValues.Add("assetsubasset", (info["assetsubasset"] as FieldLookupValue).LookupId);
+                    }
+                    if(getAssetID.Count > 1)
+                    {
+                        break;
                     }
                 }
                 
@@ -938,7 +947,7 @@ namespace MCAWebAndAPI.Service.Asset
 
         public void RollbackParentChildrenUpload(string listNameHeader, int? latestIDHeader, string siteUrl)
         {
-            throw new NotImplementedException();
+            SPConnector.DeleteListItem(listNameHeader, latestIDHeader, siteUrl);
         }
 
         public bool isExist(string listname, string caml, string site)
@@ -1104,6 +1113,7 @@ namespace MCAWebAndAPI.Service.Asset
             //updatedValues.Add("province", getProvince["Title"]);
             updatedValues.Add("office", provinceinfo["Title"]);
             updatedValues.Add("floor", provinceinfo["Floor"]);
+            updatedValues.Add("city", provinceinfo["city"]);
             updatedValues.Add("room", provinceinfo["Room"]);
             updatedValues.Add("remarks", provinceinfo["Remarks"]);
             updatedValues.Add("Status", "RUNNING");

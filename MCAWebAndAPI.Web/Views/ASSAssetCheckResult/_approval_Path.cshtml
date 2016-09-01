@@ -1,0 +1,16 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Asset
+
+@model AssetCheckResultHeaderVM
+
+<form>
+    <fieldset>            
+        <div class="col-md-6">
+            @Html.Bootstrap().LabelFor(m => m.Posision).Class("col-md-4 control-label")
+            @Html.EditorFor(m => m.Posision)
+        </div>
+        <div class="col-md-6">
+            @Html.Bootstrap().LabelFor(m => m.Name).Class("col-md-4 control-label")
+            @Html.EditorFor(m => m.Name)
+        </div>
+    </fieldset>
+</form>

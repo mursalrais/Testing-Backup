@@ -43,7 +43,8 @@ namespace MCAWebAndAPI.Service.Finance
         private const string FIELD_GL_NO = "GL_x0020_ID_x003a_GL_x0020_No";
         private const string FIELD_GL_DESC = "GL_x0020_ID_x003a_GL_x0020_Descr";
         private const string FIELD_REMARKS = "Remarks";
-        private const string FIELD_VOUCHERNO = "Voucher_x0020_NO";
+        //private const string FIELD_VOUCHERNO = "Voucher_x0020_NO";
+        private const string FIELD_VOUCHERNO = "Title";
         private const string FIELD_ID = "ID";
         private const string FIELD_PCID_DOCUMENTS = "Petty_x0020_Cash_x0020_Payment_x0020_Voucher";
 
@@ -96,7 +97,10 @@ namespace MCAWebAndAPI.Service.Finance
             newItem.Add(FIELD_WBS_ID, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.WBS.Value) });
             newItem.Add(FIELD_GL_ID, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.GL.Value) });
             newItem.Add(FIELD_REMARKS, viewModel.Remarks);
-            newItem.Add(FIELD_VOUCHERNO, DocumentNumbering.Create(siteUrl, documentNoFormat, DIGIT_DOCUMENTNO));
+
+            string docNO = DocumentNumbering.Create(siteUrl, documentNoFormat, DIGIT_DOCUMENTNO);
+            newItem.Add(FIELD_VOUCHERNO, docNO);
+            viewModel.TransactionNo = docNO;
 
             try
             {
@@ -122,11 +126,14 @@ namespace MCAWebAndAPI.Service.Finance
             if (viewModel.Professional.Value.HasValue)
             {
                 updatedValue.Add(FIELD_PROFESSIONALID, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.Professional.Value) });
+                updatedValue.Add(FIELD_VENDORID, "");
             }
+            
 
             if (viewModel.Vendor.Value.HasValue)
             {
                 updatedValue.Add(FIELD_VENDORID, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.Vendor.Value) });
+                updatedValue.Add(FIELD_PROFESSIONALID, "");
             }
 
             updatedValue.Add(FIELD_CURRENCY, viewModel.Currency.Value);

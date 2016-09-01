@@ -29,6 +29,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
         private static IEnumerable<MonthlyFeeMaster> _allProfessionalMonthlyFees;
         private static IEnumerable<DayOffRequest> _allProfessionalDayOffRequests;
         private static IEnumerable<EventCalendar> _allHolidaysAndPublicHolidays;
+        private static IEnumerable<AdjustmentMaster> _allAdjustments;
 
         private static int[] _professionalIDs;
         private static DateTime[] _dateRanges;
@@ -78,6 +79,17 @@ namespace MCAWebAndAPI.Service.HR.Payroll
         public static async Task PopulateAllValidPSAs(this List<PayrollWorksheetDetailVM> payrollWorksheet, DateTime startDatePeriod)
         {
             _allValidPSAs = _psaService.GetPSAs(startDatePeriod);
+        }
+
+        /// <summary>
+        /// To retrived all required master data in order to minimise network round-trip time
+        /// </summary>
+        /// <param name="payrollWorksheet"></param>
+        /// <param name="startDatePeriod"></param>
+        /// <returns></returns>
+        public static async Task PopulateALLAdjustment(this List<PayrollWorksheetDetailVM> payrollWorksheet, IEnumerable<int> professionalIDs)
+        {
+            _allAdjustments = _dataMasterService.GetAdjustemnt(professionalIDs.ToArray());
         }
 
         /// <summary>
@@ -210,6 +222,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             payrollWorksheet.PopulateColumnsFromProfessional();
             payrollWorksheet.PopulateColumnsFromEventCalendar();
             payrollWorksheet.PopulateColumnsFromDayOff();
+            payrollWorksheet.PopulateColumnsFromAdjustment();
 
             return payrollWorksheet;
         }
@@ -412,6 +425,78 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             }
             
             return ids.OrderBy(e=> e).ToList();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="payrollWorksheet"></param>
+        /// <returns></returns>
+        private static List<PayrollWorksheetDetailVM> PopulateColumnsFromAdjustment(this List<PayrollWorksheetDetailVM> payrollWorksheet)
+        {
+            var rowIndex = 0;
+            foreach (var professionalID in _professionalIDs)
+            {
+                foreach (var date in _dateRanges)
+                {
+                    payrollWorksheet[rowIndex++].Adjustment =
+                        IsAdjustment(professionalID, date) ? 1 : 0;
+
+                    payrollWorksheet[rowIndex++].SpotAward =
+                        IsSpotAward(professionalID, date) ? 1 : 0;
+
+                    payrollWorksheet[rowIndex++].RetentionPayment =
+                        IsRetention(professionalID, date) ? 1 : 0;
+
+                    payrollWorksheet[rowIndex++].Overtime =
+                        IsOvertime(professionalID, date) ? 1 : 0;
+
+                    payrollWorksheet[rowIndex++].Deduction =
+                        IsDeduction(professionalID, date) ? 1 : 0;
+                }
+            }
+
+            return payrollWorksheet;
+        }
+
+        private static bool IsAdjustment(int professionalID, DateTime date)
+        {
+            var adjustmentData = _allAdjustments.FirstOrDefault(e => e.ProfessionalID == professionalID
+                && e.AdjustmentPeriod <= date && date <= e.AdjustmentPeriod && e.AdjustmentType == "Adjustment");
+
+            return adjustmentData != null;
+        }
+
+        private static bool IsSpotAward(int professionalID, DateTime date)
+        {
+            var adjustmentData = _allAdjustments.FirstOrDefault(e => e.ProfessionalID == professionalID
+                && e.AdjustmentPeriod <= date && date <= e.AdjustmentPeriod && e.AdjustmentType == "Spot Award");
+
+            return adjustmentData != null;
+        }
+
+        private static bool IsRetention(int professionalID, DateTime date)
+        {
+            var adjustmentData = _allAdjustments.FirstOrDefault(e => e.ProfessionalID == professionalID
+                && e.AdjustmentPeriod <= date && date <= e.AdjustmentPeriod && e.AdjustmentType == "Retention Payment");
+
+            return adjustmentData != null;
+        }
+
+        private static bool IsOvertime(int professionalID, DateTime date)
+        {
+            var adjustmentData = _allAdjustments.FirstOrDefault(e => e.ProfessionalID == professionalID
+                && e.AdjustmentPeriod <= date && date <= e.AdjustmentPeriod && e.AdjustmentType == "Overtime");
+
+            return adjustmentData != null;
+        }
+
+        private static bool IsDeduction(int professionalID, DateTime date)
+        {
+            var adjustmentData = _allAdjustments.FirstOrDefault(e => e.ProfessionalID == professionalID
+                && e.AdjustmentPeriod <= date && date <= e.AdjustmentPeriod && e.AdjustmentType == "Deduction");
+
+            return adjustmentData != null;
         }
     }
 }

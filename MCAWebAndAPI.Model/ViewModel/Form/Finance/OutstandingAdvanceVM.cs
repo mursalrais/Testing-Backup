@@ -31,7 +31,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
             ControllerName = "Vendor",
             ActionName = "GetVendor",
             ValueField = "Value",
-            TextField = "Text"
+            TextField = "Text",
+            OnSelectEventName="OnSelectStaff"
         };
 
         /// <summary>
@@ -61,7 +62,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         [UIHint("ComboBox")]
         public ProjectComboBoxVM Project { get; set; } = new ProjectComboBoxVM();
 
-        [Required]
         [DisplayName("Remarks")]
         [UIHint("TextArea")]
         public string Remarks { get; set; }
