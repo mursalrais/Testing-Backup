@@ -8,7 +8,7 @@ namespace MCAWebAndAPI.Service.Utils
     public class FormatUtil
     {
         private const string SuffixCurrencyIDR = " rupiahs";
-        private const string SuffixCurrencyUSD = " USD dollars";
+        private const string SuffixCurrencyUSD = " dollars";
 
         /// <summary>
         /// Generate digit format string from given value

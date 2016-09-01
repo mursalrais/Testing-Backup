@@ -31,7 +31,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
             ControllerName = "Vendor",
             ActionName = "GetVendor",
             ValueField = "Value",
-            TextField = "Text"
+            TextField = "Text",
+            OnSelectEventName="OnSelectStaff"
         };
 
         /// <summary>
