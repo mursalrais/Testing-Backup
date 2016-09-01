@@ -23,9 +23,12 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         // GET: AssetCheckResult
-        public ActionResult Index()
+        public ActionResult Index(string siteUrl)
         {
-            return View();
+            assetCheckResultService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            return Redirect((siteUrl ?? ConfigResource.DefaultBOSiteUrl)+ Service.Resources.UrlResource.AssetCheckResult);
         }
 
         //[HttpPost]
@@ -36,7 +39,7 @@ namespace MCAWebAndAPI.Web.Controllers
             string SubmitForApproval,
             string SaveAsDraft,
             string Cancel
-            )
+        )
         {
             assetCheckResultService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
@@ -47,9 +50,24 @@ namespace MCAWebAndAPI.Web.Controllers
                 return View(viewModelGetData);
             }
 
+            if (!string.IsNullOrEmpty(Calculate))
+            {
+                var viewModelCalculate = assetCheckResultService.GetPopulatedModelCalculate(data);
+                return View(viewModelCalculate);
+            }
+
+
+            if (!string.IsNullOrEmpty(SubmitForApproval))
+            {
+                var viewModelSaveAsDraft = assetCheckResultService.GetPopulatedModelSave(data, true);
+                return RedirectToAction("Index");
+            }
+
+
             if (!string.IsNullOrEmpty(SaveAsDraft))
             {
-                
+                var viewModelSaveAsDraft = assetCheckResultService.GetPopulatedModelSave(data);
+                return RedirectToAction("Index");
             }
 
             var viewModel = assetCheckResultService.GetPopulatedModel(null, data.FormID.Value);
@@ -73,21 +91,57 @@ namespace MCAWebAndAPI.Web.Controllers
                 }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetCheckInfo(int IDAssetCheck)
+        
+        public ActionResult Edit(string siteUrl,
+            AssetCheckResultHeaderVM data,
+            int? ID,
+            string Calculate,
+            string SubmitForApproval,
+            string SaveAsDraft,
+            string Cancel
+        )
         {
-            var siteUrl = SessionManager.Get<string>("SiteUrl");
-            int? IDcheck = IDAssetCheck;
-            var CheckInfo = assetCheckResultService.GetCheckInfo(IDcheck, siteUrl);
+            assetCheckResultService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            
+            if (!string.IsNullOrEmpty(Calculate))
+            {
+                var viewModelCalculate = assetCheckResultService.GetPopulatedModelCalculate(data);
+                return View(viewModelCalculate);
+            }
 
-            //var professionals = GetFromExistingSession();
-            return Json(
-                new
-                {
-                    CheckInfo.ID,
-                    CheckInfo.CompletionStatus
+            if (!string.IsNullOrEmpty(SubmitForApproval))
+            {
+                var viewModelSaveAsDraft = assetCheckResultService.GetPopulatedModelSave(data, true);
+                return RedirectToAction("Index");
+            }
 
-                }, JsonRequestBehavior.AllowGet);
+            if (!string.IsNullOrEmpty(SaveAsDraft))
+            {
+                var viewModelSaveAsDraft = assetCheckResultService.GetPopulatedModelSave(data);
+                return RedirectToAction("Index");
+            }
+
+            var viewModel = assetCheckResultService.GetPopulatedModel(ID, data.FormID.Value);
+            return View(viewModel);
         }
+
+        
+        //public ActionResult GetCheckInfo(int IDAssetCheck)
+        //{
+        //    var siteUrl = SessionManager.Get<string>("SiteUrl");
+        //    int? IDcheck = IDAssetCheck;
+        //    var CheckInfo = assetCheckResultService.GetCheckInfo(IDcheck, siteUrl);
+
+        //    //var professionals = GetFromExistingSession();
+        //    return Json(
+        //        new
+        //        {
+        //            CheckInfo.ID,
+        //            CheckInfo.CompletionStatus
+
+        //        }, JsonRequestBehavior.AllowGet);
+        //}
 
         public ActionResult Search()
         {

@@ -251,6 +251,14 @@ namespace MCAWebAndAPI.Service.Common
             }
         }
 
+        public void CreateWorkflow(string workflowTransactionListName, string transactionLookupColumnName, int headerID, IEnumerable<WorkflowItemVM> workflowItems)
+        {
+            foreach (var item in workflowItems)
+            {
+                CreateWorkflow(workflowTransactionListName, transactionLookupColumnName, headerID, item);
+            }
+        }
+
         public void CreateExitProcedureChecklistWorkflow(string workflowTransactionListName, string transactionLookupColumnName, int exitProcID, IEnumerable<ExitProcedureChecklistVM> exitProcedureChecklist, string requestor = null)
         {
             foreach (var item in exitProcedureChecklist)
@@ -286,12 +294,28 @@ namespace MCAWebAndAPI.Service.Common
             var updatedValue = new Dictionary<string, object>();
             updatedValue.Add(transactionLookupColumnName, new FieldLookupValue { LookupId = headerID });
             updatedValue.Add("approverlevel", workflowItem.Level);
-            updatedValue.Add("approver0", GetApproverUserLogin((int)workflowItem.ApproverName.Value));
+            updatedValue.Add("approver0", GetApproverUserLogin((int)workflowItem.ApproverUserName.Value));
             updatedValue.Add("requestor0", requestor);
+            SPConnector.AddListItem(workflowTransactionListName, updatedValue, _siteUrl);
+        }
+
+        private void CreateWorkflow(string workflowTransactionListName, string transactionLookupColumnName, int headerID, WorkflowItemVM workflowItem)
+        {
+            var updatedValue = new Dictionary<string, object>();
+            updatedValue.Add(transactionLookupColumnName, new FieldLookupValue { LookupId = headerID });
+            updatedValue.Add("approverlevel", workflowItem.Level);
             updatedValue.Add("position", workflowItem.ApproverPositionId);
             updatedValue.Add("projectunit", workflowItem.ApproverUnitText);
             updatedValue.Add("approvername", workflowItem.ApproverName.Value);
-            SPConnector.AddListItem(workflowTransactionListName, updatedValue, _siteUrl);
+
+            try
+            { 
+                SPConnector.AddListItem(workflowTransactionListName, updatedValue, _siteUrl);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         private void CreateExitProcedureWorkflowItem(string workflowTransactionListName, string transactionLookupColumnName, int exitProcID, ExitProcedureChecklistVM exiProcedureChecklist, string requestor = null)

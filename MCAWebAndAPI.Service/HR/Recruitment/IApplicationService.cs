@@ -41,5 +41,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         void SetApplicationStatus(ApplicationDataVM viewModel);
 
         int? CreateProfessionalData(ApplicationDataVM viewModel);
+
+        void SendMail(string emailApplicant, string emailSubject, string emailContent);
+
+        string GetNationality(int nationalityID);
     }
 }

@@ -11,31 +11,67 @@
         {
             columns.Bound(p => p.Item);
 
-            columns.Bound(p => p.SerialNo);
+            columns.Bound(p => p.AssetSubAsset).ClientTemplate("#= AssetSubAsset #" +
+                "<input type='hidden' name='Details[#= index(data)#].AssetSubAsset' value='#= AssetSubAsset #' />"
+            );
 
-            columns.Bound(p => p.Province);
 
-            columns.Bound(p => p.LocationName);
+            columns.Bound(p => p.SerialNo).ClientTemplate("#= SerialNo #" +
+                "<input type='hidden' name='Details[#= index(data)#].SerialNo' value='#= SerialNo #' />"
+            );
 
-            columns.Bound(p => p.Status);
+            columns.Bound(p => p.Province).ClientTemplate("#= Province #" +
+                "<input type='hidden' name='Details[#= index(data)#].Province' value='#= Province #' />"
+            );
 
-            columns.Bound(p => p.Existense);
+            columns.Bound(p => p.LocationName).ClientTemplate("#= LocationName #" +
+                "<input type='hidden' name='Details[#= index(data)#].LocationName' value='#= LocationName #' />"
+            );
 
-            columns.Bound(p => p.Condition);
+            columns.Bound(p => p.Status).ClientTemplate("#= Status #" +
+                "<input type='hidden' name='Details[#= index(data)#].Status' value='#= Status #' />"
+            );
 
-            columns.Bound(p => p.Specification);
+            columns.Bound(p => p.Existense).ClientTemplate("#= Existense #" +
+                "<input type='hidden' name='Details[#= index(data)#].Existense' value='#= Existense #' />"
+            );
 
-            columns.Bound(p => p.SystemQty);
+            columns.Bound(p => p.Condition).ClientTemplate("#= Condition #" +
+                "<input type='hidden' name='Details[#= index(data)#].Condition' value='#= Condition #' />"
+            );
 
-            columns.Bound(p => p.PhysicalQty);
+            columns.Bound(p => p.Specification).ClientTemplate("#= Specification #" +
+                "<input type='hidden' name='Details[#= index(data)#].Specification' value='#= Specification #' />"
+            );
 
-            columns.Bound(p => p.DifferentQty);
+            columns.Bound(p => p.SystemQty).ClientTemplate("#= SystemQty #" +
+                "<input type='hidden' name='Details[#= index(data)#].SystemQty' value='#= SystemQty #' />"
+            );
 
-            columns.Bound(p => p.Dispose);
+            columns.Bound(p => p.PhysicalQty).ClientTemplate("#= PhysicalQty #" +
+                "<input type='hidden' name='Details[#= index(data)#].physicalQty' value='#= PhysicalQty #' />"
+            );
 
-            columns.Bound(p => p.Remarks);
+            columns.Bound(p => p.DifferentQty).ClientTemplate("#= DifferentQty #" +
+                "<input type='hidden' name='Details[#= index(data)#].DifferentQty' value='#= DifferentQty #' />"
+            );
 
-            columns.Bound(p => p.AssetID);
+            columns.Bound(p => p.AssetID).Hidden().ClientTemplate("#= AssetID #" +
+                "<input type='hidden' name='Details[#= index(data)#].AssetID' value='#= AssetID #' />"
+            );
+
+            columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
+                "<input type='hidden' name='Details[#= index(data)#].ID' value='#= ID #' />"
+            );
+
+            columns.Bound(p => p.Dispose).ClientTemplate("#= Dispose #" +
+                "<input type='hidden' name='Details[#= index(data)#].Dispose' value='#= Dispose #' />"
+            );
+
+            columns.Bound(p => p.Remarks).ClientTemplate("#= Remarks #" +
+                "<input type='hidden' name='Details[#= index(data)#].Remarks' value='#= Remarks #' />"
+            );
+
         })
         .DataSource(dataSource => dataSource.Ajax()
         .Model(model =>
@@ -47,6 +83,7 @@
             model.Field(p => p.LocationName).Editable(false);
             model.Field(p => p.Status).Editable(false);
             model.Field(p => p.SystemQty).Editable(false);
+            model.Field(p => p.Dispose).Editable(false);
         })
         .ServerOperation(false)
         )

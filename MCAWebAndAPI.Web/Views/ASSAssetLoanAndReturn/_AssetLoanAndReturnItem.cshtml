@@ -25,11 +25,11 @@
 
 
             columns.Bound(p => p.EstReturnDate).ClientTemplate("#= kendo.toString(EstReturnDate, 'MM-dd-yyyy') #" +
-            "<input type='hidden' name='AssetLoanAndReturnItem[#= getWorkingRelationshipDetails(data)#].EstReturnDate'  value='#= EstReturnDate #' />"
+            "<input type='hidden' class='estdate' name='AssetLoanAndReturnItem[#= getWorkingRelationshipDetails(data)#].EstReturnDate'  value='#= EstReturnDate #' />"
             );
 
             columns.Bound(p => p.ReturnDate).ClientTemplate("#= kendo.toString(ReturnDate, 'MM-dd-yyyy') #" +
-            "<input type='hidden' name='AssetLoanAndReturnItem[#= getWorkingRelationshipDetails(data)#].ReturnDate' value='#= ReturnDate #' />"
+            "<input type='hidden' class='returndate' name='AssetLoanAndReturnItem[#= getWorkingRelationshipDetails(data)#].ReturnDate' value='#= ReturnDate #' />"
             );
 
             columns.Bound(p => p.Status).ClientTemplate("#= Status #" +
@@ -56,7 +56,7 @@
                        model.Id(p => p.ID);
                        model.Field(m => m.AssetSubAsset).DefaultValue(AssetLoanAndReturnItemVM.GetAssetSubAssetDefaultValue());
                        model.Field(p => p.EstReturnDate).DefaultValue(DateTime.UtcNow); ;
-                       model.Field(p => p.ReturnDate).DefaultValue(DateTime.UtcNow); ;
+                       model.Field(p => p.ReturnDate) ;
                        model.Field(p => p.Status).Editable(false);
                        //model.Field(m => m.Status).DefaultValue(AssetLoanAndReturnItemVM.GetAssetSubAssetDefaultValue());
                    })

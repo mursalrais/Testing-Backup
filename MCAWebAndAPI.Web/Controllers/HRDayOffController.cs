@@ -130,42 +130,23 @@ namespace MCAWebAndAPI.Web.Controllers
             return array;
         }
 
-        //    var siteUrl = SessionManager.Get<string>("SiteUrl");
-        //    _hRDayOffService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+        public ActionResult DisplayRequestDetail(List<string> dayOffRequestDayOffType, List<string> dayOffRequestStarDate, List<string> dayOffRequestEndDate, List<string> dayOffRequestFullOrHalf, List<string> dayOffRequestRemarks, string siteUrl = null)
+        {
+            _hRDayOffService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
-        //    int? headerID = null;
-        //    try
-        //    {
-        //        headerID = _hRDayOffService.CreateHeader(viewModel);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        ErrorSignal.FromCurrentContext().Raise(e);
-        //        return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
-        //    }
+            var viewModel = _hRDayOffService.GetRequestData(dayOffRequestDayOffType, dayOffRequestStarDate, dayOffRequestEndDate, dayOffRequestFullOrHalf, dayOffRequestRemarks);
 
-        //    if (viewModel.StatusForm != "DraftInitiated")
-        //    {
-        //        Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateTransactionWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME,
-        //            SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)headerID);
-        //    }
+            return View("_DisplayRequestDetail", viewModel.DayOffRequestDetailsDisplay);
+        }
 
-        //    Task createDayOffDetailsTask = _hRDayOffService.CreateDayOffBalanceDetailsAsync(headerID, viewModel.DayOffBalanceDetails);
+        public ActionResult TestAction(int masterDayOffTypeValue, string siteUrl)
+        {
+            _hRDayOffService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
-        //    Task allTasks = Task.WhenAll(createDayOffDetailsTask);
-
-        //    try
-        //    {
-        //        await allTasks;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Response.StatusCode = (int)HttpStatusCode.BadRequest;
-        //        return JsonHelper.GenerateJsonErrorResponse(e);
-        //    }
-
-        //    return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.Professional);
-        //}
+            return View();
+        }
 
         [HttpPost]
         public async Task<ActionResult> CreateDayOff(FormCollection form, DayOffRequestVM viewModel)

@@ -11,26 +11,30 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 {
     public class AssetReplacementItemVM
     {
-        public int Id { get; set; }
+        public int ID { get; set; }
+        [UIHint("InGridAjaxComboBox")]
+        public AjaxComboBoxVM AssetSubAsset { get; set; } = new AjaxComboBoxVM();
 
-        public string NewAsset { get; set; }
+        public static AjaxComboBoxVM GetAssetSubAssetDefaultValue(AjaxComboBoxVM model = null)
+        {
+            if (model == null)
+            {
+                return new AjaxComboBoxVM();
+            }
+            else
+            {
+                return model;
+            }
+        }
 
-        public string Item { get; set; }
+        public string Wbs { get; set; }
 
-        public string PoLineItem { get; set; }
+        public int CostIdr { get; set; }
 
-        public int AssetNo { get; set; }
+        public int CostUsd { get; set; }
 
-        public int AssetSubNo { get; set; }
+        public string remarks { get; set; }
 
-        public string AssetDescription { get; set; }
-
-        public int WbsId { get; set; }
-
-        public string WbsDescription { get; set; }
-
-        public decimal CostIdr { get; set; }
-
-        public decimal CostUsd { get; set; }
+        public string status { get; set; }
     }
 }

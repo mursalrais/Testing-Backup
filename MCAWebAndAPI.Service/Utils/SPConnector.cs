@@ -353,6 +353,7 @@ namespace MCAWebAndAPI.Service.Utils
                 {
                     SPListItem[key] = updatedValues[key];
                 }
+                
                 //SPListItem["Editor"] = currentEditor;
                 // Update columns remotely
                 SPListItem.Update();
@@ -381,7 +382,6 @@ namespace MCAWebAndAPI.Service.Utils
             }
         }
 
-        
         /// <summary>
         /// 
         /// </summary>

@@ -740,7 +740,7 @@ namespace MCAWebAndAPI.Service.Asset
 
         private IEnumerable<string> GetFromListHR(string listname, string f1, string f2, string siteUrl)
         {
-            var siteHr = siteUrl.Replace("/bo", "/hr");
+                var siteHr = siteUrl.Replace("/bo", "/hr");
             List<string> _choices = new List<string>();
             var listItems = SPConnector.GetList(listname, siteHr);
             foreach (var item in listItems)
