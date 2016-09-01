@@ -19,7 +19,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// requeststartdate
         /// </summary>
-        [UIHint("Date")]
+        //[UIHint("Date")]
         [DisplayName("Start Date")]
         [Required]
         public string RequestStartDate { get; set; }
@@ -27,8 +27,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// requestenddate
         /// </summary>
-        [UIHint("Date")]
+        //[UIHint("Date")]
         [DisplayName("End Date")]
+        [Required]
         public string RequestEndDate { get; set; }
 
         /// <summary>
@@ -95,6 +96,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// Title
         /// </summary>
         [DisplayName("Day-Off Type")]
+        [Required]
         public string DayOffType { get; set; }
         
     }

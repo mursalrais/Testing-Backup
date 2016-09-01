@@ -1092,6 +1092,16 @@
     <Content Include="Views\HRProfessionalPerformanceEvaluation\_WorkflowPathDetails.cshtml" />
     <Content Include="Views\HRDayOff\_DayOffNextBalance.cshtml" />
     <Content Include="Views\HRDayOff\_DisplayRequestDetail.cshtml" />
+    <Content Include="Views\FINLandingPage\Index.cshtml" />
+    <Content Include="Views\FINPettyCashJournal\Item.cshtml" />
+    <Content Include="Views\FINPettyCashReimbursement\Item.cshtml" />
+    <Content Include="Views\FINPettyCashReimbursement\Print.cshtml" />
+    <Content Include="Views\FINSCASettlement\Item.cshtml" />
+    <Content Include="Views\FINSCASettlement\Print.cshtml" />
+    <Content Include="Views\FINSCASettlement\_ItemDetails.cshtml" />
+    <Content Include="Views\FINTaxExemption\ItemIncomeTax.cshtml" />
+    <Content Include="Views\FINTaxExemption\ItemOtherTax.cshtml" />
+    <Content Include="Views\FINTaxExemption\ItemVATTax.cshtml" />
     <Content Include="Views\HRCompensatory\AddCompensatoryUser.cshtml" />
     <Content Include="Views\HRCompensatory\_WorkflowPathDetails.cshtml" />
     <None Include="Web.Debug.config">
@@ -1127,11 +1137,14 @@
     <Compile Include="Controllers\CSVController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\FileController.cs" />
+    <Compile Include="Controllers\FINComboboxController.cs" />
     <Compile Include="Controllers\FINLandingPageController.cs" />
+    <Compile Include="Controllers\FINPettyCashJournalController.cs" />
     <Compile Include="Controllers\FINPettyCashPaymentVoucherController.cs" />
     <Compile Include="Controllers\FINPettyCashReplenishmentController.cs" />
     <Compile Include="Controllers\FINPettyCashSettlementController.cs" />
     <Compile Include="Controllers\FINPettyCashStatementController.cs" />
+    <Compile Include="Controllers\FINSCASettlementController.cs" />
     <Compile Include="Controllers\FINSCAVoucherController.cs" />
     <Compile Include="Controllers\HRDayOffController.cs" />
     <Compile Include="Controllers\SharedFinanceController.cs" />
@@ -1231,7 +1244,6 @@
     <Folder Include="App_Code\" />
     <Folder Include="Scripts\apps\controlls\" />
     <Folder Include="Views\Activity\" />
-    <Folder Include="Views\FINPettyCashReimbursement\" />
     <Folder Include="Views\HRDataMaster\" />
   </ItemGroup>
   <ItemGroup>

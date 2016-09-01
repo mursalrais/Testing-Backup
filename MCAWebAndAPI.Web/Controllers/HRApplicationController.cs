@@ -130,8 +130,8 @@ namespace MCAWebAndAPI.Web.Controllers
             viewModel.WorkingExperienceDetails = BindWorkingExperienceDetails(form, viewModel.WorkingExperienceDetails);
             Task createWorkingExperienceDetailsTask = _service.CreateWorkingExperienceDetailsAsync(headerID, viewModel.WorkingExperienceDetails);
             Task createApplicationDocumentTask = _service.CreateApplicationDocumentAsync(headerID, viewModel.Documents);
-            Task sendTask = EmailUtil.SendAsync(viewModel.EmailAddresOne, "Application Submission Confirmation",
-                 EmailResource.ApplicationSubmissionNotification);
+            //Task sendTask = EmailUtil.SendAsync(viewModel.EmailAddresOne, "Application Submission Confirmation",
+            //     EmailResource.ApplicationSubmissionNotification);
             Task allTasks = Task.WhenAll(createEducationDetailsTask, createTrainingDetailsTask,
                 createWorkingExperienceDetailsTask, createApplicationDocumentTask);
 
