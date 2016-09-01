@@ -122,6 +122,7 @@ namespace MCAWebAndAPI.Service.HR.Common
                 JoinDateTemp = Convert.ToDateTime(item["Join_x0020_Date"]).ToLocalTime().ToShortDateString(),
                 InsuranceAccountNumber = Convert.ToString(item["hiaccountnr"]),
                 MobileNumber = Convert.ToString(item["mobilephonenr"]),
+                TaxStatus = Convert.ToString(item["payrolltaxstatus"]),
 
                 // The followings are used in Payroll Worksheet
                 BankAccountName = Convert.ToString(item["payrollbankname"]),
