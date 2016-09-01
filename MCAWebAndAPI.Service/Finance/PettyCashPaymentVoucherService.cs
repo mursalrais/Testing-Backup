@@ -97,7 +97,10 @@ namespace MCAWebAndAPI.Service.Finance
             newItem.Add(FIELD_WBS_ID, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.WBS.Value) });
             newItem.Add(FIELD_GL_ID, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.GL.Value) });
             newItem.Add(FIELD_REMARKS, viewModel.Remarks);
-            newItem.Add(FIELD_VOUCHERNO, DocumentNumbering.Create(siteUrl, documentNoFormat, DIGIT_DOCUMENTNO));
+
+            string docNO = DocumentNumbering.Create(siteUrl, documentNoFormat, DIGIT_DOCUMENTNO);
+            newItem.Add(FIELD_VOUCHERNO, docNO);
+            viewModel.TransactionNo = docNO;
 
             try
             {
@@ -123,11 +126,14 @@ namespace MCAWebAndAPI.Service.Finance
             if (viewModel.Professional.Value.HasValue)
             {
                 updatedValue.Add(FIELD_PROFESSIONALID, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.Professional.Value) });
+                updatedValue.Add(FIELD_VENDORID, "");
             }
+            
 
             if (viewModel.Vendor.Value.HasValue)
             {
                 updatedValue.Add(FIELD_VENDORID, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.Vendor.Value) });
+                updatedValue.Add(FIELD_PROFESSIONALID, "");
             }
 
             updatedValue.Add(FIELD_CURRENCY, viewModel.Currency.Value);

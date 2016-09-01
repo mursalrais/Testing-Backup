@@ -130,8 +130,8 @@ namespace MCAWebAndAPI.Web.Controllers
             viewModel.WorkingExperienceDetails = BindWorkingExperienceDetails(form, viewModel.WorkingExperienceDetails);
             Task createWorkingExperienceDetailsTask = _service.CreateWorkingExperienceDetailsAsync(headerID, viewModel.WorkingExperienceDetails);
             Task createApplicationDocumentTask = _service.CreateApplicationDocumentAsync(headerID, viewModel.Documents);
-            Task sendTask = EmailUtil.SendAsync(viewModel.EmailAddresOne, "Application Submission Confirmation",
-                 EmailResource.ApplicationSubmissionNotification);
+            //Task sendTask = EmailUtil.SendAsync(viewModel.EmailAddresOne, "Application Submission Confirmation",
+            //     EmailResource.ApplicationSubmissionNotification);
             Task allTasks = Task.WhenAll(createEducationDetailsTask, createTrainingDetailsTask,
                 createWorkingExperienceDetailsTask, createApplicationDocumentTask);
 
@@ -188,6 +188,9 @@ namespace MCAWebAndAPI.Web.Controllers
 
             string nationalityName = _service.GetNationality(Convert.ToInt32(viewModel.Nationality.Value));
             viewModel.NationalityName = nationalityName;
+
+            //string positionName = _service.GetPositionName(Convert.ToInt32(viewModel.Position));
+            //viewModel.PositionName = positionName;
 
             viewModel.EducationDetails = BindEducationDetails(form, viewModel.EducationDetails);
             viewModel.TrainingDetails = BindTrainingDetails(form, viewModel.TrainingDetails);

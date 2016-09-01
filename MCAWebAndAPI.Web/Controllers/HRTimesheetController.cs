@@ -6,6 +6,7 @@ using MCAWebAndAPI.Web.Helpers;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
@@ -28,7 +29,7 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             SessionManager.Set("SiteUrl", siteUrl);
             _timesheetService.SetSiteUrl(siteUrl);
-            var viewModel = _timesheetService.GetTimesheet(userlogin, DateTime.Now.GetFirstPayrollDay());
+            var viewModel = _timesheetService.GetTimesheet(userlogin, DateTime.Now.ToLocalTime());
 
             SessionManager.Set("TimesheetDetails", viewModel.TimesheetDetails);
             return View(viewModel);
@@ -180,7 +181,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 _timesheetService.SetSiteUrl(siteUrl);
                 int? headerId;
            
-                if (string.IsNullOrEmpty(viewModel.UserLogin)) throw new Exception("Userlogin empty");
+                //if (string.IsNullOrEmpty(viewModel.UserLogin)) throw new Exception("Userlogin empty");
 
                 headerId = _timesheetService.CreateHeader(viewModel);
              
@@ -314,11 +315,45 @@ namespace MCAWebAndAPI.Web.Controllers
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl + strPages);
         }
 
+        public JsonResult GridDayOff_Read([DataSourceRequest] DataSourceRequest request)
+        {
+            // Get from existing session variable or create new if doesn't exist
+            if (SessionManager.Get<IEnumerable<TimesheetDetailVM>>("TimesheetDetails") == null) return null;
+            var items = SessionManager.Get<IEnumerable<TimesheetDetailVM>>("TimesheetDetails").Where(e => e.Type != null
+            && e.Type == "Day-Off");
+
+            // Convert to Kendo DataSource
+            DataSourceResult result = items.ToDataSourceResult(request);
+
+            // Convert to Json
+            var json = Json(result, JsonRequestBehavior.AllowGet);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+            // return null;
+        }
+
+        public JsonResult GridDayCompen_Read([DataSourceRequest] DataSourceRequest request)
+        {
+            // Get from existing session variable or create new if doesn't exist
+            if (SessionManager.Get<IEnumerable<TimesheetDetailVM>>("TimesheetDetails") == null) return null;
+            var items = SessionManager.Get<IEnumerable<TimesheetDetailVM>>("TimesheetDetails").Where(e => e.Type != null &&
+            e.Type == "Compensatory Time");
+
+            // Convert to Kendo DataSource
+            DataSourceResult result = items.ToDataSourceResult(request);
+
+            // Convert to Json
+            var json = Json(result, JsonRequestBehavior.AllowGet);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+            // return null;
+        }
         public JsonResult GridHolidays_Read([DataSourceRequest] DataSourceRequest request)
         {
             // Get from existing session variable or create new if doesn't exist
             if (SessionManager.Get<IEnumerable<TimesheetDetailVM>>("TimesheetDetails") == null) return null;
-            var items = SessionManager.Get<IEnumerable<TimesheetDetailVM>>("TimesheetDetails").Where(e => e.Type != null && e.Type != "Working Days");
+            var items = SessionManager.Get<IEnumerable<TimesheetDetailVM>>("TimesheetDetails").Where(e => e.Type != null 
+            && (e.Type == "Public Holiday" || e.Type == "Holiday"));
 
             // Convert to Kendo DataSource
             DataSourceResult result = items.ToDataSourceResult(request);
@@ -360,7 +395,34 @@ namespace MCAWebAndAPI.Web.Controllers
             return json;
         }
 
-      
+        public ActionResult ReadProfessional([DataSourceRequest] DataSourceRequest request, string useremail = null)
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _timesheetService.SetSiteUrl(siteUrl);
+          //  DataTable data = _service.getViewProfessionalClaim(useremail);
+         //   return Json(data.ToDataSourceResult(request));
+            return null;
+        }
+
+        public JsonResult DeleteTimesheetId(int id)
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _timesheetService.SetSiteUrl(siteUrl);
+           // _timesheetService.DeleteClaim(id);
+
+
+            return null;
+        }
+
+        public ActionResult ViewProfessional(string siteUrl = null, string useremail = null)
+        {
+            SessionManager.Set("SiteUrl", siteUrl);
+            _timesheetService.SetSiteUrl(siteUrl);
+            var viewModel = _timesheetService.GetTimesheetProfessional(useremail);
+
+            return View(viewModel);
+
+        }
 
     }
 }

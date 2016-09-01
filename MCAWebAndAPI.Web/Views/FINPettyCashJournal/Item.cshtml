@@ -1,0 +1,61 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Finance
+@model PettyCashJournalVM
+
+@*
+    Wireframe FIN13: Petty Cash Journal
+*@
+
+@{
+    ViewBag.Title = "Edit Petty Cash Payment Voucher";
+
+}
+
+@using (Html.BeginForm(
+                                        "Save", "FINPettyCashJournal",
+                                        FormMethod.Post,
+                                        new
+                                        {
+                                            @class = "form-horizontal",
+                                            enctype = "multipart/form-data"
+                                        }))
+{
+    <fieldset>
+        <legend>@ViewBag.Title</legend>
+        <div class="row">
+            <div class="col-sm-12">
+                @Html.HiddenFor(m => m.ID)
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.DateFrom).Class("col-sm-3 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.DateFrom)
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.DateTo).Class("col-sm-3 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.DateTo)
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <button id="submit-button" class="btn btn-primary" type="submit">
+                        <i class="fa fa-save"></i>
+                        Submit
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </fieldset>
+}

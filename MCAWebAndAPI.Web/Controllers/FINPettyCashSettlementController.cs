@@ -100,6 +100,7 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult Print(FormCollection form, PettyCashSettlementVM viewModel)
         {
             string RelativePath = PrintPageUrl;
+            string domain = "http://" + Request.Url.Authority + "/img/logo.png";
 
             var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl);
             service.SetSiteUrl(siteUrl);
@@ -117,7 +118,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 view.View.Render(context, writer);
                 writer.Flush();
                 content = writer.ToString();
-
+                content = content.Replace("{XIMGPATHX}", domain);
                 // Get PDF Bytes
                 try
                 {

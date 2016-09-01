@@ -8,12 +8,15 @@
     ViewBag.Title = "Input Compensatory HR";
 }
 
-@using (Html.BeginForm("CreateCompensatoryData", "HRCompensatory", FormMethod.Post,
-                                                                                                     new
-                                                                                                     {
-                                                                                                         @class = "form-horizontal",
-                                                                                                         enctype = "multipart/form-data"
-                                                                                                     }))
+@using (Ajax.BeginForm("CreateCompensatoryData", "HRCompensatory", FormMethod.Post,
+            new AjaxOptions
+            {
+                OnBegin = "onBeginForm",
+                OnComplete = "onCompleteForm",
+                OnSuccess = "onSuccessFormEmbed",
+                OnFailure = "onFailureForm"
+            }, new { @class = "form-horizontal" }))
+
 {
     <fieldset>
         @Html.HiddenFor(m => m.cmpID)
@@ -60,27 +63,43 @@
         <legend>Compensatory list</legend>
         <div id="compensatorylist" class="row"></div>
 
-        <button id="submithr-button" class="btn btn-primary" type="button">
-            <i class="fa fa-save"></i>
-            Submit
-        </button>
 
     </fieldset>
 }
 
+@if (Model.StatusForm == "" || Model.StatusForm == "Draft")
+{
 <div class="row pull-right">
     <div class="col-sm-12">
+        <button id="submithr-button" class="btn btn-primary" type="button">
+            <i class="fa fa-save"></i>
+            Submit
+        </button>
         <button id="submit-draft-button" class="btn btn-primary" type="button">
             <i class="fa fa-clipboard"></i>
             Save As Draft
         </button>
-        <button id="cancel-button" class="btn btn-primary">
-            <i class="fa fa-ban"></i>
-            Cancel
-        </button>
     </div>
 </div>
+}
 
+@if (Model.StatusForm == "Pending Approval 1 of 2" || Model.StatusForm == "Pending Approval 2 of 2")
+{
+    <div class="form-actions">
+        <div class="row">
+            <div class="col-sm-12">
+                <button id="approve-button" class="btn btn-success" type="submit">
+                    <i class="fa fa-save"></i>
+                    Approve
+                </button>
+                <button id="reject-button" class="btn btn-danger" type="submit">
+                    <i class="fa fa-save"></i>
+                    Reject
+                </button>
+            </div>
+        </div>
+    </div>
+}
 @section scripts{
 
     <script>
@@ -145,13 +164,19 @@
                             rowgrid.each(function (e) {
                                 i++;
                                 var xdate = $("#Dateid" + i).val();
+                                var xEdit = $("#Editid" + i).val();
                                 rowgrid.each(function (e) {
                                     j++;
                                     var ydate = $("#Dateid" + j).val();
+                                    var yEdit = $("#Editid" + j).val();
                                     if (i !== j) {
                                         if (xdate != "undifined" && ydate != "undifined") {
-                                            if (xdate == ydate) {
-                                                valdate = false;
+                                            if (xEdit != -1) {
+                                                if (yEdit != -1) {
+                                                    if (xdate == ydate) {
+                                                        valdate = false;
+                                                    }
+                                                }
                                             }
                                         }
                                     }
@@ -166,12 +191,42 @@
                             }
                         });
 
-                        $("#submitonly-button").click(function () {
-                            $("#StatusForm").prop("value", "submit");
-                            $("form").submit();
+                        $("#approve-button").click(function () {
+                            var rowgrid = $("#CompensatoryDetails").data("kendoGrid").tbody.find("tr");
+                            var valdate = true;
+                            var i = -1;
+                            var j = -1;
+                            rowgrid.each(function (e) {
+                                i++;
+                                var xdate = $("#Dateid" + i).val();
+                                var xEdit = $("#Editid" + i).val();
+                                rowgrid.each(function (e) {
+                                    j++;
+                                    var ydate = $("#Dateid" + j).val();
+                                    var yEdit = $("#Editid" + j).val();
+                                    if (i !== j) {
+                                        if (xdate != "undifined" && ydate != "undifined") {
+                                            if (xEdit != -1) {
+                                                if (yEdit != -1) {
+                                                    if (xdate == ydate) {
+                                                        valdate = false;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                });
+                            });
+
+                            if (valdate == false) {
+                                alert("Date you have chosen already exists, please choose another date..!!");
+                            } else {
+                                $("form").submit();
+                            }
                         });
 
-                        $("#approve-button").click(function () {
+                        $('#reject-button').click(function (e) {
+                            $("#StatusForm").val("Reject")
                             $("form").submit();
                         });
 
@@ -208,6 +263,10 @@
                             $("#ParentDiv").show();
                             var url = "/HRCompensatory/PrintCompensatoryRequest";
                             submitFormToPrint(url);
+                        });
+
+                        $("#submit-button").click(function () {
+                            $("form").submit();
                         });
 
                     });

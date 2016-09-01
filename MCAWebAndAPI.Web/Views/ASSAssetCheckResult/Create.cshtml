@@ -55,6 +55,8 @@
             </center>
         </div>
 
+        @Html.HiddenFor(m => m.AssetCheckResultID, new { Value = Model.AssetCheckResultID })
+
         <div class="row">
             <div>
                 @Html.Partial("_Details", Model.Details)
@@ -82,11 +84,11 @@
 </form>
 
 <script type="text/javascript">
-    function onSelectedId(e) {
-        var res = this.dataItem(e.item)
-        var url = "/ASSAssetCheckResult/GetCheckInfo?IDAssetCheck=" + res;
-        $.getJSON(url, function (data) {
-            $('#CompletionStatus').prop('value', data.CompletionStatus);
-        });
-    }
+    //function onSelectedId(e) {
+    //    var res = this.dataItem(e.item)
+    //    var url = "/ASSAssetCheckResult/GetCheckInfo?IDAssetCheck=" + res;
+    //    $.getJSON(url, function (data) {
+    //        $('#CompletionStatus').prop('value', data.CompletionStatus);
+    //    });
+    //}
 </script>

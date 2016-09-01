@@ -128,14 +128,13 @@ namespace MCAWebAndAPI.Web.Controllers
                 return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
             }
 
-
-
             // Update related Requisition Note & SCA Voucher
-            Task UpdateRequsitionNote = service.UpdateRequisitionNoteAsync(siteUrl,  viewModel.RequisitionNoteId);
-
-            Task allTasks2 = Task.WhenAll(UpdateRequsitionNote);
-
-            await allTasks2;
+            if (viewModel.RequisitionNoteId > 0)
+            {
+                Task UpdateRequsitionNote = service.UpdateRequisitionNoteAsync(siteUrl, viewModel.RequisitionNoteId);
+                Task allTasks2 = Task.WhenAll(UpdateRequsitionNote);
+                await allTasks2;
+            }
 
             return RedirectToAction("Index", "Success",
                 new
@@ -160,6 +159,7 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult Print(FormCollection form, EventBudgetVM viewModel)
         {
             string RelativePath = PrintPageUrl;
+            string domain = "http://" + Request.Url.Authority + "/img/logo.png";
 
             var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl);
             service.SetSiteUrl(siteUrl);
@@ -178,6 +178,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 writer.Flush();
                 content = writer.ToString();
 
+                content = content.Replace("{XIMGPATHX}", domain);
                 // Get PDF Bytes
                 try
                 {

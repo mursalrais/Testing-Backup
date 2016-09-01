@@ -26,12 +26,12 @@ namespace MCAWebAndAPI.Service.Finance
 
         OutstandingAdvanceVM Get(int? ID);
 
-        List<VendorVM> Get();
+        List<VendorVM> GetAll();
 
         Task SaveAttachmentAsync(int? ID, string sphlNo, IEnumerable<HttpPostedFileBase> documents);
 
-        Task SendEmailToProfessional(string message, OutstandingAdvanceVM viewModel, List<VendorVM> listVendor);
+        Task SendEmailToProfessional(string message, OutstandingAdvanceVM viewModel);
 
-        Task SendEmailToGrantees(string message, OutstandingAdvanceVM viewModel, List<VendorVM> listVendor);
+        Task SendEmailToGrantees(string message, OutstandingAdvanceVM viewModel);
     }
 }

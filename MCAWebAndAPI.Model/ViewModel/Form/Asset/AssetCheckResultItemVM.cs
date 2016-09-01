@@ -12,6 +12,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 {
     public class AssetCheckResultItemVM : Item
     {
+        public int? ID { get; set; }
+
         public int Item { get; set; }
 
         [DisplayName("Asset-Sub Asset")]

@@ -345,7 +345,15 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             //var viewModel = new ManpowerRequisitionVM();
 
             viewModel.ExpectedJoinDate = Convert.ToDateTime(listItem["expectedjoindate"]).ToLocalTime();
-            viewModel.DateRequested = Convert.ToDateTime(listItem["requestdate"]).ToLocalTime();
+            if (viewModel.Status.Value == "Draft")
+            {
+                viewModel.DateRequested = DateTime.Now.ToLocalTime();
+            }
+            else
+            {
+                viewModel.DateRequested = Convert.ToDateTime(listItem["requestdate"]).ToLocalTime();
+            }
+            
 
             viewModel.NoOfPerson = Convert.ToInt32(listItem["numberofperson"]);
             viewModel.Tenure = Convert.ToInt32(listItem["Tenure"]);

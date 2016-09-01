@@ -250,7 +250,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             var viewModel = new ApplicationDataVM();
 
-            viewModel.Position = FormatUtil.ConvertLookupToID(listItem, "vacantposition") + string.Empty;
+            viewModel.PositionID = (int)FormatUtil.ConvertLookupToID(listItem, "vacantposition");
+            viewModel.Position = GetPositionName(Convert.ToInt32(viewModel.PositionID));
 
             viewModel.ID = Convert.ToInt32(listItem["ID"]);
             viewModel.FirstMiddleName = Convert.ToString(listItem["Title"]);
@@ -620,6 +621,17 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         public async Task CreateApplicationDocumentAsync(int? headerID, IEnumerable<HttpPostedFileBase> documents)
         {
             CreateApplicationDocument(headerID, documents);
+        }
+
+        public string GetPositionName(int positionID)
+        {
+            string positionName = "";
+
+            var positionData = SPConnector.GetListItem(SP_POSMAS_LIST_NAME, positionID, _siteUrl);
+
+            positionName = Convert.ToString(positionData["Title"]);
+
+            return positionName;
         }
     }
 }

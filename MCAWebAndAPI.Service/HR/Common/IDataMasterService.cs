@@ -15,6 +15,8 @@ namespace MCAWebAndAPI.Service.HR.Common
 
         IEnumerable<ProfessionalMaster> GetProfessionalMonthlyFeesEdit();
 
+        IEnumerable<AdjustmentMaster> GetAdjustemnt(IEnumerable<int> professionalIDs);
+
         IEnumerable<PositionMaster> GetPositions();
 
         IEnumerable<PositionMaster> GetPositionsManpower(string Level);

@@ -19,21 +19,27 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         [UIHint("Date")]
         [Required]
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime ReceiptDate { get; set; }
+        [DisplayName("Receipt Date")]
+        public DateTime? ReceiptDate { get; set; }
+
+        [DisplayName("Receipt No")]
         public string ReceiptNo { get; set; }
+
         public string Payee { get; set; }
+
+        [DisplayName("Description of Expense")]
         public string DescriptionOfExpense { get; set; }
 
-        [UIHint("AjaxComboBox")]
+        [UIHint("InGridAjaxComboBox")]
         [Required]
         public AjaxComboBoxVM WBS { get; set; } = new AjaxComboBoxVM();
 
-        [UIHint("AjaxComboBox")]
+        [UIHint("InGridAjaxComboBox")]
         [Required]
         public AjaxComboBoxVM GL { get; set; } = new AjaxComboBoxVM();
 
+        [DisplayName("Amount (per item)")]
         public decimal Amount { get; set; }
-
 
         [UIHint("MultiFileUploader")]
         [DisplayName("Attachment")]

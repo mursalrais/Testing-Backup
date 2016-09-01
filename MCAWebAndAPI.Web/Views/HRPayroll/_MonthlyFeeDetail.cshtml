@@ -14,6 +14,9 @@
             columns.Bound(p => p.DateOfNewFee).ClientTemplate("#= kendo.toString(DateOfNewFee, 'MM-dd-yyyy') #" +
             "<input type='hidden' name='MonthlyFeeDetails[#= getMonthlyFeeDetail(data)#].DateOfNewFee' value='#= DateOfNewFee #' />"
             );
+            columns.Bound(p => p.EndDateFee).ClientTemplate("#= kendo.toString(EndDateFee, 'MM-dd-yyyy') #" +
+            "<input type='hidden' name='MonthlyFeeDetails[#= getMonthlyFeeDetail(data)#].EndDateFee' value='#= EndDateFee #' />"
+            );
             columns.Bound(p => p.MonthlyFee).ClientTemplate("#= MonthlyFee #" +
             "<input type='hidden' name='MonthlyFeeDetails[#= getMonthlyFeeDetail(data)#].MonthlyFee' value='#= MonthlyFee #' />"
             );
@@ -48,6 +51,7 @@
         {
             model.Id(p => p.ID);
             model.Field(m => m.DateOfNewFee).DefaultValue(DateTime.UtcNow);
+            model.Field(m => m.EndDateFee).DefaultValue(new DateTime(2099, 12, 31));
             model.Field(m => m.Currency).DefaultValue(MonthlyFeeDetailVM.GetCurrencyDefaultValue());
         })
         .ServerOperation(false)
