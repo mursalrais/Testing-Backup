@@ -1139,6 +1139,9 @@
     <Content Include="Views\ASSAssetLoanAndReturn\Edit.cshtml" />
     <Content Include="Views\ASSAssetDisposal\Edit.cshtml" />
     <Content Include="Views\ASSAssetCheckResult\Edit.cshtml" />
+    <Content Include="Views\ASSAssetCheckResult\View.cshtml" />
+    <Content Include="Views\ASSAssetCheckResult\_ViewDetails.cshtml" />
+    <Content Include="Views\ASSAssetCheckResult\Print.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
