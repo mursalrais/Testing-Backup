@@ -1102,6 +1102,8 @@
     <Content Include="Views\FINTaxExemption\ItemIncomeTax.cshtml" />
     <Content Include="Views\FINTaxExemption\ItemOtherTax.cshtml" />
     <Content Include="Views\FINTaxExemption\ItemVATTax.cshtml" />
+    <Content Include="Views\HRCompensatory\AddCompensatoryUser.cshtml" />
+    <Content Include="Views\HRCompensatory\_WorkflowPathDetails.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
