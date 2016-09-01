@@ -980,7 +980,6 @@
     <Content Include="Views\FINRequisitionNote\_General.cshtml" />
     <Content Include="Views\FINRequisitionNote\_ItemDetails.cshtml" />
     <Content Include="Views\FINTaxReimbursement\Item.cshtml" />
-    <Content Include="Views\FINTaxExemption\Create.cshtml" />
     <Content Include="Views\FINSPHL\Create.cshtml" />
     <Content Include="Views\FINSCAVoucher\Create.cshtml" />
     <Content Include="Views\FINSCAVoucher\_EventBudgetItems.cshtml" />
@@ -1059,11 +1058,8 @@
     <Content Include="Views\FINSCAVoucher\Edit.cshtml" />
     <Content Include="Views\FINSPHL\Edit.cshtml" />
     <Content Include="Views\FINPettyCashPaymentVoucher\_General.cshtml" />
-    <Content Include="Views\FINTaxExemption\EditIncomeTax.cshtml" />
     <Content Include="Views\FINSCAVoucher\_GeneralForm.cshtml" />
     <Content Include="Views\FINSCAVoucher\Approve.cshtml" />
-    <Content Include="Views\FINTaxExemption\EditVATTax.cshtml" />
-    <Content Include="Views\FINTaxExemption\EditOtherTax.cshtml" />
     <Content Include="Views\FINSCAVoucher\_GeneralFormDisplay.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\InGridAjaxCascadeNoPrimitiveValue.cshtml" />
     <Content Include="Views\HRAdjustmentDayOffBalance\CreateAdjustmentDayOffBalance.cshtml" />
@@ -1096,6 +1092,8 @@
     <Content Include="Views\HRProfessionalPerformanceEvaluation\_WorkflowPathDetails.cshtml" />
     <Content Include="Views\HRDayOff\_DayOffNextBalance.cshtml" />
     <Content Include="Views\HRDayOff\_DisplayRequestDetail.cshtml" />
+    <Content Include="Views\HRCompensatory\AddCompensatoryUser.cshtml" />
+    <Content Include="Views\HRCompensatory\_WorkflowPathDetails.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

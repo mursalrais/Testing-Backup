@@ -444,6 +444,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             var cratedValueDetail = new Dictionary<string, object>();
 
             cratedValueDetail.Add("Title", Convert.ToString(viewModels.cmpYearDate));
+            cratedValueDetail.Add("visibleto", SPConnector.GetUser(viewModels.cmpEmail, _siteUrl, "hr"));
 
             if (viewModels.StatusForm == "Pending Approval 1 of 2")
             {

@@ -47,11 +47,11 @@ namespace MCAWebAndAPI.Web.Controllers
                 _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
                 SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
             }
-
-            viewmodel.cmpEmail = userAccess;
-
+            
             if (viewmodel.cmpEmail != null)
                 viewmodel = await _service.GetWorkflow(viewmodel.cmpEmail, "Compensatory Request");
+
+            viewmodel.cmpEmail = userAccess;
 
             string position = _service.GetPosition(userAccess);
 
