@@ -9,10 +9,11 @@
                     <p class="lead semi-bold">
                         <strong>You have experienced a technical error. We apologize.</strong><br><br>
                         <small>
-                            Please contact your IT Administrator by providing the screenshot of this screen.<br />
+                            Please contact your IT Administrator by providing the screenshot of this screen.
+                            <br /><br />
                             @if (ViewBag.ErrorMessage != null)
                             {
-                                <text>Error: @ViewBag.ErrorMessage</text>
+                                <span style="color: red;"><text>Error: @ViewBag.ErrorMessage</text></span>
                             }
                         </small>
                     </p>

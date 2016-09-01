@@ -1,74 +1,94 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.Asset
 
-@model AssetCheckResultVM
+@model AssetCheckResultHeaderVM
 
 <form class="form-horizontal" method="post" action="/ASSAssetCheckResult/Create" id="create-asset-check-result">
     <fieldset>
         <legend>Form Asset Check Result</legend>
         <div class="col-md-6">
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.FormId).Class("col-md-4 control-label")
+                @Html.Bootstrap().LabelFor(m => m.FormID).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Html.EditorFor(m => m.Header.FormId)
-                </div>
-                <div class="col-md-6">
-                    <a class="btn btn-default" href="#">Search</a>
+                    @Html.EditorFor(m => m.FormID)
                 </div>
             </div>
             <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.Date).Class("col-md-4 control-label")
+                @Html.Bootstrap().LabelFor(m => m.CountDate).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Html.EditorFor(m => m.Header.Date)
+                    @Html.EditorFor(m => m.CountDate)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.CountedBy1).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.CountedBy1)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.CountedBy2).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.CountedBy2)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.CountedBy3).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.CountedBy3)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Attachment).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.Attachment)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.CompletionStatus).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.DisplayFor(m => m.CompletionStatus)
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.CountedBy1).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.Header.CountedBy1)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.CountedBy2).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.Header.CountedBy2)
-                </div>
-                <a style="float:right" class="btn btn-default" href="#">Get Data</a>
-            </div>
+        <div>
+            <center>
+                <input class="k-button k-button-icontext k-grid-add" type="submit" name="GetData" value="Get Data" />
+            </center>
         </div>
+
+        @Html.HiddenFor(m => m.AssetCheckResultID, new { Value = Model.AssetCheckResultID })
+
         <div class="row">
-            <div class="col-md-12">
-                @(Html.Kendo().Grid(Model.Items)
-                    .Name("asset-check-result-items-grid")
-                    .Columns(columns =>
-                    {
-                        columns.Bound(p => p.Item);
-                        columns.Bound(p => p.AssetNo);
-                        columns.Bound(p => p.SubAssetNo);
-                        columns.Bound(p => p.AssetDescription);
-                        columns.Bound(p => p.SerialNo);
-                        columns.Bound(p => p.LocationName);
-                        columns.Bound(p => p.Status);
-                        columns.Bound(p => p.SystemQty);
-                        columns.Bound(p => p.PhysicalQty);
-                        columns.Bound(p => p.DifferentQty);
-                        columns.Bound(p => p.Scrap);
-                        columns.Bound(p => p.Remarks);
-                        columns.Command(command => { command.Edit(); command.Destroy(); }).Width(250);
-                    })
-                    .ToolBar(toolbar => toolbar.Create())
-                    .Editable(editable => editable.Mode(GridEditMode.PopUp))
-                    .DataSource(dataSource => dataSource
-                        .Ajax()
-                        .Model(model => model.Id(p => p.Id))
-                        .Create(update => update.Action("EditingPopup_Create", "ASSAssetCheckResult"))
-                        .Update(update => update.Action("EditingPopup_Update", "ASSAssetCheckResult"))
-                        .Destroy(update => update.Action("EditingPopup_Destroy", "ASSAssetCheckResult"))
-                )
-                )
+            <div>
+                @Html.Partial("_Details", Model.Details)
             </div>
+            <div class="col-md-12" style="text-align: right;">
+                <input class="btn btn-default" type="submit" name="Calculate" value="Calculate" />
+            </div>
+        </div>
+        <legend>Approval Path</legend>
+        <div class="row">
+            <div style="width: 25%;">
+                @Html.Partial("_approval_Path", Model)
+            </div>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <center>
+                <input class="k-button k-button-icontext k-grid-add" type="submit" name="SubmitForApproval" value="Submit for approval" />
+                <input class="k-button k-button-icontext k-grid-add" type="submit" name="SaveAsDraft" value="Save as draft" />
+                <input class="k-button k-button-icontext k-grid-add" type="submit" name="Cancel" value="Cancel" />
+            </center>
         </div>
     </fieldset>
-
 </form>
+
+<script type="text/javascript">
+    //function onSelectedId(e) {
+    //    var res = this.dataItem(e.item)
+    //    var url = "/ASSAssetCheckResult/GetCheckInfo?IDAssetCheck=" + res;
+    //    $.getJSON(url, function (data) {
+    //        $('#CompletionStatus').prop('value', data.CompletionStatus);
+    //    });
+    //}
+</script>

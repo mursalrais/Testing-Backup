@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using Elmah;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
+using MCAWebAndAPI.Model.ViewModel.Control;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 using MCAWebAndAPI.Service.Converter;
 using MCAWebAndAPI.Service.Finance;
@@ -141,6 +142,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
         public ActionResult Print(int? ID, string userAccess = null)
         {
             ViewBag.SubTitle = SubTitle;
+            string domain = "http://" + Request.Url.Authority + "/img/logo.png";
 
             var siteUrl = SessionManager.Get<string>(SiteUrl);
             service.SetSiteUrl(siteUrl);
@@ -162,7 +164,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
                 view.View.Render(context, writer);
                 writer.Flush();
                 content = writer.ToString();
-
+                content = content.Replace("{XIMGPATHX}", domain);
                 // Get PDF Bytes
                 try
                 {
@@ -292,6 +294,22 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             json.MaxJsonLength = int.MaxValue;
 
             return json;
+        }
+
+        public JsonResult GetAll()
+        {
+            service.SetSiteUrl(ConfigResource.DefaultBOSiteUrl);
+
+            var result = service.GetAllAjaxComboBoxVM().ToList();
+            result.Insert(0, new AjaxComboBoxVM() { Value = 0, Text = "" });
+
+            return Json(result.Select(e =>
+                new
+                {
+                    Value = e.Value,
+                    Text = e.Text
+                }),
+                JsonRequestBehavior.AllowGet);
         }
 
         private void SetAdditionalSettingToVM(ref SCAVoucherVM viewModel)

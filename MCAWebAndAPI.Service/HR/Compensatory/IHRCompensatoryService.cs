@@ -22,13 +22,15 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         CompensatoryVM GetComplistActive();
 
-        CompensatoryVM GetProfessional(string userAccess);
+        CompensatoryVM GetProfessional(string userAccess, CompensatoryVM CompensatoryList);
         
         bool UpdateHeader(CompensatoryVM header);
 
+        bool CheckRequest(CompensatoryVM header);
+
         void CreateCompensatoryData(int? headerID, CompensatoryVM CompensatoryList);
 
-        void CreateHeaderCompensatory(CompensatoryVM CompensatoryList);
+        int CreateHeaderCompensatory(CompensatoryVM CompensatoryList);
 
         IEnumerable<CompensatoryMasterVM> GetCompensatoryId(int? idComp);
 

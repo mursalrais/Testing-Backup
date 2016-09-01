@@ -1,0 +1,69 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model IEnumerable<DayOffNextBalanceVM>
+
+<div class="col-sm-12">
+    @(Html.Kendo().Grid(Model)
+    .Name("DayOffNextBalance")
+    .Editable(editable => editable.Mode(GridEditMode.InCell)
+    )
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.DayOffType).Width(100).ClientTemplate("#= DayOffType.Text #" +
+                           "<input type='hidden' id='DayOffNextBalance[#= getDayOffNextBalance(data)#].DayOffType.Text' name='DayOffNextBalance[#= getDayOffNextBalance(data)#].DayOffType.Text' value='#= DayOffType.Text #' />"
+                         ).EditorViewData(new
+                         {
+                             BindTo = DayOffNextBalanceVM.GetDayOffTypeOptions()
+                         });
+
+        columns.Bound(p => p.Balance).Width(100).ClientTemplate("#= Balance #" +
+            "<input type='hidden' id='DayOffNextBalance[#= getDayOffNextBalance(data)#].Balance' name='DayOffNextBalance[#= getDayOffNextBalance(data)#].Balance' value='#= Balance #' />"
+            );
+
+        columns.Bound(p => p.DayOffBrought).Width(100).ClientTemplate("#= DayOffBrought #" +
+        "<input type='hidden' id='DayOffNextBalance[#= getDayOffNextBalance(data)#].DayOffBrought' name='DayOffNextBalance[#= getDayOffNextBalance(data)#].DayOffBrought' value='#= DayOffBrought #' />"
+        );
+
+        columns.Bound(p => p.Unit).Width(100).ClientTemplate("#= Unit.Text #" +
+                           "<input type='hidden' id='DayOffNextBalance[#= getDayOffNextBalance(data)#].Unit.Text' name='DayOffNextBalance[#= getDayOffNextBalance(data)#].Unit.Text' value='#= Unit.Text #' />"
+                         ).EditorViewData(new
+                         {
+                             BindTo = DayOffNextBalanceVM.GetUnitOptions()
+                         });
+
+        columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
+        "<input type='hidden' id='DayOffNextBalance[#= getDayOffNextBalance(data)#].EditMode' name='DayOffNextBalance[#= getDayOffNextBalance(data)#].EditMode' value='#= EditMode #' />"
+        );
+
+    })
+    .Events(e =>
+    {
+        e.Edit("onEditKendoDetail");
+        e.DataBound("onDataBoundDayOffNextBalance");
+    })
+    .DataSource(dataSource => dataSource.Ajax()
+    .Model(model =>
+    {
+        model.Id(p => p.ID);
+        model.Field(m => m.DayOffType).DefaultValue(DayOffNextBalanceVM.GetDayOffTypeDefaultValue()).Editable(false);
+        model.Field(m => m.Balance).Editable(false);
+        model.Field(m => m.DayOffBrought).Editable(false);
+        model.Field(m => m.Unit).DefaultValue(DayOffNextBalanceVM.GetUnitDefaultValue()).Editable(false);
+    })
+    .ServerOperation(false)
+    )
+
+    )
+</div>
+
+<script>
+
+    function getDayOffNextBalance(dataItem) {
+        var data = $("#DayOffNextBalance").data("kendoGrid").dataSource.data();
+        return data.indexOf(dataItem);
+    }
+
+    function onDataBoundDayOffNextBalance(e) {
+        var grid = $("#DayOffNextBalance").data("kendoGrid");
+        hideDeletedRowKendoDetail(grid);
+    }
+</script>

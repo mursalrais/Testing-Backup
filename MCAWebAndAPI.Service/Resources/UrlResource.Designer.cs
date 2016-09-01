@@ -133,6 +133,24 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to /Lists/Asset%20Check/AllItems.aspx.
+        /// </summary>
+        public static string AssetCheckForm {
+            get {
+                return ResourceManager.GetString("AssetCheckForm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to /Lists/Asset%20Check%20Result/AllItems.aspx.
+        /// </summary>
+        public static string AssetCheckResult {
+            get {
+                return ResourceManager.GetString("AssetCheckResult", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to /Lists/Asset%20Disposal/AllItems.aspx.
         /// </summary>
         public static string AssetDisposal {
@@ -156,6 +174,15 @@ namespace MCAWebAndAPI.Service.Resources {
         public static string AssetMaster {
             get {
                 return ResourceManager.GetString("AssetMaster", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to /Lists/Asset%20Replacement/AllItems.aspx.
+        /// </summary>
+        public static string AssetReplacement {
+            get {
+                return ResourceManager.GetString("AssetReplacement", resourceCulture);
             }
         }
         

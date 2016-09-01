@@ -16,6 +16,7 @@ using MCAWebAndAPI.Service.Common;
 namespace MCAWebAndAPI.Service.HR.Recruitment
 {
     public class HRCompensatoryService : IHRCompensatoryService
+                
     {
         string _siteUrl;
         static Logger logger = LogManager.GetCurrentClassLogger();
@@ -438,11 +439,12 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return CompID;
         }
 
-        public void CreateHeaderCompensatory(CompensatoryVM viewModels)
+        public int CreateHeaderCompensatory(CompensatoryVM viewModels)
         {
             var cratedValueDetail = new Dictionary<string, object>();
 
             cratedValueDetail.Add("Title", Convert.ToString(viewModels.cmpYearDate));
+            cratedValueDetail.Add("visibleto", SPConnector.GetUser(viewModels.cmpEmail, _siteUrl, "hr"));
 
             if (viewModels.StatusForm == "Pending Approval 1 of 2")
             {
@@ -473,6 +475,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             int idCmp = SPConnector.GetLatestListItemID(SP_COMREQ_LIST_NAME, _siteUrl);
 
             AddNewCompensatoryData(idCmp, viewModels);
+
+            return idCmp;
         }
 
         public void AddNewCompensatoryData(int? cmpID, CompensatoryVM viewModels)
@@ -491,6 +495,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     cratedValueDetail.Add("totalhours", viewModel.CmpTotalHours);
                     cratedValueDetail.Add("totaldays", viewModel.TotalDay);
                     cratedValueDetail.Add("remarks", viewModel.remarks);
+                    cratedValueDetail.Add("compensatorystatus", "Pending Approval 1 of 2");
 
                     try
                     {
@@ -525,6 +530,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                             cratedValueDetail.Add("totalhours", viewModel.CmpTotalHours);
                             cratedValueDetail.Add("totaldays", viewModel.TotalDay);
                             cratedValueDetail.Add("remarks", viewModel.remarks);
+                            cratedValueDetail.Add("compensatorystatus", "Pending Approval 1 of 2");
 
                             try
                             {
@@ -549,6 +555,31 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                             updatedValue.Add("totaldays", viewModel.TotalDay);
                             updatedValue.Add("remarks", viewModel.remarks);
 
+                            if (viewModels.StatusForm == " ")
+                            {
+                                updatedValue.Add("compensatorystatus", "Pending Approval 1 of 2");
+                            }
+
+                            if (viewModels.StatusForm == "Draft" || viewModels.StatusForm == "Unapprove")
+                            {
+                                updatedValue.Add("crstatus", "Draft");
+                            }
+
+                            if (viewModels.StatusForm == "Reject")
+                            {
+                                updatedValue.Add("crstatus", "Rejected");
+                            }
+
+                            if (viewModels.StatusForm == "Pending Approval 1 of 2")
+                            {
+                                updatedValue.Add("crstatus", "Pending Approval 2 of 2");
+                            }
+
+                            if (viewModels.StatusForm == "Pending Approval 2 of 2" || viewModels.StatusForm == "submithr")
+                            {
+                                updatedValue.Add("crstatus", "Approved");
+                            }
+
                             try
                             {
                                 SPConnector.UpdateListItem(SP_COMDET_LIST_NAME, viewModel.CmpID, updatedValue, _siteUrl);
@@ -563,18 +594,21 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                         continue;
                     }
                        
-                        else if (Item.CheckIfDeleted(viewModel))
+                    else if (Item.CheckIfDeleted(viewModel))
                     {
-                        try
+                        if (viewModel.CmpID != null)
                         {
-                            SPConnector.DeleteListItem(SP_COMDET_LIST_NAME, viewModel.CmpID, _siteUrl);
+                            try
+                            {
+                                SPConnector.DeleteListItem(SP_COMDET_LIST_NAME, viewModel.CmpID, _siteUrl);
+                            }
+                            catch (Exception e)
+                            {
+                                logger.Error(e);
+                                throw e;
+                            }
+                            continue;
                         }
-                        catch (Exception e)
-                        {
-                            logger.Error(e);
-                            throw e;
-                        }
-                        continue;
                     }
                 }
             }
@@ -664,19 +698,24 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             string nameProf = header.cmpName;
 
+            int? idProf = header.ddlProfessional.Value;
+
             int? idComp = header.cmpID;
 
             int? idbal = null;
 
+            int? getent = null;
+
             var caml = @"<View>  
                         <Query> 
-                            <Where><And><Eq><FieldRef Name='dayoffname' /><Value Type='Choice'>Day-off due to Compensatory time</Value></Eq><Eq><FieldRef Name='professional' /><Value Type='Lookup'>" + nameProf + @"</Value></Eq></And></Where> 
+                            <Where><And><Eq><FieldRef Name='dayoffname' /><Value Type='Choice'>Compensatory time</Value></Eq><Eq><FieldRef Name='professional' /><Value Type='Lookup'>" + nameProf + @"</Value></Eq></And></Where> 
                         </Query> 
                     </View>";
 
             foreach (var item in SPConnector.GetList(SP_COMBAL_LIST_NAME, _siteUrl, caml))
             {
                 idbal = Convert.ToInt32(item["ID"]);
+                getent = Convert.ToInt32(item["entitlement"]);
             }
 
             if (header.StatusForm == " ")
@@ -705,16 +744,41 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
                 IEnumerable<CompensatoryDetailVM> getbalance = header.CompensatoryDetails;
 
-                updateBalance.Add("entitlement", getbalance.Count());
+                updateBalance.Add("entitlement", getent + getbalance.Count());
 
-                try
+                if (idbal != null)
                 {
-                    SPConnector.UpdateListItem(SP_COMBAL_LIST_NAME, idbal, updateBalance, _siteUrl);
-                }
-                catch (Exception e)
+                    try
+                    {
+                        SPConnector.UpdateListItem(SP_COMBAL_LIST_NAME, idbal, updateBalance, _siteUrl);
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Debug(e.Message);
+                        return false;
+                    }
+                } else
                 {
-                    logger.Debug(e.Message);
-                    return false;
+                    double finalbalance = 0;
+                    int? entitlement = getbalance.Count();
+                    var addValues = new Dictionary<string, object>();
+
+                    addValues.Add("entitlement", entitlement);
+                    addValues.Add("Title", "Compensatory time");
+                    addValues.Add("finalbalance", finalbalance);
+                    addValues.Add("dayoffname", "Compensatory time");
+                    addValues.Add("professional", new FieldLookupValue { LookupId = (int)idProf });
+
+
+                    try
+                    {
+                         SPConnector.AddListItem(SP_COMBAL_LIST_NAME, addValues, _siteUrl);
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Debug(e.Message);
+                        return false;
+                    }
                 }
             }
 
@@ -732,7 +796,65 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             entitiy = header;
             return true;
         }
-        
+
+        public bool CheckRequest(CompensatoryVM header)
+        {
+            var viewModel = new CompensatoryVM();
+
+            var columnValues = new Dictionary<string, object>();
+
+            var comps = GetCompensatoryIdbyProf(header.profId);
+
+            foreach (var item in comps)
+            {
+                var caml = @"<View>  
+                              <Query> 
+                            <Where>
+                             <Eq>
+                                <FieldRef Name='compensatoryrequest' />
+                                <Value Type='Lookup'>" + item.CompensatoryID + @"</Value>
+                             </Eq>
+                            </Where>
+                                </Query> 
+                               <Query />
+                            <ViewFields>
+                               <FieldRef Name='Title' />
+                               <FieldRef Name='compensatoryrequest' />
+                               <FieldRef Name='compensatorydate' />
+                               <FieldRef Name='compensatorystarttime' />
+                               <FieldRef Name='compensatoryendtime' />
+                               <FieldRef Name='totalhours' />
+                               <FieldRef Name='totaldays' />
+                               <FieldRef Name='remarks' />
+                               <FieldRef Name='compensatorystatus' />
+                               <FieldRef Name='visibleto' />
+                               <FieldRef Name='ID' />
+                               <FieldRef Name='Attachments' />
+                            </ViewFields>
+                           </View>";
+
+                var compensatorylistDetails = new List<CompensatoryDetailVM>();
+
+                foreach (var detailitem in SPConnector.GetList(SP_COMDET_LIST_NAME, _siteUrl, caml))
+                {
+                    compensatorylistDetails.Add(ConvertToCompDetailVM(detailitem));
+                }
+
+                foreach (var cekdate in header.CompensatoryDetails)
+                {
+                    foreach (var getdate in compensatorylistDetails)
+                    {
+                        if (cekdate.CmpDate == getdate.CmpDate)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+
         public async Task<CompensatoryVM> GetCompensatoryDetailGrid(int? idComp)
         {
             var viewModel = new CompensatoryVM();
@@ -818,7 +940,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             var emails = new List<string>();
             foreach (var item in SPConnector.GetList(workflowTransactionListName, _siteUrl, caml))
             {
-                emails.Add(Convert.ToString(item["approver0"]));
+                emails.Add(FormatUtil.ConvertLookupToValue(item, "approvername_x003a_Office_x0020_"));
             }
             foreach (var item in emails)
             {
@@ -826,10 +948,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             }
         }
 
-        public CompensatoryVM GetProfessional(string username)
+        public CompensatoryVM GetProfessional(string username, CompensatoryVM viewModel)
         {
-            var viewModel = new CompensatoryVM();
-
             var caml = @"<View><Query><Where><Eq><FieldRef Name='officeemail' /><Value Type='Text'>" + username + @"</Value></Eq></Where></Query><QueryOptions /></View>";
             var listItem = SPConnector.GetList("Professional Master", _siteUrl, caml);
 

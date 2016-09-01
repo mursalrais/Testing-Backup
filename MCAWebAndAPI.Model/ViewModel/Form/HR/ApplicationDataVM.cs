@@ -59,6 +59,10 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// </summary>
         public string Position { get; set; }
 
+        public string PositionName { get; set; }
+
+        public int PositionID { get; set; }
+
         /// <summary>
         /// manpowerrequisition
         /// </summary>
@@ -102,6 +106,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             ValueField = "ID",
             TextField = "Title"
         };
+
+        [DisplayName("Nationality")]
+        public string NationalityName { get; set; }
 
         /// <summary>
         /// maritalstatus

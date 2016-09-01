@@ -117,11 +117,11 @@ namespace MCAWebAndAPI.Web.Controllers
             try
             {
                 var update = assetDisposalService.UpdateHeader(_data);
-                 if (update == false)
-                {
-                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                    return JsonHelper.GenerateJsonErrorResponse("Have To Attach File to Change Completion Status into Complete");
-                }
+                // if (update == false)
+                //{
+                //    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                //    return JsonHelper.GenerateJsonErrorResponse("Have To Attach File to Change Completion Status into Complete");
+                //}
             }
             catch (Exception e)
             {

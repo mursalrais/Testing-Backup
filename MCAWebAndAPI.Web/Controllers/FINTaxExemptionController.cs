@@ -19,7 +19,9 @@ namespace MCAWebAndAPI.Web.Controllers
 
         private const string SuccessMsgFormatCreated = "Tax Exemption No. {0} has been successfully created.";
         private const string SuccessMsgFormatUpdated = "Tax Exemption No. {0} has been successfully updated.";
-        private const string FirstPage = "{0}/Lists/Tax%20Exemption%20Income%20Documents/AllItems.aspx";
+        private const string FirstIncomeTaxPage = "{0}/Lists/Tax%20Exemption%20Income/AllItems.aspx";
+        private const string FirstVATTaxPage = "{0}/Lists/Tax%20Exemption%20VAT/AllItems.aspx";
+        private const string FirstOtherTaxPage = "{0}/Lists/Tax%20Exemption%20Others/AllItems.aspx";
 
         public FINTaxExemptionController()
         {
@@ -27,7 +29,7 @@ namespace MCAWebAndAPI.Web.Controllers
             _taxExemptionDataService.SetSiteUrl(ConfigResource.DefaultBOSiteUrl);
         }
 
-        public ActionResult Create(string siteUrl = null)
+        public ActionResult Create(string typeOfTax, string siteUrl = null)
         {
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
             _taxExemptionDataService.SetSiteUrl(siteUrl);
@@ -39,49 +41,66 @@ namespace MCAWebAndAPI.Web.Controllers
             viewModel.TaxExemptionOtherVM = _taxExemptionDataService.GetTaxExemptionOthers();
             viewModel.TypeOfTax = new TaxTypeComboBoxVM();
 
+            viewModel.TypeOfTax.Value = typeOfTax;
+
             viewModel.TypeOfTax.OnSelectEventName = "onSelectTypeOfTax";
             return View(viewModel);
         }
 
-        public ActionResult EditIncomeTax(int ID, string siteUrl)
+        public ActionResult ItemIncomeTax(int? ID, string siteUrl)
         {
+            if (!ID.HasValue)
+            {
+                return Create(TaxTypeComboBoxVM.INCOME, siteUrl);
+            }
+
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
             _taxExemptionDataService.SetSiteUrl(siteUrl);
             SessionManager.Set(SITE_URL, siteUrl);
 
             var viewModel = new TaxExemptionVM();
             viewModel.ID = ID;
-            viewModel.TaxExemptionIncomeVM = _taxExemptionDataService.GetTaxExemptionIncome(ID);
+            viewModel.TaxExemptionIncomeVM = _taxExemptionDataService.GetTaxExemptionIncome(ID.Value);
             viewModel.TypeOfTax = viewModel.TaxExemptionIncomeVM.TypeOfTax;
             viewModel.Remarks = viewModel.TaxExemptionIncomeVM.Remarks;
             viewModel.DocumentUrl = viewModel.TaxExemptionIncomeVM.DocumentUrl;
             return View(viewModel);
         }
         
-        public ActionResult EditVATTax(int ID, string siteUrl)
+        public ActionResult ItemVATTax(int? ID, string siteUrl)
         {
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
             _taxExemptionDataService.SetSiteUrl(siteUrl);
             SessionManager.Set(SITE_URL, siteUrl);
 
+            if (!ID.HasValue)
+            {
+                return Create(TaxTypeComboBoxVM.VAT, siteUrl);
+            }
+
             var viewModel = new TaxExemptionVM();
             viewModel.ID = ID;
-            viewModel.TaxExemptionVATVM = _taxExemptionDataService.GetTaxExemptionVAT(ID);
+            viewModel.TaxExemptionVATVM = _taxExemptionDataService.GetTaxExemptionVAT(ID.Value);
             viewModel.TypeOfTax= viewModel.TaxExemptionVATVM.TypeOfTax;
             viewModel.Remarks = viewModel.TaxExemptionVATVM.Remarks;
             viewModel.DocumentUrl = viewModel.TaxExemptionVATVM.DocumentUrl;
             return View(viewModel);
         }
 
-        public ActionResult EditOtherTax(int ID, string siteUrl)
+        public ActionResult ItemOtherTax(int? ID, string siteUrl)
         {
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
             _taxExemptionDataService.SetSiteUrl(siteUrl);
             SessionManager.Set(SITE_URL, siteUrl);
 
+            if (!ID.HasValue)
+            {
+                return Create(TaxTypeComboBoxVM.OTHERS, siteUrl);
+            }
+
             var viewModel = new TaxExemptionVM();
             viewModel.ID = ID;
-            viewModel.TaxExemptionOtherVM = _taxExemptionDataService.GetTaxExemptionOthers(ID);
+            viewModel.TaxExemptionOtherVM = _taxExemptionDataService.GetTaxExemptionOthers(ID.Value);
             viewModel.TypeOfTax = viewModel.TaxExemptionOtherVM.TypeOfTax;
             viewModel.Remarks = viewModel.TaxExemptionOtherVM.Remarks;
             viewModel.DocumentUrl = viewModel.TaxExemptionOtherVM.DocumentUrl;
@@ -120,16 +139,21 @@ namespace MCAWebAndAPI.Web.Controllers
 
             int? ID = null;
 
+            string firstPage = string.Empty;
+
             switch (_data.TypeOfTax.Value)
             {
                 case TaxTypeComboBoxVM.INCOME:
                     ID = _taxExemptionDataService.CreateTaxExemptionData(_data as TaxExemptionIncomeVM);
+                    firstPage = FirstIncomeTaxPage;
                     break;
                 case TaxTypeComboBoxVM.VAT:
                     ID = _taxExemptionDataService.CreateTaxExemptionData(_data as TaxExemptionVATVM);
+                    firstPage = FirstVATTaxPage;
                     break;
                 case TaxTypeComboBoxVM.OTHERS:
                     ID = _taxExemptionDataService.CreateTaxExemptionData(_data as TaxExemptionOtherVM);
+                    firstPage = FirstOtherTaxPage;
                     break;
                 default:
                     throw new NotImplementedException("Unknown Tax Type: " + _data.TypeOfTax.Value);
@@ -152,7 +176,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 new
                 {
                     successMessage = string.Format(SuccessMsgFormatCreated, ID),
-                    previousUrl = string.Format(FirstPage, siteUrl)
+                    previousUrl = string.Format(firstPage, siteUrl)
                 });
         }
 
@@ -175,10 +199,15 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> EditIncomeTax(FormCollection form, TaxExemptionVM _data)
+        public async Task<ActionResult> ItemIncomeTax(FormCollection form, TaxExemptionVM _data)
         {
             var siteUrl = SessionManager.Get<string>(SITE_URL) ?? ConfigResource.DefaultBOSiteUrl;
             _taxExemptionDataService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            if (_data.ID == null)
+            {
+                return await Create(form, _data);
+            }
 
             _data.TaxExemptionIncomeVM.ID = _data.ID;
             _data.TaxExemptionIncomeVM.TypeOfTax = _data.TypeOfTax;
@@ -205,15 +234,20 @@ namespace MCAWebAndAPI.Web.Controllers
                  new
                  {
                      successMessage = string.Format(SuccessMsgFormatUpdated, _data.ID),
-                     previousUrl = string.Format(FirstPage, siteUrl)
+                     previousUrl = string.Format(FirstIncomeTaxPage, siteUrl)
                  });
         }
 
         [HttpPost]
-        public async Task<ActionResult> EditVATTax(FormCollection form, TaxExemptionVM _data)
+        public async Task<ActionResult> ItemVATTax(FormCollection form, TaxExemptionVM _data)
         {
             var siteUrl = SessionManager.Get<string>(SITE_URL) ?? ConfigResource.DefaultBOSiteUrl;
             _taxExemptionDataService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            
+            if (_data.ID == null)
+            {
+                return await Create(form, _data);
+            }
 
             _data.TaxExemptionVATVM.ID = _data.ID;
             _data.TaxExemptionVATVM.TypeOfTax = _data.TypeOfTax;
@@ -240,15 +274,20 @@ namespace MCAWebAndAPI.Web.Controllers
                  new
                  {
                      successMessage = string.Format(SuccessMsgFormatUpdated, _data.ID),
-                     previousUrl = string.Format(FirstPage, siteUrl)
+                     previousUrl = string.Format(FirstVATTaxPage, siteUrl)
                  });
         }
 
         [HttpPost]
-        public async Task<ActionResult> EditOtherTax(FormCollection form, TaxExemptionVM _data)
+        public async Task<ActionResult> ItemOtherTax(FormCollection form, TaxExemptionVM _data)
         {
             var siteUrl = SessionManager.Get<string>(SITE_URL) ?? ConfigResource.DefaultBOSiteUrl;
             _taxExemptionDataService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            
+            if (_data.ID == null)
+            {
+                return await Create(form, _data);
+            }
 
             _data.TaxExemptionOtherVM.ID = _data.ID;
             _data.TaxExemptionOtherVM.TypeOfTax = _data.TypeOfTax;
@@ -275,7 +314,7 @@ namespace MCAWebAndAPI.Web.Controllers
                  new
                  {
                      successMessage = string.Format(SuccessMsgFormatUpdated, _data.ID),
-                     previousUrl = string.Format(FirstPage, siteUrl)
+                     previousUrl = string.Format(FirstOtherTaxPage, siteUrl)
                  });
         }
     }

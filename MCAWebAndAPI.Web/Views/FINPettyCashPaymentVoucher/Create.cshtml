@@ -60,20 +60,30 @@ Wireframe FIN10: Petty Cash Voucher
 
         $(document).ready(function () {
             SetBaseOnPaidTo($("#PaidTo_Value").data("kendoDropDownList").value());
-
+          
             $('#AmountPaidInWord').css({ "background-color": GREY_COLOR });
             $('#AmountPaidInWord').attr("readonly", "readonly");
 
             $('#Fund').css({ "background-color": GREY_COLOR });
 
             $('#Amount').change(function () {
-                var url = '@Url.Action("GetAmountInWords", "FINPettyCashPaymentVoucher")';
-                var amount = $('#Amount').val(); // The option selected
+                GetAmountWords();
+            });
 
+
+
+        });
+
+        function GetAmountWords() {
+            var url = '@Url.Action("GetAmountInWords", "FINPettyCashPaymentVoucher")';
+            var amount = $('#Amount').val(); // The option selected
+            var selectedcurrency = $('#hdnCurrency').val();
+
+            if (amount !== '') {
                 $.ajax({
                     url: url,
                     type: "GET",
-                    data: { data: amount },
+                    data: { data: amount, currency: selectedcurrency },
                     success: function (response) {
                         $('#AmountPaidInWord').val(response);
                     },
@@ -81,11 +91,9 @@ Wireframe FIN10: Petty Cash Voucher
                         $('#AmountPaidInWord').val('Error');
                     }
                 });
-            });
+            }
+        }
 
-
-
-        });
 
         var PAIDTO_PROFESSIONAL = "Professional";
         var PAIDTO_VENDOR = "Vendor";
@@ -131,6 +139,12 @@ Wireframe FIN10: Petty Cash Voucher
 
             $('.k-state-disabled').css({ "background-color": GREY_COLOR });
             $('.k-state-default').css({ "background-color": "white" });
+        }
+
+        function onSelectCurrency(e) {
+            var data = this.dataItem(e.item);
+            $('#hdnCurrency').val(data);
+            GetAmountWords();
         }
     </script>
 }

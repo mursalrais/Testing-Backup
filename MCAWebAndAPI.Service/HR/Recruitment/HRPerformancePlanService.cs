@@ -65,7 +65,25 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             foreach (var viewModel in PerformancePlanDetails)
             {
-                if (email != null)
+                if (PerformancePlanDetails.Count() != 0)
+                {
+                    if (status == "Pending Approval 2 of 2" && type == "Approver2")
+                    {
+                        var updatedValue = new Dictionary<string, object>();
+                        updatedValue.Add("status", "Approved");
+                        try
+                        {
+                            SPConnector.UpdateListItem(SP_PPPIG_LIST_NAME, viewModel.ID, updatedValue, _siteUrl);
+                        }
+                        catch (Exception e)
+                        {
+                            logger.Error(e.Message);
+                            throw new Exception(ErrorResource.SPInsertError);
+                        }
+                    }
+                }
+
+                if (type == "Professional")
                 {
                     if (Item.CheckIfSkipped(viewModel))
                         continue;
@@ -111,24 +129,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     {
                         logger.Error(e.Message);
                         throw new Exception(ErrorResource.SPInsertError);
-                    }
-                }
-
-                if (PerformancePlanDetails.Count() != 0)
-                {
-                    if (status == "Pending Approval 2 of 2" && type == "Approver2")
-                    {
-                        var updatedValue = new Dictionary<string, object>();
-                        updatedValue.Add("status", "Approved");
-                        try
-                        {
-                            SPConnector.UpdateListItem(SP_PPPIG_LIST_NAME, viewModel.ID, updatedValue, _siteUrl);
-                        }
-                        catch (Exception e)
-                        {
-                            logger.Error(e.Message);
-                            throw new Exception(ErrorResource.SPInsertError);
-                        }
                     }
                 }
             }
@@ -369,7 +369,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 {
                     foreach (var item in SPConnector.GetList(workflowTransactionListName, _siteUrl, caml))
                     {
-                        emails = Convert.ToString(item["approver0"]);
+                        emails = FormatUtil.ConvertLookupToValue(item, "approvername_x003a_Office_x0020_");
 
                         EmailUtil.Send(emails, "Ask for Approval", messageForApprover);
                         //SPConnector.SendEmail(item, message, "Ask for Approval Level 2", _siteUrl);
@@ -390,7 +390,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 foreach (var item in SPConnector.GetList(workflowTransactionListName, _siteUrl, caml))
                 {
-                    emails = Convert.ToString(item["approver0"]);
+                    emails = FormatUtil.ConvertLookupToValue(item, "approvername_x003a_Office_x0020_");
 
                     EmailUtil.Send(emails, "Ask for Approval", messageForApprover);
                     //SPConnector.SendEmail(item, message, "Ask for Approval Level 2", _siteUrl);

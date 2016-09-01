@@ -115,6 +115,7 @@
     <Compile Include="Common\Item.cs" />
     <Compile Include="Common\Location.cs" />
     <Compile Include="Common\Workflow.cs" />
+    <Compile Include="HR\DataMaster\AdjustmentMaster.cs" />
     <Compile Include="HR\DataMaster\DayOffRequest.cs" />
     <Compile Include="HR\DataMaster\DayOffTypeMaster.cs" />
     <Compile Include="ViewModel\Control\MultiSelectVM.cs" />
@@ -127,6 +128,8 @@
     <Compile Include="ViewModel\Form\Asset\AssignmentOfAssetVM.cs" />
     <Compile Include="ViewModel\Form\Asset\ProfessionalsVM.cs" />
     <Compile Include="ViewModel\Form\Common\ProfessionalVM.cs" />
+    <Compile Include="ViewModel\Form\Finance\PettyCashJournalItemVM.cs" />
+    <Compile Include="ViewModel\Form\Finance\PettyCashJournalVM.cs" />
     <Compile Include="ViewModel\Form\Finance\PettyCashReplenishmentVM.cs" />
     <Compile Include="ViewModel\Form\Finance\PettyCashStatementVM.cs" />
     <Compile Include="ViewModel\Form\Finance\PettyCashTransactionItem.cs" />
@@ -136,6 +139,8 @@
     <Compile Include="ViewModel\Form\HR\AdjustmentDataVM.cs" />
     <Compile Include="ViewModel\Form\HR\AdjustmentDayOffBalanceVM.cs" />
     <Compile Include="ViewModel\Form\HR\AdjustmentDetailsVM.cs" />
+    <Compile Include="ViewModel\Form\HR\DayOffNextBalanceVM.cs" />
+    <Compile Include="ViewModel\Form\HR\DayOffRequestDetailDisplayVM.cs" />
     <Compile Include="ViewModel\Form\HR\DayOffRequestDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\DayOffRequestVM.cs" />
     <Compile Include="HR\DataMaster\DependentMaster.cs" />
@@ -198,7 +203,6 @@
     <Compile Include="ViewModel\Form\Asset\AssetLoanAndReturnVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetReplacementHeaderVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetReplacementItemVM.cs" />
-    <Compile Include="ViewModel\Form\Asset\AssetReplacementVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetScrappingHeaderVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetScrappingItemVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetScrappingVM.cs" />

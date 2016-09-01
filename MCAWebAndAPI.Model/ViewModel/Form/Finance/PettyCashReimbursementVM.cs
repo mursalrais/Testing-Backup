@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Web;
 using MCAWebAndAPI.Model.ViewModel.Control;
+using static MCAWebAndAPI.Model.ViewModel.Form.Finance.Shared;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 {
@@ -21,26 +24,19 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         {
             this.TransactionType = Shared.PettyCashTranscationType_PettyCashReimbursement;
         }
+        public Operations Operation { get; set; }
 
         public string DocNo { get; set; }
 
         [Required]
         [UIHint("ComboBox")]
-        public PaidToComboboxVM  PaidTo { get; set; }
+        public PaidToComboboxVM  PaidTo { get; set; } = new PaidToComboboxVM();
 
         [UIHint("AjaxComboBox")]
-        public AjaxComboBoxVM Professional { get; set; } 
+        public AjaxComboBoxVM Professional { get; set; } = new AjaxComboBoxVM();
 
         [UIHint("AjaxComboBox")]
-        public AjaxComboBoxVM Vendor { get; set; } 
-        //    = new AjaxCascadeComboBoxVM
-        //{
-        //    ControllerName = "xxxx",
-        //    ActionName = "xxxxx",
-        //    ValueField = "ID",
-        //    TextField = "Title",
-        //    OnSelectEventName = "onSelectEventBudgetNo"
-        //};
+        public AjaxComboBoxVM Vendor { get; set; } = new AjaxComboBoxVM();
 
         public string Driver { get; set; }
 
@@ -57,10 +53,28 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 
         [Required]
         [DisplayName("WBS")]
-        [UIHint("ComboBox")]
-        public ComboBoxVM WBS { get; set; } = new ComboBoxVM();
+        [UIHint("AjaxComboBox")]
+        public AjaxComboBoxVM WBS { get; set; } = new AjaxComboBoxVM();
 
+        public string WBSDescription { get; set; }
 
+        [Required]
+        [DisplayName("GL")]
+        [UIHint("AjaxComboBox")]
+        public AjaxComboBoxVM GL { get; set; } = new AjaxComboBoxVM();
+
+        public string GLDescription { get; set; }
+
+        [DisplayName("Amount Reimbursed")]
+        public decimal AmountReimbursed { get; set; } = 0;
+
+        [UIHint("TextArea")]
+        public string Remarks { get; set; }
+
+        [UIHint("MultiFileUploader")]
+        public IEnumerable<HttpPostedFileBase> Documents { get; set; } = new List<HttpPostedFileBase>();
+
+        public string DocumentUrl { get; set; }
     }
 
     internal class PettyCashReimbursementVMMetadata
