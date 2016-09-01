@@ -48,8 +48,8 @@ namespace MCAWebAndAPI.Web.Controllers
                 SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
             }
             
-            if (viewmodel.cmpEmail != null)
-                viewmodel = await _service.GetWorkflow(viewmodel.cmpEmail, "Compensatory Request");
+            if (userAccess != null)
+                viewmodel = await _service.GetWorkflow(userAccess, "Compensatory Request");
 
             viewmodel.cmpEmail = userAccess;
 
