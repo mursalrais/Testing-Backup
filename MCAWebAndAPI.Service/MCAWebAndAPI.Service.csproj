@@ -250,6 +250,7 @@
     <Compile Include="HR\Recruitment\IPSAManagementService.cs" />
     <Compile Include="HR\Recruitment\PSAManagementService.cs" />
     <Compile Include="JobSchedulers\Jobs\EmailExternalJob.cs" />
+    <Compile Include="JobSchedulers\Jobs\EmailReminder5Days.cs" />
     <Compile Include="JobSchedulers\Jobs\EmailJob.cs" />
     <Compile Include="JobSchedulers\Jobs\ExitProcedureManagementJobs.cs" />
     <Compile Include="JobSchedulers\Jobs\PayrollRunJob.cs" />
