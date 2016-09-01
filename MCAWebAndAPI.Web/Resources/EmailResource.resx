@@ -350,6 +350,11 @@ This email is sent to you to notify that there is a request which required your 
 
 Link :  {0}{1}/EditForm_Custom.aspx?ID={2}</value>
   </data>
+  <data name="PSAChangeStatus" xml:space="preserve">
+    <value>Dear Mr./Mrs. HR Officer,
+
+There is a PSA with number {0} that already active start from today. Here is the URL that you can click to make redirect to edit page for change PSA Status from inactive to active</value>
+  </data>
   <data name="WorkflowAskForApproval" xml:space="preserve">
     <value>&lt;p&gt;
     &lt;strong&gt;Dear Approver&lt;/strong&gt;

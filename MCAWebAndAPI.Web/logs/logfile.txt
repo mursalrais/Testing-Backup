@@ -444,44 +444,7 @@ Parameter name: source
 2016-08-31 14:21:35.8922 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Invalid data has been used to update the list item. The field you are trying to update may be read only.
 2016-08-31 14:29:45.7340 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Invalid data has been used to update the list item. The field you are trying to update may be read only.
 2016-08-31 14:45:46.2882 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService The 'sId' argument is invalid.
-2016-09-01 16:30:24.6005 MCAWebAndAPI.Service.HR.Payroll.PayrollService System.Net.WebException: The underlying connection was closed: An unexpected error occurred on a receive. ---> System.IO.IOException: Unable to read data from the transport connection: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond. ---> System.Net.Sockets.SocketException: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
-   at System.Net.Sockets.Socket.Receive(Byte[] buffer, Int32 offset, Int32 size, SocketFlags socketFlags)
-   at System.Net.Sockets.NetworkStream.Read(Byte[] buffer, Int32 offset, Int32 size)
-   --- End of inner exception stack trace ---
-   at System.Net.Sockets.NetworkStream.Read(Byte[] buffer, Int32 offset, Int32 size)
-   at System.Net.FixedSizeReader.ReadPacket(Byte[] buffer, Int32 offset, Int32 count)
-   at System.Net.Security._SslStream.StartFrameHeader(Byte[] buffer, Int32 offset, Int32 count, AsyncProtocolRequest asyncRequest)
-   at System.Net.Security._SslStream.StartReading(Byte[] buffer, Int32 offset, Int32 count, AsyncProtocolRequest asyncRequest)
-   at System.Net.Security._SslStream.ProcessRead(Byte[] buffer, Int32 offset, Int32 count, AsyncProtocolRequest asyncRequest)
-   at System.Net.TlsStream.Read(Byte[] buffer, Int32 offset, Int32 size)
-   at System.Net.Connection.SyncRead(HttpWebRequest request, Boolean userRetrievedStream, Boolean probeRead)
-   --- End of inner exception stack trace ---
-   at MCAWebAndAPI.Service.Utils.SPConnector.GetList(String listName, String siteUrl, String caml) in D:\Reza F. Fikri\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 121
-   at MCAWebAndAPI.Service.HR.Leave.DayOffService.GetDayOffHeaderIDFromProfessional(Int32 professionalID) in D:\Reza F. Fikri\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Leave\DayOffService.cs:line 151
-   at MCAWebAndAPI.Service.HR.Leave.DayOffService.GetDayOffRequests(IEnumerable`1 professionalIDs) in D:\Reza F. Fikri\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Leave\DayOffService.cs:line 210
-   at MCAWebAndAPI.Service.HR.Payroll.PayrollServiceExtention.<PopulateAllProfessionalDayOffRequests>d__20.MoveNext() in D:\Reza F. Fikri\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Payroll\PayrollServiceExtention.cs:line 114
---- End of stack trace from previous location where exception was thrown ---
-   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
-   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
-   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
-   at MCAWebAndAPI.Service.HR.Payroll.PayrollService.<GetPayrollWorksheetDetailsAsync>d__16.MoveNext() in D:\Reza F. Fikri\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Payroll\PayrollService.cs:line 228
-2016-09-01 17:24:45.9992 MCAWebAndAPI.Service.HR.Payroll.PayrollService System.Net.WebException: The underlying connection was closed: An unexpected error occurred on a send. ---> System.IO.IOException: Authentication failed because the remote party has closed the transport stream.
-   at System.Net.Security.SslState.StartReadFrame(Byte[] buffer, Int32 readBytes, AsyncProtocolRequest asyncRequest)
-   at System.Net.Security.SslState.StartReceiveBlob(Byte[] buffer, AsyncProtocolRequest asyncRequest)
-   at System.Net.Security.SslState.ForceAuthentication(Boolean receiveFirst, Byte[] buffer, AsyncProtocolRequest asyncRequest)
-   at System.Net.Security.SslState.ProcessAuthentication(LazyAsyncResult lazyResult)
-   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
-   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
-   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
-   at System.Net.TlsStream.ProcessAuthentication(LazyAsyncResult result)
-   at System.Net.TlsStream.Write(Byte[] buffer, Int32 offset, Int32 size)
-   at System.Net.ConnectStream.WriteHeaders(Boolean async)
-   --- End of inner exception stack trace ---
-   at MCAWebAndAPI.Service.Utils.SPConnector.GetList(String listName, String siteUrl, String caml) in D:\Reza F. Fikri\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 121
-   at MCAWebAndAPI.Service.HR.Common.DataMasterService.GetMonthlyFees(Int32[] professionalIDs) in D:\Reza F. Fikri\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Common\DataMasterService.cs:line 304
-   at MCAWebAndAPI.Service.HR.Payroll.PayrollServiceExtention.<PopulateAllProfessionalMonthlyFee>d__19.MoveNext() in D:\Reza F. Fikri\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Payroll\PayrollServiceExtention.cs:line 103
---- End of stack trace from previous location where exception was thrown ---
-   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
-   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
-   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
-   at MCAWebAndAPI.Service.HR.Payroll.PayrollService.<GetPayrollWorksheetDetailsAsync>d__16.MoveNext() in D:\Reza F. Fikri\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Payroll\PayrollService.cs:line 228
+2016-09-01 15:53:02.9301 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService System.ArgumentException: The 'sId' argument is invalid.
+   at Microsoft.SharePoint.Client.List.GetItemByStringId(String sId)
+   at MCAWebAndAPI.Service.Utils.SPConnector.DeleteListItem(String listName, Nullable`1 listItemID, String siteUrl) in C:\Users\sobari\Documents\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 662
+   at MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService.CreateCompensatoryData(Nullable`1 cmpID, CompensatoryVM viewModels) in C:\Users\sobari\Documents\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Compensatory\HRCompensatoryService.cs:line 601

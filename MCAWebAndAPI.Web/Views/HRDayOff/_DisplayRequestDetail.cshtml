@@ -29,10 +29,6 @@
     "<input type='hidden' id='DayOffRequestDetailsDisplay[#= getDayOffRequestDetailsDisplay(data)#].Remarks' name='DayOffRequestDetailsDisplay[#= getDayOffRequestDetailsDisplay(data)#].Remarks' value='#= Remarks #' />"
     );
 
-        //columns.Bound(p => p.Remarks).Width(80).ClientTemplate("#= Remarks #" +
-        //           "<input type='hidden' id='DayOffRequestDetails[#= getDayOffRequestDetails(data)#].Remarks' name='DayOffRequestDetails[#= getDayOffRequestDetails(data)#].Remarks' value='#= Remarks #' />"
-        //         );
-
         columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
         "<input type='hidden' name='DayOffRequestDetailsDisplay[#= getDayOffRequestDetailsDisplay(data)#].EditMode' value='#= EditMode #' />"
         );
