@@ -261,11 +261,16 @@ namespace MCAWebAndAPI.Service.HR.Leave
         private DayOffRequestDetailDisplayVM ConvertToDayOffRequestDetailsDisplay(string dayOffType, string startDate, string endDate, string fullHalfDay, string remarks)
         {
             var dayOffRequestDetailDisplay = new DayOffRequestDetailDisplayVM();
-            
+
             dayOffRequestDetailDisplay.DayOffType = Convert.ToString(dayOffType);
             dayOffRequestDetailDisplay.RequestStartDate = Convert.ToString(startDate);
             dayOffRequestDetailDisplay.RequestEndDate = Convert.ToString(endDate);
-            dayOffRequestDetailDisplay.FullHalf = Convert.ToString(fullHalfDay);
+
+            string subFullHalfDay1 = Convert.ToString(fullHalfDay).Substring(0,4);
+            string subFullHalfDay2 = Convert.ToString(fullHalfDay).Substring(4,4);
+            string concFullHalfDay = subFullHalfDay1 + " " + subFullHalfDay2;
+
+            dayOffRequestDetailDisplay.FullHalf = concFullHalfDay;
             dayOffRequestDetailDisplay.Remarks = Convert.ToString(remarks);
 
             return dayOffRequestDetailDisplay;

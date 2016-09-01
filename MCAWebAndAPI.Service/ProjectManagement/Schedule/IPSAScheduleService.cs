@@ -14,5 +14,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
         void changePSAstatus();
 
+        //void SendMailChangeStatus(string professionalMail, string mailSubject, string mailContent);
+
     }
 }
