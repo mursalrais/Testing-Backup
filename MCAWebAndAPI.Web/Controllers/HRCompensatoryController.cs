@@ -189,6 +189,8 @@ namespace MCAWebAndAPI.Web.Controllers
             checkdate = _service.CheckRequest(viewModel);
 
             if(checkdate == true)
+                Response.TrySkipIisCustomErrors = true;
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse("date is already used at the previous transactions");
 
             try
@@ -229,6 +231,16 @@ namespace MCAWebAndAPI.Web.Controllers
             var testget = form[""];
 
             int? cmpID = viewModel.cmpID;
+
+            bool checkdate;
+
+            viewModel.CompensatoryDetails = BindCompensatorylistDateTime(form, viewModel.CompensatoryDetails);
+            checkdate = _service.CheckRequest(viewModel);
+
+            if (checkdate == true)
+                Response.TrySkipIisCustomErrors = true;
+            Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            return JsonHelper.GenerateJsonErrorResponse("date is already used at the previous transactions");
 
             try
             {

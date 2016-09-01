@@ -8,13 +8,16 @@
     ViewBag.Title = "Add Compensatory User";
 }
 
-@using (Html.BeginForm("CreateHeaderCompensatory", "HRCompensatory", FormMethod.Post,
-                                                                                         new
-                                                                                         {
-                                                                                             @class = "form-horizontal",
-                                                                                             enctype = "multipart/form-data"
-                                                                                         }))
+@using (Ajax.BeginForm("CreateHeaderCompensatory", "HRCompensatory", FormMethod.Post,
+new AjaxOptions
 {
+    OnBegin = "onBeginForm",
+    OnComplete = "onCompleteForm",
+    OnSuccess = "onSuccessFormEmbed",
+    OnFailure = "onFailureForm"
+}, new { @class = "form-horizontal" }))
+
+                                                                                                    {
     <fieldset>
         @Html.HiddenFor(m => m.cmpID)
         @Html.HiddenFor(m => m.cmpName)
