@@ -188,10 +188,11 @@ namespace MCAWebAndAPI.Web.Controllers
             viewModel.CompensatoryDetails = BindCompensatorylistDateTime(form, viewModel.CompensatoryDetails);
             checkdate = _service.CheckRequest(viewModel);
 
-            if(checkdate == true)
+            if(checkdate == true) { 
                 Response.TrySkipIisCustomErrors = true;
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse("date is already used at the previous transactions");
+                }
 
             try
             {
@@ -238,9 +239,11 @@ namespace MCAWebAndAPI.Web.Controllers
             checkdate = _service.CheckRequest(viewModel);
 
             if (checkdate == true)
+            {
                 Response.TrySkipIisCustomErrors = true;
-            Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            return JsonHelper.GenerateJsonErrorResponse("date is already used at the previous transactions");
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse("date is already used at the previous transactions");
+            }
 
             try
             {
