@@ -25,6 +25,10 @@
     "<input type='hidden' id='DayOffRequestDetailsDisplay[#= getDayOffRequestDetailsDisplay(data)#].RequestEndDate' name='DayOffRequestDetailsDisplay[#= getDayOffRequestDetailsDisplay(data)#].RequestEndDate' value='#= RequestEndDate #' />"
     );
 
+        columns.Bound(p => p.StrTotalDays).Width(80).ClientTemplate("#= StrTotalDays #" +
+    "<input type='hidden' id='DayOffRequestDetailsDisplay[#= getDayOffRequestDetailsDisplay(data)#].StrTotalDays' name='DayOffRequestDetailsDisplay[#= getDayOffRequestDetailsDisplay(data)#].StrTotalDays' value='#= StrTotalDays #' />"
+    );
+
         columns.Bound(p => p.Remarks).Width(80).ClientTemplate("#= Remarks #" +
     "<input type='hidden' id='DayOffRequestDetailsDisplay[#= getDayOffRequestDetailsDisplay(data)#].Remarks' name='DayOffRequestDetailsDisplay[#= getDayOffRequestDetailsDisplay(data)#].Remarks' value='#= Remarks #' />"
     );
@@ -52,6 +56,7 @@
         model.Field(m => m.RequestStartDate).Editable(false);
         model.Field(m => m.RequestEndDate).Editable(false);
         model.Field(m => m.Remarks).Editable(false);
+        model.Field(m => m.TotalDays).Editable(false);
     })
     .ServerOperation(false)
     @*.Events(events =>

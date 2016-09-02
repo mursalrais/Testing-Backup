@@ -18,6 +18,10 @@
         columns.Bound(p => p.YearOfGraduation).ClientTemplate("#=getMonthName(YearOfGraduation)#" + " " + "#= YearOfGraduation.getFullYear() #" +
                            "<input type='hidden' name='EducationDetails[#= getEducationDetail(data)#].YearOfGraduation' value='#= YearOfGraduation #' />"
                          ).Width(150);
+        
+        columns.Bound(p => p.StrYearOfGraduations).Hidden().ClientTemplate("#= StrYearOfGraduations #" +
+                           "<input type='hidden' name='EducationDetails[#= getEducationDetail(data)#].StrYearOfGraduations' value='#= StrYearOfGraduations #' />"
+                         ).Width(300);
         columns.Bound(p => p.Remarks).ClientTemplate("#= Remarks #" +
                            "<input type='hidden' name='EducationDetails[#= getEducationDetail(data)#].Remarks' value='#= Remarks #' />"
                          );
@@ -41,8 +45,8 @@
                    {
                        model.Id(p => p.ID);
                        model.Field(e => e.YearOfGraduation).DefaultValue(DateTime.Now.AddYears(-5));
-                   })
-                   .ServerOperation(false)
+                   }).ServerOperation(false)
+
      )
     )
 </div>
