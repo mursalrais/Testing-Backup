@@ -100,7 +100,7 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult Print(FormCollection form, PettyCashSettlementVM viewModel)
         {
             string RelativePath = PrintPageUrl;
-            string domain = "http://" + Request.Url.Authority + "/img/logo.png";
+            string domain = new SharedFinanceController().GetImageLogoPrint(Request.IsSecureConnection, Request.Url.Authority);
 
             var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl);
             service.SetSiteUrl(siteUrl);
@@ -179,7 +179,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 }
                 catch
                 {
-                    throw;
+                    //throw;
                 }
             }
             else if (paymentVoucher.PaidTo.Text.Equals(PaidToVendor))
@@ -187,7 +187,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 VendorService vendorSvc = new VendorService();
                 vendorSvc.SetSiteUrl(siteUrl);
                 var vendor = vendorSvc.GetVendor(paymentVoucher.Vendor.Value.Value);
-                paymentVoucher.PaidTo.Text = vendor.Name;
+                paymentVoucher.PaidTo.Text = string.Format("{0} - {1}", vendor.ID, vendor.Name);
             }
 
             return Json(new

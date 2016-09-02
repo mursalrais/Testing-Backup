@@ -214,11 +214,12 @@ namespace MCAWebAndAPI.Web.Controllers
             // BEGIN Workflow Demo 
             Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME, SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)cmpID);
 
-            _service.SendEmail(SP_TRANSACTION_WORKFLOW_LIST_NAME, SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)cmpID, 1, string.Format(EmailResource.EmailCompensatoryApproval, siteUrl, cmpID));
+            foreach (var item in viewModel.WorkflowItems)
+            {
+                _service.SendEmail(SP_TRANSACTION_WORKFLOW_LIST_NAME, SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)cmpID, Convert.ToInt32(item.Level), string.Format(EmailResource.EmailCompensatoryApproval, siteUrl, cmpID));
+            }
 
-            return RedirectToAction("Index",
-               "Success",
-               new { successMessage = string.Format(MessageResource.SuccessCreateCompensatoryData, viewModel.cmpName) });
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.Compensatorylist);
 
         }
 
@@ -268,15 +269,9 @@ namespace MCAWebAndAPI.Web.Controllers
                     // Send to Level 1 & 2 Approver
                     _service.SendEmail(SP_TRANSACTION_WORKFLOW_LIST_NAME, SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)cmpID, 1, string.Format(EmailResource.EmailCompensatoryApproval, siteUrl, cmpID));
                 }
-                else if (viewModel.StatusForm == "Pending Approval 1 of 2")
-                {
-                    EmailUtil.Send(viewModel.cmpEmail, "Ask for Approval", string.Format(EmailResource.EmailCompensatoryRequestor, siteUrl, cmpID));
-                }
             }
 
-            return RedirectToAction("Index",
-                          "Success",
-                          new { successMessage = string.Format(MessageResource.SuccessCreateCompensatoryData, viewModel.cmpName) });
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.Compensatorylist);
 
         }
 

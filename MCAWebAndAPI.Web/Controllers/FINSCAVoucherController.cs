@@ -142,7 +142,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
         public ActionResult Print(int? ID, string userAccess = null)
         {
             ViewBag.SubTitle = SubTitle;
-            string domain = "http://" + Request.Url.Authority + "/img/logo.png";
+            string domain = new SharedFinanceController().GetImageLogoPrint(Request.IsSecureConnection, Request.Url.Authority);
 
             var siteUrl = SessionManager.Get<string>(SiteUrl);
             service.SetSiteUrl(siteUrl);
