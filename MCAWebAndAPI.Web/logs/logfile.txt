@@ -448,3 +448,4 @@ Parameter name: source
    at Microsoft.SharePoint.Client.List.GetItemByStringId(String sId)
    at MCAWebAndAPI.Service.Utils.SPConnector.DeleteListItem(String listName, Nullable`1 listItemID, String siteUrl) in C:\Users\sobari\Documents\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 662
    at MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService.CreateCompensatoryData(Nullable`1 cmpID, CompensatoryVM viewModels) in C:\Users\sobari\Documents\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Compensatory\HRCompensatoryService.cs:line 601
+2016-09-02 14:02:01.5544 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Column 'edited' does not exist. It may have been deleted by another user.  /sites/mca-dev/hr/Lists/CompensatoryRequest

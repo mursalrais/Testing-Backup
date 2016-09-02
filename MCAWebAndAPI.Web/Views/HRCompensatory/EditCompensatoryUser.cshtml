@@ -1,0 +1,371 @@
+﻿
+@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@using MCAWebAndAPI.Web.Helpers
+
+@model CompensatoryVM
+
+@{
+    ViewBag.Title = "Edit Compensatory User";
+}
+
+@using (Ajax.BeginForm("CreateCompensatoryData", "HRCompensatory", FormMethod.Post,
+                                    new AjaxOptions
+                                    {
+                                        OnBegin = "onBeginForm",
+                                        OnComplete = "onCompleteForm",
+                                        OnSuccess = "onSuccessFormEmbed",
+                                        OnFailure = "onFailureForm"
+                                    }, new { @class = "form-horizontal" }))
+
+{
+    <fieldset>
+        @Html.HiddenFor(m => m.cmpID)
+        @Html.HiddenFor(m => m.cmpName)
+        @Html.HiddenFor(m => m.cmpEmail)
+        @Html.HiddenFor(m => m.cmpTitle)
+        @Html.HiddenFor(m => m.cmpPosition)
+        @Html.HiddenFor(m => m.cmpYearDate)
+        @Html.HiddenFor(m => m.Requestor)
+
+        <input type="hidden" id="loadpage" value="0">
+        <div class="row">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.cmpName).Class("col-xs-2 control-label")
+                <div class="col-xs-4">
+                    <input id="ProfName" class="form-control" value="" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.cmpProjUnit).Class("col-xs-2 control-label")
+                <div class="col-xs-3">
+                    @Html.EditorFor(m => m.cmpProjUnit)
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12">
+            <div class="form-group" id="ParentDiv">
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.StatusForm)
+                </div>
+            </div>
+        </div>
+        <legend>Compensatory list</legend>
+        <div id="compensatorylist" class="row"></div>
+
+        <div class="row hidden">
+            @Html.Partial("_WorkflowPathDetails", Model)
+        </div>
+    </fieldset>
+}
+
+@if (Model.StatusForm != "Approved")
+{
+    if (Model.StatusForm != "Reject")
+    {
+<div class="row pull-right">
+    <div class="col-sm-12">
+        <button id="submit-button" class="btn btn-primary" type="submit">
+            <i class="fa fa-save"></i>
+            Submit For Approval
+        </button>
+    </div>
+</div>
+    }
+}
+
+
+@if (Model.StatusForm == "" || Model.StatusForm == "Draft")
+{
+    <div class="row pull-right">
+        <div class="col-sm-12">
+            <button id="submit-draft-button" class="btn btn-primary" type="submit">
+                <i class="fa fa-clipboard"></i>
+                Save As Draft
+            </button>
+        </div>
+    </div>
+}
+
+@section scripts{
+
+    <script>
+
+        function filterLevel() {
+            return {
+                idProf: $('#ddlProfessional_Value').data("kendoDropDownList").dataItem($('#ddlProfessional_Value').data("kendoDropDownList").select()).ID
+            };
+        }
+
+        function OnChangeCompensatory(e) {
+            var dataItem = this.dataItem(e.item);
+            var idComp = null;
+            var CompStatus = null;
+
+            if (dataItem != null) {
+                idComp = dataItem.ID;
+                CompStatus = dataItem.CompensatoryStatus;
+            }
+            $("#StatusForm").prop("value", CompStatus);
+
+            var url = "/HRCompensatory/GetCompensatoryDetailsUser?idComp=" + idComp;
+            showLoading();
+            $('#compensatorylist').load(url, function (response, status, xhr) {
+                if (status == "success") {
+                    hideLoading();
+                }
+            });
+            $("#cmpID").prop("value", idComp);
+
+        };
+
+
+        $(document).ready(function () {
+
+            var nameProf = $("#cmpName").val() + " - " + $("#cmpPosition").val()
+            $("#ProfName").prop("value", nameProf);
+            $("#ProfName").prop('readonly', 'true');
+            
+            var stat = $("#StatusForm").val();
+            $("#Status").prop("value", stat);
+            $("#Status").prop('readonly', 'true');
+
+            var cmpId = $("#cmpID").val();
+
+            var url = "/HRCompensatory/GetCompensatoryDetailsUser?idComp=" + cmpId;
+            showLoading();
+            $('#compensatorylist').load(url, function (response, status, xhr) {
+                if (status == "success") {
+                    hideLoading();
+                }
+            });
+
+            $("#cancel-button").click(function () {
+                showLoading();
+                var url = "/HRCompensatory/GetCompensatoryDetailsUser?idComp=" + $("#cmpID").val();
+
+                $('#compensatorylist').load(url, function (response, status, xhr) {
+                    if (status == "success") {
+                        hideLoading();
+                    }
+                });
+            });
+
+            $("#approve-button").click(function () {
+                var rowgrid = $("#CompensatoryDetails").data("kendoGrid").tbody.find("tr");
+                var valdate = true;
+                var i = -1;
+                var j = -1;
+                rowgrid.each(function (e) {
+                    i++;
+                    var xdate = $("#Dateid" + i).val();
+                    var xEdit = $("#Editid" + i).val();
+                    rowgrid.each(function (e) {
+                        j++;
+                        var ydate = $("#Dateid" + j).val();
+                        var yEdit = $("#Editid" + j).val();
+                        if (i !== j) {
+                            if (xdate != "undifined" && ydate != "undifined") {
+                                if (xEdit != -1) {
+                                    if (yEdit != -1) {
+                                        if (xdate == ydate) {
+                                            valdate = false;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                });
+
+                if (valdate == false) {
+                    alert("Date you have chosen already exists, please choose another date..!!");
+                } else {
+                    $("form").submit();
+                }
+            });
+
+            $("#submitonly-button").click(function () {
+                $("#StatusForm").prop("value", "submit");
+                $("form").submit();
+            });
+
+            $("#submit-button").click(function () {
+                $("#StatusForm").prop("value", " ");
+                var rowgrid = $("#CompensatoryDetails").data("kendoGrid").tbody.find("tr");
+                var valdate = true;
+                var i = -1;
+                var j = -1;
+                rowgrid.each(function (e) {
+                    i++;
+                    var xdate = $("#Dateid" + i).val();
+                    var xEdit = $("#Editid" + i).val();
+                    rowgrid.each(function (e) {
+                        j++;
+                        var ydate = $("#Dateid" + j).val();
+                        var yEdit = $("#Editid" + j).val();
+                        if (i !== j) {
+                            if (xdate != "undifined" && ydate != "undifined") {
+                                if (xEdit != -1) {
+                                    if (yEdit != -1) {
+                                        if (xdate == ydate) {
+                                            valdate = false;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                });
+
+                if (valdate == false) {
+                    alert("Date you have chosen already exists, please choose another date..!!");
+                } else {
+                    $("form").submit();
+                }
+            });
+
+            $("#submit-draft-button").click(function () {
+                $("#StatusForm").val("Draft")
+                var rowgrid = $("#CompensatoryDetails").data("kendoGrid").tbody.find("tr");
+                var valdate = true;
+                var i = -1;
+                var j = -1;
+                rowgrid.each(function (e) {
+                    i++;
+                    var xdate = $("#Dateid" + i).val();
+                    var xEdit = $("#Editid" + i).val();
+                    rowgrid.each(function (e) {
+                        j++;
+                        var ydate = $("#Dateid" + j).val();
+                        var yEdit = $("#Editid" + j).val();
+                        if (i !== j) {
+                            if (xdate != "undifined" && ydate != "undifined") {
+                                if (xEdit != -1) {
+                                    if (yEdit != -1) {
+                                        if (xdate == ydate) {
+                                            valdate = false;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                });
+
+                if (valdate == false) {
+                    alert("Date you have chosen already exists, please choose another date..!!");
+                } else {
+                    $("form").submit();
+                }
+            });
+
+            $('#reject-button').click(function (e) {
+                $("#StatusForm").val("Reject")
+                $("form").submit();
+            });
+
+            $('#print-button').click(function (e) {
+                $("#ParentDiv").show();
+                var url = "/HRCompensatory/PrintCompensatoryRequest";
+                submitFormToPrint(url);
+            });
+
+        });
+
+        function getDayName(date) {
+            var day = new Array();
+            day[0] = "Monday";
+            day[1] = "Tuesday";
+            day[2] = "Wednesday";
+            day[3] = "Thursday";
+            day[4] = "Friday";
+            day[5] = "Saturday";
+            day[6] = "Sunday";
+
+            if (date != null) {
+                return day[date.getDay()];
+            };
+        }
+
+        function onChangecomp(e) {
+            var container = e.container;
+            if (e.action === "itemchange") {
+                var model = e.items[0];
+
+                if (model.StartTime != null && model.FinishTime != null) {
+                    var start = model.StartTime.getHours();
+                    var finish = model.FinishTime.getHours();
+                    var finishsec = model.FinishTime.getSeconds();
+                    var range;
+                    var rowgrid = $("#CompensatoryDetails").data("kendoGrid").tbody.find("tr");
+                    var i = -1
+                    var j = -1
+                    rowgrid.each(function (e) {
+                        i++;
+                        var xdate = $("#Dateid" + i).val();
+                        rowgrid.each(function (e) {
+                            j++;
+                            var ydate = $("#Dateid" + j).val();
+                            if (i !== j) {
+                                if (xdate == ydate) {
+                                    alert("Date you have chosen already exists, please choose another date..!!")
+                                }
+                            }
+                        });
+                    });
+
+                    if ((finish + finishsec) <= start) {
+                        alert("FinishTime can not be smaller than the starttime..!!")
+                    }
+
+                    if (start < finish) {
+                        range = finish - start
+
+                        if (model.CmpTotalHours != range) {
+                            model.set("CmpTotalHours", range);
+                        }
+
+                        if (range >= 4) {
+                            totday = 1
+                        } else {
+                            totday = 0.5
+                        }
+
+                        if (model.TotalDay != totday) {
+                            model.set("TotalDay", totday);
+                        }
+                    }
+                }
+            }
+        }
+
+        function onDataBoundDependentDetails(e) {
+            var grid = $("#CompensatoryDetails").data("kendoGrid");
+            hideDeletedRowKendoDetail(grid);
+        }
+
+        function GetDetailComplist(dataItem) {
+            var data = $("#CompensatoryDetails").data("kendoGrid").dataSource.data();
+            return data.indexOf(dataItem);
+        }
+
+        function onSuccess(data) {
+
+            window.location.href = data.urlToRedirect;
+        }
+
+        function onFailure(data) {
+
+            window.location.href = data.urlToRedirect;
+        }
+
+    </script>
+}
+
+
+
+
+

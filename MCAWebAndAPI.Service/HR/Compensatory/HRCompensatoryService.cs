@@ -782,6 +782,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 }
             }
 
+            columnValues.Add("edited", SPConnector.GetUser(header.cmpEmail, _siteUrl, "hr"));
+
             try
             {
                 SPConnector.UpdateListItem(SP_COMREQ_LIST_NAME, idComp, columnValues, _siteUrl);
@@ -840,9 +842,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     compensatorylistDetails.Add(ConvertToCompDetailVM(detailitem));
                 }
 
+                var compdetail = from a in compensatorylistDetails where a.AppStatus != "Reject" select a;
+
                 foreach (var cekdate in header.CompensatoryDetails)
                 {
-                    foreach (var getdate in compensatorylistDetails)
+                    foreach (var getdate in compdetail)
                     {
                         if (cekdate.CmpDate == getdate.CmpDate)
                         {

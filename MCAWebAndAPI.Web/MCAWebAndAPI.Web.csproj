@@ -1128,6 +1128,8 @@
     <Content Include="Views\Shared\DisplayTemplates\MultiSelect.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\MultiSelect.cshtml" />
     <Content Include="Views\HRPayroll\Upload.cshtml" />
+    <Content Include="Views\HRCompensatory\EditCompensatoryHR.cshtml" />
+    <Content Include="Views\HRCompensatory\EditCompensatoryUser.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
