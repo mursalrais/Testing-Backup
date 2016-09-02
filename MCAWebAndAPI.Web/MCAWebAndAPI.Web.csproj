@@ -1117,7 +1117,6 @@
     <Content Include="Views\ASSAssetLoanAndReturn\Edit.cshtml" />
     <Content Include="Views\ASSAssetDisposal\Edit.cshtml" />
     <Content Include="Views\ASSAssetReplacement\_Details.cshtml" />
-    <Content Include="Views\ASSAssetReplacement\GetAll.cshtml" />
     <Content Include="Views\ASSAssetReplacement\Sync.cshtml" />
     <Content Include="Views\ASSAssetReplacement\View.cshtml" />
     <Content Include="Views\ASSAssetReplacement\_DetailsView.cshtml" />
@@ -1128,7 +1127,7 @@
     <Content Include="Views\Shared\DisplayTemplates\MultiSelect.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\MultiSelect.cshtml" />
     <Content Include="Views\HRPayroll\Upload.cshtml" />
-    <Content Include="Views\ASSReportFixedAsset\_Details.cshtml" />
+    <Content Include="Views\ASSReportFixedAsset\Show.cshtml" />
     <Content Include="Views\ASSAssetTransfer\Create.cshtml" />
     <Content Include="Views\ASSAssetTransfer\Edit.cshtml" />
     <Content Include="Views\ASSAssetTransfer\Print.cshtml" />

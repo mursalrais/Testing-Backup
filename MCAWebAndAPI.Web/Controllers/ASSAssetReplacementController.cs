@@ -28,20 +28,24 @@ namespace MCAWebAndAPI.Web.Controllers
             return View();
         }
 
-        public ActionResult Create(string siteUrl)
+        public ActionResult Create(string siteUrl, int? id)
         {
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
             var viewModel = _service.GetPopulatedModel();
+            if(id != null)
+            {
+                viewModel = _service.GetInfoFromAcquisitin(id, siteUrl);
+            }
 
             return View(viewModel);
         }
 
         [HttpPost]
-        public ActionResult Submit(AssetReplacementHeaderVM _data, string siteUrl)
+        public ActionResult Submit(AssetReplacementHeaderVM _data, int id, string SiteUrl)
         {
-            siteUrl = SessionManager.Get<string>("SiteUrl");
-            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SiteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
             if (_data.Details.Count() == 0)
             {
@@ -55,7 +59,7 @@ namespace MCAWebAndAPI.Web.Controllers
             int? headerID = null;
             try
             {
-                headerID = _service.CreateHeader(_data);
+                headerID = _service.CreateHeader(_data, id, SiteUrl);
             }
             catch (Exception e)
             {
@@ -71,13 +75,13 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
-                _service.RollbackParentChildrenUpload("Asset Replacement", headerID, siteUrl);
+                _service.RollbackParentChildrenUpload("Asset Replacement", headerID, SiteUrl);
                 Response.TrySkipIisCustomErrors = true;
                 Response.TrySkipIisCustomErrors = true;
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse("Failed To Save Detail..");
             }
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetReplacement);
+            return JsonHelper.GenerateJsonSuccessResponse(SiteUrl + UrlResource.AssetReplacement);
             //return Redirect(string.Format("{0}/{1}", siteUrl ?? ConfigResource.DefaultBOSiteUrl, UrlResource.AssetAcquisition));
         }
 
@@ -157,7 +161,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse("Failed To Syncronize..");
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAcquisition);
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetReplacement);
         }
 
         public ActionResult Update(AssetReplacementHeaderVM _data, string SiteUrl)
@@ -187,35 +191,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse("Failed To Update Detail");
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAcquisition);
-        }
-
-        public ActionResult GetInfoFromAcquisitin(int id)
-        {
-            var siteUrl = SessionManager.Get<string>("SiteUrl");
-            int IDacquisition = id;
-            var acquisition = _service.GetInfoFromAcquisitin(IDacquisition, siteUrl);
-            //var details = _service.GetInfoFromAcquisitinDetail(IDacquisition, siteUrl);
-
-            //var professionals = GetFromExistingSession();
-            return Json(
-                new
-                {
-                    acquisition.Vendor,
-                    acquisition.Pono,
-                    acquisition.purchasedatetext,
-                    acquisition.purchaseDescription
-
-                }, JsonRequestBehavior.AllowGet);
-        }
-
-        public ActionResult GetAll(int id, string SiteUrl)
-        {
-            var siteUrl = SessionManager.Get<string>("SiteUrl");
-            int IDacquisition = id;
-            var acquisition = _service.GetInfoFromAcquisitin(IDacquisition, siteUrl);
-
-            return View(acquisition);
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetReplacement);
         }
 
         public JsonResult GetAssetSubSAssetGrid()
