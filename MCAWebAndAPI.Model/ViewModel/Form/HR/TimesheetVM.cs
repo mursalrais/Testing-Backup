@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,10 +13,21 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
     public class TimesheetVM : Item
     {
- 
+
+        public DataTable dtDetails { get; set; } = new DataTable();
+
+        //[UIHint("Date")]
+        //public DateTime? Period { get; set; } = DateTime.Today;
 
         [UIHint("Date")]
-        public DateTime? Period { get; set; } = DateTime.Today;
+        public DateTime? StartPeriod { get; set; } 
+
+        [UIHint("Date")]
+        public DateTime? EndPeriod { get; set; } 
+
+        [UIHint("Month")]
+        [DisplayName("Period")]
+        public DateTime? Period { get; set; } = DateTime.Now.ToLocalTime();
 
 
         [UIHint("AjaxComboBox")]
@@ -75,6 +87,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public string TimesheetStatus { get; set; }
 
         public string ApproverPosition { get; set; }
+
+        public string URL { get; set; }
 
         public IEnumerable<TimesheetDetailVM> TimesheetDetails { get; set; }
 

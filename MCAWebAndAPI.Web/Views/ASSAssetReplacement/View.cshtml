@@ -1,0 +1,109 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Asset
+
+
+
+@model AssetReplacementHeaderVM
+
+@using (Ajax.BeginForm("Update", "ASSAssetReplacement",
+                                                                                                                                                                                       FormMethod.Post,
+                                                                                                                                                                                       new AjaxOptions
+                                                                                                                                                                                       {
+                                                                                                                                                                                           OnBegin = "onBeginForm",
+                                                                                                                                                                                           OnComplete = "onCompleteForm",
+                                                                                                                                                                                           OnSuccess = "onSuccessFormEmbed",
+                                                                                                                                                                                           OnFailure = "onFailureForm"
+                                                                                                                                                                                       }, new { @class = "form-horizontal" }))
+
+{
+    <form class="form-horizontal" method="post" action="/ASSAssetReplacement/Update" id="create-asset-acquisition-form">
+        <fieldset>
+            <legend>Form Asset Replacement</legend>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.TransactionType).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @*@Html.DisplayFor(m => m.TransactionType)*@
+                        <input type="text" name="TransactionType" disabled value="Asset Replacement" id="TransactionType" style="width: 100%;" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.OldTransactionId).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.DisplayFor(m => m.OldTransactionId)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.AccMemoNo).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @*@Html.DisplayFor(m => m.TransactionType)*@
+                        <input type="text" name="AccMemoNo" value="@Model.AccMemoNo" disabled id="AccMemoNo" style="width: 100%;" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Vendor).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @*@Html.DisplayFor(m => m.Vendor)*@
+                        <input type="text" name="Vendor" disabled value="@Model.Vendor" id="Vendor" style="width: 100%;" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Pono).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @*@Html.DisplayFor(m => m.PoNo)*@
+                        <input type="text" name="PoNo" disabled value="@Model.Pono" id="PoNo" style="width: 100%;" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.PurchaseDate).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @Html.DisplayFor(m => m.purchasedatetext)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.purchaseDescription).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @*@Html.EditorFor(m => m.PurchaseDescription)*@
+                        <input type="text" disabled name="PurchaseDescription" value="@Model.purchaseDescription" id="PurchaseDescription" style="width: 100%;" />
+                    </div>
+                </div>
+            </div>
+            <div>
+                @Html.Partial("_DetailsView", Model.Details)
+            </div>
+        </fieldset>
+        @Html.HiddenFor(m => m.Id)
+        @Html.HiddenFor(m => m.CancelURL)
+        @Html.HiddenFor(m => m.Vendor)
+        @Html.HiddenFor(m => m.AccMemoNo)
+        @Html.HiddenFor(m => m.Pono)
+        @Html.HiddenFor(m => m.purchaseDescription)
+        @Html.HiddenFor(m => m.purchasedatetext)
+        @Html.HiddenFor(m => m.OldTransactionId.Value)
+        <div>
+            <center>
+                <a href="@Model.CancelURL" target='_parent'>
+                    <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
+                </a>
+            </center>
+        </div>
+
+    </form>
+}
+
+
+<script>
+    $(document).ready(function () {
+    })
+
+    function onIdChange(e) {
+        var res = this.dataItem(e.item);
+        alert("Changin..." + res);
+        var link = $("#CancelURL").val().split('/');
+        link = link[0] + "//" + link[2] + "/" + link[3] + "/" + link[4] + "/" + link[5];
+        //alert(link);
+        var url = "/ASSAssetReplacement/Create?SiteUrl=" + link + "&id=" + res;
+        window.location = url;
+    }
+</script>

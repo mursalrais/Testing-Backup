@@ -190,7 +190,7 @@
                     <i class="fa fa-save"></i>
                     Submit
                 </button>
-                <button id="submit-cancel" acti class="btn btn-primary" type="button">
+                <button id="submit-cancel" acti class="btn btn-primary" type="reset">
                     <i class="fa fa-back"></i>
                     Cancel
                 </button>
@@ -275,5 +275,9 @@
             $('#Amount').val(amout);
         });
 
+        $('#submit-cancel').click(function (e) {
+            $('#txtRole').text('');
+            
+        });
     </script>
 }

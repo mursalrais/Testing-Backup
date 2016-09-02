@@ -91,7 +91,7 @@ namespace MCAWebAndAPI.Service.Finance
                     result = viewModel.ID;
                 }
 
-                
+
             }
             catch (Exception e)
             {
@@ -130,7 +130,7 @@ namespace MCAWebAndAPI.Service.Finance
             return viewModel;
         }
 
-        public PettyCashReimbursementVM GetPettyCashReimbursement(int? ID=null)
+        public PettyCashReimbursementVM GetPettyCashReimbursement(int? ID = null)
         {
             var viewModel = new PettyCashReimbursementVM();
 
@@ -154,16 +154,26 @@ namespace MCAWebAndAPI.Service.Finance
             viewModel.Date = Convert.ToDateTime(listItem[FieldName_Date]);
             viewModel.PaidTo.Value = Convert.ToString(listItem[FieldName_PaidTo]);
             //viewModel.Professional.Value = Convert.ToInt32((listItem[FieldName_Professional] as FieldLookupValue).LookupId.ToString());
-            viewModel.Vendor.Value = listItem[FieldName_Vendor]==null?0:Convert.ToInt32((listItem[FieldName_Vendor] as FieldLookupValue).LookupId.ToString());
+            viewModel.Vendor.Value = listItem[FieldName_Vendor] == null ? 0 : Convert.ToInt32((listItem[FieldName_Vendor] as FieldLookupValue).LookupId.ToString());
             viewModel.Driver = Convert.ToString(listItem[FieldName_Driver]);
             viewModel.Currency.Value = Convert.ToString(listItem[FieldName_Currency]);
             viewModel.Reason = Convert.ToString(listItem[FieldName_Reason]);
             viewModel.Amount = Convert.ToDecimal(listItem[FieldName_AmountLiquidated]);
             viewModel.AmountReimbursed = Convert.ToDecimal(listItem[FieldName_AmountReimbursed]);
             viewModel.WBS.Value = Convert.ToInt32((listItem[FieldName_WBS] as FieldLookupValue).LookupId.ToString());
-            viewModel.WBSDescription = string.Format("{0} - {1}", (listItem[FieldName_WBSID] as FieldLookupValue).LookupValue.ToString(), (listItem[FieldName_WBSDesc] as FieldLookupValue).LookupValue.ToString());
+
+            //TODO: the following line causes error
+            //  'listItem[FieldName_WBSID]' threw an exception of type 'Microsoft.SharePoint.Client.PropertyOrFieldNotInitializedException'
+            //  biasanya karena salah tulis field name
+            //viewModel.WBSDescription = string.Format("{0} - {1}", (listItem[FieldName_WBSID] as FieldLookupValue).LookupValue.ToString(), (listItem[FieldName_WBSDesc] as FieldLookupValue).LookupValue.ToString());
+
             viewModel.GL.Value = Convert.ToInt32((listItem[FieldName_GL] as FieldLookupValue).LookupId.ToString());
-            viewModel.GLDescription = string.Format("{0} - {1}", (listItem[FieldName_GLNo] as FieldLookupValue).LookupValue.ToString(), (listItem[FieldName_GLDesc] as FieldLookupValue).LookupValue.ToString());
+
+            //TODO: the following line causes error
+            //  'listItem[FieldName_WBSID]' threw an exception of type 'Microsoft.SharePoint.Client.PropertyOrFieldNotInitializedException'
+            //  biasanya karena salah tulis field name
+            //viewModel.GLDescription = string.Format("{0} - {1}", (listItem[FieldName_GLNo] as FieldLookupValue).LookupValue.ToString(), (listItem[FieldName_GLDesc] as FieldLookupValue).LookupValue.ToString());
+
             viewModel.Remarks = Convert.ToString(listItem[FieldName_Remarks]);
 
             return viewModel;

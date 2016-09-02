@@ -8,6 +8,7 @@
 @using (Html.BeginForm("Create", "FINSCAVoucher", FormMethod.Post,
                                     new
                                     {
+                                        @id = "formCreateSCA",
                                         @class = "form-horizontal",
                                         enctype = "multipart/form-data"
                                     }))
@@ -31,7 +32,7 @@
                     <i class="fa fa-save"></i>
                     Save
                 </button>
-                <button id="submit-cancel" acti class="btn btn-primary" type="button">
+                <button id="submit-cancel" acti class="btn btn-primary" type="reset">
                     <i class="fa fa-back"></i>
                     Cancel
                 </button>
@@ -42,6 +43,22 @@
 
 @section scripts{
     <script>
+        $("#formCreateSCA").on('submit', function () {
+            var grid = $("#EventBudgetDetail").data("kendoGrid");
+            var dataSource = grid.dataSource;
+
+            //records on current view / page   
+            var recordsOnCurrentView = dataSource.view().length;
+            //total records
+            var totalRecords = dataSource.total();
+            if (totalRecords <= 0) {
+                alert("Item Detail is required.");
+                return false;
+            }
+
+            return true;
+        });
+
         function GetEventBudgetItem(dataItem) {
             $("#EventBudgetDetail").data("kendoGrid").dataSource.read();
         }

@@ -285,7 +285,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
         public ActionResult PrintRequisitionNote(FormCollection form, RequisitionNoteVM viewModel)
         {
             string RelativePath = PRINT_PAGE_URL;
-            string domain = "http://" + Request.Url.Authority + "/img/logo.png";
+            string domain = new SharedFinanceController().GetImageLogoPrint(Request.IsSecureConnection, Request.Url.Authority);
 
             var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl);
             reqNoteService.SetSiteUrl(siteUrl);

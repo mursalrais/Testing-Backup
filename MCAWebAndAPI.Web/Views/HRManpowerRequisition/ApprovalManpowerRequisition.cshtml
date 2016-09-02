@@ -63,8 +63,9 @@
     <div class="form-actions">
         <div class="row">
             <div class="col-xs-12">
+                <input type="button" class="btn btn-default" id="StatusApprove" name="StatusApprove" value="Approve">   
                 <input type="button" class="btn btn-default" id="StatusReject" name="StatusReject" value="Reject">
-                <input type="button" class="btn btn-default" id="StatusApprove" name="StatusApprove" value="Approve">        
+                    
             </div>
         </div>
     </div>
@@ -75,12 +76,14 @@
     <script>
         $(document).ready(function () {
             $("#StatusApprove").click(function () {
-                $("#Status_Value").val("@ViewBag.State");
+                $("#Status_Value").val("@ViewBag.State");                
                 $("form").submit();
+                showLoading();
             });
             $("#StatusReject").click(function () {
-                $("#Status_Value").val("Reject");
+                $("#Status_Value").val("Reject");                
                 $("form").submit();
+                showLoading();
             });
 
         });

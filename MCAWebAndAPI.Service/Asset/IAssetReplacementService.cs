@@ -14,7 +14,7 @@ namespace MCAWebAndAPI.Service.Asset
         //create empty form
         AssetReplacementHeaderVM GetPopulatedModel(int? ID = null);
 
-        int? CreateHeader(AssetReplacementHeaderVM viewmodel, string mode = null, string SiteUrl = null);
+        int? CreateHeader(AssetReplacementHeaderVM viewmodel, int id, string SiteUrl);
         bool UpdateHeader(AssetReplacementHeaderVM viewmodel);
 
         bool Syncronize(string SiteUrl);
