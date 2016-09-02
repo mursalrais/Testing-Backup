@@ -1139,6 +1139,8 @@
     <Content Include="Views\ASSAssetTransfer\_DetailsPrint.cshtml" />
     <Content Include="Views\ASSAssetTransfer\_DetailsView.cshtml" />
     <Content Include="Views\ASSAssetTransfer\_print.cshtml" />
+    <Content Include="Views\HRCompensatory\EditCompensatoryHR.cshtml" />
+    <Content Include="Views\HRCompensatory\EditCompensatoryUser.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
