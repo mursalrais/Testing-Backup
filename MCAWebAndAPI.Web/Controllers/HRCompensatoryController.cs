@@ -274,9 +274,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 }
             }
 
-            return RedirectToAction("Index",
-                          "Success",
-                          new { successMessage = string.Format(MessageResource.SuccessCreateCompensatoryData, viewModel.cmpName) });
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.Compensatorylist);
 
         }
 
