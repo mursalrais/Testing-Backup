@@ -9,6 +9,7 @@
     FormMethod.Post,
     new
     {
+        @id = "formEditSCA",
         @class = "form-horizontal",
         enctype = "multipart/form-data"
     }))
@@ -44,7 +45,7 @@
                     Save
                 </button>
                 }
-                <button id="submit-cancel" acti class="btn btn-primary" type="button">
+                <button id="submit-cancel" acti class="btn btn-primary" type="reset">
                     <i class="fa fa-back"></i>
                     Cancel
                 </button>
@@ -54,6 +55,22 @@
 }
 @section scripts{
     <script>
+        $("#formEditSCA").on('submit', function () {
+            var grid = $("#EventBudgetDetail").data("kendoGrid");
+            var dataSource = grid.dataSource;
+
+            //records on current view / page   
+            var recordsOnCurrentView = dataSource.view().length;
+            //total records
+            var totalRecords = dataSource.total();
+            if (totalRecords <= 0) {
+                alert("Item Detail is required.");
+                return false;
+            }
+
+            return true;
+        });
+
         function GetDisplayEventBudgetItem(dataItem) {
             $("#EventBudgetDetail").data("kendoGrid").dataSource.read();
         }

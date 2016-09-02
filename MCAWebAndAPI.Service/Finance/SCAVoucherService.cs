@@ -73,6 +73,8 @@ namespace MCAWebAndAPI.Service.Finance
         private const string EVENT_BUDGET_FIELD_GL_VALUE = "GL_x0020_Master_x002e_ID_x003a_G0";
         private const string EVENT_BUDGET_FIELD_QUANTITY = "Quantity";
         private const string EVENT_BUDGET_FIELD_UOMQUANTITY = "UoMQuantity";
+        private const string EVENT_BUDGET_FIELD_SCA = "SCA";
+        private const string EVENT_BUDGET_FIELD_SCA_VALUE = "0";
         #endregion
 
         private string _siteUrl = string.Empty;
@@ -289,8 +291,8 @@ namespace MCAWebAndAPI.Service.Finance
         public IEnumerable<SCAVoucherItemsVM> GetEventBudgetItems(int eventBudgetID)
         {
             var scaVoucherItemsVM = new List<SCAVoucherItemsVM>();
-            //var caml = @"<View><Query><Where><Eq><FieldRef Name='Event_x0020_Budget_x0020_ID' /><Value Type='Lookup'>" + eventBudgetID.ToString() + "</Value></Eq></Where></Query></View>";
-            var caml = CamlQueryUtil.Generate(FIELD_NAME_EBUDGET_ID, "Lookup", eventBudgetID.ToString());
+            var caml = @"<View><Query><Where><And><Gt><FieldRef Name='"+ EVENT_BUDGET_FIELD_SCA + "' /><Value Type='Text'>"+ EVENT_BUDGET_FIELD_SCA_VALUE + "</Value></Gt><Eq><FieldRef Name='"+ FIELD_NAME_EBUDGET_ID + "' /><Value Type='Lookup'>" + eventBudgetID.ToString() + "</Value></Eq></And></Where></Query></View>";
+            //var caml = CamlQueryUtil.Generate(FIELD_NAME_EBUDGET_ID, "Lookup", eventBudgetID.ToString());
 
             foreach (var listItem in SPConnector.GetList(EventBudgetService.ListName_EventBudgetItem, _siteUrl, caml))
             {
