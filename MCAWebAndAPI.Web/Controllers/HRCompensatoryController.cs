@@ -244,12 +244,15 @@ namespace MCAWebAndAPI.Web.Controllers
                 _service.UpdateHeader(viewModel);
             }
 
-            // BEGIN Workflow Demo 
-            Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME, SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)cmpID);
-
-            foreach (var item in viewModel.WorkflowItems)
+            if (viewModel.StatusForm != "Draft")
             {
-                _service.SendEmail(SP_TRANSACTION_WORKFLOW_LIST_NAME, SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)cmpID, Convert.ToInt32(item.Level), string.Format(EmailResource.EmailCompensatoryApproval, siteUrl, cmpID));
+                // BEGIN Workflow Demo 
+                Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME, SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)cmpID);
+
+                foreach (var item in viewModel.WorkflowItems)
+                {
+                    _service.SendEmail(SP_TRANSACTION_WORKFLOW_LIST_NAME, SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)cmpID, Convert.ToInt32(item.Level), string.Format(EmailResource.EmailCompensatoryApproval, siteUrl, cmpID));
+                }
             }
 
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.Compensatorylist);
@@ -296,8 +299,13 @@ namespace MCAWebAndAPI.Web.Controllers
             {
                 if (viewModel.StatusForm == " ")
                 {
-                    // BEGIN Workflow Demo 
-                    Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME, SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)cmpID);
+                    var cekworkflow = viewModel.WorkflowItems.Count();
+
+                    if (cekworkflow == 0)
+                    {
+                        // BEGIN Workflow Demo 
+                        Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME, SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)cmpID);
+                    }
 
                     // Send to Level 1 & 2 Approver
                     foreach (var item in viewModel.WorkflowItems)
