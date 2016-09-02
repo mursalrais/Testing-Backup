@@ -211,7 +211,7 @@ namespace MCAWebAndAPI.Service.Asset
                 modelDetailItem.Condition = (item["condition"] == null ? "" : item["condition"].ToString());
                 modelDetailItem.Specification = (item["specification"] == null ? "" : item["specification"].ToString());
 
-                modelDetailItem.Remarks = (item["remarks"] == null ? "" : item["remarks"].ToString());
+                //modelDetailItem.Remarks = (item["remarks"] == null ? "" : item["remarks"].ToString());
 
 
 

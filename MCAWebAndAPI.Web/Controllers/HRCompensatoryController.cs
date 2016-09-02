@@ -116,6 +116,39 @@ namespace MCAWebAndAPI.Web.Controllers
             return View("InputCompensatoryUser", viewmodel);
         }
 
+        public async Task<ActionResult> EditCompensatory(string siteurl = null, int? iD = null, string userAccess = null)
+        {
+            var viewmodel = new CompensatoryVM();
+
+            if (siteurl == "")
+            {
+                siteurl = SessionManager.Get<string>("SiteUrl");
+                _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
+            }
+            else
+            {
+                _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
+                SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
+            }
+
+            viewmodel.cmpEmail = userAccess;
+
+            ViewBag.ListName = "Compensatory%20Request";
+
+            viewmodel.cmpID = iD;
+
+            if (viewmodel.cmpEmail != null)
+                viewmodel = await _service.GetComplistbyCmpid(iD, viewmodel.cmpEmail, "Compensatory Request", SP_TRANSACTION_WORKFLOW_LIST_NAME, SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME);
+
+            string position = _service.GetPosition(userAccess);
+
+            if (position.Contains("HR"))
+                return View("EditCompensatoryHR", viewmodel);
+
+
+            return View("EditCompensatoryUser", viewmodel);
+        }
+
         public ActionResult CompensatorylistUser(string siteurl = null, int? iD = null, string username = null)
        {
             if (siteurl == "")
@@ -211,12 +244,15 @@ namespace MCAWebAndAPI.Web.Controllers
                 _service.UpdateHeader(viewModel);
             }
 
-            // BEGIN Workflow Demo 
-            Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME, SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)cmpID);
-
-            foreach (var item in viewModel.WorkflowItems)
+            if (viewModel.StatusForm != "Draft")
             {
-                _service.SendEmail(SP_TRANSACTION_WORKFLOW_LIST_NAME, SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)cmpID, Convert.ToInt32(item.Level), string.Format(EmailResource.EmailCompensatoryApproval, siteUrl, cmpID));
+                // BEGIN Workflow Demo 
+                Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME, SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)cmpID);
+
+                foreach (var item in viewModel.WorkflowItems)
+                {
+                    _service.SendEmail(SP_TRANSACTION_WORKFLOW_LIST_NAME, SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)cmpID, Convert.ToInt32(item.Level), string.Format(EmailResource.EmailCompensatoryApproval, siteUrl, cmpID));
+                }
             }
 
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.Compensatorylist);
@@ -261,13 +297,21 @@ namespace MCAWebAndAPI.Web.Controllers
           
             if (viewModel.StatusForm != "Draft")
             {
-                if (viewModel.StatusForm == "")
+                if (viewModel.StatusForm == " ")
                 {
-                    // BEGIN Workflow Demo 
-                    Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME, SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)cmpID);
+                    var cekworkflow = viewModel.WorkflowItems.Count();
+
+                    if (cekworkflow == 0)
+                    {
+                        // BEGIN Workflow Demo 
+                        Task createTransactionWorkflowItemsTask = WorkflowHelper.CreateWorkflowAsync(SP_TRANSACTION_WORKFLOW_LIST_NAME, SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)cmpID);
+                    }
 
                     // Send to Level 1 & 2 Approver
-                    _service.SendEmail(SP_TRANSACTION_WORKFLOW_LIST_NAME, SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)cmpID, 1, string.Format(EmailResource.EmailCompensatoryApproval, siteUrl, cmpID));
+                    foreach (var item in viewModel.WorkflowItems)
+                    {
+                        _service.SendEmail(SP_TRANSACTION_WORKFLOW_LIST_NAME, SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)cmpID, 1, string.Format(EmailResource.EmailCompensatoryApproval, siteUrl, cmpID));
+                    }
                 }
             }
 
