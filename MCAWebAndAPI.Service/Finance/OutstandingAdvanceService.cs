@@ -38,10 +38,13 @@ namespace MCAWebAndAPI.Service.Finance
         private const string FieldName_UnitProject = "Project_x002f_Unit";
         private const string FieldName_Name = "Title";
         private const string FieldName_OfficeEmail = "officeemail";
-        private const string FieldName_DED = "Deputy ED";
-        private const string FieldName_Grant_Manager= "Grant Manager";
-        private const string FieldName_Project_Director= "Project Director";
-        private const string FieldValue_Project = "Green Prosperity Project";
+
+        private const string Position_DED = "Deputy ED";
+        private const string Position_GrantManager = "Grant Manager";
+        private const string Position_Director = "Director";
+
+        private const string ProjectUnit_GreenProsperity = "Green Prosperity Project";
+        private const string ProjectUnit_ProgramDiv = "Program Div.";
 
         private const string FieldName_VendorID = "Title";
         private const string FieldName_Email = "Email";
@@ -153,9 +156,9 @@ namespace MCAWebAndAPI.Service.Finance
             viewModel.Staff.Text = staff[FieldName_VendorName] == null ? "" : staff[FieldName_VendorName].ToString();
 
             var listPosition = new Dictionary<string, string>();
-            listPosition.Add(FieldName_DED, viewModel.Project.Value);
-            listPosition.Add(FieldName_Grant_Manager, FieldValue_Project);
-            listPosition.Add(FieldName_Project_Director, FieldValue_Project);
+            listPosition.Add(Position_DED, ProjectUnit_ProgramDiv);
+            listPosition.Add(Position_GrantManager , ProjectUnit_GreenProsperity);
+            listPosition.Add(Position_Director , ProjectUnit_GreenProsperity);
             
             foreach(var item in listPosition)
             {

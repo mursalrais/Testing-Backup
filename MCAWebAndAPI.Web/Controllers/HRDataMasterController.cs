@@ -118,6 +118,7 @@ namespace MCAWebAndAPI.Web.Controllers
                         e.JoinDateTemp,
                         e.InsuranceAccountNumber,
                         e.MobileNumber,
+                        e.TaxStatus
                         
 
                     }

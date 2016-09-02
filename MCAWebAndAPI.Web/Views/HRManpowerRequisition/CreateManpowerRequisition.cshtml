@@ -112,6 +112,7 @@
                     //var projectUnit = $('#DivisionProjectUnit_Value').data("kendoDropDownList").dataItem($('#DivisionProjectUnit_Value').data("kendoDropDownList").select()).ProjectUnit;
                     //$('#ProjectUnitString').prop("value", projectUnit);
                     $("form").submit();
+                    showLoading();
                 }               
                 
             });
@@ -120,6 +121,7 @@
                 if (isValid) {
                     $("#Status_Value").prop("value", "Draft");
                     $("form").submit();
+                    showLoading();
                 }                
             });
 
