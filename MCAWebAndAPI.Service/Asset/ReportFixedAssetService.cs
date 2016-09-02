@@ -63,7 +63,7 @@ namespace MCAWebAndAPI.Service.Asset
                 model.warrantyexpires = Convert.ToString(info1["WarranyExpires"]);
                 model.condition = Regex.Replace(Convert.ToString(info1["Condition"]), "<.*?>", string.Empty);
                 no++;
-                Inserting(model, SiteUrl);
+                //Inserting(model, SiteUrl);
                 Listmodel.Add(model);
             }
             //Purchase Description, Purchase Date, Cost Idr/USD, vendor name, and PO No
@@ -76,7 +76,7 @@ namespace MCAWebAndAPI.Service.Asset
             var newcolumn = new Dictionary<string, object>();
             //No-Project-Asset Type-Asset ID-Asset Description-Purchase Description-Purchase Date-Quantity-Cost (IDR)-Cost (USD)-Vendor Name-Specifications-PO No-Serial No-Warranty Expires-Condition-Asset Holder Name-Province-Location
             newcolumn.Add("no", model.no);
-
+            newcolumn.Add("assettype", model.assettype);
             SPConnector.AddListItem("Asset Fixed Asset", newcolumn, SiteUrl);
         }
     }
