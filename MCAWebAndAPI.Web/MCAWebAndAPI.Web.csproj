@@ -1140,6 +1140,7 @@
     <Content Include="Views\ASSAssetTransfer\_print.cshtml" />
     <Content Include="Views\HRCompensatory\EditCompensatoryHR.cshtml" />
     <Content Include="Views\HRCompensatory\EditCompensatoryUser.cshtml" />
+    <Content Include="Views\FINEventBudget\Print.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1281,6 +1282,7 @@
     <Folder Include="App_Code\" />
     <Folder Include="Scripts\apps\controlls\" />
     <Folder Include="Views\Activity\" />
+    <Folder Include="Views\COMWBS\" />
     <Folder Include="Views\HRDataMaster\" />
   </ItemGroup>
   <ItemGroup>
