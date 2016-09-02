@@ -52,7 +52,7 @@ namespace MCAWebAndAPI.Service.Asset
             return _choices.ToArray();
         }
 
-        public int? CreateHeader(AssetReplacementHeaderVM viewmodel, string mode = null, string SiteUrl = null)
+        public int? CreateHeader(AssetReplacementHeaderVM viewmodel, int id, string SiteUrl)
         {
             viewmodel.CancelURL = _siteUrl + UrlResource.AssetReplacement;
             var columnValues = new Dictionary<string, object>();
@@ -118,7 +118,7 @@ namespace MCAWebAndAPI.Service.Asset
 
                 var model = new Dictionary<string, object>();
                 model.Add("acceptancememono", (getAsset["acceptancememono"] as FieldLookupValue).LookupValue);
-                model.Add("vendor", Convert.ToString(getAsset["vendorname"]));
+                model.Add("vendor", Convert.ToString(getAsset["vendorid"])+"-"+Convert.ToString(getAsset["vendorname"]));
                 model.Add("pono", Convert.ToString(getAsset["pono"]));
                 model.Add("purchasedate", Convert.ToDateTime(getAsset["purchasedate"]));
                 //Regex.Replace(Convert.ToString(getAsset["purchasedescription"]), "<.*?>", string.Empty);
@@ -229,8 +229,8 @@ namespace MCAWebAndAPI.Service.Asset
             viewModel.Pono = Convert.ToString(listItem["pono"]);
             viewModel.Vendor = Convert.ToString(listItem["vendor"]);
 
-            viewModel.purchasedatetext = Convert.ToString(listItem["purchasedate"]);
-            viewModel.PurchaseDate = Convert.ToDateTime(listItem["purchasedate"]);
+            viewModel.purchasedatetext = Convert.ToDateTime(listItem["purchasedate"]).Date.ToShortDateString();
+            viewModel.PurchaseDate = Convert.ToDateTime(listItem["purchasedate"]).Date;
             viewModel.purchaseDescription = Regex.Replace(Convert.ToString(listItem["purchasedescription"]), "<.*?>", string.Empty);
             viewModel.Id = Convert.ToInt32(ID);
 
@@ -323,7 +323,7 @@ namespace MCAWebAndAPI.Service.Asset
             viewmodel.OldTransactionId.Text = Convert.ToString(ID);
             viewmodel.CancelURL = _siteUrl + UrlResource.AssetReplacement;
             viewmodel.AccMemoNo = (list["acceptancememono"] as FieldLookupValue).LookupValue;
-            viewmodel.Vendor = Convert.ToString(list["vendorname"]);
+            viewmodel.Vendor = Convert.ToString(list["vendorid"])+"-"+Convert.ToString(list["vendorname"]);
             viewmodel.Pono = Convert.ToString(list["pono"]);
             viewmodel.purchasedatetext = Convert.ToDateTime(list["purchasedate"]).ToShortDateString();
             viewmodel.PurchaseDate = Convert.ToDateTime(viewmodel.purchasedatetext);

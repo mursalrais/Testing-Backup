@@ -22,8 +22,8 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             _service.SetSiteUrl(SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
             SessionManager.Set("SiteUrl", SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            _service.GetReport(SiteUrl);
-            return View();
+            var model = _service.GetReport(SiteUrl);
+            return View(model);
         }
     }
 }

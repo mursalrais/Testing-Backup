@@ -7,6 +7,7 @@ using MCAWebAndAPI.Model.ViewModel.Form.Asset;
 using NLog;
 using MCAWebAndAPI.Service.Utils;
 using System.Text.RegularExpressions;
+using MCAWebAndAPI.Service.Resources;
 
 namespace MCAWebAndAPI.Service.Asset
 {
@@ -24,7 +25,6 @@ namespace MCAWebAndAPI.Service.Asset
         public IEnumerable<ReportFixedAssetVM> GetReport(string SiteUrl)
         {
             var Listmodel = new List<ReportFixedAssetVM>();
-            var model = new ReportFixedAssetVM();
             var camlAssetMaster = @"<View><Query>
                                <Where>
                                   <Eq>
@@ -52,6 +52,8 @@ namespace MCAWebAndAPI.Service.Asset
             var no = 1;
             foreach(var info1 in infoAssetMaster)
             {
+                var model = new ReportFixedAssetVM();
+                model.CancelURL = _siteUrl + UrlResource.AssetReportFixedAsset;
                 model.no = no;
                 model.projectunit = Convert.ToString(info1["ProjectUnit"]);
                 model.assettype = Convert.ToString(info1["AssetType"]);

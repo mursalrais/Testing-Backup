@@ -1,0 +1,98 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Asset
+
+
+
+@model IEnumerable<ReportFixedAssetVM>
+
+@{
+    var index = 0;
+    var cancel = "";
+    foreach (var item in Model)
+    {
+        cancel = item.CancelURL;
+        break;
+    }
+}
+<center>
+    <input class="k-button k-button-icontext k-grid-add" size="5" value="Generate" onclick="return generateReport()" />
+    @*<a href="@cancel" target='_parent'>
+        <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
+    </a>*@
+</center>
+<br />
+<div class="col-md-12" style="margin-bottom: 20px">
+    @(Html.Kendo().Grid(Model)
+        .Name("Details")
+        .Editable(editable => editable.Mode(GridEditMode.InCell)
+        .CreateAt(GridInsertRowPosition.Bottom))
+        .Columns(columns =>
+        {
+            columns.Bound(p => p.no).ClientTemplate("#= no #" +
+            "<input type='hidden' class='no' name='Details[#= getWorkingRelationshipDetails(data)#].no' value='#= no #' />"
+            );
+
+            columns.Bound(p => p.projectunit).ClientTemplate("#= projectunit #" +
+            "<input type='hidden' class='projectunit' name='Details[#= getWorkingRelationshipDetails(data)#].projectunit' value='#= projectunit #' />"
+            );
+
+            columns.Bound(p => p.assettype).ClientTemplate("#= assettype #" +
+            "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].assettype' value='#= assettype #' />"
+            );
+
+            columns.Bound(p => p.assetid).ClientTemplate("#= assetid #" +
+            "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].assetid' value='#= assetid #' />"
+            );
+
+            columns.Bound(p => p.assetdesc).ClientTemplate("#= assetdesc #" +
+            "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].assetdesc' value='#= assetdesc #' />"
+            );
+
+            columns.Bound(p => p.specification).ClientTemplate("#= specification #" +
+            "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].specification' value='#= specification #' />"
+            );
+
+            columns.Bound(p => p.serialnumber).ClientTemplate("#= serialnumber #" +
+            "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].serialnumber' value='#= serialnumber #' />"
+            );
+
+            columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
+          "<input type='hidden' name=Details[#= getWorkingRelationshipDetails(data)#].ID value=#= ID # />"
+
+
+        );
+            columns.Bound(p => p.EditMode).Hidden()
+         .ClientTemplate("#= EditMode #<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].EditMode' value='#= EditMode #' />");
+        })
+        .Events(e =>
+        {
+            e.Edit("onCustomEditKendoDetail");
+            e.DataBound("onDataBoundWorkingRelationship");
+        })
+        .DataSource(dataSource => dataSource.Ajax()
+                   .Model(model =>
+                   {
+                       model.Id(p => p.ID);
+                       model.Field(p => p.no);
+                       model.Field(m => m.projectunit);
+                       model.Field(m => m.assettype);
+                       model.Field(p => p.assetid);
+                       model.Field(p => p.assetdesc);
+                       model.Field(p => p.specification);
+                       model.Field(p => p.serialnumber);
+
+                   })
+                   .ServerOperation(false)
+        )
+    )
+</div>
+
+<script>
+    $(document).ready(function () {
+        
+    })
+
+    function generateReport()
+    {
+        alert("generatiiing..");
+    }
+</script>
