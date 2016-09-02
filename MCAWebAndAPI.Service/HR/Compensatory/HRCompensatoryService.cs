@@ -516,34 +516,52 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 if (viewModel.CmpActiv != null)
                 {
-                    if (Item.CheckIfUpdated(viewModel))
+                    if (viewModel.CmpID == null)
                     {
-                        if (viewModel.CmpID == null)
+                        var cratedValueDetail = new Dictionary<string, object>();
+
+                        cratedValueDetail.Add("compensatoryrequest", cmpID);
+                        cratedValueDetail.Add("Title", viewModel.CmpActiv);
+                        cratedValueDetail.Add("compensatorydate", viewModel.CmpDate);
+                        cratedValueDetail.Add("compensatorystarttime", viewModel.StartTime);
+                        cratedValueDetail.Add("compensatoryendtime", viewModel.FinishTime);
+                        cratedValueDetail.Add("totalhours", viewModel.CmpTotalHours);
+                        cratedValueDetail.Add("totaldays", viewModel.TotalDay);
+                        cratedValueDetail.Add("remarks", viewModel.remarks);
+                        cratedValueDetail.Add("compensatorystatus", "Pending Approval 1 of 2");
+
+                        try
                         {
-                            var cratedValueDetail = new Dictionary<string, object>();
-
-                            cratedValueDetail.Add("compensatoryrequest", cmpID);
-                            cratedValueDetail.Add("Title", viewModel.CmpActiv);
-                            cratedValueDetail.Add("compensatorydate", viewModel.CmpDate);
-                            cratedValueDetail.Add("compensatorystarttime", viewModel.StartTime);
-                            cratedValueDetail.Add("compensatoryendtime", viewModel.FinishTime);
-                            cratedValueDetail.Add("totalhours", viewModel.CmpTotalHours);
-                            cratedValueDetail.Add("totaldays", viewModel.TotalDay);
-                            cratedValueDetail.Add("remarks", viewModel.remarks);
-                            cratedValueDetail.Add("compensatorystatus", "Pending Approval 1 of 2");
-
-                            try
+                            SPConnector.AddListItem(SP_COMDET_LIST_NAME, cratedValueDetail, _siteUrl);
+                        }
+                        catch (Exception e)
+                        {
+                            logger.Error(e.Message);
+                            throw e;
+                        }
+                        continue;
+                    }
+                    else
+                    {
+                        if (Item.CheckIfDeleted(viewModel))
+                        {
+                            if (viewModel.CmpID != null)
                             {
-                                SPConnector.AddListItem(SP_COMDET_LIST_NAME, cratedValueDetail, _siteUrl);
-                            }
-                            catch (Exception e)
-                            {
-                                logger.Error(e.Message);
-                                throw e;
+                                try
+                                {
+                                    SPConnector.DeleteListItem(SP_COMDET_LIST_NAME, viewModel.CmpID, _siteUrl);
+                                }
+                                catch (Exception e)
+                                {
+                                    logger.Error(e);
+                                    throw e;
+                                }
+                                continue;
                             }
                         }
                         else
                         {
+
                             var updatedValue = new Dictionary<string, object>();
 
                             updatedValue.Add("Title", viewModel.CmpActiv);
@@ -592,23 +610,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                             }
                         }
                         continue;
-                    }
-                       
-                    else if (Item.CheckIfDeleted(viewModel))
-                    {
-                        if (viewModel.CmpID != null)
-                        {
-                            try
-                            {
-                                SPConnector.DeleteListItem(SP_COMDET_LIST_NAME, viewModel.CmpID, _siteUrl);
-                            }
-                            catch (Exception e)
-                            {
-                                logger.Error(e);
-                                throw e;
-                            }
-                            continue;
-                        }
                     }
                 }
             }
