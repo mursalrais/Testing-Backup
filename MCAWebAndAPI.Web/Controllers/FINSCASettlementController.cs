@@ -85,7 +85,7 @@ namespace MCAWebAndAPI.Web.Controllers
         [HttpPost]
         public ActionResult Save(FormCollection form, SCASettlementVM viewModel)
         {
-            var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl);
+            var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);
 
             try

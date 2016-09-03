@@ -11,9 +11,9 @@ using MCAWebAndAPI.Model.ViewModel.Control;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 {
-    public class SCASettlementItemVM : Item
+    public class SCAReimbursementItemVM : Item
     {    /// <summary>
-         /// Wirefram FIN07: SCA Settlement
+         /// Wirefram FIN08: SCA Reimbursement
          /// </summary>
 
         [UIHint("Date")]

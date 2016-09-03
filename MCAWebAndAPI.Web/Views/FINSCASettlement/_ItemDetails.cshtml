@@ -11,11 +11,10 @@
     .Scrollable()
     .Columns(columns =>
     {
-        columns.Bound(p => p.ReceiptDate).ClientTemplate("#= ReceiptDate #" +
-              "<input type='hidden' name='ItemDetails[#= getItem(data)#].ReceiptDate' value='#= ReceiptDate #' />"
-            );
 
-        
+        columns.Bound(p => p.ReceiptDate).ClientTemplate("#= kendo.toString(ReceiptDate, \"MM/dd/yyyy \") #" +
+       "<input type='hidden' id='Dateid#= getItem(data)#' name='ItemDetails[#= getItem(data)#].ReceiptDate' value='#= kendo.toString(ReceiptDate, \"MM/dd/yyyy \") #' />");
+
         columns.Bound(p => p.ReceiptNo).ClientTemplate("#= ReceiptNo #" +
             "<input type='hidden' name='ItemDetails[#= getItem(data)#].ReceiptNo' value='#= ReceiptNo #' />");
 
@@ -74,6 +73,7 @@
                        model.Field(m => m.WBS).DefaultValue(EventBudgetItemVM.GetWBSDefaultValue());
                        model.Field(m => m.GL).DefaultValue(EventBudgetItemVM.GetGLDefaultValue());
 
+
                    })
                    .ServerOperation(false)
      )
@@ -124,5 +124,5 @@
             
         }
 
-      
+       
 </script>

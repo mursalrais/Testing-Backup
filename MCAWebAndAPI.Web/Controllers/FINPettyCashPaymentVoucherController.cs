@@ -93,10 +93,15 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create(FormCollection form, PettyCashPaymentVoucherVM viewModel)
+        public async Task<ActionResult> Create(string actionType, FormCollection form, PettyCashPaymentVoucherVM viewModel)
         {
             var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl);
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            if (actionType != "Save")
+            {
+                return Redirect(string.Format(FirstPageUrl, siteUrl));
+            }
 
             int? headerID = null;
             try
@@ -120,10 +125,15 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Edit(FormCollection form, PettyCashPaymentVoucherVM viewModel)
+        public async Task<ActionResult> Edit(string actionType, FormCollection form, PettyCashPaymentVoucherVM viewModel)
         {
             var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl);
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            if (actionType != "Save")
+            {
+                return Redirect(string.Format(FirstPageUrl, siteUrl));
+            }
 
             try
             {
