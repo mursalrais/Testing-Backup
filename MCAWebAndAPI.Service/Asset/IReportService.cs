@@ -1,16 +1,17 @@
 ﻿using MCAWebAndAPI.Model.ViewModel.Form.Asset;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Service.Asset
 {
-    public interface IReportFixedAssetService
+    public interface IReportService
     {
         void SetSiteUrl(string siteUrl);
-        IEnumerable<ReportFixedAssetVM> GetReport(String SiteUrl);
-        void Inserting(ReportFixedAssetVM model, string SiteUrl);
+        IEnumerable<AssetReportVM> GetReport(string SiteUrl, string mode);
+        DataTable getTable(string mode);
     }
 }

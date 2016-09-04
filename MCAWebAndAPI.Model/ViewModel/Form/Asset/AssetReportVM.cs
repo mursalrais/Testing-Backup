@@ -1,15 +1,18 @@
 ﻿using MCAWebAndAPI.Model.Common;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 {
-    public class ReportFixedAssetVM : Item
+    public class AssetReportVM : Item
     {
         public string CancelURL { get; set; }
+
+        public DataTable dtDetails { get; set; } = new DataTable();
 
         public int no { get; set; }
         public string projectunit { get; set; }

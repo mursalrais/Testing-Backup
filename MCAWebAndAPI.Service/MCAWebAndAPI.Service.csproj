@@ -162,9 +162,9 @@
     <Compile Include="Asset\IAssetTransferService.cs" />
     <Compile Include="Asset\IAssignmentOfAssetService.cs" />
     <Compile Include="Asset\ILocationMasterService.cs" />
-    <Compile Include="Asset\IReportFixedAssetService.cs" />
+    <Compile Include="Asset\IReportService.cs" />
     <Compile Include="Asset\LocationMasterService.cs" />
-    <Compile Include="Asset\ReportFixedAssetService.cs" />
+    <Compile Include="Asset\ReportService.cs" />
     <Compile Include="Common\ComboBoxService.cs" />
     <Compile Include="Common\IComboBoxService.cs" />
     <Compile Include="Common\ILocationService.cs" />

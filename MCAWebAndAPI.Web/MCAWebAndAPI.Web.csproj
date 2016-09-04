@@ -1127,7 +1127,7 @@
     <Content Include="Views\Shared\DisplayTemplates\MultiSelect.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\MultiSelect.cshtml" />
     <Content Include="Views\HRPayroll\Upload.cshtml" />
-    <Content Include="Views\ASSReportFixedAsset\Show.cshtml" />
+    <Content Include="Views\ASSReport\ReportFixedAsset.cshtml" />
     <Content Include="Views\ASSAssetTransfer\Create.cshtml" />
     <Content Include="Views\ASSAssetTransfer\Edit.cshtml" />
     <Content Include="Views\ASSAssetTransfer\Print.cshtml" />
@@ -1140,6 +1140,12 @@
     <Content Include="Views\ASSAssetTransfer\_print.cshtml" />
     <Content Include="Views\HRCompensatory\EditCompensatoryHR.cshtml" />
     <Content Include="Views\HRCompensatory\EditCompensatoryUser.cshtml" />
+    <Content Include="Views\ASSReport\ReportSmallValueAsset.cshtml" />
+    <Content Include="Views\ASSAssetCheckForm\Print.cshtml" />
+    <Content Include="Views\ASSAssetCheckForm\View.cshtml" />
+    <Content Include="Views\ASSAssetCheckForm\_Details.cshtml" />
+    <Content Include="Views\ASSAssetCheckForm\_print.cshtml" />
+    <Content Include="Views\ASSAssetCheckForm\_ViewDetails.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1167,7 +1173,7 @@
     <Compile Include="Controllers\ASSAssetTransferController.cs" />
     <Compile Include="Controllers\ASSAssignmentOfAssetController.cs" />
     <Compile Include="Controllers\ASSLocationMasterController.cs" />
-    <Compile Include="Controllers\ASSReportFixedAssetController.cs" />
+    <Compile Include="Controllers\ASSReportController.cs" />
     <Compile Include="Controllers\BIEmbedController.cs" />
     <Compile Include="Controllers\CalendarEventController.cs" />
     <Compile Include="Controllers\ComboBoxController.cs" />
