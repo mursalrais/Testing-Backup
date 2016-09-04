@@ -10,39 +10,34 @@ using MCAWebAndAPI.Web.Resources;
 
 using static MCAWebAndAPI.Model.ViewModel.Form.Finance.Shared;
 
-
 namespace MCAWebAndAPI.Web.Controllers
 {
     /// <summary>
-    /// Wireframe FIN07: SCA Settlement
+    /// Wireframe FIN08: SCA Reimbursement
     /// </summary>
 
     [Filters.HandleError]
-    public class FINSCASettlementController : Controller
+    public class FINSCAReimbursementController : Controller
     {
+        private const string PrintPageUrl = "~/Views/FINSCAReimbursement/Print.cshtml";
+        private const string SuccessMsgFormatUpdated = "SCA reimbursement for {0} has been successfully updated.";
+        private const string FirstPageUrl = "{0}/Lists/SCA%20Reimbursement/AllItems.aspx";
 
-        private const string PrintPageUrl = "~/Views/FINSCASettlement/Print.cshtml";
-        private const string SuccessMsgFormatUpdated = "SCA settlement for {0} has been successfully updated.";
-        private const string FirstPageUrl = "{0}/Lists/SCA%20Settlement/AllItems.aspx";
+        private const string EventBudgetController = "FINEventBudget";
+        private const string EventBudgetAction = "GetEventBudgetList";
+        private const string EventBudgetValue = "ID";
+        private const string EventBudgetText = "Title";
+        private const string EventBudgetOnSelectEventName = "onSelectEventBudgetNo";
 
-        private const string SCAVoucherController = "FINCombobox";
-        private const string SCAVoucherAction = "GetSCAVouchers";
-        private const string SCAVoucherValue = "Value";
-        private const string SCAVoucherText = "Text";
-        private const string SCAVoucherOnSelectEventName = "OnSelectSCAVoucher";
+        ISCAReimbursementService service;
+        IEventBudgetService serviceEB;
 
-        private const string PartialSettlement = "Partial Settlement";
-        private const string LastSettlement = "Last Settlement";
-
-
-        ISCASettlementService service;
-        ISCAVoucherService serviceSCAVoucher;
-
-        public FINSCASettlementController()
+        public FINSCAReimbursementController()
         {
-            service = new SCASettlementService();
-            serviceSCAVoucher = new SCAVoucherService();
+            service = new SCAReimbursementService();
+            serviceEB = new EventBudgetService();
         }
+
 
         public ActionResult Item(string siteUrl = null, string op = null, int? id = null)
         {
@@ -57,29 +52,24 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewModel);
         }
 
-        public ActionResult GetSCAVouchers(string ID)
+        public ActionResult GetEventBudgetByID(string ID)
         {
             var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
 
-            serviceSCAVoucher.SetSiteUrl(siteUrl);
+            serviceEB.SetSiteUrl(siteUrl);
 
-            var header = serviceSCAVoucher.Get(Convert.ToInt32(ID));
+            var header = serviceEB.Get(Convert.ToInt32(ID));
 
             return Json(
                 new
                 {
-                    TotalAmount = header.TotalAmount,
-                    TotalAmountInWord = header.TotalAmountInWord,
-                    Purpose = header.Purpose,
-                    Project = header.Project,
-                    Fund = Shared.Fund,
-                    Currency = header.Currency.Value
+                    Description = string.Format("{0} - {1} - {2}", header.EventName, header.DateFrom.ToString(DateFormat), header.DateTo.ToString(DateFormat))
                 },
                 JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
-        public ActionResult Save(FormCollection form, SCASettlementVM viewModel)
+        public ActionResult Save(FormCollection form, SCAReimbursementVM viewModel)
         {
             var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);
@@ -103,15 +93,15 @@ namespace MCAWebAndAPI.Web.Controllers
                });
         }
 
-
         [HttpPost]
-        public ActionResult Print(FormCollection form, SCASettlementVM viewModel)
+        public ActionResult Print(FormCollection form, SCAReimbursementVM viewModel)
         {
             string RelativePath = PrintPageUrl;
 
             var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl);
             service.SetSiteUrl(siteUrl);
             viewModel = service.Get(Operations.e, viewModel.ID);
+
 
             ViewData.Model = viewModel;
             var view = ViewEngines.Engines.FindView(ControllerContext, RelativePath, null);
@@ -149,15 +139,14 @@ namespace MCAWebAndAPI.Web.Controllers
             return Redirect(string.Format(FirstPageUrl, siteUrl));
         }
 
-        private void SetAdditionalSettingToViewModel(ref SCASettlementVM viewModel)
+        private void SetAdditionalSettingToViewModel(ref SCAReimbursementVM viewModel)
         {
-            viewModel.SCACouvher.ControllerName = SCAVoucherController;
-            viewModel.SCACouvher.ActionName = SCAVoucherAction;
-            viewModel.SCACouvher.ValueField = SCAVoucherValue;
-            viewModel.SCACouvher.TextField = SCAVoucherText;
-            viewModel.SCACouvher.OnSelectEventName = SCAVoucherOnSelectEventName;
+            viewModel.EventBudget.ControllerName = EventBudgetController;
+            viewModel.EventBudget.ActionName = EventBudgetAction;
+            viewModel.EventBudget.ValueField = EventBudgetValue;
+            viewModel.EventBudget.TextField = EventBudgetText;
+            viewModel.EventBudget.OnSelectEventName = EventBudgetOnSelectEventName;
 
-            viewModel.TypeOfSettlement.Choices = new string[] { PartialSettlement, LastSettlement };
         }
     }
 }

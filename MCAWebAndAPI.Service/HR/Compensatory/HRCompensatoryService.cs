@@ -580,22 +580,22 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
                             if (viewModels.StatusForm == "Draft" || viewModels.StatusForm == "Unapprove")
                             {
-                                updatedValue.Add("crstatus", "Draft");
+                                updatedValue.Add("compensatorystatus", "Draft");
                             }
 
                             if (viewModels.StatusForm == "Reject")
                             {
-                                updatedValue.Add("crstatus", "Rejected");
+                                updatedValue.Add("compensatorystatus", "Rejected");
                             }
 
                             if (viewModels.StatusForm == "Pending Approval 1 of 2")
                             {
-                                updatedValue.Add("crstatus", "Pending Approval 2 of 2");
+                                updatedValue.Add("compensatorystatus", "Pending Approval 2 of 2");
                             }
 
                             if (viewModels.StatusForm == "Pending Approval 2 of 2" || viewModels.StatusForm == "submithr")
                             {
-                                updatedValue.Add("crstatus", "Approved");
+                                updatedValue.Add("compensatorystatus", "Approved");
                             }
 
                             try

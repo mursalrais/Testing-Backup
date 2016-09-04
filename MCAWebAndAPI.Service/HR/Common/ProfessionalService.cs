@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Service.HR.Common
 {
-    public class ProfessionalService : IProfessionalService
+    public partial class ProfessionalService : IProfessionalService
     {
         string _siteUrl;
         const string SP_PROMAS_LIST_NAME = "Professional Master";
@@ -116,7 +116,8 @@ namespace MCAWebAndAPI.Service.HR.Common
         private ProfessionalDataVM ConvertToProfessionalModel(ListItem listItem)
         {
             var viewModel = new ProfessionalDataVM();
-
+            DateTime LastWorkingDate = Convert.ToDateTime(listItem["lastworkingdate"]);
+            DateTime CurrentDate = DateTime.UtcNow;
             viewModel.ID = Convert.ToInt32(listItem["ID"]);
             viewModel.FirstMiddleName = Convert.ToString(listItem["Title"]);
             viewModel.CurrentPosition.Value = FormatUtil.ConvertLookupToID(listItem, "Position");
@@ -125,7 +126,15 @@ namespace MCAWebAndAPI.Service.HR.Common
             {
                 viewModel.JoinDate = null;
             }
-            viewModel.ProfessionalStatus.Value = Convert.ToString(listItem["Professional_x0020_Status"]);
+            if ((LastWorkingDate.Year ==1)||(CurrentDate <= LastWorkingDate))
+            {
+                viewModel.ProfessionalStatus.Value = "Active";
+            }
+            else
+            {
+                viewModel.ProfessionalStatus.Value = "Inactive";
+            }
+            //viewModel.ProfessionalStatus.Value = Convert.ToString(listItem["Professional_x0020_Status"]);
             viewModel.PlaceOfBirth = Convert.ToString(listItem["placeofbirth"]);
             viewModel.DateOfBirth = Convert.ToDateTime(listItem["dateofbirth"]);
             viewModel.PermanentAddress =

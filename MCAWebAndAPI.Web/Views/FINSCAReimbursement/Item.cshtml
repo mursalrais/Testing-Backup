@@ -1,20 +1,12 @@
-﻿@model MCAWebAndAPI.Model.ViewModel.Form.Finance.SCASettlementVM
+﻿@model MCAWebAndAPI.Model.ViewModel.Form.Finance.SCAReimbursementVM
 
 @*
-    Wireframe FIN07: SCA Settlement
+    Wireframe FIN08: SCA Reimbursement
 *@
 
-<style media="screen" type="text/css">
-    .textbox-padding6px-readonly{
-        padding:6px;
-        background-color:#dedede;
-        border: 0px;
-        text-align:right;
-    }
-</style>
-    
+
 @using (Html.BeginForm(
-    "Save", "FINSCASettlement",
+    "Save", "FINSCAReimbursement",
     FormMethod.Post,
     new
     {
@@ -24,7 +16,7 @@
 {
 
     <fieldset>
-        <legend>SCA Settlement</legend>
+        <legend>SCA Reimbursement</legend>
         <div class="row">
             <div class="col-sm-6">
                 @Html.HiddenFor(m => m.ID)
@@ -35,9 +27,9 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.SCACouvher).Class("col-sm-3 control-label")
+                    @Html.Bootstrap().LabelFor(m => m.EventBudget).Class("col-sm-3 control-label")
                     <div class="col-sm-8">
-                        @Html.EditorFor(m => m.SCACouvher)
+                        @Html.EditorFor(m => m.EventBudget)
                     </div>
                 </div>
                 <div class="form-group">
@@ -52,42 +44,23 @@
                         @Html.DisplayFor(m => m.Fund)
                     </div>
                 </div>
-                <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.TypeOfSettlement).Class("col-sm-3 control-label")
-                    <div class="col-sm-8">
-                        @Html.EditorFor(m => m.TypeOfSettlement)
-                    </div>
-                </div>
             </div>
             <!-- Right Column -->
             <div class="col-sm-6">
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.Currency).Class("col-sm-3 control-label")
                     <div class="col-sm-5">
-                        @Html.DisplayFor(m => m.Currency, new { HtmlAttributes = new { @readonly = "readonly" } })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.SpecialCashAdvanceAmount).Class("col-sm-3 control-label")
-                    <div class="col-sm-7">
-                        @Html.EditorFor(m => m.SpecialCashAdvanceAmount, new { HtmlAttributes = new { @class = "textbox-padding6px-readonly", @readonly = "readonly" } })
+                        @Html.EditorFor(m => m.Currency)
                     </div>
                 </div>
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.TotalExpense).Class("col-sm-3 control-label")
+                    @Html.Bootstrap().LabelFor(m => m.Amount).Class("col-sm-3 control-label")
                     <div class="col-sm-8">
-                        @Html.EditorFor(m => m.TotalExpense, new { HtmlAttributes = new { @class = "textbox-padding6px-readonly", @readonly = "readonly" } })
+                        @Html.EditorFor(m => m.Amount, new { HtmlAttributes = new { @class = "textbox-padding6px-readonly", @readonly = "readonly" } })
                     </div>
                 </div>
-                <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.ReceivedFromTo).Class("col-sm-3 control-label")
-                    <div class="col-sm-8">
-                        @Html.EditorFor(m => m.ReceivedFromTo, new { HtmlAttributes = new { @class = "textbox-padding6px-readonly", @readonly = "readonly" } })
-                    </div>
-                </div>
+              
             </div>
-
         </div>
         <legend>Item Details</legend>
         <div class="row">
@@ -111,7 +84,7 @@
                     <i class="fa fa-save"></i>
                     Submit
                 </button>
-                <button id="submit-cancel" class="btn btn-primary" type="button" onclick="location.href='@Url.Action("Cancel", "FINSCASettlement")'">
+                <button id="submit-cancel" class="btn btn-primary" type="button" onclick="location.href='@Url.Action("Cancel", "FINSCAReimbursement")'">
                     <i class="fa fa-back"></i>
                     Cancel
                 </button>
@@ -120,7 +93,6 @@
     </div>
 
 }
-
 @section scripts{
     <script type="text/javascript">
         $(document).ready(function () {
@@ -141,23 +113,19 @@
 
         });
 
-        function OnSelectSCAVoucher(e)
+        function onSelectEventBudgetNo(e)
         {
             var data = this.dataItem(e.item);
 
-            var url = '@Url.Action("GetSCAVouchers", "FINSCASettlement")';
+            var url = '@Url.Action("GetEventBudgetByID", "FINSCAReimbursement")';
 
             $.ajax({
                 url: url,
                 type: "GET",
-                data: { ID: data.Value },
+                data: { ID: data.ID },
                 success: function (response) {
-                    $('#Description').val(response.Purpose);
-                    $('#Fund').val(response.Fund);
-                    $('#SpecialCashAdvanceAmount').val(response.TotalAmount);
-                    $('#Currency_Value').val(response.Currency);
-                    
-                    calculateTotal();
+                    $('#Description').val(response.Description);
+                   
                 },
                 error: function (response) {
 

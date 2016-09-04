@@ -197,6 +197,7 @@ namespace MCAWebAndAPI.Web.Controllers
             viewModel.WorkingExperienceDetails = BindWorkingExperienceDetails(form, viewModel.WorkingExperienceDetails);
             ViewData.Model = AdjustViewModel(viewModel);
 
+            
             const string RelativePath = "~/Views/HRApplication/PrintApplicationData.cshtml";
             var view = ViewEngines.Engines.FindView(ControllerContext, RelativePath, null);
             var fileName = viewModel.FirstMiddleName + "-" + viewModel.Position + "-" + "MCA-Indonesia.pdf";

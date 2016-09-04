@@ -1140,6 +1140,12 @@
     <Content Include="Views\ASSAssetTransfer\_print.cshtml" />
     <Content Include="Views\HRCompensatory\EditCompensatoryHR.cshtml" />
     <Content Include="Views\HRCompensatory\EditCompensatoryUser.cshtml" />
+    <Content Include="Views\FINEventBudget\Print.cshtml" />
+    <Content Include="Views\FINSCAVoucher\_PartialHeaderWithLogo.cshtml" />
+    <Content Include="Views\FINPettyCashSettlement\Print.cshtml" />
+    <Content Include="Views\FINSCAReimbursement\Item.cshtml" />
+    <Content Include="Views\FINSCAReimbursement\Print.cshtml" />
+    <Content Include="Views\FINSCAReimbursement\_ItemDetails.cshtml" />
     <Content Include="Views\ASSReport\ReportSmallValueAsset.cshtml" />
     <Content Include="Views\ASSAssetCheckForm\Print.cshtml" />
     <Content Include="Views\ASSAssetCheckForm\View.cshtml" />
@@ -1177,6 +1183,8 @@
     <Compile Include="Controllers\BIEmbedController.cs" />
     <Compile Include="Controllers\CalendarEventController.cs" />
     <Compile Include="Controllers\ComboBoxController.cs" />
+    <Compile Include="Controllers\COMProfessionalController.cs" />
+    <Compile Include="Controllers\COMWBSController.cs" />
     <Compile Include="Controllers\CSVController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\FileController.cs" />
@@ -1187,9 +1195,11 @@
     <Compile Include="Controllers\FINPettyCashReplenishmentController.cs" />
     <Compile Include="Controllers\FINPettyCashSettlementController.cs" />
     <Compile Include="Controllers\FINPettyCashStatementController.cs" />
+    <Compile Include="Controllers\FINSCAReimbursementController.cs" />
     <Compile Include="Controllers\FINSCASettlementController.cs" />
     <Compile Include="Controllers\FINSCAVoucherController.cs" />
     <Compile Include="Controllers\HRDayOffController.cs" />
+    <Compile Include="Controllers\SharedController.cs" />
     <Compile Include="Controllers\SharedFinanceController.cs" />
     <Compile Include="Controllers\FINTaxExemptionController.cs" />
     <Compile Include="Controllers\FINSPHLController.cs" />
@@ -1287,6 +1297,7 @@
     <Folder Include="App_Code\" />
     <Folder Include="Scripts\apps\controlls\" />
     <Folder Include="Views\Activity\" />
+    <Folder Include="Views\COMWBS\" />
     <Folder Include="Views\HRDataMaster\" />
   </ItemGroup>
   <ItemGroup>

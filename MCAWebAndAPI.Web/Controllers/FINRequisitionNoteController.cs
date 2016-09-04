@@ -16,6 +16,7 @@ using MCAWebAndAPI.Service.Finance.RequisitionNote;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;
 using FinService = MCAWebAndAPI.Service.Finance;
+using MCAWebAndAPI.Service.Common;
 
 namespace MCAWebAndAPI.Web.Controllers.Finance
 {
@@ -60,7 +61,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
         {
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
             reqNoteService.SetSiteUrl(siteUrl);
-            SessionManager.Set(SharedFinanceController.Session_SiteUrl, siteUrl);
+            SessionManager.Set(SharedController.Session_SiteUrl, siteUrl);
 
             ViewBag.ListName = WORKFLOW_TITLE;
             
@@ -75,7 +76,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             {
                 siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
                 reqNoteService.SetSiteUrl(siteUrl);
-                SessionManager.Set(SharedFinanceController.Session_SiteUrl, siteUrl);
+                SessionManager.Set(SharedController.Session_SiteUrl, siteUrl);
 
                 ViewBag.ListName = WORKFLOW_TITLE;
 
@@ -83,7 +84,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
 
                 #region Check User
 
-                var siteUrlHR = siteUrl.Replace("/bo", "/hr");
+                var siteUrlHR = CommonService.GetSiteUrlFromCurrent(siteUrl, CommonService.Sites.HR);
                 var position = FinService.SharedService.GetPosition(user, siteUrlHR);
 
 
@@ -108,11 +109,16 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
 
 
         [HttpPost]
-        public async Task<ActionResult> CreateRequisitionNote(FormCollection form, RequisitionNoteVM viewModel)
+        public async Task<ActionResult> CreateRequisitionNote(string actionType, FormCollection form, RequisitionNoteVM viewModel)
         {
-            var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl);
+            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl);
             reqNoteService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
             eventBudgetService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            if (actionType != "Save")
+            {
+                return Redirect(string.Format(FirstPageUrl, siteUrl));
+            }
 
             //set additional info for event budget no and project
             if (viewModel.EventBudgetNo.Value.HasValue && viewModel.EventBudgetNo.Value > 0)
@@ -161,11 +167,16 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
         }
 
         [HttpPost]
-        public async Task<ActionResult> EditRequisitionNote(FormCollection form, RequisitionNoteVM viewModel)
+        public async Task<ActionResult> EditRequisitionNote(string actionType, FormCollection form, RequisitionNoteVM viewModel)
         {
-            var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl);
+            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl);
             reqNoteService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
             eventBudgetService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            if (actionType != "Save")
+            {
+                return Redirect(string.Format(FirstPageUrl, siteUrl));
+            }
 
             //set additional info for event budget no and project
             if (viewModel.EventBudgetNo.Value.HasValue && viewModel.EventBudgetNo.Value > 0)
@@ -216,7 +227,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
         [HttpPost]
         public JsonResult GetRequisitionNoteDetailsByEventBudgetId([DataSourceRequest] DataSourceRequest request, int? eventBudgetId)
         {
-            var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl);
+            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl);
             eventBudgetService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
             var details = new List<RequisitionNoteItemVM>();
@@ -257,7 +268,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
 
         public JsonResult GetGLMaster()
         {
-            var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl);
+            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl);
            
             var glMasters = FinService.SharedService.GetGLMaster(siteUrl);
 
@@ -270,7 +281,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
 
         public JsonResult GetWBSMaster(string activity=null)
         {
-            reqNoteService.SetSiteUrl(SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl));
+            reqNoteService.SetSiteUrl(SessionManager.Get<string>(SharedController.Session_SiteUrl));
 
             var wbsMasters = reqNoteService.GetWBSMaster(activity);
 
@@ -287,7 +298,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             string RelativePath = PRINT_PAGE_URL;
             string domain = new SharedFinanceController().GetImageLogoPrint(Request.IsSecureConnection, Request.Url.Authority);
 
-            var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl);
+            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl);
             reqNoteService.SetSiteUrl(siteUrl);
             viewModel = reqNoteService.Get(viewModel.ID);
 
@@ -296,6 +307,17 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             var fileName = viewModel.Title + "_Application.pdf";
             byte[] pdfBuf = null;
             string content;
+
+            string footer = string.Empty;
+
+            //TODO: Resolve user name
+            string userName = "xxxx";
+
+            if (viewModel.Modified > viewModel.Created)
+            {
+                DateTime dt = DateTime.Now;
+                footer = string.Format("This form was printed by {0}, {1:MM/dd/yyyy}, {2:HH:mm}", userName, dt, dt);
+            }
 
             using (var writer = new StringWriter())
             {
@@ -307,7 +329,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
                 // Get PDF Bytes
                 try
                 {
-                    pdfBuf = PDFConverter.Instance.ConvertFromHTML(fileName, content);
+                    pdfBuf = PDFConverter.Instance.ConvertFromHTML(fileName, content, footer);
                 }
                 catch (Exception e)
                 {
@@ -322,7 +344,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
 
         //public ActionResult UpdateFromEBChanged(string siteUrl = null, int id = 0, string user = null, string a = null)
         //{
-        //    siteUrl = siteUrl ?? SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl);
+        //    siteUrl = siteUrl ?? SessionManager.Get<string>(SharedController.Session_SiteUrl);
         //    siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
 
         //    if (id == 0 || a != Action_UpdateFromEBChanged)

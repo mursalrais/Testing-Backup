@@ -61,7 +61,7 @@ namespace MCAWebAndAPI.Web.Controllers
             string RelativePath = PrintPageUrl;
             string domain = "http://" + Request.Url.Authority + "/img/logo.png";
 
-            var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl)?? ConfigResource.DefaultBOSiteUrl;
+            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl)?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);
 
             var viewModel = service.GetPettyCashReimbursement(ID);

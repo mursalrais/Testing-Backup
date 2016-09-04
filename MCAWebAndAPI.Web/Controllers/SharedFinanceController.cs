@@ -11,7 +11,6 @@ namespace MCAWebAndAPI.Web.Controllers
 {
     public class SharedFinanceController: Controller
     {
-        public const string Session_SiteUrl = "SiteUrl";
         public const string PrintImageLogo = "{0}/img/logo.png";
 
         public JsonResult GetWBSMaster(string siteUrl)

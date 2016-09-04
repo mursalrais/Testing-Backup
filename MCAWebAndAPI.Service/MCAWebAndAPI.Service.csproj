@@ -166,10 +166,12 @@
     <Compile Include="Asset\LocationMasterService.cs" />
     <Compile Include="Asset\ReportService.cs" />
     <Compile Include="Common\ComboBoxService.cs" />
+    <Compile Include="Common\CommonService.cs" />
     <Compile Include="Common\IComboBoxService.cs" />
     <Compile Include="Common\ILocationService.cs" />
     <Compile Include="Common\IWorkflowService.cs" />
     <Compile Include="Common\LocationService.cs" />
+    <Compile Include="Common\ProfessionalService.cs" />
     <Compile Include="Common\WorkflowService.cs" />
     <Compile Include="Converter\CSVConverter.cs" />
     <Compile Include="Converter\PDFConverter.cs" />
@@ -184,6 +186,7 @@
     <Compile Include="Finance\IPettyCashSettlementService.cs" />
     <Compile Include="Finance\IPettyCashStatementService.cs" />
     <Compile Include="Finance\IRequisitionNoteService.cs" />
+    <Compile Include="Finance\ISCAReimbursementService.cs" />
     <Compile Include="Finance\ISCASettlementService.cs" />
     <Compile Include="Finance\ISCAVoucherService.cs" />
     <Compile Include="Finance\ISPHLService.cs" />
@@ -198,6 +201,7 @@
     <Compile Include="Finance\PettyCashSettlementService.cs" />
     <Compile Include="Finance\PettyCashStatementService.cs" />
     <Compile Include="Finance\RequisitionNoteService.cs" />
+    <Compile Include="Finance\SCAReimbursementService.cs" />
     <Compile Include="Finance\SCASettlementService.cs" />
     <Compile Include="Finance\SCAVoucherService.cs" />
     <Compile Include="Finance\SharedService.cs" />

@@ -8,10 +8,10 @@ using MCAWebAndAPI.Model.ViewModel.Control;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 {
-    public class SCASettlementItemVM : Item
+    public class SCAReimbursementItemVM : Item
     {
         /// <summary>
-        /// Wireframe FIN07: SCA Settlement
+        /// Wireframe FIN08: SCA Reimbursement
         /// </summary>
 
         [UIHint("Date")]
@@ -19,7 +19,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         [DataType(DataType.Date)]
         [DisplayName("Receipt Date")]
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime ReceiptDate { get; set; }
+        public DateTime? ReceiptDate { get; set; } = DateTime.Now;
 
         [DisplayName("Receipt No")]
         public string ReceiptNo { get; set; }

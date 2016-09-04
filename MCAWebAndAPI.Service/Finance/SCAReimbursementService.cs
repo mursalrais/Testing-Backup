@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 using MCAWebAndAPI.Service.Utils;
@@ -12,64 +9,59 @@ using static MCAWebAndAPI.Model.ViewModel.Form.Finance.Shared;
 
 namespace MCAWebAndAPI.Service.Finance
 {
-    public class SCASettlementService : ISCASettlementService
+    /// <summary>
+    /// Wireframe FIN08: SCA Reimbursement
+    /// </summary>
+
+    public class SCAReimbursementService : ISCAReimbursementService
     {
-        /// <summary>
-        /// Wirefram FIN07: SCA Settlement
-        /// </summary>
+        private string siteUrl = string.Empty;
+        static Logger logger = LogManager.GetCurrentClassLogger();
 
-        public const string ListName = "SCA Settlement";
-        private const string ListName_SCASettlementItem = "SCA Settlement Item";
+        public const string ListName = "SCA Reimbursement";
+        private const string ListName_SCASettlementItem = "SCA Reimbursement Item";
 
-        private const string FIELD_FORMAT_DOC = "SSCA/{0}-{1}/";
+        private const string FIELD_FORMAT_DOC = "RSCA/{0}-{1}/";
         private const int DIGIT_DOCUMENTNO = 5;
 
         private const string FieldNameId = "ID";
-        private const string FieldNameSCADocumentNo = "Title";
-        private const string FieldNameSCAVoucherId = "SCAVoucher";
-        private const string FieldNameSCAPurpose = "SCAVoucher_x003a_Purpose";
-        private const string FieldNameSCAFund = "SCAVoucher_x003a_Fund";
-        private const string FieldNameSCACurrency = "SCAVoucher_x003a_Currency";
-        private const string FieldNameSCAVoucherNo = "SCAVoucher_x003a_SCA_x0020_No";
-        private const string FieldNameSCAAmount = "SCAVoucher_x003a_Total_x0020_Amo";
-        private const string FieldNameTotalExpense = "TotalExpense";
-        private const string FieldNameReceivedFromTo = "ReceivedFromTo";
+        private const string FieldNameSCAReimbursementNO = "Title";
+        private const string FieldNameEventBudget = "EventBudget";
+        private const string FieldNameDescription = "Description";
+        private const string FieldNameFund = "Fund";
+        private const string FieldNameCurrency = "Currency";
+        private const string FieldNameTotalAmount = "TotalAmountReimbursed";
         private const string FieldNameDetailReceiptDate = "ReceiptDate";
         private const string FieldNameDetailReceiptNo = "ReceiptNo";
         private const string FieldNameDetailPayee = "Payee";
-        private const string FieldNameDetailDescription = "DescriptionOfExpense";
-        private const string FieldNameDetailWBS = "WBS";
-        private const string FieldNameDetailGL = "GL";
-        private const string FieldNameDetailAmount = "AmountPerItem";
-        private const string FieldNameDetailSCAHeaderID = "SCA_x0020_Settlement";
-        private const string FieldNameDetailWBSNo = "WBS_x003a_WBS_x0020_ID";
-        private const string FieldNameDetailWBSDesc = "WBS_x003a_WBS_x0020_Description";
-        private const string FieldNameDetailGLNo = "GL_x003a_GL_x0020_No";
-        private const string FieldNameDetailGLDesc = "GL_x003a_GL_x0020_Description";
-        private const string FieldNameTypeOfSettlement = "Type_x0020_of_x0020_Settlement";
-         
-        private string siteUrl = string.Empty;
-        static Logger logger = LogManager.GetCurrentClassLogger();
+        private const string FieldNameDetailDescription = "DescriptionOfExpenses";
+        private const string FieldNameDetailWBS = "WBSMasterId";
+        private const string FieldNameDetailGL = "GLMasterId";
+        private const string FieldNameDetailAmount = "AmontPerItem";
+        private const string FieldNameDetailSCAReimbursementHeaderID = "SCAReimbursementId";
+        private const string FieldNameDetailWBSNo = "WBSMasterId_x003a_WBS_x0020_ID";
+        private const string FieldNameDetailWBSDesc = "WBSMasterId_x003a_WBS_x0020_Desc";
+        private const string FieldNameDetailGLNo = "GLMasterId_x003a_GL_x0020_No";
+        private const string FieldNameDetailGLDesc = "GLMasterId_x003a_GL_x0020_Descri";
 
         public void SetSiteUrl(string siteUrl)
         {
             this.siteUrl = siteUrl;
         }
 
-        public SCASettlementVM Get(Operations op, int? id = default(int?))
+        public SCAReimbursementVM Get(Operations op, int? id = default(int?))
         {
             if (op != Operations.c && id == null)
                 throw new InvalidOperationException(ErrorDevInvalidState);
 
-            var viewModel = new SCASettlementVM();
+            var viewModel = new SCAReimbursementVM();
 
             if (id != null)
             {
-                //To Do
                 var listItem = SPConnector.GetListItem(ListName, id, siteUrl);
-                viewModel = ConvertToSCASettlementVM(listItem);
+                viewModel = ConvertToSCAReimbursementVM(listItem);
 
-                viewModel.ItemDetails = GetSCASettlementItemDetails(id.Value);
+                viewModel.ItemDetails = GetSCAReimbursementItemDetails(id.Value);
             }
 
             viewModel.Operation = op;
@@ -77,51 +69,51 @@ namespace MCAWebAndAPI.Service.Finance
             return viewModel;
         }
 
-        public int? Save(SCASettlementVM scaSettlement)
+        public int? Save(SCAReimbursementVM scaReimbursement)
         {
             int? result = null;
             var columnValues = new Dictionary<string, object>();
             var documentNoFormat = string.Format(FIELD_FORMAT_DOC, DateTimeExtensions.GetMonthInRoman(DateTime.Now), DateTime.Now.ToString("yy")) + "{0}";
 
-            columnValues.Add(FieldNameSCAVoucherId, new FieldLookupValue { LookupId = Convert.ToInt32(scaSettlement.SCACouvher.Value) });
-            columnValues.Add(FieldNameTotalExpense, scaSettlement.TotalExpense);
-            columnValues.Add(FieldNameReceivedFromTo, scaSettlement.ReceivedFromTo);
-            columnValues.Add(FieldNameTypeOfSettlement, scaSettlement.TypeOfSettlement.Value);
+            columnValues.Add(FieldNameEventBudget, new FieldLookupValue { LookupId = Convert.ToInt32(scaReimbursement.EventBudget.Value) });
+            columnValues.Add(FieldNameTotalAmount, scaReimbursement.Amount);
+            columnValues.Add(FieldNameDescription, scaReimbursement.Description);
+            columnValues.Add(FieldNameFund, scaReimbursement.Fund);
+            columnValues.Add(FieldNameCurrency, scaReimbursement.Currency.Text);
 
             try
             {
-                if (scaSettlement.Operation == Operations.c)
+                if (scaReimbursement.Operation == Operations.c)
                 {
-                    scaSettlement.DocNo = DocumentNumbering.Create(siteUrl, documentNoFormat, DIGIT_DOCUMENTNO);
-                    columnValues.Add(FieldNameSCADocumentNo, scaSettlement.DocNo);
+                    scaReimbursement.DocNo = DocumentNumbering.Create(siteUrl, documentNoFormat, DIGIT_DOCUMENTNO);
+                    columnValues.Add(FieldNameSCAReimbursementNO, scaReimbursement.DocNo);
 
                     SPConnector.AddListItem(ListName, columnValues, siteUrl);
 
                     result = SPConnector.GetLatestListItemID(ListName, siteUrl);
 
-                    scaSettlement.ID = result;
+                    scaReimbursement.ID = result;
 
                 }
-                else if (scaSettlement.Operation == Operations.e)
+                else if (scaReimbursement.Operation == Operations.e)
                 {
-                    SPConnector.UpdateListItem(ListName, scaSettlement.ID, columnValues, siteUrl);
-                    result = scaSettlement.ID;
+                    SPConnector.UpdateListItem(ListName, scaReimbursement.ID, columnValues, siteUrl);
+                    result = scaReimbursement.ID;
                 }
 
-                SaveSCASettlementDetailItems(scaSettlement.ID, scaSettlement.ItemDetails);
+                SaveSCAReimbursementDetailItems(scaReimbursement.ID, scaReimbursement.ItemDetails);
             }
             catch (Exception e)
             {
                 logger.Error(e.Message);
                 throw e;
             }
-
             return result;
         }
 
-        private void SaveSCASettlementDetailItems(int? headerID, IEnumerable<SCASettlementItemVM> viewModels)
+        private void SaveSCAReimbursementDetailItems(int? headerID, IEnumerable<SCAReimbursementItemVM> itemDetails)
         {
-            foreach (var viewModel in viewModels)
+            foreach (var viewModel in itemDetails)
             {
                 if (Item.CheckIfSkipped(viewModel))
                     continue;
@@ -142,8 +134,8 @@ namespace MCAWebAndAPI.Service.Finance
 
 
                 var updatedValue = new Dictionary<string, object>();
-                
-                updatedValue.Add(FieldNameDetailSCAHeaderID, new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
+
+                updatedValue.Add(FieldNameDetailSCAReimbursementHeaderID, new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
                 updatedValue.Add(FieldNameDetailWBS, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.WBS.Value) });
                 updatedValue.Add(FieldNameDetailGL, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.GL.Value) });
                 updatedValue.Add(FieldNameDetailReceiptDate, viewModel.ReceiptDate);
@@ -151,7 +143,7 @@ namespace MCAWebAndAPI.Service.Finance
                 updatedValue.Add(FieldNameDetailPayee, viewModel.Payee);
                 updatedValue.Add(FieldNameDetailDescription, viewModel.DescriptionOfExpense);
                 updatedValue.Add(FieldNameDetailAmount, viewModel.Amount);
-      
+
                 try
                 {
                     if (Item.CheckIfCreated(viewModel))
@@ -171,15 +163,15 @@ namespace MCAWebAndAPI.Service.Finance
             }
         }
 
-        private IEnumerable<SCASettlementItemVM> GetSCASettlementItemDetails(int HeaderID)
+        private IEnumerable<SCAReimbursementItemVM> GetSCAReimbursementItemDetails(int HeaderID)
         {
-            List<SCASettlementItemVM> details = null;
+            List<SCAReimbursementItemVM> details = null;
 
             if (HeaderID > 0)
             {
-                var caml = @"<View><Query><Where><Eq><FieldRef Name='" + FieldNameDetailSCAHeaderID + "' /><Value Type='Lookup'>" + HeaderID.ToString() + "</Value></Eq></Where></Query></View>";
+                var caml = @"<View><Query><Where><Eq><FieldRef Name='" + FieldNameDetailSCAReimbursementHeaderID + "' /><Value Type='Lookup'>" + HeaderID.ToString() + "</Value></Eq></Where></Query></View>";
 
-                details = new List<SCASettlementItemVM>();
+                details = new List<SCAReimbursementItemVM>();
 
                 foreach (var item in SPConnector.GetList(ListName_SCASettlementItem, siteUrl, caml))
                 {
@@ -190,9 +182,9 @@ namespace MCAWebAndAPI.Service.Finance
             return details;
         }
 
-        private SCASettlementItemVM ConvertToSCASettlementItemVM(ListItem listItem)
+        private SCAReimbursementItemVM ConvertToSCASettlementItemVM(ListItem listItem)
         {
-            SCASettlementItemVM viewModel = new SCASettlementItemVM();
+            SCAReimbursementItemVM viewModel = new SCAReimbursementItemVM();
 
             viewModel.ID = Convert.ToInt32(listItem[FieldNameId]);
             viewModel.ReceiptDate = Convert.ToDateTime(listItem[FieldNameDetailReceiptDate]);
@@ -212,30 +204,26 @@ namespace MCAWebAndAPI.Service.Finance
             return viewModel;
         }
 
-        private SCASettlementVM ConvertToSCASettlementVM(ListItem listItem)
+        private SCAReimbursementVM ConvertToSCAReimbursementVM(ListItem listItem)
         {
-            SCASettlementVM viewModel = new SCASettlementVM();
+            SCAReimbursementVM viewModel = new SCAReimbursementVM();
 
             viewModel.ID = Convert.ToInt32(listItem[FieldNameId]);
-            viewModel.DocNo = Convert.ToString(listItem[FieldNameSCADocumentNo]);
+            viewModel.DocNo = Convert.ToString(listItem[FieldNameSCAReimbursementNO]);
 
-            if (listItem[FieldNameSCAVoucherId] != null)
+            if (listItem[FieldNameEventBudget] != null)
             {
-                viewModel.SCACouvher.Value = (listItem[FieldNameSCAVoucherId] as FieldLookupValue).LookupId;
-                viewModel.SCACouvher.Text = (listItem[FieldNameSCAVoucherId] as FieldLookupValue).LookupValue;
+                viewModel.EventBudget.Value = (listItem[FieldNameEventBudget] as FieldLookupValue).LookupId;
+                viewModel.EventBudget.Text = (listItem[FieldNameEventBudget] as FieldLookupValue).LookupValue;
             }
 
-            viewModel.Description = (listItem[FieldNameSCAPurpose] as FieldLookupValue).LookupValue;
-            viewModel.Fund = (listItem[FieldNameSCAFund] as FieldLookupValue).LookupValue;  
-            viewModel.Currency.Value = (listItem[FieldNameSCACurrency] as FieldLookupValue).LookupValue;
-            viewModel.SpecialCashAdvanceAmount =  Convert.ToDecimal((listItem[FieldNameSCAAmount] as FieldLookupValue).LookupValue);
+            viewModel.Description = Convert.ToString(listItem[FieldNameDescription]);
+            viewModel.Fund = Convert.ToString(listItem[FieldNameFund]);
+            viewModel.Currency.Value = Convert.ToString(listItem[FieldNameCurrency]);
             viewModel.EditMode = (int)Item.Mode.UPDATED;
-            viewModel.TotalExpense = Convert.ToDecimal(listItem[FieldNameTotalExpense]);
-            viewModel.ReceivedFromTo = Convert.ToDecimal(listItem[FieldNameReceivedFromTo]);
-            viewModel.TypeOfSettlement.Value = Convert.ToString(listItem[FieldNameTypeOfSettlement]);
+            viewModel.Amount = Convert.ToDecimal(listItem[FieldNameTotalAmount]);
 
             return viewModel;
         }
-
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 using Microsoft.SharePoint.Client;
+using static MCAWebAndAPI.Model.ViewModel.Form.Finance.PettyCashTransactionItem;
 
 namespace MCAWebAndAPI.Service.Finance
 {
@@ -17,10 +18,11 @@ namespace MCAWebAndAPI.Service.Finance
         {
             List<PettyCashTransactionItem> pettyCashStatements = new List<PettyCashTransactionItem>();
 
-            pettyCashStatements.AddRange(PettyCashPaymentVoucherService.GetPettyCashTransaction(siteUrl, dateFrom, dateTo));
-            pettyCashStatements.AddRange(PettyCashSettlementService.GetPettyCashTransaction(siteUrl, dateFrom, dateTo));
-            pettyCashStatements.AddRange(PettyCashReimbursementService.GetPettyCashTransaction(siteUrl, dateFrom, dateTo));
-            pettyCashStatements.AddRange(PettyCashReplenishmentService.GetPettyCashTransaction(siteUrl, dateFrom, dateTo));
+            //TODO: pls convert to async
+            pettyCashStatements.AddRange(PettyCashPaymentVoucherService.GetPettyCashTransaction(siteUrl, dateFrom, dateTo, Post.CR));
+            pettyCashStatements.AddRange(PettyCashSettlementService.GetPettyCashTransaction(siteUrl, dateFrom, dateTo, Post.DR));
+            pettyCashStatements.AddRange(PettyCashReimbursementService.GetPettyCashTransaction(siteUrl, dateFrom, dateTo, Post.CR));
+            pettyCashStatements.AddRange(PettyCashReplenishmentService.GetPettyCashTransaction(siteUrl, dateFrom, dateTo, Post.DR));
 
             pettyCashStatements.Sort((x, y) => x.Date.CompareTo(y.Date));
 
@@ -35,7 +37,7 @@ namespace MCAWebAndAPI.Service.Finance
         private PettyCashStatementVM ConvertToVM(ListItem listItem)
         {
             PettyCashStatementVM viewModel = new PettyCashStatementVM();
-        
+
             return viewModel;
         }
 
