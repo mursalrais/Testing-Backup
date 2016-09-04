@@ -12,8 +12,8 @@
     .Columns(columns =>
     {
 
-        columns.Bound(p => p.ReceiptDate).ClientTemplate("#= kendo.toString(ReceiptDate, \"MM/dd/yyyy \") #" +
-       "<input type='hidden' id='Dateid#= getItem(data)#' name='ItemDetails[#= getItem(data)#].ReceiptDate' value='#= kendo.toString(ReceiptDate, \"MM/dd/yyyy \") #' />");
+        columns.Bound(p => p.ReceiptDate).ClientTemplate("#= kendo.toString(ReceiptDate, \"MM/dd/yyyy\") #" +
+       "<input type='hidden' name='ItemDetails[#= getItem(data)#].ReceiptDate' value='#= kendo.toString(ReceiptDate, \"dd/MM/yyyy\") #' />");
 
         columns.Bound(p => p.ReceiptNo).ClientTemplate("#= ReceiptNo #" +
             "<input type='hidden' name='ItemDetails[#= getItem(data)#].ReceiptNo' value='#= ReceiptNo #' />");
@@ -72,7 +72,7 @@
                        model.Id(p => p.ID);
                        model.Field(m => m.WBS).DefaultValue(EventBudgetItemVM.GetWBSDefaultValue());
                        model.Field(m => m.GL).DefaultValue(EventBudgetItemVM.GetGLDefaultValue());
-
+                       
 
                    })
                    .ServerOperation(false)
@@ -85,6 +85,8 @@
 
         function getItem(dataItem) {
             var data = $("#ItemDetails").data("kendoGrid").dataSource.data();
+
+           
             return data.indexOf(dataItem);
         }
 
@@ -104,6 +106,8 @@
                 if (datasource[i].EditMode >= 0) {
                     totalAll = totalAll + datasource[i].Amount;
                 }
+
+               
             }
 
             $("#TotalExpense").val(totalAll);
@@ -121,8 +125,9 @@
 
         function onedit(e) {
             onEditKendoDetail(e);
-            
         }
+
+       
 
        
 </script>

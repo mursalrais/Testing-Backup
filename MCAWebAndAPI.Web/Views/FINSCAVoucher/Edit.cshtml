@@ -33,12 +33,20 @@
         </div>
 
         @Html.HiddenFor(m => m.ID, new { @id = "hdnSCAVoucherID" })
+        @Html.HiddenFor(m => m.SCAVoucherNo)
         @Html.HiddenFor(m => m.Action)
     </fieldset>
 
     <div class="form-actions">
         <div class="row">
             <div class="col-sm-12">
+                @if (Model.ID > 0)
+                {
+                    <button id="print-button" class="btn btn-default" type="button">
+                        Print
+                    </button>
+                }
+                &nbsp;
                 @if(Model.TransactionStatus.Value != "Locked") {
                 <button id="submit-button" class="btn btn-primary" type="submit">
                     <i class="fa fa-save"></i>
@@ -55,6 +63,24 @@
 }
 @section scripts{
     <script>
+        $(document).ready(function () {
+
+            $('#print-button').click(function (e) {
+                if (!$('form').valid()) {
+                    alert('Please make sure that all required fields are filled');
+                    return;
+                }
+
+                var actionUrl = $('form').attr("action");
+                var newActionUrl = actionUrl.replace("Edit", "Print");
+
+                $('form').prop('action', newActionUrl);
+                $('form').submit();
+
+            });
+
+        });
+
         $("#formEditSCA").on('submit', function () {
             var grid = $("#EventBudgetDetail").data("kendoGrid");
             var dataSource = grid.dataSource;

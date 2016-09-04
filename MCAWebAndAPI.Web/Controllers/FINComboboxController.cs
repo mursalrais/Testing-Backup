@@ -24,7 +24,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);
-            SessionManager.Set(SharedFinanceController.Session_SiteUrl, siteUrl);
+            SessionManager.Set(SharedController.Session_SiteUrl, siteUrl);
 
             service.SetSiteUrl(ConfigResource.DefaultBOSiteUrl);
 

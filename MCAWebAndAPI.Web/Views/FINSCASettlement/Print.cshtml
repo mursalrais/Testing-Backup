@@ -1,6 +1,9 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.Finance
 @model SCASettlementVM
 
+@*
+    Wireframe FIN07: SCA Settlement
+*@
 
 @{
     ViewBag.Title = "Print SCA Settlement";
@@ -37,6 +40,8 @@
     #TblDetail .footerBGColor {
         background-color: silver;
         padding: 4px;
+        font-weight:bold;
+         border: 0px solid black;
     }
 
     #TblNote td {
@@ -124,51 +129,46 @@
                             <td>
                                 @listData[i].WBS.Text
                             </td>
-                            
+
                             <td>
                                 @listData[i].GL.Text
                             </td>
-                            <td >
+                            <td>
                                 @listData[i].Amount.ToString()
                             </td>
 
-                            <td>
-                               
-                            </td>
+                            <td></td>
                         </tr>
                     }
                 }
-                <tr>
-                    <td class="footerBGColor"></td>
-                    <td class="footerBGColor"></td>
-                    <td class="footerBGColor"></td>
-                    <td class="footerBGColor"></td>
-                    <td class="footerBGColor"></td>
-                    <td class="rightAlign">Total Expense </td>
-                    <td class="rightAlign">@Model.TotalExpense.ToString()</td>
-                    <td class="footerBGColor"></td>
+                <tr style="border-left:1px solid black;">
+                    <td class="footerBGColor" style="border-color:transparent;"></td>
+                    <td class="footerBGColor" style="border-color:transparent;"></td>
+                    <td class="footerBGColor" style="border-color:transparent;"></td>
+                    <td class="footerBGColor" style="border-color:transparent;"></td>
+                    <td class="rightAlign footerBGColor" style="border-color:transparent;" colspan="2">Total Expense </td>
+                    <td class="rightAlign footerBGColor" style="border-color:transparent;">@Model.TotalExpense.ToString()</td>
+                    <td class="footerBGColor" style="border-color:transparent;"></td>
                 </tr>
 
                 <tr>
-                    <td class="footerBGColor"></td>
-                    <td class="footerBGColor"></td>
-                    <td class="footerBGColor"></td>
-                    <td class="footerBGColor"></td>
-                    <td class="footerBGColor"></td>
-                    <td class="rightAlign">Special Cash Advance</td>
-                    <td class="rightAlign">@Model.SpecialCashAdvanceAmount.ToString()</td>
-                    <td class="footerBGColor"></td>
+                    <td class="footerBGColor" style="border-color:transparent;"></td>
+                    <td class="footerBGColor" style="border-color:transparent;"></td>
+                    <td class="footerBGColor" style="border-color:transparent;"></td>
+                    <td class="footerBGColor" style="border-color:transparent;"></td>
+                    <td class="rightAlign footerBGColor" colspan="2" style="border-color:transparent;">Special Cash Advance</td>
+                    <td class="rightAlign footerBGColor" style="border-color:transparent;">@Model.SpecialCashAdvanceAmount.ToString()</td>
+                    <td class="footerBGColor" style="border-color:transparent;"></td>
                 </tr>
 
                 <tr>
-                    <td class="footerBGColor"></td>
-                    <td class="footerBGColor"></td>
-                    <td class="footerBGColor"></td>
-                    <td class="footerBGColor"></td>
-                    <td class="footerBGColor"></td>
-                    <td class="rightAlign">Received from/to</td>
-                    <td class="rightAlign">@Model.ReceivedFromTo.ToString()</td>
-                    <td class="footerBGColor"></td>
+                    <td class="footerBGColor" style="border-color:transparent;"></td>
+                    <td class="footerBGColor" style="border-color:transparent;"></td>
+                    <td class="footerBGColor" style="border-color:transparent;"></td>
+                    <td class="footerBGColor" style="border-color:transparent;"></td>
+                    <td class="rightAlign footerBGColor" style="border-color:transparent;" colspan="2"> Received from/to</td>
+                    <td class="rightAlign footerBGColor" style="border-color:transparent;">@Model.ReceivedFromTo.ToString()</td>
+                    <td class="footerBGColor" style="border-color:transparent;"></td>
                 </tr>
             </tbody>
         </table>
@@ -177,11 +177,11 @@
         <table width="100%" id="TblNote">
             <tbody>
                 <tr>
-                   <td>
-                       I, the authorized MCA project signatory, approve payment of this invoice and certify that the goods, works or services represented on this invoice/receipts have been accepted by and received by MCA-I.
-                       Meet all the requirements of the contract with the vendor, and their procurement meets all the requirements of the Compact, the Program, Procurement Guidelines and all other relevant supplemental
-                       agreement requirements.
-                   </td>
+                    <td>
+                        I, the authorized MCA project signatory, approve payment of this invoice and certify that the goods, works or services represented on this invoice/receipts have been accepted by and received by MCA-I.
+                        Meet all the requirements of the contract with the vendor, and their procurement meets all the requirements of the Compact, the Program, Procurement Guidelines and all other relevant supplemental
+                        agreement requirements.
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -190,13 +190,13 @@
         <table width="100%">
             <tbody>
                 <tr>
-                    <td>
+                    <td colspan="3">
                         <p style="font-weight:bold; margin-bottom:20px;"> I. PROJECT AUTHORIZATION</p>
                     </td>
                 </tr>
                 <tr>
-                    <td style="font-weight:bold;">Prepared by Special Disbursement Officer:</td>
-                    <td style="font-weight:bold;">Reviewed by Operations and Finance Manager:</td>
+                    <td width="35%" style="font-weight:bold;">Prepared by Special Disbursement Officer:</td>
+                    <td width="32%" style="font-weight:bold;">Reviewed by Operations and Finance Manager:</td>
                     <td style="font-weight:bold;">Approved by Project Director:</td>
                 </tr>
                 <tr>
@@ -220,15 +220,15 @@
                     <td>Date:</td>
                     <td>Date:</td>
                 </tr>
-                
+
                 <tr>
-                    <td>
+                    <td colspan="3">
                         <div style="height:20px; border-bottom:2px solid black; width:100%;"></div>
                     </td>
                 </tr>
 
                 <tr>
-                    <td>
+                    <td colspan="3">
                         <p style="font-weight:bold; margin-bottom:20px;"> I. FINANCE AUTHORIZATION</p>
                     </td>
                 </tr>

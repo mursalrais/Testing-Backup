@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Web;
 using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
+using MCAWebAndAPI.Service.HR.Common;
 using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
@@ -30,6 +31,7 @@ namespace MCAWebAndAPI.Service.Finance
         private const string FIELD_PAIDTO = "Paid_x0020_To";
         private const string FIELD_PROFESSIONALID = "ProfessionalID";
         private const string FIELD_PROFESSIONAL_NAME = "ProfessionalID_x003a_Full_x0020_";
+        private const string FIELD_PROFESSIONAL_POSITION = "ProfessionalPosition";
         private const string FIELD_VENDORID = "Vendor_x0020_ID";
         private const string FIELD_CURRENCY = "NewColumn1";
         private const string FIELD_AMOUNT = "Amount_x0020_Paid";
@@ -81,7 +83,11 @@ namespace MCAWebAndAPI.Service.Finance
 
             if (viewModel.Professional.Value.HasValue)
             {
-                newItem.Add(FIELD_PROFESSIONALID, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.Professional.Value) });
+                var professionalId = Convert.ToInt32(viewModel.Professional.Value);
+                var professional = new ProfessionalService().GetProfessionalData(professionalId);
+
+                newItem.Add(FIELD_PROFESSIONALID, new FieldLookupValue { LookupId = professionalId });
+                newItem.Add(FIELD_PROFESSIONAL_POSITION, professional.PositionName);
             }
 
             if (viewModel.Vendor.Value.HasValue)
@@ -125,7 +131,12 @@ namespace MCAWebAndAPI.Service.Finance
 
             if (viewModel.Professional.Value.HasValue)
             {
-                updatedValue.Add(FIELD_PROFESSIONALID, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.Professional.Value) });
+                var professionalId = Convert.ToInt32(viewModel.Professional.Value);
+                var professional =  ProfessionalService.Get(this.siteUrl, professionalId);
+
+                updatedValue.Add(FIELD_PROFESSIONALID, new FieldLookupValue { LookupId = professionalId });
+                updatedValue.Add(FIELD_PROFESSIONAL_POSITION, professional.Position);
+
                 updatedValue.Add(FIELD_VENDORID, "");
             }
 
@@ -243,10 +254,6 @@ namespace MCAWebAndAPI.Service.Finance
             if (viewModel.Professional != null && listItem[FIELD_PROFESSIONALID] != null)
             {
                 viewModel.Professional.Value = (listItem[FIELD_PROFESSIONALID] as FieldLookupValue).LookupId;
-
-                //TODO: the following line causes error
-                //viewModel.Professional.Text = (listItem[FIELD_PROFESSIONAL_NAME] as FieldLookupValue).LookupValue;
-
             }
 
             if (viewModel.Vendor != null && listItem[FIELD_VENDORID] != null)

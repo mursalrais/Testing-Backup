@@ -15,7 +15,7 @@ namespace MCAWebAndAPI.Web.Controllers
     public class FINTaxExemptionController : Controller
     {
         private ITaxExemptionDataService _taxExemptionDataService;
-        private const string SITE_URL = SharedFinanceController.Session_SiteUrl;
+        private const string SITE_URL = SharedController.Session_SiteUrl;
 
         private const string SuccessMsgFormatCreated = "Tax Exemption No. {0} has been successfully created.";
         private const string SuccessMsgFormatUpdated = "Tax Exemption No. {0} has been successfully updated.";

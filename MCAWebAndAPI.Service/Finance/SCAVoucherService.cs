@@ -98,11 +98,12 @@ namespace MCAWebAndAPI.Service.Finance
             return activityID;
         }
 
-        public int? CreateSCAVoucher(SCAVoucherVM scaVoucher)
+        public int? CreateSCAVoucher(ref SCAVoucherVM scaVoucher)
         {
             int? result = null;
             DateTime today = DateTime.Now;
             string scaNo = DocumentNumbering.Create(_siteUrl, string.Format("SCA/{0}-{1}/", DateTimeExtensions.GetMonthInRoman(today), today.ToString("yy")) + "{0}", 5);
+            scaVoucher.SCAVoucherNo = scaNo;
 
             var columnValues = new Dictionary<string, object>
             {
@@ -150,7 +151,7 @@ namespace MCAWebAndAPI.Service.Finance
                 {FIELD_NAME_SDOID,new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.SDO.Value) }},
                 {FIELD_NAME_SDO_POSITION, scaVoucher.SDOPosition },
                 {FIELD_NAME_EBUDGET_ID, new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.EventBudget.Value) }},
-                {FIELD_NAME_CURRENCY,scaVoucher.Currency},
+                {FIELD_NAME_CURRENCY,scaVoucher.Currency.Value},
                 {FIELD_NAME_TOTAL_AMOUNT,scaVoucher.TotalAmount},
                 {FIELD_NAME_TA_WORDS,scaVoucher.TotalAmountInWord},
                 {FIELD_NAME_PURPOSE,scaVoucher.Purpose},

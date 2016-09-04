@@ -116,6 +116,8 @@ namespace MCAWebAndAPI.Service.Finance
 
         public static string GetPosition(string username, string siteUrl)
         {
+            //TODO: change this implementation to Service.Common.ProfessionalService
+
             if (string.IsNullOrEmpty(siteUrl))
             {
                 throw new InvalidOperationException("Missing parameter: siteUrl.");
