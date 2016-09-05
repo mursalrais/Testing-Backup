@@ -1,29 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using MCAWebAndAPI.Model.ProjectManagement.Common;
-using MCAWebAndAPI.Service.ProjectManagement.Common;
+using MCAWebAndAPI.Service.ProjectManagement.Schedule.Common;
 using MCAWebAndAPI.Web.Helpers;
-using MCAWebAndAPI.Web.Resources;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
     public class COMWBSController : Controller
     {
-        IProjectHierarchyService _service;
-
-        public COMWBSController()
+        public JsonResult GetAllAsJsonResult(string siteUrl = null)
         {
-            _service = new ProjectHierarchyService();
-        }
-
-
-        public JsonResult GetWBS()
-        {
-            _service.SetSiteUrl(ConfigResource.DefaultProgramSiteUrl);
-            var data = GetWBSMappingFromExistingSession();
+            var data = GetWBSMappingFromExistingSession(siteUrl);
 
             return Json(data.Select(e =>
                 new
@@ -37,27 +25,24 @@ namespace MCAWebAndAPI.Web.Controllers
             ), JsonRequestBehavior.AllowGet);
         }
 
-
         public ActionResult GetWBSMappings(string siteUrl = null)
         {
-            _service.SetSiteUrl(siteUrl);
-            var data = _service.GetAllWBSMappings();
+            var data = WBSMasterService.GetAllWBSMappings(siteUrl);
             return this.Jsonp(data);
         }
 
         public ActionResult UpdateWBSMapping(string siteUrl = null)
         {
-            _service.SetSiteUrl(siteUrl);
-            var data = _service.UpdateWBSMapping();
+            var data = WBSMasterService.UpdateWBSMapping(siteUrl);
             return this.Jsonp(data);
         }
 
 
-        private IEnumerable<WBSMapping> GetWBSMappingFromExistingSession()
+        private IEnumerable<WBSMapping> GetWBSMappingFromExistingSession(string siteUrl)
         {
             //Get existing session variable
             var sessionVariable = System.Web.HttpContext.Current.Session["WBSMapping"] as IEnumerable<WBSMapping>;
-            var wbsMapping = sessionVariable ?? _service.GetWBSMappingsInProgram();
+            var wbsMapping = sessionVariable ?? WBSMasterService.GetWBSMappingsInProgram(siteUrl);
 
             if (sessionVariable == null) // If no session variable is found
                 System.Web.HttpContext.Current.Session["WBSMapping"] = wbsMapping;
