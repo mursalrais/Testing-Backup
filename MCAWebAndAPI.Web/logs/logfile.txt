@@ -492,3 +492,5 @@ Please try again.
 
 Please try again.
 >>>>>>> origin/master
+2016-09-05 13:12:51.1025 MCAWebAndAPI.Service.Converter.CSVConverter System.IndexOutOfRangeException: Index was outside the bounds of the array.
+   at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in D:\Reza F. Fikri\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64
