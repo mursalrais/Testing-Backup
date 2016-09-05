@@ -229,7 +229,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             {
                 await Task.WhenAll(populateProfessionalTask, populateValidPSATask, 
                     populateProfessionalMonthlyFeeTask, populateProfessionalDayOffRequestTask, 
-                    populateHolidaysAndPublicHolidays);
+                    populateHolidaysAndPublicHolidays, populateAdjustmentTask);
             }
             catch (Exception e)
             {

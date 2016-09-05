@@ -396,7 +396,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 StartTime = Convert.ToDateTime(item["compensatorystarttime"]),
                 FinishTime = Convert.ToDateTime(item["compensatoryendtime"]),
                 CmpTotalHours = Convert.ToInt32(item["totalhours"]),
-                TotalDay = Convert.ToInt32(item["totaldays"]),
+                TotalDay = Convert.ToDecimal(item["totaldays"]),
                 remarks = Convert.ToString(item["remarks"]),
                 AppStatus = Convert.ToString(item["compensatorystatus"]),
                 GetDateStr = DateStr.ToString("MM/dd/yyyy"),
