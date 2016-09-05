@@ -705,7 +705,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             int? idbal = null;
 
-            int? getent = null;
+            double getent = 0;
 
             var caml = @"<View>  
                         <Query> 
@@ -716,7 +716,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             foreach (var item in SPConnector.GetList(SP_COMBAL_LIST_NAME, _siteUrl, caml))
             {
                 idbal = Convert.ToInt32(item["ID"]);
-                getent = Convert.ToInt32(item["entitlement"]);
+                getent = Convert.ToDouble(item["entitlement"]);
             }
 
             if (header.StatusForm == " ")
@@ -743,9 +743,14 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 columnValues.Add("crstatus", "Approved");
 
-                IEnumerable<CompensatoryDetailVM> getbalance = header.CompensatoryDetails;
+                double entitlement = 0;
 
-                updateBalance.Add("entitlement", getent + getbalance.Count());
+                foreach(var a in header.CompensatoryDetails)
+                {
+                    entitlement = entitlement + Convert.ToDouble(a.TotalDay);
+                }
+
+                updateBalance.Add("entitlement", getent + entitlement);
 
                 if (idbal != null)
                 {
@@ -761,7 +766,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 } else
                 {
                     double finalbalance = 0;
-                    int? entitlement = getbalance.Count();
                     var addValues = new Dictionary<string, object>();
 
                     addValues.Add("entitlement", entitlement);
@@ -843,7 +847,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     compensatorylistDetails.Add(ConvertToCompDetailVM(detailitem));
                 }
 
-                var compdetail = from a in compensatorylistDetails where a.AppStatus != "Reject" select a;
+                var compdetail = from a in compensatorylistDetails where a.AppStatus != "Rejected" select a;
 
                 foreach (var cekdate in header.CompensatoryDetails)
                 {
