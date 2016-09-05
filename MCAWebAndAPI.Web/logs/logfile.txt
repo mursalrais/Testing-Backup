@@ -448,3 +448,22 @@ Parameter name: source
    at Microsoft.SharePoint.Client.List.GetItemByStringId(String sId)
    at MCAWebAndAPI.Service.Utils.SPConnector.DeleteListItem(String listName, Nullable`1 listItemID, String siteUrl) in C:\Users\sobari\Documents\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 662
    at MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService.CreateCompensatoryData(Nullable`1 cmpID, CompensatoryVM viewModels) in C:\Users\sobari\Documents\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Compensatory\HRCompensatoryService.cs:line 601
+2016-09-02 11:17:11.3527 MCAWebAndAPI.Service.HR.Payroll.PayrollService System.Net.WebException: The operation has timed out
+   at MCAWebAndAPI.Service.Utils.SPConnector.GetList(String listName, String siteUrl, String caml) in D:\Reza F. Fikri\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 121
+   at MCAWebAndAPI.Service.HR.Common.DataMasterService.GetAdjustemnt(IEnumerable`1 professionalIDs) in D:\Reza F. Fikri\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Common\DataMasterService.cs:line 332
+   at MCAWebAndAPI.Service.HR.Payroll.PayrollServiceExtention.<PopulateALLAdjustment>d__18.MoveNext() in D:\Reza F. Fikri\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Payroll\PayrollServiceExtention.cs:line 92
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at MCAWebAndAPI.Service.HR.Payroll.PayrollService.<GetPayrollWorksheetDetailsAsync>d__16.MoveNext() in D:\Reza F. Fikri\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Payroll\PayrollService.cs:line 228
+2016-09-02 20:01:26.3599 MCAWebAndAPI.Service.HR.Payroll.PayrollService System.Net.WebException: The remote name could not be resolved: 'eceos2.sharepoint.com'
+   at MCAWebAndAPI.Service.Utils.SPConnector.GetList(String listName, String siteUrl, String caml) in D:\Reza F. Fikri\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 121
+   at MCAWebAndAPI.Service.HR.Leave.DayOffService.GetDayOffHeaderIDFromProfessional(Int32 professionalID) in D:\Reza F. Fikri\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Leave\DayOffService.cs:line 151
+   at MCAWebAndAPI.Service.HR.Leave.DayOffService.GetDayOffRequests(IEnumerable`1 professionalIDs) in D:\Reza F. Fikri\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Leave\DayOffService.cs:line 210
+   at MCAWebAndAPI.Service.HR.Payroll.PayrollServiceExtention.<PopulateAllProfessionalDayOffRequests>d__20.MoveNext() in D:\Reza F. Fikri\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Payroll\PayrollServiceExtention.cs:line 114
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at MCAWebAndAPI.Service.HR.Payroll.PayrollService.<GetPayrollWorksheetDetailsAsync>d__16.MoveNext() in D:\Reza F. Fikri\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Payroll\PayrollService.cs:line 228

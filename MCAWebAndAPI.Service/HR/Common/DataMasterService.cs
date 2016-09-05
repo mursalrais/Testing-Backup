@@ -323,15 +323,13 @@ namespace MCAWebAndAPI.Service.HR.Common
 
             foreach (var professionalID in professionalIDs)
             {
-                var headerID = GetAdjustmentIDFromProfessional(professionalID);
-
                 var caml = @"<View>  
                     <Query> 
-                       <Where><Eq><FieldRef Name='professional' LookupId='True' /><Value Type='Lookup'>" + headerID +@"</Value></Eq></Where> 
+                       <Where><Eq><FieldRef Name='professional' LookupId='True' /><Value Type='Lookup'>" + professionalID + @"</Value></Eq></Where> 
                     </Query> 
               </View>";
 
-                foreach (var item in SPConnector.GetList(SP_ADJUSTMENT_LIST_NAME, _siteUrl))
+                foreach (var item in SPConnector.GetList(SP_ADJUSTMENT_LIST_NAME, _siteUrl, caml))
                 {
                     models.Add(ConvertToAdjustment_Light(item, professionalID));
                 }
@@ -343,11 +341,10 @@ namespace MCAWebAndAPI.Service.HR.Common
         {
             return new AdjustmentMaster
             {
-
-                AdjustmentPeriod = Convert.ToDateTime(item["adjustmentperiod"]),
-                ProfessionalID = professionalID,
+                AdjustmentPeriod = Convert.ToDateTime(item["adjustmentperiod"]).ToLocalTime(),
+                ProfessionalID = professionalID.ToString(),
                 AdjustmentType = Convert.ToString(item["adjustmenttype"]),
-                AdjustmentAmount = Convert.ToDouble(item["adjustmenttype"]),
+                AdjustmentAmount = Convert.ToDouble(item["adjustmentamount"]),
                 DebitOrCredit = Convert.ToString(item["debitorcredit"])
             };
         }
