@@ -151,6 +151,15 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to s.
+        /// </summary>
+        public static string AssetCheckResultApprove {
+            get {
+                return ResourceManager.GetString("AssetCheckResultApprove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to /Lists/Asset%20Disposal/AllItems.aspx.
         /// </summary>
         public static string AssetDisposal {

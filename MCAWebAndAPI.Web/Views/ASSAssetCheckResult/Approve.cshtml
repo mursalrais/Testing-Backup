@@ -2,14 +2,14 @@
 
 @model AssetCheckResultHeaderVM
 
-<form class="form-horizontal" method="post" action="/ASSAssetCheckResult/Edit" id="create-asset-check-result">
+<form class="form-horizontal" method="post" action="/ASSAssetCheckResult/Approve" id="create-asset-check-result">
     <fieldset>
         <legend>Form Asset Check Result</legend>
         <div class="col-md-6">
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.FormID).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Model.FormID.Text
+                    @Html.EditorFor(m => m.FormID)
                 </div>
             </div>
             <div class="form-group">
@@ -36,52 +36,36 @@
                     @Html.EditorFor(m => m.CountedBy3)
                 </div>
             </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Attachment).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.Attachment)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.CompletionStatus).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.DisplayFor(m => m.CompletionStatus)
-                </div>
-            </div>
-        </div>
-        <div>
-            <center>
-                @*<input class="k-button k-button-icontext k-grid-add" type="submit" name="GetData" value="Get Data" />*@
-            </center>
         </div>
 
                 @Html.HiddenFor(m => m.AssetCheckResultID, new { Value = Model.AssetCheckResultID })
 
                 @Html.HiddenFor(m => m.ID, new { Value = Model.ID })
 
-                @Html.HiddenFor(m => m.hFormID, new { Value = Model.FormID.Text })
+                @Html.HiddenFor(m => m.CreateDate, new { Value = Model.CreateDate })
+
+                @Html.HiddenFor(m => m.hCountedBy1, new { Value = Model.hCountedBy1 })
+
+                @Html.HiddenFor(m => m.hCountedBy2, new { Value = Model.hCountedBy2 })
+
+                @Html.HiddenFor(m => m.hCountedBy3, new { Value = Model.hCountedBy3 })
+
+                @Html.HiddenFor(m => m.hCountedBy1Nama, new { Value = Model.hCountedBy1Nama })
+
+                @Html.HiddenFor(m => m.hCountedBy2Nama, new { Value = Model.hCountedBy2Nama })
+
+                @Html.HiddenFor(m => m.hCountedBy3Nama, new { Value = Model.hCountedBy3Nama })
 
         <div class="row">
             <div>
-                @Html.Partial("_Details", Model.Details)
-            </div>
-            <div class="col-md-12" style="text-align: right;">
-                <input class="btn btn-default" type="submit" name="Calculate" value="Calculate" />
+                @Html.Partial("_ViewDetails", Model.Details)
             </div>
         </div>
-        <legend>Approval Path</legend>
-        <div class="row">
-            <div style="width: 25%;">
-                @Html.Partial("_approval_Path", Model)
-            </div>
-        </div>
-        <br />
-        <br />
+        
         <div class="row">
             <center>
-                <input class="k-button k-button-icontext k-grid-add" type="submit" name="SubmitForApproval" value="Submit for approval" />
-                <input class="k-button k-button-icontext k-grid-add" type="submit" name="SaveAsDraft" value="Save as draft" />
-                <input class="k-button k-button-icontext k-grid-add" type="submit" name="Cancel" value="Cancel" />
+                <input class="k-button k-button-icontext k-grid-add" type="submit" name="Approve" value="Approve" />
+                <input class="k-button k-button-icontext k-grid-add" type="submit" name="Reject" value="Reject" />
             </center>
         </div>
     </fieldset>

@@ -1155,6 +1155,7 @@
     <Content Include="Views\FINPettyCashJournal\Print.cshtml" />
     <Content Include="Views\FINPettyCashJournal\_ItemDetails.cshtml" />
     <Content Include="Views\ASSLocationMaster\Sync.cshtml" />
+    <Content Include="Views\ASSAssetCheckResult\Approve.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
