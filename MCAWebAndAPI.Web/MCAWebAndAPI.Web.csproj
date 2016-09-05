@@ -1152,6 +1152,7 @@
     <Content Include="Views\ASSAssetCheckForm\_Details.cshtml" />
     <Content Include="Views\ASSAssetCheckForm\_print.cshtml" />
     <Content Include="Views\ASSAssetCheckForm\_ViewDetails.cshtml" />
+    <Content Include="Views\ASSLocationMaster\Sync.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

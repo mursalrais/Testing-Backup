@@ -97,7 +97,7 @@ namespace MCAWebAndAPI.Service.Asset
 
             try
             {
-                SPConnector.AddListItem("Asset Replacement", columnValues, _siteUrl);
+                SPConnector.UpdateListItem("Asset Replacement", ID, columnValues, _siteUrl);
             }
             catch (Exception e)
             {
