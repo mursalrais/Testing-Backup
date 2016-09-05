@@ -8,12 +8,15 @@
     ViewBag.Title = "Add Compensatory HR";
 }
 
-@using (Html.BeginForm("CreateHeaderCompensatory", "HRCompensatory", FormMethod.Post,
-                                                                             new
-                                                                             {
-                                                                                 @class = "form-horizontal",
-                                                                                 enctype = "multipart/form-data"
-                                                                             }))
+@using (Ajax.BeginForm("CreateHeaderCompensatory", "HRCompensatory", FormMethod.Post,
+            new AjaxOptions
+            {
+                OnBegin = "onBeginForm",
+                OnComplete = "onCompleteForm",
+                OnSuccess = "onSuccessFormEmbed",
+                OnFailure = "onFailureForm"
+            }, new { @class = "form-horizontal" }))
+
 {
     <fieldset>
         @Html.HiddenFor(m => m.cmpID)
@@ -242,7 +245,7 @@
                                 model.set("CmpTotalHours", range);
                             }
 
-                            if (range >= 4) {
+                            if (range > 4) {
                                 totday = 1
                             } else {
                                 totday = 0.5

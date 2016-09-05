@@ -8,12 +8,15 @@
     ViewBag.Title = "Input Compensatory User";
 }
 
-@using (Html.BeginForm("CreateCompensatoryData", "HRCompensatory", FormMethod.Post,
-                                                                                                                 new
-                                                                                                                 {
-                                                                                                                     @class = "form-horizontal",
-                                                                                                                     enctype = "multipart/form-data"
-                                                                                                                 }))
+@using (Ajax.BeginForm("CreateCompensatoryData", "HRCompensatory", FormMethod.Post,
+new AjaxOptions
+{
+OnBegin = "onBeginForm",
+OnComplete = "onCompleteForm",
+OnSuccess = "onSuccessFormEmbed",
+OnFailure = "onFailureForm"
+}, new { @class = "form-horizontal" }))
+
 {
     <fieldset>
         @Html.HiddenFor(m => m.cmpID)
@@ -65,10 +68,6 @@
             <button id="submit-draft-button" class="btn btn-primary" type="submit">
                 <i class="fa fa-clipboard"></i>
                 Save As Draft
-            </button>
-            <button id="cancel-button" class="btn btn-primary">
-                <i class="fa fa-ban"></i>
-                Cancel
             </button>
         </div>
     </div>
@@ -337,7 +336,7 @@
                                         model.set("CmpTotalHours", range);
                                     }
 
-                                    if (range >= 4) {
+                                    if (range > 4) {
                                         totday = 1
                                     } else {
                                         totday = 0.5

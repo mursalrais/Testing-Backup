@@ -189,11 +189,15 @@ namespace MCAWebAndAPI.Web.Controllers
             string nationalityName = _service.GetNationality(Convert.ToInt32(viewModel.Nationality.Value));
             viewModel.NationalityName = nationalityName;
 
+            //string positionName = _service.GetPositionName(Convert.ToInt32(viewModel.Position));
+            //viewModel.PositionName = positionName;
+
             viewModel.EducationDetails = BindEducationDetails(form, viewModel.EducationDetails);
             viewModel.TrainingDetails = BindTrainingDetails(form, viewModel.TrainingDetails);
             viewModel.WorkingExperienceDetails = BindWorkingExperienceDetails(form, viewModel.WorkingExperienceDetails);
             ViewData.Model = AdjustViewModel(viewModel);
 
+            
             const string RelativePath = "~/Views/HRApplication/PrintApplicationData.cshtml";
             var view = ViewEngines.Engines.FindView(ControllerContext, RelativePath, null);
             var fileName = viewModel.FirstMiddleName + "-" + viewModel.Position + "-" + "MCA-Indonesia.pdf";

@@ -235,46 +235,175 @@ namespace MCAWebAndAPI.Service.HR.Leave
             };
         }
 
-        public DayOffRequestVM GetRequestData(List<string> dayOffType, List<string> startDate, List<string> endDate, List<string> fullHalfDay, List<string> remarks)
+        public DayOffRequestVM GetRequestData(List<string> dayOffType, List<string> startDate, List<string> endDate, List<string> fullHalfDay, List<string> remarks, List<string> totalDays)
         {
             var model = new DayOffRequestVM();
 
-            model.DayOffRequestDetailsDisplay = GetDayOffRequestsDetailsDisplay(dayOffType, startDate, endDate, fullHalfDay, remarks);
+            model.DayOffRequestDetailsDisplay = GetDayOffRequestsDetailsDisplay(dayOffType, startDate, endDate, fullHalfDay, remarks, totalDays);
 
             return model;
         }
 
-        private IEnumerable<DayOffRequestDetailDisplayVM> GetDayOffRequestsDetailsDisplay(List<string> dayOffType, List<string> startDate, List<string> endDate, List<string> fullHalfDay, List<string> remarks)
+        private IEnumerable<DayOffRequestDetailDisplayVM> GetDayOffRequestsDetailsDisplay(List<string> dayOffType, List<string> startDate, List<string> endDate, List<string> fullHalfDay, List<string> remarks, List<string> totalDays)
         {
             var dayOffRequestDetailDisplayData = new List<DayOffRequestDetailDisplayVM>();
 
-            int dataCount = dayOffType.Count;
+            string[] dayOffTypeRequest = dayOffType[0].Split(',');
+            string[] startDateRequest = startDate[0].Split(',');
+            string[] endDateRequest = endDate[0].Split(',');
+            string[] fullHalfRequest = fullHalfDay[0].Split(',');
+            string[] remarksRequest = remarks[0].Split(',');
+            string[] totalDaysRequest = totalDays[0].Split(',');
+
+            var dayOffRequest = new List<string>();
+            var startRequest = new List<string>();
+            var endRequest = new List<string>();
+            var fullOrHalfRequest = new List<string>();
+            var remarkRequest = new List<string>();
+            var totalRequest = new List<string>();
+
+            foreach (string checkDayOff in dayOffTypeRequest)
+            {
+                dayOffRequest.Add(checkDayOff);
+            }
+
+            foreach(string checkStartDate in startDateRequest)
+            {
+                startRequest.Add(checkStartDate);
+            }
+            
+            foreach(string checkEndDate in endDateRequest)
+            {
+                endRequest.Add(checkEndDate);
+            }
+            
+            foreach(string checkFullOrHalf in fullHalfRequest)
+            {
+                fullOrHalfRequest.Add(checkFullOrHalf);
+            }
+
+            foreach(string checkRemarks in remarksRequest)
+            {
+                remarkRequest.Add(checkRemarks);
+            }
+
+            foreach (string checkTotalDays in totalDaysRequest)
+            {
+                totalRequest.Add(checkTotalDays);
+            }
+
+            int dataCount = dayOffRequest.Count;
 
             for (int i = 1; i <= dataCount; i++)
             {
-                dayOffRequestDetailDisplayData.Add(ConvertToDayOffRequestDetailsDisplay(dayOffType[i-1], startDate[i-1], endDate[i-1], fullHalfDay[i-1], remarks[i-1]));
+                dayOffRequestDetailDisplayData.Add(ConvertToDayOffRequestDetailsDisplay(dayOffRequest[i-1], startRequest[i-1], endRequest[i-1], fullOrHalfRequest[i-1], remarkRequest[i-1], totalRequest[i-1]));
             }
 
             return dayOffRequestDetailDisplayData;
         }
 
-        private DayOffRequestDetailDisplayVM ConvertToDayOffRequestDetailsDisplay(string dayOffType, string startDate, string endDate, string fullHalfDay, string remarks)
+        private DayOffRequestDetailDisplayVM ConvertToDayOffRequestDetailsDisplay(string dayOffType, string startDate, string endDate, string fullHalfDay, string remarks, string totalDays)
         {
             var dayOffRequestDetailDisplay = new DayOffRequestDetailDisplayVM();
+            string dayOffTypeRequest = "";
 
-            dayOffType.IndexOf(",");
+            if (dayOffType == "AnnualDay-Off")
+            {
+                dayOffTypeRequest = "Annual Day-Off";
+            }
+            else if(dayOffType == "SickDay-Off")
+            {
+                dayOffTypeRequest = "Sick Day-Off";
+            }
+            else if(dayOffType == "SpecialDay-Off")
+            {
+                dayOffTypeRequest = "Special Day-Off";
+            }
+            else if (dayOffType == "UnpaidDay-Off")
+            {
+                dayOffTypeRequest = "Unpaid Day-Off";
+            }
+            else if (dayOffType == "CompensatoryTime")
+            {
+                dayOffTypeRequest = "Compensatory Time";
+            }
+            else if (dayOffType == "Maternity")
+            {
+                dayOffTypeRequest = "Maternity";
+            }
+            else if (dayOffType == "Miscarriage")
+            {
+                dayOffTypeRequest = "Miscarriage";
+            }
+            else if (dayOffType == "Paternity")
+            {
+                dayOffTypeRequest = "Paternity";
+            }
+            else if (dayOffType == "MarriageoftheProfessional")
+            {
+                dayOffTypeRequest = "Marriage of the Professional";
+            }
+            else if (dayOffType == "MarriageoftheProfessional'sChildren")
+            {
+                dayOffTypeRequest = "Marriage of the Professional's Children";
+            }
+            else if (dayOffType == "CircumcisionoftheProfessional'sSons")
+            {
+                dayOffTypeRequest = "Circumcision of the Professional's Sons";
+            }
+            else if (dayOffType == "BaptismoftheProfessional'sChildren")
+            {
+                dayOffTypeRequest = "Baptism of the Professional's Children";
+            }
+            else if (dayOffType == "DeathoftheProfessional’sdependent(i.e. spouse or children)orparentorparentin-laws")
+            {
+                dayOffTypeRequest = "Death of the Professional’s dependent (i.e. spouse or children) or parent or parent in-laws";
+            }
+            else if (dayOffType == "Deathofamemberofthe Professional’shouseholdotherthantheProfessional’sdependentorparent")
+            {
+                dayOffTypeRequest = "Death of a member of the Professional’s household other than the Professional’s dependent or parent";
+            }
+            else if (dayOffType == "Professional’sseparationdateisonorafter19ofthemonth")
+            {
+                dayOffTypeRequest = "Professional’s separation date is on or after 19 of the month";
+            }
+            else if (dayOffType == "UnscheduledclosingofMCA-Indonesiaoffice(s)")
+            {
+                dayOffTypeRequest = "Unscheduled closing of MCA-Indonesia office(s)";
+            }
+            else if (dayOffType == "VotingDay")
+            {
+                dayOffTypeRequest = "Voting Day";
+            }
+            else if (dayOffType == "Serviceasacourtwitness")
+            {
+                dayOffTypeRequest = "Service as  a court witness";
+            }
+            else if (dayOffType == "Other")
+            {
+                dayOffTypeRequest = "Other";
+            }
 
-
-            dayOffRequestDetailDisplay.DayOffType = Convert.ToString(dayOffType);
+            dayOffRequestDetailDisplay.DayOffType = Convert.ToString(dayOffTypeRequest);
             dayOffRequestDetailDisplay.RequestStartDate = Convert.ToString(startDate);
             dayOffRequestDetailDisplay.RequestEndDate = Convert.ToString(endDate);
 
             string subFullHalfDay1 = Convert.ToString(fullHalfDay).Substring(0,4);
-            string subFullHalfDay2 = Convert.ToString(fullHalfDay).Substring(4,4);
+            string subFullHalfDay2 = Convert.ToString(fullHalfDay).Substring(4,3);
             string concFullHalfDay = subFullHalfDay1 + " " + subFullHalfDay2;
 
             dayOffRequestDetailDisplay.FullHalf = concFullHalfDay;
-            dayOffRequestDetailDisplay.Remarks = Convert.ToString(remarks);
+
+            var s = remarks;
+            s = string.Join(
+                    string.Empty,
+                    s.Select((x, i) => (
+                         char.IsUpper(x) && i > 0 &&
+                         (char.IsLower(s[i - 1]) || (i < s.Count() - 1 && char.IsLower(s[i + 1])))
+                    ) ? " " + x : x.ToString()));
+
+            dayOffRequestDetailDisplay.Remarks = Convert.ToString(s);
+            dayOffRequestDetailDisplay.StrTotalDays = Convert.ToString(totalDays);
 
             return dayOffRequestDetailDisplay;
         }

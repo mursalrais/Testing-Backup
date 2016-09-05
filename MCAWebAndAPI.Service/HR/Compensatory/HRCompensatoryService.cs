@@ -516,34 +516,52 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 if (viewModel.CmpActiv != null)
                 {
-                    if (Item.CheckIfUpdated(viewModel))
+                    if (viewModel.CmpID == null)
                     {
-                        if (viewModel.CmpID == null)
+                        var cratedValueDetail = new Dictionary<string, object>();
+
+                        cratedValueDetail.Add("compensatoryrequest", cmpID);
+                        cratedValueDetail.Add("Title", viewModel.CmpActiv);
+                        cratedValueDetail.Add("compensatorydate", viewModel.CmpDate);
+                        cratedValueDetail.Add("compensatorystarttime", viewModel.StartTime);
+                        cratedValueDetail.Add("compensatoryendtime", viewModel.FinishTime);
+                        cratedValueDetail.Add("totalhours", viewModel.CmpTotalHours);
+                        cratedValueDetail.Add("totaldays", viewModel.TotalDay);
+                        cratedValueDetail.Add("remarks", viewModel.remarks);
+                        cratedValueDetail.Add("compensatorystatus", "Pending Approval 1 of 2");
+
+                        try
                         {
-                            var cratedValueDetail = new Dictionary<string, object>();
-
-                            cratedValueDetail.Add("compensatoryrequest", cmpID);
-                            cratedValueDetail.Add("Title", viewModel.CmpActiv);
-                            cratedValueDetail.Add("compensatorydate", viewModel.CmpDate);
-                            cratedValueDetail.Add("compensatorystarttime", viewModel.StartTime);
-                            cratedValueDetail.Add("compensatoryendtime", viewModel.FinishTime);
-                            cratedValueDetail.Add("totalhours", viewModel.CmpTotalHours);
-                            cratedValueDetail.Add("totaldays", viewModel.TotalDay);
-                            cratedValueDetail.Add("remarks", viewModel.remarks);
-                            cratedValueDetail.Add("compensatorystatus", "Pending Approval 1 of 2");
-
-                            try
+                            SPConnector.AddListItem(SP_COMDET_LIST_NAME, cratedValueDetail, _siteUrl);
+                        }
+                        catch (Exception e)
+                        {
+                            logger.Error(e.Message);
+                            throw e;
+                        }
+                        continue;
+                    }
+                    else
+                    {
+                        if (Item.CheckIfDeleted(viewModel))
+                        {
+                            if (viewModel.CmpID != null)
                             {
-                                SPConnector.AddListItem(SP_COMDET_LIST_NAME, cratedValueDetail, _siteUrl);
-                            }
-                            catch (Exception e)
-                            {
-                                logger.Error(e.Message);
-                                throw e;
+                                try
+                                {
+                                    SPConnector.DeleteListItem(SP_COMDET_LIST_NAME, viewModel.CmpID, _siteUrl);
+                                }
+                                catch (Exception e)
+                                {
+                                    logger.Error(e);
+                                    throw e;
+                                }
+                                continue;
                             }
                         }
                         else
                         {
+
                             var updatedValue = new Dictionary<string, object>();
 
                             updatedValue.Add("Title", viewModel.CmpActiv);
@@ -562,22 +580,22 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
                             if (viewModels.StatusForm == "Draft" || viewModels.StatusForm == "Unapprove")
                             {
-                                updatedValue.Add("crstatus", "Draft");
+                                updatedValue.Add("compensatorystatus", "Draft");
                             }
 
                             if (viewModels.StatusForm == "Reject")
                             {
-                                updatedValue.Add("crstatus", "Rejected");
+                                updatedValue.Add("compensatorystatus", "Rejected");
                             }
 
                             if (viewModels.StatusForm == "Pending Approval 1 of 2")
                             {
-                                updatedValue.Add("crstatus", "Pending Approval 2 of 2");
+                                updatedValue.Add("compensatorystatus", "Pending Approval 2 of 2");
                             }
 
                             if (viewModels.StatusForm == "Pending Approval 2 of 2" || viewModels.StatusForm == "submithr")
                             {
-                                updatedValue.Add("crstatus", "Approved");
+                                updatedValue.Add("compensatorystatus", "Approved");
                             }
 
                             try
@@ -592,23 +610,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                             }
                         }
                         continue;
-                    }
-                       
-                    else if (Item.CheckIfDeleted(viewModel))
-                    {
-                        if (viewModel.CmpID != null)
-                        {
-                            try
-                            {
-                                SPConnector.DeleteListItem(SP_COMDET_LIST_NAME, viewModel.CmpID, _siteUrl);
-                            }
-                            catch (Exception e)
-                            {
-                                logger.Error(e);
-                                throw e;
-                            }
-                            continue;
-                        }
                     }
                 }
             }
@@ -704,7 +705,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             int? idbal = null;
 
-            int? getent = null;
+            double getent = 0;
 
             var caml = @"<View>  
                         <Query> 
@@ -715,7 +716,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             foreach (var item in SPConnector.GetList(SP_COMBAL_LIST_NAME, _siteUrl, caml))
             {
                 idbal = Convert.ToInt32(item["ID"]);
-                getent = Convert.ToInt32(item["entitlement"]);
+                getent = Convert.ToDouble(item["entitlement"]);
             }
 
             if (header.StatusForm == " ")
@@ -742,9 +743,14 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 columnValues.Add("crstatus", "Approved");
 
-                IEnumerable<CompensatoryDetailVM> getbalance = header.CompensatoryDetails;
+                double entitlement = 0;
 
-                updateBalance.Add("entitlement", getent + getbalance.Count());
+                foreach(var a in header.CompensatoryDetails)
+                {
+                    entitlement = entitlement + Convert.ToDouble(a.TotalDay);
+                }
+
+                updateBalance.Add("entitlement", getent + entitlement);
 
                 if (idbal != null)
                 {
@@ -760,7 +766,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 } else
                 {
                     double finalbalance = 0;
-                    int? entitlement = getbalance.Count();
                     var addValues = new Dictionary<string, object>();
 
                     addValues.Add("entitlement", entitlement);
@@ -781,6 +786,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     }
                 }
             }
+
+            columnValues.Add("edited", SPConnector.GetUser(header.cmpEmail, _siteUrl, "hr"));
 
             try
             {
@@ -840,9 +847,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     compensatorylistDetails.Add(ConvertToCompDetailVM(detailitem));
                 }
 
+                var compdetail = from a in compensatorylistDetails where a.AppStatus != "Rejected" select a;
+
                 foreach (var cekdate in header.CompensatoryDetails)
                 {
-                    foreach (var getdate in compensatorylistDetails)
+                    foreach (var getdate in compdetail)
                     {
                         if (cekdate.CmpDate == getdate.CmpDate)
                         {

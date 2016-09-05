@@ -15,7 +15,7 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
 
         TimesheetVM GetTimesheetLoadUpdate(int? id, string userlogin);
 
-        IEnumerable<TimesheetDetailVM> GetTimesheetDetails(string userlogin, DateTime period);
+        IEnumerable<TimesheetDetailVM> GetTimesheetDetails(string userlogin, DateTime period, string strName);
 
         IEnumerable<TimesheetDetailVM> AppendWorkingDays(int? id,IEnumerable<TimesheetDetailVM> currentDays, 
             DateTime from, DateTime to, bool isFullDay, string location = null, int? locationid = null);
@@ -35,6 +35,7 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
         IEnumerable<TimesheetDetailVM> DeleteSelectedWorkingDays(int? headerId,IEnumerable<TimesheetDetailVM> currentDays , 
             DateTime from, DateTime to);
 
+        TimesheetVM GetTimesheetProfessional(string userlogin);
 
     }
 }

@@ -8,12 +8,15 @@
     ViewBag.Title = "Input Compensatory HR";
 }
 
-@using (Html.BeginForm("CreateCompensatoryData", "HRCompensatory", FormMethod.Post,
-                                                                                                     new
-                                                                                                     {
-                                                                                                         @class = "form-horizontal",
-                                                                                                         enctype = "multipart/form-data"
-                                                                                                     }))
+@using (Ajax.BeginForm("CreateCompensatoryData", "HRCompensatory", FormMethod.Post,
+            new AjaxOptions
+            {
+                OnBegin = "onBeginForm",
+                OnComplete = "onCompleteForm",
+                OnSuccess = "onSuccessFormEmbed",
+                OnFailure = "onFailureForm"
+            }, new { @class = "form-horizontal" }))
+
 {
     <fieldset>
         @Html.HiddenFor(m => m.cmpID)
@@ -59,8 +62,10 @@
         </div>
         <legend>Compensatory list</legend>
         <div id="compensatorylist" class="row"></div>
-
-
+        <button id="submithr-button" class="btn btn-primary" type="button">
+            <i class="fa fa-save"></i>
+            Submit
+        </button>
     </fieldset>
 }
 
@@ -68,10 +73,6 @@
 {
 <div class="row pull-right">
     <div class="col-sm-12">
-        <button id="submithr-button" class="btn btn-primary" type="button">
-            <i class="fa fa-save"></i>
-            Submit
-        </button>
         <button id="submit-draft-button" class="btn btn-primary" type="button">
             <i class="fa fa-clipboard"></i>
             Save As Draft
@@ -374,7 +375,7 @@
                                         model.set("CmpTotalHours", range);
                                     }
 
-                                    if (range >= 4) {
+                                    if (range > 4) {
                                         totday = 1
                                     } else {
                                         totday = 0.5

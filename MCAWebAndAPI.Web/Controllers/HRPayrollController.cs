@@ -16,6 +16,9 @@ using MCAWebAndAPI.Model.Common;
 using Elmah;
 using MCAWebAndAPI.Service.JobSchedulers.Schedulers;
 using System.Globalization;
+using System.Data;
+using MCAWebAndAPI.Model.ViewModel.Control;
+using System.Text.RegularExpressions;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -123,6 +126,8 @@ namespace MCAWebAndAPI.Web.Controllers
             {
                 array[i].DateOfNewFee = BindHelper.BindDateInGrid("MonthlyFeeDetails",
                     i, "DateOfNewFee", form);
+                array[i].EndDateFee = BindHelper.BindDateInGrid("MonthlyFeeDetails",
+                    i, "EndDateFee", form);
             }
             return array;
         }
@@ -315,6 +320,71 @@ namespace MCAWebAndAPI.Web.Controllers
             var day = Convert.ToInt32(periodString[3].Split('.')[0]);
 
             return new DateTime(year, month, day);
+        }
+
+        [HttpGet]
+        public ActionResult Upload(string siteUrl = null)
+        {
+
+            if (siteUrl == null)
+                return RedirectToAction("Index", "Error", new { errorMessage = "Parameter cannot be null" });
+
+
+            SessionManager.Set("SiteUrl", siteUrl);
+
+            var emptyTable = GenerateEmptyDataTable();
+            SessionManager.Set("CSVDataTable", emptyTable);
+
+            var viewModel = new CSVVM();
+            viewModel.ListName = "Monthly Fee";
+            viewModel.DataTable = emptyTable;
+
+            return View(viewModel);
+        }
+
+        public ActionResult SubmitUpload(string listName)
+        {
+            // Get existing session variable
+            var sessionVariables = SessionManager.Get<DataTable>("CSVDataTable") ?? new DataTable();
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+
+            //cek apakah header / item
+            int? latestIDHeader = 0;
+            int? latestIDDetail = 0;
+            List<int> idsHeader = new List<int>();
+            List<int> idsDetail = new List<int>();
+            var TableHeader = new DataTable();
+            var TableDetail = new DataTable();
+
+            var listNameHeader = "Asset Acquisition";
+            var listNameHeaderMemo = "Acceptance Memo";
+            var listNameDetail = "Asset Acquisition Details";
+            int IDProfessional;
+            DateTime DateofNewFee;
+            DateTime EndDateFee;
+            int MonthlyFee;
+            int Currency;
+            foreach (DataRow d in SessionManager.Get<DataTable>("CSVDataTable").Rows)
+            {
+                IDProfessional = Convert.ToInt32(d.ItemArray[0]);
+                DateofNewFee = Convert.ToDateTime(d.ItemArray[1]);
+                EndDateFee = Convert.ToDateTime(d.ItemArray[2]);
+            }
+            //return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAcquisition);
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAcquisition);
+        }
+
+        private DataTable GenerateEmptyDataTable()
+        {
+            DataTable table = new DataTable();
+
+            var column = new DataColumn("ID", typeof(int));
+            table.Columns.Add(column);
+            table.PrimaryKey = new DataColumn[] { column };
+            table.Columns.Add("Title", typeof(string));
+
+            table.Rows.Add(0, string.Empty);
+            return table;
         }
 
         private string ConvertToRelativeUrl(string absoluteUrl)

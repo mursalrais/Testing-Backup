@@ -4,46 +4,36 @@
 
 <form class="form-horizontal" method="post" action="/ASSAssetCheckResultApprove/Create" id="create-asset-check-result-approve">
     <fieldset>
-        <legend>Form Asset Check Result</legend>
+        <legend>Asset Check Result</legend>
         <div class="col-md-6">
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.Header.FormId).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Html.EditorFor(m => m.Header.FormId)
-                </div>
-                <div class="col-md-6">
-                    <a class="btn btn-default" href="#">Search</a>
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Header.CreateDate).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.Header.CreateDate)
+                    @Html.DisplayFor(m => m.Header.FormId)
                 </div>
             </div>
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.Header.CountDate).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Html.EditorFor(m => m.Header.CountDate)
+                    @Html.DisplayFor(m => m.Header.CountDate)
                 </div>
             </div>
-        </div>
-        <div class="col-md-6">
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.Header.CountedBy1).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Html.EditorFor(m => m.Header.CountedBy1)
+                    @Html.DisplayFor(m => m.Header.CountedBy1)
                 </div>
             </div>
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.Header.CountedBy2).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Html.EditorFor(m => m.Header.CountedBy2)
+                    @Html.DisplayFor(m => m.Header.CountedBy2)
                 </div>
             </div>
             <div class="form-group">
-                <div class="col-md-8" style="float:right">
-                    <a style="float:right" class="btn btn-default" href="#">Get Data</a>
+                @Html.Bootstrap().LabelFor(m => m.Header.CountedBy3).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.DisplayFor(m => m.Header.CountedBy3)
                 </div>
             </div>
         </div>
@@ -54,31 +44,44 @@
                     .Columns(columns =>
                     {
                         columns.Bound(p => p.Item);
-                        columns.Bound(p => p.AssetNo);
-                        columns.Bound(p => p.SubAssetNo);
-                        columns.Bound(p => p.AssetDescription);
+                        columns.Bound(p => p.AssetSubAsset);
                         columns.Bound(p => p.SerialNo);
-                        columns.Bound(p => p.LocationName);
+                        columns.Bound(p => p.Province);
+                        columns.Bound(p => p.Location);
                         columns.Bound(p => p.Status);
+                        columns.Bound(p => p.Existense);
+                        columns.Bound(p => p.Condition);
+                        columns.Bound(p => p.Specifiation);
                         columns.Bound(p => p.SystemQty);
                         columns.Bound(p => p.PhysicalQty);
-                        columns.Bound(p => p.DifferentQty);
-                        columns.Bound(p => p.Scrap);
+                        columns.Bound(p => p.DifferenceQty);
+                        columns.Bound(p => p.Dispose);
                         columns.Bound(p => p.Remarks);
-                        columns.Command(command => { command.Edit(); command.Destroy(); }).Width(250);
                     })
-                    .ToolBar(toolbar => toolbar.Create())
-                    .Editable(editable => editable.Mode(GridEditMode.PopUp))
                     .DataSource(dataSource => dataSource
                         .Ajax()
                         .Model(model => model.Id(p => p.Id))
-                        .Create(update => update.Action("EditingPopup_Create", "ASSAssetCheckResultApprove"))
-                        .Update(update => update.Action("EditingPopup_Update", "ASSAssetCheckResultApprove"))
-                        .Destroy(update => update.Action("EditingPopup_Destroy", "ASSAssetCheckResultApprove"))
                 )
                 )
             </div>
         </div>
+        <div>
+            <center>
+                <input class="k-button k-button-icontext k-grid-add" type="button" onclick="approveCheckResult()" value="Approve" />
+                <input class="k-button k-button-icontext k-grid-add" type="button" onclick="rejectCheckResult()" value="Reject" />
+            </center>
+        </div>
     </fieldset>
 
 </form>
+
+<script>
+    function approveCheckResult() {
+        // TO DO untuk memanggil Controller
+    }
+
+    function rejectCheckResult() {
+        // TO DO untuk memanggil Controller
+    }
+
+</script>

@@ -64,7 +64,7 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
             _service.SetSiteUrl(siteUrl);
-            SessionManager.Set(SharedFinanceController.Session_SiteUrl, siteUrl);
+            SessionManager.Set(SharedController.Session_SiteUrl, siteUrl);
 
             var viewModel = _service.GetPettyCashPaymentVoucher(null);
             SetAdditionalSettingToViewModel(ref viewModel, true);
@@ -76,7 +76,7 @@ namespace MCAWebAndAPI.Web.Controllers
             if (ID > 0)
             {
                 siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
-                SessionManager.Set(SharedFinanceController.Session_SiteUrl, siteUrl);
+                SessionManager.Set(SharedController.Session_SiteUrl, siteUrl);
 
                 _service.SetSiteUrl(siteUrl);
                 
@@ -93,10 +93,15 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create(FormCollection form, PettyCashPaymentVoucherVM viewModel)
+        public async Task<ActionResult> Create(string actionType, FormCollection form, PettyCashPaymentVoucherVM viewModel)
         {
-            var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl);
+            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl);
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            if (actionType != "Save")
+            {
+                return Redirect(string.Format(FirstPageUrl, siteUrl));
+            }
 
             int? headerID = null;
             try
@@ -120,10 +125,15 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Edit(FormCollection form, PettyCashPaymentVoucherVM viewModel)
+        public async Task<ActionResult> Edit(string actionType, FormCollection form, PettyCashPaymentVoucherVM viewModel)
         {
-            var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl);
+            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl);
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            if (actionType != "Save")
+            {
+                return Redirect(string.Format(FirstPageUrl, siteUrl));
+            }
 
             try
             {
@@ -148,9 +158,9 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult Print(FormCollection form, PettyCashPaymentVoucherVM viewModel)
         {
             string RelativePath = PrintPageUrl;
-            string domain = "http://" + Request.Url.Authority + "/img/logo.png";
+            string domain = new SharedFinanceController().GetImageLogoPrint(Request.IsSecureConnection, Request.Url.Authority);
 
-            var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl);
+            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl);
             _service.SetSiteUrl(siteUrl);
             viewModel = _service.GetPettyCashPaymentVoucher(viewModel.ID);
 
@@ -225,7 +235,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetPettyCashPaymentVouchers()
         {
-            var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl);
+            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl);
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
             var vendors = PettyCashPaymentVoucherService.GetPettyCashPaymentVouchers(siteUrl);

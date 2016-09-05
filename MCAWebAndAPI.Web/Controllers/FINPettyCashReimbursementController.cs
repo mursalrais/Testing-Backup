@@ -59,8 +59,9 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult Print(int? ID=null)
         {
             string RelativePath = PrintPageUrl;
+            string domain = "http://" + Request.Url.Authority + "/img/logo.png";
 
-            var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl)?? ConfigResource.DefaultBOSiteUrl;
+            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl)?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);
 
             var viewModel = service.GetPettyCashReimbursement(ID);
@@ -77,7 +78,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 view.View.Render(context, writer);
                 writer.Flush();
                 content = writer.ToString();
-
+                content = content.Replace("{XIMGPATHX}", domain);
                 // Get PDF Bytes
                 try
                 {
@@ -133,7 +134,7 @@ namespace MCAWebAndAPI.Web.Controllers
             return Json(vendors.Select(e => new
             {
                 e.ID,
-                e.Title
+                Title = e.Title + " - " + e.Name
             }), JsonRequestBehavior.AllowGet);
         }
 

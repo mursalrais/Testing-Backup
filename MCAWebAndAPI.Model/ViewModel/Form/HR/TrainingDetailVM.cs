@@ -1,5 +1,6 @@
 ﻿using MCAWebAndAPI.Model.Common;
 using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.HR
@@ -15,6 +16,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// Title
         /// </summary>
         public string Subject { get; set; }
+
+        [DisplayName("Training Year")]
+        public string StrTrainingYear { get; set; }
 
         /// <summary>
         /// trainingyear
@@ -39,5 +43,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
                 _year = value;
             }
         }
+
+
     }
 }

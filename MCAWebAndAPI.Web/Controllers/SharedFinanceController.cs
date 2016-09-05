@@ -11,7 +11,7 @@ namespace MCAWebAndAPI.Web.Controllers
 {
     public class SharedFinanceController: Controller
     {
-        public const string Session_SiteUrl = "SiteUrl";
+        public const string PrintImageLogo = "{0}/img/logo.png";
 
         public JsonResult GetWBSMaster(string siteUrl)
         {
@@ -35,5 +35,19 @@ namespace MCAWebAndAPI.Web.Controllers
             }), JsonRequestBehavior.AllowGet);
         }
 
+        public string GetImageLogoPrint(bool isHttps, string domain)
+        {
+            string url = string.Empty;
+            if (isHttps)
+            {
+                url = "https://";
+            }
+            else
+            {
+                url = "http://";
+            }
+
+            return string.Format(PrintImageLogo, url + domain);
+        }
     }
 }

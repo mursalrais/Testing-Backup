@@ -1,0 +1,56 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Finance
+@model IEnumerable<PettyCashJournalItemVM>
+
+<div class="col-xs-12">
+    @(Html.Kendo().Grid(Model)
+    .Name("ItemDetails")
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.Date).ClientTemplate("#= Date #" + "<input type='hidden' name='ItemDetails[#= getItem(data)#].Date' value='#= Date #' />");
+
+        columns.Bound(p => p.PCVNo).ClientTemplate("#= PCVNo #" + "<input type='hidden' name='ItemDetails[#= getItem(data)#].PCVNo' value='#= PCVNo #' />");
+
+        columns.Bound(p => p.Payee).ClientTemplate("#= Payee #" + "<input type='hidden' name='ItemDetails[#= getItem(data)#].Payee' value='#= Payee #' />");
+
+        columns.Bound(p => p.DescOfExpenses).ClientTemplate("#= DescOfExpenses #" + "<input type='hidden' name='ItemDetails[#= getItem(data)#].DescOfExpenses' value='#= DescOfExpenses #' />");
+
+        columns.Bound(p => p.Fund).ClientTemplate("#= Fund #" + "<input type='hidden' name='ItemDetails[#= getItem(data)#].Fund' value='#= Fund #' />");
+
+        columns.Bound(p => p.WBS).ClientTemplate("#= WBS #" + "<input type='hidden' name='ItemDetails[#= getItem(data)#].WBS' value='#= WBS #' />");
+
+        columns.Bound(p => p.GL).ClientTemplate("#= GL #" + "<input type='hidden' name='ItemDetails[#= getItem(data)#].GL' value='#= GL #' />");
+
+        columns.Bound(p => p.Amount).ClientTemplate("#= Amount #" + "<input type='hidden' name='ItemDetails[#= getItem(data)#].Amount' value='#= Amount #' />");
+    })
+    .Events(events => events.DataBound("onDataBound"))
+    .DataSource(dataSource => dataSource.Ajax()
+        .Model(model =>
+        {
+            model.Id(p => p.ID);
+        })
+        .ServerOperation(false)
+        .Read(read => read.Action("GetPettyCashTransaction", "FINPettyCashJournal").Data("GetDateParameter"))
+        )
+    )
+</div>
+
+<script>
+    function getItem(dataItem) {
+        var data = $("#ItemDetails").data("kendoGrid").dataSource.data();
+        return data.indexOf(dataItem);
+    }
+
+    function GetDateParameter() {
+        return { dateFrom: $("#DateFrom").val(), dateTo: $("#DateTo").val(), op: $("#Operation").val() };
+    }
+    function onDataBound(arg) {
+        var grid = $("#ItemDetails").data("kendoGrid");
+        var data = grid.dataSource.view();
+        var sum = 0;
+        for (var i = 0; i <= (data.length - 1) ; i++) {
+            sum = sum + data[i].Amount;
+        }
+        $("#TotalAmount").val(sum);
+        $("#CashOnhand").val($("#TotalPettyCashFund").val() - sum);
+    }
+</script>

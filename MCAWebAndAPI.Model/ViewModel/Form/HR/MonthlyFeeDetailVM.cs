@@ -16,6 +16,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [UIHint("Date")]
         public DateTime? DateOfNewFee { get; set; } = DateTime.UtcNow;
 
+        [UIHint("Date")]
+        public DateTime? EndDateFee { get; set; } = new DateTime(2099,12,31);  
+
         /// <summary>
         /// monthlyfee
         /// </summary>

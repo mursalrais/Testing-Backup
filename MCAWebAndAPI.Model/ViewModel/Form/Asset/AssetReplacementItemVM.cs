@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 using MCAWebAndAPI.Model.ViewModel.Control;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using MCAWebAndAPI.Model.Common;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 {
-    public class AssetReplacementItemVM
+    public class AssetReplacementItemVM : Item
     {
-        public int ID { get; set; }
         [UIHint("InGridAjaxComboBox")]
         public AjaxComboBoxVM AssetSubAsset { get; set; } = new AjaxComboBoxVM();
 

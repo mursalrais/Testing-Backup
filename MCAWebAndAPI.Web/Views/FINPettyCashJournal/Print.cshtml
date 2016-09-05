@@ -1,0 +1,148 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Finance
+@model PettyCashJournalVM
+@{
+    ViewBag.Title = "Print Petty Cash Replenishment Journal";
+    Layout = "~/Views/Shared/_LayoutPDF.cshtml";
+}
+
+<div class="form-horizontal">
+    <div class="row" style="text-align: center; margin-top: 20px;">
+        <div id="logo-group" class="row">
+            <img src="{XIMGPATHX}" alt="MCA Indonesia" width="100">
+        </div>
+        <div class="row" style="margin-top:5px;font-weight:bold;">
+            MCA Indonesia
+        </div>
+        <div class="row" style="margin-top:10px; font-weight:bold;">
+            Petty Cash Replenishment Journal
+        </div>
+    </div>
+
+    <div class="row" style="text-align: left; padding:25px;">
+        <table width="100%" class="b">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>PCV No.</th>
+                    <th>Payee</th>
+                    <th>Description of Expenses</th>
+                    <th>Fund</th>
+                    <th>WBS</th>
+                    <th>GL</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var item in Model.ItemDetails) { 
+                <tr>
+                    <td>@item.Date</td>
+                    <td>@item.PCVNo</td>
+                    <td>@item.Payee</td>
+                    <td>@item.DescOfExpenses</td>
+                    <td>@item.Fund</td>
+                    <td>@item.WBS</td>
+                    <td>@item.GL</td>
+                    <td>@item.Amount</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="row" style="padding:25px;">
+            <table class="pull-right">
+                <tr>
+                    <td width="250">Total amount to be replenished</td>
+                    <td width="20">:</td>
+                    <td>@Model.TotalAmount</td>
+                </tr>
+                <tr>
+                    <td>Advances for operational car 1</td>
+                    <td>:</td>
+                    <td>@Model.AdvancesForOperationalCar1</td>
+                </tr>
+                <tr>
+                    <td>Advances for operational car 2</td>
+                    <td>:</td>
+                    <td>@Model.AdvancesForOperationalCar2</td>
+                </tr>
+                <tr>
+                    <td>Advances for operational car 3</td>
+                    <td>:</td>
+                    <td>@Model.AdvancesForOperationalCar3</td>
+                </tr>
+                <tr>
+                    <td>Cash on hand</td>
+                    <td>:</td>
+                    <td>@Model.CashOnhand</td>
+                </tr>
+                <tr>
+                    <td>Total petty cash fund </td>
+                    <td>:</td>
+                    <td>@Model.TotalPettyCashFund</td>
+                </tr>
+            </table>
+        </div>
+        
+        <div class="row" style="padding:5px 25px 25px 25px;">
+            <p>This is to certify that the above expenses are actual and necessary expenses incurred in connection with the implementation of the Indonesia Compact.</p>
+            <table width="100%">
+                <tbody>
+                    <tr>
+                        <td width="20%">Reviewed By</td>
+                        <td width="20%">Approved By</td>
+                        <td width="20%">Approved By</td>
+                        <td width="20%">Approved By</td>
+                        <td width="20%">Petty Cash Custodian <br />Signature Over Printed Name</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div style="height:100px; border-bottom:1px solid black; width:150px;"></div>
+                        </td>
+                        <td>
+                            <div style="height:100px; border-bottom:1px solid black; width:150px;"></div>
+                        </td>
+                        <td>
+                            <div style="height:100px; border-bottom:1px solid black; width:150px;"></div>
+                        </td>
+                        <td>
+                            <div style="height:100px; border-bottom:1px solid black; width:150px;"></div>
+                        </td>
+                        <td>
+                            <div style="height:100px; border-bottom:1px solid black; width:150px;"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="20%" style="font-style:italic;">Finance Specialist</td>
+                        <td width="20%" style="font-style:italic;">DED for Operations Support/CFO</td>
+                        <td width="20%" style="font-style:italic;">Senior Accounting Specialist, FA</td>
+                        <td width="20%" style="font-style:italic;">Fiscal Agent Manager, FA</td>
+                        <td width="20%" style="font-style:italic;"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="5" style="height: 100px;">Date: @DateTime.Now.ToString("yyyy/MM/dd")<div style="border-bottom:1px solid black; width:250px;"></div></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    table.b td, table.b tr, table.b th {
+        border: 1px solid black;
+        text-align: left;
+        padding: 5px;
+    }
+
+    table.b {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    table.b th {
+        background-color: #cecece;
+    }
+    table{
+        padding: 5px!important;
+    }
+</style>
