@@ -9,7 +9,7 @@
     <div style="border:solid 1px;margin-bottom:10px;">
         <div class="row" style="text-align: center; margin-top: 20px;">
             <div id="logo-group" class="row">
-                <img src="~/img/logo.png" alt="MCA Indonesia" width="150">
+                <img src="{XIMGPATHX}" alt="MCA Indonesia" width="100">
             </div>
             <div class="row" style="margin-top:5px;font-weight:bold;">
                 MCA Indonesia
@@ -29,7 +29,7 @@
                 <tbody>
                     <tr>
                         <td width="150px">Date</td>
-                        <td>:</td>
+                        <td width="20px">:</td>
                         <td>@Model.Date.ToString("MM/dd/yyyy")</td>
                     </tr>
 
@@ -53,13 +53,13 @@
                     <tr>
                         <td>WBS</td>
                         <td>:</td>
-                        <td colspan="4">@Model.WBS.Text</td>
+                        <td colspan="4">@Model.WBSDescription</td>
                     </tr>
 
                     <tr>
                         <td>GL</td>
                         <td>:</td>
-                        <td colspan="4">@Model.GL.Text</td>
+                        <td colspan="4">@Model.GLDescription</td>
                     </tr>
                 </tbody>
             </table>

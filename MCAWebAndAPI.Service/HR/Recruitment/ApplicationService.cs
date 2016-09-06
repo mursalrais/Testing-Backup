@@ -250,7 +250,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             var viewModel = new ApplicationDataVM();
 
-            viewModel.Position = FormatUtil.ConvertLookupToID(listItem, "vacantposition") + string.Empty;
+            viewModel.PositionID = (int)FormatUtil.ConvertLookupToID(listItem, "vacantposition");
+            viewModel.Position = GetPositionName(Convert.ToInt32(viewModel.PositionID));
 
             viewModel.ID = Convert.ToInt32(listItem["ID"]);
             viewModel.FirstMiddleName = Convert.ToString(listItem["Title"]);
@@ -379,9 +380,12 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 ID = Convert.ToInt32(item["ID"]),
                 Company = Convert.ToString(item["applicationcompany"]),
                 Position = Convert.ToString(item["Title"]),
+                StrPosition = Convert.ToString(item["Title"]),
                 Remarks = Convert.ToString(item["applicationjobdescription"]),
                 From = Convert.ToDateTime(item["applicationfrom"]),
-                To = Convert.ToDateTime(item["applicationto"])
+                StrFrom = Convert.ToDateTime(item["applicationfrom"]).ToString("MMMM") + " " + Convert.ToDateTime(item["applicationfrom"]).ToLocalTime().Year.ToString(),
+                To = Convert.ToDateTime(item["applicationto"]),
+                StrTo = Convert.ToDateTime(item["applicationto"]).ToString("MMMM") + " " + Convert.ToDateTime(item["applicationto"]).ToLocalTime().Year.ToString()
             };
         }
 
@@ -429,7 +433,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 Subject = Convert.ToString(item["Title"]),
                 Institution = Convert.ToString(item["traininginstitution"]),
                 Remarks = Convert.ToString(item["trainingremarks"]),
-                Year = FormatUtil.ConvertDateStringToDateTime(item, "trainingyear")
+                Year = FormatUtil.ConvertDateStringToDateTime(item, "trainingyear"),
+                StrTrainingYear = Convert.ToDateTime(item["trainingyear"]).ToString("MMMM") + " " + Convert.ToDateTime(item["trainingyear"]).Year.ToString()
             };
         }
 
@@ -494,6 +499,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 Subject = Convert.ToString(item["Title"]),
                 University = Convert.ToString(item["university"]),
                 YearOfGraduation = FormatUtil.ConvertDateStringToDateTime(item, "yearofgraduation"),
+                StrYearOfGraduations = Convert.ToDateTime(item["yearofgraduation"]).ToLocalTime().ToString("MMMM") + " " + Convert.ToDateTime(item["yearofgraduation"]).ToLocalTime().Year,
                 Remarks = Convert.ToString(item["remarks"])
             };
         }
@@ -506,7 +512,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         public void SetApplicationStatus(ApplicationDataVM viewModel)
         {
             var updatedValue = new Dictionary<string, object>();
-            updatedValue.Add("applicationstatus", viewModel.WorkflowStatusOptions.Value);
+            //updatedValue.Add("applicationstatus", viewModel.WorkflowStatusOptions.Value);
+            updatedValue.Add("applicationstatus", viewModel.ApplicationStatus);
 
             try
             {
@@ -620,6 +627,17 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         public async Task CreateApplicationDocumentAsync(int? headerID, IEnumerable<HttpPostedFileBase> documents)
         {
             CreateApplicationDocument(headerID, documents);
+        }
+
+        public string GetPositionName(int positionID)
+        {
+            string positionName = "";
+
+            var positionData = SPConnector.GetListItem(SP_POSMAS_LIST_NAME, positionID, _siteUrl);
+
+            positionName = Convert.ToString(positionData["Title"]);
+
+            return positionName;
         }
     }
 }

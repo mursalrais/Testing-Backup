@@ -107,19 +107,21 @@
             });
             $("#StatusSubmit").click(function () {
                 var isValid = checkGrid();
-                if (isValid) {
+                if (isValid && ($('.form-horizontal').valid())) {
                     $("#Status_Value").prop("value", "Pending Approval");
                     //var projectUnit = $('#DivisionProjectUnit_Value').data("kendoDropDownList").dataItem($('#DivisionProjectUnit_Value').data("kendoDropDownList").select()).ProjectUnit;
                     //$('#ProjectUnitString').prop("value", projectUnit);
                     $("form").submit();
+                    showLoading();
                 }               
                 
             });
             $("#StatusDraft").click(function () {
                 var isValid = checkGrid();
-                if (isValid) {
+                if (isValid && ($('.form-horizontal').valid())) {
                     $("#Status_Value").prop("value", "Draft");
                     $("form").submit();
+                    showLoading();
                 }                
             });
 

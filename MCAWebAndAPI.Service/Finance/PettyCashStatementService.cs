@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 using Microsoft.SharePoint.Client;
+using static MCAWebAndAPI.Model.ViewModel.Form.Finance.PettyCashTransactionItem;
 
 namespace MCAWebAndAPI.Service.Finance
 {
@@ -17,14 +19,21 @@ namespace MCAWebAndAPI.Service.Finance
         {
             List<PettyCashTransactionItem> pettyCashStatements = new List<PettyCashTransactionItem>();
 
-            pettyCashStatements.AddRange(PettyCashPaymentVoucherService.GetPettyCashTransaction(siteUrl, dateFrom, dateTo));
-            pettyCashStatements.AddRange(PettyCashSettlementService.GetPettyCashTransaction(siteUrl, dateFrom, dateTo));
-            pettyCashStatements.AddRange(PettyCashReimbursementService.GetPettyCashTransaction(siteUrl, dateFrom, dateTo));
-            pettyCashStatements.AddRange(PettyCashReplenishmentService.GetPettyCashTransaction(siteUrl, dateFrom, dateTo));
+            //TODO: pls convert to async
+            pettyCashStatements.AddRange(PettyCashPaymentVoucherService.GetPettyCashTransaction(siteUrl, dateFrom, dateTo, Post.CR));
+            pettyCashStatements.AddRange(PettyCashSettlementService.GetPettyCashTransaction(siteUrl, dateFrom, dateTo, Post.CR));
+            pettyCashStatements.AddRange(PettyCashReimbursementService.GetPettyCashTransaction(siteUrl, dateFrom, dateTo, Post.CR));
+            pettyCashStatements.AddRange(PettyCashReplenishmentService.GetPettyCashTransaction(siteUrl, dateFrom, dateTo, Post.DR));
 
-            pettyCashStatements.Sort((x, y) => x.Date.CompareTo(y.Date));
+            List<PettyCashTransactionItem> ordered = pettyCashStatements.OrderBy(o => o.Date).ToList();
+
+            //pettyCashStatements.Sort((x, y) => x.Date.CompareTo(y.Date));
+
+            pettyCashStatements.Sort((x, y) => DateTime.Compare(x.Date, y.Date));
 
             return pettyCashStatements;
+
+            //return ordered;
         }
 
         public void SetSiteUrl(string siteUrl)
@@ -35,7 +44,7 @@ namespace MCAWebAndAPI.Service.Finance
         private PettyCashStatementVM ConvertToVM(ListItem listItem)
         {
             PettyCashStatementVM viewModel = new PettyCashStatementVM();
-        
+
             return viewModel;
         }
 

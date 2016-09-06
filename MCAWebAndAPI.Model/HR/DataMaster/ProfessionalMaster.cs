@@ -43,6 +43,8 @@ namespace MCAWebAndAPI.Model.HR.DataMaster
 
         public string MobileNumber { get; set; }
 
+        public string TaxStatus { get; set; }
+
         #region Used in Payroll
 
         public string BankAccountName { get; set; }

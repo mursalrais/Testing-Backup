@@ -253,8 +253,9 @@
 
             $("#save-button").click(function () {                
                 var isValid = checkGrid();
-                if (isValid) {
+                if (isValid && ($('.form-horizontal').valid())) {
                     $("form").submit();
+                    showLoading();
                 }
 
             });
@@ -263,13 +264,15 @@
                 if (isValid) {
                     $("#Status_Value").prop("value", "Draft");
                     $("form").submit();
+                    showLoading();
                 }
             });
             $("#submit-button").click(function () {
                 var isValid = checkGrid();
-                if (isValid) {
+                if (isValid && ($('.form-horizontal').valid())) {
                     $("#Status_Value").prop("value", "Pending Approval");
                     $("form").submit();
+                    showLoading();
                 }
             });
             var isKeyPosition = $("#IsKeyPosition").val();
@@ -278,7 +281,6 @@
                 $("label[for='Yes']").show();
                 $("label[for='No']").hide();
                 $("#isKeyValuationValue").val(true);
-                console.log(isKeyPosition+" asdijsoi ");
 
             }
             else {

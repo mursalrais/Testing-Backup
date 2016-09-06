@@ -8,7 +8,7 @@ namespace MCAWebAndAPI.Service.Utils
     public class FormatUtil
     {
         private const string SuffixCurrencyIDR = " rupiahs";
-        private const string SuffixCurrencyUSD = " USD dollars";
+        private const string SuffixCurrencyUSD = " dollars";
 
         /// <summary>
         /// Generate digit format string from given value
@@ -114,8 +114,8 @@ namespace MCAWebAndAPI.Service.Utils
             // format: dd/mm/yyyy
             var dateElements = Convert.ToString(item[columnName]).Split('/');
             return new DateTime(year: Convert.ToInt32(dateElements[2]),
-                month: Convert.ToInt32(dateElements[1]),
-                day: Convert.ToInt32(dateElements[0]));
+                month: Convert.ToInt32(dateElements[0]),
+                day: Convert.ToInt32(dateElements[1]));
         }
 
         public static AjaxComboBoxVM ConvertToInGridAjaxComboBox(ListItem item, string columnName)
@@ -193,7 +193,7 @@ namespace MCAWebAndAPI.Service.Utils
                 return null;
 
             var resultDate = (DateTime)date;
-            return string.Format("{0}/{1}/{2}", resultDate.Day, resultDate.Month, resultDate.Year);
+            return string.Format("{0}/{1}/{2}", resultDate.Month, resultDate.Day, resultDate.Year);
         }
 
 

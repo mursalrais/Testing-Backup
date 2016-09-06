@@ -4,12 +4,10 @@ using System.Threading.Tasks;
 using System.Web;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 using MCAWebAndAPI.Model.ViewModel.Form.Shared;
-using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
 using NLog;
 using static MCAWebAndAPI.Model.ViewModel.Form.Finance.Shared;
-using System.Linq;
 
 namespace MCAWebAndAPI.Service.Finance
 {
@@ -19,9 +17,12 @@ namespace MCAWebAndAPI.Service.Finance
 
     public class OutstandingAdvanceService : IOutstandingAdvanceService
     {
+        private const string OutstandingAdvanceDocument_URL= "{0}/Outstanding%20Advance%20Documents/Forms/AllItems.aspx?FilterField1=Outstanding_x0020_Advance&FilterValue1={1}";
         private const string ListName = "Outstanding Advance";
         private const string ListName_Document = "Outstanding Advance Documents";
+        private const string ListName_Document_OutstandingAdvance = "Outstanding_x0020_Advance";
         private const string ListName_Vendor = "Vendor";
+        private const string ListName_Professional = "Professional Master";
 
         private const string FieldName_DateOfUpload = "Date_x0020_of_x0020_Upload";
         private const string FieldName_Staff = "Staff";
@@ -33,6 +34,17 @@ namespace MCAWebAndAPI.Service.Finance
         private const string FieldName_Currency = "Currency";
         private const string FieldName_Amount = "Amount";
         private const string FieldName_Project = "Project";
+        private const string FieldName_Position = "Position";
+        private const string FieldName_UnitProject = "Project_x002f_Unit";
+        private const string FieldName_Name = "Title";
+        private const string FieldName_OfficeEmail = "officeemail";
+
+        private const string Position_DED = "Deputy ED";
+        private const string Position_GrantManager = "Grant Manager";
+        private const string Position_Director = "Director";
+
+        private const string ProjectUnit_GreenProsperity = "Green Prosperity Project";
+        private const string ProjectUnit_ProgramDiv = "Program Div.";
 
         private const string FieldName_VendorID = "Title";
         private const string FieldName_Email = "Email";
@@ -40,9 +52,9 @@ namespace MCAWebAndAPI.Service.Finance
         private const string FieldName_ID = "ID";
 
         private const string EmailSubject = " Outstanding Advance Reminder";
-        private const string Proffesional = "5";
-        private const string IC = "1";
-        private const string Grantee = "4";
+        private const string StaffIDPrefix_Proffesional = "5";
+        private const string StaffIDPrefix_IC = "1";
+        private const string StaffIDPrefix_Grantee = "4";
 
         string siteUrl = null;
         static Logger logger = LogManager.GetCurrentClassLogger();
@@ -67,6 +79,7 @@ namespace MCAWebAndAPI.Service.Finance
 
         public int Save(OutstandingAdvanceVM viewModel)
         {
+            int result = 0;
             var willCreate = viewModel.ID == null;
             var updatedValue = new Dictionary<string, object>();
 
@@ -83,11 +96,14 @@ namespace MCAWebAndAPI.Service.Finance
 
             try
             {
-                if (willCreate)
+                if (willCreate) { 
                     SPConnector.AddListItem(ListName, updatedValue, siteUrl);
-                else
+                    result= SPConnector.GetLatestListItemID(ListName, siteUrl);
+                }
+                else { 
                     SPConnector.UpdateListItem(ListName, viewModel.ID, updatedValue, siteUrl);
-
+                    result = Convert.ToInt32(viewModel.ID);
+                }
                 // Send email
                 //SendEmail("", "");
             }
@@ -114,7 +130,7 @@ namespace MCAWebAndAPI.Service.Finance
             }
 
 
-            return SPConnector.GetLatestListItemID(ListName, siteUrl);
+            return result;
         }
 
         public async Task SaveAttachmentAsync(int? ID, string reference, IEnumerable<HttpPostedFileBase> documents)
@@ -122,24 +138,48 @@ namespace MCAWebAndAPI.Service.Finance
             SaveAttachment(ID, reference, documents);
         }
 
-        public async Task SendEmailToProfessional(string message, OutstandingAdvanceVM viewModel, List<VendorVM> listVendor)
+        public async Task SendEmailToProfessional(string message, OutstandingAdvanceVM viewModel)
         {
-            var vendor = from v in listVendor where v.VendorId.ToString().Substring(0,1) == IC || v.VendorId.ToString().Substring(0,1) == Proffesional select v;
-            foreach (var item in vendor)
+            var vendor = SPConnector.GetListItem(ListName_Vendor, viewModel.Staff.Value, siteUrl);
+            var vendorId = vendor[FieldName_VendorID] == null ? "" : vendor[FieldName_VendorID].ToString();
+            var name = vendor[FieldName_VendorName] == null ? "" : vendor[FieldName_VendorName].ToString();
+            var email = vendor[FieldName_Email] == null ? "" : vendor[FieldName_Email].ToString();
+            if (vendorId.ToString().Substring(0, 1) == StaffIDPrefix_IC || vendorId.ToString().Substring(0, 1) == StaffIDPrefix_Proffesional)
             {
-                SendEmail(item.Email, CreateMessage(item.Name, message, viewModel));
+                SendEmail(email, CreateMessage(name, message, viewModel));
             }
         }
 
-        public async Task SendEmailToGrantees(string message, OutstandingAdvanceVM viewModel, List<VendorVM> listVendor)
+        public async Task SendEmailToGrantees(string message, OutstandingAdvanceVM viewModel)
         {
-            var vendor = from v in listVendor where v.VendorId.ToString().Substring(0,1) == Grantee  select v;
-            var staff = (from v in listVendor where v.ID == Convert.ToInt32(viewModel.Staff.Value) select v).ToList();
-            viewModel.Staff.Text = staff[0].Name;
+            var staff = SPConnector.GetListItem(ListName_Vendor, viewModel.Staff.Value, siteUrl);
+            viewModel.Staff.Text = staff[FieldName_VendorName] == null ? "" : staff[FieldName_VendorName].ToString();
 
-            foreach (var item in vendor)
+            var listPosition = new Dictionary<string, string>();
+            listPosition.Add(Position_DED, ProjectUnit_ProgramDiv);
+            listPosition.Add(Position_GrantManager , ProjectUnit_GreenProsperity);
+            listPosition.Add(Position_Director , ProjectUnit_GreenProsperity);
+            
+            foreach(var item in listPosition)
             {
-                SendEmail(item.Email, CreateMessage( item.Name, message, viewModel));
+                var caml = @"
+                    <View><Query>
+                        <Where><And>
+                            <Eq><FieldRef Name='{0}' /><Value Type='Lookup'>{1}</Value></Eq>
+                            <Eq><FieldRef Name='{2}' /><Value Type='Choice'>{3}</Value></Eq>
+                        </And></Where>
+                    </Query></View>";
+
+                caml = string.Format(caml, FieldName_Position, item.Key, FieldName_UnitProject, item.Value);
+
+                var listItem = SPConnector.GetList(ListName_Professional, siteUrl, caml);
+                foreach (var profesional in listItem)
+                {
+                    var name = profesional[FieldName_Name] == null ? "" : profesional[FieldName_Name].ToString();
+                    var email = profesional[FieldName_OfficeEmail] == null ? "" : profesional[FieldName_OfficeEmail].ToString();
+
+                    SendEmail(email, CreateMessage(name, message, viewModel));
+                }
             }
         }
 
@@ -154,6 +194,7 @@ namespace MCAWebAndAPI.Service.Finance
             {
                 var listItem = SPConnector.GetListItem(ListName, id, siteUrl);
                 viewModel = ConvertToVM(listItem);
+                viewModel.DocumentUrl = GetDocumentUrl(viewModel.ID);
             }
 
             viewModel.Operation = op;
@@ -174,7 +215,7 @@ namespace MCAWebAndAPI.Service.Finance
             return viewModel;
         }
 
-        public List<VendorVM> Get()
+        public List<VendorVM> GetAll()
         {
             var list = new List<VendorVM>();
             var listItem = SPConnector.GetList(ListName_Vendor, siteUrl, null);
@@ -197,6 +238,7 @@ namespace MCAWebAndAPI.Service.Finance
         {
             OutstandingAdvanceVM viewModel = new OutstandingAdvanceVM();
 
+            viewModel.ID = Convert.ToInt32(listItem[FieldName_ID]);
             viewModel.DateOfUpload = Convert.ToDateTime(listItem[FieldName_DateOfUpload]);
             viewModel.Staff.Value = Convert.ToInt32((listItem[FieldName_Staff] as FieldLookupValue).LookupValue);
             viewModel.Reference = Convert.ToString(listItem[FieldName_Reference]);
@@ -204,6 +246,7 @@ namespace MCAWebAndAPI.Service.Finance
             viewModel.Currency.Value = Convert.ToString(listItem[FieldName_Currency]);
             viewModel.Amount = Convert.ToDecimal(listItem[FieldName_Amount]);
             viewModel.Project.Value = Convert.ToString(listItem[FieldName_Project]);
+            viewModel.Remarks = Convert.ToString(listItem[FieldName_Remarks]);
 
             return viewModel;
         }
@@ -225,7 +268,7 @@ namespace MCAWebAndAPI.Service.Finance
                     if (doc != null)
                     {
                         var updateValue = new Dictionary<string, object>();
-                        updateValue.Add(ListName, new FieldLookupValue { LookupId = Convert.ToInt32(ID) });
+                        updateValue.Add(ListName_Document_OutstandingAdvance, new FieldLookupValue { LookupId = Convert.ToInt32(ID) });
 
                         try
                         {
@@ -240,6 +283,10 @@ namespace MCAWebAndAPI.Service.Finance
                 }
             }
         }
- 
+
+        private string GetDocumentUrl(int? ID)
+        {
+            return string.Format(OutstandingAdvanceDocument_URL, siteUrl, ID);
+        }
     }
 }

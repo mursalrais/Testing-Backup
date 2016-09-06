@@ -26,7 +26,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         public string Fund { get; set; } = Shared.Fund;
 
         [Required]
-        public ComboBoxVM TypeOfSettlement { get; set; }
+        [UIHint("ComboBox")]
+        [DisplayName("Type of Settlement")]
+        public ComboBoxVM TypeOfSettlement { get; set; } = new ComboBoxVM();
 
         [Required]
         [DisplayName("Currency")]

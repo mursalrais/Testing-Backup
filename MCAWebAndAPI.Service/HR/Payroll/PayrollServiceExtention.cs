@@ -29,6 +29,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
         private static IEnumerable<MonthlyFeeMaster> _allProfessionalMonthlyFees;
         private static IEnumerable<DayOffRequest> _allProfessionalDayOffRequests;
         private static IEnumerable<EventCalendar> _allHolidaysAndPublicHolidays;
+        private static IEnumerable<AdjustmentMaster> _allAdjustments;
 
         private static int[] _professionalIDs;
         private static DateTime[] _dateRanges;
@@ -78,6 +79,17 @@ namespace MCAWebAndAPI.Service.HR.Payroll
         public static async Task PopulateAllValidPSAs(this List<PayrollWorksheetDetailVM> payrollWorksheet, DateTime startDatePeriod)
         {
             _allValidPSAs = _psaService.GetPSAs(startDatePeriod);
+        }
+
+        /// <summary>
+        /// To retrived all required master data in order to minimise network round-trip time
+        /// </summary>
+        /// <param name="payrollWorksheet"></param>
+        /// <param name="startDatePeriod"></param>
+        /// <returns></returns>
+        public static async Task PopulateALLAdjustment(this List<PayrollWorksheetDetailVM> payrollWorksheet, IEnumerable<int> professionalIDs)
+        {
+            _allAdjustments = _dataMasterService.GetAdjustemnt(professionalIDs.ToArray());
         }
 
         /// <summary>
@@ -137,7 +149,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             // Put the professional IDs and daterange in the static variables
             _professionalIDs = payrollWorksheet.Select(e => e.ProfessionalID).Distinct().ToArray();
             _dateRanges = dateRange.ToArray();
-            
+
             return payrollWorksheet;
         }
 
@@ -154,7 +166,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             payrollWorksheet.Add(new PayrollWorksheetDetailVM
             {
                 PayrollDate = date,
-                ProfessionalID = indexProfessional, 
+                ProfessionalID = indexProfessional,
                 //TODO: To get this value from 13th Month Salary module
                 Last13thMonthDate = Last13MonthDate_HardCoded
             });
@@ -192,9 +204,9 @@ namespace MCAWebAndAPI.Service.HR.Payroll
         private static PayrollWorksheetDetailVM GeneratePayrollSummaryRow(this List<PayrollWorksheetDetailVM> payrollWorksheet, int indexProfessional)
         {
             var payrollWorksheetVM = new PayrollWorksheetDetailVM();
-            
+
             //TODO: To aggregate column from detail view to pivot view
-            
+
             return payrollWorksheetVM;
         }
 
@@ -210,6 +222,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             payrollWorksheet.PopulateColumnsFromProfessional();
             payrollWorksheet.PopulateColumnsFromEventCalendar();
             payrollWorksheet.PopulateColumnsFromDayOff();
+            payrollWorksheet.PopulateColumnsFromAdjustment();
 
             return payrollWorksheet;
         }
@@ -339,7 +352,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
                     }
 
                     // Skip for public holidays, sunday, and saturday
-                    if (_allHolidaysAndPublicHolidays.FirstOrDefault(e => 
+                    if (_allHolidaysAndPublicHolidays.FirstOrDefault(e =>
                       e.Date.Day == _dateRanges[indexDate].Day &&
                       e.Date.Month == _dateRanges[indexDate].Month &&
                       e.Date.Year == _dateRanges[indexDate].Year) != null)
@@ -347,15 +360,15 @@ namespace MCAWebAndAPI.Service.HR.Payroll
                         payrollWorksheet[rowIndex].Remarks = "Holiday";
                         continue;
                     }
-                     
-                    
+
+
                     var monthlyFeeData = _allProfessionalMonthlyFees
                         .FirstOrDefault(e => e.ProfessionalID == _professionalIDs[indexProfessional]
                         && IsInScopeMonthlyFee(_dateRanges[indexDate], e));
 
                     if (monthlyFeeData == null)
                         continue;
-                    
+
                     payrollWorksheet[rowIndex].DateOfNewFee = monthlyFeeData.DateOfNewFee;
                     payrollWorksheet[rowIndex].EndDate = monthlyFeeData.EndDate;
                     payrollWorksheet[rowIndex].MonthlyFeeMaster = monthlyFeeData.MonthlyFee;
@@ -410,8 +423,107 @@ namespace MCAWebAndAPI.Service.HR.Payroll
                 if (!ids.Contains(id))
                     ids.Add(id);
             }
-            
-            return ids.OrderBy(e=> e).ToList();
+
+            return ids.OrderBy(e => e).ToList();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="payrollWorksheet"></param>
+        /// <returns></returns>
+        private static List<PayrollWorksheetDetailVM> PopulateColumnsFromAdjustment(this List<PayrollWorksheetDetailVM> payrollWorksheet)
+        {
+            for (int indexProfessional = 0; indexProfessional < _professionalIDs.Length; indexProfessional++)
+            {
+                for (int indexDate = 0; indexDate < _dateRanges.Length; indexDate++)
+                {
+                    var rowIndex = indexProfessional * _dateRanges.Length + indexDate;
+
+                    var adjustmentData = _allAdjustments.FirstOrDefault(e =>
+                        e.ProfessionalID == _professionalIDs[indexProfessional] + string.Empty &&
+                        IsAdjustment(_dateRanges[indexDate], e, 1));
+
+                    if (adjustmentData != null)
+                    {
+                        payrollWorksheet[rowIndex].Adjustment = adjustmentData.AdjustmentAmount;
+                    }
+
+                    var spotData = _allAdjustments.FirstOrDefault(e =>
+                    e.ProfessionalID == _professionalIDs[indexProfessional] + string.Empty &&
+                    IsAdjustment(_dateRanges[indexDate], e, 2));
+
+                    if (spotData != null)
+                    {
+                        payrollWorksheet[rowIndex].SpotAward = spotData.AdjustmentAmount;
+                    }
+
+                    var retentionData = _allAdjustments.FirstOrDefault(e =>
+                    e.ProfessionalID == _professionalIDs[indexProfessional] + string.Empty &&
+                    IsAdjustment(_dateRanges[indexDate], e, 3));
+
+                    if (retentionData != null)
+                    {
+                        payrollWorksheet[rowIndex].RetentionPayment = retentionData.AdjustmentAmount;
+                    }
+
+                    var overtimeData = _allAdjustments.FirstOrDefault(e =>
+                    e.ProfessionalID == _professionalIDs[indexProfessional] + string.Empty &&
+                    IsAdjustment(_dateRanges[indexDate], e, 4));
+
+                    if (overtimeData != null)
+                    {
+                        payrollWorksheet[rowIndex].Overtime = overtimeData.AdjustmentAmount;
+                    }
+
+                    var deductionData = _allAdjustments.FirstOrDefault(e =>
+                    e.ProfessionalID == _professionalIDs[indexProfessional] + string.Empty &&
+                    IsAdjustment(_dateRanges[indexDate], e, 5));
+
+                    if (deductionData != null)
+                    {
+                        payrollWorksheet[rowIndex].Deduction = deductionData.AdjustmentAmount;
+                    }
+                }
+            }
+
+            return payrollWorksheet;
+        }
+
+        private static bool IsAdjustment(DateTime date, AdjustmentMaster adjustmentMaster, int flagNumber)
+        {
+            var year = adjustmentMaster.AdjustmentPeriod.Year;
+            var month = adjustmentMaster.AdjustmentPeriod.Month;
+            var day = adjustmentMaster.AdjustmentPeriod.Day;
+            var type = adjustmentMaster.AdjustmentType;
+            var typeA = "";
+
+            if (flagNumber == 1)
+            {
+                typeA = "Adjustment";
+            }
+
+            if (flagNumber == 2)
+            {
+                typeA = "Spot Award";
+            }
+
+            if (flagNumber == 3)
+            {
+                typeA = "Retention Payment";
+            }
+
+            if (flagNumber == 4)
+            {
+                typeA = "Overtime";
+            }
+
+            if (flagNumber == 5)
+            {
+                typeA = "Deduction";
+            }
+
+            return year == date.Year && month == date.Month && day == date.Day && type == typeA;
         }
     }
 }

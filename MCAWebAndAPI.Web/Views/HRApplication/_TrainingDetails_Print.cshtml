@@ -9,7 +9,8 @@
     {
         columns.Bound(p => p.Institution);
         columns.Bound(p => p.Subject);
-        columns.Bound(p => p.Year);
+        columns.Bound(p => p.Year).Hidden();
+        columns.Bound(p => p.StrTrainingYear);
         columns.Bound(p => p.Remarks);
     
     })

@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Web;
 using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
+using MCAWebAndAPI.Service.HR.Common;
 using MCAWebAndAPI.Service.Resources;
-using MCAWebAndAPI.Service.Shared;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
 using NLog;
+using static MCAWebAndAPI.Model.ViewModel.Form.Finance.PettyCashTransactionItem;
 
 namespace MCAWebAndAPI.Service.Finance
 {
@@ -30,6 +31,7 @@ namespace MCAWebAndAPI.Service.Finance
         private const string FIELD_PAIDTO = "Paid_x0020_To";
         private const string FIELD_PROFESSIONALID = "ProfessionalID";
         private const string FIELD_PROFESSIONAL_NAME = "ProfessionalID_x003a_Full_x0020_";
+        private const string FIELD_PROFESSIONAL_POSITION = "ProfessionalPosition";
         private const string FIELD_VENDORID = "Vendor_x0020_ID";
         private const string FIELD_CURRENCY = "NewColumn1";
         private const string FIELD_AMOUNT = "Amount_x0020_Paid";
@@ -81,7 +83,11 @@ namespace MCAWebAndAPI.Service.Finance
 
             if (viewModel.Professional.Value.HasValue)
             {
-                newItem.Add(FIELD_PROFESSIONALID, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.Professional.Value) });
+                var professionalId = Convert.ToInt32(viewModel.Professional.Value);
+                var professional = new ProfessionalService().GetProfessionalData(professionalId);
+
+                newItem.Add(FIELD_PROFESSIONALID, new FieldLookupValue { LookupId = professionalId });
+                newItem.Add(FIELD_PROFESSIONAL_POSITION, professional.PositionName);
             }
 
             if (viewModel.Vendor.Value.HasValue)
@@ -97,7 +103,10 @@ namespace MCAWebAndAPI.Service.Finance
             newItem.Add(FIELD_WBS_ID, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.WBS.Value) });
             newItem.Add(FIELD_GL_ID, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.GL.Value) });
             newItem.Add(FIELD_REMARKS, viewModel.Remarks);
-            newItem.Add(FIELD_VOUCHERNO, DocumentNumbering.Create(siteUrl, documentNoFormat, DIGIT_DOCUMENTNO));
+
+            string docNO = DocumentNumbering.Create(siteUrl, documentNoFormat, DIGIT_DOCUMENTNO);
+            newItem.Add(FIELD_VOUCHERNO, docNO);
+            viewModel.TransactionNo = docNO;
 
             try
             {
@@ -122,12 +131,20 @@ namespace MCAWebAndAPI.Service.Finance
 
             if (viewModel.Professional.Value.HasValue)
             {
-                updatedValue.Add(FIELD_PROFESSIONALID, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.Professional.Value) });
+                var professionalId = Convert.ToInt32(viewModel.Professional.Value);
+                var professional =  ProfessionalService.Get(this.siteUrl, professionalId);
+
+                updatedValue.Add(FIELD_PROFESSIONALID, new FieldLookupValue { LookupId = professionalId });
+                updatedValue.Add(FIELD_PROFESSIONAL_POSITION, professional.Position);
+
+                updatedValue.Add(FIELD_VENDORID, "");
             }
+
 
             if (viewModel.Vendor.Value.HasValue)
             {
                 updatedValue.Add(FIELD_VENDORID, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.Vendor.Value) });
+                updatedValue.Add(FIELD_PROFESSIONALID, "");
             }
 
             updatedValue.Add(FIELD_CURRENCY, viewModel.Currency.Value);
@@ -208,14 +225,28 @@ namespace MCAWebAndAPI.Service.Finance
         }
 
 
-        public delegate PettyCashTransactionItem ConvertToVMDelegate(string siteUrl, ListItem listItem);
-        private static PettyCashPaymentVoucherVM ConvertToVM(string siteUrl, ListItem listItem)
-        {
+        public delegate PettyCashTransactionItem ConvertToVMDelegate(string siteUrl, ListItem listItem, Post sign);
 
+        private static PettyCashPaymentVoucherVM ConvertToVMShort(string siteUrl, ListItem listItem, Post sign)
+        {
             PettyCashPaymentVoucherVM viewModel = new PettyCashPaymentVoucherVM();
+
+            int multiplier = sign == Post.DR ? 1 : -1;
 
             viewModel.ID = Convert.ToInt32(listItem[FIELD_ID]);
             viewModel.Date = Convert.ToDateTime(listItem[FIELD_DATE]);
+            viewModel.TransactionNo = Convert.ToString(listItem[FIELD_VOUCHERNO]);
+            viewModel.Amount = multiplier * Convert.ToDecimal(listItem[FIELD_AMOUNT]);
+
+            return viewModel;
+        }
+
+
+        private static PettyCashPaymentVoucherVM ConvertToVM(string siteUrl, ListItem listItem)
+        {
+
+            PettyCashPaymentVoucherVM viewModel = ConvertToVMShort(siteUrl, listItem, Post.DR);
+
             viewModel.Status.Value = Convert.ToString(listItem[FIELD_STATUS]);
             viewModel.PaidTo.Value = Convert.ToString(listItem[FIELD_PAIDTO]);
 
@@ -223,10 +254,6 @@ namespace MCAWebAndAPI.Service.Finance
             if (viewModel.Professional != null && listItem[FIELD_PROFESSIONALID] != null)
             {
                 viewModel.Professional.Value = (listItem[FIELD_PROFESSIONALID] as FieldLookupValue).LookupId;
-
-                //TODO: the following line causes error
-                //viewModel.Professional.Text = (listItem[FIELD_PROFESSIONAL_NAME] as FieldLookupValue).LookupValue;
-                
             }
 
             if (viewModel.Vendor != null && listItem[FIELD_VENDORID] != null)
@@ -236,7 +263,7 @@ namespace MCAWebAndAPI.Service.Finance
 
             viewModel.Currency.Value = Convert.ToString(listItem[FIELD_CURRENCY]);
 
-            viewModel.Amount = Convert.ToDecimal(listItem[FIELD_AMOUNT]);
+
             viewModel.AmountPaidInWord = Convert.ToString(listItem[FIELD_AMOUNTPAID_WORD]);
             viewModel.ReasonOfPayment = Convert.ToString(listItem[FIELD_REASON]);
             viewModel.Fund = Convert.ToString(listItem[FIELD_FUND]);
@@ -248,7 +275,7 @@ namespace MCAWebAndAPI.Service.Finance
             viewModel.GL.Text = string.Format("{0}-{1}", (listItem[FIELD_GL_NO] as FieldLookupValue).LookupValue, (listItem[FIELD_GL_DESC] as FieldLookupValue).LookupValue);
 
             viewModel.Remarks = Convert.ToString(listItem[FIELD_REMARKS]);
-            viewModel.TransactionNo = Convert.ToString(listItem[FIELD_VOUCHERNO]);
+
             viewModel.DocumentUrl = GetDocumentUrl(siteUrl, viewModel.ID);
 
             return viewModel;
@@ -259,10 +286,9 @@ namespace MCAWebAndAPI.Service.Finance
             return string.Format(UrlResource.PettyCashPaymentVoucherDocumentByID, siteUrl, iD);
         }
 
-        public static IEnumerable<PettyCashTransactionItem> GetPettyCashTransaction(string siteUrl, DateTime dateFrom, DateTime dateTo)
+        public static IEnumerable<PettyCashTransactionItem> GetPettyCashTransaction(string siteUrl, DateTime dateFrom, DateTime dateTo, Post sign)
         {
-            return SharedService.GetPettyCashTransaction(siteUrl, dateFrom, dateTo, LISTNAME, FIELD_DATE,
-                ConvertToVM);
+            return SharedService.GetPettyCashTransaction(siteUrl, dateFrom, dateTo, LISTNAME, FIELD_DATE, sign, ConvertToVMShort);
         }
 
     }

@@ -1,6 +1,6 @@
 ﻿@model MCAWebAndAPI.Model.ViewModel.Form.Finance.TaxExemptionVM
 
-@using (Html.BeginForm("EditOtherTax", "FINTaxExemption", FormMethod.Post,
+@using (Html.BeginForm("ItemVATTax", "FINTaxExemption", FormMethod.Post,
                                                                         new
                                                                         {
                                                                             @class = "form-horizontal",
@@ -16,8 +16,8 @@
                     @Html.TextBoxFor(m => m.TypeOfTax.Value, new { @class = "form-control", @readonly = "readonly" })
                 </div>
             </div>
-            <div id="Other">
-                @Html.Partial("_Others", Model.TaxExemptionOtherVM, new ViewDataDictionary { TemplateInfo = new TemplateInfo { HtmlFieldPrefix = "TaxExemptionOtherVM" } })
+            <div id="VAT">
+                @Html.Partial("_VAT", Model.TaxExemptionVATVM, new ViewDataDictionary { TemplateInfo = new TemplateInfo { HtmlFieldPrefix = "TaxExemptionVATVM" } })
             </div>
             <div id="CommonStuff">
                 <div class="form-group">
@@ -63,11 +63,11 @@
     <div class="form-actions">
         <div class="row">
             <div class="col-sm-12">
-                <button id="submit-button" class="btn btn-primary" type="submit">
+                <button id="submit-button" class="btn btn-primary" type="submit" value="Save" name="actionType">
                     <i class="fa fa-save"></i>
                     Submit
                 </button>
-                <button id="cancel-button" class="btn btn-default" type="button">
+                <button id="cancel-button" class="btn btn-default cancel" type="submit" value="Cancel" name="actionType">
                     Cancel
                 </button>
             </div>

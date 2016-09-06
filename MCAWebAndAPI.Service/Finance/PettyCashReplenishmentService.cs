@@ -7,6 +7,7 @@ using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
 using NLog;
+using static MCAWebAndAPI.Model.ViewModel.Form.Finance.PettyCashTransactionItem;
 
 namespace MCAWebAndAPI.Service.Finance
 {
@@ -24,7 +25,7 @@ namespace MCAWebAndAPI.Service.Finance
         private const string FieldName_Currency = "Currency";
         private const string FieldName_Amount = "Amount";
         private const string FieldName_DocNo = "Title";
-        private const string FieldName_PettyCashReplenishID = "Petty_x0020_Cash_x0020_Replenishment";   
+        private const string FieldName_PettyCashReplenishID = "Petty_x0020_Cash_x0020_Replenishment";
         private const string FieldName_Remarks = "Remarks";
 
         private const string FINPettyCashReplenishmentDocumentByID = "{0}/Petty%20Cash%20Replenishment%20Documents/Forms/AllItems.aspx#InplviewHash5093bda1-84bf-4cad-8652-286653d6a83f=FilterField1%3Dpsa%255Fx003a%255FID-FilterValue1%3D{1}";
@@ -37,7 +38,7 @@ namespace MCAWebAndAPI.Service.Finance
             var willCreate = viewModel.ID == null;
             var updatedValue = new Dictionary<string, object>();
             DateTime today = DateTime.Now;
-           
+
             updatedValue.Add(FieldName_Date, viewModel.Date);
             updatedValue.Add(FieldName_Currency, viewModel.Currency.Value);
             updatedValue.Add(FieldName_Amount, viewModel.Amount);
@@ -131,27 +132,39 @@ namespace MCAWebAndAPI.Service.Finance
 
         }
 
-        public delegate PettyCashTransactionItem ConvertToVMDelegate(string siteUrl, ListItem listItem);
+        public delegate PettyCashTransactionItem ConvertToVMDelegate(string siteUrl, ListItem listItem, Post sign);
+
+        private static PettyCashReplenishmentVM ConvertToVMSort(string siteUrl, ListItem listItem, Post sign)
+        {
+            PettyCashReplenishmentVM viewModel = new PettyCashReplenishmentVM();
+
+            int multiplier = sign == Post.DR ? 1 : -1;
+
+            viewModel.ID = Convert.ToInt32(listItem[FieldName_Id]);
+            viewModel.Date = Convert.ToDateTime(listItem[FieldName_Date]);
+            viewModel.TransactionNo = Convert.ToString(listItem[FieldName_DocNo]);
+            viewModel.Amount = multiplier * Convert.ToDecimal(listItem[FieldName_Amount]);
+
+            return viewModel;
+        }
 
         private static PettyCashReplenishmentVM ConvertToVM(string siteUrl, ListItem listItem)
         {
             PettyCashReplenishmentVM viewModel = new PettyCashReplenishmentVM();
 
-            viewModel.Date= Convert.ToDateTime(listItem[FieldName_Date]);
+            viewModel.TransactionNo = Convert.ToString(listItem[FieldName_DocNo]);
+            viewModel.Date = Convert.ToDateTime(listItem[FieldName_Date]);
             viewModel.Currency.Value = Convert.ToString(listItem[FieldName_Currency]);
             viewModel.Amount = Convert.ToDecimal(listItem[FieldName_Amount]);
-            viewModel.TransactionNo = Convert.ToString(listItem[FieldName_DocNo]);
             viewModel.Remarks = Convert.ToString(listItem[FieldName_Remarks]);
-            viewModel.ID =  Convert.ToInt32(listItem[FieldName_Id]);
-
             viewModel.DocumentUrl = GetDocumentUrl(siteUrl, viewModel.ID);
 
             return viewModel;
         }
 
-        public static IEnumerable<PettyCashTransactionItem> GetPettyCashTransaction(string siteUrl, DateTime dateFrom, DateTime dateTo)
+        public static IEnumerable<PettyCashTransactionItem> GetPettyCashTransaction(string siteUrl, DateTime dateFrom, DateTime dateTo, Post sign)
         {
-            return SharedService.GetPettyCashTransaction(siteUrl, dateFrom, dateTo, ListName, FieldName_Date, ConvertToVM);
+            return SharedService.GetPettyCashTransaction(siteUrl, dateFrom, dateTo, ListName, FieldName_Date, sign, ConvertToVMSort);
         }
 
         private static string GetDocumentUrl(string siteUrl, int? iD)

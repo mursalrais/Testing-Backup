@@ -28,22 +28,22 @@
 
             columns.Bound(p => p.Wbs).ClientTemplate("#= Wbs #" +
             "<input type='hidden' class='Wbs' name='Details[#= getWorkingRelationshipDetails(data)#].Wbs' value='#= Wbs #' />"
-            );
+            ).Width(300);
 
-            columns.Bound(p => p.CostIdr).ClientTemplate("#= kendo.toString(CostIDR, 'n2') #" +
+            columns.Bound(p => p.CostIdr).ClientTemplate("#= kendo.toString(CostIdr, 'n2') #" +
             "<input type='hidden' class='costidr' name='Details[#= getWorkingRelationshipDetails(data)#].CostIDR' value='#= CostIdr #' />"
             );
 
-            columns.Bound(p => p.CostUsd).ClientTemplate("#= kendo.toString(CostUSD, 'n2') #" +
+            columns.Bound(p => p.CostUsd).ClientTemplate("#= kendo.toString(CostUsd, 'n2') #" +
             "<input type='hidden' class='costusd' name='Details[#= getWorkingRelationshipDetails(data)#].CostUSD' value='#= CostUsd #' />"
             );
 
-            columns.Bound(p => p.remarks).ClientTemplate("#= Remarks #" +
+            columns.Bound(p => p.remarks).ClientTemplate("#= remarks #" +
             "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].Remarks' value='#= remarks #' />"
             );
 
-            columns.Bound(p => p.status).ClientTemplate("#= Status #" +
-            "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].Status' value='#= status #' />"
+            columns.Bound(p => p.status).HtmlAttributes(new {@class = "status" }).ClientTemplate("#= status #" +
+            "<input type='hidden' class='status' name='Details[#= getWorkingRelationshipDetails(data)#].Status' value='#= status #' />"
             );
 
             columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
@@ -51,6 +51,10 @@
 
 
         );
+            columns.Bound(p => p.EditMode).Hidden()
+         .ClientTemplate("#= EditMode #<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].EditMode' value='#= EditMode #' />");
+            columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
+            .Click("onDeleteKendoDetail")).Width(100);
         })
         .Events(e =>
         {
@@ -61,11 +65,11 @@
                    .Model(model =>
                    {
                        model.Id(p => p.ID);
-                       model.Field(m => m.AssetSubAsset).DefaultValue(AssetAcquisitionItemVM.GetAssetSubAssetDefaultValue());
+                       model.Field(m => m.AssetSubAsset).DefaultValue(AssetReplacementItemVM.GetAssetSubAssetDefaultValue());
                        model.Field(m => m.Wbs).Editable(false);
                        model.Field(p => p.CostIdr).Editable(false);
                        model.Field(p => p.CostUsd).Editable(false);
-                       model.Field(p => p.remarks).Editable(false);
+                       model.Field(p => p.remarks);
                        model.Field(p => p.status).Editable(false);
 
                    })
@@ -101,10 +105,6 @@
 </script>
 
 <style>
-    .k-dropdown-wrap {
-        width: 200px;
-    }
-
     .k-dirty-cell {
         width: 200px;
     }

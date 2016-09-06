@@ -31,12 +31,12 @@
                     Print
                 </button>
 
-                <button id="submit-button" class="btn btn-primary" type="submit">
+                <button id="submit-button" class="btn btn-primary" type="submit" value="Save" name="actionType">
                     <i class="fa fa-save"></i>
                     Submit
                 </button>
 
-                <button id="cancel-button" class="btn btn-primary" type="reset">
+                <button id="cancel-button" class="btn btn-default cancel" type="submit" value="Cancel" name="actionType">
                     Cancel
                 </button>
             </div>
@@ -66,20 +66,31 @@
 
         $(document).ready(function () {
             SetBaseOnPaidTo($("#PaidTo_Value").data("kendoDropDownList").value());
-
+           
             $('#AmountPaidInWord').css({ "background-color": GREY_COLOR });
             $('#AmountPaidInWord').attr("readonly", "readonly");
 
             $('#Fund').css({ "background-color": GREY_COLOR });
 
             $('#Amount').change(function () {
-                var url = '@Url.Action("GetAmountInWords", "FINPettyCashPaymentVoucher")';
-                var amount = $('#Amount').val(); // The option selected
+                GetAmountWords();
+            });
 
+
+
+        });
+
+        function GetAmountWords()
+        {
+            var url = '@Url.Action("GetAmountInWords", "FINPettyCashPaymentVoucher")';
+            var amount = $('#Amount').val(); // The option selected
+            var selectedcurrency = $('#hdnCurrency').val();
+
+            if (amount !== '') {
                 $.ajax({
                     url: url,
                     type: "GET",
-                    data: { data: amount },
+                    data: { data: amount, currency: selectedcurrency },
                     success: function (response) {
                         $('#AmountPaidInWord').val(response);
                     },
@@ -87,11 +98,8 @@
                         $('#AmountPaidInWord').val('Error');
                     }
                 });
-            });
-
-
-
-        });
+            }
+        }
 
         var PAIDTO_PROFESSIONAL = "Professional";
         var PAIDTO_VENDOR = "Vendor";
@@ -135,6 +143,13 @@
 
             $('.k-state-disabled').css({ "background-color": GREY_COLOR });
             $('.k-state-default').css({ "background-color": "white" });
+        }
+
+        function onSelectCurrency(e)
+        {
+            var data = this.dataItem(e.item);
+            $('#hdnCurrency').val(data);
+            GetAmountWords();
         }
     </script>
 }

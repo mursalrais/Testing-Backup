@@ -98,7 +98,7 @@
                                     @Html.Bootstrap().LabelFor(m => m).Class("col-sm-3 control-label")
                                     <div class="col-sm-8">
                                         <button id="application-document-button" class="btn btn-default" type="button">
-                                            Click Here to go to Requisite Note Attachments
+                                            Click Here to go to Event Budget Attachments
                                         </button>
                                     </div>
                                 </div>
@@ -153,6 +153,11 @@
             </div>
 
             <legend>Item Details</legend>
+            <div class="validation-summary-valid" id="errorLabel" style="display:none">
+                <ul>
+                    <li>Total per item (IDR) must be equal to Total Direct Payment (IDR) + Total SCA (IDR)</li>
+                </ul>
+            </div>
             <div class="row">
                 @Html.Partial("_ItemDetails", Model.ItemDetails)
             </div>
@@ -225,10 +230,16 @@
                             }
                         }
 
-                        <button id="submit-button" class="btn btn-primary" style="margin-right:10px;" type="submit">
+                        <button id="submit-button" class="btn btn-primary" style="margin-right:10px;" type="submit" value="Save" name="actionType">
                             <i class="fa fa-save"></i>
                             Submit
-                        </button><br />
+                        </button>
+                        
+                        <button id="cancel-button" class="btn btn-default cancel" type="submit" value="Cancel" name="actionType">
+                            Cancel
+                        </button>
+
+                        <br />
                         <p>@buttonMsg</p>
                     </div>
                 </div>
@@ -255,6 +266,29 @@
 
             });
 
+        });
+
+        $('form').on('submit', function () {
+            var datasource = $("#ItemDetails").data("kendoGrid").dataSource.data();
+            var totalAll = 0;
+            var totalAllDP = 0;
+            var totalAllSCA = 0;
+            for (var i = 0; i < datasource.length; i++) {
+                if (datasource[i].EditMode >= 0) {
+                    totalAll = totalAll + datasource[i].AmountPerItem;
+                    totalAllDP = totalAllDP + datasource[i].DirectPayment;
+                    totalAllSCA = totalAllSCA + datasource[i].SCA;
+                }
+            }
+            //cek valid ga
+            if (totalAll == totalAllDP + totalAllSCA) {
+                document.getElementById('errorLabel').style.display = "none";
+                return true;
+            }
+            else {
+                document.getElementById('errorLabel').style.display = "block"; 
+                return false;
+            }
         });
 
         $("#Rate").change(function () {

@@ -663,3 +663,53 @@ Parameter name: source
 2016-09-01 23:25:39.7528 MCAWebAndAPI.Service.JobSchedulers.Jobs.ExitProcedureManagementJob Task Calculation Job at https://eceos2.sharepoint.com/sites/mca-dev/hr has been successfully performed
 2016-09-01 23:26:35.7490 MCAWebAndAPI.Service.JobSchedulers.Schedulers.ExitProcedureManagementScheduler DefaultQuartzScheduler has been started at Thursday, September 1, 2016 in site https://eceos2.sharepoint.com/sites/mca-dev/hr
 2016-09-01 23:27:56.7958 MCAWebAndAPI.Service.JobSchedulers.Schedulers.ExitProcedureManagementScheduler DefaultQuartzScheduler has been started at Thursday, September 1, 2016 in site https://eceos2.sharepoint.com/sites/mca-dev/hr
+2016-09-01 15:53:02.9301 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService System.ArgumentException: The 'sId' argument is invalid.
+   at Microsoft.SharePoint.Client.List.GetItemByStringId(String sId)
+   at MCAWebAndAPI.Service.Utils.SPConnector.DeleteListItem(String listName, Nullable`1 listItemID, String siteUrl) in C:\Users\sobari\Documents\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 662
+   at MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService.CreateCompensatoryData(Nullable`1 cmpID, CompensatoryVM viewModels) in C:\Users\sobari\Documents\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Compensatory\HRCompensatoryService.cs:line 601
+2016-09-02 14:02:01.5544 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Column 'edited' does not exist. It may have been deleted by another user.  /sites/mca-dev/hr/Lists/CompensatoryRequest
+<<<<<<< HEAD
+2016-09-02 17:48:56.9369 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Column 'crstatus' does not exist. It may have been deleted by another user.  /sites/ims/hr/Lists/CompensatoryRequestDetail
+=======
+2016-09-02 16:49:42.0699 MCAWebAndAPI.Service.Asset.AssetReplacementService Cannot complete this action.
+
+Please try again.
+2016-09-02 16:51:28.7823 MCAWebAndAPI.Service.Asset.AssetReplacementService Cannot complete this action.
+
+Please try again.
+2016-09-02 16:52:08.9992 MCAWebAndAPI.Service.Asset.AssetReplacementService Cannot complete this action.
+
+Please try again.
+2016-09-02 16:53:45.6343 MCAWebAndAPI.Service.Asset.AssetReplacementService Cannot complete this action.
+
+Please try again.
+2016-09-02 16:56:21.1975 MCAWebAndAPI.Service.Asset.AssetReplacementService Cannot complete this action.
+
+Please try again.
+2016-09-02 16:57:41.2719 MCAWebAndAPI.Service.Asset.AssetReplacementService Cannot complete this action.
+
+Please try again.
+2016-09-02 16:57:52.8755 MCAWebAndAPI.Service.Asset.AssetReplacementService Cannot complete this action.
+
+Please try again.
+2016-09-02 17:01:08.8076 MCAWebAndAPI.Service.Asset.AssetReplacementService Cannot complete this action.
+
+Please try again.
+2016-09-02 17:01:25.0551 MCAWebAndAPI.Service.Asset.AssetReplacementService Cannot complete this action.
+
+Please try again.
+2016-09-02 17:10:43.4081 MCAWebAndAPI.Service.Asset.AssetReplacementService Cannot complete this action.
+
+Please try again.
+2016-09-02 17:14:03.9829 MCAWebAndAPI.Service.Asset.AssetReplacementService Cannot complete this action.
+
+Please try again.
+2016-09-02 17:20:12.6847 MCAWebAndAPI.Service.Asset.AssetReplacementService Cannot complete this action.
+
+Please try again.
+2016-09-02 17:25:05.8001 MCAWebAndAPI.Service.Asset.AssetReplacementService Cannot complete this action.
+
+Please try again.
+>>>>>>> origin/master
+2016-09-05 13:12:51.1025 MCAWebAndAPI.Service.Converter.CSVConverter System.IndexOutOfRangeException: Index was outside the bounds of the array.
+   at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in D:\Reza F. Fikri\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64

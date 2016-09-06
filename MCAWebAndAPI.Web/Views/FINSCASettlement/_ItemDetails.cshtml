@@ -11,11 +11,18 @@
     .Scrollable()
     .Columns(columns =>
     {
-        columns.Bound(p => p.ReceiptDate);
-        columns.Bound(p => p.ReceiptNo);
-        columns.Bound(p => p.Payee);
 
-        columns.Bound(p => p.DescriptionOfExpense);
+        columns.Bound(p => p.ReceiptDate).ClientTemplate("#= kendo.toString(ReceiptDate, \"MM/dd/yyyy\") #" +
+       "<input type='hidden' name='ItemDetails[#= getItem(data)#].ReceiptDate' value='#= kendo.toString(ReceiptDate, \"dd/MM/yyyy\") #' />");
+
+        columns.Bound(p => p.ReceiptNo).ClientTemplate("#= ReceiptNo #" +
+            "<input type='hidden' name='ItemDetails[#= getItem(data)#].ReceiptNo' value='#= ReceiptNo #' />");
+
+        columns.Bound(p => p.Payee).ClientTemplate("#= Payee #" +
+            "<input type='hidden' name='ItemDetails[#= getItem(data)#].Payee' value='#= Payee #' />");
+
+        columns.Bound(p => p.DescriptionOfExpense).ClientTemplate("#= DescriptionOfExpense #" +
+            "<input type='hidden' name='ItemDetails[#= getItem(data)#].DescriptionOfExpense' value='#= DescriptionOfExpense #' />");
 
         columns.Bound(p => p.WBS).ClientTemplate("#= WBS.Text #" +
             "<input type='hidden' name='ItemDetails[#= getItem(data)#].WBS.Value' value='#= WBS.Value #' />")
@@ -24,8 +31,7 @@
                            DataTextField = "Text",
                            DataValueField = "Value",
                            ControllerName = "ComboBox",
-                           ActionName = "GetWBSMasters",
-                           Filter = "filterWBS"
+                           ActionName = "GetWBSMasters"
                        });
 
         columns.Bound(p => p.GL).ClientTemplate("#= GL.Text #" +
@@ -40,8 +46,19 @@
 
                        });
 
-        columns.Bound(p => p.Amount);
-        columns.Bound(p => p.Documents);
+        columns.Bound(p => p.Amount).ClientTemplate("#= Amount #" +
+           "<input type='hidden' name='ItemDetails[#= getItem(data)#].Amount' value='#= calculateField(data).Amount #' />").Width(170);
+
+        columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger deleteRow" })
+           .Click("onDeleteKendoDetail")).Width(100);
+
+        columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
+              "<input type='hidden' name='ItemDetails[#= getItem(data)#].ID' value='#= ID #' />"
+            );
+        columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
+                     "<input type='hidden' name='ItemDetails[#= getItem(data)#].EditMode' value='#= EditMode #' />"
+        );
+
     })
      .Events(e =>
      {
@@ -55,6 +72,7 @@
                        model.Id(p => p.ID);
                        model.Field(m => m.WBS).DefaultValue(EventBudgetItemVM.GetWBSDefaultValue());
                        model.Field(m => m.GL).DefaultValue(EventBudgetItemVM.GetGLDefaultValue());
+                       
 
                    })
                    .ServerOperation(false)
@@ -65,10 +83,51 @@
 
 <script>
 
+        function getItem(dataItem) {
+            var data = $("#ItemDetails").data("kendoGrid").dataSource.data();
+
+           
+            return data.indexOf(dataItem);
+        }
+
         function onDataBoundItemDetails(e) {
             var grid = $("#ItemDetails").data("kendoGrid");
             hideDeletedRowKendoDetail(grid);
-      
+            calculateTotal();
         }
 
+        function calculateTotal() {
+            var datasource = $("#ItemDetails").data("kendoGrid").dataSource.data();
+            var totalAll = 0;
+            var totalSpecialCashAdvanceAmount = 0;
+            var totalAllSCA = 0;
+
+            for (var i = 0; i < datasource.length; i++) {
+                if (datasource[i].EditMode >= 0) {
+                    totalAll = totalAll + datasource[i].Amount;
+                }
+
+               
+            }
+
+            $("#TotalExpense").val(totalAll);
+            totalSpecialCashAdvanceAmount = $("#SpecialCashAdvanceAmount").val();
+
+            $("#ReceivedFromTo").val(totalSpecialCashAdvanceAmount - totalAll);
+
+            
+        }
+
+        function calculateField(data) {
+            calculateTotal();
+            return data;
+        }
+
+        function onedit(e) {
+            onEditKendoDetail(e);
+        }
+
+       
+
+       
 </script>

@@ -8,12 +8,15 @@
     ViewBag.Title = "Input Compensatory User";
 }
 
-@using (Html.BeginForm("CreateCompensatoryData", "HRCompensatory", FormMethod.Post,
-                                                                                                                 new
-                                                                                                                 {
-                                                                                                                     @class = "form-horizontal",
-                                                                                                                     enctype = "multipart/form-data"
-                                                                                                                 }))
+@using (Ajax.BeginForm("CreateCompensatoryData", "HRCompensatory", FormMethod.Post,
+new AjaxOptions
+{
+OnBegin = "onBeginForm",
+OnComplete = "onCompleteForm",
+OnSuccess = "onSuccessFormEmbed",
+OnFailure = "onFailureForm"
+}, new { @class = "form-horizontal" }))
+
 {
     <fieldset>
         @Html.HiddenFor(m => m.cmpID)
@@ -65,10 +68,6 @@
             <button id="submit-draft-button" class="btn btn-primary" type="submit">
                 <i class="fa fa-clipboard"></i>
                 Save As Draft
-            </button>
-            <button id="cancel-button" class="btn btn-primary">
-                <i class="fa fa-ban"></i>
-                Cancel
             </button>
         </div>
     </div>
@@ -163,7 +162,37 @@
                         });
                         
                         $("#approve-button").click(function () {
-                            $("form").submit();
+                            var rowgrid = $("#CompensatoryDetails").data("kendoGrid").tbody.find("tr");
+                            var valdate = true;
+                            var i = -1;
+                            var j = -1;
+                            rowgrid.each(function (e) {
+                                i++;
+                                var xdate = $("#Dateid" + i).val();
+                                var xEdit = $("#Editid" + i).val();
+                                rowgrid.each(function (e) {
+                                    j++;
+                                    var ydate = $("#Dateid" + j).val();
+                                    var yEdit = $("#Editid" + j).val();
+                                    if (i !== j) {
+                                        if (xdate != "undifined" && ydate != "undifined") {
+                                            if (xEdit != -1) {
+                                                if (yEdit != -1) {
+                                                    if (xdate == ydate) {
+                                                        valdate = false;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                });
+                            });
+
+                            if (valdate == false) {
+                                alert("Date you have chosen already exists, please choose another date..!!");
+                            } else {
+                                $("form").submit();
+                            }
                         });
 
                         $("#submitonly-button").click(function () {
@@ -173,12 +202,72 @@
 
                         $("#submit-button").click(function () {
                             $("#StatusForm").prop("value", " ");
-                            $("form").submit();
+                            var rowgrid = $("#CompensatoryDetails").data("kendoGrid").tbody.find("tr");
+                            var valdate = true;
+                            var i = -1;
+                            var j = -1;
+                            rowgrid.each(function (e) {
+                                i++;
+                                var xdate = $("#Dateid" + i).val();
+                                var xEdit = $("#Editid" + i).val();
+                                rowgrid.each(function (e) {
+                                    j++;
+                                    var ydate = $("#Dateid" + j).val();
+                                    var yEdit = $("#Editid" + j).val();
+                                    if (i !== j) {
+                                        if (xdate != "undifined" && ydate != "undifined") {
+                                            if (xEdit != -1) {
+                                                if (yEdit != -1) {
+                                                    if (xdate == ydate) {
+                                                        valdate = false;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                });
+                            });
+
+                            if (valdate == false) {
+                                alert("Date you have chosen already exists, please choose another date..!!");
+                            } else {
+                                $("form").submit();
+                            }
                         });
 
                         $("#submit-draft-button").click(function () {
                             $("#StatusForm").val("Draft")
-                            $("form").submit();
+                            var rowgrid = $("#CompensatoryDetails").data("kendoGrid").tbody.find("tr");
+                            var valdate = true;
+                            var i = -1;
+                            var j = -1;
+                            rowgrid.each(function (e) {
+                                i++;
+                                var xdate = $("#Dateid" + i).val();
+                                var xEdit = $("#Editid" + i).val();
+                                rowgrid.each(function (e) {
+                                    j++;
+                                    var ydate = $("#Dateid" + j).val();
+                                    var yEdit = $("#Editid" + j).val();
+                                    if (i !== j) {
+                                        if (xdate != "undifined" && ydate != "undifined") {
+                                            if (xEdit != -1) {
+                                                if (yEdit != -1) {
+                                                    if (xdate == ydate) {
+                                                        valdate = false;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                });
+                            });
+
+                            if (valdate == false) {
+                                alert("Date you have chosen already exists, please choose another date..!!");
+                            } else {
+                                $("form").submit();
+                            }
                         });
 
                         $('#reject-button').click(function (e) {
@@ -247,7 +336,7 @@
                                         model.set("CmpTotalHours", range);
                                     }
 
-                                    if (range >= 4) {
+                                    if (range > 4) {
                                         totday = 1
                                     } else {
                                         totday = 0.5

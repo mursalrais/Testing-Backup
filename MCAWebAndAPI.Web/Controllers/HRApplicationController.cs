@@ -130,8 +130,8 @@ namespace MCAWebAndAPI.Web.Controllers
             viewModel.WorkingExperienceDetails = BindWorkingExperienceDetails(form, viewModel.WorkingExperienceDetails);
             Task createWorkingExperienceDetailsTask = _service.CreateWorkingExperienceDetailsAsync(headerID, viewModel.WorkingExperienceDetails);
             Task createApplicationDocumentTask = _service.CreateApplicationDocumentAsync(headerID, viewModel.Documents);
-            Task sendTask = EmailUtil.SendAsync(viewModel.EmailAddresOne, "Application Submission Confirmation",
-                 EmailResource.ApplicationSubmissionNotification);
+            //Task sendTask = EmailUtil.SendAsync(viewModel.EmailAddresOne, "Application Submission Confirmation",
+            //     EmailResource.ApplicationSubmissionNotification);
             Task allTasks = Task.WhenAll(createEducationDetailsTask, createTrainingDetailsTask,
                 createWorkingExperienceDetailsTask, createApplicationDocumentTask);
 
@@ -172,7 +172,8 @@ namespace MCAWebAndAPI.Web.Controllers
                 return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
             }
 
-            var status = viewModel.WorkflowStatusOptions.Value;
+            //var status = viewModel.WorkflowStatusOptions.Value;
+            var status = viewModel.ApplicationStatus;
             var applicationOwner = string.Format("{0} {1}", viewModel.FirstMiddleName, viewModel.LastName);
 
             var message = string.Format(MessageResource.SuccessUpdateApplicationStatus, applicationOwner, status);
@@ -189,11 +190,15 @@ namespace MCAWebAndAPI.Web.Controllers
             string nationalityName = _service.GetNationality(Convert.ToInt32(viewModel.Nationality.Value));
             viewModel.NationalityName = nationalityName;
 
+            //string positionName = _service.GetPositionName(Convert.ToInt32(viewModel.Position));
+            //viewModel.PositionName = positionName;
+
             viewModel.EducationDetails = BindEducationDetails(form, viewModel.EducationDetails);
             viewModel.TrainingDetails = BindTrainingDetails(form, viewModel.TrainingDetails);
             viewModel.WorkingExperienceDetails = BindWorkingExperienceDetails(form, viewModel.WorkingExperienceDetails);
             ViewData.Model = AdjustViewModel(viewModel);
 
+            
             const string RelativePath = "~/Views/HRApplication/PrintApplicationData.cshtml";
             var view = ViewEngines.Engines.FindView(ControllerContext, RelativePath, null);
             var fileName = viewModel.FirstMiddleName + "-" + viewModel.Position + "-" + "MCA-Indonesia.pdf";

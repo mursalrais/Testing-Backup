@@ -17,5 +17,7 @@ namespace MCAWebAndAPI.Service.Finance
         void SetSiteUrl(string siteUrl);
 
         SCASettlementVM Get(Operations op, int? id = default(int?));
+
+        int? Save(SCASettlementVM scaSettlement);
     }
 }
