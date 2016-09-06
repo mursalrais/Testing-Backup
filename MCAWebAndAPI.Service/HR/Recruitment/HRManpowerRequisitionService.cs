@@ -207,7 +207,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 updatedValue.Add("specifictechnicalskill", viewModel.SpecificTechnicalSkillQualification);
                 updatedValue.Add("personalattributes", viewModel.PersonalAttributesCompetencies);
                 updatedValue.Add("otherrequirements", viewModel.OtherRequirements);
-                if (viewModel.Workplan.Values.Length > 0)
+                if (viewModel.Workplan.Values != null)
                 {
                     updatedValue.Add("Workplan", viewModel.Workplan.Values);
                 }

@@ -1158,6 +1158,16 @@
     <Content Include="Views\CSV\UploadMaster.cshtml" />
     <Content Include="Views\HRPerformancePlan\_WorkflowPathDetails.cshtml" />
     <Content Include="Views\ASSAssetCheckResult\Approve.cshtml" />
+    <Content Include="Views\ASSLocationMaster\Index.cshtml" />
+    <Content Include="Views\ASSAssignmentOfAsset\_DetailsPrint.cshtml" />
+    <Content Include="Views\ASSAssignmentOfAsset\_DetailsView.cshtml" />
+    <Content Include="Views\ASSAssignmentOfAsset\_print.cshtml" />
+    <Content Include="Views\ASSAssignmentOfAsset\Edit.cshtml" />
+    <Content Include="Views\ASSAssignmentOfAsset\Print.cshtml" />
+    <Content Include="Views\ASSAssignmentOfAsset\Sync.cshtml" />
+    <Content Include="Views\ASSAssignmentOfAsset\Upload.cshtml" />
+    <Content Include="Views\ASSAssignmentOfAsset\View.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Decimal.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

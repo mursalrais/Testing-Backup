@@ -19,6 +19,6 @@ namespace MCAWebAndAPI.Service.Finance
         Task CreateItems(int? ID, PettyCashJournalVM viewModel);
         PettyCashJournalVM Get(Operations op, int? id = default(int?));
         IEnumerable<PettyCashJournalItemVM> Get(int? id = default(int?));
-        IEnumerable<PettyCashJournalItemVM> GetPettyCashTransactions(string dateFrom, string dateTo);
+        IEnumerable<PettyCashJournalItemVM> GetPettyCashTransactions(DateTime dateFrom, DateTime dateTo);
     }
 }
