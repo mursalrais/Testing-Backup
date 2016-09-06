@@ -314,4 +314,7 @@
   <data name="AssetReportFixedAsset" xml:space="preserve">
     <value>/Lists/Asset%20Fixed%20Asset/AllItems.aspx</value>
   </data>
+  <data name="AssetCheckResultApprove" xml:space="preserve">
+    <value>s</value>
+  </data>
 </root>

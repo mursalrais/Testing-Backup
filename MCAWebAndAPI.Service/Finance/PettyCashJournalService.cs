@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
 using NLog;
+using static MCAWebAndAPI.Model.ViewModel.Form.Finance.PettyCashTransactionItem;
 using static MCAWebAndAPI.Model.ViewModel.Form.Finance.Shared;
 
 namespace MCAWebAndAPI.Service.Finance
@@ -17,10 +16,10 @@ namespace MCAWebAndAPI.Service.Finance
 
     public class PettyCashJournalService : IPettyCashJournalService
     {
-        private const string LISTNAME = "Petty Cash Journal";
-        private const string LISTNAME_ITEM = "Petty Cash Journal Item";
-        private const string LISTNAME_SETTLEMENT = "Petty Cash Settlement";
-        private const string LISTNAME_REIMBURSEMENT = "Petty Cash Reimbursement";
+        private const string ListName = "Petty Cash Journal";
+        private const string ListName_Item = "Petty Cash Journal Item";
+        private const string ListName_Settlement = "Petty Cash Settlement";
+        private const string ListNam_reimbursement = "Petty Cash Reimbursement";
 
         #region settlement
         private const string FieldName_Settlement_Date = "Settlement_x0020_Date";
@@ -95,12 +94,12 @@ namespace MCAWebAndAPI.Service.Finance
             {
                 if (viewModel.Operation == Operations.c)
                 {
-                    SPConnector.AddListItem(LISTNAME, columnValues, siteUrl);
-                    result = SPConnector.GetLatestListItemID(LISTNAME, siteUrl);
+                    SPConnector.AddListItem(ListName, columnValues, siteUrl);
+                    result = SPConnector.GetLatestListItemID(ListName, siteUrl);
                 }
                 else if (viewModel.Operation == Operations.e)
                 {
-                    SPConnector.UpdateListItem(LISTNAME, viewModel.ID, columnValues, siteUrl);
+                    SPConnector.UpdateListItem(ListName, viewModel.ID, columnValues, siteUrl);
                     result = viewModel.ID;
                 }
             }
@@ -132,7 +131,7 @@ namespace MCAWebAndAPI.Service.Finance
                     {
                         if (viewModel.Operation == Operations.c)
                         {
-                            SPConnector.AddListItem(LISTNAME_ITEM, columnValues, siteUrl);
+                            SPConnector.AddListItem(ListName_Item, columnValues, siteUrl);
                         }
                         else
                         {
@@ -148,15 +147,45 @@ namespace MCAWebAndAPI.Service.Finance
 
         public PettyCashJournalVM Get(Operations op, int? id = default(int?))
         {
-            if (op != Operations.c && id == null)
-                throw new InvalidOperationException(ErrorDevInvalidState);
-
             var viewModel = new PettyCashJournalVM();
 
-            if (id != null)
+            switch (op)
             {
-                var listItem = SPConnector.GetListItem(LISTNAME, id, siteUrl);
-                viewModel = ConvertToVM(listItem);
+                case Operations.c:
+                    // When creating a new PC Journal, take data from PC Settlement & Reimbursement
+                    IEnumerable<PettyCashTransactionItem> transactionItems = GetTransactionItems(viewModel.DateFrom, viewModel.DateTo);
+
+                    var items = new List<PettyCashJournalItemVM>();
+
+                    foreach (var item in transactionItems)
+                    {
+                        items.Add(new PettyCashJournalItemVM()
+                        {
+                            PCVNo = item.TransactionNo,
+                            Date = item.Date,
+                            Payee = item.Title,
+                            Amount = item.Amount
+                        });
+                    }
+
+                    viewModel.ItemDetails = items;
+
+
+                    break;
+
+                case Operations.e:
+                case Operations.v:
+                    //When viewing or editing, take data from PettyCashJournalItem
+
+                    if (id == null)
+                        throw new InvalidOperationException(ErrorDevInvalidState);
+
+                    var listItem = SPConnector.GetListItem(ListName, id, siteUrl);
+                    viewModel = ConvertToVM(listItem);
+
+                    viewModel.ItemDetails = GetItemDetails(this.siteUrl, (int)id);
+
+                    break;
             }
 
             viewModel.Operation = op;
@@ -170,7 +199,7 @@ namespace MCAWebAndAPI.Service.Finance
 
             var caml = CamlQueryUtil.Generate(FieldName_Item_PettyCashJournalID, "Lookup", id.ToString());
 
-            foreach (var list in SPConnector.GetList(LISTNAME_ITEM, siteUrl, caml))
+            foreach (var list in SPConnector.GetList(ListName_Item, siteUrl, caml))
             {
                 try
                 {
@@ -189,7 +218,18 @@ namespace MCAWebAndAPI.Service.Finance
             return viewModel;
         }
 
-        public IEnumerable<PettyCashJournalItemVM> GetPettyCashTransactions(string dateFrom, string dateTo)
+        public IEnumerable<PettyCashTransactionItem> GetTransactionItems(DateTime dateFrom, DateTime dateTo)
+        {
+            List<PettyCashTransactionItem> pettyCashTransactions = new List<PettyCashTransactionItem>();
+
+            //TODO: review DR & CR posts
+            pettyCashTransactions.AddRange(PettyCashSettlementService.GetPettyCashTransaction(siteUrl, dateFrom, dateTo, Post.DR));
+            pettyCashTransactions.AddRange(PettyCashReimbursementService.GetPettyCashTransaction(siteUrl, dateFrom, dateTo, Post.DR));
+
+            return pettyCashTransactions;
+        }
+
+        public IEnumerable<PettyCashJournalItemVM> GetPettyCashTransactions(DateTime dateFrom, DateTime dateTo)
         {
             var listView = new List<PettyCashJournalItemVM>();
 
@@ -199,11 +239,11 @@ namespace MCAWebAndAPI.Service.Finance
             return listView;
         }
 
-        private void GetPettyCashSettlement(string dateFrom, string dateTo, ref List<PettyCashJournalItemVM> listView)
+        private void GetPettyCashSettlement(DateTime dateFrom, DateTime dateTo, ref List<PettyCashJournalItemVM> listView)
         {
             var caml = @"<View><Query><Where><And><Geq><FieldRef Name='" + FieldName_Settlement_Date + "' /><Value Type='DateTime'>" + dateFrom + "</Value></Geq><Leq><FieldRef Name='" + FieldName_Settlement_Date + "' /><Value Type='DateTime'>" + dateTo + "</Value></Leq></And></Where></Query></View>";
 
-            foreach (var listItem in SPConnector.GetList(LISTNAME_SETTLEMENT, siteUrl, caml))
+            foreach (var listItem in SPConnector.GetList(ListName_Settlement, siteUrl, caml))
             {
                 var item = new PettyCashJournalItemVM();
 
@@ -212,7 +252,7 @@ namespace MCAWebAndAPI.Service.Finance
                     item.Date = Convert.ToDateTime(listItem[FieldName_Settlement_Date]);
                     item.PCVNo = Convert.ToString(listItem[FieldName_DocumentNo]);
                     item.Payee = Convert.ToString(listItem[FieldName_PaidTo]);
-                    item.DescOfExpenses= Convert.ToString(listItem[FieldName_Reason]);
+                    item.DescOfExpenses = Convert.ToString(listItem[FieldName_Reason]);
                     item.WBS = Convert.ToString(listItem[FieldName_WBS]);
                     item.GL = Convert.ToString(listItem[FieldName_GL]);
                     item.Amount = Convert.ToDecimal(listItem[FieldName_AmountLiquidated]);
@@ -231,11 +271,11 @@ namespace MCAWebAndAPI.Service.Finance
             }
         }
 
-        private void GetPettyCashReiumbursement(string dateFrom, string dateTo, ref List<PettyCashJournalItemVM> listView)
+        private void GetPettyCashReiumbursement(DateTime dateFrom, DateTime dateTo, ref List<PettyCashJournalItemVM> listView)
         {
             var caml = @"<View><Query><Where><And><Geq><FieldRef Name='" + FieldName_Reimbursement_Date + "' /><Value Type='DateTime'>" + dateFrom + "</Value></Geq><Leq><FieldRef Name='" + FieldName_Reimbursement_Date + "' /><Value Type='DateTime'>" + dateTo + "</Value></Leq></And></Where></Query></View>";
 
-            foreach (var listItem in SPConnector.GetList(LISTNAME_REIMBURSEMENT, siteUrl, caml))
+            foreach (var listItem in SPConnector.GetList(ListNam_reimbursement, siteUrl, caml))
             {
                 var item = new PettyCashJournalItemVM();
 
@@ -278,7 +318,7 @@ namespace MCAWebAndAPI.Service.Finance
             };
         }
 
-        private PettyCashJournalItemVM ConvertToItemVM(ListItem listItem)
+        private static PettyCashJournalItemVM ConvertToItemVM(ListItem listItem)
         {
             return new PettyCashJournalItemVM
             {
@@ -292,6 +332,25 @@ namespace MCAWebAndAPI.Service.Finance
                 PettyCashJournalID = Convert.ToInt32((listItem[FieldName_Item_PettyCashJournalID] as FieldLookupValue).LookupId),
                 Amount = Convert.ToDecimal(listItem[FieldName_Item_Amount]),
             };
+        }
+
+        private static IEnumerable<PettyCashJournalItemVM> GetItemDetails(string siteUrl, int headerID)
+        {
+            List<PettyCashJournalItemVM> details = null;
+
+            if (headerID > 0)
+            {
+                var caml = @"<View><Query><Where><Eq><FieldRef Name='" + FieldName_Item_PettyCashJournalID + "' /><Value Type='Lookup'>" + headerID.ToString() + "</Value></Eq></Where></Query></View>";
+
+                details = new List<PettyCashJournalItemVM>();
+
+                foreach (var item in SPConnector.GetList(ListName_Item, siteUrl, caml))
+                {
+                    details.Add(ConvertToItemVM(item));
+                }
+            }
+
+            return details;
         }
     }
 }

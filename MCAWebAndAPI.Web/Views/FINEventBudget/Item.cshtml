@@ -153,6 +153,11 @@
             </div>
 
             <legend>Item Details</legend>
+            <div class="validation-summary-valid" id="errorLabel" style="display:none">
+                <ul>
+                    <li>Total per item (IDR) must be equal to Total Direct Payment (IDR) + Total SCA (IDR)</li>
+                </ul>
+            </div>
             <div class="row">
                 @Html.Partial("_ItemDetails", Model.ItemDetails)
             </div>
@@ -261,6 +266,29 @@
 
             });
 
+        });
+
+        $('form').on('submit', function () {
+            var datasource = $("#ItemDetails").data("kendoGrid").dataSource.data();
+            var totalAll = 0;
+            var totalAllDP = 0;
+            var totalAllSCA = 0;
+            for (var i = 0; i < datasource.length; i++) {
+                if (datasource[i].EditMode >= 0) {
+                    totalAll = totalAll + datasource[i].AmountPerItem;
+                    totalAllDP = totalAllDP + datasource[i].DirectPayment;
+                    totalAllSCA = totalAllSCA + datasource[i].SCA;
+                }
+            }
+            //cek valid ga
+            if (totalAll == totalAllDP + totalAllSCA) {
+                document.getElementById('errorLabel').style.display = "none";
+                return true;
+            }
+            else {
+                document.getElementById('errorLabel').style.display = "block"; 
+                return false;
+            }
         });
 
         $("#Rate").change(function () {
