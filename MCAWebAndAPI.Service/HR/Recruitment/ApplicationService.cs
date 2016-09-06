@@ -512,7 +512,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         public void SetApplicationStatus(ApplicationDataVM viewModel)
         {
             var updatedValue = new Dictionary<string, object>();
-            updatedValue.Add("applicationstatus", viewModel.WorkflowStatusOptions.Value);
+            //updatedValue.Add("applicationstatus", viewModel.WorkflowStatusOptions.Value);
+            updatedValue.Add("applicationstatus", viewModel.ApplicationStatus);
 
             try
             {
