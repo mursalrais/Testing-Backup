@@ -142,10 +142,10 @@ namespace MCAWebAndAPI.Web.Controllers
             AssetCheckResultHeaderVM data,
             int? ID,
             string Print,
-            Boolean isApprove = false
+            Boolean RequestApproval = false
         )
         {
-            if (isApprove && ID != null)
+            if (RequestApproval && ID != null)
             {
                 return RedirectToAction("Approve", new { ID = ID });
             }

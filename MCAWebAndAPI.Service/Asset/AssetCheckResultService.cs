@@ -425,7 +425,7 @@ namespace MCAWebAndAPI.Service.Asset
                         model.hFormID,
                         model.CountDate,
                         GetFullName(model.CountedBy1.Value),
-                        _siteUrl + UrlResource.AssetCheckResultApprove);
+                        _siteUrl + String.Format(UrlResource.AssetCheckResultApprove),ID.ToString());
                     EmailUtil.Send(email.EmailTo, "Notification to approve the result", email.EmailContent);
                 }
 
@@ -526,19 +526,10 @@ namespace MCAWebAndAPI.Service.Asset
                 {
                     columnValues.Add("approvalname", data.Name.Value);
                     columnValues.Add("approvalposision", data.Posision.Value);
-
-                    EmailHelperAssetCheckResult email = new EmailHelperAssetCheckResult();
-                    email = RequestApproveEmail(
-                        model.Name.Value,
-                        assetcheckformid.ToString(),
-                        model.CountDate,
-                        GetFullName(model.CountedBy1.Value),
-                        _siteUrl + UrlResource.AssetCheckResultApprove);
-                    EmailUtil.Send(email.EmailTo, "Notification to approve the result", email.EmailContent);
                 }
 
                 SPConnector.AddListItem("Asset Check Result", columnValues, _siteUrl);
-
+                
                 foreach (var item in model.Details)
                 {
                     columnValues = new Dictionary<string, object>();
@@ -562,6 +553,27 @@ namespace MCAWebAndAPI.Service.Asset
                     columnValues.Add("remarks", item.Remarks);
 
                     SPConnector.AddListItem("Asset Check Result Detail", columnValues, _siteUrl);
+                }
+
+                caml = @"<View><Query><Where><Eq><FieldRef Name='assetcheckresultid' /><Value Type='Number'>"+assetcheckresultid.ToString()+"</Value></Eq></Where></Query></View>";
+                var lastItemAssetCheckResult = SPConnector.GetList("Asset Check Result", _siteUrl, caml);
+                int IDResult = 0;
+                foreach (var item in lastItemAssetCheckResult)
+                {
+                    IDResult = Convert.ToInt32(item["ID"].ToString());
+                }
+
+
+                if (isApproval)
+                {
+                    EmailHelperAssetCheckResult email = new EmailHelperAssetCheckResult();
+                    email = RequestApproveEmail(
+                        model.Name.Value,
+                        assetcheckformid.ToString(),
+                        model.CountDate,
+                        GetFullName(model.CountedBy1.Value),
+                        _siteUrl + String.Format( UrlResource.AssetCheckResultApprove, IDResult.ToString()));
+                    EmailUtil.Send(email.EmailTo, "Notification to approve the result", email.EmailContent);
                 }
 
                 return model;
