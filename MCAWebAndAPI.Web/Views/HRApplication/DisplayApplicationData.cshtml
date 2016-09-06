@@ -94,10 +94,10 @@
             e.preventDefault();
 
             // Get value from kendo dropdownlist
-            var applicationStatus = $('#WorkflowStatusOptions_Value').data("kendoDropDownList").value();
+            @*var applicationStatus = $('#WorkflowStatusOptions_Value').data("kendoDropDownList").value();
             if (applicationStatus ==  "@Workflow.GetApplicationStatus(Workflow.ApplicationStatus.ONBOARD)" ) {
                 $('form').prop('action', '/HRApplication/CreateProfessionalData');
-            }
+            }*@
             $('form').submit();
         });
 
