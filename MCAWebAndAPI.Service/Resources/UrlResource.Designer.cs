@@ -151,7 +151,7 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to s.
+        ///   Looks up a localized string similar to /Lists/Asset%20Check%20Result/DispForm.aspx?ID={0}&amp;RequestApproval=TRUE.
         /// </summary>
         public static string AssetCheckResultApprove {
             get {

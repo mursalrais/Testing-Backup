@@ -253,6 +253,7 @@
     <Compile Include="HR\Recruitment\IHRShortlistService.cs" />
     <Compile Include="HR\Recruitment\IPSAManagementService.cs" />
     <Compile Include="HR\Recruitment\PSAManagementService.cs" />
+    <Compile Include="JobSchedulers\Jobs\AssetManagementJob.cs" />
     <Compile Include="JobSchedulers\Jobs\EmailExternalJob.cs" />
     <Compile Include="JobSchedulers\Jobs\EmailReminder5Days.cs" />
     <Compile Include="JobSchedulers\Jobs\EmailJob.cs" />
@@ -261,6 +262,7 @@
     <Compile Include="JobSchedulers\Jobs\PSAManagementJob.cs" />
     <Compile Include="JobSchedulers\Jobs\TaskCalculationJob.cs" />
     <Compile Include="JobSchedulers\Jobs\WBSMasterSyncJob.cs" />
+    <Compile Include="JobSchedulers\Schedulers\AssetManagementScheduler.cs" />
     <Compile Include="JobSchedulers\Schedulers\EmailScheduler.cs" />
     <Compile Include="JobSchedulers\Schedulers\ExitProcedureManagementScheduler.cs" />
     <Compile Include="JobSchedulers\Schedulers\PayrollRunScheduler.cs" />
@@ -272,7 +274,9 @@
     <Compile Include="HR\Common\CalendarService.cs" />
     <Compile Include="HR\Common\ICalendarService.cs" />
     <Compile Include="ProjectManagement\Common\WBSMasterService.cs" />
+    <Compile Include="ProjectManagement\Schedule\AssetScheduleService.cs" />
     <Compile Include="ProjectManagement\Schedule\ExitProcedureScheduleService.cs" />
+    <Compile Include="ProjectManagement\Schedule\IAssetScheduleService.cs" />
     <Compile Include="ProjectManagement\Schedule\IExitProcedureScheduleService.cs" />
     <Compile Include="ProjectManagement\Schedule\IPSAScheduleService.cs" />
     <Compile Include="ProjectManagement\Schedule\IRIAService.cs" />
