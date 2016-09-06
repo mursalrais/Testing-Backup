@@ -152,7 +152,10 @@ namespace MCAWebAndAPI.Service.Finance
         {
             PettyCashReplenishmentVM viewModel = new PettyCashReplenishmentVM();
 
+            viewModel.TransactionNo = Convert.ToString(listItem[FieldName_DocNo]);
+            viewModel.Date = Convert.ToDateTime(listItem[FieldName_Date]);
             viewModel.Currency.Value = Convert.ToString(listItem[FieldName_Currency]);
+            viewModel.Amount = Convert.ToDecimal(listItem[FieldName_Amount]);
             viewModel.Remarks = Convert.ToString(listItem[FieldName_Remarks]);
             viewModel.DocumentUrl = GetDocumentUrl(siteUrl, viewModel.ID);
 

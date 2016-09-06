@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MCAWebAndAPI.Model.ViewModel.Control
+﻿namespace MCAWebAndAPI.Model.ViewModel.Control
 {
     public class TaxTypeComboBoxVM : ComboBoxVM
     {
-        public const string INCOME = "Income";
+        public const string INCOME = "Income Tax";
         public const string VAT = "VAT";
         public const string OTHERS = "Other";
 

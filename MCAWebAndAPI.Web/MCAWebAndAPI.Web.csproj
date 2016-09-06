@@ -1157,6 +1157,7 @@
     <Content Include="Views\ASSLocationMaster\Sync.cshtml" />
     <Content Include="Views\CSV\UploadMaster.cshtml" />
     <Content Include="Views\HRPerformancePlan\_WorkflowPathDetails.cshtml" />
+    <Content Include="Views\ASSAssetCheckResult\Approve.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

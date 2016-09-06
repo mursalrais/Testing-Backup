@@ -114,6 +114,7 @@ namespace MCAWebAndAPI.Service.Finance
             };
         }
 
+
         public static string GetPosition(string username, string siteUrl)
         {
             //TODO: change this implementation to Service.Common.ProfessionalService
@@ -143,22 +144,29 @@ namespace MCAWebAndAPI.Service.Finance
             var pettyCashTransactions = new List<PettyCashTransactionItem>();
             var viewModel = new PettyCashPaymentVoucherVM();
 
+            var from = String.Format("{0}-{1}-{2}", dateFrom.Year, dateFrom.Month, dateFrom.Day);
+            var to = String.Format("{0}-{1}-{2}", dateTo.Year, dateTo.Month, dateTo.Day);
+
             string caml = @"<Query>
   <Where>
     <And>
       <Geq>
         <FieldRef Name='{0}' />
-          <Value IncludeTimeValue='TRUE' Type='DateTime'>{1}</Value>
+          <Value Type='DateTime'>{1}</Value>
       </Geq>
       <Leq>
         <FieldRef Name='{0}' />
-        <Value IncludeTimeValue='TRUE' Type='DateTime'>{2}</Value>
+        <Value Type='DateTime'>{2}</Value>
       </Leq>
     </And>
   </Where>
 </Query>";
 
-            caml = string.Format(caml, dateFieldName, dateFrom, dateTo);
+            //TODO: check why date filter failed
+
+            //caml = string.Format(caml, dateFieldName, dateFrom, dateTo);
+
+            caml = string.Format(caml, dateFieldName, from, to);
 
             var listItems = SPConnector.GetList(listName, siteUrl, caml);
 

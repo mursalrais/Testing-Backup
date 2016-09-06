@@ -15,6 +15,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
     {
         public int? ID { get; set; }
 
+        public string hFormID { get; set; }
+
         public DateTime? CreateDate { get; set; }
 
         public string hCountedBy1 { get; set; }
