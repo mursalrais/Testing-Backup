@@ -270,15 +270,46 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.ProfessionalFullName = Convert.ToString(listItem["professionalfullname"]);
             viewModel.PositionBasedProject.Text = FormatUtil.ConvertLookupToValue(listItem, "position");
             viewModel.JoinDate = Convert.ToDateTime(listItem["joindate"]).ToLocalTime();
-            viewModel.DateOfNewPSA = Convert.ToDateTime(listItem["dateofnewpsa"]).ToLocalTime();
+            viewModel.DateOfNewPSA = Convert.ToDateTime(listItem["dateofnewpsa"]);
             viewModel.TenureString = Convert.ToString(listItem["tenure"]);
             viewModel.PerformancePlan.Value = Convert.ToString(listItem["initiateperformanceplan"]);
             viewModel.PSAExpiryDate = Convert.ToDateTime(listItem["psaexpirydate"]).ToLocalTime();
             viewModel.PSAExpiryDates = Convert.ToDateTime(listItem["psaexpirydates"]).ToLocalTime();
+            viewModel.LastWorkingDate = Convert.ToDateTime(listItem["lastworkingdate"]);
+
+            DateTime today = DateTime.UtcNow;
+                       
+            if((today < viewModel.DateOfNewPSA) || (today > viewModel.LastWorkingDate))
+            {
+                viewModel.PSAStatus.Text = "Inactive";
+            }
+            else if((today >= viewModel.DateOfNewPSA) && (today <= viewModel.LastWorkingDate))
+            {
+                viewModel.PSAStatus.Text = "Active";
+            }
+
+            UpdatePSAStatus(viewModel.ID, viewModel.PSAStatus.Text);
 
             viewModel.DocumentUrl = GetDocumentUrl(viewModel.ID);
 
             return viewModel;
+        }
+
+        private void UpdatePSAStatus(int? ID, string psaStatus)
+        {
+            var updatedValues = new Dictionary<string, object>();
+
+            updatedValues.Add("psastatus", psaStatus);
+
+            try
+            {
+                SPConnector.UpdateListItem(SP_PSA_LIST_NAME, ID, updatedValues, _siteUrl);
+            }
+            catch (Exception e)
+            {
+                logger.Debug(e.Message);
+                //return false;
+            }
         }
 
         private string GetDocumentUrl(int? iD)

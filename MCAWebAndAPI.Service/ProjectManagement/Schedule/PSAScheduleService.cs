@@ -151,18 +151,20 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
                                 if ((dateToday <= latestDateOfNewPSA) && (dateToday >= latestExpiryDate))
                                 {
-                                    var columnValues1 = new Dictionary<string, object>();
+                                    UpdatePSAStatus("Active", professionalPSA);
 
-                                    columnValues1.Add("psastatus", "Active");
+                                    //var columnValues1 = new Dictionary<string, object>();
 
-                                    try
-                                    {
-                                        SPConnector.UpdateListItemNoVersionConflict(SP_PSA_LIST_NAME, professionalPSA, columnValues1, _siteUrl);
-                                    }
-                                    catch (Exception e)
-                                    {
-                                        logger.Debug(e.Message);
-                                    }
+                                    //columnValues1.Add("psastatus", "Active");
+
+                                    //try
+                                    //{
+                                    //    SPConnector.UpdateListItem(SP_PSA_LIST_NAME, professionalPSA, columnValues1, _siteUrl);
+                                    //}
+                                    //catch (Exception e)
+                                    //{
+                                    //    logger.Debug(e.Message);
+                                    //}
 
                                     int? profID = FormatUtil.ConvertLookupToID(latestProfessionalPSA, "professional");//GetProfessionalID(psaNumber);
                                     string psaNumber = Convert.ToString(latestProfessionalPSA["Title"]);
@@ -176,18 +178,20 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
                                 }
                                 if((dateToday < latestDateOfNewPSA) && (dateToday > latestExpiryDate))
                                 {
-                                    var columnValues2 = new Dictionary<string, object>();
+                                    UpdatePSAStatus("Inactive", professionalPSA);
 
-                                    columnValues2.Add("psastatus", "Inactive");
+                                    //var columnValues2 = new Dictionary<string, object>();
 
-                                    try
-                                    {
-                                        SPConnector.UpdateListItemNoVersionConflict(SP_PSA_LIST_NAME, professionalPSA, columnValues2, _siteUrl);
-                                    }
-                                    catch (Exception e)
-                                    {
-                                        logger.Debug(e.Message);
-                                    }
+                                    //columnValues2.Add("psastatus", "Inactive");
+
+                                    //try
+                                    //{
+                                    //    SPConnector.UpdateListItemNoVersionConflict(SP_PSA_LIST_NAME, professionalPSA, columnValues2, _siteUrl);
+                                    //}
+                                    //catch (Exception e)
+                                    //{
+                                    //    logger.Debug(e.Message);
+                                    //}
 
                                     int? profID = FormatUtil.ConvertLookupToID(latestProfessionalPSA, "professional");//GetProfessionalID(psaNumber);
                                     string psaNumber = Convert.ToString(latestProfessionalPSA["Title"]);
@@ -212,7 +216,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
                         continue;
                     }
                 }
-                else if (dateToday >= newpsadate && dateToday <= expireDate)
+                else if ((dateToday >= newpsadate) && (dateToday <= expireDate))
                 {
                     int? professionalID = FormatUtil.ConvertLookupToID(psaData, "professional");//GetProfessionalID(psaNumber);
 
@@ -233,32 +237,38 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
                                 DateTime latestPSAExpiryDate = Convert.ToDateTime(latestProfessionalPSA["lastworkingdate"]).ToLocalTime();
                                 DateTime lastestPSANewPSA = Convert.ToDateTime(latestProfessionalPSA["dateofnewpsa"]).ToLocalTime();
 
-                                if (dateToday >= lastestPSANewPSA && dateToday <= latestPSAExpiryDate)
+                                DateTime currentPSAExpiryDate = Convert.ToDateTime(currentProfessionalPSA["lastworkingdate"]).ToLocalTime();
+                                DateTime currentPSANewPSA = Convert.ToDateTime(currentProfessionalPSA["dateofnewpsa"]).ToLocalTime();
+
+                                if ((dateToday >= lastestPSANewPSA) && (dateToday <= latestPSAExpiryDate))
                                 {
-                                    var columnValues3 = new Dictionary<string, object>();
+                                    UpdatePSAStatus("Active", professionalPSA);
+                                    UpdatePSAStatus("Inactive", id);
 
-                                    columnValues3.Add("psastatus", "Inactive");
+                                    //var columnValues3 = new Dictionary<string, object>();
 
-                                    try
-                                    {
-                                        SPConnector.UpdateListItemNoVersionConflict(SP_PSA_LIST_NAME, id, columnValues3, _siteUrl);
-                                    }
-                                    catch (Exception e)
-                                    {
-                                        logger.Debug(e.Message);
-                                    }
-                                    var columnValues4 = new Dictionary<string, object>();
+                                    //columnValues3.Add("psastatus", "Inactive");
 
-                                    columnValues4.Add("psastatus", "Active");
+                                    //try
+                                    //{
+                                    //    SPConnector.UpdateListItemNoVersionConflict(SP_PSA_LIST_NAME, id, columnValues3, _siteUrl);
+                                    //}
+                                    //catch (Exception e)
+                                    //{
+                                    //    logger.Debug(e.Message);
+                                    //}
+                                    //var columnValues4 = new Dictionary<string, object>();
 
-                                    try
-                                    {
-                                        SPConnector.UpdateListItemNoVersionConflict(SP_PSA_LIST_NAME, professionalPSA, columnValues4, _siteUrl);
-                                    }
-                                    catch (Exception e)
-                                    {
-                                        logger.Debug(e.Message);
-                                    }
+                                    //columnValues4.Add("psastatus", "Active");
+
+                                    //try
+                                    //{
+                                    //    SPConnector.UpdateListItemNoVersionConflict(SP_PSA_LIST_NAME, professionalPSA, columnValues4, _siteUrl);
+                                    //}
+                                    //catch (Exception e)
+                                    //{
+                                    //    logger.Debug(e.Message);
+                                    //}
 
 
                                     int? profID = FormatUtil.ConvertLookupToID(latestProfessionalPSA, "professional");//GetProfessionalID(psaNumber);
@@ -273,33 +283,45 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
                                 }
                                 else
                                 {
-                                    var columnValues5 = new Dictionary<string, object>();
-
-                                    columnValues5.Add("psastatus", "Active");
-
-                                    try
+                                    if((dateToday < currentPSANewPSA) || (dateToday > currentPSAExpiryDate))
                                     {
-                                        SPConnector.UpdateListItemNoVersionConflict(SP_PSA_LIST_NAME, id, columnValues5, _siteUrl);
+                                        UpdatePSAStatus("Inactive", id);
+                                        UpdatePSAStatus("Inactive", professionalPSA);
                                     }
-                                    catch (Exception e)
+                                    if((dateToday >= currentPSANewPSA) && (dateToday <= currentPSAExpiryDate))
                                     {
-                                        logger.Debug(e.Message);
+                                        UpdatePSAStatus("Active", id);
+                                        UpdatePSAStatus("Inactive", professionalPSA);
+
+                                        int? profID = FormatUtil.ConvertLookupToID(currentProfessionalPSA, "professional");//GetProfessionalID(psaNumber);
+                                        string psaNumber = Convert.ToString(currentProfessionalPSA["Title"]);
+                                        DateTime professionalJoinDate = Convert.ToDateTime(currentProfessionalPSA["joindate"]);
+                                        DateTime professionalStartPSA = Convert.ToDateTime(currentProfessionalPSA["dateofnewpsa"]);
+                                        DateTime professionalEndPSA = Convert.ToDateTime(currentProfessionalPSA["psaexpirydates"]);
+                                        DateTime professionalLastDate = Convert.ToDateTime(currentProfessionalPSA["lastworkingdate"]);
+                                        string psaStatus = Convert.ToString(currentProfessionalPSA["psastatus"]);
+
+                                        UpdateProfessionalData(profID, psaNumber, professionalJoinDate, professionalStartPSA, professionalEndPSA, professionalLastDate, psaStatus);
                                     }
 
-                                    var columnValues6 = new Dictionary<string, object>();
+                                    //var columnValues5 = new Dictionary<string, object>();
 
-                                    columnValues6.Add("psastatus", "Inactive");
-                                    SPConnector.UpdateListItemNoVersionConflict(SP_PSA_LIST_NAME, professionalPSA, columnValues6, _siteUrl);
+                                    //columnValues5.Add("psastatus", "Active");
 
-                                    int? profID = FormatUtil.ConvertLookupToID(currentProfessionalPSA, "professional");//GetProfessionalID(psaNumber);
-                                    string psaNumber = Convert.ToString(currentProfessionalPSA["Title"]);
-                                    DateTime professionalJoinDate = Convert.ToDateTime(currentProfessionalPSA["joindate"]);
-                                    DateTime professionalStartPSA = Convert.ToDateTime(currentProfessionalPSA["dateofnewpsa"]);
-                                    DateTime professionalEndPSA = Convert.ToDateTime(currentProfessionalPSA["psaexpirydates"]);
-                                    DateTime professionalLastDate = Convert.ToDateTime(currentProfessionalPSA["lastworkingdate"]);
-                                    string psaStatus = Convert.ToString(currentProfessionalPSA["psastatus"]);
+                                    //try
+                                    //{
+                                    //    SPConnector.UpdateListItemNoVersionConflict(SP_PSA_LIST_NAME, id, columnValues5, _siteUrl);
+                                    //}
+                                    //catch (Exception e)
+                                    //{
+                                    //    logger.Debug(e.Message);
+                                    //}
 
-                                    UpdateProfessionalData(profID, psaNumber, professionalJoinDate, professionalStartPSA, professionalEndPSA, professionalLastDate, psaStatus);
+                                    //var columnValues6 = new Dictionary<string, object>();
+
+                                    //columnValues6.Add("psastatus", "Inactive");
+                                    //SPConnector.UpdateListItemNoVersionConflict(SP_PSA_LIST_NAME, professionalPSA, columnValues6, _siteUrl);
+                                    
                                 }
                             }
                             if (id == professionalPSA)
@@ -311,10 +333,12 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
                                 if (dateToday >= lastestPSANewPSA && dateToday <= latestPSAExpiryDate)
                                 {
-                                    var columnValues7 = new Dictionary<string, object>();
+                                    UpdatePSAStatus("Active", professionalPSA);
 
-                                    columnValues7.Add("psastatus", "Active");
-                                    SPConnector.UpdateListItemNoVersionConflict(SP_PSA_LIST_NAME, professionalPSA, columnValues7, _siteUrl);
+                                    //var columnValues7 = new Dictionary<string, object>();
+
+                                    //columnValues7.Add("psastatus", "Active");
+                                    //SPConnector.UpdateListItemNoVersionConflict(SP_PSA_LIST_NAME, professionalPSA, columnValues7, _siteUrl);
 
                                     int? profID = FormatUtil.ConvertLookupToID(latestProfessionalPSA, "professional");//GetProfessionalID(psaNumber);
                                     string psaNumber = Convert.ToString(latestProfessionalPSA["Title"]);
@@ -328,10 +352,12 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
                                 }
                                 else
                                 {
-                                    var columnValues8 = new Dictionary<string, object>();
+                                    UpdatePSAStatus("Inactive", professionalPSA);
 
-                                    columnValues8.Add("psastatus", "Inactive");
-                                    SPConnector.UpdateListItemNoVersionConflict(SP_PSA_LIST_NAME, professionalPSA, columnValues8, _siteUrl);
+                                    //var columnValues8 = new Dictionary<string, object>();
+
+                                    //columnValues8.Add("psastatus", "Inactive");
+                                    //SPConnector.UpdateListItemNoVersionConflict(SP_PSA_LIST_NAME, professionalPSA, columnValues8, _siteUrl);
 
                                     int? profID = FormatUtil.ConvertLookupToID(latestProfessionalPSA, "professional");//GetProfessionalID(psaNumber);
                                     string psaNumber = Convert.ToString(latestProfessionalPSA["Title"]);
@@ -351,7 +377,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
             }
         }
 
-        private bool UpdatePSAStatus(string psaStatus, int id)
+        private void UpdatePSAStatus(string psaStatus, int id)
         {
             var columnValues = new Dictionary<string, object>();
             
@@ -359,18 +385,18 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
             
             try
             {
-                SPConnector.UpdateListItemNoVersionConflict(SP_PSA_LIST_NAME, id, columnValues, _siteUrl);
+                SPConnector.UpdateListItem(SP_PSA_LIST_NAME, id, columnValues, _siteUrl);
             }
             catch (Exception e)
             {
                 logger.Debug(e.Message);
-                return false;
+                //return false;
             }
 
             //var entitiy = new PSAManagementVM();
             //entitiy = psaManagement;
 
-            return true;
+            //return true;
         }
 
         private int checkProfessionalPSA(string professionalFullName)
