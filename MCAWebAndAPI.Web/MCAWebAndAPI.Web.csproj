@@ -1158,6 +1158,7 @@
     <Content Include="Views\CSV\UploadMaster.cshtml" />
     <Content Include="Views\HRPerformancePlan\_WorkflowPathDetails.cshtml" />
     <Content Include="Views\ASSAssetCheckResult\Approve.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Decimal.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
