@@ -74,20 +74,27 @@
 
         }
         function onPositionChange(e) {
+            console.log(e);
             var dataItem = this.dataItem(e.item);
-            //var urlKeyPosition = "/HRDataMaster/GetKeyPosition/" + dataItem.ID;
-            if (dataItem.IsKeyPosition == "Yes") {
-                //$('#KeyPositionValue').prop('value', "Yes");
-                $("label[for='Yes']").show();
-                $("label[for='No']").hide();
-                $("#IsKeyPosition").val(true);
-
+            if (dataItem == null) {
+                
             }
             else {
-                $("label[for='No']").show();
-                $("label[for='Yes']").hide();
-                $("#IsKeyPosition").val(false);
+                //var urlKeyPosition = "/HRDataMaster/GetKeyPosition/" + dataItem.ID;
+                if (dataItem.IsKeyPosition == "Yes") {
+                    //$('#KeyPositionValue').prop('value', "Yes");
+                    $("label[for='Yes']").show();
+                    $("label[for='No']").hide();
+                    $("#IsKeyPosition").val(true);
+
+                }
+                else {
+                    $("label[for='No']").show();
+                    $("label[for='Yes']").hide();
+                    $("#IsKeyPosition").val(false);
+                }
             }
+            
 
         };
         $(document).ready(function () {
@@ -137,6 +144,8 @@
                     }
                 }
             }
+            var validator = $("#ValidateMyContents").kendoValidator().data("kendoValidator"),
+            status = $(".status");
             return true;
         }
 
