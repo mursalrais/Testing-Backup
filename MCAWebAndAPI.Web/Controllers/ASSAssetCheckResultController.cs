@@ -141,9 +141,14 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult View(string siteUrl,
             AssetCheckResultHeaderVM data,
             int? ID,
-            string Print
+            string Print,
+            Boolean RequestApproval = false
         )
         {
+            if (RequestApproval && ID != null)
+            {
+                return RedirectToAction("Approve", new { ID = ID });
+            }
 
             assetCheckResultService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);

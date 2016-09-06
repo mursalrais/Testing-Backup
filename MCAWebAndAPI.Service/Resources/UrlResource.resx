@@ -315,6 +315,6 @@
     <value>/Lists/Asset%20Fixed%20Asset/AllItems.aspx</value>
   </data>
   <data name="AssetCheckResultApprove" xml:space="preserve">
-    <value>s</value>
+    <value>/Lists/Asset%20Check%20Result/DispForm.aspx?ID={0}&amp;RequestApproval=TRUE</value>
   </data>
 </root>
