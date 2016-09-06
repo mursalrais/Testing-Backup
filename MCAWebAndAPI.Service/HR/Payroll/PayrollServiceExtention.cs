@@ -18,7 +18,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
     /// </summary>
     public static class PayrollServiceExtention
     {
-        private static DateTime Last13MonthDate_HardCoded = new DateTime(2016, 7, 7);
+        private static DateTime Last13MonthDate_HardCoded = new DateTime(2016, 7, 7).ToLocalTime();
         private static string _siteUrl;
 
         /// <summary>

@@ -149,7 +149,7 @@ namespace MCAWebAndAPI.Web.Controllers
             SessionManager.Set("SiteUrl", siteUrl);
             _hRPayrollService.SetSiteUrl(siteUrl);
 
-            var viewModelPayroll = await _hRPayrollService.GetPayrollWorksheetDetailsAsync(DateTime.Today);
+            var viewModelPayroll = await _hRPayrollService.GetPayrollWorksheetDetailsAsync(DateTime.Today.ToLocalTime());
             SessionManager.Set("PayrollWorksheetDetailVM", viewModelPayroll);
 
             var viewModel = new PayrollRunVM();
