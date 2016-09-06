@@ -7,14 +7,18 @@
     ViewBag.Title = "CreateApplicationData";
 }
 
-@using (Html.BeginForm("SetStatusApplicationData", "HRApplication", FormMethod.Post, new
+@*@using (Html.BeginForm("SetStatusApplicationData", "HRApplication", FormMethod.Post, new
 {
     @class = "form-horizontal"
 }))
-{
+{*@
+
+<div class="form-horizontal">
     <fieldset>
         @Html.HiddenFor(m => m.ID)
         @Html.HiddenFor(m => m.Position)
+        @Html.HiddenFor(m => m.ApplicationStatus)
+
 
         <legend>Personal Details</legend>
         <div class="row">
@@ -24,7 +28,7 @@
                     <div class="col-sm-8">
                         @Html.DisplayFor(m => m.Position)
                         @*<input id="vacant-position" class="form-control" value=""/>*@
-                        
+
                     </div>
                 </div>
             </div>
@@ -59,63 +63,64 @@
         </div>
         @*<legend>Application Status</legend>*@
         @*<div class="row">
-            <div class="col-sm-6 pull-right">
-                @{
-                    Model.WorkflowStatusOptions.Choices = ApplicationDataVM.GetWorkflowStatusOptions(Model.ApplicationStatus);
-                }
-                @Html.Bootstrap().LabelFor(m => m.WorkflowStatusOptions).Class("col-sm-4 control-label")
-                <div class="col-sm-8">
-                    @Html.EditorFor(m => m.WorkflowStatusOptions)
+                <div class="col-sm-6 pull-right">
+                    @{
+                        Model.WorkflowStatusOptions.Choices = ApplicationDataVM.GetWorkflowStatusOptions(Model.ApplicationStatus);
+                    }
+                    @Html.Bootstrap().LabelFor(m => m.WorkflowStatusOptions).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.WorkflowStatusOptions)
+                    </div>
                 </div>
-            </div>
-            <div class="col-sm-6"></div>
-        </div>*@
+                <div class="col-sm-6"></div>
+            </div>*@
     </fieldset>
     <div class="form-actions">
-    <div class="row">
-        <div class="col-sm-12">
-            <button id="print-display-button" class="btn btn-primary" type="button">
-                Print
-            </button>
+        <div class="row">
+            <div class="col-sm-12">
+                <button id="print-display-button" class="btn btn-primary" type="button">
+                    Print
+                </button>
+            </div>
         </div>
     </div>
 </div>
-}
+    @*}*@
 
-@section scripts{
+    @section scripts{
 
-    <script>
-        $("#set-status-button").click(function (e) {
-            if (!$('form').valid()) {
-                alert('Please make sure that all required fields are filled');
-                return;
-            }
+        <script>
+            $("#set-status-button").click(function (e) {
+                if (!$('form').valid()) {
+                    alert('Please make sure that all required fields are filled');
+                    return;
+                }
 
-            e.preventDefault();
+                e.preventDefault();
 
-            // Get value from kendo dropdownlist
-            var applicationStatus = $('#WorkflowStatusOptions_Value').data("kendoDropDownList").value();
-            if (applicationStatus ==  "@Workflow.GetApplicationStatus(Workflow.ApplicationStatus.ONBOARD)" ) {
-                $('form').prop('action', '/HRApplication/CreateProfessionalData');
-            }
-            $('form').submit();
-        });
-
-        $(document).ready(function () {
-            $('input').prop('readonly', 'true');
-            $('textarea').prop('readonly', 'true');
-
-            var positionID = $("#Position").val();
-            var url = "/HRDataMaster/GetPosition/" + positionID;
-            $.getJSON(url, function (data) {
-                $("#vacant-position").prop("value", data.PositionName);
-            })
-
-            $('#print-display-button').click(function (e) {
-                var url = "/HRApplication/PrintApplicationData";
-                submitFormToPrint(url);
+                // Get value from kendo dropdownlist
+                var applicationStatus = $('#WorkflowStatusOptions_Value').data("kendoDropDownList").value();
+                if (applicationStatus == "@Workflow.GetApplicationStatus(Workflow.ApplicationStatus.ONBOARD)") {
+                    $('form').prop('action', '/HRApplication/CreateProfessionalData');
+                }
+                $('form').submit();
             });
 
-        });
-    </script>
-}
+            $(document).ready(function () {
+                $('input').prop('readonly', 'true');
+                $('textarea').prop('readonly', 'true');
+
+                var positionID = $("#Position").val();
+                var url = "/HRDataMaster/GetPosition/" + positionID;
+                $.getJSON(url, function (data) {
+                    $("#vacant-position").prop("value", data.PositionName);
+                })
+
+                $('#print-display-button').click(function (e) {
+                    var url = "/HRApplication/PrintApplicationData";
+                    submitFormToPrint(url);
+                });
+
+            });
+        </script>
+    }

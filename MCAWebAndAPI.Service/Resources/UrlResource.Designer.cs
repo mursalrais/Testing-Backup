@@ -151,6 +151,15 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to /Lists/Asset%20Check%20Result/DispForm.aspx?ID={0}&amp;RequestApproval=TRUE.
+        /// </summary>
+        public static string AssetCheckResultApprove {
+            get {
+                return ResourceManager.GetString("AssetCheckResultApprove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to /Lists/Asset%20Disposal/AllItems.aspx.
         /// </summary>
         public static string AssetDisposal {

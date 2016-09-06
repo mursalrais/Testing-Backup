@@ -13,6 +13,9 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using MCAWebAndAPI.Service.JobSchedulers.Schedulers;
+using Elmah;
+
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -253,19 +256,26 @@ namespace MCAWebAndAPI.Web.Controllers
             //    }
 
             //}
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl);
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetLoanAndReturn);
         }
 
         private IEnumerable<AssetLoanAndReturnItemVM> BindMonthlyFeeDetailDetails(FormCollection form, IEnumerable<AssetLoanAndReturnItemVM> monthlyFeeDetails)
         {
             var array = monthlyFeeDetails.ToArray();
+
+            
             for (int i = 0; i < array.Length; i++)
             {
+
+
                 array[i].EstReturnDate = BindHelper.BindDateInGrid("AssetLoanAndReturnItem",
                     i, "EstReturnDate", form);
+                if (array[i].ReturnDate != null)
+                {
+                    array[i].ReturnDate = BindHelper.BindDateInGrid("AssetLoanAndReturnItem",
+                        i, "ReturnDate", form);
 
-                array[i].ReturnDate = BindHelper.BindDateInGrid("AssetLoanAndReturnItem",
-                    i, "ReturnDate", form);
+                }
             }
             return array;
         }
@@ -306,6 +316,21 @@ namespace MCAWebAndAPI.Web.Controllers
                     profmasterinfo.CurrentPosition,
                     profmasterinfo.MobileNumberOne
                 }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult AssetSchedulerExpired(string siteUrl = null)
+        {
+
+            try
+            {
+                AssetManagementScheduler.DoNowPSAExpired_OnceEveryDay(siteUrl);
+            }
+            catch (Exception e)
+            {
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return RedirectToAction("Index", "Error");
+            }
+            return RedirectToAction("Index", "Success");
         }
 
 

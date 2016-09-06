@@ -39,7 +39,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 }
                 else
                 {
-                    emailApprover = GetApprover("Deputy ED");
+                    emailApprover = GetApprover("Deputy Executive Director");
                 }
                 Approver = SPConnector.GetUser(emailApprover, _siteUrl, "hr");
                 updatedValue.Add("currentapprover", Approver);
@@ -207,7 +207,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 updatedValue.Add("specifictechnicalskill", viewModel.SpecificTechnicalSkillQualification);
                 updatedValue.Add("personalattributes", viewModel.PersonalAttributesCompetencies);
                 updatedValue.Add("otherrequirements", viewModel.OtherRequirements);
-                if (viewModel.Workplan.Values.Length > 0)
+                if (viewModel.Workplan.Values != null)
                 {
                     updatedValue.Add("Workplan", viewModel.Workplan.Values);
                 }
@@ -228,7 +228,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 }
                 else
                 {
-                    emailApprover = GetApprover("Deputy ED");
+                    emailApprover = GetApprover("Deputy Executive Director");
                 }
                 Approver = SPConnector.GetUser(emailApprover, _siteUrl, "hr");
                 updatedValue.Add("currentapprover", Approver);
@@ -627,7 +627,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         public string GetApprover(string Position)
         {
-            string email = "anugerahseptian@gmail.com";
+            string email = "mca.developer@eceos.com";
             string caml = @"<View><Query><Where><Eq><FieldRef Name='Position' /><Value Type='Lookup'>" + Position + "</Value></Eq></Where></Query><ViewFields><FieldRef Name='officeemail' /></ViewFields><QueryOptions /></View>";
             foreach (var item in SPConnector.GetList(SP_PROFESSIONAL_MAST, _siteUrl, caml))
             {

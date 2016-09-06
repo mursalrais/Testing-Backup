@@ -35,8 +35,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         public CurrencyComboBoxVM Currency { get; set; } = new CurrencyComboBoxVM();
 
         [Required]
-        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
-        public decimal Amount { get; set; } = 0;
+        [UIHint("Decimal")]
+        public decimal? Amount { get; set; } = 0;
 
         [Required]
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]

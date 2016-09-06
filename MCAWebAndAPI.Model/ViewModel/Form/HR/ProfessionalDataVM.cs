@@ -9,6 +9,35 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
     public class ProfessionalDataVM : ApplicationDataVM
     {
+        [UIHint("ComboBox")]
+        [DisplayName("Project Unit")]
+        [Required]
+        public ComboBoxVM DivisionProjectUnit { get; set; } = new ComboBoxVM()
+        {
+            Choices = new string[]
+            {
+                "Communications & Outreach Unit",
+                "Community-Based Health & Nutrition Project",
+                "Cross-Cutting Sector",
+                "Economic Analysis Unit",
+                "Environment & Social Performance Unit",
+                "Executive Office",
+                "Finance Unit",
+                "Green Prosperity Project",
+                "Human Resources Unit",
+                "Information Technology Unit",
+                "Legal Unit",
+                "Monitoring & Evaluation Unit",
+                "Office Management",
+                "Operations Support Div.",
+                "Procurement Modernization Project",
+                "Procurement Unit",
+                "Program Div.",
+                "Risk & Audit Unit",
+                "Social & Gender Assessment Unit"
+            }
+        };
+
         /// <summary>
         /// Position
         /// </summary>
@@ -44,7 +73,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// datavalidationstatus
         /// </summary>
-        public string ValidationStatus { get; set; } = 
+        public string ValidationStatus { get; set; } =
             Workflow.GetProfessionalValidationStatus(Workflow.ProfessionalValidationStatus.VALIDATED);
 
         public string ValidationAction { get; set; }
@@ -177,13 +206,13 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// </summary>
         [DisplayName("Branch Office")]
         public string BranchOfficeForPayroll { get; set; }
-       
+
         /// <summary>
         /// payrollbankswiftcode
         /// </summary>
         [DisplayName("Bank Swift Code")]
         public string BankSwiftCodeForPayroll { get; set; }
-        
+
         /// <summary>
         /// payrollcurrency
         /// </summary>

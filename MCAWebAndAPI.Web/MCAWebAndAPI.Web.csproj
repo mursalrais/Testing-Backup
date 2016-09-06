@@ -1157,6 +1157,23 @@
     <Content Include="Views\ASSLocationMaster\Sync.cshtml" />
     <Content Include="Views\CSV\UploadMaster.cshtml" />
     <Content Include="Views\HRPerformancePlan\_WorkflowPathDetails.cshtml" />
+    <Content Include="Views\ASSAssetCheckResult\Approve.cshtml" />
+    <Content Include="Views\ASSLocationMaster\Index.cshtml" />
+    <Content Include="Views\ASSAssignmentOfAsset\_DetailsPrint.cshtml" />
+    <Content Include="Views\ASSAssignmentOfAsset\_DetailsView.cshtml" />
+    <Content Include="Views\ASSAssignmentOfAsset\_print.cshtml" />
+    <Content Include="Views\ASSAssignmentOfAsset\Edit.cshtml" />
+    <Content Include="Views\ASSAssignmentOfAsset\Print.cshtml" />
+    <Content Include="Views\ASSAssignmentOfAsset\Sync.cshtml" />
+    <Content Include="Views\ASSAssignmentOfAsset\Upload.cshtml" />
+    <Content Include="Views\ASSAssignmentOfAsset\View.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Decimal.cshtml" />
+    <Content Include="Views\ASSAssetLoanAndReturn\_AssetLoanAndReturnItem.cshtml" />
+    <Content Include="Views\ASSAssetLoanAndReturn\Edit.cshtml" />
+    <Content Include="Views\ASSAssetLoanAndReturn\_Details.cshtml" />
+    <Content Include="Views\ASSAssetLandingPage\Create.cshtml" />
+    <Content Include="Views\ASSAssetLandingPage\_assetFixedAssetPCFF.cshtml" />
+    <Content Include="Views\ASSAssetLandingPage\_assetSmallValueAssetPCFF.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1171,6 +1188,7 @@
     <Compile Include="Controllers\ActivityController.cs" />
     <Compile Include="Controllers\ASSAssetAcquisitionController.cs" />
     <Compile Include="Controllers\ASSAssetDisposalController.cs" />
+    <Compile Include="Controllers\ASSAssetLandingPageController.cs" />
     <Compile Include="Controllers\ASSAssetMasterController.cs" />
     <Compile Include="Controllers\ASSAssetCheckFormController.cs" />
     <Compile Include="Controllers\ASSAssetCheckResultApproveController.cs" />

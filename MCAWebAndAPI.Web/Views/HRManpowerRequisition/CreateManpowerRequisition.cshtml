@@ -74,20 +74,27 @@
 
         }
         function onPositionChange(e) {
+            console.log(e);
             var dataItem = this.dataItem(e.item);
-            //var urlKeyPosition = "/HRDataMaster/GetKeyPosition/" + dataItem.ID;
-            if (dataItem.IsKeyPosition == "Yes") {
-                //$('#KeyPositionValue').prop('value', "Yes");
-                $("label[for='Yes']").show();
-                $("label[for='No']").hide();
-                $("#IsKeyPosition").val(true);
-
+            if (dataItem == null) {
+                
             }
             else {
-                $("label[for='No']").show();
-                $("label[for='Yes']").hide();
-                $("#IsKeyPosition").val(false);
+                //var urlKeyPosition = "/HRDataMaster/GetKeyPosition/" + dataItem.ID;
+                if (dataItem.IsKeyPosition == "Yes") {
+                    //$('#KeyPositionValue').prop('value', "Yes");
+                    $("label[for='Yes']").show();
+                    $("label[for='No']").hide();
+                    $("#IsKeyPosition").val(true);
+
+                }
+                else {
+                    $("label[for='No']").show();
+                    $("label[for='Yes']").hide();
+                    $("#IsKeyPosition").val(false);
+                }
             }
+            
 
         };
         $(document).ready(function () {
@@ -107,7 +114,7 @@
             });
             $("#StatusSubmit").click(function () {
                 var isValid = checkGrid();
-                if (isValid) {
+                if (isValid && ($('.form-horizontal').valid())) {
                     $("#Status_Value").prop("value", "Pending Approval");
                     //var projectUnit = $('#DivisionProjectUnit_Value').data("kendoDropDownList").dataItem($('#DivisionProjectUnit_Value').data("kendoDropDownList").select()).ProjectUnit;
                     //$('#ProjectUnitString').prop("value", projectUnit);
@@ -118,7 +125,7 @@
             });
             $("#StatusDraft").click(function () {
                 var isValid = checkGrid();
-                if (isValid) {
+                if (isValid && ($('.form-horizontal').valid())) {
                     $("#Status_Value").prop("value", "Draft");
                     $("form").submit();
                     showLoading();
@@ -137,6 +144,8 @@
                     }
                 }
             }
+            var validator = $("#ValidateMyContents").kendoValidator().data("kendoValidator"),
+            status = $(".status");
             return true;
         }
 

@@ -181,7 +181,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 }
                 else
                 {
-                    EmailApprover = _service.GetApprover("Deputy ED");
+                    EmailApprover = _service.GetApprover("Deputy Executive Director");
                 }
                 Task sendApprover = EmailUtil.SendAsync(EmailApprover, "Application Submission Confirmation", string.Format(EmailResource.ManpowerApproval, siteUrl, viewModel.ID.Value));
 
@@ -283,7 +283,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 }
                 else
                 {
-                    EmailApprover = _service.GetApprover("Deputy ED");
+                    EmailApprover = _service.GetApprover("Deputy Executive Director");
                 }
                 Task sendApprover = EmailUtil.SendAsync(EmailApprover, "Application Submission Confirmation", string.Format(EmailResource.ManpowerApproval, siteUrl, headerID));
                                 

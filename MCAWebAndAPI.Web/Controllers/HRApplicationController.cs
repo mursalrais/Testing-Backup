@@ -172,7 +172,8 @@ namespace MCAWebAndAPI.Web.Controllers
                 return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
             }
 
-            var status = viewModel.WorkflowStatusOptions.Value;
+            //var status = viewModel.WorkflowStatusOptions.Value;
+            var status = viewModel.ApplicationStatus;
             var applicationOwner = string.Format("{0} {1}", viewModel.FirstMiddleName, viewModel.LastName);
 
             var message = string.Format(MessageResource.SuccessUpdateApplicationStatus, applicationOwner, status);

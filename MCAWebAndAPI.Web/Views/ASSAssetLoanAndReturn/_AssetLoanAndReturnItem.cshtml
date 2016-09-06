@@ -1,71 +1,71 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.Asset
 @model IEnumerable<AssetLoanAndReturnItemVM>
 
-@{
+    @{
     var index = 0;
-}
+    }
 
-<div class="col-md-12" style="margin-bottom: 20px">
-    @(Html.Kendo().Grid(Model)
+    <div class="col-md-12" style="margin-bottom: 20px">
+        @(Html.Kendo().Grid(Model)
         .Name("AssetLoanAndReturnItem")
         .ToolBar(tools => tools.Create().Text("Add New"))
         .Editable(editable => editable.Mode(GridEditMode.InCell)
         .CreateAt(GridInsertRowPosition.Bottom))
         .Columns(columns =>
         {
-            columns.Bound(p => p.AssetSubAsset).ClientTemplate("#= AssetSubAsset.Text #" +
-                          "<input type='hidden' name='AssetLoanAndReturnItem[#= getWorkingRelationshipDetails(data)#].AssetSubAsset.Value' value='#= AssetSubAsset.Value #' />"
-                        ).EditorViewData(new
-                        {
-                            DataTextField = "Text",
-                            DataValueField = "Value",
-                            ControllerName = "ASSAssetLoanAndReturn",
-                            ActionName = "GetAssetSubSAssetGrid"
-                        });
+        columns.Bound(p => p.AssetSubAsset).ClientTemplate("#= AssetSubAsset.Text #" +
+        "<input type='hidden' name='AssetLoanAndReturnItem[#= getWorkingRelationshipDetails(data)#].AssetSubAsset.Value' value='#= AssetSubAsset.Value #' />"
+        ).EditorViewData(new
+        {
+        DataTextField = "Text",
+        DataValueField = "Value",
+        ControllerName = "ASSAssetLoanAndReturn",
+        ActionName = "GetAssetSubSAssetGrid"
+        });
 
 
-            columns.Bound(p => p.EstReturnDate).ClientTemplate("#= kendo.toString(EstReturnDate, 'MM-dd-yyyy') #" +
-            "<input type='hidden' class='estdate' name='AssetLoanAndReturnItem[#= getWorkingRelationshipDetails(data)#].EstReturnDate'  value='#= EstReturnDate #' />"
-            );
+        columns.Bound(p => p.EstReturnDate).ClientTemplate("#= kendo.toString(EstReturnDate, 'MM-dd-yyyy') #" +
+        "<input type='hidden' class='estdate' name='AssetLoanAndReturnItem[#= getWorkingRelationshipDetails(data)#].EstReturnDate' value='#= EstReturnDate #' />"
+        );
 
-            columns.Bound(p => p.ReturnDate).ClientTemplate("#= kendo.toString(ReturnDate, 'MM-dd-yyyy') #" +
-            "<input type='hidden' class='returndate' name='AssetLoanAndReturnItem[#= getWorkingRelationshipDetails(data)#].ReturnDate' value='#= ReturnDate #' />"
-            );
+        columns.Bound(p => p.ReturnDate).ClientTemplate("#= kendo.toString(ReturnDate, 'MM-dd-yyyy') #" +
+        "<input type='hidden' class='returndate' name='AssetLoanAndReturnItem[#= getWorkingRelationshipDetails(data)#].ReturnDate' value='#= ReturnDate #' />"
+        );
 
-            columns.Bound(p => p.Status).ClientTemplate("#= Status #" +
-                          "<input type='hidden' name='AssetLoanAndReturnItem[#= getWorkingRelationshipDetails(data)#].Status.Value' value='#= Status #' />"
-                        );
-            columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
-          "<input type='hidden' name=AssetLoanAndReturnItem[#= getWorkingRelationshipDetails(data)#].ID value=#= ID # />"
+        columns.Bound(p => p.Status).ClientTemplate("#= Status #" +
+        "<input type='hidden' name='AssetLoanAndReturnItem[#= getWorkingRelationshipDetails(data)#].Status.Value' value='#= Status #' />"
+        );
+        columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
+        "<input type='hidden' name=AssetLoanAndReturnItem[# =getWorkingRelationshipDetails(data)#].ID value=# =ID # />"
 
 
         );
-            columns.Bound(p => p.EditMode).Hidden()
-         .ClientTemplate("#= EditMode #<input type='hidden' name='AssetLoanAndReturnItem[#= getWorkingRelationshipDetails(data)#].EditMode' value='#= EditMode #' />");
-            columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
-            .Click("onDeleteKendoDetail")).Width(100);
+        columns.Bound(p => p.EditMode).Hidden()
+        .ClientTemplate("#= EditMode #<input type='hidden' name='AssetLoanAndReturnItem[#= getWorkingRelationshipDetails(data)#].EditMode' value='#= EditMode #' />");
+        columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
+        .Click("onDeleteKendoDetail")).Width(100);
         })
         .Events(e =>
         {
-            e.Edit("onEditKendoDetail");
-            e.DataBound("onDataBoundWorkingRelationship");
+        e.Edit("onEditKendoDetail");
+        e.DataBound("onDataBoundWorkingRelationship");
         })
         .DataSource(dataSource => dataSource.Ajax()
-                   .Model(model =>
-                   {
-                       model.Id(p => p.ID);
-                       model.Field(m => m.AssetSubAsset).DefaultValue(AssetLoanAndReturnItemVM.GetAssetSubAssetDefaultValue());
-                       model.Field(p => p.EstReturnDate).DefaultValue(DateTime.UtcNow); ;
-                       model.Field(p => p.ReturnDate) ;
-                       model.Field(p => p.Status).Editable(false);
-                       //model.Field(m => m.Status).DefaultValue(AssetLoanAndReturnItemVM.GetAssetSubAssetDefaultValue());
-                   })
-                   .ServerOperation(false)
+        .Model(model =>
+        {
+        model.Id(p => p.ID);
+        model.Field(m => m.AssetSubAsset).DefaultValue(AssetLoanAndReturnItemVM.GetAssetSubAssetDefaultValue());
+        model.Field(p => p.EstReturnDate).DefaultValue(DateTime.UtcNow); ;
+        model.Field(p => p.ReturnDate) ;
+        model.Field(p => p.Status).Editable(false);
+        //model.Field(m => m.Status).DefaultValue(AssetLoanAndReturnItemVM.GetAssetSubAssetDefaultValue());
+        })
+        .ServerOperation(false)
         )
-    )
-</div>
+        )
+    </div>
 
-<script>
+    <script>
     function getWorkingRelationshipDetails(dataItem) {
         var data = $("#AssetLoanAndReturnItem").data("kendoGrid").dataSource.data();
         //data.set('AssetSubAsset', data.AssetSubAsset);
@@ -91,7 +91,7 @@
     }
 
     function val() {
-       
+
 
     }
 
@@ -106,4 +106,4 @@
             alert("Date loan is greather then Date est.");
         }
     }
-</script>
+    </script>

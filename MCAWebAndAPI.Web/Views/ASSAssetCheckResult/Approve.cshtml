@@ -1,0 +1,82 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Asset
+
+@model AssetCheckResultHeaderVM
+
+<form class="form-horizontal" method="post" action="/ASSAssetCheckResult/Approve" id="create-asset-check-result">
+    <fieldset>
+        <legend>Form Asset Check Result</legend>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.FormID).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.FormID)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.CountDate).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.CountDate)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.CountedBy1).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.CountedBy1)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.CountedBy2).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.CountedBy2)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.CountedBy3).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.CountedBy3)
+                </div>
+            </div>
+        </div>
+
+                @Html.HiddenFor(m => m.AssetCheckResultID, new { Value = Model.AssetCheckResultID })
+
+                @Html.HiddenFor(m => m.ID, new { Value = Model.ID })
+
+                @Html.HiddenFor(m => m.CreateDate, new { Value = Model.CreateDate })
+
+                @Html.HiddenFor(m => m.hCountedBy1, new { Value = Model.hCountedBy1 })
+
+                @Html.HiddenFor(m => m.hCountedBy2, new { Value = Model.hCountedBy2 })
+
+                @Html.HiddenFor(m => m.hCountedBy3, new { Value = Model.hCountedBy3 })
+
+                @Html.HiddenFor(m => m.hCountedBy1Nama, new { Value = Model.hCountedBy1Nama })
+
+                @Html.HiddenFor(m => m.hCountedBy2Nama, new { Value = Model.hCountedBy2Nama })
+
+                @Html.HiddenFor(m => m.hCountedBy3Nama, new { Value = Model.hCountedBy3Nama })
+
+        <div class="row">
+            <div>
+                @Html.Partial("_ViewDetails", Model.Details)
+            </div>
+        </div>
+        
+        <div class="row">
+            <center>
+                <input class="k-button k-button-icontext k-grid-add" type="submit" name="Approve" value="Approve" />
+                <input class="k-button k-button-icontext k-grid-add" type="submit" name="Reject" value="Reject" />
+            </center>
+        </div>
+    </fieldset>
+</form>
+
+<script type="text/javascript">
+    //function onSelectedId(e) {
+    //    var res = this.dataItem(e.item)
+    //    var url = "/ASSAssetCheckResult/GetCheckInfo?IDAssetCheck=" + res;
+    //    $.getJSON(url, function (data) {
+    //        $('#CompletionStatus').prop('value', data.CompletionStatus);
+    //    });
+    //}
+</script>

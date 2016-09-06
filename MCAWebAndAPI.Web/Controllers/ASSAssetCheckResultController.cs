@@ -141,9 +141,14 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult View(string siteUrl,
             AssetCheckResultHeaderVM data,
             int? ID,
-            string Print
+            string Print,
+            Boolean RequestApproval = false
         )
         {
+            if (RequestApproval && ID != null)
+            {
+                return RedirectToAction("Approve", new { ID = ID });
+            }
 
             assetCheckResultService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
@@ -187,6 +192,33 @@ namespace MCAWebAndAPI.Web.Controllers
                 if (pdfBuf == null)
                     return HttpNotFound();
                 return File(pdfBuf, "application/pdf");
+            }
+
+            var viewModel = assetCheckResultService.GetPopulatedModel(ID, data.FormID.Value, data);
+            return View(viewModel);
+        }
+
+        public ActionResult Approve(string siteUrl,
+            AssetCheckResultHeaderVM data,
+            int? ID,
+            string Approve,
+            string Reject
+        )
+        {
+
+            assetCheckResultService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            
+            if (!string.IsNullOrEmpty(Approve))
+            {
+                var viewModelSaveAsDraft = assetCheckResultService.Approve(ID);
+                return RedirectToAction("Index");
+            }
+
+            if (!string.IsNullOrEmpty(Reject))
+            {
+                var viewModelSaveAsDraft = assetCheckResultService.Reject(ID);
+                return RedirectToAction("Index");
             }
 
             var viewModel = assetCheckResultService.GetPopulatedModel(ID, data.FormID.Value, data);
