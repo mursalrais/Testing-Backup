@@ -164,7 +164,7 @@ namespace MCAWebAndAPI.Service.Finance
                             PCVNo = item.TransactionNo,
                             Date = item.Date,
                             Payee = item.Title,
-                            Amount = item.Amount
+                            Amount = (decimal)item.Amount
                         });
                     }
 
