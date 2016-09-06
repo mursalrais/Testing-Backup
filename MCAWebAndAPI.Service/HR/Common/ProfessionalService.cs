@@ -349,14 +349,13 @@ namespace MCAWebAndAPI.Service.HR.Common
 
         private EducationDetailVM ConvertToEducationDetailVM(ListItem item)
         {
-            return new EducationDetailVM
-            {
-                ID = Convert.ToInt32(item["ID"]),
-                Subject = Convert.ToString(item["Title"]),
-                University = Convert.ToString(item["university"]),
-                YearOfGraduation = FormatUtil.ConvertDateStringToDateTime(item, "yearofgraduation"),
-                Remarks = Convert.ToString(item["remarks"])
-            };
+            var tes = new EducationDetailVM();
+            tes.ID = Convert.ToInt32(item["ID"]);
+            tes.Subject = Convert.ToString(item["Title"]);
+            tes.University = Convert.ToString(item["university"]);
+            tes.YearOfGraduation = FormatUtil.ConvertDateStringToDateTimeProfessional(item, "yearofgraduation");
+            tes.Remarks = Convert.ToString(item["remarks"]);
+            return tes;
         }
 
 
@@ -394,7 +393,7 @@ namespace MCAWebAndAPI.Service.HR.Common
                 Subject = Convert.ToString(item["Title"]),
                 Institution = Convert.ToString(item["traininginstitution"]),
                 Remarks = Convert.ToString(item["trainingremarks"]),
-                Year = FormatUtil.ConvertDateStringToDateTime(item, "trainingyear")
+                Year = FormatUtil.ConvertDateStringToDateTimeProfessional(item, "trainingyear")
             };
         }
 

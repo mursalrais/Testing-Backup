@@ -39,7 +39,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 }
                 else
                 {
-                    emailApprover = GetApprover("Deputy ED");
+                    emailApprover = GetApprover("Deputy Executive Director");
                 }
                 Approver = SPConnector.GetUser(emailApprover, _siteUrl, "hr");
                 updatedValue.Add("currentapprover", Approver);
@@ -228,7 +228,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 }
                 else
                 {
-                    emailApprover = GetApprover("Deputy ED");
+                    emailApprover = GetApprover("Deputy Executive Director");
                 }
                 Approver = SPConnector.GetUser(emailApprover, _siteUrl, "hr");
                 updatedValue.Add("currentapprover", Approver);
