@@ -162,12 +162,12 @@ namespace MCAWebAndAPI.Service.Asset
             var siteHr = _siteUrl.Replace("/bo", "/hr");
             var dataItemPropesional = SPConnector.GetListItem("Professional Master", id, siteHr);
             email.EmailTo = dataItemPropesional["officeemail"].ToString();
-            email.EmailContent = "Dear Mr " + dataItemPropesional["Title"].ToString() + ",<br /><br /><br />" +
-                "You are authorized as an approver  for asset check result (form ID: " + formid.ToString() + ") conducted on " + conductedDate.ToString() + "." + "<br />" +
-                "The result is inputted by  " + inputtedBy + "<br />" +
-                "Please complete the approval process immediately." + "<br />" +
-                "To view detail of asset check result, please click the following link: " + "<br />" +
-                urlPath + "<br /><br /><br />" +
+            email.EmailContent = "Dear Mr " + dataItemPropesional["Title"].ToString() + "," + Environment.NewLine + Environment.NewLine + 
+                "You are authorized as an approver  for asset check result (form ID: " + formid.ToString() + ") conducted on " + conductedDate.ToString() + "." + Environment.NewLine +
+                "The result is inputted by  " + inputtedBy + Environment.NewLine +
+                "Please complete the approval process immediately." + Environment.NewLine +
+                "To view detail of asset check result, please click the following link: " + Environment.NewLine +
+                urlPath + Environment.NewLine + Environment.NewLine +
                 "Thank you for your attention.";
 
 
@@ -181,8 +181,8 @@ namespace MCAWebAndAPI.Service.Asset
             var dataItemPropesional = SPConnector.GetListItem("Professional Master", idTo, siteHr);
             var dataItemPropesionalFrom = SPConnector.GetListItem("Professional Master", idFrom, siteHr);
             email.EmailTo = dataItemPropesional["officeemail"].ToString();
-            email.EmailContent = "Dear Mr " + dataItemPropesional["Title"].ToString() + ",<br /><br /><br />" +
-                "Asset check result (form ID: " + formid + ") conducted on " + conductedDate + " already approved by Mr " + dataItemPropesionalFrom["Title"].ToString() + "<br /><br /><br />" +
+            email.EmailContent = "Dear Mr " + dataItemPropesional["Title"].ToString() + "," + Environment.NewLine + Environment.NewLine +
+                "Asset check result (form ID: " + formid + ") conducted on " + conductedDate + " already approved by Mr " + dataItemPropesionalFrom["Title"].ToString() + Environment.NewLine + Environment.NewLine + 
                 "Thank you for your attention.";
 
             
@@ -196,8 +196,8 @@ namespace MCAWebAndAPI.Service.Asset
             var dataItemPropesional = SPConnector.GetListItem("Professional Master", idTo, siteHr);
             var dataItemPropesionalFrom = SPConnector.GetListItem("Professional Master", idFrom, siteHr);
             email.EmailTo = dataItemPropesional["officeemail"].ToString();
-            email.EmailContent = "Dear Mr " + dataItemPropesional["Title"].ToString() + ",<br /><br /><br />" +
-                "Asset check result (form ID: " + formid + ") conducted on " + conductedDate + " already rejected by Mr " + dataItemPropesionalFrom["Title"].ToString() + "<br /><br /><br />" +
+            email.EmailContent = "Dear Mr " + dataItemPropesional["Title"].ToString() + "," + Environment.NewLine + Environment.NewLine + 
+                "Asset check result (form ID: " + formid + ") conducted on " + conductedDate + " already rejected by Mr " + dataItemPropesionalFrom["Title"].ToString() + "." + Environment.NewLine + Environment.NewLine + 
                 "Thank you for your attention.";
 
             return email;
@@ -426,7 +426,7 @@ namespace MCAWebAndAPI.Service.Asset
                         model.CountDate,
                         GetFullName(model.CountedBy1.Value),
                         _siteUrl + UrlResource.AssetCheckResultApprove);
-                    //EmailUtil.Send(email.EmailTo, "Notification to approve the result", email.EmailContent);
+                    EmailUtil.Send(email.EmailTo, "Notification to approve the result", email.EmailContent);
                 }
 
                 SPConnector.UpdateListItem("Asset Check Result", ID ,columnValues, _siteUrl);
@@ -534,7 +534,7 @@ namespace MCAWebAndAPI.Service.Asset
                         model.CountDate,
                         GetFullName(model.CountedBy1.Value),
                         _siteUrl + UrlResource.AssetCheckResultApprove);
-                    //EmailUtil.Send(email.EmailTo, "Notification to approve the result", email.EmailContent);
+                    EmailUtil.Send(email.EmailTo, "Notification to approve the result", email.EmailContent);
                 }
 
                 SPConnector.AddListItem("Asset Check Result", columnValues, _siteUrl);
@@ -582,7 +582,7 @@ namespace MCAWebAndAPI.Service.Asset
                 Convert.ToDateTime(dataCekResult["assetcheckcountdate"].ToString())
                 );
 
-            //EmailUtil.Send(email.EmailTo, "Approve notification of asset check result", email.EmailContent);
+            EmailUtil.Send(email.EmailTo, "Approve notification of asset check result", email.EmailContent);
 
             return model;
         }
@@ -600,7 +600,7 @@ namespace MCAWebAndAPI.Service.Asset
                 Convert.ToDateTime(dataCekResult["assetcheckcountdate"].ToString())
                 );
 
-            //EmailUtil.Send(email.EmailTo, "Rejected notification of asset check result", email.EmailContent);
+            EmailUtil.Send(email.EmailTo, "Rejected notification of asset check result", email.EmailContent);
 
 
             return model;
