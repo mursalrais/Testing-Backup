@@ -1167,6 +1167,7 @@
     <Content Include="Views\ASSAssignmentOfAsset\Sync.cshtml" />
     <Content Include="Views\ASSAssignmentOfAsset\Upload.cshtml" />
     <Content Include="Views\ASSAssignmentOfAsset\View.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Decimal.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
