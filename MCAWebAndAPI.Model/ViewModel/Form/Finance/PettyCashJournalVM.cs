@@ -18,7 +18,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         [DataType(DataType.Date)]
         [DisplayName("Date (from)")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
-        public DateTime DateFrom { get; set; } = DateTime.Today;
+        public DateTime DateFrom { get; set; } = DateTime.Today.AddDays(-14);
 
         [Required]
         [DataType(DataType.Date)]

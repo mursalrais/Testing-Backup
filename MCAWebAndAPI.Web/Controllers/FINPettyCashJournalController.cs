@@ -53,7 +53,7 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewModel);
         }
 
-        public JsonResult GetPettyCashTransaction([DataSourceRequest] DataSourceRequest request,string dateFrom, string dateTo, string op)
+        public JsonResult GetPettyCashTransaction([DataSourceRequest] DataSourceRequest request, string dateFrom, string dateTo, string op)
         {
             var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl);
             service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
@@ -62,13 +62,20 @@ namespace MCAWebAndAPI.Web.Controllers
 
             if (!string.IsNullOrEmpty(dateFrom) && !string.IsNullOrEmpty(dateTo))
             {
-                details = service.GetPettyCashTransactions(Convert.ToDateTime(dateFrom).ToString("yyyy-MM-dd"), Convert.ToDateTime(dateTo).ToString("yyyy-MM-dd")).ToList();
+                //this mess is just to ensure date format yyyy-MM-dd
+                //TODO: find a better way
+                var from = Convert.ToDateTime(DateTime.Parse(dateFrom, System.Globalization.CultureInfo.InvariantCulture).ToString("yyyy-MM-dd"));
+                var to = Convert.ToDateTime(DateTime.Parse(dateFrom, System.Globalization.CultureInfo.InvariantCulture).ToString("yyyy-MM-dd"));
+
+                details = service.GetPettyCashTransactions(from, to).ToList();
             }
 
             DataSourceResult result = details.ToDataSourceResult(request);
+           
             // Convert to Json
             var json = Json(result, JsonRequestBehavior.AllowGet);
             json.MaxJsonLength = int.MaxValue;
+
             return json;
         }
 
