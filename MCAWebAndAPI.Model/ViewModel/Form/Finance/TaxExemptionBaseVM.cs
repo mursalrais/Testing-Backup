@@ -3,20 +3,22 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 {
     public class TaxExemptionBaseVM
     {
+        /// <summary>
+        /// FIN17: Tax Exemption
+        /// </summary>
+
         private ComboBoxVM _typeOfTax;
         private DateTime _taxPeriod;
 
         public int? ID { get; set; }
 
+        [Required]
         [DisplayName("Type Of Tax")]
         [UIHint("ComboBox")]
         public ComboBoxVM TypeOfTax
@@ -35,6 +37,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
             }
         }
 
+        [Required]
         [DataType(DataType.Date)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MMM-yyyy}")]
         [DisplayName("Tax Period")]
@@ -62,8 +65,5 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 
         public IEnumerable<HttpPostedFileBase> Documents { get; set; } = new List<HttpPostedFileBase>();
 
-        protected TaxExemptionBaseVM()
-        {
-        }
     }
 }

@@ -503,6 +503,7 @@ namespace MCAWebAndAPI.Service.Asset
                         {
                             SPConnector.DeleteListItem(SP_LOCATION_MAS_LISTNAME, i, SiteUrl);
                         }
+                        return 0;
                     }
                     else
                     {
@@ -512,6 +513,7 @@ namespace MCAWebAndAPI.Service.Asset
                 catch (Exception ex)
                 {
                     ids.Add(0);
+                    return 0;
                 }
             }
             return 1;

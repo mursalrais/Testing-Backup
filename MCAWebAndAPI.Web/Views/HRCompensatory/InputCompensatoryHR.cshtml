@@ -62,8 +62,10 @@
         </div>
         <legend>Compensatory list</legend>
         <div id="compensatorylist" class="row"></div>
-
-
+        <button id="submithr-button" class="btn btn-primary" type="button">
+            <i class="fa fa-save"></i>
+            Submit
+        </button>
     </fieldset>
 }
 
@@ -71,10 +73,6 @@
 {
 <div class="row pull-right">
     <div class="col-sm-12">
-        <button id="submithr-button" class="btn btn-primary" type="button">
-            <i class="fa fa-save"></i>
-            Submit
-        </button>
         <button id="submit-draft-button" class="btn btn-primary" type="button">
             <i class="fa fa-clipboard"></i>
             Save As Draft
@@ -377,7 +375,7 @@
                                         model.set("CmpTotalHours", range);
                                     }
 
-                                    if (range >= 4) {
+                                    if (range > 4) {
                                         totday = 1
                                     } else {
                                         totday = 0.5

@@ -7,6 +7,7 @@ using MCAWebAndAPI.Model.ViewModel.Form.Asset;
 using NLog;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
+using MCAWebAndAPI.Service.Resources;
 
 namespace MCAWebAndAPI.Service.Asset
 {
@@ -38,7 +39,7 @@ namespace MCAWebAndAPI.Service.Asset
                 }
                 model.resultID = Convert.ToInt32(cekResult["assetcheckresultid"].ToString());
 
-                if(cekResult["assetcheckcountdate"] != null)
+                if (cekResult["assetcheckcountdate"] != null)
                 {
                     model.CountDate = Convert.ToDateTime(cekResult["assetcheckcountdate"].ToString());
                 }
@@ -134,6 +135,10 @@ namespace MCAWebAndAPI.Service.Asset
 
                 model.Details = modelDetail;
             }
+            else
+            {
+                model.CountDate = DateTime.Today;
+            }
             return model;
         }
 
@@ -142,6 +147,73 @@ namespace MCAWebAndAPI.Service.Asset
             var siteHr = _siteUrl.Replace("/bo", "/hr");
             var dataCountedBy1 = SPConnector.GetListItem("Professional Master", id, siteHr);
             return dataCountedBy1["Title"].ToString() + " - " + (dataCountedBy1["Position"] as FieldLookupValue).LookupValue;
+        }
+
+        public string GetFullName(int? id)
+        {
+            var siteHr = _siteUrl.Replace("/bo", "/hr");
+            var dataCountedBy1 = SPConnector.GetListItem("Professional Master", id, siteHr);
+            return dataCountedBy1["Title"].ToString();
+        }
+
+        public EmailHelperAssetCheckResult RequestApproveEmail(int? id, string formid = "", DateTime? conductedDate = null, string inputtedBy = "", string urlPath = "")
+        {
+            EmailHelperAssetCheckResult email = new EmailHelperAssetCheckResult();
+            var siteHr = _siteUrl.Replace("/bo", "/hr");
+            var dataItemPropesional = SPConnector.GetListItem("Professional Master", id, siteHr);
+            email.EmailTo = dataItemPropesional["officeemail"].ToString();
+            email.EmailContent = "Dear Mr " + dataItemPropesional["Title"].ToString() + "," + Environment.NewLine + Environment.NewLine + 
+                "You are authorized as an approver  for asset check result (form ID: " + formid.ToString() + ") conducted on " + conductedDate.ToString() + "." + Environment.NewLine +
+                "The result is inputted by  " + inputtedBy + Environment.NewLine +
+                "Please complete the approval process immediately." + Environment.NewLine +
+                "To view detail of asset check result, please click the following link: " + Environment.NewLine +
+                urlPath + Environment.NewLine + Environment.NewLine +
+                "Thank you for your attention.";
+
+
+            return email;
+        }
+
+        public EmailHelperAssetCheckResult ApproveEmail(int? idTo, int? idFrom, string formid = "", DateTime? conductedDate = null)
+        {
+            EmailHelperAssetCheckResult email = new EmailHelperAssetCheckResult();
+            var siteHr = _siteUrl.Replace("/bo", "/hr");
+            var dataItemPropesional = SPConnector.GetListItem("Professional Master", idTo, siteHr);
+            var dataItemPropesionalFrom = SPConnector.GetListItem("Professional Master", idFrom, siteHr);
+            email.EmailTo = dataItemPropesional["officeemail"].ToString();
+            email.EmailContent = "Dear Mr " + dataItemPropesional["Title"].ToString() + "," + Environment.NewLine + Environment.NewLine +
+                "Asset check result (form ID: " + formid + ") conducted on " + conductedDate + " already approved by Mr " + dataItemPropesionalFrom["Title"].ToString() + Environment.NewLine + Environment.NewLine + 
+                "Thank you for your attention.";
+
+            
+            return email;
+        }
+
+        public EmailHelperAssetCheckResult RejectEmail(int? idTo, int? idFrom, string formid = "", DateTime? conductedDate = null)
+        {
+            EmailHelperAssetCheckResult email = new EmailHelperAssetCheckResult();
+            var siteHr = _siteUrl.Replace("/bo", "/hr");
+            var dataItemPropesional = SPConnector.GetListItem("Professional Master", idTo, siteHr);
+            var dataItemPropesionalFrom = SPConnector.GetListItem("Professional Master", idFrom, siteHr);
+            email.EmailTo = dataItemPropesional["officeemail"].ToString();
+            email.EmailContent = "Dear Mr " + dataItemPropesional["Title"].ToString() + "," + Environment.NewLine + Environment.NewLine + 
+                "Asset check result (form ID: " + formid + ") conducted on " + conductedDate + " already rejected by Mr " + dataItemPropesionalFrom["Title"].ToString() + "." + Environment.NewLine + Environment.NewLine + 
+                "Thank you for your attention.";
+
+            return email;
+        }
+
+        public class EmailHelperAssetCheckResult
+        {
+            public string EmailTo
+            {
+                get; set;
+            }
+
+            public string EmailContent
+            {
+                get; set;
+            }
         }
 
         public AssetCheckResultHeaderVM GetPopulatedModelGetData(int? FormID = null)
@@ -346,6 +418,15 @@ namespace MCAWebAndAPI.Service.Asset
                 {
                     columnValues.Add("approvalname", model.Name.Value);
                     columnValues.Add("approvalposision", model.Posision.Value);
+
+                    EmailHelperAssetCheckResult email = new EmailHelperAssetCheckResult();
+                    email = RequestApproveEmail(
+                        model.Name.Value,
+                        model.hFormID,
+                        model.CountDate,
+                        GetFullName(model.CountedBy1.Value),
+                        _siteUrl + UrlResource.AssetCheckResultApprove);
+                    EmailUtil.Send(email.EmailTo, "Notification to approve the result", email.EmailContent);
                 }
 
                 SPConnector.UpdateListItem("Asset Check Result", ID ,columnValues, _siteUrl);
@@ -445,6 +526,15 @@ namespace MCAWebAndAPI.Service.Asset
                 {
                     columnValues.Add("approvalname", data.Name.Value);
                     columnValues.Add("approvalposision", data.Posision.Value);
+
+                    EmailHelperAssetCheckResult email = new EmailHelperAssetCheckResult();
+                    email = RequestApproveEmail(
+                        model.Name.Value,
+                        assetcheckformid.ToString(),
+                        model.CountDate,
+                        GetFullName(model.CountedBy1.Value),
+                        _siteUrl + UrlResource.AssetCheckResultApprove);
+                    EmailUtil.Send(email.EmailTo, "Notification to approve the result", email.EmailContent);
                 }
 
                 SPConnector.AddListItem("Asset Check Result", columnValues, _siteUrl);
@@ -476,9 +566,46 @@ namespace MCAWebAndAPI.Service.Asset
 
                 return model;
             }
-            
+
         }
-        
+
+        public AssetCheckResultHeaderVM Approve(int? ID = null)
+        {
+            var model = new AssetCheckResultHeaderVM();
+            var dataCekResult = SPConnector.GetListItem("Asset Check Result", ID, _siteUrl);
+            EmailHelperAssetCheckResult email = new EmailHelperAssetCheckResult();
+
+            email = ApproveEmail(
+                Convert.ToInt32(dataCekResult["assetcheckcountedby1"].ToString()),
+                Convert.ToInt32(dataCekResult["approvalname"].ToString()),
+                dataCekResult["assetcheckformid"].ToString(),
+                Convert.ToDateTime(dataCekResult["assetcheckcountdate"].ToString())
+                );
+
+            EmailUtil.Send(email.EmailTo, "Approve notification of asset check result", email.EmailContent);
+
+            return model;
+        }
+
+        public AssetCheckResultHeaderVM Reject(int? ID = null)
+        {
+            var model = new AssetCheckResultHeaderVM();
+            var dataCekResult = SPConnector.GetListItem("Asset Check Result", ID, _siteUrl);
+            EmailHelperAssetCheckResult email = new EmailHelperAssetCheckResult();
+
+            email = ApproveEmail(
+                Convert.ToInt32(dataCekResult["assetcheckcountedby1"].ToString()),
+                Convert.ToInt32(dataCekResult["approvalname"].ToString()),
+                dataCekResult["assetcheckformid"].ToString(),
+                Convert.ToDateTime(dataCekResult["assetcheckcountdate"].ToString())
+                );
+
+            EmailUtil.Send(email.EmailTo, "Rejected notification of asset check result", email.EmailContent);
+
+
+            return model;
+        }
+
         private IEnumerable<string> GetChoicesFromList(string listname, string v1)
         {
             List<string> _choices = new List<string>();

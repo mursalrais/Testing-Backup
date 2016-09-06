@@ -30,6 +30,7 @@
             columns.Bound(p => p.TransactionNo);
             columns.Bound(p => p.Currency);
             columns.Bound(p => p.Amount);
+            columns.Bound(p => p.Balance);
         })
         .DataSource(dataSource => dataSource.Ajax()
                    .Model(model =>

@@ -59,6 +59,8 @@
 
                 @Html.HiddenFor(m => m.ID, new { Value = Model.ID })
 
+                @Html.HiddenFor(m => m.hFormID, new { Value = Model.FormID.Text })
+
         <div class="row">
             <div>
                 @Html.Partial("_Details", Model.Details)

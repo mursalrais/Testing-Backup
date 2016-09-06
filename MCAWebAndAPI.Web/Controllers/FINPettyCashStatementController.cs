@@ -34,7 +34,7 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);
-            SessionManager.Set(SharedFinanceController.Session_SiteUrl, siteUrl);
+            SessionManager.Set(SharedController.Session_SiteUrl, siteUrl);
 
             var dateTo = DateTime.Today;
             var dateFrom = dateTo.AddDays(-14);     //going back 2 weeks

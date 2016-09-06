@@ -1,5 +1,9 @@
 ﻿@model MCAWebAndAPI.Model.ViewModel.Form.Finance.SCASettlementVM
 
+@*
+    Wireframe FIN07: SCA Settlement
+*@
+
 <style media="screen" type="text/css">
     .textbox-padding6px-readonly{
         padding:6px;
@@ -10,13 +14,13 @@
 </style>
     
 @using (Html.BeginForm(
-                            "Save", "FINSCASettlement",
-                            FormMethod.Post,
-                            new
-                            {
-                                @class = "form-horizontal",
-                                enctype = "multipart/form-data"
-                            }))
+    "Save", "FINSCASettlement",
+    FormMethod.Post,
+    new
+    {
+        @class = "form-horizontal",
+        enctype = "multipart/form-data"
+    }))
 {
 
     <fieldset>
@@ -60,7 +64,7 @@
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.Currency).Class("col-sm-3 control-label")
                     <div class="col-sm-5">
-                        @Html.EditorFor(m => m.Currency)
+                        @Html.DisplayFor(m => m.Currency, new { HtmlAttributes = new { @readonly = "readonly" } })
                     </div>
                 </div>
 
@@ -107,7 +111,7 @@
                     <i class="fa fa-save"></i>
                     Submit
                 </button>
-                <button id="submit-cancel" acti class="btn btn-primary" type="reset" >
+                <button id="submit-cancel" class="btn btn-primary" type="button" onclick="location.href='@Url.Action("Cancel", "FINSCASettlement")'">
                     <i class="fa fa-back"></i>
                     Cancel
                 </button>
@@ -151,7 +155,8 @@
                     $('#Description').val(response.Purpose);
                     $('#Fund').val(response.Fund);
                     $('#SpecialCashAdvanceAmount').val(response.TotalAmount);
-
+                    $('#Currency_Value').val(response.Currency);
+                    
                     calculateTotal();
                 },
                 error: function (response) {

@@ -253,7 +253,7 @@
 
             $("#save-button").click(function () {                
                 var isValid = checkGrid();
-                if (isValid) {
+                if (isValid && ($('.form-horizontal').valid())) {
                     $("form").submit();
                     showLoading();
                 }
@@ -269,7 +269,7 @@
             });
             $("#submit-button").click(function () {
                 var isValid = checkGrid();
-                if (isValid) {
+                if (isValid && ($('.form-horizontal').valid())) {
                     $("#Status_Value").prop("value", "Pending Approval");
                     $("form").submit();
                     showLoading();

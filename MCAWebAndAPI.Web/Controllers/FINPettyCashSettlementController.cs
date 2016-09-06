@@ -60,7 +60,7 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);
-            SessionManager.Set(SharedFinanceController.Session_SiteUrl, siteUrl);
+            SessionManager.Set(SharedController.Session_SiteUrl, siteUrl);
 
             var viewModel = service.Get(GetOperation(op), id);
 
@@ -102,7 +102,7 @@ namespace MCAWebAndAPI.Web.Controllers
             string RelativePath = PrintPageUrl;
             string domain = new SharedFinanceController().GetImageLogoPrint(Request.IsSecureConnection, Request.Url.Authority);
 
-            var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl);
+            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl);
             service.SetSiteUrl(siteUrl);
             viewModel = service.Get(Operations.e, viewModel.ID);
 
@@ -137,7 +137,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetPettyCashVouchers(int? id, string title)
         {
-            var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
+            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);
 
             var PettyCashSettlements = PettyCashPaymentVoucherService.GetPettyCashPaymentVouchers(siteUrl);
@@ -153,7 +153,7 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult GetPaymentVoucherById(int paymentVoucherID)
         {
             pettyCashPaymentVoucherService = new PettyCashPaymentVoucherService();
-            var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
+            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
 
             pettyCashPaymentVoucherService.SetSiteUrl(siteUrl);
 

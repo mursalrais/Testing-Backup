@@ -44,7 +44,7 @@ namespace MCAWebAndAPI.Service.JobSchedulers.Jobs
                     }
                     else
                     {
-                        EmailTo = GetApprover("Deputy ED", siteUrl);
+                        EmailTo = GetApprover("Deputy Executive Director", siteUrl);
                     }
                     SubjectEmail = "Still Not Approved After 5 Working Days";
                     EmailContent = "There are still Manpower Request yet to be processed (item id = " + Convert.ToInt32(item["ID"]).ToString() + ") and waiting for your approval. Please check your Manpower Approval Page";

@@ -56,6 +56,12 @@
                             <div class="tree smart-form">
                                 <ul role="tree">
                                     <li class="parent_li" role="treeitem">
+                                        <span id="back-office-button" title="Login to Back Office Site">
+                                            <i class="fa fa-lg fa-laptop"></i>
+                                            Back Office
+                                        </span>
+                                    </li>
+                                    <li class="parent_li" role="treeitem">
                                         <span id="compact-program-button" title="Login to Compact Program Site">
                                             <i class="fa fa-lg fa-compass"></i>
                                             Compact Program
@@ -127,6 +133,9 @@
             });
             $("#pm-button").click(function () {
                 window.location = "https://mcai4.sharepoint.com/sites/ims/pm";
+            });
+            $("#back-office-button").click(function () {
+                window.location = "https://mcai4.sharepoint.com/sites/ims/bo";
             });
 
         });

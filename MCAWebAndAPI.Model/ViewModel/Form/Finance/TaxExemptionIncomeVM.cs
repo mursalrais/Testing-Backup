@@ -1,56 +1,48 @@
 ﻿using MCAWebAndAPI.Model.ViewModel.Control;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 {
     public class TaxExemptionIncomeVM : TaxExemptionBaseVM
     {
-        private ComboBoxVM _typeOfWithHoldingTax;
+        /// <summary>
+        /// FIN17: Tax Exemption
+        /// </summary>
 
+        private ComboBoxVM typeOfWithHoldingTax;
+
+        [Required]
         [DisplayName("Type Of Withholding Tax")]
         [UIHint("ComboBox")]
         public ComboBoxVM TypeOfWithHoldingTax
         {
             get
             {
-                if (_typeOfWithHoldingTax == null)
+                if (typeOfWithHoldingTax == null)
                 {
-                    _typeOfWithHoldingTax = new ComboBoxVM();
+                    typeOfWithHoldingTax = new ComboBoxVM();
                 }
-                return _typeOfWithHoldingTax;
+                return typeOfWithHoldingTax;
             }
             set
             {
-                _typeOfWithHoldingTax = value;
+                typeOfWithHoldingTax = value;
             }
         }
 
         [DisplayName("Total Income Recepients")]
-        public int TotalIncomeRecepients
-        {
-            get;
-            set;
-        }
+        [UIHint("Int")]
+        public int? TotalIncomeRecepients { get; set; }
 
+        [Required(ErrorMessage = "asdadasdsa")]
         [DisplayName("Gross Income (IDR)")]
-        public decimal GrossIncome
-        {
-            get;
-            set;
-        }
+        [UIHint("Number")]
+        public decimal? GrossIncome { get; set; }
 
-
+        [Required]
         [DisplayName("Total Income Tax Borne by Government(IDR)")]
-        public decimal TotalIncomeTaxBorneByGovernment
-        {
-            get;
-            set;
-        }
+        [UIHint("Number")]
+        public decimal? TotalIncomeTaxBorneByGovernment { get; set; }
     }
 }

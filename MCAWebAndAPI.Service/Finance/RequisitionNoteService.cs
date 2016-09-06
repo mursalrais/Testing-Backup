@@ -39,6 +39,9 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
         private const string FIELD_REQUISITION_FUND = "Fund";
         private const string FIELD_REQUISITION_CURRENCY = "Currency";
         private const string FIELD_REQUISITION_TOTAL = "Total";
+        private const string FIELD_MODIFIED = "Modified";
+        private const string FIELD_CREATED = "Created";
+
         private const string FIELD_RN_HEADERID = "Requisition_x0020_Note_x0020_ID";
         private const string FIELD_RN_ACTIVITY = "Activity";
         private const string FIELD_RN_WBS = "WBS_x0020_ID";
@@ -416,6 +419,8 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
             viewModel.Currency.Value = Convert.ToString(listItem[FIELD_REQUISITION_CURRENCY]);
             viewModel.Total = Convert.ToDecimal(listItem[FIELD_REQUISITION_TOTAL]);
             viewModel.EditMode = (int)Item.Mode.UPDATED;
+            viewModel.Modified = Convert.ToDateTime(listItem[FIELD_MODIFIED]);
+            viewModel.Created = Convert.ToDateTime(listItem[FIELD_CREATED]);
 
             viewModel.Editor = Convert.ToString((listItem[FIELD_RN_EDITOR] as FieldUserValue).LookupValue);
 

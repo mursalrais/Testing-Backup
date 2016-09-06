@@ -15,6 +15,10 @@ namespace MCAWebAndAPI.Service.Asset
 
         AssetCheckResultHeaderVM GetPopulatedModelGetData(int? FormID = null);
 
+        AssetCheckResultHeaderVM Approve(int? ID = null);
+
+        AssetCheckResultHeaderVM Reject(int? ID = null);
+
         AssetCheckResultHeaderVM GetPopulatedModelCalculate(AssetCheckResultHeaderVM data, int? ID = null);
 
         AssetCheckResultHeaderVM GetPopulatedModelSave(AssetCheckResultHeaderVM data, Boolean isApproval = false, int? ID = null);

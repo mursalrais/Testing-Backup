@@ -105,6 +105,7 @@ namespace MCAWebAndAPI.Service.Finance
                 else if (scaSettlement.Operation == Operations.e)
                 {
                     SPConnector.UpdateListItem(ListName, scaSettlement.ID, columnValues, siteUrl);
+                    result = scaSettlement.ID;
                 }
 
                 SaveSCASettlementDetailItems(scaSettlement.ID, scaSettlement.ItemDetails);

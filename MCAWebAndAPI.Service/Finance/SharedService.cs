@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
+using MCAWebAndAPI.Model.ViewModel.Form.Shared;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
-using MCAWebAndAPI.Model.ViewModel.Form.Shared;
+using static MCAWebAndAPI.Model.ViewModel.Form.Finance.PettyCashTransactionItem;
 
 namespace MCAWebAndAPI.Service.Finance
 {
@@ -40,7 +38,7 @@ namespace MCAWebAndAPI.Service.Finance
             return glMasters;
         }
 
-        public static IEnumerable<WBSMasterVM> GetWBSMaster(string siteUrl, string activityValue=null)
+        public static IEnumerable<WBSMasterVM> GetWBSMaster(string siteUrl, string activityValue = null)
         {
             string caml = null;
             if (!string.IsNullOrWhiteSpace(activityValue))
@@ -68,7 +66,7 @@ namespace MCAWebAndAPI.Service.Finance
 
             return wbsMasters;
         }
-   
+
 
         public static IEnumerable<ProfessionalVM> GetProfessionalMaster(string siteUrl)
         {
@@ -116,8 +114,11 @@ namespace MCAWebAndAPI.Service.Finance
             };
         }
 
+
         public static string GetPosition(string username, string siteUrl)
         {
+            //TODO: change this implementation to Service.Common.ProfessionalService
+
             if (string.IsNullOrEmpty(siteUrl))
             {
                 throw new InvalidOperationException("Missing parameter: siteUrl.");
@@ -138,43 +139,49 @@ namespace MCAWebAndAPI.Service.Finance
         }
 
         public static IEnumerable<PettyCashTransactionItem> GetPettyCashTransaction(
-            string siteUrl, DateTime dateFrom, DateTime dateTo, string listName, string dateFieldName, ConvertToVMFunction f)
+            string siteUrl, DateTime dateFrom, DateTime dateTo, string listName, string dateFieldName, Post sign, ConvertToVMFunction f)
         {
             var pettyCashTransactions = new List<PettyCashTransactionItem>();
             var viewModel = new PettyCashPaymentVoucherVM();
+
+            var from = String.Format("{0}-{1}-{2}", dateFrom.Year, dateFrom.Month, dateFrom.Day);
+            var to = String.Format("{0}-{1}-{2}", dateTo.Year, dateTo.Month, dateTo.Day);
 
             string caml = @"<Query>
   <Where>
     <And>
       <Geq>
         <FieldRef Name='{0}' />
-          <Value IncludeTimeValue='TRUE' Type='DateTime'>{1}</Value>
+          <Value Type='DateTime'>{1}</Value>
       </Geq>
       <Leq>
         <FieldRef Name='{0}' />
-        <Value IncludeTimeValue='TRUE' Type='DateTime'>{2}</Value>
+        <Value Type='DateTime'>{2}</Value>
       </Leq>
     </And>
   </Where>
 </Query>";
 
-            caml = string.Format(caml, dateFieldName, dateFrom, dateTo);
+            //TODO: check why date filter failed
+
+            //caml = string.Format(caml, dateFieldName, dateFrom, dateTo);
+
+            caml = string.Format(caml, dateFieldName, from, to);
 
             var listItems = SPConnector.GetList(listName, siteUrl, caml);
 
             foreach (var item in listItems)
             {
-                pettyCashTransactions.Add(ConvertToVM(siteUrl, item, f));
+                pettyCashTransactions.Add(ConvertToVM(siteUrl, item, f, sign));
             }
 
             return pettyCashTransactions;
         }
 
-        public delegate PettyCashTransactionItem ConvertToVMFunction(string siteUrl, ListItem listItem);
-        public static PettyCashTransactionItem ConvertToVM(string siteUrl, ListItem listItem, ConvertToVMFunction f)
+        public delegate PettyCashTransactionItem ConvertToVMFunction(string siteUrl, ListItem listItem, Post sign);
+        public static PettyCashTransactionItem ConvertToVM(string siteUrl, ListItem listItem, ConvertToVMFunction f, Post sign)
         {
-            return f(siteUrl, listItem);
+            return f(siteUrl, listItem, sign);
         }
-
     }
 }

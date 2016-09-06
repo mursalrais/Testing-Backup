@@ -19,7 +19,8 @@ namespace MCAWebAndAPI.Service.Finance
     public class TaxReimbursementService : ITaxReimbursementService
     {
         private const string ListName = "Tax Reimbursement";
-        private const string ListName_Document = "Tax Reimbursement Document";
+        private const string ListName_Document = "Tax Reimbursement Documents";
+        private const string ListName_Tax_Reimbursement = "Tax_x0020_Reimbursement";
 
         private const string FieldName_Id = "ID";
         private const string FieldName_TypeOfTax = "Type_x0020_of_x0020_Tax";
@@ -157,7 +158,7 @@ namespace MCAWebAndAPI.Service.Finance
                     if (doc != null)
                     {
                         var updateValue = new Dictionary<string, object>();
-                        updateValue.Add(ListName, new FieldLookupValue { LookupId = Convert.ToInt32(ID) });
+                        updateValue.Add(ListName_Tax_Reimbursement, new FieldLookupValue { LookupId = Convert.ToInt32(ID) });
                         try
                         {
                             SPConnector.UploadDocument(ListName_Document, updateValue, doc.FileName, doc.InputStream, siteUrl);
