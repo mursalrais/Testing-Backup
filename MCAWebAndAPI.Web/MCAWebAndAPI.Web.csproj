@@ -1096,6 +1096,9 @@
     <Content Include="Views\HRProfessionalPerformanceEvaluation\_WorkflowPathDetails.cshtml" />
     <Content Include="Views\HRDayOff\_DayOffNextBalance.cshtml" />
     <Content Include="Views\HRDayOff\_DisplayRequestDetail.cshtml" />
+    <Content Include="Views\ASSAssetLoanAndReturn\_AssetLoanAndReturnItem.cshtml" />
+    <Content Include="Views\ASSAssetLoanAndReturn\Edit.cshtml" />
+    <Content Include="Views\ASSAssetLoanAndReturn\_Details.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

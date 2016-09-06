@@ -444,3 +444,222 @@ Parameter name: source
 2016-08-31 14:21:35.8922 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Invalid data has been used to update the list item. The field you are trying to update may be read only.
 2016-08-31 14:29:45.7340 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService Invalid data has been used to update the list item. The field you are trying to update may be read only.
 2016-08-31 14:45:46.2882 MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService The 'sId' argument is invalid.
+2016-08-31 19:25:20.4253 MCAWebAndAPI.Service.JobSchedulers.Schedulers.PSAManagementScheduler DefaultQuartzScheduler has been started at Wednesday, August 31, 2016 in site 
+2016-08-31 19:27:31.9334 MCAWebAndAPI.Service.JobSchedulers.Schedulers.PSAManagementScheduler DefaultQuartzScheduler has been started at Wednesday, August 31, 2016 in site https://eceos2.sharepoint.com/sites/mca-dev/bo
+2016-08-31 19:27:31.9334 MCAWebAndAPI.Service.JobSchedulers.Schedulers.PSAManagementScheduler DefaultQuartzScheduler has been started at Wednesday, August 31, 2016 in site https://eceos2.sharepoint.com/sites/mca-dev/bo
+2016-08-31 19:37:29.9605 MCAWebAndAPI.Service.JobSchedulers.Schedulers.PSAManagementScheduler DefaultQuartzScheduler has been started at Wednesday, August 31, 2016 in site https://eceos2.sharepoint.com/sites/mca-dev/HR
+2016-08-31 19:37:33.6570 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 8/3/2017 5:00:00 PM--twoMonthsBeforeExpired: 6/3/2017 5:00:00 PM--strExpireDate: 8/3/2017--strTwoMonthBeforeExpired: 6/3/2017
+2016-08-31 19:37:35.5881 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 9/13/2016 5:00:00 PM--twoMonthsBeforeExpired: 7/13/2016 5:00:00 PM--strExpireDate: 9/13/2016--strTwoMonthBeforeExpired: 7/13/2016
+2016-08-31 19:37:37.1932 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 12/30/2016 4:00:00 PM--twoMonthsBeforeExpired: 10/30/2016 4:00:00 PM--strExpireDate: 12/30/2016--strTwoMonthBeforeExpired: 10/30/2016
+2016-08-31 19:37:38.8833 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 8/30/2016 5:00:00 PM--twoMonthsBeforeExpired: 6/30/2016 5:00:00 PM--strExpireDate: 8/30/2016--strTwoMonthBeforeExpired: 6/30/2016
+2016-08-31 19:37:40.6300 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 9/30/2016 5:00:00 PM--twoMonthsBeforeExpired: 7/30/2016 5:00:00 PM--strExpireDate: 9/30/2016--strTwoMonthBeforeExpired: 7/30/2016
+2016-08-31 19:37:42.5172 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 7/13/2017 5:00:00 PM--twoMonthsBeforeExpired: 5/13/2017 5:00:00 PM--strExpireDate: 7/13/2017--strTwoMonthBeforeExpired: 5/13/2017
+2016-08-31 19:37:44.1840 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 7/17/2017 5:00:00 PM--twoMonthsBeforeExpired: 5/17/2017 5:00:00 PM--strExpireDate: 7/17/2017--strTwoMonthBeforeExpired: 5/17/2017
+2016-08-31 19:37:45.9329 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 7/17/2017 5:00:00 PM--twoMonthsBeforeExpired: 5/17/2017 5:00:00 PM--strExpireDate: 7/17/2017--strTwoMonthBeforeExpired: 5/17/2017
+2016-08-31 19:37:47.6940 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 7/18/2017 5:00:00 PM--twoMonthsBeforeExpired: 5/18/2017 5:00:00 PM--strExpireDate: 7/18/2017--strTwoMonthBeforeExpired: 5/18/2017
+2016-08-31 19:37:49.2564 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 7/20/2017 5:00:00 PM--twoMonthsBeforeExpired: 5/20/2017 5:00:00 PM--strExpireDate: 7/20/2017--strTwoMonthBeforeExpired: 5/20/2017
+2016-08-31 19:37:50.9118 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 8/8/2017 5:00:00 PM--twoMonthsBeforeExpired: 6/8/2017 5:00:00 PM--strExpireDate: 8/8/2017--strTwoMonthBeforeExpired: 6/8/2017
+2016-08-31 19:37:52.6542 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 8/13/2017 5:00:00 PM--twoMonthsBeforeExpired: 6/13/2017 5:00:00 PM--strExpireDate: 8/13/2017--strTwoMonthBeforeExpired: 6/13/2017
+2016-08-31 19:37:54.2436 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 8/17/2017 5:00:00 PM--twoMonthsBeforeExpired: 6/17/2017 5:00:00 PM--strExpireDate: 8/17/2017--strTwoMonthBeforeExpired: 6/17/2017
+2016-08-31 19:37:55.8974 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 8/17/2017 5:00:00 PM--twoMonthsBeforeExpired: 6/17/2017 5:00:00 PM--strExpireDate: 8/17/2017--strTwoMonthBeforeExpired: 6/17/2017
+2016-08-31 19:37:57.4411 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 8/17/2017 5:00:00 PM--twoMonthsBeforeExpired: 6/17/2017 5:00:00 PM--strExpireDate: 8/17/2017--strTwoMonthBeforeExpired: 6/17/2017
+2016-08-31 19:37:59.1297 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 8/18/2017 5:00:00 PM--twoMonthsBeforeExpired: 6/18/2017 5:00:00 PM--strExpireDate: 8/18/2017--strTwoMonthBeforeExpired: 6/18/2017
+2016-08-31 19:38:00.7271 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 8/20/2017 5:00:00 PM--twoMonthsBeforeExpired: 6/20/2017 5:00:00 PM--strExpireDate: 8/20/2017--strTwoMonthBeforeExpired: 6/20/2017
+2016-08-31 19:38:02.3277 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 8/23/2017 5:00:00 PM--twoMonthsBeforeExpired: 6/23/2017 5:00:00 PM--strExpireDate: 8/23/2017--strTwoMonthBeforeExpired: 6/23/2017
+2016-08-31 19:38:03.9269 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 7/23/2017 5:00:00 PM--twoMonthsBeforeExpired: 5/23/2017 5:00:00 PM--strExpireDate: 7/23/2017--strTwoMonthBeforeExpired: 5/23/2017
+2016-08-31 19:38:05.9502 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 5/31/2017 10:00:00 AM--twoMonthsBeforeExpired: 3/31/2017 10:00:00 AM--strExpireDate: 5/31/2017--strTwoMonthBeforeExpired: 3/31/2017
+2016-08-31 19:38:07.7775 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 4/29/2017 5:00:00 PM--twoMonthsBeforeExpired: 2/28/2017 5:00:00 PM--strExpireDate: 4/29/2017--strTwoMonthBeforeExpired: 2/28/2017
+2016-08-31 19:38:09.3446 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 3/30/2017 5:00:00 PM--twoMonthsBeforeExpired: 1/30/2017 5:00:00 PM--strExpireDate: 3/30/2017--strTwoMonthBeforeExpired: 1/30/2017
+2016-08-31 19:38:11.1418 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 3/30/2017 5:00:00 PM--twoMonthsBeforeExpired: 1/30/2017 5:00:00 PM--strExpireDate: 3/30/2017--strTwoMonthBeforeExpired: 1/30/2017
+2016-08-31 19:38:12.7371 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 5/30/2017 5:00:00 PM--twoMonthsBeforeExpired: 3/30/2017 5:00:00 PM--strExpireDate: 5/30/2017--strTwoMonthBeforeExpired: 3/30/2017
+2016-08-31 19:38:14.7012 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 5/30/2017 5:00:00 PM--twoMonthsBeforeExpired: 3/30/2017 5:00:00 PM--strExpireDate: 5/30/2017--strTwoMonthBeforeExpired: 3/30/2017
+2016-08-31 19:38:16.7234 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 10/17/2016 5:00:00 PM--twoMonthsBeforeExpired: 8/17/2016 5:00:00 PM--strExpireDate: 10/17/2016--strTwoMonthBeforeExpired: 8/17/2016
+2016-08-31 19:38:18.3624 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 11/20/2016 4:00:00 PM--twoMonthsBeforeExpired: 9/20/2016 4:00:00 PM--strExpireDate: 11/20/2016--strTwoMonthBeforeExpired: 9/20/2016
+2016-08-31 19:38:20.0034 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 9/1/2016 5:00:00 PM--twoMonthsBeforeExpired: 7/1/2016 5:00:00 PM--strExpireDate: 9/1/2016--strTwoMonthBeforeExpired: 7/1/2016
+2016-08-31 19:38:21.5603 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 10/20/2016 5:00:00 PM--twoMonthsBeforeExpired: 8/20/2016 5:00:00 PM--strExpireDate: 10/20/2016--strTwoMonthBeforeExpired: 8/20/2016
+2016-08-31 19:38:23.1350 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 11/17/2016 4:00:00 PM--twoMonthsBeforeExpired: 9/17/2016 4:00:00 PM--strExpireDate: 11/17/2016--strTwoMonthBeforeExpired: 9/17/2016
+2016-08-31 19:38:24.7774 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 10/19/2016 5:00:00 PM--twoMonthsBeforeExpired: 8/19/2016 5:00:00 PM--strExpireDate: 10/19/2016--strTwoMonthBeforeExpired: 8/19/2016
+2016-08-31 19:38:26.3892 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 10/23/2016 5:00:00 PM--twoMonthsBeforeExpired: 8/23/2016 5:00:00 PM--strExpireDate: 10/23/2016--strTwoMonthBeforeExpired: 8/23/2016
+2016-08-31 19:39:00.5867 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:39:10.5009 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:39:23.7958 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:39:34.5907 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:39:47.7799 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:39:56.5654 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:40:07.0332 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:40:16.1399 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:40:25.4584 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:40:42.4670 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:40:53.1260 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:41:01.6920 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:41:10.4833 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:41:19.7149 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:41:28.2951 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:41:37.6057 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:41:46.4519 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:41:55.4058 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:42:05.8795 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:42:16.2941 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:42:25.0636 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:43:04.3786 MCAWebAndAPI.Service.JobSchedulers.Schedulers.PSAManagementScheduler DefaultQuartzScheduler has been started at Wednesday, August 31, 2016 in site https://eceos2.sharepoint.com/sites/mca-dev/HR
+2016-08-31 19:47:10.9950 MCAWebAndAPI.Service.JobSchedulers.Schedulers.PSAManagementScheduler DefaultQuartzScheduler has been started at Wednesday, August 31, 2016 in site https://eceos2.sharepoint.com/sites/mca-dev/hr
+2016-08-31 19:47:13.4642 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 8/3/2017 5:00:00 PM--twoMonthsBeforeExpired: 6/3/2017 5:00:00 PM--strExpireDate: 8/3/2017--strTwoMonthBeforeExpired: 6/3/2017
+2016-08-31 19:47:15.1825 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 9/13/2016 5:00:00 PM--twoMonthsBeforeExpired: 7/13/2016 5:00:00 PM--strExpireDate: 9/13/2016--strTwoMonthBeforeExpired: 7/13/2016
+2016-08-31 19:47:16.7402 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 12/30/2016 4:00:00 PM--twoMonthsBeforeExpired: 10/30/2016 4:00:00 PM--strExpireDate: 12/30/2016--strTwoMonthBeforeExpired: 10/30/2016
+2016-08-31 19:47:18.3605 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 9/30/2016 5:00:00 PM--twoMonthsBeforeExpired: 7/30/2016 5:00:00 PM--strExpireDate: 9/30/2016--strTwoMonthBeforeExpired: 7/30/2016
+2016-08-31 19:47:19.9133 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 7/13/2017 5:00:00 PM--twoMonthsBeforeExpired: 5/13/2017 5:00:00 PM--strExpireDate: 7/13/2017--strTwoMonthBeforeExpired: 5/13/2017
+2016-08-31 19:47:21.4341 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 7/17/2017 5:00:00 PM--twoMonthsBeforeExpired: 5/17/2017 5:00:00 PM--strExpireDate: 7/17/2017--strTwoMonthBeforeExpired: 5/17/2017
+2016-08-31 19:47:22.9901 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 7/17/2017 5:00:00 PM--twoMonthsBeforeExpired: 5/17/2017 5:00:00 PM--strExpireDate: 7/17/2017--strTwoMonthBeforeExpired: 5/17/2017
+2016-08-31 19:47:24.5490 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 7/18/2017 5:00:00 PM--twoMonthsBeforeExpired: 5/18/2017 5:00:00 PM--strExpireDate: 7/18/2017--strTwoMonthBeforeExpired: 5/18/2017
+2016-08-31 19:47:26.1943 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 7/20/2017 5:00:00 PM--twoMonthsBeforeExpired: 5/20/2017 5:00:00 PM--strExpireDate: 7/20/2017--strTwoMonthBeforeExpired: 5/20/2017
+2016-08-31 19:47:27.8383 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 8/8/2017 5:00:00 PM--twoMonthsBeforeExpired: 6/8/2017 5:00:00 PM--strExpireDate: 8/8/2017--strTwoMonthBeforeExpired: 6/8/2017
+2016-08-31 19:47:29.3751 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 8/13/2017 5:00:00 PM--twoMonthsBeforeExpired: 6/13/2017 5:00:00 PM--strExpireDate: 8/13/2017--strTwoMonthBeforeExpired: 6/13/2017
+2016-08-31 19:47:30.9209 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 8/17/2017 5:00:00 PM--twoMonthsBeforeExpired: 6/17/2017 5:00:00 PM--strExpireDate: 8/17/2017--strTwoMonthBeforeExpired: 6/17/2017
+2016-08-31 19:47:32.6791 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 8/17/2017 5:00:00 PM--twoMonthsBeforeExpired: 6/17/2017 5:00:00 PM--strExpireDate: 8/17/2017--strTwoMonthBeforeExpired: 6/17/2017
+2016-08-31 19:47:34.4595 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 8/17/2017 5:00:00 PM--twoMonthsBeforeExpired: 6/17/2017 5:00:00 PM--strExpireDate: 8/17/2017--strTwoMonthBeforeExpired: 6/17/2017
+2016-08-31 19:47:36.0892 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 8/18/2017 5:00:00 PM--twoMonthsBeforeExpired: 6/18/2017 5:00:00 PM--strExpireDate: 8/18/2017--strTwoMonthBeforeExpired: 6/18/2017
+2016-08-31 19:47:37.7272 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 8/20/2017 5:00:00 PM--twoMonthsBeforeExpired: 6/20/2017 5:00:00 PM--strExpireDate: 8/20/2017--strTwoMonthBeforeExpired: 6/20/2017
+2016-08-31 19:47:39.2921 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 8/23/2017 5:00:00 PM--twoMonthsBeforeExpired: 6/23/2017 5:00:00 PM--strExpireDate: 8/23/2017--strTwoMonthBeforeExpired: 6/23/2017
+2016-08-31 19:47:41.0156 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 7/23/2017 5:00:00 PM--twoMonthsBeforeExpired: 5/23/2017 5:00:00 PM--strExpireDate: 7/23/2017--strTwoMonthBeforeExpired: 5/23/2017
+2016-08-31 19:47:42.6483 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 5/31/2017 10:00:00 AM--twoMonthsBeforeExpired: 3/31/2017 10:00:00 AM--strExpireDate: 5/31/2017--strTwoMonthBeforeExpired: 3/31/2017
+2016-08-31 19:47:44.1841 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 4/29/2017 5:00:00 PM--twoMonthsBeforeExpired: 2/28/2017 5:00:00 PM--strExpireDate: 4/29/2017--strTwoMonthBeforeExpired: 2/28/2017
+2016-08-31 19:47:45.7446 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 3/30/2017 5:00:00 PM--twoMonthsBeforeExpired: 1/30/2017 5:00:00 PM--strExpireDate: 3/30/2017--strTwoMonthBeforeExpired: 1/30/2017
+2016-08-31 19:47:47.3492 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 3/30/2017 5:00:00 PM--twoMonthsBeforeExpired: 1/30/2017 5:00:00 PM--strExpireDate: 3/30/2017--strTwoMonthBeforeExpired: 1/30/2017
+2016-08-31 19:47:48.9609 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 5/30/2017 5:00:00 PM--twoMonthsBeforeExpired: 3/30/2017 5:00:00 PM--strExpireDate: 5/30/2017--strTwoMonthBeforeExpired: 3/30/2017
+2016-08-31 19:47:50.5049 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 5/30/2017 5:00:00 PM--twoMonthsBeforeExpired: 3/30/2017 5:00:00 PM--strExpireDate: 5/30/2017--strTwoMonthBeforeExpired: 3/30/2017
+2016-08-31 19:47:52.2131 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 10/17/2016 5:00:00 PM--twoMonthsBeforeExpired: 8/17/2016 5:00:00 PM--strExpireDate: 10/17/2016--strTwoMonthBeforeExpired: 8/17/2016
+2016-08-31 19:47:53.8503 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 11/20/2016 4:00:00 PM--twoMonthsBeforeExpired: 9/20/2016 4:00:00 PM--strExpireDate: 11/20/2016--strTwoMonthBeforeExpired: 9/20/2016
+2016-08-31 19:47:55.4205 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 9/1/2016 5:00:00 PM--twoMonthsBeforeExpired: 7/1/2016 5:00:00 PM--strExpireDate: 9/1/2016--strTwoMonthBeforeExpired: 7/1/2016
+2016-08-31 19:47:57.1401 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 10/20/2016 5:00:00 PM--twoMonthsBeforeExpired: 8/20/2016 5:00:00 PM--strExpireDate: 10/20/2016--strTwoMonthBeforeExpired: 8/20/2016
+2016-08-31 19:47:58.6718 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 11/17/2016 4:00:00 PM--twoMonthsBeforeExpired: 9/17/2016 4:00:00 PM--strExpireDate: 11/17/2016--strTwoMonthBeforeExpired: 9/17/2016
+2016-08-31 19:48:00.1995 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 10/19/2016 5:00:00 PM--twoMonthsBeforeExpired: 8/19/2016 5:00:00 PM--strExpireDate: 10/19/2016--strTwoMonthBeforeExpired: 8/19/2016
+2016-08-31 19:48:01.8575 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService expireDate: 10/23/2016 5:00:00 PM--twoMonthsBeforeExpired: 8/23/2016 5:00:00 PM--strExpireDate: 10/23/2016--strTwoMonthBeforeExpired: 8/23/2016
+2016-08-31 19:48:31.7941 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:48:40.9970 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:48:53.9163 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:49:02.4313 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:49:14.8879 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:49:24.5787 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:49:33.2175 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:49:41.4296 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:49:50.0794 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:50:02.1930 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:50:12.8571 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:50:21.5869 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:50:30.3369 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:50:38.9832 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:50:48.2961 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:50:56.7288 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:51:06.3146 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:51:14.7972 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:51:23.4011 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:51:31.8116 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:51:40.0921 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:51:49.4884 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:51:58.4170 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:52:15.3425 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:52:23.7230 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:52:32.4029 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:52:49.3867 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:53:06.6079 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:53:20.5998 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:53:43.0298 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:53:59.9777 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:54:08.8865 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:54:17.4835 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:54:26.0735 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:54:34.4542 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:54:42.8485 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:54:51.1305 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:55:00.2464 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:55:09.1514 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:55:17.6098 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:55:34.8764 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:55:43.4645 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:55:52.5658 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:56:00.9690 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:56:09.4860 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:56:26.1046 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:56:34.7170 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:56:43.6675 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:56:52.0903 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:57:08.7645 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:57:21.2510 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:57:30.1846 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:57:44.1858 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:57:52.8435 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:58:01.6606 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:58:10.0641 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:58:18.5157 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:58:31.2345 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:58:39.7325 MCAWebAndAPI.Service.ProjectManagement.Schedule.PSAScheduleService Item does not exist. It may have been deleted by another user.
+2016-08-31 19:58:39.7415 MCAWebAndAPI.Service.JobSchedulers.Jobs.PSAManagementJob Task Calculation Job at https://eceos2.sharepoint.com/sites/mca-dev/hr has been successfully performed
+2016-09-01 00:31:41.4943 MCAWebAndAPI.Service.JobSchedulers.Schedulers.AssetManagementScheduler DefaultQuartzScheduler has been started at Thursday, September 1, 2016 in site https://eceos2.sharepoint.com/sites/mca-dev/bo
+2016-09-01 00:34:07.9797 MCAWebAndAPI.Service.ProjectManagement.Schedule.AssetScheduleService expireDate: 1/1/0001 12:00:00 AM--strReturnDate: 1/1/0001
+2016-09-01 00:44:16.5990 MCAWebAndAPI.Service.JobSchedulers.Schedulers.AssetManagementScheduler DefaultQuartzScheduler has been started at Thursday, September 1, 2016 in site https://eceos2.sharepoint.com/sites/mca-dev/bo
+2016-09-01 00:44:32.4672 MCAWebAndAPI.Service.JobSchedulers.Schedulers.AssetManagementScheduler DefaultQuartzScheduler has been started at Thursday, September 1, 2016 in site https://eceos2.sharepoint.com/sites/mca-dev/bo
+2016-09-01 00:44:32.6563 MCAWebAndAPI.Service.ProjectManagement.Schedule.AssetScheduleService expireDate: 1/1/0001 12:00:00 AM--strReturnDate: 1/1/0001
+2016-09-01 00:45:32.3188 MCAWebAndAPI.Service.JobSchedulers.Schedulers.AssetManagementScheduler DefaultQuartzScheduler has been started at Thursday, September 1, 2016 in site https://eceos2.sharepoint.com/sites/mca-dev/bo
+2016-09-01 00:49:30.2540 MCAWebAndAPI.Service.ProjectManagement.Schedule.AssetScheduleService expireDate: 1/1/0001 12:00:00 AM--strReturnDate: 1/1/0001
+2016-09-01 00:51:03.4129 MCAWebAndAPI.Service.JobSchedulers.Schedulers.AssetManagementScheduler DefaultQuartzScheduler has been started at Thursday, September 1, 2016 in site https://eceos2.sharepoint.com/sites/mca-dev/bo
+2016-09-01 00:54:15.3285 MCAWebAndAPI.Service.ProjectManagement.Schedule.AssetScheduleService expireDate: 1/1/0001 12:00:00 AM--strReturnDate: 1/1/0001
+2016-09-01 00:57:51.9287 MCAWebAndAPI.Service.JobSchedulers.Schedulers.AssetManagementScheduler DefaultQuartzScheduler has been started at Thursday, September 1, 2016 in site https://eceos2.sharepoint.com/sites/mca-dev/bo
+2016-09-01 01:02:02.4146 MCAWebAndAPI.Service.ProjectManagement.Schedule.AssetScheduleService expireDate: 1/1/0001 12:00:00 AM--strReturnDate: 1/1/0001
+2016-09-01 01:15:37.4647 MCAWebAndAPI.Service.JobSchedulers.Schedulers.AssetManagementScheduler DefaultQuartzScheduler has been started at Thursday, September 1, 2016 in site https://eceos2.sharepoint.com/sites/mca-dev/bo
+2016-09-01 01:20:20.8139 MCAWebAndAPI.Service.JobSchedulers.Schedulers.AssetManagementScheduler DefaultQuartzScheduler has been started at Thursday, September 1, 2016 in site https://eceos2.sharepoint.com/sites/mca-dev/bo
+2016-09-01 02:04:52.2078 MCAWebAndAPI.Service.JobSchedulers.Schedulers.AssetManagementScheduler DefaultQuartzScheduler has been started at Thursday, September 1, 2016 in site https://eceos2.sharepoint.com/sites/mca-dev/bo
+2016-09-01 02:08:26.8468 MCAWebAndAPI.Service.JobSchedulers.Schedulers.AssetManagementScheduler DefaultQuartzScheduler has been started at Thursday, September 1, 2016 in site 
+2016-09-01 02:37:21.1787 MCAWebAndAPI.Service.JobSchedulers.Schedulers.AssetManagementScheduler DefaultQuartzScheduler has been started at Thursday, September 1, 2016 in site https://eceos2.sharepoint.com/sites/mca-dev/bo
+2016-09-01 02:37:42.7429 MCAWebAndAPI.Service.ProjectManagement.Schedule.AssetScheduleService expireDate: 1/1/0001 12:00:00 AM--strReturnDate: 1/1/0001
+2016-09-01 02:38:58.0372 MCAWebAndAPI.Service.JobSchedulers.Schedulers.AssetManagementScheduler DefaultQuartzScheduler has been started at Thursday, September 1, 2016 in site https://eceos2.sharepoint.com/sites/mca-dev/bo
+2016-09-01 02:40:02.8747 MCAWebAndAPI.Service.JobSchedulers.Schedulers.AssetManagementScheduler DefaultQuartzScheduler has been started at Thursday, September 1, 2016 in site https://eceos2.sharepoint.com/sites/mca-dev/bo
+2016-09-01 02:40:16.3817 MCAWebAndAPI.Service.ProjectManagement.Schedule.AssetScheduleService expireDate: 1/1/0001 12:00:00 AM--strReturnDate: 1/1/0001
+2016-09-01 03:24:27.4869 MCAWebAndAPI.Service.JobSchedulers.Schedulers.AssetManagementScheduler DefaultQuartzScheduler has been started at Thursday, September 1, 2016 in site https://eceos2.sharepoint.com/sites/mca-dev/bo
+2016-09-01 03:24:45.3698 MCAWebAndAPI.Service.ProjectManagement.Schedule.AssetScheduleService expireDate: 1/1/0001 12:00:00 AM--strReturnDate: 1/1/0001
+2016-09-01 03:26:40.7725 MCAWebAndAPI.Service.JobSchedulers.Schedulers.AssetManagementScheduler DefaultQuartzScheduler has been started at Thursday, September 1, 2016 in site https://eceos2.sharepoint.com/sites/mca-dev/bo
+2016-09-01 03:26:50.3395 MCAWebAndAPI.Service.ProjectManagement.Schedule.AssetScheduleService expireDate: 1/1/0001 12:00:00 AM--strReturnDate: 1/1/0001
+2016-09-01 03:27:25.9103 MCAWebAndAPI.Service.JobSchedulers.Schedulers.AssetManagementScheduler DefaultQuartzScheduler has been started at Thursday, September 1, 2016 in site https://eceos2.sharepoint.com/sites/IMS/bo
+2016-09-01 03:27:50.6020 MCAWebAndAPI.Service.ProjectManagement.Schedule.AssetScheduleService expireDate: 1/1/0001 12:00:00 AM--strReturnDate: 1/1/0001
+2016-09-01 03:28:01.1052 MCAWebAndAPI.Service.JobSchedulers.Schedulers.AssetManagementScheduler DefaultQuartzScheduler has been started at Thursday, September 1, 2016 in site https://eceos2.sharepoint.com/sites/IMS/bo
+2016-09-01 03:28:35.6928 MCAWebAndAPI.Service.ProjectManagement.Schedule.AssetScheduleService expireDate: 1/1/0001 12:00:00 AM--strReturnDate: 1/1/0001
+2016-09-01 03:32:01.1555 MCAWebAndAPI.Service.JobSchedulers.Schedulers.AssetManagementScheduler DefaultQuartzScheduler has been started at Thursday, September 1, 2016 in site https://eceos2.sharepoint.com/sites/mca-dev/bo
+2016-09-01 03:32:27.7405 MCAWebAndAPI.Service.ProjectManagement.Schedule.AssetScheduleService expireDate: 1/1/0001 12:00:00 AM--strReturnDate: 1/1/0001
+2016-09-01 03:34:48.5090 MCAWebAndAPI.Service.JobSchedulers.Schedulers.AssetManagementScheduler DefaultQuartzScheduler has been started at Thursday, September 1, 2016 in site https://eceos2.sharepoint.com/sites/mca-dev/bo
+2016-09-01 03:35:03.0628 MCAWebAndAPI.Service.ProjectManagement.Schedule.AssetScheduleService expireDate: 1/1/0001 12:00:00 AM--strReturnDate: 1/1/0001
+2016-09-01 03:35:50.7545 MCAWebAndAPI.Service.JobSchedulers.Schedulers.AssetManagementScheduler DefaultQuartzScheduler has been started at Thursday, September 1, 2016 in site https://eceos2.sharepoint.com/sites/ims/bo
+2016-09-01 03:36:03.3190 MCAWebAndAPI.Service.ProjectManagement.Schedule.AssetScheduleService expireDate: 1/1/0001 12:00:00 AM--strReturnDate: 1/1/0001
+2016-09-01 03:39:33.4181 MCAWebAndAPI.Service.JobSchedulers.Schedulers.AssetManagementScheduler DefaultQuartzScheduler has been started at Thursday, September 1, 2016 in site https://eceos2.sharepoint.com/sites/ims/bo
+2016-09-01 03:39:48.7380 MCAWebAndAPI.Service.ProjectManagement.Schedule.AssetScheduleService expireDate: 1/1/0001 12:00:00 AM--strReturnDate: 1/1/0001
+2016-09-01 03:41:46.8926 MCAWebAndAPI.Service.JobSchedulers.Schedulers.AssetManagementScheduler DefaultQuartzScheduler has been started at Thursday, September 1, 2016 in site https://eceos2.sharepoint.com/sites/ims/bo
+2016-09-01 03:41:59.5845 MCAWebAndAPI.Service.ProjectManagement.Schedule.AssetScheduleService expireDate: 1/1/0001 12:00:00 AM--strReturnDate: 1/1/0001
+2016-09-01 03:46:20.7902 MCAWebAndAPI.Service.JobSchedulers.Schedulers.AssetManagementScheduler DefaultQuartzScheduler has been started at Thursday, September 1, 2016 in site https://eceos2.sharepoint.com/sites/ims/bo
+2016-09-01 03:46:28.9901 MCAWebAndAPI.Service.ProjectManagement.Schedule.AssetScheduleService expireDate: 1/1/0001 12:00:00 AM--strReturnDate: 1/1/0001
+2016-09-01 03:47:55.4198 MCAWebAndAPI.Service.JobSchedulers.Schedulers.AssetManagementScheduler DefaultQuartzScheduler has been started at Thursday, September 1, 2016 in site https://eceos2.sharepoint.com/sites/ims/bo
+2016-09-01 03:48:07.0516 MCAWebAndAPI.Service.ProjectManagement.Schedule.AssetScheduleService expireDate: 1/1/0001 12:00:00 AM--strReturnDate: 1/1/0001
+2016-09-01 03:50:10.0025 MCAWebAndAPI.Service.JobSchedulers.Schedulers.AssetManagementScheduler DefaultQuartzScheduler has been started at Thursday, September 1, 2016 in site https://eceos2.sharepoint.com/sites/ims/bo
+2016-09-01 03:50:19.4965 MCAWebAndAPI.Service.ProjectManagement.Schedule.AssetScheduleService expireDate: 1/1/0001 12:00:00 AM--strReturnDate: 1/1/0001
+2016-09-01 03:56:38.2522 MCAWebAndAPI.Service.JobSchedulers.Schedulers.AssetManagementScheduler DefaultQuartzScheduler has been started at Thursday, September 1, 2016 in site https://eceos2.sharepoint.com/sites/ims/bo
+2016-09-01 03:56:43.8836 MCAWebAndAPI.Service.ProjectManagement.Schedule.AssetScheduleService expireDate: 1/1/0001 12:00:00 AM--strReturnDate: 1/1/0001
+2016-09-01 04:26:24.9269 MCAWebAndAPI.Service.JobSchedulers.Schedulers.AssetManagementScheduler DefaultQuartzScheduler has been started at Thursday, September 1, 2016 in site https://eceos2.sharepoint.com/sites/mca-dev/bo
+2016-09-01 04:26:37.4530 MCAWebAndAPI.Service.ProjectManagement.Schedule.AssetScheduleService expireDate: 1/1/0001 12:00:00 AM--strReturnDate: 1/1/0001
+2016-09-01 04:27:27.9317 MCAWebAndAPI.Service.JobSchedulers.Schedulers.AssetManagementScheduler DefaultQuartzScheduler has been started at Thursday, September 1, 2016 in site https://eceos2.sharepoint.com/sites/ims/bo
+2016-09-01 04:27:31.4909 MCAWebAndAPI.Service.ProjectManagement.Schedule.AssetScheduleService expireDate: 1/1/0001 12:00:00 AM--strReturnDate: 1/1/0001
+2016-09-01 04:55:11.4054 MCAWebAndAPI.Service.JobSchedulers.Schedulers.AssetManagementScheduler DefaultQuartzScheduler has been started at Thursday, September 1, 2016 in site https://eceos2.sharepoint.com/sites/ims/bo
+2016-09-01 04:55:16.5758 MCAWebAndAPI.Service.ProjectManagement.Schedule.AssetScheduleService expireDate: 1/1/0001 12:00:00 AM--strReturnDate: 1/1/0001
+2016-09-01 04:55:59.4527 MCAWebAndAPI.Service.JobSchedulers.Jobs.AssetManagementJob Task Calculation Job at https://eceos2.sharepoint.com/sites/ims/bo has been successfully performed
+2016-09-01 04:58:46.4492 MCAWebAndAPI.Service.JobSchedulers.Schedulers.AssetManagementScheduler DefaultQuartzScheduler has been started at Thursday, September 1, 2016 in site https://eceos2.sharepoint.com/sites/ims/bo
+2016-09-01 04:59:00.8126 MCAWebAndAPI.Service.ProjectManagement.Schedule.AssetScheduleService expireDate: 1/1/0001 12:00:00 AM--strReturnDate: 1/1/0001
+2016-09-01 04:59:55.9530 MCAWebAndAPI.Service.JobSchedulers.Jobs.AssetManagementJob Task Calculation Job at https://eceos2.sharepoint.com/sites/ims/bo has been successfully performed
+2016-09-01 22:52:59.0138 MCAWebAndAPI.Service.JobSchedulers.Schedulers.AssetManagementScheduler DefaultQuartzScheduler has been started at Thursday, September 1, 2016 in site https://eceos2.sharepoint.com/sites/mca-dev/bo
+2016-09-01 22:53:41.8115 MCAWebAndAPI.Service.JobSchedulers.Schedulers.AssetManagementScheduler DefaultQuartzScheduler has been started at Thursday, September 1, 2016 in site https://eceos2.sharepoint.com/sites/ims/bo
+2016-09-01 22:53:41.8155 MCAWebAndAPI.Service.JobSchedulers.Schedulers.AssetManagementScheduler DefaultQuartzScheduler has been started at Thursday, September 1, 2016 in site https://eceos2.sharepoint.com/sites/ims/bo
+2016-09-01 22:53:52.5248 MCAWebAndAPI.Service.ProjectManagement.Schedule.AssetScheduleService expireDate: 1/1/0001 12:00:00 AM--strReturnDate: 1/1/0001
+2016-09-01 22:54:19.4183 MCAWebAndAPI.Service.ProjectManagement.Schedule.AssetScheduleService expireDate: 1/1/0001 12:00:00 AM--strReturnDate: 1/1/0001
+2016-09-01 23:20:30.0935 MCAWebAndAPI.Service.JobSchedulers.Jobs.AssetManagementJob Task Calculation Job at https://eceos2.sharepoint.com/sites/ims/bo has been successfully performed
+2016-09-01 23:23:20.7717 MCAWebAndAPI.Service.JobSchedulers.Schedulers.ExitProcedureManagementScheduler DefaultQuartzScheduler has been started at Thursday, September 1, 2016 in site 
+2016-09-01 23:24:58.2465 MCAWebAndAPI.Service.JobSchedulers.Schedulers.ExitProcedureManagementScheduler DefaultQuartzScheduler has been started at Thursday, September 1, 2016 in site https://eceos2.sharepoint.com/sites/mca-dev/hr
+2016-09-01 23:24:58.2465 MCAWebAndAPI.Service.JobSchedulers.Schedulers.ExitProcedureManagementScheduler DefaultQuartzScheduler has been started at Thursday, September 1, 2016 in site https://eceos2.sharepoint.com/sites/mca-dev/hr
+2016-09-01 23:25:25.3923 MCAWebAndAPI.Service.JobSchedulers.Schedulers.ExitProcedureManagementScheduler DefaultQuartzScheduler has been started at Thursday, September 1, 2016 in site https://eceos2.sharepoint.com/sites/mca-dev/hr
+2016-09-01 23:25:39.7528 MCAWebAndAPI.Service.JobSchedulers.Jobs.ExitProcedureManagementJob Task Calculation Job at https://eceos2.sharepoint.com/sites/mca-dev/hr has been successfully performed
+2016-09-01 23:26:35.7490 MCAWebAndAPI.Service.JobSchedulers.Schedulers.ExitProcedureManagementScheduler DefaultQuartzScheduler has been started at Thursday, September 1, 2016 in site https://eceos2.sharepoint.com/sites/mca-dev/hr
+2016-09-01 23:27:56.7958 MCAWebAndAPI.Service.JobSchedulers.Schedulers.ExitProcedureManagementScheduler DefaultQuartzScheduler has been started at Thursday, September 1, 2016 in site https://eceos2.sharepoint.com/sites/mca-dev/hr
