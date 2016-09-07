@@ -279,9 +279,16 @@ namespace MCAWebAndAPI.Web.Controllers
                 {
                     exitProcedureService.SendMailDocument(viewModel.RequestorMailAddress, string.Format("Thank You For Your Request, Please kindly download Non Disclosure Document on this url: {0}{1} and Exit Interview Form on this url: {2}{3}", siteUrl, UrlResource.ExitProcedureNonDisclosureAgreement, siteUrl, UrlResource.ExitProcedureExitInterviewForm));
 
+                    string _siteUrl = siteUrl;
+                    string urlExitProcedure = UrlResource.ExitProcedure;
+
+                    //exitProcedureService.SendEmail(viewModel, SP_EXP_CHECK_LIST,
+                    //SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)exitProcID,
+                    //string.Format("Dear Respective Approver : {0}{1}/EditExitProcedureForApprover.aspx?ID={2}", siteUrl, UrlResource.ExitProcedure, exitProcID), string.Format("Message for Requestor"));
+
                     exitProcedureService.SendEmail(viewModel, SP_EXP_CHECK_LIST,
-                    SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)exitProcID,
-                    string.Format("Dear Respective Approver : {0}{1}/EditExitProcedureForApprover.aspx?ID={2}", siteUrl, UrlResource.ExitProcedure, exitProcID), string.Format("Message for Requestor"));
+                    SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)exitProcID, _siteUrl, urlExitProcedure, viewModel.RequestorMailAddress, string.Format("Message for Requestor"));
+
                 }
             }
             catch (Exception e)
@@ -374,9 +381,14 @@ namespace MCAWebAndAPI.Web.Controllers
 
                     exitProcedureService.SendMailDocument(professionalMail, string.Format("Thank You For Your Request, Please kindly download Non Disclosure Document on this url: {0}{1} and Exit Interview Form on this url: {2}{3}", siteUrl, UrlResource.ExitProcedureNonDisclosureAgreement, siteUrl, UrlResource.ExitProcedureExitInterviewForm));
 
+                    string _siteUrl = siteUrl;
+                    string urlExitProcedure = UrlResource.ExitProcedure;
+
+                    //exitProcedureService.SendEmail(exitProcedure, SP_EXP_CHECK_LIST,
+                    //SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)exitProcedure.ID,
+                    //string.Format("Dear Respective Approver : {0}{1}/EditExitProcedureForApprover.aspx?ID={2}", siteUrl, UrlResource.ExitProcedure, exitProcedure.ID), string.Format("Message for Requestor"));
                     exitProcedureService.SendEmail(exitProcedure, SP_EXP_CHECK_LIST,
-                    SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)exitProcedure.ID,
-                    string.Format("Dear Respective Approver : {0}{1}/EditExitProcedureForApprover.aspx?ID={2}", siteUrl, UrlResource.ExitProcedure, exitProcedure.ID), string.Format("Message for Requestor"));
+                    SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)exitProcedure.ID, _siteUrl, urlExitProcedure, professionalMail, string.Format("Message for Requestor"));
 
                 }
             }

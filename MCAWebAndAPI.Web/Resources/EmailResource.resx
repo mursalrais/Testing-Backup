@@ -364,4 +364,11 @@ There is a PSA with number {0} that already active start from today. Here is the
 &lt;/p&gt;
 Link: &lt;a href="{0}"&gt;Click Here&lt;/a&gt;</value>
   </data>
+  <data name="PSATwoMonthBeforeExpired" xml:space="preserve">
+    <value>Dear {0},
+
+This email is sent to you to notify that your PSA will be expired in the next two months. Please kindly communicate to HR dept. for any further action. 
+
+Thank you.</value>
+  </data>
 </root>
