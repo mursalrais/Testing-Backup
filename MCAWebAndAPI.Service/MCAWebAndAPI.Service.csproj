@@ -169,7 +169,9 @@
     <Compile Include="Asset\ReportService.cs" />
     <Compile Include="Common\ComboBoxService.cs" />
     <Compile Include="Common\CommonService.cs" />
+    <Compile Include="Common\GLMasterService.cs" />
     <Compile Include="Common\IComboBoxService.cs" />
+    <Compile Include="Common\IGLMasterService.cs" />
     <Compile Include="Common\ILocationService.cs" />
     <Compile Include="Common\IWBSMasterService.cs" />
     <Compile Include="Common\IWorkflowService.cs" />
