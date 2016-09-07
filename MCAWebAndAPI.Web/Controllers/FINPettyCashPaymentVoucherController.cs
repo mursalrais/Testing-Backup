@@ -208,6 +208,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 writer.Flush();
                 content = writer.ToString();
                 content = content.Replace("{XIMGPATHX}", domain);
+                
                 // Get PDF Bytes
                 try
                 {
@@ -270,8 +271,8 @@ namespace MCAWebAndAPI.Web.Controllers
             viewModel.Vendor.ValueField = FIELD_ID;
             viewModel.Vendor.TextField = Field_Desc;
 
-            viewModel.WBS.ControllerName = COMBOBOX_CONTROLLER;
-            viewModel.WBS.ActionName = ACTIONNAME_WBSMASTERS;
+            viewModel.WBS.ControllerName = COMWBSController.ControllerName;
+            viewModel.WBS.ActionName = COMWBSController.GetAllByActivityAsJsonResult_MethodName;
             viewModel.WBS.ValueField = FIELD_VALUE;
             viewModel.WBS.TextField = FIELD_TEXT;
 
