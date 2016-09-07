@@ -337,18 +337,28 @@ Link : {0}</value>
 This email is sent to you to notify that your approval request has been responded by the HR Team. Thank you.</value>
   </data>
   <data name="ProfessionalPerformancePlan" xml:space="preserve">
-    <value>Dear Respective Approver,
+    <value>Dear {0},
 
-This email is sent to you to notify that there is a request which required your action to approve. Kindly check the link as per below to go to direct page accordingly. You may check your personal page in IMS (My Approval View). Thank you. 
+You are authorized as an approver for Performance Plan Form for period {1}.
+This Performance Plan is requested by {2}.
+Please complete the approval process immediately
 
-Link :   {0}{1}/EditForm_Custom.aspx?ID={2}</value>
+To view the detail, please click following link: 
+{3}{4}/EditForm_Custom.aspx?ID={5}
+
+Thank you for your attention.</value>
   </data>
   <data name="ProfessionalPerfromanceEvaluation" xml:space="preserve">
-    <value>Dear Respective Approver,
+    <value>Dear {0},
 
-This email is sent to you to notify that there is a request which required your action to approve. Kindly check the link as per below to go to direct page accordingly. You may check your personal page in IMS (My Approval View). Thank you. 
+You are authorized as an approver for Performance Evaluation Form for period {1}.
+This Performance Evaluation is requested by {2}.
+Please complete the approval process immediately
 
-Link :  {0}{1}/EditForm_Custom.aspx?ID={2}</value>
+To view the detail, please click following link: 
+{3}{4}/EditForm_Custom.aspx?ID={5}
+
+Thank you for your attention.</value>
   </data>
   <data name="PSAChangeStatus" xml:space="preserve">
     <value>Dear Mr./Mrs. HR Officer,
@@ -363,5 +373,26 @@ There is a PSA with number {0} that already active start from today. Here is the
     Please review the following form request:    
 &lt;/p&gt;
 Link: &lt;a href="{0}"&gt;Click Here&lt;/a&gt;</value>
+  </data>
+  <data name="ProfessionalPerformanceEvaluationRequestor" xml:space="preserve">
+    <value>Dear {0},
+
+Your request has been approved by {1}. Please contact respective person for any queries.  
+
+Thank you.</value>
+  </data>
+  <data name="ProfessionalPerformancePlanApproved" xml:space="preserve">
+    <value>Dear {0},
+
+Your request has been approved by {1}. Please contact respective person for any queries.  
+
+Thank you.</value>
+  </data>
+  <data name="ProfessionalPerformancePlanRejected" xml:space="preserve">
+    <value>Dear {0},
+
+Your request has been rejected by {1}. Please contact respective person for any queries.  
+
+Thank you.</value>
   </data>
 </root>

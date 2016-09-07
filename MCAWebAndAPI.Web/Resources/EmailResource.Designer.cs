@@ -371,11 +371,29 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dear Respective Approver,
+        ///   Looks up a localized string similar to Dear {0},
         ///
-        ///This email is sent to you to notify that there is a request which required your action to approve. Kindly check the link as per below to go to direct page accordingly. You may check your personal page in IMS (My Approval View). Thank you. 
+        ///Your request has been approved by {1}. Please contact respective person for any queries.  
         ///
-        ///Link :   {0}{1}/EditForm_Custom.aspx?ID={2}.
+        ///Thank you..
+        /// </summary>
+        public static string ProfessionalPerformanceEvaluationRequestor {
+            get {
+                return ResourceManager.GetString("ProfessionalPerformanceEvaluationRequestor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dear {0},
+        ///
+        ///You are authorized as an approver for Performance Plan Form for period {1}.
+        ///This Performance Plan is requested by {2}.
+        ///Please complete the approval process immediately
+        ///
+        ///To view the detail, please click following link: 
+        ///{3}{4}/EditForm_Custom.aspx?ID={5}
+        ///
+        ///Thank you for your attention..
         /// </summary>
         public static string ProfessionalPerformancePlan {
             get {
@@ -384,11 +402,42 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dear Respective Approver,
+        ///   Looks up a localized string similar to Dear {0},
         ///
-        ///This email is sent to you to notify that there is a request which required your action to approve. Kindly check the link as per below to go to direct page accordingly. You may check your personal page in IMS (My Approval View). Thank you. 
+        ///Your request has been approved by {1}. Please contact respective person for any queries.  
         ///
-        ///Link :  {0}{1}/EditForm_Custom.aspx?ID={2}.
+        ///Thank you..
+        /// </summary>
+        public static string ProfessionalPerformancePlanApproved {
+            get {
+                return ResourceManager.GetString("ProfessionalPerformancePlanApproved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dear {0},
+        ///
+        ///Your request has been rejected by {1}. Please contact respective person for any queries.  
+        ///
+        ///Thank you..
+        /// </summary>
+        public static string ProfessionalPerformancePlanRejected {
+            get {
+                return ResourceManager.GetString("ProfessionalPerformancePlanRejected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dear {0},
+        ///
+        ///You are authorized as an approver for Performance Evaluation Form for period {1}.
+        ///This Performance Evaluation is requested by {2}.
+        ///Please complete the approval process immediately
+        ///
+        ///To view the detail, please click following link: 
+        ///{3}{4}/EditForm_Custom.aspx?ID={5}
+        ///
+        ///Thank you for your attention..
         /// </summary>
         public static string ProfessionalPerfromanceEvaluation {
             get {
