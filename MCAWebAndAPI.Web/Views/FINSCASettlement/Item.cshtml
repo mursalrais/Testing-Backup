@@ -64,7 +64,7 @@
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.Currency).Class("col-sm-3 control-label")
                     <div class="col-sm-5">
-                        @Html.DisplayFor(m => m.Currency, new { HtmlAttributes = new { @readonly = "readonly" } })
+                        @Html.DisplayFor(m => m.Currency.Text, new { HtmlAttributes = new { @readonly = "readonly" } })
                     </div>
                 </div>
 
