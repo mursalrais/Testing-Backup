@@ -1104,6 +1104,10 @@
     <Content Include="Views\FINTaxExemption\ItemVATTax.cshtml" />
     <Content Include="Views\HRCompensatory\AddCompensatoryUser.cshtml" />
     <Content Include="Views\HRCompensatory\_WorkflowPathDetails.cshtml" />
+    <Content Include="Views\HRPerformancePlan\_WorkflowPathDetails.cshtml" />
+    <Content Include="Views\HRTimesheet\NotAuthorized.cshtml" />
+    <Content Include="Views\HRTimesheet\ViewProfessional.cshtml" />
+    <Content Include="Views\HRTimesheet\_WorkflowPathDetails.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

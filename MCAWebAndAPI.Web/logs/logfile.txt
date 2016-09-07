@@ -448,3 +448,16 @@ Parameter name: source
    at Microsoft.SharePoint.Client.List.GetItemByStringId(String sId)
    at MCAWebAndAPI.Service.Utils.SPConnector.DeleteListItem(String listName, Nullable`1 listItemID, String siteUrl) in C:\Users\sobari\Documents\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 662
    at MCAWebAndAPI.Service.HR.Recruitment.HRCompensatoryService.CreateCompensatoryData(Nullable`1 cmpID, CompensatoryVM viewModels) in C:\Users\sobari\Documents\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Compensatory\HRCompensatoryService.cs:line 601
+2016-09-05 16:45:34.7074 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService The underlying connection was closed: An unexpected error occurred on a receive.
+2016-09-06 17:08:14.2969 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService The 'sId' argument is invalid.
+2016-09-06 17:08:19.6478 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Value cannot be null.
+Parameter name: source
+2016-09-06 17:14:30.4785 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService The 'sId' argument is invalid.
+2016-09-06 17:14:33.6318 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Value cannot be null.
+Parameter name: source
+2016-09-06 17:19:26.6455 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService The 'sId' argument is invalid.
+2016-09-06 17:20:08.9439 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Value cannot be null.
+Parameter name: source
+2016-09-06 17:20:53.8030 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService The 'sId' argument is invalid.
+2016-09-06 17:20:57.7142 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Value cannot be null.
+Parameter name: source

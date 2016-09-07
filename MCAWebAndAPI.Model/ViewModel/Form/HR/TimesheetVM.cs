@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MCAWebAndAPI.Model.ViewModel.Control;
+using MCAWebAndAPI.Model.ViewModel.Form.Common;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
@@ -91,6 +92,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public string URL { get; set; }
 
         public IEnumerable<TimesheetDetailVM> TimesheetDetails { get; set; }
+
+        public IEnumerable<WorkflowItemVM> WorkflowItems { get; set; } = new List<WorkflowItemVM>();
 
     }
 }
