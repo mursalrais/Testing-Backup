@@ -154,16 +154,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetWBS()
         {
-            var siteUrl = SessionManager.Get<string>("SiteUrl") ?? ConfigResource.DefaultBOSiteUrl;
-            service.SetSiteUrl(siteUrl);
-
-            var wbs = FinService.SharedService.GetWBSMaster(siteUrl);
-
-            return Json(wbs.Select(e => new
-            {
-                e.ID,
-                Title = e.Title + " - " + e.WBSDescription
-            }), JsonRequestBehavior.AllowGet);
+            return new COMWBSController().GetAllAsJsonResult();
         }
 
         public JsonResult GetGL()

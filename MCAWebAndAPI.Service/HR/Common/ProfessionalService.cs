@@ -24,6 +24,16 @@ namespace MCAWebAndAPI.Service.HR.Common
 
         static Logger logger = LogManager.GetCurrentClassLogger();
 
+        public ProfessionalService()
+        {
+
+        }
+
+        public ProfessionalService(string siteUrl)
+        {
+            SetSiteUrl(siteUrl);
+        }
+
         public void SetSiteUrl(string siteUrl)
         {
             _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);

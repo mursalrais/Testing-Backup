@@ -1,17 +1,24 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using MCAWebAndAPI.Model.ProjectManagement.Common;
-using MCAWebAndAPI.Service.ProjectManagement.Schedule.Common;
+using MCAWebAndAPI.Service.Common;
 using MCAWebAndAPI.Web.Helpers;
+using MCAWebAndAPI.Web.Resources;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
     public class COMWBSController : Controller
     {
-        public JsonResult GetAllAsJsonResult(string siteUrl = null)
+        public const string ControllerName = "COMWBS";
+        public const string GetAllByActivityAsJsonResult_MethodName = "GetAllByActivityAsJsonResult";
+
+        private static string siteUrl = ConfigResource.DefaultProgramSiteUrl;
+
+        public JsonResult GetAllAsJsonResult()
         {
-            var data = GetWBSMappingFromExistingSession(siteUrl);
+            var data = GetWBSMappingFromExistingSession();
 
             return Json(data.Select(e =>
                 new
@@ -25,20 +32,47 @@ namespace MCAWebAndAPI.Web.Controllers
             ), JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetWBSMappings(string siteUrl = null)
+        public ActionResult GetWBSMappings()
         {
             var data = WBSMasterService.GetAllWBSMappings(siteUrl);
             return this.Jsonp(data);
         }
 
-        public ActionResult UpdateWBSMapping(string siteUrl = null)
+        public JsonResult GetAllByActivityAsJsonResult(string activity = null)
         {
-            var data = WBSMasterService.UpdateWBSMapping(siteUrl);
-            return this.Jsonp(data);
+            JsonResult result;
+
+            IEnumerable<WBSMapping> wbsMasters = GetWBSMappingFromExistingSession();
+
+            if (string.IsNullOrEmpty(activity))
+            {
+                result = Json(wbsMasters.Select(e => new
+                {
+                    Value = e.ID.HasValue ? Convert.ToString(e.ID) : string.Empty,
+                    Text = (e.WBSID + "-" + e.WBSDescription)
+                }), JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                result= Json(wbsMasters.Where(w => w.Activity == activity).Select(e => new
+                {
+                    Value = e.ID.HasValue ? Convert.ToString(e.ID) : string.Empty,
+                    Text = (e.WBSID + "-" + e.WBSDescription)
+                }), JsonRequestBehavior.AllowGet);
+            }
+
+
+            return result;
         }
 
+        public IEnumerable<WBSMapping> GetAllByActivity(string activity = null)
+        {
+            IEnumerable<WBSMapping> wbsMappings = GetWBSMappingFromExistingSession();
 
-        private IEnumerable<WBSMapping> GetWBSMappingFromExistingSession(string siteUrl)
+            return wbsMappings.Where(w => w.Activity == activity);
+        }
+        
+        private static IEnumerable<WBSMapping> GetWBSMappingFromExistingSession()
         {
             //Get existing session variable
             var sessionVariable = System.Web.HttpContext.Current.Session["WBSMapping"] as IEnumerable<WBSMapping>;

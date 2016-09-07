@@ -38,34 +38,35 @@ namespace MCAWebAndAPI.Service.Finance
             return glMasters;
         }
 
-        public static IEnumerable<WBSMasterVM> GetWBSMaster(string siteUrl, string activityValue = null)
-        {
-            string caml = null;
-            if (!string.IsNullOrWhiteSpace(activityValue))
-            {
-                var camlGetSubactivity = @"<View><Query><Where><Eq><FieldRef Name='" + ACTIVITYID_SUBACTIVITY + "' /><Value Type='Lookup'>" +
-                    activityValue + "</Value></Eq></Where></Query></View>";
+        //// the following pindah ke COMWBSController
+        //public static IEnumerable<WBSMasterVM> GetWBSMaster(string siteUrl, string activityValue = null)
+        //{
+        //    string caml = null;
+        //    if (!string.IsNullOrWhiteSpace(activityValue))
+        //    {
+        //        var camlGetSubactivity = @"<View><Query><Where><Eq><FieldRef Name='" + ACTIVITYID_SUBACTIVITY + "' /><Value Type='Lookup'>" +
+        //            activityValue + "</Value></Eq></Where></Query></View>";
 
-                string valuesText = string.Empty;
-                foreach (var item in SPConnector.GetList(SUBACTIVITY_SITE_LIST, siteUrl, camlGetSubactivity))
-                {
-                    valuesText += "<Value Type='Lookup'>" + Convert.ToString(item[FIELD_ID]) + "</Value>";
-                }
+        //        string valuesText = string.Empty;
+        //        foreach (var item in SPConnector.GetList(SUBACTIVITY_SITE_LIST, siteUrl, camlGetSubactivity))
+        //        {
+        //            valuesText += "<Value Type='Lookup'>" + Convert.ToString(item[FIELD_ID]) + "</Value>";
+        //        }
 
-                var camlGetWbs = @"<View><Query><Where><In><FieldRef Name='" + WBS_SUBACTIVITY_ID + "' /><Values>" +
-                    valuesText + "</Values></In></Where></Query></View>";
-            }
+        //        var camlGetWbs = @"<View><Query><Where><In><FieldRef Name='" + WBS_SUBACTIVITY_ID + "' /><Values>" +
+        //            valuesText + "</Values></In></Where></Query></View>";
+        //    }
 
 
-            var wbsMasters = new List<WBSMasterVM>();
+        //    var wbsMasters = new List<WBSMasterVM>();
 
-            foreach (var item in SPConnector.GetList(WBSMASTER_SITE_LIST, siteUrl, caml))
-            {
-                wbsMasters.Add(ConvertToWBSMasterModel(item));
-            }
+        //    foreach (var item in SPConnector.GetList(WBSMASTER_SITE_LIST, siteUrl, caml))
+        //    {
+        //        wbsMasters.Add(ConvertToWBSMasterModel(item));
+        //    }
 
-            return wbsMasters;
-        }
+        //    return wbsMasters;
+        //}
 
 
         public static IEnumerable<ProfessionalVM> GetProfessionalMaster(string siteUrl)
