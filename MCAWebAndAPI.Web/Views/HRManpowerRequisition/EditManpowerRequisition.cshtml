@@ -220,6 +220,11 @@
             //        }
             //    }
             //}
+
+            if (($("#Position_Value").val() == null) || ($("#Position_Value").val() == "")) {
+                alert("Position value cannot null");
+                return false;
+            }
             return true;
         }
         $(document).ready(function () {
