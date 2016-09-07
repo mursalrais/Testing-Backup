@@ -15,6 +15,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
     {
         public string CancelURL { get; set; }
 
+        public string attach { get; set; }
+
         public string AssetIDs { get; set; }
         public string nameOnly { get; set; }
         public string position { get; set; }
