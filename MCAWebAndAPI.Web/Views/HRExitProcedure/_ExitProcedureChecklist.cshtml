@@ -9,7 +9,7 @@
     .CreateAt(GridInsertRowPosition.Bottom)).Resizable(resize => resize.Columns(true))
     .Columns(columns =>
     {
-    columns.Bound(p => p.ItemExitProcedure).ClientTemplate("#= ItemExitProcedure #" +
+    columns.Bound(p => p.ItemExitProcedure).Width(10).ClientTemplate("#= ItemExitProcedure #" +
                        "<input type='hidden' name='ExitProcedureChecklist[#= getExitProcedureChecklists(data)#].ItemExitProcedure' value='#= ItemExitProcedure #' />"
                      );
 
