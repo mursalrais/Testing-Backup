@@ -1,0 +1,96 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Finance
+@model OutstandingAdvanceCSVVM
+
+@*
+    Wireframe FIN09: Outstanding Advance
+*@
+
+@{
+    ViewBag.Title = "Outstanding Advance Upload CSV Files";
+}
+
+@using (Html.BeginForm("UploadCSV", "FINOutstandingAdvance",
+    FormMethod.Post,
+    new
+    {
+        @id = "formOA",
+        @class = "form-horizontal",
+        enctype = "multipart/form-data"
+    }))
+{
+    <fieldset>
+        <legend>Outstanding Advance CSV File Upload</legend>
+        <div class="row">
+            <div class="col-sm-6">
+             
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.CSVFiles).Class("col-sm-3 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.CSVFiles)
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </fieldset>
+
+
+    <div class="form-actions">
+        <div class="row">
+            <div class="col-sm-12">
+                <button id="submit-button" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    Submit
+                </button>
+                <button id="cancel-button" class="btn btn-default" type="button">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $("#DateOfUpload").kendoDatePicker({
+                format: "mm/dd/yyyy"
+            });
+
+            $("#formOA").on('submit', function () {
+                if ($("#Staff_Value").val() == -1) {
+                    $("#txtStaffRole").html("The Staff field is required.");
+                    return false;
+                } else {
+                    var firstIDStaff = $("#StaffDescription").val().charAt(0);
+                    var currency = $("#Currency_Value").val();
+                    var idr = "IDR";
+                    var usd = "USD";
+                    if ((firstIDStaff == 1 || firstIDStaff == 5) && currency != idr) {
+                        alert("The currency for Professional & IC must be in IDR.");
+                        return false;
+                    } else if (firstIDStaff == 4 && currency != usd) {
+                        alert("The currency for Grantee must be in USD.");
+                        return false;
+                    }
+                }
+                return true;
+            });
+        });
+
+        function OnSelectStaff(e) {
+            var data = this.dataItem(e.item);
+            $("#StaffDescription").val(data.Text)
+            $("#txtStaffRole").html("");
+        }
+    </script>
+}
+
+<style>
+    .custom-validation {
+        color: #b94a48;
+        font-size: 85%;
+        display: block;
+        margin-top: 6px;
+    }
+</style>

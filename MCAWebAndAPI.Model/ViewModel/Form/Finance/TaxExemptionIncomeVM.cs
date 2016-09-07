@@ -32,17 +32,14 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         }
 
         [DisplayName("Total Income Recepients")]
-        [UIHint("Int")]
         public int? TotalIncomeRecepients { get; set; }
 
         [Required(ErrorMessage = "asdadasdsa")]
         [DisplayName("Gross Income (IDR)")]
-        [UIHint("Number")]
         public decimal? GrossIncome { get; set; }
 
         [Required]
         [DisplayName("Total Income Tax Borne by Government(IDR)")]
-        [UIHint("Number")]
         public decimal? TotalIncomeTaxBorneByGovernment { get; set; }
     }
 }

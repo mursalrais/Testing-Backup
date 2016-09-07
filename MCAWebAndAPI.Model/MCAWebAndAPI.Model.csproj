@@ -132,6 +132,7 @@
     <Compile Include="ViewModel\Form\Asset\ProfessionalsVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetReportVM.cs" />
     <Compile Include="ViewModel\Form\Common\ProfessionalVM.cs" />
+    <Compile Include="ViewModel\Form\Finance\OutstandingAdvanceCSVVM.cs" />
     <Compile Include="ViewModel\Form\Finance\PettyCashJournalItemVM.cs" />
     <Compile Include="ViewModel\Form\Finance\PettyCashJournalVM.cs" />
     <Compile Include="ViewModel\Form\Finance\PettyCashReplenishmentVM.cs" />
