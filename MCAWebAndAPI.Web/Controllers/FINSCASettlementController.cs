@@ -151,11 +151,11 @@ namespace MCAWebAndAPI.Web.Controllers
 
         private void SetAdditionalSettingToViewModel(ref SCASettlementVM viewModel)
         {
-            viewModel.SCACouvher.ControllerName = SCAVoucherController;
-            viewModel.SCACouvher.ActionName = SCAVoucherAction;
-            viewModel.SCACouvher.ValueField = SCAVoucherValue;
-            viewModel.SCACouvher.TextField = SCAVoucherText;
-            viewModel.SCACouvher.OnSelectEventName = SCAVoucherOnSelectEventName;
+            viewModel.SCAVoucher.ControllerName = SCAVoucherController;
+            viewModel.SCAVoucher.ActionName = SCAVoucherAction;
+            viewModel.SCAVoucher.ValueField = SCAVoucherValue;
+            viewModel.SCAVoucher.TextField = SCAVoucherText;
+            viewModel.SCAVoucher.OnSelectEventName = SCAVoucherOnSelectEventName;
 
             viewModel.TypeOfSettlement.Choices = new string[] { PartialSettlement, LastSettlement };
         }

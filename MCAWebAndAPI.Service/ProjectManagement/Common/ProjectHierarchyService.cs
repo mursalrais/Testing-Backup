@@ -4,7 +4,7 @@ using System.Linq;
 using MCAWebAndAPI.Model.ProjectManagement.Common;
 using MCAWebAndAPI.Model.ViewModel.Chart;
 using MCAWebAndAPI.Model.ViewModel.Control;
-using MCAWebAndAPI.Service.ProjectManagement.Schedule.Common;
+using MCAWebAndAPI.Service.Common;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
 using NLog;

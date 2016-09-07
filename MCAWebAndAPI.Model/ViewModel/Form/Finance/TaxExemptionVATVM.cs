@@ -11,12 +11,10 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         /// </summary>
 
         [Required]
-        [UIHint("Number")]
         [DisplayName("Total Tax Based (IDR)")]
         public decimal? TotalTaxBased { get; set; }
 
         [Required]
-        [UIHint("Number")]
         [DisplayName("Total VAT not collected (IDR)")]
         public decimal? TotalVATNotCollected { get; set; }
     }

@@ -12,7 +12,6 @@ namespace MCAWebAndAPI.Web.Controllers
 {
     public class COMProfessionalController : Controller
     {
-
         //TODO: the following field name constants should be maintained in a central place
         private const string FieldName_OfficeEmail = "officeemail";
 
@@ -44,7 +43,7 @@ namespace MCAWebAndAPI.Web.Controllers
             return result;
         }
 
-        public ProfessionalMaster GetFirstOrDefaultByOfficeEmail(string siteUrl = "", string officeEmail = "")
+        public static ProfessionalMaster GetFirstOrDefaultByOfficeEmail(string siteUrl = "", string officeEmail = "")
         {
             if (string.IsNullOrEmpty(officeEmail))
             {
@@ -71,11 +70,31 @@ namespace MCAWebAndAPI.Web.Controllers
             return GetJsonResult(professionals);
         }
 
+        public JsonResult GetForCombo(string siteUrl = null)
+        {
+            service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+
+            var professionals = GetFromExistingSession();
+            professionals = professionals.OrderBy(e => e.FirstMiddleName);
+
+            return Json(professionals.Select(e => new
+            {
+                e.ID,
+                e.FirstMiddleName,
+                NameAndPos = string.Format("{0} - {1}", e.FirstMiddleName, e.Position)
+            }), JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult GetJsonResult(string siteUrl = "", int? id = 0)
         {
             IEnumerable<ProfessionalMaster> professional = new List<ProfessionalMaster>() { Get(siteUrl, id) };
 
             return GetJsonResult(professional);
+        }
+
+        public static bool IsPositionFinance(string positionName)
+        {
+            return positionName.ToLower().Contains("finance");
         }
 
         private JsonResult GetJsonResult(IEnumerable<ProfessionalMaster> professional)

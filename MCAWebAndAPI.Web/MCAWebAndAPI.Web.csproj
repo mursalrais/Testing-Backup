@@ -1174,6 +1174,7 @@
     <Content Include="Views\ASSAssetLandingPage\Create.cshtml" />
     <Content Include="Views\ASSAssetLandingPage\_assetFixedAssetPCFF.cshtml" />
     <Content Include="Views\ASSAssetLandingPage\_assetSmallValueAssetPCFF.cshtml" />
+    <Content Include="Views\FINOutstandingAdvance\UploadCSV.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1206,6 +1207,7 @@
     <Compile Include="Controllers\BIEmbedController.cs" />
     <Compile Include="Controllers\CalendarEventController.cs" />
     <Compile Include="Controllers\ComboBoxController.cs" />
+    <Compile Include="Controllers\COMMGLController.cs" />
     <Compile Include="Controllers\COMProfessionalController.cs" />
     <Compile Include="Controllers\COMWBSController.cs" />
     <Compile Include="Controllers\CSVController.cs" />

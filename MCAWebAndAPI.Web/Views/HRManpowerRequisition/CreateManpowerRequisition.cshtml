@@ -77,7 +77,7 @@
             console.log(e);
             var dataItem = this.dataItem(e.item);
             if (dataItem == null) {
-                
+
             }
             else {
                 //var urlKeyPosition = "/HRDataMaster/GetKeyPosition/" + dataItem.ID;
@@ -144,8 +144,10 @@
                     }
                 }
             }
-            var validator = $("#ValidateMyContents").kendoValidator().data("kendoValidator"),
-            status = $(".status");
+            if (($("#Position_Value").val() == null) || ($("#Position_Value").val() == "")) {
+                alert("Position value cannot null");
+                return false;
+            }
             return true;
         }
 

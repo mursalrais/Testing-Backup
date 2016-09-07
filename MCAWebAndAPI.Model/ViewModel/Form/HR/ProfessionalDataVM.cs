@@ -41,13 +41,15 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// Position
         /// </summary>
-        [UIHint("AjaxComboBox")]
-        public AjaxComboBoxVM CurrentPosition { get; set; } = new AjaxComboBoxVM
+        [UIHint("AjaxCascadeComboBox")]
+        public AjaxCascadeComboBoxVM CurrentPosition { get; set; } = new AjaxCascadeComboBoxVM
         {
-            ActionName = "GetPositions",
+            ActionName = "GetPositionsManpower",
             ControllerName = "HRDataMaster",
             TextField = "PositionName",
-            ValueField = "ID"
+            ValueField = "ID",
+            Filter = "filterLevel",
+            Cascade = "DivisionProjectUnit_Value"
         };
 
         /// <summary>

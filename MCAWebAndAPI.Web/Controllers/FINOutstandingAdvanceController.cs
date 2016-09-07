@@ -36,8 +36,13 @@ namespace MCAWebAndAPI.Web.Controllers
             SessionManager.Set(SessionSiteUrl, siteUrl);
 
             var viewModel = service.Get(GetOperation(op), id);
-            
+
             return View(viewModel);
+        }
+
+        public ActionResult UploadCSV(string siteUrl = null)
+        {
+            return View();
         }
 
         [HttpPost]
@@ -52,7 +57,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 Task createApplicationDocumentTask = service.SaveAttachmentAsync(id, viewModel.Reference, viewModel.Documents);
                 Task sendEmailToProfessional = service.SendEmailToProfessional(EmailResource.ProfessionalEmailOutstandingAdvance, viewModel);
                 Task sendEmailToGrantees = service.SendEmailToGrantees(EmailResource.GranteesEmailOutstandingAdvance, viewModel);
-                Task allTasks = Task.WhenAll(createApplicationDocumentTask,sendEmailToProfessional,sendEmailToGrantees);
+                Task allTasks = Task.WhenAll(createApplicationDocumentTask, sendEmailToProfessional, sendEmailToGrantees);
 
                 await allTasks;
             }
@@ -66,6 +71,35 @@ namespace MCAWebAndAPI.Web.Controllers
                 new
                 {
                     successMessage = string.Format(SuccessMsgFormatUpdated, viewModel.Staff.Text),
+                    previousUrl = string.Format(FirstPageUrl, siteUrl)
+                });
+        }
+
+
+        [HttpPost]
+        public async Task<ActionResult> UploadCSV(FormCollection form, OutstandingAdvanceCSVVM viewModel)
+        {
+            var siteUrl = SessionManager.Get<string>(SessionSiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
+            service.SetSiteUrl(siteUrl);
+
+            try
+            {
+                Task createApplicationDocumentTask = service.SaveCSVFilesAsync(viewModel.CSVFiles);
+
+                Task allTasks = Task.WhenAll(createApplicationDocumentTask);
+
+                await allTasks;
+            }
+            catch (Exception e)
+            {
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
+            }
+
+            return RedirectToAction("Index", "Success",
+                new
+                {
+                    successMessage = string.Format(SuccessMsgFormatUpdated, "xxxxxxxxxx"),
                     previousUrl = string.Format(FirstPageUrl, siteUrl)
                 });
         }

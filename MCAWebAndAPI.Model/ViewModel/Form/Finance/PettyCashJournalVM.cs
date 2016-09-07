@@ -57,5 +57,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         public decimal TotalPettyCashFund { get; } = 10000000;
 
         public IEnumerable<PettyCashJournalItemVM> ItemDetails { get; set; } = new List<PettyCashJournalItemVM>();
+
+        public bool ItemEdited { get; set; } = false;
     }
 }
