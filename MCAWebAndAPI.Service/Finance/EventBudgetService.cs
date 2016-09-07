@@ -131,6 +131,13 @@ namespace MCAWebAndAPI.Service.Finance
             return true;
         }
 
+        public static IEnumerable<EventBudgetItemVM> GetItems(string siteUrl,int eventBudgetID)
+        {
+            IEventBudgetService service = new EventBudgetService();
+            service.SetSiteUrl(siteUrl);
+            return service.GetItems(eventBudgetID);
+        }
+
         public IEnumerable<EventBudgetItemVM> GetItems(int eventBudgetID)
         {
             var eventBudgets = new List<EventBudgetItemVM>();
