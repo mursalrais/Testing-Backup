@@ -456,7 +456,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             string professionalFullName = Convert.ToString(professionalData["Title"]) + " " + Convert.ToString(professionalData["lastname"]);
 
             string mailSubject = string.Format("Initiation Performance Plan for Period {0}", currentYear);
-            string mailContent = string.Format("Dear Mr./Mrs. {0}, {1}{2}This email is sent to you to notify that you are required to create Performance Plan for period {3}. Creating and approval plan process will take maximum 5 working days. Therefore, do prepare your plan accordingly. {4}{5}To Create the performance plan, please click the following link: {6}{7}/NewForm_Custom.aspx {8}Thank you for your attention.", professionalFullName, Environment.NewLine, Environment.NewLine, currentYear, Environment.NewLine, Environment.NewLine, siteUrl, UrlResource.ProfessionalPerformancePlan, Environment.NewLine);
+            string mailContent = string.Format("Dear Mr./Mrs. {0}, {1}{2}This email is sent to you to notify that you are required to create Performance Plan for period {3}. Creating and approval plan process will take maximum 5 working days. Therefore, do prepare your plan accordingly. {4}{5}To Create the performance plan, please click the following link: {6}{7}/NewForm_Custom.aspx {8}{9}Thank you for your attention.", professionalFullName, Environment.NewLine, Environment.NewLine, currentYear, Environment.NewLine, Environment.NewLine, siteUrl, UrlResource.ProfessionalPerformancePlan, Environment.NewLine, Environment.NewLine);
 
             EmailUtil.Send(professionalMail, mailSubject, mailContent);
         }
