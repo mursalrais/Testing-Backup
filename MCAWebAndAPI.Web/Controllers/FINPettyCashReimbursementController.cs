@@ -34,7 +34,7 @@ namespace MCAWebAndAPI.Web.Controllers
         private const string GL_ActionName = "GetGL";
         private const string PaidTo_EventName = "onSelectPaidTo";
         private const string ValueField = "ID";
-        private const string TextField = "Title";
+        private const string TextField = "NameAndPos";
 
         private const string PrintPageUrl = "~/Views/FINPettyCashReimbursement/Print.cshtml";
         IPettyCashReimbursementService service;
@@ -138,25 +138,6 @@ namespace MCAWebAndAPI.Web.Controllers
             }), JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetProfessional()
-        {
-            var siteUrl = SessionManager.Get<string>("SiteUrl") ?? ConfigResource.DefaultBOSiteUrl;
-            service.SetSiteUrl(siteUrl);
-
-            var vendors = FinService.SharedService.GetProfessionalMaster(siteUrl);
-
-            return Json(vendors.Select(e => new
-            {
-                e.ID,
-                e.Title
-            }), JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult GetWBS()
-        {
-            return new COMWBSController().GetAllAsJsonResult();
-        }
-
         public JsonResult GetGL()
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl") ?? ConfigResource.DefaultBOSiteUrl;
@@ -187,8 +168,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
             viewModel.Professional = new AjaxComboBoxVM
             {
-                ControllerName = PettyCashReimbursement_ControllerName,
-                ActionName = Professional_ActionName,
+                ControllerName = "COMProfessional",
+                ActionName = "GetForCombo",
                 ValueField = ValueField,
                 TextField = TextField,
                 Value = viewModel.Professional.Value
@@ -196,19 +177,19 @@ namespace MCAWebAndAPI.Web.Controllers
 
             viewModel.WBS = new AjaxComboBoxVM
             {
-                ControllerName = PettyCashReimbursement_ControllerName,
-                ActionName = WBS_ActionName,
-                ValueField = ValueField,
-                TextField = TextField,
+                ControllerName = "COMWBS",
+                ActionName = "GetAllAsJsonResult",
+                ValueField = "ID",
+                TextField = "Long",
                 Value = viewModel.WBS.Value
             };
 
             viewModel.GL = new AjaxCascadeComboBoxVM
             {
-                ControllerName = PettyCashReimbursement_ControllerName,
-                ActionName = GL_ActionName,
-                ValueField = ValueField,
-                TextField = TextField,
+                ControllerName = "COMMGL",
+                ActionName = "GetAllAsJsonResult",
+                ValueField = "ID",
+                TextField = "Long",
                 Value = viewModel.GL.Value
             };
 
