@@ -1,14 +1,14 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.Finance
 @using MCAWebAndAPI.Model.ViewModel.Control
 
-    @model IEnumerable<EventBudgetItemVM>
+@model IEnumerable<EventBudgetItemVM>
 
-    @*
-        Wireframe FIN04: Event Budget
-    *@
+@*
+    Wireframe FIN04: Event Budget
+*@
 
-    <div class="col-xs-12">
-        @(Html.Kendo().Grid(Model)
+<div class="col-xs-12">
+    @(Html.Kendo().Grid(Model)
     .Name("ItemDetails")
     .Editable(editable => editable.Mode(GridEditMode.InCell)
     .CreateAt(GridInsertRowPosition.Top))
@@ -66,13 +66,13 @@
             "<input type='hidden' name='ItemDetails[#= getItem(data)#].AmountPerItem' value='#= AmountPerItem #' />").Width(170);
 
 
-        columns.Group( g=> g
-             .Title("Funding Mechanism")
-             .Columns(x=>
-             {
-                 x.Bound(p => p.DirectPayment).ClientTemplate("#= DirectPayment #" + "<input type='hidden' name='ItemDetails[#= getItem(data)#].DirectPayment' value='#= calculateSCADirect(data).DirectPayment #' />").Width(170);
-                 x.Bound(p => p.SCA).ClientTemplate("#= SCA #" + "<input type='hidden' name='ItemDetails[#= getItem(data)#].SCA' value='#= calculateSCADirect(data).SCA #' />").Width(170);
-             })
+        columns.Group(g => g
+            .Title("Funding Mechanism")
+            .Columns(x =>
+            {
+                x.Bound(p => p.DirectPayment).ClientTemplate("#= DirectPayment #" + "<input type='hidden' name='ItemDetails[#= getItem(data)#].DirectPayment' value='#= calculateSCADirect(data).DirectPayment #' />").Width(170);
+                x.Bound(p => p.SCA).ClientTemplate("#= SCA #" + "<input type='hidden' name='ItemDetails[#= getItem(data)#].SCA' value='#= calculateSCADirect(data).SCA #' />").Width(170);
+            })
            );
 
         columns.Bound(p => p.Remarks).ClientTemplate("#= Remarks #" +
@@ -107,10 +107,10 @@
                    })
                    .ServerOperation(false)
      )
-        )
-    </div>
+    )
+</div>
 
-    <script>
+<script>
 
         function getItem(dataItem) {
             var data = $("#ItemDetails").data("kendoGrid").dataSource.data();
@@ -173,4 +173,4 @@
         $(".k-grid-Delete").click(function (e) {
             calculateTotal();
         });
-    </script>
+</script>

@@ -23,11 +23,13 @@ namespace MCAWebAndAPI.Web.Controllers
             return Json(data.Select(e =>
                 new
                 {
+                    e.ID,
                     e.WBSID,
                     e.WBSDescription,
                     e.Activity,
                     e.SubActivity,
-                    e.Project
+                    e.Project,
+                    Long = string.Format("{0} - {1}", e.WBSID, e.WBSDescription)
                 }
             ), JsonRequestBehavior.AllowGet);
         }
