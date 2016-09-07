@@ -11,7 +11,7 @@
     .Columns(columns =>
     {
         columns.Bound(p => p.ddlProfessional).ClientTemplate("#= ddlProfessional.Text #" +
-                          "<input type='hidden' name='AdjustmentDetails[#= GetDetailAdjustment(data)#].ddlProfessional.Value' value='#= ddlProfessional.Value #' />"
+                          "<input type='hidden' id='Profid#= GetDetailAdjustment(data)#' name='AdjustmentDetails[#= GetDetailAdjustment(data)#].ddlProfessional.Value' value='#= ddlProfessional.Value #' />"
                         )
                         .EditorViewData(new
                         {
@@ -66,7 +66,7 @@
          );
 
         columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
-           "<input type='hidden' name='AdjustmentDetails[#= GetDetailAdjustment(data)#].EditMode' value='#= EditMode #' />"
+           "<input type='hidden' id='Editid#= GetDetailAdjustment(data)#' name='AdjustmentDetails[#= GetDetailAdjustment(data)#].EditMode' value='#= EditMode #' />"
          );
 
     })
