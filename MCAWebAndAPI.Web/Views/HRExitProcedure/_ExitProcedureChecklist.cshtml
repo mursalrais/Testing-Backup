@@ -6,7 +6,7 @@
     .Name("ExitProcedureChecklist")
     .ToolBar(tools => tools.Create().Text("Add New ExitProcedureChecklist"))
     .Editable(editable => editable.Mode(GridEditMode.InCell)
-    .CreateAt(GridInsertRowPosition.Bottom))
+    .CreateAt(GridInsertRowPosition.Bottom)).Resizable(resize => resize.Columns(true))
     .Columns(columns =>
     {
     columns.Bound(p => p.ItemExitProcedure).Width(10).ClientTemplate("#= ItemExitProcedure #" +
