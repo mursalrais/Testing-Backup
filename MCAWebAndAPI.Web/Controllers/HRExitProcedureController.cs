@@ -213,8 +213,12 @@ namespace MCAWebAndAPI.Web.Controllers
                     }
                 }
             }
-     
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.ExitProcedure);
+
+            return RedirectToAction("Index",
+                "Success",
+                new { successMessage = string.Format(MessageResource.SuccessUpdateExitProcedure, viewModel.ID) });
+
+            //return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.ExitProcedure);
         }
 
         //Submit every data in Exit Procedure to List
@@ -297,7 +301,11 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.ExitProcedure);
+            return RedirectToAction("Index",
+                "Success",
+                new { successMessage = string.Format(MessageResource.SuccessCreateExitProcedureData, viewModel.ID) });
+
+            //return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.ExitProcedure);
         }
 
         [HttpPost]
@@ -344,7 +352,11 @@ namespace MCAWebAndAPI.Web.Controllers
                 exitProcedureService.UpdateLastWorkingDateOnProfessional(viewModel.ProfessionalID, lastWorkingDate);
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.ExitProcedure);
+            return RedirectToAction("Index",
+                "Success",
+                new { successMessage = string.Format(MessageResource.SuccessUpdateExitProcedure, viewModel.ID) });
+
+            //return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.ExitProcedure);
         }
         
         public ActionResult UpdateExitProcedure(ExitProcedureVM exitProcedure, FormCollection form)
