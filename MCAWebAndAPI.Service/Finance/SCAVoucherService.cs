@@ -51,6 +51,7 @@ namespace MCAWebAndAPI.Service.Finance
         private const string FIELD_NAME_FUND = "lzhg";
         private const string FIELD_NAME_REFFERENCE_NO = "cicv";
         private const string FIELD_NAME_REMARKS = "p7up";
+        private const string FIELD_NAME_USER_EMAIL = "UserEmail";
         private const string FIELD_NAME_WBS = "WBS_x0020_Master_x0020_ID";
         private const string FIELD_NAME_GL = "GL_x0020_Master_x0020_ID";
         private const string FIELD_NAME_TITLE = "Title";
@@ -121,7 +122,8 @@ namespace MCAWebAndAPI.Service.Finance
                 {FIELD_NAME_SUB_ACTIVITY_ID,new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.SubActivity.Value) }},
                 {FIELD_NAME_FUND,scaVoucher.Fund},
                 {FIELD_NAME_REFFERENCE_NO,scaVoucher.ReferenceNo},
-                {FIELD_NAME_REMARKS,scaVoucher.Remarks}
+                {FIELD_NAME_REMARKS,scaVoucher.Remarks},
+                {FIELD_NAME_USER_EMAIL,scaVoucher.UserEmail}
             };
 
             try
@@ -160,7 +162,8 @@ namespace MCAWebAndAPI.Service.Finance
                 {FIELD_NAME_SUB_ACTIVITY_ID,new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.SubActivity.Value) }},
                 {FIELD_NAME_FUND,scaVoucher.Fund},
                 {FIELD_NAME_REFFERENCE_NO,scaVoucher.ReferenceNo},
-                {FIELD_NAME_REMARKS,scaVoucher.Remarks}
+                {FIELD_NAME_REMARKS,scaVoucher.Remarks},
+                {FIELD_NAME_USER_EMAIL,scaVoucher.UserEmail}
             };
 
             if (scaVoucher.Action == SCAVoucherVM.ActionType.approve.ToString())
@@ -363,6 +366,7 @@ namespace MCAWebAndAPI.Service.Finance
             model.Fund = Convert.ToString(ListItem[FIELD_NAME_FUND]);
             model.ReferenceNo = ListItem[FIELD_NAME_REFFERENCE_NO] == null ? "" : ListItem[FIELD_NAME_REFFERENCE_NO].ToString();
             model.Remarks = ListItem[FIELD_NAME_REMARKS] == null ? "" : ListItem[FIELD_NAME_REMARKS].ToString();
+            model.UserEmail = ListItem[FIELD_NAME_USER_EMAIL] == null ? "" : ListItem[FIELD_NAME_USER_EMAIL].ToString();
             model.TransactionStatus.Value = ListItem[FIELD_NAME_TRANSTATUS].ToString();
             model.EventBudget.Value = Convert.ToInt32((ListItem[FIELD_NAME_EBUDGET_ID] as FieldLookupValue).LookupId.ToString());
 

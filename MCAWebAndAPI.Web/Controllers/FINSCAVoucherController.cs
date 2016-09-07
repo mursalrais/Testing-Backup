@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using Elmah;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
+using MCAWebAndAPI.Model.HR.DataMaster;
 using MCAWebAndAPI.Model.ViewModel.Control;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 using MCAWebAndAPI.Service.Converter;
@@ -43,7 +44,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             _eventBudgetService = new EventBudgetService();
         }
 
-        public ActionResult Create(string siteUrl = null, string userAccess = null)
+        public ActionResult Create(string siteUrl = null, string userEmail = "")
         {
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);
@@ -57,14 +58,19 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             return View(model);
         }
 
-        public ActionResult Edit(string siteUrl = null, int? ID = null, string userAccess = null)
+        public ActionResult Edit(string siteUrl = null, int? ID = null, string userEmail = "")
         {
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);
             SessionManager.Set(SharedController.Session_SiteUrl, siteUrl);
 
             SCAVoucherVM model = new SCAVoucherVM();
-            if (ID != null)
+
+            if (ID == null)
+            {
+                model.UserEmail = userEmail;
+            }
+            else
             {
                 model = service.Get(ID);
                 model.Action = SCAVoucherVM.ActionType.edit.ToString();
@@ -76,7 +82,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             return View(model);
         }
 
-        public ActionResult Approve(string siteUrl = null, int? ID = null, string userAccess = null)
+        public ActionResult Approve(string siteUrl = null, int? ID = null, string userEmail = "")
         {
             service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
             SessionManager.Set(SiteUrl, siteUrl ?? ConfigResource.DefaultBOSiteUrl);
@@ -86,21 +92,28 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             {
                 model = service.Get(ID);
                 model.Action = SCAVoucherVM.ActionType.approve.ToString();
+                model.UserEmail = userEmail;
                 SessionManager.Set(SCAVoucherIDSess, ID);
             }
 
             return View(model);
         }
 
-        public ActionResult Display(string siteUrl = null, int? ID = null, string userAccess = null)
+        public ActionResult Display(string siteUrl = null, int? ID = null, string userEmail = "")
         {
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);
             SessionManager.Set(SharedController.Session_SiteUrl, siteUrl);
 
             SCAVoucherVM model = new SCAVoucherVM();
+            ProfessionalMaster professional = COMProfessionalController.GetFirstOrDefaultByOfficeEmail(userEmail); 
 
             model = service.Get(ID);
+            
+            if (model.UserEmail != userEmail || !COMProfessionalController.IsPositionFinance(professional.Position))
+            {
+                throw new InvalidOperationException("You have no right to see this data.");
+            }
 
             ViewBag.SubTitle = SubTitle;
             return View(model);
@@ -185,7 +198,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create(FormCollection form, SCAVoucherVM viewModel, string userAccess = null)
+        public async Task<ActionResult> Create(FormCollection form, SCAVoucherVM viewModel)
         {
             var siteUrl = SessionManager.Get<string>(SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);

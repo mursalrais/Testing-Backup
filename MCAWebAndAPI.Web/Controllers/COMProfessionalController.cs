@@ -12,7 +12,6 @@ namespace MCAWebAndAPI.Web.Controllers
 {
     public class COMProfessionalController : Controller
     {
-
         //TODO: the following field name constants should be maintained in a central place
         private const string FieldName_OfficeEmail = "officeemail";
 
@@ -44,7 +43,7 @@ namespace MCAWebAndAPI.Web.Controllers
             return result;
         }
 
-        public ProfessionalMaster GetFirstOrDefaultByOfficeEmail(string siteUrl = "", string officeEmail = "")
+        public static ProfessionalMaster GetFirstOrDefaultByOfficeEmail(string siteUrl = "", string officeEmail = "")
         {
             if (string.IsNullOrEmpty(officeEmail))
             {
@@ -76,6 +75,11 @@ namespace MCAWebAndAPI.Web.Controllers
             IEnumerable<ProfessionalMaster> professional = new List<ProfessionalMaster>() { Get(siteUrl, id) };
 
             return GetJsonResult(professional);
+        }
+
+        public static bool IsPositionFinance(string positionName)
+        {
+            return positionName.ToLower().Contains("finance");
         }
 
         private JsonResult GetJsonResult(IEnumerable<ProfessionalMaster> professional)
