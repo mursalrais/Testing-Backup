@@ -178,21 +178,9 @@ namespace MCAWebAndAPI.Service.Finance
             viewModel.Reason = Convert.ToString(listItem[FieldName_Reason]);
             viewModel.AmountReimbursed = Convert.ToDecimal(listItem[FieldName_AmountReimbursed]);
             viewModel.WBS.Value = Convert.ToInt32((listItem[FieldName_WBS] as FieldLookupValue).LookupId.ToString());
-
-            //TODO: the following line causes error
-            //  'listItem[FieldName_WBSID]' threw an exception of type 'Microsoft.SharePoint.Client.PropertyOrFieldNotInitializedException'
-            //  biasanya karena salah tulis field name
-            //  please fix this ASAP
-            //viewModel.WBSDescription = string.Format("{0} - {1}", (listItem[FieldName_WBSID] as FieldLookupValue).LookupValue.ToString(), (listItem[FieldName_WBSDesc] as FieldLookupValue).LookupValue.ToString());
-
+            viewModel.WBSDescription = string.Format("{0} - {1}", (listItem[FieldName_WBSID] as FieldLookupValue).LookupValue.ToString(), (listItem[FieldName_WBSDesc] as FieldLookupValue).LookupValue.ToString());
             viewModel.GL.Value = Convert.ToInt32((listItem[FieldName_GL] as FieldLookupValue).LookupId.ToString());
-
-            //TODO: the following line causes error
-            //  'listItem[FieldName_WBSID]' threw an exception of type 'Microsoft.SharePoint.Client.PropertyOrFieldNotInitializedException'
-            //  biasanya karena salah tulis field name
-            //  please fix this ASAP
-            //viewModel.GLDescription = string.Format("{0} - {1}", (listItem[FieldName_GLNo] as FieldLookupValue).LookupValue.ToString(), (listItem[FieldName_GLDesc] as FieldLookupValue).LookupValue.ToString());
-
+            viewModel.GLDescription = string.Format("{0} - {1}", (listItem[FieldName_GLNo] as FieldLookupValue).LookupValue.ToString(), (listItem[FieldName_GLDesc] as FieldLookupValue).LookupValue.ToString());
             viewModel.Remarks = Convert.ToString(listItem[FieldName_Remarks]);
 
             return viewModel;

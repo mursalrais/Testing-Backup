@@ -15,6 +15,7 @@
     })
     .Pageable()
     .Sortable()
+    .Scrollable()
     .Editable(ed => ed.Mode(GridEditMode.PopUp).CreateAt(GridInsertRowPosition.Bottom))
     .DataSource(dataSource => dataSource
         .Ajax()

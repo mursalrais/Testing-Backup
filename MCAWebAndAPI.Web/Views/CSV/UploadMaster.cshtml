@@ -65,10 +65,8 @@
         });
 
         function importCSV(e) {
-            debugger
             console.log($("#ListName").val());
             var url = "/CSV/Submit?listName=" + $("#ListName").val();
-            debugger
             $.getJSON(url, function (data) {
                 showModalWindow(data);
             });

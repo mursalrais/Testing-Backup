@@ -425,7 +425,7 @@ namespace MCAWebAndAPI.Service.Asset
                         model.hFormID,
                         model.CountDate,
                         GetFullName(model.CountedBy1.Value),
-                        _siteUrl + String.Format(UrlResource.AssetCheckResultApprove),ID.ToString());
+                        _siteUrl + String.Format(UrlResource.AssetCheckResultApprove,ID.ToString()));
                     EmailUtil.Send(email.EmailTo, "Notification to approve the result", email.EmailContent);
                 }
 

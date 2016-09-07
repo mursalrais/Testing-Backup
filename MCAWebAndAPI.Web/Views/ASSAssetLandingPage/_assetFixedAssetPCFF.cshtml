@@ -1,0 +1,41 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Asset
+
+@model IEnumerable<AssetLandingPageFixedAssetVM>
+
+<div class="col-sm-12">
+
+    @(Html.Kendo().Grid(Model)
+        .Name("Details")
+        .Editable(editable => editable.Mode(GridEditMode.InCell))
+        .Columns(columns =>
+        {
+            columns.Bound(p => p.totalAsset_PCFF).ClientTemplate("#= totalAsset_PCFF #" +
+                "<input type='hidden' name='Details[#= index(data)#].totalAsset_PCFF' value='#= totalAsset_PCFF #' />"
+            );
+
+            columns.Bound(p => p.valueIDR_PCFF).ClientTemplate("#= valueIDR_PCFF #" +
+                "<input type='hidden' name='Details[#= index(data)#].valueIDR_PCFF' value='#= valueIDR_PCFF #' />"
+            );
+
+            columns.Bound(p => p.valueUSD_PCFF).ClientTemplate("#= valueUSD_PCFF #" +
+                "<input type='hidden' name='Details[#= index(data)#].valueUSD_PCFF' value='#= valueUSD_PCFF #' />"
+            );
+
+        })
+        .DataSource(dataSource => dataSource.Ajax()
+        .Model(model =>
+        {
+            model.Id(p => p.ID);
+        })
+        .ServerOperation(false)
+        )
+    )
+</div>
+
+<script>
+    function index(dataItem) {
+        var data = $("#Details").data("kendoGrid").dataSource.data();
+
+        return data.indexOf(dataItem);
+    }
+</script>

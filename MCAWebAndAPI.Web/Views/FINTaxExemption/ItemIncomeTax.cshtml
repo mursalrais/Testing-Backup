@@ -49,7 +49,7 @@
                         </div>
                         <script>
                         $('#application-document-button').click(function () {
-                            this.postMessage({
+                            parent.postMessage({
                                 result: "Success", urlToRedirect: "@Model.DocumentUrl"
                             }, "@Model.DocumentUrl");
                         });

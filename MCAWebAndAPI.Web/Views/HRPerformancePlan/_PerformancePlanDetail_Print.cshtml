@@ -1,22 +1,52 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
 @model ProfessionalPerformancePlanVM
 
-<div class="col-xs-12" style="margin-bottom: 20px">
-    @(Html.Kendo().Grid(Model.ProjectOrUnitGoalsDetails)
-        .Name("ProjectOrUnitGoalsDetails")
-        .Columns(columns =>
-        {
-            columns.Bound(p => p.ProjectOrUnitGoals);
-            columns.Bound(p => p.Category).ClientTemplate("#= Category.Text #");
-            columns.Bound(p => p.IndividualGoalAndPlan);
-            columns.Bound(p => p.Weight);
-            columns.Bound(p => p.Remarks);
-        })
-        .DataSource(dataSource => dataSource.Ajax()
-                   .Model(model =>
-                   {
-                       model.Id(p => p.ID);
-                   })
-        )
-    )
+<div class="col-xs-12">
+    <table class="table table-striped ">
+        <thead>
+            <tr>
+                <th rowspan="2">Project Or Unit Goals</th>
+                <th rowspan="2">Category</th>
+                <th rowspan="2">Individual Goal And Plan</th>
+                <th rowspan="2">Weight</th>
+                <th rowspan="2">Remarks</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.ProjectOrUnitGoalsDetails)
+            {
+                <tr>
+                    <td width="300px">@Convert.ToString(item.ProjectOrUnitGoals)</td>
+                    <td>@Convert.ToString(item.Category.Text)</td>
+                    <td width="300px">@Convert.ToString(item.IndividualGoalAndPlan)</td>
+                    <td>@Convert.ToString(item.Weight)%</td>
+                    <td width="300px">@Convert.ToString(item.Remarks)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
+
+<style type="text/css">
+    table {
+        border-collapse: collapse;
+    }
+
+    th {
+        border: 1px solid Black;
+        padding: 5px 15px;
+        text-align: center;
+        vertical-align: text-top;
+        background-color: GrayText;
+        vertical-align: top;
+    }
+
+    td {
+        border: 1px solid Black;
+        padding: 5px 15px;
+        text-align: center;
+        vertical-align: text-top;
+        vertical-align: top;
+    }
+</style>
+
