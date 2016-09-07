@@ -6,7 +6,7 @@ using MCAWebAndAPI.Service.ProjectManagement.Common;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
 
-namespace MCAWebAndAPI.Service.ProjectManagement.Schedule.Common
+namespace MCAWebAndAPI.Service.Common
 {
     public class WBSMasterService : IWBSMasterService
     {
@@ -262,6 +262,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule.Common
         {
             return new WBSMapping
             {
+                ID = Convert.ToInt32(item["ID"]),
                 WBSID = Convert.ToString(item["WBS_x0020_ID"]),
                 WBSDescription = Convert.ToString(item["WBS_x0020_Description"]),
                 Activity = Convert.ToString(item["Activity"]),

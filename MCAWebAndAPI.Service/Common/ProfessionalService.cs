@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using MCAWebAndAPI.Model.HR.DataMaster;
-using MCAWebAndAPI.Model.ViewModel.Form.HR;
-using MCAWebAndAPI.Service.Common;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
-using static MCAWebAndAPI.Service.Common.CommonService;
 
-namespace MCAWebAndAPI.Service.HR.Common
+namespace MCAWebAndAPI.Service.Common
 {
     /// <summary>
     /// Extension to MCAWebAndAPI.Service.HR.Common.ProfessionalService
@@ -36,6 +32,7 @@ namespace MCAWebAndAPI.Service.HR.Common
         //    return result;
         //}
 
+        private const string SP_PROMAS_LIST_NAME = "Professional Master";
 
         /// <summary>
         /// Gets an instance of ProfessionalMaster based on its ID

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Web;
 using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
-using MCAWebAndAPI.Service.HR.Common;
+using MCAWebAndAPI.Service.Common;
 using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
@@ -84,10 +84,11 @@ namespace MCAWebAndAPI.Service.Finance
             if (viewModel.Professional.Value.HasValue)
             {
                 var professionalId = Convert.ToInt32(viewModel.Professional.Value);
-                var professional = new ProfessionalService().GetProfessionalData(professionalId);
+                //var professional = new ProfessionalService(xxxx).GetProfessionalData(professionalId);
+                var professional = ProfessionalService.Get(siteUrl, professionalId);
 
                 newItem.Add(FIELD_PROFESSIONALID, new FieldLookupValue { LookupId = professionalId });
-                newItem.Add(FIELD_PROFESSIONAL_POSITION, professional.PositionName);
+                newItem.Add(FIELD_PROFESSIONAL_POSITION, professional.Position);
             }
 
             if (viewModel.Vendor.Value.HasValue)
@@ -111,6 +112,11 @@ namespace MCAWebAndAPI.Service.Finance
             try
             {
                 SPConnector.AddListItem(LISTNAME, newItem, siteUrl);
+            }
+            catch(ServerException se)
+            {
+                logger.Error(se.Message);
+                throw se;
             }
             catch (Exception e)
             {
