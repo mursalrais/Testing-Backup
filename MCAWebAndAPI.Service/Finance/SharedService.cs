@@ -148,24 +148,20 @@ namespace MCAWebAndAPI.Service.Finance
             var from = String.Format("{0}-{1}-{2}", dateFrom.Year, dateFrom.Month, dateFrom.Day);
             var to = String.Format("{0}-{1}-{2}", dateTo.Year, dateTo.Month, dateTo.Day);
 
-            string caml = @"<Query>
-  <Where>
-    <And>
-      <Geq>
-        <FieldRef Name='{0}' />
-          <Value Type='DateTime'>{1}</Value>
-      </Geq>
-      <Leq>
-        <FieldRef Name='{0}' />
-        <Value Type='DateTime'>{2}</Value>
-      </Leq>
-    </And>
-  </Where>
-</Query>";
-
-            //TODO: check why date filter failed
-
-            //caml = string.Format(caml, dateFieldName, dateFrom, dateTo);
+            string caml = @"<View><Query>
+                                      <Where>
+                                        <And>
+                                          <Geq>
+                                            <FieldRef Name='{0}' />
+                                              <Value Type='DateTime'>{1}</Value>
+                                          </Geq>
+                                          <Leq>
+                                            <FieldRef Name='{0}' />
+                                            <Value Type='DateTime'>{2}</Value>
+                                          </Leq>
+                                        </And>
+                                      </Where>
+                                    </Query></View>";
 
             caml = string.Format(caml, dateFieldName, from, to);
 
