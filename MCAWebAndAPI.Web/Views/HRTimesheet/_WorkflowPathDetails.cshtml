@@ -43,6 +43,9 @@
             columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
             "<input type='hidden' name='WorkflowItems[#= getWorkflowItemDetail(data)#].ID' value='#= ID #' />"
             );
+            columns.Bound(p => p.ApproverNameText).Hidden().ClientTemplate("#= ApproverNameText #" +
+          "<input type='hidden' name='WorkflowItems[#= getWorkflowItemDetail(data)#].ApproverNameText' value='#= ApproverNameText #' />"
+          );
             columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
             "<input type='hidden' name='WorkflowItems[#= getWorkflowItemDetail(data)#].EditMode' value='#= EditMode #' />"
             );
@@ -64,7 +67,7 @@
             model.Id(p => p.ID);
             model.Field(m => m.ApproverName).DefaultValue(AjaxComboBoxVM.GetDefaultValue());
             model.Field(p => p.Level).Editable(false);
-           // model.Field(p => p.ApproverEmail).Editable(false);
+            // model.Field(p => p.ApproverEmail).Editable(false);
             model.Field(p => p.Status).Editable(false);
         })
         .ServerOperation(false)
@@ -87,6 +90,7 @@
                     model.set('ApproverPositionText', (result[0].Position));
                     model.set('ApproverPositionId', (result[0].PositionId));
                     model.set('ApproverEmail', (result[0].OfficeEmail));
+                    model.set('ApproverNameText', (result[0].Name));
                 });
             }
         }
@@ -106,6 +110,7 @@
             $('#ApproverUnitText').attr('readonly', 'readonly');
             $('#ApproverPositionText').attr('readonly', 'readonly');
             $('#ApproverEmail').attr('readonly', 'readonly');
+            $('#ApproverNameText').attr('readonly', 'readonly');
         }
     }
 

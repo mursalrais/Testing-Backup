@@ -21,7 +21,7 @@
             <div class="row">
                 <div class="col-sm-6">
 
-                    @Html.HiddenFor(m => m.UserLogin)
+                    @Html.HiddenFor(m => m.ProfesionalUserLogin)
                     @Html.HiddenFor(m => m.ProfessionalID)
                     @Html.HiddenFor(m => m.UserPermission)
                     @Html.HiddenFor(m => m.Name)
@@ -389,7 +389,7 @@
                     $.getJSON(url,
                         function (result) {
                             //Project_Unit
-                            $('#UserLogin').prop('value', result[0].OfficeEmail);
+                            $('#ProfesionalUserLogin').prop('value', result[0].OfficeEmail);
                             $('#ProjectUnit').prop('value', result[0].Project_Unit);
                             $('#Name').prop('value', result[0].Name);
                             $('#ProfessionalID').prop('value', result[0].ID);

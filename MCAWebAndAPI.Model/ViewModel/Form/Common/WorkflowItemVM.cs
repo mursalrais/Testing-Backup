@@ -29,6 +29,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Common
 
         public int? ApproverPositionId { get; set; }
 
+        public string ApproverNameText { get; set; }
+
         [DisplayName("Approver Unit")]
         public string ApproverUnitText { get; set; }
 

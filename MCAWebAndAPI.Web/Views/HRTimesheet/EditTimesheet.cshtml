@@ -9,7 +9,7 @@
     <fieldset>
 
         <legend>Timesheet</legend>
-
+        @*@Html.DisplayFor(m => m.UserLogin)*@
         @using (Ajax.BeginForm("", "HRTimesheet", new AjaxOptions
         {
             OnComplete = "onCompleteUpdatePeriod",
@@ -21,7 +21,7 @@
             <div class="row">
                 <div class="col-sm-6">
                     @Html.HiddenFor(m => m.ID)
-                    @Html.HiddenFor(m => m.UserLogin)
+                    @Html.HiddenFor(m => m.ProfesionalUserLogin)
                     @Html.HiddenFor(m => m.ProfessionalID)
                     @Html.HiddenFor(m => m.UserPermission)
                     @Html.HiddenFor(m => m.Name)
@@ -36,6 +36,7 @@
                             @Html.EditorFor(m => m.Period)
                         </div>
                     </div>
+                   
                     <div class="form-group">
                         @Html.Bootstrap().LabelFor(m => m.ProfessionalName).Class("col-sm-4 control-label")
                         <div class="col-sm-8">
@@ -275,19 +276,19 @@
 
     <div class="row">
         <div class="col-sm-12">
-            <button id="submit-button" class="btn btn-success" type="button">
+            <button id="submit-button" class="btn btn-success" type="submit">
                 Submit for Approval
             </button>
-            <button id="draft-button" class="btn btn-primary" type="button">
+            <button id="draft-button" class="btn btn-primary" type="submit">
                 <i class="fa fa-save"></i>
                 Save as Draft
             </button>
 
-            <button id="approve-button" class="btn btn-success" type="button">
+            <button id="approve-button" class="btn btn-success" type="submit">
                 Approve
             </button>
 
-            <button id="reject-button" class="btn btn-primary" type="button">
+            <button id="reject-button" class="btn btn-primary" type="submit">
                 <i class="fa fa-save"></i>
                 Reject
             </button>
@@ -378,22 +379,27 @@
             professional.enable(false);
         }
 
+      
+
+    });
+
+
         $("#draft-button")
-            .click(function() {
+          .click(function () {
 
-                save('Draft', '');
+              save('Draft', '');
 
-            });
+          });
 
         $("#submit-button")
-            .click(function() {
+            .click(function () {
                 save('Pending Approval 1 of 3', '1');
 
             });
 
 
         $("#approve-button")
-            .click(function() {
+            .click(function () {
                 var strLevel = $("#ApprovalLevel").val();
                 var nextLevel = "";
                 if (strLevel === "1") {
@@ -411,7 +417,7 @@
             });
 
         $("#reject-button")
-            .click(function() {
+            .click(function () {
                 var strLevel = $("#ApprovalLevel").val();
                 $("#TimesheetStatus").val("Rejected");
                 $("#ApprovalLevel").val(strLevel);
@@ -422,19 +428,19 @@
 
 
         $("#delete-button-all")
-            .click(function() {
+            .click(function () {
                 var strID = $("#ID").val();
                 $('form').prop('action', '/HRTimesheet/DeleteAllTimesheet/' + strID);
             });
 
         $("#delete-button-selected")
-            .click(function() {
+            .click(function () {
                 var strID = $("#ID").val();
                 $('form').prop('action', '/HRTimesheet/DeleteSelectedTimesheet/' + strID);
             });
 
         $("#submit-button-add-timesheet")
-            .click(function() {
+            .click(function () {
                 var strID = $("#ID").val();
                 var startPicker = $("#From").data("kendoDatePicker");
                 var endPicker = $("#To").data("kendoDatePicker");
@@ -449,7 +455,7 @@
                     $('form').prop('action', '/HRTimesheet/AddTimesheet/' + strID);
                 }
 
-              
+
             });
 
 
@@ -457,8 +463,6 @@
                   .click(function () {
                       $('form').prop('action', '/HRTimesheet/UpdatePeriod');
                   });
-
-    });
 
 
         function OnSelectProfessionalName(e) {
@@ -468,7 +472,7 @@
             $.getJSON(url,
                 function(result) {
                     //Project_Unit
-                    $('#UserLogin').prop('value', result[0].OfficeEmail);
+                    $('#ProfesionalUserLogin').prop('value', result[0].OfficeEmail);
                     $('#ProjectUnit').prop('value', result[0].Project_Unit);
                     $('#Name').prop('value', result[0].Name);
                     $('#ProfessionalID').prop('value', result[0].ID);

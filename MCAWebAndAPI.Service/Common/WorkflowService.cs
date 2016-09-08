@@ -536,6 +536,7 @@ namespace MCAWebAndAPI.Service.Common
             var userName = userNames.FirstOrDefault();
             viewModel.ApproverEmail = userName.UserLogin;
             viewModel.Status = "Pending";
+            viewModel.ApproverNameText = userName.Name;
             viewModel.ApproverName = AjaxComboBoxVM.GetDefaultValue(new AjaxComboBoxVM
             {
                 Text = userName.Name,
@@ -650,6 +651,7 @@ namespace MCAWebAndAPI.Service.Common
                 ApproverUnitText = Convert.ToString(item["projectunit"]),
                 ApproverPositionText = FormatUtil.ConvertLookupToValue(item, "position"),
                 ApproverPositionId = FormatUtil.ConvertLookupToID(item, "position"),
+                ApproverNameText = FormatUtil.ConvertLookupToValue(item, "approvername"),
                 ApproverName = AjaxComboBoxVM.GetDefaultValue(new AjaxComboBoxVM
                 {
                     Text = FormatUtil.ConvertLookupToValue(item, "approvername"),

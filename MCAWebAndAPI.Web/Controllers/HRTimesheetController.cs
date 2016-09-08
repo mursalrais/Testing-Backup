@@ -13,7 +13,9 @@ using System.Web.Mvc;
 using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Service.Resources;
 using System.Threading.Tasks;
+using Elmah;
 using MCAWebAndAPI.Model.ViewModel.Form.Common;
+using MCAWebAndAPI.Service.JobSchedulers.Schedulers;
 
 //using
 
@@ -51,6 +53,7 @@ namespace MCAWebAndAPI.Web.Controllers
             if (viewModel.UserPermission== "Not Authorized") return RedirectToAction("NotAuthorized", "HRTimesheet");
 
             SessionManager.Set("TimesheetDetails", viewModel.TimesheetDetails);
+            SessionManager.Set("WorkflowItems", viewModel.WorkflowItems);
             return View(viewModel);
         }
 
@@ -64,12 +67,13 @@ namespace MCAWebAndAPI.Web.Controllers
         [HttpPost]
         public async Task<ActionResult> UpdatePeriod(TimesheetVM viewModel)
         {
+            if (viewModel.ProfesionalUserLogin == null) return null;
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _timesheetService.SetSiteUrl(siteUrl);
 
             try
             {
-                viewModel = await _timesheetService.GetTimesheetAsync(viewModel.UserLogin, ((DateTime)(viewModel.Period)));
+                viewModel = await _timesheetService.GetTimesheetAsync(viewModel.ProfesionalUserLogin, ((DateTime)(viewModel.Period)));
             }
             catch (Exception e)
             {
@@ -85,6 +89,7 @@ namespace MCAWebAndAPI.Web.Controllers
         [HttpPost]
         public ActionResult AddTimesheet(int? id,TimesheetVM viewModel)
         {
+
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _timesheetService.SetSiteUrl(siteUrl);
 
@@ -184,6 +189,7 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             try
             {
+                if (viewModel.ProfesionalUserLogin == null) return null;
                 var siteUrl = SessionManager.Get<string>("SiteUrl");
                 _timesheetService.SetSiteUrl(siteUrl);
                 int? headerId;
@@ -195,13 +201,25 @@ namespace MCAWebAndAPI.Web.Controllers
                     Response.StatusCode = (int)HttpStatusCode.BadRequest;
                     return JsonHelper.GenerateJsonErrorResponse("Please check Workflow Mapping Master");
                 }
-            
 
-                headerId = _timesheetService.CreateHeader(viewModel);
-             
                 var items = SessionManager.Get<IEnumerable<TimesheetDetailVM>>("TimesheetDetails");
 
-          
+                if (items== null || !items.Any())
+                {
+                    Response.TrySkipIisCustomErrors = true;
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    return JsonHelper.GenerateJsonErrorResponse("Please add working days");
+                }
+
+                var query = items.Where(e => e.Type != null && e.Type == "Working Days" && e.EditMode != -1);
+                var result = query.Sum(x => x.FullHalf);
+                if (result <= 0.5)
+                {
+                    Response.TrySkipIisCustomErrors = true;
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    return JsonHelper.GenerateJsonErrorResponse("Working days should be more than 0.5 day");
+                }
+                headerId = _timesheetService.CreateHeader(viewModel);
 
                 viewModel.TimesheetDetails = items;
                 Task createTimesheetDetailsTask = _timesheetService.CreateTimesheetDetailsAsync(headerId, viewModel.TimesheetDetails);
@@ -210,7 +228,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 Task createTimesheetWorkflowTask = _timesheetService.CreateWorkflowTimesheetAsync(headerId, viewModel.WorkflowItems, viewModel.TimesheetStatus);
 
                 Task allTask = Task.WhenAll(createTimesheetDetailsTask, createTimesheetWorkflowTask);
-            
+
                 await allTask;
 
                 var strPages = "";
@@ -260,20 +278,34 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             try
             {
+                if (viewModel.ProfesionalUserLogin == null) return null;
                 var siteUrl = SessionManager.Get<string>("SiteUrl");
                 _timesheetService.SetSiteUrl(siteUrl);
-              
-            
 
-                _timesheetService.UpdateHeader(viewModel);
 
-            
+
                 var items = SessionManager.Get<IEnumerable<TimesheetDetailVM>>("TimesheetDetails");
 
+                if (items == null || !items.Any())
+                {
+                    Response.TrySkipIisCustomErrors = true;
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    return JsonHelper.GenerateJsonErrorResponse("Please add working days");
+                }
 
+                var query = items.Where(e => e.Type != null && e.Type == "Working Days" && e.EditMode != -1);
+                var result = query.Sum(x => x.FullHalf);
+                if (result <= 0.5)
+                {
+                    Response.TrySkipIisCustomErrors = true;
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    return JsonHelper.GenerateJsonErrorResponse("Working days should be more than 0.5 day");
+                }
+
+                _timesheetService.UpdateHeader(viewModel);
                 viewModel.TimesheetDetails = items;
 
-               
+
                 Task createTimesheetDetailsTask = _timesheetService.CreateTimesheetDetailsAsync(viewModel.ID, viewModel.TimesheetDetails);
 
 
@@ -306,7 +338,7 @@ namespace MCAWebAndAPI.Web.Controllers
             catch (Exception e)
             {
 
-                //Response.TrySkipIisCustomErrors = true;
+                Response.TrySkipIisCustomErrors = true;
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse(e.Message);
             }
@@ -315,14 +347,16 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult UpdateApproval(TimesheetVM viewModel)
+        public ActionResult UpdateApproval(FormCollection form, TimesheetVM viewModel)
         {
+             if (viewModel.ProfesionalUserLogin == null) return null;
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _timesheetService.SetSiteUrl(siteUrl);
 
             try
             {
                 _timesheetService.UpdateApproval(viewModel);
+
             }
             catch (Exception e)
             {
@@ -474,6 +508,23 @@ namespace MCAWebAndAPI.Web.Controllers
 
             return View(viewModel);
 
+        }
+
+        public ActionResult TimesheetSchedulerEmail(string siteUrl = null)
+        {
+
+            try
+            {
+              
+
+                TimesheetManagementScheduler.DoNowPSAExpired_OnceEveryDay(siteUrl);
+            }
+            catch (Exception e)
+            {
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return RedirectToAction("Index", "Error");
+            }
+            return RedirectToAction("Index", "Success");
         }
 
     }

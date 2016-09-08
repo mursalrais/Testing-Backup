@@ -34,7 +34,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [UIHint("AjaxComboBox")]
         public AjaxComboBoxVM ProfessionalName { get; set; } = new AjaxComboBoxVM
         {
-            ActionName = "GetProfessionals",
+            ActionName = "GetProfessionalsActive",
             ControllerName = "HRDataMaster",
             ValueField = "ID",
             TextField = "Name",
@@ -46,7 +46,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [DisplayName("Professional ID")]
        
 
-       public string UserLogin { get; set; }
+       public string ProfesionalUserLogin { get; set; }
+
+       // public string UserEmail { get; set; }
 
         public string Name { get; set; }
 
