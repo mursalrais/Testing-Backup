@@ -26,6 +26,7 @@
         @Html.HiddenFor(m => m.cmpPosition)
         @Html.HiddenFor(m => m.cmpYearDate)
         @Html.HiddenFor(m => m.Requestor)
+        @Html.HiddenFor(m => m.profId)
 
         <input type="hidden" id="loadpage" value="0">
 
@@ -331,6 +332,7 @@
                         var dataItem = this.dataItem(e.item);
                         eMail = dataItem.OfficeEmail;
                         $("#cmpName").prop("value", dataItem.FirstMiddleName);
+                        $("#profId").prop("value", dataItem.ID);
                         $("#cmpProjUnit").prop("value", dataItem.Project_Unit);
                     };
 
