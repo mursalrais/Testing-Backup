@@ -11,6 +11,10 @@ namespace MCAWebAndAPI.Service.Asset
     {
         void SetSiteUrl(string siteUrl);
 
+        int GetMinIDProfesional();
+
+        int GetIDPosition(int? ProfesionalID);
+
         AssetCheckResultHeaderVM GetPopulatedModel(int? ID = null, string FormID = null, AssetCheckResultHeaderVM data = null);
 
         AssetCheckResultHeaderVM GetPopulatedModelGetData(int? FormID = null);
