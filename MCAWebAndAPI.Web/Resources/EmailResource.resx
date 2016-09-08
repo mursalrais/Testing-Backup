@@ -395,4 +395,11 @@ Your request has been rejected by {1}. Please contact respective person for any 
 
 Thank you.</value>
   </data>
+  <data name="PSATwoMonthBeforeExpired" xml:space="preserve">
+    <value>Dear {0},
+
+This email is sent to you to notify that your PSA will be expired in the next two months. Please kindly communicate to HR dept. for any further action. 
+
+Thank you.</value>
+  </data>
 </root>
