@@ -24,6 +24,16 @@ namespace MCAWebAndAPI.Service.HR.Common
 
         static Logger logger = LogManager.GetCurrentClassLogger();
 
+        public ProfessionalService()
+        {
+
+        }
+
+        public ProfessionalService(string siteUrl)
+        {
+            SetSiteUrl(siteUrl);
+        }
+
         public void SetSiteUrl(string siteUrl)
         {
             _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
@@ -121,6 +131,7 @@ namespace MCAWebAndAPI.Service.HR.Common
             viewModel.ID = Convert.ToInt32(listItem["ID"]);
             viewModel.FirstMiddleName = Convert.ToString(listItem["Title"]);
             viewModel.CurrentPosition.Value = FormatUtil.ConvertLookupToID(listItem, "Position");
+            viewModel.DivisionProjectUnit.Value = Convert.ToString(listItem["Project_x002f_Unit"]);
             viewModel.JoinDate = Convert.ToDateTime(listItem["Join_x0020_Date"]).ToLocalTime();
             if (viewModel.JoinDate.Value.Year == 1)
             {
@@ -404,6 +415,7 @@ namespace MCAWebAndAPI.Service.HR.Common
             updatedValue.Add("Title", viewModel.FirstMiddleName);
             updatedValue.Add("Position", new FieldLookupValue
             { LookupId = (int)viewModel.CurrentPosition.Value });
+            updatedValue.Add("Project_x002f_Unit",viewModel.DivisionProjectUnit.Value);
             updatedValue.Add("Professional_x0020_Status", viewModel.ProfessionalStatus.Value);
             updatedValue.Add("Join_x0020_Date", viewModel.JoinDate);
             updatedValue.Add("placeofbirth", viewModel.PlaceOfBirth);

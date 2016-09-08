@@ -29,7 +29,7 @@
     
         <legend>Item Detail</legend>
         <div class="row">
-            @Html.Partial("_DisplayEventBudgetItems", Model)
+            @Html.Partial("_DisplayEventBudgetItems", Model.SCAVoucherItems)
         </div>
 
         @Html.HiddenFor(m => m.ID, new { @id = "hdnSCAVoucherID" })

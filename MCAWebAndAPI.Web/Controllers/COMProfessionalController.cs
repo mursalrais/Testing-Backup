@@ -70,6 +70,21 @@ namespace MCAWebAndAPI.Web.Controllers
             return GetJsonResult(professionals);
         }
 
+        public JsonResult GetForCombo(string siteUrl = null)
+        {
+            service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+
+            var professionals = GetFromExistingSession();
+            professionals = professionals.OrderBy(e => e.FirstMiddleName);
+
+            return Json(professionals.Select(e => new
+            {
+                e.ID,
+                e.FirstMiddleName,
+                NameAndPos = string.Format("{0} - {1}", e.FirstMiddleName, e.Position)
+            }), JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult GetJsonResult(string siteUrl = "", int? id = 0)
         {
             IEnumerable<ProfessionalMaster> professional = new List<ProfessionalMaster>() { Get(siteUrl, id) };

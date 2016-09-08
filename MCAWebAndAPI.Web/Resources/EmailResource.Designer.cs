@@ -457,6 +457,19 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dear {0},
+        ///
+        ///This email is sent to you to notify that your PSA will be expired in the next two months. Please kindly communicate to HR dept. for any further action. 
+        ///
+        ///Thank you..
+        /// </summary>
+        public static string PSATwoMonthBeforeExpired {
+            get {
+                return ResourceManager.GetString("PSATwoMonthBeforeExpired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;p&gt;
         ///    &lt;strong&gt;Dear Approver&lt;/strong&gt;
         ///&lt;/p&gt;
