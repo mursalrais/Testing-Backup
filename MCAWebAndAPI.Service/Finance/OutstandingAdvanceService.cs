@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.IO;
 using System.Threading.Tasks;
 using System.Web;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
@@ -17,7 +19,7 @@ namespace MCAWebAndAPI.Service.Finance
 
     public class OutstandingAdvanceService : IOutstandingAdvanceService
     {
-        private const string OutstandingAdvanceDocument_URL= "{0}/Outstanding%20Advance%20Documents/Forms/AllItems.aspx?FilterField1=Outstanding_x0020_Advance&FilterValue1={1}";
+        private const string OutstandingAdvanceDocument_URL = "{0}/Outstanding%20Advance%20Documents/Forms/AllItems.aspx?FilterField1=Outstanding_x0020_Advance&FilterValue1={1}";
         private const string ListName = "Outstanding Advance";
         private const string ListName_Document = "Outstanding Advance Documents";
         private const string ListName_Document_OutstandingAdvance = "Outstanding_x0020_Advance";
@@ -38,10 +40,13 @@ namespace MCAWebAndAPI.Service.Finance
         private const string FieldName_UnitProject = "Project_x002f_Unit";
         private const string FieldName_Name = "Title";
         private const string FieldName_OfficeEmail = "officeemail";
-        private const string FieldName_DED = "Deputy ED";
-        private const string FieldName_Grant_Manager= "Grant Manager";
-        private const string FieldName_Project_Director= "Project Director";
-        private const string FieldValue_Project = "Green Prosperity Project";
+
+        private const string Position_DED = "Deputy ED";
+        private const string Position_GrantManager = "Grant Manager";
+        private const string Position_Director = "Director";
+
+        private const string ProjectUnit_GreenProsperity = "Green Prosperity Project";
+        private const string ProjectUnit_ProgramDiv = "Program Div.";
 
         private const string FieldName_VendorID = "Title";
         private const string FieldName_Email = "Email";
@@ -93,11 +98,13 @@ namespace MCAWebAndAPI.Service.Finance
 
             try
             {
-                if (willCreate) { 
+                if (willCreate)
+                {
                     SPConnector.AddListItem(ListName, updatedValue, siteUrl);
-                    result= SPConnector.GetLatestListItemID(ListName, siteUrl);
+                    result = SPConnector.GetLatestListItemID(ListName, siteUrl);
                 }
-                else { 
+                else
+                {
                     SPConnector.UpdateListItem(ListName, viewModel.ID, updatedValue, siteUrl);
                     result = Convert.ToInt32(viewModel.ID);
                 }
@@ -153,11 +160,11 @@ namespace MCAWebAndAPI.Service.Finance
             viewModel.Staff.Text = staff[FieldName_VendorName] == null ? "" : staff[FieldName_VendorName].ToString();
 
             var listPosition = new Dictionary<string, string>();
-            listPosition.Add(FieldName_DED, viewModel.Project.Value);
-            listPosition.Add(FieldName_Grant_Manager, FieldValue_Project);
-            listPosition.Add(FieldName_Project_Director, FieldValue_Project);
-            
-            foreach(var item in listPosition)
+            listPosition.Add(Position_DED, ProjectUnit_ProgramDiv);
+            listPosition.Add(Position_GrantManager, ProjectUnit_GreenProsperity);
+            listPosition.Add(Position_Director, ProjectUnit_GreenProsperity);
+
+            foreach (var item in listPosition)
             {
                 var caml = @"
                     <View><Query>
@@ -216,20 +223,26 @@ namespace MCAWebAndAPI.Service.Finance
         {
             var list = new List<VendorVM>();
             var listItem = SPConnector.GetList(ListName_Vendor, siteUrl, null);
-            foreach(var item in listItem)
+            foreach (var item in listItem)
             {
                 list.Add(
                     new VendorVM
                     {
                         ID = item[FieldName_ID] == null ? 0 : Convert.ToInt32(item[FieldName_ID]),
                         VendorId = item[FieldName_VendorID] == null ? "" : item[FieldName_VendorID].ToString(),
-                        Name = item[FieldName_VendorName] == null? "": item[FieldName_VendorName].ToString(),
+                        Name = item[FieldName_VendorName] == null ? "" : item[FieldName_VendorName].ToString(),
                         Email = item[FieldName_Email] == null ? "" : item[FieldName_Email].ToString()
                     });
             }
 
             return list;
         }
+
+        public async Task SaveCSVFilesAsync(IEnumerable<HttpPostedFileBase> documents)
+        {
+            SaveCSVFiles(documents);
+        }
+
 
         private OutstandingAdvanceVM ConvertToVM(ListItem listItem)
         {
@@ -255,7 +268,7 @@ namespace MCAWebAndAPI.Service.Finance
 
             return toReturn;
         }
-        
+
         private void SaveAttachment(int? ID, string reference, IEnumerable<HttpPostedFileBase> attachment)
         {
             if (ID != null)
@@ -285,5 +298,106 @@ namespace MCAWebAndAPI.Service.Finance
         {
             return string.Format(OutstandingAdvanceDocument_URL, siteUrl, ID);
         }
+
+        private void SaveCSVFiles(IEnumerable<HttpPostedFileBase> csvFiles)
+        {
+
+            ProcessCSV("");
+
+
+            foreach (var file in csvFiles)
+            {
+                if (file != null)
+                {
+
+                    try
+                    {
+
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error(e.Message);
+                        throw e;
+                    }
+                }
+            }
+        }
+
+        private void ProcessCSV(string fileName)
+        {
+            string tempFolder = Path.GetTempPath();
+
+            string csvPath = tempFolder + "\\ims\\Outstanding Advance CSV.csv";
+
+            DataTable dt = new DataTable();
+            dt.Columns.AddRange(new DataColumn[8] {
+                new DataColumn("DateUpload", typeof(DateTime)),
+                new DataColumn("StaffID", typeof(string)),
+                new DataColumn("StaffName", typeof(string)),
+                new DataColumn("Reference", typeof(string)),
+                new DataColumn("DateDue", typeof(string)),
+                new DataColumn("Currency", typeof(string)),
+                new DataColumn("Amount", typeof(string)),
+                new DataColumn("Project",typeof(string)) });
+
+            List<OutstandingAdvanceVM> imported = new List<OutstandingAdvanceVM>();
+
+
+            string csvData = System.IO.File.ReadAllText(csvPath);
+
+            try
+            {
+                var rowsCount = dt.Rows.Count - 1;
+                bool isHeader = true;
+                int r = 0;
+                string[] rows = csvData.Split('\n');
+
+                foreach (string row in rows)
+                {
+                    if (isHeader)
+                    {
+                        isHeader = false;
+                        continue;
+                    }
+
+                    if (!string.IsNullOrEmpty(row))
+                    {
+                        string[] data = row.Split(',');
+
+                        OutstandingAdvanceVM outstandingAdvance = new OutstandingAdvanceVM();
+                        outstandingAdvance.DateOfUpload = Convert.ToDateTime(data[0]);
+                        outstandingAdvance.Staff.Value = Convert.ToInt32(data[1]);
+                        outstandingAdvance.Staff.Text = Convert.ToString(data[2]);
+                        outstandingAdvance.Reference = Convert.ToString(data[3]);
+                        outstandingAdvance.DueDate = Convert.ToDateTime(data[4]);
+                        outstandingAdvance.Currency.Value = Convert.ToString(data[5]);
+                        outstandingAdvance.Amount = Convert.ToDecimal(data[6]);
+                        outstandingAdvance.Project.Value = Convert.ToString(data[7]);
+
+
+                        imported.Add(outstandingAdvance);
+
+                        dt.Rows.Add();
+                        int c = 0;
+                        foreach (string cell in row.Split(','))
+                        {
+                            dt.Rows[r][c] = cell;
+                            c++;
+                        }
+                    }
+
+                    r++;
+
+                }
+
+                //TODO: Validate imported data
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+        }
+
     }
 }

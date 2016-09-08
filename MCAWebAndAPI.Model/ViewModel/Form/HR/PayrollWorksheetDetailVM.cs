@@ -193,7 +193,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         {
             get
             {
-                return (5 / 100 * Base).ConvertInfinityOrNanToZero();
+                return (0.05 * Base).ConvertInfinityOrNanToZero();
             }
         }
 

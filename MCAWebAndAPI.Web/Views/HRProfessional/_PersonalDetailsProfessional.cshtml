@@ -8,7 +8,12 @@
             @Html.EditorFor(m => m.FirstMiddleName)
         </div>
     </div>
-    
+    <div class="form-group">
+        @Html.Bootstrap().LabelFor(m => m.DivisionProjectUnit).Class("col-sm-4 control-label")
+        <div class="col-sm-8">
+            @Html.EditorFor(m => m.DivisionProjectUnit)
+        </div>
+    </div>
     <div class="form-group">
         @Html.Bootstrap().LabelFor(m => m.CurrentPosition).Class("col-sm-4 control-label")
         <div class="col-sm-8">
@@ -81,12 +86,6 @@
         @Html.Bootstrap().LabelFor(m => m.JoinDate).Class("col-sm-4 control-label")
         <div class="col-sm-8">
             @Html.EditorFor(m => m.JoinDate)
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.Bootstrap().LabelFor(m => m.ProfessionalStatus).Class("col-sm-4 control-label")
-        <div class="col-sm-8">
-            @Html.DisplayFor(m => m.ProfessionalStatus)
         </div>
     </div>
 </div>

@@ -6,56 +6,182 @@
 *@
 
 @{
-    ViewBag.Title = "Edit Petty Cash Payment Voucher";
+    ViewBag.Title = "Petty Cash Journal";
 
 }
 
-@using (Html.BeginForm(
-                                        "Save", "FINPettyCashJournal",
-                                        FormMethod.Post,
-                                        new
-                                        {
-                                            @class = "form-horizontal",
-                                            enctype = "multipart/form-data"
-                                        }))
+@using (Html.BeginForm("Save", "FINPettyCashJournal",FormMethod.Post,
+new
+{
+    @id= "FINPettyCashJournalForm",
+    @class = "form-horizontal",
+    enctype = "multipart/form-data"
+}))
 {
     <fieldset>
         <legend>@ViewBag.Title</legend>
+        <div class="col-sm-12">
+            @Html.HiddenFor(m => m.ID)
+            @Html.HiddenFor(m => m.Operation)
+            @Html.HiddenFor(m => m.ItemEdited)
+        </div>
+        <br/>
+        <div class="col-sm-4">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.DateFrom).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.DateFrom)
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.DateTo).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.DateTo)
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-4" >
+            <div class="form-group">
+                <div class="col-sm-8">
+                    <button id="view-button" class="btn btn-default" type="button">View Journal</button>
+                </div>
+            </div>
+        </div>
+        
+        <legend style="margin-top: 75px;">Petty Cash Transactions</legend>
+            <div class="row">
+                <div class="col-sm-12">
+                    @Html.Partial("_ItemDetails", Model.ItemDetails)
+                </div>
+            </div>
+
+            <div class="col-sm-12">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.TotalAmount).Class("col-xs-9 control-label")
+                    <div class="col-xs-3">
+                        @Html.DisplayFor(m => m.TotalAmount)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.AdvancesForOperationalCar1).Class("col-xs-9 control-label")
+                    <div class="col-xs-3">
+                        @Html.EditorFor(m => m.AdvancesForOperationalCar1, new { @Value = "0" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.AdvancesForOperationalCar2).Class("col-xs-9 control-label")
+                    <div class="col-xs-3">
+                        @Html.EditorFor(m => m.AdvancesForOperationalCar2, new { @Value = "0" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.AdvancesForOperationalCar3).Class("col-xs-9 control-label")
+                    <div class="col-xs-3">
+                        @Html.EditorFor(m => m.AdvancesForOperationalCar3, new { @Value = "0" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.CashOnhand).Class("col-xs-9 control-label")
+                    <div class="col-xs-3">
+                        @Html.DisplayFor(m => m.CashOnhand)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.TotalPettyCashFund).Class("col-xs-9 control-label")
+                    <div class="col-xs-3">
+                        @Html.DisplayFor(m => m.TotalPettyCashFund)
+                    </div>
+                </div>
+            </div>
+
+    </fieldset>
+    <div class="form-actions">
         <div class="row">
             <div class="col-sm-12">
-                @Html.HiddenFor(m => m.ID)
-            </div>
-        </div>
-
-
-        <div class="row">
-            <div class="col-sm-4">
-                <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.DateFrom).Class("col-sm-3 control-label")
-                    <div class="col-sm-8">
-                        @Html.EditorFor(m => m.DateFrom)
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-4">
-                <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.DateTo).Class("col-sm-3 control-label")
-                    <div class="col-sm-8">
-                        @Html.EditorFor(m => m.DateTo)
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-4">
-                <div class="form-group">
-                    <button id="submit-button" class="btn btn-primary" type="submit">
-                        <i class="fa fa-save"></i>
-                        Submit
+                @if (Model.ID > 0)
+                {
+                    <button id="print-button" class="btn btn-default" type="button">
+                        Print
                     </button>
-                </div>
+                }
+                &nbsp;
+                <button id="submit-button" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    Submit
+                </button>
+                <button id="cancel-button" class="btn btn-default" type="button">
+                    Cancel
+                </button>
             </div>
-
         </div>
-    </fieldset>
+    </div>
 }
+
+<script>
+    $(document).ready(function () {
+        $("#view-button").on('click', function () {
+            if ($("#DateFrom").val() > $("#DateTo").val()) {
+                alert("Date (to) cannot be less than Date (from)");
+            } else {
+                $("#ItemEdited").val(true);
+                $("#ItemDetails").data("kendoGrid").dataSource.read();
+            }
+        });
+
+        $("#FINPettyCashJournalForm,#print-button").on('submit', function () {
+            var grid = $("#ItemDetails").data("kendoGrid");
+            var dataSource = grid.dataSource;
+            var recordsOnCurrentView = dataSource.view().length;
+            var totalRecords = dataSource.total();
+
+            if (totalRecords <= 0) {
+                alert("Petty Cash Transactions is required.");
+                return false;
+            }
+
+            if ($("#AdvancesForOperationalCar1").val() == '') {
+                $("#AdvancesForOperationalCar1").val(0);
+            }
+            if ($("#AdvancesForOperationalCar2").val() == '') {
+                $("#AdvancesForOperationalCar2").val(0);
+            }
+            if ($("#AdvancesForOperationalCar3").val() == '') {
+                $("#AdvancesForOperationalCar3").val(0);
+            }
+
+            return true;
+        });
+
+        $('#print-button').click(function (e) {
+            if (!$('form').valid()) {
+                alert('Please make sure that all required fields are filled');
+                return;
+            }
+
+            var actionUrl = $('form').attr("action");
+            var newActionUrl = actionUrl.replace("Save", "Print");
+
+            $('form').prop('action', newActionUrl);
+            $('form').submit();
+            
+        });
+    });
+    
+</script>
+<style>
+    #Fund,#AmountReimbursed,#TotalAmount,#TotalPettyCashFund,#CashOnhand{
+        background-color: #dedede;
+    }
+    .field-validation-error {
+        margin-top:7px !important;
+    }
+</style>

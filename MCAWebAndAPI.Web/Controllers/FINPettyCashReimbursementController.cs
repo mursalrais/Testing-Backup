@@ -34,7 +34,7 @@ namespace MCAWebAndAPI.Web.Controllers
         private const string GL_ActionName = "GetGL";
         private const string PaidTo_EventName = "onSelectPaidTo";
         private const string ValueField = "ID";
-        private const string TextField = "Title";
+        private const string TextField = "NameAndPos";
 
         private const string PrintPageUrl = "~/Views/FINPettyCashReimbursement/Print.cshtml";
         IPettyCashReimbursementService service;
@@ -59,8 +59,9 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult Print(int? ID=null)
         {
             string RelativePath = PrintPageUrl;
+            string domain = "http://" + Request.Url.Authority + "/img/logo.png";
 
-            var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl)?? ConfigResource.DefaultBOSiteUrl;
+            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl)?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);
 
             var viewModel = service.GetPettyCashReimbursement(ID);
@@ -77,7 +78,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 view.View.Render(context, writer);
                 writer.Flush();
                 content = writer.ToString();
-
+                content = content.Replace("{XIMGPATHX}", domain);
                 // Get PDF Bytes
                 try
                 {
@@ -133,35 +134,7 @@ namespace MCAWebAndAPI.Web.Controllers
             return Json(vendors.Select(e => new
             {
                 e.ID,
-                e.Title
-            }), JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult GetProfessional()
-        {
-            var siteUrl = SessionManager.Get<string>("SiteUrl") ?? ConfigResource.DefaultBOSiteUrl;
-            service.SetSiteUrl(siteUrl);
-
-            var vendors = FinService.SharedService.GetProfessionalMaster(siteUrl);
-
-            return Json(vendors.Select(e => new
-            {
-                e.ID,
-                e.Title
-            }), JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult GetWBS()
-        {
-            var siteUrl = SessionManager.Get<string>("SiteUrl") ?? ConfigResource.DefaultBOSiteUrl;
-            service.SetSiteUrl(siteUrl);
-
-            var wbs = FinService.SharedService.GetWBSMaster(siteUrl);
-
-            return Json(wbs.Select(e => new
-            {
-                e.ID,
-                Title = e.Title + " - " + e.WBSDescription
+                Title = e.Title + " - " + e.Name
             }), JsonRequestBehavior.AllowGet);
         }
 
@@ -195,8 +168,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
             viewModel.Professional = new AjaxComboBoxVM
             {
-                ControllerName = PettyCashReimbursement_ControllerName,
-                ActionName = Professional_ActionName,
+                ControllerName = "COMProfessional",
+                ActionName = "GetForCombo",
                 ValueField = ValueField,
                 TextField = TextField,
                 Value = viewModel.Professional.Value
@@ -204,19 +177,19 @@ namespace MCAWebAndAPI.Web.Controllers
 
             viewModel.WBS = new AjaxComboBoxVM
             {
-                ControllerName = PettyCashReimbursement_ControllerName,
-                ActionName = WBS_ActionName,
-                ValueField = ValueField,
-                TextField = TextField,
+                ControllerName = "COMWBS",
+                ActionName = "GetAllAsJsonResult",
+                ValueField = "ID",
+                TextField = "Long",
                 Value = viewModel.WBS.Value
             };
 
             viewModel.GL = new AjaxCascadeComboBoxVM
             {
-                ControllerName = PettyCashReimbursement_ControllerName,
-                ActionName = GL_ActionName,
-                ValueField = ValueField,
-                TextField = TextField,
+                ControllerName = "COMMGL",
+                ActionName = "GetAllAsJsonResult",
+                ValueField = "ID",
+                TextField = "Long",
                 Value = viewModel.GL.Value
             };
 

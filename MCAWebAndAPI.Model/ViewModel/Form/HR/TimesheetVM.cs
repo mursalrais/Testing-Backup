@@ -8,7 +8,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MCAWebAndAPI.Model.ViewModel.Control;
-using MCAWebAndAPI.Model.ViewModel.Form.Common;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
@@ -34,7 +33,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [UIHint("AjaxComboBox")]
         public AjaxComboBoxVM ProfessionalName { get; set; } = new AjaxComboBoxVM
         {
-            ActionName = "GetProfessionalsActive",
+            ActionName = "GetProfessionals",
             ControllerName = "HRDataMaster",
             ValueField = "ID",
             TextField = "Name",
@@ -46,9 +45,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [DisplayName("Professional ID")]
        
 
-       public string ProfesionalUserLogin { get; set; }
-
-       // public string UserEmail { get; set; }
+       public string UserLogin { get; set; }
 
         public string Name { get; set; }
 
@@ -94,8 +91,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public string URL { get; set; }
 
         public IEnumerable<TimesheetDetailVM> TimesheetDetails { get; set; }
-
-        public IEnumerable<WorkflowItemVM> WorkflowItems { get; set; } = new List<WorkflowItemVM>();
 
     }
 }

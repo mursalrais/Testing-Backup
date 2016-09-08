@@ -62,12 +62,12 @@ namespace MCAWebAndAPI.Service.Asset
         public AssetLoanAndReturnItemVM GetPopulatedModelItem(int? ID = default(int?))
         {
             var model = new AssetLoanAndReturnItemVM();
-           
+
 
             return model;
         }
 
-       
+
 
         public bool UpdateHeader(AssetLoanAndReturnHeaderVM viewmodel)
         {
@@ -211,7 +211,7 @@ namespace MCAWebAndAPI.Service.Asset
             //        </ViewFields>
             //        <QueryOptions /></View>";
 
-            var caml = @"<View><Query><Where><Eq><FieldRef Name='ID' /><Value Type='Counter'>"+ (listItem["name"] as FieldLookupValue).LookupId + @"</Value></Eq></Where></Query>
+            var caml = @"<View><Query><Where><Eq><FieldRef Name='ID' /><Value Type='Counter'>" + (listItem["name"] as FieldLookupValue).LookupId + @"</Value></Eq></Where></Query>
              <ViewFields>
                        <FieldRef Name='Title' />
                        <FieldRef Name='Position' />
@@ -228,7 +228,7 @@ namespace MCAWebAndAPI.Service.Asset
 
 
             //viewModel.AccpMemo.Value = Convert.ToString(listItem["acceptancememono"]);
-           
+
             viewModel.ContactNo = Convert.ToString(listItem["professionalmobilephonenr"]);
             if (Convert.ToDateTime(listItem["loandate"]) == DateTime.MinValue)
             {
@@ -238,14 +238,14 @@ namespace MCAWebAndAPI.Service.Asset
             {
                 viewModel.LoanDate = Convert.ToDateTime(listItem["loandate"]);
             }
-          
+
             viewModel.ID = ID;
 
             var caml1 = @"<View><Query>
                         <Where>
                            <Eq>
                                <FieldRef Name='assetloanandreturn' />
-                                <Value Type='Lookup'>"+ ID + @"</Value>
+                                <Value Type='Lookup'>" + ID + @"</Value>
                            </Eq>
                         </Where>
                     </Query>
@@ -291,7 +291,7 @@ namespace MCAWebAndAPI.Service.Asset
 
         public IEnumerable<AssetLoanAndReturnItemVM> GetDetails(int? headerID)
         {
-           
+
             var caml = @"<View><Query><Where><Eq><FieldRef Name='assetloanandreturn' /><Value Type='Lookup'>" + headerID.ToString() + "</Value></Eq></Where></Query></View>";
             var details = new List<AssetLoanAndReturnItemVM>();
 
@@ -325,25 +325,32 @@ namespace MCAWebAndAPI.Service.Asset
             _assetSubAsset.Value = (item["assetsubasset"] as FieldLookupValue).LookupId;
             _assetSubAsset.Text = Convert.ToString(ListAssetSubAsset["AssetID"]) + " - " + Convert.ToString(ListAssetSubAsset["Title"]);
 
-          
+            var model = new AssetLoanAndReturnItemVM();
+            model.ID = Convert.ToInt32(item["ID"]);
 
-            return new AssetLoanAndReturnItemVM
+            model.EstReturnDate = Convert.ToDateTime(item["estreturndate"]);
+         
+
+            DateTime? DT = new DateTime();
+            if (Convert.ToDateTime(item["returndate"]) == DateTime.MinValue)
             {
-                ID = Convert.ToInt32(item["ID"]),
-               EstReturnDate = Convert.ToDateTime(item["estreturndate"]),
-               ReturnDate = Convert.ToDateTime(item["returndate"]),
-                //description = Convert.ToString(ListAssetSubAsset["Title"]),
-                //quantity = 1,
-                AssetSubAsset = AssetLoanAndReturnItemVM.GetAssetSubAssetDefaultValue(_assetSubAsset),
-                //Province = AssetLoanAndReturnItemVM.GetProvinceDefaultValue(_province),
-                Status = Convert.ToString(item["status"])
-            };
+                model.ReturnDate = null;
+            }else
+            {
+                model.ReturnDate = Convert.ToDateTime(item["returndate"]);
+            }
+
+            model.AssetSubAsset = AssetLoanAndReturnItemVM.GetAssetSubAssetDefaultValue(_assetSubAsset);
+            model.Status = Convert.ToString(item["status"]);
+
+            return model;
         }
 
         public IEnumerable<AssetMasterVM> GetAssetSubAsset()
-            {
-            
+        {
+
             var models = new List<AssetMasterVM>();
+
 
             foreach (var item in SPConnector.GetList("Asset Master", _siteUrl))
             {
@@ -353,7 +360,7 @@ namespace MCAWebAndAPI.Service.Asset
             return models;
         }
 
-        
+
 
         private AssetMasterVM ConvertToModelAssetSubAsset(ListItem item)
         {
@@ -362,6 +369,10 @@ namespace MCAWebAndAPI.Service.Asset
             viewModel.ID = Convert.ToInt32(item["ID"]);
             viewModel.AssetNoAssetDesc.Value = Convert.ToString(item["AssetID"]);
             viewModel.AssetDesc = Convert.ToString(item["Title"]);
+
+
+
+
             return viewModel;
         }
 
@@ -549,9 +560,9 @@ namespace MCAWebAndAPI.Service.Asset
                     var getInfo = GetProfMasterInfo(viewmodel.Professional.Value, _siteUrl);
                     if (getInfo != null)
                     {
-                       // columnValues.Add("Professional0", new FieldLookupValue { LookupId = Convert.ToInt32(getInfo.ID) });
+                        // columnValues.Add("Professional0", new FieldLookupValue { LookupId = Convert.ToInt32(getInfo.ID) });
                         columnValues.Add("professionalposition", getInfo.Position);
-                        columnValues.Add("professionalname",getInfo.FirstMiddleName);
+                        columnValues.Add("professionalname", getInfo.FirstMiddleName);
                         columnValues.Add("projectunit", getInfo.CurrentPosition.Text);
                         columnValues.Add("professionalmobilephonenr", getInfo.MobileNumberOne);
                         columnValues.Add("Purpose", viewmodel.Purpose);
@@ -651,7 +662,7 @@ namespace MCAWebAndAPI.Service.Asset
             columnValues.Add("projectunit", getInfo.CurrentPosition.Text);
             columnValues.Add("contactnumber", getInfo.MobileNumberOne);
 
-           // columnValues.Add("professionalname", new FieldLookupValue { LookupId = Convert.ToInt32(Convert.ToInt32(profesional[0])) });
+            // columnValues.Add("professionalname", new FieldLookupValue { LookupId = Convert.ToInt32(Convert.ToInt32(profesional[0])) });
             //columnValues.Add("professionalposition", new FieldLookupValue { LookupId = Convert.ToInt32(Convert.ToInt32(profesional[1])) });
 
             columnValues.Add("projectunit", header.Project);
@@ -740,7 +751,7 @@ namespace MCAWebAndAPI.Service.Asset
 
         private IEnumerable<string> GetFromListHR(string listname, string f1, string f2, string siteUrl)
         {
-                var siteHr = siteUrl.Replace("/bo", "/hr");
+            var siteHr = siteUrl.Replace("/bo", "/hr");
             List<string> _choices = new List<string>();
             var listItems = SPConnector.GetList(listname, siteHr);
             foreach (var item in listItems)

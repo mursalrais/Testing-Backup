@@ -77,7 +77,12 @@
             function importCSV(e) {
                 var url = "/ASSAssignmentOfAsset/SubmitUpload?listName=" + "@Model.ListName";
                 $.getJSON(url, function (data) {
-                    showModalWindow(data);
+                    var query = window.location.search;
+                    //alert(query);
+                    query = query.split('=');
+                    query = query[1].split('&');
+                    alert("Redirecting....");
+                    window.location = query[0] + "/Lists/Asset%20Assignment/AllItems.aspx";
                 });
 
             }

@@ -17,6 +17,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [DisplayName("Item")]
         public string Item { get; set; }
 
+        [DisplayName("Item")]
         public string ItemExitProcedure { get; set; }
 
         //[UIHint("InGridAjaxCascadeComboBox")]
@@ -67,6 +68,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// Checklist Item Approval
         /// </summary>
         [UIHint("InGridComboBox")]
+        [DisplayName("Checklist Item")]
         public InGridComboBoxVM CheckListItemApproval { get; set; } = new InGridComboBoxVM();
 
         public static InGridComboBoxVM GetCheckListItemApprovalDefaultValue(InGridComboBoxVM model = null)
@@ -100,7 +102,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// Date of Approval
         /// </summary>
         [UIHint("Date")]
-        [DisplayName("Date of Approval")]
+        [DisplayName("Date")]
         public DateTime? DateOfApproval { get; set; } = DateTime.Now;
 
         /// <summary>
@@ -135,6 +137,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public bool IsSequential { get; set; }
 
         [UIHint("InGridAjaxComboBox")]
+        [DisplayName("Approver Name")]
         public AjaxComboBoxVM ApproverUserName { get; set; } = new AjaxComboBoxVM();
 
         /// <summary>
@@ -279,6 +282,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
                 e.Value == model.Value : e.Text == model.Text);
         }
 
+        [DisplayName("Indicator")]
         public string ApprovalIndicator { get; set; }
 
         public string ApprovalMail { get; set; }

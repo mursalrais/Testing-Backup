@@ -11,7 +11,7 @@
     .Columns(columns =>
     {
         columns.Bound(p => p.ddlProfessional).ClientTemplate("#= ddlProfessional.Text #" +
-                          "<input type='hidden' name='AdjustmentDetails[#= GetDetailAdjustment(data)#].ddlProfessional.Value' value='#= ddlProfessional.Value #' />"
+                          "<input type='hidden' id='Profid#= GetDetailAdjustment(data)#' name='AdjustmentDetails[#= GetDetailAdjustment(data)#].ddlProfessional.Value' value='#= ddlProfessional.Value #' />"
                         )
                         .EditorViewData(new
                         {
@@ -58,15 +58,12 @@
         columns.Bound(p => p.remark).ClientTemplate("#= remark #" +
         "<input type='hidden' name='AdjustmentDetails[#= GetDetailAdjustment(data)#].remark' value='#= remark #' />");
 
-        columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
-           .Click("onDeleteKendoDetail")).Width(100);
-
         columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
         "<input type='hidden' name='AdjustmentDetails[#= GetDetailAdjustment(data)#].ID' value='#= ID #' />"
          );
 
         columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
-           "<input type='hidden' name='AdjustmentDetails[#= GetDetailAdjustment(data)#].EditMode' value='#= EditMode #' />"
+           "<input type='hidden' id='Editid#= GetDetailAdjustment(data)#' name='AdjustmentDetails[#= GetDetailAdjustment(data)#].EditMode' value='#= EditMode #' />"
          );
 
     })

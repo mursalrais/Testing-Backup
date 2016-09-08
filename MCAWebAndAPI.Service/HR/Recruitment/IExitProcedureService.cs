@@ -51,7 +51,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         Task CreateExitProcedureChecklistAsync(ExitProcedureVM exitProcedure, int? exitProcID, IEnumerable<ExitProcedureChecklistVM> exitProcedureChecklist, string requestorposition, string requestorunit, int? positionID);
 
         void SendEmail(ExitProcedureVM header, string workflowTransactionListName, string transactionLookupColumnName,
-            int exitProcID, string messageForApprover, string messageForRequestor);
+            int exitProcID, string _siteUrl, string urlResource, string requestorMail, string messageForRequestor);
 
         void SendMailDocument(string requestorMail, string documentExitProcedure);
 

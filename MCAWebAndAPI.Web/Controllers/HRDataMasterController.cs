@@ -73,30 +73,6 @@ namespace MCAWebAndAPI.Web.Controllers
                     Desc2 = string.Format("{0}", e.FirstMiddleName)}),JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetProfessionalsActive()
-        {
-            _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
-
-            var professionals = GetFromExistingSessionProfesionalsActive();
-            professionals = professionals.OrderBy(e => e.FirstMiddleName);
-
-            return Json(professionals.Select(e =>
-                new {
-                    e.ID,
-                    e.Name,
-                    e.FirstMiddleName,
-                    e.Position,
-                    e.Status,
-                    e.OfficeEmail,
-                    e.Project_Unit,
-
-
-                    Desc = string.Format("{0}", e.Name),
-                    Desc1 = string.Format("{0} - {1}", e.Name, e.Position),
-                    Desc2 = string.Format("{0}", e.FirstMiddleName)
-                }), JsonRequestBehavior.AllowGet);
-        }
-
         public JsonResult GetProfessionalsManpower()
         {
             _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
@@ -142,6 +118,7 @@ namespace MCAWebAndAPI.Web.Controllers
                         e.JoinDateTemp,
                         e.InsuranceAccountNumber,
                         e.MobileNumber,
+                        e.TaxStatus
                         
 
                     }
@@ -297,29 +274,6 @@ namespace MCAWebAndAPI.Web.Controllers
             //Get existing session variable
             var sessionVariable = System.Web.HttpContext.Current.Session["ProfessionalMaster"] as IEnumerable<ProfessionalMaster>;
             var professionals = sessionVariable ?? _dataMasterService.GetProfessionals();
-
-            if (sessionVariable == null) // If no session variable is found
-                System.Web.HttpContext.Current.Session["ProfessionalMaster"] = professionals;
-            return professionals;
-        }
-
-        private IEnumerable<ProfessionalMaster> GetFromExistingSessionActive()
-        {
-            //Get existing session variable
-            var sessionVariable = System.Web.HttpContext.Current.Session["ProfessionalMaster"] as IEnumerable<ProfessionalMaster>;
-            var professionals = sessionVariable ?? _dataMasterService.GetProfessionalsActive();
-
-            if (sessionVariable == null) // If no session variable is found
-                System.Web.HttpContext.Current.Session["ProfessionalMaster"] = professionals;
-            return professionals;
-        }
-
-
-        private IEnumerable<ProfessionalMaster> GetFromExistingSessionProfesionalsActive()
-        {
-            //Get existing session variable
-            var sessionVariable = System.Web.HttpContext.Current.Session["ProfessionalMaster"] as IEnumerable<ProfessionalMaster>;
-            var professionals = sessionVariable ?? _dataMasterService.GetProfessionalsActive();
 
             if (sessionVariable == null) // If no session variable is found
                 System.Web.HttpContext.Current.Session["ProfessionalMaster"] = professionals;

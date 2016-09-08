@@ -14,7 +14,7 @@ namespace MCAWebAndAPI.Service.Utils
         static string UserName =  "";
         static string Password = "";
 
-        public static Task ExecuteQueryAsyncs( ClientContext clientContext)
+        public static Task ExecuteQueryAsync( ClientContext clientContext)
         {
             try
             {
@@ -252,8 +252,7 @@ namespace MCAWebAndAPI.Service.Utils
 
                 try
                 {
-                    // ExecuteQueryAsync(context);
-                    context.ExecuteQuery();
+                    ExecuteQueryAsync(context);
                 }
                 catch (Exception e)
                 {
@@ -304,8 +303,7 @@ namespace MCAWebAndAPI.Service.Utils
 
                     try
                     {
-                        //ExecuteQueryAsync(context);
-                        context.ExecuteQuery();
+                        ExecuteQueryAsync(context);
                     }
                     catch (Exception e)
                     {
@@ -449,8 +447,7 @@ namespace MCAWebAndAPI.Service.Utils
                     try
                     {
                         newItem.Update();
-                        //ExecuteQueryAsync(context);
-                        context.ExecuteQuery();
+                        ExecuteQueryAsync(context);
                     }
                     catch (Exception e)
                     {
@@ -696,8 +693,8 @@ namespace MCAWebAndAPI.Service.Utils
 
                 try
                 {
-                    context.ExecuteQuery();
-                    //ExecuteQueryAsync(context);
+                    // context.ExecuteQuery();
+                    ExecuteQueryAsync(context);
                 }
                 catch (Exception e)
                 {
@@ -726,8 +723,7 @@ namespace MCAWebAndAPI.Service.Utils
 
                     try
                     {
-                        // ExecuteQueryAsync(context);
-                        context.ExecuteQuery();
+                        ExecuteQueryAsync(context);
                     }
                     catch (Exception e)
                     {

@@ -40,10 +40,16 @@ namespace MCAWebAndAPI.Web.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult> Save(FormCollection form, PettyCashReplenishmentVM viewModel)
+        public async Task<ActionResult> Save(string actionType, FormCollection form, PettyCashReplenishmentVM viewModel)
         {
+            
             var siteUrl = SessionManager.Get<string>(SessionSiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);
+
+            if (actionType != "Save")
+            {
+                return Redirect(string.Format(FirstPageUrl, siteUrl));
+            }
 
             try
             {

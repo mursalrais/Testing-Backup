@@ -56,7 +56,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
             }
         };
 
-        [DisplayName("Vendor")]
+        [DisplayName("Contractor")]
         [UIHint("AjaxComboBox")]
         public AjaxComboBoxVM Vendor { get; set; } = new AjaxComboBoxVM();
 
@@ -68,7 +68,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 
         [Required]
         [DisplayName("Tax Period")]
-        [UIHint("Date")]
+        [UIHint("Month")]
         [DataType(DataType.Date)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MMM-yyyy}")]
         public DateTime Period { get; set; } = DateTime.Now;
