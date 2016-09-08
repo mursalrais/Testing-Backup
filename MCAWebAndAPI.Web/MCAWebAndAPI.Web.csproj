@@ -1175,6 +1175,7 @@
     <Content Include="Views\ASSAssetLandingPage\_assetFixedAssetPCFF.cshtml" />
     <Content Include="Views\ASSAssetLandingPage\_assetSmallValueAssetPCFF.cshtml" />
     <Content Include="Views\FINOutstandingAdvance\UploadCSV.cshtml" />
+    <Content Include="Views\HRPerformanceEvaluation\Dummy.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

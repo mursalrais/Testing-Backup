@@ -35,6 +35,7 @@ namespace MCAWebAndAPI.Web.Controllers
             
             var viewModel = _service.GetPerformanceMonitoring(ID);
             ViewBag.Type = type;
+            viewModel.EditType = type;
 
             return View("PerformanceMonitoring", viewModel);
         }
@@ -75,7 +76,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 }                
             }
             else
-            {
+            {               
                 //update
                 try
                 {
