@@ -38,7 +38,7 @@ namespace MCAWebAndAPI.Web.Controllers
             
             var viewModel = _service.GetPerformanceEvaluation(ID);
             ViewBag.Type = type;
-
+            viewModel.EditType = type;
             return View("PerformanceEvaluation", viewModel);
         }
         [HttpPost]

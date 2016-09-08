@@ -8,7 +8,7 @@ namespace MCAWebAndAPI.Model.HR.DataMaster
 {
     public class AdjustmentMaster
     {
-        public string ProfessionalID { get; set; }
+        public int ProfessionalID { get; set; }
 
         public DateTime AdjustmentPeriod { get; set; }
 

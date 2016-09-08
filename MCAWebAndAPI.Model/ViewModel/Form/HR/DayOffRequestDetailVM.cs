@@ -171,7 +171,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
                 "Professional’s separation date is on or after 19 of the month",
                 "Unscheduled closing of MCA-Indonesia office(s)",
                 "Voting Day",
-                "Service as a court witness",
+                "Service as  a court witness",
                 "Other"
             };
 

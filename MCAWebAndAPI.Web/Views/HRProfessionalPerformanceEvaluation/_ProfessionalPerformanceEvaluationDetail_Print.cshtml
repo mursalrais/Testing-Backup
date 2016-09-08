@@ -2,56 +2,24 @@
 @model ProfessionalPerformanceEvaluationVM
 
 <div class="col-xs-12">
-    <table class="table table-striped ">
-        <thead>
-            <tr>
-                <th rowspan="2">Project Or Unit Goals</th>
-                <th rowspan="2">Category</th>
-                <th rowspan="2">Individual Goal And Plan</th>
-                <th rowspan="2">Planned Weight</th>
-                <th rowspan="2">Actual Weight</th>
-                <th rowspan="2">Score</th>
-                <th rowspan="2">Total Score</th>
-                <th rowspan="2">Output</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.ProfessionalPerformanceEvaluationDetails)
-            {
-                <tr>
-                    <td width="300px">@Convert.ToString(item.ProjectOrUnitGoals)</td>
-                    <td>@Convert.ToString(item.Category.Text)</td>
-                    <td width="300px">@Convert.ToString(item.IndividualGoalAndPlan)</td>
-                    <td>@Convert.ToString(item.PlannedWeight)%</td>
-                    <td>@Convert.ToString(item.ActualWeight)%</td>
-                    <td>@Convert.ToString(item.Score)</td>
-                    <td>@Convert.ToString(item.TotalScore)</td>
-                    <td width="300px">@Convert.ToString(item.Output)</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-    </div>
-
-    <style type="text/css">
-                table {
-                    border-collapse: collapse;
-                }
-
-                th {
-                    border: 1px solid Black;
-                    padding: 5px 15px;
-                    text-align: center;
-                    vertical-align: text-top;
-                    background-color: GrayText;
-                    vertical-align: top;
-                }
-
-                td {
-                    border: 1px solid Black;
-                    padding: 5px 15px;
-                    text-align: center;
-                    vertical-align: text-top;
-                    vertical-align: top;
-                }
-    </style>
+    @(Html.Kendo().Grid(Model.ProfessionalPerformanceEvaluationDetails)
+        .Name("ProfessionalPerformanceEvaluationDetails")
+        .Columns(columns =>
+        {
+            columns.Bound(p => p.ProjectOrUnitGoals).Width(250);
+            columns.Bound(p => p.Category).ClientTemplate("#= Category.Text #").Width(400);
+            columns.Bound(p => p.IndividualGoalAndPlan).Width(250);
+            columns.Bound(p => p.PlannedWeight).ClientTemplate("#= PlannedWeight #%").Width(100);
+            columns.Bound(p => p.ActualWeight).ClientTemplate("#= ActualWeight #%").Width(100);
+            columns.Bound(p => p.Score).Width(100);
+            columns.Bound(p => p.TotalScore).Width(100);
+            columns.Bound(p => p.Output).Width(250);
+        })
+        .DataSource(dataSource => dataSource.Ajax()
+                   .Model(model =>
+                   {
+                       model.Id(p => p.ID);
+                   })
+        )
+    )
+</div>

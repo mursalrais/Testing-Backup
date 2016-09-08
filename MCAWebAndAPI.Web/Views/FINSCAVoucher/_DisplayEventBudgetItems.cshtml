@@ -1,5 +1,6 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.Finance
-@model IEnumerable<SCAVoucherItemsVM>
+@model SCAVoucherVM
+
 @*
     Wireframe FIN06: SCA Voucher
     i.e.: Special Cash Advance Voucher
@@ -7,13 +8,13 @@
 
 
 <div class="col-xs-12">
-    @(Html.Kendo().Grid(Model)
+    @(Html.Kendo().Grid(Model.SCAVoucherItems)
     .Name("EventBudgetDetail")
     .Columns(columns =>
     {
-        columns.Bound(p => p.WBS).ClientTemplate("#= WBS #" + "<input type='hidden' name='SCAVoucherItems[#= getItem(data)#].WBSID' value='#= WBSID #' />");
-        columns.Bound(p => p.GL).ClientTemplate("#= GL #" + "<input type='hidden' name='SCAVoucherItems[#= getItem(data)#].GLID' value='#= GLID #' />");
-        columns.Bound(p => p.Amount).ClientTemplate("#=kendo.toString(Amount,'n0')#" + "<input type='hidden' name='SCAVoucherItems[#= getItem(data)#].Amount' value='#= Amount #' />");
+        columns.Bound(p => p.WBS);
+        columns.Bound(p => p.GL);
+        columns.Bound(p => p.Amount);
 
     })
     .DataSource(dataSource => dataSource.Ajax()
@@ -25,11 +26,3 @@
         )
     )
 </div>
-
-
-<script>
-    function getItem(dataItem) {
-        var data = $("#EventBudgetDetail").data("kendoGrid").dataSource.data();
-        return data.indexOf(dataItem);
-    }
-</script>

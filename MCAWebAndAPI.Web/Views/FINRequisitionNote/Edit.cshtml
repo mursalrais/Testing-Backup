@@ -23,7 +23,6 @@
             <div class="col-sm-6">
                 @Html.HiddenFor(m => m.ID)
                 @Html.HiddenFor(m => m.Title)
-                @Html.HiddenFor(m => m.UserEmail)
             </div>
         </div>
         <div class="row">
@@ -49,12 +48,9 @@
                 <button id="print-button" class="btn btn-default" type="button">
                     Print
                 </button>
-                <button id="submit-button" class="btn btn-primary" type="submit" value="Save" name="actionType">
+                <button id="submit-button" class="btn btn-primary" type="submit">
                     <i class="fa fa-save"></i>
                     Submit
-                </button>
-                <button id="cancel-button" class="btn btn-default cancel" type="submit" value="Cancel" name="actionType">
-                    Cancel
                 </button>
             </div>
         </div>

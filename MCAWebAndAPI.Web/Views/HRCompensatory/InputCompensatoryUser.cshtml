@@ -69,6 +69,10 @@ OnFailure = "onFailureForm"
                 <i class="fa fa-clipboard"></i>
                 Save As Draft
             </button>
+            <button id="cancel-button" class="btn btn-primary">
+                <i class="fa fa-ban"></i>
+                Cancel
+            </button>
         </div>
     </div>
 }
@@ -165,12 +169,11 @@ OnFailure = "onFailureForm"
                             var rowgrid = $("#CompensatoryDetails").data("kendoGrid").tbody.find("tr");
                             var valdate = true;
                             var i = -1;
+                            var j = -1;
                             rowgrid.each(function (e) {
                                 i++;
                                 var xdate = $("#Dateid" + i).val();
                                 var xEdit = $("#Editid" + i).val();
-                                var j = -1;
-
                                 rowgrid.each(function (e) {
                                     j++;
                                     var ydate = $("#Dateid" + j).val();
@@ -181,8 +184,6 @@ OnFailure = "onFailureForm"
                                                 if (yEdit != -1) {
                                                     if (xdate == ydate) {
                                                         valdate = false;
-                                                        return false;
-
                                                     }
                                                 }
                                             }

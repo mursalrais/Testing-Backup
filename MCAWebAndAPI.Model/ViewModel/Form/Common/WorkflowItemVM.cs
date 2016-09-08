@@ -23,7 +23,13 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Common
 
         public string RequestorPosition { get; set; }
 
+        public string ApproverEmail { get; set; }
+
+        public string Status { get; set; }
+
         public int? ApproverPositionId { get; set; }
+
+        public string ApproverNameText { get; set; }
 
         [DisplayName("Approver Unit")]
         public string ApproverUnitText { get; set; }

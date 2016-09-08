@@ -8,6 +8,7 @@ using Microsoft.SharePoint.Client;
 using System.Threading.Tasks;
 using System.Linq;
 using MCAWebAndAPI.Model.ViewModel.Control;
+using View = System.Web.UI.WebControls.View;
 
 namespace MCAWebAndAPI.Service.Common
 {
@@ -450,6 +451,51 @@ namespace MCAWebAndAPI.Service.Common
             return workflowItems;
         }
 
+        public async Task<IEnumerable<WorkflowItemVM>> GetWorkflowDetailsTimeSheet(string requestor, 
+            string listName,int? headerid=null)
+        {
+            var viewModel = new WorkflowRouterVM();
+
+            viewModel.ListName = listName;
+
+            // Get Position in Professional Master
+            var caml = @"<View><Query><Where><Eq>
+                <FieldRef Name='officeemail' /><Value Type='Text'>" + requestor +
+                @"</Value></Eq></Where></Query><ViewFields><FieldRef Name='Position' /><FieldRef Name='Project_x002f_Unit' /></ViewFields><QueryOptions /></View>";
+
+            int? positionID = 0;
+            foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl, caml))
+            {
+                viewModel.RequestorPosition = FormatUtil.ConvertLookupToValue(item, "Position");
+                positionID = FormatUtil.ConvertLookupToID(item, "Position");
+
+                break;
+            }
+
+            // Get Unit in Position Master
+            var position = SPConnector.GetListItem(SP_POSMAS_LIST_NAME, positionID, _siteUrl);
+            viewModel.RequestorUnit = Convert.ToString(position["projectunit"]);
+
+            // Get List of Workflow Items based on List name, Requestor Position, and Requestor Unit
+            caml = @"<View>  
+            <Query> 
+               <Where><And><And><Eq><FieldRef Name='requestorposition' /><Value Type='Lookup'>" + viewModel.RequestorPosition +
+               @"</Value></Eq><Eq><FieldRef Name='requestorunit' /><Value Type='Choice'>" + viewModel.RequestorUnit + @"</Value></Eq></And><Eq>
+               <FieldRef Name='transactiontype' /><Value Type='Choice'>" + listName + @"</Value></Eq></And></Where> 
+            <OrderBy><FieldRef Name='approverlevel' /></OrderBy>
+            </Query> 
+            </View>";
+
+            var workflowItems = new List<WorkflowItemVM>();
+            foreach (var item in SPConnector.GetList(SP_WORKFLOW_LISTNAME, _siteUrl, caml))
+            {
+                var vm = await ConvertToWorkflowDetailTimeSheet(item);
+                workflowItems.Add(vm);
+            }
+
+            return workflowItems;
+        }
+
         private async Task<WorkflowItemVM> ConvertToWorkflowDetail(ListItem item)
         {
             var viewModel = new WorkflowItemVM();
@@ -464,6 +510,33 @@ namespace MCAWebAndAPI.Service.Common
 
             var userNames = await getApproverNamesTask;
             var userName = userNames.FirstOrDefault();
+            viewModel.ApproverEmail = userName.UserLogin;
+            viewModel.ApproverName = AjaxComboBoxVM.GetDefaultValue(new AjaxComboBoxVM
+            {
+                Text = userName.Name,
+                Value = userName.ID,
+            });
+
+            return viewModel;
+        }
+
+        private async Task<WorkflowItemVM> ConvertToWorkflowDetailTimeSheet(ListItem item)
+        {
+            var viewModel = new WorkflowItemVM();
+            viewModel.ApproverPositionText = FormatUtil.ConvertLookupToValue(item, "approverposition");
+            viewModel.ApproverPositionId = FormatUtil.ConvertLookupToID(item, "approverposition");
+            Task<IEnumerable<ProfessionalMaster>> getApproverNamesTask =
+                GetApproverUserNames(viewModel.ApproverPositionText);
+
+            viewModel.Level = Convert.ToString(item["approverlevel"]);
+
+            viewModel.ApproverUnitText = Convert.ToString(item["approverunit"]);
+
+            var userNames = await getApproverNamesTask;
+            var userName = userNames.FirstOrDefault();
+            viewModel.ApproverEmail = userName.UserLogin;
+            viewModel.Status = "Pending";
+            viewModel.ApproverNameText = userName.Name;
             viewModel.ApproverName = AjaxComboBoxVM.GetDefaultValue(new AjaxComboBoxVM
             {
                 Text = userName.Name,
@@ -532,6 +605,25 @@ namespace MCAWebAndAPI.Service.Common
             return WorkflowItems;
         }
 
+        public async Task<IEnumerable<WorkflowItemVM>> CheckWorkflowTimesheet(int headerID, string workflowTransactionListName, string transactionLookupColumnName)
+        {
+            var caml = @"<View>  
+            <Query> 
+               <Where><Eq><FieldRef Name='" + transactionLookupColumnName + @"' /><Value Type='Lookup'>" + headerID + @"</Value></Eq></Where> 
+            </Query> 
+      </View>";
+
+            var count = SPConnector.GetList(workflowTransactionListName, _siteUrl, caml).Count();
+            var WorkflowItems = new List<WorkflowItemVM>();
+            var viewModel = new WorkflowItemVM();
+            foreach (var item in SPConnector.GetList(workflowTransactionListName, _siteUrl, caml))
+            {
+                WorkflowItems.Add(ConvertToWorkflowItemTimesheet(item));
+            }
+            return WorkflowItems;
+        }
+
+
         private WorkflowItemVM ConvertToWorkflowItem(ListItem item)
         {
             return new WorkflowItemVM
@@ -540,6 +632,26 @@ namespace MCAWebAndAPI.Service.Common
                 ApproverUnitText = Convert.ToString(item["projectunit"]),
                 ApproverPositionText = FormatUtil.ConvertLookupToValue(item, "position"),
                 ApproverPositionId = FormatUtil.ConvertLookupToID(item, "position"),
+                ApproverName = AjaxComboBoxVM.GetDefaultValue(new AjaxComboBoxVM
+                {
+                    Text = FormatUtil.ConvertLookupToValue(item, "approvername"),
+                    Value = FormatUtil.ConvertLookupToID(item, "approvername_x003a_ID"),
+                })
+            };
+        }
+
+        private WorkflowItemVM ConvertToWorkflowItemTimesheet(ListItem item)
+        {
+            return new WorkflowItemVM
+            {
+                ID = Convert.ToInt32(item["ID"]),
+                ApproverEmail = FormatUtil.ConvertLookupToValue(item, "approvername_x003a_Office_x0020_"),
+                Status = Convert.ToString(item["status"]),
+                Level = Convert.ToString(item["approverlevel"]),
+                ApproverUnitText = Convert.ToString(item["projectunit"]),
+                ApproverPositionText = FormatUtil.ConvertLookupToValue(item, "position"),
+                ApproverPositionId = FormatUtil.ConvertLookupToID(item, "position"),
+                ApproverNameText = FormatUtil.ConvertLookupToValue(item, "approvername"),
                 ApproverName = AjaxComboBoxVM.GetDefaultValue(new AjaxComboBoxVM
                 {
                     Text = FormatUtil.ConvertLookupToValue(item, "approvername"),

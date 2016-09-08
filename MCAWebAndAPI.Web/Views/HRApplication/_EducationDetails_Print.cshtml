@@ -9,34 +9,16 @@
     .Name("EducationDetails")
     .Columns(columns =>
     {
-    columns.Bound(p => p.University).Width(250);
-    columns.Bound(p => p.Subject).Width(250);
-    //columns.Bound(p => p.YearOfGraduation).ClientTemplate(("#= YearOfGraduation.getFullYear() #")).Width(250);
-    columns.Bound(p => p.YearOfGraduation).Hidden().ClientTemplate("#=kendo.toString(YearOfGraduation, 'MM/dd/yyyy') #" +
-                       "<input type='hidden' name='EducationDetails[#= getEducationDetail(data)#].YearOfGraduation' value='#= YearOfGraduation #' />"
-                     ).Width(150);
-        
-        columns.Bound(p => p.StrYearOfGraduations).Width(250);
-        @*columns.Bound(p => p.YearOfGraduation).Template(@<text></text>).ClientTemplate("#=kendo.toString(YearOfGraduation,'yyyy-MM-dd')#").Width(150);*@
+        columns.Bound(p => p.University).Width(250);
+        columns.Bound(p => p.Subject).Width(250);
+        columns.Bound(p => p.YearOfGraduation).ClientTemplate(("#= YearOfGraduation.getFullYear() #")).Width(250);
         columns.Bound(p => p.Remarks);
     })
     .DataSource(dataSource => dataSource.Ajax()
                    .Model(model =>
                    {
                        model.Id(p => p.ID);
-                   }).ServerOperation(false)
-    ))
+                   }))
+    )
     
 </div>
-
-<script>
-    function getEducationDetail(dataItem) {
-        var data = $("#EducationDetails").data("kendoGrid").dataSource.data();
-        return data.indexOf(dataItem);
-    }
-
-    function onDataBoundEducationDetails(e) {
-        var grid = $("#EducationDetails").data("kendoGrid");
-        hideDeletedRowKendoDetail(grid);
-    }
-</script>

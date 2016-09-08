@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 using Microsoft.SharePoint.Client;
-using static MCAWebAndAPI.Model.ViewModel.Form.Finance.PettyCashTransactionItem;
-using System.Threading.Tasks;
-using System.Collections.Concurrent;
 
 namespace MCAWebAndAPI.Service.Finance
 {
@@ -19,31 +15,16 @@ namespace MCAWebAndAPI.Service.Finance
 
         public IEnumerable<PettyCashTransactionItem> GetPettyCashStatements(DateTime dateFrom, DateTime dateTo)
         {
+            List<PettyCashTransactionItem> pettyCashStatements = new List<PettyCashTransactionItem>();
 
-            var pettyCashStatements = new List<PettyCashTransactionItem>();
-            var list1 = new List<PettyCashTransactionItem>();
-            var list2 = new List<PettyCashTransactionItem>();
-            var list3 = new List<PettyCashTransactionItem>();
-            var list4 = new List<PettyCashTransactionItem>();
+            pettyCashStatements.AddRange(PettyCashPaymentVoucherService.GetPettyCashTransaction(siteUrl, dateFrom, dateTo));
+            pettyCashStatements.AddRange(PettyCashSettlementService.GetPettyCashTransaction(siteUrl, dateFrom, dateTo));
+            pettyCashStatements.AddRange(PettyCashReimbursementService.GetPettyCashTransaction(siteUrl, dateFrom, dateTo));
+            pettyCashStatements.AddRange(PettyCashReplenishmentService.GetPettyCashTransaction(siteUrl, dateFrom, dateTo));
 
-            //We probably could use ConcurrentBag (thread safe list), but ConcurrentBag does not have AddRange method so we will have to loop to add to the ConcurrentBag.
-            //That will be on separate thread, so perhaps the loop is not so bad.
-            //But still not which one is faster: using ConcurrentBag with loop or 4 separate list as below.
-            Task cashPaymentVoucherService = Task.Run(() => { list1.AddRange(PettyCashPaymentVoucherService.GetPettyCashTransaction(siteUrl, dateFrom, dateTo, Post.CR)); });
-            Task cashSettlementService = cashSettlementService = Task.Run(() => { list2.AddRange(PettyCashSettlementService.GetPettyCashTransaction(siteUrl, dateFrom, dateTo, Post.CR)); });
-            Task cashReimbursementService = Task.Run(() => { list3.AddRange(PettyCashReimbursementService.GetPettyCashTransaction(siteUrl, dateFrom, dateTo, Post.CR)); });
-            Task cashReplenishmentService = Task.Run(() => { list4.AddRange(PettyCashReplenishmentService.GetPettyCashTransaction(siteUrl, dateFrom, dateTo, Post.DR)); });
-            Task.WaitAll(cashPaymentVoucherService, cashSettlementService, cashReimbursementService, cashReplenishmentService);
+            pettyCashStatements.Sort((x, y) => x.Date.CompareTo(y.Date));
 
-            pettyCashStatements.AddRange(list1);
-            pettyCashStatements.AddRange(list2);
-            pettyCashStatements.AddRange(list3);
-            pettyCashStatements.AddRange(list4);
-
-            List<PettyCashTransactionItem> ordered = pettyCashStatements.OrderBy(o => o.Date).ToList();
-
-            return ordered;
-
+            return pettyCashStatements;
         }
 
         public void SetSiteUrl(string siteUrl)
@@ -54,7 +35,7 @@ namespace MCAWebAndAPI.Service.Finance
         private PettyCashStatementVM ConvertToVM(ListItem listItem)
         {
             PettyCashStatementVM viewModel = new PettyCashStatementVM();
-
+        
             return viewModel;
         }
 

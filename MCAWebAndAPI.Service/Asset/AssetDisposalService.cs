@@ -265,30 +265,9 @@ namespace MCAWebAndAPI.Service.Asset
                 updatedValues.Add("assetdisposal", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
 
 
-                var caml = @"<View><Query>
-                           <Where>
-                              <Eq>
-                                 <FieldRef Name='ID' />
-                                 <Value Type='Counter'>" + item.AssetSubAsset.Value.Value + @"</Value>
-                              </Eq>
-                           </Where>
-                        </Query>
-                        <ViewFields>
-                           <FieldRef Name='assetsubasset' />
-                           <FieldRef Name='Asset_x0020_Sub_x0020_Asset_x003' />
-                        </ViewFields>
-                        <QueryOptions /></View>";
-                var infoAcquisition = SPConnector.GetList("Asset Acquisition Details", _siteUrl, caml);
-                var assetID = 0;
-                foreach (var i in infoAcquisition)
-                {
-                    if (i["assetsubasset"] as FieldLookupValue != null)
-                    {
-                        assetID = (i["assetsubasset"] as FieldLookupValue).LookupId;
-                    }
-                }
-                updatedValues.Add("assetsubasset", new FieldLookupValue { LookupId = assetID });
-               
+
+
+                updatedValues.Add("assetsubasset", new FieldLookupValue { LookupId = Convert.ToInt32(item.AssetSubAsset.Value.Value) });
                 updatedValues.Add("remarks", item.Remarks);
                 updatedValues.Add("status", "RETIRED");
                 try

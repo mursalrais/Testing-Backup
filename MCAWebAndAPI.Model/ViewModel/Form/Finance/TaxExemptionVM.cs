@@ -1,18 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using MCAWebAndAPI.Model.ViewModel.Control;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Web;
-using MCAWebAndAPI.Model.ViewModel.Control;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 {
     public class TaxExemptionVM
     {
-        /// <summary>
-        /// FIN17: Tax Exemption
-        /// </summary>
-
-        private ComboBoxVM typeOfTax;
+        private ComboBoxVM _typeOfTax;
 
         public int? ID { get; set; }
 
@@ -22,22 +22,31 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         {
             get
             {
-                if (typeOfTax == null)
+                if (_typeOfTax == null)
                 {
-                    typeOfTax = new ComboBoxVM();
+                    _typeOfTax = new ComboBoxVM();
                 }
-                return typeOfTax;
+                return _typeOfTax;
             }
             set
             {
-                typeOfTax = value;
+                _typeOfTax = value;
             }
         }
 
         [UIHint("TextArea")]
-        public string Remarks { get; set; }
+        public string Remarks
+        {
+            get;
+            set;
+        }
 
-        public string DocumentUrl { get; set; }
+        public string DocumentUrl
+        {
+            get;
+            set;
+
+        }
 
         [UIHint("MultiFileUploader")]
         [DisplayName("Attachment")]

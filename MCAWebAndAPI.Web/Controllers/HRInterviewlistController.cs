@@ -162,7 +162,7 @@ namespace MCAWebAndAPI.Web.Controllers
                     {
                         string link = string.Format(UrlResource.InterviewPanelList, siteUrl, viewModel.Position);
 
-                        string mailbody = string.Format(EmailResource.EmailInterviewToInterviewPanel, viewModel.EmailMessage, link);
+                        string mailbody = string.Format(EmailResource.EmailInterviewToInterviewPanel, link, viewModel.PositionName);
 
                         EmailUtil.Send(mail, "Next Process Interview for position " + viewModel.PositionName + " (based on respective position)", mailbody);
                     }

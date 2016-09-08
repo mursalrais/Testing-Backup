@@ -7,7 +7,6 @@ using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
 using NLog;
-using static MCAWebAndAPI.Model.ViewModel.Form.Finance.PettyCashTransactionItem;
 using static MCAWebAndAPI.Model.ViewModel.Form.Finance.Shared;
 
 namespace MCAWebAndAPI.Service.Finance
@@ -48,7 +47,7 @@ namespace MCAWebAndAPI.Service.Finance
         private const string FieldName_Status = "Status";
         private const string FieldName_PaidTo = "Paid_x0020_To";
         private const string FieldName_Currency = "Currency";
-        private const string FieldName_AmountPaid = "Amount_x0020_Paid";
+        private const string FieldName_AmountPAid = "Amount_x0020_Paid";
         private const string FieldName_AmountPaidInWord = "Amount_x0020_Paid_x0020_in_x0020";
         private const string FieldName_Reason = "Reason_x0020_of_x0020_Payment";
         private const string FieldName_Fund = "Fund";
@@ -70,7 +69,7 @@ namespace MCAWebAndAPI.Service.Finance
             columnValues.Add(FieldName_PettyCashVoucherId, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.PettyCashVoucher.Value) });
             columnValues.Add(FieldName_Status, viewModel.Status);
             columnValues.Add(FieldName_PaidTo, viewModel.PaidTo);
-            columnValues.Add(FieldName_AmountPaid, viewModel.AmountPaid);
+            columnValues.Add(FieldName_AmountPAid, viewModel.AmountPaid);
             columnValues.Add(FieldName_Currency, viewModel.Currency.Value);
             columnValues.Add(FieldName_AmountPaidInWord, viewModel.AmountPaidInWords);
             columnValues.Add(FieldName_Reason, viewModel.ReasonOfPayment);
@@ -89,7 +88,7 @@ namespace MCAWebAndAPI.Service.Finance
 
                     viewModel.TransactionNo = DocumentNumbering.Create(siteUrl, documentNoFormat, DIGIT_DOCUMENTNO);
                     columnValues.Add(FieldName_DocumentNo, viewModel.TransactionNo);
-
+                    
                     SPConnector.AddListItem(ListName, columnValues, siteUrl);
                 }
                 else if (viewModel.Operation == Operations.e)
@@ -133,6 +132,8 @@ namespace MCAWebAndAPI.Service.Finance
             return viewModel;
         }
 
+        public delegate PettyCashTransactionItem ConvertToVMDelegate(string siteUrl, ListItem listItem);
+
         public void SavePettyCashAttachments(int? headerID, IEnumerable<HttpPostedFileBase> documents)
         {
             foreach (var doc in documents)
@@ -153,38 +154,27 @@ namespace MCAWebAndAPI.Service.Finance
             }
         }
 
-        public static IEnumerable<PettyCashTransactionItem> GetPettyCashTransaction(string siteUrl, DateTime dateFrom, DateTime dateTo, Post sign)
+        public static IEnumerable<PettyCashTransactionItem> GetPettyCashTransaction(string siteUrl, DateTime dateFrom, DateTime dateTo)
         {
-            return SharedService.GetPettyCashTransaction(siteUrl, dateFrom, dateTo, ListName, FieldName_Date, sign, ConvertToVMShort);
-        }
-
-        public delegate PettyCashTransactionItem ConvertToVMDelegate(string siteUrl, ListItem listItem, Post sign);
-
-        private static PettyCashSettlementVM ConvertToVMShort(string siteUrl, ListItem listItem, Post sign)
-        {
-            PettyCashSettlementVM viewModel = new PettyCashSettlementVM();
-
-            int multiplier = sign == Post.DR ? 1 : -1;
-
-            viewModel.ID = Convert.ToInt32(listItem[FieldName_ID]);
-            viewModel.Date = Convert.ToDateTime(listItem[FieldName_Date]);
-            viewModel.TransactionNo = Convert.ToString(listItem[FieldName_DocumentNo]);
-            viewModel.Amount = multiplier * Convert.ToDecimal(listItem[FieldName_AmountReimbursedOrReturned]);
-
-            return viewModel;
+            return SharedService.GetPettyCashTransaction(siteUrl, dateFrom, dateTo, ListName, FieldName_Date,
+                ConvertToVM);
         }
 
         private static PettyCashSettlementVM ConvertToVM(string siteUrl, ListItem listItem)
         {
-            PettyCashSettlementVM viewModel = ConvertToVMShort(siteUrl, listItem, Post.DR);
-
+            PettyCashSettlementVM viewModel = new PettyCashSettlementVM();
             viewModel.PettyCashVoucher = new Model.ViewModel.Control.AjaxComboBoxVM();
+
+            viewModel.ID = Convert.ToInt32(listItem[FieldName_ID]);
+            viewModel.Date = Convert.ToDateTime(listItem[FieldName_Date]);
+
             viewModel.PettyCashVoucher.Value = (listItem[FieldName_PettyCashVoucherNo] as FieldLookupValue).LookupId;
             viewModel.PettyCashVoucher.Text = (listItem[FieldName_PettyCashVoucherNo] as FieldLookupValue).LookupValue;
             viewModel.AdvanceReceivedDate = Convert.ToDateTime((listItem[FieldName_PettyCashVoucherAdvanceReceivedDate] as FieldLookupValue).LookupValue);
+            viewModel.TransactionNo = Convert.ToString(listItem[FieldName_DocumentNo]);
             viewModel.Status = Convert.ToString(listItem[FieldName_Status]);
             viewModel.PaidTo = Convert.ToString(listItem[FieldName_PaidTo]);
-            viewModel.AmountPaid = Convert.ToDecimal(listItem[FieldName_AmountPaid]);
+            viewModel.AmountPaid = Convert.ToDecimal(listItem[FieldName_AmountPAid]);
             viewModel.Currency.Value = Convert.ToString(listItem[FieldName_Currency]);
             viewModel.AmountPaidInWords = Convert.ToString(listItem[FieldName_AmountPaidInWord]);
             viewModel.ReasonOfPayment = Convert.ToString(listItem[FieldName_Reason]);
@@ -192,14 +182,18 @@ namespace MCAWebAndAPI.Service.Finance
             viewModel.WBS = Convert.ToString(listItem[FieldName_WBS]);
             viewModel.GL = Convert.ToString(listItem[FieldName_GL]);
             viewModel.AmountLiquidated = Convert.ToDecimal(listItem[FieldName_AmountLiquidated]);
+            viewModel.Amount = Convert.ToDecimal(listItem[FieldName_AmountReimbursedOrReturned]);
             viewModel.Remarks = Convert.ToString(listItem[FieldName_GL]);
+
             viewModel.AmountLiquidated = Convert.ToDecimal(listItem[FieldName_AmountLiquidated]);
             viewModel.Amount = Convert.ToDecimal(listItem[FieldName_AmountReimbursedOrReturned]);
-            viewModel.Remarks = Convert.ToString(listItem[FieldName_Remarks]);
-            viewModel.DocumentUrl = GetDocumentUrl(siteUrl, viewModel.ID);
 
+            viewModel.Remarks = Convert.ToString(listItem[FieldName_Remarks]);
+
+            viewModel.DocumentUrl = GetDocumentUrl(siteUrl, viewModel.ID);
             return viewModel;
         }
+
 
         private static string GetDocumentUrl(string siteUrl, int? iD)
         {

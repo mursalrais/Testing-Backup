@@ -13,25 +13,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 {
     public class AssetCheckResultHeaderVM : Item
     {
-        public int? ID { get; set; }
-
-        public string hFormID { get; set; }
-
-        public DateTime? CreateDate { get; set; }
-
-        public string hCountedBy1 { get; set; }
-
-        public string hCountedBy2 { get; set; }
-
-        public string hCountedBy3 { get; set; }
-
-        public string hCountedBy1Nama { get; set; }
-
-        public string hCountedBy2Nama { get; set; }
-
-        public string hCountedBy3Nama { get; set; }
-
-        public int? resultID;
+        public int? ID;
 
         public IEnumerable<AssetCheckResultItemVM> Details { get; set; } = new List<AssetCheckResultItemVM>();
 

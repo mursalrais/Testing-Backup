@@ -21,12 +21,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// yearofgraduation
         /// </summary>
         [DisplayName("Graduation")]
-        public string StrYearOfGraduations { get; set; }
-
-        /// <summary>
-        /// yearofgraduation
-        /// </summary>
-        [DisplayName("Graduation")]
         [UIHint("Month")]
         public DateTime? YearOfGraduation { get; set; } = DateTime.Now;
 

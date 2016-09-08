@@ -26,7 +26,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [Required(ErrorMessage = "Professional Name Field Is Required")]
         public AjaxComboBoxVM ProfessionalName { get; set; } = new AjaxComboBoxVM
         {
-            ActionName = "GetProfessionals",
+            ActionName = "GetProfessionalsActive",
             ControllerName = "HRDataMaster",
             ValueField = "ID",
             TextField = "Name",

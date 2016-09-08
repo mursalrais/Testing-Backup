@@ -39,7 +39,6 @@ namespace MCAWebAndAPI.Service.Finance
         private const string EventBudgetFieldName_TotalIDR = "Total_x0020__x0028_IDR_x0029_";
         private const string EventBudgetFieldName_TotalUSD = "Total_x0020__x0028_USD_x0029_";
         private const string EventBudgetFieldName_TransactionStatus = "TransactionStatus";
-        private const string EventBudgetFieldName_UserEmail = "UserEmail";
 
         private const string ActivityFieldName_Name = "Title";
 
@@ -116,7 +115,6 @@ namespace MCAWebAndAPI.Service.Finance
             updatedValue.Add(EventBudgetFieldName_TotalIDR, eventBudget.TotalIDR);
             updatedValue.Add(EventBudgetFieldName_TotalUSD, eventBudget.TotalUSD);
             updatedValue.Add(EventBudgetFieldName_TransactionStatus, eventBudget.TransactionStatus.Value);
-            updatedValue.Add(EventBudgetFieldName_UserEmail, eventBudget.UserEmail);
 
             try
             {
@@ -129,13 +127,6 @@ namespace MCAWebAndAPI.Service.Finance
             }
 
             return true;
-        }
-
-        public static IEnumerable<EventBudgetItemVM> GetItems(string siteUrl,int eventBudgetID)
-        {
-            IEventBudgetService service = new EventBudgetService();
-            service.SetSiteUrl(siteUrl);
-            return service.GetItems(eventBudgetID);
         }
 
         public IEnumerable<EventBudgetItemVM> GetItems(int eventBudgetID)
@@ -211,7 +202,6 @@ namespace MCAWebAndAPI.Service.Finance
             newObject.Add(EventBudgetFieldName_TotalIDR, eventBudget.TotalIDR);
             newObject.Add(EventBudgetFieldName_TotalUSD, eventBudget.TotalUSD);
             newObject.Add(EventBudgetFieldName_TransactionStatus, eventBudget.TransactionStatus.Value);
-            newObject.Add(EventBudgetFieldName_UserEmail, eventBudget.UserEmail);
 
             eventBudget.No = DocumentNumbering.Create(siteUrl, DocumentNo, 5);
             newObject.Add(EventBudgetFieldName_No, eventBudget.No);
@@ -363,7 +353,6 @@ namespace MCAWebAndAPI.Service.Finance
             }
 
             eventBudget.TransactionStatus.Value = Convert.ToString(listItem[EventBudgetFieldName_TransactionStatus]);
-            eventBudget.UserEmail = Convert.ToString(listItem[EventBudgetFieldName_UserEmail]);
             eventBudget.DocumentUrl =  GetDocumentUrl(siteUrl, eventBudget.ID);
 
             return eventBudget;

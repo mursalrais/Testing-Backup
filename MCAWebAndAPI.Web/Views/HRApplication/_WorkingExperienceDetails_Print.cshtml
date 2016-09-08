@@ -6,13 +6,10 @@
         .Name("WorkingExperienceDetails")
         .Columns(columns =>
         {
-            columns.Bound(p => p.Position).Hidden();
-            columns.Bound(p => p.StrPosition);
+            columns.Bound(p => p.Position);
             columns.Bound(p => p.Company);
-            columns.Bound(p => p.From).Hidden();
-            columns.Bound(p => p.StrFrom);
-            columns.Bound(p => p.To).Hidden();
-            columns.Bound(p => p.StrTo);
+            columns.Bound(p => p.From);
+            columns.Bound(p => p.To);
             columns.Bound(p => p.Remarks);
         })
         .DataSource(dataSource => dataSource.Ajax()

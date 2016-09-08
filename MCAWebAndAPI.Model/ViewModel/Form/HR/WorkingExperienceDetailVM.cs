@@ -12,15 +12,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// </summary>
         public string Position { get; set; }
 
-        [DisplayName("Position")]
-        public string StrPosition { get; set; }
-
-        [DisplayName("From")]
-        public string StrFrom { get; set; }
-
-        [DisplayName("To")]
-        public string StrTo { get; set; }
-
         /// <summary>
         /// applicationcompany
         /// </summary>

@@ -18,9 +18,6 @@
         columns.Bound(p => p.Year).ClientTemplate("#=getMonthName(Year) #" + " " +  "#= Year.getFullYear() #" +
                            "<input type='hidden' name='TrainingDetails[#= getTrainingDetail(data)#].Year' value='#= Year #' />"
                          ).Width(200);
-        columns.Bound(p => p.StrTrainingYear).Hidden().ClientTemplate("#= StrTrainingYear #" +
-                           "<input type='hidden' name='TrainingDetails[#= getTrainingDetail(data)#].StrTrainingYear' value='#= StrTrainingYear #' />"
-                         ).Width(350);
         columns.Bound(p => p.Remarks).ClientTemplate("#= Remarks #" +
                            "<input type='hidden' name='TrainingDetails[#= getTrainingDetail(data)#].Remarks' value='#= Remarks #' />"
                          );
