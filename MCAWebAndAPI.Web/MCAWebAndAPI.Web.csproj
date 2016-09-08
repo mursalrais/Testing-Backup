@@ -1175,6 +1175,7 @@
     <Content Include="Views\ASSAssetLandingPage\_assetFixedAssetPCFF.cshtml" />
     <Content Include="Views\ASSAssetLandingPage\_assetSmallValueAssetPCFF.cshtml" />
     <Content Include="Views\FINOutstandingAdvance\UploadCSV.cshtml" />
+    <Content Include="Views\FINOutstandingAdvance\UploadError.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1208,6 +1209,7 @@
     <Compile Include="Controllers\CalendarEventController.cs" />
     <Compile Include="Controllers\ComboBoxController.cs" />
     <Compile Include="Controllers\COMMGLController.cs" />
+    <Compile Include="Controllers\COMMVendorController.cs" />
     <Compile Include="Controllers\COMProfessionalController.cs" />
     <Compile Include="Controllers\COMWBSController.cs" />
     <Compile Include="Controllers\CSVController.cs" />
@@ -1322,7 +1324,6 @@
     <Folder Include="App_Code\" />
     <Folder Include="Scripts\apps\controlls\" />
     <Folder Include="Views\Activity\" />
-    <Folder Include="Views\COMWBS\" />
     <Folder Include="Views\HRDataMaster\" />
   </ItemGroup>
   <ItemGroup>

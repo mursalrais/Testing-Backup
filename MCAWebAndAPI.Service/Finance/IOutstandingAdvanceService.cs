@@ -31,6 +31,6 @@ namespace MCAWebAndAPI.Service.Finance
 
         Task SendEmailToGrantees(string message, OutstandingAdvanceVM viewModel);
 
-        Task SaveCSVFilesAsync(IEnumerable<HttpPostedFileBase> documents);
+        Task<List<CSVErrorLogVM>> ProcessCSVFilesAsync(IEnumerable<HttpPostedFileBase> documents, IEnumerable<VendorVM> vendors);
     }
 }

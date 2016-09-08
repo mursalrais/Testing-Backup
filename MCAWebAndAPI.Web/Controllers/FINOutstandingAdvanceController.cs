@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Elmah;
@@ -30,7 +32,6 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult Item(string siteUrl = null, string op = null, int? id = null)
         {
-
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);
             SessionManager.Set(SessionSiteUrl, siteUrl);
@@ -43,6 +44,17 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult UploadCSV(string siteUrl = null)
         {
             return View();
+        }
+
+        public ActionResult UploadError(string key, string siteUrl = null)
+        {
+            siteUrl = siteUrl ?? SessionManager.Get<string>("SiteUrl") ?? ConfigResource.DefaultBOSiteUrl;
+
+            ICSVErrorLogService errorService = new CSVErrorLogService(siteUrl);
+
+            List<CSVErrorLogVM> errors = errorService.GetAll(key).ToList();
+
+            return View(errors);
         }
 
         [HttpPost]
@@ -81,14 +93,21 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             var siteUrl = SessionManager.Get<string>(SessionSiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);
+            List<CSVErrorLogVM> csvErrors;
+
+            RedirectToRouteResult result = RedirectToAction("Index", "Success",
+                new
+                {
+                    successMessage = string.Format(SuccessMsgFormatUpdated, "xxxxxxxxxx"),
+                    previousUrl = string.Format(FirstPageUrl, siteUrl)
+                });
+
 
             try
             {
-                Task createApplicationDocumentTask = service.SaveCSVFilesAsync(viewModel.CSVFiles);
+                csvErrors = new List<CSVErrorLogVM>();
 
-                Task allTasks = Task.WhenAll(createApplicationDocumentTask);
-
-                await allTasks;
+                csvErrors = await service.ProcessCSVFilesAsync(viewModel.Documents, COMMVendorController.GetAll());
             }
             catch (Exception e)
             {
@@ -96,13 +115,18 @@ namespace MCAWebAndAPI.Web.Controllers
                 return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
             }
 
-            return RedirectToAction("Index", "Success",
-                new
-                {
-                    successMessage = string.Format(SuccessMsgFormatUpdated, "xxxxxxxxxx"),
-                    previousUrl = string.Format(FirstPageUrl, siteUrl)
-                });
-        }
+            if (csvErrors.Count > 0)
+            {
+                string key = Guid.NewGuid().ToString();
 
+                ICSVErrorLogService errorService = new CSVErrorLogService(siteUrl);
+                errorService.Save(key, csvErrors);
+
+                result = RedirectToAction("UploadError", "FINOutstandingAdvance", new { key = key });
+            }
+
+
+            return result;
+        }
     }
 }

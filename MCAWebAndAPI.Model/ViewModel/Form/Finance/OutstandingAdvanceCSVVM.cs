@@ -13,6 +13,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
     {
         [UIHint("MultiFileUploader")]
         [DisplayName("Attachment")]
-        public IEnumerable<HttpPostedFileBase> CSVFiles { get; set; } = new List<HttpPostedFileBase>();
+        public IEnumerable<HttpPostedFileBase> Documents { get; set; } = new List<HttpPostedFileBase>();
     }
 }

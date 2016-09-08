@@ -1,0 +1,52 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Finance
+@model IEnumerable<CSVErrorLogVM>
+
+@{
+    ViewBag.Title = "Petty Cash Statement";
+}
+
+@using (Html.BeginForm("xxxxxxx", "xxxxxxxxx",
+                                                                            FormMethod.Post,
+                                                                            new
+                                                                            {
+                                                                                @class = "form-horizontal",
+                                                                                enctype = "multipart/form-data"
+                                                                            }))
+{
+    <fieldset>
+        <legend>@ViewBag.Title</legend>
+        <div class="row">
+
+            <div class="col-xs-12">
+                @(Html.Kendo().Grid(Model)
+        .Name("OACSVUploadError")
+        .Columns(columns =>
+        {
+            columns.Bound(p => p.FileName);
+            columns.Bound(p => p.FieldName);
+            columns.Bound(p => p.Value);
+            columns.Bound(p => p.ErrorDescription);
+        })
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .Model(model =>
+            {
+                model.Id(p => p.ID);
+            })
+            .Group(groups =>
+            {
+                groups.Add(p => p.FileName);
+            }
+        )))
+            </div>
+        </div>
+
+    </fieldset>
+}
+
+<script>
+    function onDataBoundItemDetails(e) {
+        //TODO: do something
+    }
+
+</script>
