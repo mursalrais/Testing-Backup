@@ -114,6 +114,7 @@
     <Compile Include="Common\EventCalendar.cs" />
     <Compile Include="Common\Item.cs" />
     <Compile Include="Common\Location.cs" />
+    <Compile Include="Common\WBSMapping.cs" />
     <Compile Include="Common\Workflow.cs" />
     <Compile Include="HR\DataMaster\AdjustmentMaster.cs" />
     <Compile Include="HR\DataMaster\DayOffRequest.cs" />
@@ -122,12 +123,14 @@
     <Compile Include="ViewModel\Control\TransactionStatusComboBoxVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetDisposalDetailVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetDisposalVM.cs" />
+    <Compile Include="ViewModel\Form\Asset\AssetReportVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetTransferDetailVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetTransferVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssignmentOfAssetDetailsVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssignmentOfAssetVM.cs" />
     <Compile Include="ViewModel\Form\Asset\ProfessionalsVM.cs" />
     <Compile Include="ViewModel\Form\Common\ProfessionalVM.cs" />
+    <Compile Include="ViewModel\Form\Finance\GLMasterVM.cs" />
     <Compile Include="ViewModel\Form\Finance\PettyCashJournalItemVM.cs" />
     <Compile Include="ViewModel\Form\Finance\PettyCashJournalVM.cs" />
     <Compile Include="ViewModel\Form\Finance\PettyCashReplenishmentVM.cs" />

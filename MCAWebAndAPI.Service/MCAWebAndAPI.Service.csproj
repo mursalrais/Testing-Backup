@@ -167,6 +167,7 @@
     <Compile Include="Common\ComboBoxService.cs" />
     <Compile Include="Common\IComboBoxService.cs" />
     <Compile Include="Common\ILocationService.cs" />
+    <Compile Include="Common\IWBSMasterService.cs" />
     <Compile Include="Common\IWorkflowService.cs" />
     <Compile Include="Common\LocationService.cs" />
     <Compile Include="Common\WorkflowService.cs" />
