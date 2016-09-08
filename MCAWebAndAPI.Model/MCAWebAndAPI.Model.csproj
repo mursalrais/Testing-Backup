@@ -151,7 +151,6 @@
     <Compile Include="ProjectManagement\Common\Activity.cs" />
     <Compile Include="ProjectManagement\Common\Project.cs" />
     <Compile Include="ProjectManagement\Common\SubActivity.cs" />
-    <Compile Include="ProjectManagement\Common\WBSMapping.cs" />
     <Compile Include="ProjectManagement\Schedule\Action.cs" />
     <Compile Include="ProjectManagement\Schedule\Issue.cs" />
     <Compile Include="ProjectManagement\Schedule\RIABase.cs" />
@@ -220,7 +219,6 @@
     <Compile Include="ViewModel\Form\Finance\EventBudgetItemVM.cs" />
     <Compile Include="ViewModel\Form\Finance\EventBudgetVM.cs" />
     <Compile Include="ViewModel\Form\Finance\OutstandingAdvanceVM.cs" />
-    <Compile Include="ViewModel\Form\Finance\GLMasterVM.cs" />
     <Compile Include="ViewModel\Form\Finance\PettyCashPaymentVoucherVM.cs" />
     <Compile Include="ViewModel\Form\Finance\PettyCashReimbursementVM.cs" />
     <Compile Include="ViewModel\Form\Finance\PettyCashSettlementVM.cs" />

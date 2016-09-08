@@ -1,0 +1,143 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Finance
+
+@model EventBudgetVM
+
+<form class="form-horizontal" method="post" action="/FINEventBudget/Create" id="create-event-budget-form">
+    <fieldset>
+        <legend>Form Event Budget</legend>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.EventName).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.EventName)
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.DateFrom).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.DateFrom)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.DateTo).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.DateTo)
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Project).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.Project)
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Activity).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.Activity)
+                </div>
+            </div>
+
+            <!--
+                Combo Activity goes here
+            -->
+
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Venue).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.Venue)
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Fund).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.Fund)
+                </div>
+            </div>
+        </div>
+
+        <!-- Right column -->
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Attachment).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.Attachment)
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Rate).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.EditorFor(m => m.Rate)
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.TotalDirectPayment).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.DisplayFor(m => m.TotalDirectPayment)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.TotalSCA).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.DisplayFor(m => m.TotalSCA)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.TotalIDR).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.DisplayFor(m => m.TotalIDR)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.TotalUSD).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Html.DisplayFor(m => m.TotalUSD)
+                </div>
+            </div>
+        </div>
+
+     
+
+        // Item Detail
+        <legend>Item Details</legend>
+        <div class="row">
+            @Html.Partial("_ItemDetails", Model.ItemDetails)
+        </div>
+
+    </fieldset>
+
+    <div class="form-actions">
+        <div class="row">
+            <div class="col-sm-12">
+                <button id="print-button" class="btn btn-default" type="button">
+                    Print
+                </button>
+                <button id="submit-button" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    Submit
+                </button>
+            </div>
+        </div>
+    </div>
+
+</form>
+
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+
+
+            $("#Date").kendoDatePicker({
+                format: "mm/dd/yyyy"
+            });
+
+        });
+    </script>
+}

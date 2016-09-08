@@ -77,7 +77,7 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
 
-            var professionals = GetFromExistingSessionActive();
+            var professionals = GetFromExistingSessionProfesionalsActive();
             professionals = professionals.OrderBy(e => e.FirstMiddleName);
 
             return Json(professionals.Select(e =>
@@ -143,6 +143,36 @@ namespace MCAWebAndAPI.Web.Controllers
                         e.InsuranceAccountNumber,
                         e.MobileNumber,
                         
+
+                    }
+                ), JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetProfessionalActives(int id)
+        {
+            _dataMasterService.SetSiteUrl(System.Web.HttpContext.Current.Session["SiteUrl"] as string);
+            var professionals = GetFromExistingActiveSession();
+            professionals = from a in professionals where a.ID == id select a;
+            return Json(professionals.Where(e => e.ID == id).Select(
+                    e =>
+                    new
+                    {
+                        e.ID,
+                        e.Name,
+                        e.FirstMiddleName,
+                        e.Position,
+                        e.Status,
+                        e.Project_Unit,
+                        e.PositionId,
+                        e.PSANumber,
+                        e.JoinDate,
+                        e.OfficeEmail,
+                        e.PersonalMail,
+                        e.JoinDateTemp,
+                        e.InsuranceAccountNumber,
+                        e.MobileNumber,
+                        e.TaxStatus
+
 
                     }
                 ), JsonRequestBehavior.AllowGet);
@@ -284,6 +314,28 @@ namespace MCAWebAndAPI.Web.Controllers
             return professionals;
         }
 
+
+        private IEnumerable<ProfessionalMaster> GetFromExistingSessionProfesionalsActive()
+        {
+            //Get existing session variable
+            var sessionVariable = System.Web.HttpContext.Current.Session["ProfessionalMaster"] as IEnumerable<ProfessionalMaster>;
+            var professionals = sessionVariable ?? _dataMasterService.GetProfessionalsActive();
+
+            if (sessionVariable == null) // If no session variable is found
+                System.Web.HttpContext.Current.Session["ProfessionalMaster"] = professionals;
+            return professionals;
+        }
+
+        private IEnumerable<ProfessionalMaster> GetFromExistingActiveSession()
+        {
+            //Get existing session variable
+            var sessionVariable = System.Web.HttpContext.Current.Session["ProfessionalMasterActive"] as IEnumerable<ProfessionalMaster>;
+            var professionals = sessionVariable ?? _dataMasterService.GetProfessionalsActives();
+
+            if (sessionVariable == null) // If no session variable is found
+                System.Web.HttpContext.Current.Session["ProfessionalMasterActive"] = professionals;
+            return professionals;
+        }
 
         private IEnumerable<ProfessionalMaster> GetFromProfessionalMonthlyFeesExistingSession()
         {

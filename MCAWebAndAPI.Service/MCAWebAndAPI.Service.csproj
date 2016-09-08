@@ -154,7 +154,6 @@
     <Compile Include="Asset\IAssetCheckResultApproveService.cs" />
     <Compile Include="Asset\IAssetCheckResultService.cs" />
     <Compile Include="Asset\IAssetDisposalService.cs" />
-    <Compile Include="Asset\IAssetFixedAssetService.cs" />
     <Compile Include="Asset\IAssetLoanAndReturnService.cs" />
     <Compile Include="Asset\IAssetMasterService.cs.cs" />
     <Compile Include="Asset\IAssetReplacementService.cs" />

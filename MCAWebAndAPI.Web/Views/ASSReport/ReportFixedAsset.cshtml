@@ -1,0 +1,80 @@
+﻿@using MCAWebAndAPI.Web.Helpers
+
+@(Html.Kendo().Grid<dynamic>()
+    .Name("reportGrid")
+    .Columns(columns =>
+    {
+        var dataTable = SessionManager.Get<System.Data.DataTable>("CSVDataTable");
+        foreach (System.Data.DataColumn column in dataTable.Columns)
+        {
+            if (column.ColumnName == "No" || column.ColumnName == "Project" || column.ColumnName == "AssetType" || column.ColumnName == "AssetID" || column.ColumnName == "Quantity")
+            {
+                columns.Bound(column.ColumnName);
+            }
+            else
+            {
+                columns.Bound(column.ColumnName).Hidden(true);
+            }
+        }
+    })
+    .Sortable()
+    .Editable(ed => ed.Mode(GridEditMode.PopUp).CreateAt(GridInsertRowPosition.Bottom))
+                                              .ToolBar(tools => tools.Excel())
+                                              .ToolBar(tools => tools.Pdf())
+                                              .Excel(excel => excel
+                                              .FileName("ReportFixedAsset.xlsx"))
+                                              .Pdf(pdf => pdf.FileName("ReportFixedAsset.pdf"))
+    .Events(e => e.ExcelExport("excelExport"))
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .Model(model =>
+        {
+            model.Id("ID");
+            var dataTable = SessionManager.Get<System.Data.DataTable>("CSVDataTable");
+            foreach (System.Data.DataColumn column in dataTable.Columns)
+            {
+                var field = model.Field(column.ColumnName, column.DataType);
+            }
+        })
+        .Read(read => read.Action("Grid_ReadFA", "ASSReport"))
+    )
+)
+<script>
+    var exportFlag = true;
+    function excelExport(e)
+    {
+        if (exportFlag) {
+            //e.sender.showColumn("ID");
+            e.sender.showColumn("Specification");
+            e.sender.showColumn("SerialNumber");
+            e.sender.showColumn("WarrantyExpires");
+            e.sender.showColumn("Condition");
+            e.sender.showColumn("CostIDR");
+            e.sender.showColumn("CostUSD");
+            e.sender.showColumn("Vendor");
+            e.sender.showColumn("PurchaseDate");
+            e.sender.showColumn("PurchaseDesc");
+            e.sender.showColumn("AssetHolder");
+            e.sender.showColumn("Province");
+            e.sender.showColumn("Location");
+            e.preventDefault();
+            exportFlag = false;
+            e.sender.saveAsExcel();
+        } else {
+            e.sender.hideColumn("ID");
+            e.sender.hideColumn("Specification");
+            e.sender.hideColumn("SerialNumber");
+            e.sender.hideColumn("WarrantyExpires");
+            e.sender.hideColumn("Condition");
+            e.sender.hideColumn("CostIDR");
+            e.sender.hideColumn("CostUSD");
+            e.sender.hideColumn("Vendor");
+            e.sender.hideColumn("PurchaseDate");
+            e.sender.hideColumn("PurchaseDesc");
+            e.sender.hideColumn("AssetHolder");
+            e.sender.hideColumn("Province");
+            e.sender.hideColumn("Location");
+            exportFlag = true;
+        }
+    }
+</script>

@@ -32,5 +32,7 @@ namespace MCAWebAndAPI.Service.HR.Common
         string GetProfessionalPosition(string userLogin);
 
         string GetProfessionalOfficeEmail(int professionalID);
+
+        IEnumerable<ProfessionalMaster> GetProfessionalsActives();
     }
 }
