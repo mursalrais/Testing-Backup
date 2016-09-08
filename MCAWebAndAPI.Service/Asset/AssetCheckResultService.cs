@@ -47,9 +47,9 @@ namespace MCAWebAndAPI.Service.Asset
                 model.CountedBy2.Value = Convert.ToInt32(cekResult["assetcheckcountedby2"].ToString());
                 model.CountedBy3.Value = Convert.ToInt32(cekResult["assetcheckcountedby3"].ToString());
 
-                model.hCountedBy1 = GetFullNamePosision(model.CountedBy1.Value);
-                model.hCountedBy2 = GetFullNamePosision(model.CountedBy2.Value);
-                model.hCountedBy3 = GetFullNamePosision(model.CountedBy3.Value);
+                model.hCountedBy1 = GetFullNamePosition(model.CountedBy1.Value);
+                model.hCountedBy2 = GetFullNamePosition(model.CountedBy2.Value);
+                model.hCountedBy3 = GetFullNamePosition(model.CountedBy3.Value);
 
                 model.hCountedBy1Nama = model.hCountedBy1.Split('-')[0];
                 model.hCountedBy2Nama = model.hCountedBy2.Split('-')[0];
@@ -61,9 +61,9 @@ namespace MCAWebAndAPI.Service.Asset
                 {
                     model.Name.Value = Convert.ToInt32(cekResult["approvalname"].ToString());
                 }
-                if (cekResult["approvalposision"] != null)
+                if (cekResult["approvalPosition"] != null)
                 {
-                    model.Posision.Value = Convert.ToInt32(cekResult["approvalposision"].ToString());
+                    model.Position.Value = Convert.ToInt32(cekResult["approvalPosition"].ToString());
                 }
 
                 var modelDetail = new List<AssetCheckResultItemVM>();
@@ -142,7 +142,7 @@ namespace MCAWebAndAPI.Service.Asset
             return model;
         }
 
-        public string GetFullNamePosision(int? id)
+        public string GetFullNamePosition(int? id)
         {
             var siteHr = _siteUrl.Replace("/bo", "/hr");
             var dataCountedBy1 = SPConnector.GetListItem("Professional Master", id, siteHr);
@@ -417,7 +417,7 @@ namespace MCAWebAndAPI.Service.Asset
                 if (isApproval)
                 {
                     columnValues.Add("approvalname", model.Name.Value);
-                    columnValues.Add("approvalposision", model.Posision.Value);
+                    columnValues.Add("approvalPosition", model.Position.Value);
 
                     EmailHelperAssetCheckResult email = new EmailHelperAssetCheckResult();
                     email = RequestApproveEmail(
@@ -525,7 +525,7 @@ namespace MCAWebAndAPI.Service.Asset
                 if (isApproval)
                 {
                     columnValues.Add("approvalname", data.Name.Value);
-                    columnValues.Add("approvalposision", data.Posision.Value);
+                    columnValues.Add("approvalPosition", data.Position.Value);
                 }
 
                 SPConnector.AddListItem("Asset Check Result", columnValues, _siteUrl);

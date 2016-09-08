@@ -84,7 +84,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             try
             {
-                Task createApplicationDocumentTask = service.SaveCSVFilesAsync(viewModel.CSVFiles);
+                Task createApplicationDocumentTask = service.SaveCSVFilesAsync(viewModel.Documents);
 
                 Task allTasks = Task.WhenAll(createApplicationDocumentTask);
 
