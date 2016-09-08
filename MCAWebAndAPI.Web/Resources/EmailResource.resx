@@ -181,60 +181,56 @@ Kindly check the link as per below to go to direct page accordingly.  Thank you.
 Link : {1}</value>
   </data>
   <data name="EmailInterviewToInterviewPanel" xml:space="preserve">
-    <value>Dear Interview Panel,
+    <value>Dear Interviewer Panel,
 
+This email is sent to you to notify that here is the latest result from previous interview for position {1}
+This list requires your action to review as well as to prepare the Interview process for further action. 
+
+To view the detail, please click following link: 
 {0}
 
-This email is sent to you to notify that here is the latest list of shortlisted candidate. This list
-
-requires your action to review as well as to prepare the Interview process for further action.
-
-Kindly check the link as per below to go to direct page accordingly. Thank you.
-
-Link : {1}</value>
+Thank you for your attention.</value>
   </data>
   <data name="EmailShortlistToCandidate" xml:space="preserve">
-    <value>Dear Candidate Interview,
-
-{0}
-
-you are invited to interview on : {1}
-At hour : {2}</value>
+    <value>{0}
+</value>
   </data>
   <data name="EmailShortlistToHR" xml:space="preserve">
     <value>Dear HR Team,
 
-This email is sent to you to notify that here is the latest list of shortlisted candidate. This list
+This email is sent to you to notify that here is the latest list of shortlisted candidate for position {1} . 
+Please complete the process immediately to send the list to Interviewer Panel for further action.
 
-requires your action to send to Interview Panel for further action. Kindly check the link as per
+To view the detail, please click following link: 
+Link : {0}
 
-below to go to direct page accordingly. Thank you.
+Thank you for your attention.
 
-Link : {0}</value>
+</value>
   </data>
   <data name="EmailShortlistToInterviewPanel" xml:space="preserve">
-    <value>Dear Interview Panel,
+    <value>Dear Interviewer Panel,
 
-{0}
+This email is sent to you to notify that here is the latest list of shortlisted candidate for position {1}
+This list requires your action to review as well as to prepare the Interview process for further action. 
 
-This email is sent to you to notify that here is the latest list of shortlisted candidate. This list
+To view the detail, please click following link: 
 
-requires your action to review as well as to prepare the Interview process for further action.
-
-Kindly check the link as per below to go to direct page accordingly. Thank you.
-
-Link : {1}</value>
-  </data>
-  <data name="EmailShortlistToRequestor" xml:space="preserve">
-    <value>Dear Respective Requestor,
-
-This email is sent to you to notify that here is the list of shortlisted candidate from HR. This list
-
-requires your action to select the most suitable candidate for this position. Kindly check the link
-
-as per below to go to direct page accordingly. Thank you.
 
 Link : {0}</value>
+  </data>
+  <data name="EmailShortlistToRequestor" xml:space="preserve">
+    <value>Dear Respective User,
+
+You are authorized to shortlist candidate (s) for position {1} . 
+Please complete the process immediately to select the most suitable candidate for this position. 
+
+To view the detail, please click following link: 
+Link : {0}
+
+Thank you for your attention.
+
+</value>
   </data>
   <data name="GranteesEmailOutstandingAdvance" xml:space="preserve">
     <value>&lt;p&gt;Dear Mr/Ms. {0},&lt;/p&gt;
