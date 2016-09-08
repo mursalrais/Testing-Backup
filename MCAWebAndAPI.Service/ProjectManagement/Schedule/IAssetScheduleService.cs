@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 {
-    public interface IWBSMasterSyncService
+    public interface IAssetScheduleService
     {
         void SetSiteUrl(string siteUrl);
 
-        void Sync();
+        bool CheckTwoMonthsBeforeExpireDate();
     }
 }
