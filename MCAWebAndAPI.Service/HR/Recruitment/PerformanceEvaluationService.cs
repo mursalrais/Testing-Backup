@@ -55,8 +55,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 updatedValues.Add("latestdateforapproval1", PerformanceEvaluation.LatestDateApproval1.Value);
                 updatedValues.Add("latestdateforapproval2", PerformanceEvaluation.LatestDateApproval2.Value);
             }
-            updatedValues.Add("pestatus", "Closed");
-            updatedValues.Add("closingdate", DateTime.UtcNow);
+            else
+            {
+                updatedValues.Add("pestatus", "Closed");
+                updatedValues.Add("closingdate", DateTime.UtcNow);
+            }
             try
             {
                 SPConnector.UpdateListItem(SP_LIST_NAME, PerformanceEvaluation.ID, updatedValues, _siteUrl);
