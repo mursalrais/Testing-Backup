@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
-using MCAWebAndAPI.Model.ViewModel.Form.Shared;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
-using static MCAWebAndAPI.Model.ViewModel.Form.Finance.PettyCashTransactionItem;
+using MCAWebAndAPI.Model.ViewModel.Form.Shared;
 
 namespace MCAWebAndAPI.Service.Finance
 {
@@ -38,36 +40,35 @@ namespace MCAWebAndAPI.Service.Finance
             return glMasters;
         }
 
-        //// the following pindah ke COMWBSController
-        //public static IEnumerable<WBSMasterVM> GetWBSMaster(string siteUrl, string activityValue = null)
-        //{
-        //    string caml = null;
-        //    if (!string.IsNullOrWhiteSpace(activityValue))
-        //    {
-        //        var camlGetSubactivity = @"<View><Query><Where><Eq><FieldRef Name='" + ACTIVITYID_SUBACTIVITY + "' /><Value Type='Lookup'>" +
-        //            activityValue + "</Value></Eq></Where></Query></View>";
+        public static IEnumerable<WBSMasterVM> GetWBSMaster(string siteUrl, string activityValue=null)
+        {
+            string caml = null;
+            if (!string.IsNullOrWhiteSpace(activityValue))
+            {
+                var camlGetSubactivity = @"<View><Query><Where><Eq><FieldRef Name='" + ACTIVITYID_SUBACTIVITY + "' /><Value Type='Lookup'>" +
+                    activityValue + "</Value></Eq></Where></Query></View>";
 
-        //        string valuesText = string.Empty;
-        //        foreach (var item in SPConnector.GetList(SUBACTIVITY_SITE_LIST, siteUrl, camlGetSubactivity))
-        //        {
-        //            valuesText += "<Value Type='Lookup'>" + Convert.ToString(item[FIELD_ID]) + "</Value>";
-        //        }
+                string valuesText = string.Empty;
+                foreach (var item in SPConnector.GetList(SUBACTIVITY_SITE_LIST, siteUrl, camlGetSubactivity))
+                {
+                    valuesText += "<Value Type='Lookup'>" + Convert.ToString(item[FIELD_ID]) + "</Value>";
+                }
 
-        //        var camlGetWbs = @"<View><Query><Where><In><FieldRef Name='" + WBS_SUBACTIVITY_ID + "' /><Values>" +
-        //            valuesText + "</Values></In></Where></Query></View>";
-        //    }
+                var camlGetWbs = @"<View><Query><Where><In><FieldRef Name='" + WBS_SUBACTIVITY_ID + "' /><Values>" +
+                    valuesText + "</Values></In></Where></Query></View>";
+            }
 
 
-        //    var wbsMasters = new List<WBSMasterVM>();
+            var wbsMasters = new List<WBSMasterVM>();
 
-        //    foreach (var item in SPConnector.GetList(WBSMASTER_SITE_LIST, siteUrl, caml))
-        //    {
-        //        wbsMasters.Add(ConvertToWBSMasterModel(item));
-        //    }
+            foreach (var item in SPConnector.GetList(WBSMASTER_SITE_LIST, siteUrl, caml))
+            {
+                wbsMasters.Add(ConvertToWBSMasterModel(item));
+            }
 
-        //    return wbsMasters;
-        //}
-
+            return wbsMasters;
+        }
+   
 
         public static IEnumerable<ProfessionalVM> GetProfessionalMaster(string siteUrl)
         {
@@ -115,11 +116,8 @@ namespace MCAWebAndAPI.Service.Finance
             };
         }
 
-
         public static string GetPosition(string username, string siteUrl)
         {
-            //TODO: change this implementation to Service.Common.ProfessionalService
-
             if (string.IsNullOrEmpty(siteUrl))
             {
                 throw new InvalidOperationException("Missing parameter: siteUrl.");
@@ -140,45 +138,43 @@ namespace MCAWebAndAPI.Service.Finance
         }
 
         public static IEnumerable<PettyCashTransactionItem> GetPettyCashTransaction(
-            string siteUrl, DateTime dateFrom, DateTime dateTo, string listName, string dateFieldName, Post sign, ConvertToVMFunction f)
+            string siteUrl, DateTime dateFrom, DateTime dateTo, string listName, string dateFieldName, ConvertToVMFunction f)
         {
             var pettyCashTransactions = new List<PettyCashTransactionItem>();
             var viewModel = new PettyCashPaymentVoucherVM();
 
-            var from = String.Format("{0}-{1}-{2}", dateFrom.Year, dateFrom.Month, dateFrom.Day);
-            var to = String.Format("{0}-{1}-{2}", dateTo.Year, dateTo.Month, dateTo.Day);
+            string caml = @"<Query>
+  <Where>
+    <And>
+      <Geq>
+        <FieldRef Name='{0}' />
+          <Value IncludeTimeValue='TRUE' Type='DateTime'>{1}</Value>
+      </Geq>
+      <Leq>
+        <FieldRef Name='{0}' />
+        <Value IncludeTimeValue='TRUE' Type='DateTime'>{2}</Value>
+      </Leq>
+    </And>
+  </Where>
+</Query>";
 
-            string caml = @"<View><Query>
-                                      <Where>
-                                        <And>
-                                          <Geq>
-                                            <FieldRef Name='{0}' />
-                                              <Value Type='DateTime'>{1}</Value>
-                                          </Geq>
-                                          <Leq>
-                                            <FieldRef Name='{0}' />
-                                            <Value Type='DateTime'>{2}</Value>
-                                          </Leq>
-                                        </And>
-                                      </Where>
-                                    </Query></View>";
-
-            caml = string.Format(caml, dateFieldName, from, to);
+            caml = string.Format(caml, dateFieldName, dateFrom, dateTo);
 
             var listItems = SPConnector.GetList(listName, siteUrl, caml);
 
             foreach (var item in listItems)
             {
-                pettyCashTransactions.Add(ConvertToVM(siteUrl, item, f, sign));
+                pettyCashTransactions.Add(ConvertToVM(siteUrl, item, f));
             }
 
             return pettyCashTransactions;
         }
 
-        public delegate PettyCashTransactionItem ConvertToVMFunction(string siteUrl, ListItem listItem, Post sign);
-        public static PettyCashTransactionItem ConvertToVM(string siteUrl, ListItem listItem, ConvertToVMFunction f, Post sign)
+        public delegate PettyCashTransactionItem ConvertToVMFunction(string siteUrl, ListItem listItem);
+        public static PettyCashTransactionItem ConvertToVM(string siteUrl, ListItem listItem, ConvertToVMFunction f)
         {
-            return f(siteUrl, listItem, sign);
+            return f(siteUrl, listItem);
         }
+
     }
 }

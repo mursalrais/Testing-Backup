@@ -1,0 +1,141 @@
+﻿@model MCAWebAndAPI.Model.ViewModel.Form.Finance.SCAVoucherVM
+
+@using (Html.BeginForm("CreateSCAVoucher", "FINSCAVoucher", FormMethod.Post,
+                        new
+                        {
+                            @class = "form-horizontal",
+                            enctype = "multipart/form-data"
+                        }))
+{
+    <fieldset>
+        <legend>Special Cash Advance Voucher</legend>
+        <div class="col-sm-5">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.SCAVoucherDate).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.SCAVoucherDate)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.SDO).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.SDO)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.EventBudgetNo).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.EventBudgetNo)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Currency).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.Currency)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.TotalAmount).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.TotalAmount)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.TotalAmountInWord).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.TotalAmountInWord)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Purpose).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.Purpose)
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-5">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Project).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.Project)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Activity).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.Activity)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.SubActivity).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.SubActivity)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Fund).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.Fund)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.RefferenceNo).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.RefferenceNo)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Remarks).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.Remarks)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Documents).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.Documents)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            @Html.Partial("_EventBudgetItems", Model)
+        </div>
+    </fieldset>
+    <div class="form-actions">
+        <div class="row">
+            <div class="col-sm-12">
+                <button id="submit-button" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    Save
+                </button>
+                <button id="submit-cancel" acti class="btn btn-primary" type="button">
+                    <i class="fa fa-back"></i>
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+@section scripts{
+    <script>
+
+        $(document).ready(function () {
+            var eventBudgetNoDropDownList = $("#EventBudgetNo_Value").data("kendoDropDownList");
+            eventBudgetNoDropDownList.bind("dataBound", function (e) {
+            });
+        });
+
+        function OnSelectEventBudgetNo(e) {
+            var dataItem = this.dataItem(e.item);
+            alert(dataItem.Value);
+        }
+
+        function filterEventBudgetNo() {
+            return {
+                eventBudgetId: $("#EventBudgetNo_Value").val()
+            };
+        }
+
+    </script>
+}

@@ -13,6 +13,9 @@ using Microsoft.SharePoint.Client;
 using System.IO;
 using Elmah;
 using MCAWebAndAPI.Service.Converter;
+using System.Web.Script.Serialization;
+using MCAWebAndAPI.Model.HR.DataMaster;
+using Newtonsoft.Json;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -32,6 +35,39 @@ namespace MCAWebAndAPI.Web.Controllers
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
             return Redirect((siteUrl ?? ConfigResource.DefaultBOSiteUrl)+ Service.Resources.UrlResource.AssetCheckResult);
+        }
+
+        public int PositionID(int? ID, string siteUrl)
+        {
+            assetCheckResultService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            if(ID == null)
+            {
+                ID = assetCheckResultService.GetMinIDProfesional();
+            }
+
+            int? ProfesionalID = ID;
+            //return assetCheckResultService.GetIDPosition(ProfesionalID);
+
+            int positionID = assetCheckResultService.GetIDPosition(ProfesionalID);
+
+            var otherController = DependencyResolver.Current.GetService<HRDataMasterController>();
+            var result = otherController.GetPositions();
+
+            string json = new JavaScriptSerializer().Serialize(result.Data);
+
+            JavaScriptSerializer js = new JavaScriptSerializer();
+            PositionMaster[] persons = js.Deserialize<PositionMaster[]>(json);
+
+            for (int i = 0; i < persons.Count(); i++)
+            {
+                if (persons[i].ID == positionID)
+                {
+                    return i;
+                }
+            }
+
+            return 0;            
         }
 
         //[HttpPost]

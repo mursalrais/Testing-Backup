@@ -53,9 +53,8 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
                         string requestorName = GetRequestorName(exitProcedureID);
 
-                        string subjectMail = "Pending Action for Exit Checklist Approval";
+                        string subjectMail = "Still Not Approved After 5 Working Days";
                         string contentMail = string.Format("There still a request for exit procedure from: {0} for item: {1} needed approval from you", requestorName, Convert.ToString(exitChecklist["Title"]));
-                        //string contentMail = string.Format("Dear {0}", );
 
                         SendMailTwoMonthBeforeExpired(approvalMail, subjectMail, contentMail);
                     }
@@ -72,7 +71,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
                         string requestorName = GetRequestorName(exitProcedureID);
 
-                        string subjectMail = "Pending Action for Exit Checklist Approval";
+                        string subjectMail = "Still Not Approved After 5 Working Days";
                         string contentMail = string.Format("There still a request for exit procedure from: {0} for item: {1} needed approval from you", requestorName, Convert.ToString(exitChecklist["Title"]));
 
                         SendMailTwoMonthBeforeExpired(approvalMail, subjectMail, contentMail);
@@ -90,7 +89,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
                         string requestorName = GetRequestorName(exitProcedureID);
 
-                        string subjectMail = "Pending Action for Exit Checklist Approval";
+                        string subjectMail = "Still Not Approved After 5 Working Days";
                         string contentMail = string.Format("There still a request for exit procedure from: {0} for item: {1} needed approval from you", requestorName, Convert.ToString(exitChecklist["Title"]));
 
                         SendMailTwoMonthBeforeExpired(approvalMail, subjectMail, contentMail);

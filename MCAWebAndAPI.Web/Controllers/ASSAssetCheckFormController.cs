@@ -24,12 +24,9 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         // GET: ASSAssetCheckForm
-        public ActionResult Index(string siteUrl)
+        public ActionResult Index()
         {
-            assetCheckFormService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-
-            return Redirect((siteUrl ?? ConfigResource.DefaultBOSiteUrl) + Service.Resources.UrlResource.AssetCheckForm);
+            return View();
         }
 
         //public ActionResult Create()
@@ -52,7 +49,7 @@ namespace MCAWebAndAPI.Web.Controllers
             if (!string.IsNullOrEmpty(save))
             {
                 int? formid = assetCheckFormService.save(data);
-                return RedirectToAction("Index");
+                return RedirectToAction("View", "ASSAssetCheckForm", new { ID = formid});
             }
 
             if(!string.IsNullOrEmpty(cancel))

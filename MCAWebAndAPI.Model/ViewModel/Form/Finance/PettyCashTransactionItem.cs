@@ -6,14 +6,8 @@ using MCAWebAndAPI.Model.ViewModel.Control;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 {
-    /// <summary>
-    /// FIN15: Petty Cash Statement
-    /// </summary>
-
     public class PettyCashTransactionItem : Item
     {
-        public enum Post { DR, CR }
-
         /// <summary>
         /// Transcation Date
         /// </summary>
@@ -35,11 +29,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         public CurrencyComboBoxVM Currency { get; set; } = new CurrencyComboBoxVM();
 
         [Required]
-        [UIHint("Decimal")]
-        public decimal? Amount { get; set; } = 0;
-
-        [Required]
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
-        public decimal Balance { get; set; } = 0;
+        public decimal Amount { get; set; } = 0;
+
     }
 }

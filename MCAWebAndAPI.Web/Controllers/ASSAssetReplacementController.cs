@@ -9,8 +9,6 @@ using Kendo.Mvc.UI;
 using Kendo.Mvc.Extensions;
 using MCAWebAndAPI.Web.Resources;
 using MCAWebAndAPI.Web.Helpers;
-using MCAWebAndAPI.Service.Resources;
-using System.Net;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -28,170 +26,56 @@ namespace MCAWebAndAPI.Web.Controllers
             return View();
         }
 
-        public ActionResult Create(string siteUrl, int? id)
+        public ActionResult Create(string siteUrl)
         {
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
             var viewModel = _service.GetPopulatedModel();
-            if(id != null)
-            {
-                viewModel = _service.GetInfoFromAcquisitin(id, siteUrl);
-            }
 
             return View(viewModel);
         }
 
-        [HttpPost]
-        public ActionResult Submit(AssetReplacementHeaderVM _data, int id, string SiteUrl)
+        public ActionResult Edit()
         {
-            SiteUrl = SessionManager.Get<string>("SiteUrl");
-            _service.SetSiteUrl(SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
-
-            if (_data.Details.Count() == 0)
-            {
-                Response.TrySkipIisCustomErrors = true;
-                Response.TrySkipIisCustomErrors = true;
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse("Details should not empty");
-            }
-
-            //return View(new AssetMasterVM());
-            int? headerID = null;
-            try
-            {
-                headerID = _service.CreateHeader(_data, id, SiteUrl);
-            }
-            catch (Exception e)
-            {
-                Response.TrySkipIisCustomErrors = true;
-                Response.TrySkipIisCustomErrors = true;
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse("Failed To Save Header..");
-            }
-
-            try
-            {
-                _service.CreateDetails(headerID, _data.Details);
-            }
-            catch (Exception e)
-            {
-                _service.RollbackParentChildrenUpload("Asset Replacement", headerID, SiteUrl);
-                Response.TrySkipIisCustomErrors = true;
-                Response.TrySkipIisCustomErrors = true;
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse("Failed To Save Detail..");
-            }
-            return JsonHelper.GenerateJsonSuccessResponse(SiteUrl + UrlResource.AssetReplacement);
-            //return Redirect(string.Format("{0}/{1}", siteUrl ?? ConfigResource.DefaultBOSiteUrl, UrlResource.AssetAcquisition));
-        }
-
-        public ActionResult Edit(int ID, string siteUrl)
-        {
-            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-
-            var viewModel = _service.GetHeader(ID);
-
-            int? headerID = null;
-            headerID = viewModel.Id;
-
-            try
-            {
-                var viewdetails = _service.GetDetails(headerID);
-                viewModel.Details = viewdetails;
-            }
-            catch (Exception e)
-            {
-                Response.TrySkipIisCustomErrors = true;
-                Response.TrySkipIisCustomErrors = true;
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse("Failed To Show Data For Update");
-            }
+            var viewModel = new AssetReplacementHeaderVM();
 
             return View(viewModel);
         }
 
-        public ActionResult View(int ID, string siteUrl)
-        {
-            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-
-            var viewModel = _service.GetHeader(ID);
-
-            int? headerID = null;
-            headerID = viewModel.Id;
-
-            try
-            {
-                var viewdetails = _service.GetDetails(headerID);
-                viewModel.Details = viewdetails;
-            }
-            catch (Exception e)
-            {
-                Response.TrySkipIisCustomErrors = true;
-                Response.TrySkipIisCustomErrors = true;
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse("Failed To Show Data For Update");
-            }
-
-            return View(viewModel);
-        }
-
-        public ActionResult Sync(string siteUrl)
-        {
-            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            var viewModel = _service.GetPopulatedModel();
-            return View(viewModel);
-        }
-
-        public ActionResult Syncronize(string siteUrl)
-        {
-            siteUrl = SessionManager.Get<string>("SiteUrl");
-            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            try
-            {
-                var viewModel = _service.Syncronize(siteUrl);
-            }
-            catch (Exception e)
-            {
-                Response.TrySkipIisCustomErrors = true;
-                Response.TrySkipIisCustomErrors = true;
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse("Failed To Syncronize..");
-            }
-
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetReplacement);
-        }
-
-        public ActionResult Update(AssetReplacementHeaderVM _data, string SiteUrl)
+        public ActionResult GetInfoFromAcquisitin(int ID)
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
-            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            int IDacquisition = ID;
+            var acquisition = _service.GetInfoFromAcquisitin(IDacquisition, siteUrl);
+            //var details = _service.GetInfoFromAcquisitinDetail(IDacquisition, siteUrl);
 
-            try
-            {
-                _service.UpdateHeader(_data);
-            }
-            catch (Exception e)
-            {
-                Response.TrySkipIisCustomErrors = true;
-                Response.TrySkipIisCustomErrors = true;
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse("Failed To Update Header");
-            }
+            //var professionals = GetFromExistingSession();
+            return Json(
+                new
+                {
+                    acquisition.Vendor,
+                    acquisition.Pono,
+                    acquisition.purchasedatetext,
+                    acquisition.purchaseDescription
 
-            try
-            {
-                //update items
-                _service.UpdateDetails(_data.Id, _data.Details);
-            }
-            catch (Exception e)
-            {
-                return JsonHelper.GenerateJsonErrorResponse("Failed To Update Detail");
-            }
+                }, JsonRequestBehavior.AllowGet);
+        }
 
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetReplacement);
+        public ActionResult GetInfoFromAcquisitinDetail(int ID)
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            int IDacquisition = ID;
+            var details = _service.GetInfoFromAcquisitinDetail(IDacquisition, siteUrl);
+            return Json(details.Select(e =>
+                new
+                {
+                    e.AssetSubAsset,
+                    e.Wbs,
+                    e.CostIdr,
+                    e.CostUsd,
+                    e.remarks
+                }),
+                JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetAssetSubSAssetGrid()

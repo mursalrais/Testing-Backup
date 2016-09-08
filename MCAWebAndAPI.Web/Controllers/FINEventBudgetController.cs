@@ -39,27 +39,20 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
 
-        public ActionResult Item(string siteUrl = null, int? id = null, string userEmail = "")
+        public ActionResult Item(string siteUrl = null, int? id = null)
         {
-            if (userEmail==string.Empty)
-            {
-                throw new InvalidOperationException("Invalid parameter: userEmail.");
-            }
-
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
 
             service.SetSiteUrl(siteUrl);
             requisitionNoteService.SetSiteUrl(siteUrl);
-            SessionManager.Set(SharedController.Session_SiteUrl, siteUrl);
+            SessionManager.Set(SharedFinanceController.Session_SiteUrl, siteUrl);
 
             var viewModel = new EventBudgetVM();
-            viewModel.UserEmail = userEmail;
-
             if (id.HasValue)
             {
                 viewModel = service.Get(id);
 
-                Tuple<int, string> idNumber = requisitionNoteService.GetRequisitioNoteIdAndNoByEventBudgetID(viewModel.ID.Value);
+                Tuple<int,string> idNumber = requisitionNoteService.GetRequisitioNoteIdAndNoByEventBudgetID(viewModel.ID.Value);
 
                 viewModel.RequisitionNoteId = idNumber.Item1;
                 viewModel.RequisitionNoteNo = idNumber.Item2;
@@ -73,7 +66,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetGLMaster()
         {
-            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl);
+            var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl);
             service.SetSiteUrl(siteUrl);
 
             var glMasters = FinService.SharedService.GetGLMaster(siteUrl);
@@ -87,7 +80,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetEventBudgetList()
         {
-            service.SetSiteUrl(SessionManager.Get<string>(SharedController.Session_SiteUrl));
+            service.SetSiteUrl(SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl));
 
             var eventBudgets = service.GetEventBudgetList().ToList();
 
@@ -103,15 +96,10 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Save(string actionType, FormCollection form, EventBudgetVM viewModel)
+        public async Task<ActionResult> Save(FormCollection form, EventBudgetVM viewModel)
         {
-            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
+            var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);
-
-            if (actionType != "Save")
-            {
-                return Redirect(string.Format(FirstPageUrl, siteUrl));
-            }
 
             int? headerId = null;
 
@@ -171,9 +159,9 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult Print(FormCollection form, EventBudgetVM viewModel)
         {
             string RelativePath = PrintPageUrl;
-            string domain = new SharedFinanceController().GetImageLogoPrint(Request.IsSecureConnection,Request.Url.Authority);
+            string domain = "http://" + Request.Url.Authority + "/img/logo.png";
 
-            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl);
+            var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl);
             service.SetSiteUrl(siteUrl);
             viewModel = service.Get(viewModel.ID);
 
@@ -182,14 +170,6 @@ namespace MCAWebAndAPI.Web.Controllers
             var fileName = viewModel.No + "_Application.pdf";
             byte[] pdfBuf = null;
             string content;
-
-            string footer = string.Empty;
-
-            //TODO: Resolve user name
-            string userName = "xxxx";
-
-            DateTime dt = DateTime.Now;
-            footer = string.Format("This form was printed by {0}, {1:MM/dd/yyyy}, {2:HH:mm}", userName, dt, dt);
 
             using (var writer = new StringWriter())
             {
@@ -202,7 +182,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 // Get PDF Bytes
                 try
                 {
-                    pdfBuf = PDFConverter.Instance.ConvertFromHTML(fileName, content, footer);
+                    pdfBuf = PDFConverter.Instance.ConvertFromHTML(fileName, content);
                 }
                 catch (Exception e)
                 {

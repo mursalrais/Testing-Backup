@@ -64,7 +64,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
         public string ContactNo { get; set; }
 
         [DisplayName("Loan Date")]
-        [Required(ErrorMessage = "LoanDate Field Is Required")]
+        //[Required(ErrorMessage = "LoanDate Field Is Required")]
         [UIHint("Date")]
         public DateTime? LoanDate { get; set; }
 

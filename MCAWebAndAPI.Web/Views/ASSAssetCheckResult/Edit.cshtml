@@ -2,7 +2,7 @@
 
 @model AssetCheckResultHeaderVM
 
-<form class="form-horizontal" method="post" action="/ASSAssetCheckResult/Edit" id="create-asset-check-result">
+<form class="form-horizontal" method="post" action="/ASSAssetCheckResult/Create" id="create-asset-check-result">
     <fieldset>
         <legend>Form Asset Check Result</legend>
         <div class="col-md-6">
@@ -58,8 +58,6 @@
                 @Html.HiddenFor(m => m.AssetCheckResultID, new { Value = Model.AssetCheckResultID })
 
                 @Html.HiddenFor(m => m.ID, new { Value = Model.ID })
-
-                @Html.HiddenFor(m => m.hFormID, new { Value = Model.FormID.Text })
 
         <div class="row">
             <div>

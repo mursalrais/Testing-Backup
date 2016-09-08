@@ -66,8 +66,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         public string GLDescription { get; set; }
 
         [DisplayName("Amount Reimbursed")]
-        [Editable(false)]
-        public decimal? AmountReimbursed { get; set; }
+        public decimal AmountReimbursed { get; set; } = 0;
 
         [UIHint("TextArea")]
         public string Remarks { get; set; }
@@ -84,7 +83,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         public DateTime Date { get; set; }
 
         [DisplayName("Amount liquidated")]
-        public decimal? Amount { get; set; } = 0;
+        public decimal Amount { get; set; } = 0;
     }
 
 }

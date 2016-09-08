@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Web;
 using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Model.ViewModel.Control;
@@ -9,17 +12,15 @@ using MCAWebAndAPI.Model.ViewModel.Control;
 namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 {
     public class SCASettlementItemVM : Item
-    {
-        /// <summary>
-        /// Wireframe FIN07: SCA Settlement
-        /// </summary>
+    {    /// <summary>
+         /// Wirefram FIN07: SCA Settlement
+         /// </summary>
 
         [UIHint("Date")]
         [Required]
-        [DataType(DataType.Date)]
-        [DisplayName("Receipt Date")]
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime ReceiptDate { get; set; }
+        [DisplayName("Receipt Date")]
+        public DateTime? ReceiptDate { get; set; }
 
         [DisplayName("Receipt No")]
         public string ReceiptNo { get; set; }

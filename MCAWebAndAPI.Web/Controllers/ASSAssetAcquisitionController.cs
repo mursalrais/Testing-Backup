@@ -158,7 +158,6 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
-                _assetAcquisitionService.RollbackParentChildrenUpload("Asset Acquisition", headerID, siteUrl);
                 Response.TrySkipIisCustomErrors = true;
                 Response.TrySkipIisCustomErrors = true;
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;

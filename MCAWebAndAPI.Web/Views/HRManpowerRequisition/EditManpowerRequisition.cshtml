@@ -220,11 +220,6 @@
             //        }
             //    }
             //}
-
-            if (($("#Position_Value").val() == null) || ($("#Position_Value").val() == "")) {
-                alert("Position value cannot null");
-                return false;
-            }
             return true;
         }
         $(document).ready(function () {
@@ -258,9 +253,8 @@
 
             $("#save-button").click(function () {                
                 var isValid = checkGrid();
-                if (isValid && ($('.form-horizontal').valid())) {
+                if (isValid) {
                     $("form").submit();
-                    showLoading();
                 }
 
             });
@@ -269,15 +263,13 @@
                 if (isValid) {
                     $("#Status_Value").prop("value", "Draft");
                     $("form").submit();
-                    showLoading();
                 }
             });
             $("#submit-button").click(function () {
                 var isValid = checkGrid();
-                if (isValid && ($('.form-horizontal').valid())) {
+                if (isValid) {
                     $("#Status_Value").prop("value", "Pending Approval");
                     $("form").submit();
-                    showLoading();
                 }
             });
             var isKeyPosition = $("#IsKeyPosition").val();
@@ -286,6 +278,7 @@
                 $("label[for='Yes']").show();
                 $("label[for='No']").hide();
                 $("#isKeyValuationValue").val(true);
+                console.log(isKeyPosition+" asdijsoi ");
 
             }
             else {

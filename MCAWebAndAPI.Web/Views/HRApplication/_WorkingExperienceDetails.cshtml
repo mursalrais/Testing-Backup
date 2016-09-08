@@ -11,24 +11,15 @@
             columns.Bound(p => p.Position).ClientTemplate("#= Position #" +
                           "<input type='hidden' name='WorkingExperienceDetails[#= getWorkingExperienceDetail(data)#].Position' value='#= Position #' />"
                         ).Width(300);
-            columns.Bound(p => p.StrPosition).Hidden().ClientTemplate("#= StrPosition #" +
-                          "<input type='hidden' name='WorkingExperienceDetails[#= getWorkingExperienceDetail(data)#].StrPosition' value='#= StrPosition #' />"
-                        ).Width(300);
             columns.Bound(p => p.Company).ClientTemplate("#= Company #" +
                                "<input type='hidden' name='WorkingExperienceDetails[#= getWorkingExperienceDetail(data)#].Company' value='#= Company #' />"
                              ).Width(400);
             columns.Bound(p => p.From).ClientTemplate("#=getMonthName(From)#" + " " +  "#= From.getFullYear() #" +
                                "<input type='hidden' name='WorkingExperienceDetails[#= getWorkingExperienceDetail(data)#].From' value='#= From #' />"
                              ).Width(150);
-            columns.Bound(p => p.StrFrom).Hidden().ClientTemplate("#= StrFrom #" +
-                          "<input type='hidden' name='WorkingExperienceDetails[#= getWorkingExperienceDetail(data)#].StrFrom' value='#= StrFrom #' />"
-                        ).Width(150);
             columns.Bound(p => p.To).ClientTemplate("#=getMonthName(To)#" + " " + "#= To.getFullYear() #" +
                                "<input type='hidden' name='WorkingExperienceDetails[#= getWorkingExperienceDetail(data)#].To' value='#= To #' />"
                              ).Width(150);
-            columns.Bound(p => p.StrTo).Hidden().ClientTemplate("#= StrTo #" +
-                          "<input type='hidden' name='WorkingExperienceDetails[#= getWorkingExperienceDetail(data)#].StrTo' value='#= StrTo #' />"
-                        ).Width(150);
             columns.Bound(p => p.Remarks).ClientTemplate("#= Remarks #" +
                             "<input type='hidden' name='WorkingExperienceDetails[#= getWorkingExperienceDetail(data)#].Remarks' value='#= Remarks #' />"
                           );

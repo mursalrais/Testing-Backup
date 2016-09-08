@@ -8,13 +8,13 @@
 }
 
 @using (Ajax.BeginForm("EditProfessional", "HRProfessional", FormMethod.Post, new AjaxOptions
-    {
-        OnBegin = "onBeginForm",
-        OnComplete = "onCompleteForm",
-        OnSuccess = "onSuccessFormEmbed",
-        OnFailure = "onFailureForm"
-    }, new { @class = "form-horizontal" }))
-    {
+{
+    OnBegin = "onBeginForm",
+    OnComplete = "onCompleteForm",
+    OnSuccess = "onSuccessFormEmbed",
+    OnFailure = "onFailureForm"
+}, new { @class = "form-horizontal" }))
+{
     <fieldset>
         <legend>Validation Status</legend>
         <div class="row">
@@ -65,7 +65,7 @@
         <div class="row">
             <div class="col-sm-12">
                 @*Professional View*@
-                @if (!ViewBag.IsHRView )
+                @if (!ViewBag.IsHRView)
                 {
                     <button id="ask-hr-to-validate-action" class="btn btn-submit" type="button">
                         Validate to HR
@@ -91,7 +91,7 @@
 @section scripts{
 
     <script>
-        
+
         function filterLevel() {
             console.log("filterlever works");
             return {
@@ -101,7 +101,7 @@
         }
 
         function checkPosition() {
-            
+
             if (($("#CurrentPosition_Value").val() == null) || ($("#CurrentPosition_Value").val() == "")) {
                 alert("Current Position value cannot null");
                 return false;
@@ -120,7 +120,7 @@
                     $('#ValidationAction').prop('value', id);
                     $('form').submit();
                 }
-                
+
             });
         });
 

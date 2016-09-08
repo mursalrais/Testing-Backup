@@ -97,7 +97,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             viewModel.ProfessionalID = FormatUtil.ConvertLookupToID(listItem, "professional_x003a_ID");
             viewModel.ProjectUnit = Convert.ToString(listItem["ProjectOrUnit"]);
             viewModel.Position = Convert.ToString(listItem["position"]);
-            viewModel.Status = (listItem["professional_x003a_Tax_x0020_Sta"] as FieldLookupValue).LookupValue;
+            viewModel.Status = Convert.ToString(listItem["maritalstatus"]);
             viewModel.JoinDate = Convert.ToDateTime(listItem["joindate"]).ToLocalTime().ToShortDateString();
             viewModel.DateOfNewPsa = Convert.ToDateTime(listItem["dateofnewpsa"]).ToLocalTime().ToShortDateString();
             viewModel.EndOfContract = Convert.ToDateTime(listItem["psaexpirydate"]).ToLocalTime().ToShortDateString();
@@ -127,10 +127,9 @@ namespace MCAWebAndAPI.Service.HR.Payroll
                     }
                     continue;
                 }
-                var updatedValue = new Dictionary<string, object>(); 
+                var updatedValue = new Dictionary<string, object>();
                 updatedValue.Add("monthlyfeeid", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
                 updatedValue.Add("dateofnewfee", viewModel.DateOfNewFee);
-                updatedValue.Add("enddate", viewModel.EndDateFee);
                 updatedValue.Add("monthlyfee", viewModel.MonthlyFee);
                 updatedValue.Add("annualfee", viewModel.AnnualFee);
                 updatedValue.Add("currency", viewModel.Currency.Text);
@@ -167,7 +166,6 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             {
                 ID = Convert.ToInt32(item["ID"]),
                 DateOfNewFee = Convert.ToDateTime(item["dateofnewfee"]),
-                EndDateFee = Convert.ToDateTime(item["enddate"]),
                 MonthlyFee = Convert.ToInt32(item["monthlyfee"]),
                 AnnualFee = Convert.ToInt32(item["annualfee"]),
                 Currency = MonthlyFeeDetailVM.GetCurrencyDefaultValue(
@@ -197,8 +195,8 @@ namespace MCAWebAndAPI.Service.HR.Payroll
                 return worksheet;
 
             var period = (DateTime)periodParam;
-            var startDate = period.GetFirstPayrollDay().ToLocalTime();
-            var finishDate = period.GetLastPayrollDay().ToLocalTime();
+            var startDate = period.GetFirstPayrollDay();
+            var finishDate = period.GetLastPayrollDay();
             var dateRange = startDate.EachDay(finishDate);
 
             // Set Site URL
@@ -229,7 +227,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             {
                 await Task.WhenAll(populateProfessionalTask, populateValidPSATask, 
                     populateProfessionalMonthlyFeeTask, populateProfessionalDayOffRequestTask, 
-                    populateHolidaysAndPublicHolidays, populateAdjustmentTask);
+                    populateHolidaysAndPublicHolidays);
             }
             catch (Exception e)
             {

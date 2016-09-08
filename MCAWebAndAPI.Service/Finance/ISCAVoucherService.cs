@@ -28,7 +28,7 @@ namespace MCAWebAndAPI.Service.Finance
 
         IEnumerable<SCAVoucherItemsVM> GetEventBudgetItems(int eventBudgetID);
 
-        int? CreateSCAVoucher(ref SCAVoucherVM scaVoucher);
+        int? CreateSCAVoucher(SCAVoucherVM scaVoucher);
 
         int GetActivityIDByEventBudgetID(int eventBudgetID);
 

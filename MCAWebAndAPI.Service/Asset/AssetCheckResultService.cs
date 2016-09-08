@@ -22,6 +22,30 @@ namespace MCAWebAndAPI.Service.Asset
             _siteUrl = siteUrl;
         }
 
+        public int GetMinIDProfesional()
+        {
+            var caml = @"<View><Query><Where><Neq><FieldRef Name='ID' /><Value Type='Counter'>0</Value></Neq></Where><OrderBy><FieldRef Name='Title' Ascending='True' /></OrderBy></Query><RowLimit Paged='TRUE'>1</RowLimit></View>";
+            var siteHr = _siteUrl.Replace("/bo", "/hr");
+            var dataProvesional = SPConnector.GetList("Professional Master", siteHr,caml);
+            int ID = 0;
+            foreach(var item in dataProvesional)
+            {
+                ID = Convert.ToInt32(item["ID"].ToString());
+            }
+
+            return ID;
+        }
+
+        public int GetIDPosition(int? ProfesionalID)
+        {
+            var siteHr = _siteUrl.Replace("/bo", "/hr");
+            var dataProvesional = SPConnector.GetListItem("Professional Master", ProfesionalID, siteHr);
+
+            int PositionID = (dataProvesional["Position"] as FieldLookupValue).LookupId;
+
+            return PositionID;
+        }
+
         public AssetCheckResultHeaderVM GetPopulatedModel(int? ID = default(int?), string FormID = null, AssetCheckResultHeaderVM dataAssetResult = null)
         {
             var model = new AssetCheckResultHeaderVM();
@@ -63,7 +87,7 @@ namespace MCAWebAndAPI.Service.Asset
                 }
                 if (cekResult["approvalposision"] != null)
                 {
-                    model.Posision.Value = Convert.ToInt32(cekResult["approvalposision"].ToString());
+                    model.Position.Value = Convert.ToInt32(cekResult["approvalposision"].ToString());
                 }
 
                 var modelDetail = new List<AssetCheckResultItemVM>();
@@ -122,7 +146,6 @@ namespace MCAWebAndAPI.Service.Asset
                         }
                         modelDetailItem.Status = (item["assetstatus"] == null ? "" : item["assetstatus"].ToString());
                     }
-
 
                     modelDetailItem.Existense = (item["existence"] == null ? "" : item["existence"].ToString());
                     modelDetailItem.Condition = (item["condition"] == null ? "" : item["condition"].ToString());
@@ -417,7 +440,7 @@ namespace MCAWebAndAPI.Service.Asset
                 if (isApproval)
                 {
                     columnValues.Add("approvalname", model.Name.Value);
-                    columnValues.Add("approvalposision", model.Posision.Value);
+                    columnValues.Add("approvalposision", model.Position.Value);
 
                     EmailHelperAssetCheckResult email = new EmailHelperAssetCheckResult();
                     email = RequestApproveEmail(
@@ -525,7 +548,7 @@ namespace MCAWebAndAPI.Service.Asset
                 if (isApproval)
                 {
                     columnValues.Add("approvalname", data.Name.Value);
-                    columnValues.Add("approvalposision", data.Posision.Value);
+                    columnValues.Add("approvalposision", data.Position.Value);
                 }
 
                 SPConnector.AddListItem("Asset Check Result", columnValues, _siteUrl);

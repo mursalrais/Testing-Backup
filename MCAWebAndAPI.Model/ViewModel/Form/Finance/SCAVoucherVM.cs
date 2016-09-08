@@ -106,7 +106,5 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         public string DocumentUrl { get; set; }
 
         public string Action { get; set; }
-
-        public string UserEmail { get; set; }
     }
 }

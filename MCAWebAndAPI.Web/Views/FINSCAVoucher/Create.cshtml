@@ -8,7 +8,6 @@
 @using (Html.BeginForm("Create", "FINSCAVoucher", FormMethod.Post,
                                     new
                                     {
-                                        @id = "formCreateSCA",
                                         @class = "form-horizontal",
                                         enctype = "multipart/form-data"
                                     }))
@@ -21,7 +20,7 @@
 
         <legend>Item Detail</legend>
         <div class="row">
-            @Html.Partial("_EventBudgetItems", Model.SCAVoucherItems)
+            @Html.Partial("_EventBudgetItems", Model)
         </div>
     </fieldset>
 
@@ -32,7 +31,7 @@
                     <i class="fa fa-save"></i>
                     Save
                 </button>
-                <button id="submit-cancel" acti class="btn btn-primary" type="reset">
+                <button id="submit-cancel" acti class="btn btn-primary" type="button">
                     <i class="fa fa-back"></i>
                     Cancel
                 </button>
@@ -43,22 +42,6 @@
 
 @section scripts{
     <script>
-        $("#formCreateSCA").on('submit', function () {
-            var grid = $("#EventBudgetDetail").data("kendoGrid");
-            var dataSource = grid.dataSource;
-
-            //records on current view / page   
-            var recordsOnCurrentView = dataSource.view().length;
-            //total records
-            var totalRecords = dataSource.total();
-            if (totalRecords <= 0) {
-                alert("Item Detail is required.");
-                return false;
-            }
-
-            return true;
-        });
-
         function GetEventBudgetItem(dataItem) {
             $("#EventBudgetDetail").data("kendoGrid").dataSource.read();
         }

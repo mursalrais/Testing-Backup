@@ -34,23 +34,6 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewModel);
         }
 
-        [HttpGet]
-        public ActionResult UploadMaster(string siteUrl = null)
-        {
-            if (siteUrl == null)
-                return RedirectToAction("Index", "Error", new { errorMessage = "Parameter cannot be null" });
-
-            SessionManager.Set("SiteUrl", siteUrl);
-
-            var emptyTable = GenerateEmptyDataTable();
-            SessionManager.Set("CSVDataTable", emptyTable);
-
-            var viewModel = new CSVVM();
-            viewModel.DataTable = emptyTable;
-
-            return View(viewModel);
-        }
-
         private DataTable GenerateEmptyDataTable()
         {
             // Here we create a DataTable with four columns.

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MCAWebAndAPI.Model.ViewModel.Form.Common;
 using MCAWebAndAPI.Model.ViewModel.Form.HR;
 
 namespace MCAWebAndAPI.Service.HR.Timesheet
@@ -11,9 +12,11 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
     {
         void SetSiteUrl(string siteUrl = null);
 
-        TimesheetVM GetTimesheet(string userlogin, DateTime period);
+      //  TimesheetVM GetTimesheet(string userlogin, DateTime period);
 
-        TimesheetVM GetTimesheetLoadUpdate(int? id, string userlogin);
+        Task<TimesheetVM> GetTimesheetAsync(string userlogin, DateTime period);
+
+        Task<TimesheetVM> GetTimesheetLoadUpdate(int? id, string userlogin);
 
         IEnumerable<TimesheetDetailVM> GetTimesheetDetails(string userlogin, DateTime period, string strName);
 
@@ -27,8 +30,8 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
         Task CreateTimesheetDetailsAsync(int? headerId, IEnumerable<TimesheetDetailVM> timesheetDetails);
         void CreateTimesheetDetails(int? headerId, IEnumerable<TimesheetDetailVM> timesheetDetails);
 
-        Task CreateWorkflowTimesheetAsync(int? headerId, TimesheetVM header);
-        void CreateWorkflowTimesheet(int? headerId, TimesheetVM header);
+        Task CreateWorkflowTimesheetAsync(int? headerId, IEnumerable<WorkflowItemVM> workflowItems, string strStatus);
+        void CreateWorkflowTimesheet(int? headerId, IEnumerable<WorkflowItemVM> workflowItems);
 
         void UpdateApproval(TimesheetVM header);
 

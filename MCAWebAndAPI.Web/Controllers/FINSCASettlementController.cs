@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 using Elmah;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 using MCAWebAndAPI.Service.Converter;
 using MCAWebAndAPI.Service.Finance;
+using MCAWebAndAPI.Service.Utils;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;
 
@@ -14,13 +18,13 @@ using static MCAWebAndAPI.Model.ViewModel.Form.Finance.Shared;
 namespace MCAWebAndAPI.Web.Controllers
 {
     /// <summary>
-    /// Wireframe FIN07: SCA Settlement
+    /// Wirefram FIN07: SCA Settlement
     /// </summary>
 
     [Filters.HandleError]
     public class FINSCASettlementController : Controller
     {
-
+        
         private const string PrintPageUrl = "~/Views/FINSCASettlement/Print.cshtml";
         private const string SuccessMsgFormatUpdated = "SCA settlement for {0} has been successfully updated.";
         private const string FirstPageUrl = "{0}/Lists/SCA%20Settlement/AllItems.aspx";
@@ -34,7 +38,7 @@ namespace MCAWebAndAPI.Web.Controllers
         private const string PartialSettlement = "Partial Settlement";
         private const string LastSettlement = "Last Settlement";
 
-
+        
         ISCASettlementService service;
         ISCAVoucherService serviceSCAVoucher;
 
@@ -48,7 +52,7 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);
-            SessionManager.Set(SharedController.Session_SiteUrl, siteUrl);
+            SessionManager.Set(SharedFinanceController.Session_SiteUrl, siteUrl);
 
             var viewModel = service.Get(GetOperation(op), id);
 
@@ -59,12 +63,12 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult GetSCAVouchers(string ID)
         {
-            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
+            var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
 
             serviceSCAVoucher.SetSiteUrl(siteUrl);
 
             var header = serviceSCAVoucher.Get(Convert.ToInt32(ID));
-
+            
             return Json(
                 new
                 {
@@ -73,7 +77,7 @@ namespace MCAWebAndAPI.Web.Controllers
                     Purpose = header.Purpose,
                     Project = header.Project,
                     Fund = Shared.Fund,
-                    Currency = header.Currency.Value
+                    Currency = header.Currency
                 },
                 JsonRequestBehavior.AllowGet);
         }
@@ -81,7 +85,7 @@ namespace MCAWebAndAPI.Web.Controllers
         [HttpPost]
         public ActionResult Save(FormCollection form, SCASettlementVM viewModel)
         {
-            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
+            var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl);
             service.SetSiteUrl(siteUrl);
 
             try
@@ -109,7 +113,7 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             string RelativePath = PrintPageUrl;
 
-            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl);
+            var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl);
             service.SetSiteUrl(siteUrl);
             viewModel = service.Get(Operations.e, viewModel.ID);
 
@@ -142,22 +146,18 @@ namespace MCAWebAndAPI.Web.Controllers
             return File(pdfBuf, "application/pdf");
         }
 
-        public ActionResult Cancel()
-        {
-            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
-
-            return Redirect(string.Format(FirstPageUrl, siteUrl));
-        }
-
         private void SetAdditionalSettingToViewModel(ref SCASettlementVM viewModel)
         {
-            viewModel.SCAVoucher.ControllerName = SCAVoucherController;
-            viewModel.SCAVoucher.ActionName = SCAVoucherAction;
-            viewModel.SCAVoucher.ValueField = SCAVoucherValue;
-            viewModel.SCAVoucher.TextField = SCAVoucherText;
-            viewModel.SCAVoucher.OnSelectEventName = SCAVoucherOnSelectEventName;
+            viewModel.SCACouvher.ControllerName = SCAVoucherController;
+            viewModel.SCACouvher.ActionName = SCAVoucherAction;
+            viewModel.SCACouvher.ValueField = SCAVoucherValue;
+            viewModel.SCACouvher.TextField = SCAVoucherText;
+            viewModel.SCACouvher.OnSelectEventName = SCAVoucherOnSelectEventName;
 
             viewModel.TypeOfSettlement.Choices = new string[] { PartialSettlement, LastSettlement };
+
+
         }
+
     }
 }
