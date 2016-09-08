@@ -88,7 +88,5 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 
         public string SCAVoucherNo { get; set; }
 
-        public string UserEmail { get; set; }
-
     }
 }

@@ -1,21 +1,26 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 {
     public class TaxExemptionOtherVM : TaxExemptionBaseVM
     {
-        /// <summary>
-        /// FIN17: Tax Exemption
-        /// </summary>
-
-        [Required]
         [DisplayName("Gross Income (IDR)")]
-        public decimal? GrossIncome { get; set; }
+        public Decimal GrossIncome
+        {
+            get;
+            set;
+        }
 
-        [Required]
         [DisplayName("Total Tax (IDR)")]
-        public decimal? TotalTax { get; set; }
+        public Decimal TotalTax
+        {
+            get;
+            set;
+        }
     }
 }

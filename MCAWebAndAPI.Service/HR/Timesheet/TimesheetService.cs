@@ -7,10 +7,15 @@ using MCAWebAndAPI.Model.ViewModel.Form.HR;
 using MCAWebAndAPI.Service.Utils;
 using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Model.HR.DataMaster;
+using MCAWebAndAPI.Model.ViewModel.Form.Common;
+using MCAWebAndAPI.Service.Common;
 using MCAWebAndAPI.Service.HR.Common;
+using MCAWebAndAPI.Service.Resources;
 using Microsoft.SharePoint.Client;
 using NLog;
-using View = System.Web.UI.WebControls.View;
+using NLog.Targets.Wrappers;
+
+//using View = System.Web.UI.WebControls.View;
 
 namespace MCAWebAndAPI.Service.HR.Timesheet
 {
@@ -34,8 +39,10 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
         const string LIST_WF_MAPPING = "Workflow Mapping Master";
 
         const string LIST_PROFESSIONAL= "Professional Master";
+        private List<DateTime> lstpublicHoliday;
+        private Dictionary<DateTime, double> lstCompensatory;
+        private Dictionary<DateTime, string> lstDayOff;
 
-  
         private IDataMasterService _dataService;
         private IProfessionalService _professionalService;
         static Logger logger = LogManager.GetCurrentClassLogger();
@@ -43,62 +50,140 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
         {
             _dataService = new DataMasterService();
             _professionalService = new ProfessionalService();
+           
         }
 
-        public TimesheetVM GetTimesheetLoadUpdate(int? id,string userlogin)
+        public async Task<TimesheetVM> GetTimesheetLoadUpdate(int? id, string userlogin)
         {
-
             var viewModel = new TimesheetVM();
-
-            var professionalDataEmail = GetListItemProfessionalMaster(userlogin);//GetProfessionalDataByEmail(userlogin);
-
-            var listItem = SPConnector.GetListItem(LIST_TIME, id, _siteUrl);
-            var professionalDataId = GetListItemProfessionalMaster(null,FormatUtil.ConvertLookupToID(listItem, "professional"));//GetProfessionalDataById(FormatUtil.ConvertLookupToID(listItem, "professional"));
-
-            //FieldUserValue userValue =(FieldUserValue)listItem["visibleto"];
-            viewModel.ID = id;
-            viewModel.ProfessionalID = FormatUtil.ConvertLookupToID(listItem, "professional");
-            viewModel.UserLogin = Convert.ToString(professionalDataId["officeemail"]);//professionalDataId.OfficeEmail;
-            viewModel.Name= FormatUtil.ConvertLookupToValue(listItem, "professional");
-            viewModel.Period = Convert.ToDateTime(listItem["DatePeriod"]);
-            viewModel.ProjectUnit = Convert.ToString(professionalDataId["Project_x002f_Unit"]); //professionalDataId.Project_Unit;
-            viewModel.ProfessionalName.Value = viewModel.ProfessionalID;
-            viewModel.ProfessionalName.Text = viewModel.Name;
-            viewModel.ApprovalLevel = Convert.ToString(listItem["approvallevel"]);
-            viewModel.ApproverPosition = Convert.ToString(listItem["approverposition"]);
-            viewModel.Approver = Convert.ToString(listItem["approver"]);
-            viewModel.TimesheetStatus = Convert.ToString(listItem["timesheetstatus"]);
-
-            //if (professionalDataEmail.Project_Unit == "Human Resources Unit")
-            if (Convert.ToString(professionalDataEmail["Project_x002f_Unit"]) == "Human Resources Unit")
+            try
             {
-                viewModel.UserPermission = "HR";
-            }
-            else if (Convert.ToString(professionalDataEmail["officeemail"]) == viewModel.Approver)
-            {
-                viewModel.UserPermission = "Approver";
-            }
-            else if (viewModel.UserLogin.ToLower() == userlogin.ToLower())
-            {
-                viewModel.UserPermission = "Professional";
-            }
-            else
-            {
-                viewModel.UserPermission = "Not Authorized";
-            }
+            
 
-            if (viewModel.UserPermission != "Not Authorized")
-            {
-                viewModel.TimesheetDetails = GetTimesheetDetailsLoadUpdate(id, 
-                    Convert.ToDateTime(viewModel.Period), viewModel.UserLogin, viewModel.Name);
+                var professionalDataEmail = GetListItemProfessionalMaster(userlogin);
+
+                var listItem = SPConnector.GetListItem(LIST_TIME, id, _siteUrl);
+                var professionalDataId = GetListItemProfessionalMaster(null, FormatUtil.ConvertLookupToID(listItem, "professional"));
+
+                //FieldUserValue userValue =(FieldUserValue)listItem["visibleto"];
+                viewModel.ID = id;
+                viewModel.ProfessionalID = FormatUtil.ConvertLookupToID(listItem, "professional");
+                viewModel.ProfesionalUserLogin = Convert.ToString(professionalDataId["officeemail"]);
+                viewModel.Name = FormatUtil.ConvertLookupToValue(listItem, "professional");
+                viewModel.Period = Convert.ToDateTime(listItem["DatePeriod"]);
+                viewModel.ProjectUnit = Convert.ToString(professionalDataId["Project_x002f_Unit"]);
+                viewModel.ProfessionalName.Value = viewModel.ProfessionalID;
+                viewModel.ProfessionalName.Text = viewModel.Name;
+                viewModel.ApprovalLevel = Convert.ToString(listItem["approvallevel"]);
+                viewModel.ApproverPosition = Convert.ToString(listItem["approverposition"]);
+                viewModel.Approver = Convert.ToString(listItem["approver"]);
+                viewModel.TimesheetStatus = Convert.ToString(listItem["timesheetstatus"]);
+
+                viewModel.StartPeriod = Convert.ToDateTime(viewModel.Period).GetFirstPayrollDay(); ;
+                viewModel.EndPeriod = Convert.ToDateTime(viewModel.Period).GetLastPayrollDay();
+
+                if (Convert.ToString(professionalDataEmail["Project_x002f_Unit"]) == "Human Resources Unit")
+                {
+                    viewModel.UserPermission = "HR";
+                }
+                else if (Convert.ToString(professionalDataEmail["officeemail"]) == viewModel.Approver)
+                {
+                    viewModel.UserPermission = "Approver";
+                }
+                else if (viewModel.ProfesionalUserLogin.ToLower() == userlogin.ToLower())
+                {
+                    viewModel.UserPermission = "Professional";
+                }
+                else
+                {
+                    viewModel.UserPermission = "Not Authorized";
+                }
+
+                if (viewModel.UserPermission == "Not Authorized") return viewModel;
+
+                //Get Workflow From Mapping Master
+                var workflow = new WorkflowService();
+                workflow.SetSiteUrl(_siteUrl);
+
+                var timesheetWf = await workflow.CheckWorkflowTimesheet(Convert.ToInt32(id), LIST_WF, "timesheet");
+
+                if (timesheetWf.Count() != 0)
+                {
+                    viewModel.WorkflowItems = timesheetWf;
+                }
+                else
+                {
+                    viewModel.WorkflowItems = await workflow.GetWorkflowDetailsTimeSheet(viewModel.ProfesionalUserLogin, "Timesheet");
+                }
+
+
+                viewModel.TimesheetDetails = await GetTimesheetDetailsLoadUpdate(id,
+                    Convert.ToDateTime(viewModel.Period), viewModel.ProfesionalUserLogin, viewModel.Name);
+
+
+               
             }
-
-           
-
+            catch (Exception e)
+            {
+                logger.Error(e.Message);
+            }
             return viewModel;
         }
-        
-        public IEnumerable<TimesheetDetailVM> GetTimesheetDetailsLoadUpdate(int? id, DateTime period, 
+
+        //public  TimesheetVM GetTimesheetLoadUpdate(int? id,string userlogin)
+        //{
+
+        //    var viewModel = new TimesheetVM();
+
+        //    var professionalDataEmail = GetListItemProfessionalMaster(userlogin);//GetProfessionalDataByEmail(userlogin);
+
+        //    var listItem = SPConnector.GetListItem(LIST_TIME, id, _siteUrl);
+        //    var professionalDataId = GetListItemProfessionalMaster(null,FormatUtil.ConvertLookupToID(listItem, "professional"));//GetProfessionalDataById(FormatUtil.ConvertLookupToID(listItem, "professional"));
+
+        //    //FieldUserValue userValue =(FieldUserValue)listItem["visibleto"];
+        //    viewModel.ID = id;
+        //    viewModel.ProfessionalID = FormatUtil.ConvertLookupToID(listItem, "professional");
+        //    viewModel.UserLogin = Convert.ToString(professionalDataId["officeemail"]);//professionalDataId.OfficeEmail;
+        //    viewModel.Name= FormatUtil.ConvertLookupToValue(listItem, "professional");
+        //    viewModel.Period = Convert.ToDateTime(listItem["DatePeriod"]);
+        //    viewModel.ProjectUnit = Convert.ToString(professionalDataId["Project_x002f_Unit"]); //professionalDataId.Project_Unit;
+        //    viewModel.ProfessionalName.Value = viewModel.ProfessionalID;
+        //    viewModel.ProfessionalName.Text = viewModel.Name;
+        //    viewModel.ApprovalLevel = Convert.ToString(listItem["approvallevel"]);
+        //    viewModel.ApproverPosition = Convert.ToString(listItem["approverposition"]);
+        //    viewModel.Approver = Convert.ToString(listItem["approver"]);
+        //    viewModel.TimesheetStatus = Convert.ToString(listItem["timesheetstatus"]);
+
+        //    //if (professionalDataEmail.Project_Unit == "Human Resources Unit")
+        //    if (Convert.ToString(professionalDataEmail["Project_x002f_Unit"]) == "Human Resources Unit")
+        //    {
+        //        viewModel.UserPermission = "HR";
+        //    }
+        //    else if (Convert.ToString(professionalDataEmail["officeemail"]) == viewModel.Approver)
+        //    {
+        //        viewModel.UserPermission = "Approver";
+        //    }
+        //    else if (viewModel.UserLogin.ToLower() == userlogin.ToLower())
+        //    {
+        //        viewModel.UserPermission = "Professional";
+        //    }
+        //    else
+        //    {
+        //        viewModel.UserPermission = "Not Authorized";
+        //    }
+
+        //    if (viewModel.UserPermission != "Not Authorized")
+        //    {
+        //        //viewModel.TimesheetDetails = GetTimesheetDetailsLoadUpdate(id, 
+        //        //    Convert.ToDateTime(viewModel.Period), viewModel.UserLogin, viewModel.Name);
+        //    }
+
+
+
+        //    return viewModel;
+        //}
+
+        public async Task<IEnumerable<TimesheetDetailVM>> GetTimesheetDetailsLoadUpdate(int? id, DateTime period, 
             string userlogin,string strName)
         {
 
@@ -122,14 +207,14 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                     Type = Convert.ToString(item["Title"])
                 });
             }
-           // var strName = GetFullName(userlogin);
-            var startDate = period;
+
+            var startDate = period.GetFirstPayrollDay();
             var finishDate = period.GetLastPayrollDay();
             var dateRange = startDate.EachDay(finishDate);
 
-            var listHoliday = getPublicHoliday(_siteUrl);
-            var listDayOff = getUserDayOFF(_siteUrl, strName);
-            var listCompen = getCompensatory(_siteUrl, strName);
+            var listHoliday = await GetPublicHoliday(_siteUrl);
+            var listDayOff = await GetUserDayOff(_siteUrl, strName);
+            var listCompen = await GetCompensatory(_siteUrl, strName);
 
             foreach (var item in dateRange)
             {
@@ -180,15 +265,41 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
             return timesheetDetails;
         }
 
-        public TimesheetVM GetTimesheet(string userlogin, DateTime period)
-        {
+        //public TimesheetVM GetTimesheet(string userlogin, DateTime period)
+        //{
 
+        //    var professionalData = GetListItemProfessionalMaster(userlogin);
+        //    var startPeriod = period.GetFirstPayrollDay();
+        //    var viewModel = new TimesheetVM
+        //    {
+        //        ProfessionalID = Convert.ToInt32(professionalData["ID"]),
+        //        UserLogin = userlogin,
+        //        Name = Convert.ToString(professionalData["Title"]),
+        //        Period = period,
+        //        ProjectUnit = Convert.ToString(professionalData["Project_x002f_Unit"])
+
+        //    };
+        //    viewModel.StartPeriod = startPeriod;
+        //    viewModel.EndPeriod = period.GetLastPayrollDay();
+        //    viewModel.TimesheetDetails = GetTimesheetDetails(userlogin, startPeriod, viewModel.Name);
+        //    viewModel.ProfessionalName.Value = viewModel.ProfessionalID;
+        //    viewModel.ProfessionalName.Text = viewModel.Name;
+        //    viewModel.UserPermission = viewModel.ProjectUnit == "Human Resources Unit" ? "HR" : "Professional";
+
+          
+
+
+        //    return viewModel;
+        //}
+
+        public async Task<TimesheetVM> GetTimesheetAsync(string userlogin, DateTime period)
+        {
             var professionalData = GetListItemProfessionalMaster(userlogin);
-             var startPeriod = period.GetFirstPayrollDay();
+            var startPeriod = period.GetFirstPayrollDay();
             var viewModel = new TimesheetVM
             {
-                ProfessionalID= Convert.ToInt32(professionalData["ID"]),
-                UserLogin = userlogin,
+                ProfessionalID = Convert.ToInt32(professionalData["ID"]),
+                ProfesionalUserLogin = userlogin,
                 Name = Convert.ToString(professionalData["Title"]),
                 Period = period,
                 ProjectUnit = Convert.ToString(professionalData["Project_x002f_Unit"])
@@ -196,14 +307,26 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
             };
             viewModel.StartPeriod = startPeriod;
             viewModel.EndPeriod = period.GetLastPayrollDay();
-            viewModel.TimesheetDetails = GetTimesheetDetails(userlogin, startPeriod, viewModel.Name);
+          
             viewModel.ProfessionalName.Value = viewModel.ProfessionalID;
             viewModel.ProfessionalName.Text = viewModel.Name;
-            viewModel.UserPermission  = viewModel.ProjectUnit == "Human Resources Unit" ? "HR" : "Professional";
+            viewModel.UserPermission = viewModel.ProjectUnit == "Human Resources Unit" ? "HR" : "Professional";
+
+            //Get Workflow From Mapping Master
+            var workflow = new WorkflowService();
+            workflow.SetSiteUrl(_siteUrl);
+
+       
+            viewModel.WorkflowItems = await workflow.GetWorkflowDetailsTimeSheet(userlogin, "Timesheet");
+
+            viewModel.TimesheetDetails = await GetTimesheetDetailsAsync(userlogin, startPeriod, viewModel.Name);
+
+
 
             return viewModel;
         }
-        
+
+
         //private ProfessionalMaster GetProfessionalDataByEmail(string userlogin)
         //{
         //    var professionalData = _dataService.GetProfessionals().FirstOrDefault(e => e.OfficeEmail == userlogin);
@@ -242,16 +365,17 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
 
         }
 
-        private string GetFullNamez(string userlogin)
-        {
-            var professionalData = _dataService.GetProfessionals().FirstOrDefault(e => e.OfficeEmail == userlogin);
-            return professionalData.Name;
-        }
+        //private string GetFullNamez(string userlogin)
+        //{
+        //    var professionalData = _dataService.GetProfessionals().FirstOrDefault(e => e.OfficeEmail == userlogin);
+        //    return professionalData.Name;
+        //}
 
-        private static List<DateTime> getPublicHoliday(string strUrl)
+        private async  Task<List<DateTime>> GetPublicHoliday(string strUrl)
         {
             var listItem = SPConnector.GetList(LIST_PUB_HOLIDAY, strUrl);
-            List<DateTime> lstpublicHoliday = new List<DateTime>();
+            //List<DateTime> lstpublicHoliday = new List<DateTime>();
+            lstpublicHoliday = new List<DateTime>();
             foreach (var item in listItem)
             {
                 lstpublicHoliday.Add(Convert.ToDateTime(item["EventDate"]).ToLocalTime());
@@ -261,9 +385,10 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
  
         }
 
-        private static Dictionary<DateTime, double> getCompensatory(string strUrl, string strName)
+        private async  Task<Dictionary<DateTime, double>> GetCompensatory(string strUrl, string strName)
         {
-            Dictionary<DateTime, double> lstCompensatory = new Dictionary<DateTime, double>();
+            //  Dictionary<DateTime, double> lstCompensatory = new Dictionary<DateTime, double>();
+            lstCompensatory= new Dictionary<DateTime, double>();
             var caml = @"<View><Query><Where><And><Eq><FieldRef Name='professional' />
                         <Value Type='Lookup'>" + strName +"</Value></Eq>" +
                        "<Eq><FieldRef Name='crstatus' /><Value Type='Text'>Approved</Value></Eq>" +
@@ -294,7 +419,7 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
             return lstCompensatory;
         }
 
-        private static Dictionary<DateTime,string> getUserDayOFF(string strUrl,string strName)
+        private async  Task<Dictionary<DateTime,string>> GetUserDayOff(string strUrl,string strName)
         {
             var caml = string.Format(@"<View><Query><Where>
             <Eq><FieldRef Name='professional'/><Value Type='Lookup'>{0}</Value></Eq></Where></Query></View>", strName);
@@ -305,6 +430,7 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
 
             var listMasterDayOff = SPConnector.GetList("Master Day Off Type", strUrl, caml);
 
+            // Dictionary<DateTime, string> lstDayOff = new Dictionary<DateTime, string>();
             Dictionary<DateTime, string> lstDayOff = new Dictionary<DateTime, string>();
             foreach (var item in listMaster)
             {
@@ -335,23 +461,27 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
             }
             return lstDayOff;
         }
-        
-        public IEnumerable<TimesheetDetailVM> GetTimesheetDetails(string userlogin, DateTime period,string strName)
+
+        private async  Task<IEnumerable<TimesheetDetailVM>> GetTimesheetDetailsAsync(string userlogin, DateTime period, string strName)
         {
             var startDate = period;
             var finishDate = period.GetLastPayrollDay();
             var dateRange = startDate.EachDay(finishDate);
 
-            var listHoliday = getPublicHoliday( _siteUrl);
-            var listDayOff = getUserDayOFF(_siteUrl, strName);
-            var listCompen = getCompensatory(_siteUrl, strName);
+            var listHoliday =  GetPublicHoliday(_siteUrl);
+            var listDayOff  =  GetUserDayOff(_siteUrl, strName);
+            var listCompen =  GetCompensatory(_siteUrl, strName);
+
+            Task allTask = Task.WhenAll(listHoliday, listDayOff, listCompen);
+
+            await allTask;
 
             var timesheetDetails = new List<TimesheetDetailVM>();
 
             foreach (var item in dateRange)
             {
-             
-                if (IsDate(item, listHoliday))
+
+                if (IsDate(item, lstpublicHoliday))
                 {
                     timesheetDetails.Add(new TimesheetDetailVM
                     {
@@ -367,9 +497,9 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                         FullHalf = 1,
                         Type = TYPE_HOLIDAY
                     });
-                else if (IsDayOff(item, listDayOff))
+                else if (IsDayOff(item, lstDayOff))
                 {
-                    var arrKey= listDayOff[item].Split(Convert.ToChar(";"));
+                    var arrKey = lstDayOff[item].Split(Convert.ToChar(";"));
                     var typeDayoff = arrKey[0];
                     var fullhalf = arrKey[1];
                     var otherCat = arrKey[2];
@@ -383,16 +513,76 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                     timesheetDetails.Add(timesheetDetail);
 
                 }
-                else if (IsCompenTime(item, listCompen))
+                else if (IsCompenTime(item, lstCompensatory))
                 {
                     timesheetDetails.Add(new TimesheetDetailVM
                     {
                         Date = item,
-                        FullHalf = listCompen[item],
+                        FullHalf = lstCompensatory[item],
                         Type = TYPE_COMP_LEAVE
                     });
                 }
             }
+
+            return timesheetDetails;
+        }
+        public IEnumerable<TimesheetDetailVM> GetTimesheetDetails(string userlogin, DateTime period,string strName)
+        {
+            var startDate = period;
+            var finishDate = period.GetLastPayrollDay();
+            var dateRange = startDate.EachDay(finishDate);
+
+            //var listHoliday = GetPublicHoliday( _siteUrl);
+            //var listDayOff = getUserDayOFF(_siteUrl, strName);
+            //var listCompen = getCompensatory(_siteUrl, strName);
+
+            var timesheetDetails = new List<TimesheetDetailVM>();
+
+            //foreach (var item in dateRange)
+            //{
+             
+            //    if (IsDate(item, listHoliday))
+            //    {
+            //        timesheetDetails.Add(new TimesheetDetailVM
+            //        {
+            //            Date = item,
+            //            FullHalf = 1,
+            //            Type = TYPE_PUB_HOLIDAY
+            //        });
+            //    }
+            //    else if (item.DayOfWeek == DayOfWeek.Saturday || item.DayOfWeek == DayOfWeek.Sunday)
+            //        timesheetDetails.Add(new TimesheetDetailVM
+            //        {
+            //            Date = item,
+            //            FullHalf = 1,
+            //            Type = TYPE_HOLIDAY
+            //        });
+            //    else if (IsDayOff(item, listDayOff))
+            //    {
+            //        var arrKey= listDayOff[item].Split(Convert.ToChar(";"));
+            //        var typeDayoff = arrKey[0];
+            //        var fullhalf = arrKey[1];
+            //        var otherCat = arrKey[2];
+            //        var timesheetDetail = new TimesheetDetailVM
+            //        {
+            //            Date = item,
+            //            Type = TYPE_DAYOFF,
+            //            FullHalf = fullhalf == "Full Day" ? 1 : 0.5,
+            //            SubType = otherCat == "False" ? typeDayoff : "Others"
+            //        };
+            //        timesheetDetails.Add(timesheetDetail);
+
+            //    }
+            //    else if (IsCompenTime(item, listCompen))
+            //    {
+            //        timesheetDetails.Add(new TimesheetDetailVM
+            //        {
+            //            Date = item,
+            //            FullHalf = listCompen[item],
+            //            Type = TYPE_COMP_LEAVE
+            //        });
+            //    }
+            //}
 
             return timesheetDetails;
         }
@@ -551,60 +741,61 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
             }
         }
         
-        private DataTable Getworkflowmapping(string strProjectUnit)
-        {
+        //private DataTable Getworkflowmapping(string strProjectUnit)
+        //{
 
 
-            var dtView = new DataTable();
+        //    var dtView = new DataTable();
            
-            dtView.Columns.Add("ApproverUnit", typeof(string));
-            dtView.Columns.Add("ApproverPosition", typeof(string));
-            dtView.Columns.Add("Level", typeof(int));
-            dtView.Columns.Add("IsDefault", typeof(string));
+        //    dtView.Columns.Add("ApproverUnit", typeof(string));
+        //    dtView.Columns.Add("ApproverPosition", typeof(string));
+        //    dtView.Columns.Add("Level", typeof(int));
+        //    dtView.Columns.Add("IsDefault", typeof(string));
 
 
-            var caml = @"<View><Query>
-                        <Where>
-                        <And>
-                        <Eq>
-                            <FieldRef Name='transactiontype' />
-                            <Value Type='Choice'>Timesheet</Value>
-                        </Eq>
-                        <Eq>
-                            <FieldRef Name='requestorunit' />
-                             <Value Type='Choice'>" + strProjectUnit + "</Value>" +
-                       "</Eq>" +
-                       "</And></Where></Query></View>";
+        //    var caml = @"<View><Query>
+        //                <Where>
+        //                <And>
+        //                <Eq>
+        //                    <FieldRef Name='transactiontype' />
+        //                    <Value Type='Choice'>Timesheet</Value>
+        //                </Eq>
+        //                <Eq>
+        //                    <FieldRef Name='requestorunit' />
+        //                     <Value Type='Choice'>" + strProjectUnit + "</Value>" +
+        //               "</Eq>" +
+        //               "</And></Where></Query></View>";
 
-            var listcoll = SPConnector.GetList(LIST_WF_MAPPING, _siteUrl, caml);
+        //    var listcoll = SPConnector.GetList(LIST_WF_MAPPING, _siteUrl, caml);
 
-            if (listcoll == null || listcoll.Count == 0) return null;
+        //    if (listcoll == null || listcoll.Count == 0) return null;
 
-            foreach (var item in listcoll)
-            {
-                DataRow row = dtView.NewRow();
-                row["ApproverUnit"] = Convert.ToString(item["approverunit"]);
-                row["ApproverPosition"] = FormatUtil.ConvertLookupToValue(item, "approverposition");
-                row["Level"] = Convert.ToString(item["approverlevel"]);
-                row["IsDefault"] = Convert.ToString(item["isdefault"]);
-                dtView.Rows.Add(row);
-            }
-            dtView.DefaultView.Sort = "Level ASC";
+        //    foreach (var item in listcoll)
+        //    {
+        //        DataRow row = dtView.NewRow();
+        //        row["ApproverUnit"] = Convert.ToString(item["approverunit"]);
+        //        row["ApproverPosition"] = FormatUtil.ConvertLookupToValue(item, "approverposition");
+        //        row["Level"] = Convert.ToString(item["approverlevel"]);
+        //        row["IsDefault"] = Convert.ToString(item["isdefault"]);
+        //        dtView.Rows.Add(row);
+        //    }
+        //    dtView.DefaultView.Sort = "Level ASC";
 
-            dtView.DefaultView.RowFilter = "IsDefault='Yes'";
+        //    dtView.DefaultView.RowFilter = "IsDefault='Yes'";
 
-            if (dtView.DefaultView == null || dtView.DefaultView.Count == 0) return null;
+        //    if (dtView.DefaultView == null || dtView.DefaultView.Count == 0) return null;
 
-            return dtView.DefaultView.ToTable();
-        }
+        //    return dtView.DefaultView.ToTable();
+        //}
 
-        private void UpdateHeaderApprover(int? headerId,string strLevel,string strPosition, string strEmail,string strPermission=null)
+        private void UpdateHeaderApprover(int? headerId,string strLevel,string strPosition, 
+            string strEmail,string strPermission=null)
         {
             var columnValues = new Dictionary<string, object>
                 {
                     {"approverposition", strPosition},
                     {"approvallevel", strLevel},
-                     {"approver", strEmail},
+                    {"approver", strEmail},
                 };
 
             if (strPermission != null) columnValues.Add("timesheetstatus", "Approved");
@@ -612,202 +803,303 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
             SPConnector.UpdateSingleListItemAsync(LIST_TIME, headerId, columnValues, _siteUrl);
         }
 
-        public async Task CreateWorkflowTimesheetAsync(int? headerId, TimesheetVM header)
+        public async Task CreateWorkflowTimesheetAsync(int? headerId, IEnumerable<WorkflowItemVM> workflowItems,string strStatus)
         {
-            if (header.TimesheetStatus == "Draft") return;
-            CreateWorkflowTimesheet(headerId, header);
+            //if (strStatus == "Draft") return;
+            CreateWorkflowTimesheet(headerId, workflowItems);
         }
-        public  void CreateWorkflowTimesheet(int? headerId, TimesheetVM header)
+
+        public void CreateWorkflowTimesheet(int? headerId, IEnumerable<WorkflowItemVM> workflowItems)
         {
-
-            var caml = string.Format(@"<View><Query>
-                        <Where>
-                        <Eq>
-                            <FieldRef Name='timesheet' />
-                            <Value Type='Lookup'>{0}</Value>
-                        </Eq>
-                        </Where></Query></View>", headerId);
-
-            var listWF = SPConnector.GetList(LIST_WF, _siteUrl, caml);
-            if (listWF.Count > 0) return;
-
-            var dtView = Getworkflowmapping(header.ProjectUnit);
-            var iCount = dtView.DefaultView.Count;
-            IEnumerable<ProfessionalMaster> profMasterPosition = _dataService.GetProfessionals();
-
-     
-            var mastervalue = new Dictionary<string, Dictionary<string, object>>();
-            for (int i = 1; i <= iCount; i++)
+            var mastervalueInsert = new Dictionary<string, Dictionary<string, object>>();
+            var mastervalueUpdate = new Dictionary<string, Dictionary<string, object>>();
+            var itemsDelete = new List<string>();
+            var i = 1;
+            foreach (var item in workflowItems)
             {
-                var strApproverPosition = "";
-                var strApproverEmail = "";
-                var columnValues = new Dictionary<string, object>
+                if (Item.CheckIfSkipped(item)) continue;
+                if (Item.CheckIfDeleted(item))
                 {
-                    {"Title", header.UserLogin},
-                    {"timesheet", new FieldLookupValue {LookupId = Convert.ToInt32(headerId)}},
-                    {"approverlevel", i.ToString()}
-                };
-
-                columnValues.Add("status", header.UserPermission == "HR" ? "Approved" : "Pending Approval");
-
-
-                switch (i)
-                {
-                    case 1:
-                        dtView.DefaultView.RowFilter = "Level = 1 And IsDefault='Yes'";
-                        if (dtView.DefaultView != null && dtView.DefaultView.Count > 0)
-                        {
-                            strApproverPosition = Convert.ToString(dtView.DefaultView[0]["ApproverPosition"]);
-                            strApproverEmail = profMasterPosition.FirstOrDefault(e => e.Position == strApproverPosition).OfficeEmail;
-                        }
-                        else
-                        {
-                            goto case 2;
-                        }
-                        if (header.UserPermission != "HR")
-                        {
-                            UpdateHeaderApprover(headerId, "1", strApproverPosition, strApproverEmail);
-                        }
-                        else UpdateHeaderApprover(headerId, "1", strApproverPosition, strApproverEmail, "HR");
-                        columnValues.Add("currentstate", header.UserPermission == "HR" ? "No" : "Yes");
-                        columnValues.Add("approverposition", strApproverPosition);
-                        columnValues.Add("approver0", strApproverEmail);
-                        break;
-                    case 2:
-                        dtView.DefaultView.RowFilter = "Level = 2 And IsDefault='Yes'";
-                        if (dtView.DefaultView != null && dtView.DefaultView.Count > 0)
-                        {
-                            strApproverPosition = Convert.ToString(dtView.DefaultView[0]["ApproverPosition"]);
-                            strApproverEmail = profMasterPosition.FirstOrDefault(e => e.Position == strApproverPosition).OfficeEmail;
-                        }
-                        else
-                        {
-                            goto case 3;
-                        }
-                        if (i == 1)
-                        {
-                            if (header.UserPermission != "HR")
-                            {
-                                UpdateHeaderApprover(headerId, "1", strApproverPosition, strApproverEmail);
-                            }
-                            else UpdateHeaderApprover(headerId, "1", strApproverPosition, strApproverEmail,"HR");
-                            columnValues.Add("currentstate", "Yes");
-                        }
-                        else if (i == 2)
-                        {
-                            columnValues.Add("currentstate", "No" );
-                        }
-                           
-                        columnValues.Add("approverposition", strApproverPosition);
-                        columnValues.Add("approver0", strApproverEmail);
-                        break;
-                    case 3:
-                        dtView.DefaultView.RowFilter = "Level = 3 And IsDefault='Yes'";
-                        if (dtView.DefaultView != null && dtView.DefaultView.Count > 0)
-                        {
-                            strApproverPosition = Convert.ToString(dtView.DefaultView[0]["ApproverPosition"]);
-                            strApproverEmail = profMasterPosition.FirstOrDefault(e => e.Position == strApproverPosition).OfficeEmail;
-
-                            if (i == 1)
-                            {
-                                if (header.UserPermission != "HR")
-                                {
-                                    UpdateHeaderApprover(headerId, "1", strApproverPosition, strApproverEmail);
-                                }
-                                else
-                                {
-                                    UpdateHeaderApprover(headerId, "1", strApproverPosition, strApproverEmail,"HR");
-                                }
-                                columnValues.Add("currentstate", "Yes");
-                            }
-                            else if (i == 2)
-                            {
-                                columnValues.Add("currentstate", "No");
-                                if (header.UserPermission == "HR") UpdateHeaderApprover(headerId, "2", strApproverPosition, strApproverEmail,"HR");
-                            }
-                            else if (i == 3)
-                            {
-                                if (header.UserPermission == "HR") UpdateHeaderApprover(headerId, "3", strApproverPosition, strApproverEmail,"HR");
-                                columnValues.Add("currentstate", header.UserPermission != "HR" ? "No" : "Yes");
-                            }
-
-                            columnValues.Add("approverposition", strApproverPosition);
-                            columnValues.Add("approver0", strApproverEmail);
-                        }
-                        break;
+                    itemsDelete.Add(item.ID.ToString());
+                    continue;
                 }
 
-               if (!string.IsNullOrEmpty(strApproverPosition)) mastervalue.Add(i + ";Add", columnValues); 
+
+                var updatedValue = new Dictionary<string, object>();
+                updatedValue.Add("timesheet", new FieldLookupValue { LookupId = Convert.ToInt32(headerId) });
+                updatedValue.Add("approverlevel", item.Level);
+                updatedValue.Add("position", item.ApproverPositionId);
+                updatedValue.Add("projectunit", item.ApproverUnitText);
+                updatedValue.Add("approvername", item.ApproverName.Value);
+                updatedValue.Add("status", item.Status);
+
+                if (i==1) updatedValue.Add("currentstate", "Yes");
+                // mastervalueInsert.Add(i + ";Add", updatedValue);requestor
+
+                if (Item.CheckIfUpdated(item)) mastervalueUpdate.Add(item.ID + ";Edit", updatedValue);
+                else mastervalueInsert.Add(i + ";Add", updatedValue);
+
+                if (i == 1)
+                {
+                    UpdateHeaderApprover(headerId, item.Level, item.ApproverPositionText, 
+                        item.ApproverEmail);
+                }
+
+                i++;
+              
             }
-            SPConnector.AddListItemAsync(LIST_WF, mastervalue, _siteUrl);
-          
+
+            if (itemsDelete.Count > 0) SPConnector.DeleteMultipleListItemAsync(LIST_WF, itemsDelete, _siteUrl);
+            if (mastervalueInsert.Count > 0) SPConnector.AddListItemAsync(LIST_WF, mastervalueInsert, _siteUrl);
+            if (mastervalueUpdate.Count > 0) SPConnector.UpdateMultipleListItemAsync(LIST_WF, mastervalueUpdate, _siteUrl);
+
+           // if (mastervalueInsert.Count > 0) SPConnector.AddListItemAsync(LIST_WF, mastervalueInsert, _siteUrl);
+           
         }
+
+        //public  void CreateWorkflowTimesheet(int? headerId, TimesheetVM header)
+        //{
+
+        //    var caml = string.Format(@"<View><Query>
+        //                <Where>
+        //                <Eq>
+        //                    <FieldRef Name='timesheet' />
+        //                    <Value Type='Lookup'>{0}</Value>
+        //                </Eq>
+        //                </Where></Query></View>", headerId);
+
+        //    var listWF = SPConnector.GetList(LIST_WF, _siteUrl, caml);
+        //    if (listWF.Count > 0) return;
+
+        //    var dtView = Getworkflowmapping(header.ProjectUnit);
+        //    var iCount = dtView.DefaultView.Count;
+        //    IEnumerable<ProfessionalMaster> profMasterPosition = _dataService.GetProfessionals();
+
+     
+        //    var mastervalue = new Dictionary<string, Dictionary<string, object>>();
+        //    for (int i = 1; i <= iCount; i++)
+        //    {
+        //        var strApproverPosition = "";
+        //        var strApproverEmail = "";
+        //        var columnValues = new Dictionary<string, object>
+        //        {
+        //            {"Title", header.UserLogin},
+        //            {"timesheet", new FieldLookupValue {LookupId = Convert.ToInt32(headerId)}},
+        //            {"approverlevel", i.ToString()}
+        //        };
+
+        //        columnValues.Add("status", header.UserPermission == "HR" ? "Approved" : "Pending Approval");
+
+
+        //        switch (i)
+        //        {
+        //            case 1:
+        //                dtView.DefaultView.RowFilter = "Level = 1 And IsDefault='Yes'";
+        //                if (dtView.DefaultView != null && dtView.DefaultView.Count > 0)
+        //                {
+        //                    strApproverPosition = Convert.ToString(dtView.DefaultView[0]["ApproverPosition"]);
+        //                    strApproverEmail = profMasterPosition.FirstOrDefault(e => e.Position == strApproverPosition).OfficeEmail;
+        //                }
+        //                else
+        //                {
+        //                    goto case 2;
+        //                }
+        //                if (header.UserPermission != "HR")
+        //                {
+        //                    UpdateHeaderApprover(headerId, "1", strApproverPosition, strApproverEmail);
+        //                }
+        //                else UpdateHeaderApprover(headerId, "1", strApproverPosition, strApproverEmail, "HR");
+        //                columnValues.Add("currentstate", header.UserPermission == "HR" ? "No" : "Yes");
+        //                columnValues.Add("approverposition", strApproverPosition);
+        //                columnValues.Add("approver0", strApproverEmail);
+        //                break;
+        //            case 2:
+        //                dtView.DefaultView.RowFilter = "Level = 2 And IsDefault='Yes'";
+        //                if (dtView.DefaultView != null && dtView.DefaultView.Count > 0)
+        //                {
+        //                    strApproverPosition = Convert.ToString(dtView.DefaultView[0]["ApproverPosition"]);
+        //                    strApproverEmail = profMasterPosition.FirstOrDefault(e => e.Position == strApproverPosition).OfficeEmail;
+        //                }
+        //                else
+        //                {
+        //                    goto case 3;
+        //                }
+        //                if (i == 1)
+        //                {
+        //                    if (header.UserPermission != "HR")
+        //                    {
+        //                        UpdateHeaderApprover(headerId, "1", strApproverPosition, strApproverEmail);
+        //                    }
+        //                    else UpdateHeaderApprover(headerId, "1", strApproverPosition, strApproverEmail,"HR");
+        //                    columnValues.Add("currentstate", "Yes");
+        //                }
+        //                else if (i == 2)
+        //                {
+        //                    columnValues.Add("currentstate", "No" );
+        //                }
+                           
+        //                columnValues.Add("approverposition", strApproverPosition);
+        //                columnValues.Add("approver0", strApproverEmail);
+        //                break;
+        //            case 3:
+        //                dtView.DefaultView.RowFilter = "Level = 3 And IsDefault='Yes'";
+        //                if (dtView.DefaultView != null && dtView.DefaultView.Count > 0)
+        //                {
+        //                    strApproverPosition = Convert.ToString(dtView.DefaultView[0]["ApproverPosition"]);
+        //                    strApproverEmail = profMasterPosition.FirstOrDefault(e => e.Position == strApproverPosition).OfficeEmail;
+
+        //                    if (i == 1)
+        //                    {
+        //                        if (header.UserPermission != "HR")
+        //                        {
+        //                            UpdateHeaderApprover(headerId, "1", strApproverPosition, strApproverEmail);
+        //                        }
+        //                        else
+        //                        {
+        //                            UpdateHeaderApprover(headerId, "1", strApproverPosition, strApproverEmail,"HR");
+        //                        }
+        //                        columnValues.Add("currentstate", "Yes");
+        //                    }
+        //                    else if (i == 2)
+        //                    {
+        //                        columnValues.Add("currentstate", "No");
+        //                        if (header.UserPermission == "HR") UpdateHeaderApprover(headerId, "2", strApproverPosition, strApproverEmail,"HR");
+        //                    }
+        //                    else if (i == 3)
+        //                    {
+        //                        if (header.UserPermission == "HR") UpdateHeaderApprover(headerId, "3", strApproverPosition, strApproverEmail,"HR");
+        //                        columnValues.Add("currentstate", header.UserPermission != "HR" ? "No" : "Yes");
+        //                    }
+
+        //                    columnValues.Add("approverposition", strApproverPosition);
+        //                    columnValues.Add("approver0", strApproverEmail);
+        //                }
+        //                break;
+        //        }
+
+        //       if (!string.IsNullOrEmpty(strApproverPosition)) mastervalue.Add(i + ";Add", columnValues); 
+        //    }
+        //    SPConnector.AddListItemAsync(LIST_WF, mastervalue, _siteUrl);
+          
+        //}
         
         public void UpdateApproval( TimesheetVM header)
         {
-           var caml = string.Format(@"<View><Query>
-                        <Where>
-                        <Eq>
-                            <FieldRef Name='timesheet' />
-                            <Value Type='Lookup'>{0}</Value>
-                        </Eq>
-                       </Where></Query></View>", header.ID);
-
-            var listcoll = SPConnector.GetList(LIST_WF, _siteUrl, caml);
-
-            var strNextLevel = header.ApprovalLevel == "3" ? header.ApprovalLevel : (Convert.ToInt32(header.ApprovalLevel) + 1).ToString();
-            var listitemNext= listcoll.FirstOrDefault(e =>Convert.ToString(e["approverlevel"]) == strNextLevel);
-
-            var strStatus = "";
-            if (header.TimesheetStatus == "Rejected")
+            try
             {
-                strStatus = header.TimesheetStatus;
-            }
-            else if (header.TimesheetStatus == "Approved" && header.ApprovalLevel != "3")
-            {
-                strStatus = "Pending Approval";
-            }
-            else if (header.TimesheetStatus == "Approved" && header.ApprovalLevel == "3")
-            {
-                strStatus = "Approved";
-            }
-            var columnValues = new Dictionary<string, object>
+                //var caml = string.Format(@"<View><Query>
+                //             <Where>
+                //             <Eq>
+                //                 <FieldRef Name='timesheet' />
+                //                 <Value Type='Lookup'>{0}</Value>
+                //             </Eq>
+                //            </Where></Query></View>", header.ID);
+
+                // var listcoll = SPConnector.GetList(LIST_WF, _siteUrl, caml);
+
+                if (!header.WorkflowItems.Any()) return;
+
+                var wf = header.WorkflowItems;
+
+                var strNextLevel = "";
+                if (header.ApprovalLevel == "3" && header.TimesheetStatus != "Rejected")
+                {
+                    strNextLevel = header.ApprovalLevel;
+                }
+                else if (header.ApprovalLevel != "3" && header.TimesheetStatus != "Rejected")
+                {
+                    strNextLevel = (Convert.ToInt32(header.ApprovalLevel) + 1).ToString();
+                }
+                else if (header.TimesheetStatus == "Rejected")
+                {
+                    strNextLevel = header.ApprovalLevel;
+                }
+
+                var listitemNext = wf.FirstOrDefault(e => e.Level == strNextLevel); //listcoll.FirstOrDefault(e => Convert.ToString(e["approverlevel"]) == strNextLevel);
+
+                var strStatus = "";
+                if (header.TimesheetStatus == "Rejected")
+                {
+                    strStatus = header.TimesheetStatus;
+                }
+                else if (header.TimesheetStatus == "Approved" && header.ApprovalLevel == "1")
+                {
+                    strStatus = "Pending Approval 2 of 3";
+                }
+                else if (header.TimesheetStatus == "Approved" && header.ApprovalLevel == "2")
+                {
+                    strStatus = "Pending Approval 3 of 3";
+                }
+                else if (header.TimesheetStatus == "Approved" && header.ApprovalLevel == "3")
+                {
+                    strStatus = "Approved";
+                }
+                var columnValues = new Dictionary<string, object>
                 {
                     {"timesheetstatus", strStatus},
                     {"approvallevel", strNextLevel}
                 };
 
-            if (header.TimesheetStatus != "Rejected")
-            {
-
-                if (listitemNext != null)
+                if (header.TimesheetStatus != "Rejected")
                 {
-                    columnValues.Add("approverposition", Convert.ToString(listitemNext["approverposition"]));
-                    columnValues.Add("approver", Convert.ToString(listitemNext["approver0"]));
+
+                    if (listitemNext != null)
+                    {
+                        //columnValues.Add("approverposition", FormatUtil.ConvertLookupToValue(listitemNext,"position"));
+                        //columnValues.Add("approver", FormatUtil.ConvertLookupToValue(listitemNext, "approvername_x003a_Office_x0020_"));
+
+                        columnValues.Add("approverposition", listitemNext.ApproverPositionText);
+                        columnValues.Add("approver", listitemNext.ApproverEmail);
+
+                    }
+
                 }
 
+                SPConnector.UpdateSingleListItemAsync(LIST_TIME, header.ID, columnValues, _siteUrl);
+
+
+                if (listitemNext == null) return;
+                var columnWfValues = new Dictionary<string, object>();
+                //var idNext = Convert.ToInt32(listitemNext["ID"]);
+                var idNext = listitemNext.ID;
+                if (header.TimesheetStatus != "Rejected")
+                {
+
+                    if (header.TimesheetStatus != "Rejected") columnWfValues.Add("currentstate", "Yes");
+                    if (header.ApprovalLevel == "3") columnWfValues.Add("status", header.TimesheetStatus);
+
+
+                    SPConnector.UpdateSingleListItemAsync(LIST_WF, idNext, columnWfValues, _siteUrl);
+
+                    columnWfValues = new Dictionary<string, object>();
+                    if (header.TimesheetStatus != "Rejected") columnWfValues.Add("currentstate", "No");
+                    if (header.ApprovalLevel != "3") columnWfValues.Add("status", header.TimesheetStatus);
+                    SPConnector.UpdateSingleListItemAsync(LIST_WF, (idNext - 1), columnWfValues, _siteUrl);
+                }
+                else
+                {
+                    columnWfValues.Add("status", header.TimesheetStatus);
+                    SPConnector.UpdateSingleListItemAsync(LIST_WF, (idNext), columnWfValues, _siteUrl);
+                }
+
+                var strApproverName = wf.FirstOrDefault().ApproverNameText;
+                SendEmailApproveReject(strApproverName, header.Name,
+                header.TimesheetStatus, header.ProfesionalUserLogin, header.ID, header.StartPeriod,
+                header.EndPeriod);
+
+                if (header.ApprovalLevel != "3" && header.TimesheetStatus == "Approved")
+                {
+                    SendEmailSubmitForApproval(listitemNext.ApproverNameText, header.Name, listitemNext.ApproverEmail,
+                        header.ID, header.StartPeriod, header.EndPeriod);
+                }
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.Message);
             }
 
-            SPConnector.UpdateSingleListItemAsync(LIST_TIME, header.ID, columnValues, _siteUrl);
-
-
-            if (listitemNext == null) return;
-            var idNext = Convert.ToInt32(listitemNext["ID"]);
-
-
-
-            var columnWfValues = new Dictionary<string, object> ();
-
-            if (header.TimesheetStatus != "Rejected") columnWfValues.Add("currentstate", "Yes");
-            if (header.ApprovalLevel=="3") columnWfValues.Add("status", header.TimesheetStatus);
-
-
-            SPConnector.UpdateSingleListItemAsync(LIST_WF, idNext, columnWfValues, _siteUrl);
-
-            columnWfValues = new Dictionary<string, object>();
-            columnWfValues.Add("currentstate", "No");
-            if (header.ApprovalLevel != "3") columnWfValues.Add("status", header.TimesheetStatus);
-            SPConnector.UpdateSingleListItemAsync(LIST_WF, (idNext - 1), columnWfValues, _siteUrl);
+          
+           
 
         }
 
@@ -865,18 +1157,79 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
             var viewModel = new TimesheetVM
             {
                 URL = _siteUrl,
-                UserLogin = userlogin,
+                ProfesionalUserLogin = userlogin,
                 dtDetails = GetTimesheetProfessionalDataTable()
             };
             return viewModel;
         }
 
+        private void SendEmailSubmitForApproval(string strNameApprover, 
+            string strRequestorName, 
+         string strApproverEmail = null, int? id = null, 
+         DateTime? startPeriod = null, DateTime? endPeriod = null)
+        {
+            if (string.IsNullOrEmpty(strApproverEmail)) return;
+
+            var strBody = "";
+
+            strBody += "Dear Mr/Ms. " + strNameApprover + ",<br/><br/>";
+            strBody += @"You are authorized as an approver for Timesheet Period "
+            + Convert.ToDateTime(startPeriod).ToString("MMM-dd-yyyy") + " to "
+            + Convert.ToDateTime(endPeriod).ToString("MMM-dd-yyyy") + " <br/>";
+            strBody += "The Timesheet is requested by " + strRequestorName;
+            strBody += "<br/>Please complete the approval process immediately.";
+            strBody += "<br/><br/>To view the detail of the Timesheet, please click following link:<br/>";
+            strBody += _siteUrl + UrlResource.Timesheet + "/EditForm.aspx?ID=" + id;
+            strBody += "<br/><br/>Thank you for your attention.";
+
+            //if (!string.IsNullOrEmpty(strOfficeEmail))
+            //{
+            //   
+            //}
+            List<string> lstEmail = new List<string> {strApproverEmail};
+            EmailUtil.SendMultiple(lstEmail, "Request for Approval of Timesheet ", strBody);
+
+
+        }
+
+        private void SendEmailApproveReject(string strNameApprover,
+        string strRequestorName,string strStatus,
+        string strRequestorEmail = null, int? id = null,
+        DateTime? startPeriod = null, DateTime? endPeriod = null)
+        {
+            if (string.IsNullOrEmpty(strRequestorEmail)) return;
+            var strSubject = "";
+            var strStatusBy = "";
+            if (strStatus=="Approved")
+            {
+                strSubject = "Approval Notification of Timesheet";
+                strStatusBy = " has been approved by ";
+            }
+            else if (strStatus == "Rejected")
+            {
+                strSubject = "Rejection Notification of Timesheet";
+                strStatusBy = " has been rejected by ";
+            }
+            var strBody = "";
+
+            strBody += "Dear Mr/Ms. " + strRequestorName + ",<br/><br/>";
+            strBody += @"This is to notify you that the Timesheet Period  "
+            + Convert.ToDateTime(startPeriod).ToString("MMM-dd-yyyy") + " to "
+            + Convert.ToDateTime(endPeriod).ToString("MMM-dd-yyyy") + strStatusBy + strNameApprover + " <br/>";
+            strBody += "<br/>Please kindly find attached links :<br/>";
+            strBody += _siteUrl + UrlResource.Timesheet + "/EditForm.aspx?ID=" + id;
+            strBody += "<br/><br/>Thank you for your attention.";
+
+            List<string> lstEmail = new List<string> { strRequestorEmail };
+
+            EmailUtil.SendMultiple(lstEmail, strSubject, strBody);
+
+
+        }
+
         public int CreateHeader(TimesheetVM header)
         {
-            var dtView = Getworkflowmapping(header.ProjectUnit);
-
-            if (dtView == null || dtView.Rows.Count == 0) throw new Exception("Please check Workflow Mapping Master");
-
+         
             int ID = 0;
 
             var strGuid = Guid.NewGuid().ToString();
@@ -886,7 +1239,7 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                 {"TimesheetGUID", strGuid}
            };
 
-            var strPeriod = Convert.ToDateTime(header.Period).ToString("MM") + "-" + Convert.ToDateTime(header.Period).ToString("yyyy");
+            var strPeriod = Convert.ToDateTime(header.Period).ToString("MMMM") + " " + Convert.ToDateTime(header.Period).ToString("yyyy");
 
             columnValues.Add("Title", strPeriod);
             columnValues.Add("DatePeriod", header.Period);
@@ -902,13 +1255,21 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                 columnValues.Add("professional", header.ProfessionalID);
             }
 
-            columnValues.Add("visibleto", SPConnector.GetUser(header.UserLogin, _siteUrl, "hr"));
+            columnValues.Add("visibleto", SPConnector.GetUser(header.ProfesionalUserLogin, _siteUrl, "hr"));
 
             try
             {
                 SPConnector.AddListItem(LIST_TIME, columnValues, _siteUrl);
                 ID = SPConnector.GetLatestListItemIdbyGuid(LIST_TIME, _siteUrl,strGuid);
-              
+                if (header.TimesheetStatus == "Pending Approval 1 of 3")
+                {
+                    if (!header.WorkflowItems.Any()) return ID;
+                    var wf = header.WorkflowItems;
+                    var strEmail = wf.FirstOrDefault().ApproverEmail;
+                    var strName = wf.FirstOrDefault().ApproverNameText;
+                    SendEmailSubmitForApproval(strName, header.Name, strEmail, ID, header.StartPeriod,
+                        header.EndPeriod);
+                }
 
             }
             catch (Exception e)
@@ -930,7 +1291,15 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
             try
             {
                 SPConnector.UpdateSingleListItemAsync(LIST_TIME, header.ID, columnValues, _siteUrl);
-              
+                if (header.TimesheetStatus == "Pending Approval 1 of 3")
+                {
+                    if (!header.WorkflowItems.Any()) return ;
+                    var wf = header.WorkflowItems;
+                    var strEmail = wf.FirstOrDefault().ApproverEmail;
+                    var strName = wf.FirstOrDefault().ApproverNameText;
+                    SendEmailSubmitForApproval(strName, header.ProfessionalName.Text, strEmail, header.ID, header.StartPeriod,
+                        header.EndPeriod);
+                }
             }
             catch (Exception e)
             {

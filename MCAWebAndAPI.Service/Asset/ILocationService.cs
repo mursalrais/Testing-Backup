@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MCAWebAndAPI.Service.Common
+namespace MCAWebAndAPI.Service.Asset
 {
-    public interface IGLMasterService
+    public class ILocationService
     {
+
     }
 }

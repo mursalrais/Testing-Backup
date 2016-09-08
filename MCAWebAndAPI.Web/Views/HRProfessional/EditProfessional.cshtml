@@ -91,36 +91,15 @@
 @section scripts{
 
     <script>
-        
-        function filterLevel() {
-            console.log("filterlever works");
-            return {
-                Level: $('#DivisionProjectUnit_Value').data("kendoDropDownList").dataItem($('#DivisionProjectUnit_Value').data("kendoDropDownList").select())
-            };
-
-        }
-
-        function checkPosition() {
-            
-            if (($("#CurrentPosition_Value").val() == null) || ($("#CurrentPosition_Value").val() == "")) {
-                alert("Current Position value cannot null");
-                return false;
-            }
-            return true;
-        }
 
         $(document).ready(function () {
 
             $(".btn-submit").click(function (e) {
-                var isValid = checkPosition();
-                if (isValid) {
-                    var button = $(e.target).closest("button"); //get the row
-                    var id = button.prop('id');
+                var button = $(e.target).closest("button"); //get the row
+                var id = button.prop('id');                
 
-                    $('#ValidationAction').prop('value', id);
-                    $('form').submit();
-                }
-                
+                $('#ValidationAction').prop('value', id);
+                $('form').submit();
             });
         });
 

@@ -37,9 +37,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// </summary>
         public int TotalDays { get; set; }
 
-        [DisplayName("Total Days")]
-        public string StrTotalDays { get; set; }
-
         /// <summary>
         /// returntowork
         /// </summary>

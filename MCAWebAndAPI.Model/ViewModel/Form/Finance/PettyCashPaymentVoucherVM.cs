@@ -7,13 +7,6 @@ using MCAWebAndAPI.Model.ViewModel.Control;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 {
-    /// <summary>
-    /// Wireframe FIN10: Petty Cash Voucher
-    ///     a.k.a.: Petty Cash Payment Voucher
-    ///     a.k.a.: Petty Cash Advance Voucher
-    /// </summary>
-
-
     [MetadataType(typeof(PettyCashPaymentVoucherVMMetadata))]
     public class PettyCashPaymentVoucherVM : PettyCashTransactionItem
     {
@@ -22,6 +15,11 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
             this.TransactionType = Shared.PettyCashTranscationType_PettyCashVoucher;
         }
        
+        //[DataType(DataType.Date)]
+        //[DisplayName("Advance Receive Date")]
+        //[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
+        //public DateTime Date { get; set; } = DateTime.Today;
+
         [UIHint("ComboBox")]
         [Required]
         public ComboBoxVM Status { get; set; } = new ComboBoxVM();

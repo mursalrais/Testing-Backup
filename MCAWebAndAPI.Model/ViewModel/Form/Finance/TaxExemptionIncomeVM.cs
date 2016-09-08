@@ -1,45 +1,56 @@
 ﻿using MCAWebAndAPI.Model.ViewModel.Control;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 {
     public class TaxExemptionIncomeVM : TaxExemptionBaseVM
     {
-        /// <summary>
-        /// FIN17: Tax Exemption
-        /// </summary>
+        private ComboBoxVM _typeOfWithHoldingTax;
 
-        private ComboBoxVM typeOfWithHoldingTax;
-
-        [Required]
         [DisplayName("Type Of Withholding Tax")]
         [UIHint("ComboBox")]
         public ComboBoxVM TypeOfWithHoldingTax
         {
             get
             {
-                if (typeOfWithHoldingTax == null)
+                if (_typeOfWithHoldingTax == null)
                 {
-                    typeOfWithHoldingTax = new ComboBoxVM();
+                    _typeOfWithHoldingTax = new ComboBoxVM();
                 }
-                return typeOfWithHoldingTax;
+                return _typeOfWithHoldingTax;
             }
             set
             {
-                typeOfWithHoldingTax = value;
+                _typeOfWithHoldingTax = value;
             }
         }
 
         [DisplayName("Total Income Recepients")]
-        public int? TotalIncomeRecepients { get; set; }
+        public int TotalIncomeRecepients
+        {
+            get;
+            set;
+        }
 
-        [Required(ErrorMessage = "asdadasdsa")]
         [DisplayName("Gross Income (IDR)")]
-        public decimal? GrossIncome { get; set; }
+        public decimal GrossIncome
+        {
+            get;
+            set;
+        }
 
-        [Required]
+
         [DisplayName("Total Income Tax Borne by Government(IDR)")]
-        public decimal? TotalIncomeTaxBorneByGovernment { get; set; }
+        public decimal TotalIncomeTaxBorneByGovernment
+        {
+            get;
+            set;
+        }
     }
 }

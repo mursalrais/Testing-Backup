@@ -47,7 +47,7 @@ new AjaxOptions
         <div class="row">
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.cmpYearDate).Class("col-xs-2 control-label")
-                <div class="col-xs-2">
+                <div class="col-xs-4">
                     @Html.EditorFor(m => m.cmpYearDate)
                 </div>
             </div>
@@ -138,11 +138,11 @@ new AjaxOptions
                     var rowgrid = $("#CompensatoryDetails").data("kendoGrid").tbody.find("tr");
                     var valdate = true;
                     var i = -1;
+                    var j = -1;
                     rowgrid.each(function (e) {
                         i++;
                         var xdate = $("#Dateid" + i).val();
                         var xEdit = $("#Editid" + i).val();
-                        var j = -1;
                         rowgrid.each(function (e) {
                             j++;
                             var ydate = $("#Dateid" + j).val();
@@ -153,8 +153,6 @@ new AjaxOptions
                                         if (yEdit != -1) {
                                             if (xdate == ydate) {
                                                 valdate = false;
-                                                return false;
-
                                             }
                                         }
                                     }
@@ -273,7 +271,7 @@ new AjaxOptions
                                 model.set("CmpTotalHours", range);
                             }
 
-                            if (range > 4) {
+                            if (range >= 4) {
                                 totday = 1
                             } else {
                                 totday = 0.5

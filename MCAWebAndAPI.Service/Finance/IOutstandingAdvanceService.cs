@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
@@ -30,7 +33,5 @@ namespace MCAWebAndAPI.Service.Finance
         Task SendEmailToProfessional(string message, OutstandingAdvanceVM viewModel);
 
         Task SendEmailToGrantees(string message, OutstandingAdvanceVM viewModel);
-
-        Task SaveCSVFilesAsync(IEnumerable<HttpPostedFileBase> documents);
     }
 }

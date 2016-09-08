@@ -1,21 +1,26 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 {
     public class TaxExemptionVATVM : TaxExemptionBaseVM
     {
-        /// <summary>
-        /// FIN17: Tax Exemption
-        /// </summary>
-
-        [Required]
         [DisplayName("Total Tax Based (IDR)")]
-        public decimal? TotalTaxBased { get; set; }
+        public Decimal TotalTaxBased
+        {
+            get;
+            set;
+        }
 
-        [Required]
         [DisplayName("Total VAT not collected (IDR)")]
-        public decimal? TotalVATNotCollected { get; set; }
+        public Decimal TotalVATNotCollected
+        {
+            get;
+            set;
+        }
     }
 }

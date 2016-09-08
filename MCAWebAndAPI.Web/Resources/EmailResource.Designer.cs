@@ -147,17 +147,15 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dear Interview Panel,
+        ///   Looks up a localized string similar to Dear Interviewer Panel,
         ///
+        ///This email is sent to you to notify that here is the latest result from previous interview for position {1}
+        ///This list requires your action to review as well as to prepare the Interview process for further action. 
+        ///
+        ///To view the detail, please click following link: 
         ///{0}
         ///
-        ///This email is sent to you to notify that here is the latest list of shortlisted candidate. This list
-        ///
-        ///requires your action to review as well as to prepare the Interview process for further action.
-        ///
-        ///Kindly check the link as per below to go to direct page accordingly. Thank you.
-        ///
-        ///Link : {1}.
+        ///Thank you for your attention..
         /// </summary>
         public static string EmailInterviewToInterviewPanel {
             get {
@@ -166,12 +164,8 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dear Candidate Interview,
-        ///
-        ///{0}
-        ///
-        ///you are invited to interview on : {1}
-        ///At hour : {2}.
+        ///   Looks up a localized string similar to {0}
+        ///.
         /// </summary>
         public static string EmailShortlistToCandidate {
             get {
@@ -182,13 +176,15 @@ namespace MCAWebAndAPI.Web.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Dear HR Team,
         ///
-        ///This email is sent to you to notify that here is the latest list of shortlisted candidate. This list
+        ///This email is sent to you to notify that here is the latest list of shortlisted candidate for position {1} . 
+        ///Please complete the process immediately to send the list to Interviewer Panel for further action.
         ///
-        ///requires your action to send to Interview Panel for further action. Kindly check the link as per
+        ///To view the detail, please click following link: 
+        ///Link : {0}
         ///
-        ///below to go to direct page accordingly. Thank you.
+        ///Thank you for your attention.
         ///
-        ///Link : {0}.
+        ///.
         /// </summary>
         public static string EmailShortlistToHR {
             get {
@@ -197,17 +193,15 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dear Interview Panel,
+        ///   Looks up a localized string similar to Dear Interviewer Panel,
         ///
-        ///{0}
+        ///This email is sent to you to notify that here is the latest list of shortlisted candidate for position {1}
+        ///This list requires your action to review as well as to prepare the Interview process for further action. 
         ///
-        ///This email is sent to you to notify that here is the latest list of shortlisted candidate. This list
+        ///To view the detail, please click following link: 
         ///
-        ///requires your action to review as well as to prepare the Interview process for further action.
         ///
-        ///Kindly check the link as per below to go to direct page accordingly. Thank you.
-        ///
-        ///Link : {1}.
+        ///Link : {0}.
         /// </summary>
         public static string EmailShortlistToInterviewPanel {
             get {
@@ -216,15 +210,17 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dear Respective Requestor,
+        ///   Looks up a localized string similar to Dear Respective User,
         ///
-        ///This email is sent to you to notify that here is the list of shortlisted candidate from HR. This list
+        ///You are authorized to shortlist candidate (s) for position {1} . 
+        ///Please complete the process immediately to select the most suitable candidate for this position. 
         ///
-        ///requires your action to select the most suitable candidate for this position. Kindly check the link
+        ///To view the detail, please click following link: 
+        ///Link : {0}
         ///
-        ///as per below to go to direct page accordingly. Thank you.
+        ///Thank you for your attention.
         ///
-        ///Link : {0}.
+        ///.
         /// </summary>
         public static string EmailShortlistToRequestor {
             get {
@@ -371,29 +367,11 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dear {0},
+        ///   Looks up a localized string similar to Dear Respective Approver,
         ///
-        ///Your request has been approved by {1}. Please contact respective person for any queries.  
+        ///This email is sent to you to notify that there is a request which required your action to approve. Kindly check the link as per below to go to direct page accordingly. You may check your personal page in IMS (My Approval View). Thank you. 
         ///
-        ///Thank you..
-        /// </summary>
-        public static string ProfessionalPerformanceEvaluationRequestor {
-            get {
-                return ResourceManager.GetString("ProfessionalPerformanceEvaluationRequestor", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Dear {0},
-        ///
-        ///You are authorized as an approver for Performance Plan Form for period {1}.
-        ///This Performance Plan is requested by {2}.
-        ///Please complete the approval process immediately
-        ///
-        ///To view the detail, please click following link: 
-        ///{3}{4}/EditForm_Custom.aspx?ID={5}
-        ///
-        ///Thank you for your attention..
+        ///Link :   {0}{1}/EditForm_Custom.aspx?ID={2}.
         /// </summary>
         public static string ProfessionalPerformancePlan {
             get {
@@ -402,42 +380,11 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dear {0},
+        ///   Looks up a localized string similar to Dear Respective Approver,
         ///
-        ///Your request has been approved by {1}. Please contact respective person for any queries.  
+        ///This email is sent to you to notify that there is a request which required your action to approve. Kindly check the link as per below to go to direct page accordingly. You may check your personal page in IMS (My Approval View). Thank you. 
         ///
-        ///Thank you..
-        /// </summary>
-        public static string ProfessionalPerformancePlanApproved {
-            get {
-                return ResourceManager.GetString("ProfessionalPerformancePlanApproved", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Dear {0},
-        ///
-        ///Your request has been rejected by {1}. Please contact respective person for any queries.  
-        ///
-        ///Thank you..
-        /// </summary>
-        public static string ProfessionalPerformancePlanRejected {
-            get {
-                return ResourceManager.GetString("ProfessionalPerformancePlanRejected", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Dear {0},
-        ///
-        ///You are authorized as an approver for Performance Evaluation Form for period {1}.
-        ///This Performance Evaluation is requested by {2}.
-        ///Please complete the approval process immediately
-        ///
-        ///To view the detail, please click following link: 
-        ///{3}{4}/EditForm_Custom.aspx?ID={5}
-        ///
-        ///Thank you for your attention..
+        ///Link :  {0}{1}/EditForm_Custom.aspx?ID={2}.
         /// </summary>
         public static string ProfessionalPerfromanceEvaluation {
             get {
@@ -453,19 +400,6 @@ namespace MCAWebAndAPI.Web.Resources {
         public static string PSAChangeStatus {
             get {
                 return ResourceManager.GetString("PSAChangeStatus", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Dear {0},
-        ///
-        ///This email is sent to you to notify that your PSA will be expired in the next two months. Please kindly communicate to HR dept. for any further action. 
-        ///
-        ///Thank you..
-        /// </summary>
-        public static string PSATwoMonthBeforeExpired {
-            get {
-                return ResourceManager.GetString("PSATwoMonthBeforeExpired", resourceCulture);
             }
         }
         

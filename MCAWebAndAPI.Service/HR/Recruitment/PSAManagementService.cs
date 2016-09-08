@@ -270,48 +270,15 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.ProfessionalFullName = Convert.ToString(listItem["professionalfullname"]);
             viewModel.PositionBasedProject.Text = FormatUtil.ConvertLookupToValue(listItem, "position");
             viewModel.JoinDate = Convert.ToDateTime(listItem["joindate"]).ToLocalTime();
-            viewModel.DateOfNewPSA = Convert.ToDateTime(listItem["dateofnewpsa"]);
+            viewModel.DateOfNewPSA = Convert.ToDateTime(listItem["dateofnewpsa"]).ToLocalTime();
             viewModel.TenureString = Convert.ToString(listItem["tenure"]);
             viewModel.PerformancePlan.Value = Convert.ToString(listItem["initiateperformanceplan"]);
             viewModel.PSAExpiryDate = Convert.ToDateTime(listItem["psaexpirydate"]).ToLocalTime();
             viewModel.PSAExpiryDates = Convert.ToDateTime(listItem["psaexpirydates"]).ToLocalTime();
-            viewModel.LastWorkingDate = Convert.ToDateTime(listItem["lastworkingdate"]);
-
-            DateTime today = DateTime.UtcNow;
-                       
-            if((today < viewModel.DateOfNewPSA) || (today > viewModel.LastWorkingDate))
-            {
-                viewModel.PSAStatus.Text = "Inactive";
-            }
-            else if((today >= viewModel.DateOfNewPSA) && (today <= viewModel.LastWorkingDate))
-            {
-                viewModel.PSAStatus.Text = "Active";
-            }
-
-            bool updateData = UpdatePSAStatus(viewModel.ID, viewModel.PSAStatus.Text);
 
             viewModel.DocumentUrl = GetDocumentUrl(viewModel.ID);
 
             return viewModel;
-        }
-
-        private bool UpdatePSAStatus(int? ID, string psaStatus)
-        {
-            var updatedValues = new Dictionary<string, object>();
-
-            updatedValues.Add("psastatus", psaStatus);
-
-            try
-            {
-                SPConnector.UpdateListItem(SP_PSA_LIST_NAME, ID, updatedValues, _siteUrl);
-            }
-            catch (Exception e)
-            {
-                logger.Debug(e.Message);
-                return false;
-            }
-
-            return true;
         }
 
         private string GetDocumentUrl(int? iD)
@@ -456,7 +423,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             string professionalFullName = Convert.ToString(professionalData["Title"]) + " " + Convert.ToString(professionalData["lastname"]);
 
             string mailSubject = string.Format("Initiation Performance Plan for Period {0}", currentYear);
-            string mailContent = string.Format("Dear Mr./Mrs. {0}, {1}{2}This email is sent to you to notify that you are required to create Performance Plan for period {3}. Creating and approval plan process will take maximum 5 working days. Therefore, do prepare your plan accordingly. {4}{5}To Create the performance plan, please click the following link: {6}{7}/NewForm_Custom.aspx {8}{9}Thank you for your attention.", professionalFullName, Environment.NewLine, Environment.NewLine, currentYear, Environment.NewLine, Environment.NewLine, siteUrl, UrlResource.ProfessionalPerformancePlan, Environment.NewLine, Environment.NewLine);
+            string mailContent = string.Format("Dear Mr./Mrs. {0}, This email is sent to you to notify that you are required to create Performance Plan for period {1}. Creating and approval plan process will take maximum 5 working days. Therefore, do prepare your plan accordingly. To Create the performance plan, please click the following link: {2}{3}/NewForm_Custom.aspx", professionalFullName, currentYear, siteUrl, UrlResource.ProfessionalPerformancePlan);
 
             EmailUtil.Send(professionalMail, mailSubject, mailContent);
         }

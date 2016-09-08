@@ -19,7 +19,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         [Required]
         [UIHint("AjaxComboBox")]
         [DisplayName("SCA Voucher No")]
-        public AjaxComboBoxVM SCAVoucher { get; set; } = new AjaxComboBoxVM();
+        public AjaxComboBoxVM SCACouvher { get; set; } = new AjaxComboBoxVM();
 
         public string Description { get; set; }
 

@@ -11,17 +11,13 @@ namespace MCAWebAndAPI.Service.Asset
     {
         void SetSiteUrl(string siteUrl);
 
-        AssetCheckResultHeaderVM GetPopulatedModel(int? ID = null, string FormID = null, AssetCheckResultHeaderVM data = null);
+        AssetCheckResultHeaderVM GetPopulatedModel(int? ID = null, string FormID = null);
 
         AssetCheckResultHeaderVM GetPopulatedModelGetData(int? FormID = null);
 
-        AssetCheckResultHeaderVM Approve(int? ID = null);
+        AssetCheckResultHeaderVM GetPopulatedModelCalculate(AssetCheckResultHeaderVM data);
 
-        AssetCheckResultHeaderVM Reject(int? ID = null);
-
-        AssetCheckResultHeaderVM GetPopulatedModelCalculate(AssetCheckResultHeaderVM data, int? ID = null);
-
-        AssetCheckResultHeaderVM GetPopulatedModelSave(AssetCheckResultHeaderVM data, Boolean isApproval = false, int? ID = null);
+        AssetCheckResultHeaderVM GetPopulatedModelSave(AssetCheckResultHeaderVM data, Boolean isApproval = false);
 
         ProfessionalsVM GetProfessionalInfo(int? iDProf, string siteUrl);
 

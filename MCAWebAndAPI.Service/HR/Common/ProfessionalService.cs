@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Service.HR.Common
 {
-    public partial class ProfessionalService : IProfessionalService
+    public class ProfessionalService : IProfessionalService
     {
         string _siteUrl;
         const string SP_PROMAS_LIST_NAME = "Professional Master";
@@ -23,16 +23,6 @@ namespace MCAWebAndAPI.Service.HR.Common
         const string SP_PRODEP_LIST_NAME = "Dependent";
 
         static Logger logger = LogManager.GetCurrentClassLogger();
-
-        public ProfessionalService()
-        {
-
-        }
-
-        public ProfessionalService(string siteUrl)
-        {
-            SetSiteUrl(siteUrl);
-        }
 
         public void SetSiteUrl(string siteUrl)
         {
@@ -126,26 +116,16 @@ namespace MCAWebAndAPI.Service.HR.Common
         private ProfessionalDataVM ConvertToProfessionalModel(ListItem listItem)
         {
             var viewModel = new ProfessionalDataVM();
-            DateTime LastWorkingDate = Convert.ToDateTime(listItem["lastworkingdate"]);
-            DateTime CurrentDate = DateTime.UtcNow;
+
             viewModel.ID = Convert.ToInt32(listItem["ID"]);
             viewModel.FirstMiddleName = Convert.ToString(listItem["Title"]);
             viewModel.CurrentPosition.Value = FormatUtil.ConvertLookupToID(listItem, "Position");
-            viewModel.DivisionProjectUnit.Value = Convert.ToString(listItem["Project_x002f_Unit"]);
             viewModel.JoinDate = Convert.ToDateTime(listItem["Join_x0020_Date"]).ToLocalTime();
             if (viewModel.JoinDate.Value.Year == 1)
             {
                 viewModel.JoinDate = null;
             }
-            //if ((LastWorkingDate.Year ==1)||(CurrentDate <= LastWorkingDate))
-            //{
-            //    viewModel.ProfessionalStatus.Value = "Active";
-            //}
-            //else
-            //{
-            //    viewModel.ProfessionalStatus.Value = "Inactive";
-            //}
-            //viewModel.ProfessionalStatus.Value = Convert.ToString(listItem["Professional_x0020_Status"]);
+            viewModel.ProfessionalStatus.Value = Convert.ToString(listItem["Professional_x0020_Status"]);
             viewModel.PlaceOfBirth = Convert.ToString(listItem["placeofbirth"]);
             viewModel.DateOfBirth = Convert.ToDateTime(listItem["dateofbirth"]);
             viewModel.PermanentAddress =
@@ -360,13 +340,14 @@ namespace MCAWebAndAPI.Service.HR.Common
 
         private EducationDetailVM ConvertToEducationDetailVM(ListItem item)
         {
-            var tes = new EducationDetailVM();
-            tes.ID = Convert.ToInt32(item["ID"]);
-            tes.Subject = Convert.ToString(item["Title"]);
-            tes.University = Convert.ToString(item["university"]);
-            tes.YearOfGraduation = FormatUtil.ConvertDateStringToDateTimeProfessional(item, "yearofgraduation");
-            tes.Remarks = Convert.ToString(item["remarks"]);
-            return tes;
+            return new EducationDetailVM
+            {
+                ID = Convert.ToInt32(item["ID"]),
+                Subject = Convert.ToString(item["Title"]),
+                University = Convert.ToString(item["university"]),
+                YearOfGraduation = FormatUtil.ConvertDateStringToDateTime(item, "yearofgraduation"),
+                Remarks = Convert.ToString(item["remarks"])
+            };
         }
 
 
@@ -404,7 +385,7 @@ namespace MCAWebAndAPI.Service.HR.Common
                 Subject = Convert.ToString(item["Title"]),
                 Institution = Convert.ToString(item["traininginstitution"]),
                 Remarks = Convert.ToString(item["trainingremarks"]),
-                Year = FormatUtil.ConvertDateStringToDateTimeProfessional(item, "trainingyear")
+                Year = FormatUtil.ConvertDateStringToDateTime(item, "trainingyear")
             };
         }
 
@@ -415,8 +396,7 @@ namespace MCAWebAndAPI.Service.HR.Common
             updatedValue.Add("Title", viewModel.FirstMiddleName);
             updatedValue.Add("Position", new FieldLookupValue
             { LookupId = (int)viewModel.CurrentPosition.Value });
-            updatedValue.Add("Project_x002f_Unit",viewModel.DivisionProjectUnit.Value);
-            //updatedValue.Add("Professional_x0020_Status", viewModel.ProfessionalStatus.Value);
+            updatedValue.Add("Professional_x0020_Status", viewModel.ProfessionalStatus.Value);
             updatedValue.Add("Join_x0020_Date", viewModel.JoinDate);
             updatedValue.Add("placeofbirth", viewModel.PlaceOfBirth);
             updatedValue.Add("dateofbirth", viewModel.DateOfBirth);
@@ -492,10 +472,7 @@ namespace MCAWebAndAPI.Service.HR.Common
                 logger.Debug(e.Message);
                 throw e;
             }
-            if (viewModel.ID == null)
-            {
-               viewModel.ID = SPConnector.GetLatestListItemID(SP_PROMAS_LIST_NAME, _siteUrl);
-            }
+
             return viewModel.ID;
         }
 

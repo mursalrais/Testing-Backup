@@ -39,7 +39,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 }
                 else
                 {
-                    emailApprover = GetApprover("Deputy Executive Director");
+                    emailApprover = GetApprover("Deputy ED");
                 }
                 Approver = SPConnector.GetUser(emailApprover, _siteUrl, "hr");
                 updatedValue.Add("currentapprover", Approver);
@@ -207,7 +207,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 updatedValue.Add("specifictechnicalskill", viewModel.SpecificTechnicalSkillQualification);
                 updatedValue.Add("personalattributes", viewModel.PersonalAttributesCompetencies);
                 updatedValue.Add("otherrequirements", viewModel.OtherRequirements);
-                if (viewModel.Workplan.Values != null)
+                if (viewModel.Workplan.Values.Length > 0)
                 {
                     updatedValue.Add("Workplan", viewModel.Workplan.Values);
                 }
@@ -228,7 +228,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 }
                 else
                 {
-                    emailApprover = GetApprover("Deputy Executive Director");
+                    emailApprover = GetApprover("Deputy ED");
                 }
                 Approver = SPConnector.GetUser(emailApprover, _siteUrl, "hr");
                 updatedValue.Add("currentapprover", Approver);
@@ -345,15 +345,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             //var viewModel = new ManpowerRequisitionVM();
 
             viewModel.ExpectedJoinDate = Convert.ToDateTime(listItem["expectedjoindate"]).ToLocalTime();
-            if (viewModel.Status.Value == "Draft")
-            {
-                viewModel.DateRequested = DateTime.Now.ToLocalTime();
-            }
-            else
-            {
-                viewModel.DateRequested = Convert.ToDateTime(listItem["requestdate"]).ToLocalTime();
-            }
-            
+            viewModel.DateRequested = Convert.ToDateTime(listItem["requestdate"]).ToLocalTime();
 
             viewModel.NoOfPerson = Convert.ToInt32(listItem["numberofperson"]);
             viewModel.Tenure = Convert.ToInt32(listItem["Tenure"]);
@@ -627,7 +619,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         public string GetApprover(string Position)
         {
-            string email = "mca.developer@eceos.com";
+            string email = "anugerahseptian@gmail.com";
             string caml = @"<View><Query><Where><Eq><FieldRef Name='Position' /><Value Type='Lookup'>" + Position + "</Value></Eq></Where></Query><ViewFields><FieldRef Name='officeemail' /></ViewFields><QueryOptions /></View>";
             foreach (var item in SPConnector.GetList(SP_PROFESSIONAL_MAST, _siteUrl, caml))
             {

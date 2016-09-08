@@ -39,10 +39,6 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
         private const string FIELD_REQUISITION_FUND = "Fund";
         private const string FIELD_REQUISITION_CURRENCY = "Currency";
         private const string FIELD_REQUISITION_TOTAL = "Total";
-        private const string FIELD_MODIFIED = "Modified";
-        private const string FIELD_CREATED = "Created";
-        private const string FIELD_USER_EMAIL = "UserEmail";
-
         private const string FIELD_RN_HEADERID = "Requisition_x0020_Note_x0020_ID";
         private const string FIELD_RN_ACTIVITY = "Activity";
         private const string FIELD_RN_WBS = "WBS_x0020_ID";
@@ -151,22 +147,17 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
 
             updatedValue.Add(FIELD_REQUISITION_CATEGORY, viewModel.Category.Value);
             updatedValue.Add(FIELD_REQUISITION_DATE, viewModel.Date);
-
             if (viewModel.EventBudgetNo.Value.HasValue)
             {
                 updatedValue.Add(FIELD_REQUISITION_EVENTBUDGETNO, viewModel.EventBudgetNo.Value);
             }
-
             updatedValue.Add(FIELD_REQUISITION_PROJECT, viewModel.Project.Value);
             updatedValue.Add(FIELD_REQUISITION_FUND, viewModel.Fund);
             updatedValue.Add(FIELD_REQUISITION_CURRENCY, viewModel.Currency.Value);
             updatedValue.Add(FIELD_REQUISITION_TOTAL, viewModel.Total);
-            updatedValue.Add(FIELD_USER_EMAIL, viewModel.UserEmail);
-
-            string docNo = DocumentNumbering.Create(_siteUrl, documentNoFormat, 5);
-            updatedValue.Add(FIELD_TITLE, docNo);
-
-            viewModel.Title = docNo;
+            string docNO = DocumentNumbering.Create(_siteUrl, documentNoFormat, 5);
+            updatedValue.Add(FIELD_TITLE, docNO);
+            viewModel.Title = docNO;
 
             try
             {
@@ -196,7 +187,6 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
             updatedValue.Add(FIELD_REQUISITION_FUND, viewModel.Fund);
             updatedValue.Add(FIELD_REQUISITION_CURRENCY, viewModel.Currency.Value);
             updatedValue.Add(FIELD_REQUISITION_TOTAL, viewModel.Total);
-            updatedValue.Add(FIELD_USER_EMAIL, viewModel.UserEmail);
 
             try
             {
@@ -426,11 +416,8 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
             viewModel.Currency.Value = Convert.ToString(listItem[FIELD_REQUISITION_CURRENCY]);
             viewModel.Total = Convert.ToDecimal(listItem[FIELD_REQUISITION_TOTAL]);
             viewModel.EditMode = (int)Item.Mode.UPDATED;
-            viewModel.Modified = Convert.ToDateTime(listItem[FIELD_MODIFIED]);
-            viewModel.Created = Convert.ToDateTime(listItem[FIELD_CREATED]);
 
             viewModel.Editor = Convert.ToString((listItem[FIELD_RN_EDITOR] as FieldUserValue).LookupValue);
-            viewModel.UserEmail = Convert.ToString(listItem[FIELD_USER_EMAIL]);
 
             viewModel.DocumentUrl = GetDocumentUrl(viewModel.ID);
             return viewModel;
@@ -442,14 +429,14 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
 
             if (HeaderID > 0)
             {
-                var caml = @"<View><Query><Where><Eq><FieldRef Name='" + FIELD_RN_HEADERID + "' /><Value Type='Lookup'>" + HeaderID.ToString() + "</Value></Eq></Where></Query></View>";
+                var caml = @"<View><Query><Where><Eq><FieldRef Name='"+FIELD_RN_HEADERID+"' /><Value Type='Lookup'>" + HeaderID.ToString() + "</Value></Eq></Where></Query></View>";
 
                 details = new List<RequisitionNoteItemVM>();
 
                 foreach (var item in SPConnector.GetList(ListName_RequisitionNoteItem, _siteUrl, caml))
                 {
                     details.Add(ConvertToRequisitionNoteItemVM(item));
-                }
+            }
             }
 
             return details;
@@ -462,7 +449,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
             viewModel.ID = Convert.ToInt32(listItem[FIELD_ID]);
             viewModel.Specification = Convert.ToString(listItem[FIELD_TITLE]);
 
-            viewModel.Activity.Value = (listItem[FIELD_RN_ACTIVITY] as FieldLookupValue).LookupId;
+            viewModel.Activity.Value = (listItem[FIELD_RN_ACTIVITY] as FieldLookupValue).LookupId;           
             viewModel.Activity.Text = (listItem[FIELD_RN_ACTIVITY] as FieldLookupValue).LookupValue;
 
             viewModel.WBS.Value = (listItem[FIELD_RN_WBS] as FieldLookupValue).LookupId;

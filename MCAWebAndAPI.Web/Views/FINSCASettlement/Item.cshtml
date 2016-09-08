@@ -1,9 +1,5 @@
 ﻿@model MCAWebAndAPI.Model.ViewModel.Form.Finance.SCASettlementVM
 
-@*
-    Wireframe FIN07: SCA Settlement
-*@
-
 <style media="screen" type="text/css">
     .textbox-padding6px-readonly{
         padding:6px;
@@ -14,13 +10,13 @@
 </style>
     
 @using (Html.BeginForm(
-    "Save", "FINSCASettlement",
-    FormMethod.Post,
-    new
-    {
-        @class = "form-horizontal",
-        enctype = "multipart/form-data"
-    }))
+                            "Save", "FINSCASettlement",
+                            FormMethod.Post,
+                            new
+                            {
+                                @class = "form-horizontal",
+                                enctype = "multipart/form-data"
+                            }))
 {
 
     <fieldset>
@@ -35,9 +31,9 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.SCAVoucher).Class("col-sm-3 control-label")
+                    @Html.Bootstrap().LabelFor(m => m.SCACouvher).Class("col-sm-3 control-label")
                     <div class="col-sm-8">
-                        @Html.EditorFor(m => m.SCAVoucher)
+                        @Html.EditorFor(m => m.SCACouvher)
                     </div>
                 </div>
                 <div class="form-group">
@@ -64,7 +60,7 @@
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.Currency).Class("col-sm-3 control-label")
                     <div class="col-sm-5">
-                        @Html.DisplayFor(m => m.Currency.Text, new { HtmlAttributes = new { @readonly = "readonly" } })
+                        @Html.EditorFor(m => m.Currency)
                     </div>
                 </div>
 
@@ -111,7 +107,7 @@
                     <i class="fa fa-save"></i>
                     Submit
                 </button>
-                <button id="submit-cancel" class="btn btn-primary" type="button" onclick="location.href='@Url.Action("Cancel", "FINSCASettlement")'">
+                <button id="submit-cancel" acti class="btn btn-primary" type="reset" >
                     <i class="fa fa-back"></i>
                     Cancel
                 </button>
@@ -155,8 +151,7 @@
                     $('#Description').val(response.Purpose);
                     $('#Fund').val(response.Fund);
                     $('#SpecialCashAdvanceAmount').val(response.TotalAmount);
-                    $('#Currency_Value').val(response.Currency);
-                    
+
                     calculateTotal();
                 },
                 error: function (response) {

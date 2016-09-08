@@ -62,7 +62,7 @@
 
         <legend>Asset Loan and Return Detail</legend>
         <div class="row">
-            @Html.Partial("_Details", Model.AssetLoanAndReturnItem)
+            @Html.Partial("_AssetLoanAndReturnItem", Model.AssetLoanAndReturnItem)
         </div>
 
     </fieldset>
@@ -84,10 +84,6 @@
 
 @section scripts{
     <script type="text/javascript">
-
-        $(document).ready(function () {
-            document.getElementByClass('returndate').value = "";
-        })
 
             function onSelectedAcceptanceMemo(e) {
                 var res = this.dataItem(e.item).split("-")

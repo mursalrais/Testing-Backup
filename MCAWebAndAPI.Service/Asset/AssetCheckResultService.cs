@@ -7,7 +7,6 @@ using MCAWebAndAPI.Model.ViewModel.Form.Asset;
 using NLog;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
-using MCAWebAndAPI.Service.Resources;
 
 namespace MCAWebAndAPI.Service.Asset
 {
@@ -22,7 +21,7 @@ namespace MCAWebAndAPI.Service.Asset
             _siteUrl = siteUrl;
         }
 
-        public AssetCheckResultHeaderVM GetPopulatedModel(int? ID = default(int?), string FormID = null, AssetCheckResultHeaderVM dataAssetResult = null)
+        public AssetCheckResultHeaderVM GetPopulatedModel(int? ID = default(int?), string FormID = null)
         {
             var model = new AssetCheckResultHeaderVM();
             model.FormID.Choices = GetChoicesFromList("Asset Check", "assetcheckformid");
@@ -33,27 +32,13 @@ namespace MCAWebAndAPI.Service.Asset
 
                 model.ID = ID;
                 model.FormID.Value = cekResult["assetcheckformid"].ToString();
-                if (cekResult["Created"] != null)
-                {
-                    model.CreateDate = Convert.ToDateTime(cekResult["Created"].ToString());
-                }
-                model.resultID = Convert.ToInt32(cekResult["assetcheckresultid"].ToString());
-
-                if (cekResult["assetcheckcountdate"] != null)
+                if(cekResult["assetcheckcountdate"] != null)
                 {
                     model.CountDate = Convert.ToDateTime(cekResult["assetcheckcountdate"].ToString());
                 }
                 model.CountedBy1.Value = Convert.ToInt32(cekResult["assetcheckcountedby1"].ToString());
                 model.CountedBy2.Value = Convert.ToInt32(cekResult["assetcheckcountedby2"].ToString());
                 model.CountedBy3.Value = Convert.ToInt32(cekResult["assetcheckcountedby3"].ToString());
-
-                model.hCountedBy1 = GetFullNamePosision(model.CountedBy1.Value);
-                model.hCountedBy2 = GetFullNamePosision(model.CountedBy2.Value);
-                model.hCountedBy3 = GetFullNamePosision(model.CountedBy3.Value);
-
-                model.hCountedBy1Nama = model.hCountedBy1.Split('-')[0];
-                model.hCountedBy2Nama = model.hCountedBy2.Split('-')[0];
-                model.hCountedBy3Nama = model.hCountedBy3.Split('-')[0];
 
                 model.CompletionStatus = cekResult["completionstatus"].ToString();
 
@@ -68,9 +53,9 @@ namespace MCAWebAndAPI.Service.Asset
 
                 var modelDetail = new List<AssetCheckResultItemVM>();
 
-                var caml = @"<View><Query><Where><Eq><FieldRef Name='assetcheckresultid' /><Value Type='Number'>" + model.resultID + "</Value></Eq></Where></Query></View>";
+                var caml = @"<View><Query><Where><Eq><FieldRef Name='assetcheckformid' /><Value Type='Number'>" + model.FormID.Value + "</Value></Eq></Where></Query></View>";
                 int i = 0;
-                foreach (var item in SPConnector.GetList("Asset Check Result Detail", _siteUrl, caml))
+                foreach (var item in SPConnector.GetList("Asset Check Result", _siteUrl, caml))
                 {
                     var dataAssetMaster = SPConnector.GetListItem("Asset Master", (item["assetmaster"] as FieldLookupValue).LookupId, _siteUrl);
 
@@ -90,7 +75,6 @@ namespace MCAWebAndAPI.Service.Asset
                         modelDetailItem.AssetID = (item["assetmaster"] as FieldLookupValue).LookupId;
                     }
                     modelDetailItem.Item = i;
-                    modelDetailItem.ID = Convert.ToInt32(item["ID"].ToString());
                     modelDetailItem.AssetSubAsset = (dataAssetMaster["AssetID"] == null ? "" : dataAssetMaster["AssetID"].ToString()) + "-" + (dataAssetMaster["Title"] == null ? "" : dataAssetMaster["Title"].ToString());
                     modelDetailItem.SerialNo = (dataAssetMaster["SerialNo"] == null ? "" : dataAssetMaster["SerialNo"].ToString());
                     modelDetailItem.Province = (item["assetprovince"] == null ? "" : item["assetprovince"].ToString());
@@ -127,93 +111,13 @@ namespace MCAWebAndAPI.Service.Asset
                     modelDetailItem.Existense = (item["existence"] == null ? "" : item["existence"].ToString());
                     modelDetailItem.Condition = (item["condition"] == null ? "" : item["condition"].ToString());
                     modelDetailItem.Specification = (item["specification"] == null ? "" : item["specification"].ToString());
-
-                    modelDetailItem.Remarks = (item["remarks"] == null ? "" : item["remarks"].ToString());
-
+                    
                     modelDetail.Add(modelDetailItem);
                 }
 
                 model.Details = modelDetail;
             }
-            else
-            {
-                model.CountDate = DateTime.Today;
-            }
             return model;
-        }
-
-        public string GetFullNamePosision(int? id)
-        {
-            var siteHr = _siteUrl.Replace("/bo", "/hr");
-            var dataCountedBy1 = SPConnector.GetListItem("Professional Master", id, siteHr);
-            return dataCountedBy1["Title"].ToString() + " - " + (dataCountedBy1["Position"] as FieldLookupValue).LookupValue;
-        }
-
-        public string GetFullName(int? id)
-        {
-            var siteHr = _siteUrl.Replace("/bo", "/hr");
-            var dataCountedBy1 = SPConnector.GetListItem("Professional Master", id, siteHr);
-            return dataCountedBy1["Title"].ToString();
-        }
-
-        public EmailHelperAssetCheckResult RequestApproveEmail(int? id, string formid = "", DateTime? conductedDate = null, string inputtedBy = "", string urlPath = "")
-        {
-            EmailHelperAssetCheckResult email = new EmailHelperAssetCheckResult();
-            var siteHr = _siteUrl.Replace("/bo", "/hr");
-            var dataItemPropesional = SPConnector.GetListItem("Professional Master", id, siteHr);
-            email.EmailTo = dataItemPropesional["officeemail"].ToString();
-            email.EmailContent = "Dear Mr " + dataItemPropesional["Title"].ToString() + "," + Environment.NewLine + Environment.NewLine + 
-                "You are authorized as an approver  for asset check result (form ID: " + formid.ToString() + ") conducted on " + conductedDate.ToString() + "." + Environment.NewLine +
-                "The result is inputted by  " + inputtedBy + Environment.NewLine +
-                "Please complete the approval process immediately." + Environment.NewLine +
-                "To view detail of asset check result, please click the following link: " + Environment.NewLine +
-                urlPath + Environment.NewLine + Environment.NewLine +
-                "Thank you for your attention.";
-
-
-            return email;
-        }
-
-        public EmailHelperAssetCheckResult ApproveEmail(int? idTo, int? idFrom, string formid = "", DateTime? conductedDate = null)
-        {
-            EmailHelperAssetCheckResult email = new EmailHelperAssetCheckResult();
-            var siteHr = _siteUrl.Replace("/bo", "/hr");
-            var dataItemPropesional = SPConnector.GetListItem("Professional Master", idTo, siteHr);
-            var dataItemPropesionalFrom = SPConnector.GetListItem("Professional Master", idFrom, siteHr);
-            email.EmailTo = dataItemPropesional["officeemail"].ToString();
-            email.EmailContent = "Dear Mr " + dataItemPropesional["Title"].ToString() + "," + Environment.NewLine + Environment.NewLine +
-                "Asset check result (form ID: " + formid + ") conducted on " + conductedDate + " already approved by Mr " + dataItemPropesionalFrom["Title"].ToString() + Environment.NewLine + Environment.NewLine + 
-                "Thank you for your attention.";
-
-            
-            return email;
-        }
-
-        public EmailHelperAssetCheckResult RejectEmail(int? idTo, int? idFrom, string formid = "", DateTime? conductedDate = null)
-        {
-            EmailHelperAssetCheckResult email = new EmailHelperAssetCheckResult();
-            var siteHr = _siteUrl.Replace("/bo", "/hr");
-            var dataItemPropesional = SPConnector.GetListItem("Professional Master", idTo, siteHr);
-            var dataItemPropesionalFrom = SPConnector.GetListItem("Professional Master", idFrom, siteHr);
-            email.EmailTo = dataItemPropesional["officeemail"].ToString();
-            email.EmailContent = "Dear Mr " + dataItemPropesional["Title"].ToString() + "," + Environment.NewLine + Environment.NewLine + 
-                "Asset check result (form ID: " + formid + ") conducted on " + conductedDate + " already rejected by Mr " + dataItemPropesionalFrom["Title"].ToString() + "." + Environment.NewLine + Environment.NewLine + 
-                "Thank you for your attention.";
-
-            return email;
-        }
-
-        public class EmailHelperAssetCheckResult
-        {
-            public string EmailTo
-            {
-                get; set;
-            }
-
-            public string EmailContent
-            {
-                get; set;
-            }
         }
 
         public AssetCheckResultHeaderVM GetPopulatedModelGetData(int? FormID = null)
@@ -282,10 +186,9 @@ namespace MCAWebAndAPI.Service.Asset
                 modelDetailItem.Existense = (item["existence"] == null ? "" : item["existence"].ToString());
                 modelDetailItem.Condition = (item["condition"] == null ? "" : item["condition"].ToString());
                 modelDetailItem.Specification = (item["specification"] == null ? "" : item["specification"].ToString());
+                
 
-                //modelDetailItem.Remarks = (item["remarks"] == null ? "" : item["remarks"].ToString());
-
-
+                
 
                 modelDetail.Add(modelDetailItem);
             }
@@ -295,23 +198,16 @@ namespace MCAWebAndAPI.Service.Asset
         }
 
 
-        public AssetCheckResultHeaderVM GetPopulatedModelCalculate(AssetCheckResultHeaderVM data, int? ID = null)
+        public AssetCheckResultHeaderVM GetPopulatedModelCalculate(AssetCheckResultHeaderVM data)
         {
             var model = data;
-
             model.FormID.Choices = GetChoicesFromList("Asset Check", "assetcheckformid");
-            if(ID == null)
-            {
-                model.CompletionStatus = "In Progress";
-            }
-            else
-            {
-                data.ID = ID;
-            }
-
+            model.CompletionStatus = "In Progress";
+            
             int i = 0;
             foreach (var item in model.Details)
             {
+                
                 var caml = @"<View><Query><Where><Eq><FieldRef Name='assetsubasset_x003a_ID' /><Value Type='Lookup'>" + item.AssetID + "</Value></Eq></Where></Query></View>";
                 var dataLoan = SPConnector.GetList("Asset Loan Return Detail", _siteUrl, caml);
 
@@ -355,269 +251,115 @@ namespace MCAWebAndAPI.Service.Asset
             return model;
         }
 
-        public AssetCheckResultHeaderVM GetPopulatedModelSave(AssetCheckResultHeaderVM data, Boolean isApproval = false, int? ID = null)
+        public AssetCheckResultHeaderVM GetPopulatedModelSave(AssetCheckResultHeaderVM data, Boolean isApproval = false)
         {
-            if (ID != null)
+            var model = data;
+            model.FormID.Choices = GetChoicesFromList("Asset Check", "assetcheckformid");
+            model.CompletionStatus = "In Progress";
+
+            var caml = @"";
+            int i = 0;
+            foreach (var item in model.Details)
             {
-                var model = data;
-                model.FormID.Choices = GetChoicesFromList("Asset Check", "assetcheckformid");
 
-                var caml = @"";
-                int i = 0;
-                foreach (var item in model.Details)
+                caml = @"<View><Query><Where><Eq><FieldRef Name='assetsubasset_x003a_ID' /><Value Type='Lookup'>" + item.AssetID + "</Value></Eq></Where></Query></View>";
+                var dataLoan = SPConnector.GetList("Asset Loan Return Detail", _siteUrl, caml);
+
+                string status = "";
+                foreach (var itemLoan in dataLoan)
                 {
-
-                    caml = @"<View><Query><Where><Eq><FieldRef Name='assetsubasset_x003a_ID' /><Value Type='Lookup'>" + item.AssetID + "</Value></Eq></Where></Query></View>";
-                    var dataLoan = SPConnector.GetList("Asset Loan Return Detail", _siteUrl, caml);
-
-                    string status = "";
-                    foreach (var itemLoan in dataLoan)
-                    {
-                        status = itemLoan["status"].ToString();
-                    }
-
-                    i++;
-
-                    item.Item = i;
-
-                    item.DifferentQty = item.PhysicalQty - item.SystemQty;
-
-                    if (status != "")
-                    {
-                        item.Status = status;
-                        if (status.ToUpper() == "RUNNING" && item.DifferentQty < 0)
-                        {
-                            item.Dispose = "Yes";
-                        }
-                        if (status.ToUpper() == "LOAN" && item.DifferentQty < 0)
-                        {
-                            item.Dispose = "No";
-                        }
-
-                    }
-                    else
-                    {
-                        if (item.DifferentQty < 0)
-                        {
-                            item.Dispose = "Yes";
-                        }
-                        if (item.DifferentQty >= 0)
-                        {
-                            item.Dispose = "No";
-                        }
-                    }
+                    status = itemLoan["status"].ToString();
                 }
 
-                var columnValues = new Dictionary<string, object>();                
-                columnValues.Add("assetcheckcountdate", model.CountDate);
-                columnValues.Add("assetcheckcountedby1", model.CountedBy1.Value);
-                columnValues.Add("assetcheckcountedby2", model.CountedBy2.Value);
-                columnValues.Add("assetcheckcountedby3", model.CountedBy3.Value);
+                i++;
 
-                if (isApproval)
+                item.Item = i;
+
+                item.DifferentQty = item.PhysicalQty - item.SystemQty;
+
+                if (status != "")
                 {
-                    columnValues.Add("approvalname", model.Name.Value);
-                    columnValues.Add("approvalposision", model.Posision.Value);
+                    item.Status = status;
+                    if (status.ToUpper() == "RUNNING" && item.DifferentQty < 0)
+                    {
+                        item.Dispose = "Yes";
+                    }
+                    if (status.ToUpper() == "LOAN" && item.DifferentQty < 0)
+                    {
+                        item.Dispose = "No";
+                    }
 
-                    EmailHelperAssetCheckResult email = new EmailHelperAssetCheckResult();
-                    email = RequestApproveEmail(
-                        model.Name.Value,
-                        model.hFormID,
-                        model.CountDate,
-                        GetFullName(model.CountedBy1.Value),
-                        _siteUrl + String.Format(UrlResource.AssetCheckResultApprove,ID.ToString()));
-                    EmailUtil.Send(email.EmailTo, "Notification to approve the result", email.EmailContent);
                 }
-
-                SPConnector.UpdateListItem("Asset Check Result", ID ,columnValues, _siteUrl);
-
-                foreach (var item in model.Details)
+                else
                 {
-                    columnValues = new Dictionary<string, object>();
-                    columnValues.Add("existence", item.Existense);
-                    columnValues.Add("condition", item.Condition);
-                    columnValues.Add("specification", item.Specification);
-                    columnValues.Add("systemquantity", item.SystemQty);
-                    columnValues.Add("physicalquantity", item.PhysicalQty);
-                    columnValues.Add("differenceqty", item.DifferentQty);
-                    columnValues.Add("isdisposed", item.Dispose);
-                    columnValues.Add("remarks", item.Remarks);
-                    int? iId = item.ID;
-
-                    SPConnector.UpdateListItem("Asset Check Result Detail", item.ID ,columnValues, _siteUrl);
+                    if (item.DifferentQty < 0)
+                    {
+                        item.Dispose = "Yes";
+                    }
+                    if (item.DifferentQty >= 0)
+                    {
+                        item.Dispose = "No";
+                    }
                 }
-
-                return model;
             }
-            else
+
+            var columnValues = new Dictionary<string, object>();
+            int? assetcheckformid = Convert.ToInt32(model.FormID.Value);
+
+            columnValues.Add("Title", "Asset Check Result");
+            columnValues.Add("assetcheckformid", assetcheckformid);
+
+            caml = @"<View><Query><OrderBy><FieldRef Name='assetcheckresultid' Ascending='False' /></OrderBy></Query><RowLimit Paged='TRUE'>1</RowLimit></View>";
+            int assetcheckresultid = 0;
+            foreach (var item in SPConnector.GetList("Asset Check Result", _siteUrl, caml))
             {
-                var model = data;
-                model.FormID.Choices = GetChoicesFromList("Asset Check", "assetcheckformid");
-                model.CompletionStatus = "In Progress";
+                assetcheckresultid = Convert.ToInt32(item["assetcheckresultid"].ToString());
+            }
+            assetcheckresultid++;
+            columnValues.Add("assetcheckresultid", assetcheckresultid);
 
-                var caml = @"";
-                int i = 0;
-                foreach (var item in model.Details)
-                {
+            columnValues.Add("assetcheckcountdate", data.CountDate);
+            columnValues.Add("assetcheckcountedby1", data.CountedBy1.Value);
+            columnValues.Add("assetcheckcountedby2", data.CountedBy2.Value);
+            columnValues.Add("assetcheckcountedby3", data.CountedBy3.Value);
+            columnValues.Add("completionstatus", data.CompletionStatus);
 
-                    caml = @"<View><Query><Where><Eq><FieldRef Name='assetsubasset_x003a_ID' /><Value Type='Lookup'>" + item.AssetID + "</Value></Eq></Where></Query></View>";
-                    var dataLoan = SPConnector.GetList("Asset Loan Return Detail", _siteUrl, caml);
+            if (isApproval)
+            {
+                columnValues.Add("approvalname", data.Name.Value);
+                columnValues.Add("approvalposision", data.Posision.Value);
+            }
 
-                    string status = "";
-                    foreach (var itemLoan in dataLoan)
-                    {
-                        status = itemLoan["status"].ToString();
-                    }
+            SPConnector.AddListItem("Asset Check Result", columnValues, _siteUrl);
 
-                    i++;
-
-                    item.Item = i;
-
-                    item.DifferentQty = item.PhysicalQty - item.SystemQty;
-
-                    if (status != "")
-                    {
-                        item.Status = status;
-                        if (status.ToUpper() == "RUNNING" && item.DifferentQty < 0)
-                        {
-                            item.Dispose = "Yes";
-                        }
-                        if (status.ToUpper() == "LOAN" && item.DifferentQty < 0)
-                        {
-                            item.Dispose = "No";
-                        }
-
-                    }
-                    else
-                    {
-                        if (item.DifferentQty < 0)
-                        {
-                            item.Dispose = "Yes";
-                        }
-                        if (item.DifferentQty >= 0)
-                        {
-                            item.Dispose = "No";
-                        }
-                    }
-                }
-
-                var columnValues = new Dictionary<string, object>();
-                int? assetcheckformid = Convert.ToInt32(model.FormID.Value);
-
+            foreach (var item in model.Details)
+            {
+                columnValues = new Dictionary<string, object>();
                 columnValues.Add("Title", "Asset Check Result");
                 columnValues.Add("assetcheckformid", assetcheckformid);
-
-                caml = @"<View><Query><OrderBy><FieldRef Name='assetcheckresultid' Ascending='False' /></OrderBy></Query><RowLimit Paged='TRUE'>1</RowLimit></View>";
-                int assetcheckresultid = 0;
-                foreach (var item in SPConnector.GetList("Asset Check Result", _siteUrl, caml))
-                {
-                    assetcheckresultid = Convert.ToInt32(item["assetcheckresultid"].ToString());
-                }
-                assetcheckresultid++;
                 columnValues.Add("assetcheckresultid", assetcheckresultid);
+                columnValues.Add("assetmaster", item.AssetID);
+                columnValues.Add("assetprovince", item.Province);
+                columnValues.Add("assetlocation", item.LocationName);
+                columnValues.Add("assetstatus", item.Status);
+                columnValues.Add("existence", item.Existense);
+                columnValues.Add("condition", item.Condition);
+                columnValues.Add("specification", item.Specification);
+                columnValues.Add("systemquantity", item.SystemQty);
+                columnValues.Add("physicalquantity", item.PhysicalQty);
+                columnValues.Add("differenceqty", item.DifferentQty);
+                columnValues.Add("isdisposed", item.Dispose);
+                columnValues.Add("assetmaster_x003a_serialno", item.AssetID);
+                columnValues.Add("assetcheckstatus", item.Status);
+                columnValues.Add("completionstatus", model.CompletionStatus);
+                columnValues.Add("remarks", item.Remarks);
 
-                columnValues.Add("assetcheckcountdate", data.CountDate);
-                columnValues.Add("assetcheckcountedby1", data.CountedBy1.Value);
-                columnValues.Add("assetcheckcountedby2", data.CountedBy2.Value);
-                columnValues.Add("assetcheckcountedby3", data.CountedBy3.Value);
-                columnValues.Add("completionstatus", data.CompletionStatus);
-
-                if (isApproval)
-                {
-                    columnValues.Add("approvalname", data.Name.Value);
-                    columnValues.Add("approvalposision", data.Posision.Value);
-                }
-
-                SPConnector.AddListItem("Asset Check Result", columnValues, _siteUrl);
-                
-                foreach (var item in model.Details)
-                {
-                    columnValues = new Dictionary<string, object>();
-                    columnValues.Add("Title", "Asset Check Result");
-                    columnValues.Add("assetcheckformid", assetcheckformid);
-                    columnValues.Add("assetcheckresultid", assetcheckresultid);
-                    columnValues.Add("assetmaster", item.AssetID);
-                    columnValues.Add("assetprovince", item.Province);
-                    columnValues.Add("assetlocation", item.LocationName);
-                    columnValues.Add("assetstatus", item.Status);
-                    columnValues.Add("existence", item.Existense);
-                    columnValues.Add("condition", item.Condition);
-                    columnValues.Add("specification", item.Specification);
-                    columnValues.Add("systemquantity", item.SystemQty);
-                    columnValues.Add("physicalquantity", item.PhysicalQty);
-                    columnValues.Add("differenceqty", item.DifferentQty);
-                    columnValues.Add("isdisposed", item.Dispose);
-                    columnValues.Add("assetmaster_x003a_serialno", item.AssetID);
-                    columnValues.Add("assetcheckstatus", item.Status);
-                    columnValues.Add("completionstatus", model.CompletionStatus);
-                    columnValues.Add("remarks", item.Remarks);
-
-                    SPConnector.AddListItem("Asset Check Result Detail", columnValues, _siteUrl);
-                }
-
-                caml = @"<View><Query><Where><Eq><FieldRef Name='assetcheckresultid' /><Value Type='Number'>"+assetcheckresultid.ToString()+"</Value></Eq></Where></Query></View>";
-                var lastItemAssetCheckResult = SPConnector.GetList("Asset Check Result", _siteUrl, caml);
-                int IDResult = 0;
-                foreach (var item in lastItemAssetCheckResult)
-                {
-                    IDResult = Convert.ToInt32(item["ID"].ToString());
-                }
-
-
-                if (isApproval)
-                {
-                    EmailHelperAssetCheckResult email = new EmailHelperAssetCheckResult();
-                    email = RequestApproveEmail(
-                        model.Name.Value,
-                        assetcheckformid.ToString(),
-                        model.CountDate,
-                        GetFullName(model.CountedBy1.Value),
-                        _siteUrl + String.Format( UrlResource.AssetCheckResultApprove, IDResult.ToString()));
-                    EmailUtil.Send(email.EmailTo, "Notification to approve the result", email.EmailContent);
-                }
-
-                return model;
+                SPConnector.AddListItem("Asset Check Result Detail", columnValues, _siteUrl);
             }
 
-        }
-
-        public AssetCheckResultHeaderVM Approve(int? ID = null)
-        {
-            var model = new AssetCheckResultHeaderVM();
-            var dataCekResult = SPConnector.GetListItem("Asset Check Result", ID, _siteUrl);
-            EmailHelperAssetCheckResult email = new EmailHelperAssetCheckResult();
-
-            email = ApproveEmail(
-                Convert.ToInt32(dataCekResult["assetcheckcountedby1"].ToString()),
-                Convert.ToInt32(dataCekResult["approvalname"].ToString()),
-                dataCekResult["assetcheckformid"].ToString(),
-                Convert.ToDateTime(dataCekResult["assetcheckcountdate"].ToString())
-                );
-
-            EmailUtil.Send(email.EmailTo, "Approve notification of asset check result", email.EmailContent);
-
             return model;
         }
-
-        public AssetCheckResultHeaderVM Reject(int? ID = null)
-        {
-            var model = new AssetCheckResultHeaderVM();
-            var dataCekResult = SPConnector.GetListItem("Asset Check Result", ID, _siteUrl);
-            EmailHelperAssetCheckResult email = new EmailHelperAssetCheckResult();
-
-            email = ApproveEmail(
-                Convert.ToInt32(dataCekResult["assetcheckcountedby1"].ToString()),
-                Convert.ToInt32(dataCekResult["approvalname"].ToString()),
-                dataCekResult["assetcheckformid"].ToString(),
-                Convert.ToDateTime(dataCekResult["assetcheckcountdate"].ToString())
-                );
-
-            EmailUtil.Send(email.EmailTo, "Rejected notification of asset check result", email.EmailContent);
-
-
-            return model;
-        }
-
+        
         private IEnumerable<string> GetChoicesFromList(string listname, string v1)
         {
             List<string> _choices = new List<string>();

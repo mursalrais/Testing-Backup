@@ -103,8 +103,7 @@
             var urlPSA = "/HRPSAManagement/GetPSA/" + dataItem.ID;
             $.getJSON(url, function (result) {
                 $('#ProfessionalID').prop('value', result[0].ID);
-                $('#Status').prop('value', result[0].TaxStatus);
-                console.log(result[0]);
+                $('#Status').prop('value', result[0].Status);
                 $.getJSON(urlPSA, function (result) {
                     if (result.length == 0) {
                         $('#ProjectUnit').prop('value', "");
@@ -117,9 +116,9 @@
                     else {
                         $('#ProjectUnit').prop('value', result[0].Project_Unit);
                         $('#Position').prop('value', result[0].Position);
-                        $('#JoinDate').prop('value', result[0].JoinDateString);
-                        $('#DateOfNewPsa').prop('value', result[0].DateOfNewPSAString);
-                        $('#EndOfContract').prop('value', result[0].PsaExpiryDateString);
+                        $('#JoinDate').prop('value', result[0].JoinDate);
+                        $('#DateOfNewPsa').prop('value', result[0].DateOfNewPSA);
+                        $('#EndOfContract').prop('value', result[0].PsaExpiryDate);
                     }
                 })
             })

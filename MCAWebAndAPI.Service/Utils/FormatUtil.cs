@@ -114,19 +114,6 @@ namespace MCAWebAndAPI.Service.Utils
             // format: dd/mm/yyyy
             var dateElements = Convert.ToString(item[columnName]).Split('/');
             return new DateTime(year: Convert.ToInt32(dateElements[2]),
-                month: Convert.ToInt32(dateElements[0]),
-                day: Convert.ToInt32(dateElements[1]));
-        }
-        public static DateTime? ConvertDateStringToDateTimeProfessional(ListItem item, string columnName)
-        {
-            var dateString = Convert.ToString(item[columnName]);
-
-            if (!dateString.Contains("/"))
-                return null;
-
-            // format: dd/mm/yyyy
-            var dateElements = Convert.ToString(item[columnName]).Split('/');
-            return new DateTime(year: Convert.ToInt32(dateElements[2]),
                 month: Convert.ToInt32(dateElements[1]),
                 day: Convert.ToInt32(dateElements[0]));
         }
@@ -206,7 +193,7 @@ namespace MCAWebAndAPI.Service.Utils
                 return null;
 
             var resultDate = (DateTime)date;
-            return string.Format("{0}/{1}/{2}", resultDate.Month, resultDate.Day, resultDate.Year);
+            return string.Format("{0}/{1}/{2}", resultDate.Day, resultDate.Month, resultDate.Year);
         }
 
 

@@ -89,7 +89,7 @@
                      "<input type='hidden' name='ItemDetails[#= getRequisitionDataDetail(data)#].EditMode' value='#= EditMode #' />"
         );
         columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger deleteRow" })
-            .Click("onCustomDeleteKendoDetail")).Width(100);
+            .Click("onDeleteKendoDetail")).Width(100);
     })
      .Events(e =>
      {
@@ -190,23 +190,5 @@
 
     function refreshItemDetailGrid() {
         $("#ItemDetails").data("kendoGrid").dataSource.read();
-    }
-
-    function onCustomDeleteKendoDetail(e) {
-        var result = confirm("Are you sure you want to delete this item?");
-        if (!result) return;
-
-        var tr = $(e.target).closest("tr"); //get the row
-
-        tr.find("input[data-val]").removeAttr("data-val");
-        tr.find("input[data-val-required]").removeAttr("data-val-required");
-        
-        var data = this.dataItem(tr); //get the row data so it can be referred later
-
-        // -1 is Item.Mode.DELETED
-        data.set("EditMode", -1);
-
-        var grid = $("#ItemDetails").data("kendoGrid");
-        hideDeletedRowKendoDetail(grid);
     }
 </script>

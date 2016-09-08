@@ -33,20 +33,16 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
                 "Cross-Cutting Sector",
                 "Economic Analysis Unit",
                 "Environment & Social Performance Unit",
-                "Executive Office",
+                "Executive Director",
                 "Finance Unit",
-                "Green Prosperity Project",
                 "Human Resources Unit",
                 "Information Technology Unit",
                 "Legal Unit",
                 "Monitoring & Evaluation Unit",
-                "Office Management",
+                "Office Support Unit",
                 "Operations Support Div.",
                 "Procurement Modernization Project",
-                "Procurement Unit",
-                "Program Div.",
-                "Risk & Audit Unit",
-                "Social & Gender Assessment Unit"
+                "Program Div."
 
             }
         };
@@ -124,7 +120,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             ControllerName = "HRDataMaster",
             ActionName = "GetProfessionals",
             ValueField = "ID",
-            TextField = "Desc1",
+            TextField = "Desc",
             OnSelectEventName = "OnBehalfOfChange"
         };
 

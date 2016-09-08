@@ -172,8 +172,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
             }
 
-            //var status = viewModel.WorkflowStatusOptions.Value;
-            var status = viewModel.ApplicationStatus;
+            var status = viewModel.WorkflowStatusOptions.Value;
             var applicationOwner = string.Format("{0} {1}", viewModel.FirstMiddleName, viewModel.LastName);
 
             var message = string.Format(MessageResource.SuccessUpdateApplicationStatus, applicationOwner, status);
@@ -198,7 +197,6 @@ namespace MCAWebAndAPI.Web.Controllers
             viewModel.WorkingExperienceDetails = BindWorkingExperienceDetails(form, viewModel.WorkingExperienceDetails);
             ViewData.Model = AdjustViewModel(viewModel);
 
-            
             const string RelativePath = "~/Views/HRApplication/PrintApplicationData.cshtml";
             var view = ViewEngines.Engines.FindView(ControllerContext, RelativePath, null);
             var fileName = viewModel.FirstMiddleName + "-" + viewModel.Position + "-" + "MCA-Indonesia.pdf";

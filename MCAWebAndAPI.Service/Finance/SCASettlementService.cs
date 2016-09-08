@@ -83,7 +83,7 @@ namespace MCAWebAndAPI.Service.Finance
             var columnValues = new Dictionary<string, object>();
             var documentNoFormat = string.Format(FIELD_FORMAT_DOC, DateTimeExtensions.GetMonthInRoman(DateTime.Now), DateTime.Now.ToString("yy")) + "{0}";
 
-            columnValues.Add(FieldNameSCAVoucherId, new FieldLookupValue { LookupId = Convert.ToInt32(scaSettlement.SCAVoucher.Value) });
+            columnValues.Add(FieldNameSCAVoucherId, new FieldLookupValue { LookupId = Convert.ToInt32(scaSettlement.SCACouvher.Value) });
             columnValues.Add(FieldNameTotalExpense, scaSettlement.TotalExpense);
             columnValues.Add(FieldNameReceivedFromTo, scaSettlement.ReceivedFromTo);
             columnValues.Add(FieldNameTypeOfSettlement, scaSettlement.TypeOfSettlement.Value);
@@ -105,7 +105,6 @@ namespace MCAWebAndAPI.Service.Finance
                 else if (scaSettlement.Operation == Operations.e)
                 {
                     SPConnector.UpdateListItem(ListName, scaSettlement.ID, columnValues, siteUrl);
-                    result = scaSettlement.ID;
                 }
 
                 SaveSCASettlementDetailItems(scaSettlement.ID, scaSettlement.ItemDetails);
@@ -221,8 +220,8 @@ namespace MCAWebAndAPI.Service.Finance
 
             if (listItem[FieldNameSCAVoucherId] != null)
             {
-                viewModel.SCAVoucher.Value = (listItem[FieldNameSCAVoucherId] as FieldLookupValue).LookupId;
-                viewModel.SCAVoucher.Text = (listItem[FieldNameSCAVoucherId] as FieldLookupValue).LookupValue;
+                viewModel.SCACouvher.Value = (listItem[FieldNameSCAVoucherId] as FieldLookupValue).LookupId;
+                viewModel.SCACouvher.Text = (listItem[FieldNameSCAVoucherId] as FieldLookupValue).LookupValue;
             }
 
             viewModel.Description = (listItem[FieldNameSCAPurpose] as FieldLookupValue).LookupValue;

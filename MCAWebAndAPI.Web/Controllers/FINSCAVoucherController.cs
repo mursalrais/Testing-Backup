@@ -7,7 +7,6 @@ using System.Web.Mvc;
 using Elmah;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
-using MCAWebAndAPI.Model.HR.DataMaster;
 using MCAWebAndAPI.Model.ViewModel.Control;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 using MCAWebAndAPI.Service.Converter;
@@ -29,13 +28,11 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
         IEventBudgetService _eventBudgetService;
 
         private const string SiteUrl = "SiteUrl";
+        private const string EventBudgetDetailSess = "EventBudgetDetail";
         private const string SCAVoucherIDSess = "SESS_SCAVoucherID";
         private const string EventBudgetIDSess = "SESS_EventBudgetID";
         private const string SubTitle = "Special Cash Advance Voucher";
         private const string PrintPageURL = "~/Views/FINSCAVoucher/Print.cshtml";
-        private const string SuccessMsgFormatCreated = "SCA Voucher number {0} has been successfully created.";
-        private const string SuccessMsgFormatUpdated = "SCA Voucher number {0} has been successfully updated.";
-        private const string FirstPageUrl = "{0}/Lists/SCA%20Voucher/AllItems.aspx";
 
         public FINSCAVoucherController()
         {
@@ -43,11 +40,13 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             _eventBudgetService = new EventBudgetService();
         }
 
-        public ActionResult Create(string siteUrl = null, string userEmail = "")
+        public ActionResult Create(string siteUrl = null, string userAccess = null)
         {
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);
-            SessionManager.Set(SharedController.Session_SiteUrl, siteUrl);
+            SessionManager.Set(SharedFinanceController.Session_SiteUrl, siteUrl);
+
+            SessionManager.Remove(EventBudgetDetailSess);
 
             SCAVoucherVM model = new SCAVoucherVM();
             SetAdditionalSettingToVM(ref model);
@@ -55,19 +54,14 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             return View(model);
         }
 
-        public ActionResult Edit(string siteUrl = null, int? ID = null, string userEmail = "")
+        public ActionResult Edit(string siteUrl = null, int? ID = null, string userAccess = null)
         {
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);
-            SessionManager.Set(SharedController.Session_SiteUrl, siteUrl);
+            SessionManager.Set(SharedFinanceController.Session_SiteUrl, siteUrl);
 
             SCAVoucherVM model = new SCAVoucherVM();
-
-            if (ID == null)
-            {
-                model.UserEmail = userEmail;
-            }
-            else
+            if (ID != null)
             {
                 model = service.Get(ID);
                 model.Action = SCAVoucherVM.ActionType.edit.ToString();
@@ -79,7 +73,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             return View(model);
         }
 
-        public ActionResult Approve(string siteUrl = null, int? ID = null, string userEmail = "")
+        public ActionResult Approve(string siteUrl = null, int? ID = null, string userAccess = null)
         {
             service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
             SessionManager.Set(SiteUrl, siteUrl ?? ConfigResource.DefaultBOSiteUrl);
@@ -89,28 +83,21 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             {
                 model = service.Get(ID);
                 model.Action = SCAVoucherVM.ActionType.approve.ToString();
-                model.UserEmail = userEmail;
                 SessionManager.Set(SCAVoucherIDSess, ID);
             }
 
             return View(model);
         }
 
-        public ActionResult Display(string siteUrl = null, int? ID = null, string userEmail = "")
+        public ActionResult Display(string siteUrl = null, int? ID = null, string userAccess = null)
         {
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);
-            SessionManager.Set(SharedController.Session_SiteUrl, siteUrl);
+            SessionManager.Set(SharedFinanceController.Session_SiteUrl, siteUrl);
 
             SCAVoucherVM model = new SCAVoucherVM();
-            ProfessionalMaster professional = COMProfessionalController.GetFirstOrDefaultByOfficeEmail(userEmail); 
 
             model = service.Get(ID);
-            
-            if (model.UserEmail != userEmail || !COMProfessionalController.IsPositionFinance(professional.Position))
-            {
-                throw new InvalidOperationException("You have no right to see this data.");
-            }
 
             ViewBag.SubTitle = SubTitle;
             return View(model);
@@ -152,18 +139,18 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
                 JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Print(FormCollection form, RequisitionNoteVM model)
+        public ActionResult Print(int? ID, string userAccess = null)
         {
             ViewBag.SubTitle = SubTitle;
-            string domain = new SharedFinanceController().GetImageLogoPrint(Request.IsSecureConnection, Request.Url.Authority);
+            string domain = "http://" + Request.Url.Authority + "/img/logo.png";
 
             var siteUrl = SessionManager.Get<string>(SiteUrl);
             service.SetSiteUrl(siteUrl);
-            SessionManager.Set(SharedController.Session_SiteUrl, siteUrl);
+            SessionManager.Set(SharedFinanceController.Session_SiteUrl, siteUrl);
 
             var viewModel = new SCAVoucherVM();
-            viewModel = service.Get(model.ID);
-            viewModel.SCAVoucherItems = service.GetSCAVoucherItems(Convert.ToInt32(model.ID)).ToList();
+            viewModel = service.Get(ID);
+            viewModel.SCAVoucherItems = service.GetSCAVoucherItems(Convert.ToInt32(ID)).ToList();
 
             ViewData.Model = viewModel;
             var view = ViewEngines.Engines.FindView(ControllerContext, PrintPageURL, null);
@@ -195,14 +182,15 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create(FormCollection form, SCAVoucherVM viewModel)
+        public async Task<ActionResult> Create(FormCollection form, SCAVoucherVM viewModel, string userAccess = null)
         {
             var siteUrl = SessionManager.Get<string>(SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);
-            SessionManager.Set(SharedController.Session_SiteUrl, siteUrl);
+            SessionManager.Set(SharedFinanceController.Session_SiteUrl, siteUrl);
 
             int? ID = null;
-            ID = service.CreateSCAVoucher(ref viewModel);
+            ID = service.CreateSCAVoucher(viewModel);
+            viewModel.SCAVoucherItems = SessionManager.Get<List<SCAVoucherItemsVM>>(EventBudgetDetailSess);
 
             Task createSCAVoucherItemTask = service.CreateSCAVoucherItemAsync(ID, viewModel.SCAVoucherItems);
             Task createSCAVoucherDocumentTask = service.CreateSCAVoucherAttachmentAsync(ID, viewModel.Documents);
@@ -218,11 +206,11 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
                 return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
             }
 
-            return RedirectToAction("Index", "Success",
+            return RedirectToAction("Print",
+                "FINSCAVoucher",
                 new
                 {
-                    successMessage = string.Format(SuccessMsgFormatCreated, viewModel.SCAVoucherNo),
-                    previousUrl = string.Format(FirstPageUrl, siteUrl)
+                    ID = ID
                 });
         }
 
@@ -231,7 +219,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
         {
             var siteUrl = SessionManager.Get<string>(SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);
-            SessionManager.Set(SharedController.Session_SiteUrl, siteUrl);
+            SessionManager.Set(SharedFinanceController.Session_SiteUrl, siteUrl);
 
             try
             {
@@ -243,6 +231,8 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
                 {
                     if (service.UpdateSCAVoucher(viewModel))
                     {
+                        viewModel.SCAVoucherItems = SessionManager.Get<List<SCAVoucherItemsVM>>(EventBudgetDetailSess);
+
                         Task createSCAVoucherItemTask = service.UpdateSCAVoucherItem(viewModel.ID, viewModel.SCAVoucherItems);
                         Task createSCAVoucherDocumentTask = service.CreateSCAVoucherAttachmentAsync(viewModel.ID, viewModel.Documents);
                         Task allTasks = Task.WhenAll(createSCAVoucherItemTask);
@@ -257,11 +247,11 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
                 return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
             }
 
-            return RedirectToAction("Index", "Success",
+            return RedirectToAction("Print",
+                "FINSCAVoucher",
                 new
                 {
-                    successMessage = string.Format(SuccessMsgFormatUpdated, viewModel.SCAVoucherNo),
-                    previousUrl = string.Format(FirstPageUrl, siteUrl)
+                    ID = viewModel.ID
                 });
         }
 
@@ -269,11 +259,11 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
         {
             var siteUrl = SessionManager.Get<string>(SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);
-            SessionManager.Set(SharedController.Session_SiteUrl, siteUrl);
+            SessionManager.Set(SharedFinanceController.Session_SiteUrl, siteUrl);
 
             List<SCAVoucherItemsVM> details = new List<SCAVoucherItemsVM>();
             details = service.GetEventBudgetItems(eventBudgetId.Value).ToList();
-
+            SessionManager.Set(EventBudgetDetailSess, details);
             DataSourceResult result = details.ToDataSourceResult(request);
             var json = Json(result, JsonRequestBehavior.AllowGet);
             json.MaxJsonLength = int.MaxValue;
@@ -298,7 +288,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             {
                 details = service.GetSCAVoucherItems(sess_scaVoucherID).ToList();
             }
-
+            SessionManager.Set(EventBudgetDetailSess, details);
             DataSourceResult result = details.ToDataSourceResult(request);
             var json = Json(result, JsonRequestBehavior.AllowGet);
             json.MaxJsonLength = int.MaxValue;

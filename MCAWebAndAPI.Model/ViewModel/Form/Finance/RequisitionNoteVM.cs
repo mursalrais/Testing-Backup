@@ -48,11 +48,5 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         public IEnumerable<RequisitionNoteItemVM> ItemDetails { get; set; } = new List<RequisitionNoteItemVM>();
 
         public string Editor { get; set; }
-
-        public DateTime Created { get; set; }
-
-        public DateTime Modified { get; set; }
-
-        public string UserEmail { get; set; }
     }
 }

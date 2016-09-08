@@ -34,11 +34,6 @@ namespace MCAWebAndAPI.Service.Converter
 
         public byte[] ConvertFromHTML(string pageTitle, string stringHTML)
         {
-            return ConvertFromHTML(pageTitle, stringHTML, string.Empty);
-        }
-
-        public byte[] ConvertFromHTML(string pageTitle, string stringHTML, string footer)
-        {
             var document = new HtmlToPdfDocument
             {
                 GlobalSettings = {
@@ -52,11 +47,7 @@ namespace MCAWebAndAPI.Service.Converter
                     }
                 },
                 Objects = {
-                    new ObjectSettings
-                    {
-                        HtmlText = stringHTML,
-                        FooterSettings = new TuesPechkin.FooterSettings { LeftText = footer, FontSize = 8},
-                    }
+                    new ObjectSettings { HtmlText = stringHTML }
                 }
             };
 
