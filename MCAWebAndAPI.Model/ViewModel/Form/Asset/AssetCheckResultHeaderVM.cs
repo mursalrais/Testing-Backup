@@ -124,7 +124,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
         public string CompletionStatus;
 
         [UIHint("AjaxComboBox")]
-        public AjaxComboBoxVM Posision { get; set; } = new AjaxComboBoxVM
+        public AjaxComboBoxVM Position { get; set; } = new AjaxComboBoxVM
         {
             ControllerName = "HRDataMaster",
             ActionName = "GetPositions",
