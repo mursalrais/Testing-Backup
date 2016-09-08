@@ -40,7 +40,29 @@ namespace MCAWebAndAPI.Service.Finance
             pettyCashStatements.AddRange(list3);
             pettyCashStatements.AddRange(list4);
 
-            List<PettyCashTransactionItem> ordered = pettyCashStatements.OrderBy(o => o.Date).ToList();
+            decimal runningTotal = 0;
+            List<PettyCashTransactionItem> ordered = pettyCashStatements.OrderBy(o => o.Date)
+                .Select(i => 
+                    {
+                        decimal currentAmount = 0;
+                        if (i.Amount.HasValue)
+                        {
+                            currentAmount = i.Amount.Value;
+                            runningTotal += currentAmount;
+                        }
+                        return new PettyCashTransactionItem()
+                        {
+                            ID = i.ID,
+                            Title = i.Title,
+                            EditMode = i.EditMode,
+                            Date = i.Date,
+                            TransactionType = i.TransactionType,
+                            TransactionNo = i.TransactionNo,
+                            Currency = i.Currency,
+                            Amount = i.Amount,
+                            Balance = runningTotal
+                        };
+                   }).ToList();
 
             return ordered;
 

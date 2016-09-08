@@ -67,9 +67,12 @@
                     <i class="fa fa-save"></i>
                     Submit
                 </button>
-                <button id="cancel-button" class="btn btn-default cancel" type="submit" value="Cancel" name="actionType">
-                    Cancel
-                </button>
+                @if (!string.IsNullOrEmpty(@ViewBag.PreviousUrl))
+                {
+                    <button id="cancel-button" class="btn btn-default cancel" type="button" value="Cancel" name="actionType">
+                        Cancel
+                    </button>
+                }
             </div>
         </div>
     </div>
@@ -78,7 +81,10 @@
 @section scripts{
     <script>
         $(document).ready(function () {
-
+            $('#cancel-button').click(function () {
+                var url = "@ViewBag.PreviousUrl";
+                window.top.location = url;
+            });
         });
     </script>
 }

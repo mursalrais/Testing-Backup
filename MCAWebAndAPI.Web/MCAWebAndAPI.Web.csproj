@@ -1207,6 +1207,7 @@
     <Compile Include="Controllers\CalendarEventController.cs" />
     <Compile Include="Controllers\ComboBoxController.cs" />
     <Compile Include="Controllers\COMMGLController.cs" />
+    <Compile Include="Controllers\COMMVendorController.cs" />
     <Compile Include="Controllers\COMProfessionalController.cs" />
     <Compile Include="Controllers\COMWBSController.cs" />
     <Compile Include="Controllers\CSVController.cs" />
@@ -1223,6 +1224,7 @@
     <Compile Include="Controllers\FINSCASettlementController.cs" />
     <Compile Include="Controllers\FINSCAVoucherController.cs" />
     <Compile Include="Controllers\HRDayOffController.cs" />
+    <Compile Include="Controllers\PurchaseOrderController.cs" />
     <Compile Include="Controllers\SharedController.cs" />
     <Compile Include="Controllers\SharedFinanceController.cs" />
     <Compile Include="Controllers\FINTaxExemptionController.cs" />

@@ -93,11 +93,14 @@ namespace MCAWebAndAPI.Web.Controllers
             _taxExemptionDataService.SetSiteUrl(siteUrl);
             SessionManager.Set(SITE_URL, siteUrl);
 
+            //If you don't set this up, the cancel button will either be gone or won't work.
+            ViewBag.PreviousUrl = string.Format(FirstOtherTaxPageURL, siteUrl);
+
             if (!ID.HasValue)
             {
                 return Create(TaxTypeComboBoxVM.OTHERS, siteUrl);
             }
-
+            
             var viewModel = new TaxExemptionVM();
             viewModel.ID = ID;
             viewModel.TaxExemptionOtherVM = _taxExemptionDataService.GetTaxExemptionOthers(ID.Value);
@@ -203,11 +206,6 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             var siteUrl = SessionManager.Get<string>(SITE_URL) ?? ConfigResource.DefaultBOSiteUrl;
             _taxExemptionDataService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-
-            if (actionType != "Save")
-            {
-                return Redirect(string.Format(FirstIncomeTaxPageURL, siteUrl));
-            }
 
             if (_data.ID == null)
             {
