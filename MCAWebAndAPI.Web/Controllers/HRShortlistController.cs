@@ -74,10 +74,10 @@ namespace MCAWebAndAPI.Web.Controllers
             {
                 foreach (string mail in words)
                 {
-                    string bodymailHR = string.Format(EmailResource.EmailShortlistToRequestor, _service.GetMailUrl(Convert.ToInt32(viewModel.Position), viewModel.useraccess));
+                    string bodymailHR = string.Format(EmailResource.EmailShortlistToRequestor, _service.GetMailUrl(Convert.ToInt32(viewModel.Position), viewModel.useraccess), viewModel.PositionName);
                     if (mail != "")
                     {
-                        _service.SendEmailValidation(mail, bodymailHR);
+                        _service.SendEmailValidation(mail, viewModel.PositionName, bodymailHR);
                     }
                 }
             }
@@ -88,7 +88,7 @@ namespace MCAWebAndAPI.Web.Controllers
                     string bodymailREQ = string.Format(EmailResource.EmailShortlistToHR, _service.GetMailUrl(Convert.ToInt32(viewModel.Position), viewModel.useraccess));
                     if (mail != "")
                     {
-                        _service.SendEmailValidation(mail, bodymailREQ);
+                        _service.SendEmailValidation(mail, viewModel.PositionName, bodymailREQ);
                     }
                 }
             }
@@ -135,9 +135,9 @@ namespace MCAWebAndAPI.Web.Controllers
 
             var timeintv = viewModel.InterviewerTime.Value.ToString("HH:mm");
 
-            string bodymailREQ = string.Format(EmailResource.EmailShortlistToCandidate, viewModel.Message, dateintv, timeintv);
+            string bodymailREQ = string.Format(EmailResource.EmailShortlistToCandidate, viewModel.Message);
 
-            _service.SendEmailValidation(viewModel.SendTo, bodymailREQ);
+            _service.SendEmailValidation(viewModel.SendTo, viewModel.PositionName, bodymailREQ);
 
             return RedirectToAction("Index",
                "Success",
@@ -192,7 +192,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 {
                     string linkmail = string.Format(UrlResource.ShortlistInterviewPanel, siteUrl, viewModel.Position);
 
-                    string bodymail = string.Format(EmailResource.EmailShortlistToInterviewPanel, viewModel.EmailMessage, linkmail);
+                    string bodymail = string.Format(EmailResource.EmailShortlistToInterviewPanel, linkmail, viewModel.PositionName);
 
                     if (mail != "")
                     {

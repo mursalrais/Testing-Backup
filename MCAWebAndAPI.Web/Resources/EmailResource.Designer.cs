@@ -147,17 +147,15 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dear Interview Panel,
+        ///   Looks up a localized string similar to Dear Interviewer Panel,
         ///
+        ///This email is sent to you to notify that here is the latest result from previous interview for position {1}
+        ///This list requires your action to review as well as to prepare the Interview process for further action. 
+        ///
+        ///To view the detail, please click following link: 
         ///{0}
         ///
-        ///This email is sent to you to notify that here is the latest list of shortlisted candidate. This list
-        ///
-        ///requires your action to review as well as to prepare the Interview process for further action.
-        ///
-        ///Kindly check the link as per below to go to direct page accordingly. Thank you.
-        ///
-        ///Link : {1}.
+        ///Thank you for your attention..
         /// </summary>
         public static string EmailInterviewToInterviewPanel {
             get {
@@ -166,12 +164,8 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dear Candidate Interview,
-        ///
-        ///{0}
-        ///
-        ///you are invited to interview on : {1}
-        ///At hour : {2}.
+        ///   Looks up a localized string similar to {0}
+        ///.
         /// </summary>
         public static string EmailShortlistToCandidate {
             get {
@@ -182,13 +176,15 @@ namespace MCAWebAndAPI.Web.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Dear HR Team,
         ///
-        ///This email is sent to you to notify that here is the latest list of shortlisted candidate. This list
+        ///This email is sent to you to notify that here is the latest list of shortlisted candidate for position {1} . 
+        ///Please complete the process immediately to send the list to Interviewer Panel for further action.
         ///
-        ///requires your action to send to Interview Panel for further action. Kindly check the link as per
+        ///To view the detail, please click following link: 
+        ///Link : {0}
         ///
-        ///below to go to direct page accordingly. Thank you.
+        ///Thank you for your attention.
         ///
-        ///Link : {0}.
+        ///.
         /// </summary>
         public static string EmailShortlistToHR {
             get {
@@ -197,17 +193,15 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dear Interview Panel,
+        ///   Looks up a localized string similar to Dear Interviewer Panel,
         ///
-        ///{0}
+        ///This email is sent to you to notify that here is the latest list of shortlisted candidate for position {1}
+        ///This list requires your action to review as well as to prepare the Interview process for further action. 
         ///
-        ///This email is sent to you to notify that here is the latest list of shortlisted candidate. This list
+        ///To view the detail, please click following link: 
         ///
-        ///requires your action to review as well as to prepare the Interview process for further action.
         ///
-        ///Kindly check the link as per below to go to direct page accordingly. Thank you.
-        ///
-        ///Link : {1}.
+        ///Link : {0}.
         /// </summary>
         public static string EmailShortlistToInterviewPanel {
             get {
@@ -216,15 +210,17 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dear Respective Requestor,
+        ///   Looks up a localized string similar to Dear Respective User,
         ///
-        ///This email is sent to you to notify that here is the list of shortlisted candidate from HR. This list
+        ///You are authorized to shortlist candidate (s) for position {1} . 
+        ///Please complete the process immediately to select the most suitable candidate for this position. 
         ///
-        ///requires your action to select the most suitable candidate for this position. Kindly check the link
+        ///To view the detail, please click following link: 
+        ///Link : {0}
         ///
-        ///as per below to go to direct page accordingly. Thank you.
+        ///Thank you for your attention.
         ///
-        ///Link : {0}.
+        ///.
         /// </summary>
         public static string EmailShortlistToRequestor {
             get {

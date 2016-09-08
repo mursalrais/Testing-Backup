@@ -374,11 +374,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             
         }
 
-        public void SendEmailValidation(string emailTo, string emailMessages)
+        public void SendEmailValidation(string emailTo, string position, string emailMessages)
         {
             try
             {
-                EmailUtil.Send(emailTo, "Shortlist Candidate Data", emailMessages);
+                EmailUtil.Send(emailTo, "Shortlist Candidate for Position " + position, emailMessages);
             }
             catch (Exception e)
             {
