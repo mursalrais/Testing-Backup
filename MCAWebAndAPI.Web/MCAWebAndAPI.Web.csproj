@@ -1109,7 +1109,6 @@
     <Content Include="Views\ASSAssetCheckResult\_approval_Path.cshtml" />
     <Content Include="Views\ASSAssetCheckResult\_Details.cshtml" />
     <Content Include="Views\HRAdjustment\EditAdjustmentData.cshtml" />
-    <Content Include="Views\HRProfessionalPerformanceEvaluation\_WorkflowPathDetails.cshtml" />
     <Content Include="Views\HRDayOff\_DayOffNextBalance.cshtml" />
     <Content Include="Views\HRDayOff\_DisplayRequestDetail.cshtml" />
     <Content Include="Views\ASSAssetLoanAndReturn\_AssetLoanAndReturnItem.cshtml" />
@@ -1174,6 +1173,7 @@
     <Content Include="Views\ASSAssetLandingPage\_assetFixedAssetPCFF.cshtml" />
     <Content Include="Views\ASSAssetLandingPage\_assetSmallValueAssetPCFF.cshtml" />
     <Content Include="Views\FINOutstandingAdvance\UploadCSV.cshtml" />
+    <Content Include="Views\HRProfessionalPerformanceEvaluation\_WorkflowPathDetails.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

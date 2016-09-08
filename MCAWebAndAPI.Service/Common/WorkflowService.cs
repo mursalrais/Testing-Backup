@@ -480,7 +480,7 @@ namespace MCAWebAndAPI.Service.Common
 
         public async Task<IEnumerable<ProfessionalMaster>> GetApproverUserNames(string position)
         {
-            var caml = @"<View><Query><Where><Or><And><Gt><FieldRef Name='lastworkingdate' /><Value IncludeTimeValue='TRUE' Type='DateTime'>2016-09-08T18:23:47Z</Value></Gt><IsNull><FieldRef Name='lastworkingdate' /></IsNull></And><Eq><FieldRef Name='Position' /><Value Type='Lookup'>"+ position +@"</Value></Eq></Or></Where></Query><ViewFields><FieldRef Name='ID' /><FieldRef Name='Title' /><FieldRef Name='Position' /><FieldRef Name='Project_x002f_Unit' /><FieldRef Name='officeemail' /></ViewFields><QueryOptions /></View>";
+            var caml = @"<View><Query><Where><Or><And><Gt><FieldRef Name='lastworkingdate' /><Value IncludeTimeValue='TRUE' Type='DateTime'>" + DateTime.UtcNow.ToString("yyyy-MM-dd") + "T23:57:44Z</Value></Gt><IsNull><FieldRef Name='lastworkingdate' /></IsNull></And><Eq><FieldRef Name='Position' /><Value Type='Lookup'>"+ position +@"</Value></Eq></Or></Where></Query><ViewFields><FieldRef Name='ID' /><FieldRef Name='Title' /><FieldRef Name='Position' /><FieldRef Name='Project_x002f_Unit' /><FieldRef Name='officeemail' /></ViewFields><QueryOptions /></View>";
 
             var viewModel = new List<ProfessionalMaster>();
             foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl, caml))
@@ -493,7 +493,7 @@ namespace MCAWebAndAPI.Service.Common
 
         public IEnumerable<ProfessionalMaster> GetApproverUser()
         {
-            var caml = @"<View><Query><Where><Or><Gt><FieldRef Name='lastworkingdate' /><Value IncludeTimeValue='TRUE' Type='DateTime'>2016-09-08T18:34:17Z</Value></Gt><IsNull><FieldRef Name='lastworkingdate' /></IsNull></Or></Where></Query><ViewFields><FieldRef Name='ID' /><FieldRef Name='Title' /><FieldRef Name='Position' /><FieldRef Name='Project_x002f_Unit' /><FieldRef Name='officeemail' /></ViewFields><QueryOptions /></View>";
+            var caml = @"<View><Query><Where><Or><Gt><FieldRef Name='lastworkingdate' /><Value IncludeTimeValue='TRUE' Type='DateTime'>" + DateTime.UtcNow.ToString("yyyy-MM-dd") + "T23:57:44Z</Value></Gt><IsNull><FieldRef Name='lastworkingdate' /></IsNull></Or></Where></Query><ViewFields><FieldRef Name='ID' /><FieldRef Name='Title' /><FieldRef Name='Position' /><FieldRef Name='Project_x002f_Unit' /><FieldRef Name='officeemail' /></ViewFields><QueryOptions /></View>";
 
             var viewModel = new List<ProfessionalMaster>();
             foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl, caml))
