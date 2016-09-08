@@ -103,6 +103,7 @@ namespace MCAWebAndAPI.Service.Finance
             updatedValue.Add(FieldName_LetterDate, viewModel.LetterDate);
             updatedValue.Add(FieldName_Category, viewModel.Category.Value);
             updatedValue.Add(FieldName_Contractor, viewModel.Contractor);
+            updatedValue.Add(FieldName_VendorID, viewModel.Vendor.Value);
             updatedValue.Add(FieldName_Object, viewModel.Object);
             updatedValue.Add(FieldName_TaxPeriod, viewModel.Period);
             updatedValue.Add(FieldName_AmountIDR, viewModel.AmountIDR);
@@ -112,7 +113,7 @@ namespace MCAWebAndAPI.Service.Finance
 
             try
             {
-                if (willCreate)
+                if (viewModel.Operation == Operations.c)
                     SPConnector.AddListItem(ListName, updatedValue, siteUrl);
                 else
                     SPConnector.UpdateListItem(ListName, viewModel.ID, updatedValue, siteUrl);
@@ -183,7 +184,7 @@ namespace MCAWebAndAPI.Service.Finance
             viewModel.LetterDate = Convert.ToDateTime(listItem[FieldName_LetterDate]);
             viewModel.Category.Value = Convert.ToString(listItem[FieldName_Category]);
             viewModel.Contractor = Convert.ToString(listItem[FieldName_Contractor]);
-            viewModel.Vendor.Value = Convert.ToInt32(listItem[FieldName_VendorID]);
+            viewModel.Vendor.Value = Convert.ToInt32(listItem[FieldName_VendorID] == null ? 0 :(listItem[FieldName_VendorID] as FieldLookupValue).LookupId);
             viewModel.Object = Convert.ToString(listItem[FieldName_Object]);
             viewModel.Period = Convert.ToDateTime(listItem[FieldName_TaxPeriod]);
             viewModel.AmountIDR = Convert.ToDecimal(listItem[FieldName_AmountIDR]);

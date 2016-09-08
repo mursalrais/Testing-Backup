@@ -371,7 +371,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     {
                         emails = FormatUtil.ConvertLookupToValue(item, "approvername_x003a_Office_x0020_");
 
-                        EmailUtil.Send(emails, "Ask for Approval", messageForApprover);
+                        EmailUtil.Send(emails, "Request for Approval of Performance Plan Form", messageForApprover);
                         //SPConnector.SendEmail(item, message, "Ask for Approval Level 2", _siteUrl);
 
                         columnValues.Add("visibletoapprover1", SPConnector.GetUser(emails, _siteUrl, "hr"));
@@ -392,8 +392,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 {
                     emails = FormatUtil.ConvertLookupToValue(item, "approvername_x003a_Office_x0020_");
 
-                    EmailUtil.Send(emails, "Ask for Approval", messageForApprover);
-                    //SPConnector.SendEmail(item, message, "Ask for Approval Level 2", _siteUrl);
+                    EmailUtil.Send(emails, "Request for Approval of Performance Plan Form", messageForApprover);
 
                     columnValues.Add("visibletoapprover2", SPConnector.GetUser(emails, _siteUrl, "hr"));
                     try
@@ -411,8 +410,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     professionalEmail = (item["professional_x003a_Office_x0020_"] == null ? "" :
                     Convert.ToString((item["professional_x003a_Office_x0020_"] as FieldLookupValue).LookupValue));
 
-                    EmailUtil.Send(professionalEmail, "Plan Status", messageForRequestor);
-                    //SPConnector.SendEmail(item, "Approved by Level 1", _siteUrl);
+                    EmailUtil.Send(professionalEmail, "Approval of Performance Plan Form", messageForRequestor);
                 }
             }
 
@@ -425,8 +423,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                         professionalEmail = (item["professional_x003a_Office_x0020_"] == null ? "" :
                        Convert.ToString((item["professional_x003a_Office_x0020_"] as FieldLookupValue).LookupValue));
 
-                        EmailUtil.Send(professionalEmail, "Plan Status", messageForRequestor);
-                        //SPConnector.SendEmail(item, message, "Ask for Approval", _siteUrl);
+                        EmailUtil.Send(professionalEmail, "Approval of Performance Plan Form", messageForRequestor);
                     }
                 }
             }

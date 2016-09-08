@@ -288,14 +288,14 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 viewModel.PSAStatus.Text = "Active";
             }
 
-            UpdatePSAStatus(viewModel.ID, viewModel.PSAStatus.Text);
+            bool updateData = UpdatePSAStatus(viewModel.ID, viewModel.PSAStatus.Text);
 
             viewModel.DocumentUrl = GetDocumentUrl(viewModel.ID);
 
             return viewModel;
         }
 
-        private void UpdatePSAStatus(int? ID, string psaStatus)
+        private bool UpdatePSAStatus(int? ID, string psaStatus)
         {
             var updatedValues = new Dictionary<string, object>();
 
@@ -308,8 +308,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             catch (Exception e)
             {
                 logger.Debug(e.Message);
-                //return false;
+                return false;
             }
+
+            return true;
         }
 
         private string GetDocumentUrl(int? iD)
@@ -454,7 +456,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             string professionalFullName = Convert.ToString(professionalData["Title"]) + " " + Convert.ToString(professionalData["lastname"]);
 
             string mailSubject = string.Format("Initiation Performance Plan for Period {0}", currentYear);
-            string mailContent = string.Format("Dear Mr./Mrs. {0}, This email is sent to you to notify that you are required to create Performance Plan for period {1}. Creating and approval plan process will take maximum 5 working days. Therefore, do prepare your plan accordingly. To Create the performance plan, please click the following link: {2}{3}/NewForm_Custom.aspx", professionalFullName, currentYear, siteUrl, UrlResource.ProfessionalPerformancePlan);
+            string mailContent = string.Format("Dear Mr./Mrs. {0}, {1}{2}This email is sent to you to notify that you are required to create Performance Plan for period {3}. Creating and approval plan process will take maximum 5 working days. Therefore, do prepare your plan accordingly. {4}{5}To Create the performance plan, please click the following link: {6}{7}/NewForm_Custom.aspx {8}{9}Thank you for your attention.", professionalFullName, Environment.NewLine, Environment.NewLine, currentYear, Environment.NewLine, Environment.NewLine, siteUrl, UrlResource.ProfessionalPerformancePlan, Environment.NewLine, Environment.NewLine);
 
             EmailUtil.Send(professionalMail, mailSubject, mailContent);
         }

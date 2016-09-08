@@ -59,7 +59,7 @@
                       </div>
                   </div>
 
-                  <div class="form-group">
+                  <div id="mcaiDiv" class="form-group">
                       @Html.Bootstrap().LabelFor(m => m.Contractor).Class("col-xs-4 control-label")
                       <div class="col-xs-8">
                           @Html.EditorFor(m => m.Contractor)
@@ -116,7 +116,8 @@
                   </div>
                   </div>
               </div>
-
+        @Html.HiddenFor(m=>m.ID)
+        @Html.HiddenFor(m => m.Operation)
 
     </fieldset>
 
@@ -162,7 +163,7 @@
 @section scripts{
 <script>
     $(document).ready(function () {
-        SetEnablednessBasedOnCategory(CategoryVendor);
+        SetEnablednessBasedOnCategory($("#Category_Value").val());
 
         $('#Contractor').prop('readonly', true);
     });
@@ -176,13 +177,14 @@
         switch (data) {
             case CategoryVendor:
                 vendorDropDownList.enable(true);
+                $("#mcaiDiv").hide('slow');
                 $("#vendorDiv").show('slow');
-                $("#Contractor").val('');
                 break;
 
             case CategoryMCAI:
                 vendorDropDownList.enable(false);
                 $("#vendorDiv").hide('slow');
+                $("#mcaiDiv").show('slow');
                 $("#Contractor").val(CategoryMCAI);
                 break;
 
