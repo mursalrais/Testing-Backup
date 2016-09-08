@@ -1089,7 +1089,6 @@
     <Content Include="Views\HRDayOff\_DayOffCurrentBalance.cshtml" />
     <Content Include="Views\HRDayOff\_DayOffRequestHeaderData.cshtml" />
     <Content Include="Views\HRDayOff\_RequestForDayOff.cshtml" />
-    <Content Include="Views\HRProfessionalPerformanceEvaluation\_WorkflowPathDetails.cshtml" />
     <Content Include="Views\HRDayOff\_DayOffNextBalance.cshtml" />
     <Content Include="Views\HRDayOff\_DisplayRequestDetail.cshtml" />
     <Content Include="Views\FINLandingPage\Index.cshtml" />
