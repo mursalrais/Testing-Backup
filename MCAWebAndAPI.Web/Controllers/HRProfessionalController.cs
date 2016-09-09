@@ -125,7 +125,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse(e.Message);
             }
-            if (viewModel.ProfessionalStatus.Value == "Need HR to Validate")
+            if (viewModel.ValidationStatus == "Need HR to Validate")
             {
                 return JsonHelper.GenerateJsonSuccessResponse(siteUrl + "/" + UrlResource.ProfessionalData);
             }
