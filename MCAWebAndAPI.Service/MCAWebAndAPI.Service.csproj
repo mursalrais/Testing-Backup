@@ -270,12 +270,14 @@
     <Compile Include="JobSchedulers\Jobs\PayrollRunJob.cs" />
     <Compile Include="JobSchedulers\Jobs\PSAManagementJob.cs" />
     <Compile Include="JobSchedulers\Jobs\TaskCalculationJob.cs" />
+    <Compile Include="JobSchedulers\Jobs\TimesheetManagementJob.cs" />
     <Compile Include="JobSchedulers\Schedulers\AssetManagementScheduler.cs" />
     <Compile Include="JobSchedulers\Schedulers\EmailScheduler.cs" />
     <Compile Include="JobSchedulers\Schedulers\ExitProcedureManagementScheduler.cs" />
     <Compile Include="JobSchedulers\Schedulers\PayrollRunScheduler.cs" />
     <Compile Include="JobSchedulers\Schedulers\PSAManagementScheduler.cs" />
     <Compile Include="JobSchedulers\Schedulers\TaskCalculationScheduler.cs" />
+    <Compile Include="JobSchedulers\Schedulers\TimesheetManagementScheduler.cs" />
     <Compile Include="ProjectManagement\Common\IProjectHierarchyService.cs" />
     <Compile Include="ProjectManagement\Common\ProjectHierarchyService.cs" />
     <Compile Include="HR\Common\CalendarService.cs" />
@@ -286,8 +288,10 @@
     <Compile Include="ProjectManagement\Schedule\IExitProcedureScheduleService.cs" />
     <Compile Include="ProjectManagement\Schedule\IPSAScheduleService.cs" />
     <Compile Include="ProjectManagement\Schedule\IRIAService.cs" />
+    <Compile Include="ProjectManagement\Schedule\ITimesheetScheduleService.cs" />
     <Compile Include="ProjectManagement\Schedule\PSAScheduleService.cs" />
     <Compile Include="ProjectManagement\Schedule\RIAService.cs" />
+    <Compile Include="ProjectManagement\Schedule\TimesheetScheduleService.cs" />
     <Compile Include="Resources\ErrorResource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

@@ -32,40 +32,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
             _dataService.SetSiteUrl(_siteUrl);
         }
 
-        private void SendEmailApproveReject(string strNameApprover,
-       string strRequestorName, string strStatus,
-       string strRequestorEmail = null, int? id = null,
-       DateTime? startPeriod = null, DateTime? endPeriod = null)
-        {
-            if (string.IsNullOrEmpty(strRequestorEmail)) return;
-            var strSubject = "";
-            var strStatusBy = "";
-            if (strStatus == "Approved")
-            {
-                strSubject = "Approval Notification of Timesheet";
-                strStatusBy = " has been approved by ";
-            }
-            else if (strStatus == "Rejected")
-            {
-                strSubject = "Rejection Notification of Timesheet";
-                strStatusBy = " has been rejected by ";
-            }
-            var strBody = "";
-
-            strBody += "Dear Mr/Ms. " + strRequestorName + ",<br/><br/>";
-            strBody += @"This is to notify you that the Timesheet Period  "
-            + Convert.ToDateTime(startPeriod).ToString("MMM-dd-yyyy") + " to "
-            + Convert.ToDateTime(endPeriod).ToString("MMM-dd-yyyy") + strStatusBy + strNameApprover + " <br/>";
-            strBody += "<br/>Please kindly find attached links :<br/>";
-            //strBody += _siteUrl + UrlResource.Timesheet + "/EditForm.aspx?ID=" + id;
-            strBody += "<br/><br/>Thank you for your attention.";
-
-            List<string> lstEmail = new List<string> { strRequestorEmail };
-
-            EmailUtil.SendMultiple(lstEmail, strSubject, strBody);
-
-
-        }
+     
 
 
         public void SendEmailEveryMonth()

@@ -317,4 +317,7 @@
   <data name="AssetCheckResultApprove" xml:space="preserve">
     <value>/Lists/Asset%20Check%20Result/DispForm.aspx?ID={0}&amp;RequestApproval=TRUE</value>
   </data>
+  <data name="Timesheet" xml:space="preserve">
+    <value>/Lists/Timesheet</value>
+  </data>
 </root>
