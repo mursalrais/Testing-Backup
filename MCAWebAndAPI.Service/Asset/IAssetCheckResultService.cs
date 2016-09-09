@@ -11,6 +11,8 @@ namespace MCAWebAndAPI.Service.Asset
     {
         void SetSiteUrl(string siteUrl);
 
+        void UpdatePosition();
+
         int GetMinIDProfesional();
 
         int GetIDPosition(int? ProfesionalID);

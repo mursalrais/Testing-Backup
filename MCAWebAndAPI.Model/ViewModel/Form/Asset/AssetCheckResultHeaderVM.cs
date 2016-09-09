@@ -67,7 +67,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
         [UIHint("AjaxComboBox")]
         public AjaxComboBoxVM CountedBy1 { get; set; } = new AjaxComboBoxVM
         {
-            ControllerName = "HRDataMaster",
+            ControllerName = "ASSAssetCheckResult",
             ActionName = "GetProfessionals",
             ValueField = "ID",
             TextField = "Desc1"
@@ -77,7 +77,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
         [UIHint("AjaxComboBox")]
         public AjaxComboBoxVM CountedBy2 { get; set; } = new AjaxComboBoxVM
         {
-            ControllerName = "HRDataMaster",
+            ControllerName = "ASSAssetCheckResult",
             ActionName = "GetProfessionals",
             ValueField = "ID",
             TextField = "Desc1"
@@ -87,7 +87,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
         [UIHint("AjaxComboBox")]
         public AjaxComboBoxVM CountedBy3 { get; set; } = new AjaxComboBoxVM
         {
-            ControllerName = "HRDataMaster",
+            ControllerName = "ASSAssetCheckResult",
             ActionName = "GetProfessionals",
             ValueField = "ID",
             TextField = "Desc1"
@@ -126,7 +126,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
         [UIHint("AjaxComboBox")]
         public AjaxComboBoxVM Position { get; set; } = new AjaxComboBoxVM
         {
-            ControllerName = "HRDataMaster",
+            ControllerName = "ASSAssetCheckResult",
             ActionName = "GetPositions",
             ValueField = "ID",
             TextField = "Desc"
@@ -135,7 +135,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
         [UIHint("AjaxComboBox")]
         public AjaxComboBoxVM Name { get; set; } = new AjaxComboBoxVM
         {
-            ControllerName = "HRDataMaster",
+            ControllerName = "ASSAssetCheckResult",
             ActionName = "GetProfessionals",
             ValueField = "ID",
             TextField = "Desc"

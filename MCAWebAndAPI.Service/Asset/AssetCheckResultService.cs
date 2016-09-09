@@ -22,11 +22,30 @@ namespace MCAWebAndAPI.Service.Asset
             _siteUrl = siteUrl;
         }
 
+        public void UpdatePosition()
+        {
+            var caml = @"<View><Query><Where><Neq><FieldRef Name='ID' /><Value Type='Counter'>0</Value></Neq></Where><OrderBy><FieldRef Name='Title' Ascending='True' /></OrderBy></Query></View>";
+            var siteHr = _siteUrl.Replace("/bo", "/hr");
+            foreach (var item in SPConnector.GetList("Professional Master", siteHr, caml))
+            {
+                int id = (item["Position"] as FieldLookupValue).LookupId;
+                int s = Convert.ToInt32(item["ID"].ToString());
+                var columnValues = new Dictionary<string, object>();
+                columnValues.Add("Position", (item["Position"] as FieldLookupValue).LookupId);
+
+                SPConnector.UpdateListItem("Professional Master", Convert.ToInt32(item["ID"].ToString()), columnValues, _siteUrl);
+            }
+        }
+
         public int GetMinIDProfesional()
         {
             var caml = @"<View><Query><Where><Neq><FieldRef Name='ID' /><Value Type='Counter'>0</Value></Neq></Where><OrderBy><FieldRef Name='Title' Ascending='True' /></OrderBy></Query><RowLimit Paged='TRUE'>1</RowLimit></View>";
-            var siteHr = _siteUrl.Replace("/bo", "/hr");
-            var dataProvesional = SPConnector.GetList("Professional Master", siteHr, caml);
+
+            //var siteHr = _siteUrl.Replace("/bo", "/hr");
+            //var dataProvesional = SPConnector.GetList("Professional Master", siteHr, caml);
+
+            var dataProvesional = SPConnector.GetList("Professional Master", _siteUrl, caml);
+
             int ID = 0;
             foreach (var item in dataProvesional)
             {
@@ -38,8 +57,10 @@ namespace MCAWebAndAPI.Service.Asset
 
         public int GetIDPosition(int? ProfesionalID)
         {
-            var siteHr = _siteUrl.Replace("/bo", "/hr");
-            var dataProvesional = SPConnector.GetListItem("Professional Master", ProfesionalID, siteHr);
+            //var siteHr = _siteUrl.Replace("/bo", "/hr");
+            //var dataProvesional = SPConnector.GetListItem("Professional Master", ProfesionalID, siteHr);
+            
+            var dataProvesional = SPConnector.GetListItem("Professional Master", ProfesionalID, _siteUrl);
 
             int PositionID = (dataProvesional["Position"] as FieldLookupValue).LookupId;
 
@@ -67,9 +88,9 @@ namespace MCAWebAndAPI.Service.Asset
                 {
                     model.CountDate = Convert.ToDateTime(cekResult["assetcheckcountdate"].ToString());
                 }
-                model.CountedBy1.Value = Convert.ToInt32(cekResult["assetcheckcountedby1"].ToString());
-                model.CountedBy2.Value = Convert.ToInt32(cekResult["assetcheckcountedby2"].ToString());
-                model.CountedBy3.Value = Convert.ToInt32(cekResult["assetcheckcountedby3"].ToString());
+                model.CountedBy1.Value = (cekResult["assetcheckcountedby1"] as FieldLookupValue).LookupId;
+                model.CountedBy2.Value = (cekResult["assetcheckcountedby2"] as FieldLookupValue).LookupId;
+                model.CountedBy3.Value = (cekResult["assetcheckcountedby3"] as FieldLookupValue).LookupId;
 
                 model.hCountedBy1 = GetFullNamePosision(model.CountedBy1.Value);
                 model.hCountedBy2 = GetFullNamePosision(model.CountedBy2.Value);
@@ -81,13 +102,13 @@ namespace MCAWebAndAPI.Service.Asset
 
                 model.CompletionStatus = cekResult["completionstatus"].ToString();
 
-                if (cekResult["approvalname"] != null)
+                if ((cekResult["approvalname"] as FieldLookupValue) != null)
                 {
-                    model.Name.Value = Convert.ToInt32(cekResult["approvalname"].ToString());
+                    model.Name.Value = (cekResult["approvalname"] as FieldLookupValue).LookupId;
                 }
-                if (cekResult["approvalposision"] != null)
+                if ((cekResult["approvalposision"] as FieldLookupValue) != null)
                 {
-                    model.Position.Value = Convert.ToInt32(cekResult["approvalposision"].ToString());
+                    model.Position.Value = (cekResult["approvalposision"] as FieldLookupValue).LookupId;
                 }
 
                 var modelDetail = new List<AssetCheckResultItemVM>();
@@ -167,23 +188,26 @@ namespace MCAWebAndAPI.Service.Asset
 
         public string GetFullNamePosision(int? id)
         {
-            var siteHr = _siteUrl.Replace("/bo", "/hr");
-            var dataCountedBy1 = SPConnector.GetListItem("Professional Master", id, siteHr);
+            //var siteHr = _siteUrl.Replace("/bo", "/hr");
+            //var dataCountedBy1 = SPConnector.GetListItem("Professional Master", id, siteHr);
+            var dataCountedBy1 = SPConnector.GetListItem("Professional Master", id, _siteUrl);
             return dataCountedBy1["Title"].ToString() + " - " + (dataCountedBy1["Position"] as FieldLookupValue).LookupValue;
         }
 
         public string GetFullName(int? id)
         {
-            var siteHr = _siteUrl.Replace("/bo", "/hr");
-            var dataCountedBy1 = SPConnector.GetListItem("Professional Master", id, siteHr);
+            //var siteHr = _siteUrl.Replace("/bo", "/hr");
+            //var dataCountedBy1 = SPConnector.GetListItem("Professional Master", id, siteHr);
+            var dataCountedBy1 = SPConnector.GetListItem("Professional Master", id, _siteUrl);
             return dataCountedBy1["Title"].ToString();
         }
 
         public EmailHelperAssetCheckResult RequestApproveEmail(int? id, string formid = "", DateTime? conductedDate = null, string inputtedBy = "", string urlPath = "")
         {
             EmailHelperAssetCheckResult email = new EmailHelperAssetCheckResult();
-            var siteHr = _siteUrl.Replace("/bo", "/hr");
-            var dataItemPropesional = SPConnector.GetListItem("Professional Master", id, siteHr);
+            //var siteHr = _siteUrl.Replace("/bo", "/hr");
+            //var dataItemPropesional = SPConnector.GetListItem("Professional Master", id, siteHr);
+            var dataItemPropesional = SPConnector.GetListItem("Professional Master", id, _siteUrl);
             email.EmailTo = dataItemPropesional["officeemail"].ToString();
             email.EmailContent = "Dear Mr " + dataItemPropesional["Title"].ToString() + "," + Environment.NewLine + Environment.NewLine +
                 "You are authorized as an approver  for asset check result (form ID: " + formid.ToString() + ") conducted on " + conductedDate.ToString() + "." + Environment.NewLine +
@@ -200,9 +224,12 @@ namespace MCAWebAndAPI.Service.Asset
         public EmailHelperAssetCheckResult ApproveEmail(int? idTo, int? idFrom, string formid = "", DateTime? conductedDate = null)
         {
             EmailHelperAssetCheckResult email = new EmailHelperAssetCheckResult();
-            var siteHr = _siteUrl.Replace("/bo", "/hr");
-            var dataItemPropesional = SPConnector.GetListItem("Professional Master", idTo, siteHr);
-            var dataItemPropesionalFrom = SPConnector.GetListItem("Professional Master", idFrom, siteHr);
+            //var siteHr = _siteUrl.Replace("/bo", "/hr");
+            //var dataItemPropesional = SPConnector.GetListItem("Professional Master", idTo, siteHr);
+            //var dataItemPropesionalFrom = SPConnector.GetListItem("Professional Master", idFrom, siteHr);
+
+            var dataItemPropesional = SPConnector.GetListItem("Professional Master", idTo, _siteUrl);
+            var dataItemPropesionalFrom = SPConnector.GetListItem("Professional Master", idFrom, _siteUrl);
             email.EmailTo = dataItemPropesional["officeemail"].ToString();
             email.EmailContent = "Dear Mr " + dataItemPropesional["Title"].ToString() + "," + Environment.NewLine + Environment.NewLine +
                 "Asset check result (form ID: " + formid + ") conducted on " + conductedDate + " already approved by Mr " + dataItemPropesionalFrom["Title"].ToString() + Environment.NewLine + Environment.NewLine +
@@ -215,9 +242,11 @@ namespace MCAWebAndAPI.Service.Asset
         public EmailHelperAssetCheckResult RejectEmail(int? idTo, int? idFrom, string formid = "", DateTime? conductedDate = null)
         {
             EmailHelperAssetCheckResult email = new EmailHelperAssetCheckResult();
-            var siteHr = _siteUrl.Replace("/bo", "/hr");
-            var dataItemPropesional = SPConnector.GetListItem("Professional Master", idTo, siteHr);
-            var dataItemPropesionalFrom = SPConnector.GetListItem("Professional Master", idFrom, siteHr);
+            //var siteHr = _siteUrl.Replace("/bo", "/hr");
+            //var dataItemPropesional = SPConnector.GetListItem("Professional Master", idTo, siteHr);
+            //var dataItemPropesionalFrom = SPConnector.GetListItem("Professional Master", idFrom, siteHr);
+            var dataItemPropesional = SPConnector.GetListItem("Professional Master", idTo, _siteUrl);
+            var dataItemPropesionalFrom = SPConnector.GetListItem("Professional Master", idFrom, _siteUrl);
             email.EmailTo = dataItemPropesional["officeemail"].ToString();
             email.EmailContent = "Dear Mr " + dataItemPropesional["Title"].ToString() + "," + Environment.NewLine + Environment.NewLine +
                 "Asset check result (form ID: " + formid + ") conducted on " + conductedDate + " already rejected by Mr " + dataItemPropesionalFrom["Title"].ToString() + "." + Environment.NewLine + Environment.NewLine +
@@ -611,8 +640,8 @@ namespace MCAWebAndAPI.Service.Asset
             EmailHelperAssetCheckResult email = new EmailHelperAssetCheckResult();
 
             email = ApproveEmail(
-                Convert.ToInt32(dataCekResult["assetcheckcountedby1"].ToString()),
-                Convert.ToInt32(dataCekResult["approvalname"].ToString()),
+                (dataCekResult["assetcheckcountedby1"] as FieldLookupValue).LookupId,
+                (dataCekResult["approvalname"] as FieldLookupValue).LookupId,
                 dataCekResult["assetcheckformid"].ToString(),
                 Convert.ToDateTime(dataCekResult["assetcheckcountdate"].ToString())
                 );
@@ -629,8 +658,8 @@ namespace MCAWebAndAPI.Service.Asset
             EmailHelperAssetCheckResult email = new EmailHelperAssetCheckResult();
 
             email = ApproveEmail(
-                Convert.ToInt32(dataCekResult["assetcheckcountedby1"].ToString()),
-                Convert.ToInt32(dataCekResult["approvalname"].ToString()),
+                (dataCekResult["assetcheckcountedby1"] as FieldLookupValue).LookupId,
+                (dataCekResult["approvalname"] as FieldLookupValue).LookupId,
                 dataCekResult["assetcheckformid"].ToString(),
                 Convert.ToDateTime(dataCekResult["assetcheckcountdate"].ToString())
                 );
