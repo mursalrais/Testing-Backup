@@ -70,6 +70,21 @@ namespace MCAWebAndAPI.Web.Controllers
             return GetJsonResult(professionals);
         }
 
+        public JsonResult GetForCombo(string siteUrl = null)
+        {
+            service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+
+            var professionals = GetFromExistingSession();
+            professionals = professionals.OrderBy(e => e.FirstMiddleName);
+
+            return Json(professionals.Select(e => new
+            {
+                e.ID,
+                e.FirstMiddleName,
+                NameAndPos = string.Format("{0} - {1}", e.FirstMiddleName, e.Position)
+            }), JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult GetJsonResult(string siteUrl = "", int? id = 0)
         {
             IEnumerable<ProfessionalMaster> professional = new List<ProfessionalMaster>() { Get(siteUrl, id) };
@@ -113,10 +128,17 @@ namespace MCAWebAndAPI.Web.Controllers
 
             if (sessionVariable == null)
             {
-                siteUrl = string.IsNullOrEmpty(siteUrl) ? ConfigResource.DefaultHRSiteUrl : siteUrl;
+                //CMIIW
+                //1. karena ini static, ketika panggil langsung method ini service null
+                //2. nama session siteURL dipakai untuk url BO
 
+                //siteUrl = string.IsNullOrEmpty(siteUrl) ? ConfigResource.DefaultHRSiteUrl : siteUrl;
+                //service.SetSiteUrl(siteUrl);
+                //SessionManager.Set(SharedController.Session_SiteUrl, siteUrl);
+
+                service = new DataMasterService();
+                siteUrl = ConfigResource.DefaultHRSiteUrl;
                 service.SetSiteUrl(siteUrl);
-                SessionManager.Set(SharedController.Session_SiteUrl, siteUrl);
 
                 professionals = service.GetProfessionals();
             }

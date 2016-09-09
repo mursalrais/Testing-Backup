@@ -57,6 +57,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         public string Status { get; set; }
 
+        public string EditType { get; set; }
+
         public IEnumerable<PerformanceEvaluationDetailVM> PerformanceEvaluationDetails { get; set; } = new List<PerformanceEvaluationDetailVM>();
 
     }

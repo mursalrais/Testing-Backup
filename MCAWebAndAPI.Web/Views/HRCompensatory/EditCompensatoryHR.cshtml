@@ -26,6 +26,7 @@
         @Html.HiddenFor(m => m.cmpPosition)
         @Html.HiddenFor(m => m.cmpYearDate)
         @Html.HiddenFor(m => m.Requestor)
+        @Html.HiddenFor(m => m.profId)
 
         <input type="hidden" id="loadpage" value="0">
 
@@ -190,11 +191,12 @@
                             var rowgrid = $("#CompensatoryDetails").data("kendoGrid").tbody.find("tr");
                             var valdate = true;
                             var i = -1;
-                            var j = -1;
                             rowgrid.each(function (e) {
                                 i++;
                                 var xdate = $("#Dateid" + i).val();
                                 var xEdit = $("#Editid" + i).val();
+                                var j = -1;
+
                                 rowgrid.each(function (e) {
                                     j++;
                                     var ydate = $("#Dateid" + j).val();
@@ -205,6 +207,8 @@
                                                 if (yEdit != -1) {
                                                     if (xdate == ydate) {
                                                         valdate = false;
+                                                        return false;
+
                                                     }
                                                 }
                                             }
@@ -325,6 +329,7 @@
                         var dataItem = this.dataItem(e.item);
                         eMail = dataItem.OfficeEmail;
                         $("#cmpName").prop("value", dataItem.FirstMiddleName);
+                        $("#profId").prop("value", dataItem.ID);
                         $("#cmpProjUnit").prop("value", dataItem.Project_Unit);
                     };
 

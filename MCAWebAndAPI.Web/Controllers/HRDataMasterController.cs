@@ -73,6 +73,30 @@ namespace MCAWebAndAPI.Web.Controllers
                     Desc2 = string.Format("{0}", e.FirstMiddleName)}),JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetProfessionalsActive()
+        {
+            _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+
+            var professionals = GetFromExistingProfessionalsActiveSession();
+            professionals = professionals.OrderBy(e => e.FirstMiddleName);
+
+            return Json(professionals.Select(e =>
+                new {
+                    e.ID,
+                    e.Name,
+                    e.FirstMiddleName,
+                    e.Position,
+                    e.Status,
+                    e.OfficeEmail,
+                    e.Project_Unit,
+
+
+                    Desc = string.Format("{0}", e.Name),
+                    Desc1 = string.Format("{0} - {1}", e.Name, e.Position),
+                    Desc2 = string.Format("{0}", e.FirstMiddleName)
+                }), JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult GetProfessionalsManpower()
         {
             _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
@@ -120,6 +144,36 @@ namespace MCAWebAndAPI.Web.Controllers
                         e.MobileNumber,
                         e.TaxStatus
                         
+
+                    }
+                ), JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetProfessionalActives(int id)
+        {
+            _dataMasterService.SetSiteUrl(System.Web.HttpContext.Current.Session["SiteUrl"] as string);
+            var professionals = GetFromExistingActiveSession();
+            professionals = from a in professionals where a.ID == id select a;
+            return Json(professionals.Where(e => e.ID == id).Select(
+                    e =>
+                    new
+                    {
+                        e.ID,
+                        e.Name,
+                        e.FirstMiddleName,
+                        e.Position,
+                        e.Status,
+                        e.Project_Unit,
+                        e.PositionId,
+                        e.PSANumber,
+                        e.JoinDate,
+                        e.OfficeEmail,
+                        e.PersonalMail,
+                        e.JoinDateTemp,
+                        e.InsuranceAccountNumber,
+                        e.MobileNumber,
+                        e.TaxStatus
+
 
                     }
                 ), JsonRequestBehavior.AllowGet);
@@ -247,6 +301,28 @@ namespace MCAWebAndAPI.Web.Controllers
 
             if (sessionVariable == null) // If no session variable is found
                 System.Web.HttpContext.Current.Session["ProfessionalMaster"] = professionals;
+            return professionals;
+        }
+
+        private IEnumerable<ProfessionalMaster> GetFromExistingActiveSession()
+        {
+            //Get existing session variable
+            var sessionVariable = System.Web.HttpContext.Current.Session["ProfessionalMasterActive"] as IEnumerable<ProfessionalMaster>;
+            var professionals = sessionVariable ?? _dataMasterService.GetProfessionalsActives();
+
+            if (sessionVariable == null) // If no session variable is found
+                System.Web.HttpContext.Current.Session["ProfessionalMasterActive"] = professionals;
+            return professionals;
+        }
+
+        private IEnumerable<ProfessionalMaster> GetFromExistingProfessionalsActiveSession()
+        {
+            //Get existing session variable
+            var sessionVariable = System.Web.HttpContext.Current.Session["ProfessionalMasterActive"] as IEnumerable<ProfessionalMaster>;
+            var professionals = sessionVariable ?? _dataMasterService.GetProfessionalsActive();
+
+            if (sessionVariable == null) // If no session variable is found
+                System.Web.HttpContext.Current.Session["ProfessionalMasterActive"] = professionals;
             return professionals;
         }
 

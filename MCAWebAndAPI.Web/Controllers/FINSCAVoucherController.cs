@@ -29,7 +29,6 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
         IEventBudgetService _eventBudgetService;
 
         private const string SiteUrl = "SiteUrl";
-        private const string EventBudgetDetailSess = "EventBudgetDetail";
         private const string SCAVoucherIDSess = "SESS_SCAVoucherID";
         private const string EventBudgetIDSess = "SESS_EventBudgetID";
         private const string SubTitle = "Special Cash Advance Voucher";
@@ -50,10 +49,9 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             service.SetSiteUrl(siteUrl);
             SessionManager.Set(SharedController.Session_SiteUrl, siteUrl);
 
-            SessionManager.Remove(EventBudgetDetailSess);
-
             SCAVoucherVM model = new SCAVoucherVM();
             SetAdditionalSettingToVM(ref model);
+            ViewBag.CancelUrl = string.Format(FirstPageUrl, siteUrl);
 
             return View(model);
         }
@@ -78,6 +76,8 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
                 SessionManager.Set(EventBudgetIDSess, model.EventBudgetID);
             }
 
+            ViewBag.CancelUrl = string.Format(FirstPageUrl, siteUrl);
+
             SetAdditionalSettingToVM(ref model);
             return View(model);
         }
@@ -95,6 +95,8 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
                 model.UserEmail = userEmail;
                 SessionManager.Set(SCAVoucherIDSess, ID);
             }
+
+            ViewBag.CancelUrl = string.Format(FirstPageUrl, siteUrl);
 
             return View(model);
         }
@@ -206,7 +208,6 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
 
             int? ID = null;
             ID = service.CreateSCAVoucher(ref viewModel);
-            viewModel.SCAVoucherItems = SessionManager.Get<List<SCAVoucherItemsVM>>(EventBudgetDetailSess);
 
             Task createSCAVoucherItemTask = service.CreateSCAVoucherItemAsync(ID, viewModel.SCAVoucherItems);
             Task createSCAVoucherDocumentTask = service.CreateSCAVoucherAttachmentAsync(ID, viewModel.Documents);
@@ -247,8 +248,6 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
                 {
                     if (service.UpdateSCAVoucher(viewModel))
                     {
-                        viewModel.SCAVoucherItems = SessionManager.Get<List<SCAVoucherItemsVM>>(EventBudgetDetailSess);
-
                         Task createSCAVoucherItemTask = service.UpdateSCAVoucherItem(viewModel.ID, viewModel.SCAVoucherItems);
                         Task createSCAVoucherDocumentTask = service.CreateSCAVoucherAttachmentAsync(viewModel.ID, viewModel.Documents);
                         Task allTasks = Task.WhenAll(createSCAVoucherItemTask);
@@ -279,7 +278,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
 
             List<SCAVoucherItemsVM> details = new List<SCAVoucherItemsVM>();
             details = service.GetEventBudgetItems(eventBudgetId.Value).ToList();
-            SessionManager.Set(EventBudgetDetailSess, details);
+
             DataSourceResult result = details.ToDataSourceResult(request);
             var json = Json(result, JsonRequestBehavior.AllowGet);
             json.MaxJsonLength = int.MaxValue;
@@ -304,7 +303,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             {
                 details = service.GetSCAVoucherItems(sess_scaVoucherID).ToList();
             }
-            SessionManager.Set(EventBudgetDetailSess, details);
+
             DataSourceResult result = details.ToDataSourceResult(request);
             var json = Json(result, JsonRequestBehavior.AllowGet);
             json.MaxJsonLength = int.MaxValue;

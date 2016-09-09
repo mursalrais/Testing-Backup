@@ -10,14 +10,14 @@
 }
 
 @using (Ajax.BeginForm("PerformanceEvaluation", "HRPerformanceEvaluation",
-                                                                            FormMethod.Post,
-                                                                            new AjaxOptions
-                                                                            {
-                                                                                OnBegin = "onBeginForm",
-                                                                                OnComplete = "onCompleteForm",
-                                                                                OnSuccess = "onSuccessFormEmbed",
-                                                                                OnFailure = "onFailureForm"
-                                                                            }, new { @class = "form-horizontal" }))
+                                                                                        FormMethod.Post,
+                                                                                        new AjaxOptions
+                                                                                        {
+                                                                                            OnBegin = "onBeginForm",
+                                                                                            OnComplete = "onCompleteForm",
+                                                                                            OnSuccess = "onSuccessFormEmbed",
+                                                                                            OnFailure = "onFailureForm"
+                                                                                        }, new { @class = "form-horizontal" }))
 {
     <fieldset>
         <legend>Performance Evaluation</legend>
@@ -41,24 +41,35 @@
                     }
                     else
                     {
-                        <button id="initiate" class="btn btn-primary" type="submit" disabled>
-                            <i class="fa fa-save"></i>
-                            Initiate Evaluation Process
-                        </button>
-                        if ((Model.Status == "Open") && (Model.PerformanceEvaluationDetails.All(x => x.EvaluationStatus == "Approved")))
+                        if (ViewBag.Type == "Edit")
                         {
-                            <button id="close" class="btn btn-primary" type="submit">
+                            <button id="save" class="btn btn-primary" type="submit">
                                 <i class="fa fa-save"></i>
-                                Close Evaluation Process
+                                Save
                             </button>
                         }
                         else
                         {
-                            <button id="close" class="btn btn-primary" type="submit" disabled>
+                            <button id="initiate" class="btn btn-primary" type="submit" disabled>
                                 <i class="fa fa-save"></i>
-                                Close Evaluation Process
+                                Initiate Evaluation Process
                             </button>
+                            if ((Model.Status == "Open") && (Model.PerformanceEvaluationDetails.All(x => x.EvaluationStatus == "Approved")))
+                            {
+                                <button id="close" class="btn btn-primary" type="submit">
+                                    <i class="fa fa-save"></i>
+                                    Close Evaluation Process
+                                </button>
+                            }
+                            else
+                            {
+                                <button id="close" class="btn btn-primary" type="submit" disabled>
+                                    <i class="fa fa-save"></i>
+                                    Close Evaluation Process
+                                </button>
+                            }
                         }
+
                     }
                 </div>
             </div>
@@ -75,6 +86,7 @@
         <div class="row">
             @Html.Partial("_Detail", Model.PerformanceEvaluationDetails)
         </div>
+        @Html.HiddenFor(e => e.EditType)
     </fieldset>
 
 }

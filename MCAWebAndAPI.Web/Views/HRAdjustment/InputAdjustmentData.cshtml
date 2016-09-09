@@ -30,22 +30,20 @@
                 </div>
             </div>
         </div>
-        
+
         <legend>Adjustment & OT</legend>
         <div class="row">
             @Html.Partial("_InputAdjustmentDetails", Model.AdjustmentDetails)
         </div>
 
-        <button id="submit-button" class="btn btn-primary">
-            <i class="fa fa-save"></i>
-            Save
-        </button>
-
-        <button id="cancel-button" class="btn btn-danger">
-            <i class="fa fa-save"></i>
-            cancel
-        </button>
-
+        <div class="row pull-right">
+            <div class="col-sm-12">
+                <button id="submit-button" class="btn btn-primary" type="button">
+                    <i class="fa fa-save"></i>
+                    Save
+                </button>
+            </div>
+            </div>
     </fieldset>
 }
 
@@ -53,8 +51,39 @@
 
     <script>
         $(document).ready(function () {
-            $(".submit-button").click(function (e) {
-                $('form').submit();
+            $("#submit-button").click(function (e) {
+                var rowgrid = $("#AdjustmentDetails").data("kendoGrid").tbody.find("tr");
+                var valdate = true;
+                var i = -1;
+                rowgrid.each(function (e) {
+                    i++;
+                    var xprof = $("#Profid" + i).val();
+                    var xEdit = $("#Editid" + i).val();
+                    var j = -1;
+                    rowgrid.each(function (e) {
+                        j++;
+                        var yprof = $("#Profid" + j).val();
+                        var yEdit = $("#Editid" + j).val();
+                        if (i !== j) {
+                            if (xprof != "undifined" && yprof != "undifined") {
+                                if (xEdit != -1) {
+                                    if (yEdit != -1) {
+                                        if (xprof == yprof) {
+                                            valdate = false;
+                                            return false;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                });
+
+                if (valdate == false) {
+                    alert("Cannot input same professional in one date..!!");
+                } else {
+                    $("form").submit();
+                }
             });
         });
 

@@ -1,0 +1,139 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model TimesheetVM
+
+@{
+    ViewBag.Title = "Print Timesheet";
+    Layout = "~/Views/Shared/_LayoutPDF.cshtml";
+}
+
+
+
+<div class="form-horizontal">
+
+    <fieldset>
+
+        <div class="wrp">&nbsp;</div>
+        <div class="wrp">
+
+            REKAP KLAIM ASURANSI KESEHATAN
+
+        </div>
+        <div class="wrp">&nbsp;</div>
+        <div class="row">
+            <div class="col-xs-12">
+                <table class="table table-striped ">
+                    <thead>
+                        <tr>
+                            <th rowspan="2">No</th>
+                            <th rowspan="2">Batch No</th>
+                            <th rowspan="2">Tanggal Kirim</th>
+                            <th rowspan="2">Nama Karyawan</th>
+                            <th rowspan="2">Nama Tertanggung</th>
+                            <th rowspan="2">Tanggal Kwitansi</th>
+                            <th colspan="4">Jumlah Klaim</th>
+                            <th rowspan="2">Remarks</th>
+                        </tr>
+                        <tr>
+                            <th rowspan="1">Medical Examination</th>
+                            <th rowspan="1">Prescription</th>
+                            <th rowspan="1">Others</th>
+                            <th rowspan="1">Total</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @*@for (int i = 0; i <= Model.dtDetails.Rows.Count - 1; i++)
+                    {
+                        <tr>
+                            <td>@Convert.ToString(Model.dtDetails.Rows[i]["No"])</td>
+                            <td>@Convert.ToString(Model.dtDetails.Rows[i]["BatchNo"])</td>
+                            <td>@Convert.ToString(Model.dtDetails.Rows[i]["SubmissionDate"])</td>
+                            <td>@Convert.ToString(Model.dtDetails.Rows[i]["ProfessionalName"])</td>
+                            <td>@Convert.ToString(Model.dtDetails.Rows[i]["DependentName"])</td>
+                            <td>@Convert.ToString(Model.dtDetails.Rows[i]["ReceiptDate"])</td>
+                            <td>@Convert.ToDouble(Model.dtDetails.Rows[i]["MedicalExamination"]).ToString("n0")</td>
+                            <td>@Convert.ToDouble(Model.dtDetails.Rows[i]["Prescription"]).ToString("n0")</td>
+                            <td>@Convert.ToDouble(Model.dtDetails.Rows[i]["Others"]).ToString("n0")</td>
+                            <td>@Convert.ToDouble(Model.dtDetails.Rows[i]["Total"]).ToString("n0")</td>
+                            <td>@Convert.ToString(Model.dtDetails.Rows[i]["Remarks"])</td>
+                        </tr>
+                    }*@
+                    </tbody>
+</table>
+
+</div>
+        </div>
+
+        <div class="col-xs-6">
+            <div class="wrp">&nbsp;</div>
+            <div class="wrp">&nbsp;</div>
+            <div class="wrp">&nbsp;</div>
+            <div class="wrpTTD">Pengirim,</div>
+            <div class="wrp">&nbsp;</div>
+            <div class="wrp">&nbsp;</div>
+            <div class="wrp">&nbsp;</div>
+            <div class="wrp">&nbsp;</div>
+            @*<div class="wrpTTD">@Model.Sender</div>*@
+        </div>
+        <div class="col-xs-6">
+            <div class="wrp">&nbsp;</div>
+            <div class="wrp">&nbsp;</div>
+            <div class="wrp">&nbsp;</div>
+            <div class="wrpTTD">Penerima,</div>
+            <div class="wrp">&nbsp;</div>
+            <div class="wrp">&nbsp;</div>
+            <div class="wrp">&nbsp;</div>
+            <div class="wrp">&nbsp;</div>
+            @*<div class="wrpTTD">@Model.Recepient</div>*@
+        </div>
+    </fieldset>
+</div>
+
+
+
+<style type="text/css">
+    .wrp {
+        width: 100%;
+        text-align: center;
+        font-size: 150%;
+    }
+
+    .wrpTTD {
+        width: 100%;
+        text-align: center;
+    }
+
+    .wrpFont {
+        width: 100%;
+        text-align: center;
+        font-size: 20%;
+    }
+
+    table {
+  border-collapse: collapse;
+}
+
+th {
+  border: 1px solid Black;
+  padding: 5px 15px;text-align: center;vertical-align: text-top;background-color: GrayText; ;vertical-align: top;
+}
+
+td {
+  border: 1px solid Black;
+  padding: 5px 15px;text-align: center;vertical-align: text-top;vertical-align: top;
+}
+
+/*thead > tr:nth-child(1) > th:nth-child(1) { background-color: GrayText; text-align: center; }
+thead > tr:nth-child(1) > th:nth-child(2) { background-color: GrayText; text-align: center; }
+thead > tr:nth-child(1) > th:nth-child(3) { background-color: GrayText;  text-align: center;}
+thead > tr:nth-child(1) > th:nth-child(4) { background-color: GrayText; text-align: center; }
+thead > tr:nth-child(1) > th:nth-child(5) { background-color: GrayText; text-align: center; }
+thead > tr:nth-child(1) > th:nth-child(6) { background-color: GrayText;  text-align: center;}
+thead > tr:nth-child(1) > th:nth-child(7) { background-color: GrayText;  text-align: center;}
+thead > tr:nth-child(1) > th:nth-child(8) { background-color: GrayText; text-align: center; }
+thead > tr:nth-child(2) > th              { background-color: GrayText; text-align: center; }*/
+
+</style>
+
+
+

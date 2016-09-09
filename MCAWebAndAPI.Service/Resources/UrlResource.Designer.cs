@@ -635,5 +635,14 @@ namespace MCAWebAndAPI.Service.Resources {
                 return ResourceManager.GetString("TaxExemptionIncomeDocumentByID", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to /Lists/Timesheet.
+        /// </summary>
+        public static string Timesheet {
+            get {
+                return ResourceManager.GetString("Timesheet", resourceCulture);
+            }
+        }
     }
 }

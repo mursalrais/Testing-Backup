@@ -1,10 +1,10 @@
-﻿using MCAWebAndAPI.Service.ProjectManagement.Schedule.Common;
+﻿using MCAWebAndAPI.Service.ProjectManagement.Schedule;
 using NLog;
 using Quartz;
 
 namespace MCAWebAndAPI.Service.JobSchedulers.Jobs
 {
-    public class WBSMasterSyncJob : IJob
+    public class WBSMasterSyncJob
     {
         Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -15,8 +15,8 @@ namespace MCAWebAndAPI.Service.JobSchedulers.Jobs
 
             var siteUrl = dataMap.GetString("site-url");
 
-            WBSMasterService _psaManagementService = new WBSMasterService();
-            _psaManagementService.SetCompactProgramSiteUrl(siteUrl);
+            WBSMasterSyncService _psaManagementService = new WBSMasterSyncService();
+            _psaManagementService.SetSiteUrl(siteUrl);
             _psaManagementService.Sync();
 
             logger.Info("WBS Master Sync Job was successfully performed on {0}.", siteUrl);

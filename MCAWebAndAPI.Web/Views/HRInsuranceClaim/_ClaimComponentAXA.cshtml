@@ -1,8 +1,9 @@
 ﻿@model System.Data.DataTable
 
-<div class="col-sm-12"  >
+<div class="col-sm-12">
     @(Html.Kendo().Grid<dynamic>()
           .Name("gridDataView")
+          .Scrollable()
           .Columns(columns =>
           {
               foreach (System.Data.DataColumn column in Model.Columns)
@@ -10,7 +11,10 @@
 
                   if (column.DataType.FullName != "System.Double" && column.ColumnName != "Remarks")
                   {
-                      columns.Bound(column.ColumnName).HeaderHtmlAttributes(new { style = "overflow: visible; white-space: normal" });
+                      //columns.Bound(column.ColumnName).HeaderHtmlAttributes(new
+                      //{ style = "overflow: visible; white-space: normal" });
+                      columns.Bound(column.ColumnName).HeaderHtmlAttributes(new
+                      { style = "overflow: visible; white-space: normal" }).Width(150);
 
                   }
 
@@ -24,7 +28,7 @@
                           if (column.DataType.FullName == "System.Double")
                           {
                               info.Bound(column.ColumnName).ClientTemplate("#= kendo.toString(" + column.ColumnName + ",'n0') #").
-                              HeaderHtmlAttributes(new { style = "overflow: visible; white-space: normal" });
+                              HeaderHtmlAttributes(new { style = "overflow: visible; white-space: normal" }).Width(150);
 
                           }
                       }
@@ -32,12 +36,18 @@
 
                   })
                   );
-              //  columns.Bound("Remarks").ClientTemplate("<textarea rows='2' style='text-overflow:ellipsis; display:block; width:99%; height:100%; font-family:Arial; font-size:12px;' readonly='readonly'>#=Remarks#</textarea>");
-              columns.Bound("Remarks").ClientTemplate("<span class='onabai'>#=Remarks#</span>");
+              //columns.Bound("Remarks").ClientTemplate("<textarea rows='2' style='text-overflow:ellipsis; " +
+              //                                       "display:block; width:99%; height:100%; font-family:Arial; " +
+              //                                       "font-size:12px;' readonly='readonly'>#=Remarks#</textarea>").Width(300);
+              columns.Bound("Remarks").ClientTemplate("<textarea rows='2' wrap='hard' " +
+                                                      "display:block; width:300px; height:100%; font-family:Arial; " +
+                                                      "font-size:12px;word-wrap:break-word' readonly='readonly'>#=Remarks#</textarea>").Width(200);
+              //columns.Bound("Remarks").ClientTemplate("<span class='onabai'>#=Remarks#</span>");
+              //columns.Bound("Remarks").Width(300);
           })
            .Events(e =>
            {
-               e.DataBound("onDataBoundComponentDetails");//"<span class='onabai'>#=Remarks#</span>"
+               // e.DataBound("onDataBoundComponentDetails");//"<span class='onabai'>#=Remarks#</span>"
            })
           .DataSource(dataSource => dataSource
               .Ajax()
@@ -67,18 +77,21 @@
 </script>
 
 <style type="text/css">
-   
- .k-grid table {
-   table-layout: fixed;
-}
-     
- .k-grid tbody tr{
-    height: 38px;
-}
+        /*.k-grid table {
+       table-layout: fixed;
+    }*/
 
-.k-grid tbody tr td {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
+        .k-grid tbody tr {
+            height: 38px;
+        }
+
+        /*.k-grid tbody tr td {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }*/
+
+        .grid-scroll-container {
+            overflow: auto;
+        }
 </style>

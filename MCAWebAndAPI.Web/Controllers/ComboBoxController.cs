@@ -8,7 +8,6 @@ using MCAWebAndAPI.Service.Finance;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;
 using FinService = MCAWebAndAPI.Service.Finance;
-using MCAWebAndAPI.Model.Common;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -121,19 +120,5 @@ namespace MCAWebAndAPI.Web.Controllers
                 Text = string.IsNullOrWhiteSpace(e.Title) ? string.Empty : string.Format("{0} - {1}",e.Title, e.GLDescription)
             }), JsonRequestBehavior.AllowGet);
         }
-
-        public JsonResult GetWBSMasters(string activityValue=null)
-        {
-            var siteUrl = SessionManager.Get<string>(SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
-
-            var wbsMasters = FinService.SharedService.GetWBSMaster(siteUrl, activityValue);
-
-            return Json(wbsMasters.Select(e => new
-            {
-                Value = e.ID.HasValue ? Convert.ToString(e.ID) : string.Empty,
-                Text = (e.Title + "-" + e.WBSDescription)
-            }), JsonRequestBehavior.AllowGet);
-        }
-
     }
 }

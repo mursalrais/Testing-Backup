@@ -219,23 +219,17 @@ namespace MCAWebAndAPI.Service.Finance
 
         public async Task UpdateSCAVoucherItem(int? scaVoucherID, IEnumerable<SCAVoucherItemsVM> viewModels)
         {
-            foreach (var viewModel in viewModels)
+            try
             {
-                var columnValues = new Dictionary<string, object>
-                {
-                    {FIELD_NAME_WBS,new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.WBSID) }},
-                    {FIELD_NAME_GL, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.GLID) }},
-                    {FIELD_NAME_AMOUNT,viewModel.Amount}
-                };
-                try
-                {
-                    SPConnector.UpdateListItem(LIST_NAME_SCAVOUCHER_ITEM, viewModel.ID, columnValues, siteUrl);
-                }
-                catch (Exception e)
-                {
-                    logger.Error(e.Message);
-                    throw e;
-                }
+                var listItemID = GetIDItemDetails(siteUrl, (int)scaVoucherID);
+                SPConnector.DeleteMultipleListItemAsync(LIST_NAME_SCAVOUCHER_ITEM, listItemID, siteUrl);
+
+                CreateSCAVoucherItems(siteUrl, scaVoucherID, viewModels);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.Message);
+                throw e;
             }
         }
 
@@ -453,6 +447,23 @@ namespace MCAWebAndAPI.Service.Finance
             }
 
             return result;
+        }
+
+        private static List<string> GetIDItemDetails(string siteUrl, int headerID)
+        {
+            List<string> details = new List<string>();
+
+            if (headerID > 0)
+            {
+                var caml = @"<View><Query><Where><Eq><FieldRef Name='" + FIELD_NAME_SCAVOUCHER + "' /><Value Type='Lookup'>" + headerID.ToString() + "</Value></Eq></Where></Query></View>";
+
+                foreach (var item in SPConnector.GetList(LIST_NAME_SCAVOUCHER_ITEM, siteUrl, caml))
+                {
+                    details.Add(item[FIELD_NAME_ID].ToString());
+                }
+            }
+
+            return details;
         }
     }
 }

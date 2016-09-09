@@ -1,0 +1,43 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model IEnumerable<ClaimComponentDetailAXAVM>
+
+<div class="col-sm-12">
+ 
+    <div class="col-sm-12">
+        @(Html.Kendo().Grid(Model)
+          .Name("gridAXA")
+
+          .Columns(columns =>
+          {
+              columns.Bound(p => p.ProfessionalName);
+              columns.Bound(p => p.DependentName);
+              columns.Bound(p => p.ReceiptDate).ClientTemplate("#= kendo.toString(ReceiptDate, 'MM-dd-yyyy') #");
+              columns.Group(g => g
+                  .Title("Claim Component")
+                  .Columns(component =>
+                  {
+                      component.Bound(x => x.MedicalExamination).ClientTemplate("#= kendo.toString(MedicalExamination,'n0') #");
+                      component.Bound(x => x.Laboratorium).ClientTemplate("#= kendo.toString(Laboratorium,'n0') #");
+                      component.Bound(x => x.Prescription).ClientTemplate("#= kendo.toString(Prescription,'n0') #");
+                      component.Bound(x => x.Other).ClientTemplate("#= kendo.toString(Other,'n0') #");
+                      component.Bound(x => x.TotalAmount).ClientTemplate("#= kendo.toString(TotalAmount,'n0') #");
+                  }));
+              columns.Bound(p => p.Remarks);
+
+          })
+         .DataSource(dataSource => dataSource.Ajax()
+          .Aggregates(aggregates =>
+          {
+              aggregates.Add(p => p.TotalAmount).Sum();
+          })
+
+
+              .ServerOperation(false)
+          )
+        )
+    </div>
+</div>
+<script>
+   
+
+</script>

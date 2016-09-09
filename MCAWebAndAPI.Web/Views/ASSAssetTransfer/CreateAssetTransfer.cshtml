@@ -1,0 +1,140 @@
+﻿
+@using MCAWebAndAPI.Model.ViewModel.Form.Asset
+
+@model AssetTransferVM
+
+@using (Ajax.BeginForm("SubmitAssetTransfer", "ASSAssetTransfer",
+                                                                            FormMethod.Post,
+                                                                            new AjaxOptions
+                                                                            {
+                                                                                OnBegin = "onBeginForm",
+                                                                                OnComplete = "onCompleteForm",
+                                                                                OnSuccess = "onSuccessFormEmbed",
+                                                                                OnFailure = "onFailureForm"
+                                                                            }, new { @class = "form-horizontal" }))
+{<fieldset>
+        <legend>Form Asset Transfer</legend>
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary()
+        <div class="col-sm-6">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.TransactionType).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @*@Html.DisplayFor(m => m.TransactionType)*@
+                    <input type="text" name="TransactionType" id="TransactionType" value="Asset Transfer" disabled style="width: 100%;"/>
+                </div>
+            </div>           
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.AssetHolderFrom).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.AssetHolderFrom)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.ContactNoFrom).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @*@Html.DisplayFor(m => m.ContactNoFrom)*@
+                    <input type="text" name="ContactNoFrom" id="ContactNoFrom" value="" disabled style="width: 100%;"/>
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.ProjectUnitFrom).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @*@Html.DisplayFor(m => m.ProjectUnitFrom)*@
+                    <input type="text" name="ProjectUnitFrom" id="ProjectUnitFrom" value="" disabled style="width: 100%;"/>
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Documents).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.Documents)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.CompletionStatus).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.CompletionStatus)
+                </div>
+            </div>            
+        </div>
+
+     <div class="col-sm-6">
+         <div class="form-group">
+             @Html.Bootstrap().LabelFor(m => m.Date).Class("col-sm-4 control-label")
+             <div class="col-sm-8">
+                 @Html.EditorFor(m => m.Date)
+             </div>
+         </div>
+         <div class="form-group">
+             @Html.Bootstrap().LabelFor(m => m.AssetHolderTo).Class("col-sm-4 control-label")
+             <div class="col-sm-8">
+                 @Html.EditorFor(m => m.AssetHolderTo)
+             </div>
+         </div>
+         <div class="form-group">
+             @Html.Bootstrap().LabelFor(m => m.ContactNoTo).Class("col-sm-4 control-label")
+             <div class="col-sm-8">
+                 @*@Html.DisplayFor(m => m.ContactNoTo)*@
+                 <input type="text" name="ContactNoTo" id="ContactNoTo" value="" disabled style="width: 100%;" />
+             </div>
+         </div>
+         <div class="form-group">
+             @Html.Bootstrap().LabelFor(m => m.ProjectUnitTo).Class("col-sm-4 control-label")
+             <div class="col-sm-8">
+                 @*@Html.DisplayFor(m => m.ProjectUnitTo)*@
+                 <input type="text" name="ProjectUnitTo" id="ProjectUnitTo" value="" disabled style="width: 100%;" />
+             </div>
+         </div>
+     </div>
+
+        <legend>Asset Transfer Detail</legend>
+        <div class="row">
+            @Html.Partial("_AssetTransferDetail", Model.Details)
+        </div>
+    </fieldset>
+}
+<div class="form-actions">
+    <div class="row">
+        <div class="col-sm-12">
+            <button id="submit-button" class="btn btn-primary" type="submit">
+                <i class="fa fa-save"></i>
+                Submit
+            </button>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#submit-button").click(function () {
+                $("form").submit();
+            });
+        });
+
+        function onSelectedAssetHolderFrom(e) {
+            var res = this.dataItem(e.item).split("-")
+            alert("Acceptance Memo ID : " + res[0]);
+            var url = "/ASSAssetTransfer/GetAssetHolderFrom?IDAssetHolderFrom=" + res[0];
+            $.getJSON(url, function (data) {
+                document.getElementById('ContactNoFrom').value = data.ProjectName;
+                document.getElementById('ProjectUnitFrom').value = data.ProjectName;
+
+                //$('#ContactNoFrom').prop('value', data.ProjectName);
+                //$('#ProjectUnitFrom').prop('value', data.ContactNo);
+            });
+        }
+
+        function onSelectedAssetHolderTo(e) {
+            var res = this.dataItem(e.item).split("-")
+            alert("Acceptance Memo ID : " + res[0]);
+            var url = "/ASSAssetTransfer/GetAssetHolderTo?IDAssetHolderTo=" + res[0];
+            $.getJSON(url, function (data) {
+                document.getElementById('ContactNoTo').value = data.ProjectName;
+                document.getElementById('ProjectUnitTo').value = data.ContactNo;
+
+                //$('#ContactNoTo').prop('value', data.ProjectName);
+                //$('#ProjectUnitTo').prop('value', data.ContactNo);
+            });
+        }
+    </script>
+}

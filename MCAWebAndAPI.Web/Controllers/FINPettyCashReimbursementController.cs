@@ -34,9 +34,13 @@ namespace MCAWebAndAPI.Web.Controllers
         private const string GL_ActionName = "GetGL";
         private const string PaidTo_EventName = "onSelectPaidTo";
         private const string ValueField = "ID";
-        private const string TextField = "Title";
+        private const string TextField = "NameAndPos";
 
         private const string PrintPageUrl = "~/Views/FINPettyCashReimbursement/Print.cshtml";
+        private const string FirstPageUrl = "{0}/Lists/Petty%20Cash%20Reimbursement/AllItems.aspx";
+        private const string SuccessMsgFormatCreated = "Petty Cash Reimbursement number {0} has been successfully created.";
+        private const string SuccessMsgFormatUpdated = "Petty Cash Reimbursement number {0} has been successfully updated.";
+
         IPettyCashReimbursementService service;
 
         public FINPettyCashReimbursementController()
@@ -52,11 +56,12 @@ namespace MCAWebAndAPI.Web.Controllers
 
             var viewModel = service.Get(GetOperation(op), id);
             SetAdditionalSettingToViewModel(ref viewModel);
-            
+            ViewBag.CancelUrl = string.Format(FirstPageUrl, siteUrl);
+
             return View(viewModel);
         }
 
-        public ActionResult Print(int? ID=null)
+        public ActionResult Print(FormCollection form, RequisitionNoteVM model)
         {
             string RelativePath = PrintPageUrl;
             string domain = "http://" + Request.Url.Authority + "/img/logo.png";
@@ -64,7 +69,17 @@ namespace MCAWebAndAPI.Web.Controllers
             var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl)?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);
 
-            var viewModel = service.GetPettyCashReimbursement(ID);
+            var viewModel = service.GetPettyCashReimbursement(model.ID);
+            if (viewModel.WBS.Value > 0)
+            {
+                var wbs = COMWBSController.GetWBSMappings(viewModel.WBS.Value);
+                viewModel.WBS.Text = wbs.WBSID + " - " + wbs.WBSDescription;
+            }
+            if (viewModel.Professional.Value > 0)
+            {
+                var profesional = COMProfessionalController.Get(siteUrl, viewModel.Professional.Value);
+                viewModel.Professional.Text = profesional.Name + " - " + profesional.Position;
+            }
 
             ViewData.Model = viewModel;
             var view = ViewEngines.Engines.FindView(ControllerContext, RelativePath, null);
@@ -102,7 +117,7 @@ namespace MCAWebAndAPI.Web.Controllers
             service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
             int? ID = null;
-            ID = service.Create(viewModel);
+            ID = service.Create(ref viewModel);
             Task createApplicationDocumentTask = service.CreateAttachmentAsync(ID, viewModel.Documents);
             Task allTasks = Task.WhenAll(createApplicationDocumentTask);
 
@@ -116,11 +131,11 @@ namespace MCAWebAndAPI.Web.Controllers
                 return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
             }
 
-            return RedirectToAction("Print",
-                "FINPettyCashReimbursement",
+            return RedirectToAction("Index", "Success",
                 new
                 {
-                    ID = ID
+                    successMessage = string.Format(viewModel.Operation==Operations.c ? SuccessMsgFormatCreated : SuccessMsgFormatUpdated, viewModel.TransactionNo),
+                    previousUrl = string.Format(FirstPageUrl, siteUrl)
                 });
         }
 
@@ -135,34 +150,6 @@ namespace MCAWebAndAPI.Web.Controllers
             {
                 e.ID,
                 Title = e.Title + " - " + e.Name
-            }), JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult GetProfessional()
-        {
-            var siteUrl = SessionManager.Get<string>("SiteUrl") ?? ConfigResource.DefaultBOSiteUrl;
-            service.SetSiteUrl(siteUrl);
-
-            var vendors = FinService.SharedService.GetProfessionalMaster(siteUrl);
-
-            return Json(vendors.Select(e => new
-            {
-                e.ID,
-                e.Title
-            }), JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult GetWBS()
-        {
-            var siteUrl = SessionManager.Get<string>("SiteUrl") ?? ConfigResource.DefaultBOSiteUrl;
-            service.SetSiteUrl(siteUrl);
-
-            var wbs = FinService.SharedService.GetWBSMaster(siteUrl);
-
-            return Json(wbs.Select(e => new
-            {
-                e.ID,
-                Title = e.Title + " - " + e.WBSDescription
             }), JsonRequestBehavior.AllowGet);
         }
 
@@ -190,14 +177,14 @@ namespace MCAWebAndAPI.Web.Controllers
                 ControllerName = PettyCashReimbursement_ControllerName,
                 ActionName = Vendor_ActionName,
                 ValueField = ValueField,
-                TextField = TextField,
+                TextField = "Title",
                 Value = viewModel.Vendor.Value
             };
 
             viewModel.Professional = new AjaxComboBoxVM
             {
-                ControllerName = PettyCashReimbursement_ControllerName,
-                ActionName = Professional_ActionName,
+                ControllerName = "COMProfessional",
+                ActionName = "GetForCombo",
                 ValueField = ValueField,
                 TextField = TextField,
                 Value = viewModel.Professional.Value
@@ -205,19 +192,19 @@ namespace MCAWebAndAPI.Web.Controllers
 
             viewModel.WBS = new AjaxComboBoxVM
             {
-                ControllerName = PettyCashReimbursement_ControllerName,
-                ActionName = WBS_ActionName,
-                ValueField = ValueField,
-                TextField = TextField,
+                ControllerName = "COMWBS",
+                ActionName = "GetAllAsJsonResult",
+                ValueField = "ID",
+                TextField = "Long",
                 Value = viewModel.WBS.Value
             };
 
             viewModel.GL = new AjaxCascadeComboBoxVM
             {
-                ControllerName = PettyCashReimbursement_ControllerName,
-                ActionName = GL_ActionName,
-                ValueField = ValueField,
-                TextField = TextField,
+                ControllerName = "COMMGL",
+                ActionName = "GetAllAsJsonResult",
+                ValueField = "ID",
+                TextField = "Long",
                 Value = viewModel.GL.Value
             };
 
