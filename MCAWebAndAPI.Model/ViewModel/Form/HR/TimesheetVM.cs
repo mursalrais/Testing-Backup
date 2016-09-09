@@ -15,8 +15,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
     public class TimesheetVM : Item
     {
 
-        public DataTable dtDetails { get; set; } = new DataTable();
+      public DataTable dtDetails { get; set; } = new DataTable();
 
+      
         //[UIHint("Date")]
         //public DateTime? Period { get; set; } = DateTime.Today;
 
