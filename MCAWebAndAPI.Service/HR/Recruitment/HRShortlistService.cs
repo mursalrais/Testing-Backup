@@ -356,11 +356,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             
         }
 
-        public void SendEmailValidation(string emailTo, string position, string emailMessages)
+        public void SendEmailValidation(List<string> emailTo, string position, string emailMessages)
         {
             try
             {
-                EmailUtil.Send(emailTo, "Shortlist Candidate for Position " + position, emailMessages);
+                EmailUtil.SendMultiple(emailTo, "Shortlist Candidate for Position " + position, emailMessages);
             }
             catch (Exception e)
             {
