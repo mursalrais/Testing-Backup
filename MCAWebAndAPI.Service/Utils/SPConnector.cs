@@ -791,5 +791,41 @@ namespace MCAWebAndAPI.Service.Utils
             clientContext.Dispose();
 
         }
+
+        public static string GetAttachFileName(string listName, int? ID, string siteUrl = null)
+        {
+            MapCredential(siteUrl);
+            using (ClientContext context = new ClientContext(siteUrl ?? CurUrl))
+            {
+                SecureString secureString = new SecureString();
+                Password.ToList().ForEach(secureString.AppendChar);
+                context.Credentials = new SharePointOnlineCredentials(UserName, secureString);
+
+                var list = context.Web.Lists.GetByTitle(listName);
+                var filename = "";
+                context.Load(list);
+                context.Load(list.RootFolder);
+                context.Load(list.RootFolder.Folders);
+                context.Load(list.RootFolder.Files);
+                context.ExecuteQuery();
+                Folder fol = context.Web.GetFolderByServerRelativeUrl(list.RootFolder.ServerRelativeUrl + "/Attachments/" + ID);
+                FileCollection files = fol.Files;
+                context.Load(files, fs => fs.Include(f => f.ServerRelativeUrl, f => f.Name, f => f.ServerRelativeUrl));
+
+                try
+                {
+                    context.ExecuteQuery();
+                    foreach (Microsoft.SharePoint.Client.File f in files)
+                    {
+                        filename = f.Name;
+                    }
+                }
+                catch (Exception e)
+                {
+                    throw e;
+                }
+                return filename;
+            }
+        }
     }
 }

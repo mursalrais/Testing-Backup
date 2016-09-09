@@ -14,6 +14,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
         public IEnumerable<AssetLoanAndReturnItemVM> AssetLoanAndReturnItem { get; set; } = new List<AssetLoanAndReturnItemVM>();
 
 
+
         public DateTime _loanDate;
         public ComboBoxVM _professional;
 
@@ -59,7 +60,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
         [DisplayName("Project/Unit")]
         public string Project { get; set; }
 
-    
+
         [DisplayName("Contact No")]
         public string ContactNo { get; set; }
 

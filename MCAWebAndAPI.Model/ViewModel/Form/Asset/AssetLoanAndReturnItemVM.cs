@@ -30,6 +30,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
             }
         }
 
+
         [DisplayName("Est Return Date")]
         [UIHint("Date")]
         public DateTime? EstReturnDate { get; set; } = DateTime.UtcNow;

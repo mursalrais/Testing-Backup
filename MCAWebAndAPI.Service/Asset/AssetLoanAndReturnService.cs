@@ -71,7 +71,80 @@ namespace MCAWebAndAPI.Service.Asset
 
         public bool UpdateHeader(AssetLoanAndReturnHeaderVM viewmodel)
         {
-            throw new NotImplementedException();
+            var columnValues = new Dictionary<string, object>();
+            int? ID = viewmodel.ID;
+
+            viewmodel.CancelURL = _siteUrl + UrlResource.AssetLoanAndReturn;
+            columnValues.Add("Title", "Asset Loan and Return");
+
+            if (viewmodel.LoanDate.HasValue)
+            {
+                columnValues.Add("loandate", viewmodel.LoanDate);
+            }
+            else
+            {
+                columnValues.Add("loandate", null);
+            }
+
+           
+                string mode = null;
+                if (mode == null)
+                {
+                    var breaks = viewmodel.Professional.Value.Split('-');
+                    var getInfo = GetProfMasterInfo(breaks[0], _siteUrl);
+                    if (getInfo != null)
+                    {
+                        //  columnValues.Add("Professional0", new FieldLookupValue { LookupId = Convert.ToInt32(getInfo.ID) });
+                        columnValues.Add("name", new FieldLookupValue { LookupId = Convert.ToInt32(getInfo.ID) });
+                        columnValues.Add("professionalposition", breaks[1]);
+                        columnValues.Add("professionalname", breaks[0]);
+                        columnValues.Add("projectunit", getInfo.CurrentPosition.Text);
+                        columnValues.Add("professionalmobilephonenr", getInfo.MobileNumberOne);
+                        columnValues.Add("Purpose", viewmodel.Purpose);
+                    }
+                }
+                else
+                {
+                  
+                    var getInfo = GetProfMasterInfo(viewmodel.Professional.Value, _siteUrl);
+                    if (getInfo != null)
+                    {
+                        // columnValues.Add("Professional0", new FieldLookupValue { LookupId = Convert.ToInt32(getInfo.ID) });
+                        columnValues.Add("professionalposition", getInfo.Position);
+                        columnValues.Add("professionalname", getInfo.FirstMiddleName);
+                        columnValues.Add("projectunit", getInfo.CurrentPosition.Text);
+                        columnValues.Add("professionalmobilephonenr", getInfo.MobileNumberOne);
+                        columnValues.Add("Purpose", viewmodel.Purpose);
+                    }
+                }
+
+            
+
+
+            try
+            {
+             
+                SPConnector.UpdateListItem(SP_ASSLNR_LIST_NAME, ID, columnValues, _siteUrl);
+
+                //var id = SPConnector.GetLatestListItemID("Asset Disposal", _siteUrl);
+                //var info = SPConnector.GetListItem("Asset Disposal", id, _siteUrl);
+
+                //var loandate = 
+                //if (Convert.ToBoolean(info["Attachments"]) == false)
+                //{
+                //    SPConnector.DeleteListItem("Asset Disposal", id, _siteUrl);
+                //    return 0;
+                //}
+
+
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.Message);
+            }
+            var entitiy = new AssetLoanAndReturnHeaderVM();
+            entitiy = viewmodel;
+            return true;
         }
 
         public void CreateDetails(int? headerID, IEnumerable<AssetLoanAndReturnItemVM> items)
@@ -98,7 +171,29 @@ namespace MCAWebAndAPI.Service.Asset
 
                 var updatedValues = new Dictionary<string, object>();
                 updatedValues.Add("assetloanandreturn", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
-                updatedValues.Add("assetsubasset", new FieldLookupValue { LookupId = Convert.ToInt32(item.AssetSubAsset.Value.Value) });
+                var caml = @"<View><Query>
+                           <Where>
+                              <Eq>
+                                 <FieldRef Name='ID' />
+                                 <Value Type='Counter'>" + item.AssetSubAsset.Value.Value + @"</Value>
+                              </Eq>
+                           </Where>
+                        </Query>
+                        <ViewFields>
+                           <FieldRef Name='assetsubasset' />
+                           <FieldRef Name='Asset_x0020_Sub_x0020_Asset_x003' />
+                        </ViewFields>
+                        <QueryOptions /></View>";
+                var infoAcquisition = SPConnector.GetList("Asset Acquisition Details", _siteUrl, caml);
+                var assetID = 0;
+                foreach (var i in infoAcquisition)
+                {
+                    if (i["assetsubasset"] as FieldLookupValue != null)
+                    {
+                        assetID = (i["assetsubasset"] as FieldLookupValue).LookupId;
+                    }
+                }
+                updatedValues.Add("assetsubasset", new FieldLookupValue { LookupId = assetID });
                 updatedValues.Add("estreturndate", item.EstReturnDate);
                 updatedValues.Add("returndate", item.ReturnDate);
                 updatedValues.Add("status", "LOAN");
@@ -292,7 +387,7 @@ namespace MCAWebAndAPI.Service.Asset
         public IEnumerable<AssetLoanAndReturnItemVM> GetDetails(int? headerID)
         {
 
-            var caml = @"<View><Query><Where><Eq><FieldRef Name='assetloanandreturn' /><Value Type='Lookup'>" + headerID.ToString() + "</Value></Eq></Where></Query></View>";
+                var caml = @"<View><Query><Where><Eq><FieldRef Name='assetloanandreturn' /><Value Type='Lookup'>" + headerID.ToString() + "</Value></Eq></Where></Query></View>";
             var details = new List<AssetLoanAndReturnItemVM>();
 
             foreach (var item in SPConnector.GetList(SP_ASSLNRDetails_LIST_NAME, _siteUrl, caml))
@@ -321,21 +416,23 @@ namespace MCAWebAndAPI.Service.Asset
         {
             var ListAssetSubAsset = SPConnector.GetListItem("Asset Master", (item["assetsubasset"] as FieldLookupValue).LookupId, _siteUrl);
 
-            AjaxComboBoxVM _assetSubAsset = new AjaxComboBoxVM();
+                AjaxComboBoxVM _assetSubAsset = new AjaxComboBoxVM();
             _assetSubAsset.Value = (item["assetsubasset"] as FieldLookupValue).LookupId;
             _assetSubAsset.Text = Convert.ToString(ListAssetSubAsset["AssetID"]) + " - " + Convert.ToString(ListAssetSubAsset["Title"]);
 
             var model = new AssetLoanAndReturnItemVM();
             model.ID = Convert.ToInt32(item["ID"]);
-
+           
             model.EstReturnDate = Convert.ToDateTime(item["estreturndate"]);
-         
+            model.ReturnDate = Convert.ToDateTime(item["returndate"]);
+
 
             DateTime? DT = new DateTime();
             if (Convert.ToDateTime(item["returndate"]) == DateTime.MinValue)
             {
                 model.ReturnDate = null;
-            }else
+            }
+            else
             {
                 model.ReturnDate = Convert.ToDateTime(item["returndate"]);
             }
@@ -346,13 +443,20 @@ namespace MCAWebAndAPI.Service.Asset
             return model;
         }
 
-        public IEnumerable<AssetMasterVM> GetAssetSubAsset()
+        public IEnumerable<AssetAcquisitionItemVM> GetAssetSubAsset()
         {
-
-            var models = new List<AssetMasterVM>();
-
-
-            foreach (var item in SPConnector.GetList("Asset Master", _siteUrl))
+            var models = new List<AssetAcquisitionItemVM>();
+            var caml = @"<View><Query>
+                        <Where>
+                            <Eq>
+                                <FieldRef Name='assetsubasset' />
+                           </Eq>
+                        </Where></Query>
+                    <ViewFields> 
+                        <FieldRef Name='Title' />
+                        <FieldRef Name='AssetID' />
+                    </ViewFields><QueryOptions /></View>";
+            foreach (var item in SPConnector.GetList("Asset Acquisition Details", _siteUrl))
             {
                 models.Add(ConvertToModelAssetSubAsset(item));
             }
@@ -360,21 +464,54 @@ namespace MCAWebAndAPI.Service.Asset
             return models;
         }
 
-
-
-        private AssetMasterVM ConvertToModelAssetSubAsset(ListItem item)
+        private AssetAcquisitionItemVM ConvertToModelAssetSubAsset(ListItem item)
         {
-            var viewModel = new AssetMasterVM();
+            var viewModel = new AssetAcquisitionItemVM();
 
             viewModel.ID = Convert.ToInt32(item["ID"]);
-            viewModel.AssetNoAssetDesc.Value = Convert.ToString(item["AssetID"]);
-            viewModel.AssetDesc = Convert.ToString(item["Title"]);
-
-
-
-
+            var assetID = "";
+            //getInfo Asset Master
+            if ((item["assetsubasset"] as FieldLookupValue) != null)
+            {
+                assetID = (item["assetsubasset"] as FieldLookupValue).LookupValue;
+            }
+            var info = GetInfoAssetMaster("Asset Master", assetID, _siteUrl);
+            viewModel.AssetSubAsset.Text = Convert.ToString(info.AssetNoAssetDesc.Text) + "-" + Convert.ToString(info.AssetDesc);
             return viewModel;
         }
+
+        private AssetMasterVM GetInfoAssetMaster(string listname, string assetID, string _siteUrl)
+        {
+            var caml = @"<View>
+                        <Query>
+                           <Where>
+                              <Eq>
+                                 <FieldRef Name='AssetID' />
+                                 <Value Type='Text'>" + assetID + @"</Value>
+                              </Eq>
+                           </Where>
+                        </Query>
+                        <ViewFields>
+                           <FieldRef Name='AssetID' />
+                           <FieldRef Name='ID' />
+                           <FieldRef Name='Title' />
+                        </ViewFields>
+                        <QueryOptions /></View>";
+            var list = SPConnector.GetList(listname, _siteUrl, caml);
+            var model = new AssetMasterVM();
+            foreach (var item in list)
+            {
+                model.ID = Convert.ToInt32(item["ID"]);
+                model.AssetNoAssetDesc.Text = Convert.ToString(item["AssetID"]);
+                model.AssetDesc = Convert.ToString(item["Title"]);
+            }
+
+            return model;
+        }
+
+        
+
+
 
         public IEnumerable<AssetMasterVM> GetAssetLoanAndReturn()
         {

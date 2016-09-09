@@ -36,8 +36,10 @@ namespace MCAWebAndAPI.Service.Asset
 
         public AssignmentOfAssetVM GetHeader(int? ID, string SiteUrl)
         {
+            var filename = SPConnector.GetAttachFileName("Asset Assignment", ID, _siteUrl);
             var listItem = SPConnector.GetListItem("Asset Assignment", ID, SiteUrl);
             var viewModel = new AssignmentOfAssetVM();
+            viewModel.filename = filename;
             viewModel.position = listItem["position"].ToString();
             viewModel.nameOnly = listItem["assetholder"].ToString();
             viewModel.TransactionType = Convert.ToString(listItem["Title"]);
@@ -657,7 +659,7 @@ namespace MCAWebAndAPI.Service.Asset
         }
 
         private AssignmentOfAssetDetailsVM ConvertToDetails(ListItem item)
-        {
+        {            
             var ListAssetSubAsset = SPConnector.GetListItem("Asset Master", (item["assetsubasset"] as FieldLookupValue).LookupId, _siteUrl);
 
             AjaxComboBoxVM _assetSubAsset = new AjaxComboBoxVM();
