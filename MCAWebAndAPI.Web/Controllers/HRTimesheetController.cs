@@ -388,7 +388,8 @@ namespace MCAWebAndAPI.Web.Controllers
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl + strPages);
         }
 
-        public ActionResult PrintTimesheet(FormCollection form, TimesheetVM viewModel)
+        [HttpPost]
+        public ActionResult PrintTimesheet(TimesheetVM viewModel)
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _timesheetService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
