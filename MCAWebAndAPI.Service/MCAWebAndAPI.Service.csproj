@@ -282,6 +282,8 @@
     <Compile Include="JobSchedulers\Schedulers\PSAManagementScheduler.cs" />
     <Compile Include="JobSchedulers\Schedulers\TaskCalculationScheduler.cs" />
     <Compile Include="JobSchedulers\Schedulers\TimesheetManagementScheduler.cs" />
+    <Compile Include="Procurement\IVendorService.cs" />
+    <Compile Include="Procurement\VendorService.cs" />
     <Compile Include="ProjectManagement\Common\IProjectHierarchyService.cs" />
     <Compile Include="ProjectManagement\Common\ProjectHierarchyService.cs" />
     <Compile Include="HR\Common\CalendarService.cs" />
