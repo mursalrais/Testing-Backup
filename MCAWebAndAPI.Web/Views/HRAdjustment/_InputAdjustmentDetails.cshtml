@@ -31,7 +31,7 @@
                      ).Width(150);
 
         columns.Bound(p => p.ajusmentType).ClientTemplate("#= ajusmentType.Text #" +
-                        "<input type='hidden' name='AdjustmentDetails[#= GetDetailAdjustment(data)#].ajusmentType.Text' value='#= ajusmentType.Text #' />"
+                        "<input type='hidden' id='ajusmentType#= GetDetailAdjustment(data)#' name='AdjustmentDetails[#= GetDetailAdjustment(data)#].ajusmentType.Text' value='#= ajusmentType.Text #' />"
                       )
                       .EditorViewData(new
                       {
