@@ -63,6 +63,16 @@ namespace MCAWebAndAPI.Web.Controllers
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             string period = Convert.ToString(viewModel.periodDate) ;
+            bool checkadjust;
+
+            checkadjust = _service.CheckRequest(viewModel);
+
+            if (checkadjust == true)
+            {
+                Response.TrySkipIisCustomErrors = true;
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse("professional with same adjustment type already add in same period..!!");
+            }
 
             try
             {

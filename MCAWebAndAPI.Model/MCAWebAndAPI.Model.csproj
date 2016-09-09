@@ -303,6 +303,7 @@
     <Compile Include="ViewModel\Form\Procurement\PurchaseOrderVM.cs" />
     <Compile Include="ViewModel\Form\Procurement\PurchaseOrderHeaderVM.cs" />
     <Compile Include="ViewModel\Form\Procurement\PurchaseOrderItemVM.cs" />
+    <Compile Include="ViewModel\Form\Procurement\VendorVM.cs" />
     <Compile Include="ViewModel\Form\Shared\ProfessionalVM.cs" />
     <Compile Include="ViewModel\Form\Shared\VendorVM.cs" />
     <Compile Include="ViewModel\Gantt\GanttDependenciesVM.cs" />

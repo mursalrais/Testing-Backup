@@ -39,9 +39,9 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
         const string LIST_WF_MAPPING = "Workflow Mapping Master";
 
         const string LIST_PROFESSIONAL = "Professional Master";
-        private List<DateTime> lstpublicHoliday;
-        private Dictionary<DateTime, double> lstCompensatory;
-        private Dictionary<DateTime, string> lstDayOff;
+        //private List<DateTime> lstpublicHoliday;
+        //private Dictionary<DateTime, double> lstCompensatory;
+        //private Dictionary<DateTime, string> lstDayOff;
 
         private IDataMasterService _dataService;
        // private IProfessionalService _professionalService;
@@ -375,7 +375,7 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
         private async Task<List<DateTime>> GetPublicHoliday(string strUrl)
         {
             var listItem = SPConnector.GetList(LIST_PUB_HOLIDAY, strUrl);
-            //List<DateTime> lstpublicHoliday = new List<DateTime>();
+            List<DateTime> lstpublicHoliday = new List<DateTime>();
             lstpublicHoliday = new List<DateTime>();
             foreach (var item in listItem)
             {
@@ -388,7 +388,7 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
 
         private async Task<Dictionary<DateTime, double>> GetCompensatory(string strUrl, string strName)
         {
-            //  Dictionary<DateTime, double> lstCompensatory = new Dictionary<DateTime, double>();
+            Dictionary<DateTime, double> lstCompensatory = new Dictionary<DateTime, double>();
             lstCompensatory = new Dictionary<DateTime, double>();
             var caml = @"<View><Query><Where><And><Eq><FieldRef Name='professional' />
                         <Value Type='Lookup'>" + strName + "</Value></Eq>" +
@@ -454,7 +454,11 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                     var dateRange = startdate.EachDay(finishdate);
                     foreach (var itm in dateRange)
                     {
-                        lstDayOff.Add(itm, typeDayoff + ";" + fullhalf + ";" + otherCat);
+                        if (!lstDayOff.ContainsKey(itm))
+                        {
+                            lstDayOff.Add(itm, typeDayoff + ";" + fullhalf + ";" + otherCat);
+                        }
+                      
                     }
 
                 }
@@ -469,13 +473,26 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
             var finishDate = period.GetLastPayrollDay();
             var dateRange = startDate.EachDay(finishDate);
 
-            var listHoliday = GetPublicHoliday(_siteUrl);
-            var listDayOff = GetUserDayOff(_siteUrl, strName);
-            var listCompen = GetCompensatory(_siteUrl, strName);
+            //var listHoliday = GetPublicHoliday(_siteUrl);
+            //var listDayOff = GetUserDayOff(_siteUrl, strName);
+            //var listCompen = GetCompensatory(_siteUrl, strName);
 
-            Task allTask = Task.WhenAll(listHoliday, listDayOff, listCompen);
+          
 
-            await allTask;
+            Task<List<DateTime>> getPublicHolidayTask = GetPublicHoliday(_siteUrl);
+            Task<Dictionary<DateTime, double>> getCompensatoryTask = GetCompensatory(_siteUrl, strName);
+            Task<Dictionary<DateTime, string>> getUserDayOffTask = GetUserDayOff(_siteUrl, strName);
+
+            var lstpublicHoliday = await getPublicHolidayTask;
+            var lstCompensatory = await getCompensatoryTask;
+            var lstDayOff = await getUserDayOffTask;
+
+            //List <DateTime> lstpublicHoliday = new List<DateTime>();
+            //Dictionary<DateTime, double> lstCompensatory = new Dictionary<DateTime, double>();
+            //Dictionary<DateTime, string> lstDayOff = new Dictionary<DateTime, string>();
+            //Task allTask = Task.WhenAll(listHoliday, listDayOff, listCompen);
+
+            //await allTask;
 
             var timesheetDetails = new List<TimesheetDetailVM>();
 

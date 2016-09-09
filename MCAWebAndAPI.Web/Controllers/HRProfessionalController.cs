@@ -125,7 +125,15 @@ namespace MCAWebAndAPI.Web.Controllers
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse(e.Message);
             }
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl+"/"+UrlResource.ProfessionalData);
+            if (viewModel.ValidationAction == "ask-hr-to-validate-action")
+            {
+                return JsonHelper.GenerateJsonSuccessResponse(siteUrl + "/" + UrlResource.ProfessionalData);
+            }
+            else
+            {
+                return JsonHelper.GenerateJsonSuccessResponse(siteUrl + "/" + UrlResource.ProfessionalMaster);
+            }
+            
         }
 
         private IEnumerable<DependentDetailVM> BindDependentDetails(FormCollection form, IEnumerable<DependentDetailVM> dependentDetails)

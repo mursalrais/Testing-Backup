@@ -475,6 +475,15 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to /Lists/Professional%20Master/Need%20Validation.aspx.
+        /// </summary>
+        public static string ProfessionalMaster {
+            get {
+                return ResourceManager.GetString("ProfessionalMaster", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to /SitePages/Professional%20Performance%20Evaluation%20Approver.aspx.
         /// </summary>
         public static string ProfessionalPerformanceEvaluationApprover {

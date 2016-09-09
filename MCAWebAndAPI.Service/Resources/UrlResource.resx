@@ -320,4 +320,7 @@
   <data name="Timesheet" xml:space="preserve">
     <value>/Lists/Timesheet</value>
   </data>
+  <data name="ProfessionalMaster" xml:space="preserve">
+    <value>/Lists/Professional%20Master/Need%20Validation.aspx</value>
+  </data>
 </root>

@@ -15,8 +15,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
     public class TimesheetVM : Item
     {
 
-        public DataTable dtDetails { get; set; } = new DataTable();
+      public DataTable dtDetails { get; set; } = new DataTable();
 
+      
         //[UIHint("Date")]
         //public DateTime? Period { get; set; } = DateTime.Today;
 
@@ -45,7 +46,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [Required(ErrorMessage = "Professional ID Field Is Required")]
         [DisplayName("Professional ID")]
 
-
+     
         public string ProfesionalUserLogin { get; set; }
 
         // public string UserEmail { get; set; }
