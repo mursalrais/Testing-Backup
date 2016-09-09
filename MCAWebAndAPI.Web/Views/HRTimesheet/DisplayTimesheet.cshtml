@@ -249,7 +249,7 @@
                         &nbsp;<button id="delete-button-all" class="btn btn-primary pull-right" type="submit">Delete All Working Day</button>
                         <button id="delete-button-selected" class="btn btn-primary pull-right" type="submit">Delete Selected Working Day</button>
 
-                        @*<button id="print-button-pdf" class="btn btn-primary pull-right" type="submit" >Print to PDF</button>*@
+                        <button id="print-button-pdf" class="btn btn-primary pull-right" type="submit" >Print to PDF</button>
 
                     </div>
                     <br />
@@ -314,20 +314,20 @@
 
     <script>
 
-        //function printTimesheet() {
+        function printTimesheet() {
 
-        // //   $("#print-button")
-        // //.click(function () {
+         //   $("#print-button")
+         //.click(function () {
 
-        // //    $('form').prop('action', '/HRTimesheet/PrintTimesheet');
-        // //    $("form").submit();
+         //    $('form').prop('action', '/HRTimesheet/PrintTimesheet');
+         //    $("form").submit();
 
-        // //});
-        //    //PrintTimesheet
+         //});
+            //PrintTimesheet
 
-        //    $('form').prop('action', '/HRTimesheet/PrintTimesheet');
-        //    $("form").submit();
-        //}
+            $('form').prop('action', '/HRTimesheet/PrintTimesheet');
+            $("form").submit();
+        }
 
         function save(status, level) {
             $("#TimesheetStatus").val(status);
@@ -485,13 +485,13 @@
                 $('form').prop('action', '/HRTimesheet/UpdatePeriod');
             });
 
-     //   $("#print-button-pdf")
-     //.click(function () {
+        $("#print-button-pdf")
+     .click(function () {
 
-     //   // $('form').prop('action', '/HRTimesheet/PrintTimesheet');
-     //    window.top.location.href = $("#URL").val() + '/sitePages/hrInsuranceView.aspx';
+        // $('form').prop('action', '/HRTimesheet/PrintTimesheet');
+         window.top.location.href = $("#URL").val() + '/sitePages/hrInsuranceView.aspx';
 
-     //});
+     });
 
 
         function OnSelectProfessionalName(e) {

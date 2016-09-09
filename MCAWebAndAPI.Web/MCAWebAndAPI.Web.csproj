@@ -1179,6 +1179,7 @@
     <Content Include="Views\HRTimesheet\PrintTimesheet.cshtml" />
     <Content Include="Views\HRTimesheet\NotAuthorized.cshtml" />
     <Content Include="Views\HRTimesheet\ViewProfessional.cshtml" />
+    <Content Include="Views\HRTimesheet\DisplayTimesheet.cshtml" />
     <Content Include="Views\ASSAssetAcquisition\_DisplayGrid.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

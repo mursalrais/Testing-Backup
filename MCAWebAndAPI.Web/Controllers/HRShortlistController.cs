@@ -85,7 +85,7 @@ namespace MCAWebAndAPI.Web.Controllers
             {
                 foreach (string mail in words)
                 {
-                    string bodymailREQ = string.Format(EmailResource.EmailShortlistToHR, _service.GetMailUrl(Convert.ToInt32(viewModel.Position), viewModel.useraccess));
+                    string bodymailREQ = string.Format(EmailResource.EmailShortlistToHR, _service.GetMailUrl(Convert.ToInt32(viewModel.Position), viewModel.useraccess), viewModel.PositionName);
                     if (mail != "")
                     {
                         _service.SendEmailValidation(mail, viewModel.PositionName, bodymailREQ);
