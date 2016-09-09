@@ -28,12 +28,7 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             return View();
         }
-
-        public ActionResult AllWBS()
-        {
-            return View();
-        }
-
+        
         public ActionResult GetProjectHealthStatusChartByActivity(string siteUrl = null)
         {
             _service.SetSiteUrl(siteUrl);

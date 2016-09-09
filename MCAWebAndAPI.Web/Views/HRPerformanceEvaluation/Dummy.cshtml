@@ -1,0 +1,18 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model IEnumerable<PerformanceEvaluationDetailVM>
+
+@{ 
+    var index = 0;
+}
+
+<div class="col-md-12" style="margin-bottom: 20px">
+    @(Html.Kendo().Grid(Model)
+        .Name("Details")
+        .Columns(columns =>
+        {
+        columns.Bound(p => p.EmployeeName);
+        columns.Bound(p => p.EvaluationStatus);
+        columns.Bound(p => p.EvaluationIndicator).Template(@<div style="width:25px;height: 25px;-webkit-border-radius: 25px;-moz-border-radius: 25px;border-radius: 25px;background: @item.EvaluationIndicator;"></div>);
+        })
+        );
+</div>

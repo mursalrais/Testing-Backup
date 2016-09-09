@@ -31,14 +31,14 @@
                     Print
                 </button>
 
-                <button id="submit-button" class="btn btn-primary" type="submit">
+                <button id="submit-button" class="btn btn-primary" type="submit" value="Save" name="actionType">
                     <i class="fa fa-save"></i>
                     Submit
                 </button>
 
-                <button id="cancel-button" class="btn btn-primary" type="reset">
-                    Cancel
-                </button>
+                <a href="@ViewBag.CancelUrl" target='_parent'>
+                    <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
+                </a>
             </div>
         </div>
     </div>
@@ -154,6 +154,13 @@
     </script>
 }
 
+
+<style media="screen">
+    .k-button-icontext {
+        height: 35px;
+        margin-left: 5px;
+    }
+</style>
 
 
 

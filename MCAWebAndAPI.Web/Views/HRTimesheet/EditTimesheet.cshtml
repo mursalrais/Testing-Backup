@@ -4,304 +4,210 @@
 
 
 
-<div class="form-horizontal">
+    <div class="form-horizontal">
 
-    <fieldset>
-
-        <legend>Timesheet</legend>
-        @*@Html.DisplayFor(m => m.UserLogin)*@
-        @using (Ajax.BeginForm("", "HRTimesheet", new AjaxOptions
-        {
-            OnComplete = "onCompleteUpdatePeriod",
-            OnBegin = "onBeginForm",
-            OnSuccess = "onSuccessFormEmbed",
-            OnFailure = "onFailureForm"
-        }, new { id = "FormUpdatePeriod" }))
-        {
+        <fieldset>
+        
+            <legend>Timesheet</legend>
             <div class="row">
                 <div class="col-sm-6">
-                    @Html.HiddenFor(m => m.ID)
-                    @Html.HiddenFor(m => m.ProfesionalUserLogin)
-                    @Html.HiddenFor(m => m.ProfessionalID)
-                    @Html.HiddenFor(m => m.UserPermission)
-                    @Html.HiddenFor(m => m.Name)
-                    @Html.HiddenFor(m => m.TimesheetStatus)
-                    @Html.HiddenFor(m => m.ApprovalLevel)
-                    @Html.HiddenFor(m => m.StartPeriod)
-                    @Html.HiddenFor(m => m.EndPeriod)
-
-                    <div class="form-group">
-                        @Html.Bootstrap().LabelFor(m => m.Period).Class("col-sm-4 control-label")
-                        <div class="col-sm-8">
-                            @Html.EditorFor(m => m.Period)
+                    @using (Ajax.BeginForm("UpdatePeriod", "HRTimesheet", new AjaxOptions
+                    {
+                        OnComplete = "onCompleteUpdatePeriod",
+                        OnBegin = "onBeginForm",
+                        OnSuccess = "onSuccessFormEmbed",
+                        OnFailure = "onFailureForm"
+                    }, new { id = "FormUpdatePeriod" }))
+                    {
+                        @Html.HiddenFor(m => m.ID)
+                        @Html.HiddenFor(m => m.UserLogin)
+                        @Html.HiddenFor(m => m.ProfessionalID)
+                        @Html.DisplayFor(m => m.UserPermission)
+                        @Html.HiddenFor(m => m.Name)
+                        @Html.HiddenFor(m => m.TimesheetStatus)
+                        @Html.HiddenFor(m => m.ApprovalLevel)
+                        <div class="form-group">
+                            @Html.Bootstrap().LabelFor(m => m.Period).Class("col-sm-4 control-label")
+                            <div class="col-sm-8">
+                                @Html.EditorFor(m => m.Period)
+                            </div>
                         </div>
-                    </div>
-                   
-                    <div class="form-group">
-                        @Html.Bootstrap().LabelFor(m => m.ProfessionalName).Class("col-sm-4 control-label")
-                        <div class="col-sm-8">
-                            @Html.EditorFor(m => m.ProfessionalName)
+                        <div class="form-group">
+                            @Html.Bootstrap().LabelFor(m => m.ProfessionalName).Class("col-sm-4 control-label")
+                            <div class="col-sm-8">
+                                @Html.EditorFor(m => m.ProfessionalName)
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        @Html.Bootstrap().LabelFor(m => m.ProjectUnit).Class("col-sm-4 control-label")
-                        <div class="col-sm-8">
-                            @Html.DisplayFor(m => m.ProjectUnit)
+                        <div class="form-group">
+                            @Html.Bootstrap().LabelFor(m => m.ProjectUnit).Class("col-sm-4 control-label")
+                            <div class="col-sm-8">
+                                @Html.DisplayFor(m => m.ProjectUnit)
+                            </div>
                         </div>
-                    </div>
-
-
-                    <button id="submit-button-update-period" class="btn btn-primary pull-right" type="submit">Set</button>
-
-
-
-
+                        <button id="submit-button-update-period" class="btn btn-primary pull-right" type="submit">Set</button>
+                    }
                 </div>
                 <div class="col-sm-6">
 
-
                 </div>
             </div>
-
-            <legend>Approval Path</legend>
-
+            <br/>
+            <legend>Holidays and Day-Off</legend>
             <div class="row">
-                @Html.Partial("_WorkflowPathDetails", Model.WorkflowItems)
+                <div class="col-sm-12">
+                    @(Html.Kendo()
+                          .Grid<TimesheetDetailVM>()
+                          .Name("TimesheetDetails_Holidays")
+                          .Columns(columns =>
+                          {
+                              columns.Bound(p => p.Date).Format("{0:dddd, MMM d, yyyy}");
+                              columns.Bound(p => p.Type);
+                              columns.Bound(p => p.FullHalf)
+                                  .ClientFooterTemplate("Total Day: #=sum#")
+                                  .ClientGroupFooterTemplate("Subtotal Day: #=sum#");
+                          })
+                          .DataSource(dataSource => dataSource
+                              .Ajax()
+                              .Aggregates(aggregates =>
+                              {
+                                  aggregates.Add(p => p.FullHalf).Sum();
+                              })
+                              .Read("GridHolidays_Read", "HRTimesheet")
+                              .Group(group => group.Add(p => p.Type))
+                          )
+                          )
+                </div>
             </div>
-
-
-        }
-
-        <br />
-        <legend>Holidays & Public Holiday</legend>
-        <div class="row">
-            <div class="col-sm-12">
-                @(Html.Kendo()
-                  .Grid<TimesheetDetailVM>()
-                  .Name("TimesheetDetails_Holidays")
-                  .Columns(columns =>
-                  {
-                      columns.Bound(p => p.Date).Format("{0:dddd, MMM d, yyyy}");
-                      columns.Bound(p => p.Type);
-                      columns.Bound(p => p.FullHalf)
-                          .ClientFooterTemplate("Total Day: #=sum#")
-                          .ClientGroupFooterTemplate("Subtotal Day: #=sum#");
-                  })
-                  .DataSource(dataSource => dataSource
-                      .Ajax()
-                      .Aggregates(aggregates =>
-                      {
-                          aggregates.Add(p => p.FullHalf).Sum();
-                      })
-                      .Read("GridHolidays_Read", "HRTimesheet")
-                      .Group(group => group.Add(p => p.Type))
-                  )
-                )
+            <br/>
+            <legend>Working Days</legend>
+            <div class="row">
+                <div class="col-sm-12">
+                    @(Html.Kendo()
+                          .Grid<TimesheetDetailVM>()
+                          .Name("TimesheetDetails_WorkingDays")
+                          .Columns(columns =>
+                          {
+                              columns.Bound(p => p.Date).Format("{0:dddd, MMM d, yyyy}");
+                              columns.Bound(p => p.Location);
+                              columns.Bound(p => p.LocationID).Hidden();
+                              columns.Bound(p => p.ID).Hidden(); ;
+                              columns.Bound(p => p.EditMode).Hidden(); 
+                              columns.Bound(p => p.FullHalf)
+                              .ClientFooterTemplate("Total Day: #=sum#");
+                              columns.Bound(p => p.Type).Hidden()
+                                  .ClientGroupHeaderTemplate("Working Days");
+                          })
+                          .DataSource(dataSource => dataSource
+                              .Ajax()
+                              .Read("GridWorkingDays_Read", "HRTimesheet")
+                              .Sort(s => s.Add(p => p.Date).Ascending())
+                              .Aggregates(aggregates =>
+                              {
+                                  aggregates.Add(p => p.FullHalf).Sum();
+                              })
+                              .Group(group => group.Add(p => p.Type))
+                          )
+                          )
+                </div>
             </div>
-        </div>
-        <br />
-        <legend>Day-Off</legend>
-        <div class="row">
-            <div class="col-sm-12">
-                @(Html.Kendo()
-                  .Grid<TimesheetDetailVM>()
-                  .Name("TimesheetDetails_DayOff")
-                  .Columns(columns =>
-                  {
-                      columns.Bound(p => p.Date).Format("{0:dddd, MMM d, yyyy}");
-                      columns.Bound(p => p.Type).Hidden();
-                      columns.Bound(p => p.SubType).Title("Type");
-                      columns.Bound(p => p.FullHalf)
-                          .ClientFooterTemplate("Total Day: #=sum#")
-                          .ClientGroupFooterTemplate("Subtotal Day: #=sum#");
-                  })
-                  .DataSource(dataSource => dataSource
-                      .Ajax()
-                      .Aggregates(aggregates =>
-                      {
-                          aggregates.Add(p => p.FullHalf).Sum();
-                      })
-                      .Read("GridDayoff_Read", "HRTimesheet")
-                      .Group(group => group.Add(p => p.SubType))
-                  )
-                )
-            </div>
+            <br/>
+            <br/>
 
-        </div>
-        <br />
-        <legend>Compensatory Time</legend>
-        <div class="row">
-            <div class="col-sm-12">
-                @(Html.Kendo()
-                  .Grid<TimesheetDetailVM>()
-                  .Name("TimesheetDetails_Compen")
-                  .Columns(columns =>
-                  {
-                      columns.Bound(p => p.Date).Format("{0:dddd, MMM d, yyyy}");
-                      columns.Bound(p => p.Type);
-                      columns.Bound(p => p.FullHalf)
-                          .ClientFooterTemplate("Total Day: #=sum#")
-                          .ClientGroupFooterTemplate("Subtotal Day: #=sum#");
-                  })
-                  .DataSource(dataSource => dataSource
-                      .Ajax()
-                      .Aggregates(aggregates =>
-                      {
-                          aggregates.Add(p => p.FullHalf).Sum();
-                      })
-                      .Read("GridDayCompen_Read", "HRTimesheet")
-                      .Group(group => group.Add(p => p.Type))
-                  )
-                )
-            </div>
-
-        </div>
-        <br />
-        <legend>Working Days</legend>
-        <div class="row">
-            <div class="col-sm-12">
-                @(Html.Kendo()
-                  .Grid<TimesheetDetailVM>()
-                  .Name("TimesheetDetails_WorkingDays")
-                  .Columns(columns =>
-                  {
-                      columns.Bound(p => p.Date).Format("{0:dddd, MMM d, yyyy}");
-                      columns.Bound(p => p.Location);
-                      columns.Bound(p => p.LocationID).Hidden();
-                      columns.Bound(p => p.ID).Hidden();
-                      columns.Bound(p => p.EditMode).Hidden();
-                      columns.Bound(p => p.FullHalf)
-                          .ClientFooterTemplate("Total Day: #=sum#");
-                      columns.Bound(p => p.Type).Hidden()
-                          .ClientGroupHeaderTemplate("Working Days");
-
-                  })
-                  .Events(e =>
-                  {
-
-                  })
-                  .DataSource(dataSource => dataSource
-                      .Ajax()
-                      .Read("GridWorkingDays_Read", "HRTimesheet")
-                      .Sort(s => s.Add(p => p.Date).Ascending())
-                      .Aggregates(aggregates =>
-                      {
-                          aggregates.Add(p => p.FullHalf).Sum();
-                      })
-                      .Group(group => group.Add(p => p.Type))
-                  )
-                )
-            </div>
-        </div>
-        <br />
-        <br />
-        <legend>Add Working Day</legend>
-        <div class="row">
-            <div class="col-sm-6">
-                @using (Ajax.BeginForm("", "HRTimesheet", new AjaxOptions
-                {
-                    OnComplete = "onCompleteAddTimesheet"
-                }, new { id = "FormAddTimesheet" }))
-                {
-
-                    <div class="form-group">
-                        @Html.HiddenFor(m => m.LocationID)
-                        @Html.HiddenFor(m => m.LocationName)
-                        @Html.Bootstrap().LabelFor(m => m.From).Class("col-sm-4 control-label")
-                        <div class="col-sm-8">
-                            @(Html.Kendo().DatePicker()
-                              .Name("From")
-                              .Value(@Model.StartPeriod)
-                              .Min(@Model.StartPeriod.ToString())
-                              .Max(@Model.EndPeriod.ToString())
-                              .Events(e => e.Change("startChange"))
-                              .HtmlAttributes(new { @class = "form-control", style = "width: 100%" })
-                            )
+            <legend>Add Working Day</legend>
+            <div class="row">
+                <div class="col-sm-12">
+                    @using (Ajax.BeginForm("", "HRTimesheet", new AjaxOptions
+                    {
+                        OnComplete = "onCompleteAddTimesheet"
+                    }, new { id = "FormAddTimesheet" }))
+                    {
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                @Html.HiddenFor(m => m.LocationID)
+                                @Html.HiddenFor(m => m.LocationName)
+                                @Html.Bootstrap().LabelFor(m => m.From).Class("col-sm-4 control-label")
+                                <div class="col-sm-8">
+                                    @(Html.Kendo().DatePicker()
+                                          .Name("From")
+                                          .Value(DateTime.Today.AddDays(-7))
+                                          .Max(DateTime.Today)
+                                          .Events(e => e.Change("startChange"))
+                                          .HtmlAttributes(new {@class = "form-control", style = "width: 100%"})
+                                          )
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.Bootstrap().LabelFor(m => m.To).Class("col-sm-4 control-label")
+                                <div class="col-sm-8">
+                                    @(Html.Kendo().DatePicker()
+                                          .Name("To")
+                                          .Value(DateTime.Today)
+                                          .Min(DateTime.Today.AddDays(-31))
+                                          .Max(DateTime.Today)
+                                          .Events(e => e.Change("endChange"))
+                                          .HtmlAttributes(new {@class = "form-control", style = "width: 100%"})
+                                          )
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.Bootstrap().LabelFor(m => m.Location).Class("col-sm-4 control-label")
+                                <div class="col-sm-8">
+                                    @Html.EditorFor(m => m.Location)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.Bootstrap().LabelFor(m => m.IsFullDay).Class("col-sm-4 control-label")
+                                <div class="col-sm-8">
+                                    @Html.EditorFor(m => m.IsFullDay)
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        @Html.Bootstrap().LabelFor(m => m.To).Class("col-sm-4 control-label")
-                        <div class="col-sm-8">
-                            @(Html.Kendo().DatePicker()
-                              .Name("To")
-                              .Value(@Model.EndPeriod)
-                              .Min(@Model.StartPeriod.ToString())
-                              .Max(@Model.EndPeriod.ToString())
-                              .Events(e => e.Change("endChange"))
-                              .HtmlAttributes(new { @class = "form-control", style = "width: 100%" })
-                            )
+                        <div class="col-sm-6">&nbsp;</div>
+                        <div  class="col-sm-12">
+                        <div class="wrpTime" align="center">
+                            &nbsp;<button id="submit-button-add-timesheet" class="btn btn-primary pull-right" type="submit">Add Working Day</button>&nbsp;
+                            &nbsp;<button id="delete-button-all" class="btn btn-primary pull-right" type="submit">Delete All Working Day</button>&nbsp;
+                            &nbsp; <button id="delete-button-selected" class="btn btn-primary pull-right" type="submit">Delete Selected Working Day</button>&nbsp;
                         </div>
-                    </div>
-                    <div class="form-group">
-                        @Html.Bootstrap().LabelFor(m => m.Location).Class("col-sm-4 control-label")
-                        <div class="col-sm-8">
-                            @Html.EditorFor(m => m.Location)
+                           
                         </div>
-                    </div>
-                    <div class="form-group">
-                        @Html.Bootstrap().LabelFor(m => m.IsFullDay).Class("col-sm-4 control-label")
-                        <div class="col-sm-8">
-                            @Html.EditorFor(m => m.IsFullDay)
+                       
+                    }
                         </div>
-                    </div>
+               
+            </div>
+
+
+        </fieldset>
+
+        <div class="form-actions">
+        
+                <div class="row">
                     <div class="col-sm-12">
-                        &nbsp;<button id="submit-button-add-timesheet" class="btn btn-primary pull-right" type="submit">Add Working Day</button>
-                        &nbsp;<button id="delete-button-all" class="btn btn-primary pull-right" type="submit">Delete All Working Day</button>
-                        <button id="delete-button-selected" class="btn btn-primary pull-right" type="submit">Delete Selected Working Day</button>
+                        <button id="submit-button" class="btn btn-success" type="button">
+                            Submit for Approval
+                        </button>
+                        <button id="draft-button" class="btn btn-primary" type="button">
+                            <i class="fa fa-save"></i>
+                            Save as Draft
+                        </button>
+
+                        <button id="approve-button" class="btn btn-success" type="button">
+                           Approve
+                        </button>
+
+                        <button id="reject-button" class="btn btn-primary" type="button">
+                            <i class="fa fa-save"></i>
+                            Reject
+                        </button>
+
                     </div>
-                    <br />
-
-                }
-            </div>
-            <div class="col-sm-6"></div>
+                </div>
+           
         </div>
 
+    </div> 
 
-
-
-
-
-
-
-
-
-
-
-    </fieldset>
-
-
-</div>
-
-<div class="form-actions">
-
-    <div class="row">
-        <div class="col-sm-12">
-            <button id="submit-button" class="btn btn-success" type="submit">
-                Submit for Approval
-            </button>
-            <button id="draft-button" class="btn btn-primary" type="submit">
-                <i class="fa fa-save"></i>
-                Save as Draft
-            </button>
-
-            <button id="print-button" class="btn btn-primary" type="button" onclick="printTimesheet()">
-                <i class="fa fa-save"></i>
-                Print to PDF
-            </button>
-
-            <button id="approve-button" class="btn btn-success" type="submit">
-                Approve
-            </button>
-
-            <button id="reject-button" class="btn btn-primary" type="submit">
-                <i class="fa fa-save"></i>
-                Reject
-            </button>
-
-        </div>
-    </div>
-
-</div>
 <style type="text/css">
         .wrpTime {
         width: 100%;
@@ -314,22 +220,6 @@
 @section scripts{
 
     <script>
-        
-        function printTimesheet() {
-
-         //   $("#print-button")
-         //.click(function () {
-
-         //    $('form').prop('action', '/HRTimesheet/PrintTimesheet');
-         //    $("form").submit();
-
-         //});
-            //PrintTimesheet
-
-            $('form').prop('action', '/HRTimesheet/PrintTimesheet');
-            $("form").submit();
-        }
-
         function save(status, level) {
             $("#TimesheetStatus").val(status);
             $("#ApprovalLevel").val(level);
@@ -353,7 +243,7 @@
                 if (strStatus !== "Draft" && strPermission !== "Professional") {
                     $("#approve-button").show();
                     $("#reject-button").show();
-                }
+                 }
 
                 if (strStatus !== "Draft") {
 
@@ -386,41 +276,35 @@
                         datefrom.enable(false);
                         location.enable(false);
                     }
-                    else if (strPermission === "HR") {
-                        $("#draft-button").hide();
-                    }
+                 else if (strPermission === "HR") {
+                    $("#draft-button").hide();
                 }
+            }
 
-                $("#Location_Value").data("kendoDropDownList").value("xxx");
+        $("#Location_Value").data("kendoDropDownList").value("xxx");
 
-                var professional = $("#ProfessionalName_Value").data("kendoDropDownList");
+        var professional = $("#ProfessionalName_Value").data("kendoDropDownList");
 
 
-                if (strPermission !== "HR") {
-                    professional.enable(false);
-                }
-
-      
-
-            });
-
+        if (strPermission !== "HR") {
+            professional.enable(false);
+        }
 
         $("#draft-button")
-            .click(function () {
+            .click(function() {
 
                 save('Draft', '');
 
             });
 
         $("#submit-button")
-            .click(function () {
-                save('Pending Approval 1 of 3', '1');
+            .click(function() {
+                save('Pending Approval', '1');
 
             });
 
-
         $("#approve-button")
-            .click(function () {
+            .click(function() {
                 var strLevel = $("#ApprovalLevel").val();
                 var nextLevel = "";
                 if (strLevel === "1") {
@@ -438,7 +322,7 @@
             });
 
         $("#reject-button")
-            .click(function () {
+            .click(function() {
                 var strLevel = $("#ApprovalLevel").val();
                 $("#TimesheetStatus").val("Rejected");
                 $("#ApprovalLevel").val(strLevel);
@@ -447,44 +331,27 @@
 
             });
 
-     
 
         $("#delete-button-all")
-            .click(function () {
+            .click(function() {
                 var strID = $("#ID").val();
                 $('form').prop('action', '/HRTimesheet/DeleteAllTimesheet/' + strID);
             });
 
         $("#delete-button-selected")
-            .click(function () {
+            .click(function() {
                 var strID = $("#ID").val();
                 $('form').prop('action', '/HRTimesheet/DeleteSelectedTimesheet/' + strID);
             });
 
         $("#submit-button-add-timesheet")
-            .click(function () {
+            .click(function() {
                 var strID = $("#ID").val();
-                var startPicker = $("#From").data("kendoDatePicker");
-                var endPicker = $("#To").data("kendoDatePicker");
-                var endDate = endPicker.value();
-                var startDate = startPicker.value();
-                endDate = new Date(endDate);
-                startDate = new Date(startDate);
-                if (startDate > endDate) {
-                    alert("Start Date can not be greater than End Date");
-                    return;
-                } else {
-                    $('form').prop('action', '/HRTimesheet/AddTimesheet/' + strID);
-                }
-
-
+                $('form').prop('action', '/HRTimesheet/AddTimesheet/' + strID);
             });
 
 
-        $("#submit-button-update-period")
-            .click(function () {
-                $('form').prop('action', '/HRTimesheet/UpdatePeriod');
-            });
+    });
 
 
         function OnSelectProfessionalName(e) {
@@ -494,7 +361,7 @@
             $.getJSON(url,
                 function(result) {
                     //Project_Unit
-                    $('#ProfesionalUserLogin').prop('value', result[0].OfficeEmail);
+                    $('#UserLogin').prop('value', result[0].OfficeEmail);
                     $('#ProjectUnit').prop('value', result[0].Project_Unit);
                     $('#Name').prop('value', result[0].Name);
                     $('#ProfessionalID').prop('value', result[0].ID);
@@ -507,22 +374,6 @@
             $('#LocationName').prop('value', dataItem.Title);
         }
 
-        function convertUTCDateToLocalDate(date) {
-            var newDate = new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
-
-            var offset = date.getTimezoneOffset() / 60;
-            var hours = date.getHours();
-
-            newDate.setHours(hours - offset);
-
-            return newDate;
-        }
-
-        function addDays(date, days) {
-            var result = new Date(date);
-            result.setDate(result.getDate() + days);
-            return result;
-        }
 
         function onCompleteUpdatePeriod(e) {
             $("#TimesheetDetails_Holidays").data("kendoGrid").dataSource.read();
@@ -531,55 +382,16 @@
             $("#TimesheetDetails_WorkingDays").data("kendoGrid").dataSource.read();
             $("#TimesheetDetails_WorkingDays").data("kendoGrid").refresh();
 
-            $("#TimesheetDetails_DayOff").data("kendoGrid").dataSource.read();
-            $("#TimesheetDetails_DayOff").data("kendoGrid").refresh();
-
-            $("#TimesheetDetails_Compen").data("kendoGrid").dataSource.read();
-            $("#TimesheetDetails_Compen").data("kendoGrid").refresh();
-
-            $("#WorkflowItems").data("kendoGrid").dataSource.read();
-            $("#WorkflowItems").data("kendoGrid").refresh();
-
             var periodPicker = $("#Period").data("kendoDatePicker");
             var period = periodPicker.value();
 
-            period = new Date(convertUTCDateToLocalDate(period));
-
-
             var startPicker = $("#From").data("kendoDatePicker");
+            startPicker.min(period);
+
             var endPicker = $("#To").data("kendoDatePicker");
-
-            var endDate = addDays(period, 19);
-
-
-            var startDate = addDays(period, -11);
-
-            var iDate = startDate.getDate();
-
-            if (iDate === 19) {
-                startDate = addDays(period, -10);
-            }
-
-            endDate = new Date(endDate);
-            startDate = new Date(startDate);
-
-            var newDateStart = kendo.toString(startDate, 'M/dd/yyyy');
-            startDate.setDate(startDate.getDate());
-            endDate.setDate(endDate.getDate());
-            startPicker.min(newDateStart);
-            startPicker.max(endDate);
-            startPicker.value(newDateStart);
-
-            var newDateEnd = kendo.toString(endDate, 'MM/dd/yyyy');
-            endPicker.min(newDateStart);
-            endPicker.max(endDate);
-            endPicker.value(newDateEnd);
-
-
+            endPicker.min(period);
             hideLoading();
             $("#remoteModal").modal('show');
-
-
         }
 
         function onCompleteAddTimesheet(e) {
@@ -593,54 +405,30 @@
         };
 
         function startChange() {
-            //var endPicker = $("#To").data("kendoDatePicker"),
-            //    startDate = this.value();
+            var endPicker = $("#To").data("kendoDatePicker"),
+                startDate = this.value();
 
-            //if (startDate) {
-            //    startDate = new Date(startDate);
-            //    startDate.setDate(startDate.getDate());
-            //    // var currentDate = new Date();
-            //    // // to add 4 days to current date
-            //    //;
-            //    endPicker.min(startDate);
-            //    endPicker.max(startDate.addDays(30));
-            //}
-
-
-            // var startPicker = $("#From").data("kendoDatePicker");
-            var endPicker = $("#To").data("kendoDatePicker");
-            var endDate = endPicker.value();
-            var startDate = this.value();
-            endDate = new Date(endDate);
-            startDate = new Date(startDate);
-            if (startDate > endDate) {
-                alert("Start Date can not be greater than End Date");
+            if (startDate) {
+                startDate = new Date(startDate);
+                startDate.setDate(startDate.getDate());
+                // var currentDate = new Date();
+                // // to add 4 days to current date
+                //;
+                endPicker.min(startDate);
+                endPicker.max(startDate.addDays(30));
             }
-
         }
 
         function endChange() {
-            //var startPicker = $("#From").data("kendoDatePicker"),
-            //    endDate = this.value();
+            var startPicker = $("#From").data("kendoDatePicker"),
+                endDate = this.value();
 
-            //if (endDate) {
-            //    endDate = new Date(endDate);
-            //    endDate.setDate(endDate.getDate());
-            //    startPicker.max(endDate);
-            //    //startPicker.min(endDate-7);
-            //}
-            //var startDefault = $("#StartPeriod").val();
-            //var endDefault = $("#EndPeriod").val();
-            var startPicker = $("#From").data("kendoDatePicker");
-            //var endPicker = $("#From").data("kendoDatePicker");
-            var endDate = this.value();
-            var startDate = startPicker.value();
-            endDate = new Date(endDate);
-            startDate = new Date(startDate);
-            if (startDate > endDate) {
-                alert("Start Date can not be greater than End Date");
+            if (endDate) {
+                endDate = new Date(endDate);
+                endDate.setDate(endDate.getDate());
+                startPicker.max(endDate);
+                //startPicker.min(endDate-7);
             }
         }
-
     </script>
 }

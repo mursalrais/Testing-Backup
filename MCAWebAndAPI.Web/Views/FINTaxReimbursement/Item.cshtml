@@ -21,102 +21,103 @@
         <legend>Tax Reimbursement</legend>
       
           <div class="row">
-           
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Type).Class("col-xs-4 control-label")
-                <div class="col-xs-8">
-                    @Html.EditorFor(m => m.Type)
-                </div>
-            </div>
+              <div class="col-sm-6">
+                  <div class="form-group">
+                      @Html.Bootstrap().LabelFor(m => m.Type).Class("col-xs-4 control-label")
+                      <div class="col-xs-8">
+                          @Html.EditorFor(m => m.Type)
+                      </div>
+                  </div>
 
-        
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.LetterNo).Class("col-xs-4 control-label")
-                <div class="col-xs-8">
-                    @Html.EditorFor(m => m.LetterNo)
-                </div>
-            </div>
 
-              <div class="form-group">
-                  @Html.Bootstrap().LabelFor(m => m.LetterDate).Class("col-xs-4 control-label")
-                  <div class="col-xs-8">
-                      @Html.EditorFor(m => m.LetterDate)
+                  <div class="form-group">
+                      @Html.Bootstrap().LabelFor(m => m.LetterNo).Class("col-xs-4 control-label")
+                      <div class="col-xs-8">
+                          @Html.EditorFor(m => m.LetterNo)
+                      </div>
+                  </div>
+
+                  <div class="form-group">
+                      @Html.Bootstrap().LabelFor(m => m.LetterDate).Class("col-xs-4 control-label")
+                      <div class="col-xs-8">
+                          @Html.EditorFor(m => m.LetterDate)
+                      </div>
+                  </div>
+
+                  <div class="form-group">
+                      @Html.Bootstrap().LabelFor(m => m.Category).Class("col-xs-4 control-label")
+                      <div class="col-xs-8">
+                          @Html.EditorFor(m => m.Category)
+                      </div>
+                  </div>
+
+                  <div id="vendorDiv" class="form-group">
+                      @Html.Bootstrap().LabelFor(m => m.Vendor).Class("col-xs-4 control-label")
+                      <div class="col-xs-8">
+                          @Html.EditorFor(m => m.Vendor)
+                          <input type="hidden" id="hiddenVendorId" value="-1" name="hiddenVendorId" />
+                      </div>
+                  </div>
+
+                  <div id="mcaiDiv" class="form-group">
+                      @Html.Bootstrap().LabelFor(m => m.Contractor).Class("col-xs-4 control-label")
+                      <div class="col-xs-8">
+                          @Html.EditorFor(m => m.Contractor)
+                      </div>
+                  </div>
+
+                  <div class="form-group">
+                      @Html.Bootstrap().LabelFor(m => m.Object).Class("col-xs-4 control-label")
+                      <div class="col-xs-8">
+                          @Html.EditorFor(m => m.Object)
+                      </div>
+                  </div>
+
+                  <div class="form-group">
+                      @Html.Bootstrap().LabelFor(m => m.Period).Class("col-xs-4 control-label")
+                      <div class="col-xs-8">
+                          @Html.EditorFor(m => m.Period)
+                      </div>
+                  </div>
+
+                  <div class="form-group">
+                      @Html.Bootstrap().LabelFor(m => m.AmountIDR).Class("col-xs-4 control-label")
+                      <div class="col-xs-8">
+                          @Html.EditorFor(m => m.AmountIDR)
+                      </div>
+                  </div>
+
+                  <div class="form-group">
+                      @Html.Bootstrap().LabelFor(m => m.Remarks).Class("col-xs-4 control-label")
+                      <div class="col-xs-8">
+                          @Html.EditorFor(m => m.Remarks)
+                      </div>
+                  </div>
+
+                  <div class="form-group">
+                      @Html.Bootstrap().LabelFor(m => m.PaymentReceivedDate).Class("col-xs-4 control-label")
+                      <div class="col-xs-8">
+                          @Html.EditorFor(m => m.PaymentReceivedDate)
+                      </div>
+                  </div>
+
+                  <div class="form-group">
+                      @Html.Bootstrap().LabelFor(m => m.DocumentNo).Class("col-xs-4 control-label")
+                      <div class="col-xs-8">
+                          @Html.EditorFor(m => m.DocumentNo)
+                      </div>
+                  </div>
+
+                  <div class="form-group">
+                      @Html.Bootstrap().LabelFor(m => m.Documents).Class("col-sm-4 control-label")
+                      <div class="col-sm-8">
+                          @Html.EditorFor(m => m.Documents)
+                      </div>
+                  </div>
                   </div>
               </div>
-
-              <div class="form-group">
-                  @Html.Bootstrap().LabelFor(m => m.Category).Class("col-xs-4 control-label")
-                  <div class="col-xs-8">
-                      @Html.EditorFor(m => m.Category)
-                  </div>
-              </div>
-
-              <div id="vendorDiv" class="form-group">
-                  @Html.Bootstrap().LabelFor(m => m.Vendor).Class("col-xs-4 control-label")
-                  <div class="col-xs-8">
-                      @Html.EditorFor(m => m.Vendor)
-                      <input type="hidden" id="hiddenVendorId" value="-1" name="hiddenVendorId" />
-                  </div>
-              </div>
-
-              <div class="form-group">
-                  @Html.Bootstrap().LabelFor(m => m.Contractor).Class("col-xs-4 control-label")
-                  <div class="col-xs-8">
-                      @Html.EditorFor(m => m.Contractor)
-                  </div>
-              </div>
-
-              <div class="form-group">
-                  @Html.Bootstrap().LabelFor(m => m.Object).Class("col-xs-4 control-label")
-                  <div class="col-xs-8">
-                      @Html.EditorFor(m => m.Object)
-                  </div>
-              </div>
-
-              <div class="form-group">
-                  @Html.Bootstrap().LabelFor(m => m.Period).Class("col-xs-4 control-label")
-                  <div class="col-xs-8">
-                      @Html.EditorFor(m => m.Period)
-                  </div>
-              </div>
-
-              <div class="form-group">
-                  @Html.Bootstrap().LabelFor(m => m.AmountIDR).Class("col-xs-4 control-label")
-                  <div class="col-xs-8">
-                      @Html.EditorFor(m => m.AmountIDR)
-                  </div>
-              </div>
-
-              <div class="form-group">
-                  @Html.Bootstrap().LabelFor(m => m.Remarks).Class("col-xs-4 control-label")
-                  <div class="col-xs-8">
-                      @Html.EditorFor(m => m.Remarks)
-                  </div>
-              </div>
-
-              <div class="form-group">
-                  @Html.Bootstrap().LabelFor(m => m.PaymentReceivedDate).Class("col-xs-4 control-label")
-                  <div class="col-xs-8">
-                      @Html.EditorFor(m => m.PaymentReceivedDate)
-                  </div>
-              </div>
-
-              <div class="form-group">
-                  @Html.Bootstrap().LabelFor(m => m.DocumentNo).Class("col-xs-4 control-label")
-                  <div class="col-xs-8">
-                      @Html.EditorFor(m => m.DocumentNo)
-                  </div>
-              </div>
-
-              <div class="form-group">
-                  @Html.Bootstrap().LabelFor(m => m.Documents).Class("col-sm-4 control-label")
-                  <div class="col-sm-8">
-                      @Html.EditorFor(m => m.Documents)
-                  </div>
-              </div>
-
-        </div>
-
+        @Html.HiddenFor(m=>m.ID)
+        @Html.HiddenFor(m => m.Operation)
 
     </fieldset>
 
@@ -131,9 +132,9 @@
                             <i class="fa fa-save"></i>
                             Submit
                         </button>
-                        <button id="cancel-button" class="btn btn-default" type="button">
-                            Cancel
-                        </button>
+                        <a href="@ViewBag.CancelUrl" target='_parent'>
+                            <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
+                        </a>
                     </div>
                 </div>
             </div>
@@ -145,9 +146,9 @@
             <div class="form-actions">
                 <div class="row">
                     <div class="col-sm-12">
-                        <button id="cancel-button" class="btn btn-default" type="button">
-                            Close
-                        </button>
+                        <a href="@ViewBag.CancelUrl" target='_parent'>
+                            <input class="k-button k-button-icontext k-grid-add" size="4" value="Close" />
+                        </a>
                     </div>
                 </div>
             </div>   
@@ -162,7 +163,7 @@
 @section scripts{
 <script>
     $(document).ready(function () {
-        SetEnablednessBasedOnCategory(CategoryVendor);
+        SetEnablednessBasedOnCategory($("#Category_Value").val());
 
         $('#Contractor').prop('readonly', true);
     });
@@ -176,13 +177,14 @@
         switch (data) {
             case CategoryVendor:
                 vendorDropDownList.enable(true);
+                $("#mcaiDiv").hide('slow');
                 $("#vendorDiv").show('slow');
-                $("#Contractor").val('');
                 break;
 
             case CategoryMCAI:
                 vendorDropDownList.enable(false);
                 $("#vendorDiv").hide('slow');
+                $("#mcaiDiv").show('slow');
                 $("#Contractor").val(CategoryMCAI);
                 break;
 
@@ -207,3 +209,10 @@
 
 </script>
 }
+
+<style media="screen">
+    .k-button-icontext {
+        height: 35px;
+        margin-left: 5px;
+    }
+</style>

@@ -38,6 +38,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         [UIHint("AjaxComboBox")]
         public AjaxComboBoxVM Vendor { get; set; } = new AjaxComboBoxVM();
 
+        public string VendorName { get; set; }
+
         public string Driver { get; set; }
 
         [Required]
@@ -66,7 +68,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         public string GLDescription { get; set; }
 
         [DisplayName("Amount Reimbursed")]
-        public decimal AmountReimbursed { get; set; } = 0;
+        [Editable(false)]
+        public decimal? AmountReimbursed { get; set; }
 
         [UIHint("TextArea")]
         public string Remarks { get; set; }
@@ -83,7 +86,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         public DateTime Date { get; set; }
 
         [DisplayName("Amount liquidated")]
-        public decimal Amount { get; set; } = 0;
+        public decimal? Amount { get; set; } = 0;
     }
 
 }

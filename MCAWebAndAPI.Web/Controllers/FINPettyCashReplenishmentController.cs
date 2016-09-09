@@ -34,16 +34,24 @@ namespace MCAWebAndAPI.Web.Controllers
             SessionManager.Set(SessionSiteUrl, siteUrl);
 
             var viewModel = service.Get(id);
+            ViewBag.CancelUrl = string.Format(FirstPageUrl, siteUrl);
+
 
             return View(viewModel);
         }
 
 
         [HttpPost]
-        public async Task<ActionResult> Save(FormCollection form, PettyCashReplenishmentVM viewModel)
+        public async Task<ActionResult> Save(string actionType, FormCollection form, PettyCashReplenishmentVM viewModel)
         {
+            
             var siteUrl = SessionManager.Get<string>(SessionSiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);
+
+            if (actionType != "Save")
+            {
+                return Redirect(string.Format(FirstPageUrl, siteUrl));
+            }
 
             try
             {

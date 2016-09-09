@@ -9,7 +9,7 @@
     <div style="border:solid 1px;margin-bottom:10px;">
         <div class="row" style="text-align: center; margin-top: 20px;">
             <div id="logo-group" class="row">
-                <img src="~/img/logo.png" alt="MCA Indonesia" width="150">
+                <img src="{XIMGPATHX}" alt="MCA Indonesia" width="100">
             </div>
             <div class="row" style="margin-top:5px;font-weight:bold;">
                 MCA Indonesia
@@ -36,7 +36,22 @@
                     <tr>
                         <td>Paid To</td>
                         <td>:</td>
-                        <td colspan="4">@Model.PaidTo.Value</td>
+                        
+                            @if (!string.IsNullOrEmpty(Model.PaidTo.Value))
+                            {
+                                if (Model.PaidTo.Value.ToLower() == "professional")
+                                {
+                                    <td colspan="4">@Model.Professional.Text </td>
+                                }
+                                else if (Model.PaidTo.Value.ToLower() == "vendor")
+                                {
+                                    <td colspan="4">@Model.VendorName </td>
+                                }
+                                else
+                                {
+                                    <td colspan="4">@Model.Driver </td>
+                                }
+                            }
                     </tr>
 
                     <tr>
@@ -53,7 +68,7 @@
                     <tr>
                         <td>WBS</td>
                         <td>:</td>
-                        <td colspan="4">@Model.WBSDescription</td>
+                        <td colspan="4">@Model.WBS.Text</td>
                     </tr>
 
                     <tr>
@@ -91,7 +106,7 @@
                     <tr>
                         <td>Amount Reimbursed/Returned</td>
                         <td>:</td>
-                        <td colspan="4">@Model.AmountReimbursed</td>
+                        <td colspan="4">@Model.Amount</td>
                     </tr>
 
                     <tr>

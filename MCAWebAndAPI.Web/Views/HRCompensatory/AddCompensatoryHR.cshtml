@@ -24,6 +24,7 @@
         @Html.HiddenFor(m => m.cmpEmail)
         @Html.HiddenFor(m => m.cmpTitle)
         @Html.HiddenFor(m => m.cmpPosition)
+        @Html.HiddenFor(m => m.profId)
         <input type="hidden" id="loadpage" value="0">
 
         <div class="row">
@@ -118,11 +119,11 @@
                     var rowgrid = $("#CompensatoryDetails").data("kendoGrid").tbody.find("tr");
                     var valdate = true;
                     var i = -1;
-                    var j = -1;
                     rowgrid.each(function (e) {
                         i++;
                         var xdate = $("#Dateid" + i).val();
                         var xEdit = $("#Editid" + i).val();
+                        var j = -1;
                         rowgrid.each(function (e) {
                             j++;
                             var ydate = $("#Dateid" + j).val();
@@ -133,6 +134,8 @@
                                         if (yEdit != -1) {
                                             if (xdate == ydate) {
                                                 valdate = false;
+                                                return false;
+
                                             }
                                         }
                                     }
@@ -203,6 +206,7 @@
                 var dataItem = this.dataItem(e.item);
 
                 $("#cmpName").prop("value", dataItem.FirstMiddleName);
+                $("#profId").prop("value", dataItem.ID);
                 $("#cmpProjUnit").prop("value", dataItem.Project_Unit);
                 $("#cmpProjUnit").prop("value", dataItem.Project_Unit);
             };
@@ -245,7 +249,7 @@
                                 model.set("CmpTotalHours", range);
                             }
 
-                            if (range >= 4) {
+                            if (range > 4) {
                                 totday = 1
                             } else {
                                 totday = 0.5

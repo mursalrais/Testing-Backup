@@ -151,6 +151,15 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to /Lists/Asset%20Check%20Result/DispForm.aspx?ID={0}&amp;RequestApproval=TRUE.
+        /// </summary>
+        public static string AssetCheckResultApprove {
+            get {
+                return ResourceManager.GetString("AssetCheckResultApprove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to /Lists/Asset%20Disposal/AllItems.aspx.
         /// </summary>
         public static string AssetDisposal {
@@ -183,6 +192,15 @@ namespace MCAWebAndAPI.Service.Resources {
         public static string AssetReplacement {
             get {
                 return ResourceManager.GetString("AssetReplacement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to /Lists/Asset%20Fixed%20Asset/AllItems.aspx.
+        /// </summary>
+        public static string AssetReportFixedAsset {
+            get {
+                return ResourceManager.GetString("AssetReportFixedAsset", resourceCulture);
             }
         }
         
@@ -358,7 +376,7 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}/Manpower%20Requisition%20Documents/Forms/AllItems.aspx#InplviewHash1ad3b518-3da3-44cd-afac-6c686d40800e=FilterField1%3Dmanpowerrequestid-FilterValue1%3D{1}.
+        ///   Looks up a localized string similar to {0}/Manpower%20Requisition%20Documents/Forms/AllItems.aspx#InplviewHashb4cf8d69-0910-4645-ae07-01534b9b8c4a=FilterField1%3Dmanpowerrequestid-FilterValue1%3D{1}.
         /// </summary>
         public static string ManpowerDocumentByID {
             get {
@@ -615,15 +633,6 @@ namespace MCAWebAndAPI.Service.Resources {
         public static string TaxExemptionIncomeDocumentByID {
             get {
                 return ResourceManager.GetString("TaxExemptionIncomeDocumentByID", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to /Lists/Timesheet.
-        /// </summary>
-        public static string Timesheet {
-            get {
-                return ResourceManager.GetString("Timesheet", resourceCulture);
             }
         }
     }

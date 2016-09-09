@@ -64,10 +64,12 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
             _service.SetSiteUrl(siteUrl);
-            SessionManager.Set(SharedFinanceController.Session_SiteUrl, siteUrl);
+            SessionManager.Set(SharedController.Session_SiteUrl, siteUrl);
 
             var viewModel = _service.GetPettyCashPaymentVoucher(null);
             SetAdditionalSettingToViewModel(ref viewModel, true);
+            ViewBag.CancelUrl = string.Format(FirstPageUrl, siteUrl);
+
             return View(viewModel);
         }
 
@@ -76,13 +78,14 @@ namespace MCAWebAndAPI.Web.Controllers
             if (ID > 0)
             {
                 siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
-                SessionManager.Set(SharedFinanceController.Session_SiteUrl, siteUrl);
+                SessionManager.Set(SharedController.Session_SiteUrl, siteUrl);
 
                 _service.SetSiteUrl(siteUrl);
-                
 
                 var viewModel = _service.GetPettyCashPaymentVoucher(ID.Value);
                 SetAdditionalSettingToViewModel(ref viewModel, false);
+                ViewBag.CancelUrl = string.Format(FirstPageUrl, siteUrl);
+
                 return View(viewModel);
             }
             else
@@ -93,10 +96,15 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create(FormCollection form, PettyCashPaymentVoucherVM viewModel)
+        public async Task<ActionResult> Create(string actionType, FormCollection form, PettyCashPaymentVoucherVM viewModel)
         {
-            var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl);
+            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl);
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            if (actionType != "Save")
+            {
+                return Redirect(string.Format(FirstPageUrl, siteUrl));
+            }
 
             int? headerID = null;
             try
@@ -120,10 +128,15 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Edit(FormCollection form, PettyCashPaymentVoucherVM viewModel)
+        public async Task<ActionResult> Edit(string actionType, FormCollection form, PettyCashPaymentVoucherVM viewModel)
         {
-            var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl);
+            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl);
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            if (actionType != "Save")
+            {
+                return Redirect(string.Format(FirstPageUrl, siteUrl));
+            }
 
             try
             {
@@ -148,9 +161,9 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult Print(FormCollection form, PettyCashPaymentVoucherVM viewModel)
         {
             string RelativePath = PrintPageUrl;
-            string domain = "http://" + Request.Url.Authority + "/img/logo.png";
+            string domain = new SharedFinanceController().GetImageLogoPrint(Request.IsSecureConnection, Request.Url.Authority);
 
-            var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl);
+            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl);
             _service.SetSiteUrl(siteUrl);
             viewModel = _service.GetPettyCashPaymentVoucher(viewModel.ID);
 
@@ -198,6 +211,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 writer.Flush();
                 content = writer.ToString();
                 content = content.Replace("{XIMGPATHX}", domain);
+                
                 // Get PDF Bytes
                 try
                 {
@@ -225,7 +239,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetPettyCashPaymentVouchers()
         {
-            var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl);
+            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl);
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
             var vendors = PettyCashPaymentVoucherService.GetPettyCashPaymentVouchers(siteUrl);
@@ -260,8 +274,8 @@ namespace MCAWebAndAPI.Web.Controllers
             viewModel.Vendor.ValueField = FIELD_ID;
             viewModel.Vendor.TextField = Field_Desc;
 
-            viewModel.WBS.ControllerName = COMBOBOX_CONTROLLER;
-            viewModel.WBS.ActionName = ACTIONNAME_WBSMASTERS;
+            viewModel.WBS.ControllerName = COMWBSController.ControllerName;
+            viewModel.WBS.ActionName = COMWBSController.GetAllByActivityAsJsonResult_MethodName;
             viewModel.WBS.ValueField = FIELD_VALUE;
             viewModel.WBS.TextField = FIELD_TEXT;
 

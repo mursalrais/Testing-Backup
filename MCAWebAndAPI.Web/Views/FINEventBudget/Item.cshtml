@@ -25,6 +25,7 @@
                 <div class="col-sm-6">
                     @Html.HiddenFor(m => m.ID)
                     @Html.HiddenFor(m => m.No)
+                    @Html.HiddenFor(m => m.UserEmail)
                 </div>
             </div>
             <div class="row">
@@ -153,6 +154,11 @@
             </div>
 
             <legend>Item Details</legend>
+            <div class="validation-summary-valid" id="errorLabel" style="display:none">
+                <ul>
+                    <li>Total per item (IDR) must be equal to Total Direct Payment (IDR) + Total SCA (IDR)</li>
+                </ul>
+            </div>
             <div class="row">
                 @Html.Partial("_ItemDetails", Model.ItemDetails)
             </div>
@@ -225,10 +231,16 @@
                             }
                         }
 
-                        <button id="submit-button" class="btn btn-primary" style="margin-right:10px;" type="submit">
+                        <button id="submit-button" class="btn btn-primary" style="margin-right:10px;" type="submit" value="Save" name="actionType">
                             <i class="fa fa-save"></i>
                             Submit
-                        </button><br />
+                        </button>
+                        
+                        <a href="@ViewBag.CancelUrl" target='_parent'>
+                            <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
+                        </a>
+
+                        <br />
                         <p>@buttonMsg</p>
                     </div>
                 </div>
@@ -257,6 +269,29 @@
 
         });
 
+        $('form').on('submit', function () {
+            var datasource = $("#ItemDetails").data("kendoGrid").dataSource.data();
+            var totalAll = 0;
+            var totalAllDP = 0;
+            var totalAllSCA = 0;
+            for (var i = 0; i < datasource.length; i++) {
+                if (datasource[i].EditMode >= 0) {
+                    totalAll = totalAll + datasource[i].AmountPerItem;
+                    totalAllDP = totalAllDP + datasource[i].DirectPayment;
+                    totalAllSCA = totalAllSCA + datasource[i].SCA;
+                }
+            }
+            //cek valid ga
+            if (totalAll == totalAllDP + totalAllSCA) {
+                document.getElementById('errorLabel').style.display = "none";
+                return true;
+            }
+            else {
+                document.getElementById('errorLabel').style.display = "block"; 
+                return false;
+            }
+        });
+
         $("#Rate").change(function () {
 
             var totalIDR = $("#TotalIDR").val();
@@ -278,5 +313,10 @@
 <style media="screen">
     #Fund {
         background-color: #dedede;
+    }
+
+     .k-button-icontext {
+        height: 35px;
+        margin-left: 5px;
     }
 </style>

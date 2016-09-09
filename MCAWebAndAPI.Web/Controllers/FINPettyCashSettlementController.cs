@@ -60,11 +60,12 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);
-            SessionManager.Set(SharedFinanceController.Session_SiteUrl, siteUrl);
+            SessionManager.Set(SharedController.Session_SiteUrl, siteUrl);
 
             var viewModel = service.Get(GetOperation(op), id);
 
             SetAdditionalSettingToViewModel(ref viewModel);
+            ViewBag.CancelUrl = string.Format(FirstPageUrl, siteUrl);
 
             return View(viewModel);
         }
@@ -100,9 +101,9 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult Print(FormCollection form, PettyCashSettlementVM viewModel)
         {
             string RelativePath = PrintPageUrl;
-            string domain = "http://" + Request.Url.Authority + "/img/logo.png";
+            string domain = new SharedFinanceController().GetImageLogoPrint(Request.IsSecureConnection, Request.Url.Authority);
 
-            var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl);
+            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl);
             service.SetSiteUrl(siteUrl);
             viewModel = service.Get(Operations.e, viewModel.ID);
 
@@ -137,7 +138,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetPettyCashVouchers(int? id, string title)
         {
-            var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
+            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);
 
             var PettyCashSettlements = PettyCashPaymentVoucherService.GetPettyCashPaymentVouchers(siteUrl);
@@ -153,7 +154,7 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult GetPaymentVoucherById(int paymentVoucherID)
         {
             pettyCashPaymentVoucherService = new PettyCashPaymentVoucherService();
-            var siteUrl = SessionManager.Get<string>(SharedFinanceController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
+            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
 
             pettyCashPaymentVoucherService.SetSiteUrl(siteUrl);
 
@@ -161,33 +162,14 @@ namespace MCAWebAndAPI.Web.Controllers
 
             if (paymentVoucher.PaidTo.Text.Equals(PaidToProfessional))
             {
-                try
-                {
-                    IDataMasterService _dataMasterService = new DataMasterService();
-                    _dataMasterService.SetSiteUrl(siteUrl);
-
-                    var sessionVariable = System.Web.HttpContext.Current.Session["ProfessionalMaster"] as IEnumerable<ProfessionalMaster>;
-                    var professionals = sessionVariable ?? _dataMasterService.GetProfessionals();
-
-
-                    ProfessionalMaster data = professionals.FirstOrDefault(p => p.ID.Value == paymentVoucher.Professional.Value.Value);
-
-                    if (data != null)
-                    {
-                        paymentVoucher.PaidTo.Text = string.Format("{0} - {1}", data.Name, data.Position);
-                    }
-                }
-                catch
-                {
-                    throw;
-                }
+                paymentVoucher.PaidTo.Text = paymentVoucher.Professional.Text;
             }
             else if (paymentVoucher.PaidTo.Text.Equals(PaidToVendor))
             {
                 VendorService vendorSvc = new VendorService();
                 vendorSvc.SetSiteUrl(siteUrl);
                 var vendor = vendorSvc.GetVendor(paymentVoucher.Vendor.Value.Value);
-                paymentVoucher.PaidTo.Text = vendor.Name;
+                paymentVoucher.PaidTo.Text = string.Format("{0} - {1}", vendor.ID, vendor.Name);
             }
 
             return Json(new

@@ -19,7 +19,7 @@ namespace MCAWebAndAPI.Service.Finance
 
         void SetSiteUrl(string siteUrl);
 
-        int? Create(PettyCashReimbursementVM sphl);
+        int? Create(ref PettyCashReimbursementVM viewModel);
 
         Task CreateAttachmentAsync(int? ID, IEnumerable<HttpPostedFileBase> attachment);
 

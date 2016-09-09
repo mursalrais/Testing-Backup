@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Elmah;
@@ -30,14 +32,31 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult Item(string siteUrl = null, string op = null, int? id = null)
         {
-
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);
             SessionManager.Set(SessionSiteUrl, siteUrl);
 
             var viewModel = service.Get(GetOperation(op), id);
-            
+
+            ViewBag.CancelUrl = string.Format(FirstPageUrl, siteUrl);
+
             return View(viewModel);
+        }
+
+        public ActionResult UploadCSV(string siteUrl = null)
+        {
+            return View();
+        }
+
+        public ActionResult UploadError(string key, string siteUrl = null)
+        {
+            siteUrl = siteUrl ?? SessionManager.Get<string>("SiteUrl") ?? ConfigResource.DefaultBOSiteUrl;
+
+            ICSVErrorLogService errorService = new CSVErrorLogService(siteUrl);
+
+            List<CSVErrorLogVM> errors = errorService.GetAll(key).ToList();
+
+            return View(errors);
         }
 
         [HttpPost]
@@ -52,7 +71,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 Task createApplicationDocumentTask = service.SaveAttachmentAsync(id, viewModel.Reference, viewModel.Documents);
                 Task sendEmailToProfessional = service.SendEmailToProfessional(EmailResource.ProfessionalEmailOutstandingAdvance, viewModel);
                 Task sendEmailToGrantees = service.SendEmailToGrantees(EmailResource.GranteesEmailOutstandingAdvance, viewModel);
-                Task allTasks = Task.WhenAll(createApplicationDocumentTask,sendEmailToProfessional,sendEmailToGrantees);
+                Task allTasks = Task.WhenAll(createApplicationDocumentTask, sendEmailToProfessional, sendEmailToGrantees);
 
                 await allTasks;
             }
@@ -70,5 +89,46 @@ namespace MCAWebAndAPI.Web.Controllers
                 });
         }
 
+
+        [HttpPost]
+        public async Task<ActionResult> UploadCSV(FormCollection form, OutstandingAdvanceCSVVM viewModel)
+        {
+            var siteUrl = SessionManager.Get<string>(SessionSiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
+            service.SetSiteUrl(siteUrl);
+            List<CSVErrorLogVM> csvErrors;
+
+            RedirectToRouteResult result = RedirectToAction("Index", "Success",
+                new
+                {
+                    successMessage = string.Format(SuccessMsgFormatUpdated, "xxxxxxxxxx"),
+                    previousUrl = string.Format(FirstPageUrl, siteUrl)
+                });
+
+
+            try
+            {
+                csvErrors = new List<CSVErrorLogVM>();
+
+                csvErrors = await service.ProcessCSVFilesAsync(viewModel.Documents, COMMVendorController.GetAll());
+            }
+            catch (Exception e)
+            {
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
+            }
+
+            if (csvErrors.Count > 0)
+            {
+                string key = Guid.NewGuid().ToString();
+
+                ICSVErrorLogService errorService = new CSVErrorLogService(siteUrl);
+                errorService.Save(key, csvErrors);
+
+                result = RedirectToAction("UploadError", "FINOutstandingAdvance", new { key = key });
+            }
+
+
+            return result;
+        }
     }
 }

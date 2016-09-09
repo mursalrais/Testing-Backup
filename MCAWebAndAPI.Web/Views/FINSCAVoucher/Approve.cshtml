@@ -30,29 +30,53 @@
         </div>
         <legend>Item Detail</legend>
         <div class="row">
-            @Html.Partial("_DisplayEventBudgetItems", Model)
+            @Html.Partial("_DisplayEventBudgetItems", Model.SCAVoucherItems)
         </div>
         @Html.HiddenFor(m => m.ID, new { @id = "hdnSCAVoucherID" })
+        @Html.HiddenFor(m => m.SCAVoucherNo)
         @Html.HiddenFor(m => m.Action)
     </fieldset>
 
     <div class="form-actions">
         <div class="row">
             <div class="col-sm-12">
+                @if (Model.ID > 0)
+                {
+                    <button id="print-button" class="btn btn-default" type="button">
+                        Print
+                    </button>
+                }
                 <button id="submit-button" class="btn btn-primary" type="submit">
                     <i class="fa fa-save"></i>
                     Save
                 </button>
-                <button id="submit-cancel" acti class="btn btn-primary" type="button">
-                    <i class="fa fa-back"></i>
-                    Cancel
-                </button>
+                <a href="@ViewBag.CancelUrl" target='_parent'>
+                    <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
+                </a>
             </div>
         </div>
     </div>
 }
 @section scripts{
     <script>
+        $(document).ready(function () {
+
+            $('#print-button').click(function (e) {
+                if (!$('form').valid()) {
+                    alert('Please make sure that all required fields are filled');
+                    return;
+                }
+
+                var actionUrl = $('form').attr("action");
+                var newActionUrl = actionUrl.replace("Edit", "Print");
+
+                $('form').prop('action', newActionUrl);
+                $('form').submit();
+
+            });
+
+        });
+
         function GetDisplayEventBudgetItem(dataItem) {
             $("#EventBudgetDetail").data("kendoGrid").dataSource.read();
         }
@@ -71,4 +95,10 @@
     textarea{
         padding-left:10px!important;
     }
+
+    .k-button-icontext {
+        height: 35px;
+        margin-left: 5px;
+    }
+
 </style>

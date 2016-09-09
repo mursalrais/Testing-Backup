@@ -42,14 +42,14 @@
                                 @Html.Bootstrap().LabelFor(m => m).Class("col-sm-4 control-label")
                                 <div class="col-sm-8">
                                     <button id="application-document-button" class="btn btn-default" type="button">
-                                        Click Here to go to Tax Income Document Attachments
+                                        Click Here to go to Tax Exemption VAT Document Attachments
                                     </button>
                                 </div>
                             </div>
                         </div>
                         <script>
                         $('#application-document-button').click(function () {
-                            this.postMessage({
+                            parent.postMessage({
                                 result: "Success", urlToRedirect: "@Model.DocumentUrl"
                             }, "@Model.DocumentUrl");
                         });
@@ -63,13 +63,13 @@
     <div class="form-actions">
         <div class="row">
             <div class="col-sm-12">
-                <button id="submit-button" class="btn btn-primary" type="submit">
+                <button id="submit-button" class="btn btn-primary" type="submit" value="Save" name="actionType">
                     <i class="fa fa-save"></i>
                     Submit
                 </button>
-                <button id="cancel-button" class="btn btn-default" type="button">
-                    Cancel
-                </button>
+                <a href="@ViewBag.CancelUrl" target='_parent'>
+                    <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
+                </a>
             </div>
         </div>
     </div>
@@ -82,3 +82,10 @@
         });
     </script>
 }
+
+<style media="screen">
+    .k-button-icontext {
+        height: 35px;
+        margin-left: 5px;
+    }
+</style>

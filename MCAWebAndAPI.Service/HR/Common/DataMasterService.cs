@@ -85,26 +85,6 @@ namespace MCAWebAndAPI.Service.HR.Common
             return models;
         }
 
-
-        public IEnumerable<ProfessionalMaster> GetProfessionalsActive()
-        {
-            var caml = "";
-
-            caml = @"<View><Query><Where><Or><IsNull><FieldRef Name='lastworkingdate' />
-                    </IsNull><Gt><FieldRef Name='lastworkingdate' />
-                    <Value IncludeTimeValue='TRUE' Type='DateTime'>" + DateTime.UtcNow.ToString("yyyy-MM-dd") + "T23:57:44Z</Value></Gt>" +
-                   "</Or></Where></Query></View>";
-
-            var models = new List<ProfessionalMaster>();
-            foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl, caml))
-            {
-                models.Add(ConvertToProfessionalModel_Light(item));
-            }
-
-            return models;
-        }
-
-
         private ProfessionalMaster ConvertToProfessionalMonthlyFeeModel_Light(ListItem item)
         {
             return new ProfessionalMaster
@@ -144,6 +124,7 @@ namespace MCAWebAndAPI.Service.HR.Common
                 InsuranceAccountNumber = Convert.ToString(item["hiaccountnr"]),
                 MobileNumber = Convert.ToString(item["mobilephonenr"]),
                 TaxStatus = Convert.ToString(item["payrolltaxstatus"]),
+
                 // The followings are used in Payroll Worksheet
                 BankAccountName = Convert.ToString(item["payrollbankname"]),
                 BankAccountNumber = Convert.ToString(item["payrollaccountnr"]),
@@ -343,15 +324,13 @@ namespace MCAWebAndAPI.Service.HR.Common
 
             foreach (var professionalID in professionalIDs)
             {
-                var headerID = GetAdjustmentIDFromProfessional(professionalID);
-
                 var caml = @"<View>  
                     <Query> 
-                       <Where><Eq><FieldRef Name='professional' LookupId='True' /><Value Type='Lookup'>" + headerID +@"</Value></Eq></Where> 
+                       <Where><Eq><FieldRef Name='professional' LookupId='True' /><Value Type='Lookup'>" + professionalID + @"</Value></Eq></Where> 
                     </Query> 
               </View>";
 
-                foreach (var item in SPConnector.GetList(SP_ADJUSTMENT_LIST_NAME, _siteUrl))
+                foreach (var item in SPConnector.GetList(SP_ADJUSTMENT_LIST_NAME, _siteUrl, caml))
                 {
                     models.Add(ConvertToAdjustment_Light(item, professionalID));
                 }
@@ -363,11 +342,10 @@ namespace MCAWebAndAPI.Service.HR.Common
         {
             return new AdjustmentMaster
             {
-
-                AdjustmentPeriod = Convert.ToDateTime(item["adjustmentperiod"]),
-                ProfessionalID = professionalID,
+                AdjustmentPeriod = Convert.ToDateTime(item["adjustmentperiod"]).ToLocalTime(),
+                ProfessionalID = professionalID.ToString(),
                 AdjustmentType = Convert.ToString(item["adjustmenttype"]),
-                AdjustmentAmount = Convert.ToDouble(item["adjustmenttype"]),
+                AdjustmentAmount = Convert.ToDouble(item["adjustmentamount"]),
                 DebitOrCredit = Convert.ToString(item["debitorcredit"])
             };
         }

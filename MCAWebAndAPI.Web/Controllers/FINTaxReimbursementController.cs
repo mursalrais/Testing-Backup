@@ -17,7 +17,11 @@ namespace MCAWebAndAPI.Web.Controllers
     /// </summary>
     public class FINTaxReimbursementController : Controller
     {
-        readonly ITaxReimbursementService service;
+        private const string SuccessMsgFormatCreated = "Tax Reimbursement No. {0} has been successfully created.";
+        private const string SuccessMsgFormatUpdated = "Tax Reimbursement No. {0} has been successfully updated.";
+        private const string FirstPage = "{0}/Lists/Tax%20Reimbursement/AllItems.aspx";
+
+        private readonly ITaxReimbursementService service;
         
         public FINTaxReimbursementController()
         {
@@ -33,6 +37,7 @@ namespace MCAWebAndAPI.Web.Controllers
             var viewModel = service.Get(GetOperation(op), id);
 
             SetAdditionalSettingToViewModel(ref viewModel, true);
+            ViewBag.CancelUrl = string.Format(FirstPage, siteUrl);
 
             return View(viewModel);
 
@@ -59,7 +64,12 @@ namespace MCAWebAndAPI.Web.Controllers
                 return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
             }
 
-            return Redirect(string.Format("{0}/{1}", siteUrl ?? ConfigResource.DefaultBOSiteUrl, UrlResource.FINTaxReimbursement));
+            return RedirectToAction("Index", "Success",
+                new
+                {
+                    successMessage = string.Format(SuccessMsgFormatUpdated, viewModel.DocumentNo),
+                    previousUrl = string.Format(FirstPage, siteUrl)
+                });
         }
 
         private void SetAdditionalSettingToViewModel(ref TaxReimbursementVM viewModel, bool isCreate)

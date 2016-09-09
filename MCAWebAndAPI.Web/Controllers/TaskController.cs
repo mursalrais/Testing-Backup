@@ -35,6 +35,20 @@ namespace MCAWebAndAPI.Web.Controllers
             return RedirectToAction("Index", "Success");
         }
 
+        public ActionResult EmailReminder5Days(string siteUrl = null)
+        {
+            try
+            {
+                TaskCalculationScheduler.EmailReminderDoNow_OnceEveryDay(siteUrl);
+            }
+            catch (Exception e)
+            {
+                ErrorSignal.FromCurrentContext().Raise(e);
+                return RedirectToAction("Index", "Error");
+            }
+            return RedirectToAction("Index", "Success");
+        }
+
         //public ActionResult TaskByResource()
         //{
         //    return view();

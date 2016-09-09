@@ -1,5 +1,9 @@
 ﻿@model MCAWebAndAPI.Model.ViewModel.Form.Finance.SCASettlementVM
 
+@*
+    Wireframe FIN07: SCA Settlement
+*@
+
 <style media="screen" type="text/css">
     .textbox-padding6px-readonly{
         padding:6px;
@@ -10,13 +14,13 @@
 </style>
     
 @using (Html.BeginForm(
-                            "Save", "FINSCASettlement",
-                            FormMethod.Post,
-                            new
-                            {
-                                @class = "form-horizontal",
-                                enctype = "multipart/form-data"
-                            }))
+    "Save", "FINSCASettlement",
+    FormMethod.Post,
+    new
+    {
+        @class = "form-horizontal",
+        enctype = "multipart/form-data"
+    }))
 {
 
     <fieldset>
@@ -31,9 +35,9 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.SCACouvher).Class("col-sm-3 control-label")
+                    @Html.Bootstrap().LabelFor(m => m.SCAVoucher).Class("col-sm-3 control-label")
                     <div class="col-sm-8">
-                        @Html.EditorFor(m => m.SCACouvher)
+                        @Html.EditorFor(m => m.SCAVoucher)
                     </div>
                 </div>
                 <div class="form-group">
@@ -60,7 +64,7 @@
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.Currency).Class("col-sm-3 control-label")
                     <div class="col-sm-5">
-                        @Html.EditorFor(m => m.Currency)
+                        @Html.DisplayFor(m => m.Currency.Text, new { HtmlAttributes = new { @readonly = "readonly" } })
                     </div>
                 </div>
 
@@ -107,10 +111,9 @@
                     <i class="fa fa-save"></i>
                     Submit
                 </button>
-                <button id="submit-cancel" acti class="btn btn-primary" type="reset" >
-                    <i class="fa fa-back"></i>
-                    Cancel
-                </button>
+                <a href="@ViewBag.CancelUrl" target='_parent'>
+                    <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
+                </a>
             </div>
         </div>
     </div>
@@ -151,7 +154,8 @@
                     $('#Description').val(response.Purpose);
                     $('#Fund').val(response.Fund);
                     $('#SpecialCashAdvanceAmount').val(response.TotalAmount);
-
+                    $('#Currency_Value').val(response.Currency);
+                    
                     calculateTotal();
                 },
                 error: function (response) {
@@ -161,3 +165,10 @@
         }
     </script>
 }
+
+<style media="screen">
+    .k-button-icontext {
+        height: 35px;
+        margin-left: 5px;
+    }
+</style>

@@ -51,6 +51,7 @@ namespace MCAWebAndAPI.Service.Finance
         private const string FIELD_NAME_FUND = "lzhg";
         private const string FIELD_NAME_REFFERENCE_NO = "cicv";
         private const string FIELD_NAME_REMARKS = "p7up";
+        private const string FIELD_NAME_USER_EMAIL = "UserEmail";
         private const string FIELD_NAME_WBS = "WBS_x0020_Master_x0020_ID";
         private const string FIELD_NAME_GL = "GL_x0020_Master_x0020_ID";
         private const string FIELD_NAME_TITLE = "Title";
@@ -73,14 +74,16 @@ namespace MCAWebAndAPI.Service.Finance
         private const string EVENT_BUDGET_FIELD_GL_VALUE = "GL_x0020_Master_x002e_ID_x003a_G0";
         private const string EVENT_BUDGET_FIELD_QUANTITY = "Quantity";
         private const string EVENT_BUDGET_FIELD_UOMQUANTITY = "UoMQuantity";
+        private const string EVENT_BUDGET_FIELD_SCA = "SCA";
+        private const string EVENT_BUDGET_FIELD_SCA_VALUE = "0";
         #endregion
 
-        private string _siteUrl = string.Empty;
+        private string siteUrl = string.Empty;
         static Logger logger = LogManager.GetCurrentClassLogger();
 
         public void SetSiteUrl(string siteUrl)
         {
-            _siteUrl = siteUrl;
+            this.siteUrl = siteUrl;
         }
 
         public int GetActivityIDByEventBudgetID(int eventBudgetID)
@@ -88,7 +91,7 @@ namespace MCAWebAndAPI.Service.Finance
             int activityID = 0;
             if (eventBudgetID > 0)
             {
-                var list = SPConnector.GetListItem(LIST_NAME_EVENT_BUDGET, eventBudgetID, _siteUrl);
+                var list = SPConnector.GetListItem(LIST_NAME_EVENT_BUDGET, eventBudgetID, siteUrl);
                 activityID = list[EVENT_BUDGET_FIELD_NAME_ACTIVITY_ID] == null ? 0 :
                         Convert.ToInt32((list[EVENT_BUDGET_FIELD_NAME_ACTIVITY_ID] as FieldLookupValue).LookupId);
             }
@@ -96,11 +99,12 @@ namespace MCAWebAndAPI.Service.Finance
             return activityID;
         }
 
-        public int? CreateSCAVoucher(SCAVoucherVM scaVoucher)
+        public int? CreateSCAVoucher(ref SCAVoucherVM scaVoucher)
         {
             int? result = null;
             DateTime today = DateTime.Now;
-            string scaNo = DocumentNumbering.Create(_siteUrl, string.Format("SCA/{0}-{1}/", DateTimeExtensions.GetMonthInRoman(today), today.ToString("yy")) + "{0}", 5);
+            string scaNo = DocumentNumbering.Create(siteUrl, string.Format("SCA/{0}-{1}/", DateTimeExtensions.GetMonthInRoman(today), today.ToString("yy")) + "{0}", 5);
+            scaVoucher.SCAVoucherNo = scaNo;
 
             var columnValues = new Dictionary<string, object>
             {
@@ -118,13 +122,14 @@ namespace MCAWebAndAPI.Service.Finance
                 {FIELD_NAME_SUB_ACTIVITY_ID,new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.SubActivity.Value) }},
                 {FIELD_NAME_FUND,scaVoucher.Fund},
                 {FIELD_NAME_REFFERENCE_NO,scaVoucher.ReferenceNo},
-                {FIELD_NAME_REMARKS,scaVoucher.Remarks}
+                {FIELD_NAME_REMARKS,scaVoucher.Remarks},
+                {FIELD_NAME_USER_EMAIL,scaVoucher.UserEmail}
             };
 
             try
             {
-                SPConnector.AddListItem(LIST_NAME_SCAVOUCHER, columnValues, _siteUrl);
-                result = SPConnector.GetLatestListItemID(LIST_NAME_SCAVOUCHER, _siteUrl);
+                SPConnector.AddListItem(LIST_NAME_SCAVOUCHER, columnValues, siteUrl);
+                result = SPConnector.GetLatestListItemID(LIST_NAME_SCAVOUCHER, siteUrl);
 
             }
             catch (ServerException e)
@@ -148,7 +153,7 @@ namespace MCAWebAndAPI.Service.Finance
                 {FIELD_NAME_SDOID,new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.SDO.Value) }},
                 {FIELD_NAME_SDO_POSITION, scaVoucher.SDOPosition },
                 {FIELD_NAME_EBUDGET_ID, new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.EventBudget.Value) }},
-                {FIELD_NAME_CURRENCY,scaVoucher.Currency},
+                {FIELD_NAME_CURRENCY,scaVoucher.Currency.Value},
                 {FIELD_NAME_TOTAL_AMOUNT,scaVoucher.TotalAmount},
                 {FIELD_NAME_TA_WORDS,scaVoucher.TotalAmountInWord},
                 {FIELD_NAME_PURPOSE,scaVoucher.Purpose},
@@ -157,7 +162,8 @@ namespace MCAWebAndAPI.Service.Finance
                 {FIELD_NAME_SUB_ACTIVITY_ID,new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.SubActivity.Value) }},
                 {FIELD_NAME_FUND,scaVoucher.Fund},
                 {FIELD_NAME_REFFERENCE_NO,scaVoucher.ReferenceNo},
-                {FIELD_NAME_REMARKS,scaVoucher.Remarks}
+                {FIELD_NAME_REMARKS,scaVoucher.Remarks},
+                {FIELD_NAME_USER_EMAIL,scaVoucher.UserEmail}
             };
 
             if (scaVoucher.Action == SCAVoucherVM.ActionType.approve.ToString())
@@ -167,7 +173,7 @@ namespace MCAWebAndAPI.Service.Finance
 
             try
             {
-                SPConnector.UpdateListItem(LIST_NAME_SCAVOUCHER, scaVoucher.ID, columnValues, _siteUrl);
+                SPConnector.UpdateListItem(LIST_NAME_SCAVOUCHER, scaVoucher.ID, columnValues, siteUrl);
                 result = true;
 
             }
@@ -189,7 +195,7 @@ namespace MCAWebAndAPI.Service.Finance
 
             try
             {
-                SPConnector.UpdateListItem(LIST_NAME_SCAVOUCHER, scaVoucher.ID, columnValues, _siteUrl);
+                SPConnector.UpdateListItem(LIST_NAME_SCAVOUCHER, scaVoucher.ID, columnValues, siteUrl);
                 result = true;
 
             }
@@ -203,33 +209,27 @@ namespace MCAWebAndAPI.Service.Finance
 
         public async Task CreateSCAVoucherItemAsync(int? scaVoucherID, IEnumerable<SCAVoucherItemsVM> viewModels)
         {
-            CreateSCAVoucherItems(_siteUrl, scaVoucherID, viewModels);
+            CreateSCAVoucherItems(siteUrl, scaVoucherID, viewModels);
         }
 
         public async Task CreateSCAVoucherAttachmentAsync(int? ID, IEnumerable<HttpPostedFileBase> documents)
         {
-            CreateSCAVoucherAttachment(_siteUrl, ID, documents);
+            CreateSCAVoucherAttachment(siteUrl, ID, documents);
         }
 
         public async Task UpdateSCAVoucherItem(int? scaVoucherID, IEnumerable<SCAVoucherItemsVM> viewModels)
         {
-            foreach (var viewModel in viewModels)
+            try
             {
-                var columnValues = new Dictionary<string, object>
-                {
-                    {FIELD_NAME_WBS,new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.WBSID) }},
-                    {FIELD_NAME_GL, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.GLID) }},
-                    {FIELD_NAME_AMOUNT,viewModel.Amount}
-                };
-                try
-                {
-                    SPConnector.UpdateListItem(LIST_NAME_SCAVOUCHER_ITEM, viewModel.ID, columnValues, _siteUrl);
-                }
-                catch (Exception e)
-                {
-                    logger.Error(e.Message);
-                    throw e;
-                }
+                var listItemID = GetIDItemDetails(siteUrl, (int)scaVoucherID);
+                SPConnector.DeleteMultipleListItemAsync(LIST_NAME_SCAVOUCHER_ITEM, listItemID, siteUrl);
+
+                CreateSCAVoucherItems(siteUrl, scaVoucherID, viewModels);
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.Message);
+                throw e;
             }
         }
 
@@ -237,7 +237,7 @@ namespace MCAWebAndAPI.Service.Finance
         {
             var result = new List<SCAVoucherVM>();
 
-            foreach (var item in SPConnector.GetList(LIST_NAME_SCAVOUCHER, _siteUrl))
+            foreach (var item in SPConnector.GetList(LIST_NAME_SCAVOUCHER, siteUrl))
             {
                 result.Add(ConvertToVM(item));
             }
@@ -253,7 +253,7 @@ namespace MCAWebAndAPI.Service.Finance
 
             if (id != null)
             {
-                var list = SPConnector.GetListItem(LIST_NAME_SCAVOUCHER, id, _siteUrl);
+                var list = SPConnector.GetListItem(LIST_NAME_SCAVOUCHER, id, siteUrl);
                 viewModel = ConvertToVM(list);
                 viewModel.DocumentUrl = GetDocumentUrl(id);
 
@@ -268,7 +268,7 @@ namespace MCAWebAndAPI.Service.Finance
             //var caml = @"<View><Query><Where><Eq><FieldRef Name='SCAVoucher' /><Value Type='Lookup'>" + scaVoucherID.ToString() + "</Value></Eq></Where></Query></View>";
             var caml = CamlQueryUtil.Generate(FIELD_NAME_SCAVOUCHER, "Lookup", scaVoucherID.ToString());
 
-            foreach (var item in SPConnector.GetList(LIST_NAME_SCAVOUCHER_ITEM, _siteUrl, caml))
+            foreach (var item in SPConnector.GetList(LIST_NAME_SCAVOUCHER_ITEM, siteUrl, caml))
             {
                 scaVoucherItemsVM.Add(
                     new SCAVoucherItemsVM
@@ -288,38 +288,23 @@ namespace MCAWebAndAPI.Service.Finance
 
         public IEnumerable<SCAVoucherItemsVM> GetEventBudgetItems(int eventBudgetID)
         {
-            var scaVoucherItemsVM = new List<SCAVoucherItemsVM>();
-            //var caml = @"<View><Query><Where><Eq><FieldRef Name='Event_x0020_Budget_x0020_ID' /><Value Type='Lookup'>" + eventBudgetID.ToString() + "</Value></Eq></Where></Query></View>";
-            var caml = CamlQueryUtil.Generate(FIELD_NAME_EBUDGET_ID, "Lookup", eventBudgetID.ToString());
+            IEnumerable<EventBudgetItemVM> eventBudgetItems = EventBudgetService.GetItems(siteUrl, eventBudgetID);
 
-            foreach (var listItem in SPConnector.GetList(EventBudgetService.ListName_EventBudgetItem, _siteUrl, caml))
+            var scaVoucherItemVMs = new List<SCAVoucherItemsVM>();
+
+            foreach (var ebItem in eventBudgetItems)
             {
-                var item = new SCAVoucherItemsVM();
-
-                try
+                scaVoucherItemVMs.Add(new SCAVoucherItemsVM
                 {
-                    item.ID = Convert.ToInt32(listItem[FIELD_NAME_ID]);
-                    item.WBSID = Convert.ToInt32((listItem[EVENT_BUDGET_FIELD_WBS_ID] as FieldLookupValue).LookupId);
-                    item.WBS = string.Format("{0} - {1}", (listItem[EventBudgetService.EventBudgetItemFieldName_WBSId] as FieldLookupValue).LookupValue.ToString(), (listItem[EVENT_BUDGET_FIELD_WBS_VALUE] as FieldLookupValue).LookupValue.ToString());
-                    item.GLID = Convert.ToInt32((listItem[EventBudgetService.EventBudgetItemFieldName_GLID] as FieldLookupValue).LookupId);
-                    item.GL = string.Format("{0} - {1}", (listItem[EventBudgetService.EventBudgetItemFieldName_GLID] as FieldLookupValue).LookupValue.ToString(), (listItem[EVENT_BUDGET_FIELD_GL_VALUE] as FieldLookupValue).LookupValue.ToString());
-                    item.Amount = Convert.ToDecimal(listItem[EventBudgetService.EventBudgetItemFieldName_Quantity]) * Convert.ToDecimal(listItem[EventBudgetService.EventBudgetItemFieldName_Frequency]) * Convert.ToDecimal(listItem[EventBudgetService.EventBudgetItemFieldName_UnitPrice]);
-
-                    scaVoucherItemsVM.Add(item);
-                }
-                catch (ServerException e)
-                {
-
-                    throw e;
-                }
-                catch (Exception e)
-                {
-
-                    throw e;
-                }
+                    WBSID = Convert.ToInt32(ebItem.WBS.Value),
+                    WBS = Convert.ToString(ebItem.WBS.Text),
+                    GLID = Convert.ToInt32(ebItem.GL.Value),
+                    GL = Convert.ToString(ebItem.GL.Text),
+                    Amount = Convert.ToDecimal(ebItem.AmountPerItem)
+                });
             }
 
-            return scaVoucherItemsVM;
+            return scaVoucherItemVMs;
         }
 
         public SCAVoucherVM GetEventBudget(int? ID)
@@ -328,7 +313,7 @@ namespace MCAWebAndAPI.Service.Finance
 
             if (ID != null)
             {
-                var listItem = SPConnector.GetListItem(LIST_NAME_EVENT_BUDGET, ID, _siteUrl);
+                var listItem = SPConnector.GetListItem(LIST_NAME_EVENT_BUDGET, ID, siteUrl);
 
                 scaVoucherVM = ConvertToVMShort(listItem);
             }
@@ -338,7 +323,7 @@ namespace MCAWebAndAPI.Service.Finance
 
         private string GetDocumentUrl(int? ID)
         {
-            return string.Format(UrlResource.SCAVoucherDocumentByID, _siteUrl, ID);
+            return string.Format(UrlResource.SCAVoucherDocumentByID, siteUrl, ID);
         }
 
         private SCAVoucherVM ConvertToVM(ListItem ListItem)
@@ -360,6 +345,7 @@ namespace MCAWebAndAPI.Service.Finance
             model.Fund = Convert.ToString(ListItem[FIELD_NAME_FUND]);
             model.ReferenceNo = ListItem[FIELD_NAME_REFFERENCE_NO] == null ? "" : ListItem[FIELD_NAME_REFFERENCE_NO].ToString();
             model.Remarks = ListItem[FIELD_NAME_REMARKS] == null ? "" : ListItem[FIELD_NAME_REMARKS].ToString();
+            model.UserEmail = ListItem[FIELD_NAME_USER_EMAIL] == null ? "" : ListItem[FIELD_NAME_USER_EMAIL].ToString();
             model.TransactionStatus.Value = ListItem[FIELD_NAME_TRANSTATUS].ToString();
             model.EventBudget.Value = Convert.ToInt32((ListItem[FIELD_NAME_EBUDGET_ID] as FieldLookupValue).LookupId.ToString());
 
@@ -391,7 +377,7 @@ namespace MCAWebAndAPI.Service.Finance
 
         public void DeleteDetail(int id)
         {
-            SPConnector.DeleteListItem(LIST_NAME_SCAVOUCHER, id, _siteUrl);
+            SPConnector.DeleteListItem(LIST_NAME_SCAVOUCHER, id, siteUrl);
         }
         private static void CreateSCAVoucherAttachment(string siteUrl, int? ID, IEnumerable<HttpPostedFileBase> attachment)
         {
@@ -461,6 +447,23 @@ namespace MCAWebAndAPI.Service.Finance
             }
 
             return result;
+        }
+
+        private static List<string> GetIDItemDetails(string siteUrl, int headerID)
+        {
+            List<string> details = new List<string>();
+
+            if (headerID > 0)
+            {
+                var caml = @"<View><Query><Where><Eq><FieldRef Name='" + FIELD_NAME_SCAVOUCHER + "' /><Value Type='Lookup'>" + headerID.ToString() + "</Value></Eq></Where></Query></View>";
+
+                foreach (var item in SPConnector.GetList(LIST_NAME_SCAVOUCHER_ITEM, siteUrl, caml))
+                {
+                    details.Add(item[FIELD_NAME_ID].ToString());
+                }
+            }
+
+            return details;
         }
     }
 }

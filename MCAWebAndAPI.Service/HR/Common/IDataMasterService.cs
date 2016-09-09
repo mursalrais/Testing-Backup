@@ -11,7 +11,7 @@ namespace MCAWebAndAPI.Service.HR.Common
 
         IEnumerable<ProfessionalMaster> GetProfessionals();
 
-        IEnumerable<ProfessionalMaster> GetProfessionalsActive();
+        IEnumerable<ProfessionalMaster> GetProfessionalsActives();
 
         IEnumerable<ProfessionalMaster> GetProfessionalMonthlyFees();
 
@@ -32,7 +32,5 @@ namespace MCAWebAndAPI.Service.HR.Common
         string GetProfessionalPosition(string userLogin);
 
         string GetProfessionalOfficeEmail(int professionalID);
-
-        IEnumerable<ProfessionalMaster> GetProfessionalsActives();
     }
 }
