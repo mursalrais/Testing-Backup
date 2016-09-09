@@ -125,13 +125,13 @@ namespace MCAWebAndAPI.Web.Controllers
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse(e.Message);
             }
-            if (viewModel.ValidationStatus == "Need HR to Validate")
+            if (viewModel.ValidationAction == "ask-hr-to-validate-action")
             {
-                return JsonHelper.GenerateJsonSuccessResponse(siteUrl + "/" + UrlResource.ProfessionalMaster);
+                return JsonHelper.GenerateJsonSuccessResponse(siteUrl + "/" + UrlResource.ProfessionalData);
             }
             else
             {
-                return JsonHelper.GenerateJsonSuccessResponse(siteUrl + "/" + UrlResource.ProfessionalData);
+                return JsonHelper.GenerateJsonSuccessResponse(siteUrl + "/" + UrlResource.ProfessionalMaster);
             }
             
         }
