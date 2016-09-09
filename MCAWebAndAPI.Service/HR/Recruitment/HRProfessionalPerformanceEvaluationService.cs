@@ -158,6 +158,20 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 viewModel.WorkflowItems = await _workflow.GetWorkflowDetails(requestor, listName);
             }
 
+            foreach (var item in viewModel.WorkflowItems)
+            {
+                var lvl = item.Level;
+                if (lvl == "1")
+                {
+                    viewModel.Approver1 = item.ApproverNameText;
+                }
+
+                if (lvl == "2")
+                {
+                    viewModel.Approver2 = item.ApproverNameText;
+                }
+            }
+
             return viewModel;
         }
 

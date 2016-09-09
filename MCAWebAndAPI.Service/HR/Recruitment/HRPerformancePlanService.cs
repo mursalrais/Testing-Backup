@@ -203,6 +203,20 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 viewModel.WorkflowItems = await _workflow.GetWorkflowDetails(requestor, listName);
             }
 
+            foreach (var item in viewModel.WorkflowItems)
+            {
+                var lvl = item.Level;
+                if (lvl == "1")
+                {
+                    viewModel.Approver1 = item.ApproverNameText;
+                }
+
+                if (lvl == "2")
+                {
+                    viewModel.Approver2 = item.ApproverNameText;
+                }
+            }
+
             return viewModel;
         }
 
@@ -338,9 +352,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
         }
 
-        public async Task CreatePerformancePlanDetailsAsync(int? headerID, int? performanceID, string email, string status,string type, IEnumerable<ProjectOrUnitGoalsDetailVM> performancePlanDetails)
+        public async Task CreatePerformancePlanDetailsAsync(int? headerID, int? performanceID, string email, string status, string type, IEnumerable<ProjectOrUnitGoalsDetailVM> performancePlanDetails)
         {
-            CreatePerformancePlanDetails(headerID, performanceID, email, status,type, performancePlanDetails);
+            CreatePerformancePlanDetails(headerID, performanceID, email, status, type, performancePlanDetails);
         }
 
         public void SendEmail(ProfessionalPerformancePlanVM header, string workflowTransactionListName, string transactionLookupColumnName, int headerID, int level, string messageForApprover, string messageForRequestor)
@@ -410,7 +424,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     professionalEmail = (item["professional_x003a_Office_x0020_"] == null ? "" :
                     Convert.ToString((item["professional_x003a_Office_x0020_"] as FieldLookupValue).LookupValue));
 
-                    EmailUtil.Send(professionalEmail, "Approval of Performance Plan Form", messageForRequestor);
+                    EmailUtil.Send(emails, "Approval of Performance Plan Form", messageForRequestor);
                 }
             }
 
