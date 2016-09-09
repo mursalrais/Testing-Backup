@@ -15,9 +15,9 @@ namespace MCAWebAndAPI.Service.Asset
 
         IEnumerable<AssetLoanAndReturnItemVM> GetAssetTransfers();
 
-       // int CreateHeader(AssetLoanAndReturnHeaderVM header);
+        // int CreateHeader(AssetLoanAndReturnHeaderVM header);
 
-       int? CreateHeader(AssetLoanAndReturnHeaderVM viewmodel, string mode = null, string SiteUrl = null);
+        int? CreateHeader(AssetLoanAndReturnHeaderVM viewmodel, string mode = null, string SiteUrl = null);
 
         //int? CreateDetails(int? headerID, AssetLoanAndReturnItemVM item, string SiteUrl = null);
         //void CreateDetails(int? headerID, IEnumerable<AssetLoanAndReturnItemVM> items);
@@ -45,6 +45,8 @@ namespace MCAWebAndAPI.Service.Asset
 
         ProfessionalsVM GetProfessionalInfo(int? ID, string SiteUrl);
 
-        IEnumerable<AssetMasterVM> GetAssetSubAsset();
+        IEnumerable<AssetAcquisitionItemVM> GetAssetSubAsset();
+
+        bool UpdateHeader(AssetLoanAndReturnHeaderVM viewmodel);
     }
 }

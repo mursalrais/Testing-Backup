@@ -14,7 +14,7 @@
         .Columns(columns =>
         {
             columns.Bound(p => p.AssetSubAsset).ClientTemplate("#= AssetSubAsset.Text #" +
-                          "<input type='hidden' name='AssetLoanAndReturnItem[#= getWorkingRelationshipDetails(data)#].AssetSubAsset.Value' value='#= AssetSubAsset.Value #' />"
+                          "<input type='hidden' class='asset' name='AssetLoanAndReturnItem[#= getWorkingRelationshipDetails(data)#].AssetSubAsset.Value' value='#= AssetSubAsset.Value #' />"
                         ).EditorViewData(new
                         {
                             DataTextField = "Text",
@@ -40,9 +40,11 @@
 
 
         );
+
             columns.Bound(p => p.EditMode).Hidden()
          .ClientTemplate("#= EditMode #<input type='hidden' name='AssetLoanAndReturnItem[#= getWorkingRelationshipDetails(data)#].EditMode' value='#= EditMode #' />");
             columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
+
             .Click("onDeleteKendoDetail")).Width(100);
         })
         .Events(e =>
@@ -55,8 +57,8 @@
                    {
                        model.Id(p => p.ID);
                        model.Field(m => m.AssetSubAsset).DefaultValue(AssetLoanAndReturnItemVM.GetAssetSubAssetDefaultValue());
-                       model.Field(p => p.EstReturnDate).DefaultValue(DateTime.UtcNow); ;
-                       model.Field(p => p.ReturnDate);
+                       model.Field(p => p.EstReturnDate).DefaultValue(null);
+                       model.Field(p => p.ReturnDate).DefaultValue(null);
                        model.Field(p => p.Status).Editable(false);
                        //model.Field(m => m.Status).DefaultValue(AssetLoanAndReturnItemVM.GetAssetSubAssetDefaultValue());
                    })
@@ -66,10 +68,19 @@
 </div>
 
 <script>
+
+    //$(document).ready(function () {
+    //    var today = new Date();
+   
+    //    var breakdate = $(".estdate").val().split(" ");
+    //    alert(today);
+    //});
+
+
     function getWorkingRelationshipDetails(dataItem) {
         var data = $("#AssetLoanAndReturnItem").data("kendoGrid").dataSource.data();
-        //data.set('AssetSubAsset', data.AssetSubAsset);
-        return data.indexOf();
+        //dataItem.set('AssetSubAsset', data.AssetSubAsset);
+        return data.indexOf(dataItem);
     }
 
     function onEditKendoDetail(e) {
@@ -80,20 +91,13 @@
             // 1 is Item.Mode.UPDATED
             data.set("EditMode", 1);
         }
-        if (isCustomAdd && e.model.isNew()) {
-            isCustomAdd = false;
-            $(e.container).find("[name='AssetLoanAndReturnItem']").val(customRowDataItem.Details).change();
-        }
+       
     }
     function onDataBoundWorkingRelationship(e) {
         var grid = $("#AssetLoanAndReturnItem").data("kendoGrid");
         hideDeletedRowKendoDetail(grid);
     }
 
-    function val() {
-
-
-    }
 
     function CompareDate() {
         //            new Date(Year, Month, Date, Hr, Min, Sec);
@@ -107,3 +111,34 @@
         }
     }
 </script>
+
+<style>
+    .k-dropdown-wrap {
+        width: 200px;
+    }
+
+    .k-dirty-cell {
+        width: 200px;
+    }
+
+    .k-list-container .k-list .k-item {
+        white-space: nowrap;
+    }
+
+    .k-numeric-wrap .k-select {
+        display: none;
+        margin: 0;
+    }
+
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+        input [type=number];
+
+    {
+        -moz-appearance: textfield;
+    }
+
+    }
+</style>

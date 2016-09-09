@@ -55,19 +55,19 @@ namespace MCAWebAndAPI.Web.Controllers
                 new
                 {
                     Value = Convert.ToString(e.ID),
-                    Text = e.AssetNoAssetDesc.Value + " - " + e.AssetDesc
+                    Text = e.AssetSubAsset.Text
                 }),
                 JsonRequestBehavior.AllowGet);
         }
 
-        private IEnumerable<AssetMasterVM> GetFromPositionsExistingSession()
+        private IEnumerable<AssetAcquisitionItemVM> GetFromPositionsExistingSession()
         {
             //Get existing session variable
-            var sessionVariable = System.Web.HttpContext.Current.Session["AssetMaster"] as IEnumerable<AssetMasterVM>;
+            var sessionVariable = System.Web.HttpContext.Current.Session["Asset%Asset%20Acquisition%20Details"] as IEnumerable<AssetAcquisitionItemVM>;
             var positions = sessionVariable ?? assetLoanAndReturnService.GetAssetSubAsset();
 
             if (sessionVariable == null) // If no session variable is found
-                System.Web.HttpContext.Current.Session["AssetMaster"] = positions;
+                System.Web.HttpContext.Current.Session["Asset%Asset%20Acquisition%20Details"] = positions;
             return positions;
         }
 
@@ -115,7 +115,7 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult Submit(FormCollection form,AssetLoanAndReturnHeaderVM _data, string siteUrl)
+        public ActionResult Submit(FormCollection form, AssetLoanAndReturnHeaderVM _data, string siteUrl)
         {
             // Get existing session variable
             //var sessionVariables = SessionManager.Get<DataTable>("CSVDataTable") ?? new DataTable();
@@ -127,7 +127,7 @@ namespace MCAWebAndAPI.Web.Controllers
             int? headerID = null;
             try
             {
-                headerID = assetLoanAndReturnService.CreateHeader(_data,siteUrl);
+                headerID = assetLoanAndReturnService.CreateHeader(_data, siteUrl);
             }
             catch (Exception e)
             {
@@ -142,120 +142,12 @@ namespace MCAWebAndAPI.Web.Controllers
                 assetLoanAndReturnService.CreateDetails(headerID, _data.AssetLoanAndReturnItem);
             }
             catch (Exception e)
-            {
+            {   
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            //    //cek apakah header / item
-            //    int? latestIDHeader = 0;
-            //    int? latestIDDetail = 0;
-            //    List<int> idsHeader = new List<int>();
-            //    List<int> idsDetail = new List<int>();
-            //    var TableHeader = new DataTable();
-            //    var TableDetail = new DataTable();
-
-            //    var listNameHeader = "Asset Loan And Return";
-            //    var listNameDetail = "Asset Loan And Return Detail";
-            //    var listAssetMaster = "Asset Master";
-            //    var listProfessionalMAster = "Professional Master";
-
-            //    foreach (DataRow d in SessionManager.Get<DataTable>("CSVDataTable").Rows)
-            //    {
-            //        if (d.ItemArray[0].ToString() == "Asset Loan And Return")
-            //        {
-            //            //try
-            //            //{
-            //            //    var IDProf = assetLoanAndReturnService.getListIDOfList(listProfessionalMAster, "ID", "Title", siteUrl);
-            //            //    int myKey = 0;
-
-            //            //    foreach (var id in IDProf)
-            //            //    {
-            //            //        try
-            //            //        {
-            //            //            if (id.Value == d.ItemArray[2].ToString())
-            //            //            {
-            //            //                myKey = id.Key;
-            //            //                break;
-            //            //            }
-            //            //        }
-            //            //        catch (Exception e)
-            //            //        {
-            //            //            return JsonHelper.GenerateJsonErrorResponse("No Lookup Value/s is Found!");
-            //            //        }
-            //            //    }
-
-            //            TableHeader = new DataTable();
-            //            TableHeader.Columns.Add("Title", typeof(string));
-            //            TableHeader.Columns.Add("Professional", typeof(int));
-            //            TableHeader.Columns.Add("Project_x002f_Unit", typeof(string));
-            //            TableHeader.Columns.Add("Contact_x0020_No", typeof(string));
-            //            TableHeader.Columns.Add("Loan_x0020_Date", typeof(string));
-            //            TableHeader.Columns.Add("Purpose", typeof(string));
-
-            //            DataRow row = TableHeader.NewRow();
-
-            //            row["Title"] = d.ItemArray[0].ToString();
-            //            row["Professional"] = myKey;
-            //            if (d.ItemArray[3].ToString() == "-1")
-            //            {
-            //                row["Project_x002f_Unit"] = null;
-            //            }
-            //            else
-            //            {
-            //                row["Project_x002f_Unit"] = d.ItemArray[3].ToString();
-            //            }
-
-            //            row["Contact_x0020_No"] = d.ItemArray[4].ToString();
-            //            row["Loan_x0020_Date"] = d.ItemArray[5].ToString();
-            //            row["Purpose"] = d.ItemArray[6].ToString();
-
-            //            TableHeader.Rows.InsertAt(row, 0);
-
-            //            latestIDHeader = assetLoanAndReturnService.MassUploadHeaderDetail(listNameHeader, TableHeader, siteUrl);
-            //            idsHeader.Add(Convert.ToInt32(latestIDHeader));
-
-            //        }
-
-            //            catch (Exception e)
-            //        {
-            //            if (idsHeader.Count > 0)
-            //            {
-            //                foreach (var id in idsHeader)
-            //                {
-            //                    //delete parent
-            //                    assetLoanAndReturnService.RollbackParentChildrenUpload(listNameHeader, id, siteUrl);
-            //                }
-            //            }
-            //            else if (idsDetail.Count > 0)
-            //            {
-            //                foreach (var id in idsDetail)
-            //                {
-            //                    //delete parent
-            //                    assetLoanAndReturnService.RollbackParentChildrenUpload(listNameDetail, id, siteUrl);
-            //                }
-
-            //            }
-            //            return JsonHelper.GenerateJsonErrorResponse("Invalid data, rolling back!");
-            //        }
-
-            //        //if (d.ItemArray[8].ToString() != "" && latestIDHeader != null)
-            //        //{
-            //        //    TableDetail = new DataTable();
-            //        //    TableDetail.Columns.Add("Asset_x0020_Loan_x0020_Return_x0", typeof(string));
-            //        //    TableDetail.Columns.Add("Asset_x002d_Sub_x0020_Asset", typeof(string));
-            //        //    TableDetail.Columns.Add("Est_x0020_Return_x0020_Date", typeof(string));
-            //        //    TableDetail.Columns.Add("Return_x0020_Date", typeof(string));
-            //        //    TableDetail.Columns.Add("Status", typeof(string));
-
-            //        //    DataRow row = TableDetail.NewRow();
-            //        //    row["Asset_x0020_Loan_x0020_Return_x0"] = latestIDHeader;
-            //        //    row["Asset_x002d_Sub_x0020_Asset"] = d.ItemArray[8].ToString();
-            //        //}
-
-            //    }
-
-            //}
+           
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetLoanAndReturn);
         }
 
@@ -263,7 +155,7 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             var array = monthlyFeeDetails.ToArray();
 
-            
+
             for (int i = 0; i < array.Length; i++)
             {
 
@@ -285,7 +177,7 @@ namespace MCAWebAndAPI.Web.Controllers
             assetLoanAndReturnService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
-            var viewModel = assetLoanAndReturnService.GetHeader(ID , siteUrl);
+            var viewModel = assetLoanAndReturnService.GetHeader(ID, siteUrl);
 
             int? headerID = null;
             headerID = viewModel.ID;
@@ -293,7 +185,7 @@ namespace MCAWebAndAPI.Web.Controllers
             try
             {
                 var viewdetails = assetLoanAndReturnService.GetDetails(headerID);
-                viewModel.AssetLoanAndReturnItem= viewdetails;
+                viewModel.AssetLoanAndReturnItem = viewdetails;
             }
             catch (Exception e)
             {
@@ -302,6 +194,28 @@ namespace MCAWebAndAPI.Web.Controllers
             }
 
             return View(viewModel);
+        }
+
+        [HttpPost]
+        public ActionResult Update(FormCollection form, AssetLoanAndReturnHeaderVM viewModel, string site)
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            assetLoanAndReturnService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            assetLoanAndReturnService.UpdateHeader(viewModel);
+
+            try
+            {
+                viewModel.AssetLoanAndReturnItem = BindMonthlyFeeDetailDetails(form, viewModel.AssetLoanAndReturnItem);
+                assetLoanAndReturnService.CreateDetails(viewModel.ID, viewModel.AssetLoanAndReturnItem);
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetLoanAndReturn);
         }
 
         public ActionResult GetProfMasterInfo(string fullname, string position)

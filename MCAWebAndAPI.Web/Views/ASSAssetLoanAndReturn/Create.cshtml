@@ -3,14 +3,14 @@
 @model AssetLoanAndReturnHeaderVM
 
 @using (Ajax.BeginForm("Submit", "ASSAssetLoanAndReturn",
-                                                                                                                FormMethod.Post,
-                                                                                                                new AjaxOptions
-                                                                                                                {
-                                                                                                                    OnBegin = "onBeginForm",
-                                                                                                                    OnComplete = "onCompleteForm",
-                                                                                                                    OnSuccess = "onSuccessFormEmbed",
-                                                                                                                    OnFailure = "onFailureForm"
-                                                                                                                }, new { @class = "form-horizontal" }))
+                                                                                                                            FormMethod.Post,
+                                                                                                                            new AjaxOptions
+                                                                                                                            {
+                                                                                                                                OnBegin = "onBeginForm",
+                                                                                                                                OnComplete = "onCompleteForm",
+                                                                                                                                OnSuccess = "onSuccessFormEmbed",
+                                                                                                                                OnFailure = "onFailureForm"
+                                                                                                                            }, new { @class = "form-horizontal" }))
 
 
 {
@@ -68,16 +68,16 @@
 
     </fieldset>
 
-        @Html.HiddenFor(m => m.ID)
-        @*@Html.HiddenFor(m => m.CancelURL)*@
-        <div>
-            <center>
-                <input class="k-button k-button-icontext k-grid-add" type="submit" onclick="return saveAssignment()" value="Save" id="submit" />
-                <a href="@Model.CancelURL" target='_parent'>
-                    <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
-                </a>
-            </center>
-        </div>
+    @Html.HiddenFor(m => m.ID)
+    @*@Html.HiddenFor(m => m.CancelURL)*@
+    <div>
+        <center>
+            <input class="k-button k-button-icontext k-grid-add" type="submit" onclick="return saveAssignment()" value="Save" id="submit" />
+            <a href="@Model.CancelURL" target='_parent'>
+                <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
+            </a>
+        </center>
+    </div>
 
 
 
