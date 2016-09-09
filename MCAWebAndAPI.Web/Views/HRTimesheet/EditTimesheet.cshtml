@@ -284,6 +284,11 @@
                 Save as Draft
             </button>
 
+            <button id="print-button" class="btn btn-primary" type="button" onclick="printTimesheet()">
+                <i class="fa fa-save"></i>
+                Print to PDF
+            </button>
+
             <button id="approve-button" class="btn btn-success" type="submit">
                 Approve
             </button>
@@ -309,6 +314,22 @@
 @section scripts{
 
     <script>
+        
+        function printTimesheet() {
+
+         //   $("#print-button")
+         //.click(function () {
+
+         //    $('form').prop('action', '/HRTimesheet/PrintTimesheet');
+         //    $("form").submit();
+
+         //});
+            //PrintTimesheet
+
+            $('form').prop('action', '/HRTimesheet/PrintTimesheet');
+            $("form").submit();
+        }
+
         function save(status, level) {
             $("#TimesheetStatus").val(status);
             $("#ApprovalLevel").val(level);
@@ -332,7 +353,7 @@
                 if (strStatus !== "Draft" && strPermission !== "Professional") {
                     $("#approve-button").show();
                     $("#reject-button").show();
-                 }
+                }
 
                 if (strStatus !== "Draft") {
 
@@ -365,31 +386,31 @@
                         datefrom.enable(false);
                         location.enable(false);
                     }
-                 else if (strPermission === "HR") {
-                    $("#draft-button").hide();
+                    else if (strPermission === "HR") {
+                        $("#draft-button").hide();
+                    }
                 }
-            }
 
-        $("#Location_Value").data("kendoDropDownList").value("xxx");
+                $("#Location_Value").data("kendoDropDownList").value("xxx");
 
-        var professional = $("#ProfessionalName_Value").data("kendoDropDownList");
+                var professional = $("#ProfessionalName_Value").data("kendoDropDownList");
 
 
-        if (strPermission !== "HR") {
-            professional.enable(false);
-        }
+                if (strPermission !== "HR") {
+                    professional.enable(false);
+                }
 
       
 
-    });
+            });
 
 
         $("#draft-button")
-          .click(function () {
+            .click(function () {
 
-              save('Draft', '');
+                save('Draft', '');
 
-          });
+            });
 
         $("#submit-button")
             .click(function () {
@@ -426,6 +447,7 @@
 
             });
 
+     
 
         $("#delete-button-all")
             .click(function () {
@@ -460,9 +482,9 @@
 
 
         $("#submit-button-update-period")
-                  .click(function () {
-                      $('form').prop('action', '/HRTimesheet/UpdatePeriod');
-                  });
+            .click(function () {
+                $('form').prop('action', '/HRTimesheet/UpdatePeriod');
+            });
 
 
         function OnSelectProfessionalName(e) {

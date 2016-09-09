@@ -7,6 +7,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
@@ -15,7 +16,9 @@ using MCAWebAndAPI.Service.Resources;
 using System.Threading.Tasks;
 using Elmah;
 using MCAWebAndAPI.Model.ViewModel.Form.Common;
+using MCAWebAndAPI.Service.Converter;
 using MCAWebAndAPI.Service.JobSchedulers.Schedulers;
+using MCAWebAndAPI.Web.Resources;
 
 //using
 
@@ -383,6 +386,47 @@ namespace MCAWebAndAPI.Web.Controllers
             }
 
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl + strPages);
+        }
+
+        public ActionResult PrintTimesheet(FormCollection form, TimesheetVM viewModel)
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _timesheetService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+           // _timesheetService.CreateAxa(viewModel);
+           // viewModel = _service.GetPopulatedModelAXA(false);
+
+            const string RelativePath = "~/Views/HRTimesheet/PrintTimesheet.cshtml";
+            var view = ViewEngines.Engines.FindView(ControllerContext, RelativePath, null);
+            var fileName = Convert.ToDateTime(viewModel.Period).ToString("MMM-dd-yyyy") + "-print.pdf";
+            byte[] pdfBuf = null;
+            string content;
+            // ControllerContext context = new ControllerContext();
+            ControllerContext.Controller.ViewData.Model = viewModel;
+            ViewData = ControllerContext.Controller.ViewData;
+            TempData = ControllerContext.Controller.TempData;
+
+            using (var writer = new StringWriter())
+            {
+                //var contextviewContext = new ViewContext(ControllerContext, view.View, ViewData, TempData, writer);
+                var contextviewContext = new ViewContext(ControllerContext, view.View, ViewData, TempData, writer);
+                view.View.Render(contextviewContext, writer);
+                writer.Flush();
+                content = writer.ToString();
+
+                // Get PDF Bytes
+                try
+                {
+                    pdfBuf = PDFConverter.Instance.ConvertFromHTMLLandscape(fileName, content);
+                }
+                catch (Exception e)
+                {
+                    ErrorSignal.FromCurrentContext().Raise(e);
+                    RedirectToAction("Index", "Error");
+                }
+            }
+            if (pdfBuf == null)
+                return HttpNotFound();
+            return File(pdfBuf, "application/pdf");
         }
 
         public JsonResult GridWorkflow_Read([DataSourceRequest] DataSourceRequest request)
