@@ -22,7 +22,7 @@ namespace MCAWebAndAPI.Service.JobSchedulers.Jobs
 
             IPSAScheduleService _psaManagementService = new PSAScheduleService();
             _psaManagementService.SetSiteUrl(siteUrl);
-            //_psaManagementService.CheckTwoMonthsBeforeExpireDate();
+            _psaManagementService.CheckTwoMonthsBeforeExpireDate();
             _psaManagementService.changePSAstatus();
             //_psaManagementService.psaStatusNotification();
 
