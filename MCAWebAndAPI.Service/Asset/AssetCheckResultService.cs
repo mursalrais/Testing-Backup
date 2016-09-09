@@ -22,6 +22,30 @@ namespace MCAWebAndAPI.Service.Asset
             _siteUrl = siteUrl;
         }
 
+        public int GetMinIDProfesional()
+        {
+            var caml = @"<View><Query><Where><Neq><FieldRef Name='ID' /><Value Type='Counter'>0</Value></Neq></Where><OrderBy><FieldRef Name='Title' Ascending='True' /></OrderBy></Query><RowLimit Paged='TRUE'>1</RowLimit></View>";
+            var siteHr = _siteUrl.Replace("/bo", "/hr");
+            var dataProvesional = SPConnector.GetList("Professional Master", siteHr, caml);
+            int ID = 0;
+            foreach (var item in dataProvesional)
+            {
+                ID = Convert.ToInt32(item["ID"].ToString());
+            }
+
+            return ID;
+        }
+
+        public int GetIDPosition(int? ProfesionalID)
+        {
+            var siteHr = _siteUrl.Replace("/bo", "/hr");
+            var dataProvesional = SPConnector.GetListItem("Professional Master", ProfesionalID, siteHr);
+
+            int PositionID = (dataProvesional["Position"] as FieldLookupValue).LookupId;
+
+            return PositionID;
+        }
+
         public AssetCheckResultHeaderVM GetPopulatedModel(int? ID = default(int?), string FormID = null, AssetCheckResultHeaderVM dataAssetResult = null)
         {
             var model = new AssetCheckResultHeaderVM();
@@ -47,9 +71,9 @@ namespace MCAWebAndAPI.Service.Asset
                 model.CountedBy2.Value = Convert.ToInt32(cekResult["assetcheckcountedby2"].ToString());
                 model.CountedBy3.Value = Convert.ToInt32(cekResult["assetcheckcountedby3"].ToString());
 
-                model.hCountedBy1 = GetFullNamePosition(model.CountedBy1.Value);
-                model.hCountedBy2 = GetFullNamePosition(model.CountedBy2.Value);
-                model.hCountedBy3 = GetFullNamePosition(model.CountedBy3.Value);
+                model.hCountedBy1 = GetFullNamePosision(model.CountedBy1.Value);
+                model.hCountedBy2 = GetFullNamePosision(model.CountedBy2.Value);
+                model.hCountedBy3 = GetFullNamePosision(model.CountedBy3.Value);
 
                 model.hCountedBy1Nama = model.hCountedBy1.Split('-')[0];
                 model.hCountedBy2Nama = model.hCountedBy2.Split('-')[0];
@@ -61,9 +85,9 @@ namespace MCAWebAndAPI.Service.Asset
                 {
                     model.Name.Value = Convert.ToInt32(cekResult["approvalname"].ToString());
                 }
-                if (cekResult["approvalPosition"] != null)
+                if (cekResult["approvalposision"] != null)
                 {
-                    model.Position.Value = Convert.ToInt32(cekResult["approvalPosition"].ToString());
+                    model.Position.Value = Convert.ToInt32(cekResult["approvalposision"].ToString());
                 }
 
                 var modelDetail = new List<AssetCheckResultItemVM>();
@@ -123,7 +147,6 @@ namespace MCAWebAndAPI.Service.Asset
                         modelDetailItem.Status = (item["assetstatus"] == null ? "" : item["assetstatus"].ToString());
                     }
 
-
                     modelDetailItem.Existense = (item["existence"] == null ? "" : item["existence"].ToString());
                     modelDetailItem.Condition = (item["condition"] == null ? "" : item["condition"].ToString());
                     modelDetailItem.Specification = (item["specification"] == null ? "" : item["specification"].ToString());
@@ -142,7 +165,7 @@ namespace MCAWebAndAPI.Service.Asset
             return model;
         }
 
-        public string GetFullNamePosition(int? id)
+        public string GetFullNamePosision(int? id)
         {
             var siteHr = _siteUrl.Replace("/bo", "/hr");
             var dataCountedBy1 = SPConnector.GetListItem("Professional Master", id, siteHr);
@@ -162,7 +185,7 @@ namespace MCAWebAndAPI.Service.Asset
             var siteHr = _siteUrl.Replace("/bo", "/hr");
             var dataItemPropesional = SPConnector.GetListItem("Professional Master", id, siteHr);
             email.EmailTo = dataItemPropesional["officeemail"].ToString();
-            email.EmailContent = "Dear Mr " + dataItemPropesional["Title"].ToString() + "," + Environment.NewLine + Environment.NewLine + 
+            email.EmailContent = "Dear Mr " + dataItemPropesional["Title"].ToString() + "," + Environment.NewLine + Environment.NewLine +
                 "You are authorized as an approver  for asset check result (form ID: " + formid.ToString() + ") conducted on " + conductedDate.ToString() + "." + Environment.NewLine +
                 "The result is inputted by  " + inputtedBy + Environment.NewLine +
                 "Please complete the approval process immediately." + Environment.NewLine +
@@ -182,10 +205,10 @@ namespace MCAWebAndAPI.Service.Asset
             var dataItemPropesionalFrom = SPConnector.GetListItem("Professional Master", idFrom, siteHr);
             email.EmailTo = dataItemPropesional["officeemail"].ToString();
             email.EmailContent = "Dear Mr " + dataItemPropesional["Title"].ToString() + "," + Environment.NewLine + Environment.NewLine +
-                "Asset check result (form ID: " + formid + ") conducted on " + conductedDate + " already approved by Mr " + dataItemPropesionalFrom["Title"].ToString() + Environment.NewLine + Environment.NewLine + 
+                "Asset check result (form ID: " + formid + ") conducted on " + conductedDate + " already approved by Mr " + dataItemPropesionalFrom["Title"].ToString() + Environment.NewLine + Environment.NewLine +
                 "Thank you for your attention.";
 
-            
+
             return email;
         }
 
@@ -196,8 +219,8 @@ namespace MCAWebAndAPI.Service.Asset
             var dataItemPropesional = SPConnector.GetListItem("Professional Master", idTo, siteHr);
             var dataItemPropesionalFrom = SPConnector.GetListItem("Professional Master", idFrom, siteHr);
             email.EmailTo = dataItemPropesional["officeemail"].ToString();
-            email.EmailContent = "Dear Mr " + dataItemPropesional["Title"].ToString() + "," + Environment.NewLine + Environment.NewLine + 
-                "Asset check result (form ID: " + formid + ") conducted on " + conductedDate + " already rejected by Mr " + dataItemPropesionalFrom["Title"].ToString() + "." + Environment.NewLine + Environment.NewLine + 
+            email.EmailContent = "Dear Mr " + dataItemPropesional["Title"].ToString() + "," + Environment.NewLine + Environment.NewLine +
+                "Asset check result (form ID: " + formid + ") conducted on " + conductedDate + " already rejected by Mr " + dataItemPropesionalFrom["Title"].ToString() + "." + Environment.NewLine + Environment.NewLine +
                 "Thank you for your attention.";
 
             return email;
@@ -223,14 +246,14 @@ namespace MCAWebAndAPI.Service.Asset
             model.CompletionStatus = "In Progress";
 
             var modelDetail = new List<AssetCheckResultItemVM>();
-                        
-            var caml = @"<View><Query><Where><Eq><FieldRef Name='assetcheckformid' /><Value Type='Number'>"+FormID+"</Value></Eq></Where></Query></View>";
+
+            var caml = @"<View><Query><Where><Eq><FieldRef Name='assetcheckformid' /><Value Type='Number'>" + FormID + "</Value></Eq></Where></Query></View>";
             int i = 0;
             foreach (var item in SPConnector.GetList("Asset Check Detail", _siteUrl, caml))
             {
                 var dataAssetMaster = SPConnector.GetListItem("Asset Master", (item["assetmaster"] as FieldLookupValue).LookupId, _siteUrl);
 
-                caml = @"<View><Query><Where><Eq><FieldRef Name='assetsubasset_x003a_ID' /><Value Type='Lookup'>"+ (item["assetmaster"] as FieldLookupValue).LookupId + "</Value></Eq></Where></Query></View>";
+                caml = @"<View><Query><Where><Eq><FieldRef Name='assetsubasset_x003a_ID' /><Value Type='Lookup'>" + (item["assetmaster"] as FieldLookupValue).LookupId + "</Value></Eq></Where></Query></View>";
                 var dataLoan = SPConnector.GetList("Asset Loan Return Detail", _siteUrl, caml);
 
                 string status = "";
@@ -277,7 +300,7 @@ namespace MCAWebAndAPI.Service.Asset
                     }
                     modelDetailItem.Status = (item["assetstatus"] == null ? "" : item["assetstatus"].ToString());
                 }
-                
+
 
                 modelDetailItem.Existense = (item["existence"] == null ? "" : item["existence"].ToString());
                 modelDetailItem.Condition = (item["condition"] == null ? "" : item["condition"].ToString());
@@ -300,7 +323,7 @@ namespace MCAWebAndAPI.Service.Asset
             var model = data;
 
             model.FormID.Choices = GetChoicesFromList("Asset Check", "assetcheckformid");
-            if(ID == null)
+            if (ID == null)
             {
                 model.CompletionStatus = "In Progress";
             }
@@ -322,9 +345,9 @@ namespace MCAWebAndAPI.Service.Asset
                 }
 
                 i++;
-                
+
                 item.Item = i;
-                
+
                 item.DifferentQty = item.PhysicalQty - item.SystemQty;
 
                 if (status != "")
@@ -408,7 +431,7 @@ namespace MCAWebAndAPI.Service.Asset
                     }
                 }
 
-                var columnValues = new Dictionary<string, object>();                
+                var columnValues = new Dictionary<string, object>();
                 columnValues.Add("assetcheckcountdate", model.CountDate);
                 columnValues.Add("assetcheckcountedby1", model.CountedBy1.Value);
                 columnValues.Add("assetcheckcountedby2", model.CountedBy2.Value);
@@ -417,7 +440,7 @@ namespace MCAWebAndAPI.Service.Asset
                 if (isApproval)
                 {
                     columnValues.Add("approvalname", model.Name.Value);
-                    columnValues.Add("approvalPosition", model.Position.Value);
+                    columnValues.Add("approvalposision", model.Position.Value);
 
                     EmailHelperAssetCheckResult email = new EmailHelperAssetCheckResult();
                     email = RequestApproveEmail(
@@ -425,11 +448,11 @@ namespace MCAWebAndAPI.Service.Asset
                         model.hFormID,
                         model.CountDate,
                         GetFullName(model.CountedBy1.Value),
-                        _siteUrl + String.Format(UrlResource.AssetCheckResultApprove,ID.ToString()));
+                        _siteUrl + String.Format(UrlResource.AssetCheckResultApprove, ID.ToString()));
                     EmailUtil.Send(email.EmailTo, "Notification to approve the result", email.EmailContent);
                 }
 
-                SPConnector.UpdateListItem("Asset Check Result", ID ,columnValues, _siteUrl);
+                SPConnector.UpdateListItem("Asset Check Result", ID, columnValues, _siteUrl);
 
                 foreach (var item in model.Details)
                 {
@@ -444,7 +467,7 @@ namespace MCAWebAndAPI.Service.Asset
                     columnValues.Add("remarks", item.Remarks);
                     int? iId = item.ID;
 
-                    SPConnector.UpdateListItem("Asset Check Result Detail", item.ID ,columnValues, _siteUrl);
+                    SPConnector.UpdateListItem("Asset Check Result Detail", item.ID, columnValues, _siteUrl);
                 }
 
                 return model;
@@ -525,11 +548,11 @@ namespace MCAWebAndAPI.Service.Asset
                 if (isApproval)
                 {
                     columnValues.Add("approvalname", data.Name.Value);
-                    columnValues.Add("approvalPosition", data.Position.Value);
+                    columnValues.Add("approvalposision", data.Position.Value);
                 }
 
                 SPConnector.AddListItem("Asset Check Result", columnValues, _siteUrl);
-                
+
                 foreach (var item in model.Details)
                 {
                     columnValues = new Dictionary<string, object>();
@@ -555,7 +578,7 @@ namespace MCAWebAndAPI.Service.Asset
                     SPConnector.AddListItem("Asset Check Result Detail", columnValues, _siteUrl);
                 }
 
-                caml = @"<View><Query><Where><Eq><FieldRef Name='assetcheckresultid' /><Value Type='Number'>"+assetcheckresultid.ToString()+"</Value></Eq></Where></Query></View>";
+                caml = @"<View><Query><Where><Eq><FieldRef Name='assetcheckresultid' /><Value Type='Number'>" + assetcheckresultid.ToString() + "</Value></Eq></Where></Query></View>";
                 var lastItemAssetCheckResult = SPConnector.GetList("Asset Check Result", _siteUrl, caml);
                 int IDResult = 0;
                 foreach (var item in lastItemAssetCheckResult)
@@ -572,7 +595,7 @@ namespace MCAWebAndAPI.Service.Asset
                         assetcheckformid.ToString(),
                         model.CountDate,
                         GetFullName(model.CountedBy1.Value),
-                        _siteUrl + String.Format( UrlResource.AssetCheckResultApprove, IDResult.ToString()));
+                        _siteUrl + String.Format(UrlResource.AssetCheckResultApprove, IDResult.ToString()));
                     EmailUtil.Send(email.EmailTo, "Notification to approve the result", email.EmailContent);
                 }
 
@@ -647,7 +670,7 @@ namespace MCAWebAndAPI.Service.Asset
             var list = SPConnector.GetListItem("Asset Check Detail", ID, SiteUrl);
             var viewmodel = new AssetCheckResultHeaderVM();
             viewmodel.ID = Convert.ToInt32(ID);
-            if(list["assetstatus"] != null)
+            if (list["assetstatus"] != null)
             {
                 viewmodel.CompletionStatus = Convert.ToString(list["assetstatus"]);
             }

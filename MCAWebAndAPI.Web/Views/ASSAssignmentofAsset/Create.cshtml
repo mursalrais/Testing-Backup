@@ -4,18 +4,14 @@
 
 @model AssignmentOfAssetVM
 
-@using (Ajax.BeginForm("Submit", "ASSAssignmentOfAsset",
-                                                                                                                                       FormMethod.Post,
-                                                                                                                                       new AjaxOptions
-                                                                                                                                       {
-                                                                                                                                           OnBegin = "onBeginForm",
-                                                                                                                                           OnComplete = "onCompleteForm",
-                                                                                                                                           OnSuccess = "onSuccessFormEmbed",
-                                                                                                                                           OnFailure = "onFailureForm"
-                                                                                                                                       }, new { @class = "form-horizontal" }))
-
+@using (Html.BeginForm("Submit", "ASSAssignmentOfAsset", FormMethod.Post,
+                                                                                                                        new
+                                                                                                                        {
+                                                                                                                            @class = "form-horizontal",
+                                                                                                                            enctype = "multipart/form-data"
+                                                                                                                        }))
 {
-    <form class="form-horizontal" method="post" action="/ASSAssignmentOfAsset/Submit" id="create-asset-acquisition-form">
+    <form class="form-horizontal" method="post" action="/ASSAssignmentOfAsset/Submit" id="create-asset-acquisition-form" enctype="multipart/form-data">
         <fieldset>
             <legend>Form Asset Assignment</legend>
             <div class="col-md-6">
@@ -47,6 +43,12 @@
                     @Html.Bootstrap().LabelFor(m => m.ContactNo).Class("col-md-4 control-label")
                     <div class="col-md-8">
                         <input type="text" disabled name="ContactNo" id="ContactNo" value="" style="width : 100%"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.attach).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        <input type="file" name="attach" id="attach" style="width : 100%" />
                     </div>
                 </div>
                 <div class="form-group">
