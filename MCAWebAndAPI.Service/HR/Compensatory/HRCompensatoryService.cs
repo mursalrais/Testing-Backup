@@ -495,7 +495,15 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     cratedValueDetail.Add("totalhours", viewModel.CmpTotalHours);
                     cratedValueDetail.Add("totaldays", viewModel.TotalDay);
                     cratedValueDetail.Add("remarks", viewModel.remarks);
-                    cratedValueDetail.Add("compensatorystatus", "Pending Approval 1 of 2");
+                    
+
+                    if (viewModels.StatusForm == "submithr")
+                    {
+                        cratedValueDetail.Add("compensatorystatus", "Approved");
+                    } else
+                    {
+                        cratedValueDetail.Add("compensatorystatus", "Pending Approval 1 of 2");
+                    }
 
                     try
                     {
@@ -528,7 +536,15 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                         cratedValueDetail.Add("totalhours", viewModel.CmpTotalHours);
                         cratedValueDetail.Add("totaldays", viewModel.TotalDay);
                         cratedValueDetail.Add("remarks", viewModel.remarks);
-                        cratedValueDetail.Add("compensatorystatus", "Pending Approval 1 of 2");
+
+                        if (viewModels.StatusForm == "submithr")
+                        {
+                            cratedValueDetail.Add("compensatorystatus", "Approved");
+                        } else
+                        {
+                            cratedValueDetail.Add("compensatorystatus", "Pending Approval 1 of 2");
+
+                        }
 
                         try
                         {
