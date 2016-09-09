@@ -128,10 +128,17 @@ namespace MCAWebAndAPI.Web.Controllers
 
             if (sessionVariable == null)
             {
-                siteUrl = string.IsNullOrEmpty(siteUrl) ? ConfigResource.DefaultHRSiteUrl : siteUrl;
+                //CMIIW
+                //1. karena ini static, ketika panggil langsung method ini service null
+                //2. nama session siteURL dipakai untuk url BO
 
+                //siteUrl = string.IsNullOrEmpty(siteUrl) ? ConfigResource.DefaultHRSiteUrl : siteUrl;
+                //service.SetSiteUrl(siteUrl);
+                //SessionManager.Set(SharedController.Session_SiteUrl, siteUrl);
+
+                service = new DataMasterService();
+                siteUrl = ConfigResource.DefaultHRSiteUrl;
                 service.SetSiteUrl(siteUrl);
-                SessionManager.Set(SharedController.Session_SiteUrl, siteUrl);
 
                 professionals = service.GetProfessionals();
             }

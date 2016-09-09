@@ -30,7 +30,7 @@
         </div>
         <legend>Item Detail</legend>
         <div class="row">
-            @Html.Partial("_DisplayEventBudgetItems", Model)
+            @Html.Partial("_DisplayEventBudgetItems", Model.SCAVoucherItems)
         </div>
         @Html.HiddenFor(m => m.ID, new { @id = "hdnSCAVoucherID" })
         @Html.HiddenFor(m => m.SCAVoucherNo)
@@ -50,10 +50,9 @@
                     <i class="fa fa-save"></i>
                     Save
                 </button>
-                <button id="submit-cancel" acti class="btn btn-primary" type="button">
-                    <i class="fa fa-back"></i>
-                    Cancel
-                </button>
+                <a href="@ViewBag.CancelUrl" target='_parent'>
+                    <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
+                </a>
             </div>
         </div>
     </div>
@@ -96,4 +95,10 @@
     textarea{
         padding-left:10px!important;
     }
+
+    .k-button-icontext {
+        height: 35px;
+        margin-left: 5px;
+    }
+
 </style>

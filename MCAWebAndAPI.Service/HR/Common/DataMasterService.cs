@@ -369,5 +369,18 @@ namespace MCAWebAndAPI.Service.HR.Common
 
             return headerID;
         }
+
+        public IEnumerable<ProfessionalMaster> GetProfessionalsActives()
+        {
+            var caml = @"<View><Query><Where><Or><Gt><FieldRef Name='lastworkingdate' /><Value IncludeTimeValue='TRUE' Type='DateTime'>" + DateTime.UtcNow.ToString("yyyy-MM-dd") + "T23:57:44Z</Value></Gt><IsNull><FieldRef Name='lastworkingdate' /></IsNull></Or></Where></Query><ViewFields><FieldRef Name='ID' /><FieldRef Name='Title' /><FieldRef Name='Position' /><FieldRef Name='Project_x002f_Unit' /><FieldRef Name='officeemail' /><FieldRef Name='maritalstatus' /><FieldRef Name='PSAnumber' /><FieldRef Name='personalemail' /><FieldRef Name='Join_x0020_Date' /><FieldRef Name='hiaccountnr' /><FieldRef Name='mobilephonenr' /><FieldRef Name='payrolltaxstatus' /><FieldRef Name='payrollbankname' /><FieldRef Name='payrollcurrency' /><FieldRef Name='payrollbranchoffice' /><FieldRef Name='payrollaccountnr' /></ViewFields><QueryOptions /></View>";
+
+            var models = new List<ProfessionalMaster>();
+            foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl, caml))
+            {
+                models.Add(ConvertToProfessionalModel_Light(item));
+            }
+
+            return models;
+        }
     }
 }

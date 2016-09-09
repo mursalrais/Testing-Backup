@@ -21,7 +21,7 @@
 
         <legend>Item Detail</legend>
         <div class="row">
-            @Html.Partial("_EventBudgetItems", Model)
+            @Html.Partial("_EventBudgetItems", Model.SCAVoucherItems)
         </div>
     </fieldset>
 
@@ -32,10 +32,9 @@
                     <i class="fa fa-save"></i>
                     Save
                 </button>
-                <button id="submit-cancel" acti class="btn btn-primary" type="reset">
-                    <i class="fa fa-back"></i>
-                    Cancel
-                </button>
+                <a href="@ViewBag.CancelUrl" target='_parent'>
+                    <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
+                </a>
             </div>
         </div>
     </div>
@@ -116,4 +115,10 @@
     textarea{
         padding-left:10px!important;
     }
+
+    .k-button-icontext {
+        height: 35px;
+        margin-left: 5px;
+    }
+
 </style>

@@ -137,14 +137,14 @@ namespace MCAWebAndAPI.Service.HR.Common
             {
                 viewModel.JoinDate = null;
             }
-            if ((LastWorkingDate.Year ==1)||(CurrentDate <= LastWorkingDate))
-            {
-                viewModel.ProfessionalStatus.Value = "Active";
-            }
-            else
-            {
-                viewModel.ProfessionalStatus.Value = "Inactive";
-            }
+            //if ((LastWorkingDate.Year ==1)||(CurrentDate <= LastWorkingDate))
+            //{
+            //    viewModel.ProfessionalStatus.Value = "Active";
+            //}
+            //else
+            //{
+            //    viewModel.ProfessionalStatus.Value = "Inactive";
+            //}
             //viewModel.ProfessionalStatus.Value = Convert.ToString(listItem["Professional_x0020_Status"]);
             viewModel.PlaceOfBirth = Convert.ToString(listItem["placeofbirth"]);
             viewModel.DateOfBirth = Convert.ToDateTime(listItem["dateofbirth"]);
@@ -416,7 +416,7 @@ namespace MCAWebAndAPI.Service.HR.Common
             updatedValue.Add("Position", new FieldLookupValue
             { LookupId = (int)viewModel.CurrentPosition.Value });
             updatedValue.Add("Project_x002f_Unit",viewModel.DivisionProjectUnit.Value);
-            updatedValue.Add("Professional_x0020_Status", viewModel.ProfessionalStatus.Value);
+            //updatedValue.Add("Professional_x0020_Status", viewModel.ProfessionalStatus.Value);
             updatedValue.Add("Join_x0020_Date", viewModel.JoinDate);
             updatedValue.Add("placeofbirth", viewModel.PlaceOfBirth);
             updatedValue.Add("dateofbirth", viewModel.DateOfBirth);
@@ -492,7 +492,10 @@ namespace MCAWebAndAPI.Service.HR.Common
                 logger.Debug(e.Message);
                 throw e;
             }
-
+            if (viewModel.ID == null)
+            {
+               viewModel.ID = SPConnector.GetLatestListItemID(SP_PROMAS_LIST_NAME, _siteUrl);
+            }
             return viewModel.ID;
         }
 

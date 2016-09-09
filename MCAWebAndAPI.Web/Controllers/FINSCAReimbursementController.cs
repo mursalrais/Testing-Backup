@@ -46,6 +46,7 @@ namespace MCAWebAndAPI.Web.Controllers
             SessionManager.Set(SharedController.Session_SiteUrl, siteUrl);
 
             var viewModel = service.Get(GetOperation(op), id);
+            ViewBag.CancelUrl = string.Format(FirstPageUrl, siteUrl);
 
             SetAdditionalSettingToViewModel(ref viewModel);
 
@@ -130,13 +131,6 @@ namespace MCAWebAndAPI.Web.Controllers
             if (pdfBuf == null)
                 return HttpNotFound();
             return File(pdfBuf, "application/pdf");
-        }
-
-        public ActionResult Cancel()
-        {
-            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
-
-            return Redirect(string.Format(FirstPageUrl, siteUrl));
         }
 
         private void SetAdditionalSettingToViewModel(ref SCAReimbursementVM viewModel)

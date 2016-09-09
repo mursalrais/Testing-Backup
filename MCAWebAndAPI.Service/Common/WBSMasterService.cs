@@ -42,6 +42,16 @@ namespace MCAWebAndAPI.Service.Common
             return wbs;
         }
 
+        public static WBSMapping GetWBSMappingsInProgram(string _siteUrl, int? ID)
+        {
+            var wbs = new WBSMapping();
+
+            var listItem = SPConnector.GetListItem(SP_WBSMAPPING_IN_PROGRAM_LIST_NAME, ID, _siteUrl);
+            wbs = ConvertToWBSModelInProgram(listItem);
+            
+            return wbs;
+        }
+
         public static bool UpdateWBSMapping(string _siteUrl)
         {
             var wbsList = GetAllWBSMappings(_siteUrl);

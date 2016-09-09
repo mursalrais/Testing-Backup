@@ -1,7 +1,7 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
 @model PerformanceEvaluationVM
 
-@if (Model.ID == null)
+@if (Model.ID == null || ViewBag.Type == "Edit")
 {
     <div class="col-md-6">
         <div class="form-group">

@@ -256,13 +256,14 @@ namespace MCAWebAndAPI.Service.Finance
             viewModel.Status.Value = Convert.ToString(listItem[FIELD_STATUS]);
             viewModel.PaidTo.Value = Convert.ToString(listItem[FIELD_PAIDTO]);
 
-            //TODO: the following line is troublesome please check if we need to check both values for != null
-            if (viewModel.Professional != null && listItem[FIELD_PROFESSIONALID] != null)
+            if (listItem[FIELD_PROFESSIONALID] != null)
             {
                 viewModel.Professional.Value = (listItem[FIELD_PROFESSIONALID] as FieldLookupValue).LookupId;
+                viewModel.Professional.Text = string.Format("{0} - {1}", (listItem[FIELD_PROFESSIONAL_NAME] as FieldLookupValue).LookupValue, 
+                    Convert.ToString(listItem[FIELD_PROFESSIONAL_POSITION]));
             }
 
-            if (viewModel.Vendor != null && listItem[FIELD_VENDORID] != null)
+            if (listItem[FIELD_VENDORID] != null)
             {
                 viewModel.Vendor.Value = (listItem[FIELD_VENDORID] as FieldLookupValue).LookupId;
             }

@@ -34,14 +34,15 @@ namespace MCAWebAndAPI.Service.Finance
         private const string FieldName_DocNo = "Title";
         private const string FieldName_Date = "Reimbursement_x0020_Date";
         private const string FieldName_PaidTo = "Paid_x0020_To";
-        private const string FieldName_Professional = "NewColumn1";
+        private const string FieldName_Professional = "ProfessionalID";
         private const string FieldName_Vendor = "Vendor_x0020_ID";
+        private const string FieldName_Vendor_Name = "Vendor_x0020_ID_x003a_Vendor_x00";
         private const string FieldName_Driver = "Driver";
 
         private const string FieldName_Currency = "Currency";
         private const string FieldName_AmountLiquidated = "Amount_x0020_Liquidated";
         private const string FieldName_AmountReimbursed = "Amount_x0020_Reimbursed";
-        private const string FieldName_WBS = "WBS_x0020_ID";
+        private const string FieldName_WBS = "WBSID";
         private const string FieldName_WBSID = "WBS_x0020_ID_x003a_WBS_x0020_ID";
         private const string FieldName_WBSDesc = "WBS_x0020_ID_x003a_WBS_x0020_Des";
         private const string FieldName_GL = "GL_x0020_ID";
@@ -54,23 +55,23 @@ namespace MCAWebAndAPI.Service.Finance
         private string siteUrl = string.Empty;
         static Logger logger = LogManager.GetCurrentClassLogger();
 
-        public int? Create(PettyCashReimbursementVM viewModel)
+        public int? Create(ref PettyCashReimbursementVM viewModel)
         {
             int? result = null;
             var columnValues = new Dictionary<string, object>
            {
                {FieldName_Date, viewModel.Date},
                {FieldName_PaidTo, viewModel.PaidTo.Value},
-               //{FieldName_Professional, viewModel.Professional},
+               {FieldName_Professional,  viewModel.Professional.Value == null ? 0 : viewModel.Professional.Value},
                {FieldName_Vendor, viewModel.Vendor==null ? 0 : viewModel.Vendor.Value},
                {FieldName_Driver, viewModel.Driver},
                {FieldName_Currency, viewModel.Currency.Value},
                {FieldName_Reason, viewModel.Reason},
                {FieldName_Fund, viewModel.Fund},
-               {FieldName_WBS, viewModel.WBS.Value},
+               {FieldName_WBS,  viewModel.WBS.Value},
                {FieldName_GL, viewModel.GL.Value},
                {FieldName_AmountLiquidated, viewModel.Amount},
-               {FieldName_AmountReimbursed, viewModel.AmountReimbursed},
+               {FieldName_AmountReimbursed, viewModel.Amount},
                {FieldName_Remarks, viewModel.Remarks}
             };
 
@@ -90,7 +91,7 @@ namespace MCAWebAndAPI.Service.Finance
                     SPConnector.UpdateListItem(ListName, viewModel.ID, columnValues, siteUrl);
                     result = viewModel.ID;
                 }
-
+                
 
             }
             catch (Exception e)
@@ -122,6 +123,7 @@ namespace MCAWebAndAPI.Service.Finance
             {
                 var listItem = SPConnector.GetListItem(ListName, id, siteUrl);
                 viewModel = ConvertToVM(siteUrl, listItem);
+                viewModel.ID = id;
                 viewModel.DocumentUrl = GetDocumentUrl(viewModel.ID);
             }
 
@@ -170,15 +172,16 @@ namespace MCAWebAndAPI.Service.Finance
             //TODO: the following line causes error
             //  but currently there is nothing you can do 
             //  we are waiting for eCEOs to fix Professional Master table
-            //viewModel.Professional.Value = Convert.ToInt32((listItem[FieldName_Professional] as FieldLookupValue).LookupId.ToString());
-
+            viewModel.Professional.Value = Convert.ToInt32(listItem[FieldName_Professional]==null ? 0 : (listItem[FieldName_Professional]));
             viewModel.Vendor.Value = listItem[FieldName_Vendor] == null ? 0 : Convert.ToInt32((listItem[FieldName_Vendor] as FieldLookupValue).LookupId.ToString());
+            viewModel.VendorName = listItem[FieldName_Vendor_Name] == null ? "" : (listItem[FieldName_Vendor_Name] as FieldLookupValue).LookupValue.ToString();
             viewModel.Driver = Convert.ToString(listItem[FieldName_Driver]);
             viewModel.Currency.Value = Convert.ToString(listItem[FieldName_Currency]);
             viewModel.Reason = Convert.ToString(listItem[FieldName_Reason]);
+            viewModel.Amount = Convert.ToDecimal(listItem[FieldName_AmountLiquidated]);
             viewModel.AmountReimbursed = Convert.ToDecimal(listItem[FieldName_AmountReimbursed]);
-            viewModel.WBS.Value = Convert.ToInt32((listItem[FieldName_WBS] as FieldLookupValue).LookupId.ToString());
-            viewModel.WBSDescription = string.Format("{0} - {1}", (listItem[FieldName_WBSID] as FieldLookupValue).LookupValue.ToString(), (listItem[FieldName_WBSDesc] as FieldLookupValue).LookupValue.ToString());
+            viewModel.WBS.Value = Convert.ToInt32(listItem[FieldName_WBS]);
+            //viewModel.WBSDescription = string.Format("{0} - {1}", (listItem[FieldName_WBSID] as FieldLookupValue).LookupValue.ToString(), (listItem[FieldName_WBSDesc] as FieldLookupValue).LookupValue.ToString());
             viewModel.GL.Value = Convert.ToInt32((listItem[FieldName_GL] as FieldLookupValue).LookupId.ToString());
             viewModel.GLDescription = string.Format("{0} - {1}", (listItem[FieldName_GLNo] as FieldLookupValue).LookupValue.ToString(), (listItem[FieldName_GLDesc] as FieldLookupValue).LookupValue.ToString());
             viewModel.Remarks = Convert.ToString(listItem[FieldName_Remarks]);

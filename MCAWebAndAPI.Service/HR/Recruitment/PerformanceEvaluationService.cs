@@ -48,9 +48,18 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         public bool UpdatePerformanceEvaluation(PerformanceEvaluationVM PerformanceEvaluation)
         {
             var updatedValues = new Dictionary<string, object>();
-
-            updatedValues.Add("pestatus", "Closed");
-            updatedValues.Add("closingdate", DateTime.UtcNow);
+            if (PerformanceEvaluation.EditType == "Edit")
+            {
+                updatedValues.Add("Title", PerformanceEvaluation.Period.Value);
+                updatedValues.Add("latestdateforcreation", PerformanceEvaluation.LatestCreationDate.Value);
+                updatedValues.Add("latestdateforapproval1", PerformanceEvaluation.LatestDateApproval1.Value);
+                updatedValues.Add("latestdateforapproval2", PerformanceEvaluation.LatestDateApproval2.Value);
+            }
+            else
+            {
+                updatedValues.Add("pestatus", "Closed");
+                updatedValues.Add("closingdate", DateTime.UtcNow);
+            }
             try
             {
                 SPConnector.UpdateListItem(SP_LIST_NAME, PerformanceEvaluation.ID, updatedValues, _siteUrl);
@@ -60,25 +69,26 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 logger.Debug(e.Message);
                 return false;
             }
-
-
-            var caml = @"<View><Query><Where><Eq><FieldRef Name='performanceevaluation_x003a_ID' /><Value Type='Lookup'>" + PerformanceEvaluation.ID + "</Value></Eq></Where></Query><ViewFields><FieldRef Name='ID' /></ViewFields><QueryOptions /></View>";
-            var listItem = SPConnector.GetList(SP_DETAIL_LIST_NAME, _siteUrl, caml);
-            foreach (var item in listItem)
+            if (PerformanceEvaluation.EditType != "Edit")
             {
-                updatedValues = new Dictionary<string, object>();
-                updatedValues.Add("pestatus", "Closed");
-                try
+                var caml = @"<View><Query><Where><Eq><FieldRef Name='performanceevaluation_x003a_ID' /><Value Type='Lookup'>" + PerformanceEvaluation.ID + "</Value></Eq></Where></Query><ViewFields><FieldRef Name='ID' /></ViewFields><QueryOptions /></View>";
+                var listItem = SPConnector.GetList(SP_DETAIL_LIST_NAME, _siteUrl, caml);
+                foreach (var item in listItem)
                 {
-                    SPConnector.UpdateListItem(SP_DETAIL_LIST_NAME, Convert.ToInt32(item["ID"]), updatedValues, _siteUrl);
-                }
-                catch (Exception e)
-                {
-                    logger.Debug(e.Message);
-                    return false;
-                }
+                    updatedValues = new Dictionary<string, object>();
+                    updatedValues.Add("pestatus", "Closed");
+                    try
+                    {
+                        SPConnector.UpdateListItem(SP_DETAIL_LIST_NAME, Convert.ToInt32(item["ID"]), updatedValues, _siteUrl);
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Debug(e.Message);
+                        return false;
+                    }
 
-            }
+                }
+            }            
 
             return true;
         }

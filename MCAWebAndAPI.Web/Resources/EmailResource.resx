@@ -181,60 +181,56 @@ Kindly check the link as per below to go to direct page accordingly.  Thank you.
 Link : {1}</value>
   </data>
   <data name="EmailInterviewToInterviewPanel" xml:space="preserve">
-    <value>Dear Interview Panel,
+    <value>Dear Interviewer Panel,
 
+This email is sent to you to notify that here is the latest result from previous interview for position {1}
+This list requires your action to review as well as to prepare the Interview process for further action. 
+
+To view the detail, please click following link: 
 {0}
 
-This email is sent to you to notify that here is the latest list of shortlisted candidate. This list
-
-requires your action to review as well as to prepare the Interview process for further action.
-
-Kindly check the link as per below to go to direct page accordingly. Thank you.
-
-Link : {1}</value>
+Thank you for your attention.</value>
   </data>
   <data name="EmailShortlistToCandidate" xml:space="preserve">
-    <value>Dear Candidate Interview,
-
-{0}
-
-you are invited to interview on : {1}
-At hour : {2}</value>
+    <value>{0}
+</value>
   </data>
   <data name="EmailShortlistToHR" xml:space="preserve">
     <value>Dear HR Team,
 
-This email is sent to you to notify that here is the latest list of shortlisted candidate. This list
+This email is sent to you to notify that here is the latest list of shortlisted candidate for position {1} . 
+Please complete the process immediately to send the list to Interviewer Panel for further action.
 
-requires your action to send to Interview Panel for further action. Kindly check the link as per
+To view the detail, please click following link: 
+Link : {0}
 
-below to go to direct page accordingly. Thank you.
+Thank you for your attention.
 
-Link : {0}</value>
+</value>
   </data>
   <data name="EmailShortlistToInterviewPanel" xml:space="preserve">
-    <value>Dear Interview Panel,
+    <value>Dear Interviewer Panel,
 
-{0}
+This email is sent to you to notify that here is the latest list of shortlisted candidate for position {1}
+This list requires your action to review as well as to prepare the Interview process for further action. 
 
-This email is sent to you to notify that here is the latest list of shortlisted candidate. This list
+To view the detail, please click following link: 
 
-requires your action to review as well as to prepare the Interview process for further action.
-
-Kindly check the link as per below to go to direct page accordingly. Thank you.
-
-Link : {1}</value>
-  </data>
-  <data name="EmailShortlistToRequestor" xml:space="preserve">
-    <value>Dear Respective Requestor,
-
-This email is sent to you to notify that here is the list of shortlisted candidate from HR. This list
-
-requires your action to select the most suitable candidate for this position. Kindly check the link
-
-as per below to go to direct page accordingly. Thank you.
 
 Link : {0}</value>
+  </data>
+  <data name="EmailShortlistToRequestor" xml:space="preserve">
+    <value>Dear Respective User,
+
+You are authorized to shortlist candidate (s) for position {1} . 
+Please complete the process immediately to select the most suitable candidate for this position. 
+
+To view the detail, please click following link: 
+Link : {0}
+
+Thank you for your attention.
+
+</value>
   </data>
   <data name="GranteesEmailOutstandingAdvance" xml:space="preserve">
     <value>&lt;p&gt;Dear Mr/Ms. {0},&lt;/p&gt;
@@ -337,18 +333,28 @@ Link : {0}</value>
 This email is sent to you to notify that your approval request has been responded by the HR Team. Thank you.</value>
   </data>
   <data name="ProfessionalPerformancePlan" xml:space="preserve">
-    <value>Dear Respective Approver,
+    <value>Dear {0},
 
-This email is sent to you to notify that there is a request which required your action to approve. Kindly check the link as per below to go to direct page accordingly. You may check your personal page in IMS (My Approval View). Thank you. 
+You are authorized as an approver for Performance Plan Form for period {1}.
+This Performance Plan is requested by {2}.
+Please complete the approval process immediately
 
-Link :   {0}{1}/EditForm_Custom.aspx?ID={2}</value>
+To view the detail, please click following link: 
+{3}{4}/EditForm_Custom.aspx?ID={5}
+
+Thank you for your attention.</value>
   </data>
   <data name="ProfessionalPerfromanceEvaluation" xml:space="preserve">
-    <value>Dear Respective Approver,
+    <value>Dear {0},
 
-This email is sent to you to notify that there is a request which required your action to approve. Kindly check the link as per below to go to direct page accordingly. You may check your personal page in IMS (My Approval View). Thank you. 
+You are authorized as an approver for Performance Evaluation Form for period {1}.
+This Performance Evaluation is requested by {2}.
+Please complete the approval process immediately
 
-Link :  {0}{1}/EditForm_Custom.aspx?ID={2}</value>
+To view the detail, please click following link: 
+{3}{4}/EditForm_Custom.aspx?ID={5}
+
+Thank you for your attention.</value>
   </data>
   <data name="PSAChangeStatus" xml:space="preserve">
     <value>Dear Mr./Mrs. HR Officer,
@@ -363,6 +369,27 @@ There is a PSA with number {0} that already active start from today. Here is the
     Please review the following form request:    
 &lt;/p&gt;
 Link: &lt;a href="{0}"&gt;Click Here&lt;/a&gt;</value>
+  </data>
+  <data name="ProfessionalPerformanceEvaluationRequestor" xml:space="preserve">
+    <value>Dear {0},
+
+Your request has been approved by {1}. Please contact respective person for any queries.  
+
+Thank you.</value>
+  </data>
+  <data name="ProfessionalPerformancePlanApproved" xml:space="preserve">
+    <value>Dear {0},
+
+Your request has been approved by {1}. Please contact respective person for any queries.  
+
+Thank you.</value>
+  </data>
+  <data name="ProfessionalPerformancePlanRejected" xml:space="preserve">
+    <value>Dear {0},
+
+Your request has been rejected by {1}. Please contact respective person for any queries.  
+
+Thank you.</value>
   </data>
   <data name="PSATwoMonthBeforeExpired" xml:space="preserve">
     <value>Dear {0},

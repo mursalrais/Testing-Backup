@@ -68,6 +68,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
             var viewModel = _service.GetPettyCashPaymentVoucher(null);
             SetAdditionalSettingToViewModel(ref viewModel, true);
+            ViewBag.CancelUrl = string.Format(FirstPageUrl, siteUrl);
+
             return View(viewModel);
         }
 
@@ -79,10 +81,11 @@ namespace MCAWebAndAPI.Web.Controllers
                 SessionManager.Set(SharedController.Session_SiteUrl, siteUrl);
 
                 _service.SetSiteUrl(siteUrl);
-                
 
                 var viewModel = _service.GetPettyCashPaymentVoucher(ID.Value);
                 SetAdditionalSettingToViewModel(ref viewModel, false);
+                ViewBag.CancelUrl = string.Format(FirstPageUrl, siteUrl);
+
                 return View(viewModel);
             }
             else

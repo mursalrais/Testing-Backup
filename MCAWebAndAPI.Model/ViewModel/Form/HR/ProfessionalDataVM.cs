@@ -93,6 +93,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// officeemail
         /// </summary>
+        /// 
+        [Required]
         [UIHint("EmailAddress")]
         public string OfficeEmail { get; set; }
 

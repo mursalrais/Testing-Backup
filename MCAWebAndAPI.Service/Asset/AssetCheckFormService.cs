@@ -135,7 +135,7 @@ namespace MCAWebAndAPI.Service.Asset
 
             if(!isNew)
             {
-                var caml = @"<View><Query><Where><And>" + camlOfiice + @"<And>" + camlFloor + camlRoom + @"</And></And></Where></Query></View>";
+                var caml = @"<View><Query><Where><And>" + camlOfiice + @"<And>" + camlFloor + camlRoom + @"</And></And></Where><OrderBy><FieldRef Name='assetsubasset' Ascending='True' /></OrderBy></Query></View>";
                 int i = 0;
                 foreach (var item in SPConnector.GetList("Asset Assignment Detail", _siteUrl, caml))
                 {

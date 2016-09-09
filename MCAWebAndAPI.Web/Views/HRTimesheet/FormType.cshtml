@@ -1,0 +1,56 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@using MCAWebAndAPI.Model.Common
+@model TimesheetVM
+
+
+
+    <div class="form-horizontal">
+
+        <fieldset>
+          
+            <div class="row">
+                <div class="col-sm-6">
+                    @Html.HiddenFor(m => m.UserLogin)
+                    @Html.HiddenFor(m => m.ProfessionalID)
+                    @Html.HiddenFor(m => m.UserPermission)
+                    @Html.HiddenFor(m => m.Name)
+                    @Html.HiddenFor(m => m.TimesheetStatus)
+                    @Html.HiddenFor(m => m.ApprovalLevel)
+                   
+                </div>
+                <div class="col-sm-6">
+
+                </div>
+            </div>
+           
+        </fieldset>
+
+    
+
+    </div> 
+
+
+
+@section scripts{
+
+    <script>
+        function save(status,level) {
+            //alert('ok');
+            $("#TimesheetStatus").val(status);
+            $("#ApprovalLevel").val(level);
+            $('form').prop('action', '/HRTimesheet/SubmitTimesheet');
+            $("form").submit();
+        }
+
+        $(document)
+            .ready(function () {
+
+                window.location.href = $("#URL").val();
+
+            });
+
+
+
+       
+    </script>
+}

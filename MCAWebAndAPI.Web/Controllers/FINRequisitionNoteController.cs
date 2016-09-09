@@ -73,7 +73,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             
             var viewModel = reqNoteService.Get(null);
             viewModel.UserEmail = userEmail;
-
+            ViewBag.CancelUrl = string.Format(FirstPageUrl, siteUrl);
             SetAdditionalSettingToViewModel(ref viewModel, true);
             return View(viewModel);
         }
@@ -103,7 +103,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
 
                 #endregion Check User
 
-
+                ViewBag.CancelUrl = string.Format(FirstPageUrl, siteUrl);
                 SetAdditionalSettingToViewModel(ref viewModel, false);
 
                 return View(viewModel);
