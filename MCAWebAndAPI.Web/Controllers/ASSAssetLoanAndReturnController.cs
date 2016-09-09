@@ -197,7 +197,7 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult Update(FormCollection form, AssetLoanAndReturnHeaderVM viewModel, string site)
+        public ActionResult Update(FormCollection form, AssetLoanAndReturnHeaderVM viewModel, string SiteUrl)
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             assetLoanAndReturnService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
