@@ -65,7 +65,7 @@ namespace MCAWebAndAPI.Web.Controllers
             SessionManager.Set("SiteUrl", siteUrl);
             _timesheetService.SetSiteUrl(siteUrl);
             var viewModel = await _timesheetService.GetTimesheetLoadUpdate(id, userlogin);
-
+            viewModel.URL = siteUrl;
             if (viewModel.UserPermission == "Not Authorized") return RedirectToAction("NotAuthorized", "HRTimesheet");
 
             SessionManager.Set("TimesheetDetails", viewModel.TimesheetDetails);

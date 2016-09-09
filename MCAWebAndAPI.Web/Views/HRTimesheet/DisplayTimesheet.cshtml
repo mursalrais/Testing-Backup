@@ -29,7 +29,7 @@
                     @Html.HiddenFor(m => m.ApprovalLevel)
                     @Html.HiddenFor(m => m.StartPeriod)
                     @Html.HiddenFor(m => m.EndPeriod)
-
+                    @Html.HiddenFor(m => m.URL)
                     <div class="form-group">
                         @Html.Bootstrap().LabelFor(m => m.Period).Class("col-sm-4 control-label")
                         <div class="col-sm-8">
@@ -195,6 +195,9 @@
 
     <div class="row">
         <div class="col-sm-12">
+            <button id="submit-to-cancel" class="btn btn-success">
+                Cancel
+            </button>
             <button id="print-button" class="btn btn-success" type="submit">
                 Print to PDF
             </button>
@@ -223,7 +226,33 @@
         $(document)
             .ready(function() {
 
-             
+
+                //if (viewModel.UserPermission == "HR") {
+                //    strPages = "/sitePages/HRTimesheetView.aspx";
+                //}
+                //else if (viewModel.UserPermission == "Professional") {
+                //    strPages = "/sitePages/ProfessionalTimesheetView.aspx";
+                //}
+                //else if (viewModel.UserPermission == "Approver") {
+                //    strPages = "";
+
+                //}
+
+                $("#submit-to-cancel").kendoButton({
+                    click: function (e) {
+                        var strPermission = $("#UserPermission").val();
+
+                        if (strPermission === "HR") {
+
+                            window.top.location.href = $("#URL").val() + '/sitePages/HRTimesheetView.aspx';
+                        } else if (strPermission === "Professional") {
+                            window.top.location.href = $("#URL").val() + '/sitePages/ProfessionalTimesheetView.aspx';
+                        }
+                        else if (strPermission === "Approver") {
+                            window.top.location.href = $("#URL").val();
+                        }
+                    }
+                });
 
 
             });
