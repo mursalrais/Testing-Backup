@@ -124,8 +124,15 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
                                 DateTime professionalEndPSA = Convert.ToDateTime(latestProfessionalPSA["psaexpirydates"]);
                                 DateTime professionalLastDate = Convert.ToDateTime(latestProfessionalPSA["lastworkingdate"]);
                                 string psaStatus = Convert.ToString(latestProfessionalPSA["psastatus"]);
+                                string projectUnit = Convert.ToString(latestProfessionalPSA["ProjectOrUnit"]);
+                                int? positionID = FormatUtil.ConvertLookupToID(latestProfessionalPSA, "position");
 
-                                UpdateProfessionalData(profID, psaNumber, professionalJoinDate, professionalStartPSA, professionalEndPSA, professionalLastDate, psaStatus);
+                                if(profID != null)
+                                {
+                                    UpdateProfessionalData(profID, psaNumber, professionalJoinDate, professionalStartPSA, professionalEndPSA, professionalLastDate, psaStatus, projectUnit, positionID);
+                                }
+
+                                
                             }
                             else if(id < professionalPSA)
                             {
@@ -146,8 +153,13 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
                                     DateTime professionalEndPSA = Convert.ToDateTime(latestProfessionalPSA["psaexpirydates"]);
                                     DateTime professionalLastDate = Convert.ToDateTime(latestProfessionalPSA["lastworkingdate"]);
                                     string psaStatus = Convert.ToString(latestProfessionalPSA["psastatus"]);
+                                    string projectUnit = Convert.ToString(latestProfessionalPSA["ProjectOrUnit"]);
+                                    int? positionID = FormatUtil.ConvertLookupToID(latestProfessionalPSA, "position");
 
-                                    UpdateProfessionalData(profID, psaNumber, professionalJoinDate, professionalStartPSA, professionalEndPSA, professionalLastDate, psaStatus);
+                                    if (profID != null)
+                                    {
+                                        UpdateProfessionalData(profID, psaNumber, professionalJoinDate, professionalStartPSA, professionalEndPSA, professionalLastDate, psaStatus, projectUnit, positionID);
+                                    }
                                 }
                                 if((dateToday < latestDateOfNewPSA) && (dateToday > latestExpiryDate))
                                 {
@@ -160,8 +172,13 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
                                     DateTime professionalEndPSA = Convert.ToDateTime(latestProfessionalPSA["psaexpirydates"]);
                                     DateTime professionalLastDate = Convert.ToDateTime(latestProfessionalPSA["lastworkingdate"]);
                                     string psaStatus = Convert.ToString(latestProfessionalPSA["psastatus"]);
+                                    string projectUnit = Convert.ToString(latestProfessionalPSA["ProjectOrUnit"]);
+                                    int? positionID = FormatUtil.ConvertLookupToID(latestProfessionalPSA, "position");
 
-                                    UpdateProfessionalData(profID, psaNumber, professionalJoinDate, professionalStartPSA, professionalEndPSA, professionalLastDate, psaStatus);
+                                    if (profID != null)
+                                    {
+                                        UpdateProfessionalData(profID, psaNumber, professionalJoinDate, professionalStartPSA, professionalEndPSA, professionalLastDate, psaStatus, projectUnit, positionID);
+                                    }
 
                                 }
                             }
@@ -205,15 +222,20 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
                                 DateTime currentPSAExpiryDate = Convert.ToDateTime(currentProfessionalPSA["lastworkingdate"]).ToLocalTime();
                                 DateTime currentPSANewPSA = Convert.ToDateTime(currentProfessionalPSA["dateofnewpsa"]).ToLocalTime();
 
-                                int? profID = FormatUtil.ConvertLookupToID(currentProfessionalPSA, "professional");//GetProfessionalID(psaNumber);
+                                int? profID = FormatUtil.ConvertLookupToID(currentProfessionalPSA, "professional");
                                 string psaNumber = Convert.ToString(currentProfessionalPSA["Title"]);
                                 DateTime professionalJoinDate = Convert.ToDateTime(currentProfessionalPSA["joindate"]);
                                 DateTime professionalStartPSA = Convert.ToDateTime(currentProfessionalPSA["dateofnewpsa"]);
                                 DateTime professionalEndPSA = Convert.ToDateTime(currentProfessionalPSA["psaexpirydates"]);
                                 DateTime professionalLastDate = Convert.ToDateTime(currentProfessionalPSA["lastworkingdate"]);
                                 string psaStatus = Convert.ToString(currentProfessionalPSA["psastatus"]);
+                                string projectUnit = Convert.ToString(currentProfessionalPSA["ProjectOrUnit"]);
+                                int? positionID = FormatUtil.ConvertLookupToID(currentProfessionalPSA, "position");
 
-                                UpdateProfessionalData(profID, psaNumber, professionalJoinDate, professionalStartPSA, professionalEndPSA, professionalLastDate, psaStatus);
+                                if (profID != null)
+                                {
+                                    UpdateProfessionalData(profID, psaNumber, professionalJoinDate, professionalStartPSA, professionalEndPSA, professionalLastDate, psaStatus, projectUnit, positionID);
+                                }
                             }
                             if (id == professionalPSA)
                             {
@@ -233,8 +255,13 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
                                 DateTime professionalEndPSA = Convert.ToDateTime(latestProfessionalPSA["psaexpirydates"]);
                                 DateTime professionalLastDate = Convert.ToDateTime(latestProfessionalPSA["lastworkingdate"]);
                                 string psaStatus = Convert.ToString(latestProfessionalPSA["psastatus"]);
+                                string projectUnit = Convert.ToString(latestProfessionalPSA["ProjectOrUnit"]);
+                                int? positionID = FormatUtil.ConvertLookupToID(latestProfessionalPSA, "position");
 
-                                UpdateProfessionalData(profID, psaNumber, professionalJoinDate, professionalStartPSA, professionalEndPSA, professionalLastDate, psaStatus);
+                                if (profID != null)
+                                {
+                                    UpdateProfessionalData(profID, psaNumber, professionalJoinDate, professionalStartPSA, professionalEndPSA, professionalLastDate, psaStatus, projectUnit, positionID);
+                                }
                             }
                         }
                     }
@@ -296,7 +323,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
             return listProfessionalPSAID.LastOrDefault();
         }
 
-        private bool UpdateProfessionalData(int? professionalID, string psaNumber, DateTime professionalJoinDate, DateTime professionalStartPSA, DateTime professionalEndPSA, DateTime professionalLastDate, string psaStatus)
+        private bool UpdateProfessionalData(int? professionalID, string psaNumber, DateTime professionalJoinDate, DateTime professionalStartPSA, DateTime professionalEndPSA, DateTime professionalLastDate, string psaStatus, string projectUnit, int? positionID)
         {
             var columnValues = new Dictionary<string, object>();
 
@@ -305,11 +332,13 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
             columnValues.Add("PSAstartdate", professionalStartPSA);
             columnValues.Add("PSAexpirydate", professionalEndPSA);
             columnValues.Add("lastworkingdate", professionalLastDate);
-            columnValues.Add("psastatus", psaStatus);
+            columnValues.Add("Professional_x0020_Status", psaStatus);
+            columnValues.Add("Project_x002f_Unit", projectUnit);
+            columnValues.Add("Position", new FieldLookupValue { LookupId = (int)positionID });
 
             try
             {
-                SPConnector.UpdateListItemNoVersionConflict(SP_PSA_LIST_NAME, professionalID, columnValues, _siteUrl);
+                SPConnector.UpdateListItem(SP_PROFESSIONAL_LIST_NAME, professionalID, columnValues, _siteUrl);
             }
             catch (Exception e)
             {
