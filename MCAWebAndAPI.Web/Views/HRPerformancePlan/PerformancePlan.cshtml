@@ -353,14 +353,5 @@
                 $("form").submit();
             });
         });
-
-        $(document).ready(function () {
-            var Requestor = "@ViewBag.Requestor";
-            var List = "@ViewBag.ListName";
-            var typeForm = "@Model.TypeForm";
-            if (typeForm == "Professional") {
-                displayWorkflowRouter("workflow-placeholder", List, Requestor);
-            }
-        });
     </script>
 }

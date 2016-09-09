@@ -301,13 +301,5 @@ if (Model.TypeForm == "Approver2" && Model.StatusForm == "Pending Approval 2 of 
                 $("form").submit();
             });
         });
-
-        $(document).ready(function () {
-            var Requestor = "@ViewBag.Requestor";
-            var typeForm = "@Model.TypeForm";
-            if (typeForm == "Professional") {
-                displayWorkflowRouter("workflow-placeholder", "@ViewBag.ListName", Requestor);
-            }
-        });
     </script>
 }

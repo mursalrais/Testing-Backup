@@ -142,11 +142,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         private async Task<ProfessionalPerformancePlanVM> ConvertToProfessionalPerformancePlanModel(ListItem listItem, int? ID, string requestor, string listName, string listNameWorkflow, string columnName)
         {
-            var caml = @"<View>  
-            <Query> 
-               <Where><And><Eq><FieldRef Name='professionalperformanceplan' /><Value Type='Lookup'>" + ID + @"</Value></Eq><Eq><FieldRef Name='approver0' /><Value Type='Text'>" + requestor + @"</Value></Eq></And></Where> 
-            </Query> 
-      </View>";
+            var caml = @"<View><Query><Where><And><Eq><FieldRef Name='professionalperformanceplan' /><Value Type='Lookup'>"+ID+"</Value></Eq><Eq><FieldRef Name='approvername_x003a_Office_x0020_' /><Value Type='Lookup'>"+requestor+"</Value></Eq></And></Where></Query><ViewFields><FieldRef Name='approverlevel' /><FieldRef Name='approvername_x003a_Office_x0020_' /><FieldRef Name='professionalperformanceplan' /></ViewFields><QueryOptions /></View>";
 
             var viewModel = new ProfessionalPerformancePlanVM();
             string firstName;
