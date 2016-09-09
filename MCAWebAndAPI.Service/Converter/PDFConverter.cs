@@ -94,8 +94,8 @@ namespace MCAWebAndAPI.Service.Converter
                     DocumentTitle = pageTitle,
                     PaperSize = PaperKind.A4Rotated, // Implicit conversion to PechkinPaperSize
                     Margins =
-                    {
-                        All = 1.375,
+                    { 
+                        All = 0.3,
                         Unit = Unit.Centimeters
                     }
                 },
