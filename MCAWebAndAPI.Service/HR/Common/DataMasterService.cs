@@ -382,5 +382,24 @@ namespace MCAWebAndAPI.Service.HR.Common
 
             return models;
         }
+
+        public IEnumerable<ProfessionalMaster> GetProfessionalsActive()
+        {
+            var caml = "";
+
+            caml = @"<View><Query><Where><Or><IsNull><FieldRef Name='lastworkingdate' />
+                    </IsNull><Gt><FieldRef Name='lastworkingdate' />
+                    <Value IncludeTimeValue='TRUE' Type='DateTime'>" + DateTime.UtcNow.ToString("yyyy-MM-dd") + "T23:57:44Z</Value></Gt>" +
+                   "</Or></Where></Query></View>";
+
+            var models = new List<ProfessionalMaster>();
+            foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl, caml))
+            {
+                models.Add(ConvertToProfessionalModel_Light(item));
+            }
+
+            return models;
+        }
+
     }
 }

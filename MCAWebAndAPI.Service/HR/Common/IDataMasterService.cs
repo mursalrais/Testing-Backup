@@ -13,6 +13,8 @@ namespace MCAWebAndAPI.Service.HR.Common
 
         IEnumerable<ProfessionalMaster> GetProfessionalsActives();
 
+        IEnumerable<ProfessionalMaster> GetProfessionalsActive();
+
         IEnumerable<ProfessionalMaster> GetProfessionalMonthlyFees();
 
         IEnumerable<ProfessionalMaster> GetProfessionalMonthlyFeesEdit();

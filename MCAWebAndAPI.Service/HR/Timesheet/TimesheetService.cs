@@ -44,7 +44,7 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
         private Dictionary<DateTime, string> lstDayOff;
 
         private IDataMasterService _dataService;
-        private IProfessionalService _professionalService;
+       // private IProfessionalService _professionalService;
         static Logger logger = LogManager.GetCurrentClassLogger();
         public TimesheetService()
         {
@@ -636,7 +636,7 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
         {
             _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
             _dataService.SetSiteUrl(_siteUrl);
-            _professionalService.SetSiteUrl(_siteUrl);
+          //  _professionalService.SetSiteUrl(_siteUrl);
         }
 
         public IEnumerable<TimesheetDetailVM> AppendWorkingDays(int? id, IEnumerable<TimesheetDetailVM> currentDays, DateTime from,

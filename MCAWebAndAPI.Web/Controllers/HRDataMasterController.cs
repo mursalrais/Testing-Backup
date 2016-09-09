@@ -77,7 +77,7 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
 
-            var professionals = GetFromExistingActiveSession();
+            var professionals = GetFromExistingProfessionalsActiveSession();
             professionals = professionals.OrderBy(e => e.FirstMiddleName);
 
             return Json(professionals.Select(e =>
@@ -309,6 +309,17 @@ namespace MCAWebAndAPI.Web.Controllers
             //Get existing session variable
             var sessionVariable = System.Web.HttpContext.Current.Session["ProfessionalMasterActive"] as IEnumerable<ProfessionalMaster>;
             var professionals = sessionVariable ?? _dataMasterService.GetProfessionalsActives();
+
+            if (sessionVariable == null) // If no session variable is found
+                System.Web.HttpContext.Current.Session["ProfessionalMasterActive"] = professionals;
+            return professionals;
+        }
+
+        private IEnumerable<ProfessionalMaster> GetFromExistingProfessionalsActiveSession()
+        {
+            //Get existing session variable
+            var sessionVariable = System.Web.HttpContext.Current.Session["ProfessionalMasterActive"] as IEnumerable<ProfessionalMaster>;
+            var professionals = sessionVariable ?? _dataMasterService.GetProfessionalsActive();
 
             if (sessionVariable == null) // If no session variable is found
                 System.Web.HttpContext.Current.Session["ProfessionalMasterActive"] = professionals;
