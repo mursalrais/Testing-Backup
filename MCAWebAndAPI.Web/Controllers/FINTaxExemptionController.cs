@@ -42,8 +42,10 @@ namespace MCAWebAndAPI.Web.Controllers
             viewModel.TypeOfTax = new TaxTypeComboBoxVM();
 
             viewModel.TypeOfTax.Value = typeOfTax;
-
             viewModel.TypeOfTax.OnSelectEventName = "onSelectTypeOfTax";
+
+            ViewBag.CancelUrl = string.Format(FirstIncomeTaxPageURL, siteUrl);
+
             return View(viewModel);
         }
 
@@ -64,6 +66,9 @@ namespace MCAWebAndAPI.Web.Controllers
             viewModel.TypeOfTax = viewModel.TaxExemptionIncomeVM.TypeOfTax;
             viewModel.Remarks = viewModel.TaxExemptionIncomeVM.Remarks;
             viewModel.DocumentUrl = viewModel.TaxExemptionIncomeVM.DocumentUrl;
+
+            ViewBag.CancelUrl = string.Format(FirstIncomeTaxPageURL, siteUrl);
+
             return View(viewModel);
         }
         
@@ -84,6 +89,8 @@ namespace MCAWebAndAPI.Web.Controllers
             viewModel.TypeOfTax= viewModel.TaxExemptionVATVM.TypeOfTax;
             viewModel.Remarks = viewModel.TaxExemptionVATVM.Remarks;
             viewModel.DocumentUrl = viewModel.TaxExemptionVATVM.DocumentUrl;
+            ViewBag.CancelUrl = string.Format(FirstVATTaxPageURL, siteUrl);
+
             return View(viewModel);
         }
 
@@ -107,6 +114,8 @@ namespace MCAWebAndAPI.Web.Controllers
             viewModel.TypeOfTax = viewModel.TaxExemptionOtherVM.TypeOfTax;
             viewModel.Remarks = viewModel.TaxExemptionOtherVM.Remarks;
             viewModel.DocumentUrl = viewModel.TaxExemptionOtherVM.DocumentUrl;
+            ViewBag.CancelUrl = string.Format(FirstOtherTaxPageURL, siteUrl);
+
             return View(viewModel);
         }
 

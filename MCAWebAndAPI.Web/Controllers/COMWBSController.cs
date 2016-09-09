@@ -74,6 +74,17 @@ namespace MCAWebAndAPI.Web.Controllers
             return wbsMappings.Where(w => w.Activity == activity);
         }
         
+        public static WBSMapping GetWBSMappings(int? ID=null)
+        {
+            var result = new WBSMapping();
+            if (ID != null)
+            {
+                result = WBSMasterService.GetWBSMappingsInProgram(siteUrl, ID);
+            }
+
+            return result;
+        }
+
         private static IEnumerable<WBSMapping> GetWBSMappingFromExistingSession()
         {
             //Get existing session variable

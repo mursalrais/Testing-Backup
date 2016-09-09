@@ -38,6 +38,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         [UIHint("AjaxComboBox")]
         public AjaxComboBoxVM Vendor { get; set; } = new AjaxComboBoxVM();
 
+        public string VendorName { get; set; }
+
         public string Driver { get; set; }
 
         [Required]

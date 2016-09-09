@@ -40,9 +40,9 @@ Wireframe FIN10: Petty Cash Voucher
                     Submit
                 </button>
 
-                <button id="cancel-button" class="btn btn-default cancel" type="submit" value="Cancel" name="actionType">
-                    Cancel
-                </button>
+                <a href="@ViewBag.CancelUrl" target='_parent'>
+                    <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
+                </a>
             </div>
         </div>
     </div>
@@ -148,3 +148,11 @@ Wireframe FIN10: Petty Cash Voucher
         }
     </script>
 }
+
+
+<style media="screen">
+    .k-button-icontext {
+        height: 35px;
+        margin-left: 5px;
+    }
+</style>

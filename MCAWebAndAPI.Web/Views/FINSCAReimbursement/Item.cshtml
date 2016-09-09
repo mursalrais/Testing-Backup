@@ -84,10 +84,9 @@
                     <i class="fa fa-save"></i>
                     Submit
                 </button>
-                <button id="submit-cancel" class="btn btn-primary" type="button" onclick="location.href='@Url.Action("Cancel", "FINSCAReimbursement")'">
-                    <i class="fa fa-back"></i>
-                    Cancel
-                </button>
+                <a href="@ViewBag.CancelUrl" target='_parent'>
+                    <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
+                </a>
             </div>
         </div>
     </div>
@@ -134,3 +133,10 @@
         }
     </script>
 }
+
+<style media="screen">
+    .k-button-icontext {
+        height: 35px;
+        margin-left: 5px;
+    }
+</style>

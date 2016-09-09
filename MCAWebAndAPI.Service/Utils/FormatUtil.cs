@@ -117,7 +117,6 @@ namespace MCAWebAndAPI.Service.Utils
                 month: Convert.ToInt32(dateElements[0]),
                 day: Convert.ToInt32(dateElements[1]));
         }
-
         public static DateTime? ConvertDateStringToDateTimeProfessional(ListItem item, string columnName)
         {
             var dateString = Convert.ToString(item[columnName]);

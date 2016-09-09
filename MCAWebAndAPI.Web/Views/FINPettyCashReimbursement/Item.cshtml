@@ -150,6 +150,7 @@
                 }
                 @Html.HiddenFor(m => m.ID)
                 @Html.HiddenFor(m => m.Operation)
+                @Html.HiddenFor(m => m.TransactionNo)
             </div>
         </div>
     </fieldset>
@@ -162,11 +163,18 @@
             <div class="form-actions">
                 <div class="row">
                     <div class="col-sm-12">
+                        @if (Model.ID > 0)
+                        {
+                            <button id="print-button" class="btn btn-default" type="button">
+                                Print
+                            </button>
+                        }
+                        &nbsp;
                         <button id="submit-button" class="btn btn-primary" type="submit">
                             <i class="fa fa-save"></i>
                             Submit
                         </button>
-                        <button id="cancel-button" class="btn btn-default" type="reset">
+                        <button id="cancel-button" class="btn btn-default" type="button">
                             Cancel
                         </button>
                     </div>
@@ -180,6 +188,13 @@
             <div class="form-actions">
                 <div class="row">
                     <div class="col-sm-12">
+                        @if (Model.ID > 0)
+                        {
+                            <button id="print-button" class="btn btn-default" type="button">
+                                Print
+                            </button>
+                        }
+                        &nbsp;
                         <button id="cancel-button" class="btn btn-default" type="button">
                             Close
                         </button>
@@ -200,18 +215,44 @@
         var PAIDTO_DRIVER = "Driver";
 
         $(document).ready(function () {
-            $("#Amount").change(function(){
-                $("#AmountReimbursed").val($("#Amount").val());
-            });
             var data = $("#PaidTo_Value").val();
             setComboboxControl(data);
+
+            $("#AmountReimbursed").data("kendoNumericTextBox").enable(false);
+            $("#Amount").keyup(function () {
+                $("#AmountReimbursed").data("kendoNumericTextBox").value($("#Amount").val());
+            });
+
+            $("#Amount").change(function () {
+                $("#AmountReimbursed").data("kendoNumericTextBox").value($("#Amount").val());
+            });
+
+            $('#print-button').click(function (e) {
+                if (!$('form').valid()) {
+                    alert('Please make sure that all required fields are filled');
+                    return;
+                }
+
+                var actionUrl = $('form').attr("action");
+                var newActionUrl = actionUrl.replace("Save", "Print");
+
+                $('form').prop('action', newActionUrl);
+                $('form').submit();
+
+            });
+
+            $('#cancel-button').click(function (e) {
+                var url = "@ViewBag.CancelUrl";
+                window.top.location = url;
+
+            });
         });
 
         function onSelectPaidTo(e) {
             var data = this.dataItem(e.item);
             setComboboxControl(data);
         }
-    
+
         function setComboboxControl(data) {
             var professionalDropDownList = $("#Professional_Value").data("kendoDropDownList");
             var vendorDropDownList = $("#Vendor_Value").data("kendoDropDownList");
@@ -246,3 +287,11 @@
         }
     </script>
 }
+
+
+<style media="screen">
+    .k-button-icontext {
+        height: 35px;
+        margin-left: 5px;
+    }
+</style>

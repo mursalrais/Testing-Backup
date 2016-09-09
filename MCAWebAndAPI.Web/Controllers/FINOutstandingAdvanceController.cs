@@ -38,6 +38,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
             var viewModel = service.Get(GetOperation(op), id);
 
+            ViewBag.CancelUrl = string.Format(FirstPageUrl, siteUrl);
+
             return View(viewModel);
         }
 

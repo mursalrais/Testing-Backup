@@ -1,4 +1,6 @@
-﻿namespace MCAWebAndAPI.Model.ViewModel.Control
+﻿using System.Collections;
+
+namespace MCAWebAndAPI.Model.ViewModel.Control
 {
     public class ProjectComboBoxVM : ComboBoxVM
     {
@@ -10,7 +12,12 @@
 
         public ProjectComboBoxVM() : base()
         {
-            this.Choices = new string[]
+            this.Choices = GetAll();
+        }
+
+        public static string[] GetAll()
+        {
+            return new string[]
             {
                 PROJECT_GREEN_PROSPERITY,
                 PROJECT_HEALTH,

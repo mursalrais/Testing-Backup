@@ -51,6 +51,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
 
             SCAVoucherVM model = new SCAVoucherVM();
             SetAdditionalSettingToVM(ref model);
+            ViewBag.CancelUrl = string.Format(FirstPageUrl, siteUrl);
 
             return View(model);
         }
@@ -75,6 +76,8 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
                 SessionManager.Set(EventBudgetIDSess, model.EventBudgetID);
             }
 
+            ViewBag.CancelUrl = string.Format(FirstPageUrl, siteUrl);
+
             SetAdditionalSettingToVM(ref model);
             return View(model);
         }
@@ -92,6 +95,8 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
                 model.UserEmail = userEmail;
                 SessionManager.Set(SCAVoucherIDSess, ID);
             }
+
+            ViewBag.CancelUrl = string.Format(FirstPageUrl, siteUrl);
 
             return View(model);
         }

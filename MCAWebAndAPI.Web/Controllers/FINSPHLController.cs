@@ -36,6 +36,7 @@ namespace MCAWebAndAPI.Web.Controllers
             SessionManager.Set(SiteUrl, siteUrl);
 
             var viewModel = new SPHLVM();
+            ViewBag.CancelUrl = string.Format(FirstPage, siteUrl);
 
             return View(viewModel);
         }
@@ -51,6 +52,7 @@ namespace MCAWebAndAPI.Web.Controllers
             {
                 viewModel = service.GetDataSPHL(ID);
             }
+            ViewBag.CancelUrl = string.Format(FirstPage, siteUrl);
 
             return View(viewModel);
         }
