@@ -85,7 +85,8 @@
                     query = query.split('=');
                     query = query[1].split('&');
                     alert("Redirecting....");
-                    window.location = query[0] + "/Lists/AssetMaster/AllItems.aspx";
+                    //window.location = query[0] + "/Lists/AssetMaster/AllItems.aspx";
+                    window.top.location.href = query[0] + "/Lists/AssetMaster/AllItems.aspx";
                 });
 
             }
