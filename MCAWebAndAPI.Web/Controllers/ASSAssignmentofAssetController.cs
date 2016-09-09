@@ -96,12 +96,33 @@ namespace MCAWebAndAPI.Web.Controllers
             siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
-            //return View(new AssetMasterVM());
+            if (_data.CompletionStatus.Value == "Complete")
+            {
+                if (_data.attach.FileName == "" || _data.attach.FileName == null)
+                {
+                    Response.TrySkipIisCustomErrors = true;
+                    Response.TrySkipIisCustomErrors = true;
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    return JsonHelper.GenerateJsonErrorResponse("Have To Attach File to Change Completion Status into Complete");
+                }
+            }
+
+            if (_data.attach.FileName != "" || _data.attach.FileName != null)
+            {
+                if (_data.CompletionStatus.Value != "Complete")
+                {
+                    Response.TrySkipIisCustomErrors = true;
+                    Response.TrySkipIisCustomErrors = true;
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    return JsonHelper.GenerateJsonErrorResponse("Have To Attach File to Change Completion Status into Complete");
+                }
+            }
             int? headerID = null;
             try
             {
+                var postedFile = Request.Files["attach"];
                 headerID = _service.CreateHeader(_data, siteUrl);
-                if(headerID == 0)
+                if (headerID == 0)
                 {
                     Response.TrySkipIisCustomErrors = true;
                     Response.TrySkipIisCustomErrors = true;
@@ -147,6 +168,28 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            if (_data.CompletionStatus.Value == "Complete")
+            {
+                if (_data.attach.FileName == "" || _data.attach.FileName == null)
+                {
+                    Response.TrySkipIisCustomErrors = true;
+                    Response.TrySkipIisCustomErrors = true;
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    return JsonHelper.GenerateJsonErrorResponse("Have To Attach File to Change Completion Status into Complete");
+                }
+            }
+
+            if (_data.attach.FileName != "" || _data.attach.FileName != null)
+            {
+                if (_data.CompletionStatus.Value != "Complete")
+                {
+                    Response.TrySkipIisCustomErrors = true;
+                    Response.TrySkipIisCustomErrors = true;
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    return JsonHelper.GenerateJsonErrorResponse("Have To Attach File to Change Completion Status into Complete");
+                }
+            }
 
             try
             {
@@ -235,7 +278,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 new
                 {
                     Value = Convert.ToString(e.ID),
-                    Text = e.Province.Text+"-"+e.OfficeName+"-"+e.FloorName+"-"+e.RoomName
+                    Text = e.Province.Text + "-" + e.OfficeName + "-" + e.FloorName + "-" + e.RoomName
                 }),
                 JsonRequestBehavior.AllowGet);
         }
@@ -543,7 +586,7 @@ namespace MCAWebAndAPI.Web.Controllers
                                    <Where>
                                       <Eq>
                                          <FieldRef Name='Title' />
-                                         <Value Type='Text'>"+ d.ItemArray[2].ToString() + @"</Value>
+                                         <Value Type='Text'>" + d.ItemArray[2].ToString() + @"</Value>
                                       </Eq>
                                    </Where>
                                 </Query>
@@ -556,7 +599,7 @@ namespace MCAWebAndAPI.Web.Controllers
                                 <QueryOptions /></View>";
                         var sitehr = siteUrl.Replace("/bo", "/hr");
                         var isAssetHolderExist = _service.isExist("Professional Master", caml, sitehr);
-                        if(isAssetHolderExist == true)
+                        if (isAssetHolderExist == true)
                         {
                             DataRow row = TableHeader.NewRow();
                             row["Title"] = type;
@@ -623,7 +666,7 @@ namespace MCAWebAndAPI.Web.Controllers
                         //FXA-GP-FF-0001-GPS
                         var breakAsset = d.ItemArray[6].ToString().Split('-');
                         var assetID = breakAsset[0] + "-" + breakAsset[1] + "-" + breakAsset[2] + "-" + breakAsset[3];
-                        if(breakAsset.Length > 5)
+                        if (breakAsset.Length > 5)
                         {
                             //if breakAsset.Length > 5 (Sub Asset)
                             assetID = breakAsset[0] + "-" + breakAsset[1] + "-" + breakAsset[2] + "-" + breakAsset[3] + "-" + breakAsset[4];
@@ -650,21 +693,21 @@ namespace MCAWebAndAPI.Web.Controllers
                                 <And>
                                     <Eq>
                                     <FieldRef Name='Province' />
-                                    <Value Type='Lookup'>"+d.ItemArray[7].ToString()+@"</Value>
+                                    <Value Type='Lookup'>" + d.ItemArray[7].ToString() + @"</Value>
                                     </Eq>
                                     <And>
                                     <Eq>
                                         <FieldRef Name='Title' />
-                                        <Value Type='Text'>"+d.ItemArray[8].ToString()+@"</Value>
+                                        <Value Type='Text'>" + d.ItemArray[8].ToString() + @"</Value>
                                     </Eq>
                                     <And>
                                         <Eq>
                                             <FieldRef Name='Floor' />
-                                            <Value Type='Text'>"+d.ItemArray[9].ToString()+@"</Value>
+                                            <Value Type='Text'>" + d.ItemArray[9].ToString() + @"</Value>
                                         </Eq>
                                         <Eq>
                                             <FieldRef Name='Room' />
-                                            <Value Type='Text'>"+d.ItemArray[10].ToString()+@"</Value>
+                                            <Value Type='Text'>" + d.ItemArray[10].ToString() + @"</Value>
                                         </Eq>
                                     </And>
                                     </And>

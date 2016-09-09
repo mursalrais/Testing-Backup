@@ -720,3 +720,9 @@ Please try again.
 2016-09-05 20:45:59.6202 MCAWebAndAPI.Service.Converter.CSVConverter List 'Montlhy Fee' does not exist at site with URL 'https://eceos2.sharepoint.com/sites/mca-dev/hr'. at ID: 1
 2016-09-05 20:48:20.4904 MCAWebAndAPI.Service.Converter.CSVConverter System.IndexOutOfRangeException: Index was outside the bounds of the array.
    at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in D:\Reza F. Fikri\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64
+2016-09-07 15:13:08.0115 MCAWebAndAPI.Service.Asset.AssignmentOfAssetService Column 'Attahments' does not exist. It may have been deleted by another user.  /sites/mca-dev/bo/Lists/Asset Assignment
+2016-09-07 15:21:24.8631 MCAWebAndAPI.Service.Asset.AssignmentOfAssetService Column 'Attahments' does not exist. It may have been deleted by another user.  /sites/mca-dev/bo/Lists/Asset Assignment
+2016-09-07 15:45:47.5196 MCAWebAndAPI.Service.Asset.AssignmentOfAssetService The object is used in the context different from the one associated with the object.
+2016-09-07 15:54:42.2717 MCAWebAndAPI.Service.Asset.AssignmentOfAssetService Could not find file 'C:\Program Files\IIS Express\streamFile'.
+2016-09-08 13:37:28.7826 MCAWebAndAPI.Service.Asset.AssignmentOfAssetService The object is used in the context different from the one associated with the object.
+2016-09-08 14:23:02.7083 MCAWebAndAPI.Service.Asset.AssignmentOfAssetService The object is used in the context different from the one associated with the object.
