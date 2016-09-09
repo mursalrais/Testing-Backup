@@ -60,6 +60,19 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewModel);
         }
 
+        public async Task<ActionResult> DisplayTimesheet(string siteUrl, int? id, string userlogin)
+        {
+            SessionManager.Set("SiteUrl", siteUrl);
+            _timesheetService.SetSiteUrl(siteUrl);
+            var viewModel = await _timesheetService.GetTimesheetLoadUpdate(id, userlogin);
+
+            if (viewModel.UserPermission == "Not Authorized") return RedirectToAction("NotAuthorized", "HRTimesheet");
+
+            SessionManager.Set("TimesheetDetails", viewModel.TimesheetDetails);
+            SessionManager.Set("WorkflowItems", viewModel.WorkflowItems);
+            return View(viewModel);
+        }
+
         public ActionResult NotAuthorized(string siteUrl = null)
         {
 
@@ -388,7 +401,8 @@ namespace MCAWebAndAPI.Web.Controllers
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl + strPages);
         }
 
-        public ActionResult PrintTimesheet(FormCollection form, TimesheetVM viewModel)
+        [HttpPost]
+        public ActionResult PrintTimesheet(TimesheetVM viewModel)
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _timesheetService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
@@ -397,7 +411,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             const string RelativePath = "~/Views/HRTimesheet/PrintTimesheet.cshtml";
             var view = ViewEngines.Engines.FindView(ControllerContext, RelativePath, null);
-            var fileName = Convert.ToDateTime(viewModel.Period).ToString("MMM-dd-yyyy") + "-print.pdf";
+            var fileName = Convert.ToDateTime(viewModel.Period).ToString("MMM-dd-yyyy") + "-" + viewModel.Name +".pdf";
             byte[] pdfBuf = null;
             string content;
             // ControllerContext context = new ControllerContext();

@@ -100,11 +100,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         private async Task<ProfessionalPerformanceEvaluationVM> ConvertToProfessionalPerformancePlanModel(ListItem listItem, int? ID, string requestor, string listName, string listNameWorkflow, string columnName)
         {
-            var caml = @"<View>  
-            <Query> 
-               <Where><And><Eq><FieldRef Name='professionalperformanceevaluatio' /><Value Type='Lookup'>" + ID + @"</Value></Eq><Eq><FieldRef Name='approver0' /><Value Type='Text'>" + requestor + @"</Value></Eq></And></Where> 
-            </Query> 
-      </View>";
+            var caml = @"<View><Query><Where><And><Eq><FieldRef Name='professionalperformanceevaluatio' /><Value Type='Lookup'>" + ID + "</Value></Eq><Eq><FieldRef Name='approvername_x003a_Office_x0020_' /><Value Type='Lookup'>" + requestor + "</Value></Eq></And></Where></Query><ViewFields><FieldRef Name='approverlevel' /><FieldRef Name='approvername_x003a_Office_x0020_' /><FieldRef Name='professionalperformanceevaluatio' /></ViewFields><QueryOptions /></View>";
 
             var viewModel = new ProfessionalPerformanceEvaluationVM();
             string firstName;
@@ -156,6 +152,20 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             if (Check.Count() == 0)
             {
                 viewModel.WorkflowItems = await _workflow.GetWorkflowDetails(requestor, listName);
+            }
+
+            foreach (var item in viewModel.WorkflowItems)
+            {
+                var lvl = item.Level;
+                if (lvl == "1")
+                {
+                    viewModel.Approver1 = item.ApproverNameText;
+                }
+
+                if (lvl == "2")
+                {
+                    viewModel.Approver2 = item.ApproverNameText;
+                }
             }
 
             return viewModel;

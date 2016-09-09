@@ -26,6 +26,33 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
         }
 
+        public bool CheckRequest(AdjustmentDataVM header)
+        {
+            var viewModel = new CompensatoryVM();
+
+            var columnValues = new Dictionary<string, object>();
+
+            var adjustmentlist = new List<AdjustmentDetailsVM>();
+
+            foreach (var detailitem in SPConnector.GetList(SP_AJUDATA_LIST_NAME, _siteUrl, ""))
+            {
+                adjustmentlist.Add(ConvertToAdjusDetailVM(detailitem));
+            }
+
+            foreach (var cekadjust in header.AdjustmentDetails)
+            {
+                foreach (var getadjust in adjustmentlist)
+                {
+                    if (cekadjust.ddlProfessional.Value == getadjust.ddlProfessional.Value && cekadjust.ajusmentType.Text == getadjust.ajusmentType.Text)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
         public AdjustmentDataVM GetPeriod(int? id)
         {
             var viewModel = new AdjustmentDataVM();
@@ -171,27 +198,23 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             {
                 if (viewModel.ID == null)
                 {
-                    var checkdata = CheckAdjustment(viewModel.ddlProfessional.Value);
-                    if (checkdata == 0)
-                    {
-                        var cratedValueDetail = new Dictionary<string, object>();
-                        cratedValueDetail.Add("Title", Convert.ToString(getperiod));
-                        cratedValueDetail.Add("adjustmentperiod", getperiod);
-                        cratedValueDetail.Add("professional", new FieldLookupValue { LookupId = (int)viewModel.ddlProfessional.Value });
-                        cratedValueDetail.Add("adjustmenttype", viewModel.ajusmentType.Text);
-                        cratedValueDetail.Add("adjustmentamount", viewModel.amount);
-                        cratedValueDetail.Add("debitorcredit", viewModel.payType.Text);
-                        cratedValueDetail.Add("remarks", viewModel.remark);
+                    var cratedValueDetail = new Dictionary<string, object>();
+                    cratedValueDetail.Add("Title", Convert.ToString(getperiod));
+                    cratedValueDetail.Add("adjustmentperiod", getperiod);
+                    cratedValueDetail.Add("professional", new FieldLookupValue { LookupId = (int)viewModel.ddlProfessional.Value });
+                    cratedValueDetail.Add("adjustmenttype", viewModel.ajusmentType.Text);
+                    cratedValueDetail.Add("adjustmentamount", viewModel.amount);
+                    cratedValueDetail.Add("debitorcredit", viewModel.payType.Text);
+                    cratedValueDetail.Add("remarks", viewModel.remark);
 
-                        try
-                        {
-                            SPConnector.AddListItem(SP_AJUDATA_LIST_NAME, cratedValueDetail, _siteUrl);
-                        }
-                        catch (Exception e)
-                        {
-                            logger.Error(e.Message);
-                            throw e;
-                        }
+                    try
+                    {
+                        SPConnector.AddListItem(SP_AJUDATA_LIST_NAME, cratedValueDetail, _siteUrl);
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error(e.Message);
+                        throw e;
                     }
                 }
                 else

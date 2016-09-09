@@ -1,0 +1,265 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model TimesheetVM
+
+@using (Html.BeginForm("", "HRTimesheet", FormMethod.Post,
+                new
+                {
+                    @class = "form-horizontal",
+                    enctype = "multipart/form-data"
+                }))
+
+
+
+
+
+
+{
+    <fieldset>
+
+        <legend>Timesheet</legend>
+      
+            <div class="row">
+                <div class="col-sm-6">
+                    @Html.HiddenFor(m => m.ID)
+                    @Html.HiddenFor(m => m.ProfesionalUserLogin)
+                    @Html.HiddenFor(m => m.ProfessionalID)
+                    @Html.HiddenFor(m => m.UserPermission)
+                    @Html.HiddenFor(m => m.Name)
+                    @Html.HiddenFor(m => m.TimesheetStatus)
+                    @Html.HiddenFor(m => m.ApprovalLevel)
+                    @Html.HiddenFor(m => m.StartPeriod)
+                    @Html.HiddenFor(m => m.EndPeriod)
+
+                    <div class="form-group">
+                        @Html.Bootstrap().LabelFor(m => m.Period).Class("col-sm-4 control-label")
+                        <div class="col-sm-8">
+                            @Html.EditorFor(m => m.Period)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.Bootstrap().LabelFor(m => m.ProfessionalName).Class("col-sm-4 control-label")
+                        <div class="col-sm-8">
+                            @Html.DisplayFor(m => m.ProfessionalName)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.Bootstrap().LabelFor(m => m.ProjectUnit).Class("col-sm-4 control-label")
+                        <div class="col-sm-8">
+                            @Html.DisplayFor(m => m.ProjectUnit)
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                </div>
+            </div>
+
+            <legend>Approval Path</legend>
+
+            <div class="row">
+                @Html.Partial("_WorkflowPathDetails", Model.WorkflowItems)
+            </div>
+
+        <br />
+        <legend>Holidays & Public Holiday</legend>
+        <div class="row">
+            <div class="col-sm-12">
+                @(Html.Kendo()
+                  .Grid<TimesheetDetailVM>()
+                  .Name("TimesheetDetails_Holidays")
+                  .Columns(columns =>
+                  {
+                      columns.Bound(p => p.Date).Format("{0:dddd, MMM d, yyyy}");
+                      columns.Bound(p => p.Type);
+                      columns.Bound(p => p.FullHalf)
+                          .ClientFooterTemplate("Total Day: #=sum#")
+                          .ClientGroupFooterTemplate("Subtotal Day: #=sum#");
+                  })
+                  .DataSource(dataSource => dataSource
+                      .Ajax()
+                      .Aggregates(aggregates =>
+                      {
+                          aggregates.Add(p => p.FullHalf).Sum();
+                      })
+                      .Read("GridHolidays_Read", "HRTimesheet")
+                      .Group(group => group.Add(p => p.Type))
+                  )
+                )
+            </div>
+        </div>
+        <br />
+        <legend>Day-Off</legend>
+        <div class="row">
+            <div class="col-sm-12">
+                @(Html.Kendo()
+                  .Grid<TimesheetDetailVM>()
+                  .Name("TimesheetDetails_DayOff")
+                  .Columns(columns =>
+                  {
+                      columns.Bound(p => p.Date).Format("{0:dddd, MMM d, yyyy}");
+                      columns.Bound(p => p.Type).Hidden();
+                      columns.Bound(p => p.SubType).Title("Type");
+                      columns.Bound(p => p.FullHalf)
+                          .ClientFooterTemplate("Total Day: #=sum#")
+                          .ClientGroupFooterTemplate("Subtotal Day: #=sum#");
+                  })
+                  .DataSource(dataSource => dataSource
+                      .Ajax()
+                      .Aggregates(aggregates =>
+                      {
+                          aggregates.Add(p => p.FullHalf).Sum();
+                      })
+                      .Read("GridDayoff_Read", "HRTimesheet")
+                      .Group(group => group.Add(p => p.SubType))
+                  )
+                )
+            </div>
+
+        </div>
+        <br />
+        <legend>Compensatory Time</legend>
+        <div class="row">
+            <div class="col-sm-12">
+                @(Html.Kendo()
+                  .Grid<TimesheetDetailVM>()
+                  .Name("TimesheetDetails_Compen")
+                  .Columns(columns =>
+                  {
+                      columns.Bound(p => p.Date).Format("{0:dddd, MMM d, yyyy}");
+                      columns.Bound(p => p.Type);
+                      columns.Bound(p => p.FullHalf)
+                          .ClientFooterTemplate("Total Day: #=sum#")
+                          .ClientGroupFooterTemplate("Subtotal Day: #=sum#");
+                  })
+                  .DataSource(dataSource => dataSource
+                      .Ajax()
+                      .Aggregates(aggregates =>
+                      {
+                          aggregates.Add(p => p.FullHalf).Sum();
+                      })
+                      .Read("GridDayCompen_Read", "HRTimesheet")
+                      .Group(group => group.Add(p => p.Type))
+                  )
+                )
+            </div>
+
+        </div>
+        <br />
+        <legend>Working Days</legend>
+        <div class="row">
+            <div class="col-sm-12">
+                @(Html.Kendo()
+                  .Grid<TimesheetDetailVM>()
+                  .Name("TimesheetDetails_WorkingDays")
+                  .Columns(columns =>
+                  {
+                      columns.Bound(p => p.Date).Format("{0:dddd, MMM d, yyyy}");
+                      columns.Bound(p => p.Location);
+                      columns.Bound(p => p.LocationID).Hidden();
+                      columns.Bound(p => p.ID).Hidden();
+                      columns.Bound(p => p.EditMode).Hidden();
+                      columns.Bound(p => p.FullHalf)
+                          .ClientFooterTemplate("Total Day: #=sum#");
+                      columns.Bound(p => p.Type).Hidden()
+                          .ClientGroupHeaderTemplate("Working Days");
+
+                  })
+                  .Events(e =>
+                  {
+
+                  })
+                  .DataSource(dataSource => dataSource
+                      .Ajax()
+                      .Read("GridWorkingDays_Read", "HRTimesheet")
+                      .Sort(s => s.Add(p => p.Date).Ascending())
+                      .Aggregates(aggregates =>
+                      {
+                          aggregates.Add(p => p.FullHalf).Sum();
+                      })
+                      .Group(group => group.Add(p => p.Type))
+                  )
+                )
+            </div>
+        </div>
+  
+
+    </fieldset>
+}
+
+
+
+    
+
+
+<div class="form-actions">
+
+    <div class="row">
+        <div class="col-sm-12">
+            <button id="print-button" class="btn btn-success" type="submit">
+                Print to PDF
+            </button>
+
+
+        </div>
+    </div>
+
+</div>
+
+<style type="text/css">
+    .wrpTime {
+        width: 100%;
+        align-content: center;
+    }
+</style>
+
+
+@section scripts{
+
+    <script>
+
+       
+
+       
+        $(document)
+            .ready(function() {
+
+             
+
+
+            });
+
+
+      
+
+
+        $("#print-button")
+            .click(function () {
+              
+                $('form').prop('action', '/HRTimesheet/PrintTimesheet');
+                $("form").submit();
+
+            });
+
+      
+
+       
+
+        function OnSelectProfessionalName(e) {
+            var dataItem = this.dataItem(e.item);
+            var url = "/HRDataMaster/GetProfessional/" + dataItem.ID;
+
+            $.getJSON(url,
+                function(result) {
+                    //Project_Unit
+                    $('#ProfesionalUserLogin').prop('value', result[0].OfficeEmail);
+                    $('#ProjectUnit').prop('value', result[0].Project_Unit);
+                    $('#Name').prop('value', result[0].Name);
+                    $('#ProfessionalID').prop('value', result[0].ID);
+                });
+        }
+
+       
+      
+
+    </script>
+}

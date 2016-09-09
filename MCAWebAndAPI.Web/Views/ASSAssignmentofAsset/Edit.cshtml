@@ -5,14 +5,14 @@
 @model AssignmentOfAssetVM
 
 @using (Ajax.BeginForm("Update", "ASSAssignmentOfAsset",
-                                                                                                                                       FormMethod.Post,
-                                                                                                                                       new AjaxOptions
-                                                                                                                                       {
-                                                                                                                                           OnBegin = "onBeginForm",
-                                                                                                                                           OnComplete = "onCompleteForm",
-                                                                                                                                           OnSuccess = "onSuccessFormEmbed",
-                                                                                                                                           OnFailure = "onFailureForm"
-                                                                                                                                       }, new { @class = "form-horizontal" }))
+                                                                                                                                                   FormMethod.Post,
+                                                                                                                                                   new AjaxOptions
+                                                                                                                                                   {
+                                                                                                                                                       OnBegin = "onBeginForm",
+                                                                                                                                                       OnComplete = "onCompleteForm",
+                                                                                                                                                       OnSuccess = "onSuccessFormEmbed",
+                                                                                                                                                       OnFailure = "onFailureForm"
+                                                                                                                                                   }, new { @class = "form-horizontal" }))
 
 {
     <form class="form-horizontal" method="post" action="/ASSAssignmentOfAsset/Update" id="create-asset-acquisition-form">
@@ -22,7 +22,7 @@
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.TransactionType).Class("col-md-4 control-label")
                     <div class="col-md-8">
-                        <input type="text" disabled name="TransactionType" value="Assignment Of Asset" style="width : 100%"/>
+                        <input type="text" disabled name="TransactionType" value="Assignment Of Asset" style="width : 100%" />
                     </div>
                 </div>
                 <div class="form-group">
@@ -40,19 +40,20 @@
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.ProjectUnit).Class("col-md-4 control-label")
                     <div class="col-md-8">
-                        <input type="text" disabled name="ProjectUnit" id="ProjectUnit" value="@Model.ProjectUnit" style="width : 100%"/>
+                        <input type="text" disabled name="ProjectUnit" id="ProjectUnit" value="@Model.ProjectUnit" style="width : 100%" />
                     </div>
                 </div>
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.ContactNo).Class("col-md-4 control-label")
                     <div class="col-md-8">
-                        <input type="text" disabled name="ContactNo" id="ContactNo" value="@Model.ContactNo" style="width : 100%"/>
+                        <input type="text" disabled name="ContactNo" id="ContactNo" value="@Model.ContactNo" style="width : 100%" />
                     </div>
                 </div>
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.attach).Class("col-md-4 control-label")
                     <div class="col-md-8">
-                        <input type="file" name="attach" id="attach" value="" style="width : 100%" />
+                        <input type="file" disabled name="attach" id="attach" style="width : 100%" />@Model.filename
+                        @*<input type="text" readonly name="filename" id="filename" value="@Model.filename" style="width : 100%" />*@
                     </div>
                 </div>
                 <div class="form-group">
@@ -84,10 +85,9 @@
 <script>
     $(document).ready(function () {
         //$("#AssetHolder_Value").data("kendoDropDownList").value("");
-        })
+    })
 
-    function saveAssignment()
-    {
+    function saveAssignment() {
         if ($('#AssetHolder_Value').val() == "") {
             alert("Asset Holder Cannot be Empty");
             return false;
@@ -96,8 +96,7 @@
         var asset = document.getElementsByClassName("asset");
         var province = document.getElementsByClassName("province");
         for (var j = 0; j < asset.length; j++) {
-            if (asset[j].value == "null" || province[j].value == "null")
-            {
+            if (asset[j].value == "null" || province[j].value == "null") {
                 alert("Asset Sub Asset / Province cannot be null!");
                 return false;
             }
@@ -121,14 +120,13 @@
         }
     }
 
-    function onAssetChange(e)
-    {
+    function onAssetChange(e) {
         var res = this.dataItem(e.item).split("-")
         //alert("berubah jadiii " + res[0]);
         var url = "/ASSAssignmentOfAsset/GetProfMasterInfo?fullname=" + res[0] + "&position=" + res[1];
         $.getJSON(url, function (data) {
             //do next
-            document.getElementById('ProjectUnit').value = data.CurrentPosition.Text    ;
+            document.getElementById('ProjectUnit').value = data.CurrentPosition.Text;
             document.getElementById('ContactNo').value = data.MobileNumberOne;
         })
     }

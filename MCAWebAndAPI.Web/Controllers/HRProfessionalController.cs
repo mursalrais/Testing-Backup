@@ -125,7 +125,15 @@ namespace MCAWebAndAPI.Web.Controllers
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse(e.Message);
             }
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl+"/"+UrlResource.ProfessionalData);
+            if (viewModel.ProfessionalStatus.Value == "Need HR to Validate")
+            {
+                return JsonHelper.GenerateJsonSuccessResponse(siteUrl + "/" + UrlResource.ProfessionalData);
+            }
+            else
+            {
+                return JsonHelper.GenerateJsonSuccessResponse(siteUrl + "/" + UrlResource.ProfessionalMaster);
+            }
+            
         }
 
         private IEnumerable<DependentDetailVM> BindDependentDetails(FormCollection form, IEnumerable<DependentDetailVM> dependentDetails)

@@ -1179,6 +1179,8 @@
     <Content Include="Views\HRTimesheet\PrintTimesheet.cshtml" />
     <Content Include="Views\HRTimesheet\NotAuthorized.cshtml" />
     <Content Include="Views\HRTimesheet\ViewProfessional.cshtml" />
+    <Content Include="Views\HRTimesheet\DisplayTimesheet.cshtml" />
+    <Content Include="Views\ASSAssetAcquisition\_DisplayGrid.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1229,6 +1231,7 @@
     <Compile Include="Controllers\FINSCASettlementController.cs" />
     <Compile Include="Controllers\FINSCAVoucherController.cs" />
     <Compile Include="Controllers\HRDayOffController.cs" />
+    <Compile Include="Controllers\PROVendorController.cs" />
     <Compile Include="Controllers\PurchaseOrderController.cs" />
     <Compile Include="Controllers\SharedController.cs" />
     <Compile Include="Controllers\SharedFinanceController.cs" />
@@ -1330,6 +1333,7 @@
     <Folder Include="Views\Activity\" />
     <Folder Include="Views\COMWBS\" />
     <Folder Include="Views\HRDataMaster\" />
+    <Folder Include="Views\PROVendor\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MCAWebAndAPI.Model\MCAWebAndAPI.Model.csproj">

@@ -298,24 +298,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             foreach (var viewModel in viewModels)
             {
-                if (Item.CheckIfSkipped(viewModel))
-                    continue;
-
-                if (Item.CheckIfDeleted(viewModel))
-                {
-                    try
-                    {
-                        SPConnector.DeleteListItem(SP_APPDATA_LIST_NAME, viewModel.ID, _siteUrl);
-
-                    }
-                    catch (Exception e)
-                    {
-                        logger.Error(e);
-                        throw e;
-                    }
-                    continue;
-                }
-
                 var updatedValue = new Dictionary<string, object>();
                 updatedValue.Add("applicationstatus", viewModel.Status.Text);
                 updatedValue.Add("applicationremarks", viewModel.Remarks);

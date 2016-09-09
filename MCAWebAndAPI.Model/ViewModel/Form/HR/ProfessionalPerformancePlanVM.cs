@@ -53,5 +53,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public string Requestor { get; set; }
 
         public string TypeForm { get; set; }
+
+        public string Approver1 { get; set; }
+
+        public string Approver2 { get; set; }
     }
 }

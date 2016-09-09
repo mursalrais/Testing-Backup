@@ -123,15 +123,18 @@
     <Compile Include="HR\DataMaster\DayOffTypeMaster.cs" />
     <Compile Include="ViewModel\Control\MultiSelectVM.cs" />
     <Compile Include="ViewModel\Control\TransactionStatusComboBoxVM.cs" />
+    <Compile Include="ViewModel\Form\Asset\AssetAcquisitionVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetDisposalDetailVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetDisposalVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetLandingPageFixedAssetVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetLandingPageSmallValueAssetVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetLandingPageVM.cs" />
+    <Compile Include="ViewModel\Form\Asset\AssetReplacementVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetTransferDetailVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetTransferVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssignmentOfAssetDetailsVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssignmentOfAssetVM.cs" />
+    <Compile Include="ViewModel\Form\Asset\LocationMasterHeaderVM.cs" />
     <Compile Include="ViewModel\Form\Asset\ProfessionalsVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetReportVM.cs" />
     <Compile Include="ViewModel\Form\Common\ProfessionalVM.cs" />
@@ -300,6 +303,7 @@
     <Compile Include="ViewModel\Form\Procurement\PurchaseOrderVM.cs" />
     <Compile Include="ViewModel\Form\Procurement\PurchaseOrderHeaderVM.cs" />
     <Compile Include="ViewModel\Form\Procurement\PurchaseOrderItemVM.cs" />
+    <Compile Include="ViewModel\Form\Procurement\VendorVM.cs" />
     <Compile Include="ViewModel\Form\Shared\ProfessionalVM.cs" />
     <Compile Include="ViewModel\Form\Shared\VendorVM.cs" />
     <Compile Include="ViewModel\Gantt\GanttDependenciesVM.cs" />

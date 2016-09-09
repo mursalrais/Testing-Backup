@@ -45,10 +45,6 @@ namespace MCAWebAndAPI.Web.Controllers
             viewModel.TypeForm = "Professional";
             ViewBag.Action = "CreatePerformancePlan";
 
-            // Used for Workflow Router
-            ViewBag.ListName = "Professional%20Performance%20Plan";
-            ViewBag.Requestor = requestor;
-
             return View("PerformancePlan", viewModel);
         }
 
@@ -64,6 +60,22 @@ namespace MCAWebAndAPI.Web.Controllers
             int sum = 0;
             string project = null;
             string individual = null;
+            var ApproverName = viewModel.WorkflowItems;
+
+            foreach (var item in ApproverName)
+            {
+                var lvl = item.Level;
+                if (lvl == "1")
+                {
+                    viewModel.Approver1 = item.ApproverNameText;
+                }
+
+                if (lvl == "2")
+                {
+                    viewModel.Approver2 = item.ApproverNameText;
+                }
+            }
+
             foreach (var viewModelDetail in Detail)
             {
                 if (viewModelDetail.EditMode != -1 && Count != 0)
@@ -170,7 +182,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 if (viewModel.StatusForm != "DraftInitiated")
                     _hRPerformancePlanService.SendEmail(viewModel, SP_TRANSACTION_WORKFLOW_LIST_NAME,
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)headerID, 1,
-                    string.Format(EmailResource.ProfessionalPerformancePlan, siteUrl, UrlResource.ProfessionalPerformancePlan, headerID), string.Format(""));
+                    string.Format(EmailResource.ProfessionalPerformancePlan, viewModel.Approver1, viewModel.PerformancePeriod, viewModel.Name, siteUrl, UrlResource.ProfessionalPerfromanceEvaluation, headerID), string.Format(EmailResource.ProfessionalPerformancePlanApproved, viewModel.Name, viewModel.Requestor));
             }
             catch (Exception e)
             {
@@ -314,43 +326,43 @@ namespace MCAWebAndAPI.Web.Controllers
                 if (viewModel.StatusForm == "Initiated" || viewModel.StatusForm == "Draft")
                     _hRPerformancePlanService.SendEmail(viewModel, SP_TRANSACTION_WORKFLOW_LIST_NAME,
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.ID, 1,
-                    string.Format(EmailResource.ProfessionalPerformancePlan, viewModel.Requestor, viewModel.PerformancePeriod, viewModel.Name, siteUrl, UrlResource.ProfessionalPerfromanceEvaluation, viewModel.ID), string.Format(EmailResource.ProfessionalPerformancePlanApproved, viewModel.Name, viewModel.Requestor));
+                    string.Format(EmailResource.ProfessionalPerformancePlan, viewModel.Approver1, viewModel.PerformancePeriod, viewModel.Name, siteUrl, UrlResource.ProfessionalPerfromanceEvaluation, viewModel.ID), string.Format(EmailResource.ProfessionalPerformancePlanApproved, viewModel.Name, viewModel.Requestor));
 
                 // Send to Level 2 Approver and Requestor
                 if (viewModel.TypeForm == "Approver1" && viewModel.StatusForm == "Pending Approval 1 of 2")
                     _hRPerformancePlanService.SendEmail(viewModel, SP_TRANSACTION_WORKFLOW_LIST_NAME,
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.ID, 2,
-                    string.Format(EmailResource.ProfessionalPerformancePlan, viewModel.Requestor, viewModel.PerformancePeriod, viewModel.Name, siteUrl, UrlResource.ProfessionalPerfromanceEvaluation, viewModel.ID), string.Format(EmailResource.ProfessionalPerformancePlanApproved, viewModel.Name, viewModel.Requestor));
+                    string.Format(EmailResource.ProfessionalPerformancePlan, viewModel.Approver2, viewModel.PerformancePeriod, viewModel.Name, siteUrl, UrlResource.ProfessionalPerfromanceEvaluation, viewModel.ID), string.Format(EmailResource.ProfessionalPerformancePlanApproved, viewModel.Name, viewModel.Requestor));
 
                 // Send to Level 1 Approver
                 if (viewModel.TypeForm == "Professional" && viewModel.StatusForm == "Pending Approval 1 of 2")
                     _hRPerformancePlanService.SendEmail(viewModel, SP_TRANSACTION_WORKFLOW_LIST_NAME,
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.ID, 1,
-                    string.Format(EmailResource.ProfessionalPerformancePlan, viewModel.Requestor, viewModel.PerformancePeriod, viewModel.Name, siteUrl, UrlResource.ProfessionalPerfromanceEvaluation, viewModel.ID), string.Format(EmailResource.ProfessionalPerformancePlanApproved, viewModel.Name, viewModel.Requestor));
+                    string.Format(EmailResource.ProfessionalPerformancePlan, viewModel.Approver1, viewModel.PerformancePeriod, viewModel.Name, siteUrl, UrlResource.ProfessionalPerfromanceEvaluation, viewModel.ID), string.Format(EmailResource.ProfessionalPerformancePlanApproved, viewModel.Name, viewModel.Requestor));
 
                 // Send to Level 2 Approver
                 if (viewModel.TypeForm == "Professional" && viewModel.StatusForm == "Pending Approval 2 of 2")
                     _hRPerformancePlanService.SendEmail(viewModel, SP_TRANSACTION_WORKFLOW_LIST_NAME,
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.ID, 2,
-                    string.Format(EmailResource.ProfessionalPerformancePlan, viewModel.Requestor, viewModel.PerformancePeriod, viewModel.Name, siteUrl, UrlResource.ProfessionalPerfromanceEvaluation, viewModel.ID), string.Format(EmailResource.ProfessionalPerformancePlanApproved, viewModel.Name, viewModel.Requestor));
+                    string.Format(EmailResource.ProfessionalPerformancePlan, viewModel.Approver2, viewModel.PerformancePeriod, viewModel.Name, siteUrl, UrlResource.ProfessionalPerfromanceEvaluation, viewModel.ID), string.Format(EmailResource.ProfessionalPerformancePlanApproved, viewModel.Name, viewModel.Requestor));
 
                 // Send to Requestor
                 if (viewModel.TypeForm == "Approver2" && viewModel.StatusForm == "Pending Approval 2 of 2")
                     _hRPerformancePlanService.SendEmail(viewModel, SP_TRANSACTION_WORKFLOW_LIST_NAME,
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.ID, 2,
-                    string.Format(EmailResource.ProfessionalPerformancePlan, viewModel.Requestor, viewModel.PerformancePeriod, viewModel.Name, siteUrl, UrlResource.ProfessionalPerfromanceEvaluation, viewModel.ID), string.Format(EmailResource.ProfessionalPerformancePlanApproved, viewModel.Name, viewModel.Requestor));
+                    string.Format(EmailResource.ProfessionalPerformancePlan, viewModel.Approver2, viewModel.PerformancePeriod, viewModel.Name, siteUrl, UrlResource.ProfessionalPerfromanceEvaluation, viewModel.ID), string.Format(EmailResource.ProfessionalPerformancePlanApproved, viewModel.Name, viewModel.Requestor));
 
                 // Send to Requestor
                 if (viewModel.StatusForm == "Reject1")
                     _hRPerformancePlanService.SendEmail(viewModel, SP_TRANSACTION_WORKFLOW_LIST_NAME,
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.ID, 1,
-                    string.Format(EmailResource.ProfessionalPerformancePlan, viewModel.Requestor, viewModel.PerformancePeriod, viewModel.Name, siteUrl, UrlResource.ProfessionalPerfromanceEvaluation, viewModel.ID), string.Format(EmailResource.ProfessionalPerformancePlanRejected, viewModel.Name, viewModel.Requestor));
+                    string.Format(EmailResource.ProfessionalPerformancePlan, viewModel.Approver1, viewModel.PerformancePeriod, viewModel.Name, siteUrl, UrlResource.ProfessionalPerfromanceEvaluation, viewModel.ID), string.Format(EmailResource.ProfessionalPerformancePlanRejected, viewModel.Name, viewModel.Requestor));
 
                 // Send to Requestor
                 if (viewModel.StatusForm == "Reject2")
                     _hRPerformancePlanService.SendEmail(viewModel, SP_TRANSACTION_WORKFLOW_LIST_NAME,
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.ID, 1,
-                    string.Format(EmailResource.ProfessionalPerformancePlan, viewModel.Requestor, viewModel.PerformancePeriod, viewModel.Name, siteUrl, UrlResource.ProfessionalPerfromanceEvaluation, viewModel.ID), string.Format(EmailResource.ProfessionalPerformancePlanRejected, viewModel.Name, viewModel.Requestor));
+                    string.Format(EmailResource.ProfessionalPerformancePlan, viewModel.Approver2, viewModel.PerformancePeriod, viewModel.Name, siteUrl, UrlResource.ProfessionalPerfromanceEvaluation, viewModel.ID), string.Format(EmailResource.ProfessionalPerformancePlanRejected, viewModel.Name, viewModel.Requestor));
             }
             catch (Exception e)
             {

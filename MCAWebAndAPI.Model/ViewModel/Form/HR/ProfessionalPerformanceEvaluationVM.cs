@@ -24,5 +24,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public decimal OverallTotalScore { get; set; }
 
         public string TypeForm { get; set; }
+
+        public string Approver1 { get; set; }
+
+        public string Approver2 { get; set; }
     }
 }

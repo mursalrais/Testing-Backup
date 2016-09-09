@@ -149,7 +149,7 @@
 }
 @section scripts{
     <script type="text/javascript">
-        
+
         function filterEventProfessionalID() {
             return {
                 id: $("#ProfessionalName_Value").val()
@@ -157,7 +157,7 @@
         }
 
         $(document)
-            .ready(function () {
+            .ready(function() {
                 var strtype = $("#Type_Value").data("kendoDropDownList").text();
                 var dependent = $("#DependantName_Value").data("kendoDropDownList");
                 var professional = $("#ProfessionalName_Value").data("kendoDropDownList");
@@ -166,12 +166,15 @@
                 } else {
                     dependent.enable(false);
                 }
-               
+
                 var strPermission = $("#UserPermission").val();
                 var strClaim = $("#ClaimStatus").val();
                 if (strPermission !== "HR") {
                     professional.enable(false);
-                    if (strClaim != "Draft") {
+                    if (strClaim !== "Draft" && strClaim === "Need HR to Validate") {
+                        $("#save-button").prop("disabled", true);
+                      
+                    } else if (strClaim !== "Draft" && strClaim !== "Need HR to Validate") {
                         $("#save-button").prop("disabled", true);
                         $("#submit-to-hr-button").prop("disabled", true);
                     }
@@ -200,7 +203,6 @@
                     });
 
 
-
                 $("#submit-to-hr-button")
                     .click(function() {
                         var strtype = $("#Type_Value").data("kendoDropDownList").text();
@@ -219,12 +221,11 @@
                     });
 
 
-
                 $("#save-button-byhr")
-                    .click(function () {
+                    .click(function() {
                         var strtype = $("#Type_Value").data("kendoDropDownList").text();
                         var strDependent = $("#DependantName_Value").data("kendoDropDownList").text();
-                     
+
 
                         if (strtype === "Dependent" && strDependent === '') {
                             alert('Dependent Name field is required');
@@ -238,7 +239,7 @@
                     });
 
                 $("#submit-by-byhr-button")
-                    .click(function () {
+                    .click(function() {
                         var strtype = $("#Type_Value").data("kendoDropDownList").text();
                         var strDependent = $("#DependantName_Value").data("kendoDropDownList").text();
                         var strClaim = $("#ClaimStatusHR_Value").data("kendoDropDownList").text();
@@ -246,12 +247,10 @@
                         if (strtype === "Dependent" && strDependent === '') {
                             alert('Dependent Name field is required');
                             return false;
-                        }
-                        else if (strClaim === "") {
+                        } else if (strClaim === "") {
                             alert('Claim Status field is required');
                             return false;
-                        }
-                        else {
+                        } else {
                             $('form').prop('action', '/HRInsuranceClaim/UpdateInsuranceClaim');
                             $("form").submit();
                         }
@@ -292,7 +291,7 @@
             var url = "/HRDataMaster/GetProfessional/" + dataItem.ID;
 
             $.getJSON(url,
-                function (result) {
+                function(result) {
                     $('#OrganizationInsuranceID').prop('value', result[0].InsuranceAccountNumber);
                     $('#Position').prop('value', result[0].Position);
                     $('#ProfessionalTextName').prop('value', result[0].Name);

@@ -136,6 +136,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Asset\AssetDisposalService.cs" />
+    <Compile Include="Asset\AssetFixedAssetService.cs" />
     <Compile Include="Asset\AssetLandingPageService.cs" />
     <Compile Include="Asset\AssetMasterService.cs" />
     <Compile Include="Asset\AssetAcquisitionService.cs" />
@@ -154,6 +155,7 @@
     <Compile Include="Asset\IAssetCheckResultApproveService.cs" />
     <Compile Include="Asset\IAssetCheckResultService.cs" />
     <Compile Include="Asset\IAssetDisposalService.cs" />
+    <Compile Include="Asset\IAssetFixedAssetService.cs" />
     <Compile Include="Asset\IAssetLandingPageService.cs" />
     <Compile Include="Asset\IAssetLoanAndReturnService.cs" />
     <Compile Include="Asset\IAssetMasterService.cs.cs" />
@@ -164,8 +166,10 @@
     <Compile Include="Asset\IAssetTransferService.cs" />
     <Compile Include="Asset\IAssignmentOfAssetService.cs" />
     <Compile Include="Asset\ILocationMasterService.cs" />
+    <Compile Include="Asset\ILocationService.cs" />
     <Compile Include="Asset\IReportService.cs" />
     <Compile Include="Asset\LocationMasterService.cs" />
+    <Compile Include="Asset\LocationService.cs" />
     <Compile Include="Asset\ReportService.cs" />
     <Compile Include="Common\ComboBoxService.cs" />
     <Compile Include="Common\CommonService.cs" />
@@ -278,6 +282,8 @@
     <Compile Include="JobSchedulers\Schedulers\PSAManagementScheduler.cs" />
     <Compile Include="JobSchedulers\Schedulers\TaskCalculationScheduler.cs" />
     <Compile Include="JobSchedulers\Schedulers\TimesheetManagementScheduler.cs" />
+    <Compile Include="Procurement\IVendorService.cs" />
+    <Compile Include="Procurement\VendorService.cs" />
     <Compile Include="ProjectManagement\Common\IProjectHierarchyService.cs" />
     <Compile Include="ProjectManagement\Common\ProjectHierarchyService.cs" />
     <Compile Include="HR\Common\CalendarService.cs" />

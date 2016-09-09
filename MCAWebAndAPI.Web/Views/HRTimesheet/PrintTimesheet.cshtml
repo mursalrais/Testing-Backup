@@ -15,31 +15,145 @@
         <div class="wrp">&nbsp;</div>
         <div class="wrp">
 
-            REKAP KLAIM ASURANSI KESEHATAN
+            MCA-INDONESIA MONTHLY TIMESHEET
 
         </div>
         <div class="wrp">&nbsp;</div>
         <div class="row">
             <div class="col-xs-12">
-                <table class="table table-striped ">
+                <table class="table table-striped">
                     <thead>
+                    <tr>
+                        <th colspan="3">NAME</th>
+                        <th colspan="11"></th>
+                        <th colspan="4">POSITION</th>
+                        <th colspan="13"></th>
+                        <th colspan="1">Aug 20/2015 to Sep 19/2015</th>
+                        <th colspan="3">Professional No.</th>
+                    </tr>
                         <tr>
-                            <th rowspan="2">No</th>
-                            <th rowspan="2">Batch No</th>
-                            <th rowspan="2">Tanggal Kirim</th>
-                            <th rowspan="2">Nama Karyawan</th>
-                            <th rowspan="2">Nama Tertanggung</th>
-                            <th rowspan="2">Tanggal Kwitansi</th>
-                            <th colspan="4">Jumlah Klaim</th>
-                            <th rowspan="2">Remarks</th>
+                            <th>1</th>
+                            <th>2</th>
+                            <th>3</th>
+                            <th>4</th>
+                            <th>5</th>
+                            <th>6</th>
+                            <th>7</th>
+                            <th>8</th>
+                            <th>9</th>
+                            <th>10</th>
+                            <th>11</th>
+                            <th>12</th>
+                            <th>13</th>
+                            <th>14</th>
+                            <th>15</th>
+                            <th>16</th>
+                            <th>17</th>
+                            <th>18</th>
+                            <th>19</th>
+                            <th>20</th>
+                            <th>21</th>
+                            <th>22</th>
+                            <th>23</th>
+                            <th>24</th>
+                            <th>25</th>
+                            <th>26</th>
+                            <th>27</th>
+                            <th>28</th>
+                            <th>29</th>
+                            <th>30</th>
+                            <th>31</th>
+                            <th rowspan="3">DETAILS    WORK LOCATION</th>
+                            <th rowspan="3">TOTAL DAY</th>
+                            <th colspan="2">OFFICE USE</th>
                         </tr>
-                        <tr>
-                            <th rowspan="1">Medical Examination</th>
-                            <th rowspan="1">Prescription</th>
-                            <th rowspan="1">Others</th>
-                            <th rowspan="1">Total</th>
 
+                    <tr>
+                        <th>1</th>
+                        <th>2</th>
+                        <th>3</th>
+                        <th>4</th>
+                        <th>5</th>
+                        <th>6</th>
+                        <th>7</th>
+                        <th>8</th>
+                        <th>9</th>
+                        <th>10</th>
+                        <th>11</th>
+                        <th>12</th>
+                        <th>13</th>
+                        <th>14</th>
+                        <th>15</th>
+                        <th>16</th>
+                        <th>17</th>
+                        <th>18</th>
+                        <th>19</th>
+                        <th>20</th>
+                        <th>21</th>
+                        <th>22</th>
+                        <th>23</th>
+                        <th>24</th>
+                        <th>25</th>
+                        <th>26</th>
+                        <th>27</th>
+                        <th>28</th>
+                        <th>29</th>
+                        <th>30</th>
+                        <th>31</th>
+                        <th rowspan="2" colspan="2">ok</th>
+                    </tr>
+
+                        <tr>
+                            <th>1</th>
+                            <th>2</th>
+                            <th>3</th>
+                            <th>4</th>
+                            <th>5</th>
+                            <th>6</th>
+                            <th>7</th>
+                            <th>8</th>
+                            <th>9</th>
+                            <th>10</th>
+                            <th>11</th>
+                            <th>12</th>
+                            <th>13</th>
+                            <th>14</th>
+                            <th>15</th>
+                            <th>16</th>
+                            <th>17</th>
+                            <th>18</th>
+                            <th>19</th>
+                            <th>20</th>
+                            <th>21</th>
+                            <th>22</th>
+                            <th>23</th>
+                            <th>24</th>
+                            <th>25</th>
+                            <th>26</th>
+                            <th>27</th>
+                            <th>28</th>
+                            <th>29</th>
+                            <th>30</th>
+                            <th>31</th>
                         </tr>
+
+                    @*<tr>
+                <th rowspan="2">No</th>
+                <th rowspan="2">Batch No</th>
+                <th rowspan="2">Tanggal Kirim</th>
+                <th rowspan="2">Nama Karyawan</th>
+                <th rowspan="2">Nama Tertanggung</th>
+                <th rowspan="2">Tanggal Kwitansi</th>
+                <th colspan="4">Jumlah Klaim</th>
+                <th rowspan="2">Remarks</th>
+            </tr>
+            <tr>
+                <th rowspan="1">Medical Examination</th>
+                <th rowspan="1">Prescription</th>
+                <th rowspan="1">Others</th>
+                <th rowspan="1">Total</th>
+
+            </tr>*@
                     </thead>
                     <tbody>
                     @*@for (int i = 0; i <= Model.dtDetails.Rows.Count - 1; i++)
@@ -113,10 +227,17 @@
   border-collapse: collapse;
 }
 
-th {
+    th {
   border: 1px solid Black;
-  padding: 5px 15px;text-align: center;vertical-align: text-top;background-color: GrayText; ;vertical-align: top;
+  padding: 5px 15px;text-align: center;vertical-align: text-top;
+  vertical-align: top;
 }
+
+/*th {
+  border: 1px solid Black;
+  padding: 5px 15px;text-align: center;vertical-align: text-top;
+  background-color: GrayText; ;vertical-align: top;
+}*/
 
 td {
   border: 1px solid Black;
