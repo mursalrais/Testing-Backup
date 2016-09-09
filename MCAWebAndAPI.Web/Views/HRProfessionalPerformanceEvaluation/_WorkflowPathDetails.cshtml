@@ -37,6 +37,9 @@
             columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
             "<input type='hidden' name='WorkflowItems[#= getWorkflowItemDetail(data)#].ID' value='#= ID #' />"
             );
+            columns.Bound(p => p.ApproverNameText).Hidden().ClientTemplate("#= ApproverNameText #" +
+            "<input type='hidden' name='WorkflowItems[#= getWorkflowItemDetail(data)#].ApproverNameText' value='#= ApproverNameText #' />"
+            );
             columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
             "<input type='hidden' name='WorkflowItems[#= getWorkflowItemDetail(data)#].EditMode' value='#= EditMode #' />"
             );
@@ -70,11 +73,12 @@
         if (e.action === "itemchange") {
             if (e.field === "ApproverName") {
                 var model = e.items[0];
-                var url = "/HRDataMaster/GetProfessional/" + model.ApproverName.Value;
+                var url = "/HRDataMaster/GetProfessionalActives/" + model.ApproverName.Value;
                 $.getJSON(url, function (result) {
                     model.set('ApproverUnitText', (result[0].Project_Unit));
                     model.set('ApproverPositionText', (result[0].Position));
                     model.set('ApproverPositionId', (result[0].PositionId));
+                    model.set('ApproverNameText', (result[0].Name));
                 });
             }
         }

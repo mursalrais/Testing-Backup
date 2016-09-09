@@ -9,6 +9,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Common
 {
     public class WorkflowItemVM : Item
     {
+
+
         public string ItemExitProcedure { get; set; }
 
         public string ListName { get; set; }
@@ -87,5 +89,11 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Common
             return options.FirstOrDefault(e => e.Value == null ? 
                 e.Value == model.Value : e.Text == model.Text);
         }
+
+        public string ApproverNameText { get; set; }
+
+        public string ApproverEmail { get; set; }
+
+        public string Status { get; set; }
     }
 }

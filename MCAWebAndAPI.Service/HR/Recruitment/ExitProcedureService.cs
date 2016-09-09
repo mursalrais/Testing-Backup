@@ -969,9 +969,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     
                     var professionalRecords = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, professionalID, _siteUrl);
                     string professionalMail = Convert.ToString(professionalRecords["officeemail"]);
-                    
+                    string professionalName = Convert.ToString(professionalRecords["Title"]);
 
-                    SendAlreadyApproved(professionalMail, string.Format("Your Item: {0} already approved by {1}", viewModel.ItemExitProcedure, approverFullName));
+
+                    //SendAlreadyApproved(professionalMail, string.Format("Your Item: {0} already approved by {1}", viewModel.ItemExitProcedure, approverFullName));
+                    SendAlreadyApproved(professionalMail, string.Format("Dear {0},{1}{2}Your item : {3} has been approved by {4}. Please contact respective person for any queries.{5}{6}Thank you.", professionalName, Environment.NewLine, Environment.NewLine, viewModel.ItemExitProcedure, approverFullName, Environment.NewLine, Environment.NewLine));
                 }
             }
 
@@ -1133,7 +1135,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return Convert.ToString(item["Title"]);
         }
 
-        public void SendEmail(ExitProcedureVM header, string workflowTransactionListName, string transactionLookupColumnName, int exitProcID, string messageForApprover, string messageForRequestor)
+        public void SendEmail(ExitProcedureVM header, string workflowTransactionListName, string transactionLookupColumnName, int exitProcID, string siteUrl, string urlResource, string requestorMail, string messageForRequestor)
         {
             var camlrequestor = @"<View>  
           <Query> 
@@ -1151,8 +1153,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
       </View>";
             
             var emails = new List<string>();
-            var professionalEmail = new List<string>();
-
+                        
             if (header.StatusForm == "Pending Approval")
             {
                 foreach (var item in SPConnector.GetList(SP_EXP_CHECK_LIST_NAME, _siteUrl, camlapprover))
@@ -1161,7 +1162,15 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 }
                 foreach (var item in emails)
                 {
-                    EmailUtil.Send(item, "Ask for Approval", messageForApprover);
+                    int professionalID = GetProfessionalID(item);
+                    var professionalRecord = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, professionalID, _siteUrl);
+                    string professionalName = Convert.ToString(professionalRecord["Title"]);
+
+                    int requestorID = GetProfessionalID(requestorMail);
+                    var requestorRecord = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, requestorID, _siteUrl);
+                    string requestorName = Convert.ToString(requestorRecord["Title"]);
+
+                    EmailUtil.Send(item, "Request for Approval of Exit Checklist", string.Format("Dear {0}{1}{2}You are authorized as an approver for Exit Checklist Form.{3}This Checklist is requested by {4}{5}Please complete the approval process immediately{6}{7}To view the detail, please click following link:{8}{9}/EditExitProcedureForApprover.aspx?ID={10}{11}{12}Thank you for your attention.", professionalName, Environment.NewLine, Environment.NewLine, Environment.NewLine, requestorName, Environment.NewLine, Environment.NewLine, Environment.NewLine, siteUrl, urlResource, exitProcID, Environment.NewLine, Environment.NewLine));
                 }
             }
 
@@ -1240,6 +1249,25 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             }
         }
 
+        private int GetProfessionalID(string professionalEmail)
+        {
+            int professionalID = 0;
+
+            var camlProfessionalData = @"<View>  
+            <Query> 
+               <Where><Eq><FieldRef Name='officeemail' /><Value Type='Text'>" + professionalEmail + @"</Value></Eq></Where> 
+            </Query> 
+      </View>";
+
+            foreach(var professionalData in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl, camlProfessionalData))
+            {
+                professionalID = Convert.ToInt32(professionalData["ID"]);
+                break;
+            }
+
+            return professionalID;
+        }
+
         public void SendMailDocument(string requestorMail, string documentExitProcedure)
         {
             EmailUtil.Send(requestorMail, " ", documentExitProcedure);
@@ -1280,7 +1308,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         public void SendAlreadyApproved(string professionalMail, string messageToProfessional)
         {
-            EmailUtil.Send(professionalMail, "Your Item Already Approved", messageToProfessional);
+            EmailUtil.Send(professionalMail, "Approval of Exit Checklist", messageToProfessional);
         }
 
         public bool UpdateExitProcedureStatus(int? id, string checklistStatusApproved)

@@ -1089,7 +1089,6 @@
     <Content Include="Views\HRDayOff\_DayOffCurrentBalance.cshtml" />
     <Content Include="Views\HRDayOff\_DayOffRequestHeaderData.cshtml" />
     <Content Include="Views\HRDayOff\_RequestForDayOff.cshtml" />
-    <Content Include="Views\HRProfessionalPerformanceEvaluation\_WorkflowPathDetails.cshtml" />
     <Content Include="Views\HRDayOff\_DayOffNextBalance.cshtml" />
     <Content Include="Views\HRDayOff\_DisplayRequestDetail.cshtml" />
     <Content Include="Views\FINLandingPage\Index.cshtml" />
@@ -1110,7 +1109,6 @@
     <Content Include="Views\ASSAssetCheckResult\_approval_Path.cshtml" />
     <Content Include="Views\ASSAssetCheckResult\_Details.cshtml" />
     <Content Include="Views\HRAdjustment\EditAdjustmentData.cshtml" />
-    <Content Include="Views\HRProfessionalPerformanceEvaluation\_WorkflowPathDetails.cshtml" />
     <Content Include="Views\HRDayOff\_DayOffNextBalance.cshtml" />
     <Content Include="Views\HRDayOff\_DisplayRequestDetail.cshtml" />
     <Content Include="Views\ASSAssetLoanAndReturn\_AssetLoanAndReturnItem.cshtml" />
@@ -1171,6 +1169,18 @@
     <Content Include="Views\ASSAssetLoanAndReturn\_AssetLoanAndReturnItem.cshtml" />
     <Content Include="Views\ASSAssetLoanAndReturn\Edit.cshtml" />
     <Content Include="Views\ASSAssetLoanAndReturn\_Details.cshtml" />
+    <Content Include="Views\ASSAssetLandingPage\Create.cshtml" />
+    <Content Include="Views\ASSAssetLandingPage\_assetFixedAssetPCFF.cshtml" />
+    <Content Include="Views\ASSAssetLandingPage\_assetSmallValueAssetPCFF.cshtml" />
+    <Content Include="Views\FINOutstandingAdvance\UploadCSV.cshtml" />
+    <Content Include="Views\HRProfessionalPerformanceEvaluation\_WorkflowPathDetails.cshtml" />
+    <Content Include="Views\FINOutstandingAdvance\UploadError.cshtml" />
+    <Content Include="Views\HRTimesheet\_WorkflowPathDetails.cshtml" />
+    <Content Include="Views\HRTimesheet\PrintTimesheet.cshtml" />
+    <Content Include="Views\HRTimesheet\NotAuthorized.cshtml" />
+    <Content Include="Views\HRTimesheet\ViewProfessional.cshtml" />
+    <Content Include="Views\HRTimesheet\DisplayTimesheet.cshtml" />
+    <Content Include="Views\ASSAssetAcquisition\_DisplayGrid.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1185,6 +1195,7 @@
     <Compile Include="Controllers\ActivityController.cs" />
     <Compile Include="Controllers\ASSAssetAcquisitionController.cs" />
     <Compile Include="Controllers\ASSAssetDisposalController.cs" />
+    <Compile Include="Controllers\ASSAssetLandingPageController.cs" />
     <Compile Include="Controllers\ASSAssetMasterController.cs" />
     <Compile Include="Controllers\ASSAssetCheckFormController.cs" />
     <Compile Include="Controllers\ASSAssetCheckResultApproveController.cs" />
@@ -1202,6 +1213,8 @@
     <Compile Include="Controllers\BIEmbedController.cs" />
     <Compile Include="Controllers\CalendarEventController.cs" />
     <Compile Include="Controllers\ComboBoxController.cs" />
+    <Compile Include="Controllers\COMMGLController.cs" />
+    <Compile Include="Controllers\COMMVendorController.cs" />
     <Compile Include="Controllers\COMProfessionalController.cs" />
     <Compile Include="Controllers\COMWBSController.cs" />
     <Compile Include="Controllers\CSVController.cs" />
@@ -1218,6 +1231,7 @@
     <Compile Include="Controllers\FINSCASettlementController.cs" />
     <Compile Include="Controllers\FINSCAVoucherController.cs" />
     <Compile Include="Controllers\HRDayOffController.cs" />
+    <Compile Include="Controllers\PurchaseOrderController.cs" />
     <Compile Include="Controllers\SharedController.cs" />
     <Compile Include="Controllers\SharedFinanceController.cs" />
     <Compile Include="Controllers\FINTaxExemptionController.cs" />

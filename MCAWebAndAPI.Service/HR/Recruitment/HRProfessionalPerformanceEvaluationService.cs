@@ -120,7 +120,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.PerformancePeriod = FormatUtil.ConvertLookupToValue(listItem, "performanceevaluation");
             viewModel.StatusForm = Convert.ToString(listItem["ppestatus"]);
             viewModel.TypeForm = "Professional";
-            viewModel.OverallTotalScore = Convert.ToDecimal(listItem["overalltotalscore"]); 
+            viewModel.OverallTotalScore = Convert.ToDecimal(listItem["overalltotalscore"]);
 
             foreach (var item in SPConnector.GetList(SP_PPEW_LIST_NAME, _siteUrl, caml))
             {
@@ -156,6 +156,20 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             if (Check.Count() == 0)
             {
                 viewModel.WorkflowItems = await _workflow.GetWorkflowDetails(requestor, listName);
+            }
+
+            foreach (var item in viewModel.WorkflowItems)
+            {
+                var lvl = item.Level;
+                if (lvl == "1")
+                {
+                    viewModel.Approver1 = item.ApproverNameText;
+                }
+
+                if (lvl == "2")
+                {
+                    viewModel.Approver2 = item.ApproverNameText;
+                }
             }
 
             return viewModel;
@@ -256,7 +270,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 {
                     emails = FormatUtil.ConvertLookupToValue(item, "approvername_x003a_Office_x0020_");
 
-                    EmailUtil.Send(emails, "Ask for Approval", messageForApprover);
+                    EmailUtil.Send(emails, "Request for Approval of Performance Evaluation Form", messageForApprover);
 
                     if (header.StatusForm == "Initiated" || header.StatusForm == null)
                     {
@@ -278,7 +292,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 {
                     emails = FormatUtil.ConvertLookupToValue(item, "approvername_x003a_Office_x0020_");
 
-                    EmailUtil.Send(emails, "Ask for Approval", messageForApprover);
+                    EmailUtil.Send(emails, "Request for Approval of Performance Evaluation Form", messageForApprover);
                     //SPConnector.SendEmail(item, message, "Ask for Approval Level 2", _siteUrl);
 
                     columnValues.Add("visibletoapprover2", SPConnector.GetUser(emails, _siteUrl, "hr"));
@@ -297,21 +311,19 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     professionalEmail = (item["professional_x003a_Office_x0020_"] == null ? "" :
                     Convert.ToString((item["professional_x003a_Office_x0020_"] as FieldLookupValue).LookupValue));
 
-                    EmailUtil.Send(professionalEmail, "Evaluation Plan Status", messageForRequestor);
-                    //SPConnector.SendEmail(item, "Approved by Level 1", _siteUrl);
+                    EmailUtil.Send(professionalEmail, "Approval of Performance Evaluation Form", messageForRequestor);
                 }
             }
             if (header.TypeForm == "Approver2" && header.StatusForm == "Pending Approval 2 of 2")
+            {
+                foreach (var item in SPConnector.GetList(SP_PPE_LIST_NAME, _siteUrl, camlprof))
                 {
-                    foreach (var item in SPConnector.GetList(SP_PPE_LIST_NAME, _siteUrl, camlprof))
-                    {
-                        professionalEmail = (item["professional_x003a_Office_x0020_"] == null ? "" :
-                        Convert.ToString((item["professional_x003a_Office_x0020_"] as FieldLookupValue).LookupValue));
+                    professionalEmail = (item["professional_x003a_Office_x0020_"] == null ? "" :
+                    Convert.ToString((item["professional_x003a_Office_x0020_"] as FieldLookupValue).LookupValue));
 
-                        EmailUtil.Send(professionalEmail, "Evaluation Plan Status", messageForRequestor);
-                        //SPConnector.SendEmail(item, "Approved by Level 1", _siteUrl);PConnector.SendEmail(item, "Approved by Level 1", _siteUrl);
-                    }
+                    EmailUtil.Send(professionalEmail, "Approval of Performance Evaluation Form", messageForRequestor);
                 }
+            }
         }
 
         public void SetSiteUrl(string siteUrl = null)

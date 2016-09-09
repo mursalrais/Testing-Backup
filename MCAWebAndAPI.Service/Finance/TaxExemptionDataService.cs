@@ -37,12 +37,15 @@ namespace MCAWebAndAPI.Service.Finance
         private readonly string SP_INCOME_GROSS_INCOME_INTERNAL_COLUMN_NAME = XmlConvert.EncodeName(SP_INCOME_GROSS_INCOME_COLUMN_NAME);
         private const string SP_INCOME_TOTAL_INCOME_TAX_BORNE_COLUMN_NAME = "Total Income Tax Borne By Gov IDR";
         private const string SP_INCOME_TOTAL_INCOME_TAX_BORNE_INTERNAL_COLUMN_NAME = "Total_x0020_Income_x0020_Tax_x00";
-        
+
         private const string SP_VAT_TOTAL_TAX_BASED_IDR = "Total_x0020_Tax_x0020_Based_x002";
         private const string SP_VAT_TOTAL_VAT_NOT_COLLECTED = "Total_x0020_VAT_x0020_Not_x0020_";
 
         private const string SP_OTHER_GROSS_INCOME_IDR = "Gross_x0020_Income_x0020_IDR";
         private const string SP_OTHER_TOTAL_TAX_IDR = "Total_x0020_Tax_x0020_IDR";
+
+        private const string TaxExemptionVATDocumentByID = "{0}/Tax%20Exemption%20VAT%20Documents/Forms/AllItems.aspx#InplviewHash5093bda1-84bf-4cad-8652-286653d6a83f=FilterField1%3Dpsa%255Fx003a%255FID-FilterValue1%3D{1}";
+        private const string TaxExemptionOtherDocumentByID = "{0}/Tax%20Exemption%20Others%20Documents/Forms/AllItems.aspx#InplviewHash5093bda1-84bf-4cad-8652-286653d6a83f=FilterField1%3Dpsa%255Fx003a%255FID-FilterValue1%3D{1}";
 
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private string _siteUrl = string.Empty;
@@ -92,15 +95,25 @@ namespace MCAWebAndAPI.Service.Finance
             viewModel.GrossIncome = Convert.ToDecimal(listItem[SP_INCOME_GROSS_INCOME_INTERNAL_COLUMN_NAME]);
             viewModel.TotalIncomeTaxBorneByGovernment = Convert.ToDecimal(listItem[SP_INCOME_TOTAL_INCOME_TAX_BORNE_INTERNAL_COLUMN_NAME]);
             viewModel.Remarks = FormatUtil.ConvertMultipleLine(Convert.ToString(listItem[SP_REMARKS_COLUMN_NAME]));
-            viewModel.DocumentUrl = GetDocumentUrl(viewModel.ID);
+            viewModel.DocumentUrl = GetIncomeDocumentUrl(viewModel.ID);
             viewModel.ID = ID;
 
             return viewModel;
         }
 
-        private string GetDocumentUrl(int? iD)
+        private string GetIncomeDocumentUrl(int? iD)
         {
             return string.Format(UrlResource.TaxExemptionIncomeDocumentByID, _siteUrl, iD);
+        }
+
+        private string GetVATDocumentUrl(int? iD)
+        {
+            return string.Format(TaxExemptionVATDocumentByID, _siteUrl, iD);
+        }
+
+        private string GetOtherDocumentUrl(int? iD)
+        {
+            return string.Format(TaxExemptionOtherDocumentByID, _siteUrl, iD);
         }
 
         public int? CreateTaxExemptionData(TaxExemptionIncomeVM taxExemptionData)
@@ -176,7 +189,7 @@ namespace MCAWebAndAPI.Service.Finance
             CreateTaxExemptionData(ID, taxType, documents);
         }
 
-        private void CreateTaxExemptionData(int? ID,  string taxType, IEnumerable<HttpPostedFileBase> attachment)
+        private void CreateTaxExemptionData(int? ID, string taxType, IEnumerable<HttpPostedFileBase> attachment)
         {
             if (ID != null)
             {
@@ -199,7 +212,7 @@ namespace MCAWebAndAPI.Service.Finance
                     default:
                         throw new NotImplementedException("Not implemented tax type: " + taxType);
                 }
-                
+
                 foreach (var doc in attachment)
                 {
                     var updateValue = new Dictionary<string, object>();
@@ -254,7 +267,7 @@ namespace MCAWebAndAPI.Service.Finance
             viewModel.TotalTaxBased = Convert.ToDecimal(listItem[SP_VAT_TOTAL_TAX_BASED_IDR]);
             viewModel.TotalVATNotCollected = Convert.ToDecimal(listItem[SP_VAT_TOTAL_VAT_NOT_COLLECTED]);
 
-            viewModel.DocumentUrl = GetDocumentUrl(viewModel.ID);
+            viewModel.DocumentUrl = GetVATDocumentUrl(viewModel.ID);
             viewModel.ID = ID;
 
             return viewModel;
@@ -273,7 +286,7 @@ namespace MCAWebAndAPI.Service.Finance
             viewModel.GrossIncome = Convert.ToDecimal(listItem[SP_OTHER_GROSS_INCOME_IDR]);
             viewModel.TotalTax = Convert.ToDecimal(listItem[SP_OTHER_TOTAL_TAX_IDR]);
 
-            viewModel.DocumentUrl = GetDocumentUrl(viewModel.ID);
+            viewModel.DocumentUrl = GetOtherDocumentUrl(viewModel.ID);
             viewModel.ID = ID;
 
             return viewModel;

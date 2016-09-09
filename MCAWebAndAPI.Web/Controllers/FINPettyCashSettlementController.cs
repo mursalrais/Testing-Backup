@@ -65,6 +65,7 @@ namespace MCAWebAndAPI.Web.Controllers
             var viewModel = service.Get(GetOperation(op), id);
 
             SetAdditionalSettingToViewModel(ref viewModel);
+            ViewBag.CancelUrl = string.Format(FirstPageUrl, siteUrl);
 
             return View(viewModel);
         }
@@ -161,26 +162,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             if (paymentVoucher.PaidTo.Text.Equals(PaidToProfessional))
             {
-                try
-                {
-                    IDataMasterService _dataMasterService = new DataMasterService();
-                    _dataMasterService.SetSiteUrl(siteUrl);
-
-                    var sessionVariable = System.Web.HttpContext.Current.Session["ProfessionalMaster"] as IEnumerable<ProfessionalMaster>;
-                    var professionals = sessionVariable ?? _dataMasterService.GetProfessionals();
-
-
-                    ProfessionalMaster data = professionals.FirstOrDefault(p => p.ID.Value == paymentVoucher.Professional.Value.Value);
-
-                    if (data != null)
-                    {
-                        paymentVoucher.PaidTo.Text = string.Format("{0} - {1}", data.Name, data.Position);
-                    }
-                }
-                catch
-                {
-                    //throw;
-                }
+                paymentVoucher.PaidTo.Text = paymentVoucher.Professional.Text;
             }
             else if (paymentVoucher.PaidTo.Text.Equals(PaidToVendor))
             {

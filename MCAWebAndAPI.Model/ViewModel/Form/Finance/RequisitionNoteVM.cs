@@ -52,5 +52,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         public DateTime Created { get; set; }
 
         public DateTime Modified { get; set; }
+
+        public string UserEmail { get; set; }
     }
 }

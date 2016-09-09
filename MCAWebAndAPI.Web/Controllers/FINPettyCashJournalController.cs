@@ -43,17 +43,12 @@ namespace MCAWebAndAPI.Web.Controllers
 
             var viewModel = service.Get(GetOperation(op), id);
 
-            return View(viewModel);
-        }
-
-        public ActionResult Print()
-        {
-            var viewModel = new PettyCashJournalVM();
+            ViewBag.CancelUrl = string.Format(FirstPageUrl, siteUrl);
 
             return View(viewModel);
         }
-
-        public JsonResult GetPettyCashTransaction([DataSourceRequest] DataSourceRequest request, string dateFrom, string dateTo, string op)
+        
+        public JsonResult GetPettyCashTransaction([DataSourceRequest] DataSourceRequest request, string dateFrom, string dateTo, bool itemEdited)
         {
             var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl);
             service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
@@ -64,10 +59,11 @@ namespace MCAWebAndAPI.Web.Controllers
             {
                 //this mess is just to ensure date format yyyy-MM-dd
                 //TODO: find a better way
-                var from = Convert.ToDateTime(DateTime.Parse(dateFrom, System.Globalization.CultureInfo.InvariantCulture).ToString("yyyy-MM-dd"));
-                var to = Convert.ToDateTime(DateTime.Parse(dateFrom, System.Globalization.CultureInfo.InvariantCulture).ToString("yyyy-MM-dd"));
+                var from = Convert.ToDateTime(DateTime.Parse(dateFrom, System.Globalization.CultureInfo.InvariantCulture));
+                var to = Convert.ToDateTime(DateTime.Parse(dateTo, System.Globalization.CultureInfo.InvariantCulture));
 
-                details = service.GetPettyCashTransactions(from, to).ToList();
+                if (itemEdited)
+                    details = service.GetPettyCashTransactions(from, to).ToList();
             }
 
             DataSourceResult result = details.ToDataSourceResult(request);
@@ -114,9 +110,8 @@ namespace MCAWebAndAPI.Web.Controllers
             string domain = new SharedFinanceController().GetImageLogoPrint(Request.IsSecureConnection, Request.Url.Authority);
             var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl);
             service.SetSiteUrl(siteUrl);
-
+            
             var viewModel = service.Get(param.Operation, param.ID);
-            viewModel.ItemDetails = service.Get(param.ID).ToList();
 
             ViewData.Model = viewModel;
             var view = ViewEngines.Engines.FindView(ControllerContext, RelativePath, null);

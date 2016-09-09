@@ -34,6 +34,8 @@ namespace MCAWebAndAPI.Web.Controllers
             SessionManager.Set(SessionSiteUrl, siteUrl);
 
             var viewModel = service.Get(id);
+            ViewBag.CancelUrl = string.Format(FirstPageUrl, siteUrl);
+
 
             return View(viewModel);
         }

@@ -46,8 +46,18 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             var updatedValues = new Dictionary<string, object>();
 
-            updatedValues.Add("ppstatus", "Closed");
-            updatedValues.Add("closingdate", DateTime.UtcNow);
+            if (PerformanceMonitoring.EditType == "Edit")
+            {
+                updatedValues.Add("Title", PerformanceMonitoring.Period.Value);
+                updatedValues.Add("latestdateforcreation", PerformanceMonitoring.LatestCreationDate.Value);
+                updatedValues.Add("latestdateforapproval1", PerformanceMonitoring.LatestDateApproval1.Value);
+                updatedValues.Add("latestdateforapproval2", PerformanceMonitoring.LatestDateApproval2.Value);
+            }
+            else
+            {
+                updatedValues.Add("ppstatus", "Closed");
+                updatedValues.Add("closingdate", DateTime.UtcNow);
+            }
 
             try
             {
@@ -59,26 +69,26 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 return false;
             }
 
-            
-
-            var caml = @"<View><Query><Where><Eq><FieldRef Name='performanceplan_x003a_ID' /><Value Type='Lookup'>"+ PerformanceMonitoring.ID + "</Value></Eq></Where></Query><ViewFields><FieldRef Name='ID' /></ViewFields><QueryOptions /></View>";
-            var listItem = SPConnector.GetList(SP_DETAIL_LIST_NAME, _siteUrl, caml);
-            foreach (var item in listItem)
+            if (PerformanceMonitoring.EditType != "Edit")
             {
-                updatedValues = new Dictionary<string, object>();
-                updatedValues.Add("ppstatus", "Closed");
-                try
+                var caml = @"<View><Query><Where><Eq><FieldRef Name='performanceplan_x003a_ID' /><Value Type='Lookup'>" + PerformanceMonitoring.ID + "</Value></Eq></Where></Query><ViewFields><FieldRef Name='ID' /></ViewFields><QueryOptions /></View>";
+                var listItem = SPConnector.GetList(SP_DETAIL_LIST_NAME, _siteUrl, caml);
+                foreach (var item in listItem)
                 {
-                    SPConnector.UpdateListItem(SP_DETAIL_LIST_NAME, Convert.ToInt32(item["ID"]), updatedValues, _siteUrl);
-                }
-                catch (Exception e)
-                {
-                    logger.Debug(e.Message);
-                    return false;
-                }
+                    updatedValues = new Dictionary<string, object>();
+                    updatedValues.Add("ppstatus", "Closed");
+                    try
+                    {
+                        SPConnector.UpdateListItem(SP_DETAIL_LIST_NAME, Convert.ToInt32(item["ID"]), updatedValues, _siteUrl);
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Debug(e.Message);
+                        return false;
+                    }
 
+                }
             }
-
 
             return true;
         }
@@ -86,9 +96,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         public void CreatePerformanceMonitoringDetails(int? headerID, string emailMessage)
         {
             //Get All Active Professional
-            var caml = @"<View><Query><Where><Eq><FieldRef Name='Professional_x0020_Status' /><Value Type='Choice'>Active</Value></Eq></Where></Query><ViewFields><FieldRef Name='ID' /><FieldRef Name='Title' /><FieldRef Name='officeemail' /><FieldRef Name='Position_x003a_ID' /></ViewFields><QueryOptions /></View>";
+            var caml = @"<View><Query><Where><Or><IsNull><FieldRef Name='lastworkingdate' /></IsNull><Gt><FieldRef Name='lastworkingdate' /><Value IncludeTimeValue='TRUE' Type='DateTime'>" + DateTime.UtcNow.ToString("yyyy-MM-dd") + "T23:57:44Z</Value></Gt></Or></Where></Query><ViewFields><FieldRef Name='ID' /><FieldRef Name='Title' /><FieldRef Name='officeemail' /><FieldRef Name='Position_x003a_ID' /></ViewFields><QueryOptions /></View>";
             var listItem = SPConnector.GetList("Professional Master", _siteUrl, caml);
-            var updatedValues = new Dictionary<string, object>();           
+            var updatedValues = new Dictionary<string, object>();
             string emailTo;
             int IdDetail;
             FieldUserValue visibleTo;
@@ -126,7 +136,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     }
                     IdDetail = SPConnector.GetLatestListItemID(SP_DETAIL_LIST_NAME, _siteUrl);
 
-                    EmailUtil.Send(emailTo, "Notify to initiate Performance Plan", string.Format(emailMessage,_siteUrl,IdDetail));
+                    EmailUtil.Send(emailTo, "Notify to initiate Performance Plan", string.Format(emailMessage, _siteUrl, IdDetail));
 
                 }
                 catch (Exception e)
@@ -238,8 +248,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 //}
                 PerformancePlanMonitoringDetails.Add(new PerformanceMonitoringDetailVM
                 {
-                    ID = Convert.ToInt32(item["ID"]),                    
-                    EmployeeName = Convert.ToString((item["professional"] as FieldLookupValue).LookupValue)+" "+ Convert.ToString((item["professional_x003a_Last_x0020_Na"] as FieldLookupValue).LookupValue),
+                    ID = Convert.ToInt32(item["ID"]),
+                    EmployeeName = Convert.ToString((item["professional"] as FieldLookupValue).LookupValue) + " " + Convert.ToString((item["professional_x003a_Last_x0020_Na"] as FieldLookupValue).LookupValue),
                     PlanStatus = Convert.ToString(item["pppstatus"]),
                     PlanIndicator = color
                 });

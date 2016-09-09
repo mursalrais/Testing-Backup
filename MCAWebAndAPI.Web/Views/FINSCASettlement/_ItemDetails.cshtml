@@ -30,8 +30,8 @@
                        {
                            DataTextField = "Text",
                            DataValueField = "Value",
-                           ControllerName = "ComboBox",
-                           ActionName = "GetWBSMasters"
+                           ControllerName = "COMWBS",
+                           ActionName = "GetAllByActivityAsJsonResult"
                        });
 
         columns.Bound(p => p.GL).ClientTemplate("#= GL.Text #" +

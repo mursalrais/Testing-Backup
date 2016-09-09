@@ -17,6 +17,7 @@ using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;
 using FinService = MCAWebAndAPI.Service.Finance;
 using MCAWebAndAPI.Service.Common;
+using MCAWebAndAPI.Model.HR.DataMaster;
 
 namespace MCAWebAndAPI.Web.Controllers.Finance
 {
@@ -57,8 +58,13 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             eventBudgetService = new EventBudgetService();
         }
 
-        public ActionResult Create(string siteUrl = null)
+        public ActionResult Create(string siteUrl = null, string userEmail = "")
         {
+            if (userEmail == string.Empty)
+            {
+                throw new InvalidOperationException("Invalid parameter: userEmail.");
+            }
+
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
             reqNoteService.SetSiteUrl(siteUrl);
             SessionManager.Set(SharedController.Session_SiteUrl, siteUrl);
@@ -66,12 +72,19 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             ViewBag.ListName = WORKFLOW_TITLE;
             
             var viewModel = reqNoteService.Get(null);
+            viewModel.UserEmail = userEmail;
+            ViewBag.CancelUrl = string.Format(FirstPageUrl, siteUrl);
             SetAdditionalSettingToViewModel(ref viewModel, true);
             return View(viewModel);
         }
 
-        public ActionResult Edit(string siteUrl = null, int id = 0, string user = null)
+        public ActionResult Edit(string siteUrl = null, int id = 0, string userEmail = "")
         {
+            if (userEmail == string.Empty)
+            {
+                throw new InvalidOperationException("Invalid parameter: userEmail.");
+            }
+
             if (id > 0)
             {
                 siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
@@ -85,17 +98,12 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
                 #region Check User
 
                 var siteUrlHR = CommonService.GetSiteUrlFromCurrent(siteUrl, CommonService.Sites.HR);
-                var position = FinService.SharedService.GetPosition(user, siteUrlHR);
 
-
-                if (viewModel.Editor != user)
-                {
-
-                }
+                ProfessionalMaster professional = COMProfessionalController.GetFirstOrDefaultByOfficeEmail(siteUrl, userEmail);
 
                 #endregion Check User
 
-
+                ViewBag.CancelUrl = string.Format(FirstPageUrl, siteUrl);
                 SetAdditionalSettingToViewModel(ref viewModel, false);
 
                 return View(viewModel);

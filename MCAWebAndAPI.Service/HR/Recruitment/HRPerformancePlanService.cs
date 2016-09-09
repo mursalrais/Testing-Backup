@@ -203,6 +203,20 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 viewModel.WorkflowItems = await _workflow.GetWorkflowDetails(requestor, listName);
             }
 
+            foreach (var item in viewModel.WorkflowItems)
+            {
+                var lvl = item.Level;
+                if (lvl == "1")
+                {
+                    viewModel.Approver1 = item.ApproverNameText;
+                }
+
+                if (lvl == "2")
+                {
+                    viewModel.Approver2 = item.ApproverNameText;
+                }
+            }
+
             return viewModel;
         }
 
@@ -338,9 +352,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
         }
 
-        public async Task CreatePerformancePlanDetailsAsync(int? headerID, int? performanceID, string email, string status,string type, IEnumerable<ProjectOrUnitGoalsDetailVM> performancePlanDetails)
+        public async Task CreatePerformancePlanDetailsAsync(int? headerID, int? performanceID, string email, string status, string type, IEnumerable<ProjectOrUnitGoalsDetailVM> performancePlanDetails)
         {
-            CreatePerformancePlanDetails(headerID, performanceID, email, status,type, performancePlanDetails);
+            CreatePerformancePlanDetails(headerID, performanceID, email, status, type, performancePlanDetails);
         }
 
         public void SendEmail(ProfessionalPerformancePlanVM header, string workflowTransactionListName, string transactionLookupColumnName, int headerID, int level, string messageForApprover, string messageForRequestor)
@@ -371,7 +385,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     {
                         emails = FormatUtil.ConvertLookupToValue(item, "approvername_x003a_Office_x0020_");
 
-                        EmailUtil.Send(emails, "Ask for Approval", messageForApprover);
+                        EmailUtil.Send(emails, "Request for Approval of Performance Plan Form", messageForApprover);
                         //SPConnector.SendEmail(item, message, "Ask for Approval Level 2", _siteUrl);
 
                         columnValues.Add("visibletoapprover1", SPConnector.GetUser(emails, _siteUrl, "hr"));
@@ -392,8 +406,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 {
                     emails = FormatUtil.ConvertLookupToValue(item, "approvername_x003a_Office_x0020_");
 
-                    EmailUtil.Send(emails, "Ask for Approval", messageForApprover);
-                    //SPConnector.SendEmail(item, message, "Ask for Approval Level 2", _siteUrl);
+                    EmailUtil.Send(emails, "Request for Approval of Performance Plan Form", messageForApprover);
 
                     columnValues.Add("visibletoapprover2", SPConnector.GetUser(emails, _siteUrl, "hr"));
                     try
@@ -411,8 +424,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     professionalEmail = (item["professional_x003a_Office_x0020_"] == null ? "" :
                     Convert.ToString((item["professional_x003a_Office_x0020_"] as FieldLookupValue).LookupValue));
 
-                    EmailUtil.Send(professionalEmail, "Plan Status", messageForRequestor);
-                    //SPConnector.SendEmail(item, "Approved by Level 1", _siteUrl);
+                    EmailUtil.Send(emails, "Approval of Performance Plan Form", messageForRequestor);
                 }
             }
 
@@ -425,8 +437,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                         professionalEmail = (item["professional_x003a_Office_x0020_"] == null ? "" :
                        Convert.ToString((item["professional_x003a_Office_x0020_"] as FieldLookupValue).LookupValue));
 
-                        EmailUtil.Send(professionalEmail, "Plan Status", messageForRequestor);
-                        //SPConnector.SendEmail(item, message, "Ask for Approval", _siteUrl);
+                        EmailUtil.Send(professionalEmail, "Approval of Performance Plan Form", messageForRequestor);
                     }
                 }
             }

@@ -51,7 +51,7 @@ namespace MCAWebAndAPI.Web.Controllers
             SessionManager.Set(SharedController.Session_SiteUrl, siteUrl);
 
             var viewModel = service.Get(GetOperation(op), id);
-
+            ViewBag.CancelUrl = string.Format(FirstPageUrl, siteUrl);
             SetAdditionalSettingToViewModel(ref viewModel);
 
             return View(viewModel);
@@ -142,20 +142,13 @@ namespace MCAWebAndAPI.Web.Controllers
             return File(pdfBuf, "application/pdf");
         }
 
-        public ActionResult Cancel()
-        {
-            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
-
-            return Redirect(string.Format(FirstPageUrl, siteUrl));
-        }
-
         private void SetAdditionalSettingToViewModel(ref SCASettlementVM viewModel)
         {
-            viewModel.SCACouvher.ControllerName = SCAVoucherController;
-            viewModel.SCACouvher.ActionName = SCAVoucherAction;
-            viewModel.SCACouvher.ValueField = SCAVoucherValue;
-            viewModel.SCACouvher.TextField = SCAVoucherText;
-            viewModel.SCACouvher.OnSelectEventName = SCAVoucherOnSelectEventName;
+            viewModel.SCAVoucher.ControllerName = SCAVoucherController;
+            viewModel.SCAVoucher.ActionName = SCAVoucherAction;
+            viewModel.SCAVoucher.ValueField = SCAVoucherValue;
+            viewModel.SCAVoucher.TextField = SCAVoucherText;
+            viewModel.SCAVoucher.OnSelectEventName = SCAVoucherOnSelectEventName;
 
             viewModel.TypeOfSettlement.Choices = new string[] { PartialSettlement, LastSettlement };
         }

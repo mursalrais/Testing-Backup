@@ -23,6 +23,7 @@ new
         <div class="col-sm-12">
             @Html.HiddenFor(m => m.ID)
             @Html.HiddenFor(m => m.Operation)
+            @Html.HiddenFor(m => m.ItemEdited)
         </div>
         <br/>
         <div class="col-sm-4">
@@ -117,9 +118,9 @@ new
                     <i class="fa fa-save"></i>
                     Submit
                 </button>
-                <button id="cancel-button" class="btn btn-default" type="button">
-                    Cancel
-                </button>
+                <a href="@ViewBag.CancelUrl" target='_parent'>
+                    <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
+                </a>
             </div>
         </div>
     </div>
@@ -127,14 +128,11 @@ new
 
 <script>
     $(document).ready(function () {
-        if(!$("#ID").val()>0){
-            $("#DateFrom").val('');
-            $("#DateTo").val('');
-        }
         $("#view-button").on('click', function () {
             if ($("#DateFrom").val() > $("#DateTo").val()) {
                 alert("Date (to) cannot be less than Date (from)");
             } else {
+                $("#ItemEdited").val(true);
                 $("#ItemDetails").data("kendoGrid").dataSource.read();
             }
         });
@@ -186,4 +184,11 @@ new
     .field-validation-error {
         margin-top:7px !important;
     }
+
+    .k-button-icontext {
+        height: 35px;
+        margin-left: 5px;
+    }
+
+
 </style>

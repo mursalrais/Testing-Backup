@@ -15,6 +15,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
         const string SP_EXIT_CHECKLIST_LIST_NAME = "Exit Procedure Checklist";
         const string SP_EXIT_PROCEDURE_LIST_NAME = "Exit Procedure";
+        const string SP_PROF_MASTER = "Professional Master";
 
         string _siteUrl = null;
 
@@ -26,6 +27,8 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
         public bool FiveDaysStillNotApproved()
         {
             DateTime startDateApproval;
+            int? approverID;
+            string approverName;
             DateTime today = DateTime.Now;
             string strToday = today.ToLocalTime().ToShortDateString();
 
@@ -38,13 +41,20 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
             foreach (var exitChecklist in SPConnector.GetList(SP_EXIT_CHECKLIST_LIST_NAME, _siteUrl, camlPendingApproval))
             {
                 startDateApproval = Convert.ToDateTime(exitChecklist["startdateapproval"]).ToLocalTime();
+                approverID = FormatUtil.ConvertLookupToID(exitChecklist, "approverusername");
+
+                var professionalData = SPConnector.GetListItem(SP_PROF_MASTER, approverID, _siteUrl);
+                approverName = Convert.ToString(professionalData["Title"]);
+
                 DateTime fiveDaysAfterSubmitApproval = startDateApproval.AddDays(5);
 
                 int totalBusinessDays = BusinessDays(startDateApproval, fiveDaysAfterSubmitApproval);
 
                 if(totalBusinessDays == 5)
                 {
-                    string fiveDaysStillNotApproved = fiveDaysAfterSubmitApproval.ToShortDateString();
+                    DateTime trulyFiveBusinessDay = fiveDaysAfterSubmitApproval.AddDays(-1);
+
+                    string fiveDaysStillNotApproved = trulyFiveBusinessDay.ToShortDateString();
                     
                     if (fiveDaysStillNotApproved == strToday)
                     {
@@ -53,8 +63,9 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
                         string requestorName = GetRequestorName(exitProcedureID);
 
-                        string subjectMail = "Still Not Approved After 5 Working Days";
-                        string contentMail = string.Format("There still a request for exit procedure from: {0} for item: {1} needed approval from you", requestorName, Convert.ToString(exitChecklist["Title"]));
+                        string subjectMail = "Pending Action for Exit Checklist Approval";
+                        //string contentMail = string.Format("There still a request for exit procedure from: {0} for item: {1} needed approval from you", requestorName, Convert.ToString(exitChecklist["Title"]));
+                        string contentMail = string.Format("Dear {0}, {1}{2}This alert is sent to you to notify that there is a pending action on Exit Checklist Approval of {3}. Please complete the process immediately.{4}{5}Thank you.", approverName,Environment.NewLine, Environment.NewLine, requestorName, Environment.NewLine, Environment.NewLine);
 
                         SendMailTwoMonthBeforeExpired(approvalMail, subjectMail, contentMail);
                     }
@@ -71,8 +82,9 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
                         string requestorName = GetRequestorName(exitProcedureID);
 
-                        string subjectMail = "Still Not Approved After 5 Working Days";
-                        string contentMail = string.Format("There still a request for exit procedure from: {0} for item: {1} needed approval from you", requestorName, Convert.ToString(exitChecklist["Title"]));
+                        string subjectMail = "Pending Action for Exit Checklist Approval";
+                        //string contentMail = string.Format("There still a request for exit procedure from: {0} for item: {1} needed approval from you", requestorName, Convert.ToString(exitChecklist["Title"]));
+                        string contentMail = string.Format("Dear {0}, {1}{2}This alert is sent to you to notify that there is a pending action on Exit Checklist Approval of {3}. Please complete the process immediately.{4}{5}Thank you.", approverName, Environment.NewLine, Environment.NewLine, requestorName, Environment.NewLine, Environment.NewLine);
 
                         SendMailTwoMonthBeforeExpired(approvalMail, subjectMail, contentMail);
                     }
@@ -89,8 +101,9 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
 
                         string requestorName = GetRequestorName(exitProcedureID);
 
-                        string subjectMail = "Still Not Approved After 5 Working Days";
-                        string contentMail = string.Format("There still a request for exit procedure from: {0} for item: {1} needed approval from you", requestorName, Convert.ToString(exitChecklist["Title"]));
+                        string subjectMail = "Pending Action for Exit Checklist Approval";
+                        //string contentMail = string.Format("There still a request for exit procedure from: {0} for item: {1} needed approval from you", requestorName, Convert.ToString(exitChecklist["Title"]));
+                        string contentMail = string.Format("Dear {0}, {1}{2}This alert is sent to you to notify that there is a pending action on Exit Checklist Approval of {3}. Please complete the process immediately.{4}{5}Thank you.", approverName, Environment.NewLine, Environment.NewLine, requestorName, Environment.NewLine, Environment.NewLine);
 
                         SendMailTwoMonthBeforeExpired(approvalMail, subjectMail, contentMail);
                     }

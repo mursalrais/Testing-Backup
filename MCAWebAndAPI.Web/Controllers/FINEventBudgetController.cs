@@ -39,8 +39,13 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
 
-        public ActionResult Item(string siteUrl = null, int? id = null)
+        public ActionResult Item(string siteUrl = null, int? id = null, string userEmail = "")
         {
+            if (userEmail==string.Empty)
+            {
+                throw new InvalidOperationException("Invalid parameter: userEmail.");
+            }
+
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
 
             service.SetSiteUrl(siteUrl);
@@ -48,11 +53,13 @@ namespace MCAWebAndAPI.Web.Controllers
             SessionManager.Set(SharedController.Session_SiteUrl, siteUrl);
 
             var viewModel = new EventBudgetVM();
+            viewModel.UserEmail = userEmail;
+
             if (id.HasValue)
             {
                 viewModel = service.Get(id);
 
-                Tuple<int,string> idNumber = requisitionNoteService.GetRequisitioNoteIdAndNoByEventBudgetID(viewModel.ID.Value);
+                Tuple<int, string> idNumber = requisitionNoteService.GetRequisitioNoteIdAndNoByEventBudgetID(viewModel.ID.Value);
 
                 viewModel.RequisitionNoteId = idNumber.Item1;
                 viewModel.RequisitionNoteNo = idNumber.Item2;
@@ -60,6 +67,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             SetAdditionalSettingToViewModel(ref viewModel, (id.HasValue ? false : true));
 
+            ViewBag.CancelUrl = string.Format(FirstPageUrl, siteUrl);
             return View(viewModel);
         }
 

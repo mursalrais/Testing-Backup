@@ -33,16 +33,20 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
                 "Cross-Cutting Sector",
                 "Economic Analysis Unit",
                 "Environment & Social Performance Unit",
-                "Executive Director",
+                "Executive Office",
                 "Finance Unit",
+                "Green Prosperity Project",
                 "Human Resources Unit",
                 "Information Technology Unit",
                 "Legal Unit",
                 "Monitoring & Evaluation Unit",
-                "Office Support Unit",
+                "Office Management",
                 "Operations Support Div.",
                 "Procurement Modernization Project",
-                "Program Div."
+                "Procurement Unit",
+                "Program Div.",
+                "Risk & Audit Unit",
+                "Social & Gender Assessment Unit"
 
             }
         };

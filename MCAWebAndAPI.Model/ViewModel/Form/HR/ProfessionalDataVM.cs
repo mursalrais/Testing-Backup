@@ -9,16 +9,47 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
     public class ProfessionalDataVM : ApplicationDataVM
     {
+        [UIHint("ComboBox")]
+        [DisplayName("Project Unit")]
+        [Required]
+        public ComboBoxVM DivisionProjectUnit { get; set; } = new ComboBoxVM()
+        {
+            Choices = new string[]
+            {
+                "Communications & Outreach Unit",
+                "Community-Based Health & Nutrition Project",
+                "Cross-Cutting Sector",
+                "Economic Analysis Unit",
+                "Environment & Social Performance Unit",
+                "Executive Office",
+                "Finance Unit",
+                "Green Prosperity Project",
+                "Human Resources Unit",
+                "Information Technology Unit",
+                "Legal Unit",
+                "Monitoring & Evaluation Unit",
+                "Office Management",
+                "Operations Support Div.",
+                "Procurement Modernization Project",
+                "Procurement Unit",
+                "Program Div.",
+                "Risk & Audit Unit",
+                "Social & Gender Assessment Unit"
+            }
+        };
+
         /// <summary>
         /// Position
         /// </summary>
-        [UIHint("AjaxComboBox")]
-        public AjaxComboBoxVM CurrentPosition { get; set; } = new AjaxComboBoxVM
+        [UIHint("AjaxCascadeComboBox")]
+        public AjaxCascadeComboBoxVM CurrentPosition { get; set; } = new AjaxCascadeComboBoxVM
         {
-            ActionName = "GetPositions",
+            ActionName = "GetPositionsManpower",
             ControllerName = "HRDataMaster",
             TextField = "PositionName",
-            ValueField = "ID"
+            ValueField = "ID",
+            Filter = "filterLevel",
+            Cascade = "DivisionProjectUnit_Value"
         };
 
         /// <summary>
@@ -44,7 +75,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// datavalidationstatus
         /// </summary>
-        public string ValidationStatus { get; set; } = 
+        public string ValidationStatus { get; set; } =
             Workflow.GetProfessionalValidationStatus(Workflow.ProfessionalValidationStatus.VALIDATED);
 
         public string ValidationAction { get; set; }
@@ -62,6 +93,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// officeemail
         /// </summary>
+        /// 
+        [Required]
         [UIHint("EmailAddress")]
         public string OfficeEmail { get; set; }
 
@@ -177,13 +210,13 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// </summary>
         [DisplayName("Branch Office")]
         public string BranchOfficeForPayroll { get; set; }
-       
+
         /// <summary>
         /// payrollbankswiftcode
         /// </summary>
         [DisplayName("Bank Swift Code")]
         public string BankSwiftCodeForPayroll { get; set; }
-        
+
         /// <summary>
         /// payrollcurrency
         /// </summary>

@@ -15,6 +15,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
     {
         public string CancelURL { get; set; }
 
+        public HttpPostedFileBase attach { get; set; }
+        public string filename { get; set; }
+
         public string AssetIDs { get; set; }
         public string nameOnly { get; set; }
         public string position { get; set; }

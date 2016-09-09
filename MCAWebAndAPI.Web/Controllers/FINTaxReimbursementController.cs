@@ -37,6 +37,7 @@ namespace MCAWebAndAPI.Web.Controllers
             var viewModel = service.Get(GetOperation(op), id);
 
             SetAdditionalSettingToViewModel(ref viewModel, true);
+            ViewBag.CancelUrl = string.Format(FirstPage, siteUrl);
 
             return View(viewModel);
 

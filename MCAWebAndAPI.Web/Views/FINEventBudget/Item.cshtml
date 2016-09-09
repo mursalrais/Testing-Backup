@@ -25,6 +25,7 @@
                 <div class="col-sm-6">
                     @Html.HiddenFor(m => m.ID)
                     @Html.HiddenFor(m => m.No)
+                    @Html.HiddenFor(m => m.UserEmail)
                 </div>
             </div>
             <div class="row">
@@ -235,9 +236,9 @@
                             Submit
                         </button>
                         
-                        <button id="cancel-button" class="btn btn-default cancel" type="submit" value="Cancel" name="actionType">
-                            Cancel
-                        </button>
+                        <a href="@ViewBag.CancelUrl" target='_parent'>
+                            <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
+                        </a>
 
                         <br />
                         <p>@buttonMsg</p>
@@ -312,5 +313,10 @@
 <style media="screen">
     #Fund {
         background-color: #dedede;
+    }
+
+     .k-button-icontext {
+        height: 35px;
+        margin-left: 5px;
     }
 </style>

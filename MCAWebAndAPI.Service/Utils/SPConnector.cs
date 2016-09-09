@@ -6,15 +6,17 @@ using System;
 using Microsoft.SharePoint.Client.Utilities;
 using System.IO;
 using System.Threading.Tasks;
+using System.Web;
+
 namespace MCAWebAndAPI.Service.Utils
 {
     public class SPConnector
     {
         static string CurUrl = "";
-        static string UserName =  "";
+        static string UserName = "";
         static string Password = "";
 
-        public static Task ExecuteQueryAsync( ClientContext clientContext)
+        public static Task ExecuteQueryAsync(ClientContext clientContext)
         {
             try
             {
@@ -25,10 +27,10 @@ namespace MCAWebAndAPI.Service.Utils
             }
             catch (Exception ex)
             {
-                
+
                 throw new Exception(ex.Message);
             }
-          
+
         }
 
         private static void MapCredential(string url)
@@ -57,7 +59,7 @@ namespace MCAWebAndAPI.Service.Utils
 
             var result = 1;
             var list = GetList(listName, siteUrl, camlViewXml);
-            foreach(var item in list)
+            foreach (var item in list)
             {
                 result = Convert.ToInt32(item["ID"]);
             }
@@ -65,7 +67,7 @@ namespace MCAWebAndAPI.Service.Utils
             return result;
         }
 
-        internal static int GetLatestListItemIdbyGuid(string listName, string siteUrl = null,string strGuid=null, string caml = null)
+        internal static int GetLatestListItemIdbyGuid(string listName, string siteUrl = null, string strGuid = null, string caml = null)
         {
             string camlViewXml = string.Format("<Query>" +
                                                "<Where>" +
@@ -80,7 +82,7 @@ namespace MCAWebAndAPI.Service.Utils
                                                "<ViewFields>" +
                                                "<FieldRef Name ='ID'/>" +
                                                "</ViewFields><RowLimit>1</RowLimit>", strGuid);
-            
+
 
             var result = 1;
             var list = GetList(listName, siteUrl, camlViewXml);
@@ -104,8 +106,9 @@ namespace MCAWebAndAPI.Service.Utils
 
                 var SPList = context.Web.Lists.GetByTitle(listName);
                 var camlQuery = caml == null ?
-                    CamlQuery.CreateAllItemsQuery() :  
-                        new CamlQuery {
+                    CamlQuery.CreateAllItemsQuery() :
+                        new CamlQuery
+                        {
                             ViewXml = caml
                         };
 
@@ -132,7 +135,7 @@ namespace MCAWebAndAPI.Service.Utils
                         <Eq><FieldRef Name='ID' />
                         <Value Type='Number'>" + listItemID + "</Value></Eq>" +
                         "</Where></Query>" +
-                        "<RowLimit>1</RowLimit> </View>"; 
+                        "<RowLimit>1</RowLimit> </View>";
             //MapCredential(siteUrl);
             //using (ClientContext context = new ClientContext(siteUrl ?? CurUrl))
             //{
@@ -190,7 +193,7 @@ namespace MCAWebAndAPI.Service.Utils
                 {
                     SPListItem[key] = updatedValues[key];
                 }
-                
+
                 // Update columns remotely
                 SPListItem.Update();
 
@@ -259,7 +262,7 @@ namespace MCAWebAndAPI.Service.Utils
                     throw e;
                 }
 
-             
+
             }
         }
 
@@ -314,10 +317,10 @@ namespace MCAWebAndAPI.Service.Utils
                 }
 
 
-               
 
 
-               
+
+
 
 
             }
@@ -349,13 +352,13 @@ namespace MCAWebAndAPI.Service.Utils
 
                 // Get current editor
                 //var currentEditor = SPListItem["Editor"];
-               
+
                 // Set listitem value to parsed listitem
                 foreach (var key in updatedValues.Keys)
                 {
                     SPListItem[key] = updatedValues[key];
                 }
-                
+
                 //SPListItem["Editor"] = currentEditor;
                 // Update columns remotely
                 SPListItem.Update();
@@ -406,7 +409,7 @@ namespace MCAWebAndAPI.Service.Utils
                 {
                     newItem[key] = columnValues[key];
                 }
-                
+
                 try
                 {
                     newItem.Update();
@@ -419,7 +422,7 @@ namespace MCAWebAndAPI.Service.Utils
             }
         }
 
-        public static void AddListItemAsync(string listName, Dictionary<string, 
+        public static void AddListItemAsync(string listName, Dictionary<string,
             Dictionary<string, object>> columnValues, string siteUrl = null)
         {
             MapCredential(siteUrl);
@@ -456,7 +459,7 @@ namespace MCAWebAndAPI.Service.Utils
 
                 }
 
-              
+
             }
         }
 
@@ -593,8 +596,8 @@ namespace MCAWebAndAPI.Service.Utils
                 return field.Choices;
             }
         }
-        
-        public static bool SendEmail( string email, string content, string subject, string siteUrl= null)
+
+        public static bool SendEmail(string email, string content, string subject, string siteUrl = null)
         {
             MapCredential(siteUrl);
             using (ClientContext context = new ClientContext(siteUrl ?? CurUrl))
@@ -731,14 +734,14 @@ namespace MCAWebAndAPI.Service.Utils
                     }
                 }
 
-               
+
             }
         }
 
 
-        public static FieldUserValue GetUser(string useremail, string siteUrl,string strwebname)
+        public static FieldUserValue GetUser(string useremail, string siteUrl, string strwebname)
         {
-          
+
             using (ClientContext clientContext = new ClientContext(siteUrl))
             {
                 SecureString secureString = new SecureString();
@@ -756,6 +759,72 @@ namespace MCAWebAndAPI.Service.Utils
                 userValue.LookupId = newUser.Id;
                 return userValue;
 
+            }
+        }
+
+        public static void AttachFile(string listName, int listItemID, HttpPostedFileBase file, string siteUrl = null)
+        {
+            MapCredential(siteUrl);
+            ClientContext clientContext = new ClientContext(siteUrl);
+
+            SecureString secureString = new SecureString();
+            Password.ToList().ForEach(secureString.AppendChar);
+            clientContext.Credentials = new SharePointOnlineCredentials(UserName, secureString);
+
+            List oList = clientContext.Web.Lists.GetByTitle(listName);
+            ListItemCreationInformation itemCreateInfo = new ListItemCreationInformation();
+            ListItem oListItem = oList.GetItemById(listItemID);
+
+            clientContext.ExecuteQuery();
+
+            byte[] contents = new byte[Convert.ToInt32(file.ContentLength)];
+            Stream fStream = file.InputStream;
+            fStream.Read(contents, 0, Convert.ToInt32(file.ContentLength));
+            fStream.Close();
+            MemoryStream mStream = new MemoryStream(contents);
+            AttachmentCreationInformation aci = new AttachmentCreationInformation();
+            aci.ContentStream = mStream;
+            aci.FileName = file.FileName;
+            Attachment attachment = oListItem.AttachmentFiles.Add(aci);
+            clientContext.Load(attachment);
+            clientContext.ExecuteQuery();
+            clientContext.Dispose();
+
+        }
+
+        public static string GetAttachFileName(string listName, int? ID, string siteUrl = null)
+        {
+            MapCredential(siteUrl);
+            using (ClientContext context = new ClientContext(siteUrl ?? CurUrl))
+            {
+                SecureString secureString = new SecureString();
+                Password.ToList().ForEach(secureString.AppendChar);
+                context.Credentials = new SharePointOnlineCredentials(UserName, secureString);
+
+                var list = context.Web.Lists.GetByTitle(listName);
+                var filename = "";
+                context.Load(list);
+                context.Load(list.RootFolder);
+                context.Load(list.RootFolder.Folders);
+                context.Load(list.RootFolder.Files);
+                context.ExecuteQuery();
+                Folder fol = context.Web.GetFolderByServerRelativeUrl(list.RootFolder.ServerRelativeUrl + "/Attachments/" + ID);
+                FileCollection files = fol.Files;
+                context.Load(files, fs => fs.Include(f => f.ServerRelativeUrl, f => f.Name, f => f.ServerRelativeUrl));
+
+                try
+                {
+                    context.ExecuteQuery();
+                    foreach (Microsoft.SharePoint.Client.File f in files)
+                    {
+                        filename = f.Name;
+                    }
+                }
+                catch (Exception e)
+                {
+                    throw e;
+                }
+                return filename;
             }
         }
     }

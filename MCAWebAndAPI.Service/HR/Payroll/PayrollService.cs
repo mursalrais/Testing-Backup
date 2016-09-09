@@ -197,8 +197,8 @@ namespace MCAWebAndAPI.Service.HR.Payroll
                 return worksheet;
 
             var period = (DateTime)periodParam;
-            var startDate = period.GetFirstPayrollDay();
-            var finishDate = period.GetLastPayrollDay();
+            var startDate = period.GetFirstPayrollDay().ToLocalTime();
+            var finishDate = period.GetLastPayrollDay().ToLocalTime();
             var dateRange = startDate.EachDay(finishDate);
 
             // Set Site URL

@@ -17,7 +17,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
             this.TransactionType = Shared.PettyCashTranscationType_PettyCashReplenishment;
         }
 
-        [Required]
         public string Remarks { get; set; }
 
         [UIHint("MultiFileUploader")]

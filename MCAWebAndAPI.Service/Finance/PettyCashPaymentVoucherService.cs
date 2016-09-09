@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Web;
 using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
-using MCAWebAndAPI.Service.HR.Common;
+using MCAWebAndAPI.Service.Common;
 using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
@@ -84,10 +84,11 @@ namespace MCAWebAndAPI.Service.Finance
             if (viewModel.Professional.Value.HasValue)
             {
                 var professionalId = Convert.ToInt32(viewModel.Professional.Value);
-                var professional = new ProfessionalService().GetProfessionalData(professionalId);
+                //var professional = new ProfessionalService(xxxx).GetProfessionalData(professionalId);
+                var professional = ProfessionalService.Get(siteUrl, professionalId);
 
                 newItem.Add(FIELD_PROFESSIONALID, new FieldLookupValue { LookupId = professionalId });
-                newItem.Add(FIELD_PROFESSIONAL_POSITION, professional.PositionName);
+                newItem.Add(FIELD_PROFESSIONAL_POSITION, professional.Position);
             }
 
             if (viewModel.Vendor.Value.HasValue)
@@ -111,6 +112,11 @@ namespace MCAWebAndAPI.Service.Finance
             try
             {
                 SPConnector.AddListItem(LISTNAME, newItem, siteUrl);
+            }
+            catch(ServerException se)
+            {
+                logger.Error(se.Message);
+                throw se;
             }
             catch (Exception e)
             {
@@ -250,13 +256,14 @@ namespace MCAWebAndAPI.Service.Finance
             viewModel.Status.Value = Convert.ToString(listItem[FIELD_STATUS]);
             viewModel.PaidTo.Value = Convert.ToString(listItem[FIELD_PAIDTO]);
 
-            //TODO: the following line is troublesome please check if we need to check both values for != null
-            if (viewModel.Professional != null && listItem[FIELD_PROFESSIONALID] != null)
+            if (listItem[FIELD_PROFESSIONALID] != null)
             {
                 viewModel.Professional.Value = (listItem[FIELD_PROFESSIONALID] as FieldLookupValue).LookupId;
+                viewModel.Professional.Text = string.Format("{0} - {1}", (listItem[FIELD_PROFESSIONAL_NAME] as FieldLookupValue).LookupValue, 
+                    Convert.ToString(listItem[FIELD_PROFESSIONAL_POSITION]));
             }
 
-            if (viewModel.Vendor != null && listItem[FIELD_VENDORID] != null)
+            if (listItem[FIELD_VENDORID] != null)
             {
                 viewModel.Vendor.Value = (listItem[FIELD_VENDORID] as FieldLookupValue).LookupId;
             }

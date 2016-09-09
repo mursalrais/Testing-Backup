@@ -13,6 +13,9 @@ using Microsoft.SharePoint.Client;
 using System.IO;
 using Elmah;
 using MCAWebAndAPI.Service.Converter;
+using System.Web.Script.Serialization;
+using MCAWebAndAPI.Model.HR.DataMaster;
+using Newtonsoft.Json;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -31,7 +34,40 @@ namespace MCAWebAndAPI.Web.Controllers
             assetCheckResultService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
-            return Redirect((siteUrl ?? ConfigResource.DefaultBOSiteUrl)+ Service.Resources.UrlResource.AssetCheckResult);
+            return Redirect((siteUrl ?? ConfigResource.DefaultBOSiteUrl) + Service.Resources.UrlResource.AssetCheckResult);
+        }
+
+        public int PositionID(int? ID, string siteUrl)
+        {
+            assetCheckResultService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            if (ID == null)
+            {
+                ID = assetCheckResultService.GetMinIDProfesional();
+            }
+
+            int? ProfesionalID = ID;
+            //return assetCheckResultService.GetIDPosition(ProfesionalID);
+
+            int positionID = assetCheckResultService.GetIDPosition(ProfesionalID);
+
+            var otherController = DependencyResolver.Current.GetService<HRDataMasterController>();
+            var result = otherController.GetPositions();
+
+            string json = new JavaScriptSerializer().Serialize(result.Data);
+
+            JavaScriptSerializer js = new JavaScriptSerializer();
+            PositionMaster[] persons = js.Deserialize<PositionMaster[]>(json);
+
+            for (int i = 0; i < persons.Count(); i++)
+            {
+                if (persons[i].ID == positionID)
+                {
+                    return i;
+                }
+            }
+
+            return 0;
         }
 
         //[HttpPost]
@@ -94,7 +130,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 }, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public ActionResult Edit(string siteUrl,
             AssetCheckResultHeaderVM data,
             int? ID,
@@ -107,8 +143,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
             assetCheckResultService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            
-            if(data.ID != null)
+
+            if (data.ID != null)
             {
                 ID = data.ID;
             }
@@ -121,7 +157,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             if (!string.IsNullOrEmpty(SubmitForApproval))
             {
-                var viewModelSaveAsDraft = assetCheckResultService.GetPopulatedModelSave(data, true,ID);
+                var viewModelSaveAsDraft = assetCheckResultService.GetPopulatedModelSave(data, true, ID);
                 return RedirectToAction("Index");
             }
 
@@ -141,9 +177,14 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult View(string siteUrl,
             AssetCheckResultHeaderVM data,
             int? ID,
-            string Print
+            string Print,
+            Boolean RequestApproval = false
         )
         {
+            if (RequestApproval && ID != null)
+            {
+                return RedirectToAction("Approve", new { ID = ID });
+            }
 
             assetCheckResultService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
@@ -203,7 +244,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             assetCheckResultService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            
+
             if (!string.IsNullOrEmpty(Approve))
             {
                 var viewModelSaveAsDraft = assetCheckResultService.Approve(ID);
