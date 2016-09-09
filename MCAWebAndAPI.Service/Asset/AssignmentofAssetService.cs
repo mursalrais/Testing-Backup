@@ -10,6 +10,7 @@ using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Model.ViewModel.Control;
 using System.Data;
+using System.IO;
 
 namespace MCAWebAndAPI.Service.Asset
 {
@@ -191,22 +192,9 @@ namespace MCAWebAndAPI.Service.Asset
             {
                 SPConnector.AddListItem("Asset Assignment", columnValues, _siteUrl);
                 var id = SPConnector.GetLatestListItemID("Asset Assignment", _siteUrl);
-                var info = SPConnector.GetListItem("Asset Assignment", id, _siteUrl);
-                if (viewmodel.CompletionStatus.Value == "Complete")
+                if(viewmodel.CompletionStatus.Value == "Complete" && (viewmodel.attach.FileName != "" || viewmodel.attach.FileName != null))
                 {
-                    if (Convert.ToBoolean(info["Attachments"]) == false)
-                    {
-                        SPConnector.DeleteListItem("Asset Assignment", id, _siteUrl);
-                        return 0;
-                    }
-                }
-                else
-                {
-                    if (Convert.ToBoolean(info["Attachments"]) == true)
-                    {
-                        SPConnector.DeleteListItem("Asset Assignment", id, _siteUrl);
-                        return -1;
-                    }
+                    SPConnector.AttachFile("Asset Assignment", id, viewmodel.attach, _siteUrl);
                 }
             }
             catch (Exception e)
@@ -275,6 +263,11 @@ namespace MCAWebAndAPI.Service.Asset
             try
             {
                 SPConnector.UpdateListItem("Asset Assignment", ID, columnValues, _siteUrl);
+                if (viewmodel.CompletionStatus.Value == "Complete" && (viewmodel.attach.FileName != "" || viewmodel.attach.FileName != null))
+                {
+                    SPConnector.AttachFile("Asset Assignment", ID, viewmodel.attach, _siteUrl);
+                }
+
                 var newData = SPConnector.GetListItem("Asset Assignment", ID, _siteUrl);
                 if (viewmodel.CompletionStatus.Value == "Complete")
                 {
