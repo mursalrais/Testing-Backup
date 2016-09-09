@@ -127,11 +127,11 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             if (viewModel.ValidationStatus == "Need HR to Validate")
             {
-                return JsonHelper.GenerateJsonSuccessResponse(siteUrl + "/" + UrlResource.ProfessionalData);
+                return JsonHelper.GenerateJsonSuccessResponse(siteUrl + "/" + UrlResource.ProfessionalMaster);
             }
             else
             {
-                return JsonHelper.GenerateJsonSuccessResponse(siteUrl + "/" + UrlResource.ProfessionalMaster);
+                return JsonHelper.GenerateJsonSuccessResponse(siteUrl + "/" + UrlResource.ProfessionalData);
             }
             
         }
