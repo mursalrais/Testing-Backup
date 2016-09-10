@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using MCAWebAndAPI.Model.Common;
@@ -18,6 +19,8 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
 
     public class RequisitionNoteService : IRequisitionNoteService
     {
+        #region Constants
+
         private const string ListName_GLMaster = "GL Master";
         private const string ListName_WBSMaster = "WBS Master";
         private const string ListName_Activity = "Activity";
@@ -60,6 +63,8 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
         private const string ACTIVTY_PROJECT_NAME = "Project";
         private const string ACTIVITYID_SUBACTIVITY = "Activity_x003a_ID";
         private const string WBS_SUBACTIVITY_ID = "Sub_x0020_Activity_x003a_ID";
+
+        #endregion 
 
         string _siteUrl = null;
         static Logger logger = LogManager.GetCurrentClassLogger();
@@ -334,7 +339,6 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
             }
         }
 
-
         public async Task CreateRequisitionNoteItemsAsync(int? headerID, IEnumerable<RequisitionNoteItemVM> noteItems)
         {
             CreateRequisitionNoteItems(headerID, noteItems);
@@ -374,6 +378,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
 
             return new Tuple<int, string>(id, number);
         }
+
 
         private ActivityVM ConvertToActivityModel(ListItem item)
         {

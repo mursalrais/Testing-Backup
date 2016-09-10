@@ -310,6 +310,7 @@
     <Content Include="bin\zh-CN\Kendo.Mvc.resources.dll" />
     <Content Include="Content\bi.css" />
     <Content Include="Content\custom.css" />
+    <Content Include="Content\fin-style.css" />
     <Content Include="Content\home.css" />
     <Content Include="Content\kendo\2016.2.714\Fiori\editor.png" />
     <Content Include="Content\kendo\2016.2.714\Fiori\imagebrowser.png" />
@@ -1331,7 +1332,6 @@
     <Folder Include="App_Code\" />
     <Folder Include="Scripts\apps\controlls\" />
     <Folder Include="Views\Activity\" />
-    <Folder Include="Views\COMWBS\" />
     <Folder Include="Views\HRDataMaster\" />
     <Folder Include="Views\PROVendor\" />
   </ItemGroup>

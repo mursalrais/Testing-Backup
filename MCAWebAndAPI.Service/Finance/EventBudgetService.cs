@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using MCAWebAndAPI.Model.Common;
@@ -19,10 +21,14 @@ namespace MCAWebAndAPI.Service.Finance
 
     public class EventBudgetService : IEventBudgetService
     {
+        #region Constants
+        
         private const string ListName_EventBudget = "Event Budget";
         public const string ListName_EventBudgetItem = "Event Budget Item";
         private const string ListName_Attachment = "Event Budget Documents";
         private const string ListName_Activity = "Activity";
+        private const string ListNameLandingPageBudgetAactualDisbursement = "Budget VS Actual Disbursement MCDR";
+        private const string ListNameWBSMapping = "WBS Mapping";
 
         private const string EventBudgetFieldName_ID = "ID";
         private const string EventBudgetFieldName_No = "No";
@@ -65,7 +71,18 @@ namespace MCAWebAndAPI.Service.Finance
         private const string EventBudgetDocuments_EventBudgetId = "Event_x0020_Budget";
         private const string FINEventBudgetDocumentByID = "{0}/Event%20Budget%20Documents/Forms/AllItems.aspx#InplviewHash5093bda1-84bf-4cad-8652-286653d6a83f=FilterField1%3Dpsa%255Fx003a%255FID-FilterValue1%3D{1}";
 
-        //</ViewFields>
+        private const string BudgetActualDisbursementMonth = "Month";
+        private const string BudgetActualDisbursementYear = "Year";
+        private const string BudgetActualDisbursementBudget = "Budget";
+        private const string BudgetActualDisbursementActual = "Actual";
+        private const string BudgetActualDisbursementMonthPercent = "MonthPercentComplete";
+        private const string BudgetActualDisbursementWBSID = "WBSID";
+
+        private const string WBSMappingWBSID = "WBS_x0020_ID";
+        private const string WBSMappingActivity = "Activity";
+       
+        #endregion
+
         private const string DocumentNoMask = "EB/{0}-{1}/";
 
         private string siteUrl = null;
@@ -329,90 +346,6 @@ namespace MCAWebAndAPI.Service.Finance
             }
         }
 
-        private EventBudgetVM ConvertToEventBudgetVM(ListItem listItem)
-        {
-            var eventBudget = new EventBudgetVM();
-
-            eventBudget.ID = Convert.ToInt32(listItem[EventBudgetFieldName_ID]);
-            eventBudget.EventName = Convert.ToString(listItem[EventBudgetFieldName_EventName]);
-            eventBudget.No = Convert.ToString(listItem[EventBudgetFieldName_No]);
-
-            eventBudget.DateFrom = Convert.ToDateTime(listItem[EventBudgetFieldName_DateFrom]);
-            eventBudget.DateTo = Convert.ToDateTime(listItem[EventBudgetFieldName_DateTo]);
-
-            eventBudget.Project.Text = Convert.ToString(listItem[EventBudgetFieldName_Project]);
-            eventBudget.Project.Value = Convert.ToString(listItem[EventBudgetFieldName_Project]);
-
-            if (listItem[EventBudgetFieldName_ActivityName] != null)
-            {
-                eventBudget.Activity.Value = (listItem[EventBudgetFieldName_ActivityName] as FieldLookupValue).LookupId;
-                eventBudget.Activity.Text = (listItem[EventBudgetFieldName_ActivityName] as FieldLookupValue).LookupValue;
-            }
-
-            eventBudget.Venue = Convert.ToString(listItem[EventBudgetFieldName_Venue]);
-            eventBudget.Rate = Convert.ToDecimal(listItem[EventBudgetFieldName_ExhangeRate]);
-            eventBudget.TotalDirectPayment = Convert.ToDecimal(listItem[EventBudgetFieldName_TotalDirectPaymentIDR]);
-            eventBudget.TotalSCA = Convert.ToDecimal(listItem[EventBudgetFieldName_TotalSCAIDR]);
-            eventBudget.TotalIDR = Convert.ToDecimal(listItem[EventBudgetFieldName_TotalIDR]);
-            eventBudget.TotalUSD = Convert.ToDecimal(listItem[EventBudgetFieldName_TotalUSD]);
-
-            if (eventBudget.Rate > 0)
-            {
-                eventBudget.TotalDirectPaymentUSD = eventBudget.TotalDirectPayment / eventBudget.Rate;
-                eventBudget.TotalSCAUSD = eventBudget.TotalSCA / eventBudget.Rate;
-            }
-
-            eventBudget.TransactionStatus.Value = Convert.ToString(listItem[EventBudgetFieldName_TransactionStatus]);
-            eventBudget.UserEmail = Convert.ToString(listItem[EventBudgetFieldName_UserEmail]);
-            eventBudget.DocumentUrl =  GetDocumentUrl(siteUrl, eventBudget.ID);
-
-            return eventBudget;
-        }
-
-
-        private string[] GetList(string listName)
-        {
-            List<string> eventNames = new List<string>();
-            var listItems = SPConnector.GetList(ListName_EventBudget, siteUrl);
-
-            foreach (var item in listItems)
-            {
-                eventNames.Add(item[listName].ToString());
-            }
-
-            return eventNames.ToArray();
-        }
-
-        private string[] GetActivities(string columnName)
-        {
-            List<string> eventNames = new List<string>();
-            var listItems = SPConnector.GetList(ListName_Activity, siteUrl);
-
-            foreach (var item in listItems)
-            {
-                eventNames.Add(item[columnName].ToString());
-            }
-
-            return eventNames.ToArray();
-        }
-
-        private EventBudgetVM ConvertToEventBudgetVMForList(ListItem listItem)
-        {
-            var eventBudget = new EventBudgetVM();
-
-            eventBudget.ID = Convert.ToInt32(listItem[EventBudgetFieldName_ID]);
-            eventBudget.Title = Convert.ToString(listItem[ActivityFieldName_Name]);
-            eventBudget.No = Convert.ToString(listItem[EventBudgetFieldName_No]);
-            eventBudget.Project.Text = Convert.ToString(listItem[EventBudgetFieldName_Project]);
-
-            return eventBudget;
-        }
-
-        private string GetDocumentUrl(string siteUrl, int? iD)
-        {
-            return string.Format(FINEventBudgetDocumentByID, siteUrl, iD);
-        }
-
         public async Task UpdateRequisitionNoteAsync(string siteUrl = null, int id = 0)
         {
             UpdateRequisitionNote(siteUrl, id);
@@ -475,7 +408,6 @@ namespace MCAWebAndAPI.Service.Finance
             // attachment?
         }
 
-
         public void UpdateSCAVoucher(string siteUrl = null, int id = 0)
         {
             if (id == 0)
@@ -520,5 +452,144 @@ namespace MCAWebAndAPI.Service.Finance
 
             // attachment?
         }
+
+        #region Supply data to Landing Page
+
+        public static IEnumerable<LPBudgetVsActualDisbursementVM> GetLatestMonthBudgetActualDisbursement(DateTime period, string mcaDevSiteURL)
+        {
+            var result = new List<LPBudgetVsActualDisbursementVM>();
+            var caml = @"<View><Query><Where><And> <Eq><FieldRef Name='" + 
+                        BudgetActualDisbursementYear + "' /><Value Type='Lookup'>" + 
+                        period.Year.ToString() + "</Value></Eq> " +
+                        "<Eq><FieldRef Name='" +
+                        BudgetActualDisbursementMonth  + "' /><Value Type='Lookup'>" +
+                        period.ToString("MMMM", CultureInfo.InvariantCulture) + "</Value></Eq>"
+                        + "</And></Where></Query></View>";
+
+            string valuesText = string.Empty;
+            string camlGetActiviy = string.Empty;
+
+            foreach (var item in SPConnector.GetList(ListNameLandingPageBudgetAactualDisbursement, mcaDevSiteURL, caml))
+            {
+                if (item[BudgetActualDisbursementWBSID] != null)
+                {
+                    LPBudgetVsActualDisbursementVM itemBAD = new LPBudgetVsActualDisbursementVM();
+                    itemBAD.WBSID = (item[BudgetActualDisbursementWBSID] as FieldLookupValue).LookupValue;
+                    itemBAD.PercentageCompleted = Convert.ToDecimal(item[BudgetActualDisbursementMonthPercent]);
+                    itemBAD.BudgetUSD = Convert.ToDecimal(item[BudgetActualDisbursementBudget]);
+                    itemBAD.ActualUSD = Convert.ToDecimal(item[BudgetActualDisbursementActual]);
+
+                    result.Add(itemBAD);
+                    valuesText += "<Value Type='Lookup'>" + itemBAD.WBSID + "</Value>";
+                }
+            }
+
+            if (result.Count > 0)
+            {
+                camlGetActiviy = @"<View><Query><Where><In><FieldRef Name='" + WBSMappingWBSID + "' /><Values>" +
+                                   valuesText + "</Values></In></Where></Query></View>";
+                //get activity name
+                foreach (var item in SPConnector.GetList(ListNameWBSMapping, mcaDevSiteURL, camlGetActiviy))
+                {
+                    string wbsId = Convert.ToString(item[WBSMappingWBSID]);
+                    var listMatch = result.Where(p => p.WBSID == wbsId).ToList();
+                    if (listMatch.Count > 0)
+                    {
+                        foreach (var itemMatch in listMatch)
+                        {
+                            itemMatch.ProjectOrActivity = Convert.ToString(item[WBSMappingActivity]);
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+        #endregion
+
+
+        private EventBudgetVM ConvertToEventBudgetVM(ListItem listItem)
+        {
+            var eventBudget = new EventBudgetVM();
+
+            eventBudget.ID = Convert.ToInt32(listItem[EventBudgetFieldName_ID]);
+            eventBudget.EventName = Convert.ToString(listItem[EventBudgetFieldName_EventName]);
+            eventBudget.No = Convert.ToString(listItem[EventBudgetFieldName_No]);
+
+            eventBudget.DateFrom = Convert.ToDateTime(listItem[EventBudgetFieldName_DateFrom]);
+            eventBudget.DateTo = Convert.ToDateTime(listItem[EventBudgetFieldName_DateTo]);
+
+            eventBudget.Project.Text = Convert.ToString(listItem[EventBudgetFieldName_Project]);
+            eventBudget.Project.Value = Convert.ToString(listItem[EventBudgetFieldName_Project]);
+
+            if (listItem[EventBudgetFieldName_ActivityName] != null)
+            {
+                eventBudget.Activity.Value = (listItem[EventBudgetFieldName_ActivityName] as FieldLookupValue).LookupId;
+                eventBudget.Activity.Text = (listItem[EventBudgetFieldName_ActivityName] as FieldLookupValue).LookupValue;
+            }
+
+            eventBudget.Venue = Convert.ToString(listItem[EventBudgetFieldName_Venue]);
+            eventBudget.Rate = Convert.ToDecimal(listItem[EventBudgetFieldName_ExhangeRate]);
+            eventBudget.TotalDirectPayment = Convert.ToDecimal(listItem[EventBudgetFieldName_TotalDirectPaymentIDR]);
+            eventBudget.TotalSCA = Convert.ToDecimal(listItem[EventBudgetFieldName_TotalSCAIDR]);
+            eventBudget.TotalIDR = Convert.ToDecimal(listItem[EventBudgetFieldName_TotalIDR]);
+            eventBudget.TotalUSD = Convert.ToDecimal(listItem[EventBudgetFieldName_TotalUSD]);
+
+            if (eventBudget.Rate > 0)
+            {
+                eventBudget.TotalDirectPaymentUSD = eventBudget.TotalDirectPayment / eventBudget.Rate;
+                eventBudget.TotalSCAUSD = eventBudget.TotalSCA / eventBudget.Rate;
+            }
+
+            eventBudget.TransactionStatus.Value = Convert.ToString(listItem[EventBudgetFieldName_TransactionStatus]);
+            eventBudget.UserEmail = Convert.ToString(listItem[EventBudgetFieldName_UserEmail]);
+            eventBudget.DocumentUrl = GetDocumentUrl(siteUrl, eventBudget.ID);
+
+            return eventBudget;
+        }
+
+
+        private string[] GetList(string listName)
+        {
+            List<string> eventNames = new List<string>();
+            var listItems = SPConnector.GetList(ListName_EventBudget, siteUrl);
+
+            foreach (var item in listItems)
+            {
+                eventNames.Add(item[listName].ToString());
+            }
+
+            return eventNames.ToArray();
+        }
+
+        private string[] GetActivities(string columnName)
+        {
+            List<string> eventNames = new List<string>();
+            var listItems = SPConnector.GetList(ListName_Activity, siteUrl);
+
+            foreach (var item in listItems)
+            {
+                eventNames.Add(item[columnName].ToString());
+            }
+
+            return eventNames.ToArray();
+        }
+
+        private EventBudgetVM ConvertToEventBudgetVMForList(ListItem listItem)
+        {
+            var eventBudget = new EventBudgetVM();
+
+            eventBudget.ID = Convert.ToInt32(listItem[EventBudgetFieldName_ID]);
+            eventBudget.Title = Convert.ToString(listItem[ActivityFieldName_Name]);
+            eventBudget.No = Convert.ToString(listItem[EventBudgetFieldName_No]);
+            eventBudget.Project.Text = Convert.ToString(listItem[EventBudgetFieldName_Project]);
+
+            return eventBudget;
+        }
+
+        private string GetDocumentUrl(string siteUrl, int? iD)
+        {
+            return string.Format(FINEventBudgetDocumentByID, siteUrl, iD);
+        }
+
     }
 }

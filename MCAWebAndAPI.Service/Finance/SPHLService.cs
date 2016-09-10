@@ -155,5 +155,16 @@ namespace MCAWebAndAPI.Service.Finance
         {
             return string.Format(UrlResource.SPHLDocumentByID, _siteUrl, ID);
         }
+
+        #region Supply data to Landing Page
+
+        public static decimal GetAmount()
+        {
+            //TODO: implement for Landing Page
+            return Convert.ToDecimal(new Random().Next(1000000, 100000000));
+        }
+
+        #endregion
+
     }
 }

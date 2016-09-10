@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using MCAWebAndAPI.Model.Common;
+using MCAWebAndAPI.Model.HR.DataMaster;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
@@ -34,7 +36,9 @@ namespace MCAWebAndAPI.Service.Finance
         private const string FieldName_DocNo = "Title";
         private const string FieldName_Date = "Reimbursement_x0020_Date";
         private const string FieldName_PaidTo = "Paid_x0020_To";
-        private const string FieldName_Professional = "ProfessionalID";
+        private const string FieldName_ProfessionalID = "ProfessionalID";
+        private const string FieldName_ProfessionalName = "ProfessionalName";
+        private const string FieldName_ProfessionalPosition = "ProfessionalPosition";
         private const string FieldName_Vendor = "Vendor_x0020_ID";
         private const string FieldName_Vendor_Name = "Vendor_x0020_ID_x003a_Vendor_x00";
         private const string FieldName_Driver = "Driver";
@@ -55,14 +59,29 @@ namespace MCAWebAndAPI.Service.Finance
         private string siteUrl = string.Empty;
         static Logger logger = LogManager.GetCurrentClassLogger();
 
-        public int? Create(ref PettyCashReimbursementVM viewModel)
+        public int? Save(ref PettyCashReimbursementVM viewModel, IEnumerable<ProfessionalMaster> professionals)
         {
             int? result = null;
+
+            string professionalName= string.Empty;
+            string professionalPosition= string.Empty;
+
+            var professionalId = viewModel.Professional.Value == null ? 0 : viewModel.Professional.Value;
+
+            if (professionalId!=0)
+            {
+                professionalName = professionals.ToList().Find(p => p.ID == professionalId).Name;
+                professionalPosition = professionals.ToList().Find(p => p.ID == professionalId).Position;
+            }
+            
+
             var columnValues = new Dictionary<string, object>
-           {
+            {
                {FieldName_Date, viewModel.Date},
                {FieldName_PaidTo, viewModel.PaidTo.Value},
-               {FieldName_Professional,  viewModel.Professional.Value == null ? 0 : viewModel.Professional.Value},
+               {FieldName_ProfessionalID, professionalId},
+               {FieldName_ProfessionalName,  professionalName},
+               {FieldName_ProfessionalPosition,  professionalPosition},
                {FieldName_Vendor, viewModel.Vendor==null ? 0 : viewModel.Vendor.Value},
                {FieldName_Driver, viewModel.Driver},
                {FieldName_Currency, viewModel.Currency.Value},
@@ -172,7 +191,8 @@ namespace MCAWebAndAPI.Service.Finance
             //TODO: the following line causes error
             //  but currently there is nothing you can do 
             //  we are waiting for eCEOs to fix Professional Master table
-            viewModel.Professional.Value = Convert.ToInt32(listItem[FieldName_Professional]==null ? 0 : (listItem[FieldName_Professional]));
+            viewModel.Professional.Value = Convert.ToInt32(listItem[FieldName_ProfessionalID] == null ? 0 : (listItem[FieldName_ProfessionalID]));
+            viewModel.Professional.Text = Convert.ToString(listItem[FieldName_ProfessionalName] == null ? string.Empty : (listItem[FieldName_ProfessionalName]));
             viewModel.Vendor.Value = listItem[FieldName_Vendor] == null ? 0 : Convert.ToInt32((listItem[FieldName_Vendor] as FieldLookupValue).LookupId.ToString());
             viewModel.VendorName = listItem[FieldName_Vendor_Name] == null ? "" : (listItem[FieldName_Vendor_Name] as FieldLookupValue).LookupValue.ToString();
             viewModel.Driver = Convert.ToString(listItem[FieldName_Driver]);

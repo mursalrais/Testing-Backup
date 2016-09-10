@@ -150,6 +150,68 @@ namespace MCAWebAndAPI.Service.Finance
             CreateAttachment(ID, documents);
         }
 
+
+        #region Supply data to Landing Page
+
+        public static decimal GetIncomeTax_Reimb_YTD()
+        {
+            //TODO: implement for Landing Page
+            return Convert.ToDecimal(new Random().Next(1000000, 100000000));
+        }
+
+        public static decimal GetIncomeTax_Reimb_YTD_Min2()
+        {
+            //TODO: implement for Landing Page
+            return Convert.ToDecimal(new Random().Next(1000000, 100000000));
+        }
+
+        public static decimal GetIncomeTax_Reimb_YTD_Min1()
+        {
+            //TODO: implement for Landing Page
+            return Convert.ToDecimal(new Random().Next(1000000, 100000000));
+        }
+
+        public static decimal GetVAT_Reimb_YTD()
+        {
+            //TODO: implement for Landing Page
+            return Convert.ToDecimal(new Random().Next(1000000, 100000000));
+        }
+
+        public static decimal GetVAT_Reimb_YTD_Min2()
+        {
+            //TODO: implement for Landing Page
+            return Convert.ToDecimal(new Random().Next(1000000, 100000000));
+        }
+
+        public static decimal GetVAT_Reimb_YTD_Min1()
+        {
+            //TODO: implement for Landing Page
+            return Convert.ToDecimal(new Random().Next(1000000, 100000000));
+        }
+
+        public static decimal GetOtherTax_Reimb_YTD()
+        {
+            //TODO: implement for Landing Page
+            return Convert.ToDecimal(new Random().Next(1000000, 100000000));
+        }
+
+        public static decimal GetOtherTax_Reimb_YTD_Min2()
+        {
+            //TODO: implement for Landing Page
+            return Convert.ToDecimal(new Random().Next(1000000, 100000000));
+        }
+
+        public static decimal GetOtherTax_Reimb_YTD_Min1()
+        {
+            //TODO: implement for Landing Page
+            return Convert.ToDecimal(new Random().Next(1000000, 100000000));
+        }
+
+
+        #endregion
+
+
+
         private void CreateAttachment(int? ID, IEnumerable<HttpPostedFileBase> attachment)
         {
             if (ID != null)

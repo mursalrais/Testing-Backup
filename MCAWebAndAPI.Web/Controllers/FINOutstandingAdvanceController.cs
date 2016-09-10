@@ -19,7 +19,6 @@ namespace MCAWebAndAPI.Web.Controllers
     [Filters.HandleError]
     public class FINOutstandingAdvanceController : Controller
     {
-        private const string SessionSiteUrl = "SiteUrl";
         private const string SuccessMsgFormatUpdated = "Outstanding advance for {0} has been successfully updated.";
         private const string FirstPageUrl = "{0}/Lists/FINOutstandingAdvance/AllItems.aspx";
 
@@ -34,7 +33,7 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);
-            SessionManager.Set(SessionSiteUrl, siteUrl);
+            SessionManager.Set(SharedController.Session_SiteUrl, siteUrl);
 
             var viewModel = service.Get(GetOperation(op), id);
 
@@ -62,7 +61,7 @@ namespace MCAWebAndAPI.Web.Controllers
         [HttpPost]
         public async Task<ActionResult> Save(FormCollection form, OutstandingAdvanceVM viewModel)
         {
-            var siteUrl = SessionManager.Get<string>(SessionSiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
+            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);
 
             try
@@ -93,7 +92,7 @@ namespace MCAWebAndAPI.Web.Controllers
         [HttpPost]
         public async Task<ActionResult> UploadCSV(FormCollection form, OutstandingAdvanceCSVVM viewModel)
         {
-            var siteUrl = SessionManager.Get<string>(SessionSiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
+            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);
             List<CSVErrorLogVM> csvErrors;
 

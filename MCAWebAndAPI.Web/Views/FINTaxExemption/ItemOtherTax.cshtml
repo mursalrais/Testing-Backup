@@ -67,12 +67,9 @@
                     <i class="fa fa-save"></i>
                     Submit
                 </button>
-                @if (!string.IsNullOrEmpty(@ViewBag.PreviousUrl))
-                {
                     <a href="@ViewBag.CancelUrl" target='_parent'>
                         <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
                     </a>
-                }
             </div>
         </div>
     </div>
@@ -81,10 +78,7 @@
 @section scripts{
     <script>
         $(document).ready(function () {
-            $('#cancel-button').click(function () {
-                var url = "@ViewBag.PreviousUrl";
-                window.top.location = url;
-            });
+
         });
     </script>
 }

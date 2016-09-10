@@ -16,6 +16,8 @@ namespace MCAWebAndAPI.Service.Finance
 {
     public class TaxExemptionDataService : ITaxExemptionDataService
     {
+        #region Constants
+
         private const string SP_TAX_EXEMPTION_INCOME_LIST_NAME = "Tax Exemption Income";
         private const string SP_TAX_EXEMPTION_INCOME_DOCUMENTS_NAME = "Tax Exemption Income Documents";
 
@@ -35,7 +37,6 @@ namespace MCAWebAndAPI.Service.Finance
         private const string SP_INCOME_TOTAL_INCOME_RECIPIENTS_INTERNAL_COLUMN_NAME = "Total_x0020_Income_x0020_Recipie";
         private const string SP_INCOME_GROSS_INCOME_COLUMN_NAME = "Gross Income";
         private readonly string SP_INCOME_GROSS_INCOME_INTERNAL_COLUMN_NAME = XmlConvert.EncodeName(SP_INCOME_GROSS_INCOME_COLUMN_NAME);
-        private const string SP_INCOME_TOTAL_INCOME_TAX_BORNE_COLUMN_NAME = "Total Income Tax Borne By Gov IDR";
         private const string SP_INCOME_TOTAL_INCOME_TAX_BORNE_INTERNAL_COLUMN_NAME = "Total_x0020_Income_x0020_Tax_x00";
 
         private const string SP_VAT_TOTAL_TAX_BASED_IDR = "Total_x0020_Tax_x0020_Based_x002";
@@ -47,8 +48,14 @@ namespace MCAWebAndAPI.Service.Finance
         private const string TaxExemptionVATDocumentByID = "{0}/Tax%20Exemption%20VAT%20Documents/Forms/AllItems.aspx#InplviewHash5093bda1-84bf-4cad-8652-286653d6a83f=FilterField1%3Dpsa%255Fx003a%255FID-FilterValue1%3D{1}";
         private const string TaxExemptionOtherDocumentByID = "{0}/Tax%20Exemption%20Others%20Documents/Forms/AllItems.aspx#InplviewHash5093bda1-84bf-4cad-8652-286653d6a83f=FilterField1%3Dpsa%255Fx003a%255FID-FilterValue1%3D{1}";
 
+        #endregion 
+
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private string _siteUrl = string.Empty;
+
+        private enum TaxTypes { Income, VAT, Others};
+
+        private enum Period { YTD, YTD_Min1, YTD_Min2 }
 
         public void SetSiteUrl(string siteUrl)
         {
@@ -69,6 +76,7 @@ namespace MCAWebAndAPI.Service.Finance
             var viewModel = new TaxExemptionVATVM();
             viewModel.TaxPeriod = DateTime.Now;
             viewModel.TypeOfTax.Choices = SPConnector.GetChoiceFieldValues(SP_TAX_EXEMPTION_VAT_LIST_NAME, SP_TYPE_OF_TAX_COLUMN_NAME, _siteUrl);
+
             return viewModel;
         }
 
@@ -77,6 +85,7 @@ namespace MCAWebAndAPI.Service.Finance
             var viewModel = new TaxExemptionOtherVM();
             viewModel.TaxPeriod = DateTime.Now;
             viewModel.TypeOfTax.Choices = SPConnector.GetChoiceFieldValues(SP_TAX_EXEMPTION_OTHERS_LIST_NAME, SP_TYPE_OF_TAX_COLUMN_NAME, _siteUrl);
+
             return viewModel;
         }
 
@@ -189,6 +198,115 @@ namespace MCAWebAndAPI.Service.Finance
             CreateTaxExemptionData(ID, taxType, documents);
         }
 
+        #region Supply data to Landing Page
+
+        public static decimal GetIncomeTax_Exemp_YTD(string siteUrl)
+        {
+            return GetTaxAmount(siteUrl, TaxTypes.Income, Period.YTD);
+        }
+
+        public static decimal GetIncomeTax_Exemp_YTD_Min2(string siteUrl)
+        {
+            return GetTaxAmount(siteUrl, TaxTypes.Income, Period.YTD_Min2);
+        }
+
+        public static decimal GetIncomeTax_Exemp_YTD_Min1(string siteUrl)
+        {
+            //TODO: implement for Landing Page
+            return Convert.ToDecimal(new Random().Next(1000000, 100000000));
+        }
+
+        public static decimal GetVAT_Exemp_YTD(string siteUrl)
+        {
+            //TODO: implement for Landing Page
+            return Convert.ToDecimal(new Random().Next(1000000, 100000000));
+        }
+
+        public static decimal GetVAT_Exemp_YTD_Min2(string siteUrl)
+        {
+            //TODO: implement for Landing Page
+            return Convert.ToDecimal(new Random().Next(1000000, 100000000));
+        }
+
+        public static decimal GetVAT_Exemp_YTD_Min1(string siteUrl)
+        {
+            //TODO: implement for Landing Page
+            return Convert.ToDecimal(new Random().Next(1000000, 100000000));
+        }
+
+        public static decimal GetOtherTax_Exemp_YTD(string siteUrl)
+        {
+            //TODO: implement for Landing Page
+            return Convert.ToDecimal(new Random().Next(1000000, 100000000));
+        }
+
+        public static decimal GetOtherTax_Exemp_YTD_Min2(string siteUrl)
+        {
+            //TODO: implement for Landing Page
+            return Convert.ToDecimal(new Random().Next(1000000, 100000000));
+        }
+
+        public static decimal GetOtherTax_Exemp_YTD_Min1(string siteUrl)
+        {
+            //TODO: implement for Landing Page
+            return Convert.ToDecimal(new Random().Next(1000000, 100000000));
+        }
+
+        private static decimal GetTaxAmount(string siteUrl, TaxTypes taxType, Period period)
+        {
+            decimal result = 0;
+            int year = DateTime.Now.Year;
+            string listName = string.Empty;
+            string amountFieldName = string.Empty;
+
+            if (period == Period.YTD_Min1)
+            {
+                year--;
+            }
+            else if (period == Period.YTD_Min2)
+            {
+                year -= 2;
+            }
+
+            switch(taxType)
+            {
+                case TaxTypes.Income:
+                    listName = SP_TAX_EXEMPTION_INCOME_LIST_NAME;
+                    amountFieldName = SP_INCOME_TOTAL_INCOME_TAX_BORNE_INTERNAL_COLUMN_NAME;
+
+                    break;
+
+                case TaxTypes.VAT:
+                    listName = SP_TAX_EXEMPTION_VAT_LIST_NAME;
+                    amountFieldName = SP_VAT_TOTAL_VAT_NOT_COLLECTED;
+
+                    break;
+
+                case TaxTypes.Others:
+                    listName = SP_TAX_EXEMPTION_OTHERS_LIST_NAME;
+                    amountFieldName = SP_OTHER_TOTAL_TAX_IDR;
+
+                    break;
+            }
+
+            var dateFrom = String.Format("{0}-{1}-{2}", year, "01", "01");
+            var dateTo = String.Format("{0}-{1}-{2}", year, 12, 31);
+
+            //TODO: keliatannya caml masih salah
+            var caml = @"<View><Query><Where><And><Geq><FieldRef Name='" + SP_PERIOD_COLUMN_NAME + "' /><Value Type='DateTime'>" + dateFrom + "</Value></Geq><Leq><FieldRef Name='" + SP_PERIOD_COLUMN_NAME + "' /><Value Type='DateTime'>" + dateTo + "</Value></Leq></And></Where></Query></View>";
+
+            foreach (var listItem in SPConnector.GetList(listName, siteUrl, caml))
+            {
+                result += Convert.ToDecimal(listItem[amountFieldName]);
+            }
+
+            return result;
+
+        }
+
+
+        #endregion
+  
         private void CreateTaxExemptionData(int? ID, string taxType, IEnumerable<HttpPostedFileBase> attachment)
         {
             if (ID != null)
@@ -333,5 +451,5 @@ namespace MCAWebAndAPI.Service.Finance
             }
             return true;
         }
-    }
+  }
 }

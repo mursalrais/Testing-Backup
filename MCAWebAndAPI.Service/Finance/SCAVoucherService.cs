@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using MCAWebAndAPI.Model.Common;
@@ -321,6 +322,58 @@ namespace MCAWebAndAPI.Service.Finance
             return scaVoucherVM;
         }
 
+        public void DeleteDetail(int id)
+        {
+            SPConnector.DeleteListItem(LIST_NAME_SCAVOUCHER, id, siteUrl);
+        }
+
+        public void CreateSCAVoucherItems(string siteUrl, int? scaVoucherID, IEnumerable<SCAVoucherItemsVM> viewModels)
+        {
+            if (viewModels != null)
+            {
+                foreach (var viewModel in viewModels)
+                {
+                    var columnValues = new Dictionary<string, object>
+                {
+                    {FIELD_NAME_TITLE,scaVoucherID},
+                    {FIELD_NAME_SCAVOUCHER,scaVoucherID},
+                    {FIELD_NAME_WBS,new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.WBSID) }},
+                    {FIELD_NAME_GL, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.GLID) }},
+                    {FIELD_NAME_AMOUNT,viewModel.Amount}
+                };
+                    try
+                    {
+                        SPConnector.AddListItem(LIST_NAME_SCAVOUCHER_ITEM, columnValues, siteUrl);
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error(e.Message);
+                        throw e;
+                    }
+                }
+            }
+        }
+
+        public IEnumerable<AjaxComboBoxVM> GetAllAjaxComboBoxVM()
+        {
+            var result = new List<AjaxComboBoxVM>();
+            var vms = GetAll();
+
+            foreach (var item in vms)
+            {
+                result.Add(
+                    new AjaxComboBoxVM
+                    {
+                        Value = item.ID,
+                        Text = item.SCAVoucherNo + " - " + item.Purpose
+                    }
+                );
+            }
+
+            return result;
+        }
+        
+
         private string GetDocumentUrl(int? ID)
         {
             return string.Format(UrlResource.SCAVoucherDocumentByID, siteUrl, ID);
@@ -375,10 +428,6 @@ namespace MCAWebAndAPI.Service.Finance
             return model;
         }
 
-        public void DeleteDetail(int id)
-        {
-            SPConnector.DeleteListItem(LIST_NAME_SCAVOUCHER, id, siteUrl);
-        }
         private static void CreateSCAVoucherAttachment(string siteUrl, int? ID, IEnumerable<HttpPostedFileBase> attachment)
         {
             if (ID != null)
@@ -403,51 +452,6 @@ namespace MCAWebAndAPI.Service.Finance
             }
         }
 
-        public void CreateSCAVoucherItems(string siteUrl, int? scaVoucherID, IEnumerable<SCAVoucherItemsVM> viewModels)
-        {
-            if (viewModels != null)
-            {
-                foreach (var viewModel in viewModels)
-                {
-                    var columnValues = new Dictionary<string, object>
-                {
-                    {FIELD_NAME_TITLE,scaVoucherID},
-                    {FIELD_NAME_SCAVOUCHER,scaVoucherID},
-                    {FIELD_NAME_WBS,new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.WBSID) }},
-                    {FIELD_NAME_GL, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.GLID) }},
-                    {FIELD_NAME_AMOUNT,viewModel.Amount}
-                };
-                    try
-                    {
-                        SPConnector.AddListItem(LIST_NAME_SCAVOUCHER_ITEM, columnValues, siteUrl);
-                    }
-                    catch (Exception e)
-                    {
-                        logger.Error(e.Message);
-                        throw e;
-                    }
-                }
-            }
-        }
-
-        public IEnumerable<AjaxComboBoxVM> GetAllAjaxComboBoxVM()
-        {
-            var result = new List<AjaxComboBoxVM>();
-            var vms = GetAll();
-
-            foreach (var item in vms)
-            {
-                result.Add(
-                    new AjaxComboBoxVM
-                    {
-                        Value = item.ID,
-                        Text = item.SCAVoucherNo + " - " + item.Purpose
-                    }
-                );
-            }
-
-            return result;
-        }
 
         private static List<string> GetIDItemDetails(string siteUrl, int headerID)
         {
