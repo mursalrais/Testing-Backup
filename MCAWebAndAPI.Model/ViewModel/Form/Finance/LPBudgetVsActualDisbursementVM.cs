@@ -16,13 +16,14 @@
 
         public decimal ActualUSD { get; set; }
 
-        public decimal PercentageCompleted { get; set; }
-
         public decimal ActualPercentage
         {
             get
             {
-                return (ActualUSD + BudgetUSD) / BudgetUSD;
+                if (BudgetUSD > 0)
+                    return (ActualUSD + BudgetUSD) / BudgetUSD;
+                else
+                    return 0;
             }
         }
     }

@@ -473,14 +473,25 @@ namespace MCAWebAndAPI.Service.Finance
             {
                 if (item[BudgetActualDisbursementWBSID] != null)
                 {
-                    LPBudgetVsActualDisbursementVM itemBAD = new LPBudgetVsActualDisbursementVM();
-                    itemBAD.WBSID = (item[BudgetActualDisbursementWBSID] as FieldLookupValue).LookupValue;
-                    itemBAD.PercentageCompleted = Convert.ToDecimal(item[BudgetActualDisbursementMonthPercent]);
-                    itemBAD.BudgetUSD = Convert.ToDecimal(item[BudgetActualDisbursementBudget]);
-                    itemBAD.ActualUSD = Convert.ToDecimal(item[BudgetActualDisbursementActual]);
+                    string wbsIdValue = (item[BudgetActualDisbursementWBSID] as FieldLookupValue).LookupValue;
+                    decimal budgetUsd = Convert.ToDecimal(item[BudgetActualDisbursementBudget]);
+                    decimal actualUSD = Convert.ToDecimal(item[BudgetActualDisbursementActual]);
 
-                    result.Add(itemBAD);
-                    valuesText += "<Value Type='Lookup'>" + itemBAD.WBSID + "</Value>";
+                    LPBudgetVsActualDisbursementVM existingData = result.FirstOrDefault(m => m.WBSID == wbsIdValue);
+                    if (existingData != null)
+                    {
+                        existingData.BudgetUSD += budgetUsd;
+                        existingData.ActualUSD += actualUSD;
+                    }
+                    else
+                    {
+                        LPBudgetVsActualDisbursementVM itemBAD = new LPBudgetVsActualDisbursementVM();
+                        itemBAD.WBSID = wbsIdValue;
+                        itemBAD.BudgetUSD = budgetUsd;
+                        itemBAD.ActualUSD = actualUSD;
+                        result.Add(itemBAD);
+                        valuesText += "<Value Type='Lookup'>" + wbsIdValue + "</Value>";
+                    }
                 }
             }
 

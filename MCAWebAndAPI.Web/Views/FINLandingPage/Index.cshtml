@@ -60,7 +60,7 @@
                                         @String.Format(CultureInfo.InvariantCulture, "{0:0,0}", item.ActualUSD)
                                     </td>
                                     <td class="isi-bg4a wd-10">
-                                        @item.PercentageCompleted
+                                       @String.Format(CultureInfo.InvariantCulture, "{0:N2}", item.ActualPercentage)
                                     </td>
                                 </tr>
                             }

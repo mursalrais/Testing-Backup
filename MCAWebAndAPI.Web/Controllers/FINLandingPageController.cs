@@ -42,7 +42,7 @@ namespace MCAWebAndAPI.Web.Controllers
             //      - Joinnya lewat List WBSMapping yang ada di Compact Program juga
             //      - Implementasi List "Budget VS Actual Disbursement MCDR" di Finance menggunakan cara yagn sama dengan WBS (pakai Common)
             //          + tiru persis aja cara WBS
-            result.BudgetVsActualDisbursement = EventBudgetService.GetLatestMonthBudgetActualDisbursement(new DateTime(2016,1,1), ConfigResource.DefaultProgramSiteUrl);
+            result.BudgetVsActualDisbursement = EventBudgetService.GetLatestMonthBudgetActualDisbursement(DateTime.Now, ConfigResource.DefaultProgramSiteUrl);
 
             #endregion
 

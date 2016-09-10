@@ -289,7 +289,7 @@ namespace MCAWebAndAPI.Service.Finance
 
         public IEnumerable<SCAVoucherItemsVM> GetEventBudgetItems(int eventBudgetID)
         {
-            IEnumerable<EventBudgetItemVM> eventBudgetItems = EventBudgetService.GetItems(siteUrl, eventBudgetID);
+            IEnumerable<EventBudgetItemVM> eventBudgetItems = EventBudgetService.GetItems(siteUrl, eventBudgetID).Where(eb=>eb.SCA > 0);
 
             var scaVoucherItemVMs = new List<SCAVoucherItemsVM>();
 
