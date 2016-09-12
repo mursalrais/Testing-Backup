@@ -477,20 +477,23 @@ namespace MCAWebAndAPI.Service.Finance
                     decimal budgetUsd = Convert.ToDecimal(item[BudgetActualDisbursementBudget]);
                     decimal actualUSD = Convert.ToDecimal(item[BudgetActualDisbursementActual]);
 
-                    LPBudgetVsActualDisbursementVM existingData = result.FirstOrDefault(m => m.WBSID == wbsIdValue);
-                    if (existingData != null)
+                    if (budgetUsd > 0 || actualUSD > 0)
                     {
-                        existingData.BudgetUSD += budgetUsd;
-                        existingData.ActualUSD += actualUSD;
-                    }
-                    else
-                    {
-                        LPBudgetVsActualDisbursementVM itemBAD = new LPBudgetVsActualDisbursementVM();
-                        itemBAD.WBSID = wbsIdValue;
-                        itemBAD.BudgetUSD = budgetUsd;
-                        itemBAD.ActualUSD = actualUSD;
-                        result.Add(itemBAD);
-                        valuesText += "<Value Type='Lookup'>" + wbsIdValue + "</Value>";
+                        LPBudgetVsActualDisbursementVM existingData = result.FirstOrDefault(m => m.WBSID == wbsIdValue);
+                        if (existingData != null)
+                        {
+                            existingData.BudgetUSD += budgetUsd;
+                            existingData.ActualUSD += actualUSD;
+                        }
+                        else
+                        {
+                            LPBudgetVsActualDisbursementVM itemBAD = new LPBudgetVsActualDisbursementVM();
+                            itemBAD.WBSID = wbsIdValue;
+                            itemBAD.BudgetUSD = budgetUsd;
+                            itemBAD.ActualUSD = actualUSD;
+                            result.Add(itemBAD);
+                            valuesText += "<Value Type='Lookup'>" + wbsIdValue + "</Value>";
+                        }
                     }
                 }
             }

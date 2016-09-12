@@ -119,6 +119,24 @@ namespace MCAWebAndAPI.Service.Finance
             return result;
         }
 
+        public decimal GetAllSCAVoucherAmount(int scaVoucherId, int scaSettlementID)
+        {
+            var caml = @"<View><Query><Where><Eq><FieldRef Name='" + FieldNameSCAVoucherId + "' /><Value Type='Lookup'>" + scaVoucherId.ToString() + "</Value></Eq></Where></Query>" +
+                         "<ViewFields> <FieldRef Name='" + FieldNameTotalExpense + "' />  </ViewFields></View>";
+
+            decimal result = 0;
+            foreach (var listItem in SPConnector.GetList(ListName, siteUrl, caml))
+            {
+                if (!Convert.ToString(listItem[FieldNameId]).Equals(scaSettlementID.ToString()))
+                {
+                    result += Convert.ToDecimal(listItem[FieldNameTotalExpense]);
+                }
+            }
+
+            return result;
+
+        }
+
         private void SaveSCASettlementDetailItems(int? headerID, IEnumerable<SCASettlementItemVM> viewModels)
         {
             foreach (var viewModel in viewModels)

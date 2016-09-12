@@ -158,10 +158,17 @@ namespace MCAWebAndAPI.Service.Finance
 
         #region Supply data to Landing Page
 
-        public static decimal GetAmount()
+        public static decimal GetAmount(string siteUrl)
         {
-            //TODO: implement for Landing Page
-            return Convert.ToDecimal(new Random().Next(1000000, 100000000));
+            var caml = @"<View><ViewFields> <FieldRef Name='" + ListName_Amount + "' />  </ViewFields></View>";
+            decimal result = 0;
+
+            foreach (var listItem in SPConnector.GetList(ListName, siteUrl, caml))
+            {
+                result += Convert.ToDecimal(listItem[ListName_Amount]);
+            }
+
+            return result;
         }
 
         #endregion

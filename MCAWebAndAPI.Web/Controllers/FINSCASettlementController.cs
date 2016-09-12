@@ -103,7 +103,6 @@ namespace MCAWebAndAPI.Web.Controllers
                });
         }
 
-
         [HttpPost]
         public ActionResult Print(FormCollection form, SCASettlementVM viewModel)
         {
@@ -142,6 +141,21 @@ namespace MCAWebAndAPI.Web.Controllers
             return File(pdfBuf, "application/pdf");
         }
 
+        public ActionResult GetReceiveFromTo(decimal totalExpense, decimal totalScaVocuherAmount, int scaVoucherID, string scaSettlementID)
+        {
+            decimal prevTotalExpense = 0;
+            if (scaVoucherID > 0)
+            {
+                var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
+                service.SetSiteUrl(siteUrl);
+
+                prevTotalExpense = service.GetAllSCAVoucherAmount(scaVoucherID, (string.IsNullOrWhiteSpace(scaSettlementID) ? 0 : Convert.ToInt32(scaSettlementID)));
+            }
+
+            return Json(
+                new { receiveAmount = totalScaVocuherAmount - prevTotalExpense - totalExpense }, JsonRequestBehavior.AllowGet);
+        }
+
         private void SetAdditionalSettingToViewModel(ref SCASettlementVM viewModel)
         {
             viewModel.SCAVoucher.ControllerName = SCAVoucherController;
@@ -152,5 +166,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             viewModel.TypeOfSettlement.Choices = new string[] { PartialSettlement, LastSettlement };
         }
+
+
     }
 }

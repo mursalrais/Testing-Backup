@@ -47,7 +47,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
         private const string PICKER_EVENTBUDGET_ONSELECTCHANGE = "onSelectEventBudgetNo";
 
         private const string SuccessMsgFormatUpdated = "Requisition Note number {0} has been successfully updated.";
-        private const string FirstPageUrl = "{0}/Lists/Requisition%20Note/AllItems.aspx";
+        private const string FirstPageUrl = "{0}/Lists/Requisition%20Note/All%20Items%20FIN.aspx";
 
         readonly IRequisitionNoteService reqNoteService;
         readonly IEventBudgetService eventBudgetService;

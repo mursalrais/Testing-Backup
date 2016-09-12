@@ -19,5 +19,7 @@ namespace MCAWebAndAPI.Service.Finance
         SCASettlementVM Get(Operations op, int? id = default(int?));
 
         int? Save(SCASettlementVM scaSettlement);
+
+        decimal GetAllSCAVoucherAmount(int scaVoucherId, int scaSettlementID);
     }
 }
