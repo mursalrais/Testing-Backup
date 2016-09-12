@@ -259,7 +259,7 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to /ExitProcedureDocuments/Forms/AllItems.aspx#InplviewHash74436fc5-a236-4a9f-89af-25c300486abb=FilterField1%3DID-FilterValue1%3D1.
+        ///   Looks up a localized string similar to https://eceos2.sharepoint.com/sites/ims/hrtraining/ExitProcedureDocuments/Forms/AllItems.aspx#InplviewHash74436fc5-a236-4a9f-89af-25c300486abb=FilterField1%3DID-FilterValue1%3D1.
         /// </summary>
         public static string ExitProcedureExitInterviewForm {
             get {
@@ -268,7 +268,7 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to /ExitProcedureDocuments/Forms/AllItems.aspx#InplviewHash74436fc5-a236-4a9f-89af-25c300486abb=FilterField1%3DID-FilterValue1%3D2.
+        ///   Looks up a localized string similar to https://eceos2.sharepoint.com/sites/ims/hrtraining/ExitProcedureDocuments/Forms/AllItems.aspx#InplviewHash74436fc5-a236-4a9f-89af-25c300486abb=FilterField1%3DID-FilterValue1%3D2.
         /// </summary>
         public static string ExitProcedureNonDisclosureAgreement {
             get {

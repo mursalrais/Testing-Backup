@@ -164,10 +164,10 @@
     <value>/Lists/Exit%20Procedure</value>
   </data>
   <data name="ExitProcedureNonDisclosureAgreement" xml:space="preserve">
-    <value>/ExitProcedureDocuments/Forms/AllItems.aspx#InplviewHash74436fc5-a236-4a9f-89af-25c300486abb=FilterField1%3DID-FilterValue1%3D2</value>
+    <value>https://eceos2.sharepoint.com/sites/ims/hrtraining/ExitProcedureDocuments/Forms/AllItems.aspx#InplviewHash74436fc5-a236-4a9f-89af-25c300486abb=FilterField1%3DID-FilterValue1%3D2</value>
   </data>
   <data name="ExitProcedureExitInterviewForm" xml:space="preserve">
-    <value>/ExitProcedureDocuments/Forms/AllItems.aspx#InplviewHash74436fc5-a236-4a9f-89af-25c300486abb=FilterField1%3DID-FilterValue1%3D1</value>
+    <value>https://eceos2.sharepoint.com/sites/ims/hrtraining/ExitProcedureDocuments/Forms/AllItems.aspx#InplviewHash74436fc5-a236-4a9f-89af-25c300486abb=FilterField1%3DID-FilterValue1%3D1</value>
   </data>
   <data name="AddInterviewInvitation" xml:space="preserve">
     <value>{0}/Lists/Application/InputInterviewResultDetail.aspx?ID={1}&amp;manPos={2}</value>
