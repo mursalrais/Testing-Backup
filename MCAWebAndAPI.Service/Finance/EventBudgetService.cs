@@ -21,6 +21,8 @@ namespace MCAWebAndAPI.Service.Finance
 
     public class EventBudgetService : IEventBudgetService
     {
+        public enum GetChoice  {All, DirectPayment, SCA}
+
         #region Constants
         
         private const string ListName_EventBudget = "Event Budget";
@@ -116,6 +118,53 @@ namespace MCAWebAndAPI.Service.Finance
 
             return eventBudget;
         }   
+
+        public static ListItemCollection GetAllListItems(GetChoice choice, string siteUrl)
+        {
+            string caml = @"<View><Query>
+                            <Where>
+                                <Gt>
+                                    <FieldRef Name='{0}' />
+                                    <Value Type='Number'>0</Value> 
+                                </Gt>
+                            </Where>
+                            </Query>
+                            <QueryOptions /></View>";
+
+            switch (choice)
+            {
+                case GetChoice.DirectPayment:
+                    caml = String.Format(caml, EventBudgetFieldName_TotalDirectPaymentIDR);
+                    break;
+
+                case GetChoice.SCA:
+                    caml = String.Format(caml, EventBudgetFieldName_TotalSCAIDR);
+                    break;
+
+                default:
+                    caml = string.Empty;
+                    break;
+            }
+
+            return SPConnector.GetList(ListName_EventBudget, siteUrl, caml);
+        }
+
+        public static IEnumerable<AjaxComboBoxVM> GetAllAjaxComboBoxVMs(EventBudgetService.GetChoice choice, string siteUrl)
+        {
+            var models = new List<AjaxComboBoxVM>();
+            foreach (var item in EventBudgetService.GetAllListItems(choice, siteUrl))
+            {
+                models.Add(
+                    new AjaxComboBoxVM
+                    {
+                        Value = Convert.ToInt32(item[EventBudgetFieldName_ID]),
+                        Text = Convert.ToString(item[EventBudgetFieldName_No]) + " - " + Convert.ToString(item[EventBudgetFieldName_EventName])
+                    }
+                );
+            }
+
+            return models;
+        }
 
         public bool Update(EventBudgetVM eventBudget)
         {

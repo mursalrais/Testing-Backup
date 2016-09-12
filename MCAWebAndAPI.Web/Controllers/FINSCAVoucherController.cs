@@ -336,7 +336,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             viewModel.SDO.OnSelectEventName = "OnSelectProfessional";
 
             viewModel.EventBudget.ControllerName = "ComboBox";
-            viewModel.EventBudget.ActionName = "GetEventBudgets";
+            viewModel.EventBudget.ActionName = "GetEventBudgetsSCA";        // only display EB which has SCA amount > 0
             viewModel.EventBudget.ValueField = "Value";
             viewModel.EventBudget.TextField = "Text";
             viewModel.EventBudget.OnSelectEventName = "OnSelectEventBudgetNo";

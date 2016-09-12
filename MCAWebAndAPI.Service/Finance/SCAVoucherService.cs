@@ -289,7 +289,7 @@ namespace MCAWebAndAPI.Service.Finance
 
         public IEnumerable<SCAVoucherItemsVM> GetEventBudgetItems(int eventBudgetID)
         {
-            IEnumerable<EventBudgetItemVM> eventBudgetItems = EventBudgetService.GetItems(siteUrl, eventBudgetID).Where(eb=>eb.SCA > 0);
+            IEnumerable<EventBudgetItemVM> eventBudgetItems = EventBudgetService.GetItems(siteUrl, eventBudgetID).Where(eb => eb.SCA > 0);
 
             var scaVoucherItemVMs = new List<SCAVoucherItemsVM>();
 
@@ -301,7 +301,7 @@ namespace MCAWebAndAPI.Service.Finance
                     WBS = Convert.ToString(ebItem.WBS.Text),
                     GLID = Convert.ToInt32(ebItem.GL.Value),
                     GL = Convert.ToString(ebItem.GL.Text),
-                    Amount = Convert.ToDecimal(ebItem.AmountPerItem)
+                    Amount = Convert.ToDecimal(ebItem.SCA)
                 });
             }
 
