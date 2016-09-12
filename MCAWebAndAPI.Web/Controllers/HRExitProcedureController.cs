@@ -432,7 +432,7 @@ namespace MCAWebAndAPI.Web.Controllers
         
         public JsonResult GetApproverPositions(int approverUnit)
         {
-            exitProcedureService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            exitProcedureService.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));
             var listName = SessionManager.Get<string>("ExitProcedureListName");
             var requestorPosition = SessionManager.Get<string>("ExitProcedureRequestorPosition");
             var requestorUnitName = SessionManager.Get<string>("ExitProcedureRequestorUnit");
@@ -448,7 +448,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetApproverNames(int position)
         {
-            exitProcedureService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            exitProcedureService.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));
             var positionName = exitProcedureService.GetPositionName(position);
             var viewModel = SessionManager.Get<IEnumerable<ProfessionalMaster>>("WorkflowApprovers", "Position" + position)
                 ?? exitProcedureService.GetApproverNames(positionName);

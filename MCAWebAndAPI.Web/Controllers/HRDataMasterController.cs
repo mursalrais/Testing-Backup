@@ -52,7 +52,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetProfessionals()
         {
-            _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            //_dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            _dataMasterService.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));
 
             var professionals = GetFromExistingSession();
             professionals = professionals.OrderBy(e => e.FirstMiddleName);
@@ -75,7 +76,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetProfessionalsActive()
         {
-            _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            //_dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            _dataMasterService.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));
 
             var professionals = GetFromExistingProfessionalsActiveSession();
             professionals = professionals.OrderBy(e => e.FirstMiddleName);
@@ -99,7 +101,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetProfessionalsManpower()
         {
-            _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            //_dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            _dataMasterService.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));
 
             var professionals = GetFromExistingSession().ToList();
             professionals.Add(new ProfessionalMaster { ID = 0, Name = "", Position = "" ,FirstMiddleName="1"});
@@ -181,7 +184,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetProjectUnits()
         {
-            _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            //_dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            _dataMasterService.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));
 
             var positions = GetFromPositionsExistingSession();
             positions = positions.GroupBy(e => e.ProjectUnit).Select(y => y.First());
@@ -200,7 +204,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetPositions()
         {
-            _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            //_dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            _dataMasterService.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));
 
             var positions = GetFromPositionsExistingSession();
             return Json(positions.Select(e =>
@@ -248,7 +253,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetKeyPosition(int id)
         {
-            _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            //_dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            _dataMasterService.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));
 
             var positions = GetKeyPositionsExistingSession();
 
@@ -266,7 +272,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetPositionsGrid()
         {
-            _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            //_dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            _dataMasterService.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));
 
             var positions = GetFromPositionsExistingSession();
             positions = positions.OrderBy(e => e.ProjectUnit);
@@ -280,7 +287,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetProfessionalsGrid()
         {
-            _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            //_dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            _dataMasterService.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));
 
             var professional = GetFromExistingSession();
 
@@ -406,7 +414,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetDependants()
         {
-            _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            //_dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            _dataMasterService.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));
 
             var dependents = GetFromExistingSessionDependent();
 
@@ -424,7 +433,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetDependantsForInsurance(int id)
         {
-            _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            //_dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            _dataMasterService.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));
 
             var dependents = _dataMasterService.GetDependentsForInsurance(id);//GetFromExistingSessionDependentForInsurance(id);
 
@@ -458,7 +468,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetProfessionalsAll()
         {
-            _dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            //_dataMasterService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            _dataMasterService.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));
 
             var professional = GetFromExistingSession();
 
