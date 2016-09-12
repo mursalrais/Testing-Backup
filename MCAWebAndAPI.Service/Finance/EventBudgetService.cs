@@ -13,6 +13,7 @@ using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
 using NLog;
 
+
 namespace MCAWebAndAPI.Service.Finance
 {
     /// <summary>
@@ -90,7 +91,9 @@ namespace MCAWebAndAPI.Service.Finance
         private string siteUrl = null;
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
-        public void SetSiteUrl(string siteUrl)
+        public static object SessionManager { get; private set; }
+
+        public EventBudgetService(string siteUrl)
         {
             this.siteUrl = siteUrl;
         }
@@ -199,8 +202,8 @@ namespace MCAWebAndAPI.Service.Finance
 
         public static IEnumerable<EventBudgetItemVM> GetItems(string siteUrl,int eventBudgetID)
         {
-            IEventBudgetService service = new EventBudgetService();
-            service.SetSiteUrl(siteUrl);
+            IEventBudgetService service = new EventBudgetService(siteUrl);
+    
             return service.GetItems(eventBudgetID);
         }
 
@@ -412,11 +415,8 @@ namespace MCAWebAndAPI.Service.Finance
                 throw new Exception("Invalid parameters.");
             }
 
-            IRequisitionNoteService reqNoteService = new RequisitionNoteService();
-
-            reqNoteService.SetSiteUrl(siteUrl);
-            SetSiteUrl(siteUrl);
-
+            IRequisitionNoteService reqNoteService = new RequisitionNoteService(siteUrl);
+            
             RequisitionNoteVM rnHeader = reqNoteService.Get(id);
             EventBudgetVM ebHeader = Get(rnHeader.EventBudgetNo.Value);
 
@@ -457,6 +457,11 @@ namespace MCAWebAndAPI.Service.Finance
             // attachment?
         }
 
+        public async Task UpdateSCAVoucherAsync(string siteUrl = null, int id = 0)
+        {
+            UpdateSCAVoucher(siteUrl, id);
+        }
+
         public void UpdateSCAVoucher(string siteUrl = null, int id = 0)
         {
             if (id == 0)
@@ -464,11 +469,8 @@ namespace MCAWebAndAPI.Service.Finance
                 throw new Exception("Invalid parameters.");
             }
 
-            ISCAVoucherService scaVoucherService = new SCAVoucherService();
-
-            scaVoucherService.SetSiteUrl(siteUrl);
-            SetSiteUrl(siteUrl);
-
+            ISCAVoucherService scaVoucherService = new SCAVoucherService(siteUrl);
+            
             SCAVoucherVM scaVoucherHeader = scaVoucherService.Get(id);
             EventBudgetVM ebHeader = Get(scaVoucherHeader.EventBudgetID);
 
@@ -492,7 +494,9 @@ namespace MCAWebAndAPI.Service.Finance
                 d.Add(new SCAVoucherItemsVM()
                 {
                     WBS =  ebDetail.WBS.Text,
+                    WBSID = (int)ebDetail.WBS.Value,
                     GL =  ebDetail.GL.Text,
+                    GLID = (int)ebDetail.GL.Value,
                     Amount = ebDetail.Frequency * ebDetail.UnitPrice * ebDetail.Quantity
                 });
             }

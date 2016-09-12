@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 using MCAWebAndAPI.Service.Utils;
@@ -51,11 +48,11 @@ namespace MCAWebAndAPI.Service.Finance
         private string siteUrl = string.Empty;
         static Logger logger = LogManager.GetCurrentClassLogger();
 
-        public void SetSiteUrl(string siteUrl)
+        public SCASettlementService(string siteUrl)
         {
             this.siteUrl = siteUrl;
         }
-
+        
         public SCASettlementVM Get(Operations op, int? id = default(int?))
         {
             if (op != Operations.c && id == null)

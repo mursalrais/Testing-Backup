@@ -84,8 +84,7 @@ namespace MCAWebAndAPI.Web.Controllers
             int activityID = 0;
             List<AjaxComboBoxVM> result = new List<AjaxComboBoxVM>();
 
-            ISCAVoucherService _scaVoucherService = new SCAVoucherService();
-            _scaVoucherService.SetSiteUrl(ConfigResource.DefaultBOSiteUrl);
+            ISCAVoucherService _scaVoucherService = new SCAVoucherService(ConfigResource.DefaultBOSiteUrl);
             service.SetSiteUrl(ConfigResource.DefaultBOSiteUrl);
 
             if (eventBudgetId.HasValue && eventBudgetId.Value > 0)

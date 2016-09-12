@@ -79,14 +79,14 @@ namespace MCAWebAndAPI.Service.Finance
         private const string EVENT_BUDGET_FIELD_SCA_VALUE = "0";
         #endregion
 
-        private string siteUrl = string.Empty;
-        static Logger logger = LogManager.GetCurrentClassLogger();
-
-        public void SetSiteUrl(string siteUrl)
+        public SCAVoucherService(string siteUrl)
         {
             this.siteUrl = siteUrl;
         }
 
+        private string siteUrl = string.Empty;
+        static Logger logger = LogManager.GetCurrentClassLogger();
+        
         public int GetActivityIDByEventBudgetID(int eventBudgetID)
         {
             int activityID = 0;
@@ -372,7 +372,13 @@ namespace MCAWebAndAPI.Service.Finance
 
             return result;
         }
-        
+
+        public Tuple<int, string> GetIdAndNoByEventBudgetID(int eventBudgetId)
+        {
+            var sca = GetAll().FirstOrDefault(s => s.EventBudgetID == eventBudgetId);
+
+            return sca == null ? new Tuple<int, string>(0, string.Empty) : new Tuple<int, string>((int)sca.ID, sca.SCAVoucherNo);
+        }
 
         private string GetDocumentUrl(int? ID)
         {
