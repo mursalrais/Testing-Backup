@@ -16,6 +16,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         [Required]
         public AjaxComboBoxVM WBS { get; set; } = new AjaxComboBoxVM();
 
+        public int WBSId { get; set; }
+
+        public string WBSDesription { get; set; }
 
         public static AjaxComboBoxVM GetWBSDefaultValue(AjaxComboBoxVM model = null)
         {

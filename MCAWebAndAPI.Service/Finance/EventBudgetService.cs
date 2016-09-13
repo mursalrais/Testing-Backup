@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using MCAWebAndAPI.Model.Common;
+using MCAWebAndAPI.Model.ProjectManagement.Common;
 using MCAWebAndAPI.Model.ViewModel.Control;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 using MCAWebAndAPI.Service.Finance.RequisitionNote;
@@ -54,8 +55,14 @@ namespace MCAWebAndAPI.Service.Finance
 
         private const string EventBudgetItemFieldName_ID = "ID";
         private const string EventBudgetItemFieldName_EventBudgetID = "Event_x0020_Budget_x0020_ID";
-        public const string EventBudgetItemFieldName_WBSId = "WBS_x0020_Master_x002e_ID";
-        private const string EventBudgetItemFieldName_WBSName = "WBS_x0020_Master_x002e_ID_x003a_";
+
+        //public const string EventBudgetItemFieldName_WBSId = "WBS_x0020_Master_x002e_ID";
+        //private const string EventBudgetItemFieldName_WBSName = "WBS_x0020_Master_x002e_ID_x003a_";
+
+        public const string EventBudgetItemFieldName_WBSId = "WBSID";
+        private const string EventBudgetItemFieldName_WBSDescription = "WBSDescription";
+
+
         public const string EventBudgetItemFieldName_GLID = "GL_x0020_Master_x002e_ID";
         private const string EventBudgetItemFieldName_GLNo = "GL_x0020_Master_x002e_ID_x003a_G";
         private const string EventBudgetItemFieldName_GLDescription = "GL_x0020_Master_x002e_ID_x003a_G0";
@@ -238,8 +245,13 @@ namespace MCAWebAndAPI.Service.Finance
             detail.SCA = Convert.ToDecimal(item[EventBudgetItemFieldName_SCA]);
             detail.Remarks = Convert.ToString(item[EventBudgetItemFieldName_Remarks]);
 
-            detail.WBS.Value = (item[EventBudgetItemFieldName_WBSId] as FieldLookupValue).LookupId;
-            detail.WBS.Text = string.Format("{0}-{1}", (item[EventBudgetItemFieldName_WBSId] as FieldLookupValue).LookupValue, (item[EventBudgetItemFieldName_WBSName] as FieldLookupValue).LookupValue);
+            detail.WBSId = Convert.ToInt32(item[EventBudgetItemFieldName_WBSId]);
+            WBSMapping wbsMapping = Common.WBSMasterService.Get(siteUrl, detail.WBSId);
+
+            detail.WBS.Value = detail.WBSId;
+            detail.WBS.Text = wbsMapping.WBSIDDescription;
+            
+            detail.WBSDesription = string.Format("{0}-{1}", wbsMapping.WBSID, wbsMapping.WBSIDDescription);
 
             detail.GL.Value = (item[EventBudgetItemFieldName_GLID] as FieldLookupValue).LookupId;
             detail.GL.Text = string.Format("{0}-{1}", (item[EventBudgetItemFieldName_GLNo] as FieldLookupValue).LookupValue, (item[EventBudgetItemFieldName_GLDescription] as FieldLookupValue).LookupValue);
@@ -345,7 +357,13 @@ namespace MCAWebAndAPI.Service.Finance
 
                 var updatedValue = new Dictionary<string, object>();
                 updatedValue.Add(EventBudgetItemFieldName_EventBudgetID, headerID);
-                updatedValue.Add(EventBudgetItemFieldName_WBSId, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.WBS.Value) });
+
+                var wbsId = Convert.ToInt32(viewModel.WBS.Value);
+                WBSMapping wbsMapping = Common.WBSMasterService.Get(siteUrl, wbsId);
+
+                updatedValue.Add(EventBudgetItemFieldName_WBSId, wbsId);
+                updatedValue.Add(EventBudgetItemFieldName_WBSDescription, wbsMapping.WBSIDDescription);
+
                 updatedValue.Add(EventBudgetItemFieldName_GLID, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.GL.Value) });
                 updatedValue.Add(EventBudgetItemFieldName_Quantity, viewModel.Quantity);
                 updatedValue.Add(EventBudgetItemFieldName_UoMQuantity, viewModel.UoMQty);
