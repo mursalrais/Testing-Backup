@@ -653,5 +653,14 @@ namespace MCAWebAndAPI.Service.Resources {
                 return ResourceManager.GetString("Timesheet", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to /Lists/Vendor/AllItems.aspx.
+        /// </summary>
+        public static string VendorMaster {
+            get {
+                return ResourceManager.GetString("VendorMaster", resourceCulture);
+            }
+        }
     }
 }

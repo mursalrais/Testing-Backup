@@ -110,7 +110,7 @@ namespace MCAWebAndAPI.Web.Controllers
             var viewModel = await _service.GetManpowerRequisitionAsync(ID);
             
             string position = _service.GetPosition(username, siteUrl);
-            if (position.Contains("HR"))
+            if (position.Contains("HR") || position.Contains("Human Resource"))
             {
                 ViewBag.IsHRView = true;
             }

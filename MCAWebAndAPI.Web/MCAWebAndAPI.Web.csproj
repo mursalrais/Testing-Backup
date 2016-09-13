@@ -1182,6 +1182,9 @@
     <Content Include="Views\HRTimesheet\ViewProfessional.cshtml" />
     <Content Include="Views\HRTimesheet\DisplayTimesheet.cshtml" />
     <Content Include="Views\ASSAssetAcquisition\_DisplayGrid.cshtml" />
+    <Content Include="Views\PROVendor\Create.cshtml" />
+    <Content Include="Views\PROVendor\Edit.cshtml" />
+    <Content Include="Views\PROVendor\Upload.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1333,7 +1336,6 @@
     <Folder Include="Scripts\apps\controlls\" />
     <Folder Include="Views\Activity\" />
     <Folder Include="Views\HRDataMaster\" />
-    <Folder Include="Views\PROVendor\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MCAWebAndAPI.Model\MCAWebAndAPI.Model.csproj">
