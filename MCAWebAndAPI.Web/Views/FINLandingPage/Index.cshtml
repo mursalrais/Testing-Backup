@@ -1,209 +1,328 @@
-﻿@*
+﻿@using System.Globalization
+@model MCAWebAndAPI.Model.ViewModel.Form.Finance.LandingPageVM
 
+@*
     Wireframe FIN01: Finance Landing Page
-
 *@
+
+
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "";
 }
 
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="~/Content/fin-style.css">
+
+
 <div id="main" role="main">
-    <div id="content" class="container">
-
+    <!-- BUDGET VS ACTUAL DISBURSEMENT (LATEST MONTH) -->
+    
+    <div class="container">
         <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-11 col-lg-12 ">
-                <div class="well no-padding">
+            <table class="padzero1">
+                <table class="padzero1 width100">
+                    <th colspan="4" class="header-bg4">
+                        BUDGET VS ACTUAL DISBURSEMENT (LATEST MONTH)
+                    </th>
+                    <tr>
+                        <th class="header-bg4a wd-30">
+                            Project/Activity
+                        </th>
+                        <th class="header-bg4a wd-30">
+                            Budget(USD)
+                        </th>
+                        <th class="header-bg4a wd-30">
+                            Actual(USD)
+                        </th>
+                        <th class="header-bg4a wd-10">
+                            % Complete
+                        </th>
+                    </tr>
+                </table>
 
-                    <form action="index.html" id="login-form" class="smart-form client-form">
-                        <header>
-                            <h1 align="center" class="txt-color-grey login-header-big">Budget vs. Actual Disbursement (Latest month)</h1>
-                        </header>
-
-                        <fieldset>
-                            <div class="hero-unit">
-                                <p>The project management and integrated collaboration systems that help day-to-day needs of MCA-Indonesia.</p><br />
-                            </div>
-                        </fieldset>
-                    </form>
+                <div class="table-content" style="min-height: 100px;  border: 1px solid #1e88e5;  margin-left: 5px; ">
+                    <table class="padzero1 width100 border-bg4" style="margin-left:0px; margin-top:-1px;">
+                        @if (Model.BudgetVsActualDisbursement.Count() > 0)
+                        {
+                            foreach (var item in Model.BudgetVsActualDisbursement)
+                            {
+                                <tr>
+                                    <td class="isi-bg4a wd-30" style="text-align:left; padding:1px;">
+                                        @item.ProjectOrActivity
+                                    </td>
+                                    <td class="isi-bg4a wd-30">
+                                        @String.Format(CultureInfo.InvariantCulture, "{0:N0}", item.BudgetUSD)
+                                    </td>
+                                    <td class="isi-bg4a wd-30">
+                                        @String.Format(CultureInfo.InvariantCulture, "{0:N0}", item.ActualUSD)
+                                    </td>
+                                    <td class="isi-bg4a wd-10">
+                                       @String.Format(CultureInfo.InvariantCulture, "{0:N2}", item.ActualPercentage)
+                                    </td>
+                                </tr>
+                            }
+                        }
+                      
+                    </table>
                 </div>
-            </div>
-        </div>
 
-        <div class="row">
-            <div class="pull-left col-lg-10 ">
-                <div class="well no-padding">
-
-                    <form action="index.html" id="login-form" class="smart-form client-form">
-                        <header>
-                            <h1 align="center" class="txt-color-grey login-header-big">Outstanding Advances</h1>
-                        </header>
-
-                        <fieldset>
-                            <div class="hero-unit">
-
-                                <p>aaaaaaaaaaaaaa.</p><br />
-
-                            </div>
-                        </fieldset>
-                    </form>
-                </div>
-            </div>
-
-            <div class="pull-right col-lg-2 ">
-                <div class="well no-padding">
-
-                    <form action="index.html" id="login-form" class="smart-form client-form">
-                        <header>
-                            <h1 align="center" class="txt-color-grey login-header-big">SPHL (IDR)</h1>
-                        </header>
-
-                        <fieldset>
-                            <div class="hero-unit">
-                                <p>
-                                    cccccccc.<br />
-                                    bbbbbbbbbbbbb.
-                                </p><br />
-
-                            </div>
-                        </fieldset>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-11 col-lg-12 ">
-                <div class="well no-padding">
-
-                    <form action="index.html" id="login-form" class="smart-form client-form">
-                        <header>
-                            <h1 align="center" class="txt-color-grey login-header-big">Tax Exemption adn Reimbursement (IDR)</h1>
-                        </header>
-
-                        <div class="pull-left col-lg-1">
-                            <p>&nbsp;</p>
-                        </div>
-
-                        <div class="pull-left col-lg-1 ">
-                            <div class="well no-padding">
-                                <table class="table table-bordered table-condensed">
-                                    <caption>Tax Category</caption>
-                                    <thead>
-                                        <tr>
-                                            <th>&nbsp;</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>VAT</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Income Tax</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Others</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-
-                            </div>
-                        </div>
-
-                        <div class="pull-left col-lg-3 ">
-                            <div class="well no-padding">
-                                <table class="table table-bordered table-condensed">
-                                    <caption>2014</caption>
-                                    <thead>
-                                        <tr>
-                                            <th>Exemption</th>
-                                            <th>Reimbursement</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>200</td>
-                                            <td>120</td>
-                                        </tr>
-                                        <tr>
-                                            <td>200</td>
-                                            <td>120</td>
-                                        </tr>
-                                        <tr>
-                                            <td>200</td>
-                                            <td>120</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-
-                            </div>
-                        </div>
-
-                        <div class="pull-left col-lg-3 ">
-                            <div class="well no-padding">
-                                <table class="table table-bordered table-condensed">
-                                    <caption>2015</caption>
-                                    <thead>
-                                        <tr>
-                                            <th>Exemption</th>
-                                            <th>Reimbursement</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>200</td>
-                                            <td>120</td>
-                                        </tr>
-                                        <tr>
-                                            <td>200</td>
-                                            <td>120</td>
-                                        </tr>
-                                        <tr>
-                                            <td>200</td>
-                                            <td>120</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-
-                            </div>
-                        </div>
-
-                        <div class="pull-left col-lg-3 ">
-                            <div class="well no-padding">
-                                <table class="table table-bordered table-condensed">
-                                    <caption>2016</caption>
-                                    <thead>
-                                        <tr>
-                                            <th>Exemption</th>
-                                            <th>Reimbursement</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>200</td>
-                                            <td>120</td>
-                                        </tr>
-                                        <tr>
-                                            <td>200</td>
-                                            <td>120</td>
-                                        </tr>
-                                        <tr>
-                                            <td>200</td>
-                                            <td>120</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-
-                            </div>
-                        </div>
-
-                        <div class="pull-left col-lg-1">
-                            <p>&nbsp;</p>
-                        </div>
-
-
-                    </form>
-                </div>
-            </div>
+            </table>
         </div>
     </div>
+    <br />
+
+    <!-- OUTSTANDING ADVANCES & SPHL -->
+    <div class="container">
+        <div class="row">
+            <table class="padzero1 width100">
+                <tr>
+                    <td width="80%">
+                        <table class="border-bg1 width100" style="margin:0px;">
+                            <tr>
+                                <th class="header-bg1" colspan="2">OUTSTANDING ADVANCES</th>
+                            </tr>
+                            <tr>
+                                <td class="">
+                                    <table class="" style="height:150px; width:95%; margin-left:15px;">
+                                        <th class="header-bg1a" style="height:10px;">Profesional & IC</th>
+                                        <tr>
+                                            <td class="wrapperTable borderLess-lf-rg"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="border-bg1a">
+                                                <table style="width:97%;">
+                                                    <tr>
+                                                        <th class="header-bg1a">Number of Advance</th>
+                                                        <th class="header-bg1b">Ammount (IDR)</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="isi-bg1a" id="OA_PIC_Number">
+                                                            @String.Format(CultureInfo.InvariantCulture, "{0:#}", Model.OA_PIC_Number)    <!--Profesional & IC : Number of Advance-->
+                                                        </td>
+                                                        <td class="isi-bg1a" id="OA_PIC_Amount">
+                                                            @String.Format(CultureInfo.InvariantCulture, "{0:N0}", Model.OA_PIC_Amount)    <!--Profesional & IC : Ammount (IDR)-->
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+
+
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td>
+                                    <table class="" style="height:150px; width:95%; margin-right:15px;">
+                                        <th class="header-bg1a" style="height:10px;">Grantees</th>
+                                        <tr>
+                                            <td class="wrapperTable borderLess-lf-rg"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="border-bg1a">
+                                                <table style="width:97%;">
+                                                    <tr>
+                                                        <th class="header-bg1a">Number of Advance</th>
+                                                        <th class="header-bg1b">Ammount (IDR)</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="isi-bg1a" id="OA_G_Number">
+                                                            @String.Format(CultureInfo.InvariantCulture, "{0:#}", Model.OA_G_Number)      <!--Grantess : Number of Advance-->
+                                                        </td>
+                                                        <td class="isi-bg1a" id="OA_G_Amount">
+                                                            @String.Format(CultureInfo.InvariantCulture, "{0:N0}", Model.OA_G_Amount)      <!--Grantess : Ammount (IDR)-->
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td width="19%">
+                        <table class="width100" style="margin:0px; margin-left:15px;">
+
+                            <tr>
+                                <th class="header-bg2">SPHL(IDR)</th>
+                            </tr>
+                            <tr>
+                                <td class="border-bg2" style="height:160px;" id="SPHL">
+                                    @String.Format(CultureInfo.InvariantCulture, "{0:N0}", Model.SPHL)         <!--SPHL (IDR)-->
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <br />
+
+    <!-- TAX EXEMPTION & REIMBURSEMENT (IDR) -->
+    <div class="container">
+        <div class="row">
+            <table class="padzero1 width100">
+                <tr>
+                    <th class="header-bg3">TAX EXEMPTION & REIMBURSEMENT (IDR)</th>
+                </tr>
+                <tr>
+                    <td class="border-bg3">
+                        <table>
+                            <th class="header-bg3x"></th>
+                            <tr><td></td></tr>
+                            <tr>
+                                <td>
+                                    <table>
+                                        <tr>
+                                            <th class="header-bg3a">Tax Category</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="isi-bg3x border-bg3a">
+                                                VAT
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="isi-bg3x border-bg3a">
+                                                Income Tax
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="isi-bg3x border-bg3a">
+                                                Other
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+
+
+                            </tr>
+                        </table>
+
+                        <table style="margin-left:15px;">
+                            <th class="header-bg3a">2014</th>
+                            <tr><td></td></tr>
+                            <tr>
+                                <td class="border-bg3a">
+                                    <table class="border-bg3a">
+                                        <tr>
+                                            <th class="header-bg3a add-widthbg3">Exemption</th>
+                                            <th class="header-bg3b">Reimbursement</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="isi-bg3a" id="VAT_Exemp_YTD_min2">
+                                                @String.Format(CultureInfo.InvariantCulture, "{0:N0}", Model.VAT_Exemp_YTD_Min2)    <!-- 2014 : VAT : Exemption -->
+                                            </td>
+                                            <td class="isi-bg3a" id="VAT_Reimb_YTD_min2">
+                                                @String.Format(CultureInfo.InvariantCulture, "{0:N0}", Model.VAT_Reimb_YTD_Min2)   <!-- 2014 : VAT : Reimbursement -->
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="isi-bg3a" id="IncomeTax_Exemp_YTD_min2">
+                                                @String.Format(CultureInfo.InvariantCulture, "{0:N0}", Model.IncomeTax_Exemp_YTD_Min2)    <!-- 2014 : Income Tax : Exemption -->
+                                            </td>
+                                            <td class="isi-bg3a" id="IncomeTax_Reimb_YTD_min2">
+                                                @String.Format(CultureInfo.InvariantCulture, "{0:N0}", Model.IncomeTax_Reimb_YTD_Min2)    <!-- 2014 : Income Tax : Reimbursement -->
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="isi-bg3a" id="OtherTax_Exemp_YTD_min2">
+                                                @String.Format(CultureInfo.InvariantCulture, "{0:N0}", Model.OtherTax_Exemp_YTD_Min2)    <!-- 2014 : Other : Exemption -->
+                                            </td>
+                                            <td class="isi-bg3a" id="OtherTax_Reimb_YTD_min2">
+                                                @String.Format(CultureInfo.InvariantCulture, "{0:N0}", Model.OtherTax_Reimb_YTD_Min2)    <!-- 2014 : Other : Reimbursement -->
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <table style="margin-left:50px;">
+                            <th class="header-bg3a">2015</th>
+                            <tr><td></td></tr>
+                            <tr>
+                                <td class="border-bg3a">
+                                    <table class="border-bg3a">
+                                        <tr>
+                                            <th class="header-bg3a add-widthbg3">Exemption</th>
+                                            <th class="header-bg3b">Reimbursement</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="isi-bg3a" id="VAT_Exemp_YTD_min1">
+                                                @String.Format(CultureInfo.InvariantCulture, "{0:N0}", Model.VAT_Exemp_YTD_Min1)    <!-- 2015 : VAT : Exemption -->
+                                            </td>
+                                            <td class="isi-bg3a" id="VAT_Reimb_YTD_min1">
+                                                @String.Format(CultureInfo.InvariantCulture, "{0:N0}", Model.VAT_Reimb_YTD_Min1)    <!-- 2015 : VAT : Reimbursement -->
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="isi-bg3a" id="IncomeTax_Exemp_YTD_min1">
+                                                @String.Format(CultureInfo.InvariantCulture, "{0:N0}", Model.IncomeTax_Exemp_YTD_Min1)    <!-- 2015 : Income Tax : Exemption -->
+                                            </td>
+                                            <td class="isi-bg3a" id="IncomeTax_Reimb_YTD_min1">
+                                                @String.Format(CultureInfo.InvariantCulture, "{0:N0}", Model.IncomeTax_Reimb_YTD_Min1)    <!-- 2015 : Income Tax : Reimbursement -->
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="isi-bg3a" id="OtherTax_Exemp_YTD_min1">
+                                                @String.Format(CultureInfo.InvariantCulture, "{0:N0}", Model.OtherTax_Exemp_YTD_Min1)      <!-- 2015 : Other : Exemption -->
+                                            </td>
+                                            <td class="isi-bg3a" id="OtherTax_Reimb_YTD_min1">
+                                                @String.Format(CultureInfo.InvariantCulture, "{0:N0}", Model.OtherTax_Reimb_YTD_Min1)      <!-- 2015 : Other : Reimbursement -->
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <table style="margin-left:50px;">
+                            <th class="header-bg3a">2016</th>
+                            <tr><td></td></tr>
+                            <tr>
+                                <td class="border-bg3a">
+                                    <table class="border-bg3a">
+                                        <tr>
+                                            <th class="header-bg3a add-widthbg3">Exemption</th>
+                                            <th class="header-bg3b">Reimbursement</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="isi-bg3a" id="VAT_Exemp_YTD">
+                                                @String.Format(CultureInfo.InvariantCulture, "{0:N0}", Model.VAT_Exemp_YTD)        <!-- 2016 : VAT : Exemption -->
+                                            </td>
+                                            <td class="isi-bg3a" id="VAT_Reimb_YTD">
+                                                @String.Format(CultureInfo.InvariantCulture, "{0:N0}", Model.VAT_Reimb_YTD)        <!-- 2016 : VAT : Reimbursement -->
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="isi-bg3a" id="IncomeTax_Exemp_YTD">
+                                                @String.Format(CultureInfo.InvariantCulture, "{0:N0}", Model.IncomeTax_Exemp_YTD)  <!-- 2016 : Income Tax : Exemption -->
+                                            </td>
+                                            <td class="isi-bg3a" id="IncomeTax_Reimb_YTD">
+                                                @String.Format(CultureInfo.InvariantCulture, "{0:N0}", Model.IncomeTax_Reimb_YTD)  <!-- 2016 : Income Tax : Reimbursement -->
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="isi-bg3a" id="OtherTax_Exemp_YTD">
+                                                @String.Format(CultureInfo.InvariantCulture, "{0:N0}", Model.OtherTax_Exemp_YTD)   <!-- 2016 : Other : Exemption -->
+                                            </td>
+                                            <td class="isi-bg3a" id="OtherTax_Reimb_YTD">
+                                                @String.Format(CultureInfo.InvariantCulture, "{0:N0}", Model.OtherTax_Reimb_YTD)   <!-- 2016 : Other : Reimbursement -->
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
 </div>

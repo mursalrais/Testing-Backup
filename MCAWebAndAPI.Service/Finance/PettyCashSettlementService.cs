@@ -170,6 +170,10 @@ namespace MCAWebAndAPI.Service.Finance
             viewModel.Date = Convert.ToDateTime(listItem[FieldName_Date]);
             viewModel.TransactionNo = Convert.ToString(listItem[FieldName_DocumentNo]);
             viewModel.Amount = multiplier * Convert.ToDecimal(listItem[FieldName_AmountReimbursedOrReturned]);
+            viewModel.WBSName = Convert.ToString(listItem[FieldName_WBS]);
+            viewModel.GLName = Convert.ToString(listItem[FieldName_GL]);
+            viewModel.Payee = Convert.ToString(listItem[FieldName_PaidTo]);
+            viewModel.DescOfExpenses = Convert.ToString(listItem[FieldName_Reason]);
 
             return viewModel;
         }

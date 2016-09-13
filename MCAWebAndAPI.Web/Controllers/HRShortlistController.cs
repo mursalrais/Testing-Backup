@@ -72,25 +72,31 @@ namespace MCAWebAndAPI.Web.Controllers
 
             if (viewModel.useraccess == "HR")
             {
+                string bodymailHR = string.Format(EmailResource.EmailShortlistToRequestor, _service.GetMailUrl(Convert.ToInt32(viewModel.Position), viewModel.useraccess), viewModel.PositionName);
+                List<string> lstEmail = new List<string>();
+
                 foreach (string mail in words)
                 {
-                    string bodymailHR = string.Format(EmailResource.EmailShortlistToRequestor, _service.GetMailUrl(Convert.ToInt32(viewModel.Position), viewModel.useraccess), viewModel.PositionName);
                     if (mail != "")
                     {
-                        _service.SendEmailValidation(mail, viewModel.PositionName, bodymailHR);
+                        lstEmail.Add(mail);
                     }
                 }
+                _service.SendEmailValidation(lstEmail, viewModel.PositionName, bodymailHR);
             }
             else if (viewModel.useraccess == "REQ")
             {
+                string bodymailREQ = string.Format(EmailResource.EmailShortlistToHR, _service.GetMailUrl(Convert.ToInt32(viewModel.Position), viewModel.useraccess), viewModel.PositionName);
+                List<string> lstEmail = new List<string>();
+
                 foreach (string mail in words)
                 {
-                    string bodymailREQ = string.Format(EmailResource.EmailShortlistToHR, _service.GetMailUrl(Convert.ToInt32(viewModel.Position), viewModel.useraccess), viewModel.PositionName);
                     if (mail != "")
                     {
-                        _service.SendEmailValidation(mail, viewModel.PositionName, bodymailREQ);
+                        lstEmail.Add(mail);
                     }
                 }
+                _service.SendEmailValidation(lstEmail, viewModel.PositionName, bodymailREQ);
             }
 
             return RedirectToAction("Index",
@@ -137,7 +143,9 @@ namespace MCAWebAndAPI.Web.Controllers
 
             string bodymailREQ = string.Format(EmailResource.EmailShortlistToCandidate, viewModel.Message);
 
-            _service.SendEmailValidation(viewModel.SendTo, viewModel.PositionName, bodymailREQ);
+            List<string> lstEmail = new List<string> { viewModel.SendTo };
+
+            _service.SendEmailValidation(lstEmail, viewModel.PositionName, bodymailREQ);
 
             return RedirectToAction("Index",
                "Success",

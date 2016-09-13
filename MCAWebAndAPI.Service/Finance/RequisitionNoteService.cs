@@ -18,6 +18,8 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
 
     public class RequisitionNoteService : IRequisitionNoteService
     {
+        #region Constants
+
         private const string ListName_GLMaster = "GL Master";
         private const string ListName_WBSMaster = "WBS Master";
         private const string ListName_Activity = "Activity";
@@ -61,14 +63,16 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
         private const string ACTIVITYID_SUBACTIVITY = "Activity_x003a_ID";
         private const string WBS_SUBACTIVITY_ID = "Sub_x0020_Activity_x003a_ID";
 
+        #endregion 
+
         string _siteUrl = null;
         static Logger logger = LogManager.GetCurrentClassLogger();
 
-        public void SetSiteUrl(string siteUrl)
+        public RequisitionNoteService(string siteUrl)
         {
-            _siteUrl = siteUrl;
+            this._siteUrl = siteUrl;
         }
-
+        
         public async Task<RequisitionNoteVM> GetAsync(int? ID)
         {
             return Get(ID);
@@ -334,7 +338,6 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
             }
         }
 
-
         public async Task CreateRequisitionNoteItemsAsync(int? headerID, IEnumerable<RequisitionNoteItemVM> noteItems)
         {
             CreateRequisitionNoteItems(headerID, noteItems);
@@ -360,7 +363,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
             SPConnector.DeleteListItem(ListName_RequisitionNoteItem, id, _siteUrl);
         }
 
-        public Tuple<int, string> GetRequisitioNoteIdAndNoByEventBudgetID(int eventBudgetId)
+        public Tuple<int, string> GetIdAndNoByEventBudgetID(int eventBudgetId)
         {
             var caml = @"<View><Query><Where><Eq><FieldRef Name='" + FIELD_REQUISITION_EVENTBUDGETNO + "' /><Value Type='Lookup'>" + eventBudgetId.ToString() + "</Value></Eq></Where></Query> <RowLimit>1</RowLimit> </View>";
             string number = string.Empty;
@@ -374,6 +377,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
 
             return new Tuple<int, string>(id, number);
         }
+
 
         private ActivityVM ConvertToActivityModel(ListItem item)
         {

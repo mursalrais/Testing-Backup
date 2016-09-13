@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using MCAWebAndAPI.Model.Common;
@@ -78,14 +79,14 @@ namespace MCAWebAndAPI.Service.Finance
         private const string EVENT_BUDGET_FIELD_SCA_VALUE = "0";
         #endregion
 
-        private string siteUrl = string.Empty;
-        static Logger logger = LogManager.GetCurrentClassLogger();
-
-        public void SetSiteUrl(string siteUrl)
+        public SCAVoucherService(string siteUrl)
         {
             this.siteUrl = siteUrl;
         }
 
+        private string siteUrl = string.Empty;
+        static Logger logger = LogManager.GetCurrentClassLogger();
+        
         public int GetActivityIDByEventBudgetID(int eventBudgetID)
         {
             int activityID = 0;
@@ -288,7 +289,7 @@ namespace MCAWebAndAPI.Service.Finance
 
         public IEnumerable<SCAVoucherItemsVM> GetEventBudgetItems(int eventBudgetID)
         {
-            IEnumerable<EventBudgetItemVM> eventBudgetItems = EventBudgetService.GetItems(siteUrl, eventBudgetID);
+            IEnumerable<EventBudgetItemVM> eventBudgetItems = EventBudgetService.GetItems(siteUrl, eventBudgetID).Where(eb => eb.SCA > 0);
 
             var scaVoucherItemVMs = new List<SCAVoucherItemsVM>();
 
@@ -300,7 +301,7 @@ namespace MCAWebAndAPI.Service.Finance
                     WBS = Convert.ToString(ebItem.WBS.Text),
                     GLID = Convert.ToInt32(ebItem.GL.Value),
                     GL = Convert.ToString(ebItem.GL.Text),
-                    Amount = Convert.ToDecimal(ebItem.AmountPerItem)
+                    Amount = Convert.ToDecimal(ebItem.SCA)
                 });
             }
 
@@ -319,6 +320,64 @@ namespace MCAWebAndAPI.Service.Finance
             }
 
             return scaVoucherVM;
+        }
+
+        public void DeleteDetail(int id)
+        {
+            SPConnector.DeleteListItem(LIST_NAME_SCAVOUCHER, id, siteUrl);
+        }
+
+        public void CreateSCAVoucherItems(string siteUrl, int? scaVoucherID, IEnumerable<SCAVoucherItemsVM> viewModels)
+        {
+            if (viewModels != null)
+            {
+                foreach (var viewModel in viewModels)
+                {
+                    var columnValues = new Dictionary<string, object>
+                {
+                    {FIELD_NAME_TITLE,scaVoucherID},
+                    {FIELD_NAME_SCAVOUCHER,scaVoucherID},
+                    {FIELD_NAME_WBS,new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.WBSID) }},
+                    {FIELD_NAME_GL, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.GLID) }},
+                    {FIELD_NAME_AMOUNT,viewModel.Amount}
+                };
+                    try
+                    {
+                        SPConnector.AddListItem(LIST_NAME_SCAVOUCHER_ITEM, columnValues, siteUrl);
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error(e.Message);
+                        throw e;
+                    }
+                }
+            }
+        }
+
+        public IEnumerable<AjaxComboBoxVM> GetAllAjaxComboBoxVM()
+        {
+            var result = new List<AjaxComboBoxVM>();
+            var vms = GetAll();
+
+            foreach (var item in vms)
+            {
+                result.Add(
+                    new AjaxComboBoxVM
+                    {
+                        Value = item.ID,
+                        Text = item.SCAVoucherNo + " - " + item.Purpose
+                    }
+                );
+            }
+
+            return result;
+        }
+
+        public Tuple<int, string> GetIdAndNoByEventBudgetID(int eventBudgetId)
+        {
+            var sca = GetAll().FirstOrDefault(s => s.EventBudgetID == eventBudgetId);
+
+            return sca == null ? new Tuple<int, string>(0, string.Empty) : new Tuple<int, string>((int)sca.ID, sca.SCAVoucherNo);
         }
 
         private string GetDocumentUrl(int? ID)
@@ -375,10 +434,6 @@ namespace MCAWebAndAPI.Service.Finance
             return model;
         }
 
-        public void DeleteDetail(int id)
-        {
-            SPConnector.DeleteListItem(LIST_NAME_SCAVOUCHER, id, siteUrl);
-        }
         private static void CreateSCAVoucherAttachment(string siteUrl, int? ID, IEnumerable<HttpPostedFileBase> attachment)
         {
             if (ID != null)
@@ -403,51 +458,6 @@ namespace MCAWebAndAPI.Service.Finance
             }
         }
 
-        public void CreateSCAVoucherItems(string siteUrl, int? scaVoucherID, IEnumerable<SCAVoucherItemsVM> viewModels)
-        {
-            if (viewModels != null)
-            {
-                foreach (var viewModel in viewModels)
-                {
-                    var columnValues = new Dictionary<string, object>
-                {
-                    {FIELD_NAME_TITLE,scaVoucherID},
-                    {FIELD_NAME_SCAVOUCHER,scaVoucherID},
-                    {FIELD_NAME_WBS,new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.WBSID) }},
-                    {FIELD_NAME_GL, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.GLID) }},
-                    {FIELD_NAME_AMOUNT,viewModel.Amount}
-                };
-                    try
-                    {
-                        SPConnector.AddListItem(LIST_NAME_SCAVOUCHER_ITEM, columnValues, siteUrl);
-                    }
-                    catch (Exception e)
-                    {
-                        logger.Error(e.Message);
-                        throw e;
-                    }
-                }
-            }
-        }
-
-        public IEnumerable<AjaxComboBoxVM> GetAllAjaxComboBoxVM()
-        {
-            var result = new List<AjaxComboBoxVM>();
-            var vms = GetAll();
-
-            foreach (var item in vms)
-            {
-                result.Add(
-                    new AjaxComboBoxVM
-                    {
-                        Value = item.ID,
-                        Text = item.SCAVoucherNo + " - " + item.Purpose
-                    }
-                );
-            }
-
-            return result;
-        }
 
         private static List<string> GetIDItemDetails(string siteUrl, int headerID)
         {

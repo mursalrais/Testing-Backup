@@ -41,5 +41,13 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         [Required]
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal Balance { get; set; } = 0;
+
+        public string WBSName { get; set; }
+
+        public string GLName { get; set; }
+
+        public string Payee { get; set; }
+
+        public string DescOfExpenses { get; set; }
     }
 }

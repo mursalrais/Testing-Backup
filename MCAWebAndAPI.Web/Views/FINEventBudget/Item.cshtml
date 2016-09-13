@@ -13,8 +13,6 @@
         enctype = "multipart/form-data"
     }))
 {
-    Model.SCAVoucherNo = "ddd.ddd.ddd";
-
     string buttonMsg = string.Empty;
     var rnNoAvail = !string.IsNullOrEmpty(Model.RequisitionNoteNo);
     var scaVAvail = !string.IsNullOrEmpty(Model.SCAVoucherNo);
@@ -187,7 +185,7 @@
                                 <label class="col-sm-5 control-label"> SCA Voucher number :</label>
                                 <div class="col-sm-7">
                                     @Html.DisplayFor(m => m.SCAVoucherNo)
-
+                                    @Html.HiddenFor(m => m.SCAVoucherId)
                                 </div>
                             </div>
                             <br />

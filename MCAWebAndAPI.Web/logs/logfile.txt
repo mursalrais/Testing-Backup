@@ -728,8 +728,14 @@ Please try again.
 2016-09-08 14:23:02.7083 MCAWebAndAPI.Service.Asset.AssignmentOfAssetService The object is used in the context different from the one associated with the object.
 2016-09-09 00:46:07.4095 MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService List 'Asset Loan Return' does not exist at site with URL 'https://eceos2.sharepoint.com/sites/mca-dev/hr'.
 2016-09-09 00:48:13.3345 MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService List 'Asset Loan Return' does not exist at site with URL 'https://eceos2.sharepoint.com/sites/mca-dev/hr'.
-2016-09-09 16:38:31.3527 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Unable to connect to the remote server
-2016-09-10 09:17:17.5333 MCAWebAndAPI.Service.HR.InsuranceClaim.InsuranceClaimService The operation has timed out.
-2016-09-10 09:25:13.6568 MCAWebAndAPI.Service.HR.InsuranceClaim.InsuranceClaimService The operation has timed out.
-2016-09-10 09:37:26.8219 MCAWebAndAPI.Service.HR.InsuranceClaim.InsuranceClaimService The operation has timed out.
-2016-09-10 09:39:12.7127 MCAWebAndAPI.Service.HR.InsuranceClaim.InsuranceClaimService The operation has timed out.
+2016-09-09 20:41:44.5840 MCAWebAndAPI.Service.HR.Recruitment.HRShortlistService System.Net.Mail.SmtpException: Mailbox unavailable. The server response was: 5.3.4 554-554 5.2.0 STOREDRV.Deliver; delivery result banner
+   at System.Net.Mail.DataStopCommand.CheckResponse(SmtpStatusCode statusCode, String serverResponse)
+   at System.Net.Mail.DataStopCommand.Send(SmtpConnection conn)
+   at System.Net.ClosableStream.Close()
+   at System.Net.Mail.SmtpClient.Send(MailMessage message)
+   at MCAWebAndAPI.Service.Utils.EmailUtil.SendMultiple(List`1 lstEmail, String subject, String emailMessage) in C:\Users\sobari\Documents\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\EmailUtil.cs:line 68
+   at MCAWebAndAPI.Service.HR.Recruitment.HRShortlistService.SendEmailValidation(List`1 emailTo, String position, String emailMessages) in C:\Users\sobari\Documents\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Recruitment\HRShortlistService.cs:line 363
+2016-09-09 20:49:46.2066 MCAWebAndAPI.Service.HR.Recruitment.HRShortlistService System.Net.Mail.SmtpException: The operation has timed out.
+   at System.Net.Mail.SmtpClient.Send(MailMessage message)
+   at MCAWebAndAPI.Service.Utils.EmailUtil.SendMultiple(List`1 lstEmail, String subject, String emailMessage) in C:\Users\sobari\Documents\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\EmailUtil.cs:line 68
+   at MCAWebAndAPI.Service.HR.Recruitment.HRShortlistService.SendEmailValidation(List`1 emailTo, String position, String emailMessages) in C:\Users\sobari\Documents\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Recruitment\HRShortlistService.cs:line 363

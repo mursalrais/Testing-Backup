@@ -39,6 +39,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 
         [Required]
         [DisplayName("Amount paid in words")]
+        [UIHint("TextArea")]
         public string AmountPaidInWord { get; set; }
 
         [Required]
