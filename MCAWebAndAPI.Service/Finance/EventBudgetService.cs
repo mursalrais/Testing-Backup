@@ -402,6 +402,10 @@ namespace MCAWebAndAPI.Service.Finance
         {
             UpdateRequisitionNote(siteUrl, id);
         }
+        public async Task UpdateSCAVoucherAsync(string siteUrl = null, int id = 0)
+        {
+            UpdateSCAVoucher(siteUrl, id);
+        }
 
         /// <summary>
         /// Automatically updates existing Requsition Note based based on a change in an event budget
@@ -425,7 +429,7 @@ namespace MCAWebAndAPI.Service.Finance
 
             // copy EB updated values to RN
             rnHeader.Project.Value = ebHeader.Project.Value;
-            rnHeader.Total = ebHeader.TotalIDR;
+            rnHeader.Total = ebHeader.TotalDirectPayment;
 
             // delete all existing details in RN
             foreach (var rnDetail in rnHeader.ItemDetails)
@@ -434,33 +438,39 @@ namespace MCAWebAndAPI.Service.Finance
             }
 
             //copy all new details from EB
-            List<RequisitionNoteItemVM> d = new List<RequisitionNoteItemVM>();
+            List<RequisitionNoteItemVM> detail = new List<RequisitionNoteItemVM>();
             foreach (var ebDetail in ebHeader.ItemDetails)
             {
-                d.Add(new RequisitionNoteItemVM()
+                if (ebDetail.DirectPayment > 0)
                 {
-                    Activity = new AjaxComboBoxVM() { Value = Convert.ToInt32(ebHeader.Activity.Value), Text = ebHeader.Activity.Text },
-                    WBS = new AjaxComboBoxVM() { Value = ebDetail.WBS.Value, Text = ebDetail.WBS.Text },
-                    GL = new AjaxComboBoxVM() { Value = ebDetail.GL.Value, Text = ebDetail.GL.Text },
-                    Specification = ebDetail.Title,
-                    Quantity = ebDetail.Quantity,
-                    Frequency = ebDetail.Frequency,
-                    Price = ebDetail.UnitPrice,
-                    EditMode = (int)Item.Mode.CREATED,
-                    IsFromEventBudget = true,
-                    Total = ebDetail.Frequency * ebDetail.UnitPrice * ebDetail.Quantity
-                });
+                    detail.Add(new RequisitionNoteItemVM()
+                    {
+                        Activity = new AjaxComboBoxVM() { Value = Convert.ToInt32(ebHeader.Activity.Value), Text = ebHeader.Activity.Text },
+                        WBS = new AjaxComboBoxVM() { Value = ebDetail.WBS.Value, Text = ebDetail.WBS.Text },
+                        GL = new AjaxComboBoxVM() { Value = ebDetail.GL.Value, Text = ebDetail.GL.Text },
+                        Specification = ebDetail.Description,
+                        Quantity = ebDetail.Quantity,
+                        Frequency = ebDetail.Frequency,
+                        Price = ebDetail.UnitPrice,
+                        EditMode = (int)Item.Mode.CREATED,
+                        IsFromEventBudget = true,
+                        Total = ebDetail.Frequency * ebDetail.UnitPrice * ebDetail.Quantity
+                    });
+                }
             }
 
-            reqNoteService.CreateRequisitionNoteItems(rnHeader.ID, d);
-
+            try
+            {
+                reqNoteService.UpdateRequisitionNote(rnHeader);
+                reqNoteService.CreateRequisitionNoteItems(rnHeader.ID, detail);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Update Requisition note failed.");
+            }
             // attachment?
         }
 
-        public async Task UpdateSCAVoucherAsync(string siteUrl = null, int id = 0)
-        {
-            UpdateSCAVoucher(siteUrl, id);
-        }
 
         public void UpdateSCAVoucher(string siteUrl = null, int id = 0)
         {
@@ -479,7 +489,7 @@ namespace MCAWebAndAPI.Service.Finance
 
             // copy EB updated values to RN
             scaVoucherHeader.Project = ebHeader.Project.Value;
-            scaVoucherHeader.TotalAmount = ebHeader.TotalIDR;
+			scaVoucherHeader.TotalAmount = ebHeader.TotalSCA;
 
             // delete all existing details in RN
             foreach (var rnDetail in scaVoucherHeader.EventBudgetItems)
@@ -491,18 +501,28 @@ namespace MCAWebAndAPI.Service.Finance
             List<SCAVoucherItemsVM> d = new List<SCAVoucherItemsVM>();
             foreach (var ebDetail in ebHeader.ItemDetails)
             {
-                d.Add(new SCAVoucherItemsVM()
+                if (ebDetail.SCA > 0)
                 {
-                    WBS =  ebDetail.WBS.Text,
-                    WBSID = (int)ebDetail.WBS.Value,
-                    GL =  ebDetail.GL.Text,
-                    GLID = (int)ebDetail.GL.Value,
-                    Amount = ebDetail.Frequency * ebDetail.UnitPrice * ebDetail.Quantity
-                });
+                    d.Add(new SCAVoucherItemsVM()
+                    {
+                        WBSID = ebDetail.WBS.Value.Value,
+                        WBS = ebDetail.WBS.Text,
+                        GLID = ebDetail.GL.Value.Value,
+                        GL = ebDetail.GL.Text,
+                        Amount = ebDetail.Frequency * ebDetail.UnitPrice * ebDetail.Quantity
+                    });
+                }
             }
 
-            scaVoucherService.CreateSCAVoucherItems(siteUrl, scaVoucherHeader.ID, d);
-
+            try
+            {
+                scaVoucherService.UpdateSCAVoucher(scaVoucherHeader);
+                scaVoucherService.CreateSCAVoucherItems(siteUrl, scaVoucherHeader.ID, d);
+            }
+            catch(Exception ex)
+            {
+                throw new Exception("Update SCA Voucher failed.");
+            }
             // attachment?
         }
 

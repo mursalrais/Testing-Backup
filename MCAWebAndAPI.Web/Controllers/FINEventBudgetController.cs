@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -141,15 +142,21 @@ namespace MCAWebAndAPI.Web.Controllers
                 return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
             }
 
-            Task UpdateRequsitionNote, UpdateSCAVoucher;
-
-            // Update related Requisition Note & SCA Voucher
-            if (viewModel.RequisitionNoteId > 0 || viewModel.SCAVoucherId > 0)
+            List<Task> updateTaskRNOrSCA = new List<Task>();
+            // Update related Requisition Note & SCA Voucher, can't do like this because in every metod there are id checking id = 0 which will trheo error.
+            if (viewModel.RequisitionNoteId > 0)
             {
-                UpdateRequsitionNote = service.UpdateRequisitionNoteAsync(siteUrl, viewModel.RequisitionNoteId);
-                UpdateSCAVoucher = service.UpdateSCAVoucherAsync(siteUrl, viewModel.SCAVoucherId);
+                updateTaskRNOrSCA.Add(service.UpdateRequisitionNoteAsync(siteUrl, viewModel.RequisitionNoteId));
+            }
 
-                Task allTasks2 = Task.WhenAll(UpdateRequsitionNote, UpdateSCAVoucher);
+            if(viewModel.SCAVoucherId > 0)
+            {
+                updateTaskRNOrSCA.Add(service.UpdateSCAVoucherAsync(siteUrl, viewModel.SCAVoucherId));
+            }
+
+            if(updateTaskRNOrSCA.Count > 0)
+            {
+                Task allTasks2 = Task.WhenAll(updateTaskRNOrSCA.ToArray());
                 await allTasks2;
             }
 

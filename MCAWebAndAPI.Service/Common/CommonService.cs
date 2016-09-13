@@ -4,7 +4,7 @@ namespace MCAWebAndAPI.Service.Common
 {
     public class CommonService
     {
-        public enum Sites { HR, BO}
+        public enum Sites { HR, BO, CP}
 
         private const string SiteUrl_BO = "bo";
         private const string SiteUrl_HR = "hr";
@@ -21,6 +21,18 @@ namespace MCAWebAndAPI.Service.Common
 
                 case Sites.HR:
                     result = currentSiteUrl.Substring(0, currentSiteUrl.Length - 2) + SiteUrl_HR;
+                    break;
+
+                case Sites.CP:
+                    if (currentSiteUrl.EndsWith(SiteUrl_BO) || currentSiteUrl.EndsWith(SiteUrl_HR))
+                    {
+                        result = currentSiteUrl.Substring(0, currentSiteUrl.Length - 3);
+                    }
+                    else
+                    {
+                        result = currentSiteUrl;
+                    }
+                  
                     break;
 
                 default:

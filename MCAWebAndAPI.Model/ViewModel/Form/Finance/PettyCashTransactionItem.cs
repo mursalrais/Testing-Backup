@@ -44,6 +44,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 
         public string WBSName { get; set; }
 
+        public string WBSDescription { get; set; }
+
         public string GLName { get; set; }
 
         public string Payee { get; set; }

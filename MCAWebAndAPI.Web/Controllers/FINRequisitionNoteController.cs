@@ -245,20 +245,23 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
                 {
                     foreach (var item in eventbudget.ItemDetails)
                     {
-                        var itemRNDetail = new RequisitionNoteItemVM();
+                        if (item.DirectPayment > 0)
+                        {
+                            var itemRNDetail = new RequisitionNoteItemVM();
 
-                        itemRNDetail.ID = null;
-                        itemRNDetail.Activity = new AjaxComboBoxVM() { Value = Convert.ToInt32(eventbudget.Activity.Value), Text = eventbudget.Activity.Text };
-                        itemRNDetail.WBS = new AjaxComboBoxVM() { Value = item.WBS.Value, Text = item.WBS.Text };
-                        itemRNDetail.GL = new AjaxComboBoxVM() { Value = item.GL.Value, Text = item.GL.Text };
-                        itemRNDetail.Specification = item.Description;
-                        itemRNDetail.Quantity = item.Quantity;
-                        itemRNDetail.Price = item.UnitPrice;
-                        itemRNDetail.EditMode = (int)Item.Mode.CREATED;
-                        itemRNDetail.IsFromEventBudget = true;
-                        itemRNDetail.Frequency = item.Frequency;
-                        itemRNDetail.Total = item.Frequency * itemRNDetail.Price * itemRNDetail.Quantity;
-                        details.Add(itemRNDetail);
+                            itemRNDetail.ID = null;
+                            itemRNDetail.Activity = new AjaxComboBoxVM() { Value = Convert.ToInt32(eventbudget.Activity.Value), Text = eventbudget.Activity.Text };
+                            itemRNDetail.WBS = new AjaxComboBoxVM() { Value = item.WBS.Value, Text = item.WBS.Text };
+                            itemRNDetail.GL = new AjaxComboBoxVM() { Value = item.GL.Value, Text = item.GL.Text };
+                            itemRNDetail.Specification = item.Description;
+                            itemRNDetail.Quantity = item.Quantity;
+                            itemRNDetail.Price = item.UnitPrice;
+                            itemRNDetail.EditMode = (int)Item.Mode.CREATED;
+                            itemRNDetail.IsFromEventBudget = true;
+                            itemRNDetail.Frequency = item.Frequency;
+                            itemRNDetail.Total = item.Frequency * itemRNDetail.Price * itemRNDetail.Quantity;
+                            details.Add(itemRNDetail);
+                        }
                     }
                 }
             }

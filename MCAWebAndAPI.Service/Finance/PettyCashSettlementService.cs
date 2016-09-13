@@ -40,7 +40,7 @@ namespace MCAWebAndAPI.Service.Finance
         private const string FieldName_Date = "Settlement_x0020_Date";
         private const string FieldName_PettyCashVoucherId = "PettyCashVoucherId";
         private const string FieldName_PettyCashVoucherAdvanceReceivedDate = "PettyCashVoucherId_x003a_Advance";
-        private const string FieldName_PettyCashVoucherNo = "PettyCashVoucherId_x003a_Voucher";
+        private const string FieldName_PettyCashVoucherNo = "PettyCashVoucherId_x003a_Petty_x";
         private const string FieldName_AmountLiquidated = "Amount_x0020_Liquidated";
         private const string FieldName_AmountReimbursedOrReturned = "Amount_x0020_Reimbursed_x002f_Re";
         private const string FieldName_Remarks = "Remarks";
